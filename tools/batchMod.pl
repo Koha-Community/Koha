@@ -31,6 +31,7 @@ use C4::ClassSource;
 use C4::Dates;
 use C4::Debug;
 use YAML;
+use Switch;
 use MARC::File::XML;
 
 sub find_value {
@@ -112,22 +113,32 @@ if ($op eq "action") {
 #-------------------------------------------------------------------------------
 
 if ($op eq "show"){
-	my $barcodefh = $input->upload('uploadbarcodes');
-    my @barcodelist;
-    if ( $barcodefh){
-        while (my $barcode=<$barcodefh>){
-            chomp $barcode;
-            push @barcodelist, $barcode;
-        }
-    }
-    if ( my $list=$input->param('barcodelist')){
-        push @barcodelist, split(/\s\n/, $list);
-    }
-	push @itemnumbers,map{GetItemnumberFromBarcode($_)} @barcodelist;
+	my $filefh = $input->upload('uploadfile');
+	my $filecontent = $input->{'filecontent'};
 
-	warn Dump(@itemnumbers);
+    my @contentlist;
+    if ($filefh){
+        while (my $content=<$filefh>){
+            chomp $content;
+            push @contentlist, $content;
+        }
+
+	switch ($filecontent) {
+	    case "barcode_file" {
+		push @itemnumbers,map{GetItemnumberFromBarcode($_)} @contentlist;
+	    }
+
+	    case "itemid_file" {
+		@itemnumbers = @contentlist;
+	    }
+	}
+    } else {
+       if ( my $list=$input->param('barcodelist')){
+        push my @barcodelist, split(/\s\n/, $list);
+	push @itemnumbers,map{GetItemnumberFromBarcode($_)} @barcodelist;
+    }
+}
 	$items_display_hashref=BuildItemsData(@itemnumbers);
-	warn Dump($items_display_hashref);
 
 # now, build the item form for entering a new item
 my @loop_data =();
@@ -370,7 +381,7 @@ sub BuildItemsData{
 # And $tag>10
 sub UpdateMarcWith($$){
   my ($marcfrom,$marcto)=@_;
-  warn "FROM :",$marcfrom->as_formatted;
+  #warn "FROM :",$marcfrom->as_formatted;
 	my (  $itemtag,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
 	my $fieldfrom=$marcfrom->field($itemtag);
 	my @fields_to=$marcto->field($itemtag);
@@ -379,5 +390,5 @@ sub UpdateMarcWith($$){
 				$field_to_update->update($$subfield[0]=>$$subfield[1]) if ($$subfield[1]);
 		}
     }
-  warn "TO edited:",$marcto->as_formatted;
+  #warn "TO edited:",$marcto->as_formatted;
 }

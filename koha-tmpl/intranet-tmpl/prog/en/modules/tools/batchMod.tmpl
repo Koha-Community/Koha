@@ -25,9 +25,13 @@
                 <!-- TMPL_UNLESS name="op" -->
                         <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batchMod.pl">
                             <fieldset class="rows">
-                                <legend>Use a barcode file</legend>
+                                <legend>Use a file</legend>
                 	              <ol>
-                                    <li><label for="uploadbarcodes">Barcode file: </label> <input type="file" id="uploadbarcodes" name="uploadbarcodes"></input></li>
+				      <li>
+					<label for="barcode_file">Barcodes file</label><input type="radio" name="filecontent" value="barcode_file" id="barcode_file" checked="checked" /><br />
+					<label for="itemid_file">Item Id's file</label><input type="radio" name="filecontent" value="itemid_file" id="itemid_file" />
+				      </li>
+                                    <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile"></input></li>
                                 </ol>
                             </fieldset>
                             <fieldset class="rows">
@@ -35,7 +39,7 @@
                                 <ol>
                                     <li>
                                       <label for="barcodelist">Barcodes list (one barcode per line): </label>
-                                      <textarea rows="10" cols="30" name="barcodelist"></textarea>
+                                      <textarea rows="10" cols="30" id="barcodelist" name="barcodelist"></textarea>
                                     </li>
                                 </ol>
                             </fieldset>
