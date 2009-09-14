@@ -261,8 +261,10 @@ if ($budget) {    # its a mod ..
     if ( defined $budget->{'sort1_authcat'} ) {    # with custom  Asort* planning values
         $CGIsort1 = GetAuthvalueDropbox( 'sort1', $budget->{'sort1_authcat'}, $data->{'sort1'} );
     }
-} else {
+} elsif(scalar(@$budgets)){
     $CGIsort1 = GetAuthvalueDropbox( 'sort1', @$budgets[0]->{'sort1_authcat'}, '' );
+}else{
+    $CGIsort1 = GetAuthvalueDropbox( 'sort1','', '' );
 }
 
 # if CGIsort is successfully fetched, the use it
@@ -278,9 +280,12 @@ if ($budget) {
     if ( defined $budget->{'sort2_authcat'} ) {
         $CGIsort2 = GetAuthvalueDropbox( 'sort2', $budget->{'sort2_authcat'}, $data->{'sort2'} );
     }
-} else {
+} elsif(scalar(@$budgets)) {
     $CGIsort2 = GetAuthvalueDropbox( 'sort2', @$budgets[0]->{sort2_authcat}, '' );
+}else{
+    $CGIsort2 = GetAuthvalueDropbox( 'sort2','', '' );
 }
+
 if ($CGIsort2) {
     $template->param( CGIsort2 => $CGIsort2 );
 } else {
