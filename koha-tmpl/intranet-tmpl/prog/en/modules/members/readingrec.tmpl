@@ -17,12 +17,12 @@
 <h1>Reading Record</h1>
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form>
 <p><!-- TMPL_IF NAME="showfulllink" -->Showing All Items |
-	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show Last 50 Items Only</a> <!-- TMPL_ELSE -->	Showing Last 50 Items | 
+	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=50">Show Last 50 Items Only</a> <!-- TMPL_ELSE -->	Showing Last 50 Items | 
 	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a><!-- /TMPL_IF --></p>
 <table>
 <tr>
 	<th>
-		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=title&amp;amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
+		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=title&amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
 	</th>
 	<th>
 		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=author&amp;limit=<!-- TMPL_VAR name="limit" -->">Author</a>
@@ -32,7 +32,7 @@
 	<th>Number of Renewals</th>
 	<th>Date Due</th>
 	<th>
-		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=returndate DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
+		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=returndate%20DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
 	</th>
 </tr>
 <!-- TMPL_LOOP name="loop_reading" -->
