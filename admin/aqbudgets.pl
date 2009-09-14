@@ -187,7 +187,7 @@ if ($op eq 'add_form') {
     $template->param(
         add_validate                  => 1,
         dateformat                => C4::Dates->new()->visual(),
-        budget_dropbox     		  => $budget_period_dropbox,
+        budget_dropbox     		  => $budget_parent_dropbox,
         budget_perm_dropbox       => $budget_perm_dropbox,
         branchloop_select         => \@branchloop_select,
 		%$period,
@@ -305,10 +305,11 @@ if ($op eq 'add_form') {
         );
     }
 
+    my $budget_period_total = $num->format_price($$period{budget_period_total}) if $$period{budget_period_total};
     $template->param(
         else                   => 1,
         budget                 => \@loop,
-        budget_period_total    => $num->format_price($$period{budget_period_total}),
+        budget_period_total    => $budget_period_total,
         period_alloc_total     => $num->format_price($period_alloc_total),
         base_alloc_total       => $num->format_price($base_alloc_total),
         sub_alloc_total        => $num->format_price($sub_alloc_total),
