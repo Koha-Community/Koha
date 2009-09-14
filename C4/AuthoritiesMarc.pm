@@ -1164,26 +1164,28 @@ sub BuildUnimarcHierarchies{
   } else {
     my $record = GetAuthority($authid);
     my $found;
-    foreach my $field ($record->field('550')){
-      if ($field->subfield('5') && $field->subfield('5') eq 'g'){
-        my $parentrecord = GetAuthority($field->subfield('3'));
-        my $localresult=$hierarchies;
-        my $trees;
-        $trees = BuildUnimarcHierarchies($field->subfield('3'));
-        my @trees;
-        if ($trees=~/;/){
-           @trees = split(/;/,$trees);
-        } else {
-           push @trees, $trees;
-        }
-        foreach (@trees){
-          $_.= ",$authid";
-        }
-        @globalresult = (@globalresult,@trees);
-        $found=1;
-      }
-      $hierarchies=join(";",@globalresult);
-    }
+	if ($record){
+		foreach my $field ($record->field('550')){
+		  if ($field->subfield('5') && $field->subfield('5') eq 'g'){
+			my $parentrecord = GetAuthority($field->subfield('3'));
+			my $localresult=$hierarchies;
+			my $trees;
+			$trees = BuildUnimarcHierarchies($field->subfield('3'));
+			my @trees;
+			if ($trees=~/;/){
+			   @trees = split(/;/,$trees);
+			} else {
+			   push @trees, $trees;
+			}
+			foreach (@trees){
+			  $_.= ",$authid";
+			}
+			@globalresult = (@globalresult,@trees);
+			$found=1;
+		  }
+		  $hierarchies=join(";",@globalresult);
+		}
+	}
     #Unless there is no ancestor, I am alone.
     $hierarchies="$authid" unless ($hierarchies);
   }
@@ -1217,6 +1219,7 @@ sub BuildUnimarcHierarchy{
   my $record = shift @_;
   my $class = shift @_;
   my $authid_constructed = shift @_;
+  return undef unless ($record);
   my $authid=$record->subfield('2..','3');
   my %cell;
   my $parents=""; my $children="";
