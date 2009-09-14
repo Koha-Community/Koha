@@ -1468,6 +1468,10 @@ sub haspermission {
 
 sub getborrowernumber {
     my ($userid) = @_;
+    my $userenv = C4::Context->userenv;
+    if ( defined( $userenv ) && ref( $userenv ) eq 'HASH' && $userenv->{number} ) {
+        return $userenv->{number};
+    }
     my $dbh = C4::Context->dbh;
     for my $field ( 'userid', 'cardnumber' ) {
         my $sth =
