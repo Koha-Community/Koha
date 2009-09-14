@@ -88,7 +88,9 @@ function highlightOff() {
 function highlightOn() {
     var x;
     for (x in q_array) {
-        $("td").highlight(q_array[x]);
+    	$(".title").highlight(q_array[x]);
+    	$(".author").highlight(q_array[x]);
+        $(".result_summary").highlight(q_array[x]);
     }
     $(".highlight_toggle").toggle();
 }
@@ -372,7 +374,7 @@ $(document).ready(function(){
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
 								<!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_LOOP NAME="subtitle"  --><!--TMPL_VAR Name="subfield"--><!--/TMPL_LOOP--></a>
-                                <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for works by this author"><!-- TMPL_VAR NAME="author" --></a>
+                                <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for works by this author" class="author"><!-- TMPL_VAR NAME="author" --></a>
                                 <!-- TMPL_ELSE -->&nbsp;
                                 <!-- /TMPL_IF -->
 				<span class="results_summary"><span class="label">Publication:</span>
