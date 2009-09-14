@@ -103,11 +103,7 @@
 <input type="hidden" name"budget_period_id" value="<!-- TMPL_VAR name=    'budget_period_id' -->" />
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="post">
     <fieldset>
-    <legend>Budget options</legend>
-    <li><label for="budget_period_dropbox">Select Budget Period:</label>
-        <!-- TMPL_VAR name="budget_period_dropbox" -->
-        <input type="hidden" value="<!-- TMPL_VAR name='budget_period_id' -->" />
-    </li>
+    <legend>Budget filters</legend>
     <li>
         <label for="budget_branchcode_dropbox">Limit to Branch:</label>
         <select name="budget_branchcode"  >
