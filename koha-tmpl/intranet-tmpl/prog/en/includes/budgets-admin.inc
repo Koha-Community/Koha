@@ -28,10 +28,10 @@
                 ]
 
 // IF THERE IS NO BUDGETS DEFINED YET, THEN DISPLAY PERIOD BUTTON *ONLY*
-<!-- TMPL_UNLESS NAME="period_button_only" -->
+<!-- TMPL_IF NAME="budget_period_id" -->
 
                 var budgets_menu = [
-                        { text: _("Display budgets"), url: "/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
+                        { text: _("Display budgets"), url: "/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },                        
                         { text: _("New budget for '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->"
                            <!-- TMPL_IF NAME="budget_period_locked" -->,  id:'disabled' <!-- /TMPL_IF  -->
                            <!-- TMPL_UNLESS NAME="CAN_user_acquisition_budget_add_del" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
@@ -67,7 +67,7 @@
 
 
 
-<!-- /TMPL_UNLESS  -->
+<!-- /TMPL_IF  -->
 
             new YAHOO.widget.Button({
                 type: "menu",
