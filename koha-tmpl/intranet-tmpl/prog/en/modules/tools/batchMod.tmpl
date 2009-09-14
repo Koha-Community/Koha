@@ -1,6 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+         $(document).ready(function() {
+	    $("#itemst").tablesorter();
+	 });
+//]]>
+</script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
 <body>
@@ -60,15 +68,21 @@
 <form name="f" action="batchMod.pl" method="post">
 <div id="cataloguing_additem_itemlist">
         <div style="overflow:auto">
-        <table>
-            <tr>
-				<th>&nbsp;</th>
-                <!-- TMPL_LOOP NAME="item_header_loop" --> <th> <!-- TMPL_VAR NAME="header_value" --> </th>
-                <!-- /TMPL_LOOP --> </tr>
-            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked"></td><!--/TMPL_IF-->
+        <table id="itemst">
+	    <thead>
+		<tr>
+		    <th>&nbsp;</th>
+		    <!-- TMPL_LOOP NAME="item_header_loop" --> 
+		    <th> <!-- TMPL_VAR NAME="header_value" --> </th>
+		    <!-- /TMPL_LOOP --> 
+		</tr>
+	    </thead>
+	    <tbody>
+            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF-->
                 <!-- TMPL_LOOP NAME="item_value" --> <td><!-- TMPL_VAR ESCAPE="HTML" NAME="field" --></td> 
 				<!-- /TMPL_LOOP --> </tr>
             <!-- /TMPL_LOOP -->
+	    </tbody>
         </table>
         </div>
 </div>

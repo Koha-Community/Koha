@@ -126,6 +126,8 @@ if ($op eq "show"){
 	switch ($filecontent) {
 	    case "barcode_file" {
 		push @itemnumbers,map{GetItemnumberFromBarcode($_)} @contentlist;
+		# Remove not found barcodes
+		@itemnumbers = grep(!/^$/, @itemnumbers);
 	    }
 
 	    case "itemid_file" {
@@ -136,6 +138,9 @@ if ($op eq "show"){
        if ( my $list=$input->param('barcodelist')){
         push my @barcodelist, split(/\s\n/, $list);
 	push @itemnumbers,map{GetItemnumberFromBarcode($_)} @barcodelist;
+	# Remove not found barcodes
+	@itemnumbers = grep(!/^$/, @itemnumbers);
+
     }
 }
 	$items_display_hashref=BuildItemsData(@itemnumbers);
