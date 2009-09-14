@@ -72,10 +72,10 @@ function tagAdded() {
 }
 
 $(function() {
-    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">Clear All<\/a>");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">Select All<\/a>");
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear All')+"<\/a>");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select All')+"<\/a>");
 	$(".sendlist").show();
-    <!-- TMPL_IF NAME="RequestOnOpac" -->$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">Place Hold<\/a>");
+    <!-- TMPL_IF NAME="RequestOnOpac" -->$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">"+_('Place Hold')+"<\/a>");
 	$("a.hold").click(function(){
 		 holdSelections();
 		 return false;
@@ -116,7 +116,7 @@ $(function() {
 		tagSelected();
 		return false;
 	});
-	$("#addtags").html("<a id=\"tagsel_tag\" href=\"#\">Tag<\/a>");
+	$("#addtags").html("<a id=\"tagsel_tag\" href=\"#\">"+_("Tag")+"<\/a>");
     $("#tagsel_button").click(function(){
         tagAdded();
         return false;
