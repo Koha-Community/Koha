@@ -469,21 +469,6 @@ sub header_cell_loop {
     return \@headers;
 }
 
-foreach (1..6) {
-    $template->param('build' . $_) and $template->param(buildx => $_) and last;
-}
-$template->param(   'referer' => $input->referer(),
-                    'DHTMLcalendar_dateformat' => C4::Dates->DHTMLcalendar(),
-                );
-
-output_html_with_http_headers $input, $cookie, $template->output;
-	my ($mastertables,$subtables) = create_compound($master,$subreport);
-	$template->param( 'save_compound' => 1,
-		master=>$mastertables,
-		subsql=>$subtables
-	);
-}
-
 # pass $sth, get back an array of names for the column headers
 sub header_cell_values {
     my $sth = shift or return ();
