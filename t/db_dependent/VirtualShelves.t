@@ -10,7 +10,7 @@ use strict;
 use C4::Context;
 
 # Making 30 tests.
-BEGIN { plan tests => 32 }
+BEGIN { plan tests => 112 }
 
 # Getting some borrowers from database.
 my $dbh = C4::Context->dbh;
