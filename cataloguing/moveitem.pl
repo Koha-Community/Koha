@@ -70,21 +70,22 @@ if ($barcode && $biblionumber) {
 	if ($item) {
 
 	    my $results = GetBiblioFromItemNumber($itemnumber, $barcode);
-            my $frombiblionumber = $results->{'biblionumber'};
+        my $frombiblionumber = $results->{'biblionumber'};
 	   
 	    my $moveresult = MoveItemFromBiblio($itemnumber, $frombiblionumber, $biblionumber); 
-		my $order = GetOrderFromItemnumber($itemnumber);
-		if ($order){
-			$order->{'biblionumber'} = $biblionumber;
-			ModOrder($order);
-			my $orderitem = {
-				ordernumber => $order->{'ordernumber'},
-				itemnumber => $itemnumber,
-				newitemnumber => $newitemnumber,
-			};
-			ModOrderItem($orderitem);
-		}
+
 	    if ($moveresult) { 
+				my $order = GetOrderFromItemnumber($itemnumber);
+				if ($order){
+					$order->{'biblionumber'} = $biblionumber;
+					ModOrder($order);
+					my $orderitem = {
+						ordernumber => $order->{'ordernumber'},
+						itemnumber => $itemnumber,
+						newitemnumber => $newitemnumber,
+					};
+					ModOrderItem($orderitem);
+				}
 	             $template->param(success => 1);
 	    } else {
 		$template->param(error => 1,
