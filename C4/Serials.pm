@@ -619,66 +619,52 @@ a table of hashref. Each hash containt the subscription.
 =cut
 
 sub GetSubscriptions {
-    my ( $title, $ISSN, $biblionumber ) = @_;
+    my ( $string, $issn,$biblionumber) = @_;
     #return unless $title or $ISSN or $biblionumber;
     my $dbh = C4::Context->dbh;
     my $sth;
-    if ($biblionumber) {
-        my $query = qq(
+    my $sql = qq(
             SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
             FROM   subscription
             LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-            WHERE biblio.biblionumber=?
-        );
-        $query.=" ORDER BY title";
-        $debug and warn "GetSubscriptions query: $query";
-        $sth = $dbh->prepare($query);
-        $sth->execute($biblionumber);
+    );
+	my @bind_params;
+	my $sqlwhere;
+    if ($biblionumber) {
+        $sqlwhere="   WHERE biblio.biblionumber=?";
+		push @bind_params,$biblionumber;
     }
-    else {
-        if ( $ISSN and $title ) {
-            my $query = qq|
-                SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber        
-                FROM   subscription
-                LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-                LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-                WHERE (biblioitems.issn = ? or|. join('and ',map{"biblio.title LIKE \"%$_%\""}split (" ",$title))." )";
-            $query.=" ORDER BY title";
-        	$debug and warn "GetSubscriptions query: $query";
-            $sth = $dbh->prepare($query);
-            $sth->execute( $ISSN );
-        }
-        else {
-            if ($ISSN) {
-                my $query = qq(
-                    SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
-                    FROM   subscription
-                    LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-                    LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-                    WHERE biblioitems.issn LIKE ?
-                );
-                $query.=" ORDER BY title";
-        		$debug and warn "GetSubscriptions query: $query";
-                $sth = $dbh->prepare($query);
-                $sth->execute( "%" . $ISSN . "%" );
-            }
-            else {
-                my $query = qq(
-                    SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
-                    FROM   subscription
-                    LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-                    LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
-                    WHERE 1
-                    ).($title?" and ":""). join('and ',map{"biblio.title LIKE \"%$_%\""} split (" ",$title) );
-                
-                $query.=" ORDER BY title";
-        		$debug and warn "GetSubscriptions query: $query";
-                $sth = $dbh->prepare($query);
-                $sth->execute;
-            }
-        }
-    }
+    if ($string){
+		my @sqlstrings;	
+		my @strings_to_search;
+		@strings_to_search=map {"%$_%"} split (/ /,$string);
+		foreach my $index qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes){
+				push @bind_params,@strings_to_search; 
+				my $tmpstring= "AND $index LIKE ? "x scalar(@strings_to_search);
+				$debug && warn "$tmpstring";
+				$tmpstring=~s/^AND //;
+				push @sqlstrings,$tmpstring;
+		}
+		$sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
+	}
+    if ($issn){
+		my @sqlstrings;	
+		my @strings_to_search;
+		@strings_to_search=map {"%$_%"} split (/ /,$issn);
+		foreach my $index qw(biblioitems.issn){
+				push @bind_params,@strings_to_search; 
+				my $tmpstring= "OR $index LIKE ? "x scalar(@strings_to_search);
+				$debug && warn "$tmpstring";
+				$tmpstring=~s/^OR //;
+				push @sqlstrings,$tmpstring;
+		}
+		$sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
+	}    
+	$sql.="$sqlwhere ORDER BY title";
+    $debug and warn "GetSubscriptions query: $sql params : ", join (" ",@bind_params);
+    $sth = $dbh->prepare($sql);
+    $sth->execute(@bind_params);
     my @results;
     my $previoustitle = "";
     my $odd           = 1;
