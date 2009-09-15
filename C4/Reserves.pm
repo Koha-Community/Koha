@@ -110,6 +110,8 @@ BEGIN {
         &ModReserveMinusPriority
         
         &CheckReserves
+        &CanBookBeReserved
+	&CanItemBeReserved
         &CancelReserve
 
         &IsAvailableForItemLevelRequest
