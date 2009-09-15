@@ -55,7 +55,7 @@ my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
 my $base      = $ldap->{base}		or die ldapserver_error('base');
 $ldapname     = $ldap->{user}		;
 $ldappassword = $ldap->{pass}		;
-our %mapping  = %{$ldap->{mapping}} || (); #	or die ldapserver_error('mapping');
+our %mapping  = ($ldap->{mapping}?%{$ldap->{mapping}}:()); #	or die ldapserver_error('mapping');
 my @mapkeys = keys %mapping;
 $debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
 @mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
@@ -107,21 +107,23 @@ sub checkpw_ldap {
     my $db = Net::LDAP->new(\@hosts);
 	#$debug and $db->debug(5);
     my $userldapentry;
+    my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
+    $userldapentry = $search->shift_entry;
 	if ( $ldap->{auth_by_bind} ) {
-        my $principal_name = $ldap->{principal_name};
-        if ($principal_name and $principal_name =~ /\%/) {
-            $principal_name = sprintf($principal_name,$userid);
-        } else {
-            $principal_name = $userid;
-        }
-		my $res = $db->bind( $principal_name, password => $password );
+		my $userldapname;
+	    if ($ldap->{principal_name} and $ldap->{principal_name} =~ /\%/) {
+		    $userldapname = sprintf($ldap->{principal_name},$userid);
+		}
+		else {
+		    $userldapname=$userldapentry->dn();
+		}
+    	my $userdb = Net::LDAP->new(\@hosts);
+		my $res = $userdb->bind( $userldapname, password => $password );
         if ( $res->code ) {
-            $debug and warn "LDAP bind failed as kohauser $principal_name: ". description($res);
+            $debug and warn "LDAP bind failed as kohauser $userldapname: ". description($res);
             return 0;
         }
 	} else {
-        my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
-        $userldapentry = $search->shift_entry;
 		my $cmpmesg = $db->compare( $userldapentry, attr=>'userpassword', value => $password );
 		if ($cmpmesg->code != 6) {
 			warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($cmpmesg);
