@@ -149,7 +149,7 @@ fieldset.various li {
             <div class="yui-b"> 
         <h1>Basket grouping for Vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a></h1>
             <div class="yui-gc"> 
-	   <div class="yui-u">
+	   <div class="yui-u first">
             <fieldset id="various" class='various' >
                 <ul >
                 <li>
@@ -170,39 +170,30 @@ fieldset.various li {
                 <label for="showclosed">Show closed basketgroups</label>
                 <input type="checkbox" name="showclosed" id="showclosed" value="1" onChange="showhideclosegroups(document.getElementById('showclosed').checked);" unchecked />
                 </li>
-                <li>
-                <label for="Move all ungrouped baskets to:">Move all ungrouped baskets to</label>
-                <input type="text" name="Move all ungrouped baskets to:" id="Move all ungrouped baskets to:" onkeypress="moveallungroupedto(event, document.getElementById('Move all ungrouped baskets to:').value);" />
-                <span class="yui-button yui-link-button">
-                    <span class=" first-child"><a href="javascript: moveallungroupedto('button', document.getElementById('Move all ungrouped baskets to:').value);">Ok</a></span>
-                </span>
-                </li>
                 </ul>
             </fieldset>
-        </div>
-        <div class="yui-u first">
         <form action="<!-- TMPL_VAR name="scriptname" -->" method="post" name="basketgroups" id="basketgroups">
             <div id="groups">
             <div class="workarea_alt" >
-            <h3>Ungrouped Baskets</h3>
-            <ul id="ungrouped" class="draglist_alt">
-            <!-- TMPL_IF NAME="baskets" -->
-                <!-- TMPL_LOOP NAME="baskets" -->
-                    <li class="ungrouped" id="<!-- TMPL_VAR NAME="basketno" -->" >
-                        <a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">
-                        <!-- TMPL_IF NAME="basketname" -->
-                            <!-- TMPL_VAR NAME="basketname" -->
-                        <!-- TMPL_ELSE -->
-                            No name, basketnumber: <!-- TMPL_VAR NAME="basketno" -->
-                        <!-- /TMPL_IF -->
-                        </a>, <br />
-                        Total: <!-- TMPL_VAR name="total" -->
-                        <input type="hidden" id="<!-- TMPL_VAR NAME="basketno" -->-group" name="<!-- TMPL_VAR NAME="basketno" -->-group" value="0" />
-                        <input type="hidden" id="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" name="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" value="0" />
-                    </li>
-                    <!-- /TMPL_LOOP -->
-                <!-- /TMPL_IF -->
-                </ul>
+                <h3>Ungrouped Baskets</h3>
+                <ul id="ungrouped" class="draglist_alt">
+                <!-- TMPL_IF NAME="baskets" -->
+                    <!-- TMPL_LOOP NAME="baskets" -->
+                        <li class="ungrouped" id="<!-- TMPL_VAR NAME="basketno" -->" >
+                            <a href="basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">
+                            <!-- TMPL_IF NAME="basketname" -->
+                                <!-- TMPL_VAR NAME="basketname" -->
+                            <!-- TMPL_ELSE -->
+                                No name, basketnumber: <!-- TMPL_VAR NAME="basketno" -->
+                            <!-- /TMPL_IF -->
+                            </a>, <br />
+                            Total: <!-- TMPL_VAR name="total" -->
+                            <input type="hidden" id="<!-- TMPL_VAR NAME="basketno" -->-group" name="<!-- TMPL_VAR NAME="basketno" -->-group" value="0" />
+                            <input type="hidden" id="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" name="basket-<!-- TMPL_VAR NAME="basketno" -->-changed" value="0" />
+                        </li>
+                        <!-- /TMPL_LOOP -->
+                    <!-- /TMPL_IF -->
+                    </ul>
             </div>
 
             <!-- TMPL_IF NAME="basketgroups" -->
@@ -212,8 +203,8 @@ fieldset.various li {
                             <div class="closed" style="display: none">
                             <h3 ><!-- TMPL_VAR NAME="name" --></h3>
                             <p > [ 
-                                    <a href="javascript:parent.location='basketgroup.pl?op=printbgroup&bgroupid=<!-- TMPL_VAR NAME="id" -->';">print</a>/
-                                    <a href="javascript:unclosegroup('<!-- TMPL_VAR name="id" -->');">Unclose group</a>
+                                    <a href="javascript:parent.location='basketgroup.pl?op=printbgroup&bgroupid=<!-- TMPL_VAR NAME="id" -->';">print</a> /
+                                    <a href="javascript:unclosegroup('<!-- TMPL_VAR name="id" -->');">reopen group</a>
                             ]</p>
                             <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="closed">
                         <!-- TMPL_ELSE -->
@@ -229,8 +220,8 @@ fieldset.various li {
                         <div class="closed">
                         <h3 ><!-- TMPL_VAR NAME="name" --></h3>
                         <p > [ 
-                                <a href="javascript:parent.location='basketgroup.pl?op=printbgroup&bgroupid=<!-- TMPL_VAR NAME="id" -->';">print</a>/
-                                <a href="javascript:unclosegroup('<!-- TMPL_VAR name="id" -->');">Unclose group</a>
+                                <a href="javascript:parent.location='basketgroup.pl?op=printbgroup&bgroupid=<!-- TMPL_VAR NAME="id" -->';">print</a> /
+                                <a href="javascript:unclosegroup('<!-- TMPL_VAR name="id" -->');">reopen group</a>
                         ]</p>
                         <ul id="bg-<!-- TMPL_VAR NAME="id" -->" class="closed">
                     <!-- /TMPL_UNLESS -->

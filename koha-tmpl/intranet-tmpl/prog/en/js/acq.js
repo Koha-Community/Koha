@@ -466,7 +466,7 @@ function closebasketgroup(bgid) {
     cantprint.id = 'cantprint-' + bgid;
     var unclosegroup = document.createElement('a');
     unclosegroup.href='javascript:unclosegroup('+bgid+');';
-    unclosegroup.innerHTML=_("unclose basketgroup");
+    unclosegroup.innerHTML=_("reopen basketgroup");
     unclosegroup.id = 'unclose-' + bgid;
 
     div.appendChild(cantprint);
@@ -557,33 +557,6 @@ function showhideclosegroups(show){
     else display = 'none';
     for(var i = 0; i < divs.length; ++i){
         divs[i].style.display=display;
-    }
-}
-
-function moveallungroupedto(event, newbgname){
-    if (!enterpressed(event) && event != "button"){
-        return false;
-    }
-    var Dom = YAHOO.util.Dom;
-    var ungrouped = Dom.getElementsByClassName("ungrouped", "li");
-    var unclosed = Dom.getElementsByClassName("workarea", "div");
-    var reg = new RegExp("[-]+", "g");
-
-    for (var i = 0; i < unclosed.length; ++i){
-        if(unclosed[i].getElementsByTagName('h3')[0].innerHTML == newbgname){
-            var ul = unclosed[i].getElementsByTagName('ul')[0];
-            var id = unclosed[i].getElementsByTagName('input')[unclosed[i].getElementsByTagName('input').length-2].name.split(reg)[1];
-            for (var j = 0; j< ungrouped.length; ++j){
-                ungrouped[j].className = "grouped";
-                ungrouped[j].getElementsByTagName('input')[0].value = id;
-                ul.appendChild(ungrouped[j]);
-//FIXME: these should be using getElementById, but i don't know how.
-//this might not be explicit enough, and it's quite complex and hard to read. (above is the basketgroupid of the basket,
-// below is the changed status
-                ungrouped[j].getElementsByTagName('input')[1].value = 1;
-
-            }
-        }
     }
 }
 
