@@ -80,7 +80,7 @@ sub AddBibliosToShelf {
 my $query           = new CGI;
 
 # If set, then single item case.
-my @biblionumber    = $query->param('biblionumber');
+my $biblionumber    = $query->param('biblionumber');
 
 # If set, then multiple item case.
 
@@ -88,6 +88,7 @@ my $biblionumbers   = $query->param('biblionumbers');
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
 my $category        = $query->param('category');
+my $confirmed        = $query->param('confirmed');
 my $sortfield		= $query->param('sortfield');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -104,14 +105,14 @@ my @biblionumbers;
 if ($biblionumbers) {
     @biblionumbers = split '/', $biblionumbers;
 } else {
-    @biblionumbers = ($biblionumber);
+    @biblionumbers = (@biblionumber);
 }
 
 $shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield )
   if $newvirtualshelf;
 if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
     if ($confirmed == 1) {
-	AddBibliosToShelf($shelfnumber,@biblionumber);
+	AddBibliosToShelf($shelfnumber,@biblionumbers);
 	print
     "Content-Type: text/html\n\n<html><body onload=\"window.opener.location.reload(true);window.close()\"></body></html>";
 	exit;
