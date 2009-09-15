@@ -109,42 +109,6 @@ $(document).ready(function(){
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF --> 
 
-<<<<<<< HEAD:koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl
-    <div class="yui-g">
-    
-    
-    <!-- TMPL_IF NAME="viewshelf" -->
-    <!--  Viewing a particular shelf -->
-    <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em><!-- TMPL_VAR NAME="shelfname" ESCAPE="html" --></em></h3>
-        <!-- TMPL_IF NAME="itemsloop" -->
-        <!-- TMPL_IF NAME="manageshelf" --><div><span class="checkall"></span>
-        <span class="clearall"></span> | <a class="editshelf" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a> <form method="post" action="opac-shelves.pl">
-<input type="hidden" value="1" name="shelves"/>
-<!-- TMPL_IF NAME="showprivateshelves" -->
-<input type="hidden" name="display" value="privateshelves" />
-<!-- /TMPL_IF -->
-<input type="hidden" value="1" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->"/>
-<input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/></form>
-<a href="#" class="send" onClick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a>
-</div><!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="manageshelf" --><form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
-        <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
-        <input type="hidden" name="modifyshelfcontents" value="1" /><!-- /TMPL_IF -->
-        <!-- TMPL_VAR name='pagination_bar'-->
-<table id="listcontents">
-        <thead><tr>
-            <!-- TMPL_IF NAME="manageshelf" --><th>&nbsp;</th><!-- /TMPL_IF -->
-            <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
-            <th>Title</th>
-            <th>Author</th>
-            <th>Year</th>
-        </tr></thead>
-            <tbody><!-- TMPL_LOOP NAME="itemsloop" -->
-                <!-- TMPL_IF NAME="toggle" -->
-        <tr class="highlight">
-                <!-- TMPL_ELSE -->
-        <tr>
-=======
             <!-- TMPL_IF NAME="viewshelf" --><!--  Viewing a particular shelf -->
               <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em><!-- TMPL_VAR NAME="shelfname" ESCAPE="html" --></em></h3>
               <!-- TMPL_IF NAME="itemsloop" -->
@@ -179,7 +143,6 @@ $(document).ready(function(){
                   </div>
 				<!-- TMPL_ELSE -->
 				<div style="margin-left:1em;"><a href="#" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a> | <span><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to place holds or add tags</span></div>
->>>>>>> 3fa269d... Bug 3173 Place Hold link visible in OPAC even if syspref turned off:koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="manageshelf" -->
             <td>
