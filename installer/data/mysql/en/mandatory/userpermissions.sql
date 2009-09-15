@@ -17,7 +17,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
    (13, 'schedule_tasks', 'Schedule tasks to run'),
    (13, 'batchmod', 'Perform batch modification of items'),
-   (13, 'batchdel', 'Perform batch deletion of items')
+   (13, 'batchdel', 'Perform batch deletion of items'),
    (11, 'vendors_manage', 'Manage vendors'),
    (11, 'contracts_manage', 'Manage contracts'),
    (11, 'period_manage', 'Manage periods'),
@@ -29,4 +29,3 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'order_receive', 'Manage orders & basket'),
    (11, 'budget_add_del', 'Add and delete budgets (but cant modify budgets)')
 ;
->>>>>>> granular perms for acquisitions:installer/data/mysql/en/mandatory/userpermissions.sql
