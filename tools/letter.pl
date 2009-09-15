@@ -182,6 +182,8 @@ sub add_form {
     }
 
     # add acquisition specific tables
+    my @SQLfieldname;
+    my $field_selection;
     if ( $module eq "suggestions" ) {
         push @SQLfieldname, column_picks('borrowers'),
                             column_picks('suggestions'),
@@ -199,7 +201,6 @@ sub add_form {
         push @SQLfieldname, column_picks('aqbooksellers'), column_picks('aqorders');
         # add issues specific tables
     }
-    ];
     push @{$field_selection}, add_fields('branches');
     if ($module eq 'reserves') {
         push @{$field_selection}, add_fields('borrowers', 'reserves', 'biblio', 'items');
