@@ -47,12 +47,14 @@ function reloadPage(p) {
 						    <input type="text" id="profile_name" name="profile_name" /><br /><br />
 
 						    <label for="profile_description">Profile description :</label>
-						    <textarea cols="50" name="profile_description" id="profile_description"></textarea><br /><br />
+						    <textarea cols="50" rows="2" name="profile_description" id="profile_description"></textarea><br /><br />
 
 						    <label for="profile_content">Profile marcfields :</label>
-						    <textarea cols="50" name="profile_content" id="profile_content"></textarea>
+						    <textarea cols="50" rows="2" name="profile_content" id="profile_content"></textarea>
+						    <p>You have to define which fields or subfields you want to export, separated by pipes.<br />
+							Example&nbsp;: 200|210$a|301
+						    </p>
 						</fieldset>
-						<input type="hidden" name="action" value="create" />
 						<input type="submit" />
 					    </form>
 					<!-- /TMPL_IF -->
@@ -72,10 +74,10 @@ function reloadPage(p) {
 						    </select><br /><br />
 
 						    <label for="modify_profile_description">Profile description :</label>
-						    <textarea cols="50" name="profile_description" id="modify_profile_description"><!-- TMPL_VAR NAME="selected_profile_description" --></textarea><br /><br />
+						    <textarea cols="50" rows="2" name="profile_description" id="modify_profile_description"><!-- TMPL_VAR NAME="selected_profile_description" --></textarea><br /><br />
 
 						    <label for="modify_profile_content">Profile marcfields :</label>
-						    <textarea cols="50" name="profile_content" id="modify_profile_content"><!-- TMPL_VAR NAME="selected_profile_marcfields" --></textarea><br /><br />
+						    <textarea cols="50" rows="2" name="profile_content" id="modify_profile_content"><!-- TMPL_VAR NAME="selected_profile_marcfields" --></textarea><br /><br />
 						    
 						    <label for="delete">Delete selected profile ?</label>
 						    <input type="checkbox" name="delete" id="delete" />
