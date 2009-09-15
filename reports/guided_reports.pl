@@ -193,11 +193,32 @@ elsif ( $phase eq 'Choose these criteria' ) {
 	my $query_criteria;
     foreach my $crit (@criteria) {
         my $value = $input->param( $crit . "_value" );
-        ($value) or next;
-        if ($value =~ C4::Dates->regexp('syspref')) { 
-            $value = C4::Dates->new($value)->output("iso");
-        }
-        $query_criteria .= " AND $crit='$value'";
+	
+	# If value is not defined, then it may be range values
+	if (!$value) {
+
+	    my $fromvalue = $input->param( "from_" . $crit . "_value" );
+	    my $tovalue   = $input->param( "to_"   . $crit . "_value" );
+	    
+	    # If the range values are dates
+	    if ($fromvalue =~ C4::Dates->regexp('syspref') && $tovalue =~ C4::Dates->regexp('syspref')) { 
+		$fromvalue = C4::Dates->new($fromvalue)->output("iso");
+		$tovalue = C4::Dates->new($tovalue)->output("iso");
+	    }
+
+	    if ($fromvalue && $tovalue) {
+		$query_criteria .= " AND $crit >= '$fromvalue' AND $crit <= '$tovalue'";
+	    }
+
+	} else {
+
+	    # If value is a date
+	    if ($value =~ C4::Dates->regexp('syspref')) { 
+		$value = C4::Dates->new($value)->output("iso");
+	    }
+	    $query_criteria .= " AND $crit='$value'";
+	}
+	warn $query_criteria;
     }
 
     $template->param(

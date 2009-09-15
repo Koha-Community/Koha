@@ -158,8 +158,10 @@ canned reports and writing custom SQL reports.</p>
 </li></ol></fieldset>
 
 <fieldset class="action">
-<input type="hidden" name="phase" value="Choose this type" />
-<input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
+    <input type="hidden" name="phase" value="Choose this type" />
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" />
+</fieldset>
 </form>
 </div>
 <div class="yui-gb"><div class="yui-u first"></div>
@@ -213,8 +215,9 @@ canned reports and writing custom SQL reports.</p>
 </fieldset>
 <div class="yui-g">
 <fieldset class="action">
-<input type="hidden" name="phase" value="Choose these columns" />
-<input type="submit" name="submit" value="Next &gt;&gt;" />
+    <input type="hidden" name="phase" value="Choose these columns" />
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" />
 </fieldset>
 </div>
 </form>
@@ -223,39 +226,79 @@ canned reports and writing custom SQL reports.</p>
 
 <!-- TMPL_IF NAME="build4" -->
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" >
-<input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
-<input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
-<input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->" />
-<fieldset><legend>Step 4 of 6: Select Criteria to Limit on</legend><table>
-<!-- TMPL_LOOP NAME="criteria" -->
-<tr><td><input type="checkbox" name="criteria_column" id="<!-- TMPL_VAR
-NAME="name" -->" value="<!-- TMPL_VAR
-NAME="name" -->" /> <label for="<!-- TMPL_VAR
-NAME="name" -->"><!-- TMPL_VAR NAME="description" --> </label>
-</td>
-<!-- TMPL_IF NAME="date" -->
-<td><input type="text" size="10" id="<!-- TMPL_VAR NAME="name"
--->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value=""
-/><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom<!-- TMPL_VAR NAME="name" -->" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
-<script type="text/javascript">   
-Calendar.setup({  
-inputField     : "<!-- TMPL_VAR NAME="name" -->_value",
-ifFormat       : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-button         : "buttonfrom<!-- TMPL_VAR NAME="name" -->",
-align          : "Tl" 
-});     
-</script>          
-</td></tr>
-<!-- TMPL_ELSE -->
-<td><select name="<!-- TMPL_VAR NAME="name" -->_value">
-<!-- TMPL_LOOP NAME="values" -->
-<option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
-<!-- /TMPL_LOOP -->
-</select>
-</td></tr>
-<!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
-</table></fieldset>
+    <input type="hidden" name="area" value="<!-- TMPL_VAR NAME="area" -->" />
+    <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
+    <input type="hidden" name="column" value="<!-- TMPL_VAR NAME="column" -->" />
+    <fieldset><legend>Step 4 of 6: Select Criteria to Limit on</legend>
+	<table>
+	    <!-- TMPL_LOOP NAME="criteria" -->
+	    <tr>
+		<td>
+		    <input type="checkbox" name="criteria_column" id="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="name" -->" /> 
+		    <label for="<!-- TMPL_VAR NAME="name" -->"><!-- TMPL_VAR NAME="description" --> </label>
+		</td>
+		<!-- TMPL_IF NAME="date" -->
+		<td>
+		    <input type="text" size="10" id="<!-- TMPL_VAR NAME="name" -->_value" name="<!-- TMPL_VAR NAME="name" -->_value" value="" />
+		    <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfrom<!-- TMPL_VAR NAME="name" -->" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+		    <script type="text/javascript">   
+			Calendar.setup({  
+			inputField     : "<!-- TMPL_VAR NAME="name" -->_value",
+			ifFormat       : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+			button         : "buttonfrom<!-- TMPL_VAR NAME="name" -->",
+			align          : "Tl" 
+			});     
+		    </script>          
+		</td>
+	    </tr>
+	    <!-- TMPL_ELSE -->
+		<!-- TMPL_IF NAME="textrange" -->
+		    <td>from
+			<input type="text" size="10" id="<!-- TMPL_VAR NAME="from" -->_value" name="<!-- TMPL_VAR NAME="from" -->_value" value="" /> to 
+			<input type="text" size="10" id="<!-- TMPL_VAR NAME="to" -->_value" name="<!-- TMPL_VAR NAME="to" -->_value" value="" />
+		    </td>
+		    </tr>
+		<!-- TMPL_ELSE -->
+		    <!-- TMPL_IF NAME="daterange" -->
+		    <td>from 
+			<input type="text" size="10" id="from_<!-- TMPL_VAR NAME="name" -->_value" name="from_<!-- TMPL_VAR NAME="name" -->_value" value="" />
+			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfromfrom_<!-- TMPL_VAR NAME="name" -->" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+			<script type="text/javascript">   
+			    Calendar.setup({  
+			    inputField     : "from_<!-- TMPL_VAR NAME="name" -->_value",
+			    ifFormat       : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+			    button         : "buttonfromfrom_<!-- TMPL_VAR NAME="name" -->",
+			    align          : "Tl" 
+			    });     
+			</script>         
+			to
+			<input type="text" size="10" id="to_<!-- TMPL_VAR NAME="name" -->_value" name="to_<!-- TMPL_VAR NAME="name" -->_value" value="" />
+			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="buttonfromto_<!-- TMPL_VAR NAME="name" -->" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+			<script type="text/javascript">   
+			    Calendar.setup({  
+			    inputField     : "to_<!-- TMPL_VAR NAME="name" -->_value",
+			    ifFormat       : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+			    button         : "buttonfromto_<!-- TMPL_VAR NAME="name" -->",
+			    align          : "Tl" 
+			    });     
+			</script>        
+		    </td>
+		</tr>
+		    <!-- TMPL_ELSE -->
+			<td>
+			    <select name="<!-- TMPL_VAR NAME="name" -->_value">
+				<!-- TMPL_LOOP NAME="values" -->
+				<option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_VAR NAME="availablevalues" --></option>
+				<!-- /TMPL_LOOP -->
+			    </select>
+		       </td>
+		       </tr>
+		    <!-- /TMPL_IF -->
+		<!-- /TMPL_IF -->
+	    <!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
+	</table>
+    </fieldset>
 
 <!-- TMPL_IF NAME="definitions" -->
 <fieldset><legend>Dictionary Definitions</legend><table>
@@ -267,7 +310,8 @@ TMPL_VAR NAME="id" -->" /> <!-- TMPL_VAR NAME="name" --></td></tr>
 <!-- /TMPL_IF -->
 
 <fieldset class="action"><input type="hidden" name="phase" value="Choose these criteria" />
-<input type="submit" name="submit" value="Next &gt;&gt;" /> </fieldset>
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" /> </fieldset>
 </form>
 <!-- /TMPL_IF -->
 
@@ -298,7 +342,8 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name" --></label></td>
 </table></fieldset>
 
 <fieldset class="action"><input type="hidden" name="phase" value="Choose These Operations" />
-<input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
 </form>
 <!-- /TMPL_IF -->
 
