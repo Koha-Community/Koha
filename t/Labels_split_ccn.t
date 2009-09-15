@@ -15,7 +15,7 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 #
-# for context, see http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=2691
+# for context, see http://bugs.koha.org
 
 use strict;
 use warnings;
@@ -23,41 +23,41 @@ use warnings;
 use Test::More;
 
 BEGIN {
-    our $lccns = {};
+    our $ccns = {};
     if ($ARGV[0]) {
-        BAIL_OUT("USAGE: perl Labels_split_lccn.t 'HE 8700.7 .P6 T44 1983' 'HE,8700.7,.P6,T44,1983'") unless $ARGV[1];
-        $lccns = {$ARGV[0] => [split (/,/,$ARGV[1])],};
+        BAIL_OUT("USAGE: perl Labels_split_ccn.t 'BIO JP2 R5c.1' 'BIO,JP2,R5c.1'") unless $ARGV[1];
+        $ccns = {$ARGV[0] => [split (/,/,$ARGV[1])],};
     }
     else {
-        $lccns = {
-            'HE8700.7 .P6T44 1983' => [qw(HE 8700.7 .P6 T44 1983)],
-            'BS2545.E8 H39 1996'   => [qw(BS 2545 .E8 H39 1996)],
-            'NX512.S85 A4 2006'    => [qw(NX 512 .S85 A4 2006)],
+        $ccns = {
+            'BIO JP2 R5c.1'         => [qw(BIO JP2 R5 c.1)],
+            'FIC GIR J5c.1'         => [qw(FIC GIR J5 c.1)],
+            'J DAR G7c.11'          => [qw( J  DAR G7 c.11)],
+            'MP3-CD F PARKER'       => [qw(MP3-CD F PARKER)],
         };
     }
     my $test_num = 1;
-    foreach (keys(%$lccns)) {
-        my $split_num += scalar(@{$lccns->{$_}});
+    foreach (keys(%$ccns)) {
+        my $split_num += scalar(@{$ccns->{$_}});
         $test_num += 2 * $split_num;
         $test_num += 4;
     }
     plan tests => $test_num;
     use_ok('C4::Labels::Label');
-    use vars qw($lccns);
+    use vars qw($ccns);
 }
 
-foreach my $lccn (sort keys %$lccns) {
+foreach my $ccn (sort keys %$ccns) {
     my (@parts, @expected);
-    ok($lccn, "lccn: $lccn");
-    ok(@expected = @{$lccns->{$lccn}}, "split expected to produce " . scalar(@expected) . " pieces");
-    ok(@parts = C4::Labels::Label::_split_lccn($lccn), "C4::Labels::Label::_split_lccn($lccn)");
+    ok($ccn, "ddcn: $ccn");
+    ok(@expected = @{$ccns->{$ccn}}, "split expected to produce " . scalar(@expected) . " pieces");
+    ok(@parts = C4::Labels::Label::_split_ccn($ccn), "C4::Labels::Label::_split_ccn($ccn)");
     ok(scalar(@expected) == scalar(@parts), sprintf("%d of %d pieces produced", scalar(@parts), scalar(@expected)));
     my $i = 0;
     foreach my $unit (@expected) {
         my $part;
-        ok($part = $parts[$i], "($lccn)[$i] populated: " . (defined($part) ? $part : 'UNDEF'));
-        ok((defined($part) and $part eq $unit),     "($lccn)[$i]   matches: $unit");
+        ok($part = $parts[$i], "($ccn)[$i] populated: " . (defined($part) ? $part : 'UNDEF'));
+        ok((defined($part) and $part eq $unit),     "($ccn)[$i]   matches: $unit");
         $i++;
     }
 }
-

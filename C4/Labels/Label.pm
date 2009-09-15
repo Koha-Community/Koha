@@ -6,6 +6,7 @@ use warnings;
 use Text::Wrap;
 use Algorithm::CheckDigits;
 use Text::CSV_XS;
+use Data::Dumper;
 
 use C4::Context;
 use C4::Debug;
@@ -133,9 +134,9 @@ sub _split_ddcn {
     $_ = $ddcn;
     s/\///g;   # in theory we should be able to simply remove all segmentation markers and arrive at the correct call number...
     my (@parts) = m/
-        ^([a-zA-Z-]+(?:$possible_decimal)?) # R220.3            # BIO   # first example will require extra splitting
+        ^([-a-zA-Z]*\s?(?:$possible_decimal)?) # R220.3  CD-ROM 787.87 # will require extra splitting
         \s+
-        (.+)                               # H2793Z H32 c.2   # R5c.1   # everything else (except bracketing spaces)
+        (.+)                               # H2793Z H32 c.2 EAS # everything else (except bracketing spaces)
         \s*
         /x;
     unless (scalar @parts)  {
@@ -143,41 +144,34 @@ sub _split_ddcn {
         push @parts, $_;     # if no match, just push the whole string.
     }
 
-    if ($parts[ 0] =~ /^([a-zA-Z]+)($possible_decimal)$/) {
+    if ($parts[0] =~ /^([-a-zA-Z]+)\s?($possible_decimal)$/) {
           shift @parts;         # pull off the mathching first element, like example 1
         unshift @parts, $1, $2; # replace it with the two pieces
     }
 
     push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
-
-    if ($parts[-1] !~ /^.*\d-\d.*$/ && $parts[-1] =~ /^(.*\d+)(\D.*)$/) {
-         pop @parts;            # pull off the mathching last element, like example 2
-        push @parts, $1, $2;    # replace it with the two pieces
-    }
-
     $debug and print STDERR "split_ddcn array: ", join(" | ", @parts), "\n";
     return @parts;
 }
 
-sub _split_fcn {
+## NOTE: Custom call number types go here. It may be necessary to create additional splitting algorithms if some custom call numbers
+##      cannot be made to work here. Presently this splits standard non-ddcn, non-lccn fiction and biography call numbers.
+
+sub _split_ccn {
     my ($fcn) = @_;
-    my @fcn_split = ();
-    # Split fiction call numbers based on spaces
-    SPLIT_FCN:
-    while ($fcn) {
-        if ($fcn =~ m/([A-Za-z0-9]+\.?[0-9]?)(\W?).*?/x) {
-            push (@fcn_split, $1);
-            $fcn = $';
-        }
-        else {
-            last SPLIT_FCN;     # No match, break out of the loop
-        }
+    my @parts = ();
+    # Split call numbers based on spaces
+    push @parts, split /\s+/, $fcn;   # split the call number into an arbitrary number of pieces at spaces
+    if ($parts[-1] !~ /^.*\d-\d.*$/ && $parts[-1] =~ /^(.*\d+)(\D.*)$/) {
+        pop @parts;            # pull off the matching last element
+        push @parts, $1, $2;    # replace it with the two pieces
     }
-    unless (scalar @fcn_split) {
+    unless (scalar @parts) {
         warn sprintf('regexp failed to match string: %s', $_);
-        push (@fcn_split, $_);
+        push (@parts, $_);
     }
-    return @fcn_split;
+    $debug and print STDERR "split_ccn array: ", join(" | ", @parts), "\n";
+    return @parts;
 }
 
 sub _get_barcode_data {
@@ -414,11 +408,11 @@ sub draw_label_text {
         if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{'printing_type'} eq 'BIB') and ($self->{'callnum_split'})) { # If the field contains the call number, we do some sp
             if ($cn_source eq 'lcc') {
                 @label_lines = _split_lccn($field_data);
-                @label_lines = _split_fcn($field_data) if !@label_lines;    # If it was not a true lccn, try it as a fiction call number
+                @label_lines = _split_ccn($field_data) if !@label_lines;    # If it was not a true lccn, try it as a custom call number
                 push (@label_lines, $field_data) if !@label_lines;         # If it was not that, send it on unsplit
             } elsif ($cn_source eq 'ddc') {
                 @label_lines = _split_ddcn($field_data);
-                @label_lines = _split_fcn($field_data) if !@label_lines;
+                @label_lines = _split_ccn($field_data) if !@label_lines;
                 push (@label_lines, $field_data) if !@label_lines;
             } else {
                 warn sprintf('Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha.org', $field_data);
