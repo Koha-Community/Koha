@@ -3024,6 +3024,12 @@ COMMENT
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.115";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER table aqbudgets drop column budget_amount_sublevel;");
+    print "Upgrade to $DBversion done drop column budget_amount_sublevel from aqbudgets\n";
+    SetVersion ($DBversion);
+}
 
 
 =item DropAllForeignKeys($table)

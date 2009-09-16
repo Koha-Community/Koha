@@ -532,9 +532,8 @@ sub GetBudgetHierarchy {
 
 					# add indent
 					my $depth = $r->{depth} * 2;
-					my $space = pack "A[$depth]";
-					$r->{budget_code_indent} = $space . $r->{budget_code};
-					$r->{budget_name_indent} = $space . $r->{budget_name};
+					$r->{budget_code_indent} = $r->{budget_code};
+					$r->{budget_name_indent} = $r->{budget_name};
 					foreach my $r3 (@sort) {
 						if ($r3->{budget_id} == $r->{budget_parent_id}) {
 							$parent = $i2;
@@ -546,7 +545,7 @@ sub GetBudgetHierarchy {
 					$r->{budget_code_indent} = $r->{budget_code};
 					$r->{budget_name_indent} = $r->{budget_name};
 				}
-
+                
 				if (defined $parent) {
 					splice @sort, ($parent + 1), 0, $r;
 				} else {
@@ -575,7 +574,7 @@ sub GetBudgetHierarchy {
 
         $r->{'budget_spent'}       = GetBudgetSpent( $r->{'budget_id'} );
 
-        $r->{'budget_amount_total'} =  $r->{'budget_amount'} + $r->{'budget_amount_sublevel'}  ;
+        $r->{'budget_amount_total'} =  $r->{'budget_amount'};
 
         # foreach sub-levels
         my $unalloc_count ;
@@ -584,14 +583,8 @@ sub GetBudgetHierarchy {
 			my $sub_budget = GetBudget($sub);
 
 			$r->{budget_spent_sublevel} +=    GetBudgetSpent( $sub_budget->{'budget_id'} );
-			$unalloc_count +=   $sub_budget->{'budget_amount'} + $sub_budget->{'budget_amount_sublevel'};
+			$unalloc_count +=   $sub_budget->{'budget_amount'};
 		}
-
-	    $r->{budget_unalloc_sublevel} =  $r->{'budget_amount_sublevel'}   -   $unalloc_count;
-
-        if ( scalar  @subs_arr == 0  && $r->{budget_amount_sublevel} > 0 ) {
-            $r->{warn_no_subs} = 1;
-        }
 	}
 	return \@sort;
 }

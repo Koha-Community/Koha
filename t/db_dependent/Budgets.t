@@ -88,7 +88,6 @@ ok($budget_id=AddBudget(
 	"AddBudget returned $budget_id");
 #budget_code            | varchar(30)   | YES  |     | NULL              |       | 
 #| budget_amount          | decimal(28,6) | NO   |     | 0.000000          |       | 
-#| budget_amount_sublevel | decimal(28,6) | YES  |     | NULL              |       | 
 #| budget_id              | int(11)       | NO   | PRI | NULL              |       | 
 #| budget_branchcode      | varchar(10)   | YES  |     | NULL              |       | 
 #| budget_parent_id       | int(11)       | YES  |     | NULL              |       | 

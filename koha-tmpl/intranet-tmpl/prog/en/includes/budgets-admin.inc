@@ -21,10 +21,10 @@
 
 	function yuiToolbar() {
                 var periods_menu = [
-                        { text: _("Display all periods"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl" },
-                        { text: _("New period"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form" },
-                        { text: _("Edit period '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
-                        { text: _("Duplicate period"),  },
+                        { text: _("Display all root budgets"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl" },
+                        { text: _("New root budget"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form" },
+                        { text: _("Edit root budget '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
+                        { text: _("Duplicate root budget"),  },
                 ]
 
 // IF THERE IS NO BUDGETS DEFINED YET, THEN DISPLAY PERIOD BUTTON *ONLY*
@@ -71,7 +71,7 @@
 
             new YAHOO.widget.Button({
                 type: "menu",
-                label: _("Budget periods"),
+                label: _("Root Budgets"),
                 name: "periods_button",
                 menu: periods_menu,
                 container: "periods_menuc"
@@ -111,7 +111,7 @@
 	</script>
 	<ul class="toolbar">
 
-  <li id="periods_menuc"><a id="periods_menu" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">Budget periods</a></li>
+  <li id="periods_menuc"><a id="periods_menu" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">Root Budgets</a></li>
 
 
 <!-- TMPL_UNLESS NAME="period_button_only" -->

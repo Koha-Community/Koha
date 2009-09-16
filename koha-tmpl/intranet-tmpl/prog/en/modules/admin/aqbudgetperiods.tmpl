@@ -60,14 +60,14 @@
 
     <!-- TMPL_IF name="add_form" -->&rsaquo;
         <!-- TMPL_IF name="budget_period_id" -->
-            Modify budget period'<!-- TMPL_VAR name="budget_period_id" -->'
+            Modify root budget'<!-- TMPL_VAR name="budget_period_id" -->'
         <!-- TMPL_ELSE -->
-            Add budget period
+            Add root budget
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF name="delete_confirm" -->&rsaquo;
-            Delete budget period '<!-- TMPL_VAR name="budget_period_description" -->'?
+            Delete root budget '<!-- TMPL_VAR name="budget_period_description" -->'?
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="delete_confirmed" -->&rsaquo;
         Data Deleted
@@ -95,21 +95,21 @@
     <!-- TMPL_IF name="add_form" -->
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budget periods</a> &rsaquo;
         <!-- TMPL_IF name="budget_period_id" -->
-            Modify period <!-- TMPL_VAR name="budget_period_description" -->
+            Modify root budget <!-- TMPL_VAR name="budget_period_description" -->
 
         <!-- TMPL_ELSE -->
-            Add budget period
+            Add root budget
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 
     <!-- delete a budget period -->
     <!-- ################################ -->
     <!-- TMPL_IF name="delete_confirm" -->
-        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budget periods</a> &rsaquo;
+        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Root budgets</a> &rsaquo;
         <!-- TMPL_IF name="total" -->
-            Cannot Delete budget period '<!-- TMPL_VAR name="budget_period_description" -->'
+            Cannot Delete root budget '<!-- TMPL_VAR name="budget_period_description" -->'
         <!-- TMPL_ELSE -->
-            Delete budget period '<!-- TMPL_VAR name="budget_period_description" -->'?
+            Delete root budget '<!-- TMPL_VAR name="budget_period_description" -->'?
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 
@@ -131,9 +131,9 @@
     <!--  add or modify a budget period   -->
 <!--TMPL_IF Name="duplicates"--><!--TMPL_INCLUDE Name="duplicates.inc"--><!--/TMPL_IF-->
     <!-- TMPL_IF name="budget_period_id" -->
-        <h3>Modify budget period</h3>
+        <h3>Modify root budget</h3>
     <!-- TMPL_ELSE -->
-        <h3>Add budget period</h3>
+        <h3>Add root budget</h3>
 	<!-- /TMPL_IF -->
 <form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post">
     <fieldset class="rows">
@@ -195,14 +195,14 @@
     <li>
         <!-- ACTIVE -->
         <!-- ############################## -->
-        <label for="budget_period_active">Make Period Active</label>
+        <label for="budget_period_active">Make Budget Active</label>
         <!-- TMPL_IF NAME="budget_period_active" --><input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" checked /><!--TMPL_ELSE-->  <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1"/> <!--/TMPL_IF-->
     </li>
 
     <li>
         <!-- LOCK  -->
         <!-- ############################## -->
-        <label for="budget_period_locked">Lock Period</label>
+        <label for="budget_period_locked">Lock Budget</label>
         <!-- TMPL_IF NAME="budget_period_locked" --><input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" /><!--TMPL_ELSE-->  <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1"/> <!--/TMPL_IF-->
     </li>
     </ol>
@@ -227,12 +227,12 @@
 <!-- TMPL_IF name="delete_confirm" -->
     <!-- TMPL_IF name="total" -->
         <div class="dialog message">
-        <h3>Cannot delete budget period</h3>
+        <h3>Cannot delete root budget</h3>
         <p><strong>This record is used <!-- TMPL_VAR name="total" --> times</strong>
         . Deletion is not possible.</p>
     <!-- TMPL_ELSE -->
         <div class="dialog alert">
-        <h3>Delete budget period '<!-- TMPL_VAR name="budget_period_description" -->'?</h3>
+        <h3>Delete root budget '<!-- TMPL_VAR name="budget_period_description" -->'?</h3>
     <!-- /TMPL_IF -->
 
     <!-- ###################################################################### -->
@@ -275,12 +275,12 @@
 <!-- /TMPL_IF -->
 <!--  DEFAULT  display budget periods list -->
 <!-- TMPL_IF name="else" -->
-    <h2>Budget periods administration</h2>
+    <h2>Root budgets administration</h2>
     <!-- TMPL_IF name="cur" --><b>Currency = <!-- TMPL_VAR name="cur" --></b><!-- /TMPL_IF -->
     <table id="periodsh">
     <thead>
 	    <tr>
-	        <th>Period Name</th>
+	        <th>Root Budget Name</th>
 	        <th>Start Date</th>
 	        <th>End Date</th>
 	        <th>Active</th>
@@ -290,26 +290,29 @@
 	    </tr>
 	</thead>
 	<tbody>
-    <!-- TMPL_LOOP name="period_loop" -->
-        <!-- TMPL_IF NAME="__odd__" -->
-            <tr>
-        <!-- TMPL_ELSE -->
-            <tr class="highlight">
-        <!-- /TMPL_IF -->
-        <td><!-- TMPL_VAR name="budget_period_description" --></td>
-        <td><!-- TMPL_VAR name="budget_period_startdate" --></td>
-        <td><!-- TMPL_VAR name="budget_period_enddate" --></td>
-        <td> <font COLOR="#00FF00">   <!-- TMPL_IF name="budget_period_active" -->✓<!-- /TMPL_IF --> </font> </td>
-        <td> <font COLOR="red">   <!-- TMPL_IF name="budget_period_locked" -->X<!-- /TMPL_IF --> </font> </td>
-        <td align='right'><!-- TMPL_VAR NAME="budget_period_total" --></td>
-        <td>
-            <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;budget_period_id=<!-- TMPL_VAR name="budget_period_id" escape="HTML" -->">Edit</a>
-            <a href="<!-- TMPL_VAR name="script_name"-->?op=delete_confirm&amp;budget_period_id=<!-- TMPL_VAR name="budget_period_id" -->">Delete</a>
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR name="budget_period_id" -->">Budgets</a>
-           	<a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Add Budget</a>
-        </td>
-        </tr>
-    <!-- /TMPL_LOOP -->
+	    <!-- TMPL_LOOP name="period_loop" -->
+	        <!-- TMPL_IF NAME="__odd__" -->
+	            <tr>
+	        <!-- TMPL_ELSE -->
+	            <tr class="highlight">
+	        <!-- /TMPL_IF -->
+	        <td><!-- TMPL_VAR name="budget_period_description" --></td>
+	        <td><!-- TMPL_VAR name="budget_period_startdate" --></td>
+	        <td><!-- TMPL_VAR name="budget_period_enddate" --></td>
+	        <td> <font COLOR="#00FF00">   <!-- TMPL_IF name="budget_period_active" -->✓<!-- /TMPL_IF --> </font> </td>
+	        <td> <font COLOR="red">   <!-- TMPL_IF name="budget_period_locked" -->X<!-- /TMPL_IF --> </font> </td>
+	        <td align='right'><!-- TMPL_VAR NAME="budget_period_total" --></td>
+	        <td>
+	            <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;budget_period_id=<!-- TMPL_VAR name="budget_period_id" escape="HTML" -->">Edit</a>
+	            <a href="<!-- TMPL_VAR name="script_name"-->?op=delete_confirm&amp;budget_period_id=<!-- TMPL_VAR name="budget_period_id" -->">Delete</a>
+	            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR name="budget_period_id" -->">Budgets</a>
+	           	<a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Add Budget</a>
+	        </td>
+	        </tr>
+	    <!-- /TMPL_LOOP -->
+	    <!-- TMPL_UNLESS NAME="period_loop" -->
+    	<tr><td colspan="7">No root budget</td></tr>
+    	<!-- /TMPL_UNLESS -->
     </tbody>
     </table>
     <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>

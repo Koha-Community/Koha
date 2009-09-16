@@ -64,33 +64,30 @@ if ($parent) {
     $sth->execute( $parent->{'budget_id'} );
     my $sum = $sth->fetchrow_hashref;
     $sth->finish;
-
-    $sub_unalloc = $parent->{'budget_amount_sublevel'} - $sum->{sum};
-
+    
+    $sub_unalloc = $parent->{'budget_amount'} - $sum->{sum};
+        
 #    TRICKY.. , IF THE PARENT IS THE CURRENT PARENT  - THEN SUBSTRACT CURRENT BUDGET FROM TOTAL
-    if ( $budget->{'budget_parent_id'} == $parent_id ) {
-        $sub_unalloc           += ( $budget->{'budget_amount'} + $budget->{'budget_amount_sublevel'} );
-        $budget_period_unalloc += ( $budget->{'budget_amount'} + $budget->{'budget_amount_sublevel'} );
-    }
+    $sub_unalloc           += $budget->{'budget_amount'} if ( $budget->{'budget_parent_id'} == $parent_id ) ;
 }
 
 # ELSE , IF NO PARENT PASSED, THEN CHECK UNALLOCATED FOR PERIOD, IF NOT THEN RETURN 2
 else {
-    my $query = qq| SELECT (SUM(budget_amount_sublevel) +  SUM(budget_amount)) as sum
+    my $query = qq| SELECT SUM(budget_amount) as sum
                 FROM aqbudgets WHERE budget_period_id = ?|;
 
     my $sth   = $dbh->prepare($query);
-    $sth->execute(  $period->{'budget_period_total'}  ); 
+    $sth->execute(  $period_id  ); 
     $period_sum = $sth->fetchrow_hashref;
     $sth->finish;
-    $budget_period_unalloc = $period->{'budget_period_total'} - $period_sum->{'sum'};
+    $budget_period_unalloc = $period->{'budget_period_total'} - $period_sum->{'sum'} if $period->{'budget_period_total'};
 }
 
 if ( $parent_id) {
-    if (  $total > $sub_unalloc ) {
+    if ( ($total > $sub_unalloc ) && $sub_unalloc )  {
         $returncode = 1;
     }
-} elsif ( $total > $budget_period_unalloc ) {
+} elsif ( ( $total > $budget_period_unalloc ) && $budget_period_unalloc ) {
     $returncode = 2;
 
 } else {

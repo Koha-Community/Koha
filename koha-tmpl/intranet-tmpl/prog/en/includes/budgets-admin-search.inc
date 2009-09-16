@@ -65,14 +65,6 @@ YAHOO.util.Event.onContentReady("header_search", function() {
             <!-- /TMPL_LOOP -->     
        </select>         
 
-
-
-
-
-      </select>
-
-
-
       <input type="hidden"  name="budget_period_id" value="<!-- TMPL_VAR NAME="budget_period_id" -->" /> 
       <input type="submit" class="submit" name="filter" value="Submit" />
 </form>

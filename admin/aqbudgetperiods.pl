@@ -67,7 +67,7 @@ my $budget_period_hashref= $input->Vars;
 #my $sort1_authcat = $input->param('sort1_authcat');
 #my $sort2_authcat = $input->param('sort2_authcat');
 
-my $pagesize    = 10;
+my $pagesize    = 20;
 $searchfield =~ s/\,//g;
 
 my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(

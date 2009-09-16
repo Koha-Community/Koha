@@ -2320,7 +2320,6 @@ CREATE TABLE `aqbudgets` (
   `budget_name` varchar(80) default NULL,
   `budget_branchcode` varchar(10) default NULL,
   `budget_amount` decimal(28,6) NULL default '0.00',
-  `budget_amount_sublevel` decimal(28,6) NULL default '0.00',
   `budget_encumb` decimal(28,6) NULL default '0.00', 
   `budget_expend` decimal(28,6) NULL default '0.00', 
   `budget_notes` mediumtext,
