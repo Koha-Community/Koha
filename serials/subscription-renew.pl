@@ -59,7 +59,7 @@ my $query = new CGI;
 my $dbh   = C4::Context->dbh;
 
 my $mode           = $query->param('mode');
-my $op             = $query->param('op');
+my $op             = $query->param('op') || q{};
 my $subscriptionid = $query->param('subscriptionid');
 my $done = 0;    # for after form has been submitted
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

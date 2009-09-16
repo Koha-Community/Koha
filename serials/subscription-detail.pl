@@ -28,7 +28,7 @@ use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
 use Carp;
 
 my $query = new CGI;
-my $op = $query->param('op');
+my $op = $query->param('op') || q{};
 my $dbh = C4::Context->dbh;
 my ($template, $loggedinuser, $cookie, $hemisphere);
 my $subscriptionid = $query->param('subscriptionid');
@@ -36,7 +36,7 @@ my $subs = GetSubscription($subscriptionid);
 
 $subs->{enddate} = GetExpirationDate($subscriptionid);
 
-if ($op && $op eq 'del') {
+if ( $op eq 'del') {
 	if ($subs->{'cannotedit'}){
 		carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
 		print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");

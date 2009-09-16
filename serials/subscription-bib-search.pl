@@ -60,7 +60,7 @@ use C4::Biblio;
 
 my $input=new CGI;
 # my $type=$query->param('type');
-my $op = $input->param('op');
+my $op = $input->param('op') || q{};
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$input->param('startfrom');

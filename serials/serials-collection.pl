@@ -31,7 +31,7 @@ use C4::Context;
 
 
 my $query = new CGI;
-my $op = $query->param('op');
+my $op = $query->param('op') || q{};
 my $dbh = C4::Context->dbh;
 
 my $sth;
@@ -51,7 +51,6 @@ my @subscriptionid = $query->param('subscriptionid');
 my $subscriptiondescs ;
 my $subscriptions;
 
-$op ||= q{};
 if($op eq 'gennext' && @subscriptionid){
     my $subscriptionid = $subscriptionid[0];
     my $subscription = GetSubscription($subscriptionid);
