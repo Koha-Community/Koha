@@ -2386,6 +2386,7 @@ sub GetNextDate(@) {
     #date supposed to be in ISO.
     
     my ( $year, $month, $day ) = split(/-/, $planneddate);
+    return undef if not check_date($year, $month, $day);
     $month=1 unless ($month);
     $day=1 unless ($day);
     my @resultdate;
