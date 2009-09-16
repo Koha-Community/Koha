@@ -15,36 +15,28 @@
 // to check if the data are correctly entered.
 function Check(ff) {
     var ok=0;
-    var _alertString="Form not submitted because of the following problem(s)\n";
+    var _alertString=_("Form not submitted because of the following problem(s)\n");
     _alertString +="-------------------------------------------------------------------\n\n";
-    if (!(isNotNull(ff.booksellerid,0)) || !(isNum(ff.booksellerid,0))) {
-        ok=1;
-        _alertString += "- bookseller missing\n";
-    }
     if (!(isNotNull(ff.contractname,0))){
         ok=1;
-        _alertString += "- contract name missing\n";
-    }
-    if (!(isNotNull(ff.contractdescription,0))) {
-        ok=1;
-        _alertString += "- description missing\n";
+        _alertString += _("- Name missing\n");
     }
     if (!(CheckDate(ff.contractstartdate))){
         ok=1;
-        _alertString += "- contract start date missing\n";
+        _alertString += _("- Start date missing\n");
     }
     if (!(CheckDate(ff.contractenddate))){
         ok=1;
-        _alertString += "- contract end date missing\n";
+        _alertString += _("- End date missing\n");
     }
     
     if (!CompareDate(ff.contractstartdate.value, ff.contractenddate.value)) {
         ok=1;
-        _alertString += "Bad date! Contract start date can not be after end date.\n";
+        _alertString += _("Wrong date! start date can not be after end date.\n");
     }
     if (! CheckEndDate(ff.contractenddate.value)) {
         ok=1;
-        _alertString += "End date before today, Invalid end date!\n";
+        _alertString += _("End date before today, Invalid end date!\n");
     }
     if (ok) { // if there is a problem
         alert(_alertString);
@@ -64,6 +56,8 @@ function Check(ff) {
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+    &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR name="name" --></a>
     &rsaquo;
     <!-- TMPL_IF NAME="add_form" -->
         <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a>
@@ -95,9 +89,29 @@ function Check(ff) {
                         <input type="hidden" name="op" value="add_validate" />
                         <input type="hidden" name="checked" value="0" />
                         <!-- TMPL_IF NAME="contractnumber" -->
-                            <h1>Modify contract <!-- TMPL_VAR NAME="contractname" --></h1>
+                            <h1>Modify contract <!-- TMPL_VAR NAME="contractname" -->
+                                <select id="booksellerid" name="booksellerid">
+                                <!-- TMPL_LOOP NAME="booksellerloop" -->
+                                    <!-- TMPL_IF NAME="selected" -->
+                                        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- TMPL_ELSE -->
+                                        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- /TMPL_IF -->
+                                <!-- /TMPL_LOOP -->
+                                </select>
+                            </h1>
                         <!-- TMPL_ELSE -->
-                            <h1>New contract</h1>
+                            <h1>New contract 
+                                <select id="booksellerid" name="booksellerid">
+                                <!-- TMPL_LOOP NAME="booksellerloop" -->
+                                    <!-- TMPL_IF NAME="selected" -->
+                                        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- TMPL_ELSE -->
+                                        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- /TMPL_IF -->
+                                <!-- /TMPL_LOOP -->
+                                </select>
+                            </h1>
                         <!-- /TMPL_IF -->
                         <fieldset class="rows">
                             <ol>
@@ -107,25 +121,17 @@ function Check(ff) {
                                             <input type="hidden" name="is_a_modif" value="1" />
                                         </li>
                                 <!-- /TMPL_IF -->
-                                <li><label for="contractname">Contract name</label> &nbsp;
+                                <li><label for="contractname" class="required">Name *</label> &nbsp;
                                         <input type="text" name="contractname" id="contractname" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="contractname" -->" />
                                 </li>
-                                <li><label for="contractdescription">Contract description</label> &nbsp;
+                                <li><label for="contractdescription">Description</label> &nbsp;
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="contractdescription" -->" />
                                 </li>
-                                <li><label for="booksellerid">bookseller</label>
-                                        <select id="booksellerid" name="booksellerid">
-                                        <!-- TMPL_LOOP NAME="booksellerloop" -->
-                                            <!-- TMPL_IF NAME="selected" -->
-                                                <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
-                                            <!-- TMPL_ELSE -->
-                                                <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
-                                            <!-- /TMPL_IF -->
-                                        <!-- /TMPL_LOOP -->
-                                        </select>
+                                <li><label for="booksellerid">Bookseller</label>
+
                                 </li>
-                                <li><label for="contractstartdate">contract start date</label> &nbsp;
-                                        <input type="text" name="contractstartdate" id="contractstartdate" value="<!-- TMPL_VAR NAME="contractstartdate" -->"/>
+                                <li><label for="contractstartdate" class="required">Start date *</label> &nbsp;
+                                        <input type="text" name="contractstartdate" id="contractstartdate" value="<!-- TMPL_VAR NAME="contractstartdate" -->" maxlength="10"  size="10"/>
                                         <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="contractstartdate_button" alt="Show Calendar" />
                                         <script language="JavaScript" type="text/javascript">
                                             Calendar.setup(
@@ -137,8 +143,8 @@ function Check(ff) {
                                             );
                                         </script>
                                 </li>
-                                <li><label for="contractenddate">contract end date</label> &nbsp;
-                                        <input type="text" name="contractenddate" id="contractenddate" value="<!-- TMPL_VAR NAME="contractenddate" -->" />
+                                <li><label for="contractenddate" class="required">End date *</label> &nbsp;
+                                        <input type="text" name="contractenddate" id="contractenddate" value="<!-- TMPL_VAR NAME="contractenddate" -->" maxlength="10"  size="10" />
                                         <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="contractenddate_button" alt="Show Calendar" />
                                         <script language="JavaScript" type="text/javascript">
                                             Calendar.setup(
@@ -177,6 +183,7 @@ function Check(ff) {
                         </table>
                         <fieldset class="action">
                             <input type="hidden" name="op" value="delete_confirmed" />
+                            <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
                             <input type="hidden" name="contractnumber" value="<!-- TMPL_VAR NAME="contractnumber" -->" />
                             <input type="submit" value="Delete this Contract" />
                             <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl">Cancel</a> 
@@ -187,6 +194,7 @@ function Check(ff) {
             <!-- TMPL_IF NAME="delete_confirmed" -->
                 <h3>Contract Deleted</h3>
                 <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
+                    <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->/>
                     <input type="submit" value="OK" />
                 </form>
             <!-- /TMPL_IF -->
@@ -205,39 +213,37 @@ function Check(ff) {
                         //]]>
                     </script>
                     <ul class="toolbar">
-                        <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form">New Contract</a></li>
+                        <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">New Contract</a></li>
                     </ul>
                 </div>
-                <h2>Contract Administration</h2>
-                        <table>
-                            <tr>
-                                <th scope="col">contract id</th>
-                        <th scope="col">Contract name</th>
-                        <th scope="col">Contract description</th>
-                        <th scope="col">contract start date</th>
-                        <th scope="col">contract end date</th>
-                        <th scope="col">bookseller</th>
-                        <th scope="col" colspan="2">&nbsp; </th>
-                    </tr>
+                <h2>Contract(s) of <!-- TMPL_VAR name="name" --></h2>
+                <!-- TMPL_IF name="loop" -->
+                    <table>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Start date</th>
+                            <th scope="col">End date</th>
+                            <th scope="col" colspan="2">&nbsp; </th>
+                        </tr>
                     <!-- TMPL_LOOP NAME="loop" -->
                         <!-- TMPL_IF NAME="toggle" -->
                             <tr class="highlight">
                         <!-- TMPL_ELSE -->
                             <tr>
                         <!-- /TMPL_IF -->
-                                        <td><!-- TMPL_VAR NAME="contractnumber" --></td>
-                                        <td>
-                                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->"><!-- TMPL_VAR NAME="contractname" --></a>
+                            <td>
+                                <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->"><!-- TMPL_VAR NAME="contractname" --></a>
                         </td>
                         <td><!-- TMPL_VAR NAME="contractdescription" --></td>
                         <td><!-- TMPL_VAR NAME="contractstartdate" --></td>
                         <td><!-- TMPL_VAR NAME="contractenddate" --></td>
-                        <td><!-- TMPL_VAR NAME="booksellername" --></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->">Edit</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->">Delete</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Edit</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Delete</a></td>
                         </tr>
                     <!-- /TMPL_LOOP -->
                 </table>
+                <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
         </div>
     </div>

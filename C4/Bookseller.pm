@@ -172,10 +172,10 @@ sub AddBookseller {
                 postal,    phone,         fax,        url,           contact,
                 contpos,   contphone,     contfax,    contaltphone,  contemail,
                 contnotes, active,        listprice,  invoiceprice,  gstreg,
-                listincgst,invoiceincgst, specialty,  discount,      invoicedisc,
-                nocalc,    notes
+                listincgst,invoiceincgst,   discount,
+                notes
             )
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -190,9 +190,7 @@ sub AddBookseller {
         $data->{'active'},       $data->{'listprice'},
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'specialty'},    $data->{'discount'},
-        $data->{'invoicedisc'},  $data->{'nocalc'},
-        $data->{'notes'}
+        $data->{'discount'},     $data->{'notes'}
     );
 
     # return the id of this new supplier
@@ -233,7 +231,7 @@ sub ModBookseller {
             contphone=?,contfax=?,contaltphone=?,contemail=?,
             contnotes=?,active=?,listprice=?, invoiceprice=?,
             gstreg=?,listincgst=?,invoiceincgst=?,
-            specialty=?,discount=?,invoicedisc=?,nocalc=?,notes=?,gstrate=?
+            discount=?, notes=?, gstrate=?
         WHERE id=?
     ";
     my $sth    = $dbh->prepare($query);
@@ -249,8 +247,7 @@ sub ModBookseller {
         $data->{'active'},       $data->{'listprice'},
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'specialty'},    $data->{'discount'},
-        $data->{'invoicedisc'},  $data->{'nocalc'},
+        $data->{'discount'},
         $data->{'notes'},        $data->{'gstrate'},
         $data->{'id'}
     );

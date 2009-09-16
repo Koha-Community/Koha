@@ -27,13 +27,14 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
-use C4::Bookseller qw/GetBookSeller/;
+use C4::Bookseller qw/GetBookSellerFromId/;
 
 sub StringSearch  {
     my ($searchstring)=@_;
     my $dbh = C4::Context->dbh;
     $searchstring=~ s/\'/\\\'/g;
     my @data=split(' ',$searchstring);
+    $data[0]='' unless $data[0];
     my $sth=$dbh->prepare("Select * from aqcontract where (contractdescription like ? or contractname like ?) order by contractnumber");
     $sth->execute("%$data[0]%","%$data[0]%");
     my @results;
@@ -45,10 +46,13 @@ sub StringSearch  {
 }
 
 my $input          = new CGI;
-my $searchfield    = $input->param('searchfield');
+my $searchfield    = $input->param('searchfield') || '';
 my $script_name    = "/cgi-bin/koha/admin/aqcontract.pl";
 my $contractnumber = $input->param('contractnumber');
-my $op             = $input->param('op');
+my $booksellerid   = $input->param('booksellerid');
+my $op             = $input->param('op') || '';
+my @bookseller = GetBookSellerFromId("$booksellerid");
+
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "admin/aqcontract.tmpl",
@@ -63,15 +67,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param(
     script_name    => $script_name,
     contractnumber => $contractnumber,
-    searchfield    => $searchfield
+    searchfield    => $searchfield, 
+    booksellerid   => $booksellerid,
+    name           => $bookseller[0]->{name},
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
-
 
 #ADD_FORM: called if $op is 'add_form'. Used to create form to add or  modify a record
 if ( $op eq 'add_form' ) {
     $template->param( add_form => 1 );
     my $data;
-    my @booksellerloop = GetBookSeller("");
 
     #---- if primkey exists, it's a modify action, so read values to modify...
     if ($contractnumber) {
@@ -81,8 +86,14 @@ if ( $op eq 'add_form' ) {
         $data = $sth->fetchrow_hashref;
         $sth->finish;
 
-        for my $bookseller (@booksellerloop) {
+        for my $bookseller (@bookseller) {
             if ( $bookseller->{'id'} eq $data->{'booksellerid'} ) {
+                $bookseller->{'selected'} = 1;
+            }
+        }
+    } else {
+        for my $bookseller (@bookseller) {
+            if ( $bookseller->{'id'} eq $booksellerid ) {
                 $bookseller->{'selected'} = 1;
             }
         }
@@ -93,7 +104,7 @@ if ( $op eq 'add_form' ) {
         contractdescription      => $data->{'contractdescription'},
         contractstartdate        => format_date( $data->{'contractstartdate'} ),
         contractenddate          => format_date( $data->{'contractenddate'} ),
-        booksellerloop           => \@booksellerloop,
+        booksellerloop           => \@bookseller,
         booksellerid             => $data->{'booksellerid'},
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
@@ -135,7 +146,7 @@ elsif ( $op eq 'add_validate' ) {
       );
       $sth->finish;
   }
-  print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqcontract.pl\"></html>";
+  print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqcontract.pl?booksellerid=$booksellerid\"></html>";
   exit;
 
   # END $OP eq ADD_VALIDATE
@@ -180,7 +191,7 @@ elsif ( $op eq 'delete_confirmed' ) {
     my $sth            = $dbh->prepare("delete from aqcontract where contractnumber=?");
     $sth->execute($contractnumber);
     $sth->finish;
-    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqcontract.pl\"></html>";
+    print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=aqcontract.pl?booksellerid=$booksellerid\"></html>";
     exit;
 
     # END $OP eq DELETE_CONFIRMED
