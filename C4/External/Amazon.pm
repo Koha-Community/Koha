@@ -80,7 +80,11 @@ Get editorial reviews, customer reviews, and similar products using Amazon Web S
 =cut
 
 sub get_amazon_details {
-    my ( $isbn, $record, $marcflavour ) = @_;
+    my ( $isbn, $record, $marcflavour,$awsref ) = @_;
+
+   return unless defined $aws_ref;
+   my @aws = @$aws_ref;
+   return if $#aws == -1;
 
     #normalize the ISBN
     $isbn = _normalize_match_point ($isbn);

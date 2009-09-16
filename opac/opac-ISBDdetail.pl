@@ -51,6 +51,7 @@ use CGI;
 use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
+use C4::External::Amazon;
 use C4::Review;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;       # use getitemtypeinfo
@@ -116,6 +117,15 @@ $template->param(
     biblionumber => $biblionumber,
     reviews             => $reviews,
 );
+    my @services;
+    if ( $amazon_reviews ) {
+        $template->param( AmazonReviews => 1 );
+        push( @services, 'EditorialReview' );
+    }
+    if ( $amazon_similars ) {
+        $template->param( AmazonSimilarItems => 1 );
+        push( @services, 'Similarities' );
+    }
 
 ## Amazon.com stuff
 #not used unless preference set
