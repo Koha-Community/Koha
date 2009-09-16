@@ -288,7 +288,7 @@
                     </td>
                       <!-- /TMPL_IF -->
                     <td>
-                      <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --><!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_VAR NAME="subtitle" ESCAPE="html" --><!-- /TMPL_IF --></a>
+                      <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --><!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" --><!--TMPL VAR Name="subfield"--><!--/TMPL_LOOP--><!-- /TMPL_IF --></a>
                       <!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
                     </td>
                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
