@@ -447,7 +447,11 @@ sub ModItemFromMarc {
 
     my $dbh = C4::Context->dbh;
     my $frameworkcode = GetFrameworkCode( $biblionumber );
-    my $item = &TransformMarcToKoha( $dbh, $item_marc, $frameworkcode );
+	my ($itemtag,$itemsubfield)=GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+	
+	my $localitemmarc=MARC::Record->new;
+	$localitemmarc->append_fields($item_marc->field($itemtag));
+    my $item = &TransformMarcToKoha( $dbh, $item_marc, $frameworkcode ,'items');
     foreach my $item_field (keys %default_values_for_mod_from_marc) {
         $item->{$item_field} = $default_values_for_mod_from_marc{$item_field} unless exists $item->{$item_field};
     }
