@@ -33,7 +33,6 @@ if ($dberror) {
 
 if ($imagedata) {
     print $query->header(-type => $imagedata->{'mimetype'}, 
-                         -'Cache-Control' => 'no-store', 
                          -Content_Length => length ($imagedata->{'imagefile'})), 
           $imagedata->{'imagefile'};
 } else {
