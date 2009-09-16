@@ -124,7 +124,6 @@ sub XSLTParse4Display {
     #return $record->as_formatted();
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml();
-    $xmlrecord =~ s/\<\/record\>/$itemsxml\<\/record\>/;
     my $sysxml = "<sysprefs>\n";
     foreach my $syspref ( qw/OPACURLOpenInNewWindow DisplayOPACiconsXSLT URLLinkText/ ) {
         $sysxml .= "<syspref name=\"$syspref\">" .
