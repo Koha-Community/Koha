@@ -213,7 +213,7 @@ if ( $op eq 'delete_confirm' ) {
 
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         my $rrp = $results[$i]->{'listprice'};
-		my $qty = $results[$i]->{'quantity'};
+		my $qty = $results[$i]->{'quantity'} || 0;
 
         my $budget = GetBudget(  $results[$i]->{'budget_id'} );
         $rrp = ConvertCurrency( $results[$i]->{'currency'}, $rrp );
@@ -272,18 +272,14 @@ if ( $op eq 'delete_confirm' ) {
         basketbooksellernote => $basket->{booksellernote},
         basketcontractno     => $basket->{contractnumber},
         basketcontractname   => $contract->{contractname},
-        creationdate         => format_date( $basket->{creationdate} ),
+        creationdate         => C4::Dates->new($basket->{creationdate},'iso')->output,
         authorisedby         => $basket->{authorisedby},
         authorisedbyname     => $basket->{authorisedbyname},
-        closedate            => format_date( $basket->{closedate} ),
+        closedate            => C4::Dates->new($basket->{closedate},'iso')->output,
         active               => $bookseller->{'active'},
         booksellerid         => $bookseller->{'id'},
         name                 => $bookseller->{'name'},
-        address1             => $bookseller->{'address1'},
-        address2             => $bookseller->{'address2'},
-        address3             => $bookseller->{'address3'},
-        address4             => $bookseller->{'address4'},
-        entrydate            => format_date( $results[0]->{'entrydate'} ),
+        entrydate            => C4::Dates->new($results[0]->{'entrydate'},'iso')->output,
         books_loop           => \@books_loop,
         count                => $count,
         gist_rate            => sprintf( "%.2f", $gist * 100 ) . '%',

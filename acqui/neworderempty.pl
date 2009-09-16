@@ -42,8 +42,8 @@ the title of this new record.
 =item author
 the author of this new record.
 
-=item copyright
-the copyright of this new record.
+=item publication year
+the publication year of this new record.
 
 =item ordnum
 the number of this order.
@@ -74,7 +74,7 @@ use C4::Input;
 use C4::Auth;
 use C4::Budgets;
 use C4::Input;
-#use C4::Bookfund;
+use C4::Dates;
 
 use C4::Bookseller;		# GetBookSellerFromId
 use C4::Acquisition;
@@ -88,23 +88,22 @@ use C4::Members;
 use C4::Search qw/FindDuplicate BiblioAddAuthorities/;
 
 #needed for z3950 import:
-use C4::ImportBatch qw/GetImportRecordMarc/;
+use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
-my $input        = new CGI;
-my $booksellerid = $input->param('booksellerid');	# FIXME: else ERROR!
-my $budget_id    = $input->param('budget_id');	# FIXME: else ERROR!
-my $title        = $input->param('title');
-my $author       = $input->param('author');
-my $copyright    = $input->param('copyright');
-my $bookseller   = GetBookSellerFromId($booksellerid);	# FIXME: else ERROR!
-my $ordnum       = $input->param('ordnum') || '';
-my $biblionumber = $input->param('biblionumber');
-my $basketno     = $input->param('basketno');
-my $purchaseorder= $input->param('purchaseordernumber');
-my $suggestionid = $input->param('suggestionid');
-# my $donation     = $input->param('donation');
-my $close        = $input->param('close');
-my $uncertainprice = $input->param('uncertainprice');
+my $input           = new CGI;
+my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
+my $budget_id       = $input->param('budget_id');	# FIXME: else ERROR!
+my $title           = $input->param('title');
+my $author          = $input->param('author');
+my $publicationyear = $input->param('publicationyear');
+my $bookseller      = GetBookSellerFromId($booksellerid);	# FIXME: else ERROR!
+my $ordnum          = $input->param('ordnum') || '';
+my $biblionumber    = $input->param('biblionumber');
+my $basketno        = $input->param('basketno');
+my $suggestionid    = $input->param('suggestionid');
+my $close           = $input->param('close');
+my $uncertainprice  = $input->param('uncertainprice');
+my $import_batch_id = $input->param('import_batch_id'); # if this is filled, we come from a staged file, and we will return here after saving the order !
 my $data;
 my $new = 'no';
 
@@ -121,8 +120,12 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $basket = GetBasket($basketno);
+my $contract = &GetContract($basket->{contractnumber});
+
 #simple parameters reading (all in one :-)
 my $params = $input->Vars;
+my $listprice; # the price, that can be in MARC record if we have one
 if ( $ordnum eq '' and defined $params->{'breedingid'}){
 #we want to import from the breeding reservoir (from a z3950 search)
     my ($marcrecord, $encoding) = MARCfindbreeding($params->{'breedingid'});
@@ -131,27 +134,35 @@ if ( $ordnum eq '' and defined $params->{'breedingid'}){
     my $duplicatetitle;
 #look for duplicates
     if (! (($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord))){
-        my $itemtypes = GetItemTypes();
-        my $marcflavour = C4::Context->preference("marcflavour");
-#         warn("$marcflavour----itemtype"."-------------marcflavour".$marcflavour."---------subfield".$marcrecord->subfield('200', 'b'));
-#use the itemtype field of the UNIMARC standard.
-        if ( $marcflavour eq 'UNIMARC' ) {
-            my $itemtype = $marcrecord->subfield('200', 'b');
-#Check wether the itemtype is known
-            warn(grep { $itemtypes->{$_}->{itemtype} =~ /$itemtype/ } keys %$itemtypes);
-            if (scalar(grep { $itemtypes->{$_}->{itemtype} =~ /$itemtype/ } keys %$itemtypes) == 0) {
-                my @itemtypes = sort {lc($itemtypes->{$a}->{'description'}) cmp lc($itemtypes->{$b}->{'description'})} keys %$itemtypes;
-                $itemtype = $itemtypes[0];
-#                warn(YAML->Dump(@itemtypes));
-                $marcrecord->field('200')->update('b' => $itemtype);
-            }
-        }
         if (C4::Context->preference("BiblioAddsAuthorities")){
-              my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $params->{'frameworkcode'});
+            my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $params->{'frameworkcode'});
         }
         my $bibitemnum;
         $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";
         ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );
+        # get the price if there is one.
+        # filter by storing only the 1st number
+        # we suppose the currency is correct, as we have no possibilities to get it.
+        if ($marcrecord->subfield("345","d")) {
+            $listprice = $marcrecord->subfield("345","d");
+            if ($listprice =~ /^([\d\.,]*)/) {
+                $listprice = $1;
+                $listprice =~ s/,/\./;
+            } else {
+                $listprice = 0;
+            }
+        }
+        elsif ($marcrecord->subfield("010","d")) {
+            $listprice = $marcrecord->subfield("010","d");
+            if ($listprice =~ /^([\d\.,]*)/) {
+                $listprice = $1;
+                $listprice =~ s/,/\./;
+            } else {
+                $listprice = 0;
+            }
+        }
+        $listprice=100;
+        SetImportRecordStatus($params->{'breedingid'}, 'imported');
     }
 }
 
@@ -169,7 +180,7 @@ if ( $ordnum eq '' ) {    # create order
 # get suggestion fields if applicable. If it's a subscription renewal, then the biblio already exists
 # otherwise, retrieve suggestion information.
     if ($suggestionid) {
-		$data = ($biblionumber) ? GetBiblioData($biblionumber) : GetSuggestion($suggestionid);
+        $data = ($biblionumber) ? GetBiblioData($biblionumber) : GetSuggestion($suggestionid);
     }
 }
 else {    #modify order
@@ -197,33 +208,22 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     push @loop_currency, \%line;
 }
 
-    # ##  @loop_currency
-
-
-# build itemtype list
-my $itemtypes = GetItemTypes;
-
-my @itemtypesloop;
-foreach my $thisitemtype (sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'}} keys %$itemtypes) {
-    push @itemtypesloop, { itemtype => $itemtypes->{$thisitemtype}->{'itemtype'} , desc =>  $itemtypes->{$thisitemtype}->{'description'} } ;
-}
-
 # build branches list
 my $onlymine=C4::Context->preference('IndependantBranches') && 
-             C4::Context->userenv && 
-             C4::Context->userenv->{flags}!=1 && 
-             C4::Context->userenv->{branch};
+            C4::Context->userenv && 
+            C4::Context->userenv->{flags}!=1 && 
+            C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;
 foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {
-     my %row = (
+    my %row = (
         value      => $thisbranch,
         branchname => $branches->{$thisbranch}->{'branchname'},
     );
-	$row{'selected'} = 1 if( $thisbranch eq $data->{branchcode}) ;
+    $row{'selected'} = 1 if( $thisbranch eq $data->{branchcode}) ;
     push @branchloop, \%row;
 }
-$template->param( branchloop => \@branchloop , itypeloop => \@itemtypesloop );
+$template->param( branchloop => \@branchloop );
 
 # build bookfund list
 my $borrower= GetMember('borrowernumber' => $loggedinuser);
@@ -251,10 +251,9 @@ my $budget_dropbox = CGI::scrolling_list(
 
 if ($close) {
     $budget_id      =  $data->{'budget_id'};
-    $budget_name    =   $budget->{'budget_name'};      
+    $budget_name    =   $budget->{'budget_name'};
 
 }
-
 
 my $CGIsort1;
 if ($budget) {    # its a mod ..
@@ -292,31 +291,14 @@ if ($CGIsort2) {
     $template->param( sort2 => $data->{'sort2'} );
 }
 
-
-
-# #do a biblioitems lookup on bib
-# my @bibitems = GetBiblioItemByBiblioNumber($biblionumber);
-# my $bibitemscount = scalar @bibitems;
-# 
-# if ( $bibitemscount > 0 ) {
-#     # warn "NEWBIBLIO: bibitems for $biblio exists\n";
-#     my @bibitemloop;
-#     for ( my $i = 0 ; $i < $bibitemscount ; $i++ ) {
-#         my %line;
-#         $line{biblioitemnumber} = $bibitems[$i]->{'biblioitemnumber'};
-#         $line{isbn}             = $bibitems[$i]->{'isbn'};
-#         $line{itemtype}         = $bibitems[$i]->{'itemtype'};
-#         $line{volumeddesc}      = $bibitems[$i]->{'volumeddesc'};
-#         push( @bibitemloop, \%line );
-# 
-#         $template->param( bibitemloop => \@bibitemloop );
-#     }
-#     $template->param( bibitemexists => "1" );
-# }
-
 if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordnum) {
     # prepare empty item form
-    my $cell = PrepareItemrecordDisplay();
+    my $cell = PrepareItemrecordDisplay('','','','ACQ');
+#     warn "==> ".Data::Dumper::Dumper($cell);
+    unless ($cell) {
+        $cell = PrepareItemrecordDisplay('','','','');
+        $template->param('NoACQframework' => 1);
+    }
     my @itemloop;
     push @itemloop,$cell;
     
@@ -328,59 +310,59 @@ $template->param(
     close        => $close,
     budget_id    => $budget_id,
     budget_name  => $budget_name
-  )
-  if ($close);
+) if ($close);
 
-    # ## @loop_currency,
 $template->param(
     existing         => $biblionumber,
     ordnum           => $ordnum,
-    basketno         => $basketno,
-    booksellerid     => $booksellerid,
+    # basket informations
+    basketno             => $basketno,
+    basketname           => $basket->{'basketname'},
+    basketnote           => $basket->{'note'},
+    booksellerid         => $basket->{'booksellerid'},
+    basketbooksellernote => $basket->{booksellernote},
+    basketcontractno     => $basket->{contractnumber},
+    basketcontractname   => $contract->{contractname},
+    creationdate         => C4::Dates->new($basket->{creationdate},'iso')->output,
+    authorisedby         => $basket->{'authorisedby'},
+    authorisedbyname     => $basket->{'authorisedbyname'},
+    closedate            => C4::Dates->new($basket->{'closedate'},'iso')->output,
+    # order details
     suggestionid     => $suggestionid,
     biblionumber     => $biblionumber,
     uncertainprice   => $data->{'uncertainprice'},
     authorisedbyname => $borrower->{'firstname'} . " " . $borrower->{'surname'},
-	biblioitemnumber => $data->{'biblioitemnumber'},
-    itemtype         => $data->{'itemtype'},
-    itemtype_desc    => $itemtypes->{$data->{'itemtype'}}->{description},
+    biblioitemnumber => $data->{'biblioitemnumber'},
     discount_2dp     => sprintf( "%.2f",  $bookseller->{'discount'}) ,   # for display
     discount         => $bookseller->{'discount'},
     listincgst       => $bookseller->{'listincgst'},
     invoiceincgst    => $bookseller->{'invoiceincgst'},
-    invoicedisc      => $bookseller->{'invoicedisc'},
-    nocalc           => $bookseller->{'nocalc'},
     name             => $bookseller->{'name'},
-    cur_active_sym   => $cur->{symbol},
-    cur_active       => $cur->{currency},
+    cur_active_sym   => $cur->{'symbol'},
+    cur_active       => $cur->{'currency'},
     currency         => $bookseller->{'listprice'}, # eg: 'EUR'
     loop_currencies  => \@loop_currency,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
     author           => $data->{'author'},
-    copyrightdate    => $data->{'copyrightdate'},
+    publicationyear  => $data->{'publicationyear'},
     budget_dropbox   => $budget_dropbox,
     isbn             => $data->{'isbn'},
     seriestitle      => $data->{'seriestitle'},
     quantity         => $data->{'quantity'},
     quantityrec      => $data->{'quantity'},
-
-
     rrp              => $data->{'rrp'},
-    list_price       => sprintf("%.2f", $data->{'listprice'}), # watch the '-'
-    total            => sprintf("%.2f", $data->{ecost}*$data->{quantity} ),
-    invoice          => $data->{'booksellerinvoicenumber'},
+    list_price       => sprintf("%.2f", $data->{'listprice'}||$listprice),
+    total            => sprintf("%.2f", $data->{'ecost'}*$data->{'quantity'} ),
     ecost            => $data->{'ecost'},
-    purchaseordernumber => $data->{'purchaseordernumber'},
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
-
+    
+    import_batch_id  => $import_batch_id,
 
 # CHECKME: gst-stuff needs verifing, mason.
-    gstrate          => $bookseller->{gstrate} || C4::Context->preference("gist"),
+    gstrate          => $bookseller->{'gstrate'} || C4::Context->preference("gist"),
     gstreg           => $bookseller->{'gstreg'},
-
-#     donation         => $donation
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
@@ -426,7 +408,7 @@ sub MARCfindbreeding {
                 $record->insert_fields_ordered($f100);
             }
         }
-		
+        
         if ( !defined(ref($record)) ) {
             return -1;
         }
@@ -437,28 +419,28 @@ sub MARCfindbreeding {
             {
                 my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author");
 
- #                 my $summary = C4::Context->preference("z3950authortemplate");
+#                 my $summary = C4::Context->preference("z3950authortemplate");
                 my $auth_fields =
-                  C4::Context->preference("z3950AuthorAuthFields");
+                C4::Context->preference("z3950AuthorAuthFields");
                 my @auth_fields = split /,/, $auth_fields;
                 my $field;
 
                 if ( $record->field($tag) ) {
                     foreach my $tmpfield ( $record->field($tag)->subfields ) {
 
-       #                        foreach my $subfieldcode ($tmpfield->subfields){
+    #                        foreach my $subfieldcode ($tmpfield->subfields){
                         my $subfieldcode  = shift @$tmpfield;
                         my $subfieldvalue = shift @$tmpfield;
                         if ($field) {
                             $field->add_subfields(
                                 "$subfieldcode" => $subfieldvalue )
-                              if ( $subfieldcode ne $subfield );
+                            if ( $subfieldcode ne $subfield );
                         }
                         else {
                             $field =
-                              MARC::Field->new( $tag, "", "",
+                            MARC::Field->new( $tag, "", "",
                                 $subfieldcode => $subfieldvalue )
-                              if ( $subfieldcode ne $subfield );
+                            if ( $subfieldcode ne $subfield );
                         }
                     }
                 }
@@ -474,15 +456,15 @@ sub MARCfindbreeding {
 #                         $field->add_subfields("$subfield"=>"[ ".ucfirst($title).ucfirst($firstname)." ".$number." ]");
                         $field->add_subfields(
                                 "$subfield" => ucfirst($title) . " "
-                              . ucfirst($firstname) . " "
-                              . $number );
+                            . ucfirst($firstname) . " "
+                            . $number );
                     }
                     else {
 
 #                       $field->add_subfields("$subfield"=>"[ ".ucfirst($firstname).", ".ucfirst($lastname)." ]");
                         $field->add_subfields(
                             "$subfield" => ucfirst($firstname) . ", "
-                              . ucfirst($lastname) );
+                            . ucfirst($lastname) );
                     }
                 }
                 $record->insert_fields_ordered($field);

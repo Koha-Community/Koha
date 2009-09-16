@@ -50,7 +50,11 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
                                         });
 my $cgiparams = $input->Vars;
 my $op = $cgiparams->{'op'};
-$template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl");
+my $booksellerid  = $input->param('booksellerid');
+
+$template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",
+                booksellerid => $booksellerid,
+                );
 my $ordnum;
 
 if ($cgiparams->{'import_batch_id'} && $op eq ""){
@@ -261,15 +265,15 @@ sub import_batches_list {
 
 sub import_biblios_list {
     my ($template, $import_batch_id) = @_;
-    my $batch = GetImportBatch($import_batch_id);
-    my $biblios = GetImportBibliosRange($import_batch_id);
+    my $batch = GetImportBatch($import_batch_id,'staged');
+    my $biblios = GetImportBibliosRange($import_batch_id,'','','staged');
     my @list = ();
-# Itemtype is mandatory for adding a biblioitem, we just add a default, the user needs to modify this aftewards
-    my $itemtypehash = GetItemTypes();
-    my @itemtypes;
-    for my $key (sort { $itemtypehash->{$a}->{description} cmp $itemtypehash->{$b}->{description} } keys %$itemtypehash) {
-        push(@itemtypes, $itemtypehash->{$key});
-    }
+# # Itemtype is mandatory for adding a biblioitem, we just add a default, the user needs to modify this aftewards
+#     my $itemtypehash = GetItemTypes();
+#     my @itemtypes;
+#     for my $key (sort { $itemtypehash->{$a}->{description} cmp $itemtypehash->{$b}->{description} } keys %$itemtypehash) {
+#         push(@itemtypes, $itemtypehash->{$key});
+#     }
     foreach my $biblio (@$biblios) {
         my $citation = $biblio->{'title'};
         $citation .= " $biblio->{'author'}" if $biblio->{'author'};
@@ -289,15 +293,15 @@ sub import_biblios_list {
             match_biblionumber => $#$match > -1 ? $match->[0]->{'biblionumber'} : 0,
             match_citation => $#$match > -1 ? $match->[0]->{'title'} . ' ' . $match->[0]->{'author'} : '',
             match_score => $#$match > -1 ? $match->[0]->{'score'} : 0,
-            itemtypes => \@itemtypes,
+#             itemtypes => \@itemtypes,
         );
-        if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordnum) {
-            # prepare empty item form
-            my $cell = PrepareItemrecordDisplay();
-            my @itemloop;
-            push @itemloop,$cell;
-            $cellrecord{'items'} = \@itemloop;
-        }
+#         if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordnum) {
+#             # prepare empty item form
+#             my $cell = PrepareItemrecordDisplay();
+#             my @itemloop;
+#             push @itemloop,$cell;
+#             $cellrecord{'items'} = \@itemloop;
+#         }
         push @list, \%cellrecord;
 
 
@@ -307,15 +311,15 @@ sub import_biblios_list {
     my $nomatch_action = GetImportBatchNoMatchAction($import_batch_id);
     my $item_action = GetImportBatchItemAction($import_batch_id);
     $template->param(biblio_list => \@list,
-                                      num_results => $num_biblios,
-                                      import_batch_id => $import_batch_id,
-                                      "overlay_action_${overlay_action}" => 1,
-                                      overlay_action => $overlay_action,
-                                      "nomatch_action_${nomatch_action}" => 1,
-                                      nomatch_action => $nomatch_action,
-                                      "item_action_${item_action}" => 1,
-                                      item_action => $item_action
-                                     );
+                        num_results => $num_biblios,
+                        import_batch_id => $import_batch_id,
+                        "overlay_action_${overlay_action}" => 1,
+                        overlay_action => $overlay_action,
+                        "nomatch_action_${nomatch_action}" => 1,
+                        nomatch_action => $nomatch_action,
+                        "item_action_${item_action}" => 1,
+                        item_action => $item_action
+                    );
     batch_info($template, $batch);
 }
 

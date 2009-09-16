@@ -99,7 +99,7 @@ if ( $op eq 'add_form' ) {
     my $count = scalar @contractloop;
     if ( $count > 0) {
         $template->param(contractloop => \@contractloop,
-                                           basketcontractnumber => $basket->{'contractnumber'});
+                         basketcontractnumber => $basket->{'contractnumber'});
     }
     $template->param( add_form => 1,
                     basketname => $basket->{'basketname'},

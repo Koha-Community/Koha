@@ -140,7 +140,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-       flagsrequired   => { acquisition => 'order_manage' },
+        flagsrequired   => { acquisition => 'order_manage' },
         debug           => 1,
     }
 );
@@ -152,7 +152,7 @@ my $booksellerid  = $input->param('booksellerid');
 my $existing      = $input->param('existing');    # existing biblio, (not basket or order)
 my $title         = $input->param('title');
 my $author        = $input->param('author');
-my $copyrightdate = $input->param('copyrightdate');
+my $publicationyear= $input->param('publicationyear');
 my $isbn          = $input->param('ISBN');
 my $itemtype      = $input->param('format');
 my $quantity      = $input->param('quantity');		# FIXME: else ERROR!
@@ -176,9 +176,8 @@ my $suggestionid  = $input->param('suggestionid');
 my $biblionumber  = $input->param('biblionumber');
 my $user          = $input->remote_user;
 my $uncertainprice = $input->param('uncertainprice');
+my $import_batch_id= $input->param('import_batch_id');
 
-#warn "CREATEBIBITEM =  $input->param('createbibitem')";
-#warn Dumper $input->param('createbibitem');
 my $createbibitem = $input->param('createbibitem');
 
 # create, modify or delete biblio
@@ -193,13 +192,12 @@ if ( $quantity ne '0' ) {
         #if it doesnt create it
         my $record = TransformKohaToMarc(
             {
-                "biblio.title"              => "$title",
-                "biblio.author"             => "$author",
-                "biblio.copyrightdate"      => $copyrightdate ? $copyrightdate : "",
-                "biblio.series"             => $series        ? $series        : "",
-                "biblioitems.itemtype"      => $itemtype      ? $itemtype      : "",
-                "biblioitems.isbn"          => $isbn          ? $isbn          : "",
-                "biblioitems.publishercode" => $publishercode ? $publishercode : "",
+                "biblio.title"                => "$title",
+                "biblio.author"               => "$author",
+                "biblio.series"               => $series          ? $series        : "",
+                "biblioitems.isbn"            => $isbn            ? $isbn          : "",
+                "biblioitems.publishercode"   => $publishercode   ? $publishercode : "",
+                "biblioitems.publicationyear" => $publicationyear ? $publicationyear: "",
             });
         # create the record in catalogue, with framework ''
         ($biblionumber,$bibitemnum) = AddBiblio($record,'');
@@ -304,4 +302,8 @@ else { # qty=0, delete the line
     $biblionumber = $input->param('biblionumber');
     DelOrder( $biblionumber, $ordnum );
 }
-print $input->redirect("basket.pl?basketno=$basketno");
+if ($import_batch_id) {
+    print $input->redirect("/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&basketno=$basketno&booksellerid=$booksellerid");
+} else {
+    print $input->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
+}

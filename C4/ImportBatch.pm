@@ -797,7 +797,7 @@ sub GetImportBatchRangeDesc {
 sub GetItemNumbersFromImportBatch {
 	my ($batch_id) = @_;
  	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare("select itemnumber from import_batches,import_records,import_items where import_batches.import_batch_id=import_records.import_batch_id and import_records.import_record_id=import_items.import_record_id and import_batches.import_batch_id=?");
+	my $sth = $dbh->prepare("SELECT itemnumber FROM import_batches,import_records,import_items WHERE import_batches.import_batch_id=import_records.import_batch_id AND import_records.import_record_id=import_items.import_record_id AND import_batches.import_batch_id=?");
 	$sth->execute($batch_id);
 	my @items ;
 	while ( my ($itm) = $sth->fetchrow_array ) {
@@ -840,17 +840,22 @@ starting at the given offset.
 =cut
 
 sub GetImportBibliosRange {
-    my ($batch_id, $offset, $results_per_group) = @_;
+    my ($batch_id, $offset, $results_per_group, $status) = @_;
 
     my $dbh = C4::Context->dbh;
     my $query = "SELECT title, author, isbn, issn, import_record_id, record_sequence,
                                            status, overlay_status
                                     FROM   import_records
                                     JOIN   import_biblios USING (import_record_id)
-                                    WHERE  import_batch_id = ?
-                                    ORDER BY import_record_id";
+                                    WHERE  import_batch_id = ?";
     my @params;
     push(@params, $batch_id);
+    if ($status) {
+        $query .= " AND status=?";
+        push(@params,$status);
+    }
+    $query.=" ORDER BY import_record_id";
+
     if($offset){
         if($results_per_group){
             $query .= " LIMIT ?";

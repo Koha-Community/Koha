@@ -50,7 +50,7 @@ function isNum(v,maybenull) {
     if (maybenull==0 && v.value=='') {
 
 
-     return false;
+    return false;
     }
     return true;
 }
@@ -417,7 +417,7 @@ function enterpressed(event){
 
     if (keycode == 13)
     {
-         return true;
+        return true;
     }
     else return false;
 }
@@ -603,12 +603,12 @@ function rename(event, bgid, name){
 function log(message) {
     if (!log.window_ || log.window_.closed) {
         var win = window.open("", null, "width=400,height=200," +
-                              "scrollbars=yes,resizable=yes,status=no," +
-                              "location=no,menubar=no,toolbar=no");
+                            "scrollbars=yes,resizable=yes,status=no," +
+                            "location=no,menubar=no,toolbar=no");
         if (!win) return;
         var doc = win.document;
         doc.write("<html><head><title>Debug Log</title></head>" +
-                  "<body></body></html>");
+                "<body></body></html>");
         doc.close();
         log.window_ = win;
     }
@@ -621,7 +621,7 @@ function log(message) {
 
 
     function ownerPopup(f) {
-      window.open("/cgi-bin/koha/admin/aqbudget_owner_search.pl?op=budget",'PatronPopup','width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+    window.open("/cgi-bin/koha/admin/aqbudget_owner_search.pl?op=budget",'PatronPopup','width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     }
         //
 //=======================================================================
@@ -669,7 +669,7 @@ function calcTotalRow(cell) {
         remainingTotal.style.color = 'black';
     }
     else if ( remainingNew   > 0   )       {
-         remainingTotal.style.color = 'green';
+        remainingTotal.style.color = 'green';
     } else  {    // if its negative, make it red..
         remainingTotal.style.color = 'red';
     }
@@ -724,74 +724,75 @@ function messenger(X,Y,etc){    // FIXME: unused?
 
 //  NEXT BLOCK IS USED BY NEWORDERBEMPTY
 
-function calcNeworderTotal(f){
-	//collect values
-	var quantity = new Number(f.quantity.value);
-	var discount = new Number(f.discount.value);
-	var listinc  = new Number (f.listinc.value);
-	var currency = f.currency.value;
-	var applygst = new Number (f.applygst.value);
-	var list_price   =  new Number(f.list_price.value);
-	var invoiceingst =  new Number (f.invoiceincgst.value);
-	var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
-	var gst_on=(!listinc && invoiceingst);
+function calcNeworderTotal(){
+    //collect values
+    var f        = document.getElementById('Aform');
+    var quantity = new Number(f.quantity.value);
+    var discount = new Number(f.discount.value);
+    var listinc  = new Number (f.listinc.value);
+    var currency = f.currency.value;
+    var applygst = new Number (f.applygst.value);
+    var list_price   =  new Number(f.list_price.value);
+    var invoiceingst =  new Number (f.invoiceincgst.value);
+    var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
+    var gst_on=(!listinc && invoiceingst);
 
-	//do real stuff
-	var rrp   = new Number(list_price*exchangerate);
-	var ecost = new Number(rrp * (100 - discount ) / 100);
-	var GST   = new Number(0);
-	if (gst_on) {
-    	    rrp=rrp * (1+f.gstrate.value / 100);
-	    GST=ecost * f.gstrate.value / 100;
-	}
+    //do real stuff
+    var rrp   = new Number(list_price*exchangerate);
+    var ecost = new Number(rrp * (100 - discount ) / 100);
+    var GST   = new Number(0);
+    if (gst_on) {
+            rrp=rrp * (1+f.gstrate.value / 100);
+        GST=ecost * f.gstrate.value / 100;
+    }
 
-	var total =  new Number( (ecost + GST) * quantity);
+    var total =  new Number( (ecost + GST) * quantity);
 
-	f.rrp.value = rrp.toFixed(2);
+    f.rrp.value = rrp.toFixed(2);
 
 //	f.rrp.value = rrp
 //	f.rrp.value = 'moo'
 
-	f.ecost.value = ecost.toFixed(2);
-	f.total.value = total.toFixed(2);
-	f.list_price.value =  list_price.toFixed(2);
+    f.ecost.value = ecost.toFixed(2);
+    f.total.value = total.toFixed(2);
+    f.list_price.value =  list_price.toFixed(2);
 
 //  gst-stuff needs verifing, mason.
-	if (f.GST) {
-		f.GST.value=GST;
+    if (f.GST) {
+        f.GST.value=GST;
     }
-	return true;
+    return true;
 }
 
 // ----------------------------------------
 //USED BY NEWORDEREMPTY.PL
 /*
 function fetchSortDropbox(f) {
-	var  budgetId=f.budget_id.value;
-	var handleSuccess = function(o){
-    	if(o.responseText !== undefined){
-    	    sort_dropbox.innerHTML   = o.responseText;
-	    }
-	}
+    var  budgetId=f.budget_id.value;
+    var handleSuccess = function(o){
+        if(o.responseText !== undefined){
+            sort_dropbox.innerHTML   = o.responseText;
+        }
+    }
 
-	var callback = {   success:handleSuccess };
+    var callback = {   success:handleSuccess };
     var sUrl = '../acqui/fetch_sort_dropbox.pl?sort=1&budget_id='+budgetId
     var sort_dropbox = document.getElementById('sort1');
     var request1 = YAHOO.util.Connect.asyncRequest('GET', sUrl, callback);
-	var rr = '00';
+    var rr = '00';
 
 // FIXME: ---------  twice , coz the 2 requests get mixed up otherwise
 
-	var handleSuccess2 = function(o){
+    var handleSuccess2 = function(o){
     if(o.responseText !== undefined){
         sort2_dropbox.innerHTML   = o.responseText;
-    	}
-	}
+        }
+    }
 
-	var callback2 = {   success:handleSuccess };
-	var sUrl2 = '../acqui/fetch_sort_dropbox.pl?sort=2&budget_id='+budgetId;
-   	var sort2_dropbox = document.getElementById('sort2');
-   	var request2 = YAHOO.util.Connect.asyncRequest('GET', sUrl2, callback2);
+    var callback2 = {   success:handleSuccess };
+    var sUrl2 = '../acqui/fetch_sort_dropbox.pl?sort=2&budget_id='+budgetId;
+    var sort2_dropbox = document.getElementById('sort2');
+    var request2 = YAHOO.util.Connect.asyncRequest('GET', sUrl2, callback2);
 
 }
 */
@@ -802,7 +803,7 @@ function fetchSortDropbox(f) {
 function fetchSortDropbox(f) {
     var  budgetId=f.budget_id.value;
 
- for (i=1;i<=2;i++) {
+for (i=1;i<=2;i++) {
 
     var sort_dropbox = document.getElementById('sort'+i);
     var url = '../acqui/fetch_sort_dropbox.pl?sort='+i+'&budget_id='+budgetId;
@@ -818,14 +819,14 @@ function fetchSortDropbox(f) {
 
     xmlhttp.onreadystatechange = function() {
         if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      // stupid JS...
-          } else {
-      // wait for the call to complete
-          }
-     };
-     // rc =  eval ( xmlhttp.responseText );
+    // stupid JS...
+        } else {
+    // wait for the call to complete
+        }
+    };
+    // rc =  eval ( xmlhttp.responseText );
     sort_dropbox.innerHTML  =  xmlhttp.responseText;
- }
+}
 }
 
 
@@ -852,12 +853,12 @@ function totalExceedsBudget(budgetId, total) {
 
             actTotal = eval ( xmlhttp.responseText );
 
-	        if (  Math.abs(actTotal) < Math.abs(total)  ) {
-	        // if budget is to low :(
-	            return true ;
-    	    } else {
-    		    return false;
-    	    }
+            if (  Math.abs(actTotal) < Math.abs(total)  ) {
+            // if budget is to low :(
+                return true ;
+            } else {
+                return false;
+            }
         }
     }
 }
@@ -887,22 +888,22 @@ if ( newBudgetParent  ) { url +=  '&parent_id=' + newBudgetParent};
     xmlhttp.send(null);
 
     xmlhttp.onreadystatechange = function() {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      // stupid JS...
-          } else {
-      // wait for the call to complete
-          }
-     };
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+    // stupid JS...
+        } else {
+    // wait for the call to complete
+        }
+    };
 
     var result = eval ( xmlhttp.responseText );
 
-     if (result == '1') {
+    if (result == '1') {
             return _("- Budget total exceeds parent allocation\n");
-     } else if (result == '2') {
+    } else if (result == '2') {
             return _("- Budget total exceeds period allocation\n");
-     } else  {
-             return false;
-     }
+    } else  {
+            return false;
+    }
 }
 
 
@@ -921,22 +922,22 @@ function checkBudgetParent(budgetId, newBudgetParent) {
     xmlhttp.send(null);
 
     xmlhttp.onreadystatechange = function() {
-          if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-      // do something with the results
-          } else {
-      // wait for the call to complete
-          }
-     };
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+    // do something with the results
+        } else {
+    // wait for the call to complete
+        }
+    };
 
-     var result = eval ( xmlhttp.responseText );
+    var result = eval ( xmlhttp.responseText );
 
-     if (result == '1') {
+    if (result == '1') {
             return _("- New budget-parent is beneath budget\n");
 //     } else if (result == '2') {
 //            return "- New budget-parent has insufficent funds\n";
 //     } else  {
 //              return false;
-     }
+    }
 }
 
 

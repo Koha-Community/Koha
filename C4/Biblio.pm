@@ -960,12 +960,12 @@ sub GetMarcStructure {
         return $marc_structure_cache->{$forlibrarian}->{$frameworkcode};
     }
 
+#     my $sth = $dbh->prepare(
+#         "SELECT COUNT(*) FROM marc_tag_structure WHERE frameworkcode=?");
+#     $sth->execute($frameworkcode);
+#     my ($total) = $sth->fetchrow;
+#     $frameworkcode = "" unless ( $total > 0 );
     my $sth = $dbh->prepare(
-        "SELECT COUNT(*) FROM marc_tag_structure WHERE frameworkcode=?");
-    $sth->execute($frameworkcode);
-    my ($total) = $sth->fetchrow;
-    $frameworkcode = "" unless ( $total > 0 );
-    $sth = $dbh->prepare(
         "SELECT tagfield,liblibrarian,libopac,mandatory,repeatable 
         FROM marc_tag_structure 
         WHERE frameworkcode=? 
@@ -2279,9 +2279,11 @@ sub TransformMarcToKohaOneField {
 
 =over 4
 
-PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber);
+PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber,$frameworkcode);
 
 Returns a hash with all the fields for Display a given item data in a template
+
+The $frameworkcode returns the item for the given frameworkcode, ONLY if bibnum is not provided
 
 =back
 
@@ -2289,13 +2291,15 @@ Returns a hash with all the fields for Display a given item data in a template
 
 sub PrepareItemrecordDisplay {
 
-    my ( $bibnum, $itemnum, $defaultvalues ) = @_;
+    my ( $bibnum, $itemnum, $defaultvalues, $frameworkcode ) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $frameworkcode = &GetFrameworkCode( $bibnum );
+    $frameworkcode = &GetFrameworkCode( $bibnum ) if $bibnum;
     my ( $itemtagfield, $itemtagsubfield ) =
       &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     my $tagslib = &GetMarcStructure( 1, $frameworkcode );
+    # return nothing if we don't have found an existing framework.
+    return "" unless $tagslib;
     my $itemrecord = C4::Items::GetMarcItem( $bibnum, $itemnum) if ($itemnum);
     my @loop_data;
     my $authorised_values_sth =
@@ -2350,22 +2354,22 @@ sub PrepareItemrecordDisplay {
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq
                     'items.itemcallnumber'
-                    && $defaultvalues->{'callnumber'} )
+                    && $defaultvalues && $defaultvalues->{'callnumber'} )
                 {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
-                        $value = $defaultvalues->{'callnumber'};
+                        $value = $defaultvalues->{'callnumber'} if $defaultvalues;
                     }
                 }
                 if ( ($tagslib->{$tag}->{$subfield}->{kohafield} eq
                     'items.holdingbranch' ||
                     $tagslib->{$tag}->{$subfield}->{kohafield} eq
                     'items.homebranch')          
-                    && $defaultvalues->{'branchcode'} )
+                    && $defaultvalues && $defaultvalues->{'branchcode'} )
                 {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
-                        $value = $defaultvalues->{branchcode};
+                        $value = $defaultvalues->{branchcode}  if $defaultvalues;
                     }
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {

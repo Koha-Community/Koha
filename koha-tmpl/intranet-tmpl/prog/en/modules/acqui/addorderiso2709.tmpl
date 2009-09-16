@@ -6,50 +6,6 @@
  &rsaquo; Batch List
 <!-- /TMPL_IF -->
 </title>
-<!-- <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/additem.js"></script> -->
-<script type="text/javascript">
-//need to override cloneItemBlock to not generate a random itemid
-function cloneItemBlock(index) {    
-    var original = document.getElementById('itemblock-' + index); //original <div>
-    var clone = original.cloneNode(true);
-    var random = Math.floor(Math.random()*100000); // get a random itemid.
-    // set the attribute for the new 'div' subfields
-    clone.setAttribute('id','itemblock-' + index + '-' + random);//set another id.
-    var NumTabIndex;
-    NumTabIndex = parseInt(original.getAttribute('tabindex'));
-    if(isNaN(NumTabIndex)) NumTabIndex = 0;
-    clone.setAttribute('tabindex',NumTabIndex+1);
-    var CloneButtonPlus;
-    var CloneButtonMinus;
-        CloneButtonPlus = clone.getElementsByTagName('a')[0];
-        CloneButtonPlus.setAttribute('onclick',"cloneItemBlock('" + index  + '-' +  random + "')");
-    CloneButtonMinus = clone.getElementsByTagName('a')[1];
-    CloneButtonMinus.setAttribute('onclick',"deleteItemBlock('" + index + '-' + random + "')");
-    CloneButtonMinus.setAttribute('style',"display:inline");
-    // change itemids of the clone
-    var elems = clone.getElementsByTagName('input');
-    for( i = 0 ; elems[i] ; i++ )
-    {
-        if(elems[i].name.match(/^itemid/)) {
-            elems[i].value += "-" + random;
-        }
-    }
-    var itemid = index.split("-");
-    itemid=itemid[0];
-    original.parentNode.insertBefore(clone,original.nextSibling);
-    var quantityrec = document.getElementById('quantityrec-' + itemid);
-    quantityrec.setAttribute('value',parseFloat(quantityrec.getAttribute('value'))+1);
-}
-function deleteItemBlock(index) {
-    var aDiv = document.getElementById('itemblock-' + index);
-    var elems = aDiv.getElementsByTagName('input');
-    var itemid = index.split("-");
-    itemid=itemid[0];
-    aDiv.parentNode.removeChild(aDiv);
-    var quantityrec = document.getElementById('quantityrec-' + itemid);
-    quantityrec.setAttribute('value',parseFloat(quantityrec.getAttribute('value'))-1);
-}
-</script>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -59,14 +15,12 @@ function deleteItemBlock(index) {
    <div id="bd">
        <div id="yui-main">
            <div class="yui-b">
-             <h1>Add orders from iso2709 file</h1>
+             <h1>Add orders from staged file: <!-- TMPL_VAR name="comments" --></h1>
              <!-- TMPL_IF name="batch_details" -->
-               <h2>From batch id <!-- TMPL_VAR name="import_batch_id" --></h2>
                <div>
                      <dl>
-                       <dd><strong>File name</strong><!-- TMPL_VAR name="file_name" --></dd>
-                       <dd><strong>Comments</strong><!-- TMPL_VAR name="comments" --></dd>
-                       <dd><strong>Staged</strong><!-- TMPL_VAR name="upload_timestamp" --></dd>
+                       <dd><strong>File name:</strong> <!-- TMPL_VAR name="file_name" --></dd>
+                       <dd><strong>Staged on:</strong> <!-- TMPL_VAR name="upload_timestamp" --></dd>
                      </dl>
                </div>
                <div>
@@ -76,52 +30,17 @@ function deleteItemBlock(index) {
                          <th>#</th>
                          <th>Citation</th>
                          <th>Match?</th>
-                         <th>Order?</th>
+                         <th>Order</th>
                        </tr>
                        <!-- TMPL_LOOP name="biblio_list" -->
                          <tr>
                              <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR name="import_record_id" -->" rel="gb_page_center[600,500]"><!-- TMPL_VAR name="record_sequence"--></a></td>
                              <td>
                                 <!-- TMPL_VAR name="citation"-->
-                                    <!-- TMPL_IF name="items" -->
-                                    <fieldset class="rows">
-                                        <label>Itemtype</label>
-                                        <select id="itemtype-<!-- TMPL_VAR name="import_record_id" -->" name="itemtype-<!-- TMPL_VAR name="import_record_id" -->" >
-                                            <!-- TMPL_LOOP name="itemtypes" -->
-                                                <option value="<!-- TMPL_VAR name="itemtype" -->"><!-- TMPL_VAR name="description" --></option>
-                                            <!-- /TMPL_LOOP -->
-                                        </select>
-                                        <!-- TMPL_LOOP NAME="items" -->
-                                        <div id="outeritemblock">
-                                        <div id="itemblock-<!-- TMPL_VAR name="import_record_id" -->">
-                                            <ol><!-- TMPL_LOOP NAME="iteminformation" --><li>
-                                                <div class="subfield_line" style="<!-- TMPL_VAR NAME='hidden' -->;" id="subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
-                                                    <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
-                                                    <!-- TMPL_VAR NAME="marc_value" -->
-                                                    <input type="hidden" name="itemid" value="<!-- TMPL_VAR name="import_record_id" -->" />
-                                                    <input type="hidden" name="kohafield" value="<!-- TMPL_VAR NAME="kohafield" -->" />
-                                                    <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="tag" -->" />
-                                                    <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="subfield" -->" />
-                                                    <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-                                                    <!-- TMPL_IF NAME="ITEM_SUBFIELDS_ARE_NOT_REPEATABLE" -->
-                                                        <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='serialid' --><!-- TMPL_VAR NAME='countitems' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
-                                                    <!-- /TMPL_IF -->
-                                                </div></li>
-                                            <!-- /TMPL_LOOP-->
-                                            </ol>
-                                            <a style="cursor: pointer; color: grey; font-size: 180%;" onclick="cloneItemBlock('<!-- TMPL_VAR name="import_record_id" -->')">+</a>
-                                            <a style="display:none; cursor: pointer; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock-<!-- TMPL_VAR name="import_record_id" -->')">-</a>
-                                        </div><!-- /iteminformation -->
-                                        </div>
-                                        
-                                        <input type="hidden" name="quantityrec-<!-- TMPL_VAR name="import_record_id" -->" id="quantityrec-<!-- TMPL_VAR name="import_record_id" -->" value="1" />
-                                        <!--/TMPL_LOOP--> <!-- /items -->
-                                    </fieldset>
-                                    <!-- /TMPL_IF --> <!-- items -->
 
                              </td>
                              <td><!-- TMPL_VAR name="overlay_status"--></td>
-                             <td><input type="checkbox" name="order-<!-- TMPL_VAR name="import_record_id" -->" value="1" checked /></td>
+                             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!--TMPL_VAR name="booksellerid" -->&basketno=<!-- TMPL_VAR name="basketno" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->&breedingid=<!-- TMPL_VAR name="import_record_id" -->&import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Add order</a></td>
                          </tr>
                          <!-- TMPL_IF name="match_biblionumber" -->
                            <tr>
@@ -131,9 +50,6 @@ function deleteItemBlock(index) {
                          <!-- /TMPL_IF -->
                        <!-- /TMPL_LOOP -->
                      </table>
-                     <input type="hidden" name="op" value="import_records" />
-                     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
-                     <input type="hidden" name="basketno" value="<!-- TMPL_VAR name="basketno" -->" />
                      <input type="button" value="Save" onclick="this.form.submit()" />
                    </form>
                </div>
@@ -152,23 +68,21 @@ function deleteItemBlock(index) {
                <div>
                    <table>
                      <tr>
-                       <th>#</th>
                        <th>File name</th>
                        <th>Comments</th>
                        <th>Status</th>
                        <th>Staged</th>
                        <th># Bibs</th>
-                       <th># Items</th>
+                       <th>&nbsp;</th>
                      </tr>
                      <!-- TMPL_LOOP name="batch_list" -->
                      <tr>
-                       <td><a href="<!-- TMPL_VAR name="scriptname" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&basketno=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="import_batch_id" --></a></td>
-                       <td><!-- TMPL_VAR name="file_name" --></td>
+                        <td><!-- TMPL_VAR name="file_name" --></td>
                        <td><!-- TMPL_VAR name="comments" --></td>
                        <td><!-- TMPL_VAR name="import_status" --></td>
                        <td><!-- TMPL_VAR name="upload_timestamp" --></td>
                        <td><!-- TMPL_VAR name="num_biblios" --></td>
-                       <td><!-- TMPL_VAR name="num_items" --></td>
+                       <td><a href="<!-- TMPL_VAR name="scriptname" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&basketno=<!-- TMPL_VAR name="basketno" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Add orders</a></td>
                      </tr>
                      <!-- /TMPL_LOOP -->
                    </table>
