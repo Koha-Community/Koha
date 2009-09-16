@@ -2688,6 +2688,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	print "Upgrade to $DBversion done ( Added ShowPatronImageInWebBasedSelfCheck system preference )\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.01.00.062";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'manage_csv_profiles', 'Manage CSV export profiles')");
+    print "Upgrade to $DBversion done (added permissions for csv export profiles)\n";
+}
+
 =item
 
 Acquisitions update
@@ -3030,6 +3037,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done drop column budget_amount_sublevel from aqbudgets\n";
     SetVersion ($DBversion);
 }
+
 
 
 =item DropAllForeignKeys($table)

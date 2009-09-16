@@ -11,6 +11,10 @@
 	    <option value="iso2709">iso2709</option>
 	    <option value="ris">RIS</option>
 	    <option value="bibtex">BibTex</option>
+	    <!-- TMPL_LOOP NAME="csv_profiles" -->
+	    <option value="<!-- TMPL_VAR NAME="export_format_id" -->">CSV - <!-- TMPL_VAR NAME="profile" --></option>
+	    <!-- /TMPL_LOOP -->
+
 	</select>
 	<input type="hidden" name="shelfid" value="<!-- TMPL_VAR NAME="shelfid" -->" />
 	<input type="submit" name="save" value="Go" />

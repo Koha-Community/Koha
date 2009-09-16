@@ -29,6 +29,9 @@ use Biblio::EndnoteStyle;
 use Unicode::Normalize; # _entity_encode
 use XML::LibXSLT;
 use XML::LibXML;
+use C4::Biblio; #marc2bibtex
+use C4::Csv; #marc2csv
+use Text::CSV; #marc2csv
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -46,6 +49,8 @@ $VERSION = 3.00;
   &marcxml2marc
   &marc2dcxml
   &marc2modsxml
+  &marc2bibtex
+  &marc2csv
 
   &html2marcxml
   &html2marc
@@ -320,6 +325,99 @@ sub marc2endnote {
 	my ($text, $errmsg) = $style->format($template, $fields);
 	return ($text);
 	
+}
+
+=head2 marc2csv - Convert from UNIMARC to CSV
+
+=over 4
+
+my ($csv) = marc2csv($record, $csvprofileid);
+
+Returns a CSV scalar
+
+=over 2
+
+C<$record> - a MARC::Record object
+
+C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id and the GetCsvProfiles function in C4::Csv)
+
+=back
+
+=back
+
+=cut
+
+
+sub marc2csv {
+    my ($record, $id, $header) = @_;
+    my $output;
+    my $csv = Text::CSV->new();
+
+    # Get the information about the csv profile
+    my $marcfieldslist = GetMarcFieldsForCsv($id);
+
+    # Getting the marcfields as an array
+    my @marcfields = split('\|', $marcfieldslist);
+
+    # If we have to insert the headers
+    if ($header) {
+	my @marcfieldsheaders;
+
+	my $dbh   = C4::Context->dbh;
+
+	# For each field or subfield
+	foreach (@marcfields) {
+	    # We get the matching tag name
+	    if (index($_, '$') > 0) {
+    		my ($fieldtag, $subfieldtag) = split('\$', $_);
+		my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
+		my $sth = $dbh->prepare($query);
+		$sth->execute($fieldtag, $subfieldtag);
+		my @results = $sth->fetchrow_array();
+		push @marcfieldsheaders, @results[0];
+	    } else {
+		my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
+		my $sth = $dbh->prepare($query);
+		$sth->execute($_);
+		my @results = $sth->fetchrow_array();
+		push @marcfieldsheaders, @results[0];
+	    }
+	}
+	$csv->combine(@marcfieldsheaders);
+	$output = $csv->string() . "\n";	
+    }
+
+    # For each marcfield to export
+    my @fieldstab;
+    foreach my $marcfield (@marcfields) {
+	# If it is a subfield
+	if (index($marcfield, '$') > 0) {
+	    my ($fieldtag, $subfieldtag) = split('\$', $marcfield);
+	    my @fields = $record->field($fieldtag);
+	    my @tmpfields;
+
+	    # For each field
+	    foreach my $field (@fields) {
+
+		# We take every matching subfield
+		my @subfields = $field->subfield($subfieldtag);
+		foreach my $subfield (@subfields) {
+		    push @tmpfields, $subfield;
+		}
+	    }
+	    push (@fieldstab, join(',', @tmpfields));  		
+	# Or a field
+	} else {
+	    my @fields = ($record->field($marcfield));
+	    push (@fieldstab, join(',', map($_->as_string(), @fields)));  		
+	 }
+    };
+
+    $csv->combine(@fieldstab);
+    $output .= $csv->string() . "\n";
+   
+    return $output;
+
 }
 
 

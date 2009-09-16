@@ -18,6 +18,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'schedule_tasks', 'Schedule tasks to run'),
    (13, 'batchmod', 'Perform batch modification of items'),
    (13, 'batchdel', 'Perform batch deletion of items'),
+   (13, 'manage_csv_profiles', 'Manage CSV export profiles')
    (11, 'vendors_manage', 'Manage vendors'),
    (11, 'contracts_manage', 'Manage contracts'),
    (11, 'period_manage', 'Manage periods'),
