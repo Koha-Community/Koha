@@ -2654,7 +2654,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = '3.01.00.060';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowAllMessageDeletion','0','Allow any Library to delete any message','','YesNo');");
-    $dbh->do('DROP TABLE messages');
+    $dbh->do('DROP TABLE IF EXISTS messages');
     $dbh->do("CREATE TABLE messages ( `message_id` int(11) NOT NULL auto_increment,
         `borrowernumber` int(11) NOT NULL,
         `branchcode` varchar(4) default NULL,
