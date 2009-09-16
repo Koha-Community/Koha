@@ -1484,14 +1484,15 @@ sub ReNewSubscription {
      $sth->execute( $subscription->{biblionumber} );
      my $biblio = $sth->fetchrow_hashref;
      if (C4::Context->preference("RenewSerialAddsSuggestion")){
-        NewSuggestion(
-            $user,             $subscription->{bibliotitle},
-            $biblio->{author}, $biblio->{publishercode},
-            $biblio->{note},   '',
-            '',                '',
-            '',                '',
-            $subscription->{biblionumber}
-        );
+
+        NewSuggestion({
+            'suggestedby'   => $user,             
+	    'title'         => $subscription->{bibliotitle},
+            'author'        => $biblio->{author}, 
+	    'publishercode' => $biblio->{publishercode},
+            'note'          => $biblio->{note}, 
+            'biblionumber'  => $subscription->{biblionumber}
+        });
     }
 
     # renew subscription
