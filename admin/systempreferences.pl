@@ -149,6 +149,7 @@ $tabsysprefs{globalDueDate}                  = "Circulation";
 $tabsysprefs{holdCancelLength}               = "Circulation";
 $tabsysprefs{itemBarcodeInputFilter}         = "Circulation";
 $tabsysprefs{WebBasedSelfCheck}              = "Circulation";
+$tabsysprefs{ShowPatronImageInWebBasedSelfCheck} = "Circulation";
 $tabsysprefs{CircControl}                    = "Circulation";
 $tabsysprefs{finesCalendar}                  = "Circulation";
 $tabsysprefs{previousIssuesDefaultSortOrder} = "Circulation";
