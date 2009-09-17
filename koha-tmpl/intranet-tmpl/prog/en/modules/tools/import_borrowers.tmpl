@@ -143,16 +143,14 @@
 <h2>Notes:</h2>
 <ul>
 <li><b>Download a starter CSV file with all the columns <a href="?sample=1">here</a>.</b>  Values are comma-separated.</li>
-<li>OR format your file in CSV format with the following fields:</li>
-<li><ul><li>
+<li>OR format your file in CSV format with the following fields:<ul><li>
     <!-- TMPL_LOOP name="columnkeys" -->'<!-- TMPL_VAR name="key" -->', <!-- /TMPL_LOOP -->
-</li></ul>
-</li>
+</li></ul></li>
 <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
 <li>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types 
 and values.  The attribute type code and a ':' should precede each value. For example: &quot;INSTID:12345,LANG:fr&quot;.  This
 means that if an input record has more than one attribute, the 'patron_attributes' field must be wrapped in double quotation marks.
-<li>
+</li>
 <!-- /TMPL_IF -->
 <li>The fields 'branchcode' and 'categorycode' are <b>required</b> and <b>must match</b> valid entries in your database.</li>
 <li>'password' should be stored in plaintext, and will be converted to a md5 hash (if your passwords are already encrypted, talk to your systems administrator about options).</li>
