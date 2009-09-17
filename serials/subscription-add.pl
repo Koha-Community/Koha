@@ -304,7 +304,6 @@ if ($op eq 'addsubscription') {
     }
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } else {
-
         while (@subscription_types) {
            my $sub_type = shift @subscription_types;
            my %row = ( 'name' => $sub_type );
@@ -317,6 +316,8 @@ if ($op eq 'addsubscription') {
         }
     $template->param(subtype => \@sub_type_data,
 	);
+
+    letter_loop('', $template);
 
     my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
     if (defined $new_biblionumber) {
