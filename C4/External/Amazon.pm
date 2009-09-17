@@ -82,8 +82,8 @@ Get editorial reviews, customer reviews, and similar products using Amazon Web S
 sub get_amazon_details {
     my ( $isbn, $record, $marcflavour,$awsref ) = @_;
 
-   return unless defined $aws_ref;
-   my @aws = @$aws_ref;
+   return unless defined $awsref;
+   my @aws = @$awsref;
    return if $#aws == -1;
 
     #normalize the ISBN
