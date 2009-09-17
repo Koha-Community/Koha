@@ -118,6 +118,9 @@ $template->param(
     reviews             => $reviews,
 );
     my @services;
+	my $amazon_reviews  = C4::Context->preference("AmazonReviews");
+	my $amazon_similars = C4::Context->preference("AmazonSimilarItems");
+		
     if ( $amazon_reviews ) {
         $template->param( AmazonReviews => 1 );
         push( @services, 'EditorialReview' );
