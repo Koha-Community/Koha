@@ -99,7 +99,7 @@
                     </xsl:if>
                     <xsl:choose>
                         <!-- display right-to-left tags floating right of their left-to-right counterparts -->
-                        <xsl:when test="substring($code6,10,2) ='/r'">
+                        <xsl:when test="substring($code6,string-length($code6)-1,2) ='/r'">
                             <xsl:attribute name="style">display:block; text-align:right; float:right; width:50%; padding-left:20px</xsl:attribute>
                             <xsl:attribute name="dir">rtl</xsl:attribute>
                         </xsl:when>
