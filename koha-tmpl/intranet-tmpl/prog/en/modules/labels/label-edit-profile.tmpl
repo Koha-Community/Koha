@@ -59,6 +59,7 @@
                                             <li>
                                                 <!-- TMPL_IF NAME="profile_id" -->
                                                  <span class="label">Printer name:</span><!-- TMPL_VAR NAME="printer_name" -->
+                                                <input type="hidden" name="printer_name" value="<!-- TMPL_VAR NAME="printer_name" -->" />
                                                 <!-- TMPL_ELSE -->
                                                 <label for="printer_name">Printer name:</label><input type="text"  size="20" name="printer_name" id="printer_name" />
                                                 <!-- /TMPL_IF -->
@@ -66,6 +67,7 @@
                                             <li>
                                                 <!-- TMPL_IF NAME="profile_id" -->
 												<span class="label">Paper bin:</span> <!-- TMPL_VAR NAME="paper_bin" -->
+                                                <input type="hidden" name="paper_bin" value="<!-- TMPL_VAR NAME="paper_bin" -->" />
                                                 <!-- TMPL_ELSE -->
                                                 <label for="paper_bin">Paper bin:</label><input type="text"  size="20" name="paper_bin" id="paper_bin" />
                                                 <!-- /TMPL_IF -->
