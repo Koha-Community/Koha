@@ -56,7 +56,7 @@ $max_digits=3 unless $max_digits;
 $field =~ /(\d\d\d)(.?)/;
 my $browser_tag = $1;
 my $browser_subfield = $2;
-warn "browser : $browser_tag / $browser_subfield";
+warn "browser : $browser_tag / $browser_subfield" unless $batch;
 die "no cloud or browser field/subfield defined : nothing to do !" unless $browser_tag or $cloud_tag;
 
 my $dbh = C4::Context->dbh;
@@ -116,7 +116,7 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
                 $cloud_result{$line}++;
             }
         }else{
-            print "!";
+            print "!" unless $batch;
         }
     }
 
@@ -126,7 +126,7 @@ while ((my ($biblionumber)= $sth->fetchrow)) {
 
 # fills the browser table
 if ($browser_tag) {
-    print "inserting datas in browser table\n";
+    print "inserting datas in browser table\n" unless $batch;
     # read existing classification table is possible
     my $classification;
     if (C4::Context->preference('opaclanguages') =~ m/^fr/i && $browser_tag eq '676' & $browser_subfield eq 'a') {
