@@ -43,7 +43,6 @@ if($quicksearch){
                  type => "intranet",
                  authnotrequired => 0,
                  flagsrequired => {borrowers => 1},
-                 debug => 1,
                  });
 } else {
     ($template, $loggedinuser, $cookie)
@@ -52,26 +51,28 @@ if($quicksearch){
                  type => "intranet",
                  authnotrequired => 0,
                  flagsrequired => {borrowers => 1},
-                 debug => 1,
                  });
 }
 my $theme = $input->param('theme') || "default";
 
+my @categories=C4::Category->all;
+my $branches=GetBranchesLoop();
 
+my %categories_dislay;
+
+foreach my $category (@categories){
+	my $hash={
+			category_description=>$$category{description},
+			category_type=>$$category{category_type}
+			 };
+	$categories_dislay{$$category{categorycode}} = $hash;
+}
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
             );
 if (C4::Context->preference("AddPatronLists")=~/code/){
-    my $categories=GetBorrowercategoryList;
-    $categories->[0]->{'first'}=1;
-    $template->param(categories=>$categories);  
+    $categories[0]->{'first'}=1;
 }  
-            # only used if allowthemeoverride is set
-#my %tmpldata = pathtotemplate ( template => 'member.tmpl', theme => $theme, language => 'fi' );
-    # FIXME - Error-checking
-#my $template = HTML::Template->new( filename => $tmpldata{'path'},
-#                   die_on_bad_params => 0,
-#                   loop_context_vars => 1 );
 
 my $member=$input->param('member');
 my $orderby=$input->param('orderby');
@@ -85,32 +86,36 @@ my $patron = $input->Vars;
 foreach (keys %$patron){
 	delete $$patron{$_} unless($$patron{$_}); 
 }
-($results)=Search($patron,{surname=>1,firstname=>1}) if (keys %$patron);
-$count =scalar(@$results);
-use YAML;
-warn Dump($results);
-unless ($count){
-	if(length($member) == 1)
-	{
-		($count,$results)=SearchMember($member,$orderby,"simple");
-	}
-	else
-	{
-		($count,$results)=SearchMember($member,$orderby,"advanced");
-	}
+if (C4::Context->preference("IndependantBranches")){
+   if (C4::Context->userenv && C4::Context->userenv->{flags} % 2 !=1 && C4::Context->userenv->{'branch'}){
+        $$patron{branchcode}=C4::Context->userenv->{'branch'} unless (C4::Context->userenv->{'branch'} eq "insecure");
+   }
 }
+$$patron{firstname}.="\%" if ($$patron{firstname});
 
+my @searchpatron;
+push @searchpatron, $member if ($member);
+push @searchpatron, $patron if (keys %$patron);
+my $from= ($startfrom-1)*$resultsperpage;
+my $to=$from+$resultsperpage;
+ #($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
+ ($results)=Search(\@searchpatron,{surname=>1,firstname=>1},undef,undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
+if ($results){
+	$count =scalar(@$results);
+}
 my @resultsdata;
-my $to=($count>($startfrom*$resultsperpage)?$startfrom*$resultsperpage:$count);
-for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
+my $to=($count>$to?$to:$count);
+my $index=$from;
+foreach my $borrower(@$results[$from..$to-1]){
   #find out stats
-  my ($od,$issue,$fines)=GetMemberIssuesAndFines($results->[$i]{'borrowernumber'});
+  my ($od,$issue,$fines)=GetMemberIssuesAndFines($$borrower{'borrowernumber'});
 
-  $$results[$i]{'dateexpiry'}= C4::Dates->new($results->[$i]{'dateexpiry'},'iso')->output('syspref');
+  $$borrower{'dateexpiry'}= C4::Dates->new($$borrower{'dateexpiry'},'iso')->output('syspref');
 
   my %row = (
-    count => $i+1,
-	%{$results->[$i]},
+    count => $index++,
+	%$borrower,
+	%{$categories_dislay{$$borrower{categorycode}}},
     overdues => $od,
     issues => $issue,
     odissue => "$od/$issue",
@@ -118,19 +123,29 @@ for (my $i=($startfrom-1)*$resultsperpage; $i < $to; $i++){
     );
   push(@resultsdata, \%row);
 }
+
+if ($$patron{branchcode}){
+	foreach my $branch (grep{$_->{value} eq $$patron{branchcode}}@$branches){
+		$$branch{selected}=1;
+	}
+}
+if ($$patron{categorycode}){
+	foreach my $category (grep{$_->{categorycode} eq $$patron{categorycode}}@categories){
+		$$category{selected}=1;
+	}
+}
+my %parameters=
+        (  %$patron
+		, 'orderby'			=> $orderby 
+		, 'resultsperpage'	=> $resultsperpage 
+        , 'type'=> 'intranet'); 
 my $base_url =
     'member.pl?&amp;'
   . join(
     '&amp;',
-    map { $_->{term} . '=' . $_->{val} } (
-        { term => 'member', val => $member},
-        { term => 'orderby', val => $orderby },
-        { term => 'resultsperpage', val => $resultsperpage },
-        { term => 'type',           val => 'intranet' },
-    )
+    map { "$_=$parameters{$_}" } (keys %parameters)
   );
 
-my @categories=C4::Category->all;
 $template->param(
     paginationbar => pagination_bar(
         $base_url,  int( $count / $resultsperpage ) + 1,
@@ -139,14 +154,17 @@ $template->param(
     startfrom => $startfrom,
     from      => ($startfrom-1)*$resultsperpage+1,  
     to        => $to,
-    multipage => ($count != $to || $startfrom!=1),
-	branchloop=>GetBranchesLoop(),
+    multipage => ($count != $to+1 || $startfrom!=1),
+);
+$template->param(
+    branchloop=>$branches,
 	categoryloop=>\@categories,
 );
 
+
 $template->param( 
         searching       => "1",
-        member          => $member,
+		%$patron,
         numresults      => $count,
         resultsloop     => \@resultsdata,
             );

@@ -23,6 +23,8 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Members;
+use C4::Branch;
+use C4::Category;
 
 my $query = new CGI;
 my $quicksearch = $query->param('quicksearch');
@@ -48,6 +50,11 @@ if($quicksearch){
                  debug => 1,
                  });
 }
+my @categories=C4::Category->all;
+$template->param(
+    branchloop=>GetBranchesLoop(),
+	categoryloop=>\@categories,
+);
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
             );

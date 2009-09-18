@@ -29,6 +29,7 @@ use C4::Reserves;
 use C4::Accounts;
 use C4::Biblio;
 use C4::SQLHelper qw(InsertInTable UpdateInTable SearchInTable);
+use C4::Members::Attributes qw(SearchIdMatchingAttribute);
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -165,7 +166,6 @@ C<$count> is the number of elements in C<$borrowers>.
 
 #'
 #used by member enquiries from the intranet
-#called by member.pl and circ/circulation.pl
 sub SearchMember {
     my ($searchstring, $orderby, $type,$category_type,$filter,$showallbranches ) = @_;
     my $dbh   = C4::Context->dbh;
@@ -229,16 +229,6 @@ sub SearchMember {
         }
         $query = $query . ") OR cardnumber LIKE ? ";
         push( @bind, $searchstring );
-        if (C4::Context->preference('ExtendedPatronAttributes')) {
-            $query .= "OR borrowernumber IN (
-SELECT borrowernumber
-FROM borrower_attributes
-JOIN borrower_attribute_types USING (code)
-WHERE staff_searchable = 1
-AND attribute like ?
-)";
-            push (@bind, $searchstring);
-        }
         $query .= "order by $orderby";
 
         # FIXME - .= <<EOT;
@@ -255,9 +245,20 @@ AND attribute like ?
 }
 
 sub Search {
-    my ($filter,$orderby ) = @_;
-
-	my $data=SearchInTable("borrowers",$filter,$orderby);
+    my ($filter,$orderby, $limit, $columns_out, $search_on_fields,$searchtype) = @_;
+	my @filters;
+	if (ref($filter) eq "ARRAY"){
+		push @filters,@$filter;
+	}
+	else {
+		push @filters,$filter;
+	}
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+		my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
+		push @filters,@$matching_records;
+    }
+	$searchtype||="wide";
+	my $data=SearchInTable("borrowers",\@filters,$orderby,$limit,$columns_out,$search_on_fields,$searchtype);
 
     return ( $data );
 }
