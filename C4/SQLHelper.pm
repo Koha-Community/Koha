@@ -18,12 +18,13 @@ package C4::SQLHelper;
 # Suite 330, Boston, MA  02111-1307 USA
 
 
-use List::MoreUtils qw(first_value);
+use strict;
+use warnings;
+use List::MoreUtils qw(first_value any);
 use C4::Context;
 use C4::Dates qw(format_date_in_iso);
 use C4::Debug;
-use strict;
-use warnings;
+use YAML;
 require Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 
@@ -34,11 +35,12 @@ BEGIN {
 	@ISA    = qw(Exporter);
 @EXPORT_OK=qw(
 	InsertInTable
+	DeleteInTable
 	SearchInTable
 	UpdateInTable
-	GetPrimaryKey
+	GetPrimaryKeys
 );
-	%EXPORT_TAGS = ( all =>[qw( InsertInTable SearchInTable UpdateInTable GetPrimaryKey)]
+	%EXPORT_TAGS = ( all =>[qw( InsertInTable SearchInTable UpdateInTable GetPrimaryKeys)]
 				);
 }
 
@@ -68,29 +70,39 @@ This module contains routines for adding, modifying and Searching Data in MysqlD
 
 =over 4
 
-  $hashref = &SearchInTable($tablename,$data, $orderby);
+  $hashref = &SearchInTable($tablename,$data, $orderby, $limit, $columns_out, $filtercolumns, $searchtype);
 
 =back
 
+$tablename Name of the table (string)
 $data may contain 
 	- string
 	- data_hashref : will be considered as an AND of all the data searched
 	- data_array_ref on hashrefs : Will be considered as an OR of Datahasref elements
 
-$orderby is a hashref with fieldnames as key and 0 or 1 as values (ASCENDING or DESCENDING order)
+$orderby is an arrayref of hashref with fieldnames as key and 0 or 1 as values (ASCENDING or DESCENDING order)
+$limit is an array ref on 2 values
+$columns_out is an array ref on field names is used to limit results on those fields (* by default)
+$filtercolums is an array ref on field names : is used to limit expansion of research for strings
+$searchtype is string Can be "wide" or "exact"
 
 =cut
 
 sub SearchInTable{
-    my ($tablename,$filters,$orderby) = @_; 
+    my ($tablename,$filters,$orderby, $limit, $columns_out, $filter_columns,$searchtype) = @_; 
+	$searchtype||="wide";
     my $dbh      = C4::Context->dbh; 
-    my $sql      = "SELECT * from $tablename"; 
+	$columns_out||=["*"];
+    my $sql      = do { local $"=', '; 
+                qq{ SELECT @$columns_out from $tablename} 
+               };
     my $row; 
     my $sth; 
-    my ($keys,$values)=_filter_fields($filters,$tablename, "search"); 
+    my ($keys,$values)=_filter_fields($filters,$tablename, $searchtype,$filter_columns); 
+	my @criteria=grep{defined($_) && $_ !~/^\W$/ }@$keys;
     if ($filters) { 
-        $sql.= do { local $"=' AND '; 
-                qq{ WHERE @$keys } 
+        $sql.= do { local $"=') AND ('; 
+                qq{ WHERE (@criteria) } 
                }; 
     } 
     if ($orderby){ 
@@ -99,8 +111,11 @@ sub SearchInTable{
                 qq{ ORDER BY @orders} 
                }; 
     } 
+	if ($limit){
+		$sql.=qq{ LIMIT }.join(",",@$limit);
+	}
      
-    $debug && warn $sql," ",join(",",@$values); 
+    $debug && $values && warn $sql," ",join(",",@$values); 
     $sth = $dbh->prepare($sql); 
     $sth->execute(@$values); 
     my $results = $sth->fetchall_arrayref( {} ); 
@@ -122,11 +137,11 @@ sub SearchInTable{
 sub InsertInTable{
     my ($tablename,$data) = @_;
     my $dbh      = C4::Context->dbh;
-    my ($keys,$values)=_filter_fields($data,$tablename);
-
+    my ($keys,$values)=_filter_fields($data,$tablename,0);
+	map{$_=~s/\(|\)//g; $_=~s/ AND /, /g}@$keys;
     my $query = do { local $"=',';
     qq{
-            INSERT $tablename
+            INSERT INTO $tablename
             SET  @$keys
         };
     };
@@ -152,40 +167,70 @@ sub InsertInTable{
 
 sub UpdateInTable{
     my ($tablename,$data) = @_;
-	my $field_id=GetPrimaryKey($tablename);
-    my $id=$$data{$field_id};
+	my @field_ids=GetPrimaryKeys($tablename);
+    my @ids=@$data{@field_ids};
     my $dbh      = C4::Context->dbh;
     my ($keys,$values)=_filter_fields($data,$tablename,0);
-
+	map{$_=~s/\(|\)//g; $_=~s/ AND /, /g}@$keys;
     my $query = do { local $"=',';
     qq{
             UPDATE $tablename
             SET  @$keys
-            WHERE  $field_id=?
-        };
+            WHERE }.join (" AND ",map{ "$_=?" }@field_ids);
     };
-	$debug && warn $query, join(",",@$values,$id);
+	$debug && warn $query, join(",",@$values,@ids);
 
     my $sth = $dbh->prepare($query);
-    return $sth->execute( @$values,$id);
+    return $sth->execute( @$values,@ids);
 
 }
 
-=head2 GetPrimaryKey
+=head2 DeleteInTable
 
 =over 4
 
-  $primarykeyname = &GetPrimaryKey($tablename)
+  $status = &DeleteInTable($tablename,$data_hashref);
 
 =back
 
-	Get the Primary Key field name of the table
+  Delete Data in table
+  and returns the status of the operation
 =cut
 
-sub GetPrimaryKey($) {
+sub DeleteInTable{
+    my ($tablename,$data) = @_;
+	my @field_ids=GetPrimaryKeys($tablename);
+    my @ids=$$data{@field_ids};
+    my $dbh      = C4::Context->dbh;
+    my ($keys,$values)=_filter_fields($data,$tablename,0);
+
+    my $query = do { local $"=' AND ';
+    qq{
+            DELETE FROM $tablename
+            WHERE }.map{" $_=? "}@field_ids;
+    };
+	$debug && warn $query, join(",",@$values,@ids);
+
+    my $sth = $dbh->prepare($query);
+    return $sth->execute( @$values,@ids);
+
+}
+
+=head2 GetPrimaryKeys
+
+=over 4
+
+  @primarykeys = &GetPrimaryKeys($tablename)
+
+=back
+
+	Get the Primary Key field names of the table
+=cut
+
+sub GetPrimaryKeys($) {
 	my $tablename=shift;
-	my $hash_columns=_columns($tablename);
-	return  first_value { $$hash_columns{$_}{'Key'} =~/PRI/}  keys %$hash_columns;
+	my $hash_columns=_get_columns($tablename);
+	return  grep { $$hash_columns{$_}{'Key'} =~/PRI/i}  keys %$hash_columns;
 }
 
 =head2 _get_columns
@@ -205,15 +250,47 @@ With
 
 =cut
 
-sub _columns($) {
-	my $tablename=shift;
-	$debug && warn $tablename;
+sub _get_columns($) {
+	my ($tablename)=@_;
 	my $dbh=C4::Context->dbh;
 	my $sth=$dbh->prepare(qq{SHOW COLUMNS FROM $tablename });
 	$sth->execute;
-    return $sth->fetchall_hashref(qw(Field));
+    my $columns= $sth->fetchall_hashref(qw(Field));
 }
 
+=head2 _filter_columns
+
+=over 4
+
+_filter_columns($tablename,$research, $filtercolumns)
+
+=back
+
+Given 
+	- a tablename 
+	- indicator on purpose whether it is a research or not
+	- array_ref to columns to limit to
+
+Returns an array of all the fieldnames of the table
+If it is not for research purpose, filter primary keys
+
+=cut
+
+sub _filter_columns ($$;$) {
+	my ($tablename,$research, $filtercolumns)=@_;
+	if ($filtercolumns){
+		return (@$filtercolumns);
+	}
+	else {
+		my $columns=_get_columns($tablename);
+		if ($research){
+			return keys %$columns;
+		}
+		else {
+			return grep {my $column=$_; any {$_ ne $column }GetPrimaryKeys($tablename) } keys %$columns;
+		}
+	}
+}
 =head2 _filter_fields
 
 =over 4
@@ -224,8 +301,9 @@ _filter_fields
 
 Given 
 	- a tablename
-	- a hashref of data 
-	- an indicator on operation
+	- a string or a hashref (containing, fieldnames and datatofilter) or an arrayref to one of those elements
+	- an indicator of operation whether it is a wide research or a narrow one
+	- an array ref to columns to restrict string filter to.
 
 Returns a ref of key array to use in SQL functions
 and a ref to value array
@@ -233,48 +311,113 @@ and a ref to value array
 =cut
 
 sub _filter_fields{
-	my ($data_to_filter,$tablename,$research)=@_;
-	warn "$tablename research $research";
+	my ($filter_input,$tablename,$searchtype,$filtercolumns)=@_;
     my @keys; 
 	my @values;
-	my $columns= _columns($tablename);
-	#Filter Primary Keys of table
-    my $elements=join "|",grep {$$columns{$_}{'Key'} ne "PRI"} keys %$columns;
-	if (ref($data_to_filter) eq "HASH"){
-		foreach my $field (grep {/\b($elements)\b/} keys %$data_to_filter){
-			## supposed to be a hash of simple values, hashes of arrays could be implemented
-			$$data_to_filter{$field}=format_date_in_iso($$data_to_filter{$field}) if ($$columns{$field}{Type}=~/date/ && $$data_to_filter{$field} !~C4::Dates->regexp("iso"));
-			my $strkeys= " $field = ? ";
-			if ($field=~/code/ && $research){
-				$strkeys="( $strkeys OR $field='' OR $field IS NULL) ";
+	if (ref($filter_input) eq "HASH"){
+		return _filter_hash($filter_input,$tablename, $searchtype);
+	} elsif (ref($filter_input) eq "ARRAY"){
+		foreach my $element_data (@$filter_input){
+			my ($localkeys,$localvalues)=_filter_fields($element_data,$tablename,$searchtype,$filtercolumns);
+			if ($localkeys){
+				@$localkeys=grep{defined($_) && $_ !~/^\W*$/}@$localkeys;
+				my $string=do{ 
+								local $"=") OR (";
+								qq{(@$localkeys)}
+							};
+				push @keys, $string;
+				push @values, @$localvalues;
 			}
-			push @values, $$data_to_filter{$field};
-			push @keys, $strkeys;
-		}
-	} elsif (ref($data_to_filter) eq "ARRAY"){
-		foreach my $element (@$data_to_filter){
-			my (@localkeys,@localvalues)=_filter_fields($element);
-			push @keys, join(' AND ',@localkeys);
-			push @values, @localvalues;
 		}
 	} 
 	else{
-			my @operands=split / /,$data_to_filter;
-			foreach my $operand (@operands){
-				my @localvalues=($operand,"\%$operand\%") ;
-				foreach my $field (keys %$columns){
-					my $strkeys= " ( $field = ? OR $field LIKE ? )";
-					if ($field=~/code/){
-						$strkeys="( $strkeys OR $field='' OR $field IS NULL) ";
-					}
-					push @values, @localvalues;
-					push @keys, $strkeys;
-				}
-			}
+		return _filter_string($filter_input,$tablename, $searchtype,$filtercolumns);
 	}
 
 	return (\@keys,\@values);
 }
 
+sub _filter_hash{
+	my ($filter_input, $tablename,$searchtype)=@_;
+	my (@values, @keys);
+	my $columns= _get_columns($tablename);
+	my @columns_filtered= _filter_columns($tablename,$searchtype);
+	
+	#Filter Primary Keys of table
+    my $elements=join "|",@columns_filtered;
+	foreach my $field (grep {/\b($elements)\b/} keys %$filter_input){
+		## supposed to be a hash of simple values, hashes of arrays could be implemented
+		$$filter_input{$field}=format_date_in_iso($$filter_input{$field}) if ($$columns{$field}{Type}=~/date/ && $$filter_input{$field} !~C4::Dates->regexp("iso"));
+		my ($tmpkeys, $localvalues)=_Process_Operands($$filter_input{$field},$field,$searchtype,$columns);
+		if ($tmpkeys){
+			push @values, @$localvalues;
+			push @keys, @$tmpkeys;
+		}
+	}
+	my $string=do{ 
+				local $"=") AND (";
+				qq{( @keys )}
+				};
+	if (@keys){
+		return ([$string],\@values);
+	}
+	else {
+		return ();
+	}
+}
+
+sub _filter_string{
+	my ($filter_input,$tablename, $searchtype,$filtercolumns)=@_;
+	my @columns_filtered= _filter_columns($tablename,$searchtype,$filtercolumns);
+	my $columns= _get_columns($tablename);
+	my @operands=split / /,$filter_input;
+	my (@values,@keys);
+	my @localkeys;
+	foreach my $operand (@operands){
+		
+		foreach my $field (@columns_filtered){
+			my ($tmpkeys, $localvalues)=_Process_Operands($operand,$field,$searchtype,$columns);
+			if ($tmpkeys){
+				push @values,@$localvalues;
+				push @localkeys,@$tmpkeys;
+			}
+		}
+	}
+	my $sql= do { local $"=' OR '; 
+		   qq{@localkeys} 
+			}; 
+						
+	push @keys, $sql;
+
+	if (@keys){
+		return (\@keys,\@values);
+	}
+	else {
+		return ();
+	}
+}
+sub _Process_Operands{
+	my ($operand, $field, $searchtype,$columns)=@_;
+	my @values;
+	my @tmpkeys;
+	my $strkeys;
+	my @localvaluesextended=("\% $operand\%","$operand\%") ;
+	$strkeys= " $field = ? ";
+	if ($searchtype eq "wide"){
+			if ($field=~/(?<!zip)code|number/ ){
+				$strkeys="( $field='' OR $field IS NULL OR $strkeys ) ";
+			} elsif ($$columns{$field}{Type}=~/varchar|text/){
+				$strkeys="( $field LIKE ? OR $field LIKE ? OR $strkeys ) ";
+				push @values,@localvaluesextended;
+			}
+			push @tmpkeys, $strkeys;
+	}
+	else{
+		$strkeys= " $field = ? ";
+		push @tmpkeys, $strkeys;
+	}
+	push @values, $operand;
+	return (\@tmpkeys,\@values);
+}
 1;
 
