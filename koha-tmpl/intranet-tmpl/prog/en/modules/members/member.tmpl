@@ -58,7 +58,7 @@ $(document).ready(function() {
 
 
 						<!-- TMPL_IF NAME="resultsloop" -->
-						<div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for '<span class="ex"><!-- TMPL_VAR NAME="surname" --></span>'</h3></div>
+						<div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for <!--TMPL_IF Name="member"-->'<span class="ex"><!-- TMPL_VAR NAME="member" --></span>'<!--/TMPL_IF--><!--TMPL_IF Name="surname"-->'<span class="ex"><!-- TMPL_VAR NAME="surname" --></span>'<!--/TMPL_IF--></h3></div>
 						<div class="searchresults">
 
 							<table id="memberresultst" style="width:100%">
