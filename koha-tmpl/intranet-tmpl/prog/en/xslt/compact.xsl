@@ -4,13 +4,13 @@
   xmlns="http://www.w3.org/1999/xhtml"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
   xmlns:marc="http://www.loc.gov/MARC21/slim" 
+  exclude-result-prefixes="xsi marc"
   version="1.0">
-  <xsl:output method="html" doctype-public="-//W3C/DTD HTML 4.01 Transitional//EN" doctype-system="http://www.w3.org/TR/html4/strict.dtd" />    
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" />    
       <xsl:template match="/">
         <html>
           <head>
-            <meta http-equiv="Content-Type" content="text/html" charset="utf-8"/>
-            <link href="/koha-tmpl/opac-tmpl/prog/en/css/xsl.css" rel="stylesheet" type="text/css" />
+	    <title>MARC Card View</title>
           </head>
           <body>
            <xsl:apply-templates/>
