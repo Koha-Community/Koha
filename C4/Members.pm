@@ -257,7 +257,7 @@ sub Search {
 		my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
 		push @filters,@$matching_records;
     }
-	$searchtype||="wide";
+	$searchtype||="start_with";
 	my $data=SearchInTable("borrowers",\@filters,$orderby,$limit,$columns_out,$search_on_fields,$searchtype);
 
     return ( $data );
