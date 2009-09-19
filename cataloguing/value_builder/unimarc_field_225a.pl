@@ -81,9 +81,6 @@ sub plugin_javascript {
             var inputs = document.getElementsByTagName('input');
             
             for(var i=0 , len=inputs.length ; i \< len ; i++ ){
-                if(inputs[i].id.match(/^tag_010_subfield_a_.*/)){
-                    isbn_found = inputs[i].value;
-                }
                 if(inputs[i].id.match(/^tag_210_subfield_c_.*/)){
                     editor_found = inputs[i].value;
                 }
@@ -143,6 +140,7 @@ sub plugin {
             
     } 
     @collections = sort @collections;
+
     #	my @collections = ["test"];
     my $collection = CGI::scrolling_list(
         -name     => 'f1',
