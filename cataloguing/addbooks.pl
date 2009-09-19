@@ -57,8 +57,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # get framework list
 my $frameworks = getframeworks;
 my @frameworkcodeloop;
-foreach my $thisframeworkcode ( keys %{$frameworks} ) {
-    push @frameworkcodeloop, {
+foreach my $thisframeworkcode ( sort keys %$frameworks ) {
+    push @frameworkcodeloop,{
         value         => $thisframeworkcode,
         frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
     };
