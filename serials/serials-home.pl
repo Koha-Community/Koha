@@ -41,6 +41,7 @@ this script is the main page for serials/
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Serials;
@@ -79,14 +80,14 @@ if (@serialseqs){
       ### FIXME  This limitation that a serial must be given a title may not be very efficient for some library who do not update serials titles.
       push @information,
         { serialseq=>$seq,
-          publisheddate=>$publisheddates[$index],   
-          planneddate=>$planneddates[$index],   
-          notes=>$notes[$index],   
+          publisheddate=>$publisheddates[$index],
+          planneddate=>$planneddates[$index],
+          notes=>$notes[$index],
           status=>$status[$index]
-        }     
-    }   
-    $index++; 
-  } 
+        }
+    }
+    $index++;
+  }
   $template->param('information'=>\@information);
 }
 my @subscriptions;
@@ -96,10 +97,8 @@ if ($searched){
 
 # to toggle between create or edit routing list options
 if ($routing) {
-    for ( my $i = 0 ; $i < @subscriptions ; $i++ ) {
-        my $checkrouting =
-          check_routing( $subscriptions[$i]->{'subscriptionid'} );
-        $subscriptions[$i]->{'routingedit'} = $checkrouting;
+    for my $subscription ( @subscriptions) {
+        $subscription->{routingedit} = check_routing( $subscription->{subscriptionid} );
     }
 }
 

@@ -19,6 +19,7 @@
 
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Koha;
@@ -50,8 +51,9 @@ my @subscriptionid = $query->param('subscriptionid');
 my $subscriptiondescs ;
 my $subscriptions;
 
-if($op eq "gennext" && @subscriptionid){
-    my $subscriptionid = @subscriptionid[0];
+$op ||= q{};
+if($op eq 'gennext' && @subscriptionid){
+    my $subscriptionid = $subscriptionid[0];
     my $subscription = GetSubscription($subscriptionid);
 
 	my $sth = $dbh->prepare("SELECT publisheddate, serialid, serialseq, planneddate 
@@ -69,13 +71,13 @@ if($op eq "gennext" && @subscriptionid){
 	         $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
              $newinnerloop1, $newinnerloop2, $newinnerloop3
             ) = GetNextSeq($subscription);
-	
+
 	     ## We generate the next publication date    
 	     my $nextpublisheddate = GetNextDate( $expected->{planneddate}->output('iso'), $subscription );
 	     ## Creating the new issue
 	     NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
 	             1, $nextpublisheddate, $nextpublisheddate );
-	             
+             
 	     ## Updating the subscription seq status
 	     my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
 	                 WHERE  subscriptionid = ?";
@@ -103,7 +105,7 @@ if (@subscriptionid){
     $subs->{ "status" . $subs->{'status'} } = 1;
     $subs->{startdate}     = format_date( $subs->{startdate} );
     $subs->{histstartdate} = format_date( $subs->{histstartdate} );
-    if ( $subs->{enddate} eq '0000-00-00' ) {
+    if ( !defined $subs->{enddate} || $subs->{enddate} eq '0000-00-00' ) {
         $subs->{enddate} = '';
     }
     else {

@@ -57,7 +57,7 @@ my ($template, $loggedinuser, $cookie)
 my $sub_on;
 my @subscription_types = (
             'issues', 'weeks', 'months'
-        ); 
+        );
 my @sub_type_data;
 
 my $letters = GetLetters('serial');
@@ -85,14 +85,14 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
     if ($subs->{'cannotedit'} && $op eq 'mod'){
       warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-    } 
+    }
     $firstissuedate = $subs->{firstacquidate};  # in iso format.
     for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
 	# TODO : Handle date formats properly.
          if ($subs->{$_} eq '0000-00-00') {
             $subs->{$_} = ''
     	} else {
-            $subs->{$_} = format_date($subs->{$_});  
+            $subs->{$_} = format_date($subs->{$_});
         }
 	  }
     $subs->{'letter'}='' unless($subs->{'letter'});
@@ -109,7 +109,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
 				last;
 			}
 		}
-    
+
         $template->param($subs);
         $template->param(
                     $op => 1,
@@ -124,9 +124,9 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
     }
 }
 
-my $onlymine=C4::Context->preference('IndependantBranches') && 
-             C4::Context->userenv && 
-             C4::Context->userenv->{flags}!=1 && 
+my $onlymine=C4::Context->preference('IndependantBranches') &&
+             C4::Context->userenv &&
+             C4::Context->userenv->{flags} % 2 !=1 &&
              C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;
@@ -280,7 +280,7 @@ if ($op eq 'addsubscription') {
         # if we have not received any issues yet, then we also must change the firstacquidate for the subs.
         $firstissuedate = $nextacquidate if($nextexpected->{isfirstissue});
     }
-    
+
     if ($history_only) {
         ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
     } else {
@@ -310,7 +310,7 @@ if ($op eq 'addsubscription') {
 	     $row{'selected'} = '';
            }
            push( @sub_type_data, \%row );
-        }    
+        }
     $template->param(subtype => \@sub_type_data,
 	);
 
@@ -323,4 +323,20 @@ if ($op eq 'addsubscription') {
         }
     }
 	output_html_with_http_headers $query, $cookie, $template->output;
+}
+
+sub letter_loop {
+    my ($selected_letter, $template) = @_;
+    my $letters = GetLetters('serial');
+    my @letterloop;
+    foreach my $thisletter (keys %$letters) {
+        my $selected = $thisletter eq $selected_letter ? 1 : 0;
+        push @letterloop, {
+            value => $thisletter,
+            selected => $selected,
+            lettername => $letters->{$thisletter},
+        };
+    }
+    $template->param(letterloop => \@letterloop) if @letterloop;
+    return;
 }
