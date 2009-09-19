@@ -40,7 +40,7 @@ BEGIN {
 	UpdateInTable
 	GetPrimaryKeys
 );
-	%EXPORT_TAGS = ( all =>[qw( InsertInTable SearchInTable UpdateInTable GetPrimaryKeys)]
+	%EXPORT_TAGS = ( all =>[qw( InsertInTable DeleteInTable SearchInTable UpdateInTable GetPrimaryKeys)]
 				);
 }
 
@@ -90,7 +90,7 @@ $searchtype is string Can be "wide" or "exact"
 
 sub SearchInTable{
     my ($tablename,$filters,$orderby, $limit, $columns_out, $filter_columns,$searchtype) = @_; 
-	$searchtype||="wide";
+#	$searchtype||="start_with";
     my $dbh      = C4::Context->dbh; 
 	$columns_out||=["*"];
     my $sql      = do { local $"=', '; 
@@ -98,14 +98,17 @@ sub SearchInTable{
                };
     my $row; 
     my $sth; 
-    my ($keys,$values)=_filter_fields($filters,$tablename, $searchtype,$filter_columns); 
-	my @criteria=grep{defined($_) && $_ !~/^\W$/ }@$keys;
-    if ($filters) { 
-        $sql.= do { local $"=') AND ('; 
-                qq{ WHERE (@criteria) } 
-               }; 
-    } 
+    my ($keys,$values)=_filter_fields($tablename,$filters,$searchtype,$filter_columns); 
+	if ($keys){
+		my @criteria=grep{defined($_) && $_ !~/^\W$/ }@$keys;
+		if (@criteria) { 
+			$sql.= do { local $"=') AND ('; 
+					qq{ WHERE (@criteria) } 
+				   }; 
+		} 
+	}
     if ($orderby){ 
+		#Order by desc by default
         my @orders=map{ "$_".($$orderby{$_}? " DESC" : "") } keys %$orderby; 
         $sql.= do { local $"=', '; 
                 qq{ ORDER BY @orders} 
@@ -116,7 +119,7 @@ sub SearchInTable{
 	}
      
     $debug && $values && warn $sql," ",join(",",@$values); 
-    $sth = $dbh->prepare($sql); 
+    $sth = $dbh->prepare_cached($sql); 
     $sth->execute(@$values); 
     my $results = $sth->fetchall_arrayref( {} ); 
     return $results;
@@ -137,17 +140,11 @@ sub SearchInTable{
 sub InsertInTable{
     my ($tablename,$data) = @_;
     my $dbh      = C4::Context->dbh;
-    my ($keys,$values)=_filter_fields($data,$tablename,0);
-	map{$_=~s/\(|\)//g; $_=~s/ AND /, /g}@$keys;
-    my $query = do { local $"=',';
-    qq{
-            INSERT INTO $tablename
-            SET  @$keys
-        };
-    };
+    my ($keys,$values)=_filter_hash($tablename,$data,0);
+    my $query = qq{ INSERT INTO $tablename SET  }.join(", ",@$keys);
 
 	$debug && warn $query, join(",",@$values);
-    my $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare_cached($query);
     $sth->execute( @$values);
 
 	return $dbh->last_insert_id(undef, undef, $tablename, undef);
@@ -170,17 +167,14 @@ sub UpdateInTable{
 	my @field_ids=GetPrimaryKeys($tablename);
     my @ids=@$data{@field_ids};
     my $dbh      = C4::Context->dbh;
-    my ($keys,$values)=_filter_fields($data,$tablename,0);
-	map{$_=~s/\(|\)//g; $_=~s/ AND /, /g}@$keys;
-    my $query = do { local $"=',';
-    qq{
-            UPDATE $tablename
-            SET  @$keys
+    my ($keys,$values)=_filter_hash($tablename,$data,0);
+    my $query = 
+    qq{     UPDATE $tablename
+            SET  }.join(",",@$keys).qq{
             WHERE }.join (" AND ",map{ "$_=?" }@field_ids);
-    };
 	$debug && warn $query, join(",",@$values,@ids);
 
-    my $sth = $dbh->prepare($query);
+    my $sth = $dbh->prepare_cached($query);
     return $sth->execute( @$values,@ids);
 
 }
@@ -199,21 +193,16 @@ sub UpdateInTable{
 
 sub DeleteInTable{
     my ($tablename,$data) = @_;
-	my @field_ids=GetPrimaryKeys($tablename);
-    my @ids=$$data{@field_ids};
     my $dbh      = C4::Context->dbh;
-    my ($keys,$values)=_filter_fields($data,$tablename,0);
-
-    my $query = do { local $"=' AND ';
-    qq{
-            DELETE FROM $tablename
-            WHERE }.map{" $_=? "}@field_ids;
-    };
-	$debug && warn $query, join(",",@$values,@ids);
-
-    my $sth = $dbh->prepare($query);
-    return $sth->execute( @$values,@ids);
-
+    my ($keys,$values)=_filter_fields($tablename,$data,1);
+	if ($keys){
+		my $query = do { local $"=') AND (';
+		qq{ DELETE FROM $tablename WHERE (@$keys)};
+		};
+		$debug && warn $query, join(",",@$values);
+		my $sth = $dbh->prepare_cached($query);
+    	return $sth->execute( @$values);
+	}
 }
 
 =head2 GetPrimaryKeys
@@ -253,7 +242,7 @@ With
 sub _get_columns($) {
 	my ($tablename)=@_;
 	my $dbh=C4::Context->dbh;
-	my $sth=$dbh->prepare(qq{SHOW COLUMNS FROM $tablename });
+	my $sth=$dbh->prepare_cached(qq{SHOW COLUMNS FROM $tablename });
 	$sth->execute;
     my $columns= $sth->fetchall_hashref(qw(Field));
 }
@@ -268,7 +257,7 @@ _filter_columns($tablename,$research, $filtercolumns)
 
 Given 
 	- a tablename 
-	- indicator on purpose whether it is a research or not
+	- indicator on purpose whether all fields should be returned or only non Primary keys
 	- array_ref to columns to limit to
 
 Returns an array of all the fieldnames of the table
@@ -311,14 +300,21 @@ and a ref to value array
 =cut
 
 sub _filter_fields{
-	my ($filter_input,$tablename,$searchtype,$filtercolumns)=@_;
+	my ($tablename,$filter_input,$searchtype,$filtercolumns)=@_;
     my @keys; 
 	my @values;
 	if (ref($filter_input) eq "HASH"){
-		return _filter_hash($filter_input,$tablename, $searchtype);
+		my ($keys, $values) = _filter_hash($tablename,$filter_input, $searchtype);
+		if ($keys){
+		my $stringkey="(".join (") AND (",@$keys).")";
+		return [$stringkey],$values;
+		}
+		else {
+		return ();
+		}
 	} elsif (ref($filter_input) eq "ARRAY"){
 		foreach my $element_data (@$filter_input){
-			my ($localkeys,$localvalues)=_filter_fields($element_data,$tablename,$searchtype,$filtercolumns);
+			my ($localkeys,$localvalues)=_filter_fields($tablename,$element_data,$searchtype,$filtercolumns);
 			if ($localkeys){
 				@$localkeys=grep{defined($_) && $_ !~/^\W*$/}@$localkeys;
 				my $string=do{ 
@@ -331,14 +327,14 @@ sub _filter_fields{
 		}
 	} 
 	else{
-		return _filter_string($filter_input,$tablename, $searchtype,$filtercolumns);
+		return _filter_string($tablename,$filter_input,$searchtype,$filtercolumns);
 	}
 
 	return (\@keys,\@values);
 }
 
 sub _filter_hash{
-	my ($filter_input, $tablename,$searchtype)=@_;
+	my ($tablename,$filter_input, $searchtype)=@_;
 	my (@values, @keys);
 	my $columns= _get_columns($tablename);
 	my @columns_filtered= _filter_columns($tablename,$searchtype);
@@ -349,17 +345,13 @@ sub _filter_hash{
 		## supposed to be a hash of simple values, hashes of arrays could be implemented
 		$$filter_input{$field}=format_date_in_iso($$filter_input{$field}) if ($$columns{$field}{Type}=~/date/ && $$filter_input{$field} !~C4::Dates->regexp("iso"));
 		my ($tmpkeys, $localvalues)=_Process_Operands($$filter_input{$field},$field,$searchtype,$columns);
-		if ($tmpkeys){
+		if (@$tmpkeys){
 			push @values, @$localvalues;
 			push @keys, @$tmpkeys;
 		}
 	}
-	my $string=do{ 
-				local $"=") AND (";
-				qq{( @keys )}
-				};
 	if (@keys){
-		return ([$string],\@values);
+		return (\@keys,\@values);
 	}
 	else {
 		return ();
@@ -367,14 +359,14 @@ sub _filter_hash{
 }
 
 sub _filter_string{
-	my ($filter_input,$tablename, $searchtype,$filtercolumns)=@_;
+	my ($tablename,$filter_input, $searchtype,$filtercolumns)=@_;
+	return () unless($filter_input);
+	my @operands=split / /,$filter_input;
 	my @columns_filtered= _filter_columns($tablename,$searchtype,$filtercolumns);
 	my $columns= _get_columns($tablename);
-	my @operands=split / /,$filter_input;
 	my (@values,@keys);
 	my @localkeys;
 	foreach my $operand (@operands){
-		
 		foreach my $field (@columns_filtered){
 			my ($tmpkeys, $localvalues)=_Process_Operands($operand,$field,$searchtype,$columns);
 			if ($tmpkeys){
@@ -383,10 +375,7 @@ sub _filter_string{
 			}
 		}
 	}
-	my $sql= do { local $"=' OR '; 
-		   qq{@localkeys} 
-			}; 
-						
+	my $sql= join (' OR ', @localkeys);
 	push @keys, $sql;
 
 	if (@keys){
@@ -400,24 +389,23 @@ sub _Process_Operands{
 	my ($operand, $field, $searchtype,$columns)=@_;
 	my @values;
 	my @tmpkeys;
-	my $strkeys;
-	my @localvaluesextended=("\% $operand\%","$operand\%") ;
-	$strkeys= " $field = ? ";
-	if ($searchtype eq "wide"){
-			if ($field=~/(?<!zip)code|number/ ){
-				$strkeys="( $field='' OR $field IS NULL OR $strkeys ) ";
+	my @localkeys;
+	push @tmpkeys, " $field = ? ";
+	push @values, $operand;
+	unless ($searchtype){
+		return \@tmpkeys,\@values;
+	}
+	if ($searchtype eq "start_with"){
+			if ($field=~/(?<!zip)code|(?<!card)number/ ){
+				push @tmpkeys,(" $field= '' ","$field IS NULL");
 			} elsif ($$columns{$field}{Type}=~/varchar|text/){
-				$strkeys="( $field LIKE ? OR $field LIKE ? OR $strkeys ) ";
+				push @tmpkeys,(" $field LIKE ? ","$field LIKE ?");
+				my @localvaluesextended=("\% $operand\%","$operand\%") ;
 				push @values,@localvaluesextended;
 			}
-			push @tmpkeys, $strkeys;
 	}
-	else{
-		$strkeys= " $field = ? ";
-		push @tmpkeys, $strkeys;
-	}
-	push @values, $operand;
-	return (\@tmpkeys,\@values);
+	push @localkeys,qq{ (}.join(" OR ",@tmpkeys).qq{) };
+	return (\@localkeys,\@values);
 }
 1;
 
