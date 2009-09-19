@@ -108,7 +108,7 @@ sub _get_text_fields {
 
 
 sub _split_lccn {
-    my ($lccn) = @_;    
+    my ($lccn) = @_;
     $_ = $lccn;
     # lccn examples: 'HE8700.7 .P6T44 1983', 'BS2545.E8 H39 1996';
     my (@parts) = m/
@@ -187,7 +187,7 @@ sub _get_barcode_data {
         )
     );
     FIELD_LIST:
-    while ($f) {  
+    while ($f) {
         my $err = '';
         $f =~ s/^\s?//;
         if ( $f =~ /^'(.*)'.*/ ) {
@@ -276,9 +276,9 @@ sub _BAR {
     my $barcode_width = 0.8 * $self->{'width'};                         # this scales the barcode width to 80% of the label width
     my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 10% of the label height
     return 0, 0, 0, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor;
-}   
-            
-sub _BIBBAR { 
+}
+
+sub _BIBBAR {
     my $self = shift;
     my $barcode_llx = $self->{'llx'} + $self->{'left_text_margin'};     # this places the bottom left of the barcode the left text margin distance to right of the the left edge of the label ($self->{'llx'})
     my $barcode_lly = $self->{'lly'} + $self->{'top_text_margin'};      # this places the bottom left of the barcode the top text margin distance above the bottom of the label ($lly)
@@ -298,7 +298,7 @@ sub _BARBIB {
     my $line_spacer = ($self->{'font_size'} * 1);                               # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
     my $text_lly = (($self->{'lly'} + $self->{'height'}) - $self->{'top_text_margin'} - (($self->{'lly'} + $self->{'height'}) - $barcode_lly));
     return $self->{'llx'}, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor;
-}   
+}
 
 sub new {
     my ($invocant, %params) = @_;
@@ -443,14 +443,14 @@ sub draw_label_text {
         foreach my $line (@label_lines) {
             next LABEL_LINES if $line eq '';
             my $string_width = C4::Labels::PDF->StrWidth($line, $font, $self->{'font_size'});
-            if ($self->{'justify'} eq 'R') { 
+            if ($self->{'justify'} eq 'R') {
                 $text_llx = $params{'llx'} + $self->{'width'} - ($self->{'left_text_margin'} + $string_width);
-            } 
+            }
             elsif($self->{'justify'} eq 'C') {
                  # some code to try and center each line on the label based on font size and string point width...
                  my $whitespace = ($self->{'width'} - ($string_width + (2 * $self->{'left_text_margin'})));
                  $text_llx = (($whitespace  / 2) + $params{'llx'} + $self->{'left_text_margin'});
-            } 
+            }
             else {
                 $text_llx = ($params{'llx'} + $self->{'left_text_margin'});
             }
@@ -484,11 +484,11 @@ sub barcode {
         $tot_bar_length = ($bar_length * $num_of_bars) + ($guard_length * 2);
         $x_scale_factor = ($params{'width'} / $tot_bar_length);
         if ($params{'barcode_type'} eq 'CODE39MOD') {
-            my $c39 = CheckDigits('visa');   # get modulo43 checksum
+            my $c39 = CheckDigits('code_39');   # get modulo43 checksum
             $params{'barcode_data'} = $c39->complete($params{'barcode_data'});
         }
         elsif ($params{'barcode_type'} eq 'CODE39MOD10') {
-            my $c39_10 = CheckDigits('visa');   # get modulo43 checksum
+            my $c39_10 = CheckDigits('siret');   # get modulo43 checksum
             $params{'barcode_data'} = $c39_10->complete($params{'barcode_data'});
             $hide_text = '';
         }
@@ -777,7 +777,7 @@ Copyright 2009 Foundations Bible College.
 =head1 LICENSE
 
 This file is part of Koha.
-       
+
 Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later version.
 
