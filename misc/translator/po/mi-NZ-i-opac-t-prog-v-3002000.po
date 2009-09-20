@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2009-08-30 14:00+1200\n"
+"POT-Creation-Date: 2009-09-20 20:59+1200\n"
 "PO-Revision-Date: 2009-07-06 12:08+1200\n"
 "Last-Translator: Ian Cormack <ian@cormack.co.nz>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
@@ -62,9 +62,16 @@ msgstr "Pūkete a %s %s"
 msgid "%s &rsaquo; Self Checkout"
 msgstr "%s Putumōhio &rsaquo;  Tāki Kuhukuhu"
 
+#. %1$s: TMPL_VAR name=description
+#. %2$s: TMPL_VAR name=categorycode
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:152
+#, fuzzy, c-format
+msgid "%s (%s)"
+msgstr "%s %s (%s)"
+
 #. %1$s: TMPL_VAR name=bibliotitle
 #. %2$s: TMPL_VAR name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:38
 #, c-format
 msgid "%s (Record no. %s)"
 msgstr "%s (Pūkete nama %s)"
@@ -76,7 +83,7 @@ msgid "%s ;"
 msgstr "%s;"
 
 #. %1$s: TMPL_VAR name=review
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:619
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:628
 #, c-format
 msgid "%s <a1>Edit</a>"
 msgstr "%s<a1>Whakatika</a>"
@@ -114,7 +121,7 @@ msgid "%s Catalog &rsaquo; Placing hold %s for"
 msgstr "%s Putumōhio &rsaquo; E Tāpui ana i  %s mā"
 
 #. %1$s: TMPL_VAR name=issues_count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:180
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:192
 #, c-format
 msgid "%s Items Checked Out"
 msgstr "%s Ngā Mea Kua Tākina"
@@ -128,7 +135,7 @@ msgid "%s Search"
 msgstr "%s Rapua"
 
 #. %1$s: TMPL_VAR name=LibraryName
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:68
 #, c-format
 msgid "%s Self Checkout System"
 msgstr "Pūnaha Tāki Kuhukuhu"
@@ -161,13 +168,13 @@ msgstr "%s marama"
 
 #. %1$s: TMPL_VAR name=rank
 #. %2$s: TMPL_VAR name=reservecount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:301
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:300
 #, c-format
 msgid "%s out of %s"
 msgstr "%s o roto i te %s"
 
 #. %1$s: TMPL_VAR name=ExpectedAtLibrary
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:465
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:463
 #, c-format
 msgid "%s since"
 msgstr "%s mai i"
@@ -184,14 +191,20 @@ msgstr "%s wiki"
 msgid "%s,"
 msgstr "%s, %s"
 
-#. For the first occurrence,
 #. %1$s: TMPL_VAR name=address
 #. %2$s: TMPL_VAR name=city
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:22
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:24
 #, c-format
 msgid "%s, %s"
 msgstr "%s, %s"
+
+#. %1$s: TMPL_VAR name=B_address
+#. %2$s: TMPL_VAR name=B_address2
+#. %3$s: TMPL_VAR name=B_city
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:24
+#, fuzzy, c-format
+msgid "%s, %s, %s"
+msgstr "%s %s (%s)"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=result_number
@@ -237,7 +250,7 @@ msgid "&#8225;<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->"
 msgstr "‡<!-- TMPL_VAR NAME=waehere --> <!-- TMPL_VAR NAME=uara -->"
 
 #. %1$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:673
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:682
 #, c-format
 msgid "&copy;%s"
 msgstr "&kape;"
@@ -342,18 +355,18 @@ msgstr "(%s biblios)"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=renewsleft
 #. %2$s: TMPL_VAR name=renewsallowed
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:228
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:230
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:294
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:240
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:242
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:306
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s o ngā whakahōutanga %s e toe ana)"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=issues_count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:135
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:257
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:309
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:191
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:269
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:321
 #, c-format
 msgid "(%s total)"
 msgstr "(%s te tapeke)"
@@ -361,16 +374,16 @@ msgstr "(%s te tapeke)"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=place
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:124
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:225
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:347
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:349
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:482
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:675
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:234
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:356
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:358
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:491
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:684
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:37
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:65
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:63
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:145
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:143
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:202
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:289
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:349
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:38
@@ -389,7 +402,7 @@ msgstr "(%s)"
 msgid "(%s),"
 msgstr "(%s)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:340
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:349
 #, c-format
 msgid "(<a1>Browse Shelf</a>)"
 msgstr "(<a1>Tirotiro Tarenga</a>)"
@@ -397,7 +410,7 @@ msgstr "(<a1>Tirotiro Tarenga</a>)"
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=firstname
 #. %3$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:90
 #, c-format
 msgid "(<a1>Click here</a> if you're not %s %s %s)"
 msgstr "(<a1>Pāwhiria a konei ki te kore koe ko %s %s %s</a>)"
@@ -406,12 +419,12 @@ msgstr "(<a1>Pāwhiria a konei ki te kore koe ko %s %s %s</a>)"
 msgid "(Checked out)"
 msgstr "(I tākina)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:230
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:242
 msgid "(On hold)"
 msgstr "(Kei te puritia)"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:536
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:545
 #, c-format
 msgid "(There are %s subscriptions associated with this title)."
 msgstr "(E %s ngā tangohanga e pā ana ki tēnei taitara)."
@@ -445,7 +458,7 @@ msgstr "(rapunga whai pānga:"
 #. %1$s: TMPL_VAR name=unititle
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:95
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:124
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:675
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:684
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:381
 #, fuzzy, c-format
 msgid ", %s"
@@ -457,7 +470,7 @@ msgstr "%s, %s"
 msgid ", ISSN %s"
 msgstr "ISBN: %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:392
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:401
 msgid ", Shelving Location:"
 msgstr "Rohe Tarenga:"
 
@@ -515,8 +528,9 @@ msgstr "- %s"
 msgid "- %s,"
 msgstr "- %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:782
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:196
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:791
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:199
 msgid "-- Choose Format --"
 msgstr "-- Kōwhiria Whakatakotoranga --"
 
@@ -653,7 +667,7 @@ msgid "<!-- TMPL_VAR NAME=\"LibraryName\" --> Search RSS Feed"
 msgstr "<!-- TMPL_VAR NAME=\"IngoaWharePukapuka\" --> Rapua Whāngai RSS"
 
 #. INPUT type=text
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:77
 #, fuzzy
 msgid ""
 "<!-- TMPL_VAR NAME=\"description\" --> (<!-- TMPL_VAR NAME=\"categorycode\" "
@@ -666,18 +680,12 @@ msgstr "$<!-- TMPL_VAR NAME=\"waehere\" --> <!-- TMPL_VAR NAME=\"uara\" -->"
 msgid "<a1>%s</a>,"
 msgstr "<a1>%s</a>,"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:89
-#, c-format
-msgid "<a1>Click here</a> for more information on subscription(s) history"
-msgstr " <a1>Pāwhiria a konei</a> mō ētahi atu pārongo mō tō hītori tangohanga"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:101
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:154
 #, c-format
 msgid "<a1>HELP</a> with the self checkout system"
 msgstr "<a1>ĀWHINA</a> me te pūnaha tāki kuhukuhu"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:646
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:118
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:655
 #, c-format
 msgid "<a1>Log in to your account</a> to post a comment."
 msgstr "<a1>Taki Uru</a> ki tō pūkete </a> hei tuku kōrero."
@@ -721,11 +729,53 @@ msgstr ""
 msgid "<em>%s</em>:"
 msgstr "<em>%s</em>:"
 
-#. %1$s: TMPL_VAR name=impossible
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:55
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:97
+msgid "<em>MESSAGE 11:</em> Your account has expired."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:99
+msgid "<em>MESSAGE 12:</em> Your account has been suspended."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:101
+msgid "<em>MESSAGE 13:</em> This card has been declared lost."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:77
+msgid "<em>MESSAGE 1:</em> The system does not recognize this barcode."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:79
+msgid ""
+"<em>MESSAGE 2:</em> You have borrowed too many items and can't check out any "
+"more."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:81
+msgid "<em>MESSAGE 3:</em> This item is checked out to someone else."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:83
+msgid "<em>MESSAGE 4:</em> You cannot renew this item again."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:85
+msgid "<em>MESSAGE 5:</em> This item is not for loan."
+msgstr ""
+
+#. %1$s: TMPL_VAR name=amount
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:87
 #, c-format
-msgid "<em>Error type:</em> %s"
-msgstr "<em>Momo hapa:</em> %s"
+msgid "<em>MESSAGE 6:</em> You owe the library %s and cannot borrow."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:89
+msgid "<em>MESSAGE 7:</em> This item has been withdrawn from the collection."
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:93
+msgid "<em>MESSAGE 9:</em> This item is reserved for another patron."
+msgstr ""
 
 #. %1$s: TMPL_VAR name=already
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:141
@@ -739,12 +789,12 @@ msgstr "Kei te tīari he rārangi kua tapaina <b>%s</b> !"
 msgid "A record matching barcode <b>%s</b> has already been added."
 msgstr "Kua tāpiri kētia he pūkete e ōrite ana ki te waeherepae <b>%s</b>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:381
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:380
 #, fuzzy
 msgid "A specific copy"
 msgstr "Tāpuitia tētahi kape tauwhāiti"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:295
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:304
 msgid "About the Author"
 msgstr ""
 
@@ -756,11 +806,11 @@ msgstr "Tīpako/whakarāpopotonga"
 msgid "Accepted by the library"
 msgstr "Kua whakaaetia e te whare pukapuka"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:137
 msgid "Access Denied"
 msgstr "Kua Whakahētia te Aheitanga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:96
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:108
 #, c-format
 msgid ""
 "According to our records, we don't have up-to-date <a1>contact information</"
@@ -774,7 +824,7 @@ msgstr ""
 "(<em>Me mahara:</em> tēnā pea ka takaware te whakaora anō i tō pūkete ki te "
 "tuku tuihono koe)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:292
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:304
 msgid "Account Frozen"
 msgstr "Kua Aakatia te Pūkete"
 
@@ -797,8 +847,8 @@ msgstr "Rā Whiwhi: Tawhito Rawa ki te Hōu Rawa"
 msgid "Actions:"
 msgstr "Mahi:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:231
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:234
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:240
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:243
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:144
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:313
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:321
@@ -829,8 +879,8 @@ msgstr "Tāpiritia ki te Kāta"
 #. For the first occurrence,
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:46
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:189
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:191
 msgid "Add to Your Cart"
 msgstr "Tāpiritia ki Tō Kāta"
 
@@ -852,9 +902,8 @@ msgstr "Tāpiritia ki te rārangi:"
 msgid "Add to: "
 msgstr "Tāpiritia ki:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:709
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:721
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:130
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:718
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:730
 msgid "Add your own review"
 msgstr "Tapiritia tōu ake arotake"
 
@@ -863,6 +912,7 @@ msgid "Additional Content Types for Books/Printed Materials"
 msgstr "Etahi atu Momo Ihirangi mō ngā Pukapuka/Rawa Tā"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:107
 msgid "Address:"
 msgstr "Wāhitau"
 
@@ -901,22 +951,33 @@ msgstr "Momo mea katoa"
 msgid "All libraries"
 msgstr "Whare pukapuka katoa"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:51
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:137
+#, fuzzy
+msgid "Alternate Address:"
+msgstr "Wāhi Noho Pūmau, Hohoko Rānei:"
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:58
 msgid "Alternate Contact Details"
 msgstr "Ērā Atu Taipitopito Whakapā"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:135
+#, fuzzy
+msgid "Alternate Contact Information"
+msgstr "Pārongo Whakapā"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:59
 msgid "Alternate Contact:"
 msgstr "Tētahi Atu Tangata Whakapā"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:313
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:47
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:322
 msgid "Amazon Reviews"
 msgstr "Arotakenga Amazon"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:122
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:133
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:142
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:145
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:154
 msgid "Amount"
 msgstr "Rahinga"
 
@@ -1006,36 +1067,28 @@ msgstr "Tūturu, ka pīrangi ki te whakapiako o tō kāta?"
 msgid "Are you sure you want to remove the selected items?"
 msgstr "Tūturu, ka tangohia e koe ngā mea kua kōwhiria?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:558
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:567
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:61
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:71
 msgid "Arrived"
 msgstr "Kua Tae Mai"
 
 #. %1$s: TMPL_VAR name=branchcode
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:539
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:548
 #, c-format
 msgid "At branch: %s"
 msgstr "I te wāhi whakauru: %s"
 
 #. %1$s: TMPL_VAR name=branchname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:538
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:547
 #, fuzzy, c-format
 msgid "At library: %s"
-msgstr "Kei te whare pukapuka: %s %s"
-
-#. %1$s: TMPL_VAR name=branchcode
-#. %2$s: TMPL_VAR name=notes
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:55
-#, c-format
-msgid "At library: %s %s"
 msgstr "Kei te whare pukapuka: %s %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:4
 msgid "Audience"
 msgstr "Hunga Pānui"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:255
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:264
 msgid "Audiovisual Profile:"
 msgstr ""
 
@@ -1062,7 +1115,7 @@ msgstr "Kaituhi (A-Z)"
 msgid "Author (Z-A)"
 msgstr "Kaituhi (Z-A)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:522
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:531
 msgid "Author Notes provided by Syndetics"
 msgstr ""
 
@@ -1122,7 +1175,7 @@ msgstr "Wātea"
 msgid "Availability:"
 msgstr "Wātea:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:372
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:381
 msgid "Available"
 msgstr "Wātea"
 
@@ -1134,20 +1187,20 @@ msgstr "Putanga Wātea"
 msgid "Available in the library"
 msgstr "Kei te wātea i te Whare Pukapuka"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:709
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:718
 msgid "Average Rating (from Amazon.com):"
 msgstr "Whakatauranga Toharite (mai i Amazon.com)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:556
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:565
 #, fuzzy
 msgid "Awaited"
 msgstr "I tatari"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:265
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:274
 msgid "Awards:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:314
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:323
 msgid "Babelthèque"
 msgstr ""
 
@@ -1155,16 +1208,10 @@ msgstr ""
 msgid "Back to biblio"
 msgstr "Hoki ki biblio"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:417
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:416
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:69
 msgid "Barcode"
 msgstr "Waehere Pae"
-
-#. %1$s: TMPL_VAR name=opacdisplaycount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:56
-#, fuzzy, c-format
-msgid "Below is a list of the %s latest issues :"
-msgstr " Kei raro nei he rārangi o ngā whakaputanga hōu rawa nei e toru:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:145
 msgid "Biannual"
@@ -1192,7 +1239,7 @@ msgid "Biweekly"
 msgstr "Ia rua wiki"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:142
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:201
 msgid "Book Cover Image"
 msgstr "Whakaahua Uhi Pukapuka"
 
@@ -1221,7 +1268,7 @@ msgid "Browse our catalogue"
 msgstr "Tirotiro i tā mātou putumōhio"
 
 #. %1$s: TMPL_VAR name=starting_homebranch
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:392
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:401
 #, c-format
 msgid "Browsing %s Shelves"
 msgstr "Tirotiro Tarenga %s"
@@ -1239,14 +1286,14 @@ msgid "CGI debug is on."
 msgstr "Kei te haere te patuiro CGI."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:44
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:137
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:185
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:263
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:197
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:275
 msgid "Call No."
 msgstr "Tau Tono"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:325
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:422
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:334
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:421
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:65
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:95
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:53
@@ -1264,16 +1311,16 @@ msgstr "Tau Karanga (Pakimaero 0-9 ki Pono A-Z)"
 msgid "Call Number (Non-fiction 0-9 to Fiction A-Z)"
 msgstr "Tau Karanga (Pono 0-9 ki Pakimaero A-Z)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:235
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:244
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:75
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:132
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:145
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:314
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:133
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:104
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:31
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:40
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:59
@@ -1282,12 +1329,12 @@ msgstr "Tau Karanga (Pono 0-9 ki Pakimaero A-Z)"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:206
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:317
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:509
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:368
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:380
 msgid "Cancel"
 msgstr "Whakakore"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:434
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:433
 #, fuzzy
 msgid "Cannot be put on hold"
 msgstr "Kāore i te puritia"
@@ -1296,7 +1343,8 @@ msgstr "Kāore i te puritia"
 msgid "Card Number:"
 msgstr "Tau Kāri:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:113
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:75
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:150
 msgid "Card number:"
 msgstr "Tau Kāri:"
 
@@ -1446,15 +1494,15 @@ msgstr "Tūmomo:"
 msgid "Change your Password"
 msgstr "Huria tō Kupuhipa"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:122
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:178
 msgid "Check out or return an item:"
 msgstr "Tākina atu, whakahokia rānei tētahi mea:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:121
 msgid "Checked Out"
 msgstr "I Tākina"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:355
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:364
 msgid "Checked out"
 msgstr "I tākina"
 
@@ -1469,7 +1517,7 @@ msgstr "I tākina (%s),"
 #. %1$s: TMPL_VAR name=cardnumber
 #. %2$s: TMPL_VAR name=firstname
 #. %3$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:353
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:362
 #, fuzzy, c-format
 msgid "Checked out to %s %s %s"
 msgstr "Kei te tāki atu ki %s %s (%s)"
@@ -1482,8 +1530,10 @@ msgstr "Tiro Hītori"
 msgid "Checkouts"
 msgstr "Wāhi Tāki"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:32
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:57
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:139
 msgid "City, State:"
 msgstr "Tāone, Rohe:"
 
@@ -1501,11 +1551,12 @@ msgstr "Whakarōpūtanga: %s"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:105
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:198
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:127
 msgid "Clear All"
 msgstr "Ūkui Katoa"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:130
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:186
 msgid "Click here if done."
 msgstr "Pāwhiria a konei ina oti."
 
@@ -1515,21 +1566,21 @@ msgstr "Pāwhiria a konei ina oti."
 msgid "Click to add to cart"
 msgstr "Pāwhira hei tāpiri ki te Kāta"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:250
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:255
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:260
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:265
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:259
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:264
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:269
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:274
 #, fuzzy
 msgid "Click to open in new window"
 msgstr "Pāwhiria kia kite i Google Books"
 
 #. DIV
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:208
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:276
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:220
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:288
 msgid "Click to view in Google Books"
 msgstr "Pāwhiria kia kite i Google Books"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:392
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:401
 msgid "Close Shelf Browser"
 msgstr "Katia te Pūtiro Tarenga"
 
@@ -1546,7 +1597,7 @@ msgstr "Kati matapihi"
 msgid "Coded Fields"
 msgstr "Āpure Whai Waehere"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:324
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:333
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:207
 msgid "Collection"
 msgstr "Kohinga"
@@ -1563,12 +1614,10 @@ msgstr "Kohinga:"
 msgid "Collection: %s"
 msgstr "Kohinga: %s"
 
-#. For the first occurrence,
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=firstname
 #. %3$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:625
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:97
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:634
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "Kōrero nā %s %s %s"
@@ -1578,8 +1627,7 @@ msgstr "Kōrero nā %s %s %s"
 msgid "Comment:"
 msgstr "Kōrero:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:307
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:46
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:316
 msgid "Comments"
 msgstr "Kōrero"
 
@@ -1608,7 +1656,8 @@ msgstr ""
 msgid "Contact Details"
 msgstr "Taipitopito Whakapā"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:103
 msgid "Contact Information"
 msgstr "Pārongo Whakapā"
 
@@ -1617,7 +1666,7 @@ msgstr "Pārongo Whakapā"
 msgid "Content"
 msgstr "Ihirangi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:271
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:280
 msgid "Content Cafe"
 msgstr "Wāhi Ihirangi"
 
@@ -1632,7 +1681,7 @@ msgstr "Ihirangi"
 msgid "Contents of %s"
 msgstr "Ihirangi o %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:141
 msgid "Copies"
 msgstr "Kape"
 
@@ -1644,8 +1693,8 @@ msgstr "Kape e wātea ana i te:"
 msgid "Copies available:"
 msgstr "Kape wātea:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:328
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:413
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:337
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:412
 msgid "Copy"
 msgstr "Kape"
 
@@ -1675,10 +1724,18 @@ msgstr "Manatārua:"
 msgid "Count"
 msgstr "Rahinga"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:59
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:111
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:141
+#, fuzzy
+msgid "Country:"
+msgstr "Rahinga"
+
 #. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:52
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:218
 msgid "Cover Image"
 msgstr "Whakaahua Uhi"
 
@@ -1686,8 +1743,8 @@ msgstr "Whakaahua Uhi"
 msgid "Create a New List"
 msgstr "Hangaia he Rārangi Hōu"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:113
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:140
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:125
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:152
 msgid "Credits"
 msgstr "Tāwere"
 
@@ -1711,11 +1768,10 @@ msgstr "Ia rā"
 msgid "Damaged (%s),"
 msgstr "Pakaru (%s)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:546
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:555
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:45
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:31
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:21
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
 msgid "Date"
 msgstr "Rā"
 
@@ -1723,11 +1779,12 @@ msgstr "Rā"
 msgid "Date Added"
 msgstr "Rā Tāpiri"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:334
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:343
 msgid "Date Due"
 msgstr "Rā Whakahoki"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:124
 msgid "Date of Birth:"
 msgstr "Rā Whānau:"
 
@@ -1834,19 +1891,20 @@ msgstr "Kāore anō kia whai kāri whare pukapuka?"
 msgid "Don't have a password yet?"
 msgstr "Kāore anō kia whai kupuhipa?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:784
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:198
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:793
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:86
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:201
 msgid "Dublin Core (XML)"
 msgstr "Dublin Core (XML)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:137
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:186
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:264
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:198
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:276
 msgid "Due"
 msgstr "Rā Whakahoki"
 
 #. %1$s: TMPL_VAR name=date_due
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:452
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:450
 #, c-format
 msgid "Due %s"
 msgstr "Wā Whakarite %s"
@@ -1939,7 +1997,7 @@ msgstr "Whakatika"
 msgid "Edition statement:"
 msgstr "Tauāki putanga:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:311
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:320
 msgid "Editions"
 msgstr "Putanga"
 
@@ -1954,8 +2012,9 @@ msgid "Email Address:"
 msgstr "Wāhitau Īmēra:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:40
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:70
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:116
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:143
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:32
 msgid "Email:"
 msgstr "Imēra:"
@@ -1968,11 +2027,11 @@ msgstr "Putua ka Kati"
 msgid "Encyclopedias"
 msgstr "Mātāpunenga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:271
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:280
 msgid "Enhanced Content:"
 msgstr "Ihirangi Arā Atu Anō"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:455
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:464
 msgid "Enhanced Descriptions from Syndetics:"
 msgstr ""
 
@@ -2018,16 +2077,16 @@ msgstr "Hapa! He waehere tautohu katoa tō kōrero. KĪHAI i tāpiritia."
 msgid "Error:"
 msgstr "Hapa:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:288
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:297
 msgid "Excerpt"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:493
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:502
 msgid "Excerpt provided by Syndetics"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:34
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:49
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:31
 #, fuzzy
 msgid "Expanded MARC View"
 msgstr "Tirohanga MARC"
@@ -2037,17 +2096,20 @@ msgstr "Tirohanga MARC"
 msgid "Expecting a specific copy selection."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:154
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:46
 msgid "Expires:"
 msgstr "Ka mōnehu:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:39
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:115
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:30
 msgid "Fax:"
 msgstr "Waea Whakaahua:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:126
 msgid "Female"
 msgstr "Wahine"
 
@@ -2059,7 +2121,7 @@ msgstr "Feschrift Ind."
 msgid "Fiction"
 msgstr "Pakimaero"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:260
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:269
 #, fuzzy
 msgid "Fiction Notes:"
 msgstr "Pakimaero"
@@ -2072,17 +2134,17 @@ msgstr "Haurongo Kiriata"
 msgid "Fine Amount"
 msgstr "Rahinga Whaina"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:137
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:111
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:112
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:190
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:267
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:123
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:124
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:202
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:279
 msgid "Fines"
 msgstr "Whaina"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:120
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:131
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:132
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:143
 msgid "Fines and Charges"
 msgstr "Whaina, Utu Hoki"
 
@@ -2090,7 +2152,7 @@ msgstr "Whaina, Utu Hoki"
 msgid "First Name:"
 msgstr "Ingoa Tuatahi:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:381
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:390
 msgid "Fix Itemtype"
 msgstr "Whakatika MomoMea:"
 
@@ -2108,7 +2170,7 @@ msgid "Format:"
 msgstr "Whakatakotoranga:"
 
 #. %1$s: TMPL_VAR name=Source
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:446
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:455
 #, c-format
 msgid "From %s:"
 msgstr "Mai %s"
@@ -2123,10 +2185,11 @@ msgid "Full Heading"
 msgstr "Panekōrero Katoa"
 
 #. INPUT type=submit name=save
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:788
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:797
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:181
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:301
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:202
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:90
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:205
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
 msgid "Go"
 msgstr "Haere"
@@ -2149,7 +2212,7 @@ msgstr "Huanga Panekōrero"
 
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:90
 #, fuzzy, c-format
 msgid "Hello, %s %s"
 msgstr "Nau Mai %s %s"
@@ -2196,41 +2259,39 @@ msgstr "Pupuri"
 msgid "Hold Starts on Date"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:156
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:168
 msgid "Hold date"
 msgstr "Rā pupuri"
 
 #. %1$s: TMPL_VAR name=count
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:279
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:288
 #, c-format
 msgid "Holdings ( %s )"
 msgstr "Ngā puringa "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:115
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:309
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:127
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:321
 msgid "Holds"
 msgstr "Ngā puringa"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:153
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:165
 #, fuzzy
 msgid "Holds Waiting"
 msgstr "E tatari ana"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:419
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:418
 msgid "Home Library"
 msgstr "Whare Pukapuka Kāinga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:112
 msgid "Home Phone:"
 msgstr "Waea Kāinga:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:31
-msgid "ISBD"
-msgstr "ISBD"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:84
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:37
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:32
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:36
 msgid "ISBD View"
 msgstr "Tirohanga ISBD"
 
@@ -2331,7 +2392,7 @@ msgstr "e kawea ana (%s),"
 
 #. %1$s: TMPL_VAR name=holdingbranch
 #. %2$s: TMPL_VAR name=branch
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:170
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:182
 #, c-format
 msgid "In transit from %s to %s"
 msgstr "e kawea ana i %s ki %s"
@@ -2339,7 +2400,7 @@ msgstr "e kawea ana i %s ki %s"
 #. %1$s: TMPL_VAR name=transfertfrom
 #. %2$s: TMPL_VAR name=transfertto
 #. %3$s: TMPL_VAR name=transfertwhen
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:369
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:378
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "e kawea ana i %s ki %s mai i $s"
@@ -2347,7 +2408,7 @@ msgstr "e kawea ana i %s ki %s mai i $s"
 #. %1$s: TMPL_VAR name=transfertfrom
 #. %2$s: TMPL_VAR name=transfertto
 #. %3$s: TMPL_VAR name=transfertwhen
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:454
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:452
 #, c-format
 msgid "In transit from %s, to %s, since %s"
 msgstr "e kawea ana i %s ki %s, mai i $s"
@@ -2361,20 +2422,16 @@ msgstr "Kua rārangitia i:"
 msgid "Indexes"
 msgstr "Ngā rārangi āwhina"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:423
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:422
 msgid "Information"
 msgstr "Pārongo"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:545
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:554
 msgid "Issue #"
 msgstr "Putanga #"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
-msgid "Issue number"
-msgstr "Tau putanga"
-
 #. %1$s: TMPL_VAR name=borrowername
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:135
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:191
 #, c-format
 msgid "Issues for %s"
 msgstr "Putanga mā %s"
@@ -2395,40 +2452,40 @@ msgstr "E <b>%s</b> ōna tāurunga."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:43
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:239
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:415
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:414
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:222
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:184
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:262
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:196
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:274
 #, fuzzy
 msgid "Item Type"
 msgstr "Momo Mea:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:53
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:73
 msgid "Item cannot be checked out."
 msgstr "Kāore te mea ie taea te tāki"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:367
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:376
 msgid "Item damaged"
 msgstr "Mea pakaru"
 
 #. %1$s: TMPL_VAR name=frombranch
 #. %2$s: TMPL_VAR name=datesent
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:358
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:370
 #, c-format
 msgid "Item in transit from <b> %s</b> since %s"
 msgstr "e kawea ana  te mea i <b> %s</b> mai i %s"
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:354
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:366
 #, c-format
 msgid "Item in transit to <b> %s</b>"
 msgstr "E kawea ana te mea ki <b> %s</b>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:362
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:371
 msgid "Item lost"
 msgstr "Mea ngaro:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:322
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:331
 #, fuzzy
 msgid "Item type"
 msgstr "Momo Mea:"
@@ -2439,35 +2496,28 @@ msgid "Item type :"
 msgstr "Momo Mea:"
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:348
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:360
 #, c-format
 msgid "Item waiting at <b> %s</b>"
 msgstr "mea tatari i "
 
 #. %1$s: TMPL_VAR name=wbrname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:351
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:363
 #, c-format
 msgid "Item waiting to be pulled from <b> %s</b>"
 msgstr "Mea tatari kia kumea mai i "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:365
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:374
 msgid "Item withdrawn"
 msgstr "Mea Kounu"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:45
-msgid "Items Borrowed Notifications"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:67
-msgid "Items Returned Notifications"
-msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:54
 #, fuzzy
 msgid "Itemtype"
 msgstr "Momo Mea:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:116
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:153
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:44
 msgid "Joined:"
 msgstr "I whakaurua:"
@@ -2569,11 +2619,11 @@ msgstr "Ngā reo:"
 msgid "Large print"
 msgstr "Momotuhi Rahi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:420
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:419
 msgid "Last Location"
 msgstr "Tauwāhi Whakamutunga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:23
 msgid "Last Name:"
 msgstr "Ingoa Whānau:"
 
@@ -2581,9 +2631,8 @@ msgstr "Ingoa Whānau:"
 msgid "Last Seen"
 msgstr "Kitenga Whakamutunga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:560
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:569
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:62
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:73
 msgid "Late"
 msgstr "Tōmuri"
 
@@ -2616,7 +2665,8 @@ msgstr "Whare Pukapuka"
 msgid "Library Catalog"
 msgstr "Putumōhio Whare Pukapuka"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:111
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:73
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:148
 msgid "Library Use:"
 msgstr "Whakamahinga Whare Pukapuka"
 
@@ -2651,6 +2701,10 @@ msgstr "Ingoa Rārangi"
 msgid "List Name:"
 msgstr "Ingoa Rārangi:"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:221
+msgid "List(s) this item appears in:"
+msgstr ""
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:179
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:293
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:325
@@ -2659,7 +2713,7 @@ msgstr "Ingoa Rārangi:"
 msgid "Lists"
 msgstr "Ngā rārangi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:323
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:332
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:66
 msgid "Location"
 msgstr "Tauwāhi"
@@ -2698,7 +2752,7 @@ msgstr "Taki Uru ki Tō Pūkete"
 msgid "Log in to Your Account:"
 msgstr "Taki Uru ki Tō Pūkete"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:242
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:251
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:445
 msgid "Log in to add tags."
 msgstr "Taki uru ki te tāpiri tohu."
@@ -2726,39 +2780,59 @@ msgid "Lost (%s),"
 msgstr "Ngaro (%s),"
 
 #. A
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:30
 #, fuzzy
 msgid "MARC"
 msgstr "MARCXML"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:787
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:201
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:796
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:204
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Waehereao/UTF-8)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:786
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:200
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:795
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:88
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:203
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (Waehereao-kore/MARC-8)"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:84
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-showmarc.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:43
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:51
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:30
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:33
 msgid "MARC View"
 msgstr "Tirohanga MARC"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:785
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:199
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:794
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:87
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:202
 msgid "MARCXML"
 msgstr "MARCXML"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:783
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:197
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:95
+msgid "MESSAGE 10:"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:103
+msgid "MESSAGE 14:"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:105
+msgid "MESSAGE 15:"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:91
+msgid "MESSAGE 8:"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:792
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:200
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
 
@@ -2780,7 +2854,8 @@ msgstr "Tāurunga Matua"
 msgid "Make a <a1>purchase suggestion</a>"
 msgstr "Tukuna mai he<a1>whakaaro hoko</a>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:127
 msgid "Male"
 msgstr "Tāne"
 
@@ -2817,21 +2892,25 @@ msgstr "Tau Mema:"
 msgid "Message Sent"
 msgstr "Karere Tuku"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:97
 msgid "Message from the library"
 msgstr "He karere mai i te whare pukapuka"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:562
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:81
+msgid "Messages For You"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:571
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:63
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:75
 msgid "Missing"
 msgstr "Kua ngaro"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:113
 msgid "Mobile Phone:"
 msgstr "Waea Pūkoro:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:319
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:331
 msgid "Modify"
 msgstr "Whakarerekē"
 
@@ -2852,11 +2931,11 @@ msgstr "Ia marama"
 msgid "More Details"
 msgstr "Ētahi atu Taipitopito"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:578
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:587
 msgid "More details"
 msgstr "Ētahi atu Taipitopito"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:762
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:771
 #, fuzzy
 msgid "More searches"
 msgstr "(rapunga whai pānga:"
@@ -2885,6 +2964,7 @@ msgstr "Aku Tohu"
 msgid "Name"
 msgstr "Ingoa"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:105
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:15
 msgid "Name:"
 msgstr "Ingoa:"
@@ -2926,7 +3006,7 @@ msgstr "Tohu hōu:"
 msgid "New&nbsp;Tag:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:233
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:242
 msgid "New:"
 msgstr "Hōu:"
 
@@ -2935,7 +3015,7 @@ msgid "Newspaper"
 msgstr "Niupepa"
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:420
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:429
 msgid "Next"
 msgstr "Ki mua"
 
@@ -2944,16 +3024,16 @@ msgid "Next &gt;&gt;"
 msgstr "Ki Mua &gt;&gt;"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:265
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:362
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:361
 #, fuzzy
 msgid "Next available copy"
 msgstr "wātea"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:218
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:21
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:35
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:234
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:299
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:246
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:311
 msgid "No"
 msgstr "Kāore"
 
@@ -2988,19 +3068,19 @@ msgid "No available items."
 msgstr "Kape e wātea ana i te:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:81
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:173
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:155
 msgid "No copies available."
 msgstr "Kāore he kape e wātea ana"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:74
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:399
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:400
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:401
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:403
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:408
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:409
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:410
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:412
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:413
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:414
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:416
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:421
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:422
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:423
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:425
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:52
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:54
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:56
@@ -3008,12 +3088,12 @@ msgstr "Kāore he kape e wātea ana"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:478
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:479
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:481
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:208
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:210
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:274
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:276
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:278
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:220
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:286
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:288
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:290
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:29
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:36
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:71
@@ -3049,11 +3129,11 @@ msgstr "Kāore he kape e wātea ana:"
 msgid "No limit"
 msgstr "Kāore he tepe"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:387
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:396
 msgid "No physical items for this record"
 msgstr "Kāore he mea mō tēnei pūkete"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:296
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:308
 msgid "No renewals left"
 msgstr "Kua pau ngā wā whakahōu"
 
@@ -3077,7 +3157,7 @@ msgstr "kaore he otinga e hāngai ana ki tō rapunga mō"
 msgid "No tag was specified."
 msgstr "Kīhai tētahi mea i kōwhiria"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:227
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:236
 #, fuzzy
 msgid "No tags from this library for this title."
 msgstr "Kāore he tohu mō tēnei taitara"
@@ -3102,8 +3182,8 @@ msgid "None"
 msgstr "Kore rawa"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:84
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:32
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:45
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:27
 msgid "Normal View"
 msgstr "Tiro Pūnoa"
 
@@ -3111,8 +3191,7 @@ msgstr "Tiro Pūnoa"
 msgid "Normalised irregular"
 msgstr "Tipihori whakapūnoa"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:564
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:77
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:573
 msgid "Not Issued"
 msgstr "Kāore i tukuna"
 
@@ -3129,26 +3208,26 @@ msgstr "Ehara i te haurongo"
 msgid "Not finding what you're looking for?"
 msgstr "Kāore koe e kite i tāu e kimi ai?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:347
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:349
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:356
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:358
 msgid "Not for loan"
 msgstr "Kāore e hoatu taurewatia"
 
 #. %1$s: TMPL_VAR name=notforloanvalue
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:461
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:459
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Kāore e hoatu taurewatia (%s)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:470
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:468
 msgid "Not on hold"
 msgstr "Kāore i te puritia"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:230
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:242
 msgid "Not renewable"
 msgstr "Kāore e whakahoutia"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:548
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:557
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:111
 msgid "Note"
 msgstr "Me mahara"
@@ -3192,7 +3271,7 @@ msgstr "Tuhipoka: I roto i tō tohu he waehere tautohu kua tangohia."
 msgid "Note: your tag was entirely markup code. It was NOT added."
 msgstr "Tuhipoka: He waehere tautohu katoa tō tohu. KĪHAI i tāpiritia."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:333
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:342
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:35
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:231
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:132
@@ -3228,12 +3307,20 @@ msgstr "Tau"
 msgid "OK"
 msgstr "Ka pai"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:295
+#. %1$s: TMPL_VAR name=message_date_formatted
+#. %2$s: TMPL_VAR name=branchname
+#. %3$s: TMPL_VAR name=message
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:84
+#, c-format
+msgid "On %s %s wrote <i>\"%s\"</i>"
+msgstr ""
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:307
 msgid "On Reserve"
 msgstr "Kua Tāpuitia"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:372
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:464
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:381
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:462
 msgid "On hold"
 msgstr "Kei te Puritia"
 
@@ -3272,15 +3359,21 @@ msgstr "Kua tonoa e te whare pukapuka"
 msgid "Other"
 msgstr "Ētahi atu"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:663
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:672
 msgid "Other Editions of this Work"
 msgstr "Ētahi atu Putanga o tēnei Rawa"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:106
+#, fuzzy
+msgid "Other Name:"
+msgstr "Ingoa Tarenga:"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:122
 msgid "Overdue"
 msgstr "Hapa"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:257
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:269
 msgid "Overdues"
 msgstr "Ngā hapanga"
 
@@ -3305,16 +3398,17 @@ msgstr " Ehara ngā kupuhipa i te ōrite. Patohia anō tō kupuhipa."
 msgid "Patent document"
 msgstr "Pepa ārai"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:77
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:152
 msgid "Patron Category:"
 msgstr "Tūmomo Kairangi:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:114
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:151
 msgid "Patron Number:"
 msgstr "Tau Kairangi:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:361
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:373
 msgid "Pending"
 msgstr "Kei te tārewa"
 
@@ -3326,22 +3420,19 @@ msgstr "Hautaka"
 msgid "Periodicity"
 msgstr "Riterite tonutanga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:91
-msgid "Permanent Address"
-msgstr "Wāhi Noho Pūmau:"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:24
 msgid "Permanent Address:"
 msgstr "Wāhi Noho Pūmau:"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:94
-msgid "Permanent or Alternate Address:"
-msgstr "Wāhi Noho Pūmau, Hohoko Rānei:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
 #, fuzzy
 msgid "Personal Details"
 msgstr "Taipitopito Whaiaro"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:122
+#, fuzzy
+msgid "Personal Information"
+msgstr "Pārongo Whakapā"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:28
 msgid "Phone (Daytime):"
@@ -3351,6 +3442,8 @@ msgstr "Waea (Awatea):"
 msgid "Phone (Home):"
 msgstr "Waea (Kāinga):\t"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:60
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:142
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:61
 msgid "Phone:"
 msgstr "Waea:"
@@ -3363,11 +3456,11 @@ msgstr "Taipitopito āhuatanga:"
 msgid "Physical details:"
 msgstr "Taipitopito Āhuatanga:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:157
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:169
 msgid "Pick Up Library"
 msgstr "Wāhi Tiki"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:314
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:326
 msgid "Pick Up Location"
 msgstr "Wāhi Tiki"
 
@@ -3380,20 +3473,21 @@ msgstr "Wāhi Tiki"
 msgid "Picture"
 msgstr "Pikitia"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:742
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:745
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:751
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:754
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:483
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:485
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:487
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:70
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:256
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:259
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:198
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:459
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:462
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:167
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:170
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:26
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:57
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:169
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:172
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:127
 msgid "Place Hold"
 msgstr "Tono Tāpuitanga"
 
@@ -3402,7 +3496,7 @@ msgstr "Tono Tāpuitanga"
 msgid "Place On:"
 msgstr "Rā Tono Tāpui"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:313
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:325
 msgid "Placed On"
 msgstr "Rā Tono Tāpui"
 
@@ -3418,7 +3512,7 @@ msgstr ""
 "Whakaūngia koa tō kōre pīrangi whiwhi īmēra ina tae mai tētahi putanga hōu "
 "mō tēnei tangohanga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:120
 msgid "Please confirm the checkout:"
 msgstr "Whakaūngia koa te tākinga:"
 
@@ -3433,7 +3527,7 @@ msgstr ""
 "tuihono</a> rānei ki te tuku i ngā pārongo o nāianei  (<em>Me mahara:</em> "
 "tēnā pea ka takaware te whakaora anō i tō pūkete ki te tuku tuihono koe)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:170
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:230
 msgid "Please enter your card number:"
 msgstr "Tāurutia tō tau kāri"
 
@@ -3446,7 +3540,7 @@ msgstr ""
 "pukapuka. Ka whiwhi īmēra koe ina oti i te whare pukapuka tō whakaaro te "
 "tukatuka."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:132
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:94
 msgid ""
 "Please make any necessary changes to your record. Submitting the form will "
 "notify a library staff member, who will make the changes permanent."
@@ -3455,12 +3549,16 @@ msgstr ""
 "tētahi kaimahi o te whare pukapuka, ā, māna e whakapūmau aua "
 "whakarerekētanga."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:96
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:99
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:108
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:111
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:114
 msgid "Please note:"
 msgstr "Me mahara:"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:107
+msgid "Please see a member of the library staff."
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:71
 msgid "Please try again with plain text."
@@ -3476,13 +3574,12 @@ msgstr "Manako (It Rawa ki te Nui Rawa)"
 msgid "Popularity (Most to Least)"
 msgstr "Manako (Nui Rawa ki te Iti Rawa)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:642
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:651
 msgid "Post or edit your comments on this item."
 msgstr "Tukuna, whakatikaina rānei ō kōrero mō tēnei mea."
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:396
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:405
 msgid "Previous"
 msgstr "O Mua"
 
@@ -3490,16 +3587,16 @@ msgstr "O Mua"
 msgid "Primary (5-8)"
 msgstr "Kura Tuatahi (5-8)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:753
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:762
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:121
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:179
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:181
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:18
 msgid "Print"
 msgstr "Tā"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:241
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:316
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:328
 #, fuzzy
 msgid "Priority"
 msgstr "Mana ake:"
@@ -3561,7 +3658,7 @@ msgstr "Rā Whakaputa/Manatārua: (Mai i te Tino Tawhito ki te Tino Hōu)"
 msgid "Publication:"
 msgstr "Whakaputanga:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:331
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:340
 msgid "Published"
 msgstr "I whakaputaina"
 
@@ -3608,10 +3705,6 @@ msgstr "Ia hauwhā tau"
 msgid "RECEIPT"
 msgstr "RĪHITI"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:135
-msgid "Rating (from Amazon.com):"
-msgstr "Whakatauranga (mai i Amazon.com)"
-
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:35
 msgid "Re-Type New Password:"
 msgstr "Patohia anō te Kupuhipa Hōu"
@@ -3620,7 +3713,7 @@ msgstr "Patohia anō te Kupuhipa Hōu"
 msgid "Record No.:"
 msgstr "Tau Pūkete:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:144
 msgid "Record not found"
 msgstr "Kāore te pūkete i kitea"
 
@@ -3641,12 +3734,12 @@ msgstr "Tānga Noa"
 msgid "Regularity"
 msgstr "Auautanga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:309
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:318
 #, fuzzy
 msgid "Related"
 msgstr "Hononga whai pānga:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:691
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:700
 #, fuzzy
 msgid "Related Titles"
 msgstr "Hononga whai pānga:"
@@ -3674,22 +3767,22 @@ msgstr "Arotakenga"
 msgid "Remove Selected Items"
 msgstr "Mukua Mea Tīpako"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:137
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:188
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:228
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:266
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:294
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:200
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:240
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:278
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:306
 msgid "Renew"
 msgstr "Whakahoutia"
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:245
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:257
 msgid "Renew All"
 msgstr "Whakahoutia te katoa"
 
 #. INPUT type=button name=confirm
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:78
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:155
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:131
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:214
 msgid "Renew Item"
 msgstr "Whakahou Mea"
 
@@ -3712,18 +3805,18 @@ msgid "Results of Search"
 msgstr "Otinga Rapu"
 
 #. INPUT type=button name=confirm
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:76
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:153
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:129
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:212
 msgid "Return Item"
 msgstr "Whakahoki Mea"
 
 #. INPUT type=button name=returnbook
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:114
 msgid "Return this item"
 msgstr "Whakahokia tēnei mea"
 
 #. INPUT type=submit name=confirm
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:63
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:116
 msgid "Return to Account Summary"
 msgstr "Hoki ki  te Tīpoka Kaute"
 
@@ -3741,7 +3834,7 @@ msgstr "Hoki anō ki te Tāki Kuhukuhu"
 msgid "Return to your summary."
 msgstr "Hoki ki  te Tīpoka Kaute"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:291
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:300
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:184
 msgid "Reviews"
 msgstr "Arotakenga"
@@ -3750,7 +3843,7 @@ msgstr "Arotakenga"
 msgid "Reviews from LibraryThing.com:"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:502
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:511
 msgid "Reviews provided by Syndetics"
 msgstr ""
 
@@ -3773,8 +3866,9 @@ msgstr "Tau SMS: %S"
 msgid "Save"
 msgstr "Tiakina"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:780
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:194
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:789
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:82
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:197
 msgid "Save Record:"
 msgstr "Tiaki Pūkete:"
 
@@ -3782,9 +3876,9 @@ msgstr "Tiaki Pūkete:"
 msgid "Save to Lists"
 msgstr "Tiaki ki ngā Rārangi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:758
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:184
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:767
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:71
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:186
 msgid "Save to Your Lists"
 msgstr "Tiaki ki Ō Rārangi"
 
@@ -3801,7 +3895,7 @@ msgstr "Rārangi Matawai mō: %s"
 msgid "Scan Index:"
 msgstr "Rārangi Matawai:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:123
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:179
 msgid "Scan a new item or enter its barcode:"
 msgstr "Matawaia he mea hōu, tāurutia rānei tana waehaerepae:"
 
@@ -3815,7 +3909,7 @@ msgstr ""
 "whai ake. Me kite te mea kua tākina i tō rārangi tukunga. Me pāwhiri te "
 "patene Tukuna noa iho ki te tāuru ā-ringa koe i te waehaerepae."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:130
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:186
 msgid "Scan next item, or"
 msgstr "Matawaia te mea whai ake, tēnei rānei"
 
@@ -3826,7 +3920,7 @@ msgstr "Matawaia te mea whai ake, tēnei rānei"
 msgid "Search"
 msgstr "Rapua"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:768
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:777
 msgid "Search for this title in:"
 msgstr "Rapua tēnei taitara i:"
 
@@ -3851,12 +3945,12 @@ msgstr "Rapua: :"
 
 #. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:76
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:403
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:416
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:412
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:425
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:56
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:481
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:210
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:278
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:222
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:290
 msgid "See Baker &amp; Taylor"
 msgstr "Tirohia Baker &amp; Taylor"
 
@@ -3866,6 +3960,7 @@ msgstr "Tirohia ngā Taitara Tino Paingia"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:104
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:198
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:127
 msgid "Select All"
 msgstr "Kōwhiria te katoa"
 
@@ -3873,7 +3968,7 @@ msgstr "Kōwhiria te katoa"
 msgid "Select a List"
 msgstr "Kōwhiria tētahi rārangi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:411
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:410
 #, fuzzy
 msgid "Select a specific copy:"
 msgstr "Tāpuitia tētahi kape tauwhāiti"
@@ -3892,7 +3987,7 @@ msgstr "Kōwhiria ngā pātenga mamao:"
 msgid "Selected items :"
 msgstr "Mukua Mea Tīpako"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:97
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:150
 #, fuzzy
 msgid "Self Checkout"
 msgstr "%s Tāki kuhukuhu"
@@ -3939,7 +4034,7 @@ msgstr "Tuku i tō rārangi"
 msgid "Serial"
 msgstr "Tāuhu"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:330
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:339
 msgid "Serial Data"
 msgstr "Raraunga Tāuhu"
 
@@ -3967,7 +4062,7 @@ msgstr "Pukapuka Tāuhu:"
 msgid "Series"
 msgstr "Rārangitanga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:250
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:259
 #, fuzzy
 msgid "Series Information:"
 msgstr "Pārongo"
@@ -3982,11 +4077,11 @@ msgstr "Taitara Rārangitanga"
 msgid "Series:"
 msgstr "Rārangitanga:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:142
 msgid "Session Lost"
 msgstr "Kua Ngaro te Wātū"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:88
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:141
 msgid "Session timed out"
 msgstr "Kua pau te wātū"
 
@@ -3994,7 +4089,8 @@ msgstr "Kua pau te wātū"
 msgid "Settings Updated"
 msgstr "Āhuatanga Kua Whakahōutia"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:67
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:125
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:54
 msgid "Sex:"
 msgstr "Ira:"
@@ -4042,12 +4138,12 @@ msgstr "Whakaatu Mea Whakamutunga e 50"
 msgid "Showing only"
 msgstr "Keo te whakaaatu noa iho"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:300
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:309
 msgid "Similar Items"
 msgstr "Mea Rite"
 
 #. %1$s: TMPL_VAR name=renewal_blocked_fines
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:114
 #, c-format
 msgid ""
 "Since you have <a1>more than %s</a> in fines, you cannot renew your books "
@@ -4058,12 +4154,12 @@ msgstr ""
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:174
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:181
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:215
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:110
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:116
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:166
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:172
 msgid "Sorry"
 msgstr "Aroha mai"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:138
 msgid ""
 "Sorry, This Self-Checkout Station has lost authentication. Please contact "
 "the administrator to resolve this problem."
@@ -4071,7 +4167,7 @@ msgstr ""
 "Aroha mai, Kua ngaro te mana o tēnei Wāhi Tāki Kuhukuhu. Whakapā atu ki te "
 "kaiwhakahaere hei whakaoti i tēnei raruraru."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:53
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:73
 msgid "Sorry, This item cannot be checked out at this station."
 msgstr "Aroha mai, Kāore e taea tēnei mea te tāki i tēnei wāhi."
 
@@ -4086,11 +4182,7 @@ msgstr ""
 " Aroha mai, kāore te pūnaha e whakaaro kua whakaaetia tō tae mai ki tēnei "
 "whārangi."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:150
-msgid "Sorry, there are no reviews available for this title."
-msgstr "Aroha mai, kāore he arotakenga mō tēnei taitara."
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:721
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:730
 #, fuzzy
 msgid "Sorry, there are no reviews from this library available for this title."
 msgstr "Aroha mai, kāore he arotakenga mō tēnei taitara."
@@ -4108,7 +4200,7 @@ msgstr ""
 msgid "Sorry, you cannot place more than %s holds."
 msgstr " Aroha mai, kāore e whakaaetia kia neke atu i te %s ō tāpuitanga."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:88
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:141
 msgid "Sorry, your session has timed out, please log in again."
 msgstr " Aroha mai, kua pau kē tō wātū. Taki uru mai anō."
 
@@ -4138,12 +4230,11 @@ msgstr "Tau Pūnoa"
 msgid "Statistics"
 msgstr "Tauanga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:332
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:547
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:341
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:556
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:41
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:114
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:318
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:330
 msgid "Status"
 msgstr "Mana"
 
@@ -4205,8 +4296,8 @@ msgstr "Kaupapa %s"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:123
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:128
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:175
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:235
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:69
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:45
 msgid "Submit"
@@ -4214,8 +4305,8 @@ msgstr "Tukuna"
 
 #. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:133
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:104
 msgid "Submit Changes"
 msgstr "Tuku Whakarerekētanga"
 
@@ -4253,8 +4344,7 @@ msgstr "Whakauru ki tēnei rapunga"
 msgid "Subscription information for %s"
 msgstr "Pārongo tangohanga mō %s"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:305
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:314
 msgid "Subscriptions"
 msgstr "Tangohanga"
 
@@ -4291,15 +4381,21 @@ msgstr ""
 "Tiaki Pūnaha … ka hoki wawe mai mātou! Mēnā he pātai āu, whakapā atu ki te "
 "<a1>Kaiwhakahaere Pae Tukutuku</a>"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:284
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:293
 msgid "TOC"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:478
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:487
 msgid "Table of Contents provided by Syndetics"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:301
+#. SCRIPT
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:127
+#, fuzzy
+msgid "Tag"
+msgstr "Tohu:"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:310
 msgid "Tag Browser"
 msgstr ""
 
@@ -4308,7 +4404,7 @@ msgid "Tag Cloud"
 msgstr ""
 "Tiaki Pūnaha … Ka hoki wawe mai! Mēnā he pātai āu, whakapā mai koa ki te "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:238
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:247
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:341
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:325
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:443
@@ -4316,8 +4412,8 @@ msgstr ""
 msgid "Tag status here."
 msgstr "Mana tohu ki konei."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:223
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:227
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:232
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:236
 #, fuzzy
 msgid "Tags from this library:"
 msgstr "He karere mai i te whare pukapuka"
@@ -4340,17 +4436,12 @@ msgstr "Kupu"
 msgid "Term/Phrase"
 msgstr "Kupu/Kīanga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:56
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:78
-msgid "Text Message:"
-msgstr ""
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:92
 msgid "Thank you!"
 msgstr "Tēnā rawa atu koe!"
 
 #. %1$s: TMPL_VAR name=opacdisplaycount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:542
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:551
 #, fuzzy, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "Ngā putanga hōu rawa e toru mō tēnei tangohanga:"
@@ -4418,13 +4509,12 @@ msgstr "I mōnehu te  tangohanga i te %s"
 msgid "The tag was added as &quot;%s&quot;."
 msgstr "I tāpiritia te tohu hei &quot;%s&quot;."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:166
 #, fuzzy
 msgid "The userid"
 msgstr "Tuhinga Whakapae"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:637
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:646
 msgid "There are no comments for this item."
 msgstr "Kāore he whakaaro mō tēnei mea."
 
@@ -4487,7 +4577,7 @@ msgid ""
 "This error means that you are forbidden for some reason to see this page."
 msgstr "Ka aukatia tō tiro i tēnei whārangi e tēnei hapa."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:535
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:544
 msgid "This is a serial subscription"
 msgstr "He tukunga tāuhu tēnei"
 
@@ -4500,7 +4590,7 @@ msgstr "Ehara tēnei i te rārangi tuwhera. Kāore e taea te tāpiri mea."
 msgid "This item has been added to your cart"
 msgstr "Kua tāpirihia tēnei mea ki tō kāta"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:68
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:121
 msgid "This item is already checked out to you. Return it?"
 msgstr "Kua tākina kētia tēnei mea ki a koe. Whakahokia?"
 
@@ -4509,8 +4599,8 @@ msgstr "Kua tākina kētia tēnei mea ki a koe. Whakahokia?"
 msgid "This item is already in your cart"
 msgstr "Kei tō kāta kē tēnei mea"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:292
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:800
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:301
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:809
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -4542,7 +4632,7 @@ msgstr "E toru ngā wā i te tau"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:42
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:237
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:53
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:137
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:194
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:125
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:120
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:245
@@ -4550,10 +4640,10 @@ msgstr "E toru ngā wā i te tau"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:223
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:303
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:493
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:155
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:183
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:261
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:312
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:167
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:195
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:273
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:324
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:28
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:30
 msgid "Title"
@@ -4569,7 +4659,7 @@ msgstr "Taitara (A-Z)"
 msgid "Title (Z-A)"
 msgstr "Taitara (Z-A)"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:282
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:291
 #, fuzzy
 msgid "Title Notes"
 msgstr "Taitara"
@@ -4584,7 +4674,7 @@ msgid "Title:"
 msgstr "Taitara:"
 
 #. %1$s: TMPL_VAR name=title
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:74
 #, c-format
 msgid "Title: <em>%s</em>"
 msgstr "Taitara: <em>%s</em>"
@@ -4593,6 +4683,10 @@ msgstr "Taitara: <em>%s</em>"
 #, fuzzy
 msgid "Titles"
 msgstr "Taitara"
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:100
+msgid "To make changes to your record please contact the library."
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:16
@@ -4643,7 +4737,7 @@ msgstr "Momo Whakaupoko"
 msgid "Type/Format"
 msgstr "Momo/Whakatakotoranga"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:327
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:336
 #, fuzzy
 msgid "URL"
 msgstr "URL:"
@@ -4661,7 +4755,7 @@ msgstr "URL : %s"
 msgid "URL(s)"
 msgstr "URL:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:458
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:456
 msgid "Unavailable (lost or missing)"
 msgstr "Kāore i te wātea (kua ngaro)"
 
@@ -4755,8 +4849,8 @@ msgid "View all %s public lists"
 msgstr "Tirohia ngā rārangi tūmatanui %s katoa"
 
 #. A
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:274
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:286
 msgid "View at Amazon.com"
 msgstr "Tirohia i Amazon.com"
 
@@ -4770,22 +4864,16 @@ msgstr "Tirohia i Amazon.com"
 msgid "View details for this title"
 msgstr "Tirohia ngā kōrero mō tēnei taitara"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:326
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:335
 msgid "Vol Info"
 msgstr "Pārongo pukapuka"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:464
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:114
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:168
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:462
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:126
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:180
 msgid "Waiting"
 msgstr "E tatari ana"
-
-#. %1$s: TMPL_VAR name=subscriptionsnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:52
-#, c-format
-msgid "We have %s subscription(s) associated with this title."
-msgstr "E %s ā mātou tangohanga e pā ana ki tēnei taitara."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:166
 msgid "Website"
@@ -4812,7 +4900,14 @@ msgstr "I kounu"
 msgid "Without periodicity"
 msgstr "Me te kore rite tonu"
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:41
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:117
+#, fuzzy
+msgid "Work Email:"
+msgstr "Imēra:"
+
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:38
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:114
 msgid "Work phone:"
 msgstr "Waea (wāhi mahi):"
 
@@ -4827,15 +4922,15 @@ msgstr "Tau :"
 msgid "Year :"
 msgstr "Tau :"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:218
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:20
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:34
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:234
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:299
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:246
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:311
 msgid "Yes"
 msgstr "Āe"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:142
 msgid ""
 "You are accessing Self-Checkout from a different IP address! please log in "
 "again."
@@ -4844,7 +4939,7 @@ msgstr ""
 "rerekē. Taki uru mai anō."
 
 #. %1$s: TMPL_VAR name=borrowername
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:106
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:159
 #, c-format
 msgid "You are logged in as %s."
 msgstr "Kua taki uru koe hei %s."
@@ -4859,12 +4954,12 @@ msgstr ""
 msgid "You can't change your password."
 msgstr "Kāore koe e āhei ki te huri i tō kupuhipa."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:164
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:224
 msgid "You currently have nothing checked out."
 msgstr "Kāore he mea i tākina e koe."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:124
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:134
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:136
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:146
 msgid "You currently owe fines and charges amounting to:"
 msgstr "He whaina, he utu hoki e nama ana koe, ... te tapeke"
 
@@ -4883,7 +4978,7 @@ msgstr ""
 "Whakamātauria anō! Me mahara tonu, he pū tairongo ngā ingoa kaiwhakamahi me "
 "ngā kupuhipa."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:143
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:155
 msgid "You have a credit of:"
 msgstr "He moni tāwere āu, … te tapeke"
 
@@ -4899,7 +4994,7 @@ msgstr "Kāore anō koe kia mino i te whare pukapuka."
 msgid "You have no Fines or Charges"
 msgstr "Kāore ō Whaina, Utu ranei"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:250
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:262
 msgid "You have nothing checked out"
 msgstr "Kāore he mea i tākina e koe"
 
@@ -4930,7 +5025,7 @@ msgstr "Taiohi"
 msgid "Your Cart"
 msgstr "Tō Kāta"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:615
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:624
 msgid "Your Comment"
 msgstr "Tō Kōrero"
 
@@ -4959,7 +5054,7 @@ msgstr "Ō Tautuhinga Karere"
 msgid "Your Personal Details"
 msgstr "Ō Taipitopito Whaiaro"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:93
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:105
 #, c-format
 msgid ""
 "Your account has been frozen. Usually the reason for freezing an account is "
@@ -4979,7 +5074,7 @@ msgstr "Kei te piako tō kāta"
 msgid "Your cart is empty."
 msgstr "Kei te piako tō kāta."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:92
 msgid ""
 "Your corrections have been submitted to the library, and a staff member will "
 "update your record as soon as possible."
@@ -4995,7 +5090,7 @@ msgstr ""
 " Kua hē te whakaurunga o tō kupuhipa. Ki te haere tonu tēnei raru, tonoa koa "
 "tētahi kaimahi ki te tautuhi anō i tō kupuhipa māu."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:99
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:111
 msgid ""
 "Your library card has been marked as lost or stolen. If this is an error, "
 "please take your card to the circulation desk at your local library and the "
@@ -5021,21 +5116,20 @@ msgstr "Kua hurihia tō kupuhipa"
 msgid "Your password must be at least %s characters long."
 msgstr " Kia 6, neke atu rānei, ngā pū o tō kupuhipa hōu"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:116
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:172
 msgid "Your session has timed out due to inactivity. Please sign in."
 msgstr " Aroha mai, kua pau kē tō wātū. Taki uru mai anō."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:144
 msgid "Your userid was not found in the database. Please try again."
 msgstr ""
 "Kāore tō tuakiri kaiwhakamahi i kitea i te pātengi raraunga. Whakamātauria "
 "anō."
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:99
-msgid "Zip Code"
-msgstr "Tau Wāhi Noho"
-
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:58
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:140
 msgid "Zip Code:"
 msgstr "Tau Wāhi Noho:"
 
@@ -5086,7 +5180,7 @@ msgstr "he"
 msgid "arrive ?"
 msgstr "ka tae mai ?"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:465
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:463
 msgid "at"
 msgstr "i"
 
@@ -5094,7 +5188,7 @@ msgstr "i"
 #. %1$s: TMPL_VAR name=LibraryName
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:22
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:45
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:168
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:180
 #, c-format
 msgid "at %s"
 msgstr "i te %s"
@@ -5119,7 +5213,7 @@ msgstr "papa bristol"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:673
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:682
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:71
 #, c-format
 msgid "by %s"
@@ -5150,7 +5244,7 @@ msgstr "pakiwaituhi, kōmeke rānei"
 msgid "catalogue"
 msgstr "putumōhio"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:11
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:13
 msgid "change my password"
 msgstr "huria taku kupuhipa"
 
@@ -5254,7 +5348,7 @@ msgstr "kauhanga"
 msgid "examination paper"
 msgstr "pepa whakamātautau"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:465
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:463
 msgid "expected at"
 msgstr "e tāria ana i "
 
@@ -5280,7 +5374,7 @@ msgstr "mō"
 msgid "for '%s'"
 msgstr "mō '%s'"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:464
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:462
 msgid "for patron"
 msgstr "mō te kairangi"
 
@@ -5433,27 +5527,27 @@ msgstr "te whānuitanga o ngā momo tuhinga kounga"
 msgid "music"
 msgstr "puoro"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:5
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:6
 msgid "my fines"
 msgstr "aku whaina"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:27
 msgid "my lists"
 msgstr "aku rārangi"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:24
 msgid "my messaging"
 msgstr "aku karere"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:6
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:8
 msgid "my personal details"
 msgstr "aku taipitopito whaiaro"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:20
 msgid "my purchase suggestions"
 msgstr "ōku whakaaro hoko"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:16
 msgid "my reading history"
 msgstr "taku hītori pānui pukapuka"
 
@@ -5461,7 +5555,7 @@ msgstr "taku hītori pānui pukapuka"
 msgid "my summary"
 msgstr "taku tīpoka"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/usermenu.inc:10
 msgid "my tags"
 msgstr "aku tohu"
 
@@ -5752,7 +5846,7 @@ msgstr "hopukanga ataata"
 msgid "visual projection"
 msgstr "matapae ataata"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:166
 #, fuzzy
 msgid "was not found in the database. Please try again."
 msgstr ""
@@ -5820,8 +5914,15 @@ msgstr "tau"
 #~ msgid "<a1> %s</a> (%s)"
 #~ msgstr "<a1>%s</a>,"
 
+#~ msgid "<a1>Click here</a> for more information on subscription(s) history"
+#~ msgstr ""
+#~ " <a1>Pāwhiria a konei</a> mō ētahi atu pārongo mō tō hītori tangohanga"
+
 #~ msgid "<b>Selected items :</b> <a1>Remove</a>"
 #~ msgstr "<b>Mea kōwhiri :</b> <a1>Tangohia</a>"
+
+#~ msgid "<em>Error type:</em> %s"
+#~ msgstr "<em>Momo hapa:</em> %s"
 
 #~ msgid "<em>Title:</em> %s"
 #~ msgstr "<em>Taitara:</em> %s"
@@ -5833,6 +5934,9 @@ msgstr "tau"
 #, fuzzy
 #~ msgid "Add to a shelf"
 #~ msgstr "T&#257;piritia ki te Tarenga"
+
+#~ msgid "At library: %s %s"
+#~ msgstr "Kei te whare pukapuka: %s %s"
 
 #~ msgid "Attempting to issue %s"
 #~ msgstr "Kei te whakamātau ki te tuku %s"
@@ -5846,6 +5950,10 @@ msgstr "tau"
 #, fuzzy
 #~ msgid "Authors: %s"
 #~ msgstr "Kaituhi. %s"
+
+#, fuzzy
+#~ msgid "Below is a list of the %s latest issues :"
+#~ msgstr " Kei raro nei he rārangi o ngā whakaputanga hōu rawa nei e toru:"
 
 #, fuzzy
 #~ msgid "Books"
@@ -5911,6 +6019,12 @@ msgstr "tau"
 #~ msgstr ""
 #~ " Kia ora, Anei t&#333; Peke Pukapuka, i tukuna i te R&#257;rangi Pukapuka "
 #~ "Tuihono o Koha e %s"
+
+#~ msgid "ISBD"
+#~ msgstr "ISBD"
+
+#~ msgid "Issue number"
+#~ msgstr "Tau putanga"
 
 #~ msgid "Issues"
 #~ msgstr "Putanga"
@@ -5982,6 +6096,9 @@ msgstr "tau"
 #~ msgid "Password or PIN"
 #~ msgstr "Kupuhipa, PIN rānei"
 
+#~ msgid "Permanent Address"
+#~ msgstr "Wāhi Noho Pūmau:"
+
 #~ msgid "Pick up From:"
 #~ msgstr "Wāhi Tiki Atu:"
 
@@ -6003,6 +6120,9 @@ msgstr "tau"
 #, fuzzy
 #~ msgid "Publication year:"
 #~ msgstr "Tau Whakaputa"
+
+#~ msgid "Rating (from Amazon.com):"
+#~ msgstr "Whakatauranga (mai i Amazon.com)"
 
 #, fuzzy
 #~ msgid "Reference"
@@ -6029,11 +6149,11 @@ msgstr "tau"
 #~ msgid "Select"
 #~ msgstr "Kōwhiri"
 
-#~ msgid "Shelf Name:"
-#~ msgstr "Ingoa Tarenga:"
-
 #~ msgid "Sorry, checkout cannot proceed"
 #~ msgstr "Aroha mai, kāore e taea te pūnaha te haere tonu"
+
+#~ msgid "Sorry, there are no reviews available for this title."
+#~ msgstr "Aroha mai, kāore he arotakenga mō tēnei taitara."
 
 #~ msgid "Start search"
 #~ msgstr "Tīmataria te rapu"
@@ -6068,6 +6188,9 @@ msgstr "tau"
 #~ msgid "Warning:"
 #~ msgstr "Kia tūpato:"
 
+#~ msgid "We have %s subscription(s) associated with this title."
+#~ msgstr "E %s ā mātou tangohanga e pā ana ki tēnei taitara."
+
 #~ msgid ""
 #~ "You already have a hold placed on this item. <a1>Return to Item Detail "
 #~ "Screen</a>"
@@ -6075,6 +6198,9 @@ msgstr "tau"
 
 #~ msgid "Your card number"
 #~ msgstr "Tō tau kāri"
+
+#~ msgid "Zip Code"
+#~ msgstr "Tau Wāhi Noho"
 
 #~ msgid "[ New List ]"
 #~ msgstr "[ Rārangi Hōu ]"
