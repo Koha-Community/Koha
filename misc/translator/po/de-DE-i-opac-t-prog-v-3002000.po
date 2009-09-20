@@ -6,13 +6,13 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Improved German Koha Translation\n"
 "POT-Creation-Date: 2009-09-20 21:00+1200\n"
-"PO-Revision-Date: 2009-09-20 00:19+1300\n"
+"PO-Revision-Date: 2009-09-20 23:35+1300\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
+"Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Language: de\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 1.2.0\n"
 "X-Poedit-SourceCharset: utf-8\n"
@@ -71,9 +71,9 @@ msgstr "%s &rsaquo; Selbstverbuchung"
 #. %1$s: TMPL_VAR name=description
 #. %2$s: TMPL_VAR name=categorycode
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:152
-#, fuzzy, c-format
+#, c-format
 msgid "%s (%s)"
-msgstr "%s %s (%s)"
+msgstr "%s (%s)"
 
 #. %1$s: TMPL_VAR name=bibliotitle
 #. %2$s: TMPL_VAR name=biblionumber
@@ -208,9 +208,9 @@ msgstr "%s, %s"
 #. %2$s: TMPL_VAR name=B_address2
 #. %3$s: TMPL_VAR name=B_city
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:24
-#, fuzzy, c-format
+#, c-format
 msgid "%s, %s, %s"
-msgstr "%s %s (%s)"
+msgstr "%s, %s, %s"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=result_number
@@ -730,51 +730,60 @@ msgstr "<em>%s</em>:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:97
 msgid "<em>MESSAGE 11:</em> Your account has expired."
-msgstr ""
+msgstr "<em>NACHRICHT 11:</em> Ihr Konto ist abgelaufen."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:99
 msgid "<em>MESSAGE 12:</em> Your account has been suspended."
-msgstr ""
+msgstr "<em>NACHRICHT 12:</em> Ihr Konto wurde gesperrt."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:101
 msgid "<em>MESSAGE 13:</em> This card has been declared lost."
-msgstr ""
+msgstr "<em>NACHRICHT 13:</em> Ihr Benutzerausweis wurde verloren gemeldet."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:77
 msgid "<em>MESSAGE 1:</em> The system does not recognize this barcode."
-msgstr ""
+msgstr "<em>NACHRICHT 1:</em> Dieser Barcode wurde nicht im System gefunden."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:79
 msgid ""
 "<em>MESSAGE 2:</em> You have borrowed too many items and can't check out any "
 "more."
 msgstr ""
+"<em>NACHRICHT 2:</em> Sie haben zu viele Exemplare ausgeliehen und können "
+"jetzt nicht mehr entleihen."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:81
 msgid "<em>MESSAGE 3:</em> This item is checked out to someone else."
 msgstr ""
+"<em>NACHRICHT 3:</em> Dieses Exemplar ist bereits an jemand anderen "
+"entliehen."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:83
 msgid "<em>MESSAGE 4:</em> You cannot renew this item again."
 msgstr ""
+"<em>NACHRICHT 4:</em> Sie können dieses Exemplar nicht nochmals verlängern."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:85
 msgid "<em>MESSAGE 5:</em> This item is not for loan."
-msgstr ""
+msgstr "<em>NACHRICHT 5:</em> Dieses Exemplar kann nicht entliehen werden."
 
 #. %1$s: TMPL_VAR name=amount
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:87
 #, c-format
 msgid "<em>MESSAGE 6:</em> You owe the library %s and cannot borrow."
 msgstr ""
+"<em>NACHRICHT 6:</em> Sie haben %s offene Gebühren und können daher nichts "
+"mehr entleihen."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:89
 msgid "<em>MESSAGE 7:</em> This item has been withdrawn from the collection."
-msgstr ""
+msgstr "<em>NACHRICHT 7:</em> Dieses Exemplar wurde aus dem Bestand genommen."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:93
 msgid "<em>MESSAGE 9:</em> This item is reserved for another patron."
 msgstr ""
+"<em>NACHRICHT 9:</em> Dieses Exemplar wurde von einem anderen Benutzer "
+"vorgemerkt."
 
 #. %1$s: TMPL_VAR name=already
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:141
@@ -950,9 +959,8 @@ msgstr "Alle Bibliotheken"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:51
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:137
-#, fuzzy
 msgid "Alternate Address:"
-msgstr "Ständige oder alternative Adresse:"
+msgstr "Alternative Adresse:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:58
 msgid "Alternate Contact Details"
@@ -960,9 +968,8 @@ msgstr "Kontakt-Details ändern"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:48
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:135
-#, fuzzy
 msgid "Alternate Contact Information"
-msgstr "Kontaktinformation"
+msgstr "Alternative Konstaktinformationen"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:59
 msgid "Alternate Contact:"
@@ -1717,9 +1724,8 @@ msgstr "Zähle"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:59
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:111
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:141
-#, fuzzy
 msgid "Country:"
-msgstr "Zähle"
+msgstr "Land:"
 
 #. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
@@ -2685,7 +2691,7 @@ msgstr "Listenname:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:221
 msgid "List(s) this item appears in:"
-msgstr ""
+msgstr "Listen, in denen der Titel gelistet ist:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:179
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:293
@@ -2795,19 +2801,19 @@ msgstr "MARCXML"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:95
 msgid "MESSAGE 10:"
-msgstr ""
+msgstr "NACHRICHT 10:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:103
 msgid "MESSAGE 14:"
-msgstr ""
+msgstr "NACHRICHT 14:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:105
 msgid "MESSAGE 15:"
-msgstr ""
+msgstr "NACHRICHT 15:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:91
 msgid "MESSAGE 8:"
-msgstr ""
+msgstr "NACHRICHT 8:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:792
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
@@ -2877,7 +2883,7 @@ msgstr "Nachricht von der Bibliothek"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:81
 msgid "Messages For You"
-msgstr ""
+msgstr "Benachrichtigungen für Sie"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:571
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:63
@@ -3287,7 +3293,7 @@ msgstr "OK"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:84
 #, c-format
 msgid "On %s %s wrote <i>\"%s\"</i>"
-msgstr ""
+msgstr "Am %s schrieb %s <i>\"%s\"</i>"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:307
 msgid "On Reserve"
@@ -3339,9 +3345,8 @@ msgstr "Andere Ausgaben dieses Werkes"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:22
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:106
-#, fuzzy
 msgid "Other Name:"
-msgstr "Regalname:"
+msgstr "Weiterer Name:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:122
 msgid "Overdue"
@@ -3404,7 +3409,6 @@ msgid "Personal Details"
 msgstr "Persönliche Details"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:122
-#, fuzzy
 msgid "Personal Information"
 msgstr "Kontaktinformation"
 
@@ -3531,7 +3535,7 @@ msgstr "Bitte beachten Sie:"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:107
 msgid "Please see a member of the library staff."
-msgstr ""
+msgstr "Bitte wenden Sie sich an einen Bibliotheksmitarbeiter."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:71
 msgid "Please try again with plain text."
@@ -4364,9 +4368,8 @@ msgstr "Inhaltsverzeichnis bereitgestellt von Syndetics"
 
 #. SCRIPT
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:127
-#, fuzzy
 msgid "Tag"
-msgstr "Tags:"
+msgstr "Tag"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:310
 msgid "Tag Browser"
@@ -4658,6 +4661,8 @@ msgstr "Titel"
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:100
 msgid "To make changes to your record please contact the library."
 msgstr ""
+"Bitte wenden Sie sich an die Bibliothek, wenn Sie Änderungen an Ihrem "
+"Datensatz vornehmen möchten."
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:16
@@ -4872,9 +4877,8 @@ msgstr "unregelmäßig"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:41
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:117
-#, fuzzy
 msgid "Work Email:"
-msgstr "E-Mail:"
+msgstr "E-Mail (berufl.):"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:38
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:114
