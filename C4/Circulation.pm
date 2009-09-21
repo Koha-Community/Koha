@@ -1372,8 +1372,8 @@ sub AddReturn {
             
             
             # We update the holdingbranch from circControlBranch variable
-            UpdateHoldingbranch($circControlBranch,$iteminformation->{'itemnumber'});
-            $iteminformation->{'holdingbranch'} = $circControlBranch;
+            UpdateHoldingbranch($branch,$iteminformation->{'itemnumber'});
+            $iteminformation->{'holdingbranch'} = $branch;
         
             
             ModDateLastSeen( $iteminformation->{'itemnumber'} );
