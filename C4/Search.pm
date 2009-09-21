@@ -1125,11 +1125,13 @@ sub buildQuery {
                 }
 
                 if ($auto_truncation){
-					#FIXME only valid with LTR scripts
-					$operand=join(" ",map{ 
-											"$_*" 
-									     }split (/\s+/,$operand));
-                	warn $operand if $DEBUG;
+					unless ( $index =~ /(st-|phr|ext)/ ) {
+						#FIXME only valid with LTR scripts
+						$operand=join(" ",map{ 
+												"$_*" 
+											 }split (/\s+/,$operand));
+						warn $operand if $DEBUG;
+					}
 				}
 
                 # Detect Truncation
@@ -1397,6 +1399,7 @@ sub searchResults {
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
+		my $biblionumber;
         
         if(not $scan){
             if ($bibliotag<10){
