@@ -31,6 +31,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Output;
 use C4::VirtualShelves;
+use C4::Members;
 
 my $query = new CGI;
 
@@ -97,11 +98,15 @@ if ( $email ) {
         push( @results, $dat );
     }
 
+    my $user = GetMember($borrowernumber); 
+
     $template2->param(
         BIBLIO_RESULTS => \@results,
         email_sender   => $email_from,
         comment        => $comment,
         shelfname      => $shelf[1],
+        firstname      => $user->{firstname},
+        surname        => $user->{surname},
     );
 
     # Getting template result
