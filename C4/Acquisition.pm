@@ -37,7 +37,7 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-		&GetBasket &NewBasket &CloseBasket &DelBasket &ModBasket
+		&GetBasket &NewBasket &CloseBasket &CloseBasketgroup &ReOpenBasketgroup &DelBasket &ModBasket
 		&ModBasketHeader &GetBasketsByBookseller &GetBasketsByBasketgroup
 		&ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup
 		&GetBasketgroups
@@ -217,6 +217,57 @@ sub CloseBasket {
 }
 
 #------------------------------------------------------------#
+
+=head3 CloseBasketgroup
+
+=over 4
+
+&CloseBasketgroup($basketgroupno);
+
+close a basketgroup
+
+=back
+
+=cut
+
+sub CloseBasketgroup {
+    my ($basketgroupno) = @_;
+    my $dbh        = C4::Context->dbh;
+    my $sth = $dbh->prepare("
+        UPDATE aqbasketgroups
+        SET    closed=1
+        WHERE  id=?
+    ");
+    $sth->execute($basketgroupno);
+}
+
+#------------------------------------------------------------#
+
+=head3 ReOpenBaskergroup($basketgroupno)
+
+=over 4
+
+&ReOpenBaskergroup($basketgroupno);
+
+reopen a basketgroup
+
+=back
+
+=cut
+
+sub ReOpenBasketgroup {
+    my ($basketgroupno) = @_;
+    my $dbh        = C4::Context->dbh;
+    my $sth = $dbh->prepare("
+        UPDATE aqbasketgroups
+        SET    closed=0
+        WHERE  id=?
+    ");
+    $sth->execute($basketgroupno);
+}
+
+#------------------------------------------------------------#
+
 
 =head3 DelBasket
 
@@ -509,12 +560,15 @@ sub ModBasketgroup {
     push(@params, $basketgroupinfo->{'id'});
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
+    
+    $sth = $dbh->prepare('UPDATE aqbasket SET basketgroupid = NULL WHERE basketgroupid = ?');
+    $sth->execute($basketgroupinfo->{'id'});
+    
     if($basketgroupinfo->{'basketlist'} && @{$basketgroupinfo->{'basketlist'}}){
+        $sth = $dbh->prepare("UPDATE aqbasket SET basketgroupid=? WHERE basketno=?");
         foreach my $basketno (@{$basketgroupinfo->{'basketlist'}}) {
-            my $query2 = "UPDATE aqbasket SET basketgroupid=? WHERE basketno=?";
-            my $sth2 = $dbh->prepare($query2);
-            $sth2->execute($basketgroupinfo->{'id'}, $basketno);
-            $sth2->finish;
+            $sth->execute($basketgroupinfo->{'id'}, $basketno);
+            $sth->finish;
         }
     }
     $sth->finish;

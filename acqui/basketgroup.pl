@@ -51,7 +51,7 @@ use C4::Output;
 use CGI;
 
 use C4::Bookseller qw/GetBookSellerFromId/;
-use C4::Acquisition qw/GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket/;
+use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket/;
 use C4::Bookseller qw/GetBookSellerFromId/;
 
 my $input=new CGI;
@@ -169,93 +169,26 @@ sub displaybasketgroups {
         if( ! @$baskets[$i]->{'closedate'} ) {
             splice(@$baskets, $i, 1);
             --$i;
+        }else{
+            @$baskets[$i]->{total} = BasketTotal(@$baskets[$i]->{basketno}, $bookseller);
         }
     }
     $template->param(baskets => $baskets);
     $template->param( booksellername => $bookseller ->{'name'});
 }
 
-
-my $op = $input->param('op');
-my $booksellerid = $input->param('booksellerid');
-
-if (! $op ) {
-    if(! $booksellerid){
-        $template->param( ungroupedlist => 1);
-        my @booksellers = GetBookSeller('');
-       for (my $i=0; $i < scalar @booksellers; $i++) {
-            my $baskets = &GetBasketsByBookseller($booksellers[$i]->{id});
-            for (my $j=0; $j < scalar @$baskets; $j++) {
-                if(! @$baskets[$i]->{closedate} || @$baskets[$i]->{basketgroupid}) {
-                    splice(@$baskets, $j, 1);
-                    $j--;
-                }
-            }
-            if (scalar @$baskets == 0){
-                splice(@booksellers, $i, 1);
-                $i--;
-            }
-        }
-    } else {
-        $template->param( booksellerid => $booksellerid );
-    }
-    my $basketgroups = &GetBasketgroups($booksellerid);
-    my $bookseller = &GetBookSellerFromId($booksellerid);
-    my $baskets = &GetBasketsByBookseller($booksellerid);
-
-    displaybasketgroups($basketgroups, $bookseller, $baskets);
-} elsif ($op eq 'mod_basket') {
-#we want to modify an individual basket's group
-  my $basketno=$input->param('basketno');
-  my $basketgroupid=$input->param('basketgroupid');
-  ModBasket( { basketno => $basketno,
-                         basketgroupid => $basketgroupid } );
-  print $input->redirect("basket.pl?basketno=" . $basketno);
-} elsif ($op eq 'validate') {
-    if(! $booksellerid){
-        $template->param( booksellererror => 1);
-    } else {
-        $template->param( booksellerid => $booksellerid );
-    }
-    my $baskets = parseinputbaskets($booksellerid);
-    my ($basketgroups, $newbasketgroups) = parseinputbasketgroups($booksellerid, $baskets);
-    foreach my $nbgid (keys %$newbasketgroups){
-#javascript just picks an ID that's higher than anything else, the ID might not be correct..chenge it and change all the basket's basketgroupid as well
-        my $bgid = NewBasketgroup($newbasketgroups->{$nbgid});
-        ${$newbasketgroups->{$nbgid}}->{'id'} = $bgid;
-        ${$newbasketgroups->{$nbgid}}->{'oldid'} = $nbgid;
-    }
-    foreach my $basket (@$baskets){
-#if the basket was added to a new basketgroup, first change the groupid to the groupid of the basket in mysql, because it contains the id from javascript otherwise.
-        if ( $basket->{'basketgroupid'} && $newbasketgroups->{$basket->{'basketgroupid'}} ){
-            $basket->{'basketgroupid'} = ${$newbasketgroups->{$basket->{'basketgroupid'}}}->{'id'};
-        }
-        ModBasket($basket);
-    }
-    foreach my $basketgroup (@$basketgroups){
-        if(! $basketgroup->{'id'}){
-            foreach my $basket (@{$basketgroup->{'baskets'}}){
-                if($input->param('basket'.$basket->{'basketno'}.'changed')){
-                    ModBasket($basket);
-                }
-            }
-        } elsif ($input->param('basketgroup-'.$basketgroup->{'id'}.'-changed')){
-            ModBasketgroup($basketgroup);
-        }
-    }
-    $basketgroups = &GetBasketgroups($booksellerid);
-    my $bookseller = &GetBookSellerFromId($booksellerid);
-    $baskets = &GetBasketsByBookseller($booksellerid);
-
-    displaybasketgroups($basketgroups, $bookseller, $baskets);
-} elsif ( $op eq 'printbgroup') {
+sub printbasketgrouppdf{
+    my ($basketgroupid) = @_;
+    
     my $pdfformat = C4::Context->preference("pdfformat");
     eval "use $pdfformat" ;
+    warn @_;
     eval "use C4::Branch";
-    my $basketgroupid = $input->param('bgroupid');
+    
     my $basketgroup = GetBasketgroup($basketgroupid);
     my $bookseller = GetBookSellerFromId($basketgroup->{'booksellerid'});
     my $baskets = GetBasketsByBasketgroup($basketgroupid);
+    
     my %orders;
     for my $basket (@$baskets) {
         my @ba_orders;
@@ -310,44 +243,156 @@ if (! $op ) {
     my $pdf = printpdf($basketgroup, $bookseller, $baskets, $branch, \%orders, $bookseller->{gstrate} || C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
     exit;
+}
+
+my $op = $input->param('op');
+my $booksellerid = $input->param('booksellerid');
+$template->param(booksellerid => $booksellerid);
+
+if ( $op eq "add" ) {
+    if(! $booksellerid){
+        $template->param( ungroupedlist => 1);
+        my @booksellers = GetBookSeller('');
+       for (my $i=0; $i < scalar @booksellers; $i++) {
+            my $baskets = &GetBasketsByBookseller($booksellers[$i]->{id});
+            for (my $j=0; $j < scalar @$baskets; $j++) {
+                if(! @$baskets[$i]->{closedate} || @$baskets[$i]->{basketgroupid}) {
+                    splice(@$baskets, $j, 1);
+                    $j--;
+                }
+            }
+            if (scalar @$baskets == 0){
+                splice(@booksellers, $i, 1);
+                $i--;
+            }
+        }
+    } else {
+        my $basketgroupid = $input->param('basketgroupid');
+        if($basketgroupid){
+            my $selecteds = GetBasketsByBasketgroup($basketgroupid);
+            foreach (@{$selecteds}){
+                $_->{total} = BasketTotal($_->{basketno}, $_);
+            }
+            $template->param(basketgroupid => $basketgroupid,
+                             selectedbaskets => $selecteds);
+        }
+        $template->param( booksellerid => $booksellerid );
+    }
+    $template->param(grouping => 1);
+    my $basketgroups = &GetBasketgroups($booksellerid);
+    my $bookseller = &GetBookSellerFromId($booksellerid);
+    my $baskets = &GetBasketsByBookseller($booksellerid);
+
+    displaybasketgroups($basketgroups, $bookseller, $baskets);
+} elsif ($op eq 'mod_basket') {
+#we want to modify an individual basket's group
+  my $basketno=$input->param('basketno');
+  my $basketgroupid=$input->param('basketgroupid');
+  ModBasket( { basketno => $basketno,
+                         basketgroupid => $basketgroupid } );
+  print $input->redirect("basket.pl?basketno=" . $basketno);
+} elsif ($op eq 'validate') {
+    if(! $booksellerid){
+        $template->param( booksellererror => 1);
+    } else {
+        $template->param( booksellerid => $booksellerid );
+    }
+    my $baskets = parseinputbaskets($booksellerid);
+    my ($basketgroups, $newbasketgroups) = parseinputbasketgroups($booksellerid, $baskets);
+    foreach my $nbgid (keys %$newbasketgroups){
+#javascript just picks an ID that's higher than anything else, the ID might not be correct..chenge it and change all the basket's basketgroupid as well
+        my $bgid = NewBasketgroup($newbasketgroups->{$nbgid});
+        ${$newbasketgroups->{$nbgid}}->{'id'} = $bgid;
+        ${$newbasketgroups->{$nbgid}}->{'oldid'} = $nbgid;
+    }
+    foreach my $basket (@$baskets){
+#if the basket was added to a new basketgroup, first change the groupid to the groupid of the basket in mysql, because it contains the id from javascript otherwise.
+        if ( $basket->{'basketgroupid'} && $newbasketgroups->{$basket->{'basketgroupid'}} ){
+            $basket->{'basketgroupid'} = ${$newbasketgroups->{$basket->{'basketgroupid'}}}->{'id'};
+        }
+        ModBasket($basket);
+    }
+    foreach my $basketgroup (@$basketgroups){
+        if(! $basketgroup->{'id'}){
+            foreach my $basket (@{$basketgroup->{'baskets'}}){
+                if($input->param('basket'.$basket->{'basketno'}.'changed')){
+                    ModBasket($basket);
+                }
+            }
+        } elsif ($input->param('basketgroup-'.$basketgroup->{'id'}.'-changed')){
+            ModBasketgroup($basketgroup);
+        }
+    }
+    $basketgroups = &GetBasketgroups($booksellerid);
+    my $bookseller = &GetBookSellerFromId($booksellerid);
+    $baskets = &GetBasketsByBookseller($booksellerid);
+
+    displaybasketgroups($basketgroups, $bookseller, $baskets);
+} elsif ( $op eq 'closeandprint') {
+    my $basketgroupid = $input->param('basketgroupid');
+    
+    CloseBasketgroup($basketgroupid);
+    
+    printbasketgrouppdf($basketgroupid);
+}elsif ($op eq 'print'){
+    my $basketgroupid = $input->param('basketgroupid');
+    
+    printbasketgrouppdf($basketgroupid);
+}elsif( $op eq "delete"){
+    my $basketgroupid = $input->param('basketgroupid');
+    warn $basketgroupid;
+    DelBasketgroup($basketgroupid);
+    warn "---------------";
+    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid);
+    
+}elsif ( $op eq 'reopen'){
+    my $basketgroupid   = $input->param('basketgroupid');
+    my $booksellerid    = $input->param('booksellerid');
+    
+    ReOpenBasketgroup($basketgroupid);
+        
+    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid . '#closed');
+    
 } elsif ( $op eq 'attachbasket') {
+    
     # Getting parameters
     my $basketgroup = {};
-    my $basketno = $input->param('basketno');
-    my $basket = GetBasket($basketno);
-    $basketgroup->{'name'} = $input->param('basketgroupname') || $basket->{'basketname'};
-    $basketgroup->{'booksellerid'} = $input->param('booksellerid');
-    my $basketgroupid;
-    warn "basketgroupname", $basketgroup->{'name'};
-
+    
+    my @baskets         = $input->param('basket');
+    my $basketgroupid   = $input->param('basketgroupid');
+    my $basketgroupname = $input->param('basketgroupname');
+    my $booksellerid    = $input->param('booksellerid');
+    my $close           = $input->param('close') ? 1 : 0;
     # If we got a basketgroupname, we create a basketgroup
-    if ($basketgroup->{'name'}) {
+    if ($basketgroupid) {
+        $basketgroup = {
+              name => $basketgroupname,
+              id => $basketgroupid,
+              basketlist => \@baskets,
+              closed      => $close,
+        };
+        ModBasketgroup($basketgroup);
+        if($close){
+            
+        }
+    }else{
+        $basketgroup = {
+            name         => $basketgroupname,
+            booksellerid => $booksellerid,
+            basketlist   => \@baskets,
+            closed        => $close,
+        };
         $basketgroupid = NewBasketgroup($basketgroup);
-    } else {
-	# Else, we use the basketgroupid in parameter
-        $basketgroupid = $input->param('basketgroupid');
     }
-
-    $basketgroup= {};
-    $basketgroup->{'closed'} = 1;
-    $basketgroup->{'id'} = $basketgroupid;
-    ModBasketgroup($basketgroup);
- 
-    $basket = {};
-    $basket->{'basketno'} = $basketno;
-    $basket->{'basketgroupid'} = $basketgroupid;
-    ModBasket($basket);
-
-   
-      $basketgroup = GetBasketgroup($basketgroupid);
-    my $baskets = GetBasketsByBasketgroup($basketgroupid);
+    
+    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid);
+    
+}else{
+    my $basketgroups = &GetBasketgroups($booksellerid);
     my $bookseller = &GetBookSellerFromId($booksellerid);
+    my $baskets = &GetBasketsByBookseller($booksellerid);
 
-    if ($input->param('createorder')) {
- 	print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?op=printbgroup&bgroupid=' . $basketgroupid);
-    } else {
-	print $input->redirect('/cgi-bin/koha/acqui/booksellers.pl');
-    }
+    displaybasketgroups($basketgroups, $bookseller, $baskets);
 }
 #prolly won't use all these, maybe just use print, the rest can be done inside validate
 output_html_with_http_headers $input, $cookie, $template->output;

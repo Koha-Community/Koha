@@ -473,6 +473,14 @@ function closebasketgroup(bgid) {
     div.appendChild(unclosegroup);
 }
 
+function closeandprint(bg){
+	if(document.location = '/cgi-bin/koha/acqui/basketgroup.pl?op=closeandprint&amp;basketgroupid=' + bg ){
+		setTimeout("window.location.reload();",3000);
+	}else{
+		alert('Error downloading the file');
+	}
+}
+
 //function that lets the user unclose a basketgroup as long as he hasn't submitted the changes to the page.
 function unclosegroup(bgid){
     var div = document.getElementById('basketgroup-'+bgid+'-closed').parentNode;

@@ -2781,8 +2781,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                          CONSTRAINT `aqbasketgroups_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
                          ) ENGINE=InnoDB DEFAULT CHARSET=utf8;");
     $dbh->do("ALTER TABLE aqbasket ADD COLUMN `basketgroupid` int(11)");
-    $dbh->do("ALTER TABLE aqbasket ADD FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE");
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('pdfformat','pdfformat/example.pl','Controls what script is used for printing (basketgroups)','','free')");
+    $dbh->do("ALTER TABLE aqbasket ADD FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE ON DELETE SET NULL");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('pdfformat','pdfformat::example','Controls what script is used for printing (basketgroups)','','free')");
     print "Upgrade to $DBversion done (adding basketgroups)\n";
     SetVersion ($DBversion);
 }
