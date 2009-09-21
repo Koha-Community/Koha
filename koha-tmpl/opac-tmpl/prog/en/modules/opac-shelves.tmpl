@@ -50,9 +50,6 @@ $(function() {
 });
 
 $(document).ready(function(){
-<!-- TMPL_IF NAME="RequestOnOpac" -->
-    $(".hold").html("Place Hold");
-<!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="TagsEnabled" -->
     $("#tagsel_tag").text("Tag");
     $("#tagsel_button").click(function(){
@@ -83,7 +80,16 @@ $(document).ready(function(){
         <!-- TMPL_IF NAME="need_confirm" -->
         <div class="dialog alert">The list <i><!-- TMPL_VAR NAME="need_confirm" --></i> is not empty.
             <br />It has <b><!-- TMPL_VAR NAME="count" --></b> entries.
-            <br />Use the "Confirm" button below to confirm deletion.
+            <br />Use the "Confirm" button below to confirm deletion. 
+			<br />
+			<form action="opac-shelves.pl" method="post">
+                    <input type="hidden" name="shelves" value="1" />
+                    <input type="hidden" name="display" value="<!--TMPL_VAR Name="shelftype"-->shelves" />
+                    <input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
+                    <input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
+                    <input type="submit" class="confirm" value="Confirm" />
+             </form>
+
         </div>
         <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="nopermission" -->

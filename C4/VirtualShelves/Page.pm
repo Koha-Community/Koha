@@ -233,10 +233,10 @@ SWITCH: {
 			if (my $count = scalar @$contents){
 				unless (scalar grep {/^CONFIRM-$number$/} $query->param()) {
 					if (defined $shelflist->{$number}) {
-						push(@paramsloop, {need_confirm=>$shelflist->{$number}->{shelfname}, count=>$count});
+						push(@paramsloop, {shelf=>$number, need_confirm=>$shelflist->{$number}->{shelfname},shelftype=>"public", count=>$count});
 						$shelflist->{$number}->{confirm} = $number;
 					} else {
-						push(@paramsloop, {need_confirm=>$privshelflist->{$number}->{shelfname}, count=>$count});
+						push(@paramsloop, {shelf=>$number,need_confirm=>$privshelflist->{$number}->{shelfname},shelftype=>"private", count=>$count});
 						$privshelflist->{$number}->{confirm} = $number;
 					}
 					$stay = 0;
