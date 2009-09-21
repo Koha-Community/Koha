@@ -995,7 +995,7 @@ sub AddIssue {
         );
         $item->{'issues'}++;
         ModItem({ issues           => $item->{'issues'},
-                  holdingbranch    => C4::Context->userenv->{branch} or $item->{'holdingbranch'},
+                  holdingbranch    => C4::Context->userenv->{branch},
                   itemlost         => 0,
                   datelastborrowed => C4::Dates->new()->output('iso'),
                   onloan           => $datedue->output('iso'),
