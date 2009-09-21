@@ -57,6 +57,7 @@ use C4::Context;
 use C4::Output;
 use C4::Search;
 use C4::Biblio;
+use C4::Debug;
 
 my $input=new CGI;
 # my $type=$query->param('type');
@@ -68,6 +69,9 @@ $startfrom=0 unless $startfrom;
 my ($template, $loggedinuser, $cookie);
 my $resultsperpage;
 
+my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
+my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
+
 my $query = $input->param('q');
 # don't run the search if no search term !
 if ($op eq "do_search" && $query) {
@@ -75,10 +79,13 @@ if ($op eq "do_search" && $query) {
     # add the itemtype limit if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
     if ( $itemtypelimit ) {
-        my $index = C4::Context->preference("item-level_itypes") ? 'itype' : 'itemtype';
-        $query .= " AND $index=$itemtypelimit";
+        if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 
+            $query .= " AND $itype_or_itemtype=$itemtypelimit";
+        } else {
+            $query .= " AND $advanced_search_types=$itemtypelimit";
+        }
     }
-
+    $debug && warn $query;
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 20 if(!defined $resultsperpage);
 
@@ -170,7 +177,42 @@ if ($op eq "do_search" && $query) {
                             numbers=>\@numbers,
                             );
 } # end of if ($op eq "do_search" & $query)
- elsif ($op eq "do_search") {
+ else{
+    my @itemtypesloop;
+    if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 
+    	# load the itemtypes
+    	my $itemtypes = GetItemTypes;
+    	my $selected=1;
+    	my $cnt;
+    	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+    	    my %row =(
+    			code => $thisitemtype,
+    			selected => $selected,
+    			description => $itemtypes->{$thisitemtype}->{'description'},
+    		    );
+    	    $selected = 0 if ($selected) ;
+    	    push @itemtypesloop, \%row;
+    	}
+
+
+    } else {
+    	my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
+    	my $cnt;
+    	my $selected=1;
+    	for my $thisitemtype (sort {$a->{'lib'} cmp $b->{'lib'}} @$advsearchtypes) {
+    	    my %row =(
+    		    number=>$cnt++,
+    		    ccl => $advanced_search_types,
+    		    code => $thisitemtype->{authorised_value},
+    		    selected => $selected,
+    		    description => $thisitemtype->{'lib'},
+    		    count5 => $cnt % 4,
+    		    imageurl=> getitemtypeimagelocation( 'intranet', $thisitemtype->{'imageurl'} ),
+    		);
+    	    push @itemtypesloop, \%row;
+    	}
+    }
+
     ($template, $loggedinuser, $cookie)
         = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
                 query => $input,
@@ -179,48 +221,12 @@ if ($op eq "do_search" && $query) {
                 flagsrequired => {catalogue => 1, serials => '*'},
                 debug => 1,
                 });
-    # load the itemtypes
-    my $itemtypes = GetItemTypes;
-    my @itemtypesloop;
-    my $selected=1;
-    my $cnt;
-    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-        my %row =(
-                    code => $thisitemtype,
-                    selected => $selected,
-                    description => $itemtypes->{$thisitemtype}->{'description'},
-                );
-        $selected = 0 if ($selected) ;
-        push @itemtypesloop, \%row;
+    if ($op eq "do_search") {
+       $template->param("no_query" => 1);
+    } else {
+       $template->param("no_query" => 0);
     }
     $template->param(itemtypeloop => \@itemtypesloop);
-    $template->param("no_query" => 1);
-}
- else {
-    ($template, $loggedinuser, $cookie)
-        = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
-                query => $input,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {catalogue => 1, serials => '*'},
-                debug => 1,
-                });
-    # load the itemtypes
-    my $itemtypes = GetItemTypes;
-    my @itemtypesloop;
-    my $selected=1;
-    my $cnt;
-    foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-        my %row =(
-                    code => $thisitemtype,
-                    selected => $selected,
-                    description => $itemtypes->{$thisitemtype}->{'description'},
-                );
-        $selected = 0 if ($selected) ;
-        push @itemtypesloop, \%row;
-    }
-    $template->param(itemtypeloop => \@itemtypesloop);
-    $template->param("no_query" => 0);
 }
 
 # Print the page
