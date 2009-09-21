@@ -29,6 +29,7 @@ use C4::Items;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;
+use C4::Members;
 
 my $query = new CGI;
 
@@ -37,7 +38,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
         template_name   => "opac-sendbasketform.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => 0,
         flagsrequired   => { borrow => 1 },
     }
 );
@@ -100,10 +101,15 @@ if ( $email_add ) {
     }
 
     my $resultsarray = \@results;
+    
+    my $user = GetMember($borrowernumber); 
+    
     $template2->param(
         BIBLIO_RESULTS => $resultsarray,
         email_sender   => $email_sender,
-        comment        => $comment
+        comment        => $comment,
+        firstname      => $user->{firstname},
+        surname        => $user->{surname},
     );
 
     # Getting template result
