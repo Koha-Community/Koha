@@ -25,6 +25,7 @@ use C4::Search;
 use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
+use C4::Debug;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -103,8 +104,6 @@ sub SearchAuthorities {
     my ($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby) = @_;
 #     warn "CALL : $tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby";
     my $dbh=C4::Context->dbh;
-	use YAML;
-	warn "tags : ",Dump($tags),"\noperators:",Dump($operator),"\nvalues:",Dump($value);
     if (C4::Context->preference('NoZebra')) {
     
         #
@@ -206,8 +205,9 @@ sub SearchAuthorities {
         my $n=0;
         my @authtypecode;
         my @auths=split / /,$authtypecode ;
+		my @queries;
         foreach my  $auth (@auths){
-            $query .=" \@attr 1=authtype \@attr 5=100 ".$auth; ##No truncation on authtype
+            push @queries, " \@attr 1=authtype \@attr 5=100 ".$auth; ##No truncation on authtype
             push @authtypecode ,$auth;
             $n++;
         }
@@ -217,7 +217,6 @@ sub SearchAuthorities {
         
         my $dosearch;
         my $and=" \@and " ;
-        my $q2;
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
             if (@$value[$i]){
@@ -242,16 +241,15 @@ sub SearchAuthorities {
                     $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
                 }
                 $attr =$attr."\"".@$value[$i]."\"";
-                $q2 =($q2?"$and $q2 $attr":"$attr");
+                push @queries, "$attr";
             $dosearch=1;
             }#if value
         }
         ##Add how many queries generated
-        if ($query=~/\S+/){    
-          $query= $and.$query.$q2 
-        } else {
-          $query=$q2;    
-        }         
+		my $query;
+		foreach my $query_part (@queries){
+			$query=($query?$and.$query_part.$query:$query_part);
+		}
         ## Adding order
         #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading 1'.$query if ($sortby eq "HeadingDsc");
         my $orderstring= ($sortby eq "HeadingAsc"?
@@ -261,7 +259,8 @@ sub SearchAuthorities {
                             '@attr 7=2 @attr 1=Heading 0'
                            :''
                         );            
-        $query=($query?"\@or $orderstring $query":"\@or \@attr 1=_ALLRECORDS \@attr 2=103 '' $orderstring ");
+        $query=($dosearch?"\@or $orderstring $query":"\@or ".($query?"$and $query":"")." \@attr 1=_ALLRECORDS \@attr 2=103 '' $orderstring ");
+        $debug && warn $query;
         
         $offset=0 unless $offset;
         my $counter = $offset;
