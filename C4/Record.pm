@@ -374,13 +374,13 @@ sub marc2csv {
 		my $sth = $dbh->prepare($query);
 		$sth->execute($fieldtag, $subfieldtag);
 		my @results = $sth->fetchrow_array();
-		push @marcfieldsheaders, @results[0];
+		push @marcfieldsheaders, $results[0];
 	    } else {
 		my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
 		my $sth = $dbh->prepare($query);
 		$sth->execute($_);
 		my @results = $sth->fetchrow_array();
-		push @marcfieldsheaders, @results[0];
+		push @marcfieldsheaders, $results[0];
 	    }
 	}
 	$csv->combine(@marcfieldsheaders);

@@ -8,7 +8,7 @@ $dbh->do("ALTER TABLE issuingrules ADD
 		COLUMN `renewalsallowed` smallint(6) default NULL, 
 		COLUMN `reservesallowed` smallint(6) default NULL,
 		");
-$sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
+my $sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
 $sth->execute();
 
 my $sthupd = $dbh->prepare("UPDATE issuingrules SET renewalsallowed = ? WHERE itemtype = ?");

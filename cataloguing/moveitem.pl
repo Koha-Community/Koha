@@ -82,7 +82,7 @@ if ($barcode && $biblionumber) {
 					my $orderitem = {
 						ordernumber => $order->{'ordernumber'},
 						itemnumber => $itemnumber,
-						newitemnumber => $newitemnumber,
+						newitemnumber => $itemnumber,
 					};
 					ModOrderItem($orderitem);
 				}

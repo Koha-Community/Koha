@@ -74,7 +74,6 @@ my $count = scalar @results;
 my $branchname = GetBranchName($homebranch);
 
 #my $count = scalar @results;
-my $count;
 my $classlist   = '';
 my $total       = 0;
 my $totspent    = 0;
@@ -89,26 +88,9 @@ my @rates = GetCurrencies();
 $count = scalar @rates;
 
 my $active_currency = GetCurrency;
-my $num = new Number::Format(-int_curr_symbol => '',
-                             -decimal_digits => "2" );
-my @loop_currency = ();
-for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my %line;
-    $line{currency}        = $rates[$i]->{'currency'} ;
-    $line{currency_symbol} = $rates[$i]->{'symbol'};
-    $line{rate}            = sprintf ( '%.2f',  $rates[$i]->{'rate'} );
-    push @loop_currency, \%line;
-}
-
-# suggestions
-my $status           = $query->param('status') || "ASKED";
-my $suggestion       = CountSuggestion($status);
-my $suggestions_loop = &SearchSuggestion( {STATUS=> $status} );
-# ---------------------------------------------------
-# number format
-my $cur_format = C4::Context->preference("CurrencyFormat");
 my $num;
 
+my $cur_format = C4::Context->preference("CurrencyFormat");
 if ( $cur_format eq 'FR' ) {
     $num = new Number::Format(
         'decimal_fill'      => '2',
@@ -126,15 +108,29 @@ if ( $cur_format eq 'FR' ) {
     );
 }
 
+my @loop_currency = ();
+for ( my $i = 0 ; $i < $count ; $i++ ) {
+    my %line;
+    $line{currency}        = $rates[$i]->{'currency'} ;
+    $line{currency_symbol} = $rates[$i]->{'symbol'};
+    $line{rate}            = sprintf ( '%.2f',  $rates[$i]->{'rate'} );
+    push @loop_currency, \%line;
+}
+
+# suggestions
+my $status           = $query->param('status') || "ASKED";
+my $suggestion       = CountSuggestion($status);
+my $suggestions_loop = &SearchSuggestion( {STATUS=> $status} );
+# ---------------------------------------------------
+# number format
 my $period            = GetBudgetPeriod;
 my $budget_period_id  = $period->{budget_period_id};
 my $budget_branchcode = $period->{budget_branchcode};
 my $moo               = GetBudgetHierarchy('',$homebranch, $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'} );
-my @results           = @$moo;
+@results           = @$moo;
 my $period_total      = 0;
 my $toggle            = 0;
 my @loop;
-my ( $total, $totspent, $totcomtd, $totavail );
 
 foreach my $result (@results) {
     # only get top-level budgets for display

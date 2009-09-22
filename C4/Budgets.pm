@@ -235,7 +235,7 @@ sub GetBudgetsPlanCell {
     $actual = $sth->fetchrow_array;
 
     # get the estimated amount
-    my $sth = $dbh->prepare( qq|
+    $sth = $dbh->prepare( qq|
 
         SELECT estimated_amount AS estimated, display FROM aqbudgets_planning
             WHERE budget_period_id = ? AND
@@ -517,8 +517,8 @@ sub GetBudgetHierarchy {
 	}
 
 	# look for top parents 1st
-	my @sort;
-	my ($i, $depth_count) = 0;
+	my (@sort, $depth_count);
+	($i, $depth_count) = 0;
 	while (1) {
 		my $children = 0;
 		foreach my $r (@res) {
@@ -568,7 +568,7 @@ sub GetBudgetHierarchy {
         $moo =~ s/\ /\&nbsp\;/g;
         $r->{'budget_code_indent'} =  $moo;
 
-        my $moo = $r->{'budget_name_indent'};
+        $moo = $r->{'budget_name_indent'};
         $moo =~ s/\ /\&nbsp\;/g;
         $r->{'budget_name_indent'} = $moo;
 
@@ -635,7 +635,6 @@ get a specific budget
 sub GetBudget {
     my ( $budget_id ) = @_;
     my $dbh = C4::Context->dbh;
-    my $query;
     my $query = "
         SELECT *
         FROM   aqbudgets

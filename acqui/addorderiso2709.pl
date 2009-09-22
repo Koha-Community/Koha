@@ -208,11 +208,11 @@ if ($op eq ""){
                                 $found = 1;
                             }
                         }
-                        push @{$item->{tags}}, @tags[$i];
-                        push @{$item->{subfields}}, @subfields[$i];
-                        push @{$item->{field_values}}, @field_values[$i];
-                        push @{$item->{ind_tag}}, @ind_tag[$i];
-                        push @{$item->{indicator}}, @indicator[$i];
+                        push @{$item->{tags}}, $tags[$i];
+                        push @{$item->{subfields}}, $subfields[$i];
+                        push @{$item->{field_values}}, $field_values[$i];
+                        push @{$item->{ind_tag}}, $ind_tag[$i];
+                        push @{$item->{indicator}}, $indicator[$i];
                         $item->{itemid} = $itemid;
                         if (! $found){
                              push @items, $item;
