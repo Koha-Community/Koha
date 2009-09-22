@@ -1,25 +1,88 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
 
 <h1>Lists</h1>
+   
+<p>Lists are permanent lists of items, similar to 'favorites'. Lists can be used to keep track of 'favorites' or to create reading lists as a readers' advisory tool. Items in a list link directly to your catalog.</p>
 
-<h2>Q: What are &quot;Lists&quot;?</h2>
-<p>Lists are editable, permanent book lists. If the 'virtualshelves' Systems Preference has been enabled, both staff and patrons may create Lists. An item included on a List is directly linked to that item&rsquo;s bibliographic record in the Online Catalog. Clicking on the item will take you directly the the item&rsquo;s &ldquo;Details Screen&rdquo; and allow you to check for availability, find the item&rsquo;s location or reserve the item.</p>
+<p>There are three kinds of 'lists'</p>
 
-<p><strong>IMPORTANT:</strong> Patrons must be logged in to their account online to create and edit lists. </p>    
-<h4>TIP: Why staff might use Lists </h4>
-<p>Lists are a great tool for Reader&rsquo;s Advisory. Staff can use Lists to create a variety of reading lists for patrons (for example, according to age and reading level, or on specific topics).</p><h4>TIP: Why educators might use Lists </h4>
-<p>Lists can be used by professors to create a bibliography/reading list for class assignments. Clicking on an item in a List connects directly to the details page of that item in the Online Catalog. Students can easily see where the item is in the library and whether or not ist is available for checking out.</p><h2>Q: What types of &quot;Lists&quot; are there?</h2>
-<p>Koha supports two types of Lists:</p>
-	<ul>
-		<li>Public Lists: Anyone may view a public list, but only the person who created it may edit it.</li>
-		<li>Private Lists: Only the person who created the list may view and edit it.</li>
-	</ul><h4>TIP: Patron uses for Lists </h4>
-<p>Patrons can use Lists to share their reading favorites/ preferences with other patrons by creating one or more &ldquo;Public Lists&rdquo;. By creating &ldquo;Private Lists&rdquo;, patrons can keep lists of what they&rsquo;ve read, or what they want to read for research or recreation.</p><h2>Q: How do I create a new &quot;List&quot; from the Staff Intranet?</h2>
-<p>To create a new List:</p>
-	<ol>
-		<li>Click on &ldquo;Lists&rdquo;  (You should see a list of shelves that have already been created)</li>
-		<li>Click 'New List'</li>
-		<li>Name your list</li>
-		<li>Choose a &ldquo;Category&rdquo; (&rdquo;Public&rdquo; or &ldquo;Private&rdquo;)</li>
-		<li>Click 'Save'</li>
-	</ol><!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
+<ul><li>'private': private lists can only be viewed and edited by the user who created the list.</li>
+       <ul><li style="background-color: #ffe599">TIP: Any logged in patron can create a private list</li></ul>
+<li>'public': public lists can be viewed by the public (anyone) but only edited by the user who created the list.</li>
+         <ul><li style="background-color: #ffe599">TIP: Any logged in patron can create a public list</li></ul>
+<li>'free': free lists can be viewed or edited by any user</li>
+         <ul><li style="background-color: #ffe599">TIP: Only staff can create free lists, but any patron can edit them via the OPAC once created</li>
+          <li style="color: #990000">IMPORTANT: Keep in mind that any visitors to your OPAC can alter this list.</li></ul>
+</ul>
+
+<p style="color: #990000">IMPORTANT: To use lists this function must be enabled in your system preferences</p>
+<ul>
+<li><em>Get there:</em> Administration > System Preferences > OPAC > virtualshelves</li></ul>
+
+<h2>To add (create) a new list</h2>
+<ul>
+<li>Click on 'New List'</li>
+<li>Enter a 'Name' for your list in the field provided</li>
+<li>The 'Owner' should automatically be the individual logged into the Koha staff interface</li>
+<li>Choose a 'Category' for your new list (options are 'private', 'public' or 'free' as explained above)</li>
+<li>Click 'Save'</li>
+</ul>
+
+<h2>Edit Lists</h2>
+<ul>
+<li>Click on 'edit' next to the list you wish to edit OR click on the name of the list and then click 'Edit List'</li>
+<li>Edit details</li>
+<li>Click 'Save'</li>
+</ul>
+
+<p style="background-color: #ffe599">TIP: For instance, let's say you were putting together a reading list. You could make that list 'private' until items had been added, then 'edit' the list to change the 'category' to public when you were ready for the list to be seen by other users.</p>
+
+<h2>Placing Holds from Lists</h2>
+
+<p>You can easily place a hold on multiple items from a list simply by clicking the checkboxes and then the 'Place Hold' button</p>
+
+<h2>Deleting a List</h2>
+<ul>
+<li>Click on 'Delete' next to the list you wish to delete OR click on the name of the list and then click 'Delete List'</li>
+<li>You will be asked "Are you sure you want to delete this List?"</li>
+<li>If yes, click 'OK'. If no, click 'Cancel'</li>
+<li>If your list is populated, you will be prompted one more time to confirm whether you want to delete the list</li>
+<li>Click 'Confirm' next to the list you want to delete to delete it permanently</li>
+</ul>
+<h2>Questions</h2>
+
+<p><strong>Can I add items to a staff list right from the 'Lists' module?</strong></p>
+
+<p>Yes! To add an item to a list from the 'Lists' management module...</p>
+
+<ul>
+<li>Click on the name of the list you wish to add items to</li>
+<li>Scan or paste the barcode/s of the item you wish to add</li>
+<li>Click 'Add'</li>
+</ul>
+
+<p><strong>Can I add items to the list from the detail page?</strong></p>
+
+<ul>
+<li>Click on 'Search the catalog' in your search bar'</li>
+<li>Perform a search</li>
+<li>Click on the title of the item you wish to add to a list</li>
+<li>From the details page, click 'Add to List'</li>
+</ul>
+
+<p><strong>Why can I add items to other users' 'private' lists when I'm logged in as staff?</strong></p>
+
+<p>No, private lists will remain private.  You can see your own private lists from the staff client by clicking on the 'Your Lists' tab.</p>
+
+<p><strong>Can I see what lists a bib record is in?</strong></p>
+
+<p>Yes, on the detail page you will see a list of the lists that the title is in on the right hand side of the page</p>
+
+<p><strong>As a staff member, what can I do with public lists created by patrons?</strong></p>
+
+<p>Anyone with superlibrarian permission to edit/delete public patron lists.  Editing is limited to editing the title or sorting order.
+I have the 'virtualshelves' setting 'disabled' why can I still see the 'lists' menu in my staff client</p>
+
+<p>Even if lists are 'disabled' for the OPAC, staff users still have access to them from the staff side. The 'virtualshelves' preference only affects whether or not the feature is available from the OPAC.</p>
+
+<!-- TMPL_INCLUDE NAME="help-bottom.inc" -->
