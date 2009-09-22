@@ -102,12 +102,7 @@ if($ok){
 my @results;
 my $data;
 for(my $i=0;$i<$routing;$i++){
-<<<<<<< HEAD:serials/routing-preview.pl
-    $data=GetMember('borrowernumber' => $routinglist[$i]->{'borrowernumber'});
-    $data->{'location'}=$data->{'branchcode'};
-=======
     $data=GetMember($routinglist[$i]->{'borrowernumber'},'borrowernumber');
->>>>>>> 704d6c9... [3.0.x](bug #3563) This replaces the library name by the branchname attached to the subscription, and hide streetaddesses in serials routing:serials/routing-preview.pl
     $data->{'name'}="$data->{'firstname'} $data->{'surname'}";
     $data->{'routingid'}=$routinglist[$i]->{'routingid'};
     $data->{'subscriptionid'}=$subscriptionid;
