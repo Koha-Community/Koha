@@ -48,9 +48,6 @@ $template->param(
 
 # display news
 # use cookie setting for language, bug default to syspref if it's not set
-<<<<<<< HEAD:opac/opac-main.pl
-my $news_lang = $input->cookie('KohaOpacLanguage') || 'en';
-=======
 (my $theme) = themelanguage(C4::Context->config('opachtdocs'),'opac-main.tmpl','opac',$input);
 
 my $translations = getTranslatedLanguages('opac',$theme);
@@ -77,7 +74,6 @@ if($input->cookie('KohaOpacLanguage')){
 
 $news_lang = $news_lang ? $news_lang : 'en' ;
 
->>>>>>> e25ac14... (bug #3655) fix news language detection:opac/opac-main.pl
 my $all_koha_news   = &GetNewsToDisplay($news_lang);
 my $koha_news_count = scalar @$all_koha_news;
 
