@@ -26,7 +26,7 @@ use C4::Branch;          # GetBranches
 use C4::Members;         # GetMember
 use C4::NewsChannels;    # get_opac_news
 use C4::Acquisition;     # GetRecentAcqui
-use C4::Languages qw(getTranslatedLanguages);
+use C4::Languages qw(getTranslatedLanguages accept_language);
 
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -65,6 +65,10 @@ if($input->cookie('KohaOpacLanguage')){
         if( my @lang = grep { /^$1$/i } @languages ) {
             $news_lang = $lang[0];
         }
+    }
+    if (not $news_lang) {
+        my @languages = split ",", C4::Context->preference("opaclanguages");
+        $news_lang = @languages[0];
     }
 }
 
