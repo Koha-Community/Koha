@@ -244,6 +244,7 @@
 		  <!-- TMPL_IF NAME="reserve_in_future" -->
 		  <th>Hold Starts on Date</th>
 		  <!-- /TMPL_IF -->
+		  <th>Hold Not Needed After</th>
                   <!-- TMPL_IF NAME="OPACItemHolds" -->
                     <th id="place_on_hdr" style="display:none">Place On</th>
                   <!-- /TMPL_IF -->
@@ -339,7 +340,39 @@
 			//]]>
 			</script>
 		    </td>
+
 		    <!-- /TMPL_IF -->
+	<td>
+	    <input name="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10" readonly="readonly">
+	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate" style="cursor: pointer;" />
+	    <script language="JavaScript" type="text/javascript">
+		//<![CDATA[
+		function validate1(date) {
+			var today = new Date();
+			if ( (date > today) ||
+                    ( date.getDate() == today.getDate() &&
+                      date.getMonth() == today.getMonth() &&
+                      date.getFullYear() == today.getFullYear() ) ) {
+				return false;
+			} else {
+				return true;
+			}
+		};
+		Calendar.setup(
+			{
+				inputField : "expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->",
+				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+				button : "CalendarExpirationDate",
+				disableFunc : validate1,
+				dateStatusFunc : validate1,
+			}
+		);
+		//]]>
+	    </script>
+		<br/>
+		<a href='#' onClick="document.getElementById('expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->').value='';">Clear Date</a>
+	</td>
+
                     <!-- TMPL_IF NAME="OPACItemHolds" -->
                       <td class="place_on_type" style="display:none">
                         <table>

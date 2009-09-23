@@ -334,10 +334,11 @@ $.tablesorter.addParser({
             <thead><tr>
                 <th>Title</th>
                 <th>Placed On</th>
+		<th>Expires On</th>
                 <th>Pick Up Location</th>
-				<!-- TMPL_IF NAME="showpriority" -->
-				<th>Priority</th>
-				<!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="showpriority" -->
+			<th>Priority</th>
+		<!-- /TMPL_IF -->
                 <th>Status</th>
 		<th>Modify</th>
             </tr></thead>
@@ -360,6 +361,7 @@ $.tablesorter.addParser({
                     <!-- TMPL_VAR NAME="author" -->
                 </td>
                 <td><!-- TMPL_VAR NAME="reservedate" --></td>
+		<td><!-- TMPL_IF NAME="expirationdate" --><!-- TMPL_VAR NAME="expirationdate" --><!-- TMPL_ELSE -->Never Expires<!-- /TMPL_IF --></td>
                 <td><!-- TMPL_VAR NAME="branch" --></td>
 				<!-- TMPL_IF NAME="showpriority" -->
 				<td><!-- TMPL_VAR NAME="priority" --> </td>

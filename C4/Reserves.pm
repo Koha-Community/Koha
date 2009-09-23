@@ -115,19 +115,22 @@ BEGIN {
         &CancelReserve
 
         &IsAvailableForItemLevelRequest
+        
+        &AlterPriority
+        &ToggleLowestPriority
     );
 }    
 
 =item AddReserve
 
-    AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)
+    AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found)
 
 =cut
 
 sub AddReserve {
     my (
         $branch,    $borrowernumber, $biblionumber,
-        $constraint, $bibitems,  $priority, $resdate,  $notes,
+        $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
         $title,      $checkitem, $found
     ) = @_;
     my $fee =
@@ -137,6 +140,7 @@ sub AddReserve {
     my $const   = lc substr( $constraint, 0, 1 );
     $resdate = format_date_in_iso( $resdate ) if ( $resdate );
     $resdate = C4::Dates->today( 'iso' ) unless ( $resdate );
+    $expdate = format_date_in_iso( $expdate ) if ( $expdate );
     if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
 	# Make room in reserves for this before those of a later reserve date
 	$priority = _ShiftPriorityByDateAndPriority( $biblionumber, $resdate, $priority );
@@ -167,16 +171,16 @@ sub AddReserve {
     my $query = qq/
         INSERT INTO reserves
             (borrowernumber,biblionumber,reservedate,branchcode,constrainttype,
-            priority,reservenotes,itemnumber,found,waitingdate)
+            priority,reservenotes,itemnumber,found,waitingdate,expirationdate)
         VALUES
              (?,?,?,?,?,
-             ?,?,?,?,?)
+             ?,?,?,?,?,?)
     /;
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $borrowernumber, $biblionumber, $resdate, $branch,
         $const,          $priority,     $notes,   $checkitem,
-        $found,          $waitingdate
+        $found,          $waitingdate,	$expdate
     );
 
     #}
@@ -219,7 +223,9 @@ sub GetReservesFromBiblionumber {
                 constrainttype,
                 found,
                 itemnumber,
-                reservenotes
+                reservenotes,
+                expirationdate,
+                lowestPriority
         FROM     reserves
         WHERE biblionumber = ? ";
     unless ( $all_dates ) {
@@ -833,6 +839,26 @@ sub CheckReserves {
     }
 }
 
+=item CancelExpiredReserves
+
+  CancelExpiredReserves();
+  
+  Cancels all reserves with an expiration date from before today.
+  
+=cut
+
+sub CancelExpiredReserves {
+
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare( "SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() ) AND expirationdate != '0000-00-00'" );
+  $sth->execute();
+
+  while ( my $res = $sth->fetchrow_hashref() ) {
+    CancelReserve( $res->{'biblionumber'}, '', $res->{'borrowernumber'} );
+  }
+  
+}
+
 =item CancelReserve
 
   &CancelReserve($biblionumber, $itemnumber, $borrowernumber);
@@ -1338,9 +1364,69 @@ sub IsAvailableForItemLevelRequest {
     }
 }
 
+=item AlterPriority
+AlterPriority( $where, $borrowernumber, $biblionumber, $reservedate );
+
+This function changes a reserve's priority up, down, to the top, or to the bottom.
+Input: $where is 'up', 'down', 'top' or 'bottom'. Biblionumber, Date reserve was placed
+
+=cut
+sub AlterPriority {
+    my ( $where, $borrowernumber, $biblionumber ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    ## Find this reserve
+    my $sth = $dbh->prepare('SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ? AND cancellationdate IS NULL');
+    $sth->execute( $biblionumber, $borrowernumber );
+    my $reserve = $sth->fetchrow_hashref();
+    $sth->finish();
+
+    if ( $where eq 'up' || $where eq 'down' ) {
+    
+      my $priority = $reserve->{'priority'};        
+      $priority = $where eq 'up' ? $priority - 1 : $priority + 1;
+      _FixPriority( $biblionumber, $borrowernumber, $priority )
+
+    } elsif ( $where eq 'top' ) {
+
+      _FixPriority( $biblionumber, $borrowernumber, '1' )
+
+    } elsif ( $where eq 'bottom' ) {
+
+      _FixPriority( $biblionumber, $borrowernumber, '999999' )
+
+    }
+}
+
+=item ToggleLowestPriority
+ToggleLowestPriority( $borrowernumber, $biblionumber );
+
+This function sets the lowestPriority field to true if is false, and false if it is true.
+=cut
+
+sub ToggleLowestPriority {
+    my ( $borrowernumber, $biblionumber ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare(
+        "UPDATE reserves SET lowestPriority = NOT lowestPriority
+         WHERE biblionumber = ?
+         AND borrowernumber = ?"
+    );
+    $sth->execute(
+        $biblionumber,
+        $borrowernumber,
+    );
+    $sth->finish;
+    
+    _FixPriority( $biblionumber, $borrowernumber, '999999' );
+}
+
 =item _FixPriority
 
-&_FixPriority($biblio,$borrowernumber,$rank);
+&_FixPriority($biblio,$borrowernumber,$rank,$ignoreSetLowestRank);
 
  Only used internally (so don't export it)
  Changed how this functions works #
@@ -1352,7 +1438,7 @@ sub IsAvailableForItemLevelRequest {
 =cut 
 
 sub _FixPriority {
-    my ( $biblio, $borrowernumber, $rank ) = @_;
+    my ( $biblio, $borrowernumber, $rank, $ignoreSetLowestRank ) = @_;
     my $dbh = C4::Context->dbh;
      if ( $rank eq "del" ) {
          CancelReserve( $biblio, undef, $borrowernumber );
@@ -1427,6 +1513,15 @@ sub _FixPriority {
             $priority[$j]->{'reservedate'}
         );
         $sth->finish;
+    }
+    
+    $sth = $dbh->prepare( "SELECT borrowernumber FROM reserves WHERE lowestPriority = 1 ORDER BY priority" );
+    $sth->execute();
+    
+    unless ( $ignoreSetLowestRank ) {
+      while ( my $res = $sth->fetchrow_hashref() ) {
+        _FixPriority( $biblio, $res->{'borrowernumber'}, '999999', 1 );
+      }
     }
 }
 

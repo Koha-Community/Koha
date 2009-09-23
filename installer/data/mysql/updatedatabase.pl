@@ -3479,6 +3479,18 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
     print "Upgrade to $DBversion done (bug 1080: add soundon system preference for circulation sounds)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = '3.01.00.121';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `reserves` ADD `expirationdate` DATE NOT NULL");
+    $dbh->do("ALTER TABLE `reserves` ADD `lowestPriority` BOOL NOT NULL");
+    $dbh->do("ALTER TABLE `old_reserves` ADD `expirationdate` DATE NOT NULL");
+    $dbh->do("ALTER TABLE `old_reserves` ADD `lowestPriority` BOOL NOT NULL");
+    print "Upgrade to $DBversion done ( Added Additional Fields to Reserves tables )\n";
+    SetVersion ($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

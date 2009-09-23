@@ -91,6 +91,24 @@ my $warnings;
 my $messages;
 
 my $date = C4::Dates->today('iso');
+my $action = $input->param('action');
+
+if ( $action eq 'move' ) {
+  my $where = $input->param('where');
+  my $borrowernumber = $input->param('borrowernumber');
+  my $biblionumber = $input->param('biblionumber');
+                     
+  AlterPriority( $where, $borrowernumber, $biblionumber );
+
+} elsif ( $action eq 'cancel' ) {
+  my $borrowernumber = $input->param('borrowernumber');
+  my $biblionumber = $input->param('biblionumber');
+  CancelReserve( $biblionumber, '', $borrowernumber );
+} elsif ( $action eq 'setLowestPriority' ) {
+  my $borrowernumber = $input->param('borrowernumber');
+  my $biblionumber   = $input->param('biblionumber');
+  ToggleLowestPriority( $borrowernumber, $biblionumber );
+}
 
 if ($findborrower) {
     my ( $count, $borrowers ) =
@@ -491,6 +509,7 @@ foreach my $biblionumber (@biblionumbers) {
 	    $reserve{'hidename'} = 1;
 	    $reserve{'cardnumber'} = $reserveborrowerinfo->{'cardnumber'};
 	}
+        $reserve{'expirationdate'} = format_date( $res->{'expirationdate'} ) unless ( $res->{'expirationdate'} eq '0000-00-00' );
         $reserve{'date'}           = format_date( $res->{'reservedate'} );
         $reserve{'borrowernumber'} = $res->{'borrowernumber'};
         $reserve{'biblionumber'}   = $res->{'biblionumber'};
@@ -506,6 +525,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'ccode'}           = $res->{'ccode'};
         $reserve{'barcode'}         = $res->{'barcode'};
         $reserve{'priority'}    = $res->{'priority'};
+        $reserve{'lowestPriority'}    = $res->{'lowestPriority'};
         $reserve{'branchloop'} = GetBranchesLoop($res->{'branchcode'});
         $reserve{'optionloop'} = \@optionloop;
         
@@ -558,16 +578,14 @@ foreach my $biblionumber (@biblionumbers) {
 
 $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
+$template->param( DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar() );
 
 if ($multihold) {
     $template->param( multi_hold => 1 );
 }
 
 if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
-    $template->param(
-	reserve_in_future         => 1,
-	DHTMLcalendar_dateformat  => C4::Dates->DHTMLcalendar(),
-	);
+  template->param( reserve_in_future => 1 );
 }
     
 # printout the page
