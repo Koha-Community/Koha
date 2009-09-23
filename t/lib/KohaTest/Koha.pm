@@ -36,7 +36,6 @@ sub methods : Test( 1 ) {
       get_infos_of
       get_notforloan_label_of
       displayServers
-      displaySecondaryServers
       GetAuthValCode
       GetAuthorisedValues
       GetAuthorisedValueCategories
