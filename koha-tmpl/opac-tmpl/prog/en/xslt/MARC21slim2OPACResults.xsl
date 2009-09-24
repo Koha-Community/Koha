@@ -167,6 +167,7 @@
                 <img src="/opac-tmpl/prog/famfamfam/silk/cd.png" alt="optical disc" title="optical disc"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='r']">
+		available online
                 <img src="/opac-tmpl/prog/famfamfam/silk/drive_web.png" alt="remote" title="remote"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='a']">
@@ -452,6 +453,11 @@
 
         <xsl:for-each select="marc:datafield[@tag=110 or @tag=710]">
             <xsl:choose>
+            <xsl:when test="position()=1">
+		<xsl:text> -- </xsl:text>
+            </xsl:when>
+            </xsl:choose>
+            <xsl:choose>
             <xsl:when test="position()=last()">
                 <xsl:call-template name="nameABCDN"/>.
             </xsl:when>
@@ -462,6 +468,11 @@
         </xsl:for-each>
 
         <xsl:for-each select="marc:datafield[@tag=111 or @tag=711]">
+            <xsl:choose>
+            <xsl:when test="position()=1">
+		<xsl:text> -- </xsl:text>
+            </xsl:when>
+            </xsl:choose>
             <xsl:choose>
             <xsl:when test="position()=last()">
                 <xsl:call-template name="nameACDEQ"/>.
@@ -545,6 +556,7 @@
                     abstract or summary
                 </xsl:when>
                 <xsl:when test="contains($controlField008-24,'b')">
+			bibliography
                      <img src="/opac-tmpl/prog/famfamfam/silk/text_list_bullets.png" alt="bibliography" title="bibliography"/>
                 </xsl:when>
                 <xsl:when test="contains($controlField008-24,'c')">
@@ -863,6 +875,7 @@
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">ab</xsl:with-param>
                     </xsl:call-template>
+                    <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
 	</span>
     </xsl:if>
