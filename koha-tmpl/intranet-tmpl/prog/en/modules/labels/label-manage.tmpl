@@ -2,9 +2,7 @@
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Elements</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
     <!-- TMPL_INCLUDE NAME="greybox.inc" -->
-    <!-- Uncomment the following script line to enable firebug lite for use on IE -->
-    <!-- <script type='text/javascript' src='http://getfirebug.com/releases/lite/1.2/firebug-lite-compressed.js'></script> -->
-    <script type="text/JavaScript" language="JavaScript">
+    <script type="text/javascript">
         //<![CDATA[
             function DeleteConfirm() {
                 var element_id = selected_layout("delete");
@@ -99,7 +97,7 @@
                         <div class="yui-u first" id="manage-label-layouts">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
                             <!-- TMPL_IF NAME="table_loop" -->
-                            <form name="layouts">
+                            <form name="layouts" action="/cgi-bin/koha/label-manage.pl?label_element=<!-- TMPL_VAR NAME="label_element" -->">
                             <h2>Currently Available <!-- TMPL_VAR NAME="label_element_title" --></h2>
                             <table>
                                 <!-- TMPL_LOOP NAME="table_loop" -->
@@ -113,7 +111,7 @@
                                 <tr>
                                 <!-- TMPL_LOOP NAME="text_fields" -->
                                 <!-- TMPL_IF NAME="select_field" -->
-                                    <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->"></td>
+                                    <td align="center"><input type="checkbox" name="action" value="<!-- TMPL_VAR NAME="field_value" -->" /></td>
                                 <!-- TMPL_ELSIF NAME="field_value" -->
                                     <td><!-- TMPL_VAR NAME="field_value" --></td>
                                 <!-- TMPL_ELSE -->
@@ -124,21 +122,22 @@
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_LOOP -->
                             </table>
-                            <div style="margin: 10px 10px 10px 0px;">
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="edit" onclick="Edit()" value="Edit"></span></span>
-                                <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="delete" onclick="DeleteConfirm()" value="Delete"></span></span>
-                                <!-- TMPL_IF NAME="print" --><span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="print" onclick="Xport()" value="Export"></span></span><!-- /TMPL_IF -->
-                            </div>
+                            <fieldset class="action">
+                                <input type="button" id="edit" onclick="Edit()" value="Edit" />
+                                <input type="button" id="delete" onclick="DeleteConfirm()" value="Delete" />
+                                <!-- TMPL_IF NAME="print" --><input type="button" id="print" onclick="Xport()" value="Export" /><!-- /TMPL_IF -->
+                            </fieldset>
                             </form>
                             <!-- TMPL_ELSE -->
-                            <h2>There Are No <!-- TMPL_VAR NAME="label_element_title" --> Currently Available.</h2>
-                            <div class="hint"><h3>Use the toolbar above to create a new <!-- TMPL_VAR NAME="label_element" -->.</h3></div>
+							<div class="dialog message">
+                            <h4>There Are No <!-- TMPL_VAR NAME="label_element_title" --> Currently Available.</h4>
+                            <p>Use the toolbar above to create a new <!-- TMPL_VAR NAME="label_element" -->.</p></div>
                             <!-- /TMPL_IF -->
                         </div>
                         <!-- TMPL_IF NAME="error" -->
                         <div class="yui-u">
-                            <div class="alert">
-                                <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="label_element" --> <!-- TMPL_VAR NAME="element_id" --> was not deleted. Please have your system administrator check the error log for details.</strong>
+                            <div class="dialog alert">
+                                <strong>WARNING:</strong> An error was encountered and <!-- TMPL_VAR NAME="label_element" --> <!-- TMPL_VAR NAME="element_id" --> was not deleted. Please have your system administrator check the error log for details.
                             </div>
                         </div>
                         <!-- /TMPL_IF -->
