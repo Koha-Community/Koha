@@ -1,6 +1,40 @@
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Templates</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+	<script type="text/javascript">
+        //<![CDATA[
+		$(document).ready(function(){
+		var selectedUnit = $("#units option:selected").attr("value");
+		var unitfields = $("#page_height,#page_width,#label_width,#label_height,#top_margin,#left_margin,#top_text_margin,#left_text_margin,#col_gap,#row_gap");
+		$(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
+		$("#units").change(function(){
+			$(".unit").html(getUnit($(this).val()));
+		});
+		function getUnit(unit){
+			switch(unit){
+				case "POINT":
+					var unit = " pt";
+					break;
+				case "AGATE":
+					var unit = " ag";
+					break;
+				case "INCH":
+					var unit = " in";
+					break;
+				case "MM":
+					var unit = " mm";
+					break;
+				case "CM":
+					var unit = " cm";
+					break;
+				default:
+					var unit = "";
+			}
+			return unit;
+		}
+		});
+        //]]>
+	</script>
 </head>
 <body>
     <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -27,12 +61,28 @@
                                     </li>
                                     <li>
                                         <label for="template_code">Template Code:</label>
-                                        <input type="text"  size="43" name="template_code" id="template_code" value="<!-- TMPL_VAR NAME="template_code" -->" />
+                                        <input type="text" size="30" maxlength="43" name="template_code" id="template_code" value="<!-- TMPL_VAR NAME="template_code" -->" />
                                     </li>
                                     <li>
                                         <label for="template_desc">Template Description:</label>
-                                        <textarea cols="40" rows="3" id="template_desc" name="template_desc"><!-- TMPL_VAR NAME="template_desc" --></textarea>
+                                        <textarea cols="30" rows="3" id="template_desc" name="template_desc"><!-- TMPL_VAR NAME="template_desc" --></textarea>
                                     </li>
+ 									<li>
+                                 <label for="units">Units:</label>
+                                 <select id="units" name="units">
+                                 <!-- TMPL_LOOP NAME="units" -->
+
+									<!-- TMPL_IF NAME="selected" -->
+									<option value="<!-- TMPL_VAR NAME="type" -->" selected="selected">
+									<!-- TMPL_ELSE -->
+									<option value="<!-- TMPL_VAR NAME="type" -->">
+									<!-- /TMPL_IF -->
+
+                                 <!-- TMPL_VAR NAME="desc" -->
+                                 </option>
+                                 <!-- /TMPL_LOOP -->
+                                 </select>
+                             </li>
                                     <li>
                                         <label for="page_height">Page Height:</label>
                                         <input type="text" size="4" name="page_height" id="page_height" value="<!-- TMPL_VAR NAME="page_height" -->" />
@@ -49,20 +99,20 @@
                                         <label for="label_height">Label Height:</label>
                                         <input type="text" size="4" name="label_height" id="label_height" value="<!-- TMPL_VAR NAME="label_height" -->" />
                                     </li>
-                                    <li>
-                                        <label for="top_margin">Top Page Margin:</label>
-                                        <input type="text" size="4" name="top_margin" id="top_margin" value="<!-- TMPL_VAR NAME="top_margin" -->" />
-                                    </li>
-                                    <li>
-                                        <label for="left_margin">Left Page Margin:</label>
-                                        <input type="text" size="4" name="left_margin" id="left_margin" value="<!-- TMPL_VAR NAME="left_margin" -->" />
-                                    </li>
+
                                 </ol>
                             </fieldset>
                         </div>
                         <div class="yui-u">
                             <fieldset class="rows">
-                                <ol>
+                                <ol><li>
+                                    <label for="top_margin">Top Page Margin:</label>
+                                    <input type="text" size="4" name="top_margin" id="top_margin" value="<!-- TMPL_VAR NAME="top_margin" -->" />
+                                </li>
+                                <li>
+                                    <label for="left_margin">Left Page Margin:</label>
+                                    <input type="text" size="4" name="left_margin" id="left_margin" value="<!-- TMPL_VAR NAME="left_margin" -->" />
+                                </li>
                                     <li>
                                         <label for="top_text_margin">Top Text Margin:</label>
                                         <input type="text" size="4" name="top_text_margin" id="top_text_margin" value="<!-- TMPL_VAR NAME="top_text_margin" -->" />
@@ -87,22 +137,17 @@
                                         <label for="row_gap">Gap between Rows:</label>
                                         <input type="text" size="4" name="row_gap" id="row_gap" value="<!-- TMPL_VAR NAME="row_gap" -->" />
                                     </li>
-                                    <li>
-                                        <label for="units">Units:</label>
-                                        <select id="units" name="units">
-                                        <!-- TMPL_LOOP NAME="units" -->
-                                        <option value="<!-- TMPL_VAR NAME="type" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->>
-                                        <!-- TMPL_VAR NAME="desc" -->
-                                        </option>
-                                        <!-- /TMPL_LOOP -->
-                                        </select>
-                                    </li>
+
                                     <li>
                                         <label for="profile_id">Profile:</label>
                                         <!-- TMPL_IF NAME="profile_list" -->
                                         <select id="profile_id" name="profile_id">
                                         <!-- TMPL_LOOP NAME="profile_list" -->
-                                        <option value="<!-- TMPL_VAR NAME="profile_id" -->"<!-- TMPL_IF NAME="selected" --> selected="selected"<!-- /TMPL_IF -->>
+<!-- TMPL_IF NAME="selected" -->
+<option value="<!-- TMPL_VAR NAME="profile_id" -->" selected="selected">
+<!-- TMPL_ELSE -->
+<option value="<!-- TMPL_VAR NAME="profile_id" -->">
+<!-- /TMPL_IF -->
                                         <!-- TMPL_VAR NAME="printer_name" -->/<!-- TMPL_VAR NAME="paper_bin" -->
                                         </option>
                                         <!-- /TMPL_LOOP -->
@@ -117,8 +162,7 @@
                     </div>
                     <div class="yui-g">
                         <fieldset class="action">
-                            <span class="yui-button yui-link-button"><span class="first-child"><input type="submit" value="Save" /></span></span>
-                            <span class="yui-button yui-link-button"><span class="first-child"><input type="button" value="Cancel" onclick="window.location='/cgi-bin/koha/labels/label-manage.pl?label_element=template';" /></span></span>
+                            <input type="submit" class="submit" value="Save" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
                             <input type="hidden" name="op" value="save" />
                             <!-- TMPL_IF NAME="template_id" -->
                             <input type="hidden" name="template_id" value="<!-- TMPL_VAR NAME="template_id" -->" />
