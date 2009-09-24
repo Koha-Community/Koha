@@ -5,6 +5,7 @@
 # July 26, 2002 (my birthday!)
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Output;
