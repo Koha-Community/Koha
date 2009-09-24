@@ -66,26 +66,21 @@
                                     </select>
                                 </li>
                                 <li> 
-                                    <fieldset class="rows">
+                                    <fieldset>
                                         <legend>Bibliographic Data to Print</legend>
-                                        <!-- TMPL_IF NAME="layout_string" -->
-                                        <input type="radio" name="layout_choice" value="layout_table" checked="checked">Choose Order Of Text Fields to Print</input>
+										<ol>
+                                        <li class="radio"><!-- TMPL_IF NAME="layout_string" -->
+                                        <input type="radio" name="layout_choice" id="layout_choice_order" value="layout_table" checked="checked" /><label for="layout_choice_order">Choose Order Of Text Fields to Print</label>
                                         <!-- TMPL_ELSE -->
-                                        <input type="radio" name="layout_choice" value="layout_table">Choose Order Of Text Fields to Print</input>
+                                        <input type="radio" name="layout_choice" id="layout_choice_order" value="layout_table" /><label for="layout_choice_order">Choose Order Of Text Fields to Print</label>
                                         <!-- /TMPL_IF -->
-                                        <br />
-                                            <fieldset id="layout_table">
-                                                <table summary="fields to print">
+												<div id="layout_table">
                                                     <!-- TMPL_LOOP NAME="field_table" -->
-                                                    <tr>
+                                                    <p>
                                                         <!-- TMPL_LOOP NAME="text_fields" -->
                                                         <!-- TMPL_IF NAME="field_empty" -->
-                                                        <td>
-                                                            &nbsp;
-                                                        </td>
                                                         <!-- TMPL_ELSE -->
-                                                        <td>
-                                                            <select name="<!-- TMPL_VAR NAME="field_name" -->" id="<!-- TMPL_VAR NAME="field_name" -->">
+                                                            <select name="<!-- TMPL_VAR NAME="field_name" -->" id="<!-- TMPL_VAR NAME="field_name" escape="url" -->">
                                                                 <!-- TMPL_LOOP NAME="order" -->
                                                                 <!-- TMPL_IF Name="selected" -->
                                                                 <option value="<!-- TMPL_VAR Name="num" -->" selected="selected"><!-- TMPL_VAR Name="num" --></option>
@@ -94,30 +89,28 @@
                                                                 <!-- /TMPL_IF -->
                                                                 <!-- /TMPL_LOOP -->
                                                             </select>
-                                                            <label for="<!-- TMPL_VAR NAME="field_name" -->"><!-- TMPL_VAR NAME="field_label" --></label>
-                                                        </td>
+                                                            <label for="<!-- TMPL_VAR NAME="field_name" escape="url" -->"><!-- TMPL_VAR NAME="field_label" --></label>
                                                         <!-- /TMPL_IF -->
                                                         <!-- /TMPL_LOOP -->
-                                                    </tr>
+                                                    </p>
                                                     <!-- /TMPL_LOOP -->
-                                                </table>
-                                                <br />
-                                            </fieldset>
-                                            <br />
+											</div>
+                                            </li>
                                             <!-- TMPL_IF NAME="layout_string" -->
-                                            <input type="radio" name="layout_choice" value="layout_string" checked="checked"> List Fields </input>
+                                            <li class="radio"><input type="radio" id="layout_choice_list" name="layout_choice" value="layout_string" checked="checked" /> <label for="layout_choice_list">List Fields</label></li>
                                             <!-- TMPL_ELSE -->
-                                            <input type="radio" name="layout_choice" value="layout_string"> List Fields </input>
+                                            <li class="radio"><input type="radio" id="layout_choice_list" name="layout_choice" value="layout_string" /> <label for="layout_choice_list">List Fields</label></li>
                                             <!-- /TMPL_IF -->
-                                            <fieldset id="layout_string" class="brief">
+                                           <li> <fieldset id="layout_string" class="brief">
                                                 <label for="format_string">Data Fields</label>
                                                 <input type="text" name="format_string" id="format_string" size="80" value="<!-- TMPL_VAR ESCAPE='HTML' NAME="format_string" -->" />
-                                                <div class="help">
+                                                <div class="hint">
                                                     <p>Enter a comma separated list of fields to print.  You may include any <em>Koha field</em> or MARC subfield.</p>
                                                     <p>See online help for advanced options</p>
                                                     <p>ex: barcode, itemcallnumber, title, "050a 050b", 300a </p>
                                                 </div>
-                                            </fieldset>
+                                            </fieldset></li>
+											</ol>
                                     </fieldset>   
                                 </li>
                                 <li>
@@ -167,8 +160,8 @@
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <span class="yui-button yui-link-button"><span class="first-child"><input type="submit" value="Save" /></span></span>
-                            <span class="yui-button yui-link-button"><span class="first-child"><input type="button" value="Cancel" onclick="window.location='/cgi-bin/koha/labels/label-manage.pl?label_element=layout';" /></span></span>
+                            <input type="submit" value="Save" />
+                            <a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Cancel</a>
                             <input type="hidden" name="op" value="save" />
                             <input type="hidden" name="layout_id" value="<!-- TMPL_VAR NAME="layout_id" -->" />
                         </fieldset>
