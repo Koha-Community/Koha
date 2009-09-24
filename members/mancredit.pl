@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#wrriten 11/1/2000 by chris@katipo.oc.nz
+#written 11/1/2000 by chris@katipo.oc.nz
 #script to display borrowers account details
 
 
@@ -22,6 +22,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Auth;
 use C4::Output;
 use CGI;
@@ -43,7 +45,7 @@ if ($add){
     my $barcode=$input->param('barcode');
     my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
     my $desc=$input->param('desc');
-    my $amount=$input->param('amount');
+    my $amount=$input->param('amount') || 0;
     $amount = -$amount;
     my $type=$input->param('type');
     manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
