@@ -71,7 +71,7 @@ if ( $params->{'step2'} ) {
     my $totalDel;
     my $membersToDelete;
     if ($checkboxes{borrower}) {
-        $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1);
+        $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1, 1);
         $totalDel = scalar @$membersToDelete;
             
     }
@@ -109,7 +109,7 @@ if ( $params->{'step3'} ) {
     
     # delete members
     if ($do_delete) {
-        my $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1);
+        my $membersToDelete = GetBorrowersWhoHaveNotBorrowedSince($filterdate1, 1);
         $totalDel = scalar(@$membersToDelete);
         $radio    = $params->{'radio'};
         if ( $radio eq 'trash' ) {

@@ -1858,9 +1858,8 @@ this function get all borrowers who haven't borrowed since the date given on inp
 =cut
 
 sub GetBorrowersWhoHaveNotBorrowedSince {
-### TODO : It could be dangerous to delete Borrowers who have just been entered and who have not yet borrowed any book. May be good to add a dateexpiry or dateenrolled filter.      
-       
-                my $filterdate = shift||POSIX::strftime("%Y-%m-%d",localtime());
+    my $filterdate = shift||POSIX::strftime("%Y-%m-%d",localtime());
+    my $filterexpiry = shift;
     my $filterbranch = shift || 
                         ((C4::Context->preference('IndependantBranches') 
                              && C4::Context->userenv 
@@ -1880,7 +1879,10 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
     if ($filterbranch && $filterbranch ne ""){ 
         $query.=" AND borrowers.branchcode= ?";
         push @query_params,$filterbranch;
-    }    
+    }
+    if($filterexpiry){
+        $query .= " AND dateexpiry < NOW() ";
+    }
     $query.=" GROUP BY borrowers.borrowernumber";
     if ($filterdate){ 
         $query.=" HAVING latestissue <? OR latestissue IS NULL";
