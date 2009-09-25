@@ -87,14 +87,12 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
 
 
 
-<fieldset class="rows"><table>
-	<tr><th scope="row">
+<fieldset class="rows">
+<ol>
+	<li>
 		<label for="datefrom">Added on or after date</label>
-	    </th>
-	    <td>
-  <input type="text" size="10" id="datefrom" name="datefrom" value="" />
+	     <input type="text" size="10" id="datefrom" name="datefrom" value="" />
   <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarFrom" alt="Show Calendar" />
-
 <script type="text/javascript">
     Calendar.setup({
         inputField     :    "datefrom",
@@ -103,19 +101,10 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
         align          :    "Tl",
         singleClick    :    false
     });
-
-
-
-
 </script>
-
-
-</td>
-    </tr>
-	<tr><th scope="row">
+</li>
+<li>
 		<label for="dateto">Added on or before date</label>
-	    </th>
-	    <td>
   <input type="text" size="10" id="dateto" name="dateto" value="" />
   <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" id="openCalendarTo" alt="Show Calendar" />
 
@@ -127,13 +116,8 @@ to add to Batch <!-- TMPL_VAR NAME="batch_id" -->
         align          :    "Tl",
     });
 </script>
-
-                </td>
-            </tr></table>
-
-
-
-
+</li></ol>
+</fieldset>
 
 <fieldset class="action"><input type="submit" value="Search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
 </form>
