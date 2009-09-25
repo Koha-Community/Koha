@@ -49,7 +49,7 @@
             <td>
                 <p>
                     <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
-                <!-- TMPL_VAR NAME="subtitle" --></p>
+                <!--TMPL_LOOP Name="subtitle"--><!-- TMPL_VAR NAME="subfield" --><!--/TMPL_LOOP--></p>
                 <!-- TMPL_IF name="summary" -->
                     <p><!-- TMPL_VAR name="summary" --></p>
                 <!-- TMPL_ELSE -->
