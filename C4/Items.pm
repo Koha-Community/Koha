@@ -2032,12 +2032,39 @@ sub MoveItemFromBiblio {
     my $sth = $dbh->prepare("UPDATE items SET biblioitemnumber = ?, biblionumber = ? WHERE itemnumber = ? AND biblionumber = ?");
     my $return = $sth->execute($tobiblio, $tobiblio, $itemnumber, $frombiblio);
     if ($return == 1) {
-	my $record = GetMarcBiblio($frombiblio);
+
+	# Getting framework
 	my $frameworkcode = GetFrameworkCode($frombiblio);
+
+	# Getting marc field for itemnumber
+	my ($itemtag, $itemsubfield) = GetMarcFromKohaField('items.itemnumber', $frameworkcode);
+
+	# Getting the record we want to move the item from
+	my $record = GetMarcBiblio($frombiblio);
+
+	# The item we want to move
+	my $item;
+
+	# For each item
+	foreach my $fielditem ($record->field($itemtag)){
+		# If it is the item we want to move
+		if ($fielditem->subfield($itemsubfield) == $itemnumber) {
+		    # We save it
+		    $item = $fielditem;
+		    # Then delete it from the record
+		    $record->delete_field($fielditem) 
+		}
+	}
+	# Saving the modification
 	ModBiblioMarc($record, $frombiblio, $frameworkcode);
 
+	# Getting the record we want to move the item to
 	$record = GetMarcBiblio($tobiblio);
-	$frameworkcode = GetFrameworkCode($frombiblio);
+
+	# Inserting the previously saved item
+	$record->insert_fields_ordered($item);	
+
+	# Saving the modification
 	ModBiblioMarc($record, $tobiblio, $frameworkcode);
     } else {
 	return -1;
