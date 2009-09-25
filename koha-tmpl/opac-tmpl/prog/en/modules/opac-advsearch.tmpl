@@ -60,6 +60,16 @@
         <!-- TMPL_IF NAME="expanded_options" --><!-- TMPL_VAR NAME="left_content" --><!-- /TMPL_IF --> 
         <select name="idx">
             <option value="kw">Keyword</option>
+            <option value="ti">Title</option>
+<!-- TMPL_IF NAME="expanded_options" -->
+            <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
+            <option value="se,wrdl">Series Title</option>
+            <option value="callnum">Call Number</option>
+<!-- /TMPL_IF -->
+            <option value="su,wrdl">Subject</option>
+<!-- TMPL_IF NAME="expanded_options" -->
+            <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
+<!-- /TMPL_IF -->
             <option value="au,wrdl">Author</option>
 			
 <!-- TMPL_IF NAME="expanded_options" -->
@@ -84,16 +94,6 @@
 <!-- TMPL_ELSE -->
             <option value="nb">ISBN</option>
 <!-- /TMPL_IF -->
-            <option value="su,wrdl">Subject</option>
-<!-- TMPL_IF NAME="expanded_options" -->
-            <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
-<!-- /TMPL_IF -->
-            <option value="ti">Title</option>
-<!-- TMPL_IF NAME="expanded_options" -->
-            <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
-            <option value="se,wrdl">Series Title</option>
-            <option value="callnum">Call Number</option>
-<!-- /TMPL_IF -->
         </select>
         <input type="text" size="30" name="q" title="Enter search terms" value="" />
 <!-- TMPL_IF NAME="expanded_options" -->
@@ -105,6 +105,17 @@
 
     </fieldset></div>
 	</div>
+<div class="yui-g"><div class="container" style="text-align: center;"><!-- SEARCH BUTTONS -->
+
+    <input class="submit" type="submit" accesskey="s" name="do" title="Search" value="Search" />
+    <!-- TMPL_IF NAME="expanded_options" -->
+        <a href="/cgi-bin/koha/opac-search.pl?expanded_options=0">[Fewer Options]</a>
+    <!-- TMPL_ELSE -->
+        <a href="/cgi-bin/koha/opac-search.pl?expanded_options=1">[More options]</a>
+    <!-- /TMPL_IF -->
+    <a href="/cgi-bin/koha/opac-search.pl?do=Clear">[New Search]</a>
+
+<!-- /SEARCH BUTTONS --></div></div>
 <div id="pubrange" class="container">
 <fieldset>
 <!-- PUB RANGE OPTION -->
