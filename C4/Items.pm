@@ -209,8 +209,12 @@ sub AddItemFromMarc {
 
     # parse item hash from MARC
     my $frameworkcode = GetFrameworkCode( $biblionumber );
-    my $item = &TransformMarcToKoha( $dbh, $source_item_marc, $frameworkcode );
-    my $unlinked_item_subfields = _get_unlinked_item_subfields($source_item_marc, $frameworkcode);
+	my ($itemtag,$itemsubfield)=GetMarcFromKohaField("items.itemnumber",$frameworkcode);
+	
+	my $localitemmarc=MARC::Record->new;
+	$localitemmarc->append_fields($source_item_marc->field($itemtag));
+    my $item = &TransformMarcToKoha( $dbh, $localitemmarc, $frameworkcode ,'items');
+    my $unlinked_item_subfields = _get_unlinked_item_subfields($localitemmarc, $frameworkcode);
     return AddItem($item, $biblionumber, $dbh, $frameworkcode, $unlinked_item_subfields);
 }
 
@@ -452,11 +456,11 @@ sub ModItemFromMarc {
 	
 	my $localitemmarc=MARC::Record->new;
 	$localitemmarc->append_fields($item_marc->field($itemtag));
-    my $item = &TransformMarcToKoha( $dbh, $item_marc, $frameworkcode ,'items');
+    my $item = &TransformMarcToKoha( $dbh, $localitemmarc, $frameworkcode, 'items');
     foreach my $item_field (keys %default_values_for_mod_from_marc) {
         $item->{$item_field} = $default_values_for_mod_from_marc{$item_field} unless exists $item->{$item_field};
     }
-    my $unlinked_item_subfields = _get_unlinked_item_subfields($item_marc, $frameworkcode);
+    my $unlinked_item_subfields = _get_unlinked_item_subfields($localitemmarc, $frameworkcode);
    
     return ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $unlinked_item_subfields); 
 }
