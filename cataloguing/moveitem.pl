@@ -70,10 +70,9 @@ if ($barcode && $biblionumber) {
 	if ($item) {
 
 	    my $results = GetBiblioFromItemNumber($itemnumber, $barcode);
-        my $frombiblionumber = $results->{'biblionumber'};
+	    my $frombiblionumber = $results->{'biblionumber'};
 	   
 	    my $moveresult = MoveItemFromBiblio($itemnumber, $frombiblionumber, $biblionumber); 
-
 	    if ($moveresult) { 
 		$template->param(success => 1);
 	    } else {

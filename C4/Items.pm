@@ -2025,6 +2025,7 @@ MoveItemFromBiblio($itenumber, $frombiblio, $tobiblio);
 
 Moves an item from a biblio to another
 
+Returns undef if the move failed or the biblionumber of the destination record otherwise
 =cut
 sub MoveItemFromBiblio {
     my ($itemnumber, $frombiblio, $tobiblio) = @_;
@@ -2055,19 +2056,27 @@ sub MoveItemFromBiblio {
 		    $record->delete_field($fielditem) 
 		}
 	}
-	# Saving the modification
-	ModBiblioMarc($record, $frombiblio, $frameworkcode);
 
-	# Getting the record we want to move the item to
-	$record = GetMarcBiblio($tobiblio);
+	# If we found an item (should always true, except in case of database-marcxml inconsistency)
+	if ($item) {
 
-	# Inserting the previously saved item
-	$record->insert_fields_ordered($item);	
+	    # Saving the modification
+	    ModBiblioMarc($record, $frombiblio, $frameworkcode);
 
-	# Saving the modification
-	ModBiblioMarc($record, $tobiblio, $frameworkcode);
+	    # Getting the record we want to move the item to
+	    $record = GetMarcBiblio($tobiblio);
+
+	    # Inserting the previously saved item
+	    $record->insert_fields_ordered($item);	
+
+	    # Saving the modification
+	    ModBiblioMarc($record, $tobiblio, $frameworkcode);
+
+	} else {
+	    return undef;
+	}
     } else {
-	return -1;
+	return undef;
     }
 }
 
