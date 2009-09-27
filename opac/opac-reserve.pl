@@ -293,6 +293,7 @@ my $notforloan_label_of = get_notforloan_label_of();
 
 my $biblioLoop = [];
 my $numBibsAvailable = 0;
+my $itemdata_enumchron = 0;
 my $itemLevelTypes = C4::Context->preference('item-level_itypes');
 $template->param('item-level_itypes' => $itemLevelTypes);
 
@@ -353,6 +354,7 @@ foreach my $biblioNum (@biblionumbers) {
         $itemLoopIter->{barcode} = $itemInfo->{barcode};
         $itemLoopIter->{homeBranchName} = $branches->{$itemInfo->{homebranch}}{branchname};
         $itemLoopIter->{callNumber} = $itemInfo->{itemcallnumber};
+        $itemLoopIter->{enumchron} = $itemInfo->{enumchron};
         $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
         if ($itemLevelTypes) {
             $itemLoopIter->{description} = $itemInfo->{description};
@@ -443,6 +445,12 @@ foreach my $biblioNum (@biblionumbers) {
             $itemLoopIter->{waitingdate} = format_date($wait_hashref->{waitingdate});
         }
 	$itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
+     
+    # Show serial enumeration when needed
+    if ($itemLoopIter->{enumchron}) {
+        $itemdata_enumchron = 1;    
+    }
+    $template->param( itemdata_enumchron => $itemdata_enumchron );
         
         push @{$biblioLoopIter{itemLoop}}, $itemLoopIter;
     }
