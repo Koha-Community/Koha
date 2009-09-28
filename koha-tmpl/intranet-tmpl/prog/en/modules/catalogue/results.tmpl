@@ -177,16 +177,12 @@ function GetZ3950Terms(){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
 &rsaquo; Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" ESCAPE="html"-->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF -->
 </div>
 
-=======
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --></div>
->>>>>>> cefbb72... Ticket 1110 : Balance carts and lists:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
 <div id="doc3" class="yui-t1">
    <div id="bd">
     <div id="yui-main">
@@ -235,22 +231,15 @@ function GetZ3950Terms(){
                 <a href="#" onclick="selectAll(); return false;">Select All</a>
                 |
                 <a href="#" onclick="clearAll(); return false;">Clear All</a>
-<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
                 |
                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
-=======
-		<span class="addto"></span>
-
->>>>>>> cefbb72... Ticket 1110 : Balance carts and lists:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
                 <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
                 | <a href="/cgi-bin/koha/catalogue/search.pl" onclick="placeHold(); return false;">Place Hold</a>
                 <!-- /TMPL_IF -->
-<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
-                <input type="button" onclick="addToList(); return false;" value="Add to List"/>
+		<span class="addto"></span>
+
 				<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="z39.50 Search"/><!-- /TMPL_IF -->
-=======
->>>>>>> cefbb72... Ticket 1110 : Balance carts and lists:koha-tmpl/intranet-tmpl/prog/en/modules/catalogue/results.tmpl
             </div>
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
