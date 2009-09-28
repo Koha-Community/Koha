@@ -81,8 +81,13 @@ $.tablesorter.addParser({
 	               <h3>Messages For You</h3>
 	               <ul>
 	                       <!--TMPL_LOOP NAME="bor_messages_loop" -->
-	                               <li>On <!--TMPL_VAR NAME="message_date_formatted"--> <!--TMPL_VAR NAME="branchname"--> wrote <i>"<!--TMPL_VAR NAME="message"-->"</i></li>
+					<li>
+						<strong><!--TMPL_VAR NAME="message"--></strong><br>
+	                        		&nbsp;&nbsp;&nbsp;<i>Written on <!--TMPL_VAR NAME="message_date_formatted"--> by <!--TMPL_VAR NAME="branchname"--></i>
+					</li>
 	                        <!-- /TMPL_LOOP -->
+
+				<!-- TMPL_IF NAME="opacnote" --><li><!-- TMPL_VAR name="opacnote" --></li><!-- /TMPL_IF -->
 	               </ul>
 	       </div>
 	<!-- /TMPL_IF -->
@@ -92,12 +97,6 @@ $.tablesorter.addParser({
 		<!-- TMPL_IF NAME="patronupdate" --><div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div><!-- /TMPL_IF -->
 		
 
-        <!-- TMPL_IF NAME="opacnote"-->
-		<div class="dialog message">
-            <h3>Message from the library</h3>
-            <p><!-- TMPL_VAR name="opacnote" --></p>
-		</div>
-        <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="flagged" -->
 		<div class="dialog alert">
         <ul>

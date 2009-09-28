@@ -270,6 +270,13 @@ if ( GetMessagesCount( $borrowernumber, 'B' ) ) {
 	$template->param( bor_messages => 1 );
 }
 
+if ( $borr->{'opacnote'} ) {
+  $template->param( 
+    bor_messages => 1,
+    opacnote => $borr->{'opacnote'},
+  );
+}
+
 $template->param(
     bor_messages_loop	=> GetMessages( $borrowernumber, 'B', 'NONE' ),
     waiting_count      => $wcount,
