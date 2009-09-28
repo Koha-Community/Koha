@@ -5,7 +5,8 @@
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
 	$("#memberresultst").tablesorter({
-		sortList: [[0,0]],
+		sortList: [[1,0]],
+		widgets:	['zebra']
 	}); 
 }); 
 //]]>
@@ -61,7 +62,8 @@ $(document).ready(function() {
 						<div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for <!--TMPL_IF Name="member"-->'<span class="ex"><!-- TMPL_VAR NAME="member" --></span>'<!--/TMPL_IF--><!--TMPL_IF Name="surname"-->'<span class="ex"><!-- TMPL_VAR NAME="surname" --></span>'<!--/TMPL_IF--></h3></div>
 						<div class="searchresults">
 
-							<table id="memberresultst" style="width:100%">
+							<table id="memberresultst">
+							<thead>
 							<tr>
 							<th>Card</th>
 							<th>Name</th>
@@ -73,6 +75,8 @@ $(document).ready(function() {
 							<th>Circ note</th>
 							<th>&nbsp;</th>
 							</tr>
+							</thead>
+							<tbody>
 							<!-- TMPL_LOOP NAME="resultsloop" -->
 							<!-- TMPL_IF name="overdue" -->
 							<tr class="problem">
@@ -102,6 +106,7 @@ $(document).ready(function() {
 						<!-- /TMPL_IF --></td>
 							</tr>
 							<!-- /TMPL_LOOP -->
+							</tbody>
 							</table>
 							<div class="pages"><!--TMPL_IF Name="multipage"--><!--TMPL_VAR Name="paginationbar" --><!--/TMPL_IF--></div>
 						</div>
