@@ -75,18 +75,7 @@ if ($barcode && $biblionumber) {
 	    my $moveresult = MoveItemFromBiblio($itemnumber, $frombiblionumber, $biblionumber); 
 
 	    if ($moveresult) { 
-				my $order = GetOrderFromItemnumber($itemnumber);
-				if ($order){
-					$order->{'biblionumber'} = $biblionumber;
-					ModOrder($order);
-					my $orderitem = {
-						ordernumber => $order->{'ordernumber'},
-						itemnumber => $itemnumber,
-						newitemnumber => $itemnumber,
-					};
-					ModOrderItem($orderitem);
-				}
-	             $template->param(success => 1);
+		$template->param(success => 1);
 	    } else {
 		$template->param(error => 1,
 				 errornonewitem => 1); 
