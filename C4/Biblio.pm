@@ -50,6 +50,7 @@ BEGIN {
 
 	# to get something
 	push @EXPORT, qw(
+	    &Get
 		&GetBiblio
 		&GetBiblioData
 		&GetBiblioItemData

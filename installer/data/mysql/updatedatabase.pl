@@ -2704,6 +2704,23 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added csv export profiles)\n";
 }
 
+#$DBversion = "3.01.00.040";
+$DBversion = "3.01.00.063";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+        CREATE TABLE `fieldmapping` (
+          `id` int(11) NOT NULL auto_increment,
+          `field` varchar(255) NOT NULL,
+          `frameworkcode` char(4) NOT NULL default '',
+          `fieldcode` char(3) NOT NULL,
+          `subfieldcode` char(1) NOT NULL,
+          PRIMARY KEY  (`id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+             ");
+    SetVersion ($DBversion);
+}
+
+
 =item
 
 Acquisitions update
