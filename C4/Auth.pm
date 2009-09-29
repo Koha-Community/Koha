@@ -1310,7 +1310,7 @@ sub checkpw {
         my ( $md5password, $cardnumber, $borrowernumber, $userid, $firstname,
             $surname, $branchcode, $flags )
           = $sth->fetchrow;
-        if ( md5_base64($password) eq $md5password ) {
+        if ( md5_base64($password) eq $md5password and $md5password ne "!") {
 
             C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
