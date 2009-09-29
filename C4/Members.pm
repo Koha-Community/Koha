@@ -655,8 +655,9 @@ Returns the borrowernumber
 sub AddMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-    $data{'userid'} = '' unless $data{'password'};
+
     $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
+    $data{'password'} = '!' if (not $data{'password'} and $data{'userid'});
     
     # WE SHOULD NEVER PASS THIS SUBROUTINE ANYTHING OTHER THAN ISO DATES
     # IF YOU UNCOMMENT THESE LINES YOU BETTER HAVE A DARN COMPELLING REASON
