@@ -774,26 +774,23 @@ sub _get_match_keys {
             last FIELD if $j > 0 and $check_only_first_repeat;
             last FIELD if $i > 0 and $j > $#keys;
             my $key = "";
+			my $string;
             if ($field->is_control_field()) {
-                if ($component->{'length'}) {
-                    $key = _normalize(substr($field->data(), $component->{'offset'}, $component->{'length'}))
-                            # FIXME normalize, substr
-                } else {
-                    $key = _normalize($field->data());
-                }
+				$string=$field->data();
             } else {
                 foreach my $subfield ($field->subfields()) {
                     if (exists $component->{'subfields'}->{$subfield->[0]}) {
-                        $key .= " " . $subfield->[1];
+                        $string .= " " . $subfield->[1];
                     }
                 }
-                $key = _normalize($key);
-                if ($component->{'length'}){
-                   if (length($key) > $component->{'length'}){
-                     $key = _normalize(substr($key,$component->{'offset'},$component->{'length'}));
-                   }
-                }
+			}
+            if ($component->{'length'}>0) {
+                    $string= substr($string, $component->{'offset'}, $component->{'length'});
+                            # FIXME normalize, substr
+            } elsif ($component->{'offset'}) {
+                    $string= substr($string, $component->{'offset'});
             }
+            $key = _normalize($string);
             if ($i == 0) {
                 push @keys, $key if $key;
             } else {
@@ -802,7 +799,6 @@ sub _get_match_keys {
         }
     }
     return @keys;
-    
 }
 
 
