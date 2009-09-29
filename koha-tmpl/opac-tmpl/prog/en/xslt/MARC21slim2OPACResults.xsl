@@ -285,7 +285,7 @@
                 technical drawing
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='q'][substring(text(),2,1)='q']">
-                <img src="/opac-tmpl/prog/famfamfam/silk/script.png" alt="notated musci" title="notated music"/>
+                <img src="/opac-tmpl/prog/famfamfam/silk/script.png" alt="notated music" title="notated music"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='g'][substring(text(),2,1)='d']">
                 filmslip
