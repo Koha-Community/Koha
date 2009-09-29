@@ -1,0 +1,55 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>GreyBox - Compressing GreyBox</title>
+
+    <script type="text/javascript">
+        var GB_ROOT_DIR = "./greybox/";
+    </script>
+
+    <script type="text/javascript" src="greybox/AJS.js"></script>
+    <script type="text/javascript" src="greybox/AJS_fx.js"></script>
+    <script type="text/javascript" src="greybox/gb_scripts.js"></script>
+    <link href="greybox/gb_styles.css" rel="stylesheet" type="text/css" media="all" />
+
+    <script type="text/javascript" src="static_files/help.js"></script>
+    <link href="static_files/help.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+<body>
+
+<script>
+insertHeader();
+insertMenu('cmpr');
+</script>
+
+<h2>Code structure</h2>
+<ul>
+    <li><b>greybox:</b> Generated and compressed JavaScript and CSS is located here</li>
+    <li><b>greybox_source:</b> CSS and JavaScript structured in directories.</li>
+</ul>
+It's not recommend that you alter code in the <b>greybox</b> directory, since it's computer generated and very unreadable!
+
+
+<h2>Download Dojo ShrinkSafe</h2>
+To make the filesize as small as possible GreyBox JavaScript is compressed down using <a href="http://alex.dojotoolkit.org/shrinksafe/">Dojo ShrinkSafe</a>. This library requires <a href="http://www.java.com/getjava/">Java</a>, so make sure you got Java installed. Download following JAR file:
+<ul>
+    <li><a href="http://svn.dojotoolkit.org/dojo/trunk/buildscripts/lib/custom_rhino.jar">custom_rhino.jar</a></li>
+</ul>
+Place <b>custom_rhino.jar</b> in GreyBox's <b>compression_lib</b> directory.
+
+
+<h2>Compressing GreyBox</h2>
+Now, you are ready to compress GreyBox. This is done by running a Python script called <b>combiner.py</b>. I.e. you need to download and install <a href="http://www.python.org/download/">Pyhton</a>. 
+
+<p>
+You can run <b>combiner.py</b> in following ways:
+</p>
+
+<ul>
+    <li><b>python combiner.py full:</b> Compress everything</li>
+    <li><b>python combiner.py gallery:</b> Compress only gallery related CSS and JavaScript</li>
+    <li><b>python combiner.py window:</b> Compress only window related CSS and JavaScript</li>
+</ul>
+
+</body>
+</html>
