@@ -24,7 +24,10 @@ use Digest::MD5 qw(md5_base64);
 use C4::Debug;
 use C4::Context;
 use C4::Members qw(AddMember changepassword);
+use C4::Members::Attributes;
+use C4::Members::AttributeTypes;
 use C4::Utils qw( :all );
+use List::MoreUtils qw( any );
 use Net::LDAP;
 use Net::LDAP::Filter;
 
@@ -150,10 +153,29 @@ sub checkpw_ldap {
         }
     } elsif ($config{replicate}) { # A2, C2
         $borrowernumber = AddMember(%borrower) or die "AddMember failed";
-    } else {
+   } else {
         return 0;   # B2, D2
     }
-	return(1, $cardnumber);
+	if (C4::Context->preference('ExtendedPatronAttributes') && $borrowernumber && ($config{update} ||$config{replicate})) {
+   		my @types = C4::Members::AttributeTypes::GetAttributeTypes();
+		my @attributes = grep{my $key=$_; any{$_ eq $key}@types;} keys %borrower;
+		my $extended_patron_attributes = map{{code=>$_,value=>$borrower{$_}}}@attributes;
+		my @errors;
+		#Check before add
+		for (my $i; $i< scalar(@$extended_patron_attributes)-1;$i++) {
+			my $attr=$extended_patron_attributes->[$i];
+			unless (C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber)) {
+				unshift @errors, $i;
+				warn "ERROR_extended_unique_id_failed $attr->{code} $attr->{value}";
+			}
+		}
+		#Removing erroneous attributes
+		foreach my $index (@errors){
+			@$extended_patron_attributes=splice(@$extended_patron_attributes,$index,1);
+		}
+           C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
+  	}
+return(1, $cardnumber);
 }
 
 # Pass LDAP entry object and local cardnumber (userid).
