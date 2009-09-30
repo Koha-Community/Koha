@@ -3,6 +3,7 @@
 <meta name="generator" content="Koha <!-- TMPL_VAR NAME="Version" -->" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript">//<![CDATA[
 function sco_init(valid_session) {
     if (valid_session == 1) {
@@ -32,10 +33,29 @@ function checkout_confirm(patronid) {
     return true;
 }
 
+$.tablesorter.addParser({
+    id: 'articles',
+    is: function(s) {return false;  },
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+    type: 'text'
+});
+
 $(document).ready(function() {
     <!-- TMPL_IF    NAME="patronid" --> sco_init(1);
     <!-- TMPL_ELSIF NAME="timedout" --> sco_init(1);
     <!-- /TMPL_IF -->
+    $("#loanTable").tablesorter({
+        <!-- TMPL_IF NAME="dateformat_metric" -->
+            dateFormat: 'uk',
+        <!-- /TMPL_IF -->
+        widgets:   ['zebra'],
+        sortList:  [[2, 1], [0, 0]],
+        headers: {
+            0: { sorter: 'articles' },
+            3: { sorter: false }
+            <!-- TMPL_UNLESS NAME="nofines" -->, 4: { sorter: false }<!-- /TMPL_UNLESS -->
+        }
+    });
 });
 //]]>
 </script>
@@ -52,7 +72,40 @@ $(document).ready(function() {
 <!-- TMPL_IF NAME="impossible" --><!-- We tried to issue, but failed. -->
 <div class="dialog alert"><h3>Item cannot be checked out.</h3><p>Sorry, This item cannot be checked out at this station.  </p>
 <!-- TMPL_IF NAME="title" --><p>Title: <em><!-- TMPL_VAR NAME="title" escape="html" --></em> </p><!-- /TMPL_IF -->
-<p><em>Error type:</em> <!-- TMPL_VAR NAME="impossible" --></p>
+<p>
+   <!-- TMPL_IF NAME="circ_error_UNKNOWN_BARCODE" -->
+    <em>MESSAGE 1:</em> The system does not recognize this barcode.
+   <!-- TMPL_ELSIF NAME="circ_error_TOO_MANY" -->
+    <em>MESSAGE 2:</em> You have borrowed too many items and can't check out any more.
+   <!-- TMPL_ELSIF NAME="circ_error_ISSUED_TO_ANOTHER" -->
+    <em>MESSAGE 3:</em> This item is checked out to someone else.
+   <!-- TMPL_ELSIF NAME="circ_error_NO_MORE_RENEWALS" -->
+    <em>MESSAGE 4:</em> You cannot renew this item again.
+   <!-- TMPL_ELSIF NAME="circ_error_NOT_FOR_LOAN" -->
+    <em>MESSAGE 5:</em> This item is not for loan.
+   <!-- TMPL_ELSIF NAME="circ_error_DEBT" -->
+    <em>MESSAGE 6:</em> You owe the library <!-- TMPL_VAR NAME="amount" --> and cannot borrow.
+   <!-- TMPL_ELSIF NAME="circ_error_WTHDRAWN" -->
+    <em>MESSAGE 7:</em> This item has been withdrawn from the collection.
+   <!-- TMPL_ELSIF NAME="circ_error_RESTRICTED" -->
+    <em>MESSAGE 8:</em>
+   <!-- TMPL_ELSIF NAME="circ_error_RESERVED" -->
+    <em>MESSAGE 9:</em> This item is reserved for another patron.
+   <!-- TMPL_ELSIF NAME="circ_error_NOTSAMEBRANCH" -->
+    <em>MESSAGE 10:</em>
+   <!-- TMPL_ELSIF NAME="circ_error_EXPIRED" -->
+    <em>MESSAGE 11:</em> Your account has expired.
+   <!-- TMPL_ELSIF NAME="circ_error_DEBARRED" -->
+    <em>MESSAGE 12:</em> Your account has been suspended.
+   <!-- TMPL_ELSIF NAME="circ_error_CARD_LOST" -->
+    <em>MESSAGE 13:</em> This card has been declared lost.
+   <!-- TMPL_ELSIF NAME="circ_error_GNA" -->
+    <em>MESSAGE 14:</em>
+   <!-- TMPL_ELSIF NAME="circ_error_INVALID_DATE" -->
+    <em>MESSAGE 15:</em>
+   <!-- /TMPL_IF -->
+   Please see a member of the library staff.
+</p>
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="errorForm" method="post">
 <input type="hidden" name="op" value="login" />
 <input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />
@@ -104,6 +157,9 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_IF NAME="patronid" -->
 	<!-- TMPL_IF NAME="validuser" -->
 	<h3 class="warning">You are logged in as <!-- TMPL_VAR NAME="borrowername" -->.</h3>
+    <!-- TMPL_IF NAME="display_patron_image" -->
+        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->" alt="" />
+    <!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 	</div>
 	<!-- TMPL_IF NAME="nouser" -->
@@ -132,17 +188,20 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 
 	<div id="borrowerdetails">
 	<!-- TMPL_IF NAME="issues_count" -->
-	<table><caption>Issues for <!-- TMPL_VAR NAME='borrowername' --> <span class="count">(<!-- TMPL_VAR NAME="issues_count" --> total)</span></caption>
+	<table id="loanTable"><caption>Issues for <!-- TMPL_VAR NAME='borrowername' --> <span class="count">(<!-- TMPL_VAR NAME="issues_count" --> total)</span></caption>
 	<!-- ISSUES TABLE ROWS -->
+    <thead>
 	<tr><th>Title</th><th>Call No.</th><th>Due</th><th>Renew</th><!-- TMPL_UNLESS NAME="nofines" --><th>Fines</th><!-- /TMPL_UNLESS --></tr>
+    </thead>
 
+    <tbody>
 	<!-- TMPL_LOOP NAME="ISSUES" -->
 	<!-- TMPL_UNLESS name="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
     <!-- FIXME: yet another jacket image breakpoint -->
 	<td><!-- TMPL_IF NAME="amazonimages" --> <!-- TMPL_IF NAME="isbn" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a><!-- /TMPL_IF --> <!-- /TMPL_IF --><!-- TMPL_UNLESS NAME="noitemlinks" --><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_ELSE --><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong><!-- /TMPL_UNLESS --><span class="item-details">
 	<!-- TMPL_VAR NAME="author" --></span> (<!-- TMPL_VAR NAME="barcode" -->)</td>
 	<td><!-- TMPL_VAR NAME="itemcallnumber" DEFAULT="&nbsp;" --></td>
-	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due" --></td><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="overdue" --><td class="overdue"><!-- TMPL_VAR NAME="date_due_display" --></td><!-- TMPL_ELSE --><td><!-- TMPL_VAR NAME="date_due_display" --></td><!-- /TMPL_IF -->
 	<td>
     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
     <input type="hidden" name="op" value="checkout" />
@@ -158,6 +217,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	</td>
 	<!-- TMPL_UNLESS NAME="nofines" --><td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td><!-- /TMPL_UNLESS --></tr>
 	<!-- /TMPL_LOOP -->
+    </tbody>
 
 	</table>
 	<!-- TMPL_ELSE -->

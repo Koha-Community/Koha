@@ -597,7 +597,7 @@ WriteMakefile(
                             'Term::ANSIColor'                  => 1.10,
                             'Test'                             => 1.25,
                             'Test::Harness'                    => 2.56,
-                            'Test::More'                       => 0.62,
+                            'Test::More'                       => 0.80,
                             'Text::CSV'                        => 0.01,
                             'Text::CSV_XS'                     => 0.32,
                             'Text::Iconv'                      => 1.7,

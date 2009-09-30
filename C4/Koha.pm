@@ -966,20 +966,6 @@ sub displayServers {
     return \@primaryserverloop;
 }
 
-sub displaySecondaryServers {
-
-# 	my $secondary_servers_loop = [
-# 		{ inner_sup_servers_loop => [
-#         	{label => "Google", id=>"GOOG", value=>"google",icon => "google.ico",opensearch => "1"},
-#         	{label => "Yahoo", id=>"YAH", value=>"yahoo", icon =>"yahoo.ico", zed => "1"},
-#         	{label => "Worldcat", id=>"WCT", value=>"worldcat", icon => "worldcat.gif", zed => "1"},
-#         	{label => "Library of Congress", id=>"LOC", name=> "server", value=>"z3950.loc.gov:7090/Voyager", icon =>"loc.ico", zed => "1"},
-#     	],
-#     	},
-# 	];
-    return;    #$secondary_servers_loop;
-}
-
 =head2 GetAuthValCode
 
 $authvalcode = GetAuthValCode($kohafield,$frameworkcode);

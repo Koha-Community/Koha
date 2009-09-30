@@ -56,7 +56,11 @@
             <th>TOTAL</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_received" -->
+	<!-- TMPL_UNLESS NAME="__odd__" -->
+            <tr class="highlight">
+        <!-- TMPL_ELSE -->
             <tr>
+        <!-- /TMPL_UNLESS -->
                 <td><!-- TMPL_VAR NAME="quantityreceived" --></td>
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a>&nbsp; / &nbsp;<!-- TMPL_VAR NAME="ordernumber" --></td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
@@ -125,7 +129,11 @@
             <th>&nbsp;</th>
         </tr>
         <!-- TMPL_LOOP NAME="loop_orders" -->
+        <!-- TMPL_UNLESS NAME="__odd__" -->
+            <tr class="highlight">
+        <!-- TMPL_ELSE -->
             <tr>
+        <!-- /TMPL_UNLESS -->
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a></td>
                 <td>
                   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>

@@ -25,7 +25,7 @@ use C4::Context;
 use C4::Serials;
 
 my $query = new CGI;
-my $op = $query->param('op');
+my $op = $query->param('op') || q{};
 my $dbh = C4::Context->dbh;
 my $subscriptionid = $query->param('subscriptionid');
 my $auser = $query->param('user');

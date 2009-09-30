@@ -172,7 +172,7 @@ if ( $template_type && $template_type eq 'advsearch' ) {
     my $primary_servers_loop;# = displayPrimaryServers();
     $template->param(outer_servers_loop =>  $primary_servers_loop,);
     
-    my $secondary_servers_loop;# = displaySecondaryServers();
+    my $secondary_servers_loop;
     $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
 
     # set the default sorting
@@ -219,10 +219,11 @@ if ( $template_type && $template_type eq 'advsearch' ) {
 		$template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
 	}
 	# but let the user override it
-   	if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
-    	$template->param( expanded_options => $cgi->param('expanded_options'));
-	}
-
+	if (defined $cgi->param('expanded_options')) {
+   	    if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
+    	    $template->param( expanded_options => $cgi->param('expanded_options'));
+	    }
+        }
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
 }

@@ -78,13 +78,13 @@ function tagAdded() {
 	    });
 <!-- TMPL_IF NAME="RequestOnOpac" -->
         $(".holdsep").text("| ");
-        $(".hold").text("Place Hold");
+        $(".hold").text(_("Place Hold"));
 <!-- /TMPL_IF -->
   
         <!-- TMPL_IF NAME="TagsEnabled" -->
         <!-- TMPL_IF NAME="TagsInputOnList" -->
           $(".tagsep").text("| ");
-          $("#tagsel_tag").text("Tag");
+          $("#tagsel_tag").text(_("Tag"));
           $("#tagsel_button").click(function(){
               tagAdded();
               return false;
@@ -132,8 +132,8 @@ function tagAdded() {
 <!-- TMPL_IF NAME="loggedinusername" -->
      | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
 <!-- /TMPL_IF -->
-     <span class="holdsep"></span><a href="#" onclick="holdSel(); return false;">
-     <span class="hold"></span></a>
+     <span class="holdsep"></span>
+     <a href="#" onclick="holdSel(); return false;"><span class="hold"></span></a>
      <span class="tagsep"></span>
      <a href="#" onclick="tagSelected(); return false;"><span id="tagsel_tag"></span></a>
 </span>

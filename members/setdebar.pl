@@ -27,6 +27,7 @@ by oleonard@athenscounty.lib.oh.us
 =cut
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Context;
@@ -39,7 +40,7 @@ $flagsrequired->{borrowers} = 1;
 my ( $loggedinuser, $cookie, $sessionID ) =
   checkauth( $input, 0, $flagsrequired );
 
-my $destination    = $input->param("destination");
+my $destination    = $input->param("destination") || '';
 my $cardnumber     = $input->param("cardnumber");
 my $borrowernumber = $input->param('borrowernumber');
 my $status         = $input->param('status');

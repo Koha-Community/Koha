@@ -19,6 +19,7 @@
 
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
@@ -53,18 +54,18 @@ my $totspent    = 0;
 my $totcomtd    = 0;
 my $totavail    = 0;
 my @loop_budget = ();
-for ( my $i = 0 ; $i < $count ; $i++ ) {
+for my $r (@results) {
     my ( $spent, $comtd ) =
-      GetBookFundBreakdown( $results[$i]->{'bookfundid'} );
-    my $avail = $results[$i]->{'budgetamount'} - ( $spent + $comtd );
+      GetBookFundBreakdown( $r->{'bookfundid'} );
+    my $avail = $r->{'budgetamount'} - ( $spent + $comtd );
     my %line;
-    $line{bookfundname} = $results[$i]->{'bookfundname'};
-    $line{budgetamount} = $results[$i]->{'budgetamount'};
+    $line{bookfundname} = $r->{'bookfundname'};
+    $line{budgetamount} = $r->{'budgetamount'};
     $line{spent}        = sprintf( "%.2f", $spent );
     $line{comtd}        = sprintf( "%.2f", $comtd );
     $line{avail}        = sprintf( "%.2f", $avail );
     push @loop_budget, \%line;
-    $total    += $results[$i]->{'budgetamount'};
+    $total    += $r->{'budgetamount'};
     $totspent += $spent;
     $totcomtd += $comtd;
     $totavail += $avail;
@@ -72,20 +73,19 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 
 #currencies
 my @rates = GetCurrencies();
-$count = scalar @rates;
 
-my @loop_currency = ();
-for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my %line;
-    $line{currency} = $rates[$i]->{'currency'};
-    $line{rate}     = $rates[$i]->{'rate'};
-    push @loop_currency, \%line;
+my $loop_currency = [];
+for my $r (@rates) {
+    push @{$loop_currency}, {
+        currency => $r->{'currency'},
+        rate     => $r->{'rate'},
+    };
 }
 $template->param(
     classlist     => $classlist,
     type          => 'intranet',
     loop_budget   => \@loop_budget,
-    loop_currency => \@loop_currency,
+    loop_currency => $loop_currency,
     total         => sprintf( "%.2f", $total ),
     totspent      => sprintf( "%.2f", $totspent ),
     totcomtd      => sprintf( "%.2f", $totcomtd ),

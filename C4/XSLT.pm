@@ -124,7 +124,15 @@ sub XSLTParse4Display {
     #return $record->as_formatted();
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml();
-    $xmlrecord =~ s/\<\/record\>/$itemsxml\<\/record\>/;
+    my $sysxml = "<sysprefs>\n";
+    foreach my $syspref ( qw/OPACURLOpenInNewWindow DisplayOPACiconsXSLT URLLinkText/ ) {
+        $sysxml .= "<syspref name=\"$syspref\">" .
+                   C4::Context->preference( $syspref ) .
+                   "</syspref>\n";
+    }
+    $sysxml .= "</sysprefs>\n";
+    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
+
     my $parser = XML::LibXML->new();
     # don't die when you find &, >, etc
     $parser->recover_silently(1);

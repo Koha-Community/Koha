@@ -47,20 +47,20 @@
                                     </table>
                                 </form>
                                 <!-- TMPL_ELSE -->
-                                    <h2>There are no items in this batch yet</h2>
-                                    <div class="hint"><h3>Use the toolbar above to add items.</h3></div>
+                                    <div class="dialog message"><h4>There are no items in Batch <!-- TMPL_VAR NAME="batch_id" --> yet</h4>
+                                    <p>Use the toolbar above to add items.</p></div>
                                 <!-- /TMPL_IF -->
                             </div>
                             <!-- TMPL_IF NAME="err" -->
                             <div class="yui-u">
-                                <div class="alert">
-                                    <strong>WARNING: An error was encountered and <!-- TMPL_VAR NAME="errstr" --> Please have your system administrator check the error log for details.</strong>
+                                <div class="dialog alert">
+                                    <strong>WARNING:</strong> An error was encountered and <!-- TMPL_VAR NAME="errstr" --> Please have your system administrator check the error log for details.
                                 </div>
                             </div>
                             <!-- TMPL_ELSIF NAME="duplicate_message" -->
                             <div class="yui-u">
-                                <div class="dialog">
-                                    <strong><!-- TMPL_VAR NAME="duplicate_count" --> duplicate item(s) found and removed from batch <!-- TMPL_VAR NAME="batch_id" -->.</strong>
+                                <div class="dialog message">
+                                    <strong><!-- TMPL_VAR NAME="duplicate_count" --> duplicate item(s) found</strong> and removed from batch <!-- TMPL_VAR NAME="batch_id" -->.
                                 </div>
                             </div>
                             <!-- /TMPL_IF -->

@@ -1,5 +1,4 @@
 #!/usr/bin/perl
-# WARNING: 4-character tab stops here
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -45,6 +44,7 @@ Id of the subscription this script has to renew
 =cut
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Koha;
@@ -59,7 +59,7 @@ my $query = new CGI;
 my $dbh   = C4::Context->dbh;
 
 my $mode           = $query->param('mode');
-my $op             = $query->param('op');
+my $op             = $query->param('op') || q{};
 my $subscriptionid = $query->param('subscriptionid');
 my $done = 0;    # for after form has been submitted
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -79,14 +79,14 @@ if ( $op eq "renew" ) {
         $query->param('startdate'),  $query->param('numberlength'),
         $query->param('weeklength'), $query->param('monthlength'),
         $query->param('note')
-    );  
+    );
 }
 
 my $subscription = GetSubscription($subscriptionid);
 if ($subscription->{'cannotedit'}){
   warn "Attempt to renew subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
   print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-}  
+}
 
 $template->param(
     startdate => format_date(
@@ -99,12 +99,8 @@ $template->param(
     subscriptionid => $subscriptionid,
     bibliotitle    => $subscription->{bibliotitle},
     $op            => 1,
-    popup          => ($query->param('mode')eq "popup"),  
+    popup          => ($query->param('mode')eq "popup"),
 );
 
 # Print the page
 output_html_with_http_headers $query, $cookie, $template->output;
-
-# Local Variables:
-# tab-width: 4
-# End:

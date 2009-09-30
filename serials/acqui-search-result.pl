@@ -40,6 +40,7 @@ acqui-search-result.pl
 
 
 use strict;
+use warnings;
 use C4::Auth;
 use C4::Biblio;
 use C4::Output;
@@ -60,33 +61,33 @@ my ($template, $loggedinuser, $cookie)
 
 my $supplier=$query->param('supplier');
 my @suppliers = GetBookSeller($supplier);
-my $count = scalar @suppliers;
+#my $count = scalar @suppliers;
 
 #build result page
-my @loop_suppliers;
-for (my $i=0; $i<$count; $i++) {
-    my $orders = GetPendingOrders($suppliers[$i]->{'id'});
-    my $ordcount = scalar @$orders;
+my $loop_suppliers = [];
+for my $s (@suppliers) {
+    my $orders = GetPendingOrders($s->{'id'});
     
-    my %line;
-    $line{aqbooksellerid} =$suppliers[$i]->{'id'};
-    $line{name} = $suppliers[$i]->{'name'};
-    $line{active} = $suppliers[$i]->{'active'};
-    my @loop_basket;
-    for (my $i2=0;$i2<$ordcount;$i2++){
-        my %inner_line;
-        $inner_line{basketno} =$orders->[$i2]->{'basketno'};
-        $inner_line{total} =$orders->[$i2]->{'count(*)'};
-        $inner_line{authorisedby} = $orders->[$i2]->{'authorisedby'};
-        $inner_line{creationdate} = format_date($orders->[$i2]->{'creationdate'});
-        $inner_line{closedate} = format_date($orders->[$i2]->{'closedate'});
-        push @loop_basket, \%inner_line;
+    my $loop_basket = [];
+    for my $ord ( @{$orders} ) {
+        push @{$loop_basket}, {
+            basketno     => $ord->{'basketno'},
+            total        => $ord->{'count(*)'},
+            authorisedby => $ord->{'authorisedby'},
+            creationdate => format_date($ord->{'creationdate'}),
+            closedate    => format_date($ord->{'closedate'}),
+        };
     }
-    $line{loop_basket} = \@loop_basket;
-    push @loop_suppliers, \%line;
+    push @{$loop_suppliers}, {
+        loop_basket => $loop_basket,
+        aqbooksellerid => $s->{'id'},
+        name => $s->{'name'},
+        active => $s->{'active'},
+    };
 }
-$template->param(loop_suppliers => \@loop_suppliers,
+
+$template->param(loop_suppliers => $loop_suppliers,
                         supplier => $supplier,
-                        count => $count);
+                        count => scalar @suppliers);
 
 output_html_with_http_headers $query, $cookie, $template->output;

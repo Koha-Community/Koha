@@ -653,8 +653,18 @@ if ( C4::Context->preference("memberofinstitution") ) {
     );
 }
 
+my $lib_messages_loop = GetMessages( $borrowernumber, 'L', $branch );
+if($lib_messages_loop){ $template->param(flagged => 1 ); }
+
+my $bor_messages_loop = GetMessages( $borrowernumber, 'B', $branch );
+if($bor_messages_loop){ $template->param(flagged => 1 ); }
+
+
 $template->param(
     issued_itemtypes_count_loop => \@issued_itemtypes_count_loop,
+    lib_messages_loop		=> $lib_messages_loop,
+    bor_messages_loop		=> $bor_messages_loop,
+    all_messages_del		=> C4::Context->preference('AllowAllMessageDeletion'),
     findborrower                => $findborrower,
     borrower                    => $borrower,
     borrowernumber              => $borrowernumber,
@@ -707,6 +717,17 @@ if ($stickyduedate) {
 my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
 
+# get authorised values with type of BOR_NOTES
+my @canned_notes;
+my $dbh = C4::Context->dbh;
+my $sth = $dbh->prepare('SELECT * FROM authorised_values WHERE category = "BOR_NOTES"');
+$sth->execute();
+while ( my $row = $sth->fetchrow_hashref() ) {
+  push @canned_notes, $row;
+}
+if ( scalar( @canned_notes ) ) {
+  $template->param( canned_bor_notes_loop => \@canned_notes );
+}
 
 $template->param(
     debt_confirmed            => $debt_confirmed,

@@ -2,7 +2,7 @@
 # script to update all translations
 use strict;
 use warnings;
-use lib '/home/jmf/repos/koha-rm-test.git';
+use lib '/home/chris/git/koha.git';
 use C4::Languages;
 # Go through the theme/module combinations we need to update.
 my $dir = "po";

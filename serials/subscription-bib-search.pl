@@ -48,6 +48,7 @@ to multipage gestion.
 
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Koha;
@@ -59,7 +60,7 @@ use C4::Biblio;
 
 my $input=new CGI;
 # my $type=$query->param('type');
-my $op = $input->param('op');
+my $op = $input->param('op') || q{};
 my $dbh = C4::Context->dbh;
 
 my $startfrom=$input->param('startfrom');
@@ -77,7 +78,7 @@ if ($op eq "do_search" && $query) {
         my $index = C4::Context->preference("item-level_itypes") ? 'itype' : 'itemtype';
         $query .= " AND $index=$itemtypelimit";
     }
-    
+
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 20 if(!defined $resultsperpage);
 
@@ -91,7 +92,7 @@ if ($op eq "do_search" && $query) {
         exit;
     }
     my @results;
-    
+
     for(my $i=0;$i<$total;$i++) {
         my %resultsloop;
         my $marcrecord = MARC::File::USMARC::decode($marcrecords->[$i]);
@@ -108,7 +109,7 @@ if ($op eq "do_search" && $query) {
 
         push @results, \%resultsloop;
     }
-    
+
     ($template, $loggedinuser, $cookie)
         = get_template_and_user({template_name => "serials/result.tmpl",
                 query => $input,
@@ -144,7 +145,7 @@ if ($op eq "do_search" && $query) {
             }
         }
     }
-    
+
     my $from = 0;
     $from = $startfrom*$resultsperpage+1 if($total_hits > 0);
     my $to;

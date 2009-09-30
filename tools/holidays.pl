@@ -17,6 +17,8 @@
 
 #####Sets holiday periods for each branch. Datedues will be extended if branch is closed -TG
 use strict;
+use warnings;
+
 use CGI;
 
 use C4::Auth;

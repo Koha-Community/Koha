@@ -70,11 +70,12 @@ else {
     }
 }
 my $from=$query->param('from');
-if ($from eq 'borrower'){
-  print $query->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrower[0]");
- } elsif ($from eq 'circ'){
-  print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
- } else {
+$from ||= q{};
+if ( $from eq 'borrower'){
+    print $query->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrower[0]");
+} elsif ( $from eq 'circ'){
+    print $query->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrower[0]");
+} else {
      my $url = "/cgi-bin/koha/reserve/request.pl?";
      if ($multi_hold) {
          $url .= "multi_hold=1&biblionumbers=$biblionumbers";

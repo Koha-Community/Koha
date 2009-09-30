@@ -5,6 +5,8 @@
 #converted to using templates 3/16/03 by mwhansen@hmc.edu
 
 use strict;
+use warnings;
+
 use C4::Auth;
 use C4::Output;
 use C4::Context;

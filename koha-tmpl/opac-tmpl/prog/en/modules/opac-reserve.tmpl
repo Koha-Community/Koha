@@ -243,7 +243,7 @@
 		  <th>Hold Starts on Date</th>
 		  <!-- /TMPL_IF -->
                   <!-- TMPL_IF NAME="OPACItemHolds" -->
-                    <th id="place_on_hdr" style="display:none">Place On:</th>
+                    <th id="place_on_hdr" style="display:none">Place On</th>
                   <!-- /TMPL_IF -->
                   <!-- TMPL_UNLESS NAME="singleBranchMode" -->
                     <th>Pickup Location</th>
@@ -419,6 +419,9 @@
                               <th>Last Location</th>
                             <!-- /TMPL_UNLESS -->
                             <th>Call Number</th>
+                            <!-- TMPL_IF NAME="itemdata_enumchron" -->
+                              <th>Vol Info</th>
+                            <!-- /TMPL_IF -->
                             <th>Information</th>
                           </tr>
 
@@ -430,7 +433,7 @@
                                          value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                                 <!-- TMPL_ELSE -->
                                   <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-                                  <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
+                                  <img src="/opac-tmpl/<!-- TMPL_VAR NAME="theme" -->/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
                                 <!-- /TMPL_IF --> <!-- TMPL_IF NAME="copynumber" --><!-- TMPL_VAR NAME="copynumber" --><!-- /TMPL_IF -->
                               </td>
                               <!-- TMPL_IF NAME="item-level_itypes" -->
@@ -445,6 +448,9 @@
                                 <td><!-- TMPL_VAR NAME="holdingBranchName" --></td>
                               <!-- /TMPL_UNLESS -->
                               <td><!-- TMPL_VAR NAME="callNumber" --></td>
+                              <!-- TMPL_IF NAME="itemdata_enumchron" --><!-- test -->
+                                <td><!-- TMPL_VAR NAME="enumchron" --></td>
+                              <!-- /TMPL_IF -->
                               <td>
                                 <!-- TMPL_IF NAME="date_due" -->
                                   <span class="checkedout">Due <!-- TMPL_VAR NAME="date_due" --></span>

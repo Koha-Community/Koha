@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Serials;
@@ -44,7 +45,10 @@ foreach (keys %$letters){
 }
 
 my $letter=((scalar(@letters)>1) || ($letters[0]->{name}||$letters[0]->{code}));
-my ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order) if $supplierid;
+my ($count2, @missingissues);
+if ($supplierid) {
+    ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order);
+}
 
 my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
 			-id        => 'supplierid',
@@ -58,13 +62,13 @@ my ($singlesupplier,@supplierinfo);
 if($supplierid){
    (@supplierinfo)=GetBookSeller($supplierid);
 } else { # set up supplierid for the claim links out of main table if all suppliers is chosen
-   for(my $i=0; $i<@missingissues;$i++){
-       $missingissues[$i]->{'supplierid'} = getsupplierbyserialid($missingissues[$i]->{'serialid'});
+   for my $mi (@missingissues){
+       $mi->{supplierid} = getsupplierbyserialid($mi->{serialid});
    }
 }
 
 my $preview=0;
-if($op eq 'preview'){
+if($op && $op eq 'preview'){
     $preview = 1;
 } else {
     my @serialnums=$input->param('serialid');

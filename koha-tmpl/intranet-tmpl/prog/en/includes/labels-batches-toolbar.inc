@@ -169,11 +169,11 @@
         //]]>
     </script>
     <ul class="toolbar">
-        <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li>
+        <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li><!-- TMPL_IF NAME="table_loop" -->
         <li id="removeitemsc"><a id="removeitems" href="#">Remove Item(s)</a></li>
         <li id="deletebatchc"><a id="deletebatch" href="#">Delete Batch</a></li>
         <li id="deduplicatec"><a id="deduplicate" href="#">Remove Duplicates</a></li>
         <li id="exportitemsc"><a id="exportitems" href="#">Export Item(s)</a></li>
-        <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li>
+        <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li><!-- /TMPL_IF -->
     </ul>
 </div>

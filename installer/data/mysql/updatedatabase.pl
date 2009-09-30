@@ -2644,6 +2644,37 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Added primary keys to language tables)\n";
 }
 
+$DBversion = '3.01.00.059';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('DisplayOPACiconsXSLT', '1', '', 'If ON, displays the format, audience, type icons in XSLT MARC21 results and display pages.', 'YesNo')");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (added DisplayOPACiconsXSLT sysprefs)\n";
+}
+
+$DBversion = '3.01.00.060';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowAllMessageDeletion','0','Allow any Library to delete any message','','YesNo');");
+    $dbh->do('DROP TABLE IF EXISTS messages');
+    $dbh->do("CREATE TABLE messages ( `message_id` int(11) NOT NULL auto_increment,
+        `borrowernumber` int(11) NOT NULL,
+        `branchcode` varchar(4) default NULL,
+        `message_type` varchar(1) NOT NULL,
+        `message` text NOT NULL,
+        `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (`message_id`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+	print "Upgrade to $DBversion done ( Added AllowAllMessageDeletion syspref and messages table )\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.061';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('ShowPatronImageInWebBasedSelfCheck', '0', 'If ON, displays patron image when a patron uses web-based self-checkout', '', 'YesNo')");
+	print "Upgrade to $DBversion done ( Added ShowPatronImageInWebBasedSelfCheck system preference )\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

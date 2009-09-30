@@ -21,6 +21,7 @@ use CGI;
 
 use C4::Auth;
 use C4::Koha;
+use C4::Dates qw/format_date/;
 use C4::Circulation;
 use C4::Reserves;
 use C4::Output;
@@ -85,10 +86,14 @@ elsif ( $op eq "checkout" ) {
 
         # FIXME  we assume only one error.
         $template->param(
-            impossible => $issue_error,
-            title      => $item->{title},
-            hide_main  => 1,
+            impossible                => $issue_error,
+            "circ_error_$issue_error" => 1,
+            title                     => $item->{title},
+            hide_main                 => 1,
         );
+        if ($issue_error eq 'DEBT') {
+            $template->param(amount => $impossible->{DEBT});
+        }
         #warn "issue_error: " . $issue_error ;
         if ( $issue_error eq "NO_MORE_RENEWALS" ) {
             $return_only = 1;
@@ -113,9 +118,11 @@ elsif ( $op eq "checkout" ) {
         }
     } elsif ( $confirm_required && !$confirmed ) {
         #warn "failed confirmation";
+        my $issue_error = (keys %$needconfirm)[0];
         $template->param(
-            impossible => (keys %$needconfirm)[0],
-            hide_main  => 1,
+            impossible                => (keys %$needconfirm)[0],
+            "circ_error_$issue_error" => 1,
+            hide_main                 => 1,
         );
     } else {
         if ( $confirmed || $issuenoconfirm ) {    # we'll want to call getpatroninfo again to get updated issues.
@@ -146,6 +153,7 @@ if ($borrower->{cardnumber}) {
     my @issues;
     my ($issueslist) = GetPendingIssues( $borrower->{'borrowernumber'} );
     foreach my $it (@$issueslist) {
+        $it->{date_due_display} = format_date($it->{date_due});
         my ($renewokay, $renewerror) = CanBookBeIssued($borrower, $it->{'barcode'},'','');
         $it->{'norenew'} = 1 if $renewokay->{'NO_MORE_RENEWALS'};
         push @issues, $it;
@@ -164,7 +172,17 @@ if ($borrower->{cardnumber}) {
     $template->param(
         inputfocus => $inputfocus,
 		nofines => 1,
+        "dateformat_" . C4::Context->preference('dateformat') => 1,
     );
+    if (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
+        my ($image, $dberror) = GetPatronImage($borrower->{cardnumber});
+        if ($image) {
+            $template->param(
+                display_patron_image => 1,
+                cardnumber           => $borrower->{cardnumber},
+            );
+        }
+    }
 } else {
     $template->param(
         patronid   => $patronid,

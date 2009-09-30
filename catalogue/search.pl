@@ -261,7 +261,7 @@ if ( $template_type eq 'advsearch' ) {
     my $primary_servers_loop;# = displayPrimaryServers();
     $template->param(outer_servers_loop =>  $primary_servers_loop,);
     
-    my $secondary_servers_loop;# = displaySecondaryServers();
+    my $secondary_servers_loop;
     $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
 
     # set the default sorting

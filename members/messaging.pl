@@ -19,6 +19,8 @@
 
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Context;
 use C4::Auth;
@@ -62,7 +64,7 @@ my $branch         = C4::Context->userenv->{'branch'};
 
 $template->param( $borrower );
 
-my $borrower = GetMemberDetails( $borrowernumber );
+$borrower = GetMemberDetails( $borrowernumber );
 
 
     if ( $borrower->{'category_type'} eq 'C') {

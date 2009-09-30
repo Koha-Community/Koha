@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-#wrriten 11/1/2000 by chris@katipo.oc.nz
+#written 11/1/2000 by chris@katipo.oc.nz
 #script to display borrowers account details
 
 
@@ -22,6 +22,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Auth;
 use C4::Output;
 use CGI;
@@ -34,13 +36,14 @@ my $input=new CGI;
 
 my $borrowernumber=$input->param('borrowernumber');
 
+
 # get borrower details
 my $data=GetMember($borrowernumber,'borrowernumber');
 my $add=$input->param('add');
 if ($add){
 #  print $input->header;
     my $barcode=$input->param('barcode');
-	my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
+    my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
     my $desc=$input->param('desc');
     my $amount=$input->param('amount');
     my $type=$input->param('type');
@@ -75,6 +78,16 @@ if ($add){
 					debug => 1,
 					});
 					
+  # get authorised values with type of MANUAL_INV
+  my @invoice_types;
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare('SELECT * FROM authorised_values WHERE category = "MANUAL_INV"');
+  $sth->execute();
+  while ( my $row = $sth->fetchrow_hashref() ) {
+    push @invoice_types, $row;
+  }
+  $template->param( invoice_types_loop => \@invoice_types );
+
     if ( $data->{'category_type'} eq 'C') {
         my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
         my $cnt = scalar(@$catcodes);

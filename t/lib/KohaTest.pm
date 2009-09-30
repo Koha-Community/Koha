@@ -83,106 +83,6 @@ these are run once, at the beginning of the whole test suite
 sub startup_15_truncate_tables : Test( startup => 1 ) {
     my $self = shift;
     
-#     my @truncate_tables = qw( accountlines 
-#                               accountoffsets              
-#                               action_logs                 
-#                               alert                       
-#                               aqbasket                    
-#                               aqbookfund                  
-#                               aqbooksellers               
-#                               aqbudget                    
-#                               aqorderbreakdown            
-#                               aqorderdelivery             
-#                               aqorders                    
-#                               auth_header                 
-#                               auth_subfield_structure     
-#                               auth_tag_structure          
-#                               auth_types                  
-#                               authorised_values           
-#                               biblio                      
-#                               biblio_framework            
-#                               biblioitems                 
-#                               borrowers                   
-#                               branchcategories            
-#                               branches                    
-#                               branchrelations             
-#                               branchtransfers             
-#                               browser                     
-#                               categories                  
-#                               cities                      
-#                               class_sort_rules            
-#                               class_sources               
-#                               currency                    
-#                               deletedbiblio               
-#                               deletedbiblioitems          
-#                               deletedborrowers            
-#                               deleteditems                
-#                               ethnicity                   
-#                               import_batches              
-#                               import_biblios              
-#                               import_items                
-#                               import_record_matches       
-#                               import_records              
-#                               issues                      
-#                               issuingrules                
-#                               items                       
-#                               itemtypes                   
-#                               labels                      
-#                               labels_conf                 
-#                               labels_profile              
-#                               labels_templates            
-#                               language_descriptions       
-#                               language_rfc4646_to_iso639  
-#                               language_script_bidi        
-#                               language_script_mapping     
-#                               language_subtag_registry    
-#                               letter                      
-#                               marc_matchers               
-#                               marc_subfield_structure     
-#                               marc_tag_structure          
-#                               matchchecks                 
-#                               matcher_matchpoints         
-#                               matchpoint_component_norms  
-#                               matchpoint_components       
-#                               matchpoints                 
-#                               notifys                     
-#                               nozebra                     
-#                               old_issues                  
-#                               old_reserves                
-#                               opac_news                   
-#                               overduerules                
-#                               patroncards                 
-#                               patronimage                 
-#                               printers                    
-#                               printers_profile            
-#                               repeatable_holidays         
-#                               reports_dictionary          
-#                               reserveconstraints          
-#                               reserves                    
-#                               reviews                     
-#                               roadtype                    
-#                               saved_reports               
-#                               saved_sql                   
-#                               serial                      
-#                               serialitems                 
-#                               services_throttle           
-#                               sessions                    
-#                               special_holidays            
-#                               statistics                  
-#                               stopwords                   
-#                               subscription                
-#                               subscriptionhistory         
-#                               subscriptionroutinglist     
-#                               suggestions                 
-#                               systempreferences           
-#                               tags                        
-#                               userflags                   
-#                               virtualshelfcontents        
-#                               virtualshelves              
-#                               z3950servers                
-#                               zebraqueue                  
-#                         );
-
     my @truncate_tables = qw( accountlines 
                               accountoffsets              
                               alert                       
@@ -204,8 +104,9 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
                               ethnicity                   
                               issues                      
                               issuingrules                
-                              labels                      
-                              labels_profile              
+                              labels_batches
+                              labels_layouts
+                              labels_templates
                               matchchecks                 
                               notifys                     
                               nozebra                     

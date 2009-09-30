@@ -133,7 +133,6 @@ if ($count>$resultsperpage){
 }
 my @loopres;
 
-my $hilighted=0;
 for (my $i=$startfrom;$i<=($startfrom+$resultsperpage-1<$count-1?$startfrom+$resultsperpage-1:$count-1);$i++){
 
     my %cell;
@@ -146,8 +145,6 @@ for (my $i=$startfrom;$i<=($startfrom+$resultsperpage-1<$count-1?$startfrom+$res
     $cell{bibcount}=$results[$i]->{biblio};
     $cell{reccount}=$results[$i]->{itemsreceived};
     $cell{itemcount}=$results[$i]->{itemsexpected};
-    $cell{hilighted} = $hilighted%2;
-    $hilighted++;
     push @loopres, \%cell;
 }
 $template->param(searchresults=>\@loopres, count=>$count) if ($count);

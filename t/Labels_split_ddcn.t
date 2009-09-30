@@ -1,32 +1,56 @@
 #!/usr/bin/perl
 #
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
 # for context, see http://bugs.koha.org
 
 use strict;
 use warnings;
 
-use Test::More tests => 82;
+use Test::More;
 
 BEGIN {
-    use_ok('C4::Labels');
+    our $ddcns = {};
+    if ($ARGV[0]) {
+        BAIL_OUT("USAGE: perl Labels_split_ddcn.t '621.3828 J28l' '621.3828,J28l'") unless $ARGV[1];
+        $ddcns = {$ARGV[0] => [split (/,/,$ARGV[1])],};
+    }
+    else {
+        $ddcns = {
+            'R220.3 H2793Z H32 c.2' => [qw(R 220.3 H2793Z H32 c.2)],
+            'CD-ROM 787.87 EAS'     => [qw(CD-ROM 787.87 EAS)],
+            '252.051 T147 v.1-2'    => [qw(252.051 T147 v.1-2)],
+        };
+    }
+    my $test_num = 1;
+    foreach (keys(%$ddcns)) {
+        my $split_num += scalar(@{$ddcns->{$_}});
+        $test_num += 2 * $split_num;
+        $test_num += 4;
+    }
+    plan tests => $test_num;
+    use_ok('C4::Labels::Label');
+    use vars qw($ddcns);
 }
-ok(defined C4::Labels::split_ddcn, 'C4::Labels::split_ddcn defined');
-
-my $ddcns = {
-    'BIO JP2 R5c.1'         => [qw(BIO JP2 R5 c.1 )],
-    'FIC GIR J5c.1'         => [qw(FIC GIR J5 c.1 )],
-    'J DAR G7c.11'          => [qw( J  DAR G7 c.11)],
-    'R220.3 H2793Z H32 c.2' => [qw(R 220.3 H2793Z H32 c.2)],
-    'CD-ROM 787.87 EAS'     => [qw(CD-ROM 787.87 EAS)],
-    'MP3-CD F PARKER'       => [qw(MP3-CD F PARKER)],
-    '252.051 T147 v.1-2'    => [qw(252.051 T147 v.1-2)],
-};
 
 foreach my $ddcn (sort keys %$ddcns) {
     my (@parts, @expected);
     ok($ddcn, "ddcn: $ddcn");
     ok(@expected = @{$ddcns->{$ddcn}}, "split expected to produce " . scalar(@expected) . " pieces");
-    ok(@parts = C4::Labels::split_ddcn($ddcn), "C4::Labels::split_ddcn($ddcn)");
+    ok(@parts = C4::Labels::Label::_split_ddcn($ddcn), "C4::Labels::Label::_split_ddcn($ddcn)");
     ok(scalar(@expected) == scalar(@parts), sprintf("%d of %d pieces produced", scalar(@parts), scalar(@expected)));
     my $i = 0;
     foreach my $unit (@expected) {
@@ -36,4 +60,3 @@ foreach my $ddcn (sort keys %$ddcns) {
         $i++;
     }
 }
-

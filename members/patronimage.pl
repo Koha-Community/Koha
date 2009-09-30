@@ -21,6 +21,8 @@
 #
 
 use strict;
+use warnings;
+
 use CGI; #qw(:standard escapeHTML);
 use C4::Context;
 use C4::Members;
@@ -33,7 +35,7 @@ my $cardnumber;
 
 =head1 NAME
 
-patronimage.pl - Script for retrieving and formating Koha patron images for display
+patronimage.pl - Script for retrieving and formatting Koha patron images for display
 
 =head1 SYNOPSIS
 

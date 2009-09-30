@@ -21,6 +21,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Auth;
 use C4::Output;
 use CGI;
@@ -34,7 +36,7 @@ my $input=new CGI;
 my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
 my $data=GetMember($borrowernumber,'borrowernumber');
-my $order=$input->param('order');
+my $order=$input->param('order') || '';
 my $order2=$order;
 if ($order2 eq ''){
   $order2="date_due desc";

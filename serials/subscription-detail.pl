@@ -16,6 +16,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Koha;
@@ -24,25 +25,23 @@ use C4::Serials;
 use C4::Output;
 use C4::Context;
 use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
-#use Date::Manip;
+use Carp;
 
 my $query = new CGI;
-my $op = $query->param('op');
+my $op = $query->param('op') || q{};
 my $dbh = C4::Context->dbh;
-my $sth;
-# my $id;
 my ($template, $loggedinuser, $cookie, $hemisphere);
 my $subscriptionid = $query->param('subscriptionid');
-my $subs = &GetSubscription($subscriptionid);
+my $subs = GetSubscription($subscriptionid);
 
 $subs->{enddate} = GetExpirationDate($subscriptionid);
 
-if ($op eq 'del') {
+if ( $op eq 'del') {
 	if ($subs->{'cannotedit'}){
-		warn "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+		carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
 		print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-	}  
-	&DelSubscription($subscriptionid);
+	}
+	DelSubscription($subscriptionid);
 	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
 	exit;
 }
@@ -75,24 +74,34 @@ $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 
 $template->param($subs);
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});
+my @irregular_issues = split /,/, $subs->{irregularity};
 
+if (! $subs->{numberpattern}) {
+    $subs->{numberpattern} = q{};
+}
+if (! $subs->{dow}) {
+    $subs->{dow} = q{};
+}
+if (! $subs->{periodicity}) {
+    $subs->{periodicity} = '0';
+}
 $template->param(
 	subscriptionid => $subscriptionid,
     routing => $routing,
     serialslist => \@serialslist,
     totalissues => $totalissues,
     hemisphere => $hemisphere,
-    cannotedit =>(C4::Context->preference('IndependantBranches') && 
-                C4::Context->userenv && 
-                C4::Context->userenv->{flags} % 2 !=1  && 
+    cannotedit =>(C4::Context->preference('IndependantBranches') &&
+                C4::Context->userenv &&
+                C4::Context->userenv->{flags} % 2 !=1  &&
                 C4::Context->userenv->{branch} && $subs->{branchcode} &&
                 (C4::Context->userenv->{branch} ne $subs->{branchcode})),
-    "periodicity".($subs->{periodicity}?$subs->{periodicity}:'0') => 1,
-    "arrival".$subs->{dow} => 1,
-    "numberpattern".$subs->{numberpattern} => 1,
-    intranetstylesheet => C4::Context->preference("intranetstylesheet"),
-    intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"), 
-    irregular_issues => scalar(split(/,/,$subs->{irregularity})),
+    'periodicity' . $subs->{periodicity} => 1,
+    'arrival' . $subs->{dow} => 1,
+    'numberpattern' . $subs->{numberpattern} => 1,
+    intranetstylesheet => C4::Context->preference('intranetstylesheet'),
+    intranetcolorstylesheet => C4::Context->preference('intranetcolorstylesheet'),
+    irregular_issues => scalar @irregular_issues,
     );
 
 output_html_with_http_headers $query, $cookie, $template->output;

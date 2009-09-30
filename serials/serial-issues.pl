@@ -42,6 +42,7 @@ the biblionumber this script has to give more infos.
 =cut
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Koha;
@@ -57,7 +58,6 @@ my $selectview = $query->param('selectview');
 $selectview = C4::Context->preference("SubscriptionHistory") unless $selectview;
 
 my $sth;
-# my $id;
 my ($template, $loggedinuser, $cookie);
 my $biblionumber = $query->param('biblionumber');
 if ($selectview eq "full"){
@@ -75,10 +75,10 @@ if ($selectview eq "full"){
 	 flagsrequired => {serials => 1},
      debug => 1,
      });
- 
+
  # replace CR by <br> in librarian note
  # $subscription->{opacnote} =~ s/\n/\<br\/\>/g;
- 
+
     $template->param(
         biblionumber => $query->param('biblionumber'),
         years => $subscriptions,

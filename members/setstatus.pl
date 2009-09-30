@@ -23,6 +23,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Context;
@@ -36,11 +37,11 @@ my $flagsrequired;
 $flagsrequired->{borrowers}=1;
 my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
 
-my $destination = $input->param("destination");
+my $destination = $input->param("destination") || '';
 my $cardnumber = $input->param("cardnumber");
 my $borrowernumber=$input->param('borrowernumber');
 my $status = $input->param('status');
-my $reregistration = $input->param('reregistration');
+my $reregistration = $input->param('reregistration') || '';
 
 my $dbh = C4::Context->dbh;
 my $dateexpiry;
