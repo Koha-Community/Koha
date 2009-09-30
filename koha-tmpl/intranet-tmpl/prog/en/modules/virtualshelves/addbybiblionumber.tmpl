@@ -68,17 +68,19 @@
   </h4>
 <!-- /TMPL_UNLESS -->
 
-<!-- TMPL_IF NAME="CGIvirtualshelves" --><form name="f1" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
+<!-- TMPL_IF NAME="CGIvirtualshelves" --><!-- TMPL_UNLESS NAME="newshelf" --><form name="f1" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
     <!-- TMPL_UNLESS NAME="biblionumbers" -->
       <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <!-- TMPL_ELSE -->
       <input type="hidden" name="biblionumbers" value="<!-- TMPL_VAR NAME="biblionumbers" -->" />
     <!-- /TMPL_UNLESS -->
+    <input type="hidden" name="confirmed" value="1" /></fieldset>
     <fieldset class="rows">
     <legend>Select an existing list</legend>
     <ol>
         <li><label>Choose list</label><!-- TMPL_VAR NAME="CGIvirtualshelves" --></li>
     </ol>
+    <!-- TMPL_LOOP NAME="biblios" --><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
     <!-- TMPL_UNLESS NAME="biblionumbers" -->
       <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
     <!-- TMPL_ELSE -->
@@ -87,31 +89,34 @@
     <fieldset class="action"><input type="submit" value="Save" class="submit" /></fieldset>
 	</fieldset>
 </form>
-<h4>...or...</h4><!-- /TMPL_IF -->
-
+<h4>...or...</h4><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
+<!-- TMPL_UNLESS NAME="shelfnumber" -->
 <form name="f2" method="post" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl">
     <fieldset class="rows"><legend>Add to a new list:</legend>
         <ol><li>
             <label for="newvirtualshelf">
                 List name:
             </label>
+            <!-- TMPL_LOOP NAME="biblios" --><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
             <!-- TMPL_UNLESS NAME="biblionumbers" -->
 			  <input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <!-- TMPL_ELSE -->
 			  <input type="hidden" name="biblionumbers" id="biblionumbers" value="<!-- TMPL_VAR NAME="biblionumbers" -->" />
             <!-- /TMPL_UNLESS -->
             <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
+	    <input type="hidden" name="confirmed" value="1" />
         </li>
         <li>
             <label for="category">Category:</label>
             <select name="category" id="category">
                 <option value="1">Private</option>
                 <option value="2">Public</option>
-				<option value="3">Free</option>
+		<option value="3">Free</option>
             </select>
         </li></ol>
     <fieldset class="action"><input type="submit" value="Save" class="submit" /></fieldset> </fieldset>
 </form>
+<!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
 </div>
 

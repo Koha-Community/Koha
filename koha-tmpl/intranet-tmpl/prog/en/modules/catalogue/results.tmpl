@@ -21,11 +21,6 @@ function verify_images() {
         }
     });
 }
-$(window).load(function() {
-    verify_images();
-});
-<!-- /TMPL_IF -->
-
 var q_array = new Array();  // will hold search terms, if present
 
 $(window).load(function() {
@@ -80,7 +75,7 @@ $(".addtocart").show();
                         return false;                   
                 } else if($("#addto").find("option:selected").attr("value") == "newlist"){
                         if (vShelfAdd()) {
-			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&confirm=1&' + vShelfAdd());
+			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
                         }
                         return false;   
                 }

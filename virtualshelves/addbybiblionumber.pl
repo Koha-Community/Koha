@@ -50,6 +50,10 @@
 
     if this script has to add a shelf, it add one with this category.
 
+=item newshelf
+
+    if this parameter exists, then we create a new shelf
+
 =back
 
 =cut
@@ -102,6 +106,7 @@ my $biblionumbers   = $query->param('biblionumbers');
 
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
+my $newshelf        = $query->param('newshelf');
 my $category        = $query->param('category');
 my $sortfield	    = $query->param('sortfield');
 my $confirmed       = $query->param('confirmed') || 0;
@@ -124,8 +129,7 @@ if ($biblionumbers) {
     @biblionumbers = (@biblionumber);
 }
 
-$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield )
-  if $newvirtualshelf;
+$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield ) if $newvirtualshelf;
 if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
 
     if ($confirmed == 1) {
@@ -173,6 +177,7 @@ else {    # this shelf doesn't already exist.
         push( @shelvesloop, $shelf->{shelfnumber} );
         $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
     }
+
     if(@shelvesloop gt 0){
         my $CGIvirtualshelves = CGI::scrolling_list
           (
@@ -188,8 +193,23 @@ else {    # this shelf doesn't already exist.
            CGIvirtualshelves => $CGIvirtualshelves,
           );
     }
-    
-    unless ($biblionumbers) {
+   	my @biblios;
+        for my $bib (@biblionumber) {
+	    my $data = GetBiblioData( $bib );
+            push(@biblios,
+                        { biblionumber => $bib,
+                          title        => $data->{'title'},
+                          author       => $data->{'author'},
+                        } );
+        }
+    $template->param(
+           newshelf     => $newshelf,
+	   biblios=>\@biblios,
+           multiple     => (scalar(@biblionumber) > 1),
+           total        => scalar(@biblionumber),
+    );
+
+    unless (@biblionumbers) {
         my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
     
         $template->param
