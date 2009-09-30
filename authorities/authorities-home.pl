@@ -125,7 +125,7 @@ if ( $op eq "do_search" ) {
 
     $template->param(
         pagination_bar => pagination_bar(
-            $base_url,  int( $total / $resultsperpage ) + 1,
+            $base_url,  getnbpages( $total, $resultsperpage ),
             $startfrom, 'startfrom'
         ),
         total     => $total,

@@ -138,7 +138,7 @@ my $base_url =
 
 $template->param(
     paginationbar => pagination_bar(
-        $base_url,  int( $count / $resultsperpage ) + 1,
+        $base_url,  int( ($count - 1) / $resultsperpage ) + 1,
         $startfrom, 'startfrom'
     ),
     startfrom => $startfrom,
