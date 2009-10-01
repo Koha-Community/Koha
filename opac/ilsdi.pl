@@ -215,13 +215,13 @@ if ( $service and grep { $service eq $_ } @services ) {
 }
 
 # Output XML by passing the hashref to XMLOut
-print CGI::header('text/xml');
+print CGI::header('-type'=>'text/xml', '-charset'=>'utf-8');
 print XMLout(
     $out,
     noattr        => 1,
     noescape      => 1,
     nosort        => 1,
-    xmldecl       => '<?xml version="1.0" encoding="ISO-8859-1" ?>',
+    xmldecl       => '<?xml version="1.0" encoding="UTF-8" ?>',
     RootName      => $service,
     SuppressEmpty => 1
 );
