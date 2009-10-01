@@ -344,7 +344,7 @@ sub _filter_hash{
 	foreach my $field (grep {/\b($elements)\b/} keys %$filter_input){
 		## supposed to be a hash of simple values, hashes of arrays could be implemented
 		$$filter_input{$field}=format_date_in_iso($$filter_input{$field}) if ($$columns{$field}{Type}=~/date/ && $$filter_input{$field} !~C4::Dates->regexp("iso"));
-		my ($tmpkeys, $localvalues)=_Process_Operands($$filter_input{$field},$field,$searchtype,$columns);
+		my ($tmpkeys, $localvalues)=_Process_Operands($$filter_input{$field},"$tablename.$field",$searchtype,$columns);
 		if (@$tmpkeys){
 			push @values, @$localvalues;
 			push @keys, @$tmpkeys;
@@ -368,7 +368,7 @@ sub _filter_string{
 	my @localkeys;
 	foreach my $operand (@operands){
 		foreach my $field (@columns_filtered){
-			my ($tmpkeys, $localvalues)=_Process_Operands($operand,$field,$searchtype,$columns);
+			my ($tmpkeys, $localvalues)=_Process_Operands($operand,"$tablename.$field",$searchtype,$columns);
 			if ($tmpkeys){
 				push @values,@$localvalues;
 				push @localkeys,@$tmpkeys;
