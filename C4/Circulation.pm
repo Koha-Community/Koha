@@ -1312,10 +1312,11 @@ sub AddReturn {
 	$branch ||=C4::Context->userenv->{'branch'};
     
     # get information on item
-    my $iteminformation = GetItemIssue( GetItemnumberFromBarcode($barcode));
+    my $itemnumber = GetItemnumberFromBarcode($barcode);
+    my $iteminformation = GetItemIssue( $itemnumber );
     my $biblio = GetBiblioItemData($iteminformation->{'biblioitemnumber'});
 #     use Data::Dumper;warn Data::Dumper::Dumper($iteminformation);  
-    unless ($iteminformation->{'itemnumber'} ) {
+    unless ( $iteminformation->{'itemnumber'} or $itemnumber) {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
     } else {
@@ -1327,7 +1328,7 @@ sub AddReturn {
         
         # even though item is not on loan, it may still
         # be transferred; therefore, get current branch information
-        my $curr_iteminfo = GetItem($iteminformation->{'itemnumber'});
+        my $curr_iteminfo = GetItem($itemnumber);
         $iteminformation->{'homebranch'} = $curr_iteminfo->{'homebranch'};
         $iteminformation->{'holdingbranch'} = $curr_iteminfo->{'holdingbranch'};
         $iteminformation->{'itemlost'} = $curr_iteminfo->{'itemlost'};
@@ -1341,7 +1342,7 @@ sub AddReturn {
         }
 		
 		    # if independent branches are on and returning to different branch, refuse the return
-        if ($hbr ne $branch && C4::Context->preference("IndependantBranches")){
+        if ($hbr ne $branch && C4::Context->preference("IndependantBranches") && $iteminformation->{borrowernumber}){
 			  $messages->{'Wrongbranch'} = 1;
 			  $doreturn=0;
 		    }
@@ -1420,8 +1421,8 @@ sub AddReturn {
     
     # find reserves.....
     #     if we don't have a reserve with the status W, we launch the Checkreserves routine
-        my ( $resfound, $resrec ) =
-        C4::Reserves::CheckReserves( $iteminformation->{'itemnumber'} );
+        my ( $resfound, $resrec ) = 
+        C4::Reserves::CheckReserves( $itemnumber, $barcode );
         if ($resfound) {
             $resrec->{'ResFound'}   = $resfound;
             $messages->{'ResFound'} = $resrec;

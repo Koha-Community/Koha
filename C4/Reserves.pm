@@ -1314,17 +1314,43 @@ sub _Findgroupreserve {
                reserves.itemnumber          AS itemnumber
         FROM reserves
         JOIN biblioitems USING (biblionumber)
-        JOIN hold_fill_targets USING (biblionumber, borrowernumber)
+        JOIN hold_fill_targets USING (biblionumber, borrowernumber, itemnumber)
         WHERE found IS NULL
         AND priority > 0
-        AND holds_fill_targets.itemnumber = ?
+        AND hold_fill_targets.itemnumber = ?
 
     /;
     my $sth = $dbh->prepare($item_level_target_query);
     $sth->execute($itemnumber);
 	my $data = $sth->fetchall_arrayref({});
-    return @$data if ($data);
+    return @$data if (@$data);
 
+    # check for title-level targetted match
+    my $title_level_target_query = qq/
+        SELECT reserves.biblionumber        AS biblionumber,
+               reserves.borrowernumber      AS borrowernumber,
+               reserves.reservedate         AS reservedate,
+               reserves.branchcode          AS branchcode,
+               reserves.cancellationdate    AS cancellationdate,
+               reserves.found               AS found,
+               reserves.reservenotes        AS reservenotes,
+               reserves.priority            AS priority,
+               reserves.timestamp           AS timestamp,
+               biblioitems.biblioitemnumber AS biblioitemnumber,
+               reserves.itemnumber          AS itemnumber
+        FROM reserves
+        JOIN biblioitems USING (biblionumber)
+        JOIN hold_fill_targets USING (biblionumber, borrowernumber)
+        WHERE found IS NULL
+        AND priority > 0
+        AND item_level_request = 0
+        AND hold_fill_targets.itemnumber = ?
+    /;
+    $sth = $dbh->prepare($title_level_target_query);
+    $sth->execute($itemnumber);
+    $data = $sth->fetchall_arrayref({});
+    return @$data if (@$data);
+    
     my $query = qq/
         SELECT reserves.biblionumber               AS biblionumber,
                reserves.borrowernumber             AS borrowernumber,
@@ -1349,7 +1375,7 @@ sub _Findgroupreserve {
     $sth = $dbh->prepare($query);
     $sth->execute( $biblio, $bibitem, $itemnumber );
     $data = $sth->fetchall_arrayref({});
-    return @$data if ($data);
+    return @$data if (@$data);
 	return undef;
 }
 
