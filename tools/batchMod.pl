@@ -114,7 +114,7 @@ if ($op eq "action") {
 
 if ($op eq "show"){
 	my $filefh = $input->upload('uploadfile');
-	my $filecontent = $input->{'filecontent'};
+	my $filecontent = $input->param('filecontent');
 
     my @contentlist;
     if ($filefh){
