@@ -20,6 +20,8 @@ sub updateMarc {
     my $field;
     my $biblio = GetMarcBiblio($id);
 
+    return unless $biblio;
+
     if(!$biblio->field('099'))
     {
         $field = new MARC::Field('099','','',
