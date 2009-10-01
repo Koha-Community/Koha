@@ -6,7 +6,7 @@ my $dbh=C4::Context->dbh;
 
 $dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('EnableOpacSearchHistory', '1', '', 'Enable or disable opac search history', 'YesNo')");
 
-my $create = << END;
+my $create = <<END;
 CREATE TABLE IF NOT EXISTS `search_history` (
   `userid` int(11) NOT NULL,
   `sessionid` varchar(32) NOT NULL,
