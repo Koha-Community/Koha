@@ -652,7 +652,7 @@ sub GetSubscriptions {
 		my @sqlstrings;	
 		my @strings_to_search;
 		@strings_to_search=map {"%$_%"} split (/ /,$issn);
-		foreach my $index qw(biblioitems.issn){
+		foreach my $index qw(biblioitems.issn subscription.callnumber){
 				push @bind_params,@strings_to_search; 
 				my $tmpstring= "OR $index LIKE ? "x scalar(@strings_to_search);
 				$debug && warn "$tmpstring";
