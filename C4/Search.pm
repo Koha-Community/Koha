@@ -1439,33 +1439,49 @@ sub searchResults {
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
             my $summary = $itemtypes{ $oldbiblio->{itemtype} }->{summary};
             my @fields  = $marcrecord->fields();
-            foreach my $field (@fields) {
-                my $tag      = $field->tag();
-                my $tagvalue = $field->as_string();
-                if (! utf8::is_utf8($tagvalue)) {
-                    utf8::decode($tagvalue);
-                }
-
-                $summary =~
-                  s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
-                unless ( $tag < 10 ) {
-                    my @subf = $field->subfields;
-                    for my $i ( 0 .. $#subf ) {
-                        my $subfieldcode  = $subf[$i][0];
-                        my $subfieldvalue = $subf[$i][1];
-                        if (! utf8::is_utf8($subfieldvalue)) {
-                            utf8::decode($subfieldvalue);
-                        }
-                        my $tagsubf       = $tag . $subfieldcode;
-                        $summary =~
-s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+            
+            my $newsummary;
+            foreach my $line ( "$summary\n" =~ /(.*)\n/g ){
+                my $tags = {};
+                foreach my $tag ( $line =~ /\[(\d{3}[\w|\d])\]/ ) {
+                    $tag =~ /(.{3})(.)/;
+                    if($marcrecord->field($1)){
+                        my @abc = $marcrecord->field($1)->subfield($2);
+                        $tags->{$tag} = $#abc + 1 ;
                     }
                 }
+                
+                # We catch how many times to repeat this line
+                my $max = 0;
+                foreach my $tag (keys(%$tags)){
+                    $max = $tags->{$tag} if($tags->{$tag} > $max);
+                 }
+                
+                # we replace, and repeat each line
+                for (my $i = 0 ; $i < $max ; $i++){
+                    my $newline = $line;
+
+                    foreach my $tag ( $newline =~ /\[(\d{3}[\w|\d])\]/g ) {
+                        $tag =~ /(.{3})(.)/;
+                        
+                        if($marcrecord->field($1)){
+                            my @repl = $marcrecord->field($1)->subfield($2);
+                            my $subfieldvalue = $repl[$i];
+                            
+                            if (! utf8::is_utf8($subfieldvalue)) {
+                                utf8::decode($subfieldvalue);
+                            }
+ 
+                             $newline =~ s/\[$tag\]/$subfieldvalue/g;
+                        }
+                    }
+                    $newsummary .= "$newline\n";
+                }
             }
-            # FIXME: yuk
-            $summary =~ s/\[(.*?)]//g;
-            $summary =~ s/\n/<br\/>/g;
-            $oldbiblio->{summary} = $summary;
+
+            $newsummary =~ s/\[(.*?)]//g;
+            $newsummary =~ s/\n/<br\/>/g;
+            $oldbiblio->{summary} = $newsummary;
         }
 
         # Pull out the items fields
