@@ -204,9 +204,9 @@ sub GetRecentShelves ($$$) {
     my (@shelflist);
 	my $total = _shelf_count($owner, $mincategory);
 	my @params = ($owner, $mincategory, 0, $row_count);	 #FIXME: offset is hardcoded here, but could be passed in for enhancements
-	shift @params if !$owner;
+	shift @params if (not defined $owner);
 	my $query = "SELECT * FROM virtualshelves";
-	$query .= ($owner ? " WHERE owner = ? AND category = ?" : " WHERE category >= ? ");
+	$query .= ((defined $owner) ? " WHERE owner = ? AND category = ?" : " WHERE category >= ? ");
 	$query .= " ORDER BY lastmodified DESC LIMIT ?, ?";
 	my $sth = $dbh->prepare($query);
 	$sth->execute(@params);
