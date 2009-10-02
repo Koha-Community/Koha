@@ -23,7 +23,7 @@ function confirmnotdup(){
 		</li>
 	<!--/TMPL_LOOP--></ul>
 </p>
-<form action="<TMPL_VAR Name="action_dup_no_url"-->" method="get">
+<form action="<!--TMPL_VAR Name="action_dup_no_url"-->" method="get">
 	<input type="submit" class="save" onclick="confirmnotdup(); return false;" value="No: Save as New" />
 </form>
 </div>
