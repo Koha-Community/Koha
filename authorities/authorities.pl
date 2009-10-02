@@ -19,6 +19,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
@@ -131,6 +132,9 @@ sub create_input {
     # if there is no value provided but a default value in parameters, get it
     unless ($value) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
+        if (!defined $value) {
+            $value = q{};
+        }
 
         # get today date & replace YYYY, MM, DD if provided in the default value
         my ( $year, $month, $day ) = Today();
@@ -351,7 +355,7 @@ sub build_tabs ($$$$$) {
 
             # if MARC::Record is not empty =>use it as master loop, then add missing subfields that should be in the tab.
             # if MARC::Record is empty => use tab as master loop.
-            if ( $record ne -1 && ( $record->field($tag) || $tag eq '000' ) ) {
+            if ( $record != -1 && ( $record->field($tag) || $tag eq '000' ) ) {
                 my @fields;
                 if ( $tag ne '000' ) {
                                 @fields = $record->field($tag);
@@ -552,7 +556,7 @@ if ($authid) {
     ($oldauthnumtagfield,$oldauthnumtagsubfield) = &GetAuthMARCFromKohaField("auth_header.authid",$authtypecode);
     ($oldauthtypetagfield,$oldauthtypetagsubfield) = &GetAuthMARCFromKohaField("auth_header.authtypecode",$authtypecode);
 }
-
+$op ||= q{};
 #------------------------------------------------------------------------------------------------------------------------------
 if ($op eq "add") {
 #------------------------------------------------------------------------------------------------------------------------------
@@ -577,7 +581,8 @@ if ($op eq "add") {
         }    
     }
 
-    my ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
+    my ($duplicateauthid,$duplicateauthvalue);
+     ($duplicateauthid,$duplicateauthvalue) = FindDuplicateAuthority($record,$authtypecode) if ($op eq "add") && (!$is_a_modif);
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if (!$duplicateauthid or $confirm_not_duplicate) {
@@ -626,9 +631,8 @@ $template->param(authid                       => $authid,
 my $authtypes = getauthtypes;
 my @authtypesloop;
 foreach my $thisauthtype (keys %$authtypes) {
-    my $selected = 1 if $thisauthtype eq $authtypecode;
     my %row =(value => $thisauthtype,
-                selected => $selected,
+                selected => $thisauthtype eq $authtypecode,
                 authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
             );
     push @authtypesloop, \%row;

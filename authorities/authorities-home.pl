@@ -18,6 +18,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Auth;
@@ -32,7 +33,9 @@ use C4::Biblio;
 
 my $query        = new CGI;
 my $op           = $query->param('op');
+$op ||= q{};
 my $authtypecode = $query->param('authtypecode');
+$authtypecode ||= q{};
 my $dbh          = C4::Context->dbh;
 
 my $authid = $query->param('authid');
@@ -43,10 +46,9 @@ my @authtypesloop;
 foreach my $thisauthtype ( sort { $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'} }
     keys %$authtypes )
 {
-    my $selected = 1 if $thisauthtype eq $authtypecode;
     my %row = (
         value        => $thisauthtype,
-        selected     => $selected,
+        selected     => $thisauthtype eq $authtypecode,
         authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
     );
     push @authtypesloop, \%row;
@@ -88,7 +90,13 @@ if ( $op eq "do_search" ) {
     for ( my $i = 0 ; $i <= $#marclist ; $i++ ) {
         if ($value[$i]){   
           push @field_data, { term => "marclist",  val => $marclist_ini[$i] };
+          if (!defined $and_or[$i]) {
+              $and_or[$i] = q{};
+          }
           push @field_data, { term => "and_or",    val => $and_or[$i] };
+          if (!defined $excluding[$i]) {
+              $excluding[$i] = q{};
+          }
           push @field_data, { term => "excluding", val => $excluding[$i] };
           push @field_data, { term => "operator",  val => $operator[$i] };
           push @field_data, { term => "value",     val => $value[$i] };
@@ -113,6 +121,9 @@ if ( $op eq "do_search" ) {
 
     my $from = ( $startfrom - 1 ) * $resultsperpage + 1;
     my $to;
+    if (!defined $total) {
+        $total = 0;
+    }
 
     if ( $total < $startfrom * $resultsperpage ) {
         $to = $total;

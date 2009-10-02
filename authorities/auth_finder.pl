@@ -19,6 +19,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 
 use CGI;
 use C4::Output;
@@ -44,16 +45,16 @@ my $resultsperpage;
 my $authtypes = getauthtypes;
 my @authtypesloop;
 foreach my $thisauthtype ( keys %$authtypes ) {
-    my $selected = 1 if $thisauthtype eq $authtypecode;
     my %row = (
         value        => $thisauthtype,
-        selected     => $selected,
+        selected     => ($thisauthtype eq $authtypecode),
         authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
         index        => $index,
     );
     push @authtypesloop, \%row;
 }
 
+$op ||= q{};
 if ( $op eq "do_search" ) {
     my @marclist  = $query->param('marclist');
     my @and_or    = $query->param('and_or');

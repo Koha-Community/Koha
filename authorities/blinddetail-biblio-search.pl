@@ -38,6 +38,7 @@ parameters tables.
 =cut
 
 use strict;
+use warnings;
 
 use C4::AuthoritiesMarc;
 use C4::Auth;
@@ -58,7 +59,10 @@ my $authtypecode = &GetAuthTypeCode($authid);
 my $tagslib      = &GetTagsLabels( 1, $authtypecode );
 
 my $auth_type = GetAuthType($authtypecode);
-my $record = GetAuthority($authid) if $authid;
+my $record;
+if ($authid) {
+    $record = GetAuthority($authid);
+}
 
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -72,7 +76,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # fill arrays
-my $tag;
 my @loop_data = ();
 if ($authid) {
     foreach my $field ( $record->field( $auth_type->{auth_tag_to_report} ) ) {
