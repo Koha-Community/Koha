@@ -144,6 +144,7 @@ use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Languages qw(getAllLanguages);
 use C4::Koha;
+use C4::VirtualShelves qw(GetRecentShelves);
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
 
@@ -640,23 +641,22 @@ if ($query_desc || $limit_desc) {
 # VI. BUILD THE TEMPLATE
 
 # Build drop-down list for 'Add To:' menu...
-my $session = get_session($cgi->cookie("CGISESSID"));
-my @addpubshelves;
-my $pubshelves = $session->param('pubshelves');
-my $barshelves = $session->param('barshelves');
-foreach my $shelf (@$pubshelves) {
-        next if ( ($shelf->{'owner'} != ($borrowernumber ? $borrowernumber : -1)) && ($shelf->{'category'} < 3) );
-        push (@addpubshelves, $shelf);
+
+my $row_count = 10; # FIXME:This probably should be a syspref
+my ($pubshelves, $total) = GetRecentShelves(2, $row_count, undef);
+my ($barshelves, $total) = GetRecentShelves(1, $row_count, $borrowernumber);
+
+my @pubshelves = @{$pubshelves};
+my @barshelves = @{$barshelves};
+
+if (@pubshelves) {
+        $template->param( addpubshelves     => scalar (@pubshelves));
+        $template->param( addpubshelvesloop => @pubshelves);
 }
 
-if (@addpubshelves) {
-        $template->param( addpubshelves     => scalar (@addpubshelves));
-        $template->param( addpubshelvesloop => \@addpubshelves);
-}
-
-if (defined $barshelves) {
-        $template->param( addbarshelves     => scalar (@$barshelves));
-        $template->param( addbarshelvesloop => $barshelves);
+if (@barshelves) {
+        $template->param( addbarshelves     => scalar (@barshelves));
+        $template->param( addbarshelvesloop => @barshelves);
 }
 
 
