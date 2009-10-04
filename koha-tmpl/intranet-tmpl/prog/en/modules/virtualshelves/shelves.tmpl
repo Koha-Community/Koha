@@ -9,8 +9,8 @@ var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
 
 $(document).ready(function(){
 	$("#addbarcode").focus();
-	$("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">Clear All<\/a>");
-	$("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">Select All<\/a>");
+	$("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Clear All')+"<\/a>");
+	$("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">"+_('Select All')+"<\/a>");
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
