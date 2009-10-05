@@ -661,7 +661,7 @@ gets all budgets
 # -------------------------------------------------------------------
 sub GetBudgets {
     my ($filters,$orderby) = @_;
-    return SearchInTable("aqbudgetperiods",$filters, $orderby, undef,undef, undef, "wide");
+    return SearchInTable("aqbudgets",$filters, $orderby, undef,undef, undef, "wide");
 }
 
 # -------------------------------------------------------------------
