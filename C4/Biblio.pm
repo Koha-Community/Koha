@@ -1769,6 +1769,7 @@ sub TransformHtmlToXml {
     my $prevtag = -1;
     my $first   = 1;
     my $j       = -1;
+	@$indicator=map{sprintf("%2s",$_) unless ( length($_)<2)}@$indicator;
     for ( my $i = 0 ; $i < @$tags ; $i++ ) {
         if (C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a") {
             # if we have a 100 field and it's values are not correct, skip them.
