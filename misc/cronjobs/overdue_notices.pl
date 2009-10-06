@@ -53,6 +53,8 @@ overdue_notices.pl [ -n ] [ -library <branchcode> ] [ -max <number of days> ] [ 
    -library      <branchname>     only deal with overdues from this library
    -csv          <filename>       populate CSV file
    -itemscontent <list of fields> item information in templates
+   -borcat       <categorycode>   category code that must be included
+   -borcatout    <categorycode>   category code that must be excluded
 
 =head1 OPTIONS
 
@@ -103,6 +105,14 @@ defaults to issuedate,title,barcode,author
 
 Other possible values come from fields in the biblios, items, and
 issues tables.
+
+=item B<-borcat>
+
+Repetable field, that permit to select only few of patrons categories.
+
+=item B<-borcatout>
+
+Repetable field, permis to exclude some patrons categories.
 
 =item B<-t> | B<--triggered>
 
@@ -223,6 +233,7 @@ alert them of items that have just become due.
 
 # These variables are set by command line options.
 # They are initially set to default values.
+my $dbh = C4::Context->dbh();
 my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
@@ -233,6 +244,8 @@ my $csvfilename;
 my $triggered = 0;
 my $listall = 0;
 my $itemscontent = join( ',', qw( issuedate title barcode author ) );
+my @myborcat;
+my @myborcatout;
 
 GetOptions(
     'help|?'         => \$help,
@@ -245,6 +258,8 @@ GetOptions(
     'itemscontent=s' => \$itemscontent,
     'list-all'      => \$listall,
     't|triggered'             => \$triggered,
+    'borcat=s'      => \@myborcat,
+    'borcatout=s'   => \@myborcatout,
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -278,7 +293,6 @@ if ($mybranch) {
 # these are the fields that will be substituted into <<item.content>>
 my @item_content_fields = split( /,/, $itemscontent );
 
-my $dbh = C4::Context->dbh();
 binmode( STDOUT, ":utf8" );
 
 our $csv;       # the Text::CSV_XS object
@@ -314,13 +328,21 @@ SELECT biblio.*, items.*, issues.*, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_ove
     AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ?
 END_SQL
 
-    my $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ");
-    $rqoverduerules->execute($branchcode);
+    my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
+    $query .= " AND categorycode IN (".join( ',' , ('?') x @myborcat ).") " if (@myborcat);
+    $query .= " AND categorycode NOT IN (".join( ',' , ('?') x @myborcatout ).") " if (@myborcatout);
+    
+    my $rqoverduerules =  $dbh->prepare($query);
+    $rqoverduerules->execute($branchcode, @myborcat, @myborcatout);
     
     # We get default rules is there is no rule for this branch
     if($rqoverduerules->rows == 0){
-        $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = '' ");
-        $rqoverduerules->execute();
+        $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = '' ";
+        $query .= " AND categorycode IN (".join( ',' , ('?') x @myborcat ).") " if (@myborcat);
+        $query .= " AND categorycode NOT IN (".join( ',' , ('?') x @myborcatout ).") " if (@myborcatout);
+        
+        $rqoverduerules = $dbh->prepare($query);
+        $rqoverduerules->execute(@myborcat, @myborcatout);
     }
 
     # my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
