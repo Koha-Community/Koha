@@ -32,7 +32,6 @@ use C4::Accounts;
 
 # for _koha_notify_reserve
 use C4::Members::Messaging;
-use C4::Members qw( GetMember );
 use C4::Letters;
 use C4::Branch qw( GetBranchDetail );
 use List::MoreUtils qw( firstidx );
