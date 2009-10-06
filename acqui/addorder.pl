@@ -146,40 +146,41 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # get CGI parameters
-my $ordnum        = $input->param('ordnum');
-my $basketno      = $input->param('basketno');
-my $booksellerid  = $input->param('booksellerid');
-my $existing      = $input->param('existing');    # existing biblio, (not basket or order)
-my $title         = $input->param('title');
-my $author        = $input->param('author');
-my $publicationyear= $input->param('publicationyear');
-my $isbn          = $input->param('ISBN');
-my $itemtype      = $input->param('format');
-my $quantity      = $input->param('quantity');		# FIXME: else ERROR!
-my $listprice     = $input->param('list_price') || 0;
-my $branch        = $input->param('branch');
-my $series        = $input->param('series');
-my $notes         = $input->param('notes');
-my $budget_id     = $input->param('budget_id');
-my $sort1         = $input->param('sort1');
-my $sort2         = $input->param('sort2');
-my $rrp           = $input->param('rrp');
-my $ecost         = $input->param('ecost');
-my $gst           = $input->param('GST');
-my $budget        = $input->param('budget');
-my $cost          = $input->param('cost');
-my $sub           = $input->param('sub');
-my $purchaseorder = $input->param('purchaseordernumber');
-my $invoice       = $input->param('invoice');
-my $publishercode = $input->param('publishercode');
-my $suggestionid  = $input->param('suggestionid');
-my $biblionumber  = $input->param('biblionumber');
+my $orderinfo					= $input->Vars;
+$orderinfo->{'list_price'}    ||=  0;
+#my $ordnum        = $input->param('ordnum');
+#my $basketno      = $input->param('basketno');
+#my $booksellerid  = $input->param('booksellerid');
+#my $existing      = $input->param('existing');    # existing biblio, (not basket or order)
+#my $title         = $input->param('title');
+#my $author        = $input->param('author');
+#my $publicationyear= $input->param('publicationyear');
+#my $isbn          = $input->param('ISBN');
+#my $itemtype      = $input->param('format');
+#my $quantity      = $input->param('quantity');		# FIXME: else ERROR!
+#my $branch        = $input->param('branch');
+#my $series        = $input->param('series');
+#my $notes         = $input->param('notes');
+#my $budget_id     = $input->param('budget_id');
+#my $sort1         = $input->param('sort1');
+#my $sort2         = $input->param('sort2');
+#my $rrp           = $input->param('rrp');
+#my $ecost         = $input->param('ecost');
+#my $gst           = $input->param('GST');
+#my $budget        = $input->param('budget');
+#my $cost          = $input->param('cost');
+#my $sub           = $input->param('sub');
+#my $purchaseorder = $input->param('purchaseordernumber');
+#my $invoice       = $input->param('invoice');
+#my $publishercode = $input->param('publishercode');
+#my $suggestionid  = $input->param('suggestionid');
+#my $biblionumber  = $input->param('biblionumber');
+#my $uncertainprice = $input->param('uncertainprice');
+#my $import_batch_id= $input->param('import_batch_id');
+#
+#my $createbibitem = $input->param('createbibitem');
+#
 my $user          = $input->remote_user;
-my $uncertainprice = $input->param('uncertainprice');
-my $import_batch_id= $input->param('import_batch_id');
-
-my $createbibitem = $input->param('createbibitem');
-
 # create, modify or delete biblio
 # create if $quantity>=0 and $existing='no'
 # modify if $quantity>=0 and $existing='yes'
@@ -205,54 +206,15 @@ if ( $quantity ne '0' ) {
         if ($suggestionid) {
             ModStatus( $suggestionid, 'ORDERED', '', $biblionumber );
         }
+		$orderinfo->{biblioitemnumber}=$bibitemnum;
     }
 
     # if we already have $ordnum, then it's an ordermodif
     if ($ordnum) {
-        my %orderinfo = ("biblionumber", $biblionumber,
-                                    "ordernumber", $ordnum,
-                                    "basketno", $basketno,
-                                    "quantity", $quantity,
-                                    "listprice", $listprice,
-                                    "notes", $notes,
-                                    "biblioitemnumber", $bibitemnum,
-                                    "rrp", $rrp,
-                                    "ecost", $ecost,
-                                    "gst", $gst,
-                                    "unitprice", $cost,
-                                    "subscription", $sub,
-                                    "sort1", $sort1,
-                                    "sort2", $sort2,
-#                                    "budgetdate", $budget,
-                                    "purchaseordernumber", $purchaseorder,
-                                    "branchcode", $branch,
-                                    "booksellerinvoicenumber", $invoice,
-                                    "budget_id", $budget_id,
-                                    "uncertainprice", $uncertainprice);
-        ModOrder( \%orderinfo);
+        ModOrder( $orderinfo);
     }
     else { # else, it's a new line
-        my %orderinfo = ("biblionumber", $biblionumber,
-                                    "ordernumber", $ordnum,
-                                    "basketno", $basketno,
-                                    "quantity", $quantity,
-                                    "listprice", $listprice,
-                                    "notes", $notes,
-                                    "biblioitemnumber", $bibitemnum,
-                                    "rrp", $rrp,
-                                    "ecost", $ecost,
-                                    "gst", $gst,
-                                    "unitprice", $cost,
-                                    "subscription", $sub,
-                                    "sort1", $sort1,
-                                    "sort2", $sort2,
-#                                    "budgetdate", $budget,
-                                    "purchaseordernumber", $purchaseorder,
-                                    "branchcode", $branch,
-                                    "booksellerinvoicenumber", $invoice,
-                                    "budget_id", $budget_id,
-                                    "uncertainprice", $uncertainprice);
-        ( $basketno, $ordnum ) = NewOrder(\%orderinfo);
+        ( $basketno, $ordnum ) = NewOrder($orderinfo);
     }
 
     # now, add items if applicable

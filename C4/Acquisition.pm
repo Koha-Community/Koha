@@ -25,6 +25,7 @@ use C4::Dates qw(format_date format_date_in_iso);
 use MARC::Record;
 use C4::Suggestions;
 use C4::Debug;
+use C4::SQLHelper qw(InsertInTable);
 
 use Time::localtime;
 use HTML::Entities;
@@ -910,6 +911,8 @@ table of the Koha database.
 
 =item $hashref->{'uncertainprice'} may be 0 for "the price is known" or 1 for "the price is uncertain"
 
+=item defaults entrydate to Now
+
 The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "biblioitemnumber", "rrp", "ecost", "gst", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "bookfundid".
 
 =back
@@ -935,29 +938,9 @@ sub NewOrder {
     } else {
         $orderinfo->{'subscription'} = 0;
     }
+    $orderinfo->{'entrydate'} ||= C4::Dates->new()->output("iso");
 
-    my $query = "INSERT INTO aqorders (";
-    foreach my $orderinfokey (keys %{$orderinfo}) {
-        next if $orderinfokey =~ m/branchcode|entrydate/;   # skip branchcode and entrydate, branchcode isnt a vaild col, entrydate we add manually with NOW()
-        $query .= "$orderinfokey,";
-        push(@params, $orderinfo->{$orderinfokey});
-    }
-
-    $query .= "entrydate) VALUES (";
-    foreach (@params) {
-        $query .= "?,";
-    }
-    $query .= " NOW() )";  #ADDING CURRENT DATE TO  'budgetdate, entrydate, purchaseordernumber'...
-
-    my $sth = $dbh->prepare($query);
-
-    $sth->execute(@params);
-    $sth->finish;
-
-    #get ordnum MYSQL dependant, but $dbh->last_insert_id returns null
-    my $ordnum = $dbh->{'mysql_insertid'};
-
-    $sth->finish;
+	my $ordnum=InsertInTable("aqorders",$orderinfo);
     return ( $orderinfo->{'basketno'}, $ordnum );
 }
 
