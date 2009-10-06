@@ -69,9 +69,9 @@ aqbooksellers table in the Koha database.
 sub GetBookSeller($) {
     my ($searchstring) = @_;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM aqbooksellers WHERE name LIKE ?";
+    my $query = "SELECT * FROM aqbooksellers WHERE name LIKE ? ";
     my $sth =$dbh->prepare($query);
-    $sth->execute( "$searchstring%" );
+    $sth->execute( "%$searchstring%");
     my @results;
     # count how many baskets this bookseller has.
     # if it has none, the bookseller can be deleted
