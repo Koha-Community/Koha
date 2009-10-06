@@ -2268,6 +2268,7 @@ sub PrepareItemrecordDisplay {
     my ( $bibnum, $itemnum, $defaultvalues ) = @_;
 
     my $dbh = C4::Context->dbh;
+	my $today_iso = C4::Dates->today('iso');
     my $frameworkcode = &GetFrameworkCode( $bibnum );
     my ( $itemtagfield, $itemtagsubfield ) =
       &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
@@ -2305,9 +2306,15 @@ sub PrepareItemrecordDisplay {
                   if ($itemrecord) {
                       ( $x, $value ) = _find_value( $tag, $subfield, $itemrecord );
                   }
-                  if (!defined $value) {
-                      $value = q||;
-                  }
+				  unless ($value) {
+						$value   = $tagslib->{$tag}->{$subfield}->{defaultvalue};
+						$value ||= $defaultvalues->{$tagslib->{$tag}->{$subfield}->{'kohafield'}};
+						# get today date & replace YYYY, MM, DD if provided in the default value
+						my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
+						$value =~ s/YYYY/$year/g;
+						$value =~ s/MM/$month/g;
+						$value =~ s/DD/$day/g;
+				  }
                   $value =~ s/"/&quot;/g;
 
                 # search for itemcallnumber if applicable
