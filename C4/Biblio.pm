@@ -2275,6 +2275,9 @@ sub PrepareItemrecordDisplay {
       &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     my $tagslib = &GetMarcStructure( 1, $frameworkcode );
     my $itemrecord = C4::Items::GetMarcItem( $bibnum, $itemnum) if ($itemnum);
+	# FIXME : I'd rather have GetMarcBiblio called out of this.
+	# Since it gets the whole Biblio record for each item
+    my $marcrecord = GetMarcBiblio( $bibnum) if ($bibnum);
     my @loop_data;
     my $authorised_values_sth =
       $dbh->prepare(
@@ -2327,7 +2330,7 @@ sub PrepareItemrecordDisplay {
                       substr( C4::Context->preference('itemcallnumber'), 0, 3 );
                     my $CNsubfield =
                       substr( C4::Context->preference('itemcallnumber'), 3, 1 );
-                    my $temp = $itemrecord->field($CNtag) if ($itemrecord);
+                    my $temp = $marcrecord->field($CNtag) if ($marcrecord);
                     if ($temp) {
                         $value = $temp->subfield($CNsubfield);
                     }
