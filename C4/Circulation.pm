@@ -979,7 +979,7 @@ sub AddIssue {
         unless ($datedue) {
             my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
             my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
-            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch );
+            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
 
             # if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
             if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
@@ -1971,7 +1971,7 @@ sub AddRenewal {
 			$item->{homebranch}			# item's homebranch determines loanlength OR do we want the branch specified by the AddRenewal argument?
         );
 		#FIXME -- use circControl?
-		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch);	# this branch is the transactional branch.
+		$datedue =  CalcDateDue(C4::Dates->new(),$loanlength,$branch,$borrower);	# this branch is the transactional branch.
 								# The question of whether to use item's homebranch calendar is open.
     }
 
