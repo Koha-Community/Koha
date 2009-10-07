@@ -846,6 +846,7 @@
             </xsl:when>
             </xsl:choose>
     </xsl:if>
+<xsl:text> </xsl:text> <!-- added blank space to fix font display problem, see Bug 3671 -->
 	</span>
 </xsl:if>
 
