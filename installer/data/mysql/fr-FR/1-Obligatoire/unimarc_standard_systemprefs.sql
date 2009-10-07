@@ -217,3 +217,6 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalPeriodBase', 'date_due', 'Permet de déterminer si la période de renouvellement doit être calculée sur la date de retour ou sur le jour du renouvellement','date_due|now','Choice');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OPACDisplayRequestPriority','0','','Afficher l\'ordre des réservation pour les adhérents � l\'opac','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AWSPrivateKey','','Voir:  http://aws.amazon.com. Notez que cela est nécessaire après le 15 Aout 2009 pour pouvoir utiliser les webservices Amazon autre que les couvertures de livre.','','free');
+INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewISBD','1','Affiche la vue ISBD � l''intranet','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewLabeledMARC','0','Affiche la vue labeled MARC','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewMARC','1','Affiche la vue MARC','','YesNo');
