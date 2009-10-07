@@ -28,6 +28,7 @@ use C4::Category;
 
 my $query = new CGI;
 my $quicksearch = $query->param('quicksearch');
+my $branch = $query->param('branchcode');
 my ($template, $loggedinuser, $cookie);
 my $template_name;
 
@@ -52,7 +53,7 @@ if($quicksearch){
 }
 my @categories=C4::Category->all;
 $template->param(
-    branchloop=>GetBranchesLoop(),
+    branchloop=>(defined $branch?GetBranchesLoop($branch):GetBranchesLoop()),
 	categoryloop=>\@categories,
 );
 $template->param( 

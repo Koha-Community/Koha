@@ -55,8 +55,13 @@ if($quicksearch){
 }
 my $theme = $input->param('theme') || "default";
 
+my $patron = $input->Vars;
+foreach (keys %$patron){
+	delete $$patron{$_} unless($$patron{$_}); 
+}
+
 my @categories=C4::Category->all;
-my $branches=GetBranchesLoop();
+my $branches=(defined $$patron{branchcode}?GetBranchesLoop($$patron{branchcode}):GetBranchesLoop());
 
 my %categories_dislay;
 
@@ -82,16 +87,13 @@ $member =~ s/\*/%/g;
 
 my ($count,$results);
 
-my $patron = $input->Vars;
-foreach (keys %$patron){
-	delete $$patron{$_} unless($$patron{$_}); 
-}
 if (C4::Context->preference("IndependantBranches")){
    if (C4::Context->userenv && C4::Context->userenv->{flags} % 2 !=1 && C4::Context->userenv->{'branch'}){
         $$patron{branchcode}=C4::Context->userenv->{'branch'} unless (C4::Context->userenv->{'branch'} eq "insecure");
    }
 }
 $$patron{firstname}.="\%" if ($$patron{firstname});
+$$patron{surname}.="\%" if ($$patron{surname});
 
 my @searchpatron;
 push @searchpatron, $member if ($member);
@@ -99,7 +101,7 @@ push @searchpatron, $patron if (keys %$patron);
 my $from= ($startfrom-1)*$resultsperpage;
 my $to=$from+$resultsperpage;
  #($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
- ($results)=Search(\@searchpatron,{surname=>1,firstname=>1},undef,undef,["firstname","surname","email","othernames","cardnumber"]  ) if (@searchpatron);
+ ($results)=Search(\@searchpatron,{surname=>1,firstname=>1},undef,undef,["firstname","surname","email","othernames","cardnumber"],"start_with"  ) if (@searchpatron);
 if ($results){
 	$count =scalar(@$results);
 }
