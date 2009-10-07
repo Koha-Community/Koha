@@ -1007,9 +1007,10 @@ sub buildQuery {
 
     # no stemming/weight/fuzzy in NoZebra
     if ( C4::Context->preference("NoZebra") ) {
-        $stemming      = 0;
-        $weight_fields = 0;
-        $fuzzy_enabled = 0;
+        $stemming         = 0;
+        $weight_fields    = 0;
+        $fuzzy_enabled    = 0;
+    	$auto_truncation  = 0;
     }
 
     my $query        = $operands[0];
