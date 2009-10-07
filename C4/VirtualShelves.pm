@@ -276,9 +276,8 @@ sub GetShelfContents ($;$$$) {
          WHERE  vc.shelfnumber=? ";
 	my @params = ($shelfnumber);
 	if($sortfield) {
-		$query .= " ORDER BY ? ";
+		$query .= " ORDER BY " . $sortfield;
 		$query .= " DESC " if ($sortfield eq 'copyrightdate');
-		push (@params, $sortfield);
 	}
     if($row_count){
 	   $query .= " LIMIT ?, ? ";
