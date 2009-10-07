@@ -58,10 +58,5 @@ $template->param(
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
             );
-if (C4::Context->preference("AddPatronLists")=~/code/){
-    my $categories=GetBorrowercategoryList;
-    $categories->[0]->{'first'}=1;
-    $template->param(categories=>$categories);  
-}  
 
 output_html_with_http_headers $query, $cookie, $template->output;
