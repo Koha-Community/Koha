@@ -48,7 +48,7 @@ BEGIN {
         AddItem
         AddItemBatchFromMarc
         ModItemFromMarc
-		Item2Marc
+    Item2Marc
         ModItem
         ModDateLastSeen
         ModItemTransfer
@@ -72,10 +72,12 @@ BEGIN {
         GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
         GetHiddenItemnumbers
-		DelItemCheck
-		MoveItemFromBiblio 
-		GetLatestAcquisitions
+        DelItemCheck
+    MoveItemFromBiblio
+    GetLatestAcquisitions
+
         CartToShelf
+        ShelfToCart
 
 	GetAnalyticsCount
         GetItemHolds
@@ -190,7 +192,30 @@ sub CartToShelf {
     }
 
     my $item = GetItem($itemnumber);
-    $item->{location} = $item->{permanent_location};
+    if ( $item->{location} eq 'CART' ) {
+        $item->{location} = $item->{permanent_location};
+        ModItem($item, undef, $itemnumber);
+    }
+}
+
+=head2 ShelfToCart
+
+  ShelfToCart($itemnumber);
+
+Set the current shelving location of the item
+to shelving cart ('CART').
+
+=cut
+
+sub ShelfToCart {
+    my ( $itemnumber ) = @_;
+
+    unless ( $itemnumber ) {
+        croak "FAILED ShelfToCart() - no itemnumber supplied";
+    }
+
+    my $item = GetItem($itemnumber);
+    $item->{'location'} = 'CART';
     ModItem($item, undef, $itemnumber);
 }
 
@@ -541,6 +566,9 @@ sub ModItemTransfer {
     my ( $itemnumber, $frombranch, $tobranch ) = @_;
 
     my $dbh = C4::Context->dbh;
+
+    # Remove the 'shelving cart' location status if it is being used.
+    CartToShelf( $itemnumber ) if ( C4::Context->preference("ReturnToShelvingCart") );
 
     #new entry in branchtransfers....
     my $sth = $dbh->prepare(
