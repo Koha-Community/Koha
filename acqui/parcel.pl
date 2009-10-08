@@ -146,7 +146,7 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
     $tototal       += $total;
 }
 
-my $pendingorders = GetPendingOrders($supplierid, 0, 1);
+my $pendingorders = GetPendingOrders($supplierid, "", 1);
 my $countpendings = scalar @$pendingorders;
 
 # pending orders totals

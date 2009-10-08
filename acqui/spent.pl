@@ -45,7 +45,7 @@ my $query =
     and (datecancellationprinted is NULL or
 	   datecancellationprinted='0000-00-00')
     and (closedate >= ? and closedate < ?)
-
+    ORDER BY datereceived
   ";
 my $sth = $dbh->prepare($query);
 $sth->execute( $bookfund, $start, $end, $start, $end);
