@@ -1652,12 +1652,15 @@ sub AddReturn {
             );
             $sth->execute( $item->{'itemnumber'} );
             # if we have a reservation with valid transfer, we can set it's status to 'W'
+            ShelfToCart( $item->{'itemnumber'} ) if ( C4::Context->preference("ReturnToShelvingCart") );
             C4::Reserves::ModReserveStatus($item->{'itemnumber'}, 'W');
         } else {
             $messages->{'WrongTransfer'}     = $tobranch;
             $messages->{'WrongTransferItem'} = $item->{'itemnumber'};
         }
         $validTransfert = 1;
+    } else {
+        ShelfToCart( $item->{'itemnumber'} ) if ( C4::Context->preference("ReturnToShelvingCart") );
     }
 
     # fix up the accounts.....
