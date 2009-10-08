@@ -222,20 +222,23 @@ sub GetBookFundBreakdown {
 
     # do a query for spent totals.
     my $query = "
-        SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
-               quantityreceived,subscription, closedate
-        FROM   aqorders
-        LEFT JOIN aqbasket USING (basketno)
-        LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
-        LEFT JOIN aqbookfund ON (aqorderbreakdown.bookfundid=aqbookfund.bookfundid and aqorderbreakdown.branchcode=aqbookfund.branchcode)
-        LEFT JOIN aqbudget ON (aqbudget.bookfundid=aqbookfund.bookfundid and aqbudget.branchcode=aqbookfund.branchcode)
-        WHERE  aqorderbreakdown.bookfundid=?
-            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
-            AND ((budgetdate >= ? and budgetdate < ?) OR (startdate>=? and enddate<=?))
-            AND (closedate >= ? AND closedate <= ?)
+        Select distinct quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
+    as qrev,subscription,title,itype as itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
+    quantity-quantityreceived as tleft,
+    aqorders.ordernumber
+    as ordnum,entrydate,budgetdate,aqbasket.booksellerid,aqbasket.basketno
+    from aqorders
+    inner join aqorderbreakdown on aqorderbreakdown.ordernumber = aqorders.ordernumber
+    inner join aqbasket on aqbasket.basketno = aqorders.basketno
+    left join items on  items.biblionumber=aqorders.biblionumber
+    where bookfundid=? 
+   and (datereceived >= ? and datereceived < ?)
+    and (datecancellationprinted is NULL or
+	   datecancellationprinted='0000-00-00')
+    and (closedate >= ? and closedate < ?)
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $id, $start, $end, $start, $end, $start, $end );
+    $sth->execute( $id, $start, $end, $start, $end);
 
     my ($spent) = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
@@ -244,8 +247,7 @@ sub GetBookFundBreakdown {
                 $spent += $data->{'quantity'} * $data->{'unitprice'};
             }
             else {
-                $spent += ( $data->{'unitprice'} ) * ($data->{'quantityreceived'}?$data->{'quantityreceived'}:0);
-    
+                $spent += ( $data->{'unitprice'} ) * ($data->{'qrev'}?$data->{'qrev'}:0);
             }
 
         }
