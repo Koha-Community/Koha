@@ -3,12 +3,26 @@
 -- for Koha.
 --
 
-TRUNCATE class_sort_rules;
+-- TRUNCATE class_sort_rules;
 -- class sorting (filing) rules
+/*
 INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`) VALUES
                                ('dewey',   'Типовые правила заполнения для ДКД', 'Dewey'),
                                ('lcc',     'Типовые правила заполнения для КБК', 'LCC'),
                                ('generic', 'Правила заполнения для обобщённого библиотечного шифра', 'Generic');
+*/
+
+INSERT INTO class_sort_rules (class_sort_rule, description, sort_routine) VALUES 
+('dewey',                           'Типовые правила заполнения для ДКД',             'Dewey')
+ON DUPLICATE KEY UPDATE description='Типовые правила заполнения для ДКД',sort_routine='Dewey';
+
+INSERT INTO class_sort_rules (class_sort_rule, description, sort_routine) VALUES 
+('lcc',                             'Типовые правила заполнения для КБК',             'LCC')
+ON DUPLICATE KEY UPDATE description='Типовые правила заполнения для КБК',sort_routine='LCC';
+
+INSERT INTO class_sort_rules (class_sort_rule, description, sort_routine) VALUES 
+('generic',                         'Правила заполнения для обобщённого библиотечного шифра',             'Generic')
+ON DUPLICATE KEY UPDATE description='Правила заполнения для обобщённого библиотечного шифра',sort_routine='Generic';
 
 
 TRUNCATE class_sources;
