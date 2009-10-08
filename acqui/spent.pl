@@ -31,7 +31,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 #	correctly due to missing joins between tables
 
 my $query =
-"Select distinct quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
+"Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
     as qrev,subscription,title,itype as itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
     quantity-quantityreceived as tleft,
     aqorders.ordernumber
