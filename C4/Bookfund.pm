@@ -223,20 +223,20 @@ sub GetBookFundBreakdown {
     # do a query for spent totals.
     my $query = "
         Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
-    as qrev,subscription,title,itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
+    as qrev,subscription,title,itype as itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
     quantity-quantityreceived as tleft,
     aqorders.ordernumber
-    as ordnum,entrydate,budgetdate,booksellerid,aqbasket.basketno
-    from aqorderbreakdown,aqbasket,aqorders
-    left join biblioitems on  biblioitems.biblioitemnumber=aqorders.biblioitemnumber 
-    where bookfundid=? and
-    aqorders.ordernumber=aqorderbreakdown.ordernumber and
-    aqorders.basketno=aqbasket.basketno
-   and (
-	(datereceived >= ? and datereceived < ?))
+    as ordnum,entrydate,budgetdate,aqbasket.booksellerid,aqbasket.basketno
+    from aqorders
+    inner join aqorderbreakdown on aqorderbreakdown.ordernumber = aqorders.ordernumber
+    inner join aqbasket on aqbasket.basketno = aqorders.basketno
+    left join items on  items.biblionumber=aqorders.biblionumber
+    where bookfundid=? 
+   and (datereceived >= ? and datereceived < ?)
     and (datecancellationprinted is NULL or
 	   datecancellationprinted='0000-00-00')
     and (closedate >= ? and closedate < ?)
+    ORDER BY datereceived
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute( $id, $start, $end, $start, $end);
