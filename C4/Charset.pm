@@ -139,7 +139,6 @@ sub MarcToUTF8Record {
     my $marc = shift;
     my $marc_flavour = shift;
     my $source_encoding = shift;
-
     my $marc_record;
     my $marc_blob_is_utf8 = 0;
     if (ref($marc) eq 'MARC::Record') {
@@ -216,7 +215,7 @@ sub MarcToUTF8Record {
             @errors = _marc_iso5426_to_utf8($marc_record, $marc_flavour);
         } else {
             # assume any other character encoding is for Text::Iconv
-            @errors = _marc_to_utf8_via_text_iconv($marc_record, $marc_flavour, 'iso-8859-1');
+            @errors = _marc_to_utf8_via_text_iconv($marc_record, $marc_flavour, $source_encoding);
         }
 
         if (@errors) {
