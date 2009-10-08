@@ -72,6 +72,7 @@ if (!$op or $op eq 'authtype_create_confirm') {
 	$sth->execute($authtypecode);
 	my ($authtypeexist) = $sth->fetchrow;
 	if ($authtypeexist) {
+		$op||="else";
 	} else {
 		# if authtype does not exists, then OP must be changed to "create authtype" if we are not on the way to create it
 		# (op = authtyp_create_confirm)
