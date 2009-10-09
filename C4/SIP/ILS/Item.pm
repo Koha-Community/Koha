@@ -112,6 +112,7 @@ sub new {
 	$item->{hold_queue} = [ sort priority_sort @$arrayref ];
 	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
 	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
+    $item->{due_date} = $issue->{date_due};
 	$self = $item;
 	bless $self, $type;
 
