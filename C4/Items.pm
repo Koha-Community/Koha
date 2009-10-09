@@ -1267,11 +1267,12 @@ sub GetItemsInfo {
            items.notforloan as itemnotforloan,
            itemtypes.description
      FROM items
+     LEFT JOIN branches ON items.homebranch = branches.branchcode
      LEFT JOIN biblio      ON      biblio.biblionumber     = items.biblionumber
      LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
      . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
-    $query .= " WHERE items.biblionumber = ? ORDER BY items.dateaccessioned desc" ;
+    $query .= " WHERE items.biblionumber = ? ORDER BY branches.branchname,items.dateaccessioned desc" ;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my $i = 0;
