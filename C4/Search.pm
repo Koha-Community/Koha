@@ -27,6 +27,8 @@ use XML::Simple;
 use C4::Dates qw(format_date);
 use C4::XSLT;
 use C4::Branch;
+use C4::Debug;
+use YAML;
 use URI::Escape;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
@@ -633,10 +635,12 @@ sub _remove_stopwords {
 #       we use IsAlpha unicode definition, to deal correctly with diacritics.
 #       otherwise, a French word like "leçon" woudl be split into "le" "çon", "le"
 #       is a stopword, we'd get "çon" and wouldn't find anything...
+#       
 		foreach ( keys %{ C4::Context->stopwords } ) {
 			next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
+			$debug && warn "$_ Dump($operand)";
 			if ( my ($matched) = ($operand =~
-				/(\P{IsAlnum}\Q$_\E\P{IsAlnum}|^\Q$_\E\P{IsAlnum}|\P{IsAlnum}\Q$_\E$|^\Q$_\E$)/gi) )
+				/([^\X\p{isAlnum}]\Q$_\E[^\X\p{isAlnum}]|[^\X\p{isAlnum}]\Q$_\E$|^\Q$_\E[^\X\p{isAlnum}])/gi))
 			{
 				$operand =~ s/\Q$matched\E/ /gi;
 				push @stopwords_removed, $_;
