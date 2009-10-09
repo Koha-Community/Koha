@@ -233,8 +233,8 @@ if ($op and $op eq 'serialchangestatus') {
           my $xml = TransformHtmlToXml( $itemhash{$item}->{'tags'},
                                   $itemhash{$item}->{'subfields'},
                                   $itemhash{$item}->{'field_values'},
-                                  $itemhash{$item}->{'ind_tag'},
-                                  $itemhash{$item}->{'indicator'});
+                                  $itemhash{$item}->{'indicator'},
+                                  $itemhash{$item}->{'ind_tag'});
   #           warn $xml;
           my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
           if ($item=~/^N/){
