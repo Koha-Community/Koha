@@ -65,7 +65,7 @@
                                     <!-- /TMPL_LOOP -->
                                     </select>
                                 </li>
-                                <li> 
+                                <li>
                                     <fieldset>
                                         <legend>Bibliographic Data to Print</legend>
 										<ol>
@@ -96,11 +96,11 @@
                                                     <!-- /TMPL_LOOP -->
 											</div>
                                             </li>
-                                            <!-- TMPL_IF NAME="layout_string" -->
+                                            <!-- TMPL_UNLESS NAME="layout_string" -->
                                             <li class="radio"><input type="radio" id="layout_choice_list" name="layout_choice" value="layout_string" checked="checked" /> <label for="layout_choice_list">List Fields</label></li>
                                             <!-- TMPL_ELSE -->
                                             <li class="radio"><input type="radio" id="layout_choice_list" name="layout_choice" value="layout_string" /> <label for="layout_choice_list">List Fields</label></li>
-                                            <!-- /TMPL_IF -->
+                                            <!-- /TMPL_UNLESS -->
                                            <li> <fieldset id="layout_string" class="brief">
                                                 <label for="format_string">Data Fields</label>
                                                 <input type="text" name="format_string" id="format_string" size="80" value="<!-- TMPL_VAR ESCAPE='HTML' NAME="format_string" -->" />
@@ -111,7 +111,7 @@
                                                 </div>
                                             </fieldset></li>
 											</ol>
-                                    </fieldset>   
+                                    </fieldset>
                                 </li>
                                 <li>
                                     <label for="guidebox">Draw Guide Boxes</label>

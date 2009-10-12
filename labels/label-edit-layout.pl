@@ -4,7 +4,7 @@
 # Parts Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -44,6 +44,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $op = $cgi->param('op') || $ARGV[0] || '';
 my $layout_id = $cgi->param('layout_id') || $cgi->param('element_id') || $ARGV[1] || '';
+my $layout_choice = $cgi->param('layout_choice') || '';
 my $layout = '';
 
 sub _set_selected {
@@ -108,7 +109,7 @@ if ($op eq 'edit') {
 }
 elsif  ($op eq 'save') {
     my $format_string = '';
-    if ($cgi->param('layout_choice') eq 'layout_table') {       # translate the field table into a format_string
+    if ($layout_choice eq 'layout_table') {       # translate the field table into a format_string
         my @layout_table = ();
         foreach my $cgi_param ($cgi->param()) {
             if (($cgi_param =~ m/^(.*)_tbl$/) && ($cgi->param($cgi_param))) {
@@ -165,5 +166,6 @@ $template->param(
         font_size       => $layout->get_attr('font_size'),
         callnum_split   => $layout->get_attr('callnum_split'),
         format_string   => $layout->get_attr('format_string'),
+        layout_string   => 1,   # FIXME: This should not be hard-coded; It should perhaps be yet another syspref... CN
 );
 output_html_with_http_headers $cgi, $cookie, $template->output;

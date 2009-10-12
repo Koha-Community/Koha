@@ -77,7 +77,7 @@ sub retrieve {
     my $invocant = shift;
     my %opts = @_;
     my $type = ref($invocant) || $invocant;
-    my $query = "SELECT * FROM printers_profile WHERE profile_id = ?";  
+    my $query = "SELECT * FROM printers_profile WHERE profile_id = ?";
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{profile_id});
     if ($sth->err) {
@@ -109,7 +109,7 @@ sub delete {
         warn sprintf('%s : Cannot delete layout as the profile id is invalid or non-existant.', $call_type);
         return -1;
     }
-    my $query = "DELETE FROM printers_profile WHERE profile_id = ?";  
+    my $query = "DELETE FROM printers_profile WHERE profile_id = ?";
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
     $sth->execute($query_param);
@@ -299,7 +299,7 @@ Copyright 2009 Foundations Bible College.
 =head1 LICENSE
 
 This file is part of Koha.
-       
+
 Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later version.
 
@@ -319,7 +319,7 @@ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #=head2 draw_boundaries
 #
 # sub draw_boundaries ($llx_spine, $llx_circ1, $llx_circ2,
-#                $lly, $spine_width, $label_height, $circ_width)  
+#                $lly, $spine_width, $label_height, $circ_width)
 #
 #This sub draws boundary lines where the label outlines are, to aid in printer testing, and debugging.
 #

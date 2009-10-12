@@ -4,7 +4,7 @@
 # Parts Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -41,6 +41,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $op = $cgi->param('op');
+warn "operation = $op\n";
 my $template_id = $cgi->param('template_id') || $cgi->param('element_id');
 my $label_template = undef;
 my $profile_list = undef;
@@ -85,9 +86,11 @@ elsif ($op eq 'save') {
     else {      # if no label_id, this is a new layout so insert it
         $label_template = C4::Labels::Template->new(@params);
         my $template_id = $label_template->save();
-        my $profile = C4::Labels::Profile->retrieve(profile_id => $cgi->param('profile_id'));
-        $profile->set_attr(template_id => $template_id) if $template_id != $profile->get_attr('template_id');
-        $profile->save();
+        if ($cgi->param('profile_id')) {
+            my $profile = C4::Labels::Profile->retrieve(profile_id => $cgi->param('profile_id'));
+            $profile->set_attr(template_id => $template_id) if $template_id != $profile->get_attr('template_id');
+            $profile->save();
+        }
     }
     print $cgi->redirect("label-manage.pl?label_element=template");
     exit;
