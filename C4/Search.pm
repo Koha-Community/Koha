@@ -937,7 +937,7 @@ sub buildQuery {
 					unless ( $index =~ /(st-|phr|ext)/ ) {
 						#FIXME only valid with LTR scripts
 						$operand=join(" ",map{ 
-												"$_*" 
+											(index($_,"*")>0?"$_":"$_*")
 											 }split (/\s+/,$operand));
 						warn $operand if $DEBUG;
 					}
