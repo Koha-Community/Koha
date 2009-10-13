@@ -1960,7 +1960,6 @@ END_SQL
     SetVersion ($DBversion);
 }
 if (C4::Context->preference("Version") =~/3\.00/) {
-	warn "inside 3.00";
         my $perllibdir=C4::Context->config('intranetdir');
 	my $return=do qq($perllibdir/installer/data/mysql/updatedatabase30.pl);
 	unless ($return){
