@@ -2,6 +2,18 @@ Searching:
 # omitted, broken: sortbynonfiling
     Features:
         -
+            - pref: NoZebra
+              choices:
+                  yes: "Don't use"
+                  no: Use
+            - the Zebra search engine. Searches are very slow on even modest sized collections when Zebra is off.
+        -
+            - When Zebra is not in use, translate the following MARC fields to the following indexes (each line should look something like <code>'indexname' =&gt; '100a,245a,500*',</code>):
+            - pref: NoZebraIndexes
+              type: textarea
+              class: list
+            -
+        -
             - pref: QueryAutoTruncate
               type: boolean
               choices:

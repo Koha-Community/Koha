@@ -29,6 +29,12 @@ OPAC:
               class: long
             - as the name of the library on the OPAC.
         -
+            - pref: OpacMaintenance
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - a warning that the OPAC is under maintenance, instead of the OPAC itself. Note: this shows the same warning as when the database needs upgraded, but unconditionally.
+        -
             - By default, show bib records
             - pref: BiblioDefaultView
               choices:
@@ -54,6 +60,13 @@ OPAC:
               choices:
                   yes: using XSLT stylesheets.
                   no: normally.
+        -
+            - On pages displayed with XSLT stylesheets on the OPAC,
+            - pref: DisplayOPACiconsXSLT
+              choices:
+                  yes: show
+                  no: "don't show"
+            - icons for itemtype and authorized values.
         -
             - pref: OPACDisplayRequestPriority
               choices:

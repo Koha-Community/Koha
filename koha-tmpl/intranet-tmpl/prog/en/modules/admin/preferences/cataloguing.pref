@@ -1,4 +1,4 @@
-Cataloguing:
+Cataloging:
 # broken, omitted: marc
     Interface:
         -
@@ -12,6 +12,19 @@ Cataloguing:
                   yes: Display
                   no: "Don't display"
             - descriptions of fields and subfields in the MARC editor.
+    Spine Labels:
+        -
+            - When using the quick spine label printer,
+            - pref: SpineLabelAutoPrint
+              choices:
+                  yes: do
+                  no: "don't"
+            - automatically pop up a print dialog.
+        -
+            - "Include the following fields on a quick-printed spine label:"
+            - (Enter in columns from the <code>biblio</code>, <code>biblioitems</code> or <code>items</code> tables, surrounded by &lt; and &gt;.)
+            - pref: SpineLabelFormat
+              type: textarea
     Record Structure:
         -
             - Interpret and store MARC records in the
@@ -35,18 +48,6 @@ Cataloguing:
             - Fill in the <a href="http://www.loc.gov/marc/organizations/orgshome.html">MARC organization code</a>
             - pref: MARCOrgCode
             - by default in new MARC records (leave blank to disable).
-        -
-            - pref: NoZebra
-              choices:
-                  yes: "Don't use"
-                  no: Use
-            - the Zebra search engine. Searches are very slow on even modest sized collections when Zebra is off.
-        -
-            - When Zebra is off, translate the following marc fields to the following indexes (each line should look something like <code>'indexname' =&gt; '100a,245a,500*',</code>):
-            - pref: NoZebraIndexes
-              type: textarea
-              class: list
-            -
         -
             - pref: z3950NormalizeAuthor
               choices:
@@ -86,7 +87,7 @@ Cataloguing:
               choices:
                   standard: "Don't"
                   economical: Do
-            - collapse repeated tags of the same type into one tag entry.
+            - collapse repeated tags of the same type into one tag entry on the display.
         -
             - By default, display biblio records in
             - pref: IntranetBiblioDefaultView
@@ -105,3 +106,14 @@ Cataloguing:
                   yes: Hide
                   no: "Don't hide"
             - items marked as suppressed from OPAC search results. Note that you must have the <code>Suppress</code> index set up in Zebra and at least one suppressed item, or your searches will be broken.
+        - 
+            - Show the
+            - pref: StaffSerialIssueDisplayCount
+              class: integer
+            - previous issues of a serial on the staff client.
+        - 
+            - Show the
+            - pref: OPACSerialIssueDisplayCount
+              class: integer
+            - previous issues of a serial on the OPAC.
+
