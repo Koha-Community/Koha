@@ -48,7 +48,11 @@ Filter by area <select name="areas">
 </tr>
 <!-- TMPL_IF NAME="definitions" -->
 <!-- TMPL_LOOP NAME="definitions" -->
+<!-- TMPL_UNLESS NAME="__odd__" -->
+<tr class="highlight" valign="top">
+<!-- TMPL_ELSE -->
 <tr valign="top">
+<!-- /TMPL_UNLESS -->
 <td><!-- TMPL_VAR NAME="name" --></td>
 <td><!-- TMPL_VAR NAME="description" --></td>
 <td><!-- TMPL_VAR NAME="areaname" --></td>
@@ -60,7 +64,7 @@ Filter by area <select name="areas">
 </form></td>
 </tr>
 <!-- /TMPL_LOOP -->
-<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 </table>
 <!-- /TMPL_IF -->
 
@@ -187,7 +191,6 @@ Filter by area <select name="areas">
 <input type="hidden" name="columnstring" value="<!-- TMPL_VAR NAME="columnstring" -->" />
 
 <!-- TMPL_LOOP NAME="columns" -->
-<p>
 <input type="hidden" name="criteria_column" value="<!-- TMPL_VAR NAME="name" -->" />
 <!-- TMPL_VAR NAME="name" -->
 <!-- TMPL_IF NAME="distinct" -->
@@ -243,7 +246,6 @@ align          : "Tl"
 <p>Search string matches <input type="text" size="13" name="<!-- TMPL_VAR NAME="name" -->_value" /></p>
 <!-- /TMPL_IF -->
 
-</p>
 <!-- /TMPL_LOOP -->
 <input type="hidden" name="phase" value="New Term step 5" />
 <input type="submit" name="submit" value="Next" />            
