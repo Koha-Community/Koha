@@ -90,7 +90,6 @@ $searchtype is string Can be "wide" or "exact"
 
 sub SearchInTable{
     my ($tablename,$filters,$orderby, $limit, $columns_out, $filter_columns,$searchtype) = @_; 
-warn "searchtype : ",$searchtype;
 #	$searchtype||="start_with";
     my $dbh      = C4::Context->dbh; 
 	$columns_out||=["*"];
@@ -401,7 +400,6 @@ sub _Process_Operands{
 			if ($field=~/(?<!zip)code|(?<!card)number/ ){
 				push @tmpkeys,(" $field= '' ","$field IS NULL");
 			} elsif ($$columns{$col_field}{Type}=~/varchar|text/i){
-				warn "in text Type";
 				push @tmpkeys,(" $field LIKE ? ","$field LIKE ?");
 				my @localvaluesextended=("\% $operand\%","$operand\%") ;
 				push @values,@localvaluesextended;
