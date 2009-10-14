@@ -343,7 +343,8 @@ if ( defined $htmlfilename ) {
   if ( $htmlfilename eq '' ) {
     $html_fh = *STDOUT;
   } else {
-    open $html_fh, ">", $htmlfilename or die "unable to open $htmlfilename: $!";
+    my $today = C4::Dates->new();
+    open $html_fh, ">",File::Spec->catdir ($htmlfilename,"notices-".$today->output('iso').".html");
   }
   
   print $html_fh "<html>\n";
