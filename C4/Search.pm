@@ -60,6 +60,7 @@ This module provides searching functions for Koha's bibliographic databases
   &FindDuplicate
   &SimpleSearch
   &searchResults
+  &SearchAcquisitions
   &getRecords
   &buildQuery
   &NZgetRecords
@@ -1703,6 +1704,86 @@ sub searchResults {
     return @newresults;
 }
 
+=head2 SearchAcquisitions
+    Search for acquisitions 
+=cut
+
+sub SearchAcquisitions{
+    my ($datebegin, $dateend, $itemtypes,$criteria, $orderby) = @_;
+    
+    my $dbh=C4::Context->dbh;
+    # Variable initialization
+    my $str=qq|
+    SELECT marcxml 
+    FROM biblio 
+    LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
+    LEFT JOIN items ON items.biblionumber=biblio.biblionumber
+    WHERE dateaccessioned BETWEEN ? AND ? 
+    |;
+    
+    my (@params,@loopcriteria);
+    
+    push @params, $datebegin->output("iso");
+    push @params, $dateend->output("iso");
+
+    if (scalar(@$itemtypes)>0 and $criteria ne "itemtype" ){
+        if(C4::Context->preference("item-level_itypes")){
+            $str .= "AND items.itype IN (?".( ',?' x scalar @$itemtypes - 1 ).") ";
+        }else{
+            $str .= "AND biblioitems.itemtype IN (?".( ',?' x scalar @$itemtypes - 1 ).") ";
+        }    
+        push @params, @$itemtypes;
+    }
+        
+    if ($criteria =~/itemtype/){
+        if(C4::Context->preference("item-level_itypes")){
+            $str .= "AND items.itype=? ";
+        }else{
+            $str .= "AND biblioitems.itemtype=? ";
+        }
+        @loopcriteria= @$itemtypes;
+    }elsif ($criteria=~/itemcallnumber/){
+        $str .= "AND (items.itemcallnumber LIKE CONCAT(?,'%') 
+                 OR items.itemcallnumber is NULL
+                 OR items.itemcallnumber = '')";
+        @loopcriteria = ("AA".."zz", "") unless (scalar(@loopcriteria)>0);  
+    }else {
+        $str .= "AND biblio.title LIKE CONCAT(?,'%') ";
+        @loopcriteria = ("A".."z") unless (scalar(@loopcriteria)>0);  
+    }
+        
+    if ($orderby =~ /date_desc/){
+        $str.=" ORDER BY dateaccessioned DESC";
+    } else {
+        $str.=" ORDER BY title";
+    }
+    
+    my $qdataacquisitions=$dbh->prepare($str);
+        
+    my @loopacquisitions;
+    foreach my $value(@loopcriteria){
+        push @params,$value;
+        my %cell;
+        $cell{"title"}=$value;
+        $cell{"titlecode"}=$value;
+        
+        eval{$qdataacquisitions->execute(@params);};
+  
+        if ($@){ warn "recentacquisitions Error :$@";}
+        else {
+            my @loopdata;
+            while (my $data=$qdataacquisitions->fetchrow_hashref){
+                push @loopdata, {"summary"=>GetBiblioSummary( $data->{'marcxml'} ) };
+            }
+            $cell{"loopdata"}=\@loopdata;
+        }
+        push @loopacquisitions,\%cell if (scalar(@{$cell{loopdata}})>0);
+        pop @params;
+    }
+    $qdataacquisitions->finish;
+    return \@loopacquisitions;
+}
+
 #----------------------------------------------------------------------
 #
 # Non-Zebra GetRecords#
@@ -1932,7 +2013,7 @@ sub NZanalyse {
             );
 
             # split each word, query the DB and build the biblionumbers result
-            foreach ( split / /, $string ) {
+            foreach ( split (/ /, $string )) {
                 next if C4::Context->stopwords->{ uc($_) };   # skip if stopword
                 warn "search on all indexes on $_" if $DEBUG;
                 my $biblionumbers;
@@ -1961,7 +2042,7 @@ sub NZanalyse {
 sub NZoperatorAND{
     my ($rightresult, $leftresult)=@_;
     
-    my @leftresult = split /;/, $leftresult;
+    my @leftresult = split (/;/, $leftresult);
     warn " @leftresult / $rightresult \n" if $DEBUG;
     
     #             my @rightresult = split /;/,$leftresult;
@@ -2035,8 +2116,8 @@ sub NZorder {
         # popularity is not in MARC record, it's builded from a specific query
         my $sth =
           $dbh->prepare("select sum(issues) from items where biblionumber=?");
-        foreach ( split /;/, $biblionumbers ) {
-            my ( $biblionumber, $title ) = split /,/, $_;
+        foreach ( split (/;/, $biblionumbers )) {
+            my ( $biblionumber, $title ) = split (/,/, $_);
             $result{$biblionumber} = GetMarcBiblio($biblionumber);
             $sth->execute($biblionumber);
             my $popularity = $sth->fetchrow || 0;
@@ -2075,8 +2156,8 @@ sub NZorder {
     }
     elsif ( $ordering =~ /author/ ) {
         my %result;
-        foreach ( split /;/, $biblionumbers ) {
-            my ( $biblionumber, $title ) = split /,/, $_;
+        foreach ( split (/;/, $biblionumbers )) {
+            my ( $biblionumber, $title ) = split (/,/, $_);
             my $record = GetMarcBiblio($biblionumber);
             my $author;
             if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
@@ -2118,8 +2199,8 @@ sub NZorder {
     }
     elsif ( $ordering =~ /callnumber/ ) {
         my %result;
-        foreach ( split /;/, $biblionumbers ) {
-            my ( $biblionumber, $title ) = split /,/, $_;
+        foreach ( split (/;/, $biblionumbers )) {
+            my ( $biblionumber, $title ) = split (/,/, $_);
             my $record = GetMarcBiblio($biblionumber);
             my $callnumber;
             my ( $callnumber_tag, $callnumber_subfield ) =
@@ -2161,8 +2242,8 @@ sub NZorder {
     }
     elsif ( $ordering =~ /pubdate/ ) {             #pub year
         my %result;
-        foreach ( split /;/, $biblionumbers ) {
-            my ( $biblionumber, $title ) = split /,/, $_;
+        foreach ( split (/;/, $biblionumbers )) {
+            my ( $biblionumber, $title ) = split (/,/, $_);
             my $record = GetMarcBiblio($biblionumber);
             my ( $publicationyear_tag, $publicationyear_subfield ) =
               GetMarcFromKohaField( 'biblioitems.publicationyear', '' );
@@ -2203,8 +2284,8 @@ sub NZorder {
 
 # the title is in the biblionumbers string, so we just need to build a hash, sort it and return
         my %result;
-        foreach ( split /;/, $biblionumbers ) {
-            my ( $biblionumber, $title ) = split /,/, $_;
+        foreach ( split (/;/, $biblionumbers )) {
+            my ( $biblionumber, $title ) = split (/,/, $_);
 
 # hint : the result is sorted by title.biblionumber because we can have X biblios with the same title
 # and we don't want to get only 1 result for each of them !!!

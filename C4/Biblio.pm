@@ -62,6 +62,7 @@ BEGIN {
 		&GetBiblioItemInfosOf
 		&GetBiblioItemByBiblioNumber
 		&GetBiblioFromItemNumber
+		&GetBiblioSummary
 		
 		&GetRecordValue
 		&GetFieldMapping
@@ -1244,6 +1245,119 @@ sub GetCOinSBiblio {
     #<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="
     }
     return $coins_value;
+}
+
+=head2 GetBiblioSummary
+
+=over 4
+
+$summary = GetBiblioSummary($marcrecord);
+
+Return the summary of a record.
+
+=back
+
+=cut
+
+sub GetBiblioSummary {
+    my $recorddata =shift @_;
+    
+    my $marcflavour = C4::Context->preference("marcflavour");
+    my $marc=MARC::Record::new_from_xml($recorddata,"utf-8",$marcflavour);
+    
+    my $str;
+    
+    if($marcflavour eq "MARC21"){
+        $str="<b>".$marc->subfield('245',"a")."</b>" if $marc->subfield('245','a');
+        $str.= " <i>".$marc->subfield('245',"b")."</i> " if $marc->subfield('245','b');
+        
+        if ($marc->field('245')){
+            $str.=" / ";
+            foreach ($marc->field('100')->subfield("a")) {
+                $str.=$_." ; ";
+            }
+            $str=~s/ ; $/. /; 
+        }
+      
+        if ($marc->field('260')){
+            $str.=" - ";
+            $str.=$marc->subfield('260',"a")." " if $marc->subfield('260','a');
+            $str.=" : ".$marc->subfield('260',"b")." " if $marc->subfield('260','b');
+            $str.=", ".$marc->subfield('260',"c")." " if $marc->subfield('260','c');
+        }
+        if ($marc->field('300')){
+            $str.=" - ";
+            $str.=$marc->subfield('300','a') if ($marc->subfield(300,'a'));
+            $str.=" ; ".$marc->subfield('300','b') if $marc->subfield('300','b');
+            $str.=" ; ".$marc->subfield('300','c') if $marc->subfield('300','c');
+            $str.=" ; ".$marc->subfield('300','e') if $marc->subfield('300','e');
+        }
+        foreach ($marc->field('500')){
+            $str.= " - ";
+            foreach ($_->subfield("a")){
+                $str.=$_."; "
+            } 
+        }
+        my $itemtypes=GetItemTypes();
+        $str.=" - <u>".$itemtypes->{$marc->subfield('942','c')}->{'description'}."</u> ";
+        $str.="<br />\n";
+       
+    }else{
+        $str = "<b>".$marc->subfield('200','a')."</b>"   if $marc->subfield('200','a');
+        $str.= " <i>".$marc->subfield('200','e')."</i> " if $marc->subfield('200','e');
+        if ($marc->field('200')){
+            $str.=" / ";
+            foreach ($marc->field('200')->subfield("f")) {
+                $str.=$_." ; ";
+            }
+            $str=~s/ ; $/. /; 
+        }
+        
+        if ($marc->subfield('200','g')){
+            $str.=" ; ";
+            foreach ($marc->field('200')->subfield("g")){
+                $str.=$_." ; ";
+            } 
+            $str=~s/ ; $/. /; 
+        }
+        
+        if ($marc->field('461')){
+            $str.="- In :";
+            $str.=     $marc->subfield('461','t') if $marc->subfield('461','t');
+            $str.=", ".$marc->subfield('461','d') if $marc->subfield('461','d');
+            $str.=", ".$marc->subfield('461','v') if $marc->subfield('461','v');
+            $str.=", ".$marc->subfield('461','h') if $marc->subfield('461','h');
+            $str.=" ; ".$marc->subfield('461','x') if $marc->subfield('461','x');
+        }
+        
+        if ($marc->field('210')){
+            $str.=" - ";
+            $str.=$marc->subfield('210',"a")." " if $marc->subfield('210','a');
+            $str.=" : ".$marc->subfield('210',"c")." " if $marc->subfield('210','c');
+            $str.=", ".$marc->subfield('210',"d")." " if $marc->subfield('210','d');
+        }
+        
+        if ($marc->field('215')){
+            $str.=" - ";
+            $str.=$marc->subfield('215','a') if ($marc->subfield(215,'a'));
+            $str.=" ; ".$marc->subfield('215','d') if $marc->subfield('215','d');
+            $str.=" ; ".$marc->subfield('215','c') if $marc->subfield('215','c');
+            $str.=" ; ".$marc->subfield('215','e') if $marc->subfield('215','e');
+        }
+        foreach ($marc->field('300')){
+            $str.=" - ";
+            foreach ($_->subfield("a")){
+                $str.=$_."; "
+            } 
+        }
+        
+        my $itemtypes=GetItemTypes;
+        if($itemtypes->{$marc->subfield('200','b')}){
+            $str.=" - <u>".$itemtypes->{$marc->subfield('200','b')}->{'description'}."</u> ";
+        }
+        $str.="<br />\n";         
+    }    
+    return $str;
 }
 
 =head2 GetAuthorisedValueDesc
