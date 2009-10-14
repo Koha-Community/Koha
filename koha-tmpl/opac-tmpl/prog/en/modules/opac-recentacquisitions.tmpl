@@ -1,0 +1,106 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha en ligne<!-- /TMPL_IF -->
+    Catalogue &rsaquo; Acquisitions  Récentes <!-- TMPL_IF NAME="show_list" -->&rsaquo; Resultats<!-- TMPL_ELSE -->&rsaquo; Choisir<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="masthead.inc" -->
+
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<!-- TMPL_IF NAME="show_list" -->
+  <h1>Recent Acquisitions </h1>
+  <!-- TMPL_LOOP NAME="loopacquisitions" -->
+  	<a href="#<!--TMPL_VAR Name="titlecode"-->"><!--TMPL_VAR Name="title"--></a><br />
+  <!-- /TMPL_LOOP -->
+ 
+  <!-- TMPL_LOOP NAME="loopacquisitions" -->
+  	<h2><a name="<!--TMPL_VAR Name="titlecode"-->"><!--TMPL_VAR Name="title"--></a></h2>
+	  <!-- TMPL_LOOP NAME="loopdata" -->
+    	<!--TMPL_VAR Name="summary"--><br /> <br/>
+	  <!-- /TMPL_LOOP-->
+  <!-- /TMPL_LOOP -->
+<!-- TMPL_ELSE -->
+	<form method="get" action="">
+	<fieldset class="rows"><legend>Recent Acquisitions </legend>
+                <p>Between <input type="text" readonly="readonly" size="10" id="datebegin" name="datebegin" value="<!--TMPL_VAR Name="datebegin"-->"/>
+                   <script type="text/javascript">
+				   //<![CDATA[
+                    Calendar.setup(
+                        {
+                            inputField : "datebegin",
+                            ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                            button : "openCalendarDateBegin",
+                        }
+                    );
+					//]]>
+                    </script>
+                    and <input readonly="readonly" size="10" id="dateend" name="dateend" value="<!--TMPL_VAR Name="dateend"-->" type="text" />
+                        
+                          <script type="text/javascript">
+						  //<![CDATA[ 
+                            Calendar.setup(
+                                {
+                                    inputField : "dateend",
+                                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                                    button : "openCalendarDateEnd",
+                                }
+                            );
+							//]]>
+                </script></p> 
+   			<p>
+   				List by: 
+   				<select name="criteria">
+   					<option value="itemtype">Item Type</option>
+		            <option value="itemcallnumber">Call Number</option>
+        		    <option value="title">Title</option>
+	            </select>
+	        </p>
+
+   			<p>Limit by item type:</p>
+		    <table>
+		        <tr>
+		      <!--TMPL_LOOP Name="itemtypeloop"-->
+		        <td>
+			        <!-- TMPL_IF name="imageurl"-->
+			        	<img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" />
+			        <!-- /TMPL_IF -->
+				    <input type="checkbox" id="mc-<!--TMPL_VAR Name="number" -->" name="itemtypes" value="<!--TMPL_VAR Name="code" -->" />&nbsp;
+			        <label for="mc-<!--TMPL_VAR Name="number" -->">
+			        	<!--TMPL_VAR Name="description" -->
+			        </label>
+		        </td>
+		        <!-- TMPL_UNLESS name="count5" --></tr><tr><!-- /TMPL_UNLESS -->
+		      <!--/TMPL_LOOP-->
+		      </tr>
+		    </table>     
+   
+		    <p>Order by: 
+		    	<select name="orderby">
+		            <option value=""> </option>
+		            <option value="date_desc">Date desc</option>
+		            <option value="title">Title</option>
+	            </select>
+            </p>
+      
+                   
+  		</fieldset>
+	<fieldset class="action">
+		<input type="submit" value="Submit" name="OK"/>
+		<input type="hidden" name="op" value="show_list" />
+	</fieldset>
+	</form>
+<!-- /TMPL_IF -->
+
+</div>
+</div>
+<div class="yui-b">
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

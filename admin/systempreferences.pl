@@ -287,6 +287,7 @@ $tabsysprefs{AnonSuggestions}      = "OPAC";
 $tabsysprefs{suggestion}           = "OPAC";
 $tabsysprefs{OpacTopissue}         = "OPAC";
 $tabsysprefs{OpacBrowser}          = "OPAC";
+$tabsysprefs{OpacRecentAcquisitions} = "OPAC";
 $tabsysprefs{kohaspsuggest}        = "OPAC";
 $tabsysprefs{OpacRenewalAllowed}   = "OPAC";
 $tabsysprefs{OPACItemHolds}        = "OPAC";
