@@ -39,7 +39,7 @@ $('#sort_by').change(function() {
 
 $(".addtocart").show();
         var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
-
+        <!-- TMPL_IF name="intranetbookbag" -->     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>"; <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="addbarshelves" -->
         param1 += "<optgroup label=\"Your Lists:\">";<!-- TMPL_LOOP NAME="addbarshelvesloop" -->
         param1 += "<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP -->
@@ -79,6 +79,11 @@ $(".addtocart").show();
                         }
                         return false;   
                 }
+		if($("#addto").find("option:selected").attr("value") == "addtocart"){
+                        addMultiple();
+                        return false;
+                 }
+
         }
 
     $("#selection_ops").show();

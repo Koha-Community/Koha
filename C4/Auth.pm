@@ -352,6 +352,7 @@ sub get_template_and_user {
             intranetreadinghistory      => C4::Context->preference("intranetreadinghistory"),
             intranetstylesheet          => C4::Context->preference("intranetstylesheet"),
             intranetuserjs              => C4::Context->preference("intranetuserjs"),
+	    intranetbookbag  		=> C4::Context->preference("intranetbookbag"),
             noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
             suggestion                  => C4::Context->preference("suggestion"),
             virtualshelves              => C4::Context->preference("virtualshelves"),
@@ -894,6 +895,7 @@ sub checkauth {
         intranetcolorstylesheet =>
 								C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
+        intranetbookbag    => C4::Context->preference("intranetbookbag"),
         IntranetNav        => C4::Context->preference("IntranetNav"),
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
@@ -901,7 +903,6 @@ sub checkauth {
         AutoLocation       => C4::Context->preference("AutoLocation"),
 		wrongip            => $info{'wrongip'}
     );
-
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     my $self_url = $query->url( -absolute => 1 );

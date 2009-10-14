@@ -3064,6 +3064,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.116";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(  qq# INSERT INTO `systempreferences` VALUES ('intranetbookbag','1','','If ON, enables display of Cart feature in the intranet','YesNo')  #);
+
+    print "Upgrade to $DBversion done (intranetbookbag syspref added)\n";
+    SetVersion ($DBversion);
+}
 
 
 =item DropAllForeignKeys($table)

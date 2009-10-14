@@ -65,28 +65,13 @@ use C4::Output;
 use C4::VirtualShelves qw/:DEFAULT GetRecentShelves/;
 use C4::Circulation;
 use C4::Auth;
-#splits incoming biblionumber(s) to array and adds each to shelf.
+
+# splits incoming biblionumber(s) to array and adds each to shelf.
 sub AddBibliosToShelf {
     my ($shelfnumber,@biblionumber)=@_;
 
     # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
-    if (scalar(@biblionumber) == 1) {
-        @biblionumber = (split /\//,$biblionumber[0]);
-    }
-    for my $bib (@biblionumber){
-        AddToShelfFromBiblio($bib, $shelfnumber);
-    }
-}
-
-
-
-#use it only to debug !
-use warnings;
-
-sub AddBibliosToShelf {
-    my ($shelfnumber,@biblionumber)=@_;
-
-    # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
+    # (Note : they come in as '/' when added from the cart)
     if (scalar(@biblionumber) == 1) {
         @biblionumber = (split /\//,$biblionumber[0]);
     }
@@ -127,6 +112,9 @@ if ($biblionumbers) {
     @biblionumbers = split '/', $biblionumbers;
 } else {
     @biblionumbers = (@biblionumber);
+}
+if (scalar(@biblionumber) == 1) {
+        @biblionumber = (split /\//,$biblionumber[0]);
 }
 
 $shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield ) if $newvirtualshelf;

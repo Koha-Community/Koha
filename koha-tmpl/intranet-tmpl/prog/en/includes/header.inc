@@ -1,3 +1,5 @@
+    <!-- TMPL_IF NAME="intranetbookbag" --><div id="cartDetails">Your cart is empty.</div><!-- /TMPL_IF -->
+
     <div id="header" class="clearfix">
         <div id="toplevelnav">
             <ul id="toplevelmenu">
@@ -35,6 +37,9 @@
                         </div>
                     </div>
                 </li>
+		<!-- TMPL_IF NAME="intranetbookbag" -->
+		<li><a href="#" id="cartmenulink"><i></i><span><i></i><span></span><img src="/intranet-tmpl/prog/img/cart.gif" width="14" height="14" alt="" border="0" />Cart<span id="basketcount"></span></span></a></li>
+		<!-- /TMPL_IF -->
             </ul>
         </div>
     <div id="login">
