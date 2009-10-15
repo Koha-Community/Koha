@@ -56,6 +56,7 @@ my $dbh = C4::Context->dbh;
 my $error        = $input->param('error');
 my @itemnumbers  = $input->param('itemnumber');
 my $op           = $input->param('op');
+my $del          = $input->param('del');
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "tools/batchMod.tmpl",
@@ -68,6 +69,7 @@ my ($template, $loggedinuser, $cookie)
 
 my $today_iso = C4::Dates->today('iso');
 $template->param(today_iso => $today_iso);
+$template->param(del       => $del);
 
 my $itemrecord;
 my $nextop="";
