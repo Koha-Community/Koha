@@ -52,8 +52,13 @@ my $mode = $input->param('mode');
 my $id   = $input->param('id');
 
 if ( $mode eq 'job_add' ) {
-    my $startdate =
-      join( '', ( split m|/|, $input->param('startdate') )[ 2, 0, 1 ] );
+
+    # Retrieving the date according to the dateformat syspref
+    my $c4date = C4::Dates->new($input->param('startdate'));
+
+    # Formatting it for Schedule::At
+    my $startdate = join('', (split /-/, $c4date->output("iso")));
+
     my $starttime = $input->param('starttime');
     my $recurring = $input->param('recurring');
     $starttime =~ s/\://g;
