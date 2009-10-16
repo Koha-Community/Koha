@@ -695,7 +695,7 @@ sub _detect_truncation {
 # STEMMING
 sub _build_stemmed_operand {
     my ($operand,$lang) = @_;
-    require Lingua::Stem::Snowball;
+    require Lingua::Stem::Snowball ;
     my $stemmed_operand;
 
     # If operand contains a digit, it is almost certainly an identifier, and should
@@ -706,18 +706,10 @@ sub _build_stemmed_operand {
     return $operand if $operand =~ /\d/;
 
 # FIXME: the locale should be set based on the user's language and/or search choice
+    warn "$lang";
     my $stemmer = Lingua::Stem::Snowball->new( lang => $lang,
                                                encoding => "UTF-8" );
 
-# FIXME: these should be stored in the db so the librarian can modify the behavior
-# Lingua::Stem can't add exceptions
-#    $stemmer->add_exceptions(
-#        {
-#            'and' => 'and',
-#            'or'  => 'or',
-#            'not' => 'not',
-#        }
-#    );
     my @words = split( / /, $operand );
     my @stems = $stemmer->stem(\@words);
     for my $stem (@stems) {
