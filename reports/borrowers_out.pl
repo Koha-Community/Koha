@@ -56,7 +56,7 @@ my ($template, $borrowernumber, $cookie)
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {reports => 1},
+                flagsrequired => {reports => '*'},
                 debug => 1,
                 });
 $template->param(do_it => $do_it,

@@ -3071,6 +3071,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (intranetbookbag syspref added)\n";
     SetVersion ($DBversion);
 }
+
 $DBversion = "3.01.00.117";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(  qq# ALTER TABLE authorised_values ADD COLUMN `lib_opac` VARCHAR(80) default NULL AFTER `lib` #);
@@ -3078,6 +3079,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (opac authorised values added)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.01.00.118";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+$dbh->do("
+       INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
+		(16, 'execute_reports', 'Execute SQL reports'),
+		(16, 'create_reports', 'Create SQL Reports')
+	");
+
+    print "Upgrade to $DBversion done (granular permissions for guided reports added)\n";
+    SetVersion ($DBversion);
+}
+
 
 
 =item DropAllForeignKeys($table)

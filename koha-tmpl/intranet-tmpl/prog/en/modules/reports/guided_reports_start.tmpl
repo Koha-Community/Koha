@@ -78,18 +78,24 @@ This feature aims to provide some middle ground between the built in
 canned reports and writing custom SQL reports.</p>
 
      <h3>Build And Run Reports</h3>
-	      <form action="/cgi-bin/koha/reports/guided_reports.pl">
-		  <input type="hidden" name="phase" value="Build new" />
-		<input type="submit" name="submit" value="Build new"/>
-		</form>
+	    <!-- TMPL_IF NAME="CAN_user_reports_create_report" -->
 		<form action="/cgi-bin/koha/reports/guided_reports.pl">
-		<input type="hidden" name="phase" value="Use saved"/>
-		<input type="submit" name="submit" value="Use saved"/>
+		    <input type="hidden" name="phase" value="Build new" />
+		    <input type="submit" name="submit" value="Build new"/>
 		</form>
+	    <!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="CAN_user_reports_execute_report" -->
 		<form action="/cgi-bin/koha/reports/guided_reports.pl">
-		<input type="hidden" name="phase" value="Create report from SQL"/>
-		<input type="submit" name="submit" value="Create report from SQL"/>
-        </form>
+		    <input type="hidden" name="phase" value="Use saved"/>
+		    <input type="submit" name="submit" value="Use saved"/>
+		</form>
+	    <!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="CAN_user_reports_create_report" -->
+		<form action="/cgi-bin/koha/reports/guided_reports.pl">
+		    <input type="hidden" name="phase" value="Create report from SQL"/>
+		    <input type="submit" name="submit" value="Create report from SQL"/>
+		</form>
+	    <!-- /TMPL_IF -->
 <h3>Reports Dictionary</h3>
 <p>Use the reports dictionary to define custom criteria to use in your reports</p>
 <form action="/cgi-bin/koha/reports/dictionary.pl">

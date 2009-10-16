@@ -41,19 +41,29 @@ Script to control the guided report creation
 
 my $input = new CGI;
 
+my $phase = $input->param('phase');
+my $flagsrequired;
+if ( $phase eq 'Build new' ) {
+    $flagsrequired = 'create_report';
+}
+elsif ( $phase eq 'Use saved' ) {
+    $flagsrequired = 'execute_report';
+} else {
+    $flagsrequired = '*';
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "reports/guided_reports_start.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { reports => 1 },
+        flagsrequired   => { reports => $flagsrequired },
         debug           => 1,
     }
 );
 
     my @errors = ();
-my $phase = $input->param('phase');
 if ( !$phase ) {
     $template->param( 'start' => 1 );
     # show welcome page
