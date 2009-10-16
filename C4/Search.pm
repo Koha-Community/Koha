@@ -710,13 +710,14 @@ sub _build_stemmed_operand {
                                                encoding => "UTF-8" );
 
 # FIXME: these should be stored in the db so the librarian can modify the behavior
-    $stemmer->add_exceptions(
-        {
-            'and' => 'and',
-            'or'  => 'or',
-            'not' => 'not',
-        }
-    );
+# Lingua::Stem can't add exceptions
+#    $stemmer->add_exceptions(
+#        {
+#            'and' => 'and',
+#            'or'  => 'or',
+#            'not' => 'not',
+#        }
+#    );
     my @words = split( / /, $operand );
     my @stems = $stemmer->stem(\@words);
     for my $stem (@stems) {
