@@ -595,7 +595,7 @@ sub ModDateLastSeen {
 
 =over 4
 
-DelItem($biblionumber, $itemnumber);
+DelItem($dbh, $biblionumber, $itemnumber);
 
 =back
 
