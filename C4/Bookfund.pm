@@ -214,6 +214,7 @@ sub GetBookFundBreakdown {
     my ( $id, $start, $end ) = @_;
     my $dbh = C4::Context->dbh;
 
+    
     # if no start/end dates given defaut to everything
     if ( !$start ) {
         $start = '0000-00-00';
@@ -222,76 +223,41 @@ sub GetBookFundBreakdown {
 
     # do a query for spent totals.
     my $query = "
-        Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
-    as qrev,subscription,title,itype as itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
-    quantity-quantityreceived as tleft,
-    aqorders.ordernumber
-    as ordnum,entrydate,budgetdate,aqbasket.booksellerid,aqbasket.basketno
-    from aqorders
-    inner join aqorderbreakdown on aqorderbreakdown.ordernumber = aqorders.ordernumber
-    inner join aqbasket on aqbasket.basketno = aqorders.basketno
-    left join items on  items.biblionumber=aqorders.biblionumber
-    where bookfundid=? 
-   and (datereceived >= ? and datereceived < ?)
-    and (datecancellationprinted is NULL or
-	   datecancellationprinted='0000-00-00')
-    and (closedate >= ? and closedate < ?)
+    SELECT quantity,datereceived,freight,unitprice,listprice,ecost,
+        quantityreceived AS qrev,subscription,title,aqorders.biblionumber,
+        aqorders.booksellerinvoicenumber,quantity-quantityreceived as tleft,
+        aqorders.ordernumber as ordnum,entrydate,budgetdate,aqbasket.booksellerid,
+        aqbasket.basketno
+    FROM aqorders
+        LEFT JOIN aqorderbreakdown USING (ordernumber)
+        LEFT JOIN aqbasket USING (basketno)
+        LEFT JOIN aqbudget USING (bookfundid)
+    WHERE bookfundid=?
+        AND (datecancellationprinted IS NULL OR datecancellationprinted = '0000-00-00')
+        AND closedate BETWEEN startdate AND enddate 
+        AND creationdate > startdate
     ORDER BY datereceived
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $id, $start, $end, $start, $end);
+    $sth->execute( $id);
 
-    my ($spent) = 0;
+    my ($spent, $comtd) = (0, 0);
     while ( my $data = $sth->fetchrow_hashref ) {
+        
+        my $recv  = $data->{'qrev'};
+        my $left = $data->{'tleft'};
+        my $ecost = $data->{'ecost'};
+        
+        
         if($data->{datereceived}){
-            my $recv = $data->{'qrev'};
             if ( $recv > 0 ) {
                 $spent += $recv * $data->{'unitprice'};
             }
-
         }
-    }
+        $left = $data->{quantity} if(not $recv);
 
-    # then do a seperate query for commited totals, (pervious single query was
-    # returning incorrect comitted results.
+        $comtd += $left * $ecost;
 
-    $query = "
-        SELECT  quantity,datereceived,freight,unitprice,
-                listprice,ecost,quantityreceived AS qrev,
-                subscription,title,itemtype,aqorders.biblionumber,
-                aqorders.booksellerinvoicenumber,
-                quantity-quantityreceived AS tleft,quantityreceived,
-                aqorders.ordernumber AS ordnum,entrydate,budgetdate
-        FROM    aqorders
-        LEFT JOIN aqbasket USING (basketno)
-        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=aqorders.biblioitemnumber
-        LEFT JOIN aqorderbreakdown ON aqorders.ordernumber=aqorderbreakdown.ordernumber
-        WHERE   bookfundid=?
-            AND (budgetdate >= ? AND budgetdate < ?)
-            AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')
-            AND (closedate >= ? AND closedate <= ?)
-    ";
-
-    $sth = $dbh->prepare($query);
-#      warn "$start $end";     
-    $sth->execute( $id, $start, $end , $start, $end);
-
-    my $comtd=0;
-
-    while ( my $data = $sth->fetchrow_hashref ) {
-        if(not $data->{datereceived}){
-            my $left = $data->{'tleft'};
-            if ( !$left || $left eq '' ) {
-                $left = $data->{'quantity'};
-            }
-            if ( $left && $left > 0 ) {
-                my $subtotal = $left * $data->{'ecost'};
-                $data->{subtotal} = $subtotal;
-                $data->{'left'} = $left;
-                $comtd += $subtotal;
-            }
-        }
-#         use Data::Dumper; warn Dumper($data);    
     }
 
     $sth->finish;
