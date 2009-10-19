@@ -350,72 +350,76 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <div id="holdings">
 <!-- TMPL_IF name="count" -->
-    <table id="holdingst">
-        <thead><tr>
-            <!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
-            <th>Location</th>
-        <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
-        <th>Call Number</th>
-        <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Vol Info</th><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="itemdata_uri" --><th>URL</th><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy</th><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="serial" -->
-        <th>Serial Data</th>
-            <th>Published</th><!-- /TMPL_IF -->
-            <th>Status</th>
-            <!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Notes</th><!-- /TMPL_IF -->
-            <th>Date Due</th>
-        </tr></thead>
-        <tbody><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-        <tr><!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_IF -->
-            <td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location_description" --> </td>
-            <!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
-            <td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
-            <!-- TMPL_IF NAME="itemdata_enumchron" --><td><!-- TMPL_VAR NAME="enumchron" --></td><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="itemdata_uri" --><td><a href="<!-- TMPL_VAR NAME="uri" -->"><!-- TMPL_VAR NAME="uri" --></a></td><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="itemdata_copynumber" --><td><!-- TMPL_VAR NAME="copynumber" --></td><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="serial" --><td><!-- TMPL_VAR NAME="serialseq" --> </td>
-            <td><!-- TMPL_VAR NAME="publisheddate" --> </td><!-- /TMPL_IF -->
-            <td><!-- TMPL_IF name="bi_notforloan" -->
-                    Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
-                <!-- TMPL_ELSIF NAME="itypenotforloan" -->
-                    Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
-                <!-- TMPL_ELSE -->
-                    <!-- TMPL_IF name="datedue" -->
-                         <!-- TMPL_IF name="OPACShowCheckoutName" -->
-			Checked out to <!-- TMPL_VAR NAME="cardnumber" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
-                    <!-- TMPL_ELSE -->
-                    Checked out
+    <!-- TMPL_IF name="lotsofitems" -->
+	<p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;viewallitems=1">Click here to view them all.</a></p>
+    <!-- TMPL_ELSE -->
+	<table id="holdingst">
+	    <thead><tr>
+		<!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
+		<th>Location</th>
+	    <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
+	    <th>Call Number</th>
+	    <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Vol Info</th><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="itemdata_uri" --><th>URL</th><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy</th><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="serial" -->
+	    <th>Serial Data</th>
+		<th>Published</th><!-- /TMPL_IF -->
+		<th>Status</th>
+		<!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Notes</th><!-- /TMPL_IF -->
+		<th>Date Due</th>
+	    </tr></thead>
+	    <tbody><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+	    <tr><!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_IF -->
+		<td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location_description" --> </td>
+		<!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
+		<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
+		<!-- TMPL_IF NAME="itemdata_enumchron" --><td><!-- TMPL_VAR NAME="enumchron" --></td><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="itemdata_uri" --><td><a href="<!-- TMPL_VAR NAME="uri" -->"><!-- TMPL_VAR NAME="uri" --></a></td><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="itemdata_copynumber" --><td><!-- TMPL_VAR NAME="copynumber" --></td><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="serial" --><td><!-- TMPL_VAR NAME="serialseq" --> </td>
+		<td><!-- TMPL_VAR NAME="publisheddate" --> </td><!-- /TMPL_IF -->
+		<td><!-- TMPL_IF name="bi_notforloan" -->
+			Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
+		    <!-- TMPL_ELSIF NAME="itypenotforloan" -->
+			Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
+		    <!-- TMPL_ELSE -->
+			<!-- TMPL_IF name="datedue" -->
+			     <!-- TMPL_IF name="OPACShowCheckoutName" -->
+			    Checked out to <!-- TMPL_VAR NAME="cardnumber" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+			<!-- TMPL_ELSE -->
+			Checked out
+			    <!-- /TMPL_IF -->
+			<!-- TMPL_ELSE -->
+			    <!-- TMPL_IF name="itemnotforloan" -->
+				<!-- TMPL_VAR NAME="notforloanvalue" -->
+			    <!-- TMPL_ELSE -->
+				<!-- TMPL_IF name="itemlost"-->
+				    <!-- TMPL_IF name="lostimageurl"--><img src="<!-- TMPL_VAR NAME="lostimageurl" -->" alt="<!-- TMPL_VAR NAME="lostimagelabel" -->" title="<!-- TMPL_VAR NAME="lostimagelabel" -->"><!-- TMPL_ELSE -->Item lost<!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				    <!-- TMPL_IF NAME="wthdrawn" -->
+					Item withdrawn
+				    <!-- TMPL_ELSIF NAME="damaged" -->
+					Item damaged
+				    <!-- TMPL_ELSIF Name="transfertwhen" -->
+					In transit from <!-- TMPL_VAR NAME="transfertfrom" -->
+					to <!-- TMPL_VAR NAME="transfertto" --> since <!-- TMPL_VAR NAME="transfertwhen" -->
+				    <!-- TMPL_ELSE -->
+					<!-- TMPL_IF NAME="waiting" -->On hold<!-- TMPL_ELSE --><!-- TMPL_IF NAME="onhold" -->On hold<!-- TMPL_ELSE -->Available<!-- /TMPL_IF --><!-- /TMPL_IF -->
+				    <!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+			    <!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
-                    <!-- TMPL_ELSE -->
-                        <!-- TMPL_IF name="itemnotforloan" -->
-                            <!-- TMPL_VAR NAME="notforloanvalue" -->
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="itemlost"-->
-                                <!-- TMPL_IF name="lostimageurl"--><img src="<!-- TMPL_VAR NAME="lostimageurl" -->" alt="<!-- TMPL_VAR NAME="lostimagelabel" -->" title="<!-- TMPL_VAR NAME="lostimagelabel" -->"><!-- TMPL_ELSE -->Item lost<!-- /TMPL_IF -->
-                            <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF NAME="wthdrawn" -->
-                                    Item withdrawn
-                                <!-- TMPL_ELSIF NAME="damaged" -->
-                                    Item damaged
-                                <!-- TMPL_ELSIF Name="transfertwhen" -->
-                                    In transit from <!-- TMPL_VAR NAME="transfertfrom" -->
-                                    to <!-- TMPL_VAR NAME="transfertto" --> since <!-- TMPL_VAR NAME="transfertwhen" -->
-                                <!-- TMPL_ELSE -->
-                                    <!-- TMPL_IF NAME="waiting" -->On hold<!-- TMPL_ELSE --><!-- TMPL_IF NAME="onhold" -->On hold<!-- TMPL_ELSE -->Available<!-- /TMPL_IF --><!-- /TMPL_IF -->
-                                <!-- /TMPL_IF -->
-                            <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF -->
-                    <!-- /TMPL_IF -->
-                <!-- /TMPL_IF --></td>
-                <!-- TMPL_IF NAME="itemdata_itemnotes" --><td><!-- TMPL_VAR NAME="itemnotes" --></td><!-- /TMPL_IF -->
-            <td><!-- TMPL_VAR NAME="datedue" --></td>
-            <!-- TMPL_IF NAME="type" -->
-            <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
-            <!-- /TMPL_IF -->
-        </tr>
-        <!-- /TMPL_LOOP --></tbody>
-    </table>
+		    <!-- /TMPL_IF --></td>
+		    <!-- TMPL_IF NAME="itemdata_itemnotes" --><td><!-- TMPL_VAR NAME="itemnotes" --></td><!-- /TMPL_IF -->
+		<td><!-- TMPL_VAR NAME="datedue" --></td>
+		<!-- TMPL_IF NAME="type" -->
+		<td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
+		<!-- /TMPL_IF -->
+	    </tr>
+	    <!-- /TMPL_LOOP --></tbody>
+	</table>
+    <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 <p>No physical items for this record</p>
 <!-- /TMPL_IF -->

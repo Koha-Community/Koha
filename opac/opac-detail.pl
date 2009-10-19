@@ -126,6 +126,14 @@ foreach my $subscription (@subscriptions) {
 
 $dat->{'count'} = scalar(@items);
 
+# If there is a lot of items, and the user has not decided
+# to view them all yet, we first warn him
+# TODO: The limit of 50 could be a syspref
+my $viewallitems = $query->param('viewallitems');
+if ($dat->{'count'} >= 50 && !$viewallitems) {
+    $template->param('lotsofitems' => 1);
+}
+
 my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) );
 
 my $norequests = 1;
@@ -607,7 +615,7 @@ switch (C4::Context->preference('opacSerialDefaultTab')) {
 
     case "holdings" {
 	if ($dat->{'count'} > 0) {
-	   $dat->{'defaultholdings'} = 1; 
+	   $defaulttab = 'holdings'; 
 	} else {
 	     # As this is the last option, we try other options if there are no items
 	     if ($subscriptionsnumber) {
