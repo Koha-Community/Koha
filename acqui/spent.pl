@@ -31,24 +31,23 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 #	correctly due to missing joins between tables
 
 my $query =
-"Select quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
-    as qrev,subscription,title,itype as itemtype,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
+"SELECT quantity,datereceived,freight,unitprice,listprice,ecost,quantityreceived
+    as qrev,subscription,title,aqorders.biblionumber,aqorders.booksellerinvoicenumber,
     quantity-quantityreceived as tleft,
     aqorders.ordernumber
     as ordnum,entrydate,budgetdate,aqbasket.booksellerid,aqbasket.basketno
-    from aqorders
-    inner join aqorderbreakdown on aqorderbreakdown.ordernumber = aqorders.ordernumber
-    inner join aqbasket on aqbasket.basketno = aqorders.basketno
-    left join items on  items.biblionumber=aqorders.biblionumber
-    where bookfundid=? 
-   and (datereceived >= ? and datereceived < ?)
-    and (datecancellationprinted is NULL or
-	   datecancellationprinted='0000-00-00')
-    and (closedate >= ? and closedate < ?)
+    FROM aqorders
+    LEFT JOIN aqorderbreakdown USING (ordernumber)
+    LEFT JOIN aqbasket USING (basketno)
+    LEFT JOIN aqbudget USING (bookfundid)
+    WHERE bookfundid=?
+    AND (datecancellationprinted IS NULL OR datecancellationprinted = '0000-00-00')
+    AND closedate BETWEEN startdate AND enddate 
+    AND creationdate > startdate
     ORDER BY datereceived
   ";
 my $sth = $dbh->prepare($query);
-$sth->execute( $bookfund, $start, $end, $start, $end);
+$sth->execute( $bookfund);
 
 my $total = 0;
 my $toggle;
