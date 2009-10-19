@@ -3092,6 +3092,18 @@ $dbh->do("
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.119";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+$dbh->do("
+	UPDATE `systempreferences` SET `options` = 'holdings|serialcollection|subscriptions',
+	WHERE `systempreferences`.`variable` = 'opacSerialDefaultTab' LIMIT 1 
+	");
+
+    print "Upgrade to $DBversion done (opac-detail default tag updated)\n";
+    SetVersion ($DBversion);
+}
+
+
 
 
 =item DropAllForeignKeys($table)

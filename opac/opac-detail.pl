@@ -40,6 +40,7 @@ use C4::Serials;
 use C4::Members;
 use C4::VirtualShelves;
 use C4::XSLT;
+use Switch;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -124,12 +125,6 @@ foreach my $subscription (@subscriptions) {
 }
 
 $dat->{'count'} = scalar(@items);
-
-# If there are no items or the syspref says so, we show serial collection as default tab
-if ($dat->{'count'} == 0 || C4::Context->preference('opacSerialDefaultTab') eq 'serialcollection') {
-	$dat->{'defaultserialcollection'} = 1;
-	
-}
 
 my $biblio_authorised_value_images = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $biblionumber, $record ) );
 
@@ -585,6 +580,48 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $search_for_title =~ s/{ISBN}/$isbn/g;
  $template->param('OPACSearchForTitleIn' => $search_for_title);
 }
+
+# We try to select the best default tab to show, according to what
+# the user wants, and what's available for display
+my $defaulttab;
+switch (C4::Context->preference('opacSerialDefaultTab')) {
+
+    # If the user wants subscriptions by default
+    case "subscriptions" { 
+	# And there are subscriptions, we display them
+	if ($subscriptionsnumber) {
+	    $defaulttab = 'subscriptions';
+	} else {
+	   # Else, we try next option
+	   next; 
+	}
+    }
+
+    case "serialcollection" {
+	if (scalar(@serialcollections) > 0) {
+	    $defaulttab = 'serialcollection' ;
+	} else {
+	    next;
+	}
+    }
+
+    case "holdings" {
+	if ($dat->{'count'} > 0) {
+	   $dat->{'defaultholdings'} = 1; 
+	} else {
+	     # As this is the last option, we try other options if there are no items
+	     if ($subscriptionsnumber) {
+		$defaulttab = 'subscriptions';
+	     } elsif (scalar(@serialcollections) > 0) {
+		$defaulttab = 'serialcollection' ;
+	     }
+	}
+
+    }
+
+}
+$template->param('defaulttab' => $defaulttab);
+
 
 
 output_html_with_http_headers $query, $cookie, $template->output;

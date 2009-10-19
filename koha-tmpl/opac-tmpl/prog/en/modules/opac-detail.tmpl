@@ -285,7 +285,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <div id="bibliodescriptions" class="toptabs">
 
 <ul>   
-<li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings
+<li<!-- TMPL_IF EXPR="defaulttab eq 'holdings'"  --> class="ui-tabs-selected"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings
     ( <!-- TMPL_VAR NAME="count" --> )</a>
    </li>
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#descriptions">Title Notes</a></li>
@@ -310,7 +310,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#LTFLTagBrowse">Tag Browser</a></li>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="subscriptionsnumber" --><li>
+<!-- TMPL_IF name="subscriptionsnumber" --><li<!-- TMPL_IF EXPR="defaulttab eq 'subscriptions'" --> class="ui-tabs-selected"<!-- /TMPL_IF -->>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
@@ -323,7 +323,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <!-- TMPL_IF NAME="Babeltheque" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#babeltheque">Babelthèque</a></li><!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="serialcollection" -->
-    <li<!-- TMPL_IF NAME="defaultserialcollection" --> class="ui-tabs-selected"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#serialcollection">Serial Collection</a></li>
+    <li<!-- TMPL_IF  EXPR="defaulttab eq 'serialcollection'"  --> class="ui-tabs-selected"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#serialcollection">Serial Collection</a></li>
     <!-- /TMPL_IF -->
 </ul>
 
