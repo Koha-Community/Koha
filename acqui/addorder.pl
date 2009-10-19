@@ -186,35 +186,35 @@ my $user          = $input->remote_user;
 # modify if $quantity>=0 and $existing='yes'
 # delete if $quantity has been set to 0 by the librarian
 my $bibitemnum;
-if ( $quantity ne '0' ) {
+if ( $orderinfo->{quantity} ne '0' ) {
     #TODO:check to see if biblio exists
-    unless ( $biblionumber ) {
+    unless ( $$orderinfo{biblionumber} ) {
 
         #if it doesnt create it
         my $record = TransformKohaToMarc(
             {
-                "biblio.title"                => "$title",
-                "biblio.author"               => "$author",
-                "biblio.series"               => $series          ? $series        : "",
-                "biblioitems.isbn"            => $isbn            ? $isbn          : "",
-                "biblioitems.publishercode"   => $publishercode   ? $publishercode : "",
-                "biblioitems.publicationyear" => $publicationyear ? $publicationyear: "",
+                "biblio.title"                => "$$orderinfo{title}",
+                "biblio.author"               => "$$orderinfo{author}",
+                "biblio.series"               => $$orderinfo{series}          ? $$orderinfo{series}        : "",
+                "biblioitems.isbn"            => $$orderinfo{isbn}            ? $$orderinfo{isbn}          : "",
+                "biblioitems.publishercode"   => $$orderinfo{publishercode}   ? $$orderinfo{publishercode} : "",
+                "biblioitems.publicationyear" => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
             });
         # create the record in catalogue, with framework ''
-        ($biblionumber,$bibitemnum) = AddBiblio($record,'');
+        my ($biblionumber,$bibitemnum) = AddBiblio($record,'');
         # change suggestion status if applicable
-        if ($suggestionid) {
-            ModStatus( $suggestionid, 'ORDERED', '', $biblionumber );
+        if ($$orderinfo{suggestionid}) {
+            ModSuggestion( {suggestionid=>$$orderinfo{suggestionid}, status=>'ORDERED', biblionumber=>$biblionumber} );
         }
 		$orderinfo->{biblioitemnumber}=$bibitemnum;
     }
 
     # if we already have $ordnum, then it's an ordermodif
-    if ($ordnum) {
+    if ($$orderinfo{ordnum}) {
         ModOrder( $orderinfo);
     }
     else { # else, it's a new line
-        ( $basketno, $ordnum ) = NewOrder($orderinfo);
+        @$orderinfo{qw(basketno ordnum )} = NewOrder($orderinfo);
     }
 
     # now, add items if applicable
@@ -252,8 +252,8 @@ if ( $quantity ne '0' ) {
                                     $itemhash{$item}->{'indicator'},
                                     'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
-            my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
-            NewOrderItem($itemnumber, $ordnum);
+            my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$$orderinfo{biblionumber});
+            NewOrderItem($itemnumber, $$orderinfo{ordnum});
 
         }
     }
@@ -261,10 +261,12 @@ if ( $quantity ne '0' ) {
 }
 
 else { # qty=0, delete the line
-    $biblionumber = $input->param('biblionumber');
-    DelOrder( $biblionumber, $ordnum );
+    my $biblionumber = $input->param('biblionumber');
+    DelOrder( $biblionumber, $$orderinfo{ordnum} );
 }
-if ($import_batch_id) {
+my $basketno=$$orderinfo{basketno};
+my $booksellerid=$$orderinfo{booksellerid};
+if (my $import_batch_id=$$orderinfo{import_batch_id}) {
     print $input->redirect("/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=$import_batch_id&basketno=$basketno&booksellerid=$booksellerid");
 } else {
     print $input->redirect("/cgi-bin/koha/acqui/basket.pl?basketno=$basketno");
