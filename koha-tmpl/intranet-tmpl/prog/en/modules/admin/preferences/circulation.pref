@@ -116,13 +116,9 @@ Circulation:
             - pref: CircControl
               type: choice
               choices:
-            - pref: CircControl
-              type: choice
-              choices:
                   PickupLibrary: the library you are logged in at.
                   PatronLibrary: the library the patron is from.
                   ItemHomeBranch: the library the item is from.
-            -
         -
             - Use the checkout and fines rules of
             - pref: HomeOrHoldingBranch
@@ -210,6 +206,9 @@ Circulation:
                   no: in that order.
             -
         -
+            - pref: canreservefromotherbranches
+              choices:
+                  yes: Allow
                   no: "Don't allow (with independent branches)"
             - a user from one library to place a hold on an item from another library
         -
