@@ -598,6 +598,23 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }  
 
+$DBversion = "3.00.04.019";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $authdisplayhierarchy = C4::Context->preference('AuthDisplayHierarchy');
+    if ($authdisplayhierarchy < 1){
+       $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)VALUES('AuthDisplayHierarchy','0','To display authorities in a hierarchy way. Put ON only if you have a thesaurus. Default is OFF','','YesNo')");
+    };
+
+    my $opacamazon = C4::Context->preference('OPACAmazonCoverImages');
+    if ($opacamazon < 1){
+       $dbh->do("INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)VALUES('OPACAmazonCoverImages','0','Display cover images on OPAC from Amazon Web Services. Default is OFF','','YesNo')");
+    };
+
+    print "Upgrade to $DBversion done (new AuthDisplayHierarchy, )\n";
+    SetVersion ($DBversion);
+}  
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
