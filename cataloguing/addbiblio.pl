@@ -927,12 +927,19 @@ if ( $op eq "addbiblio" ) {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
         }
 
-        if ($mode ne "popup"){
+        if ($mode ne "popup" && !$is_a_modif){
             print $input->redirect(
                 "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
             );
             exit;
-        } else {
+        }
+		elsif($is_a_modif){
+     		print $input->redirect(
+                "/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
+            );
+            exit;
+
+		}else {
           $template->param(
             biblionumber => $biblionumber,
             done         =>1,
