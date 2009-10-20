@@ -3095,7 +3095,7 @@ $dbh->do("
 $DBversion = "3.01.00.119";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $dbh->do("
-	UPDATE `systempreferences` SET `options` = 'holdings|serialcollection|subscriptions',
+	UPDATE `systempreferences` SET `options` = 'holdings|serialcollection|subscriptions'
 	WHERE `systempreferences`.`variable` = 'opacSerialDefaultTab' LIMIT 1 
 	");
 
