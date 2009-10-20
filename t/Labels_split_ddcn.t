@@ -5,11 +5,7 @@
 use strict;
 use warnings;
 
-<<<<<<< HEAD:t/Labels_split_ddcn.t
-use Test::More tests => 62;
-=======
 use Test::More tests => 82;
->>>>>>> e72a02e... Bug 2500 Tweaking DDCN Split for Hyphenated Volumn Numbers:t/Labels_split_ddcn.t
 
 BEGIN {
     use_ok('C4::Labels');
