@@ -8,23 +8,8 @@
 <script src="<!-- TMPL_VAR NAME="themelang" -->/js/pages/preferences.js" type="text/javascript"></script>
 <script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js" type="text/javascript"></script>
 <script type="text/javascript">
-//<![CDATA[
-	$(document).ready(function(){
-		$("h3").attr("class","expanded").attr("title",_("Click to expand this section"));
-		var collapsible = $(".collapsed,.expanded");
-	
-	    $(collapsible).toggle(function () {
-	     $(this).addClass("collapsed").removeClass("expanded").attr("title",_("Click to expand this section"));
-         $(this).next("table").hide();
-	      },
-	      function () {
-	      	$(this).addClass("expanded").removeClass("collapsed").attr("title",_("Click to collapse this section"));
-	        $(this).next("table").show();
-	      }
-    );
-
-		
-	});
+ //<![CDATA[
+    // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
     <!-- TMPL_IF NAME="searchfield" -->
     var to_highlight = "<!-- TMPL_VAR NAME="searchfield" ESCAPE="JS"-->";
 

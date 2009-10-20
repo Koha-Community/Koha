@@ -57,4 +57,20 @@ $( document ).ready( function () {
             return _( "You have made changes to system preferences." );
         }
     }
+
+    $("h3").attr("class","expanded").attr("title",_("Click to expand this section"));
+    var collapsible = $(".collapsed,.expanded");
+
+    $(collapsible).toggle(
+        function () {
+            $(this).addClass("collapsed").removeClass("expanded").attr("title",_("Click to expand this section"));
+            $(this).next("table").hide();
+        },
+        function () {
+            $(this).addClass("expanded").removeClass("collapsed").attr("title",_("Click to collapse this section"));
+            $(this).next("table").show();
+        }
+    );
+
+    $( '.prefs-tab .action .cancel' ).click( function () { KOHA.Preferences.Modified = false } );
 } );
