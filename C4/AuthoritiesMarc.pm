@@ -361,17 +361,9 @@ sub CountUsage {
         return scalar @tab;
     } else {
         ### ZOOM search here
-        my $oConnection=C4::Context->Zconn("biblioserver",1);
         my $query;
         $query= "an=".$authid;
-        my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-        my $result;
-        while ((my $i = ZOOM::event([ $oConnection ])) != 0) {
-            my $ev = $oConnection->last_event();
-            if ($ev == ZOOM::Event::ZEND) {
-                $result = $oResult->size();
-            }
-        }
+  		my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
         return ($result);
     }
 }
