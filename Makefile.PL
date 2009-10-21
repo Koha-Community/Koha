@@ -579,6 +579,7 @@ WriteMakefile(
                             'List::MoreUtils'                  => 0.21,
                             'Locale::Currency::Format'         => 1.28,
                             'Locale::Language'                 => 2.07,
+                            'Locale::PO'                       => 0.17,
                             'MARC::Charset'                    => 0.98,
                             'MARC::Crosswalk::DublinCore'      => 0.02,
                             'MARC::File::XML'                  => 0.88,
