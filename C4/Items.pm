@@ -30,6 +30,7 @@ use C4::Log;
 use C4::Branch;
 require C4::Reserves;
 use C4::Charset;
+use C4::Acquisition;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -2059,6 +2060,14 @@ sub MoveItemFromBiblio {
 
 	# If we found an item (should always true, except in case of database-marcxml inconsistency)
 	if ($item) {
+
+	    # Checking if the item we want to move is in an order 
+	    my $order = GetOrderFromItemnumber($itemnumber);
+	    if ($order) {
+		# Replacing the biblionumber within the order if necessary
+		$order->{'biblionumber'} = $tobiblio;
+	        ModOrder($order);
+	    }
 
 	    # Saving the modification
 	    ModBiblioMarc($record, $frombiblio, $frameworkcode);
