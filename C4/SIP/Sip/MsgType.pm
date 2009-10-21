@@ -933,69 +933,69 @@ sub handle_patron_info {
 
     $resp = (PATRON_INFO_RESP);
     if ($patron) {
-	$resp .= patron_status_string($patron);
-	$resp .= (defined($lang) and length($lang) ==3) ? $lang : $patron->language;
-	$resp .= Sip::timestamp();
+        $resp .= patron_status_string($patron);
+        $resp .= (defined($lang) and length($lang) ==3) ? $lang : $patron->language;
+        $resp .= Sip::timestamp();
 
-	$resp .= add_count('patron_info/hold_items',
-			   scalar @{$patron->hold_items});
-	$resp .= add_count('patron_info/overdue_items',
-			   scalar @{$patron->overdue_items});
-	$resp .= add_count('patron_info/charged_items',
-			   scalar @{$patron->charged_items});
-	$resp .= add_count('patron_info/fine_items',
-			   scalar @{$patron->fine_items});
-	$resp .= add_count('patron_info/recall_items',
-			   scalar @{$patron->recall_items});
-	$resp .= add_count('patron_info/unavail_holds',
-			   scalar @{$patron->unavail_holds});
+        $resp .= add_count('patron_info/hold_items',
+            scalar @{$patron->hold_items});
+        $resp .= add_count('patron_info/overdue_items',
+            scalar @{$patron->overdue_items});
+        $resp .= add_count('patron_info/charged_items',
+            scalar @{$patron->charged_items});
+        $resp .= add_count('patron_info/fine_items',
+            scalar @{$patron->fine_items});
+        $resp .= add_count('patron_info/recall_items',
+            scalar @{$patron->recall_items});
+        $resp .= add_count('patron_info/unavail_holds',
+            scalar @{$patron->unavail_holds});
 
-    # FID_INST_ID added last (order irrelevant for fields w/ identifiers)
+        $resp .= add_field(FID_INST_ID,       ($ils->institution_id || 'SIP2'));
 
-	# while the patron ID we got from the SC is valid, let's
-	# use the one returned from the ILS, just in case...
-	$resp .= add_field(FID_PATRON_ID,     $patron->id);
-	$resp .= add_field(FID_PERSONAL_NAME, $patron->name);
+        # while the patron ID we got from the SC is valid, let's
+        # use the one returned from the ILS, just in case...
+        $resp .= add_field(FID_PATRON_ID,     $patron->id);
+        $resp .= add_field(FID_PERSONAL_NAME, $patron->name);
 
-	# TODO: add code for the fields
-	#   hold items limit
-	#   overdue items limit
-	#   charged items limit
+        # TODO: add code for the fields
+        #   hold items limit
+        #   overdue items limit
+        #   charged items limit
 
-	$resp .= add_field(FID_VALID_PATRON, 'Y');
-	if (defined($patron_pwd)) {
-	    # If patron password was provided, report whether it was right or not.
-	    $resp .= add_field(FID_VALID_PATRON_PWD,
-			       sipbool($patron->check_password($patron_pwd)));
-	}
+        $resp .= add_field(FID_VALID_PATRON, 'Y');
+        if (defined($patron_pwd)) {
+            # If patron password was provided, report whether it was right or not.
+            $resp .= add_field(FID_VALID_PATRON_PWD,
+                sipbool($patron->check_password($patron_pwd)));
+        }
 
-	$resp .= maybe_add(FID_CURRENCY,   $patron->currency);
-	$resp .= maybe_add(FID_FEE_AMT,    $patron->fee_amount);
-	$resp .= add_field(FID_FEE_LMT,    $patron->fee_limit);
+        $resp .= maybe_add(FID_CURRENCY,   $patron->currency);
+        $resp .= maybe_add(FID_FEE_AMT,    $patron->fee_amount);
+        $resp .= add_field(FID_FEE_LMT,    $patron->fee_limit);
 
-    # TODO: zero or more item details for 2.0 can go here:
-    #          hold_items
-    #       overdue_items
-    #       charged_items
-    #          fine_items
-    #        recall_items
+        # TODO: zero or more item details for 2.0 can go here:
+        #          hold_items
+        #       overdue_items
+        #       charged_items
+        #          fine_items
+        #        recall_items
 
-	$resp .= summary_info($ils, $patron, $summary, $start, $end);
+        $resp .= summary_info($ils, $patron, $summary, $start, $end);
 
-	$resp .= maybe_add(FID_HOME_ADDR,  $patron->address);
-	$resp .= maybe_add(FID_EMAIL,      $patron->email_addr);
-	$resp .= maybe_add(FID_HOME_PHONE, $patron->home_phone);
+        $resp .= maybe_add(FID_HOME_ADDR,  $patron->address);
+        $resp .= maybe_add(FID_EMAIL,      $patron->email_addr);
+        $resp .= maybe_add(FID_HOME_PHONE, $patron->home_phone);
 
-	# SIP 2.0 extensions used by Envisionware
-	# Other terminals will ignore unrecognized fields (unrecognized field identifiers)
-	$resp .= maybe_add(FID_PATRON_BIRTHDATE, $patron->birthdate);
-	$resp .= maybe_add(FID_PATRON_CLASS,     $patron->ptype);
+        # SIP 2.0 extensions used by Envisionware
+        # Other terminals will ignore unrecognized fields (unrecognized field identifiers)
+        $resp .= maybe_add(FID_PATRON_BIRTHDATE, $patron->birthdate);
+        $resp .= maybe_add(FID_PATRON_CLASS,     $patron->ptype);
 
-	# Custom protocol extension to report patron internet privileges
-	$resp .= maybe_add(FID_INET_PROFILE,     $patron->inet_privileges);
+        # Custom protocol extension to report patron internet privileges
+        $resp .= maybe_add(FID_INET_PROFILE,     $patron->inet_privileges);
 
-	$resp .= maybe_add(FID_SCREEN_MSG,       $patron->screen_msg);
-	$resp .= maybe_add(FID_PRINT_LINE,       $patron->print_line);
+        $resp .= maybe_add(FID_SCREEN_MSG,       $patron->screen_msg);
+        $resp .= maybe_add(FID_PRINT_LINE,       $patron->print_line);
     } else {
         # Invalid patron ID:
         # no privileges, no items associated,
@@ -1003,6 +1003,7 @@ sub handle_patron_info {
         $resp .= 'YYYY' . (' ' x 10) . $lang . Sip::timestamp();
         $resp .= '0000' x 6;
 
+        $resp .= add_field(FID_INST_ID,       ($ils->institution_id || 'SIP2'));
         # patron ID is invalid, but field is required, so just echo it back
         $resp .= add_field(FID_PATRON_ID,     $fields->{(FID_PATRON_ID)});
         $resp .= add_field(FID_PERSONAL_NAME, '');
@@ -1012,7 +1013,6 @@ sub handle_patron_info {
         }
     }
 
-    $resp .= add_field(FID_INST_ID,       ($ils->institution_id || 'SIP2'));
     $self->write_msg($resp);
     return(PATRON_INFO);
 }
