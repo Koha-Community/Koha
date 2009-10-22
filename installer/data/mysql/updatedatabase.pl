@@ -3103,6 +3103,33 @@ $dbh->do("
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.120";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+$dbh->do(<<'ISBDUPDATE');
+UPDATE `koha`.`systempreferences` SET `value` = '#200|<p> |<b>{200a}</b>{. 200c}{ = 200d}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g }|
+#205|. - |{205a}{ / 205f}|
+#210|. - |{ 210a }{ : 210c }{, 210d}|
+
+#461|. - Extrait de : |<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=461]/subfield[@code=t] &quot;{461t}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" alt="chercher" height="15" title="Chercher sur {461t}"></a>{461t}{, 461x }{ ; 461v}{, 461h}{, 461p}|
+
+#461||{ 461c}|
+
+#215|. - |{215a}{ : 215c}{ ; 215d}{ + 215e}|
+
+#225| - | (<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=225]/subfield[@code=a] &quot;{225a}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" alt="recherche cat" height="15" title="Chercher sur {225a}"></a>{225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, 225x}{ ; 225v}) |
+
+#200|||</p>
+
+#010|<p>|ISBN {010a}{ (010b)}. - |</p>
+
+#300|<p>|{300a}|</p>
+
+#320|<p[...]'
+ISBDUPDATE
+
+    print "Upgrade to $DBversion done (isbd updated)\n";
+    SetVersion ($DBversion);
+}
 
 
 

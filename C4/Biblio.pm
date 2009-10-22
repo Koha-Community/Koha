@@ -766,6 +766,7 @@ Return the ISBD view which can be included in opac and intranet
 
 sub GetISBDView {
     my $biblionumber    = shift;
+    my $template        = shift;
     my $record          = GetMarcBiblio($biblionumber);
     my $itemtype        = &GetFrameworkCode($biblionumber);
     my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$itemtype);
@@ -809,7 +810,7 @@ sub GetISBDView {
                     my $tagsubf = $tag . $subfvalue;
                     $calculated =~
                           s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-                    $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
+                    if ($template eq "opac") { $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g; }
                 
                     # field builded, store the result
                     if ( $calculated && !$hasputtextbefore )
@@ -850,7 +851,7 @@ sub GetISBDView {
     
                 $calculated =~
             s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-            $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
+            if ($template eq "opac") { $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g; }
                 }
     
                 # field builded, store the result
