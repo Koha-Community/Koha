@@ -99,7 +99,7 @@ $template->param(
 
 # my @blocs = split /\@/,$ISBD;
 # my @fields = $record->fields();
-my $res = GetISBDView($biblionumber);
+my $res = GetISBDView($biblionumber, "opac");
 
 my $reviews = getreviews( $biblionumber, 1 );
 foreach ( @$reviews ) {
