@@ -207,6 +207,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
             ModSuggestion( {suggestionid=>$$orderinfo{suggestionid}, status=>'ORDERED', biblionumber=>$biblionumber} );
         }
 		$orderinfo->{biblioitemnumber}=$bibitemnum;
+		$orderinfo->{biblionumber}=$biblionumber;
     }
 
     # if we already have $ordnum, then it's an ordermodif
