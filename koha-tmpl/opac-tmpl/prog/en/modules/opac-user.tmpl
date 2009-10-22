@@ -119,13 +119,16 @@ $.tablesorter.addParser({
         <ul>
             <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked Out</a></li>
             <!-- TMPL_IF NAME="overdues_count" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OPACFinesTab" -->
             <!-- TMPL_IF NAME="amountoverfive" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="amountoverzero" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="amountlessthanzero" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="waiting_count" --><!-- TMPL_IF NAME="atdestination" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-waiting">Waiting</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="reserves_count" --><li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">Holds</a></li><!-- /TMPL_IF -->
         </ul>
         
+<!-- TMPL_IF NAME="OPACFinesTab" -->
         <!-- FINES BOX -->
         <!-- TMPL_IF NAME="amountoverfive" -->
             <div id="opac-user-fines"> <h3>Fines and Charges</h3>
@@ -154,6 +157,7 @@ $.tablesorter.addParser({
             <tr><td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl"><!-- TMPL_VAR NAME="amountoutstanding" --></a></td></tr>
             </table></div>
         <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
     
     <!-- /TMPL_LOOP -->
 
@@ -198,8 +202,10 @@ $.tablesorter.addParser({
         <!-- TMPL_IF name="OpacRenewalAllowed" -->
         <!-- TMPL_UNLESS name="patron_flagged" --><th>Renew</th><!-- /TMPL_UNLESS -->
         <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OPACFinesTab" -->
         <th>Fines</th>
         </tr></thead>
+<!-- /TMPL_IF -->
         <tbody>
 		<!-- FIXME: the styling for highlight overrides the overdue red background,
 				so currently we don't use this conditional as the first thing inside the LOOP:
@@ -242,7 +248,9 @@ $.tablesorter.addParser({
                         <!-- /TMPL_IF --></td>
                     <!-- /TMPL_UNLESS -->
                 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OPACFinesTab" -->
                 <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+<!-- /TMPL_IF -->
             </tr>
         <!-- /TMPL_LOOP --></tbody>
         </table>
@@ -275,8 +283,10 @@ $.tablesorter.addParser({
 <th>Due</th>
 <!-- TMPL_IF name="OpacRenewalAllowed" -->
                     <!-- TMPL_UNLESS name="patron_flagged" --><th>Renew</th><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+<!-- TMPL_IF NAME="OPACFinesTab" -->
 <th>Fines</th>
 </tr></thead>
+<!-- /TMPL_IF -->
 
 <tbody><!-- TMPL_LOOP NAME="OVERDUES" -->
 <tr>
@@ -307,7 +317,9 @@ $.tablesorter.addParser({
 <!-- TMPL_ELSE -->No renewals left
 <!-- /TMPL_IF -->
 </td><!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
+<!-- TMPL_IF NAME="OPACFinesTab" -->
 <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+<!-- /TMPL_IF -->
 </tr>
 <!-- /TMPL_LOOP --></tbody>
 </table></div>
