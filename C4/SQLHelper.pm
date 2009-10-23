@@ -334,7 +334,14 @@ sub _filter_fields{
 		}
 	} 
 	else{
-		return _filter_string($tablename,$filter_input,$searchtype,$filtercolumns);
+		my ($keys, $values) = _filter_string($tablename,$filter_input, $searchtype,$filtercolumns);
+		if ($keys){
+		my $stringkey="(".join (") AND (",@$keys).")";
+		return [$stringkey],$values;
+		}
+		else {
+		return ();
+		}
 	}
 
 	return (\@keys,\@values);
@@ -372,8 +379,8 @@ sub _filter_string{
 	my @columns_filtered= _filter_columns($tablename,$searchtype,$filtercolumns);
 	my $columns= _get_columns($tablename);
 	my (@values,@keys);
-	my @localkeys;
 	foreach my $operand (@operands){
+		my @localkeys;
 		foreach my $field (@columns_filtered){
 			my ($tmpkeys, $localvalues)=_Process_Operands($operand,"$tablename.$field",$searchtype,$columns);
 			if ($tmpkeys){
@@ -381,9 +388,9 @@ sub _filter_string{
 				push @localkeys,@$tmpkeys;
 			}
 		}
+		my $sql= join (' OR ', @localkeys);
+		push @keys, $sql;
 	}
-	my $sql= join (' OR ', @localkeys);
-	push @keys, $sql;
 
 	if (@keys){
 		return (\@keys,\@values);
