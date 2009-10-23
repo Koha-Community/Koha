@@ -107,7 +107,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
                     $op => 1,
                     "subtype_$sub_on" => 1,
                     sublength =>$sublength,
-                    history => ($op eq 'mod' && $subs->{manualhistory} == 1 ),
+                    history => ($op eq 'mod'),
                     "periodicity".$subs->{'periodicity'} => 1,
                     "numberpattern".$subs->{'numberpattern'} => 1,
                     firstacquiyear => substr($firstissuedate,0,4),
@@ -199,6 +199,12 @@ if ($op eq 'addsubscription') {
     my $startdate       = format_date_in_iso($query->param('startdate'));
     my $enddate       = format_date_in_iso($query->param('enddate'));
     my $firstacquidate  = format_date_in_iso($query->param('firstacquidate'));    
+    my $histenddate = format_date_in_iso($query->param('histenddate'));
+    my $histstartdate = format_date_in_iso($query->param('histstartdate'));
+    my $recievedlist = $query->param('recievedlist');
+    my $missinglist = $query->param('missinglist');
+    my $opacnote = $query->param('opacnote');
+    my $librariannote = $query->param('librariannote');
 	my $subscriptionid = NewSubscription($auser,$branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
 					$startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
 					$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
@@ -208,6 +214,7 @@ if ($op eq 'addsubscription') {
                     $numberpattern, $callnumber, $hemisphere,($manualhistory?$manualhistory:0),$internalnotes,
                     $serialsadditems,$staffdisplaycount,$opacdisplaycount,$graceperiod,$location,$enddate
 				);
+    ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } elsif ($op eq 'modsubscription') {
@@ -273,7 +280,6 @@ if ($op eq 'addsubscription') {
     my $missinglist = $query->param('missinglist');
     my $opacnote = $query->param('opacnote');
     my $librariannote = $query->param('librariannote');
-    my $history_only = $query->param('history_only');
 	my $staffdisplaycount = $query->param('staffdisplaycount');
 	my $opacdisplaycount = $query->param('opacdisplaycount');
     my $graceperiod     = $query->param('graceperiod') || 0;
@@ -285,9 +291,6 @@ if ($op eq 'addsubscription') {
         $firstissuedate = $nextacquidate if($nextexpected->{isfirstissue});
     }
 
-    if ($history_only) {
-        ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
-    } else {
         &ModSubscription(
             $auser,           $branchcode,   $aqbooksellerid, $cost,
             $aqbudgetid,      $startdate,    $periodicity,    $firstissuedate,
@@ -301,7 +304,7 @@ if ($op eq 'addsubscription') {
             $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
             $serialsadditems, $staffdisplaycount,$opacdisplaycount,$graceperiod,$location,$enddate,$subscriptionid
         );
-    }
+        ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } else {
         while (@subscription_types) {
