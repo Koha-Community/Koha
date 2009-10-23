@@ -34,23 +34,6 @@ use YAML;
 use Switch;
 use MARC::File::XML;
 
-sub find_value {
-    my ($tagfield,$insubfield,$record) = @_;
-    my $result;
-    my $indicator;
-    foreach my $field ($record->field($tagfield)) {
-        my @subfields = $field->subfields();
-        foreach my $subfield (@subfields) {
-            if (@$subfield[0] eq $insubfield) {
-                $result .= @$subfield[1];
-                $indicator = $field->indicator(1).$field->indicator(2);
-            }
-        }
-    }
-    return($indicator,$result);
-}
-
-
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
 my $error        = $input->param('error');
@@ -58,8 +41,16 @@ my @itemnumbers  = $input->param('itemnumber');
 my $op           = $input->param('op');
 my $del          = $input->param('del');
 
+my $template_name;
+if (!defined $op) {
+    $template_name = "tools/batchMod.tmpl";
+} else {
+    $template_name = ($del) ? "tools/batchMod-del.tmpl" : "tools/batchMod-edit.tmpl";
+}
+
+
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "tools/batchMod.tmpl",
+    = get_template_and_user({template_name => $template_name,
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
@@ -78,6 +69,10 @@ my $items_display_hashref;
 my $frameworkcode="";
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 
+my $deleted_items = 0;     # Numbers of deleted items
+my $not_deleted_items = 0; # Numbers of items that could not be deleted
+my @not_deleted;           # List of the itemnumbers that could not be deleted
+
 #--- ----------------------------------------------------------------------------
 if ($op eq "action") {
 #-------------------------------------------------------------------------------
@@ -91,22 +86,23 @@ if ($op eq "action") {
     my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
     my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
 
-#	my @params=$input->param();
-#	warn @params;
-#    my $marcitem = TransformHtmlToMarc(\@params,$input);
-	foreach my $itemnumber(@itemnumbers){
-		my $itemdata=GetItem($itemnumber);
-		if ($input->param("del")){
-			DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'})
-		} else {
-			my $localmarcitem=Item2Marc($itemdata);
-			UpdateMarcWith($marcitem,$localmarcitem);
-            eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
-		#	eval{ModItem($localitem,$itemdata->{biblionumber},$itemnumber)};
-		}
-	}
-	$items_display_hashref=BuildItemsData(@itemnumbers);
-    $nextop="action";
+    foreach my $itemnumber(@itemnumbers){
+	    my $itemdata=GetItem($itemnumber);
+	    if ($input->param("del")){
+		    my $return = DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
+		    if ($return == 1) {
+			$deleted_items++;
+		    } else {
+			$not_deleted_items++;
+			push @not_deleted, $itemdata->{'itemnumber'};
+		    }
+	    } else {
+		    my $localmarcitem=Item2Marc($itemdata);
+		    UpdateMarcWith($marcitem,$localmarcitem);
+		    eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
+	    }
+    }
+    $items_display_hashref=BuildItemsData(@itemnumbers);
 }
 
 #
@@ -155,61 +151,62 @@ my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM auth
 my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
-foreach my $tag (sort keys %{$tagslib}) {
-# loop through each subfield
-  foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
-    next if subfield_is_koha_internal_p($subfield);
-    next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
-    my %subfield_data;
- 
-    my $index_subfield = int(rand(1000000)); 
-    if ($subfield eq '@'){
-        $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_subfield;
-    } else {
-        $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
-    }
-    $subfield_data{tag}        = $tag;
-    $subfield_data{subfield}   = $subfield;
-    $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
-#   $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
-    $subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
-    $subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
-    $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
-    my ($x,$value);
-    $value =~ s/"/&quot;/g;
-    unless ($value) {
-        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
-        # get today date & replace YYYY, MM, DD if provided in the default value
-        my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
-        $value =~ s/YYYY/$year/g;
-        $value =~ s/MM/$month/g;
-        $value =~ s/DD/$day/g;
-    }
-    $subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
-    # testing branch value if IndependantBranches.
 
-    my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
-    my $attributes          = qq($attributes_no_value value="$value" );
-    if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
-      my @authorised_values;
-      my %authorised_lib;
-      # builds list, depending on authorised value...
+foreach my $tag (sort keys %{$tagslib}) {
+    # loop through each subfield
+    foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
+     	next if subfield_is_koha_internal_p($subfield);
+    	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
+	my %subfield_data;
+ 
+	my $index_subfield = int(rand(1000000)); 
+	if ($subfield eq '@'){
+	    $subfield_data{id} = "tag_".$tag."_subfield_00_".$index_subfield;
+	} else {
+	    $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
+	}
+	$subfield_data{tag}        = $tag;
+	$subfield_data{subfield}   = $subfield;
+	$subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
+    #   $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
+	$subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
+	$subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
+	$subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
+	my ($x,$value);
+	$value =~ s/"/&quot;/g;
+	unless ($value) {
+	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
+	    # get today date & replace YYYY, MM, DD if provided in the default value
+	    my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
+	    $value =~ s/YYYY/$year/g;
+	    $value =~ s/MM/$month/g;
+	    $value =~ s/DD/$day/g;
+	}
+	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
+	# testing branch value if IndependantBranches.
+
+	my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+	my $attributes          = qq($attributes_no_value value="$value" );
+	if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
+	my @authorised_values;
+	my %authorised_lib;
+	# builds list, depending on authorised value...
   
-      if ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "branches" ) {
-          foreach my $thisbranch (@$branches) {
-              push @authorised_values, $thisbranch->{value};
-              $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
-              $value = $thisbranch->{value} if $thisbranch->{selected};
-          }
-      }
-      elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-          push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-          my $sth = $dbh->prepare("select itemtype,description from itemtypes order by description");
-          $sth->execute;
-          while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
-              push @authorised_values, $itemtype;
-              $authorised_lib{$itemtype} = $description;
-          }
+	if ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "branches" ) {
+	    foreach my $thisbranch (@$branches) {
+		push @authorised_values, $thisbranch->{value};
+		$authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
+		$value = $thisbranch->{value} if $thisbranch->{selected};
+	    }
+	}
+	elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+	    push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+	    my $sth = $dbh->prepare("select itemtype,description from itemtypes order by description");
+	    $sth->execute;
+	    while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
+		push @authorised_values, $itemtype;
+		$authorised_lib{$itemtype} = $description;
+	    }
 
           #---- class_sources
       }
@@ -298,25 +295,39 @@ foreach my $tag (sort keys %{$tagslib}) {
     push (@loop_data, \%subfield_data);
     $i++
   }
-}
+} # -- End foreach tag
 
-# what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
-$template->param(
-    item             => \@loop_data,
-);
-$nextop="action"
-}
+
+    # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
+    $template->param(item => \@loop_data);
+    $nextop="action"
+} # -- End action="show"
+
 $template->param(%$items_display_hashref) if $items_display_hashref;
 $template->param(
     op      => $nextop,
     $op => 1,
-    opisadd => ($nextop eq "saveitem") ? 0 : 1,
 );
+
+if ($op eq "action") {
+
+    my @not_deleted_loop = map{{itemnumber=>$_}}@not_deleted;
+
+    $template->param(
+	not_deleted_items => $not_deleted_items,
+	deleted_items => $deleted_items,
+	not_deleted_itemnumbers => \@not_deleted_loop 
+    );
+}
+
 foreach my $error (@errors) {
     $template->param($error => 1);
 }
 output_html_with_http_headers $input, $cookie, $template->output;
 exit;
+
+
+# ---------------- Functions
 
 sub BuildItemsData{
 	my @itemnumbers=@_;
@@ -381,6 +392,7 @@ sub BuildItemsData{
 		my @header_loop=map { { header_value=> $witness{$_}} } @witnesscodessorted;
 	return { item_loop        => \@item_value_loop, item_header_loop => \@header_loop };
 }
+
 #BE WARN : it is not the general case 
 # This function can be OK in the item marc record special case
 # Where subfield is not repeated
@@ -399,3 +411,22 @@ sub UpdateMarcWith($$){
     }
   #warn "TO edited:",$marcto->as_formatted;
 }
+
+sub find_value {
+    my ($tagfield,$insubfield,$record) = @_;
+    my $result;
+    my $indicator;
+    foreach my $field ($record->field($tagfield)) {
+        my @subfields = $field->subfields();
+        foreach my $subfield (@subfields) {
+            if (@$subfield[0] eq $insubfield) {
+                $result .= @$subfield[1];
+                $indicator = $field->indicator(1).$field->indicator(2);
+            }
+        }
+    }
+    return($indicator,$result);
+}
+
+
+

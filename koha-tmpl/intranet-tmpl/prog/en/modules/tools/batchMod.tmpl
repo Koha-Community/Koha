@@ -30,7 +30,6 @@
         <div id="yui-main">
             <div class="yui-b">
                 <h1>Batch <!-- TMPL_IF name="del" -->deletion<!-- TMPL_ELSE -->modification<!-- /TMPL_IF --></h1>
-                <!-- TMPL_UNLESS name="op" -->
                         <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batchMod.pl">
                             <fieldset class="rows">
                                 <legend>Use a file</legend>
@@ -58,72 +57,8 @@
                             </fieldset>
                         </form>
                     </div>
-                <!-- /TMPL_UNLESS -->
-<!-- TMPL_IF NAME="barcode_not_unique" --><div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="no_next_barcode" --><div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="book_on_loan" --><div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="book_reserved" --><div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div><!-- /TMPL_IF -->
-
-<!-- TMPL_IF name="item_loop" -->
-<form name="f" action="batchMod.pl" method="post">
-<div id="cataloguing_additem_itemlist">
-        <div style="overflow:auto">
-        <table id="itemst">
-	    <thead>
-		<tr>
-		    <th>&nbsp;</th>
-		    <!-- TMPL_LOOP NAME="item_header_loop" --> 
-		    <th> <!-- TMPL_VAR NAME="header_value" --> </th>
-		    <!-- /TMPL_LOOP --> 
-		</tr>
-	    </thead>
-	    <tbody>
-            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF-->
-                <!-- TMPL_LOOP NAME="item_value" --> <td><!-- TMPL_VAR ESCAPE="HTML" NAME="field" --></td> 
-				<!-- /TMPL_LOOP --> </tr>
-            <!-- /TMPL_LOOP -->
-	    </tbody>
-        </table>
-        </div>
-</div>
-<!-- TMPL_IF name="show" -->
-<div id="cataloguing_additem_newitem">
-     <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
-    <!-- TMPL_IF name="del" -->
-                            <p>This will delete the selected items.</p>
-                            <input type="hidden" name="del" value="1" />
-    <!-- TMPL_ELSE -->
-        <h2>Edit Items</h2>
-	<fieldset class="rows">
-	<ol>
-        <!-- TMPL_LOOP NAME="item" -->
-               <li><div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
-               <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
-                <!-- TMPL_VAR NAME="marc_value" -->
-                <input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" />
-                <input type="hidden" name="subfield"  value="<!-- TMPL_VAR NAME="subfield" -->" />
-                <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
-                <!-- TMPL_IF NAME="repeatable" -->
-                    <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
-                <!-- /TMPL_IF -->
-   
-            </div></li>
-        <!-- /TMPL_LOOP -->
-    </ol>
-    </fieldset>
-    <!-- /TMPL_IF -->	
-<fieldset class="action">    
-    <input type="submit" name="submit" value="Go" />
-</fieldset>
-</div>
-           <!-- TMPL_ELSE -->
-                        <h3>No results!</h3>
-                        <a href="javascript:window.history.back()">Go back</a>
-           <!-- /TMPL_IF -->
-
-</div>
-</div>
-        <div class="yui-b">
+		    </div>
+       <div class="yui-b">
             <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
         </div>
     </div>
