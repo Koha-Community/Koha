@@ -120,7 +120,8 @@ sub SearchInTable{
      
     $debug && $values && warn $sql," ",join(",",@$values); 
     $sth = $dbh->prepare_cached($sql); 
-    $sth->execute(@$values); 
+    eval{$sth->execute(@$values)}; 
+	warn $@ if ($@ && $debug);
     my $results = $sth->fetchall_arrayref( {} ); 
     return $results;
 }
@@ -145,7 +146,8 @@ sub InsertInTable{
 
 	$debug && warn $query, join(",",@$values);
     my $sth = $dbh->prepare_cached($query);
-    $sth->execute( @$values);
+    eval{$sth->execute(@$values)}; 
+	warn $@ if ($@ && $debug);
 
 	return $dbh->last_insert_id(undef, undef, $tablename, undef);
 }
@@ -175,8 +177,10 @@ sub UpdateInTable{
 	$debug && warn $query, join(",",@$values,@ids);
 
     my $sth = $dbh->prepare_cached($query);
-    return $sth->execute( @$values,@ids);
-
+	my $result;
+    eval{$result=$sth->execute(@$values,@ids)}; 
+	warn $@ if ($@ && $debug);
+    return $result;
 }
 
 =head2 DeleteInTable
@@ -201,7 +205,10 @@ sub DeleteInTable{
 		};
 		$debug && warn $query, join(",",@$values);
 		my $sth = $dbh->prepare_cached($query);
-    	return $sth->execute( @$values);
+   		my $result;
+    	eval{$result=$sth->execute(@$values)}; 
+		warn $@ if ($@ && $debug);
+    	return $result;
 	}
 }
 
