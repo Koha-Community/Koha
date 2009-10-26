@@ -31,7 +31,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 die() unless C4::Context->preference("OpacRecentAcquisitions");
 
-my $op = $query->param('op');
+my $op = $query->param('op') || '';
 if ($op eq "show_list"){
 
     my $datebegin           = C4::Dates->new($query->param('datebegin'));

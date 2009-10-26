@@ -1741,12 +1741,21 @@ sub SearchAcquisitions{
         }else{
             $str .= "AND biblioitems.itemtype=? ";
         }
+        
+        if(scalar(@$itemtypes) == 0){
+            my $itypes = GetItemTypes();
+            for my $key (keys %$itypes){
+                push @$itemtypes, $key;
+            }
+        }
+        
         @loopcriteria= @$itemtypes;
     }elsif ($criteria=~/itemcallnumber/){
         $str .= "AND (items.itemcallnumber LIKE CONCAT(?,'%') 
                  OR items.itemcallnumber is NULL
                  OR items.itemcallnumber = '')";
-        @loopcriteria = ("AA".."zz", "") unless (scalar(@loopcriteria)>0);  
+
+        @loopcriteria = ("AA".."ZZ", "") unless (scalar(@loopcriteria)>0);  
     }else {
         $str .= "AND biblio.title LIKE CONCAT(?,'%') ";
         @loopcriteria = ("A".."z") unless (scalar(@loopcriteria)>0);  
