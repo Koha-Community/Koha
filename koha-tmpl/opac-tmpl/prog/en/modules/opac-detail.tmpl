@@ -293,6 +293,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 			Checked out to <!-- TMPL_VAR NAME="cardnumber" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
                     <!-- TMPL_ELSE -->
                     Checked out
+	                    <!-- /TMPL_IF -->
                     <!-- TMPL_ELSE -->
                         <!-- TMPL_IF name="itemnotforloan" -->
                             <!-- TMPL_VAR NAME="notforloanvalue" -->
@@ -319,11 +320,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <!-- TMPL_IF NAME="type" -->
             <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
             <!-- /TMPL_IF -->
-        </tr>
-        <!-- /TMPL_LOOP --></tbody>
-    </table>
+        </tr>    	
+        <!-- /TMPL_LOOP -->
+		</tbody>
+	</table>
 <!-- TMPL_ELSE -->
-<p>No physical items for this record</p>
+	<p>No physical items for this record</p>
 <!-- /TMPL_IF -->
 <!--/TMPL_LOOP-->
 <!-- TMPL_IF NAME="OpenOPACShelfBrowser" -->
