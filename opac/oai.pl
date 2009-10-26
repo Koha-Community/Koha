@@ -155,16 +155,27 @@ sub new {
 
     my $self = $class->SUPER::new();
 
-    $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
-        metadataPrefix    => 'oai_dc',
-        schema            => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
-        metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/'
-    ) );
-    $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
-        metadataPrefix    => 'marcxml',
-        schema            => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd',
-        metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim'
-    ) );
+    if ( $repository->{ conf } ) {
+        foreach my $name ( @{ $self->{ koha_metadata_formats } } ) {
+            my $format = $repository->{ conf }->{ format }->{ $name };
+            $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
+                metadataPrefix    => $format->{metadataPrefix},
+                schema            => $format->{schema},
+                metadataNamespace => $format->{metadataNamespace}, ) );
+        }
+    }
+    else {
+        $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
+            metadataPrefix    => 'oai_dc',
+            schema            => 'http://www.openarchives.org/OAI/2.0/oai_dc.xsd',
+            metadataNamespace => 'http://www.openarchives.org/OAI/2.0/oai_dc/'
+        ) );
+        $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
+            metadataPrefix    => 'marcxml',
+            schema            => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd',
+            metadataNamespace => 'http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim'
+        ) );
+    }
 
     return $self;
 }
@@ -196,8 +207,9 @@ sub new {
 
     my $parser = XML::LibXML->new();
     my $record_dom = $parser->parse_string( $marcxml );
-    if ( $args{metadataPrefix} ne 'marcxml' ) {
-        $record_dom = $repository->oai_dc_stylesheet()->transform( $record_dom );
+    my $format =  $args{metadataPrefix};
+    if ( $format ne 'marcxml' ) {
+        $record_dom = $repository->stylesheet($format)->transform( $record_dom );
     }
     $self->metadata( HTTP::OAI::Metadata->new( dom => $record_dom ) );
 
@@ -361,28 +373,11 @@ use HTTP::OAI::Repository qw/:validate/;
 use XML::SAX::Writer;
 use XML::LibXML;
 use XML::LibXSLT;
+use YAML::XS qw( LoadFile );
 use CGI qw/:standard -oldstyle_urls/;
 
 use C4::Context;
 use C4::Biblio;
-
-
-=head1 NAME
-
-C4::OAI::Repository - Handles OAI-PMH requests for a Koha database.
-
-=head1 SYNOPSIS
-
-  use C4::OAI::Repository;
-
-  my $repository = C4::OAI::Repository->new();
-
-=head1 DESCRIPTION
-
-This object extend HTTP::OAI::Repository object.
-
-=cut
-
 
 
 sub new {
@@ -392,6 +387,14 @@ sub new {
     $self->{ koha_identifier      } = C4::Context->preference("OAI-PMH:archiveID");
     $self->{ koha_max_count       } = C4::Context->preference("OAI-PMH:MaxCount");
     $self->{ koha_metadata_format } = ['oai_dc', 'marcxml'];
+    $self->{ koha_stylesheet      } = { }; # Build when needed
+
+    # Load configuration file if defined in OAI-PMH:ConfFile syspref
+    if ( my $file = C4::Context->preference("OAI-PMH:ConfFile") ) {
+        $self->{ conf } = LoadFile( $file );
+        my @formats = keys %{ $self->{conf}->{format} };
+        $self->{ koha_metadata_format } =  \@formats;
+    }
 
     # Check for grammatical errors in the request
     my @errs = validate_request( CGI::Vars() );
@@ -449,30 +452,78 @@ sub new {
 }
 
 
-#
-# XSLT stylesheet used to transform MARCXML record into OAI Dublin Core.
-# The object is constructed the fist time this method is called.
-#
-# Styleeet file is located in /koha-tmpl/intranet-tmpl/prog/en/xslt/ directory.
-# Its name is constructed with 'marcflavour' syspref:
-#   - MARC21slim2OAIDC.xsl
-#   - UNIMARCslim2OADIC.xsl
-#
-sub oai_dc_stylesheet {
-    my $self = shift;
+sub stylesheet {
+    my ( $self, $format ) = @_;
 
-    unless ( $self->{ oai_dc_stylesheet } ) {
-        my $xslt_file = C4::Context->config('intranetdir') .
-                        "/koha-tmpl/intranet-tmpl/prog/en/xslt/" .
-                        C4::Context->preference('marcflavour') .
-                        "slim2OAIDC.xsl";
+    my $stylesheet = $self->{ koha_stylesheet }->{ $format };
+    unless ( $stylesheet ) {
+        my $xsl_file = $self->{ conf }
+                       ? $self->{ conf }->{ format }->{ $format }->{ xsl_file }
+                       : ( C4::Context->config('intranetdir') .
+                         "/koha-tmpl/intranet-tmpl/prog/en/xslt/" .
+                         C4::Context->preference('marcflavour') .
+                         "slim2OAIDC.xsl" );
         my $parser = XML::LibXML->new();
         my $xslt = XML::LibXSLT->new();
-        my $style_doc = $parser->parse_file( $xslt_file );
-        my $stylesheet = $xslt->parse_stylesheet( $style_doc );
-        $self->{ oai_dc_stylesheet } = $stylesheet;
+        my $style_doc = $parser->parse_file( $xsl_file );
+        $stylesheet = $xslt->parse_stylesheet( $style_doc );
+        $self->{ koha_stylesheet }->{ $format } = $stylesheet;
     }
 
-    return $self->{ oai_dc_stylesheet };
+    return $stylesheet;
 }
+
+
+
+=head1 NAME
+
+C4::OAI::Repository - Handles OAI-PMH requests for a Koha database.
+
+=head1 SYNOPSIS
+
+  use C4::OAI::Repository;
+
+  my $repository = C4::OAI::Repository->new();
+
+=head1 DESCRIPTION
+
+This object extend HTTP::OAI::Repository object.
+It accepts OAI-PMH HTTP requests and returns result.
+
+This OAI-PMH server can operate in a simple mode and extended one. 
+
+In simple mode, repository configuration comes entirely from Koha system
+preferences (OAI-PMH:archiveID and OAI-PMH:MaxCount) and the server returns
+records in marcxml or dublin core format. Dublin core records are created from
+koha marcxml records tranformed with XSLT. Used XSL file is located in
+koha-tmpl/intranet-tmpl/prog/en/xslt directory and choosed based on marcflavour,
+respecively MARC21slim2OAIDC.xsl for MARC21 and  MARC21slim2OAIDC.xsl for
+UNIMARC.
+
+In extende mode, it's possible to parameter other format than marcxml or Dublin
+Core. A new syspref OAI-PMH:ConfFile specify a YAML configuration file which
+list available metadata formats and XSL file used to create them from marcxml
+records. If this syspref isn't set, Koha OAI server works in simple mode. A
+configuration file koha-oai.conf can look like that:
+
+  ---
+  format:
+    vs:
+      metadataPrefix: vs
+      metadataNamespace: http://veryspecial.tamil.fr/vs/format-pivot/1.1/vs
+      schema: http://veryspecial.tamil.fr/vs/format-pivot/1.1/vs.xsd
+      xsl_file: /usr/local/koha/xslt/vs.xsl
+    marcxml:
+      metadataPrefix: marxml
+      metadataNamespace: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim
+      schema: http://www.loc.gov/MARC21/slim http://www.loc.gov/standards/marcxml/schema/MARC21slim.xsd
+    oai_dc:
+      metadataPrefix: oai_dc
+      metadataNamespace: http://www.openarchives.org/OAI/2.0/oai_dc/
+      schema: http://www.openarchives.org/OAI/2.0/oai_dc.xsd
+      xsl_file: /usr/local/koha/koha-tmpl/intranet-tmpl/xslt/UNIMARCslim2OAIDC.xsl
+
+=cut
+
+
 
