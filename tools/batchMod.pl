@@ -94,7 +94,7 @@ if ($op eq "action") {
 			$deleted_items++;
 		    } else {
 			$not_deleted_items++;
-			push @not_deleted, $itemdata->{'itemnumber'};
+			push @not_deleted, { itemnumber => $itemdata->{'itemnumber'}, barcode => $itemdata->{'barcode'}, title => $itemdata->{'title'}, $return => 1 };
 		    }
 	    } else {
 		    my $localmarcitem=Item2Marc($itemdata);
@@ -113,6 +113,7 @@ if ($op eq "action") {
 if ($op eq "show"){
 	my $filefh = $input->upload('uploadfile');
 	my $filecontent = $input->param('filecontent');
+	my @notfoundbarcodes;
 
     my @contentlist;
     if ($filefh){
@@ -123,9 +124,16 @@ if ($op eq "show"){
 
 	switch ($filecontent) {
 	    case "barcode_file" {
-		push @itemnumbers,map{GetItemnumberFromBarcode($_)} @contentlist;
-		# Remove not found barcodes
-		@itemnumbers = grep(!/^$/, @itemnumbers);
+		foreach my $barcode (@contentlist) {
+
+		    my $itemnumber = GetItemnumberFromBarcode($barcode);
+		    if ($itemnumber) {
+			push @itemnumbers,$itemnumber;
+		    } else {
+			push @notfoundbarcodes, $barcode;
+		    }
+		}
+
 	    }
 
 	    case "itemid_file" {
@@ -135,9 +143,16 @@ if ($op eq "show"){
     } else {
        if ( my $list=$input->param('barcodelist')){
         push my @barcodelist, split(/\s\n/, $list);
-	push @itemnumbers,map{GetItemnumberFromBarcode($_)} @barcodelist;
-	# Remove not found barcodes
-	@itemnumbers = grep(!/^$/, @itemnumbers);
+
+	foreach my $barcode (@barcodelist) {
+
+	    my $itemnumber = GetItemnumberFromBarcode($barcode);
+	    if ($itemnumber) {
+		push @itemnumbers,$itemnumber;
+	    } else {
+		push @notfoundbarcodes, $barcode;
+	    }
+	}
 
     }
 }
@@ -300,6 +315,10 @@ foreach my $tag (sort keys %{$tagslib}) {
 
     # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
     $template->param(item => \@loop_data);
+    if (@notfoundbarcodes) { 
+	my @notfoundbarcodesloop = map{{barcode=>$_}}@notfoundbarcodes;
+    	$template->param(notfoundbarcodes => \@notfoundbarcodesloop);
+    }
     $nextop="action"
 } # -- End action="show"
 
@@ -311,12 +330,12 @@ $template->param(
 
 if ($op eq "action") {
 
-    my @not_deleted_loop = map{{itemnumber=>$_}}@not_deleted;
+    #my @not_deleted_loop = map{{itemnumber=>$_}}@not_deleted;
 
     $template->param(
 	not_deleted_items => $not_deleted_items,
 	deleted_items => $deleted_items,
-	not_deleted_itemnumbers => \@not_deleted_loop 
+	not_deleted_loop => \@not_deleted 
     );
 }
 
