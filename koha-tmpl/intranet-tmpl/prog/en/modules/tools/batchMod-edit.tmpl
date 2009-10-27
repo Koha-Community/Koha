@@ -84,9 +84,9 @@
 		      <!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
 	       </label>
                 <!-- TMPL_VAR NAME="marc_value" -->
-                <input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" />
-                <input type="hidden" name="subfield"  value="<!-- TMPL_VAR NAME="subfield" -->" />
-                <input type="hidden" name="mandatory" value="<!-- TMPL_VAR NAME="mandatory" -->" />
+                <!-- TMPL_IF NAME="tag" --><input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" /><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="subfield" --><input type="hidden" name="subfield"       value="<!-- TMPL_VAR NAME="subfield" -->" /><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="mandatory" --><input type="hidden" name="mandatory"       value="<!-- TMPL_VAR NAME="mandatory" -->" /><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="repeatable" -->
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
@@ -100,7 +100,6 @@
 </fieldset>
 </div>
 <!-- TMPL_ELSE --> <!-- // ACTION -->
-         <h3>No results!</h3>
          <a href="javascript:window.history.back()">Go back</a>
 <!-- /TMPL_IF -->
 

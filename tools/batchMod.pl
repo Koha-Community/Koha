@@ -82,6 +82,7 @@ if ($op eq "action") {
     # build indicator hash.
     my @ind_tag   = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
+
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
     my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
     my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
@@ -200,8 +201,32 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
 	# testing branch value if IndependantBranches.
 
-	my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
-	my $attributes          = qq($attributes_no_value value="$value" );
+	my $attributes_no_value;
+	my $not_editable = 0;
+	# Disable barcode and stock numbers batch editing
+	my @not_editable_koha_fields = ( 'items.barcode', 'items.stknumber' );
+	foreach (@not_editable_koha_fields) {
+	    my ($bctag, $bcsubfield) = GetMarcFromKohaField($_, $frameworkcode);
+    	    if (($bctag eq $subfield_data{tag}) && ($bcsubfield eq $subfield_data{subfield})) {
+		$not_editable = 1;
+	    }
+
+	}
+
+	my $attributes;
+	# If a field is found to be non-editable,
+	if ($not_editable) {
+		# We mark it as disabled, so the user won't be able to edit it
+     		$attributes_no_value = qq(disabled="disabled"); 
+		$attributes = $attributes_no_value;
+		# We also remove it's data, so it won't be modified
+		undef($subfield_data{tag});
+		undef($subfield_data{subfield});
+	} else {
+	    $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+	    $attributes          = qq($attributes_no_value value="$value" );
+	}
+
 	if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
 	my @authorised_values;
 	my %authorised_lib;
