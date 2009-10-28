@@ -749,6 +749,10 @@ sub GetISBDView {
     my $tagslib      = &GetMarcStructure( 1, $itemtype );
     
     my $ISBD = C4::Context->preference('ISBD');
+    if($template eq "opac"){
+        $ISBD = C4::Context->preference('OPACISBD');
+    }
+    
     my $bloc = $ISBD;
     my $res;
     my $blocres;
@@ -786,7 +790,6 @@ sub GetISBDView {
                     my $tagsubf = $tag . $subfvalue;
                     $calculated =~
                           s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-                    $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g if ($template eq "opac");
                 
                     # field builded, store the result
                     if ( $calculated && !$hasputtextbefore )
@@ -825,9 +828,6 @@ sub GetISBDView {
                                   $valuecode     # replace by the value code
                                /gx;
     
-                $calculated =~
-            s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-            $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g if ($template eq "opac");
                 }
     
                 # field builded, store the result
