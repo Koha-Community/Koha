@@ -489,7 +489,7 @@ sub GetBudgetHierarchy {
             push @bind_params, $branchcode;
         }
     }
-	$query.=" WHERE ".join(' AND ', @where_strings);
+	$query.=" WHERE ".join(' AND ', @where_strings) if @where_strings;
 	$debug && warn $query,join(",",@bind_params);
 	my $sth = $dbh->prepare($query);
 	$sth->execute(@bind_params);
