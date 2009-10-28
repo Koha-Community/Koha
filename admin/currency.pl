@@ -115,9 +115,10 @@ if ($op eq 'add_form') {
             WHERE currency = ?  |  );
 
         $sth->execute(  $input->param('rate'),
-                        $input->param('symbol'),
-                        $input->param('active'),
-                        $input->param('currency'),  );
+                        $input->param('symbol')||'',
+                        $input->param('active')||0,
+                        $input->param('currency'),
+                        );
     }
     else
     {
@@ -126,8 +127,9 @@ if ($op eq 'add_form') {
 
         $sth->execute(  $input->param('currency'),
                         $input->param('rate'),
-                        $input->param('symbol'),
-                        $input->param('active'),       );
+                        $input->param('symbol')||'',
+                        $input->param('active')||0,
+                        );
     }
                                                     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
