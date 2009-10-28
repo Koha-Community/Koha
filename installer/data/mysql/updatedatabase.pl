@@ -3136,19 +3136,19 @@ UPDATE `koha`.`systempreferences` SET `value` = '#200|<p> |<b>{200a}</b>{. 200c}
 
 #200|<br>|<p><i>Auteurs : </i>|
 
-#700||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7009}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l'auteur"></a>{700c}{ 700b}{ 700a}{ 700d}{ (700f)}{. 7004} --|
+#700||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7009}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{700c}{ 700b}{ 700a}{ 700d}{ (700f)}{. 7004} --|
 
-#701||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7019}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l'auteur"></a>{701c}{ 701b}{ 701a}{ 701d}{ (701f)}{. 7014} --|
+#701||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7019}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{701c}{ 701b}{ 701a}{ 701d}{ (701f)}{. 7014} --|
 
-#702||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7029}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l'auteur"></a>{702c}{ 702b}{ 702a}{ 702d}{ (702f)}{. 7024} --|</p>
+#702||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7029}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{702c}{ 702b}{ 702a}{ 702d}{ (702f)}{. 7024} --|</p>
 
 
 
-#710|<p><i> Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7109}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l'auteur"></a>{710a}{ (710c)}{. 710b} ({710d ;}{ 710f ; }{710e}) --|
+#710|<p><i> Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7109}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{710a}{ (710c)}{. 710b} ({710d ;}{ 710f ; }{710e}) --|
 
-#711|<i> Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7119}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l'auteur"></a>{711a}{ (711c)}{. 711b} ({711d ;}{ 711f ; }{711e}) --|</p>
+#711|<i> Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7119}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{711a}{ (711c)}{. 711b} ({711d ;}{ 711f ; }{711e}) --|</p>
 
-#712|<p><i>Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7129}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l'auteur"></a>{712a}{ (712c)}{. 712b} ({712d ;}{ 712f ; }{712e}){. 7124} --|</p>
+#712|<p><i>Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7129}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{712a}{ (712c)}{. 712b} ({712d ;}{ 712f ; }{712e}){. 7124} --|</p>
 
 #500|<p>|{[500a}{ (500m)}{. 500k}] --|</p>
 
