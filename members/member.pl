@@ -29,6 +29,7 @@ use CGI;
 use C4::Members;
 use C4::Branch;
 use C4::Category;
+use File::Basename;
 
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');
@@ -166,6 +167,7 @@ $template->param(
 
 $template->param( 
         searching       => "1",
+		actionname		=>basename($0),
 		%$patron,
         numresults      => $count,
         resultsloop     => \@resultsdata,
