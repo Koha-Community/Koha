@@ -50,34 +50,35 @@ if($ok){
     # get biblio information....
     my $biblio = $subs->{'biblionumber'};
 
-    # get existing reserves .....
-    my ($count,$reserves) = GetReservesFromBiblionumber($biblio);
-    my $totalcount = $count;
-    foreach my $res (@$reserves) {
-        if ($res->{'found'} eq 'W') {
-	    $count--;
-        }
-    }
-    my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
-    my @itemresults = GetItemsInfo($subs->{'biblionumber'}, 'intra');
-    my $branch = $itemresults[0]->{'holdingbranch'};
-    my $branchname = GetBranchName($branch);
-    my $const = 'o';
-    my $notes;
-    my $title = $subs->{'bibliotitle'};
-    for(my $i=0;$i<$routing;$i++){
-	my $sth = $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ?");
-        $sth->execute($biblio,$routinglist[$i]->{'borrowernumber'});
-        my $data = $sth->fetchrow_hashref;
+	if (C4::Context->preference('RoutingListAddReserves')){
+		# get existing reserves .....
+		my ($count,$reserves) = GetReservesFromBiblionumber($biblio);
+		my $totalcount = $count;
+		foreach my $res (@$reserves) {
+			if ($res->{'found'} eq 'W') {
+				$count--;
+			}
+		}
+		my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
+		my @itemresults = GetItemsInfo($subs->{'biblionumber'}, 'intra');
+		my $branch = $itemresults[0]->{'holdingbranch'};
+		my $branchname = GetBranchName($branch);
+		my $const = 'o';
+		my $notes;
+		my $title = $subs->{'bibliotitle'};
+		for(my $i=0;$i<$routing;$i++){
+			my $sth = $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ?");
+				$sth->execute($biblio,$routinglist[$i]->{'borrowernumber'});
+				my $data = $sth->fetchrow_hashref;
 
-#       warn "$routinglist[$i]->{'borrowernumber'} is the same as $data->{'borrowernumber'}";
-	if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
-	    ModReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
-        } else {
-        AddReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},'',$notes,$title);
+		#       warn "$routinglist[$i]->{'borrowernumber'} is the same as $data->{'borrowernumber'}";
+			if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
+				ModReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
+				} else {
+				AddReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},'',$notes,$title);
+			}
+    	}
 	}
-    }
-
 
     ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/routing-preview-slip.tmpl",
@@ -122,4 +123,4 @@ $template->param(
     routingnotes => $routingnotes,
     );
 
-        output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;

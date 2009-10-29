@@ -3105,125 +3105,18 @@ $dbh->do("
 
 $DBversion = "3.01.00.120";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-$dbh->do(<<'ISBDUPDATE');
-UPDATE `koha`.`systempreferences` SET `value` = '#200|<p> |<b>{200a}</b>{. 200c}{ = 200d}{ : 200e}{. 200h}{. 200i}{ / 200f}{ ; 200g  }| 
-#205|. - |{205a}{ / 205f}|
-#210|. - |{ 210a }{ : 210c }{, 210d}|
-
-#461|. - Extrait de : |<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=461]/subfield[@code=t] &quot;{461t}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" alt="chercher" height="15" title="Chercher sur {461t}"></a>{461t}{, 461x }{ ; 461v}{, 461h}{, 461p}|
-
-#461||{ 461c}|
-
-#215|. - |{215a}{ : 215c}{ ; 215d}{ + 215e}|
-
-#225| - | (<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=225]/subfield[@code=a] &quot;{225a}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" alt="recherche cat" height="15" title="Chercher sur {225a}"></a>{225a}{ = 225d}{ : 225e}{. 225h}{. 225i}{ / 225f}{, 225x}{ ; 225v}) |
-
-#200|||</p>
-
-#010|<p>|ISBN {010a}{ (010b)}. - |</p>
-
-#300|<p>|{300a}|</p>
-
-#320|<p>|{ 320a}|</p>
-
-#327|<p>|{ 327a}|</p>
-
-#328|<p>|{ 328a}|</p>
-
-#454|<p>Traduit de : |{ "454t"}{. 454e}{. 454c}{, 454d}|</p>
-
-
-
-#200|<br>|<p><i>Auteurs : </i>|
-
-#700||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7009}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{700c}{ 700b}{ 700a}{ 700d}{ (700f)}{. 7004} --|
-
-#701||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7019}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{701c}{ 701b}{ 701a}{ 701d}{ (701f)}{. 7014} --|
-
-#702||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7029}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{702c}{ 702b}{ 702a}{ 702d}{ (702f)}{. 7024} --|</p>
-
-
-
-#710|<p><i> Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7109}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{710a}{ (710c)}{. 710b} ({710d ;}{ 710f ; }{710e}) --|
-
-#711|<i> Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7119}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{711a}{ (711c)}{. 711b} ({711d ;}{ 711f ; }{711e}) --|</p>
-
-#712|<p><i>Collectivités : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{7129}&quot;"> <img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Chercher sur l''auteur"></a>{712a}{ (712c)}{. 712b} ({712d ;}{ 712f ; }{712e}){. 7124} --|</p>
-
-#500|<p>|{[500a}{ (500m)}{. 500k}] --|</p>
-
-#503|<p>|{[503a}{. 503b}{. 503m}{, 503n}{. 503j}{. 503e}{, 503f}] --|</p>
-
-#312|<p>|{312a} --|</p>
-
-
-
-#200||<br>|
-
-#856|<p>URL : |<a href="{856u}">{856u}</a> {(856e)}|</p>
-
-#200|<br>|<p><b><label>Mots-cl&eacute;s : </label></b></p>|
-
-#600||<a href="/cgi-bin/koha/catalogue/search.pl?q=an=&quot;{6009}&quot;"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" alt="recherche cat" title="Search on {6009}"></a> { 600c}{ 600b }<a href="opac-authoritiesdetail.pl?authid={6009}">{600a}</a>{ 600d}{ (600f)} {. 6004} --<br/>|
-
-#601||<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf @attr 1=/record/datafield[@tag=601]/subfield[@code=9] &quot;{6019}&quot;"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6019}"></a><a href="opac-authoritiesdetail.pl?authid={6019}">{601a}</a>{ (601c)}{. 601b}{ : 601d} { ; 601f}{ ; 601e}{ -- 601x }{-- 601z }{-- 601y}<br/>|
-
-#605||<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf @attr 1=/record/datafield[@tag=605]/subfield[@code=9] &quot;{6059}&quot;"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6059}"></a><a href="opac-authoritiesdetail.pl?authid={6059}">{605a}</a>{. 605i}{. 605h}{. 605k}{. 605m}{. 605q} {-- 605x }{-- 605z }{-- 605y }{-- 605l}<br/>|
-
-
-
-#630|<p><i><label>MACLES :</label></i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an={6309}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6309}"></a>{630a} -- |</p>
-
-#606|<p><i>Sujets : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an={6069}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6069}"></a><a href="opac-authoritiesdetail.pl?authid={6069}">{606a}</a>{-- 606x }{-- 606z }{606y } -- |</p>
-
-#631|<p><i>Peuples : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an={6319}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6319}"></a><a href="opac-authoritiesdetail.pl?authid={6319}">{631a}</a>{-- 631x }{-- 631z }{631y } -- |</p>
-
-#632|<p><i>Anthrop. : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an={6329}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6329}"></a><a href="opac-authoritiesdetail.pl?authid={6329}">{632a}</a>{-- 632x }{-- 632z }{632y } -- |</p>
-
-#634|<p><i>Chrono : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an={6349}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6349}"></a><a href="opac-authoritiesdetail.pl?authid={6349}">{634a}</a>{-- 634x }{-- 634z }{634y } -- |</p>
-
-#637|<p><i>Topo : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=su={637a}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6379}"></a><a href="/cgi-bin/koha/catalogue/search.pl?q=pqf @attr 1=/record/datafield[@tag=637]/subfield[@code=a] &quot;{6059}&quot;{637a}">{637a}</a> -- |</p>
-
-#633|<p><i>Oeuvres : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an={6339}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6339}"></a><a href="opac-authoritiesdetail.pl?authid={6339}">{633a}</a>{-- 633x }{-- 633z }{633y } -- |</p>
-
-#607|<p><i>Lieux : </i>|<a href="/cgi-bin/koha/catalogue/search.pl?q=an={6079}"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {6079}"></a><a href="opac-authoritiesdetail.pl?authid={6079}">{607a}</a>{-- 607x }{-- 607z }{607y } -- |</p>
-
-
-
-#200||<p><i>Mots libres: </i>|
-
-#641||<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=641]/subfield[@code=a] &quot;{641a}&quot;"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {641a}"></a>{641a} |
-
-#642||<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=642]/subfield[@code=a] &quot;{642a}&quot;"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {642a}"></a>{642a} |
-
-#644||<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=644]/subfield[@code=a] &quot;{644a}&quot;"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="1c-tmpl/prog/images/filefind.png" height="15" title="Search on {646a}"></a>{646a} -- |
-
-#610||<a href="/cgi-bin/koha/catalogue/search.pl?q=pqf=@attr 1=/record/datafield[@tag=610]/subfield[@code=a] &quot;{610a}&quot;"><img border="0" src="/opac-tmpl/prog/images/filefind.png" height="15" title="Search on {610a}"></a>{ 610a} -- |<br/>
-
-
-
-#011|<p><label>ISSN : </label>|{011a }{ (011b)}.|</p>
-
-
-
-#330|<p>|<i>R&eacute;sum&eacute; : </i>{330a} </br>|</p>
-
-#200|<br>|<br><h2>Exemplaires</h2>|
-
-#200|<table>|<th>Localisation</th><th>Cote</th><th>Statut</th><th>Fonds</th>|
-
-#995||<tr><td>{995c}</td><td> {995k}</td><td> {995o}</td><td> {995s}</td></tr>|
-
-#200|||</table>'
-
- WHERE `systempreferences`.`variable` = 'isbd' LIMIT 1 ;
-ISBDUPDATE
-
+    if (C4::Context->preference("opaclanguages") eq "fr") {
+	$dbh->do(qq{
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','Si activé, des reservations sont automatiquement créées pour chaque lecteur de la liste de circulation d''un numéro de périodique','','YesNo');
+	});
+	}else{
+	$dbh->do(qq{
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','If ON the patrons on routing lists are automatically added to holds on the issue.','','YesNo');
+	});
+	}
     print "Upgrade to $DBversion done (isbd updated)\n";
     SetVersion ($DBversion);
 }
-
-
 
 =item DropAllForeignKeys($table)
 
