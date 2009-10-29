@@ -10,9 +10,9 @@
 
 <div id="doc3" class="yui-t2">
 
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
 
 <!-- TMPL_INCLUDE NAME="acquisitions-toolbar.inc" -->
 
@@ -23,11 +23,11 @@
     <fieldset>
         <legend>Manage orders</legend>
     <!-- TMPL_IF name="nobudget" -->
-		<!-- TMPL_IF NAME="CAN_user_parameters" -->
+        <!-- TMPL_IF NAME="CAN_user_parameters" -->
         <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</span>
-		<!-- TMPL_ELSE -->
-		<span class="problem">Your administrator must define a budget in Administration</span>
-		<!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+        <span class="problem">Your administrator must define a budget in Administration</span>
+        <!-- /TMPL_IF -->
         <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
             <p><label for="supplierpage">Vendor </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
             <input type="submit" value="Search" />
@@ -47,32 +47,10 @@
     <fieldset>
     <legend>Pending suggestions</legend>
         <!-- TMPL_IF name="suggestion" -->
-            <!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/acceptorreject.pl">Manage suggestions</a>
+            <!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/suggestion.pl">Manage suggestions</a>
         <!-- TMPL_ELSE -->
             <p>No suggestions waiting</p>
         <!-- /TMPL_IF -->
-    <br>
-    <br>
-    <table>
-        <thead>
-            <tr>
-                <th>Book fund group</th>
-                <th>number of <br>waiting sugg.</th>
-                <th></th>
-            </tr>
-        </thead>
-
-        <tbody>
-        <!-- TMPL_LOOP name="bookfundgroup_loop" -->
-            <tr>
-                <td><!-- TMPL_VAR name="bookfundgroupname" --></td>
-                <td><!-- TMPL_VAR name="nowsuggestions" --></td>
-                <td><a href="/cgi-bin/koha/suggestion/acceptorrejectpd.pl?bookfundgroupnumber=<!-- TMPL_VAR name="bookfundgroupnumber" -->">manage</a></td>
-            </tr>
-        <!-- /TMPL_LOOP -->
-        </tbody>
-    </table>
-
     </fieldset>
 </div>
 </div>
@@ -100,47 +78,35 @@
             <th>Avail</th>
         </tr>
         </thead>
-        <tbody>
-
-
-        <!-- TMPL_LOOP name="loop_budget" -->
-
-   <!--TMPL_IF name="toggle"-->
-      <tr class="highlight">
-      <!--TMPL_ELSE-->
-      <tr>
-      <!--/TMPL_IF-->
-
-                <td align="center"><!-- TMPL_VAR name="budget_code" --></td>
-                <td align="center"><!-- TMPL_VAR name="budget_owner" --></td>
-                <td align="center"><!-- TMPL_VAR name="budget_branchname" --></td>
-                <td><p  align="right" ><!-- TMPL_VAR name="budget_amount" --></p> </td>
-                <td><p  align="right" ><!-- TMPL_VAR name="budget_spent" --></p> </td>
-                <td><p  align="right" ><!-- TMPL_VAR name="budget_avail" --></p> </td>
-
-            </tr>
-        <!-- /TMPL_LOOP -->
-        </tbody>
-
         <tfoot>
         <tr>
             <th>Total</th>
-                <td>
-                <td>
-            <th><p  align="right" ><!-- TMPL_VAR name="total" --></p> </th>
-            <th><p  align="right" ><!-- TMPL_VAR name="totspent" --></p> </th>
-            <th><p  align="right" ><!-- TMPL_VAR name="totavail" --></p> </th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th align="right" ><!-- TMPL_VAR name="total" --></th>
+            <th align="right" ><!-- TMPL_VAR name="totspent" --></th>
+            <th align="right" ><!-- TMPL_VAR name="totavail" --></th>
         </tr>
         </tfoot>
+        <tbody>
+        <!-- TMPL_LOOP name="loop_budget" -->
+            <!--TMPL_IF name="toggle"-->
+                <tr class="highlight">
+            <!--TMPL_ELSE-->
+                <tr>
+            <!--/TMPL_IF-->
+                <td align="center"><!-- TMPL_VAR name="budget_code" --></td>
+                <td align="center"><!-- TMPL_VAR name="budget_owner" --></td>
+                <td align="center"><!-- TMPL_VAR name="budget_branchname" --></td>
+                <td align="right" ><!-- TMPL_VAR name="budget_amount" --></td>
+                <td align="right" ><!-- TMPL_VAR name="budget_spent" --></td>
+                <td align="right" ><!-- TMPL_VAR name="budget_avail" --></td>
+            </tr>
+        <!-- /TMPL_LOOP -->
+        </tbody>
     </table>
     </div>
-
-
-    <p>Use your reload button [ctrl + r] to get the most recent figures.
-    Committed figures are approximate only, as exchange rates will affect the amount actually paid.</p>
     <!-- /TMPL_IF -->
-
-
 
     <div id="acqui_acqui_home_currency">
     <!-- TMPL_IF NAME="loop_currency" -->
@@ -180,14 +146,6 @@
 </div>
 
 </div>
-
-<div id="acqui_acqui_home_hints">
-    <h2>Help</h2>
-    <p>To begin an order, local purchase or donation, search for the vendor or benefactor, and then you can create a new Basket.</p>
-    <p>A Basket is a collection of orders.</p>
-    <p>To order an item you need to establish whether a biblio already exists for it, and either add an item, or set up a new biblio and then add the item.</p>
-</div>
-
 </div>
 </div>
 <div class="yui-b">

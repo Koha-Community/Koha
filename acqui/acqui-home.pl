@@ -169,76 +169,6 @@ foreach my $result (@results) {
     push( @loop_budget, { %{$result}, toggle => $toggle++ % 2, } );
 }
 
-
-# ---------------------------------------------------
-
-=c FIXME
-
-
-### $cur
-
-## suggestions
-
-my $dbh = C4::Context->dbh;
-
-
-## liste des domaines
-
-my $sth=$dbh->prepare("
-SELECT bookfundgroupnumber,bookfundgroupname
-FROM `aq2bookfundgroups`
-ORDER BY Bookfundgroupname
-");
-$sth->execute;
-
-my @bookfundgroup_loop;  ## liste des domaines
-
-while (my $row=$sth->fetchrow_hashref) {
-        push @bookfundgroup_loop,$row;
-}
-$sth->finish;
-
-
-## liste des BFG ayant des suggestions à traiter
-
-
-## nowsuggestions = Number Of Waiting Suggestions
-
-my $dbh = C4::Context->dbh;
-
-my $sth=$dbh->prepare("
-SELECT bookfundgroupnumber, count(*) AS nowsuggestions
-FROM `aq2orders`
-WHERE step=2
-AND STATUS='ASKED'
-GROUP BY bookfundgroupnumber
-");
-$sth->execute;
-
-my @nowsuggestionsneq0_loop;  ## liste des BFG ayant des suggestions à traiter
-
-while (my $row=$sth->fetchrow_hashref) {
-        push @nowsuggestionsneq0_loop,$row;
-}
-$sth->finish;
-
-
-## liste des BFG avec l'effectif des suggestions à traiter (effectif éventuellement nul)
-
-my @nowsuggestions_loop;
-
-foreach my $data1 (@bookfundgroup_loop) {
-    $data1->{'nowsuggestions'}=0;
-    foreach my $data2 (@nowsuggestionsneq0_loop) {
-        if ($data1->{'bookfundgroupnumber'}==$data2->{'bookfundgroupnumber'}) {
-            $data1->{'nowsuggestions'}=$data2->{'nowsuggestions'};
-        }
-    }
-}
-
-=cut
-
-
 $template->param(
     classlist     => $classlist,
     type          => 'intranet',
@@ -251,13 +181,7 @@ $template->param(
     totspent      => $num->format_price($totspent ),
     totcomtd      => $num->format_price( $totcomtd ),
     totavail      => $num->format_price( $totavail ),
-
-    #      nowsuggestions_loop           => \@nowsuggestions_loop,
-    #      bookfundgroup_loop            => \@bookfundgroup_loop,
-    #      numberofwaitingsuggestionsgpd => $numberofwaitingsuggestionsgpd,
-    #      numberofwaitingsuggestionspd  => $numberofwaitingsuggestionspd,
-    #      suggestions_loop              => $suggestions_loop,
-
+    suggestion    => $suggestion,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

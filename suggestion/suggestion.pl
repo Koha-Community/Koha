@@ -71,7 +71,7 @@ my $tabcode    = $input->param('tabcode');
 
 # filter informations which are not suggestion related.
 my $suggestion_ref  = $input->Vars;
-delete $$suggestion_ref{$_} foreach qw<suggestedbyme op displayby tabcode edit_field>;
+delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
 foreach (keys %$suggestion_ref){
 	delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
 }
