@@ -161,7 +161,6 @@ if ( $ordnum eq '' and defined $params->{'breedingid'}){
                 $listprice = 0;
             }
         }
-        $listprice=100;
         SetImportRecordStatus($params->{'breedingid'}, 'imported');
     }
 }
