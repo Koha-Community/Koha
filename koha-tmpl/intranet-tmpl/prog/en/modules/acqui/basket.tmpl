@@ -79,13 +79,13 @@
                         //]]>
                     </script>
                     <ul id="toolbar-list" class="toolbar">
-                    <li><a href="basketheader.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->&op=add_form" class="button" id="basketheadbutton">Edit basket header information</a></li>
-                    <li><a href="<!-- TMPL_VAR NAME="script_name" -->?op=del_basket&basketno=<!-- TMPL_VAR NAME="basketno" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->" class="button" id="delbasketbutton">Delete this basket</a></li>
+                    <li><a href="basketheader.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;op=add_form" class="button" id="basketheadbutton">Edit basket header information</a></li>
+                    <li><a href="<!-- TMPL_VAR NAME="script_name" -->?op=del_basket&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->" class="button" id="delbasketbutton">Delete this basket</a></li>
                     <!-- TMPL_IF name="unclosable" -->
                         <li><button onclick="confirm_close()" class="yui-button-disabled" id="closebutton" type="push" disabled="true" title="You can not close this basket" >Can not close basket</a></li>
-                        <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->&owner=1" class="button" id="uncertpricesbutton">Uncertain prices</a></li>
+                        <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->&amp;owner=1" class="button" id="uncertpricesbutton">Uncertain prices</a></li>
                     <!-- TMPL_ELSE -->
-                        <li><a href="<!-- TMPL_VAR name="script_name" -->?op=close&basketno=<!-- TMPL_VAR name="basketno" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="closebutton">Close this basket</a></li>
+                        <li><a href="<!-- TMPL_VAR name="script_name" -->?op=close&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="closebutton">Close this basket</a></li>
                     <!-- /TMPL_IF -->
                     </ul>
                 </div>
@@ -124,7 +124,7 @@
             <h2>
             <span class="yui-button yui-link-button">
             <em class="first-child">
-                <a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&basketno=<!-- TMPL_VAR NAME="basketno" -->&booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->" class="yui-link-button">Yes, delete this basket!</a>
+                <a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->" class="yui-link-button">Yes, delete this basket!</a>
             </em>
             </span>
             <span class="yui-button yui-link-button">
@@ -141,7 +141,7 @@
                 <!-- TMPL_IF NAME="basketbooksellernote" --><p>Bookseller note: <!-- TMPL_VAR NAME="basketbooksellernote" --></p><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="basketcontractno" -->
                     <p>Contract number: <!-- TMPL_VAR NAME="basketcontractno" --></p>
-                    <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></p>
+                    <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></p>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="authorisedbyname" --><p>Managed by:  <!-- TMPL_VAR NAME="authorisedbyname" --></p><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="creationdate" --><p>Open on:  <!-- TMPL_VAR NAME="creationdate" --></p><!-- /TMPL_IF -->
@@ -190,6 +190,36 @@
                         <!-- /TMPL_IF -->
                     </tr>
                 </thead>
+                <tfoot>
+                <tr>
+                    <th>Total GST Exc.</th>
+                    <th><!-- TMPL_VAR NAME="total_rrp_gste" --></th>
+                    <th>&nbsp;</th>
+                    <th><!-- TMPL_VAR name="qty_total" --></th>
+                    <th><!-- TMPL_VAR NAME="total_est_gste" --></th>
+                        <!-- TMPL_IF name="active" -->
+                            <!-- TMPL_IF name="closedate" -->
+                            <td colspan="1" rowspan="3">&nbsp;</td>
+                            <!-- TMPL_ELSE -->
+                            <td colspan="3" rowspan="3">&nbsp;</td>
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_IF -->
+                </tr>
+                <tr>
+                    <th>GST (<!-- TMPL_VAR NAME="gist_rate" -->)</th>
+                    <th><!-- TMPL_VAR NAME="gist_rrp" --></th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th><!-- TMPL_VAR NAME="gist_est" --></th>
+                </tr>
+                <tr>
+                    <th>Total GST Inc. (<!-- TMPL_VAR NAME="currency" -->)</th>
+                    <th><!-- TMPL_VAR NAME="total_rrp_gsti" --></th>
+                    <th>&nbsp;</th>
+                    <th><!-- TMPL_VAR name="qty_total" --></th>
+                    <th><!-- TMPL_VAR NAME="total_est_gsti" --></th>
+                </tr>
+                </tfoot>
                 <tbody>
                 <!-- TMPL_LOOP NAME="books_loop" -->
                     <!-- TMPL_IF NAME="order_received" --><tr class="disabled"><!-- TMPL_ELSE --><!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><!-- /TMPL_IF -->
@@ -220,34 +250,6 @@
                     </tr>
                 <!-- /TMPL_LOOP -->
                 </tbody>
-                <tr>
-                    <th>Total GST Exc.</th>
-                    <th><!-- TMPL_VAR NAME="total_rrp_gste" --></th>
-                    <th>&nbsp;</th>
-                    <th><!-- TMPL_VAR name="qty_total" --></th>
-                    <th><!-- TMPL_VAR NAME="total_est_gste" --></th>
-                        <!-- TMPL_IF name="active" -->
-                            <!-- TMPL_IF name="closedate" -->
-                            <td colspan="1" rowspan="3">&nbsp;</td>
-                            <!-- TMPL_ELSE -->
-                            <td colspan="3" rowspan="3">&nbsp;</td>
-                            <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF -->
-                </tr>
-                <tr>
-                    <th>GST (<!-- TMPL_VAR NAME="gist_rate" -->)</th>
-                    <th><!-- TMPL_VAR NAME="gist_rrp" --></th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                    <th><!-- TMPL_VAR NAME="gist_est" --></th>
-                </tr>
-                <tr>
-                    <th>Total GST Inc. (<!-- TMPL_VAR NAME="currency" -->)</th>
-                    <th><!-- TMPL_VAR NAME="total_rrp_gsti" --></th>
-                    <th>&nbsp;</th>
-                    <th><!-- TMPL_VAR name="qty_total" --></th>
-                    <th><!-- TMPL_VAR NAME="total_est_gsti" --></th>
-                </tr>
             </table>
         <!-- TMPL_ELSE -->
             <table>
