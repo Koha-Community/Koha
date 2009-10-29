@@ -1142,6 +1142,7 @@ sub GetHistory {
         
         if ( defined $title ) {
             $query .= " AND biblio.title LIKE ? ";
+            $title =~ s/\s+/%/g;
             push @query_params, "%$title%";
         }
 
