@@ -51,7 +51,7 @@ use C4::Context;
 my $query         = new CGI;
 my $title         = $query->param('title_filter');
 my $ISSN          = $query->param('ISSN_filter');
-my $routing       = $query->param('routing');
+my $routing       = $query->param('routing')||C4::Context->preference("RoutingSerials");
 my $searched      = $query->param('searched');
 my $biblionumber  = $query->param('biblionumber');
 

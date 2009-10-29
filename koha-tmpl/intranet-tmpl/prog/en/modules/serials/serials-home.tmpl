@@ -72,10 +72,9 @@ Serials updated :
                 Library (Callnumber)
             </th>
             <!-- TMPL_IF NAME="routing" -->
-              <th colspan="3">&nbsp;</th>
-            <!-- TMPL_ELSE -->
-              <th colspan="2">&nbsp;</th>
+              <th >Routing list</th>
             <!-- /TMPL_IF -->        
+            <th colspan="2">&nbsp;</th>
         </tr>
         
         <!-- TMPL_LOOP name="subscriptions" -->
@@ -99,17 +98,21 @@ Serials updated :
                 <!-- TMPL_IF name="branchcode" --><!-- TMPL_VAR name="branchcode" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="callnumber" -->(<!-- TMPL_VAR name="callnumber" -->)<!-- /TMPL_IF -->
                 </td>
-                <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Issue History</a>
-                </td>
                 <!-- TMPL_IF NAME="routing" -->
                 <td>
                 <!-- TMPL_IF NAME="cannotedit" -->
                   &nbsp;        
                 <!-- TMPL_ELSE -->
-                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" --><!-- TMPL_UNLESS NAME="routingedit" -->&amp;op=new<!-- /TMPL_UNLESS -->">Routing List</a>
+                    <!--TMPL_IF Name="routingedit"-->
+                        <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a>
+                	<!-- TMPL_ELSE -->
+						<a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;op=new">New</a>
+					<!--/TMPL_IF-->
                 <!-- /TMPL_IF -->
                 </td>
                 <!-- /TMPL_IF -->
+                <td><a href="/cgi-bin/koha/serials/serials-collection.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Issue History</a>
+                </td>
                 <td>
                 <!-- TMPL_IF NAME="cannotedit" -->
                   &nbsp;        
