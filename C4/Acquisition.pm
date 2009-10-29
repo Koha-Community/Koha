@@ -867,7 +867,7 @@ C<$order> are fields from the biblio, biblioitems, aqorders tables of the Koha d
 =cut
 
 sub GetOrder {
-    my ($ordnum) = @_;
+    my ($ordernumber) = @_;
     my $dbh      = C4::Context->dbh;
     my $query = "
         SELECT biblioitems.*, biblio.*, aqorders.*
@@ -878,7 +878,7 @@ sub GetOrder {
 
     ";
     my $sth= $dbh->prepare($query);
-    $sth->execute($ordnum);
+    $sth->execute($ordernumber);
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
     return $data;
@@ -901,7 +901,7 @@ table of the Koha database.
 =item $hashref->{'basketno'} is the basketno foreign key in aqorders, it is mandatory
 
 
-=item $hashref->{'ordnum'} is a "minimum order number." 
+=item $hashref->{'ordernumber'} is a "minimum order number." 
 
 =item $hashref->{'budgetdate'} is effectively ignored.
   If it's undef (anything false) or the string 'now', the current day is used.
@@ -940,8 +940,8 @@ sub NewOrder {
     }
     $orderinfo->{'entrydate'} ||= C4::Dates->new()->output("iso");
 
-	my $ordnum=InsertInTable("aqorders",$orderinfo);
-    return ( $orderinfo->{'basketno'}, $ordnum );
+	my $ordernumber=InsertInTable("aqorders",$orderinfo);
+    return ( $orderinfo->{'basketno'}, $ordernumber );
 }
 
 
@@ -960,7 +960,7 @@ sub NewOrder {
 =cut
 
 sub NewOrderItem {
-    #my ($biblioitemnumber,$ordnum, $biblionumber) = @_;
+    #my ($biblioitemnumber,$ordernumber, $biblionumber) = @_;
     my ($itemnumber, $ordernumber)  = @_;
     my $dbh = C4::Context->dbh;
     my $query = qq|
@@ -1068,7 +1068,7 @@ sub ModOrderItem {
 
 =over 4
 
-&ModOrderBiblioitemNumber($biblioitemnumber,$ordnum, $biblionumber);
+&ModOrderBiblioitemNumber($biblioitemnumber,$ordernumber, $biblionumber);
 
 Modifies the biblioitemnumber for an existing order.
 Updates the order with order number C<$ordernum> and biblionumber C<$biblionumber>.
@@ -1079,7 +1079,7 @@ Updates the order with order number C<$ordernum> and biblionumber C<$biblionumbe
 
 #FIXME: is this used at all?
 sub ModOrderBiblioitemNumber {
-    my ($biblioitemnumber,$ordnum, $biblionumber) = @_;
+    my ($biblioitemnumber,$ordernumber, $biblionumber) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
       UPDATE aqorders
@@ -1087,7 +1087,7 @@ sub ModOrderBiblioitemNumber {
       WHERE  ordernumber = ?
       AND biblionumber =  ?";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $biblioitemnumber, $ordnum, $biblionumber );
+    $sth->execute( $biblioitemnumber, $ordernumber, $biblionumber );
 }
 
 #------------------------------------------------------------#
@@ -1117,7 +1117,7 @@ C<$ordernumber>.
 
 sub ModReceiveOrder {
     my (
-        $biblionumber,    $ordnum,  $quantrec, $user, $cost,
+        $biblionumber,    $ordernumber,  $quantrec, $user, $cost,
         $invoiceno, $freight, $rrp, $budget_id, $datereceived
       )
       = @_;
@@ -1135,7 +1135,7 @@ sub ModReceiveOrder {
         SELECT * FROM   aqorders  
 	    WHERE           biblionumber=? AND aqorders.ordernumber=?");
 
-    $sth->execute($biblionumber,$ordnum);
+    $sth->execute($biblionumber,$ordernumber);
     my $order = $sth->fetchrow_hashref();
     $sth->finish();
 
@@ -1151,7 +1151,7 @@ sub ModReceiveOrder {
                 , quantityreceived=?
             WHERE biblionumber=? AND ordernumber=?");
 
-        $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$quantrec,$biblionumber,$ordnum);
+        $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$quantrec,$biblionumber,$ordernumber);
         $sth->finish;
 
         # create a new order for the remaining items, and set its bookfund.
@@ -1164,7 +1164,7 @@ sub ModReceiveOrder {
 							set quantityreceived=?,datereceived=?,booksellerinvoicenumber=?,
 								unitprice=?,freight=?,rrp=?
                             where biblionumber=? and ordernumber=?");
-        $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$biblionumber,$ordnum);
+        $sth->execute($quantrec,$datereceived,$invoiceno,$cost,$freight,$rrp,$biblionumber,$ordernumber);
         $sth->finish;
     }
     return $datereceived;
@@ -1260,7 +1260,7 @@ cancelled.
 =cut
 
 sub DelOrder {
-    my ( $bibnum, $ordnum ) = @_;
+    my ( $bibnum, $ordernumber ) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
         UPDATE aqorders
@@ -1268,7 +1268,7 @@ sub DelOrder {
         WHERE  biblionumber=? AND ordernumber=?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $bibnum, $ordnum );
+    $sth->execute( $bibnum, $ordernumber );
     $sth->finish;
 }
 

@@ -59,6 +59,7 @@ function popup(subscriptionid) {
 			<ul>
 			<!-- TMPL_IF NAME="NOTEXPIRED" --> <li>The subscription has not expired yet</li> <!-- /TMPL_IF --> 
 			<!-- TMPL_IF NAME="LINKEDISSUES" --> <li>The subscription has linked issues</li> <!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="LINKEDITEMS" --> <li>The subscription has linked items<br /> Those items won't be deleted</li> <!-- /TMPL_IF -->
 			</ul>
 			<form method="post" action="/cgi-bin/koha/serials/subscription-detail.pl">
 			<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" />

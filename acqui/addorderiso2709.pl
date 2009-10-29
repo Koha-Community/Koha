@@ -55,7 +55,7 @@ my $booksellerid  = $input->param('booksellerid');
 $template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",
                 booksellerid => $booksellerid,
                 );
-my $ordnum;
+my $ordernumber;
 
 if ($cgiparams->{'import_batch_id'} && $op eq ""){
     $op = "batch_details";
@@ -174,7 +174,7 @@ if ($op eq ""){
             # remove uncertainprice flag if we have found a price in the MARC record
             $orderinfo{uncertainprice} = 0 if $orderinfo{listprice};
             my $basketno;
-            ( $basketno, $ordnum ) = NewOrder(\%orderinfo);
+            ( $basketno, $ordernumber ) = NewOrder(\%orderinfo);
 
             # now, add items if applicable
             # parse all items sent by the form, and create an item just for the import_record_id we are dealing with
@@ -228,7 +228,7 @@ if ($op eq ""){
                                                 $item->{'indicator'});
                         my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
                         my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
-                        NewOrderItem( $itemnumber, $ordnum);
+                        NewOrderItem( $itemnumber, $ordernumber);
                 }
             }
         }
@@ -295,7 +295,7 @@ sub import_biblios_list {
             match_score => $#$match > -1 ? $match->[0]->{'score'} : 0,
 #             itemtypes => \@itemtypes,
         );
-#         if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordnum) {
+#         if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
 #             # prepare empty item form
 #             my $cell = PrepareItemrecordDisplay();
 #             my @itemloop;

@@ -42,7 +42,7 @@ All of the cgi parameters below are related to the new order.
 
 =over 4
 
-=item C<ordnum>
+=item C<ordernumber>
 the number of this new order.
 
 =item C<basketno>
@@ -148,7 +148,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 # get CGI parameters
 my $orderinfo					= $input->Vars;
 $orderinfo->{'list_price'}    ||=  0;
-#my $ordnum        = $input->param('ordnum');
+#my $ordernumber        = $input->param('ordernumber');
 #my $basketno      = $input->param('basketno');
 #my $booksellerid  = $input->param('booksellerid');
 #my $existing      = $input->param('existing');    # existing biblio, (not basket or order)
@@ -210,12 +210,12 @@ if ( $orderinfo->{quantity} ne '0' ) {
 		$orderinfo->{biblionumber}=$biblionumber;
     }
 
-    # if we already have $ordnum, then it's an ordermodif
-    if ($$orderinfo{ordnum}) {
+    # if we already have $ordernumber, then it's an ordermodif
+    if ($$orderinfo{ordernumber}) {
         ModOrder( $orderinfo);
     }
     else { # else, it's a new line
-        @$orderinfo{qw(basketno ordnum )} = NewOrder($orderinfo);
+        @$orderinfo{qw(basketno ordernumber )} = NewOrder($orderinfo);
     }
 
     # now, add items if applicable
@@ -254,7 +254,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
                                     'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$$orderinfo{biblionumber});
-            NewOrderItem($itemnumber, $$orderinfo{ordnum});
+            NewOrderItem($itemnumber, $$orderinfo{ordernumber});
 
         }
     }
@@ -263,7 +263,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
 
 else { # qty=0, delete the line
     my $biblionumber = $input->param('biblionumber');
-    DelOrder( $biblionumber, $$orderinfo{ordnum} );
+    DelOrder( $biblionumber, $$orderinfo{ordernumber} );
 }
 my $basketno=$$orderinfo{basketno};
 my $booksellerid=$$orderinfo{booksellerid};

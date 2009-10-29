@@ -62,14 +62,14 @@ while ( my ( $key, $value ) = each(%$item) ) {
     $value = '' unless defined $value;
     my @characters = split( //, $value );
     my $charnum    = 1;
-    my $wordnum    = 1;
+    my $wordernumber    = 1;
     my $i          = 1;
     foreach my $char (@characters) {
         if ( $char ne ' ' ) {
-            $data->{$key} .= "<span class='character word$wordnum character$charnum' id='$key$i'>$char</span>";
+            $data->{$key} .= "<span class='character word$wordernumber character$charnum' id='$key$i'>$char</span>";
         } else {
             $data->{$key} .= "<span class='space character$charnum' id='$key$i'>$char</span>";
-            $wordnum++;
+            $wordernumber++;
             $charnum = 1;
         }
         $charnum++;

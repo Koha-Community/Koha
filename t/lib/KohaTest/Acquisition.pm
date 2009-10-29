@@ -71,7 +71,7 @@ sub create_new_basket {
     $self->add_biblios( add_items => 1 );
     ok( scalar @{$self->{'biblios'}} > 0, 'we have added at least one biblio' );
 
-    my ( $basketno, $ordnum ) = NewOrder( undef, # $basketno,
+    my ( $basketno, $ordernumber ) = NewOrder( undef, # $basketno,
                                           $self->{'biblios'}[0], # $bibnum,
                                           undef, # $title,
                                           1, # $quantity,
@@ -93,16 +93,16 @@ sub create_new_basket {
                                           undef, # $purchaseorder
                                      );
     ok( $basketno, "my basket number is $basketno" );
-    ok( $ordnum,   "my order number is $ordnum" );
+    ok( $ordernumber,   "my order number is $ordernumber" );
     
-    my $order = GetOrder( $ordnum );
-    is( $order->{'ordernumber'}, $ordnum, 'got the right order' )
+    my $order = GetOrder( $ordernumber );
+    is( $order->{'ordernumber'}, $ordernumber, 'got the right order' )
       or diag( Data::Dumper->Dump( [ $order ], [ 'order' ] ) );
     
     is( $order->{'budgetdate'}, $today, "the budget date is $today" );
 
     # XXX should I stuff these in $self?
-    return ( $basketno, $ordnum );
+    return ( $basketno, $ordernumber );
     
 }
 

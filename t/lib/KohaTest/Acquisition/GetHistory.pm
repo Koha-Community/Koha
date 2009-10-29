@@ -41,9 +41,9 @@ sub no_history : Test( 4 ) {
 sub one_order : Test( 50 ) {
     my $self = shift;
     
-    my ( $basketno, $ordnum ) = $self->create_new_basket();
+    my ( $basketno, $ordernumber ) = $self->create_new_basket();
     ok( $basketno, "basketno is $basketno" );
-    ok( $ordnum, "ordnum is $ordnum" );
+    ok( $ordernumber, "ordernumber is $ordernumber" );
 
     # No arguments fetches no history.
     {

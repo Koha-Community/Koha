@@ -38,7 +38,7 @@ my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired, '
 my $user=$input->remote_user;
 my $biblionumber = $input->param('biblionumber');
 my $biblioitemnumber=$input->param('biblioitemnumber');
-my $ordnum=$input->param('ordnum');
+my $ordernumber=$input->param('ordernumber');
 my $origquantityrec=$input->param('origquantityrec');
 my $quantityrec=$input->param('quantityrec');
 my $quantity=$input->param('quantity');
@@ -61,7 +61,7 @@ my %tplorder = ( 'quantity'                  =>     $input->param('quantity') ||
                              'ecost'                      =>      $input->param('ecost') || '',
                              'unitprice'                =>      $input->param('cost') || '',
                      );
-my $order = GetOrder($ordnum);
+my $order = GetOrder($ordernumber);
 if ( any { $order->{$_} ne $tplorder{$_} } qw(quantity quantityreceived notes rrp ecost unitprice) ) {
     $order->{quantity} = $tplorder{quantity} if $tplorder{quantity};
     $order->{quantityreceived} = $tplorder{quantityreceived} if $tplorder{quantityreceived};
@@ -111,7 +111,7 @@ if ($quantityrec > $origquantityrec ) {
     
     # save the quantity received.
 	if( $quantityrec > 0 ) {
-    	$datereceived = ModReceiveOrder($biblionumber,$ordnum, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
+    	$datereceived = ModReceiveOrder($biblionumber,$ordernumber, $quantityrec ,$user,$unitprice,$invoiceno,$freight,$replacement,undef,$datereceived);
 	}
 }
     print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");

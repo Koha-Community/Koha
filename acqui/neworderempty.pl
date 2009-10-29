@@ -45,7 +45,7 @@ the author of this new record.
 =item publication year
 the publication year of this new record.
 
-=item ordnum
+=item ordernumber
 the number of this order.
 
 =item biblio
@@ -97,7 +97,7 @@ my $title           = $input->param('title');
 my $author          = $input->param('author');
 my $publicationyear = $input->param('publicationyear');
 my $bookseller      = GetBookSellerFromId($booksellerid);	# FIXME: else ERROR!
-my $ordnum          = $input->param('ordnum') || '';
+my $ordernumber          = $input->param('ordernumber') || '';
 my $biblionumber    = $input->param('biblionumber');
 my $basketno        = $input->param('basketno');
 my $suggestionid    = $input->param('suggestionid');
@@ -126,7 +126,7 @@ my $contract = &GetContract($basket->{contractnumber});
 #simple parameters reading (all in one :-)
 my $params = $input->Vars;
 my $listprice; # the price, that can be in MARC record if we have one
-if ( $ordnum eq '' and defined $params->{'breedingid'}){
+if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 #we want to import from the breeding reservoir (from a z3950 search)
     my ($marcrecord, $encoding) = MARCfindbreeding($params->{'breedingid'});
     die("Could not find the selected record in the reservoir, bailing") unless $marcrecord;
@@ -168,10 +168,10 @@ if ( $ordnum eq '' and defined $params->{'breedingid'}){
 
 my $cur = GetCurrency();
 
-if ( $ordnum eq '' ) {    # create order
+if ( $ordernumber eq '' ) {    # create order
     $new = 'yes';
 
-    # 	$ordnum=newordernum;
+    # 	$ordernumber=newordernum;
     if ( $biblionumber && !$suggestionid ) {
         $data = GetBiblioData($biblionumber);
     }
@@ -183,7 +183,7 @@ if ( $ordnum eq '' ) {    # create order
     }
 }
 else {    #modify order
-    $data   = GetOrder($ordnum);
+    $data   = GetOrder($ordernumber);
     $biblionumber = $data->{'biblionumber'};
     $budget_id = $data->{'budget_id'};
 
@@ -290,7 +290,7 @@ if ($CGIsort2) {
     $template->param( sort2 => $data->{'sort2'} );
 }
 
-if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordnum) {
+if (C4::Context->preference('AcqCreateItem') eq 'ordering' && !$ordernumber) {
     # prepare empty item form
     my $cell = PrepareItemrecordDisplay('','','','ACQ');
 #     warn "==> ".Data::Dumper::Dumper($cell);
@@ -313,7 +313,7 @@ $template->param(
 
 $template->param(
     existing         => $biblionumber,
-    ordnum           => $ordnum,
+    ordernumber           => $ordernumber,
     # basket informations
     basketno             => $basketno,
     basketname           => $basket->{'basketname'},
