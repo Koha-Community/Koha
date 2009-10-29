@@ -3105,7 +3105,7 @@ $dbh->do("
 
 $DBversion = "3.01.00.120";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    if (C4::Context->preference("opaclanguages") eq "fr") {
+    if (C4::Context->preference("opaclanguages") =~ /fr/) {
 	$dbh->do(qq{
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','Si activé, des reservations sont automatiquement créées pour chaque lecteur de la liste de circulation d''un numéro de périodique','','YesNo');
 	});
@@ -3117,6 +3117,16 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
     print "Upgrade to $DBversion done (isbd updated)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.01.00.121";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE biblioitems ADD INDEX issn_idx (issn);
+	});
+    print "Upgrade to $DBversion done (isbd updated)\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 
