@@ -138,19 +138,29 @@ if ( $op eq 'delete_confirm' ) {
 } elsif ($op eq 'close') {
     my $confirm = $query->param('confirm');
     if ($confirm) {
-	my $basketno = $query->param('basketno');
-	my $booksellerid = $query->param('booksellerid');
-	$basketno =~ /^\d+$/ and CloseBasket($basketno);
-	print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno='.$basketno.'&op=attachbasket&booksellerid=' . $booksellerid);
-	exit;
-
+        my $basketno = $query->param('basketno');
+        my $booksellerid = $query->param('booksellerid');
+        $basketno =~ /^\d+$/ and CloseBasket($basketno);
+        # if requested, create basket group, close it and attach the basket
+        if ($query->param('createbasketgroup')) {
+            my $basketgroupid = NewBasketgroup( { name => $basket->{basketname},
+                            booksellerid => $booksellerid,
+                            closed => 1,
+                            });
+            ModBasket( { basketno => $basketno,
+                         basketgroupid => $basketgroupid } );
+            print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid='.$booksellerid);
+        } else {
+            print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno='.$basketno.'&amp;op=attachbasket&amp;booksellerid=' . $booksellerid);
+        }
+        exit;
     } else {
-	$template->param(confirm_close => "1",
-		 	booksellerid    => $booksellerid,
-			basketno        => $basket->{'basketno'},
-		    	basketname      => $basket->{'basketname'},
-			basketgroupname => $basket->{'basketname'});
-		
+    $template->param(confirm_close => "1",
+            booksellerid    => $booksellerid,
+            basketno        => $basket->{'basketno'},
+                basketname      => $basket->{'basketname'},
+            basketgroupname => $basket->{'basketname'});
+        
     }
 } elsif ($query->param('op') eq 'reopen') {
     my $basket;
