@@ -3114,7 +3114,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','If ON the patrons on routing lists are automatically added to holds on the issue.','','YesNo');
 	});
 	}
-    print "Upgrade to $DBversion done (isbd updated)\n";
+    print "Upgrade to $DBversion done (Added RoutingListAddReserves syspref)\n";
     SetVersion ($DBversion);
 }
 
@@ -3123,7 +3123,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE biblioitems ADD INDEX issn_idx (issn);
 	});
-    print "Upgrade to $DBversion done (isbd updated)\n";
+    print "Upgrade to $DBversion done (added index to ISSN)\n";
     SetVersion ($DBversion);
 }
 
