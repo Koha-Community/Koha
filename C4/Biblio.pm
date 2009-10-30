@@ -1812,7 +1812,18 @@ sub TransformHtmlToXml {
             }
         }
         else {    # @$tags[$i] eq $prevtag
-            if ( @$values[$i] eq "" ) {
+   			my $indicator1=eval{substr( @$indicator[$j], 0, 1 )};
+			my $indicator2=eval{substr( @$indicator[$j], 1, 1 )};
+            my $ind1 = _default_ind_to_space($indicator1);
+            my $ind2;
+            if ( @$indicator[$j] ) {
+               $ind2 = _default_ind_to_space($indicator2);
+            }
+            else {
+               warn "Indicator in @$tags[$i] is empty";
+               $ind2 = " ";
+            }
+         if ( @$values[$i] eq "" ) {
             }
             else {
                 if ($first) {
