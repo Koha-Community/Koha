@@ -31,6 +31,13 @@ use C4::Biblio;
 use C4::Items;
 
 my $query = new CGI;
+if (C4::Context->preference('AutoSelfCheckAllowed')) 
+{
+	my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');
+	my $AutoSelfCheckPass = C4::Context->preference('AutoSelfCheckPass');
+	$query->param(-name=>'userid',-values=>[$AutoSelfCheckID]),
+	$query->param(-name=>'password',-values=>[$AutoSelfCheckPass]),
+}
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
     template_name   => "sco/sco-main.tmpl",
     authnotrequired => 0,
