@@ -270,8 +270,8 @@
                 <input type="submit" class="submit" value="Search" /></li>
                 <li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">From a Suggestion</a></li>
                 <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">From a new (empty) record</a></li>
-                <li><a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->">From an external source</a></li>
-                <li><a href="/cgi-bin/koha/acqui/addorderiso2709.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->"> From a staged file</a></li>
+                <li><a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">From an external source</a></li>
+                <li><a href="/cgi-bin/koha/acqui/addorderiso2709.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->"> From a staged file</a></li>
                 </ul>
             </form>
         </fieldset>
@@ -284,12 +284,10 @@
         <div id="closebasket_needsconfirmation" class="dialog alert">
 
         <form action="/cgi-bin/koha/acqui/basket.pl" class="confirm">
-        <fieldset>
-        <legend>Closing basket <!-- TMPL_VAR name="basketname" --></legend>
-            <p>Are you sure you want to close this basket ?</p>
+            <h1>Are you sure you want to close basket <!-- TMPL_VAR name="basketname" -->?</h1>
             <p>
-            <label for="createorder">Create order ?</label>
-            <input type="checkbox" id="createorder" name="createorder"/>
+            <label for="createbasketgroup">Create basket group?</label>
+            <input type="checkbox" id="createbasketgroup" name="createbasketgroup"/>
             </p>
             <input type="hidden" id="basketno" value="<!-- TMPL_VAR name="basketno" -->" name="basketno" />
             <input type="hidden" value="close" name="op" />
@@ -298,7 +296,6 @@
             <input type="hidden" name="basketgroupname" value="<!-- TMPL_VAR name="basketgroupname" -->" />
             <input type="submit" class="approve" value="Yes, Close (Y)" accesskey="y" />
             <input type="submit" class="deny" value="No, Don't Close (N)" accesskey="n" onclick="javascript:window.location='/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->';return false;" />
-        </fieldset>
         </form>
         </div>
     <!-- /TMPL_IF -->

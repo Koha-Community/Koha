@@ -213,7 +213,7 @@ function Check(ff) {
                         //]]>
                     </script>
                     <ul class="toolbar">
-                        <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">New Contract</a></li>
+                        <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">New Contract</a></li>
                     </ul>
                 </div>
                 <h2>Contract(s) of <!-- TMPL_VAR name="name" --></h2>
@@ -238,8 +238,8 @@ function Check(ff) {
                         <td><!-- TMPL_VAR NAME="contractdescription" --></td>
                         <td><!-- TMPL_VAR NAME="contractstartdate" --></td>
                         <td><!-- TMPL_VAR NAME="contractenddate" --></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Edit</a></td>
-                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Delete</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Edit</a></td>
+                        <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Delete</a></td>
                         </tr>
                     <!-- /TMPL_LOOP -->
                 </table>
