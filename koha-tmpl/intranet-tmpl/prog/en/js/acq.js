@@ -740,13 +740,13 @@ function calcNeworderTotal(){
     var listinc  = new Number (f.listinc.value);
     var currency = f.currency.value;
     var applygst = new Number (f.applygst.value);
-    var list_price   =  new Number(f.list_price.value);
+    var list_price   =  new Number(f.listprice.value);
     var invoiceingst =  new Number (f.invoiceincgst.value);
     var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
     var gst_on=(!listinc && invoiceingst);
 
     //do real stuff
-    var rrp   = new Number(list_price*exchangerate);
+    var rrp   = new Number(listprice*exchangerate);
     var ecost = new Number(rrp * (100 - discount ) / 100);
     var GST   = new Number(0);
     if (gst_on) {
@@ -763,7 +763,7 @@ function calcNeworderTotal(){
 
     f.ecost.value = ecost.toFixed(2);
     f.total.value = total.toFixed(2);
-    f.list_price.value =  list_price.toFixed(2);
+    f.listprice.value =  list_price.toFixed(2);
 
 //  gst-stuff needs verifing, mason.
     if (f.GST) {

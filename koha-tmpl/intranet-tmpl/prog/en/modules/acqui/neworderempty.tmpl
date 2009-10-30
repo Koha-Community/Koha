@@ -24,7 +24,7 @@ function Check(ff) {
                     _alertString += "\n- " + _("Quanity must be greater than '0'");
     }
 
-    if (!(isNum(ff.list_price,0))){
+    if (!(isNum(ff.listprice,0))){
         ok=1;
                     _alertString += "\n- " + _("Vendor price must be a number");
     }
@@ -258,10 +258,10 @@ ff.submit();
             <li>
                 <!-- TMPL_IF name="close" -->
             <span class="label">Vendor price: </span>
-                    <input type="hidden" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="list_price" -->" /><!-- TMPL_VAR NAME="list_price" -->
+                    <input type="hidden" size="20" name="listprice" id="listprice" value="<!-- TMPL_VAR NAME="listprice" -->" /><!-- TMPL_VAR NAME="listprice" -->
                 <!-- TMPL_ELSE -->
-                <label for="list_price">Vendor price: </label>
-                    <input type="text" size="20" name="list_price" id="list_price" value="<!-- TMPL_VAR NAME="list_price" -->" onchange="calcNeworderTotal()" /> (entered as <!-- TMPL_VAR NAME="currency" -->)
+                <label for="listprice">Vendor price: </label>
+                    <input type="text" size="20" name="listprice" id="listprice" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="calcNeworderTotal()" /> (entered as <!-- TMPL_VAR NAME="currency" -->)
 
                 <!--/TMPL_IF-->
             </li>
