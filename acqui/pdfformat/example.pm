@@ -28,6 +28,8 @@ use strict;
 use warnings;
 use utf8;
 
+use C4::Branch qw(GetBranchDetail);
+
 BEGIN {
          use Exporter   ();
          our ($VERSION, @ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
@@ -267,6 +269,10 @@ sub printbaskets {
 
 sub printhead {
     my ($pdf, $basketgroup, $bookseller, $branch) = @_;
+
+    # get branch details
+    my $branchdetails = GetBranchDetail( $basketgroup->{'deliveryplace'} );
+
     # open 1st page (with the header)
     my $page = $pdf->openpage(1);
     
@@ -294,6 +300,16 @@ sub printhead {
     $text->text($bookseller->{address2});
     $text->translate(110/mm,  ($height-190)/mm);
     $text->text($bookseller->{address3});
+    # print delivery infos
+    $text->font( $pdf->corefont("Times-Bold", -encoding => "utf8"), 4/mm );
+    $text->translate(50/mm,  ($height-230)/mm);
+    $text->text($branchdetails->{branchaddress1});
+    $text->translate(50/mm,  ($height-235)/mm);
+    $text->text($branchdetails->{branchaddress2});
+    $text->translate(50/mm,  ($height-240)/mm);
+    $text->text($branchdetails->{branchaddress3});
+    $text->translate(50/mm,  ($height-245)/mm);
+    $text->text($basketgroup->{'deliverycomment'});
 }
 
 sub printfooters {

@@ -53,6 +53,8 @@ use CGI;
 use C4::Bookseller qw/GetBookSellerFromId/;
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket/;
 use C4::Bookseller qw/GetBookSellerFromId/;
+use C4::Branch qw/GetBranches/;
+use C4::Members qw/GetMember/;
 
 my $input=new CGI;
 
@@ -268,14 +270,41 @@ if ( $op eq "add" ) {
         }
     } else {
         my $basketgroupid = $input->param('basketgroupid');
-        if($basketgroupid){
+        my $branchcode;
+        if ( $basketgroupid ) {
+            # Get the selected baskets in the basketgroup to display them
             my $selecteds = GetBasketsByBasketgroup($basketgroupid);
             foreach (@{$selecteds}){
                 $_->{total} = BasketTotal($_->{basketno}, $_);
             }
             $template->param(basketgroupid => $basketgroupid,
                              selectedbaskets => $selecteds);
+
+            # Get general informations about the basket group to prefill the form
+            my $basketgroup = GetBasketgroup($basketgroupid);
+            $template->param(
+                name            => $basketgroup->{name},
+                deliverycomment => $basketgroup->{deliverycomment},
+            );
+            $branchcode = $basketgroup->{deliveryplace};
         }
+
+        # Build the combobox to select the delivery place
+        my $borrower = GetMember( ( 'borrowernumber' => $loggedinuser ) );
+        my $branch   = $branchcode || $borrower->{'branchcode'};
+        my $branches = GetBranches;
+        my @branchloop;
+        foreach my $thisbranch (sort keys %$branches) {
+            my $selected = 1 if $thisbranch eq $branch;
+            my %row = (
+                value      => $thisbranch,
+                selected   => $selected,
+                branchname => $branches->{$thisbranch}->{branchname},
+            );
+            push @branchloop, \%row;
+        }
+        $template->param( branchloop => \@branchloop );
+
         $template->param( booksellerid => $booksellerid );
     }
     $template->param(grouping => 1);
@@ -362,14 +391,18 @@ if ( $op eq "add" ) {
     my $basketgroupid   = $input->param('basketgroupid');
     my $basketgroupname = $input->param('basketgroupname');
     my $booksellerid    = $input->param('booksellerid');
+    my $deliveryplace   = $input->param('deliveryplace');
+    my $deliverycomment = $input->param('deliverycomment');
     my $close           = $input->param('close') ? 1 : 0;
     # If we got a basketgroupname, we create a basketgroup
     if ($basketgroupid) {
         $basketgroup = {
-              name => $basketgroupname,
-              id => $basketgroupid,
-              basketlist => \@baskets,
-              closed      => $close,
+              name            => $basketgroupname,
+              id              => $basketgroupid,
+              basketlist      => \@baskets,
+              deliveryplace   => $deliveryplace,
+              deliverycomment => $deliverycomment,
+              closed          => $close,
         };
         ModBasketgroup($basketgroup);
         if($close){
@@ -377,10 +410,12 @@ if ( $op eq "add" ) {
         }
     }else{
         $basketgroup = {
-            name         => $basketgroupname,
-            booksellerid => $booksellerid,
-            basketlist   => \@baskets,
-            closed        => $close,
+            name            => $basketgroupname,
+            booksellerid    => $booksellerid,
+            basketlist      => \@baskets,
+            deliveryplace   => $deliveryplace,
+            deliverycomment => $deliverycomment,
+            closed          => $close,
         };
         $basketgroupid = NewBasketgroup($basketgroup);
     }

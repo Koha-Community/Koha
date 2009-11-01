@@ -480,6 +480,10 @@ $hashref->{'name'} is the 'name' field of the basketgroup in the aqbasketgroups 
 
 $hashref->{'basketlist'} is a list reference of the 'id's of the baskets that belong to this group,
 
+$hashref->{'deliveryplace'} is the 'deliveryplace' field of the basketgroup in the aqbasketgroups table,
+
+$hashref->{'deliverycomment'} is the 'deliverycomment' field of the basketgroup in the aqbasketgroups table,
+
 $hashref->{'closed'} is the 'closed' field of the aqbasketgroups table, it is false if 0, true otherwise.
 
 =back
@@ -493,7 +497,7 @@ sub NewBasketgroup {
     die "booksellerid is required to create a basketgroup" unless $basketgroupinfo->{'booksellerid'};
     my $query = "INSERT INTO aqbasketgroups (";
     my @params;
-    foreach my $field ('name', 'closed') {
+    foreach my $field ('name', 'deliveryplace', 'deliverycomment', 'closed') {
         if ( $basketgroupinfo->{$field} ) {
             $query .= "$field, ";
             push(@params, $basketgroupinfo->{$field});
@@ -537,6 +541,10 @@ $hashref->{'name'} is the 'name' field of the basketgroup in the aqbasketgroups 
 
 $hashref->{'basketlist'} is a list reference of the 'id's of the baskets that belong to this group,
 
+$hashref->{'deliveryplace'} is the 'deliveryplace' field of the basketgroup in the aqbasketgroups table,
+
+$hashref->{'deliverycomment'} is the 'deliverycomment' field of the basketgroup in the aqbasketgroups table,
+
 $hashref->{'closed'} is the 'closed' field of the aqbasketgroups table, it is false if 0, true otherwise.
 
 =back
@@ -551,7 +559,7 @@ sub ModBasketgroup {
     my $dbh = C4::Context->dbh;
     my $query = "UPDATE aqbasketgroups SET ";
     my @params;
-    foreach my $field (qw(name closed)) {
+    foreach my $field (qw(name deliveryplace deliverycomment closed)) {
         if ( $basketgroupinfo->{$field} ne undef) {
             $query .= "$field=?, ";
             push(@params, $basketgroupinfo->{$field});
