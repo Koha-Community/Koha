@@ -34,4 +34,4 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 $template->param( admin => $admin );
-output_html_with_http_headers $query, $cookie, $template->output;
+output_with_http_headers $query, $cookie, $template->output, 'html', '401 Unauthorized';
