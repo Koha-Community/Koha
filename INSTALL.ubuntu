@@ -41,6 +41,26 @@ IMPORTANT:  You _MUST_ follow all the steps outlined there for
 
 1.3 Install the Yaz and Zebra packages
 
+Add Indexdata repository to your sources
+
+	$ sudo gedit /etc/apt/sources.list
+
+Add those lines at the end of the file
+
+# IndexData Repository
+deb http://ftp.indexdata.dk/pub/ubuntu/ jaunty main
+
+where jaunty is the name of your ubuntu version
+
+Save and quit
+
+Add Indexdata Key in order to be able to check signatures
+
+	$ cd ~
+	$ wget http://ftp.indexdata.dk/debian/indexdata.asc
+	$ sudo apt-key add indexdata.asc
+
+
 Run the following command to update your system:
 
     $ sudo apt-get update
