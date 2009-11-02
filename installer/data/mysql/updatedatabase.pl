@@ -3083,6 +3083,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.118";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $dbh->do("
+??? d'ici jusqu'à ???FIN des lignes ont pu être insérées/effacées
        INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
 		(16, 'execute_reports', 'Execute SQL reports'),
 		(16, 'create_reports', 'Create SQL Reports')
@@ -3127,12 +3128,31 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+=item
+
+    Deal with branches
+
+=cut
+
+my $DBversion = "3.01.00.0122";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # update branches table
+    # 
+    $dbh->do("ALTER TABLE branches ADD `branchzip` varchar(25) default NULL AFTER `branchaddress3`");
+    $dbh->do("ALTER TABLE branches ADD `branchcity` mediumtext AFTER `branchzip`");
+    $dbh->do("ALTER TABLE branches ADD `branchcountry` text AFTER `branchcity`");
+    $dbh->do("ALTER TABLE branches ADD `branchurl` mediumtext AFTER `branchemail`");
+    $dbh->do("ALTER TABLE branches ADD `branchnotes` mediumtext AFTER `branchprinter`");
+    print "Upgrade to $DBversion done (branches)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
 
 =cut
+
 
 sub DropAllForeignKeys {
     my ($table) = @_;
