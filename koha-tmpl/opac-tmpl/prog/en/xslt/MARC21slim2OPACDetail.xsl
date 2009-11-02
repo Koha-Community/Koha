@@ -138,10 +138,18 @@
             </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="nameABCDN"/></a>
-        <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+        <xsl:choose><xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
 
         <xsl:for-each select="marc:datafield[@tag=111 or @tag=711]">
+            <xsl:choose>
+            <xsl:when test="marc:subfield[@code='n']">
+               <xsl:text> </xsl:text>
+               <xsl:call-template name="subfieldSelect">
+                  <xsl:with-param name="codes">n</xsl:with-param>                              </xsl:call-template>
+               <xsl:text> </xsl:text>
+            </xsl:when>
+            </xsl:choose>
         <a>
         <xsl:choose>
             <xsl:when test="marc:subfield[@code=9]">
