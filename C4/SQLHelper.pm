@@ -75,16 +75,23 @@ This module contains routines for adding, modifying and Searching Data in MysqlD
 =back
 
 $tablename Name of the table (string)
+
 $data may contain 
 	- string
+
 	- data_hashref : will be considered as an AND of all the data searched
+
 	- data_array_ref on hashrefs : Will be considered as an OR of Datahasref elements
 
 $orderby is an arrayref of hashref with fieldnames as key and 0 or 1 as values (ASCENDING or DESCENDING order)
-$limit is an array ref on 2 values
+
+$limit is an array ref on 2 values in order to limit results to MIN..MAX
+
 $columns_out is an array ref on field names is used to limit results on those fields (* by default)
+
 $filtercolums is an array ref on field names : is used to limit expansion of research for strings
-$searchtype is string Can be "wide" or "exact"
+
+$searchtype is string Can be "start_with" or "exact" 
 
 =cut
 
