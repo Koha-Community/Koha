@@ -26,14 +26,20 @@ KOHA.Preferences = {
 };
 
 $( document ).ready( function () {
-    $( '.prefs-tab .preference' ).change( function () {
+    function mark_modified() {
         $( this.form ).find( '.save-all' ).removeAttr( 'disabled' );
         $( this ).addClass( 'modified' );
         var name_cell = $( this ).parent().parent().find( '.name-cell' );
 
 		if ( !name_cell.find( '.modified-warning' ).length ) name_cell.append( '<em class="modified-warning">(modified)</em>' );
         KOHA.Preferences.Modified = true;
-    } );
+    }
+
+    $( '.prefs-tab' )
+        .find( 'input.preference, textarea.preference' ).keyup( function () {
+            if ( this.defaultValue === undefined || this.value != this.defaultValue ) mark_modified.call( this );
+        } ).end()
+        .find( 'select.preference' ).change( mark_modified );
 
     if ( document.location.search.indexOf( 'jumpfield' ) != -1 ) {
         document.location.hash = "highlighted";
