@@ -176,14 +176,18 @@ for my $itm (@items) {
 ## get notes and subjects from MARC record
 my $dbh              = C4::Context->dbh;
 my $marcflavour      = C4::Context->preference("marcflavour");
-my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
-my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
-my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
-my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
-my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $normalized_isbn  = GetNormalizedISBN($dat->{isbn},$record,$marcflavour);
+my $marcnotesarray   = GetMarcNotes     ($record,$marcflavour);
+my $marcauthorsarray = GetMarcAuthors   ($record,$marcflavour);
+my $marcsubjctsarray = GetMarcSubjects  ($record,$marcflavour);
+my $marcseriesarray  = GetMarcSeries    ($record,$marcflavour);
+my $marcurlsarray    = GetMarcUrls      ($record,$marcflavour);
 my $subtitle         = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $record, '');
 
     $template->param(
+                     normalized_oclc         => GetNormalizedOCLCNumber($record,$marcflavour),
+                     normalized_upc          => GetNormalizedUPC       ($record,$marcflavour),
+                     normalized_isbn         => $normalized_isbn,
                      MARCNOTES               => $marcnotesarray,
                      MARCSUBJCTS             => $marcsubjctsarray,
                      MARCAUTHORS             => $marcauthorsarray,
@@ -241,36 +245,13 @@ $template->param(
     loggedincommenter   => $loggedincommenter
 );
 
-sub isbn_cleanup ($) {
-	my $isbn=shift;
-    ($isbn) = $isbn =~ /([\d-]*[X]*)/;
-    $isbn =~ s/-//g;
-	if (
-		$isbn =~ /\b(\d{13})\b/ or
-		$isbn =~ /\b(\d{10})\b/ or 
-		$isbn =~ /\b(\d{9}X)\b/i
-	) {
-		return $1;
-	}
-	return undef;
-}
 
 # XISBN Stuff
-my $xisbn=$dat->{'isbn'};
-(my $aisbn) = $xisbn =~ /([\d-]*[X]*)/;
-$aisbn =~ s/-//g;
-$template->param(amazonisbn => $aisbn);		# FIXME: so it is OK if the ISBN = 'XXXXX' ?
-my ($clean,$clean2);
-# these might be overkill, but they are better than the regexp above.
-if ($clean = isbn_cleanup($xisbn)){
-	$template->param(clean_isbn => $clean);
-}
 
 if (C4::Context->preference("OPACFRBRizeEditions")==1) {
     eval {
         $template->param(
-            xisbn => $xisbn,
-            XISBNS => get_xisbns($xisbn)
+            XISBNS => get_xisbns($normalized_isbn)
         );
     };
     if ($@) { warn "XISBN Failed $@"; }
@@ -284,7 +265,7 @@ if ( C4::Context->preference("OPACAmazonEnabled") && C4::Context->preference("OP
     my $amazon_reviews  = C4::Context->preference("AmazonReviews");
     my $amazon_similars = C4::Context->preference("AmazonSimilarItems");
     my @services;
-    my $amazon_details = &get_amazon_details( $dat->{isbn}, $record, $marcflavour, \@services );
+    my $amazon_details = &get_amazon_details( $normalized_isbn, $record, $marcflavour, \@services );
 
     if ( $amazon_reviews ) {
 	
@@ -373,11 +354,6 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         $sth_get_biblio->execute($this_item->{biblionumber});
         while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
             $this_item->{'title'} = $this_biblio->{'title'};
-            if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
-                $this_item->{'isbn'} = $clean2;
-            } else { 
-                $this_item->{'isbn'} = $this_biblio->{'isbn'};
-            }
         }
         unshift @previous_items, $this_item;
     }
@@ -412,11 +388,6 @@ if (C4::Context->preference("OPACShelfBrowser")) {
         $sth_get_biblio->execute($this_item->{biblionumber});
         while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
             $this_item->{'title'} = $this_biblio->{'title'};
-            if ($clean2 = isbn_cleanup($this_biblio->{'isbn'})) {
-                $this_item->{'isbn'} = $clean2;
-            } else { 
-                $this_item->{'isbn'} = $this_biblio->{'isbn'};
-            }
         }
         push @next_items, $this_item;
     }
@@ -447,14 +418,14 @@ if (C4::Context->preference("BakerTaylorEnabled")) {
 		BakerTaylorBookstoreURL => C4::Context->preference('BakerTaylorBookstoreURL'),
 	);
 	my ($bt_user, $bt_pass);
-	if ($clean and
+	if ($normalized_isbn and
 		$bt_user = C4::Context->preference('BakerTaylorUsername') and
 		$bt_pass = C4::Context->preference('BakerTaylorPassword')    )
 	{
 		$template->param(
 		BakerTaylorContentURL   =>
 		sprintf("http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=%s&Password=%s&ItemKey=%s&Options=Y",
-				$bt_user,$bt_pass,$clean)
+				$bt_user,$bt_pass,$normalized_isbn)
 		);
 	}
 }

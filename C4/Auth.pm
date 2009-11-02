@@ -310,6 +310,7 @@ sub get_template_and_user {
         }
         $template->param(
             OPACAmazonContent             => "" . C4::Context->preference("OPACAmazonContent"),
+            OPACAmazonCoverImages         => "" . C4::Context->preference("OPACAmazonCoverImages"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
             LibraryName               => "" . C4::Context->preference("LibraryName"),
