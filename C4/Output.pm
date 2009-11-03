@@ -137,9 +137,6 @@ sub themelanguage {
     # First, check the user's preferences
     my $lang;
     my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
-    $lang = accept_language( $http_accept_language, 
-              getTranslatedLanguages($interface,'prog') )
-      if $http_accept_language;
     # But, if there's a cookie set, obey it
     $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
     # Fall back to English
@@ -149,42 +146,38 @@ sub themelanguage {
     } else {
         @languages = split ",", C4::Context->preference("opaclanguages");
     }
-    if ($lang){  
+    $lang = accept_language( $http_accept_language,
+              getTranslatedLanguages($interface,'prog') )
+      if $http_accept_language;
+
+    if (grep(/^$lang$/, @languages)){
         @languages=($lang,@languages);
     } else {
         $lang = $languages[0];
-    }      
+    }
+
     my $theme = 'prog';	# in the event of theme failure default to 'prog' -fbcit
     my $dbh = C4::Context->dbh;
-    my @themes;
     if ( $interface eq "intranet" ) {
-        @themes    = split " ", C4::Context->preference("template");
+        $theme = C4::Context->preference("template");
     }
     else {
       # we are in the opac here, what im trying to do is let the individual user
       # set the theme they want to use.
       # and perhaps the them as well.
         #my $lang = $query->cookie('KohaOpacLanguage');
-        @themes = split " ", C4::Context->preference("opacthemes");
+        $theme = C4::Context->preference("opacthemes");
     }
 
  # searches through the themes and languages. First template it find it returns.
  # Priority is for getting the theme right.
     THEME:
-    foreach my $th (@themes) {
-        foreach my $la (@languages) {
-            #for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
-                # warn "$htdocs/$th/$la/modules/$interface-"."tmpl";
-                #$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-				if ( -e "$htdocs/$th/$la/modules/$tmpl") {
-                #".($interface eq 'intranet'?"modules":"")."/$tmpl" ) {
-                    $theme = $th;
-                    $lang  = $la;
-                    last THEME;
-                }
-                last unless $la =~ /[-_]/;
-            #}
-        }
+    foreach my $la (@languages) {
+			if ( -e "$htdocs/$theme/$la/modules/$tmpl") {
+                $lang  = $la;
+                last THEME;
+            }
+            last unless $la =~ /[-_]/;
     }
     return ( $theme, $lang );
 }
