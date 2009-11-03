@@ -68,7 +68,7 @@ my $delete              = $input->param("delete");
 my $id                  = $input->param("id");
 if ($delete) { $action = "delete"; }
 
-if ($profile_name && $profile_content && $profile_description && $action) {
+if ($profile_name && $profile_content && $action) {
     my $rows;
 
     if ($action eq "create") {
