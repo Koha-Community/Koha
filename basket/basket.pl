@@ -103,13 +103,13 @@ foreach my $biblionumber ( @bibs ) {
     $dat->{HASAUTHORS}  = $hasauthors;
 
     if ( C4::Context->preference("BiblioDefaultView") eq "normal" ) {
-        $dat->{dest} = "opac-detail.pl";
+        $dat->{dest} = "/cgi-bin/koha/catalogue/detail.pl";
     }
     elsif ( C4::Context->preference("BiblioDefaultView") eq "marc" ) {
-        $dat->{dest} = "opac-MARCdetail.pl";
+        $dat->{dest} = "/cgi-bin/koha/catalogue/MARCdetail.pl";
     }
     else {
-        $dat->{dest} = "opac-ISBDdetail.pl";
+        $dat->{dest} = "/cgi-bin/koha/catalogue/ISBDdetail.pl";
     }
     push( @results, $dat );
 }

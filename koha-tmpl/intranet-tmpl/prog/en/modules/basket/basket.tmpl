@@ -105,11 +105,8 @@ function tagAdded() {
 		);
 	        return false;
 	    });
-<!-- TMPL_IF NAME="RequestOnOpac" -->
         $(".holdsep").text("| ");
         $(".hold").text(_("Place Hold"));
-<!-- /TMPL_IF -->
-  
         <!-- TMPL_IF NAME="TagsEnabled" -->
         <!-- TMPL_IF NAME="TagsInputOnList" -->
           $(".tagsep").text("| ");
@@ -138,7 +135,7 @@ function tagAdded() {
 <ul class="toolbar">
 	<li>
 	    <span id="addchild" class="yui-button yui-link-button"><span class="first-child">
-		<!-- TMPL_IF NAME="verbose" --><a href="opac-basket.pl" class="brief" onclick="showLess(); return false;">Brief Display</a><!-- TMPL_ELSE --><a href="basket.pl" class="detail" onclick="showMore(); return false;">More Details</a><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="verbose" --><a href="basket.pl" class="brief" onclick="showLess(); return false;">Brief Display</a><!-- TMPL_ELSE --><a href="basket.pl" class="detail" onclick="showMore(); return false;">More Details</a><!-- /TMPL_IF -->
 	    </span></span>
 	</li>
 	<li>
@@ -194,7 +191,7 @@ function tagAdded() {
        <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
      </span>
 </p><!-- /TMPL_UNLESS -->
-            <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
+            <form action="basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
     <h3>
         <!-- TMPL_IF NAME="print_basket" -->
