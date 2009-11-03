@@ -204,7 +204,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 	my $attributes_no_value;
 	my $not_editable = 0;
 	# Disable barcode and stock numbers batch editing
-	my @not_editable_koha_fields = ( 'items.barcode', 'items.stknumber' );
+	my @not_editable_koha_fields = ( 'items.barcode', 'items.stocknumber' );
 	foreach (@not_editable_koha_fields) {
 	    my ($bctag, $bcsubfield) = GetMarcFromKohaField($_, $frameworkcode);
     	    if (($bctag eq $subfield_data{tag}) && ($bcsubfield eq $subfield_data{subfield})) {

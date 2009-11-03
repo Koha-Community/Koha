@@ -3167,6 +3167,31 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.125";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE items ADD stocknumber VARCHAR(32) DEFAULT NULL COMMENT "stores the inventory number";
+	});
+	$dbh->do(qq{
+	ALTER TABLE items ADD UNIQUE INDEX itemsstocknumberidx (stocknumber);
+	});
+	$dbh->do(qq{
+	ALTER TABLE deleteditems ADD stocknumber VARCHAR(32) DEFAULT NULL COMMENT "stores the inventory number of deleted items";
+	});
+	$dbh->do(qq{
+	ALTER TABLE deleteditems ADD UNIQUE INDEX deleteditemsstocknumberidx (stocknumber);
+	});
+	if (C4::Context->preference('marcflavour') eq 'UNIMARC'){
+		$dbh->do(qq{
+	INSERT IGNORE INTO marc_subfield_structure (frameworkcode,tagfield, tagsubfield, tab, repeatable, mandatory,kohafield) 
+	SELECT DISTINCT (frameworkcode),995,"j",10,0,0,"items.stocknumber" from biblio_framework ;
+		});
+	}
+	
+    print "Upgrade to $DBversion done (stocknumber field added)\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 
