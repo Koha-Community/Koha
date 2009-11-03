@@ -142,6 +142,12 @@ OPAC:
             - pref: opaccredits
               type: textarea
               class: code
+        -
+            - 'Include a "More Searches" box on the detail pages of items on the OPAC, with the following HTML (leave blank to disable):'
+            - '<br />Note: The placeholders {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record.'
+            - pref: OPACSearchForTitleIn
+              type: textarea
+              class: code
     Features:
         -
             - pref: opacuserlogin
@@ -154,7 +160,19 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - patrons to change their own password on the OPAC. Note that enabling this will break LDAP authentication.
+            - patrons to change their own password on the OPAC. Note that this must be off to use LDAP authentication.
+        -
+            - pref: OPACPatronDetails
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to notify the library of changes to their contact information from the OPAC.
+        -
+            - pref: OPACFinesTab
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to access the Fines tab on the My Account page on the OPAC.
         -
             - pref: OpacAuthorities
               choices:

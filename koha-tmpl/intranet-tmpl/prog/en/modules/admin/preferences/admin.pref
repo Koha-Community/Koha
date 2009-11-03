@@ -50,6 +50,11 @@ Administration:
                   no: "Don't allow"
             - staff to access the staff client without logging in. Enabling this is dangerous, and should not be done in production environments.
         -
+            - Automatically log out users after
+            - pref: timeout
+              class: integer
+            - seconds of inactivity.
+        -
             - pref: AutoLocation
               default: 0
               choices:

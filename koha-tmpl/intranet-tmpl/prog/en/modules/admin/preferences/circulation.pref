@@ -81,7 +81,7 @@ Circulation:
             - When items are created, give them the temporary location of
             - pref: NewItemsDefaultLocation
               class: short
-            - (should be a location code or blank).
+            - (should be a location code, or blank to disable).
         -
             - pref: InProcessingToShelvingCart
               choices:
@@ -89,7 +89,7 @@ Circulation:
                   no: "Don't move"
             - items that have the location PROC to the location CART when they are checked in.
         -
-            - pref: InProcessingToShelvingCart
+            - pref: ReturnToShelvingCart
               choices:
                   yes: Move
                   no: "Don't move"
@@ -239,3 +239,11 @@ Circulation:
                   test: Calculate (but only for mailing to the admin)
                   production: Calculate and charge
             - fines (when <code>misc/cronjobs/fines.pl</code> is being run).
+    Self Checkout:
+        -
+            - pref: ShowPatronImageInWebBasedSelfCheck
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - "the patron's picture (if one has been added) when they use the web-based self checkout."
+

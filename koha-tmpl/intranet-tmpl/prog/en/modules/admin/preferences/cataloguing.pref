@@ -73,6 +73,11 @@ Cataloging:
                   OFF: not generated automatically.
     Display:
         -
+            - 'Separate multiple displayed authors, series or subjects with '
+            - pref: authoritysep
+              class: short
+            - '.'
+        -
             - Show
             - pref: URLLinkText
             - as the text of links embedded in MARC records.
@@ -116,4 +121,11 @@ Cataloging:
             - pref: OPACSerialIssueDisplayCount
               class: integer
             - previous issues of a serial on the OPAC.
+        -
+            - When showing the subscription information for a biblio, show
+            - pref: SubscriptionHistory
+              choices:
+                  simplified: a summary
+                  full: a full list
+            - of the serial issues.
 
