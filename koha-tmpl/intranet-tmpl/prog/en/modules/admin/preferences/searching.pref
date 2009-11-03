@@ -81,6 +81,7 @@ Searching:
         -
             - By default, sort search results in the staff client by
             - pref: defaultSortField
+              default: relevance
               choices:
                   relevance: relevance
                   popularity: total number of checkouts
@@ -104,6 +105,7 @@ Searching:
         -
             - By default, sort search results in the OPAC by
             - pref: OPACdefaultSortField
+              default: relevance
               choices:
                   relevance: relevance
                   popularity: total number of checkouts
@@ -111,7 +113,10 @@ Searching:
                   pubdate: date of publication
                   acqdate: date added
                   title: title
-                  author: author}}, {{choice OPACdefaultSortOrder
+                  author: author
+            - ","
+            - pref: OPACdefaultSortOrder
+              choices:
                   asc: ascending.
                   desc: descending.
                   az: from A to Z.
