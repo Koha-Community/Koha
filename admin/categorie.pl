@@ -210,3 +210,23 @@ if ($op eq 'add_form') {
 } #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
 
+exit 0;
+
+sub _get_brief_messaging_prefs {
+    my $categorycode = shift;
+    my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
+    my $results = [];
+    PREF: foreach my $option ( @$messaging_options ) {
+        my $pref = C4::Members::Messaging::GetMessagingPreferences( { categorycode => $categorycode,
+                                                                    message_name       => $option->{'message_name'} } );
+        next unless  @{$pref->{'transports'}};
+        my $brief_pref = { message_attribute_id => $option->{'message_attribute_id'},
+                           message_name => $option->{'message_name'},
+                         };
+        foreach my $transport ( @{$pref->{'transports'}} ) {
+            push @{ $brief_pref->{'transports'} }, { transport => $transport };
+        }
+        push @$results, $brief_pref;
+    }
+    return $results;
+}
