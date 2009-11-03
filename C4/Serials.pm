@@ -460,6 +460,7 @@ sub PrepareSerialsData{
             : "XXX" );
         $subs->{'planneddate'} = format_date( $subs->{'planneddate'} );
         $subs->{ "status" . $subs->{'status'} } = 1;
+        $subs->{ "checked" } = $subs->{'status'} =~/1|3|4|7/;
 
 #         $subs->{'notes'} = $subs->{'notes'} eq $previousnote?"":$subs->{notes};
         if ( $subs->{'year'} && $subs->{'year'} ne "" ) {
