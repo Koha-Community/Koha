@@ -21,9 +21,10 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
-package pdfformat::example;
+package pdfformat::layout3pages;
 use vars qw($VERSION @ISA @EXPORT);
-use Number::Format qw(format_price);      
+use Number::Format qw(format_price);
+use MIME::Base64;
 use strict;
 use warnings;
 use utf8;
@@ -90,12 +91,12 @@ sub printorders {
         # add basketgroup number
         $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
         $text->translate(20/mm,  ($height-15)/mm);
-        $text->text("Commande N°".$basketgroup->{'id'}.". Panier N° ".$basket->{basketno}.". ".$basket->{booksellernote});
+        $text->text("Order N°".$basketgroup->{'id'}.". Basket N° ".$basket->{basketno}.". ".$basket->{booksellernote});
         
         my $pdftable = new PDF::Table();
         my $abaskets;
         my $arrbasket;
-        my @keys = ('Document','Qté','Prix public TTC','Remise','Prix remisé HT','TVA', 'Total TTC'); 
+        my @keys = ('Document','Qty','RRT GST Inc.','Discount','Discount price GST Exc.','GST', 'Total GST Inc.'); 
         for my $bkey (@keys) {
             push(@$arrbasket, $bkey);
         }
@@ -156,6 +157,9 @@ sub printorders {
 sub printbaskets {
     my ($pdf, $basketgroup, $hbaskets, $bookseller, $GSTrate, $orders) = @_;
     
+    # get library name
+    my $libraryname = C4::Context->preference("LibraryName");
+    
     my $cur_format = C4::Context->preference("CurrencyFormat");
     my $num;
     
@@ -180,16 +184,20 @@ sub printbaskets {
     my $page = $pdf->openpage(2);
     # create a text
     my $text = $page->text;
+    
     # add basketgroup number
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
-    $text->translate(($width-40)/mm,  ($height-50)/mm);
+    $text->translate(($width-40)/mm,  ($height-53)/mm);
     $text->text("".$basketgroup->{'id'});
-    
+    # print the libraryname in the header
+    $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
+    $text->translate(30/mm,  ($height-28.5)/mm);
+    $text->text($libraryname);
     my $pdftable = new PDF::Table();
     my $abaskets;
     my $arrbasket;
     # header of the table
-    my @keys = ('Lot',  'Panier (N°)', 'Prix public TTC', 'Remise', 'Prix remisé','taux TVA', 'Total HT','TVA', 'Total TTC');
+    my @keys = ('Lot',  'Basket (N°)', 'RRT GST Inc.', 'Discount', 'Discount price','GST rate', 'Total GST exc.','GST', 'Total GST Inc.');
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
@@ -270,14 +278,23 @@ sub printbaskets {
 sub printhead {
     my ($pdf, $basketgroup, $bookseller, $branch) = @_;
 
+    # get library name
+    my $libraryname = C4::Context->preference("LibraryName");
     # get branch details
     my $branchdetails = GetBranchDetail( $basketgroup->{'deliveryplace'} );
+    # get the subject
+    my $subject;
 
     # open 1st page (with the header)
     my $page = $pdf->openpage(1);
     
     # create a text
     my $text = $page->text;
+    
+    # print the libraryname in the header
+    $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
+    $text->translate(30/mm,  ($height-28.5)/mm);
+    $text->text($libraryname);
 
     # print order info, on the default PDF
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 8/mm );
@@ -288,27 +305,52 @@ sub printhead {
     my $today = C4::Dates->today();
     $text->translate(130/mm,  ($height-5-48)/mm);
     $text->text($today);
-    # print bookseller infos
+    
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
-    $text->translate(110/mm,  ($height-170)/mm);
+    
+    # print branch infos
+    $text->translate(100/mm,  ($height-86)/mm);
+    $text->text($libraryname);
+    $text->translate(100/mm,  ($height-97)/mm);
+    $text->text($branch->{branchname});
+    $text->translate(100/mm,  ($height-108.5)/mm);
+    $text->text($branch->{branchphone});
+    $text->translate(100/mm,  ($height-115.5)/mm);
+    $text->text($branch->{branchfax});
+    $text->translate(100/mm,  ($height-122.5)/mm);
+    $text->text($branch->{branchaddress1});
+    $text->translate(100/mm,  ($height-127.5)/mm);
+    $text->text($branch->{branchaddress2});
+    $text->translate(100/mm,  ($height-132)/mm);
+    $text->text($branch->{branchaddress3});
+    $text->translate(100/mm,  ($height-138.5)/mm);
+    $text->text($branch->{branchemail});
+    
+    # print subject
+    $text->translate(100/mm,  ($height-145.5)/mm);
+    $text->text($subject);
+    
+    # print bookseller infos
+    $text->translate(100/mm,  ($height-177)/mm);
     $text->text($bookseller->{name});
-    $text->translate(110/mm,  ($height-175)/mm);
+    $text->translate(100/mm,  ($height-182)/mm);
     $text->text($bookseller->{postal});
-    $text->translate(110/mm,  ($height-180)/mm);
+    $text->translate(100/mm,  ($height-187)/mm);
     $text->text($bookseller->{address1});
-    $text->translate(110/mm,  ($height-185)/mm);
+    $text->translate(100/mm,  ($height-197)/mm);
     $text->text($bookseller->{address2});
-    $text->translate(110/mm,  ($height-190)/mm);
+    $text->translate(100/mm,  ($height-202)/mm);
     $text->text($bookseller->{address3});
+    
     # print delivery infos
     $text->font( $pdf->corefont("Times-Bold", -encoding => "utf8"), 4/mm );
-    $text->translate(50/mm,  ($height-230)/mm);
+    $text->translate(50/mm,  ($height-237)/mm);
     $text->text($branchdetails->{branchaddress1});
-    $text->translate(50/mm,  ($height-235)/mm);
+    $text->translate(50/mm,  ($height-242)/mm);
     $text->text($branchdetails->{branchaddress2});
-    $text->translate(50/mm,  ($height-240)/mm);
+    $text->translate(50/mm,  ($height-247)/mm);
     $text->text($branchdetails->{branchaddress3});
-    $text->translate(50/mm,  ($height-245)/mm);
+    $text->translate(50/mm,  ($height-252)/mm);
     $text->text($basketgroup->{'deliverycomment'});
 }
 
@@ -326,7 +368,9 @@ sub printfooters {
 sub printpdf {
     my ($basketgroup, $bookseller, $baskets, $branch, $orders, $GST) = @_;
     # open the default PDF that will be used for base (1st page already filled)
-    my $pdf = PDF::API2->open('pdfformat/example.pdf');
+    my $template = C4::Context->preference("OrderPdfTemplate");
+    $template = decode_base64($template);
+    my $pdf = PDF::API2->openScalar($template);
     $pdf->pageLabel( 0, {
         -style => 'roman',
     } ); # start with roman numbering

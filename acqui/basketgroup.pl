@@ -182,7 +182,7 @@ sub displaybasketgroups {
 sub printbasketgrouppdf{
     my ($basketgroupid) = @_;
     
-    my $pdfformat = C4::Context->preference("pdfformat");
+    my $pdfformat = C4::Context->preference("OrderPdfFormat");
     eval "use $pdfformat" ;
     warn @_;
     eval "use C4::Branch";
