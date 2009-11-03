@@ -1508,8 +1508,11 @@ sub AddReturn {
         
         #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
         #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
-        
-        if (($doreturn or $messages->{'NotIssued'}) and ($branch ne $iteminformation->{$hbr}) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) and ($reserveDone ne 1) ){
+        if (($doreturn or $messages->{'NotIssued'}) 
+            and ($branch ne $hbr) 
+            and not $messages->{'WrongTransfer'} 
+            and ($validTransfert ne 1) 
+            and ($reserveDone ne 1) ){
 			if (C4::Context->preference("AutomaticItemReturn") == 1) {
 				ModItemTransfer($iteminformation->{'itemnumber'}, $branch, $iteminformation->{$hbr});
 				$messages->{'WasTransfered'} = 1;
