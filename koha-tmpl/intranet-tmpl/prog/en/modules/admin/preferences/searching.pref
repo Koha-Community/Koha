@@ -14,12 +14,13 @@ Searching:
               class: list
             -
         -
+            - Perform wildcard searching (where, for example, <cite>Har</cite> would match <cite>Harry</cite> and <cite>harp</cite>)
             - pref: QueryAutoTruncate
               type: boolean
               choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - words in a search query to use the * wildcard (for example, <cite>Har*</cite> would <cite>Harry</cite> and <cite>harp</cite>).
+                  yes: automatically.
+                  no: only if * is added.
+            - "<br />(The * character would be used like so: <cite>Har*</cite> or <cite>*logging</cite>.)"
         -
             - pref: QueryFuzzy
               type: boolean
