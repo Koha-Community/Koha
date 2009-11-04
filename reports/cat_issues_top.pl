@@ -48,6 +48,8 @@ my $column = $input->param("Criteria");
 my @filters = $input->param("Filter");
 $filters[0]=format_date_in_iso($filters[0]);
 $filters[1]=format_date_in_iso($filters[1]);
+$filters[2]=format_date_in_iso($filters[2]);
+$filters[3]=format_date_in_iso($filters[3]);
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 my $mime = $input->param("MIME");
@@ -209,7 +211,9 @@ sub calculate {
     my $colorder;
     if ($column){
         $column = "old_issues.".$column if (($column=~/branchcode/) or ($column=~/timestamp/));
-        $column = "biblioitems.".$column if $column=~/itemtype/;
+        if($column=~/itemtype/){
+            $column = C4::Context->preference('item-level_itypes') ? "items.itype": "biblioitems.itemtype";
+        }
         $column = "borrowers.".$column if $column=~/categorycode/;
         my @colfilter ;
         $colfilter[0] = @$filters[0] if ($column =~ /timestamp/ )  ;
@@ -310,11 +314,10 @@ sub calculate {
     $strcalc .= "SELECT DISTINCT biblio.title, COUNT(biblio.biblionumber) AS RANK, biblio.biblionumber AS ID";
     $strcalc .= " , $colfield " if ($colfield);
     $strcalc .= " FROM `old_issues` 
-                  LEFT JOIN borrowers ON old_issues.borrowernumber=borrowers.borrowernumber 
-                  LEFT JOIN (items 
-                         LEFT JOIN biblioitems ON biblioitems.biblioitemnumber=items.biblioitemnumber) 
-                    ON items.itemnumber=old_issues.itemnumber 
-                  LEFT JOIN biblio ON (biblio.biblionumber=items.biblionumber) 
+                  LEFT JOIN items USING(itemnumber) 
+                  LEFT JOIN biblio USING(biblionumber) 
+                  LEFT JOIN biblioitems USING(biblionumber)
+                  LEFT JOIN borrowers USING(borrowernumber)
                   WHERE 1";
 
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
@@ -328,7 +331,14 @@ sub calculate {
     @$filters[4]=~ s/\*/%/g if (@$filters[4]);
     $strcalc .= " AND old_issues.branchcode like '" . @$filters[4] ."'" if ( @$filters[4] );
     @$filters[5]=~ s/\*/%/g if (@$filters[5]);
-    $strcalc .= " AND biblioitems.itemtype like '" . @$filters[5] ."'" if ( @$filters[5] );
+    if ( @$filters[5] ){
+        if(C4::Context->preference('item-level_itypes') ){
+            $strcalc .= " AND items.itype like "
+        }else{
+            $strcalc .= " AND biblioitems.itemtype like "
+        } 
+        $strcalc .= "'" . @$filters[5] ."'" ;
+    }
     @$filters[6]=~ s/\*/%/g if (@$filters[6]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[6] ."'" if ( @$filters[6] );
     @$filters[7]=~ s/\*/%/g if (@$filters[7]);
@@ -342,17 +352,9 @@ sub calculate {
     $strcalc .= ", $colfield" if ($column);
     $strcalc .= " order by RANK DESC";
     $strcalc .= ", $colfield " if ($colfield);
-
-# 	my $max;
-# 	if (@loopcol) {
-# 		$max = $line*@loopcol;
-# 	} else { $max=$line;}
-# 	$strcalc .= " LIMIT 0,$max";
-    warn "SQL :". $strcalc;
     
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
-# 	warn "filling table";
     my $previous_col;
     my %indice;
     while (my  @data = $dbcalc->fetchrow) {
@@ -362,7 +364,6 @@ sub calculate {
         $table[$indice{$col}]->{$col}->{'name'}=$row;
         $table[$indice{$col}]->{$col}->{'count'}=$rank;
         $table[$indice{$col}]->{$col}->{'link'}=$id;
-#		warn " ".$i." ".$col. " ".$row;
         $indice{$col}++;
     }
     
@@ -370,12 +371,10 @@ sub calculate {
     
     for ($i=1; $i<=$line;$i++) {
         my @loopcell;
-        warn " $i";
         #@loopcol ensures the order for columns is common with column titles
         # and the number matches the number of columns
         my $colcount=0;
         foreach my $col ( @loopcol ) {
-#			warn " colonne :$col->{coltitle}";
             my $value;
             my $count=0;
             my $link;
@@ -388,15 +387,12 @@ sub calculate {
                 $count =$table[$i]->{"zzEMPTY"}->{'count'};
                 $link =$table[$i]->{"zzEMPTY"}->{'link'};
             }
-#			warn " ".$i ." value:$value count:$count reference:$link";
             push @loopcell, {value => $value, count =>$count, reference => $link} ;
         }
-        #warn "row : $row colcount:$colcount";
         #my $total = $table[$i]->{totalrow}/$colcount if ($colcount>0);
         push @looprow,{ 'rowtitle' => $i ,
                         'loopcell' => \@loopcell,
                         'hilighted' => ($hilighted >0),
-                        #'totalrow' => ($total)?sprintf("%.2f",$total):0
                     };
         $hilighted = -$hilighted;
     }
