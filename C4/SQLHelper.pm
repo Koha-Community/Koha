@@ -413,8 +413,19 @@ sub _Process_Operands{
 	my @localkeys;
 	push @tmpkeys, " $field = ? ";
 	push @values, $operand;
+	#By default, exact search
 	unless ($searchtype){
 		return \@tmpkeys,\@values;
+	}
+	if ($searchtype eq "contain"){
+			my $col_field=(index($field,".")>0?substr($field, index($field,".")+1):$field);
+			if ($field=~/(?<!zip)code|(?<!card)number/ ){
+				push @tmpkeys,(" $field= '' ","$field IS NULL");
+			} elsif ($$columns{$col_field}{Type}=~/varchar|text/i){
+				push @tmpkeys,(" $field LIKE ? ");
+				my @localvaluesextended=("\%$operand\%") ;
+				push @values,@localvaluesextended;
+			}
 	}
 	if ($searchtype eq "start_with"){
 			my $col_field=(index($field,".")>0?substr($field, index($field,".")+1):$field);
