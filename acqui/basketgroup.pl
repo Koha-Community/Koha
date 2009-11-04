@@ -239,10 +239,8 @@ sub printbasketgrouppdf{
         }
         %orders->{$basket->{basketno}}=\@ba_orders;
     }
-    print $input->header( -type => 'application/pdf', -attachment => 'basketgroup.pdf' );
-    my $branch = GetBranchInfo(GetBranch($input, GetBranches()));
-    $branch = @$branch[0];
-    my $pdf = printpdf($basketgroup, $bookseller, $baskets, $branch, \%orders, $bookseller->{gstrate} || C4::Context->preference("gist")) || die "pdf generation failed";
+    print $input->header( -type => 'application/pdf', -attachment => $basketgroup->{name}.'.pdf' );
+    my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} || C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
     exit;
 }
@@ -270,7 +268,8 @@ if ( $op eq "add" ) {
         }
     } else {
         my $basketgroupid = $input->param('basketgroupid');
-        my $branchcode;
+        my $billingplace;
+        my $deliveryplace;
         if ( $basketgroupid ) {
             # Get the selected baskets in the basketgroup to display them
             my $selecteds = GetBasketsByBasketgroup($basketgroupid);
@@ -286,24 +285,42 @@ if ( $op eq "add" ) {
                 name            => $basketgroup->{name},
                 deliverycomment => $basketgroup->{deliverycomment},
             );
-            $branchcode = $basketgroup->{deliveryplace};
+            $billingplace  = $basketgroup->{billingplace};
+            $deliveryplace = $basketgroup->{deliveryplace};
         }
 
-        # Build the combobox to select the delivery place
+        # determine default billing and delivery places depending on librarian homebranch and existing basketgroup data
         my $borrower = GetMember( ( 'borrowernumber' => $loggedinuser ) );
-        my $branch   = $branchcode || $borrower->{'branchcode'};
+        my $billingplace  = $billingplace  || $borrower->{'branchcode'};
+        my $deliveryplace = $deliveryplace || $borrower->{'branchcode'};
+        
         my $branches = GetBranches;
-        my @branchloop;
-        foreach my $thisbranch (sort keys %$branches) {
-            my $selected = 1 if $thisbranch eq $branch;
+        
+        # Build the combobox to select the billing place
+        my @billingplaceloop;
+        for (sort keys %$branches) {
+            my $selected = 1 if $_ eq $billingplace;
             my %row = (
-                value      => $thisbranch,
+                value      => $_,
                 selected   => $selected,
-                branchname => $branches->{$thisbranch}->{branchname},
+                branchname => $branches->{$_}->{branchname},
             );
-            push @branchloop, \%row;
+            push @billingplaceloop, \%row;
         }
-        $template->param( branchloop => \@branchloop );
+        $template->param( billingplaceloop => \@billingplaceloop );
+        
+        # Build the combobox to select the delivery place
+        my @deliveryplaceloop;
+        for (sort keys %$branches) {
+            my $selected = 1 if $_ eq $deliveryplace;
+            my %row = (
+                value      => $_,
+                selected   => $selected,
+                branchname => $branches->{$_}->{branchname},
+            );
+            push @deliveryplaceloop, \%row;
+        }
+        $template->param( deliveryplaceloop => \@deliveryplaceloop );
 
         $template->param( booksellerid => $booksellerid );
     }
@@ -386,11 +403,11 @@ if ( $op eq "add" ) {
     
     # Getting parameters
     my $basketgroup = {};
-    
     my @baskets         = $input->param('basket');
     my $basketgroupid   = $input->param('basketgroupid');
     my $basketgroupname = $input->param('basketgroupname');
     my $booksellerid    = $input->param('booksellerid');
+    my $billingplace    = $input->param('billingplace');
     my $deliveryplace   = $input->param('deliveryplace');
     my $deliverycomment = $input->param('deliverycomment');
     my $close           = $input->param('close') ? 1 : 0;
@@ -400,6 +417,7 @@ if ( $op eq "add" ) {
               name            => $basketgroupname,
               id              => $basketgroupid,
               basketlist      => \@baskets,
+              billingplace    => $billingplace,
               deliveryplace   => $deliveryplace,
               deliverycomment => $deliverycomment,
               closed          => $close,

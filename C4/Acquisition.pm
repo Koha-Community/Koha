@@ -19,6 +19,7 @@ package C4::Acquisition;
 
 
 use strict;
+use warnings;
 use C4::Context;
 use C4::Debug;
 use C4::Dates qw(format_date format_date_in_iso);
@@ -541,6 +542,8 @@ $hashref->{'name'} is the 'name' field of the basketgroup in the aqbasketgroups 
 
 $hashref->{'basketlist'} is a list reference of the 'id's of the baskets that belong to this group,
 
+$hashref->{'billingplace'} is the 'billingplace' field of the basketgroup in the aqbasketgroups table,
+
 $hashref->{'deliveryplace'} is the 'deliveryplace' field of the basketgroup in the aqbasketgroups table,
 
 $hashref->{'deliverycomment'} is the 'deliverycomment' field of the basketgroup in the aqbasketgroups table,
@@ -559,8 +562,8 @@ sub ModBasketgroup {
     my $dbh = C4::Context->dbh;
     my $query = "UPDATE aqbasketgroups SET ";
     my @params;
-    foreach my $field (qw(name deliveryplace deliverycomment closed)) {
-        if ( $basketgroupinfo->{$field} ne undef) {
+    foreach my $field (qw(name billingplace deliveryplace deliverycomment closed)) {
+        if ( defined $basketgroupinfo->{$field} ) {
             $query .= "$field=?, ";
             push(@params, $basketgroupinfo->{$field});
         }

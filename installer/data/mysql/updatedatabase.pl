@@ -3200,6 +3200,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.127";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE aqbasketgroups ADD 'billingplace' VARCHAR(10) AFTER 'deliverycomment';
+	});
+	
+    print "Upgrade to $DBversion done (isbd updated)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 

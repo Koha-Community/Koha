@@ -276,12 +276,13 @@ sub printbaskets {
 }
 
 sub printhead {
-    my ($pdf, $basketgroup, $bookseller, $branch) = @_;
+    my ($pdf, $basketgroup, $bookseller) = @_;
 
     # get library name
     my $libraryname = C4::Context->preference("LibraryName");
     # get branch details
-    my $branchdetails = GetBranchDetail( $basketgroup->{'deliveryplace'} );
+    my $billingdetails  = GetBranchDetail( $basketgroup->{billingplace} );
+    my $deliverydetails = GetBranchDetail( $basketgroup->{deliveryplace} );
     # get the subject
     my $subject;
 
@@ -308,50 +309,54 @@ sub printhead {
     
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
     
-    # print branch infos
+    # print billing infos
     $text->translate(100/mm,  ($height-86)/mm);
     $text->text($libraryname);
     $text->translate(100/mm,  ($height-97)/mm);
-    $text->text($branch->{branchname});
+    $text->text($billingdetails->{branchname});
     $text->translate(100/mm,  ($height-108.5)/mm);
-    $text->text($branch->{branchphone});
+    $text->text($billingdetails->{branchphone});
     $text->translate(100/mm,  ($height-115.5)/mm);
-    $text->text($branch->{branchfax});
+    $text->text($billingdetails->{branchfax});
     $text->translate(100/mm,  ($height-122.5)/mm);
-    $text->text($branch->{branchaddress1});
+    $text->text($billingdetails->{branchaddress1});
     $text->translate(100/mm,  ($height-127.5)/mm);
-    $text->text($branch->{branchaddress2});
-    $text->translate(100/mm,  ($height-132)/mm);
-    $text->text($branch->{branchaddress3});
-    $text->translate(100/mm,  ($height-138.5)/mm);
-    $text->text($branch->{branchemail});
+    $text->text($billingdetails->{branchaddress2});
+    $text->translate(100/mm,  ($height-132.5)/mm);
+    $text->text($billingdetails->{branchaddress3});
+    $text->translate(100/mm,  ($height-137.5)/mm);
+    $text->text(join(' ', $billingdetails->{branchzip}, $billingdetails->{branchcity}, $billingdetails->{branchcountry}));
+    $text->translate(100/mm,  ($height-147.5)/mm);
+    $text->text($billingdetails->{branchemail});
     
     # print subject
     $text->translate(100/mm,  ($height-145.5)/mm);
     $text->text($subject);
     
     # print bookseller infos
-    $text->translate(100/mm,  ($height-177)/mm);
+    $text->translate(100/mm,  ($height-180)/mm);
     $text->text($bookseller->{name});
-    $text->translate(100/mm,  ($height-182)/mm);
+    $text->translate(100/mm,  ($height-185)/mm);
     $text->text($bookseller->{postal});
-    $text->translate(100/mm,  ($height-187)/mm);
+    $text->translate(100/mm,  ($height-190)/mm);
     $text->text($bookseller->{address1});
-    $text->translate(100/mm,  ($height-197)/mm);
+    $text->translate(100/mm,  ($height-195)/mm);
     $text->text($bookseller->{address2});
-    $text->translate(100/mm,  ($height-202)/mm);
+    $text->translate(100/mm,  ($height-200)/mm);
     $text->text($bookseller->{address3});
     
     # print delivery infos
     $text->font( $pdf->corefont("Times-Bold", -encoding => "utf8"), 4/mm );
     $text->translate(50/mm,  ($height-237)/mm);
-    $text->text($branchdetails->{branchaddress1});
+    $text->text($deliverydetails->{branchaddress1});
     $text->translate(50/mm,  ($height-242)/mm);
-    $text->text($branchdetails->{branchaddress2});
+    $text->text($deliverydetails->{branchaddress2});
     $text->translate(50/mm,  ($height-247)/mm);
-    $text->text($branchdetails->{branchaddress3});
+    $text->text($deliverydetails->{branchaddress3});
     $text->translate(50/mm,  ($height-252)/mm);
-    $text->text($basketgroup->{'deliverycomment'});
+    $text->text(join(' ', $deliverydetails->{branchzip}, $deliverydetails->{branchcity}, $deliverydetails->{branchcountry}));
+    $text->translate(50/mm,  ($height-262)/mm);
+    $text->text($basketgroup->{deliverycomment});
 }
 
 sub printfooters {
@@ -366,7 +371,7 @@ sub printfooters {
 }
 
 sub printpdf {
-    my ($basketgroup, $bookseller, $baskets, $branch, $orders, $GST) = @_;
+    my ($basketgroup, $bookseller, $baskets, $orders, $GST) = @_;
     # open the default PDF that will be used for base (1st page already filled)
     my $template = C4::Context->preference("OrderPdfTemplate");
     $template = decode_base64($template);
@@ -375,7 +380,7 @@ sub printpdf {
         -style => 'roman',
     } ); # start with roman numbering
     # fill the 1st page (basketgroup information)
-    printhead($pdf, $basketgroup, $bookseller, $branch);
+    printhead($pdf, $basketgroup, $bookseller);
     # fill the 2nd page (orders summary)
     printbaskets($pdf, $basketgroup, $baskets, $bookseller, $GST, $orders);
     # fill other pages (orders)
