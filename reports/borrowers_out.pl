@@ -198,7 +198,6 @@ sub calculate {
         
         my $sth2 = $dbh->prepare( $strsth2 );
         $sth2->execute;
-        warn $strsth2;
         while (my ($celvalue) = $sth2->fetchrow) {
             my %cell;
     #		my %ft;
@@ -251,7 +250,6 @@ sub calculate {
         } else { $max=$line;}
         $strcalc .= " LIMIT 0,$max";
      } 
-    warn "SQL : ". $strcalc;
     
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
