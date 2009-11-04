@@ -1200,8 +1200,8 @@ sub GetCOinSBiblio {
         $genre = ($mtx eq 'dc') ? "&rft.type=$genre" : "&rft.genre=$genre";
 
         # Setting datas
-        $aulast     = $record->subfield('700','a');
-        $aufirst    = $record->subfield('700','b');
+        $aulast     = $record->subfield('700','a') || '';
+        $aufirst    = $record->subfield('700','b') || '';
         $oauthors   = "&rft.au=$aufirst $aulast";
         # others authors
         if($record->field('200')){
@@ -1211,10 +1211,10 @@ sub GetCOinSBiblio {
         }
         $title      = ( $mtx eq 'dc' ) ? "&rft.title=".$record->subfield('200','a') :
                                          "&rft.title=".$record->subfield('200','a')."&rft.btitle=".$record->subfield('200','a');
-        $pubyear    = $record->subfield('210','d');
-        $publisher  = $record->subfield('210','c');
-        $isbn       = $record->subfield('010','a');
-        $issn       = $record->subfield('011','a');
+        $pubyear    = $record->subfield('210','d') || '';
+        $publisher  = $record->subfield('210','c') || '';
+        $isbn       = $record->subfield('010','a') || '';
+        $issn       = $record->subfield('011','a') || '';
     }else{
         # MARC21 need some improve
         my $fmts;
