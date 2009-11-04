@@ -173,6 +173,7 @@ function verify_images() {
 <ul>   
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings</a></li>
 <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#description">Descriptions</a></li>
+<!-- TMPL_IF name="subscriptionsnumber" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a></li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="FRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#editions">Editions</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="AmazonSimilarItems" --><li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#related">Related Titles</a></li><!-- /TMPL_IF -->
  </ul>
@@ -351,6 +352,56 @@ function verify_images() {
 <!-- /TMPL_IF -->
 </div>
 </div>
+
+<!-- TMPL_IF name="subscriptionsnumber" -->
+<div id="subscriptions">
+<div class="yui-g">
+<div id="catalogue_detail_subscriptions">
+    <h2>This is a serial subscription</h2>
+    <p> (There are <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
+    <!-- TMPL_LOOP Name="subscriptions" -->
+	    <!-- TMPL_IF name="branchname" --><h3>At library: <!-- TMPL_VAR NAME="branchname" --></h3><!-- TMPL_ELSE -->
+	    <!-- TMPL_IF name="branchcode" --><h3>At branch: <!-- TMPL_VAR NAME="branchcode" --></h3><!-- /TMPL_IF --><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
+            <!--TMPL_IF NAME="latestserials"-->
+            <p> The <!-- TMPL_VAR NAME="staffdisplaycount" --> latest issues related to this subscription:</p>
+            <table>
+                <tr>
+                    <th>Issue #</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Note</th>
+                </tr>
+            <!--TMPL_LOOP Name="latestserials"-->
+                <tr>
+                    <td><!--TMPL_VAR Name="serialseq"--></td>
+                    <td><!--TMPL_VAR Name="planneddate"--></td>
+                    <td><!--TMPL_IF Name="status1"-->Expected
+                        <!--TMPL_ELSE -->
+                            <!-- TMPL_IF Name="status2"-->Arrived
+                            <!--TMPL_ELSE -->
+                                <!-- TMPL_IF Name="status3"-->Late
+                                <!--TMPL_ELSE -->
+                                    <!-- TMPL_IF Name="status4"-->Missing
+                                    <!--TMPL_ELSE -->
+                                        <!-- TMPL_IF Name="status5"-->Not Issued
+                                        <!--/TMPL_IF-->
+                                    <!--/TMPL_IF-->
+                                <!--/TMPL_IF-->
+                            <!--/TMPL_IF-->
+                        <!--/TMPL_IF--></td>
+                    <td><!--TMPL_VAR Name="notes"--></td>
+                </tr>
+            <!--/TMPL_LOOP -->
+            </table>
+            <!-- /TMPL_IF -->
+			<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Subscription Details</a>
+    <!-- /TMPL_LOOP -->
+</div>
+</div>
+</div>
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="FRBRizeEditions" --><!-- TMPL_IF NAME="XISBNS" -->
 <div id="editions"><h2>Editions</h2>
 <table>
@@ -402,51 +453,6 @@ function verify_images() {
 </div>
 
 
-
-<!-- TMPL_IF name="subscriptionsnumber" -->
-<div class="yui-g">
-<div id="catalogue_detail_subscriptions">
-    <h2>This is a serial subscription</h2>
-    <p> (We have <!-- TMPL_VAR name="subscriptionsnumber" --> subscriptions associated with this title).</p> 
-    <!-- TMPL_LOOP Name="subscriptions" -->
-            <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
-            <!--TMPL_IF NAME="latestserials"-->
-            <p> The <!-- TMPL_VAR NAME="staffdisplaycount" --> latest issues related to this subscription:</p>
-            <table>
-                <tr>
-                    <th>Issue #</th>
-                    <th>Date</th>
-                    <th>Status</th>
-                    <th>Note</th>
-                </tr>
-            <!--TMPL_LOOP Name="latestserials"-->
-                <tr>
-                    <td><!--TMPL_VAR Name="serialseq"--></td>
-                    <td><!--TMPL_VAR Name="planneddate"--></td>
-                    <td><!--TMPL_IF Name="status1"-->Expected
-                        <!--TMPL_ELSE -->
-                            <!-- TMPL_IF Name="status2"-->Arrived
-                            <!--TMPL_ELSE -->
-                                <!-- TMPL_IF Name="status3"-->Late
-                                <!--TMPL_ELSE -->
-                                    <!-- TMPL_IF Name="status4"-->Missing
-                                    <!--TMPL_ELSE -->
-                                        <!-- TMPL_IF Name="status5"-->Not Issued
-                                        <!--/TMPL_IF-->
-                                    <!--/TMPL_IF-->
-                                <!--/TMPL_IF-->
-                            <!--/TMPL_IF-->
-                        <!--/TMPL_IF--></td>
-                    <td><!--TMPL_VAR Name="notes"--></td>
-                </tr>
-            <!--/TMPL_LOOP -->
-            </table>
-            <!-- /TMPL_IF -->
-			<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Subscription Details</a>
-    <!-- /TMPL_LOOP -->
-</div>
-</div>
-<!-- /TMPL_IF -->
 
 </div>
 </div>
