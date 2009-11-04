@@ -3257,7 +3257,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10) default NULL, ADD deliverycomment VARCHAR(255) default NULL;
 	});
 	
-    print "Upgrade to $DBversion done (isbd updated)\n";
+    print "Upgrade to $DBversion done (adding deliveryplace deliverycomment to basketgroups)\n";
     SetVersion ($DBversion);
 }
 
