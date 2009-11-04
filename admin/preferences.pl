@@ -126,9 +126,9 @@ sub TransformPrefsToHTML {
                     my $name = $piece->{'pref'};
 
                     if ( $name ) {
-                        my $row = $dbh->selectrow_hashref( "SELECT value FROM systempreferences WHERE variable = ?", {}, $name );
+                        my $row = $dbh->selectrow_hashref( "SELECT value, type FROM systempreferences WHERE variable = ?", {}, $name );
                         my $value;
-                        if ( !defined( $row ) && defined( $piece->{'default'} ) ) {
+                        if ( ( !defined( $row ) || ( !defined( $row->{'value'} ) && $row->{'type'} ne 'YesNo' ) ) && defined( $piece->{'default'} ) ) {
                             $value = $piece->{'default'};
                         } else {
                             $value = $row->{'value'};
