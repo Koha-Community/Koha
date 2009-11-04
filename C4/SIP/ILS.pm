@@ -180,7 +180,13 @@ sub checkin {
     # BEGIN TRANSACTION
     $circ->item($item = new ILS::Item $item_id);
 
-    $circ->do_checkin($current_loc, $return_date);
+    if ($item) {
+        $circ->do_checkin($current_loc, $return_date);
+    } else {
+        $circ->alert(1);
+        $circ->alert_type(99);
+        $circ->screen_msg('Invalid Item');
+    }
 	# It's ok to check it in if it exists, and if it was checked out
 	$circ->ok($item && $item->{patron});
 
