@@ -46,6 +46,7 @@ my $fullreportname = "reports/borrowers_out.tmpl";
 my $limit = $input->param("Limit");
 my $column = $input->param("Criteria");
 my @filters = $input->param("Filter");
+$filters[1] = format_date_in_iso($filters[1]) if $filters[1];
 my $output = $input->param("output");
 my $basename = $input->param("basename");
 my $mime = $input->param("MIME");
@@ -186,7 +187,7 @@ sub calculate {
         $colorder .= $column;
         
         my $strsth2;
-        $strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `old_issues` ON old_issues.borrowernumber=borrowers.borrowernumber";
+        $strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `old_issues` USING(borrowernumber)";
         if ($colfilter[0]) {
             $colfilter[0] =~ s/\*/%/g;
             $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
@@ -197,7 +198,7 @@ sub calculate {
         
         my $sth2 = $dbh->prepare( $strsth2 );
         $sth2->execute;
-
+        warn $strsth2;
         while (my ($celvalue) = $sth2->fetchrow) {
             my %cell;
     #		my %ft;
@@ -235,24 +236,11 @@ sub calculate {
     $strcalc .= "WHERE 1 ";
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
+    my $strqueryfilter = "SELECT DISTINCT borrowernumber FROM old_issues WHERE borrowernumber IS NOT NULL ";
     if (@$filters[1]){
-        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM old_issues where old_issues.timestamp> @$filters[1] ";
-#        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM old_issues where old_issues.timestamp> ".format_date_in_iso(@$filters[1]));
-        $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
-        
-# 		$queryfilter->execute(@$filters[1]);
-# 		while (my ($borrowernumber)=$queryfilter->fetchrow){
-# 			$strcalc .= " AND borrowers.borrowernumber <> $borrowernumber ";
-# 		}
-    } else {
-        my $strqueryfilter="SELECT DISTINCT borrowernumber FROM old_issues ";
-#        my $queryfilter = $dbh->prepare("SELECT DISTINCT borrowernumber FROM old_issues ");
-#        $queryfilter->execute;
-        $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
-# 		while (my ($borrowernumber)=$queryfilter->fetchrow){
-# 			$strcalc .= " AND borrowers.borrowernumber <> $borrowernumber ";
-# 		}
+        my $strqueryfilter .= "AND old_issues.timestamp> @$filters[1] ";
     }
+    $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
     $strcalc .= " group by borrowers.borrowernumber";
     $strcalc .= ", $colfield" if ($column);
     $strcalc .= " order by $colfield " if ($colfield);
@@ -263,7 +251,7 @@ sub calculate {
         } else { $max=$line;}
         $strcalc .= " LIMIT 0,$max";
      } 
-#    warn "SQL :". $strcalc;
+    warn "SQL : ". $strcalc;
     
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
