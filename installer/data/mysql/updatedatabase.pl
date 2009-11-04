@@ -3153,21 +3153,11 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10), deliverycomment VARCHAR(255);
 	});
 	
-    print "Upgrade to $DBversion done (isbd updated)\n";
+    print "Upgrade to $DBversion done (adding deliveryplace deliverycomment to basketgroups)\n";
     SetVersion ($DBversion);
 }
 
 $DBversion = "3.01.00.124";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do(qq{
-	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10), deliverycomment VARCHAR(255);
-	});
-	
-    print "Upgrade to $DBversion done (isbd updated)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.125";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE items ADD stocknumber VARCHAR(32) DEFAULT NULL COMMENT "stores the inventory number";
@@ -3192,7 +3182,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.126";
+$DBversion = "3.01.00.125";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OrderPdfTemplate','','Uploads a PDF template','NULL','Upload')");
     $dbh->do("UPDATE systempreferences SET variable='OrderPdfFormat' WHERE variable='pdfformat'");
