@@ -427,8 +427,8 @@ sub select_2_select_count ($) {
 sub strip_limit ($) {
     my $sql = shift or return;
     ($sql =~ /\bLIMIT\b/i) or return ($sql, 0, undef);
-    $sql =~ s/\bLIMIT\b\s*\d+(\,\s*\d+)?\s*/ /ig;
-    return ($sql, (defined $1 ? $1 : 0), $2);   # offset can default to 0, LIMIT cannot!
+    $sql =~ s/\bLIMIT\b\s*(\d+)(\s*\,\s*(\d+))?\s*/ /ig;
+    return ($sql, (defined $2 ? $1 : 0), (defined $3 ? $3 : $1));   # offset can default to 0, LIMIT cannot!
 }
 
 sub execute_query ($;$$$) {
@@ -457,13 +457,12 @@ sub execute_query ($;$$$) {
         $useroffset,
         (defined($userlimit ) ? $userlimit  : 'UNDEF');
     $offset += $useroffset;
-    my $total;
     if (defined($userlimit)) {
         if ($offset + $limit > $userlimit ) {
             $limit = $userlimit - $offset;
+        } elsif ( ! $offset && $limit > $userlimit ) {
+            $limit = $userlimit;
         }
-        $total = $userlimit if $userlimit < $total;     # we will never exceed a user defined LIMIT and...
-        $userlimit = $total if $userlimit > $total;     # we will never exceed the total number of records available to satisfy the query
     }
     $sql .= " LIMIT ?, ?";
 
