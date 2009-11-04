@@ -196,6 +196,18 @@ Circulation:
                   no: "Don't allow"
             - hold requests to be placed on items that are not checked out.
         -
+            - pref: AllowHoldDateInFuture
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - hold requests to be placed that do not enter the waiting list until a certain future date.
+        -
+            - pref: OPACAllowHoldDateInFuture
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - "patrons to place holds that don't enter the waiting list until a certain future date. (AllowHoldDateInFuture must also be enabled)."
+        -
             - Satisfy holds from the libraries
             - pref: StaticHoldsQueueWeight
               class: multi
