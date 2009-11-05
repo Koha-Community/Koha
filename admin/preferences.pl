@@ -104,7 +104,7 @@ sub _get_chunk {
 }
 
 sub TransformPrefsToHTML {
-    my ( $data, $highlighted_pref ) = @_;
+    my ( $data, $searchfield ) = @_;
 
     my @lines;
     my $dbh = C4::Context->dbh;
@@ -135,10 +135,20 @@ sub TransformPrefsToHTML {
                         }
                         my $chunk = _get_chunk( $value, %$piece );
 
-                        $chunk->{'highlighted'} = 1 if ( $highlighted_pref && $name =~ /$highlighted_pref/ );
+                        # No highlighting of inputs yet, but would be useful
+                        $chunk->{'highlighted'} = 1 if ( $searchfield && $name =~ /^$searchfield$/i );
 
                         push @chunks, $chunk;
-                        push @names, { name => $name, highlighted => ( $highlighted_pref && ( $name =~ /$highlighted_pref/i ? 1 : 0 ) ) };
+
+                        my $name_entry = { name => $name };
+                        if ( $searchfield ) {
+                            if ( $name =~ /^$searchfield$/i ) {
+                                $name_entry->{'jumped'} = 1;
+                            } elsif ( $name =~ /$searchfield/i ) {
+                                $name_entry->{'highlighted'} = 1;
+                            }
+                        }
+                        push @names, $name_entry;
                     } else {
                         push @chunks, $piece;
                     }
@@ -168,24 +178,6 @@ sub _get_pref_files {
     }
 
     return %results;
-}
-
-sub JumpPref {
-    my ( $input, $tab, $jumpfield ) = @_;
-
-    return ( $tab ) if ( $jumpfield !~ /^[a-zA-Z_0-9-]+$/ );
-
-    my %tab_files = _get_pref_files( $input, 1 );
-
-    while ( my ( $tab, $tabfile ) = each %tab_files ) {
-        while ( <$tabfile> ) {
-            return ( $tab, $1 ) if ( /pref: ($jumpfield)/i );
-        }
-
-        close $tabfile;
-    }
-
-    return ( "", "" );
 }
 
 sub SearchPrefs {
@@ -222,9 +214,13 @@ sub SearchPrefs {
 
                 foreach my $piece ( @$line ) {
                     if ( ref( $piece ) eq 'HASH' ) {
-                        if ( ref( $piece->{'choices'} ) eq 'HASH' && grep( { $_ && matches( $_ ) } values( %{ $piece->{'choices'} } ) ) ) {
-                            $matched = 1;
+                        if ( $piece->{'pref'} =~ /^$searchfield$/i ) {
+                            my ( undef, $LINES ) = TransformPrefsToHTML( $data, $searchfield );
+
+                            return { search_jumped => 1, tab => $tab_name, tab_title => $title, LINES => $LINES };
                         } elsif ( matches( $piece->{'pref'} ) ) {
+                            $matched = 1;
+                        } elsif ( ref( $piece->{'choices'} ) eq 'HASH' && grep( { $_ && matches( $_ ) } values( %{ $piece->{'choices'} } ) ) ) {
                             $matched = 1;
                         }
                     } elsif ( matches( $piece ) ) {
@@ -285,18 +281,6 @@ if ( $op eq 'save' ) {
 
     print $input->redirect( '/cgi-bin/koha/admin/preferences.pl?tab=' . $tab );
     exit;
-} elsif ( $op eq 'jump' ) {
-    my $jumpfield = $input->param( 'jumpfield' );
-    $template->param( jumpfield => $jumpfield );
-
-    my $new_tab;
-    ( $new_tab, $highlighted ) = JumpPref( $input, $tab, $jumpfield );
-
-    if ( $highlighted ) {
-        $tab = $new_tab;
-    } else {
-        $template->param( jump_not_found => 1 );
-    }
 }
 
 my @TABS;
@@ -318,6 +302,7 @@ if ( $op eq 'search' ) {
 
     if ( @TABS ) {
         $tab = ''; # No need to load a particular tab, as we found results
+        $template->param( search_jumped => 1 ) if ( $TABS[0]->{'search_jumped'} );
     } else {
         $template->param(
             search_not_found => 1,
@@ -326,7 +311,7 @@ if ( $op eq 'search' ) {
 }
 
 if ( $tab ) {
-    my ( $tab_title, $LINES ) = TransformPrefsToHTML( GetTab( $input, $tab ), $highlighted, ( $op eq 'jump' ) );
+    my ( $tab_title, $LINES ) = TransformPrefsToHTML( GetTab( $input, $tab ), $highlighted );
 
     push @TABS, { tab_title => $tab_title, LINES => $LINES };
     $template->param(

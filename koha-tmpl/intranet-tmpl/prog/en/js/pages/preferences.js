@@ -41,9 +41,18 @@ $( document ).ready( function () {
         } ).end()
         .find( 'select.preference' ).change( mark_modified );
 
-    if ( document.location.search.indexOf( 'jumpfield' ) != -1 ) {
-        document.location.hash = "highlighted";
+    window.onbeforeunload = function () {
+        if ( KOHA.Preferences.Modified ) {
+            return _( "You have made changes to system preferences." );
+        }
     }
+
+    $( '.prefs-tab .action .cancel' ).click( function () { KOHA.Preferences.Modified = false } );
+
+    $( '.prefs-tab .save-all' ).attr( 'disabled', true ).click( function () {
+        KOHA.Preferences.Save( this.form );
+        return false;
+    } );
 
     $( '.prefs-tab .expand-textarea' ).show().click( function () {
         $( this ).hide().nextAll( 'textarea, input[type=submit]' )
@@ -52,17 +61,6 @@ $( document ).ready( function () {
 
         return false;
     } ).nextAll( 'textarea, input[type=submit]' ).hide().css( { opacity: 0 } );
-
-    $( '.prefs-tab .save-all' ).attr( 'disabled', true ).click( function () {
-        KOHA.Preferences.Save( this.form );
-        return false;
-    } );
-
-    window.onbeforeunload = function () {
-        if ( KOHA.Preferences.Modified ) {
-            return _( "You have made changes to system preferences." );
-        }
-    }
 
     $("h3").attr("class","expanded").attr("title",_("Click to expand this section"));
     var collapsible = $(".collapsed,.expanded");
@@ -78,5 +76,14 @@ $( document ).ready( function () {
         }
     );
 
-    $( '.prefs-tab .action .cancel' ).click( function () { KOHA.Preferences.Modified = false } );
+    if ( to_highlight ) {
+        var words = to_highlight.split( ' ' );
+        $( '.prefs-tab table' ).find( 'td, th' ).not( '.name-cell' ).each( function ( i, td ) {
+            $.each( words, function ( i, word ) { $( td ).highlight( word ) } );
+        } ).find( 'option' ).removeHighlight();
+    }
+
+    if ( search_jumped ) {
+        document.location.hash = "jumped";
+    }
 } );
