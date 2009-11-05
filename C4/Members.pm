@@ -244,6 +244,41 @@ sub SearchMember {
     return ( scalar(@$data), $data );
 }
 
+=over 2
+
+=item Search
+
+  $borrowers_result_array_ref = &Search($filter,$orderby, $limit, $columns_out, $search_on_fields,$searchtype);
+
+=back
+
+Looks up patrons (borrowers) on filter.
+
+BUGFIX 499: C<$type> is now used to determine type of search.
+if $type is "simple", search is performed on the first letter of the
+surname only.
+
+$category_type is used to get a specified type of user. 
+(mainly adults when creating a child.)
+
+C<$filter> can be
+   - a space-separated list of search terms. Implicit AND is done on them
+   - a hash ref containing fieldnames associated with queried value
+   - an array ref combining the two previous elements Implicit OR is done between each array element
+
+
+C<$orderby> is an arrayref of hashref. Contains the name of the field and 0 or 1 depending if order is ascending or descending
+
+C<$limit> is there to allow limiting number of results returned
+
+C<&columns_out> is an array ref to the fieldnames you want to see in the result list
+
+C<&search_on_fields> is an array ref to the fieldnames you want to limit search on when you are using string search
+
+C<&searchtype> is a string telling the type of search you want todo : start_with, exact or contains are allowed
+
+=cut
+
 sub Search {
     my ($filter,$orderby, $limit, $columns_out, $search_on_fields,$searchtype) = @_;
 	my @filters;
