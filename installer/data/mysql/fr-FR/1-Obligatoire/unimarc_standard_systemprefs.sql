@@ -270,3 +270,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('S
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnableOpacSearchHistory', '1', 'Enable or disable opac search history', 'YesNo','')
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacSerialDefaultTab', 'serialcollection', 'Ce paramètre définit l''onglet par défaut pour l''affichage des périodiques dans l''OPAC.', 'holdings|serialcollection|subscriptions', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','Si activé, des reservations sont automatiquement créées pour chaque lecteur de la liste de circulation d''un numéro de périodique','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SpecifyDueDate',1,'Define whether to display \"Specify Due Date\" form in Circulation',','YesNo');
