@@ -920,7 +920,6 @@ sub BuildSummary{
     $summary =~ s/\n/<br>/g;
   } else {
     my $heading; 
-    my $authid; 
     my $altheading;
     my $seealso;
     my $broaderterms;
@@ -934,7 +933,6 @@ sub BuildSummary{
       # accepted form
       foreach my $field ($record->field('2..')) {
         $heading.= $field->subfield('a');
-                $authid=$field->subfield('3');
       }
       # rejected form(s)
       foreach my $field ($record->field('3..')) {
@@ -948,13 +946,13 @@ sub BuildSummary{
       }
       # see :
       foreach my $field ($record->field('5..')) {
-            
+        my $authid=_get_authid_subfield($field);    
         if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
-          $broaderterms.= '<span class="BT"> <a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+          $broaderterms.= '<span class="BT"> <a href="detail.pl?authid='.$authid.'">'.$field->subfield('a')."</a></span> -- \n";
         } elsif (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'h')){
-          $narrowerterms.= '<span class="NT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+          $narrowerterms.= '<span class="NT"><a href="detail.pl?authid='.$authid.'">'.$field->subfield('a')."</a></span> -- \n";
         } elsif ($field->subfield('a')) {
-          $seealso.= '<span class="RT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+          $seealso.= '<span class="RT"><a href="detail.pl?authid='.$authid.'">'.$field->subfield('a')."</a></span> -- \n";
         }
       }
       # // form
@@ -1025,6 +1023,10 @@ sub BuildSummary{
   return $summary;
 }
 
+sub _get_authid_subfield{
+	my ($field)=@_;
+	return $field->subfield('9')||$field->subfield('3');
+}
 =head2 BuildUnimarcHierarchies
 
 =over 4
@@ -1057,10 +1059,11 @@ sub BuildUnimarcHierarchies{
     my $found;
     foreach my $field ($record->field('550')){
       if ($field->subfield('5') && $field->subfield('5') eq 'g'){
-        my $parentrecord = GetAuthority($field->subfield('3'));
+		my $subfauthid=_get_authid_subfield($field);
+        my $parentrecord = GetAuthority($subfauthid);
         my $localresult=$hierarchies;
         my $trees;
-        $trees = BuildUnimarcHierarchies($field->subfield('3'));
+        $trees = BuildUnimarcHierarchies($subfauthid);
         my @trees;
         if ($trees=~/;/){
            @trees = split(/;/,$trees);
@@ -1113,11 +1116,12 @@ sub BuildUnimarcHierarchy{
   my $parents=""; my $children="";
   my (@loopparents,@loopchildren);
   foreach my $field ($record->field('550')){
+	my $subfauthid=_get_authid_subfield($field);
     if ($field->subfield('5') && $field->subfield('a')){
       if ($field->subfield('5') eq 'h'){
-        push @loopchildren, { "childauthid"=>$field->subfield('3'),"childvalue"=>$field->subfield('a')};
+        push @loopchildren, { "childauthid"=>$subfauthid,"childvalue"=>$field->subfield('a')};
       }elsif ($field->subfield('5') eq 'g'){
-        push @loopparents, { "parentauthid"=>$field->subfield('3'),"parentvalue"=>$field->subfield('a')};
+        push @loopparents, { "parentauthid"=>$subfauthid,"parentvalue"=>$field->subfield('a')};
       }
           # brothers could get in there with an else
     }
