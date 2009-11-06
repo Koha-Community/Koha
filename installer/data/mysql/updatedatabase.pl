@@ -3150,10 +3150,10 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.123";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
-	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10), deliverycomment VARCHAR(255);
+	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10) default NULL ADD deliverycomment VARCHAR(255) default NULL;
 	});
 	
-    print "Upgrade to $DBversion done (adding deliveryplace deliverycomment to basketgroups)\n";
+    print "Upgrade to $DBversion done (isbd updated)\n";
     SetVersion ($DBversion);
 }
 
@@ -3193,7 +3193,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.127";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
-	ALTER TABLE aqbasketgroups ADD 'billingplace' VARCHAR(10) AFTER 'deliverycomment';
+	ALTER TABLE aqbasketgroups ADD billingplace VARCHAR(10) NOT NULL AFTER deliverycomment;
 	});
 	
     print "Upgrade to $DBversion done (isbd updated)\n";
