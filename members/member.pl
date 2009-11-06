@@ -97,7 +97,7 @@ push @searchpatron, $patron if (keys %$patron);
 my $from= ($startfrom-1)*$resultsperpage;
 my $to=$from+$resultsperpage;
  #($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
- ($results)=Search(\@searchpatron,{surname=>1,firstname=>1},undef,undef,["firstname","surname","email","othernames","cardnumber"],"start_with"  ) if (@searchpatron);
+ ($results)=Search(\@searchpatron,{surname=>1,firstname=>1},undef,undef,["firstname","surname","email","othernames","cardnumber","userid"],"start_with"  ) if (@searchpatron);
 if ($results){
 	$count =scalar(@$results);
 }
