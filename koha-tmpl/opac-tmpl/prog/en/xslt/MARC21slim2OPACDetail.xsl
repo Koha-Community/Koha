@@ -468,15 +468,15 @@
         <xsl:for-each select="marc:datafield[@tag=505]">
         <span class="results_summary"><span class="label">
         <xsl:choose>
-        <xsl:when test="@ind1=0">
-            Contents:
-        </xsl:when>
         <xsl:when test="@ind1=1">
             Incomplete contents:
         </xsl:when>
         <xsl:when test="@ind1=1">
             Partial contents:
         </xsl:when>
+        <xsl:otherwise>
+            Contents:
+        </xsl:otherwise>
         </xsl:choose>  
         </span>
         <xsl:choose>
@@ -526,6 +526,23 @@
         </xsl:if>
         </xsl:for-each>
         </xsl:if>
+
+        <xsl:for-each select="marc:datafield[@tag=520]">
+        <span class="results_summary"><span class="label">
+        <xsl:choose>
+          <xsl:when test="@ind1=0"><xsl:text>Subject: </xsl:text></xsl:when>
+          <xsl:when test="@ind1=1"><xsl:text>Review: </xsl:text></xsl:when>
+          <xsl:when test="@ind1=2"><xsl:text>Scope and content: </xsl:text></xsl:when>
+          <xsl:when test="@ind1=3"><xsl:text>Abstract: </xsl:text></xsl:when>
+          <xsl:when test="@ind1=4"><xsl:text>Content advice: </xsl:text></xsl:when>
+          <xsl:otherwise><xsl:text>Summary: </xsl:text></xsl:otherwise>
+        </xsl:choose>
+        </span>
+        <xsl:call-template name="subfieldSelect">
+          <xsl:with-param name="codes">abcu</xsl:with-param>
+        </xsl:call-template>
+        </span>
+        </xsl:for-each>
 
         <!-- 780 -->
         <xsl:if test="marc:datafield[@tag=780]">
