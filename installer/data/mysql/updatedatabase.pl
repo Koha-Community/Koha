@@ -3176,8 +3176,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	INSERT IGNORE INTO marc_subfield_structure (frameworkcode,tagfield, tagsubfield, tab, repeatable, mandatory,kohafield) 
 	SELECT DISTINCT (frameworkcode),995,"j",10,0,0,"items.stocknumber" from biblio_framework ;
 		});
-	}
-	
+		#Previously, copynumber was used as stocknumber
+		$dbh->do(qq{
+	UPDATE items set stocknumber=copynumber;
+		});
+		$dbh->do(qq{
+	UPDATE items set copynumber=NULL;
+		});
+	}	
     print "Upgrade to $DBversion done (stocknumber field added)\n";
     SetVersion ($DBversion);
 }
