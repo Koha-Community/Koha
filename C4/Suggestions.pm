@@ -66,8 +66,6 @@ BEGIN {
         &GetSuggestionByStatus
         &GetSuggestionFromBiblionumber
         &ModStatus
-        &ModSuggestion
-        &NewSuggestion
     );
 }
 
