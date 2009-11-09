@@ -2735,7 +2735,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # fill AnonymousPatron with AnonymousSuggestion value (copy)
     my $sth=$dbh->prepare("SELECT value FROM systempreferences WHERE variable='AnonSuggestions'");
     $sth->execute;
-    my ($value) = $sth->fetchrow();
+    my ($value) = $sth->fetchrow() || 0;
     $dbh->do("UPDATE systempreferences SET value='$value' WHERE variable='AnonymousPatron'");
     # set AnonymousSuggestion do YesNo
     # 1st, set the value (1/True if it had a borrowernumber)
@@ -3050,10 +3050,7 @@ ALTER table suggestions
 	;
 SUGGESTIONS
 
-    print <<COMMENT;
-Upgrade to $DBversion done  
-	Suggestions
-COMMENT
+    print "Upgrade to $DBversion done Suggestions";
     SetVersion ($DBversion);
 }
 
@@ -3083,7 +3080,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.118";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $dbh->do("
-??? d'ici jusqu'à ???FIN des lignes ont pu être insérées/effacées
        INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
 		(16, 'execute_reports', 'Execute SQL reports'),
 		(16, 'create_reports', 'Create SQL Reports')
@@ -3150,10 +3146,10 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.123";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
-	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10) default NULL ADD deliverycomment VARCHAR(255) default NULL;
+	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10) default NULL, ADD deliverycomment VARCHAR(255) default NULL;
 	});
 	
-    print "Upgrade to $DBversion done (isbd updated)\n";
+    print "Upgrade to $DBversion done (delivery place and comment)\n";
     SetVersion ($DBversion);
 }
 
