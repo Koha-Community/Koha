@@ -27,6 +27,7 @@ use C4::Auth;
 use C4::Branch;
 use C4::Dates qw/format_date/;
 use Date::Calc qw/Today/;
+use Text::CSV_XS;
 
 my $input = new CGI;
 my $order   = $input->param( 'order' ) || '';
@@ -52,18 +53,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $dbh = C4::Context->dbh;
 
-# download the complete CSV
-if ($op eq 'csv') {
-warn "BRANCH : $branchfilter";
-    my $lib = $branchfilter ? "-library $branchfilter" :'';
-    my $csv = `../misc/cronjobs/overdue_notices.pl -csv -n $lib`;
-    print $input->header(-type => 'application/vnd.sun.xml.calc',
-                        -encoding    => 'utf-8',
-                        -attachment=>"overdues.csv",
-                        -filename=>"overdues.csv" );
-    print $csv;
-    exit;
-}
 my $req;
 $req = $dbh->prepare( "select categorycode, description from categories order by description");
 $req->execute;
@@ -101,6 +90,7 @@ $template->param(
     borname      => $bornamefilter,
     order        => $order,
     showall      => $showall,
+    csv_param_string => $input->query_string(),
 );
 
 my @sort_roots = qw(borrower title barcode date_due);
@@ -141,7 +131,7 @@ LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
 LEFT JOIN biblio      ON (biblio.biblionumber=items.biblionumber )
 WHERE 1=1 "; # placeholder, since it is possible that none of the additional
              # conditions will be selected by user
-$strsth.=" AND date_due               < '" . $todaysdate     . "' " unless ($showall);
+$strsth.=" AND date_due               < NOW() " unless ($showall);
 $strsth.=" AND (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
 $strsth.=" AND borrowers.categorycode = '" . $borcatfilter   . "' " if $borcatfilter;
 $strsth.=" AND biblioitems.itemtype   = '" . $itemtypefilter . "' " if $itemtypefilter;
@@ -181,4 +171,41 @@ $template->param(
     overdueloop => \@overduedata
 );
 
+# download the complete CSV
+if ($op eq 'csv') {
+        binmode(STDOUT, ":utf8");
+        my $csv = build_csv(\@overduedata);
+        print $input->header(-type => 'application/vnd.sun.xml.calc',
+                             -encoding    => 'utf-8',
+                             -attachment=>"overdues.csv",
+                             -filename=>"overdues.csv" );
+        print $csv;
+        exit;
+}
+
 output_html_with_http_headers $input, $cookie, $template->output;
+
+
+sub build_csv {
+    my $overdues = shift;
+
+    return "" if scalar(@$overdues) == 0;
+
+    my @lines = ();
+
+    # build header ...
+    my @keys = sort keys %{ $overdues->[0] };
+    my $csv = Text::CSV_XS->new({
+        sep_char => C4::Context->preference("delimiter") ? 
+                    C4::Context->preference("delimiter") : ';' ,
+    });
+    $csv->combine(@keys);
+    push @lines, $csv->string();
+
+    # ... and rest of report
+    foreach my $overdue ( @{ $overdues } ) {
+        push @lines, $csv->string() if $csv->combine(map { $overdue->{$_} } @keys);
+    }
+
+    return join("\n", @lines) . "\n";
+}

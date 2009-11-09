@@ -18,7 +18,7 @@
 	<div class="yui-b">
 
 <h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
-<p><a href="overdue.pl?op=csv&amp;branch=<!-- TMPL_VAR name="branchfilter" -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)</p>
+<p><a href="overdue.pl?op=csv<!--TMPL_IF NAME="csv_param_string" -->&amp;<!-- TMPL_VAR name="csv_param_string" escape="HTML" --><!-- /TMPL_IF -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)</p>
 <div class="sql"><pre><!-- TMPL_VAR NAME="sql" ESCAPE="HTML" --></pre></div>
 <div class="searchresults">
 <table id="overduest">
@@ -41,7 +41,7 @@
 <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
 <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
 <!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR ESCAPE="HTML" NAME="subtitle" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR ESCAPE="HTML" NAME="author" --><!-- /TMPL_IF -->
         </td>
     </tr>
 <!-- /TMPL_LOOP --></tbody>
@@ -50,7 +50,7 @@
 </div>
 </div>
 <div class="yui-b">
-<form method="post" action="/cgi-bin/koha/circ/overdue.pl">
+<form method="get" action="/cgi-bin/koha/circ/overdue.pl">
   <fieldset class="brief">
 <h4>Filter On:</h4>
 	<ol>
