@@ -156,10 +156,11 @@ sub GetBranchesLoop (;$$) {  # since this is what most pages want anyway
     my $onlymine = @_ ? shift : onlymine();
     my $branches = GetBranches($onlymine);
     my @loop;
+    my $searchMyLibraryFirst = C4::Context->preference("SearchMyLibraryFirst");;
     foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
         push @loop, {
             value => $_,
-            selected => ($_ eq $branch) ? 1 : 0, 
+            selected => (($_ eq $branch) && $searchMyLibraryFirst ) ? 1 : 0, 
             branchname => $branches->{$_}->{branchname},
         };
     }
