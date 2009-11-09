@@ -18,7 +18,14 @@
 	<div class="yui-b">
 
 <h2>Items Overdue as of <!-- TMPL_VAR NAME="todaysdate" --></h2>
-<p><a href="overdue.pl?op=csv<!--TMPL_IF NAME="csv_param_string" -->&amp;<!-- TMPL_VAR name="csv_param_string" escape="HTML" --><!-- /TMPL_IF -->">Download file of all overdues</a> (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)</p>
+<p>
+	<!-- TMPL_IF NAME="csv_param_string" -->
+      <a href="overdue.pl?op=csv&amp;<!-- TMPL_VAR name="csv_param_string" escape="HTML" -->">Download file of all overdues</a>
+    <!-- TMPL_ELSE -->
+      <a href="overdue.pl?op=csv">Download file of all overdues</a>
+    <!-- /TMPL_IF -->
+    (for <!-- TMPL_IF name="branchfilter" -->branch <!-- TMPL_VAR name="branchfilter" --><!-- TMPL_ELSE -->all branches<!-- /TMPL_IF -->. Other filters are ignored)
+</p>
 <div class="sql"><pre><!-- TMPL_VAR NAME="sql" ESCAPE="HTML" --></pre></div>
 <div class="searchresults">
 <table id="overduest">
