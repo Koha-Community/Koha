@@ -11,6 +11,7 @@ use warnings;
 use C4::Context;
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session);
+use C4::Languages qw(getAllLanguages);
 use C4::Search;
 use C4::Biblio;  # GetBiblioData
 use C4::Koha;
@@ -19,6 +20,7 @@ use C4::Branch; # GetBranches
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
 use Storable qw(thaw freeze);
+
 
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
@@ -123,6 +125,10 @@ $template->param(
     branchloop       => GetBranchesLoop($mybranch, 0),
     searchdomainloop => GetBranchCategories(undef,'searchdomain'),
 );
+
+# load the language limits (for search)
+my $languages_limit_loop = getAllLanguages();
+$template->param(search_languages_loop => $languages_limit_loop,);
 
 # load the Type stuff
 my $itemtypes = GetItemTypes;

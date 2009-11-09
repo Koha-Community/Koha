@@ -70,7 +70,6 @@
             <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
             <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
 <!-- /TMPL_IF -->
-            <option value="ln">Language</option>
 <!-- TMPL_IF NAME="expanded_options" -->
             <option value="nt">Notes/Comments</option>
 <!-- /TMPL_IF -->
@@ -131,6 +130,22 @@
 	</fieldset>
     </div>
 <!-- TMPL_IF NAME="expanded_options" -->
+    <fieldset><legend>Language</label>
+<!-- LANGUAGE LIMIT -->
+                <p><label for="language-limit">Language: </label>                                        
+                <select name="limit">
+                <option value="">No Limit</option>
+                <!-- TMPL_LOOP NAME="search_languages_loop" -->
+                <!-- TMPL_IF NAME="selected" -->
+                <option value="ln,rtrn:<!-- TMPL_VAR NAME="iso639_2_code" -->" selected="selected"><!-- TMPL_VAR NAME="language_description" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="ln,rtrn:<!-- TMPL_VAR NAME="iso639_2_code" -->"><!-- TMPL_VAR NAME="language_description" --></option>
+                <!-- /TMPL_IF -->
+                
+                <!-- /TMPL_LOOP -->
+                </select></p><!-- <a href="">Show all languages</a>-->
+<!-- /LANGUAGE LIMIT -->
+</fieldset>
     <!--TMPL_IF Name="usmarc"-->
         <!-- SUBTYPE LIMITS -->
             <div id="subtypes" class="container"><fieldset>
