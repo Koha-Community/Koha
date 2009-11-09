@@ -1040,20 +1040,21 @@ sub buildQuery {
     my $group_OR_limits;
     my $availability_limit;
     foreach my $this_limit (@limits) {
-        if ( $this_limit =~ /available/ ) {
-
-# 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
-# In English:
-# all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
-            $availability_limit .=
-"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
-            $limit_cgi  .= "&limit=available";
-            $limit_desc .= "";
-        }
-
+#        if ( $this_limit =~ /available/ ) {
+#
+## 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
+## In English:
+## all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
+#            $availability_limit .=
+#"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+#            $limit_cgi  .= "&limit=available";
+#            $limit_desc .= "";
+#        }
+#
         # group_OR_limits, prefixed by mc-
         # OR every member of the group
-        elsif ( $this_limit =~ /mc/ ) {
+#        elsif ( $this_limit =~ /mc/ ) {
+        if ( $this_limit =~ /mc/ ) {
             $group_OR_limits .= " or " if $group_OR_limits;
             $limit_desc      .= " or " if $group_OR_limits;
             $group_OR_limits .= "$this_limit";
