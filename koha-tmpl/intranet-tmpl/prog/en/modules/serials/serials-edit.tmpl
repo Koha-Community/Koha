@@ -154,7 +154,7 @@ function CloneSubfield(index){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo;  Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo;  Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --> <!-- TMPL_IF name="callnumber" -->(<!-- TMPL_VAR name="callnumber" -->)<!-- /TMPL_IF --></i></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -162,7 +162,7 @@ function CloneSubfield(index){
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --></i></h1>
+<h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --> <!-- TMPL_IF name="callnumber" -->(<!-- TMPL_VAR name="callnumber" -->)<!-- /TMPL_IF --></i></h1>
 <form method="post" name="f" action="serials-edit.pl" id="serials_edit">
 <!--onsubmit="return barcode_check()">-->
 

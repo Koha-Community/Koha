@@ -140,12 +140,13 @@ my @subscriptionloop;
 my %processedsubscriptionid;
 foreach my $subscriptionid (@subscriptionids){
     #Donot process subscriptionid twice if it was already processed.
+    my $subscriptiondetail = GetSubscription($subscriptionid);
     next unless (defined($subscriptionid) && !$processedsubscriptionid{$subscriptionid});
     my $cell;
     if ($serialdatalist[0]->{'serialsadditems'}){
     #Create New empty item
         $cell =
-        PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'},'', GetSubscription($subscriptionid));
+        PrepareItemrecordDisplay( $serialdatalist[0]->{'biblionumber'},'', $subscriptiondetail);
         $cell->{serialsadditems} = 1;
     }
     $cell->{'subscriptionid'}=$subscriptionid;
@@ -158,6 +159,10 @@ foreach my $subscriptionid (@subscriptionids){
                             'subscriptionexpired'=>HasSubscriptionExpired($subscriptionid),
     };
     $processedsubscriptionid{$subscriptionid}=1;
+    $template->param(bibliotitle  => $subscriptiondetail->{'bibliotitle'},
+                        callnumber => $subscriptiondetail->{'callnumber'},
+                );
+
 }
 $template->param(newserialloop=>\@newserialloop);
 $template->param(subscriptions=>\@subscriptionloop);
@@ -293,9 +298,8 @@ if ($op and $op eq 'serialchangestatus') {
 }
 
 $template->param(
-	serialsadditems => $serialdatalist[0]->{'serialsadditems'},
-	bibliotitle  => $bibdata->{'title'},
-	biblionumber => $serialdatalist[0]->{'biblionumber'},
-	serialslist  => \@serialdatalist,
+    serialsadditems => $serialdatalist[0]->{'serialsadditems'},
+    biblionumber => $serialdatalist[0]->{'biblionumber'},
+    serialslist  => \@serialdatalist,
 );
 output_html_with_http_headers $query, $cookie, $template->output;
