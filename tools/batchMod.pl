@@ -42,10 +42,13 @@ my $op           = $input->param('op');
 my $del          = $input->param('del');
 
 my $template_name;
+my $template_flag;
 if (!defined $op) {
     $template_name = "tools/batchMod.tmpl";
+    $template_flag = { tools => '*' };
 } else {
     $template_name = ($del) ? "tools/batchMod-del.tmpl" : "tools/batchMod-edit.tmpl";
+    $template_flag = ($del) ? { tools => 'batchdel' }   : { tools => 'batchmod' };
 }
 
 
@@ -54,7 +57,7 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {editcatalogue => 1},
+                 flagsrequired => $template_flag,
                  });
 
 
