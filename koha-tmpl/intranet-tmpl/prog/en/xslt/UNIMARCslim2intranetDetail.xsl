@@ -134,9 +134,9 @@
 
   <abbr class="unapi-id" title="koha:biblionumber:{marc:datafield[@tag=090]/marc:subfield[@code='a']}"><!-- unAPI --></abbr>
 
-<xsl:if test="marc:controlfield[@tag=005]">
+<xsl:if test="marc:controlfield[@tag=009]">
     <li><strong>PPN: </strong>
-      <xsl:value-of select="marc:controlfield[@tag=005]"/>
+      <xsl:value-of select="marc:controlfield[@tag=009]"/>
     </li>
   </xsl:if>
 
