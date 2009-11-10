@@ -112,6 +112,10 @@ foreach my $subscription (@subscriptions) {
     my %cell;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{notes};
+    $cell{missinglist}       = $subscription->{missinglist};
+    $cell{opacnote}          = $subscription->{opacnote};
+    $cell{histstartdate}     = format_date($subscription->{histstartdate});
+    $cell{histenddate}       = format_date($subscription->{histenddate});
     $cell{branchcode}        = $subscription->{branchcode};
     $cell{branchname}        = GetBranchName($subscription->{branchcode});
     $cell{hasalert}          = $subscription->{hasalert};

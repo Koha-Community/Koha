@@ -1704,7 +1704,7 @@ CREATE TABLE `subscriptionhistory` (
   `biblionumber` int(11) NOT NULL default 0,
   `subscriptionid` int(11) NOT NULL default 0,
   `histstartdate` date default NULL,
-  `enddate` date default NULL,
+  `histenddate` date default NULL,
   `missinglist` longtext NOT NULL,
   `recievedlist` longtext NOT NULL,
   `opacnote` varchar(150) NOT NULL default '',

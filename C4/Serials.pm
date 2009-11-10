@@ -533,7 +533,7 @@ sub GetSubscriptionsFromBiblionumber {
     while ( my $subs = $sth->fetchrow_hashref ) {
         $subs->{startdate}     = format_date( $subs->{startdate} );
         $subs->{histstartdate} = format_date( $subs->{histstartdate} );
-        $subs->{histenddate} = format_date( $subs->{histenddate} );
+        $subs->{enddate} = format_date( $subs->{enddate} );
         $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
         $subs->{missinglist}  =~ s/\n/\<br\/\>/g;
         $subs->{recievedlist} =~ s/\n/\<br\/\>/g;
@@ -625,44 +625,45 @@ sub GetSubscriptions {
     my $dbh = C4::Context->dbh;
     my $sth;
     my $sql = qq(
-            SELECT subscription.*,biblio.title,biblioitems.issn,biblio.biblionumber
+            SELECT subscription.*, subscriptionhistory.*, biblio.title,biblioitems.issn,biblio.biblionumber
             FROM   subscription
+            LEFT JOIN subscriptionhistory USING(subscriptionid)
             LEFT JOIN biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
     );
-	my @bind_params;
-	my $sqlwhere;
+    my @bind_params;
+    my $sqlwhere;
     if ($biblionumber) {
         $sqlwhere="   WHERE biblio.biblionumber=?";
-		push @bind_params,$biblionumber;
+        push @bind_params,$biblionumber;
     }
     if ($string){
-		my @sqlstrings;	
-		my @strings_to_search;
-		@strings_to_search=map {"%$_%"} split (/ /,$string);
-		foreach my $index qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes){
-				push @bind_params,@strings_to_search; 
-				my $tmpstring= "AND $index LIKE ? "x scalar(@strings_to_search);
-				$debug && warn "$tmpstring";
-				$tmpstring=~s/^AND //;
-				push @sqlstrings,$tmpstring;
-		}
-		$sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
-	}
+        my @sqlstrings;	
+        my @strings_to_search;
+        @strings_to_search=map {"%$_%"} split (/ /,$string);
+        foreach my $index qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes){
+                push @bind_params,@strings_to_search; 
+                my $tmpstring= "AND $index LIKE ? "x scalar(@strings_to_search);
+                $debug && warn "$tmpstring";
+                $tmpstring=~s/^AND //;
+                push @sqlstrings,$tmpstring;
+        }
+        $sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
+    }
     if ($issn){
-		my @sqlstrings;	
-		my @strings_to_search;
-		@strings_to_search=map {"%$_%"} split (/ /,$issn);
-		foreach my $index qw(biblioitems.issn subscription.callnumber){
-				push @bind_params,@strings_to_search; 
-				my $tmpstring= "OR $index LIKE ? "x scalar(@strings_to_search);
-				$debug && warn "$tmpstring";
-				$tmpstring=~s/^OR //;
-				push @sqlstrings,$tmpstring;
-		}
-		$sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
-	}    
-	$sql.="$sqlwhere ORDER BY title";
+        my @sqlstrings;	
+        my @strings_to_search;
+        @strings_to_search=map {"%$_%"} split (/ /,$issn);
+        foreach my $index qw(biblioitems.issn subscription.callnumber){
+                push @bind_params,@strings_to_search; 
+                my $tmpstring= "OR $index LIKE ? "x scalar(@strings_to_search);
+                $debug && warn "$tmpstring";
+                $tmpstring=~s/^OR //;
+                push @sqlstrings,$tmpstring;
+        }
+        $sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
+    }    
+    $sql.="$sqlwhere ORDER BY title";
     $debug and warn "GetSubscriptions query: $sql params : ", join (" ",@bind_params);
     $sth = $dbh->prepare($sql);
     $sth->execute(@bind_params);
