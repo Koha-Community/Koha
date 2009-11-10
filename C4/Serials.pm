@@ -34,10 +34,10 @@ use C4::Debug;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
-	$VERSION = 3.01;	# set version for version checking
-	require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
+    $VERSION = 3.01;	# set version for version checking
+    require Exporter;
+    @ISA    = qw(Exporter);
+    @EXPORT = qw(
     &NewSubscription    &ModSubscription    &DelSubscription    &GetSubscriptions
     &GetSubscription    &CountSubscriptionFromBiblionumber      &GetSubscriptionsFromBiblionumber
     &GetFullSubscriptionsFromBiblionumber   &GetFullSubscription &ModSubscriptionHistory
@@ -94,7 +94,7 @@ sub GetSuppliersWithLateIssues {
     my $query = qq|
         SELECT DISTINCT id, name
         FROM            subscription 
-	LEFT JOIN       serial ON serial.subscriptionid=subscription.subscriptionid
+        LEFT JOIN       serial ON serial.subscriptionid=subscription.subscriptionid
         LEFT JOIN       aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
         WHERE           subscription.subscriptionid = serial.subscriptionid
         AND             (planneddate < now() OR serial.STATUS = 3 OR serial.STATUS = 4)
@@ -374,7 +374,7 @@ sub GetSubscription {
 # #       $debug and warn "flags: ".C4::Context->userenv->{'flags'};
 #       $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
 #     }
-	$debug and warn "query : $query\nsubsid :$subscriptionid";
+    $debug and warn "query : $query\nsubsid :$subscriptionid";
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     return $sth->fetchrow_hashref;
@@ -423,7 +423,7 @@ sub GetFullSubscription {
           IF(serial.publisheddate="00-00-0000",serial.planneddate,serial.publisheddate) DESC,
           serial.subscriptionid
           |;
-	$debug and warn "GetFullSubscription query: $query";   
+    $debug and warn "GetFullSubscription query: $query";   
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     return $sth->fetchall_arrayref({});
@@ -462,7 +462,6 @@ sub PrepareSerialsData{
         $subs->{ "status" . $subs->{'status'} } = 1;
         $subs->{ "checked" } = $subs->{'status'} =~/1|3|4|7/;
 
-#         $subs->{'notes'} = $subs->{'notes'} eq $previousnote?"":$subs->{notes};
         if ( $subs->{'year'} && $subs->{'year'} ne "" ) {
             $year = $subs->{'year'};
         }
@@ -475,18 +474,12 @@ sub PrepareSerialsData{
         else {
             $tmpresults{$year} = {
                 'year' => $year,
-
-                #               'startdate'=>format_date($subs->{'startdate'}),
                 'aqbooksellername' => $subs->{'aqbooksellername'},
                 'bibliotitle'      => $subs->{'bibliotitle'},
                 'serials'          => [$subs],
                 'first'            => $first,
-#                 'branchcode'       => $subs->{'branchcode'},
-#                 'subscriptionid'   => $subs->{'subscriptionid'},
             };
         }
-
-        #         $previousnote=$subs->{notes};
     }
     foreach my $key ( sort { $b cmp $a } keys %tmpresults ) {
         push @res, $tmpresults{$key};
@@ -522,11 +515,6 @@ sub GetSubscriptionsFromBiblionumber {
        LEFT JOIN branches ON branches.branchcode=subscription.branchcode
        WHERE subscription.biblionumber = ?
     );
-#     if (C4::Context->preference('IndependantBranches') && 
-#         C4::Context->userenv && 
-#         C4::Context->userenv->{'flags'} != 1){
-#        $query.=" AND subscription.branchcode IN ('".C4::Context->userenv->{'branch'}."',\"\")";
-#     }
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my @res;
@@ -1489,9 +1477,9 @@ sub ReNewSubscription {
 
         NewSuggestion({
             'suggestedby'   => $user,             
-	    'title'         => $subscription->{bibliotitle},
+            'title'         => $subscription->{bibliotitle},
             'author'        => $biblio->{author}, 
-	    'publishercode' => $biblio->{publishercode},
+            'publishercode' => $biblio->{publishercode},
             'note'          => $biblio->{note}, 
             'biblionumber'  => $subscription->{biblionumber}
         });
@@ -1504,9 +1492,8 @@ sub ReNewSubscription {
         WHERE  subscriptionid=?
     |;
     $sth = $dbh->prepare($query);
-    $sth->execute( $startdate,
-        $numberlength, $weeklength, $monthlength, $subscriptionid );
-        
+    $sth->execute( $startdate, $numberlength, $weeklength, $monthlength, $subscriptionid );
+
     logaction("SERIAL", "RENEW", $subscriptionid, "") if C4::Context->preference("SubscriptionLog");
 }
 
@@ -1613,11 +1600,9 @@ sub ItemizeSerials {
             }
         }
         if ( $bibitemno == 0 ) {
-
-    # warn "need to add new biblioitem so copy last one and make minor changes";
             my $sth =
               $dbh->prepare(
-"SELECT * FROM biblioitems WHERE biblionumber = ? ORDER BY biblioitemnumber DESC"
+                    "SELECT * FROM biblioitems WHERE biblionumber = ? ORDER BY biblioitemnumber DESC"
               );
             $sth->execute( $data->{'biblionumber'} );
             my $biblioitem = $sth->fetchrow_hashref;
@@ -1627,14 +1612,6 @@ sub ItemizeSerials {
               $data->{serialseq} . ' ('
               . format_date( $data->{'planneddate'} ) . ')';
             $biblioitem->{'dewey'} = $info->{itemcallnumber};
-
-            #FIXME  HDL : I don't understand why you need to call newbiblioitem, as the biblioitem should already be somewhere.
-            # so I comment it, we can speak of it when you want
-            # newbiblioitems has been removed from Biblio.pm, as it has a deprecated API now
-#             if ( $info->{barcode} )
-#             {    # only make biblioitem if we are going to make item also
-#                 $bibitemno = newbiblioitem($biblioitem);
-#             }
         }
     }
 
@@ -1688,7 +1665,6 @@ sub ItemizeSerials {
                   GetMarcFromKohaField( "items.itemcallnumber",
                     $fwk );
 
-                #warn "items.itemcallnumber : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
                     $marcrecord->field($tag)
                       ->add_subfields( "$subfield" => $info->{itemcallnumber} );
@@ -1704,7 +1680,6 @@ sub ItemizeSerials {
                 my ( $tag, $subfield ) =
                   GetMarcFromKohaField( "items.itemnotes", $fwk );
 
-                # warn "items.itemnotes : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
                     $marcrecord->field($tag)
                       ->add_subfields( "$subfield" => $info->{notes} );
@@ -1720,7 +1695,6 @@ sub ItemizeSerials {
                 my ( $tag, $subfield ) =
                   GetMarcFromKohaField( "items.location", $fwk );
 
-                # warn "items.location : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
                     $marcrecord->field($tag)
                       ->add_subfields( "$subfield" => $info->{location} );
@@ -1737,7 +1711,6 @@ sub ItemizeSerials {
                   GetMarcFromKohaField( "items.notforloan",
                     $fwk );
 
-                # warn "items.notforloan : $tag , $subfield";
                 if ( $marcrecord->field($tag) ) {
                     $marcrecord->field($tag)
                       ->add_subfields( "$subfield" => $info->{status} );
@@ -1793,23 +1766,23 @@ sub HasSubscriptionStrictlyExpired {
    
     # If the expiration date is set
     if ($expirationdate != 0) {
-	my ($endyear, $endmonth, $endday) = split('-', $expirationdate);
+        my ($endyear, $endmonth, $endday) = split('-', $expirationdate);
 
-	# Getting today's date
-	my ($nowyear, $nowmonth, $nowday) = Today();
+        # Getting today's date
+        my ($nowyear, $nowmonth, $nowday) = Today();
 
-	# if today's date > expiration date, then the subscription has stricly expired
-	if (Delta_Days($nowyear, $nowmonth, $nowday,
-			 $endyear, $endmonth, $endday) < 0) {
-	    return 1;	
-	} else {
-	    return 0;
-	}
+        # if today's date > expiration date, then the subscription has stricly expired
+        if (Delta_Days($nowyear, $nowmonth, $nowday,
+                $endyear, $endmonth, $endday) < 0) {
+            return 1;
+        } else {
+            return 0;
+        }
     } else {
-	# There are some cases where the expiration date is not set
-	# As we can't determine if the subscription has expired on a date-basis,
-	# we return -1;
-	return -1;
+        # There are some cases where the expiration date is not set
+        # As we can't determine if the subscription has expired on a date-basis,
+        # we return -1;
+        return -1;
     }
 }
 
@@ -1844,7 +1817,7 @@ sub HasSubscriptionExpired {
       my $sth = $dbh->prepare($query);
       $sth->execute($subscriptionid);
       my ($res) = $sth->fetchrow  ;
-	  return 0 unless $res;
+      return 0 unless $res;
       my @res=split (/-/,$res);
       my @endofsubscriptiondate=split(/-/,$expirationdate);
       return 2 if (scalar(@res)!=3 || scalar(@endofsubscriptiondate)!=3||not check_date(@res) || not check_date(@endofsubscriptiondate));
@@ -1855,10 +1828,10 @@ sub HasSubscriptionExpired {
     } else {
       if ($subscription->{'numberlength'}){
         my $countreceived=countissuesfrom($subscriptionid,$subscription->{'startdate'});
-      	return 1 if ($countreceived >$subscription->{'numberlength'});
-	      return 0;
+        return 1 if ($countreceived >$subscription->{'numberlength'});
+        return 0;
       } else {
-	      return 0;
+        return 0;
       }
     }
     return 0;	# Notice that you'll never get here.
@@ -1993,51 +1966,35 @@ sub GetLateOrMissingIssues {
     }
     if ($supplierid) {
         $sth = $dbh->prepare(
-"SELECT
-   serialid,
-   aqbooksellerid,
-   name,
-   biblio.title,
-   planneddate,
-   serialseq,
-   serial.status,
-   serial.subscriptionid,
-   claimdate
-FROM      serial 
-LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid 
-LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
-LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-WHERE subscription.subscriptionid = serial.subscriptionid 
-AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
-AND subscription.aqbooksellerid=$supplierid
-$byserial
-ORDER BY $order"
+            "SELECT
+                serialid,      aqbooksellerid,        name,
+                biblio.title,  planneddate,           serialseq,
+                serial.status, serial.subscriptionid, claimdate
+            FROM      serial 
+                LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid 
+                LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
+                LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+                WHERE subscription.subscriptionid = serial.subscriptionid 
+                AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
+                AND subscription.aqbooksellerid=$supplierid
+                $byserial
+                ORDER BY $order"
         );
     }
     else {
         $sth = $dbh->prepare(
-"SELECT 
-   serialid,
-   aqbooksellerid,
-   name,
-   biblio.title,
-   planneddate,
-   serialseq,
-   serial.status,
-   serial.subscriptionid,
-   claimdate
-FROM serial 
-LEFT JOIN subscription 
-ON serial.subscriptionid=subscription.subscriptionid 
-LEFT JOIN biblio 
-ON subscription.biblionumber=biblio.biblionumber
-LEFT JOIN aqbooksellers 
-ON subscription.aqbooksellerid = aqbooksellers.id
-WHERE 
-   subscription.subscriptionid = serial.subscriptionid 
-AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
-$byserial
-ORDER BY $order"
+            "SELECT 
+            serialid,      aqbooksellerid,         name,
+            biblio.title,  planneddate,           serialseq,
+            serial.status, serial.subscriptionid, claimdate
+            FROM serial 
+                LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid 
+                LEFT JOIN biblio ON subscription.biblionumber=biblio.biblionumber
+                LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
+                WHERE subscription.subscriptionid = serial.subscriptionid 
+                        AND (serial.STATUS = 4 OR ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3 OR serial.STATUS = 7))
+                $byserial
+                ORDER BY $order"
         );
     }
     $sth->execute;
@@ -2094,8 +2051,8 @@ sub removeMissingIssue {
         $missinglist =~ s/\|$//g;
         my $sth2 = $dbh->prepare(
             "UPDATE subscriptionhistory
-                                       SET missinglist = ?
-                                       WHERE subscriptionid = ?"
+                    SET missinglist = ?
+                    WHERE subscriptionid = ?"
         );
         $sth2->execute( $missinglist, $subscriptionid );
     }
@@ -2120,8 +2077,8 @@ sub updateClaim {
     my $dbh        = C4::Context->dbh;
     my $sth        = $dbh->prepare(
         "UPDATE serial SET claimdate = now()
-                                   WHERE serialid = ?
-                                   "
+                WHERE serialid = ?
+        "
     );
     $sth->execute($serialid);
 }
@@ -2147,9 +2104,9 @@ sub getsupplierbyserialid {
     my $sth        = $dbh->prepare(
         "SELECT serialid, serial.subscriptionid, aqbooksellerid
          FROM serial 
-         LEFT JOIN subscription ON serial.subscriptionid = subscription.subscriptionid
-         WHERE serialid = ?
-                                   "
+            LEFT JOIN subscription ON serial.subscriptionid = subscription.subscriptionid
+            WHERE serialid = ?
+        "
     );
     $sth->execute($serialid);
     my $line   = $sth->fetchrow_hashref;
@@ -2174,7 +2131,7 @@ sub check_routing {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare(
-"SELECT count(routingid) routingids FROM subscription LEFT JOIN subscriptionroutinglist 
+                            "SELECT count(routingid) routingids FROM subscription LEFT JOIN subscriptionroutinglist 
                               ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
                               WHERE subscription.subscriptionid = ? ORDER BY ranking ASC
                               "
@@ -2205,7 +2162,7 @@ sub addroutingmember {
     my $dbh = C4::Context->dbh;
     my $sth =
       $dbh->prepare(
-"SELECT max(ranking) rank FROM subscriptionroutinglist WHERE subscriptionid = ?"
+            "SELECT max(ranking) rank FROM subscriptionroutinglist WHERE subscriptionid = ?"
       );
     $sth->execute($subscriptionid);
     while ( my $line = $sth->fetchrow_hashref ) {
@@ -2218,7 +2175,7 @@ sub addroutingmember {
     }
     $sth =
       $dbh->prepare(
-"INSERT INTO subscriptionroutinglist (subscriptionid,borrowernumber,ranking) VALUES (?,?,?)"
+                "INSERT INTO subscriptionroutinglist (subscriptionid,borrowernumber,ranking) VALUES (?,?,?)"
       );
     $sth->execute( $subscriptionid, $borrowernumber, $rank );
 }
@@ -2246,7 +2203,7 @@ sub reorder_members {
     my $dbh = C4::Context->dbh;
     my $sth =
       $dbh->prepare(
-"SELECT * FROM subscriptionroutinglist WHERE subscriptionid = ? ORDER BY ranking ASC"
+            "SELECT * FROM subscriptionroutinglist WHERE subscriptionid = ? ORDER BY ranking ASC"
       );
     $sth->execute($subscriptionid);
     my @result;
@@ -2336,11 +2293,10 @@ sub getroutinglist {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $sth              = $dbh->prepare(
-        "SELECT routingid, borrowernumber,
-                              ranking, biblionumber 
-         FROM subscription 
-         LEFT JOIN subscriptionroutinglist ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
-         WHERE subscription.subscriptionid = ? ORDER BY ranking ASC
+        "SELECT routingid, borrowernumber, ranking, biblionumber 
+            FROM subscription 
+            LEFT JOIN subscriptionroutinglist ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
+            WHERE subscription.subscriptionid = ? ORDER BY ranking ASC
                               "
     );
     $sth->execute($subscriptionid);
@@ -2431,7 +2387,6 @@ sub abouttoexpire {
           "select max(planneddate) from serial where subscriptionid=?");
       $sth->execute($subscriptionid);
       my ($res) = $sth->fetchrow ;
-#        warn "date expiration : ".$expirationdate." date courante ".$res;
       my @res=split (/-/,$res);
       @res=Date::Calc::Today if ($res[0]*$res[1]==0);
       my @endofsubscriptiondate=split(/-/,$expirationdate);
@@ -2623,7 +2578,6 @@ sub GetNextDate(@) {
     }  
     my $resultdate=sprintf("%04d-%02d-%02d",$resultdate[0],$resultdate[1],$resultdate[2]);
       
-#     warn "dateNEXTSEQ : ".$resultdate;
     return "$resultdate";
 }
 
