@@ -2793,7 +2793,7 @@ SEARCHHIST
 	print "Upgrade done (added OPAC search history preference and table)\n";
 }
 
-$DBversion = "3.01.00.070";
+$DBversion = "3.01.00.071";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE authorised_values ADD COLUMN `lib_opac` VARCHAR(80) default NULL AFTER `lib`");
 	print "Upgrade done (Added a lib_opac field in authorised_values table)\n";
