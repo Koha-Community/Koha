@@ -2467,55 +2467,41 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added FilterBeforeOverdueReport syspref and new index on authorised_values)\n";
 }
 
-$DBversion = '3.01.00.038';
+$DBversion = "3.01.00.038";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_1');
-    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_2');
+    # update branches table
+    # 
+    $dbh->do("ALTER TABLE branches ADD `branchzip` varchar(25) default NULL AFTER `branchaddress3`");
+    $dbh->do("ALTER TABLE branches ADD `branchcity` mediumtext AFTER `branchzip`");
+    $dbh->do("ALTER TABLE branches ADD `branchcountry` text AFTER `branchcity`");
+    $dbh->do("ALTER TABLE branches ADD `branchurl` mediumtext AFTER `branchemail`");
+    $dbh->do("ALTER TABLE branches ADD `branchnotes` mediumtext AFTER `branchprinter`");
+    print "Upgrade to $DBversion done (add ZIP, city, country, URL, and notes column to branches)\n";
     SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (deleting contraints in issuingrules)\n";
 }
 
 $DBversion = '3.01.00.039';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do('ALTER TABLE issuingrules ADD COLUMN `renewalsallowed` smallint(6) NOT NULL default "0" AFTER `issuelength`;');
-    $sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
-    $sth->execute();
-
-    my $sthupd = $dbh->prepare("UPDATE issuingrules SET renewalsallowed = ? WHERE itemtype = ?");
-    
-    while(my $row = $sth->fetchrow_hashref){
-        $sthupd->execute($row->{renewalsallowed}, $row->{itemtype});
-    }
-    
-    $dbh->do('ALTER TABLE itemtypes DROP COLUMN `renewalsallowed`;');
-    
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('SpineLabelFormat', '<itemcallnumber><copynumber>', '30|10', 'This preference defines the format for the quick spine label printer. Just list the fields you would like to see in the order you would like to see them, surrounded by <>, for example <itemcallnumber>.', 'Textarea')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,options,explanation,type)VALUES('SpineLabelAutoPrint', '0', '', 'If this setting is turned on, a print dialog will automatically pop up for the quick spine label printer.', 'YesNo')");
     SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (Moving allowed renewals from itemtypes to issuingrule)\n";
+    print "Upgrade to $DBversion done (added SpineLabelFormat and SpineLabelAutoPrint sysprefs)\n";
 }
 
 $DBversion = '3.01.00.040';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do('ALTER TABLE issuingrules ADD COLUMN `reservesallowed` smallint(6) NOT NULL default "0" AFTER `renewalsallowed`;');
-    
-    my $maxreserves = C4::Context->preference('maxreserves');
-    $sth = $dbh->prepare('UPDATE issuingrules SET reservesallowed = ?;');
-    $sth->execute($maxreserves);
-    
-    $dbh->do('DELETE FROM systempreferences WHERE variable = "maxreserves";');
-
-    $dbh->do("INSERT INTO systempreferences (variable,value, options, explanation, type) VALUES('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice')");
-    
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('AllowHoldDateInFuture','0','If set a date field is displayed on the Hold screen of the Staff Interface, allowing the hold date to be set in the future.','','YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('OPACAllowHoldDateInFuture','0','If set, along with the AllowHoldDateInFuture system preference, OPAC users can set the date of a hold to be in the future.','','YesNo')");
     SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (Moving max allowed reserves from system preference to issuingrule)\n";
+    print "Upgrade to $DBversion done (AllowHoldDateInFuture and OPACAllowHoldDateInFuture sysprefs)\n";
 }
 
-$DBversion = "3.01.00.041";
+$DBversion = '3.01.00.041';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchmod', 'Perform batch modification of items')");
-    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchdel', 'Perform batch deletion of items')");
-    print "Upgrade to $DBversion done (added permissions for batch modification and deletion)\n";
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AWSPrivateKey','','See:  http://aws.amazon.com.  Note that this is required after 2009/08/15 in order to retrieve any enhanced content other than book covers from Amazon.','','free')");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (added AWSPrivateKey syspref - note that if you use enhanced content from Amazon, this should be set right away.)\n";
 }
-
 
 $DBversion = '3.01.00.042';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -2704,7 +2690,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (added csv export profiles)\n";
 }
 
-#$DBversion = "3.01.00.040";
 $DBversion = "3.01.00.063";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("
@@ -2720,6 +2705,129 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.064';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_1');
+    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_2');
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (deleting contraints in issuingrules)\n";
+}
+
+$DBversion = '3.01.00.065';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('ALTER TABLE issuingrules ADD COLUMN `renewalsallowed` smallint(6) NOT NULL default "0" AFTER `issuelength`;');
+    $sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
+    $sth->execute();
+
+    my $sthupd = $dbh->prepare("UPDATE issuingrules SET renewalsallowed = ? WHERE itemtype = ?");
+    
+    while(my $row = $sth->fetchrow_hashref){
+        $sthupd->execute($row->{renewalsallowed}, $row->{itemtype});
+    }
+    
+    $dbh->do('ALTER TABLE itemtypes DROP COLUMN `renewalsallowed`;');
+    
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (Moving allowed renewals from itemtypes to issuingrule)\n";
+}
+
+$DBversion = '3.01.00.066';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('ALTER TABLE issuingrules ADD COLUMN `reservesallowed` smallint(6) NOT NULL default "0" AFTER `renewalsallowed`;');
+    
+    my $maxreserves = C4::Context->preference('maxreserves');
+    $sth = $dbh->prepare('UPDATE issuingrules SET reservesallowed = ?;');
+    $sth->execute($maxreserves);
+    
+    $dbh->do('DELETE FROM systempreferences WHERE variable = "maxreserves";');
+
+    $dbh->do("INSERT INTO systempreferences (variable,value, options, explanation, type) VALUES('ReservesControlBranch','PatronLibrary','ItemHomeLibrary|PatronLibrary','Branch checked for members reservations rights','Choice')");
+    
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (Moving max allowed reserves from system preference to issuingrule)\n";
+}
+
+$DBversion = "3.01.00.067";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchmod', 'Perform batch modification of items')");
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchdel', 'Perform batch deletion of items')");
+    print "Upgrade to $DBversion done (added permissions for batch modification and deletion)\n";
+}
+
+$DBversion = "3.01.00.068";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("ALTER TABLE issuingrules ADD 
+			COLUMN `finedays` int(11) default NULL AFTER `fine`,
+			COLUMN `renewalsallowed` smallint(6) default NULL, 
+			COLUMN `reservesallowed` smallint(6) default NULL,
+			");
+	my $sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
+    $sth->execute();
+	my $sthupd = $dbh->prepare("UPDATE issuingrules SET renewalsallowed = ? WHERE itemtype = ?");
+	while(my $row = $sth->fetchrow_hashref){
+		  $sthupd->execute($row->{renewalsallowed}, $row->{itemtype});
+	}
+	$dbh->do('ALTER TABLE itemtypes DROP COLUMN `renewalsallowed`;');
+	print "Upgrade done (Adding finedays renewalsallowed, and reservesallowed fields in issuingrules table)\n";
+}
+
+$DBversion = "3.01.00.069";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(<<SUGGESTIONS);
+	ALTER table suggestions 
+		ADD budgetid INT(11),
+		ADD branchcode VARCHAR(10) default NULL,
+		ADD acceptedby INT(11) default NULL,
+		ADD acceptedon date default NULL,
+		ADD suggestedby INT(11) default NULL,
+		ADD suggestedon date default NULL,
+		ADD managedby INT(11) default NULL,
+		ADD managedon date default NULL,
+		ADD rejectedby INT(11) default NULL,
+		ADD rejectedon date default NULL,
+		ADD collectiontitle text default NULL,
+		ADD itemtype VARCHAR(30) default NULL,
+		ADD biblionumber INT(11) default NULL,
+		ADD sort1 VARCHAR(80) default NULL,
+		ADD sort2 VARCHAR(80) default NULL
+		;
+SUGGESTIONS
+	print "Add some fields to suggestions";
+}
+
+$DBversion = "3.01.00.070";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('EnableOpacSearchHistory', '1', '', 'Enable or disable opac search history', 'YesNo')");
+
+	my $create = <<SEARCHHIST;
+CREATE TABLE IF NOT EXISTS `search_history` (
+  `userid` int(11) NOT NULL,
+  `sessionid` varchar(32) NOT NULL,
+  `query_desc` varchar(255) NOT NULL,
+  `query_cgi` varchar(255) NOT NULL,
+  `total` int(11) NOT NULL,
+  `time` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  KEY `userid` (`userid`),
+  KEY `sessionid` (`sessionid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Opac search history results';
+SEARCHHIST
+	$dbh->do($create);
+
+	print "Upgrade done (added OPAC search history preference and table)\n";
+}
+
+$DBversion = "3.01.00.071";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("ALTER TABLE authorised_values ADD COLUMN `lib_opac` VARCHAR(80) default NULL AFTER `lib`");
+	print "Upgrade done (Added a lib_opac field in authorised_values table)\n";
+}
+
+$DBversion = "3.01.00.072";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("ALTER TABLE `subscription` ADD `enddate` date default NULL");
+	$dbh->do("ALTER TABLE subscriptionhistory CHANGE enddate histenddate DATE default NULL");
+	print "Upgrade to $DBversion done ( Adding enddate to subscription)\n";
+}
 
 =item
 
