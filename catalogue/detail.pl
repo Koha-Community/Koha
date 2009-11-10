@@ -36,6 +36,7 @@ use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 use C4::Search;		# enabled_staff_search_views
 use C4::VirtualShelves;
+use C4::XSLT;
 
 # use Smart::Comments;
 
@@ -56,6 +57,12 @@ my $fw = GetFrameworkCode($biblionumber);
 ## get notes and subjects from MARC record
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $record           = GetMarcBiblio($biblionumber);
+
+# XSLT processing of some stuff
+if (C4::Context->preference("XSLTDetailsDisplay") ) {
+    $template->param('XSLTDetailsDisplay' =>'1',
+        'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail','intranet') );
+}
 
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in

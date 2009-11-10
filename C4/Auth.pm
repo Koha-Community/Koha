@@ -330,6 +330,8 @@ sub get_template_and_user {
             'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
+            XSLTDetailsDisplay        => C4::Context->preference("XSLTDetailsDisplay"),
+            XSLTResultsDisplay        => C4::Context->preference("XSLTResultsDisplay"),
                  );
 
     if ( $in->{'type'} eq "intranet" ) {
@@ -352,11 +354,11 @@ sub get_template_and_user {
             intranetreadinghistory      => C4::Context->preference("intranetreadinghistory"),
             intranetstylesheet          => C4::Context->preference("intranetstylesheet"),
             intranetuserjs              => C4::Context->preference("intranetuserjs"),
-	    intranetbookbag  		=> C4::Context->preference("intranetbookbag"),
+            intranetbookbag             => C4::Context->preference("intranetbookbag"),
             noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
             suggestion                  => C4::Context->preference("suggestion"),
             virtualshelves              => C4::Context->preference("virtualshelves"),
-			StaffSerialIssueDisplayCount => C4::Context->preference("StaffSerialIssueDisplayCount"),
+            StaffSerialIssueDisplayCount => C4::Context->preference("StaffSerialIssueDisplayCount"),
             NoZebra                     => C4::Context->preference('NoZebra'),
         );
     }
@@ -408,8 +410,6 @@ sub get_template_and_user {
             RequestOnOpac             => C4::Context->preference("RequestOnOpac"),
             TemplateEncoding          => "". C4::Context->preference("TemplateEncoding"),
             'Version'                 => C4::Context->preference('Version'),
-            XSLTDetailsDisplay        => C4::Context->preference("XSLTDetailsDisplay"),
-            XSLTResultsDisplay        => C4::Context->preference("XSLTResultsDisplay"),
             hidelostitems             => C4::Context->preference("hidelostitems"),
             mylibraryfirst            => (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv) ? C4::Context->userenv->{'branch'} : '',
             opaclayoutstylesheet      => "" . C4::Context->preference("opaclayoutstylesheet"),
