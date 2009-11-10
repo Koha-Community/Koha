@@ -82,7 +82,7 @@ $criteria{'1'} = [
     'items.dateaccessioned|date'
 ];
 $criteria{'2'} =
-  [ 'items.itemnumber|textrange', 'items.biblionumber|textrange', 'items.barcode|textrange', 'items.holdingbranch', 'items.homebranch', 'items.onloan|daterange', 'items.ccode', 'items.itemcallnumber|textrange', 'items.itype', 'items.itemlost', 'items.location' ];
+  [ 'items.itemnumber|textrange', 'items.biblionumber|textrange', 'items.barcode|textrange', 'biblio.frameworkcode', 'items.holdingbranch', 'items.homebranch', 'biblio.datecreated|daterange', 'biblio.timestamp|daterange', 'items.onloan|daterange', 'items.ccode', 'items.itemcallnumber|textrange', 'items.itype', 'items.itemlost', 'items.location' ];
 $criteria{'3'} = ['borrowers.branchcode'];
 $criteria{'4'} = ['aqorders.datereceived|date'];
 $criteria{'5'} = ['borrowers.branchcode'];
@@ -335,7 +335,6 @@ sub get_criteria {
 		push @criteria_array, \%temp;
 	    }
 
-
 	    else {
 		my $query =
 		  "SELECT distinct($column) as availablevalues FROM $table";
@@ -344,6 +343,7 @@ sub get_criteria {
 		my @values;
 		while ( my $row = $sth->fetchrow_hashref() ) {
 		    push @values, $row;
+		    if ($row->{'availablevalues'} eq '') { $row->{'default'} = 1 };
 		}
 		$sth->finish();
 

@@ -205,7 +205,7 @@ elsif ( $phase eq 'Choose these criteria' ) {
         my $value = $input->param( $crit . "_value" );
 	
 	# If value is not defined, then it may be range values
-	if (!$value) {
+	if (!defined $value) {
 
 	    my $fromvalue = $input->param( "from_" . $crit . "_value" );
 	    my $tovalue   = $input->param( "to_"   . $crit . "_value" );
