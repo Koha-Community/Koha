@@ -2237,6 +2237,32 @@ sub CountIssues {
     return $countreceived;
 }
 
+=head2 HasItems
+
+=over 4
+
+$result = &HasItems($subscriptionid)
+
+
+=back
+
+=cut
+
+sub HasItems {
+    my ($subscriptionid) = @_;
+    my $dbh              = C4::Context->dbh;
+    my $query = qq|
+            SELECT COUNT(serialitems.itemnumber)
+            FROM   serial 
+			LEFT JOIN serialitems USING(serialid)
+            WHERE  subscriptionid=? AND serialitems.serialid NOT NULL
+        |;
+    my $sth=$dbh->prepare($query);
+    $sth->execute($subscriptionid);
+    my ($countitems)=$sth->fetchrow;
+    return $countitems;  
+}
+
 =head2 abouttoexpire
 
 =over 4

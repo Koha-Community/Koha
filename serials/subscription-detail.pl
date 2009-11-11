@@ -56,10 +56,12 @@ if ($op eq 'del') {
     # Asking for confirmation if the subscription has not strictly expired yet or if it has linked issues
     my $strictlyexpired = HasSubscriptionStrictlyExpired($subscriptionid);
     my $linkedissues = CountIssues($subscriptionid);
-    if ($strictlyexpired == 0 || $linkedissues > 0) {
+    my $countitems   = HasItems($subscriptionid);
+    if ($strictlyexpired == 0 || $linkedissues > 0 || $countitems>0) {
 		$template->param(NEEDSCONFIRMATION => 1);
 		if ($strictlyexpired == 0) { $template->param("NOTEXPIRED" => 1); }
 		if ($linkedissues     > 0) { $template->param("LINKEDISSUES" => 1); }
+		if ($countitems       > 0) { $template->param("LINKEDITEMS"  => 1); }
     } else {
 		$issueconfirmed = "1";
     }
