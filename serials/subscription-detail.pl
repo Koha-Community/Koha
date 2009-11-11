@@ -84,7 +84,7 @@ my ($user, $sessionID, $flags);
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?
 
 for my $date qw(startdate enddate firstacquidate histstartdate histenddate){
-    $$subs{$_}      = format_date($$subs{$_}) if $_ && $$subs{$_};
+    $$subs{$date}      = format_date($$subs{$date}) if $date && $$subs{$date};
 }
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
 
