@@ -623,37 +623,37 @@ sub GetSubscriptions {
     my @bind_params;
     my $sqlwhere;
     if ($biblionumber) {
-        $sqlwhere="   WHERE biblio.biblionumber=?";
-        push @bind_params,$biblionumber;
+        $sqlwhere = "   WHERE biblio.biblionumber=?";
+        push @bind_params, $biblionumber;
     }
-    if ($string){
-        my @sqlstrings;	
+    if ($string) {
+        my @sqlstrings;
         my @strings_to_search;
-        @strings_to_search=map {"%$_%"} split (/ /,$string);
-        foreach my $index qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes){
-                push @bind_params,@strings_to_search; 
-                my $tmpstring= "AND $index LIKE ? "x scalar(@strings_to_search);
-                $debug && warn "$tmpstring";
-                $tmpstring=~s/^AND //;
-                push @sqlstrings,$tmpstring;
+        @strings_to_search = map { "%$_%" } split( / /, $string );
+        foreach my $index qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes) {
+            push @bind_params, @strings_to_search;
+            my $tmpstring = "AND $index LIKE ? " x scalar(@strings_to_search);
+            $debug && warn "$tmpstring";
+            $tmpstring =~ s/^AND //;
+            push @sqlstrings, $tmpstring;
         }
-        $sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
+        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "(" . join( ") OR (", @sqlstrings ) . ")";
     }
-    if ($issn){
-        my @sqlstrings;	
+    if ($issn) {
+        my @sqlstrings;
         my @strings_to_search;
-        @strings_to_search=map {"%$_%"} split (/ /,$issn);
-        foreach my $index qw(biblioitems.issn subscription.callnumber){
-                push @bind_params,@strings_to_search; 
-                my $tmpstring= "OR $index LIKE ? "x scalar(@strings_to_search);
-                $debug && warn "$tmpstring";
-                $tmpstring=~s/^OR //;
-                push @sqlstrings,$tmpstring;
+        @strings_to_search = map { "%$_%" } split( / /, $issn );
+        foreach my $index qw(biblioitems.issn subscription.callnumber) {
+            push @bind_params, @strings_to_search;
+            my $tmpstring = "OR $index LIKE ? " x scalar(@strings_to_search);
+            $debug && warn "$tmpstring";
+            $tmpstring =~ s/^OR //;
+            push @sqlstrings, $tmpstring;
         }
-        $sqlwhere.= ($sqlwhere?" AND ":" WHERE ")."(".join(") OR (",@sqlstrings).")";
-    }    
-    $sql.="$sqlwhere ORDER BY title";
-    $debug and warn "GetSubscriptions query: $sql params : ", join (" ",@bind_params);
+        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "(" . join( ") OR (", @sqlstrings ) . ")";
+    }
+    $sql .= "$sqlwhere ORDER BY title";
+    $debug and warn "GetSubscriptions query: $sql params : ", join( " ", @bind_params );
     $sth = $dbh->prepare($sql);
     $sth->execute(@bind_params);
     my @results;
