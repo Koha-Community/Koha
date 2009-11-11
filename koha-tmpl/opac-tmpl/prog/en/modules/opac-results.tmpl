@@ -180,11 +180,13 @@ $(document).ready(function(){
     });
 <!-- TMPL_IF NAME="RequestOnOpac" -->
   <!-- TMPL_IF NAME="opacuserlogin" -->
+  <!-- TMPL_IF NAME="DisplayMultiPlaceHold" -->
     $("#placehold").html("<input class=\"submit\" type=\"submit\" value=\""+_("Place Hold")+"\"/>");
 	$("#placehold").find("input:submit").click(function(){
         holdMultiple();
 		return false;
 	});
+  <!-- /TMPL_IF -->
   <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
     $("#holdDetails").hide();
