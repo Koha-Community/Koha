@@ -89,7 +89,7 @@ if ($subscription->{'cannotedit'}){
 
 $template->param(
     startdate => format_date(
-             GetExpirationDate($subscriptionid)
+             $subscription->{enddate}
           || POSIX::strftime( "%Y-%m-%d", localtime )
     ),
     numberlength   => $subscription->{numberlength},
