@@ -999,10 +999,12 @@ sub BuildSummary{
   if ($summary and C4::Context->preference('marcflavour') eq 'UNIMARC') {
     my @fields = $record->fields();
     #             $reported_tag = '$9'.$result[$counter];
+	my @stringssummary;
     foreach my $field (@fields) {
       my $tag = $field->tag();
       my $tagvalue = $field->as_string();
-      $summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
+      my $localsummary= $summary;
+	  $localsummary =~ s/\[(.?.?.?.?)$tag\*(.*?)\]/$1$tagvalue$2\[$1$tag$2\]/g;
       if ($tag<10) {
         if ($tag eq '001') {
           $reported_tag.='$3'.$field->data();
@@ -1013,12 +1015,16 @@ sub BuildSummary{
           my $subfieldcode = $subf[$i][0];
           my $subfieldvalue = $subf[$i][1];
           my $tagsubf = $tag.$subfieldcode;
-          $summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+          $localsummary =~ s/\[(.?.?.?.?)$tagsubf(.*?)\]/$1$subfieldvalue$2\[$1$tagsubf$2\]/g;
         }
       }
+	  push @stringssummary, $localsummary if ($localsummary ne $summary);
     }
-    $summary =~ s/\[(.*?)]//g;
-    $summary =~ s/\n/<br>/g;
+	my $resultstring;
+	$resultstring = join(" -- ",@stringssummary);
+    $resultstring =~ s/\[(.*?)\]//g;
+    $resultstring =~ s/\n/<br>/g;
+	$summary      =  $resultstring;
   } else {
     my $heading; 
     my $authid; 
@@ -1035,7 +1041,6 @@ sub BuildSummary{
       # accepted form
       foreach my $field ($record->field('2..')) {
         $heading.= $field->subfield('a');
-                $authid=$field->subfield('3');
       }
       # rejected form(s)
       foreach my $field ($record->field('3..')) {
