@@ -816,19 +816,16 @@ sub GetISBDView {
               else {
                 my @subf = $field->subfields;
                 for my $i ( 0 .. $#subf ) {
-                my $valuecode   = $subf[$i][1];
-                my $subfieldcode  = $subf[$i][0];
-                my $subfieldvalue =
-                GetAuthorisedValueDesc( $tag, $subf[$i][0],
-                  $subf[$i][1], '', $tagslib );
-                my $tagsubf = $tag . $subfieldcode;
-    
-                $calculated =~ s/                  # replace all {{}} codes by the value code.
-                                  \{\{$tagsubf\}\} # catch the {{actualcode}}
-                                /
-                                  $valuecode     # replace by the value code
-                               /gx;
-    
+                    my $valuecode   = $subf[$i][1];
+                    my $subfieldcode  = $subf[$i][0];
+                    my $subfieldvalue =
+                    GetAuthorisedValueDesc( $tag, $subf[$i][0],
+                      $subf[$i][1], '', $tagslib );
+                    my $tagsubf = $tag . $subfieldcode;
+        
+                    $calculated =~ s/\{\{$tagsubf\}\}/$valuecode/gx;
+                    $calculated =~
+                        s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
                 }
     
                 # field builded, store the result
