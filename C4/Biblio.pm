@@ -1511,13 +1511,13 @@ sub GetMarcUrls {
 
     my @marcurls;
     for my $field ( $record->field('856') ) {
-        my $marcurl;
         my @notes;
         for my $note ( $field->subfield('z') ) {
             push @notes, { note => $note };
         }
         my @urls = $field->subfield('u');
         foreach my $url (@urls) {
+            my $marcurl;
             if ( $marcflavour eq 'MARC21' ) {
                 my $s3   = $field->subfield('3');
                 my $link = $field->subfield('y');
