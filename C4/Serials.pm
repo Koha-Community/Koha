@@ -1128,7 +1128,7 @@ sub ModSerialStatus {
             $missinglist .= "; $serialseq"
               if ( $status eq 4
                 and not index( "$missinglist", "$serialseq" ) >= 0 );
-            $missinglist .= "; not issued $serialseq"
+            $missinglist .= "; $serialseq"
               if ( $status eq 5
                 and index( "$missinglist", "$serialseq" ) >= 0 );
             $query = "UPDATE subscriptionhistory SET recievedlist=?, missinglist=? WHERE  subscriptionid=?";
