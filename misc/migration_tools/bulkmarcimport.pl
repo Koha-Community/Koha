@@ -314,7 +314,7 @@ RECORD: while (  ) {
             ## An authid is defined but no authority in database : add
                 eval { ( $authid ) = AddAuthority($record,$authid, $authtypecode) };
                 if ($@){
-                    warn "Problem with authority $authid Cannot Add";
+                    warn "Problem with authority $authid Cannot Add ".$@;
 					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ERROR"}) if ($logfile);
                 }
    				else{
@@ -325,7 +325,7 @@ RECORD: while (  ) {
             ## True insert in database
                 eval { ( $authid ) = AddAuthority($record,"", $authtypecode) };
                 if ($@){
-                    warn "Problem with authority $authid Cannot Add";
+                    warn "Problem with authority $authid Cannot Add".$@;
 					printlog({id=>$originalid||$id||$authid, op=>"insert",status=>"ERROR"}) if ($logfile);
                 }
    				else{
