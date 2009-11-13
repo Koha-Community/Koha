@@ -214,7 +214,7 @@ function CloneSubfield(index){
               <select name="status" size="1"  disabled="disabled">
             <!--TMPL_ELSE-->
               <!--TMPL_IF Name="serialsadditems"-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', <!--TMPL_VAR Name="serialid"-->)} else { HideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', '<!--TMPL_VAR Name="serialid"-->')} else { HideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
                <!--TMPL_ELSE -->
               <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" >
                <!--/TMPL_IF--> 
@@ -263,7 +263,7 @@ function CloneSubfield(index){
   <!--TMPL_IF Name="serialsadditems"-->
           <tr>
           <td colspan="5">
-      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->',  <!--TMPL_VAR Name="serialid"-->)">
+      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->',  '<!--TMPL_VAR Name="serialid"-->')">
              Click to add item</a>
         <fieldset class="rows" style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
@@ -313,7 +313,7 @@ function CloneSubfield(index){
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="hidden" name="itemcount" value="<!-- TMPL_VAR name="issuesatonce" -->" />
             <input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->" />
-            Supplemental Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', <!--TMPL_VAR Name="serialid"-->)} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" />
+            Supplemental Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', '<!--TMPL_VAR Name="serialid"-->')} else {HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" />
         </td>
         <td>
             <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
@@ -367,7 +367,7 @@ function CloneSubfield(index){
   <!--TMPL_IF Name="serialsadditems"-->
           <tr>
           <td colspan="5">
-      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', <!--TMPL_VAR Name="serialid"-->)">
+      <a id="label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', '<!--TMPL_VAR Name="serialid"-->')">
              Click to add item</a>
         <fieldset  class="rows" style="display:none;" id="items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->">
         <legend><a style="cursor: pointer;"  onclick="HideItems('items<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')">
