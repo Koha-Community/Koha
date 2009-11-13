@@ -1,6 +1,14 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Serials <!-- TMPL_VAR name="biblionumber" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+        $("#srlt").tablesorter(); 
+ }); 
+ //]]>
+</script>
 </head>
 <body> 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -63,7 +71,8 @@ Serials updated :
         <h3>Search for Serial Routing List</h3>
 <!-- /TMPL_IF -->
 
-    <table>
+    <table id="srlt">
+	<thead>
         <tr>
             <th>ISSN</th>
             <th>Title</th>
@@ -76,7 +85,8 @@ Serials updated :
             <!-- /TMPL_IF -->        
             <th colspan="2">&nbsp;</th>
         </tr>
-        
+	</thead>
+	<tbody> 
         <!-- TMPL_LOOP name="subscriptions" -->
         <!-- TMPL_UNLESS name="__odd__" -->
             <tr class="highlight">
@@ -122,6 +132,7 @@ Serials updated :
                 </td>
             </tr>
         <!-- /TMPL_LOOP -->
+	</tbody>
     </table>
     
         <!-- /TMPL_IF -->

@@ -6,6 +6,21 @@
 	vertical-align: top;
 }
 </style>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+ $(document).ready(function() {
+        $("#vendorst").tablesorter({
+	    headers: { 
+		3: { 
+		    sorter: false 
+		}
+	    } 
+	}); 
+ }); 
+ //]]>
+</script>
+
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -27,14 +42,16 @@
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="loop_suppliers" -->
     <div id="acqui_order_supplierlist">
-        <table>
+        <table id="vendorst">
+	<thead>
         <tr>
             <th>Order</th>
             <th>Order receive</th>
             <th>Vendor</th>
             <th>&nbsp;</th>
         </tr>
-        
+	</thead>
+	<tbody> 
         <!-- TMPL_LOOP name="loop_suppliers" -->
         <!-- TMPL_UNLESS name="__odd__" -->
             <tr class="highlight">
@@ -100,6 +117,7 @@
                 </td>
                 </tr>
             <!-- /TMPL_LOOP -->
+	    </tbody>
             </table>
         </div>
     <!-- /TMPL_IF -->
