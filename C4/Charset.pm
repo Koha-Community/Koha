@@ -257,7 +257,7 @@ sub SetMarcUnicodeFlag {
         my $string; 
 		my ($subflength,$encodingposition)=($marc_flavour=~/AUTH/?(21,9):(36,22));
 		$string=$marc_record->subfield( 100, "a" );
-        if (length($string)==$subflength) { 
+        if (defined $string && length($string)==$subflength) { 
 			$string = substr $string, 0,$subflength if (length($string)>$subflength);
         } 
         else { 
