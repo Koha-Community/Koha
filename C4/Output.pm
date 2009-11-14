@@ -139,6 +139,7 @@ sub themelanguage {
     my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
     # But, if there's a cookie set, obey it
     $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
+    
     # Fall back to English
     my @languages;
     if ($interface eq 'intranet') {
@@ -146,9 +147,23 @@ sub themelanguage {
     } else {
         @languages = split ",", C4::Context->preference("opaclanguages");
     }
-    $lang = accept_language( $http_accept_language,
+
+    # Ricardo Dias Marques
+    # 14-Nov-2009
+    # - If we have a language set in the Cookie, we'll accept it if it exists in the list of Translated Languages
+    # - If we don't have a language set in the Cookie, we'll try to use the one set in the browser (available
+    #      in $http_accept_language) if it also exists in the list of Translated Languages
+    if ($lang ne "")
+    {
+        $lang = accept_language( $lang,
+              getTranslatedLanguages($interface,'prog') );
+    }
+    else
+    {
+        $lang = accept_language( $http_accept_language,
               getTranslatedLanguages($interface,'prog') )
       if $http_accept_language;
+    }
 
     if (grep(/^$lang$/, @languages)){
         @languages=($lang,@languages);
