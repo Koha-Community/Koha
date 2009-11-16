@@ -29,6 +29,21 @@ $(document).ready(function(){
 			return false;
 		}
 	}
+
+    /**
+     * This function checks if the adequate number of records are checked for merging
+     */
+    function MergeItems() {
+	var checkboxes = $("input:checkbox:checked");
+        var nbCheckbox = checkboxes.length;
+	if (nbCheckbox != 2) {
+	    alert(_('Two records must be selected for merging.'));
+	} else {
+	    location.href='/cgi-bin/koha/cataloguing/merge.pl?biblionumber=' + checkboxes[0].value + '&amp;biblionumber=' + checkboxes[1].value;
+	}
+	return false;
+    }
+
     /**
      * This function checks all checkboxes if all are empty,
      * or unchecks all if any already checked.
@@ -189,6 +204,7 @@ function placeHold () {
         <!-- TMPL_IF name="manageshelf" -->
             <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place Hold"/>
             <input type="submit" value="Remove selected Items" onclick='return confirm(_("Are you sure you want to remove these items from the shelf?"))' />
+            <input type="submit" value="Merge selected Items" onclick='return MergeItems();' />
         <!-- /TMPL_IF -->
  </fieldset>
 </form>
