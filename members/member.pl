@@ -30,6 +30,7 @@ use C4::Members;
 use C4::Branch;
 use C4::Category;
 use File::Basename;
+use YAML;
 
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');
@@ -81,15 +82,20 @@ if (C4::Context->preference("AddPatronLists")=~/code/){
 }  
 
 my $member=$input->param('member');
-my $orderby=$input->param('orderby');
-$orderby = "surname,firstname" unless $orderby;
+my $orderbyparams=$input->param('orderby');
+my @orderby;
+if ($orderbyparams){
+	my @orderbyelt=split(/,/,$orderbyparams);
+	push @orderby, {$orderbyelt[0]=>$orderbyelt[1]||0};
+}
+else {
+	@orderby = ({surname=>1},{firstname=>1});
+}
+warn Data::Dumper::Dumper(@orderby);
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
 my ($count,$results);
-
-$$patron{firstname}.="\%" if ($$patron{firstname});
-$$patron{surname}.="\%" if ($$patron{surname});
 
 my @searchpatron;
 push @searchpatron, $member if ($member);
@@ -97,7 +103,7 @@ push @searchpatron, $patron if (keys %$patron);
 my $from= ($startfrom-1)*$resultsperpage;
 my $to=$from+$resultsperpage;
  #($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
- ($results)=Search(\@searchpatron,{surname=>1,firstname=>1},undef,undef,["firstname","surname","email","othernames","cardnumber","userid"],"start_with"  ) if (@searchpatron);
+ ($results)=Search(\@searchpatron,\@orderby,undef,undef,["firstname","surname","email","othernames","cardnumber","userid"],"start_with"  ) if (@searchpatron);
 if ($results){
 	$count =scalar(@$results);
 }
@@ -134,7 +140,7 @@ if ($$patron{categorycode}){
 }
 my %parameters=
         (  %$patron
-		, 'orderby'			=> $orderby 
+		, 'orderby'			=> $orderbyparams 
 		, 'resultsperpage'	=> $resultsperpage 
         , 'type'=> 'intranet'); 
 my $base_url =

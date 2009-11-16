@@ -116,10 +116,13 @@ sub SearchInTable{
 	}
     if ($orderby){ 
 		#Order by desc by default
-        my @orders=map{ "$_".($$orderby{$_}? " DESC" : "") } keys %$orderby; 
-        $sql.= do { local $"=', '; 
-                qq{ ORDER BY @orders} 
-               }; 
+		my @orders;
+		foreach my $order (@$orderby){
+			push @orders,map{ "$_".($$order{$_}? " DESC " : "") } keys %$order; 
+		}
+		$sql.= do { local $"=', '; 
+				qq{ ORDER BY @orders} 
+        }; 
     } 
 	if ($limit){
 		$sql.=qq{ LIMIT }.join(",",@$limit);
@@ -417,25 +420,21 @@ sub _Process_Operands{
 	unless ($searchtype){
 		return \@tmpkeys,\@values;
 	}
-	if ($searchtype eq "contain"){
-			my $col_field=(index($field,".")>0?substr($field, index($field,".")+1):$field);
-			if ($field=~/(?<!zip)code|(?<!card)number/ ){
-				push @tmpkeys,(" $field= '' ","$field IS NULL");
-			} elsif ($$columns{$col_field}{Type}=~/varchar|text/i){
-				push @tmpkeys,(" $field LIKE ? ");
-				my @localvaluesextended=("\%$operand\%") ;
-				push @values,@localvaluesextended;
-			}
+	my $col_field=(index($field,".")>0?substr($field, index($field,".")+1):$field);
+	if ($field=~/(?<!zip)code|(?<!card)number/ && $searchtype ne "exact"){
+		push @tmpkeys,(" $field= '' ","$field IS NULL");
 	}
-	if ($searchtype eq "start_with"){
-			my $col_field=(index($field,".")>0?substr($field, index($field,".")+1):$field);
-			if ($field=~/(?<!zip)code|(?<!card)number/ ){
-				push @tmpkeys,(" $field= '' ","$field IS NULL");
-			} elsif ($$columns{$col_field}{Type}=~/varchar|text/i){
-				push @tmpkeys,(" $field LIKE ? ","$field LIKE ?");
-				my @localvaluesextended=("\% $operand\%","$operand\%") ;
-				push @values,@localvaluesextended;
-			}
+	if ($$columns{$col_field}{Type}=~/varchar|text/i){
+		my @localvaluesextended;
+		if ($searchtype eq "contain"){
+			push @tmpkeys,(" $field LIKE ? ");
+			push @localvaluesextended,("\%$operand\%") ;
+		}
+		if ($searchtype eq "start_with"){
+			push @tmpkeys,(" $field LIKE ? ","$field LIKE ?");
+			push @localvaluesextended, ("\% $operand\%","$operand\%") ;
+		}
+		push @values,@localvaluesextended;
 	}
 	push @localkeys,qq{ (}.join(" OR ",@tmpkeys).qq{) };
 	return (\@localkeys,\@values);

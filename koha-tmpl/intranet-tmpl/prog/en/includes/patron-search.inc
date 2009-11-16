@@ -48,13 +48,32 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<div id="patron_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-    <input id="searchmember" size="25" class="focus" name="member" type="text" />
+    <input id="searchmember" size="25" class="focus" name="member" type="text" value="<!--TMPL_VAR Name="member"-->"/>
+	<!--TMPL_IF Name="branchloop"-->
+	<span class="filteraction" id="filteraction_off"> <a href="#" onClick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
+	<span class="filteraction" id="filteraction_on"> <a href="#" onClick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
+	<!--/TMPL_IF -->
     order by:
     <select name="orderby" id="searchorderby">
-    <option value="surname,firstname">Surname</option>
-    <option value="cardnumber">Cardnumber</option>
+    <option value="surname,1">Surname</option>
+    <option value="cardnumber,1">Cardnumber</option>
     </select>
     <input value="Search" class="submit" type="submit" />
+	<!--TMPL_IF Name="branchloop"-->
+	<div id="filters"> <label for="branchcode"> Library :</label><select name="branchcode" id="branchcode">
+        <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
+        <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
+      <!-- /TMPL_LOOP --></select><br />
+                 <label for="categorycode"> categorycode :</label><select name="categorycode" id="categorycode">
+        <option value="">Any</option><!-- TMPL_LOOP name="categoryloop" -->
+        <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="categorycode" -->" selected="selected"><!-- TMPL_VAR name="description" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="description" --></option><!-- /TMPL_IF -->
+      <!-- /TMPL_LOOP --></select>
+	</div>
+	<!--/TMPL_IF -->
 </form>
 	</div>
 	<!-- TMPL_IF NAME="CAN_user_circulate" -->
@@ -93,4 +112,11 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
 			</ul>	
 </div>
+<script type="text/javascript">//<![CDATA[
+$(document).ready(function() {
+	$("#filters").toggle(); 
+	$("#filteraction_off").toggle(); 
+}); 
+//]]>
+</script>
 <!-- End Patrons Resident Search Box -->
