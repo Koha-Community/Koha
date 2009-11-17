@@ -360,6 +360,12 @@ my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM auth
 my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
+# Getting the fields where the item location is
+my ($location_field, $location_subfield) = GetMarcFromKohaField('items.location', $frameworkcode);
+
+# Getting the name of the authorised values' category for item location
+my $item_location_category = $tagslib->{$location_field}->{$location_subfield}->{'authorised_value'};
+
 foreach my $tag (sort keys %{$tagslib}) {
 # loop through each subfield
   foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
@@ -458,7 +464,12 @@ foreach my $tag (sort keys %{$tagslib}) {
           $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
           while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
               push @authorised_values, $value;
-              $authorised_lib{$value} = $lib;
+	      
+	      if ($tagslib->{$tag}->{$subfield}->{authorised_value} eq $item_location_category) {
+		  $authorised_lib{$value} = $value . " - " . $lib;
+	      } else {
+		  $authorised_lib{$value} = $lib;
+	      }
           }
       }
       $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
