@@ -3277,7 +3277,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	ALTER TABLE aqbasketgroups ADD billingplace VARCHAR(10) NOT NULL AFTER deliverycomment;
 	});
 	
-    print "Upgrade to $DBversion done (isbd updated)\n";
+    print "Upgrade to $DBversion done (Adding billingplace to aqbasketgroups)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.128";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE auth_subfield_structure MODIFY frameworkcode VARCHAR(10) NULL;
+	});
+	
+    print "Upgrade to $DBversion done (changing frameworkcode length in auth_subfield_structure)\n";
     SetVersion ($DBversion);
 }
 
