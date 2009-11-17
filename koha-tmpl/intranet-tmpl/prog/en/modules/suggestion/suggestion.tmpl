@@ -111,24 +111,18 @@ $(document).ready(function() {
             <tbody>
             <tr>
                 <td>Suggestion creation </td>
-                <td><input type="text" id="createdon" name="createdon" size="10" maxlentgh="10" value="<!--TMPL_VAR Name="createdon"-->"/></td>
-                <td><input type="hidden" id="suggestedby" name="suggestedby" value="<!--TMPL_VAR Name="suggestedby"-->"/>
-                    <!-- TMPL_IF NAME="guarantorid" -->
-                        <input id="guarantorsearch" type="button" value="Change" onclick="Dopopguarantor('guarantor_search.pl');" />
-                    <!-- TMPL_ELSE -->
-                        <input id="guarantorsearch" type="button" value="Set to Patron" onclick="Dopopguarantor('guarantor_search.pl');" />
-                    <!-- /TMPL_IF -->
-                    <input id="guarantordelete" type="button" value="Delete" /><!--TMPL_VAR Name="suggestedbyinformation"-->
+                <td><input type="text" id="suggesteddate" name="suggesteddate" size="10" maxlentgh="10" value="<!--TMPL_VAR Name="suggesteddate"-->"/></td>
+                <td><input type="hidden" id="suggestedby" name="suggestedby" value="<!--TMPL_VAR Name="suggestedby"-->"/><!--TMPL_VAR Name="suggestedbyinformation"-->
                 </td>
             </tr>
             <tr>
                 <td>Suggestion management </td>
-                <td><input type="text" id="managedon" name="managedon" size="10" maxlength="10" value="<!--TMPL_VAR Name="managedon"-->" /></td>
+                <td><input type="text" id="managedon" name="manageddate" size="10" maxlength="10" value="<!--TMPL_VAR Name="manageddate"-->" /></td>
                 <td><input type="hidden" id="managedby" name="managedby" value="<!--TMPL_VAR Name="managedby"-->"/><!--TMPL_VAR Name="managedbyinformation"--></td>
             </tr>
             <tr>
                 <td>Suggestion Accepted </td>
-                <td><input type="text" id="acceptedon" name="acceptedon" size="10" maxlength="10" value="<!--TMPL_VAR Name="acceptedon"-->" /></td>
+                <td><input type="text" id="accepteddate" name="accepteddate" size="10" maxlength="10" value="<!--TMPL_VAR Name="accepteddate"-->" /></td>
                 <td><input type="hidden" id="acceptedby" name="acceptedby" value="<!--TMPL_VAR Name="acceptedby"-->"/><!--TMPL_VAR Name="acceptedbyinformation"--></td>
             </tr>
             </tbody>
@@ -180,7 +174,7 @@ $(document).ready(function() {
                     <select name="suggestedby"><option value="">Any</option>
                         <!-- TMPL_LOOP name="suggestedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                     </select>
-                    <label for="suggestedon"> suggested on :</label>
+                    <label for="suggesteddate"> suggested on :</label>
                     <br/>
                     <label for="managedby"> management user :</label>
                     <select name="suggestionmanagedby"><option value="">Any</option>
@@ -192,7 +186,7 @@ $(document).ready(function() {
                     <select name="suggestionacceptedby"><option value="">Any</option>
                         <!-- TMPL_LOOP name="suggestionacceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                     </select>
-                    <label for="acceptedon"> Accepted on:</label>
+                    <label for="accepteddate"> Accepted on:</label>
                 </fieldset>
                 <fieldset ><legend> Acquistion information :</legend>
                     <label for="bookfundid"> BookFund :</label>

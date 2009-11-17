@@ -31,19 +31,19 @@ use C4::Debug;
 
 sub Init{
     my $suggestion= shift @_;
-    foreach my $date qw(createdon managedon){
+    foreach my $date qw(suggesteddate manageddate){
         $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
                                 $suggestion->{$date}=C4::Dates->today:
                                 format_date($suggestion->{$date}) 
                             );
-    }               
-    $suggestion->{'acceptedon'}=(($suggestion->{'acceptedon'} eq "0000-00-00" ||$suggestion->{'acceptedon'} eq "")?
+    }
+    $suggestion->{'accepteddate'}=(($suggestion->{'accepteddate'} eq "0000-00-00" ||$suggestion->{'accepteddate'} eq "")?
                                 "":
-                                format_date($suggestion->{'acceptedon'}) 
+                                format_date($suggestion->{'accepteddate'}) 
                             );
-    $suggestion->{'managedby'}=C4::Context->userenv->{"id"} unless ($suggestion->{'managedby'});
-    $suggestion->{'createdby'}=C4::Context->userenv->{"id"} unless ($suggestion->{'createdby'});
-    $suggestion->{'branchcode'}=C4::Context->userenv->{"branch"} unless ($suggestion->{'branchcode'});
+    $suggestion->{'managedby'}  =C4::Context->userenv->{"number"} unless ($suggestion->{'managedby'});
+    $suggestion->{'suggestedby'}=C4::Context->userenv->{"number"} unless ($suggestion->{'suggestedby'});
+    $suggestion->{'branchcode'} =C4::Context->userenv->{"branch"} unless ($suggestion->{'branchcode'});
 }
 
 sub GetCriteriumDesc{
@@ -161,7 +161,7 @@ if ($op=~/else/) {
     
         my $suggestions = &SearchSuggestion($suggestion_ref);
         foreach (@$suggestions){
-            foreach my $date qw(createdon managedon acceptedon){
+            foreach my $date qw(suggesteddate manageddate accepteddate){
                 if ($_->{$date} ne "0000-00-00" && $_->{$date} ne "" ){
                 $_->{$date}=format_date($_->{$date}) ;
                 } else {
@@ -187,7 +187,7 @@ if ($op=~/else/) {
     );
 }
 
-foreach my $element qw(managedby createdby suggestedby rejectedby){
+foreach my $element qw(managedby suggestedby){
     $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
         my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
