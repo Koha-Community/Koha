@@ -2771,31 +2771,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	print "Upgrade done (Adding finedays renewalsallowed, and reservesallowed fields in issuingrules table)\n";
 }
 
-$DBversion = "3.01.00.069";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do(<<SUGGESTIONS);
-	ALTER table suggestions 
-		ADD budgetid INT(11),
-		ADD branchcode VARCHAR(10) default NULL,
-		ADD acceptedby INT(11) default NULL,
-		ADD acceptedon date default NULL,
-		ADD suggestedby INT(11) default NULL,
-		ADD suggestedon date default NULL,
-		ADD managedby INT(11) default NULL,
-		ADD managedon date default NULL,
-		ADD rejectedby INT(11) default NULL,
-		ADD rejectedon date default NULL,
-		ADD collectiontitle text default NULL,
-		ADD itemtype VARCHAR(30) default NULL,
-		ADD biblionumber INT(11) default NULL,
-		ADD sort1 VARCHAR(80) default NULL,
-		ADD sort2 VARCHAR(80) default NULL
-		;
-SUGGESTIONS
-	print "Add some fields to suggestions";
-}
 
-$DBversion = "3.01.00.070";
+$DBversion = "3.01.00.069";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('EnableOpacSearchHistory', '1', '', 'Enable or disable opac search history', 'YesNo')");
 
@@ -2816,13 +2793,13 @@ SEARCHHIST
 	print "Upgrade done (added OPAC search history preference and table)\n";
 }
 
-$DBversion = "3.01.00.071";
+$DBversion = "3.01.00.070";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE authorised_values ADD COLUMN `lib_opac` VARCHAR(80) default NULL AFTER `lib`");
 	print "Upgrade done (Added a lib_opac field in authorised_values table)\n";
 }
 
-$DBversion = "3.01.00.072";
+$DBversion = "3.01.00.071";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE `subscription` ADD `enddate` date default NULL");
 	$dbh->do("ALTER TABLE subscriptionhistory CHANGE enddate histenddate DATE default NULL");
@@ -3140,24 +3117,18 @@ $DBversion = "3.01.00.114";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(<<SUGGESTIONS);
 ALTER table suggestions 
-	ADD budgetid INT(11),
-	ADD branchcode VARCHAR(10) default NULL,
-	ADD acceptedby INT(11) default NULL,
-	ADD acceptedon date default NULL,
-	ADD suggestedby INT(11) default NULL,
-	ADD suggestedon date default NULL,
-	ADD managedby INT(11) default NULL,
-	ADD managedon date default NULL,
-	ADD rejectedby INT(11) default NULL,
-	ADD rejectedon date default NULL,
-	ADD collectiontitle text default NULL,
-	ADD itemtype VARCHAR(30) default NULL,
-	ADD biblionumber INT(11) default NULL,
-	ADD sort1 VARCHAR(80) default NULL,
-	ADD sort2 VARCHAR(80) default NULL
-	;
+    ADD budgetid INT(11),
+    ADD branchcode VARCHAR(10) default NULL,
+    ADD acceptedby INT(11) default NULL,
+    ADD accepteddate date default NULL,
+    ADD suggesteddate date default NULL,
+    ADD manageddate date default NULL,
+    ADD rejectedby INT(11) default NULL,
+    ADD rejecteddate date default NULL,
+    ADD collectiontitle text default NULL,
+    ADD itemtype VARCHAR(30) default NULL,
+    ;
 SUGGESTIONS
-
     print "Upgrade to $DBversion done Suggestions";
     SetVersion ($DBversion);
 }
