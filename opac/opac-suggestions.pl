@@ -75,7 +75,7 @@ if ( $op eq "add_confirm" ) {
 		#some suggestion are answering the request Donot Add	
 	} 
 	else {
-		$$suggestion{'suggestioncreatedon'}=C4::Dates->today;
+		$$suggestion{'suggestioncreateddate'}=C4::Dates->today;
 		$$suggestion{'branchcode'}=C4::Context->userenv->{"branch"};
 		&NewSuggestion($suggestion);
 		# empty fields, to avoid filter in "SearchSuggestion"

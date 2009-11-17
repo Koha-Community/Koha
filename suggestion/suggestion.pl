@@ -35,15 +35,17 @@ sub Init{
         $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
                                 $suggestion->{$date}=C4::Dates->today:
                                 format_date($suggestion->{$date}) 
-                            );
-    }
-    $suggestion->{'accepteddate'}=(($suggestion->{'accepteddate'} eq "0000-00-00" ||$suggestion->{'accepteddate'} eq "")?
+                              );
+    }               
+    foreach my $date qw(rejecteddate accepteddate){
+    $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
                                 "":
-                                format_date($suggestion->{'accepteddate'}) 
-                            );
-    $suggestion->{'managedby'}  =C4::Context->userenv->{"number"} unless ($suggestion->{'managedby'});
-    $suggestion->{'suggestedby'}=C4::Context->userenv->{"number"} unless ($suggestion->{'suggestedby'});
-    $suggestion->{'branchcode'} =C4::Context->userenv->{"branch"} unless ($suggestion->{'branchcode'});
+                                format_date($suggestion->{$date}) 
+                              );
+	}
+    $suggestion->{'managedby'}=C4::Context->userenv->{"number"} unless ($suggestion->{'managedby'});
+    $suggestion->{'createdby'}=C4::Context->userenv->{"number"} unless ($suggestion->{'createdby'});
+    $suggestion->{'branchcode'}=C4::Context->userenv->{"branch"} unless ($suggestion->{'branchcode'});
 }
 
 sub GetCriteriumDesc{
@@ -119,6 +121,7 @@ elsif ($op=~/edit/) {
     $op ='save';
 }  
 elsif ($op eq "change" ) {
+<<<<<<< HEAD:suggestion/suggestion.pl
     if ($$suggestion_ref{"STATUS"}){
         my $tmpstatus=($$suggestion_ref{"STATUS"} eq "ACCEPTED"?"accepted":"managed");
         $$suggestion_ref{"$tmpstatus"."on"}=C4::Dates->today;
@@ -134,6 +137,26 @@ elsif ($op eq "change" ) {
     foreach (keys %$suggestion_ref){
         delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
     }
+=======
+	if ($$suggestion_ref{"STATUS"}){
+		if (my $tmpstatus=lc($$suggestion_ref{"STATUS"}) =~/ACCEPTED|REJECTED/i){
+			$$suggestion_ref{"$tmpstatus"."date"}=C4::Dates->today;
+			$$suggestion_ref{"$tmpstatus"."by"}=C4::Context->userenv->{number};
+		}
+		$$suggestion_ref{"manageddate"}=C4::Dates->today;
+		$$suggestion_ref{"managedby"}=C4::Context->userenv->{number};
+	}
+	if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
+		if ( $reason eq "other" ) {
+				$reason = $$suggestion_ref{"other_reason$tabcode"};
+		}
+		$$suggestion_ref{'reason'}=$reason;
+	}
+	delete $$suggestion_ref{$_} foreach ("reason$tabcode", "other_reason$tabcode");
+ 	foreach (keys %$suggestion_ref){
+		delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
+	}
+>>>>>>> Date management update Suggestions:suggestion/suggestion.pl
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
         $$suggestion_ref{'suggestionid'}=$suggestionid;

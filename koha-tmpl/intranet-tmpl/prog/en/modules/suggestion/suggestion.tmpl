@@ -95,7 +95,6 @@ $(document).ready(function() {
             </select>
         </li>
         <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40" value="<!--TMPL_VAR Name="note"-->"></textarea></li>
-        <li><label for="sort1">Sort1:</label><textarea name="sort1" id="sort1" rows="5" cols="40" value="<!--TMPL_VAR Name="sort1"-->"></textarea></li>
         </ol>
     </fieldset>
     <fieldset class="rows"> <legend>Suggestion management</legend><ol>
@@ -140,7 +139,7 @@ $(document).ready(function() {
                 <option value="">Any</option><!-- TMPL_LOOP name="budgetsloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="budget_id" -->" selected="selected"><!-- TMPL_VAR name="budget_name" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="budget_id" -->"><!-- TMPL_VAR name="budget_name" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
             </select>
-    </li>
+    	</li>
     </fieldset>
     <fieldset class="action"><input type="hidden" name="op" value="<!--TMPL_VAR Name="op"-->" /><!--TMPL_IF Name="suggestionid"--><input type="submit" value="Save" /><a class="action" href="suggestion.pl?suggestionid=<!--TMPL_VAR Name="suggestionid"-->">Cancel</a><!--TMPL_ELSE--><input type="submit" value="Submit Your Suggestion" /><a class="action" href="add.pl">Cancel</a><!--/TMPL_IF-->
     </fieldset>
@@ -165,28 +164,21 @@ $(document).ready(function() {
                     <label for="collectiontitle"> Collection Title :</label><input type="text" name="collectiontitle" value="<!-- TMPL_VAR name="collectiontitle"-->" />
                 </fieldset>
                 <fieldset><legend> Suggestion information: </legend>
-                    <label for="status"> status :</label>
-                    <select name="status"><option value="">Any</option>
-                        <!-- TMPL_LOOP name="status_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
-                    </select>
-                    <br/>
-                    <label for="suggestedby"> suggested By :</label>
-                    <select name="suggestedby"><option value="">Any</option>
-                        <!-- TMPL_LOOP name="suggestedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
-                    </select>
-                    <label for="suggesteddate"> suggested on :</label>
-                    <br/>
-                    <label for="managedby"> management user :</label>
-                    <select name="suggestionmanagedby"><option value="">Any</option>
-                        <!-- TMPL_LOOP name="suggestionmanagedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
-                    </select>
-                    <label for="managedon"> management date :</label>
-                    <br/>
-                    <label for="acceptedby"> Accepted by :</label>
-                    <select name="suggestionacceptedby"><option value="">Any</option>
-                        <!-- TMPL_LOOP name="suggestionacceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
-                    </select>
-                    <label for="accepteddate"> Accepted on:</label>
+                    <label for="status"> status :</label><select name="status"><option value="">Any</option>
+<!-- TMPL_LOOP name="status_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+                                                          </select><br/>
+                    <label for="suggestedby"> suggested By :</label><select name="suggestedby"><option value="">Any</option>
+<!-- TMPL_LOOP name="suggestedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+                                                                     </select>
+                    <label for="suggesteddate"> suggested on :</label><!--TMPL_VAR Name="suggesteddate"--><br/>
+                    <label for="managedby"> management user :</label><select name="suggestionmanagedby"><option value="">Any</option>
+<!-- TMPL_LOOP name="suggestionmanagedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+                                                                     </select>
+                    <label for="manageddate"> management date :</label><!--TMPL_VAR Name="manageddate"--><br/>
+                    <label for="acceptedby"> Accepted by :</label><select name="suggestionacceptedby"><option value="">Any</option>
+<!-- TMPL_LOOP name="suggestionacceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+		                                      </select>
+                    <label for="accepteddate"> Accepted on:</label><!--TMPL_VAR Name="accepteddate"-->
                 </fieldset>
                 <fieldset ><legend> Acquistion information :</legend>
                     <label for="bookfundid"> BookFund :</label>
@@ -254,15 +246,15 @@ $(document).ready(function() {
                     <br />
                     <!-- TMPL_IF name="copyrightdate" -->&copy; <!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="volumedesc" -->; Volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
-                        <!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="collectiontitle" -->;<!-- TMPL_VAR name="collectiontitle" --> <!-- /TMPL_IF --><!-- TMPL_IF name="itemtype" -->;<!-- TMPL_VAR name="itemtype" --> <!-- /TMPL_IF --><br /><!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF --><!-- TMPL_IF name="sort1" -->;<!-- TMPL_VAR name="sort1" --> <!-- /TMPL_IF -->
+                        <!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="collectiontitle" -->;<!-- TMPL_VAR name="collectiontitle" --> <!-- /TMPL_IF --><!-- TMPL_IF name="itemtype" -->;<!-- TMPL_VAR name="itemtype" --> <!-- /TMPL_IF --><br /><!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF -->
                 </td>
                 <td>
                     <!--TMPL_IF Name="emailsuggestedby"--><a href="mailto:<!-- TMPL_VAR name="emailsuggestedby" -->"><!--/TMPL_IF--><!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->, <!-- TMPL_VAR name="firstnamesuggestedby" --><!-- /TMPL_IF --> <!--TMPL_IF Name="emailsuggestedby"--></a><!--/TMPL_IF-->
-                    <!--TMPL_IF Name="createdon"--><br/><!-- TMPL_VAR name="createdon" --><!--/TMPL_IF-->
+                    <!--TMPL_IF Name="suggesteddate"--><br/><!-- TMPL_VAR name="suggesteddate" --><!--/TMPL_IF-->
                 </td>
                 <td>
                     <!--TMPL_IF Name="emailmanagedby"--><a href="mailto:<!-- TMPL_VAR name="emailmanagedby" -->"><!--/TMPL_IF--><!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->, <!-- TMPL_VAR name="firstnamemanagedby" --><!-- /TMPL_IF --> <!--TMPL_IF Name="emailmanagedby"--></a><!--/TMPL_IF-->
-                    <!--TMPL_IF Name="managedon"--><br/><!-- TMPL_VAR name="managedon" --><!--/TMPL_IF-->
+                    <!--TMPL_IF Name="manageddate"--><br/><!-- TMPL_VAR name="manageddate" --><!--/TMPL_IF-->
                 </td>
                 <td>
                     <!-- TMPL_VAR name="branchcode" -->

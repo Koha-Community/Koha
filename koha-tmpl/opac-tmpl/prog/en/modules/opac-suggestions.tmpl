@@ -73,7 +73,6 @@ $.tablesorter.addParser({
 			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="itemtype"-->" selected="selected"> <!--TMPL_ELSE--><option value="<!-- TMPL_VAR name="itemtype" -->"> <!--/TMPL_IF--> <!--TMPL_IF Name="imageurl"--><img alt="<!-- TMPL_VAR name="description" -->" src="<!--TMPL_VAR Name="imageurl"-->"><!--TMPL_ELSE--><!-- TMPL_VAR name="description" --><!--/TMPL_IF--></option>
         <!-- /TMPL_LOOP -->
         </select> </li>
-    <li><label for="sort1">Sort1:</label><input type="text" id="sort1" name="sort1" size="50" maxlength="80" /></li>
     <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40"></textarea></li>
     </ol></fieldset>
         <fieldset class="action"><input type="hidden" name="suggestedby" value="<!--TMPL_VAR Name="suggestedbyme"-->" /><input type="hidden" name="op" value="add_confirm" /><input type="submit" value="Submit Your Suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a></fieldset>
