@@ -35,12 +35,12 @@ sub Init{
         $suggestion->{$date}=(($suggestion->{$date} eq "0000-00-00" ||$suggestion->{$date} eq "")?
                                 $suggestion->{$date}=C4::Dates->today:
                                 format_date($suggestion->{$date}) 
-                              );
+                            );
     }               
     $suggestion->{'acceptedon'}=(($suggestion->{'acceptedon'} eq "0000-00-00" ||$suggestion->{'acceptedon'} eq "")?
                                 "":
                                 format_date($suggestion->{'acceptedon'}) 
-                              );
+                            );
     $suggestion->{'managedby'}=C4::Context->userenv->{"id"} unless ($suggestion->{'managedby'});
     $suggestion->{'createdby'}=C4::Context->userenv->{"id"} unless ($suggestion->{'createdby'});
     $suggestion->{'branchcode'}=C4::Context->userenv->{"branch"} unless ($suggestion->{'branchcode'});
@@ -53,7 +53,7 @@ sub GetCriteriumDesc{
     return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
     if ($displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
-		return "" unless $borr;
+        return "" unless $borr;
 #		warn '$borr : ',Data::Dumper::Dumper($borr);
         return $$borr{firstname}.", ".$$borr{surname};
     }  
@@ -73,7 +73,7 @@ my $tabcode    = $input->param('tabcode');
 my $suggestion_ref  = $input->Vars;
 delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
 foreach (keys %$suggestion_ref){
-	delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
+    delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
 }
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         {
@@ -89,18 +89,18 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 ##
 if ($op =~/save/i){
     if ($$suggestion_ref{'suggestionid'}>0){
-      &ModSuggestion($suggestion_ref);
+    &ModSuggestion($suggestion_ref);
     }  
     else {
         ###FIXME:Search here if suggestion already exists.
         my $suggestions_loop =
             SearchSuggestion( $suggestion_ref );
-	    if (@$suggestions_loop>=1){
-		    #some suggestion are answering the request Donot Add	
-	    } 
-	    else {    
-        	## Adding some informations related to suggestion
-        	&NewSuggestion($suggestion_ref);
+        if (@$suggestions_loop>=1){
+            #some suggestion are answering the request Donot Add	
+        } 
+        else {    
+            ## Adding some informations related to suggestion
+            &NewSuggestion($suggestion_ref);
         }
         # empty fields, to avoid filter in "SearchSuggestion"
     }  
@@ -119,24 +119,24 @@ elsif ($op=~/edit/) {
     $op ='save';
 }  
 elsif ($op eq "change" ) {
-	if ($$suggestion_ref{"STATUS"}){
-		my $tmpstatus=($$suggestion_ref{"STATUS"} eq "ACCEPTED"?"accepted":"managed");
-		$$suggestion_ref{"$tmpstatus"."on"}=C4::Dates->today;
-		$$suggestion_ref{"$tmpstatus"."by"}=C4::Context->userenv->{number};
-	}
-	if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
-		if ( $reason eq "other" ) {
-				$reason = $$suggestion_ref{"other_reason$tabcode"};
-		}
-		$$suggestion_ref{'reason'}=$reason;
-	}
-	delete $$suggestion_ref{$_} foreach ("reason$tabcode", "other_reason$tabcode");
- 	foreach (keys %$suggestion_ref){
-		delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
-	}
+    if ($$suggestion_ref{"STATUS"}){
+        my $tmpstatus=($$suggestion_ref{"STATUS"} eq "ACCEPTED"?"accepted":"managed");
+        $$suggestion_ref{"$tmpstatus"."on"}=C4::Dates->today;
+        $$suggestion_ref{"$tmpstatus"."by"}=C4::Context->userenv->{id};
+    }
+    if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
+        if ( $reason eq "other" ) {
+                $reason = $$suggestion_ref{"other_reason$tabcode"};
+        }
+        $$suggestion_ref{'reason'}=$reason;
+    }
+    delete $$suggestion_ref{$_} foreach ("reason$tabcode", "other_reason$tabcode");
+    foreach (keys %$suggestion_ref){
+        delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
+    }
     foreach my $suggestionid (@editsuggestions) {
-		next unless $suggestionid;
-		$$suggestion_ref{'suggestionid'}=$suggestionid;
+        next unless $suggestionid;
+        $$suggestion_ref{'suggestionid'}=$suggestionid;
         &ModSuggestion($suggestion_ref);
     }
     $op = 'else';
@@ -149,7 +149,7 @@ elsif ($op eq "change" ) {
 if ($op=~/else/) {
     $op='else';
     
-	$displayby||="STATUS";
+    $displayby||="STATUS";
     my $criteria_list=GetDistinctValues("suggestions.".$displayby);
     my @allsuggestions;
     foreach my $criteriumvalue (map{$$_{'value'}} @$criteria_list){
@@ -174,27 +174,27 @@ if ($op=~/else/) {
                             "suggestiontypelabel"=>GetCriteriumDesc($criteriumvalue,$displayby)||"",
                             "suggestionscount"=>scalar(@$suggestions),             
                             'suggestions_loop'=>$suggestions,
-							};
-		
+                            };
+
         delete $$suggestion_ref{$displayby} unless $definedvalue;
     }
     my $reasonsloop = GetAuthorisedValues("SUGGEST");
     $template->param(
-        "displayby"=> $displayby,        
-        "notabs"=> $displayby eq "",        
+        "displayby"=> $displayby,
+        "notabs"=> $displayby eq "",
         suggestions       => \@allsuggestions,
         reasonsloop       => $reasonsloop,
     );
 }
 
-foreach my $element qw<managedby createdby suggestedby rejectedby>{
-	warn $$suggestion_ref{$element};
-	if ($$suggestion_ref{$element}){
-		my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
-		my $presentation_string=$$member{firstname}." ".$$member{surname}." ".GetBranchName($$member{branchcode})." ".$$member{description}." ".$$member{category_type};
-		warn $presentation_string;
-		$template->param($element."information"=>$presentation_string);
-	}
+foreach my $element qw(managedby createdby suggestedby rejectedby){
+    $debug || warn $$suggestion_ref{$element};
+    if ($$suggestion_ref{$element}){
+        my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
+        my $presentation_string=$$member{firstname}." ".$$member{surname}." ".GetBranchName($$member{branchcode})." ".$$member{description}." ".$$member{category_type};
+        $debug || warn $presentation_string;
+        $template->param($element."information"=>$presentation_string);
+    }
 }
 $template->param(
     %$suggestion_ref,  
@@ -209,36 +209,36 @@ $template->param(
 
 #branch display management
 my $onlymine=C4::Context->preference('IndependantBranches') && 
-             C4::Context->userenv && 
-             C4::Context->userenv->{flags}!=1 && 
-             C4::Context->userenv->{branch};
+            C4::Context->userenv && 
+            C4::Context->userenv->{flags}!=1 && 
+            C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
 my @branchloop;
 
 foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$b}->{'branchname'}} keys %$branches ) {
-     my %row = (
+    my %row = (
         value      => $thisbranch,
         branchname => $branches->{$thisbranch}->{'branchname'},
         selected   => ($branches->{$thisbranch}->{'branchcode'} eq $branchfilter)
-                      ||($branches->{$thisbranch}->{'branchcode'} eq $$suggestion_ref{'branchcode'})    
+                    ||($branches->{$thisbranch}->{'branchcode'} eq $$suggestion_ref{'branchcode'})    
     );
     push @branchloop, \%row;
 }
 $branchfilter=C4::Context->userenv->{'branch'} if ($onlymine && !$branchfilter);
 
 $template->param( branchloop => \@branchloop,
-                  branchfilter => $branchfilter);
+                branchfilter => $branchfilter);
 
 # the index parameter is different for item-level itemtypes
 my $supportlist=GetSupportList();				
 foreach my $support(@$supportlist){
     $$support{'selected'}= $$support{'code'} eq $$suggestion_ref{'itemtype'};
-	if ($$support{'imageurl'}){
-		$$support{'imageurl'}= getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
-	}
-	else {
-	   delete $$support{'imageurl'}
-	}
+    if ($$support{'imageurl'}){
+        $$support{'imageurl'}= getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
+    }
+    else {
+    delete $$support{'imageurl'}
+    }
 }
 $template->param(itemtypeloop=>$supportlist);
 
@@ -247,7 +247,7 @@ my $searchbudgets={ budget_branchcode=>$branchfilter} if $branchfilter;
 my $budgets = GetBudgets($searchbudgets);
 
 foreach (@$budgets){
-	$_->{'selected'}=1 if ($$suggestion_ref{'budget_id'} && $_{'budget_id'} eq $$suggestion_ref{'budget_id'})
+    $_->{'selected'}=1 if ($$suggestion_ref{'budget_id'} && $_{'budget_id'} eq $$suggestion_ref{'budget_id'})
 };
 
 $template->param( budgetsloop => $budgets);
@@ -257,11 +257,11 @@ foreach my $field qw(managedby acceptedby suggestedby STATUS){
     my $values_list;
     $values_list=GetDistinctValues("suggestions.".$field) ;
     my @codes_list = map{
-						{ 'code'=>$$_{'value'},
-						  'desc'=>GetCriteriumDesc($$_{'value'},$field),
-						  'selected'=> $$_{'value'} eq $$suggestion_ref{$field}
-						}
-				      } @$values_list;
+                        { 'code'=>$$_{'value'},
+                        'desc'=>GetCriteriumDesc($$_{'value'},$field),
+                        'selected'=> $$_{'value'} eq $$suggestion_ref{$field}
+                        }
+                    } @$values_list;
     $hashlists{lc($field)."_loop"}=\@codes_list;
 }
 $template->param(%hashlists);
