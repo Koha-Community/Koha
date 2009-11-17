@@ -291,8 +291,8 @@ if ( $op eq "add" ) {
 
         # determine default billing and delivery places depending on librarian homebranch and existing basketgroup data
         my $borrower = GetMember( ( 'borrowernumber' => $loggedinuser ) );
-        my $billingplace  = $billingplace  || $borrower->{'branchcode'};
-        my $deliveryplace = $deliveryplace || $borrower->{'branchcode'};
+        $billingplace  = $billingplace  || $borrower->{'branchcode'};
+        $deliveryplace = $deliveryplace || $borrower->{'branchcode'};
         
         my $branches = GetBranches;
         
