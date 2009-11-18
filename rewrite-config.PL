@@ -137,6 +137,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__AUTH_INDEX_MODE__" => 'grs1',
   "__RUN_DATABASE_TESTS__" => 'no',
   "__PATH_TO_ZEBRA__" => "",
+  "__USE_MEMCACHED__" => 'no',
   "__MEMCACHED_SERVERS__" => "",
   "__MEMCACHED_NAMESPACE__" => "",
 );
