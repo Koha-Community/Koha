@@ -1195,6 +1195,7 @@ sub _get_value {
 
     # take value from install log if present
     if (exists $install_log_values{$key}) {
+        $install_log_values{$key} =~ s/\$/\$\$/g;
         return $install_log_values{$key};
     }
 
@@ -1214,6 +1215,7 @@ sub _get_value {
         $retry_msg .= _add_valid_values_disp($key, $valid_values);
         $val = prompt($retry_msg, $default);
     }
+    $val =~ s/\$/\$\$/g;
     return $val;
 }
 
