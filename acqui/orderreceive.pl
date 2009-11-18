@@ -81,7 +81,7 @@ my $datereceived = C4::Dates->new($input->param('datereceived'),'iso') || C4::Da
 my $catview      = $input->param('catview');
 my $gst          = $input->param('gst');
 
-my @results = SearchOrder( $search, $supplierid, $biblionumber, $catview );
+my @results = SearchOrder( $search, $supplierid, $biblionumber);
 my $count   = scalar @results;
 my $order 	= GetOrder($search);
 

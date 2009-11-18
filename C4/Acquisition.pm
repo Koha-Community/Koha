@@ -678,7 +678,7 @@ C<@results> is an array of references-to-hash with the following keys:
 =cut
 
 sub SearchOrder {
-    my ( $search, $id, $biblionumber, $catview ) = @_;
+    my ( $search, $id, $biblionumber ) = @_;
     my $dbh = C4::Context->dbh;
     my @data = split( ' ', $search );
     my @searchterms;
@@ -689,17 +689,20 @@ sub SearchOrder {
     push( @searchterms, $search, $search, $biblionumber );
     my $query;
   ### FIXME  THIS CAN raise a problem if more THAN ONE biblioitem is linked to one biblio  
-    if($id and $search){
-        @searchterms = ($id, $search);
-        $query =
-          "SELECT *,biblio.title
-             FROM aqorders
-             LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
-             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
-             LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
-             WHERE aqbasket.booksellerid = ? AND aqorders.ordernumber = ?
-          "
-    }elsif ($id) {  
+    if(not $id and $biblionumber and $search){
+        $query = "SELECT *,biblio.title 
+           FROM aqorders 
+           LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber 
+           LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber 
+           LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
+            WHERE ((datecancellationprinted is NULL)
+            OR (datecancellationprinted = '0000-00-00'))
+            AND aqorders.biblionumber = ?
+            AND aqorders.ordernumber = ? 
+            ";
+            @searchterms = ($biblionumber, $search);
+    }
+    elsif($id) {  
         $query =
           "SELECT *,biblio.title 
            FROM aqorders 
@@ -715,7 +718,6 @@ sub SearchOrder {
                 map { "(biblio.title like ? or biblio.title like ?)" } @data )
           )
           . ") OR biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
-
     }
     else {
         $query =
@@ -733,11 +735,6 @@ sub SearchOrder {
                 map { "(biblio.title like ? OR biblio.title like ?)" } @data )
           )
           . ") or biblioitems.isbn=? OR (aqorders.ordernumber=? AND aqorders.biblionumber=?)) ";
-    }
-    
-    if ( $biblionumber ) {
-        $query .= "AND biblio.biblionumber = ? ";
-        push (@searchterms, $biblionumber);
     }
     
     $query .= " GROUP BY aqorders.ordernumber";
