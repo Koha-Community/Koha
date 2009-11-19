@@ -121,23 +121,6 @@ elsif ($op=~/edit/) {
     $op ='save';
 }  
 elsif ($op eq "change" ) {
-<<<<<<< HEAD:suggestion/suggestion.pl
-    if ($$suggestion_ref{"STATUS"}){
-        my $tmpstatus=($$suggestion_ref{"STATUS"} eq "ACCEPTED"?"accepted":"managed");
-        $$suggestion_ref{"$tmpstatus"."on"}=C4::Dates->today;
-        $$suggestion_ref{"$tmpstatus"."by"}=C4::Context->userenv->{id};
-    }
-    if ( my $reason = $$suggestion_ref{"reason$tabcode"}){
-        if ( $reason eq "other" ) {
-                $reason = $$suggestion_ref{"other_reason$tabcode"};
-        }
-        $$suggestion_ref{'reason'}=$reason;
-    }
-    delete $$suggestion_ref{$_} foreach ("reason$tabcode", "other_reason$tabcode");
-    foreach (keys %$suggestion_ref){
-        delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
-    }
-=======
 	if ($$suggestion_ref{"STATUS"}){
 		if (my $tmpstatus=lc($$suggestion_ref{"STATUS"}) =~/ACCEPTED|REJECTED/i){
 			$$suggestion_ref{"$tmpstatus"."date"}=C4::Dates->today;
@@ -156,7 +139,6 @@ elsif ($op eq "change" ) {
  	foreach (keys %$suggestion_ref){
 		delete $$suggestion_ref{$_} unless ($$suggestion_ref{$_});
 	}
->>>>>>> Date management update Suggestions:suggestion/suggestion.pl
     foreach my $suggestionid (@editsuggestions) {
         next unless $suggestionid;
         $$suggestion_ref{'suggestionid'}=$suggestionid;
