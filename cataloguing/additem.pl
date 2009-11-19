@@ -355,7 +355,6 @@ foreach my $subfield_code (sort keys(%witness)) {
 # now, build the item form for entering a new item
 my @loop_data =();
 my $i=0;
-my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
 
 my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
@@ -461,15 +460,28 @@ foreach my $tag (sort keys %{$tagslib}) {
       }
       else {
           push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
+
+	  # Are we dealing with item location ?
+          my $item_location = ($tagslib->{$tag}->{$subfield}->{authorised_value} eq $item_location_category) ? 1 : 0;
+
+          # If so, we sort by authorised_value, else by libelle
+          my $orderby = $item_location ? 'authorised_value' : 'lib';
+
+          my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY $orderby");
+
+          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value});
+
+
           while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
-              push @authorised_values, $value;
-	      
-	      if ($tagslib->{$tag}->{$subfield}->{authorised_value} eq $item_location_category) {
-		  $authorised_lib{$value} = $value . " - " . $lib;
-	      } else {
-		  $authorised_lib{$value} = $lib;
-	      }
+            push @authorised_values, $value;
+	      	if ($tagslib->{$tag}->{$subfield}->{authorised_value} eq $item_location_category) {
+		  		$authorised_lib{$value} = $value . " - " . $lib;
+	      	} else {
+		  		$authorised_lib{$value} = $lib;
+	      	}
+
+	      	# For item location, we show the code and the libelle
+	      	$authorised_lib{$value} = ($item_location) ? $value . " - " . $lib : $lib;
           }
       }
       $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
