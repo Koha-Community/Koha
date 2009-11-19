@@ -1141,7 +1141,10 @@ sub ModReceiveOrder {
     $datereceived = C4::Dates->output('iso') unless $datereceived;
     my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblionumber );
     if ($suggestionid) {
-        ModStatus( $suggestionid, 'AVAILABLE', '', $biblionumber );
+        ModSuggestion( {suggestionid=>$suggestionid, 
+						STATUS=>'AVAILABLE', 
+						biblionumber=> $biblionumber} 
+						);
     }
 
     my $sth=$dbh->prepare("
