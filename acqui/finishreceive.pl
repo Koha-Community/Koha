@@ -115,7 +115,3 @@ if ($quantityrec > $origquantityrec ) {
 	}
 }
     print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
-<<<<<<< HEAD:acqui/finishreceive.pl
-=======
-# >>>>>>> finishreceive:acqui/finishreceive.pl
->>>>>>> 8a2ecbd... merge fix : recieving:acqui/finishreceive.pl
