@@ -1132,7 +1132,7 @@ Format results in a form suitable for passing to the template
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
 sub searchResults {
-    my ( $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults ) = @_;
+    my ( $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults, $hidelostitems ) = @_;
     my $dbh = C4::Context->dbh;
     my @newresults;
 
@@ -1313,6 +1313,7 @@ sub searchResults {
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
+            
 			my $hbranch     = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'homebranch'    : 'holdingbranch';
 			my $otherbranch = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'holdingbranch' : 'homebranch';
             # set item's branch name, use HomeOrHoldingBranch syspref first, fall back to the other one
@@ -1457,11 +1458,105 @@ sub searchResults {
         $oldbiblio->{damagedcount}         = $itemdamaged_count;
         $oldbiblio->{intransitcount}       = $item_in_transit_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
-        push( @newresults, $oldbiblio );
+        $oldbiblio->{isbn} =~
+          s/-//g;    # deleting - in isbn to enable amazon content
+        push( @newresults, $oldbiblio ) 
+            if(not $hidelostitems
+               or (($items_count > $itemlost_count ) 
+                    && $hidelostitems));
     }
+    
     return @newresults;
 }
 
+=head2 SearchAcquisitions
+    Search for acquisitions 
+=cut
+
+sub SearchAcquisitions{
+    my ($datebegin, $dateend, $itemtypes,$criteria, $orderby) = @_;
+    
+    my $dbh=C4::Context->dbh;
+    # Variable initialization
+    my $str=qq|
+    SELECT marcxml 
+    FROM biblio 
+    LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
+    LEFT JOIN items ON items.biblionumber=biblio.biblionumber
+    WHERE dateaccessioned BETWEEN ? AND ? 
+    |;
+    
+    my (@params,@loopcriteria);
+    
+    push @params, $datebegin->output("iso");
+    push @params, $dateend->output("iso");
+
+    if (scalar(@$itemtypes)>0 and $criteria ne "itemtype" ){
+        if(C4::Context->preference("item-level_itypes")){
+            $str .= "AND items.itype IN (?".( ',?' x scalar @$itemtypes - 1 ).") ";
+        }else{
+            $str .= "AND biblioitems.itemtype IN (?".( ',?' x scalar @$itemtypes - 1 ).") ";
+        }    
+        push @params, @$itemtypes;
+    }
+        
+    if ($criteria =~/itemtype/){
+        if(C4::Context->preference("item-level_itypes")){
+            $str .= "AND items.itype=? ";
+        }else{
+            $str .= "AND biblioitems.itemtype=? ";
+        }
+        
+        if(scalar(@$itemtypes) == 0){
+            my $itypes = GetItemTypes();
+            for my $key (keys %$itypes){
+                push @$itemtypes, $key;
+            }
+        }
+        
+        @loopcriteria= @$itemtypes;
+    }elsif ($criteria=~/itemcallnumber/){
+        $str .= "AND (items.itemcallnumber LIKE CONCAT(?,'%') 
+                 OR items.itemcallnumber is NULL
+                 OR items.itemcallnumber = '')";
+
+        @loopcriteria = ("AA".."ZZ", "") unless (scalar(@loopcriteria)>0);  
+    }else {
+        $str .= "AND biblio.title LIKE CONCAT(?,'%') ";
+        @loopcriteria = ("A".."z") unless (scalar(@loopcriteria)>0);  
+    }
+        
+    if ($orderby =~ /date_desc/){
+        $str.=" ORDER BY dateaccessioned DESC";
+    } else {
+        $str.=" ORDER BY title";
+    }
+    
+    my $qdataacquisitions=$dbh->prepare($str);
+        
+    my @loopacquisitions;
+    foreach my $value(@loopcriteria){
+        push @params,$value;
+        my %cell;
+        $cell{"title"}=$value;
+        $cell{"titlecode"}=$value;
+        
+        eval{$qdataacquisitions->execute(@params);};
+  
+        if ($@){ warn "recentacquisitions Error :$@";}
+        else {
+            my @loopdata;
+            while (my $data=$qdataacquisitions->fetchrow_hashref){
+                push @loopdata, {"summary"=>GetBiblioSummary( $data->{'marcxml'} ) };
+            }
+            $cell{"loopdata"}=\@loopdata;
+        }
+        push @loopacquisitions,\%cell if (scalar(@{$cell{loopdata}})>0);
+        pop @params;
+    }
+    $qdataacquisitions->finish;
+    return \@loopacquisitions;
+}
 #----------------------------------------------------------------------
 #
 # Non-Zebra GetRecords#
@@ -2316,6 +2411,7 @@ sub GetDistinctValues {
 		return \@elements;
    }
 }
+
 
 END { }    # module clean-up code here (global destructor)
 
