@@ -49,6 +49,7 @@ my $borrowernumber = $query->param('borrowernumber');
 my $notes = $query->param('notes');
 my $op = $query->param('op') || q{};
 my $date_selected = $query->param('date_selected');
+$date_selected ||= q{};
 my $dbh = C4::Context->dbh;
 
 if($op eq 'delete'){
@@ -68,20 +69,20 @@ if($op eq 'save'){
 my ($routing, @routinglist) = getroutinglist($subscriptionid);
 my $subs = GetSubscription($subscriptionid);
 my ($count,@serials) = GetSerials($subscriptionid);
-my ($serialdates) = GetLatestSerials($subscriptionid,$count);
+my $serialdates = GetLatestSerials($subscriptionid,$count);
 
-my @dates;
-my $i=0;
-foreach my $dateseq (@$serialdates) {
-        $dates[$i]->{'planneddate'} = $dateseq->{'planneddate'};
-        $dates[$i]->{'serialseq'} = $dateseq->{'serialseq'};
-        $dates[$i]->{'serialid'} = $dateseq->{'serialid'};
-        if($date_selected eq $dateseq->{'serialid'}){
-            $dates[$i]->{'selected'} = ' selected';
-        } else {
-            $dates[$i]->{'selected'} = '';
-        }
-        $i++;
+my $dates = [];
+foreach my $dateseq (@{$serialdates}) {
+    my $d = {};
+    $d->{planneddate} = $dateseq->{planneddate};
+    $d->{serialseq} = $dateseq->{serialseq};
+    $d->{serialid} = $dateseq->{serialid};
+    if($date_selected eq $dateseq->{serialid}){
+        $d->{selected} = ' selected';
+    } else {
+        $d->{selected} = q{};
+    }
+    push @{$dates}, $d;
 }
 
 my ($template, $loggedinuser, $cookie)
@@ -92,19 +93,6 @@ my ($template, $loggedinuser, $cookie)
 				flagsrequired => {serials => 1},
 				debug => 1,
 				});
-# my $date;
-# if($serialseq){
-#    for(my $i = 0;$i<@serials; $i++){
-#	if($serials[$i]->{'serialseq'} eq $serialseq){
-#	    $date = $serials[$i]->{'planneddate'}
-#	}
-#    }
-# } else {
-#    $serialseq = $serials[0]->{'serialseq'};
-#    $date = $serials[0]->{'planneddate'};
-# }
-
-# my $issue = "$serialseq ($date)";
 
 my @results;
 my $data;
@@ -154,7 +142,7 @@ $template->param(
     subscriptionid => $subscriptionid,
     memberloop => \@results,
     op => $new,
-    dates => \@dates,
+    dates => $dates,
     routingnotes => $serials[0]->{'routingnotes'},
     );
 
