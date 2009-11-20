@@ -216,7 +216,8 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OpacSuppression', '0', '', 'Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details', 'YesNo');
 -- FIXME: add FrameworksLoaded, noOPACUserLogin, ReadingHistory ?
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('pdfformat','pdfformat/example.pl','Controls what script is used for printing (basketgroups)','','free');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OrderPdfFormat','pdfformat::layout3pages','Controls what script is used for printing (basketgroups)','','free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OrderPdfTemplate','','Uploads a PDF template to use for printing baskets','NULL','Upload');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type)  VALUES ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: \'36000\' is displayed as \'360 000,00\'  in \'FR\' or \'360,000.00\'  in \'US\'.','Choice');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowRenewalLimitOverride', '0', 'if ON, allows renewal limits to be overridden on the circulation screen',NULL,'YesNo');
