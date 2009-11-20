@@ -458,9 +458,9 @@ sub output_with_http_headers($$$$;$) {
     print $query->header($options), $data;
 }
 
-sub output_html_with_http_headers ($$$) {
-    my ( $query, $cookie, $data ) = @_;
-    output_with_http_headers( $query, $cookie, $data, 'html' );
+sub output_html_with_http_headers ($$$;$) {
+    my ( $query, $cookie, $data, $status ) = @_;
+    output_with_http_headers( $query, $cookie, $data, 'html', $status );
 }
 
 sub is_ajax () {
