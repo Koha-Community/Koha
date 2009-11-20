@@ -290,12 +290,8 @@ if($params->{'multibranchlimit'}) {
 push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
 }
 
-my $available;
-foreach my $limit(@limits) {
-    if ($limit =~/available/) {
-        $available = 1;
-    }
-}
+my $available = $params->{'available'};
+
 $template->param(available => $available);
 
 # append year limits if they exist
@@ -412,11 +408,11 @@ for (my $i=0;$i<=@servers;$i++) {
                 # we want as specified by $offset and $results_per_page,
                 # we need to set the offset parameter of searchResults to 0
                 my @group_results = searchResults( $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
-                                                   @{ $group->{"RECORDS"} }, C4::Context->preference('hidelostitems'));
+                                                   @{ $group->{"RECORDS"} }, $available, C4::Context->preference('hidelostitems'));
                 push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
             }
-        } else {
-            @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,$scan,@{$results_hashref->{$server}->{"RECORDS"}},, C4::Context->preference('hidelostitems'));
+        } else { 
+            @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,$scan, $available,C4::Context->preference('hidelostitems'), @{$results_hashref->{$server}->{"RECORDS"}});
         }
 		my $tag_quantity;
 		if (C4::Context->preference('TagsEnabled') and
@@ -459,7 +455,7 @@ for (my $i=0;$i<=@servers;$i++) {
         if ($hits) {
             $template->param(total => $hits);
             my $limit_cgi_not_availablity = $limit_cgi;
-            $limit_cgi_not_availablity =~ s/&limit=available//g if defined $limit_cgi_not_availablity;
+            $limit_cgi_not_availablity =~ s/&available=1//g if defined $limit_cgi_not_availablity;
             $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
             $template->param(limit_cgi => $limit_cgi);
             $template->param(query_cgi => $query_cgi);
@@ -583,6 +579,6 @@ if (defined $barshelves) {
 	$template->param( addbarshelvesloop => $barshelves);
 }
 
-my $content_type = ($format eq 'rss' or $format eq 'atom') ? $format : 'html';
+$content_type = ($format eq 'rss' or $format eq 'atom') ? $format : 'html';
 
 output_html_with_http_headers $cgi, $cookie, $template->output, $content_type;
