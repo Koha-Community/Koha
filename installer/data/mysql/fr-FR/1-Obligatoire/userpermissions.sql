@@ -24,9 +24,9 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (11, 'planning_manage', 'Gérer de la planification des budgets'),
    (11, 'order_manage', 'Gérer les commandes et les paniers'),
    (11, 'group_manage', 'Gérer les commandes et les bons de commande'),
-   (11, 'order_receive', 'Gérer les réceptions')
-   (11, 'budget_add_del', 'Ajouter et supprimer les budgets (mais pas modifier)')
-   (13, 'manage_csv_profiles', 'Manage CSV export profiles')
-   (13, 'batch_mod', 'Modification Par lot des exemplaires')
+   (11, 'order_receive', 'Gérer les réceptions'),
+   (11, 'budget_add_del', 'Ajouter et supprimer les budgets (mais pas modifier)'),
+   (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
+   (13, 'batch_mod', 'Modification Par lot des exemplaires'),
    (13, 'batch_del', 'Suppression par lot des exemplaires')
 ;
