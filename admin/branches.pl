@@ -114,10 +114,13 @@ elsif ( $op eq 'delete' ) {
     
     # check to see if the branchcode is being used in the database somewhere....
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
-    $sth->execute( $branchcode, $branchcode );
-    my ($total) = $sth->fetchrow_array;
-    if ($total) {
+    my $sthitems     = $dbh->prepare("select count(*) from items where holdingbranch=? or homebranch=?");
+    my $sthborrowers = $dbh->prepare("select count(*) from borrowers where branchcode=?");
+    $sthitems->execute( $branchcode, $branchcode );
+    $sthborrowers->execute( $branchcode );
+    my ($totalitems)     = $sthitems->fetchrow_array;
+    my ($totalborrowers) = $sthitems->fetchrow_array;
+    if ($totalitems or $totalborrowers) {
         $template->param( else => 1 );
         default("MESSAGE7", $template);
     }
