@@ -33,20 +33,26 @@ use C4::VirtualShelves;
 use POSIX qw/strftime/;
 
 # use utf8;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas);
 
 BEGIN {
     $VERSION = 3.02;        # set version for version checking
-    $debug = $ENV{DEBUG} || 0 ;
+    $debug = $ENV{DEBUG} || 1 ; # Changed
     @ISA   = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
     %EXPORT_TAGS = (EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)]);
     $ldap = C4::Context->config('useldapserver') || 0;
+    $cas = C4::Context->config('usecasserver') || 0;
     if ($ldap) {
         require C4::Auth_with_ldap;             # no import
         import  C4::Auth_with_ldap qw(checkpw_ldap);
     }
+    if ($cas) {
+        require C4::Auth_with_cas;             # no import
+        import  C4::Auth_with_cas qw(checkpw_cas login_cas logout_cas);
+    }
+
 }
 
 =head1 NAME
@@ -615,7 +621,6 @@ sub checkauth {
             $userid   = $session->param('id');
 			$sessiontype = $session->param('sessiontype');
         }
-   
         if ( ($query->param('koha_login_context')) && ($query->param('userid') ne $session->param('id')) ) {
             #if a user enters an id ne to the id in the current session, we need to log them in...
             #first we need to clear the anonymous session...
@@ -634,6 +639,12 @@ sub checkauth {
             _session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,(strftime "%c",localtime));
             $sessionID = undef;
             $userid    = undef;
+
+	    if ($cas) {
+		warn "Here we cas logout the user";
+		# Add a syspref here
+		logout_cas($query);
+	    }
         }
         elsif ( $lasttime < time() - $timeout ) {
             # timed logout
@@ -674,53 +685,63 @@ sub checkauth {
         my $sessionID = $session->id;
        	C4::Context->_new_userenv($sessionID);
         $cookie = $query->cookie(CGISESSID => $sessionID);
-        if ( $userid    = $query->param('userid') ) {
-            my $password = $query->param('password');
-            my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
-            if ($return) {
-                _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime "%c",localtime));
-                if ( $flags = haspermission($userid, $flagsrequired) ) {
-                    $loggedin = 1;
-                }
-                else {
-                    $info{'nopermission'} = 1;
-                    C4::Context->_unset_userenv($sessionID);
-                }
+		if ($cas && !$query->param('ticket')) {
+			login_cas($query);
+		}
+		if ($cas || ($userid    = $query->param('userid')) ) {
+        	my $password = $query->param('password');
+		my ($return, $cardnumber);
+		if ($cas) {
+		    my $retuserid;
+		    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
+		    $userid = $retuserid;
+        	} else {
+		    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
+		}
+		if ($return) {
+            	_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
+            	if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
+					$loggedin = 1;
+            	}
+           		else {
+                	$info{'nopermission'} = 1;
+                	C4::Context->_unset_userenv($sessionID);
+            	}
 
-                my ($borrowernumber, $firstname, $surname, $userflags,
-                    $branchcode, $branchname, $branchprinter, $emailaddress);
+				my ($borrowernumber, $firstname, $surname, $userflags,
+					$branchcode, $branchname, $branchprinter, $emailaddress);
 
-                if ( $return == 1 ) {
-                    my $select = "
-                    SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
-                            branches.branchname    as branchname, 
-                            branches.branchprinter as branchprinter, 
-                            email 
-                    FROM borrowers 
-                    LEFT JOIN branches on borrowers.branchcode=branches.branchcode
-                    ";
-                    my $sth = $dbh->prepare("$select where userid=?");
-                    $sth->execute($userid);
-                    unless ($sth->rows) {
-                        $debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
-                        $sth = $dbh->prepare("$select where cardnumber=?");
-                        $sth->execute($cardnumber);
-                        unless ($sth->rows) {
-                            $debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
-                            $sth->execute($userid);
-                            unless ($sth->rows) {
-                                $debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
-                            }
-                        }
-                    }
-                    if ($sth->rows) {
-                        ($borrowernumber, $firstname, $surname, $userflags,
-                            $branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
-                        $debug and print STDERR "AUTH_3 results: " .
-                            "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
-                    } else {
-                        print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
-                    }
+            	if ( $return == 1 ) {
+                	my $select = "
+                	SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
+                    	    branches.branchname    as branchname, 
+                        	branches.branchprinter as branchprinter, 
+                        	email 
+                	FROM borrowers 
+                	LEFT JOIN branches on borrowers.branchcode=branches.branchcode
+                	";
+                	my $sth = $dbh->prepare("$select where userid=?");
+                	$sth->execute($userid);
+					unless ($sth->rows) {
+                		$debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
+						$sth = $dbh->prepare("$select where cardnumber=?");
+                   		$sth->execute($cardnumber);
+						unless ($sth->rows) {
+                			$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
+                    		$sth->execute($userid);
+							unless ($sth->rows) {
+                				$debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
+							}
+						}
+					}
+                	if ($sth->rows) {
+                    	($borrowernumber, $firstname, $surname, $userflags,
+                    		$branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
+						$debug and print STDERR "AUTH_3 results: " .
+							"$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
+					} else {
+						print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
+					}
 
 # launch a sequence to check if we have a ip for the branch, i
 # if we have one we replace the branchcode of the userenv by the branch bound in the ip.
@@ -1046,8 +1067,15 @@ sub check_api_auth {
             # caller did something wrong, fail the authenticateion
             return ("failed", undef, undef);
         }
-        my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
-        if ($return and haspermission($userid, $flagsrequired)) {
+	my ($return, $cardnumber);
+	if ($cas) {
+	    my $retuserid;
+	    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
+	    $userid = $retuserid;
+	} else {
+	    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
+	}
+        if ($return and haspermission( $dbh, $userid, $flagsrequired)) {
             my $session = get_session("");
             return ("failed", undef, undef) unless $session;
 
@@ -1293,11 +1321,21 @@ sub get_session {
 
 sub checkpw {
 
-    my ( $dbh, $userid, $password ) = @_;
+    my ( $dbh, $userid, $password, $query ) = @_;
     if ($ldap) {
         $debug and print "## checkpw - checking LDAP\n";
         my ($retval,$retcard) = checkpw_ldap(@_);    # EXTERNAL AUTH
         ($retval) and return ($retval,$retcard);
+    }
+
+    if ($cas) {
+        $debug and print STDERR "## checkpw - checking CAS\n";
+	# In case of a CAS authentication, we use the ticket instead of the password
+	my $ticket = $query->param('ticket');
+	warn ("ticket : $ticket");
+        my ($retval,$retcard,$retuserid) = checkpw_cas($dbh, $ticket, $query);    # EXTERNAL AUTH
+	warn "retval : $retval $retcard";
+        ($retval) and return ($retval,$retcard,$retuserid);
     }
 
     # INTERNAL AUTH
