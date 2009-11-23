@@ -41,6 +41,7 @@
 		
 	<!-- TMPL_IF NAME="opacuserlogin" -->
     <!-- TMPL_UNLESS NAME="loggedinusername" -->
+    <!-- TMPL_UNLESS NAME="casAuthentication" -->
     <div class="yui-u">
 	<div id="login" class="container">
 	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
@@ -56,6 +57,7 @@
 	</form>
 	</div>
 	 </div>
+    <!-- /TMPL_UNLESS -->
     <!-- /TMPL_UNLESS -->
 	
 <!-- /TMPL_IF -->

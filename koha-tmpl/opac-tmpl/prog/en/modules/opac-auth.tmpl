@@ -39,6 +39,21 @@
 <p>You entered an incorrect username or password. Please try again! And remember, usernames and passwords are case sensitive.</p>
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="casAuthentication" -->
+<h4>Cas Login</h4>
+
+<!-- TMPL_IF NAME="invalidCasLogin" -->
+<!-- This is what is displayed if cas login has failed -->
+<p>Sorry, the CAS login failed.</p>
+<!-- /TMPL_IF -->
+
+<p>If you have a <acronym title="Central Authentication Service">CAS</acronym> account, please <a href="<!-- TMPL_VAR NAME="casServerUrl" -->">click here to login</a>.<p>
+
+<h4>Local Login</h4>
+<p>If you do not have a CAS account, but a local account, you can still log in : </p>
+
+<!-- /TMPL_IF -->
+
 <form action="<!-- TMPL_VAR NAME="url" -->" name="auth" id="auth" method="post">
   <input type="hidden" name="koha_login_context" value="opac" />
 <fieldset class="brief"><!-- TMPL_LOOP NAME="INPUTS" -->

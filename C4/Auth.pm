@@ -37,7 +37,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $cas
 
 BEGIN {
     $VERSION = 3.02;        # set version for version checking
-    $debug = $ENV{DEBUG} || 1 ; # Changed
+    $debug = $ENV{DEBUG};
     @ISA   = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
@@ -51,7 +51,7 @@ BEGIN {
     }
     if ($cas) {
         require C4::Auth_with_cas;             # no import
-        import  C4::Auth_with_cas qw(checkpw_cas login_cas logout_cas);
+        import  C4::Auth_with_cas qw(checkpw_cas login_cas logout_cas login_cas_url);
     }
 
 }
@@ -684,16 +684,15 @@ sub checkauth {
         my $sessionID = $session->id;
        	C4::Context->_new_userenv($sessionID);
         $cookie = $query->cookie(CGISESSID => $sessionID);
-		if ($cas && !$query->param('ticket')) {
-			login_cas($query);
-		}
-		if ($cas || ($userid    = $query->param('userid')) ) {
+	    $userid    = $query->param('userid');
+    	    if ($cas || $userid) {
         	my $password = $query->param('password');
 		my ($return, $cardnumber);
-		if ($cas) {
+		if ($cas && $query->param('ticket')) {
 		    my $retuserid;
 		    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
 		    $userid = $retuserid;
+		    $info{'invalidCasLogin'} = 1 unless ($return);
         	} else {
 		    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
 		}
@@ -892,6 +891,7 @@ sub checkauth {
     $template->param(
     login        => 1,
         INPUTS               => \@inputs,
+        casAuthentication    => C4::Context->preference("casAuthentication"),
         suggestion           => C4::Context->preference("suggestion"),
         virtualshelves       => C4::Context->preference("virtualshelves"),
         LibraryName          => C4::Context->preference("LibraryName"),
@@ -924,6 +924,13 @@ sub checkauth {
 		wrongip            => $info{'wrongip'}
     );
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
+
+    if ($cas) { 
+	$template->param(
+	    casServerUrl    => login_cas_url(),
+	    invalidCasLogin => $info{'invalidCasLogin'}
+	);
+    }
 
     my $self_url = $query->url( -absolute => 1 );
     $template->param(
@@ -1067,7 +1074,7 @@ sub check_api_auth {
             return ("failed", undef, undef);
         }
 	my ($return, $cardnumber);
-	if ($cas) {
+	if ($cas && $query->param('ticket')) {
 	    my $retuserid;
 	    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
 	    $userid = $retuserid;
@@ -1327,7 +1334,7 @@ sub checkpw {
         ($retval) and return ($retval,$retcard);
     }
 
-    if ($cas) {
+    if ($cas && $query->param('ticket')) {
         $debug and print STDERR "## checkpw - checking CAS\n";
 	# In case of a CAS authentication, we use the ticket instead of the password
 	my $ticket = $query->param('ticket');

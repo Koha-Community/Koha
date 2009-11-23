@@ -32,21 +32,21 @@ BEGIN {
 	require Exporter;
 	$VERSION = 3.03;	# set the version for version checking
 	@ISA    = qw(Exporter);
-	@EXPORT = qw( checkpw_cas login_cas logout_cas );
+	@EXPORT = qw(checkpw_cas login_cas logout_cas login_cas_url);
 }
 
 
 my $context = C4::Context->new() 	or die 'C4::Context->new failed';
 my $casserver = C4::Context->preference('casServerUrl');
 
+# Logout from CAS
 sub logout_cas {
     my ($query) = @_;
     my $cas = Authen::CAS::Client->new($casserver);
-    warn $cas->logout_url();
-    print $query->redirect($cas->logout_url());
-
+    print $query->redirect($cas->logout_url(url => %ENV->{'SCRIPT_URI'}));
 }
 
+# Login to CAS
 sub login_cas {
     my ($query) = @_;
     my $cas = Authen::CAS::Client->new($casserver);
@@ -54,45 +54,52 @@ sub login_cas {
     print $query->redirect($cas->login_url(%ENV->{'SCRIPT_URI'})); 
 }
 
+# Returns CAS login URL with callback to the requesting URL
+sub login_cas_url {
+    my $cas = Authen::CAS::Client->new($casserver);
+    return $cas->login_url(%ENV->{'SCRIPT_URI'});
+}
+
+# Checks for password correctness
+# In our case : is there a ticket, is it valid and does it match one of our users ?
 sub checkpw_cas {
     warn "checkpw_cas";
     my ($dbh, $ticket, $query) = @_;
     my $retnumber;
     my $cas = Authen::CAS::Client->new($casserver);
 
+    # If we got a ticket
     if ($ticket) {
 	warn "Got ticket : $ticket";
+	
+	# We try to validate it
 	my $val = $cas->service_validate(%ENV->{'SCRIPT_URI'}, $ticket);
+	
+	# If it's valid
 	if( $val->is_success() ) {
 
 	    my $userid = $val->user();
 	    warn "User authenticated as: $userid";
 
+	    # Does it match one of our users ?
     	    my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
     	    $sth->execute($userid);
     	    if ( $sth->rows ) {
 		$retnumber = $sth->fetchrow;
+		return (1, $retnumber, $userid);
 	    }
 	    my $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
 	    $sth->execute($userid);
 	    if ( $sth->rows ) {
 	    	$retnumber = $sth->fetchrow;
+		return (1, $retnumber, $userid);
 	    }
-    	    return (1, $retnumber, $userid);
     	} else {
-    	    warn "Invalid session ticket";
+    	    warn "Invalid session ticket : $ticket";
     	    return 0;
 	}
-
-    } else {
-	warn ("Don't have any ticket, let's go get one from the CAS server!");
-	my $url = $cas->login_url(%ENV->{'SCRIPT_URI'});
-	print $query->redirect($url);    	
     }
-
-    warn "We should not reach this point";
     return 0;
-    #return(1, $retnumber);
 }
 
 1;

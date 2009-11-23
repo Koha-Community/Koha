@@ -41,7 +41,13 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borrower = GetMember( 'borrowernumber'=> $borrowernumber );
+my $casAuthentication = C4::Context->preference('casAuthentication');
+$template->param(
+    casAuthentication   => $casAuthentication,
+);
+
+
+my $borrower = GetMember( borrowernumber=>$borrowernumber );
 $template->param(
     textmessaging        => $borrower->{textmessaging},
 ) if (ref($borrower) eq "HASH");
