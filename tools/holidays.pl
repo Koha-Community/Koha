@@ -93,7 +93,7 @@ foreach my $weekday (keys %$week_days_holidays) {
 
 my $day_month_holidays = $calendar->get_day_month_holidays();
 my @day_month_holidays;
-foreach my $monthDay (keys %$day_month_holidays) {
+foreach my $monthDay (sort keys %$day_month_holidays) {
     # Determine date format on month and day.
     my $day_monthdate;
     if (C4::Context->preference("dateformat") eq "metric") {
@@ -113,7 +113,7 @@ foreach my $monthDay (keys %$day_month_holidays) {
 
 my $exception_holidays = $calendar->get_exception_holidays();
 my @exception_holidays;
-foreach my $yearMonthDay (keys %$exception_holidays) {
+foreach my $yearMonthDay (sort keys %$exception_holidays) {
     my $exceptiondate = C4::Dates->new($exception_holidays->{$yearMonthDay}{date}, "iso");
     my %exception_holiday;
     %exception_holiday = (KEY => $yearMonthDay,
@@ -125,7 +125,7 @@ foreach my $yearMonthDay (keys %$exception_holidays) {
 
 my $single_holidays = $calendar->get_single_holidays();
 my @holidays;
-foreach my $yearMonthDay (keys %$single_holidays) {
+foreach my $yearMonthDay (sort keys %$single_holidays) {
     my $holidaydate = C4::Dates->new($single_holidays->{$yearMonthDay}{date}, "iso");
     my %holiday;
     %holiday = (KEY => $yearMonthDay,
