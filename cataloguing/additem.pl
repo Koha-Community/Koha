@@ -75,16 +75,27 @@ my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
 my $op           = $input->param('op');
 
+my $frameworkcode = &GetFrameworkCode($biblionumber);
+
+# Defining which userflag is needing according to the framework currently used
+my $userflags;
+if (defined $input->param('frameworkcode')) {
+    $userflags = ($input->param('frameworkcode') eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+}
+
+if (not defined $userflags) {
+    $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+}
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/additem.tmpl",
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {editcatalogue => 1},
+                 flagsrequired => {editcatalogue => $userflags},
                  debug => 1,
                  });
 
-my $frameworkcode = &GetFrameworkCode($biblionumber);
 
 my $today_iso = C4::Dates->today('iso');
 $template->param(today_iso => $today_iso);

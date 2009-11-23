@@ -43,7 +43,7 @@ my $query = new CGI;
 # web browser, but instead should be stored and submitted by biblios.
 
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 1} );
+my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
 
 if ($status eq "ok") {
     print $query->header(-type => 'text/xml', cookie => $cookie);

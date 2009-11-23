@@ -78,7 +78,7 @@ my ($template, $loggedinuser, $cookie)
 			     query => $input,
 			     type => "intranet",
 			     authnotrequired => 0,
-			     flagsrequired => {editcatalogue => 1},
+			     flagsrequired => {editcatalogue => '*'},
 			     debug => 1,
 			     });
 	$result = "     nam a22     7a 4500" unless $result;

@@ -29,7 +29,7 @@ use XML::Simple;
 
 my $query = new CGI;
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 1} );
+my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
 
 if ($status eq "ok") {
     print $query->header(-type => 'text/xml', cookie => $cookie);

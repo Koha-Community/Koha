@@ -2,7 +2,7 @@
 	
 	<script type="text/javascript">
 	//<![CDATA[
-	<!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
+	<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
 	/* this function open a popup to search on z3950 server.  */
 	function PopupZ3950() {
 		var strQuery = GetZ3950Terms();
@@ -156,7 +156,7 @@ function confirm_items_deletion() {
 <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
 
 <ul class="toolbar">
-	<!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
+	<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
 	<li id="newmenuc"><a id="newbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New Record</a></li>
 	<li><a id="newitem" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">New Item</a></li>
 	<li><a id="newsub" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=<!-- TMPL_VAR NAME="biblionumber" -->">New Subscription</a></li>
@@ -171,7 +171,7 @@ function confirm_items_deletion() {
         <!-- TMPL_UNLESS name="bi_notforloan" -->
 	<!-- TMPL_UNLESS NAME="norequests" --><li><a id="placehold" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Place Hold</a></li><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
 	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><li id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><li id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></li><!-- /TMPL_IF -->
     </ul>
 </form>
 </div>

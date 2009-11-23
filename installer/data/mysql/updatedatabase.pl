@@ -3291,6 +3291,18 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.128";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+		INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
+                (9, 'edit_catalogue', 'Edit catalogue'),
+		(9, 'fast_cataloging', 'Fast cataloging')
+	});
+	
+    print "Upgrade to $DBversion done (granular permissions for cataloging added)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

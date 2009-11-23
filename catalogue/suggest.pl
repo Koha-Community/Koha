@@ -48,7 +48,7 @@ my ($template, $loggedinuser, $cookie)
                  query => $query,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {editcatalogue => 1},
+                 flagsrequired => {editcatalogue => 'edit_catalogue'},
                  debug => 1,
                  });
 $template->param("loop" => \@loop_suggests,

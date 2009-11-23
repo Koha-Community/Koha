@@ -13,7 +13,7 @@
                         <div class="bd">
                             <ul>
                             <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></li>
-                            <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
+                            <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
                             <li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></li>
                             <!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="CAN_user_acquisition" -->

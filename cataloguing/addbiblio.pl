@@ -830,6 +830,8 @@ my $mode          = $input->param('mode');
 my $frameworkcode = $input->param('frameworkcode');
 my $dbh           = C4::Context->dbh;
 
+my $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not($frameworkcode) );
 
@@ -840,7 +842,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { editcatalogue => 1 },
+        flagsrequired   => { editcatalogue => $userflags },
     }
 );
 
