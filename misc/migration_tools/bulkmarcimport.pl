@@ -354,7 +354,11 @@ RECORD: while (  ) {
 			  }
 			}
 					# create biblio, unless we already have it ( either match or isbn )
-            unless ($biblionumber) {
+            if ($biblionumber) {
+				eval{$biblioitemnumber=GetBiblioData($biblionumber)->{biblioitemnumber};}
+			}
+			else 
+			{
                 eval { ( $biblionumber, $biblioitemnumber ) = AddBiblio($record, '', { defer_marc_save => 1 }) };
             }
             if ( $@ ) {
