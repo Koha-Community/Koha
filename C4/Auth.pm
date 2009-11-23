@@ -698,7 +698,7 @@ sub checkauth {
 		}
 		if ($return) {
             	_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
-            	if ( $flags = haspermission( $dbh, $userid, $flagsrequired ) ) {
+            	if ( $flags = haspermission(  $userid, $flagsrequired ) ) {
 					$loggedin = 1;
             	}
            		else {
@@ -1081,7 +1081,7 @@ sub check_api_auth {
 	} else {
 	    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
 	}
-        if ($return and haspermission( $dbh, $userid, $flagsrequired)) {
+        if ($return and haspermission(  $userid, $flagsrequired)) {
             my $session = get_session("");
             return ("failed", undef, undef) unless $session;
 
