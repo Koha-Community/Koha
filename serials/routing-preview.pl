@@ -49,6 +49,10 @@ my ($template, $loggedinuser, $cookie);
 if($ok){
     # get biblio information....
     my $biblio = $subs->{'biblionumber'};
+	my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
+	my @itemresults = GetItemsInfo($subs->{'biblionumber'}, 'intra');
+	my $branch = $itemresults[0]->{'holdingbranch'};
+	my $branchname = GetBranchName($branch);
 
 	if (C4::Context->preference('RoutingListAddReserves')){
 		# get existing reserves .....
@@ -59,10 +63,6 @@ if($ok){
 				$count--;
 			}
 		}
-		my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
-		my @itemresults = GetItemsInfo($subs->{'biblionumber'}, 'intra');
-		my $branch = $itemresults[0]->{'holdingbranch'};
-		my $branchname = GetBranchName($branch);
 		my $const = 'o';
 		my $notes;
 		my $title = $subs->{'bibliotitle'};
