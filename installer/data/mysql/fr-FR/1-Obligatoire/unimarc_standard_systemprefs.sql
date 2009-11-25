@@ -24,6 +24,9 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('borrowerRelationship', '', 'Liste les relations entre les garants et leurs garantis (separées par | ou ,)', 'Père|Mère|grand-parent|Tuteur légal|Autre\r\n', 'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersLog', '0', 'Activer ce paramètre pour enregistrer les actions sur les lecteurs', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersTitles', '', 'Liste les titres de politesse (séparés par | ou ,)', 'M|Mme|Mlle', 'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('casAuthentication', '0', 'Active ou désactive l''authentification par CAS', '', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('casLogout', '0', 'Est-ce qu''une déconnexion de Koha doit aussi provoquer la déconnexion de l''utilisateur de CAS ?', '', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('casServerUrl', 'https://localhost:8443/cas', 'L''URL du serveur CAS', '', 'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CataloguingLog', '0', 'Activer ce paramètre pour enregistrer les actions sur le catalogage', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('checkdigit','none','Active la vérification des cartes adhérents sur aucun ou selon la méthode \"Katipo\"','none|katipo','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat', 'us', 'Ce paramètre définit le format d''affichage des dates (us mm/jj/aaaa, metric jj/mm/aaaa, ISO aaaa/mm/jj)', 'metric|us|iso', 'Choice');
