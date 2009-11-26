@@ -432,7 +432,7 @@ foreach my $tag (sort keys %{$tagslib}) {
           foreach my $thisbranch (@$branches) {
               push @authorised_values, $thisbranch->{value};
               $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
-              $value = $thisbranch->{value} if $thisbranch->{selected};
+             # $value = $thisbranch->{value} if $thisbranch->{selected};
           }
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
