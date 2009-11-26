@@ -3209,7 +3209,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 =cut
 
-my $DBversion = "3.01.00.0122";
+$DBversion = "3.01.00.0122";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # update branches table
     # 
@@ -3307,7 +3307,9 @@ $DBversion = "3.01.00.130";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('casAuthentication', '1', '', 'Enable or disable CAS authentication', 'YesNo'), ('casLogout', '1', '', 'Does a logout from Koha should also log out of CAS ?', 'YesNo'), ('casServerUrl', 'https://localhost:8443/cas', '', 'URL of the cas server', 'Free')");
 	print "Upgrade done (added CAS authentication system preferences)\n";
+    SetVersion ($DBversion);
 }
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
