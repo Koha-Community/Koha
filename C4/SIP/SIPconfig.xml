@@ -2,10 +2,18 @@
 <!-- FIXME: above address gets nothing? -->
   <error-detect enabled="true" />
 
-<!-- Set Net::Server::PreFork runtime parameters -->
-<!--  <server-params
-           min_servers='1'
-           min_spare_servers='0' /> -->
+<!--
+  Set Net::Server::PreFork runtime parameters 
+  syslog_ident will identify SIP2 Koha server entries in syslog
+  For OpenSolaris, add: syslog_logsock=stream
+-->
+  <server-params
+    min_servers='1'
+    min_spare_servers='0' 
+    log_file='Sys::Syslog'
+    syslog_ident='koha_sip'
+    syslog_facility='local6'
+  />
   
   <listeners>
 <!-- vestigial HTTP, never implemented: just use the OPAC!
