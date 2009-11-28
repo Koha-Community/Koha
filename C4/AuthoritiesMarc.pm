@@ -591,7 +591,7 @@ sub AddAuthority {
     my $sth=$dbh->prepare("select max(authid) from auth_header");
     $sth->execute;
     ($authid)=$sth->fetchrow;
-    $authid=$authid+1;
+    ( $authid ||= 0 )++; # $authid is undef for the first authority
     ## Insert the recordID in MARC record
     if   ( my $field = $record->field('001') ) { $field->data($authid) }
     else { $record->insert_fields_ordered(MARC::Field->new('001',$authid)) }
