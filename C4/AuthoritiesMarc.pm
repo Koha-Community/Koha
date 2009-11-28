@@ -591,11 +591,9 @@ sub AddAuthority {
     $sth->execute;
     ($authid)=$sth->fetchrow;
     $authid=$authid+1;
-  ##Insert the recordID in MARC record 
-    unless ($record->field('001') && $record->field('001')->data() eq $authid){
-        $record->delete_field($record->field('001'));
-        $record->insert_fields_ordered(MARC::Field->new('001',$authid));
-    }
+    ## Insert the recordID in MARC record
+    if   ( my $field = $record->field('001') ) { $field->data($authid) }
+    else { $record->insert_fields_ordered(MARC::Field->new('001',$authid)) }
   } else {
     $auth_exists=$dbh->do(qq(select authid from auth_header where authid=?),undef,$authid);
 #     warn "auth_exists = $auth_exists";
