@@ -3293,78 +3293,33 @@ Internal function to add a biblioitem
 
 sub _koha_add_biblioitem {
     my ( $dbh, $biblioitem ) = @_;
-    my $error;
+    my @fields = qw/ biblionumber
+    cn_class cn_item cn_sort cn_source cn_suffix
+    collectionissn collectiontitle collectionvolume
+    editionresponsibility editionstatement
+    illus isbn issn itemtype lccn marc
+    notes number pages place
+    publicationyear publishercode size
+    totalissues url
+    volume volumedate volumedesc
+    /;
 
-    my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
-    my $query =
-    "INSERT INTO biblioitems SET
-        biblionumber    = ?,
-        volume          = ?,
-        number          = ?,
-        itemtype        = ?,
-        isbn            = ?,
-        issn            = ?,
-        publicationyear = ?,
-        publishercode   = ?,
-        volumedate      = ?,
-        volumedesc      = ?,
-        collectiontitle = ?,
-        collectionissn  = ?,
-        collectionvolume= ?,
-        editionstatement= ?,
-        editionresponsibility = ?,
-        illus           = ?,
-        pages           = ?,
-        notes           = ?,
-        size            = ?,
-        place           = ?,
-        lccn            = ?,
-        marc            = ?,
-        url             = ?,
-        cn_source       = ?,
-        cn_class        = ?,
-        cn_item         = ?,
-        cn_suffix       = ?,
-        cn_sort         = ?,
-        totalissues     = ?
-        ";
+    ($$biblioitem{cn_sort}) = GetClassSort( @$biblioitem{qw/ biblioitems.cn_source cn_class cn_item /} ); 
+
+    my $query = 'INSERT INTO biblioitems SET '
+	.  join ( ',', map { "$_ =?" } @fields )
+	.  ';'
+    ; 
+
     my $sth = $dbh->prepare($query);
-    $sth->execute(
-        $biblioitem->{'biblionumber'},
-        $biblioitem->{'volume'},
-        $biblioitem->{'number'},
-        $biblioitem->{'itemtype'},
-        $biblioitem->{'isbn'},
-        $biblioitem->{'issn'},
-        $biblioitem->{'publicationyear'},
-        $biblioitem->{'publishercode'},
-        $biblioitem->{'volumedate'},
-        $biblioitem->{'volumedesc'},
-        $biblioitem->{'collectiontitle'},
-        $biblioitem->{'collectionissn'},
-        $biblioitem->{'collectionvolume'},
-        $biblioitem->{'editionstatement'},
-        $biblioitem->{'editionresponsibility'},
-        $biblioitem->{'illus'},
-        $biblioitem->{'pages'},
-        $biblioitem->{'bnotes'},
-        $biblioitem->{'size'},
-        $biblioitem->{'place'},
-        $biblioitem->{'lccn'},
-        $biblioitem->{'marc'},
-        $biblioitem->{'url'},
-        $biblioitem->{'biblioitems.cn_source'},
-        $biblioitem->{'cn_class'},
-        $biblioitem->{'cn_item'},
-        $biblioitem->{'cn_suffix'},
-        $cn_sort,
-        $biblioitem->{'totalissues'}
-    );
+    $sth->execute( @$biblioitem{@fields} );
     my $bibitemnum = $dbh->{'mysql_insertid'};
-    if ( $dbh->errstr ) {
-        $error.="ERROR in _koha_add_biblioitem $query".$dbh->errstr;
-        warn $error;
-    }
+    my $error = '';
+    $dbh->errstr and warn $error .=
+	'ERROR in _koha_add_biblioitem '
+	. $query
+	. $dbh->errstr
+    ;
     $sth->finish();
     return ($bibitemnum,$error);
 }
