@@ -228,21 +228,13 @@ unless you can guarantee that C<ModBiblioMarc> will be called.
 =cut
 
 sub AddBiblio {
-    my $record = shift;
-    my $frameworkcode = shift;
-    my $options = @_ ? shift : undef;
-    my $defer_marc_save = 0;
-    if (defined $options and exists $options->{'defer_marc_save'} and $options->{'defer_marc_save'}) {
-        $defer_marc_save = 1;
-    }
-
-    my ($biblionumber,$biblioitemnumber,$error);
+    my ( $record, $frameworkcode, $options ) = @_;
     my $dbh = C4::Context->dbh;
     # transform the data into koha-table style data
     my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
-    ($biblionumber,$error) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
+    my ($biblionumber) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
-    ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $olddata );
+    my ($biblioitemnumber) = _koha_add_biblioitem( $dbh, $olddata );
 
     _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
 
@@ -250,7 +242,7 @@ sub AddBiblio {
     _koha_marc_update_biblioitem_cn_sort($record, $olddata, $frameworkcode);
     
     # now add the record
-    ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
+    ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $$options{defer_marc_save} ||= 0;
       
     logaction("CATALOGUING", "ADD", $biblionumber, "biblio") if C4::Context->preference("CataloguingLog");
     return ( $biblionumber, $biblioitemnumber );
