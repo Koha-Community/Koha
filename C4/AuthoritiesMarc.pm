@@ -246,7 +246,7 @@ sub SearchAuthorities {
             }#if value
         }
         ##Add how many queries generated
-		my $query;
+		$query='';
 		foreach my $query_part (@queries){
 			$query=($query?$and.$query_part.$query:$query_part);
 		}
