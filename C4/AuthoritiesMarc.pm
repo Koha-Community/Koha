@@ -526,8 +526,9 @@ sub AddAuthority {
 	my $leader='    nz   a22     o  4500';#Leader for incomplete MARC21 record
 
 # if authid empty => true add, find a new authid number
-  my $format= 'UNIMARCAUTH' if (uc(C4::Context->preference('marcflavour')) eq 'UNIMARC');
-  $format= 'MARC21' if (uc(C4::Context->preference('marcflavour')) ne 'UNIMARC');
+  my $format = uc(C4::Context->preference('marcflavour')) eq 'UNIMARC'
+    ? 'UNIMARCAUTH' : 'MARC21'
+  ; 
 
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
