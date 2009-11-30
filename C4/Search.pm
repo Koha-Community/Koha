@@ -1553,6 +1553,7 @@ sub searchResults {
 				$onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
 				$onloan_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
 				$onloan_items->{$key}->{barcode} = $item->{barcode};
+				$onloan_items->{$key}->{reserved} = $item->{reserved};
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
                     $onloan_items->{$prefix}->{longoverdue}++;
