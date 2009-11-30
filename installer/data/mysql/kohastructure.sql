@@ -678,6 +678,18 @@ CREATE TABLE `default_branch_circ_rules` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `default_branch_item_rules`
+--
+
+CREATE TABLE `default_branch_item_rules` (
+  `itemtype` varchar(10) NOT NULL,
+  `holdallowed` tinyint(1) default NULL,
+  PRIMARY KEY  (`itemtype`),
+  CONSTRAINT `default_branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
+    ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `default_circ_rules`
 --
 
