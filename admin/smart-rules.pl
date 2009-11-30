@@ -365,7 +365,38 @@ foreach my $entry (@sorted_branch_cat_rules, @sorted_row_loop) {
     $entry->{unlimited_maxissueqty} = 1 unless defined($entry->{maxissueqty});
 }
 
+my $sth_branch_item;
+if ($branch eq "*") {
+    $sth_branch_item = $dbh->prepare("
+        SELECT default_branch_item_rules.*, itemtypes.description AS humanitemtype
+        FROM default_branch_item_rules
+        JOIN itemtypes USING (itemtype)
+    ");
+    $sth_branch_item->execute();
+} else {
+    $sth_branch_item = $dbh->prepare("
+        SELECT branch_item_rules.*, itemtypes.description AS humanitemtype
+        FROM branch_item_rules
+        JOIN itemtypes USING (itemtype)
+        WHERE branch_item_rules.branchcode = ?
+    ");
+    $sth_branch_item->execute($branch);
+}
+
+my @branch_item_rules = ();
+while (my $row = $sth_branch_item->fetchrow_hashref) {
+    push @branch_item_rules, $row;
+}
+my @sorted_branch_item_rules = sort { $a->{'humanitemtype'} cmp $b->{'humanitemtype'} } @branch_item_rules;
+
+# note undef holdallowed so that template can deal with them
+foreach my $entry (@sorted_branch_item_rules) {
+    $entry->{holdallowed_any} = 1 if($entry->{holdallowed} == 2);
+    $entry->{holdallowed_same} = 1 if($entry->{holdallowed} == 1);
+}
+
 $template->param(show_branch_cat_rule_form => 1);
+$template->param(branch_item_rule_loop => \@sorted_branch_item_rules);
 $template->param(branch_cat_rule_loop => \@sorted_branch_cat_rules);
 
 $template->param(categoryloop => \@category_loop,
