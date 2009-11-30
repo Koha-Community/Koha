@@ -934,10 +934,14 @@ sub buildQuery {
                 }
 
                 if ($auto_truncation){
-                   # join throws an error if there is a leading space
-                   $operand =~ s/^\s+//;
-		   $operand=~join(" ",map{ "$_*" }split (/\s+/,$operand));
-                }
+					unless ( $index =~ /(st-|phr|ext)/ ) {
+						#FIXME only valid with LTR scripts
+						$operand=join(" ",map{ 
+												"$_*" 
+											 }split (/\s+/,$operand));
+						warn $operand if $DEBUG;
+					}
+				}
 
                 # Detect Truncation
                 my $truncated_operand;
@@ -1208,7 +1212,12 @@ sub searchResults {
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
+<<<<<<< HEAD:C4/Search.pm
 
+=======
+		my $biblionumber;
+        
+>>>>>>> C4/Search.pm followup auto_truncation 3.0.x cherry-pick:C4/Search.pm
         if ($bibliotag<10){
             $fw = GetFrameworkCode($marcrecord->field($bibliotag)->data);
         }else{
