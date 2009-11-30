@@ -632,6 +632,20 @@ OPACISBDEN
     SetVersion ($DBversion);
 }  
 
+$DBversion = "3.00.04.021";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(<<DEFAULTBRANCHRULES);
+    CREATE TABLE `default_branch_item_rules` (
+      `itemtype` varchar(10) NOT NULL,
+      `holdallowed` tinyint(1) default NULL,
+      PRIMARY KEY  (`itemtype`),
+      CONSTRAINT `default_branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
+        ON DELETE CASCADE ON UPDATE CASCADE
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+DEFAULTBRANCHRULES
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
