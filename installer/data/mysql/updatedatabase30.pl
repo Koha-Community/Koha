@@ -632,7 +632,7 @@ OPACISBDEN
     SetVersion ($DBversion);
 }  
 
-$DBversion = "3.00.04.021";
+$DBversion = "3.00.05.001";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(<<DEFAULTBRANCHRULES);
     CREATE TABLE `default_branch_item_rules` (
@@ -645,6 +645,32 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 DEFAULTBRANCHRULES
 }
 
+$DBversion = "3.00.05.001";
+#$DBversion = "3.01.00.012";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowHoldPolicyOverride', '0', 'Allow staff to override hold policies when placing holds',NULL,'YesNo')");
+    $dbh->do("
+        CREATE TABLE `branch_item_rules` (
+          `branchcode` varchar(10) NOT NULL,
+          `itemtype` varchar(10) NOT NULL,
+          `holdallowed` tinyint(1) default NULL,
+          PRIMARY KEY  (`itemtype`,`branchcode`),
+          KEY `branch_item_rules_ibfk_2` (`branchcode`),
+          CONSTRAINT `branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`) ON DELETE CASCADE ON UPDATE CASCADE,
+          CONSTRAINT `branch_item_rules_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8
+    ");
+    $dbh->do("
+        ALTER TABLE default_branch_circ_rules
+            ADD COLUMN holdallowed tinyint(1) NULL
+    ");
+    $dbh->do("
+        ALTER TABLE default_circ_rules
+            ADD COLUMN holdallowed tinyint(1) NULL
+    ");
+    print "Upgrade to $DBversion done (Add tables and system preferences for holds policies)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
