@@ -444,7 +444,14 @@ function yuiZ3950button() {
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="barcode" -->(<!-- TMPL_VAR NAME="barcode" -->)<!-- /TMPL_IF -->
-                                        (<!-- TMPL_VAR NAME="count" --><!-- TMPL_IF NAME="longoverdue" -->, <!-- TMPL_VAR NAME="longoverdue" --> long overdue<!-- /TMPL_IF -->) date due: <!-- TMPL_VAR NAME="due_date" --></li>
+                                        (<!-- TMPL_VAR NAME="count" --><!-- TMPL_IF NAME="longoverdue" -->, <!-- TMPL_VAR NAME="longoverdue" --> long overdue<!-- /TMPL_IF -->)
+                                        <!-- TMPL_IF NAME="date_due" --> 
+                                        	date due: <!-- TMPL_VAR NAME="due_date" -->
+                                       	<!-- TMPL_ELSIF NAME="reserved" -->
+                                       		On Hold
+                                       	<!-- /TMPL_IF -->
+                                    	</li>
+                                        	
                                     <!-- /TMPL_LOOP --></ul>
                                     <!-- /TMPL_IF -->
 
