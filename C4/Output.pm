@@ -45,7 +45,7 @@ BEGIN {
 					html =>[qw(&output_html_with_http_headers)]
 				);
     push @EXPORT, qw(
-        &themelanguage &gettemplate setlanguagecookie pagination_bar
+        &themelanguage &gettemplate setlanguagecookie getlanguagecookie pagination_bar
     );
     push @EXPORT, qw(
         &output_html_with_http_headers
@@ -138,8 +138,8 @@ sub themelanguage {
     my $lang;
     my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
     # But, if there's a cookie set, obey it
-    $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
     
+    $lang = $query->cookie('KohaOpacLanguage') if (defined $query and $query->cookie('KohaOpacLanguage'));
     # Fall back to English
     my @languages;
     if ($interface eq 'intranet') {
@@ -208,6 +208,20 @@ sub setlanguagecookie {
         -uri    => $uri,
         -cookie => $cookie
     );
+}
+
+sub getlanguagecookie {
+    my ($query) = @_;
+    my $lang;
+    if ($query->cookie('KohaOpacLanguage')){
+        $lang = $query->cookie('KohaOpacLanguage') ;
+    }else{
+        $lang = $ENV{HTTP_ACCEPT_LANGUAGE};
+        
+    }
+    $lang = substr($lang, 0, 2);
+
+    return $lang;
 }
 
 =item pagination_bar
@@ -369,19 +383,38 @@ response's Content-Type to that value instead of "text/html".
 
 =cut
 
-sub output_html_with_http_headers ($$$;$) {
-    my $query = shift;
-    my $cookie = shift;
-    my $html = shift;
-    my $content_type = @_ ? shift : "text/html";
-    $content_type = "text/html" unless $content_type =~ m!/!; # very basic sanity check
-    print $query->header(
-        -type    => $content_type,
-        -charset => 'UTF-8',
-        -cookie  => $cookie,
-        -Pragma => 'no-cache',
-        -'Cache-Control' => 'no-cache',
-    ), $html;
+sub output_with_http_headers($$$$;$) {
+    my ( $query, $cookie, $data, $content_type, $status ) = @_;
+    $status ||= '200 OK';
+
+    my %content_type_map = (
+        'html' => 'text/html',
+        'js'   => 'text/javascript',
+        'json' => 'application/json',
+        'xml'  => 'text/xml',
+        # NOTE: not using application/atom+xml or application/rss+xml because of
+        # Internet Explorer 6; see bug 2078.
+        'rss'  => 'text/xml',
+        'atom' => 'text/xml'
+    );
+
+    die "Unknown content type '$content_type'" if ( !defined( $content_type_map{$content_type} ) );
+    my $options = {
+        type    => $content_type_map{$content_type},
+        status  => $status,
+        charset => 'UTF-8',
+        Pragma          => 'no-cache',
+        'Cache-Control' => 'no-cache',
+    };
+    $options->{cookie} = $cookie if $cookie;
+    if ($content_type eq 'html') {  # guaranteed to be one of the content_type_map keys, else we'd have died
+        $options->{'Content-Style-Type' } = 'text/css';
+        $options->{'Content-Script-Type'} = 'text/javascript';
+    }
+    # remove SUDOC specific NSB NSE
+    $data =~ s/\x{C2}\x{98}|\x{C2}\x{9C}/ /g;
+    $data =~ s/\x{C2}\x{88}|\x{C2}\x{89}/ /g;
+    print $query->header($options), $data;
 }
 
 sub output_ajax_with_http_headers ($$) {
