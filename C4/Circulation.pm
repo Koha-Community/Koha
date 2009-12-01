@@ -1385,6 +1385,7 @@ sub AddReturn {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
     } else {
+        $iteminformation->{'itemnumber'} = $itemnumber;
         # find the borrower
         if ( not $iteminformation->{borrowernumber} ) {
             $messages->{'NotIssued'} = $barcode;
