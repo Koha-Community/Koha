@@ -2,10 +2,24 @@
 <title>Koha &rsaquo; <!-- TMPL_IF NAME="viewshelf" -->Lists &rsaquo; Contents of <!-- TMPL_VAR NAME="shelfname" --><!-- TMPL_ELSE -->Lists<!-- /TMPL_IF --><!-- TMPL_IF NAME="shelves" --> &rsaquo; Create New List<!-- /TMPL_IF --><!-- TMPL_IF NAME="edit" --> &rsaquo; Edit List <!-- TMPL_VAR name="shelfname"--><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript">
-//<![CDATA[ 
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">                                                                                               
 
 $(document).ready(function(){
+	// Tablesorter
+        $("#shelvescontentt").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->dateFormat: 'uk',<!-- /TMPL_IF -->
+	    headers: {                                                                                                        
+		0: { sorter: false },
+		4: { sorter: false }                                                                                            
+	    }                                                                                                                 
+	}); 
+
+	$("#privshelvest, #pubshelvest").tablesorter({
+	    headers: {                                                                                                        
+		4: { sorter: false }                                                                                            
+	    }                                                                                                                 
+	});
+
 	$("#addbarcode").focus();
 	$("span.clearall").html("<a id=\"CheckNone\" href=\"/cgi-bin/koha/shelves.pl\">Clear All<\/a>");
 	$("span.checkall").html("<a id=\"CheckAll\" href=\"/cgi-bin/koha/shelves.pl\">Select All<\/a>");
@@ -109,7 +123,8 @@ $(document).ready(function(){
   <legend>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
  <!--TMPL_IF NAME="manageshelf" --><p><span class="checkall"></span><span class="clearall"></span></p><!-- /TMPL_IF -->
  <!-- TMPL_VAR name='pagination_bar'-->
-    <table>
+    <table id="shelvescontentt">
+	<thead>
             <tr>
                 <!--TMPL_IF NAME="manageshelf" --><th class="checkall">&nbsp;</th><!-- /TMPL_IF -->
                 <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
@@ -118,6 +133,8 @@ $(document).ready(function(){
                 <th>Date Added</th>
                 <th>&nbsp;</th>
             </tr>
+	</thead>
+	<tbody>
 		<!-- TMPL_LOOP NAME="itemsloop" -->
 			<!-- TMPL_IF NAME="toggle" -->
 			<tr class="highlight">
@@ -158,6 +175,7 @@ $(document).ready(function(){
 			</td>
 			</tr>
 		<!-- /TMPL_LOOP --><!-- /itemsloop -->
+	</tbody>
     </table>
  </fieldset>
  <fieldset class="action">
@@ -289,8 +307,11 @@ $(document).ready(function(){
 		<!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="shelveslooppriv" -->
 			<!-- TMPL_VAR name='pagination_bar'-->
-        		<table>
-        		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
+        		<table id="privshelvest">
+			    <thead>
+				<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
+			    </thead>
+			    <tbody>
                 <!-- TMPL_LOOP NAME="shelveslooppriv" -->
                     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
         <td><a href="shelves.pl?<!-- TMPL_IF NAME="showprivateshelves" -->display=privateshelves&amp;<!-- /TMPL_IF -->viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
@@ -327,6 +348,7 @@ $(document).ready(function(){
             <!-- TMPL_ELSE -->
             <tr><td colspan="4">No Private Lists.</td></tr>
             <!-- /TMPL_IF --><!-- /shelveslooppriv -->
+	    </tbody>
         </table>
 		</div><!-- /privateshelves -->
 
@@ -337,8 +359,11 @@ $(document).ready(function(){
 		<!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="shelvesloop" -->
 		<!-- TMPL_VAR name='pagination_bar'-->
-        <table>
-        <tr><th>List Name</th><th>Contents</th><th>Sort By</th><th>Type</th><th>Options</th></tr>
+        <table id="pubshelvest">
+	    <thead>
+		<tr><th>List Name</th><th>Contents</th><th>Sort By</th><th>Type</th><th>Options</th></tr>
+	    </thead>
+	    <tbody>
             <!-- TMPL_LOOP NAME="shelvesloop" -->
                 <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
 		<td><a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
@@ -371,6 +396,7 @@ $(document).ready(function(){
 		</td>
 		</tr>
             <!-- /TMPL_LOOP -->
+	    </tbody>
         </table>
         <!-- TMPL_ELSE -->
         	<!-- TMPL_IF NAME="showpublicshelves" -->No Public Lists.<!-- /TMPL_IF -->
