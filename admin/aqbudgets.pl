@@ -50,6 +50,9 @@ my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     }
 );
 
+my $cur = GetCurrency();
+$template->param( cur => $cur->{symbol} );
+
 my $op = $input->param('op');
 
 # see if the user want to see all budgets or only owned ones
