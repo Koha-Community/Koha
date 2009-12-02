@@ -233,30 +233,8 @@
         <h3>Delete root budget '<!-- TMPL_VAR name="budget_period_description" -->'?</h3>
     <!-- /TMPL_IF -->
 
-    <!-- ###################################################################### -->
-    <!-- display information about the budget period that must be deleted  -->
-    <!-- ###################################################################### -->
-
-    <table>
-        <tr>
-        <th scope="row">Start date</th>
-        <td><!-- TMPL_VAR name="budget_period_startdate" --></td>
-        </tr>
-
-        <tr>
-        <th scope="row">End date</th>
-        <td><!-- TMPL_VAR name="budget_period_enddate" --></td>
-        </tr>
-
-        <tr>
-        <th scope="row">Total amount</th>
-        <td><!-- TMPL_VAR name="budget_period_total" --></td>
-        </tr>
-    </table>
-
-
     <!-- ############################################################# -->
-    <!-- "delete" and "quit" buttons    -->
+    <!-- "delete" and "cancel" buttons    -->
     <!-- ############################################################# -->
 
     <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
@@ -266,7 +244,7 @@
     </form>
 
     <form action="<!-- TMPL_VAR name="script_name" -->" method="post">
-        <input type="submit" class="deny" value="Quit" />
+        <input type="submit" class="deny" value="Cancel" />
     </form>
 
     </div>
