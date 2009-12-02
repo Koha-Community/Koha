@@ -305,7 +305,7 @@ if ( defined $csvfilename ) {
     } else {
         open $csv_fh, ">", $csvfilename or die "unable to open $csvfilename: $!";
     }
-    if ( $csv->combine(qw(name surname address1 address2 zipcode city email itemcount itemsinfo)) ) {
+    if ( $csv->combine(qw(title name surname address1 address2 zipcode city email itemcount itemsinfo due_date issue_date)) ) {
         print $csv_fh $csv->string, "\n";
     } else {
         $verbose and warn 'combine failed on argument: ' . $csv->error_input;
@@ -368,7 +368,7 @@ END_SQL
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
 
             my $borrower_sql = <<'END_SQL';
-SELECT COUNT(*), issues.borrowernumber, firstname, surname, address, address2, city, zipcode, email, MIN(date_due) as longest_issue
+SELECT COUNT(*), issues.borrowernumber, borrowers.title, firstname, surname, address, address2, city, zipcode, email, MIN(date_due) as longest_issue, MIN(issuedate) as earliest_issue
 FROM   issues
 LEFT JOIN borrowers USING (borrowernumber)
 LEFT JOIN categories ON (borrowers.categorycode=categories.categorycode)
@@ -398,7 +398,7 @@ END_SQL
             $sth->execute(@borrower_parameters);
             $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
 
-            while( my ( $itemcount, $borrowernumber, $firstname, $lastname, $address1, $address2, $city, $postcode, $email ) = $sth->fetchrow ) {
+            while( my ( $itemcount, $borrowernumber, $borrowertitle, $firstname, $lastname, $address1, $address2, $city, $postcode, $email, $longest_issue, $earliest_issue ) = $sth->fetchrow ) {
                 $verbose and warn "borrower $firstname, $lastname ($borrowernumber) has $itemcount items triggering level $i.";
     
                 my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"} );
@@ -450,6 +450,7 @@ END_SQL
                       prepare_letter_for_printing(
                         {   letter         => $letter,
                             borrowernumber => $borrowernumber,
+                            borrowertitle  => $borrowertitle,
                             firstname      => $firstname,
                             lastname       => $lastname,
                             address1       => $address1,
@@ -458,6 +459,8 @@ END_SQL
                             postcode       => $postcode,
                             email          => $email,
                             itemcount      => $itemcount,
+                            longest_issue  => $longest_issue,
+                            earliest_issue => $earliest_issue,
                             titles         => $titles,
                             outputformat   => defined $csvfilename ? 'csv' : '',
                         }
@@ -612,9 +615,11 @@ sub prepare_letter_for_printing {
 
     my $return;
     if ( exists $params->{'outputformat'} && $params->{'outputformat'} eq 'csv' ) {
+	my $longest_issue = C4::Dates->new($params->{'longest_issue'}, "iso")->output();
+	my $earliest_issue = C4::Dates->new($params->{'earliest_issue'}, "iso")->output();
         if ($csv->combine(
-                $params->{'firstname'}, $params->{'lastname'}, $params->{'address1'},  $params->{'address2'}, $params->{'postcode'},
-                $params->{'city'},      $params->{'email'},    $params->{'itemcount'}, $params->{'titles'}
+                $params->{'borrowertitle'}, $params->{'firstname'}, $params->{'lastname'}, $params->{'address1'},  $params->{'address2'}, $params->{'postcode'},
+                $params->{'city'},      $params->{'email'},    $params->{'itemcount'}, $params->{'titles'}, $longest_issue, $earliest_issue
             )
           ) {
             return $csv->string, "\n";
