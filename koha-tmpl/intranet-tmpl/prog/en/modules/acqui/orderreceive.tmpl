@@ -22,7 +22,7 @@ fieldset.rows .itemblock fieldset.action { padding:.5em; }
 	<div class="yui-b">
 
 <h1>Receive items from : <!-- TMPL_VAR NAME="name" --> <!-- TMPL_IF NAME="invoice" -->[<!-- TMPL_VAR NAME="invoice" -->] <!-- /TMPL_IF --> (order #<!-- TMPL_VAR NAME="ordernumber" -->)</h1>
-
+<a href="<!-- TMPL_VAR NAME="previousurl" -->">Back to receive summary</a>
 <!-- TMPL_IF name="count" -->
     <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post">
 <div class="yui-g">
