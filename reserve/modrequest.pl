@@ -68,8 +68,5 @@ else {
     }
 }
 my $from=$query->param('from');
-if ($from eq 'borrower'){
-  print $query->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrower[0]");
- } else {
-   print $query->redirect("/cgi-bin/koha/reserve/request.pl?biblionumber=$biblionumber[0]");
-}
+
+print $query->redirect($query->referer());
