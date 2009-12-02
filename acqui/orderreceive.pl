@@ -85,7 +85,7 @@ my @results = SearchOrder( $search, $supplierid, $biblionumber);
 my $count   = scalar @results;
 my $order 	= GetOrder($search);
 
-my $bookseller = GetBookSellerFromId( $results[0]->{'booksellerid'} );
+my $bookseller = GetBookSellerFromId( $supplierid );
 
 my $date = $results[0]->{'entrydate'};
 
@@ -197,6 +197,7 @@ $template->param(
     name             => $bookseller->{'name'},
     freight          => $freight,
     gst              => $gst,
+    previousurl      => $input->referer(),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
