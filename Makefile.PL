@@ -539,6 +539,7 @@ WriteMakefile(
               NO_META      => 1,
               PREREQ_PM => {
                             'Algorithm::CheckDigits'           => 0.50,
+							'Authen::CAS::Client'              => 0.05,
                             'Biblio::EndnoteStyle'             => 0.05,
                             'CGI'                              => 3.15,
                             'CGI::Carp'                        => 1.29,
