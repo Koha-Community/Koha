@@ -91,10 +91,11 @@ if ($item) {
     }
 }
 
-my @reservloop;
-my @getreserves = C4::Context->preference('IndependantBranches') ? GetReservesForBranch($default) : GetReservesForBranch();
+my (@reservloop, @overloop);
+my ($reservcount, $overcount);
+my @getreserves = $default ? GetReservesForBranch($default) : GetReservesForBranch();
 # get reserves for the branch we are logged into, or for all branches
-	
+
 my $today = Date_to_Days(&Today);
 foreach my $num (@getreserves) {
     next unless ($num->{'waitingdate'} && $num->{'waitingdate'} ne '0000-00-00');
@@ -106,21 +107,18 @@ foreach my $num (@getreserves) {
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );  # using the fixed up itype/itemtype
     $getreserv{'waitingdate'} = format_date( $num->{'waitingdate'} );
 
-    my ( $waiting_year, $waiting_month, $waiting_day ) = split /-/, $num->{'waitingdate'};
+    my ( $waiting_year, $waiting_month, $waiting_day ) = split (/-/, $num->{'waitingdate'});
     ( $waiting_year, $waiting_month, $waiting_day ) =
       Add_Delta_Days( $waiting_year, $waiting_month, $waiting_day,
         C4::Context->preference('ReservesMaxPickUpDelay'));
     my $calcDate = Date_to_Days( $waiting_year, $waiting_month, $waiting_day );
 
-    if ($today > $calcDate) {
-        $getreserv{'messcompa'} = 1;
-    }
     $getreserv{'itemtype'}       = $itemtypeinfo->{'description'};
     $getreserv{'title'}          = $gettitle->{'title'};
     $getreserv{'itemnumber'}     = $gettitle->{'itemnumber'};
     $getreserv{'biblionumber'}   = $gettitle->{'biblionumber'};
     $getreserv{'barcode'}        = $gettitle->{'barcode'};
-    $getreserv{'homebranch'}     = $gettitle->{'homebranch'};
+    $getreserv{'homebranch'}     = GetBranchName($gettitle->{'homebranch'});
     $getreserv{'holdingbranch'}  = $gettitle->{'holdingbranch'};
     $getreserv{'itemcallnumber'} = $gettitle->{'itemcallnumber'};
     if ( $gettitle->{'homebranch'} ne $gettitle->{'holdingbranch'} ) {
@@ -133,11 +131,22 @@ foreach my $num (@getreserves) {
     if ( $getborrower->{'emailaddress'} ) {
         $getreserv{'borrowermail'}  = $getborrower->{'emailaddress'};
     }
-    push @reservloop, \%getreserv;
+ 
+    if ($today > $calcDate) {
+        push @overloop,   \%getreserv;
+        $overcount++;
+    }else{
+        push @reservloop, \%getreserv;
+        $reservcount++;
+    }
+    
 }
 
 $template->param(
     reserveloop => \@reservloop,
+    reservecount => $reservcount,
+    overloop    => \@overloop,
+    overcount   => $overcount,
     show_date   => format_date(C4::Dates->today('iso')),
 	dateformat  => C4::Context->preference("dateformat"),
 );
