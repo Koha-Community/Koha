@@ -118,7 +118,8 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xsl_suffix ) = @_;
+    my ( $biblionumber, $orig_record, $xsl_suffix, $interface ) = @_;
+    $interface = 'opac' unless $interface;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     #return $record->as_formatted();
@@ -139,10 +140,18 @@ sub XSLTParse4Display {
     my $source = $parser->parse_string($xmlrecord);
     unless ( $stylesheet ) {
         my $xslt = XML::LibXSLT->new();
-        my $xslfile = C4::Context->config('opachtdocs') . 
+        my $xslfile;
+        if ($interface eq 'intranet') {
+            $xslfile = C4::Context->config('intrahtdocs') . 
+                      "/prog/en/xslt/" .
+                      C4::Context->preference('marcflavour') .
+                      "slim2intranet$xsl_suffix.xsl";
+        } else {
+            $xslfile = C4::Context->config('opachtdocs') . 
                       "/prog/en/xslt/" .
                       C4::Context->preference('marcflavour') .
                       "slim2OPAC$xsl_suffix.xsl";
+        }
         my $style_doc = $parser->parse_file($xslfile);
         $stylesheet = $xslt->parse_stylesheet($style_doc);
     }

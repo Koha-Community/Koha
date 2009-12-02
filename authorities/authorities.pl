@@ -185,10 +185,9 @@ sub create_input {
     value=\"$value\"
     class=\"input_marceditor\"
     tabindex=\"1\"                     
-    disabled=\"disabled\"
         readonly=\"readonly\" \/>
-    <span class=\"buttonDot\"
-        onclick=\"Dopop('/cgi-bin/koha/authorities/auth_finder.pl?authtypecode=".$tagslib->{$tag}->{$subfield}->{authtypecode}."&index=$subfield_data{id}','$subfield_data{id}')\">...</span>
+    <a href=\"#\" class=\"buttonDot\"
+        onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
     ";
     # it's a plugin field
     }

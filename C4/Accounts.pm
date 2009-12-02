@@ -266,7 +266,7 @@ EOT
 sub returnlost{
     my ( $borrowernumber, $itemnum ) = @_;
     C4::Circulation::MarkIssueReturned( $borrowernumber, $itemnum );
-    my $borrower = C4::Members::GetMember( $borrowernumber, 'borrowernumber' );
+    my $borrower = C4::Members::GetMember( 'borrowernumber'=>$borrowernumber );
     my @datearr = localtime(time);
     my $date = ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
     my $bor = "$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";

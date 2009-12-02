@@ -215,9 +215,14 @@ my @biblioloop = ();
 foreach my $biblionumber (@biblionumbers) {
 
     my %biblioloopiter = ();
+	my $maxreserves;
 
     my $dat          = GetBiblioData($biblionumber);
 
+    if ( not CanBookBeReserved($borrowerinfo->{borrowernumber}, $biblionumber) ) {
+ 		$warnings = 1;
+        $maxreserves = 1;
+    }
     # get existing reserves .....
     my ( $count, $reserves ) = GetReservesFromBiblionumber($biblionumber,1);
     my $totalcount = $count;
@@ -238,7 +243,9 @@ foreach my $biblionumber (@biblionumbers) {
 
     $template->param( alreadyreserved => $alreadyreserved,
                       messages => $messages,
-                      warnings => $warnings );
+                      warnings => $warnings,
+					  maxreserves=>$maxreserves
+					  );
     
     
     # FIXME think @optionloop, is maybe obsolete, or  must be switchable by a systeme preference fixed rank or not
@@ -400,7 +407,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $policy_holdallowed = 0;
             }
             
-            if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve}) {
+            if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve} and CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber) ) {
                 if ( not $policy_holdallowed and C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
                     $item->{override} = 1;
                     $num_override++;

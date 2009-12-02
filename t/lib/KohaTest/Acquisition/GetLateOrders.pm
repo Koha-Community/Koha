@@ -67,7 +67,7 @@ sub one_order : Test( 29 ) {
     }
 
     # provide some branch information
-    my $member = GetMember( $self->{'memberid'} );
+    my $member = GetMember( borrowernumber=>$self->{'memberid'} );
     # diag( Data::Dumper->Dump( [ $member ], [ 'member' ] ) );
     {
         my @orders = GetLateOrders( 0, $self->{'booksellerid'}, $member->{'branchcode'} );

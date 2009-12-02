@@ -23,9 +23,11 @@ xpath disable
 all any
 melm 001        Local-number,Local-number:n
 # Local-number (biblionumber can be either in 090$9 or, on some setup, on 001)
+melm 009      Identifier-standard:w,Identifier-standard:n
 melm 090$9      Local-number,Local-number:n
-melm 099$c      date-entered-on-file:s,date-entered-on-file:n,date-entered-on-file:y
+melm 099$c      date-entered-on-file:s,date-entered-on-file:n,date-entered-on-file:y,Date-of-acquisition,Date-of-acquisition:d,Date-of-acquisition:s
 melm 099$d      Date/time-last-modified:s,Date/time-last-modified:n,Date/time-last-modified:y
+melm 099$t      ccode:w
 
 
 melm 010$a    ISBN:w
@@ -37,8 +39,8 @@ melm 011$y    ISSN:w,Identifier-standard:w
 # wrong ISSN
 melm 011$z    ISSN:w,Identifier-standard:w
 
-melm 200$b      itemtype:w
-melm 995$r      itype:w
+melm 200$b      itemtype:w,itype:w
+melm 995$r      itemtype:w,itype:w
 
 melm 100$a      tpubdate:s:range(data,8,1),ta:w:range(data,17,1),ta:w:range(data,18,1),ta:w:range(data,19,1),Modified-code:n:range(data,21,1),ln:s:range(data,22,3),char-encoding:n:range(data,26,2),char-encoding:n:range(data,28,2),char-encoding:n:range(data,30,2),script-Title:n:range(data,34,2)
 melm 101$a     ln
@@ -78,7 +80,6 @@ melm 680$b		LC-call-number:s
 melm 680		LC-call-number
 #melm 001		Identifier-standard:w
 
-melm 200$b      itype
 
 #melm 100$9		Cross-Reference	!:w
 
@@ -327,6 +328,7 @@ melm 995$c		holdingbranch,Record-Source,item
 melm 995$d		holdingbranch,Record-Source,item
 melm 995$e      location,item
 melm 995$f		barcode,item
+melm 995$h		ccode,item
 melm 995$j		LC-card-number:s,item
 melm 995$k      Call-Number,Local-Classification,lcn,Call-Number:p,Local-Classification:p,lcn:p,item
 melm 995$s      popularity:n,popularity:s,item

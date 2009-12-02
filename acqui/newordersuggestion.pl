@@ -106,6 +106,7 @@ my $publishercode   = $input->param('publishercode');
 my $op              = $input->param('op');
 my $suggestionid    = $input->param('suggestionid');
 my $duplicateNumber = $input->param('duplicateNumber');
+my $uncertainprice = $input->param('uncertainprice');
 
 $op = 'else' unless $op;
 
@@ -116,7 +117,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         type            => "intranet",
         query           => $input,
         authnotrequired => 1,
-        flagsrequired   => { acquisition => 1 },
+        flagsrequired   => { acquisition => 'order_manage' },
     }
 );
 
@@ -126,14 +127,18 @@ if ( $op eq 'connectDuplicate' ) {
 
 # getting all suggestions.
 my $suggestions_loop =
-  &SearchSuggestion( $borrowernumber, $author, $title, $publishercode,'ACCEPTED',
-    -1 );
+        &SearchSuggestion( 
+                { managedby 	=> $borrowernumber, 
+                author		  	=> $author, 
+                title			=> $title, 
+                publishercode	=> $publishercode,
+                status		    => 'ACCEPTED'});
 my $vendor = GetBookSellerFromId($supplierid);
 $template->param(
     suggestions_loop        => $suggestions_loop,
     basketno                => $basketno,
     supplierid              => $supplierid,
-	name					=> $vendor->{'name'},
+    name					=> $vendor->{'name'},
     "op_$op"                => 1,
 );
 

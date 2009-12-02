@@ -21,18 +21,68 @@ function verify_images() {
         }
     });
 }
-$(window).load(function() {
-    verify_images();
-});
-<!-- /TMPL_IF -->
-
 var q_array = new Array();  // will hold search terms, if present
 
+$(window).load(function() {
+        verify_images();
+     });
+<!-- /TMPL_IF -->
+function Dopop(link) {                      
+        newin=window.open(link,'popup','width=500,height=500,toolbar=false,scrollbars=yes,resizeable=yes');
+}   
 $(document).ready(function() {
-    $('#sortbyform').find("input:submit").hide();
-    $('#sort_by').change(function() {
+$('#sortbyform').find("input:submit").hide();
+$('#sort_by').change(function() {
         $('#sortbyform').submit();
     });
+
+
+$(".addtocart").show();
+        var param1 = "<label for=\"addto\">Add to: <\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+        <!-- TMPL_IF name="intranetbookbag" -->     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>"; <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="addbarshelves" -->
+        param1 += "<optgroup label=\"Your Lists:\">";<!-- TMPL_LOOP NAME="addbarshelvesloop" -->
+        param1 += "<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP -->
+        param1 += "<\/optgroup>";<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="addpubshelves" -->param1 += "<optgroup label=\"Public Lists:\">"<!-- TMPL_LOOP NAME="addpubshelvesloop" -->+"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"<!-- /TMPL_LOOP -->
+        param1 +="<\/optgroup><option value=\"newlist\">[ New List ]<\/option>"
+<!-- /TMPL_IF -->
+        <!-- /TMPL_IF -->
+        param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\"Save\" />";
+ $('#sortsubmit').hide();
+        $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
+        $("span.addto").html(param1);
+        $("#addto").change(function(){
+                cartList();
+        });
+        $(".addto").find("input:submit").click(function(){
+                cartList();
+                return false;
+	});
+
+ $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
+    
+        function cartList(){
+                        if($("#addto").find("option:selected").attr("value") == "addtolist"){
+                        var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
+                        if (vShelfAdd()) {
+			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vShelfAdd());
+                        }
+                        return false;                   
+                } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+                        if (vShelfAdd()) {
+			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
+                        }
+                        return false;   
+                }
+		if($("#addto").find("option:selected").attr("value") == "addtocart"){
+                        addMultiple();
+                        return false;
+                 }
+
+        }
+
     $("#selection_ops").show();
     $(".selection").show();
     <!-- TMPL_IF NAME="query_desc" -->
@@ -174,7 +224,7 @@ function GetZ3950Terms(){
             <h3>
                 <!-- TMPL_VAR NAME="total" --> result(s) found <!-- TMPL_IF NAME="query_desc" -->for <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"-->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s): <span style="font-weight: bold;">'<!-- TMPL_VAR NAME="limit_desc" -->'</span><!-- /TMPL_IF --><!-- TMPL_IF NAME="LibraryName" --> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog<!-- /TMPL_IF -->.<br />&nbsp;
             </h3>
-            <div id="selection_ops" style="display:none">
+            <div id="selection_ops" class="cartlist" style="display:none">
                 <a href="#" onclick="selectAll(); return false;">Select All</a>
                 |
                 <a href="#" onclick="clearAll(); return false;">Clear All</a>
@@ -182,10 +232,11 @@ function GetZ3950Terms(){
                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
                 <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
-                  <input type="button" onclick="placeHold(); return false;" value="Place Hold"/>
+                | <a href="/cgi-bin/koha/catalogue/search.pl" onclick="placeHold(); return false;">Place Hold</a>
                 <!-- /TMPL_IF -->
-                <input type="button" onclick="addToList(); return false;" value="Add to List"/>
-				<!-- TMPL_IF NAME="CAN_user_editcatalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="z39.50 Search"/><!-- /TMPL_IF -->
+		<span class="addto"></span>
+
+				<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="z39.50 Search"/><!-- /TMPL_IF -->
             </div>
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
@@ -309,7 +360,16 @@ function GetZ3950Terms(){
             <!-- ######### -->
 
             <div id="searchresults">
-                    
+                <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
+                <!-- TMPL_IF NAME="searchdesc" -->
+                <!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
+                <input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+                <!-- /TMPL_LOOP -->
+                <!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
+                <input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+                <!-- /TMPL_LOOP -->
+                <!-- /TMPL_IF -->
+    
                     <!-- TABLE RESULTS START -->
 
                 <table>
@@ -329,28 +389,23 @@ function GetZ3950Terms(){
                                     </a></td>                           
                             <!-- /TMPL_IF -->
                             <td>
-                                <input type="checkbox" class="selection" value="<!-- TMPL_VAR NAME="biblionumber" -->" style="display:none" />
+                                <input type="checkbox" class="selection" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" style="display:none" />
                             </td>
                             <td>
                                 <p><!-- TMPL_VAR NAME="result_number" -->.
                                     <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
                                         <a class="title" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                            <b><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></b>
-                                        </a> <!-- TMPL_VAR NAME="subtitle" -->
-<!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
                                     <!-- TMPL_ELSIF NAME="BiblioDefaultViewlabeled_marc" -->
                                             <a class="title" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                                <!-- TMPL_VAR NAME="title" --> 
-                                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
                                     <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
                                             <a class="title" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                                <!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF -->
-                                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
                                     <!-- TMPL_ELSE -->
                                             <a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                                <!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF -->
-                                            </a> <!-- TMPL_VAR NAME="subtitle" --><!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
-									<!-- /TMPL_IF -->
+                                    <!-- /TMPL_IF -->
+                                            <b><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></b>
+                                            </a> 
+                                        <!-- TMPL_LOOP NAME="subtitle" --> , <!-- TMPL_VAR NAME="subfield" --> <!-- /TMPL_LOOP -->
+										<!-- TMPL_IF name="volume" -->,<!-- TMPL_VAR name="volume" --><!-- /TMPL_IF --> <!-- TMPL_IF name="volumeddesc" -->, <!-- TMPL_VAR name="volumeddesc" --><!-- /TMPL_IF -->
                                 </p>
                                 <!-- TMPL_IF name="summary" -->
                                         <!-- TMPL_IF NAME="author" -->
@@ -472,6 +527,7 @@ function GetZ3950Terms(){
                             </tr>
                         <!-- /TMPL_LOOP -->
                 </table>
+		</form>
                 </div>
         <!-- /TMPL_IF -->
         <!-- TMPL_INCLUDE NAME="page-numbers.inc" -->

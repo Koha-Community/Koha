@@ -1,6 +1,8 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Remaining circulation permissions'),
    ( 1, 'override_renewals', 'Override blocked renewals'),
+   ( 9, 'edit_catalogue', 'Editer le  catalogue'),
+   ( 9, 'fast_cataloging', 'Catalogage rapide'),
    (13, 'edit_news', 'Write news for the OPAC and staff interfaces'),
    (13, 'label_creator', 'Create printable labels and barcodes from catalog and patron data'),
    (13, 'edit_calendar', 'Define days when the library is closed'),
@@ -15,5 +17,18 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'import_patrons', 'Import patron data'),
    (13, 'delete_anonymize_patrons', 'Delete old borrowers and anonymize circulation history (deletes borrower reading history)'),
    (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
-   (13, 'schedule_tasks', 'Schedule tasks to run')
+   (13, 'schedule_tasks', 'Schedule tasks to run'),
+   (11, 'vendors_manage', 'Manage vendors'),
+   (11, 'contracts_manage', 'Gérer les contrats'),
+   (11, 'period_manage', 'Gérer les périodes'),
+   (11, 'budget_manage', 'Gérer les budgets'),
+   (11, 'budget_modify', 'Modifier les budgets (impossible de créer les lignes, mais possible de modifier celles qui existent'),
+   (11, 'planning_manage', 'Gérer de la planification des budgets'),
+   (11, 'order_manage', 'Gérer les commandes et les paniers'),
+   (11, 'group_manage', 'Gérer les commandes et les bons de commande'),
+   (11, 'order_receive', 'Gérer les réceptions'),
+   (11, 'budget_add_del', 'Ajouter et supprimer les budgets (mais pas modifier)'),
+   (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
+   (13, 'batch_mod', 'Modification Par lot des exemplaires'),
+   (13, 'batch_del', 'Suppression par lot des exemplaires')
 ;

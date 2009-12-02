@@ -75,16 +75,27 @@ my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
 my $op           = $input->param('op');
 
+my $frameworkcode = &GetFrameworkCode($biblionumber);
+
+# Defining which userflag is needing according to the framework currently used
+my $userflags;
+if (defined $input->param('frameworkcode')) {
+    $userflags = ($input->param('frameworkcode') eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+}
+
+if (not defined $userflags) {
+    $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+}
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "cataloguing/additem.tmpl",
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {editcatalogue => 1},
+                 flagsrequired => {editcatalogue => $userflags},
                  debug => 1,
                  });
 
-my $frameworkcode = &GetFrameworkCode($biblionumber);
 
 my $today_iso = C4::Dates->today('iso');
 $template->param(today_iso => $today_iso);
@@ -239,25 +250,24 @@ if ($op eq "additem") {
 } elsif ($op eq "delitem") {
 #-------------------------------------------------------------------------------
     # check that there is no issue on this item before deletion.
-    my $sth=$dbh->prepare("select * from issues i where i.itemnumber=?");
-    $sth->execute($itemnumber);
-    my $onloan=$sth->fetchrow;
-	$sth->finish();
-    $nextop="additem";
-    if ($onloan){
-        push @errors,"book_on_loan";
-    } else {
-		# check it doesnt have a waiting reserve
-		$sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'W' AND itemnumber = ?");
-		$sth->execute($itemnumber);
-		my $reserve=$sth->fetchrow;
-		unless ($reserve){
-			&DelItem($dbh,$biblionumber,$itemnumber);
-			print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
-            exit;
-		}
-        push @errors,"book_reserved";
+    $error = &DelItemCheck($dbh,$biblionumber,$itemnumber);
+    if($error == 1){
+        print $input->redirect("additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode");
+    }else{
+        push @errors,$error;
+        $nextop="additem";
     }
+#-------------------------------------------------------------------------------
+} elsif ($op eq "delallitems") {
+#-------------------------------------------------------------------------------
+    my @biblioitems = &GetBiblioItemByBiblioNumber($biblionumber);
+    foreach my $biblioitem (@biblioitems){
+        my $items = &GetItemsByBiblioitemnumber($biblioitem->{biblioitemnumber});
+
+        foreach my $item (@$items){
+            &DelItem($dbh,$biblionumber,$item->{itemnumber});
+        }
+	}
 #-------------------------------------------------------------------------------
 } elsif ($op eq "saveitem") {
 #-------------------------------------------------------------------------------
@@ -356,10 +366,15 @@ foreach my $subfield_code (sort keys(%witness)) {
 # now, build the item form for entering a new item
 my @loop_data =();
 my $i=0;
-my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
 
 my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
+
+# Getting the fields where the item location is
+my ($location_field, $location_subfield) = GetMarcFromKohaField('items.location', $frameworkcode);
+
+# Getting the name of the authorised values' category for item location
+my $item_location_category = $tagslib->{$location_field}->{$location_subfield}->{'authorised_value'};
 
 foreach my $tag (sort keys %{$tagslib}) {
 # loop through each subfield
@@ -417,7 +432,7 @@ foreach my $tag (sort keys %{$tagslib}) {
           foreach my $thisbranch (@$branches) {
               push @authorised_values, $thisbranch->{value};
               $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
-              $value = $thisbranch->{value} if $thisbranch->{selected};
+             # $value = $thisbranch->{value} if $thisbranch->{selected};
           }
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
@@ -456,10 +471,28 @@ foreach my $tag (sort keys %{$tagslib}) {
       }
       else {
           push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
+
+	  # Are we dealing with item location ?
+          my $item_location = ($tagslib->{$tag}->{$subfield}->{authorised_value} eq $item_location_category) ? 1 : 0;
+
+          # If so, we sort by authorised_value, else by libelle
+          my $orderby = $item_location ? 'authorised_value' : 'lib';
+
+          my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY $orderby");
+
+          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value});
+
+
           while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
-              push @authorised_values, $value;
-              $authorised_lib{$value} = $lib;
+            push @authorised_values, $value;
+	      	if ($tagslib->{$tag}->{$subfield}->{authorised_value} eq $item_location_category) {
+		  		$authorised_lib{$value} = $value . " - " . $lib;
+	      	} else {
+		  		$authorised_lib{$value} = $lib;
+	      	}
+
+	      	# For item location, we show the code and the libelle
+	      	$authorised_lib{$value} = ($item_location) ? $value . " - " . $lib : $lib;
           }
       }
       $subfield_data{marc_value} =CGI::scrolling_list(      # FIXME: factor out scrolling_list
@@ -537,6 +570,7 @@ $template->param(
     itemtagsubfield  => $itemtagsubfield,
     op      => $nextop,
     opisadd => ($nextop eq "saveitem") ? 0 : 1,
+    C4::Search::enabled_staff_search_views,
 );
 foreach my $error (@errors) {
     $template->param($error => 1);

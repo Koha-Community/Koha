@@ -26,10 +26,11 @@ package C4::Output;
 # templates.
 
 use strict;
-use warnings;
 
 use C4::Context;
 use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );
+use C4::Dates qw(format_date);
+use C4::Budgets qw(GetCurrency);
 
 use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
@@ -46,10 +47,10 @@ BEGIN {
 					html =>[qw(&output_with_http_headers &output_html_with_http_headers)]
 				);
     push @EXPORT, qw(
-        &themelanguage &gettemplate setlanguagecookie pagination_bar
+        &themelanguage &gettemplate setlanguagecookie getlanguagecookie pagination_bar
     );
     push @EXPORT, qw(
-        &output_html_with_http_headers &output_with_http_headers
+        &output_html_with_http_headers &output_with_http_headers FormatData FormatNumber
     );
 }
 
@@ -81,6 +82,7 @@ sub gettemplate {
     }
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
+    my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
     # if the template doesn't exist, load the English one as a last resort
     my $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
@@ -141,7 +143,7 @@ sub themelanguage {
               getTranslatedLanguages($interface,'prog') )
       if $http_accept_language;
     # But, if there's a cookie set, obey it
-    $lang = $query->cookie('KohaOpacLanguage') if $query->cookie('KohaOpacLanguage');
+    $lang = $query->cookie('KohaOpacLanguage') if (defined $query and $query->cookie('KohaOpacLanguage'));
     # Fall back to English
     my @languages;
     if ($interface eq 'intranet') {
@@ -200,6 +202,60 @@ sub setlanguagecookie {
         -uri    => $uri,
         -cookie => $cookie
     );
+}
+
+sub getlanguagecookie {
+    my ($query) = @_;
+    my $lang;
+    if ($query->cookie('KohaOpacLanguage')){
+        $lang = $query->cookie('KohaOpacLanguage') ;
+    }else{
+        $lang = $ENV{HTTP_ACCEPT_LANGUAGE};
+        
+    }
+    $lang = substr($lang, 0, 2);
+
+    return $lang;
+}
+
+=item FormatNumber
+=cut
+sub FormatNumber{
+my $cur  =  GetCurrency;
+my $cur_format = C4::Context->preference("CurrencyFormat");
+my $num;
+
+if ( $cur_format eq 'FR' ) {
+    $num = new Number::Format(
+        'decimal_fill'      => '2',
+        'decimal_point'     => ',',
+        'int_curr_symbol'   => $cur->{symbol},
+        'mon_thousands_sep' => ' ',
+        'thousands_sep'     => ' ',
+        'mon_decimal_point' => ','
+    );
+} else {  # US by default..
+    $num = new Number::Format(
+        'int_curr_symbol'   => '',
+        'mon_thousands_sep' => ',',
+        'mon_decimal_point' => '.'
+    );
+}
+return $num;
+}
+
+=item FormatData
+
+FormatData($data_hashref)
+C<$data_hashref> is a ref to data to format
+
+Format dates of data those dates are assumed to contain date in their noun
+Could be used in order to centralize all the formatting for HTML output
+=cut
+
+sub FormatData{
+		my $data_hashref=shift;
+        $$data_hashref{$_} = format_date( $$data_hashref{$_} ) for grep{/date/} keys (%$data_hashref);
 }
 
 =item pagination_bar
@@ -392,6 +448,9 @@ sub output_with_http_headers($$$$;$) {
         $options->{'Content-Style-Type' } = 'text/css';
         $options->{'Content-Script-Type'} = 'text/javascript';
     }
+    # remove SUDOC specific NSB NSE
+    $data =~ s/\x{C2}\x{98}|\x{C2}\x{9C}/ /g;
+    $data =~ s/\x{C2}\x{88}|\x{C2}\x{89}/ /g;
     print $query->header($options), $data;
 }
 

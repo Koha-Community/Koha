@@ -44,6 +44,7 @@ use strict;
 use warnings;
 
 use CGI;
+use MIME::Base64;
 use C4::Auth;
 use C4::Context;
 use C4::Koha;
@@ -67,9 +68,14 @@ use C4::Output;
 my %tabsysprefs;
 
 # Acquisitions
-$tabsysprefs{acquisitions}              = "Acquisitions";
-$tabsysprefs{gist}                      = "Acquisitions";
-$tabsysprefs{emailPurchaseSuggestions}  = "Acquisitions";
+    $tabsysprefs{acquisitions}="Acquisitions";
+    $tabsysprefs{gist}="Acquisitions";
+    $tabsysprefs{emailPurchaseSuggestions}="Acquisitions";
+    $tabsysprefs{RenewSerialAddsSuggestion}="Acquisitions";
+    $tabsysprefs{AcqCreateItem}="Acquisitions";
+    $tabsysprefs{OrderPdfFormat}="Acquisitions";
+    $tabsysprefs{OrderPdfTemplate}="Acquisitions";
+    $tabsysprefs{CurrencyFormat}="Acquisitions";
 
 # Admin
 $tabsysprefs{singleBranchMode}      = "Admin";
@@ -350,6 +356,7 @@ $tabsysprefs{XSLTResultsDisplay}   = "OPAC";
 $tabsysprefs{OPACShowCheckoutName}   = "OPAC";
 
 # Serials
+$tabsysprefs{RoutingListAddReserves}  	   = "Serials";
 $tabsysprefs{OPACSerialIssueDisplayCount}  = "Serials";
 $tabsysprefs{StaffSerialIssueDisplayCount} = "Serials";
 $tabsysprefs{OPACDisplayExtendedSubInfo}   = "Serials";
@@ -451,6 +458,8 @@ sub GetPrefParams {
     if ( not defined( $data->{'type'} ) ) {
         $params->{'type-free'} = 1;
         $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 );
+    } elsif ( $data->{'type'} eq 'Upload' ) {
+        $params->{'type-upload'} = 1;
     } elsif ( $data->{'type'} eq 'Choice' ) {
         $params->{'type-choice'} = 1;
     } elsif ( $data->{'type'} eq 'YesNo' ) {
@@ -683,6 +692,13 @@ if ( $op eq 'add_form' ) {
             $value = $params->{'value'};
         }
     }
+
+    if ( $input->param('preftype') eq 'Upload' ) {
+        my $lgtfh = $input->upload('value');
+        $value = join '', <$lgtfh>;
+        $value = encode_base64($value);
+    }
+
     if ( $sth->rows ) {
         unless ( C4::Context->config('demo') ) {
             my $sth = $dbh->prepare("update systempreferences set value=?,explanation=?,type=?,options=? where variable=?");

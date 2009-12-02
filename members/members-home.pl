@@ -23,9 +23,12 @@ use C4::Auth;
 use C4::Output;
 use C4::Context;
 use C4::Members;
+use C4::Branch;
+use C4::Category;
 
 my $query = new CGI;
 my $quicksearch = $query->param('quicksearch');
+my $branch = $query->param('branchcode');
 my ($template, $loggedinuser, $cookie);
 my $template_name;
 
@@ -48,13 +51,13 @@ if($quicksearch){
                  debug => 1,
                  });
 }
+my @categories=C4::Category->all;
+$template->param(
+    branchloop=>(defined $branch?GetBranchesLoop($branch):GetBranchesLoop()),
+	categoryloop=>\@categories,
+);
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
             );
-if (C4::Context->preference("AddPatronLists")=~/code/){
-    my $categories=GetBorrowercategoryList;
-    $categories->[0]->{'first'}=1;
-    $template->param(categories=>$categories);  
-}  
 
 output_html_with_http_headers $query, $cookie, $template->output;

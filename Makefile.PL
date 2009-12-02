@@ -585,14 +585,18 @@ WriteMakefile(
                             'Net::LDAP'                        => 0.33, # optional
                             'Net::LDAP::Filter'                => 0.14, # optional
                             'Net::Z3950::ZOOM'                 => 1.16,
+                            'Number::Format'                   => 1.52,
                             'PDF::API2'                        => 2.000,
                             'PDF::API2::Page'                  => 2.000,
                             'PDF::API2::Util'                  => 2.000,
+                            'PDF::API2::Simple'                => 1.000,
+                            'PDF::Table'                       => 0.9.3,
                             'PDF::Reuse'                       => 0.33,
                             'PDF::Reuse::Barcode'              => 0.05,
                             'POE'                              => 0.9999,
                             'POSIX'                            => 1.09,
                             'Schedule::At'                     => 1.06,
+                            'Storable'	                       => 2.21,
                             'SMS::Send'                        => 0.05, # optional
                             'Term::ANSIColor'                  => 1.10,
                             'Test'                             => 1.25,
@@ -849,7 +853,10 @@ be run from the current directory.
 
 Configuration directory:);
         # FIXME - home directory portability consideration apply
-        $install_base_default = (exists $ENV{'HOME'}) ? "$ENV{'HOME'}/koha-dev" : "$defaults->{'INSTALL_BASE'}-dev";
+        $install_base_default = 
+	    $ENV{DESTDIR}
+	    || ( exists $ENV{HOME} ? "$ENV{HOME}/koha-dev" : "$defaults->{'INSTALL_BASE'}-dev" ) 
+	;
     } elsif ($config{'INSTALL_MODE'} eq 'single') {
         $msg = "\nPlease specify the directory in which to install Koha";
         # FIXME -- we're assuming under a 'single' mode install

@@ -82,7 +82,7 @@ sub plugin {
                                     query => $input,
                                     type => "intranet",
                                     authnotrequired => 0,
-                                    flagsrequired => {editcatalogue => 1},
+                                    flagsrequired => {editcatalogue => '*'},
                                     debug => 1,
                                     });
 
@@ -91,6 +91,8 @@ sub plugin {
     my $len = 0;
     my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE isbn LIKE ? OR isbn LIKE ? LIMIT 1');
     
+    $isbn =~ s/-//g;
+    warn $isbn;
     if (length ($isbn) == 13){
         $isbn = substr($isbn, 3, length($isbn)-3);
     }

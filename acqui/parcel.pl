@@ -1,9 +1,10 @@
 #!/usr/bin/perl
 
-#script to receive orders
-#written by chris@katipo.co.nz 24/2/2000
+#script to recieve orders
+
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -53,52 +54,137 @@ To filter the results list on this given date.
 
 use C4::Auth;
 use C4::Acquisition;
+use C4::Budgets;
 use C4::Bookseller;
 use C4::Biblio;
+use C4::Items;
 use CGI;
 use C4::Output;
 use C4::Dates qw/format_date format_date_in_iso/;
+use JSON;
 
 use strict;
 
-my $input      = new CGI;
-my $supplierid = $input->param('supplierid');
-my $bookseller = GetBookSellerFromId($supplierid);
+my $input=new CGI;
+my $supplierid=$input->param('supplierid');
+my $bookseller=GetBookSellerFromId($supplierid);
 
-my $invoice = $input->param('invoice') || '';
-my $freight = $input->param('freight');
-my $gst     = $input->param('gst');
-my $datereceived =
-  ($input->param('op') eq 'new')
-  ? C4::Dates->new($input->param('datereceived'))
-  : C4::Dates->new($input->param('datereceived'), 'iso');
+my $invoice=$input->param('invoice') || '';
+my $freight=$input->param('freight');
+my $gst= $input->param('gst') || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+my $datereceived =  ($input->param('op') eq 'new') ? C4::Dates->new($input->param('datereceived')) 
+					:  C4::Dates->new($input->param('datereceived'), 'iso')   ;
 $datereceived = C4::Dates->new() unless $datereceived;
 my $code            = $input->param('code');
 my @rcv_err         = $input->param('error');
 my @rcv_err_barcode = $input->param('error_bc');
 
-my ($template, $loggedinuser, $cookie) = get_template_and_user(
-    {   template_name   => "acqui/parcel.tmpl",
-        query           => $input,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { acquisition => 1 },
-        debug           => 1,
-    }
-);
+my $startfrom=$input->param('startfrom');
+my $resultsperpage = $input->param('resultsperpage');
+$resultsperpage = 20 unless ($resultsperpage);
+$startfrom=0 unless ($startfrom);
 
-# If receiving error, report the error (coming from finishreceive.pl).
-if (scalar(@rcv_err)) {
-    my $cnt = 0;
-    my $error_loop;
-    for my $err (@rcv_err) {
-        push @$error_loop, { "error_$err" => 1, barcode => $rcv_err_barcode[$cnt] };
-        $cnt++;
+if($input->param('format') eq "json"){
+    my ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "acqui/ajax.tmpl",
+                 query => $input,
+				 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {acquisition => 'order_receive'},
+                 debug => 1,
+    });
+       
+    my @datas;
+    my $search   = $input->param('search') || '';
+    my $supplier = $input->param('supplierid') || '';
+    my $basketno = $input->param('basketno') || '';
+    my $orderno  = $input->param('orderno') || '';
+
+    my $orders = SearchOrder($orderno, $search, $supplier, $basketno);
+    foreach my $order (@$orders){
+        if($order->{quantityreceived} < $order->{quantity}){
+            my $data = {};
+            
+            $data->{basketno} = $order->{basketno};
+            $data->{ordernumber} = $order->{ordernumber};
+            $data->{title} = $order->{title};
+            $data->{author} = $order->{author};
+            $data->{biblionumber} = $order->{biblionumber};
+            $data->{freight} = $order->{freight};
+            $data->{quantrem} = $order->{quantity} - $order->{quantityreceived};
+            $data->{quantity} = $order->{quantity};
+            $data->{ecost} = $order->{ecost};
+            $data->{ordertotal} = sprintf("%.2f",$order->{ecost}*$order->{quantity});
+            push @datas, $data;
+        }
     }
-    $template->param(
-        receive_error => 1,
-        error_loop    => $error_loop,
-    );
+    
+    my $json_text = to_json(\@datas);
+    $template->param(return => $json_text);
+    output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+
+my ($template, $loggedinuser, $cookie)
+    = get_template_and_user({template_name => "acqui/parcel.tmpl",
+                 query => $input,
+				 type => "intranet",
+                 authnotrequired => 0,
+                 flagsrequired => {acquisition => 'order_receive'},
+                 debug => 1,
+});
+
+my $action = $input->param('action');
+my $ordernumber = $input->param('ordernumber');
+my $biblionumber = $input->param('biblionumber');
+
+# If canceling an order
+if ($action eq "cancelorder") {
+
+    my $error_delitem;
+    my $error_delbiblio;
+
+    # We delete the order
+    DelOrder($biblionumber, $ordernumber);
+
+    # We delete all the items related to this order
+    my @itemnumbers = GetItemnumbersFromOrder($ordernumber);
+    foreach (@itemnumbers) {
+	my $delcheck = DelItemCheck(C4::Context->dbh, $biblionumber, $_);
+	# (should always success, as no issue should exist on item on order)
+	if ($delcheck != 1) { $error_delitem = 1; }
+    }
+
+    # We get the number of remaining items
+    my $itemcount = GetItemsCount($biblionumber);
+    
+    # If there are no items left,
+    if ($itemcount eq 0) {
+	# We delete the record
+	$error_delbiblio = DelBiblio($biblionumber);	
+    }
+
+    if ($error_delitem || $error_delbiblio) {
+	warn $error_delitem;
+	warn $error_delbiblio;
+	if ($error_delitem)   { $template->param(error_delitem => 1); }
+	if ($error_delbiblio) { $template->param(error_delbiblio => 1); }
+    } else {
+	$template->param(success_delorder => 1);
+    }
+}
+
+# If receiving error, report the error (coming from finishrecieve.pl(sic)).
+if( scalar(@rcv_err) ) {
+	my $cnt=0;
+	my $error_loop;
+	for my $err (@rcv_err) {
+		push @$error_loop, { "error_$err" => 1 , barcode => $rcv_err_barcode[$cnt] };
+		$cnt++;
+	}
+	$template->param( receive_error => 1 ,
+						error_loop => $error_loop,
+					);
 }
 
 my $cfstr         = "%.2f";                                                           # currency format string -- could get this from currency table.
@@ -146,25 +232,59 @@ my $ordergrandtotal;
 my @loop_orders = ();
 for (my $i = 0 ; $i < $countpendings ; $i++) {
     my %line;
-    %line = %{ $pendingorders->[$i] };
-    $line{quantity}         += 0;
-    $line{quantityreceived} += 0;
-    $line{unitprice}        += 0;
-    $totalPunitprice        += $line{unitprice};
-    $totalPquantity         += $line{quantity};
-    $totalPqtyrcvd          += $line{quantityreceived};
-    $totalPecost            += $line{ecost};
-    $line{ecost}      = sprintf("%.2f", $line{ecost});
-    $line{ordertotal} = sprintf("%.2f", $line{ecost} * $line{quantity});
-    $line{unitprice}  = sprintf("%.2f", $line{unitprice});
-    $line{invoice}    = $invoice;
-    $line{gst}        = $gst;
-    $line{total}      = $total;
+    %line = %{$pendingorders->[$i]};
+    $line{quantity}+=0;
+    $line{quantrem} = $line{quantity} - $line{quantityreceived};
+    $line{quantityreceived}+=0;
+    $line{unitprice}+=0;
+    $totalPunitprice += $line{unitprice};
+    $totalPquantity +=$line{quantity};
+    $totalPqtyrcvd +=$line{quantityreceived};
+    $totalPecost += $line{ecost};
+    $line{ecost} = sprintf("%.2f",$line{ecost});
+    $line{ordertotal} = sprintf("%.2f",$line{ecost}*$line{quantity});
+    $line{unitprice} = sprintf("%.2f",$line{unitprice});
+    $line{invoice} = $invoice;
+    $line{gst} = $gst;
+    $line{total} = $total;
     $line{supplierid} = $supplierid;
     $ordergrandtotal += $line{ecost} * $line{quantity};
-    push @loop_orders, \%line;
+    push @loop_orders, \%line if ($i >= $startfrom and $i < $startfrom + $resultsperpage);
 }
 $freight = $totalfreight unless $freight;
+
+my $count = $countpendings;
+
+if ($count>$resultsperpage){
+    my $displaynext=0;
+    my $displayprev=$startfrom;
+    if(($count - ($startfrom+$resultsperpage)) > 0 ) {
+        $displaynext = 1;
+    }
+
+    my @numbers = ();
+    for (my $i=1; $i<$count/$resultsperpage+1; $i++) {
+            my $highlight=0;
+            ($startfrom/$resultsperpage==($i-1)) && ($highlight=1);
+            push @numbers, { number => $i,
+                highlight => $highlight ,
+                startfrom => ($i-1)*$resultsperpage};
+    }
+
+    my $from = $startfrom*$resultsperpage+1;
+    my $to;
+    if($count < (($startfrom+1)*$resultsperpage)){
+        $to = $count;
+    } else {
+        $to = (($startfrom+1)*$resultsperpage);
+    }
+    $template->param(numbers=>\@numbers,
+                     displaynext=>$displaynext,
+                     displayprev=>$displayprev,
+                     nextstartfrom=>(($startfrom+$resultsperpage<$count)?$startfrom+$resultsperpage:$count),
+                     prevstartfrom=>(($startfrom-$resultsperpage>0)?$startfrom-$resultsperpage:0)
+                    );
+}
 
 #$totalfreight=$freight;
 $tototal = $tototal + $freight;
@@ -194,5 +314,6 @@ $template->param(
     totalPquantity        => $totalPquantity,
     totalPqtyrcvd         => $totalPqtyrcvd,
     totalPecost           => sprintf("%.2f", $totalPecost),
+    resultsperpage        => $resultsperpage,
 );
 output_html_with_http_headers $input, $cookie, $template->output;

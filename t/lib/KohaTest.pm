@@ -10,7 +10,6 @@ plan skip_all => "Test::Class required for performing database tests" if $@;
 
 use C4::Auth;
 use C4::Biblio;
-use C4::Bookfund;
 use C4::Bookseller;
 use C4::Context;
 use C4::Items;
@@ -82,61 +81,158 @@ these are run once, at the beginning of the whole test suite
 
 sub startup_15_truncate_tables : Test( startup => 1 ) {
     my $self = shift;
-    
-    my @truncate_tables = qw( accountlines 
-                              accountoffsets              
-                              alert                       
-                              aqbasket                    
-                              aqbooksellers               
-                              aqorderbreakdown            
-                              aqorderdelivery             
-                              aqorders                    
-                              auth_header                 
-                              branchcategories            
-                              branchrelations             
-                              branchtransfers             
-                              browser                     
-                              cities                      
-                              deletedbiblio               
-                              deletedbiblioitems          
-                              deletedborrowers            
-                              deleteditems                
-                              ethnicity                   
-                              issues                      
-                              issuingrules                
-                              labels_batches
-                              labels_layouts
-                              labels_templates
-                              matchchecks                 
-                              notifys                     
-                              nozebra                     
-                              old_issues                  
-                              old_reserves                
-                              overduerules                
-                              patroncards                 
-                              patronimage                 
-                              printers                    
-                              printers_profile            
-                              reports_dictionary          
-                              reserveconstraints          
-                              reserves                    
-                              reviews                     
-                              roadtype                    
-                              saved_reports               
-                              saved_sql                   
-                              serial                      
-                              serialitems                 
-                              services_throttle           
-                              special_holidays            
-                              statistics                  
-                              subscription                
-                              subscriptionhistory         
-                              subscriptionroutinglist     
-                              suggestions                 
-                              tags                        
-                              virtualshelfcontents        
+
+#     my @truncate_tables = qw( accountlines
+#                               accountoffsets
+#                               action_logs
+#                               alert
+#                               aqbasket
+#                               aqbookfund
+#                               aqbooksellers
+#                               aqbudget
+#                               aqorderdelivery
+#                               aqorders
+#                               auth_header
+#                               auth_subfield_structure
+#                               auth_tag_structure
+#                               auth_types
+#                               authorised_values
+#                               biblio
+#                               biblio_framework
+#                               biblioitems
+#                               borrowers
+#                               branchcategories
+#                               branches
+#                               branchrelations
+#                               branchtransfers
+#                               browser
+#                               categories
+#                               cities
+#                               class_sort_rules
+#                               class_sources
+#                               currency
+#                               deletedbiblio
+#                               deletedbiblioitems
+#                               deletedborrowers
+#                               deleteditems
+#                               ethnicity
+#                               import_batches
+#                               import_biblios
+#                               import_items
+#                               import_record_matches
+#                               import_records
+#                               issues
+#                               issuingrules
+#                               items
+#                               itemtypes
+#                               labels
+#                               labels_conf
+#                               labels_profile
+#                               labels_templates
+#                               language_descriptions
+#                               language_rfc4646_to_iso639
+#                               language_script_bidi
+#                               language_script_mapping
+#                               language_subtag_registry
+#                               letter
+#                               marc_matchers
+#                               marc_subfield_structure
+#                               marc_tag_structure
+#                               matchchecks
+#                               matcher_matchpoints
+#                               matchpoint_component_norms
+#                               matchpoint_components
+#                               matchpoints
+#                               notifys
+#                               nozebra
+#                               old_issues
+#                               old_reserves
+#                               opac_news
+#                               overduerules
+#                               patroncards
+#                               patronimage
+#                               printers
+#                               printers_profile
+#                               repeatable_holidays
+#                               reports_dictionary
+#                               reserveconstraints
+#                               reserves
+#                               reviews
+#                               roadtype
+#                               saved_reports
+#                               saved_sql
+#                               serial
+#                               serialitems
+#                               services_throttle
+#                               sessions
+#                               special_holidays
+#                               statistics
+#                               stopwords
+#                               subscription
+#                               subscriptionhistory
+#                               subscriptionroutinglist
+#                               suggestions
+#                               systempreferences
+#                               tags
+#                               userflags
+#                               virtualshelfcontents
+#                               virtualshelves
+#                               z3950servers
+#                               zebraqueue
+#                         );
+
+    my @truncate_tables = qw( accountlines
+                              accountoffsets
+                              alert
+                              aqbasket
+                              aqbooksellers
+                              aqorderdelivery
+                              aqorders
+                              auth_header
+                              branchcategories
+                              branchrelations
+                              branchtransfers
+                              browser
+                              cities
+                              deletedbiblio
+                              deletedbiblioitems
+                              deletedborrowers
+                              deleteditems
+                              ethnicity
+                              issues
+                              issuingrules
+                              labels
+                              labels_profile
+                              matchchecks
+                              notifys
+                              nozebra
+                              old_issues
+                              old_reserves
+                              overduerules
+                              patroncards
+                              patronimage
+                              printers
+                              printers_profile
+                              reports_dictionary
+                              reserveconstraints
+                              reserves
+                              reviews
+                              roadtype
+                              saved_reports
+                              saved_sql
+                              serial
+                              serialitems
+                              services_throttle
+                              special_holidays
+                              statistics
+                              subscription
+                              subscriptionhistory
+                              subscriptionroutinglist
+                              suggestions
+                              tags
+                              virtualshelfcontents
                         );
-    
+
     my $failed_to_truncate = 0;
     foreach my $table ( @truncate_tables ) {
         my $dbh = C4::Context->dbh();
@@ -162,7 +258,7 @@ sub startup_20_add_bookseller : Test(startup => 1) {
     my $id = AddBookseller( $booksellerinfo );
     ok( $id, "created bookseller: $id" );
     $self->{'booksellerid'} = $id;
-    
+
     return;
 }
 
@@ -182,7 +278,7 @@ sub startup_22_add_bookfund : Test(startup => 2) {
     # diag( Data::Dumper->Dump( [ $bookfund ], qw( bookfund  ) ) );
     is( $bookfund->{'bookfundid'},   $bookfundid,      "found bookfund: '$bookfundid'" );
     is( $bookfund->{'bookfundname'}, 'General Stacks', "found bookfund: '$bookfundid'" );
-    
+
     $self->{'bookfundid'} = $bookfundid;
     return;
 }
@@ -237,7 +333,7 @@ sub startup_24_add_member : Test(startup => 1) {
     my $borrowernumber = AddMember( %$memberinfo );
     ok( $borrowernumber, "created member: $borrowernumber" );
     $self->{'memberid'} = $borrowernumber;
-    
+
     return;
 }
 
@@ -251,7 +347,7 @@ sub startup_30_login : Test( startup => 2 ) {
     $self->{'sessionid'} = '12345678'; # does this value matter?
     my $borrower_details = C4::Members::GetMemberDetails( $self->{'memberid'} );
     ok( $borrower_details->{'cardnumber'}, 'cardnumber' );
-    
+
     # make a cookie and force it into $cgi.
     # This would be a lot easier with Test::MockObject::Extends.
     my $cgi = CGI->new( { userid   => $borrower_details->{'cardnumber'},
@@ -268,7 +364,7 @@ sub startup_30_login : Test( startup => 2 ) {
 
     # my $session = C4::Auth::get_session( $sessionID );
     # diag( Data::Dumper->Dump( [ $session ], [ qw( session ) ] ) );
-    
+
 
 }
 
@@ -316,7 +412,7 @@ sub random_string {
         $randomstring .= $alphabet[ rand( scalar( @alphabet ) ) ];
     }
     return $randomstring;
-    
+
 }
 
 =head3 random_phone
@@ -329,7 +425,7 @@ sub random_phone {
     my $self = shift;
 
     return '212-555-5555';
-    
+
 }
 
 =head3 random_email
@@ -343,7 +439,7 @@ sub random_email {
     my $self = shift;
 
     return $self->random_string() . '@example.com';
-    
+
 }
 
 =head3 random_ip
@@ -356,7 +452,7 @@ sub random_ip {
     my $self = shift;
 
     return '127.0.0.2';
-    
+
 }
 
 =head3 random_date
@@ -469,10 +565,10 @@ sub add_biblios {
                        );
 
         my $appendedfieldscount = $marcrecord->append_fields( @marc_fields );
-        
+
         diag $MARC::Record::ERROR if ( $MARC::Record::ERROR );
         is( $appendedfieldscount, scalar @marc_fields, 'added correct number of MARC fields' );
-        
+
         my $frameworkcode = ''; # XXX I'd like to put something reasonable here.
         my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $marcrecord, $frameworkcode );
         ok( $biblionumber, "the biblionumber is $biblionumber" );
@@ -491,8 +587,8 @@ sub add_biblios {
         }
         push @{$self->{'biblios'}}, $biblionumber;
     }
-   
-    $self->reindex_marc(); 
+
+    $self->reindex_marc();
     my $query = 'Finn Test';
     my ( $error, $results ) = SimpleSearch( $query );
     if ( $param{'count'} <= scalar( @$results ) ) {
@@ -500,7 +596,7 @@ sub add_biblios {
     } else {
         fail( "we never found all $param{'count'} titles" );
     }
-    
+
 }
 
 =head3 reindex_marc
@@ -544,7 +640,7 @@ sub reindex_marc {
         system "zebraidx -c $zebra_config -d $zebra_db -g iso2709 update $directory/${record_type} > /dev/null 2>\&1";
         system "zebraidx -c $zebra_config -d $zebra_db -g iso2709 commit > /dev/null 2>\&1";
     }
-        
+
 }
 
 
@@ -660,7 +756,7 @@ sub start_zebrasrv {
             if ( $return != 0 ) {
                 diag( "command '$command' died with value: " . $? >> 8 );
             }
-            
+
             $command = "zebraidx -c $zebra_config -d $zebra_db_name create $zebra_db_name";
             diag $command;
             $return = system( $command . ' > /dev/null 2>&1' );
@@ -669,7 +765,7 @@ sub start_zebrasrv {
             }
         }
     }
-    
+
     diag 'starting zebrasrv...';
 
     my $pidfile = File::Spec->catdir( C4::Context->config("logdir"), 'zebra.pid' );
@@ -728,7 +824,7 @@ sub start_zebraqueue_daemon {
     diag $command;
     my $started = system( $command );
     diag "started: $started";
-    
+
 }
 
 =head3 stop_zebraqueue_daemon

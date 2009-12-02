@@ -1,0 +1,57 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Attach item</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc" -->
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloging/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <i><!-- TMPL_VAR NAME="bibliotitle" escape="html" --></i></div>
+<div id="doc3" class="yui-t2">
+
+<!-- TMPL_IF NAME="error" -->
+    <div class="dialog alert">
+	<!-- TMPL_IF NAME="errornonewitem" -->ERROR: Unable to create the new item.<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="errornoitem" -->ERROR: Unable to get the item.<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="errornoitemnumber" -->ERROR: Unable to get the item number from this barcode.<!-- /TMPL_IF -->
+    </div>
+    <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+	<input type="submit" value="OK" />
+	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+    </form>
+<!-- TMPL_ELSE -->
+    <!-- TMPL_IF NAME="success" -->
+	<div class="dialog">The item has successfully been attached to <i><!-- TMPL_VAR NAME="bibliotitle" escape="html" --></i>.</div>    
+	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+	    <input type="submit" value="OK" />
+	    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+	</form>
+    <!-- TMPL_ELSE -->
+	<!-- TMPL_IF NAME="missingparameter" -->
+	<form method="post" action="/cgi-bin/koha/cataloguing/moveitem.pl">
+	    <!-- TMPL_IF NAME="missingbiblionumber" -->
+	    <fieldset id="biblionumber_fieldset">
+		<label for="biblionumber_fieldset">Select the biblionumber to attach the item to</label>
+		    <div class="hint">Enter biblionumber:</div>
+		    <input type="text" name="biblionumber" id="biblionumber" class="focus" size="14" /> 
+	    </fieldset>
+	    <!-- TMPL_ELSE -->
+	    <input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+	    <!-- /TMPL_IF -->
+
+    	    <!-- TMPL_IF NAME="missingbarcode" -->
+	    <fieldset id="barcode_fieldset">
+		<label for="barcode_fieldset">Select the item to attach<!-- TMPL_IF NAME="bibliotitle" --> to <i><!-- TMPL_VAR NAME="bibliotitle" escape="html" --></i><!-- /TMPL_IF --></label>
+		    <div class="hint">Enter item barcode:</div>
+		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> 
+	    </fieldset>
+	    <!-- TMPL_ELSE -->
+	    <input type="hidden" name="barcode" id="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
+	    <!-- /TMPL_IF -->
+
+	    <input type="submit" value="Select" />
+
+	</form>
+	<!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

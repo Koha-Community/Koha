@@ -41,19 +41,29 @@ Script to control the guided report creation
 
 my $input = new CGI;
 
+my $phase = $input->param('phase');
+my $flagsrequired;
+if ( $phase eq 'Build new' ) {
+    $flagsrequired = 'create_report';
+}
+elsif ( $phase eq 'Use saved' ) {
+    $flagsrequired = 'execute_report';
+} else {
+    $flagsrequired = '*';
+}
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
         template_name   => "reports/guided_reports_start.tmpl",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { reports => 1 },
+        flagsrequired   => { reports => $flagsrequired },
         debug           => 1,
     }
 );
 
     my @errors = ();
-my $phase = $input->param('phase');
 if ( !$phase ) {
     $template->param( 'start' => 1 );
     # show welcome page
@@ -193,11 +203,32 @@ elsif ( $phase eq 'Choose these criteria' ) {
 	my $query_criteria;
     foreach my $crit (@criteria) {
         my $value = $input->param( $crit . "_value" );
-        ($value) or next;
-        if ($value =~ C4::Dates->regexp('syspref')) { 
-            $value = C4::Dates->new($value)->output("iso");
-        }
-        $query_criteria .= " AND $crit='$value'";
+	
+	# If value is not defined, then it may be range values
+	if (!defined $value) {
+
+	    my $fromvalue = $input->param( "from_" . $crit . "_value" );
+	    my $tovalue   = $input->param( "to_"   . $crit . "_value" );
+	    
+	    # If the range values are dates
+	    if ($fromvalue =~ C4::Dates->regexp('syspref') && $tovalue =~ C4::Dates->regexp('syspref')) { 
+		$fromvalue = C4::Dates->new($fromvalue)->output("iso");
+		$tovalue = C4::Dates->new($tovalue)->output("iso");
+	    }
+
+	    if ($fromvalue && $tovalue) {
+		$query_criteria .= " AND $crit >= '$fromvalue' AND $crit <= '$tovalue'";
+	    }
+
+	} else {
+
+	    # If value is a date
+	    if ($value =~ C4::Dates->regexp('syspref')) { 
+		$value = C4::Dates->new($value)->output("iso");
+	    }
+	    $query_criteria .= " AND $crit='$value'";
+	}
+	warn $query_criteria;
     }
 
     $template->param(
@@ -455,6 +486,18 @@ elsif ($phase eq 'Save Compound'){
 		master=>$mastertables,
 		subsql=>$subtables
 	);
+}
+
+# pass $sth, get back an array of names for the column headers
+sub header_cell_values {
+    my $sth = shift or return ();
+    return @{$sth->{NAME}};
+}
+
+# pass $sth, get back a TMPL_LOOP-able set of names for the column headers
+sub header_cell_loop {
+    my @headers = map { +{ cell => $_ } } header_cell_values (shift);
+    return \@headers;
 }
 
 # pass $sth, get back an array of names for the column headers

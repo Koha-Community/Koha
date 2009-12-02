@@ -300,6 +300,28 @@
     </span>
   </xsl:if>
 
+  <xsl:if test="marc:datafield[@tag=955]">
+    <span class="results_summary">
+      <span class="label">SUDOC serial history: </span>
+      <xsl:for-each select="marc:datafield[@tag=955]">
+        <xsl:value-of select="marc:subfield[@code='9']"/>: 
+        <xsl:value-of select="marc:subfield[@code='r']"/>
+        <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+      </xsl:for-each>
+    </span>
+  </xsl:if>
+
+  <xsl:if test="marc:datafield[@tag=955]">
+    <span class="results_summary">
+      <span class="label">SUDOC serial history: </span>
+      <xsl:for-each select="marc:datafield[@tag=955]">
+        <xsl:value-of select="marc:subfield[@code='9']"/>: 
+        <xsl:value-of select="marc:subfield[@code='r']"/>
+        <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+      </xsl:for-each>
+    </span>
+  </xsl:if>
+
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">600</xsl:with-param>
     <xsl:with-param name="label">Sujet - Nom de personne</xsl:with-param>

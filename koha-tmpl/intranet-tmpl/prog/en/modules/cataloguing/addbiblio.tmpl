@@ -131,11 +131,17 @@ function AreMandatoriesNotOk(){
 	    	for(var j=0,len2=eleminputs.length; j<len2; j++){
 	
 	    		if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
-					/* tag_801_subfield_c_841304_545657 */
 					inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
 					
 					for( var k=0; k<len2; k++){
 						if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
+							isempty = false
+						}
+					}
+					
+					elemselect = elem.getElementsByTagName('select');
+					for( var k=0; k<elemselect.length; k++){
+						if(elemselect[k].id.match(inputregexp) && elemselect[k].value){
 							isempty = false
 						}
 					}
@@ -147,7 +153,7 @@ function AreMandatoriesNotOk(){
     	
     	if(isempty){
     		flag = 1;
-    		StrAlert += "\t* Field " + arr[0] + " is mandatory, at least one of its subfields must be filled.\n";
+    		StrAlert += _("\t* Field ") + arr[0] + _(" is mandatory, at least one of its subfields must be filled.\n");
     	}
     	
     }
@@ -746,6 +752,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                 <!-- TMPL_UNLESS NAME="advancedMARCEditor" -->
                     <!-- TMPL_IF name="mandatory" --><span class="subfield subfield_mandatory"><!-- TMPL_ELSE --><span class="subfield"><!-- /TMPL_IF -->
                         <!-- TMPL_VAR NAME="marc_lib_plain" -->
+                        <!-- TMPL_IF NAME="mandatory" --><span class="mandatory_marker" title="This field is mandatory">*</span><!-- /TMPL_IF -->
                     </span>
                     </label>
                 <!-- /TMPL_UNLESS -->

@@ -18,9 +18,11 @@ $| = 1;
 # command-line parameters
 my $want_help = 0;
 my $do_update = 0;
+my $wherestrings;
 
 my $result = GetOptions(
     'run-update'    => \$do_update,
+    'where=s@'         => \$wherestrings,
     'h|help'        => \$want_help,
 );
 
@@ -46,9 +48,12 @@ $dbh->commit();
 exit 0;
 
 sub process_bibs {
-    my $sql = "SELECT biblionumber FROM biblio ORDER BY biblionumber ASC";
+    my $sql = "SELECT biblionumber FROM biblio JOIN biblioitems USING (biblionumber)";
+    $sql.="WHERE ". join(" AND ",@$wherestrings) if ($wherestrings);
+    $sql.="ORDER BY biblionumber ASC";
     my $sth = $dbh->prepare($sql);
-    $sth->execute();
+    eval{$sth->execute();};
+    if ($@){ die "error $@";};
     while (my ($biblionumber) = $sth->fetchrow_array()) {
         $num_bibs_processed++;
         process_bib($biblionumber);
@@ -139,6 +144,7 @@ not in sync with the items table.
 
 Parameters:
     --run-update            run the synchronization
+    --where condition       selects the biblios on a criterium (Repeatable)
     --help or -h            show this message.
 _USAGE_
 }

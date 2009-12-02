@@ -51,7 +51,7 @@ sub do_renew_for ($$) {
 
 sub do_renew {
 	my $self = shift;
-	my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
+	my $borrower = GetMember( 'cardnumber'=>$self->{patron}->id);
 	return $self->do_renew_for($borrower);
 }	
 

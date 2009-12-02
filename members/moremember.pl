@@ -93,7 +93,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 
 #start the page and read in includes
-my $data           = GetMember( $borrowernumber ,'borrowernumber');
+my $data           = GetMember( 'borrowernumber' => $borrowernumber );
 my $reregistration = $input->param('reregistration');
 
 if ( not defined $data ) {
@@ -138,7 +138,7 @@ $data->{ "sex_".$data->{'sex'}."_p" } = 1;
 my $catcode;
 if ( $category_type eq 'C') {
 	if ($data->{'guarantorid'} ne '0' ) {
-    	my $data2 = GetMember( $data->{'guarantorid'} ,'borrowernumber');
+    	my $data2 = GetMember( 'borrowernumber' => $data->{'guarantorid'} );
     	foreach (qw(address city B_address B_city phone mobile zipcode country B_country)) {
     	    $data->{$_} = $data2->{$_};
     	}
@@ -178,7 +178,7 @@ if ( $category_type eq 'A' ) {
 }
 else {
     if ($data->{'guarantorid'}){
-	    my ($guarantor) = GetMember( $data->{'guarantorid'},'biblionumber');
+	    my ($guarantor) = GetMember( 'borrowernumber' =>$data->{'guarantorid'});
 		$template->param(guarantor => 1);
 		foreach (qw(borrowernumber cardnumber firstname surname)) {        
 			  $template->param("guarantor$_" => $guarantor->{$_});

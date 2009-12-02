@@ -140,10 +140,11 @@ use strict;            # always use
 ## load Koha modules
 use C4::Context;
 use C4::Output;
-use C4::Auth;
+use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Languages qw(getAllLanguages);
 use C4::Koha;
+use C4::VirtualShelves qw(GetRecentShelves);
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
 
@@ -206,8 +207,13 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 my $branches = GetBranches();
 my @branch_loop;
 
+# we need to know the borrower branch code to set a default branch
+my $borrowerbranchcode = C4::Context->userenv->{'branch'};
+
 for my $branch_hash (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, };
+    # if independantbranches is activated, set the default branch to the borrower branch
+    my $selected = (C4::Context->preference("independantbranches") and ($borrowerbranchcode eq $branch_hash)) ? 1 : undef;
+    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, selected => $selected};
 }
 
 my $categories = GetBranchCategories(undef,'searchdomain');
@@ -311,6 +317,8 @@ if ( $template_type eq 'advsearch' ) {
     if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
         $template->param( expanded_options => $cgi->param('expanded_options'));
     }
+
+    $template->param(virtualshelves => C4::Context->preference("virtualshelves"));
 
     output_html_with_http_headers $cgi, $cookie, $template->output;
     exit;
@@ -433,7 +441,8 @@ my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by,$scan);
+my $lang = C4::Output::getlanguagecookie($cgi);
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by,$scan,$lang);
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
@@ -630,4 +639,26 @@ if ($query_desc || $limit_desc) {
 }
 
 # VI. BUILD THE TEMPLATE
+
+# Build drop-down list for 'Add To:' menu...
+
+my $row_count = 10; # FIXME:This probably should be a syspref
+my ($pubshelves, $total) = GetRecentShelves(2, $row_count, undef);
+my ($barshelves, $total) = GetRecentShelves(1, $row_count, $borrowernumber);
+
+my @pubshelves = @{$pubshelves};
+my @barshelves = @{$barshelves};
+
+if (@pubshelves) {
+        $template->param( addpubshelves     => scalar (@pubshelves));
+        $template->param( addpubshelvesloop => @pubshelves);
+}
+
+if (@barshelves) {
+        $template->param( addbarshelves     => scalar (@barshelves));
+        $template->param( addbarshelvesloop => @barshelves);
+}
+
+
+
 output_html_with_http_headers $cgi, $cookie, $template->output;

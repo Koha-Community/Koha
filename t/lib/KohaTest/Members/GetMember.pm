@@ -30,8 +30,8 @@ sub startup_create_borrower : Test( startup => 1 ) {
         address      => 'address'   . $self->random_string(),
         city         => 'city'      . $self->random_string(),
         cardnumber   => 'card'      . $self->random_string(),
-        branchcode   => 'CPL',
-        categorycode => 'B',    # B  => Board
+        branchcode   => 'U1BCG',
+        categorycode => 'D',    # B  => Board
         dateexpiry   => '2020-01-01',
         password     => 'testpassword',
         userid       => 'testuser',
@@ -66,7 +66,7 @@ sub borrowernumber_get : Test( 6 ) {
 
     #search by borrowernumber
     my $results =
-      C4::Members::GetMember( $self->{get_new_borrowernumber}, 'borrowernumber' );
+      C4::Members::GetMember( borrowernumber=>$self->{get_new_borrowernumber});
     ok( $results, 'we successfully called GetMember searching by borrowernumber' );
 
     ok( exists $results->{borrowernumber},
@@ -93,7 +93,7 @@ sub cardnumber_get : Test( 6 ) {
         "we have a valid cardnumber $self->{get_new_cardnumber} to test with" );
 
     #search by cardnumber
-    my $results = C4::Members::GetMember( $self->{get_new_cardnumber}, 'cardnumber' );
+    my $results = C4::Members::GetMember( 'cardnumber'=>$self->{get_new_cardnumber} );
     ok( $results, 'we successfully called GetMember searching by cardnumber' );
 
     ok( exists $results->{cardnumber}, 'member details has a "cardnumber" attribute' );
@@ -120,7 +120,7 @@ sub firstname_get : Test( 6 ) {
         "we have a valid firstname $self->{get_new_firstname} to test with" );
 
     ##search by firstname
-    my $results = C4::Members::GetMember( $self->{get_new_firstname}, 'firstname' );
+    my $results = C4::Members::GetMember( 'firstname'=>$self->{get_new_firstname} );
     ok( $results, 'we successfully called GetMember searching by firstname' );
 
     ok( exists $results->{firstname}, 'member details has a "firstname" attribute' );
@@ -146,7 +146,7 @@ sub userid_get : Test( 6 ) {
         "we have a valid userid $self->{get_new_userid} to test with" );
 
     #search by userid
-    my $results = C4::Members::GetMember( $self->{get_new_userid}, 'userid' );
+    my $results = C4::Members::GetMember( 'userid'=>$self->{get_new_userid} );
     ok( $results, 'we successfully called GetMember searching by userid' );
 
     ok( exists $results->{'userid'}, 'member details has a "userid" attribute' );

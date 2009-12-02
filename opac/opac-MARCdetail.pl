@@ -170,7 +170,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
                     }
                     $subfield_data{marc_value} =
                       GetAuthorisedValueDesc( $fields[$x_i]->tag(),
-                        $subf[$i][0], $subf[$i][1], '', $tagslib );
+                        $subf[$i][0], $subf[$i][1], '', $tagslib, '', 'opac' );
                 }
                 $subfield_data{marc_subfield} = $subf[$i][0];
                 $subfield_data{marc_tag}      = $fields[$x_i]->tag();
@@ -241,7 +241,7 @@ foreach my $field (@fields) {
         else {
             $this_row{ $subf[$i][0] } =
               GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
-                $subf[$i][1], '', $tagslib );
+                $subf[$i][1], '', $tagslib, '', 'opac' );
         }
     }
     if (%this_row) {

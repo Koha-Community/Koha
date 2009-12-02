@@ -29,6 +29,7 @@ use C4::Output;
 use C4::Dates;
 use XML::Simple;
 use XML::Dumper;
+use Switch;
 use C4::Debug;
 # use Smart::Comments;
 # use Data::Dumper;
@@ -81,7 +82,7 @@ $criteria{'1'} = [
     'items.dateaccessioned|date'
 ];
 $criteria{'2'} =
-  [ 'items.holdingbranch', 'items.homebranch' ,'items.itemlost', 'items.location', 'items.ccode'];
+  [ 'items.itemnumber|textrange', 'items.biblionumber|textrange', 'items.barcode|textrange', 'biblio.frameworkcode', 'items.holdingbranch', 'items.homebranch', 'biblio.datecreated|daterange', 'biblio.timestamp|daterange', 'items.onloan|daterange', 'items.ccode', 'items.itemcallnumber|textrange', 'items.itype', 'items.itemlost', 'items.location' ];
 $criteria{'3'} = ['borrowers.branchcode'];
 $criteria{'4'} = ['aqorders.datereceived|date'];
 $criteria{'5'} = ['borrowers.branchcode'];
@@ -305,31 +306,57 @@ sub get_criteria {
     foreach my $localcrit (@$crit) {
         my ( $value, $type )   = split( /\|/, $localcrit );
         my ( $table, $column ) = split( /\./, $value );
-        if ( $type eq 'date' ) {
-			my %temp;
-            $temp{'name'}   = $value;
-            $temp{'date'}   = 1;
-			$temp{'description'} = $column_defs->{$value};
-            push @criteria_array, \%temp;
-        }
-        else {
+	switch ($type) {
+	    case 'textrange' {
+		my %temp;
+		$temp{'name'}        = $value;
+		$temp{'from'}        = "from_" . $value;
+		$temp{'to'}          = "to_" . $value;
+		$temp{'textrange'}   = 1;
+		$temp{'description'} = $column_defs->{$value};
+		push @criteria_array, \%temp;
+	    }
 
-            my $query =
-              "SELECT distinct($column) as availablevalues FROM $table";
-            my $sth = $dbh->prepare($query);
-            $sth->execute();
-            my @values;
-            while ( my $row = $sth->fetchrow_hashref() ) {
-                push @values, $row;
-                ### $row;
-            }
-            $sth->finish();
-            my %temp;
-            $temp{'name'}   = $value;
-			$temp{'description'} = $column_defs->{$value};
-            $temp{'values'} = \@values;
-            push @criteria_array, \%temp;
-        }
+	    case 'date' {
+		my %temp;
+		$temp{'name'}        = $value;
+		$temp{'date'}        = 1;
+		$temp{'description'} = $column_defs->{$value};
+		push @criteria_array, \%temp;
+	    }
+
+	    case 'daterange' {
+		my %temp;
+		$temp{'name'}        = $value;
+		$temp{'from'}        = "from_" . $value;
+		$temp{'to'}          = "to_" . $value;
+		$temp{'daterange'}   = 1;
+		$temp{'description'} = $column_defs->{$value};
+		push @criteria_array, \%temp;
+	    }
+
+	    else {
+		my $query =
+		  "SELECT distinct($column) as availablevalues FROM $table";
+		my $sth = $dbh->prepare($query);
+		$sth->execute();
+		my @values;
+		while ( my $row = $sth->fetchrow_hashref() ) {
+		    push @values, $row;
+		    if ($row->{'availablevalues'} eq '') { $row->{'default'} = 1 };
+		}
+		$sth->finish();
+
+		my %temp;
+		$temp{'name'}        = $value;
+	    	$temp{'description'} = $column_defs->{$value};
+		$temp{'values'}      = \@values;
+		
+		push @criteria_array, \%temp;
+     
+	    }
+
+	}
     }
     return ( \@criteria_array );
 }
@@ -523,7 +550,7 @@ sub get_saved_reports {
     foreach (@$result){
         $_->{date_created} = format_date($_->{date_created}); 
         
-        my $member = C4::Members::GetMember($_->{borrowernumber});
+        my $member = C4::Members::GetMember(borrowernumber=>$_->{borrowernumber});
         $_->{borrowerfirstname} = $member->{firstname};
         $_->{borrowersurname}   = $member->{surname};
     }

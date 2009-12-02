@@ -374,9 +374,13 @@ $.tablesorter.addParser({
                     <!-- /TMPL_IF -->
                 </td>
 		<td>
-		<form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
-		<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-		<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete('Are you sure you want to cancel this hold?');" /></form>
+		<!-- TMPL_IF NAME="cancelable" -->
+			<form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+			<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete('Are you sure you want to cancel this hold?');" /></form>
+		<!-- TMPL_ELSE -->
+			&nbsp;
+		<!-- /TMPL_IF -->
 		</td>
 
             </tr>

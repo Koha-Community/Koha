@@ -30,7 +30,7 @@ use C4::Charset;
 my $query = new CGI;
 binmode STDOUT, ":utf8";
 
-my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 1} );
+my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
 unless ($status eq "ok") {
     print $query->header(-type => 'text/xml', -status => '403 Forbidden');
     print XMLout({ auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);

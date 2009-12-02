@@ -35,7 +35,7 @@ my $input=new CGI;
 
 my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
-my $data=GetMember($borrowernumber,'borrowernumber');
+my $data=GetMember('borrowernumber'=>$borrowernumber);
 my $order=$input->param('order') || '';
 my $order2=$order;
 if ($order2 eq ''){

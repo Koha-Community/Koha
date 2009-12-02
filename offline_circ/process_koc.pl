@@ -239,7 +239,7 @@ sub kocIssueItem {
 
   $circ->{ 'barcode' } = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
   my $branchcode = C4::Context->userenv->{branch};
-  my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
+  my $borrower = GetMember( 'cardnumber'=>$circ->{ 'cardnumber' } );
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
   my $issue = GetItemIssue( $item->{'itemnumber'} );
 
@@ -327,7 +327,7 @@ sub kocReturnItem {
   #warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
   my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
   if ( $borrowernumber ) {
-  my $borrower = GetMember( $borrowernumber, 'borrowernumber' );
+  my $borrower = GetMember( 'borrowernumber' =>$borrowernumber );
     C4::Circulation::MarkIssueReturned( $borrowernumber,
                                       $item->{'itemnumber'},
                                       undef,
@@ -354,7 +354,7 @@ sub kocReturnItem {
 
 sub kocMakePayment {
   my ( $circ ) = @_;
-  my $borrower = GetMember( $circ->{ 'cardnumber' }, 'cardnumber' );
+  my $borrower = GetMember( 'cardnumber'=>$circ->{ 'cardnumber' } );
   recordpayment( $borrower->{'borrowernumber'}, $circ->{'amount'} );
   push( @output, { payment => 1,
     amount => $circ->{'amount'},

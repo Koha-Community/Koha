@@ -212,7 +212,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         my $borrowernumber;
         my $member;
         if ( ($matchpoint eq 'cardnumber') && ($borrower{'cardnumber'}) ) {
-            $member = GetMember( $borrower{'cardnumber'}, 'cardnumber' );
+            $member = GetMember( 'cardnumber' => $borrower{'cardnumber'} );
             if ($member) {
                 $borrowernumber = $member->{'borrowernumber'};
             }

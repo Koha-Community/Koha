@@ -52,7 +52,7 @@ my $reviews = getallreviews(0);
 
 foreach ( @$reviews ) {
     my $borrowernumber = $_->{borrowernumber};
-    my $borrowerData   = GetMember($borrowernumber,'borrowernumber');
+    my $borrowerData   = GetMember('borrowernumber' => $borrowernumber);
     my $biblioData     = GetBiblioData($_->{biblionumber});
     # setting some borrower info into this hash
     $_->{bibliotitle} = $biblioData->{'title'};

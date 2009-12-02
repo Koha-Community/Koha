@@ -37,6 +37,7 @@ BEGIN {
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
 		&GetCcodes
+		&GetSupportName &GetSupportList
 		&get_itemtypeinfos_of
 		&getframeworks &getframeworkinfo
 		&getauthtypes &getauthtype
@@ -211,6 +212,87 @@ sub subfield_is_koha_internal_p ($) {
     return length $subfield != 1;
 }
 
+=head2 GetSupportName
+
+  $itemtypename = &GetSupportName($codestring);
+
+Returns a string with the name of the itemtype.
+
+
+=cut
+
+sub GetSupportName{
+	my ($codestring)=@_;
+	return if (! $codestring); 
+	my $resultstring;
+	my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
+	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {  
+		my $query = qq|
+			SELECT description
+			FROM   itemtypes
+			WHERE itemtype=?
+			order by description
+		|;
+		my $sth = C4::Context->dbh->prepare($query);
+		$sth->execute($codestring);
+		($resultstring)=$sth->fetchrow;
+		return $resultstring;
+	} else {
+        my $sth =
+            C4::Context->dbh->prepare(
+                    "SELECT lib FROM authorised_values WHERE category = ? AND authorised_value = ?"
+                    );
+        $sth->execute( $advanced_search_types, $codestring );
+        my $data = $sth->fetchrow_hashref;
+        return $$data{'lib'};
+	}
+
+}
+=head2 GetSupportList
+
+  $itemtypes = &GetSupportList();
+
+Returns an array ref containing informations about Support (since itemtype is rather a circulation code when item-level-itypes is used).
+
+build a HTML select with the following code :
+
+=head3 in PERL SCRIPT
+
+    my $itemtypes = GetSupportList();
+    $template->param(itemtypeloop => $itemtypes);
+
+=head3 in TEMPLATE
+
+    <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+        <select name="itemtype">
+            <option value="">Default</option>
+        <!-- TMPL_LOOP name="itemtypeloop" -->
+            <option value="<!-- TMPL_VAR name="itemtype" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->> <!--TMPL_IF Name="imageurl"--><img alt="<!-- TMPL_VAR name="description" -->" src="<!--TMPL_VAR Name="imageurl"-->><!--TMPL_ELSE-->"<!-- TMPL_VAR name="description" --><!--/TMPL_IF--></option>
+        <!-- /TMPL_LOOP -->
+        </select>
+        <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
+        <input type="submit" value="OK" class="button">
+    </form>
+
+=cut
+
+sub GetSupportList{
+	my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
+	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {  
+		my $query = qq|
+			SELECT *
+			FROM   itemtypes
+			order by description
+		|;
+		my $sth = C4::Context->dbh->prepare($query);
+		$sth->execute;
+		return $sth->fetchall_arrayref({});
+	} else {
+		my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
+		my @results= map {{itemtype=>$$_{authorised_value},description=>$$_{lib},imageurl=>$$_{imageurl}}} @$advsearchtypes;
+		return \@results;
+	}
+}
 =head2 GetItemTypes
 
   $itemtypes = &GetItemTypes();
@@ -986,26 +1068,31 @@ sub GetAuthValCode {
 
 $authvalues = GetAuthorisedValues([$category], [$selected]);
 
-This function returns all authorised values from the'authosied_value' table in a reference to array of hashrefs.
+This function returns all authorised values from the'authorised_value' table in a reference to array of hashrefs.
 
 C<$category> returns authorised values for just one category (optional).
+
+C<$opac> If set to a true value, displays OPAC descriptions rather than normal ones when they exist.
 
 =cut
 
 sub GetAuthorisedValues {
-    my ($category,$selected) = @_;
+    my ($category,$selected,$opac) = @_;
 	my @results;
     my $dbh      = C4::Context->dbh;
     my $query    = "SELECT * FROM authorised_values";
     $query .= " WHERE category = '" . $category . "'" if $category;
-
+    $query .= " ORDER BY category, lib, lib_opac";
     my $sth = $dbh->prepare($query);
     $sth->execute;
 	while (my $data=$sth->fetchrow_hashref) {
-		if ($selected eq $data->{'authorised_value'} ) {
-			$data->{'selected'} = 1;
-		}
-        push @results, $data;
+	    if ($selected eq $data->{'authorised_value'} ) {
+		    $data->{'selected'} = 1;
+	    }
+	    if ($opac && $data->{'lib_opac'}) {
+		$data->{'lib'} = $data->{'lib_opac'};
+	    }
+	    push @results, $data;
 	}
     #my $data = $sth->fetchall_arrayref({});
     return \@results; #$data;
@@ -1034,6 +1121,7 @@ sub GetAuthorisedValueCategories {
 =head2 GetKohaAuthorisedValues
 	
 	Takes $kohafield, $fwcode as parameters.
+	If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
 	Returns hashref of Code => description
 	Returns undef 
 	  if no authorised value category is defined for the kohafield.
@@ -1041,16 +1129,16 @@ sub GetAuthorisedValueCategories {
 =cut
 
 sub GetKohaAuthorisedValues {
-  my ($kohafield,$fwcode,$codedvalue) = @_;
+  my ($kohafield,$fwcode,$opac) = @_;
   $fwcode='' unless $fwcode;
   my %values;
   my $dbh = C4::Context->dbh;
   my $avcode = GetAuthValCode($kohafield,$fwcode);
   if ($avcode) {  
-	my $sth = $dbh->prepare("select authorised_value, lib from authorised_values where category=? ");
+	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
    	$sth->execute($avcode);
-	while ( my ($val, $lib) = $sth->fetchrow_array ) { 
-   		$values{$val}= $lib;
+	while ( my ($val, $lib, $lib_opac) = $sth->fetchrow_array ) { 
+		$values{$val} = ($opac && $lib_opac) ? $lib_opac : $lib;
    	}
    	return \%values;
   } else {

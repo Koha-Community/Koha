@@ -26,6 +26,7 @@ use C4::Branch;          # GetBranches
 use C4::Members;         # GetMember
 use C4::NewsChannels;    # get_opac_news
 use C4::Acquisition;     # GetRecentAcqui
+use C4::Languages qw(getTranslatedLanguages accept_language);
 
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -40,14 +41,45 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my $borrower = GetMember( $borrowernumber, 'borrowernumber' );
+my $casAuthentication = C4::Context->preference('casAuthentication');
+$template->param(
+    casAuthentication   => $casAuthentication,
+);
+
+
+my $borrower = GetMember( borrowernumber=>$borrowernumber );
 $template->param(
     textmessaging        => $borrower->{textmessaging},
-);
+) if (ref($borrower) eq "HASH");
 
 # display news
 # use cookie setting for language, bug default to syspref if it's not set
-my $news_lang = $input->cookie('KohaOpacLanguage') || 'en';
+(my $theme) = themelanguage(C4::Context->config('opachtdocs'),'opac-main.tmpl','opac',$input);
+
+my $translations = getTranslatedLanguages('opac',$theme);
+my @languages = ();
+foreach my $trans (@$translations)
+{
+    push(@languages, $trans->{rfc4646_subtag});
+}
+
+my $news_lang;
+if($input->cookie('KohaOpacLanguage')){
+    $news_lang = $input->cookie('KohaOpacLanguage');
+}else{
+    while( !$news_lang && ( $ENV{HTTP_ACCEPT_LANGUAGE} =~ m/([a-zA-Z]{2,}-?[a-zA-Z]*)(;|,)?/g ) ){
+        if( my @lang = grep { /^$1$/i } @languages ) {
+            $news_lang = $lang[0];
+        }
+    }
+    if (not $news_lang) {
+        my @languages = split ",", C4::Context->preference("opaclanguages");
+        $news_lang = @languages[0];
+    }
+}
+
+$news_lang = $news_lang ? $news_lang : 'en' ;
+
 my $all_koha_news   = &GetNewsToDisplay($news_lang);
 my $koha_news_count = scalar @$all_koha_news;
 

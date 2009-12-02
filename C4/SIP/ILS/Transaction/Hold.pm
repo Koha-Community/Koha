@@ -49,7 +49,7 @@ sub do_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
+	my $borrower = GetMember( 'cardnumber'=>$self->{patron}->id);
 	unless ($borrower) {
 		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
 		$self->ok(0);
@@ -82,7 +82,7 @@ sub drop_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
+	my $borrower = GetMember( 'cardnumber'=>$self->{patron}->id);
 	unless ($borrower) {
 		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
 		$self->ok(0);
@@ -104,7 +104,7 @@ sub change_hold {
 		$self->ok(0);
 		return $self;
 	}
-	my $borrower = GetMember( $self->{patron}->id, 'cardnumber');
+	my $borrower = GetMember( 'cardnumber'=>$self->{patron}->id);
 	unless ($borrower) {
 		$self->screen_msg('No borrower matches cardnumber "' . $self->{patron}->id . '".');
 		$self->ok(0);

@@ -342,6 +342,16 @@ function sendBasket() {
     var win_form = open(loc,"win_form",optWin);
 }
 
+function downloadBasket() {
+    var nameCookie = "bib_list";
+    var valCookie = readCookie(nameCookie);
+    var strCookie = nameCookie + "=" + valCookie;
+
+    var loc = CGIBIN + "opac-downloadcart.pl?" + strCookie;
+
+    open(loc,"win_form",'dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100');
+}
+
 function printBasket() {
     var loc = document.location + "&print=1";
     document.location = loc;
@@ -457,7 +467,7 @@ function hideLists(){
 $("#cartDetails").ready(function(){
 	$("#cartDetails,#cartmenulink").click(function(){ hideCart(); });
 	$("#cartmenulink").click(function(){ openBasket(); return false; });
-	$("#cartmenulink").hoverIntent(function(){
+	$("#cartmenulink").hover(function(){
 		showCart();
 	},function(){
 		hideCart();

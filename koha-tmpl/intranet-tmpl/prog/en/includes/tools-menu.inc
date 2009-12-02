@@ -1,7 +1,11 @@
 <script type="text/javascript">//<![CDATA[
 	$(document).ready(function() {
 		var path = location.pathname.substring(1);
-		$('#navmenulist a[href$="/' + path + '"]').css('font-weight','bold');
+		var url = window.location.toString();
+		url.match(/\?(.+)$/);
+		var params = RegExp.$1;
+		if (params) { params = "?" + params; }
+		$('#navmenulist a[href$="/' + path + params + '"]').css('font-weight','bold');
 	});
 //]]>
 </script>
@@ -33,6 +37,12 @@
     <!-- TMPL_IF NAME="CAN_user_tools_inventory" -->
 	<li><a href="/cgi-bin/koha/tools/inventory.pl">Inventory/stocktaking</a></li>
     <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_tools_batchdel" -->
+	<li><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Batch deletion of items</a></li>
+    <!--/TMPL_IF-->
+    <!-- TMPL_IF NAME="CAN_user_tools_batchmod" -->
+	<li><a href="/cgi-bin/koha/tools/batchMod.pl">Batch modification of items</a></li>
+    <!--/TMPL_IF-->
     <!-- TMPL_IF NAME="CAN_user_tools_stage_marc_import" -->
 	<li><a href="/cgi-bin/koha/tools/stage-marc-import.pl">MARC Import (staging)</a></li>
     <!-- /TMPL_IF -->

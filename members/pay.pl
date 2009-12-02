@@ -58,7 +58,7 @@ if ( $borrowernumber eq '' ) {
 }
 
 # get borrower details
-my $data = GetMember( $borrowernumber,'borrowernumber' );
+my $data = GetMember( borrowernumber => $borrowernumber );
 my $user = $input->remote_user;
 
 # get account details

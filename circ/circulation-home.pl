@@ -21,7 +21,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Context;
-
+use C4::Koha;
 
 my $query = new CGI;
 my ($template, $loggedinuser, $cookie)
@@ -31,5 +31,10 @@ my ($template, $loggedinuser, $cookie)
 				authnotrequired => 0,
 				flagsrequired => {circulate => "circulate_remaining_permissions"},
 				});
+
+# Checking if there is a Fast Cataloging Framework
+my $fa = getframeworkinfo('FA');
+$template->param({ fast_cataloging => 1 }) if (defined $fa);
+
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -71,7 +71,7 @@ BEGIN {
 				}       
                 print "</body></html>";
 			}
-		CGI::Carp::set_message(\&handle_errors);
+		#CGI::Carp::set_message(\&handle_errors);
 		## give a stack backtrace if KOHA_BACKTRACES is set
 		## can't rely on DebugLevel for this, as we're not yet connected
 		if ($ENV{KOHA_BACKTRACES}) {

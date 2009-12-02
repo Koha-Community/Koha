@@ -123,7 +123,7 @@ sub Getoverdues {
    SELECT issues.*, items.itype as itemtype, items.homebranch, items.barcode
      FROM issues 
 LEFT JOIN items       USING (itemnumber)
-    WHERE date_due < now() 
+    WHERE date_due < CURDATE() 
 ";
     } else {
         $statement = "
@@ -131,7 +131,7 @@ LEFT JOIN items       USING (itemnumber)
      FROM issues 
 LEFT JOIN items       USING (itemnumber)
 LEFT JOIN biblioitems USING (biblioitemnumber)
-    WHERE date_due < now() 
+    WHERE date_due < CURDATE() 
 ";
     }
 
@@ -169,7 +169,7 @@ sub checkoverdues {
          LEFT JOIN biblio      ON items.biblionumber     = biblio.biblionumber
          LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
             WHERE issues.borrowernumber  = ?
-            AND   issues.date_due < NOW()"
+            AND   issues.date_due < CURDATE()"
     );
     # FIXME: SELECT * across 4 tables?  do we really need the marc AND marcxml blobs??
     $sth->execute($borrowernumber);
@@ -1201,7 +1201,7 @@ sub GetOverduesForBranch {
     WHERE (accountlines.amountoutstanding  != '0.000000')
       AND (accountlines.accounttype         = 'FU'      )
       AND (issues.branchcode =  ?   )
-      AND (issues.date_due  <= NOW())
+      AND (issues.date_due  < CURDATE())
     ";
     my @getoverdues;
     my $i = 0;

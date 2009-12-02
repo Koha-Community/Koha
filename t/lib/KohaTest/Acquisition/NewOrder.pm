@@ -25,7 +25,7 @@ sub new_order_no_budget : Test( 4 ) {
                          localtime->year() + 1900,
                          localtime->mon() + 1,
                          localtime->mday() );
-    my ( $basketno, $ordnum ) = NewOrder( undef, # $basketno,
+    my ( $basketno, $ordernumber ) = NewOrder( undef, # $basketno,
                                           1, # $bibnum,
                                           undef, # $title,
                                           undef, # $quantity,
@@ -48,10 +48,10 @@ sub new_order_no_budget : Test( 4 ) {
 										  undef, # $branchcode
                                      );
     ok( $basketno, "my basket number is $basketno" );
-    ok( $ordnum,   "my order number is $ordnum" );
+    ok( $ordernumber,   "my order number is $ordernumber" );
 
-    my $order = GetOrder( $ordnum );
-    is( $order->{'ordernumber'}, $ordnum, 'got the right order' )
+    my $order = GetOrder( $ordernumber );
+    is( $order->{'ordernumber'}, $ordernumber, 'got the right order' )
       or diag( Data::Dumper->Dump( [ $order ], [ 'order' ] ) );
     
     is( $order->{'budgetdate'}, $today, "the budget date is $today" );
@@ -73,7 +73,7 @@ sub new_order_set_budget : Test( 4 ) {
                          localtime->year() + 1900,
                          localtime->mon() + 1,
                          localtime->mday() );
-    my ( $basketno, $ordnum ) = NewOrder( undef, # $basketno,
+    my ( $basketno, $ordernumber ) = NewOrder( undef, # $basketno,
                                           1, # $bibnum,
                                           undef, # $title,
                                           undef, # $quantity,
@@ -96,10 +96,10 @@ sub new_order_set_budget : Test( 4 ) {
 										  undef, # $branchcode
                                      );
     ok( $basketno, "my basket number is $basketno" );
-    ok( $ordnum,   "my order number is $ordnum" );
+    ok( $ordernumber,   "my order number is $ordernumber" );
 
-    my $order = GetOrder( $ordnum );
-    is( $order->{'ordernumber'}, $ordnum, 'got the right order' )
+    my $order = GetOrder( $ordernumber );
+    is( $order->{'ordernumber'}, $ordernumber, 'got the right order' )
       or diag( Data::Dumper->Dump( [ $order ], [ 'order' ] ) );
     
     like( $order->{'budgetdate'}, qr(^2\d\d\d-07-01$), "the budget date ($order->{'budgetdate'}) is a July 1st." );

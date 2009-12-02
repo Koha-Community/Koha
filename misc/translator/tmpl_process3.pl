@@ -54,7 +54,7 @@ sub text_replace_tag ($$) {
     if ($attr->{$a}) {
         next if $a eq 'content' && $tag ne 'meta';
         next if $a eq 'value' && ($tag ne 'input'
-        || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|text)$/)); # FIXME
+        || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:checkbox|hidden|radio|text)$/)); # FIXME
         my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
         if ($val =~ /\S/s) {
         my $s = find_translation($val);
@@ -218,7 +218,7 @@ usage_error('You must at least specify input and string list filenames.')
     if !@in_files || !defined $str_file;
 
 # Type match defaults to *.tmpl plus *.inc if not specified
-$type = "tmpl|inc" if !defined($type);
+$type = "tmpl|inc|xsl" if !defined($type);
 
 # Check the inputs for being files or directories
 for my $input (@in_files) {

@@ -11,12 +11,16 @@ use warnings;
 use C4::Context;
 use C4::Output;
 use C4::Auth qw(:DEFAULT get_session);
+use C4::Languages qw(getAllLanguages);
 use C4::Search;
 use C4::Biblio;  # GetBiblioData
 use C4::Koha;
 use C4::Tags qw(get_tags);
-use POSIX qw(ceil floor strftime);
 use C4::Branch; # GetBranches
+use POSIX qw(ceil floor strftime);
+use URI::Escape;
+use Storable qw(thaw freeze);
+
 
 # create a new CGI object
 # FIXME: no_undef_params needs to be tested
@@ -122,6 +126,10 @@ $template->param(
     searchdomainloop => GetBranchCategories(undef,'searchdomain'),
 );
 
+# load the language limits (for search)
+my $languages_limit_loop = getAllLanguages();
+$template->param(search_languages_loop => $languages_limit_loop,);
+
 # load the Type stuff
 my $itemtypes = GetItemTypes;
 # the index parameter is different for item-level itemtypes
@@ -145,8 +153,8 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
     	push @itemtypesloop, \%row;
 	}
 } else {
-    my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
-	for my $thisitemtype (sort {$a->{'lib'} cmp $b->{'lib'}} @$advsearchtypes) {
+    my $advsearchtypes = GetAuthorisedValues($advanced_search_types, '', 'opac');
+	for my $thisitemtype (@$advsearchtypes) {
 		my %row =(
 				number=>$cnt++,
 				ccl => $advanced_search_types,
@@ -330,7 +338,8 @@ my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_
 my @results;
 
 ## I. BUILD THE QUERY
-( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by);
+my $lang = C4::Output::getlanguagecookie($cgi);
+( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by, 0, $lang);
 
 sub _input_cgi_parse ($) { 
     my @elements;
@@ -350,11 +359,11 @@ $template->param ( QUERY_INPUTS => \@query_inputs );
 my @limit_inputs = $limit_cgi ? _input_cgi_parse($limit_cgi) : ();
 
 # add OPAC 'hidelostitems'
-if (C4::Context->preference('hidelostitems') == 1) {
-    # either lost ge 0 or no value in the lost register
-    $query ="($query) and ( (lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='') )";
-}
-
+#if (C4::Context->preference('hidelostitems') == 1) {
+#    # either lost ge 0 or no value in the lost register
+#    $query ="($query) and ( (lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='') )";
+#}
+#
 # add OPAC suppression - requires at least one item indexed with Suppress
 if (C4::Context->preference('OpacSuppression')) {
     $query = "($query) not Suppress=1";
@@ -415,11 +424,11 @@ for (my $i=0;$i<=@servers;$i++) {
                 # we want as specified by $offset and $results_per_page,
                 # we need to set the offset parameter of searchResults to 0
                 my @group_results = searchResults( $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
-                                                   @{ $group->{"RECORDS"} });
+                                                   @{ $group->{"RECORDS"} }, C4::Context->preference('hidelostitems'));
                 push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
             }
         } else {
-            @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,$scan,@{$results_hashref->{$server}->{"RECORDS"}});
+            @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,$scan,@{$results_hashref->{$server}->{"RECORDS"}},, C4::Context->preference('hidelostitems'));
         }
 		my $tag_quantity;
 		if (C4::Context->preference('TagsEnabled') and
@@ -438,7 +447,53 @@ for (my $i=0;$i<=@servers;$i++) {
 	if ($results_hashref->{$server}->{"hits"}){
 	    $total = $total + $results_hashref->{$server}->{"hits"};
 	}
-        ## If there's just one result, redirect to the detail page
+ 	# Opac search history
+ 	my $newsearchcookie;
+ 	if (C4::Context->preference('EnableOpacSearchHistory')) {
+ 	    my @recentSearches; 
+ 
+ 	    # Getting the (maybe) already sent cookie
+ 	    my $searchcookie = $cgi->cookie('KohaOpacRecentSearches');
+ 	    if ($searchcookie){
+ 		$searchcookie = uri_unescape($searchcookie);
+ 		if (thaw($searchcookie)) {
+ 		    @recentSearches = @{thaw($searchcookie)};
+ 		}
+ 	    }
+ 
+ 	    # Adding the new search if needed
+ 	    if ($borrowernumber eq '') {
+ 	    # To a cookie (the user is not logged in)
+ 
+     		if ($params->{'offset'} eq '') {
+ 
+     		    push @recentSearches, {
+     					    "query_desc" => $query_desc || "unknown", 
+     					    "query_cgi"  => $query_cgi  || "unknown", 
+     					    "time"       => time(),
+     					    "total"      => $total
+     					  };
+     		    $template->param(ShowOpacRecentSearchLink => 1);
+     		}
+ 
+     		# Pushing the cookie back 
+     		$newsearchcookie = $cgi->cookie(
+ 					    -name => 'KohaOpacRecentSearches',
+ 					    # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
+ 					    -value => uri_escape(freeze(\@recentSearches)),
+ 					    -expires => ''
+ 			);
+ 			$cookie = [$cookie, $newsearchcookie];
+ 	    } 
+		else {
+ 	    # To the session (the user is logged in)
+ 			if ($params->{'offset'} eq '') {
+				AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc, $query_cgi, $total);
+     		    $template->param(ShowOpacRecentSearchLink => 1);
+     		}
+ 	    }
+ 	}
+    ## If there's just one result, redirect to the detail page
         if ($total == 1) {         
             my $biblionumber=$newresults[0]->{biblionumber};
             if (C4::Context->preference('BiblioDefaultView') eq 'isbd') {

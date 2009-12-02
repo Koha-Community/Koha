@@ -29,7 +29,7 @@ my ($template, $loggedinuser, $cookie)
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {reports => 1},
+				flagsrequired => {reports => '*'},
 				debug => 1,
 				});
 $template->param(intranetcolorstylesheet => C4::Context->preference("intranetcolorstylesheet"),

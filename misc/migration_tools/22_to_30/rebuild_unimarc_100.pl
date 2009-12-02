@@ -30,7 +30,7 @@ while (my ($biblionumber,$time)=$sth->fetchrow ){
 # print "record : $biblionumber \n";
     my $record = GetMarcBiblio($biblionumber);
 # print "=> ".$record->as_formatted;
-    MARCmodrecord($biblionumber,$record,$time);
+    MARCmodrecord($biblionumber,$record,$time) if ($record);
 #
 }
 

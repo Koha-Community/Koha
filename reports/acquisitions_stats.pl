@@ -64,7 +64,7 @@ my ($template, $borrowernumber, $cookie)
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {reports => 1},
+				flagsrequired => {reports => '*'},
 				debug => 1,
 				});
 our $sep     = $input->param("sep");
@@ -73,7 +73,6 @@ $template->param(do_it => $do_it,
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 		);
 if ($do_it) {
-    # warn "line=$line, col=$column, pod=$podsp, rod=$rodsp, aod=$aodsp, calc=$calc, filters=@filters\n";
     my $results =
       calculate( $line, $column, $podsp, $rodsp, $aodsp, $calc, \@filters );
     if ( $output eq "screen" ) {
@@ -154,12 +153,12 @@ else {
         -multiple => 0
     );
 
-    $req = $dbh->prepare("SELECT DISTINCTROW bookfundid,bookfundname FROM aqbookfund ORDER BY bookfundname");
+    $req = $dbh->prepare("SELECT DISTINCTROW budget_code, budget_name FROM aqbudgets ORDER BY budget_name");
     $req->execute;
     undef @select;
     undef %select;
     push @select, "";
-    $select{''} = "All Funds";
+    $select{''} = "All budgets";
 
     while ( my ( $value, $desc ) = $req->fetchrow ) {
         push @select, $value;
@@ -324,7 +323,7 @@ sub calculate {
 
     $linefilter[0] = @$filters[4]  if ( $line =~ /bookseller/ );
     $linefilter[0] = @$filters[5]  if ( $line =~ /itemtype/ );
-    $linefilter[0] = @$filters[6]  if ( $line =~ /bookfund/ );
+    $linefilter[0] = @$filters[6]  if ( $line =~ /budget/ );
     $linefilter[0] = @$filters[7]  if ( $line =~ /sort1/ );
     $linefilter[0] = @$filters[8] if ( $line =~ /sort2/ );
 
@@ -340,7 +339,7 @@ sub calculate {
 #    $colfilter[1] = @$filters[5] if ( $column =~ /acquired/ );
     $colfilter[0] = @$filters[4]  if ( $column =~ /bookseller/ );
     $colfilter[0] = @$filters[5]  if ( $column =~ /itemtype/ );
-    $colfilter[0] = @$filters[6]  if ( $column =~ /bookfund/ );
+    $colfilter[0] = @$filters[6]  if ( $column =~ /budget/ );
     $colfilter[0] = @$filters[7]  if ( $column =~ /sort1/ );
     $colfilter[0] = @$filters[8]  if ( $column =~ /sort2/ );
 
@@ -404,11 +403,13 @@ sub calculate {
 
     my $strsth;
     $strsth .=
-      "SELECT DISTINCTROW $linefield FROM (aqorders, aqbasket,aqorderbreakdown)
+      "SELECT DISTINCTROW $linefield FROM (aqorders, aqbasket )
                 LEFT JOIN items ON (aqorders.biblionumber= items.biblionumber)
                 LEFT JOIN biblioitems ON (aqorders.biblionumber= biblioitems.biblionumber)
+                LEFT JOIN aqbudgets  ON (aqorders.budget_id = aqbudgets.budget_id )
+
                 LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id) WHERE (aqorders.basketno=aqbasket.basketno)
-                AND (aqorderbreakdown.ordernumber=aqorders.ordernumber) AND $line IS NOT NULL ";
+                AND $line IS NOT NULL AND $line <> '' ";
 
 #				LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
     
@@ -478,17 +479,17 @@ sub calculate {
         $colfield .= "Year($column)";
 
     }
-    elsif ( ( $column =~ /deliverydate/ ) and ( $rodsp == 1 ) ) {
+    elsif ( ( $column =~ /received/ ) and ( $rodsp == 1 ) ) {
 
         #Display by day
         $colfield .= "dayname($column)";
     }
-    elsif ( ( $column =~ /deliverydate/ ) and ( $rodsp == 2 ) ) {
+    elsif ( ( $column =~ /received/ ) and ( $rodsp == 2 ) ) {
 
         #Display by Month
         $colfield .= "monthname($column)";
     }
-    elsif ( ( $column =~ /deliverydate/ ) and ( $rodsp == 3 ) ) {
+    elsif ( ( $column =~ /received/ ) and ( $rodsp == 3 ) ) {
 
         #Display by Year
         $colfield .= "Year($column)";
@@ -516,12 +517,14 @@ sub calculate {
 
     my $strsth2;
     $strsth2 .=
-      "SELECT distinctrow $colfield FROM (aqorders, aqbasket,aqorderbreakdown)
+      "SELECT distinctrow $colfield FROM (aqorders, aqbasket )
                  LEFT JOIN items ON (aqorders.biblionumber= items.biblionumber)
                  LEFT JOIN biblioitems ON (aqorders.biblionumber= biblioitems.biblionumber)
+                 LEFT JOIN aqbudgets  ON (aqorders.budget_id = aqbudgets.budget_id )
+
                  LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id)
-                 WHERE (aqorders.basketno=aqbasket.basketno) AND (aqorderbreakdown.ordernumber=aqorders.ordernumber)
-                 AND $column IS NOT NULL";
+                 WHERE (aqorders.basketno=aqbasket.basketno) AND 
+                 $column IS NOT NULL AND $column <> '' ";
 
 #				LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
 
@@ -548,12 +551,13 @@ sub calculate {
             $strsth2 .= " AND $column LIKE ? ";
         }
     }
+
+
     $strsth2 .= " GROUP BY $colfield";
     $strsth2 .= " ORDER BY $colfield";
 
-#	warn "MASON:. $strsth2";
-
     my $sth2 = $dbh->prepare($strsth2);
+
     if ( (@colfilter) and ($colfilter[1]) ) {
         $sth2->execute( $colfilter[0], $colfilter[1] );
     }
@@ -567,11 +571,9 @@ sub calculate {
 		my %cell;
 		if ($celvalue) {
 			$cell{coltitle} = $celvalue;
-			#warn "\$cell{coltitle} = $celvalue\n";
 			push @loopcol, \%cell;
 		}
 	}
-
 
     #       warn "fin des titres colonnes";
 
@@ -585,7 +587,6 @@ sub calculate {
 #	warn "init table...\n";
     foreach my $row (@loopline) {
         foreach my $col (@loopcol) {
-			#warn " init table : $row->{rowtitle} / $col->{coltitle} \n";
             $table{ $row->{rowtitle} }->{ $col->{coltitle} } = 0;
         }
         $table{ $row->{rowtitle} }->{totalrow} = 0;
@@ -597,11 +598,13 @@ sub calculate {
     $strcalc .= "SUM( aqorders.quantity ) " if ( $process == 1 );
     $strcalc .= "SUM( aqorders.quantity * aqorders.listprice ) "
       if ( $process == 2 );
-    $strcalc .= "FROM (aqorders, aqbasket,aqorderbreakdown)
+    $strcalc .= "FROM (aqorders, aqbasket )
                  LEFT JOIN items ON (aqorders.biblionumber= items.biblionumber)
                  LEFT JOIN biblioitems ON (aqorders.biblionumber= biblioitems.biblionumber)
-                 LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id) WHERE (aqorders.basketno=aqbasket.basketno)
-                      AND (aqorderbreakdown.ordernumber=aqorders.ordernumber) ";
+                 LEFT JOIN aqbudgets  ON (aqorders.budget_id = aqbudgets.budget_id )
+
+                 LEFT JOIN aqbooksellers ON (aqbasket.booksellerid=aqbooksellers.id) 
+                 WHERE (aqorders.basketno=aqbasket.basketno) ";
 
 #                 LEFT JOIN aqorderdelivery ON (aqorders.ordernumber =aqorderdelivery.ordernumber )
     
@@ -630,7 +633,7 @@ sub calculate {
     $strcalc .= " AND biblioitems.itemtype LIKE '" . @$filters[5] . "'"
       if ( @$filters[5] );
     @$filters[6] =~ s/\*/%/g if ( @$filters[6] );
-    $strcalc .= " AND aqorderbreakdown.bookfundid LIKE '" . @$filters[6] . "'"
+    $strcalc .= " AND aqbudgets.budget_code LIKE '" . @$filters[6] . "'"
       if ( @$filters[6] );
     @$filters[7] =~ s/\*/%/g if ( @$filters[7] );
     $strcalc .= " AND aqorders.sort1 LIKE '" . @$filters[7] . "'"
@@ -638,9 +641,13 @@ sub calculate {
     @$filters[8] =~ s/\*/%/g if ( @$filters[8] );
     $strcalc .= " AND aqorders.sort2 LIKE '" . @$filters[8] . "'"
       if ( @$filters[8] );
+
+    $strcalc .= " AND aqorders.datecancellationprinted is NULL ";
+
     $strcalc .= " GROUP BY $linefield, $colfield ORDER BY $linefield,$colfield";
 
 #	warn $strcalc . "\n";
+
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
 
@@ -648,7 +655,9 @@ sub calculate {
     my $emptycol;
     while ( my ( $row, $col, $value ) = $dbcalc->fetchrow ) {
 		next if ($row eq undef || $col eq undef);
-		#warn "filling table $row / $col / $value ";
+
+# warn "filling table $row / $col / $value ";
+
         $emptycol = 1         if ( !defined($col) );
         $col      = "zzEMPTY" if ( !defined($col) );
         $row      = "zzEMPTY" if ( !defined($row) );

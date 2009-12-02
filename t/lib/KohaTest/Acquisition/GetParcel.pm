@@ -39,12 +39,12 @@ sub one_parcel : Test( 17 ) {
                          localtime->year() + 1900,
                          localtime->mon() + 1,
                          localtime->mday() );
-    my ( $basketno, $ordnum ) = $self->create_new_basket();
+    my ( $basketno, $ordernumber ) = $self->create_new_basket();
     
     ok( $basketno, "my basket number is $basketno" );
-    ok( $ordnum,   "my order number is $ordnum" );
+    ok( $ordernumber,   "my order number is $ordernumber" );
     my $datereceived = ModReceiveOrder( $self->{'biblios'}[0],             # biblionumber
-                                        $ordnum,       # $ordnum,
+                                        $ordernumber,       # $ordernumber,
                                         undef,         # $quantrec,
                                         undef,         # $user,
                                         undef,         # $cost,

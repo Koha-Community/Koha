@@ -2,10 +2,10 @@
 
 
 #script to show display basket of orders
-#written by chris@katipo.co.nz 24/2/2000
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
@@ -84,7 +84,7 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {acquisition => 1},
+                 flagsrequired => {acquisition => 'order_receive'},
                  debug => 1,
 });
 

@@ -94,14 +94,14 @@ sub true_p ($) {
     my($x) = @_;
     my $it;
     if (!defined $x || ref($x) ne '') {
-	die INVALID_BOOLEAN_STRING_EXCEPTION;
+	warn INVALID_BOOLEAN_STRING_EXCEPTION;
     }
     $x = lc($x);
     $x =~ s/\s//g;
     if (defined $strings{$x}) {
 	$it = $strings{$x};
     } else {
-	die INVALID_BOOLEAN_STRING_EXCEPTION;
+	warn INVALID_BOOLEAN_STRING_EXCEPTION;
     }
     return $it;
 }

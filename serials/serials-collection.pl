@@ -63,7 +63,7 @@ if($op eq 'gennext' && @subscriptionid){
 	if ( my $issue = $sth->fetchrow_hashref ) {
 		ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
                 $issue->{planneddate}, $issue->{publisheddate},
-                3, "Automatically set to late" );
+                3, "" );
 	}else{
 		my $expected = GetNextExpected($subscriptionid);
 	    my (

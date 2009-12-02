@@ -261,7 +261,7 @@ sub get_tags (;$) {		# i.e., from tags_index
 
 sub get_approval_rows (;$) {		# i.e., from tags_approval
 	my $hash = shift || {};
-	my @ok_fields = qw(term approved date_approved approved_by weight_total limit sort);
+	my @ok_fields = qw(term approved date_approved approved_by weight_total limit sort borrowernumber);
 	my $wheres;
 	my $limit  = "";
 	my $order  = "";
@@ -279,7 +279,7 @@ sub get_approval_rows (;$) {		# i.e., from tags_approval
 		if ($key eq 'limit') {
 			my $val = $hash->{$key};
 			unless ($val =~ /^(\d+,)?\d+$/) {
-				carp "Non-nuerical limit value '$val' ignored!";
+				carp "Non-numerical limit value '$val' ignored!";
 				next;
 			}
 			$limit = " LIMIT $val\n";
@@ -288,6 +288,7 @@ sub get_approval_rows (;$) {		# i.e., from tags_approval
 				unless (
 					$by =~ /^([-+])?(term)/            or
 					$by =~ /^([-+])?(biblionumber)/    or
+                    $by =~ /^([-+])?(borrowernumber)/  or
 					$by =~ /^([-+])?(weight_total)/    or
 					$by =~ /^([-+])?(approved(_by)?)/  or
 					$by =~ /^([-+])?(date_approved)/

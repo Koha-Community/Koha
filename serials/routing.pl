@@ -109,7 +109,7 @@ my ($template, $loggedinuser, $cookie)
 my @results;
 my $data;
 for(my $i=0;$i<$routing;$i++){
-    $data=GetMember($routinglist[$i]->{'borrowernumber'},'borrowernumber');
+    $data=GetMember('borrowernumber' => $routinglist[$i]->{'borrowernumber'});
     $data->{'location'}=$data->{'branchcode'};
     if ($data->{firstname} ) {
         $data->{name} = $data->{firstname} . q| |;

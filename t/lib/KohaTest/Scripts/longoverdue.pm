@@ -60,7 +60,7 @@ sub set_overdue_item_lost : Test( 13 ) {
     # my $item_from_barcode = C4::Items::GetItem( undef, $item->{'barcode'} );
     # diag( Data::Dumper->Dump( [ $item_from_barcode ], [ 'item_from_barcode' ] ) );
 
-    my $borrower = C4::Members::GetMember( $self->{'memberid'} );
+    my $borrower = C4::Members::GetMember( borrowernumber => $self->{'memberid'} );
     ok( $borrower->{'borrowernumber'}, 'borrowernumber' );
     
     my ( $issuingimpossible, $needsconfirmation ) = C4::Circulation::CanBookBeIssued( $borrower, $item->{'barcode'}, $duedate, 0 );

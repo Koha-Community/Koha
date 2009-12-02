@@ -57,6 +57,9 @@ BEGIN {
     
     	&merge
     	&FindDuplicateAuthority
+
+        &GuessAuthTypeCode
+        &GuessAuthId
  	);
 }
 
@@ -358,17 +361,9 @@ sub CountUsage {
         return scalar @tab;
     } else {
         ### ZOOM search here
-        my $oConnection=C4::Context->Zconn("biblioserver",1);
         my $query;
         $query= "an=".$authid;
-        my $oResult = $oConnection->search(new ZOOM::Query::CCL2RPN( $query, $oConnection ));
-        my $result;
-        while ((my $i = ZOOM::event([ $oConnection ])) != 0) {
-            my $ev = $oConnection->last_event();
-            if ($ev == ZOOM::Event::ZEND) {
-                $result = $oResult->size();
-            }
-        }
+  		my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
         return ($result);
     }
 }
@@ -409,6 +404,107 @@ sub GetAuthTypeCode {
   return $authtypecode;
 }
  
+=head2 GuessAuthTypeCode
+
+=over 4
+
+my $authtypecode = GuessAuthTypeCode($record);
+
+=back
+
+Get the record and tries to guess the adequate authtypecode from its content.
+
+=cut
+
+sub GuessAuthTypeCode {
+    my ($record) = @_;
+    return unless defined $record;
+my $heading_fields = {
+    "MARC21"=>{
+        '100'=>{authtypecode=>'PERSO_NAME'},
+        '110'=>{authtypecode=>'CORPO_NAME'},
+        '111'=>{authtypecode=>'MEETI_NAME'},
+        '130'=>{authtypecode=>'UNIF_TITLE'},
+        '148'=>{authtypecode=>'CHRON_TERM'},
+        '150'=>{authtypecode=>'TOPIC_TERM'},
+        '151'=>{authtypecode=>'GEOGR_NAME'},
+        '155'=>{authtypecode=>'GENRE/FORM'},
+        '180'=>{authtypecode=>'GEN_SUBDIV'},
+        '181'=>{authtypecode=>'GEO_SUBDIV'},
+        '182'=>{authtypecode=>'CHRON_SUBD'},
+        '185'=>{authtypecode=>'FORM_SUBD'},
+    },
+#200 Personal name	700, 701, 702 4-- with embedded 700, 701, 702 600
+#                    604 with embedded 700, 701, 702
+#210 Corporate or meeting name	710, 711, 712 4-- with embedded 710, 711, 712 601 604 with embedded 710, 711, 712
+#215 Territorial or geographic name 	710, 711, 712 4-- with embedded 710, 711, 712 601, 607 604 with embedded 710, 711, 712
+#216 Trademark 	716 [Reserved for future use]
+#220 Family name 	720, 721, 722 4-- with embedded 720, 721, 722 602 604 with embedded 720, 721, 722
+#230 Title 	500 4-- with embedded 500 605
+#240 Name and title (embedded 200, 210, 215, or 220 and 230) 	4-- with embedded 7-- and 500 7--  604 with embedded 7-- and 500 500
+#245 Name and collective title (embedded 200, 210, 215, or 220 and 235) 	4-- with embedded 7-- and 501 604 with embedded 7-- and 501 7-- 501
+#250 Topical subject 	606
+#260 Place access 	620
+#280 Form, genre or physical characteristics 	608
+#
+#
+# Could also be represented with :
+#leader position 9
+#a = personal name entry
+#b = corporate name entry
+#c = territorial or geographical name
+#d = trademark
+#e = family name
+#f = uniform title
+#g = collective uniform title
+#h = name/title
+#i = name/collective uniform title
+#j = topical subject
+#k = place access
+#l = form, genre or physical characteristics
+    "UNIMARC"=>{
+        '200'=>{authtypecode=>'NP'},
+        '210'=>{authtypecode=>'CO'},
+        '215'=>{authtypecode=>'SNG'},
+        '216'=>{authtypecode=>'TM'},
+        '220'=>{authtypecode=>'FAM'},
+        '230'=>{authtypecode=>'TU'},
+        '235'=>{authtypecode=>'CO_UNI_TI'},
+        '240'=>{authtypecode=>'SAUTTIT'},
+        '245'=>{authtypecode=>'NAME_COL'},
+        '250'=>{authtypecode=>'SNC'},
+        '260'=>{authtypecode=>'PA'},
+        '280'=>{authtypecode=>'GENRE/FORM'},
+    }
+};
+    foreach my $field (keys %{$heading_fields->{uc(C4::Context->preference('marcflavour'))} }) {
+       return $heading_fields->{uc(C4::Context->preference('marcflavour'))}->{$field}->{'authtypecode'} if (defined $record->field($field));
+    }
+    return;
+}
+
+=head2 GuessAuthId
+
+=over 4
+
+my $authtid = GuessAuthId($record);
+
+=back
+
+Get the record and tries to guess the adequate authtypecode from its content.
+
+=cut
+
+sub GuessAuthId {
+    my ($record) = @_;
+    return unless ($record && $record->field('001'));
+#    my $authtypecode=GuessAuthTypeCode($record);
+#    my ($tag,$subfield)=GetAuthMARCFromKohaField("auth_header.authid",$authtypecode);
+#    if ($tag > 010) {return $record->subfield($tag,$subfield)}
+#    else {return $record->field($tag)->data}
+    return $record->field('001')->data;
+}
+
 =head2 GetTagsLabels
 
 =over 4
@@ -903,10 +999,12 @@ sub BuildSummary{
   if ($summary and C4::Context->preference('marcflavour') eq 'UNIMARC') {
     my @fields = $record->fields();
     #             $reported_tag = '$9'.$result[$counter];
+	my @stringssummary;
     foreach my $field (@fields) {
       my $tag = $field->tag();
       my $tagvalue = $field->as_string();
-      $summary =~ s/\[(.?.?.?.?)$tag\*(.*?)]/$1$tagvalue$2\[$1$tag$2]/g;
+      my $localsummary= $summary;
+	  $localsummary =~ s/\[(.?.?.?.?)$tag\*(.*?)\]/$1$tagvalue$2\[$1$tag$2\]/g;
       if ($tag<10) {
         if ($tag eq '001') {
           $reported_tag.='$3'.$field->data();
@@ -917,12 +1015,16 @@ sub BuildSummary{
           my $subfieldcode = $subf[$i][0];
           my $subfieldvalue = $subf[$i][1];
           my $tagsubf = $tag.$subfieldcode;
-          $summary =~ s/\[(.?.?.?.?)$tagsubf(.*?)]/$1$subfieldvalue$2\[$1$tagsubf$2]/g;
+          $localsummary =~ s/\[(.?.?.?.?)$tagsubf(.*?)\]/$1$subfieldvalue$2\[$1$tagsubf$2\]/g;
         }
       }
+	  push @stringssummary, $localsummary if ($localsummary ne $summary);
     }
-    $summary =~ s/\[(.*?)]//g;
-    $summary =~ s/\n/<br>/g;
+	my $resultstring;
+	$resultstring = join(" -- ",@stringssummary);
+    $resultstring =~ s/\[(.*?)\]//g;
+    $resultstring =~ s/\n/<br>/g;
+	$summary      =  $resultstring;
   } else {
     my $heading; 
     my $authid; 
@@ -939,7 +1041,6 @@ sub BuildSummary{
       # accepted form
       foreach my $field ($record->field('2..')) {
         $heading.= $field->subfield('a');
-                $authid=$field->subfield('3');
       }
       # rejected form(s)
       foreach my $field ($record->field('3..')) {
@@ -1060,26 +1161,28 @@ sub BuildUnimarcHierarchies{
   } else {
     my $record = GetAuthority($authid);
     my $found;
-    foreach my $field ($record->field('550')){
-      if ($field->subfield('5') && $field->subfield('5') eq 'g'){
-        my $parentrecord = GetAuthority($field->subfield('3'));
-        my $localresult=$hierarchies;
-        my $trees;
-        $trees = BuildUnimarcHierarchies($field->subfield('3'));
-        my @trees;
-        if ($trees=~/;/){
-           @trees = split(/;/,$trees);
-        } else {
-           push @trees, $trees;
-        }
-        foreach (@trees){
-          $_.= ",$authid";
-        }
-        @globalresult = (@globalresult,@trees);
-        $found=1;
-      }
-      $hierarchies=join(";",@globalresult);
-    }
+	if ($record){
+		foreach my $field ($record->field('550')){
+		  if ($field->subfield('5') && $field->subfield('5') eq 'g'){
+			my $parentrecord = GetAuthority($field->subfield('3'));
+			my $localresult=$hierarchies;
+			my $trees;
+			$trees = BuildUnimarcHierarchies($field->subfield('3'));
+			my @trees;
+			if ($trees=~/;/){
+			   @trees = split(/;/,$trees);
+			} else {
+			   push @trees, $trees;
+			}
+			foreach (@trees){
+			  $_.= ",$authid";
+			}
+			@globalresult = (@globalresult,@trees);
+			$found=1;
+		  }
+		  $hierarchies=join(";",@globalresult);
+		}
+	}
     #Unless there is no ancestor, I am alone.
     $hierarchies="$authid" unless ($hierarchies);
   }
@@ -1113,7 +1216,8 @@ sub BuildUnimarcHierarchy{
   my $record = shift @_;
   my $class = shift @_;
   my $authid_constructed = shift @_;
-  my $authid=$record->subfield('250','3');
+  return undef unless ($record);
+  my $authid=$record->subfield('2..','3');
   my %cell;
   my $parents=""; my $children="";
   my (@loopparents,@loopchildren);
@@ -1134,7 +1238,7 @@ sub BuildUnimarcHierarchy{
   $cell{"class"}=$class;
   $cell{"loopauthid"}=$authid;
   $cell{"current_value"} =1 if $authid eq $authid_constructed;
-  $cell{"value"}=$record->subfield('250',"a");
+  $cell{"value"}=$record->subfield('2..',"a");
   return \%cell;
 }
 

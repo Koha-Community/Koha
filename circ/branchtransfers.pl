@@ -209,7 +209,7 @@ foreach my $code ( keys %$messages ) {
     elsif ( $code eq 'WasReturned' ) {
         $err{errwasreturned} = 1;
 		$err{borrowernumber} = $messages->{'WasReturned'};
-		my $borrower = GetMember($messages->{'WasReturned'},'borrowernumber');
+		my $borrower = GetMember('borrowernumber'=>$messages->{'WasReturned'});
 		$err{title}      = $borrower->{'title'};
 		$err{firstname}  = $borrower->{'firstname'};
 		$err{surname}    = $borrower->{'surname'};

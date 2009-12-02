@@ -54,12 +54,10 @@ function search_member(subscriptionid){
 <tr><td style="padding-top:5px;"><b>List Member:</b></td>
     <td><table cellspacing="0" cellpadding="0" border="0" class="collapse">
         <tr><th>Name</th>
-            <th>Location</th>
             <th>Rank</th>
             <th>Delete</th></tr>
 <!-- TMPL_LOOP NAME="memberloop" -->
         <tr><td><!-- TMPL_VAR NAME="name" --></td>
-            <td><!-- TMPL_VAR NAME="location" --></td>
             <td><!-- TMPL_VAR NAME="routingbox" --></td>
             <td><a href="/cgi-bin/koha/serials/routing.pl?routingid=<!-- TMPL_VAR NAME="routingid" -->&amp;subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->

@@ -88,7 +88,7 @@
 
 <!-- TMPL_IF NAME="add_form" -->
     
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post" <!-- TMPL_IF NAME="type-upload" -->enctype="multipart/form-data"<!-- /TMPL_IF -->>
                 
         <fieldset class="rows"><legend>
         <!-- TMPL_IF NAME="modify" -->Modify
@@ -100,6 +100,8 @@
             <li><label for="value">Value: </label>
                 <!-- TMPL_IF NAME="type-free" -->
                     <textarea id="value" name="value" cols="<!-- TMPL_VAR NAME="fieldlength" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
+                <!-- TMPL_ELSIF NAME="type-upload" -->
+                    <input type="file" name="value" />
                 <!-- TMPL_ELSIF NAME="type-textarea" -->
                     <textarea name="value" id="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
                 <!-- TMPL_ELSIF NAME="type-choice" -->
@@ -258,10 +260,13 @@
         <!-- TMPL_ELSE -->
         <td>
         <!-- /TMPL_IF -->
-            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" <!-- TMPL_IF NAME="type-upload" -->enctype="multipart/form-data"<!-- /TMPL_IF -->>
 
                 <!-- TMPL_IF NAME="type-free" -->
                 <input type="text" name="value" size="<!-- TMPL_VAR NAME="fieldlength" -->" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" />
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="type-upload" -->
+                <input type="file" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" />
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type-textarea" -->
                 <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>

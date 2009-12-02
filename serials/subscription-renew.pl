@@ -72,11 +72,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-
 if ( $op eq "renew" ) {
     ReNewSubscription(
         $subscriptionid,             $loggedinuser,
-        $query->param('startdate'),  $query->param('numberlength'),
+        C4::Dates->new($query->param('startdate'))->output('iso'),  $query->param('numberlength'),
         $query->param('weeklength'), $query->param('monthlength'),
         $query->param('note')
     );
@@ -90,7 +89,7 @@ if ($subscription->{'cannotedit'}){
 
 $template->param(
     startdate => format_date(
-             GetExpirationDate($subscriptionid)
+             $subscription->{enddate}
           || POSIX::strftime( "%Y-%m-%d", localtime )
     ),
     numberlength   => $subscription->{numberlength},

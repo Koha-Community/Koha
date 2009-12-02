@@ -1,0 +1,129 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+         $(document).ready(function() {
+	    $("#itemst").tablesorter();
+	 });
+//]]>
+</script>
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="cat-search.inc"-->
+
+<div id="breadcrumbs">
+	<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+	<a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+	<a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Delete batches of notices</a>
+</div>
+
+<div id="doc3" class="yui-t2">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <h1>Batch deletion</h1>
+	    <!-- TMPL_IF NAME="barcode_not_unique" --><div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="no_next_barcode" --><div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="book_on_loan" --><div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="book_reserved" --><div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div><!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="item_loop" -->
+    <!-- TMPL_UNLESS name="action" -->
+
+    <!-- TMPL_IF name="notfoundbarcodes" -->
+	    <div class="error"><p>Warning, the following barcodes were not found :</p>
+	    <table>
+		<thead>
+		    <tr>
+			<th>Barcode</th>
+		    </tr>
+		</thead>
+		<tbody>
+		    <!-- TMPL_LOOP name="notfoundbarcodes" -->
+			<tr><td><!-- TMPL_VAR name="barcode" --></td></tr>
+		    <!-- /TMPL_LOOP -->
+		</tbody>
+	    </table></div>
+	    <p>The following barcodes were found : </p>
+	<!-- /TMPL_IF -->
+
+
+	<form name="f" action="batchMod.pl" method="post">
+	<div id="cataloguing_additem_itemlist">
+		<div style="overflow:auto">
+		<table id="itemst">
+		    <thead>
+			<tr>
+			    <th>&nbsp;</th>
+			    <!-- TMPL_LOOP NAME="item_header_loop" --> 
+			    <th> <!-- TMPL_VAR NAME="header_value" --> </th>
+			    <!-- /TMPL_LOOP --> 
+			</tr>
+		    </thead>
+		    <tbody>
+		    <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF-->
+			<!-- TMPL_LOOP NAME="item_value" --> <td><!-- TMPL_VAR ESCAPE="HTML" NAME="field" --></td> 
+					<!-- /TMPL_LOOP --> </tr>
+		    <!-- /TMPL_LOOP -->
+		    </tbody>
+		</table>
+		</div>
+	</div>
+	<!-- TMPL_IF name="show" -->
+		<div id="cataloguing_additem_newitem">
+	     <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
+	     <p>This will delete the selected items.</p>
+	     <input type="hidden" name="del" value="1" />
+	     <fieldset class="action">    
+		<input type="submit" name="submit" value="Go" />
+	    </fieldset>
+	</div>
+	<!-- /TMPL_IF -->
+    <!-- /TMPL_UNLESS -->
+<!-- TMPL_ELSE -->
+    <p>No item found</p>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF name="action" -->
+	<p><!-- TMPL_VAR NAME="deleted_items" --> item(s) deleted.</p>
+	<!-- TMPL_IF NAME="not_deleted_items" -->
+	    <p><!-- TMPL_VAR NAME="not_deleted_items" --> item(s) could not be deleted : <!-- TMPL_LOOP NAME="not_deleted_itemnumbers" --><!-- TMPL_VAR NAME="itemnumber" --><!-- /TMPL_LOOP --></p>
+	<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="not_deleted_loop" -->
+	<table id="itemst">
+		<thead>
+		    <tr>
+			<th>Itemnumber</th>
+			<th>Barcode</th>
+			<th>Reason</th>
+		    </tr>
+		</thead>
+		<tbody>
+		    <!-- TMPL_LOOP name="not_deleted_loop" -->
+			<tr>
+			    <td><!-- TMPL_VAR name="itemnumber" --></td>
+			    <td><!-- TMPL_VAR name="barcode" --></td>
+			    <td><!-- TMPL_IF name="book_on_loan" -->Item is checked out<!-- TMPL_ELSIF name="book_reserved" -->Item has a waiting hold<!-- /TMPL_IF --></td>
+			</tr>
+		    <!-- /TMPL_LOOP -->
+		</tbody>
+	    </table>
+
+	<!-- /TMPL_IF -->
+
+	<p><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Back</a></p>
+<!-- /TMPL_IF -->
+
+</div>
+</div>
+        <div class="yui-b">
+            <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

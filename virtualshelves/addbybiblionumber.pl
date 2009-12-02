@@ -50,6 +50,10 @@
 
     if this script has to add a shelf, it add one with this category.
 
+=item newshelf
+
+    if this parameter exists, then we create a new shelf
+
 =back
 
 =cut
@@ -62,9 +66,19 @@ use C4::VirtualShelves qw/:DEFAULT GetRecentShelves/;
 use C4::Circulation;
 use C4::Auth;
 
-#use it only to debug !
-use CGI::Carp qw/fatalsToBrowser/;
-use warnings;
+# splits incoming biblionumber(s) to array and adds each to shelf.
+sub AddBibliosToShelf {
+    my ($shelfnumber,@biblionumber)=@_;
+
+    # multiple bibs might come in as '/' delimited string (from where, i don't see), or as array.
+    # (Note : they come in as '/' when added from the cart)
+    if (scalar(@biblionumber) == 1) {
+        @biblionumber = (split /\//,$biblionumber[0]);
+    }
+    for my $bib (@biblionumber){
+        AddToShelfFromBiblio($bib, $shelfnumber);
+    }
+}
 
 my $query           = new CGI;
 
@@ -72,12 +86,16 @@ my $query           = new CGI;
 my $biblionumber    = $query->param('biblionumber');
 
 # If set, then multiple item case.
+my @biblionumber   = $query->param('biblionumber');
 my $biblionumbers   = $query->param('biblionumbers');
 
 my $shelfnumber     = $query->param('shelfnumber');
 my $newvirtualshelf = $query->param('newvirtualshelf');
+my $newshelf        = $query->param('newshelf');
 my $category        = $query->param('category');
-my $sortfield		= $query->param('sortfield');
+my $sortfield	    = $query->param('sortfield');
+my $confirmed       = $query->param('confirmed') || 0;
+
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -93,18 +111,44 @@ my @biblionumbers;
 if ($biblionumbers) {
     @biblionumbers = split '/', $biblionumbers;
 } else {
-    @biblionumbers = ($biblionumber);
+    @biblionumbers = (@biblionumber);
+}
+if (scalar(@biblionumber) == 1) {
+        @biblionumber = (split /\//,$biblionumber[0]);
 }
 
-$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield )
-  if $newvirtualshelf;
+$shelfnumber = AddShelf( $newvirtualshelf, $loggedinuser, $category, $sortfield ) if $newvirtualshelf;
 if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
-    foreach my $biblionumber (@biblionumbers) {
-        AddToShelfFromBiblio( $biblionumber, $shelfnumber );
+
+    if ($confirmed == 1) {
+	AddBibliosToShelf($shelfnumber,@biblionumber);
+	print
+    "Content-Type: text/html\n\n<html><body onload=\"window.opener.location.reload(true);window.close()\"></body></html>";
+	exit;
+    } else {
+	my ( $singleshelf, $singleshelfname, $singlecategory ) = GetShelf( $query->param('shelfnumber') );
+	my @biblios;
+        for my $bib (@biblionumber) {
+	    my $data = GetBiblioData( $bib );
+            push(@biblios,
+                        { biblionumber => $bib,
+                          title        => $data->{'title'},
+                          author       => $data->{'author'},
+                        } );
+        }
+
+       	$template->param
+        (
+         biblionumber => \@biblionumber,
+         biblios      => \@biblios,
+         multiple     => (scalar(@biblionumber) > 1),
+         singleshelf  => 1,
+         shelfname    => $singleshelfname,
+         shelfnumber  => $singleshelf,
+         total        => scalar(@biblionumber),
+         confirm      => 1,
+        );
     }
-    print
-"Content-Type: text/html\n\n<html><body onload=\"window.close()\"></body></html>";
-    exit;
 }
 else {    # this shelf doesn't already exist.
     my $limit = 10;
@@ -116,11 +160,12 @@ else {    # this shelf doesn't already exist.
         $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
     }
     # then open shelves...
-    my ($shelflist) = GetRecentShelves(3, $limit, undef);
+    ($shelflist) = GetRecentShelves(3, $limit, undef);
     for my $shelf ( @{ $shelflist->[0] } ) {
         push( @shelvesloop, $shelf->{shelfnumber} );
         $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
     }
+
     if(@shelvesloop gt 0){
         my $CGIvirtualshelves = CGI::scrolling_list
           (
@@ -136,8 +181,23 @@ else {    # this shelf doesn't already exist.
            CGIvirtualshelves => $CGIvirtualshelves,
           );
     }
-    
-    unless ($biblionumbers) {
+   	my @biblios;
+        for my $bib (@biblionumber) {
+	    my $data = GetBiblioData( $bib );
+            push(@biblios,
+                        { biblionumber => $bib,
+                          title        => $data->{'title'},
+                          author       => $data->{'author'},
+                        } );
+        }
+    $template->param(
+           newshelf     => $newshelf,
+	   biblios=>\@biblios,
+           multiple     => (scalar(@biblionumber) > 1),
+           total        => scalar(@biblionumber),
+    );
+
+    unless (@biblionumbers) {
         my ( $bibliocount, @biblios ) = GetBiblio($biblionumber);
     
         $template->param
@@ -163,5 +223,5 @@ else {    # this shelf doesn't already exist.
           );
     }
     
-    output_html_with_http_headers $query, $cookie, $template->output;
 }
+output_html_with_http_headers $query, $cookie, $template->output;

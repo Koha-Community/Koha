@@ -204,9 +204,9 @@ sub GetRecentShelves ($$$) {
     my (@shelflist);
 	my $total = _shelf_count($owner, $mincategory);
 	my @params = ($owner, $mincategory, 0, $row_count);	 #FIXME: offset is hardcoded here, but could be passed in for enhancements
-	shift @params if !$owner;
+	shift @params if (not defined $owner);
 	my $query = "SELECT * FROM virtualshelves";
-	$query .= ($owner ? " WHERE owner = ? AND category = ?" : " WHERE category >= ? ");
+	$query .= ((defined $owner) ? " WHERE owner = ? AND category = ?" : " WHERE category >= ? ");
 	$query .= " ORDER BY lastmodified DESC LIMIT ?, ?";
 	my $sth = $dbh->prepare($query);
 	$sth->execute(@params);
@@ -602,6 +602,26 @@ sub _shelf_count ($$) {
 	$sth->execute(@params);
 	my $total = $sth->fetchrow;
 	return $total;
+}
+
+sub _biblionumber_sth {
+    my ($shelf) = @_;
+    my $query = 'select biblionumber from virtualshelfcontents where shelfnumber = ?';
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare($query)
+	or die $dbh->errstr;
+    $sth->execute( $shelf )
+	or die $sth->errstr;
+    $sth;
+}
+
+sub each_biblionumbers (&$) {
+    my ($code,$shelf) = @_;
+    my $ref =  _biblionumber_sth($shelf)->fetchall_arrayref;
+    map {
+	$_=$$_[0];
+	$code->();
+    } @$ref;
 }
 
 1;

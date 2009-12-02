@@ -19,6 +19,7 @@ package C4::Biblio;
 
 use strict;
 use warnings;
+
 # use utf8;
 use MARC::Record;
 use MARC::File::USMARC;
@@ -28,7 +29,7 @@ use POSIX qw(strftime);
 
 use C4::Koha;
 use C4::Dates qw/format_date/;
-use C4::Log; # logaction
+use C4::Log;    # logaction
 use C4::ClassSource;
 use C4::Charset;
 require C4::Heading;
@@ -37,81 +38,89 @@ require C4::Serials;
 use vars qw($VERSION @ISA @EXPORT);
 
 BEGIN {
-	$VERSION = 1.00;
+    $VERSION = 1.00;
 
-	require Exporter;
-	@ISA = qw( Exporter );
+    require Exporter;
+    @ISA = qw( Exporter );
 
-	# to add biblios
-# EXPORTED FUNCTIONS.
-	push @EXPORT, qw( 
-		&AddBiblio
-	);
+    # to add biblios
+    # EXPORTED FUNCTIONS.
+    push @EXPORT, qw(
+      &AddBiblio
+    );
 
-	# to get something
-	push @EXPORT, qw(
-		&GetBiblio
-		&GetBiblioData
-		&GetBiblioItemData
-		&GetBiblioItemInfosOf
-		&GetBiblioItemByBiblioNumber
-		&GetBiblioFromItemNumber
-		
-		&GetISBDView
+    # to get something
+    push @EXPORT, qw(
+      &Get
+      &GetBiblio
+      &GetBiblioData
+      &GetBiblioItemData
+      &GetBiblioItemInfosOf
+      &GetBiblioItemByBiblioNumber
+      &GetBiblioFromItemNumber
 
-		&GetMarcNotes
-		&GetMarcSubjects
-		&GetMarcBiblio
-		&GetMarcAuthors
-		&GetMarcSeries
-		GetMarcUrls
-		&GetUsedMarcStructure
-		&GetXmlBiblio
-		&GetCOinSBiblio
+      &GetRecordValue
+      &GetFieldMapping
+      &SetFieldMapping
+      &DeleteFieldMapping
 
-		&GetAuthorisedValueDesc
-		&GetMarcStructure
-		&GetMarcFromKohaField
-		&GetFrameworkCode
-		&GetPublisherNameFromIsbn
-		&TransformKohaToMarc
-		
-		&CountItemsIssued
-	);
+      &GetISBDView
 
-	# To modify something
-	push @EXPORT, qw(
-		&ModBiblio
-		&ModBiblioframework
-		&ModZebra
-	);
-	# To delete something
-	push @EXPORT, qw(
-		&DelBiblio
-	);
+      &GetMarcNotes
+      &GetMarcSubjects
+      &GetMarcBiblio
+      &GetMarcAuthors
+      &GetMarcSeries
+      GetMarcUrls
+      &GetUsedMarcStructure
+      &GetXmlBiblio
+      &GetCOinSBiblio
+
+      &GetAuthorisedValueDesc
+      &GetMarcStructure
+      &GetMarcFromKohaField
+      &GetFrameworkCode
+      &GetPublisherNameFromIsbn
+      &TransformKohaToMarc
+
+      &CountItemsIssued
+    );
+
+    # To modify something
+    push @EXPORT, qw(
+      &ModBiblio
+      &ModBiblioframework
+      &ModZebra
+    );
+
+    # To delete something
+    push @EXPORT, qw(
+      &DelBiblio
+    );
 
     # To link headings in a bib record
     # to authority records.
     push @EXPORT, qw(
-        &LinkBibHeadingsToAuthorities
+      &LinkBibHeadingsToAuthorities
     );
 
-	# Internal functions
-	# those functions are exported but should not be used
-	# they are usefull is few circumstances, so are exported.
-	# but don't use them unless you're a core developer ;-)
-	push @EXPORT, qw(
-		&ModBiblioMarc
-	);
-	# Others functions
-	push @EXPORT, qw(
-		&TransformMarcToKoha
-		&TransformHtmlToMarc2
-		&TransformHtmlToMarc
-		&TransformHtmlToXml
-		&PrepareItemrecordDisplay
-		&GetNoZebraIndexes
-	);
+    # Internal functions
+    # those functions are exported but should not be used
+    # they are usefull is few circumstances, so are exported.
+    # but don't use them unless you're a core developer ;-)
+    push @EXPORT, qw(
+      &ModBiblioMarc
+    );
+
+    # Others functions
+    push @EXPORT, qw(
+      &TransformMarcToKoha
+      &TransformHtmlToMarc2
+      &TransformHtmlToMarc
+      &TransformHtmlToXml
+      &PrepareItemrecordDisplay
+      &GetNoZebraIndexes
+    );
 }
 
 eval {
@@ -121,12 +130,13 @@ eval {
         import Memoize::Memcached qw(memoize_memcached);
 
         my $memcached = {
-            servers    => [ $servers ],
+            servers    => [$servers],
             key_prefix => C4::Context->config('memcached_namespace') || 'koha',
         };
-        memoize_memcached('GetMarcStructure', memcached => $memcached, expire_time => 600); #cache for 10 minutes
+        memoize_memcached( 'GetMarcStructure', memcached => $memcached, expire_time => 600 );    #cache for 10 minutes
     }
 };
+
 =head1 NAME
 
 C4::Biblio - cataloging management functions
@@ -229,31 +239,32 @@ unless you can guarantee that C<ModBiblioMarc> will be called.
 =cut
 
 sub AddBiblio {
-    my $record = shift;
-    my $frameworkcode = shift;
-    my $options = @_ ? shift : undef;
+    my $record          = shift;
+    my $frameworkcode   = shift;
+    my $options         = @_ ? shift : undef;
     my $defer_marc_save = 0;
-    if (defined $options and exists $options->{'defer_marc_save'} and $options->{'defer_marc_save'}) {
+    if ( defined $options and exists $options->{'defer_marc_save'} and $options->{'defer_marc_save'} ) {
         $defer_marc_save = 1;
     }
 
-    my ($biblionumber,$biblioitemnumber,$error);
+    my ( $biblionumber, $biblioitemnumber, $error );
     my $dbh = C4::Context->dbh;
+
     # transform the data into koha-table style data
     my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
-    ($biblionumber,$error) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
+    ( $biblionumber, $error ) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
-    ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $olddata );
+    ( $biblioitemnumber, $error ) = _koha_add_biblioitem( $dbh, $olddata );
 
-    _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
+    _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
 
     # update MARC subfield that stores biblioitems.cn_sort
-    _koha_marc_update_biblioitem_cn_sort($record, $olddata, $frameworkcode);
-    
+    _koha_marc_update_biblioitem_cn_sort( $record, $olddata, $frameworkcode );
+
     # now add the record
     ModBiblioMarc( $record, $biblionumber, $frameworkcode ) unless $defer_marc_save;
-      
-    logaction("CATALOGUING", "ADD", $biblionumber, "biblio") if C4::Context->preference("CataloguingLog");
+
+    logaction( "CATALOGUING", "ADD", $biblionumber, "biblio" ) if C4::Context->preference("CataloguingLog");
     return ( $biblionumber, $biblioitemnumber );
 }
 
@@ -283,62 +294,62 @@ and biblionumber data for indexing.
 
 sub ModBiblio {
     my ( $record, $biblionumber, $frameworkcode ) = @_;
-    if (C4::Context->preference("CataloguingLog")) {
+    if ( C4::Context->preference("CataloguingLog") ) {
         my $newrecord = GetMarcBiblio($biblionumber);
-        logaction("CATALOGUING", "MODIFY", $biblionumber, "BEFORE=>".$newrecord->as_formatted);
+        logaction( "CATALOGUING", "MODIFY", $biblionumber, "BEFORE=>" . $newrecord->as_formatted );
     }
-    
+
     my $dbh = C4::Context->dbh;
-    
+
     $frameworkcode = "" unless $frameworkcode;
 
     # get the items before and append them to the biblio before updating the record, atm we just have the biblio
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
-    my $oldRecord = GetMarcBiblio( $biblionumber );
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my $oldRecord = GetMarcBiblio($biblionumber);
 
     # delete any item fields from incoming record to avoid
     # duplication or incorrect data - use AddItem() or ModItem()
     # to change items
-    foreach my $field ($record->field($itemtag)) {
+    foreach my $field ( $record->field($itemtag) ) {
         $record->delete_field($field);
     }
-    
-    # parse each item, and, for an unknown reason, re-encode each subfield 
+
+    # parse each item, and, for an unknown reason, re-encode each subfield
     # if you don't do that, the record will have encoding mixed
     # and the biblio will be re-encoded.
     # strange, I (Paul P.) searched more than 1 day to understand what happends
     # but could only solve the problem this way...
-   my @fields = $oldRecord->field( $itemtag );
-    foreach my $fielditem ( @fields ){
+    my @fields = $oldRecord->field($itemtag);
+    foreach my $fielditem (@fields) {
         my $field;
-        foreach ($fielditem->subfields()) {
+        foreach ( $fielditem->subfields() ) {
             if ($field) {
-                $field->add_subfields(Encode::encode('utf-8',$_->[0]) => Encode::encode('utf-8',$_->[1]));
+                $field->add_subfields( Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
             } else {
-                $field = MARC::Field->new("$itemtag",'','',Encode::encode('utf-8',$_->[0]) => Encode::encode('utf-8',$_->[1]));
+                $field = MARC::Field->new( "$itemtag", '', '', Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
             }
-          }
+        }
         $record->append_fields($field);
     }
-    
+
     # update biblionumber and biblioitemnumber in MARC
     # FIXME - this is assuming a 1 to 1 relationship between
     # biblios and biblioitems
-    my $sth =  $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
+    my $sth = $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
     $sth->execute($biblionumber);
     my ($biblioitemnumber) = $sth->fetchrow;
     $sth->finish();
-    _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
+    _koha_marc_update_bib_ids( $record, $frameworkcode, $biblionumber, $biblioitemnumber );
 
     # load the koha-table data object
     my $oldbiblio = TransformMarcToKoha( $dbh, $record, $frameworkcode );
 
     # update MARC subfield that stores biblioitems.cn_sort
-    _koha_marc_update_biblioitem_cn_sort($record, $oldbiblio, $frameworkcode);
+    _koha_marc_update_biblioitem_cn_sort( $record, $oldbiblio, $frameworkcode );
 
     # update the MARC record (that now contains biblio and items) with the new record data
     &ModBiblioMarc( $record, $biblionumber, $frameworkcode );
-    
+
     # modify the other koha tables
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
@@ -355,10 +366,8 @@ sub ModBiblio {
 sub ModBiblioframework {
     my ( $biblionumber, $frameworkcode ) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(
-        "UPDATE biblio SET frameworkcode=? WHERE biblionumber=?"
-    );
-    $sth->execute($frameworkcode, $biblionumber);
+    my $sth = $dbh->prepare( "UPDATE biblio SET frameworkcode=? WHERE biblionumber=?" );
+    $sth->execute( $frameworkcode, $biblionumber );
     return 1;
 }
 
@@ -379,14 +388,15 @@ C<$error> : undef unless an error occurs
 =cut
 
 sub DelBiblio {
-    my ( $biblionumber ) = @_;
+    my ($biblionumber) = @_;
     my $dbh = C4::Context->dbh;
     my $error;    # for error handling
-    
+
     # First make sure this biblio has no items attached
     my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber=?");
     $sth->execute($biblionumber);
-    if (my $itemnumber = $sth->fetchrow){
+    if ( my $itemnumber = $sth->fetchrow ) {
+
         # Fix this to use a status the template can understand
         $error .= "This Biblio has items attached, please delete them first before deleting this biblio ";
     }
@@ -395,27 +405,26 @@ sub DelBiblio {
 
     # We delete attached subscriptions
     my $subscriptions = &C4::Serials::GetFullSubscriptionsFromBiblionumber($biblionumber);
-    foreach my $subscription (@$subscriptions){
-        &C4::Serials::DelSubscription($subscription->{subscriptionid});
+    foreach my $subscription (@$subscriptions) {
+        &C4::Serials::DelSubscription( $subscription->{subscriptionid} );
     }
-    
+
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
     # for at least 2 reasons :
     # - we need to read the biblio if NoZebra is set (to remove it from the indexes
     # - if something goes wrong, the biblio may be deleted from Koha but not from zebra
     #   and we would have no way to remove it (except manually in zebra, but I bet it would be very hard to handle the problem)
     my $oldRecord;
-    if (C4::Context->preference("NoZebra")) {
+    if ( C4::Context->preference("NoZebra") ) {
+
         # only NoZebra indexing needs to have
         # the previous version of the record
         $oldRecord = GetMarcBiblio($biblionumber);
     }
-    ModZebra($biblionumber, "recordDelete", "biblioserver", $oldRecord, undef);
+    ModZebra( $biblionumber, "recordDelete", "biblioserver", $oldRecord, undef );
 
     # delete biblioitems and items from Koha tables and save in deletedbiblioitems,deleteditems
-    $sth =
-      $dbh->prepare(
-        "SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
+    $sth = $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
     $sth->execute($biblionumber);
     while ( my $biblioitemnumber = $sth->fetchrow ) {
 
@@ -430,7 +439,7 @@ sub DelBiblio {
     # from being generated by _koha_delete_biblioitems
     $error = _koha_delete_biblio( $dbh, $biblionumber );
 
-    logaction("CATALOGUING", "DELETE", $biblionumber, "") if C4::Context->preference("CataloguingLog");
+    logaction( "CATALOGUING", "DELETE", $biblionumber, "" ) if C4::Context->preference("CataloguingLog");
 
     return;
 }
@@ -462,8 +471,8 @@ sub LinkBibHeadingsToAuthorities {
     my $bib = shift;
 
     my $num_headings_changed = 0;
-    foreach my $field ($bib->fields()) {
-        my $heading = C4::Heading->new_from_bib_field($field);    
+    foreach my $field ( $bib->fields() ) {
+        my $heading = C4::Heading->new_from_bib_field($field);
         next unless defined $heading;
 
         # check existing $9
@@ -473,23 +482,132 @@ sub LinkBibHeadingsToAuthorities {
         my $authorities = $heading->authorities();
 
         # want only one exact match
-        if ($#{ $authorities } == 0) {
-            my $authority = MARC::Record->new_from_usmarc($authorities->[0]);
-            my $authid = $authority->field('001')->data();
+        if ( $#{$authorities} == 0 ) {
+            my $authority = MARC::Record->new_from_usmarc( $authorities->[0] );
+            my $authid    = $authority->field('001')->data();
             next if defined $current_link and $current_link eq $authid;
 
-            $field->delete_subfield(code => '9') if defined $current_link;
-            $field->add_subfields('9', $authid);
+            $field->delete_subfield( code => '9' ) if defined $current_link;
+            $field->add_subfields( '9', $authid );
             $num_headings_changed++;
         } else {
-            if (defined $current_link) {
-                $field->delete_subfield(code => '9');
+            if ( defined $current_link ) {
+                $field->delete_subfield( code => '9' );
                 $num_headings_changed++;
             }
         }
 
     }
     return $num_headings_changed;
+}
+
+=head2 GetRecordValue
+
+=over 4
+
+my $values = GetRecordValue($field, $record, $frameworkcode);
+
+=back
+
+Get MARC fields from a keyword defined in fieldmapping table.
+
+=cut
+
+sub GetRecordValue {
+    my ( $field, $record, $frameworkcode ) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare('SELECT fieldcode, subfieldcode FROM fieldmapping WHERE frameworkcode = ? AND field = ?');
+    $sth->execute( $frameworkcode, $field );
+
+    my @result = ();
+
+    while ( my $row = $sth->fetchrow_hashref ) {
+        foreach my $field ( $record->field( $row->{fieldcode} ) ) {
+            if ( ( $row->{subfieldcode} ne "" && $field->subfield( $row->{subfieldcode} ) ) ) {
+                foreach my $subfield ( $field->subfield( $row->{subfieldcode} ) ) {
+                    push @result, { 'subfield' => $subfield };
+                }
+
+            } elsif ( $row->{subfieldcode} eq "" ) {
+                push @result, { 'subfield' => $field->as_string() };
+            }
+        }
+    }
+
+    return \@result;
+}
+
+=head2 SetFieldMapping
+
+=over 4
+
+SetFieldMapping($framework, $field, $fieldcode, $subfieldcode);
+
+=back
+
+Set a Field to MARC mapping value, if it already exists we don't add a new one.
+
+=cut
+
+sub SetFieldMapping {
+    my ( $framework, $field, $fieldcode, $subfieldcode ) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare('SELECT * FROM fieldmapping WHERE fieldcode = ? AND subfieldcode = ? AND frameworkcode = ? AND field = ?');
+    $sth->execute( $fieldcode, $subfieldcode, $framework, $field );
+    if ( not $sth->fetchrow_hashref ) {
+        my @args;
+        $sth = $dbh->prepare('INSERT INTO fieldmapping (fieldcode, subfieldcode, frameworkcode, field) VALUES(?,?,?,?)');
+
+        $sth->execute( $fieldcode, $subfieldcode, $framework, $field );
+    }
+}
+
+=head2 DeleteFieldMapping
+
+=over 4
+
+DeleteFieldMapping($id);
+
+=back
+
+Delete a field mapping from an $id.
+
+=cut
+
+sub DeleteFieldMapping {
+    my ($id) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare('DELETE FROM fieldmapping WHERE id = ?');
+    $sth->execute($id);
+}
+
+=head2 GetFieldMapping
+
+=over 4
+
+GetFieldMapping($frameworkcode);
+
+=back
+
+Get all field mappings for a specified frameworkcode
+
+=cut
+
+sub GetFieldMapping {
+    my ($framework) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $sth = $dbh->prepare('SELECT * FROM fieldmapping where frameworkcode = ?');
+    $sth->execute($framework);
+
+    my @return;
+    while ( my $row = $sth->fetchrow_hashref ) {
+        push @return, $row;
+    }
+    return \@return;
 }
 
 =head2 GetBiblioData
@@ -511,24 +629,24 @@ the first one is considered.
 =cut
 
 sub GetBiblioData {
-    my ( $bibnum ) = @_;
+    my ($bibnum) = @_;
     my $dbh = C4::Context->dbh;
 
-  #  my $query =  C4::Context->preference('item-level_itypes') ? 
+    #  my $query =  C4::Context->preference('item-level_itypes') ?
     #   " SELECT * , biblioitems.notes AS bnotes, biblio.notes
     #       FROM biblio
     #        LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
     #       WHERE biblio.biblionumber = ?
     #        AND biblioitems.biblionumber = biblio.biblionumber
     #";
-    
+
     my $query = " SELECT * , biblioitems.notes AS bnotes, itemtypes.notforloan as bi_notforloan, biblio.notes
             FROM biblio
             LEFT JOIN biblioitems ON biblio.biblionumber = biblioitems.biblionumber
             LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype
             WHERE biblio.biblionumber = ?
             AND biblioitems.biblionumber = biblio.biblionumber ";
-         
+
     my $sth = $dbh->prepare($query);
     $sth->execute($bibnum);
     my $data;
@@ -556,14 +674,14 @@ that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
 #'
 sub GetBiblioItemData {
     my ($biblioitemnumber) = @_;
-    my $dbh       = C4::Context->dbh;
-    my $query = "SELECT *,biblioitems.notes AS bnotes
+    my $dbh                = C4::Context->dbh;
+    my $query              = "SELECT *,biblioitems.notes AS bnotes
         FROM biblio LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblionumber ";
-    unless(C4::Context->preference('item-level_itypes')) { 
+    unless ( C4::Context->preference('item-level_itypes') ) {
         $query .= "LEFT JOIN itemtypes on biblioitems.itemtype=itemtypes.itemtype ";
-    }    
+    }
     $query .= " WHERE biblioitemnumber = ? ";
-    my $sth       =  $dbh->prepare($query);
+    my $sth = $dbh->prepare($query);
     my $data;
     $sth->execute($biblioitemnumber);
     $data = $sth->fetchrow_hashref;
@@ -583,9 +701,9 @@ NOTE : This function has been copy/paste from C4/Biblio.pm from head before zebr
 
 sub GetBiblioItemByBiblioNumber {
     my ($biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("Select * FROM biblioitems WHERE biblionumber = ?");
-    my $count = 0;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare("Select * FROM biblioitems WHERE biblionumber = ?");
+    my $count          = 0;
     my @results;
 
     $sth->execute($biblionumber);
@@ -619,17 +737,21 @@ sub GetBiblioFromItemNumber {
     my ( $itemnumber, $barcode ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
-    if($itemnumber) {
-        $sth=$dbh->prepare(  "SELECT * FROM items 
+    if ($itemnumber) {
+        $sth = $dbh->prepare(
+            "SELECT * FROM items 
             LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
-             WHERE items.itemnumber = ?") ; 
+             WHERE items.itemnumber = ?"
+        );
         $sth->execute($itemnumber);
     } else {
-        $sth=$dbh->prepare(  "SELECT * FROM items 
+        $sth = $dbh->prepare(
+            "SELECT * FROM items 
             LEFT JOIN biblio ON biblio.biblionumber = items.biblionumber
             LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
-             WHERE items.barcode = ?") ; 
+             WHERE items.barcode = ?"
+        );
         $sth->execute($barcode);
     }
     my $data = $sth->fetchrow_hashref;
@@ -650,122 +772,111 @@ Return the ISBD view which can be included in opac and intranet
 =cut
 
 sub GetISBDView {
-    my $biblionumber    = shift;
-    my $record          = GetMarcBiblio($biblionumber);
-    my $itemtype        = &GetFrameworkCode($biblionumber);
-    my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$itemtype);
-    my $tagslib      = &GetMarcStructure( 1, $itemtype );
-    
+    my ( $biblionumber, $template ) = @_;
+    my $record   = GetMarcBiblio($biblionumber);
+    my $itemtype = &GetFrameworkCode($biblionumber);
+    my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
+    my $tagslib = &GetMarcStructure( 1, $itemtype );
+
     my $ISBD = C4::Context->preference('ISBD');
     my $bloc = $ISBD;
     my $res;
     my $blocres;
-    
-    foreach my $isbdfield ( split (/#/, $bloc) ) {
+
+    foreach my $isbdfield ( split( /#/, $bloc ) ) {
 
         #         $isbdfield= /(.?.?.?)/;
         $isbdfield =~ /(\d\d\d)([^\|])?\|(.*)\|(.*)\|(.*)/;
-        my $fieldvalue    = $1 || 0;
-        my $subfvalue     = $2 || "";
-        my $textbefore    = $3;
+        my $fieldvalue = $1 || 0;
+        my $subfvalue  = $2 || "";
+        my $textbefore = $3;
         my $analysestring = $4;
         my $textafter     = $5;
-    
+
         #         warn "==> $1 / $2 / $3 / $4";
         #         my $fieldvalue=substr($isbdfield,0,3);
         if ( $fieldvalue > 0 ) {
             my $hasputtextbefore = 0;
-            my @fieldslist = $record->field($fieldvalue);
-            @fieldslist = sort {$a->subfield($holdingbrtagsubf) cmp $b->subfield($holdingbrtagsubf)} @fieldslist if ($fieldvalue eq $holdingbrtagf);
-    
+            my @fieldslist       = $record->field($fieldvalue);
+            @fieldslist = sort { $a->subfield($holdingbrtagsubf) cmp $b->subfield($holdingbrtagsubf) } @fieldslist if ( $fieldvalue eq $holdingbrtagf );
+
             #         warn "ERROR IN ISBD DEFINITION at : $isbdfield" unless $fieldvalue;
             #             warn "FV : $fieldvalue";
-            if ($subfvalue ne ""){
-              foreach my $field ( @fieldslist ) {
-                foreach my $subfield ($field->subfield($subfvalue)){ 
-                  my $calculated = $analysestring;
-                  my $tag        = $field->tag();
-                  if ( $tag < 10 ) {
-                  }
-                  else {
-                    my $subfieldvalue =
-                    GetAuthorisedValueDesc( $tag, $subfvalue,
-                      $subfield, '', $tagslib );
-                    my $tagsubf = $tag . $subfvalue;
-                    $calculated =~
-                          s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-                    $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
-                
-                    # field builded, store the result
-                    if ( $calculated && !$hasputtextbefore )
-                    {    # put textbefore if not done
-                    $blocres .= $textbefore;
-                    $hasputtextbefore = 1;
+            if ( $subfvalue ne "" ) {
+                foreach my $field (@fieldslist) {
+                    foreach my $subfield ( $field->subfield($subfvalue) ) {
+                        my $calculated = $analysestring;
+                        my $tag        = $field->tag();
+                        if ( $tag < 10 ) {
+                        } else {
+                            my $subfieldvalue = GetAuthorisedValueDesc( $tag, $subfvalue, $subfield, '', $tagslib );
+                            my $tagsubf = $tag . $subfvalue;
+                            $calculated =~ s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+                            if ( $template eq "opac" ) { $calculated =~ s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g; }
+
+                            # field builded, store the result
+                            if ( $calculated && !$hasputtextbefore ) {    # put textbefore if not done
+                                $blocres .= $textbefore;
+                                $hasputtextbefore = 1;
+                            }
+
+                            # remove punctuation at start
+                            $calculated =~ s/^( |;|:|\.|-)*//g;
+                            $blocres .= $calculated;
+
+                        }
                     }
-                
-                    # remove punctuation at start
-                    $calculated =~ s/^( |;|:|\.|-)*//g;
-                    $blocres .= $calculated;
-                                
-                  }
                 }
-              }
-              $blocres .= $textafter if $hasputtextbefore;
-            } else {    
-            foreach my $field ( @fieldslist ) {
-              my $calculated = $analysestring;
-              my $tag        = $field->tag();
-              if ( $tag < 10 ) {
-              }
-              else {
-                my @subf = $field->subfields;
-                for my $i ( 0 .. $#subf ) {
-                my $valuecode   = $subf[$i][1];
-                my $subfieldcode  = $subf[$i][0];
-                my $subfieldvalue =
-                GetAuthorisedValueDesc( $tag, $subf[$i][0],
-                  $subf[$i][1], '', $tagslib );
-                my $tagsubf = $tag . $subfieldcode;
-    
-                $calculated =~ s/                  # replace all {{}} codes by the value code.
+                $blocres .= $textafter if $hasputtextbefore;
+            } else {
+                foreach my $field (@fieldslist) {
+                    my $calculated = $analysestring;
+                    my $tag        = $field->tag();
+                    if ( $tag < 10 ) {
+                    } else {
+                        my @subf = $field->subfields;
+                        for my $i ( 0 .. $#subf ) {
+                            my $valuecode     = $subf[$i][1];
+                            my $subfieldcode  = $subf[$i][0];
+                            my $subfieldvalue = GetAuthorisedValueDesc( $tag, $subf[$i][0], $subf[$i][1], '', $tagslib );
+                            my $tagsubf       = $tag . $subfieldcode;
+
+                            $calculated =~ s/                  # replace all {{}} codes by the value code.
                                   \{\{$tagsubf\}\} # catch the {{actualcode}}
                                 /
                                   $valuecode     # replace by the value code
                                /gx;
-    
-                $calculated =~
-            s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
-            $calculated =~s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g;
+
+                            $calculated =~ s/\{(.?.?.?.?)$tagsubf(.*?)\}/$1$subfieldvalue$2\{$1$tagsubf$2\}/g;
+                            if ( $template eq "opac" ) { $calculated =~ s#/cgi-bin/koha/[^/]+/([^.]*.pl\?.*)$#opac-$1#g; }
+                        }
+
+                        # field builded, store the result
+                        if ( $calculated && !$hasputtextbefore ) {    # put textbefore if not done
+                            $blocres .= $textbefore;
+                            $hasputtextbefore = 1;
+                        }
+
+                        # remove punctuation at start
+                        $calculated =~ s/^( |;|:|\.|-)*//g;
+                        $blocres .= $calculated;
+                    }
                 }
-    
-                # field builded, store the result
-                if ( $calculated && !$hasputtextbefore )
-                {    # put textbefore if not done
-                $blocres .= $textbefore;
-                $hasputtextbefore = 1;
-                }
-    
-                # remove punctuation at start
-                $calculated =~ s/^( |;|:|\.|-)*//g;
-                $blocres .= $calculated;
-              }
+                $blocres .= $textafter if $hasputtextbefore;
             }
-            $blocres .= $textafter if $hasputtextbefore;
-            }       
-        }
-        else {
+        } else {
             $blocres .= $isbdfield;
         }
     }
     $res .= $blocres;
-    
+
     $res =~ s/\{(.*?)\}//g;
     $res =~ s/\\n/\n/g;
     $res =~ s/\n/<br\/>/g;
-    
+
     # remove empty ()
     $res =~ s/\(\)//g;
-   
+
     return $res;
 }
 
@@ -781,9 +892,9 @@ sub GetISBDView {
 
 sub GetBiblio {
     my ($biblionumber) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM biblio WHERE biblionumber = ?");
-    my $count = 0;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare("SELECT * FROM biblio WHERE biblionumber = ?");
+    my $count          = 0;
     my @results;
     $sth->execute($biblionumber);
     while ( my $data = $sth->fetchrow_hashref ) {
@@ -839,19 +950,19 @@ our $marc_structure_cache;
 
 sub GetMarcStructure {
     my ( $forlibrarian, $frameworkcode ) = @_;
-    my $dbh=C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
     $frameworkcode = "" unless $frameworkcode;
 
-    if (defined $marc_structure_cache and exists $marc_structure_cache->{$forlibrarian}->{$frameworkcode}) {
+    if ( defined $marc_structure_cache and exists $marc_structure_cache->{$forlibrarian}->{$frameworkcode} ) {
         return $marc_structure_cache->{$forlibrarian}->{$frameworkcode};
     }
 
+    #     my $sth = $dbh->prepare(
+    #         "SELECT COUNT(*) FROM marc_tag_structure WHERE frameworkcode=?");
+    #     $sth->execute($frameworkcode);
+    #     my ($total) = $sth->fetchrow;
+    #     $frameworkcode = "" unless ( $total > 0 );
     my $sth = $dbh->prepare(
-        "SELECT COUNT(*) FROM marc_tag_structure WHERE frameworkcode=?");
-    $sth->execute($frameworkcode);
-    my ($total) = $sth->fetchrow;
-    $frameworkcode = "" unless ( $total > 0 );
-    $sth = $dbh->prepare(
         "SELECT tagfield,liblibrarian,libopac,mandatory,repeatable 
         FROM marc_tag_structure 
         WHERE frameworkcode=? 
@@ -860,11 +971,8 @@ sub GetMarcStructure {
     $sth->execute($frameworkcode);
     my ( $liblibrarian, $libopac, $tag, $res, $tab, $mandatory, $repeatable );
 
-    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) =
-        $sth->fetchrow )
-    {
-        $res->{$tag}->{lib} =
-          ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
+    while ( ( $tag, $liblibrarian, $libopac, $mandatory, $repeatable ) = $sth->fetchrow ) {
+        $res->{$tag}->{lib}        = ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
         $res->{$tag}->{tab}        = "";
         $res->{$tag}->{mandatory}  = $mandatory;
         $res->{$tag}->{repeatable} = $repeatable;
@@ -877,7 +985,7 @@ sub GetMarcStructure {
          ORDER BY tagfield,tagsubfield
         "
     );
-    
+
     $sth->execute($frameworkcode);
 
     my $subfield;
@@ -892,19 +1000,12 @@ sub GetMarcStructure {
     my $defaultvalue;
 
     while (
-        (
-            $tag,          $subfield,      $liblibrarian,
-            $libopac,      $tab,
-            $mandatory,    $repeatable,    $authorised_value,
-            $authtypecode, $value_builder, $kohafield,
-            $seealso,      $hidden,        $isurl,
-            $link,$defaultvalue
+        (   $tag,          $subfield,      $liblibrarian, $libopac, $tab,    $mandatory, $repeatable, $authorised_value,
+            $authtypecode, $value_builder, $kohafield,    $seealso, $hidden, $isurl,     $link,       $defaultvalue
         )
         = $sth->fetchrow
-      )
-    {
-        $res->{$tag}->{$subfield}->{lib} =
-          ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
+      ) {
+        $res->{$tag}->{$subfield}->{lib}              = ( $forlibrarian or !$libopac ) ? $liblibrarian : $libopac;
         $res->{$tag}->{$subfield}->{tab}              = $tab;
         $res->{$tag}->{$subfield}->{mandatory}        = $mandatory;
         $res->{$tag}->{$subfield}->{repeatable}       = $repeatable;
@@ -938,9 +1039,9 @@ sub GetMarcStructure {
     
 =cut
 
-sub GetUsedMarcStructure($){
+sub GetUsedMarcStructure($) {
     my $frameworkcode = shift || '';
-    my $query         = qq/
+    my $query = qq/
         SELECT *
         FROM   marc_subfield_structure
         WHERE   tab > -1 
@@ -949,7 +1050,7 @@ sub GetUsedMarcStructure($){
     /;
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($frameworkcode);
-    return $sth->fetchall_arrayref({});
+    return $sth->fetchall_arrayref( {} );
 }
 
 =head2 GetMarcFromKohaField
@@ -968,10 +1069,7 @@ sub GetMarcFromKohaField {
     my ( $kohafield, $frameworkcode ) = @_;
     return 0, 0 unless $kohafield and defined $frameworkcode;
     my $relations = C4::Context->marcfromkohafield;
-    return (
-        $relations->{$frameworkcode}->{$kohafield}->[0],
-        $relations->{$frameworkcode}->{$kohafield}->[1]
-    );
+    return ( $relations->{$frameworkcode}->{$kohafield}->[0], $relations->{$frameworkcode}->{$kohafield}->[1] );
 }
 
 =head2 GetMarcBiblio
@@ -991,17 +1089,18 @@ The MARC record contains both biblio & item data.
 sub GetMarcBiblio {
     my $biblionumber = shift;
     my $dbh          = C4::Context->dbh;
-    my $sth          =
-      $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
+    my $sth          = $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
-    my $row = $sth->fetchrow_hashref;
-    my $marcxml = StripNonXmlChars($row->{'marcxml'});
-     MARC::File::XML->default_record_format(C4::Context->preference('marcflavour'));
+    my $row     = $sth->fetchrow_hashref;
+    my $marcxml = StripNonXmlChars( $row->{'marcxml'} );
+    MARC::File::XML->default_record_format( C4::Context->preference('marcflavour') );
     my $record = MARC::Record->new();
+
     if ($marcxml) {
-        $record = eval {MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour'))};
-        if ($@) {warn " problem with :$biblionumber : $@ \n$marcxml";}
-#      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
+        $record = eval { MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour') ) };
+        if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
+
+        #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;
     } else {
         return undef;
@@ -1022,10 +1121,9 @@ The XML contains both biblio & item datas
 =cut
 
 sub GetXmlBiblio {
-    my ( $biblionumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth =
-      $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
+    my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
     my ($marcxml) = $sth->fetchrow;
     return $marcxml;
@@ -1044,15 +1142,15 @@ Returns the COinS(a span) which can be included in a biblio record
 =cut
 
 sub GetCOinSBiblio {
-    my ( $biblionumber ) = @_;
+    my ($biblionumber) = @_;
     my $record = GetMarcBiblio($biblionumber);
 
     # get the coin format
-    my $pos7 = substr $record->leader(), 7,1;
-    my $pos6 = substr $record->leader(), 6,1;
+    my $pos7 = substr $record->leader(), 7, 1;
+    my $pos6 = substr $record->leader(), 6, 1;
     my $mtx;
     my $genre;
-    my ($aulast, $aufirst) = ('','');
+    my ( $aulast, $aufirst ) = ( '', '' );
     my $oauthors  = '';
     my $title     = '';
     my $subtitle  = '';
@@ -1061,94 +1159,101 @@ sub GetCOinSBiblio {
     my $issn      = '';
     my $publisher = '';
 
-    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ){
+    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
         my $fmts6;
         my $fmts7;
         %$fmts6 = (
-                    'a' => 'book',
-                    'b' => 'manuscript',
-                    'c' => 'book',
-                    'd' => 'manuscript',
-                    'e' => 'map',
-                    'f' => 'map',
-                    'g' => 'film',
-                    'i' => 'audioRecording',
-                    'j' => 'audioRecording',
-                    'k' => 'artwork',
-                    'l' => 'document',
-                    'm' => 'computerProgram',
-                    'r' => 'document',
+            'a' => 'book',
+            'b' => 'manuscript',
+            'c' => 'book',
+            'd' => 'manuscript',
+            'e' => 'map',
+            'f' => 'map',
+            'g' => 'film',
+            'i' => 'audioRecording',
+            'j' => 'audioRecording',
+            'k' => 'artwork',
+            'l' => 'document',
+            'm' => 'computerProgram',
+            'r' => 'document',
 
-                );
+        );
         %$fmts7 = (
-                    'a' => 'journalArticle',
-                    's' => 'journal',
-                );
+            'a' => 'journalArticle',
+            's' => 'journal',
+        );
 
-        $genre =  $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book' ;
+        $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
 
-        if( $genre eq 'book' ){
-            $genre =  $fmts7->{$pos7} if $fmts7->{$pos7};
+        if ( $genre eq 'book' ) {
+            $genre = $fmts7->{$pos7} if $fmts7->{$pos7};
         }
 
         ##### We must transform mtx to a valable mtx and document type ####
-        if( $genre eq 'book' ){
+        if ( $genre eq 'book' ) {
             $mtx = 'book';
-        }elsif( $genre eq 'journal' ){
+        } elsif ( $genre eq 'journal' ) {
             $mtx = 'journal';
-        }elsif( $genre eq 'journalArticle' ){
-            $mtx = 'journal';
+        } elsif ( $genre eq 'journalArticle' ) {
+            $mtx   = 'journal';
             $genre = 'article';
-        }else{
+        } else {
             $mtx = 'dc';
         }
 
-        $genre = ($mtx eq 'dc') ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
+        $genre = ( $mtx eq 'dc' ) ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
 
         # Setting datas
-        $aulast     = $record->subfield('700','a');
-        $aufirst    = $record->subfield('700','b');
-        $oauthors   = "&amp;rft.au=$aufirst $aulast";
+        $aulast  = $record->subfield( '700', 'a' );
+        $aufirst = $record->subfield( '700', 'b' );
+        $oauthors = "&amp;rft.au=$aufirst $aulast";
+
         # others authors
-        if($record->field('200')){
-            for my $au ($record->field('200')->subfield('g')){
+        if ( $record->field('200') ) {
+            for my $au ( $record->field('200')->subfield('g') ) {
                 $oauthors .= "&amp;rft.au=$au";
             }
         }
-        $title      = ( $mtx eq 'dc' ) ? "&amp;rft.title=".$record->subfield('200','a') :
-                                         "&amp;rft.title=".$record->subfield('200','a')."&amp;rft.btitle=".$record->subfield('200','a');
-        $pubyear    = $record->subfield('210','d');
-        $publisher  = $record->subfield('210','c');
-        $isbn       = $record->subfield('010','a');
-        $issn       = $record->subfield('011','a');
-    }else{
+        $title =
+          ( $mtx eq 'dc' )
+          ? "&amp;rft.title=" . $record->subfield( '200', 'a' )
+          : "&amp;rft.title=" . $record->subfield( '200', 'a' ) . "&amp;rft.btitle=" . $record->subfield( '200', 'a' );
+        $pubyear   = $record->subfield( '210', 'd' );
+        $publisher = $record->subfield( '210', 'c' );
+        $isbn      = $record->subfield( '010', 'a' );
+        $issn      = $record->subfield( '011', 'a' );
+    } else {
+
         # MARC21 need some improve
         my $fmts;
-        $mtx = 'book';
+        $mtx   = 'book';
         $genre = "&amp;rft.genre=book";
 
         # Setting datas
-        if ($record->field('100')) {
-            $oauthors .= "&amp;rft.au=".$record->subfield('100','a');
+        if ( $record->field('100') ) {
+            $oauthors .= "&amp;rft.au=" . $record->subfield( '100', 'a' );
         }
+
         # others authors
-        if($record->field('700')){
-            for my $au ($record->field('700')->subfield('a')){
+        if ( $record->field('700') ) {
+            for my $au ( $record->field('700')->subfield('a') ) {
                 $oauthors .= "&amp;rft.au=$au";
             }
         }
-        $title      = "&amp;rft.btitle=".$record->subfield('245','a');
-        $subtitle   = $record->subfield('245', 'b') || '';
+        $title = "&amp;rft.btitle=" . $record->subfield( '245', 'a' );
+        $subtitle = $record->subfield( '245', 'b' ) || '';
         $title .= $subtitle;
-        $pubyear    = $record->subfield('260', 'c') || '';
-        $publisher  = $record->subfield('260', 'b') || '';
-        $isbn       = $record->subfield('020', 'a') || '';
-        $issn       = $record->subfield('022', 'a') || '';
+        $pubyear   = $record->subfield( '260', 'c' ) || '';
+        $publisher = $record->subfield( '260', 'b' ) || '';
+        $isbn      = $record->subfield( '020', 'a' ) || '';
+        $issn      = $record->subfield( '022', 'a' ) || '';
 
     }
-    my $coins_value = "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear";
+    my $coins_value =
+"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear";
     $coins_value =~ s/(\ |&[^a])/\+/g;
-    #<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="
+
+#<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="
 
     return $coins_value;
 }
@@ -1158,49 +1263,48 @@ sub GetCOinSBiblio {
 =over 4
 
 my $subfieldvalue =get_authorised_value_desc(
-    $tag, $subf[$i][0],$subf[$i][1], '', $taglib, $category);
+    $tag, $subf[$i][0],$subf[$i][1], '', $taglib, $category, $opac);
 Retrieve the complete description for a given authorised value.
 
 Now takes $category and $value pair too.
 my $auth_value_desc =GetAuthorisedValueDesc(
     '','', 'DVD' ,'','','CCODE');
 
+If the optional $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
+
+
 =back
 
 =cut
 
 sub GetAuthorisedValueDesc {
-    my ( $tag, $subfield, $value, $framework, $tagslib, $category ) = @_;
+    my ( $tag, $subfield, $value, $framework, $tagslib, $category, $opac ) = @_;
     my $dbh = C4::Context->dbh;
 
-    if (!$category) {
+    if ( !$category ) {
 
         return $value unless defined $tagslib->{$tag}->{$subfield}->{'authorised_value'};
 
-#---- branch
+        #---- branch
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
             return C4::Branch::GetBranchName($value);
         }
 
-#---- itemtypes
+        #---- itemtypes
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
             return getitemtypeinfo($value)->{description};
         }
 
-#---- "true" authorized value
-        $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'}
+        #---- "true" authorized value
+        $category = $tagslib->{$tag}->{$subfield}->{'authorised_value'};
     }
 
     if ( $category ne "" ) {
-        my $sth =
-            $dbh->prepare(
-                    "SELECT lib FROM authorised_values WHERE category = ? AND authorised_value = ?"
-                    );
+        my $sth = $dbh->prepare( "SELECT lib, lib_opac FROM authorised_values WHERE category = ? AND authorised_value = ?" );
         $sth->execute( $category, $value );
         my $data = $sth->fetchrow_hashref;
-        return $data->{'lib'};
-    }
-    else {
+        return ( $opac && $data->{'lib_opac'} ) ? $data->{'lib_opac'} : $data->{'lib'};
+    } else {
         return $value;    # if nothing is found return the original value
     }
 }
@@ -1222,8 +1326,7 @@ sub GetMarcNotes {
     my $scope;
     if ( $marcflavour eq "MARC21" ) {
         $scope = '5..';
-    }
-    else {    # assume unimarc if not marc21
+    } else {    # assume unimarc if not marc21
         $scope = '3..';
     }
     my @marcnotes;
@@ -1242,7 +1345,7 @@ sub GetMarcNotes {
         }
     }
 
-    if ( $note ) {
+    if ($note) {
         $marcnote = { marcnote => $note };
         push @marcnotes, $marcnote;    #load last tag into array
     }
@@ -1267,52 +1370,57 @@ sub GetMarcSubjects {
     if ( $marcflavour eq "MARC21" ) {
         $mintag = "600";
         $maxtag = "699";
-    }
-    else {    # assume unimarc if not marc21
+    } else {    # assume unimarc if not marc21
         $mintag = "600";
         $maxtag = "611";
     }
-    
+
     my @marcsubjects;
-    my $subject = "";
+    my $subject  = "";
     my $subfield = "";
     my $marcsubject;
 
-    foreach my $field ( $record->field('6..' )) {
+    foreach my $field ( $record->field('6..') ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
         my @subfields_loop;
         my @subfields = $field->subfields();
-        my $counter = 0;
+        my $counter   = 0;
         my @link_loop;
+
         # if there is an authority link, build the link with an= subfield9
-        my $subfield9 = $field->subfield('9');
-        for my $subject_subfield (@subfields ) {
+        my $found9 = 0;
+        for my $subject_subfield (@subfields) {
+
             # don't load unimarc subfields 3,4,5
-            next if (($marcflavour eq "UNIMARC") and ($subject_subfield->[0] =~ /3|4|5/ ) );
+            next if ( ( $marcflavour eq "UNIMARC" ) and ( $subject_subfield->[0] =~ /2|3|4|5/ ) );
+
             # don't load MARC21 subfields 2 (FIXME: any more subfields??)
-            next if (($marcflavour eq "MARC21")  and ($subject_subfield->[0] =~ /2/ ) );
-            my $code = $subject_subfield->[0];
-            my $value = $subject_subfield->[1];
+            next if ( ( $marcflavour eq "MARC21" ) and ( $subject_subfield->[0] =~ /2/ ) );
+            my $code      = $subject_subfield->[0];
+            my $value     = $subject_subfield->[1];
             my $linkvalue = $value;
             $linkvalue =~ s/(\(|\))//g;
-            my $operator = " and " unless $counter==0;
-            if ($subfield9) {
-                @link_loop = ({'limit' => 'an' ,link => "$subfield9" });
-            } else {
-                push @link_loop, {'limit' => 'su', link => $linkvalue, operator => $operator };
+            my $operator = " and " unless $counter == 0;
+            if ( $code eq 9 ) {
+                $found9 = 1;
+                @link_loop = ( { 'limit' => 'an', link => "$linkvalue" } );
             }
-            my $separator = C4::Context->preference("authoritysep") unless $counter==0;
+            if ( not $found9 ) {
+                push @link_loop, { 'limit' => 'su', link => $linkvalue, operator => $operator };
+            }
+            my $separator = C4::Context->preference("authoritysep") unless $counter == 0;
+
             # ignore $9
             my @this_link_loop = @link_loop;
-            push @subfields_loop, {code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($subject_subfield->[0] eq 9 );
+            push @subfields_loop, { code => $code, value => $value, link_loop => \@this_link_loop, separator => $separator } unless ( $subject_subfield->[0] eq 9 );
             $counter++;
         }
-                
+
         push @marcsubjects, { MARCSUBJECT_SUBFIELDS_LOOP => \@subfields_loop };
-        
+
     }
-        return \@marcsubjects;
-}  #end getMARCsubjects
+    return \@marcsubjects;
+}    #end getMARCsubjects
 
 =head2 GetMarcAuthors
 
@@ -1329,17 +1437,17 @@ The authors are stored in differents places depending on MARC flavour
 sub GetMarcAuthors {
     my ( $record, $marcflavour ) = @_;
     my ( $mintag, $maxtag );
+
     # tagslib useful for UNIMARC author reponsabilities
-    my $tagslib = &GetMarcStructure( 1, '' ); # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
+    my $tagslib =
+      &GetMarcStructure( 1, '' );    # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
     if ( $marcflavour eq "MARC21" ) {
         $mintag = "700";
-        $maxtag = "720"; 
-    }
-    elsif ( $marcflavour eq "UNIMARC" ) {    # assume unimarc if not marc21
+        $maxtag = "720";
+    } elsif ( $marcflavour eq "UNIMARC" ) {    # assume unimarc if not marc21
         $mintag = "700";
         $maxtag = "712";
-    }
-    else {
+    } else {
         return;
     }
     my @marcauthors;
@@ -1348,33 +1456,37 @@ sub GetMarcAuthors {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
         my @subfields_loop;
         my @link_loop;
-        my @subfields = $field->subfields();
+        my @subfields  = $field->subfields();
         my $count_auth = 0;
+
         # if there is an authority link, build the link with Koha-Auth-Number: subfield9
         my $subfield9 = $field->subfield('9');
         for my $authors_subfield (@subfields) {
+
             # don't load unimarc subfields 3, 5
-            next if ($marcflavour eq 'UNIMARC' and ($authors_subfield->[0] =~ /3|5/ ) );
+            next if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] =~ /3|5/ ) );
             my $subfieldcode = $authors_subfield->[0];
-            my $value = $authors_subfield->[1];
-            my $linkvalue = $value;
+            my $value        = $authors_subfield->[1];
+            my $linkvalue    = $value;
             $linkvalue =~ s/(\(|\))//g;
-            my $operator = " and " unless $count_auth==0;
+            my $operator = " and " unless $count_auth == 0;
+
             # if we have an authority link, use that as the link, otherwise use standard searching
             if ($subfield9) {
-                @link_loop = ({'limit' => 'an' ,link => "$subfield9" });
-            }
-            else {
+                @link_loop = ( { 'limit' => 'an', link => "$subfield9" } );
+            } else {
+
                 # reset $linkvalue if UNIMARC author responsibility
-                if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] eq "4")) {
-                    $linkvalue = "(".GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ).")";
+                if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] eq "4" ) ) {
+                    $linkvalue = "(" . GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ) . ")";
                 }
-                push @link_loop, {'limit' => 'au', link => $linkvalue, operator => $operator };
+                push @link_loop, { 'limit' => 'au', link => $linkvalue, operator => $operator };
             }
-            $value = GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib ) if ( $marcflavour eq 'UNIMARC' and ($authors_subfield->[0] =~/4/));
+            $value = GetAuthorisedValueDesc( $field->tag(), $authors_subfield->[0], $authors_subfield->[1], '', $tagslib )
+              if ( $marcflavour eq 'UNIMARC' and ( $authors_subfield->[0] =~ /4/ ) );
             my @this_link_loop = @link_loop;
-            my $separator = C4::Context->preference("authoritysep") unless $count_auth==0;
-            push @subfields_loop, {code => $subfieldcode, value => $value, link_loop => \@this_link_loop, separator => $separator} unless ($authors_subfield->[0] eq '9' );
+            my $separator = C4::Context->preference("authoritysep") unless $count_auth == 0;
+            push @subfields_loop, { code => $subfieldcode, value => $value, link_loop => \@this_link_loop, separator => $separator } unless ( $authors_subfield->[0] eq '9' );
             $count_auth++;
         }
         push @marcauthors, { MARCAUTHOR_SUBFIELDS_LOOP => \@subfields_loop };
@@ -1399,13 +1511,13 @@ sub GetMarcUrls {
 
     my @marcurls;
     for my $field ( $record->field('856') ) {
-        my $marcurl;
         my @notes;
         for my $note ( $field->subfield('z') ) {
             push @notes, { note => $note };
         }
         my @urls = $field->subfield('u');
         foreach my $url (@urls) {
+            my $marcurl;
             if ( $marcflavour eq 'MARC21' ) {
                 my $s3   = $field->subfield('3');
                 my $link = $field->subfield('y');
@@ -1415,11 +1527,13 @@ sub GetMarcUrls {
                     } elsif ( $field->indicator(1) eq '1' ) {
                         $url = 'ftp://' . $url;
                     } else {
+
                         #  properly, this should be if ind1=4,
                         #  however we will assume http protocol since we're building a link.
                         $url = 'http://' . $url;
                     }
                 }
+
                 # TODO handle ind 2 (relationship)
                 $marcurl = {
                     MARCURL => $url,
@@ -1451,61 +1565,64 @@ The series are stored in differents places depending on MARC flavour
 =cut
 
 sub GetMarcSeries {
-    my ($record, $marcflavour) = @_;
-    my ($mintag, $maxtag);
-    if ($marcflavour eq "MARC21") {
+    my ( $record, $marcflavour ) = @_;
+    my ( $mintag, $maxtag );
+    if ( $marcflavour eq "MARC21" ) {
         $mintag = "440";
         $maxtag = "490";
-    } else {           # assume unimarc if not marc21
+    } else {    # assume unimarc if not marc21
         $mintag = "600";
         $maxtag = "619";
     }
 
     my @marcseries;
-    my $subjct = "";
+    my $subjct   = "";
     my $subfield = "";
     my $marcsubjct;
 
-    foreach my $field ($record->field('440'), $record->field('490')) {
+    foreach my $field ( $record->field('440'), $record->field('490') ) {
         my @subfields_loop;
+
         #my $value = $field->subfield('a');
         #$marcsubjct = {MARCSUBJCT => $value,};
         my @subfields = $field->subfields();
+
         #warn "subfields:".join " ", @$subfields;
         my $counter = 0;
         my @link_loop;
         for my $series_subfield (@subfields) {
             my $volume_number;
             undef $volume_number;
+
             # see if this is an instance of a volume
-            if ($series_subfield->[0] eq 'v') {
-                $volume_number=1;
+            if ( $series_subfield->[0] eq 'v' ) {
+                $volume_number = 1;
             }
 
-            my $code = $series_subfield->[0];
-            my $value = $series_subfield->[1];
+            my $code      = $series_subfield->[0];
+            my $value     = $series_subfield->[1];
             my $linkvalue = $value;
             $linkvalue =~ s/(\(|\))//g;
-            my $operator = " and " unless $counter==0;
-            push @link_loop, {link => $linkvalue, operator => $operator };
-            my $separator = C4::Context->preference("authoritysep") unless $counter==0;
+            my $operator = " and " unless $counter == 0;
+            push @link_loop, { link => $linkvalue, operator => $operator };
+            my $separator = C4::Context->preference("authoritysep") unless $counter == 0;
             if ($volume_number) {
-            push @subfields_loop, {volumenum => $value};
-            }
-            else {
-            push @subfields_loop, {code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number};
+                push @subfields_loop, { volumenum => $value };
+            } else {
+                push @subfields_loop, { code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number };
             }
             $counter++;
         }
         push @marcseries, { MARCSERIES_SUBFIELDS_LOOP => \@subfields_loop };
+
         #$marcsubjct = {MARCSUBJCT => $field->as_string(),};
         #push @marcsubjcts, $marcsubjct;
         #$subjct = $value;
 
     }
-    my $marcseriessarray=\@marcseries;
+    my $marcseriessarray = \@marcseries;
     return $marcseriessarray;
-}  #end getMARCseriess
+}    #end getMARCseriess
 
 =head2 GetFrameworkCode
 
@@ -1518,9 +1635,9 @@ sub GetMarcSeries {
 =cut
 
 sub GetFrameworkCode {
-    my ( $biblionumber ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
+    my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
     $sth->execute($biblionumber);
     my ($frameworkcode) = $sth->fetchrow;
     return $frameworkcode;
@@ -1535,13 +1652,13 @@ sub GetFrameworkCode {
 
 =cut
 
-sub GetPublisherNameFromIsbn($){
+sub GetPublisherNameFromIsbn($) {
     my $isbn = shift;
     $isbn =~ s/[- _]//g;
     $isbn =~ s/^0*//;
-    my @codes = (split '-', DisplayISBN($isbn));
-    my $code = $codes[0].$codes[1].$codes[2];
-    my $dbh  = C4::Context->dbh;
+    my @codes = ( split '-', DisplayISBN($isbn) );
+    my $code  = $codes[0] . $codes[1] . $codes[2];
+    my $dbh   = C4::Context->dbh;
     my $query = qq{
         SELECT distinct publishercode
         FROM   biblioitems
@@ -1570,13 +1687,11 @@ sub GetPublisherNameFromIsbn($){
 =cut
 
 sub TransformKohaToMarc {
-    my ( $hash ) = @_;
-    my $sth = C4::Context->dbh->prepare(
-        "SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield=?"
-    );
+    my ($hash) = @_;
+    my $sth    = C4::Context->dbh->prepare( "SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield=?" );
     my $record = MARC::Record->new();
-    SetMarcUnicodeFlag($record, C4::Context->preference("marcflavour"));
-    foreach (keys %{$hash}) {
+    SetMarcUnicodeFlag( $record, C4::Context->preference("marcflavour") );
+    foreach ( keys %{$hash} ) {
         &TransformKohaToMarcOneField( $sth, $record, $_, $hash->{$_}, '' );
     }
     return $record;
@@ -1594,15 +1709,13 @@ sub TransformKohaToMarc {
 
 sub TransformKohaToMarcOneField {
     my ( $sth, $record, $kohafieldname, $value, $frameworkcode ) = @_;
-    $frameworkcode='' unless $frameworkcode;
+    $frameworkcode = '' unless $frameworkcode;
     my $tagfield;
     my $tagsubfield;
 
     if ( !defined $sth ) {
         my $dbh = C4::Context->dbh;
-        $sth = $dbh->prepare(
-            "SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield=?"
-        );
+        $sth = $dbh->prepare( "SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield=?" );
     }
     $sth->execute( $frameworkcode, $kohafieldname );
     if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
@@ -1611,8 +1724,7 @@ sub TransformKohaToMarcOneField {
             $tag->update( $tagsubfield => $value );
             $record->delete_field($tag);
             $record->insert_fields_ordered($tag);
-        }
-        else {
+        } else {
             $record->add_fields( $tagfield, " ", " ", $tagsubfield => $value );
         }
     }
@@ -1640,22 +1752,25 @@ sub TransformHtmlToXml {
     $xml .= "<record>\n";
     $auth_type = C4::Context->preference('marcflavour') unless $auth_type;
     MARC::File::XML->default_record_format($auth_type);
+
     # in UNIMARC, field 100 contains the encoding
-    # check that there is one, otherwise the 
+    # check that there is one, otherwise the
     # MARC::Record->new_from_xml will fail (and Koha will die)
-    my $unimarc_and_100_exist=0;
-    $unimarc_and_100_exist=1 if $auth_type eq 'ITEM'; # if we rebuild an item, no need of a 100 field
+    my $unimarc_and_100_exist = 0;
+    $unimarc_and_100_exist = 1 if $auth_type eq 'ITEM';    # if we rebuild an item, no need of a 100 field
     my $prevvalue;
     my $prevtag = -1;
     my $first   = 1;
     my $j       = -1;
     for ( my $i = 0 ; $i < @$tags ; $i++ ) {
-        if (C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a") {
+
+        if ( C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a" ) {
+
             # if we have a 100 field and it's values are not correct, skip them.
             # if we don't have any valid 100 field, we will create a default one at the end
             my $enc = substr( @$values[$i], 26, 2 );
-            if ($enc eq '01' or $enc eq '50' or $enc eq '03') {
-                $unimarc_and_100_exist=1;
+            if ( $enc eq '01' or $enc eq '50' or $enc eq '03' ) {
+                $unimarc_and_100_exist = 1;
             } else {
                 next;
             }
@@ -1665,34 +1780,33 @@ sub TransformHtmlToXml {
         @$values[$i] =~ s/>/&gt;/g;
         @$values[$i] =~ s/"/&quot;/g;
         @$values[$i] =~ s/'/&apos;/g;
-#         if ( !utf8::is_utf8( @$values[$i] ) ) {
-#             utf8::decode( @$values[$i] );
-#         }
+
+        #         if ( !utf8::is_utf8( @$values[$i] ) ) {
+        #             utf8::decode( @$values[$i] );
+        #         }
         if ( ( @$tags[$i] ne $prevtag ) ) {
             $j++ unless ( @$tags[$i] eq "" );
+            my $indicator1 = eval { substr( @$indicator[$j], 0, 1 ) };
+            my $indicator2 = eval { substr( @$indicator[$j], 1, 1 ) };
+            my $ind1       = _default_ind_to_space($indicator1);
+            my $ind2;
+            if ( @$indicator[$j] ) {
+                $ind2 = _default_ind_to_space($indicator2);
+            } else {
+                warn "Indicator in @$tags[$i] is empty";
+                $ind2 = " ";
+            }
             if ( !$first ) {
                 $xml .= "</datafield>\n";
                 if (   ( @$tags[$i] && @$tags[$i] > 10 )
-                    && ( @$values[$i] ne "" ) )
-                {
-                    my $ind1 = _default_ind_to_space(substr( @$indicator[$j], 0, 1 ));
-                    my $ind2;
-                    if ( @$indicator[$j] ) {
-                        $ind2 = _default_ind_to_space(substr( @$indicator[$j], 1, 1 ));
-                    }
-                    else {
-                        warn "Indicator in @$tags[$i] is empty";
-                        $ind2 = " ";
-                    }
+                    && ( @$values[$i] ne "" ) ) {
                     $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                     $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                     $first = 0;
-                }
-                else {
+                } else {
                     $first = 1;
                 }
-            }
-            else {
+            } else {
                 if ( @$values[$i] ne "" ) {
 
                     # leader
@@ -1701,28 +1815,30 @@ sub TransformHtmlToXml {
                         $first = 1;
 
                         # rest of the fixed fields
-                    }
-                    elsif ( @$tags[$i] < 10 ) {
+                    } elsif ( @$tags[$i] < 10 ) {
                         $xml .= "<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
                         $first = 1;
-                    }
-                    else {
-                        my $ind1 = _default_ind_to_space( substr( @$indicator[$j], 0, 1 ) );
-                        my $ind2 = _default_ind_to_space( substr( @$indicator[$j], 1, 1 ) );
+                    } else {
                         $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                         $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                         $first = 0;
                     }
                 }
             }
-        }
-        else {    # @$tags[$i] eq $prevtag
-            if ( @$values[$i] eq "" ) {
+        } else {    # @$tags[$i] eq $prevtag
+            my $indicator1 = eval { substr( @$indicator[$j], 0, 1 ) };
+            my $indicator2 = eval { substr( @$indicator[$j], 1, 1 ) };
+            my $ind1       = _default_ind_to_space($indicator1);
+            my $ind2;
+            if ( @$indicator[$j] ) {
+                $ind2 = _default_ind_to_space($indicator2);
+            } else {
+                warn "Indicator in @$tags[$i] is empty";
+                $ind2 = " ";
             }
-            else {
+            if ( @$values[$i] eq "" ) {
+            } else {
                 if ($first) {
-                    my $ind1 = _default_ind_to_space( substr( @$indicator[$j], 0, 1 ) );
-                    my $ind2 = _default_ind_to_space( substr( @$indicator[$j], 1, 1 ) );
                     $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                     $first = 0;
                 }
@@ -1732,14 +1848,16 @@ sub TransformHtmlToXml {
         $prevtag = @$tags[$i];
     }
     $xml .= "</datafield>\n" if @$tags > 0;
-    if (C4::Context->preference('marcflavour') eq 'UNIMARC' and !$unimarc_and_100_exist) {
-#     warn "SETTING 100 for $auth_type";
+    if ( C4::Context->preference('marcflavour') eq 'UNIMARC' and !$unimarc_and_100_exist ) {
+
+        #     warn "SETTING 100 for $auth_type";
         my $string = strftime( "%Y%m%d", localtime(time) );
+
         # set 50 to position 26 is biblios, 13 if authorities
-        my $pos=26;
-        $pos=13 if $auth_type eq 'UNIMARCAUTH';
+        my $pos = 26;
+        $pos = 13 if $auth_type eq 'UNIMARCAUTH';
         $string = sprintf( "%-*s", 35, $string );
-        substr( $string, $pos , 6, "50" );
+        substr( $string, $pos, 6, "50" );
         $xml .= "<datafield tag=\"100\" ind1=\"\" ind2=\"\">\n";
         $xml .= "<subfield code=\"a\">$string</subfield>\n";
         $xml .= "</datafield>\n";
@@ -1758,7 +1876,7 @@ if its undefined or zero length
 
 sub _default_ind_to_space {
     my $s = shift;
-    if (!defined $s || $s eq q{}) {
+    if ( !defined $s || $s eq q{} ) {
         return ' ';
     }
     return $s;
@@ -1797,89 +1915,73 @@ sub TransformHtmlToMarc {
     # 'tag_' parameters to avoid incorrect character
     # conversion later on
     my $cgi_params = $cgi->Vars;
-    foreach my $param_name (keys %$cgi_params) {
-        if ($param_name =~ /^tag_/) {
+    foreach my $param_name ( keys %$cgi_params ) {
+        if ( $param_name =~ /^tag_/ ) {
             my $param_value = $cgi_params->{$param_name};
-            if (utf8::decode($param_value)) {
+            if ( utf8::decode($param_value) ) {
                 $cgi_params->{$param_name} = $param_value;
-            } 
+            }
+
             # FIXME - need to do something if string is not valid UTF-8
         }
     }
-   
+
     # creating a new record
-    my $record  = MARC::Record->new();
-    my $i=0;
+    my $record = MARC::Record->new();
+    my $i      = 0;
     my @fields;
-    while ($params->[$i]){ # browse all CGI params
-        my $param = $params->[$i];
-        my $newfield=0;
+    while ( $params->[$i] ) {    # browse all CGI params
+        my $param    = $params->[$i];
+        my $newfield = 0;
+
         # if we are on biblionumber, store it in the MARC::Record (it may not be in the edited fields)
-        if ($param eq 'biblionumber') {
-            my ( $biblionumbertagfield, $biblionumbertagsubfield ) =
-                &GetMarcFromKohaField( "biblio.biblionumber", '' );
-            if ($biblionumbertagfield < 10) {
-                $newfield = MARC::Field->new(
-                    $biblionumbertagfield,
-                    $cgi->param($param),
-                );
+        if ( $param eq 'biblionumber' ) {
+            my ( $biblionumbertagfield, $biblionumbertagsubfield ) = &GetMarcFromKohaField( "biblio.biblionumber", '' );
+            if ( $biblionumbertagfield < 10 ) {
+                $newfield = MARC::Field->new( $biblionumbertagfield, $cgi->param($param), );
             } else {
-                $newfield = MARC::Field->new(
-                    $biblionumbertagfield,
-                    '',
-                    '',
-                    "$biblionumbertagsubfield" => $cgi->param($param),
-                );
+                $newfield = MARC::Field->new( $biblionumbertagfield, '', '', "$biblionumbertagsubfield" => $cgi->param($param), );
             }
-            push @fields,$newfield if($newfield);
-        } 
-        elsif ($param =~ /^tag_(\d*)_indicator1_/){ # new field start when having 'input name="..._indicator1_..."
-            my $tag  = $1;
-            
-            my $ind1 = _default_ind_to_space(substr($cgi->param($param),          0, 1));
-            my $ind2 = _default_ind_to_space(substr($cgi->param($params->[$i+1]), 0, 1));
-            $newfield=0;
-            my $j=$i+2;
-            
-            if($tag < 10){ # no code for theses fields
-    # in MARC editor, 000 contains the leader.
-                if ($tag eq '000' ) {
-                    $record->leader($cgi->param($params->[$j+1])) if length($cgi->param($params->[$j+1]))==24;
-    # between 001 and 009 (included)
-                } elsif ($cgi->param($params->[$j+1]) ne '') {
-                    $newfield = MARC::Field->new(
-                        $tag,
-                        $cgi->param($params->[$j+1]),
-                    );
+            push @fields, $newfield if ($newfield);
+        } elsif ( $param =~ /^tag_(\d*)_indicator1_/ ) {    # new field start when having 'input name="..._indicator1_..."
+            my $tag = $1;
+
+            my $ind1 = _default_ind_to_space( substr( $cgi->param($param), 0, 1 ) );
+            my $ind2 = _default_ind_to_space( substr( $cgi->param( $params->[ $i + 1 ] ), 0, 1 ) );
+            $newfield = 0;
+            my $j = $i + 2;
+
+            if ( $tag < 10 ) {                              # no code for theses fields
+                                                            # in MARC editor, 000 contains the leader.
+                if ( $tag eq '000' ) {
+                    $record->leader( $cgi->param( $params->[ $j + 1 ] ) ) if length( $cgi->param( $params->[ $j + 1 ] ) ) == 24;
+
+                    # between 001 and 009 (included)
+                } elsif ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {
+                    $newfield = MARC::Field->new( $tag, $cgi->param( $params->[ $j + 1 ] ), );
                 }
-    # > 009, deal with subfields
+
+                # > 009, deal with subfields
             } else {
-                while(defined $params->[$j] && $params->[$j] =~ /_code_/){ # browse all it's subfield
+                while ( defined $params->[$j] && $params->[$j] =~ /_code_/ ) {    # browse all it's subfield
                     my $inner_param = $params->[$j];
-                    if ($newfield){
-                        if($cgi->param($params->[$j+1]) ne ''){  # only if there is a value (code => value)
-                            $newfield->add_subfields(
-                                $cgi->param($inner_param) => $cgi->param($params->[$j+1])
-                            );
+                    if ($newfield) {
+                        if ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {         # only if there is a value (code => value)
+                            $newfield->add_subfields( $cgi->param($inner_param) => $cgi->param( $params->[ $j + 1 ] ) );
                         }
                     } else {
-                        if ( $cgi->param($params->[$j+1]) ne '' ) { # creating only if there is a value (code => value)
-                            $newfield = MARC::Field->new(
-                                $tag,
-                                $ind1,
-                                $ind2,
-                                $cgi->param($inner_param) => $cgi->param($params->[$j+1]),
-                            );
+                        if ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {         # creating only if there is a value (code => value)
+                            $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($inner_param) => $cgi->param( $params->[ $j + 1 ] ), );
                         }
                     }
-                    $j+=2;
+                    $j += 2;
                 }
             }
-            push @fields,$newfield if($newfield);
+            push @fields, $newfield if ($newfield);
         }
         $i++;
     }
-    
+
     $record->append_fields(@fields);
     return $record;
 }
@@ -1899,38 +2001,39 @@ Extract data from a MARC bib record into a hashref representing
 Koha biblio, biblioitems, and items fields. 
 
 =cut
+
 sub TransformMarcToKoha {
     my ( $dbh, $record, $frameworkcode, $limit_table ) = @_;
 
     my $result;
-    $limit_table=$limit_table||0;
+    $limit_table = $limit_table || 0;
     $frameworkcode = '' unless defined $frameworkcode;
-    
-    unless (defined $inverted_field_map) {
+
+    unless ( defined $inverted_field_map ) {
         $inverted_field_map = _get_inverted_marc_field_map();
     }
 
     my %tables = ();
-    if ( defined $limit_table && $limit_table eq 'items') {
+    if ( defined $limit_table && $limit_table eq 'items' ) {
         $tables{'items'} = 1;
     } else {
-        $tables{'items'} = 1;
-        $tables{'biblio'} = 1;
+        $tables{'items'}       = 1;
+        $tables{'biblio'}      = 1;
         $tables{'biblioitems'} = 1;
     }
 
     # traverse through record
-    MARCFIELD: foreach my $field ($record->fields()) {
+  MARCFIELD: foreach my $field ( $record->fields() ) {
         my $tag = $field->tag();
         next MARCFIELD unless exists $inverted_field_map->{$frameworkcode}->{$tag};
-        if ($field->is_control_field()) {
+        if ( $field->is_control_field() ) {
             my $kohafields = $inverted_field_map->{$frameworkcode}->{$tag}->{list};
-            ENTRY: foreach my $entry (@{ $kohafields }) {
-                my ($subfield, $table, $column) = @{ $entry };
+          ENTRY: foreach my $entry ( @{$kohafields} ) {
+                my ( $subfield, $table, $column ) = @{$entry};
                 next ENTRY unless exists $tables{$table};
-                my $key = _disambiguate($table, $column);
-                if ($result->{$key}) {
-                    unless (($key eq "biblionumber" or $key eq "biblioitemnumber") and ($field->data() eq "")) {
+                my $key = _disambiguate( $table, $column );
+                if ( $result->{$key} ) {
+                    unless ( ( $key eq "biblionumber" or $key eq "biblioitemnumber" ) and ( $field->data() eq "" ) ) {
                         $result->{$key} .= " | " . $field->data();
                     }
                 } else {
@@ -1938,17 +2041,18 @@ sub TransformMarcToKoha {
                 }
             }
         } else {
+
             # deal with subfields
-            MARCSUBFIELD: foreach my $sf ($field->subfields()) {
+          MARCSUBFIELD: foreach my $sf ( $field->subfields() ) {
                 my $code = $sf->[0];
                 next MARCSUBFIELD unless exists $inverted_field_map->{$frameworkcode}->{$tag}->{sfs}->{$code};
                 my $value = $sf->[1];
-                SFENTRY: foreach my $entry (@{ $inverted_field_map->{$frameworkcode}->{$tag}->{sfs}->{$code} }) {
-                    my ($table, $column) = @{ $entry };
+              SFENTRY: foreach my $entry ( @{ $inverted_field_map->{$frameworkcode}->{$tag}->{sfs}->{$code} } ) {
+                    my ( $table, $column ) = @{$entry};
                     next SFENTRY unless exists $tables{$table};
-                    my $key = _disambiguate($table, $column);
-                    if ($result->{$key}) {
-                        unless (($key eq "biblionumber" or $key eq "biblioitemnumber") and ($value eq "")) {
+                    my $key = _disambiguate( $table, $column );
+                    if ( $result->{$key} ) {
+                        unless ( ( $key eq "biblionumber" or $key eq "biblioitemnumber" ) and ( $value eq "" ) ) {
                             $result->{$key} .= " | " . $value;
                         }
                     } else {
@@ -1960,25 +2064,23 @@ sub TransformMarcToKoha {
     }
 
     # modify copyrightdate to keep only the 1st year found
-    if (exists $result->{'copyrightdate'}) {
+    if ( exists $result->{'copyrightdate'} ) {
         my $temp = $result->{'copyrightdate'};
         $temp =~ m/c(\d\d\d\d)/;
-        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) { # search cYYYY first
+        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) {    # search cYYYY first
             $result->{'copyrightdate'} = $1;
-        }
-        else {                      # if no cYYYY, get the 1st date.
+        } else {                                       # if no cYYYY, get the 1st date.
             $temp =~ m/(\d\d\d\d)/;
             $result->{'copyrightdate'} = $1;
         }
     }
 
     # modify publicationyear to keep only the 1st year found
-    if (exists $result->{'publicationyear'}) {
+    if ( exists $result->{'publicationyear'} ) {
         my $temp = $result->{'publicationyear'};
-        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) { # search cYYYY first
+        if ( $temp =~ m/c(\d\d\d\d)/ and $1 > 0 ) {    # search cYYYY first
             $result->{'publicationyear'} = $1;
-        }
-        else {                      # if no cYYYY, get the 1st date.
+        } else {                                       # if no cYYYY, get the 1st date.
             $temp =~ m/(\d\d\d\d)/;
             $result->{'publicationyear'} = $1;
         }
@@ -1991,12 +2093,12 @@ sub _get_inverted_marc_field_map {
     my $field_map = {};
     my $relations = C4::Context->marcfromkohafield;
 
-    foreach my $frameworkcode (keys %{ $relations }) {
-        foreach my $kohafield (keys %{ $relations->{$frameworkcode} }) {
-            next unless @{ $relations->{$frameworkcode}->{$kohafield} }; # not all columns are mapped to MARC tag & subfield
-            my $tag = $relations->{$frameworkcode}->{$kohafield}->[0];
+    foreach my $frameworkcode ( keys %{$relations} ) {
+        foreach my $kohafield ( keys %{ $relations->{$frameworkcode} } ) {
+            next unless @{ $relations->{$frameworkcode}->{$kohafield} };    # not all columns are mapped to MARC tag & subfield
+            my $tag      = $relations->{$frameworkcode}->{$kohafield}->[0];
             my $subfield = $relations->{$frameworkcode}->{$kohafield}->[1];
-            my ($table, $column) = split /[.]/, $kohafield, 2;
+            my ( $table, $column ) = split /[.]/, $kohafield, 2;
             push @{ $field_map->{$frameworkcode}->{$tag}->{list} }, [ $subfield, $table, $column ];
             push @{ $field_map->{$frameworkcode}->{$tag}->{sfs}->{$subfield} }, [ $table, $column ];
         }
@@ -2038,17 +2140,17 @@ more.
 =cut
 
 sub CountItemsIssued {
-  my ( $biblionumber )  = @_;
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare('SELECT COUNT(*) as issuedCount FROM items, issues WHERE items.itemnumber = issues.itemnumber AND items.biblionumber = ?');
-  $sth->execute( $biblionumber );
-  my $row = $sth->fetchrow_hashref();
-  return $row->{'issuedCount'};
+    my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare('SELECT COUNT(*) as issuedCount FROM items, issues WHERE items.itemnumber = issues.itemnumber AND items.biblionumber = ?');
+    $sth->execute($biblionumber);
+    my $row = $sth->fetchrow_hashref();
+    return $row->{'issuedCount'};
 }
 
 sub _disambiguate {
-    my ($table, $column) = @_;
-    if ($column eq "cn_sort" or $column eq "cn_source") {
+    my ( $table, $column ) = @_;
+    if ( $column eq "cn_sort" or $column eq "cn_source" ) {
         return $table . '.' . $column;
     } else {
         return $column;
@@ -2070,30 +2172,25 @@ FIXME: this is meant to replace TransformMarcToKohaOneField after more testing.
 =cut
 
 sub get_koha_field_from_marc {
-    my ($koha_table,$koha_column,$record,$frameworkcode) = @_;
-    my ( $tagfield, $subfield ) = GetMarcFromKohaField( $koha_table.'.'.$koha_column, $frameworkcode );  
+    my ( $koha_table, $koha_column, $record, $frameworkcode ) = @_;
+    my ( $tagfield, $subfield ) = GetMarcFromKohaField( $koha_table . '.' . $koha_column, $frameworkcode );
     my $kohafield;
     foreach my $field ( $record->field($tagfield) ) {
         if ( $field->tag() < 10 ) {
-            if ( $kohafield ) {
+            if ($kohafield) {
                 $kohafield .= " | " . $field->data();
-            }
-            else {
+            } else {
                 $kohafield = $field->data();
             }
-        }
-        else {
+        } else {
             if ( $field->subfields ) {
                 my @subfields = $field->subfields();
                 foreach my $subfieldcount ( 0 .. $#subfields ) {
                     if ( $subfields[$subfieldcount][0] eq $subfield ) {
-                        if ( $kohafield ) {
-                            $kohafield .=
-                              " | " . $subfields[$subfieldcount][1];
-                        }
-                        else {
-                            $kohafield =
-                              $subfields[$subfieldcount][1];
+                        if ($kohafield) {
+                            $kohafield .= " | " . $subfields[$subfieldcount][1];
+                        } else {
+                            $kohafield = $subfields[$subfieldcount][1];
                         }
                     }
                 }
@@ -2101,8 +2198,7 @@ sub get_koha_field_from_marc {
         }
     }
     return $kohafield;
-} 
-
+}
 
 =head2 TransformMarcToKohaOneField
 
@@ -2120,30 +2216,23 @@ sub TransformMarcToKohaOneField {
     # only the 1st will be retrieved...
     my ( $kohatable, $kohafield, $record, $result, $frameworkcode ) = @_;
     my $res = "";
-    my ( $tagfield, $subfield ) =
-      GetMarcFromKohaField( $kohatable . "." . $kohafield,
-        $frameworkcode );
+    my ( $tagfield, $subfield ) = GetMarcFromKohaField( $kohatable . "." . $kohafield, $frameworkcode );
     foreach my $field ( $record->field($tagfield) ) {
         if ( $field->tag() < 10 ) {
             if ( $result->{$kohafield} ) {
                 $result->{$kohafield} .= " | " . $field->data();
-            }
-            else {
+            } else {
                 $result->{$kohafield} = $field->data();
             }
-        }
-        else {
+        } else {
             if ( $field->subfields ) {
                 my @subfields = $field->subfields();
                 foreach my $subfieldcount ( 0 .. $#subfields ) {
                     if ( $subfields[$subfieldcount][0] eq $subfield ) {
                         if ( $result->{$kohafield} ) {
-                            $result->{$kohafield} .=
-                              " | " . $subfields[$subfieldcount][1];
-                        }
-                        else {
-                            $result->{$kohafield} =
-                              $subfields[$subfieldcount][1];
+                            $result->{$kohafield} .= " | " . $subfields[$subfieldcount][1];
+                        } else {
+                            $result->{$kohafield} = $subfields[$subfieldcount][1];
                         }
                     }
                 }
@@ -2160,9 +2249,11 @@ sub TransformMarcToKohaOneField {
 
 =over 4
 
-PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber);
+PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber,$frameworkcode);
 
 Returns a hash with all the fields for Display a given item data in a template
+
+The $frameworkcode returns the item for the given frameworkcode, ONLY if bibnum is not provided
 
 =back
 
@@ -2170,22 +2261,22 @@ Returns a hash with all the fields for Display a given item data in a template
 
 sub PrepareItemrecordDisplay {
 
-    my ( $bibnum, $itemnum, $defaultvalues ) = @_;
+    my ( $bibnum, $itemnum, $defaultvalues, $frameworkcode ) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $frameworkcode = &GetFrameworkCode( $bibnum );
-    my ( $itemtagfield, $itemtagsubfield ) =
-      &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    $frameworkcode = &GetFrameworkCode($bibnum) if $bibnum;
+    my ( $itemtagfield, $itemtagsubfield ) = &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     my $tagslib = &GetMarcStructure( 1, $frameworkcode );
-    my $itemrecord = C4::Items::GetMarcItem( $bibnum, $itemnum) if ($itemnum);
+
+    # return nothing if we don't have found an existing framework.
+    return "" unless $tagslib;
+    my $itemrecord = C4::Items::GetMarcItem( $bibnum, $itemnum ) if ($itemnum);
     my @loop_data;
-    my $authorised_values_sth =
-      $dbh->prepare(
-"SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib"
-      );
+    my $authorised_values_sth = $dbh->prepare( "SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib" );
     foreach my $tag ( sort keys %{$tagslib} ) {
         my $previous_tag = '';
         if ( $tag ne '' ) {
+
             # loop through each subfield
             my $cntsubf;
             foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
@@ -2195,58 +2286,47 @@ sub PrepareItemrecordDisplay {
                 $subfield_data{tag}           = $tag;
                 $subfield_data{subfield}      = $subfield;
                 $subfield_data{countsubfield} = $cntsubf++;
-                $subfield_data{kohafield}     =
-                  $tagslib->{$tag}->{$subfield}->{'kohafield'};
+                $subfield_data{kohafield}     = $tagslib->{$tag}->{$subfield}->{'kohafield'};
 
-         #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
-                $subfield_data{marc_lib} = $tagslib->{$tag}->{$subfield}->{lib};
-                $subfield_data{mandatory} =
-                  $tagslib->{$tag}->{$subfield}->{mandatory};
-                $subfield_data{repeatable} =
-                  $tagslib->{$tag}->{$subfield}->{repeatable};
-                $subfield_data{hidden} = "display:none"
+                #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
+                $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
+                $subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
+                $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
+                $subfield_data{hidden}     = "display:none"
                   if $tagslib->{$tag}->{$subfield}->{hidden};
-                  my ( $x, $value );
-                  if ($itemrecord) {
-                      ( $x, $value ) = _find_value( $tag, $subfield, $itemrecord );
-                  }
-                  if (!defined $value) {
-                      $value = q||;
-                  }
-                  $value =~ s/"/&quot;/g;
+                my ( $x, $value );
+                if ($itemrecord) {
+                    ( $x, $value ) = _find_value( $tag, $subfield, $itemrecord );
+                }
+                if ( !defined $value ) {
+                    $value = q||;
+                }
+                $value =~ s/"/&quot;/g;
 
                 # search for itemcallnumber if applicable
-                if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq
-                    'items.itemcallnumber'
-                    && C4::Context->preference('itemcallnumber') )
-                {
-                    my $CNtag =
-                      substr( C4::Context->preference('itemcallnumber'), 0, 3 );
-                    my $CNsubfield =
-                      substr( C4::Context->preference('itemcallnumber'), 3, 1 );
+                if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
+                    && C4::Context->preference('itemcallnumber') ) {
+                    my $CNtag      = substr( C4::Context->preference('itemcallnumber'), 0, 3 );
+                    my $CNsubfield = substr( C4::Context->preference('itemcallnumber'), 3, 1 );
                     my $temp = $itemrecord->field($CNtag) if ($itemrecord);
                     if ($temp) {
                         $value = $temp->subfield($CNsubfield);
                     }
                 }
-                if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq
-                    'items.itemcallnumber'
-                    && $defaultvalues->{'callnumber'} )
-                {
+                if (   $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
+                    && $defaultvalues
+                    && $defaultvalues->{'callnumber'} ) {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
-                        $value = $defaultvalues->{'callnumber'};
+                        $value = $defaultvalues->{'callnumber'} if $defaultvalues;
                     }
                 }
-                if ( ($tagslib->{$tag}->{$subfield}->{kohafield} eq
-                    'items.holdingbranch' ||
-                    $tagslib->{$tag}->{$subfield}->{kohafield} eq
-                    'items.homebranch')          
-                    && $defaultvalues->{'branchcode'} )
-                {
+                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.holdingbranch' || $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.homebranch' )
+                    && $defaultvalues
+                    && $defaultvalues->{'branchcode'} ) {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
-                        $value = $defaultvalues->{branchcode};
+                        $value = $defaultvalues->{branchcode} if $defaultvalues;
                     }
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
@@ -2255,73 +2335,45 @@ sub PrepareItemrecordDisplay {
 
                     # builds list, depending on authorised value...
                     #---- branch
-                    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq
-                        "branches" )
-                    {
-                        if ( ( C4::Context->preference("IndependantBranches") )
-                            && ( C4::Context->userenv->{flags} % 2 != 1 ) )
-                        {
-                            my $sth =
-                              $dbh->prepare(
-                                "SELECT branchcode,branchname FROM branches WHERE branchcode = ? ORDER BY branchname"
-                              );
+                    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+                        if (   ( C4::Context->preference("IndependantBranches") )
+                            && ( C4::Context->userenv->{flags} % 2 != 1 ) ) {
+                            my $sth = $dbh->prepare( "SELECT branchcode,branchname FROM branches WHERE branchcode = ? ORDER BY branchname" );
                             $sth->execute( C4::Context->userenv->{branch} );
                             push @authorised_values, ""
-                              unless (
-                                $tagslib->{$tag}->{$subfield}->{mandatory} );
-                            while ( my ( $branchcode, $branchname ) =
-                                $sth->fetchrow_array )
-                            {
+                              unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                            while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
                                 push @authorised_values, $branchcode;
                                 $authorised_lib{$branchcode} = $branchname;
                             }
-                        }
-                        else {
-                            my $sth =
-                              $dbh->prepare(
-                                "SELECT branchcode,branchname FROM branches ORDER BY branchname"
-                              );
+                        } else {
+                            my $sth = $dbh->prepare( "SELECT branchcode,branchname FROM branches ORDER BY branchname" );
                             $sth->execute;
                             push @authorised_values, ""
-                              unless (
-                                $tagslib->{$tag}->{$subfield}->{mandatory} );
-                            while ( my ( $branchcode, $branchname ) =
-                                $sth->fetchrow_array )
-                            {
+                              unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                            while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
                                 push @authorised_values, $branchcode;
                                 $authorised_lib{$branchcode} = $branchname;
                             }
                         }
 
                         #----- itemtypes
-                    }
-                    elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq
-                        "itemtypes" )
-                    {
-                        my $sth =
-                          $dbh->prepare(
-                            "SELECT itemtype,description FROM itemtypes ORDER BY description"
-                          );
+                    } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+                        my $sth = $dbh->prepare( "SELECT itemtype,description FROM itemtypes ORDER BY description" );
                         $sth->execute;
                         push @authorised_values, ""
                           unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-                        while ( my ( $itemtype, $description ) =
-                            $sth->fetchrow_array )
-                        {
+                        while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
                             push @authorised_values, $itemtype;
                             $authorised_lib{$itemtype} = $description;
                         }
 
                         #---- "true" authorised value
-                    }
-                    else {
-                        $authorised_values_sth->execute(
-                            $tagslib->{$tag}->{$subfield}->{authorised_value} );
+                    } else {
+                        $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
                         push @authorised_values, ""
                           unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-                        while ( my ( $value, $lib ) =
-                            $authorised_values_sth->fetchrow_array )
-                        {
+                        while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
                             push @authorised_values, $value;
                             $authorised_lib{$value} = $lib;
                         }
@@ -2335,10 +2387,8 @@ sub PrepareItemrecordDisplay {
                         -tabindex => '',
                         -multiple => 0,
                     );
-                }
-                else {
-                    $subfield_data{marc_value} =
-"<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\" />";
+                } else {
+                    $subfield_data{marc_value} = "<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\" />";
                 }
                 push( @loop_data, \%subfield_data );
             }
@@ -2353,6 +2403,7 @@ sub PrepareItemrecordDisplay {
         'iteminformation' => \@loop_data
     };
 }
+
 #"
 
 #
@@ -2361,15 +2412,15 @@ sub PrepareItemrecordDisplay {
 # replaced by a zebraqueue table, that is filled with ModZebra to run.
 # the table is emptied by misc/cronjobs/zebraqueue_start.pl script
 # =head2 ModZebrafiles
-# 
+#
 # &ModZebrafiles( $dbh, $biblionumber, $record, $folder, $server );
-# 
+#
 # =cut
-# 
+#
 # sub ModZebrafiles {
-# 
+#
 #     my ( $dbh, $biblionumber, $record, $folder, $server ) = @_;
-# 
+#
 #     my $op;
 #     my $zebradir =
 #       C4::Context->zebraconfig($server)->{directory} . "/" . $folder . "/";
@@ -2379,7 +2430,7 @@ sub PrepareItemrecordDisplay {
 #     }
 #     closedir DIR;
 #     my $filename = $zebradir . $biblionumber;
-# 
+#
 #     if ($record) {
 #         open( OUTPUT, ">", $filename . ".xml" );
 #         print OUTPUT $record;
@@ -2408,41 +2459,47 @@ ModZebra( $biblionumber, $op, $server, $oldRecord, $newRecord );
 sub ModZebra {
 ###Accepts a $server variable thus we can use it for biblios authorities or other zebra dbs
     my ( $biblionumber, $op, $server, $oldRecord, $newRecord ) = @_;
-    my $dbh=C4::Context->dbh;
+    my $dbh = C4::Context->dbh;
 
     # true ModZebra commented until indexdata fixes zebraDB crashes (it seems they occur on multiple updates
     # at the same time
     # replaced by a zebraqueue table, that is filled with ModZebra to run.
     # the table is emptied by misc/cronjobs/zebraqueue_start.pl script
 
-    if (C4::Context->preference("NoZebra")) {
+    if ( C4::Context->preference("NoZebra") ) {
+
         # lock the nozebra table : we will read index lines, update them in Perl process
         # and write everything in 1 transaction.
         # lock the table to avoid someone else overwriting what we are doing
         $dbh->do('LOCK TABLES nozebra WRITE,biblio WRITE,biblioitems WRITE, systempreferences WRITE, auth_types WRITE, auth_header WRITE, auth_subfield_structure READ');
-        my %result; # the result hash that will be built by deletion / add, and written on mySQL at the end, to improve speed
-        if ($op eq 'specialUpdate') {
+        my %result;    # the result hash that will be built by deletion / add, and written on mySQL at the end, to improve speed
+        if ( $op eq 'specialUpdate' ) {
+
             # OK, we have to add or update the record
             # 1st delete (virtually, in indexes), if record actually exists
-            if ($oldRecord) { 
-                %result = _DelBiblioNoZebra($biblionumber,$oldRecord,$server);
+            if ($oldRecord) {
+                %result = _DelBiblioNoZebra( $biblionumber, $oldRecord, $server );
             }
+
             # ... add the record
-            %result=_AddBiblioNoZebra($biblionumber,$newRecord, $server, %result);
+            %result = _AddBiblioNoZebra( $biblionumber, $newRecord, $server, %result );
         } else {
+
             # it's a deletion, delete the record...
             # warn "DELETE the record $biblionumber on $server".$record->as_formatted;
-            %result=_DelBiblioNoZebra($biblionumber,$oldRecord,$server);
+            %result = _DelBiblioNoZebra( $biblionumber, $oldRecord, $server );
         }
+
         # ok, now update the database...
         my $sth = $dbh->prepare("UPDATE nozebra SET biblionumbers=? WHERE server=? AND indexname=? AND value=?");
-        foreach my $key (keys %result) {
-            foreach my $index (keys %{$result{$key}}) {
-                $sth->execute($result{$key}->{$index}, $server, $key, $index);
+        foreach my $key ( keys %result ) {
+            foreach my $index ( keys %{ $result{$key} } ) {
+                $sth->execute( $result{$key}->{$index}, $server, $key, $index );
             }
         }
         $dbh->do('UNLOCK TABLES');
     } else {
+
         #
         # we use zebra, just fill zebraqueue table
         #
@@ -2452,12 +2509,12 @@ sub ModZebra {
                          AND   operation = ?
                          AND   done = 0";
         my $check_sth = $dbh->prepare_cached($check_sql);
-        $check_sth->execute($server, $biblionumber, $op);
+        $check_sth->execute( $server, $biblionumber, $op );
         my ($count) = $check_sth->fetchrow_array;
         $check_sth->finish();
-        if ($count == 0) {
-            my $sth=$dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
-            $sth->execute($biblionumber,$server,$op);
+        if ( $count == 0 ) {
+            my $sth = $dbh->prepare("INSERT INTO zebraqueue  (biblio_auth_number,server,operation) VALUES(?,?,?)");
+            $sth->execute( $biblionumber, $server, $op );
             $sth->finish;
         }
     }
@@ -2474,13 +2531,13 @@ sub ModZebra {
 sub GetNoZebraIndexes {
     my $no_zebra_indexes = C4::Context->preference('NoZebraIndexes');
     my %indexes;
-    INDEX: foreach my $line (split /['"],[\n\r]*/,$no_zebra_indexes) {
+  INDEX: foreach my $line ( split /['"],[\n\r]*/, $no_zebra_indexes ) {
         $line =~ /(.*)=>(.*)/;
-        my $index = $1; # initial ' or " is removed afterwards
+        my $index  = $1;    # initial ' or " is removed afterwards
         my $fields = $2;
-        $index =~ s/'|"|\s//g;
+        $index  =~ s/'|"|\s//g;
         $fields =~ s/'|"|\s//g;
-        $indexes{$index}=$fields;
+        $indexes{$index} = $fields;
     }
     return %indexes;
 }
@@ -2499,87 +2556,104 @@ sub GetNoZebraIndexes {
 
 =cut
 
-
 sub _DelBiblioNoZebra {
-    my ($biblionumber, $record, $server)=@_;
-    
+    my ( $biblionumber, $record, $server ) = @_;
+
     # Get the indexes
     my $dbh = C4::Context->dbh;
+
     # Get the indexes
     my %index;
     my $title;
-    if ($server eq 'biblioserver') {
-        %index=GetNoZebraIndexes;
+    if ( $server eq 'biblioserver' ) {
+        %index = GetNoZebraIndexes;
+
         # get title of the record (to store the 10 first letters with the index)
-        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title', ''); # FIXME: should be GetFrameworkCode($biblionumber) ??
-        $title = lc($record->subfield($titletag,$titlesubfield));
+        my ( $titletag, $titlesubfield ) = GetMarcFromKohaField( 'biblio.title', '' );    # FIXME: should be GetFrameworkCode($biblionumber) ??
+        $title = lc( $record->subfield( $titletag, $titlesubfield ) );
     } else {
+
         # for authorities, the "title" is the $a mainentry
-        my ($auth_type_tag, $auth_type_sf) = C4::AuthoritiesMarc::get_auth_type_location();
-        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield($auth_type_tag, $auth_type_sf));
-        warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
-        $title = $record->subfield($authref->{auth_tag_to_report},'a');
-        $index{'mainmainentry'}= $authref->{'auth_tag_to_report'}.'a';
-        $index{'mainentry'}    = $authref->{'auth_tag_to_report'}.'*';
-        $index{'auth_type'}    = "${auth_type_tag}${auth_type_sf}";
+        my ( $auth_type_tag, $auth_type_sf ) = C4::AuthoritiesMarc::get_auth_type_location();
+        my $authref = C4::AuthoritiesMarc::GetAuthType( $record->subfield( $auth_type_tag, $auth_type_sf ) );
+        warn "ERROR : authtype undefined for " . $record->as_formatted unless $authref;
+        $title = $record->subfield( $authref->{auth_tag_to_report}, 'a' );
+        $index{'mainmainentry'} = $authref->{'auth_tag_to_report'} . 'a';
+        $index{'mainentry'}     = $authref->{'auth_tag_to_report'} . '*';
+        $index{'auth_type'}     = "${auth_type_tag}${auth_type_sf}";
     }
-    
+
     my %result;
+
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
     $title =~ s/ |,|;|\[|\]|\(|\)|\*|-|'|=//g;
+
     # limit to 10 char, should be enough, and limit the DB size
-    $title = substr($title,0,10);
+    $title = substr( $title, 0, 10 );
+
     #parse each field
-    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value=?');
-    foreach my $field ($record->fields()) {
+    my $sth2 = $dbh->prepare('SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value=?');
+    foreach my $field ( $record->fields() ) {
+
         #parse each subfield
-        next if $field->tag <10;
-        foreach my $subfield ($field->subfields()) {
-            my $tag = $field->tag();
+        next if $field->tag < 10;
+        foreach my $subfield ( $field->subfields() ) {
+            my $tag          = $field->tag();
             my $subfieldcode = $subfield->[0];
-            my $indexed=0;
+            my $indexed      = 0;
+
             # check each index to see if the subfield is stored somewhere
             # otherwise, store it in __RAW__ index
-            foreach my $key (keys %index) {
-#                 warn "examining $key index : ".$index{$key}." for $tag $subfieldcode";
-                if ($index{$key} =~ /$tag\*/ or $index{$key} =~ /$tag$subfieldcode/) {
-                    $indexed=1;
-                    my $line= lc $subfield->[1];
+            foreach my $key ( keys %index ) {
+
+                #                 warn "examining $key index : ".$index{$key}." for $tag $subfieldcode";
+                if ( $index{$key} =~ /$tag\*/ or $index{$key} =~ /$tag$subfieldcode/ ) {
+                    $indexed = 1;
+                    my $line = lc $subfield->[1];
+
                     # remove meaningless value in the field...
                     $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
+
                     # ... and split in words
-                    foreach (split / /,$line) {
-                        next unless $_; # skip  empty values (multiple spaces)
-                        # if the entry is already here, do nothing, the biblionumber has already be removed
-                        unless ( defined( $result{$key}->{$_} ) && ( $result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/) ) {
+                    foreach ( split / /, $line ) {
+                        next unless $_;    # skip  empty values (multiple spaces)
+                                           # if the entry is already here, do nothing, the biblionumber has already be removed
+                        unless ( defined( $result{$key}->{$_} ) && ( $result{$key}->{$_} =~ /$biblionumber,$title\-(\d);/ ) ) {
+
                             # get the index value if it exist in the nozebra table and remove the entry, otherwise, do nothing
-                            $sth2->execute($server,$key,$_);
+                            $sth2->execute( $server, $key, $_ );
                             my $existing_biblionumbers = $sth2->fetchrow;
+
                             # it exists
                             if ($existing_biblionumbers) {
-#                                 warn " existing for $key $_: $existing_biblionumbers";
-                                $result{$key}->{$_} =$existing_biblionumbers;
+
+                                #                                 warn " existing for $key $_: $existing_biblionumbers";
+                                $result{$key}->{$_} = $existing_biblionumbers;
                                 $result{$key}->{$_} =~ s/$biblionumber,$title\-(\d);//;
                             }
                         }
                     }
                 }
             }
+
             # the subfield is not indexed, store it in __RAW__ index anyway
             unless ($indexed) {
-                my $line= lc $subfield->[1];
+                my $line = lc $subfield->[1];
                 $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:/ /g;
+
                 # ... and split in words
-                foreach (split / /,$line) {
-                    next unless $_; # skip  empty values (multiple spaces)
-                    # if the entry is already here, do nothing, the biblionumber has already be removed
-                    unless ($result{'__RAW__'}->{$_} =~ /$biblionumber,$title\-(\d);/) {
+                foreach ( split / /, $line ) {
+                    next unless $_;    # skip  empty values (multiple spaces)
+                                       # if the entry is already here, do nothing, the biblionumber has already be removed
+                    unless ( $result{'__RAW__'}->{$_} =~ /$biblionumber,$title\-(\d);/ ) {
+
                         # get the index value if it exist in the nozebra table and remove the entry, otherwise, do nothing
-                        $sth2->execute($server,'__RAW__',$_);
+                        $sth2->execute( $server, '__RAW__', $_ );
                         my $existing_biblionumbers = $sth2->fetchrow;
+
                         # it exists
                         if ($existing_biblionumbers) {
-                            $result{'__RAW__'}->{$_} =$existing_biblionumbers;
+                            $result{'__RAW__'}->{$_} = $existing_biblionumbers;
                             $result{'__RAW__'}->{$_} =~ s/$biblionumber,$title\-(\d);//;
                         }
                     }
@@ -2597,108 +2671,128 @@ sub _DelBiblioNoZebra {
 =cut
 
 sub _AddBiblioNoZebra {
-    my ($biblionumber, $record, $server, %result)=@_;
+    my ( $biblionumber, $record, $server, %result ) = @_;
     my $dbh = C4::Context->dbh;
+
     # Get the indexes
     my %index;
     my $title;
-    if ($server eq 'biblioserver') {
-        %index=GetNoZebraIndexes;
+    if ( $server eq 'biblioserver' ) {
+        %index = GetNoZebraIndexes;
+
         # get title of the record (to store the 10 first letters with the index)
-        my ($titletag,$titlesubfield) = GetMarcFromKohaField('biblio.title', ''); # FIXME: should be GetFrameworkCode($biblionumber) ??
-        $title = lc($record->subfield($titletag,$titlesubfield));
+        my ( $titletag, $titlesubfield ) = GetMarcFromKohaField( 'biblio.title', '' );    # FIXME: should be GetFrameworkCode($biblionumber) ??
+        $title = lc( $record->subfield( $titletag, $titlesubfield ) );
     } else {
+
         # warn "server : $server";
         # for authorities, the "title" is the $a mainentry
-        my ($auth_type_tag, $auth_type_sf) = C4::AuthoritiesMarc::get_auth_type_location();
-        my $authref = C4::AuthoritiesMarc::GetAuthType($record->subfield($auth_type_tag, $auth_type_sf));
-        warn "ERROR : authtype undefined for ".$record->as_formatted unless $authref;
-        $title = $record->subfield($authref->{auth_tag_to_report},'a');
-        $index{'mainmainentry'} = $authref->{auth_tag_to_report}.'a';
-        $index{'mainentry'}     = $authref->{auth_tag_to_report}.'*';
-        $index{'auth_type'}    = "${auth_type_tag}${auth_type_sf}";
+        my ( $auth_type_tag, $auth_type_sf ) = C4::AuthoritiesMarc::get_auth_type_location();
+        my $authref = C4::AuthoritiesMarc::GetAuthType( $record->subfield( $auth_type_tag, $auth_type_sf ) );
+        warn "ERROR : authtype undefined for " . $record->as_formatted unless $authref;
+        $title = $record->subfield( $authref->{auth_tag_to_report}, 'a' );
+        $index{'mainmainentry'} = $authref->{auth_tag_to_report} . 'a';
+        $index{'mainentry'}     = $authref->{auth_tag_to_report} . '*';
+        $index{'auth_type'}     = "${auth_type_tag}${auth_type_sf}";
     }
 
     # remove blancks comma (that could cause problem when decoding the string for CQL retrieval) and regexp specific values
     $title =~ s/ |\.|,|;|\[|\]|\(|\)|\*|-|'|:|=|\r|\n//g;
+
     # limit to 10 char, should be enough, and limit the DB size
-    $title = substr($title,0,10);
+    $title = substr( $title, 0, 10 );
+
     #parse each field
-    my $sth2=$dbh->prepare('SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value=?');
-    foreach my $field ($record->fields()) {
+    my $sth2 = $dbh->prepare('SELECT biblionumbers FROM nozebra WHERE server=? AND indexname=? AND value=?');
+    foreach my $field ( $record->fields() ) {
+
         #parse each subfield
         ###FIXME: impossible to index a 001-009 value with NoZebra
-        next if $field->tag <10;
-        foreach my $subfield ($field->subfields()) {
-            my $tag = $field->tag();
+        next if $field->tag < 10;
+        foreach my $subfield ( $field->subfields() ) {
+            my $tag          = $field->tag();
             my $subfieldcode = $subfield->[0];
-            my $indexed=0;
-#             warn "INDEXING :".$subfield->[1];
+            my $indexed      = 0;
+
+            #             warn "INDEXING :".$subfield->[1];
             # check each index to see if the subfield is stored somewhere
             # otherwise, store it in __RAW__ index
-            foreach my $key (keys %index) {
-#                 warn "examining $key index : ".$index{$key}." for $tag $subfieldcode";
-                if ($index{$key} =~ /$tag\*/ or $index{$key} =~ /$tag$subfieldcode/) {
-                    $indexed=1;
-                    my $line= lc $subfield->[1];
+            foreach my $key ( keys %index ) {
+
+                #                 warn "examining $key index : ".$index{$key}." for $tag $subfieldcode";
+                if ( $index{$key} =~ /$tag\*/ or $index{$key} =~ /$tag$subfieldcode/ ) {
+                    $indexed = 1;
+                    my $line = lc $subfield->[1];
+
                     # remove meaningless value in the field...
                     $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:|\r|\n/ /g;
+
                     # ... and split in words
-                    foreach (split / /,$line) {
-                        next unless $_; # skip  empty values (multiple spaces)
-                        # if the entry is already here, improve weight
-#                         warn "managing $_";
-                        if ( exists $result{$key}->{$_} && $result{$key}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d+);/) {
+                    foreach ( split / /, $line ) {
+                        next unless $_;    # skip  empty values (multiple spaces)
+                                           # if the entry is already here, improve weight
+
+                        #                         warn "managing $_";
+                        if ( exists $result{$key}->{$_} && $result{$key}->{"$_"} =~ /$biblionumber,\Q$title\E\-(\d+);/ ) {
                             my $weight = $1 + 1;
                             $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//g;
                             $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
                         } else {
+
                             # get the value if it exist in the nozebra table, otherwise, create it
-                            $sth2->execute($server,$key,$_);
+                            $sth2->execute( $server, $key, $_ );
                             my $existing_biblionumbers = $sth2->fetchrow;
+
                             # it exists
                             if ($existing_biblionumbers) {
-                                $result{$key}->{"$_"} =$existing_biblionumbers;
+                                $result{$key}->{"$_"} = $existing_biblionumbers;
                                 my $weight = defined $1 ? $1 + 1 : 1;
                                 $result{$key}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//g;
                                 $result{$key}->{"$_"} .= "$biblionumber,$title-$weight;";
-                            # create a new ligne for this entry
+
+                                # create a new ligne for this entry
                             } else {
-#                             warn "INSERT : $server / $key / $_";
-                                $dbh->do('INSERT INTO nozebra SET server='.$dbh->quote($server).', indexname='.$dbh->quote($key).',value='.$dbh->quote($_));
-                                $result{$key}->{"$_"}.="$biblionumber,$title-1;";
+
+                                #                             warn "INSERT : $server / $key / $_";
+                                $dbh->do( 'INSERT INTO nozebra SET server=' . $dbh->quote($server) . ', indexname=' . $dbh->quote($key) . ',value=' . $dbh->quote($_) );
+                                $result{$key}->{"$_"} .= "$biblionumber,$title-1;";
                             }
                         }
                     }
                 }
             }
+
             # the subfield is not indexed, store it in __RAW__ index anyway
             unless ($indexed) {
-                my $line= lc $subfield->[1];
+                my $line = lc $subfield->[1];
                 $line =~ s/-|\.|\?|,|;|!|'|\(|\)|\[|\]|{|}|"|<|>|&|\+|\*|\/|=|:|\r|\n/ /g;
+
                 # ... and split in words
-                foreach (split / /,$line) {
-                    next unless $_; # skip  empty values (multiple spaces)
-                    # if the entry is already here, improve weight
+                foreach ( split / /, $line ) {
+                    next unless $_;    # skip  empty values (multiple spaces)
+                                       # if the entry is already here, improve weight
                     my $tmpstr = $result{'__RAW__'}->{"$_"} || "";
-                    if ($tmpstr =~ /$biblionumber,\Q$title\E\-(\d+);/) {
-                        my $weight=$1+1;
+                    if ( $tmpstr =~ /$biblionumber,\Q$title\E\-(\d+);/ ) {
+                        my $weight = $1 + 1;
                         $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//;
                         $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
                     } else {
+
                         # get the value if it exist in the nozebra table, otherwise, create it
-                        $sth2->execute($server,'__RAW__',$_);
+                        $sth2->execute( $server, '__RAW__', $_ );
                         my $existing_biblionumbers = $sth2->fetchrow;
+
                         # it exists
                         if ($existing_biblionumbers) {
-                            $result{'__RAW__'}->{"$_"} =$existing_biblionumbers;
-                            my $weight = ($1 ? $1 : 0) + 1;
+                            $result{'__RAW__'}->{"$_"} = $existing_biblionumbers;
+                            my $weight = ( $1 ? $1 : 0 ) + 1;
                             $result{'__RAW__'}->{"$_"} =~ s/$biblionumber,\Q$title\E\-(\d+);//;
                             $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-$weight;";
-                        # create a new ligne for this entry
+
+                            # create a new ligne for this entry
                         } else {
-                            $dbh->do('INSERT INTO nozebra SET server='.$dbh->quote($server).',  indexname="__RAW__",value='.$dbh->quote($_));
-                            $result{'__RAW__'}->{"$_"}.="$biblionumber,$title-1;";
+                            $dbh->do( 'INSERT INTO nozebra SET server=' . $dbh->quote($server) . ',  indexname="__RAW__",value=' . $dbh->quote($_) );
+                            $result{'__RAW__'}->{"$_"} .= "$biblionumber,$title-1;";
                         }
                     }
                 }
@@ -2707,7 +2801,6 @@ sub _AddBiblioNoZebra {
     }
     return %result;
 }
-
 
 =head2 _find_value
 
@@ -2735,12 +2828,10 @@ sub _find_value {
     if ( $tagfield < 10 ) {
         if ( $record->field($tagfield) ) {
             push @result, $record->field($tagfield)->data();
-        }
-        else {
+        } else {
             push @result, "";
         }
-    }
-    else {
+    } else {
         foreach my $field ( $record->field($tagfield) ) {
             my @subfields = $field->subfields();
             foreach my $subfield (@subfields) {
@@ -2768,26 +2859,25 @@ the MARC XML.
 =cut
 
 sub _koha_marc_update_bib_ids {
-    my ($record, $frameworkcode, $biblionumber, $biblioitemnumber) = @_;
+    my ( $record, $frameworkcode, $biblionumber, $biblioitemnumber ) = @_;
 
     # we must add bibnum and bibitemnum in MARC::Record...
     # we build the new field with biblionumber and biblioitemnumber
     # we drop the original field
     # we add the new builded field.
-    my ($biblio_tag, $biblio_subfield ) = GetMarcFromKohaField("biblio.biblionumber",$frameworkcode);
-    my ($biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.biblioitemnumber",$frameworkcode);
+    my ( $biblio_tag,     $biblio_subfield )     = GetMarcFromKohaField( "biblio.biblionumber",          $frameworkcode );
+    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
 
-    if ($biblio_tag != $biblioitem_tag) {
+    if ( $biblio_tag != $biblioitem_tag ) {
+
         # biblionumber & biblioitemnumber are in different fields
 
         # deal with biblionumber
-        my ($new_field, $old_field);
-        if ($biblio_tag < 10) {
+        my ( $new_field, $old_field );
+        if ( $biblio_tag < 10 ) {
             $new_field = MARC::Field->new( $biblio_tag, $biblionumber );
         } else {
-            $new_field =
-              MARC::Field->new( $biblio_tag, '', '',
-                "$biblio_subfield" => $biblionumber );
+            $new_field = MARC::Field->new( $biblio_tag, '', '', "$biblio_subfield" => $biblionumber );
         }
 
         # drop old field and create new one...
@@ -2796,23 +2886,23 @@ sub _koha_marc_update_bib_ids {
         $record->append_fields($new_field);
 
         # deal with biblioitemnumber
-        if ($biblioitem_tag < 10) {
+        if ( $biblioitem_tag < 10 ) {
             $new_field = MARC::Field->new( $biblioitem_tag, $biblioitemnumber, );
         } else {
-            $new_field =
-              MARC::Field->new( $biblioitem_tag, '', '',
-                "$biblioitem_subfield" => $biblioitemnumber, );
+            $new_field = MARC::Field->new( $biblioitem_tag, '', '', "$biblioitem_subfield" => $biblioitemnumber, );
         }
+
         # drop old field and create new one...
         $old_field = $record->field($biblioitem_tag);
         $record->delete_field($old_field) if $old_field;
         $record->insert_fields_ordered($new_field);
 
     } else {
+
         # biblionumber & biblioitemnumber are in the same field (can't be <10 as fields <10 have only 1 value)
         my $new_field = MARC::Field->new(
             $biblio_tag, '', '',
-            "$biblio_subfield" => $biblionumber,
+            "$biblio_subfield"     => $biblionumber,
             "$biblioitem_subfield" => $biblioitemnumber
         );
 
@@ -2837,26 +2927,27 @@ subfield that contains a copy of the value of biblioitems.cn_sort.
 =cut
 
 sub _koha_marc_update_biblioitem_cn_sort {
-    my $marc = shift;
-    my $biblioitem = shift;
-    my $frameworkcode= shift;
+    my $marc          = shift;
+    my $biblioitem    = shift;
+    my $frameworkcode = shift;
 
-    my ($biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.cn_sort",$frameworkcode);
+    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.cn_sort", $frameworkcode );
     return unless $biblioitem_tag;
 
-    my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
+    my ($cn_sort) = GetClassSort( $biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
 
-    if (my $field = $marc->field($biblioitem_tag)) {
-        $field->delete_subfield(code => $biblioitem_subfield);
-        if ($cn_sort ne '') {
-            $field->add_subfields($biblioitem_subfield => $cn_sort);
+    if ( my $field = $marc->field($biblioitem_tag) ) {
+        $field->delete_subfield( code => $biblioitem_subfield );
+        if ( $cn_sort ne '' ) {
+            $field->add_subfields( $biblioitem_subfield => $cn_sort );
         }
     } else {
+
         # if we get here, no biblioitem tag is present in the MARC record, so
         # we'll create it if $cn_sort is not empty -- this would be
         # an odd combination of events, however
         if ($cn_sort) {
-            $marc->insert_grouped_field(MARC::Field->new($biblioitem_tag, ' ', ' ', $biblioitem_subfield => $cn_sort));
+            $marc->insert_grouped_field( MARC::Field->new( $biblioitem_tag, ' ', ' ', $biblioitem_subfield => $cn_sort ) );
         }
     }
 }
@@ -2880,10 +2971,9 @@ sub _koha_add_biblio {
 
     # set the series flag
     my $serial = 0;
-    if ( $biblio->{'seriestitle'} ) { $serial = 1 };
+    if ( $biblio->{'seriestitle'} ) { $serial = 1 }
 
-    my $query = 
-        "INSERT INTO biblio
+    my $query = "INSERT INTO biblio
         SET frameworkcode = ?,
             author = ?,
             title = ?,
@@ -2897,26 +2987,20 @@ sub _koha_add_biblio {
         ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $frameworkcode,
-        $biblio->{'author'},
-        $biblio->{'title'},
-        $biblio->{'unititle'},
-        $biblio->{'notes'},
-        $serial,
-        $biblio->{'seriestitle'},
-        $biblio->{'copyrightdate'},
-        $biblio->{'abstract'}
+        $frameworkcode, $biblio->{'author'},      $biblio->{'title'},         $biblio->{'unititle'}, $biblio->{'notes'},
+        $serial,        $biblio->{'seriestitle'}, $biblio->{'copyrightdate'}, $biblio->{'abstract'}
     );
 
     my $biblionumber = $dbh->{'mysql_insertid'};
     if ( $dbh->errstr ) {
-        $error.="ERROR in _koha_add_biblio $query".$dbh->errstr;
+        $error .= "ERROR in _koha_add_biblio $query" . $dbh->errstr;
         warn $error;
     }
 
     $sth->finish();
+
     #warn "LEAVING _koha_add_biblio: ".$biblionumber."\n";
-    return ($biblionumber,$error);
+    return ( $biblionumber, $error );
 }
 
 =head2 _koha_modify_biblio
@@ -2948,27 +3032,19 @@ sub _koha_modify_biblio {
                abstract = ?
         WHERE  biblionumber = ?
         "
-    ;
+      ;
     my $sth = $dbh->prepare($query);
-    
+
     $sth->execute(
-        $frameworkcode,
-        $biblio->{'author'},
-        $biblio->{'title'},
-        $biblio->{'unititle'},
-        $biblio->{'notes'},
-        $biblio->{'serial'},
-        $biblio->{'seriestitle'},
-        $biblio->{'copyrightdate'},
-        $biblio->{'abstract'},
-        $biblio->{'biblionumber'}
+        $frameworkcode,      $biblio->{'author'},      $biblio->{'title'},         $biblio->{'unititle'}, $biblio->{'notes'},
+        $biblio->{'serial'}, $biblio->{'seriestitle'}, $biblio->{'copyrightdate'}, $biblio->{'abstract'}, $biblio->{'biblionumber'}
     ) if $biblio->{'biblionumber'};
 
     if ( $dbh->errstr || !$biblio->{'biblionumber'} ) {
-        $error.="ERROR in _koha_modify_biblio $query".$dbh->errstr;
+        $error .= "ERROR in _koha_modify_biblio $query" . $dbh->errstr;
         warn $error;
     }
-    return ( $biblio->{'biblionumber'},$error );
+    return ( $biblio->{'biblionumber'}, $error );
 }
 
 =head2 _koha_modify_biblioitem_nonmarc
@@ -2989,10 +3065,9 @@ sub _koha_modify_biblioitem_nonmarc {
     my $error;
 
     # re-calculate the cn_sort, it may have changed
-    my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
+    my ($cn_sort) = GetClassSort( $biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
 
-    my $query = 
-    "UPDATE biblioitems 
+    my $query = "UPDATE biblioitems 
     SET biblionumber    = ?,
         volume          = ?,
         number          = ?,
@@ -3025,41 +3100,20 @@ sub _koha_modify_biblioitem_nonmarc {
         ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $biblioitem->{'biblionumber'},
-        $biblioitem->{'volume'},
-        $biblioitem->{'number'},
-        $biblioitem->{'itemtype'},
-        $biblioitem->{'isbn'},
-        $biblioitem->{'issn'},
-        $biblioitem->{'publicationyear'},
-        $biblioitem->{'publishercode'},
-        $biblioitem->{'volumedate'},
-        $biblioitem->{'volumedesc'},
-        $biblioitem->{'collectiontitle'},
-        $biblioitem->{'collectionissn'},
-        $biblioitem->{'collectionvolume'},
-        $biblioitem->{'editionstatement'},
-        $biblioitem->{'editionresponsibility'},
-        $biblioitem->{'illus'},
-        $biblioitem->{'pages'},
-        $biblioitem->{'bnotes'},
-        $biblioitem->{'size'},
-        $biblioitem->{'place'},
-        $biblioitem->{'lccn'},
-        $biblioitem->{'url'},
-        $biblioitem->{'biblioitems.cn_source'},
-        $biblioitem->{'cn_class'},
-        $biblioitem->{'cn_item'},
-        $biblioitem->{'cn_suffix'},
-        $cn_sort,
-        $biblioitem->{'totalissues'},
+        $biblioitem->{'biblionumber'},     $biblioitem->{'volume'},           $biblioitem->{'number'},                $biblioitem->{'itemtype'},
+        $biblioitem->{'isbn'},             $biblioitem->{'issn'},             $biblioitem->{'publicationyear'},       $biblioitem->{'publishercode'},
+        $biblioitem->{'volumedate'},       $biblioitem->{'volumedesc'},       $biblioitem->{'collectiontitle'},       $biblioitem->{'collectionissn'},
+        $biblioitem->{'collectionvolume'}, $biblioitem->{'editionstatement'}, $biblioitem->{'editionresponsibility'}, $biblioitem->{'illus'},
+        $biblioitem->{'pages'},            $biblioitem->{'bnotes'},           $biblioitem->{'size'},                  $biblioitem->{'place'},
+        $biblioitem->{'lccn'},             $biblioitem->{'url'},              $biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'},
+        $biblioitem->{'cn_item'},          $biblioitem->{'cn_suffix'},        $cn_sort,                               $biblioitem->{'totalissues'},
         $biblioitem->{'biblioitemnumber'}
     );
     if ( $dbh->errstr ) {
-        $error.="ERROR in _koha_modify_biblioitem_nonmarc $query".$dbh->errstr;
+        $error .= "ERROR in _koha_modify_biblioitem_nonmarc $query" . $dbh->errstr;
         warn $error;
     }
-    return ($biblioitem->{'biblioitemnumber'},$error);
+    return ( $biblioitem->{'biblioitemnumber'}, $error );
 }
 
 =head2 _koha_add_biblioitem
@@ -3078,9 +3132,8 @@ sub _koha_add_biblioitem {
     my ( $dbh, $biblioitem ) = @_;
     my $error;
 
-    my ($cn_sort) = GetClassSort($biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
-    my $query =
-    "INSERT INTO biblioitems SET
+    my ($cn_sort) = GetClassSort( $biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
+    my $query = "INSERT INTO biblioitems SET
         biblionumber    = ?,
         volume          = ?,
         number          = ?,
@@ -3113,43 +3166,23 @@ sub _koha_add_biblioitem {
         ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $biblioitem->{'biblionumber'},
-        $biblioitem->{'volume'},
-        $biblioitem->{'number'},
-        $biblioitem->{'itemtype'},
-        $biblioitem->{'isbn'},
-        $biblioitem->{'issn'},
-        $biblioitem->{'publicationyear'},
-        $biblioitem->{'publishercode'},
-        $biblioitem->{'volumedate'},
-        $biblioitem->{'volumedesc'},
-        $biblioitem->{'collectiontitle'},
-        $biblioitem->{'collectionissn'},
-        $biblioitem->{'collectionvolume'},
-        $biblioitem->{'editionstatement'},
-        $biblioitem->{'editionresponsibility'},
-        $biblioitem->{'illus'},
-        $biblioitem->{'pages'},
-        $biblioitem->{'bnotes'},
-        $biblioitem->{'size'},
-        $biblioitem->{'place'},
-        $biblioitem->{'lccn'},
-        $biblioitem->{'marc'},
-        $biblioitem->{'url'},
-        $biblioitem->{'biblioitems.cn_source'},
-        $biblioitem->{'cn_class'},
-        $biblioitem->{'cn_item'},
-        $biblioitem->{'cn_suffix'},
-        $cn_sort,
+        $biblioitem->{'biblionumber'},     $biblioitem->{'volume'},           $biblioitem->{'number'},                $biblioitem->{'itemtype'},
+        $biblioitem->{'isbn'},             $biblioitem->{'issn'},             $biblioitem->{'publicationyear'},       $biblioitem->{'publishercode'},
+        $biblioitem->{'volumedate'},       $biblioitem->{'volumedesc'},       $biblioitem->{'collectiontitle'},       $biblioitem->{'collectionissn'},
+        $biblioitem->{'collectionvolume'}, $biblioitem->{'editionstatement'}, $biblioitem->{'editionresponsibility'}, $biblioitem->{'illus'},
+        $biblioitem->{'pages'},            $biblioitem->{'bnotes'},           $biblioitem->{'size'},                  $biblioitem->{'place'},
+        $biblioitem->{'lccn'},             $biblioitem->{'marc'},             $biblioitem->{'url'},                   $biblioitem->{'biblioitems.cn_source'},
+        $biblioitem->{'cn_class'},         $biblioitem->{'cn_item'},          $biblioitem->{'cn_suffix'},             $cn_sort,
         $biblioitem->{'totalissues'}
     );
     my $bibitemnum = $dbh->{'mysql_insertid'};
+
     if ( $dbh->errstr ) {
-        $error.="ERROR in _koha_add_biblioitem $query".$dbh->errstr;
+        $error .= "ERROR in _koha_add_biblioitem $query" . $dbh->errstr;
         warn $error;
     }
     $sth->finish();
-    return ($bibitemnum,$error);
+    return ( $bibitemnum, $error );
 }
 
 =head2 _koha_delete_biblio
@@ -3223,8 +3256,7 @@ sub _koha_delete_biblioitems {
     my ( $dbh, $biblioitemnumber ) = @_;
 
     # get all the data for this biblioitem
-    my $sth =
-      $dbh->prepare("SELECT * FROM biblioitems WHERE biblioitemnumber=?");
+    my $sth = $dbh->prepare("SELECT * FROM biblioitems WHERE biblioitemnumber=?");
     $sth->execute($biblioitemnumber);
 
     if ( my $data = $sth->fetchrow_hashref ) {
@@ -3245,8 +3277,7 @@ sub _koha_delete_biblioitems {
         $bkup_sth->finish;
 
         # delete the biblioitem
-        my $del_sth =
-          $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
+        my $del_sth = $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
         $del_sth->execute($biblioitemnumber);
         $del_sth->finish;
     }
@@ -3267,16 +3298,15 @@ sub _koha_delete_biblioitems {
 =cut
 
 sub ModBiblioMarc {
-    
-# pass the MARC::Record to this function, and it will create the records in the marc field
+
+    # pass the MARC::Record to this function, and it will create the records in the marc field
     my ( $record, $biblionumber, $frameworkcode ) = @_;
-    my $dbh = C4::Context->dbh;
+    my $dbh    = C4::Context->dbh;
     my @fields = $record->fields();
     if ( !$frameworkcode ) {
         $frameworkcode = "";
     }
-    my $sth =
-      $dbh->prepare("UPDATE biblio SET frameworkcode=? WHERE biblionumber=?");
+    my $sth = $dbh->prepare("UPDATE biblio SET frameworkcode=? WHERE biblionumber=?");
     $sth->execute( $frameworkcode, $biblionumber );
     $sth->finish;
     my $encoding = C4::Context->preference("marcflavour");
@@ -3284,34 +3314,30 @@ sub ModBiblioMarc {
     # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
     if ( $encoding eq "UNIMARC" ) {
         my $string = $record->subfield( 100, "a" );
-        if ( ($string) && ( length($record->subfield( 100, "a" )) == 35 ) ) {
+        if ( ($string) && ( length( $record->subfield( 100, "a" ) ) == 35 ) ) {
             my $f100 = $record->field(100);
             $record->delete_field($f100);
-        }
-        else {
+        } else {
             $string = POSIX::strftime( "%Y%m%d", localtime );
             $string =~ s/\-//g;
             $string = sprintf( "%-*s", 35, $string );
         }
         substr( $string, 22, 6, "frey50" );
         unless ( $record->subfield( 100, "a" ) ) {
-            $record->insert_grouped_field(
-                MARC::Field->new( 100, "", "", "a" => $string ) );
+            $record->insert_grouped_field( MARC::Field->new( 100, "", "", "a" => $string ) );
         }
     }
     my $oldRecord;
-    if (C4::Context->preference("NoZebra")) {
+    if ( C4::Context->preference("NoZebra") ) {
+
         # only NoZebra indexing needs to have
         # the previous version of the record
         $oldRecord = GetMarcBiblio($biblionumber);
     }
-    $sth =
-      $dbh->prepare(
-        "UPDATE biblioitems SET marc=?,marcxml=? WHERE biblionumber=?");
-    $sth->execute( $record->as_usmarc(), $record->as_xml_record($encoding),
-        $biblionumber );
+    $sth = $dbh->prepare("UPDATE biblioitems SET marc=?,marcxml=? WHERE biblionumber=?");
+    $sth->execute( $record->as_usmarc(), $record->as_xml_record($encoding), $biblionumber );
     $sth->finish;
-    ModZebra($biblionumber,"specialUpdate","biblioserver",$oldRecord,$record);
+    ModZebra( $biblionumber, "specialUpdate", "biblioserver", $oldRecord, $record );
     return $biblionumber;
 }
 
@@ -3357,21 +3383,19 @@ sub z3950_extended_services {
         $Zpackage->option( databaseName => $serviceOptions->{'databaseName'} );
     }
     if ( $serviceOptions->{'recordIdNumber'} ) {
-        $Zpackage->option(
-            recordIdNumber => $serviceOptions->{'recordIdNumber'} );
+        $Zpackage->option( recordIdNumber => $serviceOptions->{'recordIdNumber'} );
     }
     if ( $serviceOptions->{'recordIdOpaque'} ) {
-        $Zpackage->option(
-            recordIdOpaque => $serviceOptions->{'recordIdOpaque'} );
+        $Zpackage->option( recordIdOpaque => $serviceOptions->{'recordIdOpaque'} );
     }
 
- # this is an ILL request (Zebra doesn't support it, but Koha could eventually)
- #if ($serviceType eq 'itemorder') {
- #   $Zpackage->option('contact-name' => $serviceOptions->{'contact-name'});
- #   $Zpackage->option('contact-phone' => $serviceOptions->{'contact-phone'});
- #   $Zpackage->option('contact-email' => $serviceOptions->{'contact-email'});
- #   $Zpackage->option('itemorder-item' => $serviceOptions->{'itemorder-item'});
- #}
+    # this is an ILL request (Zebra doesn't support it, but Koha could eventually)
+    #if ($serviceType eq 'itemorder') {
+    #   $Zpackage->option('contact-name' => $serviceOptions->{'contact-name'});
+    #   $Zpackage->option('contact-phone' => $serviceOptions->{'contact-phone'});
+    #   $Zpackage->option('contact-email' => $serviceOptions->{'contact-email'});
+    #   $Zpackage->option('itemorder-item' => $serviceOptions->{'itemorder-item'});
+    #}
 
     if ( $serviceOptions->{record} ) {
         $Zpackage->option( record => $serviceOptions->{record} );
@@ -3406,8 +3430,8 @@ sub set_service_options {
     my ($serviceType) = @_;
     my $serviceOptions;
 
-# FIXME: This needs to be an OID ... if we ever need 'syntax' this sub will need to change
-#   $serviceOptions->{ 'syntax' } = ''; #zebra doesn't support syntaxes other than xml
+    # FIXME: This needs to be an OID ... if we ever need 'syntax' this sub will need to change
+    #   $serviceOptions->{ 'syntax' } = ''; #zebra doesn't support syntaxes other than xml
 
     if ( $serviceType eq 'commit' ) {
 
@@ -3447,9 +3471,9 @@ sub set_service_options {
 sub get_biblio_authorised_values {
     my $biblionumber = shift;
     my $record       = shift;
-    
-    my $forlibrarian = 1; # are we in staff or opac?
-    my $frameworkcode = GetFrameworkCode( $biblionumber );
+
+    my $forlibrarian  = 1;                                 # are we in staff or opac?
+    my $frameworkcode = GetFrameworkCode($biblionumber);
 
     my $authorised_values;
 
@@ -3464,26 +3488,27 @@ sub get_biblio_authorised_values {
                       AND (kohafield like 'biblio%'
                        OR  kohafield like '') );
     my $bibliolevel_authorised_values = C4::Context->dbh->selectall_hashref( $query, 'authorised_value' );
-    
-    foreach my $tag ( keys( %$tagslib ) ) {
-        foreach my $subfield ( keys( %{$tagslib->{ $tag }} ) ) {
+
+    foreach my $tag ( keys(%$tagslib) ) {
+        foreach my $subfield ( keys( %{ $tagslib->{$tag} } ) ) {
+
             # warn "checking $subfield. type is: " . ref $tagslib->{ $tag }{ $subfield };
-            if ( 'HASH' eq ref $tagslib->{ $tag }{ $subfield } ) {
-                if ( defined $tagslib->{ $tag }{ $subfield }{'authorised_value'} && exists $bibliolevel_authorised_values->{ $tagslib->{ $tag }{ $subfield }{'authorised_value'} } ) {
-                    if ( defined $record->field( $tag ) ) {
-                        my $this_subfield_value = $record->field( $tag )->subfield( $subfield );
+            if ( 'HASH' eq ref $tagslib->{$tag}{$subfield} ) {
+                if ( defined $tagslib->{$tag}{$subfield}{'authorised_value'} && exists $bibliolevel_authorised_values->{ $tagslib->{$tag}{$subfield}{'authorised_value'} } ) {
+                    if ( defined $record->field($tag) ) {
+                        my $this_subfield_value = $record->field($tag)->subfield($subfield);
                         if ( defined $this_subfield_value ) {
-                            $authorised_values->{ $tagslib->{ $tag }{ $subfield }{'authorised_value'} } = $this_subfield_value;
+                            $authorised_values->{ $tagslib->{$tag}{$subfield}{'authorised_value'} } = $this_subfield_value;
                         }
                     }
                 }
             }
         }
     }
+
     # warn ( Data::Dumper->Dump( [ $authorised_values ], [ 'authorised_values' ] ) );
     return $authorised_values;
 }
-
 
 1;
 

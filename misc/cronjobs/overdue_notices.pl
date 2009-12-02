@@ -43,16 +43,18 @@ overdue_notices.pl - prepare messages to be sent to patrons for overdue items
 
 =head1 SYNOPSIS
 
-overdue_notices.pl [ -n ] [ -library <branchcode> ] [ -max <number of days> ] [ -csv [ <filename> ] ] [ -itemscontent <field list> ]
+overdue_notices.pl [ -n ] [ -library <branchcode> ] [ -library <branchcode>...] [ -max <number of days> ] [ -csv [ <filename> ] ] [ -itemscontent <field list> ]
 
  Options:
    -help                          brief help message
    -man                           full documentation
    -n                             No email will be sent
    -max          <days>           maximum days overdue to deal with
-   -library      <branchname>     only deal with overdues from this library
+   -library      <branchname>     only deal with overdues from this library (repeatable : several libraries can be given)
    -csv          <filename>       populate CSV file
    -itemscontent <list of fields> item information in templates
+   -borcat       <categorycode>   category code that must be included
+   -borcatout    <categorycode>   category code that must be excluded
 
 =head1 OPTIONS
 
@@ -87,7 +89,8 @@ any CSV files. Defaults to 90 to match F<longoverdues.pl>.
 =item B<-library>
 
 select overdues for one specific library. Use the value in the
-branches.branchcode table.
+branches.branchcode table. This option can be repeated in order 
+to select overdues for a group of libraries.
 
 =item B<-csv>
 
@@ -103,6 +106,14 @@ defaults to issuedate,title,barcode,author
 
 Other possible values come from fields in the biblios, items, and
 issues tables.
+
+=item B<-borcat>
+
+Repetable field, that permit to select only few of patrons categories.
+
+=item B<-borcatout>
+
+Repetable field, permis to exclude some patrons categories.
 
 =item B<-t> | B<--triggered>
 
@@ -223,16 +234,19 @@ alert them of items that have just become due.
 
 # These variables are set by command line options.
 # They are initially set to default values.
+my $dbh = C4::Context->dbh();
 my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
 my $nomail  = 0;
 my $MAX     = 90;
-my $mybranch;
+my @branchcodes; # Branch(es) passed as parameter
 my $csvfilename;
 my $triggered = 0;
 my $listall = 0;
 my $itemscontent = join( ',', qw( issuedate title barcode author ) );
+my @myborcat;
+my @myborcatout;
 
 GetOptions(
     'help|?'         => \$help,
@@ -240,11 +254,13 @@ GetOptions(
     'v'              => \$verbose,
     'n'              => \$nomail,
     'max=s'          => \$MAX,
-    'library=s'      => \$mybranch,
+    'library=s'      => \@branchcodes,
     'csv:s'          => \$csvfilename,    # this optional argument gets '' if not supplied.
     'itemscontent=s' => \$itemscontent,
     'list-all'      => \$listall,
     't|triggered'             => \$triggered,
+    'borcat=s'      => \@myborcat,
+    'borcatout=s'   => \@myborcatout,
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -253,24 +269,38 @@ if ( defined $csvfilename && $csvfilename =~ /^-/ ) {
     warn qq(using "$csvfilename" as filename, that seems odd);
 }
 
-my @branches    = C4::Overdues::GetBranchcodesWithOverdueRules();
-my $branchcount = scalar(@branches);
+my @overduebranches    = C4::Overdues::GetBranchcodesWithOverdueRules();	# Branches with overdue rules
+my @branches;									# Branches passed as parameter with overdue rules
+my $branchcount = scalar(@overduebranches);
+
+my $overduebranch_word = scalar @overduebranches > 1 ? 'branches' : 'branch';
+my $branchcodes_word = scalar @branchcodes > 1 ? 'branches' : 'branch';
+
 if ($branchcount) {
-    my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
-    $verbose and warn "Found $branchcount $branch_word with first message enabled: " . join( ', ', map { "'$_'" } @branches ), "\n";
+    $verbose and warn "Found $branchcount $overduebranch_word with first message enabled: " . join( ', ', map { "'$_'" } @overduebranches ), "\n";
 } else {
     die 'No branches with active overduerules';
 }
 
-if ($mybranch) {
-    $verbose and warn "Branch $mybranch selected\n";
-    if ( scalar grep { $mybranch eq $_ } @branches ) {
-        @branches = ($mybranch);
+if (@branchcodes) {
+    $verbose and warn "$branchcodes_word @branchcodes passed on parameter\n";
+    
+    # Getting libraries which have overdue rules
+    my %seen = map { $_ => 1 } @branchcodes;
+    @branches = grep { $seen{$_} } @overduebranches;
+    
+    
+    if (@branches) {
+
+    	my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
+	$verbose and warn "$branch_word @branches have overdue rules\n";
+
     } else {
-        $verbose and warn "No active overduerules for branch '$mybranch'\n";
+    
+        $verbose and warn "No active overduerules for $branchcodes_word  '@branchcodes'\n";
         ( scalar grep { '' eq $_ } @branches )
           or die "No active overduerules for DEFAULT either!";
-        $verbose and warn "Falling back on default rules for $mybranch\n";
+        $verbose and warn "Falling back on default rules for @branchcodes\n";
         @branches = ('');
     }
 }
@@ -278,13 +308,13 @@ if ($mybranch) {
 # these are the fields that will be substituted into <<item.content>>
 my @item_content_fields = split( /,/, $itemscontent );
 
-my $dbh = C4::Context->dbh();
 binmode( STDOUT, ":utf8" );
 
 our $csv;       # the Text::CSV_XS object
 our $csv_fh;    # the filehandle to the CSV file.
 if ( defined $csvfilename ) {
-    $csv = Text::CSV_XS->new( { binary => 1 } );
+    my $sep_char = C4::Context->preference('delimiter') || ',';
+    $csv = Text::CSV_XS->new( { binary => 1 , sep_char => $sep_char } );
     if ( $csvfilename eq '' ) {
         $csv_fh = *STDOUT;
     } else {
@@ -314,8 +344,23 @@ SELECT biblio.*, items.*, issues.*, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_ove
     AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ?
 END_SQL
 
-    my $rqoverduerules = $dbh->prepare("SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ");
-    $rqoverduerules->execute($branchcode);
+    my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
+    $query .= " AND categorycode IN (".join( ',' , ('?') x @myborcat ).") " if (@myborcat);
+    $query .= " AND categorycode NOT IN (".join( ',' , ('?') x @myborcatout ).") " if (@myborcatout);
+    
+    my $rqoverduerules =  $dbh->prepare($query);
+    $rqoverduerules->execute($branchcode, @myborcat, @myborcatout);
+    
+    # We get default rules is there is no rule for this branch
+    if($rqoverduerules->rows == 0){
+        $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = '' ";
+        $query .= " AND categorycode IN (".join( ',' , ('?') x @myborcat ).") " if (@myborcat);
+        $query .= " AND categorycode NOT IN (".join( ',' , ('?') x @myborcatout ).") " if (@myborcatout);
+        
+        $rqoverduerules = $dbh->prepare($query);
+        $rqoverduerules->execute(@myborcat, @myborcatout);
+    }
+
     # my $outfile = 'overdues_' . ( $mybranch || $branchcode || 'default' );
     while ( my $overdue_rules = $rqoverduerules->fetchrow_hashref ) {
       PERIOD: foreach my $i ( 1 .. 3 ) {

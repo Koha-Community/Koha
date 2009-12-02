@@ -16,42 +16,58 @@ function add_member(subscriptionid,borrowernumber){
    </style>
 </head>
 <body>
-
-<div id="custom-doc" class="yui-t7">
+<div id="doc3" class="yui-t7">
+   
    <div id="bd">
+		<div id="yui-main">
+		    <div class="yui-b">
+   <div role="search" class="yui-g">
+				<!-- TMPL_INCLUDE NAME="../members/search.tmpl" -->
+   </div> 
+				<div role="main" class="yui-g"> 
 	
+						<!-- TMPL_IF NAME="resultsloop" -->
+						<div id="searchheader"> <h3>Results <!-- TMPL_VAR Name ="from" --> to <!-- TMPL_VAR Name ="to" --> of <!-- TMPL_VAR Name ="numresults" --> found for <!--TMPL_IF Name="member"-->'<span class="ex"><!-- TMPL_VAR NAME="member" --></span>'<!--/TMPL_IF--><!--TMPL_IF Name="surname"-->'<span class="ex"><!-- TMPL_VAR NAME="surname" --></span>'<!--/TMPL_IF--></h3></div>
+						<div class="searchresults">
 
-<h1>Member Search</h1>
-
-
-<form name="search" action="/cgi-bin/koha/serials/member-search.pl" method="post">
-<input type="text" name="member" size="30" />
-<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" />
-<input type="submit" class="button" value="Search" />
-</form>
-
-<!-- TMPL_IF NAME="memberloop" -->
-<div class="searchresults">
-<table>
+							<table id="memberresultst">
+							<thead>
 <tr>
+	<th>Card</th>
 	<th>Name</th>
-    <th>Location</th>
+	<th>Library</th>
     <th>Add</th>
 </tr>
-<!-- TMPL_LOOP NAME="memberloop" -->
-<tr><td><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
-    <td><!-- TMPL_VAR NAME="streetaddress" --></td>
+</thead>
+<tbody>
+<!-- TMPL_LOOP NAME="resultsloop" -->
+<!--TMPL_IF Name="__odd__"--><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
+<td><!-- TMPL_VAR NAME="cardnumber" --> </td>
+<td><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --></td>
+<td><!-- TMPL_VAR NAME="branchcode" --> </td>
     <td><a onclick="add_member(<!-- TMPL_VAR
 NAME="subscriptionid" -->,<!-- TMPL_VAR NAME="borrowernumber" -->); return false" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;op=add">Add</a></td></tr>
 <!-- /TMPL_LOOP -->
+							</tbody>
         </table>
+							<div class="pages"><!--TMPL_IF Name="multipage"--><!--TMPL_VAR Name="paginationbar" --><!--/TMPL_IF--></div>
+						</div>
 </div>
 <!-- TMPL_ELSE -->
-    <!-- TMPL_IF NAME="member" -->
+    <!-- TMPL_IF NAME="searching" -->
         <p>No results found</p>
     <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
+					</div>
+				</div>
 
+			</div> 
+		     
+    </div> 
+</div>
+<!-- TMPL_IF NAME="memberloop" -->
+<div class="searchresults">
+<table>
 <p><a href="#" class="button close">Close</a></p>
 
 </div>

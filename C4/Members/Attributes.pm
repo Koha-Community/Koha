@@ -32,7 +32,8 @@ BEGIN {
     $VERSION = 3.01;
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(GetBorrowerAttributes CheckUniqueness SetBorrowerAttributes
-                    extended_attributes_code_value_arrayref extended_attributes_merge);
+                    extended_attributes_code_value_arrayref extended_attributes_merge
+					SearchIdMatchingAttribute);
     %EXPORT_TAGS = ( all => \@EXPORT_OK );
 }
 
@@ -99,6 +100,32 @@ sub GetBorrowerAttributes {
         }
     }
     return \@results;
+}
+
+=head2 SearchIdMatchingAttribute
+
+=over 4
+
+my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
+
+=back
+
+
+=cut
+
+sub SearchIdMatchingAttribute{
+    my $filter = shift;
+
+    my $dbh = C4::Context->dbh();
+    my $query = qq{
+SELECT borrowernumber
+FROM borrower_attributes
+JOIN borrower_attribute_types USING (code)
+WHERE staff_searchable = 1
+AND attribute like ?};
+    my $sth = $dbh->prepare_cached($query);
+    $sth->execute($filter);
+	return $sth->fetchall_arrayref;
 }
 
 =head2 CheckUniqueness

@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Details for: <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Details for: <!-- TMPL_VAR NAME="title" escape="html" --> <!--TMPL_LOOP Name=subtitle--><!-- TMPL_VAR NAME="subfield" --> <!--/TMPL_LOOP-->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
@@ -79,7 +79,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
         <!-- TMPL_VAR NAME="XSLTBloc" -->
     <!-- TMPL_ELSE -->
-    <h1><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1>
+    <h1><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" ESCAPE="HTML"--><!--/TMPL_LOOP --></span><!-- /TMPL_IF --></h1>
     <!-- TMPL_IF NAME="author" --><h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" ESCAPE="HTML" --></a></h5><!-- /TMPL_IF --> 
     <div id="views"><span class="view"><span id="Normalview">Normal View</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></span> <!-- TMPL_IF NAME="ISBD" --><span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></span><!-- /TMPL_IF -->
     </div>
@@ -129,7 +129,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <abbr class="unapi-id" title="koha:biblionumber:<!-- TMPL_VAR NAME="biblionumber" -->"><!-- unAPI --></abbr>
     <!-- TMPL_IF NAME="ocoins" -->
     <!-- COinS / OpenURL -->
-    <span class="Z3988" title="<!-- TMPL_VAR NAME="ocoins" -->"></span>
+    <span class="Z3988" title="<!-- TMPL_VAR NAME="ocoins" ESCAPE="HTML" -->"></span>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF name="normalized_isbn" -->
@@ -285,7 +285,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <div id="bibliodescriptions" class="toptabs">
 
 <ul>   
-<li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings
+<li<!-- TMPL_IF EXPR="defaulttab eq 'holdings'"  --> class="ui-tabs-selected"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#holdings">Holdings
     ( <!-- TMPL_VAR NAME="count" --> )</a>
    </li>
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#descriptions">Title Notes</a></li>
@@ -310,7 +310,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#LTFLTagBrowse">Tag Browser</a></li>
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-<!-- TMPL_IF name="subscriptionsnumber" --><li>
+<!-- TMPL_IF name="subscriptionsnumber" --><li<!-- TMPL_IF EXPR="defaulttab eq 'subscriptions'" --> class="ui-tabs-selected"<!-- /TMPL_IF -->>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#subscriptions">Subscriptions</a>
     </li><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="reviewson" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#comments">Comments</a></li><!-- /TMPL_IF -->
@@ -322,76 +322,104 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonReviews" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#amazonreviews">Amazon Reviews</a></li><!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="Babeltheque" --><li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#babeltheque">Babelthèque</a></li><!-- /TMPL_IF -->
 
+    <!-- TMPL_IF NAME="serialcollection" -->
+    <li<!-- TMPL_IF  EXPR="defaulttab eq 'serialcollection'"  --> class="ui-tabs-selected"<!-- /TMPL_IF -->><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->#serialcollection">Serial Collection</a></li>
+    <!-- /TMPL_IF -->
 </ul>
+
+<!-- TMPL_IF NAME="serialcollection" -->
+<div id="serialcollection">
+    <table id="serialcollectiont">
+	<thead>
+	    <tr>
+		<th>Branch</th>
+		<th>Serial collection</th>
+	    </tr>
+	</thead>
+	<tbody>
+	<!-- TMPL_LOOP NAME="serialcollections" -->
+	    <tr>
+		<td><!-- TMPL_VAR NAME="branch" --></td>
+		<td><!-- TMPL_VAR NAME="text" --></td>
+	    </tr>
+	<!-- /TMPL_LOOP -->
+	</tbody>
+    </table>
+</div>
+<!-- /TMPL_IF -->
 
 <div id="holdings">
 <!-- TMPL_IF name="count" -->
-    <table id="holdingst">
-        <thead><tr>
-            <!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
-            <th>Location</th>
-        <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
-        <th>Call Number</th>
-        <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Vol Info</th><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="itemdata_uri" --><th>URL</th><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy</th><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="serial" -->
-        <th>Serial Data</th>
-            <th>Published</th><!-- /TMPL_IF -->
-            <th>Status</th>
-            <!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Notes</th><!-- /TMPL_IF -->
-            <th>Date Due</th>
-        </tr></thead>
-        <tbody><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-        <tr><!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_IF -->
-            <td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location_description" --> </td>
-            <!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
-            <td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
-            <!-- TMPL_IF NAME="itemdata_enumchron" --><td><!-- TMPL_VAR NAME="enumchron" --></td><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="itemdata_uri" --><td><a href="<!-- TMPL_VAR NAME="uri" -->"><!-- TMPL_VAR NAME="uri" --></a></td><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="itemdata_copynumber" --><td><!-- TMPL_VAR NAME="copynumber" --></td><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="serial" --><td><!-- TMPL_VAR NAME="serialseq" --> </td>
-            <td><!-- TMPL_VAR NAME="publisheddate" --> </td><!-- /TMPL_IF -->
-            <td><!-- TMPL_IF name="bi_notforloan" -->
-                    Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
-                <!-- TMPL_ELSIF NAME="itypenotforloan" -->
-                    Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
-                <!-- TMPL_ELSE -->
-                    <!-- TMPL_IF name="datedue" -->
-                         <!-- TMPL_IF name="OPACShowCheckoutName" -->
-			Checked out to <!-- TMPL_VAR NAME="cardnumber" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
-                    <!-- TMPL_ELSE -->
-                    Checked out
+    <!-- TMPL_IF name="lotsofitems" -->
+	<p>This record has many physical items. <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;viewallitems=1">Click here to view them all.</a></p>
+    <!-- TMPL_ELSE -->
+	<table id="holdingst">
+	    <thead><tr>
+		<!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
+		<th>Location</th>
+	    <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
+	    <th>Call Number</th>
+	    <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Vol Info</th><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="itemdata_uri" --><th>URL</th><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy</th><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="serial" -->
+	    <th>Serial Data</th>
+		<th>Published</th><!-- /TMPL_IF -->
+		<th>Status</th>
+		<!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Notes</th><!-- /TMPL_IF -->
+		<th>Date Due</th>
+	    </tr></thead>
+	    <tbody><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+	    <tr><!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_IF -->
+		<td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="location_description" --> </td>
+		<!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
+		<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --></td>
+		<!-- TMPL_IF NAME="itemdata_enumchron" --><td><!-- TMPL_VAR NAME="enumchron" --></td><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="itemdata_uri" --><td><a href="<!-- TMPL_VAR NAME="uri" -->"><!-- TMPL_VAR NAME="uri" --></a></td><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="itemdata_copynumber" --><td><!-- TMPL_VAR NAME="copynumber" --></td><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="serial" --><td><!-- TMPL_VAR NAME="serialseq" --> </td>
+		<td><!-- TMPL_VAR NAME="publisheddate" --> </td><!-- /TMPL_IF -->
+		<td><!-- TMPL_IF name="bi_notforloan" -->
+			Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
+		    <!-- TMPL_ELSIF NAME="itypenotforloan" -->
+			Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
+		    <!-- TMPL_ELSE -->
+			<!-- TMPL_IF name="datedue" -->
+			     <!-- TMPL_IF name="OPACShowCheckoutName" -->
+			    Checked out to <!-- TMPL_VAR NAME="cardnumber" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
+			<!-- TMPL_ELSE -->
+			Checked out
+			    <!-- /TMPL_IF -->
+			<!-- TMPL_ELSE -->
+			    <!-- TMPL_IF name="itemnotforloan" -->
+				<!-- TMPL_VAR NAME="notforloanvalue" -->
+			    <!-- TMPL_ELSE -->
+				<!-- TMPL_IF name="itemlost"-->
+				    <!-- TMPL_IF name="lostimageurl"--><img src="<!-- TMPL_VAR NAME="lostimageurl" -->" alt="<!-- TMPL_VAR NAME="lostimagelabel" -->" title="<!-- TMPL_VAR NAME="lostimagelabel" -->"><!-- TMPL_ELSE -->Item lost<!-- /TMPL_IF -->
+				<!-- TMPL_ELSE -->
+				    <!-- TMPL_IF NAME="wthdrawn" -->
+					Item withdrawn
+				    <!-- TMPL_ELSIF NAME="damaged" -->
+					Item damaged
+				    <!-- TMPL_ELSIF Name="transfertwhen" -->
+					In transit from <!-- TMPL_VAR NAME="transfertfrom" -->
+					to <!-- TMPL_VAR NAME="transfertto" --> since <!-- TMPL_VAR NAME="transfertwhen" -->
+				    <!-- TMPL_ELSE -->
+					<!-- TMPL_IF NAME="waiting" -->On hold<!-- TMPL_ELSE --><!-- TMPL_IF NAME="onhold" -->On hold<!-- TMPL_ELSE -->Available<!-- /TMPL_IF --><!-- /TMPL_IF -->
+				    <!-- /TMPL_IF -->
+				<!-- /TMPL_IF -->
+			    <!-- /TMPL_IF -->
 			<!-- /TMPL_IF -->
-                    <!-- TMPL_ELSE -->
-                        <!-- TMPL_IF name="itemnotforloan" -->
-                            <!-- TMPL_VAR NAME="notforloanvalue" -->
-                        <!-- TMPL_ELSE -->
-                            <!-- TMPL_IF name="itemlost"-->
-                                <!-- TMPL_IF name="lostimageurl"--><img src="<!-- TMPL_VAR NAME="lostimageurl" -->" alt="<!-- TMPL_VAR NAME="lostimagelabel" -->" title="<!-- TMPL_VAR NAME="lostimagelabel" -->"><!-- TMPL_ELSE -->Item lost<!-- /TMPL_IF -->
-                            <!-- TMPL_ELSE -->
-                                <!-- TMPL_IF NAME="wthdrawn" -->
-                                    Item withdrawn
-                                <!-- TMPL_ELSIF NAME="damaged" -->
-                                    Item damaged
-                                <!-- TMPL_ELSIF Name="transfertwhen" -->
-                                    In transit from <!-- TMPL_VAR NAME="transfertfrom" -->
-                                    to <!-- TMPL_VAR NAME="transfertto" --> since <!-- TMPL_VAR NAME="transfertwhen" -->
-                                <!-- TMPL_ELSE -->
-                                    <!-- TMPL_IF NAME="waiting" -->On hold<!-- TMPL_ELSE --><!-- TMPL_IF NAME="onhold" -->On hold<!-- TMPL_ELSE -->Available<!-- /TMPL_IF --><!-- /TMPL_IF -->
-                                <!-- /TMPL_IF -->
-                            <!-- /TMPL_IF -->
-                        <!-- /TMPL_IF -->
-                    <!-- /TMPL_IF -->
-                <!-- /TMPL_IF --></td>
-                <!-- TMPL_IF NAME="itemdata_itemnotes" --><td><!-- TMPL_VAR NAME="itemnotes" --></td><!-- /TMPL_IF -->
-            <td><!-- TMPL_VAR NAME="datedue" --></td>
-            <!-- TMPL_IF NAME="type" -->
-            <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
-            <!-- /TMPL_IF -->
-        </tr>
-        <!-- /TMPL_LOOP --></tbody>
-    </table>
+		    <!-- /TMPL_IF --></td>
+		    <!-- TMPL_IF NAME="itemdata_itemnotes" --><td><!-- TMPL_VAR NAME="itemnotes" --></td><!-- /TMPL_IF -->
+		<td><!-- TMPL_VAR NAME="datedue" --></td>
+		<!-- TMPL_IF NAME="type" -->
+		<td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
+		<!-- /TMPL_IF -->
+	    </tr>
+	    <!-- /TMPL_LOOP --></tbody>
+	</table>
+    <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
 <p>No physical items for this record</p>
 <!-- /TMPL_IF -->
@@ -541,13 +569,16 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 
 <!-- TMPL_IF name="subscriptionsnumber" -->
 <div id="subscriptions">
-    <h2>This is a serial subscription</h2>
-    <p> (There are <!-- TMPL_VAR NAME="subscriptionsnumber" --> subscriptions associated with this title).</p>
+    <h2>This is a serial</h2>
+    <p>There are <!-- TMPL_VAR NAME="subscriptionsnumber" --> subscription(s) associated with this title.</p>
     <!-- TMPL_LOOP Name="subscriptions" -->
     <!-- TMPL_IF name="branchname" --><h3>At library: <!-- TMPL_VAR NAME="branchname" --></h3><!-- TMPL_ELSE -->
     <!-- TMPL_IF name="branchcode" --><h3>At branch: <!-- TMPL_VAR NAME="branchcode" --></h3><!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="subscriptionnotes" --><p><!--TMPL_VAR NAME="subscriptionnotes"--> </p><!-- /TMPL_IF -->
-    <!--TMPL_IF NAME="latestserials"-->
+    <p>Issues between: <!--TMPL_VAR NAME="histstartdate"-->  and:<!-- TMPL_IF NAME="histenddate" --> <!--TMPL_VAR NAME="histenddate"--> <!-- TMPL_ELSE --> now (current)<!-- /TMPL_IF --></p>
+    <!-- TMPL_IF NAME="missinglist" --><p>Missing issues: <!--TMPL_VAR NAME="missinglist"--> </p><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="opacnote" --><p>(<!-- TMPL_VAR NAME="opacnote" -->)</p><!-- /TMPL_IF -->
+<!--TMPL_IF NAME="latestserials"-->
     <p> The <!-- TMPL_VAR NAME="opacdisplaycount" --> latest issues for this subscription:</p>
     <table>
         <tr>
@@ -758,9 +789,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	<!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
-        <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-detailprint.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
-            Print
-        </a></li>
+        <li><a class="print" href="javascript:window.print();">Print</a></li>
 <!-- TMPL_IF name="virtualshelves" -->
     <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" -->
         <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
@@ -789,11 +818,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <label for="format">Save Record:</label>
         <select name="format" id="format">
         <option value="">-- Choose Format --</option>
-        <option value="mods">MODS (XML)</option>
+        <option value="bibtex">BIBTEX</option>
         <option value="dc">Dublin Core (XML)</option>
         <option value="marcxml">MARCXML</option>
         <option value="marc8">MARC (non-Unicode/MARC-8)</option>
-        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+        <option value="utf8">MARC (Unicode/UTF-8)</option>    
+        <option value="mods">MODS (XML)</option>
+        <option value="ris">RIS</option>
+		</select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
 <input type="submit" name="save" value="Go" /></form>
         </div>
 

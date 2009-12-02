@@ -269,10 +269,10 @@ sub create_order {
                               localtime->mon() + 1,
                               localtime->mday() ) unless exists $param{'date'};
 
-    my ( $basketno, $ordnum ) = $self->create_new_basket( %param );
+    my ( $basketno, $ordernumber ) = $self->create_new_basket( %param );
 
     my $datereceived = ModReceiveOrder( $self->{'biblios'}[0],             # biblionumber
-                                        $ordnum,       # $ordnum,
+                                        $ordernumber,       # $ordernumber,
                                         undef,         # $quantrec,
                                         undef,         # $user,
                                         undef,         # $cost,

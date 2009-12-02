@@ -163,7 +163,7 @@ $(document).ready(function() {
 <!--/TMPL_IF -->
 
 
-<!-- TMPL_IF NAME="years" --><form name="edition" action="serials-edit.pl">
+<!-- TMPL_IF NAME="years" --><form name="edition" action="serials-edit.pl" method="post">
 <div id="subscription_years" class="toptabs numbered">
 <ul>
 	<!-- TMPL_LOOP NAME="years" -->
@@ -225,18 +225,10 @@ $(document).ready(function() {
                     <!--TMPL_IF Name="subscriptionexpired"-->
                     <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" disabled="disabled" />
                     <!--TMPL_ELSE-->
-                      <!--TMPL_IF Name="status1"-->
+                      <!--TMPL_IF Name="checked"-->
                     <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
                       <!--TMPL_ELSE -->
-                      <!--TMPL_IF Name="status3"-->
-                    <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
-                      <!--TMPL_ELSE -->
-                        <!--TMPL_IF Name="status4"-->
-                    <input type="checkbox" name="serialid" checked="checked" value="<!--TMPL_VAR Name="serialid"-->" />
-                        <!--TMPL_ELSE -->
                     <input type="checkbox" name="serialid" value="<!--TMPL_VAR Name="serialid"-->" />
-                        <!--/TMPL_IF-->           
-                      <!--/TMPL_IF-->           
                       <!--/TMPL_IF-->           
                     <!--/TMPL_IF -->
                   <!--/TMPL_IF -->

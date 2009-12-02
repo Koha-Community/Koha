@@ -13,7 +13,7 @@ while (1) {
 	defined($in) or last;
 	chomp($in);
 	last unless $in;
-	print "GetMember : \n",  Dumper(GetMember($in, 'cardnumber'));
+	print "GetMember : \n",  Dumper(GetMember('cardnumber'=>$in));
 	my ($member) = GetMemberDetails(undef, $in);
 	my $flags = $member->{authflags};
 	print "GetMemberDetails (member) : \n", Dumper($member);

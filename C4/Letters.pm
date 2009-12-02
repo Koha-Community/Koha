@@ -271,7 +271,7 @@ sub SendAlerts {
 
             # and parse borrower ...
             my $innerletter = $letter;
-            my $borinfo = GetMember( $_->{'borrowernumber'}, 'borrowernumber' );
+            my $borinfo = GetMember( 'borrowernumber' => $_->{'borrowernumber'});
             parseletter( $innerletter, 'borrowers', $_->{'borrowernumber'} );
 
             # ... then send mail
@@ -483,9 +483,11 @@ sub parseletter_sth {
     ($table eq 'biblio'       ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                      :
     ($table eq 'biblioitems'  ) ? "SELECT * FROM $table WHERE   biblionumber = ?"                      :
     ($table eq 'items'        ) ? "SELECT * FROM $table WHERE     itemnumber = ?"                      :
+    ($table eq 'suggestions'  ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?" :
     ($table eq 'reserves'     ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?" :
     ($table eq 'borrowers'    ) ? "SELECT * FROM $table WHERE borrowernumber = ?"                      :
     ($table eq 'branches'     ) ? "SELECT * FROM $table WHERE     branchcode = ?"                      :
+    ($table eq 'suggestions'  ) ? "SELECT * FROM $table WHERE borrowernumber = ? and biblionumber = ?" :
     ($table eq 'aqbooksellers') ? "SELECT * FROM $table WHERE             id = ?"                      : undef ;
     unless ($query) {
         warn "ERROR: No parseletter_sth query for table '$table'";
@@ -773,7 +775,7 @@ sub _send_message_by_email ($) {
 
     my $to_address = $message->{to_address};
     unless ($to_address) {
-        my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
+        my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
         unless ($member) {
             warn "FAIL: No 'to_address' and INVALID borrowernumber ($message->{borrowernumber})";
             _set_message_status( { message_id => $message->{'message_id'},
@@ -817,7 +819,7 @@ sub _send_message_by_email ($) {
 
 sub _send_message_by_sms ($) {
     my $message = shift or return undef;
-    my $member = C4::Members::GetMember( $message->{'borrowernumber'} );
+    my $member = C4::Members::GetMember( 'borrowernumber' => $message->{'borrowernumber'} );
     return unless $member->{'smsalertnumber'};
 
     my $success = C4::SMS->send_sms( { destination => $member->{'smsalertnumber'},

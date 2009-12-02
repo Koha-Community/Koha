@@ -31,10 +31,10 @@ we make an order, then see if it shows up in the pending orders
 sub one_new_order : Test( 49 ) {
     my $self = shift;
 
-    my ( $basketno, $ordnum ) = $self->create_new_basket();
+    my ( $basketno, $ordernumber ) = $self->create_new_basket();
 
     ok( $basketno, "basketno is $basketno" );
-    ok( $ordnum, "ordnum is $ordnum" );
+    ok( $ordernumber, "ordernumber is $ordernumber" );
     
     my $orders = GetPendingOrders( $self->{'booksellerid'} );
     is( scalar @$orders, 1, 'we successfully entered one order.' );

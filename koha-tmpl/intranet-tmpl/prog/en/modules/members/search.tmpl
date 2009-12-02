@@ -1,0 +1,19 @@
+    <form action="<!--TMPL_VAR Name="actionname"-->" method="get">
+				<h3 > Filter :</h3>
+				<input type="hidden" name="surname" value="<!-- TMPL_VAR name="surname"-->" />
+				<input type="text" name="member" value="<!-- TMPL_VAR name="member"-->" /><br/>
+                <label for="branchcode"> Library :</label><select name="branchcode" id="branchcode">
+        <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
+        <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
+      <!-- /TMPL_LOOP --></select><br />
+                 <label for="categorycode"> categorycode :</label><select name="categorycode" id="categorycode">
+        <option value="">Any</option><!-- TMPL_LOOP name="categoryloop" -->
+        <!-- TMPL_IF NAME="selected" -->
+        <option value="<!-- TMPL_VAR name="categorycode" -->" selected="selected"><!-- TMPL_VAR name="description" --></option><!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="description" --></option><!-- /TMPL_IF -->
+      <!-- /TMPL_LOOP --></select> <br />
+                    <input type="submit" value="Search" />
+                </fieldset>
+            </form>

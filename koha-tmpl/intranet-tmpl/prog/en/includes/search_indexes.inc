@@ -8,7 +8,7 @@
     <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name as Phrase</option>
     <option value="pn">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
     <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name as Phrase</option>
-    <option value="ln">Language</option>
+    <option value="ln,rtrn">Language</option>
     <option value="nt">Notes/Comments</option>
     <option value="pb">Publisher</option>
     <option value="pl">Publisher Location</option>

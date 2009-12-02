@@ -150,8 +150,8 @@ foreach my $biblioNumber (@biblionumbers) {
 #
 #
 if ( $query->param('place_reserve') ) {
-
     my $notes = $query->param('notes');
+	my $canreserve=0;
 
     # List is composed of alternating biblio/item/branch
     my $selectedItems = $query->param('selecteditems');
@@ -204,6 +204,7 @@ if ( $query->param('place_reserve') ) {
         # holdingbranch, force the value $rank and $found.
         my $rank = $biblioData->{rank};
         if ($itemNum ne ''){
+        	$canreserve = 1 if CanItemBeReserved($borrowernumber,$itemNum);
             $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
             my $item = GetItem($itemNum);
             if ( $item->{'holdingbranch'} eq $branch ){
@@ -211,13 +212,14 @@ if ( $query->param('place_reserve') ) {
             }
         }
         else {
+        	$canreserve = 1 if CanBookBeReserved($borrowernumber,$biblioNum);
             # Inserts a null into the 'itemnumber' field of 'reserves' table.
             $itemNum = undef;
         }
         
         # Here we actually do the reserveration. Stage 3.
         AddReserve($branch, $borrowernumber, $biblioNum, 'a', [$biblioNum], $rank, $startdate, $notes,
-                   $biblioData->{'title'}, $itemNum, $found);
+                   $biblioData->{'title'}, $itemNum, $found) if ($canreserve);
     }
 
     print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");
@@ -432,7 +434,7 @@ foreach my $biblioNum (@biblionumbers) {
             $policy_holdallowed = 0;
         }
 
-        if (IsAvailableForItemLevelRequest($itemNum) and $policy_holdallowed) {
+        if (IsAvailableForItemLevelRequest($itemNum) and $policy_holdallowed and CanItemBeReserved($borrowernumber,$itemNum)) {
             $itemLoopIter->{available} = 1;
             $numCopiesAvailable++;
         }
@@ -461,6 +463,9 @@ foreach my $biblioNum (@biblionumbers) {
         $biblioLoopIter{holdable} = 1;
     }
     if ($biblioLoopIter{already_reserved}) {
+        $biblioLoopIter{holdable} = undef;
+    }
+    if(not CanBookBeReserved($borrowernumber,$biblioNum)){
         $biblioLoopIter{holdable} = undef;
     }
 

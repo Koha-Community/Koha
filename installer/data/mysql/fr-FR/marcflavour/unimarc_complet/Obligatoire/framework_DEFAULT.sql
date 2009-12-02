@@ -2022,7 +2022,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 ('995', 'g', 'code à barres, préfixe', '', 0, 0, '', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'h', 'code à barres, incrémentation', '', 0, 0, '', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'i', 'code à barres, suffixe', '', 0, 0, '', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
-('995', 'j', 'x', '', 0, 0, '', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
+('995', 'j', 'Numéro Inventaire', '', 0, 0, 'items.stocknumber', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'k', 'cote', 'cote', 0, 1, 'items.itemcallnumber', 10, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'l', 'volumaison', '', 0, 1, '', -1, '', '', '', NULL, 0, '', NULL, NULL, ''),
 ('995', 'm', 'date de prêt ou de dépôt', '', 0, 0, '', 10, '', '', '', NULL, 1, '', NULL, NULL, ''),

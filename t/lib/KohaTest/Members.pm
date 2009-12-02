@@ -41,17 +41,13 @@ sub methods : Test( 1 ) {
                       GetAge
                       get_institutions 
                       add_member_orgs 
-                      GetCities 
-                      GetSortDetails 
                       MoveMemberToDeleted 
                       DelMember 
                       ExtendMemberSubscriptionTo 
-                      GetRoadTypes 
                       GetTitles 
                       GetPatronImage 
                       PutPatronImage 
                       RmPatronImage 
-                      GetRoadTypeDetails 
                       GetBorrowersWhoHaveNotBorrowedSince 
                       GetBorrowersWhoHaveNeverBorrowed 
                       GetBorrowersWithIssuesHistoryOlderThan 
