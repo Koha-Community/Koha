@@ -2793,7 +2793,7 @@ SEARCHHIST
 	print "Upgrade done (added OPAC search history preference and table)\n";
 }
 
-$DBversion = "3.01.00.071";
+$DBversion = "3.01.00.070";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE authorised_values ADD COLUMN `lib_opac` VARCHAR(80) default NULL AFTER `lib`");
 	print "Upgrade done (Added a lib_opac field in authorised_values table)\n";
@@ -2812,7 +2812,7 @@ Acquisitions update
 
 =cut
 
-$DBversion = "3.01.00.100";
+$DBversion = "3.01.00.072";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacPrivacy', '0', 'if ON, allows patrons to define their privacy rules (reading history)',NULL,'YesNo')");
     # create a new syspref for the 'Mr anonymous' patron
@@ -2833,7 +2833,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.101';
+$DBversion = '3.01.00.073';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(<<'END_SQL');
 CREATE TABLE IF NOT EXISTS `aqcontract` (
@@ -2852,7 +2852,7 @@ END_SQL
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.102';
+$DBversion = '3.01.00.074';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `basketname` varchar(50) default NULL AFTER `basketno`");
     $dbh->do("ALTER TABLE `aqbasket` ADD COLUMN `note` mediumtext AFTER `basketname`");
@@ -2863,7 +2863,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.103';
+$DBversion = '3.01.00.075';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `aqorders` ADD COLUMN `uncertainprice` tinyint(1)");
 
@@ -2871,7 +2871,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.104';
+$DBversion = '3.01.00.076';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("CREATE TABLE IF NOT EXISTS `aqbasketgroups` (
                          `id` int(11) NOT NULL auto_increment,
@@ -2889,7 +2889,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.105';
+$DBversion = '3.01.00.077';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DROP TABLE IF EXISTS `aqbudgetperiods` ");
     $dbh->do(qq|
@@ -3021,7 +3021,7 @@ BUDGETDROPDATES
 
 
 
-$DBversion = '3.01.00.106';
+$DBversion = '3.01.00.078';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE aqbudgetperiods ADD COLUMN budget_period_total decimal(28,6)");
     print "Upgrade to $DBversion done (adds 'budget_period_total' column to aqbudgetperiods table)\n";
@@ -3029,7 +3029,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 
-$DBversion = '3.01.00.107';
+$DBversion = '3.01.00.079';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE currency ADD COLUMN active  tinyint(1)");
 
@@ -3037,7 +3037,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.01.00.108';
+$DBversion = '3.01.00.080';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do(<<BUDG_PERM );
 INSERT INTO permissions (module_bit, code, description) VALUES
@@ -3058,7 +3058,7 @@ BUDG_PERM
 }
 
 
-$DBversion = '3.01.00.109';
+$DBversion = '3.01.00.081';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE aqbooksellers ADD COLUMN `gstrate` decimal(6,4) default NULL");
     if (my $gist=C4::Context->preference("gist")){
@@ -3069,7 +3069,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.01.00.110";
+$DBversion = "3.01.00.082";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     if (C4::Context->preference("opaclanguages") eq "fr") {
         $dbh->do(qq#INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AcqCreateItem','ordering',"Définit quand l'exemplaire est créé : à la commande, à la livraison, au catalogage",'ordering|receiving|cataloguing','Choice')#);
@@ -3080,7 +3080,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.111";
+$DBversion = "3.01.00.083";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(qq| 
  CREATE TABLE `aqorders_items` (
@@ -3097,7 +3097,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.112";
+$DBversion = "3.01.00.084";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(  qq# INSERT INTO `systempreferences` VALUES ('CurrencyFormat','US','US|FR','Determines the display format of currencies. eg: ''36000'' is displayed as ''360 000,00''  in ''FR'' or 360,000.00''  in ''US''.','Choice')  #);
 
@@ -3105,7 +3105,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.113";
+$DBversion = "3.01.00.085";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER table aqorders drop column title");
     $dbh->do("ALTER TABLE `aqorders` CHANGE `budget_id` `budget_id` INT( 11 ) NOT NULL");
@@ -3113,7 +3113,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.114";
+$DBversion = "3.01.00.086";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(<<SUGGESTIONS);
 ALTER table suggestions 
@@ -3133,14 +3133,14 @@ SUGGESTIONS
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.115";
+$DBversion = "3.01.00.087";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER table aqbudgets drop column budget_amount_sublevel;");
     print "Upgrade to $DBversion done drop column budget_amount_sublevel from aqbudgets\n";
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.116";
+$DBversion = "3.01.00.088";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(  qq# INSERT INTO `systempreferences` VALUES ('intranetbookbag','1','','If ON, enables display of Cart feature in the intranet','YesNo')  #);
 
@@ -3148,7 +3148,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.117";
+$DBversion = "3.01.00.089";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(  qq# ALTER TABLE authorised_values ADD COLUMN `lib_opac` VARCHAR(80) default NULL AFTER `lib` #);
 
@@ -3156,7 +3156,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.118";
+$DBversion = "3.01.00.090";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $dbh->do("
        INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
@@ -3168,7 +3168,7 @@ $dbh->do("
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.119";
+$DBversion = "3.01.00.091";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $dbh->do("
 	UPDATE `systempreferences` SET `options` = 'holdings|serialcollection|subscriptions'
@@ -3179,7 +3179,7 @@ $dbh->do("
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.120";
+$DBversion = "3.01.00.092";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     if (C4::Context->preference("opaclanguages") =~ /fr/) {
 	$dbh->do(qq{
@@ -3194,7 +3194,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.121";
+$DBversion = "3.01.00.093";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE biblioitems ADD INDEX issn_idx (issn);
@@ -3203,26 +3203,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-=item
-
-    Deal with branches
-
-=cut
-
-$DBversion = "3.01.00.0122";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    # update branches table
-    # 
-    $dbh->do("ALTER TABLE branches ADD `branchzip` varchar(25) default NULL AFTER `branchaddress3`");
-    $dbh->do("ALTER TABLE branches ADD `branchcity` mediumtext AFTER `branchzip`");
-    $dbh->do("ALTER TABLE branches ADD `branchcountry` text AFTER `branchcity`");
-    $dbh->do("ALTER TABLE branches ADD `branchurl` mediumtext AFTER `branchemail`");
-    $dbh->do("ALTER TABLE branches ADD `branchnotes` mediumtext AFTER `branchprinter`");
-    print "Upgrade to $DBversion done (branches)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.123";
+$DBversion = "3.01.00.094";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10) default NULL, ADD deliverycomment VARCHAR(255) default NULL;
@@ -3232,7 +3213,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.124";
+$DBversion = "3.01.00.095";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE items ADD stocknumber VARCHAR(32) DEFAULT NULL COMMENT "stores the inventory number";
@@ -3263,7 +3244,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.125";
+$DBversion = "3.01.00.096";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OrderPdfTemplate','','Uploads a PDF template to use for printing baskets','NULL','Upload')");
     $dbh->do("UPDATE systempreferences SET variable='OrderPdfFormat' WHERE variable='pdfformat'");
@@ -3271,7 +3252,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.127";
+$DBversion = "3.01.00.097";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE aqbasketgroups ADD billingplace VARCHAR(10) NOT NULL AFTER deliverycomment;
@@ -3281,7 +3262,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.128";
+$DBversion = "3.01.00.098";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE auth_subfield_structure MODIFY frameworkcode VARCHAR(10) NULL;
@@ -3291,7 +3272,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.129";
+$DBversion = "3.01.00.099";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 		INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
@@ -3303,7 +3284,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.130";
+$DBversion = "3.01.00.100";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('casAuthentication', '1', '', 'Enable or disable CAS authentication', 'YesNo'), ('casLogout', '1', '', 'Does a logout from Koha should also log out of CAS ?', 'YesNo'), ('casServerUrl', 'https://localhost:8443/cas', '', 'URL of the cas server', 'Free')");
 	print "Upgrade done (added CAS authentication system preferences)\n";
