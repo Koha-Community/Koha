@@ -37,6 +37,16 @@
 
     $(document).ready(function() {
         new YAHOO.widget.Button("newcurrency");
+
+        // prevents users to check active with a currency != 1
+        $("#rate").keyup(function() {
+            if ( $(this).val() == 1.0 ) {
+                $("#active").removeAttr('disabled');
+            } else {
+                $("#active").removeAttr('checked');
+                $("#active").attr('disabled','disabled');
+            }
+        });
     });
 //]]>
 </script>
