@@ -1406,14 +1406,14 @@ sub searchResults {
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
 		my $biblionumber;
-        
+
         if(not $scan){
             if ($bibliotag<10){
-                $biblionumber = $marcrecord->field($bibliotag)->data;
+                $biblionumber = $marcrecord->field($bibliotag) ? $marcrecord->field($bibliotag)->data : undef;
             }else{
                 $biblionumber = $marcrecord->subfield($bibliotag,$bibliosubf);
             } 
-            $fw = GetFrameworkCode($biblionumber);
+            $fw = (defined $biblionumber) ? GetFrameworkCode($biblionumber) : '';
         }
         
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, $fw );
