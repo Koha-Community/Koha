@@ -114,7 +114,14 @@ if ( $op eq 'add_form' ) {
 		my $budgetperiod_hash=GetBudgetPeriod($budget_period_id);
         # get dropboxes
 		FormatData($budgetperiod_hash);
-        $$budgetperiod_hash{budget_period_total}= $num->format_price($$budgetperiod_hash{'budget_period_total'});  
+
+        my $editnum = new Number::Format(
+            'int_curr_symbol'   => '',
+            'thousands_sep'     => '',
+            'mon_decimal_point' => '.'
+        );
+
+        $$budgetperiod_hash{budget_period_total}= $editnum->format_price($$budgetperiod_hash{'budget_period_total'});
         $template->param(
 			%$budgetperiod_hash
         );
