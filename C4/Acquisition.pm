@@ -1493,15 +1493,16 @@ sub GetLateOrders {
         biblioitems.publicationyear,
     ";
     my $from = "
-    FROM (((
-        (aqorders LEFT JOIN biblio     ON biblio.biblionumber         = aqorders.biblionumber)
-        LEFT JOIN biblioitems          ON biblioitems.biblionumber    = biblio.biblionumber)
-        LEFT JOIN aqbudgets            ON aqorders.budget_id          = aqbudgets.budget_id),
-        (aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby       = borrowers.borrowernumber)
-        LEFT JOIN aqbooksellers        ON aqbasket.booksellerid       = aqbooksellers.id
+    FROM
+        aqorders LEFT JOIN biblio     ON biblio.biblionumber         = aqorders.biblionumber
+        LEFT JOIN biblioitems         ON biblioitems.biblionumber    = biblio.biblionumber
+        LEFT JOIN aqbudgets           ON aqorders.budget_id          = aqbudgets.budget_id,
+        aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby       = borrowers.borrowernumber
+        LEFT JOIN aqbooksellers       ON aqbasket.booksellerid       = aqbooksellers.id
         WHERE aqorders.basketno = aqbasket.basketno
-        AND ( (datereceived = '' OR datereceived IS NULL)
-            OR (aqorders.quantityreceived < aqorders.quantity)
+        AND ( datereceived = ''
+            OR datereceived IS NULL
+            OR aqorders.quantityreceived < aqorders.quantity
         )
     ";
     my $having = "";
