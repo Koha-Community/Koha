@@ -23,7 +23,9 @@
                 var periods_menu = [
                         { text: _("Display all root budgets"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl" },
                         { text: _("New root budget"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form" },
+                        <!-- TMPL_IF NAME="budget_period_id" -->
                         { text: _("Edit root budget '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
+                        <!-- /TMPL_IF -->
                         { text: _("Duplicate root budget"),  },
                 ]
 
