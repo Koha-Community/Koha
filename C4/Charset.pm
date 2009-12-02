@@ -633,7 +633,7 @@ Converts a string from ISO-5426 to UTF-8.
 
 
 my %chars;
-$chars{0xb0}=0x0101;#3/0ayn[ain]
+# $chars{0xb0}=0x0101;#3/0ayn[ain] # commented because it seems to be wrong at use
 $chars{0xb1}=0x0623;#3/1alif/hamzah[alefwithhamzaabove]
 #$chars{0xb2}=0x00e0;#'à';
 $chars{0xb2}=0x00e0;#3/2leftlowsinglequotationmark
