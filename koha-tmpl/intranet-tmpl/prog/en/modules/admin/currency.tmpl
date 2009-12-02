@@ -189,12 +189,7 @@
             <td><!-- TMPL_VAR NAME="rate" --></td>
             <td><!-- TMPL_VAR NAME="symbol" ESCAPE="HTML" --></td>
             <td><!-- TMPL_VAR NAME="timestamp" --></td>
-
-            <td><!-- TMPL_IF NAME="active" -->
-                <font COLOR="#00FF00">✓</font>
-                <!-- /TMPL_IF -->
-            </td>
-
+            <td style="color:green;"><!-- TMPL_IF NAME="active" -->✓<!-- /TMPL_IF --></td>
             <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
             <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
         </tr>

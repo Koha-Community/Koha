@@ -165,11 +165,13 @@ if ($op eq 'add_form') {
     my $count = scalar(@$results);
     my @loop;
     for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+        warn Data::Dumper::Dumper($results->[$i]);
         push @loop, {
-            currency => $results->[$i]{'currency'},
-                rate => $results->[$i]{'rate'},
-            symbol => $results->[$i]{'symbol'},
-        timestamp => format_date($results->[$i]{'timestamp'}),
+            currency  => $results->[$i]{'currency'},
+            rate      => $results->[$i]{'rate'},
+            symbol    => $results->[$i]{'symbol'},
+            timestamp => format_date($results->[$i]{'timestamp'}),
+            active    => $results->[$i]{'active'},
         };
     }
     $template->param(loop => \@loop);
