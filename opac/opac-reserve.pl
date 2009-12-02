@@ -250,6 +250,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
 }
 
 my @bibitemloop;
+my $num_available = 0;
 
 foreach my $biblioitemnumber (@biblioitemnumbers) {
     my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
@@ -330,12 +331,17 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
 
-        my $branchitemrule = C4::Context->preference("RequestOnOpac");
+        my $branchitemrule = GetBranchItemRule( $borr->{'branchcode'}, $itemInfo->{'itype'} );
         my $policy_holdallowed = 1;
-
+        
+        if ( $branchitemrule->{'holdallowed'} == 0 ||
+                ( $branchitemrule->{'holdallowed'} == 1 && $borr->{'branchcode'} ne $itemInfo->{'homebranch'} ) ) {
+            $policy_holdallowed = 0;
+        }
 
         if (IsAvailableForItemLevelRequest($itemnumber) and $policy_holdallowed) {
             $item->{available} = 1;
+            $num_available++;
         }
 
 	# FIXME: move this to a pm
@@ -350,6 +356,10 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
     }
 
     push @bibitemloop, $biblioitem;
+}
+
+if ( $num_available == 0 ) {
+        $template->param( none_available => 1, message => 1 );
 }
 
 # display infos
