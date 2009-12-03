@@ -155,6 +155,8 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
     <!-- TMPL_IF NAME="budget_lines" -->
 
+    <!-- TMPL_IF name="cur" --><p><b>Currency = <!-- TMPL_VAR name="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></p><!-- /TMPL_IF -->
+
     <table id="plan" width="100%">
     <thead>
     <tr>
@@ -257,7 +259,6 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
     <!-- TMPL_ELSE -->
         <span><b>Cells contain estimated values only.</b></span><br />
     <!-- /TMPL_IF -->
-    <span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br />
     <!-- TMPL_IF name="budget_period_locked" -->
         <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled='disabled'/> -->
     <!-- TMPL_ELSE -->
