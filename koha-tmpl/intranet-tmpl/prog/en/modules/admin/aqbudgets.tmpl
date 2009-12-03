@@ -257,9 +257,9 @@
 
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" name="Aform" method="post">
     <fieldset class="rows">
-    <legend><!-- TMPL_IF NAME="budget_id" -->Modify<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> Budget
+    <legend><!-- TMPL_IF NAME="budget_id" -->Modify<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> Root Budget
     <!-- TMPL_IF NAME="budget_period_description" -->
-        <!-- TMPL_VAR NAME="budget_name" --> for period <!-- TMPL_VAR NAME="budget_period_description" -->
+        <!-- TMPL_VAR NAME="budget_name" --> <!-- TMPL_VAR NAME="budget_period_description" -->
     <!-- /TMPL_IF -->
     </legend>
 
