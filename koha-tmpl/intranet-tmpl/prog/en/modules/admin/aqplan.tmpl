@@ -115,11 +115,13 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
         <input type="checkbox" id="show_mine"  name="show_mine" value="1"  />
     <!-- /TMPL_IF -->
     <label for="show_mine">Show my budgets only</label>
-    </td><td>
-
-     <label for="budget_period_dropbox">Select budget period:</label>
-     <!-- TMPL_VAR name="budget_period_dropbox" -->
-    </td></tr>
+    </td>
+    <td>
+        <label for="authcat_dropbox"  > Select planning type:</label>
+        <!-- TMPL_VAR NAME="authcat_dropbox" -->
+        <input type="submit" name="option_submit" value="Select" />
+    </td>
+    </tr>
 
     <tr><td>
     <!-- TMPL_IF NAME="show_active" -->
@@ -128,11 +130,9 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
         <input type="checkbox" id="show_active" name="show_active" value="1" />
         <!-- /TMPL_IF -->
     <label for="show_active">Show active budgets only</label>
-    </td><td>
-
-    <label for="authcat_dropbox"  > Select planning type:</label>
-    <!-- TMPL_VAR NAME="authcat_dropbox" -->
-    </td></tr>
+    </td>
+    <td></td>
+    </tr>
 
     <!-- TMPL_UNLESS  name="budget_period_locked" -->
     <tr><td>
@@ -143,10 +143,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
         <!-- /TMPL_IF -->
         <label for="show_actual">Show actual/estimated values:</label>
     </td>
-
-    <td align="right">
-     <input type="submit" name="option_submit" value="Select" />
-    </td>
+    <td></td>
     </tr>
     <!-- /TMPL_UNLESS -->
     </table>
