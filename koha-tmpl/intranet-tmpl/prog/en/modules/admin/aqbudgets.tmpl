@@ -316,7 +316,9 @@
     <select name="budget_branchcode">
     <option value=""></option>
     <!-- TMPL_LOOP name="branchloop_select" -->
-        <!-- TMPL_IF name="selected" --> <option value="<!-- TMPL_VAR name="value" -->" > <!--TMPL_ELSE--> <option value="<!-- TMPL_VAR name="value" -->" selected="selected"> <!-- /TMPL_IF --> <!-- TMPL_VAR name="branchname" --></option>
+        <option value="<!-- TMPL_VAR name="value" -->"<!-- TMPL_IF name="selected" -->selected="selected"<!-- /TMPL_IF -->>
+            <!-- TMPL_VAR name="value" --> - <!-- TMPL_VAR name="branchname" -->
+        </option>
     <!-- /TMPL_LOOP -->
     </select>
     </li>
