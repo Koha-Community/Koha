@@ -191,6 +191,11 @@ SWITCH: {
                 $this_item->{'imageurl'} = getitemtypeinfo($this_item->{'itemtype'})->{'imageurl'};
                 $this_item->{'coins'} = GetCOinSBiblio($this_item->{'biblionumber'});
 				$this_item->{'subtitle'} = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $record, '');
+				
+				# Getting items infos for location display
+				my @items_infos = &GetItemsInfo($this_item->{'biblionumber'}, $type);
+				$this_item->{'ITEM_RESULTS'} = \@items_infos;
+
 			}
 			push @paramsloop, {display => 'privateshelves'} if $category == 1;
 			$showadd = 1;
