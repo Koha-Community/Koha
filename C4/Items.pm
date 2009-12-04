@@ -2032,8 +2032,11 @@ Returns undef if the move failed or the biblionumber of the destination record o
 sub MoveItemFromBiblio {
     my ($itemnumber, $frombiblio, $tobiblio) = @_;
     my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("UPDATE items SET biblioitemnumber = ?, biblionumber = ? WHERE itemnumber = ? AND biblionumber = ?");
-    my $return = $sth->execute($tobiblio, $tobiblio, $itemnumber, $frombiblio);
+    my $sth = $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = ?");
+    $sth->execute( $tobiblio );
+    my ( $tobiblioitem ) = $sth->fetchrow();
+    $sth = $dbh->prepare("UPDATE items SET biblioitemnumber = ?, biblionumber = ? WHERE itemnumber = ? AND biblionumber = ?");
+    my $return = $sth->execute($tobiblioitem, $tobiblio, $itemnumber, $frombiblio);
     if ($return == 1) {
 
 	# Getting framework
