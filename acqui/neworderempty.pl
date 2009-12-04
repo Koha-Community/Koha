@@ -339,7 +339,7 @@ $template->param(
     name             => $bookseller->{'name'},
     cur_active_sym   => $cur->{'symbol'},
     cur_active       => $cur->{'currency'},
-    currency         => $bookseller->{'listprice'}, # eg: 'EUR'
+    currency         => $bookseller->{'listprice'} || $cur->{'currency'}, # eg: 'EUR'
     loop_currencies  => \@loop_currency,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
