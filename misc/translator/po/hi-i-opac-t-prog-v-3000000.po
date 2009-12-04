@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2009-12-03 10:55+1300\n"
+"POT-Creation-Date: 2009-12-04 14:29+1300\n"
 "PO-Revision-Date: 2009-06-03 21:44+1200\n"
 "Last-Translator: amit gupta <amit.gupta@osslabs.biz>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -52,7 +52,7 @@ msgstr "%s %s %s %s (%s) "
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
 #. %3$s: TMPL_VAR name=cardnumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:114
 #, c-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s) "
@@ -60,20 +60,20 @@ msgstr "%s %s (%s) "
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:14
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:14
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
 #, c-format
 msgid "%s %s's account"
 msgstr "%s %s 'खाते ओं "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=LibraryName
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:1
 #, c-format
 msgid "%s &rsaquo; Self Checkout"
 msgstr "%s &rsaquo; स्व चेकआउट "
@@ -150,10 +150,10 @@ msgid "%s Self Checkout"
 msgstr "%s स्व चेकआउट "
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=libraryname
+#. %1$s: TMPL_VAR name=LibraryName
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:20
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:26
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:27
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:20
 #, c-format
 msgid "%s Self Checkout System"
 msgstr "%s स्व चेकआउट सिस्टम "
@@ -186,13 +186,13 @@ msgstr "%s महीने "
 
 #. %1$s: TMPL_VAR name=rank
 #. %2$s: TMPL_VAR name=reservecount
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:114
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:119
 #, c-format
 msgid "%s out of %s"
 msgstr "%s के बाहर %s "
 
 #. %1$s: TMPL_VAR name=ExpectedAtLibrary
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:198
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:208
 #, c-format
 msgid "%s since"
 msgstr "%s जब से "
@@ -268,14 +268,14 @@ msgid "&copy;%s"
 msgstr "© %s "
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:14
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:14
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:120
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:218
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:14
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
 msgid "&gt;"
 msgstr "&gt; "
 
@@ -385,11 +385,11 @@ msgid "(%s of %s renewals remaining)"
 msgstr "(%s %s नवीकरण के शेष) "
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=overdues_count
+#. %1$s: TMPL_VAR name=issues_count
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:84
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:253
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:301
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:84
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:117
 #, c-format
 msgid "(%s total)"
 msgstr "(%s कुल) "
@@ -401,17 +401,17 @@ msgstr "(%s कुल) "
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:287
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:289
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:503
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:38
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:204
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:251
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:37
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:65
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:63
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:145
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:432
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:124
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:204
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:251
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:38
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:15
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:29
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:37
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:124
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:432
 #, c-format
 msgid "(%s)"
 msgstr "(%s) "
@@ -478,17 +478,17 @@ msgstr "(कोई शीर्षक) "
 msgid "(published on %s)"
 msgstr "(%s पर) प्रकाशित "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:144
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:7
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:144
 msgid "(related searches:"
 msgstr "(संबंधित खोजों: "
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=unititle
+#. %1$s: TMPL_VAR name=subfield
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:34
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:94
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:123
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:503
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:34
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:332
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:339
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:345
@@ -508,10 +508,14 @@ msgid ", Shelving Location:"
 msgstr ", ठंडे बस्ते स्थान: "
 
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:103
 #, c-format
 msgid ", by %s"
 msgstr "द्वारा %s "
+
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:92
+msgid ", none of these items can be placed on hold."
+msgstr ""
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:40
 #, c-format
@@ -535,14 +539,14 @@ msgstr ""
 "है या चोरी है. "
 
 #. For the first occurrence,
-#. %1$s: TMPL_VAR name=marcnote
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:149
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:235
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:237
+#. %1$s: TMPL_VAR name=publicationyear
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:62
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:63
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:65
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:127
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:149
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:235
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:237
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:217
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:218
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:220
@@ -581,8 +585,8 @@ msgstr "... या ... "
 msgid ".png"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:40
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:40
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:80
 msgid "/"
 msgstr ""
@@ -643,23 +647,23 @@ msgstr "%s/cgi-bin/koha/opac-search.pl?%s%s&amp;format=rss2"
 msgid "/opac-tmpl/prog/famfamfam/"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:6
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:79
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:6
 msgid "10 titles"
 msgstr "10 खिताब "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:12
 msgid "100 titles"
 msgstr "100 खिताब "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:39
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:116
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:39
 msgid "12 months"
 msgstr "12 महीने "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:7
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:80
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:7
 msgid "15 titles"
 msgstr "15 खिताब "
 
@@ -679,14 +683,14 @@ msgstr "2 सप्ताह "
 msgid "2 years"
 msgstr "2 वर्ष "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:8
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:81
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:8
 msgid "20 titles"
 msgstr "20 खिताब "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:37
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:114
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:40
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:37
 msgid "3 months"
 msgstr "3 महीने "
 
@@ -694,23 +698,23 @@ msgstr "3 महीने "
 msgid "3 weeks"
 msgstr "3 सप्ताह पहले "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:9
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:82
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:9
 msgid "30 titles"
 msgstr "30 खिताब "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:10
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:83
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:10
 msgid "40 titles"
 msgstr "40 खिताब "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:11
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:84
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:11
 msgid "50 titles"
 msgstr "50 खिताब "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:38
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:115
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:38
 msgid "6 months"
 msgstr "6 महीने "
 
@@ -912,8 +916,8 @@ msgstr ""
 msgid "Account Frozen"
 msgstr "खाता अवरुद्ध "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:36
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:113
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:36
 msgid "Acquired in the last:"
 msgstr "आखिरी में एक्वायर्ड: "
 
@@ -1027,13 +1031,13 @@ msgstr "उन्नत खोज "
 msgid "All Tags"
 msgstr "सभी टैग "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:18
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:18
 msgid "All branches"
 msgstr "सभी शाखाओं "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:28
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:103
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:28
 msgid "All item types"
 msgstr "सभी मद प्रकार "
 
@@ -1064,11 +1068,11 @@ msgstr "मात्रा "
 msgid "Amount Outstanding"
 msgstr "राशि बकाया "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:12
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:12
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:13
 msgid "An Error has Occurred"
 msgstr "एक त्रुटि हो गई है "
@@ -1147,8 +1151,8 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "क्या आप चयनित मदों को दूर करना चाहते हैं? "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:427
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:71
 msgid "Arrived"
 msgstr "आ "
 
@@ -1193,17 +1197,17 @@ msgstr ""
 msgid "Auteur:"
 msgstr "लेखक:"
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:35
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:45
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:127
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:63
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:213
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:139
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:127
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:45
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:213
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:63
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:161
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:228
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:371
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:35
 msgid "Author"
 msgstr "लेखक "
 
@@ -1217,8 +1221,8 @@ msgstr "लेखक (A-Z) "
 msgid "Author (Z-A)"
 msgstr "लेखक (z-ए) "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:21
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:21
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:21
 msgid "Author(s):"
 msgstr "लेखक (एँ): "
 
@@ -1249,8 +1253,8 @@ msgstr "प्राधिकरण खोज परिणाम "
 msgid "Authorized Headings"
 msgstr "अधिकृत शीर्षकों "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:12
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:101
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:12
 msgid "Authors"
 msgstr "लेखक "
 
@@ -1333,8 +1337,8 @@ msgstr "Bibliographies "
 msgid "Bimonthly"
 msgstr "Bimonthly "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:49
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:172
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:49
 msgid "Biography"
 msgstr "जीवनी "
 
@@ -1350,8 +1354,8 @@ msgid "Book"
 msgstr ""
 
 #. IMG
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:90
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:123
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:90
 msgid "Book Cover Image"
 msgstr "बुक कवर छवि "
 
@@ -1424,23 +1428,23 @@ msgstr "CGI डिबग पर है. "
 msgid "CR"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:182
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:259
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:139
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:158
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:182
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:259
 msgid "Call No."
 msgstr "कॉल नहीं "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:53
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:55
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:265
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:165
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:65
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:156
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:95
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:61
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:53
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:55
 msgid "Call Number"
 msgstr "फोन नंबर "
 
@@ -1454,26 +1458,32 @@ msgstr "फोन नंबर (गल्प Z-एक गैर करने क
 msgid "Call Number (Non-fiction 0-9 to Fiction A-Z)"
 msgstr "फोन नंबर (गैर गल्प एक-Z करने के लिए कल्पना 0-9) "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:75
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:220
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:133
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:361
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:75
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:49
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:133
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:97
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:31
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:40
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:59
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:69
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:33
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:285
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:49
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:52
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:147
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:239
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:381
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:97
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:361
 msgid "Cancel"
 msgstr "रद्द करें "
+
+#. IMG
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:176
+#, fuzzy
+msgid "Cannot be put on hold"
+msgstr "नहीं पकड़ पर "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:17
 msgid "Card Number:"
@@ -1490,8 +1500,8 @@ msgstr "कार्ड संख्या: "
 
 #. For the first occurrence,
 #. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:62
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:163
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:62
 msgid "Cart"
 msgstr "गाड़ी "
 
@@ -1503,11 +1513,11 @@ msgstr "कैसेट रिकॉर्डिंग "
 msgid "Catalog"
 msgstr "Catalog "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-showreviews.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-showreviews.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
 msgid "Catalog &rsaquo;"
 msgstr "Catalog &rsaquo;"
@@ -1532,11 +1542,11 @@ msgstr "Catalog &rsaquo; अपनी सूची में जोड़ें 
 msgid "Catalog &rsaquo; Advanced Search"
 msgstr "Catalog &rsaquo; उन्नत खोज "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:1
 msgid "Catalog &rsaquo; An Error Has Occurred"
 msgstr "Catalog &rsaquo; एक त्रुटि हो गई "
@@ -1601,8 +1611,8 @@ msgstr "Catalog &rsaquo; आपकी गाड़ी भेजा "
 msgid "Catalog &rsaquo; Sending Your List"
 msgstr "Catalog &rsaquo; आपकी सूची भेजना "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:1
 msgid "Catalog &rsaquo; Serials"
 msgstr "Catalog &rsaquo; धारावाहिक "
@@ -1707,8 +1717,8 @@ msgstr "वर्गीकरण "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=classification
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:32
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:32
 #, c-format
 msgid "Classification: %s"
 msgstr "वर्गीकरण: %s "
@@ -1735,8 +1745,8 @@ msgstr "यहां क्लिक गतिविधि समाप्त �
 msgid "Click here if done."
 msgstr "यहाँ क्लिक करें यदि किया. "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:74
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:416
+#: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:74
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:838
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:315
 #, fuzzy
@@ -1763,8 +1773,8 @@ msgstr "बंद शेल्फ ब्राउज़र "
 msgid "Close this window."
 msgstr "इस विंडो को बंद करें. "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:10
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:10
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:10
 msgid "Close window"
 msgstr "विंडो बंद करें "
 
@@ -1788,8 +1798,8 @@ msgstr "संग्रह: "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=seriestitle
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:25
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:24
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:25
 #, c-format
 msgid "Collection: %s"
 msgstr "संग्रह: %s "
@@ -1812,8 +1822,8 @@ msgstr ""
 msgid "Comment by %s %s %s"
 msgstr "%s द्वारा टिप्पणी %s %s "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:27
 msgid "Comment:"
 msgstr "टिप्पणी: "
 
@@ -1857,7 +1867,7 @@ msgstr ""
 msgid "Confirm"
 msgstr "पुष्टि "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:218
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:232
 msgid "Confirm Reservation"
 msgstr "आरक्षण की पुष्टि "
 
@@ -1953,7 +1963,7 @@ msgstr "प्रतियां उपलब्ध है: "
 msgid "Copy"
 msgstr "प्रतिलिपि "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:166
 msgid "Copy Number"
 msgstr "कॉपी संख्या "
 
@@ -1967,8 +1977,8 @@ msgstr "कॉपीराइट तिथि: "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=copyrightdate
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:27
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:27
 #, c-format
 msgid "Copyright year: %s"
 msgstr "कॉपीराइट वर्ष: %s "
@@ -1984,8 +1994,8 @@ msgstr "गणना "
 
 #. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:72
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:203
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:203
 msgid "Cover Image"
 msgstr "आवरण छवि "
 
@@ -2025,11 +2035,11 @@ msgid "Damaged (%s),"
 msgstr "क्षतिग्रस्त (%s), "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:416
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:48
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:45
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:31
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:21
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
 msgid "Date"
 msgstr "तिथि "
 
@@ -2113,8 +2123,8 @@ msgstr "डेवी "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=dewey
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:31
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:30
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:31
 #, c-format
 msgid "Dewey: %s"
 msgstr "डेवी: %s "
@@ -2167,22 +2177,22 @@ msgstr "अभी तक एक कूटशब्द नहीं है? "
 msgid "Dublin Core (XML)"
 msgstr "डबलिन कोर (xml) "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:183
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:260
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
 msgid "Due"
 msgstr "देय "
 
 #. %1$s: TMPL_VAR name=date_due
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:182
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:192
 #, c-format
 msgid "Due %s"
 msgstr "कारण %s "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:67
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:139
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:67
 msgid "Due Date"
 msgstr "अन्तिम तिथि "
 
@@ -2276,8 +2286,8 @@ msgstr "संस्करण "
 msgid "Editions"
 msgstr "संस्करण "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:23
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:23
 msgid "Email Address:"
 msgstr "ईमेल पता: "
 
@@ -2321,11 +2331,11 @@ msgid ""
 msgstr ""
 ", आपके प्रयोक्ता आईडी दर्ज करें और बटन सबमिट करें पर क्लिक करें (या चाबी प्रवेश) दबाएँ. "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:13
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:13
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:13
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:13
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:13
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:13
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:13
 msgid "Error 404"
 msgstr "त्रुटि 404 "
 
@@ -2391,23 +2401,23 @@ msgstr "Filmographies "
 msgid "Fine Amount"
 msgstr "ठीक राशि "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:108
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:109
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:187
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:263
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
 msgid "Fines"
 msgstr "जुर्माना "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:117
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:128
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:14
 msgid "Fines and Charges"
 msgstr "जुर्माना और शुल्क "
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:230
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:244
 msgid "Finish and Place Reservation"
 msgstr "खत्म करो और प्लेस आरक्षण "
 
@@ -2427,7 +2437,7 @@ msgstr ""
 "उदाहरण के लिए: 1999-2001. तुम भी \"\" सब कुछ 1987 या \"2008 से पहले प्रकाशित -1987 "
 "के लिए इस्तेमाल कर सकते हैं -\" सब कुछ 2008 के बाद प्रकाशित करने के लिए. "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:109
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:114
 msgid "For:"
 msgstr "के लिए: "
 
@@ -2446,8 +2456,8 @@ msgstr ""
 msgid "From %s:"
 msgstr "से %s "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:89
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:16
 msgid "From:"
 msgstr "से: "
 
@@ -2460,12 +2470,12 @@ msgstr "पूर्ण शीर्षक "
 msgid "General;"
 msgstr "वयस्क, जनरल "
 
-#. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
+#. INPUT type=submit name=save
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:612
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:202
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:181
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:267
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:202
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:70
 msgid "Go"
 msgstr "जाना "
 
@@ -2529,7 +2539,7 @@ msgstr "छिपाएँ विंडो "
 msgid "Hide my tags"
 msgstr "मेरे टैग "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:148
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:157
 msgid "Hold"
 msgstr "पकड़ना "
 
@@ -2552,7 +2562,7 @@ msgstr "Holds "
 msgid "Holds Waiting"
 msgstr "Holds प्रतीक्षालय "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:153
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:162
 msgid "Home Library"
 msgstr "होम लाइब्रेरी "
 
@@ -2570,12 +2580,12 @@ msgstr "ISBD "
 msgid "ISBD View"
 msgstr "ISBD देखें "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:43
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:45
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:95
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:134
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:85
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:220
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:85
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:43
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:45
 msgid "ISBN"
 msgstr "आईऍसबीऍन "
 
@@ -2588,8 +2598,8 @@ msgstr "आईऍसबीऍन "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=ISBN
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:23
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:22
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:23
 #, c-format
 msgid "ISBN: %s"
 msgstr "आईऍसबीऍन: %s "
@@ -2648,8 +2658,8 @@ msgstr "चित्रण "
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=OPACBaseURL
 #. %2$s: TMPL_VAR name=biblionumber
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:35
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:35
 #, c-format
 msgid ""
 "In the online catalog: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s Items :"
@@ -2688,7 +2698,7 @@ msgstr "करने के लिए %s से पारगमन %s बाद 
 #. %1$s: TMPL_VAR name=transfertfrom
 #. %2$s: TMPL_VAR name=transfertto
 #. %3$s: TMPL_VAR name=transfertwhen
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:184
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:194
 #, c-format
 msgid "In transit from %s, to %s, since %s"
 msgstr "%s से पारगमन में, %s, क्योंकि %s करने के लिए "
@@ -2706,7 +2716,7 @@ msgstr "में क्रमाँक: "
 msgid "Indexes"
 msgstr "Indexes "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:167
 msgid "Information"
 msgstr "जानकारी "
 
@@ -2746,12 +2756,12 @@ msgstr "जारी प्रश्न "
 msgid "It has <b>%s</b> entries."
 msgstr "यह <b> %s </b> प्रविष्टियों की है. "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:150
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:43
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:159
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:159
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:181
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:258
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:60
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:43
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:159
 msgid "Item Type"
 msgstr "मद प्रकार "
 
@@ -2788,7 +2798,7 @@ msgstr "आइटम के प्रकार "
 msgid "Item type :"
 msgstr "आइटम के प्रकार: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:102
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:107
 msgid "Item type:"
 msgstr "आइटम के प्रकार: "
 
@@ -2853,50 +2863,50 @@ msgstr "सूचियाँ "
 msgid "Koha - RSS"
 msgstr "Koha - आरएसएस "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:3
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:3
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:3
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:3
 msgid "Koha <!-- TMPL_VAR NAME=\"Version\" -->"
 msgstr "Koha <!-- TMPL_VAR NAME=\"Version\" -->"
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/maintenance.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-showreviews.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiesdetail.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-browser.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:2
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-account.tmpl:1
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/maintenance.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/kohaerror.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiessearchresultlist.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authoritiesdetail.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-showreviews.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:1
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:1
 msgid "Koha Online"
 msgstr "Koha ऑनलाइन "
 
@@ -2919,8 +2929,8 @@ msgstr "LCCN: "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=lccn
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:33
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:32
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:33
 #, c-format
 msgid "LCCN: %s"
 msgstr "LCCN: %s "
@@ -2942,7 +2952,7 @@ msgstr "भाषाएँ: "
 msgid "Large print"
 msgstr "बड़े प्रिंट "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:154
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:163
 msgid "Last Location"
 msgstr "अंतिम स्थान "
 
@@ -2955,8 +2965,8 @@ msgid "Last Seen"
 msgstr "अंतिम बार देखा "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:429
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:73
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:73
 msgid "Late"
 msgstr "देर "
 
@@ -3007,8 +3017,8 @@ msgstr "सीमा <a1> वर्तमान में उपलब्ध व
 msgid "Limit to any of the following:"
 msgstr "किसी भी निम्नलिखित की सीमा: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:26
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:101
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:26
 msgid "Limit to:"
 msgstr "सीमित करने के लिए: "
 
@@ -3044,10 +3054,10 @@ msgstr "सूची नाम: "
 msgid "List by:"
 msgstr "सूची नाम: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:73
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:120
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:218
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:243
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:73
 msgid "Lists"
 msgstr "सूचियाँ "
 
@@ -3149,12 +3159,12 @@ msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (non-Unicode/MARC-8) "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:83
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-showmarc.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:33
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:36
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:43
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:48
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:51
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-showmarc.tmpl:1
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:52
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:129
 msgid "MARC View"
@@ -3261,8 +3271,8 @@ msgstr "सदस्यता संख्या: "
 msgid "Merged with ... to form ..."
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:8
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:8
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:8
 msgid "Message Sent"
 msgstr "संदेश भेजा "
 
@@ -3271,8 +3281,8 @@ msgid "Message from the library"
 msgstr "पुस्तकालय की ओर से संदेश "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:431
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:75
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:63
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:75
 msgid "Missing"
 msgstr "गायब "
 
@@ -3407,13 +3417,13 @@ msgstr "अगला "
 msgid "Next &gt;&gt;"
 msgstr "अगला&gt;&gt; "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:230
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:291
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:21
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:136
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:77
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:100
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:136
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:21
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:230
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:291
 msgid "No"
 msgstr "नहीं "
 
@@ -3460,12 +3470,6 @@ msgstr "नहीं प्रतियां उपलब्ध है. "
 msgid "No copies available."
 msgstr "नहीं प्रतियां उपलब्ध है. "
 
-#. For the first occurrence,
-#. SCRIPT
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:29
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:36
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:71
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:80
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:73
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:342
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:343
@@ -3473,18 +3477,22 @@ msgstr "नहीं प्रतियां उपलब्ध है. "
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:354
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:355
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:357
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:52
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:54
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:465
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:466
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:468
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:203
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:206
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:208
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:270
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:272
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:274
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:465
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:466
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:468
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:52
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:54
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:71
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:80
 msgid "No cover image available"
 msgstr "नहीं कवर छवि उपलब्ध "
 
@@ -3511,8 +3519,8 @@ msgstr "कोई आइटम चुना गया "
 msgid "No items available:"
 msgstr "कोई आइटम उपलब्ध है: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:40
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:40
 msgid "No limit"
 msgstr "कोई सीमा नहीं "
 
@@ -3595,7 +3603,7 @@ msgid "Not for loan"
 msgstr "नहीं ऋण के लिए "
 
 #. %1$s: TMPL_VAR name=notforloanvalue
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:193
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:203
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "नहीं ऋण के लिए (%s) "
@@ -3604,13 +3612,13 @@ msgstr "नहीं ऋण के लिए (%s) "
 msgid "Not for loan :"
 msgstr "नहीं ऋण के लिए: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:202
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:212
 msgid "Not on hold"
 msgstr "नहीं पकड़ पर "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:226
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:98
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:131
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:226
 msgid "Not renewable"
 msgstr "नहीं अक्षय "
 
@@ -3662,17 +3670,17 @@ msgid "Note: your tag was entirely markup code. It was NOT added."
 msgstr "नोट: आपके टैग पूरी तरह मार्कअप कोड था. यह नहीं जोड़ा गया है. "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:273
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:35
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:146
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:132
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:218
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:35
 msgid "Notes"
 msgstr "नोट्स "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=notes
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:28
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:27
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:28
 #, c-format
 msgid "Notes : %s"
 msgstr "नोट्स: %s "
@@ -3681,9 +3689,9 @@ msgstr "नोट्स: %s "
 msgid "Notes/Comments"
 msgstr "नोट्स / टिप्पणियाँ "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:67
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:35
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userdetails.tmpl:65
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:67
 msgid "Notes:"
 msgstr "नोट्स: "
 
@@ -3702,7 +3710,7 @@ msgid "On Reserve"
 msgstr "रिजर्व पर "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:312
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:197
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:207
 msgid "On hold"
 msgstr "पकड़ने पर "
 
@@ -3886,11 +3894,11 @@ msgstr "लाइब्रेरी उठाओ "
 msgid "Pick Up Location"
 msgstr "स्थान उठाओ "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:226
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:240
 msgid "Pick up From:"
 msgstr "से उठाओ: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:117
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:122
 msgid "Pick up from:"
 msgstr "से उठाओ: "
 
@@ -3900,30 +3908,32 @@ msgstr "चित्र "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:551
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:554
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:167
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:170
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:138
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:209
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:26
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:144
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:146
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:220
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:222
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:70
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:256
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:259
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:456
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:167
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:170
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:26
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:29
 msgid "Place Hold"
 msgstr "जगह पकड़ो "
 
 #. %1$s: TMPL_VAR name=title
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:98
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:103
 #, c-format
 msgid "Place a hold on <a1>%s</a>"
 msgstr "एक जगह पर पकड़ <a1>%s</a> "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:146
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:155
 msgid "Place a hold on a specific copy"
 msgstr "एक विशिष्ट कॉपी पर एक पकड़ प्लेस "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:130
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:135
 msgid "Place a hold on the next available copy"
 msgstr "उपलब्ध अगले कॉपी पर एक पकड़ प्लेस "
 
@@ -4035,11 +4045,11 @@ msgstr "प्राथमिक (5-8) "
 msgid "Primary;"
 msgstr "प्राथमिक (5-8) "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:18
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:562
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:179
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:65
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:179
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:35
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:18
 msgid "Print"
 msgstr "प्रिंट "
 
@@ -4048,7 +4058,7 @@ msgstr "प्रिंट "
 msgid "Priority"
 msgstr "प्राथमिकता: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:114
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:119
 msgid "Priority:"
 msgstr "प्राथमिकता: "
 
@@ -4080,9 +4090,9 @@ msgstr "क्रमादेशित ग्रंथों "
 msgid "Public"
 msgstr "सार्वजनिक "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:99
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:251
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:253
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:99
 msgid "Public Lists"
 msgstr "सार्वजनिक सूचियाँ "
 
@@ -4100,7 +4110,7 @@ msgstr "सार्वजनिक "
 msgid "Publication Date Range:"
 msgstr "प्रकाशन तिथि सीमा: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:104
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:109
 msgid "Publication year:"
 msgstr "प्रकाशन वर्ष: "
 
@@ -4128,16 +4138,16 @@ msgstr "द्वारा प्रकाशित: "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=publishercode
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:24
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:24
 #, c-format
 msgid "Published by: %s"
 msgstr "द्वारा प्रकाशित: %s "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:110
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:131
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:77
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:217
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:77
 msgid "Publisher"
 msgstr "प्रकाशक "
 
@@ -4145,17 +4155,17 @@ msgstr "प्रकाशक "
 msgid "Publisher Location"
 msgstr "प्रकाशक स्थान "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:29
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:66
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:29
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:802
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:173
 msgid "Publisher:"
 msgstr "प्रकाशक: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:86
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:87
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:3
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:75
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:86
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:87
 msgid "Purchase Suggestions"
 msgstr "खरीद सुझाव "
 
@@ -4175,9 +4185,9 @@ msgstr "रेटिंग Amazon.com () से: "
 msgid "Re-Type New Password:"
 msgstr "पुनः प्रकार नई पासवर्ड: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:84
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:18
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:31
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:84
 msgid "Recent Acquisitions"
 msgstr ""
 
@@ -4234,14 +4244,14 @@ msgstr "प्रासंगिकता "
 msgid "Remove Selected Items"
 msgstr "हटाएँ चयनित आइटम "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:129
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:96
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:185
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:224
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:262
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:286
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:96
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:129
 msgid "Renew"
 msgstr "नवीनीकृत "
 
@@ -4362,8 +4372,8 @@ msgstr "के लिए सूचकांक स्कैन: %s "
 msgid "Scan Index:"
 msgstr "सूचकांक स्कैन: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:74
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:105
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:74
 msgid "Scan a new item or enter its barcode:"
 msgstr "एक नए आइटम स्कैन या उसके बारकोड दर्ज करें: "
 
@@ -4381,9 +4391,10 @@ msgstr ""
 msgid "Scan next item, or"
 msgstr "स्कैन अगले आइटम, या "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:20
+#. INPUT type=submit
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:97
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:262
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:20
 msgid "Search"
 msgstr "खोज "
 
@@ -4414,10 +4425,10 @@ msgstr "खोज: "
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:75
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:345
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:357
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:56
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:468
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:208
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:274
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:468
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:56
 msgid "See Baker &amp; Taylor"
 msgstr "देखो बेकर और टेलर "
 
@@ -4460,9 +4471,9 @@ msgid "Semiweekly"
 msgstr "Semiweekly "
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:33
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:64
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:33
 msgid "Send"
 msgstr "भेजना "
 
@@ -4500,8 +4511,8 @@ msgstr "सीरियल प्रकार "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=serial
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:30
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:29
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:30
 #, c-format
 msgid "Serial: %s"
 msgstr "सीरियल: %s "
@@ -4510,17 +4521,17 @@ msgstr "सीरियल: %s "
 msgid "Serials"
 msgstr "धारावाहिक "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:50
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:130
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:216
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-facets.inc:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:48
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:50
 msgid "Series"
 msgstr "श्रृंखला "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:133
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:94
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:219
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:94
 msgid "Series Title"
 msgstr "सीरीज शीर्षक "
 
@@ -4567,8 +4578,8 @@ msgstr "दिखाएँ अतिरिक्त "
 msgid "Show my tags"
 msgstr "मेरे टैग "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:5
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:78
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:5
 msgid "Show the top"
 msgstr "दिखाएँ शीर्ष "
 
@@ -4596,6 +4607,7 @@ msgstr "इसी प्रकार के आइटम "
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:40
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:47
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:55
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:92
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:82
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:87
 msgid "Sorry"
@@ -4697,10 +4709,10 @@ msgstr "सांख्यिकी "
 
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:272
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:417
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:41
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:114
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:62
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:310
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:114
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:41
 msgid "Status"
 msgstr "स्थिति "
 
@@ -4716,11 +4728,11 @@ msgstr "तीन कदम: क्लिक करें 'के लिए य�
 msgid "Step Two: Scan the barcode for each item, one at a time"
 msgstr "कदम दो: प्रत्येक आइटम के लिए बारकोड, एक एक समय में स्कैन "
 
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:128
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:214
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:87
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:38
 #: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:40
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:128
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:87
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:214
 msgid "Subject"
 msgstr "विषय "
 
@@ -4749,27 +4761,27 @@ msgstr "विषय (एँ): "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=subject
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:26
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:25
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:26
 #, c-format
 msgid "Subject: %s"
 msgstr "विषय: %s "
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:45
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:69
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:123
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:95
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:107
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:76
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:98
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:110
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:107
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:76
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:69
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:95
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/opac-topissues.inc:45
 msgid "Submit"
 msgstr "जमा करें "
 
 #. INPUT type=submit
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:133
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-userupdate.tmpl:133
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-messaging.tmpl:97
 msgid "Submit Changes"
 msgstr "भेजें परिवर्तन "
@@ -5094,29 +5106,29 @@ msgstr "तीन बार एक वर्ष "
 msgid "Thèse:"
 msgstr "Theses "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:28
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:30
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:41
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:42
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:53
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:139
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:158
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:125
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-main.tmpl:44
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:120
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:211
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:91
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:160
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:227
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:370
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:152
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:180
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:257
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:304
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:53
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:125
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:91
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:62
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-recentacquisitions.tmpl:88
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-tags.tmpl:120
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:211
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:139
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:158
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:86
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:119
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:41
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:42
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:160
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:227
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:370
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:28
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:30
 msgid "Title"
 msgstr "शीर्षक "
 
@@ -5135,7 +5147,7 @@ msgstr "शीर्षक (z-ए) "
 msgid "Title Phrase"
 msgstr "शीर्षक वाक्यांश "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:221
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:235
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-suggestions.tmpl:63
 msgid "Title:"
 msgstr "शीर्षक: "
@@ -5150,12 +5162,12 @@ msgstr "शीर्षक:<em>%s</ em> "
 msgid "Titles"
 msgstr "शीर्षक "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:62
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:17
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:16
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:16
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:16
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:62
 #, c-format
 msgid "To report this error, you can <a1>email the Koha Administrator</a>."
 msgstr ""
@@ -5215,8 +5227,8 @@ msgstr "यूआरएल (ओं) "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=url
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:34
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:33
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:34
 #, c-format
 msgid "URL : %s"
 msgstr "यूआरएल: %s "
@@ -5225,7 +5237,7 @@ msgstr "यूआरएल: %s "
 msgid "URL(s)"
 msgstr "यूआरएल (ओं) "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:189
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:199
 msgid "Unavailable (lost or missing)"
 msgstr "अनुपलब्ध (खो या लापता) "
 
@@ -5239,8 +5251,8 @@ msgstr "एकीकृत शीर्षक "
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=unititle
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:29
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:28
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:29
 #, c-format
 msgid "Unified title: %s"
 msgstr "एकीकृत शीर्षक: %s "
@@ -5268,12 +5280,12 @@ msgstr "सदस्यता रद्द करें "
 msgid "Use the \"Confirm\" button below to confirm deletion."
 msgstr "नीचे \"बटन मिटाने की पुष्टि करने के लिए\" पुष्टि का प्रयोग करें. "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:64
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:18
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/401.tmpl:19
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/404.tmpl:18
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/403.tmpl:18
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/500.tmpl:18
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/errors/400.tmpl:18
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-auth.tmpl:64
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "इस्तेमाल शीर्ष मेनू बार Koha के दूसरे भाग में नेविगेट करने के लिए. "
 
@@ -5352,10 +5364,10 @@ msgstr ""
 msgid "Vol Info"
 msgstr "Vol जानकारी "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:197
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:60
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:207
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:111
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:165
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:60
 msgid "Waiting"
 msgstr "प्रतीक्षा कर रहा है "
 
@@ -5415,13 +5427,13 @@ msgstr "वर्ष: "
 msgid "Year :"
 msgstr "वर्ष: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:230
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:291
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:20
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:136
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/circulation.tmpl:60
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-circ.tmpl:100
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:136
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:20
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:34
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:230
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:291
 msgid "Yes"
 msgstr "हाँ "
 
@@ -5462,9 +5474,9 @@ msgstr "आप वर्तमान में कुछ भी नहीं ह
 msgid "You currently owe fines and charges amounting to:"
 msgstr "आप वर्तमान में जुर्माना और शुल्क की राशि देने हैं: "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:152
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:6
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-results.tmpl:6
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:152
 msgid "You did not specify any search criteria."
 msgstr "आप किसी भी खोज मापदंड निर्दिष्ट नहीं किया. "
 
@@ -5507,13 +5519,13 @@ msgstr "आप पिक के लिए एक पुस्तकालय क
 msgid "You must select at least one item."
 msgstr "आपको कम से कम एक आइटम का चयन करना होगा. "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:11
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-advsearch.tmpl:164
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:11
 msgid "Young Adult"
 msgstr "युवा वयस्क "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:59
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:59
 msgid "Your Cart"
 msgstr "आपका कार्ट "
 
@@ -5527,9 +5539,9 @@ msgstr "आपकी टिप्पणी "
 msgid "Your List : %s"
 msgstr "अपनी सूची: %s "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:116
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:246
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-shelves.tmpl:248
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/masthead.inc:116
 msgid "Your Lists"
 msgstr "आपकी सूचियाँ "
 
@@ -5733,7 +5745,7 @@ msgstr "translation"
 msgid "art reproduction"
 msgstr "photomechanical प्रजनन "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:198
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:208
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:461
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:515
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:391
@@ -5744,8 +5756,8 @@ msgstr "पर "
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=LibraryName
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-opensearch.tmpl:22
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:165
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-topissues.tmpl:45
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-user.tmpl:165
 #, c-format
 msgid "at %s"
 msgstr "%s पर "
@@ -5784,8 +5796,9 @@ msgstr ""
 msgid "bcg"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:85
+#. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:521
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:85
 msgid "bibliography"
 msgstr "bibliography "
 
@@ -5821,8 +5834,8 @@ msgstr ""
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:71
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detail.tmpl:501
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-review.tmpl:71
 #, c-format
 msgid "by %s"
 msgstr "द्वारा %s "
@@ -5895,8 +5908,8 @@ msgstr ""
 msgid "coats of arms"
 msgstr "हथियारों का कोट "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:170
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:251
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:170
 msgid "collage"
 msgstr "महाविद्यालय "
 
@@ -6014,8 +6027,8 @@ msgstr ""
 msgid "diagram"
 msgstr "नाटक "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:89
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:527
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:89
 msgid "dictionary"
 msgstr "शब्दकोश "
 
@@ -6032,8 +6045,8 @@ msgstr ""
 msgid "diorama"
 msgstr "नाटक "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:91
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:563
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:91
 msgid "directory"
 msgstr "निर्देशिका "
 
@@ -6050,14 +6063,15 @@ msgstr "निबंध या थीसिस "
 msgid "do not notify"
 msgstr "सूचित नहीं है "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:37
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:634
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:668
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:37
 msgid "drama"
 msgstr "नाटक "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:171
+#. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:254
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:171
 msgid "drawing"
 msgstr "ड्राइंग "
 
@@ -6084,8 +6098,8 @@ msgid "email"
 msgstr "ईमेल "
 
 #. META http-equiv=Content-Language
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:5
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:6
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:5
 msgid "en-us"
 msgstr "en-us "
 
@@ -6112,7 +6126,7 @@ msgstr "निबंध "
 msgid "examination paper"
 msgstr "परीक्षा पेपर "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:198
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:208
 msgid "expected at"
 msgstr "पर उम्मीद "
 
@@ -6137,10 +6151,10 @@ msgstr ""
 msgid "fgknps"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:36
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:628
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:640
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:674
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:36
 msgid "fiction"
 msgstr "कल्पना "
 
@@ -6207,7 +6221,7 @@ msgstr "के लिए "
 msgid "for '%s'"
 msgstr "के लिए'%s "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:197
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-reserve.tmpl:207
 msgid "for patron"
 msgstr "संरक्षक के लिए "
 
@@ -6274,8 +6288,8 @@ msgstr "illuminations "
 msgid "illustrations"
 msgstr "चित्र "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:24
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:23
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:24
 msgid "in"
 msgstr "में "
 
@@ -6291,8 +6305,8 @@ msgstr "Catalog %s में. <a1> "
 msgid "in the past %s months"
 msgstr "पिछले %s महीने में "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:87
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:539
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:87
 msgid "index"
 msgstr "सूचकांक "
 
@@ -6345,8 +6359,9 @@ msgstr "koha:isbn:<!-- TMPL_VAR NAME=\"isbn\" -->"
 msgid "koha:isbn:{$isbn}"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:22
+#. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:344
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:22
 msgid "large print"
 msgstr "बड़े प्रिंट "
 
@@ -6485,8 +6500,8 @@ msgstr "महीने "
 msgid "moon"
 msgstr "महीने "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:112
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:735
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:112
 msgid "motion picture"
 msgstr "चलचित्र "
 
@@ -6644,8 +6659,9 @@ msgstr "अन्य गैर ग्राफिक प्रकार का �
 msgid "others"
 msgstr "दूसरों "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:172
+#. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:260
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:172
 msgid "painting"
 msgstr "चित्रकला "
 
@@ -6653,8 +6669,8 @@ msgstr "चित्रकला "
 msgid "paper"
 msgstr "पेपर "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:95
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:611
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:95
 msgid "patent"
 msgstr "पेटेंट "
 
@@ -6672,19 +6688,20 @@ msgstr "photomechanical प्रजनन "
 msgid "photomechanical reproduction"
 msgstr "photomechanical प्रजनन "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:174
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:266
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:174
 msgid "photonegative"
 msgstr "photonegative "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:175
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:269
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:175
 msgid "photoprint"
 msgstr "photoprint "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:176
+#. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:272
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:726
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:176
 msgid "picture"
 msgstr "चित्र "
 
@@ -6705,8 +6722,8 @@ msgstr "प्लास्टर "
 msgid "plates"
 msgstr "प्लेट "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:42
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:689
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:42
 msgid "poetry"
 msgstr "कविता "
 
@@ -6726,9 +6743,9 @@ msgstr ""
 msgid "pre-primary (0-5)"
 msgstr "पूर्व प्राथमिक (0-5) "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:177
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:75
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:275
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:177
 msgid "print"
 msgstr "प्रिंट "
 
@@ -6765,8 +6782,8 @@ msgstr ""
 msgid "reformatted digital"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:21
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:347
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:21
 msgid "regular print"
 msgstr "नियमित रूप से प्रिंट "
 
@@ -6906,8 +6923,8 @@ msgstr "मानक "
 msgid "starts with"
 msgstr "शुरू से "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:93
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:566
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:93
 msgid "statistics"
 msgstr "आँकड़े "
 
@@ -6968,14 +6985,15 @@ msgstr "VHS टेप / विडेओकसेट "
 msgid "tape reel"
 msgstr ""
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:178
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:278
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:732
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:178
 msgid "technical drawing"
 msgstr "तकनीकी ड्राइंग "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:100
+#. IMG
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:569
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/subtypes_unimarc.inc:100
 msgid "technical report"
 msgstr "तकनीकी रिपोर्ट "
 
@@ -6995,11 +7013,11 @@ msgid "text/html; charset=iso-8859-1"
 msgstr "text/html; charset=iso-8859-1"
 
 #. META http-equiv=Content-Type
-#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:2
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:3
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:4
-#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:2
 #: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/sco-main.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/sco/help.tmpl:2
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-basket.tmpl:4
+#: ../../koha-tmpl/opac-tmpl/prog/en/modules/opac-detailprint.tmpl:3
+#: ../../koha-tmpl/opac-tmpl/prog/en/includes/doc-head-close.inc:2
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
@@ -7135,8 +7153,8 @@ msgstr "सीमा के साथ (s): '%s' "
 msgid "wood"
 msgstr "लकड़ी "
 
-#: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:70
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:412
+#: ../../koha-tmpl/opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:70
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:834
 #: ../../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:311
 msgid "y3z"
