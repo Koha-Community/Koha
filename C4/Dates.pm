@@ -70,10 +70,10 @@ sub regexp ($;$) {
     # way of saying "does this string match *whatever* format that Dates object is?"
 
 	($format eq 'sql') and 
-	return qr/^(\d{4})(\d{2})(\d{2})(?:\s{4}(\d{2})(\d{2})(\d{2}))?/;
+	return qr/^(\d{4})(\d{1,2})(\d{1,2})(?:\s{4}(\d{2})(\d{2})(\d{2}))?/;
 	($format eq 'iso') and 
-	return qr/^(\d{4})$delim(\d{2})$delim(\d{2})(?:(?:\s{1}|T)(\d{2})\:?(\d{2})\:?(\d{2}))?Z?/;
-	return qr/^(\d{2})$delim(\d{2})$delim(\d{4})(?:\s{1}(\d{2})\:?(\d{2})\:?(\d{2}))?/;  # everything else
+	return qr/^(\d{4})$delim(\d{1,2})$delim(\d{1,2})(?:(?:\s{1}|T)(\d{2})\:?(\d{2})\:?(\d{2}))?Z?/;
+	return qr/^(\d{1,2})$delim(\d{1,2})$delim(\d{4})(?:\s{1}(\d{1,2})\:?(\d{1,2})\:?(\d{1,2}))?/;  # everything else
 }
 
 sub dmy_map ($$) {
