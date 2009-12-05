@@ -325,11 +325,9 @@ if ( C4::Context->preference("OPACAmazonEnabled") ) {
     my $amazon_similars = C4::Context->preference("OPACAmazonSimilarItems");
     my @services;
     if ( $amazon_reviews ) {
-        $template->param( OPACAmazonReviews => 1 );
         push( @services, 'EditorialReview', 'Reviews' );
     }
     if ( $amazon_similars ) {
-        $template->param( OPACAmazonSimilarItems => 1 );
         push( @services, 'Similarities' );
     }
     my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour, \@services );
