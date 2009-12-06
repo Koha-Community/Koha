@@ -1315,7 +1315,7 @@ sub get_target_directories {
 
     _get_env_overrides(\%dirmap);
     _get_argv_overrides(\%dirmap);
-    _add_destdir(\%dirmap);
+    _add_destdir(\%dirmap) unless ($^O eq 'MSWin32');
 
     return \%dirmap, \%skipdirs;
 }
