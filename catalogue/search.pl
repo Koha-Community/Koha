@@ -378,7 +378,7 @@ if($params->{'multibranchlimit'}) {
 push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
 }
 
-my $available = $params->{'available'} || "0";
+my $available = $params->{'available'};
 
 $template->param(available => $available);
 

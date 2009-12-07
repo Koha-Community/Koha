@@ -1659,7 +1659,7 @@ sub searchResults {
           ? C4::Context->preference('maxItemsinSearchResults') - 1
           : 1;
            
-        if(not $limit_available){
+        if(! $limit_available){
             for my $key ( sort keys %$onloan_items) {
                 (++$onloanitemscount > $maxitems) and last;
                 push @onloan_items_loop, $onloan_items->{$key};
@@ -1707,7 +1707,8 @@ sub searchResults {
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{isbn} =~
           s/-//g;    # deleting - in isbn to enable amazon content
-        push( @newresults, $oldbiblio ) if (not $limit_available or ($limit_available and $available_count));
+        push( @newresults, $oldbiblio ) if ((not $limit_available and ($items_count))
+                                        or ($limit_available and $available_count));
          
             #if((not $hidelostitems and not $limit_available ) 
             #or ($items_count > $itemlost_count and $available_count  ));
