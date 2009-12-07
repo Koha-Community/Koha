@@ -1336,9 +1336,7 @@ Format results in a form suitable for passing to the template
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
 sub searchResults {
-    my ( $searchdesc, $hits, $results_per_page, $offset, $scan,
-        $limit_available, $hidelostitems, @marcresults) = @_;
-
+    my ( $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults, $hidelostitems ) = @_;
     my $dbh = C4::Context->dbh;
     my @newresults;
 
@@ -1543,7 +1541,7 @@ sub searchResults {
             
 			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
-            if ( ($item->{onloan} or $item->{reserved} ) and not $limit_available) {
+            if ( $item->{onloan} or $item->{reserved} ) {
                 $onloan_count++;
 				my $key = $prefix . $item->{onloan} . $item->{barcode};
 				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});
@@ -1598,7 +1596,7 @@ sub searchResults {
 
                 # item is withdrawn, lost or damaged
                 if (   $item->{wthdrawn}
-                    || ($item->{itemlost} and not $hidelostitems)
+                    || $item->{itemlost}
                     || $item->{damaged}
                     || $item->{notforloan} 
                     || $item->{reserved}
@@ -1658,17 +1656,13 @@ sub searchResults {
           ( C4::Context->preference('maxItemsinSearchResults') )
           ? C4::Context->preference('maxItemsinSearchResults') - 1
           : 1;
-           
-        if(! $limit_available){
-            for my $key ( sort keys %$onloan_items) {
-                (++$onloanitemscount > $maxitems) and last;
-                push @onloan_items_loop, $onloan_items->{$key};
-            }
-        
-            for my $key ( sort keys %$other_items ) {
-                (++$otheritemscount > $maxitems) and last;
-                push @other_items_loop, $other_items->{$key};
-            }
+        for my $key ( sort keys %$onloan_items ) {
+            (++$onloanitemscount > $maxitems) and last;
+            push @onloan_items_loop, $onloan_items->{$key};
+        }
+        for my $key ( sort keys %$other_items ) {
+            (++$otheritemscount > $maxitems) and last;
+            push @other_items_loop, $other_items->{$key};
         }
         for my $key ( sort keys %$notforloan_items ) {
             (++$notforloanitemscount > $maxitems) and last;
@@ -1678,6 +1672,7 @@ sub searchResults {
             (++$availableitemscount > $maxitems) and last;
             push @available_items_loop, $available_items->{$key}
         }
+
         # XSLT processing of some stuff
         if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
@@ -1707,17 +1702,10 @@ sub searchResults {
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{isbn} =~
           s/-//g;    # deleting - in isbn to enable amazon content
-        push( @newresults, $oldbiblio ) if ((not $limit_available and ($items_count))
-                                        or ($limit_available and $available_count));
-         
-            #if((not $hidelostitems and not $limit_available ) 
-            #or ($items_count > $itemlost_count and $available_count  ));
-            #($items_count > $itemlost_count) )
-            #or (or ($available_count and $limit_available))
-            #);
-            #+ $onloan_count ) )  
-            #        && ( $hidelostitems or $limit_available ))
-            #   );
+        push( @newresults, $oldbiblio ) 
+            if(not $hidelostitems
+               or (($items_count > $itemlost_count ) 
+                    && $hidelostitems));
         
     }
     
