@@ -348,11 +348,11 @@ $template->param ( QUERY_INPUTS => \@query_inputs );
 my @limit_inputs = $limit_cgi ? _input_cgi_parse($limit_cgi) : ();
 
 # add OPAC 'hidelostitems'
-#if (C4::Context->preference('hidelostitems') == 1) {
-#    # either lost ge 0 or no value in the lost register
-#    $query ="($query) and ( (lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='') )";
-#}
-#
+if (C4::Context->preference('hidelostitems') == 1) {
+    # either lost ge 0 or no value in the lost register
+    $query ="($query) and ( (lost,st-numeric <= 0) or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='') )";
+}
+
 # add OPAC suppression - requires at least one item indexed with Suppress
 if (C4::Context->preference('OpacSuppression')) {
     $query = "($query) not Suppress=1";
