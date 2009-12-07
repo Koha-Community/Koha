@@ -412,11 +412,11 @@ for (my $i=0;$i<=@servers;$i++) {
                 # we want as specified by $offset and $results_per_page,
                 # we need to set the offset parameter of searchResults to 0
                 my @group_results = searchResults( $query_desc, $group->{'group_count'},$results_per_page, 0, $scan,
-                                                   @{ $group->{"RECORDS"} }, C4::Context->preference('hidelostitems'));
+                                                   @{ $group->{"RECORDS"} });
                 push @newresults, { group_label => $group->{'group_label'}, GROUP_RESULTS => \@group_results };
             }
         } else {
-            @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,$scan,@{$results_hashref->{$server}->{"RECORDS"}},, C4::Context->preference('hidelostitems'));
+            @newresults = searchResults( $query_desc,$hits,$results_per_page,$offset,$scan,@{$results_hashref->{$server}->{"RECORDS"}});
         }
 		my $tag_quantity;
 		if (C4::Context->preference('TagsEnabled') and
