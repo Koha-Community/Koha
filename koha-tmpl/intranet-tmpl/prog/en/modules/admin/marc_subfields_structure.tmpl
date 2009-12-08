@@ -75,9 +75,7 @@
    <ul>
         <!-- TMPL_LOOP NAME="loop" -->
             <!-- TMPL_IF NAME="new_subfield" -->
-                <!-- TMPL_IF EXPR="tagfield >=10" --><!-- display new only for > 10 fields -->
                 <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">New</a></li>
-                <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
                 <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
                     <!-- TMPL_VAR NAME="subfieldcode" -->
