@@ -97,6 +97,7 @@ JSON
 LWP::Simple
 LWP::UserAgent
 Lingua::Stem
+Lingua::Stem::Snowball
 List::Util
 List::MoreUtils
 Locale::Language

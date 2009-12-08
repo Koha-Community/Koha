@@ -570,6 +570,7 @@ WriteMakefile(
                             'LWP::Simple'                      => 1.41,
                             'LWP::UserAgent'                   => 2.033,
                             'Lingua::Stem'                     => 0.82,
+			    'Lingua::Stem::Snowball'	       => 0.952,
                             'List::Util'                       => 1.18,
                             'List::MoreUtils'                  => 0.21,
                             'Locale::Language'                 => 2.07,
