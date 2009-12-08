@@ -372,7 +372,16 @@ response's Content-Type to that value instead of "text/html".
 sub output_html_with_http_headers ($$$;$) {
     my $query = shift;
     my $cookie = shift;
-    my $html = shift;
+    my $html = shift; 
+    $html =~ s/ \x{C2}
+	(?: \x{88} # NSB
+	|   \x{89} # NSE 
+	# SUDOC shares the cataloguing of french universities
+	|   \x{98} # SUDOC NSB 
+	|   \x{9c} # SUDOC NSE
+	)
+    //gx;
+
     my $content_type = @_ ? shift : "text/html";
     $content_type = "text/html" unless $content_type =~ m!/!; # very basic sanity check
     print $query->header(
