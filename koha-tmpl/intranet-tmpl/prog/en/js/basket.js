@@ -374,10 +374,10 @@ function showLess() {
 
 function updateBasket(updated_value,target) {
 	if(target){
-	target.$('#basketcount').html("<span>"+updated_value+"</span>");
+	target.$('#basketcount').html(" <span>("+updated_value+")</span>");
 	target.$('#cartDetails').html(_("Your cart contains ")+updated_value+_(" items"));
 	} else {
-	$('#basketcount').html("<span>"+updated_value+"</span>");
+	$('#basketcount').html(" <span>("+updated_value+")</span>");
 	$('#cartDetails').html(_("Your cart contains ")+updated_value+_(" items"));
 	}
 	var basketcount = updated_value;
@@ -420,50 +420,18 @@ function vShelfAdd() {
 function showCart(){
 		var position = $("#cartmenulink").offset();
 		var top = position.top + $("#cartmenulink").outerHeight();
-		var menuWidth = 200;
-		var buttonWidth = $("#cartmenulink").innerWidth();
-		var buttonOffset = menuWidth - buttonWidth;
-		var left = position.left -  buttonOffset;
+		var left = position.left
 		$("#cartDetails").css("position","absolute").css("top",top);
 		$("#cartDetails").css("position","absolute").css("left",left);
-		$("#cartDetails").fadeIn("fast",function(){
-  			$("#cartDetails").dropShadow({left: 3, top: 3, blur: 0,  color: "#000", opacity: 0.1});
-        });
-}
-
-function showLists(){
-               var position = $("#listsmenulink").offset();
-              var top = position.top + $("#listsmenulink").outerHeight();
-               var menuWidth = 200;
-               var buttonWidth = $("#listsmenulink").innerWidth();
-               var buttonOffset = menuWidth - buttonWidth;
-               var left = position.left -  buttonOffset;
-               $("#listsDetails").css("position","absolute").css("top",top);
-               $("#listsDetails").css("position","absolute").css("left",left);
-               $("#listsDetails").fadeIn("fast",function(){
-                       $("#listsDetails").dropShadow({left: 3, top: 3, blur: 0,  color: "#000", opacity: 0.1});
-        });
+		$("#cartDetails").fadeIn("fast");
 }
 
 function hideCart(){
-    $("#cartDetails").removeShadow();
     $("#cartDetails").fadeOut("fast");
 }
 
-function hideLists(){
-    $("#listsDetails").removeShadow();
-    $("#listsDetails").fadeOut("fast");
-}
-
-
 $(document).ready(function(){
 	$("#cartmenulink").click(function(){ openBasket(); return false; });
-	$("#cartDetails,#cartmenulink").click(function(){ hideCart(); });
-	$("#cartmenulink").hover(function(){
-		showCart();
-	},function(){
-		hideCart();
-	});
 	if(basketcount){ updateBasket(basketcount); }
 });
 
