@@ -15,7 +15,8 @@
 	<li><a href="/cgi-bin/koha/tools/koha-news.pl">News</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_label_creator" -->
-	<li><a href="/cgi-bin/koha/labels/label-home.pl">Labels (spine and barcode)</a></li>
+	<li><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></li>
+	<li><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_edit_calendar" -->
 	<li><a href="/cgi-bin/koha/tools/holidays.pl">Calendar</a></li>
