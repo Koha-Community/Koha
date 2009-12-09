@@ -41,7 +41,7 @@
             <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->&amp;op=enter">Edit</a></li>
             <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR name="id" -->">Contracts</a></li>
         <!-- TMPL_ELSE -->
-            <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New</a></li>
+            <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New Vendor</a></li>
         <!-- /TMPL_IF -->
     </ul>
 </div>
