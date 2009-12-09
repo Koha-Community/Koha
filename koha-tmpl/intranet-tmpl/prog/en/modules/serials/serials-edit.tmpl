@@ -66,11 +66,11 @@ function unHideItems(index,labelindex, serialId) {
 	label = document.getElementById(labelindex);
 	label.style.display='none';	
 
-	// Prefilling 995$v with issue number
+	// Prefilling 995$h with serial enumeration/issue number
 	// Getting item id
 	itemid = $("fieldset#" + index + " div.cataloguing_additem_itemlist div.items").attr("id");
 	// Getting subfield id
-	subfieldid = "subfield" + itemid.substr(4) + "v";
+	subfieldid = "subfield" + itemid.substr(4) + "h";
 	// Setting text field 
 	$("#" + subfieldid + " input[type='text']").val($("#serialseq" + serialId).val());
 
