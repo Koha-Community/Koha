@@ -98,7 +98,9 @@ if (f.company.value == "") {
                         <!-- TMPL_VAR NAME="currency" -->
                     <!-- /TMPL_LOOP -->
                     </select></li>
-            <!-- TMPL_IF NAME="GST" --><li>GST Registered
+	    </ol>
+	    <ol class="radio">
+            <!-- TMPL_IF NAME="GST" --><li><label for="gst" class="radio">GST Registered</label>
                 <!-- TMPL_IF name="gstreg" -->
                     <input type="radio" name="gst" id="gstyes" value="1" checked="checked" /><label for="gstyes">Yes</label>
                     <input type="radio" name="gst" id="gstno" value="0" /><label for="gstno">No</label>
@@ -107,7 +109,7 @@ if (f.company.value == "") {
                     <input type="radio" name="gst" id="gstno" value="0" checked="checked" /><label for="gstno">No</label>
                 <!-- /TMPL_IF --></li><!-- /TMPL_IF -->
             
-            <!-- TMPL_IF NAME="GST" --><li>Ordering prices
+            <!-- TMPL_IF NAME="GST" --><li><label for="order_prices" class="radio">Ordering prices</label>
                 <!-- TMPL_IF name="listincgst" -->
                     <input type="radio" id="list_gstyes" name="list_gst" value="1" checked="checked" /><label for="list_gstyes">include GST</label>
                     <input type="radio" id="list_gstno" name="list_gst" value="0" /><label for="list_gstno">don't include GST</label>
@@ -116,7 +118,7 @@ if (f.company.value == "") {
                     <input type="radio" id="list_gstno" name="list_gst" value="0" checked="checked" /><label for="list_gstno">don't include GST</label>
                 <!-- /TMPL_IF --></li><!-- /TMPL_IF -->
             
-            <!-- TMPL_IF NAME="GST" --><li>Invoice prices
+            <!-- TMPL_IF NAME="GST" --><li><label for="invoice_prices" class="radio">Invoice prices</label>
                 <!-- TMPL_IF name= "invoiceincgst" -->
                     <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" checked="checked" /><label for="invoice_gstyes">include GST</label>
                     <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" /><label for="invoice_gstno">don't include GST</label>
@@ -124,6 +126,8 @@ if (f.company.value == "") {
                     <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1"><label for="invoice_gstyes">include GST</label>
                     <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" /><label for="invoice_gstno">don't include GST</label>
                 <!-- /TMPL_IF --></li><!-- /TMPL_IF -->
+	    </ol>
+	    <ol>
             <li><label for="discount">Discount</label>
                 <input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %</li>
             <li><label for="gstrate">GST rate</label><input type="text" name="gstrate" id="gstrate" size="5" value="<!-- TMPL_VAR name="gstrate" -->"/>%</li>
