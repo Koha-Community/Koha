@@ -48,6 +48,7 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Acquisition;
 use C4::Koha;
+use C4::Items; # GetItemsCount
 
 my $query = new CGI;
 
@@ -76,6 +77,7 @@ $template->param(
 
 $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
+$template->param( 'ItemsCount' => GetItemsCount( $biblionumber ) );
 
 # adding the $RequestOnOpac param
 my $RequestOnOpac;
