@@ -87,6 +87,7 @@ function Check(ff) {
                 <!-- TMPL_IF NAME="add_form" -->
                     <form name="Aform" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
                         <input type="hidden" name="op" value="add_validate" />
+                        <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
                         <input type="hidden" name="checked" value="0" />
                         <!-- TMPL_IF NAME="contractnumber" -->
                             <h1>Modify contract <!-- TMPL_VAR NAME="contractname" --> for <!-- TMPL_VAR NAME="booksellername" --></h1>
