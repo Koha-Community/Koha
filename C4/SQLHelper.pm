@@ -97,7 +97,7 @@ $searchtype is string Can be "start_with" or "exact"
 
 sub SearchInTable{
     my ($tablename,$filters,$orderby, $limit, $columns_out, $filter_columns,$searchtype) = @_; 
-#	$searchtype||="start_with";
+	$searchtype||="exact";
     my $dbh      = C4::Context->dbh; 
 	$columns_out||=["*"];
     my $sql      = do { local $"=', '; 
