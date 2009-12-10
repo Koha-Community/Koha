@@ -18,12 +18,12 @@
 use strict;
 use warnings;
 use CGI;
-use C4::Biblio;
-use C4::Items;
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation;
 use C4::Reserves;
+use C4::Biblio;
+use C4::Items;
 use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Context;
