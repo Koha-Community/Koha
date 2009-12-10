@@ -57,7 +57,7 @@ function Check(ff) {
     &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
     &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR name="name" --></a>
+    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a>
     &rsaquo;
     <!-- TMPL_IF NAME="add_form" -->
         <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a>
@@ -204,7 +204,7 @@ function Check(ff) {
                         <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">New Contract</a></li>
                     </ul>
                 </div>
-                <h2>Contract(s) of <!-- TMPL_VAR name="name" --></h2>
+                <h2>Contract(s) of <!-- TMPL_VAR name="booksellername" --></h2>
                 <!-- TMPL_IF name="loop" -->
                     <table>
                         <tr>
@@ -215,13 +215,9 @@ function Check(ff) {
                             <th scope="col" colspan="2">&nbsp; </th>
                         </tr>
                     <!-- TMPL_LOOP NAME="loop" -->
-                        <!-- TMPL_IF NAME="toggle" -->
-                            <tr class="highlight">
-                        <!-- TMPL_ELSE -->
-                            <tr>
-                        <!-- /TMPL_IF -->
-                            <td>
-                                <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->"><!-- TMPL_VAR NAME="contractname" --></a>
+                        <!-- TMPL_IF NAME="__even__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+                        <td>
+                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->"><!-- TMPL_VAR NAME="contractname" --></a>
                         </td>
                         <td><!-- TMPL_VAR NAME="contractdescription" --></td>
                         <td><!-- TMPL_VAR NAME="contractstartdate" --></td>
