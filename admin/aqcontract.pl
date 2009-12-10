@@ -95,6 +95,7 @@ if ( $op eq 'add_form' ) {
             $booksellername = $$_{name} if $$_{id} eq $booksellerid;
         }
     }
+
     $template->param(
         contractnumber           => $data->{'contractnumber'},
         contractname             => $data->{'contractname'},
@@ -102,7 +103,6 @@ if ( $op eq 'add_form' ) {
         contractstartdate        => format_date( $data->{'contractstartdate'} ),
         contractenddate          => format_date( $data->{'contractenddate'} ),
         booksellername           => $booksellername,
-        booksellerid             => $data->{'booksellerid'},
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
 

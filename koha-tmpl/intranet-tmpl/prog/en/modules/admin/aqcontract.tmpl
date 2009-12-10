@@ -60,22 +60,22 @@ function Check(ff) {
     <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR name="name" --></a>
     &rsaquo;
     <!-- TMPL_IF NAME="add_form" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a>
         &rsaquo;
         <!-- TMPL_IF NAME="contractnumber" -->Modify contract '<!-- TMPL_VAR NAME="contractname" -->'
         <!-- TMPL_ELSE -->New contract
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="add_validate" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a>
         &rsaquo; Data recorded
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="delete_confirm" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a>
         &rsaquo; Confirm Deletion of Contract <!-- TMPL_VAR NAME="contractnumber" -->
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="delete_confirmed" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a> &rsaquo; Contract Deleted
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a> &rsaquo; Contract Deleted
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="else" -->Contracts<!-- /TMPL_IF -->
 </div>
