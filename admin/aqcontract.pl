@@ -77,6 +77,7 @@ $template->param(
 if ( $op eq 'add_form' ) {
     $template->param( add_form => 1 );
     my $data;
+    my $booksellername;
 
     #---- if primkey exists, it's a modify action, so read values to modify...
     if ($contractnumber) {
@@ -86,16 +87,12 @@ if ( $op eq 'add_form' ) {
         $data = $sth->fetchrow_hashref;
         $sth->finish;
 
-        for my $bookseller (@bookseller) {
-            if ( $bookseller->{'id'} eq $data->{'booksellerid'} ) {
-                $bookseller->{'selected'} = 1;
-            }
+        for ( @bookseller ) {
+            $booksellername = $$_{name} if $$_{id} eq $$data{booksellerid};
         }
     } else {
-        for my $bookseller (@bookseller) {
-            if ( $bookseller->{'id'} eq $booksellerid ) {
-                $bookseller->{'selected'} = 1;
-            }
+        for ( @bookseller ) {
+            $booksellername = $$_{name} if $$_{id} eq $booksellerid;
         }
     }
     $template->param(
@@ -104,7 +101,7 @@ if ( $op eq 'add_form' ) {
         contractdescription      => $data->{'contractdescription'},
         contractstartdate        => format_date( $data->{'contractstartdate'} ),
         contractenddate          => format_date( $data->{'contractenddate'} ),
-        booksellerloop           => \@bookseller,
+        booksellername           => $booksellername,
         booksellerid             => $data->{'booksellerid'},
         DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     );
