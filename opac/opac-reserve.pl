@@ -331,7 +331,10 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         # If there is no loan, return and transfer, we show a checkbox.
         $item->{notforloan} = $item->{notforloan} || 0;
 
-        my $branchitemrule = GetBranchItemRule( $borr->{'branchcode'}, $item->{'itemtype'} );
+        my $branch = C4::Circulation::_GetCircControlBranch($item, $borr);
+
+        my $branchitemrule = GetBranchItemRule( $branch, $item->{'itemtype'} );
+
         my $policy_holdallowed = 1;
         
         if ( $branchitemrule->{'holdallowed'} == 0 ||
