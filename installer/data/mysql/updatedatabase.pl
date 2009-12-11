@@ -2748,8 +2748,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.01.00.068";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
-	print "Upgrade done (Adding finedays in issuingrules table)\n";
+	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine`");
+        $dbh->do("ALTER TABLE issuingrules ADD COLUMN `renewalsallowed` smallint(6) default NULL");
+	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `reservesallowed` smallint(6) default NULL");
+	my $sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
+    $sth->execute();
+	my $sthupd = $dbh->prepare("UPDATE issuingrules SET renewalsallowed = ? WHERE itemtype = ?");
+	while(my $row = $sth->fetchrow_hashref){
+		  $sthupd->execute($row->{renewalsallowed}, $row->{itemtype});
+	}
+	$dbh->do('ALTER TABLE itemtypes DROP COLUMN `renewalsallowed`;');
+	print "Upgrade done (Adding finedays renewalsallowed, and reservesallowed fields in issuingrules table)\n";
 }
 
 
