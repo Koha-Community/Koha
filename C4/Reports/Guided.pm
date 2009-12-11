@@ -82,11 +82,12 @@ $criteria{'1'} = [
     'items.dateaccessioned|date'
 ];
 $criteria{'2'} =
-  [ 'items.itemnumber|textrange', 'items.biblionumber|textrange', 'items.barcode|textrange', 'biblio.frameworkcode', 'items.holdingbranch', 'items.homebranch', 'biblio.datecreated|daterange', 'biblio.timestamp|daterange', 'items.onloan|daterange', 'items.ccode', 'items.itemcallnumber|textrange', 'items.itype', 'items.itemlost', 'items.location' ];
+  [ 'items.itemnumber|textrange', 'items.biblionumber|textrange', 'items.barcode|textrange', 'biblio.frameworkcode', 'items.holdingbranch', 'items.homebranch', 'biblio.datecreated|daterange', 'biblio.timestamp|daterange', 'items.onloan|daterange', 'items.ccode', 'items.itemcallnumber|textrange', 'items.itemlost', 'items.location' ];
 $criteria{'3'} = ['borrowers.branchcode'];
 $criteria{'4'} = ['aqorders.datereceived|date'];
 $criteria{'5'} = ['borrowers.branchcode'];
 
+# Adds itemtypes to criteria, according to the syspref
 if (C4::Context->preference('item-level_itypes')) {
     unshift @{ $criteria{'1'} }, 'items.itype';
     unshift @{ $criteria{'2'} }, 'items.itype';
