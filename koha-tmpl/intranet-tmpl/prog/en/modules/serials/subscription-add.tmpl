@@ -7,7 +7,6 @@
 fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 .yui-u li p label.widelabel {
     width: 300px;  /* not enough for IE7 apparently */
-    /* height: 2.4em; background-color: pink; */
 }
 </style>
 <script type="text/javascript">
@@ -439,22 +438,22 @@ var textbox = '';
         textbox +="<\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[5]+"<\/td><td><input type='text' name='lastvalue1temp' id='lastvalue1temp' size='4' onkeyup='moreoptionsupdate(this)' value=\"" + document.f.lastvalue1.value +  "\" /><\/td>\n";
         if(y){
-            textbox +="<td><input type='text' name='lastvalue2temp' id='lastvalue2temp' size='4' onkeyup='moreoptionsupdate(this)' value=\"" + document.f.lastvalue2.value + "\" /><\/td>\n";
+            textbox +="<td><input type=\"text\" name=\"lastvalue2temp\" id=\"lastvalue2temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this)\" value=\"" + document.f.lastvalue2.value + "\" /><\/td>\n";
             if(z){
-                textbox +="<td><input type='text' name='lastvalue3temp' id='lastvalue3temp' size='4' onkeyup='moreoptionsupdate(this)' value=\"" + document.f.lastvalue3.value + "\" /><\/td>\n";
+                textbox +="<td><input type=\"text\" name=\"lastvalue3temp\" id=\"lastvalue3temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this)\" value=\"" + document.f.lastvalue3.value + "\" /><\/td>\n";
             }
         }
         textbox +="<\/tr>\n";
         if(y){
             textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
             textbox +="<td>&nbsp;<\/td>\n";
-            textbox +="<td><input type='text' name='whenmorethan2temp' id='whenmorethan2temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
+            textbox +="<td><input type=\"text\" name=\"whenmorethan2temp\" id=\"whenmorethan2temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,1)\"><\/td>\n";
             if(z){
-                textbox +="<td><input type='text' name='whenmorethan3temp' id='whenmorethan3temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
+                textbox +="<td><input type=\"text\" name=\"whenmorethan3temp\" id=\"whenmorethan3temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,1)\"><\/td>\n";
             }
             textbox +="<\/tr>";
         } else {
-          textbox +="<tr> <td>"+_("issues expected")+"<\/td><td><input type='text' name='issuesexpected1temp' id='issuesexpected1temp' size='4' onkeyup='moreoptionsupdate(this,0)' value=\"" + document.f.issuesexpected1.value + "\" ><\/td><\/tr>";
+          textbox +="<tr> <td>"+_("issues expected")+"<\/td><td><input type=\"text\" name=\"issuesexpected1temp\" id=\"issuesexpected1temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,0)\" value=\"" + document.f.issuesexpected1.value + "\" ><\/td><\/tr>";
         }
         textbox +="<\/table>\n";
     }
@@ -496,7 +495,7 @@ var textbox = '';
     //alert("X: "+x+"Year: "+y);
     if(x){
         var hemi_select = parseInt('<!-- TMPL_VAR NAME="hemisphere" -->');
-        textbox +="<li><label for=\"hemisphere\">"+ text[7]  +"<\/label><select name='hemisphere' id=\"hemisphere\" onchange='hemispheres(this.options[this.selectedIndex].value)'>";
+        textbox +="<li><label for=\"hemisphere\">"+ text[7]  +"<\/label><select name=\"hemisphere\" id=\"hemisphere\" onchange=\"hemispheres(this.options[this.selectedIndex].value)\">";
         for(var i = 1; i <= 2; i++){
             textbox +="<option value='"+i+"'";
             if(i == hemi_select){
@@ -505,10 +504,10 @@ var textbox = '';
             textbox +=">"+text[i+7]+"<\/option>";
         }
         textbox +="<\/li>\n";
-        textbox +="<table id='seasonal_irregularity'><tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
+        textbox +="<table id=\"seasonal_irregularity\"><tr><th>&nbsp;<\/th><th>"+x+"<\/th>";
         textbox +="<th>"+text[16]+"<\/th>";
         textbox +="<\/tr>\n";
-        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/th><td><select name='lastvalue2temp' id='lastvalue2temp' id='season1' onchange='moreoptionsupdate(this)'>";
+        textbox +="<tr><th scope=\"row\">"+text[5]+"<\/th><td><select name=\"lastvalue2temp\" id=\"lastvalue2temp\" id=\"season1\" onchange=\"moreoptionsupdate(this)\">";
         for(var j = 1; j <= 4; j++){
             textbox +="<option value='"+j+"'>"+text[j+9]+"<\/option>";
         }
@@ -516,7 +515,7 @@ var textbox = '';
         var isyr = irregular_issues.firstissue;
         textbox += "<td>" + irregular_issues.firstissue.getFullYear() + "<\/td><\/tr>\n";
         textbox +="<tr><th scope=\"row\">"+text[6]+"<\/th>";
-        textbox +="<td><input type='text' name='whenmorethan2temp' id='whenmorethan2temp' size='4' onkeyup='moreoptionsupdate(this,1)'><\/td>\n";
+        textbox +="<td><input type=\"text\" name=\"whenmorethan2temp\" id=\"whenmorethan2temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,1)\"><\/td>\n";
         textbox +="<\/tr><\/table>\n";
     }
     document.getElementById("more_options").innerHTML = textbox;
@@ -632,13 +631,13 @@ function irregularity_check(){
             errortext +=expected+_(" issues expected, ")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
             irregular_issues.numskipped = expected - rollover;
 		}
-        errortext +="<select multiple id='irregularity_select' name='irregularity_select' onchange='irregular_issues.update();'>\n";
+        errortext +="<select multiple id=\"irregularity_select\" name=\"irregularity_select\" onchange=\"irregular_issues.update();\">\n";
 		errortext +=irregular_options(periodicity);
-		errortext += "<\/select>\n <textarea rows='6' width='18' id='irregularity_summary' name='irregularity_summary' value='foo' />";
+		errortext += "<\/select>\n <textarea rows=\"6\" width=\"18\" id=\"irregularity_summary\" name=\"irregularity_summary\" value=\"foo\"><\/textarea>";
         error=errortext;
     }
     if(toobig){
-        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<p class='warning'> You seem to have indicated more issues per year than expected.<\/p>");
+        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<p class=\"warning\"> You seem to have indicated more issues per year than expected.<\/p>");
         error=errortext;
     }
     if(error.length ==0){
@@ -1025,9 +1024,9 @@ $(document).ready(function() {
             <textarea name="internalnotes" id="internalnotes" cols="30" rows="2"><!-- TMPL_VAR name="internalnotes" --></textarea>
         </li>
         <li>
-            <label for="letter">Patron notification: </label>
             
                <!-- TMPL_IF NAME="letterloop" -->
+            <label for="letter">Patron notification: </label>
 			   <select name="letter" id="letter">
                     <option value="">None</option>
                 <!-- TMPL_LOOP name="letterloop" -->
@@ -1040,6 +1039,7 @@ $(document).ready(function() {
                 </select> 
 				<div class="hint">Select a notice and patrons on the routing list will be notified when new issues are received.</div>
             	<!-- TMPL_ELSE -->
+            <span class="label">Patron notification: </span>
 				<div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
 				<!-- /TMPL_IF -->
         </li>
@@ -1099,7 +1099,6 @@ $(document).ready(function() {
 		</ol>
         </fieldset>
     <fieldset class="action"><input type="submit" value="Save subscription history"  /></fieldset>
-    </form>
 </div>
 
 <div class="yui-g">
