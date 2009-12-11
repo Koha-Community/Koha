@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Search Results</title>
+<title>Koha &rsaquo; Serials &rsaquo; Search Results</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" language="javascript">
 //<![CDATA[
@@ -21,23 +21,19 @@ function GetIt(bibno,title)
    <div id="bd">
 	
 
-<h1>Search results from <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></h1>
 <!-- TMPL_IF NAME="total"-->
+<h1>Search results from <!-- TMPL_VAR NAME="from" --> to <!-- TMPL_VAR NAME="to" --> of <!-- TMPL_VAR NAME="total" --></h1>
 <table>
     <tr>
        <th>Title</th>
        <th>Author</th>
-       <th>publisher</th>
+       <th>Publisher</th>
        <th>Publication year</th>
+	   <th>&nbsp;</th>
     </tr>
     <!-- TMPL_LOOP NAME="resultsloop" -->
         <tr>
-            <td>
-                <a href="#" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR escape="URL" NAME="title" -->');" title="Get this one !">
-                    <!-- TMPL_VAR NAME="title" escape="html" -->
-                </a>
-                <br />
-                <small><!-- TMPL_VAR ESCAPE="HTML" NAME="subtitle" --></small>
+            <td><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR ESCAPE="HTML" NAME="subtitle" -->
             </td>
             <td>
                 <!-- TMPL_VAR ESCAPE="HTML" NAME="author" -->
@@ -48,6 +44,7 @@ function GetIt(bibno,title)
             <td>
                 <!-- TMPL_VAR ESCAPE="HTML" NAME="publicationyear" -->
             </td>
+			<td><a href="#" onclick="GetIt('<!-- TMPL_VAR NAME="biblionumber" -->','<!-- TMPL_VAR escape="URL" NAME="title" -->');" title="Choose this record">Choose</a></td>
         </tr>
     <!-- /TMPL_LOOP -->
     </table>
@@ -60,9 +57,8 @@ function GetIt(bibno,title)
 <!-- TMPL_IF NAME="displaynext" -->
 <a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=<!-- TMPL_VAR ESCAPE="URL" NAME="startfromnext" -->&amp;q=<!-- TMPL_VAR ESCAPE="URL" NAME="query" -->">&gt;&gt;</a>
 <!-- /TMPL_IF -->
-<br/>
-<a href="subscription-bib-search.pl">Search for another Biblio</a>
-<a class="button" href="#" onclick="window.close()">  Close</a>
+<p><a href="subscription-bib-search.pl">Search for another record</a></p>
+<fieldset class="action"><a class="button close" href="#">Close</a></fieldset>
 </div>
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
