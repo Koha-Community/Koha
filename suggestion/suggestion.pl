@@ -157,6 +157,7 @@ if ($op=~/else/) {
     $displayby||="STATUS";
     my $criteria_list=GetDistinctValues("suggestions.".$displayby);
     my @allsuggestions;
+    my $reasonsloop = GetAuthorisedValues("SUGGEST");
     foreach my $criteriumvalue (map{$$_{'value'}} @$criteria_list){
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
         
@@ -179,16 +180,17 @@ if ($op=~/else/) {
                             "suggestiontypelabel"=>GetCriteriumDesc($criteriumvalue,$displayby)||"",
                             "suggestionscount"=>scalar(@$suggestions),             
                             'suggestions_loop'=>$suggestions,
+	                    'reasonsloop'     => $reasonsloop,
                             };
 
         delete $$suggestion_ref{$displayby} unless $definedvalue;
     }
-    my $reasonsloop = GetAuthorisedValues("SUGGEST");
+
     $template->param(
         "displayby"=> $displayby,
         "notabs"=> $displayby eq "",
         suggestions       => \@allsuggestions,
-        reasonsloop       => $reasonsloop,
+    
     );
 }
 
