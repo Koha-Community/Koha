@@ -5,7 +5,13 @@
 <script type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
-        $("#srlt").tablesorter(); 
+        $("#srlt").tablesorter({
+            headers: {
+                2: { sorter: false },
+                4: { sorter: false },
+				5: { sorter: false }
+            }
+        }); 
  }); 
  //]]>
 </script>
@@ -14,7 +20,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Serials </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <!-- TMPL_IF NAME="done_searched"--><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Search results<!-- TMPL_ELSE -->Serials <!-- /TMPL_IF --> </div>
 
 <div id="doc3" class="yui-t2">
    
@@ -65,7 +71,7 @@ Serials updated :
 </table>
 <!--/TMPL_IF-->
         <!-- TMPL_IF NAME="done_searched"-->
-<h1>Serials subscriptions</h1>
+<h2>Serials subscriptions</h2>
 
 <!-- TMPL_IF NAME="routing" -->
         <h3>Search for Serial Routing List</h3>
@@ -81,7 +87,7 @@ Serials updated :
                 Library (Callnumber)
             </th>
             <!-- TMPL_IF NAME="routing" -->
-              <th >Routing list</th>
+              <th>Routing list</th>
             <!-- /TMPL_IF -->        
             <th colspan="2">&nbsp;</th>
         </tr>
