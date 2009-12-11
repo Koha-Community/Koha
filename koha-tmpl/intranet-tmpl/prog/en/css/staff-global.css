@@ -1432,17 +1432,33 @@ div.pages a {
 	text-decoration: none;
 }
 
-div.pages a:link {
+div.pages a:link,
+div.pages a:visited {
 	background-color : #eeeeee;
 	color : #3366CC;
 }
 
 div.pages a:hover {
-	background-color : #e8f0f6;
+	background-color : #FFC;
 }
 
 div.pages a:active {
 	background-color : #ffc;
+}
+
+div.pages .current,
+div.pages .currentPage {
+	background-color : #e6fcb7;
+	color : #666;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+}
+
+div.pages .inactive {
+	background-color : #f3f3f3;
+	color : #BCBCBC;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
 }
 
 div.browse {
