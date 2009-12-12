@@ -41,6 +41,7 @@ thus, it can be REJECTED, ACCEPTED, ORDERED, ASKED, AVAIBLE
 =cut
 
 use strict;
+use warnings;
 use Number::Format;
 
 use CGI;
@@ -146,14 +147,19 @@ foreach my $result (@results) {
     $result->{'budget_branchname'} = GetBranchName( $result->{'budget_branchcode'} );
 
     my $member      = GetMember( $result->{'budget_owner_id'} );
-    my $member_full = $member->{'firstname'} . ' ' . $member->{'surname'};
+    my $member_full = $member->{'firstname'} . ' ' . $member->{'surname'} if $member;
 
     $result->{'budget_owner'} = $member_full;
-    $result->{'budget_avail'} = $result->{'budget_amount'} - $result->{'budget_spent'};
+    if ($result->{'budget_spent'}){
+	$result->{'budget_avail'} = $result->{'budget_amount'} - $result->{'budget_spent'};
+    }
+    else {
+	$result->{'budget_avail'} = $result->{'budget_amount'};
+    }
     $result->{'budget_spent'} = GetBudgetSpent( $result->{'budget_id'} );
 
     $total    += $result->{'budget_amount'};
-    $totspent += $result->{'budget_spent'};
+    $totspent += $result->{'budget_spent'} if $result->{'budget_spent'};
     $totavail += $result->{'budget_avail'};
 
     $result->{'budget_amount'} = $num->format_price( $result->{'budget_amount'} );
@@ -164,7 +170,7 @@ foreach my $result (@results) {
     #        $result->{'budget_spent_percent'} = sprintf( "%00d", $spent_percent );
 
     my $borrower = &GetMember( $result->{budget_owner_id} );
-    $result->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
+    $result->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'} if $borrower;
 
     push( @loop_budget, { %{$result}, toggle => $toggle++ % 2, } );
 }
