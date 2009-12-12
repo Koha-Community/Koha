@@ -1094,7 +1094,9 @@ sub buildQuery {
     }
 
     # Normalize the query and limit strings
-    $query =~ s/:/=/g;
+    # This is flawed , means we can't search anything with : in it
+    # if user wants to do ccl or cql, start the query with that
+#    $query =~ s/:/=/g;
     $limit =~ s/:/=/g;
     for ( $query, $query_desc, $limit, $limit_desc ) {
         s/  / /g;    # remove extra spaces
