@@ -3126,7 +3126,7 @@ ALTER table suggestions
     ADD rejectedby INT(11) default NULL,
     ADD rejecteddate date default NULL,
     ADD collectiontitle text default NULL,
-    ADD itemtype VARCHAR(30) default NULL,
+    ADD itemtype VARCHAR(30) default NULL
     ;
 SUGGESTIONS
     print "Upgrade to $DBversion done Suggestions";
