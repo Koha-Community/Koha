@@ -9,6 +9,6 @@ use warnings;
 use Test::More tests => 1;
 
 BEGIN {
-        use_ok('C4::Bookfund');
+        use_ok('C4::Budgets');
 }
 
