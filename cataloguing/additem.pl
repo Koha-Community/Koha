@@ -283,7 +283,7 @@ foreach my $tag (sort keys %{$tagslib}) {
     my ($x,$value);
     ($x,$value) = find_value($tag,$subfield,$itemrecord) if ($itemrecord);
     $value =~ s/"/&quot;/g;
-    unless ($value) {
+    if ( ! defined( $value ) || $value eq '')  {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
         # get today date & replace YYYY, MM, DD if provided in the default value
         my ( $year, $month, $day ) = split ',', $today_iso;     # FIXME: iso dates don't have commas!
