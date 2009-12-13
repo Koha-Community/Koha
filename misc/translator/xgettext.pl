@@ -98,8 +98,9 @@ sub text_extract (*) {
 	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
 	    # value [tag=input], meta
 	    my $tag = lc($1) if $t =~ /^<(\S+)/s;
-	    for my $a ('alt', 'content', 'title', 'value') {
+	    for my $a ('alt', 'content', 'title', 'value','label') {
 		if ($attr->{$a}) {
+            next if $a eq 'label' && $tag ne 'optgroup';
 		    next if $a eq 'content' && $tag ne 'meta';
 		    next if $a eq 'value' && ($tag ne 'input'
 			|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|submit)$/)); # FIXME
