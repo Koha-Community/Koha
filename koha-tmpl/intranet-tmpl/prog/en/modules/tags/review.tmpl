@@ -51,19 +51,19 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 		// window.alert('AJAX approved tag: ' + tag);
 	};
 	var failure_approve = function(tag){
-		window.alert('AJAX failed to approve tag: ' + tag);
+		window.alert(_('AJAX failed to approve tag: ') + tag);
 	};
 	var success_reject  = function(tag){
 		// window.alert('AJAX rejected tag: ' + tag);
 	};
 	var failure_reject  = function(tag){
-		window.alert('AJAX failed to reject tag: ' + tag);
+		window.alert(_('AJAX failed to reject tag: ') + tag);
 	};
 	var success_test    = function(tag){
-		$('#verdict').html(tag + ' is permitted!');
+		$('#verdict').html(tag + _(' is permitted!'));
 	};
 	var failure_test    = function(tag){
-		$('#verdict').html(tag + ' is prohibited!');
+		$('#verdict').html(tag + _(' is prohibited!'));
 	};
 	var indeterminate_test = function(tag){
 		$('#verdict').html(tag + ' is neither permitted nor prohibited!');
@@ -85,7 +85,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	}
 	$(document).ready(function() {
 		$('.ajax_buttons' ).css({visibility:"visible"});
-		$("p.check").html("<strong>Select: <\/strong><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\">All<\/a> <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\">Pending<\/a> <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\">None<\/a>");
+		$("p.check").html("<strong>"+_('Select: ')+"<\/strong><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\">"+_("All")+"<\/a> <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\">"+_("Pending")+"<\/a> <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\">"+_("None")+"<\/a>");
 	    $("#CheckAll").click(function(){
 	        $(".checkboxed").checkCheckboxes();
 	        return false;
