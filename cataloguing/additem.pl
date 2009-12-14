@@ -421,7 +421,7 @@ foreach my $tag (sort keys %{$tagslib}) {
         }
     }
 
-    my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+    my $attributes_no_value = qq(id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
     my $attributes          = qq($attributes_no_value value="$value" );
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
       my @authorised_values;
@@ -503,7 +503,7 @@ foreach my $tag (sort keys %{$tagslib}) {
           -override => 1,
           -size     => 1,
           -multiple => 0,
-          -tabindex => 1,
+         # -tabindex => 1,
           -id       => "tag_".$tag."_subfield_".$subfield."_".$index_subfield,
           -class    => "input_marceditor",
       );
