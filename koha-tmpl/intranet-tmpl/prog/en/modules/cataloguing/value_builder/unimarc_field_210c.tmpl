@@ -72,7 +72,9 @@
                         <td><!-- TMPL_VAR NAME="summary" --></td>
                         <td><!-- TMPL_VAR NAME="used" --> times</td>
                         <td>
-                            <a href="javascript:report('<!-- TMPL_VAR name="summary" ESCAPE=JS -->')"><img alt="choose" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/arrow.gif" width="32" hspace="0" vspace="0" border="0"></a>
+			    <!-- TMPL_IF NAME="to_report" -->
+                            <a href="javascript:report('<!-- TMPL_VAR name="to_report" ESCAPE=JS -->')"><img alt="choose" src="<!-- TMPL_VAR NAME="interface" -->/<!-- TMPL_VAR NAME="theme" -->/images/arrow.gif" width="32" hspace="0" vspace="0" border="0"></a>
+			    <!-- /TMPL_IF -->
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
@@ -91,12 +93,10 @@
 
 function report(summary)
 {    
-    var regexp= /--\s*(.*)/;
-    var result=summary.match(regexp);
     var doc   = opener.document; 
     var field = doc.getElementById('<!-- TMPL_VAR NAME="index" -->');
 
-    field.value = result[1];
+    field.value = summary;
     self.close();
 }
 </script>
