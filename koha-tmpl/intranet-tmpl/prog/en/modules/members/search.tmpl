@@ -3,6 +3,9 @@
 				<h3 > Filter :</h3>
 				<input type="hidden" name="surname" value="<!-- TMPL_VAR name="surname"-->" />
 				<input type="text" name="member" value="<!-- TMPL_VAR name="member"-->" /><br/>
+				<!-- TMPL_IF NAME="subscriptionid" -->
+				<input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->">
+				<!-- /TMPL_IF -->
                 <label for="branchcode"> Library :</label><select name="branchcode" id="branchcode">
         <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
         <!-- TMPL_IF NAME="selected" -->
