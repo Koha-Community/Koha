@@ -2384,15 +2384,8 @@ sub CalcDateDue {
 	my ($startdate,$loanlength,$branch,$borrower) = @_;
 	my $datedue;
 
-	if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
-		my $timedue = time + ($loanlength) * 86400;
-	#FIXME - assumes now even though we take a startdate 
-		my @datearr  = localtime($timedue);
-		$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
-	} else {
-		my $calendar = C4::Calendar->new(  branchcode => $branch );
-		$datedue = $calendar->addDate($startdate, $loanlength);
-	}
+	my $calendar = C4::Calendar->new(  branchcode => $branch );
+	$datedue = $calendar->addDate($startdate, $loanlength);
 
 	# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
 	if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
