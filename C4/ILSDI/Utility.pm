@@ -98,7 +98,7 @@ sub CanBookBeReserved {
         $out = undef;
     }
     my @reserves = GetReservesFromBorrowernumber( $borrower->{'borrowernumber'} );
-    if ( scalar(@reserves) >= $MAXIMUM_NUMBER_OF_RESERVES ) {
+    if ( $MAXIMUM_NUMBER_OF_RESERVES && scalar(@reserves) >= $MAXIMUM_NUMBER_OF_RESERVES ) {
         $out = undef;
     }
     foreach my $res (@reserves) {
