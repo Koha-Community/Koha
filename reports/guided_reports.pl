@@ -26,6 +26,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Dates;
 use C4::Debug;
+use C4::Branch; # XXX subfield_is_koha_internal_p
 
 =head1 NAME
 
@@ -226,7 +227,12 @@ elsif ( $phase eq 'Choose these criteria' ) {
 	    if ($value =~ C4::Dates->regexp('syspref')) { 
 		$value = C4::Dates->new($value)->output("iso");
 	    }
-	    $query_criteria .= " AND $crit='$value'";
+        # don't escape runtime parameters, they'll be at runtime
+        if ($value =~ /<<.*>>/) {
+            $query_criteria .= " AND $crit=$value";
+        } else {
+            $query_criteria .= " AND $crit='$value'";
+        }
 	}
 	warn $query_criteria;
     }
@@ -304,8 +310,7 @@ elsif ( $phase eq 'Build Report' ) {
     my $column   = $input->param('column');
     my $crit     = $input->param('criteria');
     my $totals   = $input->param('totals');
-	my $definition = $input->param('definition');
-#    my @criteria = split( ',', $crit );
+    my $definition = $input->param('definition');
     my $query_criteria=$crit;
     # split the columns up by ,
     my @columns = split( ',', $column );
@@ -377,6 +382,7 @@ elsif ($phase eq 'Run this report'){
     my $limit  = 20;    # page size. # TODO: move to DB or syspref?
     my $offset = 0;
     my $report = $input->param('reports');
+    my @sql_params = $input->param('sql_params');
     # offset algorithm
     if ($input->param('page')) {
         $offset = ($input->param('page') - 1) * $limit;
@@ -386,33 +392,128 @@ elsif ($phase eq 'Run this report'){
         push @errors, {no_sql_for_id=>$report};   
     } 
     my @rows = ();
-    my ($sth, $errors) = execute_query($sql, $offset, $limit);
-    my $total = select_2_select_count_value($sql) || 0;
-    unless ($sth) {
-        die "execute_query failed to return sth for report $report: $sql";
-    } else {
-        my $headref = $sth->{NAME} || [];
-        my @headers = map { +{ cell => $_ } } @$headref;
-        $template->param(header_row => \@headers);
-        while (my $row = $sth->fetchrow_arrayref()) {
-            my @cells = map { +{ cell => $_ } } @$row;
-            push @rows, { cells => \@cells };
-        }
-    }
+    # if we have at least 1 parameter, and it's not filled, then don't execute but ask for parameters
+    if ($sql =~ /<</ && !@sql_params) {
+        # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
+        my @split = split /<<|>>/,$sql;
+        my @tmpl_parameters;
+        for(my $i=0;$i<($#split/2);$i++) {
+            my ($text,$authorised_value) = split /\|/,$split[$i*2+1];
+            my $input;
+            if ($authorised_value) {
+                my $dbh=C4::Context->dbh;
+                my @authorised_values;
+                my %authorised_lib;
+                # builds list, depending on authorised value...
+                if ( $authorised_value eq "branches" ) {
+                    my $branches = GetBranchesLoop();
+                    foreach my $thisbranch (@$branches) {
+                        push @authorised_values, $thisbranch->{value};
+                        $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
+                    }
+                }
+                elsif ( $authorised_value eq "itemtypes" ) {
+                    my $sth = $dbh->prepare("SELECT itemtype,description FROM itemtypes ORDER BY description");
+                    $sth->execute;
+                    while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
+                        push @authorised_values, $itemtype;
+                        $authorised_lib{$itemtype} = $description;
+                    }
+                }
+                elsif ( $authorised_value eq "cn_source" ) {
+                    my $class_sources = GetClassSources();
+                    my $default_source = C4::Context->preference("DefaultClassificationSource");
+                    foreach my $class_source (sort keys %$class_sources) {
+                        next unless $class_sources->{$class_source}->{'used'} or
+                                    ($class_source eq $default_source);
+                        push @authorised_values, $class_source;
+                        $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
+                    }
+                }
+                elsif ( $authorised_value eq "categorycode" ) {
+                    my $sth = $dbh->prepare("SELECT categorycode, description FROM categories ORDER BY description");
+                    $sth->execute;
+                    while ( my ( $categorycode, $description ) = $sth->fetchrow_array ) {
+                        push @authorised_values, $categorycode;
+                        $authorised_lib{$categorycode} = $description;
+                    }
 
-    my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
-    my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report&phase=Run%20this%20report";
-    $template->param(
-        'results' => \@rows,
-        'sql'     => $sql,
-        'execute' => 1,
-        'name'    => $name,
-        'notes'   => $notes,
-        'errors'  => $errors,
-        'pagination_bar'  => pagination_bar($url, $totpages, $input->param('page')),
-        'unlimited_total' => $total,
-    );
-}	
+                    #---- "true" authorised value
+                }
+                else {
+                    my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
+
+                    $authorised_values_sth->execute( $authorised_value);
+
+                    while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
+                        push @authorised_values, $value;
+                        $authorised_lib{$value} = $lib;
+                        # For item location, we show the code and the libelle
+                        $authorised_lib{$value} = $lib;
+                    }
+                }
+                $input =CGI::scrolling_list(      # FIXME: factor out scrolling_list
+                    -name     => "sql_params",
+                    -values   => \@authorised_values,
+#                     -default  => $value,
+                    -labels   => \%authorised_lib,
+                    -override => 1,
+                    -size     => 1,
+                    -multiple => 0,
+                    -tabindex => 1,
+                );
+
+            } else {
+                $input = "<input type='text' name='sql_params'/>";
+            }
+            push @tmpl_parameters, {'entry' => $text, 'input' => $input };
+        }
+        $template->param('sql'         => $sql,
+                        'name'         => $name,
+                        'sql_params'   => \@tmpl_parameters,
+                        'enter_params' => 1,
+                        'reports'      => $report,
+                        );
+    } else {
+        # OK, we have parameters, or there are none, we run the report
+        # if there were parameters, replace before running
+        # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
+        my @split = split /<<|>>/,$sql;
+        my @tmpl_parameters;
+        for(my $i=0;$i<$#split/2;$i++) {
+            my $quoted = C4::Context->dbh->quote($sql_params[$i]);
+            # if there are special regexp chars, we must \ them
+            $split[$i*2+1] =~ s/(\||\?|\.|\*|\(|\)|\%)/\\$1/g;
+            $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
+        }
+        my ($sth, $errors) = execute_query($sql, $offset, $limit);
+        my $total = select_2_select_count_value($sql) || 0;
+        unless ($sth) {
+            die "execute_query failed to return sth for report $report: $sql";
+        } else {
+            my $headref = $sth->{NAME} || [];
+            my @headers = map { +{ cell => $_ } } @$headref;
+            $template->param(header_row => \@headers);
+            while (my $row = $sth->fetchrow_arrayref()) {
+                my @cells = map { +{ cell => $_ } } @$row;
+                push @rows, { cells => \@cells };
+            }
+        }
+
+        my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
+        my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report&phase=Run%20this%20report";
+        $template->param(
+            'results' => \@rows,
+            'sql'     => $sql,
+            'execute' => 1,
+            'name'    => $name,
+            'notes'   => $notes,
+            'errors'  => $errors,
+            'pagination_bar'  => pagination_bar($url, $totpages, $input->param('page')),
+            'unlimited_total' => $total,
+        );
+    }
+}
 
 elsif ($phase eq 'Export'){
     binmode STDOUT, ':utf8';

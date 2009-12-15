@@ -294,7 +294,7 @@ canned reports and writing custom SQL reports.</p>
             <td>
                 <select name="<!-- TMPL_VAR NAME="name" -->_value">
                 <!-- TMPL_LOOP NAME="values" -->
-                <option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_IF name="default" -->Default<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="availablevalues" --><!-- /TMPL_IF --></option>
+                <option value="<!-- TMPL_VAR NAME="availablevalues"-->"><!-- TMPL_IF name="default" -->Default<!-- TMPL_ELSE --><!-- TMPL_VAR NAME="availablevalues" ESCAPE="HTML"--><!-- /TMPL_IF --></option>
                 <!-- /TMPL_LOOP -->
                 </select>
             </td>
@@ -390,11 +390,11 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 <h1>Confirm Custom Report</h1>
 <p>Your report will be generated with the following SQL statement.</p>
 <p> 
-<!-- TMPL_VAR NAME="sql" -->
+<!-- TMPL_VAR NAME="sql" ESCAPE="HTML" -->
 </p>
 
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" ESCAPE="html" -->" />
+<input type="hidden" name="sql" value="<!-- TMPL_VAR NAME="sql" -->" />
 <input type="hidden" name="type" value="<!-- TMPL_VAR NAME="type" -->" />
 <p>You will need to save the report before you can execute it</p>
 <fieldset class="action"><input type="hidden" name="phase" value="Save" />  
@@ -417,10 +417,24 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 </form>
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF name="enter_params" -->
+    <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+        <input type='hidden' name='phase' value='Run this report' />
+        <input type='hidden' name='reports' value="<!--TMPL_VAR name='reports' -->" />
+        <h1>Enter parameters for report <!-- TMPL_VAR name="name" -->:</h1>
+        <!-- TMPL_IF NAME="notes" --><p><!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
+        <!-- TMPL_LOOP name="sql_params" -->
+            <p><!-- TMPL_VAR name="entry" -->: <!-- TMPL_VAR name='input' --></p>
+        <!-- /TMPL_LOOP -->
+        <input type='submit' value='Run the report'/>
+    </form>
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="execute" -->
 <h1><!-- TMPL_VAR NAME="name" --></h1>
 <!-- TMPL_IF NAME="notes" --><p><!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="unlimited_total" --><p>Total number of rows matching the (unlimited) query is <!-- TMPL_VAR NAME="unlimited_total" -->.</p><!-- /TMPL_IF -->
+<!-- TMPL_VAR name="sql" -->
 <!-- TMPL_VAR NAME='pagination_bar' DEFAULT="" -->
 <!-- TMPL_UNLESS name="errors" -->
 <table>
