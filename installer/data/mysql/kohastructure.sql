@@ -2224,7 +2224,7 @@ CREATE TABLE `item_circulation_alert_preferences` (
 CREATE TABLE `messages` (
   `message_id` int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) NOT NULL,
-  `branchcode` varchar(4) default NULL,
+  `branchcode` varchar(10) default NULL,
   `message_type` varchar(1) NOT NULL,
   `message` text NOT NULL,
   `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,

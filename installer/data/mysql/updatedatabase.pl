@@ -3541,6 +3541,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.127';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do("ALTER TABLE messages CHANGE branchcode branchcode varchar(10);");
+    print "Upgrade to $DBversion done (bug 4190: messages in patron account did not work with branchcodes > 4)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
