@@ -183,7 +183,7 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
                            AND itemnumber IS NOT NULL
                            AND (found IS NOT NULL OR priority = 0)
                         )
-                       AND biblionumber = ?";
+                       AND items.biblionumber = ?";
     my @params = ($biblionumber, $biblionumber);
     if ($#branches_to_use > -1) {
         $items_query .= " AND holdingbranch IN (" . join (",", map { "?" } @branches_to_use) . ")";
