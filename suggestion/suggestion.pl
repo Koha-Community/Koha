@@ -198,9 +198,14 @@ foreach my $element qw(managedby suggestedby){
     $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
         my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
-        my $presentation_string=$$member{firstname}." ".$$member{surname}." ".GetBranchName($$member{branchcode})." ".$$member{description}." ".$$member{category_type};
-        $debug || warn $presentation_string;
-        $template->param($element."information"=>$presentation_string);
+        $template->param(
+            $element."_borrowernumber"=>$$member{borrowernumber},
+            $element."_firstname"=>$$member{firstname},
+            $element."_surname"=>$$member{surname},
+            $element."_branchcode"=>$$member{branchcode},
+            $element."_description"=>$$member{description},
+            $element."_category_type"=>$$member{category_type}
+        );
     }
 }
 $template->param(
