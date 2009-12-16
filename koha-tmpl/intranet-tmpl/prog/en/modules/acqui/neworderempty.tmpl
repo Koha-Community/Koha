@@ -10,7 +10,7 @@ actTotal = "";
 
 function Check(ff) {
     var ok=0;
-    var _alertString="Form not submitted because of the following problem(s)\n";
+    var _alertString= _("Form not submitted because of the following problem(s)")+"\n";
 
     _alertString +="-------------------------------------------------------------------\n\n";
 
@@ -54,8 +54,6 @@ ff.submit();
 </head>
 <body onload="calcNeworderTotal()">
 
-<div  name="<!-- TMPL_VAR NAME="ordernumber" -->" >
-
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
@@ -67,32 +65,33 @@ ff.submit();
     <div id="yui-main">
     <div class="yui-b">
 
-<h1>
+<h2>
     <!-- TMPL_IF name="ordernumber" -->
         Modify order details (line #<!-- TMPL_VAR NAME="ordernumber" -->)
     <!-- TMPL_ELSE -->
         New order
     <!-- /TMPL_IF -->
         <!-- TMPL_IF name="suggestionid" -->(defined from suggestion #<!-- TMPL_VAR NAME="suggestionid" -->)<!-- /TMPL_IF -->
-</h1>
+</h2>
 
 <!-- TMPL_IF name="basketno" -->
-<fieldset class="rows">
     <div id="acqui_basket_summary"  class="yui-g">
-        <h2>Basket details</h2>
-        <!-- TMPL_IF NAME="basketnote" --><p>Internal note: <!-- TMPL_VAR NAME="basketnote" --></p><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="basketbooksellernote" --><p>Bookseller note: <!-- TMPL_VAR NAME="basketbooksellernote" --></p><!-- /TMPL_IF -->
+	<fieldset class="rows">
+        <legend>Basket details</legend>
+		<ol>
+        <!-- TMPL_IF NAME="basketnote" --><li><span class="label">Internal note:</span> <!-- TMPL_VAR NAME="basketnote" --></li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="basketbooksellernote" --><li><span class="label">Bookseller note</span>: <!-- TMPL_VAR NAME="basketbooksellernote" --></li><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="basketcontractno" -->
-            <p>Contract number: <!-- TMPL_VAR NAME="basketcontractno" --></p>
-            <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></p>
+            <li><span class="label">Contract number: </span><!-- TMPL_VAR NAME="basketcontractno" --></li>
+            <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></li>
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="authorisedbyname" --><p>Managed by:  <!-- TMPL_VAR NAME="authorisedbyname" --></p><!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="creationdate" --><p>Open on:  <!-- TMPL_VAR NAME="creationdate" --></p><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="authorisedbyname" --><li><span class="label">Managed by:</span>  <!-- TMPL_VAR NAME="authorisedbyname" --></li><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="creationdate" --><li><span class="label">Open on:</span>  <!-- TMPL_VAR NAME="creationdate" --></li><!-- /TMPL_IF -->
         <!-- TMPL_IF name="closedate" -->
         <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
-        <p>Closed on:  <!-- TMPL_VAR name="closedate" --></p>
+        <li><span class="label">Closed on:</span>  <!-- TMPL_VAR name="closedate" --></li>
         <!-- TMPL_IF name="basketgroups" -->
-            <p> basketgroup: <select id="basketgroupid" name="basketgroupid">
+            <li>Basketgroup: <select id="basketgroupid" name="basketgroupid">
                 <!-- TMPL_LOOP name="basketgroups" -->
                     <!-- TMPL_IF name="default" -->
                     <option value="<!-- TMPL_VAR name="id" -->" selected="selected"><!-- TMPL_VAR name="name" --></option>
@@ -104,13 +103,14 @@ ff.submit();
                 <input type="hidden" id="basketno" value="<!-- TMPL_VAR name="basketno" -->" name="basketno" />
                 <input type="hidden" value="mod_basket" name="op" />
                 <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
-                <input type="submit" value="Change basketgroup" />
-            </p>
+            </li>
+		<fieldset class="action"><input type="submit" value="Change basketgroup" /></fieldset>
         </form>
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-    </div>
+			</ol>
 </fieldset>
+    </div>
 <!-- /TMPL_IF -->
 
 <form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform">
@@ -197,7 +197,7 @@ ff.submit();
     <fieldset class="rows">
         <legend>Item</legend>
         <!-- TMPL_IF name="NoACQframework" -->
-            <p class="required">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</p>
+            <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
         <!-- /TMPL_IF -->
 
         <!-- TMPL_LOOP NAME="items" -->
@@ -234,17 +234,17 @@ ff.submit();
             <li>
                 <!-- TMPL_IF name="close" -->
             <span class="label required">Quantity: </span>
-                    <input type="hidden" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" /><!-- TMPL_VAR NAME="quantity" -->
+                    <input type="hidden" size="20" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" /><!-- TMPL_VAR NAME="quantity" -->
                 <!-- TMPL_ELSE -->
                 <label class="required" for="quantity">Quantity: </label>
                     <!-- TMPL_IF name="items" -->
-                        <input type="text" READONLY size="20" id="quantityrec" name="quantity" value="1" onchange="calcNeworderTotal();" />
+                        <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" onchange="calcNeworderTotal();" />
                     <!-- TMPL_ELSE -->
                         <input type="text" size="20" id="quantityrec" name="quantity" value="<!-- TMPL_VAR name="quantityrec" -->" onchange="calcNeworderTotal();" />
                     <!-- /TMPL_IF -->
                 <!--/TMPL_IF-->
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
-                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="1" />
+                <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
@@ -269,12 +269,13 @@ ff.submit();
             <li>
                     <label for="uncertainprice">Uncertain price: </label>
                     <!--TMPL_IF NAME="uncertainprice" -->
-                    <input type="checkbox" name="uncertainprice" value="1" checked />
+                    <input type="checkbox" name="uncertainprice"  id="uncertainprice" value="1" checked="checked" />
                     <!-- TMPL_ELSE -->
-                    <input type="checkbox" name="uncertainprice" value="1" />
+                    <input type="checkbox" name="uncertainprice" id="uncertainprice" value="1" />
                 <!--/TMPL_IF-->
             </li>
             <!-- /TMPL_UNLESS -->
+			<li>
                 <!-- TMPL_IF name="close" -->
             <span class="label">Replacement cost: </span>
                     <input type="hidden" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /><!-- TMPL_VAR NAME="rrp" -->
@@ -349,14 +350,13 @@ ff.submit();
 </ol>
     </fieldset>
     <fieldset class="action">
-        <input type="button" value="Save" onclick="Check(this.form)" /> <!-- TMPL_IF name="suggestionid" --><a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->">Cancel</a><!-- TMPL_ELSE --><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Cancel</a><!-- /TMPL_IF -->
+        <input type="button" value="Save" onclick="Check(this.form)" /> <!-- TMPL_IF name="suggestionid" --><a class="cancel" href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">Cancel</a><!-- TMPL_ELSE --><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Cancel</a><!-- /TMPL_IF -->
     </fieldset>
 </form>
 </div>
 </div>
 <div class="yui-b">
 <!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
-</div>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
