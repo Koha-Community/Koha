@@ -1,32 +1,32 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Clone Issuing Rules</title>
+<title>Koha &rsaquo; Administration &rsaquo; Issuing Rules &rsaquo; Clone Issuing Rules</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  Clone Issuing Rules</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/smart-rules.pl">Issuing rules</a> &rsaquo; Clone issuing rules</div>
 
 <div id="doc3" class="yui-t1">
 
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-    <h1>Cloning issuing rules
+    <h2>Cloning issuing rules
         <!-- TMPL_IF EXPR="frombranchname || tobranchname" -->
             <!-- TMPL_IF NAME="frombranchname" --> from "<!-- TMPL_VAR NAME="frombranchname" -->"<!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="tobranchname" --> to "<!-- TMPL_VAR NAME="tobranchname" -->"<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
-    </h1>
+    </h2>
 
     <!-- TMPL_IF NAME="result" -->
 	<!-- TMPL_IF NAME="error" -->
-	    <p class="error">Issuing rules cloning failed!</p>
+	    <div class="dialog alert">Cloning of issuing rules failed!</div>
 	<!-- TMPL_ELSE -->
-	    <div class="message"><p>The rules have been cloned.</p></div>
+	    <div class="dialog message"><p>The rules have been cloned.</p></div>
 	<!-- /TMPL_IF -->
+	<a href="/cgi-bin/koha/admin/smart-rules.pl">Return to Issuing rules</a>
     <!-- TMPL_ELSE -->
 
 	<p class="help">Use carefully ! If the destination library already has issuing rules, they will be deleted without warning !</p> 
@@ -58,7 +58,7 @@
 		<!-- TMPL_IF NAME="frombranch" --><input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="frombranch" -->" /><!-- /TMPL_IF -->
 	    </fieldset>
 	<!-- /TMPL_UNLESS -->
-	<input type="submit" />
+	<input type="submit" value="Submit" />
 	</form>
 
     <!-- /TMPL_IF -->

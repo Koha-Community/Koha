@@ -18,7 +18,7 @@ $(document).ready(function() {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  Issuing Rules</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Issuing Rules</div>
 
 <div id="doc3" class="yui-t1">
 
@@ -46,7 +46,7 @@ $(document).ready(function() {
         </ul>
         <p>To modify a rule, create a new one with the same patron type and item type.</p>
     </div>
-    <div id="bloc100">
+    <div>
         <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
         Select a library :
             <select name="branch" id="branch" style="width:20em;">
@@ -154,6 +154,7 @@ $(document).ready(function() {
                     <th>&nbsp;</th>
                     <th>Total Current Checkouts Allowed</th>
                     <th>Hold Policy</th>
+                    <th>&nbsp;</th>
                     <th>&nbsp;</th>
                 </tr>
                 <tr>
