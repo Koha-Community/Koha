@@ -114,7 +114,7 @@ $(document).ready(function(){
     });
 	$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
 	$("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
-	$("span.addto").html(param1);
+<!-- TMPL_IF NAME="opacbookbag" -->$("span.addto").html(param1);<!-- TMPL_ELSE --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->$("span.addto").html(param1);<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	$("#addto").change(function(){
 		cartList();
 	});
