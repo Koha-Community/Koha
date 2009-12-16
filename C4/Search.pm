@@ -934,13 +934,7 @@ sub buildQuery {
                 }
 
                 if ($auto_truncation){
-					unless ( $index =~ /(st-|phr|ext)/ ) {
-						#FIXME only valid with LTR scripts
-						$operand=join(" ",map{ 
-											(index($_,"*")>0?"$_":"$_*")
-											 }split (/\s+/,$operand));
-						warn $operand if $DEBUG;
-					}
+					$operand=~join(" ",map{ "$_*" }split (/\s+/,$operand));
 				}
 
                 # Detect Truncation
@@ -1212,12 +1206,6 @@ sub searchResults {
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
-<<<<<<< HEAD:C4/Search.pm
-
-=======
-		my $biblionumber;
-        
->>>>>>> C4/Search.pm followup auto_truncation 3.0.x cherry-pick:C4/Search.pm
         if ($bibliotag<10){
             $fw = GetFrameworkCode($marcrecord->field($bibliotag)->data);
         }else{
