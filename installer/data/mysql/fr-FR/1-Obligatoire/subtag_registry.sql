@@ -385,7 +385,7 @@ INSERT INTO language_subtag_registry( subtag, type, description, added)
 VALUES ( 'pt', 'language', 'Portuguese','2005-10-16' );
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
-VALUES( 'pt','pol');
+VALUES( 'pt','por');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'pt', 'language', 'pt', 'Portugu&ecirc;s');
