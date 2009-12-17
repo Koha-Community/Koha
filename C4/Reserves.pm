@@ -24,6 +24,7 @@ use strict;
 # use warnings;  # FIXME: someday
 use C4::Context;
 use C4::Biblio;
+use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Members;
 use C4::Items;
 use C4::Search;
@@ -56,6 +57,7 @@ C4::Reserves - Koha functions for dealing with reservation.
              =0      : then the reserve is being dealed
   - found : NULL       : means the patron requested the 1st available, and we haven't choosen the item
             W(aiting)  : the reserve has an itemnumber affected, and is on the way
+            T(ransfet) : the reserve has an itemnumber affected, and is beeing transfered to pickup branch
             F(inished) : the reserve has been completed, and is done
   - itemnumber : empty : the reserve is still unaffected to an item
                  filled: the reserve is attached to an item
@@ -90,6 +92,7 @@ BEGIN {
     @EXPORT = qw(
         &AddReserve
   
+        &GetPendingReserves
         &GetReservesFromItemnumber
         &GetReservesFromBiblionumber
         &GetReservesFromBorrowernumber
@@ -214,6 +217,94 @@ sub AddReserve {
     }
         
     return;     # FIXME: why not have a useful return value?
+}
+
+
+
+=item GetPendingReserves
+
+=cut
+
+sub GetPendingReserves {
+    my ($startdate, $enddate) = @_;
+    
+    my $sqldatewhere;
+    my @query_params;
+    my $indepbranch  = C4::Context->preference('IndependantBranches') ? C4::Context->userenv->{'branch'} : undef;
+    my $dbh          = C4::Context->dbh;
+    
+    my $query = "SELECT * 
+                 FROM reserves
+                 WHERE 
+                    reserves.found IS NULL ";
+    
+    if (!defined($startdate) or $startdate eq "") {
+        $startdate = format_date($startdate);
+    }
+    if (!defined($enddate) or $enddate eq "") {
+        $enddate = format_date($enddate);
+    }
+    
+    if ($startdate) {
+        $sqldatewhere .= " AND reservedate >= ?";
+        push @query_params, format_date_in_iso($startdate);
+    }
+    if ($enddate) {
+        $sqldatewhere .= " AND reservedate <= ?";
+        push @query_params, format_date_in_iso($enddate);
+    }
+    $query .= $sqldatewhere;
+    
+    if ($indepbranch){
+	    $query .= " AND branchcode = ? ";
+        push @query_params, $indepbranch;
+    }
+    
+    
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@query_params);
+    
+    my %reserves;
+    
+    while ( my $reserve = $sth->fetchrow_hashref ) {
+        my $line;
+        unless( $line = $reserves{$reserve->{biblionumber}} ){
+            $line      = {};
+            my $biblio = GetBiblioData($reserve->{biblionumber});
+            my @items  = GetItemsInfo($reserve->{biblionumber});
+                    
+            $line->{title}           = $biblio->{title};
+    
+            foreach my $item (@items){
+                next if ($indepbranch && $indepbranch ne $item->{holdingbranch});
+                $line->{count}++;
+                $line->{holdingbranches}->{$item->{holdingbranch}} = 1;
+                $line->{callnumbers}->{$item->{itemcallnumber}} = 1;
+                $line->{locations}->{$item->{location}} = 1;
+                $line->{itemtypes}->{$item->{itemtype}} = 1;
+            }
+        }
+        $line->{reservecount}++;
+        $reserves{$reserve->{biblionumber}} = $line if($line->{count});
+    }
+    
+    my @reserves;
+    foreach my $rkey (keys %reserves){
+        my $line = $reserves{$rkey};
+        $line->{biblionumber} = $rkey;
+        
+        foreach my $datatype (qw/holdingbranches callnumbers locations itemtypes/){
+            my @newdatas = ();
+            foreach my $data (keys %{$line->{$datatype}}){
+                @newdatas = { 'value' => $data}
+            }
+            $line->{$datatype} = \@newdatas;
+        }
+        
+        push @reserves, $line;
+    }
+    
+    return \@reserves;
 }
 
 =item GetReservesFromBiblionumber
@@ -999,8 +1090,9 @@ sub ModReserveAffect {
     if ($transferToDo) {
     $query = "
         UPDATE reserves
-        SET    priority = 0,
-               itemnumber = ?
+        SET    priority   = 0,
+               itemnumber = ?,
+               found      = 'T'
         WHERE borrowernumber = ?
           AND biblionumber = ?
     ";

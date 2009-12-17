@@ -23,7 +23,7 @@ $.tablesorter.addParser({
 		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[3,0]],
-			headers: { 0:{sorter:false},1:{sorter:false},3: { sorter: 'articles' },7:{sorter:false}}
+			headers: { 0:{sorter:false},1:{sorter:false},2: { sorter: 'articles' },6:{sorter:false}}
 		}); 
  	 });
 //]]>
@@ -50,9 +50,6 @@ $.tablesorter.addParser({
     <table id="holdst">
     <thead><tr>
         <th>
-				Pull This Many Items
-        </th>        
-        <th>
 				Items Available
         </th>
         <th>
@@ -77,52 +74,35 @@ $.tablesorter.addParser({
             Available Locations
 				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=location&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
         </th>
-        <th >Earliest Hold Date
-            <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=date&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
-        </th>
-
     </tr></thead>
     
    <tbody> <!-- TMPL_LOOP NAME="reserveloop" -->
         <tr>
-            <!-- TMPL_IF name="borrowernumber" -->
-                <td><p><b><!-- TMPL_VAR NAME="pullcount" --></b></p></td>
-                <td><!-- TMPL_VAR NAME="count" --></td>  
-                <td><!-- TMPL_VAR NAME="rcount" --></td> 
-                <td>
-                    <p>
-                    <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+            <td><!-- TMPL_VAR NAME="count" --></td>  
+            <td><!-- TMPL_VAR NAME="reservecount" --></td> 
+            <td>
+                <p>
+                <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                    <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
+                </a>
+                <!-- TMPL_ELSE -->
+                    <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
+                    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
                         <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
                     </a>
                     <!-- TMPL_ELSE -->
-                        <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
-                        <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
                             <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
                         </a>
-                        <!-- TMPL_ELSE -->
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                                <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                            </a>
-                        <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
-                    </p>
-                </td>
-            <!-- TMPL_ELSE -->
-                <td colspan="3">
-                    &nbsp;
-                </td>
-                <td>"</td>
-            <!-- /TMPL_IF -->
-            <td><p><!-- TMPL_VAR NAME="holdingbranch" --></p></td>
-            <td><p><!-- TMPL_VAR NAME="itemcallnumber" --></p></td>
-				<td><p><!-- TMPL_VAR NAME="itype" --></p></td> 
-				<td><p><!-- TMPL_VAR NAME="location" --></p></td>
-            <td width="15%">
-                <p><!-- TMPL_VAR NAME="reservedate" --></p>
-                <p>in <!-- TMPL_VAR NAME="branch" --></p>
-                <!-- TMPL_IF NAME="statusw" --><p>Waiting</p><!-- /TMPL_IF --><!-- TMPL_IF NAME="statusf" --><p>Fullfilled</p><!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+                </p>
             </td>
+            <td><p><!-- TMPL_LOOP NAME="holdingbranches" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
+            <td><p><!-- TMPL_LOOP NAME="callnumbers" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
+			<td><p><!-- TMPL_LOOP NAME="itemtypes" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
+			<td><p><!-- TMPL_LOOP NAME="locations" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
         </tr>
     <!-- /TMPL_LOOP --></tbody>
     </table>
