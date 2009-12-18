@@ -1,3 +1,5 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title><!--TMPL_IF NAME="budget_id" -->Modify<!-- TMPL_ELSE -->Add<!-- /TMPL_IF --> Budget</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
@@ -306,11 +308,8 @@
 
     <!-- FIXME: hardcoded button positions :/ -->
     <input style="position:absolute; left:600px;" type="button" id="patron_search" value="Edit owner" onclick="ownerPopup(); return false;" />
-    <input style="position:absolute; left:680px;"  type="button" id="patron_search" value="Remove owner" onclick="ownerRemove(this.form); return false;" />
+    <input style="position:absolute; left:680px;"  type="button" id="patron_removal" value="Remove owner" onclick="ownerRemove(this.form); return false;" />
     </li>
-    </td>
-    </tr>
-    </table>
 
     <li>
     <label for="branch">Library: </label>
@@ -385,7 +384,7 @@
 <div class="dialog alert"> <h3>Delete Budget <!-- TMPL_VAR NAME="budget_name" -->?</h3>
 <table>
     <tr>
-    <th scope="row">Budget Amount:</td>
+    <td scope="row">Budget Amount:</td>
     <td><!-- TMPL_VAR NAME="budget_amount" --></td>
     </tr>
 </table>
