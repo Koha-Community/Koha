@@ -1139,7 +1139,13 @@ sub buildQuery {
                 }
 
                 if ($auto_truncation){
-					$operand=~join(" ",map{ "$_*" }split (/\s+/,$operand));
+					unless ( $index =~ /(st-|phr|ext)/ ) {
+						#FIXME only valid with LTR scripts
+						$operand=join(" ",map{ 
+											(index($_,"*")>0?"$_":"$_*")
+											 }split (/\s+/,$operand));
+						warn $operand if $DEBUG;
+					}
 				}
 
                 # Detect Truncation
