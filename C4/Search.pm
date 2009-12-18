@@ -932,8 +932,10 @@ sub buildQuery {
                 }
 
                 if ($auto_truncation){
-					$operand=~join(" ",map{ "$_*" }split (/\s+/,$operand));
-				}
+                   # join throws an error if there is a leading space
+                   $operand =~ s/^\s+//;
+		   $operand=~join(" ",map{ "$_*" }split (/\s+/,$operand));
+                }
 
                 # Detect Truncation
                 my $truncated_operand;
