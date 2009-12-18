@@ -145,38 +145,39 @@ if (f.company.value == "") {
 <!--TMPL_ELSE-->
     <h1><!-- TMPL_VAR NAME="name" --></h1>
         <div class="yui-g">
-        <div id="supplier-company-details" class="yui-u first">
-            <p><strong>Company Name: </strong>
-                <!-- TMPL_VAR NAME="name" --></p>
-            <p><strong>Postal Address: </strong>
-                    <!-- TMPL_VAR NAME="postal" --></p>
-            <p><strong>Physical Address: </strong>
-                <!-- TMPL_VAR NAME="address1" --><!-- TMPL_VAR NAME="address2" --><!-- TMPL_VAR NAME="address3" --><!-- TMPL_VAR NAME="address4" --></p>
-            <p><strong>Phone: </strong>
-                <!-- TMPL_VAR NAME="phone" --></p>
-            <p><strong>Fax: </strong>
-                <!-- TMPL_VAR NAME="fax" --></p>
-        <!-- TMPL_IF NAME="url" --> <p><strong>Web site: </strong>
-                <a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a></p><!-- /TMPL_IF -->
-        </div>
-        <div id="supplier-contact-details" class="yui-u">
-            <h3>Contact details</h3>
-            <p><strong>Contact name: </strong>
-                <!-- TMPL_VAR NAME="contact" --></p>
-            <p><strong>Position: </strong>
-                <!-- TMPL_VAR NAME="contpos" --></p>
-            <p><strong>Phone: </strong>
-                <!-- TMPL_VAR NAME="contphone" --></p>
-            <p><strong>Alternative phone: </strong>
-                <!-- TMPL_VAR NAME="contaltphone" --></p>
-            <p><strong>Fax: </strong>
-                <!-- TMPL_VAR NAME="contfax" --></p>
-            <!-- TMPL_IF NAME="contemail" --><p><strong>Email: </strong>
-                <a href="mailto:<!-- TMPL_VAR NAME="contemail" -->"><!-- TMPL_VAR NAME="contemail" --></a></p><!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="contnotes" --><p><strong>Notes: </strong>
-                <!-- TMPL_VAR NAME="contnotes" --></p><!-- /TMPL_IF -->
-        
-        </div>
+            <div id="supplier-company-details" class="yui-u first">
+                <h3>Supplier details</h3>
+                <div class="rows">
+                    <ol>
+                        <li><span class="label">Company Name: </span><!-- TMPL_VAR NAME="name" --></li>
+                        <li><span class="label">Postal Address: </span><!-- TMPL_VAR NAME="postal" --></li>
+                        <li><span class="label">Physical Address: </span><!-- TMPL_VAR NAME="address1" --><!-- TMPL_VAR NAME="address2" --><!-- TMPL_VAR NAME="address3" --><!-- TMPL_VAR NAME="address4" --></li>
+                        <li><span class="label">Phone: </span><!-- TMPL_VAR NAME="phone" --></li>
+                        <li><span class="label">Fax: </span><!-- TMPL_VAR NAME="fax" --></li>
+                        <!-- TMPL_IF NAME="url" -->
+                            <li><span class="label">Web site: </span><a href="<!-- TMPL_VAR NAME="url" -->"><!-- TMPL_VAR NAME="url" --></a></li>
+                        <!-- /TMPL_IF -->
+                    </ol>
+                </div>
+            </div>
+            <div id="supplier-contact-details" class="yui-u">
+                <h3>Contact details</h3>
+                <div class="rows">
+                    <ol>
+                        <li><span class="label">Contact name: </span><!-- TMPL_VAR NAME="contact" --></li>
+                        <li><span class="label">Position: </span><!-- TMPL_VAR NAME="contpos" --></li>
+                        <li><span class="label">Phone: </span><!-- TMPL_VAR NAME="contphone" --></li>
+                        <li><span class="label">Alternative phone: </span><!-- TMPL_VAR NAME="contaltphone" --></li>
+                        <li><span class="label">Fax: </span><!-- TMPL_VAR NAME="contfax" --></li>
+                        <!-- TMPL_IF NAME="contemail" -->
+                            <li><span class="label">Email: </span><a href="mailto:<!-- TMPL_VAR NAME="contemail" -->"><!-- TMPL_VAR NAME="contemail" --></a></li>
+                        <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="contnotes" -->
+                            <li><span class="label">Notes: </span><!-- TMPL_VAR NAME="contnotes" --></li>
+                        <!-- /TMPL_IF -->
+                    </ol>
+                </div>
+            </div>
         </div>
         <div id="supplier-ordering-information" class="yui-g">
         <h3>Ordering information</h3>
