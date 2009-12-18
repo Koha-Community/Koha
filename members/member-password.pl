@@ -73,7 +73,7 @@ if ( $newpassword  && ! $errormsg ) {
     my $userid = $bor->{'userid'};
 
     my $chars='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
-    my $length=int(rand(2))+4;
+    my $length=int(rand(2))+C4::Context->preference("minPasswordLength");
     my $defaultnewpassword='';
     for (my $i=0; $i<$length; $i++) {
 	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
