@@ -74,7 +74,7 @@
                 <td>	<table>
                         <!-- TMPL_IF NAME="loop_basket"-->
                             <tr>
-                                <th>Basket</th>
+                                <th>Basket (#)</th>
                                 <th>Items</th>
                                 <th>Created by</th>
                                 <th>Date</th>
@@ -90,8 +90,7 @@
                                 <tr>
                             <!-- /TMPL_UNLESS -->
                             <!--/TMPL_IF-->
-                                    <td><!-- TMPL_VAR NAME="basketno" --></td>
-                                    <td><!-- TMPL_VAR NAME="basketname" --></td>
+                                    <td><!-- TMPL_VAR NAME="basketname" --> (<!-- TMPL_VAR NAME="basketno" -->)</td>
                                     <td><!--TMPL_VAR NAME="total"--></td>
                                     <td>						<!-- TMPL_VAR name="firstname" -->
                                             <!-- TMPL_VAR name="surname" -->
