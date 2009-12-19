@@ -31,6 +31,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'batchmod', 'Perform batch modification of items'),
    (13, 'batchdel', 'Perform batch deletion of items'),
    (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
+   (13, 'moderate_tags', 'Moderate patron tags'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (16, 'create_reports', 'Create SQL Reports')
 ;

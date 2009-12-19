@@ -3305,6 +3305,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES (13, 'moderate_tags', 'Moderate patron tags')");
+	print "Upgrade done (adding patron permissions for tags tool)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
