@@ -191,8 +191,9 @@
                     </tr>
                 </thead>
                 <tfoot>
+                <!-- TMPL_IF name="GST" -->
                 <tr>
-                    <th>Total GST Exc.</th>
+                    <th>Total Tax Exc.</th>
                     <th><!-- TMPL_VAR NAME="total_rrp_gste" --></th>
                     <th>&nbsp;</th>
                     <th><!-- TMPL_VAR name="qty_total" --></th>
@@ -206,19 +207,28 @@
                         <!-- /TMPL_IF -->
                 </tr>
                 <tr>
-                    <th>GST (<!-- TMPL_VAR NAME="gist_rate" -->)</th>
+                    <th>Tax (<!-- TMPL_VAR NAME="gist_rate" -->)</th>
                     <th><!-- TMPL_VAR NAME="gist_rrp" --></th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                     <th><!-- TMPL_VAR NAME="gist_est" --></th>
                 </tr>
                 <tr>
-                    <th>Total GST Inc. (<!-- TMPL_VAR NAME="currency" -->)</th>
+                    <th>Total Tax Inc. (<!-- TMPL_VAR NAME="currency" -->)</th>
                     <th><!-- TMPL_VAR NAME="total_rrp_gsti" --></th>
                     <th>&nbsp;</th>
                     <th><!-- TMPL_VAR name="qty_total" --></th>
                     <th><!-- TMPL_VAR NAME="total_est_gsti" --></th>
                 </tr>
+                <!-- TMPL_ELSE -->
+                <tr>
+                    <th>Total (<!-- TMPL_VAR NAME="currency" -->)</th>
+                    <th><!-- TMPL_VAR NAME="total_rrp_gsti" --></th>
+                    <th>&nbsp;</th>
+                    <th><!-- TMPL_VAR name="qty_total" --></th>
+                    <th><!-- TMPL_VAR NAME="total_est_gsti" --></th>
+                </tr>
+                <!-- /TMPL_IF -->
                 </tfoot>
                 <tbody>
                 <!-- TMPL_LOOP NAME="books_loop" -->
@@ -256,7 +266,7 @@
                 <tr><td>Basket empty</td></tr>
             </table>
         <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="listincgst" --><small class="highlight">** Vendor's listings already include GST.</small>
+        <!-- TMPL_IF NAME="listincgst" --><small class="highlight">** Vendor's listings already include tax.</small>
         <!-- /TMPL_IF -->
         </div>
         <br />
