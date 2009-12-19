@@ -155,8 +155,8 @@
     	<legend>Budget filters</legend>
     	<ul>
 		<li>
-      		<label for="filter_budgetbranch">Library: </label>
-       		<select name="filter_budgetbranch" id="filter_budgetbranch" style="width:10em;">
+      		<label for="filter_budgetbranch_id">Library: </label>
+       		<select name="filter_budgetbranch" id="filter_budgetbranch_id" style="width:10em;">
 	        	<option value=""></option>
 	            <!-- TMPL_LOOP name="branchloop" -->
 	                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
@@ -173,7 +173,7 @@
     	</li>
     	</ul>
 
-		<input type="hidden" name="show" value="1"  >
+		<input type="hidden" name="show" value="1"  />
       	<input type="hidden"  name="budget_period_id" value="<!-- TMPL_VAR NAME="budget_period_id" -->" /> 
       	<input type="submit" class="submit" name="filter" value="Select" />
 	</fieldset>
@@ -247,7 +247,7 @@
     </tfoot>
 </table>
 
-<span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br>
+<span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br />
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 <!-- /TMPL_IF --> <!-- else -->
 
