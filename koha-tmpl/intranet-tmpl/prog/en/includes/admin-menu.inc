@@ -6,8 +6,6 @@
 <h5>Basic parameters</h5>
 <ul>
 	<li><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, groups</a></li>
-	<li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Budgets, periods, planning</a></li>
-	<li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
 	<li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types and circulation codes</a></li>
 </ul>
 
@@ -33,9 +31,11 @@
     <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
 </ul>
 
-<h5>Acquisitions</h5>
+<h5>Acquisition parameters</h5>
+
 <ul>
 	<li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
+	<li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Budgets, periods, planning</a></li>
 	<li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Root Budgets</a></li>
 </ul>
 
