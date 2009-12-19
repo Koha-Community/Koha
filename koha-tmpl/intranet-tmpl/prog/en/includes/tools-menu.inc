@@ -32,6 +32,9 @@
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_moderate_comments" --><!-- FIXME: Update here when Tag specific permission is created. --><li><a href="/cgi-bin/koha/tags/review.pl">Moderate patron tags</a></li>
     <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_tools_manage_csv_profiles" -->
+	<li><a href="/cgi-bin/koha/tools/csv-profiles.pl">CSV Profiles</a></li>
+    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_view_system_logs" -->
 	<li><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></li>
     <!-- /TMPL_IF -->
