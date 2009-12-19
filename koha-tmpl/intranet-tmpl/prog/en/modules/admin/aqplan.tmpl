@@ -2,18 +2,17 @@
 <title>
 Budget planning
 </title>
-<head>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
+<link href="<!-- TMPL_VAR NAME="yuipath" -->/reset/reset.css" rel="stylesheet" type="text/css" />
+<link href="<!-- TMPL_VAR NAME="yuipath" -->/fonts/fonts.css" rel="stylesheet" type="text/css" />
+<link href="<!-- TMPL_VAR NAME="yuipath" -->/menu/assets/menu.css" rel="stylesheet" type="text/css" />
+<link href="<!-- TMPL_VAR NAME="yuipath" -->/container/assets/skins/sam/container.css"  rel="stylesheet" type="text/css" />
+
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="budgets-admin-search.inc" -->
-
-<link href="<!-- TMPL_VAR NAME="yuipath" -->/reset/reset.css" rel="stylesheet" type="text/css" />
-<link href="<!-- TMPL_VAR NAME="yuipath" -->/fonts/fonts.css" rel="stylesheet" type="text/css" />
-<link href="<!-- TMPL_VAR NAME="yuipath" -->/menu/assets/menu.css" rel="stylesheet" type="text/css" />
-<link href="<!-- TMPL_VAR NAME="yuipath" --> /container/assets/skins/sam/container.css"  rel="stylesheet" type="text/css" />
 
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/yahoo/yahoo.js" type="text/javascript"></script>
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/event/event.js" type="text/javascript"></script>
@@ -91,7 +90,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Budgets</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=   <!-- TMPL_VAR NAME="budget_period_id" -->">Planning</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Planning</a> &rsaquo;
 </div>
 
 <div id="doc3" class="yui-t2">
@@ -102,7 +101,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
 <!-- TMPL_INCLUDE NAME="budgets-admin.inc" -->
 
-<br>
+<br />
 
 <form method="post" id='Aform' name="Aform"  action="/cgi-bin/koha/admin/aqplan.pl">
 
@@ -150,16 +149,12 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
     </td>
     </tr>
     <!-- /TMPL_UNLESS -->
-
-    <br>
-
-    </td></tr>
     </table>
 </fieldset>
 
-<br>
+<br />
 
-<!-- --------------------------------------------------------- -->
+<!-- Budget Lines -->
 
     <!-- TMPL_IF NAME="budget_lines" -->
 
@@ -171,11 +166,11 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
     <!-- TMPL_LOOP NAME="authvals_row" -->
          <!-- TMPL_IF NAME="display" -->
-            <th id="<!-- TMPL_VAR NAME="code" -->"   style="text-align: center;
+            <th id="<!-- TMPL_VAR NAME="code" -->"   style="text-align: center;"
                         class="<!-- TMPL_VAR NAME='colnum' -->" >
         <!-- TMPL_ELSE -->
             <th id="<!-- TMPL_VAR NAME="code" -->"   style="text-align: center;
-                            display:none;
+                            display:none;" 
                         class="<!-- TMPL_VAR NAME='colnum' -->" >
         <!-- /TMPL_IF -->
 
@@ -199,10 +194,10 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
             <!--/TMPL_IF -->
 
         <td align='left'><!-- TMPL_VAR NAME="budget_name_indent"--></td>
-        <td align='right'><span id='budget_tot_formatted" -->'><!-- TMPL_VAR NAME="budget_amount_formatted"-->&nbsp;</span></td>
+        <td align='right'><span id='budget_tot_formatted" -->'><!-- TMPL_VAR NAME="budget_amount_formatted"-->&nbsp;</span>
 
         <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
-        <div style="display:none;" id='budget_tot_<!-- TMPL_VAR NAME="budget_id" -->'><!-- TMPL_VAR NAME="budget_amount"--></div>
+        <div style="display:none;" id='budget_tot_<!-- TMPL_VAR NAME="budget_id" -->'><!-- TMPL_VAR NAME="budget_amount"--></div></td>
 
         <!-- TMPL_LOOP NAME="lines"	-->
             <td 
@@ -217,9 +212,9 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
                 <!--TMPL_IF  Name="budget_lock" -->
                     <!-- TMPL_VAR NAME="estimated_amount" -->&nbsp;
-                    <input type="hidden" style="text-align: right;"  name='<!-- TMPL_VAR NAME="cell_name"-->' value="<!-- TMPL_VAR NAME="estimated_amount" -->"   >
+                    <input type="hidden" style="text-align: right;"  name='<!-- TMPL_VAR NAME="cell_name"-->' value="<!-- TMPL_VAR NAME="estimated_amount" -->"   />
                 <!--TMPL_ELSE -->
-                    <input type="text" style="text-align: right;  width:90%; " size='6' name='<!-- TMPL_VAR NAME="cell_name"-->'  value="<!-- TMPL_VAR NAME="estimated_amount" -->"  id='<!-- TMPL_VAR NAME="budget_id"-->' class='<!-- TMPL_VAR NAME="budget_id"-->' onchange="calcTotalRow(this);" >
+                    <input type="text" style="text-align: right;  width:90%; " size='6' name='<!-- TMPL_VAR NAME="cell_name"-->'  value="<!-- TMPL_VAR NAME="estimated_amount" -->"  id='<!-- TMPL_VAR NAME="budget_id"-->' class='<!-- TMPL_VAR NAME="budget_id"-->' onchange="calcTotalRow(this);" />
                 <!--/TMPL_IF -->
 
                 </td></tr>
@@ -235,12 +230,13 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
             <!-- TMPL_IF NAME="act_negative" --> style="color: red;" <!--/TMPL_IF -->
                 <!-- TMPL_IF NAME="act_positive" --> style="color: green;" <!--/TMPL_IF --> >
                 <!-- TMPL_VAR NAME="budget_act_remain"-->
+        <!-- TMPL_ELSE --> >
         <!-- /TMPL_IF -->
             </td>
 
             <td width="50%"    align="right"  
-        <!-- TMPL_IF NAME="est_negative" --> style="color: red;" <!--/TMPL_IF -->
-        <!-- TMPL_IF NAME="est_positive" --> style="color: green;" <!--/TMPL_IF -->
+        <!-- TMPL_IF NAME="est_negative" --> style="color: red;" <!--/TMPL_IF --> 
+        <!-- TMPL_IF NAME="est_positive" --> style="color: green;" <!--/TMPL_IF --> 
         name="est_total" id='budget_est_<!-- TMPL_VAR NAME="budget_id"-->'>  <!-- TMPL_VAR NAME="budget_est_remain"-->&nbsp;    
             </td>
             </tr>
@@ -260,11 +256,11 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
     </table>
 
     <!-- TMPL_IF NAME="show_actual" -->
-        <span><b>Each cell contain both actual and estimated values.</b></span><br>
+        <span><b>Each cell contain both actual and estimated values.</b></span><br />
     <!-- TMPL_ELSE -->
-        <span><b>Cells contain estimated values only.</b></span><br>
+        <span><b>Cells contain estimated values only.</b></span><br />
     <!-- /TMPL_IF -->
-    <span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br>
+    <span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br />
     <!-- TMPL_IF name="budget_period_locked" -->
         <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled='disabled'/> -->
     <!-- TMPL_ELSE -->
