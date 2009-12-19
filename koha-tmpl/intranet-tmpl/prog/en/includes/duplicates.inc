@@ -16,7 +16,7 @@ function confirmnotdup(){
 <p>Is this a duplicate of 
 	<ul><!--TMPL_LOOP Name="duplicates"-->
 		<li><a href="<!--TMPL_VAR Name="url"-->?<!--TMPL_VAR Name="field_name"-->=<!-- TMPL_VAR name="dupid" -->" onclick="openWindow('<!--TMPL_VAR Name="url"-->?<!--TMPL_VAR Name="field_name"-->=<!-- TMPL_VAR name="dupid" -->&amp;popup=1', 'Duplicate '; return false;)"><!-- TMPL_VAR name="duplicateinformation" --></a>?
-		<form action="<!--TMPL_VAR Name="action_dup_yes_url"-->"" method="get">
+		<form action="<!--TMPL_VAR Name="action_dup_yes_url"-->" method="get">
 			<input type="hidden" name="<!--TMPL_VAR Name="field_name"-->" value="<!-- TMPL_VAR name="dupid" -->" />
 			<input type="submit" class="edit" value="Yes: Edit existing" />
 		</form>
