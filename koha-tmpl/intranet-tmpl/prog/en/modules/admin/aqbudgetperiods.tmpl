@@ -75,7 +75,7 @@
 </title>
 
 
-<head></head>
+</head>
 
 <body>
 
@@ -299,14 +299,14 @@
 	        <td><!-- TMPL_VAR name="budget_period_description" --></td>
 	        <td><!-- TMPL_VAR name="budget_period_startdate" --></td>
 	        <td><!-- TMPL_VAR name="budget_period_enddate" --></td>
-	        <td> <font COLOR="#00FF00">   <!-- TMPL_IF name="budget_period_active" -->✓<!-- /TMPL_IF --> </font> </td>
-	        <td> <font COLOR="red">   <!-- TMPL_IF name="budget_period_locked" -->X<!-- /TMPL_IF --> </font> </td>
+	        <td><!-- TMPL_IF name="budget_period_active" --><font COLOR="#00FF00">✓</font><!-- /TMPL_IF --> </td>
+	        <td> <!-- TMPL_IF name="budget_period_locked" --><font COLOR="red"> X </font><!-- /TMPL_IF --> </td>
 	        <td align='right'><!-- TMPL_VAR NAME="budget_period_total" --></td>
 	        <td>
 	            <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;budget_period_id=<!-- TMPL_VAR name="budget_period_id" escape="HTML" -->">Edit</a>
 	            <a href="<!-- TMPL_VAR name="script_name"-->?op=delete_confirm&amp;budget_period_id=<!-- TMPL_VAR name="budget_period_id" -->">Delete</a>
 	            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR name="budget_period_id" -->">Budgets</a>
-	           	<a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Add Budget</a>
+	           	<a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Add Budget</a>
 	        </td>
 	        </tr>
 	    <!-- /TMPL_LOOP -->
