@@ -1,7 +1,7 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Remaining circulation permissions'),
    ( 1, 'override_renewals', 'Override blocked renewals'),
-   ( 9, 'edit_catalogue', 'Edit catalogue'),
+   ( 9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
    ( 9, 'fast_cataloging', 'Fast cataloging'),
    (11, 'vendors_manage', 'Manage vendors'),
    (11, 'contracts_manage', 'Manage contracts'),
