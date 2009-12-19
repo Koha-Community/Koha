@@ -78,13 +78,13 @@ $(document).ready(function() {
         <h1>Enter a new purchase suggestion</h1>
     <!--/TMPL_IF-->    
     <fieldset class="rows"> <legend>Bibliographic information</legend><ol>
-        <li><label for="title">Title:</label><input type="text" id="title" name="title" size="50" maxlentgh="80" value="<!--TMPL_VAR Name="title"-->"/></li>
-        <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" value="<!--TMPL_VAR Name="author"-->"/></li>
-        <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" value="<!--TMPL_VAR Name="copyrightdate"-->" /></li>
-        <li><label for="isbn">ISBN or ISSN or other standard number:</label></label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" value="<!--TMPL_VAR Name="isbn"-->"/></li>
-        <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" value="<!--TMPL_VAR Name="publishercode"-->"/></li>
-        <li><label for="place">Publication Place:</label><input type="text" id="place" name="place" size="50" maxlength="80" value="<!--TMPL_VAR Name="place"-->"/></li>
-        <li><label for="collectiontitle">Collection Title :</label></label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" value="<!--TMPL_VAR Name="collectiontitle"-->"/></li>
+        <li><label for="title">Title:</label> <input type="text" id="title" name="title" size="50" maxlentgh="80" value="<!--TMPL_VAR Name="title"-->"/></li>
+        <li><label for="author">Author:</label> <input type="text" id="author" name="author" size="50" maxlength="80" value="<!--TMPL_VAR Name="author"-->"/></li>
+        <li><label for="copyrightdate">Copyright date:</label> <input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" value="<!--TMPL_VAR Name="copyrightdate"-->" /></li>
+        <li><label for="isbn">ISBN or ISSN or other standard number:</label> <input type="text" id="isbn" name="isbn" size="50" maxlength="80" value="<!--TMPL_VAR Name="isbn"-->"/></li>
+        <li><label for="publishercode">Publisher:</label ><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" value="<!--TMPL_VAR Name="publishercode"-->"/></li>
+        <li><label for="place">Publication Place:</label> <input type="text" id="place" name="place" size="50" maxlength="80" value="<!--TMPL_VAR Name="place"-->"/></li>
+        <li><label for="collectiontitle">Collection Title:</label> <input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" value="<!--TMPL_VAR Name="collectiontitle"-->"/></li>
         <li><label for="itemtype">Document Type :</label>
             <select name="itemtype" >
             <!--TMPL_LOOP Name="itemtypeloop"-->
@@ -109,13 +109,13 @@ $(document).ready(function() {
             <thead><th>&nbsp;</th><th>date</th><th>by</th></thead>
             <tbody>
             <tr>
-                <td>Suggestion creation </td>
+                <td>Suggestion Creation </td>
                 <td><input type="text" id="suggesteddate" name="suggesteddate" size="10" maxlentgh="10" value="<!--TMPL_VAR Name="suggesteddate"-->"/></td>
                 <td><input type="hidden" id="suggestedby" name="suggestedby" value="<!--TMPL_VAR Name="suggestedby"-->"/><!-- TMPL_IF NAME="suggestedby_borrowernumber" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="suggestedby_borrowernumber" -->"><!--TMPL_VAR Name="suggestedby_surname"-->, <!-- TMPL_VAR NAME="suggestedby_firstname" --></a>  <!-- TMPL_VAR NAME="suggestedby_branchcode" --> (<!-- TMPL_VAR NAME="suggestedby_description" -->)<!-- /TMPL_IF -->
                 </td>
             </tr>
             <tr>
-                <td>Suggestion management </td>
+                <td>Suggestion Management </td>
                 <td><input type="text" id="managedon" name="manageddate" size="10" maxlength="10" value="<!--TMPL_VAR Name="manageddate"-->" /></td>
                 <td><input type="hidden" id="managedby" name="managedby" value="<!--TMPL_VAR Name="managedby"-->"/><!-- TMPL_IF NAME="managedby_borrowernumber" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="managedby_borrowernumber" -->"><!--TMPL_VAR Name="managedby_surname"-->, <!-- TMPL_VAR NAME="managedby_firstname" --></a> <!-- TMPL_VAR NAME="managedby_branchcode" --> (<!-- TMPL_VAR NAME="managedby_description" -->)<!-- /TMPL_IF --></td>
             </tr>
@@ -128,7 +128,7 @@ $(document).ready(function() {
         </table>
     </fieldset>
     <fieldset class="rows"> <legend>Acquisition information</legend><ol>
-        <li><label for="branchcode">Branchcode:</label> 
+        <li><label for="branchcode">Branch:</label> 
             <select name="branchcode" id="branchcode">
                 <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
@@ -158,30 +158,30 @@ $(document).ready(function() {
                 <fieldset><legend> Bibliographic information : </legend>
                     <label for="title"> Title :</label><input type="text" name="title" value="<!-- TMPL_VAR name="title"-->" />
                     <label for="author"> Author :</label><input type="text" name="author" value="<!-- TMPL_VAR name="author"-->" />
-                    <label for="isbn"> isbn :</label><input type="text" name="isbn" value="<!-- TMPL_VAR name="isbn"-->" /><br/>
+                    <label for="isbn"> ISBN :</label><input type="text" name="isbn" value="<!-- TMPL_VAR name="isbn"-->" /><br/>
                     <label for="publishercode"> Publisher :</label><input type="text" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" />
                     <label for="publicationyear"> Publication year :</label><input type="text" name="publicationyear" value="<!-- TMPL_VAR name="publicationyear"-->" />
                     <label for="collectiontitle"> Collection Title :</label><input type="text" name="collectiontitle" value="<!-- TMPL_VAR name="collectiontitle"-->" />
                 </fieldset>
                 <fieldset><legend> Suggestion information: </legend>
-                    <label for="status"> status :</label><select name="status"><option value="">Any</option>
+                    <label for="status"> Status :</label><select name="status"><option value="">Any</option>
 <!-- TMPL_LOOP name="status_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                           </select><br/>
-                    <label for="suggestedby"> suggested By :</label><select name="suggestedby"><option value="">Any</option>
+                    <label for="suggestedby"> Suggested By :</label><select name="suggestedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="suggestedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                                      </select>
-                    <label for="suggesteddate"> suggested on :</label><!--TMPL_VAR Name="suggesteddate"--><br/>
-                    <label for="managedby"> management user :</label><select name="suggestionmanagedby"><option value="">Any</option>
+                    <label for="suggesteddate"> Suggested on :</label><!--TMPL_VAR Name="suggesteddate"--><br/>
+                    <label for="managedby"> Management user :</label><select name="suggestionmanagedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="suggestionmanagedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                                      </select>
-                    <label for="manageddate"> management date :</label><!--TMPL_VAR Name="manageddate"--><br/>
+                    <label for="manageddate"> Management date :</label><!--TMPL_VAR Name="manageddate"--><br/>
                     <label for="acceptedby"> Accepted by :</label><select name="suggestionacceptedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="suggestionacceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
 		                                      </select>
                     <label for="accepteddate"> Accepted on:</label><!--TMPL_VAR Name="accepteddate"-->
                 </fieldset>
                 <fieldset ><legend> Acquistion information :</legend>
-                    <label for="bookfundid"> BookFund :</label>
+                    <label for="bookfundid"> Book Fund :</label>
                     <select name="bookfundid"><option value="">Any</option><!-- TMPL_LOOP name="bookfundsloop" -->
                         <!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="bookfundid" -->" selected="selected"><!-- TMPL_VAR name="bookfundname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundname" --></option><!-- /TMPL_IF -->
                         <!-- /TMPL_LOOP -->
@@ -194,10 +194,10 @@ $(document).ready(function() {
                     </select>
                 </fieldset>
                 </div>
-                <label for="displayby">Organise By</label>
+                <label for="displayby">Organize By</label>
                 <select name="displayby" id="displayby">
                     <option value="">No tabs</option>
-                    <option value="STATUS">status</option>
+                    <option value="STATUS">Status</option>
                     <option value="branchcode">Library</option>
                     <option value="itemtype">Item Type</option>
                     <option value="sort1">Sort1</option>
