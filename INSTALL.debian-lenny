@@ -5,7 +5,7 @@ Installation Guide for Installing Koha on Debian Lenny with MySQL 5
 Feedback/bug reports: Koha Developer's List:
 http://lists.koha.org/mailman/listinfo/koha-devel
 
-This document last modified: 13 March 2009
+This document last modified: 19 December 2009
 
 Installation Instructions
 =============================
@@ -50,35 +50,25 @@ Note: for more information about Git, please see the Koha Git Usage Guide:
 Find the latest Koha stable version on http://download.koha.org
 and get it:
 
-    $ wget http://download.koha.org/koha-3.00.01-stable.tar.gz
+    $ wget <URL> found on download.koha.org
 
 1.5 Install additional Debian dependencies
 
 IMPORTANT:  You should only use CPAN for Perl dependencies which are NOT
             available from the package maintainer. You have been warned!
 
-Using the debian-lenny.packages file included in the Koha source tree,
-run the following:
+Run shell script installing all necessary Debian packages, MySQL Server,
+Zebra and all Debian packaged Perl module required by Koha:
 
-    $ sudo dpkg --set-selections < install_misc/debian-lenny.packages
-
-Now start dselect:
-
-    $ sudo apt-get install dselect
-    $ sudo dselect
-
-Choose [I]nstall and accept packages to be installed (hit return)
-
-(may take a while)
-
-Choose [C]onfigure, [R]emove and [Q]uit until dselect has completed.
+    $ sudo install_misc/apt-get-debian-lenny.sh
 
 1.6 Install Perl dependencies that aren't packaged into Debian Lenny
 sources
 
 Run the following command:
 
-    $ sudo cpan Algorithm::CheckDigits SMS::Send HTTP::OAI
+    $ sudo cpan Algorithm::CheckDigits SMS::Send HTTP::OAI IPC::Cmd \\
+      Memoize::Memcached PDF::API2::Simple PDF::Table Storable Test::More
 
 Note: you may need to run CPAN initialization if you've not run cpan
 before:
@@ -187,27 +177,37 @@ configured to run as the root user.
 
 Option 1: run the Zebra processes from the command line:
 
-    Zebra Server:
+1.1 Zebra Search Server
+
+This process send responses to search requests sent by Koha or
+Z39.50/SRU/SRW clients.
+
     $ sudo -u ${KOHA_USER} zebrasrv -f /etc/koha/koha-conf.xml
     (note that the path to koha-conf.xml may be different depending on your
     installation choices)
 
-    Note: the user you run Zebra as will be the only user with write permission
-    on the Zebra index; in development mode, you may wish to use your system
-    user.
+Note: the user you run Zebra as will be the only user with write permission
+      on the Zebra index; in development mode, you may wish to use your
+      system user.
 
-    Zebraqueue Daemon:
-    $ sudo -u ${KOHA_USER} misc/bin/zebraqueue_daemon.pl
+1.2 Zebra Indexer
+
+Added/updated/deleted records in Koha MySQL database must be indexed
+into Zebra. A specific script must be launched each time a bibliographic
+or an authority record is edited.
+
+    $ sudo -u ${KOHA_USER} misc/migration_tools/rebuild_zebra -z -b -a
 
     Note: if you are running in this mode, you may wish to defer starting the
     zebraqueue until you've run the web installer (see below).
 
-Option 2: run the Zebra processes as daemons, and add to startup process:
+Option 2: run automatically Zebra processes as daemons:
 
 Note that references to $SCRIPT_DIR refer to the directory where
 Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
 
-    Zebra Server:
+1.1 Zebra Search Server
+
     $ sudo ln -s ${SCRIPT_DIR}/koha-zebra-ctl.sh  /etc/init.d/koha-zebra-daemon
     (Note: ${SCRIPT_DIR} is /usr/share/koha/bin/ by default in a standard install)
     $ sudo update-rc.d koha-zebra-daemon defaults
@@ -215,12 +215,14 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
     
     $ sudo ${SCRIPT_DIR}/koha-zebra-ctl.sh start
 
-    Zebraqueue Daemon:
-    $ sudo ln -s ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh  /etc/init.d/koha-zebraqueue-daemon
-    $ sudo update-rc.d koha-zebraqueue-daemon defaults 
-    ( Note: see man chkconfig(8) on other distros )
+1.2 Zebra Indexer
 
-    $ sudo ${SCRIPT_DIR}/koha-zebraqueue-ctl.sh start
+Add an entry in Koha user crontab to scheduled added/updated/deleted records
+indexing by Zebra with this command:
+
+  <path/to/koha>/misc/migration_tools/rebuild_zebra -z -b -a
+
+See check misc/cronjobs/crontab.example for usage examples.
 
 6. Run the Web Installer, populate the database, initial configuration of settings
 
@@ -239,10 +241,14 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
       (note: use the correct path to your koha-conf.xml)
 
 7.1 Import:
-    Bibliographic data in MARC21 format
+
+Bibliographic data in MARC21 format
+
     $ misc/migration-tools/bulkmarcimport.pl -file /path/to/marc.iso2709
-    Authority data in MARC21 format
-	$ misc/migration-tools/bulkauthimport.pl -file /path/to/auth.iso2709
+
+Authority data in MARC21 format
+
+    $ misc/migration-tools/bulkmarcimport.pl -a -file /path/to/auth.iso2709
 
 7.2 Fast Index:
     $ misc/migration-tools/rebuild_zebra.pl -b -w
@@ -295,10 +301,6 @@ Uninstall Instructions
 Tested on the following operating environments
 ==============================================
 - Debian Lenny 5.0
-
-Installer Bug reports
-=====================
-Please send any installer bug reports to jmf AT liblime DOT com
 
 Other Notes
 =====================
