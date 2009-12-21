@@ -64,6 +64,8 @@ if (C4::Context->preference("XSLTDetailsDisplay") ) {
         'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail','intranet') );
 }
 
+$template->param( 'SpineLabelShowPrintOnBibDetails' => C4::Context->preference("SpineLabelShowPrintOnBibDetails") );
+
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
