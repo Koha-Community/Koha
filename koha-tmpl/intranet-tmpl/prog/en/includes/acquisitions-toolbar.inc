@@ -14,6 +14,11 @@
         new YAHOO.widget.Button("newperiod");
         new YAHOO.widget.Button("newbudget");
         new YAHOO.widget.Button("newsupplier");
+        new YAHOO.widget.Button("newbasket");
+        new YAHOO.widget.Button("editsupplier");
+        new YAHOO.widget.Button("receive");
+        new YAHOO.widget.Button("newcontract");
+        new YAHOO.widget.Button("editcontracts");
 
         var manageorders = [
             { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&op=add_form"},
@@ -27,12 +32,9 @@
             <!-- /TMPL_IF -->
         ]
         <!-- TMPL_IF NAME="id" -->
-        new YAHOO.widget.Button("newbasket");
-        new YAHOO.widget.Button("editsupplier");
-        new YAHOO.widget.Button("receive");
-        new YAHOO.widget.Button("newcontract");
-        new YAHOO.widget.Button("editcontracts");
-        new YAHOO.widget.Button({type: "menu", label: _("Manage orders"), name: "manageorders", menu: manageorders, container: "toolbar-list"});
+            <!-- TMPL_IF NAME="basketcount" -->
+                new YAHOO.widget.Button({type: "menu", label: _("Manage orders"), name: "manageorders", menu: manageorders, container: "toolbar-list"});
+            <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     }
 
@@ -43,6 +45,9 @@
             <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->&amp;op=enter">Edit</a></li>
             <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=<!-- TMPL_VAR name="id" -->">New Contract</a></li>
             <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR name="id" -->">Contracts</a></li>
+            <!-- TMPL_UNLESS NAME="basketcount" -->
+                <li><a id="newbasket" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR name="id" -->">New Basket</a></li>
+            <!-- /TMPL_UNLESS -->
         <!-- TMPL_ELSE -->
             <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New Vendor</a></li>
         <!-- /TMPL_IF -->
