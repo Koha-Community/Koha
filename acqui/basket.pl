@@ -135,6 +135,13 @@ if ( $op eq 'delete_confirm' ) {
 } elsif ($op eq 'attachbasket' && $template->{'param_map'}->{'CAN_user_acquisition_group_manage'} == 1) {
       print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno=' . $basket->{'basketno'} . '&op=attachbasket&booksellerid=' . $booksellerid);
     # check if we have to "close" a basket before building page
+} elsif ($op eq 'export') {
+    print $query->header(
+        -type       => 'text/csv',
+        -attachment => 'basket' . $basket->{'basketno'} . '.csv',
+    );
+    print GetBasketAsCSV($query->param('basketno'));
+    exit;
 } elsif ($op eq 'close') {
     my $confirm = $query->param('confirm');
     if ($confirm) {

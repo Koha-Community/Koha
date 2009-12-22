@@ -114,6 +114,18 @@ fieldset.various li {
 	YAHOO.util.Event.onDOMReady(DDApp.init, DDApp, true);
 	var tabView = new YAHOO.widget.TabView('bgtabs');
 //]]>
+
+
+function submitForm(form) {
+    if (form.close.checked == true) {
+	var input = document.createElement("input");
+	input.setAttribute("type", "hidden");
+	input.setAttribute("name", "closed");
+	input.setAttribute("value", "1");
+	form.appendChild(input);
+    }
+}
+
 </script>
 </head>
 <body>
@@ -172,8 +184,8 @@ fieldset.various li {
 		</div>
 <!--  TMPL_IF NAME="grouping" -->
 	<div id="bd"> 
-	    <div class="yui-gc"> 
-		    <div class="yui-u first"> 
+	    <div class="yui-g"> 
+		    <div class="yui-u grouping"> 
 
 				<form action="<!-- TMPL_VAR name="scriptname" -->" method="post" name="basketgroups" id="basketgroups">
 	            <div id="groups">
@@ -202,8 +214,8 @@ fieldset.various li {
 
 			</div> 
 			
-		    <div class="yui-u grouping"> 
-		    	<form action="" method="post">
+		    <div class="yui-u first"> 
+		    	<form action="" method="post" id="groupingform" onsubmit="return submitForm(this)">
 					<fieldset id="various" class='various' >
 						<h3><label for="basketgroupname">Basketgroup Name:</label></h3>
 						<input type="text" name="basketgroupname" id="basketgroupname" value="<!-- TMPL_VAR NAME="name" -->" />
@@ -257,8 +269,8 @@ fieldset.various li {
 	<div class="yui-g"> 
 		<div id="bgtabs" class="yui-navset">
 		    <ul class="yui-nav">
-		        <li class="selected"><a href="#opened"><em>Opened</em></a></li>
-		        <li><a href="#closed"><em>Closed</em></a></li>
+		        <li<!-- TMPL_UNLESS NAME="closed" --> class="selected"<!-- /TMPL_UNLESS -->><a href="#opened"><em>Opened</em></a></li>
+		        <li<!-- TMPL_IF NAME="closed" --> class="selected"<!-- /TMPL_IF -->><a href="#closed"><em>Closed</em></a></li>
 		    </ul>            
 		    <div class="yui-content">
 		        <div id="opened">

@@ -74,6 +74,7 @@
                                 new YAHOO.widget.Button("closebutton");
                             <!-- /TMPL_IF -->
                             new YAHOO.widget.Button("basketheadbutton");
+                            new YAHOO.widget.Button("exportbutton");
                             new YAHOO.widget.Button("delbasketbutton");
                         }
                         //]]>
@@ -87,6 +88,7 @@
                     <!-- TMPL_ELSE -->
                         <li><a href="<!-- TMPL_VAR name="script_name" -->?op=close&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="closebutton">Close this basket</a></li>
                     <!-- /TMPL_IF -->
+                        <li><a href="<!-- TMPL_VAR name="script_name" -->?op=export&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="exportbutton">Export this basket as CSV</a></li>
                     </ul>
                 </div>
             <!-- TMPL_ELSE -->

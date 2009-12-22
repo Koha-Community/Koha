@@ -25,6 +25,7 @@ use C4::Debug;
 use C4::Dates qw(format_date format_date_in_iso);
 use MARC::Record;
 use C4::Suggestions;
+use C4::Biblio;
 use C4::Debug;
 use C4::SQLHelper qw(InsertInTable);
 
@@ -40,6 +41,7 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
         &GetBasket &NewBasket &CloseBasket &DelBasket &ModBasket
+	&GetBasketAsCSV
         &GetBasketsByBookseller &GetBasketsByBasketgroup
 
         &ModBasketHeader
@@ -221,6 +223,66 @@ sub CloseBasket {
 }
 
 #------------------------------------------------------------#
+
+=head3 GetBasketAsCSV
+
+=over 4
+
+&GetBasketAsCSV($basketno);
+
+Export a basket as CSV
+
+=back
+
+=cut
+sub GetBasketAsCSV {
+    my ($basketno) = @_;
+    my $basket = GetBasket($basketno);
+    my @orders = GetOrders($basketno);
+    my $contract = GetContract($basket->{'contractnumber'});
+    my $csv = Text::CSV->new();
+    my $output; 
+
+    # TODO: Translate headers
+    my @headers = qw(contractname ordernumber line entrydate isbn author title publishercode collectiontitle notes quantity rrp);
+
+    $csv->combine(@headers);                                                                                                        
+    $output = $csv->string() . "\n";	
+
+    my @rows;
+    foreach my $order (@orders) {
+	my @cols;
+	my $bd = GetBiblioData($order->{'biblionumber'});
+	push(@cols,
+		$contract->{'contractname'},
+		$order->{'ordernumber'},
+		$order->{'entrydate'}, 
+		$order->{'isbn'},
+		$bd->{'author'},
+		$bd->{'title'},
+		$bd->{'publishercode'},
+		$bd->{'collectiontitle'},
+		$order->{'notes'},
+		$order->{'quantity'},
+		$order->{'rrp'},
+	    );
+	push (@rows, \@cols);
+    }
+
+    # Sort by publishercode 
+    # TODO: Sort by publishercode then by title
+    @rows = sort { @$a[7] cmp @$b[7] } @rows;
+
+    foreach my $row (@rows) {
+	$csv->combine(@$row);                                                                                                                    
+	$output .= $csv->string() . "\n";    
+
+    }
+                                                                                                                                                      
+    return $output;             
+
+}
+
 
 =head3 CloseBasketgroup
 
