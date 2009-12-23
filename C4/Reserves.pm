@@ -35,7 +35,7 @@ use C4::Accounts;
 use C4::Members::Messaging;
 use C4::Letters;
 use C4::Branch qw( GetBranchDetail );
-use List::MoreUtils qw( firstidx );
+use List::MoreUtils qw( firstidx any );
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -226,40 +226,23 @@ sub AddReserve {
 =cut
 
 sub GetPendingReserves {
-    my ($startdate, $enddate) = @_;
-    
-    my $sqldatewhere;
+    my ($filters, $startindex, $results) = @_;
+
+    $startindex = "0" if not $startindex;
+
     my @query_params;
     my $indepbranch  = C4::Context->preference('IndependantBranches') ? C4::Context->userenv->{'branch'} : undef;
     my $dbh          = C4::Context->dbh;
     
-    my $query = "SELECT * 
-                 FROM reserves
-                 WHERE 
-                    reserves.found IS NULL ";
-    
-    if (!defined($startdate) or $startdate eq "") {
-        $startdate = format_date($startdate);
-    }
-    if (!defined($enddate) or $enddate eq "") {
-        $enddate = format_date($enddate);
-    }
-    
-    if ($startdate) {
-        $sqldatewhere .= " AND reservedate >= ?";
-        push @query_params, format_date_in_iso($startdate);
-    }
-    if ($enddate) {
-        $sqldatewhere .= " AND reservedate <= ?";
-        push @query_params, format_date_in_iso($enddate);
-    }
-    $query .= $sqldatewhere;
+    my $query = "SELECT DISTINCT(biblionumber) AS biblionumber 
+                 FROM reserves 
+                 LEFT JOIN biblio USING(biblionumber)
+                 WHERE reserves.found IS NULL ";
     
     if ($indepbranch){
 	    $query .= " AND branchcode = ? ";
         push @query_params, $indepbranch;
     }
-    
     
     my $sth = $dbh->prepare($query);
     $sth->execute(@query_params);
@@ -274,7 +257,6 @@ sub GetPendingReserves {
             my @items  = GetItemsInfo($reserve->{biblionumber});
                     
             $line->{title}           = $biblio->{title};
-    
             foreach my $item (@items){
                 next if ($indepbranch && $indepbranch ne $item->{holdingbranch});
                 $line->{count}++;
@@ -296,15 +278,27 @@ sub GetPendingReserves {
         foreach my $datatype (qw/holdingbranches callnumbers locations itemtypes/){
             my @newdatas = ();
             foreach my $data (keys %{$line->{$datatype}}){
-                @newdatas = { 'value' => $data}
+                push @newdatas, { 'value' => $data}
             }
             $line->{$datatype} = \@newdatas;
         }
-        
-        push @reserves, $line;
+        my $filtered = 1;
+        foreach my $key (keys %$filters){
+            my $value = $filters->{$key};
+            $filtered = 0 if not (any { $_->{value} =~ /^$value$/ } @{$line->{$key}}) and $value;
+        }
+        push @reserves, $line if $filtered; # if (any { $_->{value} =~ /^FOSPC$/ } @{$line->{holdingbranches}});
     }
     
-    return \@reserves;
+    my $count = scalar @reserves;
+    my $endindex = ($count > $startindex + $results) ? $startindex + $results : $count;
+    
+    if($count){
+        @reserves = @reserves[$startindex..$endindex];
+    }
+    
+    
+    return ($count, \@reserves);
 }
 
 =item GetReservesFromBiblionumber
