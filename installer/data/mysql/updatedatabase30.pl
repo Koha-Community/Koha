@@ -689,6 +689,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
+$DBversion = "3.00.06.001";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $value = $dbh->selectrow_array("SELECT value FROM systempreferences WHERE variable = 'HomeOrHoldingBranch'");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('HomeOrHoldingBranchReturn','$value','Used by Circulation to determine which branch of an item to check checking-in items','holdingbranch|homebranch','Choice');");
+    print "Upgrade to $DBversion done (Add HomeOrHoldingBranchReturn system preference)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
