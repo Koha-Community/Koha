@@ -1027,7 +1027,6 @@ sub BuildSummary{
 	$summary      =  $resultstring;
   } else {
     my $heading; 
-    my $authid; 
     my $altheading;
     my $seealso;
     my $broaderterms;
