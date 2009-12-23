@@ -137,7 +137,7 @@ sub SearchSuggestion  {
     LEFT JOIN categories AS C2 ON C2.categorycode = U2.categorycode
     WHERE STATUS NOT IN ('CLAIMED')
     } , map {
-        if ( my $s = $$suggestion{$_} ) {
+        if ( my $s = $suggestion->{$_} ) {
         push @sql_params,'%'.$s.'%'; 
         " and suggestions.$_ like ? ";
         } else { () }
@@ -147,7 +147,7 @@ sub SearchSuggestion  {
     my $userenv = C4::Context->userenv;
     if (C4::Context->preference('IndependantBranches')) {
             if ($userenv) {
-                if (($userenv->{flags} % 2) != 1 && !$$suggestion{branchcode}){
+                if (($userenv->{flags} % 2) != 1 && !$suggestion->{branchcode}){
                 push @sql_params,$$userenv{branch};
                 push @query,q{ and (branchcode = ? or branchcode ='')};
                 }
@@ -161,7 +161,7 @@ sub SearchSuggestion  {
     >} keys %$suggestion
     ) {
         if ($$suggestion{$field}){
-            push @sql_params,$$suggestion{$field};
+            push @sql_params,$suggestion->{$field};
             push @query, " and suggestions.$field=?";
         } 
         else {
@@ -380,12 +380,12 @@ sub ModSuggestion {
     my $status_update_table=UpdateInTable("suggestions", $suggestion);
     # check mail sending.
     if ($$suggestion{STATUS}){
-        my $letter=C4::Letters::getletter('suggestions',$$suggestion{STATUS});
+        my $letter=C4::Letters::getletter('suggestions',$suggestion->{STATUS});
         if ($letter){
         my $enqueued = C4::Letters::EnqueueLetter({
             letter=>$letter,
-            borrowernumber=>$$suggestion{suggestedby},
-            suggestionid=>$$suggestion{suggestionid},
+            borrowernumber=>$suggestion->{suggestedby},
+            suggestionid=>$suggestion->{suggestionid},
             msg_transport_type=>'email'
             });
         if (!$enqueued){warn "can't enqueue letter $letter";}
