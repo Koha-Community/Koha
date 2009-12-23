@@ -1,33 +1,11 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Circulation &rsaquo; Pending Holds</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- Additions to enable Calendar system -->
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
-<!-- End of additions --><!-- Additions to enable Calendar system -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
-<!-- End of additions -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
-//<![CDATA[
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
-	 $(document).ready(function() {
-	 	$("th a").hide();
-		$.tablesorter.defaults.widgets = ['zebra'];
-		$("#holdst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
-		dateFormat: 'uk',<!-- /TMPL_IF -->
-			sortList: [[3,0]],
-			headers: { 0:{sorter:false},1:{sorter:false},2: { sorter: 'articles' },6:{sorter:false}}
-		}); 
- 	 });
-//]]>
-</script>
+
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/yuiloader/yuiloader-min.js"></script>
+<style type="text/css">
+	tr.yui-dt-even td {background-color: #EEE;}
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -35,162 +13,132 @@ $.tablesorter.addParser({
 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Pending Holds</div>
-
 <div id="doc3" class="yui-t2">
-   
    <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+		<div id="yui-main">
+			<div class="yui-b">
+				<h2>Pending Reserves</h2>
+				<div id="filters">
+					<label for="holdingbranch">Home branch:</label>
+					<select name="holdingbranch" id="holdingbranch" onchange="javascript:updateDatas()">
+						<option value="">All Branches</option>
+						<!-- TMPL_LOOP NAME="branches_loop" -->
+							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+					<label for="location">Location:</label>
+					<select name="location" id="location" onchange="javascript:updateDatas()">
+						<option value="">All Locations</option>
+						<!-- TMPL_LOOP NAME="locations_loop" -->
+							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
+					<label for="itemtype">Item Type:</label>
+					<select name="itemtype" id="itemtype" onchange="javascript:updateDatas()">
+						<option value="">All Item types</option>
+						<!-- TMPL_LOOP NAME="itemtypes_loop" -->
+							<option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="description" --></option>
+						<!-- /TMPL_LOOP -->
+					</select>
 
-<h2>Pending holds placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --></h2>
-<h3>Reported on <!-- TMPL_VAR NAME="todaysdate" --></h3>
-<p>The following holds have not been filled. Please retrieve them and check them in.</p>
-<div class="searchresults">
-    <!-- TMPL_IF NAME="reserveloop" -->
-    <table id="holdst">
-    <thead><tr>
-        <th>
-				Items Available
-        </th>
-        <th>
-				Patrons with Holds
-        </th>
-        <th>Title
-        <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=biblio&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
-        </th>
-        <th>
-            Libraries
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=library&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
-        </th>
-        <th>
-            Available Call Numbers
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=call&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
-        </th>
-        <th>
-            Available Itypes
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=itype&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
-        </th>
-        <th>
-            Available Locations
-				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=location&amp;from=<!-- TMPL_VAR NAME="from" -->&amp;to=<!-- TMPL_VAR NAME="to" -->">Sort</a>
-        </th>
-    </tr></thead>
-    
-   <tbody> <!-- TMPL_LOOP NAME="reserveloop" -->
-        <tr>
-            <td><!-- TMPL_VAR NAME="count" --></td>  
-            <td><!-- TMPL_VAR NAME="reservecount" --></td> 
-            <td>
-                <p>
-                <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                    <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                </a>
-                <!-- TMPL_ELSE -->
-                    <!-- TMPL_IF name="BiblioDefaultViewisbd" -->
-                    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                        <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                    </a>
-                    <!-- TMPL_ELSE -->
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                            <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                        </a>
-                    <!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
-                </p>
-            </td>
-            <td><p><!-- TMPL_LOOP NAME="holdingbranches" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
-            <td><p><!-- TMPL_LOOP NAME="callnumbers" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
-			<td><p><!-- TMPL_LOOP NAME="itemtypes" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
-			<td><p><!-- TMPL_LOOP NAME="locations" --><!-- TMPL_VAR NAME="value" --><br /><!-- /TMPL_LOOP --></p></td>
-        </tr>
-    <!-- /TMPL_LOOP --></tbody>
-    </table>
-    <!-- TMPL_ELSE -->
-        <b>No items found.</b>
-    <!-- /TMPL_IF -->
-</div>
+				</div>
+				<div id="dataPaginator"><!-- The Paginator widget is rendered here --></div>
+				<div id="dynamicdata"></div>
+			</div>
+		</div>
+	<script type="text/JavaScript" language="JavaScript">
+		//<![CDATA[
+		var myDataSource;
+		var myDataTable;
+		var myConfigs;
+		var myColumnDefs;
+		function updateDatas(){
+			var holdingbranch = document.getElementById('holdingbranch').value;
+			var location      = document.getElementById('location').value;
+			var itemtype      = document.getElementById('itemtype').value;
 
-</div>
-</div>
-<div class="yui-b">
-<div id="filters">
+			var newurl        = "&startIndex=0&results=25";
+			var newbaseurl    = "/cgi-bin/koha/circ/pendingreserves.pl?json=1" +
+								"&holdingbranches=" + holdingbranch +
+								"&locations=" + location +
+								"&itemtypes=" + itemtype;
 
-<form action="/cgi-bin/koha/circ/pendingreserves.pl" method="post" >
-<fieldset class="brief">
-<h4>Refine Results</h4>
-<ol>
-<li>
-<label for="from">
-    Start date:
-</label>
-<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="from" -->" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
-<script language="JavaScript" type="text/javascript">
-function validate1(date) {
-    var day = date.getDate();
-    var month = date.getMonth() + 1;
-    var year = date.getFullYear();
-    var weekDay = date.getDay();
-    var dayMonth = month + '-' + day;
-    var dateString = year + '-' + month + '-' + day;
-    var dateTo = document.getElementById('to').value.split("-");
-    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
-    if (date > limitDate) {
-            return true;
-    } else {
-            return false;
-    }
-}
-Calendar.setup(
-        {
-        inputField : "from",
-        ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-        button : "openCalendarFrom",
-        disableFunc : validate1,
-        dateStatusFunc : validate1
-        }
-);
-</script></li>
-<li><label for="to">
-    End date:
-</label>
-<input size="10" id="to" name="to" value="<!-- TMPL_VAR NAME="to" -->" type="text" />
-<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
-<script type="text/javascript">
-        function validate2(date) {
-            var day = date.getDate();
-            var month = date.getMonth() + 1;
-            var year = date.getFullYear();
-            var weekDay = date.getDay();
-            var dayMonth = month + '-' + day;
-            var dateString = year + '-' + month + '-' + day;
-            var dateFrom = document.getElementById('from').value.split("-");
-            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
-            if (limitDate > date) {
-                    return true;
-            } else {
-                    return false;
-            }
-        }
+		 	myDataSource = new YAHOO.util.DataSource(newbaseurl);
+		 	myDataSource.responseType = YAHOO.util.DataSource.TYPE_JSON
 
-        Calendar.setup(
-                {
-                    inputField : "to",
-                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-                    button : "openCalendarTo",
-                    disableFunc : validate2,
-                    dateStatusFunc : validate2
-                }
-        );
-</script></li>
-</ol>
-<p><i>(Inclusive, default is two days ago to today, set other date ranges as needed. )</i></p>
-<fieldset class="action"><input type="submit" value="Submit" class="submit"/></fieldset>
-</fieldset>
-</form>
+		 	myDataSource.responseSchema = {
+			    	resultsList: "records",
+			        fields: [
+						{key:"title"},
+						{key:"biblionumber"},
+			            {key:"callnumbers", parser: stringparser},
+			            {key:"itemtypes", parser: stringparser},
+			            {key:"holdingbranches", parser: stringparser},
+			            {key:"locations", parser: stringparser},
+			            {key:"count"},
+			            {key:"reservecount"}
+			        ],
+			        metaFields: {
+			            totalRecords: "totalRecords" // Access to value in the server response
+			        }
+				};
+			
+			myConfigs = {
+			        initialRequest: newurl, // Initial request for first page of data
+			        dynamicData: true, // Enables dynamic server-driven data
+			        paginator: new YAHOO.widget.Paginator({ rowsPerPage:25 }) // Enables pagination 
+		    };
 
-</div>
-</div>
-</div>
+			myDataTable = new YAHOO.widget.DataTable("dynamicdata", myColumnDefs, myDataSource, myConfigs);
+			myDataTable.handleDataReturnPayload = function(oRequest, oResponse, oPayload) {
+		        oPayload.totalRecords = oResponse.meta.totalRecords;
+		        return oPayload;
+		    }
+		}
+		
+		var stringparser = function(sData) {
+	 	 	retString = "";
+	        for( i = 0 ; i < sData.length ; i++ ){
+	 	        retString += sData[i]['value'] + "<br />";
+	        }
+	        return retString;
+	    };
+
+	    var formatUrl = function(elCell, oRecord, oColumn, sData) {
+	    	var baseurl =
+	    	<!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+		        '/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=';
+			<!-- TMPL_ELSIF name="BiblioDefaultViewisbd"-->
+	        	'/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=';
+			<!-- TMPL_ELSE -->
+		        '/cgi-bin/koha/catalogue/detail.pl?biblionumber=';
+	 		<!-- /TMPL_IF -->
+			    
+		     
+            elCell.innerHTML = "<a href=' " + baseurl + oRecord.getData("biblionumber") + " ' target='_blank'>" + sData + "</a>";
+        };
+		
+		var loader = new YAHOO.util.YUILoader();
+		loader.insert({
+		    	require: ["reset", "menu", "button",  "connection", "json", "paginator", "datatable","datasource"],
+		    	onSuccess: function() {
+					    // Column definitions
+					    myColumnDefs = [ // sortable:true enables sorting
+					        {key:"title", label:"Title", sortable:false, formatter:formatUrl},
+					        {key:"callnumbers", label:"Call Numbers", sortable:false},
+					        {key:"itemtypes", label:"Item Types", sortable:false},
+					        {key:"holdingbranches", label:"Holding Branches", sortable:false},
+					        {key:"locations", label:"Locations", sortable:false},
+					        {key:"count", label:"Count", sortable:false},
+					        {key:"reservecount", label:"Reserves Count", sortable:false}
+					    ];
+			
+					    updateDatas();
+				}    	
+		});
+
+		//]]>
+	</script>
+	</div>
+	
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
