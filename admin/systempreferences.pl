@@ -150,6 +150,7 @@ $tabsysprefs{finesCalendar}                  = "Circulation";
 $tabsysprefs{previousIssuesDefaultSortOrder} = "Circulation";
 $tabsysprefs{todaysIssuesDefaultSortOrder}   = "Circulation";
 $tabsysprefs{HomeOrHoldingBranch}            = "Circulation";
+$tabsysprefs{HomeOrHoldingBranchReturn}      = "Circulation";
 $tabsysprefs{RandomizeHoldsQueueWeight}      = "Circulation";
 $tabsysprefs{StaticHoldsQueueWeight}         = "Circulation";
 $tabsysprefs{AllowOnShelfHolds}              = "Circulation";

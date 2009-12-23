@@ -1400,7 +1400,8 @@ sub AddReturn {
         $iteminformation->{'itemlost'} = $curr_iteminfo->{'itemlost'};
         
         # check if the book is in a permanent collection....
-        my $hbr      = $iteminformation->{C4::Context->preference("HomeOrHoldingBranch")};
+        my $hbr      = C4::Context->preference("HomeOrHoldingBranchReturn") || "homebranch";
+        $hbr         = $iteminformation->{$hbr};
         my $branches = GetBranches();
 		# FIXME -- This 'PE' attribute is largely undocumented.  afaict, there's no user interface that reflects this functionality.
         if ( $hbr && $branches->{$hbr}->{'PE'} ) {
