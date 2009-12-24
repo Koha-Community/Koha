@@ -118,7 +118,7 @@ sub SearchInTable{
 		#Order by desc by default
 		my @orders;
 		foreach my $order (@$orderby){
-			push @orders,map{ "$_".($$order{$_}? " DESC " : "") } keys %$order; 
+			push @orders,map{ "$_".($order->{$_}? " DESC " : "") } keys %$order; 
 		}
 		$sql.= do { local $"=', '; 
 				qq{ ORDER BY @orders} 
@@ -236,7 +236,7 @@ sub DeleteInTable{
 sub GetPrimaryKeys($) {
 	my $tablename=shift;
 	my $hash_columns=_get_columns($tablename);
-	return  grep { $$hash_columns{$_}{'Key'} =~/PRI/i}  keys %$hash_columns;
+	return  grep { $hash_columns->{$_}->{'Key'} =~/PRI/i}  keys %$hash_columns;
 }
 
 =head2 _get_columns
@@ -344,6 +344,7 @@ sub _filter_fields{
 		}
 	} 
 	else{
+        $debug && warn "filterstring : $filter_input";
 		my ($keys, $values) = _filter_string($tablename,$filter_input, $searchtype,$filtercolumns);
 		if ($keys){
 		my $stringkey="(".join (") AND (",@$keys).")";
@@ -367,8 +368,8 @@ sub _filter_hash{
     my $elements=join "|",@columns_filtered;
 	foreach my $field (grep {/\b($elements)\b/} keys %$filter_input){
 		## supposed to be a hash of simple values, hashes of arrays could be implemented
-		$$filter_input{$field}=format_date_in_iso($$filter_input{$field}) if ($$columns{$field}{Type}=~/date/ && $$filter_input{$field} !~C4::Dates->regexp("iso"));
-		my ($tmpkeys, $localvalues)=_Process_Operands($$filter_input{$field},"$tablename.$field",$searchtype,$columns);
+		$filter_input->{$field}=format_date_in_iso($filter_input->{$field}) if ($columns->{$field}{Type}=~/date/ && $filter_input->{$field} !~C4::Dates->regexp("iso"));
+		my ($tmpkeys, $localvalues)=_Process_Operands($filter_input->{$field},"$tablename.$field",$searchtype,$columns);
 		if (@$tmpkeys){
 			push @values, @$localvalues;
 			push @keys, @$tmpkeys;
@@ -424,7 +425,7 @@ sub _Process_Operands{
 	if ($field=~/(?<!zip)code|(?<!card)number/ && $searchtype ne "exact"){
 		push @tmpkeys,(" $field= '' ","$field IS NULL");
 	}
-	if ($$columns{$col_field}{Type}=~/varchar|text/i){
+	if ($columns->{$col_field}->{Type}=~/varchar|text/i){
 		my @localvaluesextended;
 		if ($searchtype eq "contain"){
 			push @tmpkeys,(" $field LIKE ? ");
