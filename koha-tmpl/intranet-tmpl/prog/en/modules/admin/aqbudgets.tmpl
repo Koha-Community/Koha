@@ -7,8 +7,8 @@
 <!-- TMPL_IF name="add_form" -->
 <script type="text/javascript">
 //<![CDATA[
-
-        var actTotal ="";
+//
+     var actTotal ="";
 
     function ownerRemove(f) {
         document.getElementById('budget_owner_name').innerHTML = '';
@@ -164,9 +164,6 @@
             <th>Base-level<br />spent</th>
             <th>Base-level<br />remaining</th>
             <th class="tooltipcontent">&nbsp;</th>
-            <!-- Owner</th>
-            <th>Branch</th>
-            <th>Note</th> -->
             <th>Actions</th>
         </tr>
     </thead>
@@ -213,7 +210,7 @@
     </tr>
         <!-- /TMPL_LOOP -->
     <!-- TMPL_ELSE -->
-        <tr><td colspan="9">No budget found</td></tr>
+        <tr><td colspan="12">No budget found</td></tr>
     <!-- /TMPL_IF -->
     </tbody>
 </table>
@@ -241,6 +238,7 @@
     <li>
         <span class="label">Budget Parent: </span>
         <!-- TMPL_VAR NAME="budget_parent_name" -->
+        <!-- TMPL_VAR NAME="budget_parent_id" --> - <!-- TMPL_VAR NAME="budget_parent_name" -->
         <input type="hidden" name="budget_parent_id" value="<!-- TMPL_VAR NAME="budget_parent_id" -->" />
     </li>
     <!-- /TMPL_IF -->
