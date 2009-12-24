@@ -2294,14 +2294,15 @@ sub PrepareItemrecordDisplay {
                 $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
                 $subfield_data{hidden}     = "display:none"
                   if $tagslib->{$tag}->{$subfield}->{hidden};
-                my ( $x, $value );
+                my ( $x, $defaultvalue );
                 if ($itemrecord) {
-                    ( $x, $value ) = _find_value( $tag, $subfield, $itemrecord );
+                    ( $x, $defaultvalue ) = _find_value( $tag, $subfield, $itemrecord );
                 }
-                if ( !defined $value ) {
-                    $value = q||;
+                $defaultvalue = $tagslib->{$tag}->{$subfield}->{defaultvalue} unless $defaultvalue;
+                if ( !defined $defaultvalue ) {
+                    $defaultvalue = q||;
                 }
-                $value =~ s/"/&quot;/g;
+                $defaultvalue =~ s/"/&quot;/g;
 
                 # search for itemcallnumber if applicable
                 if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
@@ -2310,7 +2311,7 @@ sub PrepareItemrecordDisplay {
                     my $CNsubfield = substr( C4::Context->preference('itemcallnumber'), 3, 1 );
                     my $temp = $itemrecord->field($CNtag) if ($itemrecord);
                     if ($temp) {
-                        $value = $temp->subfield($CNsubfield);
+                        $defaultvalue = $temp->subfield($CNsubfield);
                     }
                 }
                 if (   $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
@@ -2318,7 +2319,7 @@ sub PrepareItemrecordDisplay {
                     && $defaultvalues->{'callnumber'} ) {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
-                        $value = $defaultvalues->{'callnumber'} if $defaultvalues;
+                        $defaultvalue = $defaultvalues->{'callnumber'} if $defaultvalues;
                     }
                 }
                 if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.holdingbranch' || $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.homebranch' )
@@ -2326,7 +2327,7 @@ sub PrepareItemrecordDisplay {
                     && $defaultvalues->{'branchcode'} ) {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
-                        $value = $defaultvalues->{branchcode} if $defaultvalues;
+                        $defaultvalue = $defaultvalues->{branchcode} if $defaultvalues;
                     }
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
@@ -2381,14 +2382,14 @@ sub PrepareItemrecordDisplay {
                     $subfield_data{marc_value} = CGI::scrolling_list(
                         -name     => 'field_value',
                         -values   => \@authorised_values,
-                        -default  => "$value",
+                        -default  => "$defaultvalue",
                         -labels   => \%authorised_lib,
                         -size     => 1,
                         -tabindex => '',
                         -multiple => 0,
                     );
                 } else {
-                    $subfield_data{marc_value} = "<input type=\"text\" name=\"field_value\" value=\"$value\" size=\"50\" maxlength=\"255\" />";
+                    $subfield_data{marc_value} = "<input type=\"text\" name=\"field_value\" value=\"$defaultvalue\" size=\"50\" maxlength=\"255\" />";
                 }
                 push( @loop_data, \%subfield_data );
             }
