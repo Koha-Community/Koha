@@ -165,7 +165,8 @@ sub get_template_and_user {
 			$template->param(	bartotal		=> $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@$barshelves));
 		}
 
-        $borrowernumber = getborrowernumber($user);
+        $borrowernumber = getborrowernumber($user) if defined($user);
+
         my ( $borr ) = GetMemberDetails( $borrowernumber );
         my @bordat;
         $bordat[0] = $borr;
