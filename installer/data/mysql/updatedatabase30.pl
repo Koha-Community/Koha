@@ -697,6 +697,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.06.002";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE issues CHANGE COLUMN `itemnumber` `itemnumber` int(11) UNIQUE DEFAULT NULL;");
+    $dbh->do("ALTER TABLE serialitems ADD CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;");
+    print "Upgrade to $DBversion done (Improve serialitems table security)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

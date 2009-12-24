@@ -1104,7 +1104,7 @@ CREATE TABLE `import_items` (
 DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` (
   `borrowernumber` int(11) default NULL,
-  `itemnumber` int(11) default NULL,
+  `itemnumber` int(11) UNIQUE default NULL,
   `date_due` date default NULL,
   `branchcode` varchar(10) default NULL,
   `issuingbranch` varchar(18) default NULL,
@@ -2195,7 +2195,8 @@ CREATE TABLE `serialitems` (
 	`serialid` int(11) NOT NULL,
 	UNIQUE KEY `serialitemsidx` (`itemnumber`),
 	KEY `serialitems_sfk_1` (`serialid`),
-	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 		  
 DROP TABLE IF EXISTS `user_permissions`;
