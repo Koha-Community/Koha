@@ -43,8 +43,10 @@ $(document).ready(function() {
 <!-- TMPL_ELSIF name="else" -->
 &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
 <!-- TMPL_ELSIF name="delete_confirm" -->
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
 &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'
 <!-- TMPL_ELSIF name="delete_confirmed" -->
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
 &rsaquo; Data Deleted
 <!-- /TMPL_IF -->
 </div>
@@ -94,7 +96,7 @@ $(document).ready(function() {
 	<input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" /><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" />
 	<input type="submit" class="approve" value="Yes, Delete this Tag" /></form>
 	
-	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
+	<form action="<!-- TMPL_VAR NAME="script_name" -->" method="get"><input type="hidden" name="frameworkcode" value="<!-- TMPL_VAR NAME="frameworkcode" -->" /><input type="submit" value="No, Do Not Delete" class="deny" /></form></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirmed" -->
