@@ -151,6 +151,15 @@ elsif ( $op eq 'addcategory_validate' ) {
     unless ( $params->{'categorycode'} && $params->{'categoryname'} ) {
         default("MESSAGE4",$template);
     }
+    elsif ($input->param('add')){
+	# doing an add must check the code is unique
+	if (CheckCategoryUnique($input->param('categorycode'))){
+	    ModBranchCategoryInfo($params);
+	}
+	else {
+	    default("MESSAGE9",$template);
+	}
+    }
     else {
         ModBranchCategoryInfo($params);
         default("MESSAGE5",$template);

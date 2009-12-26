@@ -44,6 +44,7 @@ BEGIN {
 		&ModBranchCategoryInfo
 		&DelBranch
 		&DelBranchCategory
+	        &CheckCategoryUnique
 	);
 	@EXPORT_OK = qw( &onlymine &mybranch get_branch_code_from_name );
 }
@@ -526,20 +527,42 @@ sets the data from the editbranch form, and writes to the database...
 sub ModBranchCategoryInfo {
     my ($data) = @_;
     my $dbh    = C4::Context->dbh;
-	if ($data->{'add'}){
-		# we are doing an insert
-		my $sth   = $dbh->prepare("INSERT INTO branchcategories (categorycode,categoryname,codedescription,categorytype) VALUES (?,?,?,?)");
-		$sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'} );
-		$sth->finish();		
-	}
-	else {
-		# modifying
-		my $sth = $dbh->prepare("UPDATE branchcategories SET categoryname=?,codedescription=?,categorytype=? WHERE categorycode=?");
-		$sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},uc( $data->{'categorycode'} ) );
-		$sth->finish();
-	}
+    if ($data->{'add'}){
+	# we are doing an insert
+	my $sth   = $dbh->prepare("INSERT INTO branchcategories (categorycode,categoryname,codedescription,categorytype) VALUES (?,?,?,?)");
+	$sth->execute(uc( $data->{'categorycode'} ),$data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'} );
+	$sth->finish();		
+    }
+    else {
+	# modifying
+	my $sth = $dbh->prepare("UPDATE branchcategories SET categoryname=?,codedescription=?,categorytype=? WHERE categorycode=?");
+	$sth->execute($data->{'categoryname'}, $data->{'codedescription'},$data->{'categorytype'},uc( $data->{'categorycode'} ) );
+	$sth->finish();
+    }
 }
 
+=head2 CheckCategoryUnique
+
+if (CheckCategoryUnique($categorycode)){
+  # do something
+}
+
+=cut
+
+sub CheckCategoryUnique {
+    my $categorycode = shift;
+    my $dbh    = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT categorycode FROM branchcategories WHERE categorycode = ?");
+    $sth->execute(uc( $categorycode) );
+    if (my $data = $sth->fetchrow_hashref){
+	return 0;
+    }
+    else {
+	return 1;
+    }
+}
+
+    
 =head2 DeleteBranchCategory
 
 DeleteBranchCategory($categorycode);
