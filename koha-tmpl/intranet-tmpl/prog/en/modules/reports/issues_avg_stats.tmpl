@@ -250,7 +250,6 @@
 				<td><input type="radio" name="Column" value="issuingbranch"></td>
 				<td ><! TMPL_VAR NAME="CGIBranch" ></td>
 			</tr> -->
-			<tr><td colspan="4"><input type="hidden" name="Filter" value="" /></td></tr>
 <!--End Modified -->
 			<!-- TMPL_IF Name="hassort1" -->
 				<tr class="hilighted"> 
@@ -275,15 +274,16 @@
 	<fieldset class="rows">
 	<legend>Output</legend>
 <ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application:  
 		</label><!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
 	</fieldset>
 
 	<fieldset class="action">
-	<input type="submit" value="Submit" />
+	<input type="hidden" name="Filter" value="" />
 	<input type="hidden" name="report_name" value="<!--TMPL_VAR NAME="report_name" -->" />
 	<input type="hidden" name="do_it" value="1" />
+	<input type="submit" value="Submit" />
 	</fieldset>
 	</form>
 <!-- /TMPL_IF -->
