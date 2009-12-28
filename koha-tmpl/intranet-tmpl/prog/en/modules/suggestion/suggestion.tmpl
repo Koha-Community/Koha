@@ -34,7 +34,7 @@ $(document).ready(function() {
 <!--TMPL_LOOP Name="suggestions"-->
     $("#<!--TMPL_VAR Name="suggestiontype"-->t").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
     dateFormat: 'uk',<!-- /TMPL_IF -->
-    headers: {0:{sorter: false}, 1: { sorter: 'articles' },5:{sorter: false},6:{sorter: false},7:{sorter: false}, 8:{sorter: false},9:{sorter: false},10:{sorter: false}}
+    headers: {0:{sorter: false}, 1: { sorter: 'articles' },2:{sorter: false},5:{sorter: false},6:{sorter: false},7:{sorter: false}, 8:{sorter: false},9:{sorter: false},10:{sorter: false}}
     });
     $("#CheckAll<!--TMPL_VAR Name="suggestiontype"-->").click(function(){
         $("#<!--TMPL_VAR Name="suggestiontype"-->t :checkbox").attr('checked', $("#CheckAll<!--TMPL_VAR Name="suggestiontype"-->").is(':checked'));
@@ -227,6 +227,7 @@ $(document).ready(function() {
         <thead>
             <th><input type="checkbox" id="CheckAll<!--TMPL_VAR Name="suggestiontype"-->" >Check <!--TMPL_IF Name="notabs"-->All <!--TMPL_ELSE-->tab <!--/TMPL_IF--></th>
             <th>Suggestion</th>
+	    <th>Note</th>
             <th>Suggested by /on</th>
             <th>Managed by /on</th>
             <th>For</th>
@@ -248,6 +249,7 @@ $(document).ready(function() {
                         <!-- TMPL_IF name="volumedesc" -->; Volume:<i><!-- TMPL_VAR name="volumedesc" --></i> <!-- /TMPL_IF -->
                         <!-- TMPL_IF name="isbn" -->; ISBN :<i><!-- TMPL_VAR name="isbn" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->; Published by <!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="publicationyear" --> in <i><!-- TMPL_VAR name="publicationyear" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --> in <i><!-- TMPL_VAR name="place" --></i> <!-- /TMPL_IF --><!-- TMPL_IF name="collectiontitle" -->;<!-- TMPL_VAR name="collectiontitle" --> <!-- /TMPL_IF --><!-- TMPL_IF name="itemtype" -->;<!-- TMPL_VAR name="itemtype" --> <!-- /TMPL_IF --><br /><!-- TMPL_IF name="note" --><!-- TMPL VAR NAME="note" --><!-- /TMPL_IF -->
                 </td>
+		 <td><!-- TMPL_VAR NAME="note" --></td>
                 <td>
                     <!--TMPL_IF Name="emailsuggestedby"--><a href="mailto:<!-- TMPL_VAR name="emailsuggestedby" -->"><!--/TMPL_IF--><!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->, <!-- TMPL_VAR name="firstnamesuggestedby" --><!-- /TMPL_IF --> <!--TMPL_IF Name="emailsuggestedby"--></a><!--/TMPL_IF-->
                     <!--TMPL_IF Name="suggesteddate"--><br/><!-- TMPL_VAR name="suggesteddate" --><!--/TMPL_IF-->
