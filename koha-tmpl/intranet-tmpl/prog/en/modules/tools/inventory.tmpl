@@ -2,7 +2,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Inventory</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.pack.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
@@ -95,33 +95,34 @@ $(document).ready(function(){
                 <input type="text" name="maxlocation" id="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
         </li>
         <!-- TMPL_IF name="statuses" -->
-            <label for="statuses" style="display: block;">Item statuses:</label>
-          <li>
+	</ol>
+	</fieldset>
             <fieldset class="rows">
+            <legend>Item statuses:</legend>
             <div name="statuses" style="display: block;">
                   <!-- TMPL_LOOP name="statuses" -->
                       <!-- TMPL_IF name="values" -->
-                          <div style="float: left; padding: 5px; margin: 5px;" align="right">
-                              <strong style="text-decoration: underline;">
-                                  <!-- TMPL_VAR name="fieldname" -->
-                              </strong>
+                          <fieldset style="float: left; padding: 5px; margin: 5px;text-align:right">
+                              <legend><!-- TMPL_VAR name="fieldname" --></legend>
                               <ul id="statuses-<!-- TMPL_VAR name="fieldname" -->" style="display: inline;">
                               <!-- TMPL_LOOP name="values" -->
-                                  <li>
-                                    <strong>
+                                  <!-- TMPL_IF NAME="lib" --><li>
+                                    <label for="<!-- TMPL_VAR name="id" -->">
                                       <!-- TMPL_VAR name="lib" -->
-                                    </strong>
+                                    </label>
                                     <input type="checkbox" name="status-<!-- TMPL_VAR name="fieldname" -->-<!-- TMPL_VAR name="id" -->" id="<!-- TMPL_VAR name="id" -->" />
-                                  </li>
+                                  </li><!-- /TMPL_IF -->
                               <!-- /TMPL_LOOP -->
                               </ul>
-                          </div>
+                          </fieldset>
                       <!-- /TMPL_IF -->
                   <!-- /TMPL_LOOP -->
                 </div>
             </fieldset>
-          </li>
+		<fieldset class="rows">
+          <ol>
         <!-- /TMPL_IF -->
+
         <li><label for="datelastseen">Inventory date:</label>
             <input type="text" id="datelastseen" name="datelastseen" value="<!-- TMPL_VAR NAME="datelastseen" -->" />
             <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datelastseen_button" alt="Show Calendar" />
@@ -148,11 +149,11 @@ $(document).ready(function(){
         </li>
         <li>
            <label for="CSVexport">Export to csv file</label>
-           <input type="checkbox" name="CSVexport" />
+           <input type="checkbox" name="CSVexport" id="CSVexport" />
         </li>
         <li>
             <label for="compareinv2barcd">Compare barcodes list to results</label>
-            <input type="checkbox" name="compareinv2barcd" />
+            <input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" />
         </li>
         </ol>
   </fieldset>
