@@ -43,8 +43,10 @@ To know the bookseller this script has to display details.
 use strict;
 use C4::Auth;
 use C4::Acquisition;
+use C4::Contract;
 use C4::Biblio;
 use C4::Output;
+use C4::Dates qw/format_date /;
 use CGI;
 
 use C4::Bookseller;
@@ -66,8 +68,23 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 );
 my $GST = $booksellers[0]->{'gstrate'} || C4::Context->preference("gist");
 $GST *= 100;
+
+my @contracts = GetContracts($id);
+my $contractcount = scalar(@contracts);
+$template->param(hascontracts => 1) if ($contractcount > 0);
+
 #build array for currencies
 if ($op eq "display") {
+
+    # get contracts
+    my @contracts = @{GetContract( { booksellerid => $id } )};
+
+    # format dates
+    for ( @contracts ) {
+        $$_{contractstartdate} = format_date($$_{contractstartdate});
+        $$_{contractenddate}   = format_date($$_{contractenddate});
+    }
+
 	$template->param(
 		id            => $id,
 		name          => $booksellers[0]->{'name'},
@@ -97,6 +114,7 @@ if ($op eq "display") {
 		listprice     => $booksellers[0]->{'listprice'},
 		GST           => $GST,
 		basketcount   => $booksellers[0]->{'basketcount'},
+		contracts     => \@contracts
 	);
 }
 elsif ($op eq 'delete') {

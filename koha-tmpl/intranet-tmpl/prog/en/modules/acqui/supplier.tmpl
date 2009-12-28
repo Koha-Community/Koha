@@ -202,6 +202,32 @@ if (f.company.value == "") {
             <!-- TMPL_IF NAME="notes" --><p><strong>Notes: </strong>
                 <!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
         </div>
+
+                <!-- TMPL_IF name="contracts" -->
+		    <h3>Contract(s)</h3>
+                    <table>
+                        <tr>
+                            <th scope="col">Name</th>
+                            <th scope="col">Description</th>
+                            <th scope="col">Start date</th>
+                            <th scope="col">End date</th>
+                            <th scope="col" colspan="2">&nbsp; </th>
+                        </tr>
+                    <!-- TMPL_LOOP NAME="contracts" -->
+                        <!-- TMPL_IF NAME="__even__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+                        <td>
+                            <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR NAME="contractname" --></a>
+                        </td>
+                        <td><!-- TMPL_VAR NAME="contractdescription" --></td>
+                        <td><!-- TMPL_VAR NAME="contractstartdate" --></td>
+                        <td><!-- TMPL_VAR NAME="contractenddate" --></td>
+                        <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Edit</a></td>
+                        <td><a href="/cgi-bin/koha/admin/aqcontract.pl?op=delete_confirm&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Delete</a></td>
+                        </tr>
+                    <!-- /TMPL_LOOP -->
+                </table>
+                <!-- /TMPL_IF -->
+
 <!--/TMPL_IF-->
 
 </div>

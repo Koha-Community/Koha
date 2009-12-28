@@ -108,17 +108,6 @@ function Check(ff) {
                                 <li><label for="contractdescription">Description</label> &nbsp;
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="contractdescription" -->" />
                                 </li>
-                                <li><label for="booksellerid">Vendor</label>
-                                <select id="booksellerid" name="booksellerid">
-                                <!-- TMPL_LOOP NAME="booksellerloop" -->
-                                    <!-- TMPL_IF NAME="selected" -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- TMPL_ELSE -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- /TMPL_IF -->
-                                <!-- /TMPL_LOOP -->
-                                </select>
-                                </li>
                                 <li><label for="contractstartdate" class="required">Start date *</label> &nbsp;
                                         <input type="text" name="contractstartdate" id="contractstartdate" value="<!-- TMPL_VAR NAME="contractstartdate" -->" maxlength="10"  size="10"/>
                                         <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="contractstartdate_button" alt="Show Calendar" />
