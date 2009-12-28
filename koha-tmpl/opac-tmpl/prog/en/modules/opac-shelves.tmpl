@@ -123,6 +123,23 @@ $(function() {
     });
     <!-- /TMPL_IF -->
 });
+      function Check(f) {
+		var _alertString="";
+		var alertString2;
+
+	    if(f.addshelf.value.length ==0){
+			_alertString += _("- You must enter a List Name\n");
+		}
+
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = _("Form not submitted because of the following problem(s)\n");
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
 //]]>
 </script>
 </head>
@@ -475,7 +492,7 @@ $(function() {
                     <input type="hidden" name="shelves" value="1" />
                     <ol>
                       <li>
-                        <label for="addshelf">List Name:</label>
+                        <label class="required" for="addshelf">List Name:</label>
                         <!-- TMPL_IF NAME="already" -->
                           <input id="addshelf" type="text" name="addshelf" value="<!-- TMPL_VAR NAME="already" -->" size="60" />
                         <!-- TMPL_ELSE -->
@@ -501,7 +518,7 @@ $(function() {
                     </ol>
                   </fieldset>
                   <fieldset class="action">
-                    <input type="submit" value="Save" class="submit" />
+                    <input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" />
                     <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl">Cancel</a>
                   </fieldset>
                 </form>
