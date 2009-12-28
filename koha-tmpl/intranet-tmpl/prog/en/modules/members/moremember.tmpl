@@ -163,10 +163,10 @@ if (nodename =="barcodes[]"){
      <!-- TMPL_UNLESS NAME="I" --><!-- TMPL_IF NAME="othernames" -->&ldquo;<!-- TMPL_VAR NAME="othernames" -->&rdquo;<!-- /TMPL_IF -->
 
 <p class="address"><!-- TMPL_VAR NAME="streetnumber" -->
+        <!-- TMPL_VAR NAME="address" -->         
         <!--TMPL_IF NAME="roaddetails"-->
-         <!-- TMPL_VAR NAME="roaddetails" -->,
-        <!-- /TMPL_IF -->
-        <!-- TMPL_VAR NAME="address" --><br />
+         <!-- TMPL_VAR NAME="roaddetails" -->
+        <!-- /TMPL_IF --><br />
         <!-- TMPL_IF NAME="address2" --><!-- TMPL_VAR NAME="address2"--><br /><!-- /TMPL_IF -->
     	<!-- TMPL_IF NAME="city" --><!-- TMPL_VAR NAME="city" --><!-- /TMPL_IF -->
     	<!-- TMPL_IF NAME="zipcode" --><!-- TMPL_VAR NAME="zipcode" --><br /><!-- /TMPL_IF -->
