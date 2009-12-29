@@ -1724,7 +1724,7 @@ Looks up the different title . Returns array  with all borrowers title
 =cut
 
 sub GetTitles {
-    my @borrowerTitle = split /,|\|/,C4::Context->preference('BorrowersTitles');
+    my @borrowerTitle = split (/,|\|/,C4::Context->preference('BorrowersTitles'));
     unshift( @borrowerTitle, "" );
     my $count=@borrowerTitle;
     if ($count == 1){
@@ -1838,10 +1838,13 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
                          : "");  
     my $dbh   = C4::Context->dbh;
     my $query = "
-        SELECT borrowers.borrowernumber,max(issues.timestamp) as latestissue
+        SELECT borrowers.borrowernumber,
+               max(old_issues.timestamp) as latestissue,
+               max(issues.timestamp) as currentissue
         FROM   borrowers
         JOIN   categories USING (categorycode)
-        LEFT JOIN issues ON borrowers.borrowernumber = issues.borrowernumber
+        LEFT JOIN old_issues USING (borrowernumber)
+        LEFT JOIN issues USING (borrowernumber) 
         WHERE  category_type <> 'S'
    ";
     my @query_params;
@@ -1854,7 +1857,8 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
     }
     $query.=" GROUP BY borrowers.borrowernumber";
     if ($filterdate){ 
-        $query.=" HAVING latestissue <? OR latestissue IS NULL";
+        $query.=" HAVING (latestissue < ? OR latestissue IS NULL) 
+                  AND currentissue IS NULL";
         push @query_params,$filterdate;
     }
     warn $query if $debug;
