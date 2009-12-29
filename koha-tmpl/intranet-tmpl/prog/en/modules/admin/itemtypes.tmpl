@@ -225,6 +225,10 @@ Item Types Administration
         
       </li>
       <li>
+          <label for="renewalsallowed">Renewals: </label>
+		  <input type="text" id="renewalsallowed" name="renewalsallowed" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="renewalsallowed" -->" />
+        </li>
+      <li>
           <label for="rentalcharge">Rental charge: </label>
 		  <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="<!-- TMPL_VAR name="rentalcharge" -->" />
          </li>
@@ -259,6 +263,7 @@ Item Types Administration
 
 	<tr><th scope="row">Description</th><td><!-- TMPL_VAR name="description" --></td></tr>
 	<tr><th scope="row">Loan length</th><td><!-- TMPL_VAR name="loanlength" --></td></tr>
+	<tr><th scope="row">Renewals</th><td><!-- TMPL_IF name="renewalsallowed" -->Allowed<!-- TMPL_ELSE -->Not allowed<!-- /TMPL_IF --></td></tr>
 <tr><th scope="row">Rental charge</th><td><!-- TMPL_VAR name="rentalcharge" --></td></tr></table>
 		<form action="<!-- TMPL_VAR name="script_name" -->" method="post">
 		<input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="<!-- TMPL_VAR name="itemtype" -->" /><!-- TMPL_IF name="total" -->
@@ -280,6 +285,7 @@ Item Types Administration
     <th>Code</th>
     <th>Description</th>
     <th>Not for loan</th>
+    <th>Renewable</th>
     <th>Charge</th>
     <th>Actions</th>
   </tr>
@@ -297,6 +303,13 @@ Item Types Administration
     </td>
     <td><!-- TMPL_VAR name="description" --></td>
     <td><!-- TMPL_IF NAME="notforloan" -->Yes<!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td>
+    <td>
+    <!-- TMPL_IF NAME="renewalsallowed" -->
+      <!-- TMPL_VAR name="renewalsallowed" --> times
+    <!-- TMPL_ELSE -->
+      No
+    <!-- /TMPL_IF -->
+    </td>
     <td>
     <!-- TMPL_UNLESS name="notforloan" -->
       <!-- TMPL_VAR NAME="rentalcharge" -->
