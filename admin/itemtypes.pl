@@ -112,6 +112,7 @@ if ( $op eq 'add_form' ) {
     $template->param(
         itemtype        => $itemtype,
         description     => $data->{'description'},
+        renewalsallowed => $data->{'renewalsallowed'},
         rentalcharge    => sprintf( "%.2f", $data->{'rentalcharge'} ),
         notforloan      => $data->{'notforloan'},
         imageurl        => $data->{'imageurl'},
@@ -137,6 +138,7 @@ elsif ( $op eq 'add_validate' ) {
         my $query2 = '
             UPDATE itemtypes
             SET    description = ?
+                 , renewalsallowed = ?
                  , rentalcharge = ?
                  , notforloan = ?
                  , imageurl = ?
@@ -146,6 +148,7 @@ elsif ( $op eq 'add_validate' ) {
         $sth = $dbh->prepare($query2);
         $sth->execute(
             $input->param('description'),
+            $input->param('renewalsallowed'),
             $input->param('rentalcharge'),
             ( $input->param('notforloan') ? 1 : 0 ),
             (
@@ -162,15 +165,16 @@ elsif ( $op eq 'add_validate' ) {
     else {    # add a new itemtype & not modif an old
         my $query = "
             INSERT INTO itemtypes
-                (itemtype,description,rentalcharge, notforloan, imageurl,summary)
+                (itemtype,description,renewalsallowed,rentalcharge, notforloan, imageurl,summary)
             VALUES
-                (?,?,?,?,?,?);
+                (?,?,?,?,?,?,?);
             ";
         my $sth = $dbh->prepare($query);
 		my $image = $input->param('image');
         $sth->execute(
             $input->param('itemtype'),
             $input->param('description'),
+            $input->param('renewalsallowed'),
             $input->param('rentalcharge'),
             $input->param('notforloan') ? 1 : 0,
             $image eq 'removeImage' ?           ''                 :
@@ -200,13 +204,14 @@ elsif ( $op eq 'delete_confirm' ) {
 
     my $sth =
       $dbh->prepare(
-"select itemtype,description,rentalcharge from itemtypes where itemtype=?"
+"select itemtype,description,renewalsallowed,rentalcharge from itemtypes where itemtype=?"
       );
     $sth->execute($itemtype);
     my $data = $sth->fetchrow_hashref;
     $template->param(
         itemtype        => $itemtype,
         description     => $data->{description},
+        renewalsallowed => $data->{renewalsallowed},
         rentalcharge    => sprintf( "%.2f", $data->{rentalcharge} ),
         imageurl        => $data->{imageurl},
         total           => $total
