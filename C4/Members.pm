@@ -1878,6 +1878,7 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
         LEFT JOIN old_issues USING (borrowernumber)
         LEFT JOIN issues USING (borrowernumber) 
         WHERE  category_type <> 'S'
+        AND borrowernumber NOT IN (SELECT guarantorid FROM borrowers WHERE guarantorid IS NOT NULL AND guarantorid <> 0) 
    ";
     my @query_params;
     if ($filterbranch && $filterbranch ne ""){ 
