@@ -1853,7 +1853,8 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
         push @query_params,$filterbranch;
     }
     if($filterexpiry){
-        $query .= " AND dateexpiry < NOW() ";
+        $query .= " AND dateexpiry < ? ";
+        push @query_params,$filterdate;
     }
     $query.=" GROUP BY borrowers.borrowernumber";
     if ($filterdate){ 
