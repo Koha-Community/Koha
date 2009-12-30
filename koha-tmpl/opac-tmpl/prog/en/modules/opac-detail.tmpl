@@ -47,6 +47,15 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <style type="text/css">
     #addtagl { display: none; }
 </style>
+<!-- COinS / OpenURL -->
+<!-- TMPL_IF NAME="ocoins" -->
+<span class="Z3988" title="<!-- TMPL_VAR NAME="ocoins" -->"></span>
+<!-- TMPL_ELSE -->
+    <!-- TMPL_IF name="isbn" -->
+        <!-- unAPI <abbr/> tag -->
+        <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" --></abbr></span>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="XSLTDetailsDisplay" --><script type="text/javascript">                            
     var GB_ROOT_DIR = "/intranet-tmpl/prog/en/lib/greybox/";                               
 </script><!-- /TMPL_IF -->
@@ -142,15 +151,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <!-- /TMPL_IF -->
     
     <!-- TMPL_IF NAME="pages" --><span class="results_summary"><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></span><!-- /TMPL_IF -->
-    <!-- COinS / OpenURL -->
-    <!-- TMPL_IF NAME="ocoins" -->
-    <span class="Z3988" title="<!-- TMPL_VAR NAME="ocoins" -->"></span>
-    <!-- TMPL_ELSE -->
-        <!-- TMPL_IF name="isbn" -->
-            <!-- unAPI <abbr/> tag -->
-            <span class="results_summary"><span class="label">ISBN: </span><abbr class="unapi-id" title="koha:isbn:<!-- TMPL_VAR NAME="isbn" -->"><!-- TMPL_VAR NAME="isbn" --></abbr></span>
-        <!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
     <span class="results_summary"><span class="label">ISSN:</span><!-- TMPL_VAR NAME="issn" --></span>
     <!-- /TMPL_IF -->
