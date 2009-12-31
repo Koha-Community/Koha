@@ -1251,8 +1251,10 @@ Return the summary of a record.
 sub GetBiblioSummary {
     my $recorddata =shift @_;
     
+    return unless $recorddata;
     my $marcflavour = C4::Context->preference("marcflavour");
     my $marc=MARC::Record::new_from_xml($recorddata,"utf-8",$marcflavour);
+    return unless $marc;
     
     my $str;
     
