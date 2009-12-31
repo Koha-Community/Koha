@@ -33,6 +33,7 @@ use C4::Output;
 use C4::Dates qw/format_date/;
 use Exporter;
 use Data::Dumper;
+use C4::Csv;
 
 use vars qw($debug @EXPORT @ISA $VERSION);
 
@@ -317,6 +318,7 @@ $template->param(
     shelvesloopall  => [(@shelvesloop, @shelveslooppriv)],
     numberCanManage => $numberCanManage,
 	"BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
+    csv_profiles => GetCsvProfilesLoop()
 );
 if ($template->param('viewshelf') or
 	$template->param( 'shelves' ) or
