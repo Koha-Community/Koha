@@ -393,11 +393,50 @@ a .term {
 	padding : .3em 0;
 }
 
-#action a, #toolbar a {
+#action a {
 	background-position : 5px center;
 	background-repeat : no-repeat;
 	text-decoration : none;
-	padding-left : 26px;
+	padding-left : 35px;
+}
+
+#action a.print {
+	background-image:url(../../images/print.gif);
+}
+
+#action a#furthersearches {
+	background : transparent url(../../images/menu-arrow.gif) no-repeat right center;
+	border : 1px solid #F3F3F3;
+	margin-left : 5px;
+	padding : 2px 26px 2px 10px;
+	text-decoration : none;
+}
+
+#action a#furthersearches:hover {
+	border-top : 1px solid #FFF;
+	border-left : 1px solid #FFF;
+	border-right : 1px solid #979797;
+	border-bottom : 1px solid #979797;
+}
+
+#action a.reserve,
+.searchresults a.reserve {
+	background-image:url(../../images/placereserve.gif);
+}
+
+#action a.addtoshelf, #toolbar a.addtoshelf {
+	background-image:url(../../images/addtoshelf.gif);
+}
+
+#action a.addtocart, #toolbar a.addtocart {
+	background-image:url(../../images/cart2.gif);
+}
+
+/* toolbar buttons */
+
+#toolbar a,
+#toolbar input {
+	white-space : nowrap;
 }
 
 #toolbar ul {
@@ -417,82 +456,147 @@ a .term {
 	border-left : 0;
 }
 
-#action a.reserve, #toolbar a.reserve, .searchresults a.reserve {
-	background-image:url(../../images/placereserve.gif);
-}
 
-.searchresults a.highlight_toggle {
-	background : transparent url(../../images/highlight.gif) -4px center no-repeat;
-	display: none;
-	font-weight: normal;
-	padding : 0 10px 0 21px;
-}
-
-#action a.addtoshelf, #toolbar a.addtoshelf {
-	background-image:url(../../images/addtoshelf.gif);
-}
-
-#action a.addtocart, #toolbar a.addtocart {
-	background-image:url(../../images/cart2.gif);
-}
-
-#action a.print, #toolbar a.print {
-	background-image:url(../../images/print.gif);
-}
-
-#action a#furthersearches {
-	background : transparent url(../../images/menu-arrow.gif) no-repeat right center;
-	border : 1px solid #F3F3F3;
-	margin-left : 5px;
-	padding : 2px 26px 2px 10px;
+#toolbar a.print {
+	background: transparent url(../../images/print-small.png) 5px 50% no-repeat;
+	display : none;
 	text-decoration : none;
-}
-
-#action a#furthersearches:hover {
-	border-top : 1px solid #FFF;
-	border-left : 1px solid #FFF;
-	border-right : 1px solid #979797;
-	border-bottom : 1px solid #979797;
+	padding-left : 23px;
 }
 
 #toolbar a.brief {
-	background-image: url(../../images/brief.gif);
+	background: transparent url(../../images/brief.gif) 5px 50% no-repeat;
+	text-decoration : none;
+	padding-left : 23px;
 }
 
-#toolbar  a.detail {
-	background-image: url(../../images/detail.gif);
+#toolbar a.detail {
+	background: transparent url(../../images/detail.gif) 5px 50% no-repeat;
+	text-decoration : none;
+	padding-left : 27px;
 }
 
-#toolbar a.print {
-	background-image: url(../../images/print.gif);
+#toolbar a.download {
+	background : transparent url("../../images/download.png") 7px 50% no-repeat;
+	padding-left : 24px;
+	text-decoration : none;
+}
+
+#toolbar a.editshelf {
+	background : transparent url("../../images/shelf-edit.gif") 12px 50% no-repeat;
+	padding-left : 26px;
+	text-decoration : none;
+}
+
+#toolbar a.empty {
+	background: transparent url(../../images/empty-small.png) 5px 50% no-repeat;
+	text-decoration : none;
+	padding-left : 21px;
 }
 
 #toolbar a.hide {
-	background-image: url(../../images/close.gif);
+	background: transparent url(../../images/close.gif) 5px 50% no-repeat;
+	text-decoration : none;
+	padding-left : 26px;
 }
 
-#toolbar a.send {
-	background-image: url(../../images/send.gif);
-}
-.sendlist {
-	display : none;
-}
-a.send {
-	background-image: url(../../images/send.gif);
-	background-position : 0px center;
-	background-repeat : no-repeat;
+#toolbar a.hold {
+	background: transparent url(../../images/place-hold-small.png) 5px 50% no-repeat;
 	text-decoration : none;
-	padding-left : 21px;
-	padding-right : 5px;
+	padding-left : 23px;
 }
-a.hold,
+
+#toolbar a.newshelf {
+	background : transparent url("../../images/shelf-new.gif") 5px 50% no-repeat;
+	padding-left : 23px;
+	text-decoration : none;
+}
+
+#toolbar a.send,
+a.send {
+	background: transparent url(../../images/send.png) 2px 50% no-repeat;
+	text-decoration : none;
+	padding-left : 28px;
+}
+
+#toolbar a.new {
+	background : transparent url("../../images/new.gif") 5px 50% no-repeat;
+	padding-left : 23px;
+	text-decoration : none;
+}
+
+#toolbar input.download {
+	background : transparent url("../../images/download.png") 7px 50% no-repeat;
+	border : 0;
+	color : #006699;
+	cursor : pointer;
+	padding-left : 24px;
+	text-decoration : none;
+}
+
+#toolbar input.editshelf,
+input.editshelf {
+	background : transparent url("../../images/shelf-edit.gif") 10px 50% no-repeat;
+	border : 0;
+	color : #006699;
+	cursor : pointer;
+	font-size : 100%;
+	padding-left : 29px;
+	text-decoration : none;
+}
+
+#toolbar input.newshelf {
+	background : transparent url("../../images/shelf-new.gif") center left no-repeat;
+	border : 0;
+	color : #006699;
+	cursor : pointer;
+	font-size : 100%;
+	margin: 0 0.5em;
+	padding-left : 15px;
+	text-decoration : none;
+}
+
+#toolbar input.deleteshelf,
+input.deleteshelf {
+	background : transparent url("../../images/shelf-delete.gif") 7px 50% no-repeat;
+	border : 0;
+	color : #006699;
+	cursor : pointer;
+	font-size : 100%;
+	padding-left : 20px;
+}
+
+#toolbar input.deleteshelf:hover {
+	color: #990033;
+}
+
+
+#toolbar input.editshelf:active,input.deleteshelf:active {
+	border : 0;
+}
+
+#tagsel_span input.submit,
+#tagsel_tag {
+	background-image: url(../../images/tags-small.png);
+	background-position : 7px center;
+	background-repeat : no-repeat;
+	padding-left : 25px;
+	text-decoration: none;
+}
+
+#placehold input.submit:hover,
+#tagsel_span input.submit:hover {
+	color: #990033;
+}
+
 #placehold input.submit {
-	background-image: url(../../images/placereserve.gif);
+	background-image:url(../../images/placereserve.gif);
 	background-position : 9px center;
 	background-repeat : no-repeat;
 	text-decoration : none;
-	padding-left : 34px;
+	padding-left : 23px;
 }
+
 #placehold input.submit,
 #tagsel_span input.submit {
 	border : 0;
@@ -503,22 +607,11 @@ a.hold,
 	color : #336699;
 	cursor : pointer;
 }
-#tagsel_span input.submit,
-#tagsel_tag {
-	background-image: url(../../images/tags.gif);
-	background-position : 9px center;
-	background-repeat : no-repeat;
-	padding-left : 24px;
-	text-decoration: none;
-}
-#tagsel_tag {
-	padding-left: 27px;
-}
-#placehold input.submit:hover,#tagsel_span input.submit:hover {
-	color: #990033;
-}
-#toolbar a.empty {
-	background-image: url(../../images/trash.gif);
+.searchresults a.highlight_toggle {
+	background : transparent url(../../images/highlight.gif) -4px center no-repeat;
+	display: none;
+	font-weight: normal;
+	padding : 0 10px 0 21px;
 }
 
 /* the itemtype list in advanced search */
@@ -1742,47 +1835,6 @@ a#MARCview, a#MARCviewPop, a#ISBDview, a#Normalview {
 }
 #shelfbrowser a {
 	display : block;
-}
-a.new {
-	background : transparent url("../../images/new.gif") center left no-repeat;
-	border : 0;
-	color : #006699;
-	cursor : pointer;
-	margin:0pt 0.5em;
-	padding-left : 15px;
-	text-decoration : none;
-}
-input.editshelf,a.editshelf {
-	background : transparent url("../../images/shelf-edit.gif") center left no-repeat;
-	border : 0;
-	color : #006699;
-	cursor : pointer;
-	margin:0pt 0.5em;
-	padding-left : 15px;
-	text-decoration : none;
-}
-input.newshelf,a.newshelf {
-	background : transparent url("../../images/shelf-new.gif") center left no-repeat;
-	border : 0;
-	color : #006699;
-	cursor : pointer;
-	font-size : 100%;
-	margin:0pt 0.5em;
-	padding-left : 15px;
-	text-decoration : none;
-}
-input.deleteshelf {
-	background : transparent url("../../images/shelf-delete.gif") center left no-repeat;
-	border : 0;
-	color : #006699;
-	cursor : pointer;
-	font-size : 100%;
-	margin:0pt 0.5em;
-	padding-left : 13px;
-}
-
-input.editshelf:active,input.deleteshelf:active {
-	border : 0;
 }
 
 #comments .commentline {

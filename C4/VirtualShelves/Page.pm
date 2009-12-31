@@ -182,6 +182,7 @@ SWITCH: {
 			}
 			($items, $totitems) = GetShelfContents($shelfnumber, $shelflimit, $shelfoffset);
 			for my $this_item (@$items) {
+				my $record = GetMarcBiblio($this_item->{'biblionumber'});
 				# the virtualshelfcontents table does not store these columns nor are they retrieved from the items
 				# and itemtypes tables, so I'm commenting them out for now to quiet the log -crn
 				#$this_item->{imageurl} = $imgdir."/".$itemtypes->{ $this_item->{itemtype}  }->{'imageurl'};
@@ -189,6 +190,7 @@ SWITCH: {
 				$this_item->{'dateadded'} = format_date($this_item->{'dateadded'});
                 $this_item->{'imageurl'} = getitemtypeinfo($this_item->{'itemtype'})->{'imageurl'};
                 $this_item->{'coins'} = GetCOinSBiblio($this_item->{'biblionumber'});
+				$this_item->{'subtitle'} = C4::Biblio::get_koha_field_from_marc('bibliosubtitle', 'subtitle', $record, '');
 			}
 			push @paramsloop, {display => 'privateshelves'} if $category == 1;
 			$showadd = 1;
