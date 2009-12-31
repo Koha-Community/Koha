@@ -448,6 +448,7 @@ sub getRecords {
                     # not an index scan
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
+            		warn $results[$i-1]->record($j)->render() ;
 
                         # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] = $record;
@@ -1647,6 +1648,10 @@ sub searchResults {
         }
 
         # XSLT processing of some stuff
+	my $debug=1;
+	use C4::Charset;
+	SetUTF8Flag($marcrecord);
+	$debug && warn $marcrecord->as_formatted;
         if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
                 $oldbiblio->{biblionumber}, $marcrecord, 'Results' );

@@ -124,8 +124,9 @@ sub XSLTParse4Display {
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     #return $record->as_formatted();
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
-    my $xmlrecord = $record->as_xml();
+    my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
     my $sysxml = "<sysprefs>\n";
+    warn $xmlrecord;
     foreach my $syspref ( qw/OPACURLOpenInNewWindow DisplayOPACiconsXSLT URLLinkText/ ) {
         $sysxml .= "<syspref name=\"$syspref\">" .
                    C4::Context->preference( $syspref ) .
@@ -137,7 +138,7 @@ sub XSLTParse4Display {
 
     my $parser = XML::LibXML->new();
     # don't die when you find &, >, etc
-    $parser->recover_silently(1);
+    $parser->recover_silently(0);
     my $source = $parser->parse_string($xmlrecord);
     unless ( $stylesheet ) {
         my $xslt = XML::LibXSLT->new();
