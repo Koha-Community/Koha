@@ -111,7 +111,6 @@ if($input->param('format') eq "json"){
             $data->{author} = $order->{author};
             $data->{biblionumber} = $order->{biblionumber};
             $data->{freight} = $order->{freight};
-            $data->{quantrem} = $order->{quantity} - $order->{quantityreceived};
             $data->{quantity} = $order->{quantity};
             $data->{ecost} = $order->{ecost};
             $data->{ordertotal} = sprintf("%.2f",$order->{ecost}*$order->{quantity});
@@ -234,7 +233,6 @@ for (my $i = 0 ; $i < $countpendings ; $i++) {
     my %line;
     %line = %{$pendingorders->[$i]};
     $line{quantity}+=0;
-    $line{quantrem} = $line{quantity} - $line{quantityreceived};
     $line{quantityreceived}+=0;
     $line{unitprice}+=0;
     $totalPunitprice += $line{unitprice};
