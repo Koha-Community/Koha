@@ -61,7 +61,6 @@ my $input       = new CGI;
 my $searchfield          = $input->param('searchfield');
 my $budget_period_id     = $input->param('budget_period_id');
 my $op                   = $input->param('op')||"else";
-my $check_duplicate      = $input->param('confirm_not_duplicate')||0;
 
 my $budget_period_hashref= $input->Vars;
 #my $sort1_authcat = $input->param('sort1_authcat');
@@ -127,7 +126,6 @@ if ( $op eq 'add_form' ) {
         );
     } # IF-MOD
     $template->param( DHTMLcalendar_dateformat 	=> C4::Dates->DHTMLcalendar(),);
-    $template->param( confirm_not_duplicate		=> $check_duplicate     	  );
 }
 
 elsif ( $op eq 'add_validate' ) {
@@ -139,31 +137,6 @@ elsif ( $op eq 'add_validate' ) {
 		my $status=ModBudgetPeriod($budget_period_hashref);
 	} 
 	else {    # ELSE ITS AN ADD
-		unless ($check_duplicate){
-			my $candidates=GetBudgetPeriods({ 
-									 		budget_period_startdate	=> $$budget_period_hashref{budget_period_startdate}
-									 		, budget_period_enddate	=> $$budget_period_hashref{budget_period_enddate}
-									 		});
-			if (@$candidates){
-				my @duplicates=map{
-									{ dupid 			   => $$_{budget_period_id}
-									, duplicateinformation =>
-											$$_{budget_period_description}." ".$$_{budget_period_startdate}." ".$$_{budget_period_enddate}
-									}
-								  } @$candidates;
-				$template->param(url			  => "aqbudgetperiods.pl", 
-								field_name		  => "budget_period_id",
-								action_dup_yes_url=> "aqbudgets.pl",
-								action_dup_no_url => "aqbudgetperiods.pl?op=add_validate",
-								confirm_not_duplicate	  => 0
-									);
-				delete $$budget_period_hashref{budget_period_id};
-				$template->param(duplicates=>\@duplicates,%$budget_period_hashref);
-				$template->param("add_form"=>1);
-				output_html_with_http_headers $input, $cookie, $template->output;
-				exit;
-			}
-		}
 		my $budget_period_id=AddBudgetPeriod($budget_period_hashref);
 	}
 	$op='else';
