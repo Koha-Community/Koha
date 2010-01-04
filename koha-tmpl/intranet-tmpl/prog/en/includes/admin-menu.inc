@@ -6,7 +6,8 @@
 <h5>Basic parameters</h5>
 <ul>
 	<li><a href="/cgi-bin/koha/admin/branches.pl">Libraries, branches, groups</a></li>
-	<li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types and circulation codes</a></li>
+	<li><a href="/cgi-bin/koha/admin/itemtypes.pl">Item types</a></li>
+	<li><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a></li>
 </ul>
 
 <h5>Patrons and circulation</h5>
@@ -22,7 +23,6 @@
 
 <h5>Catalog</h5>
 <ul>
-	<li><a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized values</a></li>
 	<li><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Bibliographic framework</a></li>
 	<li><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></li>
 	<li><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></li>

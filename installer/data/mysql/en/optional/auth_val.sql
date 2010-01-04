@@ -24,6 +24,8 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC',
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','GEN','General Stacks');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','AV','Audio Visual');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','REF','Reference');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','CART','Book Cart');
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('LOC','PROC','Processing Center');
 
 -- collection codes for an item
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('CCODE','FIC','Fiction');
@@ -43,3 +45,9 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('NOT_L
 -- restricted status of an item, linked to items.restricted
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','0','');
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTRICTED','1','Restricted Access');
+
+-- manual invoice types
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUAL_INV','Copier Fees','.25');
+
+--custom borrower notes
+INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Address Notes');
