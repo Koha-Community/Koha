@@ -152,8 +152,8 @@ foreach my $result (@results) {
 
     $result->{'budget_owner'}   = $member_full;
     $result->{'budget_ordered'} = GetBudgetOrdered( $result->{'budget_id'} );
-    $result->{'budget_avail'}   = $result->{'budget_amount'} - $result->{'budget_spent'} - $result->{'budget_ordered'};
     $result->{'budget_spent'}   = GetBudgetSpent( $result->{'budget_id'} );
+    $result->{'budget_avail'}   = $result->{'budget_amount'} - $result->{'budget_spent'} - $result->{'budget_ordered'};
 
     $total      += $result->{'budget_amount'};
     $totspent   += $result->{'budget_spent'};
