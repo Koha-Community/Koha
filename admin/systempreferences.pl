@@ -80,6 +80,7 @@ $tabsysprefs{FrameworksLoaded}      = "Admin";
 $tabsysprefs{libraryAddress}        = "Admin";
 $tabsysprefs{delimiter}             = "Admin";
 $tabsysprefs{IndependantBranches}   = "Admin";
+$tabsysprefs{IndependentBranchPatron}= "Admin";
 $tabsysprefs{insecure}              = "Admin";
 $tabsysprefs{KohaAdmin}             = "Admin";
 $tabsysprefs{KohaAdminEmailAddress} = "Admin";

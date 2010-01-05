@@ -713,6 +713,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.06.004";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences  (variable,value,explanation,options,type) VALUES('IndependentBranchPatron','0','If ON, librarian patron search can only be done on patron of same library as librarian',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add IndependentBranchPatron system preference to be able to limit patron search to librarian's Library)\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 
