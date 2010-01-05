@@ -94,7 +94,6 @@ for (@failedrenews) { $renew_failed{$_} = 1; }
 
 my $findborrower = $query->param('findborrower');
 $findborrower =~ s|,| |g;
-#$findborrower =~ s|'| |g;
 my $borrowernumber = $query->param('borrowernumber');
 
 $branch  = C4::Context->userenv->{'branch'};  
@@ -102,7 +101,7 @@ $printer = C4::Context->userenv->{'branchprinter'};
 
 
 # If AutoLocation is not activated, we show the Circulation Parameters to chage settings of librarian
-if (C4::Context->preference("AutoLocation") ne 1) { # FIXME: string comparison to number
+if (C4::Context->preference("AutoLocation") != 1) {
     $template->param(ManualLocation => 1);
 }
 
@@ -133,15 +132,6 @@ if ( $barcode ) {
     }
 }
 
-#set up cookie.....
-# my $branchcookie;
-# my $printercookie;
-# if ($query->param('setcookies')) {
-#     $branchcookie = $query->cookie(-name=>'branch', -value=>"$branch", -expires=>'+1y');
-#     $printercookie = $query->cookie(-name=>'printer', -value=>"$printer", -expires=>'+1y');
-# }
-#
-
 my ($datedue,$invalidduedate,$globalduedate);
 
 if(C4::Context->preference('globalDueDate') && (C4::Context->preference('globalDueDate') =~ C4::Dates->regexp('syspref'))){
@@ -150,19 +140,19 @@ if(C4::Context->preference('globalDueDate') && (C4::Context->preference('globalD
 my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
 if($duedatespec_allow){
     if ($duedatespec) {
-    	if ($duedatespec =~ C4::Dates->regexp('syspref')) {
-    		my $tempdate = C4::Dates->new($duedatespec);
-    		if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
-    			# i.e., it has to be later than today/now
-    			$datedue = $tempdate;
-    		} else {
-    			$invalidduedate = 1;
-    			$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
-    		}
-    	} else {
-    		$invalidduedate = 1;
-    		$template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
-    	}
+        if ($duedatespec =~ C4::Dates->regexp('syspref')) {
+            my $tempdate = C4::Dates->new($duedatespec);
+            if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
+                # i.e., it has to be later than today/now
+                $datedue = $tempdate;
+            } else {
+                $invalidduedate = 1;
+                $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+            }
+        } else {
+            $invalidduedate = 1;
+            $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+        }
     } else {
         # pass global due date to tmpl if specifyduedate is true 
         # and we have no barcode (loading circ page but not checking out)
@@ -240,9 +230,12 @@ if ($borrowernumber) {
     my ($warning_year, $warning_month, $warning_day) = split /-/, $borrower->{'dateexpiry'};
     my (  $enrol_year,   $enrol_month,   $enrol_day) = split /-/, $borrower->{'dateenrolled'};
     # Renew day is calculated by adding the enrolment period to today
-    my (  $renew_year,   $renew_month,   $renew_day) =
-      Add_Delta_YM( $enrol_year, $enrol_month, $enrol_day,
-        0 , $borrower->{'enrolmentperiod'}) if ($enrol_year*$enrol_month*$enrol_day>0);
+    my (  $renew_year,   $renew_month,   $renew_day);
+    if ($enrol_year*$enrol_month*$enrol_day>0) {
+        (  $renew_year,   $renew_month,   $renew_day) =
+        Add_Delta_YM( $enrol_year, $enrol_month, $enrol_day,
+            0 , $borrower->{'enrolmentperiod'});
+    }
     # if the expiry date is before today ie they have expired
     if ( $warning_year*$warning_month*$warning_day==0 
         || Date_to_Days($today_year,     $today_month, $today_day  ) 
@@ -280,44 +273,44 @@ if ($borrowernumber) {
 #
 #
 if ($barcode) {
-  # always check for blockers on issuing
-  my ( $error, $question ) =
+    # always check for blockers on issuing
+    my ( $error, $question ) =
     CanBookBeIssued( $borrower, $barcode, $datedue , $inprocess );
-  my $blocker = $invalidduedate ? 1 : 0;
+    my $blocker = $invalidduedate ? 1 : 0;
 
-  delete $question->{'DEBT'} if ($debt_confirmed);
-  foreach my $impossible ( keys %$error ) {
-            $template->param(
-                $impossible => $$error{$impossible},
-                IMPOSSIBLE  => 1
-            );
-            $blocker = 1;
-        }
+    delete $question->{'DEBT'} if ($debt_confirmed);
+    foreach my $impossible ( keys %$error ) {
+        $template->param(
+            $impossible => $$error{$impossible},
+            IMPOSSIBLE  => 1
+        );
+        $blocker = 1;
+    }
     if( !$blocker ){
         my $confirm_required = 0;
-    	unless($issueconfirmed){
+        unless($issueconfirmed){
             #  Get the item title for more information
             my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
-		    $template->param( itemhomebranch => $getmessageiteminfo->{'homebranch'} );
+            $template->param( itemhomebranch => $getmessageiteminfo->{'homebranch'} );
 
-		    # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
-       	    foreach my $needsconfirmation ( keys %$question ) {
-       	        $template->param(
-       	            $needsconfirmation => $$question{$needsconfirmation},
-       	            getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
-       	            NEEDSCONFIRMATION  => 1
-       	        );
-       	        $confirm_required = 1;
-       	    }
-		}
+            # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.
+            foreach my $needsconfirmation ( keys %$question ) {
+                $template->param(
+                    $needsconfirmation => $$question{$needsconfirmation},
+                    getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
+                    NEEDSCONFIRMATION  => 1
+                );
+                $confirm_required = 1;
+            }
+        }
         unless($confirm_required) {
             AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
-			$inprocess = 1;
+            $inprocess = 1;
             if($globalduedate && ! $stickyduedate && $duedatespec_allow ){
                 $duedatespec = $globalduedate->output();
                 $stickyduedate = 1;
             }
-		}
+        }
     }
     
     # FIXME If the issue is confirmed, we launch another time GetMemberIssuesAndFines, now display the issue count after issue 
@@ -333,8 +326,6 @@ if ($borrowernumber) {
 ##################################################################################
 # BUILD HTML
 # show all reserves of this borrower, and the position of the reservation ....
-my $borrowercategory;
-my $category_type;
 if ($borrowernumber) {
 
     # new op dev
@@ -402,7 +393,7 @@ if ($borrowernumber) {
         push( @reservloop, \%getreserv );
 
 #         if we have a reserve waiting, initiate waitingreserveloop
-        if ($getreserv{waiting} eq 1) {
+        if ($getreserv{waiting} == 1) {
         push (@WaitingReserveLoop, \%getWaitingReserveInfo)
         }
       
@@ -445,14 +436,14 @@ if ($borrower) {
         );
         $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
         my ( $restype, $reserves ) = CheckReserves( $it->{'itemnumber'} );
-		$it->{'can_renew'} = $can_renew;
-		$it->{'can_confirm'} = !$can_renew && !$restype;
-		$it->{'renew_error'} = $restype;
-	    $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
+        $it->{'can_renew'} = $can_renew;
+        $it->{'can_confirm'} = !$can_renew && !$restype;
+        $it->{'renew_error'} = $restype;
+        $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
 
-	    $totalprice += $it->{'replacementprice'};
-		$it->{'itemtype'} = $itemtypeinfo->{'description'};
-		$it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
+        $totalprice += $it->{'replacementprice'};
+        $it->{'itemtype'} = $itemtypeinfo->{'description'};
+        $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
         $it->{'dd'} = format_date($it->{'date_due'});
         $it->{'issuedate'} = format_date($it->{'issuedate'});
         $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
@@ -487,13 +478,12 @@ if ($borrower) {
 my $dbh = C4::Context->dbh;
 
 # how many of each is allowed?
-my $issueqty_sth = $dbh->prepare( "
-SELECT itemtypes.description AS description,issuingrules.itemtype,maxissueqty
-FROM issuingrules
-  LEFT JOIN itemtypes ON (itemtypes.itemtype=issuingrules.itemtype)
-  WHERE categorycode=?
-" );
-$issueqty_sth->execute("*");	# This is a literal asterisk, not a wildcard.
+my $issueqty_sth = $dbh->prepare(
+    'SELECT itemtypes.description AS description,issuingrules.itemtype,maxissueqty ' .
+    'FROM issuingrules LEFT JOIN itemtypes ON (itemtypes.itemtype=issuingrules.itemtype) ' .
+    'WHERE categorycode=?'
+);
+$issueqty_sth->execute(q{*}); # This is a literal asterisk, not a wildcard.
 
 while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
 
@@ -504,12 +494,11 @@ while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
           $issued_itemtypes_count->{ $data->{'description'} } );
 
     # can't have a negative number of remaining
-    if ( $data->{'left'} < 0 ) { $data->{'left'} = "0" }
-    $data->{'flag'} = 1 unless ( $data->{'maxissueqty'} > $data->{'count'} );
-    unless ( ( $data->{'maxissueqty'} < 1 )
-        || ( $data->{'itemtype'} eq "*" )
-        || ( $data->{'itemtype'} eq "CIRC" ) )
-    {
+    if ( $data->{'left'} < 0 ) { $data->{'left'} = '0' }
+    if ( $data->{maxissueqty} <= $data->{count} ) {
+        $data->{flag} = 1;
+    }
+    if ( $data->{maxissueqty} > 0 && $data->{itemtype} !~m/^(\*|CIRC)$/ ) {
         push @issued_itemtypes_count_loop, $data;
     }
 }
@@ -599,16 +588,7 @@ foreach my $flag ( sort keys %$flags ) {
             );
 
             my $items = $flags->{$flag}->{'itemlist'};
-# useless ???
-#             {
-#                 my @itemswaiting;
-#                 foreach my $item (@$items) {
-#                     my ($iteminformation) =
-#                         getiteminformation( $item->{'itemnumber'}, 0 );
-#                     push @itemswaiting, $iteminformation;
-#                 }
-#             }
-            if ( ! $query->param('module') or $query->param('module') ne 'returns' ) {
+            if ( ! $query->param('module') || $query->param('module') ne 'returns' ) {
                 $template->param( nonreturns => 'true' );
             }
         }
@@ -665,18 +645,18 @@ my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'
 
 $template->param(
     issued_itemtypes_count_loop => \@issued_itemtypes_count_loop,
-    lib_messages_loop		=> $lib_messages_loop,
-    bor_messages_loop		=> $bor_messages_loop,
-    all_messages_del		=> C4::Context->preference('AllowAllMessageDeletion'),
-    findborrower                => $findborrower,
-    borrower                    => $borrower,
-    borrowernumber              => $borrowernumber,
-    branch                      => $branch,
-    branchname                  => GetBranchName($borrower->{'branchcode'}),
-    printer                     => $printer,
-    printername                 => $printer,
-    firstname                   => $borrower->{'firstname'},
-    surname                     => $borrower->{'surname'},
+    lib_messages_loop => $lib_messages_loop,
+    bor_messages_loop => $bor_messages_loop,
+    all_messages_del  => C4::Context->preference('AllowAllMessageDeletion'),
+    findborrower      => $findborrower,
+    borrower          => $borrower,
+    borrowernumber    => $borrowernumber,
+    branch            => $branch,
+    branchname        => GetBranchName($borrower->{'branchcode'}),
+    printer           => $printer,
+    printername       => $printer,
+    firstname         => $borrower->{'firstname'},
+    surname           => $borrower->{'surname'},
     dateexpiry        => format_date($newexpiry),
     expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
@@ -687,8 +667,8 @@ $template->param(
     emailpro          => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
-    zipcode	          => $borrower->{'zipcode'},
-    country	          => $borrower->{'country'},
+    zipcode           => $borrower->{'zipcode'},
+    country           => $borrower->{'country'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
     amountold         => $amountold,
@@ -697,14 +677,14 @@ $template->param(
     duedatespec       => $duedatespec,
     message           => $message,
     CGIselectborrower => $CGIselectborrower,
-	totalprice => sprintf("%.2f", $totalprice),
-    totaldue        => sprintf("%.2f", $total),
+    totalprice        => sprintf('%.2f', $totalprice),
+    totaldue          => sprintf('%.2f', $total),
     todayissues       => \@todaysissues,
     previssues        => \@previousissues,
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
-	is_child          => ($borrower->{'category_type'} eq 'C'),
+    is_child          => ($borrower->{'category_type'} eq 'C'),
     circview => 1,
 );
 
@@ -713,16 +693,11 @@ if ($stickyduedate) {
     $session->param( 'stickyduedate', $duedatespec );
 }
 
-#if ($branchcookie) {
-#$cookie=[$cookie, $branchcookie, $printercookie];
-#}
-
 my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
 
 # get authorised values with type of BOR_NOTES
 my @canned_notes;
-my $dbh = C4::Context->dbh;
 my $sth = $dbh->prepare('SELECT * FROM authorised_values WHERE category = "BOR_NOTES"');
 $sth->execute();
 while ( my $row = $sth->fetchrow_hashref() ) {
