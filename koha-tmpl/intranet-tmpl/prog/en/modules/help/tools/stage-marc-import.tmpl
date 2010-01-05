@@ -2,24 +2,19 @@
 
 <h1>MARC Import</h1>
 
-<p>This is one of the screens you will see frequently if you are starting from scratch.</p>
+<p>Importing records into Koha includes two steps. The first is to stage records for import.</p>
 
-<p>It is useful to import a bunch of ISO 2709 biblios that can be used later for a quick cataloguing</p>
-
-<p>First, you need to browse your computer to find the MARC record that you grabbed for your item. Click on</p>
-
-<p>Choose File to browse.</p>
-
-<p>If you aren't sure if you've already imported a record, keep the radio button set to</p>
-
-<p>Ignore this one, keep the existing one.</p>
-
-<p>You can "name" the import to help you when you need to choose between more than 1 imported biblio (or just want to keep trace on where the biblios comes from)</p>
-
-<p>You can also change char encoding between MARC21 and UNIMARC</p>
-
-<p>You don't need to actually name every import, so you don't need to fill in this box if you don't want to. It is useful for telling imports apart if you've more than one of the same record.</p>
-
-<p><b>IMPORTANT : This tool is NOT intended to import ISO 2709 in your ACTIVE database. If you need to migrate data from another ILS, then you must consider $kohaInstall/scripts/misc/bulkmarcimport.pl</b></p>
+<ul><li>First find the MARC file on your computer</li>
+<li>Next you will be presented with options for record matching and item imports</li>
+<ul><li>Enter 'Comments about this file' to identify your upload when going to the 'Manage Staged MARC Records' tool</li>
+<li>Choose the character encoding</li>
+<li>Choose whether or not you want to look for matching records</li>
+<ul><li>You can set up record matching rules through the administration area</li></ul>
+<li>Next choose what to do with matching records if they are found</li>
+<li>Finally choose what to do with records that are unique</li>
+<li>Next you can choose whether or not to import the item data found in the MARC records</li></ul>
+<li>Click 'Stage for import'</li>
+<li>You will be presented with a confirmation of your MARC import</li>
+<li>To complete the process continue to the Managed Staged MARC Records Tool</li></ul>
 
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->
