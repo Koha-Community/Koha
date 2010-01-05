@@ -83,6 +83,8 @@ this function get all suppliers with late issues.
 
 return :
 the supplierlist into a hash. this hash containts id & name of the supplier
+Only valid suppliers are returned. Late subscriptions lacking a supplier are
+ignored.
 
 =back
 
@@ -103,6 +105,7 @@ sub GetSuppliersWithLateIssues {
     $sth->execute;
     my %supplierlist;
     while ( my ( $id, $name ) = $sth->fetchrow ) {
+        next if !defined $id;
         $supplierlist{$id} = $name;
     }
     return %supplierlist;
