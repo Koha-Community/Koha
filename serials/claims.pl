@@ -31,7 +31,7 @@ my ($template, $loggedinuser, $cookie)
             });
 my $supplier_loop = [];
 foreach my $s_id (sort {$supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist){
-        my ($count) = GetLateOrMissingIssues($supplierid,q{},$order);
+        my ($count) = GetLateOrMissingIssues($s_id,q{},$order);
         push @{$supplier_loop}, {
             id   => $s_id,
             name => $supplierlist{$s_id} . "($count)",
