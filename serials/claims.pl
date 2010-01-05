@@ -18,7 +18,7 @@ my $claimletter = $input->param('claimletter');
 my $supplierid = $input->param('supplierid');
 my $suppliername = $input->param('suppliername');
 my $order = $input->param('order');
-my %supplierlist = GetSuppliersWithLateIssues;
+my %supplierlist = GetSuppliersWithLateIssues();
 my @select_supplier;
 
 # open template first (security & userenv set here)
@@ -30,15 +30,19 @@ my ($template, $loggedinuser, $cookie)
             flagsrequired => {serials => 1},
             debug => 1,
             });
-foreach my $supplierid (sort {$supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist){
-        my ($count, @dummy) = GetLateOrMissingIssues($supplierid,"",$order);
-        my $counting = $count;
-        $supplierlist{$supplierid} = $supplierlist{$supplierid}." ($counting)";
-	push @select_supplier, $supplierid
+my $supplier_loop = [];
+foreach my $s_id (sort {$supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist){
+        my ($count) = GetLateOrMissingIssues($supplierid,q{},$order);
+        push @{$supplier_loop}, {
+            id   => $s_id,
+            name => $supplierlist{$s_id} . "($count)",
+            selected => ( $supplierid && $supplierid == $s_id ),
+        };
 }
-my $letters = GetLetters("claimissues");
+
+my $letters = GetLetters('claimissues');
 my @letters;
-foreach (keys %$letters){
+foreach (keys %{$letters}){
     push @letters ,{code=>$_,name=> $letters->{$_}};
 }
 
@@ -47,14 +51,6 @@ my ($count2, @missingissues);
 if ($supplierid) {
     ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order);
 }
-
-my $CGIsupplier=CGI::scrolling_list( -name     => 'supplierid',
-			-id        => 'supplierid',
-			-values   => \@select_supplier,
-			-default  => $supplierid,
-			-labels   => \%supplierlist,
-			-size     => 1,
-			-multiple => 0 );
 
 my ($singlesupplier,@supplierinfo);
 if($supplierid){
@@ -81,7 +77,7 @@ if ($op eq "send_alert"){
 $template->param('letters'=>\@letters,'letter'=>$letter);
 $template->param(
         order =>$order,
-        CGIsupplier => $CGIsupplier,
+        supplier_loop => $supplier_loop,
         phone => $supplierinfo[0]->{phone},
         booksellerfax => $supplierinfo[0]->{booksellerfax},
         bookselleremail => $supplierinfo[0]->{bookselleremail},
