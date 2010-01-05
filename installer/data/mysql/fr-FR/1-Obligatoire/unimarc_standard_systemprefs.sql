@@ -222,3 +222,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewISBD','1','Affiche la vue ISBD à l\'intranet','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewLabeledMARC','0','Affiche la vue labeled MARC','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewMARC','1','Affiche la vue MARC','','YesNo');
+INSERT INTO systempreferences  (variable,value,explanation,options,type) VALUES ('IndependentBranchPatron','0','Si activé, Le bibliothécaire ne recherche les lecteurs que dans SA bibliothèque',NULL,'YesNo');");
