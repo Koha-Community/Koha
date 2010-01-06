@@ -26,6 +26,7 @@ use C4::Circulation;
 use Encode;
 use XML::LibXML;
 use XML::LibXSLT;
+use LWP::Simple;
 
 use strict;
 
@@ -37,6 +38,7 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &XSLTParse4Display
+        &GetURI
     );
 }
 
@@ -45,6 +47,19 @@ BEGIN {
 C4::XSLT - Functions for displaying XSLT-generated content
 
 =head1 FUNCTIONS
+
+=head1 GetURI
+
+=head2 GetURI file and returns the xslt as a string
+
+=cut
+
+sub GetURI {
+    my ($uri) = @_;
+    my $string;
+    $string = get $uri ; 
+    return $string;
+}
 
 =head1 transformMARCXML4XSLT
 
@@ -118,7 +133,7 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xsl_suffix ) = @_;
+    my ( $biblionumber, $orig_record, $xslfilename ) = @_;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     #return $record->as_formatted();
@@ -129,17 +144,22 @@ sub XSLTParse4Display {
     # don't die when you find &, >, etc
     $parser->recover_silently(1);
     my $source = $parser->parse_string($xmlrecord);
-    unless ( $stylesheet ) {
+    unless ( $stylesheet->{$xslfilename} ) {
         my $xslt = XML::LibXSLT->new();
-        my $xslfile = C4::Context->config('opachtdocs') . 
-                      "/prog/en/xslt/" .
-                      C4::Context->preference('marcflavour') .
-                      "slim2OPAC$xsl_suffix.xsl";
-        my $style_doc = $parser->parse_file($xslfile);
-        $stylesheet = $xslt->parse_stylesheet($style_doc);
+        my $style_doc;
+        if ($xslfilename=~/http:/){
+            my $xsltstring=GetURI($xslfilename);
+            $style_doc = $parser->parse_string($xsltstring);
+        }
+        else {
+            use Cwd;
+            warn getcwd;
+            $style_doc = $parser->parse_file($xslfilename);
+        }
+        $stylesheet->{$xslfilename} = $xslt->parse_stylesheet($style_doc);
     }
-    my $results = $stylesheet->transform($source);
-    my $newxmlrecord = $stylesheet->output_string($results);
+    my $results = $stylesheet->{$xslfilename}->transform($source);
+    my $newxmlrecord = $stylesheet->{$xslfilename}->output_string($results);
     return $newxmlrecord;
 }
 
