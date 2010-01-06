@@ -26,6 +26,7 @@
         <div class="container">
 	<h1>Search history</h1>
 	<!-- TMPL_IF EXPR="recentSearches || previousSearches" -->
+	    <a href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history" onclick="javascript:return confirm(_('Are you sure you want to delete your search history?'));">Delete your search history</a>
 	    <!-- TMPL_IF NAME="recentSearches" -->
 	    <!-- TMPL_IF NAME="previousSearches" -->
 	    <h2>Current session</h2>
