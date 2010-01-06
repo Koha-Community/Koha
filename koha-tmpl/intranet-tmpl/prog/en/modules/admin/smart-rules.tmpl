@@ -73,6 +73,7 @@ $(document).ready(function() {
                 <th>Suspension in Days (day)</th>
                 <th>Renewals Allowed (count)</th>
                 <th>Holds Allowed (count)</th>
+		        <th>Rental Discount (%)</th>
 				<th>&nbsp;</th>
             </tr>
 				<!-- TMPL_LOOP NAME="rules" -->
@@ -106,6 +107,7 @@ $(document).ready(function() {
 							<td><!-- TMPL_IF NAME="finedays" --> <!-- TMPL_VAR NAME="finedays" --> <!-- /TMPL_IF --></td>
 							<td><!-- TMPL_IF NAME="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --> <!-- /TMPL_IF --></td>
 							<td><!-- TMPL_IF NAME="reservesallowed" --><!-- TMPL_VAR NAME="reservesallowed" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_IF NAME="rentaldiscount" --><!-- TMPL_VAR NAME="rentaldiscount" --> <!-- /TMPL_IF --></td>
 							<td>
 								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
 							</td>
@@ -136,6 +138,7 @@ $(document).ready(function() {
                     <td><input name="finedays" size="3" /> </td>
                     <td><input name="renewalsallowed" size="2" /></td>
                     <td><input name="reservesallowed" size="2" /></td>
+		    <td><input name="rentaldiscount" size="2" /></td>
                     <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/><input type="submit" value="Add" class="submit" /></td>
                 </tr>
             </table>
