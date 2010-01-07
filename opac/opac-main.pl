@@ -67,14 +67,16 @@ my $news_lang;
 if($input->cookie('KohaOpacLanguage')){
     $news_lang = $input->cookie('KohaOpacLanguage');
 }else{
-    while( !$news_lang && ( $ENV{HTTP_ACCEPT_LANGUAGE} =~ m/([a-zA-Z]{2,}-?[a-zA-Z]*)(;|,)?/g ) ){
-        if( my @lang = grep { /^$1$/i } @languages ) {
-            $news_lang = $lang[0];
+    if ($ENV{HTTP_ACCEPT_LANGUAGE}) {
+        while( !$news_lang && ( $ENV{HTTP_ACCEPT_LANGUAGE} =~ m/([a-zA-Z]{2,}-?[a-zA-Z]*)(;|,)?/g ) ){
+            if( my @lang = grep { /^$1$/i } @languages ) {
+                $news_lang = $lang[0];
+            }
         }
     }
     if (not $news_lang) {
         my @languages = split ",", C4::Context->preference("opaclanguages");
-        $news_lang = @languages[0];
+        $news_lang = $languages[0];
     }
 }
 
@@ -88,7 +90,7 @@ $template->param(
     koha_news_count => $koha_news_count
 );
 
-# If GoogleIndicTransliteration system preference is On Set paramter to load Google's javascript in OPAC search screens 
+# If GoogleIndicTransliteration system preference is On Set paramter to load Google's javascript in OPAC search screens
 if (C4::Context->preference('GoogleIndicTransliteration')) {
         $template->param('GoogleIndicTransliteration' => 1);
 }
