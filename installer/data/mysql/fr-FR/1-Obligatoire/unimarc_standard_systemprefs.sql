@@ -250,8 +250,8 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
 INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'StaffSerialIssueDisplayCount', '3', '', 'Nombre de bulletins à afficher pour chaque abonnement dans l''interface pro', 'Integer');
 INSERT INTO `systempreferences` ( `variable` , `value` , `options` , `explanation` , `type` ) VALUES ( 'OPACSerialIssueDisplayCount', '3', '', 'Nombre de bulletins à afficher pour chaque abonnement à l''OPAC', 'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACShowCheckoutName','0','Affiche à l''OPAC le nom du lecteur qui a emprunté le document. Attention : la plupart des bibliothèques laisseront ce paramètre à Off. Il sera utile à des bibliothèques d''entreprise','','YesNo');
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesID','','Voir : http://librarything.com/forlibraries/','','free'); 
-INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesEnabled','0','Active les service Library Thing','','YesNo'); 
+INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesID','','Voir : http://librarything.com/forlibraries/','','free');
+INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesEnabled','0','Active les service Library Thing','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('LibraryThingForLibrariesTabbedView','0','Met le contenu de LibraryThingForLibraries dans les onglets.','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewISBD','1','Autoriser l''affichage de la vue ISBD des notices bibliographiques','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type)VALUES('viewLabeledMARC','0','Autoriser l''affichage MARC labellis des notices bibliographiques','','YesNo');
@@ -273,3 +273,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacSerialDefaultTab', 'serialcollection', 'Ce paramètre définit l''onglet par défaut pour l''affichage des périodiques dans l''OPAC.', 'holdings|serialcollection|subscriptions', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','Si activé, des reservations sont automatiquement créées pour chaque lecteur de la liste de circulation d''un numéro de périodique','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SpecifyDueDate',1,'Autorise ou non le bibliothécaire à spécifier la date de retour dans le module circulation','','YesNo');
+INSERT INTO  systempreferences VALUES ('ImageLimit',5,'','Limiter le nombre d''images stockées en base pour la photo Lecteur à cette taille.','Integer');
+
+
