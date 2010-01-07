@@ -142,6 +142,9 @@ if ($loggedinuser == '') {
     }
 
 }
+
+$template->param(searchhistoryview => 1);
+
 output_html_with_http_headers $cgi, $cookie, $template->output;
 
 
