@@ -290,7 +290,7 @@ if (@branchcodes) {
     @branches = grep { $seen{$_} } @overduebranches;
     
     
-    if (@branches) {
+    if (@overduebranches) {
 
     	my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
 	$verbose and warn "$branch_word @branches have overdue rules\n";
@@ -327,6 +327,7 @@ if ( defined $csvfilename ) {
     }
 }
 
+@branches = @overduebranches unless @branches;
 foreach my $branchcode (@branches) {
 
     my $branch_details = C4::Branch::GetBranchDetail($branchcode);
