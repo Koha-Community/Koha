@@ -94,7 +94,7 @@ li.list2 {
     <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a> &rsaquo;
     <!-- TMPL_IF NAME="add_form" -->
         <!-- TMPL_IF NAME="basketno" -->Edit basket '<!-- TMPL_VAR NAME="basketname" -->'
-        <!-- TMPL_ELSE -->Add a basket
+        <!-- TMPL_ELSE -->add a basket to <!-- TMPL_VAR name="booksellername" -->
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 </div>
@@ -155,10 +155,6 @@ li.list2 {
         </fieldset>
     </form>
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="add_validate" -->
-        <h3>Data recorded</h3>
-        <META HTTP-EQUIV=Refresh CONTENT="0; URL=basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">
-     <!-- /TMPL_IF -->
 </div>
 </div>
 <div class="yui-b">
