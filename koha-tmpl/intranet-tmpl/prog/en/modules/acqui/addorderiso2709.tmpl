@@ -7,6 +7,19 @@
 <!-- /TMPL_IF -->
 </title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#files").tablesorter({
+            headers: {
+                5: { sorter: false },
+            }
+        });
+    });
+//]]>
+</script>
+</head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
@@ -66,7 +79,8 @@
               <!-- /TMPL_IF -->
              <!-- TMPL_ELSE -->
                <div>
-                   <table>
+                   <table id="files">
+                     <thead>
                      <tr>
                        <th>File name</th>
                        <th>Comments</th>
@@ -75,6 +89,8 @@
                        <th># Bibs</th>
                        <th>&nbsp;</th>
                      </tr>
+                     </thead>
+                     <tbody>
                      <!-- TMPL_LOOP name="batch_list" -->
                      <tr>
                         <td><!-- TMPL_VAR name="file_name" --></td>
@@ -85,6 +101,7 @@
                        <td><a href="<!-- TMPL_VAR name="scriptname" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Add orders</a></td>
                      </tr>
                      <!-- /TMPL_LOOP -->
+                     </tbody>
                    </table>
                </div>
              <!-- /TMPL_IF -->
