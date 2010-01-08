@@ -3298,21 +3298,34 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.01.00.101";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(
+        "INSERT INTO systempreferences 
+           (variable, value, options, explanation, type)
+         VALUES (
+            'OverdueNoticeBcc', '', '', 
+            'Email address to Bcc outgoing notices sent by email',
+            'free')
+         ");
+	print "Upgrade to $DBversion done (added OverdueNoticeBcc system preferences)\n";
+    SetVersion ($DBversion);
+}
+$DBversion = "3.01.00.102";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES (9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)')");
 	print "Upgrade done (fixed spelling error in edit_catalogue permission)\n";
     SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.01.00.103";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES (13, 'moderate_tags', 'Moderate patron tags')");
 	print "Upgrade done (adding patron permissions for tags tool)\n";
     SetVersion ($DBversion);
 }
 
-$DBversion = "XXX";
+$DBversion = "3.01.00.104";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
     eval { $maninv_count = $dbh->do("SELECT 1 FROM authorised_values WHERE category='MANUAL_INV'"); };
@@ -3330,6 +3343,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	print "Upgrade to $DBversion done ( add defaults to authorized values for MANUAL_INV and BOR_NOTES and add new default LOC authorized values for shelf to cart processing )\n";
 	SetVersion ($DBversion);
 }
+
+
 
 =item DropAllForeignKeys($table)
 
