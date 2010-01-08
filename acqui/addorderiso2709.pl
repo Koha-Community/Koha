@@ -38,6 +38,7 @@ use C4::Items;
 use C4::Koha qw/GetItemTypes/;
 use C4::Budgets qw/GetBudgets/;
 use C4::Acquisition qw/NewOrderItem/;
+use C4::Bookseller qw/GetBookSellerFromId/;
 
 my $input = new CGI;
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
@@ -51,9 +52,11 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 my $cgiparams = $input->Vars;
 my $op = $cgiparams->{'op'};
 my $booksellerid  = $input->param('booksellerid');
+my $bookseller = GetBookSellerFromId($booksellerid);
 
 $template->param(scriptname => "/cgi-bin/koha/acqui/addorderiso2709.pl",
                 booksellerid => $booksellerid,
+                booksellername => $bookseller->{name},
                 );
 my $ordernumber;
 
