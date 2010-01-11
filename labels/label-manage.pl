@@ -4,7 +4,7 @@
 # Parts Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -28,7 +28,7 @@ use Data::Dumper;
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use autouse 'C4::Branch' => qw(get_branch_code_from_name);
-use C4::Labels::Lib 1.000000 qw(get_all_templates get_all_layouts get_all_profiles get_batch_summary html_table);
+use C4::Creators::Lib 1.000000 qw(get_all_templates get_all_layouts get_all_profiles get_batch_summary html_table);
 use C4::Labels::Layout 1.000000;
 use C4::Labels::Template 1.000000;
 use C4::Labels::Profile 1.000000;
@@ -46,9 +46,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $error = 0;
 my $db_rows = {};
-my $display_columns = { layout =>   [  # db column       => {col label                  is link? 
+my $display_columns = { layout =>   [  # db column       => {col label                  is link?
                                         {layout_id       => {label => 'Layout ID',      link_field      => 0}},
                                         {layout_name     => {label => 'Layout',         link_field      => 0}},
                                         {barcode_type    => {label => 'Barcode Type',   link_field      => 0}},
@@ -73,9 +72,10 @@ my $display_columns = { layout =>   [  # db column       => {col label          
                                     ],
 };
 
-my $label_element = $cgi->param('label_element') || undef;
+my $label_element = $cgi->param('label_element') || 'template';   # default to template managment
 my $op = $cgi->param('op') || 'none';
 my $element_id = $cgi->param('element_id') || undef;
+my $error = $cgi->param('error') || 0;
 
 my $branch_code = ($label_element eq 'batch' ? get_branch_code_from_name($template->param('LoginBranchname')) : '');
 
@@ -84,18 +84,18 @@ if ($op eq 'delete') {
     elsif       ($label_element eq 'template')  {$error = C4::Labels::Template::delete(template_id => $element_id);}
     elsif       ($label_element eq 'profile')   {$error = C4::Labels::Profile::delete(profile_id => $element_id);}
     elsif       ($label_element eq 'batch')     {$error = C4::Labels::Batch::delete(batch_id => $element_id, branch_code => $branch_code);}
-    else                                        {}      # FIXME: Some error trapping code 
+    else                                        {}      # FIXME: Some error trapping code
 }
 
-if      ($label_element eq 'layout')    {$db_rows = get_all_layouts();}
-elsif   ($label_element eq 'template')  {$db_rows = get_all_templates();}
-elsif   ($label_element eq 'profile')   {$db_rows = get_all_profiles();}
-elsif   ($label_element eq 'batch')     {$db_rows = get_batch_summary(filter => "branch_code=\'$branch_code\' OR branch_code=\'NB\'");}
+if      ($label_element eq 'layout')    {$db_rows = get_all_layouts(table_name => 'creator_layouts', filter => 'creator=\'Labels\'');}
+elsif   ($label_element eq 'template')  {$db_rows = get_all_templates(table_name => 'creator_templates', filter => 'creator=\'Labels\'');}
+elsif   ($label_element eq 'profile')   {$db_rows = get_all_profiles(table_name => 'printers_profile', filter => 'creator=\'Labels\'');}
+elsif   ($label_element eq 'batch')     {$db_rows = get_batch_summary(filter => "branch_code=\'$branch_code\' OR branch_code=\'NB\'", creator => 'Labels');}
 else                                    {}      # FIXME: Some error trapping code
 
 my $table = html_table($display_columns->{$label_element}, $db_rows);
 
-$template->param(error => $error) if ($error ne 0);
+$template->param(error => $error) if ($error) && ($error ne 0);
 $template->param(print => 1) if ($label_element eq 'batch');
 $template->param(
                 op              => $op,

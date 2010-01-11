@@ -137,8 +137,8 @@ sub Init {
 
 sub Jpeg {
     my $self = shift;
-    my ($imageFile, $width, $height) = @_;
-    return prJpeg($imageFile, $width, $height);
+    my ($imageData, $width, $height, $imageFormat) = @_;
+    return prJpeg($imageData, $width, $height, $imageFormat);
 }
 
 sub Js {

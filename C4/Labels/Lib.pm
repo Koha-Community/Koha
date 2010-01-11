@@ -3,7 +3,7 @@ package C4::Labels::Lib;
 # Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -20,7 +20,7 @@ package C4::Labels::Lib;
 use strict;
 use warnings;
 
-use Data::Dumper;
+use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Context;
 use C4::Debug;
@@ -115,7 +115,7 @@ my $text_justification_types = [
     {type => 'L',       name => 'Left',                         selected => 0},
     {type => 'C',       name => 'Center',                       selected => 0},
     {type => 'R',       name => 'Right',                        selected => 0},
-#    {type => 'F',       name => 'Full',                         selected => 0},    
+#    {type => 'F',       name => 'Full',                         selected => 0},
 ];
 
 my $unit_values = [
@@ -226,7 +226,7 @@ sub get_all_profiles {
     This function returns an arrayref whose elements are hashes containing the batch_ids of current batches along with the item count
     for each batch upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
     One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
-    
+
     NOTE: Do not pass in the keyword 'WHERE.'
 
     examples:
@@ -269,7 +269,7 @@ sub get_batch_summary {
     This function returns an arrayref whose elements are hashes containing the label_ids of current labels along with the item count
     for each label upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
     One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
-    
+
     NOTE: Do not pass in the keyword 'WHERE.'
 
     examples:
@@ -445,7 +445,6 @@ sub html_table {
     return undef if scalar(@$data) == 0;      # no need to generate a table if there is not data to display
     my $table = [];
     my $fields = [];
-    my @headers = ();
     my @table_columns = ();
     my ($row_index, $col_index) = (0,0);
     my $cols = 0;       # number of columns to wrap on

@@ -25,7 +25,7 @@ use CGI;
 
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
-use C4::Labels::Lib 1.000000 qw(get_all_profiles get_unit_values);
+use C4::Creators::Lib 1.000000 qw(get_all_profiles get_unit_values);
 use C4::Labels::Template 1.000000;
 
 my $cgi = new CGI;
@@ -72,13 +72,15 @@ elsif ($op eq 'save') {
                         );
     if ($template_id) {   # if a label_id was passed in, this is an update to an existing layout
         $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
-        my $old_profile = C4::Labels::Profile->retrieve(profile_id => $label_template->get_attr('profile_id'));
-        my $new_profile = C4::Labels::Profile->retrieve(profile_id => $cgi->param('profile_id'));
-        if ($label_template->get_attr('template_id') != $new_profile->get_attr('template_id')) {
-            $new_profile->set_attr(template_id => $label_template->get_attr('template_id'));
-            $old_profile->set_attr(template_id => 0);
-            $new_profile->save();
-            $old_profile->save();
+        if ($cgi->param('profile_id')) {
+            my $old_profile = C4::Labels::Profile->retrieve(profile_id => $label_template->get_attr('profile_id'));
+            my $new_profile = C4::Labels::Profile->retrieve(profile_id => $cgi->param('profile_id'));
+            if ($label_template->get_attr('template_id') != $new_profile->get_attr('template_id')) {
+                $new_profile->set_attr(template_id => $label_template->get_attr('template_id'));
+                $old_profile->set_attr(template_id => 0);
+                $new_profile->save();
+                $old_profile->save();
+            }
         }
         $label_template->set_attr(@params);
         $label_template->save();
