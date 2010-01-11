@@ -38,15 +38,16 @@ listed, please inform your systems administrator.</p>
     <li><!--TMPL_VAR Name="name"-->
     <!--TMPL_IF Name="usagemail"-->
       <br /> This module is used whenever Koha has to send email.
-    <!--/TMPL_IF-->
-    <!--TMPL_IF Name="usagebarcode"-->
+    <!--TMPL_ELSIF Name="usagebarcode"-->
       <br /> This module is needed if you intend to print barcodes.
-    <!--/TMPL_IF-->
-    <!--TMPL_IF Name="usagespine"-->
+    <!--TMPL_ELSIF Name="usagespine"-->
       <br /> This module is needed if you intend to print spine labels.
-    <!--/TMPL_IF-->
-    <!--TMPL_IF Name="usageLDAP"-->
+    <!--TMPL_ELSIF Name="usageLDAP"-->
       <br /> This module is needed if you intend to use LDAP for authentication.
+    <!--TMPL_ELSIF Name="usagepatronimages"-->
+      <br /> This module is needed if you intend to use patron images.
+    <!--TMPL_ELSIF Name="usagepatroncards"-->
+      <br /> This module is needed if you intend to use the patron card creator.
     <!--/TMPL_IF-->
     </li>
   <!--/TMPL_LOOP-->

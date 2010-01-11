@@ -556,9 +556,9 @@ WriteMakefile(
                             'Digest::SHA'                      => 5.43,
                             'Email::Date'                      => 1.103,
                             'File::Temp'                       => 0.16,
-                            'GD'                               => 2.39,    #optional
+                            'GD'                               => 2.39,    #optional, used for patron image feature
                             'GD::Barcode::UPCE'                => 1.1,
-                            'Graphics::Magick'                 => 1.37
+                            'Graphics::Magick'                 => 1.3.7,   #optional, used for patron cards creator
                             'Getopt::Long'                     => 2.35,
                             'Getopt::Std'                      => 1.05,
                             'HTML::Template::Pro'              => 0.69,
