@@ -21,6 +21,7 @@ use MARC::Charset;
 use C4::Context;
 use C4::Biblio;
 use C4::Koha;
+use C4::Debug;
 use C4::Charset;
 use C4::Items;
 use Unicode::Normalize;
@@ -267,16 +268,16 @@ RECORD: while (  ) {
        my $server=($authorities?'authorityserver':'biblioserver');
        my ($error, $results,$totalhits)=C4::Search::SimpleSearch( $query, 0, 3, [$server] );
        die "unable to search the database for duplicates : $error" if (defined $error);
-       warn "$query $server : $totalhits";
+       #warn "$query $server : $totalhits";
        if ($results && scalar(@$results)==1){
            my $marcrecord = MARC::File::USMARC::decode($results->[0]);
 	   	   $id=GetRecordId($marcrecord,$tagid,$subfieldid);
        } 
        elsif  ($results && scalar(@$results)>1){
-       warn "more than one match for $query";
+       $debug && warn "more than one match for $query";
        } 
        else {
-       warn "nomatch for $query";
+       $debug && warn "nomatch for $query";
        }
     }
 	my $originalid;
