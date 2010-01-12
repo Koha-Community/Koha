@@ -35,7 +35,12 @@
                 alert("Please select image(s) to " + op + ".");
                 return (-1);
             };
-
+            function showHideLayers(element, time, action) {
+                setTimeout("changeVisibility('" + element + "','" + action + "')", time)
+            }
+            function changeVisibility(element, action) {
+                document.getElementById(element).style.display=action;
+            }
     </script>
     <script type="text/javascript">
         //<![CDATA[
@@ -45,6 +50,7 @@
             $("#upload").empty();
             $("#delete").empty();
             buildButtons();
+            showHideLayers('dialog', 5000, 'none')
          });
 
         function buildButtons() {
@@ -101,7 +107,7 @@
                     <div class="yui-u first">
                         <h1>Upload Images</h1>
                         <!-- TMPL_IF name="IMPORT_SUCCESSFUL" -->
-                        <div class="dialog message">
+                        <div id="dialog" class="dialog message">
                             <li><h3>Image successfully uploaded.</h3></li>
                             <li>File: <!-- TMPL_VAR name="SOURCE_FILE" --></li>
                             <li>Image name: <!-- TMPL_VAR name="IMAGE_NAME" --></li>
@@ -135,7 +141,7 @@
                     <div class="yui-u">
                     <h1>Delete Images</h1>
                         <!-- TMPL_IF name="DELETE_SUCCESSFULL" -->
-                        <div class="dialog message">
+                        <div id="dialog" class="dialog message">
                             <li><h3>Image(s) successfully deleted.</h3></li>
                         </div>
                         <!-- /TMPL_IF -->
