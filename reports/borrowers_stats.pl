@@ -28,6 +28,7 @@ use C4::Acquisition;
 use C4::Output;
 use C4::Reports;
 use C4::Circulation;
+use C4::Dates qw/format_date format_date_in_iso/;
 use Date::Calc qw(
   Today
   Add_Delta_YM
@@ -49,6 +50,8 @@ my $fullreportname = "reports/borrowers_stats.tmpl";
 my $line = $input->param("Line");
 my $column = $input->param("Column");
 my @filters = $input->param("Filter");
+$filters[3]=format_date_in_iso($filters[3]);
+$filters[4]=format_date_in_iso($filters[4]);
 my $digits = $input->param("digits");
 my $period = $input->param("period");
 my $borstat = $input->param("status");
@@ -197,7 +200,12 @@ sub calculate {
 	for (my $i=0;$i<=7;$i++) {
 		my %cell;
 		if ( @$filters[$i] ) {
-			$cell{filter} .= @$filters[$i];
+		    if($i == 3 or $i == 4){
+		        $cell{filter} .= format_date(@$filters[$i]);
+		    }else{
+		        $cell{filter} .= @$filters[$i];
+		    }
+			
 			$cell{crit} .="Cat Code " if ($i==0);
 			$cell{crit} .="Zip Code" if ($i==1);
 			$cell{crit} .="Branchcode" if ($i==2);
