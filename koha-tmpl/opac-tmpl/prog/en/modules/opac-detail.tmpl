@@ -80,7 +80,24 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <!-- TMPL_ELSE -->
     <h1><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --> <span class="subtitle"><!-- TMPL_VAR NAME="subtitle" --></span><!-- /TMPL_IF --></h1>
     <!-- TMPL_IF NAME="author" --><h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="author" ESCAPE="HTML" --></a></h5><!-- /TMPL_IF --> 
-    <div id="views"><span class="view"><span id="Normalview">Normal View</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></span> <!-- TMPL_IF NAME="ISBD" --><span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></span><!-- /TMPL_IF -->
+    <div id="views">
+	<span class="view">
+	    <span id="Normalview">Normal View</span>
+	</span> 
+
+	<!-- TMPL_IF NAME="can_opac_view_MARC" -->
+	    <span class="view">
+		<a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a>
+	    </span>
+	<!-- /TMPL_IF -->
+
+	<!-- TMPL_IF NAME="can_opac_view_ISBD" -->
+	    <!-- TMPL_IF NAME="ISBD" -->
+		<span class="view">
+		    <a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a>
+		</span>
+	    <!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
     </div>
 
     <span class="results_summary"><!-- TMPL_UNLESS NAME="item-level_itypes" -->

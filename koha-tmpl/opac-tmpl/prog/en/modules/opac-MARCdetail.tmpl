@@ -44,17 +44,23 @@
     <div class="yui-g" style="margin-top : 1em;">
 	<h1 style="float:left;margin: 0 1em 1em 0;">MARC View</h1>
 	<div id="views">
-	<span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span> 
-
-<!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
-<span class="view"><a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC View</a></span>
-        <span class="view"><span id="MARCview">Expanded MARC View</a></span></span>
-<!-- TMPL_ELSE -->
-<span class="view"><span id="MARCview">MARC View</span>
-<!-- /TMPL_IF -->
-
- <!-- TMPL_IF NAME="ISBD" --><span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a></span><!-- /TMPL_IF -->
-</div>
+	    <span class="view">
+		<a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a>
+	    </span> 
+	    <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
+		<span class="view"><a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC View</a></span>
+		<span class="view"><span id="MARCview">Expanded MARC View</a></span></span>
+	    <!-- TMPL_ELSE -->
+		<!-- TMPL_IF NAME="can_opac_view_MARC" -->
+		    <span class="view"><span id="MARCview">MARC View</span>
+		<!-- /TMPL_IF -->
+	    <!-- /TMPL_IF -->
+       	    <!-- TMPL_IF NAME="ISBD" -->
+		<!-- TMPL_IF NAME="can_opac_view_ISBD" -->
+		    <span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a></span>
+		<!-- /TMPL_IF -->
+	    <!-- /TMPL_IF -->
+	</div>
     <h1 style="clear:both;"><!-- TMPL_VAR NAME="bibliotitle" --> (Record no. <!-- TMPL_VAR NAME="biblionumber" -->)</h1>
 	<table id="marc">
         <!-- TMPL_LOOP name="0XX" -->

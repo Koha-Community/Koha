@@ -28,14 +28,20 @@
 	<div class="container">	
 	
 	
-     <h1 style="float:left;margin:0 1em 1em 0;">ISBD</h1> <div id="views">
-	 <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span> <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
-<span class="view"><a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC View</a></span>
-       <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Expanded MARC View</a></span>
-<!-- TMPL_ELSE -->
-<span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></span>
-<!-- /TMPL_IF --> <span class="view"><span id="ISBDview">ISBD View</span></span>
-</div>
+     <h1 style="float:left;margin:0 1em 1em 0;">ISBD</h1>
+     <div id="views">
+	 <span class="view">
+	    <a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a>
+	 </span>
+	 <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
+	     <span class="view"><a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC View</a></span>
+	     <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Expanded MARC View</a></span>
+	 <!-- TMPL_ELSE -->
+	     <!-- TMPL_IF NAME="can_opac_view_MARC" -->
+		 <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></span>
+	     <!-- /TMPL_IF -->
+	 <!-- /TMPL_IF --> <span class="view"><span id="ISBDview">ISBD View</span></span>
+    </div>
     <div id="isbdcontents"><!-- TMPL_VAR name="ISBD" --></div>
 	
 		<div id="bibliodescriptions" class="toptabs">

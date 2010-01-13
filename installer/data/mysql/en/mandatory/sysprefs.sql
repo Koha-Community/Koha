@@ -226,4 +226,6 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonCoverImages', '0', 'Display cover images on OPAC from Amazon Web Services','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReadingHistory', '0', 'If on display reading history for user', NULL, 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReceiveBackIssues', '5', 'Number of Previous journals to display when on subscription detail', '', '');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IndependentBranchPatron',0,'If ON, librarian patron search can only be done on patron of same library as librarian',NULL,'YesNo');");
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IndependentBranchPatron',0,'If ON, librarian patron search can only be done on patron of same library as librarian',NULL,'YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACviewISBD','1','Allow display of ISBD view of bibiographic records in OPAC','','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACviewMARC','1','Allow display of MARC view of bibiographic records in OPAC','','YesNo');
