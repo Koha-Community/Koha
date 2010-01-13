@@ -414,6 +414,8 @@ elsif ( $step && $step == 3 ) {
         if (@$stderr_buf) {
             $template->param(update_errors => [ map { { line => $_ } } split(/\n/, join('', @$stderr_buf)) ] );
             $template->param(has_update_errors => 1);
+            warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n";
+            foreach my $line (@$stderr_buf) {warn "$line\n";}
         }
 
         $template->param( $op => 1 );

@@ -74,13 +74,13 @@ sub new {
     $self->{'port'}     = C4::Context->config("port");
     $self->{'user'}     = C4::Context->config("user");
     $self->{'password'} = C4::Context->config("pass");
-    $self->{'dbh'} = DBI->connect("DBI:$self->{dbms}:dbname=$self->{dbname};host=$self->{hostname}" . 
+    $self->{'dbh'} = DBI->connect("DBI:$self->{dbms}:dbname=$self->{dbname};host=$self->{hostname}" .
                                   ( $self->{port} ? ";port=$self->{port}" : "" ),
                                   $self->{'user'}, $self->{'password'});
     $self->{'language'} = undef;
     $self->{'marcflavour'} = undef;
 	$self->{'dbh'}->do('set NAMES "utf8"');
-    $self->{'dbh'}->{'mysql_enable_utf8'}=1; 
+    $self->{'dbh'}->{'mysql_enable_utf8'}=1;
 
     bless $self, $class;
     return $self;
@@ -150,7 +150,7 @@ sub marc_framework_sql_list {
     }
     my @listdir = sort grep { !/^\.|marcflavour/ && -d "$dir/$_" } readdir(MYDIR);
     closedir MYDIR;
-   
+
     my @fwklist;
     my $request = $self->{'dbh'}->prepare("SELECT value FROM systempreferences WHERE variable='FrameworksLoaded'");
     $request->execute;
@@ -192,7 +192,7 @@ sub marc_framework_sql_list {
         $cell{"code"}       = lc($requirelevel);
         push @fwklist, \%cell;
     }
- 
+
     return ($defaulted_to_en, \@fwklist);
 }
 
@@ -300,9 +300,9 @@ sub sql_file_list {
 
     my ($marc_defaulted_to_en, $marc_sql) = $self->marc_framework_sql_list($lang, $marcflavour);
     my ($sample_defaulted_to_en, $sample_sql) = $self->sample_data_sql_list($lang);
-    
+
     my @sql_list = ();
-    map { 
+    map {
         map {
             if ($subset_wanted->{'mandatory'}) {
                 push @sql_list, $_->{'fwkfile'} if $_->{'mandatory'};
@@ -312,11 +312,11 @@ sub sql_file_list {
             }
         } @{ $_->{'frameworks'} }
     } (@$marc_sql, @$sample_sql);
-    
+
     return \@sql_list
 }
 
-=head2 load_db_schema 
+=head2 load_db_schema
 
 =over 4
 
@@ -356,7 +356,7 @@ directory path).  This means that dependencies among the scripts are to
 be resolved by carefully naming them, keeping in mind that the directory name
 does *not* currently count.
 
-FIXME: this is a rather delicate way of dealing with dependencies between 
+FIXME: this is a rather delicate way of dealing with dependencies between
        the install scripts.
 
 The return value C<$list> is an arrayref containing a hashref for each
@@ -429,7 +429,7 @@ sub load_sql_in_order {
     return ($fwk_language, \@list);
 }
 
-=head2 set_marcflavour_syspref 
+=head2 set_marcflavour_syspref
 
 =over 4
 
@@ -462,7 +462,7 @@ sub set_marcflavour_syspref {
     $request->execute;
 }
 
-=head2 set_indexing_engine 
+=head2 set_indexing_engine
 
 =over 4
 
@@ -569,9 +569,12 @@ sub load_sql {
             . " $self->{dbname} ";                        # Therefore, be sure to run 'trust' on localhost in pg_hba.conf -fbcit
         $error = qx($strcmd -f $filename 2>&1 1>/dev/null);
         # Be sure to set 'client_min_messages = error' in postgresql.conf
-        # so that only true errors are returned to stderr or else the installer will 
+        # so that only true errors are returned to stderr or else the installer will
         # report the import a failure although it really succeded -fbcit
     }
+#   errors thrown while loading installer data should be logged
+    warn "C4::Installer::load_sql returned the following errors while attempting to load $filename:\n";
+    warn $error;
     return $error;
 }
 
@@ -596,7 +599,7 @@ sub get_file_path_from_name {
     my $partialname = shift;
 
     my $lang = 'en'; # FIXME: how do I know what language I want?
-    
+
     my ($defaulted_to_en, $list) = $self->sample_data_sql_list($lang);
     # warn( Data::Dumper->Dump( [ $list ], [ 'list' ] ) );
 
