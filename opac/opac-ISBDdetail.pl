@@ -98,6 +98,8 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
 );
 
+$template->param(C4::Search::enabled_opac_search_views);
+
 my $norequests = 1;
 my $res = GetISBDView($biblionumber, "opac");
 my @items = &GetItemsInfo($biblionumber, 'opac');
