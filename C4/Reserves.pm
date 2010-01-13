@@ -262,7 +262,11 @@ sub GetPendingReserves {
                     
             $line->{title}           = $biblio->{title};
             foreach my $item (@items){
-                next if ($indepbranch && $indepbranch ne $item->{holdingbranch});
+                next if ( ($indepbranch && $indepbranch ne $item->{holdingbranch}) 
+                          or $item->{onloan} 
+                          or $item->{notforloan} 
+                          or $item->{itemlost} 
+                          or $item->{count_reserves} eq "Waiting" or $item->{count_reserves} eq "Transit");
                 $line->{count}++;
                 $line->{holdingbranches}->{$item->{holdingbranch}} = 1;
                 $line->{callnumbers}->{$item->{itemcallnumber}} = 1;
@@ -851,6 +855,9 @@ sub CheckReserves {
             if ( $res->{'itemnumber'} == $item && $res->{'priority'} == 0) {
                 # Found it
                 return ( "Waiting", $res );
+            }
+            elsif( $res->{'itemnumber'} == $item && $res->{'found'} eq 'T' ){
+                return ( "Transit", $res );
             }
             else {
                 # See if this item is more important than what we've got
