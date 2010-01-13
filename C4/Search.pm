@@ -2427,6 +2427,37 @@ sub enabled_staff_search_views
 	);
 }
 
+=head2 enabled_opac_search_views
+
+%hash = enabled_opac_search_views()
+
+This function returns a hash that contains two flags obtained from the system
+preferences, used to determine whether a particular opac search results view
+is enabled.
+
+=over 2
+
+=item C<Output arg:>
+
+    * $hash{can_view_MARC} is true only if the MARC view is enabled
+    * $hash{can_view_ISBD} is true only if the ISBD view is enabled
+
+=item C<usage in the script:>
+
+=back
+
+$template->param ( C4::Search::enabled_opac_search_views );
+
+=cut
+
+sub enabled_opac_search_views
+{
+	return (
+		can_opac_view_MARC		=> C4::Context->preference('OPACviewMARC'),		# 1 if the opac search allows the MARC view
+		can_opac_view_ISBD		=> C4::Context->preference('OPACviewISBD'),		# 1 if the opac search allows the ISBD view
+	);
+}
+
 
 =head2 z3950_search_args
 
