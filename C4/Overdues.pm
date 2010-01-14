@@ -169,7 +169,7 @@ sub checkoverdues {
          LEFT JOIN biblio      ON items.biblionumber     = biblio.biblionumber
          LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
             WHERE issues.borrowernumber  = ?
-            AND   issues.date_due < NOW()"
+            AND   issues.date_due < CURDATE()"
     );
     # FIXME: SELECT * across 4 tables?  do we really need the marc AND marcxml blobs??
     $sth->execute($borrowernumber);
