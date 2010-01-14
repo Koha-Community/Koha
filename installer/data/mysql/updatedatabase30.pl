@@ -729,6 +729,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.00.06.006';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do("
+        INSERT INTO `letter` (module, code, name, title, content)         VALUES('reserves', 'STAFFHOLDPLACED', 'Hold Placed on Item (from staff)', 'Hold Placed on Item (from staff)','An hold has been placed on the following item from the intranet : <<title>> (<<biblionumber>>) for the user <<firstname>> <<surname>> (<<cardnumber>>).');
+    ");
+    print "Upgrade to $DBversion done (Added notice for hold from staff)\n";
+    SetVersion ($DBversion);
+}
+
 
 
 
