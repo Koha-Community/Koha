@@ -69,7 +69,7 @@ sub do_hold {
 	}
 	my $bibno = $bib->{biblionumber};
 	AddReserve($branch, $borrower->{borrowernumber}, 
-				$bibno, 'a', GetBiblioItemByBiblioNumber($bibno)) ;
+				$bibno, 'a', GetBiblioItemByBiblioNumber($bibno), "opac") ;
 		# unfortunately no meaningful return value
 	$self->ok(1);
 	return $self;

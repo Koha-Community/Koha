@@ -122,7 +122,7 @@ BEGIN {
 
 =item AddReserve
 
-    AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found)
+    AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$notes,$title,$checkitem,$found, $from)
 
 =cut
 
@@ -130,7 +130,7 @@ sub AddReserve {
     my (
         $branch,    $borrowernumber, $biblionumber,
         $constraint, $bibitems,  $priority,       $notes,
-        $title,      $checkitem, $found
+        $title,      $checkitem, $found, $from
     ) = @_;
     my $fee =
           GetReserveFee($borrowernumber, $biblionumber, $constraint,
@@ -182,7 +182,8 @@ sub AddReserve {
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
         my $borrower = GetMemberDetails($borrowernumber);
         my $biblio   = GetBiblioData($biblionumber);
-        my $letter = C4::Letters::getletter( 'reserves', 'HOLDPLACED');
+	my $lettertype = ($from eq "intranet") ? "STAFFHOLDPLACED" : "HOLDPLACED";
+        my $letter = C4::Letters::getletter( 'reserves', $lettertype);
         my $admin_email_address = C4::Context->preference('KohaAdminEmailAddress');
 
         my %keys = (%$borrower, %$biblio);

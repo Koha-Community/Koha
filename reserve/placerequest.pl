@@ -77,13 +77,13 @@ if ($type eq 'str8' && $borrowernumber ne ''){
 	my $const;
 	if ($input->param('request') eq 'any'){
             # place a request on 1st available
-            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem,$found);
+            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem,$found, "intranet");
 	} elsif ($reqbib[0] ne ''){
             # FIXME : elsif probably never reached, (see top of the script)
             # place a request on a given item
-            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'o',\@reqbib,$rank[0],$notes,$title,$checkitem, $found);
+            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'o',\@reqbib,$rank[0],$notes,$title,$checkitem, $found, "intranet");
 	} else {
-            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found);
+            AddReserve($branch,$borrowernumber->{'borrowernumber'},$biblionumber,'a',\@realbi,$rank[0],$notes,$title,$checkitem, $found, "intranet");
 	}
 	
 print $input->redirect("request.pl?biblionumber=$biblionumber");
