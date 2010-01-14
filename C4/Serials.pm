@@ -1011,7 +1011,9 @@ sub GetExpirationDate {
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
     my $enddate          = $subscription->{startdate};
-
+    
+    return if not $subscription->{startdate};
+    
 # we don't do the same test if the subscription is based on X numbers or on X weeks/months
     if (($subscription->{periodicity} % 16) >0){
       if ( $subscription->{numberlength} ) {
