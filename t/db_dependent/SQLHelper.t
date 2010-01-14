@@ -10,7 +10,7 @@ use YAML;
 use C4::Debug;
 use C4::SQLHelper qw(:all);
 
-use Test::More tests => 18;
+use Test::More tests => 19;
 
 #1
 BEGIN {
@@ -19,6 +19,8 @@ BEGIN {
 use C4::Category;
 use C4::Branch;
 my @categories=C4::Category->all;
+my $insert;
+ok(($insert=InsertInTable("branches",{branchcode=>"ZZZZ",branchname=>"Brancheinconnue",city=>" ",zipcode=>" "},1))==0,"AddBranch (Insert In Table with primary key defined)");
 my $branches=C4::Branch->GetBranches;
 my @branchcodes=keys %$branches;
 my ($borrid, $borrtmp);

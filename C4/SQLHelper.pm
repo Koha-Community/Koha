@@ -140,7 +140,7 @@ sub SearchInTable{
 
 =over 4
 
-  $data_id_in_table = &InsertInTable($tablename,$data_hashref);
+  $data_id_in_table = &InsertInTable($tablename,$data_hashref,$withprimarykeys);
 
 =back
 
@@ -149,9 +149,9 @@ sub SearchInTable{
 =cut
 
 sub InsertInTable{
-    my ($tablename,$data) = @_;
+    my ($tablename,$data,$withprimarykeys) = @_;
     my $dbh      = C4::Context->dbh;
-    my ($keys,$values)=_filter_hash($tablename,$data,0);
+    my ($keys,$values)=_filter_hash($tablename,$data,($withprimarykeys?"exact":0));
     my $query = qq{ INSERT INTO $tablename SET  }.join(", ",@$keys);
 
 	$debug && warn $query, join(",",@$values);
@@ -418,7 +418,7 @@ sub _Process_Operands{
 	push @tmpkeys, " $field = ? ";
 	push @values, $operand;
 	#By default, exact search
-	unless ($searchtype){
+	if (!$searchtype ||$searchtype eq "exact"){
 		return \@tmpkeys,\@values;
 	}
 	my $col_field=(index($field,".")>0?substr($field, index($field,".")+1):$field);
