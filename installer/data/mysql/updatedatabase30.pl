@@ -707,8 +707,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.00.06.003";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("UPDATE systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACDetail.xsl' where variable='XSLTDetailsDisplay' AND value=1;");
-    $dbh->do("UPDATE systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACResults.xsl' where variable='XSLTResultsDisplay' AND value=1;");
+    $dbh->do("UPDATE systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACDetail.xsl',type='Free' where variable='XSLTDetailsDisplay' AND value=1;");
+    $dbh->do("UPDATE systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACResults.xsl',type='Free' where variable='XSLTResultsDisplay' AND value=1;");
     print "Upgrade to $DBversion done (Improve XSLT)\n";
     SetVersion ($DBversion);
 }
