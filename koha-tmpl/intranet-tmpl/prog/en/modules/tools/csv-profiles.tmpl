@@ -95,6 +95,42 @@ function reloadPage(p) {
 						    </select>
 						    <br /><br />
 
+						    <label for="csv">CSV separator :</label>
+						    <select name="csv_separator">
+							<option value=";">Colon (:)</option>
+							<option value="," selected="selected">Comma (,)</option>
+							<option value="|">Pipe (|)</option>
+							<option value=";">Semi-colon (;)</option>
+							<option value="#">Sharp (#)</option>
+							<option value=" ">Space ( )</option>
+							<option value="\t">Tabulation (\t)</option>
+						    </select>
+						    <br /><br />
+
+						    <label for="field_separator">Field separator :</label>
+						    <select name="field_separator">
+							<option value=";">Colon (:)</option>
+							<option value=",">Comma (,)</option>
+							<option value="|">Pipe (|)</option>
+							<option value=";">Semi-colon (;)</option>
+							<option value="#" selected="selected">Sharp (#)</option>
+							<option value=" ">Space ( )</option>
+							<option value="\t">Tabulation (\t)</option>
+						    </select>
+						    <br /><br />
+
+						    <label for="subfield_separator">Subfield separator :</label>
+						    <select name="subfield_separator">
+							<option value=";">Colon (:)</option>
+							<option value=",">Comma (,)</option>
+							<option value="|" selected="selected">Pipe (|)</option>
+							<option value=";">Semi-colon (;)</option>
+							<option value="#">Sharp (#)</option>
+							<option value=" ">Space ( )</option>
+							<option value="\t">Tabulation (\t)</option>
+						    </select>
+						    <br /><br />
+
 						    <label for="profile_content">Profile marcfields :</label>
 						    <textarea cols="50" rows="2" name="profile_content" id="profile_content"></textarea>
 						    <p>You have to define which fields or subfields you want to export, separated by pipes.<br />
@@ -122,6 +158,44 @@ function reloadPage(p) {
 
 						    <li><label for="modify_profile_description">Profile description :</label>
 						    <textarea cols="50" rows="2" name="profile_description" id="modify_profile_description"><!-- TMPL_VAR NAME="selected_profile_description" --></textarea>
+
+						    <label for="csv">CSV separator :</label>
+						    <select name="csv_separator">
+							<option value=";">Colon (:)</option>
+							<option value=","<!-- TMPL_IF EXPR="selected_csv_separator eq ','" --> selected="selected"<!-- /TMPL_IF -->>Comma (,)</option>
+							<option value="|"<!-- TMPL_IF EXPR="selected_csv_separator eq '|'" --> selected="selected"<!-- /TMPL_IF -->>Pipe (|)</option>
+							<option value=";"<!-- TMPL_IF EXPR="selected_csv_separator eq ';'" --> selected="selected"<!-- /TMPL_IF -->>Semi-colon (;)</option>
+							<option value="#"<!-- TMPL_IF EXPR="selected_csv_separator eq '#'" --> selected="selected"<!-- /TMPL_IF -->>Sharp (#)</option>
+							<option value=" "<!-- TMPL_IF EXPR="selected_csv_separator eq ' '" --> selected="selected"<!-- /TMPL_IF -->>Space ( )</option>
+							<option value="\t"<!-- TMPL_IF EXPR="selected_csv_separator eq '\t'" --> selected="selected"<!-- /TMPL_IF -->>Tabulation (\t)</option>
+						    </select>
+						    <br /><br />
+
+
+						    <label for="field_separator">Field separator :</label>
+						    <select name="field_separator">
+                                                        <option value=";">Colon (:)</option>
+                                                        <option value=","<!-- TMPL_IF EXPR="selected_field_separator eq ','" --> selected="selected"<!-- /TMPL_IF -->>Comma (,)</option>
+                                                        <option value="|"<!-- TMPL_IF EXPR="selected_field_separator eq '|'" --> selected="selected"<!-- /TMPL_IF -->>Pipe (|)</option>
+                                                        <option value=";"<!-- TMPL_IF EXPR="selected_field_separator eq ';'" --> selected="selected"<!-- /TMPL_IF -->>Semi-colon (;)</option>
+                                                        <option value="#"<!-- TMPL_IF EXPR="selected_field_separator eq '#'" --> selected="selected"<!-- /TMPL_IF -->>Sharp (#)</option>
+                                                        <option value=" "<!-- TMPL_IF EXPR="selected_field_separator eq ' '" --> selected="selected"<!-- /TMPL_IF -->>Space ( )</option>
+                                                        <option value="\t"<!-- TMPL_IF EXPR="selected_field_separator eq '\t'" --> selected="selected"<!-- /TMPL_IF -->>Tabulation (\t)</option>
+						    </select>
+						    <br /><br />
+
+						    <label for="subfield_separator">Subfield separator :</label>
+						    <select name="subfield_separator">
+                                                        <option value=";">Colon (:)</option>
+                                                        <option value=","<!-- TMPL_IF EXPR="selected_subfield_separator eq ','" --> selected="selected"<!-- /TMPL_IF -->>Comma (,)</option>
+                                                        <option value="|"<!-- TMPL_IF EXPR="selected_subfield_separator eq '|'" --> selected="selected"<!-- /TMPL_IF -->>Pipe (|)</option>
+                                                        <option value=";"<!-- TMPL_IF EXPR="selected_subfield_separator eq ';'" --> selected="selected"<!-- /TMPL_IF -->>Semi-colon (;)</option>
+                                                        <option value="#"<!-- TMPL_IF EXPR="selected_subfield_separator eq '#'" --> selected="selected"<!-- /TMPL_IF -->>Sharp (#)</option>
+                                                        <option value=" "<!-- TMPL_IF EXPR="selected_subfield_separator eq ' '" --> selected="selected"<!-- /TMPL_IF -->>Space ( )</option>
+                                                        <option value="\t"<!-- TMPL_IF EXPR="selected_subfield_separator eq '\t'" --> selected="selected"<!-- /TMPL_IF -->>Tabulation (\t)</option>
+						    </select>
+						    <br /><br />
+
 
 						    <label for="csv">CSV separator :</label>
 						    <select name="csv_separator">
