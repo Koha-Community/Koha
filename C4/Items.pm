@@ -1269,7 +1269,8 @@ sub GetItemsInfo {
            biblioitems.lccn,
            biblioitems.url,
            items.notforloan as itemnotforloan,
-           itemtypes.description
+           itemtypes.description,
+           branchurl
      FROM items
      LEFT JOIN branches ON items.homebranch = branches.branchcode
      LEFT JOIN biblio      ON      biblio.biblionumber     = items.biblionumber
