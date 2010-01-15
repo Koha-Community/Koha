@@ -89,9 +89,9 @@ if ($orderbyparams){
 	push @orderby, {$orderbyelt[0]=>$orderbyelt[1]||0};
 }
 else {
-	@orderby = ({surname=>1},{firstname=>1});
+	@orderby = ({firstname=>1},{surname=>1});
 }
-warn Data::Dumper::Dumper(@orderby);
+
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
