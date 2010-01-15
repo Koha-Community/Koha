@@ -3358,6 +3358,18 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.108';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE `export_format` ADD `csv_separator` VARCHAR( 2 ) NOT NULL AFTER `marcfields` ,
+	ADD `field_separator` VARCHAR( 2 ) NOT NULL AFTER `csv_separator` ,
+	ADD `subfield_separator` VARCHAR( 2 ) NOT NULL AFTER `field_separator` 
+	});
+	print "Upgrade done (added separators for csv export)\n";
+    SetVersion ($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

@@ -63,6 +63,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $profile_name        = $input->param("profile_name");
 my $profile_description = $input->param("profile_description");
 my $profile_content     = $input->param("profile_content");
+my $csv_separator       = $input->param("csv_separator");
+my $field_separator     = $input->param("field_separator");
+my $subfield_separator  = $input->param("subfield_separator");
 my $action              = $input->param("action");
 my $delete              = $input->param("delete");
 my $id                  = $input->param("id");
@@ -72,17 +75,17 @@ if ($profile_name && $profile_content && $action) {
     my $rows;
 
     if ($action eq "create") {
-	my $query = "INSERT INTO export_format(export_format_id, profile, description, marcfields) VALUES (NULL, ?, ?, ?)";
+	my $query = "INSERT INTO export_format(export_format_id, profile, description, marcfields, csv_separator, field_separator, subfield_separator) VALUES (NULL, ?, ?, ?, ?, ?, ?)";
 	my $sth   = $dbh->prepare($query);
-	$rows  = $sth->execute($profile_name, $profile_description, $profile_content);
+	$rows  = $sth->execute($profile_name, $profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator);
     
     }
 
     if ($action eq "edit") {
-	my $query = "UPDATE export_format SET description=?, marcfields=? WHERE export_format_id=? LIMIT 1";
+	my $query = "UPDATE export_format SET description=?, marcfields=?, csv_separator=?, field_separator=?, subfield_separator=? WHERE export_format_id=? LIMIT 1";
 	my $sth   = $dbh->prepare($query);
-	$rows  = $sth->execute($profile_description, $profile_content, $profile_name);
-
+	$rows  = $sth->execute($profile_description, $profile_content, $csv_separator, $field_separator, $subfield_separator, $profile_name);
+warn "id $id";
     }
 
     if ($action eq "delete") {
@@ -100,17 +103,21 @@ if ($profile_name && $profile_content && $action) {
 
     # If a profile has been selected for modification
     if ($id) {
-	my $query = "SELECT export_format_id, profile, description, marcfields FROM export_format WHERE export_format_id = ?";
+	my $query = "SELECT export_format_id, profile, description, marcfields, csv_separator, field_separator, subfield_separator FROM export_format WHERE export_format_id = ?";
 	my $sth;
 	$sth = $dbh->prepare($query);
 
 	$sth->execute($id);
 	my $selected_profile = $sth->fetchrow_arrayref();
+	warn "value : " . $selected_profile->[4];
 	$template->param(
 	    selected_profile_id          => $selected_profile->[0],
 	    selected_profile_name        => $selected_profile->[1],
 	    selected_profile_description => $selected_profile->[2],
-	    selected_profile_marcfields  => $selected_profile->[3]
+	    selected_profile_marcfields  => $selected_profile->[3],
+	    selected_csv_separator       => $selected_profile->[4],
+	    selected_field_separator     => $selected_profile->[5],
+	    selected_subfield_separator  => $selected_profile->[6]
 	);
 
     }
