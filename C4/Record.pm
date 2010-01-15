@@ -341,6 +341,8 @@ C<$record> - a MARC::Record object
 
 C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id and the GetCsvProfiles function in C4::Csv)
 
+C<$header> - true if the headers are to be printed (typically at first pass)
+
 =back
 
 =back
@@ -351,36 +353,72 @@ C<$csvprofileid> - the id of the CSV profile to use for the export (see export_f
 sub marc2csv {
     my ($record, $id, $header) = @_;
     my $output;
-    my $csv = Text::CSV->new();
 
     # Get the information about the csv profile
-    my $marcfieldslist = GetMarcFieldsForCsv($id);
+    my $profile = GetCsvProfile($id);
+
+    # Getting separators
+    my $csvseparator      = $profile->{csv_separator}      || ',';
+    my $fieldseparator    = $profile->{field_separator}    || '#';
+    my $subfieldseparator = $profile->{subfield_separator} || '|';
+
+    # TODO: Be more generic (in case we have to handle other protected chars or more separators)
+    if ($csvseparator eq '\t') { $csvseparator = "\t" }
+    if ($fieldseparator eq '\t') { $fieldseparator = "\t" }
+    if ($subfieldseparator eq '\t') { $subfieldseparator = "\t" }
+
+    # Init CSV
+    my $csv = Text::CSV->new({ sep_char => $csvseparator });
+
+    # Getting the marcfields
+    my $marcfieldslist = $profile->{marcfields};
 
     # Getting the marcfields as an array
-    my @marcfields = split('\|', $marcfieldslist);
+    my @marcfieldsarray = split('\|', $marcfieldslist);
+
+   # Separating the marcfields from the the user-supplied headers
+    my @marcfields;
+    foreach (@marcfieldsarray) {
+        my @result = split('=', $_);
+        if (scalar(@result) == 2) {
+           push @marcfields, { header => $result[0], field => $result[1] }; 
+        } else {
+           push @marcfields, { field => $result[0] }
+        }
+    }
 
     # If we have to insert the headers
     if ($header) {
 	my @marcfieldsheaders;
-
 	my $dbh   = C4::Context->dbh;
 
 	# For each field or subfield
 	foreach (@marcfields) {
-	    # We get the matching tag name
-	    if (index($_, '$') > 0) {
-    		my ($fieldtag, $subfieldtag) = split('\$', $_);
-		my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
-		my $sth = $dbh->prepare($query);
-		$sth->execute($fieldtag, $subfieldtag);
-		my @results = $sth->fetchrow_array();
-		push @marcfieldsheaders, @results[0];
+
+	    my $field = $_->{field};
+
+	    # If we have a user-supplied header, we use it
+	    if (exists $_->{header}) {
+		    push @marcfieldsheaders, $_->{header};
 	    } else {
-		my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
-		my $sth = $dbh->prepare($query);
-		$sth->execute($_);
-		my @results = $sth->fetchrow_array();
-		push @marcfieldsheaders, @results[0];
+warn "else";
+		# If not, we get the matching tag name from koha
+		if (index($field, '$') > 0) {
+		    my ($fieldtag, $subfieldtag) = split('\$', $field);
+		    my $query = "SELECT liblibrarian FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield=?";
+		    my $sth = $dbh->prepare($query);
+		    $sth->execute($fieldtag, $subfieldtag);
+		    my @results = $sth->fetchrow_array();
+warn "subfield $fieldtag, $subfieldtag";
+		    push @marcfieldsheaders, $results[0];
+		} else {
+		    my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
+		    my $sth = $dbh->prepare($query);
+		    $sth->execute($field);
+		    my @results = $sth->fetchrow_array();
+warn "field $results[0]";
+		    push @marcfieldsheaders, $results[0];
+		}
 	    }
 	}
 	$csv->combine(@marcfieldsheaders);
@@ -389,7 +427,8 @@ sub marc2csv {
 
     # For each marcfield to export
     my @fieldstab;
-    foreach my $marcfield (@marcfields) {
+    foreach (@marcfields) {
+	my $marcfield = $_->{field};
 	# If it is a subfield
 	if (index($marcfield, '$') > 0) {
 	    my ($fieldtag, $subfieldtag) = split('\$', $marcfield);
@@ -405,11 +444,11 @@ sub marc2csv {
 		    push @tmpfields, $subfield;
 		}
 	    }
-	    push (@fieldstab, join(',', @tmpfields));  		
+	    push (@fieldstab, join($subfieldseparator, @tmpfields));  		
 	# Or a field
 	} else {
 	    my @fields = ($record->field($marcfield));
-	    push (@fieldstab, join(',', map($_->as_string(), @fields)));  		
+	    push (@fieldstab, join($fieldseparator, map($_->as_string(), @fields)));  		
 	 }
     };
 
