@@ -19,32 +19,9 @@
 
 						<div class="browse">
 							Browse by last name:
-							<a href="/cgi-bin/koha/members/member.pl?surname=a">A</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=b">B</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=c">C</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=d">D</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=e">E</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=f">F</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=g">G</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=h">H</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=i">I</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=j">J</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=k">K</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=l">L</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=m">M</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=n">N</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=o">O</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=p">P</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=q">Q</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=r">R</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=s">S</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=t">T</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=u">U</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=v">V</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=w">W</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=x">X</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=y">Y</a>
-							<a href="/cgi-bin/koha/members/member.pl?surname=z">Z</a>
+							<!-- TMPL_LOOP name="letters" -->
+								<a href="/cgi-bin/koha/members/member.pl?quicksearch=1&surname=<!-- TMPL_VAR NAME="letter" -->"><!-- TMPL_VAR NAME="letter" --></a>
+							<!-- /TMPL_LOOP -->
 						</div>
 
 

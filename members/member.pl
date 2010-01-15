@@ -37,24 +37,14 @@ my $quicksearch = $input->param('quicksearch');
 my $startfrom = $input->param('startfrom')||1;
 my $resultsperpage = $input->param('resultsperpage')||C4::Context->preference("PatronsPerPage")||20;
 
-my ($template, $loggedinuser, $cookie);
-if($quicksearch){
-    ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/member-quicksearch-results.tmpl",
-                 query => $input,
-                 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {borrowers => 1},
-                 });
-} else {
-    ($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tmpl",
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
                  flagsrequired => {borrowers => 1},
                  });
-}
+
 my $theme = $input->param('theme') || "default";
 
 my $patron = $input->Vars;
@@ -150,6 +140,9 @@ my $base_url =
     '&amp;',
     map { "$_=$parameters{$_}" } (keys %parameters)
   );
+
+my @letters = map { {letter => $_} } ( 'A' .. 'Z');
+$template->param( letters => \@letters );
 
 $template->param(
     paginationbar => pagination_bar(
