@@ -4,6 +4,7 @@
 <!-- TMPL_IF NAME="delete_confirm" --><!-- TMPL_IF NAME="totalgtzero" -->Cannot Delete: Category <!-- TMPL_VAR NAME="categorycode" escape="html" --> in Use<!-- TMPL_ELSE -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" escape="html" -->'<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript">
 //<![CDATA[
 	//
@@ -59,6 +60,10 @@
 		  	_alertString += "- upperagelimit is not a number\n";
 				
 		}
+		if(ff.enrolmentperioddate.value && ff.enrolmentperiod.value){
+			document.getElementById('enrolmentmessage').className = "error";
+			return false;
+		}
 		
 		if (ok) { // if there is a problem
 			alert(_alertString);
@@ -107,7 +112,21 @@
 	<li><label for="categorycode">Category code: </label> &nbsp; <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
 	<!-- /TMPL_IF -->
 	<li><label for="description">Description: </label> &nbsp; <input type="text" name="description" id="description" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="description" escape="html" -->" /></li>
-	<li><label for="enrolmentperiod">Enrollment period: </label> &nbsp; <input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="enrolmentperiod" -->" /> months</li>
+	<li><label for="enrolmentperiod">Enrollment period: </label> &nbsp; 
+		<input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="<!-- TMPL_IF NAME="enrolmentperiod" --><!-- TMPL_VAR NAME="enrolmentperiod" --><!-- /TMPL_IF -->" /> months <br />
+		<label for="enrolmentperioddate">Until date: </label> &nbsp;
+		<input type="text" name="enrolmentperioddate" id="enrolmentperioddate" value="<!-- TMPL_VAR NAME="enrolmentperioddate" -->" /> <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="enrolmentperioddate_button" alt="Show Calendar" />
+		<script type="text/javascript">
+            //<![CDATA[
+               Calendar.setup({
+                    inputField : "enrolmentperioddate",
+                    ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                	button : "enrolmentperioddate_button"
+            	});
+           	//]]>
+        </script>
+		<div id="enrolmentmessage" class="hint">Cannot have "months" and "until date" at the same time</div>
+	</li>
 	<li><label for="dateofbirthrequired">Age required: </label> &nbsp; <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="<!-- TMPL_VAR NAME="dateofbirthrequired" -->" size="3" maxlength="3" /> years</li>
 	<li><label for="upperagelimit">Upperage limit: </label> &nbsp; <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="<!-- TMPL_VAR NAME="upperagelimit" -->" /> years</li>
 	<li><label for="enrolmentfee">Enrollment fee: </label><input type="text" name="enrolmentfee" id="enrolmentfee" size="6" value="<!-- TMPL_VAR NAME="enrolmentfee" -->" /></li>
@@ -164,7 +183,15 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 	<table>
 	<tr><th scope="row">Category code: </th><td><!-- TMPL_VAR NAME="categorycode" escape="html" --></td></tr>
 	<tr><th scope="row">Description: </th><td><!-- TMPL_VAR NAME="description" escape="html" --></td></tr>
-	<tr><th scope="row">Enrollment period: </th><td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td></tr>
+	<tr><th scope="row">Enrollment period: </th>
+		<td>
+			<!-- TMPL_IF NAME="enrolmentperiod" -->
+				<!-- TMPL_VAR NAME="enrolmentperiod" --> months
+			<!-- TMPL_ELSE -->
+				until <!-- TMPL_VAR NAME="enrolmentperioddate" -->
+			<!-- /TMPL_IF -->
+		</td>
+	</tr>
 	<tr><th scope="row">Age required: </th><td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td></tr>
 	<tr><th scope="row">Upperage limit: </th><td><!-- TMPL_VAR NAME="upperagelimit" --> years</td></tr>
 	<tr><th scope="row">Enrollment fee: </th><td><!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
@@ -250,7 +277,14 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
                             <!-- TMPL_IF NAME="type_S" -->Staff<!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="type_X" -->Statistical<!-- /TMPL_IF -->
                         </td>
-                        <td><!-- TMPL_VAR NAME="enrolmentperiod" --> months</td>
+                        <td>
+                        	<!-- TMPL_IF NAME="enrolmentperiod" -->
+                        		<!-- TMPL_VAR NAME="enrolmentperiod" --> months
+                        	<!-- TMPL_ELSE -->
+                        		until <!-- TMPL_VAR NAME="enrolmentperioddate" -->
+                        	<!-- /TMPL_IF -->
+                        
+                        </td>
                         <td><!-- TMPL_VAR NAME="dateofbirthrequired" --> years</td>
 			<td><!-- TMPL_VAR NAME="upperagelimit" --> years</td>
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>

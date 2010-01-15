@@ -1269,16 +1269,20 @@ Return date is also in ISO format.
 
 sub GetExpiryDate {
     my ( $categorycode, $dateenrolled ) = @_;
-    my $enrolmentperiod = 12;   # reasonable default
+    my $enrolments;
     if ($categorycode) {
         my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+        my $sth = $dbh->prepare("SELECT enrolmentperiod,enrolmentperioddate FROM categories WHERE categorycode=?");
         $sth->execute($categorycode);
-        $enrolmentperiod = $sth->fetchrow;
+        $enrolments = $sth->fetchrow_hashref;
     }
     # die "GetExpiryDate: for enrollmentperiod $enrolmentperiod (category '$categorycode') starting $dateenrolled.\n";
-    my @date = split /-/,$dateenrolled;
-    return sprintf("%04d-%02d-%02d", Add_Delta_YM(@date,0,$enrolmentperiod));
+    my @date = split (/-/,$dateenrolled);
+    if($enrolments->{enrolmentperiod}){
+        return sprintf("%04d-%02d-%02d", Add_Delta_YM(@date,0,$enrolments->{enrolmentperiod}));
+    }else{
+        return $enrolments->{enrolmentperioddate};
+    }
 }
 
 =head2 checkuserpassword (OUEST-PROVENCE)
