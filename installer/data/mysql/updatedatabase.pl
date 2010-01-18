@@ -3328,6 +3328,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.01.00.104";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
+    my ($maninv_count, $borrnotes_count);
     eval { $maninv_count = $dbh->do("SELECT 1 FROM authorised_values WHERE category='MANUAL_INV'"); };
     if ($maninv_count == 0) {
         $dbh->do("INSERT INTO authorised_values (category,authorised_value,lib) VALUES ('MANUAL_INV','Copier Fees','.25')");
