@@ -24,6 +24,7 @@ use POSIX qw(strftime);
 use C4::Suggestions;
 use C4::Koha;
 use C4::Biblio;
+use C4::Branch;
 use C4::Items;
 use C4::Search;
 use C4::Letters;
@@ -460,6 +461,7 @@ sub PrepareSerialsData {
             ? format_date( $subs->{'publisheddate'} )
             : "XXX"
         );
+        $subs->{'branchname'} = GetBranchName( $subs->{'branchcode'} );
         $subs->{'planneddate'}                  = format_date( $subs->{'planneddate'} );
         $subs->{ "status" . $subs->{'status'} } = 1;
         $subs->{"checked"}                      = $subs->{'status'} =~ /1|3|4|7/;
