@@ -114,7 +114,8 @@ $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
 
 my $strsth="SELECT date_due,
-  concat(surname,' ', firstname) as borrower, 
+  surname,
+  firstname,
   borrowers.address,
   borrowers.city,
   borrowers.zipcode,
@@ -143,11 +144,11 @@ $strsth.=" AND biblioitems.itemtype   = '" . $itemtypefilter . "' " if $itemtype
 $strsth.=" AND borrowers.flags        = '" . $borflagsfilter . "' " if $borflagsfilter;
 $strsth.=" AND borrowers.branchcode   = '" . $branchfilter   . "' " if $branchfilter;
 $strsth.=" ORDER BY " . (
-    ($order eq "borrower" or $order eq "borrower desc") ? "$order, date_due"                 : 
-    ($order eq "title"    or $order eq    "title desc") ? "$order, date_due, borrower"       :
-    ($order eq "barcode"  or $order eq  "barcode desc") ? "items.$order, date_due, borrower" :
-                            ($order eq "date_due desc") ? "date_due DESC, borrower"          :
-                                                          "date_due, borrower"  # default sort order
+    ($order eq "surname" or $order eq "surname desc") ? "$order, date_due"                 : 
+    ($order eq "title"    or $order eq    "title desc") ? "$order, date_due, surname"       :
+    ($order eq "barcode"  or $order eq  "barcode desc") ? "items.$order, date_due, surname" :
+                            ($order eq "date_due desc") ? "date_due DESC, surname"          :
+                                                          "date_due, surname"  # default sort order
 );
 $template->param(sql=>$strsth);
 my $sth=$dbh->prepare($strsth);
@@ -159,11 +160,12 @@ while (my $data=$sth->fetchrow_hashref) {
     push @overduedata, {
         issuedate      => format_date($data->{issuedate}),
         duedate        => format_date($data->{date_due}),
+        surname        => $data->{surname},
+        firstname      => $data->{firstname},
         borrowernumber => $data->{borrowernumber},
         barcode        => $data->{barcode},
         itemnum        => $data->{itemnumber},
         itemcallnumber => $data->{itemcallnumber},
-        name           => $data->{borrower},
         address        => $data->{address},
         city           => $data->{city},
         zipcode        => $data->{zipcode},
