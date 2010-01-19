@@ -3346,6 +3346,32 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
+$DBversion = "3.01.00.105";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("
+      CREATE TABLE `collections` (
+        `colId` int(11) NOT NULL auto_increment,
+        `colTitle` varchar(100) NOT NULL default '',
+        `colDesc` text NOT NULL,
+        `colBranchcode` varchar(4) default NULL COMMENT 'branchcode for branch where item should be held.',
+        PRIMARY KEY  (`colId`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+       
+    $dbh->do("
+      CREATE TABLE `collections_tracking` (
+        `ctId` int(11) NOT NULL auto_increment,
+        `colId` int(11) NOT NULL default '0' COMMENT 'collections.colId',
+        `itemnumber` int(11) NOT NULL default '0' COMMENT 'items.itemnumber',
+        PRIMARY KEY  (`ctId`)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+    $dbh->do("
+        INSERT INTO permissions (module_bit, code, description) 
+        VALUES ( 13, 'rotating_collections', 'Manage Rotating collections')" );
+	print "Upgrade to $DBversion done (added collection and collection_tracking tables for rotataing collection functionnality)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
