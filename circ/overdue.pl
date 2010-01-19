@@ -121,7 +121,9 @@ my $strsth="SELECT date_due,
   borrowers.phone,
   borrowers.email,
   issues.itemnumber,
+  issues.issuedate,
   items.barcode,
+  items.itemcallnumber,
   biblio.title,
   biblio.author,
   borrowers.borrowernumber,
@@ -155,10 +157,12 @@ $sth->execute();
 my @overduedata;
 while (my $data=$sth->fetchrow_hashref) {
     push @overduedata, {
+        issuedate      => format_date($data->{issuedate}),
         duedate        => format_date($data->{date_due}),
         borrowernumber => $data->{borrowernumber},
         barcode        => $data->{barcode},
         itemnum        => $data->{itemnumber},
+        itemcallnumber => $data->{itemcallnumber},
         name           => $data->{borrower},
         address        => $data->{address},
         city           => $data->{city},
