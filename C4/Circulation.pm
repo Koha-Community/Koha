@@ -1420,14 +1420,16 @@ sub AddReturn {
             $doreturn = 0;
         }
     
-
+    # We know the document was just seen
+    ModDateLastSeen( $iteminformation->{'itemnumber'} );
+        
     #     new op dev : if the book returned in an other branch update the holding branch
     
     # update issues, thereby returning book (should push this out into another subroutine
         $borrower = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
     
     # case of a return of document (deal with issues and holdingbranch)
-    
+            
         if ($doreturn) {
 			my $circControlBranch = _GetCircControlBranch($iteminformation,$borrower);
 			if($dropbox) {
@@ -1442,9 +1444,7 @@ sub AddReturn {
             # We update the holdingbranch from circControlBranch variable
             UpdateHoldingbranch($branch,$iteminformation->{'itemnumber'});
             $iteminformation->{'holdingbranch'} = $branch;
-        
-            
-            ModDateLastSeen( $iteminformation->{'itemnumber'} );
+
             ModItem({ onloan => undef }, $biblio->{'biblionumber'}, $iteminformation->{'itemnumber'});
 
             if ($iteminformation->{borrowernumber}){
