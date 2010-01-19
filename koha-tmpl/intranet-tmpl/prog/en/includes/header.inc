@@ -7,7 +7,7 @@
                 <!-- TMPL_IF NAME="CAN_user_borrowers" --><li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl">Search</a></li><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="intranetbookbag" -->
-                    <li><a href="#" id="cartmenulink"><img src="/intranet-tmpl/prog/img/cart-small.gif" alt="" border="0" />Cart<span id="basketcount"></span></a></li>
+                    <li><a href="#" id="cartmenulink">Cart<span id="basketcount"></span></a></li>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_VAR name="IntranetNav" -->
                 <li class="more">
