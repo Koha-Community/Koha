@@ -23,7 +23,7 @@
 
 =head1 systempreferences.pl
 
-ALGO :
+ALSO :
  this script use an $op to know what to do.
  if $op is empty or none of the above values,
     - the default screen is build (with all records, or filtered datas).
@@ -265,8 +265,8 @@ $tabsysprefs{BakerTaylorPassword}     = 'EnhancedContent';
 $tabsysprefs{BakerTaylorUsername}     = 'EnhancedContent';
 
 # Library Thing for Libraries
-$tabsysprefs{LibraryThingForLibrariesID} = "EnhancedContent"; 
-$tabsysprefs{LibraryThingForLibrariesEnabled} = "EnhancedContent"; 
+$tabsysprefs{LibraryThingForLibrariesID} = "EnhancedContent";
+$tabsysprefs{LibraryThingForLibrariesEnabled} = "EnhancedContent";
 $tabsysprefs{LibraryThingForLibrariesTabbedView} = "EnhancedContent";
 
 # Syndetics
@@ -383,6 +383,11 @@ $tabsysprefs{'OAI-PMH:Subset'}    = "OAI-PMH";
 
 # ILS-DI variables
 $tabsysprefs{'ILS-DI'} = "ILS-DI";
+
+# Creator variables
+
+$tabsysprefs{'ImageLimit'} = "Creators";
+
 sub StringSearch {
     my ( $searchstring, $type ) = @_;
     my $dbh = C4::Context->dbh;
@@ -414,8 +419,8 @@ sub StringSearch {
         if ( $type and $type eq 'all' ) {
             $sth = $dbh->prepare( "
             SELECT *
-              FROM systempreferences 
-              WHERE variable LIKE ? OR explanation LIKE ? 
+              FROM systempreferences
+              WHERE variable LIKE ? OR explanation LIKE ?
               ORDER BY VARIABLE" );
             $sth->execute( "%$searchstring%", "%$searchstring%" );
         } else {

@@ -104,9 +104,9 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
                 while ( my $entry = readdir $dir ) {
 	        push @directories, "$recursive_dir/$entry" if ( -d "$recursive_dir/$entry" and $entry !~ /^\./ );
                 $debug and warn "$recursive_dir/$entry";
-                }   
+                }
                 closedir $dir;
-            }       
+            }
             my $results;
             foreach my $dir ( @directories ) {
                 $results = handle_dir( $dir, $filesuffix );
@@ -133,7 +133,7 @@ if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these ope
 			TCOUNTS => ($filecount > 0 ? $filecount : undef),
             );
 			$template->param( borrowernumber => $borrowernumber ) if $borrowernumber;
-        }   
+        }
     }
 } elsif ( ($op eq 'Upload') && !$uploadfile ) {
     warn "Problem uploading file or no file uploaded.";
@@ -154,14 +154,14 @@ sub handle_dir {
     my ( $dir, $suffix ) = @_;
     my $source;
     $debug and warn "Entering sub handle_dir; passed \$dir=$dir, \$suffix=$suffix";
-    if ($suffix =~ m/zip/i) {     # If we were sent a zip file, process any included data/idlink.txt files 
+    if ($suffix =~ m/zip/i) {     # If we were sent a zip file, process any included data/idlink.txt files
         my ( $file, $filename, $cardnumber );
         $debug and warn "Passed a zip file.";
         opendir my $dirhandle, $dir;
         while ( my $filename = readdir $dirhandle ) {
             $file = "$dir/$filename" if ($filename =~ m/datalink\.txt/i || $filename =~ m/idlink\.txt/i);
         }
-        unless (open (FILE, $file)) { 
+        unless (open (FILE, $file)) {
 		warn "Opening $dir/$file failed!";
                 $errors{'OPNLINK'} = $file;
 		return $errors; # This error is fatal to the import of this directory contents, so bail and return the error to the caller
@@ -210,7 +210,7 @@ sub handle_file {
         }
         $debug and warn "Source: $source";
         my $size = (stat($source))[7];
-            if ($size > 100000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
+            if ($size > 200000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
                 $filerrors{'OVRSIZ'} = 1;
                 push my @filerrors, \%filerrors;
                 push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
@@ -222,14 +222,14 @@ sub handle_file {
             $srcimage = GD::Image->new(*IMG);
             close (IMG);
 			if (defined $srcimage) {
-				my $mimetype = 'image/jpeg';	# GD autodetects three basic image formats: PNG, JPEG, XPM; we will convert all to JPEG...
+				my $mimetype = 'image/png';	# GD autodetects three basic image formats: PNG, JPEG, XPM; we will convert all to PNG which is lossless...
 				# Check the pixel size of the image we are about to import...
 				my ($width, $height) = $srcimage->getBounds();
 				$debug and warn "$filename is $width pix X $height pix.";
-				if ($width > 140 || $height > 200) {    # MAX pixel dims are 140 X 200...
-					$debug and warn "$filename exceeds the maximum pixel dimensions of 140 X 200. Resizing...";
+				if ($width > 200 || $height > 300) {    # MAX pixel dims are 200 X 300...
+					$debug and warn "$filename exceeds the maximum pixel dimensions of 200 X 300. Resizing...";
 					my $percent_reduce;    # Percent we will reduce the image dimensions by...
-					if ($width > 140) {
+					if ($width > 200) {
 						$percent_reduce = sprintf("%.5f",(140/$width));    # If the width is oversize, scale based on width overage...
 					} else {
 						$percent_reduce = sprintf("%.5f",(200/$height));    # otherwise scale based on height overage.
@@ -239,13 +239,13 @@ sub handle_file {
 					$debug and warn "Reducing $filename by " . ($percent_reduce * 100) . "\% or to $width_reduce pix X $height_reduce pix";
 					$image = GD::Image->new($width_reduce, $height_reduce, 1); #'1' creates true color image...
 					$image->copyResampled($srcimage,0,0,0,0,$width_reduce,$height_reduce,$width,$height);
-					$imgfile = $image->jpeg(100);
+					$imgfile = $image->png();
 					$debug and warn "$filename is " . length($imgfile) . " bytes after resizing.";
 					undef $image;
 					undef $srcimage;    # This object can get big...
 				} else {
 					$image = $srcimage;
-					$imgfile = $image->jpeg();
+					$imgfile = $image->png();
 					$debug and warn "$filename is " . length($imgfile) . " bytes.";
 					undef $image;
 					undef $srcimage;    # This object can get big...
@@ -285,7 +285,7 @@ sub handle_file {
 		}
     } else {    # The need for this seems a bit unlikely, however, to maximize error trapping it is included
         warn "Missing " . ($cardnumber ? "filename" : ($filename ? "cardnumber" : "cardnumber and filename"));
-        $filerrors{'CRDFIL'} = ($cardnumber ? "filename" : ($filename ? "cardnumber" : "cardnumber and filename")); 
+        $filerrors{'CRDFIL'} = ($cardnumber ? "filename" : ($filename ? "cardnumber" : "cardnumber and filename"));
         push my @filerrors, \%filerrors;
 		push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
         $template->param( ERRORS => 1 );

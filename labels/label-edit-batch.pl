@@ -4,7 +4,7 @@
 # Parts Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -27,7 +27,7 @@ use CGI;
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Branch qw(get_branch_code_from_name);
-use C4::Labels::Lib 1.000000 qw(get_label_summary html_table);
+use C4::Creators::Lib 1.000000 qw(get_label_summary html_table);
 use C4::Labels::Batch 1.000000;
 
 my $cgi = new CGI;
@@ -108,7 +108,7 @@ $db_rows = get_label_summary(items => $items, batch_id => $batch_id);
 
 my $table = html_table($display_columns, $db_rows);
 
-$template->param(   
+$template->param(
                 err         => $err,
                 errstr      => $errstr,
                 ) if ($err ne 0);

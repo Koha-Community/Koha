@@ -90,7 +90,7 @@ sub _get_label_item {
     if ($sth1->err) {
         warn sprintf('Database returned the following error: %s', $sth1->errstr);
     }
-    my $data1 = $sth->fetchrow_hashref;
+    my $data1 = $sth1->fetchrow_hashref;
     $data->{'itemtype'} = $data1->{'description'};
     $data->{'itype'} = $data1->{'description'};
     $barcode_only ? return $data->{'barcode'} : return $data;
@@ -286,6 +286,7 @@ sub _BIBBAR {
     my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 10% of the label height
     my $line_spacer = ($self->{'font_size'} * 1);       # number of pixels between text rows (This is actually leading: baseline to baseline minus font size. Recommended starting point is 20% of font size.).
     my $text_lly = ($self->{'lly'} + ($self->{'height'} - $self->{'top_text_margin'}));
+    warn  "Label: llx $self->{'llx'}, lly $self->{'lly'}, Text: lly $text_lly, $line_spacer, Barcode: llx $barcode_llx, lly $barcode_lly, $barcode_width, $barcode_y_scale_factor\n";
     return $self->{'llx'}, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor;
 }
 
@@ -442,7 +443,7 @@ sub draw_label_text {
         LABEL_LINES:    # generate lines of label text for current field
         foreach my $line (@label_lines) {
             next LABEL_LINES if $line eq '';
-            my $string_width = C4::Labels::PDF->StrWidth($line, $font, $self->{'font_size'});
+            my $string_width = C4::Creators::PDF->StrWidth($line, $font, $self->{'font_size'});
             if ($self->{'justify'} eq 'R') {
                 $text_llx = $params{'llx'} + $self->{'width'} - ($self->{'left_text_margin'} + $string_width);
             }

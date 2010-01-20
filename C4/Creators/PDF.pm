@@ -1,9 +1,9 @@
-package C4::Labels::PDF;
+package C4::Creators::PDF;
 
 # Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -135,10 +135,16 @@ sub Init {
     prInit($string, $duplicateCode);
 }
 
+sub AltJpeg {
+    my $self = shift;
+    my ($imageData, $width, $height, $imageFormat, $altImageData, $altImageWidth, $altImageHeight, $altImageFormat) = @_;
+    return prAltJpeg($imageData, $width, $height, $imageFormat, $altImageData, $altImageWidth, $altImageHeight, $altImageFormat);
+}
+
 sub Jpeg {
     my $self = shift;
-    my ($imageFile, $width, $height) = @_;
-    return prJpeg($imageFile, $width, $height);
+    my ($imageData, $width, $height, $imageFormat) = @_;
+    return prJpeg($imageData, $width, $height, $imageFormat);
 }
 
 sub Js {
@@ -279,8 +285,8 @@ __END__
 
 =head1 NAME
 
-C4::Labels::PDF -   A class wrapper for PDF::Reuse and PDF::Reuse::Barcode to allow usage as a psuedo-object. For usage see
-                    PDF::Reuse documentation and C4::Labels::PDF code.
+C4::Creators::PDF -   A class wrapper for PDF::Reuse and PDF::Reuse::Barcode to allow usage as a psuedo-object. For usage see
+                    PDF::Reuse documentation and C4::Creators::PDF code.
 
 =cut
 
