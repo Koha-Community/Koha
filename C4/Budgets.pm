@@ -318,6 +318,7 @@ sub GetBudgetPermDropbox {
 	$labels{'1'} = 'Owner';
 	$labels{'2'} = 'Library';
 	my $radio = CGI::scrolling_list(
+		-id       => 'budget_permission',
 		-name      => 'budget_permission',
 		-values    => [ '0', '1', '2' ],
 		-default   => $perm,

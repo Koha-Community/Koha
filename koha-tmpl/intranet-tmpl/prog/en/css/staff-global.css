@@ -239,7 +239,6 @@ table.invis tr,table.invis td {
 	border : white;
 }
 
-
 td, th {
 	border-bottom : 1px solid #BCBCBC;
 	border-left : 1px solid #BCBCBC;
@@ -253,6 +252,12 @@ td {
 td.borderless {
     border-collapse : separate;
     border : 0 none;
+}
+
+td.data,
+th.data {
+	font-family : "Courier New", Courier, monospace;
+	text-align : right;
 }
 
 th {
@@ -522,6 +527,16 @@ div.yui-b fieldset.brief ol {
 
 div.yui-b fieldset.brief select {
 	width: 12em;
+}
+div.yui-b fieldset.brief li.radio {
+	padding : .7em 0;
+}
+div.yui-b fieldset.brief li.radio label {
+	display : inline;
+}
+
+div.yui-b fieldset.brief li.radio input {
+	padding:0.3em 0;
 }
 
 fieldset.rows {  
@@ -808,7 +823,7 @@ fieldset.rows .inputnote {
     visibility:visible; /* you propably don't need to change this one */
     display:block;
 }
-#newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newlabelbatch a, #newpatroncardbatch a, #newprofile a, #newsubscription a, #newdictionary a, #newbasket a {
+#newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newlabelbatch a, #newpatroncardbatch a, #newprofile a, #newsubscription a, #newdictionary a, #newbasket a, #newrootbudget-button, #budgets_menuc .first-child, #periods_menuc .first-child {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-new.gif");
 	background-position : center left;
@@ -904,7 +919,7 @@ fieldset.rows .inputnote {
 	background-repeat : no-repeat;
 }
 
-#editmenuc .first-child, #deleteshelf .first-child,#newmenuc .first-child, #addbiblio .first-child, #z3950search .first-child, #printmenuc .first-child, #newsupplier .first-child, #savemenuc .first-child {
+#editmenuc .first-child, #deleteshelf .first-child,#newmenuc .first-child, #addbiblio .first-child, #z3950search .first-child, #printmenuc .first-child, #newsupplier .first-child, #savemenuc .first-child, #budgets_menuc .first-child, #periods_menuc .first-child {
 	padding-left : 15px;
 }
 
