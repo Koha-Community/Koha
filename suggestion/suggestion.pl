@@ -50,7 +50,7 @@ sub Init{
 
 sub GetCriteriumDesc{
     my ($criteriumvalue,$displayby)=@_;
-    return ($criteriumvalue eq 'ASKED'?"pending":lc $criteriumvalue) if ($displayby =~/status/i);
+    return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
     return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
     if ($displayby =~/managedby/||$displayby =~/acceptedby/){
@@ -163,7 +163,7 @@ if ($op=~/else/) {
         
         next if ($definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue);
         $$suggestion_ref{$displayby}=$criteriumvalue;
-        warn $$suggestion_ref{$displayby}."=$criteriumvalue; $displayby";
+#        warn $$suggestion_ref{$displayby}."=$criteriumvalue; $displayby";
     
         my $suggestions = &SearchSuggestion($suggestion_ref);
         foreach (@$suggestions){
@@ -180,7 +180,7 @@ if ($op=~/else/) {
                             "suggestiontypelabel"=>GetCriteriumDesc($criteriumvalue,$displayby)||"",
                             "suggestionscount"=>scalar(@$suggestions),             
                             'suggestions_loop'=>$suggestions,
-	                    'reasonsloop'     => $reasonsloop,
+                            'reasonsloop'     => $reasonsloop,
                             };
 
         delete $$suggestion_ref{$displayby} unless $definedvalue;
@@ -190,12 +190,11 @@ if ($op=~/else/) {
         "displayby"=> $displayby,
         "notabs"=> $displayby eq "",
         suggestions       => \@allsuggestions,
-    
     );
 }
 
 foreach my $element qw(managedby suggestedby){
-    $debug || warn $$suggestion_ref{$element};
+#    $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
         my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
         $template->param(
