@@ -3372,6 +3372,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	print "Upgrade to $DBversion done (added collection and collection_tracking tables for rotataing collection functionnality)\n";
     SetVersion ($DBversion);
 }
+$DBversion = "3.01.00.106";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ( 'OpacAddMastheadLibraryPulldown', '0', '', 'Adds a pulldown menu to select the library to search on the opac masthead.', 'YesNo' )");
+	print "Upgrade done (added OpacAddMastheadLibraryPulldown system preferences)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
