@@ -917,10 +917,17 @@ function Check(f) {
 $(document).ready(function() {
     init_pattern();
 	
-	<!--TMPL_IF Name="manualhistory"--> $("#subscription_form_history").show();<!--/TMPL_IF-->
-	
+	<!--TMPL_IF Name="history"--> $("#subscription_form_history").show();<!--/TMPL_IF-->
+	$("#cancel_manual_history").click(function(){
+		$("#subscription_form_history").hide();
+		$("#manuallist").attr("checked","");
+	});
    	$("#manuallist").click( function(){
-		$("#subscription_form_history").toggle();
+		if($(this).attr("checked")){
+			$("#subscription_form_history").show();
+		} else {
+			$("#subscription_form_history").hide();
+		}
 	}
 	);
    //  $(".widelabel").attr("width", "300px");  // labels stay skinny in IE7 anyway.
@@ -1068,8 +1075,8 @@ $(document).ready(function() {
 	</div>
 	
 <div id="subscription_form_history" class="yui-u" style="display:none">
-    <h2>Subscription history</h2>
-        <p>Hint : you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify these fields with care, as future serial receive will continue to update them automatically.</p>
+<div><h3 style="display:inline">Subscription history</h3> <a href="#" id="cancel_manual_history">[cancel manual history]</a></div>
+        <p>Hint: you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify these fields with care, as future serial receive will continue to update them automatically.</p>
         <fieldset class="rows">
 		<ol>
             <li>
