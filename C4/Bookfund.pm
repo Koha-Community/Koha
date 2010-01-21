@@ -232,14 +232,15 @@ sub GetBookFundBreakdown {
         LEFT JOIN aqorderbreakdown USING (ordernumber)
         LEFT JOIN aqbasket USING (basketno)
         LEFT JOIN aqbudget USING (bookfundid)
-    WHERE bookfundid=?
+    WHERE aqbudgetid=?
         AND (datecancellationprinted IS NULL OR datecancellationprinted = '0000-00-00')
         AND closedate BETWEEN startdate AND enddate 
         AND creationdate > startdate
+        
     ORDER BY datereceived
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $id);
+    $sth->execute($id);
 
     my ($spent, $comtd) = (0, 0);
     while ( my $data = $sth->fetchrow_hashref ) {

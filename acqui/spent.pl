@@ -12,7 +12,7 @@ use CGI;
 
 my $dbh      = C4::Context->dbh;
 my $input    = new CGI;
-my $bookfund = $input->param('bookfund');
+my $budgetid = $input->param('aqbudgetid');
 my $start    = $input->param('start');
 my $end      = $input->param('end');
 
@@ -40,14 +40,14 @@ my $query =
     LEFT JOIN aqorderbreakdown USING (ordernumber)
     LEFT JOIN aqbasket USING (basketno)
     LEFT JOIN aqbudget USING (bookfundid)
-    WHERE bookfundid=?
+    WHERE aqbudgetid=?
     AND (datecancellationprinted IS NULL OR datecancellationprinted = '0000-00-00')
     AND closedate BETWEEN startdate AND enddate 
     AND creationdate > startdate
     ORDER BY datereceived
   ";
 my $sth = $dbh->prepare($query);
-$sth->execute( $bookfund);
+$sth->execute( $budgetid );
 
 my $total = 0;
 my $toggle;
