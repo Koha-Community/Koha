@@ -1079,7 +1079,7 @@ END_SQL
         $query .= 'WHERE ';
         $query .= join ' AND ', @where_strings;
     }
-    $query .= ' ORDER BY itemcallnumber, title';
+    $query .= ' ORDER BY items.cn_sort, itemcallnumber, title';
     my $sth = $dbh->prepare($query);
     $sth->execute( @bind_params );
 
