@@ -67,6 +67,7 @@ my $borrower= GetMember($loggedinuser);
 my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
 my @results = GetBookFunds($homebranch);
+
 my $count = scalar @results;
 
 my $classlist   = '';
@@ -77,7 +78,7 @@ my $totavail    = 0;
 my @loop_budget = ();
 
 for (my $i=0; $i<$count; $i++){
-	my ($spent,$comtd)=GetBookFundBreakdown($results[$i]->{'bookfundid'},$results[$i]->{'startdate'},$results[$i]->{'enddate'});
+	my ($spent,$comtd)=GetBookFundBreakdown($results[$i]->{'aqbudgetid'},$results[$i]->{'startdate'},$results[$i]->{'enddate'});
 	my $avail=$results[$i]->{'budgetamount'}-($spent+$comtd);
 	my %line;
 	$line{bookfundname} = $results[$i]->{'bookfundname'};
