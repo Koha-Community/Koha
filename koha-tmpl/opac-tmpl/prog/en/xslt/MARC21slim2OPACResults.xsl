@@ -410,6 +410,7 @@
                             <xsl:with-param name="codes">h</xsl:with-param>
                         </xsl:call-template>
                     </xsl:if>
+                <xsl:text> </xsl:text>
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">fgknps</xsl:with-param>
                      </xsl:call-template>
