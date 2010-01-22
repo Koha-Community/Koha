@@ -2971,8 +2971,10 @@ sub _koha_add_biblio {
     my $error;
 
     # set the series flag
-    my $serial = 0;
-    if ( $biblio->{'seriestitle'} ) { $serial = 1 }
+    unless (defined $biblio->{'serial'}){
+    	$biblio->{'serial'} = 0;
+    	if ( $biblio->{'seriestitle'} ) { $biblio->{'serial'} = 1 }
+    }
 
     my $query = "INSERT INTO biblio
         SET frameworkcode = ?,
@@ -2989,7 +2991,7 @@ sub _koha_add_biblio {
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $frameworkcode, $biblio->{'author'},      $biblio->{'title'},         $biblio->{'unititle'}, $biblio->{'notes'},
-        $serial,        $biblio->{'seriestitle'}, $biblio->{'copyrightdate'}, $biblio->{'abstract'}
+        $biblio->{'serial'},        $biblio->{'seriestitle'}, $biblio->{'copyrightdate'}, $biblio->{'abstract'}
     );
 
     my $biblionumber = $dbh->{'mysql_insertid'};
