@@ -3306,7 +3306,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 $DBversion = "3.01.00.102";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES (9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)')");
+    $dbh->do(
+    "UPDATE permissions set description = 'Edit catalog (Modify bibliographic/holdings data)' where module_bit = 9 and code = 'edit_catalogue'"
+    );
 	print "Upgrade done (fixed spelling error in edit_catalogue permission)\n";
     SetVersion ($DBversion);
 }
