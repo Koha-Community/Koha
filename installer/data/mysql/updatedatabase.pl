@@ -6631,6 +6631,30 @@ if ( CheckVersion($DBversion) ) {
 }
 
 
+$DBversion = "3.11.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES ('19', 'plugins', 'Koha plugins', '0')");
+    $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES
+              ('19', 'manage', 'Manage plugins ( install / uninstall )'),
+              ('19', 'tool', 'Use tool plugins'),
+              ('19', 'report', 'Use report plugins'),
+              ('19', 'configure', 'Configure plugins')
+            ");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('UseKohaPlugins','1','Enable or disable the ability to use Koha Plugins.','','YesNo')");
+
+    $dbh->do("
+        CREATE TABLE IF NOT EXISTS plugin_data (
+            plugin_class varchar(255) NOT NULL,
+            plugin_key varchar(255) NOT NULL,
+            plugin_value text,
+            PRIMARY KEY (plugin_class,plugin_key)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+    ");
+
+    print "Upgrade to $DBversion done (Bug 7804: Added plugin system.)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)

@@ -634,6 +634,46 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.22',
     },
+    'File::Temp' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '0.22',
+    },
+    'File::Copy' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '2.08',
+    },
+    'File::Path' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '2.07',
+    },
+    'Archive::Extract' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '0.60',
+    },
+    'Archive::Zip' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '1.30',
+    },
+    'Module::Load::Conditional' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '0.38',
+    },
+    'Module::Bundled::Files' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '0.03',
+    },
+    'Module::Pluggable' => {
+        'usage'    => 'Plugins',
+        'required' => '0',
+        'min_ver'  => '3.9',
+    },
 };
 
 1;

@@ -3063,6 +3063,17 @@ CREATE TABLE linktracker (
    KEY dateidx (timeclicked)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table 'plugin_data'
+--
+
+CREATE TABLE IF NOT EXISTS plugin_data (
+  plugin_class varchar(255) NOT NULL,
+  plugin_key varchar(255) NOT NULL,
+  plugin_value text,
+  PRIMARY KEY (plugin_class,plugin_key)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

@@ -133,7 +133,7 @@ EOQ
 sub get_template_and_user {
     my $in       = shift;
     my $template =
-      C4::Templates::gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
+      C4::Templates::gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'}, $in->{'is_plugin'} );
     my ( $user, $cookie, $sessionID, $flags );
     if ( $in->{'template_name'} !~m/maintenance/ ) {
         ( $user, $cookie, $sessionID, $flags ) = checkauth(
@@ -202,6 +202,7 @@ sub get_template_and_user {
             $template->param( CAN_user_serials          => 1 );
             $template->param( CAN_user_reports          => 1 );
             $template->param( CAN_user_staffaccess      => 1 );
+            $template->param( CAN_user_plugins          => 1 );
             foreach my $module (keys %$all_perms) {
                 foreach my $subperm (keys %{ $all_perms->{$module} }) {
                     $template->param( "CAN_user_${module}_${subperm}" => 1 );
@@ -366,6 +367,7 @@ sub get_template_and_user {
             OPACLocalCoverImages        => C4::Context->preference('OPACLocalCoverImages'),
             AllowMultipleCovers         => C4::Context->preference('AllowMultipleCovers'),
             EnableBorrowerFiles         => C4::Context->preference('EnableBorrowerFiles'),
+            UseKohaPlugins              => C4::Context->preference('UseKohaPlugins'),
         );
     }
     else {

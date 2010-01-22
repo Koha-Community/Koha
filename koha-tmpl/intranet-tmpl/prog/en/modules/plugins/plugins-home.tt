@@ -1,0 +1,116 @@
+[% USE KohaDates %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Plugins </title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+</head>
+
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; Plugins
+</div>
+
+<div id="doc3" class="yui-t1">
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="details">
+                    <h1>Plugins</h1>
+
+                    [% UNLESS ( plugins ) %]
+                        [% UNLESS ( method ) %]
+                            <h3>No plugins installed</h3>
+                        [% ELSE %]
+                            [% IF method == 'tool' %]
+                                <h3>No plugins that can be used as a tool are installed</h3>
+                            [% ELSIF method == 'report' %]
+                                <h3>No plugins that can create a report are installed</h3>
+                            [% ELSE %]
+                                <h3>Unknown plugin type <i>[% method %]</i>
+                            [% END %]
+                        [% END %]
+                    [% ELSE %]
+                        <table>
+                            <tr>
+                                <th>Name</th>
+                                <th>&nbsp;</th>
+                                <th>Description</th>
+                                <th>Author</th>
+                                <th>Plugin Version</th>
+                                <th>Minimum Koha Version</th>
+                                <th>Maximum Koha Version</th>
+                                <th>Last Updated</th>
+                                [% IF ( CAN_user_plugins_configure ) %]<th>Configure</th>[% END %]
+                                [% IF ( CAN_user_plugins_manage ) %]<th>Uninstall</th>[% END %]
+                            </tr>
+
+                            [% FOREACH plugin IN plugins %]
+                                <tr>
+                                    <td><strong>[% plugin.metadata.name %]</strong></td>
+                                    <td>
+                                        [% IF ( CAN_user_plugins_report ) %]
+                                            [% IF plugin.can('report') %]
+                                                <p style="white-space:nowrap"><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=report">Run report</a></p>
+                                            [% END %]
+                                        [% END %]
+
+                                        [% IF ( CAN_user_plugins_tool ) %]
+                                            [% IF plugin.can('tool') %]
+                                                <p style="white-space:nowrap"><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=tool">Run tool</a></p>
+                                            [% END %]
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% plugin.metadata.description %]
+
+                                        [% IF ( plugin.metadata.minimum_version && koha_version < plugin.metadata.minimum_version ) %]
+                                            <div class="error">Warning: This report was written for a newer version of Koha. Run at your own risk.</div>
+                                        [% END %]
+
+                                        [% IF ( plugin.metadata.maximum_version && koha_version > plugin.metadata.maximum_version ) %]
+                                            <div class="error">Warning: This report was written for an older version of Koha. Run at your own risk.</div>
+                                        [% END %]
+                                    </td>
+                                    <td>[% plugin.metadata.author %]</td>
+                                    <td>[% plugin.metadata.version %]</td>
+                                    <td>[% plugin.metadata.minimum_version %]</td>
+                                    <td>[% plugin.metadata.maximum_version %]</td>
+                                    <td>[% plugin.metadata.date_updated | $KohaDates %]</td>
+                                    [% IF ( CAN_user_plugins_configure ) %]
+                                        <td>
+                                            [% IF plugin.can('configure') %]
+                                                <a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class %]&method=configure">Configure</a>
+                                            [% END %]
+                                        </td>
+                                    [% END %]
+                                    [% IF ( CAN_user_plugins_manage ) %]
+                                        <td>
+                                            [% IF plugin.can('uninstall') %]
+                                                <a href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class %]" onclick="return confirm('Are you sure you want to uninstall the plugin [% plugin.metadata.name %]?')">Uninstall</a>
+                                            [% END %]
+                                        </td>
+                                    [% END %]
+                            [% END %]
+                        </table>
+                    [% END %]
+                </div>
+            </div>
+        </div>
+
+        <div class="yui-b noprint">
+            <div id="navmenu">
+                <ul id="navmenulist">
+                    [% IF ( CAN_user_plugins_manage ) %]
+                        <li><a href="plugins-upload.pl">Upload a plugin</a></li>
+                    [% END %]
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+[% INCLUDE 'intranet-bottom.inc' %]

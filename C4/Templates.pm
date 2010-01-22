@@ -228,13 +228,15 @@ sub _get_template_file {
 
 
 sub gettemplate {
-    my ( $tmplbase, $interface, $query ) = @_;
+    my ( $tmplbase, $interface, $query, $is_plugin ) = @_;
     ($query) or warn "no query in gettemplate";
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     $tmplbase =~ s/\.tmpl$/.tt/;
     my ($htdocs, $theme, $lang, $filename)
        =  _get_template_file($tmplbase, $interface, $query);
+    $filename = $tmplbase if ( $is_plugin );
     my $template = C4::Templates->new($interface, $filename, $tmplbase, $query);
+
 # NOTE: Commenting these out rather than deleting them so that those who need
 # to know how we previously shimmed these directories will be able to understand.
 #    my $is_intranet = $interface eq 'intranet';
