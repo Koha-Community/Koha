@@ -2705,14 +2705,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.064';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_1');
-    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_2');
-    SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (deleting contraints in issuingrules)\n";
-}
-
 $DBversion = '3.01.00.065';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do('ALTER TABLE issuingrules ADD COLUMN `renewalsallowed` smallint(6) NOT NULL default "0" AFTER `issuelength`;');
