@@ -3291,13 +3291,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.100";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('casAuthentication', '1', '', 'Enable or disable CAS authentication', 'YesNo'), ('casLogout', '1', '', 'Does a logout from Koha should also log out of CAS ?', 'YesNo'), ('casServerUrl', 'https://localhost:8443/cas', '', 'URL of the cas server', 'Free')");
-	print "Upgrade done (added CAS authentication system preferences)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.01.00.101";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(
