@@ -210,6 +210,7 @@ sub build_csv {
     # build header ...
     my @keys = sort keys %{ $overdues->[0] };
     my $csv = Text::CSV_XS->new({
+        binary   => 1,
         sep_char => C4::Context->preference("delimiter") ? 
                     C4::Context->preference("delimiter") : ';' ,
     });
