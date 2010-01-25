@@ -106,7 +106,7 @@ if ($cardnumber) {
     my $number_reserves =
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
-    if ( $number_reserves > C4::Context->preference('maxreserves') ) {
+    if ( not CanBookBeReserved($borrowerinfo->{borrowernumber}, $biblionumber)) {
 		$warnings = 1;
         $maxreserves = 1;
     }
@@ -250,15 +250,18 @@ my @bibitemloop;
 
 foreach my $biblioitemnumber (@biblioitemnumbers) {
     my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
-
+    
     my $num_available;
     my $num_override;
-
+    $biblioitem->{itemloop} = [];
+    
     $biblioitem->{description} =
       $itemtypes->{ $biblioitem->{itemtype} }{description};
 
     foreach my $itemnumber ( @{ $itemnumbers_of_biblioitem{$biblioitemnumber} } ){
         my $item = $iteminfos_of->{$itemnumber};
+        
+        
         unless (C4::Context->preference('item-level_itypes')) {
             $item->{itype} = $biblioitem->{itemtype};
         }
@@ -356,7 +359,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
             $policy_holdallowed = 0;
         }
 
-        if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve}) {
+        if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve} and CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber)) {
             if ( not $policy_holdallowed and C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
                 $item->{override} = 1;
                 $num_override++;
