@@ -2966,11 +2966,9 @@ BUDGETCONSTRAINTS
     $dbh->do(<<BUDGETDROPDATES);
 ALTER TABLE `aqbudgets`
    DROP startdate,
-   DROP enddate,
-   DROP bookfundid
+   DROP enddate
 BUDGETDROPDATES
 
-    $dbh->do("DROP TABLE aqbookfund ");
 
     $dbh->do("DROP TABLE IF EXISTS `aqbudgets_planning` ");
     $dbh->do("CREATE TABLE  `aqbudgets_planning` (
@@ -2991,6 +2989,8 @@ BUDGETDROPDATES
                     ADD COLUMN  `sort1_authcat` varchar(10) default NULL,
                     ADD COLUMN  `sort2_authcat` varchar(10) default NULL" );
 
+                # cannot do until aqorderbreakdown removed
+#    $dbh->do("DROP TABLE aqbookfund ");
 
 
 
@@ -3074,6 +3074,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     );
 
     $dbh->do(qq| DROP TABLE aqorderbreakdown |);
+    $dbh->do('DROP TABLE aqbookfund');
     print "Upgrade to $DBversion done (New aqorders_items table for acqui)\n";
     SetVersion ($DBversion);
 }
