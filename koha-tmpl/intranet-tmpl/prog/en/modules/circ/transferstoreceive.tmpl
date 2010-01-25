@@ -35,9 +35,10 @@ $(document).ready(function() {
 	<div id="yui-main">
 	<div class="yui-g">
 
-	<h1>Transfers made to your library on : <!-- TMPL_VAR NAME="show_date" --></h1>
+	<h1>Transfers made to your library as of <!-- TMPL_VAR NAME="show_date" --></h1>
 	<!-- TMPL_IF name="branchesloop" -->
         <p>Your library is the destination for the following transfer(s)</p>
+		<!-- TMPL_IF NAME="latetransfers" --><p>Transfers are <span class="error">considered late</span> after <!-- TMPL_VAR NAME="TransfersMaxDaysWarning" --> days.</p><!-- /TMPL_IF -->
         <div id="resultlist">
         <!-- TMPL_LOOP NAME="branchesloop" -->
             <!-- TMPL_IF NAME="branchcode" -->
@@ -55,7 +56,7 @@ $(document).ready(function() {
                 <!-- TMPL_ELSE -->
                 <tr>
                 <!-- /TMPL_IF -->
-                    <td><p><!-- TMPL_VAR NAME="datetransfer" --></p> <!-- TMPL_IF NAME="messcompa" -->check this transfer<!-- /TMPL_IF --></td>
+                    <td><p><!-- TMPL_VAR NAME="datetransfer" --></p> <!-- TMPL_IF NAME="messcompa" --><span class="error">Transfer is <!-- TMPL_VAR NAME="diff" --> days late</span><!-- /TMPL_IF --></td>
                     <td><span style="display:none;"><!-- TMPL_VAR NAME="title" escape="html" --></span><!-- invisible title for tablesorter -->
                         <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
 <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>

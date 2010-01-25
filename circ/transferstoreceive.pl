@@ -58,6 +58,7 @@ my $default = C4::Context->userenv->{'branch'};
 # get the all the branches for reference
 my $branches = GetBranches();
 my @branchesloop;
+my $latetransfers;
 foreach my $br ( keys %$branches ) {
     my @transferloop;
     my %branchloop;
@@ -78,15 +79,18 @@ foreach my $br ( keys %$branches ) {
                 C4::Context->preference('TransfersMaxDaysWarning'));
             my $calcDate = Date_to_Days( $sent_year, $sent_month, $sent_day );
             my $today    = Date_to_Days(&Today);
+			my $diff = $today - $calcDate;
 
             if ($today > $calcDate) {
+				$latetransfers = 1;
                 $getransf{'messcompa'} = 1;
+				$getransf{'diff'} = $diff;
             }
             my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
-            my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );
+            my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $gettitle->{'itype'} : $gettitle->{'itemtype'} );
 
             $getransf{'datetransfer'} = format_date( $num->{'datesent'} );
-            $getransf{'itemtype'} = $itemtypeinfo->{'description'};
+            $getransf{'itemtype'} = $itemtypeinfo ->{'description'};
 			foreach (qw(title biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
             	$getransf{$_} = $gettitle->{$_};
 			}
@@ -114,6 +118,8 @@ $template->param(
     branchesloop => \@branchesloop,
     show_date    => format_date(C4::Dates->today('iso')),
 	'dateformat_' . (C4::Context->preference("dateformat") || '') => 1,
+	TransfersMaxDaysWarning => C4::Context->preference('TransfersMaxDaysWarning'),
+	latetransfers => $latetransfers ? 1 : 0,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
