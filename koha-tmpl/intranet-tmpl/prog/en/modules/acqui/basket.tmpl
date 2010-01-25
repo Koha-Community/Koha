@@ -113,7 +113,7 @@
             <!-- /TMPL_UNLESS -->
             
     <!-- TMPL_IF NAME="NO_BOOKSELLER" -->
-    <h2>Supplier Not Found</h2>
+    <h2>Vendor not found</h2>
     <!-- TMPL_ELSE -->
         <!-- TMPL_IF NAME="delete_confirmed" -->
             <h3>Basket deleted</h3>
@@ -138,7 +138,7 @@
             <div id="acqui_basket_summary"  class="yui-g">
                 <h2>Basket details</h2>
                 <!-- TMPL_IF NAME="basketnote" --><p>Internal note: <!-- TMPL_VAR NAME="basketnote" --></p><!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="basketbooksellernote" --><p>Bookseller note: <!-- TMPL_VAR NAME="basketbooksellernote" --></p><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="basketbooksellernote" --><p>Vendor note: <!-- TMPL_VAR NAME="basketbooksellernote" --></p><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="basketcontractno" -->
                     <p>Contract number: <!-- TMPL_VAR NAME="basketcontractno" --></p>
                     <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></p>

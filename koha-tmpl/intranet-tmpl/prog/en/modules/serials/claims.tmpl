@@ -158,7 +158,7 @@
 
     <h1>Claims</h1>
 
-<!-- TMPL_IF NAME="letter" --><!-- TMPL_UNLESS NAME="missingissues" --><!-- TMPL_IF NAME="supplierid" --> <div class="dialog alert">No missing issues found.</div><!-- TMPL_ELSE --><div class="dialog message">Please choose a supplier.</div><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="letter" --><!-- TMPL_UNLESS NAME="missingissues" --><!-- TMPL_IF NAME="supplierid" --> <div class="dialog alert">No missing issues found.</div><!-- TMPL_ELSE --><div class="dialog message">Please choose a vendor.</div><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
 	
 	     <!-- TMPL_IF NAME="SHOWCONFIRMATION" -->
      <div class="dialog alert">Your notification has been sent.</div>
@@ -248,7 +248,7 @@
                     <!--TMPL_IF NAME="letter"-->
                     <th>Claim</th>
                     <!--/TMPL_IF-->
-                    <th>Supplier</th>
+                    <th>Vendor</th>
                     <th>Title</th>
                     <th>Issue number</th>
                     <th>Status</th>
@@ -294,7 +294,7 @@
 	     <p><span class="exportSelected"></span></p>
         <!-- TMPL_IF Name="singlesupplier"-->
             <input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
-            <!-- <a href="claims.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR name="supplierid" -->,''); return false" class="button">Supplier Group Claim Notice</a></p> -->
+            <!-- <a href="claims.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR name="supplierid" -->,''); return false" class="button">Vendor Group Claim Notice</a></p> -->
         <!-- /TMPL_IF -->
 
 <!--TMPL_IF Name="letter" -->
@@ -346,7 +346,7 @@
         <h3>Missing Issues</h3>
         <table>
             <tr>
-                <td><b>Supplier<b></td>
+                <td><b>Vendor<b></td>
                 <td><b>Title</b></td>
                 <td><b>Issue number</b></td>
                 <td><b>Missing since</b></td>

@@ -40,7 +40,7 @@
 
                              </td>
                              <td><!-- TMPL_VAR name="overlay_status"--></td>
-                             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!--TMPL_VAR name="booksellerid" -->&basketno=<!-- TMPL_VAR name="basketno" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->&breedingid=<!-- TMPL_VAR name="import_record_id" -->&import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Add order</a></td>
+                             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!--TMPL_VAR name="booksellerid" -->&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->&amp;breedingid=<!-- TMPL_VAR name="import_record_id" -->&amp;import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->">Add order</a></td>
                          </tr>
                          <!-- TMPL_IF name="match_biblionumber" -->
                            <tr>
@@ -60,7 +60,7 @@
                     <!-- TMPL_IF name="current_page" -->
                       <span class="current"><!-- TMPL_VAR name="page_number" --></span>
                     <!-- TMPL_ELSE -->
-                      <a class="nav" href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&offset=<!-- TMPL_VAR name="offset" -->"><!-- TMPL_VAR name="page_number" --></a>
+                      <a class="nav" href="<!-- TMPL_VAR name="script_name" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&amp;offset=<!-- TMPL_VAR name="offset" -->"><!-- TMPL_VAR name="page_number" --></a>
                     <!-- /TMPL_IF -->
                   <!-- /TMPL_LOOP -->
               <!-- /TMPL_IF -->
@@ -82,7 +82,7 @@
                        <td><!-- TMPL_VAR name="import_status" --></td>
                        <td><!-- TMPL_VAR name="upload_timestamp" --></td>
                        <td><!-- TMPL_VAR name="num_biblios" --></td>
-                       <td><a href="<!-- TMPL_VAR name="scriptname" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&basketno=<!-- TMPL_VAR name="basketno" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Add orders</a></td>
+                       <td><a href="<!-- TMPL_VAR name="scriptname" -->?import_batch_id=<!-- TMPL_VAR name="import_batch_id" -->&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">Add orders</a></td>
                      </tr>
                      <!-- /TMPL_LOOP -->
                    </table>

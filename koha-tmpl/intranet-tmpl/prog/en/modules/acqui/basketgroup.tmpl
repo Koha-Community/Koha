@@ -140,8 +140,8 @@ fieldset.various li {
 				
 					function yuiToolbar() {
 						var booksellermenu = [
-							{ text: _("Bookseller"), url: "/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR name="booksellerid" -->" },
-							{ text: _("Edit bookseller"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->"},
+							{ text: _("Vendor"), url: "/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR name="booksellerid" -->" },
+							{ text: _("Edit vendor"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->"},
 						]
 						var ordersbutton = [
 						         { text: _("Manage orders"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=<!-- TMPL_VAR name="booksellerid" -->" },
@@ -150,7 +150,7 @@ fieldset.various li {
 						new YAHOO.widget.Button("newbasketgroup");
 					    new YAHOO.widget.Button({
 					        type: "menu",
-					        label: _("Bookseller"),
+					        label: _("Vendor"),
 					        name: "booksellerbutton",
 					        menu: booksellermenu,
 					        container: "toolbar"
@@ -168,7 +168,7 @@ fieldset.various li {
 				</script>
 				<a href="?op=add&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->" name="newbasketgroup" id="newbasketgroup">New Basket Group</a>
 			</div>
-        	<h1>Basket grouping for Vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a></h1>
+			<h1>Basket grouping for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a></h1>
 		</div>
 <!--  TMPL_IF NAME="grouping" -->
 	<div id="bd"> 
