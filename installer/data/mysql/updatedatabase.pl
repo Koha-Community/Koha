@@ -2748,11 +2748,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.01.00.068";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("ALTER TABLE issuingrules ADD
-			COLUMN `finedays` int(11) default NULL AFTER `fine`,
-			ADD COLUMN `reservesallowed` smallint(6) default NULL;
-			");
-	print "Upgrade done (Adding finedays and reservesallowed fields in issuingrules table)\n";
+	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
+	print "Upgrade done (Adding finedays in issuingrules table)\n";
 }
 
 
