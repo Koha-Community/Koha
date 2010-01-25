@@ -196,7 +196,11 @@
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF Name="message" -->
-            <span class="lost">Unavailable (lost or missing)</span>
+        	<span class="lost">Unavailable 
+        	<!-- TMPL_UNLESS NAME="notholdable" -->
+            (lost or missing)
+            <!-- /TMPL_IF -->
+            </span>
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF Name="notforloan" -->

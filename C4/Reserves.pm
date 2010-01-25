@@ -112,6 +112,8 @@ BEGIN {
         &ModReserveMinusPriority
         
         &CheckReserves
+        &CanBookBeReserved
+        &CanItemBeReserved
         &CancelReserve
 
         &IsAvailableForItemLevelRequest
@@ -429,6 +431,89 @@ sub GetReservesFromBorrowernumber {
     }
     my $data = $sth->fetchall_arrayref({});
     return @$data;
+}
+#-------------------------------------------------------------------------------------
+=item CanBookBeReserved
+
+$error = &CanBookBeReserved($borrowernumber, $biblionumber)
+
+=cut
+
+sub CanBookBeReserved{
+    my ($borrowernumber, $biblionumber) = @_;
+
+    my $dbh           = C4::Context->dbh;
+    my $biblio        = GetBiblioData($biblionumber);
+    my $borrower      = C4::Members::GetMember(borrowernumber=>$borrowernumber);
+    my $controlbranch = C4::Context->preference('ReservesControlBranch');
+    my $itype         = C4::Context->preference('item-level_itypes');
+    my $reservesrights= C4::Context->preference('maxreserves');
+    my $reservescount = 0;
+    
+    # we retrieve the user rights
+    my @args;
+    my $branchcode;
+    
+    
+    if($controlbranch eq "ItemHomeLibrary"){
+        $branchcode = '*';
+    }elsif($controlbranch eq "PatronLibrary"){
+        $branchcode = $borrower->{branchcode};
+    }
+
+    $reservescount = GetReserveCount($borrowernumber);
+
+    if($reservescount < $reservesrights){
+        return 1;
+    }else{
+        return 0;
+    }
+    
+}
+
+=item CanItemBeReserved
+
+$error = &CanItemBeReserved($borrowernumber, $itemnumber)
+
+this function return 1 if an item can be issued by this borrower.
+
+=cut
+
+sub CanItemBeReserved{
+    my ($borrowernumber, $itemnumber) = @_;
+    
+    my $dbh             = C4::Context->dbh;
+            
+    my $controlbranch   = C4::Context->preference('ReservesControlBranch') || "ItemHomeLibrary";
+    my $itype           = C4::Context->preference('item-level_itypes') ? "itype" : "itemtype";
+    my $allowedreserves = C4::Context->preference('maxreserves');
+    
+    # we retrieve borrowers and items informations #
+    my $item     = C4::Items::GetItem($itemnumber);
+    my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);     
+
+    my $branchcode   = "*";
+    my $branchfield  = "reserves.branchcode";
+    
+    if( $controlbranch eq "ItemHomeLibrary" ){
+        $branchcode = $item->{homebranch};
+    }elsif( $controlbranch eq "PatronLibrary" ){
+        $branchcode = $borrower->{branchcode};
+    }
+    
+    # we retrieve user rights on this itemtype and branchcode
+    my $issuingrule = C4::Circulation::GetIssuingRule($borrower->{categorycode}, $item->{$itype}, $branchcode);
+    
+    # we retrieve count
+    
+    my $reservecount = GetReserveCount($borrowernumber);
+
+    # we check if it's ok or not
+    if(( $reservecount < $allowedreserves ) and $issuingrule->{maxissueqty} ){
+        return 1;
+    }else{
+        return 0;
+    }
 }
 #-------------------------------------------------------------------------------------
 

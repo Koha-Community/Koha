@@ -145,6 +145,7 @@ if ( $query->param('place_reserve') ) {
     my $notes=$query->param('notes');
     my $checkitem=$query->param('checkitem');
     my $found;
+    my $canreserve=0;
     
     #if we have an item selectionned, and the pickup branch is the same as the holdingbranch of the document, we force the value $rank and $found.
     if ($checkitem ne ''){
@@ -168,13 +169,24 @@ if ( $query->param('place_reserve') ) {
             $i2++;
         }
     }
-    # here we actually do the reserveration. Stage 3.
-    if ($query->param('request') eq 'any'){
-        # place a request on 1st available
-        AddReserve($branch,$borrowernumber,$biblionumber,'a',\@realbi,$rank,$notes,$bibdata->{'title'},$checkitem,$found);
-    } else {
-        AddReserve($branch,$borrowernumber,$biblionumber,'a',\@realbi,$rank,$notes,$bibdata->{'title'},$checkitem, $found);
+    
+    if ($checkitem ne ''){
+    	$canreserve = 1 if CanItemBeReserved($borrowernumber,$checkitem);
+        $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
+        my $item = GetItem($checkitem);
+        if ( $item->{'holdingbranch'} eq $branch ){
+            $found = 'W' unless C4::Context->preference('ReservesNeedReturns');
+        }
     }
+    else {
+    	$canreserve = 1 if CanBookBeReserved($borrowernumber,$biblionumber);
+        # Inserts a null into the 'itemnumber' field of 'reserves' table.
+        $checkitem = undef;
+    }
+
+    # here we actually do the reserveration. Stage 3.
+    AddReserve($branch,$borrowernumber,$biblionumber,'a',\@realbi,$rank,$notes,
+                $bibdata->{'title'},$checkitem, $found) if ($canreserve);
     print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-holds");
 }
 else {
@@ -342,7 +354,7 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
             $policy_holdallowed = 0;
         }
 
-        if (IsAvailableForItemLevelRequest($itemnumber) and $policy_holdallowed) {
+        if (IsAvailableForItemLevelRequest($itemnumber) and $policy_holdallowed and CanItemBeReserved($borrowernumber,$itemnumber)) {
             $item->{available} = 1;
             $num_available++;
         }
@@ -354,10 +366,17 @@ foreach my $biblioitemnumber (@biblioitemnumbers) {
         while (my $wait_hashref = $sth2->fetchrow_hashref) {
             $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
         }
-	$item->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes->{ $item->{itype} }{imageurl} );
+    	
+    	$item->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes->{ $item->{itype} }{imageurl} );
+
         push @{ $biblioitem->{itemloop} }, $item;
     }
-
+    
+    if(not CanBookBeReserved($borrowernumber,$biblionumber)){
+        $biblioitem->{available} = undef;
+        $biblioitem->{notholdable} = 1;
+    }
+    
     push @bibitemloop, $biblioitem;
 }
 
