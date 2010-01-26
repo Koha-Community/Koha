@@ -5,6 +5,17 @@
 //<![CDATA[
 $(document).ready(function(){
 		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
+		/* Inline edit/delete links */
+		var biblionumber = $("input[name='biblionumber']").attr("value");
+		$("td").click(function(event){
+			var $tgt = $(event.target);
+			if($tgt.is("a")||$tgt.is(":first-child")||$tgt.is(":nth-child(2)")){ return true; } else {
+			var rowid = $(this).parent().attr("id");
+			num_rowid = rowid.replace("row","");
+			$(".linktools").remove();
+			$(this).append("<span class=\"linktools\"><a href=\"/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&itemnumber="+num_rowid+"#edititem\">Edit Item</a> <a href=\"/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&itemnumber="+num_rowid+"\" onclick=\"confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,"+num_rowid+"); return false;\">Delete Item</a></span>");
+		}
+		});
 });
 function active(numlayer)
 {
@@ -195,7 +206,7 @@ function set_to_today(id, force) {
             </tr>
                 <!-- TMPL_LOOP NAME="item_loop" -->
                 <tr id="row<!-- TMPL_VAR NAME="itemnumber" -->">
-                    <!-- TMPL_IF Name="nomod"--> <td colspan="2">&nbsp;</td><!--TMPL_ELSE--><td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">Edit</a></td>
+                    <!-- TMPL_IF Name="nomod"--> <td colspan="2">&nbsp;</td><!--TMPL_ELSE--><td><a href="additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#edititem">Edit</a></td>
                     <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->" onclick="confirm_deletion(<!-- TMPL_VAR NAME="biblionumber" -->,<!-- TMPL_VAR NAME="itemnumber" -->); return false;">Delete</a></td><!--/TMPL_IF-->
                 <!-- TMPL_LOOP NAME="item_value" -->
                     <td><!-- TMPL_VAR ESCAPE=HTML NAME="field" --></td>
@@ -214,7 +225,7 @@ function set_to_today(id, force) {
     <!-- TMPL_IF name="opisadd" -->
         <h2 id="additema">Add Item</h2>
     <!-- TMPL_ELSE -->
-        <h2>Edit Item #<!-- TMPL_VAR NAME="itemnumber" --></h2>
+        <h2 id="edititem">Edit Item #<!-- TMPL_VAR NAME="itemnumber" --></h2>
     <!-- /TMPL_IF -->	
 	<fieldset class="rows">
 	<ol>

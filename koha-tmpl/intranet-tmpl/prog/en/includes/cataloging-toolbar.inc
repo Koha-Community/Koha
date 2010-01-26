@@ -55,7 +55,7 @@
         new YAHOO.widget.Button({
                 id: "z3950search",
                 type: "button",
-                label: _("z39.50 Search"),
+                label: _("Z39.50 Search"),
                 container: "newmenuc",
                 onclick: {fn:function(){PopupZ3950()}}
         });
@@ -79,7 +79,7 @@
 			</select>
 			<input type="submit" value="Add Record Without Search" />
 		</form>
-        <a id="z3950search" onclick="PopupZ3950(); return false;">z39.50 Search</a>
+        <a id="z3950search" onclick="PopupZ3950(); return false;">Z39.50 Search</a>
     <!-- /TMPL_IF -->  
 
   </div>

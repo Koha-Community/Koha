@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Serials</title>
+<title>Koha &rsaquo; Serials &rsaquo; Catalog search</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
 <body>
@@ -15,12 +15,14 @@
 <form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="get">
     <input type="hidden" name="op" value="do_search" />
     <input type="hidden" name="type" value="intranet" />
-    <label for="q">Keyword</label>
-    <input type="text" id="q"  name="q" />
+	<fieldset class="rows">
+	<ol>
+    <li><label for="q">Keyword: </label>
+    <input type="text" id="q"  name="q" /></li>
     
     <!-- ITEMTYPE LIMITS -->
-        <p>Limit type to: 
-        <select name="itemtypelimit">
+        <li><label for="itemtypelimit">Limit type to: </label>
+        <select name="itemtypelimit" id="itemtypelimit">
 	    <option value="">All</option>
         <!--TMPL_LOOP Name="itemtypeloop"-->
             <option value="<!--TMPL_VAR Name="code" -->">
@@ -28,10 +30,11 @@
             </option>
         <!--/TMPL_LOOP-->
         </select>
-        </p>
+        </li>
     <!-- /ITEMTYPE LIMITS -->
-
-    <input type="submit" value="Search" />
+	</ol>
+</fieldset>
+<fieldset class="action"><input type="submit" value="Search" /></fieldset>
 
 
 </form>

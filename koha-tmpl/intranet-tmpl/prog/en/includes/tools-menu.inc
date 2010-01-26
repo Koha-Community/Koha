@@ -15,7 +15,8 @@
 	<li><a href="/cgi-bin/koha/tools/koha-news.pl">News</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_label_creator" -->
-	<li><a href="/cgi-bin/koha/labels/label-home.pl">Labels (spine and barcode)</a></li>
+	<li><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></li>
+	<li><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_edit_calendar" -->
 	<li><a href="/cgi-bin/koha/tools/holidays.pl">Calendar</a></li>
@@ -29,7 +30,11 @@
     <!-- TMPL_IF NAME="CAN_user_tools_moderate_comments" -->
 	<li><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Moderate OPAC comments</a></li>
     <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="CAN_user_tools_moderate_comments" --><!-- FIXME: Update here when Tag specific permission is created. --><li><a href="/cgi-bin/koha/tags/review.pl">Moderate patron tags</a></li>
+    <!-- TMPL_IF NAME="CAN_user_tools_moderate_tags" -->
+    <li><a href="/cgi-bin/koha/tags/review.pl">Moderate patron tags</a></li>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_tools_manage_csv_profiles" -->
+	<li><a href="/cgi-bin/koha/tools/csv-profiles.pl">CSV Profiles</a></li>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="CAN_user_tools_view_system_logs" -->
 	<li><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></li>

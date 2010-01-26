@@ -1,16 +1,32 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Serials
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Subscription information for <!-- TMPL_VAR name="bibliotitle" -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" language="javascript">
 //<![CDATA[
 
 $(document).ready(function(){
-    initFilters();
-	
+	showlayer(<!-- TMPL_VAR name="yearmin" -->);
+	$("a.tabsubs:first").addClass("currentsubtab");
+	$("#filterform").submit(function(){
+		filterByLibrary();
+		return false;
+	});
+	$("#libraryfilter").change(function(){
+		filterByLibrary();
+	});
+	$("#subscriptionidfilter").change(function(){
+		filterBySubscriptionId();
+	});
+	$("#reset").click(function(){
+		clearFilters();
+	});
+	$("a.tabsubs").click(function(){
+		$("a.tabsubs").removeClass("currentsubtab");
+		$(this).addClass("currentsubtab");
+	});
 });
 
 // Filters initialization
 function initFilters() {
-
     // Deleting everything from the library filter
     $("#libraryfilter option").remove();
 
@@ -101,71 +117,64 @@ function clearFilters(keeplibrary) {
     if (keeplibrary != true) { 
 	// Reinit library options
 	initFilters();
-	$("#libraryfilter option[@value=all]").attr("selected", "selected"); 
+	$("#libraryfilter option[value=all]").attr("selected", "selected");
     }
 }
-
+function showlayer(numlayer){
+	$(".yeardata").each(function(){
+		ong = $(this).attr("id");
+		if(ong == "show"+numlayer){
+			$(this).show();
+			currentYear = ong;
+		} else  {
+			$(this).hide();
+		}
+	});
+    clearFilters();
+}
 //]]>
 </script>
-
+<style type="text/css">
+	#search-facets fieldset { border: 0; margin: 0;padding:0;}#search-facets ol{padding:.3em;}#search-facets li {list-style-type:none;padding:4px 4px;}#search-facets label{font-weight:bold;display:block;margin:.2em 0;}#search-facets fieldset.action {padding-left:4px;margin:.3em;}div.tabsub { clear:both;}#subtabs a { display:block;float:left;border:1px solid #CCC;padding:.2em .4em;margin-right:.3em;text-decoration:none;font-size:115%;}#subtabs strong { display:block; float: left; font-size:115%;padding:.2em .4em; }#subtabs { margin-top : 1em; }a.currentsubtab { background-color:#FFC;}
+</style>
 </head>
-<body>
+<body id="opac-full-serial-issues">
 <!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
    <div id="bd">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-<div class="container">
 
 <!-- TMPL_UNLESS name="popup" -->
-    <h1 class="catalogue">Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h1>
-    <a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button catalogue">Back to biblio</a>
+    <h2>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h2>
+	<div id="views">
+		<span class="view"><a id="Normalview" href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal view</a></span>
+		<span class="view"><a id="Briefhistory" href="opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&amp;selectview=small">Brief history</a></span>
+		<span class="view"><span id="Fullhistory">Full history</span></span>
+	</div>
+
 <!-- /TMPL_UNLESS -->
-    <div class="tabsubs">
+    <div id="subtabs"><strong>Show year: </strong>
     <!-- TMPL_LOOP NAME="years" -->
         <!-- TMPL_IF NAME="year" -->
-            <a  class="tabsubs" href="javascript:showlayer(<!-- TMPL_VAR NAME="year" -->)"><!-- TMPL_VAR NAME="year" --></a>
+            <a class="tabsubs" href="#" onclick="showlayer(<!-- TMPL_VAR NAME="year" -->); return false;"><!-- TMPL_VAR NAME="year" --></a>
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP -->
-    <a class="tabsubs" href="opac-serial-issues.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->&selectview=small">Compact view</a>
     </div>
 
-    <form action="opac-serial-issues.pl" onsubmit="filterByLibrary(); return false;">
-	<fieldset>
-	    
-	    <legend>Filters :</legend>
-
-	    <label for="libraryfilter">Library : </label>
-            <select id="libraryfilter" onchange="filterByLibrary();">
-            </select>
-	    
-	    <label for="subscriptionidfilter">Subscription : </label>
-            <select id="subscriptionidfilter" disabled="disabled" onchange="filterBySubscriptionId();">
-            </select>
-	    
-	    <input type="reset" value="Clear Filters" onclick="clearFilters();" />
-    	
-	</fieldset>
-    </form>
     <!-- TMPL_LOOP NAME="years" -->
   <!--TMPL_IF Name="first" -->  
-    <div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="tabsub" style="display:block"><!--TMPL_ELSE --><div name="yeardata" id="<!-- TMPL_VAR NAME="year" -->" class="tabsub" style="display:none"><!--/TMPL_IF -->
-        <table class="subscriptionstclass" width="400px">
+    <div class="yeardata tabsub" id="show<!-- TMPL_VAR NAME="year" -->" style="display:block"><!--TMPL_ELSE --><div class="yeardata tabsub" id="show<!-- TMPL_VAR NAME="year" -->" style="display:none"><!--/TMPL_IF -->
+        <table class="subscriptionstclass">
 	    <thead>
 		<tr>
-		    <th>Date
-		    </th>
-		    <th>Library
-		    </th>
-		    <th>Notes
-		    </th>
-		    <th>Date received
-		    </th>
-		    <th>Number
-		    </th>
-		    <th>Status
-		    </th>
+		    <th>Date</th>
+		    <th>Library</th>
+		    <th>Notes</th>
+		    <th>Date received</th>
+		    <th>Number</th>
+		    <th>Status</th>
 		    <th>Subscription</th>
 		</tr>
 	    </thead>
@@ -174,7 +183,7 @@ function clearFilters(keeplibrary) {
 		<tr>
 		    <td>    <!-- TMPL_VAR Name="publisheddate" -->
 		    </td>
-		    <td class="libraryfilterclass">    <!-- TMPL_VAR name="branchcode" -->
+		    <td class="libraryfilterclass">    <!-- TMPL_VAR name="branchname" -->
 		    </td>
 		    <td>    <!-- TMPL_VAR name="notes" -->
 		    </td>
@@ -198,34 +207,26 @@ function clearFilters(keeplibrary) {
         </table>
     </div>
     <!--/TMPL_LOOP -->
-<script language="JavaScript" type="text/javascript">
-var currentYear;
-showlayer(<!-- TMPL_VAR name="yearmin" -->);
-function showlayer(numlayer)
-{
-    var yeardata=document.getElementsByName("yeardata");
-    for (i=0; i<yeardata.length; i++ ) {
-        ong=yeardata[i].getAttribute('id');
-        if (numlayer==ong) {
-            yeardata[i].style.display="block";
-	    currentYear = ong;
-        } else {
-            yeardata[i].style.display="none";
-        }
-    }
 
-    clearFilters();
-}
-
-</script>
-</div></div>
 </div>
 </div>
-<!-- TMPL_IF NAME="OpacNav" -->
+</div>
 <div class="yui-b">
 <div class="container">
-<!--TMPL_INCLUDE NAME="navigation.inc" -->
+<div id="search-facets">
+<form action="opac-serial-issues.pl" id="filterform">
+    <h4>Refine your search</h4>
+	<fieldset>
+	   <ol><li> <label for="libraryfilter">Library : </label>
+	            <select id="libraryfilter" name="libraryfilter" style="width:10em;"></select></li>
+	    <li><label for="subscriptionidfilter">Subscription : </label>
+            <select id="subscriptionidfilter" name="subscriptionfilter" style="width:10em;" disabled="disabled"></select></li></ol>
+		</fieldset>
+		<fieldset class="action"><input type="reset" id="reset" value="Clear" /></fieldset>
+    </form>
 </div>
-</div><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpacNav" --><!--TMPL_INCLUDE NAME="navigation.inc" --><!-- /TMPL_IF -->
+</div>
+</div>
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

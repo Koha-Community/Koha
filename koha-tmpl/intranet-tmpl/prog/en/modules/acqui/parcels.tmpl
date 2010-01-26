@@ -9,7 +9,7 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a> &rsaquo; Receive shipment from vendor <!-- TMPL_VAR NAME="name" --></div>
 
-<div id="doc" class="yui-t7">
+<!-- TMPL_IF NAME="count" --><div id="doc3" class="yui-t2"><!-- TMPL_ELSE --><div id="doc" class="yui-t7"><!-- /TMPL_IF -->
    
    <div id="bd">
 	<div id="yui-main">
@@ -17,33 +17,12 @@
 	
 <h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="name" --></a></h1>
 
-<!-- TMPL_IF NAME="count" --><p> <!-- TMPL_VAR NAME="count" --> shipments</p><!--/TMPL_IF-->
+<!-- TMPL_IF NAME="count" -->
+<p> <!-- TMPL_VAR NAME="count" --> shipments</p>
 <div id="resultlist">
 <!-- Search Results Table -->
-<!-- TMPL_IF NAME="count" -->
-<form method="get" action="parcels.pl">
-    <table class="small">
-        <tr>
-            <th> <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" /></th>
-            <th><label for="filter">Invoice / Code:</label><input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->" id="filter" /></th>
-            <th><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="<!-- TMPL_VAR NAME="datefrom" -->" /><br /> 
-                <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="<!-- TMPL_VAR NAME="dateto" -->" /></th>
-            <th><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
-                <option value="aqorders.booksellerinvoicenumber"> Code</option>
-                <option value="datereceived"> Date Received</option>
-                <option value="datereceived desc"> Date Received reverse</option>
-                <option value="aqorders.booksellerinvoicenumber desc"> Code reverse</option>
-                </select><br />
-                <label for="resultsperpage">Results per page :</label><select name="resultsperpage" id="resultsperpage">
-                <option value="20">20</option>
-                <option value="30">30</option>
-                <option value="50">50</option>
-                <option value="100">100</option>
-                </select></th>
-            <th><input type="submit" class="button" value="Filter" /></th>
-        </tr>
-	</table><br />
-    <table class="small">
+
+<table class="small">
         <tr>
             <th>Line</th>
             <th>Date Received</th>
@@ -81,7 +60,7 @@
     </tr>
 <!-- /TMPL_LOOP -->
 </table>
-</form>
+
 <div id="resultnumber">
 <!-- Row of numbers corresponding to search result pages -->
 <!-- TMPL_IF NAME="displayprev" -->
@@ -98,8 +77,9 @@
     <a href="parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;startfrom=<!-- TMPL_VAR NAME="nextstartfrom" --><!--TMPL_IF Name="datefrom"-->&amp;datefrom=<!--TMPL_VAR Name="datefrom"--><!--/TMPL_IF--><!--TMPL_IF Name="dateto"-->&amp;dateto=<!--TMPL_VAR Name="dateto"--><!--/TMPL_IF--><!--TMPL_IF Name="code"-->&amp;filter=<!--TMPL_VAR Name="code"--><!--/TMPL_IF--><!--TMPL_IF Name="orderby"-->&amp;orderby=<!--TMPL_VAR Name="orderby"--><!--/TMPL_IF--><!--TMPL_IF Name="resultsperpage"-->&amp;resultsperpage=<!--TMPL_VAR Name="resultsperpage"--><!--/TMPL_IF-->&amp;type=intra">Next &gt;&gt;</a>
 <!-- /TMPL_IF -->
 </div>
-<!--/TMPL_IF-->
 </div>
+<!--/TMPL_IF-->
+
     <div id="parcels_new_parcel">
         <form method="get" action="parcel.pl">
     <fieldset class="rows">
@@ -138,6 +118,32 @@
         </form>
     </div>
 </div>
+</div>
+<div class="yui-b">
+<!-- TMPL_IF NAME="count" --><form method="get" action="parcels.pl">
+    <fieldset class="brief">
+	<h4>Filter</h4>
+        <ol>
+            <li> <input type="hidden" name="supplierid" value="<!-- TMPL_VAR NAME="supplierid" -->" /></li>
+            <li><label for="filter">Invoice number:</label><input type="text" size="20" name="filter" value="<!-- TMPL_VAR NAME="filter" -->" id="filter" /></li>
+            <li><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="<!-- TMPL_VAR NAME="datefrom" -->" /><br /> 
+                <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="<!-- TMPL_VAR NAME="dateto" -->" /></li>
+            <li><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
+                <option value="aqorders.booksellerinvoicenumber">Invoice number</option>
+                <option value="datereceived"> Date Received</option>
+                <option value="datereceived desc"> Date Received reverse</option>
+                <option value="aqorders.booksellerinvoicenumber desc"> Invoice number reverse</option>
+                </select><br />
+                <label for="resultsperpage">Results per page :</label><select name="resultsperpage" id="resultsperpage">
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                </select></li>
+        </ol>
+	<fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Clear</a></fieldset>
+	</fieldset>
+</form><!-- /TMPL_IF -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

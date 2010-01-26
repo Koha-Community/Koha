@@ -101,17 +101,7 @@ function Check(ff) {
                                 </select>
                             </h1>
                         <!-- TMPL_ELSE -->
-                            <h1>New contract 
-                                <select id="booksellerid" name="booksellerid">
-                                <!-- TMPL_LOOP NAME="booksellerloop" -->
-                                    <!-- TMPL_IF NAME="selected" -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- TMPL_ELSE -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- /TMPL_IF -->
-                                <!-- /TMPL_LOOP -->
-                                </select>
-                            </h1>
+                            <h1>New contract</h1>
                         <!-- /TMPL_IF -->
                         <fieldset class="rows">
                             <ol>
@@ -127,8 +117,16 @@ function Check(ff) {
                                 <li><label for="contractdescription">Description</label> &nbsp;
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="contractdescription" -->" />
                                 </li>
-                                <li><label for="booksellerid">Bookseller</label>
-
+                                <li><label for="booksellerid">Vendor</label>
+                                <select id="booksellerid" name="booksellerid">
+                                <!-- TMPL_LOOP NAME="booksellerloop" -->
+                                    <!-- TMPL_IF NAME="selected" -->
+                                        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- TMPL_ELSE -->
+                                        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
+                                    <!-- /TMPL_IF -->
+                                <!-- /TMPL_LOOP -->
+                                </select>
                                 </li>
                                 <li><label for="contractstartdate" class="required">Start date *</label> &nbsp;
                                         <input type="text" name="contractstartdate" id="contractstartdate" value="<!-- TMPL_VAR NAME="contractstartdate" -->" maxlength="10"  size="10"/>
@@ -174,12 +172,12 @@ function Check(ff) {
                     <fieldset>
                         <legend>Confirm Deletion of Contract <!-- TMPL_VAR NAME="contractnumber" --></legend>
                         <table>
-                            <tr><th scope="row">contractnumber:</th><td><!-- TMPL_VAR NAME="contractnumber" --></td></tr>
-                            <tr><th scope="row">Contract Name:</th><td><!-- TMPL_VAR NAME="contractname" --></td></tr>
-                            <tr><th scope="row">Contract Description:</th><td><!-- TMPL_VAR NAME="contractdescription" --></td></tr>
-                            <tr><th scope="row">contractstartdate:</th><td><!-- TMPL_VAR NAME="contractstartdate" --></td></tr>
-                            <tr><th scope="row">contractenddate:</th><td><!-- TMPL_VAR NAME="contractenddate" --></td></tr>
-                            <tr><th scope="row">bookseller:</th><td><!-- TMPL_VAR NAME="booksellername" --></td></tr>
+                            <tr><th scope="row">Contract number:</th><td><!-- TMPL_VAR NAME="contractnumber" --></td></tr>
+                            <tr><th scope="row">Contract name:</th><td><!-- TMPL_VAR NAME="contractname" --></td></tr>
+                            <tr><th scope="row">Contract description:</th><td><!-- TMPL_VAR NAME="contractdescription" --></td></tr>
+                            <tr><th scope="row">Contract start date:</th><td><!-- TMPL_VAR NAME="contractstartdate" --></td></tr>
+                            <tr><th scope="row">Contract end date:</th><td><!-- TMPL_VAR NAME="contractenddate" --></td></tr>
+                            <tr><th scope="row">Vendor:</th><td><!-- TMPL_VAR NAME="booksellername" --></td></tr>
                         </table>
                         <fieldset class="action">
                             <input type="hidden" name="op" value="delete_confirmed" />

@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Serials
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
+<body id="opac-serial-issues">
 <!-- TMPL_IF NAME="OpacNav" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
    <div id="bd">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
@@ -10,13 +10,16 @@
 	<div class="yui-b"><div class="yui-g">
 
 <div class="container">
-<h1>Issues for a subscription</h1>
-	<a href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Normal View</a>
-	<a href="opac-serial-issues.pl?selectview=full&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Full History</a>
-
+<h2>Issues for a subscription</h2>
+<div id="views">
+	<span class="view"><a id="Normalview" href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Normal View</a></span>
+		<span class="view"><span id="Briefhistory">Brief history</span></span>
+	<span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Full History</a></span>
+</div>
 <form method="post" name="f">
 <!-- TMPL_LOOP name="subscription_LOOP" -->
-<h2>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h2>
+<div id="subscriptionline<!-- TMPL_VAR NAME="subscriptionid" -->" style="border-bottom:1px solid #EEE;">
+<h3>Subscription information for <!-- TMPL_VAR name="bibliotitle" --></h3>
 		<p>The current subscription began on <!-- TMPL_VAR name="startdate" --> and is issued every
 		<!--TMPL_IF name="periodicity1" -->
 				day
@@ -83,21 +86,21 @@
             <p>The subscription expired on <!-- TMPl_VAR name="histenddate" --></p>
         <!-- /TMPL_IF -->
 		</p>
-    <h2><!-- TMPL_VAR name="branchname" --> <!-- TMPL_VAR name="notes" --></h2>
+    <h4><!-- TMPL_VAR name="branchname" --> <!-- TMPL_VAR name="notes" --></h4>
   <!-- TMPL_IF name="recievedlist" -->
-    <h3>Available Issues</h3>
+    <h5>Available Issues</h5>
     <p>
       <!-- TMPL_VAR name="recievedlist" -->
     </p>
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="missinglist" -->
-    <h3>Unavailable Issues</h3>
+    <h5>Unavailable Issues</h5>
     <p>
       <!-- TMPL_VAR name="missinglist" -->
     </p>
   <!-- /TMPL_IF -->
     <!-- TMPL_IF name="opacnote" -->
-        <h3>Issues summary</h3>
+        <h5>Issues summary</h5>
         <p>
             <!-- TMPL_VAR name="opacnote" -->
         </p>
@@ -113,7 +116,7 @@
             </a>
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
-
+</div>
 <!-- /TMPL_LOOP -->
 </div>
 </div>

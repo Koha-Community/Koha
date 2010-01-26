@@ -11,7 +11,7 @@ use C4::Debug;
 use C4::Labels::Batch 1.000000;
 use C4::Labels::Template 1.000000;
 use C4::Labels::Layout 1.000000;
-use C4::Labels::PDF 1.000000;
+use C4::Creators::PDF 1.000000;
 use C4::Labels::Label 1.000000;
 
 =head

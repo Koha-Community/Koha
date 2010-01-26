@@ -37,6 +37,16 @@
 
     $(document).ready(function() {
         new YAHOO.widget.Button("newcurrency");
+
+        // prevents users to check active with a currency != 1
+        $("#rate").keyup(function() {
+            if ( $(this).val() == 1.0 ) {
+                $("#active").removeAttr('disabled');
+            } else {
+                $("#active").removeAttr('checked');
+                $("#active").attr('disabled','disabled');
+            }
+        });
     });
 //]]>
 </script>
@@ -109,7 +119,8 @@
         </fieldset>
         
     <fieldset class="action">
-        <input type="submit" value="Submit" onclick="Check(this.form)" /> <a class="cancel" href="<!-- TMPL_VAR NAME="script_name" -->">Cancel</a>
+        <input type="submit" value="Submit" onclick="Check(this.form)" />
+        <input type="button" onclick="window.location.href='<!-- TMPL_VAR NAME="script_name" -->'" value="Cancel" />
     </fieldset>
     </form>
 
@@ -189,20 +200,13 @@
             <td><!-- TMPL_VAR NAME="rate" --></td>
             <td><!-- TMPL_VAR NAME="symbol" ESCAPE="HTML" --></td>
             <td><!-- TMPL_VAR NAME="timestamp" --></td>
-
-            <td><!-- TMPL_IF NAME="active" -->
-                <font COLOR="#00FF00">✓</font>
-                <!-- /TMPL_IF -->
-            </td>
-
+            <td style="color:green;"><!-- TMPL_IF NAME="active" -->✓<!-- /TMPL_IF --></td>
             <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Edit</a></td>
             <td><a href="<!-- TMPL_VAR NAME="script_name" -->?op=delete_confirm&amp;searchfield=<!-- TMPL_VAR NAME="currency" -->">Delete</a></td>
         </tr>
         <!-- /TMPL_LOOP -->
     </table>
 <br>
-<p><b>Hint:</b> Your 'active' currency should have it's exchange rate set to '1.00000'</p>
-
     
     <!-- TMPL_IF NAME="offsetgtzero" -->
         <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Previous</a>

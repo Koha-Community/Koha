@@ -306,4 +306,5 @@ if ( $op eq 'delete_confirm' ) {
         grouped              => $basket->{basketgroupid},
     );
 }
+
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -18,12 +18,12 @@
 use strict;
 use warnings;
 use CGI;
-use C4::Biblio;
-use C4::Items;
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Koha;
 use C4::Circulation;
 use C4::Reserves;
+use C4::Biblio;
+use C4::Items;
 use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Context;
@@ -426,7 +426,9 @@ foreach my $biblioNum (@biblionumbers) {
         # If there is no loan, return and transfer, we show a checkbox.
         $itemLoopIter->{notforloan} = $itemLoopIter->{notforloan} || 0;
 
-        my $branchitemrule = GetBranchItemRule( $borr->{'branchcode'}, $itemInfo->{'itype'} );
+        my $branch = C4::Circulation::_GetCircControlBranch($itemLoopIter, $borr);
+
+        my $branchitemrule = GetBranchItemRule( $branch, $itemInfo->{'itype'} );
         my $policy_holdallowed = 1;
 
         if ( $branchitemrule->{'holdallowed'} == 0 ||

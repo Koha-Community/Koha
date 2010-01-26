@@ -239,7 +239,6 @@ table.invis tr,table.invis td {
 	border : white;
 }
 
-
 td, th {
 	border-bottom : 1px solid #BCBCBC;
 	border-left : 1px solid #BCBCBC;
@@ -253,6 +252,12 @@ td {
 td.borderless {
     border-collapse : separate;
     border : 0 none;
+}
+
+td.data,
+th.data {
+	font-family : "Courier New", Courier, monospace;
+	text-align : right;
 }
 
 th {
@@ -296,6 +301,15 @@ tr.onissue td {
 
 tr.highlight.onissue td {
 	background-color: #FFFFE1;
+}
+
+tfoot td {
+	background-color : #f3f3f3;
+	font-weight : bold;
+}
+
+td.total {
+	text-align : right;
 }
 
 caption {
@@ -514,6 +528,16 @@ div.yui-b fieldset.brief ol {
 div.yui-b fieldset.brief select {
 	width: 12em;
 }
+div.yui-b fieldset.brief li.radio {
+	padding : .7em 0;
+}
+div.yui-b fieldset.brief li.radio label {
+	display : inline;
+}
+
+div.yui-b fieldset.brief li.radio input {
+	padding:0.3em 0;
+}
 
 fieldset.rows {  
 border-width : 1px;
@@ -685,8 +709,9 @@ fieldset.rows label.inline {
 }
 
 fieldset.rows .inputnote {
+	clear : left;
 	float : left;
-	margin : .5em 0 0 10em;
+	margin : .5em 0 0 11em;
 }
 
 .ui-tabs-nav li {
@@ -798,7 +823,7 @@ fieldset.rows .inputnote {
     visibility:visible; /* you propably don't need to change this one */
     display:block;
 }
-#newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newlabelbatch a, #newpatroncardbatch a, #newprofile a, #newsubscription a, #newdictionary a, #newbasket a {
+#newbiblio a, #addchild a, #newentry a, #newshelf a, #newmenuc .first-child, #newsupplier .first-child, #newlabel a, #newtemplate a, #newlabelbatch a, #newpatroncardbatch a, #newprofile a, #newsubscription a, #newdictionary a, #newbasket a, #newrootbudget-button, #budgets_menuc .first-child, #periods_menuc .first-child {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-new.gif");
 	background-position : center left;
@@ -894,7 +919,7 @@ fieldset.rows .inputnote {
 	background-repeat : no-repeat;
 }
 
-#editmenuc .first-child, #deleteshelf .first-child,#newmenuc .first-child, #addbiblio .first-child, #z3950search .first-child, #printmenuc .first-child, #newsupplier .first-child, #savemenuc .first-child {
+#editmenuc .first-child, #deleteshelf .first-child,#newmenuc .first-child, #addbiblio .first-child, #z3950search .first-child, #printmenuc .first-child, #newsupplier .first-child, #savemenuc .first-child, #budgets_menuc .first-child, #periods_menuc .first-child {
 	padding-left : 15px;
 }
 
@@ -1423,17 +1448,33 @@ div.pages a {
 	text-decoration: none;
 }
 
-div.pages a:link {
+div.pages a:link,
+div.pages a:visited {
 	background-color : #eeeeee;
 	color : #3366CC;
 }
 
 div.pages a:hover {
-	background-color : #e8f0f6;
+	background-color : #FFC;
 }
 
 div.pages a:active {
 	background-color : #ffc;
+}
+
+div.pages .current,
+div.pages .currentPage {
+	background-color : #e6fcb7;
+	color : #666;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
+}
+
+div.pages .inactive {
+	background-color : #f3f3f3;
+	color : #BCBCBC;
+	font-weight: bold;
+	padding: 1px 5px 1px 5px;
 }
 
 div.browse {
@@ -1520,6 +1561,7 @@ a.yuimenuitemlabel:hover {
 #toplevelnav {
 	float : left;
 	margin-left : .5em;
+	width : 30em;
 }
 
 ul#toplevelmenu {
@@ -1791,9 +1833,11 @@ h1#xml a {
 	width:35px;
 }
 
-#cartDetails,#cartUpdate,#holdDetails,#listsDetails {
+#cartDetails {
 	background-color : #FFF;
 	border: 1px solid #739acf;
+	border-right-width : 2px;
+	border-bottom-width : 2px;
 	color : black;
 	display : none;
 	margin : 0;
@@ -1801,163 +1845,16 @@ h1#xml a {
 	text-align : center;
 	width : 180px;
 }
-
-#cartmenulink, #listsmenulink {
-	background : #aaa;
-	padding : 5px;
-	color : #333;
-	text-decoration : none;
-	cursor : pointer;
-}
-
- #cartmenulink *, #listsmenulink * {
-	font-style : normal;
-	background-image : url(../../img/button-bg.gif);
-	background-repeat : no-repeat;
-}
-
- #cartmenulink i, #listsmenulink i {
-	background-position : top left;
-	position : absolute;
-	margin-bottom : -5px;
-	top : 0;
-	left : 0;
-	width : 5px;
-	height : 5px;
-}
-
- #cartmenulink span, #listsmenulink span {
-	background-position : bottom left;
-	left : -5px;
-	padding : 0 0 5px 10px;
-	margin-bottom : -5px;
-}
-/* For IE7 */
- *:first-child+html #cartmenulink span { padding-top : 3px; padding-bottom : 7px; }
- *:first-child+html #listsmenulink span { padding-top : 5px; }
-
- #cartmenulink span i, #listsmenulink span i {
-	background-position : bottom right;
-	margin-bottom : 0;
-	position : absolute;
-	left : 100%;
-	width : 10px;
-	height : 100%;
-	top : 0;
-}
-
- #cartmenulink span span, #listsmenulink span span {
-	background-position : top right;
-	position : absolute;
-	right : -10px;
-	margin-left : 10px;
-	top : -5px;
-	height : 0;
-}
-
-* html #cartmenulink span, * html #cartmenulink i, * html #listsmenulink span, * html #listsmenulink i {
-	float : left;
-	width : auto;
-	background-image : none;
-	cursor : pointer;
-}
-* html #cartmenulink span, * html #listsmenulink span {
-	padding-top : 5px;
-}
-#listsmenulink {
-	background : #9FBFFF;
-}
-
 #cartmenulink {
-	background : #98CB58;
-	color : #336600;
-	font-size : 105%;
+        background: transparent url("../../img/cart-small.gif") 0 3px no-repeat;
+        padding-left : 15px;
 }
-
-#listsmenulink:hover {
-	background-color : #b8d0e6;
-}
-
-#cartmenulink:hover {
-	background-color : #BFDE96;
-}
-
-#cartmenulink img {
-	background-image : none;
-	display : inline;
-	padding : 3px 3px 0 3px;
-}
-
-#cartmenulink span#basketcount {
-	background-image : none;
-	float : none;
-	display : inline;
-	height : auto;
-	position : relative;
-	margin : 0;
-	padding : 0;
-	left : auto;
-	right : auto;
-	top : auto;
-}
-
 #cartmenulink span#basketcount span {
-	background-image : none;
-	background-color : #E6FCB7;
-	color : #000;
 	display : inline;
-	float : none;
-	font-size : 80%;
+	font-size : 90%;
 	font-weight : normal;
-	margin : 0 0 0 .9em;
-	padding : 0 .3em 0 .3em;
-	position : relative;
-	left : auto;
-	right : auto;
-	top : auto;
+	padding : 0;
 }
-
-a#listsmenulink, a#listsmenulink:hover {
-	color : #006699;
-	font-size : 105%;
-	font-weight : bold;
-	line-height : 185%;
-	margin-left : 1.5em;
+#moremenu {
+        display : none;
 }
-
-a#cartmenulink, a#cartmenulink:hover {
-	color : #336600;
-	font-size : 105%;
-	font-weight : bold;
-	line-height : 185%;
-	margin-left : 1.5em;
-}
-* html a#cartmenulink {
-	padding-top: 0;
-}
- * html a#cartmenulink:hover {
-	padding-top : 0;
-}
-/* For IE7 */
-*:first-child+html a#listsmenulink { padding-top : 0; }
-*:first-child+html a#listsmenulink:hover { padding-top : 0; }
-*:first-child+html a#cartmenulink { padding-top : 0; }
-*:first-child+html a#cartmenulink:hover { padding-top : 0; }
-*:first-child+html #cartmenulink span i{ top : -4px; }
-*:first-child+html #listsmenulink span i { top : -5px; }
-
-#listsmenulink img {
-	background-image : none;
-	display : inline;
-	padding : 0 0 2px 0;
-}
-
-* html #cartmenulink {
-	border : 1px solid #336600;
-}
-
-* html #listsmenulink {
-	border : 1px solid #006699;
-}
-
-

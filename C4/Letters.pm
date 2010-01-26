@@ -800,6 +800,9 @@ sub _send_message_by_email ($) {
         Message => $content,
         'content-type' => $message->{'content_type'} || 'text/plain; charset="UTF-8"',
     );
+    if ( my $bcc = C4::Context->preference('OverdueNoticeBcc') ) {
+       $sendmail_params{ Bcc } = $bcc;
+    }
     
     my $success = sendmail( %sendmail_params );
 

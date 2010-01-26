@@ -152,7 +152,7 @@ if ($op eq 'add_form') {
     # build branches select
     my $branches = GetBranches;
     my @branchloop_select;
-    foreach my $thisbranch ( keys %$branches ) {
+    foreach my $thisbranch ( sort keys %$branches ) {
         my %row = (
             value      => $thisbranch,
             branchname => $branches->{$thisbranch}->{'branchname'},

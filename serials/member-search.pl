@@ -126,7 +126,7 @@ my %parameters=
 		, 'resultsperpage'	=> $resultsperpage 
         , 'type'=> 'intranet'); 
 my $base_url =
-    'member.pl?&amp;'
+    'member-search.pl?&amp;'
   . join(
     '&amp;',
     map { "$_=$parameters{$_}" } (keys %parameters)

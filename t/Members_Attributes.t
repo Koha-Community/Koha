@@ -94,17 +94,11 @@ can_ok('C4::Members::Attributes', qw(extended_attributes_merge extended_attribut
 
 ok(ref($C4::Members::Attributes::AttributeTypes) eq 'HASH', '$C4::Members::Attributes::AttributeTypes is a hashref');
 
-diag scalar(@merge_tests) . " tests for extended_attributes_merge";
-
 foreach my $test (@merge_tests) {
     my ($old, $new, $merged);
     ok($old = extended_attributes_code_value_arrayref($test->{line1}), "extended_attributes_code_value_arrayref('$test->{line1}')");
-    foreach (@$old) { diag "old attribute: $_->{code} = $_->{value}"; }
     ok($new = extended_attributes_code_value_arrayref($test->{line2}), "extended_attributes_code_value_arrayref('$test->{line2}')");
-    foreach (@$new) { diag "new attribute: $_->{code} = $_->{value}"; }
     ok($merged = extended_attributes_merge($old, $new),                "extended_attributes_merge(\$old, \$new)");
-    foreach (@$merged) { diag "merge (overwrite) attribute: $_->{code} = $_->{value}"; }
     ok($merged = extended_attributes_merge($old, $new, 1),             "extended_attributes_merge(\$old, \$new, 1)");
-    foreach (@$merged) { diag "merge (preserve) attribute: $_->{code} = $_->{value}"; }
 }
 

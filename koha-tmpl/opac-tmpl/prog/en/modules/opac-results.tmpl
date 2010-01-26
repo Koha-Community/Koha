@@ -10,8 +10,8 @@
 
 
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
-<script type="text/javascript">
+<!-- TMPL_IF NAME="OpacHighlightedWords" --><script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
+<!-- /TMPL_IF --><script type="text/javascript">
 //<![CDATA[
 
 function holdMultiple() {
@@ -114,7 +114,7 @@ $(document).ready(function(){
     });
 	$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
 	$("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
-	$("span.addto").html(param1);
+<!-- TMPL_IF NAME="opacbookbag" -->$("span.addto").html(param1);<!-- TMPL_ELSE --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->$("span.addto").html(param1);<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	$("#addto").change(function(){
 		cartList();
 	});
@@ -162,13 +162,11 @@ $(document).ready(function(){
 <!-- /TMPL_IF -->
     $("#holdDetails").hide();
 
-    <!-- TMPL_IF NAME="query_desc" -->
-        var query_desc = "<!-- TMPL_VAR NAME="query_desc" ESCAPE="JS"-->";
+<!-- TMPL_IF NAME="query_desc" --><!-- TMPL_IF NAME="OpacHighlightedWords" -->var query_desc = "<!-- TMPL_VAR NAME="query_desc" ESCAPE="JS"-->";
         q_array = query_desc.split(" ");
         highlightOn();
         $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
-        $("#highlight_toggle_off").show().click(function() {highlightOff();});
-    <!-- /TMPL_IF -->
+        $("#highlight_toggle_off").show().click(function() {highlightOff();});<!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 	<!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);

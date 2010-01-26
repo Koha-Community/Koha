@@ -1,16 +1,15 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-
-	<title>Koha &rsaquo; Catalog &rsaquo; Profile for CSV export</title>
-
-	<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-
-<script language="Javascript" type="text/javascript">
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Tools &rsaquo; CSV export profiles</title><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+//<![CDATA[
 function reloadPage(p) {
 	var id = p.value;
 	if (id != 0) { document.location = "/cgi-bin/koha/tools/csv-profiles.pl?id=" + id; }
 }
+     $(document).ready(function() {
+        $('#csvexporttabs > ul').tabs();
+     });
+//]]>
 </script>
-
 </head>
 
 <body>
@@ -20,7 +19,7 @@ function reloadPage(p) {
 	<div id="breadcrumbs">
 		<a href="/cgi-bin/koha/mainpage.pl">Home</a>
 		&rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-		&rsaquo; New profile for CSV export
+		&rsaquo; CSV export profiles
 	</div>
 
 	<div id="doc3" class="yui-t2">
@@ -38,63 +37,75 @@ function reloadPage(p) {
 		<!-- TMPL_IF EXPR="action eq 'delete'" --><p class="error">The CSV profile has not been deleted.</p><!-- /TMPL_IF -->
 					    <!-- /TMPL_IF -->
 				    <!-- /TMPL_IF -->
-
-					<h1>New profile for CSV export</h1>
+<div id="csvexporttabs" class="toptabs">
+<ul>
+	<li><a href="csv-profiles.pl#csvnew">New profile</a></li>
+	<!-- TMPL_IF NAME="existing_profiles" -->
+	<!-- TMPL_IF NAME="selected_profile_id" -->
+	<li class="ui-tabs-selected">
+	<!-- TMPL_ELSE -->
+	<li>
+	 <!-- /TMPL_IF -->
+	<a href="csv-profiles.pl#csvedit">Edit profile</a></li> <!-- /TMPL_IF -->
+</ul>
+	<div id="csvnew">
+					<h3>New CSV export profile</h3>
 
 					     <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
 						<fieldset class="brief">
-						    <label for="profile_name">Profile name :</label>
-						    <input type="text" id="profile_name" name="profile_name" /><br /><br />
+						    <ol><li><label for="profile_name" class="required">Profile name :</label>
+						    <input type="text" id="profile_name" name="profile_name" /></li>
 
-						    <label for="profile_description">Profile description :</label>
-						    <textarea cols="50" rows="2" name="profile_description" id="profile_description"></textarea><br /><br />
+						    <li><label for="profile_description">Profile description :</label>
+						    <textarea cols="50" rows="2" name="profile_description" id="profile_description"></textarea></li>
 
-						    <label for="profile_content">Profile marcfields :</label>
+						    <li><label for="profile_content" class="required">Profile marcfields :</label>
 						    <textarea cols="50" rows="2" name="profile_content" id="profile_content"></textarea>
-						    <p>You have to define which fields or subfields you want to export, separated by pipes.<br />
-							Example&nbsp;: 200|210$a|301
-						    </p>
+						    <p>Define which fields or subfields you want to export, separated by pipes.<br />
+							For example: 200|210$a|301
+						    </p></li></ol>
 						</fieldset>
 						<input type="hidden" name="action" value="create" />
-						<input type="submit" />
+						<input type="submit" value="Submit" />
 					    </form>
-
+</div>
 					<!-- TMPL_IF NAME="existing_profiles" -->
-					<br /><br />
-					<h1>Modify or delete an existing profile</h1>
+<div id="csvedit">
+					<h3>Modify or delete a CSV export profile</h3>
 						
 				      	    <form action="/cgi-bin/koha/tools/csv-profiles.pl" method="post">
 						<fieldset class="brief">
-						    <label for="modify_profile_name">Profile name :</label>
+						    <ol><li><label for="modify_profile_name">Profile name :</label>
 						    <select id="modify_profile_name" name="profile_name" onchange="javascript:reloadPage(this)">
 							<option value="0">-- Choose One --</option>
 							<!-- TMPL_LOOP NAME="existing_profiles" -->
 							<option value="<!-- TMPL_VAR NAME="export_format_id" -->"<!-- TMPL_IF EXPR="export_format_id eq selected_profile_id" --> selected="selected"<!-- /TMPL_IF-->><!-- TMPL_VAR NAME="profile" --></option>
 							<!-- /TMPL_LOOP -->
-						    </select><br /><br />
+						    </select></li>
 
-						    <label for="modify_profile_description">Profile description :</label>
-						    <textarea cols="50" rows="2" name="profile_description" id="modify_profile_description"><!-- TMPL_VAR NAME="selected_profile_description" --></textarea><br /><br />
+						    <li><label for="modify_profile_description">Profile description :</label>
+						    <textarea cols="50" rows="2" name="profile_description" id="modify_profile_description"><!-- TMPL_VAR NAME="selected_profile_description" --></textarea>
 
 						    <label for="modify_profile_content">Profile marcfields :</label>
-						    <textarea cols="50" rows="2" name="profile_content" id="modify_profile_content"><!-- TMPL_VAR NAME="selected_profile_marcfields" --></textarea><br /><br />
+						    <textarea cols="50" rows="2" name="profile_content" id="modify_profile_content"><!-- TMPL_VAR NAME="selected_profile_marcfields" --></textarea></li>
 						    
-						    <label for="delete">Delete selected profile ?</label>
-						    <input type="checkbox" name="delete" id="delete" />
+						   <li class="radio"> <label for="delete">Delete selected profile ?</label>
+						    <input type="checkbox" name="delete" id="delete" /></li></ol>
 
 						</fieldset>
 
 						<input type="hidden" name="modify_profile_id" value="<!-- TMPL_VAR NAME="selected_profile_id" -->" />
 						<input type="hidden" name="action" value="edit" />
-						<input type="submit" />
+						<input type="submit" value="Submit" /> <a href="/cgi-bin/koha/tools/csv-profiles.pl" class="cancel">Cancel</a>
 					    </form>
+</div>
 					<!-- /TMPL_IF -->
 
 				</div>
 			</div>
-			<div class="yui-b">
 
-
-		</div>
+		    <div class="yui-b noprint">
+        <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
+    </div>
 	</div>
 	<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

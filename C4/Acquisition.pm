@@ -41,8 +41,8 @@ BEGIN {
     @EXPORT = qw(
         &GetBasket &NewBasket &CloseBasket &DelBasket &ModBasket
         &GetBasketsByBookseller &GetBasketsByBasketgroup
-        
-        &ModBasketHeader 
+
+        &ModBasketHeader
 
         &ModBasketgroup &NewBasketgroup &DelBasketgroup &GetBasketgroup &CloseBasketgroup
         &GetBasketgroups &ReOpenBasketgroup
@@ -50,7 +50,7 @@ BEGIN {
         &NewOrder &DelOrder &ModOrder &GetPendingOrders &GetOrder &GetOrders
         &GetOrderNumber &GetLateOrders &GetOrderFromItemnumber
         &SearchOrder &GetHistory &GetRecentAcqui
-        &ModReceiveOrder &ModOrderBiblioitemNumber 
+        &ModReceiveOrder &ModOrderBiblioitemNumber
 
         &NewOrderItem &ModOrderItem
 
@@ -76,7 +76,7 @@ sub GetOrderFromItemnumber {
 
     my $sth = $dbh->prepare($query);
 
-    $sth->trace(3);
+#    $sth->trace(3);
 
     $sth->execute($itemnumber);
 
@@ -85,7 +85,7 @@ sub GetOrderFromItemnumber {
 
 }
 
-# Returns the itemnumber(s) associated with the ordernumber given in parameter 
+# Returns the itemnumber(s) associated with the ordernumber given in parameter
 sub GetItemnumbersFromOrder {
     my ($ordernumber) = @_;
     my $dbh          = C4::Context->dbh;
@@ -95,7 +95,7 @@ sub GetItemnumbersFromOrder {
     my @tab;
 
     while (my $order = $sth->fetchrow_hashref) {
-    push @tab, $order->{'itemnumber'}; 
+    push @tab, $order->{'itemnumber'};
     }
 
     return @tab;
@@ -574,10 +574,10 @@ sub ModBasketgroup {
     push(@params, $basketgroupinfo->{'id'});
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
-    
+
     $sth = $dbh->prepare('UPDATE aqbasket SET basketgroupid = NULL WHERE basketgroupid = ?');
     $sth->execute($basketgroupinfo->{'id'});
-    
+
     if($basketgroupinfo->{'basketlist'} && @{$basketgroupinfo->{'basketlist'}}){
         $sth = $dbh->prepare("UPDATE aqbasket SET basketgroupid=? WHERE basketno=?");
         foreach my $basketno (@{$basketgroupinfo->{'basketlist'}}) {
@@ -914,7 +914,7 @@ table of the Koha database.
 =item $hashref->{'basketno'} is the basketno foreign key in aqorders, it is mandatory
 
 
-=item $hashref->{'ordernumber'} is a "minimum order number." 
+=item $hashref->{'ordernumber'} is a "minimum order number."
 
 =item $hashref->{'budgetdate'} is effectively ignored.
 If it's undef (anything false) or the string 'now', the current day is used.
@@ -1141,14 +1141,14 @@ sub ModReceiveOrder {
     $datereceived = C4::Dates->output('iso') unless $datereceived;
     my $suggestionid = GetSuggestionFromBiblionumber( $dbh, $biblionumber );
     if ($suggestionid) {
-        ModSuggestion( {suggestionid=>$suggestionid, 
-						STATUS=>'AVAILABLE', 
-						biblionumber=> $biblionumber} 
+        ModSuggestion( {suggestionid=>$suggestionid,
+						STATUS=>'AVAILABLE',
+						biblionumber=> $biblionumber}
 						);
     }
 
     my $sth=$dbh->prepare("
-        SELECT * FROM   aqorders  
+        SELECT * FROM   aqorders
         WHERE           biblionumber=? AND aqorders.ordernumber=?");
 
     $sth->execute($biblionumber,$ordernumber);
@@ -1234,7 +1234,7 @@ sub SearchOrder {
             LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
             LEFT JOIN aqbasket ON aqorders.basketno = aqbasket.basketno
                 WHERE  (datecancellationprinted is NULL)";
-                
+
     if($ordernumber){
         $query .= " AND (aqorders.ordernumber=?)";
         push @args, $ordernumber;
@@ -1493,15 +1493,16 @@ sub GetLateOrders {
         biblioitems.publicationyear,
     ";
     my $from = "
-    FROM (((
-        (aqorders LEFT JOIN biblio     ON biblio.biblionumber         = aqorders.biblionumber)
-        LEFT JOIN biblioitems          ON biblioitems.biblionumber    = biblio.biblionumber)
-        LEFT JOIN aqbudgets            ON aqorders.budget_id          = aqbudgets.budget_id),
-        (aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby       = borrowers.borrowernumber)
-        LEFT JOIN aqbooksellers        ON aqbasket.booksellerid       = aqbooksellers.id
+    FROM
+        aqorders LEFT JOIN biblio     ON biblio.biblionumber         = aqorders.biblionumber
+        LEFT JOIN biblioitems         ON biblioitems.biblionumber    = biblio.biblionumber
+        LEFT JOIN aqbudgets           ON aqorders.budget_id          = aqbudgets.budget_id,
+        aqbasket LEFT JOIN borrowers  ON aqbasket.authorisedby       = borrowers.borrowernumber
+        LEFT JOIN aqbooksellers       ON aqbasket.booksellerid       = aqbooksellers.id
         WHERE aqorders.basketno = aqbasket.basketno
-        AND ( (datereceived = '' OR datereceived IS NULL)
-            OR (aqorders.quantityreceived < aqorders.quantity)
+        AND ( datereceived = ''
+            OR datereceived IS NULL
+            OR aqorders.quantityreceived < aqorders.quantity
         )
     ";
     my $having = "";

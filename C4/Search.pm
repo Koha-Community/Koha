@@ -197,7 +197,7 @@ $template->param(result=>\@results);
 
 sub SimpleSearch {
     my ( $query, $offset, $max_results, $servers )  = @_;
-    
+
     if ( C4::Context->preference('NoZebra') ) {
         my $result = NZorder( NZanalyse($query) )->{'biblioserver'};
         my $search_result =
@@ -283,7 +283,7 @@ sub SimpleSearch {
     );
 
 The all singing, all dancing, multi-server, asynchronous, scanning,
-searching, record nabbing, facet-building 
+searching, record nabbing, facet-building
 
 See verbse embedded documentation.
 
@@ -517,9 +517,9 @@ sub getRecords {
 
                             # if it's a branch, label by the name, not the code,
                             if ( $link_value =~ /branch/ ) {
-								if (defined $branches 
-									&& ref($branches) eq "HASH" 
-									&& defined $branches->{$one_facet} 
+								if (defined $branches
+									&& ref($branches) eq "HASH"
+									&& defined $branches->{$one_facet}
 									&& ref ($branches->{$one_facet}) eq "HASH")
 								{
                                 	$facet_label_value =
@@ -550,7 +550,7 @@ sub getRecords {
                     push @facets_loop, {
                         type_link_value => $link_value,
                         type_id         => $link_value . "_id",
-                        "type_label_" . $facets_info->{$link_value}->{'label_value'} => 1, 
+                        "type_label_" . $facets_info->{$link_value}->{'label_value'} => 1,
                         facets     => \@this_facets_array,
                         expandable => $expandable,
                         expand     => $link_value,
@@ -578,10 +578,10 @@ sub pazGetRecords {
     my $results_hashref = {};
     my $stats = XMLin($paz->stat);
     my $results = XMLin($paz->show($offset, $results_per_page, 'work-title:1'), forcearray => 1);
-   
+
     # for a grouped search result, the number of hits
     # is the number of groups returned; 'bib_hits' will have
-    # the total number of bibs. 
+    # the total number of bibs.
     $results_hashref->{'biblioserver'}->{'hits'} = $results->{'merged'}->[0];
     $results_hashref->{'biblioserver'}->{'bib_hits'} = $stats->{'hits'};
 
@@ -613,7 +613,7 @@ sub pazGetRecords {
 
         push @{ $results_hashref->{'biblioserver'}->{'GROUPS'} }, $result_group;
     }
-    
+
     # pass through facets
     my $termlist_xml = $paz->termlist('author,subject');
     my $terms = XMLin($termlist_xml, forcearray => 1);
@@ -647,7 +647,7 @@ sub _remove_stopwords {
 #       we use IsAlpha unicode definition, to deal correctly with diacritics.
 #       otherwise, a French word like "leçon" woudl be split into "le" "çon", "le"
 #       is a stopword, we'd get "çon" and wouldn't find anything...
-#       
+#
 		foreach ( keys %{ C4::Context->stopwords } ) {
 			next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
 			$debug && warn "$_ Dump($operand)";
@@ -700,13 +700,13 @@ sub _build_stemmed_operand {
 
     # If operand contains a digit, it is almost certainly an identifier, and should
     # not be stemmed.  This is particularly relevant for ISBNs and ISSNs, which
-    # can contain the letter "X" - for example, _build_stemmend_operand would reduce 
+    # can contain the letter "X" - for example, _build_stemmend_operand would reduce
     # "014100018X" to "x ", which for a MARC21 database would bring up irrelevant
     # results (e.g., "23 x 29 cm." from the 300$c).  Bug 2098.
     return $operand if $operand =~ /\d/;
 
 # FIXME: the locale should be set based on the user's language and/or search choice
-    warn "$lang";
+    #warn "$lang";
     my $stemmer = Lingua::Stem::Snowball->new( lang => $lang,
                                                encoding => "UTF-8" );
 
@@ -852,13 +852,15 @@ sub buildQuery {
 
     # pass nested queries directly
     # FIXME: need better handling of some of these variables in this case
-    if ( $query =~ /(\(|\))/ ) {
-        return (
-            undef,              $query, $simple_query, $query_cgi,
-            $query,             $limit, $limit_cgi,    $limit_desc,
-            $stopwords_removed, 'ccl'
-        );
-    }
+    # Nested queries aren't handled well and this implementation is flawed and causes users to be
+    # unable to search for anything containing () commenting out, will be rewritten for 3.4.0
+#    if ( $query =~ /(\(|\))/ ) {
+#        return (
+#            undef,              $query, $simple_query, $query_cgi,
+#            $query,             $limit, $limit_cgi,    $limit_desc,
+#            $stopwords_removed, 'ccl'
+#        );
+#    }
 
 # Form-based queries are non-nested and fixed depth, so we can easily modify the incoming
 # query operands and indexes and add stemming, truncation, field weighting, etc.
@@ -905,7 +907,7 @@ sub buildQuery {
                 # ISBN,ISSN,Standard Number, don't need special treatment
                 elsif ( $index eq 'nb' || $index eq 'ns' ) {
                     $indexes_set++;
-                    (   
+                    (
                         $stemming,      $auto_truncation,
                         $weight_fields, $fuzzy_enabled,
                         $remove_stopwords
@@ -932,8 +934,10 @@ sub buildQuery {
                 }
 
                 if ($auto_truncation){
-					$operand=~join(" ",map{ "$_*" }split (/\s+/,$operand));
-				}
+                   # join throws an error if there is a leading space
+                   $operand =~ s/^\s+//;
+		   $operand=~join(" ",map{ "$_*" }split (/\s+/,$operand));
+                }
 
                 # Detect Truncation
                 my $truncated_operand;
@@ -1090,7 +1094,9 @@ sub buildQuery {
     }
 
     # Normalize the query and limit strings
-    $query =~ s/:/=/g;
+    # This is flawed , means we can't search anything with : in it
+    # if user wants to do ccl or cql, start the query with that
+#    $query =~ s/:/=/g;
     $limit =~ s/:/=/g;
     for ( $query, $query_desc, $limit, $limit_desc ) {
         s/  / /g;    # remove extra spaces
@@ -1195,20 +1201,20 @@ sub searchResults {
     }
 
 	my $marcflavour = C4::Context->preference("marcflavour");
-    # We get the biblionumber position in MARC 
+    # We get the biblionumber position in MARC
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
     my $fw;
-    
+
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
-        
+
         if ($bibliotag<10){
             $fw = GetFrameworkCode($marcrecord->field($bibliotag)->data);
         }else{
             $fw = GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
         }
-        
+
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, $fw );
         $oldbiblio->{subtitle} = GetRecordValue('subtitle', $marcrecord, $fw);
         $oldbiblio->{result_number} = $i + 1;
@@ -1231,7 +1237,7 @@ sub searchResults {
         if ( $itemtypes{ $oldbiblio->{itemtype} }->{summary} ) {
             my $summary = $itemtypes{ $oldbiblio->{itemtype} }->{summary};
             my @fields  = $marcrecord->fields();
-            
+
             my $newsummary;
             foreach my $line ( "$summary\n" =~ /(.*)\n/g ){
                 my $tags = {};
@@ -1242,28 +1248,28 @@ sub searchResults {
                         $tags->{$tag} = $#abc + 1 ;
                     }
                 }
-                
+
                 # We catch how many times to repeat this line
                 my $max = 0;
                 foreach my $tag (keys(%$tags)){
                     $max = $tags->{$tag} if($tags->{$tag} > $max);
                  }
-                
+
                 # we replace, and repeat each line
                 for (my $i = 0 ; $i < $max ; $i++){
                     my $newline = $line;
 
                     foreach my $tag ( $newline =~ /\[(\d{3}[\w|\d])\]/g ) {
                         $tag =~ /(.{3})(.)/;
-                        
+
                         if($marcrecord->field($1)){
                             my @repl = $marcrecord->field($1)->subfield($2);
                             my $subfieldvalue = $repl[$i];
-                            
+
                             if (! utf8::is_utf8($subfieldvalue)) {
                                 utf8::decode($subfieldvalue);
                             }
- 
+
                              $newline =~ s/\[$tag\]/$subfieldvalue/g;
                         }
                     }
@@ -1313,7 +1319,7 @@ sub searchResults {
             foreach my $code ( keys %subfieldstosearch ) {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
-            
+
 			my $hbranch     = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'homebranch'    : 'holdingbranch';
 			my $otherbranch = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'holdingbranch' : 'homebranch';
             # set item's branch name, use HomeOrHoldingBranch syspref first, fall back to the other one
@@ -1321,7 +1327,7 @@ sub searchResults {
                 $item->{'branchname'} = $branches{$item->{$hbranch}};
             }
             elsif ($item->{$otherbranch}) {	# Last resort
-                $item->{'branchname'} = $branches{$item->{$otherbranch}}; 
+                $item->{'branchname'} = $branches{$item->{$otherbranch}};
             }
 
 			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
@@ -1355,7 +1361,7 @@ sub searchResults {
                 # is item in transit?
                 my $transfertwhen = '';
                 my ($transfertfrom, $transfertto);
-                
+
                 unless ($item->{wthdrawn}
                         || $item->{itemlost}
                         || $item->{damaged}
@@ -1381,7 +1387,7 @@ sub searchResults {
                 if (   $item->{wthdrawn}
                     || $item->{itemlost}
                     || $item->{damaged}
-                    || $item->{notforloan} 
+                    || $item->{notforloan}
                     || ($transfertwhen ne ''))
                 {
                     $wthdrawn_count++        if $item->{wthdrawn};
@@ -1460,34 +1466,34 @@ sub searchResults {
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{isbn} =~
           s/-//g;    # deleting - in isbn to enable amazon content
-        push( @newresults, $oldbiblio ) 
+        push( @newresults, $oldbiblio )
             if(not $hidelostitems
-               or (($items_count > $itemlost_count ) 
+               or (($items_count > $itemlost_count )
                     && $hidelostitems));
     }
-    
+
     return @newresults;
 }
 
 =head2 SearchAcquisitions
-    Search for acquisitions 
+    Search for acquisitions
 =cut
 
 sub SearchAcquisitions{
     my ($datebegin, $dateend, $itemtypes,$criteria, $orderby) = @_;
-    
+
     my $dbh=C4::Context->dbh;
     # Variable initialization
     my $str=qq|
-    SELECT marcxml 
-    FROM biblio 
+    SELECT marcxml
+    FROM biblio
     LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
     LEFT JOIN items ON items.biblionumber=biblio.biblionumber
-    WHERE dateaccessioned BETWEEN ? AND ? 
+    WHERE dateaccessioned BETWEEN ? AND ?
     |;
-    
+
     my (@params,@loopcriteria);
-    
+
     push @params, $datebegin->output("iso");
     push @params, $dateend->output("iso");
 
@@ -1496,53 +1502,53 @@ sub SearchAcquisitions{
             $str .= "AND items.itype IN (?".( ',?' x scalar @$itemtypes - 1 ).") ";
         }else{
             $str .= "AND biblioitems.itemtype IN (?".( ',?' x scalar @$itemtypes - 1 ).") ";
-        }    
+        }
         push @params, @$itemtypes;
     }
-        
+
     if ($criteria =~/itemtype/){
         if(C4::Context->preference("item-level_itypes")){
             $str .= "AND items.itype=? ";
         }else{
             $str .= "AND biblioitems.itemtype=? ";
         }
-        
+
         if(scalar(@$itemtypes) == 0){
             my $itypes = GetItemTypes();
             for my $key (keys %$itypes){
                 push @$itemtypes, $key;
             }
         }
-        
+
         @loopcriteria= @$itemtypes;
     }elsif ($criteria=~/itemcallnumber/){
-        $str .= "AND (items.itemcallnumber LIKE CONCAT(?,'%') 
+        $str .= "AND (items.itemcallnumber LIKE CONCAT(?,'%')
                  OR items.itemcallnumber is NULL
                  OR items.itemcallnumber = '')";
 
-        @loopcriteria = ("AA".."ZZ", "") unless (scalar(@loopcriteria)>0);  
+        @loopcriteria = ("AA".."ZZ", "") unless (scalar(@loopcriteria)>0);
     }else {
         $str .= "AND biblio.title LIKE CONCAT(?,'%') ";
-        @loopcriteria = ("A".."z") unless (scalar(@loopcriteria)>0);  
+        @loopcriteria = ("A".."z") unless (scalar(@loopcriteria)>0);
     }
-        
+
     if ($orderby =~ /date_desc/){
         $str.=" ORDER BY dateaccessioned DESC";
     } else {
         $str.=" ORDER BY title";
     }
-    
+
     my $qdataacquisitions=$dbh->prepare($str);
-        
+
     my @loopacquisitions;
     foreach my $value(@loopcriteria){
         push @params,$value;
         my %cell;
         $cell{"title"}=$value;
         $cell{"titlecode"}=$value;
-        
+
         eval{$qdataacquisitions->execute(@params);};
-  
+
         if ($@){ warn "recentacquisitions Error :$@";}
         else {
             my @loopdata;
@@ -1632,7 +1638,7 @@ sub NZanalyse {
             # depending of operand, intersect, union or exclude both lists
             # to get a result list
             if ( $operator eq ' and ' ) {
-                return NZoperatorAND($leftresult,$rightresult);      
+                return NZoperatorAND($leftresult,$rightresult);
             }
             elsif ( $operator eq ' or ' ) {
 
@@ -1640,13 +1646,13 @@ sub NZanalyse {
                 return $leftresult . $rightresult;
             }
             elsif ( $operator eq ' not ' ) {
-                return NZoperatorNOT($leftresult,$rightresult);      
+                return NZoperatorNOT($leftresult,$rightresult);
             }
-        }      
+        }
         else {
 # this error is impossible, because of the regexp that isolate the operand, but just in case...
             return $leftresult;
-        } 
+        }
     }
     warn "string :" . $string if $DEBUG;
     my $left = "";
@@ -1738,7 +1744,7 @@ sub NZanalyse {
         $left = 'subject'          if $left =~ '^su$';
         $left = 'koha-Auth-Number' if $left =~ '^an$';
         $left = 'keyword'          if $left =~ '^kw$';
-        $left = 'itemtype'         if $left =~ '^mc$'; # Fix for Bug 2599 - Search limits not working for NoZebra 
+        $left = 'itemtype'         if $left =~ '^mc$'; # Fix for Bug 2599 - Search limits not working for NoZebra
         warn "handling leaf... left:$left operator:$operator right:$right" if $DEBUG;
         my $dbh = C4::Context->dbh;
         if ( $operator && $left ne 'keyword' ) {
@@ -1814,10 +1820,10 @@ sub NZanalyse {
 
 sub NZoperatorAND{
     my ($rightresult, $leftresult)=@_;
-    
+
     my @leftresult = split /;/, $leftresult;
     warn " @leftresult / $rightresult \n" if $DEBUG;
-    
+
     #             my @rightresult = split /;/,$leftresult;
     my $finalresult;
 
@@ -1838,7 +1844,7 @@ sub NZoperatorAND{
     warn "NZAND DONE : $finalresult \n" if $DEBUG;
     return $finalresult;
 }
-      
+
 sub NZoperatorOR{
     my ($rightresult, $leftresult)=@_;
     return $rightresult.$leftresult;
@@ -1846,7 +1852,7 @@ sub NZoperatorOR{
 
 sub NZoperatorNOT{
     my ($leftresult, $rightresult)=@_;
-    
+
     my @leftresult = split /;/, $leftresult;
 
     #             my @rightresult = split /;/,$leftresult;
@@ -1864,7 +1870,7 @@ sub NZoperatorNOT{
 =head2 NZorder
 
   $finalresult = NZorder($biblionumbers, $ordering,$results_per_page,$offset);
-  
+
   TODO :: Description
 
 =cut
@@ -2299,12 +2305,12 @@ sub BiblioAddAuthorities{
   my $dbh=C4::Context->dbh;
   my $query=$dbh->prepare(qq|
 SELECT authtypecode,tagfield
-FROM marc_subfield_structure 
-WHERE frameworkcode=? 
+FROM marc_subfield_structure
+WHERE frameworkcode=?
 AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
 # SELECT authtypecode,tagfield
-# FROM marc_subfield_structure 
-# WHERE frameworkcode=? 
+# FROM marc_subfield_structure
+# WHERE frameworkcode=?
 # AND (authtypecode IS NOT NULL OR authtypecode<>\"\")|);
   $query->execute($frameworkcode);
   my ($countcreated,$countlinked);
@@ -2316,7 +2322,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
       my $query='at='.$data->{authtypecode}.' ';
       map {$query.= ' and he,ext="'.$_->[1].'"' if ($_->[0]=~/[A-z]/)}  $field->subfields();
       my ($error, $results, $total_hits)=SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
-    # there is only 1 result 
+    # there is only 1 result
           if ( $error ) {
         warn "BIBLIOADDSAUTHORITIES: $error";
             return (0,0) ;
@@ -2326,14 +2332,14 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
         $field->add_subfields('9'=>$marcrecord->field('001')->data);
         $countlinked++;
       } elsif (scalar(@$results)>1) {
-   #More than One result 
+   #More than One result
    #This can comes out of a lack of a subfield.
 #         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
 #         $record->field($data->{tagfield})->add_subfields('9'=>$marcrecord->field('001')->data);
   $countlinked++;
       } else {
   #There are no results, build authority record, add it to Authorities, get authid and add it to 9
-  ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode     
+  ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode
   ###NOTICE : This can be a problem. We should also look into other types and rejected forms.
          my $authtypedata=C4::AuthoritiesMarc->GetAuthType($data->{authtypecode});
          next unless $authtypedata;

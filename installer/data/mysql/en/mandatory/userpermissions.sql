@@ -1,7 +1,7 @@
 INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Remaining circulation permissions'),
    ( 1, 'override_renewals', 'Override blocked renewals'),
-   ( 9, 'edit_catalogue', 'Edit catalogue'),
+   ( 9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
    ( 9, 'fast_cataloging', 'Fast cataloging'),
    (11, 'vendors_manage', 'Manage vendors'),
    (11, 'contracts_manage', 'Manage contracts'),
@@ -31,6 +31,8 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'batchmod', 'Perform batch modification of items'),
    (13, 'batchdel', 'Perform batch deletion of items'),
    (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
+   (13, 'moderate_tags', 'Moderate patron tags'),
+   (13, 'rotating_collections', 'Manage rotating collections'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (16, 'create_reports', 'Create SQL Reports')
 ;

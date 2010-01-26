@@ -44,12 +44,24 @@ Prints the manual page and exits.
 
 =item B<--file>
 
-the filename that we should use for the database file that we produce. Defaults to "borrowers.db"
+The filename that we should use for the database file that we produce. Defaults to "borrowers.db"
 
 =item B<--force>
 
 Forcefully overwrite any existing db file. Defaults to false, so
 program will terminate prematurely if the file already exists.
+
+=item B<--sqlite2>
+
+This option cause the output file to be an SQLite2 database.
+This is the format that the original offline circ client
+( the one written in PHP/Gtk, version < 1.0 ) requires. 
+
+=item B<--sqlite3>
+
+This option cause the output file to be an SQLite3 database.
+This is the format that the new offline circ client
+( the one written in C++/Qt4, version >= 1.0 ) requires. 
 
 =back
 
@@ -90,6 +102,8 @@ my $help     = 0;
 my $man      = 0;
 my $filename = 'borrowers.db';
 my $force    = 0;
+my $sqlite2  = 0;
+my $sqlite3  = 0;
 
 GetOptions(
     'verbose' => \$verbose,
@@ -97,9 +111,13 @@ GetOptions(
     'man'     => \$man,
     'file=s'  => \$filename,
     'force'   => \$force,
+    'sqlite2' => \$sqlite2,
+    'sqlite3' => \$sqlite3,
 ) or pod2usage(2);
+
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
+
 
 my %wanted_borrowers_columns = map { $_ => 1 } qw/borrowernumber cardnumber surname  firstname address city phone dateofbirth/; 
 my %wanted_issues_columns    = map { $_ => 1 } qw/borrowernumber date_due itemcallnumber title itemtype/;
@@ -111,7 +129,12 @@ verify_dbd_sqlite();
 
 ## Create DB Connections
 my $dbh_mysql = C4::Context->dbh;
-my $dbh_sqlite = DBI->connect( "dbi:SQLite2:dbname=$filename", "", "" );
+my $dbh_sqlite;
+if ( $sqlite2 ) {
+  $dbh_sqlite = DBI->connect( "dbi:SQLite2:dbname=$filename", "", "" );
+} elsif ( $sqlite3 ) {
+  $dbh_sqlite = DBI->connect( "dbi:SQLite:dbname=$filename", "", "" );
+}
 $dbh_sqlite->{AutoCommit} = 0;
 
 create_borrowers_table();
@@ -131,17 +154,31 @@ make sure we have a new enough version of it.
 
 sub verify_dbd_sqlite {
 
+  if ( $sqlite2 ) {
     eval { require DBD::SQLite2; };
     if ( $EVAL_ERROR ) {
-        my $msg = <<'END_MESSAGE';
+      my $msg = <<'END_MESSAGE';
 DBD::SQLite2 is required to generate offline circultion database files, but not found.
-Please install the DBD::SQLite2 perl module. It is availalbe from
+Please install the DBD::SQLite2 perl module. It is available from
 http://search.cpan.org/dist/DBD-SQLite2/ or through the CPAN module.
 END_MESSAGE
-        die $msg;
+      die $msg;
     }
-}
+  } elsif ( $sqlite3 ) {
+    eval { require DBD::SQLite; };
+    if ( $EVAL_ERROR ) {
+      my $msg = <<'END_MESSAGE';
+DBD::SQLite3 is required to generate offline circultion database files, but not found.
+Please install the DBD::SQLite3 perl module. It is available from
+http://search.cpan.org/dist/DBD-SQLite3/ or through the CPAN module.
+END_MESSAGE
+      die $msg;
+    }
+  } else {
+    die( "Error: execution requires either the option --sqlite2 or --sqlite3. Run with --help for details." );
+  }
 
+}
 =head2 prepare_file_for_writing
 
 pass in the filename that we're considering using for the SQLite db.

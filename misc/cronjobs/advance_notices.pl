@@ -54,6 +54,7 @@ use C4::Letters;
 use C4::Members;
 use C4::Members::Messaging;
 use C4::Overdues;
+use C4::Dates qw/format_date/;
 
 
 # These are defaults for command line options.
@@ -64,12 +65,14 @@ my $mindays     = 0;                                                # -m: Maximu
 my $maxdays     = 30;                                               # -e: the End of the time period
 my $fromaddress = C4::Context->preference('KohaAdminEmailAddress'); # -f: From address for the emails
 my $verbose     = 0;                                                # -v: verbose
+my $itemscontent = join(',',qw( issuedate title barcode author ));
 
-GetOptions( 'c'    => \$confirm,
-            'n'    => \$nomail,
-            'm:i'  => \$maxdays,
-            'f:s'  => \$fromaddress,
-            'v'    => \$verbose,
+GetOptions( 'c'              => \$confirm,
+            'n'              => \$nomail,
+            'm:i'            => \$maxdays,
+            'f:s'            => \$fromaddress,
+            'v'              => \$verbose,
+            'itemscontent=s' => \$itemscontent,
        );
 my $usage = << 'ENDUSAGE';
 
@@ -83,7 +86,9 @@ This script has the following parameters :
         -f from address for the emails. Defaults to KohaAdminEmailAddress system preference
 	-n send No mail. Instead, all mail messages are printed on screen. Usefull for testing purposes.
         -v verbose
-
+        -i csv list of fields that get substituted into templates in places
+           of the E<lt>E<lt>items.contentE<gt>E<gt> placeholder.  Defaults to
+           issuedate,title,barcode,author
 ENDUSAGE
 
 # Since advance notice options are not visible in the web-interface
@@ -107,6 +112,8 @@ unless ($confirm) {
 	
 }
 
+# The fields that will be substituted into <<items.content>>
+my @item_content_fields = split(/,/,$itemscontent);
 
 warn 'getting upcoming due issues' if $verbose;
 my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $maxdays } );
@@ -117,10 +124,21 @@ warn 'found ' . scalar( @$upcoming_dues ) . ' issues' if $verbose;
 my $upcoming_digest;
 my $due_digest;
 
+my $dbh = C4::Context->dbh();
+my $sth = $dbh->prepare(<<'END_SQL');
+SELECT biblio.*, items.*, issues.*
+  FROM issues,items,biblio
+  WHERE items.itemnumber=issues.itemnumber
+    AND biblio.biblionumber=items.biblionumber
+    AND issues.borrowernumber = ?
+    AND issues.itemnumber = ?
+    AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
+END_SQL
+
 UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
     warn 'examining ' . $upcoming->{'itemnumber'} . ' upcoming due items' if $verbose;
     # warn( Data::Dumper->Dump( [ $upcoming ], [ 'overdue' ] ) );
-    
+
     my $letter;
     my $borrower_preferences;
     if ( 0 == $upcoming->{'days_until_due'} ) {
@@ -138,11 +156,19 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             my $letter_type = 'DUE';
             $letter = C4::Letters::getletter( 'circulation', $letter_type );
             die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
+            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},'0');
+            my $titles = "";
+            while ( my $item_info = $sth->fetchrow_hashref()) {
+              my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
+              $titles .= join("\t",@item_info) . "\n";
+            }
         
             $letter = parse_letter( { letter         => $letter,
                                       borrowernumber => $upcoming->{'borrowernumber'},
-                                      branchcode    => $upcoming->{'branchcode'},
-                                      biblionumber   => $biblio->{'biblionumber'} } );
+                                      branchcode     => $upcoming->{'branchcode'},
+                                      biblionumber   => $biblio->{'biblionumber'},
+                                      substitute     => { 'items.content' => $titles }
+                                    } );
         }
     } else {
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $upcoming->{'borrowernumber'},
@@ -159,29 +185,52 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             my $letter_type = 'PREDUE';
             $letter = C4::Letters::getletter( 'circulation', $letter_type );
             die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
+            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$maxdays);
+            my $titles = "";
+            while ( my $item_info = $sth->fetchrow_hashref()) {
+              my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
+              $titles .= join("\t",@item_info) . "\n";
+            }
         
             $letter = parse_letter( { letter         => $letter,
                                       borrowernumber => $upcoming->{'borrowernumber'},
-                                      branchcode    => $upcoming->{'branchcode'},
-                                      biblionumber   => $biblio->{'biblionumber'} } );
+                                      branchcode     => $upcoming->{'branchcode'},
+                                      biblionumber   => $biblio->{'biblionumber'},
+                                      substitute     => { 'items.content' => $titles }
+                                    } );
         }
     }
 
     # If we have prepared a letter, send it.
-    if ( $letter ) {
+    if ($letter) {
+      if ($nomail) {
+        local $, = "\f";
+        print $letter->{'content'};
+      }
+      else {
         foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
             C4::Letters::EnqueueLetter( { letter                 => $letter,
                                           borrowernumber         => $upcoming->{'borrowernumber'},
                                           message_transport_type => $transport } );
         }
+      }
     }
-    
 }
 
 
 # warn( Data::Dumper->Dump( [ $upcoming_digest ], [ 'upcoming_digest' ] ) );
 
 # Now, run through all the people that want digests and send them
+
+$sth = $dbh->prepare(<<'END_SQL');
+SELECT biblio.*, items.*, issues.*
+  FROM issues,items,biblio
+  WHERE items.itemnumber=issues.itemnumber
+    AND biblio.biblionumber=items.biblionumber
+    AND issues.borrowernumber = ?
+    AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
+END_SQL
+
 PATRON: while ( my ( $borrowernumber, $count ) = each %$upcoming_digest ) {
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
                                                                                   message_name   => 'advance notice' } );
@@ -192,15 +241,28 @@ PATRON: while ( my ( $borrowernumber, $count ) = each %$upcoming_digest ) {
     my $letter_type = 'PREDUEDGST';
     my $letter = C4::Letters::getletter( 'circulation', $letter_type );
     die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
+    $sth->execute($borrowernumber,$maxdays);
+    my $titles = "";
+    while ( my $item_info = $sth->fetchrow_hashref()) {
+      my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
+      $titles .= join("\t",@item_info) . "\n";
+    }
     $letter = parse_letter( { letter         => $letter,
                               borrowernumber => $borrowernumber,
-                              substitute     => { count => $count }
+                              substitute     => { count => $count,
+                                                  'items.content' => $titles
+                                                }
                          } );
-
-    foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
+    if ($nomail) {
+      local $, = "\f";
+      print $letter->{'content'};
+    }
+    else {
+      foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
         C4::Letters::EnqueueLetter( { letter                 => $letter,
                                       borrowernumber         => $borrowernumber,
                                       message_transport_type => $transport } );
+      }
     }
 }
 
@@ -214,15 +276,29 @@ PATRON: while ( my ( $borrowernumber, $count ) = each %$due_digest ) {
     my $letter_type = 'DUEDGST';
     my $letter = C4::Letters::getletter( 'circulation', $letter_type );
     die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
+    $sth->execute($borrowernumber,'0');
+    my $titles = "";
+    while ( my $item_info = $sth->fetchrow_hashref()) {
+      my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
+      $titles .= join("\t",@item_info) . "\n";
+    }
     $letter = parse_letter( { letter         => $letter,
                               borrowernumber => $borrowernumber,
-                              substitute     => { count => $count }
+                              substitute     => { count => $count,
+                                                  'items.content' => $titles
+                                                }
                          } );
 
-    foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
+    if ($nomail) {
+      local $, = "\f";
+      print $letter->{'content'};
+    }
+    else {
+      foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
         C4::Letters::EnqueueLetter( { letter                 => $letter,
                                       borrowernumber         => $borrowernumber,
                                       message_transport_type => $transport } );
+      }
     }
 }
 

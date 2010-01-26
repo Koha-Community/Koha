@@ -337,9 +337,10 @@ sub get_template_and_user {
             'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
-            XSLTDetailsDisplay        => C4::Context->preference("XSLTDetailsDisplay"),
-            XSLTResultsDisplay        => C4::Context->preference("XSLTResultsDisplay"),
-                 );
+            XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
+            XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
+            BranchesLoop                 => GetBranchesLoop(),
+    );
 
     if ( $in->{'type'} eq "intranet" ) {
         $template->param(
@@ -392,8 +393,12 @@ sub get_template_and_user {
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
-            OPACAmazonSimilarItems    => "" . C4::Context->preference("OPACAmazonSimilarItems"),
+            OPACAmazonEnabled         => C4::Context->preference("OPACAmazonEnabled"),
+            OPACAmazonSimilarItems    => C4::Context->preference("OPACAmazonSimilarItems"),
+            OPACAmazonCoverImages     => C4::Context->preference("OPACAmazonCoverImages"),
+            OPACAmazonReviews         => C4::Context->preference("OPACAmazonReviews"),
             OPACFRBRizeEditions       => C4::Context->preference("OPACFRBRizeEditions"),
+            OpacHighlightedWords       => C4::Context->preference("OpacHighlightedWords"),
             OPACItemHolds             => C4::Context->preference("OPACItemHolds"),
             OPACShelfBrowser          => "". C4::Context->preference("OPACShelfBrowser"),
             OPACURLOpenInNewWindow    => "" . C4::Context->preference("OPACURLOpenInNewWindow"),
@@ -433,7 +438,8 @@ sub get_template_and_user {
             reviewson                 => C4::Context->preference("reviewson"),
             suggestion                => "" . C4::Context->preference("suggestion"),
             virtualshelves            => "" . C4::Context->preference("virtualshelves"),
-			OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
+            OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
+            OpacAddMastheadLibraryPulldown => C4::Context->preference("OpacAddMastheadLibraryPulldown"),
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);

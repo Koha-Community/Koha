@@ -131,6 +131,18 @@ if ( $step && $step == 1 ) {
               { name => "GD::Barcode", usagebarcode => 1, usagespine => 1 };
         }
     }
+    unless ( eval { require GD } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing,
+              { name => "GD", usagepatronimages => 1 };
+        }
+    }
+    unless ( eval { require Graphics::Magick } ) {
+        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
+            push @missing,
+              { name => "Graphics::Magick", usagepatroncards => 1 };
+        }
+    }
     unless ( eval { require Data::Random } ) {
         if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
             push @missing, { name => "Data::Random", usagebarcode => 1 };
@@ -230,7 +242,7 @@ elsif ( $step && $step == 2 ) {
                 }
                 $template->param( "checkgrantaccess" => $grantaccess );
             }	# End mysql connect check...
-	    
+
 	    elsif ( $info{dbms} eq "Pg" ) {
 		# Check if database has been created...
 		my $rv = $dbh->do( "SELECT * FROM pg_catalog.pg_database WHERE datname = \'$info{dbname}\';" );
@@ -257,7 +269,7 @@ elsif ( $step && $step == 3 ) {
 #
 # STEP 3 : database setup
 #
-# 
+#
     my $op = $query->param('op');
     if ( $op && $op eq 'finished' ) {
         #
@@ -298,7 +310,7 @@ elsif ( $step && $step == 3 ) {
         #
         #
         # (note that the term "selectframeworks is not correct. The user can select various files, not only frameworks)
-        
+
         #Framework Selection
         #sql data for import are supposed to be located in installer/data/<language>/<level>
         # Where <language> is en|fr or any international abbreviation (provided language hash is updated... This will be a problem with internationlisation.)
@@ -314,15 +326,15 @@ elsif ( $step && $step == 3 ) {
         my $marcflavour = $query->param('marcflavour');
         if ($marcflavour){
             $installer->set_marcflavour_syspref($marcflavour);
-        };    
+        };
         $marcflavour = C4::Context->preference('marcflavour') unless ($marcflavour);
         #Insert into database the selected marcflavour
-        undef $/; 
+        undef $/;
         my ($marc_defaulted_to_en, $fwklist) = $installer->marc_framework_sql_list($langchoice, $marcflavour);
         $template->param('en_marc_frameworks' => $marc_defaulted_to_en);
         $template->param( "frameworksloop" => $fwklist );
         $template->param( "marcflavour" => ucfirst($marcflavour));
-       
+
         my ($sample_defaulted_to_en, $levellist) = $installer->sample_data_sql_list($langchoice, $marcflavour);
         $template->param( "en_sample_data" => $sample_defaulted_to_en);
         $template->param( "levelloop" => $levellist );
@@ -334,7 +346,7 @@ elsif ( $step && $step == 3 ) {
         # 1ST install, 2nd sub-step : show the user the marcflavour available.
         #
         #
-        
+
         #Choose Marc Flavour
         #sql data are supposed to be located in installer/data/<dbms>/<language>/marcflavour/marcflavourname
 	# Where <dbms> is database type according to DBD syntax
@@ -362,13 +374,13 @@ elsif ( $step && $step == 3 ) {
         }
         my @listdir = grep { !/^\./ && -d "$dir/$_" } readdir(MYDIR);
         closedir MYDIR;
-        my $marcflavour=C4::Context->preference("marcflavour");    
+        my $marcflavour=C4::Context->preference("marcflavour");
         my @flavourlist;
         foreach my $marc (@listdir) {
-            my %cell=(    
+            my %cell=(
             "label"=> ucfirst($marc),
             "code"=>uc($marc),
-            "checked"=> defined($marcflavour) ? uc($marc) eq $marcflavour : 0);      
+            "checked"=> defined($marcflavour) ? uc($marc) eq $marcflavour : 0);
 #             $cell{"description"}= do { local $/ = undef; open INPUT "<$dir/$marc.txt"||"";<INPUT> };
             push @flavourlist, \%cell;
         }
@@ -402,6 +414,8 @@ elsif ( $step && $step == 3 ) {
         if (@$stderr_buf) {
             $template->param(update_errors => [ map { { line => $_ } } split(/\n/, join('', @$stderr_buf)) ] );
             $template->param(has_update_errors => 1);
+            warn "The following errors were returned while attempting to run the updatedatabase.pl script:\n";
+            foreach my $line (@$stderr_buf) {warn "$line\n";}
         }
 
         $template->param( $op => 1 );

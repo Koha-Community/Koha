@@ -290,7 +290,7 @@ if (@branchcodes) {
     @branches = grep { $seen{$_} } @overduebranches;
     
     
-    if (@branches) {
+    if (@overduebranches) {
 
     	my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
 	$verbose and warn "$branch_word @branches have overdue rules\n";
@@ -327,6 +327,7 @@ if ( defined $csvfilename ) {
     }
 }
 
+@branches = @overduebranches unless @branches;
 foreach my $branchcode (@branches) {
 
     my $branch_details = C4::Branch::GetBranchDetail($branchcode);
@@ -414,7 +415,10 @@ END_SQL
             $sth->execute(@borrower_parameters);
             $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
 
-            while( my ( $itemcount, $borrowernumber, $firstname, $lastname, $address1, $address2, $city, $postcode, $email ) = $sth->fetchrow ) {
+            while ( my ($itemcount, $borrowernumber, $firstname, $lastname,
+                    $address1, $address2, $city, $postcode, $country, $email,
+                    $longest_issue ) = $sth->fetchrow )
+            {
                 $verbose and warn "borrower $firstname, $lastname ($borrowernumber) has $itemcount items triggering level $i.";
     
                 my $letter = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"} );

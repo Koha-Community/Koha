@@ -12,6 +12,9 @@
   <!-- TMPL_IF NAME="OpacPasswordChange" -->
     <!-- TMPL_IF NAME="passwdview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-passwd.pl">change my password</a></li>
   <!-- /TMPL_IF -->
+  <!-- TMPL_IF NAME="ShowOpacRecentSearchLink" -->
+  <!-- TMPL_IF NAME="searchhistoryview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-search-history.pl">my search history</a></li>
+  <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="opacreadinghistory" -->
   <!-- TMPL_IF NAME="readingrecview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a></li>
   <!-- /TMPL_IF -->

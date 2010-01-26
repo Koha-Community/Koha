@@ -66,6 +66,10 @@ $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHo
 $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
 my $record       = GetMarcBiblio($biblionumber);
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTDetailsDisplay") ) {
@@ -87,10 +91,6 @@ if (C4::Context->preference('hidelostitems')) {
 }
 my $dat = &GetBiblioData($biblionumber);
 
-if (!$dat) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
-}
 my $itemtypes = GetItemTypes();
 # imageurl:
 my $itemtype = $dat->{'itemtype'};
@@ -325,11 +325,9 @@ if ( C4::Context->preference("OPACAmazonEnabled") ) {
     my $amazon_similars = C4::Context->preference("OPACAmazonSimilarItems");
     my @services;
     if ( $amazon_reviews ) {
-        $template->param( OPACAmazonReviews => 1 );
         push( @services, 'EditorialReview', 'Reviews' );
     }
     if ( $amazon_similars ) {
-        $template->param( OPACAmazonSimilarItems => 1 );
         push( @services, 'Similarities' );
     }
     my $amazon_details = &get_amazon_details( $isbn, $record, $marcflavour, \@services );

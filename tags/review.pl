@@ -35,7 +35,7 @@ use C4::Debug;
 use C4::Tags 0.03 qw(get_tags get_approval_rows approval_counts whitelist blacklist is_approved);
 
 my $script_name = "/cgi-bin/koha/tags/review.pl";
-my $needed_flags = { tools => 'moderate_comments' };	# FIXME: replace when more specific permission is created.
+my $needed_flags = { tools => 'moderate_tags' };	# FIXME: replace when more specific permission is created.
 
 sub ajax_auth_cgi ($) {		# returns CGI object
 	my $needed_flags = shift;

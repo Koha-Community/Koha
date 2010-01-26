@@ -202,7 +202,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 		<th>Term</th>
 		<th>Weight</th>
 		<th>Actions</th>
-		<th>Reviewer</th>
+        <!-- TMPL_UNLESS NAME="filter_approved_pending" --><th>Reviewer</th><!-- /TMPL_UNLESS -->
 		<th>Date</th>
 	</tr>
 	<!-- TMPL_LOOP NAME="tagloop" -->
@@ -239,7 +239,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 			<input class="rej" type="submit" title="<!-- TMPL_VAR NAME="term"-->" value="Reject" name="reject" />
 			</span>
 	    </td>
-		<td>&nbsp;</td>
+	    <!-- TMPL_UNLESS NAME="filter_approved_pending" --><td>&nbsp;</td><!-- /TMPL_UNLESS -->
 		<!-- /TMPL_IF -->
 	    <td><!-- TMPL_VAR NAME="date_approved"-->
 	    </td>

@@ -141,7 +141,13 @@
 
                 <li><span class="label">
                 <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
-                    Accession Date:</span> <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="dateaccessioned" --></a>
+                
+                    Accession Date:</span> 
+                    <!-- TMPL_IF NAME="basketno" -->
+                    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="dateaccessioned" --></a>
+                    <!-- TMPL_ELSE -->
+                    <!-- TMPL_VAR NAME="dateaccessioned" -->
+                    <!-- /TMPL_IF --> 
                 <!-- TMPL_ELSE -->
                     <!-- TMPL_VAR NAME="dateaccessioned" -->
                 <!-- /TMPL_IF --> </li>

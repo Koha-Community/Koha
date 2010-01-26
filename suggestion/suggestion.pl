@@ -50,7 +50,7 @@ sub Init{
 
 sub GetCriteriumDesc{
     my ($criteriumvalue,$displayby)=@_;
-    return ($criteriumvalue eq 'ASKED'?"pending":lc $criteriumvalue) if ($displayby =~/status/i);
+    return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
     return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
     if ($displayby =~/managedby/||$displayby =~/acceptedby/){
@@ -157,12 +157,13 @@ if ($op=~/else/) {
     $displayby||="STATUS";
     my $criteria_list=GetDistinctValues("suggestions.".$displayby);
     my @allsuggestions;
+    my $reasonsloop = GetAuthorisedValues("SUGGEST");
     foreach my $criteriumvalue (map{$$_{'value'}} @$criteria_list){
         my $definedvalue = defined $$suggestion_ref{$displayby} && $$suggestion_ref{$displayby} ne "";
         
         next if ($definedvalue && $$suggestion_ref{$displayby} ne $criteriumvalue);
         $$suggestion_ref{$displayby}=$criteriumvalue;
-        warn $$suggestion_ref{$displayby}."=$criteriumvalue; $displayby";
+#        warn $$suggestion_ref{$displayby}."=$criteriumvalue; $displayby";
     
         my $suggestions = &SearchSuggestion($suggestion_ref);
         foreach (@$suggestions){
@@ -179,26 +180,31 @@ if ($op=~/else/) {
                             "suggestiontypelabel"=>GetCriteriumDesc($criteriumvalue,$displayby)||"",
                             "suggestionscount"=>scalar(@$suggestions),             
                             'suggestions_loop'=>$suggestions,
+                            'reasonsloop'     => $reasonsloop,
                             };
 
         delete $$suggestion_ref{$displayby} unless $definedvalue;
     }
-    my $reasonsloop = GetAuthorisedValues("SUGGEST");
+
     $template->param(
         "displayby"=> $displayby,
         "notabs"=> $displayby eq "",
         suggestions       => \@allsuggestions,
-        reasonsloop       => $reasonsloop,
     );
 }
 
 foreach my $element qw(managedby suggestedby){
-    $debug || warn $$suggestion_ref{$element};
+#    $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
         my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
-        my $presentation_string=$$member{firstname}." ".$$member{surname}." ".GetBranchName($$member{branchcode})." ".$$member{description}." ".$$member{category_type};
-        $debug || warn $presentation_string;
-        $template->param($element."information"=>$presentation_string);
+        $template->param(
+            $element."_borrowernumber"=>$$member{borrowernumber},
+            $element."_firstname"=>$$member{firstname},
+            $element."_surname"=>$$member{surname},
+            $element."_branchcode"=>$$member{branchcode},
+            $element."_description"=>$$member{description},
+            $element."_category_type"=>$$member{category_type}
+        );
     }
 }
 $template->param(

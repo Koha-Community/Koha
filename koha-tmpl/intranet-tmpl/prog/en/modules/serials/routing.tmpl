@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Serials &rsaquo; <!-- TMPL_VAR NAME="title" escape="html" --> &rsaquo; Edit Routing List</title>
+<title>Koha &rsaquo; Serials &rsaquo; <!-- TMPL_VAR NAME="title" escape="html" --> &rsaquo; <!-- TMPL_IF NAME="op" -->Create Routing List<!-- TMPL_ELSE -->Edit Routing List<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script language="javascript" type="text/javascript">
 <!--
@@ -10,7 +10,7 @@ function reorder_item(sid,rid,rank){
 }
 
 function search_member(subscriptionid){
-    var myurl = 'member-search.pl?subscriptionid='+subscriptionid; window.open(myurl,'FindAMember','width=500,height=400,toolbar=no,scrollbars=yes');
+    var myurl = 'member-search.pl?subscriptionid='+subscriptionid; window.open(myurl,'FindAMember','width=550,height=480,toolbar=no,scrollbars=yes');
 }
 
 //-->
@@ -20,7 +20,7 @@ function search_member(subscriptionid){
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="serials-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->"><i><!-- TMPL_VAR NAME="title" escape="html" --></i></a> &rsaquo; Edit Routing List </div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->"><i><!-- TMPL_VAR NAME="title" escape="html" --></i></a> &rsaquo; <!-- TMPL_IF NAME="op" -->Create Routing List<!-- TMPL_ELSE -->Edit Routing List<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
    
@@ -30,29 +30,25 @@ function search_member(subscriptionid){
 
 
 <!-- TMPL_IF NAME="op" -->
-<h1>Create Routing List</h1>
+<h1>Create Routing List for <i><!-- TMPL_VAR NAME="title" escape="html" --></i></h1>
 <!-- TMPL_ELSE -->
-<h1>Edit Routing List</h1>
+<h1>Edit Routing List for <i><!-- TMPL_VAR NAME="title" escape="html" --></i></h1>
 <!-- /TMPL_IF -->
 
 <form method="post" action="routing.pl">
 <input type="hidden" name="op" value="save" />
 <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR NAME="subscriptionid" -->" />
-<p><b>Serial Title:</b> <!-- TMPL_VAR NAME="title" escape="html" --></p>
-<p><b>Issue:</b> 
-
-<select name="date_selected">
+<fieldset class="rows">
+	<ol>
+		<li><label for="date_selected">Issue: </label>
+<select name="date_selected" id="date_selected">
 <!-- TMPL_LOOP NAME="dates" -->
 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)" selected="selected"><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)"><!-- TMPL_VAR NAME="serialseq" --> (<!-- TMPL_VAR NAME="planneddate" -->)</option><!-- /TMPL_IF -->
 <!-- /TMPL_LOOP -->
-</select>
-
-<!-- TMPL_VAR NAME="issue" --></p>
+</select> <!-- TMPL_VAR NAME="issue" --></li>
 
 <!-- TMPL_IF NAME="memberloop" -->
-<table>
-<tr><td style="padding-top:5px;"><b>List Member:</b></td>
-    <td><table cellspacing="0" cellpadding="0" border="0" class="collapse">
+<li><span class="label">Recipients:</span><table style="clear:none;margin:0;">
         <tr><th>Name</th>
             <th>Rank</th>
             <th>Delete</th></tr>
@@ -61,23 +57,24 @@ function search_member(subscriptionid){
             <td><!-- TMPL_VAR NAME="routingbox" --></td>
             <td><a href="/cgi-bin/koha/serials/routing.pl?routingid=<!-- TMPL_VAR NAME="routingid" -->&amp;subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete">Delete</a></td></tr>
 <!-- /TMPL_LOOP -->
-        </table><p><a onclick="search_member(<!-- TMPL_VAR
+        </table><p style="margin-left:10em;"><a onclick="search_member(<!-- TMPL_VAR
 NAME="subscriptionid" -->); return false"
 href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR
-NAME="subscriptionid" -->" class="button">Add List Member</a> &nbsp; <a
-href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete" class="button">Delete All</a></p></td></tr>
-
+NAME="subscriptionid" -->" class="button">Add recipients</a> &nbsp; <a
+href="/cgi-bin/koha/serials/routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=delete" class="button">Delete All</a></p></li>
 <!-- TMPL_ELSE -->
-<table border="0" cellspacing="0" cellpadding="0">
-<tr><td><b>List Member:</b></td>
-    <td><p><a onclick="search_member(<!-- TMPL_VAR NAME="subscriptionid"
--->); return false" href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button">Add List Member</a></p></td></tr>
+<li><span class="label">Recipients:</span>
+    <a onclick="search_member(<!-- TMPL_VAR NAME="subscriptionid"
+-->); return false" href="/cgi-bin/koha/serials/member-search.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->" class="button">Add recipients</a></li>
 <!-- /TMPL_IF -->
-<tr><td valign="top"><label for="notes">Notes:</label></td>
-    <td><textarea name="notes" id="notes" rows="3" cols="50"><!-- TMPL_VAR NAME="routingnotes" --></textarea></td></tr>
-</table>
-<p><input type="submit" name="submit" class="button" value="Save" /></p>
+
+	<li><label for="notes">Notes:</label><textarea name="notes" id="notes" rows="3" cols="50"><!-- TMPL_VAR NAME="routingnotes" --></textarea></li>
+	</ol>
+
+</fieldset>
+<fieldset class="action"><input type="submit" name="submit" value="Save" /></fieldset>
 </form>
+
 
 </div>
 </div>

@@ -397,7 +397,9 @@ foreach my $biblionumber (@biblionumbers) {
                 }
             }
             
-            my $branchitemrule = GetBranchItemRule( $item->{'homebranch'}, $item->{'itype'} );
+            my $branch = C4::Circulation::_GetCircControlBranch($item, $borrowerinfo);
+
+            my $branchitemrule = GetBranchItemRule( $branch, $item->{'itype'} );
             my $policy_holdallowed = 1;
             
             $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};

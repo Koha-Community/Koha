@@ -54,11 +54,11 @@
 		<span class="label">City ID: </span><!-- TMPL_VAR NAME="cityid" --></li>
 	<!-- /TMPL_IF -->
 	<li>
-	<label for="city_name">City name: </label>
+	<label for="city_name">City, State: </label>
 	<input type="text" name="city_name" id="city_name" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="city_name" ESCAPE="HTML" -->" />
 	</li>
 	<li>				
-	<label for="city_zipcode">City zipcode: </label>
+	<label for="city_zipcode">Zip/Postal code: </label>
 	<input type="text" name="city_zipcode" id="city_zipcode" size="10" maxlength="10" value="<!-- TMPL_VAR NAME="city_zipcode" -->" />
 	</li></ol></fieldset>
 	
@@ -81,10 +81,10 @@
         <tr><th>City id</th>
             <td><!-- TMPL_VAR NAME="cityid" --></td>
         </tr>
-        <tr><th>City name</th>
+        <tr><th>City, State</th>
             <td><!-- TMPL_VAR NAME="city_name" --></td>
         </tr>
-        <tr><th>City zipcode</th>
+        <tr><th>Zip/Postal code</th>
             <td><!-- TMPL_VAR NAME="city_zipcode" --></td>
         </tr>
     </table>
@@ -118,8 +118,8 @@
 <!-- TMPL_IF NAME="loop" -->	<table>
 		<tr>
 			<th>City ID</th>
-			<th>City name</th>
-			<th>City zipcode</th>
+			<th>City, State</th>
+			<th>Zip/Postal code</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 		</tr>

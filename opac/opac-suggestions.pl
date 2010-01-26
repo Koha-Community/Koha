@@ -66,7 +66,7 @@ if ($allsuggestions){
 else {
 	$$suggestion{suggestedby} ||= $borrowernumber unless ($allsuggestions);
 }
-warn "bornum:",$borrowernumber;
+# warn "bornum:",$borrowernumber;
 use YAML;
 my $suggestions_loop =
   &SearchSuggestion( $suggestion);
@@ -97,7 +97,7 @@ map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})-
 my $supportlist=GetSupportList();				
 foreach my $support(@$supportlist){
 	if ($$support{'imageurl'}){
-		$$support{'imageurl'}= getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
+		$$support{'imageurl'}= getitemtypeimagelocation( 'opac', $$support{'imageurl'} );
 	}
 	else {
 	   delete $$support{'imageurl'}

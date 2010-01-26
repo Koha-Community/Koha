@@ -48,9 +48,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
     <!-- TMPL_IF NAME="CircAutocompl" -->
     <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
-                <input autocomplete="off" id="findborrower" name="findborrower" size="40" class="focus" type="text" />
+                <input autocomplete="off" id="findborrower" name="findborrower" size="40" class="focus" type="text" /> <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <div id="yborrowercontainer"></div>
-                <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             <!-- TMPL_IF NAME="stickyduedate" -->

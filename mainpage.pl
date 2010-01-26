@@ -17,7 +17,7 @@
 #
 
 use strict;
-
+use warnings;
 use CGI;
 use C4::Output;
 use C4::Auth;

@@ -6,6 +6,9 @@
                 <!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="CAN_user_borrowers" --><li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl">Search</a></li><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="intranetbookbag" -->
+                    <li><a href="#" id="cartmenulink">Cart<span id="basketcount"></span></a></li>
+                <!-- /TMPL_IF -->
                 <!-- TMPL_VAR name="IntranetNav" -->
                 <li class="more">
                     <a id="showmore" href="/cgi-bin/koha/mainpage.pl">More</a>
@@ -37,9 +40,6 @@
                         </div>
                     </div>
                 </li>
-                <!-- TMPL_IF NAME="intranetbookbag" -->
-                    <li><a href="#" id="cartmenulink"><i></i><span><i></i><span></span><img src="/intranet-tmpl/prog/img/cart.gif" width="14" height="14" alt="" border="0" />Cart<span id="basketcount"></span></span></a></li>
-                <!-- /TMPL_IF -->
             </ul>
         </div>
     <div id="login">

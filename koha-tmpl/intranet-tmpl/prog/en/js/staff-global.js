@@ -31,6 +31,7 @@ function _(s) { return s } // dummy function for gettext
 				function onShowMoreClick(p_oEvent) {
                     // Position and display the menu        
                     positionoMoremenu();
+                        $("#moremenu").show();
                     oMoremenu.show();
                     // Stop propagation and prevent the default "click" behavior
                     YAHOO.util.Event.stopEvent(p_oEvent);	

@@ -24,7 +24,7 @@ $(document).ready(function(){
 
 	function confirmDelete(message){
 		if (window.confirm(message)) {
-			location.href="/cgi-bin/koha/virtualshelves/shelves.pl?<!-- TMPL_IF NAME="showprivateshelves" -->display=privateshelves&<!-- /TMPL_IF -->shelves=1&amp;DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1";
+			location.href="/cgi-bin/koha/virtualshelves/shelves.pl?<!-- TMPL_IF NAME="showprivateshelves" -->display=privateshelves&<!-- /TMPL_IF -->shelves=1&DEL-<!-- TMPL_VAR NAME="shelfnumber" -->=1";
 		} else { 
 			return false;
 		}
@@ -140,16 +140,12 @@ function placeHold () {
         <input type="hidden" name="modifyshelfcontents" value="1" />
  <fieldset>
   <legend>Contents of <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
-   <div id="toolbar" class="list-actions">
+   
  <!--TMPL_IF NAME="manageshelf" -->
-     <span class="checkall"></span> |
-     <span class="clearall"></span> |
+     <p><span class="checkall"></span> |
+     <span class="clearall"></span></p>
  <!-- /TMPL_IF -->
-  <a class="print" href="shelves.pl" onclick="print(); return false;">Print</a> |
-  <a href="#" class="send tag_hides" onclick="open(CGIBIN+'virtualshelves/sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Send List</a> |
- <a href="#" class="download tag_hides" onclick="open(CGIBIN+'virtualshelves/downloadshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Download List</a>
-
- </div>
+	
  <!-- TMPL_VAR name='pagination_bar'-->
     <table>
             <tr>
@@ -198,15 +194,15 @@ function placeHold () {
 			</td>
 			</tr>
 		<!-- /TMPL_LOOP --><!-- /itemsloop -->
-    </table>
- </fieldset>
- <fieldset class="action">
+    </table><fieldset class="action">
         <!-- TMPL_IF name="manageshelf" -->
-            <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place Hold"/>
-            <input type="submit" value="Remove selected Items" onclick='return confirm(_("Are you sure you want to remove these items from the shelf?"))' />
-            <input type="submit" value="Merge selected Items" onclick='return MergeItems();' />
+            <input type="button" id="placehold" style="display:none" onclick="placeHold(); return false;" value="Place Holds" />
+            <input type="submit" value="Remove selected Items" onclick="return confirm(_('Are you sure you want to remove these items from the shelf?'));" />
+            <input type="submit" value="Merge selected Items" onclick="return MergeItems();" />
         <!-- /TMPL_IF -->
  </fieldset>
+ </fieldset>
+ 
 </form>
 	<!-- /TMPL_IF -->
    </div>
@@ -215,7 +211,7 @@ function placeHold () {
 <!-- TMPL_IF name="manageshelf" -->
 <div class="yui-g">
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
- <fieldset class="brief action">
+ <fieldset class="brief">
     <legend>Add an item to <i><!-- TMPL_VAR NAME="shelfname" --></i></legend>
         <ol>
             <li>
@@ -346,7 +342,6 @@ function placeHold () {
             <!-- TMPL_IF NAME="mine" -->
 				<form action="merge.pl" method="get">
 					<input type="hidden" name="shelf" value="<!-- TMPL_VAR NAME="shelf" -->" />
-					<input type="submit" class="editshelf" value="Merge" />
 				</form>
 				<form action="shelves.pl" method="get">
 					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
@@ -370,10 +365,10 @@ function placeHold () {
 		</td>
 		</tr>
                 <!-- /TMPL_LOOP -->
-            <!-- TMPL_ELSE -->
-            <tr><td colspan="4">No Private Lists.</td></tr>
-            <!-- /TMPL_IF --><!-- /shelveslooppriv -->
         </table>
+            <!-- TMPL_ELSE -->
+            <p>No Private Lists.</p>
+            <!-- /TMPL_IF --><!-- /shelveslooppriv -->
 		</div><!-- /privateshelves -->
 
         <!-- TMPL_IF NAME="showpublicshelves" -->

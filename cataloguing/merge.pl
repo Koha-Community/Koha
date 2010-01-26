@@ -56,6 +56,10 @@ if ($merge) {
     my $record       = TransformHtmlToMarc( \@params , $input );
     my $tobiblio     =  $input->param('biblio1');
     my $frombiblio   =  $input->param('biblio2');
+
+    # Rewriting the leader
+    $record->leader(GetMarcBiblio($tobiblio)->leader());
+
     my $frameworkcode = &GetFrameworkCode($tobiblio);
     my @notmoveditems;
 

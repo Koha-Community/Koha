@@ -236,14 +236,14 @@ function GetZ3950Terms(){
                 <!-- /TMPL_IF -->
 		<span class="addto"></span>
 
-				<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="z39.50 Search"/><!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="Z39.50 Search"/><!-- /TMPL_IF -->
             </div>
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
         <div id="searchheader">
 			<form method="post" name="fz3950" class="fz3950bigrpad">
-				<span id="z3950searchc"><input type="button" id="z3950search" value="z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
+				<span id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
 			</form>
             <h3>No results found</h3>
         <!-- TMPL_IF NAME="searchdesc" -->

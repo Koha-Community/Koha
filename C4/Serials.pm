@@ -24,6 +24,7 @@ use POSIX qw(strftime);
 use C4::Suggestions;
 use C4::Koha;
 use C4::Biblio;
+use C4::Branch;
 use C4::Items;
 use C4::Search;
 use C4::Letters;
@@ -83,6 +84,8 @@ this function get all suppliers with late issues.
 
 return :
 the supplierlist into a hash. this hash containts id & name of the supplier
+Only valid suppliers are returned. Late subscriptions lacking a supplier are
+ignored.
 
 =back
 
@@ -103,6 +106,7 @@ sub GetSuppliersWithLateIssues {
     $sth->execute;
     my %supplierlist;
     while ( my ( $id, $name ) = $sth->fetchrow ) {
+        next if !defined $id;
         $supplierlist{$id} = $name;
     }
     return %supplierlist;
@@ -457,6 +461,7 @@ sub PrepareSerialsData {
             ? format_date( $subs->{'publisheddate'} )
             : "XXX"
         );
+        $subs->{'branchname'} = GetBranchName( $subs->{'branchcode'} );
         $subs->{'planneddate'}                  = format_date( $subs->{'planneddate'} );
         $subs->{ "status" . $subs->{'status'} } = 1;
         $subs->{"checked"}                      = $subs->{'status'} =~ /1|3|4|7/;

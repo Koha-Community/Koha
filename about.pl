@@ -16,7 +16,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
-
+use warnings;
 use C4::Output;    # contains gettemplate
 use C4::Auth;
 use C4::Context;
@@ -97,6 +97,7 @@ JSON
 LWP::Simple
 LWP::UserAgent
 Lingua::Stem
+Lingua::Stem::Snowball
 List::Util
 List::MoreUtils
 Locale::Language

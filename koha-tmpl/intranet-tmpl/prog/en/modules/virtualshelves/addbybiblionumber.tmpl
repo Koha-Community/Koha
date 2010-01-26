@@ -26,17 +26,16 @@
                         <!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_LOOP -->
 			<input type="hidden" name="confirmed" value="1" />
 			<!-- TMPL_IF NAME="shelfnumber" --><input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><!-- /TMPL_IF -->
-		    </fieldset>
 
 <!-- TMPL_UNLESS NAME="shelfnumber" -->
 
-    <!-- TMPL_UNLESS NAME="newshelf" -->
+<!-- TMPL_IF NAME="CGIvirtualshelves" -->    <!-- TMPL_UNLESS NAME="newshelf" -->
      <fieldset class="rows">
 	<legend>Select an existing list</legend>
 	<ol>
 	    <li><label>Choose list</label><!-- TMPL_VAR NAME="CGIvirtualshelves" --></li>
 	</ol>
-	<!-- TMPL_LOOP NAME="biblios" --><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
+	<!-- TMPL_LOOP NAME="biblios" --><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_LOOP -->
 	<!-- TMPL_UNLESS NAME="biblionumbers" -->
 	  <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
 	<!-- TMPL_ELSE -->
@@ -44,7 +43,7 @@
 	<!-- /TMPL_UNLESS -->
 	</fieldset>
 
-	<p>... or...</p> 
+	<p>... or...</p> <!-- /TMPL_IF -->
 
     <!-- /TMPL_UNLESS -->
 
@@ -53,7 +52,7 @@
 	    <label for="newvirtualshelf">
 		List name:
 	    </label>
-	    <!-- TMPL_LOOP NAME="biblios" --><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->"><!-- /TMPL_LOOP -->
+	    <!-- TMPL_LOOP NAME="biblios" --><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_LOOP -->
 	    <!-- TMPL_UNLESS NAME="biblionumbers" -->
 			  <input type="hidden" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
 	    <!-- TMPL_ELSE -->
@@ -67,7 +66,7 @@
 	    <select name="category" id="category">
 		<option value="1">Private</option>
 		<option value="2">Public</option>
-		<option value="3">Free</option>
+		<option value="3">Open</option>
 	    </select>
 	</li></ol>
     </fieldset> 

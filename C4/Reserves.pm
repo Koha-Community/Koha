@@ -352,7 +352,7 @@ sub CanBookBeReserved{
     my @args;
     my $rightsquery = "SELECT categorycode, itemtype, branchcode, reservesallowed 
                        FROM issuingrules 
-                       WHERE categorycode = ?";
+                       WHERE categorycode IN (?, '*')";
     push @args,$borrower->{categorycode};
 
     if($controlbranch eq "ItemHomeLibrary"){
@@ -370,7 +370,6 @@ sub CanBookBeReserved{
     }
     
     $rightsquery .= " ORDER BY categorycode DESC, itemtype DESC, branchcode DESC";
-    
     my $sthrights = $dbh->prepare($rightsquery);
     $sthrights->execute(@args);
     
@@ -405,7 +404,6 @@ sub CanBookBeReserved{
     if(my $row = $sthcount->fetchrow_hashref()){
        $reservescount = $row->{count};
     }
-    
     if($reservescount < $reservesrights){
         return 1;
     }else{

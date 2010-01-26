@@ -9,7 +9,7 @@ use C4::Debug;
 use C4::Labels::Batch 1.000000;
 use C4::Labels::Template 1.000000;
 use C4::Labels::Layout 1.000000;
-use C4::Labels::PDF 1.000000;
+use C4::Creators::PDF 1.000000;
 use C4::Labels::Label 1.000000;
 
 my $cgi = new CGI;
@@ -29,7 +29,7 @@ print $cgi->header( -type       => 'application/pdf',
                     -attachment => "$pdf_file.pdf",
                   );
 
-my $pdf = C4::Labels::PDF->new(InitVars => 0);
+my $pdf = C4::Creators::PDF->new(InitVars => 0);
 my $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
 my $template = C4::Labels::Template->retrieve(template_id => $template_id, profile_id => 1);
 my $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);

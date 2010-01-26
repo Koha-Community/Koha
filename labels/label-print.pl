@@ -3,7 +3,7 @@
 # Copyright 2009 Foundations Bible College.
 #
 # This file is part of Koha.
-#       
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -25,7 +25,7 @@ use Data::Dumper;
 
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
-use C4::Labels::Lib 1.000000 qw(get_all_templates get_all_layouts get_label_output_formats);
+use C4::Creators::Lib 1.000000 qw(get_all_templates get_all_layouts get_output_formats);
 use C4::Labels::Batch 1.000000;
 
 my $cgi = new CGI;
@@ -43,8 +43,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $op = $cgi->param('op') || 'none';
 my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');   # this will handle individual label printing
 my @batch_ids = $cgi->param('batch_id') if $cgi->param('batch_id');
-my $layout_id = $cgi->param('layout_id') || undef; 
-my $template_id = $cgi->param('template_id') || undef; 
+my $layout_id = $cgi->param('layout_id') || undef;
+my $template_id = $cgi->param('template_id') || undef;
 my $start_label = $cgi->param('start_label') || 1;
 my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
 my $output_format = $cgi->param('output_format') || 'pdf';
@@ -52,7 +52,7 @@ my $referer = $cgi->param('referer') || undef;
 
 my $layouts = undef;
 my $templates = undef;
-my $label_output_formats = undef;
+my $output_formats = undef;
 my @batches = ();
 my $multi_batch_count = scalar(@batch_ids);
 my $label_count = scalar(@label_ids);
@@ -112,16 +112,16 @@ elsif ($op eq 'none') {
     @batch_ids = grep{$_ = {batch_id => $_}} @batch_ids;
     @label_ids = grep{$_ = {label_id => $_}} @label_ids;
     @item_numbers = grep{$_ = {item_number => $_}} @item_numbers;
-    $templates = get_all_templates(field_list => 'template_id, template_code');
-    $layouts = get_all_layouts(field_list => 'layout_id, layout_name');
-    $label_output_formats = get_label_output_formats();
+    $templates = get_all_templates(field_list => 'template_id, template_code', filter => 'creator = "Labels"');
+    $layouts = get_all_layouts(field_list => 'layout_id, layout_name', filter => 'creator = "Labels"');
+    $output_formats = get_output_formats();
     $template->param(
                     batch_ids                   => \@batch_ids,
                     label_ids                   => \@label_ids,
                     item_numbers                => \@item_numbers,
                     templates                   => $templates,
                     layouts                     => $layouts,
-                    label_output_formats        => $label_output_formats,
+                    output_formats              => $output_formats,
                     multi_batch_count           => $multi_batch_count,
                     label_count                 => $label_count,
                     item_count                  => $item_count,
