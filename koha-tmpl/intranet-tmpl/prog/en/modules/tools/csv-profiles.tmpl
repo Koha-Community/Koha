@@ -130,12 +130,21 @@ function reloadPage(p) {
 							<option value="\t">Tabulation (\t)</option>
 						    </select>
 						    <br /><br />
+					
+						    <label for="encoding">Encoding :</label>
+						    <select name="encoding">
+							<!-- TMPL_LOOP NAME="encodings" -->
+							    <option<!-- TMPL_IF EXPR="encoding eq 'utf8'" --> selected="selected" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="encoding" --></option>
+							<!-- /TMPL_LOOP -->
+						    </select>
+						    <br /><br />
+
 
 						    <label for="profile_content">Profile marcfields :</label>
 						    <textarea cols="50" rows="2" name="profile_content" id="profile_content"></textarea>
 						    <p>You have to define which fields or subfields you want to export, separated by pipes.<br />
 						       You can also use your own headers (instead of the ones from koha) by prefixing the field number with an header, followed by the equal sign.<br /> 
-						       Example&nbsp;: Personal name=200|Entry element=210$a|300
+						       Example&nbsp;: Personal name=200|Entry element=210$a|300|009
 						    </p>
 						</fieldset>
 						<input type="hidden" name="action" value="create" />
@@ -233,6 +242,15 @@ function reloadPage(p) {
                                                         <option value="\t"<!-- TMPL_IF EXPR="selected_subfield_separator eq '\t'" --> selected="selected"<!-- /TMPL_IF -->>Tabulation (\t)</option>
 						    </select>
 						    <br /><br />
+
+						    <label for="encoding">Encoding :</label>
+						    <select name="encoding">
+							<!-- TMPL_LOOP NAME="encodings" -->
+							    <option<!-- TMPL_IF EXPR="selected_encoding eq encoding" --> selected="selected" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="encoding" --></option>
+							<!-- /TMPL_LOOP -->
+						    </select>
+						    <br /><br />
+
 
 
 						    <label for="modify_profile_content">Profile marcfields :</label>

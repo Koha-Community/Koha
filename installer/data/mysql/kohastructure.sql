@@ -755,6 +755,10 @@ CREATE TABLE `export_format` (
   `profile` varchar(255) NOT NULL,
   `description` mediumtext NOT NULL,
   `marcfields` mediumtext NOT NULL,
+  `csv_separator` varchar(2) NOT NULL,
+  `field_separator` varchar(2) NOT NULL,
+  `subfield_separator` varchar(2) NOT NULL,
+  `encoding` varchar(255) NOT NULL,
   PRIMARY KEY  (`export_format_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='Used for CSV export';
 
