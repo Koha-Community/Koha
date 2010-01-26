@@ -13,7 +13,7 @@
 <!-- TMPL_IF NAME="OpacHighlightedWords" --><script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <!-- /TMPL_IF --><script type="text/javascript">
 //<![CDATA[
-
+<!-- TMPL_IF name="RequestOnOpac" -->
 function holdMultiple() {
     var checkedBiblioNums = ""; // Separated by "/"
     var checkedCount = 0;
@@ -37,9 +37,9 @@ function holdBiblioNums(numList) {
     // numList: biblio numbers separated by "/"
     $("#hold_form_biblios").attr("value", numList);
     $("#hold_form").submit();
-}
+}<!-- /TMPL_IF -->
 
-
+<!-- TMPL_IF NAME="TagsEnabled" -->
 function tagSelected() {
     var checkedBoxes = $(".searchresults :checkbox:checked");
     if ($(checkedBoxes).size() == 0) {
@@ -77,8 +77,8 @@ function tagAdded() {
 
     KOHA.Tags.add_multitags_button(bibs, tag);
     return false;
-}
-
+}<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpacHighlightedWords" -->
 var q_array = new Array();  // holds search terms if available
 
 function highlightOff() {
@@ -94,9 +94,12 @@ function highlightOn() {
     }
     $(".highlight_toggle").toggle();
 }
-
+<!-- /TMPL_IF -->
 $(document).ready(function(){
-	$(".addtocart").show();
+	<!-- TMPL_IF name="opacbookbag" -->$(".addtocart").show();<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="opacbookbag" -->
+	<!-- TMPL_IF NAME="virtualshelves" -->
 	var param1 = "<label for=\"addto\">"+_("Add to: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
 	<!-- TMPL_IF name="opacbookbag" -->	param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>";
 	<!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="addbarshelves" -->
@@ -108,6 +111,22 @@ $(document).ready(function(){
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 	param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
+	<!-- TMPL_ELSE -->
+		var param1 = "<a id=\"addto\" class=\"addtocart\" href=\"#\">Add to Cart<\/a>";
+	<!-- /TMPL_IF -->
+<!-- TMPL_ELSE -->
+		var param1 = "<label for=\"addto\">"+_("Add to list: ")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+<!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="addbarshelves" -->
+	param1 += "<optgroup label=\""+_("Your Lists:")+"\">";<!-- TMPL_LOOP NAME="addbarshelvesloop" -->
+	param1 += "<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP -->
+	param1 += "<\/optgroup>";<!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="addpubshelves" -->param1 += "<optgroup label=\""+_("Public Lists:")+"\">"<!-- TMPL_LOOP NAME="addpubshelvesloop" -->+"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"<!-- /TMPL_LOOP --><!-- /TMPL_IF -->
+	param1 +="<\/optgroup><option value=\"newlist\">[ "+_("New List")+" ]<\/option>"
+	<!-- /TMPL_IF -->
+	<!-- /TMPL_IF -->
+	param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
+<!-- /TMPL_IF -->
+
 	$('#sortsubmit').hide();
     $('#sort_by').change(function() {
         $('#bookbag_form').submit();
@@ -115,6 +134,8 @@ $(document).ready(function(){
 	$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
 	$("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
 <!-- TMPL_IF NAME="opacbookbag" -->$("span.addto").html(param1);<!-- TMPL_ELSE --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->$("span.addto").html(param1);<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacbookbag" -->
+	<!-- TMPL_IF NAME="virtualshelves" -->
 	$("#addto").change(function(){
 		cartList();
 	});
@@ -122,7 +143,13 @@ $(document).ready(function(){
 		cartList();
 		return false;
 	});
-
+	<!-- TMPL_ELSE -->
+	$("#addto").click(function(){
+		cartList();
+		return false;
+	});
+	<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
     $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
     
 	function cartList(){
@@ -138,7 +165,7 @@ $(document).ready(function(){
 			}<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
 			return false;	
 		}
-		if($("#addto").find("option:selected").attr("value") == "addtocart"){
+		if($("#addto").find("option:selected").attr("value") == "addtocart" || $("#addto").attr("class") == "addtocart"){
 			addMultiple();
 			return false;
 		 }
@@ -338,7 +365,9 @@ $(document).ready(function(){
                 <tr>
             <!-- /TMPL_UNLESS -->
 
-                <td class="select selectcol"><!--TMPL_IF EXPR="opacbookbag || virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- /TMPL_IF --></td>
+                <td class="select selectcol"><!--TMPL_IF NAME="opacbookbag" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></td>
                 <td class="select selectcol"><!-- TMPL_VAR NAME="result_number" -->.</td>
 
 				<!-- TMPL_UNLESS NAME="item-level_itypes" -->
