@@ -31,7 +31,8 @@ use XML::LibXSLT;
 use XML::LibXML;
 use C4::Biblio; #marc2bibtex
 use C4::Csv; #marc2csv
-use Text::CSV; #marc2csv
+use C4::Koha; #marc2csv
+use Text::CSV::Encoded; #marc2csv
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -331,13 +332,13 @@ sub marc2endnote {
 
 =over 4
 
-my ($csv) = marc2csv($record, $csvprofileid);
+my ($csv) = marc2csv($record, $csvprofileid, $header);
 
 Returns a CSV scalar
 
 =over 2
 
-C<$record> - a MARC::Record object
+C<$biblio> - a biblionumber
 
 C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id and the GetCsvProfiles function in C4::Csv)
 
@@ -351,11 +352,20 @@ C<$header> - true if the headers are to be printed (typically at first pass)
 
 
 sub marc2csv {
-    my ($record, $id, $header) = @_;
+    my ($biblio, $id, $header) = @_;
     my $output;
 
-    # Get the information about the csv profile
+    # Getting the record
+    my $record = GetMarcBiblio($biblio);
+
+    # Getting the framework
+    my $frameworkcode = GetFrameworkCode($biblio);
+
+    # Getting information about the csv profile
     my $profile = GetCsvProfile($id);
+
+    # Getting output encoding
+    my $encoding          = $profile->{encoding} || 'utf8';
 
     # Getting separators
     my $csvseparator      = $profile->{csv_separator}      || ',';
@@ -368,7 +378,8 @@ sub marc2csv {
     if ($subfieldseparator eq '\t') { $subfieldseparator = "\t" }
 
     # Init CSV
-    my $csv = Text::CSV->new({ sep_char => $csvseparator });
+    my $csv = Text::CSV::Encoded->new({ sep_char => $csvseparator });
+    $csv = $csv->encoding_out($encoding) if ($encoding ne 'utf8');
 
     # Getting the marcfields
     my $marcfieldslist = $profile->{marcfields};
@@ -401,7 +412,6 @@ sub marc2csv {
 	    if (exists $_->{header}) {
 		    push @marcfieldsheaders, $_->{header};
 	    } else {
-warn "else";
 		# If not, we get the matching tag name from koha
 		if (index($field, '$') > 0) {
 		    my ($fieldtag, $subfieldtag) = split('\$', $field);
@@ -409,14 +419,12 @@ warn "else";
 		    my $sth = $dbh->prepare($query);
 		    $sth->execute($fieldtag, $subfieldtag);
 		    my @results = $sth->fetchrow_array();
-warn "subfield $fieldtag, $subfieldtag";
 		    push @marcfieldsheaders, $results[0];
 		} else {
 		    my $query = "SELECT liblibrarian FROM marc_tag_structure WHERE tagfield=?";
 		    my $sth = $dbh->prepare($query);
 		    $sth->execute($field);
 		    my @results = $sth->fetchrow_array();
-warn "field $results[0]";
 		    push @marcfieldsheaders, $results[0];
 		}
 	    }
@@ -441,14 +449,18 @@ warn "field $results[0]";
 		# We take every matching subfield
 		my @subfields = $field->subfield($subfieldtag);
 		foreach my $subfield (@subfields) {
-		    push @tmpfields, $subfield;
+
+		    # Getting authorised value
+		    my $authvalues = GetKohaAuthorisedValuesFromField($fieldtag, $subfieldtag, $frameworkcode, undef);
+		    push @tmpfields, (defined $authvalues->{$subfield}) ? $authvalues->{$subfield} : $subfield;
 		}
 	    }
 	    push (@fieldstab, join($subfieldseparator, @tmpfields));  		
 	# Or a field
 	} else {
 	    my @fields = ($record->field($marcfield));
-	    push (@fieldstab, join($fieldseparator, map($_->as_string(), @fields)));  		
+	    my $authvalues = GetKohaAuthorisedValuesFromField($marcfield, undef, $frameworkcode, undef);
+	    push (@fieldstab, join($fieldseparator, map((defined $authvalues->{$_->as_string}) ? $authvalues->{$_->as_string} : $_->as_string, @fields)));  		
 	 }
     };
 

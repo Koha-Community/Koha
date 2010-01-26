@@ -124,6 +124,7 @@ Test::Harness
 Test::More
 Text::CSV
 Text::CSV_XS
+Text::CSV::Encoded
 Text::Iconv
 Text::Wrap
 Time::HiRes
