@@ -2986,6 +2986,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.102";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE `export_format` ADD `encoding` VARCHAR(255) NOT NULL AFTER `subfield_separator`
+	});
+	print "Upgrade done (added encoding for csv export)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 

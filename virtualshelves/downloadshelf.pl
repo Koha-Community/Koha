@@ -38,40 +38,40 @@ my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
     {
-        template_name   => "opac-downloadcart.tmpl",
+        template_name   => "virtualshelves/downloadshelf.tmpl",
         query           => $query,
-        type            => "opac",
-        authnotrequired => 1,
-        flagsrequired   => { borrow => 1 },
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1 },
     }
 );
 
-my $bib_list = $query->param('bib_list');
+my $shelfid = $query->param('shelfid');
 my $format  = $query->param('format');
 my $dbh     = C4::Context->dbh;
 
-if ($bib_list && $format) {
+if ($shelfid && $format) {
 
-    my @bibs = split( /\//, $bib_list );
-
+    my @shelf               = GetShelf($shelfid);
+    my ($items, $totitems)  = GetShelfContents($shelfid);
     my $marcflavour         = C4::Context->preference('marcflavour');
     my $output;
 
     # retrieve biblios from shelf
     my $firstpass = 1;
-    foreach my $biblio (@bibs) {
+    foreach my $biblio (@$items) {
+	my $biblionumber = $biblio->{biblionumber};
 
-	my $record = GetMarcBiblio($biblio);
+	my $record = GetMarcBiblio($biblionumber);
 
 	switch ($format) {
 	    case "iso2709" { $output .= $record->as_usmarc(); }
 	    case "ris"     { $output .= marc2ris($record); }
-	    case "bibtex"  { $output .= marc2bibtex($record, $biblio); }
+	    case "bibtex"  { $output .= marc2bibtex($record, $biblionumber); }
 	    # We're in the case of a csv profile (firstpass is used for headers printing) :
-            case /^\d+$/   { $output .= marc2csv($biblio, $format, $firstpass); }
+	    case /^\d+$/   { $output .= marc2csv($biblionumber, $format, $firstpass); }
 	}
-        $firstpass = 0;
-
+	$firstpass = 0;
     }
 
     # If it was a CSV export we change the format after the export so the file extension is fine
@@ -80,11 +80,11 @@ if ($bib_list && $format) {
     print $query->header(
 	-type => 'application/octet-stream',
 	-'Content-Transfer-Encoding' => 'binary',
-	-attachment=>"cart.$format");
+	-attachment=>"shelf.$format");
     print $output;
 
-} else { 
+} else {
     $template->param(csv_profiles => GetCsvProfilesLoop());
-    $template->param(bib_list => $bib_list); 
+    $template->param(shelfid => $shelfid); 
     output_html_with_http_headers $query, $cookie, $template->output;
 }
