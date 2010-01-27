@@ -2705,14 +2705,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.064';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_1');
-    $dbh->do('ALTER TABLE issuingrules DROP FOREIGN KEY issuingrules_ibfk_2');
-    SetVersion ($DBversion);
-    print "Upgrade to $DBversion done (deleting contraints in issuingrules)\n";
-}
-
 $DBversion = '3.01.00.065';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do('ALTER TABLE issuingrules ADD COLUMN `renewalsallowed` smallint(6) NOT NULL default "0" AFTER `issuelength`;');
@@ -2756,19 +2748,8 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = "3.01.00.068";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("ALTER TABLE issuingrules ADD
-			COLUMN `finedays` int(11) default NULL AFTER `fine`,
-			ADD COLUMN `renewalsallowed` smallint(6) default NULL, 
-			ADD COLUMN `reservesallowed` smallint(6) default NULL;
-			");
-	my $sth = $dbh->prepare("SELECT itemtype, renewalsallowed FROM itemtypes");
-    $sth->execute();
-	my $sthupd = $dbh->prepare("UPDATE issuingrules SET renewalsallowed = ? WHERE itemtype = ?");
-	while(my $row = $sth->fetchrow_hashref){
-		  $sthupd->execute($row->{renewalsallowed}, $row->{itemtype});
-	}
-	$dbh->do('ALTER TABLE itemtypes DROP COLUMN `renewalsallowed`;');
-	print "Upgrade done (Adding finedays renewalsallowed, and reservesallowed fields in issuingrules table)\n";
+	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
+	print "Upgrade done (Adding finedays in issuingrules table)\n";
 }
 
 
@@ -2985,11 +2966,9 @@ BUDGETCONSTRAINTS
     $dbh->do(<<BUDGETDROPDATES);
 ALTER TABLE `aqbudgets`
    DROP startdate,
-   DROP enddate,
-   DROP bookfundid
+   DROP enddate
 BUDGETDROPDATES
 
-    $dbh->do("DROP TABLE aqbookfund ");
 
     $dbh->do("DROP TABLE IF EXISTS `aqbudgets_planning` ");
     $dbh->do("CREATE TABLE  `aqbudgets_planning` (
@@ -3010,6 +2989,8 @@ BUDGETDROPDATES
                     ADD COLUMN  `sort1_authcat` varchar(10) default NULL,
                     ADD COLUMN  `sort2_authcat` varchar(10) default NULL" );
 
+                # cannot do until aqorderbreakdown removed
+#    $dbh->do("DROP TABLE aqbookfund ");
 
 
 
@@ -3093,6 +3074,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     );
 
     $dbh->do(qq| DROP TABLE aqorderbreakdown |);
+    $dbh->do('DROP TABLE aqbookfund');
     print "Upgrade to $DBversion done (New aqorders_items table for acqui)\n";
     SetVersion ($DBversion);
 }
@@ -3145,14 +3127,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(  qq# INSERT INTO `systempreferences` VALUES ('intranetbookbag','1','','If ON, enables display of Cart feature in the intranet','YesNo')  #);
 
     print "Upgrade to $DBversion done (intranetbookbag syspref added)\n";
-    SetVersion ($DBversion);
-}
-
-$DBversion = "3.01.00.089";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do(  qq# ALTER TABLE authorised_values ADD COLUMN `lib_opac` VARCHAR(80) default NULL AFTER `lib` #);
-
-    print "Upgrade to $DBversion done (opac authorised values added)\n";
     SetVersion ($DBversion);
 }
 
@@ -3291,13 +3265,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.100";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('casAuthentication', '1', '', 'Enable or disable CAS authentication', 'YesNo'), ('casLogout', '1', '', 'Does a logout from Koha should also log out of CAS ?', 'YesNo'), ('casServerUrl', 'https://localhost:8443/cas', '', 'URL of the cas server', 'Free')");
-	print "Upgrade done (added CAS authentication system preferences)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.01.00.101";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(
@@ -3313,7 +3280,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 $DBversion = "3.01.00.102";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES (9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)')");
+    $dbh->do(
+    "UPDATE permissions set description = 'Edit catalog (Modify bibliographic/holdings data)' where module_bit = 9 and code = 'edit_catalogue'"
+    );
 	print "Upgrade done (fixed spelling error in edit_catalogue permission)\n";
     SetVersion ($DBversion);
 }
