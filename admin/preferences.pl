@@ -43,8 +43,13 @@ sub GetTab {
 
     my $tab_template = C4::Output::gettemplate( 'admin/preferences/' . $tab . '.pref', 'intranet', $input );
 
+    my $active_currency = GetCurrency();
+    my $local_currency;
+    if ($currency) {
+        $local_currency = $active_currency->{currency};
+    }
     $tab_template->param(
-        local_currency => GetCurrency()->{'currency'}, # currency code is used, because we do not know how a given currency is formatted.
+        local_currency => $local_currency, # currency code is used, because we do not know how a given currency is formatted.
     );
 
     return YAML::Syck::Load( $tab_template->output() );
