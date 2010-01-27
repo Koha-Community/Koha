@@ -1,6 +1,6 @@
 <h5>System Preferences</h5>
 <ul>
-	<li><a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a></li>
+	<li><a href="/cgi-bin/koha/admin/preferences.pl">System Preferences</a></li>
 </ul>
 
 <h5>Basic parameters</h5>

@@ -99,4 +99,3 @@
     <!-- TMPL_IF EXPR="virtualshelves || intranetbookbag" -->
         <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"></script>
     <!-- /TMPL_IF -->
-

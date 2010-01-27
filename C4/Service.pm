@@ -85,7 +85,7 @@ sub init {
 
     our $cookie = $cookie_; # I have no desire to offend the Perl scoping gods
 
-    $class->return_error( type => 'auth', message => $status ) if ( $status ne 'ok' );
+    $class->return_error( 'auth', $status ) if ( $status ne 'ok' );
 
     return ( $query, new C4::Output::JSONStream );
 }

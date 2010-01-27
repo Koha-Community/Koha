@@ -1,0 +1,79 @@
+# Broken, omitted: TemplateEncoding
+
+Staff Client:
+    Appearance:
+        -
+            - Use the
+            - pref: template
+              choices: staff-templates
+            - theme on the staff interface.
+        -
+            - "Enable the following languages on the staff interface:"
+            - pref: language
+              type: staff-languages
+        -
+            - "The staff client is located at http://"
+            - pref: staffClientBaseURL
+              class: url
+            - .
+        -
+            - Include the stylesheet at
+            - pref: intranetstylesheet
+              class: url
+            - on all pages in the staff interface, instead of the default. (This should be a complete URL, starting with <code>http://</code>.)
+        -
+            - Include the stylesheet <code><!-- TMPL_VAR NAME="themelang" -->/css/</code>
+            - pref: intranetcolorstylesheet
+              class: file
+            - on all pages in the staff interface. (Leave blank to disable.)
+        -
+            - Use include files from the
+            - pref: intranet_includes
+              class: file
+            - directory in the template directory, instead of <code>includes/</code>. (Leave blank to disable)
+        -
+            - "Show the following HTML in its own column on the main page of the staff client:"
+            - pref: IntranetmainUserblock
+              type: textarea
+              class: code
+        -
+            - "Show the following HTML in the More menu at the top of each page on the staff client (should be a list of links or blank):"
+            - pref: IntranetNav
+              type: textarea
+              class: code
+        -
+            - "Include the following JavaScript on all pages in the staff interface:"
+            - pref: intranetuserjs
+              type: textarea
+              class: code
+        -
+            - Use the Yahoo UI libraries
+            - pref: yuipath
+              choices:
+                  local: "included with Koha (faster, will work if internet goes down)."
+                  "http://yui.yahooapis.com/2.5.1/build": "from Yahoo's own servers (less demand on your servers)."
+    Options:
+        -
+            - pref: viewMARC
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to view records in plain MARC form on the staff client.
+        -
+            - pref: viewLabeledMARC
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to view records in labeled MARC form on the staff client.
+        -
+            - pref: viewISBD
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to view records in ISBD form on the staff client.
+        -
+            - pref: HidePatronName
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - the names of patrons that have items checked out or on hold on detail pages or the "Place Hold" screen.

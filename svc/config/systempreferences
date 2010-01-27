@@ -1,0 +1,112 @@
+#!/usr/bin/perl
+
+# Copyright 2009 Jesse Weaver
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
+
+use strict;
+use warnings;
+
+use C4::Context;
+use C4::Service;
+use C4::Log;
+
+=head1 NAME
+
+svc/config/systempreferences - Web service for setting system preferences
+
+=head1 SYNOPSIS
+
+  POST /svc/config/systempreferences/insecure
+  POST /svc/config/systempreferences/
+
+=head1 DESCRIPTION
+
+This service is used to set system preferences, either one at a time or in
+batches.
+
+=head1 METHODS
+
+=cut
+
+our ( $query, $response ) = C4::Service->init( parameters => 1 );
+
+=head2 set_preference
+
+=over 4
+
+POST /svc/config/systempreferences/$preference
+
+value=$value
+
+=back
+
+Used to set a single system preference.
+
+=cut
+
+sub set_preference {
+    my ( $preference ) = @_;
+
+    unless ( C4::Context->config('demo') ) {
+        my $value = join( ',', $query->param( 'value' ) );
+        C4::Context->set_preference( $preference, $value );
+        logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $preference . " | " . $value );
+    }
+
+    C4::Service->return_success( $response );
+}
+
+=head2 set_preferences
+
+=over 4
+
+POST /svc/config/systempreferences/
+
+pref_$pref1=$value1&pref_$pref2=$value2
+
+=back
+
+Used to set several system preferences at once. Each preference you want to set
+should be sent prefixed with pref. If you wanted to turn off the
+GranularPermissions syspref, for instance, you would POST the following:
+
+pref_GranularPermissions=0
+
+=cut
+
+sub set_preferences {
+    unless ( C4::Context->config( 'demo' ) ) {
+        foreach my $param ( $query->param() ) {
+            my ( $pref ) = ( $param =~ /pref_(.*)/ );
+
+            next if ( !defined( $pref ) );
+
+            my $value = join( ',', $query->param( $param ) );
+
+            C4::Context->set_preference( $pref, $value );
+            logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $pref . " | " . $value );
+        }
+    }
+
+    C4::Service->return_success( $response );
+}
+
+C4::Service->dispatch(
+    [ 'POST /([A-Za-z0-9_-]+)', [ 'value' ], \&set_preference ],
+    [ 'POST /', [], \&set_preferences ],
+);
