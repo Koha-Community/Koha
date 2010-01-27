@@ -30,6 +30,7 @@ use C4::Branch;
 use C4::Debug;
 use YAML;
 use URI::Escape;
+use C4::Charset;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -446,6 +447,7 @@ sub getRecords {
                     # not an index scan
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
+            		warn $results[$i-1]->record($j)->render() ;
 
                         # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] = $record;
@@ -1405,6 +1407,7 @@ sub searchResults {
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
+	    SetUTF8Flag($marcrecord);
 		my $biblionumber;
 
         if(not $scan){
@@ -1672,7 +1675,6 @@ sub searchResults {
         }
 
         # XSLT processing of some stuff
-        # FIXME : This needs some work in order to be more flexible : Can not use a result list for intranet different from OPAC
         if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
                 $oldbiblio->{biblionumber}, $marcrecord, C4::Context->preference("XSLTResultsDisplay") );
