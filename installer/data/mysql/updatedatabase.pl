@@ -1,3 +1,5 @@
+-	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
+-	print "Upgrade done (Adding finedays in issuingrules table)\n";
 #!/usr/bin/perl
 
 
@@ -2725,11 +2727,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = '3.01.00.066';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("ALTER TABLE issuingrules 
-			ADD COLUMN `finedays` int(11) default NULL AFTER `fine`,
-			ADD COLUMN `renewalsallowed` smallint(6) default NULL, 
-			ADD COLUMN `reservesallowed` smallint(6) default NULL;
-			");
+    $dbh->do('ALTER TABLE issuingrules ADD COLUMN `reservesallowed` smallint(6) NOT NULL default "0" AFTER `renewalsallowed`;');
     
     my $maxreserves = C4::Context->preference('maxreserves');
     $sth = $dbh->prepare('UPDATE issuingrules SET reservesallowed = ?;');
@@ -2748,10 +2746,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchmod', 'Perform batch modification of items')");
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchdel', 'Perform batch deletion of items')");
     print "Upgrade to $DBversion done (added permissions for batch modification and deletion)\n";
+    SetVersion ($DBversion);
 }
 
 $DBversion = "3.01.00.068";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
+	print "Upgrade done (Adding finedays in issuingrules table)\n";
+    SetVersion ($DBversion);
 }
 
 
@@ -3369,7 +3371,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.102";
+$DBversion = "3.01.00.109";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(qq{
 	ALTER TABLE `export_format` ADD `encoding` VARCHAR(255) NOT NULL AFTER `subfield_separator`
@@ -3378,7 +3380,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.02.00.015';
+$DBversion = '3.01.00.110';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do('ALTER TABLE `categories` ADD COLUMN `enrolmentperioddate` DATE NULL DEFAULT NULL AFTER `enrolmentperiod`');
     print "Upgrade done (Add enrolment period date support)\n";
