@@ -1,11 +1,12 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->Download shelf<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Download cart<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body id="opac-downloadcart">
-<!-- TMPL_IF NAME="format" -->
-    Your Download should automatically start
+<body id="opac-downloadcart" style="padding:1em;">
+<div class="container"><!-- TMPL_IF NAME="format" -->
+    <p>Your download should begin automatically.</p>
 <!-- TMPL_ELSE -->
-<div id="export" class="detailtagcell">    <form method="post" action="/cgi-bin/koha/opac-downloadcart.pl">
-	<label for="format">Download cart:</label>
+<form method="post" action="/cgi-bin/koha/opac-downloadcart.pl">
+	<fieldset class="rows">
+	<ol><li><label for="format">Download cart:</label>
         <select name="format" id="format">
 	    <option value="">-- Choose Format --</option>
 	    <option value="iso2709">iso2709</option>
@@ -15,13 +16,15 @@
 	    <option value="<!-- TMPL_VAR NAME="export_format_id" -->">CSV - <!-- TMPL_VAR NAME="profile" --></option>
 	    <!-- /TMPL_LOOP -->
 
-	</select>
+	</select></li></ol>
+</fieldset>
+<fieldset class="action">
 	<input type="hidden" name="bib_list" value="<!-- TMPL_VAR NAME="bib_list" -->" />
 	<input type="submit" name="save" value="Go" />
+</fieldset>
     </form>
 
-    <p><a class="button" href="#" onclick="javascript:window.close()">Close this window</a></p>
-    </div>
+    <p><a class="button close" href="#">Close this window</a></p>
 
 <!-- /TMPL_IF -->
 </body>

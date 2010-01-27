@@ -1,14 +1,15 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Download shelf</title>
+<title>Koha &rsaquo; Download shelf</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
+<body style="padding:1em;">
 <!-- TMPL_IF NAME="format" -->
-    Your Download should automatically start
+    <p>Your download should begin automatically.</p>
 <!-- TMPL_ELSE -->
-<div id="export" class="detailtagcell">    <form method="post" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
-	<fieldset class="row">
+<form method="post" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
+	<fieldset class="rows">
 	<legend>Download Shelf</legend>
+	<ol><li>
 	<label for="format">Format : </label>
         <select name="format" id="format">
 	    <option value="">-- Choose Format --</option>
@@ -18,15 +19,13 @@
 	    <!-- TMPL_LOOP NAME="csv_profiles" -->
 	    <option value="<!-- TMPL_VAR NAME="export_format_id" -->">CSV - <!-- TMPL_VAR NAME="profile" --></option>
 	    <!-- /TMPL_LOOP -->
-
 	</select>
-	<input type="hidden" name="shelfid" value="<!-- TMPL_VAR NAME="shelfid" -->" />
-	<input type="submit" name="save" value="Go" />
+	</li></ol>
+	</fieldset>
+	<fieldset class="action"><input type="hidden" name="shelfid" value="<!-- TMPL_VAR NAME="shelfid" -->" />
+	<input type="submit" name="save" value="Save" />  <a class="cancel close" href="#">Cancel</a>
 	</fieldset>
     </form>
-
-    <p><a class="button" href="#" onclick="javascript:window.close()">Close this window</a></p>
-    </div>
 
 <!-- /TMPL_IF -->
 </body>
