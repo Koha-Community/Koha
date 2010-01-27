@@ -20,6 +20,8 @@ package C4::Charset;
 use strict;
 use MARC::Charset qw/marc8_to_utf8/;
 use Text::Iconv;
+use C4::Debug;
+use Unicode::Normalize;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -31,6 +33,7 @@ BEGIN {
     @EXPORT = qw(
         IsStringUTF8ish
         MarcToUTF8Record
+        SetUTF8Flag
         SetMarcUnicodeFlag
         StripNonXmlChars
     );
@@ -106,6 +109,86 @@ sub IsStringUTF8ish {
 
     return 1 if utf8::is_utf8($str);
     return utf8::decode($str);
+}
+
+=head2 SetUTF8Flag
+
+=over 4
+
+my $marc_record = SetUTF8Flag($marc_record);
+
+=back
+
+This function sets the PERL UTF8 flag for data.
+It is required when using new_from_usmarc 
+since MARC::File::USMARC does not handle PERL UTF8 setting.
+When editing unicode marc records fields and subfields, you
+would end up in double encoding without using this function. 
+
+FIXME
+In my opinion, this function belongs to MARC::Record and not
+to this package.
+But since it handles charset, and MARC::Record, it finds its way in that package
+
+=cut
+
+sub SetUTF8Flag{
+	my ($record)=@_;
+	return unless ($record && $record->fields());
+	foreach my $field ($record->fields()){
+		if ($field->tag()>=10){
+			my @subfields;
+			foreach my $subfield ($field->subfields()){
+				push @subfields,($$subfield[0],NormalizeString($$subfield[1]));
+			}
+			my $newfield=MARC::Field->new(
+							$field->tag(),
+							$field->indicator(1),
+							$field->indicator(2),
+							@subfields
+						);
+			$field->replace_with($newfield);
+		}
+	}
+}
+
+=head2 NormalizeString
+
+=over 4
+
+    my $normalized_string=NormalizeString($string);
+
+=back
+	Given 
+	    a string
+        nfc : If you want to set NFC and not NFD
+        transform : If you expect all the signs to be removed
+    Sets the PERL UTF8 Flag on your initial data if need be
+    and applies cleaning if required 
+    
+	Returns a utf8 NFD normalized string
+	
+	Sample code :
+	my $string=NormalizeString ("l'ornithoptère");
+    #results into ornithoptère in NFD form and sets UTF8 Flag
+=cut
+
+sub NormalizeString{
+	my ($string,$nfc,$transform)=@_;
+	utf8::decode($string) unless (utf8::is_utf8($string));
+	if ($nfc){
+		$string= NFD($string);
+	}
+	else {
+		$string=NFC($string);
+	}
+	if ($transform){
+    $string=~s/\<|\>|\^|\;|\.|\?|,|\-|\(|\)|\[|\]|\{|\}|\$|\%|\!|\*|\:|\\|\/|\&|\"|\'/ /g;
+	#removing one letter words "d'" "l'"  was changed into "d " "l " 
+    $string=~s/\b\S\b//g;
+    $string=~s/\s+$//g;
+	}
+    return $string; 
 }
 
 =head2 MarcToUTF8Record
