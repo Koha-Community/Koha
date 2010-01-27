@@ -23,19 +23,31 @@
 use strict;
 use warnings;
 
+use CGI;
+
 use C4::Auth;
 use C4::Output;
-use CGI;
 use C4::Members;
 use C4::Branch;
-
 use C4::Dates qw/format_date/;
-my $input=new CGI;
 
+my $input = CGI->new;
 
-my $borrowernumber=$input->param('borrowernumber');
 #get borrower details
-my $data=GetMember('borrowernumber'=>$borrowernumber);
+my $data = undef;
+my $borrowernumber = undef;
+my $cardnumber = undef;
+
+if ($input->param('cardnumber')) {
+    $cardnumber = $input->param('cardnumber');
+    $data = GetMember(cardnumber => $cardnumber);
+    $borrowernumber = $data->{'borrowernumber'}; # we must define this as it is used to retrieve other data about the patron
+}
+if ($input->param('borrowernumber')) {
+    $borrowernumber = $input->param('borrowernumber');
+    $data = GetMember(borrowernumber => $borrowernumber);
+}
+
 my $order=$input->param('order') || '';
 my $order2=$order;
 if ($order2 eq ''){
@@ -47,7 +59,7 @@ if ($limit){
     if ($limit eq 'full'){
 		$limit=0;
     }
-} 
+}
 else {
   $limit=50;
 }
@@ -86,8 +98,8 @@ if ( $data->{'category_type'} eq 'C') {
 }
 
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
-if (! $limit){ 
-	$limit = 'full'; 
+if (! $limit){
+	$limit = 'full';
 }
 
 my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
@@ -117,7 +129,7 @@ $template->param(
 			   			branchcode => $data->{'branchcode'},
 			   			is_child        => ($data->{'category_type'} eq 'C'),
 			   			branchname => GetBranchName($data->{'branchcode'}),
-						showfulllink => ($count > 50),					
+						showfulllink => ($count > 50),
 						loop_reading => \@loop_reading);
 output_html_with_http_headers $input, $cookie, $template->output;
 
