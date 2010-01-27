@@ -28,7 +28,7 @@ use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
 use C4::Log;
 use C4::Output;
-use C4::Bookfund qw(GetLocalCurrency);
+use C4::Budget qw(GetCurrency);
 use File::Spec;
 use IO::File;
 use YAML::Syck qw();
@@ -44,7 +44,7 @@ sub GetTab {
     my $tab_template = C4::Output::gettemplate( 'admin/preferences/' . $tab . '.pref', 'intranet', $input );
 
     $tab_template->param(
-        local_currency => GetLocalCurrency()->{'currency'}, # currency code is used, because we do not know how a given currency is formatted.
+        local_currency => GetCurrency()->{'currency'}, # currency code is used, because we do not know how a given currency is formatted.
     );
 
     return YAML::Syck::Load( $tab_template->output() );
