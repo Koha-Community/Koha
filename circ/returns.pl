@@ -549,5 +549,16 @@ $template->param(
     overduecharges => $overduecharges,
 );
 
+my $itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );
+if ( $itemnumber ) {
+    my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+    if ( ! ( $holdingBranch eq $collectionBranch ) ) {
+        $template->param(
+          collectionItemNeedsTransferred => 1,
+          collectionBranch => GetBranchName($collectionBranch),
+        );
+    }
+}                                                                                                            
+
 # actually print the page!
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -3340,7 +3340,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("
         INSERT INTO permissions (module_bit, code, description) 
         VALUES ( 13, 'rotating_collections', 'Manage Rotating collections')" );
-	print "Upgrade to $DBversion done (added collection and collection_tracking tables for rotataing collection functionnality)\n";
+	print "Upgrade to $DBversion done (added collection and collection_tracking tables for rotating collections functionality)\n";
     SetVersion ($DBversion);
 }
 $DBversion = "3.01.00.106";

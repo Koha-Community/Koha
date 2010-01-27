@@ -56,6 +56,11 @@ function Dopop(link) {
 	<div id="yui-main">
 
 <div class="yui-g">
+
+<!-- TMPL_IF Name="collectionItemNeedsTransferred" -->
+	<div class="dialog message">This item is part of a Rotating Collection and needs to be Transferred to <!-- TMPL_VAR NAME="collectionBranch" --></div>
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="wrongbranch" -->
 <div class="dialog alert"><h3>Cannot Check In</h3><p>This item must be checked in at its home library. <strong>NOT CHECKED IN</strong></p>
 </div>

@@ -406,6 +406,34 @@ sub TransferCollection {
   
 }
 
+=item GetCollectionItemBranches
+ my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+=cut
+sub GetCollectionItemBranches {
+  my ( $itemnumber ) = @_;
+
+  if ( ! $itemnumber ) {
+    return;
+  }
+
+  my $dbh = C4::Context->dbh;
+
+  my ( $sth, @results );
+  $sth = $dbh->prepare("SELECT holdingbranch, colBranchcode FROM items, collections, collections_tracking 
+                        WHERE items.itemnumber = collections_tracking.itemnumber
+                        AND collections.colId = collections_tracking.colId
+                        AND items.itemnumber = ?");
+  $sth->execute( $itemnumber );
+    
+  my $row = $sth->fetchrow_hashref;
+  
+  $sth->finish;
+  
+  return (
+      $$row{'holdingbranch'},
+      $$row{'colBranchcode'},
+  );  
+}
 
 =item isItemInThisCollection
 $inCollection = isItemInThisCollection( $itemnumber, $colId );
