@@ -45,7 +45,7 @@ sub GetTab {
 
     my $active_currency = GetCurrency();
     my $local_currency;
-    if ($currency) {
+    if ($active_currency) {
         $local_currency = $active_currency->{currency};
     }
     $tab_template->param(
