@@ -1032,7 +1032,7 @@ CREATE TABLE `creator_batches` (
   `timestamp` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `branch_code` varchar(10) NOT NULL DEFAULT 'NB',
   `creator` char(15) NOT NULL DEFAULT 'Labels',
-  PRIMARY KEY (`label_id`) USING BTREE,
+  PRIMARY KEY (`label_id`),
   KEY `branch_fk_constraint` (`branch_code`),
   KEY `item_fk_constraint` (`item_number`),
   KEY `borrower_fk_constraint` (`borrower_number`),
@@ -1052,7 +1052,7 @@ CREATE TABLE `creator_images` (
   `image_id` int(4) NOT NULL AUTO_INCREMENT,
   `imagefile` mediumblob,
   `image_name` char(20) NOT NULL DEFAULT 'DEFAULT',
-  PRIMARY KEY (`image_id`) USING BTREE,
+  PRIMARY KEY (`image_id`),
   UNIQUE KEY `image_name_index` (`image_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1078,7 +1078,7 @@ CREATE TABLE `creator_layouts` (
   `format_string` varchar(210) NOT NULL DEFAULT 'barcode',
   `layout_xml` text NOT NULL,
   `creator` char(15) NOT NULL DEFAULT 'Labels',
-  PRIMARY KEY (`layout_id`) USING BTREE
+  PRIMARY KEY (`layout_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -1442,7 +1442,7 @@ CREATE TABLE `printers_profile` (
   `units` char(20) NOT NULL default 'POINT',
   `creator` char(15) NOT NULL DEFAULT 'Labels',
   PRIMARY KEY  (`profile_id`),
-  UNIQUE KEY `printername` (`printer_name`,`template_id`,`paper_bin`,`creator`) USING BTREE
+  UNIQUE KEY `printername` (`printer_name`,`template_id`,`paper_bin`,`creator`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
