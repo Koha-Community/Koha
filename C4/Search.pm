@@ -940,6 +940,7 @@ sub getIndexes{
                     'holdingbranch',
                     'homebranch',
                     'issues',
+                    'item',
                     'itemnumber',
                     'itype',
                     'Local-classification',
