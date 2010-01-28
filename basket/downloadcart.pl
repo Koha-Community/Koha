@@ -57,21 +57,24 @@ if ($bib_list && $format) {
     my $marcflavour         = C4::Context->preference('marcflavour');
     my $output;
 
-    # retrieve biblios from shelf
-    my $firstpass = 1;
-    foreach my $biblio (@bibs) {
+    # CSV   
+    if ($format =~ /^\d+$/) {
 
-	my $record = GetMarcBiblio($biblio);
+        $output = marc2csv(\@bibs, $format);
+    
+    # Other formats
+    } else {
 
-	switch ($format) {
-	    case "iso2709" { $output .= $record->as_usmarc(); }
-	    case "ris"     { $output .= marc2ris($record); }
-	    case "bibtex"  { $output .= marc2bibtex($record, $biblio); }
-	    # We're in the case of a csv profile (firstpass is used for headers printing) :
-            case /^\d+$/   { $output .= marc2csv($biblio, $format, $firstpass); }
+	foreach my $biblio (@bibs) {
+
+	    my $record = GetMarcBiblio($biblio);
+
+	    switch ($format) {
+		case "iso2709" { $output .= $record->as_usmarc(); }
+		case "ris"     { $output .= marc2ris($record); }
+		case "bibtex"  { $output .= marc2bibtex($record, $biblio); }
+	    }
 	}
-        $firstpass = 0;
-
     }
 
     # If it was a CSV export we change the format after the export so the file extension is fine
