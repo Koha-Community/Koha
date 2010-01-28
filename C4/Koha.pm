@@ -1111,7 +1111,7 @@ sub GetAuthorisedValues {
     my $sth = $dbh->prepare($query);
     $sth->execute;
 	while (my $data=$sth->fetchrow_hashref) {
-	    if ($selected eq $data->{'authorised_value'} ) {
+	    if ($selected && $selected eq $data->{'authorised_value'} ) {
 		    $data->{'selected'} = 1;
 	    }
 	    if ($opac && $data->{'lib_opac'}) {
