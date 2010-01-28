@@ -1,0 +1,15 @@
+# CSV Export custom processing example
+# (should be name according to the csv export id : 1.yaml for example)
+--- |
+# preprocessing
+# Deactivate quoting
+$csv->quote_char('');
+--- |
+# postprocessing
+# Adding a trailer at the end of the CSV file
+$output .= "This is a trailer";
+--- |
+# field processing
+# Adding "Word " before each 001
+if ($marcfield eq '001') { $value = 'Word ' . $value; }
+---
