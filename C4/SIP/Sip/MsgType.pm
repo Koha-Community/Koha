@@ -904,7 +904,7 @@ sub summary_info {
 
     syslog("LOG_DEBUG", "summary_info: list = (%s)", join(", ", @{$itemlist}));
     foreach my $i (@{$itemlist}) {
-        $resp .= add_field($fid, $i);
+        $resp .= add_field($fid, $i->{barcode});
     }
 
     return $resp;

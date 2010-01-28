@@ -130,7 +130,7 @@
 
 <!-- TMPL_IF name="add_form" -->
     <!--  add or modify a budget period   -->
-<!--TMPL_IF Name="duplicates"--><!--TMPL_INCLUDE Name="duplicates.inc"--><!--/TMPL_IF-->
+
     <!-- TMPL_IF name="budget_period_id" -->
         <h3>Modify root budget</h3>
     <!-- TMPL_ELSE -->
@@ -142,7 +142,6 @@
     <!-- display information about the budget period that must be added or modified -->
     <!-- ################################################################################# -->
     <input type="hidden" name="op" value="add_validate" />
-    <input type="hidden" name="confirm_not_duplicate" value="<!--TMPL_VAR Name="confirm_not_duplicate"-->" />
     <input type="hidden" name="budget_period_id" value="<!-- TMPL_VAR name="budget_period_id" -->" />
     <ol>
     <li>
@@ -253,7 +252,7 @@
 <!--  DEFAULT  display budget periods list -->
 <!-- TMPL_IF name="else" -->
     <h2>Root budgets administration</h2>
-    <!-- TMPL_IF name="cur" --><b>Currency = <!-- TMPL_VAR name="cur" --></b><!-- /TMPL_IF -->
+    <p><!-- TMPL_IF name="cur" --><b>Currency = <!-- TMPL_VAR name="cur" --></b><!-- /TMPL_IF --></p>
     <table id="periodsh">
     <thead>
 	    <tr>
@@ -276,8 +275,8 @@
 	        <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR name="budget_period_id" -->" title="View budgets for <!-- TMPL_VAR name="budget_period_description" -->"><!-- TMPL_VAR name="budget_period_description" --></a></td>
 	        <td><!-- TMPL_VAR name="budget_period_startdate" --></td>
 	        <td><!-- TMPL_VAR name="budget_period_enddate" --></td>
-	        <td><!-- TMPL_IF name="budget_period_active" --><span style="color:#669900;">Active</span>&nbsp;<!-- TMPL_ELSE --><!-- /TMPL_IF --> </td>
-	        <td> <!-- TMPL_IF name="budget_period_locked" --><span style="color:#cc0000;">Locked</span>&nbsp;<!-- TMPL_ELSE --><!-- /TMPL_IF --> </td>
+	        <td><!-- TMPL_IF name="budget_period_active" --><span style="color:green;">Active</span>&nbsp;<!-- TMPL_ELSE --><!-- /TMPL_IF --> </td>
+	        <td> <!-- TMPL_IF name="budget_period_locked" --><span style="color:green;">Locked</span>&nbsp;<!-- TMPL_ELSE --><!-- /TMPL_IF --> </td>
 	        <td align='right'><!-- TMPL_VAR NAME="budget_period_total" --></td>
 	        <td>
 	            <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;budget_period_id=<!-- TMPL_VAR name="budget_period_id" escape="HTML" -->">Edit</a>

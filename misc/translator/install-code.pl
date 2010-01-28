@@ -33,7 +33,7 @@ sub install_code {
         print $_, " : ", $interface, "\n";
         my $cmd = "./tmpl_process3.pl install -r " . 
                   "-i ../../koha-tmpl/$interface-tmpl/prog/en/ " .
-                  "-o ../../koha-tmpl/$interface-tmpl/prog/$code/ " .
+                  "-o ../../koha-tmpl/$interface-tmpl/prog/$code " .
                   "-s po/$_";
         system $cmd;
     }

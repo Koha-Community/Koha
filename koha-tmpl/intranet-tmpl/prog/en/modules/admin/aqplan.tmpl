@@ -9,18 +9,12 @@ Budget planning
 <link href="<!-- TMPL_VAR NAME="yuipath" -->/menu/assets/menu.css" rel="stylesheet" type="text/css" />
 <link href="<!-- TMPL_VAR NAME="yuipath" -->/container/assets/skins/sam/container.css"  rel="stylesheet" type="text/css" />
 
-</head>
-<body>
-<!-- TMPL_INCLUDE NAME="header.inc" -->
-<!-- TMPL_INCLUDE NAME="budgets-admin-search.inc" -->
-
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/yahoo/yahoo.js" type="text/javascript"></script>
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/event/event.js" type="text/javascript"></script>
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/dom/dom.js" type="text/javascript"></script>
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/menu/menu.js" type="text/javascript"></script>
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/container/menu.js" type="text/javascript"></script>
 <script  src="<!-- TMPL_VAR NAME="yuipath" -->/yahoo-dom-event/yahoo-dom-event.js"  type="text/javascript"></script>
-
 
 <script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
 <script type="text/javascript">
@@ -84,7 +78,13 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
 </script>
 
-
+<title>
+Budget planning
+</title>
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="budgets-admin-search.inc" -->
 
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
@@ -154,6 +154,8 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 <!-- Budget Lines -->
 
     <!-- TMPL_IF NAME="budget_lines" -->
+
+    <!-- TMPL_IF name="cur" --><p><b>Currency = <!-- TMPL_VAR name="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></p><!-- /TMPL_IF -->
 
     <table id="plan" width="100%">
     <thead>
@@ -257,7 +259,6 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
     <!-- TMPL_ELSE -->
         <span><b>Cells contain estimated values only.</b></span><br />
     <!-- /TMPL_IF -->
-    <span><b>Currency = <!-- TMPL_VAR NAME="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></span><br />
     <!-- TMPL_IF name="budget_period_locked" -->
         <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled='disabled'/> -->
     <!-- TMPL_ELSE -->

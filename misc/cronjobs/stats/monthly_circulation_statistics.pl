@@ -67,8 +67,8 @@ my $sth3 = $dbh->prepare ("SELECT COUNT(*) FROM biblioitems,items,statistics WHE
 
 # number of renewals for this library
 my $sth4 = $dbh->prepare ("SELECT COUNT(statistics.itemnumber) FROM statistics,items,biblioitems
-	WHERE YEAR(statistics.datetime)=YEAR(SUBDATE('2007-01-01',INTERVAL 1 MONTH))
-	AND MONTH(statistics.datetime)=MONTH(SUBDATE('2007-01-01',INTERVAL 1 MONTH))
+	WHERE YEAR(statistics.datetime)=YEAR(SUBDATE(CURDATE(),INTERVAL 1 MONTH))
+	AND MONTH(statistics.datetime)=MONTH(SUBDATE(CURDATE(),INTERVAL 1 MONTH))
 	AND statistics.itemnumber=items.itemnumber
 	AND biblioitems.ccode=?
         AND homebranch=?

@@ -1269,16 +1269,20 @@ Return date is also in ISO format.
 
 sub GetExpiryDate {
     my ( $categorycode, $dateenrolled ) = @_;
-    my $enrolmentperiod = 12;   # reasonable default
+    my $enrolments;
     if ($categorycode) {
         my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("select enrolmentperiod from categories where categorycode=?");
+        my $sth = $dbh->prepare("SELECT enrolmentperiod,enrolmentperioddate FROM categories WHERE categorycode=?");
         $sth->execute($categorycode);
-        $enrolmentperiod = $sth->fetchrow;
+        $enrolments = $sth->fetchrow_hashref;
     }
     # die "GetExpiryDate: for enrollmentperiod $enrolmentperiod (category '$categorycode') starting $dateenrolled.\n";
-    my @date = split /-/,$dateenrolled;
-    return sprintf("%04d-%02d-%02d", Add_Delta_YM(@date,0,$enrolmentperiod));
+    my @date = split (/-/,$dateenrolled);
+    if($enrolments->{enrolmentperiod}){
+        return sprintf("%04d-%02d-%02d", Add_Delta_YM(@date,0,$enrolments->{enrolmentperiod}));
+    }else{
+        return $enrolments->{enrolmentperioddate};
+    }
 }
 
 =head2 checkuserpassword (OUEST-PROVENCE)
@@ -1724,7 +1728,7 @@ Looks up the different title . Returns array  with all borrowers title
 =cut
 
 sub GetTitles {
-    my @borrowerTitle = split /,|\|/,C4::Context->preference('BorrowersTitles');
+    my @borrowerTitle = split (/,|\|/,C4::Context->preference('BorrowersTitles'));
     unshift( @borrowerTitle, "" );
     my $count=@borrowerTitle;
     if ($count == 1){
@@ -1827,9 +1831,8 @@ this function get all borrowers who haven't borrowed since the date given on inp
 =cut
 
 sub GetBorrowersWhoHaveNotBorrowedSince {
-### TODO : It could be dangerous to delete Borrowers who have just been entered and who have not yet borrowed any book. May be good to add a dateexpiry or dateenrolled filter.      
-       
-                my $filterdate = shift||POSIX::strftime("%Y-%m-%d",localtime());
+    my $filterdate = shift||POSIX::strftime("%Y-%m-%d",localtime());
+    my $filterexpiry = shift;
     my $filterbranch = shift || 
                         ((C4::Context->preference('IndependantBranches') 
                              && C4::Context->userenv 
@@ -1839,20 +1842,29 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
                          : "");  
     my $dbh   = C4::Context->dbh;
     my $query = "
-        SELECT borrowers.borrowernumber,max(issues.timestamp) as latestissue
+        SELECT borrowers.borrowernumber,
+               max(old_issues.timestamp) as latestissue,
+               max(issues.timestamp) as currentissue
         FROM   borrowers
         JOIN   categories USING (categorycode)
-        LEFT JOIN issues ON borrowers.borrowernumber = issues.borrowernumber
+        LEFT JOIN old_issues USING (borrowernumber)
+        LEFT JOIN issues USING (borrowernumber) 
         WHERE  category_type <> 'S'
+        AND borrowernumber NOT IN (SELECT guarantorid FROM borrowers WHERE guarantorid IS NOT NULL AND guarantorid <> 0) 
    ";
     my @query_params;
     if ($filterbranch && $filterbranch ne ""){ 
         $query.=" AND borrowers.branchcode= ?";
         push @query_params,$filterbranch;
-    }    
+    }
+    if($filterexpiry){
+        $query .= " AND dateexpiry < ? ";
+        push @query_params,$filterdate;
+    }
     $query.=" GROUP BY borrowers.borrowernumber";
     if ($filterdate){ 
-        $query.=" HAVING latestissue <? OR latestissue IS NULL";
+        $query.=" HAVING (latestissue < ? OR latestissue IS NULL) 
+                  AND currentissue IS NULL";
         push @query_params,$filterdate;
     }
     warn $query if $debug;

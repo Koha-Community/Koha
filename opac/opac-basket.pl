@@ -73,15 +73,8 @@ foreach my $biblionumber ( @bibs ) {
     if($dat->{'author'} || @$marcauthorsarray) {
       $hasauthors = 1;
     }
-	
-    my $shelflocations =GetKohaAuthorisedValues('items.location',$dat->{'frameworkcode'}, 'opac');
     my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}, 'opac');
 
-	for my $itm (@items) {
-	    if ($itm->{'location'}){
-	    $itm->{'location_description'} = $shelflocations->{$itm->{'location'} };
-		}
-	}
 	# COinS format FIXME: for books Only
         my $coins_format;
         my $fmt = substr $record->leader(), 6,2;

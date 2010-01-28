@@ -74,6 +74,7 @@
                                 new YAHOO.widget.Button("closebutton");
                             <!-- /TMPL_IF -->
                             new YAHOO.widget.Button("basketheadbutton");
+                            new YAHOO.widget.Button("exportbutton");
                             new YAHOO.widget.Button("delbasketbutton");
                         }
                         //]]>
@@ -87,6 +88,7 @@
                     <!-- TMPL_ELSE -->
                         <li><a href="<!-- TMPL_VAR name="script_name" -->?op=close&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="closebutton">Close this basket</a></li>
                     <!-- /TMPL_IF -->
+                        <li><a href="<!-- TMPL_VAR name="script_name" -->?op=export&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="exportbutton">Export this basket as CSV</a></li>
                     </ul>
                 </div>
             <!-- TMPL_ELSE -->
@@ -141,7 +143,7 @@
                 <!-- TMPL_IF NAME="basketbooksellernote" --><p>Vendor note: <!-- TMPL_VAR NAME="basketbooksellernote" --></p><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="basketcontractno" -->
                     <p>Contract number: <!-- TMPL_VAR NAME="basketcontractno" --></p>
-                    <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></p>
+                    <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="basketcontractno" -->&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="basketcontractname" --></a></p>
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="authorisedbyname" --><p>Managed by:  <!-- TMPL_VAR NAME="authorisedbyname" --></p><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="creationdate" --><p>Open on:  <!-- TMPL_VAR NAME="creationdate" --></p><!-- /TMPL_IF -->

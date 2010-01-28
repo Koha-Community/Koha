@@ -1027,7 +1027,6 @@ sub BuildSummary{
 	$summary      =  $resultstring;
   } else {
     my $heading; 
-    my $authid; 
     my $altheading;
     my $seealso;
     my $broaderterms;
@@ -1040,7 +1039,7 @@ sub BuildSummary{
     # construct UNIMARC summary, that is quite different from MARC21 one
       # accepted form
       foreach my $field ($record->field('2..')) {
-        $heading.= $field->subfield('a');
+        $heading.= $field->as_string('abcdefghijlmnopqrstuvwxyz');
       }
       # rejected form(s)
       foreach my $field ($record->field('3..')) {
@@ -1049,18 +1048,18 @@ sub BuildSummary{
       foreach my $field ($record->field('4..')) {
         if ($field->subfield('2')) {
             my $thesaurus = "thes. : ".$thesaurus{"$field->subfield('2')"}." : ";
-            $see.= '<span class="UF">'.$thesaurus.$field->subfield('a')."</span> -- \n";
+            $see.= '<span class="UF">'.$thesaurus.$field->as_string('abcdefghijlmnopqrstuvwxyz')."</span> -- \n";
         }
       }
       # see :
       foreach my $field ($record->field('5..')) {
             
         if (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'g')) {
-          $broaderterms.= '<span class="BT"> <a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
-        } elsif (($field->subfield('5')) && ($field->subfield('a')) && ($field->subfield('5') eq 'h')){
-          $narrowerterms.= '<span class="NT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+          $broaderterms.= '<span class="BT"> '.$field->as_string('abcdefgjxyz')."</span> -- \n";
+        } elsif (($field->subfield('5')) && ($field->as_string) && ($field->subfield('5') eq 'h')){
+          $narrowerterms.= '<span class="NT">'.$field->as_string('abcdefgjxyz')."</span> -- \n";
         } elsif ($field->subfield('a')) {
-          $seealso.= '<span class="RT"><a href="detail.pl?authid='.$field->subfield('3').'">'.$field->subfield('a')."</a></span> -- \n";
+          $seealso.= '<span class="RT">'.$field->as_string('abcdefgxyz')."</a></span> -- \n";
         }
       }
       # // form

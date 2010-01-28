@@ -50,6 +50,9 @@ my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
     }
 );
 
+my $cur = GetCurrency();
+$template->param( cur => $cur->{symbol} );
+
 my $op = $input->param('op');
 
 # see if the user want to see all budgets or only owned ones
@@ -218,13 +221,13 @@ if ($op eq 'add_form') {
         } else {
             AddBudget( $budget_hash );
         }
-    }            
+    }
     my $branches = GetBranches();
     my $budget_period_dropbox = GetBudgetPeriodsDropbox($$period{budget_period_id} );
     $template->param(
         budget_period_dropbox     => $budget_period_dropbox,
         budget_id                 => $budget_id,
-		%$period,
+        %$period,
     );
 
     my $moo = GetBudgetHierarchy($$period{budget_period_id}, C4::Context->userenv->{branchcode}, $show_mine?$borrower_id:'');
@@ -233,7 +236,7 @@ if ($op eq 'add_form') {
     my $toggle = 0;
     my @loop;
     my $period_total = 0;
-    my ( $period_alloc_total, $base_alloc_total, $base_spent_total, $base_remaining_total );
+    my ( $period_alloc_total, $base_spent_total );
 
 	use YAML;
 	$debug && warn Dump(@budgets);
@@ -279,10 +282,8 @@ if ($op eq 'add_form') {
 ## TOTALS
         # adds to total  - only if budget is a 'top-level' budget
         $period_alloc_total += $budget->{'budget_amount_total'} if $budget->{'depth'} == 0;
-        $base_alloc_total += $budget->{'budget_amount'};
         $base_spent_total += $budget->{'budget_spent'};
         $budget->{'budget_remaining'} = $budget->{'budget_amount'} - $budget->{'budget_spent'};
-        $base_remaining_total += $budget->{'budget_remaining'};
 
 # if amount == 0 dont display...
         delete  $budget->{'budget_unalloc_sublevel'} if  $budget->{'budget_unalloc_sublevel'} == 0 ;
@@ -309,10 +310,7 @@ if ($op eq 'add_form') {
         budget                 => \@loop,
         budget_period_total    => $budget_period_total,
         period_alloc_total     => $num->format_price($period_alloc_total),
-        base_alloc_total       => $num->format_price($base_alloc_total),
         base_spent_total       => $num->format_price($base_spent_total),
-        base_remaining_total   => $num->format_price($base_remaining_total),
-        period_remaining_total => $num->format_price( $period_alloc_total - $base_alloc_total ),
         branchloop             => \@branchloop2,
     );
 

@@ -59,16 +59,8 @@ foreach my $svc (keys %{$config->{listeners}}) {
 # Jun 16 21:21:31 server08 steve_sip[19305]: ILS::Transaction::Checkout performing checkout...
 # [  TIMESTAMP  ] [ HOST ] [ IDENT ]  PID  : Message...
 #
-# The IDENT is determined by $ENV{KOHA_SIP_LOG_IDENT}, if present.
-# Otherwise it is "_sip" appended to $USER, if present, or "acs-server" as a fallback.
-#  
+# The IDENT is determined by config file 'server-params' arguments
 
-my $syslog_ident = $ENV{KOHA_SIP_LOG_IDENT} || ($ENV{USER} ? $ENV{USER} . "_sip" : 'acs-server');
-
-push @parms,
-    "log_file=Sys::Syslog",
-    "syslog_ident=$syslog_ident",
-    "syslog_facility=" . LOG_SIP;
 
 #
 # Server Management: set parameters for the Net::Server::PreFork

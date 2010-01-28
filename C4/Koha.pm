@@ -53,6 +53,7 @@ BEGIN {
 		&GetAuthorisedValues
 		&GetAuthorisedValueCategories
 		&GetKohaAuthorisedValues
+		&GetKohaAuthorisedValuesFromField
 		&GetAuthValCode
 		&GetNormalizedUPC
 		&GetNormalizedISBN
@@ -1064,6 +1065,30 @@ sub GetAuthValCode {
 	return $authvalcode;
 }
 
+=head2 GetAuthValCodeFromField
+
+$authvalcode = GetAuthValCodeFromField($field,$subfield,$frameworkcode);
+
+C<$subfield> can be undefined
+
+=cut
+
+sub GetAuthValCodeFromField {
+	my ($field,$subfield,$fwcode) = @_;
+	my $dbh = C4::Context->dbh;
+	$fwcode='' unless $fwcode;
+	my $sth;
+	if (defined $subfield) {
+	    $sth = $dbh->prepare('select authorised_value from marc_subfield_structure where tagfield=? and tagsubfield=? and frameworkcode=?');
+	    $sth->execute($field,$subfield,$fwcode);
+	} else {
+	    $sth = $dbh->prepare('select authorised_value from marc_tag_structure where tagfield=? and frameworkcode=?');
+	    $sth->execute($field,$fwcode);
+	}
+	my ($authvalcode) = $sth->fetchrow_array;
+	return $authvalcode;
+}
+
 =head2 GetAuthorisedValues
 
 $authvalues = GetAuthorisedValues([$category], [$selected]);
@@ -1134,6 +1159,35 @@ sub GetKohaAuthorisedValues {
   my %values;
   my $dbh = C4::Context->dbh;
   my $avcode = GetAuthValCode($kohafield,$fwcode);
+  if ($avcode) {  
+	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
+   	$sth->execute($avcode);
+	while ( my ($val, $lib, $lib_opac) = $sth->fetchrow_array ) { 
+		$values{$val} = ($opac && $lib_opac) ? $lib_opac : $lib;
+   	}
+   	return \%values;
+  } else {
+  	return undef;
+  }
+}
+
+=head2 GetKohaAuthorisedValuesFromField
+	
+	Takes $field, $subfield $fwcode as parameters.
+	If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
+	$subfield can be undefined
+	Returns hashref of Code => description
+	Returns undef 
+	  if no authorised value category is defined for the given field and subfield 
+
+=cut
+
+sub GetKohaAuthorisedValuesFromField {
+  my ($field, $subfield, $fwcode,$opac) = @_;
+  $fwcode='' unless $fwcode;
+  my %values;
+  my $dbh = C4::Context->dbh;
+  my $avcode = GetAuthValCodeFromField($field, $subfield, $fwcode);
   if ($avcode) {  
 	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
    	$sth->execute($avcode);

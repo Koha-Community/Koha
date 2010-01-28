@@ -359,6 +359,20 @@ foreach (@$alerts) {
     $_->{relatedto} = findrelatedto( $_->{type}, $_->{externalid} );
 }
 
+my $candeleteuser;
+my $userenv = C4::Context->userenv;
+if($userenv->{flags} % 2 == 1){
+    $candeleteuser = 1;
+}elsif ( C4::Context->preference("IndependantBranches") ) {
+    $candeleteuser = ( $data->{'branchcode'} eq $userenv->{branch} );
+}else{
+    if( C4::Auth::getuserflags( $userenv->{flags},$userenv->{number})->{borrowers} ) {
+        $candeleteuser = 1;
+    }else{
+        $candeleteuser = 0;
+    }
+}
+
 # check to see if patron's image exists in the database
 # basically this gives us a template var to condition the display of
 # patronimage related interface on
@@ -389,6 +403,7 @@ $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    CANDELETEUSER    => $candeleteuser,
     roaddetails     => $roaddetails,
     borrowernumber  => $borrowernumber,
     categoryname    => $data->{'description'},

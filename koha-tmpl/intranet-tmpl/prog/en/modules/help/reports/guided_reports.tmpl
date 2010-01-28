@@ -52,5 +52,17 @@
 
 <p>NEKLS also has a great page (<a href="http://www.nexpresslibrary.org/training/reports-training/" target="_new">http://www.nexpresslibrary.org/training/reports-training/</a>) with a list of reports they have written.</p>
 
+<p><strong>Can I have run-time defined parameters?</strong></p>
+
+<p>Yes, you can: there is a specific syntax that Koha will understand as 'ask for values when running the report'. The syntax is &lt;&lt;Question to ask|authorised_value&gt;&gt;.</p>
+<ul>
+<li>The &lt;&lt; and &gt;&gt; are just delimiters. You must put &lt;&lt; at the beginning and &gt;&gt; at the end of your parameter</li>
+<li>The <strong>Question to ask</strong> will be displayed on the left of the string to enter. 
+<li>The <strong>authorised_value</strong> can be omitted if not applicable. If it contains an authorised value category, or <strong>branches</strong> or <strong>itemtype</strong> or <strong>categorycode</strong>, a list with the Koha authorised values will be displayed instead of a free field</li>
+</ul>
+<p>Note that you can have more than one parameter in a given SQL</p>
+<p>Note that entering nothing at run time won't probably work as you expect. It will be considered as "value empty" not as "ignore this parameter". For example entering nothing for : "title=&lt;&lt;Enter title&gt;&gt;" will display results with title='' (no title). If you want to have to have something not mandatory, use "title like &lt;&lt;Enter title&gt;&gt;" and enter a % at run time instead of nothing</p>
+<p>Sample :</p>
+<ul><li>SELECT surname,firstname FROM borrowers WHERE branchcode=&lt;&lt;Enter patrons library|branches&gt;&gt; AND surname like &lt;&lt;Enter filter for patron surname (% if none)&gt;&gt;</li></ul>
 
 <!-- TMPL_INCLUDE NAME="help-bottom.inc" -->

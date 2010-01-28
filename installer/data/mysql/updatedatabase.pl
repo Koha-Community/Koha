@@ -1,3 +1,5 @@
+-	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
+-	print "Upgrade done (Adding finedays in issuingrules table)\n";
 #!/usr/bin/perl
 
 
@@ -2726,7 +2728,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = '3.01.00.066';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do('ALTER TABLE issuingrules ADD COLUMN `reservesallowed` smallint(6) NOT NULL default "0" AFTER `renewalsallowed`;');
-
+    
     my $maxreserves = C4::Context->preference('maxreserves');
     $sth = $dbh->prepare('UPDATE issuingrules SET reservesallowed = ?;');
     $sth->execute($maxreserves);
@@ -2744,12 +2746,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchmod', 'Perform batch modification of items')");
     $dbh->do("INSERT INTO permissions (module_bit, code, description) VALUES ( 13, 'batchdel', 'Perform batch deletion of items')");
     print "Upgrade to $DBversion done (added permissions for batch modification and deletion)\n";
+    SetVersion ($DBversion);
 }
 
 $DBversion = "3.01.00.068";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
 	print "Upgrade done (Adding finedays in issuingrules table)\n";
+    SetVersion ($DBversion);
 }
 
 
@@ -2905,7 +2909,7 @@ ADDPERIODS
 
 
     $dbh->do(<<BUDGETNAME);
-ALTER TABLE aqbudget RENAME`aqbudgets`
+ALTER TABLE aqbudget RENAME `aqbudgets`
 BUDGETNAME
     my $maxbudgetid=$dbh->selectcol_arrayref(<<IDsBUDGET);
 SELECT MAX(aqbudgetid) from aqbudgets
@@ -3353,6 +3357,33 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $upgrade_script = C4::Context->config("intranetdir") . "/installer/data/mysql/patroncards_upgrade.pl";
     system("perl $upgrade_script");
     print "Upgrade to $DBversion done (Migrated labels and patroncards tables and data to new schema.)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.108';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE `export_format` ADD `csv_separator` VARCHAR( 2 ) NOT NULL AFTER `marcfields` ,
+	ADD `field_separator` VARCHAR( 2 ) NOT NULL AFTER `csv_separator` ,
+	ADD `subfield_separator` VARCHAR( 2 ) NOT NULL AFTER `field_separator` 
+	});
+	print "Upgrade done (added separators for csv export)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.01.00.109";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(qq{
+	ALTER TABLE `export_format` ADD `encoding` VARCHAR(255) NOT NULL AFTER `subfield_separator`
+	});
+	print "Upgrade done (added encoding for csv export)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.110';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('ALTER TABLE `categories` ADD COLUMN `enrolmentperioddate` DATE NULL DEFAULT NULL AFTER `enrolmentperiod`');
+    print "Upgrade done (Add enrolment period date support)\n";
     SetVersion ($DBversion);
 }
 

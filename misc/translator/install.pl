@@ -15,7 +15,7 @@ while (defined($po = readdir(DIR))) {
     my ($lang,$interface) = ($1,$2);
     $interface =~ s/staff/intranet/;
     system("mkdir ../../koha-tmpl/$interface-tmpl/prog/$lang");
-    system("./tmpl_process3.pl install -i ../../koha-tmpl/$interface-tmpl/prog/en/ -o ../../koha-tmpl/$interface-tmpl/prog/$lang/ -s po/$po -r");
+    system("./tmpl_process3.pl install -i ../../koha-tmpl/$interface-tmpl/prog/en/ -o ../../koha-tmpl/$interface-tmpl/prog/$lang -s po/$po -r");
 }
 closedir DIR;
 

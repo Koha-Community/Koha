@@ -69,7 +69,7 @@ if ($shelfid && $format) {
 	    case "ris"     { $output .= marc2ris($record); }
 	    case "bibtex"  { $output .= marc2bibtex($record, $biblionumber); }
 	    # We're in the case of a csv profile (firstpass is used for headers printing) :
-	    case /^\d+$/   { $output .= marc2csv($record, $format, $firstpass); }
+	    case /^\d+$/   { $output .= marc2csv($biblionumber, $format, $firstpass); }
 	}
 	$firstpass = 0;
     }

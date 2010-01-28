@@ -437,8 +437,10 @@ if ( $op eq "add" ) {
         };
         $basketgroupid = NewBasketgroup($basketgroup);
     }
-    
-    print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid);
+   
+    my $url = '/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid;
+    $url .= "&closed=1" if ($input->param("closed")); 
+    print $input->redirect($url);
     
 }else{
     my $basketgroups = &GetBasketgroups($booksellerid);
@@ -447,5 +449,6 @@ if ( $op eq "add" ) {
 
     displaybasketgroups($basketgroups, $bookseller, $baskets);
 }
+$template->param(closed => $input->param("closed"));
 #prolly won't use all these, maybe just use print, the rest can be done inside validate
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -57,25 +57,25 @@ function Check(ff) {
     &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
     &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR name="name" --></a>
+    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a>
     &rsaquo;
     <!-- TMPL_IF NAME="add_form" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a>
         &rsaquo;
         <!-- TMPL_IF NAME="contractnumber" -->Modify contract '<!-- TMPL_VAR NAME="contractname" -->'
         <!-- TMPL_ELSE -->New contract
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="add_validate" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a>
         &rsaquo; Data recorded
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="delete_confirm" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a>
         &rsaquo; Confirm Deletion of Contract <!-- TMPL_VAR NAME="contractnumber" -->
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="delete_confirmed" -->
-        <a href="/cgi-bin/koha/admin/aqcontract.pl">Contracts</a> &rsaquo; Contract Deleted
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR  NAME="booksellerid" -->">Contracts</a> &rsaquo; Contract Deleted
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="else" -->Contracts<!-- /TMPL_IF -->
 </div>
@@ -87,21 +87,12 @@ function Check(ff) {
                 <!-- TMPL_IF NAME="add_form" -->
                     <form name="Aform" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
                         <input type="hidden" name="op" value="add_validate" />
+                        <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
                         <input type="hidden" name="checked" value="0" />
                         <!-- TMPL_IF NAME="contractnumber" -->
-                            <h1>Modify contract <!-- TMPL_VAR NAME="contractname" -->
-                                <select id="booksellerid" name="booksellerid">
-                                <!-- TMPL_LOOP NAME="booksellerloop" -->
-                                    <!-- TMPL_IF NAME="selected" -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- TMPL_ELSE -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- /TMPL_IF -->
-                                <!-- /TMPL_LOOP -->
-                                </select>
-                            </h1>
+                            <h1>Modify contract <!-- TMPL_VAR NAME="contractname" --> for <!-- TMPL_VAR NAME="booksellername" --></h1>
                         <!-- TMPL_ELSE -->
-                            <h1>New contract</h1>
+                            <h1>New contract for <!-- TMPL_VAR NAME="booksellername" --></h1>
                         <!-- /TMPL_IF -->
                         <fieldset class="rows">
                             <ol>
@@ -116,17 +107,6 @@ function Check(ff) {
                                 </li>
                                 <li><label for="contractdescription">Description</label> &nbsp;
                                         <input type="text" name="contractdescription" id="contractdescription" size="40" maxlength="80" value="<!-- TMPL_VAR NAME="contractdescription" -->" />
-                                </li>
-                                <li><label for="booksellerid">Vendor</label>
-                                <select id="booksellerid" name="booksellerid">
-                                <!-- TMPL_LOOP NAME="booksellerloop" -->
-                                    <!-- TMPL_IF NAME="selected" -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- TMPL_ELSE -->
-                                        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name" --></option>
-                                    <!-- /TMPL_IF -->
-                                <!-- /TMPL_LOOP -->
-                                </select>
                                 </li>
                                 <li><label for="contractstartdate" class="required">Start date *</label> &nbsp;
                                         <input type="text" name="contractstartdate" id="contractstartdate" value="<!-- TMPL_VAR NAME="contractstartdate" -->" maxlength="10"  size="10"/>
@@ -214,7 +194,7 @@ function Check(ff) {
                         <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->">New Contract</a></li>
                     </ul>
                 </div>
-                <h2>Contract(s) of <!-- TMPL_VAR name="name" --></h2>
+                <h2>Contract(s) of <!-- TMPL_VAR name="booksellername" --></h2>
                 <!-- TMPL_IF name="loop" -->
                     <table>
                         <tr>
@@ -225,13 +205,9 @@ function Check(ff) {
                             <th scope="col" colspan="2">&nbsp; </th>
                         </tr>
                     <!-- TMPL_LOOP NAME="loop" -->
-                        <!-- TMPL_IF NAME="toggle" -->
-                            <tr class="highlight">
-                        <!-- TMPL_ELSE -->
-                            <tr>
-                        <!-- /TMPL_IF -->
-                            <td>
-                                <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->"><!-- TMPL_VAR NAME="contractname" --></a>
+                        <!-- TMPL_IF NAME="__even__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
+                        <td>
+                            <a href="<!-- TMPL_VAR NAME="script_name" -->?op=add_form&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->"><!-- TMPL_VAR NAME="contractname" --></a>
                         </td>
                         <td><!-- TMPL_VAR NAME="contractdescription" --></td>
                         <td><!-- TMPL_VAR NAME="contractstartdate" --></td>

@@ -75,18 +75,29 @@ $keys{'5'} = ['borrowers.borrowernumber=accountlines.borrowernumber'];
 # have to do someting here to know if its dropdown, free text, date etc
 
 our %criteria;
+# reports on circulation
 $criteria{'1'} = [
     'statistics.type',   'borrowers.categorycode',
     'statistics.branch',
     'biblioitems.publicationyear|date',
     'items.dateaccessioned|date'
 ];
+# reports on catalogue
 $criteria{'2'} =
-  [ 'items.itemnumber|textrange', 'items.biblionumber|textrange', 'items.barcode|textrange', 'biblio.frameworkcode', 'items.holdingbranch', 'items.homebranch', 'biblio.datecreated|daterange', 'biblio.timestamp|daterange', 'items.onloan|daterange', 'items.ccode', 'items.itemcallnumber|textrange', 'items.itype', 'items.itemlost', 'items.location' ];
-$criteria{'3'} = ['borrowers.branchcode'];
+  [ 'items.itemnumber|textrange',   'items.biblionumber|textrange',   'items.barcode|textrange', 
+    'biblio.frameworkcode',         'items.holdingbranch',            'items.homebranch', 
+  'biblio.datecreated|daterange',   'biblio.timestamp|daterange',     'items.onloan|daterange', 
+  'items.ccode',                    'items.itemcallnumber|textrange', 'items.itype', 
+  'items.itemlost',                 'items.location' ];
+# reports on borrowers
+$criteria{'3'} = ['borrowers.branchcode', 'borrowers.categorycode'];
+# reports on acquisition
 $criteria{'4'} = ['aqorders.datereceived|date'];
-$criteria{'5'} = ['borrowers.branchcode'];
 
+# reports on accounting
+$criteria{'5'} = ['borrowers.branchcode', 'borrowers.categorycode'];
+
+# Adds itemtypes to criteria, according to the syspref
 if (C4::Context->preference('item-level_itypes')) {
     unshift @{ $criteria{'1'} }, 'items.itype';
     unshift @{ $criteria{'2'} }, 'items.itype';
@@ -244,7 +255,6 @@ sub _build_query {
     my $dbh           = C4::Context->dbh();
     my $joinedtables  = join( ',', @$tables );
     my $joinedcolumns = join( ',', @$columns );
-    my $joinedkeys    = join( ' AND ', @$keys );
     my $query =
       "SELECT $totals $joinedcolumns FROM $tables->[0] ";
 	for (my $i=1;$i<@$tables;$i++){
@@ -341,6 +351,14 @@ sub get_criteria {
 		my $sth = $dbh->prepare($query);
 		$sth->execute();
 		my @values;
+        # push the runtime choosing option
+        my $list;
+        $list='branches' if $column eq 'branchcode' or $column eq 'holdingbranch' or $column eq 'homebranch';
+        $list='categorycode' if $column eq 'categorycode';
+        $list='itemtype' if $column eq 'itype';
+        $list='ccode' if $column eq 'ccode';
+        # TODO : improve to let the librarian choose the description at runtime
+        push @values, { availablevalues => "<<$column".($list?"|$list":'').">>" };
 		while ( my $row = $sth->fetchrow_hashref() ) {
 		    push @values, $row;
 		    if ($row->{'availablevalues'} eq '') { $row->{'default'} = 1 };

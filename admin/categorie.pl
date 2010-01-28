@@ -41,6 +41,7 @@ use CGI;
 use C4::Context;
 use C4::Auth;
 use C4::Output;
+use C4::Dates;
 use C4::Form::MessagingPreferences;
 
 sub StringSearch  {
@@ -90,14 +91,17 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
+		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
 		$sth->execute($categorycode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
 	}
 
+    $data->{'enrolmentperioddate'} = undef if ($data->{'enrolmentperioddate'} eq '0000-00-00');
+
 	$template->param(description        => $data->{'description'},
 				enrolmentperiod         => $data->{'enrolmentperiod'},
+				enrolmentperioddate     => C4::Dates::format_date($data->{'enrolmentperioddate'}),
 				upperagelimit           => $data->{'upperagelimit'},
 				dateofbirthrequired     => $data->{'dateofbirthrequired'},
 				enrolmentfee            => sprintf("%.2f",$data->{'enrolmentfee'}),
@@ -105,6 +109,7 @@ if ($op eq 'add_form') {
 				issuelimit              => $data->{'issuelimit'},
 				reservefee              => sprintf("%.2f",$data->{'reservefee'}),
 				category_type           => $data->{'category_type'},
+				DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 				"type_".$data->{'category_type'} => 1,
 				);
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
@@ -117,13 +122,17 @@ if ($op eq 'add_form') {
 	$template->param(add_validate => 1);
 	my $is_a_modif = $input->param("is_a_modif");
 	my $dbh = C4::Context->dbh;
+	if($input->param('enrolmentperioddate')){
+	    $input->param('enrolmentperioddate' => C4::Dates::format_date_in_iso($input->param('enrolmentperioddate')) );
+	}
+	
 	if ($is_a_modif) {
-            my $sth=$dbh->prepare("UPDATE categories SET description=?,enrolmentperiod=?,upperagelimit=?,dateofbirthrequired=?,enrolmentfee=?,reservefee=?,overduenoticerequired=?,category_type=? WHERE categorycode=?");
-            $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type','categorycode'));
+            my $sth=$dbh->prepare("UPDATE categories SET description=?,enrolmentperiod=?, enrolmentperioddate=?,upperagelimit=?,dateofbirthrequired=?,enrolmentfee=?,reservefee=?,overduenoticerequired=?,category_type=? WHERE categorycode=?");
+            $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type','categorycode'));
             $sth->finish;
         } else {
-            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?)");
-            $sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type'));
+            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?,?)");
+            $sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type'));
             $sth->finish;
         }
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
@@ -146,7 +155,7 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(total => $total->{'total'});
 	
-	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
+	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
 	$sth2->execute($categorycode);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -154,8 +163,9 @@ if ($op eq 'add_form') {
 		$template->param(totalgtzero => 1);
 	}
 
-        $template->param(description             => $data->{'description'},
+        $template->param(       description             => $data->{'description'},
                                 enrolmentperiod         => $data->{'enrolmentperiod'},
+                                enrolmentperioddate     => C4::Dates::format_date($data->{'enrolmentperioddate'}),
                                 upperagelimit           => $data->{'upperagelimit'},
                                 dateofbirthrequired     => $data->{'dateofbirthrequired'},
                                 enrolmentfee            =>  sprintf("%.2f",$data->{'enrolmentfee'}),
@@ -183,16 +193,18 @@ if ($op eq 'add_form') {
 	my @loop;
 	my ($count,$results)=StringSearch($searchfield,'web');
 	for (my $i=0; $i < $count; $i++){
-		my %row = (categorycode => $results->[$i]{'categorycode'},
-				description => $results->[$i]{'description'},
-				enrolmentperiod => $results->[$i]{'enrolmentperiod'},
-				upperagelimit => $results->[$i]{'upperagelimit'},
-				dateofbirthrequired => $results->[$i]{'dateofbirthrequired'},
-				enrolmentfee => sprintf("%.2f",$results->[$i]{'enrolmentfee'}),
-				overduenoticerequired => $results->[$i]{'overduenoticerequired'},
-				issuelimit => $results->[$i]{'issuelimit'},
-				reservefee => sprintf("%.2f",$results->[$i]{'reservefee'}),
-				category_type => $results->[$i]{'category_type'},
+		my %row = (
+		        categorycode            => $results->[$i]{'categorycode'},
+				description             => $results->[$i]{'description'},
+				enrolmentperiod         => $results->[$i]{'enrolmentperiod'},
+				enrolmentperioddate     => C4::Dates::format_date($results->[$i]{'enrolmentperioddate'}),
+				upperagelimit           => $results->[$i]{'upperagelimit'},
+				dateofbirthrequired     => $results->[$i]{'dateofbirthrequired'},
+				enrolmentfee            => sprintf("%.2f",$results->[$i]{'enrolmentfee'}),
+				overduenoticerequired   => $results->[$i]{'overduenoticerequired'},
+				issuelimit              => $results->[$i]{'issuelimit'},
+				reservefee              => sprintf("%.2f",$results->[$i]{'reservefee'}),
+				category_type           => $results->[$i]{'category_type'},
 				"type_".$results->[$i]{'category_type'} => 1);
         if (C4::Context->preference('EnhancedMessagingPreferences')) {
             my $brief_prefs = _get_brief_messaging_prefs($results->[$i]{'categorycode'});

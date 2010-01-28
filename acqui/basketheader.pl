@@ -112,13 +112,14 @@ if ( $op eq 'add_form' ) {
 #End Edit
 } elsif ( $op eq 'add_validate' ) {
 #we are confirming the changes, save the basket
-    $template->param(add_validate => 1);
+    my $basketno;
     if ( $is_an_edit ) {
+        $basketno = $input->param('basketno');
         ModBasketHeader($input->param('basketno'),$input->param('basketname'),$input->param('basketnote'),$input->param('basketbooksellernote'),$input->param('basketcontractnumber'));
-        $template->param( basketno => $basketno );
     } else { #New basket
-        my $basketno = NewBasket($booksellerid, $loggedinuser, $input->param('basketname'), $input->param('basketnote'), $input->param('basketbooksellernote'), $input->param('basketcontractnumber'));
-        $template->param( basketno => $basketno );
+        $basketno = NewBasket($booksellerid, $loggedinuser, $input->param('basketname'), $input->param('basketnote'), $input->param('basketbooksellernote'), $input->param('basketcontractnumber'));
     }
+    print $input->redirect('basket.pl?basketno='.$basketno);
+    exit 0;
 }
 output_html_with_http_headers $input, $cookie, $template->output;

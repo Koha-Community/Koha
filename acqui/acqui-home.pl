@@ -78,6 +78,7 @@ my $branchname = GetBranchName($homebranch);
 my $classlist   = '';
 my $total       = 0;
 my $totspent    = 0;
+my $totordered  = 0;
 my $totcomtd    = 0;
 my $totavail    = 0;
 my @loop_budget = ();
@@ -149,22 +150,20 @@ foreach my $result (@results) {
     my $member      = GetMember( $result->{'budget_owner_id'} );
     my $member_full = $member->{'firstname'} . ' ' . $member->{'surname'} if $member;
 
-    $result->{'budget_owner'} = $member_full;
-    if ($result->{'budget_spent'}){
-	$result->{'budget_avail'} = $result->{'budget_amount'} - $result->{'budget_spent'};
-    }
-    else {
-	$result->{'budget_avail'} = $result->{'budget_amount'};
-    }
-    $result->{'budget_spent'} = GetBudgetSpent( $result->{'budget_id'} );
+    $result->{'budget_owner'}   = $member_full;
+    $result->{'budget_ordered'} = GetBudgetOrdered( $result->{'budget_id'} );
+    $result->{'budget_spent'}   = GetBudgetSpent( $result->{'budget_id'} );
+    $result->{'budget_avail'}   = $result->{'budget_amount'} - $result->{'budget_spent'} - $result->{'budget_ordered'};
 
-    $total    += $result->{'budget_amount'};
-    $totspent += $result->{'budget_spent'} if $result->{'budget_spent'};
-    $totavail += $result->{'budget_avail'};
+    $total      += $result->{'budget_amount'};
+    $totspent   += $result->{'budget_spent'};
+    $totordered += $result->{'budget_ordered'};
+    $totavail   += $result->{'budget_avail'};
 
-    $result->{'budget_amount'} = $num->format_price( $result->{'budget_amount'} );
-    $result->{'budget_spent'}  = $num->format_price( $result->{'budget_spent'} );
-    $result->{'budget_avail'}  = $num->format_price( $result->{'budget_avail'} );
+    $result->{'budget_amount'}  = $num->format_price( $result->{'budget_amount'} );
+    $result->{'budget_spent'}   = $num->format_price( $result->{'budget_spent'} );
+    $result->{'budget_ordered'} = $num->format_price( $result->{'budget_ordered'} );
+    $result->{'budget_avail'}   = $num->format_price( $result->{'budget_avail'} );
 
     #        my $spent_percent = ( $result->{'budget_spent'} / $result->{'budget_amount'} ) * 100;
     #        $result->{'budget_spent_percent'} = sprintf( "%00d", $spent_percent );
@@ -184,7 +183,8 @@ $template->param(
     branchname    => $branchname,
     budget        => $period->{budget_name},
     total         => $num->format_price(  $total ),
-    totspent      => $num->format_price($totspent ),
+    totspent      => $num->format_price( $totspent ),
+    totordered    => $num->format_price( $totordered ),
     totcomtd      => $num->format_price( $totcomtd ),
     totavail      => $num->format_price( $totavail ),
     suggestion    => $suggestion,
