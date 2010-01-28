@@ -324,6 +324,18 @@ sub get_template_and_user {
 	    }
  	}
 
+    if(C4::Context->preference('dateformat')){
+        if(C4::Context->preference('dateformat') eq "metric"){
+            $template->param(dateformat_metric => 1);
+        } elsif(C4::Context->preference('dateformat') eq "us"){
+            $template->param(dateformat_us => 1);
+        } else {
+            $template->param(dateformat_iso => 1);
+        }
+    } else {
+        $template->param(dateformat_iso => 1);
+    }
+
     # these template parameters are set the same regardless of $in->{'type'}
     $template->param(
             "BiblioDefaultView".C4::Context->preference("BiblioDefaultView")         => 1,
