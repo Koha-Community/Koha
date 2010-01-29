@@ -180,6 +180,10 @@
 <!-- TMPL_IF NAME="else" -->
 
 <h2>Currencies and Exchange Rates</h2>
+
+<!-- TMPL_IF NAME="loop" --><!-- TMPL_UNLESS NAME="activecurrency" --><div class="dialog alert"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
+
+
     <!-- TMPL_IF NAME="searchfield" -->
         You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
     <!-- /TMPL_IF -->

@@ -155,7 +155,7 @@ Budget planning
 
     <!-- TMPL_IF NAME="budget_lines" -->
 
-    <!-- TMPL_IF name="cur" --><p><b>Currency = <!-- TMPL_VAR name="cur" --> <!-- TMPL_VAR NAME="cur_format" --></b></p><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="cur" --><p><b>Currency = <!-- TMPL_VAR name="cur" --></b></p><!-- TMPL_ELSE --><div class="dialog alert"><h3>No active currency is defined</h3><p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p></div><!-- /TMPL_IF -->
 
     <table id="plan" width="100%">
     <thead>

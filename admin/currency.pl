@@ -164,8 +164,10 @@ if ($op eq 'add_form') {
     my $results = StringSearch($searchfield);
     my $count = scalar(@$results);
     my @loop;
+    my $activecurrency;
     for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-        warn Data::Dumper::Dumper($results->[$i]);
+        # warn Data::Dumper::Dumper($results->[$i]);
+        if($results->[$i]{'active'} == 1){ $activecurrency = 1; }
         push @loop, {
             currency  => $results->[$i]{'currency'},
             rate      => $results->[$i]{'rate'},
@@ -174,7 +176,10 @@ if ($op eq 'add_form') {
             active    => $results->[$i]{'active'},
         };
     }
-    $template->param(loop => \@loop);
+    $template->param(
+        loop => \@loop,
+        activecurrency => $activecurrency,
+    );
 
     if ($offset>0) {
         $template->param(offsetgtzero => 1,

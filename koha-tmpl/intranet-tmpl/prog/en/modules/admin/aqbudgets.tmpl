@@ -96,7 +96,7 @@
     $(document).ready(function() {
         var tooltipcontent = $(".tooltipcontent");
         tooltipcontent.hide();
-        
+
         $(".tooltiped td").each(function (){
             contentelem = $(this).parent().children().filter(".tooltipcontent");
             if(contentelem.html() != ""){
@@ -104,7 +104,7 @@
                 content: contentelem.html(),
                 show: "mouseover",
                 hide: "mouseout",
-                style: { 
+                style: {
                     name: "light",
                     tip: "bottomLeft",
                     border: {
@@ -140,7 +140,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="budgets-admin-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; 
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Root budgets</a> &rsaquo; <!-- TMPL_IF NAME="else" -->Budgets for '<!-- TMPL_VAR name="budget_period_description" -->'<!-- /TMPL_IF --><!-- TMPL_IF name="add_form" -->
     <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Budgets</a> &rsaquo; <!-- TMPL_IF NAME="budget_id" -->Modify budget<!-- TMPL_IF NAME="budget_name" --> '<!-- TMPL_VAR NAME="budget_name" -->'<!-- /TMPL_IF --><!-- TMPL_ELSE -->Add budget<!-- /TMPL_IF --><!-- /TMPL_IF -->  <!-- TMPL_IF name="delete_confirm" -->
     <a href="/cgi-bin/koha/admin/aqbudgets.pl">Budgets</a> &rsaquo; Delete budget?<!-- /TMPL_IF --></div>
@@ -152,6 +152,8 @@
 
 <!-- TMPL_UNLESS name="delete_confirm" --><!-- TMPL_INCLUDE NAME="budgets-admin-toolbar.inc" --><!-- /TMPL_UNLESS -->
 <!-- TMPL_IF name="else" -->
+
+<!-- TMPL_UNLESS NAME="cur" --><div class="dialog alert"><h3>No active currency is defined</h3><p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p></div><!-- /TMPL_UNLESS -->
 
 <h1>Budgets for '<!-- TMPL_VAR name="budget_period_description" -->'</h1>
 <table id="budgeth">

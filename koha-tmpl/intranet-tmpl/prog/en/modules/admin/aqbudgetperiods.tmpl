@@ -252,7 +252,7 @@
 <!--  DEFAULT  display budget periods list -->
 <!-- TMPL_IF name="else" -->
     <h2>Root budgets administration</h2>
-    <p><!-- TMPL_IF name="cur" --><b>Currency = <!-- TMPL_VAR name="cur" --></b><!-- /TMPL_IF --></p>
+    <!-- TMPL_IF name="cur" --><p><b>Currency = <!-- TMPL_VAR name="cur" --></b></p><!-- TMPL_ELSE --><div class="dialog alert"><h3>No active currency is defined</h3><p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p></div><!-- /TMPL_IF -->
     <table id="periodsh">
     <thead>
 	    <tr>
