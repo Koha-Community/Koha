@@ -1,5 +1,3 @@
--	$dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine` ");
--	print "Upgrade done (Adding finedays in issuingrules table)\n";
 #!/usr/bin/perl
 
 
