@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange Rates &rsaquo; 
+<title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange Rates &rsaquo;
 <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
@@ -69,7 +69,7 @@
 <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
-    
+
 <!-- TMPL_IF NAME="else" -->
 <div id="toolbar">
     <ul class="toolbar">
@@ -107,20 +107,23 @@
         </li>
 
         <li>
-            <label for="currency">Last Updated: </label><!-- TMPL_VAR NAME="timestamp" -->
+            <span class="label">Last Updated: </span><!-- TMPL_VAR NAME="timestamp" -->
         </li>
         <li>
-            <label for="currency">Active: </label>
-            <input type="checkbox" id="active" name="active" value="1"
-            <!-- TMPL_IF NAME="active" --> checked <!-- /TMPL_IF -->   />
+            <label for="active">Active: </label>
+            <!-- TMPL_IF NAME="active" -->
+            <input type="checkbox" id="active" name="active" value="1" checked="checked" />
+            <!-- TMPL_ELSE -->
+            <input type="checkbox" id="active" name="active" value="1" />
+            <!-- /TMPL_IF -->
         </li>
 
         </ol>
         </fieldset>
-        
+
     <fieldset class="action">
         <input type="submit" value="Submit" onclick="Check(this.form)" />
-        <input type="button" onclick="window.location.href='<!-- TMPL_VAR NAME="script_name" -->'" value="Cancel" />
+        <a href="/cgi-bin/koha/admin/currency.pl" class="cancel">Cancel</a>
     </fieldset>
     </form>
 
@@ -179,7 +182,7 @@
 <h2>Currencies and Exchange Rates</h2>
     <!-- TMPL_IF NAME="searchfield" -->
         You searched for <!-- TMPL_VAR NAME="searchfield" --></span>
-    <!-- /TMPL_IF -->	
+    <!-- /TMPL_IF -->
 
     <table>
         <tr>
@@ -207,13 +210,13 @@
         <!-- /TMPL_LOOP -->
     </table>
 <br>
-    
+
     <!-- TMPL_IF NAME="offsetgtzero" -->
         <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->">&lt;&lt; Previous</a>
     <!-- /TMPL_IF -->
 
     <!-- TMPL_IF NAME="ltcount" -->
-        <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>	
+        <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->">Next &gt;&gt;</a>
     <!-- /TMPL_IF -->
 
 <!-- /TMPL_IF -->
