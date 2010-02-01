@@ -360,7 +360,6 @@ sub marc2csv {
         ($preprocess,$postprocess, $fieldprocessing) = YAML::LoadFile($configfile);
     }
 
-    warn $fieldprocessing;
     # Preprocessing
     eval $preprocess if ($preprocess);
 

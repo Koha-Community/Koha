@@ -1110,7 +1110,7 @@ sub GetKohaAuthorisedValuesFromField {
   my $dbh = C4::Context->dbh;
   my $avcode = GetAuthValCodeFromField($field, $subfield, $fwcode);
   if ($avcode) {  
-	my $sth = $dbh->prepare("select authorised_value, lib, lib_opac from authorised_values where category=? ");
+	my $sth = $dbh->prepare("select authorised_value, lib  from authorised_values where category=? ");
    	$sth->execute($avcode);
 	while ( my ($val, $lib, $lib_opac) = $sth->fetchrow_array ) { 
 		$values{$val} = ($opac && $lib_opac) ? $lib_opac : $lib;
