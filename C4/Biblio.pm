@@ -3000,6 +3000,8 @@ sub _koha_marc_update_bib_ids {
     # we drop the original field
     # we add the new builded field.
     my ($biblio_tag, $biblio_subfield ) = GetMarcFromKohaField("biblio.biblionumber",$frameworkcode);
+    unless ( $biblio_tag ) { die "can't GetMarcFromKohaField for framework $frameworkcode"; }
+
     my ($biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField("biblioitems.biblioitemnumber",$frameworkcode);
 
     if ($biblio_tag != $biblioitem_tag) {
