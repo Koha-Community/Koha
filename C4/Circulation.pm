@@ -69,7 +69,6 @@ BEGIN {
 		&AddRenewal
 		&GetRenewCount
 		&GetItemIssue
-                &GetOpenIssue
 		&GetItemIssues
 		&GetBorrowerIssues
 		&GetIssuingCharges
@@ -77,6 +76,7 @@ BEGIN {
         &GetBranchBorrowerCircRule
         &GetBranchItemRule
 		&GetBiblioIssues
+		&GetOpenIssue
 		&AnonymiseIssueHistory
 	);
 
@@ -904,7 +904,6 @@ sub AddIssue {
     my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode) = @_;
     my $dbh = C4::Context->dbh;
 	my $barcodecheck=CheckValidBarcode($barcode);
-
     # $issuedate defaults to today.
     if ( ! defined $issuedate ) {
         $issuedate = strftime( "%Y-%m-%d", localtime );

@@ -189,7 +189,8 @@ sub parse_header_line {
 sub parse_command_line {
     my $command_line = shift;
     chomp($command_line);
-
+    $command_line =~ s/\r//g;
+    
     my ( $timestamp, $command, @args ) = split( /\t/, $command_line );
     my ( $date,      $time,    $id )   = split( /\s/, $timestamp );
 
@@ -248,11 +249,11 @@ sub kocIssueItem {
   my ( $year, $month, $day ) = split( /-/, $circ->{'date'} );
   ( $year, $month, $day ) = Add_Delta_Days( $year, $month, $day, $issuelength );
   my $date_due = sprintf("%04d-%02d-%02d", $year, $month, $day);
-  
+
   if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
 #warn "Item Currently Issued.";
     my $issue = GetOpenIssue( $item->{'itemnumber'} );
-
+    
     if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
 #warn "Item issued to this member already, renewing.";
     
