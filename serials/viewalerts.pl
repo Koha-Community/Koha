@@ -19,6 +19,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -31,7 +32,6 @@ my $dbh = C4::Context->dbh;
 
 my $input = new CGI;
 my $print = $input->param('print');
-my $template_name;
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => 'serials/viewalerts.tmpl',

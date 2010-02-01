@@ -30,21 +30,15 @@ use C4::Context;
 use C4::Branch; # GetBranches
 use C4::Serials;
 use C4::Letters;
+use Carp;
 
 #use Smart::Comments;
 
-my $query = new CGI;
+my $query = CGI->new;
 my $op = $query->param('op') || '';
 my $dbh = C4::Context->dbh;
-my ($subscriptionid,$auser,$branchcode,$librarian,$cost,$aqbooksellerid, $aqbooksellername,$aqbudgetid, $bookfundid, $startdate, $periodicity,
-	$firstacquidate, $dow, $irregularity, $numberpattern, $numberlength, $weeklength, $monthlength, $sublength,
-	$add1,$every1,$whenmorethan1,$setto1,$lastvalue1,$innerloop1,
-	$add2,$every2,$whenmorethan2,$setto2,$lastvalue2,$innerloop2,
-	$add3,$every3,$whenmorethan3,$setto3,$lastvalue3,$innerloop3,
-	$numberingmethod, $status, $biblionumber,
-	$bibliotitle, $callnumber, $notes, $hemisphere, $letter, $manualhistory,$serialsadditems, $location);
+my $sub_length;
 
-	my @budgets;
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-add.tmpl",
 				query => $query,
@@ -68,11 +62,11 @@ my $nextexpected;
 
 if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
 
-    $subscriptionid = $query->param('subscriptionid');
-    $subs = &GetSubscription($subscriptionid);
+    my $subscriptionid = $query->param('subscriptionid');
+    $subs = GetSubscription($subscriptionid);
 ## FIXME : Check rights to edit if mod. Could/Should display an error message.
     if ($subs->{'cannotedit'} && $op eq 'mod'){
-      warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+      carp "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }
     $firstissuedate = $subs->{firstacquidate};  # in iso format.
@@ -87,15 +81,13 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
 	  }
     $subs->{'letter'}='' unless($subs->{'letter'});
     letter_loop($subs->{'letter'}, $template);
-    $irregularity   = $subs->{'irregularity'};
-    $numberpattern  = $subs->{'numberpattern'};
     $nextexpected = GetNextExpected($subscriptionid);
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate}->output('iso') eq $firstissuedate ;
     $subs->{nextacquidate} = $nextexpected->{planneddate}->output()  if($op eq 'mod');
     unless($op eq 'modsubscription') {
 		foreach my $length_unit qw(numberlength weeklength monthlength){
 			if ($subs->{$length_unit}){
-				$sublength=$subs->{$length_unit};
+				$sub_length=$subs->{$length_unit};
 				$sub_on=$length_unit;
 				last;
 			}
@@ -106,7 +98,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
         $template->param(
                     $op => 1,
                     "subtype_$sub_on" => 1,
-                    sublength =>$sublength,
+                    sublength =>$sub_length,
                     history => ($op eq 'mod'),
                     "periodicity".$subs->{'periodicity'} => 1,
                     "numberpattern".$subs->{'numberpattern'} => 1,
@@ -120,18 +112,18 @@ my $onlymine=C4::Context->preference('IndependantBranches') &&
              C4::Context->userenv->{flags} % 2 !=1 &&
              C4::Context->userenv->{branch};
 my $branches = GetBranches($onlymine);
-my @branchloop;
-for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+my $branchloop;
+for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %{$branches}) {
     my $selected = 0;
     $selected = 1 if ($thisbranch eq C4::Context->userenv->{'branch'});
     $selected = 1 if (defined($subs) && $thisbranch eq $subs->{'branchcode'});
-    my %row =(value => $thisbranch,
-                selected => $selected,
-                branchname => $branches->{$thisbranch}->{'branchname'},
-            );
-    push @branchloop, \%row;
+    push @{$branchloop}, {
+        value => $thisbranch,
+        selected => $selected,
+        branchname => $branches->{$thisbranch}->{'branchname'},
+    };
 }
-$template->param(branchloop => \@branchloop,
+$template->param(branchloop => $branchloop,
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
 my $count = 0;
@@ -140,13 +132,58 @@ $template->param(  'dateformat_' . C4::Context->preference('dateformat') => 1 ,
                 );
 
 if ($op eq 'addsubscription') {
+    redirect_add_subscription();
+} elsif ($op eq 'modsubscription') {
+    redirect_mod_subscription();
+} else {
+        while (@subscription_types) {
+           my $sub_type = shift @subscription_types;
+           my %row = ( 'name' => $sub_type );
+           if ( defined $sub_on and $sub_on eq $sub_type ) {
+	     $row{'selected'} = ' selected';
+           } else {
+	     $row{'selected'} = '';
+           }
+           push( @sub_type_data, \%row );
+        }
+    $template->param(subtype => \@sub_type_data,
+	);
+
+    letter_loop('', $template);
+
+    my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
+    if (defined $new_biblionumber) {
+        my $bib = GetBiblioData($new_biblionumber);
+        if (defined $bib) {
+            $template->param(bibnum      => $new_biblionumber);
+            $template->param(bibliotitle => $bib->{title});
+        }
+    }
+	output_html_with_http_headers $query, $cookie, $template->output;
+}
+
+sub letter_loop {
+    my ($selected_letter, $templte) = @_;
+    my $letters = GetLetters('serial');
+    my @letterloop;
+    foreach my $thisletter (keys %$letters) {
+        my $selected = $thisletter eq $selected_letter ? 1 : 0;
+        push @letterloop, {
+            value => $thisletter,
+            selected => $selected,
+            lettername => $letters->{$thisletter},
+        };
+    }
+    $templte->param(letterloop => \@letterloop) if @letterloop;
+    return;
+}
+
+sub redirect_add_subscription {
     my $auser           = $query->param('user');
     my $branchcode      = $query->param('branchcode');
     my $aqbooksellerid  = $query->param('aqbooksellerid');
     my $cost            = $query->param('cost');
     my $aqbudgetid      = $query->param('aqbudgetid');
-    my $startdate       = $query->param('startdate');
-    my $firstacquidate  = $query->param('firstacquidate');
     my $periodicity     = $query->param('periodicity');
     my $dow             = $query->param('dow');
     my @irregularity    = $query->param('irregularity_select');
@@ -198,7 +235,7 @@ if ($op eq 'addsubscription') {
     my $location = $query->param('location');
     my $startdate       = format_date_in_iso($query->param('startdate'));
     my $enddate       = format_date_in_iso($query->param('enddate'));
-    my $firstacquidate  = format_date_in_iso($query->param('firstacquidate'));    
+    my $firstacquidate  = format_date_in_iso($query->param('firstacquidate'));
     my $histenddate = format_date_in_iso($query->param('histenddate'));
     my $histstartdate = format_date_in_iso($query->param('histstartdate'));
     my $recievedlist = $query->param('recievedlist');
@@ -217,7 +254,10 @@ if ($op eq 'addsubscription') {
     ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-} elsif ($op eq 'modsubscription') {
+    return;
+}
+
+sub redirect_mod_subscription {
     my $subscriptionid = $query->param('subscriptionid');
 	  my @irregularity = $query->param('irregularity_select');
     my $auser = $query->param('user');
@@ -228,7 +268,6 @@ if ($op eq 'addsubscription') {
     my $biblionumber = $query->param('biblionumber');
     my $aqbudgetid = $query->param('aqbudgetid');
     my $startdate = format_date_in_iso($query->param('startdate'));
-    my $enddate = format_date_in_iso($query->param('enddate'));
     my $nextacquidate = $query->param('nextacquidate') ?
                             format_date_in_iso($query->param('nextacquidate')):
                             format_date_in_iso($query->param('startdate'));
@@ -238,6 +277,7 @@ if ($op eq 'addsubscription') {
     my $sublength = $query->param('sublength');
     my $subtype = $query->param('subtype');
 
+    my ($monthlength, $weeklength, $numberlength);
     if($subtype eq 'months'){
         $monthlength = $sublength;
     } elsif ($subtype eq 'weeks'){
@@ -291,10 +331,10 @@ if ($op eq 'addsubscription') {
         $firstissuedate = $nextacquidate if($nextexpected->{isfirstissue});
     }
 
-        &ModSubscription(
+        ModSubscription(
             $auser,           $branchcode,   $aqbooksellerid, $cost,
             $aqbudgetid,      $startdate,    $periodicity,    $firstissuedate,
-            $dow,             join(",",@irregularity), $numberpattern,  $numberlength,
+            $dow,             join(q{,},@irregularity), $numberpattern,  $numberlength,
             $weeklength,      $monthlength,  $add1,           $every1,
             $whenmorethan1,   $setto1,       $lastvalue1,     $innerloop1,
             $add2,            $every2,       $whenmorethan2,  $setto2,
@@ -306,45 +346,5 @@ if ($op eq 'addsubscription') {
         );
         ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-} else {
-        while (@subscription_types) {
-           my $sub_type = shift @subscription_types;
-           my %row = ( 'name' => $sub_type );
-           if ( defined $sub_on and $sub_on eq $sub_type ) {
-	     $row{'selected'} = ' selected';
-           } else {
-	     $row{'selected'} = '';
-           }
-           push( @sub_type_data, \%row );
-        }
-    $template->param(subtype => \@sub_type_data,
-	);
-
-    letter_loop('', $template);
-
-    my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
-    if (defined $new_biblionumber) {
-        my $bib = GetBiblioData($new_biblionumber);
-        if (defined $bib) {
-            $template->param(bibnum      => $new_biblionumber);
-            $template->param(bibliotitle => $bib->{title});
-        }
-    }
-	output_html_with_http_headers $query, $cookie, $template->output;
-}
-
-sub letter_loop {
-    my ($selected_letter, $template) = @_;
-    my $letters = GetLetters('serial');
-    my @letterloop;
-    foreach my $thisletter (keys %$letters) {
-        my $selected = $thisletter eq $selected_letter ? 1 : 0;
-        push @letterloop, {
-            value => $thisletter,
-            selected => $selected,
-            lettername => $letters->{$thisletter},
-        };
-    }
-    $template->param(letterloop => \@letterloop) if @letterloop;
     return;
 }

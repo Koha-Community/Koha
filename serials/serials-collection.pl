@@ -34,8 +34,6 @@ my $query = new CGI;
 my $op = $query->param('op') || q{};
 my $dbh = C4::Context->dbh;
 
-my $sth;
-# my $id;
 my ($template, $loggedinuser, $cookie);
 ($template, $loggedinuser, $cookie)
   = get_template_and_user({template_name => "serials/serials-collection.tmpl",
@@ -55,7 +53,7 @@ if($op eq 'gennext' && @subscriptionid){
     my $subscriptionid = $subscriptionid[0];
     my $subscription = GetSubscription($subscriptionid);
 
-	my $sth = $dbh->prepare("SELECT publisheddate, serialid, serialseq, planneddate 
+	my $sth = $dbh->prepare("SELECT publisheddate, serialid, serialseq, planneddate
 							FROM serial WHERE status = 1 AND subscriptionid = ?");
 	$sth->execute($subscriptionid);
 
@@ -71,12 +69,12 @@ if($op eq 'gennext' && @subscriptionid){
              $newinnerloop1, $newinnerloop2, $newinnerloop3
             ) = GetNextSeq($subscription);
 
-	     ## We generate the next publication date    
+	     ## We generate the next publication date
 	     my $nextpublisheddate = GetNextDate( $expected->{planneddate}->output('iso'), $subscription );
 	     ## Creating the new issue
 	     NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
 	             1, $nextpublisheddate, $nextpublisheddate );
-             
+
 	     ## Updating the subscription seq status
 	     my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
 	                 WHERE  subscriptionid = ?";

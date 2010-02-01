@@ -85,7 +85,7 @@ if ($date) {
             push @subscriptions_loop,$subscription;
         }
     }
-    
+
     $template->param (
         title           => $title,
         issn            => $issn,

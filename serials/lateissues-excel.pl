@@ -33,7 +33,6 @@ my $op = $query->param('op') || q{};
 my $serialidcount = @serialid;
 
 my %supplierlist = GetSuppliersWithLateIssues;
-my @select_supplier;
 
 my @loop1;
 my ($count, @lateissues);

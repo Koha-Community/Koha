@@ -79,13 +79,13 @@ if ($op eq "do_search" && $query) {
     # add the itemtype limit if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
     if ( $itemtypelimit ) {
-	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 
+	if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	    $query .= " AND $itype_or_itemtype=$itemtypelimit";
 	} else {
 	    $query .= " AND $advanced_search_types=$itemtypelimit";
 	}
     }
-    $debug && warn $query; 
+    $debug && warn $query;
     $resultsperpage= $input->param('resultsperpage');
     $resultsperpage = 20 if(!defined $resultsperpage);
 
@@ -180,7 +180,7 @@ if ($op eq "do_search" && $query) {
 } # end of if ($op eq "do_search" & $query)
  else {
     my @itemtypesloop;
-    if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 
+    if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	# load the itemtypes
 	my $itemtypes = GetItemTypes;
 	my $selected=1;
@@ -223,7 +223,7 @@ if ($op eq "do_search" && $query) {
                 debug => 1,
                 });
 
- 
+
     if ($op eq "do_search") {
        $template->param("no_query" => 1);
     } else {

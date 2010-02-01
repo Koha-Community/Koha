@@ -27,7 +27,7 @@ acqui-search-result.pl
 
 =head1 DESCRIPTION
  TODO
- 
+
 =head1 PARAMETERS
 
 =over 4
@@ -67,7 +67,7 @@ my @suppliers = GetBookSeller($supplier);
 my $loop_suppliers = [];
 for my $s (@suppliers) {
     my $orders = GetPendingOrders($s->{'id'});
-    
+
     my $loop_basket = [];
     for my $ord ( @{$orders} ) {
         push @{$loop_basket}, {

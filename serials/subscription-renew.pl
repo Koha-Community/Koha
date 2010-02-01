@@ -47,6 +47,7 @@ use strict;
 use warnings;
 
 use CGI;
+use Carp;
 use C4::Koha;
 use C4::Auth;
 use C4::Dates qw/format_date/;
@@ -83,7 +84,7 @@ if ( $op eq "renew" ) {
 
 my $subscription = GetSubscription($subscriptionid);
 if ($subscription->{'cannotedit'}){
-  warn "Attempt to renew subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+  carp "Attempt to renew subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
   print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 }
 

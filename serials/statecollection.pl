@@ -17,6 +17,7 @@
 
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
@@ -66,8 +67,8 @@ if ($op eq 'serialchangestatus') {
 		} else {
 			# add a special issue
 			if ($serialseqs[$i]) {
-				my $subscription=getsubscription($subscriptionid);
-				newissue($serialseqs[$i],$subscriptionid,$subscription->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
+				my $sub=getsubscription($subscriptionid);
+				newissue($serialseqs[$i],$subscriptionid,$sub->{biblionumber},$status[$i], format_date_in_iso($planneddates[$i]));
 			}
 		}
 	}

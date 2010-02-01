@@ -28,7 +28,7 @@ serials-recieve.pl
 
 =item op
 op can be :
-    * modsubscriptionhistory :to modify the subscription history 
+    * modsubscriptionhistory :to modify the subscription history
     * serialchangestatus     :to modify the status of this subscription
 
 =item subscriptionid
@@ -63,6 +63,7 @@ op can be :
 
 
 use strict;
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
@@ -125,7 +126,7 @@ if ($op eq 'serialchangestatus') {
     my $sth = $dbh->prepare("select status from serial where serialid=?");
     for (my $i=0;$i<=$#serialids;$i++) {
         $sth->execute($serialids[$i]);
-        
+
         my ($oldstatus) = $sth->fetchrow;
         if ($serialids[$i]) {
             ModSerialStatus($serialids[$i],$serialseqs[$i],format_date_in_iso($planneddates[$i]),format_date_in_iso($publisheddates[$i]),$status[$i],$notes[$i]) unless ($hassubscriptionexpired && $oldstatus == 1);
@@ -140,11 +141,11 @@ if ($op eq 'serialchangestatus') {
                 my ($status2, @errors)= ItemizeSerials($serialids[$i],\%info);
                 my $sth2 = $dbh->prepare("UPDATE subscriptionhistory SET lastbranch = ? WHERE subscriptionid = ?");
                 $sth2->execute($homebranches[$i],$subscriptionid);
-                $sth2->finish;			    
+                $sth2->finish;
                 # remove from missing list if item being checked in is on it
                 if ($status2 ==1){
                 removeMissingIssue($serialseqs[$i],$subscriptionid);
-                }			    
+                }
             }
         } else {
             # add a special issue
@@ -185,7 +186,7 @@ my $subs = &GetSubscription($subscriptionid);
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);
 my $count = @serialslist;
 for(my $i=0;$i<$count;$i++){
-    warn "la : $i";
+    #warn "la : $i";
     $serialslist[$i]->{'callnumber'} = $subscription->{'callnumber'};
     my $temp = rand(10000000);
     $serialslist[$i]->{'barcode'} = "TEMP" . sprintf("%.0f",$temp);
@@ -217,7 +218,7 @@ if (C4::Context->preference("serialsadditems")){
     }
     my $itemstatushash = GetItemStatus($fwk);
     my @itemstatusloop;
-	my $itemstatusloopcount=0;    
+	my $itemstatusloopcount=0;
     foreach my $thisitemstatus (keys %$itemstatushash) {
         my %row =(itemval => $thisitemstatus,
                     itemlib => $itemstatushash->{$thisitemstatus},
@@ -242,7 +243,7 @@ if (C4::Context->preference("serialsadditems")){
 		$data->{"branchloop"} = \@branchloop ;
 	}
 # warn "Choice: $choice";
-    $template->param(choice => $choice);    
+    $template->param(choice => $choice);
     $template->param(serialadditems =>C4::Context->preference("serialsadditems"),
                     branchloop => \@branchloop,
                     ) ;
@@ -271,7 +272,7 @@ $template->param(
             bibliotitle => $subs->{bibliotitle},
             biblionumber => $subs->{biblionumber},
             hassubscriptionexpired =>$hassubscriptionexpired,
-            abouttoexpire =>$abouttoexpire,    
+            abouttoexpire =>$abouttoexpire,
             routing => $routing,
             missingseq => $manualissue,
             frommissing => $manualstatus,

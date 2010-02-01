@@ -19,7 +19,6 @@ my $supplierid = $input->param('supplierid');
 my $suppliername = $input->param('suppliername');
 my $order = $input->param('order');
 my %supplierlist = GetSuppliersWithLateIssues();
-my @select_supplier;
 
 # open template first (security & userenv set here)
 my ($template, $loggedinuser, $cookie)
