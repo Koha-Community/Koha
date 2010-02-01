@@ -176,6 +176,9 @@ foreach my $tag (sort keys %{$tagslib}) {
     foreach my $subfield (sort keys %{$tagslib->{$tag}}) {
      	next if subfield_is_koha_internal_p($subfield);
     	next if ($tagslib->{$tag}->{$subfield}->{'tab'} ne "10");
+        # barcode and stocknumber are not meant to be batch-modified
+    	next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.barcode';
+    	next if $tagslib->{$tag}->{$subfield}->{'kohafield'} eq 'items.stocknumber';
 	my %subfield_data;
  
 	my $index_subfield = int(rand(1000000)); 
@@ -204,31 +207,8 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{visibility} = "display:none;" if (($tagslib->{$tag}->{$subfield}->{hidden} > 4) || ($tagslib->{$tag}->{$subfield}->{hidden} < -4));
 	# testing branch value if IndependantBranches.
 
-	my $attributes_no_value;
-	my $not_editable = 0;
-	# Disable barcode and stock numbers batch editing
-	my @not_editable_koha_fields = ( 'items.barcode', 'items.stocknumber' );
-	foreach (@not_editable_koha_fields) {
-	    my ($bctag, $bcsubfield) = GetMarcFromKohaField($_, $frameworkcode);
-    	    if (($bctag eq $subfield_data{tag}) && ($bcsubfield eq $subfield_data{subfield})) {
-		$not_editable = 1;
-	    }
-
-	}
-
-	my $attributes;
-	# If a field is found to be non-editable,
-	if ($not_editable) {
-		# We mark it as disabled, so the user won't be able to edit it
-     		$attributes_no_value = qq(disabled="disabled"); 
-		$attributes = $attributes_no_value;
-		# We also remove it's data, so it won't be modified
-		undef($subfield_data{tag});
-		undef($subfield_data{subfield});
-	} else {
-	    $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
-	    $attributes          = qq($attributes_no_value value="$value" );
-	}
+	my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
+	my $attributes          = qq($attributes_no_value value="$value" );
 
 	if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
 	my @authorised_values;
@@ -387,7 +367,6 @@ sub BuildItemsData{
 		foreach my $itemnumber (@itemnumbers){
 			my $itemdata=GetItem($itemnumber);
 			my $itemmarc=Item2Marc($itemdata);
-			my $biblio=GetBiblioData($$itemdata{biblionumber});
 			my %this_row;
 			foreach my $field (grep {$_->tag() eq $itemtagfield} $itemmarc->fields()) {
 				# loop through each subfield
@@ -415,8 +394,12 @@ sub BuildItemsData{
 					$this_row{itemnumber} = $subfvalue if ($tag eq $itemtagfield && $subfcode eq $itemtagsubfield);
 				}
 			}
-			$this_row{0}=join("\n",@$biblio{qw(title author ISBN)});
-			$witness{0}="&nbsp;";
+
+            # grab title, author, and ISBN to identify bib that the item
+            # belongs to in the display
+			my $biblio=GetBiblioData($$itemdata{biblionumber});
+            $this_row{bibinfo} = join("\n", @$biblio{qw(title author ISBN)});
+
 			if (%this_row) {
 				push(@big_array, \%this_row);
 			}
@@ -434,9 +417,11 @@ sub BuildItemsData{
 			$row_data{itemnumber} = $row->{itemnumber};
 			#reporting this_row values
 			$row_data{'nomod'} = $row->{'nomod'};
+            $row_data{bibinfo} = $row->{bibinfo};
 			push(@item_value_loop,\%row_data);
 		}
 		my @header_loop=map { { header_value=> $witness{$_}} } @witnesscodessorted;
+
 	return { item_loop        => \@item_value_loop, item_header_loop => \@header_loop };
 }
 

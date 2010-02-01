@@ -55,6 +55,7 @@
 	    <thead>
 		<tr>
 		    <th>&nbsp;</th>
+		    <th>&nbsp;</th>
 		    <!-- TMPL_LOOP NAME="item_header_loop" --> 
 		    <th> <!-- TMPL_VAR NAME="header_value" --> </th>
 		    <!-- /TMPL_LOOP --> 
@@ -62,6 +63,7 @@
 	    </thead>
 	    <tbody>
             <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF-->
+                <td><!-- TMPL_VAR ESCAPE="HTML" NAME="bibinfo" --></td>
                 <!-- TMPL_LOOP NAME="item_value" --> <td><!-- TMPL_VAR ESCAPE="HTML" NAME="field" --></td> 
 				<!-- /TMPL_LOOP --> </tr>
             <!-- /TMPL_LOOP -->
@@ -83,9 +85,9 @@
 		      <!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
 	       </label>
                 <!-- TMPL_VAR NAME="marc_value" -->
-                <!-- TMPL_IF NAME="tag" --><input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" /><!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="subfield" --><input type="hidden" name="subfield"       value="<!-- TMPL_VAR NAME="subfield" -->" /><!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="mandatory" --><input type="hidden" name="mandatory"       value="<!-- TMPL_VAR NAME="mandatory" -->" /><!-- /TMPL_IF -->
+                <input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" />
+                <input type="hidden" name="subfield"       value="<!-- TMPL_VAR NAME="subfield" -->" />
+                <input type="hidden" name="mandatory"       value="<!-- TMPL_VAR NAME="mandatory" -->" />
                 <!-- TMPL_IF NAME="repeatable" -->
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
