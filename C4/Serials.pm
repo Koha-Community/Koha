@@ -56,6 +56,7 @@ BEGIN {
       &reorder_members
       &check_routing &updateClaim &removeMissingIssue
       &CountIssues
+      HasItems
 
     );
 }
