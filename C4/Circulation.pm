@@ -73,6 +73,7 @@ BEGIN {
         &GetBranchBorrowerCircRule
 		&GetBranchItemRule
 		&GetBiblioIssues
+		&GetOpenIssue
 		&AnonymiseIssueHistory
 	);
 
@@ -879,7 +880,6 @@ sub AddIssue {
     my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode) = @_;
     my $dbh = C4::Context->dbh;
 	my $barcodecheck=CheckValidBarcode($barcode);
-
     # $issuedate defaults to today.
     if ( ! defined $issuedate ) {
         $issuedate = strftime( "%Y-%m-%d", localtime );
@@ -1791,6 +1791,28 @@ sub GetItemIssue {
     $data->{'itemnumber'} = $itemnumber; # fill itemnumber, in case item is not on issue.
     # FIXME: that would mean issues.itemnumber IS NULL and we didn't really match it.
     return ($data);
+}
+
+=head2 GetOpenIssue
+
+$issue = GetOpenIssue( $itemnumber );
+
+Returns the row from the issues table if the item is currently issued, undef if the item is not currently issued
+
+C<$itemnumber> is the item's itemnumber
+
+Returns a hashref
+
+=cut
+
+sub GetOpenIssue {
+  my ( $itemnumber ) = @_;
+
+  my $dbh = C4::Context->dbh;  
+  my $sth = $dbh->prepare( "SELECT * FROM issues WHERE itemnumber = ? AND returndate IS NULL" );
+  $sth->execute( $itemnumber );
+  my $issue = $sth->fetchrow_hashref();
+  return $issue;
 }
 
 =head2 GetItemIssues
