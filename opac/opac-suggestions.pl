@@ -72,10 +72,10 @@ my $suggestions_loop =
   &SearchSuggestion( $suggestion);
 if ( $op eq "add_confirm" ) {
 	if (@$suggestions_loop>=1){
-		#some suggestion are answering the request Donot Add	
-	} 
+		#some suggestion are answering the request Donot Add
+	}
 	else {
-		$$suggestion{'suggestioncreateddate'}=C4::Dates->today;
+		$$suggestion{'suggesteddate'}=C4::Dates->today;
 		$$suggestion{'branchcode'}=C4::Context->userenv->{"branch"};
 		&NewSuggestion($suggestion);
 		# empty fields, to avoid filter in "SearchSuggestion"
@@ -93,8 +93,8 @@ if ( $op eq "delete_confirm" ) {
     }
     $op = 'else';
 }
-map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;  
-my $supportlist=GetSupportList();				
+map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;
+my $supportlist=GetSupportList();
 foreach my $support(@$supportlist){
 	if ($$support{'imageurl'}){
 		$$support{'imageurl'}= getitemtypeimagelocation( 'opac', $$support{'imageurl'} );

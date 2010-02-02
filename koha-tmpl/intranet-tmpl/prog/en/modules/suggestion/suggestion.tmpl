@@ -10,10 +10,10 @@
         new YAHOO.widget.Button("newsuggestion");
     }
 $.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
+    id: 'articles',
+    is: function(s) {return false;  },
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+    type: 'text'
 });
 /**
 *  displayOther.
@@ -72,7 +72,7 @@ $(document).ready(function() {
 	$("h4.collapse a").click(function(){
 		$(this).parent().parent().find("ol").toggle();
     });
-}); 
+});
 // ]]>
 </script>
 <style type="text/css">
@@ -81,7 +81,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
 </style>
 <!--/TMPL_IF-->
 </head>
-<body>              
+<body>
 <!-- TMPL_INCLUDE name="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!-- TMPL_IF name="op_save" --> <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; <!-- TMPL_IF name="suggestionid" -->Suggestion edit #<!-- TMPL_VAR name="suggestionid" --><!--TMPL_ELSE-->New purchase suggestion<!-- /TMPL_IF --><!--TMPL_ELSE-->Suggestions Management<!-- /TMPL_IF --> </div>
@@ -95,9 +95,9 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
     <!-- TMPL_IF name="suggestionid" -->
         <h1>Edit purchase suggestion #<!-- TMPL_VAR name="suggestionid" --></h1>
         <input type="hidden" name="suggestionid" value="<!-- TMPL_VAR name="suggestionid" -->"/>
-    <!--TMPL_ELSE-->  
+    <!--TMPL_ELSE-->
         <h1>Enter a new purchase suggestion</h1>
-    <!--/TMPL_IF-->    
+    <!--/TMPL_IF-->
     <fieldset class="rows"> <legend>Bibliographic information</legend><ol>
         <li><label for="title">Title:</label><input type="text" id="title" name="title" size="50" maxlength="80" value="<!--TMPL_VAR Name="title"-->"/></li>
         <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" value="<!--TMPL_VAR Name="author"-->"/></li>
@@ -148,7 +148,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
         </table></li></ol>
     </fieldset>
     <fieldset class="rows"> <legend>Acquisition information</legend><ol>
-        <li><label for="branchcode">Branchcode:</label> 
+        <li><label for="branchcode">Branchcode:</label>
             <select name="branchcode" id="branchcode">
                 <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
@@ -174,7 +174,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
 
 <h1>Suggestions Management</h1>
 
-<!--TMPL_UNLESS Name="notabs"-->        
+<!--TMPL_UNLESS Name="notabs"-->
 <div id="sorting" class="overlay">Sorting...</div>
 <div id="loadingtab" class="overlay">Loading tab...</div>
 <div id="suggestiontabs" class="toptabs">
@@ -184,7 +184,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
 <!--/TMPL_LOOP -->
     </ul>
     </div>
-<!--/TMPL_UNLESS -->        
+<!--/TMPL_UNLESS -->
 
 <!--TMPL_LOOP Name="suggestions"-->
 <div id="<!--TMPL_VAR Name="suggestiontype"-->">
@@ -219,7 +219,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                 </td>
                 <td>
                     <!--TMPL_IF Name="emailsuggestedby"--><a href="mailto:<!-- TMPL_VAR name="emailsuggestedby" -->"><!--/TMPL_IF--><!-- TMPL_VAR name="surnamesuggestedby" --><!-- TMPL_IF name="firstnamesuggestedby" -->, <!-- TMPL_VAR name="firstnamesuggestedby" --><!-- /TMPL_IF --> <!--TMPL_IF Name="emailsuggestedby"--></a><!--/TMPL_IF-->
-                    <!--TMPL_IF Name="suggesteddate"--><br/><!-- TMPL_VAR name="suggesteddate" --><!--/TMPL_IF-->
+                    <!--TMPL_IF Name="suggesteddate"--> / <!-- TMPL_VAR name="suggesteddate" --><!--/TMPL_IF-->
                 </td>
                 <td>
                     <!--TMPL_IF Name="emailmanagedby"--><a href="mailto:<!-- TMPL_VAR name="emailmanagedby" -->"><!--/TMPL_IF--><!-- TMPL_VAR name="surnamemanagedby" --><!-- TMPL_IF name="firstnamemanagedby" -->, <!-- TMPL_VAR name="firstnamemanagedby" --><!-- /TMPL_IF --> <!--TMPL_IF Name="emailmanagedby"--></a><!--/TMPL_IF-->
