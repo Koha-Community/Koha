@@ -59,9 +59,9 @@ function Check(f) {
 }
 function CheckMultipleAdd(f) {
 
-    if (!f || isNaN(f) || !parseInt(f) == f || f <= 0) { 
-	alert(_("Please enter a number of items to create.")); 
-	return false;	
+    if (!f || isNaN(f) || !parseInt(f) == f || f <= 0) {
+	alert(_("Please enter a number of items to create."));
+	return false;
     }
 }
 function Dopop(link,i) {
@@ -87,12 +87,12 @@ function CloneSubfield(index){
     var old_id =  original.getAttribute('id');
     old_id=old_id.substr(12);
     var new_id  = old_id+new_key;
-    
+
     // set the attribute for the new 'div' subfields
     var inputs     = clone.getElementsByTagName('input');
     var selects    = clone.getElementsByTagName('select');
     var textareas  = clone.getElementsByTagName('textarea');
-        
+
     // input
     var id_input = "";
     for(var i=0,len=inputs.length; i<len ; i++ ){
@@ -100,30 +100,30 @@ function CloneSubfield(index){
         inputs[i].setAttribute('id',id_input);
         inputs[i].setAttribute('name',inputs[i].getAttribute('name'));
     }
-    
-    // select 
+
+    // select
     for(var i=0,len=selects.length; i<len ; i++ ){
         id_input = selects[i].getAttribute('id')+new_key;
         selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
         selects[i].setAttribute('name',selects[i].getAttribute('name'));
     }
-    
+
     // textarea
     for(var i=0,len=textareas.length; i<len ; i++ ){
         id_input = textareas[i].getAttribute('id')+new_key;
         textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
         textareas[i].setAttribute('name',textareas[i].getAttribute('name'));
     }
-    
+
     <!-- TMPL_UNLESS NAME='advancedMARCEditor' -->
     // when cloning a subfield, reset its label too.
     var label = clone.getElementsByTagName('label')[0];
     label.setAttribute('for',id_input);
     <!-- /TMPL_UNLESS -->
-    
+
     // setting a new if for the parent div
     clone.setAttribute('id',new_id);
-    
+
     var CloneButtonPlus;
     try {
       var spans = clone.getElementsByTagName('span');
@@ -179,7 +179,7 @@ function set_to_today(id, force) {
 </div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -194,7 +194,7 @@ function set_to_today(id, force) {
 
 <div id="cataloguing_additem_itemlist">
     <!-- TMPL_IF name="item_loop" -->
-        <div style="overflow:auto">
+        <div>
         <table>
             <tr>
                 <th colspan="2">&nbsp;</th>
@@ -226,12 +226,12 @@ function set_to_today(id, force) {
         <h2 id="additema">Add Item</h2>
     <!-- TMPL_ELSE -->
         <h2 id="edititem">Edit Item #<!-- TMPL_VAR NAME="itemnumber" --></h2>
-    <!-- /TMPL_IF -->	
+    <!-- /TMPL_IF -->
 	<fieldset class="rows">
 	<ol>
         <!-- TMPL_LOOP NAME="item" -->
                <li><div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
-   
+
                <label><!-- TMPL_VAR NAME="subfield" --> - <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF --><!-- TMPL_VAR NAME="marc_lib" --><!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF --></label>
                 <!-- TMPL_VAR NAME="marc_value" -->
                 <input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" />
@@ -240,7 +240,7 @@ function set_to_today(id, force) {
                 <!-- TMPL_IF NAME="repeatable" -->
                     <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">+</span>
                 <!-- /TMPL_IF -->
-   
+
             </div></li>
         <!-- /TMPL_LOOP -->
     </ol>
@@ -251,9 +251,9 @@ function set_to_today(id, force) {
 
 <fieldset class="action">    <!-- TMPL_IF name="opisadd" -->
     <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
-    <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe he validated the adding of multiple copies 
-		when pressing the enter key, while in fact it is the first submit button that is validated, in our case the "add (single) item" button. 
-		It is a bit tricky, but necessary in the sake of UI correctness. 
+    <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe he validated the adding of multiple copies
+		when pressing the enter key, while in fact it is the first submit button that is validated, in our case the "add (single) item" button.
+		It is a bit tricky, but necessary in the sake of UI correctness.
     -->
 
     <input type="submit" name="add_submit" value="Add item" onclick="return Check(this.form)" />
@@ -268,7 +268,7 @@ function set_to_today(id, force) {
     <input type="hidden" name="tag" value="<!-- TMPL_VAR NAME="itemtagfield" -->" />
     <input type="hidden" name="subfield" value="<!-- TMPL_VAR NAME="itemtagsubfield" -->" />
     <input type="hidden" name="field_value" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
-    <input type="submit" value="Save Changes" onclick="return Check(this.form)" /> 
+    <input type="submit" value="Save Changes" onclick="return Check(this.form)" />
     <!-- /TMPL_IF --></fieldset>
 
     </form>
