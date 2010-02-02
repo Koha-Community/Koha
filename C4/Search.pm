@@ -814,7 +814,7 @@ sub getIndexes{
                     'biblionumber',
                     'bio',
                     'biography',
-                    'callnum',          
+                    'callnum',
                     'cfn',
                     'Chronological-subdivision',
                     'cn-bib-source',
@@ -927,7 +927,7 @@ sub getIndexes{
                     'Title-uniform-seealso',
                     'totalissues',
                     'yr',
-                    
+
                     # items indexes
                     'acqsource',
                     'barcode',
@@ -964,10 +964,10 @@ sub getIndexes{
                     'stack',
                     'uri',
                     'withdrawn',
-                    
+
                     # subject related
                   );
-                  
+
     return \@indexes;
 }
 
@@ -1114,11 +1114,11 @@ sub buildQuery {
                     ) = ( 0, 0, 0, 0, 0 );
 
                 }
-                
+
                 if(not $index){
                     $index = 'kw';
                 }
-                
+
                 # Set default structure attribute (word list)
                 my $struct_attr;
                 unless ( $indexes_set || !$index || $index =~ /(st-|phr|ext|wrdl)/ ) {
@@ -1141,7 +1141,7 @@ sub buildQuery {
                 if ($auto_truncation){
 					unless ( $index =~ /(st-|phr|ext)/ ) {
 						#FIXME only valid with LTR scripts
-						$operand=join(" ",map{ 
+						$operand=join(" ",map{
 											(index($_,"*")>0?"$_":"$_*")
 											 }split (/\s+/,$operand));
 						warn $operand if $DEBUG;
@@ -1305,7 +1305,9 @@ sub buildQuery {
     # Normalize the query and limit strings
     # This is flawed , means we can't search anything with : in it
     # if user wants to do ccl or cql, start the query with that
-    $query =~ s/:/=/g;
+#    $query =~ s/:/=/g;
+    $query =~ s/(?<=(ti|au|pb|su|an|kw|mc)):/=/g;
+    $query =~ s/(?<=rtrn):/=/g;
     $limit =~ s/:/=/g;
     for ( $query, $query_desc, $limit, $limit_desc ) {
         s/  / /g;    # remove extra spaces
