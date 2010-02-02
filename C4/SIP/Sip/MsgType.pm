@@ -544,7 +544,11 @@ sub handle_checkout {
 	$resp .= add_field(FID_PATRON_ID, $patron_id);
 	$resp .= add_field(FID_ITEM_ID, $item_id);
 	$resp .= add_field(FID_TITLE_ID, $item->title_id);
-	$resp .= add_field(FID_DUE_DATE, $item->due_date);
+    if ($item->due_date) {
+        $resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
+    } else {
+        $resp .= add_field(FID_DUE_DATE, q{});
+    }
 
 	$resp .= maybe_add(FID_SCREEN_MSG, $status->screen_msg);
 	$resp .= maybe_add(FID_PRINT_LINE, $status->print_line);
