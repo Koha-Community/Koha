@@ -17,6 +17,7 @@
 
 
 use strict;
+use warnings;
 
 use CGI;
 
@@ -48,22 +49,21 @@ $template->param($borr);
 my $itemtypes = GetItemTypes();
 
 # get the record
-my $order  = $query->param('order');
-my $order2 = $order;
-if ( $order2 eq '' ) {
-    $order2 = "date_due desc";
+my $order  = $query->param('order') || '';
+if ( $order eq '' ) {
+    $order = "date_due desc";
     $template->param( orderbydate => 1 );
 }
 
-if ( $order2 eq 'title' ) {
+if ( $order eq 'title' ) {
     $template->param( orderbytitle => 1 );
 }
 
-if ( $order2 eq 'author' ) {
+if ( $order eq 'author' ) {
     $template->param( orderbyauthor => 1 );
 }
 
-my $limit = $query->param('limit');
+my $limit = $query->param('limit') || 50;
 if ( $limit eq 'full' ) {
     $limit = 0;
 }
@@ -71,9 +71,8 @@ else {
     $limit = 50;
 }
 
-my ( $count, $issues ) = GetAllIssues( $borrowernumber, $order2, $limit );
+my ( $count, $issues ) = GetAllIssues( $borrowernumber, $order, $limit );
 
-my $borr = GetMemberDetails( $borrowernumber );
 my @bordat;
 $bordat[0] = $borr;
 $template->param( BORROWER_INFO => \@bordat );
@@ -94,8 +93,10 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
     $line{returndate}     = format_date( $issues->[$i]->{'returndate'} );
     $line{volumeddesc}    = $issues->[$i]->{'volumeddesc'};
     $line{counter}        = $i + 1;
-    $line{'description'} = $itemtypes->{ $issues->[$i]->{'itemtype'} }->{'description'};
-    $line{imageurl}       = getitemtypeimagelocation( 'opac', $itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'} );
+    if($issues->[$i]->{'itemtype'}) {
+        $line{'itypedescription'} = $itemtypes->{ $issues->[$i]->{'itemtype'} }->{'description'};
+        $line{imageurl}       = getitemtypeimagelocation( 'opac', $itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'} );
+    }
     push( @loop_reading, \%line );
 }
 
