@@ -140,7 +140,6 @@ sub XSLTParse4Display {
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
     my $sysxml = "";
-    warn $xmlrecord;
     foreach my $syspref ( qw/OPACURLOpenInNewWindow DisplayOPACiconsXSLT URLLinkText/ ) {
         if (C4::Context->preference( $syspref ) ){
         $sysxml .= "<syspref name=\"$syspref\">" .
