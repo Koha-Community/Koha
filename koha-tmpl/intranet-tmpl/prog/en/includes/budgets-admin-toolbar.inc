@@ -20,8 +20,8 @@
 	function yuiToolbar() {
 <!-- TMPL_IF NAME="budget_period_id" -->
 		                var budgets_menu = [
-						{ text: _("New root budget"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form" },
-                        { text: _("New budget for '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->"
+						{ text: _("New budget"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form" },
+                        { text: _("New fund for '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->"
                            <!-- TMPL_IF NAME="budget_period_locked" -->,  disabled:true<!-- /TMPL_IF  -->
                            <!-- TMPL_UNLESS NAME="CAN_user_acquisition_budget_add_del" -->,  disabled:true <!-- /TMPL_UNLESS  -->
                           }
@@ -32,8 +32,8 @@
 
         <!-- TMPL_IF NAME="budget_period_id" -->
                 var periods_menu = [
-                        { text: _("Edit root budget '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
-                        { text: _("Duplicate root budget '<!-- TMPL_VAR NAME="budget_period_description" -->'") }
+                        { text: _("Edit budget '<!-- TMPL_VAR NAME="budget_period_description" -->'"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
+                        { text: _("Duplicate budget '<!-- TMPL_VAR NAME="budget_period_description" -->'") }
                 ]
         <!-- /TMPL_IF -->
 
@@ -102,9 +102,9 @@
 	//]]>
 </script>
 	<ul class="toolbar">
-        <!-- TMPL_UNLESS NAME="budget_period_id" --><li><a id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New Root Budget</a></li><!-- /TMPL_UNLESS -->
+        <!-- TMPL_UNLESS NAME="budget_period_id" --><li><a id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New Budget</a></li><!-- /TMPL_UNLESS -->
 		<!-- TMPL_UNLESS NAME="period_button_only" --><li id="budgets_menuc"><a id="budgets_menu" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New</a></li><!-- /TMPL_UNLESS -->
-        <li id="periods_menuc"><a id="periods_menu" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">Root Budgets</a></li>
+        <li id="periods_menuc"><a id="periods_menu" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">Budgets</a></li>
 		<!-- TMPL_UNLESS NAME="period_button_only" --><li id="planning_menuc"><a id="planning_menu" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Budget planning</a></li>
 	<!-- /TMPL_UNLESS -->
 	</ul>

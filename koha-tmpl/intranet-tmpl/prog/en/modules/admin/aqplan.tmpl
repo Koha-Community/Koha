@@ -79,7 +79,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 </script>
 
 <title>
-Budget planning
+Budget & Fund Planning
 </title>
 </head>
 <body>
@@ -89,7 +89,8 @@ Budget planning
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
-    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Budgets</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; 
+    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Funds</a> &rsaquo;
     <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Planning</a> &rsaquo;
 </div>
 
@@ -114,7 +115,7 @@ Budget planning
     <!-- TMPL_ELSE -->
         <input type="checkbox" id="show_mine"  name="show_mine" value="1"  />
     <!-- /TMPL_IF -->
-    <label for="show_mine">Show my budgets only</label>
+    <label for="show_mine">Show my funds only</label>
     </td>
     <td>
         <label for="authcat_dropbox"  > Select planning type:</label>
@@ -129,7 +130,7 @@ Budget planning
     <!-- TMPL_ELSE -->
         <input type="checkbox" id="show_active" name="show_active" value="1" />
         <!-- /TMPL_IF -->
-    <label for="show_active">Show active budgets only</label>
+    <label for="show_active">Show active funds only</label>
     </td>
     <td></td>
     </tr>
@@ -160,8 +161,8 @@ Budget planning
     <table id="plan" width="100%">
     <thead>
     <tr>
-    <th>Budget name</th>
-    <th>Budget total</th>
+    <th>Fund name</th>
+    <th>Fund total</th>
 
     <!-- TMPL_LOOP NAME="authvals_row" -->
          <!-- TMPL_IF NAME="display" -->
@@ -177,10 +178,10 @@ Budget planning
 
     <!-- /TMPL_LOOP -->
 
-    <th >Budget remaining    </th>
+    <th>Fund remaining</th>
 
     <th id='popmenu' style=" text-align: center;" >
-    <span id="add_popmenu_item"    class="buttonPlus" > + </span></th>
+    <span id="add_popmenu_item" class="buttonPlus" > + </span></th>
     </tr>
     </thead>
 
@@ -294,7 +295,7 @@ Budget planning
 </form>
 
         <!-- TMPL_ELSE 	-->
-No budgets to display for this search criteria
+No funds to display for this search criteria
         <!-- /TMPL_IF 	-->
 
 
