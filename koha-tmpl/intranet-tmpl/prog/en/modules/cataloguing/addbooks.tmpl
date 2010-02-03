@@ -15,12 +15,12 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Cataloging</div>
 
 <div id="doc" class="yui-t7">
-   
+
    <div id="bd">
 	<div id="yui-main">
-	
+
 <!-- TMPL_INCLUDE NAME="cataloging-toolbar.inc" -->
-	
+
 	<!-- TMPL_IF name="noitemsfound" -->
 		No results found
 	<!-- /TMPL_IF -->
@@ -48,7 +48,7 @@
         <!-- /TMPL_IF -->
             <td>
                 <p>
-                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a>
                 <!--TMPL_LOOP Name="subtitle"--><!-- TMPL_VAR NAME="subfield" --><!--/TMPL_LOOP--></p>
                 <!-- TMPL_IF name="summary" -->
                     <p><!-- TMPL_VAR name="summary" --></p>
@@ -101,7 +101,7 @@
                 <td><!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue"--><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit biblio</a>
 					<!-- TMPL_ELSE --><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="disabled" onclick="return false;">Edit biblio</a>
 					<!-- /TMPL_IF -->
-                    
+
                 </td>
                 <td>
                     <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add holdings</a>

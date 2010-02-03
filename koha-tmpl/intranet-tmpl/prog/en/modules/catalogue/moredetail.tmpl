@@ -11,7 +11,7 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item Details for <i><!-- TMPL_LOOP NAME="BIBITEM_DATA" --><!-- TMPL_VAR NAME="title" escape="html" --><!-- /TMPL_LOOP --></i></div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
@@ -48,18 +48,18 @@
 	    <!-- TMPL_IF NAME="item-level_itypes" -->
             <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="itype" -->&nbsp;</li>
 	    <!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="collection" --><li><span class="label">Collection:</span> <!-- TMPL_VAR NAME="collection" --></li> <!-- /TMPL_IF -->  
+            <!-- TMPL_IF NAME="collection" --><li><span class="label">Collection:</span> <!-- TMPL_VAR NAME="collection" --></li> <!-- /TMPL_IF -->
             <li><span class="label">Item Callnumber:</span> <!-- TMPL_VAR NAME="itemcallnumber" -->&nbsp;</li>
-            <!-- TMPL_IF NAME="copyvol" --><li><span class="label">Copy / Vol :</span> <!-- TMPL_VAR NAME="copyvol" -->&nbsp;</li> <!-- /TMPL_IF -->  
+            <!-- TMPL_IF NAME="copyvol" --><li><span class="label">Copy / Vol :</span> <!-- TMPL_VAR NAME="copyvol" -->&nbsp;</li> <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="replacementprice" --><li><span class="label">Replacement Price:</span> <!-- TMPL_VAR NAME="replacementprice" -->&nbsp;</li> <!-- /TMPL_IF -->
             </ol></div>
-           <div class="listgroup"><h4>Statuses <!-- TMPL_IF NAME="status_advisory" -->( 
+           <div class="listgroup"><h4>Statuses <!-- TMPL_IF NAME="status_advisory" -->(
                 <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF -->
-                <!-- TMPL_IF name="itemlost"-->Lost<!-- /TMPL_IF --> 
+                <!-- TMPL_IF name="itemlost"-->Lost<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="damaged" -->Damaged<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="wthdrawn" -->Withdrawn<!-- /TMPL_IF -->
             )<!-- /TMPL_IF --></h4>
-            
+
             <ol class="bibliodetails">
             <li><span class="label">Current Location:</span> <!-- TMPL_VAR NAME="holdingbranchname" -->&nbsp;</li>
             <li><span class="label">Checkout Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="datedue" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
@@ -141,13 +141,13 @@
 
                 <li><span class="label">
                 <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
-                
-                    Accession Date:</span> 
+
+                    Accession Date:</span>
                     <!-- TMPL_IF NAME="basketno" -->
                     <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="dateaccessioned" --></a>
                     <!-- TMPL_ELSE -->
                     <!-- TMPL_VAR NAME="dateaccessioned" -->
-                    <!-- /TMPL_IF --> 
+                    <!-- /TMPL_IF -->
                 <!-- TMPL_ELSE -->
                     <!-- TMPL_VAR NAME="dateaccessioned" -->
                 <!-- /TMPL_IF --> </li>
@@ -166,7 +166,7 @@
                 <!-- TMPL_IF NAME="CAN_user_circulate" -->
               <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
                     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" /><input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
-                    <textarea name="itemnotes" rows="2" cols="30"><!-- TMPL_VAR NAME="itemnotes" --></textarea><input type="submit" name="submit" class="submit" value="Update" /> 
+                    <textarea name="itemnotes" rows="2" cols="30"><!-- TMPL_VAR NAME="itemnotes" --></textarea><input type="submit" name="submit" class="submit" value="Update" />
               </form>
             </li>
             </ol>

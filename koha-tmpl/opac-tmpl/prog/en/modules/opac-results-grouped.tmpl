@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; 
+<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;
 <!-- TMPL_IF NAME="searchdesc" -->
 	Results of Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
@@ -35,12 +35,12 @@ $(document).ready(function(){
 			<!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
 			}<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
-			return false;			
+			return false;
 		} else if($("#addto").find("option:selected").attr("value") == "newlist"){
 			<!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
 			}<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
-			return false;	
+			return false;
 		}
 		if($("#addto").find("option:selected").attr("value") == "addtocart"){
 			addMultiple();
@@ -54,7 +54,7 @@ $(document).ready(function(){
     $("#CheckNone").click(function(){
         $("#bookbag_form").unCheckCheckboxes();
         return false;
-    }); 
+    });
     <!-- TMPL_IF NAME="query_desc" -->
     var query_desc = "<!-- TMPL_VAR NAME="query_desc" ESCAPE="JS"-->";
     q_array = query_desc.split(" ");
@@ -103,8 +103,8 @@ function highlightOn() {
 	<h4>Error:</h4>
     <!-- TMPL_VAR NAME="query_error" -->
 </div>
-<!-- /TMPL_IF -->	
-	
+<!-- /TMPL_IF -->
+
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="total" -->
 <!-- TMPL_IF NAME="scan" -->
@@ -139,7 +139,7 @@ function highlightOn() {
             </tr>
         </table>
     </form>
-    
+
     <form action="/cgi-bin/koha/opac-search.pl" method="get">
         <table>
             <tr>
@@ -153,7 +153,7 @@ function highlightOn() {
 			<tr>
 			<!-- /TMPL_IF -->
                 <td>
-                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title" -->&quot;"><!-- TMPL_VAR NAME="title" --></a>
+                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title" ESCAPE="url" -->&quot;"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a>
                 </td>
                 <td>
                     <!-- TMPL_VAR NAME="subtitle" -->
@@ -267,7 +267,7 @@ function highlightOn() {
                                     <a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="classification" ESCAPE="URL" -->">
                                         <!-- TMPL_VAR NAME="classification" -->
                                     </a>
-<!-- /TMPL_IF --></p> 
+<!-- /TMPL_IF --></p>
 				</td>
                 </tr>
                 <!-- /TMPL_LOOP -->
@@ -284,7 +284,7 @@ function highlightOn() {
 	<!-- TMPL_IF name="suggestion" -->
 <!-- TMPL_IF NAME="AnonSuggestions" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- TMPL_ELSE --><!-- TMPL_IF NAME="loggedinusername" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-    
+
 </div>
 </div>
 <div class="yui-b">

@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
 <meta http-equiv="Content-Language" content="en-us" />
-<style type="text/css"> 
+<style type="text/css">
     @import url(<!-- TMPL_VAR NAME="themelang" -->/css/print.css);
 </style>
     <!-- TMPL_ELSE --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -13,14 +13,14 @@
 	<script type="text/javascript">
 	//<![CDATA[
 
-$(document).ready(function() 
-    { 
+$(document).ready(function()
+    {
         $("#itemst").tablesorter({
                         headers: { 0: { sorter: false }}
-                }); 
-    } 
-); 
-    
+                });
+    }
+);
+
 
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
 
@@ -73,9 +73,9 @@ function tagAdded() {
 		var checked = [];
 		$("#bookbag_form").checkCheckboxes("*", true).each(
 		    function() {
-				selRecord(this.value,true); 
+				selRecord(this.value,true);
 			}
-		); 
+		);
 	        return false;
 	    });
 	    $("#CheckNone").click(function(){
@@ -91,7 +91,7 @@ function tagAdded() {
         $(".holdsep").text("| ");
         $(".hold").text(_("Place Hold"));
 <!-- /TMPL_IF -->
-  
+
         <!-- TMPL_IF NAME="TagsEnabled" -->
         <!-- TMPL_IF NAME="TagsInputOnList" -->
           $(".tagsep").text("| ");
@@ -160,7 +160,7 @@ function tagAdded() {
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
     <h3>
         <!-- TMPL_IF NAME="print_basket" -->
-            <!-- TMPL_VAR NAME="title" -->
+            <!-- TMPL_VAR NAME="title" escape="html" -->
                 <!-- TMPL_IF name="subtitle" --> <!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF -->
                 <!-- TMPL_IF name="author" --> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
@@ -199,7 +199,7 @@ function tagAdded() {
 	    </td>
         </tr>
         <!-- /TMPL_IF -->
-        
+
         <!-- TMPL_IF NAME="publishercode" -->
             <tr>
                 <th scope="row">Publisher</th>
@@ -219,7 +219,7 @@ function tagAdded() {
             <td> <!-- TMPL_VAR NAME="seriestitle" --></td>
         </tr>
         <!-- /TMPL_IF -->
-        
+
         <!-- TMPL_IF name="MARCSUBJCTS" -->
         <tr>
             <th scope="row">Subject(s)</th>
@@ -230,13 +230,13 @@ function tagAdded() {
                 <!-- /TMPL_LOOP --></td>
         </tr>
         <!-- /TMPL_IF -->
-    
+
         <!-- TMPL_IF name="copyrightdate" -->
             <tr><th scope="row">Copyright</th>
                 <td> <!-- TMPL_VAR NAME="copyrightdate" --></td>
             </tr>
         <!-- /TMPL_IF -->
-    
+
         <!-- TMPL_IF name="MARCNOTES" -->
         <tr>
             <th scope="row">Notes</th>
@@ -246,7 +246,7 @@ function tagAdded() {
             <!-- /TMPL_LOOP --></td>
         </tr>
         <!-- /TMPL_IF -->
-    
+
         <!-- TMPL_IF name="unititle" -->
         <tr>
             <th scope="row">Unified title</th>
@@ -277,20 +277,20 @@ function tagAdded() {
             <td> <!-- TMPL_VAR name="lccn" --></td>
         </tr>
         <!-- /TMPL_IF -->
-		
+
         <!-- TMPL_IF name="MARCURLS" -->
         <tr>
             <th scope="row">URL(s)</th>
             <td>
 	   <!-- TMPL_LOOP name="MARCURLS" -->
 		<p><!-- TMPL_IF NAME="part" --><!-- TMPL_VAR NAME="part" -->
-			<br /><!-- /TMPL_IF --> 
-	
+			<br /><!-- /TMPL_IF -->
+
 		<!-- TMPL_VAR NAME="MARCURL" -->
 			<!-- TMPL_IF NAME="notes" --><!-- TMPL_LOOP NAME="notes" --><!-- TMPL_VAR NAME="note" --><br /><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
             <!-- /TMPL_LOOP --></p></td>
         </tr><!-- /TMPL_IF -->
-		
+
         <tr>
             <th scope="row">Location(s)</th>
             <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
@@ -310,10 +310,10 @@ function tagAdded() {
 <!-- TMPL_UNLESS NAME="print_basket" -->
 <p style="border-top : 1px solid #E8E8E8;">
 	<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
-    <a id="CheckAll" href="#">Select All</a> 
+    <a id="CheckAll" href="#">Select All</a>
     <a id="CheckNone" href="#">Clear All</a>
     | <b>Selected items :</b>
-<span id="tag_hides">                
+<span id="tag_hides">
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
 <!-- TMPL_IF NAME="loggedinusername" -->
      | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
@@ -346,7 +346,7 @@ function tagAdded() {
             <!-- /TMPL_IF -->
             <!-- TMPL_UNLESS NAME="print_basket" --><td>
                         <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked);" />
-                   
+
                 </td> <!-- /TMPL_UNLESS -->
             <td>
 		<a href="#" onclick="openBiblio('<!-- TMPL_VAR name="dest" -->',<!-- TMPL_VAR name="biblionumber" -->)">

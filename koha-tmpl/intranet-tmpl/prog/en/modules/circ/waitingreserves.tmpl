@@ -5,10 +5,10 @@
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
+    id: 'articles',
+    is: function(s) {return false;  },
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+    type: 'text'
 });
 	 $(document).ready(function() {
 	 	$("th a").hide();
@@ -17,7 +17,7 @@ $.tablesorter.addParser({
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[3,0]],
 			headers: { 1:{sorter:'articles'},3: { sorter: 'articles' },4:{sorter:false}}
-		}); 
+		});
  	 });
 //]]>
 </script>
@@ -32,7 +32,7 @@ $.tablesorter.addParser({
 </div>
 
 <div id="doc" class="yui-t7">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-g">
@@ -90,7 +90,7 @@ $.tablesorter.addParser({
                     </td>
                     <td>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
-                        <!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+                        <!-- TMPL_IF NAME="borrowermail" --><a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" ESCAPE="url" -->">
         <!-- TMPL_VAR NAME="borrowermail" --></a><!--/TMPL_IF-->
                     </td>
                     <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
@@ -101,7 +101,7 @@ $.tablesorter.addParser({
                             <input type="hidden" name="fbr" value="<!-- TMPL_VAR NAME="holdingbranch" -->" />
                             <input type="hidden" name="tbr" value="<!-- TMPL_VAR NAME="homebranch" -->" />
                             <!-- TMPL_IF NAME="dotransfer" -->
-                            <input type="submit" value="Cancel hold and return to : <!-- TMPL_VAR NAME="homebranch" -->" /> 
+                            <input type="submit" value="Cancel hold and return to : <!-- TMPL_VAR NAME="homebranch" -->" />
                             <!-- TMPL_ELSE -->
                             <input type="submit" value="Cancel hold" />
                             <!-- /TMPL_IF -->

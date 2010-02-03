@@ -5,19 +5,19 @@
 <script type="text/javascript" language="JavaScript">
 //<![CDATA[
 $.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
+    id: 'articles',
+    is: function(s) {return false;  },
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+    type: 'text'
 });
 $(document).ready(function() {
     <!-- TMPL_LOOP NAME="branchesloop" -->
-    $.tablesorter.defaults.widgets = ['zebra']; 
+    $.tablesorter.defaults.widgets = ['zebra'];
     $("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF ="dateformat_metric" -->
         dateFormat: 'uk',<!-- /TMPL_IF -->
         sortList: [[1,0]],
         headers: { 1: { sorter: 'articles' },4:{sorter:false}}
-    }); 
+    });
     <!-- /TMPL_LOOP -->
 });
 //]]>
@@ -30,7 +30,7 @@ $(document).ready(function() {
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Transfers to your library</div>
 
 <div id="doc" class="yui-t7">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-g">
@@ -73,7 +73,7 @@ $(document).ready(function() {
                         </a>
                         <br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
                             <!-- TMPL_IF NAME="borrowermail" -->
-                                <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" -->">
+                                <a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Reservation: <!-- TMPL_VAR NAME="title" ESCAPE="html" -->">
                                     <!-- TMPL_VAR NAME="borrowermail" -->
                                 </a>
                             <!--/TMPL_IF-->

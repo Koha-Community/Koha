@@ -3,7 +3,7 @@
             Receipt Summary for <!-- TMPL_VAR NAME="name" --> <!--TMPL_IF Name="invoice"-->Invoice <!-- TMPL_VAR NAME="invoice" --><!--/TMPL_IF --> on <!-- TMPL_VAR NAME="formatteddatereceived" --><!-- TMPL_ELSE -->Receive Orders from <!-- TMPL_VAR NAME="name" --><!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="greybox.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/json/json-min.js"></script> 
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/json/json-min.js"></script>
 <script type="text/JavaScript">
 //<![CDATA[
 
@@ -18,8 +18,8 @@
     });
 
      // Case-insensitive version of jquery's contains function
-     jQuery.extend(jQuery.expr[':'], { 
-	    icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0" 
+     jQuery.extend(jQuery.expr[':'], {
+	    icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0"
      });
 
      // Contains exactly function
@@ -77,7 +77,7 @@
 		success: function(o) {
 			var jsonString = o.responseText;
 			var gst = "<!-- TMPL_VAR NAME="gst" -->";
-			try { 
+			try {
 				var orders = YAHOO.lang.JSON.parse(jsonString);
 				var foundCount = orders.length;
 
@@ -93,7 +93,7 @@
                        + '<td>' + order.ecost + '</td>'
                        + '<td>' + order.ordertotal + '</td>'
                        + '<td>'
-                       + '<a href="orderreceive.pl?ordernumber=' + order.ordernumber + '&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=' + gst + '&amp;freight=' + order.freight + '&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a> /' 
+                       + '<a href="orderreceive.pl?ordernumber=' + order.ordernumber + '&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=' + gst + '&amp;freight=' + order.freight + '&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a> /'
                        + '<a href="parcel.pl?type=intra&amp;ordernumber=' + order.ordernumber + '&amp;biblionumber=' + order.biblionumber + '&amp;action=cancelorder&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->" onclick="return confirm(\'' + _('Are you sure you want to cancel this order?') + '\');">Cancel</a>'
                        + '</td></tr>').appendTo("table#pendingt");
 				}
@@ -109,7 +109,7 @@
 
 	return false;
     }
-    
+
     // Clear already applied filters
     function clearFilters() {
 	$("#nothingfoundrow").remove();
@@ -132,7 +132,7 @@
         <!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -213,7 +213,7 @@
                 <td><!-- TMPL_VAR NAME="ecost" --></td>
                 <td><!-- TMPL_VAR NAME="ordertotal" --></td>
 				<td>
-				    <a href="orderreceive.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a> / 
+				    <a href="orderreceive.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->&amp;gst=<!-- TMPL_VAR NAME="gst" -->&amp;freight=<!-- TMPL_VAR NAME="freight" -->&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->">Receive</a> /
 				    <a href="parcel.pl?type=intra&amp;ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;action=cancelorder&amp;supplierid=<!-- TMPL_VAR NAME="supplierid" -->&amp;datereceived=<!-- TMPL_VAR NAME="invoicedatereceived" -->&amp;invoice=<!-- TMPL_VAR NAME="invoice" -->" onclick="return confirm(_('Are you sure you want to cancel this order?'));">Cancel</a>
 				</td>
             </tr>
@@ -294,7 +294,7 @@
         <!-- /TMPL_UNLESS -->
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->"><!-- TMPL_VAR NAME="basketno" --></a></td>
                 <td><a href="neworderempty.pl?ordernumber=<!-- TMPL_VAR NAME="ordernumber" -->&amp;booksellerid=<!-- TMPL_VAR NAME="supplierid" -->"><!-- TMPL_VAR NAME="ordernumber" --></a></td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a>
                 <!-- TMPL_IF NAME="author" --> / <!-- TMPL_VAR NAME="author" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="isbn" --> - <!-- TMPL_VAR NAME="isbn" --><!--/TMPL_IF-->
                 <!-- TMPL_IF NAME="publishercode" --><br />Publisher :<!-- TMPL_VAR NAME="publishercode" --><!--/TMPL_IF-->
@@ -347,4 +347,4 @@
 <!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
 </div>
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" --> 
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

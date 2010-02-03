@@ -95,9 +95,9 @@
 
 <p>
     <!-- TMPL_IF NAME="isfiltered" -->
-      <a href="overdue.pl?op=csv&amp;<!-- TMPL_VAR name="csv_param_string" escape="HTML" -->">Download file of displayed overdues</a> 
+      <a href="overdue.pl?op=csv&amp;<!-- TMPL_VAR name="csv_param_string" escape="HTML" -->">Download file of displayed overdues</a>
     <!-- TMPL_ELSE -->
-      <a href="overdue.pl?op=csv">Download file of all overdues</a> 
+      <a href="overdue.pl?op=csv">Download file of all overdues</a>
     <!-- /TMPL_IF -->
 </p>
 <div class="sql"><pre><!-- TMPL_VAR NAME="sql" ESCAPE="HTML" --></pre></div>
@@ -116,15 +116,15 @@
     <tr>
         <td><!-- TMPL_VAR NAME="duedate" --></td>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="name" --></a>
-        <!-- TMPL_IF NAME="email" -->[<a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">email</a>]<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="email" -->[<a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" ESCAPE="html" -->">email</a>]<!-- /TMPL_IF -->
         (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSIF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSIF NAME="phonepro" --><!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF -->)</td>
         <td><!-- TMPL_VAR name="branchcode" --></td>
         <td><!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
+<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" escape="html" --></a>
 <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
-<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
+<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" escape="html" --></a>
 <!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
         </td>
 		<td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnum" -->#item<!-- TMPL_VAR NAME="itemnum" -->"><!-- TMPL_VAR name="barcode" --></a></td>
 		<td><!-- TMPL_VAR name="itemcallnumber" --></td>
@@ -229,7 +229,7 @@
 	<!-- /TMPL_LOOP -->
 </select></li>
 
-<li class="radio"><label for="showall">Show any items currently issued:</label> 
+<li class="radio"><label for="showall">Show any items currently issued:</label>
 	<!-- TMPL_IF NAME="showall" -->
             <input type="checkbox" id="showall" name="showall" value="show" checked="checked" />
     <!-- TMPL_ELSE -->

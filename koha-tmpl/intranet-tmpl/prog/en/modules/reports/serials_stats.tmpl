@@ -7,7 +7,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 	//<![CDATA[
-    	$(document).ready(function() { 
+		$(document).ready(function() {
     		$("#resulttable").tablesorter({
     				widgets : ['zebra']
     			});
@@ -44,7 +44,7 @@
 			<tr>
 				<!-- TMPL_LOOP NAME="datas" -->
 					<td><!-- TMPL_VAR NAME="name" --></td>
-					<td><!-- TMPL_VAR NAME="title" --></td>
+					<td><!-- TMPL_VAR NAME="title" ESCAPE="html" --></td>
 					<td><!-- TMPL_VAR NAME="subscriptionid" --></td>
 					<td><!-- TMPL_VAR NAME="branchcode" --></td>
 					<td><!-- TMPL_VAR NAME="callnumber" --></td>
@@ -58,44 +58,44 @@
 
 <!-- TMPL_ELSE -->
 	<form method="post" action="/cgi-bin/koha/reports/serials_stats.pl">
-	
+
 	<fieldset class="rows">
 		<ol>
 			<li>
-				
+
 				<label for="bookseller">
 					Vendor:
 			    </label>
 				<select name="bookseller" id="bookseller">
 					<option value="">Any Vendor</option>
     				<!--TMPL_LOOP Name="booksellers"-->
-        				<option value="<!--TMPL_VAR Name="aqbooksellerid"-->"><!--TMPL_VAR Name="name"--></option>  
-     				<!--/TMPL_LOOP --> 
+						<option value="<!--TMPL_VAR Name="aqbooksellerid"-->"><!--TMPL_VAR Name="name"--></option>
+					<!--/TMPL_LOOP -->
 			    </select>
 			</li><li>
 		    	<label for="branch">
-					Branch: 
+					Branch:
 		    	</label>
 		    	<select name="branchcode"  id="branchcode">
 		    		<option value="">Any Branch</option>
     				<!--TMPL_LOOP Name="branches"-->
-        				<option value="<!--TMPL_VAR Name="branchcode"-->"><!--TMPL_VAR Name="branchname"--></option>  
-     				<!--/TMPL_LOOP --> 		    	
+						<option value="<!--TMPL_VAR Name="branchcode"-->"><!--TMPL_VAR Name="branchname"--></option>
+					<!--/TMPL_LOOP -->
 		    	</select>
-		    	
+
 		    </li>
 		    <li>
 		    	<label for="expired">Include expired subscriptions: </label>
 		    	<input type="checkbox" name="expired" />
 		    </li>
-		</ol>	
+		</ol>
 	</fieldset>
-	
+
 
 	<fieldset class="rows">
 	<legend>Output</legend>
 <ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
-<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> 
+<li><label for="outputfile">To a file:</label> 		<input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
 		<label class="inline" for="MIME">Into an application</label><!-- TMPL_VAR NAME="CGIextChoice" -->
 		<!-- TMPL_VAR NAME="CGIsepChoice" --></li></ol>
 	</fieldset>

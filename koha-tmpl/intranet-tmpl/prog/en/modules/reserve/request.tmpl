@@ -447,7 +447,7 @@ function checkMultiHold() {
         <!-- /TMPL_IF -->
           <td>
             <ul>
-              <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></li>
+              <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a></li>
               <!-- TMPL_IF NAME="publicationyear" -->
                 <li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li>
               <!-- /TMPL_IF -->
@@ -526,7 +526,7 @@ function checkMultiHold() {
     <!-- TMPL_IF NAME="reserveloop" -->
     <table>
       <!-- TMPL_IF NAME="multi_hold" -->
-          <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a></caption>
+          <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a></caption>
       <!-- /TMPL_IF -->
       <tr>
         <th>Priority</th>

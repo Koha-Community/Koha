@@ -50,7 +50,7 @@
           </tr>
 
           <input type="hidden" id="colId" name="colId" value="<!-- TMPL_VAR NAME="colId" -->" />
-          <input type="hidden" name="action" value="addItem" /> 
+          <input type="hidden" name="action" value="addItem" />
           <tr><td align="right" colspan="99"><input type="submit" value="Submit" /></td></tr>
         </table>
         </form>
@@ -67,7 +67,7 @@
             </tr>
             <!-- TMPL_LOOP NAME="collectionItemsLoop" -->
               <tr>
-                <td><!-- TMPL_VAR NAME="title" --></td>
+                <td><!-- TMPL_VAR NAME="title" ESCAPE="html" --></td>
                 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                 <td><!-- TMPL_VAR NAME="barcode" --></td>
               </tr>

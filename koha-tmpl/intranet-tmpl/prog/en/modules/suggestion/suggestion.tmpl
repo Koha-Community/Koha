@@ -99,7 +99,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
         <h1>Enter a new purchase suggestion</h1>
     <!--/TMPL_IF-->
     <fieldset class="rows"> <legend>Bibliographic information</legend><ol>
-        <li><label for="title">Title:</label><input type="text" id="title" name="title" size="50" maxlength="80" value="<!--TMPL_VAR Name="title"-->"/></li>
+        <li><label for="title">Title:</label><input type="text" id="title" name="title" size="50" maxlength="80" value="<!--TMPL_VAR Name="title" ESCAPE="html"-->"/></li>
         <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" value="<!--TMPL_VAR Name="author"-->"/></li>
         <li><label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" value="<!--TMPL_VAR Name="copyrightdate"-->" /></li>
         <li><label for="isbn">ISBN or ISSN or other standard number:</label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" value="<!--TMPL_VAR Name="isbn"-->"/></li>
@@ -210,7 +210,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                 </td>
                 <td>
                     <a href="suggestion.pl?suggestionid=<!-- TMPL_VAR NAME="suggestionid" -->&amp;op=edit" title="suggestion" >
-                        <!-- TMPL_VAR NAME="title" --><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                        <!-- TMPL_VAR NAME="title" ESCAPE="html" --><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
                     </a>
                     <br />
                     <!-- TMPL_IF name="copyrightdate" -->&copy; <!-- TMPL_VAR name="copyrightdate" --> <!-- /TMPL_IF -->
@@ -289,7 +289,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                 <div style="display:block;" id="limits">
 
 				<fieldset class="brief"><h4 class="collapse"><a href="#">Bibliographic information</a></h4>
-                   <ol> <li><label for="title"> Title:</label><input type="text" id="title" name="title" value="<!-- TMPL_VAR name="title"-->" /></li>
+                   <ol> <li><label for="title"> Title:</label><input type="text" id="title" name="title" value="<!-- TMPL_VAR name="title" ESCAPE="html"-->" /></li>
                     <li><label for="author"> Author:</label><input type="text" id="author" name="author" value="<!-- TMPL_VAR name="author"-->" /></li>
                     <li><label for="isbn"> ISBN:</label><input type="text" id="isbn"  name="isbn" value="<!-- TMPL_VAR name="isbn"-->" /></li>
                     <li><label for="publishercode"> Publisher:</label><input type="text" id="publishercode" name="publishercode" value="<!-- TMPL_VAR name="publishercode"-->" /></li>

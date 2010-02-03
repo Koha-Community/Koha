@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Catalog &rsaquo; Details for <!-- TMPL_VAR NAME="title" --></title>
+<title>Koha &rsaquo; Catalog &rsaquo; Details for <!-- TMPL_VAR NAME="title" ESCAPE="html" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <link rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/css/print.css" />
 </head>
@@ -22,7 +22,7 @@
 			<!-- TMPL_IF name="subject" --><tr><th>Subject: </th><td><!-- TMPL_VAR NAME="subject" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="copyrightdate" --><tr><th>Copyright Date: </th><td> <!-- TMPL_VAR NAME="copyrightdate" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="notes" --><tr><th>Notes: </th><td><!-- TMPL_VAR NAME="notes" --></td></tr><!-- /TMPL_IF -->
-			<!-- TMPL_IF name="unititle" --><tr><th>Unititle: </th><td><!-- TMPL_VAR NAME="unititle" --></td></tr><!-- /TMPL_IF --> 
+			<!-- TMPL_IF name="unititle" --><tr><th>Unititle: </th><td><!-- TMPL_VAR NAME="unititle" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="dewey" --><tr><th>Dewey: </th><td><!-- TMPL_VAR name="dewey" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="classification" --><tr><th>Classification: </th><td> <!-- TMPL_VAR name="classification" --></td></tr><!-- /TMPL_IF -->
 			<!-- TMPL_IF name="lccn" --><tr><th>LCCN: </th><td><!-- TMPL_VAR name="lccn" --></td></tr><!-- /TMPL_IF -->

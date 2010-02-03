@@ -113,7 +113,7 @@
                 <!-- /TMPL_UNLESS -->
             <!-- /TMPL_UNLESS -->
             <!-- /TMPL_UNLESS -->
-            
+
     <!-- TMPL_IF NAME="NO_BOOKSELLER" -->
     <h2>Vendor not found</h2>
     <!-- TMPL_ELSE -->
@@ -170,7 +170,7 @@
                 <!-- /TMPL_IF -->
             </div>
         <!-- /TMPL_IF -->
-        
+
         <!-- TMPL_UNLESS name="delete_confirm" -->
         <div id="acqui_basket_content">
         <h2>Order Details</h2>
@@ -237,7 +237,7 @@
                     <!-- TMPL_IF NAME="order_received" --><tr class="disabled"><!-- TMPL_ELSE --><!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF --><!-- /TMPL_IF -->
                         <td>
                             <p><!-- TMPL_IF NAME="order_received" --> (rcvd)<!-- /TMPL_IF -->
-                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a> by <!-- TMPL_VAR NAME="author" -->
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a> by <!-- TMPL_VAR NAME="author" -->
                                     <!-- TMPL_IF name="notes" --> <!--TMPL_VAR name="notes" --><!-- /TMPL_IF -->
                                     <!-- TMPL_IF name="isbn"--> - <!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF -->
                                     <!-- TMPL_IF name="publishercode" -->, <!-- TMPL_VAR NAME="publishercode" --><!-- /TMPL_IF -->
