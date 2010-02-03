@@ -32,7 +32,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         this.oACDS.responseType = YAHOO.widget.DS_XHR.TYPE_FLAT;
         this.oACDS.maxCacheEntries = 60;
         this.oACDS.queryMatchSubset = true;
-    
+
         // Instantiate first AutoComplete
         var myInput = document.getElementById('findborrower');
         var myContainer = document.getElementById('yborrowercontainer');
@@ -41,7 +41,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         //this.oAutoComp.queryDelay = 1;
         this.oAutoComp.formatResult = this.fnCustomFormatter;
 }
-});    
+});
 //]]>
 </script><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <div id="header_search">
@@ -50,29 +50,29 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
     <input id="searchmember" size="25" class="focus" name="member" type="text" value="<!--TMPL_VAR Name="member"-->"/>
 	<!--TMPL_IF Name="branchloop"-->
-	<span class="filteraction" id="filteraction_off"> <a href="#" onClick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
-	<span class="filteraction" id="filteraction_on"> <a href="#" onClick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
+	<span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
+	<span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
 	<!--/TMPL_IF -->
     order by:
     <select name="orderby" id="searchorderby">
     <option value="surname,1">Surname</option>
-    <option value="cardnumber,1">Cardnumber</option>
+    <option value="cardnumber,1">Card number</option>
     </select>
     <input value="Search" class="submit" type="submit" />
 	<!--TMPL_IF Name="branchloop"-->
-	<div id="filters"> <label for="branchcode"> Library :</label><select name="branchcode" id="branchcode">
+	<p id="filters"> <label for="branchcode">Library: </label><select name="branchcode" id="branchcode">
         <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
         <!-- TMPL_IF NAME="selected" -->
         <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE -->
         <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
-      <!-- /TMPL_LOOP --></select><br />
-                 <label for="categorycode"> categorycode :</label><select name="categorycode" id="categorycode">
+      <!-- /TMPL_LOOP --></select>
+                 <label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
         <option value="">Any</option><!-- TMPL_LOOP name="categoryloop" -->
         <!-- TMPL_IF NAME="selected" -->
         <option value="<!-- TMPL_VAR name="categorycode" -->" selected="selected"><!-- TMPL_VAR name="description" --></option><!-- TMPL_ELSE -->
         <option value="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="description" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP --></select>
-	</div>
+	</p>
 	<!--/TMPL_IF -->
 </form>
 	</div>
@@ -110,13 +110,13 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 			<li><a href="/cgi-bin/koha/members/members-home.pl#patron_search">Search Patrons</a></li>
 			<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
-			</ul>	
+			</ul>
 </div>
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
-	$("#filters").toggle(); 
-	$("#filteraction_off").toggle(); 
-}); 
+	$("#filters").toggle();
+	$("#filteraction_off").toggle();
+});
 //]]>
 </script>
 <!-- End Patrons Resident Search Box -->
