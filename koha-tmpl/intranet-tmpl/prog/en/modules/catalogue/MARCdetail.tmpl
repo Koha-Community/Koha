@@ -21,23 +21,23 @@ function Changefwk(FwkList) {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; MARC Details for <i><!-- TMPL_VAR NAME="bibliotitle" --></i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; MARC Details for <i><!-- TMPL_VAR NAME="bibliotitle" ESCAPE="html" --></i></div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
 
 <!-- TMPL_UNLESS name="popup" -->
-    <h1>MARC biblio : <!-- TMPL_VAR NAME="biblionumber" -->  ( <!-- TMPL_VAR NAME="bibliotitle" --> )</h1>
-    
+    <h1>MARC biblio : <!-- TMPL_VAR NAME="biblionumber" -->  ( <!-- TMPL_VAR NAME="bibliotitle" ESCAPE="html" --> )</h1>
+
 
 <!-- /TMPL_UNLESS -->
 
     <p><b>With Framework :<!--TMPL_VAR Name="framework" --></b></p>
-    
+
 <div id="bibliotabs" class="toptabs numbered">
 	<ul>
             <!-- TMPL_IF name="0XX" -->
@@ -103,7 +103,7 @@ function Changefwk(FwkList) {
             </div> <!-- class='tag' -->
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div id="tab1XX">
         <!-- TMPL_LOOP NAME="1XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -133,7 +133,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div id="tab2XX">
         <!-- TMPL_LOOP NAME="2XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -163,7 +163,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div id="tab3XX">
         <!-- TMPL_LOOP NAME="3XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -193,7 +193,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div id="tab4XX">
         <!-- TMPL_LOOP NAME="4XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -223,7 +223,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div  id="tab5XX">
         <!-- TMPL_LOOP NAME="5XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -253,7 +253,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div id="tab6XX">
         <!-- TMPL_LOOP NAME="6XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -283,7 +283,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div  id="tab7XX">
         <!-- TMPL_LOOP NAME="7XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -313,7 +313,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div id="tab8XX">
         <!-- TMPL_LOOP NAME="8XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -343,7 +343,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
     <div id="tab9XX">
         <!-- TMPL_LOOP NAME="9XX" -->
                 <!-- TMPL_IF name="tag" -->
@@ -373,7 +373,7 @@ function Changefwk(FwkList) {
             </div>
         <!-- /TMPL_LOOP -->
     </div>
-    
+
      <!-- TMPL_IF name="10XX" -->
     <div id="tab10XX">
         <table>

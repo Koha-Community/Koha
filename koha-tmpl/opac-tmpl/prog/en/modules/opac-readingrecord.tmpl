@@ -57,7 +57,7 @@ TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
 
 <!-- TMPL_IF NAME="SyndeticsCoverImages" --><img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" --><!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->&amp;type=xw10" alt=""/><!-- /TMPL_IF -->
 </td>
-<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a>
+<td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a>
                     <span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span></td>

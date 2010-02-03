@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; 
+<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;
 <!-- TMPL_IF NAME="searchdesc" -->
-	Results of Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF --> 
+	Results of Search <!-- TMPL_IF NAME="query_desc" -->for '<!-- TMPL_VAR NAME="query_desc" -->'<!-- /TMPL_IF --><!-- TMPL_IF NAME="limit_desc" -->&nbsp;with limit(s):&nbsp;'<!-- TMPL_VAR NAME="limit_desc" -->'<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
     You did not specify any search criteria.
 <!-- /TMPL_IF -->
@@ -29,7 +29,7 @@ function holdMultiple() {
     if (checkedCount > 0) {
         holdBiblioNums(checkedBiblioNums);
     } else {
-        alert(MSG_NO_RECORD_SELECTED);   
+        alert(MSG_NO_RECORD_SELECTED);
     }
 }
 
@@ -151,19 +151,19 @@ $(document).ready(function(){
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
     $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
-    
+
 	function cartList(){
 			if($("#addto").find("option:selected").attr("value") == "addtolist"){
 			var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
 			if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
 			}
-			return false;			
+			return false;
 		} else if($("#addto").find("option:selected").attr("value") == "newlist"){
 			<!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
 			}<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
-			return false;	
+			return false;
 		}
 		if($("#addto").find("option:selected").attr("value") == "addtocart" || $("#addto").attr("class") == "addtocart"){
 			addMultiple();
@@ -250,8 +250,8 @@ $(document).ready(function(){
 	<h4>Error:</h4>
     <!-- TMPL_VAR NAME="query_error" -->
 </div>
-<!-- /TMPL_IF -->	
-	
+<!-- /TMPL_IF -->
+
 <!-- Search Results Table -->
 <!-- TMPL_IF NAME="total" -->
 <!-- TMPL_IF NAME="scan" -->
@@ -286,7 +286,7 @@ $(document).ready(function(){
             </tr>
         </table>
     </form>
-    
+
     <form action="/cgi-bin/koha/opac-search.pl" method="get">
         <table>
             <tr>
@@ -300,7 +300,7 @@ $(document).ready(function(){
 			<tr>
 			<!-- /TMPL_IF -->
                 <td>
-                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title"  ESCAPE="URL" -->&quot;"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></a>
+                    <a href="/cgi-bin/koha/opac-search.pl?q=<!-- TMPL_VAR NAME="scan_use" escape="url" -->&quot;<!-- TMPL_VAR NAME="title"  ESCAPE="URL" -->&quot;"><!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" ESCAPE="html" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --></a>
                 </td>
                 <td>
                     <!-- TMPL_VAR NAME="author" -->
@@ -400,7 +400,7 @@ $(document).ready(function(){
                                 <!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title">
                                 <!-- /TMPL_IF -->
                                 <!-- /TMPL_IF -->
-								<!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_LOOP NAME="subtitle"  --><!--TMPL_VAR Name="subfield"--><!--/TMPL_LOOP--></a>
+								<!-- TMPL_IF NAME="title" --><!-- TMPL_VAR NAME="title" ESCAPE="html" --><!-- TMPL_ELSE -->No title<!-- /TMPL_IF --> <!-- TMPL_LOOP NAME="subtitle"  --><!--TMPL_VAR Name="subfield"--><!--/TMPL_LOOP--></a>
                                 <!-- TMPL_IF NAME="author" -->by <a href="/cgi-bin/koha/opac-search.pl?q=au:<!-- TMPL_VAR NAME="author" ESCAPE="URL" -->" title="Search for works by this author" class="author"><!-- TMPL_VAR NAME="author" --></a>
                                 <!-- TMPL_ELSE -->&nbsp;
                                 <!-- /TMPL_IF -->
@@ -452,7 +452,7 @@ $(document).ready(function(){
                 </span>
 
 				<!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --><div class="ltfl_reviews"></div><!-- /TMPL_IF --> 
+				<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --><div class="ltfl_reviews"></div><!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="TagsEnabled" -->
                 <!-- TMPL_IF NAME="TagsShowOnList" -->
                 <!-- TMPL_IF NAME="TagLoop" -->
@@ -528,7 +528,7 @@ $(document).ready(function(){
 	<!-- TMPL_IF name="suggestion" -->
 <!-- TMPL_IF NAME="AnonSuggestions" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- TMPL_ELSE --><!-- TMPL_IF NAME="loggedinusername" --><div class="suggestion">Not finding what you're looking for?<br />  Make a <a href="/cgi-bin/koha/opac-suggestions.pl?op=add">purchase suggestion</a></div><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-</div>    
+</div>
 </div>
 </div>
         <!-- TMPL_IF NAME="opacfacets" -->
@@ -540,7 +540,7 @@ $(document).ready(function(){
         <!-- /TMPL_IF -->
 </div>
 
-<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --> 
-<script src="http://ltfl.librarything.com/forlibraries/widget.js?id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->&systype=koha" type="text/javascript"></script> 
-<!-- /TMPL_IF --> 
+<!-- TMPL_IF NAME="LibraryThingForLibrariesID" -->
+<script src="http://ltfl.librarything.com/forlibraries/widget.js?id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->&systype=koha" type="text/javascript"></script>
+<!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->

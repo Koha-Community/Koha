@@ -70,23 +70,23 @@ function checkMultiHold() {
         alert(MSG_NO_ITEMS_AVAILABLE);
         return false;
     }
-    
+
     var biblionumbers = "";
     $(spans).each(function() {
         var bibnum = $(this).attr("title");
-        biblionumbers += bibnum + "/";    
+        biblionumbers += bibnum + "/";
     });
 
     var badSpans = $(".not_holdable");
     var badBibs = "";
     $(badSpans).each(function() {
         var bibnum = $(this).attr("title");
-        badBibs += bibnum + "/";    
+        badBibs += bibnum + "/";
     });
 
     $("#multi_hold_bibs").val(biblionumbers);
     $("#bad_bibs").val(badBibs);
-    
+
     return true;
 }
 
@@ -148,7 +148,7 @@ function checkMultiHold() {
 	<div id="yui-main">
 	<div class="yui-b">
 <!-- TMPL_IF NAME="noitems" -->
-<div class="dialog alert">            
+<div class="dialog alert">
 <strong>Cannot place hold:</strong> this record has no items attached.
 </div>
 <!-- TMPL_ELSE -->
@@ -162,7 +162,7 @@ function checkMultiHold() {
 			</form>
 		</div>
   <!-- /TMPL_IF -->
-    
+
   <!-- TMPL_UNLESS NAME="multi_hold" -->
     <h1>Place a hold on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a></h1>
   <!-- TMPL_ELSE -->
@@ -170,15 +170,15 @@ function checkMultiHold() {
   <!-- /TMPL_UNLESS -->
 
   <!-- TMPL_UNLESS NAME="cardnumber"-->
-    <!-- TMPL_IF NAME="messageborrower" -->                                    
-      <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, Please, try another</p> </div>    
+    <!-- TMPL_IF NAME="messageborrower" -->
+      <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, Please, try another</p> </div>
     <!-- /TMPL_IF -->
     <form action="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" method="post">
         <!-- TMPL_UNLESS name="CGIselectborrower" -->
 			<fieldset class="brief">
 		        <label for="patron">Patron: </label>
 				<div class="hint">Enter patron card number or partial name:</div>
-                <input type="text" size="20" id="patron" class="focus" name="findborrower" /> 
+                <input type="text" size="20" id="patron" class="focus" name="findborrower" />
                 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber"-->" />
                 <input type="submit" value="Search" />
 			</fieldset>
@@ -216,7 +216,7 @@ function checkMultiHold() {
     <!-- /TMPL_UNLESS -->
 
     </div>
-<!-- /TMPL_IF -->	
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="messages" -->
     <div class="dialog message"><ul>
@@ -234,7 +234,7 @@ function checkMultiHold() {
   <!-- TMPL_IF NAME="messageborrower" -->
    <div class="dialog alert"><h3>Patron not found:</h3> <p>Name or barcode not found. Please try an other </p></div>
   <!-- /TMPL_IF -->
-  
+
   <fieldset class="rows left">
     <legend>Hold details</legend>
         <!-- TMPL_UNLESS NAME="multi_hold" -->
@@ -242,7 +242,7 @@ function checkMultiHold() {
         <!-- TMPL_ELSE -->
             <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
         <!-- /TMPL_UNLESS -->
-    
+
         <input type="hidden" size="10" name="member" value="<!--  TMPL_VAR NAME="cardnumber" -->" />
         <input type="hidden" name="type" value="str8" />
 
@@ -252,12 +252,12 @@ function checkMultiHold() {
             <input type="hidden" name="bad_bibs" id="bad_bibs" value=""/>
             <input type="hidden" name="request" value="any"/>
             <!-- TMPL_LOOP NAME="biblioloop" -->
-              <input type="hidden" name="title_<!-- TMPL_VAR NAME="biblionumber">" value="<!-- TMPL_VAR NAME="title">"/>
+              <input type="hidden" name="title_<!-- TMPL_VAR NAME="biblionumber">" value="<!-- TMPL_VAR NAME="title" ESCAPE="html">"/>
               <input type="hidden" name="rank_<!-- TMPL_VAR NAME="biblionumber">" value="<!-- TMPL_VAR NAME="rank">"/>
             <!-- /TMPL_LOOP -->
         <!-- TMPL_ELSE -->
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-            <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" -->" />
+            <input type="hidden" name="title" value="<!-- TMPL_VAR NAME="title" ESCAPE="html" -->" />
             <input type="hidden" name="rank-request" value="<!-- TMPL_VAR NAME="fixedRank" -->" />
         <!-- /TMPL_IF -->
 
@@ -343,7 +343,7 @@ function checkMultiHold() {
 
             <!-- TMPL_IF NAME="publicationyear" --><li><span class="label">Publication year:</span> <!-- TMPL_VAR NAME="publicationyear" --></li><!-- /TMPL_IF -->
           </ol>
-         
+
         <table id="requestspecific">
         <caption>Place a hold on a specific copy</caption>
 		<tr>
@@ -367,7 +367,7 @@ function checkMultiHold() {
                 <input type="radio" name="checkitem" class="needsoverride" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                 <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/error.png" alt="Requires override of hold policy" />
             <!-- TMPL_ELSE -->
-                <input disabled="disabled" type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" /> 
+                <input disabled="disabled" type="radio" name="checkitem" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                 <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
             <!-- /TMPL_IF -->
             </td>
@@ -378,7 +378,7 @@ function checkMultiHold() {
             <!-- /TMPL_IF -->
 
             <td>
-                    <!-- TMPL_VAR NAME="barcode" --> 
+                    <!-- TMPL_VAR NAME="barcode" -->
             </td>
             <td>
             <!-- TMPL_VAR NAME="homebranchname" -->
@@ -399,11 +399,11 @@ function checkMultiHold() {
             to <!-- TMPL_VAR NAME="transfertto" -->, since <!-- TMPL_VAR NAME="transfertwhen" -->
         	<!-- /TMPL_IF -->
         	<!-- /TMPL_IF -->
-    
+
         	<!-- TMPL_IF Name="message" -->
             Unavailable (lost or missing)
         	<!-- /TMPL_IF -->
-    
+
         	<!-- TMPL_IF Name="notforloan" -->
             Not for loan (<!-- TMPL_VAR NAME="notforloanvalue" -->)
         	<!-- /TMPL_IF -->
@@ -425,7 +425,7 @@ function checkMultiHold() {
         </tr>
     <!-- /TMPL_LOOP --> <!-- itemloop -->
         </table>
-        
+
     <!-- /TMPL_LOOP --> <!-- bibitemloop -->
 
   <!-- TMPL_ELSE --><!-- UNLESS multi_hold -->
@@ -494,7 +494,7 @@ function checkMultiHold() {
     </table>
 
   <!-- /TMPL_UNLESS --><!-- /multi_hold -->
-    
+
     <fieldset class="action">
         <!-- TMPL_IF NAME="cardnumber"-->
             <!-- TMPL_IF NAME="override_required" -->
@@ -545,9 +545,9 @@ function checkMultiHold() {
     <!-- TMPL_IF Name="wait" -->
             <option value="W" selected="selected">Waiting</option>
     <!-- /TMPL_IF -->
-	<!-- TMPL_LOOP Name="optionloop" -->                 
-	<!-- TMPL_IF Name="selected" --><option value="<!-- TMPL_VAR NAME="num" -->" selected="selected"><!-- TMPL_VAR NAME="num" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="num" -->"><!-- TMPL_VAR NAME="num" --></option><!-- /TMPL_IF --> 
-	<!-- /TMPL_LOOP -->  
+	<!-- TMPL_LOOP Name="optionloop" -->
+	<!-- TMPL_IF Name="selected" --><option value="<!-- TMPL_VAR NAME="num" -->" selected="selected"><!-- TMPL_VAR NAME="num" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="num" -->"><!-- TMPL_VAR NAME="num" --></option><!-- /TMPL_IF -->
+	<!-- /TMPL_LOOP -->
             <option value="del">del</option>
           </select>
         </td>
@@ -600,7 +600,7 @@ function checkMultiHold() {
     <!-- TMPL_ELSE -->
       <!-- TMPL_IF Name="constrainttypea" -->
             <!-- TMPL_IF Name="item_level_hold" -->
-                <i>Only item 
+                <i>Only item
                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME='biblionumber' -->">
                      <!-- TMPL_IF NAME="barcodenumber" -->
                          <!-- TMPL_VAR NAME="barcodenumber" -->
