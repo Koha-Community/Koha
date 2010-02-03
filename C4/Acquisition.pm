@@ -166,15 +166,19 @@ sub GetBasket {
 
 $basket = &NewBasket( $booksellerid, $authorizedby, $basketname, $basketnote, $basketbooksellernote, $basketcontractnumber );
 
+=back
+
 Create a new basket in aqbasket table
+
+=over 2
 
 =item C<$booksellerid> is a foreign key in the aqbasket table
 
 =item C<$authorizedby> is the username of who created the basket
 
-The other parameters are optional, see ModBasketHeader for more info on them.
-
 =back
+
+The other parameters are optional, see ModBasketHeader for more info on them.
 
 =cut
 
@@ -658,13 +662,13 @@ sub ModBasketgroup {
 
 DelBasketgroup($basketgroupid);
 
-=over 2
+=back
 
 Deletes a basketgroup in the aqbasketgroups table, and removes the reference to it from the baskets,
 
-=item C<$basketgroupid> is the 'id' field of the basket in the aqbasketgroup table
+=over 2
 
-=back
+=item C<$basketgroupid> is the 'id' field of the basket in the aqbasketgroup table
 
 =back
 
@@ -682,13 +686,14 @@ sub DelBasketgroup {
 
 #------------------------------------------------------------#
 
-=back
 
 =head2 FUNCTIONS ABOUT ORDERS
 
 =over 2
 
 =cut
+
+=back
 
 =head3 GetBasketgroup
 
@@ -750,11 +755,7 @@ sub GetBasketgroups {
 
 #------------------------------------------------------------#
 
-=back
-
 =head2 FUNCTIONS ABOUT ORDERS
-
-=over 2
 
 =cut
 
@@ -1768,9 +1769,13 @@ sub GetRecentAcqui {
 
 $contractlist = &GetContracts($booksellerid, $activeonly);
 
+=back
+
 Looks up the contracts that belong to a bookseller
 
 Returns a list of contracts
+
+=over 2
 
 =item C<$booksellerid> is the "id" field in the "aqbooksellers" table.
 

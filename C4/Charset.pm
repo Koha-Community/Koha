@@ -161,6 +161,7 @@ sub SetUTF8Flag{
     my $normalized_string=NormalizeString($string);
 
 =back
+
 	Given 
 	    a string
         nfc : If you want to set NFC and not NFD

@@ -507,7 +507,7 @@ sub clear_syspref_cache {
     %sysprefs = ();
 }
 
-=head2 set_preference
+=item set_preference
 
   C4::Context->set_preference( $variable, $value );
 

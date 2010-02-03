@@ -2509,6 +2509,7 @@ OR adds a new authority record
 
 =item C<BUGS>
     * I had to add this to Search.pm (instead of the logical Biblio.pm) because of a circular dependency (this sub uses SimpleSearch, and Search.pm uses Biblio.pm)
+
 =back
 
 =cut
