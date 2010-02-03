@@ -630,13 +630,13 @@ sub DelBudget {
 	return $rc;
 }
 
-=back
-
 =head2 FUNCTIONS ABOUT BUDGETS
 
 =over 2
 
 =cut
+
+=back
 
 =head3 GetBudget
 
@@ -773,9 +773,12 @@ sub ConvertCurrency {
     return ( $price / $cur );
 }
 
-=item
+=head3 _columns
+
 	returns an array containing fieldname followed by PRI as value if PRIMARY Key
+
 =cut
+
 sub _columns(;$) {
 	my $tablename=shift||"aqbudgets";
     return @{C4::Context->dbh->selectcol_arrayref("SHOW columns from $tablename",{Columns=>[1,4]})};
@@ -805,8 +808,6 @@ END { }    # module clean-up code here (global destructor)
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 
