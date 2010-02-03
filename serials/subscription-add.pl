@@ -178,6 +178,16 @@ sub letter_loop {
     return;
 }
 
+sub _get_sub_length {
+    my ($type, $length) = @_;
+    return
+        (
+            $type eq 'numberlength' ? $length : 0,
+            $type eq 'weeklength'   ? $length : 0,
+            $type eq 'monthlength'  ? $length : 0,
+        );
+}
+
 sub redirect_add_subscription {
     my $auser           = $query->param('user');
     my $branchcode      = $query->param('branchcode');
@@ -187,21 +197,11 @@ sub redirect_add_subscription {
     my $periodicity     = $query->param('periodicity');
     my $dow             = $query->param('dow');
     my @irregularity    = $query->param('irregularity_select');
-    my $numberlength    = 0;
-    my $weeklength      = 0;
-    my $monthlength     = 0;
     my $numberpattern   = $query->param('numbering_pattern');
-    my $sublength       = $query->param('sublength');
-    my $subtype         = $query->param('subtype');
     my $graceperiod     = $query->param('graceperiod') || 0;
 
-    if ($subtype eq 'months'){
-        $monthlength = $sublength;
-    } elsif ($subtype eq 'weeks'){
-        $weeklength = $sublength;
-    } else {
-        $numberlength = $sublength;
-    }
+    my ($numberlength, $weeklength, $monthlength)
+        = _get_sub_length( $query->param('subtype'), $query->param('sublength') );
     my $add1 = $query->param('add1');
     my $every1 = $query->param('every1');
     my $whenmorethan1 = $query->param('whenmorethan1');
@@ -274,17 +274,9 @@ sub redirect_mod_subscription {
     my $enddate = format_date_in_iso($query->param('enddate'));
     my $periodicity = $query->param('periodicity');
     my $dow = $query->param('dow');
-    my $sublength = $query->param('sublength');
-    my $subtype = $query->param('subtype');
 
-    my ($monthlength, $weeklength, $numberlength);
-    if($subtype eq 'months'){
-        $monthlength = $sublength;
-    } elsif ($subtype eq 'weeks'){
-        $weeklength = $sublength;
-    } else {
-        $numberlength = $sublength;
-    }
+    my ($numberlength, $weeklength, $monthlength)
+        = _get_sub_length( $query->param('subtype'), $query->param('sublength') );
     my $numberpattern = $query->param('numbering_pattern');
     my $add1 = $query->param('add1');
     my $every1 = $query->param('every1');
