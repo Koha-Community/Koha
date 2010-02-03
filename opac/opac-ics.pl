@@ -20,6 +20,8 @@
 # This script builds an ICalendar file (rfc 2445) for use in programs such as Ical
 
 use strict;
+use warnings;
+
 use CGI;
 use Data::ICal;
 use Data::ICal::Entry::Event;

@@ -18,6 +18,8 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+use warnings;
+
 use C4::Auth qw(:DEFAULT get_session);
 use CGI;
 use Storable qw(freeze thaw);
@@ -46,7 +48,7 @@ my ($template, $loggedinuser, $cookie)
 $template->param(dateformat => C4::Context->preference("dateformat"));
 
 # If the user is not logged in, we deal with the cookie
-if ($loggedinuser == '') {
+if (!$loggedinuser) {
 
     # Deleting search history
     if ($cgi->param('action') && $cgi->param('action') eq 'delete') {
