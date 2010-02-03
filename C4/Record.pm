@@ -328,12 +328,12 @@ sub marc2endnote {
 	
 }
 
-=head2 marcrecords2csv - Convert several records from UNIMARC to CSV
+=head2 marc2csv - Convert several records from UNIMARC to CSV
 Pre and postprocessing can be done through a YAML file
 
 =over 4
 
-my ($csv) = marcrecords2csv($biblios, $csvprofileid);
+my ($csv) = marc2csv($biblios, $csvprofileid);
 
 Returns a CSV scalar
 
@@ -375,11 +375,11 @@ sub marc2csv {
     return $output;
 }
 
-=head2 marc2csv - Convert a single record from UNIMARC to CSV
+=head2 marcrecord2csv - Convert a single record from UNIMARC to CSV
 
 =over 4
 
-my ($csv) = marc2csv($biblio, $csvprofileid, $header);
+my ($csv) = marcrecord2csv($biblio, $csvprofileid, $header);
 
 Returns a CSV scalar
 
@@ -415,7 +415,6 @@ sub marcrecord2csv {
 
     # Getting output encoding
     my $encoding          = $profile->{encoding} || 'utf8';
-
     # Getting separators
     my $csvseparator      = $profile->{csv_separator}      || ',';
     my $fieldseparator    = $profile->{field_separator}    || '#';
@@ -426,7 +425,8 @@ sub marcrecord2csv {
     if ($fieldseparator eq '\t') { $fieldseparator = "\t" }
     if ($subfieldseparator eq '\t') { $subfieldseparator = "\t" }
 
-    $csv->encoding_out($encoding) if ($encoding ne 'utf8');
+
+    $csv = $csv->encoding_out($encoding) ;
     $csv->sep_char($csvseparator);
 
     # Getting the marcfields
@@ -527,7 +527,7 @@ sub marcrecord2csv {
 
     $csv->combine(@fieldstab);
     $output .= $csv->string() . "\n";
-   
+
     return $output;
 
 }
