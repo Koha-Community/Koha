@@ -210,7 +210,7 @@ sub handle_file {
         }
         $debug and warn "Source: $source";
         my $size = (stat($source))[7];
-            if ($size > 200000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
+            if ($size > 550000) {    # This check is necessary even with image resizing to avoid possible security/performance issues...
                 $filerrors{'OVRSIZ'} = 1;
                 push my @filerrors, \%filerrors;
                 push @{ $count{filenames} }, { filerrors => \@filerrors, source => $filename, cardnumber => $cardnumber };
