@@ -405,6 +405,7 @@ CREATE TABLE `categories` (
   `categorycode` varchar(10) NOT NULL default '',
   `description` mediumtext,
   `enrolmentperiod` smallint(6) default NULL,
+  `enrolmentperioddate` DATE NULL DEFAULT NULL,
   `upperagelimit` smallint(6) default NULL,
   `dateofbirthrequired` tinyint(1) default NULL,
   `finetype` varchar(30) default NULL,
