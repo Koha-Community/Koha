@@ -2370,22 +2370,6 @@ sub PrepareItemrecordDisplay {
                         }
 
                         #---- "true" authorised value
-                    }
-                    elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq
-                        "cn_source" )
-                    {
-                      my $class_sources = GetClassSources();
-                      my $default_source = C4::Context->preference("DefaultClassificationSource");
-                      foreach my $class_source (sort keys %$class_sources) {
-                        next unless $class_sources->{$class_source}->{'used'} or
-                                    ($value and $class_source eq $value)      or
-                                    ($class_source eq $default_source);
-                        push @authorised_values, $class_source;
-                        $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
-                      }
-                      $value = $default_source unless ($value);
-
-                      #---- "true" authorised value
                     } else {
                         $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
                         push @authorised_values, ""
