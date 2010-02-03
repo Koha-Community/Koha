@@ -107,19 +107,15 @@ if (defined $error) {
 my @results;
 
 if ($marcresults) {
-    foreach my $i ( 0 .. scalar @$marcresults ) {
-        my %resultsloop;
-        my $marcrecord = MARC::File::USMARC::decode( $marcresults->[$i] );
+    foreach my $result ( @{$marcresults} ) {
+        my $marcrecord = MARC::File::USMARC::decode( $result );
         my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
 
-        #build the hash for the template.
-        %resultsloop = %$biblio;
-        $resultsloop{highlight} = ( $i % 2 ) ? (1) : (0);
-        $resultsloop{booksellerid} = $booksellerid;
-        push @results, \%resultsloop;
+        $biblio->{booksellerid} = $booksellerid;
+        push @results, $biblio;
+
     }
 }
-
 $template->param(
     basketno             => $basketno,
     booksellerid     => $bookseller->{'id'},
