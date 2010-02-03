@@ -65,7 +65,7 @@
 								</select>
 							</li>
 							<li>
-								<label for="object">Object</label>
+								<label for="object">Object: </label>
 								<input type="text" id="object" name="object" value="<!-- TMPL_VAR NAME="object"-->" />
 							</li>
 							<li>
@@ -73,48 +73,37 @@
 								<input type="text" id="info" name="info" value="<!-- TMPL_VAR NAME="info"-->" />
 							</li>
 							<li>
-								<label for="from"> Display from</label> <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
+								<label for="from"> Display from: </label> <input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="datefrom"-->" />
 								<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" id="openCalendarFrom" style="cursor: pointer;" />
-								<label for="to">to</label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
+				<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
+							</li>
+							<li>
+								<label for="to">Display to: </label> <input size="10" id="to" name="to" type="text" value="<!-- TMPL_VAR NAME="dateto"-->" />
 								<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarTo" alt="Show Calendar" style="cursor: pointer;" border="0" />
 									<script type="text/javascript">
 									//<![CDATA[
-									// function submit_check (from_id,to_id) {
-									//	var dateFrom = Date_from_syspref(document.getElementById(from_id).value);
-									//	var dateTo   = Date_from_syspref(document.getElementById(  to_id).value);
-									//	var today = new Date();
-									// 	if (dateFrom < dateTo) { 
-									//		alert("The starting date cannot be after the ending date.");
-									//		document.getElementById(to_id).select();
-									//		return false;
-									//	}
-									// 	if (dateFrom > today) { 
-									//		alert("The starting date cannot be in the future.");
-									//		document.getElementById(from_id).select();
-									//		return false;
-									//	}
-									// }
-									
+
 									// return true if the date is blocked.
 									function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}
 									function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}
-									
+
 									Calendar.setup({
-									inputField : "from",
-									ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-									button : "openCalendarFrom",
-									disableFunc : disable_from,
-									dateStatusFunc : disable_from
+										inputField : "from",
+										ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+										button : "openCalendarFrom",
+										disableFunc : disable_from,
+										dateStatusFunc : disable_from
 									});
 									Calendar.setup({
-									inputField : "to",
-									ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-									button : "openCalendarTo",
-									disableFunc : disable_to,
-									dateStatusFunc : disable_to
+										inputField : "to",
+										ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+										button : "openCalendarTo",
+										disableFunc : disable_to,
+										dateStatusFunc : disable_to
 									});
 									//]]>
 									</script>
+				<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
 							</li>
 						</ol>
 					</fieldset>

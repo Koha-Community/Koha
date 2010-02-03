@@ -1,0 +1,1 @@
+<!-- TMPL_IF NAME="dateformat_us" -->(MM/DD/YYYY)<!-- TMPL_ELSIF NAME="dateformat_metric" -->(DD/MM/YYYY)<!-- TMPL_ELSE -->(YYYY/MM/DD)<!-- /TMPL_IF -->

@@ -317,10 +317,12 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 			<label for="from">Date: from </label>
 			<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR NAME="filter_date_approved_from" -->" />
 			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarFrom" />
-			<br />
+			<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
+
 			<label for="to">...to </label>
 			<input type="text" size="10" id="to"   name="to"   value="<!-- TMPL_VAR NAME="filter_date_approved_to" -->" />
 			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" border="0" alt="Show Calendar" style="cursor: pointer;" id="openCalendarTo" />
+			<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
 	    </li>
   </ol>
  <fieldset class="action"><input type="submit" value="Apply Filter(s)" /></fieldset>

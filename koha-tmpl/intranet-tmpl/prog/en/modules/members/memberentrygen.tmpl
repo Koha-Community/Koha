@@ -226,6 +226,7 @@
         </script>
         <!-- TMPL_IF NAME="mandatorydateofbirth" --><span class="required">Required</span><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="ERROR_dateofbirth" --><span class="required">(Error)</span><!-- /TMPL_IF -->
+		<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
             </li>
             <li>
                 <!-- TMPL_IF NAME="mandatoryinitials" -->
@@ -792,6 +793,7 @@
       </script>
 		<!-- TMPL_IF NAME="mandatorydateenrolled" --><span class="required">Required</span><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="ERROR_dateenrolled" --><span class="required">(Error)</span><!-- /TMPL_IF -->
+		<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
 		</li>
 		<li>
 			<!-- TMPL_IF NAME="mandatorydateexpiry" -->
@@ -813,6 +815,7 @@
       </script>
 		<!-- TMPL_IF NAME="mandatorydateexpiry" --><span class="required">Required</span><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="ERROR_dateexpiry" --><span class="required">(Error)</span><!-- /TMPL_IF -->
+		<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
 		</li>
 		<li>
 			<!-- TMPL_IF NAME="mandatoryopacnote" -->

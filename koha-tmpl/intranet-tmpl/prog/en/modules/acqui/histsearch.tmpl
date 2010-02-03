@@ -25,6 +25,7 @@
 		<li><label for="from">From: </label> 
 			<input type="text" size="10" id="from" name="from" value="<!-- TMPL_VAR name="from_placed_on" -->" />
 			<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
+				<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
 		</li>
 		<li><label for="to">To: </label> 
 			<input type="text" size="10" id="to" name="to" value="<!-- TMPL_VAR name="to_placed_on" -->" />
@@ -48,6 +49,7 @@
 					dateStatusFunc : disable_to
    	             });
 			</script>
+				<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
 		</li>
 		</ol>
 	</fieldset>
