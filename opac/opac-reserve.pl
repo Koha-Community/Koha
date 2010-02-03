@@ -96,16 +96,6 @@ $template->param( branch => $branch );
 my $CGIbranchloop = GetBranchesLoop($branch);
 $template->param( CGIbranch => $CGIbranchloop );
 
-#Debug
-#output_html_with_http_headers($query,$cookie,"<html><head></head><body> @biblionumbers </body></html>\n");
-#exit;
-#my %bibdata;
-#my $rank;
-#my $biblionumber;
-#my $bibdata;
-#my %itemhash;
-#my $forloan;
-
 #
 #
 # Build hashes of the requested biblio(item)s and items.
@@ -264,7 +254,7 @@ if ( $borr->{debarred} && ($borr->{debarred} eq 1) ) {
 
 my @reserves = GetReservesFromBorrowernumber( $borrowernumber );
 $template->param( RESERVES => \@reserves );
-if ( scalar(@reserves) >= $MAXIMUM_NUMBER_OF_RESERVES ) {
+if ( $MAXIMUM_NUMBER_OF_RESERVES && (scalar(@reserves) >= $MAXIMUM_NUMBER_OF_RESERVES) ) {
     $template->param( message => 1 );
     $noreserves = 1;
     $template->param( too_many_reserves => scalar(@reserves));
