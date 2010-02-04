@@ -211,6 +211,13 @@ Circulation:
                   no: "Don't allow"
             - "patrons to place holds that don't enter the waiting list until a certain future date. (AllowHoldDateInFuture must also be enabled)."
         -
+            - Check the
+            - pref: ReservesControlBranch
+              choices:
+                  ItemHomeLibrary: "item's home library"
+                  PatronLibrary: "patron's home library"
+            - to see if the patron can place a hold on the item.                  
+        -
             - Satisfy holds from the libraries
             - pref: StaticHoldsQueueWeight
               class: multi

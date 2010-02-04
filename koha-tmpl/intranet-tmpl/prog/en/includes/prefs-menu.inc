@@ -13,6 +13,7 @@
 <!-- TMPL_IF NAME="opac" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Online Public Access Catalog" href="/cgi-bin/koha/admin/preferences.pl?tab=opac">OPAC</a></li>
 <!-- TMPL_IF NAME="patrons" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Patrons" href="/cgi-bin/koha/admin/preferences.pl?tab=patrons">Patrons</a></li>
 <!-- TMPL_IF NAME="searching" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Searching" href="/cgi-bin/koha/admin/preferences.pl?tab=searching">Searching</a></li>
+<!-- TMPL_IF NAME="serials" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Serials" href="/cgi-bin/koha/admin/preferences.pl?tab=serials">Serials</a></li>
 <!-- TMPL_IF NAME="staff-client" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Staff Client" href="/cgi-bin/koha/admin/preferences.pl?tab=staff-client">Staff Client</a></li>
 <!-- TMPL_IF NAME="web-services" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a title="Web Services" href="/cgi-bin/koha/admin/preferences.pl?tab=web-services">Web Services</a></li>
 </ul>
