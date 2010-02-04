@@ -79,6 +79,8 @@ window.onload=function(){
         An unsupported operation was attempted<!-- TMPL_IF NAME="element_id" --> on <!-- TMPL_VAR NAME="card_element" --> <!-- TMPL_VAR NAME="element_id" --><!-- /TMPL_IF -->. Please have your system administrator check the error log for details.
         <!-- TMPL_ELSIF NAME="202" -->
         An error has occurred. Please ask your system administrator to check the error log for more details.
+        <!-- TMPL_ELSIF NAME="203" -->
+        A non-existent or invalid branch code was supplied. Please <a href="/cgi-bin/koha/circ/selectbranchprinter.pl">verify</a> that you have a branch selected.
         <!-- TMPL_ELSIF NAME="301" -->
         An error has occurred while attempting to upload the image file. Please ask you system administrator to check the error log for more details.
         <!-- TMPL_ELSIF NAME="302" -->

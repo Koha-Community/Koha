@@ -105,10 +105,15 @@ elsif ($op eq 'de_duplicate') {
         exit;
     }
 }
-elsif ($op = 'edit') {
+elsif ($op eq 'edit') {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
 }
 elsif ($op eq 'new') {
+    if (!$branch_code) {
+        warn sprintf('Batch edit interface called with an invalid/non-existent branch code: %s',$branch_code ? $branch_code : 'NULL');
+        print $cgi->redirect("manage.pl?card_element=batch&error=203") if $err;
+        exit;
+    }
     $batch = C4::Patroncards::Batch->new(branch_code => $branch_code);
     $batch_id = $batch->get_attr('batch_id');
 }
