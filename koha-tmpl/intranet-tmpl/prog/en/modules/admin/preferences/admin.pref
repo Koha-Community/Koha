@@ -84,3 +84,21 @@ Administration:
                   yes: Prevent
                   no: "Don't prevent"
             - staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries.
+    CAS Authentication:
+        -
+            - pref: casAuthentication
+              default: 0
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - CAS for login authentication.
+        -
+            - pref: casLogout
+              default: 0
+              choices:
+                  yes: Logout
+                  no: "Don't Logout"
+            - of CAS when logging out of Koha.
+        -
+            - The CAS Authentication Server can be found at
+            - pref: casServerUrl           
