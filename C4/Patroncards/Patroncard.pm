@@ -56,13 +56,13 @@ sub draw_barcode {
     my $barcode_width = 0.8 * $self->{'width'};                         # this scales the barcode width to 80% of the label width
     my $barcode_y_scale_factor = 0.01 * $self->{'height'};              # this scales the barcode height to 1% of the label height
     _draw_barcode(      $self,
-                        llx     => $self->{'llx'} + $self->{'layout'}->{'barcode'}->{'llx'},
-                        lly     => $self->{'lly'} + $self->{'layout'}->{'barcode'}->{'lly'},
+                        llx     => $self->{'llx'} + $self->{'layout'}->{'barcode'}->[0]->{'llx'},
+                        lly     => $self->{'lly'} + $self->{'layout'}->{'barcode'}->[0]->{'lly'},
                         width   => $barcode_width,
                         y_scale_factor  => $barcode_y_scale_factor,
-                        barcode_type    => $self->{'layout'}->{'barcode'}->{'type'},
-                        barcode_data    => $self->{'layout'}->{'barcode'}->{'data'},
-                        text    => $self->{'layout'}->{'barcode'}->{'text_print'},
+                        barcode_type    => $self->{'layout'}->{'barcode'}->[0]->{'type'},
+                        barcode_data    => $self->{'layout'}->{'barcode'}->[0]->{'data'},
+                        text    => $self->{'layout'}->{'barcode'}->[0]->{'text_print'},
     );
 }
 

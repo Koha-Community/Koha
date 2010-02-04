@@ -110,7 +110,7 @@ foreach my $item (@{$items}) {
         my $card_number = GetMember(borrowernumber => $borrower_number)->{'cardnumber'};
 
 #       Set barcode data
-        $layout_xml->{'barcode'}->{'data'} = $card_number if $layout_xml->{'barcode'};
+        $layout_xml->{'barcode'}->[0]->{'data'} = $card_number if $layout_xml->{'barcode'};
 
 #       Create a new patroncard object
         my $patron_card = C4::Patroncards::Patroncard->new(
