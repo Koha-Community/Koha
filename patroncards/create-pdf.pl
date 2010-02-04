@@ -87,7 +87,7 @@ else {
     $items = $batch->get_attr('items');
 }
 
-my $layout_xml = XMLin($layout->get_attr('layout_xml'));
+my $layout_xml = XMLin($layout->get_attr('layout_xml'), ForceArray => 1);
 
 if ($layout_xml->{'page_side'} eq 'B') { # rearrange items on backside of page to swap columns
     my $even = 1;
@@ -129,18 +129,19 @@ foreach my $item (@{$items}) {
 #       Do image foo and place binary image data into layout hash
         my $image_data = {};
         my $error = undef;
+        my $images = $layout_xml->{'images'};
         PROCESS_IMAGES:
-        foreach (keys %{$layout_xml->{'images'}}) {
-            if (grep{m/source/} keys(%{$layout_xml->{'images'}->{$_}->{'data_source'}})) {
-                if ($layout_xml->{'images'}->{$_}->{'data_source'}->{'image_source'} eq 'none') {
+        foreach (keys %{$images}) {
+            if (grep{m/source/} keys(%{$images->{$_}->{'data_source'}->[0]})) {
+                if ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'none') {
                     next PROCESS_IMAGES;
                 }
-                elsif ($layout_xml->{'images'}->{$_}->{'data_source'}->{'image_source'} eq 'patronimages') {
+                elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'patronimages') {
                     ($image_data, $error) = GetPatronImage($card_number);
                     warn sprintf('No image exists for borrower number %s.', $borrower_number) if !$image_data;
                     next PROCESS_IMAGES if !$image_data;
                 }
-                elsif ($layout_xml->{'images'}->{$_}->{'data_source'}->{'image_source'} eq 'creator_images') {
+                elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'creator_images') {
                     my $dbh = C4::Context->dbh();
                     $dbh->{LongReadLen} = 1000000;      # allows us to read approx 1MB
                     $image_data = $dbh->selectrow_hashref("SELECT imagefile FROM creator_images WHERE image_name = \'$$layout_xml{'images'}{$_}{'data_source'}{'image_name'}\'");
@@ -154,7 +155,7 @@ foreach my $item (@{$items}) {
                 }
             }
             else {
-                warn sprintf("Unrecognized image data source: %s", $layout_xml->{'images'}->{$_}->{'data_source'});
+                warn sprintf("Unrecognized image data source: %s", $images->{$_}->{'data_source'});
                 next PROCESS_IMAGES;
             }
 
@@ -172,7 +173,7 @@ foreach my $item (@{$items}) {
         my $alt_width = ceil($image->Get('width')); # the rounding up is important: Adobe reader does not handle long decimal numbers well
         my $alt_height = ceil($image->Get('height'));
         my $ratio = $alt_width / $alt_height;
-        my $display_height = ceil($layout_xml->{'images'}->{$_}->{'Dx'});
+        my $display_height = ceil($images->{$_}->{'Dx'});
         my $display_width = ceil($ratio * $display_height);
 
 
@@ -180,14 +181,14 @@ foreach my $item (@{$items}) {
         $image->Set(magick => 'jpg', quality => 100);
 
 #       Write params for alt image...
-            $layout_xml->{'images'}->{$_}->{'alt'}->{'Sx'} = $alt_width;
-            $layout_xml->{'images'}->{$_}->{'alt'}->{'Sy'} = $alt_height;
-            $layout_xml->{'images'}->{$_}->{'alt'}->{'data'} = $alt_image->ImageToBlob();
+            $images->{$_}->{'alt'}->{'Sx'} = $alt_width;
+            $images->{$_}->{'alt'}->{'Sy'} = $alt_height;
+            $images->{$_}->{'alt'}->{'data'} = $alt_image->ImageToBlob();
 
 #       Write params for display image...
-            $layout_xml->{'images'}->{$_}->{'Sx'} = $display_width;
-            $layout_xml->{'images'}->{$_}->{'Sy'} = $display_height;
-            $layout_xml->{'images'}->{$_}->{'data'} = $image->ImageToBlob();
+            $images->{$_}->{'Sx'} = $display_width;
+            $images->{$_}->{'Sy'} = $display_height;
+            $images->{$_}->{'data'} = $image->ImageToBlob();
 
             my $err = $patron_card->draw_image($pdf);
             warn sprintf ("Error encountered while attempting to draw image %s, %s", $_, $err) if $err;

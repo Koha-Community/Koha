@@ -190,7 +190,7 @@ sub draw_image {
     my $images = $self->{'layout'}->{'images'};
     PROCESS_IMAGES:
     foreach my $image (keys %$images) {
-        next PROCESS_IMAGES if $images->{$image}->{'data_source'}->{'image_source'} eq 'none';
+        next PROCESS_IMAGES if $images->{$image}->{'data_source'}->[0]->{'image_source'} eq 'none';
         my $Tx = $self->{'llx'} + $images->{$image}->{'Tx'};
         my $Ty = $self->{'lly'} + $images->{$image}->{'Ty'};
         warn sprintf('No image passed in.') and next if !$images->{$image}->{'data'};
