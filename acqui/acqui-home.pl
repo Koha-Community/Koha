@@ -67,6 +67,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # budget
+warn("LOGGED=$loggedinuser");
 my $borrower= GetMember('borrowernumber' => $loggedinuser);
 my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
@@ -147,7 +148,7 @@ foreach my $result (@results) {
     my $r = GetBranchName( $result->{'budget_owner_id'} );
     $result->{'budget_branchname'} = GetBranchName( $result->{'budget_branchcode'} );
 
-    my $member      = GetMember( $result->{'budget_owner_id'} );
+    my $member      = GetMember( borrowernumber => $result->{budget_owner_id} );
     my $member_full = $member->{'firstname'} . ' ' . $member->{'surname'} if $member;
 
     $result->{'budget_owner'}   = $member_full;
@@ -168,8 +169,9 @@ foreach my $result (@results) {
     #        my $spent_percent = ( $result->{'budget_spent'} / $result->{'budget_amount'} ) * 100;
     #        $result->{'budget_spent_percent'} = sprintf( "%00d", $spent_percent );
 
-    my $borrower = &GetMember( $result->{budget_owner_id} );
-    $result->{budget_owner_name} = $borrower->{'firstname'} . ' ' . $borrower->{'surname'} if $borrower;
+    if ($member) {
+        $result->{budget_owner_name} = $member->{'firstname'} . ' ' . $member->{'surname'};
+    }
 
     push( @loop_budget, { %{$result}, toggle => $toggle++ % 2, } );
 }

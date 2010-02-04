@@ -188,7 +188,7 @@ sub hold_patron_name {
 sub hold_patron_bcode {
     my $self = shift or return;
     my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
-    my $holder = GetMember($borrowernumber, 'borrowernumber');
+    my $holder = GetMember(borrowernumber => $borrowernumber);
     if ($holder) {
         if ($holder->{cardnumber}) {
             return $holder->{cardnumber};
