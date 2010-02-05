@@ -46,7 +46,7 @@
             <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=<!-- TMPL_VAR name="id" -->">New Contract</a></li>
             <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR name="id" -->">Contracts</a></li>
             <!-- TMPL_UNLESS NAME="basketcount" -->
-                <li><a id="newbasket" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR name="id" -->">New Basket</a></li>
+                <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=<!-- TMPL_VAR name="id" -->&op=add_form">New Basket</a></li>
             <!-- /TMPL_UNLESS -->
         <!-- TMPL_ELSE -->
             <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New Vendor</a></li>
