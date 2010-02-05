@@ -276,4 +276,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('RoutingListAddReserves','1','If ON the patrons on routing lists are automatically added to holds on the issue.','','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ( 'OpacAddMastheadLibraryPulldown', '0', '', 'Adds a pulldown menu to select the library to search on the opac masthead.', 'YesNo' );
 INSERT INTO systempreferences VALUES ('ImageLimit',5,'','Limit images stored in the database by the Patron Card image manager to this number.','Integer');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SpineLabelShowPrintOnBibDetails', '0', '', 'If turned on, a "Print Label" link will appear for each item catalogue/detail.pl to print each items spinelabel.', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SpineLabelShowPrintOnBibDetails', '0', '', 'If turned on, a "Print Label" link will appear for each item on the bib details page in the staff interface.', 'YesNo');

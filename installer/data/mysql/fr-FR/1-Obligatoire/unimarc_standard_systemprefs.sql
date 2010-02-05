@@ -279,4 +279,4 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO  systempreferences VALUES ('ImageLimit',5,'','Limiter le nombre d''images stockées en base pour la photo Lecteur à cette taille.','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACPatronDetails','1','Si désactivé, l''affichage détaillé des données adhérents est désactivé à l''OPAC.','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OPACFinesTab','1','Si désactivé, l''onglet Amende est désactivé à l''OPAC.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SpineLabelShowPrintOnBibDetails', '0', '', 'If turned on, a "Print Label" link will appear for each item catalogue/detail.pl to print each items spinelabel.', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SpineLabelShowPrintOnBibDetails', '0', '', 'If turned on, a "Print Label" link will appear for each item on the bib details page in the staff interface.', 'YesNo');

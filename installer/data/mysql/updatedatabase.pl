@@ -3393,7 +3393,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = '3.01.00.112';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SpineLabelShowPrintOnBibDetails', '0', '', 'If turned on, a \"Print Label\" link will appear for each item catalogue/detail.pl to print each items spinelabel.', 'YesNo');");
+	$dbh->do("INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SpineLabelShowPrintOnBibDetails', '0', '', 'If turned on, a \"Print Label\" link will appear for each item on the bib details page in the staff interface.', 'YesNo');");
 	print "Upgrade done ( added Show Spine Label Printer on Bib Items Details preferences )\n";
     SetVersion ($DBversion);
 }
