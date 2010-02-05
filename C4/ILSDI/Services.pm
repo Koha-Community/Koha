@@ -279,7 +279,7 @@ sub LookupPatron {
     my ($cgi) = @_;
 
     # Get the borrower...
-    my $borrower = GetMember( $cgi->param('id'), $cgi->param('id_type') );
+    my $borrower = GetMember($cgi->param('id_type') => $cgi->param('id'));
     if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
     }
@@ -314,7 +314,7 @@ sub AuthenticatePatron {
     }
 
     # Get the borrower
-    my $borrower = GetMember( $cgi->param('username'), "userid" );
+    my $borrower = GetMember( userid => $cgi->param('username') );
 
     # Build the hashref
     my $patron->{'id'} = $borrower->{'borrowernumber'};

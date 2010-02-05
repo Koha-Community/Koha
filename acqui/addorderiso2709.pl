@@ -126,7 +126,7 @@ if ($op eq ""){
             if (C4::Context->preference("BiblioAddsAuthorities")){
                 my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $cgiparams->{'frameworkcode'});
             }
-            my $patron = C4::Members->GetMember($loggedinuser);
+            my $patron = C4::Members->GetMember(borrowernumber => $loggedinuser);
             my $branch = C4::Branch->GetBranchDetail($patron->{branchcode});
             my ($invoice);
             my %orderinfo = ("biblionumber", $biblionumber,

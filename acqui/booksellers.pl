@@ -112,7 +112,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
             $inner_line{basketname}     = $orders->[$i2]{'basketname'};
             $inner_line{total}        = scalar GetOrders($orders->[$i2]{'basketno'});
             $inner_line{authorisedby} = $orders->[$i2]{'authorisedby'};
-            my $authby = GetMember( $orders->[$i2]{'authorisedby'});
+            my $authby = GetMember(borrowernumber => $orders->[$i2]{'authorisedby'});
             $inner_line{surname}      = $authby->{'firstname'};
             $inner_line{firstname}    = $authby->{'surname'};
             $inner_line{creationdate} = format_date( $orders->[$i2]{'creationdate'} );
