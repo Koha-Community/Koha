@@ -713,7 +713,9 @@ sub checkauth {
 		    $userid = $retuserid;
 		    $info{'invalidCasLogin'} = 1 unless ($return);
         	} else {
-		    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
+		    my $retuserid;
+		    ( $return, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
+		    $userid = $retuserid if ($retuserid ne '');
 		}
 		if ($return) {
                _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
@@ -739,20 +741,21 @@ sub checkauth {
                 	";
                 	my $sth = $dbh->prepare("$select where userid=?");
                 	$sth->execute($userid);
-					unless ($sth->rows) {
-                		$debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
-						$sth = $dbh->prepare("$select where cardnumber=?");
-                   		$sth->execute($cardnumber);
-						unless ($sth->rows) {
-                			$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
-                    		$sth->execute($userid);
-							unless ($sth->rows) {
-                				$debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
-							}
-						}
-					}
+			unless ($sth->rows) {
+		    	    $debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
+		    	    $sth = $dbh->prepare("$select where cardnumber=?");
+		       	    $sth->execute($cardnumber);
+
+		    	    unless ($sth->rows) {
+				$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
+				$sth->execute($userid);
+				unless ($sth->rows) {
+				    $debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
+				}
+			    }
+			}
                 	if ($sth->rows) {
-                    	($borrowernumber, $firstname, $surname, $userflags,
+			    ($borrowernumber, $firstname, $surname, $userflags,
                     		$branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
 						$debug and print STDERR "AUTH_3 results: " .
 							"$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
@@ -1376,7 +1379,7 @@ sub checkpw {
 
             C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
-            return 1, $cardnumber;
+            return 1, $userid;
         }
     }
     $sth =
@@ -1540,7 +1543,7 @@ sub haspermission {
     my ($userid, $flagsrequired) = @_;
     my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
     $sth->execute($userid);
-    my $flags = getuserflags( $sth->fetchrow(), $userid );
+    my $flags = getuserflags($sth->fetchrow(), $userid);
     if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
         $flags->{'superlibrarian'} = 1;
@@ -1549,7 +1552,9 @@ sub haspermission {
         # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
         $flags->{'superlibrarian'} = 1;
     }
+
     return $flags if $flags->{superlibrarian};
+
     foreach my $module ( keys %$flagsrequired ) {
         my $subperm = $flagsrequired->{$module};
         if ($subperm eq '*') {
