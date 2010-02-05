@@ -274,3 +274,13 @@ Circulation:
                   yes: Enable
                   no: "Don't enable"
             - "the web-based self checkout system. (available at: /cgi-bin/koha/sco/sco-main.pl)"
+        -
+            - pref: AutoSelfCheckAllowed
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - "the web-based self checkout system to automatically login with this staff login"
+            - pref: AutoSelfCheckID
+            - and this password
+            - pref: AutoSelfCheckPass
+            - .
