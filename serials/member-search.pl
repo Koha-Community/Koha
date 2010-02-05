@@ -71,8 +71,10 @@ if (C4::Context->preference("AddPatronLists")=~/code/){
 my $member=$cgi->param('member');
 my $orderby=$cgi->param('orderby');
 $orderby = "surname,firstname" unless $orderby;
-$member =~ s/,//g;   #remove any commas from search string
-$member =~ s/\*/%/g;
+if (defined $member) {
+    $member =~ s/,//g;   #remove any commas from search string
+    $member =~ s/\*/%/g;
+}
 
 my ($count,$results);
 
@@ -86,13 +88,21 @@ $$patron{surname}.="\%" if ($$patron{surname});
 
 my @searchpatron;
 push @searchpatron, $member if ($member);
-push @searchpatron, $patron if (keys %$patron);
-my $from= ($startfrom-1)*$resultsperpage;
-my $to=$from+$resultsperpage;
- #($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
- ($results)=Search(\@searchpatron,{surname=>1,firstname=>1},undef,undef,["firstname","surname","email","othernames","cardnumber"],"start_with"  ) if (@searchpatron);
-if ($results){
-	$count =scalar(@$results);
+push @searchpatron, $patron if ( keys %$patron );
+my $from = ( $startfrom - 1 ) * $resultsperpage;
+my $to   = $from + $resultsperpage;
+if (@searchpatron) {
+    ($results) = Search(
+        \@searchpatron,
+        [ { surname => 0 }, { firstname => 0 } ],
+        undef,
+        undef,
+        [ "firstname", "surname", "email", "othernames", "cardnumber" ],
+        "start_with"
+    );
+}
+if ($results) {
+    $count = scalar(@$results);
 }
 my @resultsdata;
 $to=($count>$to?$to:$count);
