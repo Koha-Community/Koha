@@ -732,7 +732,7 @@ sub CanBookBeIssued {
     #
     if ( $borrower->{'category_type'} eq 'X' && (  $item->{barcode}  )) { 
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
-        &UpdateStats(C4::Context->userenv->{'branch'},'localuse','','',$item->{'itemnumber'},$item->{'itemtype'},$borrower->{'borrowernumber'});
+        &UpdateStats(C4::Context->userenv->{'branch'},'localuse','','',$item->{'itemnumber'},$item->{'itemtype'},$borrower->{'borrowernumber'}, undef, $item->{'ccode'});
         ModDateLastSeen( $item->{'itemnumber'} );
         return( { STATS => 1 }, {});
     }
@@ -1172,7 +1172,7 @@ sub AddIssue {
             C4::Context->userenv->{'branch'},
             'issue', $charge,
             ($sipmode ? "SIP-$sipmode" : ''), $item->{'itemnumber'},
-            $item->{'itype'}, $borrower->{'borrowernumber'}
+            $item->{'itype'}, $borrower->{'borrowernumber'}, undef, $item->{'ccode'}
         );
 
         # Send a checkout slip.
@@ -1740,7 +1740,7 @@ sub AddReturn {
         $branch, $stat_type, '0', '',
         $item->{'itemnumber'},
         $biblio->{'itemtype'},
-        $borrowernumber
+        $borrowernumber, undef, $item->{'ccode'}
     );
 
     # Send a check-in slip. # NOTE: borrower may be undef.  probably shouldn't try to send messages then.
@@ -2472,7 +2472,7 @@ sub AddRenewal {
             'Rent', $charge, $itemnumber );
     }
     # Log the renewal
-    UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber);
+    UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber, undef, $item->{'ccode'});
 	return $datedue;
 }
 

@@ -5769,6 +5769,18 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
 }
 
 
+$DBversion = '3.09.00.044';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE statistics ADD COLUMN ccode VARCHAR ( 10 ) NULL AFTER associatedborrower");
+    $dbh->do("UPDATE statistics SET statistics.ccode = ( SELECT items.ccode FROM items WHERE statistics.itemnumber = items.itemnumber )");
+    $dbh->do("UPDATE statistics SET statistics.ccode = (
+              SELECT deleteditems.ccode FROM deleteditems
+                  WHERE statistics.itemnumber = deleteditems.itemnumber
+              ) WHERE statistics.ccode IS NULL");
+    print "Upgrade done ( Added Collection Code to Statistics table. )\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
