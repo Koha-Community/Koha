@@ -3429,6 +3429,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = 'XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	if (C4::Context->preference('OrderPdfFormat') eq 'pdfformat::example'){
+		$dbh->do("UPDATE `systempreferences` set value='pdfformat::layout2pages' WHERE variable='OrderPdfFormat'");
+	}
+	print "Upgrade done ( corrected default OrderPdfFormat value is still set wrong )\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
