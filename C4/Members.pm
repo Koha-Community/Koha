@@ -515,14 +515,18 @@ sub patronflags {
 
   $borrower = &GetMember(%information);
 
-Looks up information about a patron (borrower) by either card number
-,firstname, or borrower number, depending on $type value.
-If C<$type> == 'cardnumber', C<&GetBorrower>
-searches by cardnumber then by firstname if not found in cardnumber; 
-otherwise, it searches by borrowernumber.
+Retrieve the first patron record meeting on criteria listed in the
+C<%information> hash, which should contain one or more
+pairs of borrowers column names and values, e.g.,
+
+   $borrower = GetMember(borrowernumber => id);
 
 C<&GetBorrower> returns a reference-to-hash whose keys are the fields of
 the C<borrowers> table in the Koha database.
+
+FIXME: GetMember() is used throughout the code as a lookup
+on a unique key such as the borrowernumber, but this meaning is not
+enforced in the routine itself.
 
 =cut
 
