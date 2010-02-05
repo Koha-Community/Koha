@@ -660,6 +660,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
             <td><!-- TMPL_VAR NAME="charge" --></td>
             <td><!-- TMPL_VAR NAME="replacementprice" --></td>
+      <!-- TMPL_IF NAME="renew_failed" -->
+            <td class="problem">Renewal Failed</td>
+      <!-- TMPL_ELSE -->
         <td><span style="padding: 0 1em;"><!-- TMPL_VAR NAME="renewals" --></span>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
@@ -690,6 +693,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         </td>
+        <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Checkin Failed</td>
       <!--TMPL_ELSE-->
@@ -697,9 +701,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                 <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="renew_failed" -->
-		<td>Renewal Failed</td>
-		<!-- /TMPL_IF -->
     </tr>
     <!-- /TMPL_LOOP --> <!-- /loop todayissues -->
     <!-- /if todayissues --><!-- /TMPL_IF -->
@@ -725,6 +726,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
         <td><!-- TMPL_VAR NAME="charge" --></td>
         <td><!-- TMPL_VAR NAME="replacementprice" --></td>
+      <!-- TMPL_IF NAME="renew_failed" -->
+            <td class="problem">Renewal Failed</td>
+      <!-- TMPL_ELSE -->
         <td><span style="padding: 0 1em;"><!-- TMPL_IF NAME="renewals" --><!-- TMPL_VAR NAME="renewals" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF --></span>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
@@ -755,17 +759,14 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         </td>
-		      <!-- TMPL_IF NAME="return_failed" -->
+        <!-- /TMPL_IF -->
+		  <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Checkin Failed</td>
-      <!--TMPL_ELSE-->
+        <!--TMPL_ELSE-->
             <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
                 <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="renew_failed" -->
-		<td>Renewal Failed</td>
-		<!-- /TMPL_IF -->
-
     </tr>
     <!-- /loop previssues --><!-- /TMPL_LOOP -->
 <!--/if previssues --><!-- /TMPL_IF -->
