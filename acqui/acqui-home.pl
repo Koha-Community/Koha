@@ -67,7 +67,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # budget
-warn("LOGGED=$loggedinuser");
 my $borrower= GetMember('borrowernumber' => $loggedinuser);
 my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
