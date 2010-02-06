@@ -25,6 +25,7 @@
 <ul>
 	<li><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Bibliographic framework</a></li>
 	<li><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></li>
+	<li><a href="/cgi-bin/koha/admin/fieldmapping.pl">Keywords to MARC mapping</a></li>
 	<li><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></li>
     <li><a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a></li>
     <li><a href="/cgi-bin/koha/admin/classsources.pl">Classification sources</a></li>
@@ -35,8 +36,9 @@
 
 <ul>
 	<li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
-	<li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Budgets, periods, planning</a></li>
-	<li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Root Budgets</a></li>
+	<li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a></li>
+	<li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a></li>
+
 </ul>
 
 <h5>Additional parameters</h5>
