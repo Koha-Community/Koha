@@ -88,6 +88,26 @@ function placeHold () {
     $("#hold_form").submit();
     return false;
 }
+    /**
+     * This function checks to make sure a list title is assigned
+     */
+      function Check(f) {
+		var _alertString="";
+		var alertString2;
+
+	    if(f.addshelf.value.length ==0){
+			_alertString += _("- You must enter a List Name\n");
+		}
+
+		if (_alertString.length==0) {
+			document.Aform.submit();
+		} else {
+			alertString2 = _("Form not submitted because of the following problem(s)\n");
+			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
 //]]>
 </script>
 </head>
@@ -242,7 +262,7 @@ function placeHold () {
         <input type="hidden" name="shelves" value="1" />
         <legend>Create a new List</legend>
         <ol>
-        <li><label for="addshelf">Name: </label><input id="addshelf" type="text" name="addshelf" size="25" /></li>
+        <li><label class="required" for="addshelf">List Name:</label><input id="addshelf" type="text" name="addshelf" size="25" /></li>
         <li><span class="label">Owner: </span><input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR name="loggedinuser" -->" /><!-- TMPL_VAR name="loggedinusername" --></li>
 		<li><label for="sortfield" >Sort this list by: </label>
 		<select name="sortfield">
@@ -292,7 +312,7 @@ function placeHold () {
 	<!-- /TMPL_IF -->
 
 		</fieldset>
-		<fieldset class="action"><input type="submit" value="Save" /><a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a></fieldset>
+		<fieldset class="action"><input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" /><a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a></fieldset>
     </form>
     </div>
     <div class="yui-u">
