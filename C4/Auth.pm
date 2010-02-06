@@ -350,8 +350,8 @@ sub get_template_and_user {
             'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
-            XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
-            XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
+            OPACXSLTDetailsDisplay       => C4::Context->preference("XSLTDetailsDisplay"),
+            OPACXSLTResultsDisplay       => C4::Context->preference("XSLTResultsDisplay"),
             BranchesLoop                 => GetBranchesLoop(),
     );
 

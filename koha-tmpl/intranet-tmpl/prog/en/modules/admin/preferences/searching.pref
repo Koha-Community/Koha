@@ -73,9 +73,15 @@ Searching:
                   no: "don't show"
             - '"More options" on the OPAC and staff advanced search pages.'
     Results Display:
-        -
-            - Show search results
+        -   
+            - Show biblio records on result page
             - pref: XSLTResultsDisplay
+              choices:
+                  yes: using XSLT stylesheets.
+                  no: normally.
+        -   
+            - Show item details pages on the OPAC
+            - pref: XSLTDetailsDisplay
               choices:
                   yes: using XSLT stylesheets.
                   no: normally.

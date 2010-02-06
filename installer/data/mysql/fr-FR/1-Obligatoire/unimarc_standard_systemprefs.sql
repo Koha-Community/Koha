@@ -214,8 +214,10 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 	('TagsShowOnList',   '6','','Nombre de tags à afficher sur la page de résultat, 0 désactivant l\'affichage.','Integer');
 
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Active le parcours des rayonnages sur la page de détail','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTDetailsDisplay','0','','Activer la feuille XSL pour l''affichage des notices détaillées','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTResultsDisplay','0','','Activer la feuille XSL pour l''affichage des listes de résultat','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACXSLTDetailsDisplay','0','','Activer la feuille XSL pour l''affichage à l''OPAC des notices détaillées','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACXSLTResultsDisplay','0','','Activer la feuille XSL pour l''affichage à l''OPAC des listes de résultat','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTDetailsDisplay','0','','Activer la feuille XSL pour l''affichage des notices détaillées dans la partie pro','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTResultsDisplay','0','','Activer la feuille XSL pour l''affichage des listes de résultat dans la partie pro','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Définit quel champ est utilisé pour la limitation par type de document dans la recherche avancée','Choice');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowOnShelfHolds', '0', '', 'Autorise les réservations de documents en rayon.', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Autorise les réservations de documents déclarés endommagés', 'YesNo');

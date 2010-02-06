@@ -7,7 +7,7 @@
 	}); 
 //]]>
 </script>
-<!-- TMPL_IF NAME="XSLTDetailsDisplay" --><script type="text/javascript">
+<!-- TMPL_IF NAME="OPACXSLTDetailsDisplay" --><script type="text/javascript">
     var GB_ROOT_DIR = "/opac-tmpl/prog/en/lib/greybox/";
 </script>
 <script type="text/javascript" src="/opac-tmpl/prog/en/lib/greybox/AJS.js"></script>
@@ -30,7 +30,7 @@
     <div id="catalogue_detail_biblio">
 	
      <h1 style="float:left;margin:0 1em 1em 0;">ISBD View</h1> <div id="views">
-	 <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span> <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
+	 <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span> <!-- TMPL_IF NAME="OPACXSLTDetailsDisplay" -->
 <span class="view"><a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC View</a></span>
        <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Expanded MARC View</a></span>
 <!-- TMPL_ELSE -->

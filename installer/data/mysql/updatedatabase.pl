@@ -3398,6 +3398,21 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.113';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $value = C4::Context->preference("XSLTResultsDisplay");
+    $dbh->do(
+        "INSERT INTO systempreferences (variable,value,type)
+         VALUES('OPACXSLTResultsDisplay',$value,'YesNo')");
+    $value = C4::Context->preference("XSLTDetailsDisplay");
+    $dbh->do(
+        "INSERT INTO systempreferences (variable,value,type)
+         VALUES('OPACXSLTDetailsDisplay',$value,'YesNo')");
+    print "Upgrade done (added two new syspref: OPACXSLTResultsDisplay and OPACXSLTDetailDisplay). You may have to go in Admin > System preference to tweak XSLT related syspref both in OPAC and Search tabs.\n     ";
+    SetVersion ($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

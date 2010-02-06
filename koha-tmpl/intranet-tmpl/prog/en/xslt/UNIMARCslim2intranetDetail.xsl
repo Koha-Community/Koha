@@ -386,7 +386,7 @@
           <xsl:otherwise> | </xsl:otherwise>
         </xsl:choose>      
       </xsl:for-each>
-    </strong>
+    </li>
   </xsl:if>
 
         <!-- 780 -->
