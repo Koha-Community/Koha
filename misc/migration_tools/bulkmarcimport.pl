@@ -28,6 +28,7 @@ use Unicode::Normalize;
 use Time::HiRes qw(gettimeofday);
 use Getopt::Long;
 use IO::File;
+use Pod::Usage;
 
 binmode(STDOUT, ":utf8");
 my ( $input_marc_file, $number, $offset) = ('',0,0);
@@ -62,58 +63,8 @@ GetOptions(
 $biblios=!$authorities||$biblios;
 
 if ($version || ($input_marc_file eq '')) {
-    print <<EOF
-Small script to import bibliographic records into Koha.
-
-Parameters:
-  h      this version/help screen
-  file   /path/to/file/to/dump: the file to import
-  v      verbose mode. 1 means "some infos", 2 means "MARC dumping"
-  fk     Turn off foreign key checks during import.
-  n      the number of records to import. If missing, all the file is imported
-  o      file offset before importing, ie number of records to skip.
-  commit the number of records to wait before performing a 'commit' operation
-  l file logs actions done for each record and their status into file
-  t      test mode: parses the file, saying what he would do, but doing nothing.
-  s      skip automatic conversion of MARC-8 to UTF-8.  This option is 
-         provided for debugging.
-  c      the characteristic MARC flavour. At the moment, only MARC21 and 
-         UNIMARC are supported. MARC21 by default.
-  d      delete EVERYTHING related to biblio in koha-DB before import. Tables:
-         biblio, biblioitems, titems
-  m      format, MARCXML or ISO2709 (defaults to ISO2709)
-  keepids field store ids in field (usefull for authorities, where 001 contains the authid for Koha, that can contain a very valuable info for authorities coming from LOC or BNF. useless for biblios probably)
-  b|biblios type of import : bibliographic records
-  a|authorities type of import : authority records
-  match  matchindex,fieldtomatch matchpoint to use to deduplicate
-          fieldtomatch can be either 001 to 999 
-                       or field and list of subfields as such 100abcde
-  i|isbn if set, a search will be done on isbn, and, if the same isbn is found, the biblio is not added. It's another
-         method to deduplicate. 
-         match & i can be both set.
-  x      source bib tag for reporting the source bib number
-  y      source subfield for reporting the source bib number
-  idmap  file for the koha bib and source id
-  keepids store ids in 009 (usefull for authorities, where 001 contains the authid for Koha, that can contain a very valuable info for authorities coming from LOC or BNF. useless for biblios probably)
-  b|biblios type of import : bibliographic records
-  a|authorities type of import : authority records
-  match  matchindex,fieldtomatch matchpoint to use to deduplicate
-          fieldtomatch can be either 001 to 999 
-                       or field and list of subfields as such 100abcde
-  i|isbn if set, a search will be done on isbn, and, if the same isbn is found, the biblio is not added. It's another
-         method to deduplicate. 
-         match & i can be both set.
-IMPORTANT: don't use this script before you've entered and checked your MARC 
-           parameters tables twice (or more!). Otherwise, the import won't work 
-           correctly and you will get invalid data.
-
-SAMPLE: 
-  \$ export KOHA_CONF=/etc/koha.conf
-  \$ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 \\
-    -file /home/jmf/koha.mrc -n 3000
-EOF
-;#'
-exit;
+    pod2usage( -verbose => 2 );
+    exit;
 }
 
 if (defined $idmapfl) {
@@ -464,3 +415,127 @@ sub printlog{
 	my $logelements=shift;
 	print $loghandle join (";",@$logelements{qw<id op status>}),"\n";
 }
+
+
+=head1 NAME
+
+bulkmarcimport.pl - Import bibliographic/authority records into Koha
+
+=head1 USAGE
+
+ $ export KOHA_CONF=/etc/koha.conf
+ $ perl misc/migration_tools/bulkmarcimport.pl -d -commit 1000 \\
+    -file /home/jmf/koha.mrc -n 3000
+
+=head1 WARNING
+
+Don't use this script before you've entered and checked your MARC parameters
+tables twice (or more!). Otherwise, the import won't work correctly and you
+will get invalid data.
+
+=head1 DESCRIPTION
+
+=over
+
+=item  B<-h>
+
+This version/help screen
+
+=item B<-b, -biblios>
+
+Type of import: bibliographic records
+
+=item B<-a, -authorities>
+
+Type of import: authority records
+
+=item B<-file>=I<FILE>
+
+The I<FILE> to import
+
+=item  B<-v>
+
+Verbose mode. 1 means "some infos", 2 means "MARC dumping"
+
+=item B<-fk>
+
+Turn off foreign key checks during import.
+
+=item B<-n>=I<NUMBER>
+
+The I<NUMBER> of records to import. If missing, all the file is imported
+
+=item B<-o, -offset>=I<NUMBER>
+
+File offset before importing, ie I<NUMBER> of records to skip.
+
+=item B<-commit>=I<NUMBER>
+
+The I<NUMBER> of records to wait before performing a 'commit' operation
+
+=item B<-l>
+
+File logs actions done for each record and their status into file
+
+=item B<-t>
+
+Test mode: parses the file, saying what he would do, but doing nothing.
+
+=item B<-s>
+
+Skip automatic conversion of MARC-8 to UTF-8.  This option is provided for
+debugging.
+
+=item B<-c>=I<CHARACTERISTIC>
+
+The I<CHARACTERISTIC> MARC flavour. At the moment, only I<MARC21> and
+I<UNIMARC> are supported. MARC21 by default.
+
+=item B<-d>
+
+Delete EVERYTHING related to biblio in koha-DB before import. Tables: biblio,
+biblioitems, items
+
+=item B<-m>=I<FORMAT>
+
+Input file I<FORMAT>: I<MARCXML> or I<ISO2709> (defaults to ISO2709)
+
+=item B<-k, -keepids>=<FIELD>
+
+Field store ids in I<FIELD> (usefull for authorities, where 001 contains the
+authid for Koha, that can contain a very valuable info for authorities coming
+from LOC or BNF. useless for biblios probably)
+
+=item B<-match>=<FIELD>
+
+I<FIELD> matchindex,fieldtomatch matchpoint to use to deduplicate fieldtomatch
+can be either 001 to 999 or field and list of subfields as such 100abcde
+
+=item B<-i,-isbn>
+
+If set, a search will be done on isbn, and, if the same isbn is found, the
+biblio is not added. It's another method to deduplicate.  B<-match> & B<-isbn>
+can be both set.
+
+=item B<-x>=I<TAG>
+
+Source bib I<TAG> for reporting the source bib number
+
+=item B<-y>=I<SUBFIELD>
+
+Source I<SUBFIELD> for reporting the source bib number
+
+=item B<-idmap>=I<FILE>
+
+I<FILE> for the koha bib and source id
+
+=item B<-keepids>
+
+Store ids in 009 (usefull for authorities, where 001 contains the authid for
+Koha, that can contain a very valuable info for authorities coming from LOC or
+BNF. useless for biblios probably)
+
+=back
+
+=cut
+
