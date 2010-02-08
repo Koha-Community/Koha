@@ -100,7 +100,7 @@ for my $attrcode (grep { /^patron_attr_filter_/ } $input->param) {
 my $have_pattr_filter_data = keys(%cgi_attrcode_to_attrvalues) > 0;
 
 my @patron_attr_filter_loop;   # array of [ domid cgivalue ismany isclone ordinal code description repeatable authorised_value_category ]
-#my @patron_attr_order_loop;    # array of { label => $patron_attr_label, value => $patron_attr_order }
+my @patron_attr_order_loop;    # array of { label => $patron_attr_label, value => $patron_attr_order }
 
 my @sort_roots = qw(borrower title barcode date_due);
 push @sort_roots, map {$_ . " desc"} @sort_roots;
@@ -144,13 +144,13 @@ while (my $row = $sth->fetchrow_hashref) {
         };
     }
 } continue { ++$ordinal }
-#for (@patron_attr_order_loop) { $_->{selected} = 1 if $order eq $_->{value} }
+for (@patron_attr_order_loop) { $_->{selected} = 1 if $order eq $_->{value} }
 
 $template->param(ORDER_LOOP => \@order_loop);
 
 my %borrowernumber_to_attributes;    # hash of { borrowernumber => { attrcode => [ [val,display], [val,display], ... ] } }
                                      #   i.e. val differs from display when attr is an authorised value
-if (0 && @patron_attr_filter_loop) {
+if (@patron_attr_filter_loop) {
     # MAYBE FIXME: currently, *all* borrower_attributes are loaded into %borrowernumber_to_attributes
     #              then filtered and honed down to match the patron attribute filters. If this is
     #              too resource intensive, MySQL can be used to do the filtering, i.e. rewire the
@@ -200,11 +200,12 @@ if (0 && @patron_attr_filter_loop) {
 
 
 $template->param(
+    patron_attr_header_loop => [ map { { header => $_->{description} } } grep { ! $_->{isclone} } @patron_attr_filter_loop ],
     branchloop   => GetBranchesLoop($branchfilter, $onlymine),
     branchfilter => $branchfilter,
     borcatloop=> \@borcatloop,
     itemtypeloop => \@itemtypeloop,
-#     patron_attr_filter_loop => \@patron_attr_filter_loop,
+    patron_attr_filter_loop => \@patron_attr_filter_loop,
     borname => $bornamefilter,
     order => $order,
     showall => $showall);
