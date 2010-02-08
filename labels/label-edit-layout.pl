@@ -27,8 +27,8 @@ use Text::CSV_XS;
 
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
-use C4::Creators::Lib 1.000000 qw(get_barcode_types get_label_types get_font_types get_text_justification_types);
-use C4::Labels::Layout 1.000000;
+use C4::Creators 1.000000;
+use C4::Labels 1.000000;
 
 my $cgi = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

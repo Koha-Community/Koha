@@ -28,14 +28,14 @@ use C4::Debug;
 BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
     use base qw(Exporter);
-    our @EXPORT_OK = qw(unpack_UTF8
-                        text_alignment
-                        leading
-                        box
-                        get_borrower_attributes
-                        put_image
-                        get_image
-                        rm_image
+    our @EXPORT = qw(unpack_UTF8
+                     text_alignment
+                     leading
+                     box
+                     get_borrower_attributes
+                     put_image
+                     get_image
+                     rm_image
     );
 }
 

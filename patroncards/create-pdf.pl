@@ -29,11 +29,8 @@ use autouse 'Data::Dumper' => qw(Dumper);
 use C4::Debug;
 use C4::Context;
 use autouse 'C4::Members' => qw(GetPatronImage GetMember);
-use C4::Creators::PDF 1.000000;
-use C4::Patroncards::Batch 1.000000;
-use C4::Patroncards::Template 1.000000;
-use C4::Patroncards::Layout 1.000000;
-use C4::Patroncards::Patroncard 1.000000;
+use C4::Creators 1.000000;
+use C4::Patroncards 1.000000;
 
 my $cgi = new CGI;
 

@@ -28,20 +28,20 @@ use C4::Debug;
 BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
     use base qw(Exporter);
-    our @EXPORT_OK = qw(get_all_templates
-                        get_all_layouts
-                        get_all_profiles
-                        get_batch_summary
-                        get_label_summary
-                        get_barcode_types
-                        get_label_types
-                        get_font_types
-                        get_text_justification_types
-                        get_label_output_formats
-                        get_column_names
-                        get_table_names
-                        get_unit_values
-                        html_table
+    our @EXPORT = qw(get_all_templates
+                     get_all_layouts
+                     get_all_profiles
+                     get_batch_summary
+                     get_label_summary
+                     get_barcode_types
+                     get_label_types
+                     get_font_types
+                     get_text_justification_types
+                     get_label_output_formats
+                     get_column_names
+                     get_table_names
+                     get_unit_values
+                     html_table
     );
 }
 

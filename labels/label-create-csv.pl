@@ -8,11 +8,8 @@ use Text::CSV_XS;
 use Data::Dumper;
 
 use C4::Debug;
-use C4::Labels::Batch 1.000000;
-use C4::Labels::Template 1.000000;
-use C4::Labels::Layout 1.000000;
-use C4::Creators::PDF 1.000000;
-use C4::Labels::Label 1.000000;
+use C4::Creators 1.000000;
+use C4::Label 1.000000;
 
 =head
 
@@ -96,7 +93,7 @@ Copyright 2009 Foundations Bible College.
 =head1 LICENSE
 
 This file is part of Koha.
-       
+
 Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later version.
 

@@ -12,8 +12,8 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Debug;
-use C4::Creators::Lib 1.000000 qw(html_table);
-use C4::Patroncards::Lib 1.000000 qw(put_image get_image rm_image);
+use C4::Creators 1.000000;
+use C4::Patroncards 1.000000;
 
 my $cgi = CGI->new;
 
