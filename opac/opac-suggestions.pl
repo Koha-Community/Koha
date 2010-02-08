@@ -103,6 +103,15 @@ foreach my $support(@$supportlist){
 	   delete $$support{'imageurl'}
 	}
 }
+
+foreach my $suggestion(@$suggestions_loop) {
+    if($suggestion->{'suggestedby'} == $borrowernumber) {
+        $suggestion->{'showcheckbox'} = $borrowernumber;
+    } else {
+        $suggestion->{'showcheckbox'} = 0;
+    }
+}
+
 $template->param(
 	%$suggestion,
 	itemtypeloop=> $supportlist,
