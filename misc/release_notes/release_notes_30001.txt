@@ -136,7 +136,7 @@ major.minor[.revision[.build]]
   * revision: two-digit
   * build:    three-digit
 
-This release of Koha 3.0 is versioned 3.00.00.107. Every database change
+This release of Koha 3.0.1 is versioned 3.00.01.005. Every database change
 or significant enough code change requires an update to the 'build' number,
 and developers will be able to easily upgrade their systems using the built-in
 updater.
@@ -146,7 +146,7 @@ Koha 3.0.1 Release :
 This release of Koha 3.0.1 includes the following general improvements over
 the previous release:
 
-  * General Bugfixing (over 150 bugs fixed since RC1!)
+  * General Bugfixing
     Authorities :
       Authorities structure edition
       Authorities edition with diacritics
@@ -185,7 +185,7 @@ the previous release:
     UTF8 support improved
     Failover improved
     Many performance improvements under the hood
-  * Adding a Subject cloud
+  * Adding a Subject cloud based on zebra
   * better UNIMARC version 5 compliance
   * Improving diacritics management in zebra
   * Additional translations
@@ -196,7 +196,13 @@ the previous release:
 Subsequent releases will be bugfix releases, and won't include new
 features which would require some databas changes.
 
-Koha 3.0.x Release Schedule : we plan to issue bugfix only releases on a 2 month base.
+Koha 3.0.x Release Schedule : we plan to issue bugfix only releases on a 2 month base from now on.
+So Next releases should be beginning of April, June, August, October, December.
+
+Note that Windows is not supported for this version as there are blockers.
+
+Note that this version is still supporting only MySQL.
+Support for PostgreSQL is still very experimental.
 
 New features which have deep impact on code will be available in Koha 3.2 
 and subsequent releases.
@@ -235,31 +241,36 @@ TRANSLATIONS
 Koha 3.0 (this release) currently has complete translations for the following
 languages:
 
-OPAC: de-DE (German), el-GR (Greek), es-ES (Spanish), en (English), fr-FR (French)
-   hu-HU (Hungarian), it-IT (Italian), pt-PT (Portuguese), tr-TR (Turkish),
+OPAC: ar-Arab (Arabic), da-DK (Danish), de-DE (German), el-GR (Greek), es-ES (Spanish), en (English), 
+   en-NZ (New Zealand English), fr-FR (French),
+   hu-HU (Hungarian), it-IT (Italian), nn-NO - Norwegian Nynorsk, nb-NO Norwegian (Bokmål),
+   nl-NL (Dutch), pt-PT (Portuguese), tr-TR (Turkish),
    ru-RU (Russian), uk-UA (Ukranian)
-   zh-Hans-CN (Simplified Chinese in China), zh-Hans-TW (Simplified Chinese in Taiwan)
+   
 
-Staff Client fr-FR (French), en (English), hy-Armn (Armenian),
-   ru-RU (Russian), uk-UA (Ukranian)
-   zh-Hans-CN (Simplified Chinese in China), zh-Hans-TW (Simplified Chinese in Taiwan)
+Staff Client: de-DE (German), el-EL (Greek), fr-FR (French), en (English),
+   es-ES (Spanish), it-IT (Italian), uk-UA (Ukranian),
+   
 
 Additionally, Koha 3 (this release) has partial translations for the following
 languages:
 
 OPAC: am-Ethi (Amharic), bg-Cyrl (Bulgarian), fa-Arab (Persian), fi-FI (Finnish)
-   gl (Galego), he-Hebr (Hebrew), id-ID (Indonesian), ja-Japn (Japanese),
-   kn-Knda (kannada), ko-Kore (Korean), mi-NZ (Maori), pl-PL (Polish),
-   tet (Tetum)
+   gl (Galician), he-Hebr (Hebrew), hr-HR (Croatian), hu-HU (Hungarian), id-ID (Indonesian), 
+   ja-Japn (Japanese), kn-Knda (kannada), ko-Kore (Korean), lo-Laoo (Laoo), 
+   mi-NZ (Maori), pl-PL (Polish), pt-PT (Portuguese), sv-SE (Swedish),
+   tet (Tetum), zh-Hans-CN (Simplified Chinese in China), zh-Hans-TW (Simplified Chinese in Taiwan)
 
-Staff Client: de-DE (German), el-EL (Greek), es-ES (Spanish), hu-HU (Hungarian),
-   ja-Japn (Japanese), tr-TR (Turkish), 
+Staff Client: ar-Arab (Arabic), es-ES (Spanish), hu-HU (Hungarian),
+    hy-Armn (Armenian), ja-Japn (Japanese), nn-NO - Norwegian Nynorsk, nb-NO Norwegian (Bokmål),
+    ru-RU (Russian), tr-TR (Turkish), 
+    zh-Hans-CN (Simplified Chinese in China), zh-Hans-TW (Simplified Chinese in Taiwan)
 
 The Koha Team welcomes additional translations; please see
 http://www.kohadocs.org/usersguide/apb.html for information about
 translating Koha, and join the koha-translate list to volunteer:
 
-http://lists.nongnu.org/mailman/listinfo/koha-translate
+http://lists.koha.org/mailman/listinfo/koha-translate
 
 Note that I chose to release even though some words are still missing.
 I apologize to translators.
