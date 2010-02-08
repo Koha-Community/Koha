@@ -2492,7 +2492,7 @@ CREATE TABLE `aqorders` (
   `booksellerinvoicenumber` mediumtext,
   `freight` decimal(28,6) default NULL,
   `unitprice` decimal(28,6) default NULL,
-  `quantityreceived` smallint(6) default NULL,
+  `quantityreceived` smallint(6) NOT NULL default 0,
   `cancelledby` varchar(10) default NULL,
   `datecancellationprinted` date default NULL,
   `notes` mediumtext,
