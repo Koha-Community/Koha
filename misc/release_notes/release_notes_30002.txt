@@ -1,0 +1,439 @@
+==============================================================================
+RELEASE NOTES FOR KOHA 3.0.2
+==============================================================================
+Koha 3 is the next-generation release of the award-winning Koha open-source
+integrated library system.
+
+You can obtain Koha 3.0.2 from the following URL:
+
+http://download.koha.org/koha-3.00.02.tar.gz
+
+These Release Notes cover What's New in Koha 3, information about the new
+Revision control system (Git), and Version-release process, pointers to
+Download, Installation, and Upgrade documentation, a brief introduction to the
+new Templates, a call to Translation and Documentation writers, and finally, 
+Known Issues with this version.
+
+==============================================================================
+WHAT'S NEW IN KOHA 3?
+==============================================================================
+
+1. Zebra plugin - Zebra is a high-performance, general-purpose structured
+text indexing and retrieval engine. It supports large data sets (tens of
+millions of records) and includes support for SRU, Z39.50 and several query
+languages: CCL, CQL, and PQF. For more information about Zebra, please see:
+
+http://indexdata.dk/zebra
+
+Koha's new search engine, built on top of Zebra, supports features such as
+relevance ranking, field weighting, truncation, stemming, use of fuzzy
+operators, language-specific indexing, sorting, etc.
+
+Indexes are updated in real-time with circulation transactions, enabling
+limits by availability and statuses.
+
+Faceted refine-by limits are available from both staff and opac interfaces.
+
+For libraries that don't want the overhead of maintaing Zebra, Koha 3 ships
+with a NoZebra option, in which bibliographic and authority data is indexed
+in the RDBMS.
+
+2. New installer - based on the common Perl module ExtUtils::MakeMaker, the
+new installer makes it a snap to get Koha running on just about any platform.
+
+The installer comes complete with a Developer's Toolkit target ('dev') that
+can be used to get a development environment linked directly to revision
+control, to support rapid prototyping and an agile development process.
+
+3. Standard APIs - Koha 3 supports a number of important library search and
+retrieval standards and microformats, such as SRU/W, Z39.50
+(http://www.loc.gov/standards/sru/), UnAPI (http://unapi.info/) and
+COinS/OpenURL
+(http://ocoins.info; http://www.niso.org/committees/committee_ax.html).
+
+Also supported is the popular Internet standard: OpenSearch
+(http://opensearch.a9.com/) created by Amazon's A9.
+
+Records are stored internally in an SGML-like format and can be retrieved in
+MARCXML, Dublin Core, MODS, RSS, Atom, RDF-DC, SRW-DC, OAI-DC, and EndNote;
+and the OPAC can be used by citation tools such as Zotero. Creating new 
+export formats is a trivial exercise in writing XSLT; records can be passed
+through XSLT transformations either directly out of the index, or via a
+separate parsing function.
+
+To retrieve and interact with Circulation and Patron data, Koha 3 includes
+support for 3M's Standard Interchange Protocol (SIP2), using the OpenNCIP
+libraries (http://openncip.org).
+
+There are also an ever-expanding set of native REST APIs to handle
+interoperability with external tools such as third-party cataloging clients.
+These APIs provide authentication as well as add/edit/delete control over
+bibliographic data within a Koha system. For more information, see:
+
+http://wiki.koha.org/doku.php?id=en:development:web_services
+
+Koha 3 also includes pluggable authentication - easy integration with LDAP and 
+Active Directory via the Auth_with_ldap module.
+
+Enriched content web services, such as those offered by Amazon.com, Baker and
+Taylor's Content Cafe, and the Google Book API can be enabled to enrich
+bibliographic content with jacket covers, professional reviews, ratings and
+comments from users, as well as point to 'Similar Items' within the catalog.
+OCLC's xISBN, and LibraryThing's ThingISBN an likewise be enabled to provide
+an 'Editions' tab, pulling together all the formats, languages, and editions
+of a work into the item detail pages. New with Koha 3 is service throttling
+for these services, to keep within subscription limits.
+
+4. Cross-platform, multi-RDBMS, Web-server agnostic - Run Koha on the platform
+of your choice: Linux, Windows, Mac OS X, FreeBSD, Solaris. Koha 3 also
+includes better support for multi-RDBMS (MySQL 5.0 and PostgreSQL), and runs
+under Apache2, IIS, or the web server of your choosing.
+
+5. Multi-lingual support - Koha was designed from the ground up for multilingual
+libraries. Koha 3 can handle Chinese, Japanese, and even right-to-left languages
+such as Arabic and Hebrew with ease (BiDi).
+
+Koha's index engine (Zebra) can handle record formats containing any UNICODE
+compliant script, such as Arabic, Chinese, Hebrew, Japanese and Korean. Zebra
+has this support via the ICU libraries created and maintained by IBM.
+
+You can translate Koha into your language using the built-in translation tools,
+or by visiting http://translate.koha.org.
+
+6. New templates - Koha's staff and patron interfaces are developed with a
+template system that's easy to theme. The default templates are composed of 100%
+valid XHTML and CSS. Koha aims to meet or exceed U.S. Government Section 508 and
+W3C's WAI-AA standards for sight and motor impaired individuals. All 
+Javascript usage comes with fallback modes that work in any web browser.
+
+7. Koha 3 has quite a few new modules, as well as enhancements to existing
+modules, including: news writer, label creator, calendar, OPAC comments, MARC
+staging and overlay, notices, transaction logs, guided reports with a data
+dictionary and task scheduler, classification sources/filing rules, and more!
+
+==============================================================================
+REVISION CONTROL
+==============================================================================
+
+With Koha 3, we've started using a new distributed revision control system
+called Git; it's the same system in use by many other projects, including the
+Linux Kernel. To learn more about how to develop Koha using Git, please see
+the Wiki page:
+
+http://wiki.koha.org/doku.php?id=en:development:git_usage
+
+==============================================================================
+VERSION NUMBERING
+==============================================================================
+
+With Koha 3, version numbering has been changed to use a method similar to
+Perl's:
+
+major.minor[.revision[.build]]
+
+  * major:    one digit
+  * minor:    two-digit
+  * revision: two-digit
+  * build:    three-digit
+
+This release of Koha 3.00.02 is versioned 3.00.02.012. Every database change
+or significant enough code change requires an update to the 'build' number,
+and developers will be able to easily upgrade their systems using the built-in
+updater.
+
+Koha 3.0.2 Release :
+
+This release of Koha 3.0.2 includes the following general improvements over
+the previous release:
+
+xslt support for UNIMARC added
+UNIMARC support for search available items only and weight field
+better IE7 support for intranet
+Show Summary in opac results
+opac-browser
+Serial subscription report
+translations improved
+
+
+Complete list follows :
+Fixes Bug 3043: Followup.
+Bug 3245: advancedMARCeditor syspref not returning to cataloguing tab
+Bug 2266: Could not uncollapse a tag if you turn on advancedMARCeditor.
+BUG FIXING : opac-browser wouldnot display anything.
+Bug 3162 Fix only for [3.0.x]
+bug 2908 followup - use "list", not "shelf"
+(bug #3080) fix the acqui/spent.pl
+(bug #3079) show summary in opac results
+(bug #1578) fix a little error in code
+bug 988 followup - tweak wording
+bugfix stickyduedate more sticky - couple more forms in circulation.tmpl
+bugfix stickyduedate more sticky - also patron search in quick search block
+Bugfix 3176 - Browser selected languages are not use by OPAC
+(bug #3196) fix itemlost.pl
+Bug 1984 - added Javascript in the header to open, print, and close the slip window
+bug 1907 Partial fix: prevent bad records from truncating output.
+bug 3212: MARC21 bib leader plugin sets Leader/09 to 'a'
+bug 3211: fix XHTML validation errors in MAR21 bib leader plugin
+bug 3209: add 'p' (mixed materials) to MARC21 Leader/06 dropdown
+(bug #3198) fix serial receive with autobarcode
+Bug 3213 - UNIMARC/MARC21 selection
+Bug 3213 - Add UNIMARC XSLT stylesheet
+More fixes for Bug 2704, 440 Display Issues
+bug 3195 : Item Transfers and Holds disrupted.
+Revert "(bug #3025) multiple check-in of a multiple times reserved item go wrong"
+(bug #3190) allow right truncation in lot of records
+(bug #3174) show the member name in reports
+bug 2287: handle case where autoMemberNum is off
+Allow autogenerated cardnumbers again to solve http://bugs.koha.org/cgi-bin/bugzilla3/show_bug.cgi?id=2287
+(bug #3183) fix the SetMarcUnicodeFlag function
+Add system preference search to administration home page (Bug 3181)
+Bugfix 3199 - batchRebuildBiblioTables.pl failed due to missing argument [3.0.x]
+Bug 2944 fix courtesy of Amr Denni
+(bug #3197) Subfield code box was not present on new subfield tab in Admin/Authority
+Bug 3081 - The category code in the patron personal details page in opac showed the category code and not the description. This patch makes the description appear instead. Looking at both opac-userupdate.pl and opac-userupdate.tmpl, the actual value of this text box is not retrieved for any purpose.
+(bug #3193) fix the comtd value in acqui-home.pl
+Bug 3157: IE compatibility for label display
+(bug #2750) Cannot return to another branch if the independantbranch option is set as ON
+bug 2687 followup: Increase maxlength attribute to support 64 characters
+Bug 3177 - haspermission offers bogus option
+bug 3141: use quoted printable encoding in cart/list emails
+bug 2908 followup - use "list", not "shelf"
+Corrected: fix for Bug 3112, Emailed list contains too much whitespace
+(bug #3187) authority search pagination doesn't work
+(bug #3058) show items that are excluded of loan in search results
+(bug #3057) mandatory subfield edition
+(bug #3053) extract ISBD view generator, and permit to display valuecode in ISBD view
+(bug #3051) bad support of pagination in auth_finder
+(bug #3025) multiple check-in of a multiple times reserved item go wrong
+(bug #3011) csv export doesn't fill all the fields
+(bug #2939) delete a warning
+(bug #2938) add a serials subscriptions report
+(bug #2908) adding send shelf by e-mail feature
+Bug fix to OPAC shelf browsing query statement
+Adding warnings, fixing a bug that meant the title of an item that had a fine was never printed
+Bug #2974 Adding category code to BorrowerMandatoryField produced a "The following fields are mandatory: categorycode"
+(bug #3174) fill borrower number, and show author and creation date in saved reports
+minPasswordLength not returning user back to systempreferences.pl?tab=Patrons. Incorrect reference MinPasswordLength fixed. Could not find bug report.
+Bug 3126: remove comma for IE7
+Bug 2505 adding warnings to opac-authorities-home and fixing warnings generated
+Bugs 2822, 2551, 3163 fixes to XSLT
+(bug #2750) Cannot return to another branch if the independantbranch option is set as ON
+(bug #2961) change the workflow of the new issue
+bug 2915 followup - small efficiency improvement
+Bug 3114 - IE7 spacing needs width: 100% to avoid line collapse.
+bug 3161: don't display blank language chooser
+bug 2505: fix more warnings in opac-search.pl
+Bug 2505 Adding use warnings, and fixing the warnings generated
+Bug 2776 : emailPurchaseSuggestions syspref deprecated
+BUG-3160: fixes 'itemlost' check on item return.
+bug 3159: allow editing child patron that has no valid guarantor
+bug 2505 followup: restored correct item type image display
+Bug 2505: adding warnings to opac-detail.pl
+Bug 3152 OPAC reading history column headers don't line up with text
+Bug 3128 - followup and correction
+Bug 3128: IE7 tweak
+bug 1546 - replacing REPLACE statements
+Bug 3118: Remove comment that perturbs IE
+IE bugs 3124 and 3115: z3950 search and guided_reports
+Fix for Bug 3119: Add due date to the patron circulation history window
+Fix for Bug 1877, Link to patron record from manage suggestions
+Bug #3101 - Changed the Print and Confirm button
+Bug 2847 - Added url escaping for categorie.tmpl
+Bug 2847 - Fix html escaping in categorie.tmpl (more needed)
+Fix Bug #2925
+Partial fix for Bug #3139
+Modification on Bug # 3102 - "Location" instead of "Localization"
+Update for bug 1545 allowing for the title to be edited
+Change typo Localisation to Localization for Bug # 3102
+Bug 3013 Fix for 007 value builder to include all material types
+Allowing users to edit saved sql in guided reports. Bug 1545
+Bug 3132: Reformatting guarantor entry based on C vs. P patron types
+Bug 3133 - correct typos
+Removing duplicate email form field. Fixes Bug 3010.
+bug 2958: fix search results navigation for CCL, CQL, and PQF queries
+bug 3100: increase width of alternate postal code
+Multi-bug fix - SetMarcUnicodeFlag for records coming from Koha
+bug: unescaped single-quote in french sys. prefs. sql file
+bug 3110 - Move Serial Preferences to Serials Tab
+bug 3049: display correct due date of renewed loans
+Bug 2919 -- fix value_builder plugins for dateaccessioned, barcode
+Partial fix for Bug 2655, "Items waiting on the hold shelf display as 'Available' in OPAC"
+Bug 3090 - Add perldoc details
+Fix for Bug 3095, Add to lists page doesn't redirect with no javascript
+Another try at fixing Bug 2949.
+Bug 3066 - Overhaul guided reports
+Corrected: Hiding renew link in the OPAC for items which cannot be renewed. Fixes bug 3083.
+(bug #3084) in baskets, change the isbn of column
+Adding details to OPAC search results RSS, described in Bug 2973.
+bug 3088: fix crash in opac-ISBDdetail.pl
+Bug #3071 - Z39.50 search result highlights are mixed
+BUG-1503: fixes broken matching for 'hidden' values.
+(bug #3063) fix unimarc 4xx plugin with cloned field
+Bug #3036 Avoid command-line installer blocking on opensolaris plateform
+Minor bug fix Documentation update : 3039
+Hiding labels for add to list options when user isn't logged in or options don't exist. Fixes Bug 3043.
+quietens a noisy debug pop-up, when debugging
+Bug 2958 - notforloan (8008) is a numeric field.
+Second patch to address LL Bug 367 Titles without ISBNs display "no cover image available" while titles with ISBNS that don't match a Syndetics cover display nothing
+Fix for LL bug 367 Titles without ISBNs display "no cover image available"
+Bug Fix : weight field was broken in UNIMARC
+bug 3028: remove reservefix.pl cronjob
+Correcting delete patron button to use TMPL_VAR instead of DOM query. Fixes Bug 3014, Can't delete restricted patron from circulation screen.
+Fix for Bug 3015: Check-in screen displays branch name inconsistently
+Bug 2617: Add strict (and warnings), partial fix.
+(bug #2863) add the borrowers branchcodes in suggestion list
+(bug #2811)[3.2] fix opac-renew.pl part
+bug 2904: fix display of URLs in UNIMARC
+corrected patch for bug 2951
+bug 2772: bad image location
+Bug 2883 - longoverdue cronjob fails to implement required functionality.
+Kohabug 2500 Fiction Call Number Splitting Enhancement/Bugfix
+bug 2924 fixed rebuild_zebra.pl to work when export is skipped
+bug 1546 - REPLACE statements
+Fix for Bug 2984, Error when generating CSV output from "Generate labels for Batch" button
+bug 2870, fixes non-populating of guarantor fields
+Formatting changes for OPAC xslt and staff client catalog detail pages. Fixes Bug 2704, 440 Display Issues.
+bug 2856 followup: remove unconditional warn
+Bug 2868: fixing typo in NoZebraIndexes setting in sysprefs
+bug 2860: allow setting of a syspref value to '0'
+bug 2505: turn on warnings in admin/systemprefernces.pl
+bug 2867 [1/2]: Move basic editing to main system preferences screen
+bug 2505: enable warnings for opac/sco/sco-main.pl
+bug 2857: fix UTF-8 conversion issues in web services
+bug 2613: allow web self-check to accept patron ID
+Some minor markup corrections to opac authorities pages. Some fixes to address Bug 2620.
+Fixing a couple of bugs in the package
+Revert "Fix the guided report export, bad check of errors(bug #2672)"
+(bug #1758) change the position of GetCOinSBiblio()
+(bug #2948) change the aqbudgetid column type
+(bug #2938)[follow previous] Add new report in menus
+(bug #2933) change popup names containing space chars
+(bug #2929) permit to define "fine days" in issuing rules
+(bug #2915) C4::Biblio::DelBiblio delete the serials
+(bug #2856) Activate the duplicate patrons detection and check birthdate only if one is set
+Fix the guided report export, bad check of errors(bug #2672)
+bug 2540: allow download of report
+(bug #2881) preselect default sorting
+(bug #2996) update unimarc 105 plugin to the actual norm
+(bug #2961) be xhtml valid
+bug 2986: tweak authtype index for MARC21 (GRS-1)
+(bug #3004) fix the opac authority search
+(bug #2998) fix search sorting containing "="
+(bug #2996) fix and improve 100 and 105 unimarc plugins
+(bug #2995) Set a default encoding for e-mails
+bug 2992: don't display MARC codes in search results
+(bug #2978) fix differents bugs in marc editor
+bug itemtype icons interfere with location text
+bug 2971: Fixed leak by removing drop shadow instead of hiding it.
+Bug 2968 - SIP ACS_STATUS message (98) misreported config.
+URLs checker enhancement (bug #2959)
+(bug #2962) escape searchbox, and change the search from tag clouds
+(bug #2961) add a button to add manually the next issue
+bug 2126: reduce round-off errors in fine balance
+(bug #2957) import Date_to_Days
+(bug #2956) fix 4xx plugin pagination
+
+This release is bugfix only release, and doesnot include new
+features which would require some database changes.
+It does add some databases changes though but only to FIX bugs.
+
+
+
+Note that Windows is not supported for this version as there are blockers.
+
+Note that this version is still supporting only MySQL.
+Support for PostgreSQL is still very experimental.
+
+New features which have deep impact on code will be available in Koha 3.2 
+and subsequent releases.
+
+==============================================================================
+UPGRADING FROM A PREVIOUS VERSION OF KOHA
+==============================================================================
+
+The upgrade process from a previous version of Koha is documented on the Wiki
+at the following page:
+
+Upgrading from 2.2 or earlier version:
+
+http://wiki.koha.org/doku.php?id=22_to_30
+
+Upgrading from a previous version of 3.0:
+
+Please consult INSTALL files for details on how to upgrade
+
+==============================================================================
+TEMPLATES
+==============================================================================
+
+You may have heard that the templates for Koha 3 have been re-skinned; there
+is also the start of a template style guide on the Wiki:
+
+http://wiki.koha.org/doku.php?id=en:documentation:templates_style_guide
+
+Kudos to Owen Leonard and the Nelsonville Public Library for their
+contributions!
+
+==============================================================================
+TRANSLATIONS
+==============================================================================
+
+Koha 3.0.2 (this release) currently has complete translations for the following
+languages:
+
+OPAC: ar-Arab (Arabic), da-DK (Danish), de-DE (German), el-GR (Greek), es-ES (Spanish), en (English), 
+   en-NZ (New Zealand English), fr-FR (French),
+   hu-HU (Hungarian), it-IT (Italian), nn-NO - Norwegian Nynorsk, nb-NO Norwegian (Bokmål),
+   nl-NL (Dutch), pt-PT (Portuguese), tr-TR (Turkish),
+   ru-RU (Russian), uk-UA (Ukranian)
+   
+
+Staff Client: de-DE (German), el-EL (Greek), fr-FR (French), en (English),
+   es-ES (Spanish), it-IT (Italian), uk-UA (Ukranian),
+   
+
+Additionally, Koha 3.0.2 (this release) has partial translations for the following
+languages:
+
+OPAC: am-Ethi (Amharic), bg-Cyrl (Bulgarian), fa-Arab (Persian), fi-FI (Finnish)
+   gl (Galician), he-Hebr (Hebrew), hr-HR (Croatian), hu-HU (Hungarian), id-ID (Indonesian), 
+   ja-Japn (Japanese), kn-Knda (kannada), ko-Kore (Korean), lo-Laoo (Laoo), 
+   mi-NZ (Maori), pl-PL (Polish), pt-PT (Portuguese), sv-SE (Swedish),
+   tet (Tetum), zh-Hans-CN (Simplified Chinese in China), zh-Hans-TW (Simplified Chinese in Taiwan)
+
+Staff Client: ar-Arab (Arabic), es-ES (Spanish), hu-HU (Hungarian),
+    hy-Armn (Armenian), ja-Japn (Japanese), nn-NO - Norwegian Nynorsk, nb-NO Norwegian (Bokmål),
+    ru-RU (Russian), tr-TR (Turkish), 
+    zh-Hans-CN (Simplified Chinese in China), zh-Hans-TW (Simplified Chinese in Taiwan)
+
+The Koha Team welcomes additional translations; please see
+http://www.kohadocs.org/usersguide/apb.html for information about
+translating Koha, and join the koha-translate list to volunteer:
+
+http://lists.koha.org/mailman/listinfo/koha-translate
+
+Note that I chose to release even though some words are still missing.
+I apologize to translators.
+I had proclaimed string freeze, but some strings were still untranslated.
+You can find latest uptodate translations on Pootle : http://translate.koha.org/languages/
+You can also ask for translation rights if you need.
+Thank you for your patience and your work, translators.
+
+==============================================================================
+DOCUMENTATION
+==============================================================================
+
+User-contributed documentation for Koha 3 is available on the Koha Wiki
+(http://wiki.koha.org). The Koha Team welcomes documentation contributions;
+please join the Koha-devel list to volunteer:
+
+http://lists.nongnu.org/mailman/listinfo/koha-devel
+
+==============================================================================
+KNOWN ISSUES
+==============================================================================
+
+Known bugs are documented on the Koha wiki: http://bugs.koha.org and at the
+3.0 RM's QA notes Wiki page:
+
+http://wiki.koha.org/doku.php?id=en:development:qanotes3.0
