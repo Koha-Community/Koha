@@ -3421,6 +3421,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.115';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('UPDATE aqorders SET quantityreceived = 0 WHERE quantityreceived IS NULL');
+    $dbh->do('ALTER TABLE aqorders MODIFY COLUMN quantityreceived smallint(6) NOT NULL DEFAULT 0');
+	print "Upgrade to $DBversion done ( Default aqorders.quantityreceived to 0 )\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
