@@ -283,7 +283,7 @@ sub SendAlerts {
                     Message => "" . $innerletter->{content},
                     'Content-Type' => 'text/plain; charset="utf8"',
                     );
-                sendmail(%mail);
+                sendmail(%mail) or carp $Mail::Sendmail::error;
 
 # warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
             }
@@ -344,7 +344,7 @@ sub SendAlerts {
                 Message        => "" . $innerletter->{content},
                 'Content-Type' => 'text/plain; charset="utf8"',
             );
-            sendmail(%mail);
+            sendmail(%mail) or carp $Mail::Sendmail::error;
             warn
 "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
         }
@@ -422,7 +422,7 @@ sub SendAlerts {
                 Message => $mail_msg,
                 'Content-Type' => 'text/plain; charset="utf8"',
             );
-            sendmail(%mail);
+            sendmail(%mail) or carp $Mail::Sendmail::error;
             logaction(
                 "ACQUISITION",
                 "CLAIM ISSUE",
@@ -453,7 +453,7 @@ sub SendAlerts {
                 Message => $letter->{'content'},
                 'Content-Type' => 'text/plain; charset="utf8"',
         );
-        sendmail(%mail);
+        sendmail(%mail) or carp $Mail::Sendmail::error;
     }
 }
 
@@ -804,18 +804,15 @@ sub _send_message_by_email ($) {
        $sendmail_params{ Bcc } = $bcc;
     }
     
-    my $success = sendmail( %sendmail_params );
 
-    if ( $success ) {
-        # warn "Sendmail OK. Log says: " .  $Mail::Sendmail::log;
+    if ( sendmail( %sendmail_params ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
-                               status     => 'sent' } );
-        return $success;
+                status     => 'sent' } );
+        return 1;
     } else {
-        # warn "Mail::Sendmail::error - " . $Mail::Sendmail::error;
-        # warn "Mail::Sendmail::log   - " . $Mail::Sendmail::log;
         _set_message_status( { message_id => $message->{'message_id'},
-                               status     => 'failed' } );
+                status     => 'failed' } );
+        carp $Mail::Sendmail::error;
         return;
     }
 }
