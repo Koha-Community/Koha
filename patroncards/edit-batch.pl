@@ -109,9 +109,9 @@ elsif ($op eq 'edit') {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);
 }
 elsif ($op eq 'new') {
-    if (!$branch_code) {
+    if ($branch_code eq '') {
         warn sprintf('Batch edit interface called with an invalid/non-existent branch code: %s',$branch_code ? $branch_code : 'NULL');
-        print $cgi->redirect("manage.pl?card_element=batch&error=203") if $err;
+        print $cgi->redirect("manage.pl?card_element=batch&error=203");
         exit;
     }
     $batch = C4::Patroncards::Batch->new(branch_code => $branch_code);
@@ -119,7 +119,7 @@ elsif ($op eq 'new') {
 }
 else {
     warn sprintf('Batch edit interface called an unsupported operation: %s',$op);
-    print $cgi->redirect("manage.pl?card_element=batch&error=202") if $err;
+    print $cgi->redirect("manage.pl?card_element=batch&error=202");
     exit;
 }
 
