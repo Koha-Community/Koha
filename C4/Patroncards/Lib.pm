@@ -58,12 +58,12 @@ sub text_alignment {
         return $origin_llx, $Tw;
     }
     elsif ($alignment eq 'C') {
-        my $center_margin = ($text_box_width / 2) +  $text_llx;
+        my $center_margin = ($text_box_width / 2) + ($origin_llx - $text_llx);
         $Tx = $center_margin - ($string_width / 2);
         return $Tx, $Tw;
     }
     elsif ($alignment eq 'R') {
-        $Tx = ($text_box_width - $string_width) + ($text_llx / 2);
+        $Tx = ($text_box_width - $string_width) + (($origin_llx - $text_llx) / 2);
         return $Tx, $Tw;
     }
     elsif ($alignment eq 'L') {

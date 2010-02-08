@@ -65,7 +65,7 @@ my $lower_left_y  = 0;
 my $upper_right_x = $template->get_attr('page_width');
 my $upper_right_y = $template->get_attr('page_height');
 
-$pdf->Compress(1);
+$pdf->Compress(1); # comment this out to debug pdf files, but be sure to uncomment it in production or you may be very sorry...
 $pdf->Mbox($lower_left_x, $lower_left_y, $upper_right_x, $upper_right_y);
 
 my ($llx, $lly) = 0,0;

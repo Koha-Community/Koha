@@ -83,7 +83,7 @@ sub draw_text {
     my ($self, $pdf, %params) = @_;
     warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
     my @card_text = ();
-    my $text = $self->{'layout'}->{'text'};
+    my $text = [@{$self->{'layout'}->{'text'}}]; # make a copy of the arrayref *not* simply a pointer
     return unless (ref($text) eq 'ARRAY'); # just in case there is not text
     while (scalar @$text) {
         my $line = shift @$text;
