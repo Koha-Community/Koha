@@ -43,7 +43,6 @@
 <!-- TMPL_IF NAME="js_page" -->
     <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/pages/<!-- TMPL_VAR NAME="js_page" -->"></script>
 <!-- /TMPL_IF -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/tags.js"></script>
 
 <!-- TMPL_IF NAME="js_widgets" -->
     <!-- TMPL_LOOP NAME="js_widgets" -->

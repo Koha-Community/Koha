@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Your Cart
-    <!-- TMPL_IF NAME="print_basket" --></title>
+<title><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo; Your Cart</title>
+    <!-- TMPL_IF NAME="print_basket" -->
 
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
@@ -44,48 +44,6 @@ function placeHold () {
 
 
 
-var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
-
-function tagSelected() {
-    var bibs = document.getElementById('records').value;
-    if (bibs) {
-        $("#tagsel_tag").hide();
-        $("#tag_hides").hide();
-        $("#tagsel_form").show();
-    } else {
-        alert(MSG_NO_RECORD_SELECTED);
-    }
-}
-
-function tagCanceled() {
-    $("#tagsel_form").hide();
-    $("#tagsel_tag").show();
-    $("#tag_hides").show();
-}
-
-function tagAdded() {
-    var checkedBoxes = $("input:checkbox:checked");
-    if (!$(checkedBoxes).size()) {
-        alert(MSG_NO_RECORD_SELECTED);
-        return false;
-    }
-
-    var tag = $("#tagsel_new").val();
-    if (!tag || (tag == "")) {
-        alert(MSG_NO_TAG_SPECIFIED);
-        return false;
-    }
-
-    var bibs = [];
-    for (var i = 0; i < $(checkedBoxes).size(); i++) {
-        var box = $(checkedBoxes).get(i);
-        bibs[i] = $(box).val();
-    }
-
-    KOHA.Tags.add_multitags_button(bibs, tag);
-    return false;
-}
-
 	$(document).ready(function(){
 		$("#CheckAll").click(function(){
 		var checked = [];
@@ -107,16 +65,6 @@ function tagAdded() {
 	    });
         $(".holdsep").text("| ");
         $(".hold").text(_("Place Hold"));
-        <!-- TMPL_IF NAME="TagsEnabled" -->
-        <!-- TMPL_IF NAME="TagsInputOnList" -->
-          $(".tagsep").text("| ");
-          $("#tagsel_tag").text(_("Tag"));
-          $("#tagsel_button").click(function(){
-              tagAdded();
-              return false;
-          });
-        <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
 	});
 
 
@@ -159,7 +107,7 @@ function tagAdded() {
 	    </span></span>
 	</li>
 	<li>
-	    <span id="delete" class="yui-button yui-link-button"><span class="first-child">
+	    <span id="hide" class="yui-button yui-link-button"><span class="first-child">
 		<a class="hide" href="basket.pl" onclick="quit(); return false;">Hide Window</a>
 	    </span></span>
 	</li>
@@ -169,8 +117,6 @@ function tagAdded() {
 
 <!-- TMPL_IF NAME="verbose" -->
 	<!-- TMPL_UNLESS NAME="print_basket" --><p style="padding: 7px 0; border-top : 1px solid #E8E8E8;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
-<span id="tag_hides">
-<a href="#" onclick="delSelRecords(); return false;">Remove</a>
 
 <!-- TMPL_IF NAME="loggedinusername" -->
      | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
@@ -180,16 +126,6 @@ function tagAdded() {
      | <a href="#" onclick="placeHold(); return false;">Place Hold</a>
 <!-- /TMPL_IF -->
 
-     <span class="tagsep"></span>
-     <a href="#" onclick="tagSelected(); return false;"><span id="tagsel_tag"></span></a>
-</span>
-     <span id="tagsel_form" style="display:none">
-       <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
-       <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
-       <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button"
-           type="submit" value="Add" style="display:inline" />
-       <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
-     </span>
 </p><!-- /TMPL_UNLESS -->
             <form action="basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     <!-- TMPL_LOOP NAME="BIBLIO_RESULTS" -->
@@ -348,7 +284,6 @@ function tagAdded() {
     <a id="CheckAll" href="#">Select All</a>
     <a id="CheckNone" href="#">Clear All</a>
     | <b>Selected items :</b>
-<span id="tag_hides">
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
 
 <!-- TMPL_IF NAME="loggedinusername" -->
@@ -360,14 +295,6 @@ function tagAdded() {
 <!-- /TMPL_IF -->
 
 
-     <span class="tagsep"></span><a href="#" onclick="tagSelected(); return false;"><span id="tagsel_tag"></span></a>
-</span>
-     <span id="tagsel_form" style="display:none">
-       <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
-       <input name="tagsel_new" id="tagsel_new" maxlength="100"  style="display:inline"/>
-       <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add"  style="display:inline"/>
-       <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
-     </span>
 <!-- /TMPL_UNLESS -->
 </p>
     <table id="itemst">
@@ -402,7 +329,6 @@ function tagAdded() {
                         <!-- /TMPL_IF -->
 						    <!-- COinS / OpenURL -->
     <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.tpages=<!-- TMPL_VAR NAME="size" -->&amp;rft.isbn=<!-- TMPL_VAR NAME="isbn"  ESCAPE="url" -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publisher" ESCAPE="url" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span>
-    <div id="newtag<!-- TMPL_VAR NAME="biblionumber">_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>
 
 						</td>
             <td><!-- TMPL_VAR name="description" --></td>
