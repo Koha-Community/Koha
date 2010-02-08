@@ -35,7 +35,8 @@ delete $$suggestion{$_} foreach qw<op suggestedbyme>;
 $op = 'else' unless $op;
 
 my ( $template, $borrowernumber, $cookie );
-
+my $deleted = $input->param('deleted');
+my $submitted = $input->param('submitted');
 
 if ( C4::Context->preference("AnonSuggestions") ) {
     ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -84,6 +85,8 @@ if ( $op eq "add_confirm" ) {
 		   &SearchSuggestion( $suggestion );
 	}
 	$op              = 'else';
+    print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else&submitted=1");
+    exit;
 }
 
 if ( $op eq "delete_confirm" ) {
@@ -92,6 +95,8 @@ if ( $op eq "delete_confirm" ) {
         &DelSuggestion( $borrowernumber, $delete_field );
     }
     $op = 'else';
+    print $input->redirect("/cgi-bin/koha/opac-suggestions.pl?op=else&deleted=1");
+    exit;
 }
 map{ $_->{'branchcodesuggestedby'}=GetBranchInfo($_->{'branchcodesuggestedby'})->[0]->{'branchname'}} @$suggestions_loop;
 my $supportlist=GetSupportList();
@@ -118,7 +123,7 @@ $template->param(
     suggestions_loop => $suggestions_loop,
     showall    => $allsuggestions,
     "op_$op"         => 1,
-	  suggestionsview => 1
+    suggestionsview => 1,
 );
 
 
