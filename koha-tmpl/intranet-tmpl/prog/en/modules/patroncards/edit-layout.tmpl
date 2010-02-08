@@ -179,12 +179,21 @@
                                     <label for="page_side">Page Side:</label>
                                     <!-- TMPL_IF NAME="page_side" -->
                                     <input type="radio" name="page_side" id="page_side" value="F" />Front
-                                    <input type="radio" name="page_side" id="page_side" value="B" checked />Back
+                                    <input type="radio" name="page_side" id="page_side" value="B" checked="checked" />Back
                                     <!-- TMPL_ELSE -->
-                                    <input type="radio" name="page_side" id="page_side" value="F" checked />Front
+                                    <input type="radio" name="page_side" id="page_side" value="F" checked="checked" />Front
                                     <input type="radio" name="page_side" id="page_side" value="B" />Back
                                     <!-- /TMPL_IF -->
-
+                                </li>
+                                <li>
+                                    <label for="guide_box">Guide Box:</label>
+                                    <!-- TMPL_IF NAME="guide_box" -->
+                                    <input type="radio" name="guide_box" id="guide_box" value="1" checked="checked" />On
+                                    <input type="radio" name="guide_box" id="guide_box" value="0" />Off
+                                    <!-- TMPL_ELSE -->
+                                    <input type="radio" name="guide_box" id="guide_box" value="1" />On
+                                    <input type="radio" name="guide_box" id="guide_box" value="0" checked="checked" />Off
+                                    <!-- /TMPL_IF -->
                                 </li>
                                 </fieldset>
                                 </li>
