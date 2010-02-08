@@ -1009,7 +1009,7 @@ sub NewOrder {
         die "Mandatory parameter $key missing" unless $orderinfo->{$key};
     }
 
-    if ( $orderinfo->{'subscription'} eq 'yes' ) {
+    if ( defined $orderinfo->{subscription} && $orderinfo->{'subscription'} eq 'yes' ) {
         $orderinfo->{'subscription'} = 1;
     } else {
         $orderinfo->{'subscription'} = 0;

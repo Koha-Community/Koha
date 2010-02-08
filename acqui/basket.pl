@@ -86,6 +86,9 @@ my $basket = GetBasket($basketno);
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
 my ($bookseller) = GetBookSellerFromId($booksellerid);
 my $op = $query->param('op');
+if (!defined $op) {
+    $op = q{};
+}
 
 if ( $op eq 'delete_confirm' ) {
     my $basketno = $query->param('basketno');
@@ -231,6 +234,9 @@ if ( $op eq 'delete_confirm' ) {
     for ( my $i = 0 ; $i < $count ; $i++ ) {
         my $rrp = $results[$i]->{'listprice'};
 		my $qty = $results[$i]->{'quantity'} || 0;
+        if (!defined $results[$i]->{quantityreceived}) {
+            $results[$i]->{quantityreceived} = 0;
+        }
 
         my $budget = GetBudget(  $results[$i]->{'budget_id'} );
         $rrp = ConvertCurrency( $results[$i]->{'currency'}, $rrp );
@@ -242,7 +248,7 @@ if ( $op eq 'delete_confirm' ) {
         my %line = %{ $results[$i] };
 		($i%2) and $line{toggle} = 1;
 
-        $line{order_received} = ( $qty eq $results[$i]->{'quantityreceived'} );
+        $line{order_received} = ( $qty == $results[$i]->{'quantityreceived'} );
         $line{basketno}       = $basketno;
         $line{i}              = $i;
         $line{budget_name}    = $budget->{budget_name};
