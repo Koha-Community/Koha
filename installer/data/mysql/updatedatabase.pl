@@ -3429,12 +3429,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = '3.01.00.116';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	if (C4::Context->preference('OrderPdfFormat') eq 'pdfformat::example'){
 		$dbh->do("UPDATE `systempreferences` set value='pdfformat::layout2pages' WHERE variable='OrderPdfFormat'");
 	}
-	print "Upgrade done ( corrected default OrderPdfFormat value is still set wrong )\n";
+	print "Upgrade done ( corrected default OrderPdfFormat value if still set wrong )\n";
     SetVersion ($DBversion);
 }
 
