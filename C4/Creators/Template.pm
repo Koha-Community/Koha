@@ -271,7 +271,6 @@ sub get_next_label_pos {
         $current_label->{'llx'} = $self->get_attr('left_margin');
         if ($current_label->{'row_count'} eq $self->get_attr('rows')) {
             $new_page = 1;
-            #$pdf->Page(); # after invoking this method, the calling script should check row, col and if they are both one then insert a new pdf page
             $current_label->{'lly'} = ($self->get_attr('page_height') - $self->get_attr('top_margin') - $self->get_attr('label_height'));
             $current_label->{'row_count'} = 1;
         }

@@ -41,7 +41,8 @@ my $start_label = $cgi->param('start_label') || 1;
 my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
 my @borrower_numbers  = $cgi->param('borrower_number') if $cgi->param('borrower_number');
 
-my $items = undef;      # items = cards
+my $items = undef; # items = cards
+my $new_page = 0;
 
 my $pdf_file = (@label_ids || @borrower_numbers ? "card_single_" . scalar(@label_ids || @borrower_numbers) : "card_batch_$batch_id");
 print $cgi->header( -type       => 'application/pdf',
@@ -101,7 +102,6 @@ if ($layout_xml->{'page_side'} eq 'B') { # rearrange items on backside of page t
 
 CARD_ITEMS:
 foreach my $item (@{$items}) {
-    my $new_page = 0; #FIXME: this needs to be implimented or removed
     if ($item) {
         my $borrower_number = $item->{'borrower_number'};
         my $card_number = GetMember(borrowernumber => $borrower_number)->{'cardnumber'};
@@ -193,11 +193,11 @@ foreach my $item (@{$items}) {
         $patron_card->draw_text($pdf);
     }
     ($llx, $lly, $new_page) = $template->get_next_label_pos();
-    #$pdf->Page() if $new_page;
+    $pdf->Page() if $new_page;
 }
 
 $pdf->End();
 
 # FIXME: Possibly do a redirect here if there were error encountered during PDF creation.
 
-exit 0;
+1;
