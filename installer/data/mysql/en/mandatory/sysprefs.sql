@@ -213,7 +213,7 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page. WARNING: this feature is very resource consuming on collections with large numbers of items.','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 ('OPACXSLTDetailsDisplay','0','','Enable XSL stylesheet control over details page display on OPAC','YesNo'),
-('OPACXSLTResultsDisplay','0','','Enable XSL stylesheet control over results page display on OPAC','YesNo');
+('OPACXSLTResultsDisplay','0','','Enable XSL stylesheet control over results page display on OPAC','YesNo'),
 ('XSLTDetailsDisplay','0','','Enable XSL stylesheet control over details page display on intranet','YesNo'),
 ('XSLTResultsDisplay','0','','Enable XSL stylesheet control over results page display on intranet','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice');
