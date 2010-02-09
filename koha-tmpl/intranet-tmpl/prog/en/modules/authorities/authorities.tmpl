@@ -605,7 +605,11 @@ function searchauthority() {
                 <div class="tag" id="tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->">
                 <div class="tag_title" name="div_indicator">
                 <!-- TMPL_UNLESS name="hide_marc" -->
+		    <!-- TMPL_IF NAME="advancedMARCEditor" -->
+                    <a class="tagnum" onclick="ExpandField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->')"><!-- TMPL_VAR NAME="tag" --></a>
+		    <!-- TMPL_ELSE -->
                     <span title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+		    <!-- /TMPL_IF -->
                     <!-- TMPL_IF NAME="fixedfield" -->
                     <input class="indicator flat"
                                 type="text"
