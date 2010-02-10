@@ -1,6 +1,8 @@
 TRUNCATE permissions;
 
 INSERT INTO permissions (module_bit, code, description) VALUES
+   ( 6, 'place_holds', 'Place holds for patrons'),
+   ( 6, 'modify_holds_priority', 'Modify holds priority'),
    (13, 'edit_news',                   'Написание новостей для электронного каталога и интерфейса библиотекарей'),
    (13, 'label_creator',               'Создание печатных наклеек и штрихкодов из каталога и с данными о пользователях'),
    (13, 'edit_calendar',               'Определение дней, когда библиотека закрыта'),

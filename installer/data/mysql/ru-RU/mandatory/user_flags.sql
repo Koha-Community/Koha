@@ -6,7 +6,7 @@ INSERT INTO `userflags` VALUES(2, 'catalogue',       'Просмотр ката�
 INSERT INTO `userflags` VALUES(3, 'parameters',      'Установка системных настроек Koha',0);
 INSERT INTO `userflags` VALUES(4, 'borrowers',       'Внесение и изменение посетителей',0);
 INSERT INTO `userflags` VALUES(5, 'permissions',     'Установка привилегий пользователя',0);
-INSERT INTO `userflags` VALUES(6, 'reserveforothers','Резервирование книжек для посетителей',0);
+INSERT INTO `userflags` VALUES(6, 'reserveforothers','Place and modify holds for patrons',0);
 INSERT INTO `userflags` VALUES(7, 'borrow',          'Заем книг',1);
 INSERT INTO `userflags` VALUES(9, 'editcatalogue',   'Изменение каталога (изменение библиографических/локальных данных)',0);
 INSERT INTO `userflags` VALUES(10,'updatecharges',   'Обновление оплат пользователей',0);

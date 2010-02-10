@@ -3500,6 +3500,18 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.123";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
+        (6, 'place_holds', 'Place holds for patrons')");
+    $dbh->do("INSERT INTO `permissions` (`module_bit`, `code`, `description`) VALUES
+        (6, 'modify_holds_priority', 'Modify holds priority')");
+    $dbh->do("UPDATE `userflags` SET `flagdesc` = 'Place and modify holds for patrons' WHERE `flag` = 'reserveforothers'");
+    print "Upgrade to $DBversion done (Add granular permission for holds modification and update description of reserveforothers permission)\n";
+    SetVersion ($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

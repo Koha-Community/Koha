@@ -6,7 +6,7 @@ INSERT INTO `userflags` VALUES(2,'catalogue','Consultation du catalogue (interfa
 INSERT INTO `userflags` VALUES(3,'parameters','Définition des paramètres de l''application',0);
 INSERT INTO `userflags` VALUES(4,'borrowers','Gestion des lecteurs',0);
 INSERT INTO `userflags` VALUES(5,'permissions','Définition des habilitations',0);
-INSERT INTO `userflags` VALUES(6,'reserveforothers','Gestion des réservations',0);
+INSERT INTO `userflags` VALUES(6,'reserveforothers','Ajout et modifications des réservations des adhérents',0);
 INSERT INTO `userflags` VALUES(7,'borrow','Circulation (inutile normalement)',1);
 INSERT INTO `userflags` VALUES(9,'editcatalogue','fonctions de catalogage',0);
 INSERT INTO `userflags` VALUES(10,'updatecharges','Gestion des pénalités financières',0);

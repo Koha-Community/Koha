@@ -51,7 +51,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { reserveforothers => 1 },
+        flagsrequired   => { reserveforothers => 'place_holds' },
     }
 );
 
