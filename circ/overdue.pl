@@ -25,7 +25,8 @@ use C4::Output;
 use CGI;
 use C4::Auth;
 use C4::Branch;
-use C4::Dates qw/format_date/;
+use C4::Overdues qw/GetOverduesByBorrowers/;
+use C4::Dates qw/format_date format_date_in_iso/;
 use Date::Calc qw/Today/;
 use Text::CSV_XS;
 
@@ -91,6 +92,9 @@ $template->param(
     order        => $order,
     showall      => $showall,
     csv_param_string => $input->query_string(),
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    dateduefrom => $input->param( 'dateduefrom' ),
+    datedueto => $input->param( 'datedueto' ),
 );
 
 my @sort_roots = qw(borrower title barcode date_due);
@@ -113,76 +117,14 @@ my $todaysdate = sprintf("%-04.4d-%-02.2d-%02.2d", Today());
 $bornamefilter =~s/\*/\%/g;
 $bornamefilter =~s/\?/\_/g;
 
-my $strsth="SELECT date_due,
-  surname,
-  firstname,
-  borrowers.title as borrowertitle,
-  CONCAT(borrowers.address, '\n', borrowers.address2) as address,
-  borrowers.city,
-  borrowers.zipcode,
-  borrowers.phone,
-  borrowers.email,
-  issues.itemnumber,
-  issues.issuedate,
-  items.barcode,
-  items.itemcallnumber,
-  biblio.title,
-  biblio.author,
-  borrowers.borrowernumber,
-  biblio.biblionumber,
-  borrowers.branchcode 
-  FROM issues
-LEFT JOIN borrowers   ON (issues.borrowernumber=borrowers.borrowernumber )
-LEFT JOIN items       ON (issues.itemnumber=items.itemnumber)
-LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
-LEFT JOIN biblio      ON (biblio.biblionumber=items.biblionumber )
-WHERE 1=1 "; # placeholder, since it is possible that none of the additional
-             # conditions will be selected by user
-$strsth.=" AND date_due               < NOW() " unless ($showall);
-$strsth.=" AND (borrowers.firstname like '".$bornamefilter."%' or borrowers.surname like '".$bornamefilter."%' or borrowers.cardnumber like '".$bornamefilter."%')" if($bornamefilter) ;
-$strsth.=" AND borrowers.categorycode = '" . $borcatfilter   . "' " if $borcatfilter;
-$strsth.=" AND biblioitems.itemtype   = '" . $itemtypefilter . "' " if $itemtypefilter;
-$strsth.=" AND borrowers.flags        = '" . $borflagsfilter . "' " if $borflagsfilter;
-$strsth.=" AND borrowers.branchcode   = '" . $branchfilter   . "' " if $branchfilter;
-$strsth.=" ORDER BY " . (
-    ($order eq "surname" or $order eq "surname desc") ? "$order, date_due"                 : 
-    ($order eq "title"    or $order eq    "title desc") ? "$order, date_due, surname"       :
-    ($order eq "barcode"  or $order eq  "barcode desc") ? "items.$order, date_due, surname" :
-                            ($order eq "date_due desc") ? "date_due DESC, surname"          :
-                                                          "date_due, surname"  # default sort order
-);
-$template->param(sql=>$strsth);
-my $sth=$dbh->prepare($strsth);
-#warn "overdue.pl : query string ".$strsth;
-$sth->execute();
+my $dateduefrom = format_date_in_iso($input->param( 'dateduefrom' ));
+my $datedueto   = format_date_in_iso($input->param( 'datedueto' ));
 
-my @overduedata;
-while (my $data=$sth->fetchrow_hashref) {
-    push @overduedata, {
-        issuedate      => format_date($data->{issuedate}),
-        duedate        => format_date($data->{date_due}),
-        surname        => $data->{surname},
-        firstname      => $data->{firstname},
-        borrowertitle  => $data->{borrowertitle},
-        borrowernumber => $data->{borrowernumber},
-        barcode        => $data->{barcode},
-        itemnum        => $data->{itemnumber},
-        itemcallnumber => $data->{itemcallnumber},
-        address        => $data->{address},
-        city           => $data->{city},
-        zipcode        => $data->{zipcode},
-        phone          => $data->{phone},
-        email          => $data->{email},
-        biblionumber   => $data->{biblionumber},
-        title          => $data->{title},
-        author         => $data->{author},
-        branchcode     => $data->{branchcode},
-    };
-}
+my @overduedata = @{GetOverduesByBorrowers($branchfilter, $borcatfilter, $itemtypefilter, $borflagsfilter, $bornamefilter, $order, $dateduefrom, $datedueto)};
 
 $template->param(
     todaysdate  => format_date($todaysdate),
-    overdueloop => \@overduedata
+    overdueloop => \@overduedata 
 );
 
 # download the complete CSV
@@ -208,7 +150,20 @@ sub build_csv {
     my @lines = ();
 
     # build header ...
-    my @keys = sort keys %{ $overdues->[0] };
+    my @keys = (
+        'borrowernumber',
+        'title',
+        'firstname',
+        'surname',
+        'address',
+        'city',
+        'zipcode',
+        'phone',
+        'email',
+        'branchcode',
+        'overdues'
+    );
+
     my $csv = Text::CSV_XS->new({
         binary   => 1,
         sep_char => C4::Context->preference("delimiter") ? 
@@ -219,7 +174,23 @@ sub build_csv {
 
     # ... and rest of report
     foreach my $overdue ( @{ $overdues } ) {
-        push @lines, $csv->string() if $csv->combine(map { $overdue->{$_} } @keys);
+        my $issues;
+        foreach my $issue ( @{$overdue->{overdues} }){
+            $issues .= "$issue->{title} / $issue->{author} / $issue->{itemcallnumber} / $issue->{barcode} / ".format_date($issue->{issuedate}). " - " . format_date($issue->{date_due}) . " \r\n";
+        }
+        push @lines, $csv->string() if $csv->combine(
+            $overdue->{borrowernumber},
+            $overdue->{title},
+            $overdue->{firstname},
+            $overdue->{surname},
+            $overdue->{address},
+            $overdue->{city},
+            $overdue->{zipcode},
+            $overdue->{phone},
+            $overdue->{email},
+            $overdue->{branchcode},
+            $issues,
+        );
     }
 
     return join("\n", @lines) . "\n";

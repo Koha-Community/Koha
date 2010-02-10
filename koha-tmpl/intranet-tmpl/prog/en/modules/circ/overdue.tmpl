@@ -4,6 +4,7 @@
 <style type="text/css">
     .sql {display:none;}
 </style>
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -30,7 +31,6 @@
 <div class="searchresults">
 <table id="overduest">
 <thead><tr>
-    <th>Due Date</th>
     <th>Patron</th>
     <th>Library</th>
     <th>Title</th>
@@ -38,17 +38,26 @@
 
 <tbody><!-- TMPL_LOOP NAME="overdueloop" -->
     <tr>
-        <td><!-- TMPL_VAR NAME="duedate" --></td>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR NAME="firstname" --></a>
         <!-- TMPL_IF NAME="email" -->[<a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">email</a>]<!-- /TMPL_IF -->
         (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSIF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSIF NAME="phonepro" --><!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF -->)</td>
         <td><!-- TMPL_VAR name="branchcode" --></td>
-        <td><!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
-<!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
-<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
-<!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR ESCAPE="HTML" NAME="subtitle" --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR ESCAPE="HTML" NAME="author" --><!-- /TMPL_IF -->
+        <td>
+            <!-- TMPL_LOOP NAME="overdues" -->
+                <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
+                    <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
+                    <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                <!-- TMPL_ELSE -->
+                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+                <!-- /TMPL_IF -->
+                <!-- TMPL_VAR NAME="title" ESCAPE="HTML" -->
+                <!-- TMPL_VAR ESCAPE="HTML" NAME="subtitle" -->
+                
+                </a>
+                <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR ESCAPE="HTML" NAME="author" --><!-- /TMPL_IF --> 
+                <br/>
+            <!-- /TMPL_LOOP -->
         </td>
     </tr>
 <!-- /TMPL_LOOP --></tbody>
@@ -61,6 +70,35 @@
   <fieldset class="brief">
 <h4>Filter On:</h4>
 	<ol>
+    <li style="border: dashed; border-width:1px;">Date due:
+        <label for="dateduefrom">From:
+        <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateduefrom_button" alt="Show Calendar" />
+        </label>
+        <input type="text" id="dateduefrom" name="dateduefrom" size="20" value="<!-- TMPL_VAR NAME="dateduefrom" -->" />
+        <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+            {
+                inputField : "dateduefrom",
+                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                button : "dateduefrom_button"
+            }
+            );
+        </script>
+        
+        <label for="datedueto">To:
+        <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" />
+        </label>
+        <input type="text" id="datedueto" name="datedueto" size="20" value="<!-- TMPL_VAR NAME="datedueto" -->" />
+        <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+            {
+                inputField : "datedueto",
+                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                button : "datedueto_button"
+            }
+            );
+        </script>
+    </li>
     <li><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname"-->" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       <!-- TMPL_LOOP name="borcatloop" -->
