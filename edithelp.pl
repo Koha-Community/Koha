@@ -21,6 +21,7 @@ use strict;
 use C4::Output;
 use C4::Auth;
 use CGI;
+use warnings;
 
 use vars qw($debug);
 
@@ -30,10 +31,10 @@ BEGIN {
 
 our $input = new CGI;
 
-my $type    = $input->param('type');
-my $referer = $input->param('referer');
+my $type    = $input->param('type') || '';
+my $referer = $input->param('referer') || '';
 my $oldreferer = $referer;
-my $help    = $input->param('help');
+my $help    = $input->param('help') || '';
 # strip any DOS-newlines that TinyMCE may have sneaked in
 $help =~ s/\r//g;
 my $error;
