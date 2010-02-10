@@ -492,7 +492,7 @@ sub CanItemBeReserved{
     
     # we retrieve borrowers and items informations #
     my $item     = C4::Items::GetItem($itemnumber);
-    my $borrower = C4::Members::GetMember('borrowernumber'=>$borrowernumber);     
+    my $borrower = C4::Members::GetMember($borrowernumber, 'borrowernumber');     
 
     my $branchcode   = "*";
     my $branchfield  = "reserves.branchcode";
