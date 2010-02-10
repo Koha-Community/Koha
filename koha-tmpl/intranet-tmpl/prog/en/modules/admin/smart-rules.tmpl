@@ -56,7 +56,7 @@ $(document).ready(function() {
             <!-- /TMPL_LOOP -->
             </select>
         </form>
-<!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="branch" -->" /> 
+<!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="branch" -->" />
             <select name="tobranch" id="tobranch"><!-- TMPL_LOOP NAME="branchloop" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_LOOP --></select> <input type="submit" value="Clone" /></form><!-- /TMPL_IF --></fieldset>
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
@@ -100,14 +100,14 @@ $(document).ready(function() {
 									<!-- TMPL_VAR NAME="maxissueqty" -->
 								<!-- /TMPL_IF -->
 							</td>
-							<td><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_VAR NAME="issuelength" --></td>
 							<td><!-- TMPL_VAR NAME="fine" --></td>
-							<td><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> <!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> <!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="finedays" --> <!-- TMPL_VAR NAME="finedays" --> <!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --> <!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="reservesallowed" --><!-- TMPL_VAR NAME="reservesallowed" --> <!-- /TMPL_IF --></td>
-							<td><!-- TMPL_IF NAME="rentaldiscount" --><!-- TMPL_VAR NAME="rentaldiscount" --> <!-- /TMPL_IF --></td>
+							<td><!-- TMPL_VAR NAME="chargeperiod" --></td>
+							<td><!-- TMPL_VAR NAME="firstremind" --></td>
+							<td><!-- TMPL_VAR NAME="finedays" --></td>
+							<td><!-- TMPL_VAR NAME="renewalsallowed" --></td>
+							<td><!-- TMPL_VAR NAME="reservesallowed" --></td>
+							<td><!-- TMPL_VAR NAME="rentaldiscount" --></td>
 							<td>
 								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
 							</td>
@@ -198,7 +198,7 @@ $(document).ready(function() {
     </div>
     <!-- TMPL_IF NAME="show_branch_cat_rule_form" -->
     <div class="help">
-        <p>For this library, you can specify the maximum number of loans that 
+        <p>For this library, you can specify the maximum number of loans that
             a patron of a given category can make, regardless of the item type.
         </p>
         <p>If the total amount loanable for a given patron category is left blank,
