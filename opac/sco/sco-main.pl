@@ -31,6 +31,13 @@ use C4::Biblio;
 use C4::Items;
 
 my $query = new CGI;
+
+unless (C4::Context->preference('WebBasedSelfCheck')) {
+    # redirect to OPAC home if self-check is not enabled
+    print $query->redirect("/cgi-bin/koha/opac-main.pl");
+    exit;
+}
+
 if (C4::Context->preference('AutoSelfCheckAllowed')) 
 {
 	my $AutoSelfCheckID = C4::Context->preference('AutoSelfCheckID');

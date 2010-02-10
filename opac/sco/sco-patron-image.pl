@@ -23,6 +23,16 @@ use C4::Service;
 use C4::Members;
 
 my ($query, $response) = C4::Service->init(circulate => 'circulate_remaining_permissions');
+
+unless (C4::Context->preference('WebBasedSelfCheck')) {
+    print $query->header(status => '403 Forbidden - web-based self-check not enabled');
+    exit;
+}
+unless (C4::Context->preference('ShowPatronImageInWebBasedSelfCheck')) {
+    print $query->header(status => '403 Forbidden - displaying patron images in self-check not enabled');
+    exit;
+}
+
 my ($cardnumber) = C4::Service->require_params('cardnumber');
 
 my ($imagedata, $dberror) = GetPatronImage($cardnumber);
