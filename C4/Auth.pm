@@ -350,8 +350,8 @@ sub get_template_and_user {
             'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
-            OPACXSLTDetailsDisplay       => C4::Context->preference("XSLTDetailsDisplay"),
-            OPACXSLTResultsDisplay       => C4::Context->preference("XSLTResultsDisplay"),
+            XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
+            XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
             BranchesLoop                 => GetBranchesLoop(),
     );
 
@@ -453,6 +453,8 @@ sub get_template_and_user {
             virtualshelves            => "" . C4::Context->preference("virtualshelves"),
             OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
             OpacAddMastheadLibraryPulldown => C4::Context->preference("OpacAddMastheadLibraryPulldown"),
+            OPACXSLTDetailsDisplay           => C4::Context->preference("OPACXSLTDetailsDisplay"),
+            OPACXSLTResultsDisplay           => C4::Context->preference("OPACXSLTResultsDisplay")
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
