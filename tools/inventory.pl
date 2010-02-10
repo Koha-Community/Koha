@@ -40,7 +40,7 @@ my $minlocation=$input->param('minlocation') || '';
 my $maxlocation=$input->param('maxlocation');
 $maxlocation=$minlocation.'Z' unless ( $maxlocation || ! $minlocation );
 my $location=$input->param('location');
-my $itemtype=$input->param('itemtype');
+my $itemtype=$input->param('itemtype'); # FIXME note, template does not currently supply this
 my $ignoreissued=$input->param('ignoreissued');
 my $datelastseen = $input->param('datelastseen');
 my $offset = $input->param('offset');
@@ -183,7 +183,7 @@ if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compa
         }
     }
     if ($markseen or $op) {
-        $res = GetItemsForInventory($minlocation,$maxlocation,$location, $ignoreissued,$datelastseen,$branchcode,$offset,$pagesize,$staton);
+        $res = GetItemsForInventory($minlocation,$maxlocation,$location, $ignoreissued,$itemtype,$datelastseen,$branchcode,$offset,$pagesize,$staton);
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),
