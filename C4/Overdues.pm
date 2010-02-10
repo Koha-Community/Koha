@@ -50,6 +50,7 @@ BEGIN {
         &UpdateFine
         &GetOverdueDelays
         &GetOverduerules
+        &GetOverduesByBorrowers
         &GetFine
         &CreateItemAccountLine
         &ReplacementCost2
@@ -152,6 +153,128 @@ LEFT JOIN biblioitems USING (biblioitemnumber)
     return $sth->fetchall_arrayref({});
 }
 
+=head2 GetOverduesByBorrowers
+
+@borrowers = GetOverduesByBorrowers();
+
+Returns an array with hashes, that contains all informations of borrowers, and another hash with overdues
+
+@borrower = [
+    {
+        'surname'        => ,
+        'firstname'      => ,
+        'title'          => ,
+        'borrowernumber' => ,
+        'address'        => ,
+        'city'           => ,
+        'zipcode'        => ,
+        'phone'          => ,
+        'email'          => ,
+        'branchcode'     => ,
+        'overdues'       => {
+            'biblionumber' => ,
+            'title'        => ,
+            'author'       => ,
+            'issuedate'    => ,
+            'datedue'      => ,
+            'barcode'      => ,
+            'itemnumber'   => ,
+            'callnumber'   => ,
+        }
+    }
+]
+
+=cut
+
+sub GetOverduesByBorrowers{
+    my ($branchcode, $category, $itemtype, $flags, $name, $order, $dateduefrom, $datedueto) = @_;
+    
+    my @result = ();
+    my $dbh    = C4::Context->dbh;
+    
+    my $strsth = "
+        SELECT 
+            borrowernumber,
+            surname,
+            firstname,
+            title,
+            CONCAT(borrowers.address, '\n', borrowers.address2) as address,
+            city,
+            zipcode,
+            email,
+            phone,
+            mobile,
+            phonepro,
+            branchcode
+        FROM
+            borrowers
+        WHERE borrowernumber IN (SELECT distinct(borrowernumber) FROM issues WHERE date_due < NOW() ) 
+    ";
+    $strsth.=" AND (borrowers.firstname like '".$name."%' or borrowers.surname like '".$name."%' or borrowers.cardnumber like '".$name."%')" if($name) ;
+    $strsth.=" AND borrowers.categorycode = '" . $category   . "' " if $category;
+    $strsth.=" AND borrowers.flags        = '" . $flags . "' " if $flags;
+    $strsth.=" AND borrowers.branchcode   = '" . $branchcode   . "' " if $branchcode;
+    
+    $strsth.=" ORDER BY " . (
+    ($order eq "surname" or $order eq "surname desc") ? "$order"                 : 
+    ($order eq "title"    or $order eq    "title desc") ? "$order, surname"       :
+                                                          "surname"  # default sort order
+                                                          );
+                                                          
+                                                          
+    my $strsthissues = "
+        SELECT 
+            biblionumber,
+            issuedate,
+            date_due,
+            barcode,
+            itemnumber,
+            itemcallnumber,
+            title,
+            author
+        FROM
+            issues
+            LEFT JOIN items USING(itemnumber)
+            LEFT JOIN biblio USING(biblionumber)
+            LEFT JOIN biblioitems USING(biblionumber)
+        WHERE
+            borrowernumber = ?
+    ";
+    
+    my @args;
+    my $itype = (C4::Context->preference("item-level_itypes")) ? "itype" : "itemtype" ;
+    if($itemtype){
+        $strsthissues .= " AND $itype = ? ";
+        push @args, $itemtype;
+    }
+    if($datedueto){
+        $strsthissues .= " AND date_due < ? ";
+        push @args, $datedueto;
+    }
+    if($dateduefrom){
+        $strsthissues .= " AND date_due > ? ";
+        push @args, $dateduefrom;
+    }
+    if(not ($datedueto or $dateduefrom)){
+        $strsthissues .= " AND date_due > NOW() ";
+    }
+    my $sthissues = $dbh->prepare($strsthissues);
+    my $sthbor    = $dbh->prepare($strsth);
+    $sthbor->execute();
+
+    while (my $data=$sthbor->fetchrow_hashref) {
+        my $borrower = $data;
+        $sthissues->execute($data->{borrowernumber}, @args);
+        
+        my @issues = ();
+        while(my $issuedata = $sthissues->fetchrow_hashref()){
+            push @issues, $issuedata;
+        }
+        $borrower->{overdues} = \@issues;
+        push @result, $borrower if scalar @{$borrower->{overdues}};
+    }
+    return \@result;
+}
 
 =head2 checkoverdues
 
