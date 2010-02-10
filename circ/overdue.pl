@@ -93,8 +93,8 @@ $template->param(
     showall      => $showall,
     csv_param_string => $input->query_string(),
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
-    dateduefrom => $input->param( 'dateduefrom' ),
-    datedueto => $input->param( 'datedueto' ),
+    dateduefrom => $input->param( 'dateduefrom' ) || '',
+    datedueto   => $input->param( 'datedueto' ) || '',
 );
 
 my @sort_roots = qw(borrower title barcode date_due);
