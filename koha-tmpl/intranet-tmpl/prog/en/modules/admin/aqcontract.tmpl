@@ -21,20 +21,22 @@ function Check(ff) {
         ok=1;
         _alertString += _("- Name missing\n");
     }
-    if (!(CheckDate(ff.contractstartdate))){
+    var startDate = Date_from_syspref($("#contractstartdate").val());
+    var endDate   = Date_from_syspref($("#contractenddate").val());
+    if (!parseInt(startDate.getTime())) {
         ok=1;
-        _alertString += _("- Start date missing\n");
+        _alertString += _("- Start date missing or invalid.\n");
     }
-    if (!(CheckDate(ff.contractenddate))){
+    if (!parseInt(endDate.getTime())) {
         ok=1;
-        _alertString += _("- End date missing\n");
+        _alertString += _("- End date missing or invalid.\n");
     }
     
-    if (!CompareDate(ff.contractstartdate.value, ff.contractenddate.value)) {
+    if (startDate > endDate) {
         ok=1;
-        _alertString += _("Wrong date! start date can not be after end date.\n");
+        _alertString += _("Wrong date! start date cannot be after end date.\n");
     }
-    if (! CheckEndDate(ff.contractenddate.value)) {
+    if (endDate < (new Date)) {
         ok=1;
         _alertString += _("End date before today, Invalid end date!\n");
     }

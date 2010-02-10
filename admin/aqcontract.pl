@@ -52,6 +52,7 @@ $template->param(
     booksellerid   => $booksellerid,
     booksellername => $bookseller[0]->{name},
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    dateformat     => C4::Context->preference("dateformat"),
 );
 
 #ADD_FORM: called if $op is 'add_form'. Used to create form to add or  modify a record
