@@ -738,6 +738,13 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.00.06.007';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do("INSERT INTO `permissions` (`module_bit` , `code` , `description`) VALUES ('9', 'edit_items', 'Edit items');");
+    print "Upgrade to $DBversion done (Added 'Edit Items' permission)\n";
+    SetVersion ($DBversion);
+}
+
 
 
 

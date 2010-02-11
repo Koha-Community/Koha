@@ -57,6 +57,7 @@ for ($damaged,$itemlost,$wthdrawn) {
 # modify MARC item if input differs from items table.
 my $item_changes = {};
 if (defined $itemnotes) { # i.e., itemnotes parameter passed from form
+    my ($loggedinuser, $cookie, $sessionID) = checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes'}) or $itemnotes ne $item_data_hashref->{'itemnotes'}) {
         $item_changes->{'itemnotes'} = $itemnotes;
     }
