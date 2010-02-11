@@ -149,6 +149,16 @@ foreach my $result (@results) {
 
     my $member      = GetMember( borrowernumber => $result->{budget_owner_id} );
     my $member_full = $member->{'firstname'} . ' ' . $member->{'surname'} if $member;
+    # as we are going to treat these as numbers let's ensure they are not NULL
+    if (!defined $result->{budget_amount} ) {
+        $result->{budget_amount} = 0;
+    }
+    if (!defined $result->{budget_spent} ) {
+        $result->{budget_spent} = 0;
+    }
+    if (!defined $result->{budget_ordered} ) {
+        $result->{budget_ordered} = 0;
+    }
 
     $result->{'budget_owner'}   = $member_full;
     $result->{'budget_ordered'} = GetBudgetOrdered( $result->{'budget_id'} );
