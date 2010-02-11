@@ -230,23 +230,19 @@ my ( $flags, $homebranch )= ($borrower->{'flags'},$borrower->{'branchcode'});
 
 my $budget =  GetBudget($budget_id);
 # build budget list
-my %labels;
-my @values;
-my $budgets = GetBudgetHierarchy('','',$borrower->{'borrowernumber'});
-foreach my $r (@$budgets) {
-    $labels{"$r->{budget_id}"} = $r->{budget_name};
-    next if  sprintf ("%00d",  $r->{budget_amount})  ==   0;
-    push @values, $r->{budget_id};
+my $budget_loop = [];
+my $budgets = GetBudgetHierarchy(q{},q{},$borrower->{borrowernumber});
+foreach my $r (@{$budgets}) {
+    if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
+        next;
+    }
+    push @{$budget_loop}, {
+        b_id  => $r->{budget_id},
+        b_txt => $r->{budget_name},
+        b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
+    };
 }
-# if no budget_id is passed then its an add
-my $budget_dropbox = CGI::scrolling_list(
-    -name    => 'budget_id',
-    -id      => 'budget_id',
-    -values  => \@values,
-    -size    => 1,
-    -labels  => \%labels,
-    -onChange   => "fetchSortDropbox(this.form)",
-);
+
 
 if ($close) {
     $budget_id      =  $data->{'budget_id'};
@@ -345,7 +341,7 @@ $template->param(
     title            => $data->{'title'},
     author           => $data->{'author'},
     publicationyear  => $data->{'publicationyear'},
-    budget_dropbox   => $budget_dropbox,
+    budget_loop      => $budget_loop,
     isbn             => $data->{'isbn'},
     seriestitle      => $data->{'seriestitle'},
     quantity         => $data->{'quantity'},
