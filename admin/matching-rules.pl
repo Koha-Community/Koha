@@ -19,6 +19,8 @@
 #
 
 use strict;
+use warnings;
+
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -29,7 +31,7 @@ use C4::Matcher;
 my $script_name = "/cgi-bin/koha/admin/matching-rules.pl";
 
 my $input = new CGI;
-my $op = $input->param('op');
+my $op = $input->param('op') || '';
 
 
 my ($template, $loggedinuser, $cookie)
