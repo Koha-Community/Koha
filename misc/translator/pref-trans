@@ -1,24 +1,6 @@
 #!/usr/bin/perl
 
 
-package PrefPo;
-
-
-sub new {
-    my ($class, $lang) = @_;
-
-    my $self           = { lang => $lang };
-    my $context        = C4::Context->new();
-    $self->{path_en}   = $context->config('intrahtdocs') .
-                         '/prog/en/modules/admin/preferences';
-    $self->{path_lang} = $context->config('intrahtdocs') .
-                         "/prog/$lang/modules/admin/preferences";
-    $self->{po}        = {};
-
-    bless $self, $class;
-}
-
-
 package Tokenizer;
 
 use strict;
@@ -105,7 +87,7 @@ sub add_prefs {
 sub get_trans_text {
     my ($self, $id) = @_;
 
-    my $po = $self->{po}->{'"'.$id.'"'};
+    my $po = $self->{po}->{$id};
     return unless $po;
     return Locale::PO->dequote($po->msgstr);
 }
@@ -155,7 +137,6 @@ sub get_po_from_prefs {
         $self->{file} = $file;
         #print Dump($pref), "\n";
         while ( my ($tab, $tab_content) = each %$pref ) {
-            print "TAB: $tab\n";
             if ( ref($tab_content) eq 'ARRAY' ) {
                 $self->add_prefs( $tab, $tab_content );
                 next;
@@ -189,7 +170,8 @@ sub init {
 sub update {
     my $self = shift;
 
-    # Get po from current .pref files
+    print "Update '", $self->{lang}, "' preferences .po file from 'en' .pref files\n";
+    # Get po from current 'en' .pref files
     $self->get_po_from_prefs();
     my $po_current = $self->{po};
 
@@ -214,7 +196,10 @@ sub install {
         print "Koha directories hierarchy for ", $self->{lang}, " must be created first\n";
         exit;
     }
-    $self->{po} = Locale::PO->load_file_ashash( $self->po_filename );
+
+    # Update the language .po file with last modified 'en' preferences
+    # and load it.
+    $self->update();
 
     chdir( $self->{path_en} );
     for my $file ( <*.pref> ) {

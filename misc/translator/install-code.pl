@@ -8,7 +8,7 @@ install-code.pl
 
 =head1 USAGE
 
-Install templates for given language codes.
+Install templates and preferences for given language codes.
 
 For example:
 
@@ -17,7 +17,6 @@ For example:
 creates templates for languages: fr-FR and en-ES
 
 =cut
-
 
 
 sub install_code {
@@ -37,6 +36,8 @@ sub install_code {
                   "-s po/$_";
         system $cmd;
     }
+
+    system "./pref-trans install $code";
 }
 
 
