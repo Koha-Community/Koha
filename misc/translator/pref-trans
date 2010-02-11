@@ -1,0 +1,327 @@
+#!/usr/bin/perl
+
+
+package PrefPo;
+
+
+sub new {
+    my ($class, $lang) = @_;
+
+    my $self           = { lang => $lang };
+    my $context        = C4::Context->new();
+    $self->{path_en}   = $context->config('intrahtdocs') .
+                         '/prog/en/modules/admin/preferences';
+    $self->{path_lang} = $context->config('intrahtdocs') .
+                         "/prog/$lang/modules/admin/preferences";
+    $self->{po}        = {};
+
+    bless $self, $class;
+}
+
+
+package Tokenizer;
+
+use strict;
+use warnings;
+
+use C4::Context;
+use YAML::Syck qw( Dump LoadFile );
+use Data::Dumper;
+use Locale::PO;
+
+
+sub new {
+    my ($class, $lang) = @_;
+
+    my $self           = { lang => $lang };
+    my $context        = C4::Context->new();
+    $self->{path_en}   = $context->config('intrahtdocs') .
+                         '/prog/en/modules/admin/preferences';
+    $self->{path_lang} = $context->config('intrahtdocs') .
+                         "/prog/$lang/modules/admin/preferences";
+    $self->{po}        = {};
+
+    bless $self, $class;
+}
+
+
+sub po_filename {
+    my $self = shift;
+
+    my $context    = C4::Context->new;
+    my $trans_path = $context->config('intranetdir') . '/misc/translator/po';
+    my $trans_file = "$trans_path/" . $self->{lang} . "-pref.po";
+    return $trans_file;
+}
+
+
+sub po_append {
+    my ($self, $id, $comment) = @_;
+    my $po = $self->{po};
+    my $p = $po->{$id};
+    if ( $p ) {
+        $p->comment( $p->comment . "\n" . $comment );
+    }
+    else {
+        $po->{$id} = Locale::PO->new(
+            -comment => $comment,
+            -msgid   => $id,
+            -msgstr  => ''
+        );
+    }
+}
+
+
+sub add_prefs {
+    my ($self, $comment, $prefs) = @_;
+
+    for my $pref ( @$prefs ) {
+        my $pref_name = '';
+        for my $element ( @$pref ) {
+            if ( ref( $element) eq 'HASH' ) {
+                $pref_name = $element->{pref};
+                last;
+            }
+        }
+        for my $element ( @$pref ) {
+            if ( ref( $element) eq 'HASH' ) {
+                while ( my ($key, $value) = each(%$element) ) {
+                    next unless $key eq 'choices';
+                    next unless ref($value) eq 'HASH';
+                    for my $ckey ( keys %$value ) {
+                        my $id = $self->{file} . "#$pref_name# " . $value->{$ckey};
+                        $self->po_append( $id, $comment );
+                    }
+                }
+            }
+            elsif ( $element ) {
+                $self->po_append( $self->{file} . "#$pref_name# $element", $comment );
+            }
+        }
+    }
+}
+
+
+sub get_trans_text {
+    my ($self, $id) = @_;
+
+    my $po = $self->{po}->{'"'.$id.'"'};
+    return unless $po;
+    return Locale::PO->dequote($po->msgstr);
+}
+
+
+sub update_prefs {
+    my ($self, $pref, $prefs) = @_;
+
+    for my $p ( @$prefs ) {
+        my $pref_name = '';
+        next unless $p;
+        my @pref_array = @$p;
+        for my $element ( @pref_array ) {
+            if ( ref( $element) eq 'HASH' ) {
+                $pref_name = $element->{pref};
+                last;
+            }
+        }
+        for my $i ( 0..$#pref_array ) {
+            my $element = $pref_array[$i];
+            if ( ref( $element) eq 'HASH' ) {
+                while ( my ($key, $value) = each(%$element) ) {
+                    next unless $key eq 'choices';
+                    next unless ref($value) eq 'HASH';
+                    for my $ckey ( keys %$value ) {
+                        my $id = $self->{file} . "#$pref_name# " . $value->{$ckey};
+                        my $text = $self->get_trans_text( $id );
+                        $value->{$ckey} = $text if $text;
+                    }
+                }
+            }
+            elsif ( $element ) {
+                my $text = $self->get_trans_text( $self->{file} . "#$pref_name# $element" );
+                $p->[$i] = $text if $text;
+            }
+        }
+    }
+}
+
+
+sub get_po_from_prefs {
+    my $self = shift;
+
+    chdir( $self->{path_en} );
+    for my $file ( <*.pref> ) {
+        my $pref = LoadFile($file);
+        $self->{file} = $file;
+        #print Dump($pref), "\n";
+        while ( my ($tab, $tab_content) = each %$pref ) {
+            print "TAB: $tab\n";
+            if ( ref($tab_content) eq 'ARRAY' ) {
+                $self->add_prefs( $tab, $tab_content );
+                next;
+            }
+            while ( my ($section, $sysprefs) = each %$tab_content ) {
+                my $comment = "$tab > $section";
+                $self->po_append( $self->{file} . " " . $section, $comment );
+                $self->add_prefs( $comment, $sysprefs );
+            }
+        }
+    }
+}
+
+
+sub save_po {
+    my $self = shift;
+    # Write .po entries into a file put in Koha standard po directory
+    Locale::PO->save_file_fromhash( $self->po_filename, $self->{po} );
+    print "Saved in file: ", $self->po_filename, "\n";
+}
+
+
+sub init {
+    my $self = shift;
+
+    $self->get_po_from_prefs();
+    $self->save_po();
+}
+
+
+sub update {
+    my $self = shift;
+
+    # Get po from current .pref files
+    $self->get_po_from_prefs();
+    my $po_current = $self->{po};
+
+    # Get po from previous generation
+    my $po_previous = Locale::PO->load_file_ashash( $self->po_filename );
+
+    for my $id ( keys %$po_current ) {
+        my $po =  $po_previous->{'"'.$id.'"'};
+        next unless $po;
+        my $text = Locale::PO->dequote( $po->msgstr );
+        $po_current->{$id}->msgstr( $text );
+    }
+
+    $self->save_po();
+}
+
+
+sub install {
+    my $self = shift;
+
+    unless ( -r $self->{path_lang} ) {
+        print "Koha directories hierarchy for ", $self->{lang}, " must be created first\n";
+        exit;
+    }
+    $self->{po} = Locale::PO->load_file_ashash( $self->po_filename );
+
+    chdir( $self->{path_en} );
+    for my $file ( <*.pref> ) {
+        my $pref = LoadFile($file);
+        $self->{file} = $file;
+        while ( my ($tab, $tab_content) = each %$pref ) {
+            if ( ref($tab_content) eq 'ARRAY' ) {
+                $self->update_prefs( $pref, $tab_content );
+                next;
+            }
+            while ( my ($section, $sysprefs) = each %$tab_content ) {
+                $self->update_prefs( $pref, $sysprefs );
+            }
+            my $ntab = {};
+            for my $section ( keys %$tab_content ) {
+                my $text = $self->get_trans_text($self->{file} . " $section");
+                my $nsection = $text ? $text : $section;
+                $ntab->{$nsection} = $tab_content->{$section};
+            }
+            $pref->{$tab} = $ntab;
+        }
+        my $file_trans = $self->{path_lang} . "/$file";
+        print "Write $file\n";
+        open my $fh, ">", $file_trans;
+        print $fh Dump($pref);
+    }
+}
+
+
+package Main;
+
+use strict;
+use warnings;
+
+use Pod::Usage;
+
+sub usage {
+    pod2usage( -verbose => 2 );
+    exit;
+}
+
+
+usage() if $#ARGV != 1;
+
+my ($cmd, $lang) = @ARGV;
+if ( $cmd =~ /init|install|update/i ) {
+    my $tokenizer = Tokenizer->new( $lang );
+    $tokenizer->init( )    if $cmd =~ /init/i;
+    $tokenizer->update( )  if $cmd =~ /update/i;
+    $tokenizer->install( ) if $cmd =~ /install/i;
+}
+else {
+    usage();
+}
+
+
+
+=head1 NAME
+
+pref-trans - Handle preferences translation
+
+=head1 SYNOPSYS
+
+  pref-trans init fr-FR
+  pref-trans update fr-FR
+  pref-trans install fr-FR
+
+=head1 USAGE
+
+=over
+
+=item pref-trans init F<lang>
+
+Create a .po file in po directory, named F<lang>-pref.po. This file contains
+text to translate extracted from .pref files.
+
+=item pref-trans update F<lang>
+
+Update a .po file in po directory, named F<lang>-pref.po. This file contains
+new text to translate extracted from .pref files. Previous translated text are
+kept. There is a minor bug, which can't be fixed due to preferences data
+struture: preferences tab subsection labels are lost when updating .po file.
+
+=item pref-trans install F<lang>
+
+Use F<lang>-pref.po file to translate the english version of preferences files
+and copy those files in the appropriate directory.
+
+=back
+
+=head1 DESCRIPTION
+
+Koha preferences are stored in a data structure found in
+koha-tmpl/intranet-tmpl/en/module/admin/preferences/ files. Depending of user
+language, other files are used. This script extract text from 'en' preference
+files, and put them in one .po file.  This .po file can be updated. When
+completed, a .po file can be applied to create localized versions of
+preferences templates.
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2010 by Tamil, s.a.r.l.
+
+L<http://www.tamil.fr>
+
+This script is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License, version 2.1.
+
+=cut
+
