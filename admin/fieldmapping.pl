@@ -67,7 +67,6 @@ if($field and $fieldcode){
 }
 
 my $fieldloop = GetFieldMapping($framework);
-warn Data::Dumper::Dumper($fieldloop->[1]);
 
 $template->param( frameworkloop => \@frameworkloop, 
                   framework     => $framework,
