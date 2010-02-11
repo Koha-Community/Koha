@@ -153,7 +153,7 @@
 		<!-- TMPL_IF NAME="card2" --><li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=<!-- TMPL_VAR NAME="borrower2" -->"><!-- TMPL_VAR NAME="card2" --></a>&nbsp;</li><!-- /TMPL_IF -->
                 <li><span class="label">Paid for?:</span> <!-- TMPL_VAR NAME="paidfor" -->&nbsp;</li>
             <li><span class="label">Public Note:</span>
-                <!-- TMPL_IF NAME="CAN_user_circulate" -->
+                <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
               <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
                     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" /><input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
                     <textarea name="itemnotes" rows="2" cols="30"><!-- TMPL_VAR NAME="itemnotes" --></textarea><input type="submit" name="submit" class="submit" value="Update" /> 
