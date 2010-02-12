@@ -77,6 +77,7 @@ sub new {
     my $class = shift;
     
     $self->{ user_agent } = new LWP::UserAgent;
+    $self->{ bad_url    } = { };
     
     bless $self, $class;
     return $self;
@@ -88,6 +89,7 @@ sub check_biblio {
     my $biblionumber    = shift;
     my $uagent          = $self->{ user_agent   };
     my $host            = $self->{ host_default };
+    my $bad_url         = $self->{ bad_url      };
 
     my $record = GetMarcBiblio( $biblionumber ); 
     return unless $record->field('856');
@@ -98,17 +100,24 @@ sub check_biblio {
         next unless $url; 
         $url = "$host/$url" unless $url =~ /^http/;
         my $check = { url => $url };
-        my $req = HTTP::Request->new( GET => $url );
-        my $res = $uagent->request( $req, sub { die }, 1 );
-        if ( $res->is_success ) {
+        if ( $bad_url->{ $url } ) {
             $check->{ is_success } = 1;
-            $check->{ status     } = 'ok';
+            $check->{ status     } = '500 Site already checked';
         }
         else {
-            $check->{ is_success } = 0;
-            $check->{ status     } = $res->status_line;
+            my $req = HTTP::Request->new( GET => $url );
+            my $res = $uagent->request( $req, sub { die }, 1 );
+            if ( $res->is_success ) {
+                $check->{ is_success } = 1;
+                $check->{ status     } = 'ok';
+            }
+            else {
+                $check->{ is_success } = 0;
+                $check->{ status     } = $res->status_line;
+                $bad_url->{ $url     } = 1;
+            }
         }
-        push( @urls, $check );       
+        push @urls, $check;
     }
     return \@urls;
 }
@@ -168,7 +177,13 @@ sub check_all_url {
     my $sth = $dbh->prepare( 
         "SELECT biblionumber FROM biblioitems WHERE url <> ''" );
     $sth->execute;
-    print "<html>\n<body>\n<table>\n" if $html;
+    if ( $html ) {
+        print <<EOS;
+<html>
+<body>
+<table>
+EOS
+    }
     while ( my ($biblionumber) = $sth->fetchrow ) {
         my $result = $checker->check_biblio( $biblionumber );  
         next unless $result;  # No URL
