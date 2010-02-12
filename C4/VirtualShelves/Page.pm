@@ -197,7 +197,7 @@ sub shelfpage ($$$$$) {
                     $this_item->{'dateadded'} = format_date( $this_item->{'dateadded'} );
                     $this_item->{'imageurl'}  = getitemtypeinfo( $this_item->{'itemtype'} )->{'imageurl'};
                     $this_item->{'coins'}     = GetCOinSBiblio( $this_item->{'biblionumber'} );
-                    $this_item->{'subtitle'}  = C4::Biblio::get_koha_field_from_marc( 'bibliosubtitle', 'subtitle', $record, '' );
+                    $this_item->{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($this_item->{'biblionumber'}));
 
                     # Getting items infos for location display
                     my @items_infos = &GetItemsInfo( $this_item->{'biblionumber'}, $type );
@@ -348,10 +348,10 @@ sub shelfpage ($$$$$) {
         $template->param( seflag => 1 );
     }
 
-    #FIXME:	This refresh really only needs to happen when there is a modification of some sort
-    #		to the shelves, but the above code is so convoluted in its handling of the various
-    #		options, it is easier to do this refresh every time C4::VirtualShelves::Page.pm is
-    #		called
+    #FIXME: This refresh really only needs to happen when there is a modification of some sort
+    #       to the shelves, but the above code is so convoluted in its handling of the various
+    #       options, it is easier to do this refresh every time C4::VirtualShelves::Page.pm is
+    #       called
 
     my ( $total, $pubshelves, $barshelves ) = RefreshShelvesSummary( $query->cookie("CGISESSID"), $loggedinuser, ( $loggedinuser == -1 ? 20 : 10 ) );
 

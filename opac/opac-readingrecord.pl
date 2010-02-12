@@ -23,6 +23,7 @@ use CGI;
 
 use C4::Auth;
 use C4::Koha;
+use C4::Biblio;
 use C4::Circulation;
 use C4::Dates qw/format_date/;
 use C4::Members;
@@ -82,6 +83,8 @@ my @loop_reading;
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
 	
+    my $record = GetMarcBiblio($issues->[$i]->{'biblionumber'});
+
 	# XISBN Stuff
 	my $isbn = GetNormalizedISBN($issues->[$i]->{'isbn'});
 	$line{normalized_isbn} = $isbn;
@@ -98,6 +101,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $line{imageurl}       = getitemtypeimagelocation( 'opac', $itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'} );
     }
     push( @loop_reading, \%line );
+    $line{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($issues->[$i]->{'biblionumber'}));
 }
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -132,4 +136,3 @@ $template->param(
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
-
