@@ -55,7 +55,10 @@ my 	( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 if ($phase eq 'View Dictionary'){
 	# view the dictionary we use to set up abstract variables such as all borrowers over fifty who live in a certain town
-	my $areas = get_report_areas($area);
+	my $areas = get_report_areas();
+    foreach (@{ $areas }) {
+        $_->{selected} = 1 if $_->{id} eq $area; # mark active area
+    }
 	my $definitions = get_from_dictionary($area);
 	$template->param( 'areas' => $areas ,
 		'start_dictionary' => 1,

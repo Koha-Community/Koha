@@ -162,7 +162,6 @@ sub get_report_areas {
         my %hashrep;
         $hashrep{id}   = $i + 1;
         $hashrep{name} = $reports[$i];
-        $hashrep{selected} = 1 if $hashrep{id} == $area;
         push @reports2, \%hashrep;
     }
     return ( \@reports2 );
