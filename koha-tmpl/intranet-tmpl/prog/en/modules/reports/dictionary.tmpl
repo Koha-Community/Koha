@@ -28,8 +28,12 @@
 Filter by area <select name="areas">
 <option value="">All</option>
 <!-- TMPL_LOOP NAME="areas" -->     
-<option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>                  
-<!-- /TMPL_LOOP -->                
+    <!-- TMPL_IF NAME="selected">
+        <option value="<!-- TMPL_VAR NAME="id" -->" selected="selected" ><!-- TMPL_VAR NAME="name"--></option>
+    <!-- TMPL_ELSE -->
+        <option value="<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="name"--></option>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_LOOP -->
 </select> 
 <input name="submit" value="Go" type="submit" />
 </form>
