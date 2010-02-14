@@ -161,13 +161,13 @@ function tagAdded() {
     <h3>
         <!-- TMPL_IF NAME="print_basket" -->
             <!-- TMPL_VAR NAME="title" escape="html" -->
-                <!-- TMPL_IF name="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
-                <!-- TMPL_IF name="author" --> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" escape="html"--><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="author" --> <!-- TMPL_VAR NAME="author" escpae="html" --><!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
                 <input type="checkbox" value="<!-- TMPL_VAR NAME="biblionumber" -->" name="bib<!-- TMPL_VAR NAME="biblionumber" -->" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" onclick="selRecord(value,checked)" />
                 <!-- TMPL_VAR NAME="title" escape="html" -->
-                <!-- TMPL_IF name="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
-                <!-- TMPL_IF name="author" --> <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" escape="html" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF -->
+                <!-- TMPL_IF name="author" --> <!-- TMPL_VAR NAME="author" escape="html"--><!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     </h3>
 	    <!-- COinS / OpenURL -->
