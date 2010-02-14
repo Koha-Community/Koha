@@ -123,7 +123,7 @@ if (f.company.value == "") {
                     <label for="invoice_gstyes">Include tax</label> <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" checked="checked" />
                     <label for="invoice_gstno">Don't include tax</label> <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" />
                     <!-- TMPL_ELSE -->
-                    <label for="invoice_gstyes">Include tax</label> <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1">
+                    <label for="invoice_gstyes">Include tax</label> <input type="radio" id="invoice_gstyes" name="invoice_gst" value="1" />
                     <label for="invoice_gstno">Don't include tax</label> <input type="radio" id="invoice_gstno" name="invoice_gst" value="0" checked="checked" />
                 <!-- /TMPL_IF --></li><!-- /TMPL_IF -->
             </ol>
@@ -197,7 +197,7 @@ if (f.company.value == "") {
                     <!-- TMPL_IF name= "invoiceincgst" -->Yes<!--TMPL_ELSE-->No<!-- /TMPL_IF --></p><!-- /TMPL_IF -->
             <p><strong>Discount: </strong>
                 <!-- TMPL_VAR NAME="discount" --> %</p>
-            <!-- TMPL_IF NAME="GST" --<p><strong>Tax rate: </strong>
+            <!-- TMPL_IF NAME="GST" --><p><strong>Tax rate: </strong>
                 <!-- TMPL_VAR name="GST" -->%</p><!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="notes" --><p><strong>Notes: </strong>
                 <!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
