@@ -152,7 +152,6 @@ This will return a list of all the available report areas
 =cut
 
 sub get_report_areas {
-    my $area = shift;
     my $dbh = C4::Context->dbh();
 
     # FIXME these should be in the database
