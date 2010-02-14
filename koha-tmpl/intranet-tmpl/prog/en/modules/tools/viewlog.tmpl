@@ -144,7 +144,7 @@
 									<th>Info</th>
 								</tr>
 								<!-- TMPL_LOOP NAME="looprow" -->
-									<tr>
+									<!-- TMPL_UNLESS NAME="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
 										<td><!-- TMPL_VAR NAME="timestamp" --></td>
 										<td>
 											<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="user" -->" title="display detail for this librarian."> <!-- TMPL_VAR NAME="user" --> </a>
@@ -164,7 +164,7 @@
 												<!-- TMPL_ELSE -->
 													<!-- TMPL_IF EXPR="module eq 'CATALOGUING'" -->
 														<!-- TMPL_IF EXPR="info eq 'item'" -->
-															<a href="/cgi-bin/koha/catalogue/moredetail.pl?item=<!-- TMPL_VAR NAME="object" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="object" -->">Item <!-- TMPL_VAR NAME="object" --></a>
+															<a href="/cgi-bin/koha/catalogue/moredetail.pl?item=<!-- TMPL_VAR NAME="object" -->&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="object" -->">Item <!-- TMPL_VAR NAME="object" --></a>
 														<!-- TMPL_ELSE -->
 															<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="object" --></a>
 														<!-- /TMPL_IF -->
