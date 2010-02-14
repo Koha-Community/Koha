@@ -37,6 +37,7 @@ my $order = $input->param('order');
 my $startdate=$input->param('from');
 my $enddate=$input->param('to');
 my $run_report=$input->param('run_report');
+my $report_page=$input->param('report_page');
 
 my $theme = $input->param('theme');    # only used if allowthemeoverride is set
 
@@ -86,9 +87,10 @@ if (!defined($enddate) or $enddate eq "") {
 
 
 my @reservedata;
+my ($prev_results, $next_results, $next_or_previous) = (0,0,0);
 if ( $run_report ) {
     my $dbh    = C4::Context->dbh;
-    my ($sqlorderby, $sqldatewhere) = ("","");
+    my ($sqlorderby, $sqldatewhere, $sqllimitoffset) = ("","","");
     $debug and warn format_date_in_iso($startdate) . "\n" . format_date_in_iso($enddate);
     my @query_params = ();
     if ($startdate) {
@@ -98,6 +100,12 @@ if ( $run_report ) {
     if ($enddate) {
         $sqldatewhere .= " AND reservedate <= ?";
         push @query_params, format_date_in_iso($enddate);
+    }
+
+    $sqllimitoffset = " LIMIT 251";
+    if ($report_page) {
+        $sqllimitoffset  .= " OFFSET=?";
+        push @query_params, ($report_page * 250);
     }
 
     if ($order eq "biblio") {
@@ -206,6 +214,18 @@ if ( $run_report ) {
 
     $sth->finish;
 
+    # Next Page?
+    if ($report_page > 0) {
+        $prev_results = $report_page  - 1;
+    }
+    if ( scalar(@reservedata) > 250 ) {
+        $next_results = $report_page + 1;
+        pop(@reservedata); # .. we retrieved 251 results
+    }
+    if ($prev_results || $next_results) {
+        $next_or_previous = 1;
+    }
+
     # *** I doubt any of this is needed now with the above fixes *** -d.u.
 
     #$strsth=~ s/AND reserves.itemnumber is NULL/AND reserves.itemnumber is NOT NULL/;
@@ -260,6 +280,10 @@ $template->param(
     from                => $startdate,
     to              	=> $enddate,
     run_report          => $run_report,
+    report_page         => $report_page,
+    prev_results        => $prev_results,
+    next_results        => $next_results,
+    next_or_previous    => $next_or_previous,
     reserveloop     	=> \@reservedata,
     "BiblioDefaultView".C4::Context->preference("BiblioDefaultView") => 1,
     DHTMLcalendar_dateformat =>  C4::Dates->DHTMLcalendar(),
