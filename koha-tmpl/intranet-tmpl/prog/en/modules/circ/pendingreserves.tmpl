@@ -42,7 +42,8 @@ $.tablesorter.addParser({
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h2>Pending holds placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --></h2>
+<h2>Pending holds<!-- TMPL_IF NAME="run_report" --> placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --><!-- /TMPL_IF --></h2>
+<!-- TMPL_IF NAME="run_report" -->
 <h3>Reported on <!-- TMPL_VAR NAME="todaysdate" --></h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
 <div class="searchresults">
@@ -130,6 +131,7 @@ $.tablesorter.addParser({
         <b>No items found.</b>
     <!-- /TMPL_IF -->
 </div>
+<!-- /TMPL_IF -->
 
 </div>
 </div>
@@ -206,7 +208,7 @@ Calendar.setup(
 </script></li>
 </ol>
 <p><i>(Inclusive, default is two days ago to today, set other date ranges as needed. )</i></p>
-<fieldset class="action"><input type="submit" value="Submit" class="submit"/></fieldset>
+<fieldset class="action"><input type="submit" name="run_report" value="Submit" class="submit"/></fieldset>
 </fieldset>
 </form>
 
