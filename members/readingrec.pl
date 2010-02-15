@@ -29,6 +29,8 @@ use C4::Auth;
 use C4::Output;
 use C4::Members;
 use C4::Branch;
+use List::MoreUtils qw/any/;
+
 use C4::Dates qw/format_date/;
 
 my $input = CGI->new;
@@ -54,6 +56,17 @@ if ($order2 eq ''){
   $order2="date_due desc";
 }
 my $limit=$input->param('limit');
+=======
+my $borrowernumber = $input->param('borrowernumber');
+my $limit          = $input->param('limit');
+my $order          = $input->param('order') || '';
+
+$order = "issuestimestamp desc" if not any { $order =~ $_ } ('issuestimestamp', 'title', 'author', 'returndate');
+
+#get borrower details
+my $data=GetMember('borrowernumber'=>$borrowernumber);
+
+>>>>>>> (MT #2920) fix reading record scripts:members/readingrec.pl
 
 if ($limit){
     if ($limit eq 'full'){
@@ -63,7 +76,7 @@ if ($limit){
 else {
   $limit=50;
 }
-my ($count,$issues)=GetAllIssues($borrowernumber,$order2,$limit);
+my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",
@@ -76,18 +89,19 @@ my ($template, $loggedinuser, $cookie)
 
 my @loop_reading;
 
-for (my $i=0;$i<$count;$i++){
+foreach my $issue (@{$issues}){
  	my %line;
-	$line{biblionumber}=$issues->[$i]->{'biblionumber'};
-	$line{title}=$issues->[$i]->{'title'};
-	$line{author}=$issues->[$i]->{'author'};
-	$line{classification} = $issues->[$i]->{'classification'} || $issues->[$i]->{'itemcallnumber'};
-	$line{date_due}=format_date($issues->[$i]->{'date_due'});
-	$line{returndate}=format_date($issues->[$i]->{'returndate'});
-	$line{issuedate}=format_date($issues->[$i]->{'issuedate'});
-	$line{renewals}=$issues->[$i]->{'renewals'};
-	$line{barcode}=$issues->[$i]->{'barcode'};
-	$line{volumeddesc}=$issues->[$i]->{'volumeddesc'};
+ 	$line{issuestimestamp} = format_date($issue->{'issuestimestamp'});
+	$line{biblionumber}    = $issue->{'biblionumber'};
+	$line{title}           = $issue->{'title'};
+	$line{author}          = $issue->{'author'};
+	$line{classification}  = $issue->{'classification'} || $issue->{'itemcallnumber'};
+	$line{date_due}        = format_date($issue->{'date_due'});
+	$line{returndate}      = format_date($issue->{'returndate'});
+	$line{issuedate}      = format_date($issue->{'issuedate'});
+	$line{renewals}        = $issue->{'renewals'};
+	$line{barcode}         = $issue->{'barcode'};
+	$line{volumeddesc}     = $issue->{'volumeddesc'};
 	push(@loop_reading,\%line);
 }
 
@@ -130,7 +144,7 @@ $template->param(
 			   			branchcode => $data->{'branchcode'},
 			   			is_child        => ($data->{'category_type'} eq 'C'),
 			   			branchname => GetBranchName($data->{'branchcode'}),
-						showfulllink => ($count > 50),
+						showfulllink => (scalar @loop_reading > 50),					
 						loop_reading => \@loop_reading);
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -72,7 +72,7 @@ else {
     $limit = 50;
 }
 
-my ( $count, $issues ) = GetAllIssues( $borrowernumber, $order, $limit );
+my ( $issues ) = GetAllIssues( $borrowernumber, $order, $limit );
 
 my @bordat;
 $bordat[0] = $borr;
@@ -80,14 +80,15 @@ $template->param( BORROWER_INFO => \@bordat );
 
 my @loop_reading;
 
-for ( my $i = 0 ; $i < $count ; $i++ ) {
+foreach my $issue (@{$issues} ) {
     my %line;
 	
     my $record = GetMarcBiblio($issues->[$i]->{'biblionumber'});
 
 	# XISBN Stuff
-	my $isbn = GetNormalizedISBN($issues->[$i]->{'isbn'});
+	my $isbn               = GetNormalizedISBN($issue->{'isbn'});
 	$line{normalized_isbn} = $isbn;
+<<<<<<< HEAD:opac/opac-readingrecord.pl
     $line{biblionumber}   = $issues->[$i]->{'biblionumber'};
     $line{title}          = $issues->[$i]->{'title'};
     $line{author}         = $issues->[$i]->{'author'};
@@ -100,6 +101,17 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
         $line{'itypedescription'} = $itemtypes->{ $issues->[$i]->{'itemtype'} }->{'description'};
         $line{imageurl}       = getitemtypeimagelocation( 'opac', $itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'} );
     }
+=======
+    $line{biblionumber}    = $issue->{'biblionumber'};
+    $line{title}           = $issue->{'title'};
+    $line{author}          = $issue->{'author'};
+    $line{itemcallnumber}  = $issue->{'itemcallnumber'};
+    $line{date_due}        = format_date( $issue->{'date_due'} );
+    $line{returndate}      = format_date( $issue->{'returndate'} );
+    $line{volumeddesc}     = $issue->{'volumeddesc'};
+    $line{'description'}   = $itemtypes->{ $issue->{'itemtype'} }->{'description'};
+    $line{imageurl}        = getitemtypeimagelocation( 'opac', $itemtypes->{ $issue->{'itemtype'}  }->{'imageurl'} );
+>>>>>>> (MT #2920) fix reading record scripts:opac/opac-readingrecord.pl
     push( @loop_reading, \%line );
     $line{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($issues->[$i]->{'biblionumber'}));
 }
@@ -128,11 +140,11 @@ for(qw(AmazonCoverImages GoogleJackets)) {	# BakerTaylorEnabled handled above
 }
 
 $template->param(
-    count          => $count,
     READING_RECORD => \@loop_reading,
     limit          => $limit,
     showfulllink   => 1,
-	readingrecview => 1
+	readingrecview => 1,
+	count          => scalar @loop_reading,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

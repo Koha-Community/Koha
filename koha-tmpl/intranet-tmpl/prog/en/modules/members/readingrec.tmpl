@@ -21,6 +21,9 @@
 	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a><!-- /TMPL_IF --></p>
 <table>
 <tr>
+    <th>
+        <a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=issuestimestamp&amp;limit=<!-- TMPL_VAR name="limit" -->">Date</a>
+    </th>
 	<th>
 		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=title&amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
 	</th>
@@ -42,21 +45,20 @@
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF NAME="returndate" --><tr><!-- TMPL_ELSE --><tr class="onissue"><!-- /TMPL_IF -->
 <!-- /TMPL_UNLESS -->
-
-            <td>
+        <td>
+            <!-- TMPL_VAR name="issuestimestamp" -->
+        </td>
+        <td>
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
                 <!-- TMPL_VAR name="title" escape="html" -->
             </a>
         </td>
 
-            <td>
-        <!-- TMPL_VAR name="author" --></td>
+        <td><!-- TMPL_VAR name="author" --></td>
 
-            <td>
-        <!-- TMPL_VAR NAME="classification" --></td>
+        <td><!-- TMPL_VAR NAME="classification" --></td>
 
-            <td>
-        <!-- TMPL_VAR NAME="barcode" --></td>
+        <td><!-- TMPL_VAR NAME="barcode" --></td>
 
             <td>
         <!-- TMPL_VAR NAME="renewals" --></td>
