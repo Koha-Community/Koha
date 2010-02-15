@@ -51,12 +51,12 @@ my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 
 for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
     $accts->[$i]{'date'} = format_date( $accts->[$i]{'date'} );
-    $accts->[$i]{'amount'} = sprintf( "%.2f", $accts->[$i]{'amount'} );
+    $accts->[$i]{'amount'} = sprintf( "%.2f", $accts->[$i]{'amount'} || '0.00');
     if ( $accts->[$i]{'amount'} >= 0 ) {
         $accts->[$i]{'amountcredit'} = 1;
     }
     $accts->[$i]{'amountoutstanding'} =
-      sprintf( "%.2f", $accts->[$i]{'amountoutstanding'} );
+      sprintf( "%.2f", $accts->[$i]{'amountoutstanding'} || '0.00' );
     if ( $accts->[$i]{'amountoutstanding'} >= 0 ) {
         $accts->[$i]{'amountoutstandingcredit'} = 1;
     }
