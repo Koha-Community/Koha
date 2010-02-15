@@ -746,6 +746,14 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
 }
 
 
+$DBversion = '3.00.06.008';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do("INSERT INTO `user_permissions` (borrowernumber,`module_bit` , `code` ) (SELECT borrowernumber, '9', 'edit_items' FROM borrowers WHERE (flags<<9 && 00000001));");
+    print "Upgrade to $DBversion done (updating permissions for catalogers)\n";
+    SetVersion ($DBversion);
+}
+
+
 
 
 =item DropAllForeignKeys($table)
