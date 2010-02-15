@@ -96,16 +96,28 @@ elsif ( $op eq 'add_validate' ) {
         default("MESSAGE1",$template);
     }
     else {
-        my $error = ModBranch($params); # FIXME: causes warnings to log on duplicate branchcode
-        # if error saving, stay on edit and rise error
-        if ($error) {
-            # copy input parameters back to form
-            # FIXME - doing this doesn't preserve any branch group selections, but good enough for now
-            editbranchform($branchcode,$template);
-            $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, "ERROR$error" => 1 );
-        } else {
-            $template->param( else => 1);
-            default("MESSAGE2",$template);
+        my $mod_branch = 1;
+        if ($params->{add}) {
+            my ($existing) =
+                C4::Context->dbh->selectrow_array("SELECT count(*) FROM branches WHERE branchcode = ?", {}, $branchcode);
+            if ($existing > 0) {
+                $mod_branch = 0;
+                _branch_to_template($params, $template); # preserve most (FIXME) of user's input
+                $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, 'ERROR1' => 1 );
+            }
+        }
+        if ($mod_branch) {
+            my $error = ModBranch($params); # FIXME: causes warnings to log on duplicate branchcode
+            # if error saving, stay on edit and rise error
+            if ($error) {
+                # copy input parameters back to form
+                # FIXME - doing this doesn't preserve any branch group selections, but good enough for now
+                editbranchform($branchcode,$template);
+                $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, "ERROR$error" => 1 );
+            } else {
+                $template->param( else => 1);
+                default("MESSAGE2",$template);
+            }
         }
     }
 }
@@ -155,6 +167,7 @@ elsif ( $op eq 'addcategory_validate' ) {
 	# doing an add must check the code is unique
 	if (CheckCategoryUnique($input->param('categorycode'))){
 	    ModBranchCategoryInfo($params);
+        default("MESSAGE5",$template);
 	}
 	else {
 	    default("MESSAGE9",$template);
@@ -219,22 +232,7 @@ sub editbranchform {
 
         # get the old printer of the branch
         $oldprinter = $data->{'branchprinter'} || '';
-        $innertemplate->param( 
-             branchcode     => $data->{'branchcode'},
-             branch_name    => $data->{'branchname'},
-             branchaddress1 => $data->{'branchaddress1'},
-             branchaddress2 => $data->{'branchaddress2'},
-             branchaddress3 => $data->{'branchaddress3'},
-             branchzip      => $data->{'branchzip'},
-             branchcity     => $data->{'branchcity'},
-             branchcountry  => $data->{'branchcountry'},
-             branchphone    => $data->{'branchphone'},
-             branchfax      => $data->{'branchfax'},
-             branchemail    => $data->{'branchemail'},
-             branchurl      => $data->{'branchurl'},
-             branchip       => $data->{'branchip'},
-             branchnotes    => $data->{'branchnotes'}, 
-        );
+        _branch_to_template($data, $innertemplate);
     }
 
     foreach my $thisprinter ( keys %$printers ) {
@@ -384,6 +382,26 @@ sub branchinfotable {
         branchcategories => \@branchcategories
     );
 
+}
+
+sub _branch_to_template {
+    my ($data, $template) = @_;
+    $template->param( 
+         branchcode     => $data->{'branchcode'},
+         branch_name    => $data->{'branchname'},
+         branchaddress1 => $data->{'branchaddress1'},
+         branchaddress2 => $data->{'branchaddress2'},
+         branchaddress3 => $data->{'branchaddress3'},
+         branchzip      => $data->{'branchzip'},
+         branchcity     => $data->{'branchcity'},
+         branchcountry  => $data->{'branchcountry'},
+         branchphone    => $data->{'branchphone'},
+         branchfax      => $data->{'branchfax'},
+         branchemail    => $data->{'branchemail'},
+         branchurl      => $data->{'branchurl'},
+         branchip       => $data->{'branchip'},
+         branchnotes    => $data->{'branchnotes'}, 
+    );
 }
 
 output_html_with_http_headers $input, $cookie, $template->output;
