@@ -178,11 +178,12 @@ if ($filter = $input->param('to')) {
 	}
 }
 if ($filter = $input->param('approver')) {		# name (or borrowernumber) from input box
-	if (($filter =~ /^\d+$/ and $filter > 0) or
-		(1) ){	# $filter=get borrowernumber from name
+	if ($filter =~ /^\d+$/ and $filter > 0) {
+		# $filter=get borrowernumber from name
+		# FIXME: get borrowernumber from name not implemented.
 		$template->param(filter_approver=>$filter);
 		$filters{approved_by} = $filter;
-	# } else {
+	} else {
 		push @errors, {approver=>$filter};
 	}
 }
