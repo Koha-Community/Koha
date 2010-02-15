@@ -74,9 +74,11 @@ use C4::Biblio;
 sub new {
 
     my $self = {};
-    my $class = shift;
+    my ($class, $timeout) = @_;
     
-    $self->{ user_agent } = new LWP::UserAgent;
+    my $uagent = new LWP::UserAgent;
+    $uagent->timeout( $timeout) if $timeout;
+    $self->{ user_agent } = $uagent;
     $self->{ bad_url    } = { };
     
     bless $self, $class;
@@ -143,12 +145,14 @@ my $host        = '';
 my $host_pro    = '';
 my $html        = 0;
 my $uriedit     = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=";
+my $timeout     = 15;
 GetOptions( 
     'verbose'       => \$verbose,
     'html'          => \$html,
     'help'          => \$help,
     'host=s'        => \$host,
     'host-pro=s'    => \$host_pro,
+    'timeout=i',    => \$timeout,
 );
 
 
@@ -169,7 +173,7 @@ sub bibediturl {
 # Check all URLs from all current Koha biblio records
 #
 sub check_all_url {
-    my $checker = C4::URL::Checker->new();
+    my $checker = C4::URL::Checker->new($timeout);
     $checker->{ host_default }  = $host;
     
     my $context = new C4::Context(  );  
@@ -258,6 +262,10 @@ record in edit mode. With this parameter B<--host-pro> is required.
 =item B<--host-pro=http://koha-pro.tld>
 
 Server host used to link to biblio record editing page.
+
+=item B<--timeout=15>
+
+Timeout for fetching URLs. By default 15 seconds.
 
 =item B<--help|-h>
 
