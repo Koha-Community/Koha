@@ -38,6 +38,8 @@ parameters tables.
 =cut
 
 use strict;
+use warnings;
+
 use C4::AuthoritiesMarc;
 use C4::Auth;
 use C4::Context;
