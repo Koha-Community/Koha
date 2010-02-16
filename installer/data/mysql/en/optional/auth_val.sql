@@ -49,5 +49,5 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('RESTR
 -- manual invoice types
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUAL_INV','Copier Fees','.25');
 
---custom borrower notes
+-- custom borrower notes
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Address Notes');
