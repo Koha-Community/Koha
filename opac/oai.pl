@@ -11,7 +11,7 @@ use C4::Context;
 
 BEGIN {
     eval { require PerlIO::gzip };
-    $GZIP = $@ ? 0 : 1;
+    $GZIP = ($@) ? 0 : 1;
 }
 
 unless ( C4::Context->preference('OAI-PMH') ) {
@@ -291,7 +291,7 @@ sub new {
         metadataPrefix  => $token->{metadata_prefix},
         from            => $token->{from},
         until           => $token->{until},
-        offset          => $pos ) );
+        offset          => $pos ) ) if ($pos > $token->{offset});
 
     return $self;
 }
@@ -338,7 +338,7 @@ sub new {
         metadataPrefix  => $token->{metadata_prefix},
         from            => $token->{from},
         until           => $token->{until},
-        offset          => $pos ) );
+        offset          => $pos ) ) if ($pos > $token->{offset});
 
     return $self;
 }
