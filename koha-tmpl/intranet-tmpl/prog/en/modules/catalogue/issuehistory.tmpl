@@ -21,14 +21,16 @@
     <!-- TMPL_IF NAME="issues" -->
         <p><b>Has been checked out <!-- TMPL_VAR NAME="total" --> times</b></p>
         <table>
-            <tr><th>Date</th>
-            <th>Name</th>
+            <tr>
+            <th>Patron</th>
             <th>Barcode</th>
             <th>Library</th>
-            <th>Issuing Library</th>
-            <th>Renew</th>
-            <th>Date due</th>
-            <th>Return date</th></tr>
+            <th>Issuing library</th>
+            <th>Renewed</th>
+            <th>Checkout on</th>
+            <th>Due date</th>
+            <th>Checkin on</th>
+            </tr>
         <!-- TMPL_LOOP NAME="issues" -->
             <tr>
                 <td><!-- TMPL_IF NAME="issuedate" -->
