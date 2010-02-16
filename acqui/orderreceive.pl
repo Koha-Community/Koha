@@ -111,7 +111,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $count == 1 ) {
     if (C4::Context->preference('AcqCreateItem') eq 'receiving') {
         # prepare empty item form
-        my $cell = PrepareItemrecordDisplay();
+        my $cell = PrepareItemrecordDisplay('','','','ACQ');
+        unless ($cell) {
+            $cell = PrepareItemrecordDisplay('','','','');
+            $template->param('NoACQframework' => 1);
+        }
         my @itemloop;
         push @itemloop,$cell;
         

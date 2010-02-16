@@ -103,7 +103,7 @@ if ($quantityrec > $origquantityrec ) {
                                     $itemhash{$item}->{'subfields'},
                                     $itemhash{$item}->{'field_values'},
                                     $itemhash{$item}->{'ind_tag'},
-                                    $itemhash{$item}->{'indicator'});
+                                    $itemhash{$item}->{'indicator'},'ITEM');
             my $record=MARC::Record::new_from_xml($xml, 'UTF-8');
             my ($biblionumber,$bibitemnum,$itemnumber) = AddItemFromMarc($record,$biblionumber);
         }

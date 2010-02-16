@@ -38,6 +38,9 @@
     <!-- TMPL_IF name="items" -->
     <fieldset class="rows">
         <legend>Item</legend>
+        <!-- TMPL_IF name="NoACQframework" -->
+            <p class="required">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</p>
+        <!-- /TMPL_IF -->
 
         <!-- TMPL_LOOP NAME="items" -->
         <div id="outeritemblock">
