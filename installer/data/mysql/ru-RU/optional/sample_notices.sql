@@ -1,22 +1,14 @@
-INSERT INTO `letter`
-(module, code, name, title, content)
-VALUES
-('circulation','ODUE','Уведомление о просрочке','Единица прострочена','Любезный <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nПо нашим нынешним записям, у Вас есть простроченные экземпляры. Ваша библиотека не взимает штрафы за опоздание, но, пожалуйста, поверните или обновите их как можно скорее.\r\n\r\n<<branches.branchname>><<branches.branchaddress1>><<branches.branchaddress2>><<branches.branchaddress3>><<branches.branchphone>><<branches.branchfax>><<branches.branchemail>>Если Вы зарегистрировали пароль в библиотеке, вы можете использовать его с вашим номером библиотечного билета для продолжения онлайн. Если экземпляр имеет просрочки более чем на 30 дней, Вы не сможете использовать Ваш читательский билет пока не вернете экземпляр. Следующий экземпляр в настоящее время является просроченным:\r\n\r\n<<items.content>>'),
-
-('claimacquisition','ACQCLAIM','Требование приобретения','	
-Экземпляр не получено','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\nНомер заказа <<aqorders.ordernumber>> (<<aqorders.title>>) (<<aqorders.quantity>> каждый) получено не было.'),
-
-('serial','RLIST','Список скерування','Сериальные издания уже доступное','<<borrowers.firstname>> <<borrowers.title>>,\r\n\r\nСледующий выпуск уже доступен:\r\n\r\n<<items.content>>\r\n\r\nПросьба забрать его в любое удобное для Вас время.'),
-
-('members','ACCTDETAILS','Шаблон данных учетной записи - типовые','Данные Вашего нового учетного счета в Коха.','Hello <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nДанные Вашего нового учетного счета в Коха такие:\r\n\r\nПользователь:  <<borrowers.userid>>\r\nПароль: <<borrowers.password>>\r\n\r\nЕсли у Вас возникли проблемы или вопросы по поводу Вашей учетной записи, пожалуйста, свяжитесь с администратором Коха.\r\n\r\nСпасибо,\r\nадминистратор Koha\r\nkohaadmin@yoursite.org'),
-
-('circulation','DUE','Напоминание про возвращение единицы','Напоминание про возвращение единицы','Любезный <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nследующую единицу теперь нужно возвратить:\r\n\r\n<<items.content>>'),
-
-('circulation','DUEDGST','Напоминие про возвращение единицы (сборник)','Напоминие про возвращение единицы','Вы задолжали <<count>> единиц'),
-
-('circulation','PREDUE','	
-Предварительное уведомление о задолженности единицы','Предварительное уведомление о задолженности единицы','Любезный <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nследующую единицу скоро нужно возвратить:\r\n\r\n<<items.content>>'),
-
-('circulation','PREDUEDGST','Предварительное уведомление о задолженности единицы (сборник)','Предварительное уведомление о задолженности единицы','В ближайшем времени Вам нужно возвратить <<count>> единиц'),
-
-('circulation','EVENT','Предстоящее библиотечное событие','Предстоящее библиотечное событие','Любезный <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nЭто напоминание о предстоящем библиотечном событии, в котором Вы проявили интерес.');
+INSERT INTO `letter` (module, code, name, title, content) 
+VALUES ('circulation','ODUE','Overdue Notice','Item Overdue',"Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nAccording to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nPhone: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nIf you have registered a password with the library, and you have a renewal available, you may renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned.\n\nThe following item(s) is/are currently overdue:\n\n<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <fine>GBP</fine></item>\n\nThank-you for your prompt attention to this matter.\n\n<<branches.branchname>> Staff\n"),
+('claimacquisition','ACQCLAIM','Acquisition Claim','Item Not Received',"<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\nOrdernumber <<aqorders.ordernumber>> (<<aqorders.title>>) (<<aqorders.quantity>> ordered) ($<<aqorders.listprice>> each) has not been received."),
+('serial','RLIST','Routing List','Serial is now available','<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following issue is now available:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)\r\n\r\nPlease pick it up at your convenience.'),
+('members','ACCTDETAILS','Account Details Template - DEFAULT','Your new Koha account details.','Hello <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nYour new Koha account details are:\r\n\r\nUser:  <<borrowers.userid>>\r\nPassword: <<borrowers.password>>\r\n\r\nIf you have any problems or questions regarding your account, please contact your Koha Administrator.\r\n\r\nThank you,\r\nKoha Administrator\r\nkohaadmin@yoursite.org'), 
+('circulation','DUE','Item Due Reminder','Item Due Reminder','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item is now due:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'), 
+('circulation','DUEDGST','Item Due Reminder (Digest)','Item Due Reminder','You have <<count>> items due'), 
+('circulation','PREDUE','Advance Notice of Item Due','Advance Notice of Item Due','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThe following item will be due soon:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)'
+), 
+('circulation','PREDUEDGST','Advance Notice of Item Due (Digest)','Advance Notice of Item Due','You have <<count>> items due soon'),
+('circulation','EVENT','Upcoming Library Event','Upcoming Library Event','Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nThis is a reminder of an upcoming library event in which you have expressed interest.'),
+('reserves', 'HOLD', 'Hold Available for Pickup', 'Hold Available for Pickup at <<branches.branchname>>', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYou have a hold available for pickup as of <<reserves.waitingdate>>:\r\n\r\nTitle: <<biblio.title>>\r\nAuthor: <<biblio.author>>\r\nCopy: <<items.copynumber>>\r\nLocation: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>\r\n<<branches.branchcity>> <<branches.branchzip>>'),
+('circulation','CHECKIN','Item Check-in (Digest)','Check-ins','The following items have been checked in:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you.'),
+('circulation','CHECKOUT','Item Check-out (Digest)','Checkouts','The following items have been checked out:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you for visiting <<branches.branchname>>.');
