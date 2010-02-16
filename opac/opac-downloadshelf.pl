@@ -33,7 +33,6 @@ use C4::Record;
 use C4::Ris;
 use C4::Csv;
 use utf8;
-use open qw( :std :utf8);
 my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (

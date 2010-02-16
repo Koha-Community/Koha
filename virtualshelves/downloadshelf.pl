@@ -33,7 +33,6 @@ use C4::Record;
 use C4::Ris;
 use C4::Csv;
 use utf8;
-use open qw( :std :utf8);
 my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
@@ -82,7 +81,7 @@ if ($shelfid && $format) {
 
     # If it was a CSV export we change the format after the export so the file extension is fine
     $format = "csv" if ($format =~ m/^\d+$/);
-
+    
     print $query->header(
 	-type => 'application/octet-stream',
 	-'Content-Transfer-Encoding' => 'binary',
