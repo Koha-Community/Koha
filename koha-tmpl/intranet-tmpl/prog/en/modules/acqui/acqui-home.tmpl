@@ -43,16 +43,6 @@
     <!-- /TMPL_IF -->
     </fieldset>
 </div>
-<div id="acqui_acqui_home_suggestions">
-    <fieldset>
-    <legend>Pending suggestions</legend>
-        <!-- TMPL_IF name="suggestion" -->
-            <!--TMPL_VAR NAME="suggestion" --> suggestions waiting <a href="/cgi-bin/koha/suggestion/suggestion.pl">Manage suggestions</a>
-        <!-- TMPL_ELSE -->
-            <p>No suggestions waiting</p>
-        <!-- /TMPL_IF -->
-    </fieldset>
-</div>
 </div>
 
 <div class="yui-u">
@@ -110,42 +100,6 @@
     </table>
     </div>
     <!-- /TMPL_IF -->
-
-    <div id="acqui_acqui_home_currency">
-    <!-- TMPL_IF NAME="loop_currency" -->
-        <h3>Exchange rates</h3>
-        <form action="/cgi-bin/koha/acqui/currency.pl">
-        <table>
-            <tr>
-                <th>Currency</th>
-                <th>Symbol</th>
-                <th>Rate</th>
-                <th>&nbsp;</th>
-            </tr>
-            <!-- TMPL_LOOP name="loop_currency" -->
-                <tr>
-                    <td align='center'><!-- TMPL_VAR name="currency" --></td>
-                    <td align='center'><!-- TMPL_VAR name="currency_symbol" --></td>
-                    <td>
-                            <input type="hidden" name="type" value="change" />
-                            <input type="text" size="10" value="<!-- TMPL_VAR name="rate" -->" />
-                    </td>
-
-
-
-
-
-                    <td><input type="submit" value="Save" /></td>
-                </tr>
-            <!-- /TMPL_LOOP -->
-        </table>
-        </form>
-    <!-- TMPL_ELSE -->
-        <a href="/cgi-bin/koha/admin/currency.pl?op=add_form" class="button">
-        Add Currency
-        </a>
-    <!-- /TMPL_IF -->
-    </div>
 </div>
 
 </div>

@@ -25,8 +25,6 @@ acqui-home.pl
 =head1 DESCRIPTION
 
 this script is the main page for acqui/
-It presents the budget's dashboard, another table about differents currency with
-their rates and the pending suggestions.
 
 =head1 CGI PARAMETERS
 
@@ -74,7 +72,6 @@ my @results = GetBudgets($homebranch);
 my $count = scalar @results;
 my $branchname = GetBranchName($homebranch);
 
-#my $count = scalar @results;
 my $classlist   = '';
 my $total       = 0;
 my $totspent    = 0;
@@ -86,8 +83,6 @@ my @loop_budget = ();
 # ---------------------------------------------------
 # currencies
 my $cur;
-my @rates = GetCurrencies();
-$count = scalar @rates;
 
 my $active_currency = GetCurrency;
 my $num;
@@ -108,15 +103,6 @@ if ( $cur_format eq 'FR' ) {
         'mon_thousands_sep' => ',',
         'mon_decimal_point' => '.'
     );
-}
-
-my @loop_currency = ();
-for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my %line;
-    $line{currency}        = $rates[$i]->{'currency'} ;
-    $line{currency_symbol} = $rates[$i]->{'symbol'};
-    $line{rate}            = sprintf ( '%.2f',  $rates[$i]->{'rate'} );
-    push @loop_currency, \%line;
 }
 
 # suggestions
@@ -189,7 +175,6 @@ $template->param(
     classlist     => $classlist,
     type          => 'intranet',
     loop_budget   => \@loop_budget,
-    loop_currency => \@loop_currency,
     active_symbol => $active_currency->{'symbol'},
     branchname    => $branchname,
     budget        => $period->{budget_name},
