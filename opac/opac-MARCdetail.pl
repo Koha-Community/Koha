@@ -132,46 +132,29 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
         }
         else {
             my @subf = $fields[$x_i]->subfields;
-            my $previous;
+            my $previous = '';
             # loop through each subfield
             for my $i ( 0 .. $#subf ) {
                 $subf[$i][0] = "@" unless $subf[$i][0];
-                next
-                  if (
-                    $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{tab}
-                    ne $tabloop );
-                next
-                  if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{hidden} > 0 ); 
+                my $sf_def = $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] };
+                next if ( $sf_def->{tab} ne $tabloop );
+                next if ( $sf_def->{hidden} > 0 ); 
                 my %subfield_data;
-                $subfield_data{marc_lib} =
-                                ($tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib} eq $previous) ?
-                                '--' :
-                                $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
-                $previous = $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{lib};
-                $subfield_data{link} =
-                  $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }->{link};
+                $subfield_data{marc_lib} = ($sf_def->{lib} eq $previous) ?  '--' : $sf_def->{lib};
+                $previous = $sf_def->{lib};
+                $subfield_data{link} = $sf_def->{link};
                 $subf[$i][1] =~ s/\n/<br\/>/g;
-                if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
-                    ->{isurl} )
-                {
-                    $subfield_data{marc_value} =
-                      "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+                if ( $sf_def->{isurl} ) {
+                    $subfield_data{marc_value} = "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
                 }
-                elsif ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
-                    ->{kohafield} eq "biblioitems.isbn" )
-                {
-
-#                    warn " tag : ".$tagslib->{$fields[$x_i]->tag()}." subfield :".$tagslib->{$fields[$x_i]->tag()}->{$subf[$i][0]}. "ISBN : ".$subf[$i][1]."PosttraitementISBN :".DisplayISBN($subf[$i][1]);
+                elsif ( defined($sf_def->{kohafield}) && $sf_def->{kohafield} eq "biblioitems.isbn" ) {
                     $subfield_data{marc_value} = $subf[$i][1];
                 }
                 else {
-                    if ( $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] }
-                        ->{authtypecode} )
-                    {
+                    if ( $sf_def->{authtypecode} ) {
                         $subfield_data{authority} = $fields[$x_i]->subfield(9);
                     }
-                    $subfield_data{marc_value} =
-                      GetAuthorisedValueDesc( $fields[$x_i]->tag(),
+                    $subfield_data{marc_value} = GetAuthorisedValueDesc( $fields[$x_i]->tag(),
                         $subf[$i][0], $subf[$i][1], '', $tagslib, '', 'opac' );
                 }
                 $subfield_data{marc_subfield} = $subf[$i][0];
@@ -226,23 +209,19 @@ foreach my $field (@fields) {
 
     # loop through each subfield
     for my $i ( 0 .. $#subf ) {
-        next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{tab} ne 10 );
-		next if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{hidden} > 0 );
-        $witness{ $subf[$i][0] } =
-          $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
+        my $sf_def = $tagslib->{ $field->tag() }->{ $subf[$i][0] };
+        next if ( $sf_def->{tab} ne 10 );
+		next if ( $sf_def->{hidden} > 0 );
+        $witness{ $subf[$i][0] } = $sf_def->{lib};
 
-        if ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{isurl} ) {
-            $this_row{ $subf[$i][0] } =
-              "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
+        if ( $sf_def->{isurl} ) {
+            $this_row{ $subf[$i][0] } = "<a href=\"$subf[$i][1]\">$subf[$i][1]</a>";
         }
-        elsif ( $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq
-            "biblioitems.isbn" )
-        {
+        elsif ( $sf_def->{kohafield} eq "biblioitems.isbn" ) {
             $this_row{ $subf[$i][0] } = $subf[$i][1];
         }
         else {
-            $this_row{ $subf[$i][0] } =
-              GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
+            $this_row{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(), $subf[$i][0],
                 $subf[$i][1], '', $tagslib, '', 'opac' );
         }
     }
