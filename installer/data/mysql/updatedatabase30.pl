@@ -709,6 +709,8 @@ $DBversion = "3.00.06.003";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACDetail.xsl',type='Free' where variable='XSLTDetailsDisplay' AND value=1;");
     $dbh->do("UPDATE systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACResults.xsl',type='Free' where variable='XSLTResultsDisplay' AND value=1;");
+    $dbh->do("UPDATE systempreferences set value='',type='Free' where variable='XSLTDetailsDisplay' AND value=0;");
+    $dbh->do("UPDATE systempreferences set value='',type='Free' where variable='XSLTResultsDisplay' AND value=0;");
     print "Upgrade to $DBversion done (Improve XSLT)\n";
     SetVersion ($DBversion);
 }
@@ -732,7 +734,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = '3.00.06.006';
 if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     $dbh->do("
-        INSERT INTO `letter` (module, code, name, title, content)         VALUES('reserves', 'STAFFHOLDPLACED', 'Hold Placed on Item (from staff)', 'Hold Placed on Item (from staff)','An hold has been placed on the following item from the intranet : <<title>> (<<biblionumber>>) for the user <<firstname>> <<surname>> (<<cardnumber>>).');
+        INSERT INTO `letter` (module, code, name, title, content)         VALUES('reserves', 'STAFFHOLDPLACED', 'Hold Placed on Item (from staff)', 'Hold Placed on Item (from staff)','A hold has been placed on the following item from the intranet : <<title>> (<<biblionumber>>) for the user <<firstname>> <<surname>> (<<cardnumber>>).');
     ");
     print "Upgrade to $DBversion done (Added notice for hold from staff)\n";
     SetVersion ($DBversion);
