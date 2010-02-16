@@ -47,7 +47,7 @@ my ( $template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user
     {   template_name   => "admin/aqplan.tmpl",
         query           => $input,
         type            => "intranet",
-        authnotrequired => 1,
+        authnotrequired => 0,
         flagsrequired   => { acquisition => 'planning_manage' },
         debug           => 1,
     }
