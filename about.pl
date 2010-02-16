@@ -101,6 +101,7 @@ Lingua::Stem
 Lingua::Stem::Snowball
 List::Util
 List::MoreUtils
+Locale::Currency::Format
 Locale::Language
 MARC::Crosswalk::DublinCore
 MARC::Charset

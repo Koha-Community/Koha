@@ -3457,6 +3457,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    eval{use Locale::Currency::Format};
+    if (!$@) {
+        print "Upgrade to $DBversion done (Locale::Currency::Format installed.)\n";
+        SetVersion ($DBversion);
+    }
+    else {
+        print "Upgrade to $DBversion done.\n";
+        print "NOTICE: The Locale::Currency::Format package is not installed on your system or not found in \@INC.\nThis dependency is required in order to include fine information in overdue notices.\nPlease ask your system administrator to install this package.\n";
+        SetVersion ($DBversion);
+    }
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

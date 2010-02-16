@@ -577,6 +577,7 @@ WriteMakefile(
 			    'Lingua::Stem::Snowball'	       => 0.952,
                             'List::Util'                       => 1.18,
                             'List::MoreUtils'                  => 0.21,
+                            'Locale::Currency::Format'         => 1.28,
                             'Locale::Language'                 => 2.07,
                             'MARC::Charset'                    => 0.98,
                             'MARC::Crosswalk::DublinCore'      => 0.02,
