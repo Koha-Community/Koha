@@ -425,7 +425,9 @@ sub marcrecord2csv {
     if ($csvseparator eq '\t') { $csvseparator = "\t" }
     if ($fieldseparator eq '\t') { $fieldseparator = "\t" }
     if ($subfieldseparator eq '\t') { $subfieldseparator = "\t" }
-
+    if ($csvseparator eq '\n') { $csvseparator = "\n" }
+    if ($fieldseparator eq '\n') { $fieldseparator = "\n" }
+    if ($subfieldseparator eq '\n') { $subfieldseparator = "\n" }
 
     $csv = $csv->encoding_out($encoding) ;
     $csv->sep_char($csvseparator);
