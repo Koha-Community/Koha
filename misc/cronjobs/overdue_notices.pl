@@ -19,6 +19,7 @@
 
 use strict;
 use warnings;
+use utf8;
 
 BEGIN {
 
@@ -28,14 +29,17 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
+use Getopt::Long;
+use Pod::Usage;
+use Text::CSV_XS;
+use Locale::Currency::Format 1.28;
+use Encode;
+
 use C4::Context;
 use C4::Dates qw/format_date/;
 use C4::Debug;
 use C4::Letters;
-
-use Getopt::Long;
-use Pod::Usage;
-use Text::CSV_XS;
+use C4::Overdues qw(GetFine);
 
 =head1 NAME
 
@@ -244,7 +248,7 @@ my @branchcodes; # Branch(es) passed as parameter
 my $csvfilename;
 my $triggered = 0;
 my $listall = 0;
-my $itemscontent = join( ',', qw( issuedate title barcode author ) );
+my $itemscontent = join( ',', qw( issuedate title barcode author biblionumber ) );
 my @myborcat;
 my @myborcatout;
 
@@ -436,24 +440,27 @@ END_SQL
                     C4::Members::DebarMember($borrowernumber);
                     $verbose and warn "debarring $borrowernumber $firstname $lastname\n";
                 }
-                $sth2->execute( ($listall) ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ) );
+                my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));
+                $sth2->execute(@params);
                 my $itemcount = 0;
                 my $titles = "";
+                my @items = ();
                 while ( my $item_info = $sth2->fetchrow_hashref() ) {
                     my @item_info = map { $_ =~ /^date|date$/ ? format_date( $item_info->{$_} ) : $item_info->{$_} || '' } @item_content_fields;
                     $titles .= join("\t", @item_info) . "\n";
                     $itemcount++;
+                    push (@items, $item_info->{'biblionumber'});
                 }
                 $sth2->finish;
-    
                 $letter = parse_letter(
-                    {   letter         => $letter,
-                        borrowernumber => $borrowernumber,
-                        branchcode     => $branchcode,
-                        substitute     => {
-                            bib             => $branch_details->{'branchname'},
-                            'items.content' => $titles
-                        }
+                    {   letter          => $letter,
+                        borrowernumber  => $borrowernumber,
+                        branchcode      => $branchcode,
+                        biblionumber    => \@items,
+                        substitute      => {    # this appears to be a hack to overcome incomplete features in this code.
+                                            bib             => $branch_details->{'branchname'}, # maybe 'bib' is a typo for 'lib<rary>'?
+                                            'items.content' => $titles
+                                           }
                     }
                 );
     
@@ -576,7 +583,7 @@ substituted keys and values.
 
 =cut
 
-sub parse_letter {
+sub parse_letter { # FIXME: this code should probably be moved to C4::Letters:parseletter
     my $params = shift;
     foreach my $required (qw( letter borrowernumber )) {
         return unless exists $params->{$required};
@@ -585,23 +592,42 @@ sub parse_letter {
     if ( $params->{'substitute'} ) {
         while ( my ( $key, $replacedby ) = each %{ $params->{'substitute'} } ) {
             my $replacefield = "<<$key>>";
-
             $params->{'letter'}->{title}   =~ s/$replacefield/$replacedby/g;
             $params->{'letter'}->{content} =~ s/$replacefield/$replacedby/g;
         }
     }
 
-    C4::Letters::parseletter( $params->{'letter'}, 'borrowers', $params->{'borrowernumber'} );
+    $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'borrowers', $params->{'borrowernumber'} );
 
     if ( $params->{'branchcode'} ) {
-        C4::Letters::parseletter( $params->{'letter'}, 'branches', $params->{'branchcode'} );
+        $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'branches', $params->{'branchcode'} );
     }
 
     if ( $params->{'biblionumber'} ) {
-        C4::Letters::parseletter( $params->{'letter'}, 'biblio',      $params->{'biblionumber'} );
-        C4::Letters::parseletter( $params->{'letter'}, 'biblioitems', $params->{'biblionumber'} );
-    }
+        my $item_format = '';
+        PROCESS_ITEMS:
+        while (scalar(@{$params->{'biblionumber'}}) > 0) {
+            my $item = shift @{$params->{'biblionumber'}};
+            my $fine = GetFine($item, $params->{'borrowernumber'});
+            if (!$item_format) {
+                $params->{'letter'}->{'content'} =~ m/(<item>.*<\/item>)/;
+                $item_format = $1;
+            }
+            if ($params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/) { # process any fine tags...
+                no strict; # currency_format behaves badly if we quote the bareword for some reason...
+                my $formatted_fine = currency_format("$1", "$fine", FMT_SYMBOL);
+                use strict;
+                $formatted_fine = Encode::encode("utf8", $formatted_fine);
+                $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/$formatted_fine/;
+            }
+            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblio',      $item );
+            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblioitems', $item );
+            $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'items', $item );
+            $params->{'letter'}->{'content'} =~ s/(<item>.*<\/item>)/$1\n$item_format/ if scalar(@{$params->{'biblionumber'}} > 0);
 
+        }
+    }
+    $params->{'letter'}->{'content'} =~ s/<\/{0,1}?item>//g; # strip all remaining item tags...
     return $params->{'letter'};
 }
 

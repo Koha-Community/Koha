@@ -22,12 +22,13 @@ use warnings;
 
 use MIME::Lite;
 use Mail::Sendmail;
+use Encode;
+use Carp;
+
 use C4::Members;
 use C4::Log;
 use C4::SMS;
 use C4::Debug;
-use Encode;
-use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -506,7 +507,6 @@ sub parseletter {
         carp "ERROR: parseletter() 1st argument 'letter' empty";
         return;
     }
-    # 	warn "Parseletter : ($letter, $table, $pk ...)";
     my $sth = parseletter_sth($table);
     unless ($sth) {
         warn "parseletter_sth('$table') failed to return a valid sth.  No substitution will be done for that table.";
@@ -520,15 +520,18 @@ sub parseletter {
 
     my $values = $sth->fetchrow_hashref;
 
+
     # and get all fields from the table
     my $columns = C4::Context->dbh->prepare("SHOW COLUMNS FROM $table");
     $columns->execute;
     while ( ( my $field ) = $columns->fetchrow_array ) {
         my $replacefield = "<<$table.$field>>";
+        $values->{$field} =~ s/\p{P}(?=$)//g if $values->{$field};
         my $replacedby   = $values->{$field} || '';
         ($letter->{title}  ) and $letter->{title}   =~ s/$replacefield/$replacedby/g;
         ($letter->{content}) and $letter->{content} =~ s/$replacefield/$replacedby/g;
     }
+    return $letter;
 }
 
 =head2 EnqueueLetter
@@ -770,7 +773,7 @@ ENDSQL
     return $sth->fetchall_arrayref({});
 }
 
-sub _send_message_by_email ($) {
+sub _send_message_by_email ($;$$$) {
     my $message = shift or return;
 
     my $to_address = $message->{to_address};
