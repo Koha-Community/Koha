@@ -1258,11 +1258,11 @@ sub checkpw {
         my ( $md5password, $cardnumber, $borrowernumber, $userid, $firstname,
             $surname, $branchcode, $flags )
           = $sth->fetchrow;
-        if ( md5_base64($password) eq $md5password ) {
+        if ( ( md5_base64($password) eq $md5password ) and ($md5password ne "!") ) {
 
             C4::Context->set_userenv( $borrowernumber, $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
-            return 1, $userid;
+            return 1, $cardnumber;
         }
     }
     if (   $userid && $userid eq C4::Context->config('user')
@@ -1416,8 +1416,8 @@ Returns member's flags or 0 if a permission is not met.
 
 sub haspermission {
     my ($userid, $flagsrequired) = @_;
-    my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
-    $sth->execute($userid);
+    my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=? or cardnumber=?");
+    $sth->execute($userid,$userid);
     my $flags = getuserflags( $sth->fetchrow(), $userid );
     if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
