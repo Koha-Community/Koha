@@ -523,7 +523,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 			<!-- /TMPL_IF -->
 
         	<!-- TMPL_IF NAME="credits" -->
-			<li><span class="circ-hlt">Credits:</span> Patron has a credit</li>
+			<li>
+                <span class="circ-hlt">Credits:</span> Patron has a credit<!-- TMPL_IF NAME="creditsamount" --> of <!-- TMPL_VAR name="creditsamount" --><!-- /TMPL_IF -->
+            </li>
 			<!-- /TMPL_IF -->
 
 

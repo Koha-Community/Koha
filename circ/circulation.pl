@@ -561,7 +561,8 @@ foreach my $flag ( sort keys %$flags ) {
         elsif ( $flag eq 'CREDITS' ) {
             $template->param(
                 credits    => 'true',
-                creditsmsg => $flags->{'CREDITS'}->{'message'}
+                creditsmsg => $flags->{'CREDITS'}->{'message'},
+                creditsamount => sprintf("%.02f", -($flags->{'CREDITS'}->{'amount'})), # from patron's pov
             );
         }
     }
@@ -577,7 +578,8 @@ foreach my $flag ( sort keys %$flags ) {
         elsif ( $flag eq 'CREDITS' ) {
             $template->param(
                 credits    => 'true',
-                creditsmsg => $flags->{'CREDITS'}->{'message'}
+                creditsmsg => $flags->{'CREDITS'}->{'message'},
+                creditsamount => sprintf("%.02f", -($flags->{'CREDITS'}->{'amount'})), # from patron's pov
             );
         }
         elsif ( $flag eq 'ODUES' ) {
