@@ -686,6 +686,7 @@ $template->param(
     CGIorganisations  => $CGIorganisations,
     is_child          => ($borrower->{'category_type'} eq 'C'),
     circview => 1,
+    soundon           => C4::Context->preference("SoundOn"),
 );
 
 # save stickyduedate to session

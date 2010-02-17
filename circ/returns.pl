@@ -547,6 +547,7 @@ $template->param(
     dropboxmode    => $dropboxmode,
     dropboxdate    => $dropboxdate->output(),
     overduecharges => $overduecharges,
+    soundon        => C4::Context->preference("SoundOn"),
 );
 
 my $itemnumber = GetItemnumberFromBarcode( $query->param('barcode') );

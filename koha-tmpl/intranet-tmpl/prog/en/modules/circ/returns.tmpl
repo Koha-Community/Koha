@@ -92,6 +92,11 @@ function Dopop(link) {
 <!-- case of a reservation found, and display info -->
     <!-- TMPL_IF Name="waiting" -->
 	<!-- waiting -->
+
+<!-- TMPL_IF NAME="soundon" -->
+<audio src="/intranet-tmpl/prog/sound/ending.ogg" autoplay autobuffer></audio>
+<!-- /TMPL_IF -->	
+	
 <div class="dialog message">
         <h3>Hold Found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a></h3>
         <!-- TMPL_IF NAME="reservenotes" --><h4>Notes: <!-- TMPL_VAR Name="reservenotes" --></h4><!-- /TMPL_IF -->
@@ -217,6 +222,11 @@ function Dopop(link) {
     <!-- case of simple return no issue or transfer but with a reservation  -->
     <!-- TMPL_IF Name="reserved" -->
 	<!--  reserved  -->
+	
+<!-- TMPL_IF NAME="soundon" -->
+<audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay autobuffer></audio>
+<!-- /TMPL_IF -->
+	
 	<div class="dialog message">
 	  <h3>Hold Found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->"><!-- TMPL_VAR Name="title" escape="html" --></a></h3>
         <!-- TMPL_IF NAME="reservenotes" --><h4>Notes: <!-- TMPL_VAR Name="reservenotes" --></h4><!-- /TMPL_IF -->
@@ -281,6 +291,13 @@ function Dopop(link) {
                         <p class="problem">Item is withdrawn.</p>
                     <!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
+<!-- TMPL_IF NAME="soundon" -->
+<audio src="/intranet-tmpl/prog/sound/critical.ogg" autoplay autobuffer></audio>
+<!-- /TMPL_IF -->
+        <!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="soundon" -->
+<audio src="/intranet-tmpl/prog/sound/beep.ogg" autoplay autobuffer></audio>
+<!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
     </div>
 <!-- /TMPL_IF -->
