@@ -3457,9 +3457,9 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.XXX';
+$DBversion = '3.01.00.119';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    eval{use Locale::Currency::Format};
+    eval{require Locale::Currency::Format};
     if (!$@) {
         print "Upgrade to $DBversion done (Locale::Currency::Format installed.)\n";
         SetVersion ($DBversion);
