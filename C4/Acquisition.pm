@@ -207,12 +207,13 @@ sub GetPendingOrders {
         LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber
         WHERE booksellerid=?
             AND datecancellationprinted IS NULL
-            AND (to_days(now())-to_days(closedate) < 180 OR closedate IS NULL)
     ";
     if($closed){
         $strsth .= "
         AND (quantity > quantityreceived OR quantityreceived is NULL) 
         AND closedate IS NOT NULL ";
+    }else{
+        $strsth .= "AND (to_days(now())-to_days(closedate) < 180 OR closedate IS NULL)";
     }
     ## FIXME  Why 180 days ???
     my @query_params = ( $supplierid );
