@@ -1,0 +1,126 @@
+#!/usr/bin/perl
+
+package Main;
+
+use strict;
+use warnings;
+
+use LangInstaller;
+use Getopt::Long;
+use Pod::Usage;
+
+
+my $verbose     = 0;
+my $pref        = 0;
+my $all         = 0;
+GetOptions(
+    'v|verbose' => \$verbose,
+    'p'         => \$pref,
+    'a|all'     => \$all,
+);
+
+
+sub usage {
+    pod2usage( -verbose => 2 );
+    exit;
+}
+
+
+usage() if $#ARGV != 1 && $#ARGV != 0;
+
+my ($cmd, $lang) = @ARGV;
+$cmd = lc $cmd;
+if ( $cmd =~ /create|install|update/ ) {
+    my $installer = LangInstaller->new( $lang, $pref );
+    if ( $all ) {
+        usage() if $cmd eq 'create';
+        for my $lang ( @{$installer->{langs}} ) {
+            $installer->set_lang( $lang );
+            $installer->$cmd();
+        }
+    }
+    else {
+        $installer->$cmd();
+    }
+}
+else {
+    usage();
+}
+
+
+
+=head1 NAME
+
+translate - Handle templates and preferences translation
+
+=head1 SYNOPSYS
+
+  translate create fr-FR
+  translate update fr-FR
+  translate install fr-FR
+  translate -p install fr-FR
+  translate install
+
+=head1 DESCRIPTION
+
+In Koha, three categories of information are translated based on standard GNU
+.po files: opac templates pages, intranet templates and system preferences. The
+script is a wrapper. It allows to quickly create/update/install .po files for a
+given language or for all available languages.
+
+=head1 USAGE
+
+=over
+
+=item translate create F<lang>
+
+Create 3 .po files in F</misc/translator/po> subdirectory: (1) from opac pages
+templates, (2) intranet templates, and (3) from preferences. English 'en'
+version of templates and preferences are used as references.
+
+=over
+
+=item F<lang>-opac.po
+
+Contains extracted text from english (en) OPAC templates found in
+<KOHA_ROOT>/koha-tmpl/opac-tmpl/prog/en/ directory.
+
+=item F<lang>-intranet.po
+
+Contains extracted text from english (en) intranet templates found in
+<KOHA_ROOT>/koha-tmpl/intranet-tmpl/prog/en/ directory.
+
+=item F<lang>-pref.po
+
+Contains extracted text from english (en) preferences. They are found in files
+located in <KOHA_ROOT>/koha-tmpl/intranet-tmpl/prog/en/admin/preferences
+directory.
+
+=back
+
+=item translate [-p] update F<lang>
+
+Update .po files in F<po> directory, named F<lang>-*.po. Without F<lang>, all
+available languages are updated. With -p option, only preferences .po file is
+updated.
+
+=item translate [-p] install F<lang>
+
+Use .po files to translate the english version of templayes and preferences files
+and copy those files in the appropriate directory. Without F<lang>, all
+available languages are installed. With -p option, only preferences .po file is
+updated.
+
+=back
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2010 by Tamil, s.a.r.l.
+
+L<http://www.tamil.fr>
+
+This script is free software; you can redistribute it and/or modify it under
+the terms of the GNU Lesser General Public License, version 2.1.
+
+=cut
+
