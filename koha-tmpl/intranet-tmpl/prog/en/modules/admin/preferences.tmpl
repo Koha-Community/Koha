@@ -94,7 +94,6 @@
                     <!-- TMPL_ELSIF NAME="type_languages" -->
                     <dl>
                     <!-- TMPL_LOOP NAME="languages" -->
-                    <dt>
                         <!-- TMPL_IF NAME="plural" -->
                         <dt>
                             <!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF -->
@@ -103,9 +102,9 @@
                         <dd>
                             <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" --> <!-- TMPL_VAR NAME="script_description" --> <!-- TMPL_VAR NAME="region_description" --> <!-- TMPL_VAR NAME="variant_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</label>
                             <!-- TMPL_IF NAME="enabled" -->
-                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" />
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             <!-- TMPL_ELSE -->
-                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" />
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" class="preference preference-checkbox"/>
                             <!-- /TMPL_IF -->
                         </dd>
                         <!-- /TMPL_LOOP -->
@@ -113,9 +112,9 @@
                         <dt>
                             <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</label>
                             <!-- TMPL_IF NAME="group_enabled" -->
-                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" />
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             <!-- TMPL_ELSE -->
-                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" />
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" class="preference preference-checkbox"/>
                             <!-- /TMPL_IF -->
                         </dt>
                         <!-- /TMPL_IF -->
