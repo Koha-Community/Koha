@@ -2441,6 +2441,7 @@ CREATE TABLE `aqbudgets_planning` (
   `estimated_amount` decimal(28,6) default NULL,
   `authcat` varchar(30) NOT NULL,
   `authvalue` varchar(30) NOT NULL,
+  `display` tinyint(1) DEFAULT 1,
   PRIMARY KEY  (`plan_id`),
   CONSTRAINT `aqbudgets_planning_ifbk_1` FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

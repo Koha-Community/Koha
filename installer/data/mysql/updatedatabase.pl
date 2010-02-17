@@ -3445,6 +3445,18 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.118';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my ($count) = $dbh->selectrow_array("SELECT count(*) FROM information_schema.columns
+                                         WHERE table_name = 'aqbudgets_planning'
+                                         AND column_name = 'display'");
+    if ($count < 1) {
+        $dbh->do("ALTER TABLE aqbudgets_planning ADD COLUMN display tinyint(1) DEFAULT 1");
+    }
+    print "Upgrade to $DBversion done (bug 4203: add display column to aqbudgets_planning if missing)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
