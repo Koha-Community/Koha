@@ -559,7 +559,7 @@ function calcTotalRow(cell) {
 
     var bud_id =  cell.className;
     var val1 =    cell.value;
-    var remainingTotal =   document.getElementById("budget_est_"+bud_id) ;
+    var remainingTotal =   document.getElementById("budget_est_"+bud_id).textContent;
     var remainingNew =0;
     var budgetTotal  =  document.getElementById("budget_tot_"+bud_id ).textContent;
     var arr =  getElementsByClass(bud_id);
@@ -594,10 +594,10 @@ function calcTotalRow(cell) {
 
 function autoFillRow(bud_id) {
 
-    var remainingTotal =   document.getElementById("budget_est_"+bud_id) ;
+    var remainingTotal =   document.getElementById("budget_est_"+bud_id).textContent;
     var remainingNew = new Number;
     var budgetTotal  =  document.getElementById("budget_tot_"+bud_id ).textContent;
-    var arr =  getElementsByClass(bud_id);
+    var arr =  getElementsByClass("plan_entry_" + bud_id);
 
     budgetTotal   =  budgetTotal.replace(/\,/, "");
     var qty = new Number;
