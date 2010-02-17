@@ -17,6 +17,9 @@
 
 
 use strict;
+use warnings;
+# FIXME - Generates a warning from C4/Context.pm (uninitilized value).
+
 use CGI;
 use C4::Auth;
 use C4::Output;
