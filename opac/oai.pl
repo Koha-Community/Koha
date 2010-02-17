@@ -156,7 +156,7 @@ sub new {
     my $self = $class->SUPER::new();
 
     if ( $repository->{ conf } ) {
-        foreach my $name ( @{ $self->{ koha_metadata_formats } } ) {
+        foreach my $name ( @{ $repository->{ koha_metadata_format } } ) {
             my $format = $repository->{ conf }->{ format }->{ $name };
             $self->metadataFormat( HTTP::OAI::MetadataFormat->new(
                 metadataPrefix    => $format->{metadataPrefix},
