@@ -373,7 +373,7 @@ use HTTP::OAI::Repository qw/:validate/;
 use XML::SAX::Writer;
 use XML::LibXML;
 use XML::LibXSLT;
-use YAML::XS qw( LoadFile );
+use YAML::Syck qw( LoadFile );
 use CGI qw/:standard -oldstyle_urls/;
 
 use C4::Context;
