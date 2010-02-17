@@ -50,11 +50,6 @@ Circulation:
                   no: "Don't allow"
             - staff to delete messages added from other libraries.
         -
-            - Mark a hold as problematic if it has been waiting for more than
-            - pref: ReservesMaxPickUpDelay
-              class: integer
-            - days.
-        -
             - Show the
             - pref: numReturnedItemsToShow
               class: integer
@@ -222,7 +217,12 @@ Circulation:
               choices:
                   ItemHomeLibrary: "item's home library"
                   PatronLibrary: "patron's home library"
-            - to see if the patron can place a hold on the item.                  
+            - to see if the patron can place a hold on the item.    
+        -
+            - Mark a hold as problematic if it has been waiting for more than
+            - pref: ReservesMaxPickUpDelay
+              class: integer
+            - days.
         -
             - Satisfy holds from the libraries
             - pref: StaticHoldsQueueWeight
