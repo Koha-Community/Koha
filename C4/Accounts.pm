@@ -283,7 +283,11 @@ sub chargelostitem{
    
     my $dbh = C4::Context->dbh();
     my ($itemnumber) = @_;
-    my $sth=$dbh->prepare("SELECT * FROM issues, items WHERE issues.itemnumber=items.itemnumber and  issues.itemnumber=?");
+    my $sth=$dbh->prepare("SELECT issues.*,items.*,biblio.title 
+                           FROM issues 
+                           JOIN items USING (itemnumber) 
+                           JOIN biblio USING (biblionumber)
+                           WHERE issues.itemnumber=?");
     $sth->execute($itemnumber);
     my $issues=$sth->fetchrow_hashref();
 
