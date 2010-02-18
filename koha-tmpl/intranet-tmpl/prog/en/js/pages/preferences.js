@@ -29,7 +29,7 @@ $( document ).ready( function () {
     function mark_modified() {
         $( this.form ).find( '.save-all' ).removeAttr( 'disabled' );
         $( this ).addClass( 'modified' );
-        var name_cell = $( this ).parent().parent().find( '.name-cell' );
+        var name_cell = $( this ).parents( '.name-row' ).find( '.name-cell' );
 		if ( !name_cell.find( '.modified-warning' ).length )
             name_cell.append( '<em class="modified-warning">(modified)</em>' );
         KOHA.Preferences.Modified = true;
@@ -40,7 +40,7 @@ $( document ).ready( function () {
             if ( this.defaultValue === undefined || this.value != this.defaultValue ) mark_modified.call( this );
         } ).end()
         .find( 'select.preference' ).change( mark_modified );
-    $('.$preference-checkbox').change( function () {
+    $('.preference-checkbox').change( function () {
         $('.preference-checkbox').addClass('modified');
         mark_modified.call(this);
     } );
