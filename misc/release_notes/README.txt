@@ -7,7 +7,7 @@ Update and document the translations
  didn't succeed
 
 Install and test the translations
- ./install.pl will install every translation in the po dir
+ ./translate install will install every translation in the po dir
 
 Upload the translations to translate.koha.org
  This is generally done by deleting the database and importing
