@@ -3471,6 +3471,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     }
 }
 
+$DBversion = '3.01.00.120';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('soundon','0','Enable circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet.','','YesNo');
+});
+    print "Upgrade to $DBversion done (bug 1080: add soundon system preference for circulation sounds)\n";
+    SetVersion ($DBversion);
+}
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
