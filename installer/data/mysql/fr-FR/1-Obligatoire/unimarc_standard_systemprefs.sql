@@ -181,7 +181,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:archiveID','KOHA-OAI-TEST','Identification de l''archive OAI-PMH',NULL,'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:MaxCount','50','Nombre maximum d''enregistrements retournés simultanément aux requêtes ListRecords et ListIdentifiers',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:Set','SET,Set experimental\r\nSET:SUBSET,Sous-set experimental','Sets OAI-PMH exportés, Le nom du set est d''une virgule et d''une brève description. Un set par ligne.','30|10','Textarea');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:Subset','itemtype=\'BOOK\'','Exprime le sous ensemble des éléments de la table biblioitem à exporter (expérimental)',NULL,'Free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:ConfFile','','Si vide, le serveur OAI de Koha fonctionne en mode normal, sino il fonctionne en mode étendu.',NULL,'File');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('language','fr-FR','Définit les langues accessibles dans l''interface professionnelle',NULL,'Languages');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacheader','','HTML spécifique à ajouter à l''OPAC','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('QueryAutoTruncate',1,'Si activé, la troncature est activée par défaut',NULL,'YesNo');

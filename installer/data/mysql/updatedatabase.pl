@@ -3490,6 +3490,15 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.122';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{
+      INSERT INTO systempreferences (variable,value,explanation,options,type)
+      VALUES ('OAI-PMH:ConfFile', '', 'If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode.','','File');
+});
+    print "Upgrade to $DBversion done. — Add a new system preference OAI-PMF:ConfFile\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
