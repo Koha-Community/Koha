@@ -98,7 +98,7 @@ if ( $email ) {
         push( @results, $dat );
     }
 
-    my $user = GetMember($borrowernumber); 
+    my $user = GetMember(borrowernumber => $borrowernumber); 
 
     $template2->param(
         BIBLIO_RESULTS => \@results,

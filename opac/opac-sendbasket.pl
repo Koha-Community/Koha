@@ -102,7 +102,7 @@ if ( $email_add ) {
 
     my $resultsarray = \@results;
     
-    my $user = GetMember($borrowernumber); 
+    my $user = GetMember(borrowernumber => $borrowernumber); 
     
     $template2->param(
         BIBLIO_RESULTS => $resultsarray,
