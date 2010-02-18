@@ -114,8 +114,12 @@ $.tablesorter.addParser({
                 </tr>
                 <!-- /TMPL_LOOP --></tbody>
         </table>
+        <!-- TMPL_ELSE -->
+            <div class="dialog message">No holds found.</div>
+        <!-- /TMPL_IF -->
         </div>
         <div id="holdsover">
+                <!-- TMPL_IF NAME="overloop" -->
                <table id="holdso">
                <thead><tr>
                     <th>Available since</th>
@@ -162,10 +166,10 @@ $.tablesorter.addParser({
                 </tr>
                 <!-- /TMPL_LOOP --></tbody>
         </table>
-        </div>
         <!-- TMPL_ELSE -->
             <div class="dialog message">No holds found.</div>
-        <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
+        </div>
         </div>
     <!-- /TMPL_UNLESS -->
 
