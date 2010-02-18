@@ -512,7 +512,8 @@ for (my $i=0;$i<=@servers;$i++) {
  	    }
  	}
     ## If there's just one result, redirect to the detail page
-        if ($total == 1) {         
+        if ($total == 1 && $format ne 'rss2'
+	    && $format ne 'opensearchdescription' && $format ne 'atom') {   
             my $biblionumber=$newresults[0]->{biblionumber};
             if (C4::Context->preference('BiblioDefaultView') eq 'isbd') {
                 print $cgi->redirect("/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=$biblionumber");
