@@ -35,7 +35,7 @@ my $contractnumber = $input->param('contractnumber');
 my $booksellerid   = $input->param('booksellerid');
 my $op             = $input->param('op') || '';
 
-my @bookseller = GetBookSellerFromId($booksellerid);
+my $bookseller = GetBookSellerFromId($booksellerid);
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "admin/aqcontract.tmpl",
@@ -50,7 +50,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param(
     contractnumber => $contractnumber,
     booksellerid   => $booksellerid,
-    booksellername => $bookseller[0]->{name},
+    booksellername => $bookseller->{name},
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     dateformat     => C4::Context->preference("dateformat"),
 );
