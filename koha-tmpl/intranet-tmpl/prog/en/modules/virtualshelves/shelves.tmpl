@@ -203,7 +203,7 @@ function placeHold () {
             <!-- TMPL_ELSE -->
 				<a class="title" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
 			<!-- /TMPL_IF -->
-			<!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" --></a>
+			<!-- TMPL_VAR NAME="title" escape="html" --><!-- TMPL_LOOP NAME="subtitle" --> <!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --></a>
 			</td>
 			<td><!-- TMPL_VAR NAME="author" --></td>
 			<td><!-- TMPL_VAR NAME="dateadded" --></td>
