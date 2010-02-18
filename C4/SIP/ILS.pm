@@ -7,6 +7,7 @@ package ILS;
 use warnings;
 use strict;
 use Sys::Syslog qw(syslog);
+use Encode;
 
 use ILS::Item;
 use ILS::Patron;
@@ -159,7 +160,7 @@ sub checkout {
 			$circ->desensitize(!$item->magnetic);
 
 			syslog("LOG_DEBUG", "ILS::Checkout: patron %s has checked out %s",
-				$patron_id, join(', ', @{$patron->{items}}));
+				$patron_id, join(', ', encode_utf8(@{$patron->{items}})));
 		}
 		else {
 			syslog("LOG_ERR", "ILS::Checkout Issue failed");

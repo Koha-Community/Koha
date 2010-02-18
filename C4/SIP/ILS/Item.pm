@@ -22,6 +22,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Members;
 use C4::Reserves;
+use Encode;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
 
@@ -109,7 +110,7 @@ sub new {
 	bless $self, $type;
 
     syslog("LOG_DEBUG", "new ILS::Item('%s'): found with title '%s'",
-	   $item_id, $self->{title});
+	   $item_id, encode_utf8($self->{title}));
 
     return $self;
 }

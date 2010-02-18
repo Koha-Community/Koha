@@ -8,6 +8,7 @@ use strict;
 use warnings;
 use English;
 use Exporter;
+use Encode;
 
 use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
@@ -193,7 +194,7 @@ sub read_SIP_packet {
 sub write_msg {
     my ($self, $msg, $file) = @_;
     my $cksum;
-
+    $msg=encode_utf8($msg);
     if ($error_detection) {
 		if (defined($self->{seqno})) {
 		    $msg .= 'AY' . $self->{seqno};
