@@ -87,7 +87,7 @@ sub GetBookSeller($) {
 
 
 sub GetBookSellerFromId($) {
-	my ($id) = shift or return undef;
+	my $id = shift or return;
 	my $dbh = C4::Context->dbh();
 	my $query = "SELECT * FROM aqbooksellers WHERE id = ?";
 	my $sth =$dbh->prepare($query);
@@ -96,9 +96,9 @@ sub GetBookSellerFromId($) {
 		my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?");
 		$sth2->execute($id);
 		$data->{basketcount}=$sth2->fetchrow();
-		return ($data);
+		return $data;
 	}
-	return 0;
+	return;
 }
 #-----------------------------------------------------------------#
 
