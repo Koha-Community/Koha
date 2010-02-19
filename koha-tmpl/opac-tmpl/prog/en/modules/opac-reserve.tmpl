@@ -343,7 +343,7 @@
 
 		    <!-- /TMPL_IF -->
 	<td>
-	    <input name="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10" readonly="readonly">
+	    <input name="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10" readonly="readonly" />
 	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
 		//<![CDATA[
@@ -370,7 +370,7 @@
 		//]]>
 	    </script>
 		<br/>
-		<a href='#' onClick="document.getElementById('expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->').value='';">Clear Date</a>
+		<a href='#' onclick="document.getElementById('expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->').value='';">Clear Date</a>
 	</td>
 
                     <!-- TMPL_IF NAME="OPACItemHolds" -->

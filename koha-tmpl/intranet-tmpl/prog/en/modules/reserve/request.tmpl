@@ -317,7 +317,7 @@ function checkMultiHold() {
 
 	<li>
 	    <label for="expiration_date">Hold expires on date:</label>
-	    <input name="expiration_date" id="expiration_date" size="10" readonly="readonly">
+	    <input name="expiration_date" id="expiration_date" size="10" readonly="readonly" />
 	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
 		//<![CDATA[
@@ -343,7 +343,7 @@ function checkMultiHold() {
 		);
 		//]]>
 	    </script>
-		<a href='#' onClick="document.getElementById('expiration_date').value='';">Clear Date</a>
+		<a href='#' onclick="document.getElementById('expiration_date').value='';">Clear Date</a>
 	</li>
 
         <!-- TMPL_UNLESS NAME="multi_hold" -->
@@ -569,7 +569,7 @@ function checkMultiHold() {
 	<th>Expiration</th>
         <th>Pick up Library</th>
         <th>Details</th>
-        <th><img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0" title="Toggle Set to Lowest Priority"></th>
+        <th><img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
 	<th>&nbsp;</th>
       </tr>
   <!-- TMPL_LOOP Name="reserveloop" -->
@@ -589,20 +589,20 @@ function checkMultiHold() {
         </td>
 
         <td style="white-space:nowrap;">
-	        <a title="Move Reserve Up" href="request.pl?action=move&where=up&borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&date=<!-- TMPL_VAR Name="date" -->">
-			<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-up.png" border="0" />
+	        <a title="Move Hold Up" href="request.pl?action=move&amp;where=up&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->">
+			<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-up.png" border="0" alt="Go up" />
                 </a>
 
-		<a title="Move Reserve To Top" href="request.pl?action=move&where=top&borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&date=<!-- TMPL_VAR Name="date" -->">
-                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-top.png" border="0" />
+		<a title="Move Hold To Top" href="request.pl?action=move&amp;where=top&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->">
+                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-top.png" border="0" alt="Go top" />
                 </a>
 
-                <a title="Move Reserve To Bottom" href="request.pl?action=move&where=bottom&borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&date=<!-- TMPL_VAR Name="date" -->">
-                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0" />
+                <a title="Move Hold To Bottom" href="request.pl?action=move&amp;where=bottom&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->">
+                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0" alt="Go bottom" />
                 </a>
 
-                <a title="Move Reserve Down" href="request.pl?action=move&where=down&borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&date=<!-- TMPL_VAR Name="date" -->">
-                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img//go-down.png" border="0" />
+                <a title="Move Hold Down" href="request.pl?action=move&amp;where=down&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->">
+                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-down.png" border="0" alt="Go down" />
                 </a>
         </td>
 
@@ -679,18 +679,18 @@ function checkMultiHold() {
         </td>
 
 	<td>
-		<a title="Toggle Lowest Priority" href="request.pl?action=setLowestPriority&borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&date=<!-- TMPL_VAR Name="date" -->"> 
+		<a title="Toggle Lowest Priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->"> 
 			<!-- TMPL_IF NAME="lowestPriority" -->
-	                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0"/ title="Unset Lowest Priority" />
+	                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0" alt="Unset Lowest Priority" />
 		        <!-- TMPL_ELSE -->
-		                <img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-down.png" border="0"/ title="Set To Lowest Priority" />
+		                <img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-down.png" border="0" alt="Set To Lowest Priority" />
 		        <!-- /TMPL_IF -->
 		</a>
 	</td> 
 
 	<td>
-		<a title="Cancel Reserve" href="request.pl?action=cancel&borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&date=<!-- TMPL_VAR Name="date" -->">
-                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/x.png" border="0" />
+		<a title="Cancel Hold" href="request.pl?action=cancel&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->">
+                	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/x.png" border="0" alt="Cancel" />
                 </a>
 	</td>
 
