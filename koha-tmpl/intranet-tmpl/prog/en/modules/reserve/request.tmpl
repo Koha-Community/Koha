@@ -561,15 +561,21 @@ function checkMultiHold() {
           <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a></caption>
       <!-- /TMPL_IF -->
       <tr>
-        <!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" --><th>Priority</th><!-- TMPL_ELSE --><th>Delete?</th><!-- /TMPL_IF -->
-	    <th>&nbsp</th>
+        <!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" -->
+            <th>Priority</th>
+	        <th>&nbsp</th>
+        <!-- TMPL_ELSE -->
+            <th>Delete?</th>
+        <!-- /TMPL_IF -->
         <th>Patron</th>
         <th>Notes</th>
         <th>Date</th>
 	<th>Expiration</th>
         <th>Pick up Library</th>
         <th>Details</th>
-        <th><img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
+        <!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" -->
+            <th><img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
+        <!-- /TMPL_IF -->
 	<th>&nbsp;</th>
       </tr>
   <!-- TMPL_LOOP Name="reserveloop" -->
@@ -588,6 +594,7 @@ function checkMultiHold() {
           </select>
         </td>
 
+     <!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" -->
         <td style="white-space:nowrap;">
 	        <a title="Move Hold Up" href="request.pl?action=move&amp;where=up&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->">
 			<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-up.png" border="0" alt="Go up" />
@@ -605,6 +612,7 @@ function checkMultiHold() {
                 	<img src="/intranet-tmpl/<!-- TMPL_VAR NAME='theme' -->/img/go-down.png" border="0" alt="Go down" />
                 </a>
         </td>
+    <!-- /TMPL_IF -->
 
         <td>
           <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->" >
@@ -678,6 +686,7 @@ function checkMultiHold() {
     <!-- /TMPL_IF -->
         </td>
 
+    <!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" -->
 	<td>
 		<a title="Toggle Lowest Priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->"> 
 			<!-- TMPL_IF NAME="lowestPriority" -->
@@ -687,6 +696,7 @@ function checkMultiHold() {
 		        <!-- /TMPL_IF -->
 		</a>
 	</td> 
+    <!-- /TMPL_IF -->
 
 	<td>
 		<a title="Cancel Hold" href="request.pl?action=cancel&amp;borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->&amp;biblionumber=<!-- TMPL_VAR Name="biblionumber" -->&amp;date=<!-- TMPL_VAR Name="date" -->">
