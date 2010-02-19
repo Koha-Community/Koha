@@ -1,5 +1,5 @@
 Circulation:
-# broken, omitted: emailLibrarianWhenHoldIsPlaced, holdCancelLength, WebBasedSelfCheck
+# broken, omitted: holdCancelLength
 # FIXME: printcirculationslips is also omitted. It _technically_ could work, but C4::Print is HLT specific and needs a little bit of refactoring.
     Interface:
         -
@@ -250,6 +250,12 @@ Circulation:
             - pref: maxreserves
               class: integer
             - holds at once.
+        -
+            - pref: emailLibrarianWhenHoldIsPlaced
+              choices:
+                  yes: Enable
+                  no:  "Don't enable"
+            - "sending an email to the Koha administrator email address whenever a hold request is placed."
     Fines Policy:
         -
             - Calculate fines based on days overdue
