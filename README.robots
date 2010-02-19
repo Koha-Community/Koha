@@ -1,0 +1,18 @@
+The robots.txt file.
+
+Search engines, when looking for sites to show in search results, will first
+look for the file /robots.txt.  If this file is found and has lines that apply
+to them they will do as instructed.  A very basic robots.txt follow as an
+example:
+
+# go away
+User-agent: *
+Disallow: /
+
+This tells every search engine that cares (User-agent: *) to not index the site
+(Disallow everything past /).
+
+If you have installed Koha to /usr/local/koha3 then this file would be placed
+in the directory /usr/local/koha3/opac/htdocs/.  This should prevent search
+engines from browsing every biblio record, and every view of each record, on
+your Koha install periodically.
