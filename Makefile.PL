@@ -1607,13 +1607,6 @@ sub postamble {
     # variables -- this is for the use of
     # rewrite-confg.PL
 
-    # quote '$' in the two password parameters
-    my %config = %config;
-    $config{'DB_PASS'} =~ s/\$/\$\$/g;
-    if ($config{'INSTALL_ZEBRA'} eq "yes") {
-        $config{'ZEBRA_PASS'} =~ s/\$/\$\$/g;
-    }
-
     my $env;
 	# Hereagain, we must alter syntax per platform...
 	if ( $^O eq 'MSWin32' ) {
