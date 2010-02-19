@@ -509,7 +509,8 @@ foreach my $biblionumber (@biblionumbers) {
 	    $reserve{'hidename'} = 1;
 	    $reserve{'cardnumber'} = $reserveborrowerinfo->{'cardnumber'};
 	}
-        $reserve{'expirationdate'} = format_date( $res->{'expirationdate'} ) unless ( $res->{'expirationdate'} eq '0000-00-00' );
+        $reserve{'expirationdate'} = format_date( $res->{'expirationdate'} ) 
+            unless ( !defined($res->{'expirationdate'}) || $res->{'expirationdate'} eq '0000-00-00' );
         $reserve{'date'}           = format_date( $res->{'reservedate'} );
         $reserve{'borrowernumber'} = $res->{'borrowernumber'};
         $reserve{'biblionumber'}   = $res->{'biblionumber'};
@@ -585,7 +586,7 @@ if ($multihold) {
 }
 
 if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
-  template->param( reserve_in_future => 1 );
+    $template->param( reserve_in_future => 1 );
 }
     
 # printout the page

@@ -113,6 +113,7 @@ BEGIN {
         &CanBookBeReserved
 	&CanItemBeReserved
         &CancelReserve
+        &CancelExpiredReserves
 
         &IsAvailableForItemLevelRequest
         
@@ -849,13 +850,16 @@ sub CheckReserves {
 
 sub CancelExpiredReserves {
 
-  my $dbh = C4::Context->dbh;
-  my $sth = $dbh->prepare( "SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() ) AND expirationdate != '0000-00-00'" );
-  $sth->execute();
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( "
+        SELECT * FROM reserves WHERE DATE(expirationdate) < DATE( CURDATE() ) 
+        AND expirationdate IS NOT NULL
+    " );
+    $sth->execute();
 
-  while ( my $res = $sth->fetchrow_hashref() ) {
-    CancelReserve( $res->{'biblionumber'}, '', $res->{'borrowernumber'} );
-  }
+    while ( my $res = $sth->fetchrow_hashref() ) {
+        CancelReserve( $res->{'biblionumber'}, '', $res->{'borrowernumber'} );
+    }
   
 }
 

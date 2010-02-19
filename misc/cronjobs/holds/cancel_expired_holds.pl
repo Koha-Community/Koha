@@ -1,14 +1,6 @@
 #!/usr/bin/perl
 
-#  This script loops through each overdue item, determines the fine,
-#  and updates the total amount of fines due by each user.  It relies on
-#  the existence of /tmp/fines, which is created by ???
-# Doesnt really rely on it, it relys on being able to write to /tmp/
-# It creates the fines file
-#
-#  This script is meant to be run nightly out of cron.
-
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2009-2010 Kyle Hall
 #
 # This file is part of Koha.
 #
@@ -25,14 +17,14 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 
-# $Id: sendoverdues.pl,v 1.1.2.1 2007/03/26 22:38:09 tgarip1957 Exp $
-
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
+
+# cancel all expired hold requests
 
 use C4::Reserves;
 

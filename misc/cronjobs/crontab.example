@@ -64,6 +64,9 @@ KOHA_CRON_PATH = /home/liblime/kohaclone/misc/cronjobs
 # Hourly holds queue updated
 52   * * * *  $KOHA_CRON_PATH/holds/build_holds_queue.pl >/dev/null 2>&1
 
+# Cancel expired holds
+0 1 * * *  $KOHA_CRON_PATH/holds/cancel_expired_holds.pl >/dev/null 2>&1
+
 # ZEBRA INDEX UPDATES with -z option, incremental index updates throughout the day
 # for both authorities and bibs
 */10 * * * *  $KOHA_CRON_PATH/../migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
