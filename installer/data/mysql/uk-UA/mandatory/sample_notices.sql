@@ -19,4 +19,5 @@ VALUES
 
 ('circulation','PREDUEDGST','Попереднє повідомлення про заборгованість одиниці (збірка)','Попереднє повідомлення про заборгованість одиниці','В найближчому часі Вам потрібно повернути <<count>> одиниць'),
 
-('circulation','EVENT','Майбутня бібліотечна подія','Майбутня бібліотечна подія','Добродій <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nЦе нагадування про майбутню бібліотечну подію, до якої Ви проявили інтерес.');
+('circulation','EVENT','Майбутня бібліотечна подія','Майбутня бібліотечна подія','Добродій <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nЦе нагадування про майбутню бібліотечну подію, до якої Ви проявили інтерес.'),
+('reserves', 'HOLDPLACED', 'Hold Placed on Item', 'Hold Placed on Item','A hold has been placed on the following item : <<title>> (<<biblionumber>>) by the user <<firstname>> <<surname>> (<<cardnumber>>).');
