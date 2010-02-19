@@ -187,7 +187,7 @@ sub AddReserve {
 
     # Send e-mail to librarian if syspref is active
     if(C4::Context->preference("emailLibrarianWhenHoldIsPlaced")){
-        my $borrower = GetMemberDetails($borrowernumber);
+        my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
         my $biblio   = GetBiblioData($biblionumber);
         my $letter = C4::Letters::getletter( 'reserves', 'HOLDPLACED');
         my $admin_email_address = C4::Context->preference('KohaAdminEmailAddress');
