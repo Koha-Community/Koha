@@ -30,6 +30,7 @@ my @trans_syspref_files = qw(
     fr-FR/1-Obligatoire/unimarc_standard_systemprefs.sql
     uk-UA/mandatory/system_preferences_optimal.sql
     ru-RU/mandatory/system_preferences_optimal.sql
+    pl-PL/mandatory/sysprefs.sql
 );
 
 ok(
