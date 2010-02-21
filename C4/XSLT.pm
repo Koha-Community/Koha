@@ -26,6 +26,7 @@ use C4::Items;
 use C4::Koha;
 use C4::Biblio;
 use C4::Circulation;
+use C4::Reserves;
 use Encode;
 use XML::LibXML;
 use XML::LibXSLT;
@@ -173,8 +174,10 @@ sub buildKohaItemsNamespace {
 
         my ( $transfertwhen, $transfertfrom, $transfertto ) = C4::Circulation::GetTransfers($item->{itemnumber});
 
-        if ( $itemtypes->{ $item->{itype} }->{notforloan} || $item->{notforloan} || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} ||
-             (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} ) {
+	my ( $reservestatus, $reserveitem ) = C4::Reserves::CheckReserves($item->{itemnumber});
+
+        if ( $itemtypes->{ $item->{itype} }->{notforloan} || $item->{notforloan} || $item->{onloan} || $item->{wthdrawn} || $item->{itemlost} || $item->{damaged} || 
+             (defined $transfertwhen && $transfertwhen ne '') || $item->{itemnotforloan} || (defined $reservestatus && $reservestatus eq "Waiting") ){ 
             if ( $item->{notforloan} < 0) {
                 $status = "On order";
             } 
@@ -195,6 +198,9 @@ sub buildKohaItemsNamespace {
             }
             if (defined $transfertwhen && $transfertwhen ne '') {
                 $status = 'In transit';
+            }
+            if (defined $reservestatus && $reservestatus eq "Waiting") {
+                $status = 'Waiting';
             }
         } else {
             $status = "available";
