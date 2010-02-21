@@ -27,6 +27,7 @@ use XML::Simple;
 use C4::Dates qw(format_date);
 use C4::XSLT;
 use C4::Branch;
+use C4::Reserves;    # CheckReserves
 use C4::Debug;
 use YAML;
 use URI::Escape;
@@ -1516,6 +1517,7 @@ sub searchResults {
         my $itemdamaged_count     = 0;
         my $item_in_transit_count = 0;
         my $can_place_holds       = 0;
+	my $item_onhold_count     = 0;
         my $items_count           = scalar(@fields);
         my $maxitems =
           ( C4::Context->preference('maxItemsinSearchResults') )
@@ -1573,6 +1575,10 @@ sub searchResults {
                 my $transfertwhen = '';
                 my ($transfertfrom, $transfertto);
 
+                # is item on the reserve shelf?
+		my $reservestatus = 0;
+		my $reserveitem;
+
                 unless ($item->{wthdrawn}
                         || $item->{itemlost}
                         || $item->{damaged}
@@ -1592,6 +1598,7 @@ sub searchResults {
                     #        should map transit status to record indexed in Zebra.
                     #
                     ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
+		    ($reservestatus, $reserveitem) = C4::Reserves::CheckReserves($item->{itemnumber});
                 }
 
                 # item is withdrawn, lost or damaged
@@ -1599,12 +1606,14 @@ sub searchResults {
                     || $item->{itemlost}
                     || $item->{damaged}
                     || $item->{notforloan}
+		    || $reservestatus eq 'Waiting'
                     || ($transfertwhen ne ''))
                 {
                     $wthdrawn_count++        if $item->{wthdrawn};
                     $itemlost_count++        if $item->{itemlost};
                     $itemdamaged_count++     if $item->{damaged};
                     $item_in_transit_count++ if $transfertwhen ne '';
+		    $item_onhold_count++     if $reservestatus eq 'Waiting';
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
                     $other_count++;
 
@@ -1613,6 +1622,7 @@ sub searchResults {
                     	$other_items->{$key}->{$_} = $item->{$_};
 					}
                     $other_items->{$key}->{intransit} = ($transfertwhen ne '') ? 1 : 0;
+                    $other_items->{$key}->{onhold} = ($reservestatus) ? 1 : 0;
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
 					$other_items->{$key}->{count}++ if $item->{$hbranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
@@ -1677,6 +1687,7 @@ sub searchResults {
         $oldbiblio->{itemlostcount}        = $itemlost_count;
         $oldbiblio->{damagedcount}         = $itemdamaged_count;
         $oldbiblio->{intransitcount}       = $item_in_transit_count;
+        $oldbiblio->{onholdcount}          = $item_onhold_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{isbn} =~
           s/-//g;    # deleting - in isbn to enable amazon content
