@@ -585,7 +585,11 @@ function checkMultiHold() {
           <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
           <select name="rank-request">
     <!-- TMPL_IF Name="wait" -->
+        <!-- TMPL_IF NAME="intransit" -->
+            <option value="T" selected="selected">In transit</option>
+        <!-- TMPL_ELSE -->
             <option value="W" selected="selected">Waiting</option>
+        <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" --><!-- TMPL_LOOP Name="optionloop" -->
         <!-- TMPL_IF Name="selected" --><option value="<!-- TMPL_VAR NAME="num" -->" selected="selected"><!-- TMPL_VAR NAME="num" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="num" -->"><!-- TMPL_VAR NAME="num" --></option><!-- /TMPL_IF -->
