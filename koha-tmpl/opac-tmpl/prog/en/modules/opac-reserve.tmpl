@@ -304,8 +304,7 @@
 		    <!-- TMPL_IF NAME="reserve_in_future" -->
 		    <td>
 			<input name="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10">
-			<!-- <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->" style="cursor: pointer;" /> -->
-			<script language="JavaScript" type="text/javascript">
+		  <script language="JavaScript" type="text/javascript">
 			//<![CDATA[
 			$("#reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").attr( 'readonly', 'readonly' );
 
@@ -344,7 +343,7 @@
 		    <!-- /TMPL_IF -->
 	<td>
 	    <input name="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10" readonly="readonly" />
-	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate" style="cursor: pointer;" />
+	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate_<!-- TMPL_VAR NAME="biblionumber" -->" style="cursor: pointer;" />
 	    <script language="JavaScript" type="text/javascript">
 		//<![CDATA[
 		function validate1(date) {
@@ -362,15 +361,15 @@
 			{
 				inputField : "expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->",
 				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-				button : "CalendarExpirationDate",
+				button : "CalendarExpirationDate_<!-- TMPL_VAR NAME="biblionumber" -->",
 				disableFunc : validate1,
 				dateStatusFunc : validate1,
 			}
 		);
 		//]]>
 	    </script>
-		<br/>
-		<a href='#' onclick="document.getElementById('expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->').value='';">Clear Date</a>
+		<p style="margin:.3em 2em;">
+		<a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->').value='';return false;">Clear Date</a></p>
 	</td>
 
                     <!-- TMPL_IF NAME="OPACItemHolds" -->
