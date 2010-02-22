@@ -165,13 +165,20 @@
      <!-- /TMPL_IF -->
 <!-- TMPL_UNLESS NAME="letter" --><div class="dialog alert">No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>.</div><!-- /TMPL_UNLESS -->
     <form id="claims" name="claims" action="claims.pl" method="post">
-    <fieldset><label for="supplierid">View: </label>
-        <select id="supplierid" size="1" name="supplierid">
-        <!-- TMPL_LOOP NAME="supplier_loop" -->
-          <option value="<!-- TMPL_VAR NAME="id" -->"<!--  TMPL_IF NAME="selected" --> selected="yes" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" -->       
-          </option>
-        <!-- /TMPL_LOOP -->
-        </select>
+    <fieldset>
+	    <label for="supplierid">Supplier: </label>
+	    <select id="supplierid" name="supplierid">
+	        <!-- TMPL_LOOP name="suploop"-->
+	            <!-- TMPL_IF name="selected" -->
+	            <option value="<!-- TMPL_VAR name="id" -->" selected="selected" >
+	            <!-- TMPL_ELSE -->
+	            <option value="<!-- TMPL_VAR name="id" -->">
+	            <!-- /TMPL_IF -->
+	                <!-- TMPL_VAR name="name" -->
+	                (<!-- TMPL_VAR name="count" -->)
+	            </option>
+	        <!-- /TMPL_LOOP -->
+	    </select>
         <input type="submit" value="OK" />
         <!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
         <!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
