@@ -27,11 +27,9 @@
 	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
 	    $("span.exportSelected").html("<a id=\"ExportSelected\" href=\"/cgi-bin/koha/serials/claims.pl\"> "+_("Export selected items data") +"<\/a>");
 
-
-	    $("#CheckAll").click(function(){ 
-		          $("#claimst :checkbox").attr('checked', $("#CheckAll").is(':checked')); 
-	    });
-
+        $("#CheckAll").click(function() {
+            $("#claimst tr:visible :checkbox").attr('checked', $("#CheckAll").is(':checked'));
+        });
 
 	    // Generates a dynamic link for exporting the selection's data as CSV
 	    $("#ExportSelected").click(function() {
