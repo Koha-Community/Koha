@@ -24,7 +24,7 @@
 
 
 	    // Checkboxes : Select All / None
-	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All"));
+	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
 	    $("span.exportSelected").html("<a id=\"ExportSelected\" href=\"/cgi-bin/koha/serials/claims.pl\"> "+_("Export selected items data") +"<\/a>");
 
 
@@ -242,11 +242,10 @@
 
 	<form action="claims.pl" method="post" class="checkboxed" onsubmit="return checkForm()">
         <input type="hidden" name="order" value="<!--TMPL_VAR Name="order"-->" />
-	    	    <p><span class="checkall"></span><span class="clearall"></span></p> 
          <table id="claimst">
                 <thead><tr>
                     <!--TMPL_IF NAME="letter"-->
-                    <th>Claim</th>
+                    <th><input type="checkbox" id="CheckAll"></th>
                     <!--/TMPL_IF-->
                     <th>Vendor</th>
                     <th>Title</th>
