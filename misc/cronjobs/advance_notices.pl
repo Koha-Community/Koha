@@ -185,7 +185,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             my $letter_type = 'PREDUE';
             $letter = C4::Letters::getletter( 'circulation', $letter_type );
             die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
-            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$maxdays);
+            $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$borrower_preferences->{'days_in_advance'});
             my $titles = "";
             while ( my $item_info = $sth->fetchrow_hashref()) {
               my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
@@ -241,7 +241,7 @@ PATRON: while ( my ( $borrowernumber, $count ) = each %$upcoming_digest ) {
     my $letter_type = 'PREDUEDGST';
     my $letter = C4::Letters::getletter( 'circulation', $letter_type );
     die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
-    $sth->execute($borrowernumber,$maxdays);
+    $sth->execute($borrowernumber,$borrower_preferences->{'days_in_advance'});
     my $titles = "";
     while ( my $item_info = $sth->fetchrow_hashref()) {
       my @item_info = map { $_ =~ /^date|date$/ ? format_date($item_info->{$_}) : $item_info->{$_} || '' } @item_content_fields;
