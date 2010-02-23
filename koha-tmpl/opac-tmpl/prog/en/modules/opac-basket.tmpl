@@ -21,7 +21,7 @@ $(document).ready(function()
     }
 );
 
-
+<!-- TMPL_IF NAME="TagsEnabled" -->
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
 
 function tagSelected() {
@@ -67,7 +67,7 @@ function tagAdded() {
     KOHA.Tags.add_multitags_button(bibs, tag);
     return false;
 }
-
+<!-- /TMPL_IF -->
 	$(document).ready(function(){
 		$("#CheckAll").click(function(){
 		var checked = [];
@@ -87,23 +87,15 @@ function tagAdded() {
 		);
 	        return false;
 	    });
-<!-- TMPL_IF NAME="RequestOnOpac" -->
-        $(".holdsep").text("| ");
-        $(".hold").text(_("Place Hold"));
-<!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="TagsEnabled" -->
-        <!-- TMPL_IF NAME="TagsInputOnList" -->
-          $(".tagsep").text("| ");
-          $("#tagsel_tag").text(_("Tag"));
           $("#tagsel_button").click(function(){
               tagAdded();
               return false;
           });
         <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
 	});
-
+<!-- TMPL_IF NAME="RequestOnOpac" -->
     function holdSel() {
         var items = document.getElementById('records').value;
         if (items) {
@@ -112,7 +104,7 @@ function tagAdded() {
             alert(MSG_NO_RECORD_SELECTED);
         }
     }
-
+<!-- /TMPL_IF -->
 	//]]>
 	</script>
 	<!-- /TMPL_IF -->
@@ -143,10 +135,10 @@ function tagAdded() {
 <!-- TMPL_IF NAME="loggedinusername" -->
      | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
 <!-- /TMPL_IF -->
-     <span class="holdsep"></span>
-     <a href="#" onclick="holdSel(); return false;"><span class="hold"></span></a>
-     <span class="tagsep"></span>
-     <a href="#" onclick="tagSelected(); return false;"><span id="tagsel_tag"></span></a>
+
+     <!-- TMPL_IF NAME="RequestOnOpac" -->| <a href="#" onclick="holdSel(); return false;">Place hold</a><!-- /TMPL_IF -->
+     <!-- TMPL_IF NAME="TagsEnabled" -->
+     | <a href="#" onclick="tagSelected(); return false;">Tag</a><!-- /TMPL_IF -->
 </span>
      <span id="tagsel_form" style="display:none">
        <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
@@ -315,11 +307,12 @@ function tagAdded() {
     | <b>Selected items :</b>
 <span id="tag_hides">
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
-<!-- TMPL_IF NAME="loggedinusername" -->
+<!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->
      | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
-<!-- /TMPL_IF -->
-     <span class="holdsep"></span><a href="#" onclick="holdSel(); return false;"><span class="hold"></span></a>
-     <span class="tagsep"></span><a href="#" onclick="tagSelected(); return false;"><span id="tagsel_tag"></span></a>
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+     <!-- TMPL_IF NAME="RequestOnOpac" -->| <a href="#" onclick="holdSel(); return false;">Place hold</a><!-- /TMPL_IF -->
+     <!-- TMPL_IF NAME="TagsEnabled" -->
+     | <a href="#" onclick="tagSelected(); return false;">Tag</a><!-- /TMPL_IF -->
 </span>
      <span id="tagsel_form" style="display:none">
        <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
