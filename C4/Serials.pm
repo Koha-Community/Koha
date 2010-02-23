@@ -909,7 +909,7 @@ sub GetSeq {
 
 =head2 GetExpirationDate
 
-$sensddate = GetExpirationDate($subscriptionid, [$startdate])
+$enddate = GetExpirationDate($subscriptionid, [$startdate])
 
 this function return the next expiration date for a subscription given on input args.
 
@@ -1252,8 +1252,18 @@ sub NewSubscription {
         $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount, $graceperiod,   $location,     $enddate
     );
 
-    #then create the 1st waited number
     my $subscriptionid = $dbh->{'mysql_insertid'};
+    unless ($enddate){
+       $enddate = GetExpirationDate($subscriptionid,$startdate);
+        $query = q|
+            UPDATE subscription
+            SET    enddate=?
+            WHERE  subscriptionid=?
+        |;
+        $sth = $dbh->prepare($query);
+        $sth->execute( $enddate, $subscriptionid );
+    }
+    #then create the 1st waited number
     $query = qq(
         INSERT INTO subscriptionhistory
             (biblionumber, subscriptionid, histstartdate,  opacnote, librariannote)
@@ -1604,7 +1614,7 @@ sub HasSubscriptionExpired {
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
     if ( ( $subscription->{periodicity} % 16 ) > 0 ) {
-        my $expirationdate = $subscription->{enddate};
+        my $expirationdate = $subscription->{enddate} || GetExpirationDate($subscriptionid);
         if (!defined $expirationdate) {
             $expirationdate = q{};
         }
