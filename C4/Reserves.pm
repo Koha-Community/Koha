@@ -1006,7 +1006,7 @@ sub CancelReserve {
         $sth->execute( $biblio, $borr );
 
         # now fix the priority on the others....
-        _FixPriority( $priority, $biblio );
+        _FixPriority( $biblio, $borr );
     }
 }
 
@@ -1152,7 +1152,7 @@ sub ModReserveFill {
     # now fix the priority on the others (if the priority wasn't
     # already sorted!)....
     unless ( $priority == 0 ) {
-        _FixPriority( $priority, $biblionumber );
+        _FixPriority( $biblionumber, $borrowernumber );
     }
 }
 
