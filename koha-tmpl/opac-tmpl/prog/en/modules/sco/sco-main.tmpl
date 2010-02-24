@@ -230,7 +230,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<fieldset class="checkout"><label for="patronid">Please enter your card number:</label> 
 	<input type="text" id="patronid" class="focus" size="20" name="patronid" />
 
- 	<!-- TMPL_LOOP NAME="INPUTS" --><input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->"><!-- /TMPL_LOOP -->
+ 	<!-- TMPL_LOOP NAME="INPUTS" --><input type="hidden" name="<!-- TMPL_VAR ESCAPE=HTML NAME="name" -->" value="<!-- TMPL_VAR ESCAPE=HTML NAME="value" -->"><!-- /TMPL_LOOP -->
 	<input type="hidden" name="op" value="login" />
  	<input type="submit" value="Submit" class="submit" /></fieldset></form>
 	</div>

@@ -39,7 +39,7 @@
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post" name="loginform" id="loginform">
     <input type="hidden" name="koha_login_context" value="intranet" />
 <!-- TMPL_LOOP NAME="INPUTS" -->
-    <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE="html" -->" />
+    <input type="hidden" name="<!-- TMPL_VAR ESCAPE=HTML NAME="name" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE="html" -->" />
 <!-- /TMPL_LOOP -->
 <p><label for="userid">Username:</label>
 <input type="text" name="userid" id="userid" class="input focus" value="<!-- TMPL_VAR NAME="userid" -->" size="20" tabindex="1" />

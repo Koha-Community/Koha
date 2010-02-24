@@ -168,10 +168,10 @@ function highlightOn() {
 	<form action="/cgi-bin/koha/opac-search.pl" method="get" name="bookbag_form" id="bookbag_form">
 		<!-- TMPL_IF NAME="searchdesc" -->
 		<!-- TMPL_LOOP NAME="QUERY_INPUTS"-->
-		<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+		<input type="hidden" name="<!-- TMPL_VAR ESCAPE=HTML NAME="input_name" -->" value="<!-- TMPL_VAR ESCAPE=HTML NAME="input_value" -->"/>
 		<!-- /TMPL_LOOP -->
 		<!-- TMPL_LOOP NAME="LIMIT_INPUTS"-->
-		<input type="hidden" name="<!-- TMPL_VAR NAME="input_name" -->" value="<!-- TMPL_VAR NAME="input_value" -->"/>
+		<input type="hidden" name="<!-- TMPL_VAR ESCAPE=HTML NAME="input_name" -->" value="<!-- TMPL_VAR ESCAPE=HTML NAME="input_value" -->"/>
 		<!-- /TMPL_LOOP -->
 		<!-- /TMPL_IF -->
 

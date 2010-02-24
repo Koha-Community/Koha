@@ -30,7 +30,7 @@
 <!-- login prompt time-->
 <form action="<!-- TMPL_VAR NAME="url" -->" method="post" name="mainform" id="mainform">
 <!-- TMPL_LOOP NAME="INPUTS" -->
-    <input type="hidden" name="<!-- TMPL_VAR NAME="name" -->" value="<!-- TMPL_VAR NAME="value" -->" />
+    <input type="hidden" name="<!-- TMPL_VAR ESCAPE=HTML NAME="name" -->" value="<!-- TMPL_VAR ESCAPE=HTML NAME="value" -->" />
 <!-- /TMPL_LOOP -->
 <h3>Welcome to the Koha Web Installer</h3>
 <p>Before we begin, please verify you have the correct credentials to continue. Please log in
