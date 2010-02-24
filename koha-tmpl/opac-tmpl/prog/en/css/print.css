@@ -145,13 +145,28 @@ body#basket a {
 	font-weight : bold;
 }
 
-body#basket table, body#basket td, body#basket th {
+body#basket table {
+	border-top : 1px solid #EEE;
+	border-left : 1px solid #EEE;
+}
+body#basket td,
+body#basket th {
 	background-color : transparent;
-	border : 0;
 	padding : 2px;
 }
 
 body#basket th {
+	background-color : #EEE;
+}
+
+body#basket th,
+body#basket th[scope=col] {
+	text-align : center;
+	vertical-align : middle;
+}
+
+body#basket th[scope=row] {
+	font-size : 89%;
 	text-align : right;
 	vertical-align : top;
 	width : 10%;

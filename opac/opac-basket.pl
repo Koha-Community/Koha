@@ -115,6 +115,7 @@ my $resultsarray = \@results;
 # my $itemsarray=\@items;
 
 $template->param(
+    bib_list => $bib_list,
     BIBLIO_RESULTS => $resultsarray,
 );
 

@@ -4,6 +4,15 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
 <meta http-equiv="Content-Language" content="en-us" />
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+    $(document).ready(function(){
+        print();
+        location.href="/cgi-bin/koha/opac-basket.pl?bib_list=<!-- TMPL_VAR NAME="bib_list" --><!-- TMPL_IF NAME="verbose" -->&verbose=1<!-- /TMPL_IF -->";
+    });
+    //]]>
+    </script>
 <style type="text/css">
     @import url(<!-- TMPL_VAR NAME="themelang" -->/css/print.css);
 </style>
@@ -13,13 +22,11 @@
 	<script type="text/javascript">
 	//<![CDATA[
 
-$(document).ready(function()
-    {
-        $("#itemst").tablesorter({
-                        headers: { 0: { sorter: false }}
-                });
-    }
-);
+$(document).ready(function(){
+    $("#itemst").tablesorter({
+        headers: { 0: { sorter: false }}
+    });
+});
 
 <!-- TMPL_IF NAME="TagsEnabled" -->
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
@@ -109,13 +116,13 @@ function tagAdded() {
 	</script>
 	<!-- /TMPL_IF -->
 </head>
-<!-- TMPL_IF NAME="print_basket" --><body id="basket" onload="print();history.back();"><!-- TMPL_ELSE --><body id="basket"><!-- /TMPL_IF -->
+<body id="basket">
 
 <div id="doc" class="yui-t7">
 <div class="container">
-<!-- TMPL_UNLESS NAME="print_basket" -->
 <h1>Your Cart</h1>
 
+<!-- TMPL_UNLESS NAME="print_basket" -->
 <div id="toolbar">
 <ul>
 	<li><!-- TMPL_IF NAME="verbose" --><a href="opac-basket.pl" class="brief" onclick="showLess(); return false;">Brief Display</a><!-- TMPL_ELSE --><a href="opac-basket.pl" class="detail" onclick="showMore(); return false;">More Details</a><!-- /TMPL_IF --></li>
@@ -320,11 +327,11 @@ function tagAdded() {
        <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add"  style="display:inline"/>
        <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
      </span>
-<!-- /TMPL_UNLESS -->
 </p>
+<!-- /TMPL_UNLESS -->
     <table id="itemst">
 	<thead><tr>
-	    <th>&nbsp;</th>
+	    <!-- TMPL_UNLESS NAME="print_basket" --><th>&nbsp;</th><!-- /TMPL_UNLESS -->
 	    <th>Title</th>
 	    <th>Author</th>
 	    <th>Year</th>
@@ -370,13 +377,11 @@ function tagAdded() {
     </table></form>
 <!-- /TMPL_IF -->
 
-<!-- TMPL_IF NAME="print_basket" -->
-<a href="#back" class="screen">&lt;&lt; Back to Cart</a>
-<!-- TMPL_ELSE -->
+<!-- TMPL_UNLESS NAME="print_basket" -->
 <form name="myform" action="opac-basket.pl" method="get">
     <input type="hidden" name="records" id="records" />
 </form>
-<!-- /TMPL_IF -->
+<!-- /TMPL_UNLESS -->
 
 </div>
 </div>
