@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # This Script can be used to provide a list of ALL external modules ***used*** (uncommented) in Koha.
 # It provides you not only the list of modules BUT ALSO the files that uses those modules.
@@ -6,6 +6,7 @@
 
 
 use strict;
+use warnings;
 use C4::Context;
 my $dir=C4::Context->config('intranetdir');
 qx(grep -r "^ *use" $dir | grep -v "C4\|strict\|vars" >/tmp/modulesKoha.log);

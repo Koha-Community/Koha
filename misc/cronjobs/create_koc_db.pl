@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 
 # 2008 Kyle Hall <kyle.m.hall@gmail.com>
 

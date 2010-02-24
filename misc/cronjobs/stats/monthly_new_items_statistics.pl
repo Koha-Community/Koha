@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #-----------------------------------
 # Script Name: addstats.pl
 # Script Version: 1.0
@@ -28,6 +28,8 @@
 # You should have received a copy of the GNU General Public License along with
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
+
+use warnings;
 
 # UNCOMMENT the following lines if running from a command line
 # print "THIS SCRIPT produces a comma-separated values file of circulation statistics for a given month and year.\n\nDo you wish to continue? (y/n) ";

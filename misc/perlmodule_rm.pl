@@ -1,5 +1,8 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
+
 # Remove a perl module
+
+use warnings;
 use ExtUtils::Packlist;
 use ExtUtils::Installed;
 

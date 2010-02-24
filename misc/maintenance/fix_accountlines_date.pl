@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #
 # Copyright (C) 2008 LibLime
 #
@@ -18,6 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this

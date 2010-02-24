@@ -1,4 +1,4 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 #-----------------------------------
 # Script Name: circstats.pl
 # Script Version: 1.0
@@ -30,6 +30,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 # use strict;
+use warnings;
 
 # UNCOMMENT the following lines if running from a command line
 # print "THIS SCRIPT produces a comma-separated values file of circulation statistics for a given month and year.\n\nDo you wish to continue? (y/n) ";
