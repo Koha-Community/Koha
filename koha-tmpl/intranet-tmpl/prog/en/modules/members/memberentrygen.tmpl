@@ -403,7 +403,16 @@
       City, State: </label>
         
         <input type="text" id="city" name="city" size="20" value="<!-- TMPL_VAR NAME="city" -->" />
-        <!-- TMPL_IF NAME="city_cgipopup" -->or <strong>choose</strong> <!-- TMPL_VAR NAME="citypopup" --><!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="city_cgipopup" -->or <strong>choose</strong>
+        <select id="select_city" name "select_city">
+        <!-- TMPL_LOOP NAME="city_loop" -->
+            <option value="<!-- TMPL_VAR NAME='city_zipcode'-->|<!-- TMPL_VAR NAME='city_name' -->"
+                <!-- TMPL_IF NAME="selected" --> selected="1" <!-- /TMPL_IF --> >
+                <!-- TMPL_VAR NAME="city_name" --> <!-- TMPL_VAR NAME="city_zipcode" -->
+            </option>
+        <!-- /TMPL_LOOP -->
+        </select>
+        <!-- /TMPL_IF -->
 	  <!-- TMPL_IF NAME="mandatorycity" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>
     <li> 

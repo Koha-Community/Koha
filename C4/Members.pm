@@ -1508,48 +1508,31 @@ sub add_member_orgs {
 
 }    # sub add_member_orgs
 
-=head2 GetCities (OUEST-PROVENCE)
+=head2 GetCities
 
-  ($id_cityarrayref, $city_hashref) = &GetCities();
+  $cityarrayref = GetCities();
 
-Looks up the different city and zip in the database. Returns two
-elements: a reference-to-array, which lists the zip city
-codes, and a reference-to-hash, which maps the name of the city.
-WHERE =>OUEST PROVENCE OR EXTERIEUR
+  Returns an array_ref of the entries in the cities table
+  If there are entries in the table an empty row is returned
+  This is currently only used to populate a popup in memberentry
 
 =cut
 
 sub GetCities {
 
-    #my ($type_city) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = qq|SELECT cityid,city_zipcode,city_name 
-        FROM cities 
-        ORDER BY city_name|;
-    my $sth = $dbh->prepare($query);
-
-    #$sth->execute($type_city);
-    $sth->execute();
-    my %city;
-    my @id;
-    #    insert empty value to create a empty choice in cgi popup
-    push @id, " ";
-    $city{""} = "";
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @id, $data->{'city_zipcode'}."|".$data->{'city_name'};
-        $city{ $data->{'city_zipcode'}."|".$data->{'city_name'} } = $data->{'city_name'};
+    my $city_arr = $dbh->selectall_arrayref(
+        q|SELECT cityid,city_zipcode,city_name FROM cities ORDER BY city_name|,
+        { Slice => {} });
+    if ( @{$city_arr} ) {
+        unshift @{$city_arr}, {
+            city_zipcode => q{},
+            city_name    => q{},
+            cityid       => q{},
+        };
     }
 
-#test to know if the table contain some records if no the function return nothing
-    my $id = @id;
-    if ( $id == 1 ) {
-        # all we have is the one blank row
-        return ();
-    }
-    else {
-        unshift( @id, "" );
-        return ( \@id, \%city );
-    }
+    return  $city_arr;
 }
 
 =head2 GetSortDetails (OUEST-PROVENCE)
