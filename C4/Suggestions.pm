@@ -387,6 +387,7 @@ sub ModSuggestion {
             letter=>$letter,
             borrowernumber=>$suggestion->{suggestedby},
             suggestionid=>$suggestion->{suggestionid},
+            LibraryName => C4::Context->preference("LibraryName"),
             msg_transport_type=>'email'
             });
         if (!$enqueued){warn "can't enqueue letter $letter";}
