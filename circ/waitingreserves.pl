@@ -44,6 +44,7 @@ my $item           = $input->param('itemnumber');
 my $borrowernumber = $input->param('borrowernumber');
 my $fbr            = $input->param('fbr') || '';
 my $tbr            = $input->param('tbr') || '';
+my $all_branches   = $input->param('allbranches') || '';
 
 my $cancel;
 
@@ -90,10 +91,12 @@ if ($item) {
         ModItemTransfer( $item, $fbr, $tbr );
     }
 }
+$template->param( all_branches_link => $input->url . '?allbranches=1&' . $input->query_string )
+  unless $all_branches;
 
 my (@reservloop, @overloop);
 my ($reservcount, $overcount);
-my @getreserves = $default ? GetReservesForBranch($default) : GetReservesForBranch();
+my @getreserves = $all_branches ? GetReservesForBranch() : GetReservesForBranch($default);
 # get reserves for the branch we are logged into, or for all branches
 
 my $today = Date_to_Days(&Today);

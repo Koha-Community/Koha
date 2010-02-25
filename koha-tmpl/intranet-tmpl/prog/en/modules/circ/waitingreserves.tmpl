@@ -38,7 +38,12 @@ $.tablesorter.addParser({
     <div id="yui-main">
     <div class="yui-g">
 
-        <h2>Holds awaiting pickup for your library on: <!-- TMPL_VAR NAME="show_date" --></h2>
+        <h2>Holds awaiting pickup for your library on: <!-- TMPL_VAR NAME="show_date" -->
+            <!-- TMPL_IF NAME="all_branches_link" -->
+            <span style="margin-left:20px"><a href="<!-- TMPL_VAR NAME="all_branches_link" -->">
+            View all branches</a></span>
+            <!-- /TMPL_IF -->
+        </h2>
         <!-- TMPL_IF NAME="messagetransfert" -->
             <div>
                 <h2>Hold find for (<!-- TMPL_VAR NAME="nextreservtitle" -->) must transfered</h2>
