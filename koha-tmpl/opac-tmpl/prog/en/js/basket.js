@@ -435,9 +435,7 @@ function showCart(){
 		var left = position.left -  buttonOffset;
 		$("#cartDetails").css("position","absolute").css("top",top);
 		$("#cartDetails").css("position","absolute").css("left",left);
-		$("#cartDetails").fadeIn("fast",function(){
-  			$("#cartDetails").dropShadow({left: 3, top: 3, blur: 0,  color: "#000", opacity: 0.1});
-        });
+		$("#cartDetails").fadeIn("fast");
 }
 
 function showLists(){
@@ -449,25 +447,21 @@ function showLists(){
                var left = position.left -  buttonOffset;
                $("#listsDetails").css("position","absolute").css("top",top);
                $("#listsDetails").css("position","absolute").css("left",left);
-               $("#listsDetails").fadeIn("fast",function(){
-                       $("#listsDetails").dropShadow({left: 3, top: 3, blur: 0,  color: "#000", opacity: 0.1});
-        });
+               $("#listsDetails").fadeIn("fast");
 }
 
 function hideCart(){
-    $("#cartDetails").removeShadow();
     $("#cartDetails").fadeOut("fast");
 }
 
 function hideLists(){
-    $("#listsDetails").removeShadow();
     $("#listsDetails").fadeOut("fast");
 }
 
 $("#cartDetails").ready(function(){
 	$("#cartDetails,#cartmenulink").click(function(){ hideCart(); });
 	$("#cartmenulink").click(function(){ openBasket(); return false; });
-	$("#cartmenulink").hover(function(){
+	$("#cartmenulink").hoverIntent(function(){
 		showCart();
 	},function(){
 		hideCart();
