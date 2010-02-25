@@ -147,9 +147,7 @@
     <!-- TMPL_LOOP name="columnkeys" -->'<!-- TMPL_VAR name="key" -->', <!-- /TMPL_LOOP -->
 </li></ul></li>
 <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
-<li>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types 
-and values.  The attribute type code and a ':' should precede each value. For example: &quot;INSTID:12345,LANG:fr&quot;.  This
-means that if an input record has more than one attribute, the 'patron_attributes' field must be wrapped in double quotation marks.
+<li>If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value. For example: <b>INSTID:12345,LANG:fr</b> or <b>STARTDATE:January 1 2010,TRACK:Day</b>. If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma: <b>&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</b>.  The second syntax would be required if the data might have a comma in it, like a date string.
 </li>
 <!-- /TMPL_IF -->
 <li>The fields 'branchcode' and 'categorycode' are <b>required</b> and <b>must match</b> valid entries in your database.</li>
