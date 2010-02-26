@@ -20,6 +20,8 @@
 use strict;
 use warnings;
 
+use List::MoreUtils qw(any);
+
 use C4::ILSDI::Services;
 use C4::Auth;
 use C4::Output;
