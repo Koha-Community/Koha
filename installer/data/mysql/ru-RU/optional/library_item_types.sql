@@ -1,6 +1,6 @@
 TRUNCATE itemtypes;
 
-INSERT INTO `itemtypes` VALUES ('BK', 'Книги',5,0,0,'bridge/book.gif','');
+INSERT INTO `itemtypes` VALUES ('BK', ' Книги',5,0,0,'bridge/book.gif','');
 
 INSERT INTO `itemtypes` VALUES ('MX', 'Смешанные атериалы',5,0,0,'bridge/kit.gif','');
 
