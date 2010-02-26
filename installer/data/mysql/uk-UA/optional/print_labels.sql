@@ -1,3 +1,6 @@
+truncate labels_templates;
+truncate labels_conf; 
+
 -- Label Templates
 LOCK TABLES `labels_templates` WRITE;
 INSERT INTO `labels_templates`
