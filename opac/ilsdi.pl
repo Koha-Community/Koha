@@ -31,7 +31,7 @@ use CGI;
 
 This script is a basic implementation of ILS-DI protocol for Koha.
 It acts like a dispatcher, that get the CGI request, check required and 
-optionals arguments, call a function from C4::ILS-DI::Services, and finaly 
+optionals arguments, call a function from C4::ILS-DI, and finaly
 outputs the returned hashref as XML.
 
 =cut
@@ -112,21 +112,6 @@ my %optional = (
     'CancelHold' => [],
 );
 
-# If ILS-DI module is disabled in System->Preferences, redirect to 404
-unless ( C4::Context->preference('ILS-DI') ) {
-    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
-    exit 1;
-}
-
-# If the remote address is not allowed, redirect to 403
-if ( C4::Context->preference('ILS-DI:AuthorizedIPs') # If no filter set, allow access to everybody
-    and $cgi->param('service') and $cgi->param('service') ne 'Describe' # Allow access to online documentation
-    and not any { $ENV{'REMOTE_ADDR'} eq $_ } split(/,/, C4::Context->preference('ILS-DI:AuthorizedIPs')) # IP Check
-    ) {
-    print $cgi->redirect("/cgi-bin/koha/errors/403.pl");
-    exit 1;
-}
-
 # If no service is requested, display the online documentation
 unless ( $cgi->param('service') ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -142,7 +127,7 @@ unless ( $cgi->param('service') ) {
 }
 
 # If user requested a service description, then display it
-if ( $cgi->param('service') eq "Describe" and grep { $cgi->param('verb') eq $_ } @services ) {
+if ( $cgi->param('service') eq "Describe" and any { $cgi->param('verb') eq $_ } @services ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {   template_name   => "ilsdi.tmpl",
             query           => $cgi,
@@ -156,47 +141,60 @@ if ( $cgi->param('service') eq "Describe" and grep { $cgi->param('verb') eq $_ }
     exit 0;
 }
 
+# If ILS-DI module is disabled in System->Preferences, redirect to 404
+unless ( C4::Context->preference('ILS-DI') ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit 1;
+}
+
+# If the remote address is not allowed, redirect to 403
+my @AuthorizedIPs = split(/,/, C4::Context->preference('ILS-DI:AuthorizedIPs'));
+if ( @AuthorizedIPs # If no filter set, allow access to everybody
+    and not any { $ENV{'REMOTE_ADDR'} eq $_ } @AuthorizedIPs # IP Check
+    ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/403.pl");
+    exit 1;
+}
+
 my $service = $cgi->param('service') || "ilsdi";
 
 my $out;
 
 # Check if the requested service is in the list
-if ( $service and grep { $service eq $_ } @services ) {
+if ( $service and any { $service eq $_ } @services ) {
 
     my @parmsrequired = @{ $required{$service} };
     my @parmsoptional = @{ $optional{$service} };
     my @parmsall      = ( @parmsrequired, @parmsoptional );
     my @names         = $cgi->param;
-    my %paramhash     = ();
-    foreach my $name (@names) {
-        $paramhash{$name} = 1;
-    }
+    my %paramhash;
+    $paramhash{$_} = 1 for @names;
 
     # check for missing parameters
-    foreach my $name (@parmsrequired) {
-        if ( ( !exists $paramhash{$name} ) ) {
-            $out->{'message'} = "missing $name parameter";
+    for ( @parmsrequired ) {
+        unless ( exists $paramhash{$_} ) {
+            $out->{'message'} = "missing $_ parameter";
         }
     }
 
     # check for illegal parameters
-    foreach my $name (@names) {
+    for my $name ( @names ) {
         my $found = 0;
-        foreach my $name2 (@parmsall) {
+        for my $name2 (@parmsall) {
             if ( $name eq $name2 ) {
                 $found = 1;
             }
         }
-        if ( ( $found == 0 ) && ( $name ne 'service' ) ) {
+        if ( $found == 0 && $name ne 'service' ) {
             $out->{'message'} = "$name is an illegal parameter";
         }
     }
 
     # check for multiple parameters
-    foreach my $name (@names) {
-        my @values = $cgi->param($name);
+    for ( @names ) {
+        my @values = $cgi->param($_);
         if ( $#values != 0 ) {
-            $out->{'message'} = "multiple values are not allowed for the $name parameter";
+            $out->{'message'} = "multiple values are not allowed for the $_ parameter";
         }
     }
 
@@ -205,7 +203,7 @@ if ( $service and grep { $service eq $_ } @services ) {
         # GetAvailability is a special case, as it cannot use XML::Simple
         if ( $service eq "GetAvailability" ) {
             print CGI::header('text/xml');
-            print C4::ILSDI::Services::GetAvailability($cgi);
+            print C4::ILSDI::GetAvailability($cgi);
             exit 0;
         } else {
 
@@ -235,4 +233,5 @@ print XMLout(
     RootName      => $service,
     SuppressEmpty => 1
 );
+exit 0;
 
