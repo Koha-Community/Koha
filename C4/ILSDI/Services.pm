@@ -294,6 +294,7 @@ sub LookupPatron {
 
     # Get the borrower...
 <<<<<<< HEAD:C4/ILSDI/Services.pm
+<<<<<<< HEAD:C4/ILSDI/Services.pm
     my $borrower = GetMember($cgi->param('id_type') => $cgi->param('id'));
     if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
@@ -303,6 +304,9 @@ sub LookupPatron {
     my $patron->{'id'} = $borrower->{'borrowernumber'};
 =======
     my $borrower = GetMember( $cgi->param('id'), $cgi->param('id_type') );
+=======
+    my $borrower = GetMember( $cgi->param('id_type')||"borrowernumber",$cgi->param('id') );
+>>>>>>> (MT 2563) : ILSDI PatronLookUp Problem:C4/ILSDI.pm
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 >>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
