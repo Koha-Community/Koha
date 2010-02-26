@@ -113,12 +113,22 @@ my %optional = (
 );
 
 # If ILS-DI module is disabled in System->Preferences, redirect to 404
-if ( not C4::Context->preference('ILS-DI') ) {
+unless ( C4::Context->preference('ILS-DI') ) {
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
+    exit 1;
+}
+
+# If the remote address is not allowed, redirect to 403
+if ( C4::Context->preference('ILS-DI:AuthorizedIPs') # If no filter set, allow access to everybody
+    and $cgi->param('service') and $cgi->param('service') ne 'Describe' # Allow access to online documentation
+    and not any { $ENV{'REMOTE_ADDR'} eq $_ } split(/,/, C4::Context->preference('ILS-DI:AuthorizedIPs')) # IP Check
+    ) {
+    print $cgi->redirect("/cgi-bin/koha/errors/403.pl");
+    exit 1;
 }
 
 # If no service is requested, display the online documentation
-if ( not $cgi->param('service') ) {
+unless ( $cgi->param('service') ) {
     my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {   template_name   => "ilsdi.tmpl",
             query           => $cgi,
