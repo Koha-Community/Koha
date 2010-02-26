@@ -141,10 +141,12 @@ if ( $cgi->param('service') eq "Describe" and any { $cgi->param('verb') eq $_ } 
     exit 0;
 }
 
+my $out;
+
 # If ILS-DI module is disabled in System->Preferences, redirect to 404
 unless ( C4::Context->preference('ILS-DI') ) {
-    print $cgi->redirect("/cgi-bin/koha/errors/404.pl");
-    exit 1;
+    $out->{'code'} = "NotAllowed";
+    $out->{'message'} = "ILS-DI is disabled.";
 }
 
 # If the remote address is not allowed, redirect to 403
@@ -152,13 +154,11 @@ my @AuthorizedIPs = split(/,/, C4::Context->preference('ILS-DI:AuthorizedIPs'));
 if ( @AuthorizedIPs # If no filter set, allow access to everybody
     and not any { $ENV{'REMOTE_ADDR'} eq $_ } @AuthorizedIPs # IP Check
     ) {
-    print $cgi->redirect("/cgi-bin/koha/errors/403.pl");
-    exit 1;
+    $out->{'code'} = "NotAllowed";
+    $out->{'message'} = "Unauthorized IP address: ".$ENV{'REMOTE_ADDR'}.".";
 }
 
 my $service = $cgi->param('service') || "ilsdi";
-
-my $out;
 
 # Check if the requested service is in the list
 if ( $service and any { $service eq $_ } @services ) {
@@ -173,7 +173,8 @@ if ( $service and any { $service eq $_ } @services ) {
     # check for missing parameters
     for ( @parmsrequired ) {
         unless ( exists $paramhash{$_} ) {
-            $out->{'message'} = "missing $_ parameter";
+            $out->{'code'} = "MissingParameter";
+            $out->{'message'} = "The required parameter ".$_." is missing.";
         }
     }
 
@@ -186,7 +187,8 @@ if ( $service and any { $service eq $_ } @services ) {
             }
         }
         if ( $found == 0 && $name ne 'service' ) {
-            $out->{'message'} = "$name is an illegal parameter";
+            $out->{'code'} = "IllegalParameter";
+            $out->{'message'} = "The parameter ".$name." is illegal.";
         }
     }
 
@@ -194,7 +196,8 @@ if ( $service and any { $service eq $_ } @services ) {
     for ( @names ) {
         my @values = $cgi->param($_);
         if ( $#values != 0 ) {
-            $out->{'message'} = "multiple values are not allowed for the $_ parameter";
+            $out->{'code'} = "MultipleValuesNotAllowed";
+            $out->{'message'} = "Multiple values not allowed for the parameter ".$_.".";
         }
     }
 
