@@ -37,29 +37,6 @@ function barcode_check(){
     }
     <!--/TMPL_IF-->
 }
-
-function Check(f) {
-    var total_errors=0;
-//	alert(f.field_value.length);
-    for (i=0 ; i<f.field_value.length ; i++) {
-//	alert (f.field_value[i].value);
-        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
-            document.getElementById("error"+i).style.backgroundColor="#FF0000";
-            total_errors++;
-        } else {
-//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
-        }
-    }
-    var alertString2;
-    if (total_errors==0) {
-        document.f.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
-        alert(alertString2);
-    }
-}
 function unHideItems(index,labelindex, serialId) {
 	subfield = document.getElementById(index);
 	subfield.style.display = 'block';
@@ -156,6 +133,24 @@ function CloneSubfield(index){
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 }
+$(document).ready(function() {
+	$("form#serials_edit").submit(function() {
+	    var total_errors = 0;
+        $(".subfield_line:visible", this).each(function() {
+            if ($("*[name=field_value]", this).val().length == 0 &&
+                $("*[name=mandatory]", this).val() == 1) {
+                total_errors++;
+            }
+        });
+        if ( total_errors > 0 ) {
+            var mes  = _("Form not submitted because of the following problem(s)");
+            mes += "\n------------------------------------------------------------------------------------\n";
+            mes += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+            alert(mes);
+            return false;
+        }
+    });
+});
 //]]>
 </script>
 <style type="text/css">#serials_edit fieldset.rows label, #serials_edit fieldset.rows span.label {
@@ -424,7 +419,7 @@ function CloneSubfield(index){
 <!-- /TMPL_LOOP -->
 
 </table>
-    <fieldset class="action"><input type="submit" value="Save"  class="button" accesskey="w" /> <!--onclick="Check(this.form)" --></fieldset>
+    <fieldset class="action"><input type="submit" value="Save"  class="button" accesskey="w" />
 </form>
 
 </div>
