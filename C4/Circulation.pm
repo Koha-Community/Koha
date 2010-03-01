@@ -2065,9 +2065,9 @@ sub CanBookBeRenewed {
                    LEFT JOIN biblioitems USING (biblioitemnumber)
                    
                    WHERE
-                    issuingrules.categorycode = borrowers.categorycode
+                    (issuingrules.categorycode = borrowers.categorycode OR issuingrules.categorycode = '*')
                    AND
-                    issuingrules.itemtype = $itype
+                    (issuingrules.itemtype = $itype OR issuingrules.itemtype = '*')
                    AND
                     (issuingrules.branchcode = $controlbranch OR issuingrules.branchcode = '*') 
                    AND 
