@@ -214,17 +214,6 @@ sub GetRecords {
 
         map { $biblioitem->{$_} = encode_entities( $biblioitem->{$_}, '&' ) } grep( !/marcxml/, keys %$biblioitem );
 
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-        push @records, $biblioitem;
-=======
-            $_ = encode_entities( $$biblioitem{$_}, '&' ) for @$biblioitem{ grep {!/marcxml/} keys %$biblioitem };
-            
-            push @records, $biblioitem;
-            
-        } else {
-            push @records, { code => 'RecordNotFound' };
-        }
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
     }
 
     return { record => \@records };
@@ -260,11 +249,7 @@ sub GetAuthorityRecords {
     foreach my $authid ( split( / /, $cgi->param('id') ) ) {
 
         # Get the record as XML string, or error code
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-        my $record = GetAuthorityXML($authid) || "<record>RecordNotFound</record>";
-=======
         my $record = GetAuthorityXML( $_ ) || "<record><code>RecordNotFound</code></record>";
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
         $record =~ s/<\?xml(.*)\?>//go;
         $records .= $record;
     }
@@ -293,8 +278,6 @@ sub LookupPatron {
     my ($cgi) = @_;
 
     # Get the borrower...
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-<<<<<<< HEAD:C4/ILSDI/Services.pm
     my $borrower = GetMember($cgi->param('id_type') => $cgi->param('id'));
     if ( not $borrower->{'borrowernumber'} ) {
         return { message => 'PatronNotFound' };
@@ -302,13 +285,7 @@ sub LookupPatron {
 
     # Build the hashref
     my $patron->{'id'} = $borrower->{'borrowernumber'};
-=======
-    my $borrower = GetMember( $cgi->param('id'), $cgi->param('id_type') );
-=======
-    my $borrower = GetMember( $cgi->param('id_type')||"borrowernumber",$cgi->param('id') );
->>>>>>> (MT 2563) : ILSDI PatronLookUp Problem:C4/ILSDI.pm
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     # ...and return his ID
     return $patron;
@@ -331,15 +308,9 @@ sub LookupPatron {
 sub AuthenticatePatron {
     my ($cgi) = @_;
 
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    # Check if borrower exists, using a C4::ILSDI::Utility function...
-    if ( not( BorrowerExists( $cgi->param('username'), $cgi->param('password') ) ) ) {
-        return { message => 'PatronNotFound' };
-=======
     # Check if borrower exists, using a C4::Auth function...
     unless( checkpw( C4::Context->dbh, $cgi->param('username'), $cgi->param('password') ) ) {
         return { code => 'PatronNotFound' };
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
     }
 
     # Get the borrower
@@ -378,15 +349,8 @@ sub GetPatronInfo {
 
     # Get Member details
     my $borrowernumber = $cgi->param('patron_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $borrower = GetMemberDetails( $borrowernumber, undef );
-    if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-    }
-=======
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     # Cleaning the borrower hashref
     $borrower->{'charges'}    = $borrower->{'flags'}->{'CHARGES'}->{'amount'};
@@ -470,20 +434,6 @@ sub GetPatronStatus {
 
     # Get Member details
     my $borrowernumber = $cgi->param('patron_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $borrower = GetMemberDetails( $borrowernumber, undef );
-    if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-    }
-
-    # Hashref building
-    my $patron;
-    $patron->{'type'}   = $borrower->{'categorycode'};
-    $patron->{'status'} = 0;                             #TODO
-    $patron->{'expiry'} = $borrower->{'dateexpiry'};
-
-    return $patron;
-=======
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
@@ -493,7 +443,6 @@ sub GetPatronStatus {
         status => 0, # TODO
         expiry => $$borrower{dateexpiry},
     };
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 }
 
 =head2 GetServices
@@ -514,19 +463,6 @@ sub GetServices {
 
     # Get the member, or return an error code if not found
     my $borrowernumber = $cgi->param('patron_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $borrower = GetMemberDetails( $borrowernumber, undef );
-    if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-    }
-
-    # Get the item, or return an error code if not found
-    my $itemnumber = $cgi->param('item_id');
-    my $item = GetItem( $itemnumber, undef, undef );
-    if ( not $item->{'itemnumber'} ) {
-        return { message => 'RecordNotFound' };
-    }
-=======
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
@@ -534,7 +470,6 @@ sub GetServices {
     my $itemnumber = $cgi->param('item_id');
     my $item = GetItem( $itemnumber );
     return { code => 'RecordNotFound' } unless $$item{itemnumber};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     my @availablefor;
 
@@ -600,27 +535,13 @@ sub RenewLoan {
 
     # Get borrower infos or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $borrower = GetMemberDetails( $borrowernumber, undef );
-    if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-    }
-=======
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     # Get the item, or return an error code
     my $itemnumber = $cgi->param('item_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $item = GetItem( $itemnumber, undef, undef );
-    if ( not $item->{'itemnumber'} ) {
-        return { message => 'RecordNotFound' };
-    }
-=======
     my $item = GetItem( $itemnumber );
     return { code => 'RecordNotFound' } unless $$item{itemnumber};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     # Add renewal if possible
     my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
@@ -664,26 +585,6 @@ sub HoldTitle {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $borrower = GetMemberDetails( $borrowernumber, undef );
-    if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-    }
-
-    # Get the biblio record, or return an error code
-    my $biblionumber = $cgi->param('bib_id');
-    my ( $count, $biblio ) = GetBiblio($biblionumber);
-    if ( not $biblio->{'biblionumber'} ) {
-        return { message => 'RecordNotFound' };
-    }
-    my $title = $biblio->{'title'};
-
-    # Check if the biblio can be reserved
-    my $canbereserved = CanBookBeReserved( $borrower, $biblionumber );
-    if ( not $canbereserved ) {
-        return { message => 'NotHoldable' };
-    }
-=======
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
@@ -696,26 +597,16 @@ sub HoldTitle {
 
     # Check if the biblio can be reserved
     return { code => 'NotHoldable' } unless CanBookBeReserved( $borrowernumber, $biblionumber );
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     my $branch;
 
     # Pickup branch management
     if ( $cgi->param('pickup_location') ) {
         $branch = $cgi->param('pickup_location');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-        my $branches = GetBranches();
-        if ( not $branches->{$branch} ) {
-            return { message => 'LocationNotFound' };
-        }
-    } else {    # if user provide no branch, use his own
-        $branch = $borrower->{'branchcode'};
-=======
         my $branches = GetBranches;
         return { code => 'LocationNotFound' } unless $$branches{$branch};
     } else { # if the request provide no branch, use the borrower's branch
         $branch = $$borrower{branchcode};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
     }
 
     # Add the reserve
@@ -759,44 +650,12 @@ sub HoldItem {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $borrower = GetMemberDetails( $borrowernumber, undef );
-    if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-    }
-=======
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     # Get the biblio or return an error code
     my $biblionumber = $cgi->param('bib_id');
     my ( $count, $biblio ) = GetBiblio($biblionumber);
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    if ( not $biblio->{'biblionumber'} ) {
-        return { message => 'RecordNotFound' };
-    }
-    my $title = $biblio->{'title'};
-
-    # Get the item or return an error code
-    my $itemnumber = $cgi->param('item_id');
-    my $item = GetItem( $itemnumber, undef, undef );
-    if ( not $item->{'itemnumber'} ) {
-        return { message => 'RecordNotFound' };
-    }
-
-    # if the biblio does not match the item, return an error code
-    if ( $item->{'biblionumber'} ne $biblio->{'biblionumber'} ) {
-        return { message => 'RecordNotFound' };
-    }
-
-    # Check for item disponibility
-    my $canitembereserved = IsAvailableForItemLevelRequest($itemnumber);
-    my $canbookbereserved = CanBookBeReserved( $borrower, $biblionumber );
-    if ( ( not $canbookbereserved ) or not($canitembereserved) ) {
-        return { message => 'NotHoldable' };
-    }
-=======
     return { code => 'RecordNotFound' } unless $$biblio{biblionumber};
 
     my $title = $$biblio{title};
@@ -813,7 +672,6 @@ sub HoldItem {
     my $canitembereserved = CanItemBeReserved( $borrowernumber, $itemnumber );
     my $canbookbereserved = CanBookBeReserved( $borrowernumber, $biblionumber );
     return { code => 'NotHoldable' } unless $canbookbereserved and $canitembereserved;
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     my $branch;
 
@@ -821,17 +679,9 @@ sub HoldItem {
     if ( $cgi->param('pickup_location') ) {
         $branch = $cgi->param('pickup_location');
         my $branches = GetBranches();
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-        if ( not $branches->{$branch} ) {
-            return { message => 'LocationNotFound' };
-        }
-    } else {    # if user provide no branch, use his own
-        $branch = $borrower->{'branchcode'};
-=======
         return { code => 'LocationNotFound' } unless $$branches{$branch};
     } else { # if the request provide no branch, use the borrower's branch
         $branch = $$borrower{branchcode};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
     }
 
     my $rank;
@@ -874,19 +724,6 @@ sub CancelHold {
 
     # Get the borrower or return an error code
     my $borrowernumber = $cgi->param('patron_id');
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    my $borrower = GetMemberDetails( $borrowernumber, undef );
-    if ( not $borrower->{'borrowernumber'} ) {
-        return { message => 'PatronNotFound' };
-    }
-
-    # Get the item or return an error code
-    my $itemnumber = $cgi->param('item_id');
-    my $item = GetItem( $itemnumber, undef, undef );
-    if ( not $item->{'itemnumber'} ) {
-        return { message => 'RecordNotFound' };
-    }
-=======
     my $borrower = GetMemberDetails( $borrowernumber );
     return { code => 'PatronNotFound' } unless $$borrower{borrowernumber};
 
@@ -894,7 +731,6 @@ sub CancelHold {
     my $itemnumber = $cgi->param('item_id');
     my $item = GetItem( $itemnumber );
     return { code => 'RecordNotFound' } unless $$item{itemnumber};
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     # Get borrower's reserves
     my @reserves = GetReservesFromBorrowernumber( $borrowernumber, undef );
@@ -906,23 +742,12 @@ sub CancelHold {
     }
 
     # if the item was not reserved by the borrower, returns an error code
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    if ( not grep { $itemnumber eq $_ } @reserveditems ) {
-        return { message => 'NotCanceled' };
-    }
-=======
     return { code => 'NotCanceled' } unless any { $itemnumber eq $_ } @reserveditemnumbers;
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 
     # Cancel the reserve
     CancelReserve( $itemnumber, undef, $borrowernumber );
 
-<<<<<<< HEAD:C4/ILSDI/Services.pm
-    return { message => 'Canceled' };
-
-=======
     return { code => 'Canceled' };
->>>>>>> [MT2306_2271] ILS-DI Message codes consistence:C4/ILSDI.pm
 }
 
 1;
