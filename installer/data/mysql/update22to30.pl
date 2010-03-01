@@ -3500,7 +3500,7 @@ my $DBversion = "3.00.00.000";
     
     # at last, remove useless fields
     foreach $table ( keys %uselessfields ) {
-        my @fields = split /,/,$uselessfields{$table};
+        my @fields = split (/,/,$uselessfields{$table});
         my $fields;
         my $exists;
         foreach my $fieldtodrop (@fields) {
@@ -3526,11 +3526,14 @@ my $DBversion = "3.00.00.000";
     #
     $sth=$dbh->prepare("ALTER TABLE `aqbookfund` DROP PRIMARY KEY , ADD PRIMARY KEY ( `bookfundid` , `branchcode` ) ;");
     $sth->execute;
+    $sth->finish;
    
     # drop extra key on borrowers.borrowernumber
     $dbh->do("ALTER TABLE borrowers DROP KEY borrowernumber"); 
-
-    $sth->finish;
+    
+    # update enrolmentperiod
+    $dbh->do("UPDATE categories SET enrolmentperiod = enrolmentperiod * 12");
+    
     print "upgrade to Koha 3.0 done\n";
     SetVersion ($DBversion);
 
