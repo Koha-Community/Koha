@@ -20,6 +20,7 @@ package C4::Overdues;
 
 use strict;
 use Date::Calc qw/Today Date_to_Days/;
+use C4::Dates qw/format_date/;
 use Date::Manip qw/UnixDate/;
 use C4::Circulation;
 use C4::Context;
@@ -268,6 +269,8 @@ sub GetOverduesByBorrowers{
         
         my @issues = ();
         while(my $issuedata = $sthissues->fetchrow_hashref()){
+            $issuedata->{date_due}  = format_date($issuedata->{date_due}); 
+            $issuedata->{issuedate} = format_date($issuedata->{issuedate});
             push @issues, $issuedata;
         }
         $borrower->{overdues} = \@issues;
