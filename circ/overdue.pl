@@ -176,7 +176,7 @@ sub build_csv {
     foreach my $overdue ( @{ $overdues } ) {
         my $issues;
         foreach my $issue ( @{$overdue->{overdues} }){
-            $issues .= "$issue->{title} / $issue->{author} / $issue->{itemcallnumber} / $issue->{barcode} / ".format_date($issue->{issuedate}). " - " . format_date($issue->{date_due}) . " \r\n";
+            $issues .= "$issue->{title} / $issue->{author} / $issue->{itemcallnumber} / $issue->{barcode} / ".$issue->{issuedate}. " - " . $issue->{date_due} . " \r\n";
         }
         push @lines, $csv->string() if $csv->combine(
             $overdue->{borrowernumber},
