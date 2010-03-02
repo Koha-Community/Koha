@@ -86,7 +86,7 @@ if ($op eq 'save') {
     my $sth_delete=$dbh->prepare("DELETE FROM overduerules WHERE branchcode=? AND categorycode=?");
     foreach my $key (@names){
             # ISSUES
-            if ($key =~ /(delay|letter)([1-3])-(.*)/) {
+            if ($key =~ /(delay|letter|debarred)([1-3])-(.*)/) {
                     my $type = $1; # data type
                     my $num = $2; # From 1 to 3
                     my $bor = $3; # borrower category
