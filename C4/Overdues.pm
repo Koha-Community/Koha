@@ -256,7 +256,7 @@ sub GetOverduesByBorrowers{
         push @args, $dateduefrom;
     }
     if(not ($datedueto or $dateduefrom)){
-        $strsthissues .= " AND date_due > NOW() ";
+        $strsthissues .= " AND date_due < NOW() ";
     }
     my $sthissues = $dbh->prepare($strsthissues);
     my $sthbor    = $dbh->prepare($strsth);
