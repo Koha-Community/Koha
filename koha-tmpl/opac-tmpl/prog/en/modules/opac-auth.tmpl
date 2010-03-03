@@ -5,6 +5,13 @@
  Catalog &rsaquo; Catalog Login Disabled
 <!-- /TMPL_IF -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<!-- Bug 4288: Hide circular 'Log in to Your Account' link in opac-auth.pl -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ( $("#auth" ) ) { $("#members ul li a").hide(); }
+    });
+</script>
 </head>
 <body id="opac-login-page">
 <div id="doc3" class="yui-t7">
