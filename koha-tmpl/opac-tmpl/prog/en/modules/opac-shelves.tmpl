@@ -102,6 +102,7 @@ $(function() {
                     <span class="clearall"></span>
                     |
                     <!-- div id="tag_hides" -->
+		      <a href="#" class="download tag_hides" onclick="open(CGIBIN+'opac-downloadshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100')">Download List</a>
                       <a class="editshelf tag_hides" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a>
                       <form method="post" action="opac-shelves.pl" class="tag_hides">
                         <input type="hidden" value="1" name="shelves"/>
