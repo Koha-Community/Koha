@@ -406,7 +406,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <label for="barcode">Checking out to <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->) </label>
 	<div class="hint">Enter item barcode:</div>
 
-	<input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /> <input type="submit" value="Check Out" />
+	<input type="text" name="barcode" id="barcode" class="barcode focus" size="14" <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->disabled="disabled"<!-- /TMPL_IF -->/> <input type="submit" value="Check Out" />
 
     <!-- TMPL_IF NAME="SpecifyDueDate" --><div class="date-select">
         <div class="hint">Specify Due Date <!-- TMPL_INCLUDE NAME="date-format.inc" -->: </div>
