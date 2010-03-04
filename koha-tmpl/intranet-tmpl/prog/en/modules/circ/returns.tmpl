@@ -57,7 +57,15 @@ function Dopop(link) {
 
 <div class="yui-g">
 <!-- TMPL_IF NAME="wrongbranch" -->
-<div class="dialog alert"><h3>Cannot Check In</h3><p>This item must be checked in at its home library. <strong>NOT CHECKED IN</strong></p>
+<div class="dialog alert"><h3>Cannot Check In</h3><p>This item must be checked in at its home library: <!-- TMPL_VAR Name="homebranch" -->. <strong>NOT CHECKED IN</strong></p>
+	     <form method="post" action="returns.pl" class="confirm">
+				
+                <input type="hidden" name="barcode" value="<!-- TMPL_VAR Name="barcode" -->" />
+                <input type="hidden" name="exemptfine" value="<!-- TMPL_VAR Name="exemptfine" -->" />
+                <input type="hidden" name="dropboxmode" value="<!-- TMPL_VAR Name="dropboxmode" -->" />
+				<input type="submit" name="override" value="Check-In" class="submit" />
+				<input type="submit" name="cancel" value="Cancel" class="submit" />
+		</form>
 </div>
 <!-- /TMPL_IF -->
 <!-- case of a mistake in transfer loop -->
