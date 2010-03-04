@@ -175,7 +175,7 @@ if ($dotransfer){
 }
 
 # actually return book and prepare item table.....
-if ($barcode) {
+if ($barcode and not $query->param('cancel')) {
     $barcode = barcodedecode($barcode) if C4::Context->preference('itemBarcodeInputFilter');
     $itemnumber = GetItemnumberFromBarcode($barcode);
 
