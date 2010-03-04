@@ -544,6 +544,16 @@
         </span>
         </xsl:for-each>
 
+	<!-- 866 holdings public note -->
+        <xsl:if test="marc:datafield[@tag=866]">
+        <span class="results_summary"><span class="label">Holdings Note: </span>
+        <xsl:for-each select="marc:datafield[@tag=866]">
+                <xsl:value-of select="marc:subfield[@code='z']"/>
+                <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+        </xsl:for-each>
+        </span>
+        </xsl:if>
+
         <!-- 780 -->
         <xsl:if test="marc:datafield[@tag=780]">
         <xsl:for-each select="marc:datafield[@tag=780]">
