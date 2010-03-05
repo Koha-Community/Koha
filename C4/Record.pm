@@ -487,7 +487,7 @@ sub marcrecord2csv {
 	my $marcfield = $_->{field};
 
 	# Remove any blank char that might have unintentionally insered into the tag name
-	$marcfield =~ s/\s+//;	
+	$marcfield =~ s/\s+//g;	
 
 	# If it is a subfield
 	if (index($marcfield, '$') > 0) {
