@@ -248,20 +248,20 @@ sub MarcToUTF8Record {
     # If we do not know the source encoding, try some guesses
     # as follows:
     #   1. Record is UTF-8 already.
-    #   2. If MARC flavor is MARC21, then
+    #   2. If MARC flavor is MARC21 or NORMARC, then
     #      a. record is MARC-8
     #      b. record is ISO-8859-1
     #   3. If MARC flavor is UNIMARC, then
     if (not defined $source_encoding) {
         if ($marc_blob_is_utf8) {
-            # note that for MARC21 we are not bothering to check
+            # note that for MARC21/NORMARC we are not bothering to check
             # if the Leader/09 is set to 'a' or not -- because
             # of problems with various ILSs (including Koha in the
             # past, alas), this just is not trustworthy.
             SetMarcUnicodeFlag($marc_record, $marc_flavour);
             return $marc_record, 'UTF-8', [];
         } else {
-            if ($marc_flavour eq 'MARC21') {
+            if ($marc_flavour eq 'MARC21' || $marc_flavour eq 'NORMARC') {
                 return _default_marc21_charconv_to_utf8($marc_record, $marc_flavour);
             } elsif ($marc_flavour =~/UNIMARC/) {
                 return _default_unimarc_charconv_to_utf8($marc_record, $marc_flavour);
@@ -316,7 +316,7 @@ sub SetMarcUnicodeFlag {
     my $marc_flavour = shift; # || C4::Context->preference("marcflavour");
 
     $marc_record->encoding('UTF-8');
-    if ($marc_flavour eq 'MARC21') {
+    if ($marc_flavour eq 'MARC21' || $marc_flavour eq 'NORMARC') {
         my $leader = $marc_record->leader();
         substr($leader, 9, 1) = 'a';
         $marc_record->leader($leader); 

@@ -1302,10 +1302,10 @@ ISBNs stored in differents places depending on MARC flavour
 sub GetMarcISBN {
     my ( $record, $marcflavour ) = @_;
     my $scope;
-    if ( $marcflavour eq "MARC21" ) {
-        $scope = '020';
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $scope = '010';
+    } else {    # assume marc21 if not unimarc
+        $scope = '020';
     }
     my @marcisbns;
     my $isbn = "";
@@ -1342,10 +1342,10 @@ The note are stored in differents places depending on MARC flavour
 sub GetMarcNotes {
     my ( $record, $marcflavour ) = @_;
     my $scope;
-    if ( $marcflavour eq "MARC21" ) {
-        $scope = '5..';
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $scope = '3..';
+    } else {    # assume marc21 if not unimarc
+        $scope = '5..';
     }
     my @marcnotes;
     my $note = "";
@@ -1382,12 +1382,12 @@ The subjects are stored in differents places depending on MARC flavour
 sub GetMarcSubjects {
     my ( $record, $marcflavour ) = @_;
     my ( $mintag, $maxtag );
-    if ( $marcflavour eq "MARC21" ) {
-        $mintag = "600";
-        $maxtag = "699";
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "600";
         $maxtag = "611";
+    } else {    # assume marc21 if not unimarc
+        $mintag = "600";
+        $maxtag = "699";
     }
 
     my @marcsubjects;
@@ -1453,12 +1453,12 @@ sub GetMarcAuthors {
     # tagslib useful for UNIMARC author reponsabilities
     my $tagslib =
       &GetMarcStructure( 1, '' );    # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
-    if ( $marcflavour eq "MARC21" ) {
-        $mintag = "700";
-        $maxtag = "720";
-    } elsif ( $marcflavour eq "UNIMARC" ) {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "700";
         $maxtag = "712";
+    } elsif ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) { # assume marc21 or normarc if not unimarc
+        $mintag = "700";
+        $maxtag = "720";
     } else {
         return;
     }
@@ -1573,12 +1573,12 @@ The series are stored in differents places depending on MARC flavour
 sub GetMarcSeries {
     my ( $record, $marcflavour ) = @_;
     my ( $mintag, $maxtag );
-    if ( $marcflavour eq "MARC21" ) {
-        $mintag = "440";
-        $maxtag = "490";
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "600";
         $maxtag = "619";
+    } else {    # assume marc21 if not unimarc
+        $mintag = "440";
+        $maxtag = "490";
     }
 
     my @marcseries;

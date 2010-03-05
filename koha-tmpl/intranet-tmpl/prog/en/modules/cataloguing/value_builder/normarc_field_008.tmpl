@@ -1,0 +1,4519 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Katalogisering &rsaquo; Feltbygger for 008</title> 
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body style="padding:1em;">
+<h3>008 Informasjonskoder</h3>
+
+<form>
+      <p><select name="MatTypeList" id="MatTypeList" onchange="RedrawChoices(this.options[selectedIndex].value);">
+
+			<option value="" selected="selected">Velg materialtype</option>			
+	<!-- TMPL_IF name="mon" --> 
+		<option value="mon" selected="selected">Monografier</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="mon">Monografier</option> 
+		<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="per" --> 
+		<option value="per" selected="selected">Periodika</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="per">Periodika</option> 
+		<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="fil" --> 
+		<option value="fil" selected="selected">Maskinlesbare filer</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="fil">Maskinlesbare filer</option> 
+		<!-- /TMPL_IF -->	
+	<!-- TMPL_IF name="mus" --> 
+		<option value="mus" selected="selected">Musikktrykk og lydopptak</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="mus">Musikktrykk og lydopptak</option> 
+		<!-- /TMPL_IF -->	
+	<!-- TMPL_IF name="fv" --> 
+		<option value="fv" selected="selected">Filmer og videogrammer</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="fv">Filmer og videogrammer</option> 
+		<!-- /TMPL_IF -->	
+	<!-- TMPL_IF name="kar" --> 
+		<option value="kar" selected="selected">Kart</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="kar">Kart</option> 
+		<!-- /TMPL_IF -->
+		
+      </select></p>
+</form>
+
+<form name="f_pop" onsubmit="report()">
+<input type="hidden" name="plugin_name" value="normarc_field_008.pl" />
+<table>
+
+<hr />
+
+<!-- Start first batch of common fields for all formats -->
+<table>
+
+	<tr>
+		<td>00-05 Registreringsdato</td>
+		<td><input type="text" name="f1" maxlength="6" size="7" value="<!-- TMPL_VAR name="f1" -->" /></td>
+	</tr>
+	<tr>
+		<!-- 06 Type of date / Publication status -->
+		<td><label for="f6">06 Dateringskode/Utgivelsesstatus</label></td>
+		<td>
+			<select name="f6" id="f6" size="1">
+	<!-- TMPL_IF name="f6 " -->
+		<option value=" " selected="selected">^ Ikke angitt</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">^ Ikke angitt</option>
+		<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="f6a" --> 
+		<option value="a" selected="selected">a Antatt/forventet utgivelsesår i pos. 7-10</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="a">a Antatt/forventet utgivelsesår i pos. 7-10</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6c" --> 
+		<option value="c" selected="selected">c Utgivelsesår i pos. 7-10 og copyrightår i pos. 11-14</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="c">c Utgivelsesår i pos. 7-10 og copyrightår i pos. 11-14</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6n" --> 
+		<option value="n" selected="selected">n Ukjent år</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="n">n Ukjent år</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6o" --> 
+		<option value="o" selected="selected">o Opphørt (periodika)</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="o">o Opphørt (periodika)</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6p" --> 
+		<option value="p" selected="selected">p År for distribusjon/frigivelse i pos. 7-10 og produksjons-/opptaksperiode i pos. 11-14</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="p">p År for distribusjon/frigivelse i pos. 7-10 og produksjons-/opptaksperiode i pos. 11-14</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6r" --> 
+		<option value="r" selected="selected">r Nyutgaveår i pos. 7-10 og originalår i pos. 11-14</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="r">r Nyutgaveår i pos. 7-10 og originalår i pos. 11-14</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6s" --> 
+		<option value="s" selected="selected">s Enkelt år (f.eks. utgivelsesår) i pos. 7-10</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="s">s Enkelt år (f.eks. utgivelsesår) i pos. 7-10</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6u" --> 
+		<option value="u" selected="selected">u Ukjent status (periodika)</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="u">u Ukjent status (periodika)</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f6x" --> 
+		<option value="x" selected="selected">x Løpende (periodika)</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="x">x Løpende (periodika)</option> 
+		<!-- /TMPL_IF --> 	
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f710">07-10 Årstall 1</label></td>
+		<td>
+			<input type="text" name="f710" id="f710" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f710" -->"/>
+		</td>
+	</tr>
+	<tr>
+    <td><label for="f1114">11-14 Årstall 2</label></td>
+    <td>
+      <input type="text" name="f1114" id="f1114" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f1114" -->"/>
+		</td>
+  </tr>
+
+	<tr>
+      <td><label for="f1517">15-17 Utgivelsesland</label> See <a href="http://www.loc.gov/marc/countries/countries_code.html">MARC Code List for Countries</a> </td>
+      <td>
+              <input type="text" name="f1517" id="f1517" size="3"  maxlength="3" value="<!-- TMPL_VAR NAME="f1517" -->"/>
+      </td>
+        </tr>
+				
+<!-- End first batch of common fields for all formats -->
+				
+<tr><td id="choices" colspan="2"></td></tr>
+
+<!-- Start second batch of common fields for all formats -->
+                <td><label for="f3537">35-37 Språk</label> See <a href="http://www.loc.gov/marc/languages/language_code.html">MARC Code List for Languages</a></td>
+                <td>
+                        <input type="text" name="f3537" id="f3537" size="4"  maxlength="4" value="<!-- TMPL_VAR NAME="f3537" -->"/>
+                </td>
+        </tr>
+	<tr>
+                <td><label for="f38">38 Udefinert</label></td>
+                <td>
+										<input type="hidden" name="f38" value=" " />                
+                </td>
+        </tr>
+<tr>
+                <td><label for="f39">39 Katalogiseringskilde</label></td>
+                <td>
+                <select name="f39" id="f39" size="1">                                    
+	<!-- TMPL_IF name="f39 " -->
+		<option value=" " selected="selected">^ Ikke angitt</option>
+		<!-- TMPL_ELSE -->
+		<option value=" ">^ Ikke angitt</option>
+		<!-- /TMPL_IF -->
+	<!-- TMPL_IF name="f390" --> 
+		<option value="0" selected="selected">0 Norges nasjonalbibliografi, autorisert post</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="0">0 Norges nasjonalbibliografi, autorisert post</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f391" --> 
+		<option value="1" selected="selected">1 Norges nasjonalbibliografi, uautorisert post</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="1">1 Norges nasjonalbibliografi, uautorisert post</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f392" --> 
+		<option value="2" selected="selected">2 Biblioteksentralen, autorisert post</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="2">2 Biblioteksentralen, autorisert post</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f393" --> 
+		<option value="3" selected="selected">3 Biblioteksentralen, uautorisert post</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="3">3 Biblioteksentralen, uautorisert post</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f394" --> 
+		<option value="4" selected="selected">4 BIBSYS, autorisert post</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="4">4 BIBSYS, autorisert post</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f395" --> 
+		<option value="5" selected="selected">5 BIBSYS, uautorisert post</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="5">5 BIBSYS, uautorisert post</option> 
+		<!-- /TMPL_IF --> 
+	<!-- TMPL_IF name="f399" --> 
+		<option value="9" selected="selected">9 Annen kilde</option> 
+		<!-- TMPL_ELSE --> 
+		<option value="9">9 Annen kilde</option> 
+		<!-- /TMPL_IF -->
+								</select>
+                </td>
+        </tr>
+				
+<!-- End second batch of common fields for all formats -->
+
+</table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+</form>
+
+<script type="text/javascript">//<![CDATA[
+
+function RedrawChoices(typ){
+  var divOutput=document.getElementById("choices");
+  switch(typ){
+  case "mon":
+    divOutput.innerHTML='<table><tr> \
+		<td>18 Illustrasjoner</td> \
+		<td> \
+    <select name="f18" id="f18" size="1"> \
+	<!-- TMPL_IF name="f18 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18a" --> \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Illustrasjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18b" --> \
+		<option value="b" selected="selected">b Kart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kart</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18c" --> \
+		<option value="c" selected="selected">c Portretter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Portretter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18d" --> \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Diagrammer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18e" --> \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Planer (grunnriss)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18f" --> \
+		<option value="f" selected="selected">f Plansjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Plansjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18g" --> \
+		<option value="g" selected="selected">g Noter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Noter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18h" --> \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Faksimiler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18i" --> \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Våpenskjold</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18j" --> \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Genealogiske tabeller</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18k" --> \
+		<option value="k" selected="selected">k Blanketter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Blanketter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18l" --> \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Prøver, mønstre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18m" --> \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Lydmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18n" --> \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18o" --> \
+		<option value="o" selected="selected">o Fotografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Fotografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18p" --> \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Illuminasjoner</option> \
+		<!-- /TMPL_IF --> \
+		</select> \
+		</td> \
+		</tr><tr> \
+		<td>19 Illustrasjoner</td> \
+		<td> \
+    <select name="f19" id="f19" size="1"> \
+	<!-- TMPL_IF name="f19 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19a" --> \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Illustrasjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19b" --> \
+		<option value="b" selected="selected">b Kart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kart</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19c" --> \
+		<option value="c" selected="selected">c Portretter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Portretter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19d" --> \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Diagrammer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19e" --> \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Planer (grunnriss)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19f" --> \
+		<option value="f" selected="selected">f Plansjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Plansjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19g" --> \
+		<option value="g" selected="selected">g Noter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Noter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19h" --> \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Faksimiler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19i" --> \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Våpenskjold</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19j" --> \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Genealogiske tabeller</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19k" --> \
+		<option value="k" selected="selected">k Blanketter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Blanketter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19l" --> \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Prøver, mønstre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19m" --> \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Lydmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19n" --> \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19o" --> \
+		<option value="o" selected="selected">o Fotografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Fotografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19p" --> \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Illuminasjoner</option> \
+		<!-- /TMPL_IF --> \
+		</select> \
+		</td> \
+		</tr><tr> \
+		<td>20 Illustrasjoner</td> \
+		<td> \
+    <select name="f20" id="f20" size="1"> \
+	<!-- TMPL_IF name="f20 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20a" --> \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Illustrasjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20b" --> \
+		<option value="b" selected="selected">b Kart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kart</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20c" --> \
+		<option value="c" selected="selected">c Portretter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Portretter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20d" --> \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Diagrammer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20e" --> \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Planer (grunnriss)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20f" --> \
+		<option value="f" selected="selected">f Plansjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Plansjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20g" --> \
+		<option value="g" selected="selected">g Noter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Noter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20h" --> \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Faksimiler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20i" --> \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Våpenskjold</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20j" --> \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Genealogiske tabeller</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20k" --> \
+		<option value="k" selected="selected">k Blanketter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Blanketter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20l" --> \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Prøver, mønstre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20m" --> \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Lydmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20n" --> \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20o" --> \
+		<option value="o" selected="selected">o Fotografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Fotografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20p" --> \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Illuminasjoner</option> \
+		<!-- /TMPL_IF --> \
+		</select> \
+		</td> \
+		</tr><tr> \
+		<td>21 Illustrasjoner</td> \
+		<td> \
+    <select name="f21" id="f21" size="1"> \
+	<!-- TMPL_IF name="f21 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21a" --> \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Illustrasjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21b" --> \
+		<option value="b" selected="selected">b Kart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kart</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21c" --> \
+		<option value="c" selected="selected">c Portretter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Portretter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21d" --> \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Diagrammer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21e" --> \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Planer (grunnriss)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21f" --> \
+		<option value="f" selected="selected">f Plansjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Plansjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21g" --> \
+		<option value="g" selected="selected">g Noter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Noter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21h" --> \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Faksimiler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21i" --> \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Våpenskjold</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21j" --> \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Genealogiske tabeller</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21k" --> \
+		<option value="k" selected="selected">k Blanketter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Blanketter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21l" --> \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Prøver, mønstre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21m" --> \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Lydmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21n" --> \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21o" --> \
+		<option value="o" selected="selected">o Fotografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Fotografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21p" --> \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Illuminasjoner</option> \
+		<!-- /TMPL_IF --> \
+		</select> \
+		</td></tr> \
+		<tr> \
+		<td>22 Målgruppe / Intelektuelt nivå</td> \
+		<td> \
+		<select name="f22" id="f22" size="1"> \
+	<!-- TMPL_IF name="f22 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22a" --> \
+		<option value="a" selected="selected">a Voksne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Voksne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22b" --> \
+		<option value="b" selected="selected">b Billedbøker for voksne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Billedbøker for voksne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22f" --> \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Spesialisert</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22g" --> \
+		<option value="g" selected="selected">g Generell</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Generell</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22j" --> \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Barn og ungdom</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22k" --> \
+		<option value="k" selected="selected">k Billedbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Billedbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22l" --> \
+		<option value="l" selected="selected">l Barn i alderen til og med 5 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Barn i alderen til og med 5 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22m" --> \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22n" --> \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22o" --> \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22p" --> \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22q" --> \
+		<option value="q" selected="selected">q Lettlest</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Lettlest</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22r" --> \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22s" --> \
+		<option value="s" selected="selected">s Storskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Storskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22v" --> \
+		<option value="v" selected="selected">v Billedbøker for barn i alderen til og med 5 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="v">v Billedbøker for barn i alderen til og med 5 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22w" --> \
+		<option value="w" selected="selected">w Billedbøker for elever på 1. til 3. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="w">w Billedbøker for elever på 1. til 3. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22x" --> \
+		<option value="x" selected="selected">x Billedbøker for elever på 4. og 5. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Billedbøker for elever på 4. og 5. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22y" --> \
+		<option value="y" selected="selected">y Billedbøker for elever på 6. og 7. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="y">y Billedbøker for elever på 6. og 7. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22z" --> \
+		<option value="z" selected="selected">z Billedbøker for elever på ungdomstrinnet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Billedbøker for elever på ungdomstrinnet</option> \
+		<!-- /TMPL_IF --> \
+		</select> \
+		</td></tr> \
+		<tr> \
+				<td>23 Materialform</td> \
+				<td> \
+				<select name="f23" id="f23" size="1"> \
+	<!-- TMPL_IF name="f23 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23a" --> \
+		<option value="a" selected="selected">a Mikrofilm</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Mikrofilm</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23b" --> \
+		<option value="b" selected="selected">b Mikrofilmkort</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Mikrofilmkort</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23c" --> \
+		<option value="c" selected="selected">c Mikro-opak</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Mikro-opak</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23f" --> \
+		<option value="f" selected="selected">f Braille</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Braille</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23r" --> \
+		<option value="r" selected="selected">r Ordinært trykk (øye-lesbar)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Ordinært trykk (øye-lesbar)</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>24 Innhold</td> \
+				<td> \
+				<select name="f24" id="f24" size="1"> \
+	<!-- TMPL_IF name="f24 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>25 Innhold</td> \
+				<td> \
+				<select name="f25" id="f25" size="1"> \
+	<!-- TMPL_IF name="f25 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>26 Innhold</td> \
+				<td> \
+				<select name="f26" id="f26" size="1"> \
+	<!-- TMPL_IF name="f26 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>27 Innhold</td> \
+				<td> \
+				<select name="f27" id="f27" size="1"> \
+	<!-- TMPL_IF name="f27 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>28 Offentlig publikasjon</td> \
+				<td> \
+				<select name="f28" id="f28" size="1"> \
+	<!-- TMPL_IF name="f28 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f280" --> \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f281" --> \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28b" --> \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28c" --> \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28d" --> \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28e" --> \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>29 Konferanse</td> \
+				<td> \
+				<select name="f29" id="f29" size="1"> \
+	<!-- TMPL_IF name="f29 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f290" --> \
+		<option value="0" selected="selected">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f291" --> \
+		<option value="1" selected="selected">1 Dokumentet er en konferansepublikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Dokumentet er en konferansepublikasjon</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>30 Festskrift</td> \
+				<td> \
+				<select name="f30" id="f30" size="1"> \
+	<!-- TMPL_IF name="f30 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f300" --> \
+		<option value="0" selected="selected">0 Dokumentet er ikke et festskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Dokumentet er ikke et festskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f301" --> \
+		<option value="1" selected="selected">1 Dokumentet er et festskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Dokumentet er et festskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30a" --> \
+		<option value="a" selected="selected">a Festskrift for person</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Festskrift for person</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30b" --> \
+		<option value="b" selected="selected">b Festskrift for korporasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Festskrift for korporasjon</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>31 Register</td> \
+				<td> \
+				<select name="f31" id="f31" size="1"> \
+	<!-- TMPL_IF name="f31 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f310" --> \
+		<option value="0" selected="selected">0 Dokumentet har ikke register</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Dokumentet har ikke register</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f311" --> \
+		<option value="1" selected="selected">1 Dokumentet har register</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Dokumentet har register</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>32 Udefinert</td> \
+				<td> \
+				<input type="hidden" name="f32" id="f32" size="1" value=" " /> \
+				</td></tr> \
+		<tr> \
+				<td>33 Litterær form / genre</td> \
+				<td> \
+				<select name="f33" id="f33" size="1"> \
+  <!-- TMPL_IF name="f33 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f330" --> \
+		<option value="0" selected="selected">0 Ikke skjønnlitteratu</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Ikke skjønnlitteratu</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f331" --> \
+		<option value="1" selected="selected">1 Skjønnlitteratur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Skjønnlitteratur</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33a" --> \
+		<option value="a" selected="selected">a Antologi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Antologi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33d" --> \
+		<option value="d" selected="selected">d Dikt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Dikt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33l" --> \
+		<option value="l" selected="selected">l Lærebok, brevkurs</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lærebok, brevkurs</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33n" --> \
+		<option value="n" selected="selected">n Novelle / fortelling</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Novelle / fortelling</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33p" --> \
+		<option value="p" selected="selected">p Pekebok</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Pekebok</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33r" --> \
+		<option value="r" selected="selected">r Roman</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Roman</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33s" --> \
+		<option value="s" selected="selected">s Skuespill</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Skuespill</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33t" --> \
+		<option value="t" selected="selected">t Tegneserie</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tegneserie</option> \
+		<!-- /TMPL_IF --> \
+				</select> \
+				</td></tr> \
+		<tr> \
+		<td>34 Biografi</td> \
+		<td> \
+		<select name="f34" id="f34" size="1"> \
+	<!-- TMPL_IF name="f34 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f340" --> \
+		<option value="0" selected="selected">0 Ikke biografisk materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Ikke biografisk materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f341" --> \
+		<option value="1" selected="selected">1 Biografisk materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Biografisk materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34a" --> \
+		<option value="a" selected="selected">a Selvbiografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Selvbiografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34b" --> \
+		<option value="b" selected="selected">b Enkeltbiografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Enkeltbiografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34c" --> \
+		<option value="c" selected="selected">c Samlingsbiografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Samlingsbiografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34d" --> \
+		<option value="d" selected="selected">d Inneholder biografisk informasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Inneholder biografisk informasjon</option> \
+		<!-- /TMPL_IF --> \
+		</select> \
+		</td></tr> \
+		</table>';
+    break;
+  case "per":
+    divOutput.innerHTML='<table> \
+		<tr> \
+		 <td>18 Periodisitet</td> \
+		 <td> \
+		 <select name="f18" id="f18" size="1"> \
+	<!-- TMPL_IF name="f18 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18a" --> \
+		<option value="a" selected="selected">a Årlig</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Årlig</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18b" --> \
+		<option value="b" selected="selected">b Annenhver måned (6-8 ganger pr år)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Annenhver måned (6-8 ganger pr år)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18c" --> \
+		<option value="c" selected="selected">c To ganger pr uke</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c To ganger pr uke</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18d" --> \
+		<option value="d" selected="selected">d Daglig (4-7 ganger pr uke)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Daglig (4-7 ganger pr uke)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18e" --> \
+		<option value="e" selected="selected">e Annenhver uke</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Annenhver uke</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18f" --> \
+		<option value="f" selected="selected">f To ganger pr år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f To ganger pr år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18g" --> \
+		<option value="g" selected="selected">g Annethvert år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Annethvert år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18h" --> \
+		<option value="h" selected="selected">h Hvert tredje år eller sjeldnere</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Hvert tredje år eller sjeldnere</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18i" --> \
+		<option value="i" selected="selected">i Tre ganger pr uke</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Tre ganger pr uke</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18j" --> \
+		<option value="j" selected="selected">j Tre ganger pr måned</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Tre ganger pr måned</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18k" --> \
+		<option value="k" selected="selected">k Uregelmessig</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Uregelmessig</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18m" --> \
+		<option value="m" selected="selected">m Månedlig (9-12 ganger pr år)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Månedlig (9-12 ganger pr år)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18q" --> \
+		<option value="q" selected="selected">q Kvartalsvis</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Kvartalsvis</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18s" --> \
+		<option value="s" selected="selected">s To ganger pr måned</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s To ganger pr måned</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18t" --> \
+		<option value="t" selected="selected">t Tre ganger pr år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tre ganger pr år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18w" --> \
+		<option value="w" selected="selected">w Ukentlig</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="w">w Ukentlig</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18z" --> \
+		<option value="z" selected="selected">z Annen periodisitet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annen periodisitet</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>19 Regularitet</td> \
+		 <td> \
+		 <select name="f19" id="f19" size="1"> \
+	<!-- TMPL_IF name="f19 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19n" --> \
+		<option value="n" selected="selected">n Normalisert uregelmessig</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Normalisert uregelmessig</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19r" --> \
+		<option value="r" selected="selected">r Regelmessig</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Regelmessig</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19u" --> \
+		<option value="u" selected="selected">u Ikke kjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ikke kjent</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19x" --> \
+		<option value="x" selected="selected">x Fullstendig uregelmessig</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Fullstendig uregelmessig</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>20 ISSN-senter</td> \
+		 <td> \
+		 <select name="f20" id="f20" size="1"> \
+	<!-- TMPL_IF name="f20 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f200" --> \
+		<option value="0" selected="selected">0 ISSN International Centre (Paris)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 ISSN International Centre (Paris)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f201" --> \
+		<option value="1" selected="selected">1 Forente stater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Forente stater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f202" --> \
+		<option value="2" selected="selected">2 Storbritannia</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="2">2 Storbritannia</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f203" --> \
+		<option value="3" selected="selected">3 Australia</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="3">3 Australia</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f204" --> \
+		<option value="4" selected="selected">4 Canada</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="4">4 Canada</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f205" --> \
+		<option value="5" selected="selected">5 Moskva regionale senter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="5">5 Moskva regionale senter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f206" --> \
+		<option value="6" selected="selected">6 Tyskland</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="6">6 Tyskland</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f207" --> \
+		<option value="7" selected="selected">7 Frankrike</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="7">7 Frankrike</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20a" --> \
+		<option value="a" selected="selected">a Finland</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Finland</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20f" --> \
+		<option value="f" selected="selected">f Sverige</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Sverige</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20h" --> \
+		<option value="h" selected="selected">h Danmark</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Danmark</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20r" --> \
+		<option value="r" selected="selected">r Norge</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Norge</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20z" --> \
+		<option value="z" selected="selected">z Andre ISSN-sentre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre ISSN-sentre</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>21 Type periodikum</td> \
+		 <td> \
+		 <select name="f21" id="f21" size="1"> \
+	<!-- TMPL_IF name="f21 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21a" --> \
+		<option value="a" selected="selected">a Årbok</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Årbok</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21m" --> \
+		<option value="m" selected="selected">m Monografiserie</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Monografiserie</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21n" --> \
+		<option value="n" selected="selected">n Avis</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Avis</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21p" --> \
+		<option value="p" selected="selected">p Tidsskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Tidsskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21z" --> \
+		<option value="z" selected="selected">z Andre typer periodika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre typer periodika</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	<!-- TMPL_IF name="f22 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22a" --> \
+		<option value="a" selected="selected">a Voksne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Voksne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22b" --> \
+		<option value="b" selected="selected">b Tegneserier for voksne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Tegneserier for voksne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22f" --> \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Spesialisert</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22g" --> \
+		<option value="g" selected="selected">g Generell</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Generell</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22j" --> \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Barn og ungdom</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22k" --> \
+		<option value="k" selected="selected">k Tegneserier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Tegneserier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22l" --> \
+		<option value="l" selected="selected">l Barn i alderen til og med 5 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Barn i alderen til og med 5 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22m" --> \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22n" --> \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22o" --> \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22p" --> \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22q" --> \
+		<option value="q" selected="selected">q Lettlest</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Lettlest</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22r" --> \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22s" --> \
+		<option value="s" selected="selected">s Storskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Storskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22v" --> \
+		<option value="v" selected="selected">v Tegneserier for barn i alderen til og med 5 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="v">v Tegneserier for barn i alderen til og med 5 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22w" --> \
+		<option value="w" selected="selected">w Tegneserier for elever på 1. til 3. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="w">w Tegneserier for elever på 1. til 3. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22x" --> \
+		<option value="x" selected="selected">x Tegneserier for elever på 4. og 5. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Tegneserier for elever på 4. og 5. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22y" --> \
+		<option value="y" selected="selected">y Tegneserier for elever på 6. og 7. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="y">y Tegneserier for elever på 6. og 7. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22z" --> \
+		<option value="z" selected="selected">z Tegneserier for elever på ungdomstrinnet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Tegneserier for elever på ungdomstrinnet</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Materialform</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	<!-- TMPL_IF name="f23 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23a" --> \
+		<option value="a" selected="selected">a Mikrofilm</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Mikrofilm</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23b" --> \
+		<option value="b" selected="selected">b Mikrofilmkort</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Mikrofilmkort</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23c" --> \
+		<option value="c" selected="selected">c Mikro-opak</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Mikro-opak</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23f" --> \
+		<option value="f" selected="selected">f Braille</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Braille</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23r" --> \
+		<option value="r" selected="selected">r Ordinært trykk (øye-lesbar)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Ordinært trykk (øye-lesbar)</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>24 Innhold</td> \
+		 <td> \
+		 <select name="f24" id="f24" size="1"> \
+	<!-- TMPL_IF name="f24 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>25 Innhold</td> \
+		 <td> \
+		 <select name="f25" id="f25" size="1"> \
+	<!-- TMPL_IF name="f25 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Innhold</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	<!-- TMPL_IF name="f26 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>27 Innhold</td> \
+		 <td> \
+		 <select name="f27" id="f27" size="1"> \
+	<!-- TMPL_IF name="f27 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27a" --> \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27b" --> \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27c" --> \
+		<option value="c" selected="selected">c Kataloger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kataloger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27d" --> \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Ordbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27e" --> \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Konversasjonsleksika</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27f" --> \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Håndbøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27h" --> \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Referanseverk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27i" --> \
+		<option value="i" selected="selected">i Registre</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Registre</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27k" --> \
+		<option value="k" selected="selected">k Diskografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Diskografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27l" --> \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Lover og forskrifter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27m" --> \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27n" --> \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27o" --> \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Anmeldelser</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27q" --> \
+		<option value="q" selected="selected">q Filmografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Filmografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27r" --> \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Adressebøker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27s" --> \
+		<option value="s" selected="selected">s Statistikker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Statistikker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27t" --> \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Tekniske rapporter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27x" --> \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27z" --> \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	<!-- TMPL_IF name="f28 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f280" --> \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f281" --> \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28b" --> \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28c" --> \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28d" --> \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28e" --> \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>29 Konferanse</td> \
+		 <td> \
+		 <select name="f29" id="f29" size="1"> \
+	<!-- TMPL_IF name="f29 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f290" --> \
+		<option value="0" selected="selected">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f291" --> \
+		<option value="1" selected="selected">1 Dokumentet er en konferansepublikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Dokumentet er en konferansepublikasjon</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>30 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>31 Register</td> \
+		 <td> \
+		 <select name="f31" id="f31" size="1"> \
+	<!-- TMPL_IF name="f31 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f310" --> \
+		<option value="0" selected="selected">0 Dokumentet har ikke register</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Dokumentet har ikke register</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f311" --> \
+		<option value="1" selected="selected">1 Dokumentet har register</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Dokumentet har register</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31b" --> \
+		<option value="b" selected="selected">b Register for hele bindet finnes i bindets siste hefte</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Register for hele bindet finnes i bindets siste hefte</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31e" --> \
+		<option value="e" selected="selected">e Register for hele bindet finnes i første hefte av neste bind</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Register for hele bindet finnes i første hefte av neste bind</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31h" --> \
+		<option value="h" selected="selected">h Registeret utgis separat</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Registeret utgis separat</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31z" --> \
+		<option value="z" selected="selected">z Registeret tilgjengelig på annet vis</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Registeret tilgjengelig på annet vis</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 <tr> \
+		 <td>32 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>33 Tittelens originale alfabet eller skriftsystem</td> \
+		 <td> \
+		 <select name="f33" id="f33" size="1"> \
+	<!-- TMPL_IF name="f33 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33a" --> \
+		<option value="a" selected="selected">a Grunnleggende latinsk alfabet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Grunnleggende latinsk alfabet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33b" --> \
+		<option value="b" selected="selected">b Utvidet latinsk alfabet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Utvidet latinsk alfabet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33c" --> \
+		<option value="c" selected="selected">c Kyrillisk alfabet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kyrillisk alfabet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33d" --> \
+		<option value="d" selected="selected">d Japanske tegn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Japanske tegn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33e" --> \
+		<option value="e" selected="selected">e Kinesiske tegn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Kinesiske tegn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33f" --> \
+		<option value="f" selected="selected">f Arabisk alfabet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Arabisk alfabet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33g" --> \
+		<option value="g" selected="selected">g Gresk alfabet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Gresk alfabet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33h" --> \
+		<option value="h" selected="selected">h Hebraisk alfabet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Hebraisk alfabet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33i" --> \
+		<option value="i" selected="selected">i Thai</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Thai</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33j" --> \
+		<option value="j" selected="selected">j Devanagari</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Devanagari</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33k" --> \
+		<option value="k" selected="selected">k Koreansk alfabet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Koreansk alfabet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33l" --> \
+		<option value="l" selected="selected">l Tamil</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Tamil</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33m" --> \
+		<option value="m" selected="selected">m Gotisk skrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Gotisk skrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33u" --> \
+		<option value="u" selected="selected">u Ukjent eller uanvendelig</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent eller uanvendelig</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33z" --> \
+		<option value="z" selected="selected">z Andre alfabeter eller skriftsystemer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre alfabeter eller skriftsystemer</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 		 <tr> \
+		 <td>34 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f34" id="f34" value=" " /> \
+		 </td></tr> \
+		 </table>';
+    break;
+  case "fil":
+    divOutput.innerHTML='<table> \
+		 <tr> \
+		 <td>18-21 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f18" id="f18" value=" " /> \
+		 <input type="hidden" name="f19" id="f19" value=" " /> \
+		 <input type="hidden" name="f20" id="f20" value=" " /> \
+		 <input type="hidden" name="f21" id="f21" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	<!-- TMPL_IF name="f22 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f221" --> \
+		<option value="1" selected="selected">1 Barn i alderen til og med 5 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Barn i alderen til og med 5 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22a" --> \
+		<option value="a" selected="selected">a Voksne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Voksne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22f" --> \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Spesialisert</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22g" --> \
+		<option value="g" selected="selected">g Generell</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Generell</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22j" --> \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Barn og ungdom</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22m" --> \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22n" --> \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22o" --> \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22p" --> \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22q" --> \
+		<option value="q" selected="selected">q Lettlest</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Lettlest</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22r" --> \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22s" --> \
+		<option value="s" selected="selected">s Storskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Storskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23-25 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f23" id="f23" value=" " /> \
+		 <input type="hidden" name="f24" id="f24" value=" " /> \
+		 <input type="hidden" name="f25" id="f25" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Type data</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	<!-- TMPL_IF name="f26 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26a" --> \
+		<option value="a" selected="selected">a Numeriske data</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Numeriske data</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26b" --> \
+		<option value="b" selected="selected">b Programvare</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Programvare</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26c" --> \
+		<option value="c" selected="selected">c Grafiske data</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Grafiske data</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26d" --> \
+		<option value="d" selected="selected">d Tekst</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Tekst</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26e" --> \
+		<option value="e" selected="selected">e Bibliografiske data</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Bibliografiske data</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26f" --> \
+		<option value="f" selected="selected">f Font</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Font</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26g" --> \
+		<option value="g" selected="selected">g Spill</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Spill</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26h" --> \
+		<option value="h" selected="selected">h Lyd</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Lyd</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26i" --> \
+		<option value="i" selected="selected">i Interaktivt multimedium</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Interaktivt multimedium</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26j" --> \
+		<option value="j" selected="selected">j Online tjeneste</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Online tjeneste</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26m" --> \
+		<option value="m" selected="selected">m En kombinasjon av to eller flere av de ovennevnte</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m En kombinasjon av to eller flere av de ovennevnte</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26z" --> \
+		<option value="z" selected="selected">z Annen type data</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annen type data</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 <tr> \
+		 <td>27 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f27" id="f27" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	<!-- TMPL_IF name="f28 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f280" --> \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f281" --> \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28b" --> \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28c" --> \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28d" --> \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28e" --> \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 		 <tr> \
+		 <td>29-34 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f29" id="f29" value=" " /> \
+ 		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 <input type="hidden" name="f31" id="f31" value=" " /> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 <input type="hidden" name="f33" id="f33" value=" " /> \
+		 <input type="hidden" name="f34" id="f34" value=" " /> \
+		 </td></tr> \
+		</table>';
+		break;
+  case "mus":
+    divOutput.innerHTML='<table> \
+		 		 		 <tr> \
+		 <td>18-19 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f18" id="f18" value=" " /> \
+ 		 <input type="hidden" name="f19" id="f19" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>20 Format</td> \
+		 <td> \
+		 <select name="f20" id="f20" size="1"> \
+	<!-- TMPL_IF name="f20 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20a" --> \
+		<option value="a" selected="selected">a Partitur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Partitur</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20b" --> \
+		<option value="b" selected="selected">b Studiepartitur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Studiepartitur</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20c" --> \
+		<option value="c" selected="selected">c Klaverpartitur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Klaverpartitur</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20d" --> \
+		<option value="d" selected="selected">d Korpartitur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Korpartitur</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20e" --> \
+		<option value="e" selected="selected">e Particell eller direksjonsstemme for klaver/fiolin o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Particell eller direksjonsstemme for klaver/fiolin o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20g" --> \
+		<option value="g" selected="selected">g Enhetspartitur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Enhetspartitur</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20m" --> \
+		<option value="m" selected="selected">m Forskjellige typer partitur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Forskjellige typer partitur</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20z" --> \
+		<option value="z" selected="selected">z Annet enn partitur</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet enn partitur</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>21 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f21" id="f21" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	<!-- TMPL_IF name="f22 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f221" --> \
+		<option value="1" selected="selected">1 Barn i alderen til og med 5 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Barn i alderen til og med 5 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22a" --> \
+		<option value="a" selected="selected">a Voksne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Voksne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22f" --> \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Spesialisert</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22g" --> \
+		<option value="g" selected="selected">g Generell</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Generell</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22j" --> \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Barn og ungdom</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22m" --> \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22n" --> \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22o" --> \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22p" --> \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22q" --> \
+		<option value="q" selected="selected">q Lettlest</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="q">q Lettlest</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22r" --> \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22s" --> \
+		<option value="s" selected="selected">s Storskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Storskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Materialform</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	<!-- TMPL_IF name="f23 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23a" --> \
+		<option value="a" selected="selected">a Mikrofilm</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Mikrofilm</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23b" --> \
+		<option value="b" selected="selected">b Mikrofilmkort</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Mikrofilmkort</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23c" --> \
+		<option value="c" selected="selected">c Mikro-opak</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Mikro-opak</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23f" --> \
+		<option value="f" selected="selected">f Braille</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Braille</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23r" --> \
+		<option value="r" selected="selected">r Ordinært trykk (øye-lesbar)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Ordinært trykk (øye-lesbar)</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>24 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f24" id="f24" size="1"> \
+	<!-- TMPL_IF name="f24 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24a" --> \
+		<option value="a" selected="selected">a Diskografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Diskografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24b" --> \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24c" --> \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Verkfortegnelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24d" --> \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Libretto eller tekst</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24e" --> \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24f" --> \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24g" --> \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24h" --> \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24i" --> \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Historiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24k" --> \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Etnologiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24n" --> \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24s" --> \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24z" --> \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>25 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f25" id="f25" size="1"> \
+	<!-- TMPL_IF name="f25 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25a" --> \
+		<option value="a" selected="selected">a Diskografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Diskografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25b" --> \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25c" --> \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Verkfortegnelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25d" --> \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Libretto eller tekst</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25e" --> \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25f" --> \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25g" --> \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25h" --> \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25i" --> \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Historiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25k" --> \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Etnologiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25n" --> \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25s" --> \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25z" --> \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	<!-- TMPL_IF name="f26 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26a" --> \
+		<option value="a" selected="selected">a Diskografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Diskografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26b" --> \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26c" --> \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Verkfortegnelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26d" --> \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Libretto eller tekst</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26e" --> \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26f" --> \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26g" --> \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26h" --> \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26i" --> \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Historiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26k" --> \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Etnologiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26n" --> \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26s" --> \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26z" --> \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>27 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f27" id="f27" size="1"> \
+	<!-- TMPL_IF name="f27 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27a" --> \
+		<option value="a" selected="selected">a Diskografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Diskografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27b" --> \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27c" --> \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Verkfortegnelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27d" --> \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Libretto eller tekst</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27e" --> \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27f" --> \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27g" --> \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27h" --> \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27i" --> \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Historiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27k" --> \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Etnologiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27n" --> \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27s" --> \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27z" --> \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	<!-- TMPL_IF name="f28 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28a" --> \
+		<option value="a" selected="selected">a Diskografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Diskografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28b" --> \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28c" --> \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Verkfortegnelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28d" --> \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Libretto eller tekst</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28e" --> \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28f" --> \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28g" --> \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28h" --> \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28i" --> \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Historiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28k" --> \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Etnologiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28n" --> \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28s" --> \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28z" --> \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>29 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f29" id="f29" size="1"> \
+	<!-- TMPL_IF name="f29 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29a" --> \
+		<option value="a" selected="selected">a Diskografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Diskografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29b" --> \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Bibliografi</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29c" --> \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Verkfortegnelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29d" --> \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Libretto eller tekst</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29e" --> \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29f" --> \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29g" --> \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29h" --> \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29i" --> \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Historiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29k" --> \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Etnologiske opplysninger</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29n" --> \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29s" --> \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f29z" --> \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet ledsagende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>30 Innhold på lydopptak</td> \
+		 <td> \
+		 <select name="f30" id="f30" size="1"> \
+	<!-- TMPL_IF name="f30 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30a" --> \
+		<option value="a" selected="selected">a Selvbiografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Selvbiografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30b" --> \
+		<option value="b" selected="selected">b Biografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Biografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30c" --> \
+		<option value="c" selected="selected">c Samtaler og diskusjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Samtaler og diskusjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30d" --> \
+		<option value="d" selected="selected">d Drama</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Drama</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30e" --> \
+		<option value="e" selected="selected">e Essays</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Essays</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30f" --> \
+		<option value="f" selected="selected">f Romaner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Romaner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30g" --> \
+		<option value="g" selected="selected">g Rapporter, referater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Rapporter, referater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30h" --> \
+		<option value="h" selected="selected">h Fortellinger, noveller</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Fortellinger, noveller</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30i" --> \
+		<option value="i" selected="selected">i Undervisning</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Undervisning</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30j" --> \
+		<option value="j" selected="selected">j Språkundervisning</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Språkundervisning</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30k" --> \
+		<option value="k" selected="selected">k Komedier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Komedier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30l" --> \
+		<option value="l" selected="selected">l Foredrag, taler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Foredrag, taler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30m" --> \
+		<option value="m" selected="selected">m Memoarer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Memoarer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30o" --> \
+		<option value="o" selected="selected">o Eventyr</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Eventyr</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30p" --> \
+		<option value="p" selected="selected">p Dikt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Dikt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30r" --> \
+		<option value="r" selected="selected">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30s" --> \
+		<option value="s" selected="selected">s Lyder (f.eks. fuglelyder)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Lyder (f.eks. fuglelyder)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30t" --> \
+		<option value="t" selected="selected">t Intervjuer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Intervjuer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f30z" --> \
+		<option value="z" selected="selected">z Andre typer innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre typer innhold</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>31 Innhold på lydopptak</td> \
+		 <td> \
+		 <select name="f31" id="f31" size="1"> \
+	<!-- TMPL_IF name="f31 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31a" --> \
+		<option value="a" selected="selected">a Selvbiografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Selvbiografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31b" --> \
+		<option value="b" selected="selected">b Biografier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Biografier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31c" --> \
+		<option value="c" selected="selected">c Samtaler og diskusjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Samtaler og diskusjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31d" --> \
+		<option value="d" selected="selected">d Drama</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Drama</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31e" --> \
+		<option value="e" selected="selected">e Essays</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Essays</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31f" --> \
+		<option value="f" selected="selected">f Romaner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Romaner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31g" --> \
+		<option value="g" selected="selected">g Rapporter, referater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Rapporter, referater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31h" --> \
+		<option value="h" selected="selected">h Fortellinger, noveller</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="h">h Fortellinger, noveller</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31i" --> \
+		<option value="i" selected="selected">i Undervisning</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Undervisning</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31j" --> \
+		<option value="j" selected="selected">j Språkundervisning</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Språkundervisning</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31k" --> \
+		<option value="k" selected="selected">k Komedier</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Komedier</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31l" --> \
+		<option value="l" selected="selected">l Foredrag, taler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Foredrag, taler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31m" --> \
+		<option value="m" selected="selected">m Memoarer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Memoarer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31o" --> \
+		<option value="o" selected="selected">o Eventyr</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Eventyr</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31p" --> \
+		<option value="p" selected="selected">p Dikt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Dikt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31r" --> \
+		<option value="r" selected="selected">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31s" --> \
+		<option value="s" selected="selected">s Lyder (f.eks. fuglelyder)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Lyder (f.eks. fuglelyder)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31t" --> \
+		<option value="t" selected="selected">t Intervjuer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="t">t Intervjuer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f31z" --> \
+		<option value="z" selected="selected">z Andre typer innhold</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre typer innhold</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 <tr> \
+		 <td>32-34 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 <input type="hidden" name="f33" id="f33" value=" " /> \
+		 <input type="hidden" name="f34" id="f34" value=" " /> \
+		 </td></tr> \
+		</table>';
+		break;
+  case "fv":
+    divOutput.innerHTML='<table> \
+				 		 <tr> \
+		 <td>18-20 Spilletid for filmer og videogrammer</td> \
+		 <td> \
+		 (Feltet er ikke tilgjengelig) \
+		 <input type="hidden" name="f18" id="f18" value=" " /> \
+		 <input type="hidden" name="f19" id="f19" value=" " /> \
+		 <input type="hidden" name="f20" id="f20" value=" " /> \
+		 </td></tr> \
+		 				 		 <tr> \
+		 <td>21 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f21" id="f21" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	<!-- TMPL_IF name="f22 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f221" --> \
+		<option value="1" selected="selected">1 Voksne over 18 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Voksne over 18 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f222" --> \
+		<option value="2" selected="selected">2 Voksne over 15 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="2">2 Voksne over 15 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f224" --> \
+		<option value="4" selected="selected">4 Ungdom over 12 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="4">4 Ungdom over 12 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f225" --> \
+		<option value="5" selected="selected">5 Barn over 7 år</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="5">5 Barn over 7 år</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f226" --> \
+		<option value="6" selected="selected">6 Småbarn</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="6">6 Småbarn</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22a" --> \
+		<option value="a" selected="selected">a Voksne</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Voksne</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22f" --> \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Spesialisert</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22g" --> \
+		<option value="g" selected="selected">g Generell</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Generell</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22j" --> \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Barn og ungdom</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	<!-- TMPL_IF name="f23 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23l" --> \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23m" --> \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23n" --> \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23o" --> \
+		<option value="o" selected="selected">o Plakater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Plakater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23p" --> \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Pressemateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23s" --> \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23z" --> \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>24 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f24" id="f24" size="1"> \
+	<!-- TMPL_IF name="f24 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24l" --> \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24m" --> \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24n" --> \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24o" --> \
+		<option value="o" selected="selected">o Plakater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Plakater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24p" --> \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Pressemateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24s" --> \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f24z" --> \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>25 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f25" id="f25" size="1"> \
+	<!-- TMPL_IF name="f25 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25l" --> \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25m" --> \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25n" --> \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25o" --> \
+		<option value="o" selected="selected">o Plakater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Plakater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25p" --> \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Pressemateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25s" --> \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f25z" --> \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	<!-- TMPL_IF name="f26 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26l" --> \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26m" --> \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26n" --> \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26o" --> \
+		<option value="o" selected="selected">o Plakater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Plakater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26p" --> \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Pressemateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26s" --> \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f26z" --> \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>27 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f27" id="f27" size="1"> \
+	<!-- TMPL_IF name="f27 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27l" --> \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27m" --> \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27n" --> \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Intet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27o" --> \
+		<option value="o" selected="selected">o Plakater</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Plakater</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27p" --> \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Pressemateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27r" --> \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="r">r Instruksjonsmateriale</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27s" --> \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f27z" --> \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annet medfølgende materiale</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	<!-- TMPL_IF name="f28 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f280" --> \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f281" --> \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28b" --> \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28c" --> \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28d" --> \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28e" --> \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 				 		 <tr> \
+		 <td>29-33 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f29" id="f29" value=" " /> \
+		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 <input type="hidden" name="f31" id="f31" value=" " /> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 <input type="hidden" name="f33" id="f33" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>34 Teknikk</td> \
+		 <td> \
+		 <select name="f34" id="f34" size="1"> \
+	<!-- TMPL_IF name="f34 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34a" --> \
+		<option value="a" selected="selected">a Animasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Animasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34c" --> \
+		<option value="c" selected="selected">c Animasjon og levende bevegelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Animasjon og levende bevegelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34l" --> \
+		<option value="l" selected="selected">l Levende bevegelse</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Levende bevegelse</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34u" --> \
+		<option value="u" selected="selected">u Ukjent</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="u">u Ukjent</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34z" --> \
+		<option value="z" selected="selected">z Annen teknikk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annen teknikk</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		</table>';
+		break;
+  case "kar":
+    divOutput.innerHTML='<table> \
+		<tr> \
+		 <td>18 Relieff</td> \
+		 <td> \
+		 <select name="f18" id="f18" size="1"> \
+	<!-- TMPL_IF name="f18 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18a" --> \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Høydekurver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18b" --> \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Skyggelegging</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18c" --> \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Graderte fargetoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18d" --> \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Bakkestreker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18e" --> \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Dybdepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18f" --> \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Formlinjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18g" --> \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Høydepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18i" --> \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Punktsymboler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18j" --> \
+		<option value="j" selected="selected">j Landformer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Landformer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18k" --> \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18n" --> \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f18z" --> \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre reliefftyper</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>19 Relieff</td> \
+		 <td> \
+		 <select name="f19" id="f19" size="1"> \
+	<!-- TMPL_IF name="f19 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19a" --> \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Høydekurver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19b" --> \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Skyggelegging</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19c" --> \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Graderte fargetoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19d" --> \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Bakkestreker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19e" --> \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Dybdepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19f" --> \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Formlinjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19g" --> \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Høydepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19i" --> \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Punktsymboler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19j" --> \
+		<option value="j" selected="selected">j Landformer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Landformer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19k" --> \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19n" --> \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f19z" --> \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre reliefftyper</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>20 Relieff</td> \
+		 <td> \
+		 <select name="f20" id="f20" size="1"> \
+	<!-- TMPL_IF name="f20 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20a" --> \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Høydekurver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20b" --> \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Skyggelegging</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20c" --> \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Graderte fargetoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20d" --> \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Bakkestreker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20e" --> \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Dybdepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20f" --> \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Formlinjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20g" --> \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Høydepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20i" --> \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Punktsymboler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20j" --> \
+		<option value="j" selected="selected">j Landformer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Landformer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20k" --> \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20n" --> \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f20z" --> \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre reliefftyper</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>21 Relieff</td> \
+		 <td> \
+		 <select name="f21" id="f21" size="1"> \
+	<!-- TMPL_IF name="f21 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21a" --> \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Høydekurver</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21b" --> \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Skyggelegging</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21c" --> \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Graderte fargetoner</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21d" --> \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Bakkestreker</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21e" --> \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Dybdepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21f" --> \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="f">f Formlinjer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21g" --> \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="g">g Høydepunkt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21i" --> \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="i">i Punktsymboler</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21j" --> \
+		<option value="j" selected="selected">j Landformer</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Landformer</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21k" --> \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21n" --> \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f21z" --> \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre reliefftyper</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Projeksjon</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	<!-- TMPL_IF name="f22 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22a" --> \
+		<option value="a" selected="selected">a Planprojeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Planprojeksjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22b" --> \
+		<option value="b" selected="selected">b Sylinderprojeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Sylinderprojeksjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22c" --> \
+		<option value="c" selected="selected">c Kjegleprojeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kjegleprojeksjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f22z" --> \
+		<option value="z" selected="selected">z Annen projeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annen projeksjon</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Projeksjon</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	<!-- TMPL_IF name="f23 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23a" --> \
+		<option value="a" selected="selected">a Planprojeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="a">a Planprojeksjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23b" --> \
+		<option value="b" selected="selected">b Sylinderprojeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Sylinderprojeksjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23c" --> \
+		<option value="c" selected="selected">c Kjegleprojeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Kjegleprojeksjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f23z" --> \
+		<option value="z" selected="selected">z Annen projeksjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Annen projeksjon</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 		 				 		 <tr> \
+		 <td>24-27 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f24" id="f24" value=" " /> \
+		 <input type="hidden" name="f25" id="f25" value=" " /> \
+		 <input type="hidden" name="f26" id="f26" value=" " /> \
+		 <input type="hidden" name="f27" id="f27" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	<!-- TMPL_IF name="f28 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f280" --> \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f281" --> \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Offentlig publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28b" --> \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="b">b Kommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28c" --> \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28d" --> \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f28e" --> \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 		 		 				 		 <tr> \
+		 <td>29-30 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f29" id="f29" value=" " /> \
+		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>31 Register</td> \
+	 <td> \
+		 <select name="f31" id="f31" size="1"> \
+	<!-- TMPL_IF name="f31 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f310" --> \
+		<option value="0" selected="selected">0 Dokumentet har ikke register</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="0">0 Dokumentet har ikke register</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f311" --> \
+		<option value="1" selected="selected">1 Dokumentet har register</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="1">1 Dokumentet har register</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 		 		 		 		 				 		 <tr> \
+		 <td>32 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>33 Spesielle formatkarakteristika</td> \
+		 <td> \
+		 <select name="f33" id="f33" size="1"> \
+	<!-- TMPL_IF name="f33 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33j" --> \
+		<option value="j" selected="selected">j Postkort o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Postkort o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33k" --> \
+		<option value="k" selected="selected">k Kalender</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Kalender</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33l" --> \
+		<option value="l" selected="selected">l Puslespill</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Puslespill</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33m" --> \
+		<option value="m" selected="selected">m Relieffkart med blindeskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Relieffkart med blindeskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33n" --> \
+		<option value="n" selected="selected">n Spill</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Spill</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33o" --> \
+		<option value="o" selected="selected">o Veggkart/rullegardinkart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Veggkart/rullegardinkart</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33p" --> \
+		<option value="p" selected="selected">p Spillkort</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Spillkort</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f33z" --> \
+		<option value="z" selected="selected">z Andre spesielle former for kart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre spesielle former for kart</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>34 Spesielle formatkarakteristika</td> \
+		 <td> \
+		 <select name="f34" id="f34" size="1"> \
+	<!-- TMPL_IF name="f34 " --> \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		<!-- TMPL_ELSE --> \
+		<option value=" ">^ Ikke angitt</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34j" --> \
+		<option value="j" selected="selected">j Postkort o.l.</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="j">j Postkort o.l.</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34k" --> \
+		<option value="k" selected="selected">k Kalender</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="k">k Kalender</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34l" --> \
+		<option value="l" selected="selected">l Puslespill</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="l">l Puslespill</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34m" --> \
+		<option value="m" selected="selected">m Relieffkart med blindeskrift</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="m">m Relieffkart med blindeskrift</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34n" --> \
+		<option value="n" selected="selected">n Spill</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="n">n Spill</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34o" --> \
+		<option value="o" selected="selected">o Veggkart/rullegardinkart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="o">o Veggkart/rullegardinkart</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34p" --> \
+		<option value="p" selected="selected">p Spillkort</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="p">p Spillkort</option> \
+		<!-- /TMPL_IF --> \
+	<!-- TMPL_IF name="f34z" --> \
+		<option value="z" selected="selected">z Andre spesielle former for kart</option> \
+		<!-- TMPL_ELSE --> \
+		<option value="z">z Andre spesielle former for kart</option> \
+		<!-- /TMPL_IF --> \
+</select> \
+		 </td></tr> \
+		</table>';
+		break;
+	default:
+    divOutput.innerHTML="baz";
+	}
+}
+
+// Pad the string with spaces so that it is 4 characters long.
+// Also, truncate strings that are longer than 4 characters.
+function pad4(s) {
+	var pad = "";
+	if (s.length < 4) {
+		var padLength = 4 - s.length;
+		for (var i = 0; i < 4 - s.length; i++) {
+			pad += " ";
+		}
+		s += pad;
+	} else {
+		s = s.substring(0, 4);
+	}
+	return s;
+}
+
+function report() {
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+            field.value = 
+			document.f_pop.f1.value+
+			document.f_pop.f6.value+
+			// bug 2563 {
+			( document.f_pop.f710.value.match(/^\s*$/)  ? "    " : pad4(document.f_pop.f710.value)  )+
+			( document.f_pop.f1114.value.match(/^\s*$/) ? "    " : pad4(document.f_pop.f1114.value) )+
+			// }
+			document.f_pop.f1517.value+
+			document.f_pop.f18.value+
+			document.f_pop.f19.value+
+			document.f_pop.f20.value+
+			document.f_pop.f21.value+
+			document.f_pop.f22.value+
+			document.f_pop.f23.value+
+			document.f_pop.f24.value+
+			document.f_pop.f25.value+
+			document.f_pop.f26.value+
+			document.f_pop.f27.value+
+			document.f_pop.f28.value+
+			document.f_pop.f29.value+
+			document.f_pop.f30.value+
+			document.f_pop.f31.value+
+			document.f_pop.f32.value+
+			document.f_pop.f33.value+
+			document.f_pop.f34.value+
+			document.f_pop.f3537.value+
+			document.f_pop.f38.value+
+			document.f_pop.f39.value;
+		self.close();
+		return false;
+	}
+	//]]>
+</script>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
