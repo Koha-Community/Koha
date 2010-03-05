@@ -485,6 +485,10 @@ sub marcrecord2csv {
     my @fieldstab;
     foreach (@marcfields) {
 	my $marcfield = $_->{field};
+
+	# Remove any blank char that might have unintentionally insered into the tag name
+	$marcfield =~ s/\s+//;	
+
 	# If it is a subfield
 	if (index($marcfield, '$') > 0) {
 	    my ($fieldtag, $subfieldtag) = split('\$', $marcfield);
