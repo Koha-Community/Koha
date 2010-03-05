@@ -517,8 +517,19 @@ sub marcrecord2csv {
 	    foreach (@fields) {
 		my $value;
 
-		# Getting authorised value
-		$value = defined $authvalues->{$_->as_string} ? $authvalues->{$_->as_string} : $_->as_string;
+		# If it is a control field
+		if ($_->is_control_field) {
+		    $value = defined $authvalues->{$_->as_string} ? $authvalues->{$_->as_string} : $_->as_string;
+		} else {
+
+		    # If it is a field, we gather all subfields, joined by the subfield separator
+		    my @subvaluesarray;
+		    my @subfields = $_->subfields;
+		    foreach my $subfield (@subfields) {
+			push (@subvaluesarray, defined $authvalues->{$subfield->[1]} ? $authvalues->{$subfield->[1]} : $subfield->[1]);
+		    }
+		    $value = join ($subfieldseparator, @subvaluesarray);
+		}
 
 		# Field processing
 		eval $fieldprocessing if ($fieldprocessing);
