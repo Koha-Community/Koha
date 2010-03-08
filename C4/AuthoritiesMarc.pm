@@ -1051,9 +1051,7 @@ sub BuildUnimarcHierarchies{
   my $data = GetHeaderAuthority($authid);
   if ($data->{'authtrees'} and not $force){
     return $data->{'authtrees'};
-  } elsif ($data->{'authtrees'}){
-    $hierarchies=$data->{'authtrees'};
-  } else {
+  } elsif ($force or !($data->{authtrees})) {
     my $record = GetAuthority($authid);
     my $found;
     foreach my $field ($record->field('550')){
@@ -1079,6 +1077,9 @@ sub BuildUnimarcHierarchies{
     }
     #Unless there is no ancestor, I am alone.
     $hierarchies="$authid" unless ($hierarchies);
+  } 
+  else {
+    $hierarchies=$data->{'authtrees'};
   }
   AddAuthorityTrees($authid,$hierarchies);
   return $hierarchies;
