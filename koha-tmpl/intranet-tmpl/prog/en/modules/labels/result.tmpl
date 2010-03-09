@@ -65,32 +65,20 @@
                 No results found
                 <!-- /TMPL_IF -->
             </div>
-            <div id="breadcrumbs">
-                <a href="/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->">Search for Items for Batch <!-- TMPL_VAR NAME="batch_id" --></a> &rsaquo;
-                Search results
-            </div>
+
             <form name="resultform" class="checkboxed" action="">
-                <div style="float: right; margin-top: .5em; margin-left: .7em; margin-bottom: .7em">
-                    <input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false" />
-                    <input type="button" class="close" value="Done" />
-                </div>
-                <div style="float: left; margin-top: .5em; margin-right: .7em; margin-bottom: .7em">
-                    <input id="CheckAll" type="submit" class="icon checkall" value="Check All" onclick="return false" />
-                    <!--<a id="CheckAll" href="/cgi-bin/koha/labels/label-item-search.pl">Select All</a>-->
-                    <input id="CheckNone" type="submit" class="icon checknone" value="Clear All" onclick="return false" />
-                    <!--<a id="CheckNone" href="/cgi-bin/koha/labels/label-item-search.pl">Clear All</a>-->
-                </div>
-                <div style="padding-top: 0.7em;">
+            <p><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <input type="button" value="Add checked" onclick="add_item('checked',<!-- TMPL_VAR NAME="batch_id" -->,'<!-- TMPL_VAR NAME="type" -->'); return false;" />
+                    <input type="button" class="close" value="Done" /></p>
+
+                <div id="label-search-results">
                 <input type="hidden" name="ccl_query" value="<!-- TMPL_VAR name="ccl_query" -->" />
-	        <!-- TMPL_LOOP name="result_set" -->
-	        <table id="label-search-results" frame="border" border="2">
-		    <tr>
-		        <td colspan="5">
-		            <label style="font-weight:bold;"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></label>
-                            by <!-- TMPL_VAR NAME="author" --><br />
-                            [<!-- TMPL_VAR NAME="itemtype" -->], <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" -->, <!-- /TMPL_IF --><!-- TMPL_IF name="pages" --><!-- TMPL_VAR name="pages" --><!-- /TMPL_IF --><!-- TMPL_IF name="isbn" -->, <b>ISBN: </b><!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->,<br /><!-- TMPL_VAR name="notes" --><!-- /TMPL_IF -->
-			</td>
-                    </tr>
+            <!-- TMPL_LOOP name="result_set" -->
+            <div style="border-bottom:1px solid #CCC;margin: .5em 0;">
+		            <h4><!-- TMPL_VAR NAME="title" ESCAPE="html" --></h4>
+                            <p><!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                            [<!-- TMPL_VAR NAME="itemtype" -->], <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --> <!-- /TMPL_IF --><!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF --><!-- TMPL_IF name="copyrightdate" --><!-- TMPL_VAR name="copyrightdate" -->, <!-- /TMPL_IF --><!-- TMPL_IF name="pages" --><!-- TMPL_VAR name="pages" --><!-- /TMPL_IF --><!-- TMPL_IF name="isbn" -->, <b>ISBN: </b><!-- TMPL_VAR name="isbn" --><!-- /TMPL_IF --><!-- TMPL_IF name="notes" -->,<br /><!-- TMPL_VAR name="notes" --><!-- /TMPL_IF --></p>
+
+                    <table style="margin-bottom:1em;">
                     <!-- TMPL_LOOP NAME="item_table" -->
                     <!-- TMPL_IF NAME="header_fields" -->
                     <tr>
@@ -114,7 +102,8 @@
                     </tr>
                     <!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->
-	        </table>
+                    </table>
+                    </div>
 	        <!-- /TMPL_LOOP -->
                 </div>
             </form>
