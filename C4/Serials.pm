@@ -607,15 +607,15 @@ sub GetSubscriptions {
     $sth = $dbh->prepare($sql);
     $sth->execute(@bind_params);
     my @results;
-    my $previoustitle = "";
+    my $previousbiblio = "";
     my $odd           = 1;
 
     while ( my $line = $sth->fetchrow_hashref ) {
-        if ( $previoustitle eq $line->{title} ) {
+        if ( $previousbiblio eq $line->{biblionumber} ) {
             $line->{title} = "";
             $line->{issn}  = "";
         } else {
-            $previoustitle = $line->{title};
+            $previousbiblio = $line->{biblionumber};
             $odd           = -$odd;
         }
         $line->{toggle} = 1 if $odd == 1;
