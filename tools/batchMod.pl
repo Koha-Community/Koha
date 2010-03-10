@@ -87,9 +87,10 @@ if ($op eq "action") {
     my @ind_tag   = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
 
-    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
-    my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
-    my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
+    # Is there something to modify ?
+    # TODO : We shall use this var to warn the user in case no modification was done to the items
+    my $something_to_modify = scalar(grep {!/^$/} @values);
+    
     foreach my $itemnumber(@itemnumbers){
 	    my $itemdata=GetItem($itemnumber);
 	    if ($input->param("del")){
@@ -101,9 +102,14 @@ if ($op eq "action") {
 			push @not_deleted, { itemnumber => $itemdata->{'itemnumber'}, barcode => $itemdata->{'barcode'}, title => $itemdata->{'title'}, $return => 1 };
 		    }
 	    } else {
+		if ($something_to_modify) {
+		    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
+		    my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
+    		    my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
 		    my $localmarcitem=Item2Marc($itemdata);
 		    UpdateMarcWith($marcitem,$localmarcitem);
 		    eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
+		}
 	    }
     }
     # If we have a reasonable amount of items, we display them
@@ -182,6 +188,11 @@ my $i=0;
 my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
 
 my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
+
+# Adding a default choice, in case the user does not want to modify the branch
+my @nochange_branch = { branchname => '', value => '', selected => 1 };
+unshift (@$branches, @nochange_branch);
+
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
 
