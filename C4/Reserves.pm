@@ -1296,23 +1296,41 @@ sub ModReserveMinusPriority {
 sub GetReserveInfo {
 	my ( $borrowernumber, $biblionumber ) = @_;
     my $dbh = C4::Context->dbh;
-	my $strsth="SELECT reservedate, reservenotes, reserves.borrowernumber,
-				reserves.biblionumber, reserves.branchcode,
-				notificationdate, reminderdate, priority, found,
-				firstname, surname, phone, 
-				email, address, address2,
-				cardnumber, city, zipcode,
-				biblio.title, biblio.author,
-				items.holdingbranch, items.itemcallnumber, items.itemnumber, 
-				barcode, notes
-			FROM reserves left join items 
-				ON items.itemnumber=reserves.itemnumber , 
-				borrowers, biblio 
+	my $strsth="SELECT 
+	               reservedate, 
+	               reservenotes, 
+	               reserves.borrowernumber,
+				   reserves.biblionumber, 
+				   reserves.branchcode,
+				   reserves.waitingdate,
+				   notificationdate, 
+				   reminderdate, 
+				   priority, 
+				   found,
+				   firstname, 
+				   surname, 
+				   phone, 
+				   email, 
+				   address, 
+				   address2,
+				   cardnumber, 
+				   city, 
+				   zipcode,
+				   biblio.title, 
+				   biblio.author,
+				   items.holdingbranch, 
+				   items.itemcallnumber, 
+				   items.itemnumber,
+				   items.location, 
+				   barcode, 
+				   notes
+			FROM reserves 
+			 LEFT JOIN items USING(itemnumber) 
+		     LEFT JOIN borrowers USING(borrowernumber)
+		     LEFT JOIN biblio ON  (reserves.biblionumber=biblio.biblionumber) 
 			WHERE 
-				reserves.borrowernumber=?  &&
-				reserves.biblionumber=? && 
-				reserves.borrowernumber=borrowers.borrowernumber && 
-				reserves.biblionumber=biblio.biblionumber ";
+				reserves.borrowernumber=?
+				AND reserves.biblionumber=?";
 	my $sth = $dbh->prepare($strsth); 
 	$sth->execute($borrowernumber,$biblionumber);
 
