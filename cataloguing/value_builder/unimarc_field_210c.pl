@@ -134,7 +134,14 @@ my ($input) = @_;
         my ($results,$total) = SearchAuthorities( \@tags,\@and_or,
                                             \@excluding, \@operator, \@value,
                                             $startfrom*$resultsperpage, $resultsperpage,$authtypecode, $orderby);
-                                            
+
+	# Getting the $b if it exists
+	foreach my $_ (@$results) {
+		if ($_->{reported_tag} =~ m/^\$b/) {
+		    $_->{to_report} = substr($_->{reported_tag}, 2);
+	    }
+ 	}
+
         ($template, $loggedinuser, $cookie)
             = get_template_and_user({template_name => "cataloguing/value_builder/unimarc_field_210c.tmpl",
                     query => $query,
