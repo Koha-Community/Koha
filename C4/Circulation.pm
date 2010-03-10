@@ -619,7 +619,7 @@ item withdrawn.
 
 item is restricted (set by ??)
 
-C<$issuingimpossible> a reference to a hash. It contains reasons why issuing is impossible.
+C<$needsconfirmation> a reference to a hash. It contains reasons why issuing is impossible.
 Possible values are :
 
 =head3 DEBT
