@@ -90,6 +90,7 @@
                     &nbsp;
                 <!-- /TMPL_IF -->
             </li>
+            <!-- TMPL_IF NAME="itemdamagedloop" -->
             <li><span class="label">Damaged Status:</span>
                 <!-- TMPL_IF NAME="CAN_user_circulate" -->
                     <form action="updateitem.pl" method="post">
@@ -117,6 +118,7 @@
                     &nbsp;
                 <!-- /TMPL_IF -->
             </li>
+            <!-- /TMPL_IF -->
             <li><span class="label">Withdrawn?:</span><!-- TMPL_IF NAME="wthdrawn" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="CAN_user_circulate" -->
                     <form action="updateitem.pl" method="post">
