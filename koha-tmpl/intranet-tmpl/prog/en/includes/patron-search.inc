@@ -55,8 +55,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	<!--/TMPL_IF -->
     order by:
     <select name="orderby" id="searchorderby">
-    <option value="surname,1">Surname</option>
-    <option value="cardnumber,1">Card number</option>
+    <option value="surname,0">Surname</option>
+    <option value="cardnumber,0">Cardnumber</option>
     </select>
     <input value="Search" class="submit" type="submit" />
 	<!--TMPL_IF Name="branchloop"-->
