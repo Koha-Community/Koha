@@ -55,6 +55,8 @@ sub new {
 	my $address = $kp->{address}      || ''; 
     my $dob     = $kp->{dateofbirth};
     $dob and $dob =~ s/-//g;    # YYYYMMDD
+    my $dexpiry     = $kp->{dateexpiry};
+    $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
 	$adr .= ($adr && $address) ? " $address" : $address;
     my $fines_amount = $flags->{CHARGES}->{amount};
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
@@ -66,6 +68,8 @@ sub new {
         id   => $kp->{cardnumber},    # to SIP, the id is the BARCODE, not userid
         password        => $pw,
         ptype           => $kp->{categorycode},     # 'A'dult.  Whatever.
+        dateexpiry      => $dexpiry,
+        dateexpiry_iso  => $kp->{dateexpiry},
         birthdate       => $dob,
         birthdate_iso   => $kp->{dateofbirth},
         branchcode      => $kp->{branchcode},
@@ -96,7 +100,7 @@ sub new {
     );
     }
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
-	for (qw(CHARGES CREDITS GNA LOST DBARRED NOTES)) {
+	for (qw(EXPIRED CHARGES CREDITS GNA LOST DEBARRED NOTES)) {
 		($flags->{$_}) or next;
         if ($_ ne 'NOTES' and $flags->{$_}->{message}) {
             $ilspatron{screen_msg} .= " -- " . $flags->{$_}->{message};  # show all but internal NOTES
@@ -131,6 +135,8 @@ my %fields = (
     home_phone              => 0,
     birthdate               => 0,
     birthdate_iso           => 0,
+    dateexpiry              => 0,
+    dateexpiry_iso          => 0,
     ptype                   => 0,
     charge_ok               => 0,   # for patron_status[0] (inverted)
     renew_ok                => 0,   # for patron_status[1] (inverted)
