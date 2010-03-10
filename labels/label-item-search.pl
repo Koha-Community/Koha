@@ -126,7 +126,8 @@ if ($show_results) {
             foreach my $item ( keys %$item_results ) {
                 #DEBUG Notes: Build an array element 'item' of the correct bib (results) hash which contains item-specific data...
                 if ($item_results->{$item}->{'biblionumber'} eq $results_set[$i]->{'biblionumber'}) {
-                    my $item_data->{'_item_number'} = $item_results->{$item}->{'itemnumber'};
+                    my $item_data;
+                    $item_data->{'_item_number'} = $item_results->{$item}->{'itemnumber'};
                     $item_data->{'_item_call_number'} = ($item_results->{$item}->{'itemcallnumber'} ? $item_results->{$item}->{'itemcallnumber'} : 'NA');
                     $item_data->{'_date_accessioned'} = $item_results->{$item}->{'dateaccessioned'};
                     $item_data->{'_barcode'} = ( $item_results->{$item}->{'barcode'} ? $item_results->{$item}->{'barcode'} : 'NA');

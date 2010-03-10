@@ -318,7 +318,8 @@ sub get_label_summary {
             return -1;
         }
         my $record = $sth->fetchrow_hashref;
-        my $label_summary->{'_label_number'} = $label_number;
+        my $label_summary;
+        $label_summary->{'_label_number'} = $label_number;
         $record->{'author'} =~ s/[^\.|\w]$// if $record->{'author'};  # strip off ugly trailing chars... but not periods or word chars
         $record->{'title'} =~ s/\W*$//;  # strip off ugly trailing chars
         # FIXME contructing staff interface URLs should be done *much* higher up the stack - for the most part, C4 module code
