@@ -58,6 +58,7 @@ BEGIN {
       &GetBiblioItemInfosOf
       &GetBiblioItemByBiblioNumber
       &GetBiblioFromItemNumber
+      &GetBiblionumberFromItemnumber
 
       &GetRecordValue
       &GetFieldMapping
@@ -714,6 +715,24 @@ sub GetBiblioItemByBiblioNumber {
 
     $sth->finish;
     return @results;
+}
+
+=head2 GetBiblionumberFromItemnumber
+
+=over 4
+
+=back
+
+=cut
+
+sub GetBiblionumberFromItemnumber {
+    my ($itemnumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $sth            = $dbh->prepare("Select biblionumber FROM items WHERE itemnumber = ?");
+
+    $sth->execute($itemnumber);
+    my ($result) = $sth->fetchrow;
+    return ($result);
 }
 
 =head2 GetBiblioFromItemNumber

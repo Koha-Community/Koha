@@ -30,7 +30,6 @@
 	    <!-- TMPL_IF NAME="book_on_loan" --><div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div><!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="book_reserved" --><div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div><!-- /TMPL_IF -->
 
-<!-- TMPL_IF name="item_loop" -->
     <!-- TMPL_UNLESS name="action" -->
 
     <!-- TMPL_IF name="notfoundbarcodes" -->
@@ -47,11 +46,14 @@
 		    <!-- /TMPL_LOOP -->
 		</tbody>
 	    </table></div>
+	    <!-- TMPL_UNLESS name="too_many_items" -->
 	    <p>The following barcodes were found : </p>
+	    <!-- /TMPL_UNLESS -->
 	<!-- /TMPL_IF -->
 
 
-	<form name="f" action="batchMod.pl" method="post">
+<form name="f" action="batchMod.pl" method="post">
+<!-- TMPL_IF name="item_loop" -->
 	<div id="cataloguing_additem_itemlist">
 		<div style="overflow:auto">
 		<table id="itemst">
@@ -72,10 +74,33 @@
 		</table>
 		</div>
 	</div>
+<!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="simple_items_display" -->
+    <ul>
+    <!-- TMPL_LOOP NAME="simple_items_display" -->
+        <li>
+            <a href="<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a>
+        </li>
+    <!-- /TMPL_LOOP -->
+    </ul>
+<!-- /TMPL_IF -->
+
+
+
 	<!-- TMPL_IF name="show" -->
+
+<!-- TMPL_IF name="too_many_items" -->
+    <p>Too many items (<!-- TMPL_VAR NAME="too_many_items" -->): not displaying each one individually.</p>
+    <!-- TMPL_LOOP name="itemnumbers_hashref" -->
+        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+    <!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->   
+
+
 		<div id="cataloguing_additem_newitem">
 	     <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
-	     <p>This will delete the selected items.</p>
+	     <p>This will delete <!-- TMPL_IF NAME="too_many_items" -->all the<!-- TMPL_ELSE -->the selected<!-- /TMPL_IF --> items.</p>
 	     <input type="hidden" name="del" value="1" />
 	     <fieldset class="action">    
 		<input type="submit" name="submit" value="Go" />
@@ -83,9 +108,6 @@
 	</div>
 	<!-- /TMPL_IF -->
     <!-- /TMPL_UNLESS -->
-<!-- TMPL_ELSE -->
-    <p>No item found</p>
-<!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="action" -->
 	<p><!-- TMPL_VAR NAME="deleted_items" --> item(s) deleted.</p>

@@ -66,6 +66,7 @@ BEGIN {
         GetItemsInfo
         get_itemnumbers_of
         GetItemnumberFromBarcode
+        GetBarcodeFromItemnumber
 
 		DelItemCheck
 		MoveItemFromBiblio 
@@ -1513,6 +1514,27 @@ sub GetItemnumberFromBarcode {
     my $rq =
       $dbh->prepare("SELECT itemnumber FROM items WHERE items.barcode=?");
     $rq->execute($barcode);
+    my ($result) = $rq->fetchrow;
+    return ($result);
+}
+
+=head2 GetBarcodeFromItemnumber
+
+=over 4
+
+$result = GetBarcodeFromItemnumber($itemnumber);
+
+=back
+
+=cut
+
+sub GetBarcodeFromItemnumber {
+    my ($itemnumber) = @_;
+    my $dbh = C4::Context->dbh;
+
+    my $rq =
+      $dbh->prepare("SELECT barcode FROM items WHERE items.itemnumber=?");
+    $rq->execute($itemnumber);
     my ($result) = $rq->fetchrow;
     return ($result);
 }

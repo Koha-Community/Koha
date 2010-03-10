@@ -90,7 +90,6 @@ if ($op eq "action") {
     my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
     my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
     my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
-
     foreach my $itemnumber(@itemnumbers){
 	    my $itemdata=GetItem($itemnumber);
 	    if ($input->param("del")){
@@ -107,7 +106,14 @@ if ($op eq "action") {
 		    eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
 	    }
     }
-    $items_display_hashref=BuildItemsData(@itemnumbers);
+    # If we have a reasonable amount of items, we display them
+    if (scalar(@itemnumbers) <= 1000) {
+	$items_display_hashref=BuildItemsData(@itemnumbers);
+    } else {
+	# Else, we only display the barcode
+	my @simple_items_display = map {{ itemnumber => $_, barcode => GetBarcodeFromItemnumber($_), biblionumber => GetBiblionumberFromItemnumber($_) }} @itemnumbers;
+	$template->param("simple_items_display" => \@simple_items_display);
+    }
 }
 
 #
@@ -124,7 +130,7 @@ if ($op eq "show"){
     if ($filefh){
         while (my $content=<$filefh>){
             chomp $content;
-            push @contentlist, $content;
+            push @contentlist, $content if $content;
         }
 
 	switch ($filecontent) {
@@ -161,8 +167,15 @@ if ($op eq "show"){
 
     }
 }
+    # Only display the items if there are no more than 1000
+    if (scalar(@itemnumbers) <= 1000) {
 	$items_display_hashref=BuildItemsData(@itemnumbers);
-
+    } else {
+	$template->param("too_many_items" => scalar(@itemnumbers));
+	# Even if we do not display the items, we need the itemnumbers
+	my @itemnumbers_hashref = map {{itemnumber => $_}} @itemnumbers;
+	$template->param("itemnumbers_hashref" => \@itemnumbers_hashref);
+    }
 # now, build the item form for entering a new item
 my @loop_data =();
 my $i=0;
