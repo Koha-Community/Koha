@@ -2213,34 +2213,36 @@ sub AddRenewal {
 
 sub GetRenewCount {
     # check renewal status
-    my ($bornum,$itemno)=@_;
-    my $dbh = C4::Context->dbh;
-    my $renewcount = 0;
-        my $renewsallowed = 0;
-        my $renewsleft = 0;
+    my ( $bornum, $itemno ) = @_;
+    my $dbh           = C4::Context->dbh;
+    my $renewcount    = 0;
+    my $renewsallowed = 0;
+    my $renewsleft    = 0;
+
+    my $borrower = C4::Members::GetMemberDetails($bornum);
+    my $item     = GetItem($itemno); 
+
     # Look in the issues table for this item, lent to this borrower,
     # and not yet returned.
 
     # FIXME - I think this function could be redone to use only one SQL call.
-    my $sth = $dbh->prepare("select * from issues
+    my $sth = $dbh->prepare(
+        "select * from issues
                                 where (borrowernumber = ?)
-                                and (itemnumber = ?)");
-    $sth->execute($bornum,$itemno);
+                                and (itemnumber = ?)"
+    );
+    $sth->execute( $bornum, $itemno );
     my $data = $sth->fetchrow_hashref;
     $renewcount = $data->{'renewals'} if $data->{'renewals'};
     $sth->finish;
-    my $query = "SELECT renewalsallowed FROM items ";
-    $query .= (C4::Context->preference('item-level_itypes'))
-                ? "LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype "
-                : "LEFT JOIN biblioitems on items.biblioitemnumber = biblioitems.biblioitemnumber
-                   LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
-    $query .= "WHERE items.itemnumber = ?";
-    my $sth2 = $dbh->prepare($query);
-    $sth2->execute($itemno);
-    my $data2 = $sth2->fetchrow_hashref();
-    $renewsallowed = $data2->{'renewalsallowed'};
-    $renewsleft = $renewsallowed - $renewcount;
-    return ($renewcount,$renewsallowed,$renewsleft);
+    # $item and $borrower should be calculated
+    my $branchcode = _GetCircControlBranch($item, $borrower);
+    
+    my $issuingrule = GetIssuingRule($borrower->{categorycode}, $item->{itype}, $branchcode);
+    
+    $renewsallowed = $issuingrule->{'renewalsallowed'};
+    $renewsleft    = $renewsallowed - $renewcount;
+    return ( $renewcount, $renewsallowed, $renewsleft );
 }
 
 =head2 GetIssuingCharges
