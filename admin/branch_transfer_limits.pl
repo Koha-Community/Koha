@@ -40,6 +40,20 @@ my ($template, $loggedinuser, $cookie)
 
 my $dbh = C4::Context->dbh;
 
+my $branchcode = $input->param('branchcode');
+my $branchname = GetBranchName($branchcode);
+
+# Getting the branches for user selection
+my $branches = GetBranches();
+my @branch_loop;
+for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+    my %row =(value => $thisbranch,
+              branchname => $branches->{$thisbranch}->{'branchname'},
+             );
+    push @branch_loop, \%row;
+}
+
+
 # Set the template language for the correct limit type
 my $limit_phrase = 'Collection Code';
 my $limitType = C4::Context->preference("BranchTransferLimitsType");
@@ -69,15 +83,13 @@ while ( my $row = $sth->fetchrow_hashref ) {
 
 ## If Form Data Passed, Update the Database
 if ( $input->param('updateLimits') ) {
-    DeleteBranchTransferLimits();
+	DeleteBranchTransferLimits();
 
 	foreach my $code ( @codes ) {
 		foreach my $toBranch ( @branchcodes ) {
-			foreach my $fromBranch ( @branchcodes ) {
-				my $isSet = $input->param( $code . "_" . $toBranch . "_" . $fromBranch );
-				if ( $isSet ) {
-                                    CreateBranchTransferLimit( $toBranch, $fromBranch, $code );
-				}
+			my $isSet = not $input->param( $code . "_" . $toBranch);
+			if ( $isSet ) {
+			    CreateBranchTransferLimit( $toBranch, $branchcode, $code );
 			}
 		}
 	}
@@ -100,23 +112,12 @@ foreach my $code ( @codes ) {
 	$row_data{ code } = $code;
 	$row_data{ to_branch_loop } = \@to_branch_loop;
 	foreach my $toBranch ( @branchcodes ) {
-		my @from_branch_loop;
 		my %row_data;
-		$row_data{ code } = $code;
-		$row_data{ toBranch } = $toBranch;
-		$row_data{ from_branch_loop } = \@from_branch_loop;
-		
-		foreach my $fromBranch ( @branchcodes ) {
-			my %row_data;
-                        my $isChecked = ! IsBranchTransferAllowed( $toBranch, $fromBranch, $code );
-			$row_data{ code } = $code;
-			$row_data{ toBranch } = $toBranch;
-			$row_data{ fromBranch } = $fromBranch;
-                        $row_data{ isChecked } = $isChecked;
-			
-			push( @from_branch_loop, \%row_data );
-		}
-		
+                my $isChecked = IsBranchTransferAllowed( $toBranch, $branchcode, $code );
+		$row_data{ code }         = $code;
+		$row_data{ toBranch }     = $toBranch;
+		$row_data{ isChecked }    = $isChecked;	
+		$row_data{ toBranchname } = GetBranchName($toBranch);	
 		push( @to_branch_loop, \%row_data );
 	}
 
@@ -127,7 +128,10 @@ foreach my $code ( @codes ) {
 $template->param(
 		branchcount => $branchcount,
 		codes_loop => \@codes_loop,
+		branch_loop => \@branch_loop,
 		branchcode_loop => \@branchcode_loop,
+		branchcode => $branchcode,
+		branchname => $branchname,
 		limit_phrase => $limit_phrase,
 		);
 
