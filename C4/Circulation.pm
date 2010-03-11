@@ -897,7 +897,7 @@ sub AddIssue {
 		
 		# get biblioinformation for this item
 		my $biblio = GetBiblioFromItemNumber($item->{itemnumber});
-		
+		my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 		#
 		# check if we just renew the issue.
 		#
@@ -978,7 +978,6 @@ sub AddIssue {
                 VALUES (?,?,?,?,?)"
           );
         unless ($datedue) {
-            my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
             my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
             $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
 
@@ -1021,7 +1020,7 @@ sub AddIssue {
             C4::Context->userenv->{'branch'},
             'issue', $charge,
             ($sipmode ? "SIP-$sipmode" : ''), $item->{'itemnumber'},
-            $item->{'itype'}, $borrower->{'borrowernumber'}
+            $itype, $borrower->{'borrowernumber'}
         );
     }
     
@@ -1380,7 +1379,8 @@ sub AddReturn {
     my $itemnumber = GetItemnumberFromBarcode($barcode);
     my $iteminformation = GetItemIssue( $itemnumber );
     my $biblio = GetBiblioItemData($iteminformation->{'biblioitemnumber'});
-#     use Data::Dumper;warn Data::Dumper::Dumper($iteminformation);  
+    my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};     
+
     unless ( $iteminformation->{'itemnumber'} or $itemnumber) {
         $messages->{'BadBarcode'} = $barcode;
         $doreturn = 0;
@@ -1501,7 +1501,7 @@ sub AddReturn {
         UpdateStats(
             $branch, 'return', '0', '',
             $iteminformation->{'itemnumber'},
-            $biblio->{'itemtype'},
+            $itype,
             $borrower->{'borrowernumber'}
         );
         
