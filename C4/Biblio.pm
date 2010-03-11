@@ -646,8 +646,10 @@ sub GetBiblioItemData {
         FROM biblio LEFT JOIN biblioitems on biblio.biblionumber=biblioitems.biblionumber ";
     unless(C4::Context->preference('item-level_itypes')) { 
         $query .= "LEFT JOIN itemtypes on biblioitems.itemtype=itemtypes.itemtype ";
-    }    
-    $query .= " WHERE biblioitemnumber = ? ";
+    } else {
+	$query .= "LEFT JOIN items on biblio.biblionumber=items.biblionumber ";
+    }
+    $query .= " WHERE biblioitems.biblioitemnumber = ? ";
     my $sth       =  $dbh->prepare($query);
     my $data;
     $sth->execute($biblioitemnumber);
