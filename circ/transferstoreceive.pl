@@ -91,9 +91,12 @@ foreach my $br ( keys %$branches ) {
 
             $getransf{'datetransfer'} = format_date( $num->{'datesent'} );
             $getransf{'itemtype'} = $itemtypeinfo ->{'description'};
-			foreach (qw(title biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
+			foreach (qw(title author biblionumber itemnumber barcode homebranch holdingbranch itemcallnumber)) {
             	$getransf{$_} = $gettitle->{$_};
 			}
+
+            my $record = GetMarcBiblio($gettitle->{'biblionumber'});
+            $getransf{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($gettitle->{'biblionumber'}));
 
             # we check if we have a reserv for this transfer
             my @checkreserv = GetReservesFromItemnumber($num->{'itemnumber'} );

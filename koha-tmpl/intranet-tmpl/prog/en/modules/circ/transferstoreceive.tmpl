@@ -15,8 +15,8 @@ $(document).ready(function() {
     $.tablesorter.defaults.widgets = ['zebra'];
     $("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF ="dateformat_metric" -->
         dateFormat: 'uk',<!-- /TMPL_IF -->
-        sortList: [[1,0]],
-        headers: { 1: { sorter: 'articles' },4:{sorter:false}}
+        sortList: [[0,0]],
+        headers: { 1: { sorter: 'articles' }}
     });
     <!-- /TMPL_LOOP -->
 });
@@ -47,8 +47,9 @@ $(document).ready(function() {
             <thead><tr>
                 <th>Date of transfer</th>
                 <th>Title</th>
-                <th>Reserved by </th>
-                <th>Location</th>
+                <th>On hold for</th>
+                <th>Home library</th>
+                <th>Call no.</th>
             </tr></thead>
             <tbody><!-- TMPL_LOOP NAME="reserv" -->
                 <!-- TMPL_IF NAME="messcompa" -->
@@ -59,12 +60,12 @@ $(document).ready(function() {
                     <td><p><!-- TMPL_VAR NAME="datetransfer" --></p> <!-- TMPL_IF NAME="messcompa" --><span class="error">Transfer is <!-- TMPL_VAR NAME="diff" --> days late</span><!-- /TMPL_IF --></td>
                     <td><span style="display:none;"><!-- TMPL_VAR NAME="title" escape="html" --></span><!-- invisible title for tablesorter -->
                         <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
+<a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></a>
 <!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" -->
-<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a>
+<a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></a>
 <!-- TMPL_ELSE -->
-<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" -->  <!-- TMPL_VAR NAME="subtitle" --></a><!-- /TMPL_IF -->
-                            &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
+<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></a><!-- /TMPL_IF --> <!-- TMPL_IF NAME="author" -->by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="itemtype" -->&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)<!-- /TMPL_IF -->
                             <br />Barcode: <!-- TMPL_VAR NAME="barcode" -->
                     </td>
                     <td><!-- TMPL_IF NAME="borrowername" -->
@@ -81,7 +82,8 @@ $(document).ready(function() {
                         <p>None</p>
                     <!-- /TMPL_IF -->
                     </td>
-                    <td><!-- TMPL_VAR NAME="homebranch" --> <!-- TMPL_VAR NAME="itemcallnumber" --></td>
+                    <td><!-- TMPL_VAR NAME="homebranch" --></td>
+                    <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                 </tr>
             <!-- /TMPL_LOOP --></tbody>
             </table>
