@@ -63,17 +63,20 @@ my $dbh = C4::Context->dbh;
 ################## ADD_FORM ##################################
 # called by default. Used to create form to add or  modify a record
 if ( $op eq 'add_form' ) {
-    my $sth = $dbh->prepare(
-"select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure where kohafield=?"
-    );
+    my $data;
+    my $sth =
+      $dbh->prepare(
+"select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure where kohafield=? AND frameworkcode=''"
+      );
     $sth->execute( $tablename . "." . $kohafield );
     my ( $defaulttagfield, $defaulttagsubfield, $defaultliblibrarian ) =
       $sth->fetchrow;
 
     for ( my $i = 0 ; $i <= 9 ; $i++ ) {
-        my $sth2 = $dbh->prepare(
-"select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure where tagfield like ?"
-        );
+        my $sth2 =
+          $dbh->prepare(
+"select tagfield,tagsubfield,liblibrarian as lib,tab from marc_subfield_structure where tagfield like ? AND frameworkcode=''"
+          );
         $sth2->execute("$i%");
         my @marcarray;
         push @marcarray, " ";
