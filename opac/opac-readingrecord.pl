@@ -88,20 +88,6 @@ foreach my $issue (@{$issues} ) {
 	# XISBN Stuff
 	my $isbn               = GetNormalizedISBN($issue->{'isbn'});
 	$line{normalized_isbn} = $isbn;
-<<<<<<< HEAD:opac/opac-readingrecord.pl
-    $line{biblionumber}   = $issues->[$i]->{'biblionumber'};
-    $line{title}          = $issues->[$i]->{'title'};
-    $line{author}         = $issues->[$i]->{'author'};
-    $line{itemcallnumber} = $issues->[$i]->{'itemcallnumber'};
-    $line{date_due}       = format_date( $issues->[$i]->{'date_due'} );
-    $line{returndate}     = format_date( $issues->[$i]->{'returndate'} );
-    $line{volumeddesc}    = $issues->[$i]->{'volumeddesc'};
-    $line{counter}        = $i + 1;
-    if($issues->[$i]->{'itemtype'}) {
-        $line{'itypedescription'} = $itemtypes->{ $issues->[$i]->{'itemtype'} }->{'description'};
-        $line{imageurl}       = getitemtypeimagelocation( 'opac', $itemtypes->{ $issues->[$i]->{'itemtype'}  }->{'imageurl'} );
-    }
-=======
     $line{biblionumber}    = $issue->{'biblionumber'};
     $line{title}           = $issue->{'title'};
     $line{author}          = $issue->{'author'};
@@ -109,9 +95,10 @@ foreach my $issue (@{$issues} ) {
     $line{date_due}        = format_date( $issue->{'date_due'} );
     $line{returndate}      = format_date( $issue->{'returndate'} );
     $line{volumeddesc}     = $issue->{'volumeddesc'};
-    $line{'description'}   = $itemtypes->{ $issue->{'itemtype'} }->{'description'};
-    $line{imageurl}        = getitemtypeimagelocation( 'opac', $itemtypes->{ $issue->{'itemtype'}  }->{'imageurl'} );
->>>>>>> (MT #2920) fix reading record scripts:opac/opac-readingrecord.pl
+    if($issue{'itemtype'}) {
+        $line{'description'}   = $itemtypes->{ $issue->{'itemtype'} }->{'description'};
+        $line{imageurl}        = getitemtypeimagelocation( 'opac', $itemtypes->{ $issue->{'itemtype'}  }->{'imageurl'} );
+    }
     push( @loop_reading, \%line );
     $line{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($issues->[$i]->{'biblionumber'}));
 }
