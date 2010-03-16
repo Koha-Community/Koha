@@ -1,0 +1,69 @@
+#!/usr/bin/perl
+#
+# Find copyright and license problems in Koha source files. At this
+# time it only looks for references to the old FSF address in GPLv2
+# license notices, but it might in the future be extended to look for
+# other things, too.
+#
+# Copyright 2010 Catalyst IT Ltd
+#
+# This file is part of Koha.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with this program; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+
+use strict;
+use warnings;
+
+use File::Find;
+
+
+my @files;
+sub wanted {
+    my $name = $File::Find::name;
+    push @files, $name
+        unless $name =~ /\/(\.git|koha-tmpl)(\/.*)?$/ ||
+               $name =~ /\.(gif|jpg|odt|ogg|pdf|png|po|psd|svg|swf|zip)$/ ||
+               ! -f $name;
+}
+
+
+sub has_gpl2plus_and_current_fsf_address {
+    my ($name) = @_;
+    my $hascopyright;
+    my $hasgpl;
+    my $hasv2;
+    my $hasorlater;
+    my $hasfranklinst;
+    open(FILE, $name) || return 0;
+    while (my $line = <FILE>) {
+        $hascopyright = 1 if ($line =~ /Copyright.*\d\d/);
+        $hasgpl = 1 if ($line =~ /GNU General Public License/);
+        $hasv2 = 1 if ($line =~ /either version 2/);
+        $hasorlater = 1 if ($line =~ /any later version/ ||
+                            $line =~ /at your option/);
+        $hasfranklinst = 1 if ($line =~ /51 Franklin Street/);
+    }
+    return ! $hascopyright ||
+           ($hasgpl && $hasv2 && $hasorlater && $hasfranklinst);
+}
+
+
+find({ wanted => \&wanted, no_chdir => 1 }, @ARGV);
+foreach my $name (@files) {
+    if (! has_gpl2plus_and_current_fsf_address($name)) {
+        print "$name\n";
+    }
+}
