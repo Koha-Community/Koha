@@ -364,9 +364,11 @@ if ( C4::Context->preference("OPACAmazonEnabled") ) {
 my $syndetics_elements;
 
 if ( C4::Context->preference("SyndeticsEnabled") ) {
+    $template->param("SyndeticsEnabled" => 1);
+    $template->param("SyndeticsClientCode" => C4::Context->preference("SyndeticsClientCode"));
 	eval {
-    $syndetics_elements = &get_syndetics_index($isbn,$upc,$oclc);
-	for my $element (values %$syndetics_elements) {
+	    $syndetics_elements = &get_syndetics_index($isbn,$upc,$oclc);
+	    for my $element (values %$syndetics_elements) {
 		$template->param("Syndetics$element"."Exists" => 1 );
 		#warn "Exists: "."Syndetics$element"."Exists";
 	}
@@ -378,8 +380,8 @@ if ( C4::Context->preference("SyndeticsEnabled")
         && C4::Context->preference("SyndeticsSummary")
         && ( exists($syndetics_elements->{'SUMMARY'}) || exists($syndetics_elements->{'AVSUMMARY'}) ) ) {
 	eval {
-	my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc, $syndetics_elements);
-	$template->param( SYNDETICS_SUMMARY => $syndetics_summary );
+	    my $syndetics_summary = &get_syndetics_summary($isbn,$upc,$oclc, $syndetics_elements);
+	    $template->param( SYNDETICS_SUMMARY => $syndetics_summary );
 	};
 	warn $@ if $@;
 
