@@ -1,7 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange Rates &rsaquo;
 <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF --></title>
@@ -58,7 +57,6 @@
 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; <!-- TMPL_IF NAME="add_form" --><!-- TMPL_IF NAME="searchfield" -->Modify Currency '<!-- TMPL_VAR NAME="searchfield" -->'<!-- TMPL_ELSE -->New Currency<!-- /TMPL_IF --><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="add_validate" -->Data Recorded<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->Confirm Deletion of Currency '<span class="ex"><!-- TMPL_VAR NAME="searchfield" --></span>'<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Currency Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="else" -->Currencies<!-- /TMPL_IF -->
@@ -80,7 +78,7 @@
 <!-- TMPL_IF NAME="add_form" -->
 
 <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post">
-    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="op" value="save" />
     <fieldset class="rows">
     <legend><!-- TMPL_IF NAME="searchfield" -->
         Modify currency
@@ -127,15 +125,6 @@
     </fieldset>
     </form>
 
-<!-- /TMPL_IF -->
-
-<!-- TMPL_IF NAME="add_validate" -->
-<div class="dialog message">
-    <h3>Data Recorded</h3>
-    <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
-        <input type="submit" class="approve"  value="OK" />
-    </form>
-</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="delete_confirm" -->

@@ -96,8 +96,7 @@ if ($op eq 'add_form') {
                                                     # END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'add_validate') {
-    $template->param(add_validate => 1);
+} elsif ($op eq 'save') {
     my $dbh = C4::Context->dbh;
     my $check = $dbh->prepare("select count(*) as count from currency where currency = ?");
 
@@ -131,6 +130,8 @@ if ($op eq 'add_form') {
                         $input->param('active')||0,
                         );
     }
+
+print $input->redirect("/cgi-bin/koha/admin/currency.pl");
                                                     # END $OP eq ADD_VALIDATE
 ################## DELETE_CONFIRM ##################################
 # called by default form, used to confirm deletion of data in DB
