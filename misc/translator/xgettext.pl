@@ -103,7 +103,7 @@ sub text_extract (*) {
             next if $a eq 'label' && $tag ne 'optgroup';
 		    next if $a eq 'content' && $tag ne 'meta';
 		    next if $a eq 'value' && ($tag ne 'input'
-			|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|submit)$/)); # FIXME
+			|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|checkbox)$/)); # FIXME
 		    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
 		    $val = TmplTokenizer::trim $val;
 		    remember( $s, $val ) if $val =~ /\S/s;
