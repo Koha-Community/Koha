@@ -619,7 +619,9 @@ item withdrawn.
 
 item is restricted (set by ??)
 
-C<$needsconfirmation> a reference to a hash. It contains reasons why issuing is impossible.
+C<$needsconfirmation> a reference to a hash. It contains reasons why the loan could be prevented, 
+but ones that can be overriden by the operator.
+
 Possible values are :
 
 =head3 DEBT
