@@ -742,7 +742,7 @@ sub CancelHold {
     }
 
     # if the item was not reserved by the borrower, returns an error code
-    return { code => 'NotCanceled' } unless any { $itemnumber eq $_ } @reserveditemnumbers;
+    return { code => 'NotCanceled' } unless any { $itemnumber eq $_ } @reserveditems;
 
     # Cancel the reserve
     CancelReserve( $itemnumber, undef, $borrowernumber );
