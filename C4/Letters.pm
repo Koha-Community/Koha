@@ -29,6 +29,9 @@ use C4::Members;
 use C4::Log;
 use C4::SMS;
 use C4::Debug;
+use Date::Calc qw( Add_Delta_Days );
+use Encode;
+use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -38,7 +41,7 @@ BEGIN {
 	$VERSION = 3.01;
 	@ISA = qw(Exporter);
 	@EXPORT = qw(
-	&GetLetters &getletter &addalert &getalert &delalert &findrelatedto &SendAlerts
+	&GetLetters &getletter &addalert &getalert &delalert &findrelatedto &SendAlerts GetPrintMessages
 	);
 }
 
@@ -519,6 +522,19 @@ sub parseletter {
     }
 
     my $values = $sth->fetchrow_hashref;
+    
+    # TEMPORARY hack until the expirationdate column is added to reserves
+    if ( $table eq 'reserves' && $values->{'waitingdate'} ) {
+        my @waitingdate = split /-/, $values->{'waitingdate'};
+
+        $values->{'expirationdate'} = C4::Dates->new(
+            sprintf(
+                '%04d-%02d-%02d',
+                Add_Delta_Days( @waitingdate, C4::Context->preference( 'ReservesMaxPickUpDelay' ) )
+            ),
+            'iso'
+        )->output();
+    }
 
 
     # and get all fields from the table
@@ -648,6 +664,26 @@ sub GetRSSMessages {
     
     return _get_unsent_messages( { message_transport_type => 'rss',
                                    limit                  => $params->{'limit'},
+                                   borrowernumber         => $params->{'borrowernumber'}, } );
+}
+
+=head2 GetPrintMessages
+
+=over 4
+
+my $message_list = GetPrintMessages( { borrowernumber => $borrowernumber } )
+
+Returns a arrayref of all queued print messages (optionally, for a particular
+person).
+
+=back
+
+=cut
+
+sub GetPrintMessages {
+    my $params = shift || {};
+    
+    return _get_unsent_messages( { message_transport_type => 'print',
                                    borrowernumber         => $params->{'borrowernumber'}, } );
 }
 

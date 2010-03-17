@@ -32,7 +32,7 @@ use C4::Accounts;
 
 # for _koha_notify_reserve
 use C4::Members::Messaging;
-use C4::Members qw( GetMember );
+use C4::Members qw();
 use C4::Letters;
 use C4::Branch qw( GetBranchDetail );
 use C4::Dates qw( format_date_in_iso );
@@ -1688,9 +1688,19 @@ sub _koha_notify_reserve {
     my ($itemnumber, $borrowernumber, $biblionumber) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber, message_name => 'Hold Filled' } );
+    my $borrower = C4::Members::GetMember( $borrowernumber );
+    my $letter_code;
+    my $print_mode = 0;
+    my $messagingprefs;
+    if ( $borrower->{'email'} || $borrower->{'smsalertnumber'} ) {
+        $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber, message_name => 'Hold Filled' } );
 
-    return if ( !defined( $messagingprefs->{'letter_code'} ) );
+        return if ( !defined( $messagingprefs->{'letter_code'} ) );
+        $letter_code = $messagingprefs->{'letter_code'};
+    } else {
+        $letter_code = 'HOLD_PRINT';
+        $print_mode = 1;
+    }
 
     my $sth = $dbh->prepare("
         SELECT *
@@ -1704,19 +1714,33 @@ sub _koha_notify_reserve {
 
     my $admin_email_address = $branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
 
-    my $letter = getletter( 'reserves', $messagingprefs->{'letter_code'} );
+    my $letter = getletter( 'reserves', $letter_code );
+    die "Could not find a letter called '$letter_code' in the 'reserves' module" unless( $letter );
 
     C4::Letters::parseletter( $letter, 'branches', $reserve->{'branchcode'} );
-    C4::Letters::parseletter( $letter, 'borrowers', $reserve->{'borrowernumber'} );
-    C4::Letters::parseletter( $letter, 'biblio', $reserve->{'biblionumber'} );
-    C4::Letters::parseletter( $letter, 'reserves', $reserve->{'borrowernumber'}, $reserve->{'biblionumber'} );
+    C4::Letters::parseletter( $letter, 'borrowers', $borrowernumber );
+    C4::Letters::parseletter( $letter, 'biblio', $biblionumber );
+    C4::Letters::parseletter( $letter, 'reserves', $borrowernumber, $biblionumber );
 
     if ( $reserve->{'itemnumber'} ) {
         C4::Letters::parseletter( $letter, 'items', $reserve->{'itemnumber'} );
     }
+    my $today = C4::Dates->new()->output();
+    $letter->{'title'} =~ s/<<today>>/$today/g;
+    $letter->{'content'} =~ s/<<today>>/$today/g;
     $letter->{'content'} =~ s/<<[a-z0-9_]+\.[a-z0-9]+>>//g; #remove any stragglers
 
-    if ( -1 !=  firstidx { $_ eq 'email' } @{$messagingprefs->{transports}} ) {
+    if ( $print_mode ) {
+        C4::Letters::EnqueueLetter( {
+            letter => $letter,
+            borrowernumber => $borrowernumber,
+            message_transport_type => 'print',
+        } );
+        
+        return;
+    }
+
+    if ( grep { $_ eq 'email' } @{$messagingprefs->{transports}} ) {
         # aka, 'email' in ->{'transports'}
         C4::Letters::EnqueueLetter(
             {   letter                 => $letter,
@@ -1727,7 +1751,7 @@ sub _koha_notify_reserve {
         );
     }
 
-    if ( -1 != firstidx { $_ eq 'sms' } @{$messagingprefs->{transports}} ) {
+    if ( grep { $_ eq 'sms' } @{$messagingprefs->{transports}} ) {
         C4::Letters::EnqueueLetter(
             {   letter                 => $letter,
                 borrowernumber         => $borrowernumber,
