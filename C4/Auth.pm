@@ -121,7 +121,7 @@ C4::Auth - Authenticates Koha users
 
 =cut
 
-my $SERCH_HISTORY_INSERT_SQL =<<EOQ;
+my $SEARCH_HISTORY_INSERT_SQL =<<EOQ;
 INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, total, time            )
 VALUES                    (     ?,         ?,          ?,         ?,     ?, FROM_UNIXTIME(?))
 EOQ
@@ -260,7 +260,7 @@ sub get_template_and_user {
 				$searchcookie = uri_unescape($searchcookie);
 			        my @recentSearches = @{thaw($searchcookie) || []};
 				if (@recentSearches) {
-					my $sth = $dbh->prepare($SERCH_HISTORY_INSERT_SQL);
+					my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
 					$sth->execute( $borrowernumber,
 						       $in->{'query'}->cookie("CGISESSID"),
 						       $_->{'query_desc'},
