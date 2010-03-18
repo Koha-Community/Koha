@@ -160,12 +160,6 @@ ENDOFNOTFORLOANOVERRIDE
       print "Upgrade to $DBversion done (Adding AllowNotForLoanOverride System preference)\n";
 }
 
-$DBversion = "3.00.01.005";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine`");
-    print "Upgrade to $DBversion done (Adding a field in issuingrules table)\n";
-    SetVersion ($DBversion);
-}
 
 $DBversion = "3.00.01.006";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -756,6 +750,12 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
 }
 
 
+$DBversion = "3.00.06.009";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE issuingrules ADD COLUMN `finedays` int(11) default NULL AFTER `fine`");
+    print "Upgrade to $DBversion done (Adding a field in issuingrules table)\n";
+    SetVersion ($DBversion);
+}
 
 
 =item DropAllForeignKeys($table)
