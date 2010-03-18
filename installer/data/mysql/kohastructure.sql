@@ -298,6 +298,7 @@ CREATE TABLE `borrower_attributes` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+DROP TABLE IF EXISTS `branch_item_rules`;
 CREATE TABLE `branch_item_rules` (
   `branchcode` varchar(10) NOT NULL,
   `itemtype` varchar(10) NOT NULL,
