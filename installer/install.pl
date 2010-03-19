@@ -433,7 +433,7 @@ elsif ( $step && $step == 3 ) {
             	$info{'user'}, $info{'password'}
         );
 	my $rq;
-        if ( $info{dbms} eq 'mysql' ) { $rq = $dbh->prepare( "SHOW TABLES FROM " . $info{'dbname'} ); }
+        if ( $info{dbms} eq 'mysql' ) { $rq = $dbh->prepare( "SHOW TABLES" ); }
 	elsif ( $info{dbms} eq 'Pg' ) { $rq = $dbh->prepare( "SELECT *
 								FROM information_schema.tables
 								WHERE table_schema='public' and table_type='BASE TABLE';" ); }

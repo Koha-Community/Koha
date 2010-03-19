@@ -466,7 +466,7 @@ CREATE TABLE `default_branch_circ_rules` (
 --
 -- Table structure for table `default_branch_item_rules`
 --
-
+DROP TABLE IF EXISTS `default_branch_item_rules`;
 CREATE TABLE `default_branch_item_rules` (
   `itemtype` varchar(10) NOT NULL,
   `holdallowed` tinyint(1) default NULL,
@@ -2222,7 +2222,7 @@ CREATE TABLE `item_circulation_alert_preferences` (
 --
 -- Table structure for table `messages`
 --
-
+DROP TABLE IF EXISTS `messages`;
 CREATE TABLE `messages` (
   `message_id` int(11) NOT NULL auto_increment,
   `borrowernumber` int(11) NOT NULL,
