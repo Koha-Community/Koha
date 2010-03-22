@@ -1146,6 +1146,11 @@ sub GetCOinSBiblio {
     my $record = GetMarcBiblio($biblionumber);
 
     # get the coin format
+    if ( ! $record ) {
+	# can't get a valid MARC::Record object, bail out at this point
+	warn "We called GetMarcBiblio with a biblionumber that doesn't exist biblionumber=$biblionumber";
+	return;
+    }
     my $pos7 = substr $record->leader(), 7, 1;
     my $pos6 = substr $record->leader(), 6, 1;
     my $mtx;
