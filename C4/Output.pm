@@ -358,7 +358,7 @@ sub pagination_bar {
 
 =item output_html_with_http_headers
 
-   &output_html_with_http_headers($query, $cookie, $html[, $content_type])
+   &output_html_with_http_headers($query, $cookie, $html[, $content_type][, status])
 
 Outputs the HTML page $html with the appropriate HTTP headers,
 with the authentication cookie $cookie and a Content-Type that
@@ -369,7 +369,7 @@ response's Content-Type to that value instead of "text/html".
 
 =cut
 
-sub output_html_with_http_headers ($$$;$) {
+sub output_html_with_http_headers ($$$;$$) {
     my $query = shift;
     my $cookie = shift;
     my $html = shift; 
@@ -383,8 +383,10 @@ sub output_html_with_http_headers ($$$;$) {
     //gx;
 
     my $content_type = @_ ? shift : "text/html";
+    my $status = shift; 
     $content_type = "text/html" unless $content_type =~ m!/!; # very basic sanity check
     print $query->header(
+        -status  => $status,
         -type    => $content_type,
         -charset => 'UTF-8',
         -cookie  => $cookie,
