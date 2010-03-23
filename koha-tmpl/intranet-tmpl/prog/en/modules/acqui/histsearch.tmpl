@@ -60,6 +60,7 @@
 		<table>
 			<tr>
 				<th>Basket</th>
+				<th>Basket group</th>
 				<th>Invoice Number</th>
 				<th>Summary</th>
 				<th>Vendor</th>
@@ -71,7 +72,8 @@
 			
 			<!-- TMPL_LOOP NAME="suggestions_loop" -->
 				<tr>
-                    <td><a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a></td>
+                    <td><!-- TMPL_VAR name="basketname" --> (<a href="basket.pl?basketno=<!-- TMPL_VAR name="basketno" -->"><!-- TMPL_VAR name="basketno" --></a>)</td>
+			<td><!-- TMPL_VAR name="groupname" --> (<a href="basketgroup.pl?booksellerid=<!-- TMPL_VAR name="id" -->"><!-- TMPL_VAR name="basketgroupid" --></a>)</td>
 					<td><!-- TMPL_IF NAME="invoicenumber" -->
 					        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=<!-- TMPL_VAR NAME="invoicenumber"-->&amp;supplierid=<!-- TMPL_VAR NAME="id"-->&amp;datereceived=<!-- TMPL_VAR NAME="datereceived" -->"><!-- TMPL_VAR NAME="invoicenumber"--></a>
 					    <!-- TMPL_ELSE -->

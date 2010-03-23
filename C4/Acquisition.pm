@@ -1672,7 +1672,11 @@ sub GetHistory {
                 biblio.title,
                 biblio.author,
                 aqorders.basketno,
-                name,aqbasket.creationdate,
+		aqbasket.basketname,
+		aqbasket.basketgroupid,
+		aqbasketgroups.name as groupname,
+                aqbooksellers.name,
+		aqbasket.creationdate,
                 aqorders.datereceived,
                 aqorders.quantity,
                 aqorders.quantityreceived,
@@ -1683,12 +1687,13 @@ sub GetHistory {
                 aqorders.biblionumber
             FROM aqorders
             LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
+	    LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
             LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
             LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
 
         $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
         if ( C4::Context->preference("IndependantBranches") );
-
+	
         $query .= " WHERE (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
 
         my @query_params  = ();
@@ -1704,7 +1709,7 @@ sub GetHistory {
         }
 
         if ( defined $name ) {
-            $query .= " AND name LIKE ? ";
+            $query .= " AND aqbooksellers.name LIKE ? ";
             push @query_params, "%$name%";
         }
 
@@ -1725,7 +1730,8 @@ sub GetHistory {
                 push @query_params, $userenv->{branch};
             }
         }
-        $query .= " ORDER BY booksellerid";
+        $query .= " ORDER BY id";
+	warn $query;
         my $sth = $dbh->prepare($query);
         $sth->execute( @query_params );
         my $cnt = 1;
