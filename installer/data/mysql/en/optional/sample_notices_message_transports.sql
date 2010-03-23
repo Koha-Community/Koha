@@ -13,7 +13,6 @@ values
 (2, 'sms',   1, 'circulation', 'PREDUEDGST'),
 (3, 'sms',   0, 'circulation', 'EVENT'),
 (4, 'sms',   0, 'reserves',    'HOLD'),
-(4, 'sms',   0, 'reserves',    'HOLD'),
 (5, 'email', 0, 'circulation', 'CHECKIN'),
 (5, 'sms',   0, 'circulation', 'CHECKIN'),
 (6, 'email', 0, 'circulation', 'CHECKOUT'),
