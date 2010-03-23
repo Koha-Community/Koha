@@ -3548,6 +3548,13 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.128';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do('CREATE INDEX budget_id ON aqorders (budget_id );');
+    print "Upgrade to $DBversion done (bug 4331: index orders by budget_id)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
