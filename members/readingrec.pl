@@ -50,23 +50,8 @@ if ($input->param('borrowernumber')) {
     $data = GetMember(borrowernumber => $borrowernumber);
 }
 
-my $order=$input->param('order') || '';
-my $order2=$order;
-if ($order2 eq ''){
-  $order2="date_due desc";
-}
+my $order=$input->param('order') || 'date_due desc';
 my $limit=$input->param('limit');
-=======
-my $borrowernumber = $input->param('borrowernumber');
-my $limit          = $input->param('limit');
-my $order          = $input->param('order') || '';
-
-$order = "issuestimestamp desc" if not any { $order =~ $_ } ('issuestimestamp', 'title', 'author', 'returndate');
-
-#get borrower details
-my $data=GetMember('borrowernumber'=>$borrowernumber);
-
->>>>>>> (MT #2920) fix reading record scripts:members/readingrec.pl
 
 if ($limit){
     if ($limit eq 'full'){
@@ -77,6 +62,7 @@ else {
   $limit=50;
 }
 my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
+warn "BORR : $borrowernumber = ".Data::Dumper::Dumper($issues);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",
@@ -99,7 +85,7 @@ foreach my $issue (@{$issues}){
 	$line{date_due}        = format_date($issue->{'date_due'});
 	$line{returndate}      = format_date($issue->{'returndate'});
 	$line{issuedate}       = format_date($issue->{'issuedate'});
-	$line{issuingbranch}   = GetBranchName($issues->[$i]->{'issuingbranch'});
+	$line{issuingbranch}   = GetBranchName($issue->{'issuingbranch'});
 	$line{renewals}        = $issue->{'renewals'};
 	$line{barcode}         = $issue->{'barcode'};
 	$line{volumeddesc}     = $issue->{'volumeddesc'};
