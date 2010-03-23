@@ -82,10 +82,10 @@
         </tfoot>
         <tbody>
         <!-- TMPL_LOOP name="loop_budget" -->
-            <!--TMPL_IF name="toggle"-->
-                <tr class="highlight">
-            <!--TMPL_ELSE-->
+            <!--TMPL_IF NAME="__odd__" -->
                 <tr>
+            <!--TMPL_ELSE-->
+                <tr class="highlight">
             <!--/TMPL_IF-->
                 <td align="center"><!-- TMPL_VAR name="budget_code" --></td>
                 <td align="center"><!-- TMPL_VAR name="budget_owner" --></td>
