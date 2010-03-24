@@ -1051,10 +1051,12 @@ sub BuildUnimarcHierarchies{
   my $data = GetHeaderAuthority($authid);
   if ($data->{'authtrees'} and not $force){
     return $data->{'authtrees'};
-  } elsif ($force or !($data->{authtrees})) {
+#  } elsif ($data->{'authtrees'}){
+#    $hierarchies=$data->{'authtrees'};
+  } else {
     my $record = GetAuthority($authid);
     my $found;
-    foreach my $field ($record->field('550')){
+    foreach my $field ($record->field('5..')){
       if ($field->subfield('5') && $field->subfield('5') eq 'g'){
 		my $subfauthid=_get_authid_subfield($field);
         my $parentrecord = GetAuthority($subfauthid);
@@ -1078,9 +1080,6 @@ sub BuildUnimarcHierarchies{
     #Unless there is no ancestor, I am alone.
     $hierarchies="$authid" unless ($hierarchies);
   } 
-  else {
-    $hierarchies=$data->{'authtrees'};
-  }
   AddAuthorityTrees($authid,$hierarchies);
   return $hierarchies;
 }
@@ -1111,11 +1110,12 @@ sub BuildUnimarcHierarchy{
   my $record = shift @_;
   my $class = shift @_;
   my $authid_constructed = shift @_;
+  return unless $record;
   my $authid=$record->field('001')->data();
   my %cell;
   my $parents=""; my $children="";
   my (@loopparents,@loopchildren);
-  foreach my $field ($record->field('550')){
+  foreach my $field ($record->field('5..')){
 	my $subfauthid=_get_authid_subfield($field);
     if ($field->subfield('5') && $field->subfield('a')){
       if ($field->subfield('5') eq 'h'){
