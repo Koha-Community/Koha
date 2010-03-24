@@ -66,6 +66,7 @@
                 data: inputs.join('&'),
                 url: f.action,
                 dataType: 'json',
+		type: 'post',
                 success: function(json) {
                     jobID = json.jobID;
                     inBackgroundJobProgressTimer = false;

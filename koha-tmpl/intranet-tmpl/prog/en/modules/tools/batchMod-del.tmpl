@@ -1,6 +1,12 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Tools &rsaquo; Batch Deletion of Items</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="background-job.inc" -->
+<style type="text/css">
+        #jobpanel,#jobstatus,#jobfailed { display : none; }
+        #jobstatus { margin:.4em; }
+        #jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }
+</style>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
@@ -64,6 +70,10 @@
 
 
 <form name="f" action="batchMod.pl" method="post">
+     <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
+     <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
+     <input type="hidden" name="completedJobID" id="completedJobID" value="" />
+
 <!-- TMPL_IF name="item_loop" -->
 	<div id="cataloguing_additem_itemlist">
 		<div style="overflow:auto">
@@ -115,7 +125,12 @@
 	     <p>This will delete <!-- TMPL_IF NAME="too_many_items" -->all the<!-- TMPL_ELSE -->the selected<!-- /TMPL_IF --> items.</p>
 	     <input type="hidden" name="del" value="1" />
 	     <fieldset class="action">    
-		<input type="submit" name="submit" value="Go" />
+		<div id="jobpanel">
+		    <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+		    <div id="jobfailed"></div>
+		</div>
+		<input type="submit" name="mainformsubmit" value="Go" onclick="return submitBackgroundJob(this.form);" />
+		<input type="button" value="Cancel" onclick="javascript:history.back();" />
 	    </fieldset>
 	</div>
 	<!-- /TMPL_IF -->

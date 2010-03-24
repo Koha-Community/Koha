@@ -28,6 +28,7 @@ use C4::Items;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
+use C4::BackgroundJob;
 use C4::ClassSource;
 use C4::Dates;
 use C4::Debug;
@@ -41,6 +42,9 @@ my $error        = $input->param('error');
 my @itemnumbers  = $input->param('itemnumber');
 my $op           = $input->param('op');
 my $del          = $input->param('del');
+my $completedJobID = $input->param('completedJobID');
+my $runinbackground = $input->param('runinbackground');
+
 
 my $template_name;
 my $template_flag;
@@ -77,6 +81,11 @@ my $deleted_items = 0;     # Numbers of deleted items
 my $not_deleted_items = 0; # Numbers of items that could not be deleted
 my @not_deleted;           # List of the itemnumbers that could not be deleted
 
+my %cookies = parse CGI::Cookie($cookie);
+my $sessionID = $cookies{'CGISESSID'}->value;
+my $dbh = C4::Context->dbh;
+
+
 #--- ----------------------------------------------------------------------------
 if ($op eq "action") {
 #-------------------------------------------------------------------------------
@@ -90,38 +99,67 @@ if ($op eq "action") {
     # Is there something to modify ?
     # TODO : We shall use this var to warn the user in case no modification was done to the items
     my $something_to_modify = scalar(grep {!/^$/} @values);
-    
-    foreach my $itemnumber(@itemnumbers){
-	    my $itemdata=GetItem($itemnumber);
-	    if ($input->param("del")){
-		    my $return = DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
-		    if ($return == 1) {
-			$deleted_items++;
-		    } else {
-			$not_deleted_items++;
-			push @not_deleted, { biblionumber => $itemdata->{'biblionumber'}, itemnumber => $itemdata->{'itemnumber'}, barcode => $itemdata->{'barcode'}, title => $itemdata->{'title'}, $return => 1 };
-		    }
-	    } else {
-		if ($something_to_modify) {
-		    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
-		    my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
-    		    my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
-		    my $localmarcitem=Item2Marc($itemdata);
-		    UpdateMarcWith($marcitem,$localmarcitem);
-		    eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
-		}
-	    }
-    }
-    # If we have a reasonable amount of items, we display them
-    if (scalar(@itemnumbers) <= 1000) {
-	$items_display_hashref=BuildItemsData(@itemnumbers);
+
+    # Once the job is done
+    if ($completedJobID) {
+	# If we have a reasonable amount of items, we display them
+	if (scalar(@itemnumbers) <= 1000) {
+	    $items_display_hashref=BuildItemsData(@itemnumbers);
+	} else {
+	    # Else, we only display the barcode
+	    my @simple_items_display = map {{ itemnumber => $_, barcode => GetBarcodeFromItemnumber($_), biblionumber => GetBiblionumberFromItemnumber($_) }} @itemnumbers;
+	    $template->param("simple_items_display" => \@simple_items_display);
+	}
+
+	# Setting the job as done
+	my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
+
+	# Calling the template
+        add_saved_job_results_to_template($template, $completedJobID);
+
+    # While the job is getting done
     } else {
-	# Else, we only display the barcode
-	my @simple_items_display = map {{ itemnumber => $_, barcode => GetBarcodeFromItemnumber($_), biblionumber => GetBiblionumberFromItemnumber($_) }} @itemnumbers;
-	$template->param("simple_items_display" => \@simple_items_display);
+
+	# Job size is the number of items we have to process
+	my $job_size = scalar(@itemnumbers);
+	my $job = undef;
+	$dbh->{AutoCommit} = 0;
+	my $callback = sub {};
+
+	# If we asked for background processing
+	if ($runinbackground) {
+	    $job = put_in_background($job_size);
+	    $callback = progress_callback($job, $dbh);
+	}
+
+	# For each item
+	my $i = 1; 
+	foreach my $itemnumber(@itemnumbers){
+
+		$job->progress($i) if $runinbackground;
+		my $itemdata=GetItem($itemnumber);
+		if ($input->param("del")){
+			my $return = DelItemCheck(C4::Context->dbh, $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
+			if ($return == 1) {
+			    $deleted_items++;
+			} else {
+			    $not_deleted_items++;
+			    push @not_deleted, { biblionumber => $itemdata->{'biblionumber'}, itemnumber => $itemdata->{'itemnumber'}, barcode => $itemdata->{'barcode'}, title => $itemdata->{'title'}, $return => 1 };
+			}
+		} else {
+		    if ($something_to_modify) {
+			my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
+			my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
+			my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
+			my $localmarcitem=Item2Marc($itemdata);
+			UpdateMarcWith($marcitem,$localmarcitem);
+			eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
+		    }
+		}
+		$i++;
+	}
     }
 }
-
 #
 #-------------------------------------------------------------------------------
 # build screen with existing items. and "new" one
@@ -485,5 +523,66 @@ sub find_value {
     return($indicator,$result);
 }
 
+# ----------------------------
+# Background functions
+
+
+sub add_results_to_template {
+    my $template = shift;
+    my $results = shift;
+    $template->param(map { $_ => $results->{$_} } keys %{ $results });
+}
+
+sub add_saved_job_results_to_template {
+    my $template = shift;
+    my $completedJobID = shift;
+    my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
+    my $results = $job->results();
+    add_results_to_template($template, $results);
+}
+
+sub put_in_background {
+    my $job_size = shift;
+
+    my $job = C4::BackgroundJob->new($sessionID, "test", $ENV{'SCRIPT_NAME'}, $job_size);
+    my $jobID = $job->id();
+
+    # fork off
+    if (my $pid = fork) {
+        # parent
+        # return job ID as JSON
+
+        # prevent parent exiting from
+        # destroying the kid's database handle
+        # FIXME: according to DBI doc, this may not work for Oracle
+        $dbh->{InactiveDestroy}  = 1;
+
+        my $reply = CGI->new("");
+        print $reply->header(-type => 'text/html');
+        print "{ jobID: '$jobID' }";
+        exit 0;
+    } elsif (defined $pid) {
+        # child
+        # close STDOUT to signal to Apache that
+        # we're now running in the background
+        close STDOUT;
+        close STDERR;
+    } else {
+        # fork failed, so exit immediately
+        warn "fork failed while attempting to run $ENV{'SCRIPT_NAME'} as a background job";
+        exit 0;
+    }
+    return $job;
+}
+
+sub progress_callback {
+    my $job = shift;
+    my $dbh = shift;
+    return sub {
+        my $progress = shift;
+        $job->progress($progress);
+        $dbh->commit();
+    }
+}
 
 
