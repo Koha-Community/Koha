@@ -62,7 +62,6 @@ else {
   $limit=50;
 }
 my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
-warn "BORR : $borrowernumber = ".Data::Dumper::Dumper($issues);
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "members/readingrec.tmpl",
