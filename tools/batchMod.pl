@@ -107,7 +107,7 @@ if ($op eq "action") {
 	    $items_display_hashref=BuildItemsData(@itemnumbers);
 	} else {
 	    # Else, we only display the barcode
-	    my @simple_items_display = map {{ itemnumber => $_, barcode => GetBarcodeFromItemnumber($_), biblionumber => GetBiblionumberFromItemnumber($_) }} @itemnumbers;
+	    my @simple_items_display = map {{ itemnumber => $_, barcode => (GetBarcodeFromItemnumber($_) or ""), biblionumber => (GetBiblionumberFromItemnumber($_) or "") }} @itemnumbers;
 	    $template->param("simple_items_display" => \@simple_items_display);
 	}
 
