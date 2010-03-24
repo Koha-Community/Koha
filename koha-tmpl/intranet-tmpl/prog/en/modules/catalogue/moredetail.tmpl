@@ -63,33 +63,35 @@
             <ol class="bibliodetails">
             <li><span class="label">Current Location:</span> <!-- TMPL_VAR NAME="holdingbranchname" -->&nbsp;</li>
             <li><span class="label">Checkout Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="datedue" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
-            <li><span class="label">Lost Status:</span>
-                <!-- TMPL_IF NAME="CAN_user_circulate" -->
-                    <form action="updateitem.pl" method="post">
-                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
-                    <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
-                    <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
-                    <select name="itemlost" >
-            <!-- TMPL_LOOP NAME="itemlostloop" -->
-                <!-- TMPL_IF NAME="selected" -->
-                        <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
-                <!-- TMPL_ELSE -->
-                        <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
-                <!-- /TMPL_IF -->
-            <!-- /TMPL_LOOP -->
-                    </select>
-                    <input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
-                    <input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
-                    <input type="submit" name="submit" class="submit" value="Set Status" /></form>
-                <!-- TMPL_ELSE -->
-                    <!-- TMPL_LOOP NAME="itemlostloop" -->
-                        <!-- TMPL_IF NAME="selected" -->
-                            <!-- TMPL_VAR NAME="lib" -->
-                        <!-- /TMPL_IF -->
-                    <!-- /TMPL_LOOP -->
-                    &nbsp;
-                <!-- /TMPL_IF -->
-            </li>
+            <!-- TMPL_IF name="itemlostloop" -->
+                <li><span class="label">Lost Status:</span>
+                    <!-- TMPL_IF NAME="CAN_user_circulate" -->
+                        <form action="updateitem.pl" method="post">
+                        <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR Name="biblionumber" -->" />
+                        <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
+                        <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
+                        <select name="itemlost" >
+                        <!-- TMPL_LOOP NAME="itemlostloop" -->
+                            <!-- TMPL_IF NAME="selected" -->
+                                    <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
+                            <!-- TMPL_ELSE -->
+                                    <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                        </select>
+                        <input type="hidden" name="wthdrawn" value="<!-- TMPL_VAR NAME="wthdrawn" -->" />
+                        <input type="hidden" name="damaged" value="<!-- TMPL_VAR NAME="damaged" -->" />
+                        <input type="submit" name="submit" class="submit" value="Set Status" /></form>
+                    <!-- TMPL_ELSE -->
+                        <!-- TMPL_LOOP NAME="itemlostloop" -->
+                            <!-- TMPL_IF NAME="selected" -->
+                                <!-- TMPL_VAR NAME="lib" -->
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_LOOP -->
+                        &nbsp;
+                    <!-- /TMPL_IF -->
+                </li>
+            <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="itemdamagedloop" -->
             <li><span class="label">Damaged Status:</span>
                 <!-- TMPL_IF NAME="CAN_user_circulate" -->
