@@ -6,6 +6,17 @@
 //<![CDATA[
          $(document).ready(function() {
 	    $("#itemst").tablesorter();
+	    $("#selectallbutton").click(function() {
+		$("#itemst").find("input:checkbox").each(function() {
+		    $(this).attr("checked", true);
+		});
+	    });
+	    $("#clearallbutton").click(function() {
+		$("#itemst").find("input:checkbox").each(function() {
+		    $(this).attr("checked", false);
+		});
+	    });
+
 	 });
 //]]>
 </script>
@@ -56,6 +67,7 @@
 <!-- TMPL_IF name="item_loop" -->
 	<div id="cataloguing_additem_itemlist">
 		<div style="overflow:auto">
+		<div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div>
 		<table id="itemst">
 		    <thead>
 			<tr>
@@ -127,7 +139,7 @@
 		    <!-- TMPL_LOOP name="not_deleted_loop" -->
 			<tr>
 			    <td><!-- TMPL_VAR name="itemnumber" --></td>
-			    <td><!-- TMPL_VAR name="barcode" --></td>
+			    <td><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR name="barcode" --></a></td>
 			    <td><!-- TMPL_IF name="book_on_loan" -->Item is checked out<!-- TMPL_ELSIF name="book_reserved" -->Item has a waiting hold<!-- /TMPL_IF --></td>
 			</tr>
 		    <!-- /TMPL_LOOP -->
