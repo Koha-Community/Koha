@@ -3,7 +3,7 @@
 # script to show a PDF file.
 # written 07/04
 # by Veleda Matias - matias_veleda@hotmail.com - Physics Library UNLP Argentina and
-#    Castañeda Sebastian - seba3c@yahoo.com.ar - Physics Library UNLP Argentina and
+#    CastaÃ±eda Sebastian - seba3c@yahoo.com.ar - Physics Library UNLP Argentina and
 
 # This file is part of Koha.
 #
