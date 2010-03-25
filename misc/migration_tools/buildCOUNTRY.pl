@@ -52,20 +52,20 @@ my %codesiso;
 	);
 
 %codesiso = (
-	'an' => 'Antilles Néerlandaises',
+	'an' => 'Antilles NÃ©erlandaises',
 	'at' => 'Autriche',
 	'cr' => 'Costa Rica',
-	'er' => 'Erythrée',
+	'er' => 'ErythrÃ©e',
 	'fr' => ' France',
 	'in' => 'Inde',
 	'is' => 'Islande',
 	'lt' => 'Lituanie',
 	'nd' => 'Pays Bas',
 	'nf' => 'Norfolk',
-	'ng' => 'Nigéria',
+	'ng' => 'NigÃ©ria',
 	'pa' => 'Manama',
 	'pn' => 'Pitcairn',
-	're' => 'Réunion (ile)',
+	're' => 'RÃ©union (ile)',
 	'sp' => 'Espagne',
 	'us' => 'Etats Unis',
 	) if $language eq 'fr';
