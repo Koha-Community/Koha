@@ -63,7 +63,7 @@ our %item_db = (
         ],
     },
     '660' => {
-        title => "Harry Potter y el cáliz de fuego",
+        title => "Harry Potter y el cÃ¡liz de fuego",
         id => '660',
         sip_media_type => '001',
         magnetic_media => 0,
