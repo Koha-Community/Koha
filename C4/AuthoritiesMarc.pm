@@ -1056,6 +1056,7 @@ sub BuildUnimarcHierarchies{
   } else {
     my $record = GetAuthority($authid);
     my $found;
+    return unless $record;
     foreach my $field ($record->field('5..')){
       if ($field->subfield('5') && $field->subfield('5') eq 'g'){
 		my $subfauthid=_get_authid_subfield($field);
