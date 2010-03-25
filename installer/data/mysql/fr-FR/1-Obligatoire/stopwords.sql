@@ -14,7 +14,7 @@
 #
 
 INSERT INTO stopwords VALUES ('AU');
-INSERT INTO stopwords VALUES ('ÇA');
+INSERT INTO stopwords VALUES ('Ã‡A');
 INSERT INTO stopwords VALUES ('CAR');
 INSERT INTO stopwords VALUES ('CE');
 INSERT INTO stopwords VALUES ('CELA');
