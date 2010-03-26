@@ -36,7 +36,8 @@
                 <xsl:when test="$leader6='m'">CF</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">MP</xsl:when>
                 <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">VM</xsl:when>
-                <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'">MU</xsl:when>
+                <xsl:when test="$leader6='i' or $leader6='j'">MU</xsl:when>
+                <xsl:when test="$leader6='c' or $leader6='d'">PR</xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="materialTypeLabel">
@@ -52,7 +53,9 @@
                 <xsl:when test="$leader6='m'">Computer File</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">Map</xsl:when>
                 <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">Visual Material</xsl:when>
-                <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'">Sound</xsl:when>
+                <xsl:when test="$leader6='j'">Music</xsl:when>
+                <xsl:when test="$leader6='i'">Sound</xsl:when>
+                <xsl:when test="$leader6='c' or $leader6='d'">Score</xsl:when>
             </xsl:choose>
         </xsl:variable>
 

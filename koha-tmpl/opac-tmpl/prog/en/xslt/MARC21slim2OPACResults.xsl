@@ -40,7 +40,8 @@
                 <xsl:when test="$leader6='m'">CF</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">MP</xsl:when>
                 <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">VM</xsl:when>
-                <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'">MU</xsl:when>
+                <xsl:when test="$leader6='i' or $leader6='j'">MU</xsl:when>
+                <xsl:when test="$leader6='c' or $leader6='d'">PR</xsl:when>
             </xsl:choose>
         </xsl:variable>
         <xsl:variable name="controlField008-23" select="substring($controlField008,24,1)"/>
@@ -514,7 +515,9 @@
                 <xsl:when test="$leader6='m'"><img src="/opac-tmpl/prog/famfamfam/silk/computer_link.png" alt="computer file" title="computer file"/> Computer File</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'"><img src="/opac-tmpl/prog/famfamfam/silk/map.png" alt="map" title="map"/> Map</xsl:when>
                 <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'"><img src="/opac-tmpl/prog/famfamfam/silk/film.png" alt="visual material" title="visual material"/> Visual Material</xsl:when>
-                <xsl:when test="$leader6='c' or $leader6='d' or $leader6='i' or $leader6='j'"><img src="/opac-tmpl/prog/famfamfam/silk/sound.png" alt="sound" title="sound"/> Sound</xsl:when>
+                <xsl:when test="$leader6='c' or $leader6='d'"><img src="/opac-tmpl/prog/famfamfam/silk/music.png" alt="score" title="score"/> Score</xsl:when>
+                <xsl:when test="$leader6='i'"><img src="/opac-tmpl/prog/famfamfam/silk/sound.png" alt="sound" title="sound"/> Sound</xsl:when>
+                <xsl:when test="$leader6='j'"><img src="/opac-tmpl/prog/famfamfam/silk/sound.png" alt="music" title="music"/> Music</xsl:when>
             </xsl:choose>
     </xsl:if>
     <xsl:if test="string-length(normalize-space($physicalDescription))">
