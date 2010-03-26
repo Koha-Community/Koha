@@ -167,7 +167,7 @@ if ($op=~/else/) {
     
         my $suggestions = &SearchSuggestion($suggestion_ref);
         foreach my $suggestion (@$suggestions){
-            $suggestion->{budget_name}=GetBudget($suggestion->{budgetid})->{budget_name};
+            $suggestion->{budget_name}=GetBudget($suggestion->{budgetid})->{budget_name} if $suggestion->{budgetid};
             foreach my $date qw(suggesteddate manageddate accepteddate){
                 if ($suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ){
                 $suggestion->{$date}=format_date($suggestion->{$date}) ;
