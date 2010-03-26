@@ -2607,7 +2607,7 @@ sub GetDistinctValues {
     if ($fieldname=~/\./){
 			my ($table,$column)=split /\./, $fieldname;
 			my $dbh = C4::Context->dbh;
-			warn "select DISTINCT($column) as value, count(*) as cnt from $table group by lib order by $column ";
+			warn "select DISTINCT($column) as value, count(*) as cnt from $table group by lib order by $column " if $DEBUG;
 			my $sth = $dbh->prepare("select DISTINCT($column) as value, count(*) as cnt from $table ".($string?" where $column like \"$string%\"":"")."group by value order by $column ");
 			$sth->execute;
 			my $elements=$sth->fetchall_arrayref({});
