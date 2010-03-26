@@ -288,6 +288,7 @@ if ( $op eq 'delete_confirm' ) {
 	my $total_est_gste = $total_rrp_gste - ($total_rrp_gste * $discount);
 
     my $contract = &GetContract($basket->{contractnumber});
+    my @orders = GetOrders($basketno);
     $template->param(
         basketno             => $basketno,
         basketname           => $basket->{'basketname'},
@@ -317,6 +318,7 @@ if ( $op eq 'delete_confirm' ) {
         GST                  => $gist,
         basketgroups         => $basketgroups,
         grouped              => $basket->{basketgroupid},
+        unclosable           => @orders ? 0 : 1, 
     );
 }
 
