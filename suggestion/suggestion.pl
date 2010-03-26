@@ -166,12 +166,13 @@ if ($op=~/else/) {
 #        warn $$suggestion_ref{$displayby}."=$criteriumvalue; $displayby";
     
         my $suggestions = &SearchSuggestion($suggestion_ref);
-        foreach (@$suggestions){
+        foreach my $suggestion (@$suggestions){
+            $suggestion->{budget_name}=GetBudget($suggestion->{budgetid})->{budget_name};
             foreach my $date qw(suggesteddate manageddate accepteddate){
-                if ($_->{$date} ne "0000-00-00" && $_->{$date} ne "" ){
-                $_->{$date}=format_date($_->{$date}) ;
+                if ($suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ){
+                $suggestion->{$date}=format_date($suggestion->{$date}) ;
                 } else {
-                $_->{$date}="" ;
+                $suggestion->{$date}="" ;
                 }             
             }    
         }
@@ -257,8 +258,8 @@ $template->param(itemtypeloop=>$supportlist);
 my $searchbudgets={ budget_branchcode=>$branchfilter} if $branchfilter;
 my $budgets = GetBudgets($searchbudgets);
 
-foreach (@$budgets){
-    $_->{'selected'}=1 if ($$suggestion_ref{'budget_id'} && $_{'budget_id'} eq $$suggestion_ref{'budget_id'})
+foreach my $budget (@$budgets){
+    $budget->{'selected'}=1 if ($$suggestion_ref{'budgetid'} && $budget->{'budget_id'} eq $$suggestion_ref{'budgetid'})
 };
 
 $template->param( budgetsloop => $budgets);
