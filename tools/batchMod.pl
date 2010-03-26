@@ -123,7 +123,6 @@ if ($op eq "action") {
 	# Job size is the number of items we have to process
 	my $job_size = scalar(@itemnumbers);
 	my $job = undef;
-	$dbh->{AutoCommit} = 0;
 	my $callback = sub {};
 
 	# If we asked for background processing
@@ -581,7 +580,6 @@ sub progress_callback {
     return sub {
         my $progress = shift;
         $job->progress($progress);
-        $dbh->commit();
     }
 }
 
