@@ -63,49 +63,33 @@ if ( $data->{'category_type'} eq 'C') {
 }
 
 #get account details
-my ($total,$accts,$numaccts)=GetMemberAccountRecords($borrowernumber);
+my ($total,$accts,undef)=GetMemberAccountRecords($borrowernumber);
 my $totalcredit;
 if($total <= 0){
         $totalcredit = 1;
 }
-my @accountrows; # this is for the tmpl-loop
 
-my $toggle;
-for (my $i=0;$i<$numaccts;$i++){
-    if($i%2){
-            $toggle = 0;
-    } else {
-            $toggle = 1;
+my $reverse_col = 0; # Flag whether we need to show the reverse column
+foreach my $accountline ( @{$accts}) {
+    $accountline->{amount} += 0.00;
+    if ($accountline->{amount} <= 0 ) {
+        $accountline->{amountcredit} = 1;
     }
-    $accts->[$i]{'toggle'} = $toggle;
-    $accts->[$i]{'amount'}+=0.00;
-    if($accts->[$i]{'amount'} <= 0){
-        $accts->[$i]{'amountcredit'} = 1;
+    $accountline->{amountoutstanding} += 0.00;
+    if ( $accountline->{amountoutstanding} <= 0 ) {
+        $accountline->{amountoutstandingcredit} = 1;
     }
-    $accts->[$i]{'amountoutstanding'}+=0.00;
-    if($accts->[$i]{'amountoutstanding'} <= 0){
-        $accts->[$i]{'amountoutstandingcredit'} = 1;
+
+    $accountline->{date} = format_date($accountline->{date});
+    $accountline->{amount} = sprintf '%.2f', $accountline->{amount};
+    $accountline->{amountoutstanding} = sprintf '%.2f', $accountline->{amountoutstanding};
+    if ($accountline->{accounttype} eq 'Pay') {
+        $accountline->{payment} = 1;
+        $reverse_col = 1;
     }
-    my %row = ( 'date'              => format_date($accts->[$i]{'date'}),
-                'amountcredit' => $accts->[$i]{'amountcredit'},
-                'amountoutstandingcredit' => $accts->[$i]{'amountoutstandingcredit'},
-                'toggle' => $accts->[$i]{'toggle'},
-                'description'       => $accts->[$i]{'description'},
-				'itemnumber'       => $accts->[$i]{'itemnumber'},
-				'biblionumber'       => $accts->[$i]{'biblionumber'},
-                'amount'            => sprintf("%.2f",$accts->[$i]{'amount'}),
-                'amountoutstanding' => sprintf("%.2f",$accts->[$i]{'amountoutstanding'}),
-                'accountno' => $accts->[$i]{'accountno'},
-                'payment' => ( $accts->[$i]{'accounttype'} eq 'Pay' ),
-                
-                );
-    
-    if ($accts->[$i]{'accounttype'} ne 'F' && $accts->[$i]{'accounttype'} ne 'FU'){
-        $row{'printtitle'}=1;
-        $row{'title'} = $accts->[$i]{'title'};
+    if ($accountline->{accounttype} ne 'F' && $accountline->{accounttype} ne 'FU'){
+        $accountline->{printtitle} = 1;
     }
-    
-    push(@accountrows, \%row);
 }
 
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
@@ -121,7 +105,6 @@ $template->param(
     cardnumber          => $data->{'cardnumber'},
     categorycode        => $data->{'categorycode'},
     category_type       => $data->{'category_type'},
- #   category_description => $data->{'description'},
     categoryname		 => $data->{'description'},
     address             => $data->{'address'},
     address2            => $data->{'address2'},
@@ -134,7 +117,8 @@ $template->param(
 	branchname			=> GetBranchName($data->{'branchcode'}),
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
-	is_child        => ($data->{'category_type'} eq 'C'),
-    accounts            => \@accountrows );
+    is_child            => ($data->{'category_type'} eq 'C'),
+    reverse_col         => $reverse_col,
+    accounts            => $accts );
 
 output_html_with_http_headers $input, $cookie, $template->output;
