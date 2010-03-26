@@ -92,7 +92,7 @@ use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
 my $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
-my $budget_id       = $input->param('budget_id');	# FIXME: else ERROR!
+my $budget_id       = $input->param('budget_id') || 0;	# FIXME: else ERROR!
 my $title           = $input->param('title');
 my $author          = $input->param('author');
 my $publicationyear = $input->param('publicationyear');
@@ -125,7 +125,7 @@ my $contract = &GetContract($basket->{contractnumber});
 
 #simple parameters reading (all in one :-)
 my $params = $input->Vars;
-my $listprice; # the price, that can be in MARC record if we have one
+my $listprice=0; # the price, that can be in MARC record if we have one
 if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 #we want to import from the breeding reservoir (from a z3950 search)
     my ($marcrecord, $encoding) = MARCfindbreeding($params->{'breedingid'});
@@ -348,7 +348,7 @@ $template->param(
     quantityrec      => $data->{'quantity'},
     rrp              => $data->{'rrp'},
     listprice        => sprintf("%.2f", $data->{'listprice'}||$listprice),
-    total            => sprintf("%.2f", $data->{'ecost'}*$data->{'quantity'} ),
+    total            => sprintf("%.2f", ($data->{'ecost'}||0)*($data->{'quantity'}||0) ),
     ecost            => $data->{'ecost'},
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
