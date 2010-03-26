@@ -240,7 +240,7 @@ ff.submit();
                     <!-- TMPL_IF name="items" -->
                         <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" onchange="calcNeworderTotal();" />
                     <!-- TMPL_ELSE -->
-                        <input type="text" size="20" id="quantityrec" name="quantity" value="<!-- TMPL_VAR name="quantityrec" -->" onchange="calcNeworderTotal();" />
+                        <input type="text" size="20" id="quantity" name="quantity" value="<!-- TMPL_VAR name="quantityrec" -->" onchange="calcNeworderTotal();" />
                     <!-- /TMPL_IF -->
                 <!--/TMPL_IF-->
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->

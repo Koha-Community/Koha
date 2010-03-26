@@ -35,8 +35,8 @@ function cloneItemBlock(index) {
     //}
     // insert this line on the page    
     original.parentNode.insertBefore(clone,original.nextSibling);
-    var quantityrec = document.getElementById('quantityrec');
-    quantityrec.setAttribute('value',parseFloat(quantityrec.getAttribute('value'))+1);
+    var quantity = document.getElementById('quantity');
+    quantity.setAttribute('value',parseFloat(quantity.getAttribute('value'))+1);
 }
 function check_additem() {
 	var	barcodes = document.getElementsByName('barcode');
