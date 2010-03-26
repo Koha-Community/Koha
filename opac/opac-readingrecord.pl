@@ -83,7 +83,7 @@ my @loop_reading;
 foreach my $issue (@{$issues} ) {
     my %line;
 	
-    my $record = GetMarcBiblio($issues->[$i]->{'biblionumber'});
+    my $record = GetMarcBiblio($issue->{'biblionumber'});
 
 	# XISBN Stuff
 	my $isbn               = GetNormalizedISBN($issue->{'isbn'});
@@ -95,12 +95,12 @@ foreach my $issue (@{$issues} ) {
     $line{date_due}        = format_date( $issue->{'date_due'} );
     $line{returndate}      = format_date( $issue->{'returndate'} );
     $line{volumeddesc}     = $issue->{'volumeddesc'};
-    if($issue{'itemtype'}) {
+    if($issue->{'itemtype'}) {
         $line{'description'}   = $itemtypes->{ $issue->{'itemtype'} }->{'description'};
         $line{imageurl}        = getitemtypeimagelocation( 'opac', $itemtypes->{ $issue->{'itemtype'}  }->{'imageurl'} );
     }
     push( @loop_reading, \%line );
-    $line{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($issues->[$i]->{'biblionumber'}));
+    $line{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($issue->{'biblionumber'}));
 }
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
