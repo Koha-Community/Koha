@@ -443,6 +443,7 @@ my %default_values_for_mod_from_marc = (
     replacementpricedate => undef, 
     restricted           => undef, 
     stack                => undef, 
+    stocknumber          => undef, 
     uri                  => undef, 
     wthdrawn             => 0,
 );
