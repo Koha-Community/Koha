@@ -195,7 +195,7 @@ if ( $orderinfo->{quantity} ne '0' ) {
             {
                 "biblio.title"                => "$$orderinfo{title}",
                 "biblio.author"               => "$$orderinfo{author}",
-                "biblio.series"               => $$orderinfo{series}          ? $$orderinfo{series}        : "",
+                "biblio.seriestitle"          => $$orderinfo{series}          ? $$orderinfo{series}        : "",
                 "biblioitems.isbn"            => $$orderinfo{isbn}            ? $$orderinfo{isbn}          : "",
                 "biblioitems.publishercode"   => $$orderinfo{publishercode}   ? $$orderinfo{publishercode} : "",
                 "biblioitems.publicationyear" => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
