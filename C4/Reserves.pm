@@ -1805,32 +1805,31 @@ sub _ShiftPriorityByDateAndPriority {
     my ( $biblio, $resdate, $new_priority ) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT priority FROM reserves WHERE biblionumber = ? AND ( reservedate > ? OR priority > ? ) ORDER BY priority ASC";
+    my $query = "SELECT priority FROM reserves WHERE biblionumber = ? AND ( reservedate > ? OR priority > ? ) ORDER BY priority ASC LIMIT 1";
     my $sth = $dbh->prepare( $query );
     $sth->execute( $biblio, $resdate, $new_priority );
-    my ( $min_priority ) = $sth->fetchrow;
-    $sth->finish;  # $sth might have more data.
+    my $min_priority = $sth->fetchrow;
+    # if no such matches are found, $new_priority remains as original value
     $new_priority = $min_priority if ( $min_priority );
-    my $updated_priority = $new_priority + 1;
 
-    $query = "
- UPDATE reserves
-    SET priority = ?
-  WHERE biblionumber = ?
-    AND borrowernumber = ?
-    AND reservedate = ?
-    AND found IS NULL";
+    # Shift the priority up by one; works in conjunction with the next SQL statement
+    $query = "UPDATE reserves
+              SET priority = priority+1
+              WHERE biblionumber = ?
+              AND borrowernumber = ?
+              AND reservedate = ?
+              AND found IS NULL";
     my $sth_update = $dbh->prepare( $query );
 
-    $query = "SELECT * FROM reserves WHERE priority >= ?";
+    # Select all reserves for the biblio with priority greater than $new_priority, and order greatest to least
+    $query = "SELECT borrowernumber, reservedate FROM reserves WHERE priority >= ? AND biblionumber = ? ORDER BY priority DESC";
     $sth = $dbh->prepare( $query );
-    $sth->execute( $new_priority );
+    $sth->execute( $new_priority, $biblio );
     while ( my $row = $sth->fetchrow_hashref ) {
-	$sth_update->execute( $updated_priority, $biblio, $row->{borrowernumber}, $row->{reservedate} );
-	$updated_priority++;
+	$sth_update->execute( $biblio, $row->{borrowernumber}, $row->{reservedate} );
     }
 
-    return $new_priority;  # so the caller knows what priority they end up at
+    return $new_priority;  # so the caller knows what priority they wind up receiving
 }
 
 =back
