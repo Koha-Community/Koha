@@ -159,7 +159,7 @@ if ( $op eq 'delete_confirm' ) {
                             });
             ModBasket( { basketno => $basketno,
                          basketgroupid => $basketgroupid } );
-            print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid='.$booksellerid);
+            print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid='.$booksellerid.'&closed=1');
         } else {
             print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno='.$basketno.'&amp;op=attachbasket&amp;booksellerid=' . $booksellerid);
         }
