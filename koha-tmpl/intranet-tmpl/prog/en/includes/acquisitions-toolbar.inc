@@ -23,7 +23,7 @@
         var manageorders = [
             { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&op=add_form"},
             { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=<!--TMPL_VAR Name="id"-->"},
-            { text: _("Basket grouping"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->"},
+            { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->"},
             { text: _("Receive shipments"), url: "/cgi-bin/koha/acqui/parcels.pl?supplierid=<!--TMPL_VAR Name="id"-->" },
             <!-- TMPL_IF name="basketno" -->
                 { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&basketno=<!--TMPL_VAR name="basketno" -->&owner=1"}
