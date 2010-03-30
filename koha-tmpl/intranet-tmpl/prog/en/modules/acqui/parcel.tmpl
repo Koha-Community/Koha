@@ -83,13 +83,13 @@
 
 				for( i = 0 ; i < orders.length ; i++){
 					order = orders[i];
-					$('<tr>'
+					$('<tr class="orderfound">'
                        + '<td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=' + order.basketno + '">' + order.basketno + '</a></td>'
-                       + '<td class="orderfilterclass"> ' + order.ordernumber + ' </td>'
+                       + '<td class="orderfilterclass"> <a href="neworderempty.pl?ordernumber=' + order.ordernumber + '&booksellerid=' + order.booksellerid + '">' + order.ordernumber + ' </a></td>'
                        + '<td class="summaryfilterclass">'
-                       + '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + order.biblionumber + '">' + order.title + '</a> / ' + order.author + '&ndash;' + order.isbn + '</td>'
+                       + '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + order.biblionumber + '">' + order.title + '</a> by ' + order.author + '&nbsp;&ndash;&nbsp;' + order.isbn + '</td>'
                        + '<td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">Card</a></td>'
-                       + '<td>' + order.quantrem + ' / ' + order.quantity + '</td>'
+                       + '<td>' + order.quantity + '</td>'
                        + '<td>' + order.ecost + '</td>'
                        + '<td>' + order.ordertotal + '</td>'
                        + '<td>'
@@ -114,6 +114,7 @@
     function clearFilters() {
 	$("#nothingfoundrow").remove();
         $("#pendingt tbody.filterclass tr").show();
+        $("#pendingt tbody.filterclass tr.orderfound").remove();
 	pendingExpand();
     }
 

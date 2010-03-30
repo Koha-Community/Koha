@@ -109,6 +109,8 @@ if($input->param('format') eq "json"){
             $data->{ordernumber} = $order->{ordernumber};
             $data->{title} = $order->{title};
             $data->{author} = $order->{author};
+            $data->{isbn} = $order->{isbn};
+            $data->{booksellerid} = $order->{booksellerid};
             $data->{biblionumber} = $order->{biblionumber};
             $data->{freight} = $order->{freight};
             $data->{quantity} = $order->{quantity};
