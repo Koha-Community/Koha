@@ -32,7 +32,7 @@
     function pendingCollapse() {
 	$("#pendingcollapserow").remove();
 	$("#pendingt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
-	$("#pendingt").before("<p id=\"pendingcollapserow\">Only the first " + rowsToCollapse + " items are displayed. <a href=\"javascript:pendingExpand();\">Click here to show all " + rowCountPending + " items<\/a>.<\/p>");
+	$("#pendingt").before("<p id=\"pendingcollapserow\">" + _("Only the first ")  + rowsToCollapse +  _(" items are displayed.") + "<a href=\"javascript:pendingExpand();\">" + _("Click here to show all ")  + rowCountPending + _(" items") + "<\/a>.<\/p>");
 
     }
 
@@ -40,21 +40,21 @@
     function pendingExpand() {
 	$("#pendingcollapserow").remove();
 	$("#pendingt tr").show();
-	$("#pendingt").before("<p id=\"pendingcollapserow\">" + rowCountPending + " items are displayed. <a href=\"javascript:pendingCollapse();\">Click here to show only the first " + rowsToCollapse + " items<\/a>.<\/p>");
+	$("#pendingt").before("<p id=\"pendingcollapserow\">" + rowCountPending + _(" items are displayed.") + "<a href=\"javascript:pendingCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
     }
 
     // Collapse already received items table
     function receivedCollapse() {
 	$("#receivedcollapserow").remove();
 	$("#receivedt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
-	$("#receivedt").before("<p id=\"receivedcollapserow\">Only the first " + rowsToCollapse + " items are displayed. <a href=\"javascript:receivedExpand();\">Click here to show all " + rowCountReceived + " items<\/a>.<\/p>");
+	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("Only the first ") + rowsToCollapse + _(" items are displayed.") + "<a href=\"javascript:receivedExpand();\">" + _("Click here to show all ") + rowCountReceived + _(" items") + "<\/a>.<\/p>");
     }
 
     // Expand already received items table
     function receivedExpand() {
 	$("#receivedcollapserow").remove();
 	$("#receivedt tr").show();
-	$("#receivedt").before("<p id=\"receivedcollapserow\">All " + rowCountReceived + " items are displayed. <a href=\"javascript:receivedCollapse();\">Click here to show only the first " + rowsToCollapse + " items<\/a>.<\/p>");
+	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("All ") + rowCountReceived + _(" items are displayed.") + "<a href=\"javascript:receivedCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
     }
 
     // Launch filtering
@@ -87,7 +87,7 @@
                        + '<td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=' + order.basketno + '">' + order.basketno + '</a></td>'
                        + '<td class="orderfilterclass"> <a href="neworderempty.pl?ordernumber=' + order.ordernumber + '&booksellerid=' + order.booksellerid + '">' + order.ordernumber + ' </a></td>'
                        + '<td class="summaryfilterclass">'
-                       + '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + order.biblionumber + '">' + order.title + '</a> by ' + order.author + '&nbsp;&ndash;&nbsp;' + order.isbn + '</td>'
+                       + '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + order.biblionumber + '">' + order.title + '</a>' + _(" by ") + order.author + '&nbsp;&ndash;&nbsp;' + order.isbn + '</td>'
                        + '<td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">Card</a></td>'
                        + '<td>' + order.quantity + '</td>'
                        + '<td>' + order.ecost + '</td>'
