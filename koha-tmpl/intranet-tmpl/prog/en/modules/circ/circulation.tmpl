@@ -235,6 +235,10 @@ function refocus(calendar) {
     <li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="BORRNOTSAMEBRANCH" -->
+    <li>This patrons is from a different library (<!-- TMPL_VAR NAME="BORRNOTSAMEBRANCH" -->)</li>
+<!-- /TMPL_IF -->
+
 <!-- TMPL_IF NAME="PATRON_CANT" -->
     <li>This patron can't check out this item per library circulation policy</i>
 <!-- /TMPL_IF -->
@@ -337,7 +341,7 @@ function refocus(calendar) {
             <li>Patron's card is expired</li>
         <!-- /TMPL_IF -->
 
-        <!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
+        <!-- TMPL_IF NAME="ITEMNOTSAMEBRANCH" -->
             <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
         <!-- /TMPL_IF -->
 
