@@ -82,8 +82,8 @@
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
 
-<!-- ITEMTYPE LIMITS -->
     <div id="itemtypelist">
+<!-- ITEMTYPE LIMITS -->
 	<fieldset>
      <legend>Limit to any of the following:</legend>
     <table>
@@ -99,18 +99,21 @@
       </tr>
     </table>
 	</fieldset>
-    </div>
 <!-- /ITEMTYPE LIMITS -->
+    </div>
 
 <!-- TMPL_IF NAME="expanded_options" -->
+<div id="basiclimits" class="container">
 <!-- BASIC LIMITS -->
  <fieldset>
 	<legend>Limits:</legend>
+<div id="pubrange" class="container">
 <!-- PUB / COPY YEAR LIMIT --><!-- FIXME: add publication,copyright,acquisition options -->
 	<p><label for="limit-yr">Year: </label>
 		<input size="15" name="limit-yr" id="" value=""/>&nbsp;&nbsp;(format: yyyy-yyyy)</p>
 <!-- /PUB / COPY YEAR LIMIT -->
-
+</div>
+<div id="language" class="container">
 <!-- LANGUAGE LIMIT -->
 		<p><label for="language-limit">Language: </label>                                        
 		<select name="limit">
@@ -125,14 +128,17 @@
 		<!-- /TMPL_LOOP -->
 		</select></p><!-- <a href="">Show all languages</a>-->
 <!-- /LANGUAGE LIMIT -->
+</div>
 </fieldset>
 <!-- /BASIC LIMITS -->
+</div>
 <!-- /TMPL_IF -->
 
 
 <!-- TMPL_IF NAME="UNIMARC" -->
 <!-- TMPL_INCLUDE NAME="subtypes_unimarc.inc" -->
 <!-- TMPL_ELSE -->
+<div id="subtype" class="container">
 <!-- SUBTYPE LIMITS -->
         <fieldset>
         <legend>Subtype limits:</legend><p>
@@ -201,9 +207,11 @@
        </p>
 
 </fieldset>
+</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="template-defined-limits" -->
+<div id="advsearch-itemtype" class="container">
 <!-- TYPE LIMITS -->
     <fieldset>
 
@@ -246,14 +254,18 @@
             
             </table>
 </fieldset>
+</div>
 <!-- /TMPL_IF -->
 <!-- /TYPE LIMITS -->
 
+<div id="availability" class="container">
 <!-- AVAILABILITY LIMITS -->
     <fieldset><legend>Location and availability: </legend>
-        <p>
-        <label for="available-items">Only items currently available</label> <input type="checkbox" id="available-items" name="limit" value="available" /></p>
-        <p>
+<div id="currently-avail" class="container">
+        <label for="available-items">Only items currently available</label> <input type="checkbox" id="available-items" name="limit" value="available" />
+</div>
+<p />
+<div id="select-libs" class="container">
         <label for="branchloop">Individual Libraries:</label><select name="limit" id="branchloop" onchange='if(this.value != ""){document.getElementById("categoryloop").disabled=true;} else {document.getElementById("categoryloop").disabled=false;}'>
         <option value="">All Libraries</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
@@ -265,29 +277,30 @@
         <!-- /TMPL_LOOP -->
         </select>
     <!-- <input type="hidden" name="limit" value="branch: MAIN" /> -->
-        </p>
         <!-- TMPL_IF NAME="searchdomainloop" -->
     <p>OR</p> <!-- should addjs to grey out group pulldown if a library is selected. -->
-    <p>
         <label for="categoryloop">Groups of Libraries</label><select name="multibranchlimit" id="categoryloop">
         <option value=""> -- none -- </option>
         <!-- TMPL_LOOP NAME="searchdomainloop" -->
         <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="categoryname" --></option>
         <!-- /TMPL_LOOP -->
         </select>
-        </p>
     <!-- /TMPL_IF -->
+</div>
     </fieldset>
 <!-- /AVAILABILITY LIMITS -->
+</div>
 
 <!-- RANK LIMITS -->
 
+<div id="sortby" class="container">
 <fieldset><legend>Sort by: </legend>
     <p><select id="sort_by" name="sort_by">
   <!-- TMPL_INCLUDE NAME="resort_form.inc" -->
     </select>
         </p>
 </fieldset>
+</div>
 <!-- RANK LIMITS -->
 
 </div>
