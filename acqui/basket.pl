@@ -257,10 +257,8 @@ if ( $op eq 'delete_confirm' ) {
         $line{line_total}     = sprintf( "%.2f", $line_total );
         $line{odd}            = $i % 2;
         if ($line{uncertainprice}) {
-            $template->param( unclosable => 1 );
-            for my $key (qw/ecost line_total rrp/) {
-                $line{$key} .= '??';
-            }
+            $template->param( uncertainprices => 1 );
+            $line{rrp} .= ' (Uncertain)';
         }
 	if ($line{'title'}){
 	    my $volume = $results[$i]->{'volume'};

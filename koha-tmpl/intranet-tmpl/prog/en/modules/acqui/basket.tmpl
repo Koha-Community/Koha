@@ -78,8 +78,9 @@
                         // YUI Toolbar Functions
                         function yuiToolbar() {
                             <!-- TMPL_IF name="unclosable" -->
-                                new YAHOO.widget.Button("uncertpricesbutton");
                                 new YAHOO.widget.Button("closebutton", {disabled:true});
+                            <!-- TMPL_ELSIF name="uncertainprices" -->
+                                new YAHOO.widget.Button("uncertpricesbutton");
                             <!-- TMPL_ELSE -->
                                 new YAHOO.widget.Button("closebutton");
                             <!-- /TMPL_IF -->
@@ -94,6 +95,7 @@
                     <li><a href="javascript:confirm_deletion();" class="button" id="delbasketbutton">Delete this basket</a></li>
                     <!-- TMPL_IF name="unclosable" -->
                         <li><button onclick="confirm_close()" class="yui-button-disabled" id="closebutton" type="push" disabled="true" title="You can not close this basket" >Can not close basket</a></li>
+                    <!-- TMPL_ELSIF name="uncertainprices" -->
                         <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR name="booksellerid" -->&amp;owner=1" class="button" id="uncertpricesbutton">Uncertain prices</a></li>
                     <!-- TMPL_ELSE -->
                         <li><a href="<!-- TMPL_VAR name="script_name" -->?op=close&amp;basketno=<!-- TMPL_VAR name="basketno" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->" class="button" id="closebutton">Close this basket</a></li>
