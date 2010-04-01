@@ -217,6 +217,7 @@ if ($barcode) {
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},
+        homebranchname   => GetBranchName( $biblio->{'homebranch'} ),
         author           => $biblio->{'author'},
         itembarcode      => $biblio->{'barcode'},
         itemtype         => $biblio->{'itemtype'},
@@ -289,6 +290,7 @@ if ( $messages->{'Wrongbranch'} ){
 # case of wrong transfert, if the document wasn't transfered to the right library (according to branchtransfer (tobranch) BDD)
 
 if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
+    $messages->{'WrongTransfer'} = GetBranchName( $messages->{'WrongTransfer'} );
     $template->param(
         WrongTransfer  => 1,
         TransferWaitingAt => $messages->{'WrongTransfer'},
