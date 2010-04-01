@@ -58,9 +58,14 @@ my $sth = $dbh->prepare("SELECT biblionumber FROM biblio");
 $sth->execute;
 # my ($biblionumbermax) =  $sth->fetchrow;
 # warn "$biblionumbermax <<==";
+my @errors;
 while (my ($biblionumber)= $sth->fetchrow) {
     #now, parse the record, extract the item fields, and store them in somewhere else.
     my $record = GetMarcBiblio($biblionumber);
+    if (not defined $record) {
+	push @errors, $biblionumber;
+	next;
+    }
     my @fields = $record->field($tagfield);
     my @items;
     my $nbitems=0;
@@ -82,6 +87,9 @@ while (my ($biblionumber)= $sth->fetchrow) {
 # $dbh->do("unlock tables");
 my $timeneeded = time() - $starttime;
 print "$i MARC record done in $timeneeded seconds\n";
+if (scalar(@errors) > 0) {
+    print "Some biblionumber could not be processed though: ", join(" ", @errors);
+}
 
 # modified NEWmodbiblio to jump the MARC part of the biblio modif
 # highly faster
