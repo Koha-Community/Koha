@@ -9,6 +9,7 @@ use warnings;
 use English;
 use Exporter;
 
+use DateTime;
 use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
 use Socket qw(:crlf);
@@ -49,6 +50,13 @@ our $last_response = '';
 
 sub timestamp {
     my $time = $_[0] || time();
+    if ($time=~m/^(\d{4})\-(\d{2})\-(\d{2})/) {
+        my $dt = DateTime->new(
+            year  => $1,
+            month => $2,
+            day   => $3);
+        $time = $dt->epoch();
+    }
     return strftime(SIP_DATETIME, localtime($time));
 }
 
