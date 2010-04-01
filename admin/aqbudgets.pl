@@ -298,8 +298,21 @@ if ($op eq 'add_form') {
         $budget->{"budget_owner_name"}     = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};
         $budget->{"budget_borrowernumber"} = $borrower->{'borrowernumber'};
 
+        #Make a list of parents of the bugdet
+        my @budget_hierarchy;
+        push  @budget_hierarchy, { element_name => $budget->{"budget_name"}, element_id => $budget->{"budget_id"} };
+        my $parent_id = $budget->{"budget_parent_id"};
+        while ($parent_id) {
+            my $parent = GetBudget($parent_id);
+            push @budget_hierarchy, { element_name => $parent->{"budget_name"}, element_id => $parent->{"budget_id"} };
+            $parent_id = $parent->{"budget_parent_id"};
+        }
+        push  @budget_hierarchy, { element_name => $period->{"budget_period_description"} }; 
+        @budget_hierarchy = reverse(@budget_hierarchy);
+
         push( @loop, {  %{$budget},
                         branchname  => $branches->{ $budget->{branchcode} }->{branchname},
+                        budget_hierarchy => \@budget_hierarchy,
                     }
         );
     }
