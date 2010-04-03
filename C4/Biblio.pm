@@ -3322,7 +3322,7 @@ sub ModBiblioMarc {
     # deal with UNIMARC field 100 (encoding) : create it if needed & set encoding to unicode
     if ( $encoding eq "UNIMARC" ) {
         my $string = $record->subfield( 100, "a" );
-        if ( ($string) && ( length( $record->subfield( 100, "a" ) ) == 35 ) ) {
+        if ( ($string) && ( length( $record->subfield( 100, "a" ) ) == 36 ) ) {
             my $f100 = $record->field(100);
             $record->delete_field($f100);
         } else {
