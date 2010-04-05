@@ -689,6 +689,7 @@ sub CanBookBeIssued {
     if ( $borrower->{'category_type'} eq 'X' && (  $item->{barcode}  )) { 
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         &UpdateStats(C4::Context->userenv->{'branch'},'localuse','','',$item->{'itemnumber'},$item->{'itemtype'},$borrower->{'borrowernumber'});
+        ModDateLastSeen( $item->{'itemnumber'} );
         return( { STATS => 1 }, {});
     }
     if ( $borrower->{flags}->{GNA} ) {
