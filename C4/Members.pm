@@ -176,7 +176,7 @@ sub SearchMember {
     my (@where_string, @bind_params);
     push @where_string, "cardnumber=?";
     push @bind_params, $searchstring;
-    if (C4::Context->preference("IndependantBranchPatron") && !$showallbranches){
+    if (C4::Context->preference("IndependentBranchPatron") && !$showallbranches){
           if (C4::Context->userenv && (C4::Context->userenv->{flags} % 2) !=1 && C4::Context->userenv->{'branch'}){
             unless (C4::Context->userenv->{'branch'} eq "insecure"){
             	push @where_string,"borrowers.branchcode =?";
