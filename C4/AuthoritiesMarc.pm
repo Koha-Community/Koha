@@ -1060,6 +1060,7 @@ sub BuildUnimarcHierarchies{
     foreach my $field ($record->field('5..')){
       if ($field->subfield('5') && $field->subfield('5') eq 'g'){
 		my $subfauthid=_get_authid_subfield($field);
+        next if ($subfauthid eq $authid);
         my $parentrecord = GetAuthority($subfauthid);
         my $localresult=$hierarchies;
         my $trees;
