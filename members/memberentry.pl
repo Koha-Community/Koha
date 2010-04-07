@@ -130,6 +130,7 @@ if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
     my $syspref = $dateobject->regexp();		# same syspref format for all 3 dates
     my $iso     = $dateobject->regexp('iso');	#
     foreach (qw(dateenrolled dateexpiry dateofbirth)) {
+        next unless exists $newdata{$_};
         my $userdate = $newdata{$_} or next;
         if ($userdate =~ /$syspref/) {
             $newdata{$_} = format_date_in_iso($userdate);	# if they match syspref format, then convert to ISO
@@ -274,7 +275,7 @@ if ($op eq 'save' || $op eq 'insert'){
 }
 
 if ($op eq 'modify' || $op eq 'insert' || $op eq 'save' ){
-    unless ($newdata{'dateexpiry'}){
+    if (exists ($newdata{'dateexpiry'}) && !($newdata{'dateexpiry'})){
         my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
         $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
     }
@@ -373,8 +374,6 @@ if (C4::Context->preference("IndependantBranches")) {
     }
 }
 if ($op eq 'add'){
-    my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
-    $data{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
     $template->param( updtype => 'I', step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1);
 }
 if ($op eq "modify")  {
