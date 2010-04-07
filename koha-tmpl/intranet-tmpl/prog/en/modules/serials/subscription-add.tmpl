@@ -407,7 +407,7 @@ function moreoptions_daily_check(x) {
     var errortext='';
     if(periodicity == 1){ // i.e. daily
         document.getElementById("irregularity").innerHTML = '';
-        errortext =_("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
+        errortext =_("Please indicate which days of the week you DO NOT expect to receive issues.")+"<br \/>";
         for(var j=0;j<irregular_issues.daynames.length;j++){
             errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+irregular_issues.daynames[j]+" &nbsp; ";
         }
@@ -539,7 +539,7 @@ function irregularity_check(){
     var error='';
     var toobig;
     var expected; 
-    var errortext = _("<b>Warning irregularity detected<\/b><br \/>");
+    var errortext = "<b>"+_("Warning irregularity detected")+"</b><br \/>";
     switch(periodicity){
     case "12":
         if(rollover < 730) expected =730;
@@ -626,9 +626,9 @@ function irregularity_check(){
 			// FIXME:  We interpret irregularity as which days per week for periodicity==1.
 			//  We need two cases: one in which we're published n days/week, in which case irregularity should be per week,
 			//  and a regular daily pub, where irregularity should be per year.
-            errortext += _("Please indicate which days of the week you <b>DO NOT<\/b> expect to receive issues.<br \/>");
+            errortext += _("Please indicate which days of the week you DO NOT expect to receive issues.")+"<br \/>";
         } else {
-            errortext +=expected+_(" issues expected, ")+rollover+_(" were entered. <br \/>Please indicate which date(s) an issue is not expected<br \/>");
+            errortext +=expected+_(" issues expected, ")+rollover+_(" were entered.")+"<br \/>"+_("Please indicate which date(s) an issue is not expected")+"<br \/>";
             irregular_issues.numskipped = expected - rollover;
 		}
         errortext +="<select multiple id=\"irregularity_select\" name=\"irregularity_select\" onchange=\"irregular_issues.update();\">\n";
@@ -637,7 +637,7 @@ function irregularity_check(){
         error=errortext;
     }
     if(toobig){
-        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered.<p class=\"warning\"> You seem to have indicated more issues per year than expected.<\/p>");
+        errortext +=expectedover+_(" issues expected, ")+rollover+_(" were entered")+"<p class=\"warning\">"+_("You seem to have indicated more issues per year than expected.<\/p>");
         error=errortext;
     }
     if(error.length ==0){
