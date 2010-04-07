@@ -1059,40 +1059,12 @@ sub GetAllIssues {
         $query .= " limit $limit";
     }
 
-    #print $query;
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber, $borrowernumber);
     my @result;
     my $i = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
         push @result, $data;
-    }
-
-    # get all issued items for borrowernumber from oldissues table
-    # large chunk of older issues data put into table oldissues
-    # to speed up db calls for issuing items
-    if ( C4::Context->preference("ReadingHistory") ) {
-        # FIXME oldissues (not to be confused with old_issues) is
-        # apparently specific to HLT.  Not sure if the ReadingHistory
-        # syspref is still required, as old_issues by design
-        # is no longer checked with each loan.
-        my $query2 = "SELECT * FROM old_issues
-                      LEFT JOIN items ON items.itemnumber=old_issues.itemnumber
-                      LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
-                      LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-                      WHERE borrowernumber=? 
-                      ORDER BY $order";
-        if ( $limit != 0 ) {
-            $limit = $limit - scalar(@result);
-            $query2 .= " limit $limit";
-        }
-
-        my $sth2 = $dbh->prepare($query2);
-        $sth2->execute($borrowernumber);
-
-        while ( my $data2 = $sth2->fetchrow_hashref ) {
-            push @result, $data2;
-        }
     }
 
     return \@result;

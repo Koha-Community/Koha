@@ -273,7 +273,7 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowOnShelfHolds', '0', '', 'Allow hold requests to be placed on items that are not on loan', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Allow hold requests to be placed on damaged items', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OpacSuppression', '0', '', 'Turn ON the OPAC Suppression feature, requires further setup, ask your system administrator for details', 'YesNo');
--- FIXME: add FrameworksLoaded, noOPACUserLogin, ReadingHistory ?
+-- FIXME: add FrameworksLoaded, noOPACUserLogin?
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('SMSSendDriver','','','Sets which SMS::Send driver is used to send SMS messages.','free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowRenewalLimitOverride', '0', 'if ON, allows renewal limits to be overridden on the circulation screen',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('MergeAuthoritiesOnUpdate', '1', 'if ON, Updating authorities will automatically updates biblios',NULL,'YesNo');
@@ -297,9 +297,6 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
 
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAmazonCoverImages', '0', 'Display cover images on OPAC from Amazon Web Services','','YesNo');
 --from 3.00.02.007
-
--- INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReadingHistory', '0', 'If on display reading history for user', NULL, 'YesNo');
--- Removed unused ReadingHistory sypref
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReceiveBackIssues', '5', 'Number of Previous journals to display when on subscription detail', '', '');
 

@@ -106,7 +106,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacuserlogin', '1', 'si ce paramètre est activé, les adhérents peuvent s''identifier à l''OPAC. Sinon seule la consultation anonyme est possible', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('patronimages', 'jpg', 'Ce paramètre permet d''activer la gestion des photos des adhérents. Mettre une extension d''image (jpg) pour activer la chose', '', 'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('printcirculationslips', '1', 'Active ou non l''impression de tickets de circulation', '', 'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReadingHistory', '0', 'Active ou non l''affichage de l''historique de lecture ', NULL, 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReceiveBackIssues', '5', 'Ce paramètre définit le nombre d''anciens bulletins à afficher lorsque l''on bulletine', '', '');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RequestOnOpac', '1', 'Active ou non les réservations à l''OPAC', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReservesMaxPickUpDelay', '10', 'Délai maximum pour venir chercher un document réservé et mis de coté', '', 'Integer');
