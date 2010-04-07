@@ -422,18 +422,19 @@ function CloneSubfield(index){
     var clone = original.cloneNode(true);
     var new_key = CreateKey();
     var new_id  = original.getAttribute('id')+new_key;
-    
     // set the attribute for the new 'div' subfields
     var inputs     = clone.getElementsByTagName('input');
     var selects    = clone.getElementsByTagName('select');
     var textareas  = clone.getElementsByTagName('textarea');
-        
+    var linkid;
+
     // input
     var id_input = "";
     for(var i=0,len=inputs.length; i<len ; i++ ){
         id_input = inputs[i].getAttribute('id')+new_key;
         inputs[i].setAttribute('id',id_input);
         inputs[i].setAttribute('name',inputs[i].getAttribute('name')+new_key);
+	linkid = id_input;
     }
     
     // select 
@@ -449,7 +450,20 @@ function CloneSubfield(index){
         textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
         textareas[i].setAttribute('name',textareas[i].getAttribute('name')+new_key);
     }
-    
+
+    // Changing the "..." link's onclick attribute for plugin callback
+    var links  = clone.getElementsByTagName('a');
+    var link = links[0];
+    var buttonDotOnClick = link.getAttribute('onclick');
+    if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
+	var re = /\('.*'\)/i;
+        buttonDotOnClick = buttonDotOnClick.replace(re,"('"+linkid+"')");
+        if(buttonDotOnClick){
+	    link.setAttribute('onclick',buttonDotOnClick);
+        }
+    }
+
+
     <!-- TMPL_UNLESS NAME='advancedMARCEditor' -->
     // when cloning a subfield, reset its label too.
     var label = clone.getElementsByTagName('label')[0];
