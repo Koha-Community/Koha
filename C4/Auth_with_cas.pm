@@ -18,6 +18,7 @@ package C4::Auth_with_cas;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+use warnings;
 
 use C4::Debug;
 use C4::Context;
@@ -44,20 +45,20 @@ my $casserver = C4::Context->preference('casServerUrl');
 sub logout_cas {
     my ($query) = @_;
     my $cas = Authen::CAS::Client->new($casserver);
-    print $query->redirect($cas->logout_url(url => %ENV->{'SCRIPT_URI'}));
+    print $query->redirect($cas->logout_url(url => $ENV{'SCRIPT_URI'}));
 }
 
 # Login to CAS
 sub login_cas {
     my ($query) = @_;
     my $cas = Authen::CAS::Client->new($casserver);
-    print $query->redirect($cas->login_url(%ENV->{'SCRIPT_URI'})); 
+    print $query->redirect($cas->login_url($ENV{'SCRIPT_URI'})); 
 }
 
 # Returns CAS login URL with callback to the requesting URL
 sub login_cas_url {
     my $cas = Authen::CAS::Client->new($casserver);
-    return $cas->login_url(%ENV->{'SCRIPT_URI'});
+    return $cas->login_url($ENV{'SCRIPT_URI'});
 }
 
 # Checks for password correctness
@@ -73,7 +74,7 @@ sub checkpw_cas {
 	$debug and warn "Got ticket : $ticket";
 	
 	# We try to validate it
-	my $val = $cas->service_validate(%ENV->{'SCRIPT_URI'}, $ticket);
+	my $val = $cas->service_validate($ENV{'SCRIPT_URI'}, $ticket);
 	
 	# If it's valid
 	if( $val->is_success() ) {
@@ -88,7 +89,7 @@ sub checkpw_cas {
 		$retnumber = $sth->fetchrow;
 		return (1, $retnumber, $userid);
 	    }
-	    my $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
+	    $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
 	    $sth->execute($userid);
 	    if ( $sth->rows ) {
 	    	$retnumber = $sth->fetchrow;
