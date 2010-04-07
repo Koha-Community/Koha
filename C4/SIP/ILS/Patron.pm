@@ -50,6 +50,15 @@ sub new {
 	my $flags     = $kp->{flags};     # or warn "Warning: No flags from patron object for '$patron_id'"; 
 	my $debarred  = $kp->{debarred};  # 1 if ($kp->{flags}->{DBARRED}->{noissues});
 	$debug and warn sprintf("Debarred = %s : ", ($debarred||'undef')) . Dumper(%{$kp->{flags}});
+    my ($day, $month, $year) = (localtime)[3,4,5];
+    my $today    = sprintf '%04d-%02d-%02d', $year+1900, $month+1, $day;
+    my $expired  = ($today gt $kp->{dateexpiry}) ? 1 : 0;
+    if ($expired) {
+        if ($kp->{opacnote} ) {
+            $kp->{opacnote} .= q{ };
+        }
+        $kp->{opacnote} .= 'PATRON EXPIRED';
+    }
 	my %ilspatron;
 	my $adr     = $kp->{streetnumber} || '';
 	my $address = $kp->{address}      || ''; 
@@ -78,10 +87,10 @@ sub new {
         address         => $adr,
         home_phone      => $kp->{phone},
         email_addr      => $kp->{email},
-        charge_ok       => ( !$debarred ),
-        renew_ok        => ( !$debarred ),
-        recall_ok       => ( !$debarred ),
-        hold_ok         => ( !$debarred ),
+        charge_ok       => ( !$debarred && !$expired ),
+        renew_ok        => ( !$debarred && !$expired ),
+        recall_ok       => ( !$debarred && !$expired ),
+        hold_ok         => ( !$debarred && !$expired ),
         card_lost       => ( $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST} ),
         claims_returned => 0,
         fines           => $fines_amount, # GetMemberAccountRecords($kp->{borrowernumber})
@@ -96,7 +105,8 @@ sub new {
         fine_items      => [],
         recall_items    => [],
         unavail_holds   => [],
-        inet            => ( !$debarred ),
+        inet            => ( !$debarred && !$expired ),
+        expired         => $expired,
     );
     }
     $debug and warn "patron fines: $ilspatron{fines} ... amountoutstanding: $kp->{amountoutstanding} ... CHARGES->amount: $flags->{CHARGES}->{amount}";
@@ -209,6 +219,11 @@ sub fines_amount {
 sub language {
     my $self = shift;
     return $self->{language} || '000'; # Unspecified
+}
+
+sub expired {
+    my $self = shift;
+    return $self->{expired};
 }
 
 #
