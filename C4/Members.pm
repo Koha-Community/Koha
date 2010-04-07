@@ -1015,7 +1015,7 @@ sub GetPendingIssues {
 
 =head2 GetAllIssues
 
-  ($count, $issues) = &GetAllIssues($borrowernumber, $sortkey, $limit);
+  $issues = &GetAllIssues($borrowernumber, $sortkey, $limit);
 
 Looks up what the patron with the given borrowernumber has borrowed,
 and sorts the results.
@@ -1026,11 +1026,9 @@ C<biblioitems>, or C<items> table in the Koha database.
 
 C<$limit> is the maximum number of results to return.
 
-C<&GetAllIssues> returns a two-element array. C<$issues> is a
-reference-to-array, where each element is a reference-to-hash; the
-keys are the fields from the C<issues>, C<biblio>, C<biblioitems>, and
-C<items> tables of the Koha database. C<$count> is the number of
-elements in C<$issues>
+C<&GetAllIssues> an arrayref, C<$issues>, of hashrefs, the keys of which
+are the fields from the C<issues>, C<biblio>, C<biblioitems>, and
+C<items> tables of the Koha database.
 
 =cut
 
