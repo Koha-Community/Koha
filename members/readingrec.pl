@@ -84,7 +84,7 @@ foreach my $issue (@{$issues}){
 	$line{date_due}        = format_date($issue->{'date_due'});
 	$line{returndate}      = format_date($issue->{'returndate'});
 	$line{issuedate}       = format_date($issue->{'issuedate'});
-	$line{issuingbranch}   = GetBranchName($issue->{'issuingbranch'});
+	$line{issuingbranch}   = GetBranchName($issue->{'branchcode'});
 	$line{renewals}        = $issue->{'renewals'};
 	$line{barcode}         = $issue->{'barcode'};
 	$line{volumeddesc}     = $issue->{'volumeddesc'};
