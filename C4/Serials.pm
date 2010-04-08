@@ -84,9 +84,8 @@ Give all XYZ functions
 this function get all suppliers with late issues.
 
 return :
-the supplierlist into a hash. this hash containts id & name of the supplier
-Only valid suppliers are returned. Late subscriptions lacking a supplier are
-ignored.
+an array_ref of suppliers each entry is a hash_ref containing id and name
+the array is in name order
 
 =back
 
@@ -103,14 +102,7 @@ sub GetSuppliersWithLateIssues {
         AND             (planneddate < now() OR serial.STATUS = 3 OR serial.STATUS = 4)
         ORDER BY name
     |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute;
-    my %supplierlist;
-    while ( my ( $id, $name ) = $sth->fetchrow ) {
-        next if !defined $id;
-        $supplierlist{$id} = $name;
-    }
-    return %supplierlist;
+    return $dbh->selectall_arrayref($query, { Slice => {} });
 }
 
 =head2 GetLateIssues
@@ -161,16 +153,14 @@ sub GetLateIssues {
     my @issuelist;
     my $last_title;
     my $odd   = 0;
-    my $count = 0;
     while ( my $line = $sth->fetchrow_hashref ) {
         $odd++ unless $line->{title} eq $last_title;
         $line->{title} = "" if $line->{title} eq $last_title;
         $last_title = $line->{title} if ( $line->{title} );
         $line->{planneddate} = format_date( $line->{planneddate} );
-        $count++;
         push @issuelist, $line;
     }
-    return $count, @issuelist;
+    return @issuelist;
 }
 
 =head2 GetSubscriptionHistoryFromSubscriptionId
@@ -1845,12 +1835,11 @@ sub DelIssue {
 
 =over 4
 
-($count,@issuelist) = &GetLateMissingIssues($supplierid,$serialid)
+@issuelist = &GetLateMissingIssues($supplierid,$serialid)
 
 this function select missing issues on database - where serial.status = 4 or serial.status=3 or planneddate<now
 
 return :
-a count of the number of missing issues
 the issuelist into a table. Each line of this table containts a ref to a hash which it containts
 name,title,planneddate,serialseq,serial.subscriptionid from tables : subscription, serial & biblio
 
@@ -1905,20 +1894,17 @@ sub GetLateOrMissingIssues {
     }
     $sth->execute;
     my @issuelist;
-    my $last_title;
-    my $odd   = 0;
-    my $count = 0;
     while ( my $line = $sth->fetchrow_hashref ) {
-        $odd++ unless $line->{title} eq $last_title;
-        $last_title = $line->{title} if ( $line->{title} );
-        $line->{planneddate}                  = format_date( $line->{planneddate} );
-        $line->{claimdate}                    = format_date( $line->{claimdate} );
-        $line->{ "status" . $line->{status} } = 1;
-        $line->{'odd'} = 1 if $odd % 2;
-        $count++;
+        if ($line->{planneddate}) {
+            $line->{planneddate} = format_date( $line->{planneddate} );
+        }
+        if ($line->{claimdate}) {
+            $line->{claimdate}   = format_date( $line->{claimdate} );
+        }
+        $line->{"status".$line->{status}}   = 1;
         push @issuelist, $line;
     }
-    return $count, @issuelist;
+    return @issuelist;
 }
 
 =head2 removeMissingIssue

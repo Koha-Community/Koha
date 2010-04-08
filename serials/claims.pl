@@ -18,7 +18,7 @@ my $claimletter = $input->param('claimletter');
 my $supplierid = $input->param('supplierid');
 my $suppliername = $input->param('suppliername');
 my $order = $input->param('order');
-my %supplierlist = GetSuppliersWithLateIssues();
+my $supplierlist = GetSuppliersWithLateIssues;
 
 # open template first (security & userenv set here)
 my ($template, $loggedinuser, $cookie)
@@ -29,14 +29,14 @@ my ($template, $loggedinuser, $cookie)
             flagsrequired => {serials => 1},
             debug => 1,
             });
-my $supplier_loop = [];
-foreach my $s_id (sort {$supplierlist{$a} cmp $supplierlist{$b} } keys %supplierlist){
-        my ($count) = GetLateOrMissingIssues($s_id,q{},$order);
-        push @{$supplier_loop}, {
-            id   => $s_id,
-            name => $supplierlist{$s_id} . "($count)",
-            selected => ( $supplierid && $supplierid == $s_id ),
-        };
+
+for my $supplier ( @{$supplierlist} ) {
+        my @dummy = GetLateOrMissingIssues($supplier->{id},q{},$order);
+        my $counting = scalar @dummy;
+        $supplier->{name} .= " ($counting)";
+        if ($supplierid && $supplierid == $supplier->{id}) {
+            $supplier->{selected} = 1;
+        }
 }
 
 my $letters = GetLetters('claimissues');
@@ -46,9 +46,9 @@ foreach (keys %{$letters}){
 }
 
 my $letter=((scalar(@letters)>1) || ($letters[0]->{name}||$letters[0]->{code}));
-my ($count2, @missingissues);
+my  @missingissues;
 if ($supplierid) {
-    ($count2, @missingissues) = GetLateOrMissingIssues($supplierid,$serialid,$order);
+    @missingissues = GetLateOrMissingIssues($supplierid,$serialid,$order);
 }
 
 my ($singlesupplier,@supplierinfo);
@@ -63,20 +63,18 @@ if($supplierid){
 my $preview=0;
 if($op && $op eq 'preview'){
     $preview = 1;
+} else {
+    my @serialnums=$input->param('serialid');
+    if (@serialnums) { # i.e. they have been flagged to generate claims
+        SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
+        my $cntupdate=UpdateClaimdateIssues(\@serialnums);
+        ### $cntupdate SHOULD be equal to scalar(@$serialnums)
+    }
 }
-if ($op eq "send_alert"){
-  my @serialnums=$input->param("serialid");
-  SendAlerts('claimissues',\@serialnums,$input->param("letter_code"));
-  my $cntupdate=UpdateClaimdateIssues(\@serialnums);
-  ### $cntupdate SHOULD be equal to scalar(@$serialnums)
-  $template->param('SHOWCONFIRMATION' => 1);
-  $template->param('suppliername' => $suppliername);
-}
-
 $template->param('letters'=>\@letters,'letter'=>$letter);
 $template->param(
         order =>$order,
-        supplier_loop => $supplier_loop,
+        supplier_loop => $supplierlist,
         phone => $supplierinfo[0]->{phone},
         booksellerfax => $supplierinfo[0]->{booksellerfax},
         bookselleremail => $supplierinfo[0]->{bookselleremail},

@@ -32,12 +32,10 @@ my @serialid = $query->param('serialid');
 my $op = $query->param('op') || q{};
 my $serialidcount = @serialid;
 
-my %supplierlist = GetSuppliersWithLateIssues;
-
 my @loop1;
-my ($count, @lateissues);
+my @lateissues;
 if($op ne 'claims'){
-    ($count, @lateissues) = GetLateIssues($supplierid);
+    @lateissues = GetLateIssues($supplierid);
     for my $issue (@lateissues){
         push @loop1,
       [ $issue->{'name'}, $issue->{'title'}, $issue->{'serialseq'}, $issue->{'planneddate'},];
@@ -45,9 +43,9 @@ if($op ne 'claims'){
 }
 my $totalcount2 = 0;
 my @loop2;
-my ($count2, @missingissues);
+my @missingissues;
 for (my $k=0;$k<@serialid;$k++){
-    ($count2, @missingissues) = GetLateOrMissingIssues($supplierid, $serialid[$k]);
+    @missingissues = GetLateOrMissingIssues($supplierid, $serialid[$k]);
 
     for (my $j=0;$j<@missingissues;$j++){
 	my @rows2 = ($missingissues[$j]->{'name'},          # lets build up a row
@@ -57,7 +55,7 @@ for (my $k=0;$k<@serialid;$k++){
                      );
         push (@loop2, \@rows2);
     }
-    $totalcount2 = $totalcount2 + $count2;
+    $totalcount2 += scalar @missingissues;
     # update claim date to let one know they have looked at this missing item
     updateClaim($serialid[$k]);
 }
@@ -107,6 +105,7 @@ for my $row ( @loop2 ) {
 print ",,,,,,,\n";
 print ",,,,,,,\n";
 if($op ne 'claims'){
+    my $count = scalar @lateissues;
     print ",,Total Number Late, $count\n";
 }
 if($serialidcount == 1){

@@ -167,10 +167,10 @@
     <form id="claims" name="claims" action="claims.pl" method="post">
     <fieldset><label for="supplierid">View: </label>
         <select id="supplierid" size="1" name="supplierid">
-        <!-- TMPL_LOOP name="supplier_loop" -->
-            <option value="<!--TMPL_VAR name="id"-->" <!-- TMPL_IF NAME="selected" -->selected="1"<!-- /TMPL_IF -->>
-                 <!--TMPL_VAR name="name"--></option>
-        <!--/TMPL_LOOP-->
+        <!-- TMPL_LOOP NAME="supplier_loop" -->
+          <option value="<!-- TMPL_VAR NAME="id" -->"<!--  TMPL_IF NAME="selected" --> selected="yes" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" -->       
+          </option>
+        <!-- /TMPL_LOOP -->
         </select>
         <input type="submit" value="OK" />
         <!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
@@ -306,9 +306,9 @@
 			</select>
 	    <input type="hidden" name="op" value="send_alert" /><input type="submit" name="submit" class="button" value="Send notification" /></fieldset>
             <!--/TMPL_IF-->
+        </form>
 <!-- /TMPL_IF -->
 
-        </form>
 <!-- TMPL_ELSE -->
 
 <div id="doc" class="yui-t7">
