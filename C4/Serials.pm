@@ -64,7 +64,7 @@ BEGIN {
 
 =head1 NAME
 
-C4::Serials - Give functions for serializing.
+C4::Serials - Serials Module Functions
 
 =head1 SYNOPSIS
 
@@ -72,23 +72,20 @@ C4::Serials - Give functions for serializing.
 
 =head1 DESCRIPTION
 
-Give all XYZ functions
+Functions for handling subscriptions, claims routing etc.
 
-=head1 FUNCTIONS
+
+=head1 SUBROUTINES
 
 =head2 GetSuppliersWithLateIssues
 
-=over 4
-
-%supplierlist = &GetSuppliersWithLateIssues
+$supplierlist = GetSuppliersWithLateIssues()
 
 this function get all suppliers with late issues.
 
 return :
 an array_ref of suppliers each entry is a hash_ref containing id and name
 the array is in name order
-
-=back
 
 =cut
 
@@ -108,17 +105,13 @@ sub GetSuppliersWithLateIssues {
 
 =head2 GetLateIssues
 
-=over 4
+@issuelist = GetLateIssues($supplierid)
 
-@issuelist = &GetLateIssues($supplierid)
-
-this function select late issues on database
+this function selects late issues from the database
 
 return :
-the issuelist into an table. Each line of this table containts a ref to a hash which it containts
+the issuelist as an array. Each element of this array contains a hashi_ref containing
 name,title,planneddate,serialseq,serial.subscriptionid from tables : subscription, serial & biblio
-
-=back
 
 =cut
 
@@ -166,15 +159,9 @@ sub GetLateIssues {
 
 =head2 GetSubscriptionHistoryFromSubscriptionId
 
-=over 4
-
 $sth = GetSubscriptionHistoryFromSubscriptionId()
-this function just prepare the SQL request.
+this function prepares the SQL request and returns the statement handle
 After this function, don't forget to execute it by using $sth->execute($subscriptionid)
-return :
-$sth = $dbh->prepare($query).
-
-=back
 
 =cut
 
@@ -190,15 +177,11 @@ sub GetSubscriptionHistoryFromSubscriptionId() {
 
 =head2 GetSerialStatusFromSerialId
 
-=over 4
-
 $sth = GetSerialStatusFromSerialId();
-this function just prepare the SQL request.
+this function returns a statement handle
 After this function, don't forget to execute it by using $sth->execute($serialid)
 return :
 $sth = $dbh->prepare($query).
-
-=back
 
 =cut
 
@@ -214,16 +197,13 @@ sub GetSerialStatusFromSerialId() {
 
 =head2 GetSerialInformation
 
-=over 4
 
 $data = GetSerialInformation($serialid);
-returns a hash containing :
+returns a hash_ref containing :
   items : items marcrecord (can be an array)
   serial table field
   subscription table field
   + information about subscription expiration
-  
-=back
 
 =cut
 
@@ -282,12 +262,9 @@ sub GetSerialInformation {
 
 =head2 AddItem2Serial
 
-=over 4
-
-$data = AddItem2Serial($serialid,$itemnumber);
+$rows = AddItem2Serial($serialid,$itemnumber);
 Adds an itemnumber to Serial record
-
-=back
+returns the number of rows affected
 
 =cut
 
@@ -301,14 +278,10 @@ sub AddItem2Serial {
 
 =head2 UpdateClaimdateIssues
 
-=over 4
-
 UpdateClaimdateIssues($serialids,[$date]);
 
-Update Claimdate for issues in @$serialids list with date $date 
+Update Claimdate for issues in @$serialids list with date $date
 (Take Today if none)
-
-=back
 
 =cut
 
@@ -326,15 +299,11 @@ sub UpdateClaimdateIssues {
 
 =head2 GetSubscription
 
-=over 4
-
 $subs = GetSubscription($subscriptionid)
-this function get the subscription which has $subscriptionid as id.
+this function returns the subscription which has $subscriptionid as id.
 return :
 a hashref. This hash containts
 subscription, subscriptionhistory, aqbudget.bookfundid, biblio.title
-
-=back
 
 =cut
 
@@ -376,12 +345,8 @@ sub GetSubscription {
 
 =head2 GetFullSubscription
 
-=over 4
-
-   \@res = GetFullSubscription($subscriptionid)
-   this function read on serial table.
-
-=back
+   $array_ref = GetFullSubscription($subscriptionid)
+   this function reads the serial table.
 
 =cut
 
@@ -426,12 +391,8 @@ sub GetFullSubscription {
 
 =head2 PrepareSerialsData
 
-=over 4
-
-   \@res = PrepareSerialsData($serialinfomation)
+   $array_ref = PrepareSerialsData($serialinfomation)
    where serialinformation is a hashref array
-
-=back
 
 =cut
 
@@ -484,11 +445,11 @@ sub PrepareSerialsData {
 
 =head2 GetSubscriptionsFromBiblionumber
 
-\@res = GetSubscriptionsFromBiblionumber($biblionumber)
-this function get the subscription list. it reads on subscription table.
+$array_ref = GetSubscriptionsFromBiblionumber($biblionumber)
+this function get the subscription list. it reads the subscription table.
 return :
-table of subscription which has the biblionumber given on input arg.
-each line of this table is a hashref. All hashes containt
+reference to an array of subscriptions which have the biblionumber given on input arg.
+each element of this array is a hashref containing
 startdate, histstartdate,opacnote,missinglist,recievedlist,periodicity,status & enddate
 
 =cut
@@ -544,12 +505,8 @@ sub GetSubscriptionsFromBiblionumber {
 
 =head2 GetFullSubscriptionsFromBiblionumber
 
-=over 4
-
-   \@res = GetFullSubscriptionsFromBiblionumber($biblionumber)
-   this function read on serial table.
-
-=back
+   $array_ref = GetFullSubscriptionsFromBiblionumber($biblionumber)
+   this function reads the serial table.
 
 =cut
 
@@ -593,14 +550,10 @@ sub GetFullSubscriptionsFromBiblionumber {
 
 =head2 GetSubscriptions
 
-=over 4
-
 @results = GetSubscriptions($title,$ISSN,$biblionumber);
-this function get all subscriptions which has title like $title,ISSN like $ISSN and biblionumber like $biblionumber.
+this function gets all subscriptions which have title like $title,ISSN like $ISSN and biblionumber like $biblionumber.
 return:
 a table of hashref. Each hash containt the subscription.
-
-=back
 
 =cut
 
@@ -680,16 +633,12 @@ sub GetSubscriptions {
 
 =head2 GetSerials
 
-=over 4
-
 ($totalissues,@serials) = GetSerials($subscriptionid);
-this function get every serial not arrived for a given subscription
+this function gets every serial not arrived for a given subscription
 as well as the number of issues registered in the database (all types)
 this number is used to see if a subscription can be deleted (=it must have only 1 issue)
 
 FIXME: We should return \@serials.
-
-=back
 
 =cut
 
@@ -741,14 +690,10 @@ sub GetSerials {
 
 =head2 GetSerials2
 
-=over 4
-
 @serials = GetSerials2($subscriptionid,$status);
-this function gets every serial waited for a given subscription
+this function returns every serial waited for a given subscription
 as well as the number of issues registered in the database (all types)
 this number is used to see if a subscription can be deleted (=it must have only 1 issue)
-
-=back
 
 =cut
 
@@ -777,14 +722,10 @@ sub GetSerials2 {
 
 =head2 GetLatestSerials
 
-=over 4
-
 \@serials = GetLatestSerials($subscriptionid,$limit)
 get the $limit's latest serials arrived or missing for a given subscription
 return :
-a ref to a table which it containts all of the latest serials stored into a hash.
-
-=back
+a ref to an array which contains all of the latest serials stored into a hash.
 
 =cut
 
@@ -813,12 +754,8 @@ sub GetLatestSerials {
 
 =head2 GetDistributedTo
 
-=over 4
-
 $distributedto=GetDistributedTo($subscriptionid)
-This function select the old previous value of distributedto in the database.
-
-=back
+This function returns the field distributedto for the subscription matching subscriptionid
 
 =cut
 
@@ -834,15 +771,11 @@ sub GetDistributedTo {
 
 =head2 GetNextSeq
 
-=over 4
-
 GetNextSeq($val)
 $val is a hashref containing all the attributes of the table 'subscription'
 This function get the next issue for the subscription given on input arg
 return:
-all the input params updated.
-
-=back
+a list containing all the input params updated.
 
 =cut
 
@@ -929,15 +862,11 @@ sub GetNextSeq {
 
 =head2 GetSeq
 
-=over 4
-
 $calculated = GetSeq($val)
 $val is a hashref containing all the attributes of the table 'subscription'
 this function transforms {X},{Y},{Z} to 150,0,0 for example.
 return:
 the sequence in integer format
-
-=back
 
 =cut
 
@@ -969,12 +898,12 @@ sub GetSeq {
 
 =head2 GetExpirationDate
 
-$sensddate = GetExpirationDate($subscriptionid)
+$sensddate = GetExpirationDate($subscriptionid, [$startdate])
 
 this function return the next expiration date for a subscription given on input args.
 
 return
-the enddate
+the enddate or undef
 
 =cut
 
@@ -1017,14 +946,10 @@ sub GetExpirationDate {
 
 =head2 CountSubscriptionFromBiblionumber
 
-=over 4
-
 $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber)
-this count the number of subscription for a biblionumber given.
+this returns a count of the subscriptions for a given biblionumber
 return :
-the number of subscriptions with biblionumber given on input arg.
-
-=back
+the number of subscriptions
 
 =cut
 
@@ -1040,13 +965,10 @@ sub CountSubscriptionFromBiblionumber {
 
 =head2 ModSubscriptionHistory
 
-=over 4
-
 ModSubscriptionHistory($subscriptionid,$histstartdate,$enddate,$recievedlist,$missinglist,$opacnote,$librariannote);
 
-this function modify the history of a subscription. Put your new values on input arg.
-
-=back
+this function modifies the history of a subscription. Put your new values on input arg.
+returns the number of rows affected
 
 =cut
 
@@ -1067,14 +989,10 @@ sub ModSubscriptionHistory {
 
 =head2 ModSerialStatus
 
-=over 4
-
 ModSerialStatus($serialid,$serialseq, $planneddate,$publisheddate,$status,$notes)
 
 This function modify the serial status. Serial status is a number.(eg 2 is "arrived")
 Note : if we change from "waited" to something else,then we will have to create a new "waited" entry
-
-=back
 
 =cut
 
@@ -1155,11 +1073,10 @@ sub ModSerialStatus {
             SendAlerts( 'issue', $val->{subscriptionid}, $val->{letter} );
         }
     }
+    return;
 }
 
 =head2 GetNextExpected
-
-=over 4
 
 $nextexpected = GetNextExpected($subscriptionid)
 
@@ -1171,8 +1088,6 @@ $nextexepected = {
     serialid => int
     planneddate => C4::Dates object
     }
-
-=back
 
 =cut
 
@@ -1200,8 +1115,6 @@ sub GetNextExpected($) {
 
 =head2 ModNextExpected
 
-=over 4
-
 ModNextExpected($subscriptionid,$date)
 
 Update the planneddate for the current expected issue of the subscription.
@@ -1209,7 +1122,7 @@ This will modify all future prediction results.
 
 C<$date> is a C4::Dates object.
 
-=back
+returns 0
 
 =cut
 
@@ -1228,11 +1141,8 @@ sub ModNextExpected($$) {
 
 =head2 ModSubscription
 
-=over 4
-
-this function modify a subscription. Put all new values on input args.
-
-=back
+this function modifies a subscription. Put all new values on input args.
+returns the number of rows affected
 
 =cut
 
@@ -1276,15 +1186,12 @@ sub ModSubscription {
         $graceperiod,   $location,        $enddate,           $subscriptionid
     );
     my $rows = $sth->rows;
-    $sth->finish;
 
     logaction( "SERIAL", "MODIFY", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
     return $rows;
 }
 
 =head2 NewSubscription
-
-=over 4
 
 $subscriptionid = &NewSubscription($auser,branchcode,$aqbooksellerid,$cost,$aqbudgetid,$biblionumber,
     $startdate,$periodicity,$dow,$numberlength,$weeklength,$monthlength,
@@ -1298,8 +1205,6 @@ Create a new subscription with value given on input args.
 
 return :
 the id of this new subscription
-
-=back
 
 =cut
 
@@ -1383,13 +1288,9 @@ sub NewSubscription {
 
 =head2 ReNewSubscription
 
-=over 4
-
 ReNewSubscription($subscriptionid,$user,$startdate,$numberlength,$weeklength,$monthlength,$note)
 
 this function renew a subscription with values given on input args.
-
-=back
 
 =cut
 
@@ -1446,18 +1347,16 @@ sub ReNewSubscription {
     $sth->execute( $enddate, $subscriptionid );
 
     logaction( "SERIAL", "RENEW", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
+    return;
 }
 
 =head2 NewIssue
-
-=over 4
 
 NewIssue($serialseq,$subscriptionid,$biblionumber,$status, $planneddate, $publisheddate,  $notes)
 
 Create a new issue stored on the database.
 Note : we have to update the recievedlist and missinglist on subscriptionhistory for this subscription.
-
-=back
+returns the serial id
 
 =cut
 
@@ -1506,16 +1405,12 @@ sub NewIssue {
 
 =head2 ItemizeSerials
 
-=over 4
-
 ItemizeSerials($serialid, $info);
 $info is a hashref containing  barcode branch, itemcallnumber, status, location
 $serialid the serialid
 return :
 1 if the itemize is a succes.
-0 and @error else. @error containts the list of errors found.
-
-=back
+0 and @error otherwise. @error containts the list of errors found.
 
 =cut
 
@@ -1641,16 +1536,12 @@ sub ItemizeSerials {
 
 =head2 HasSubscriptionStrictlyExpired
 
-=over 4
-
 1 or 0 = HasSubscriptionStrictlyExpired($subscriptionid)
 
 the subscription has stricly expired when today > the end subscription date 
 
 return :
 1 if true, 0 if false, -1 if the expiration date is not set.
-
-=back
 
 =cut
 
@@ -1686,8 +1577,6 @@ sub HasSubscriptionStrictlyExpired {
 
 =head2 HasSubscriptionExpired
 
-=over 4
-
 $has_expired = HasSubscriptionExpired($subscriptionid)
 
 the subscription has expired when the next issue to arrive is out of subscription limit.
@@ -1696,8 +1585,6 @@ return :
 0 if the subscription has not expired
 1 if the subscription has expired
 2 if has subscription does not have a valid expiration date set
-
-=back
 
 =cut
 
@@ -1737,12 +1624,8 @@ sub HasSubscriptionExpired {
 
 =head2 SetDistributedto
 
-=over 4
-
 SetDistributedto($distributedto,$subscriptionid);
 This function update the value of distributedto for a subscription given on input arg.
-
-=back
 
 =cut
 
@@ -1756,16 +1639,13 @@ sub SetDistributedto {
     |;
     my $sth = $dbh->prepare($query);
     $sth->execute( $distributedto, $subscriptionid );
+    return;
 }
 
 =head2 DelSubscription
 
-=over 4
-
 DelSubscription($subscriptionid)
-this function delete the subscription which has $subscriptionid as id.
-
-=back
+this function deletes subscription which has $subscriptionid as id.
 
 =cut
 
@@ -1782,12 +1662,10 @@ sub DelSubscription {
 
 =head2 DelIssue
 
-=over 4
-
 DelIssue($serialseq,$subscriptionid)
-this function delete an issue which has $serialseq and $subscriptionid given on input arg.
+this function deletes an issue which has $serialseq and $subscriptionid given on input arg.
 
-=back
+returns the number of rows affected
 
 =cut
 
@@ -1830,17 +1708,13 @@ sub DelIssue {
 
 =head2 GetLateOrMissingIssues
 
-=over 4
-
 @issuelist = &GetLateMissingIssues($supplierid,$serialid)
 
-this function select missing issues on database - where serial.status = 4 or serial.status=3 or planneddate<now
+this function selects missing issues on database - where serial.status = 4 or serial.status=3 or planneddate<now
 
 return :
-the issuelist into a table. Each line of this table containts a ref to a hash which it containts
+the issuelist as an array of hash refs. Each element of this array contains 
 name,title,planneddate,serialseq,serial.subscriptionid from tables : subscription, serial & biblio
-
-=back
 
 =cut
 
@@ -1906,16 +1780,12 @@ sub GetLateOrMissingIssues {
 
 =head2 removeMissingIssue
 
-=over 4
-
 removeMissingIssue($subscriptionid)
 
 this function removes an issue from being part of the missing string in 
 subscriptionlist.missinglist column
 
 called when a missing issue is found from the serials-recieve.pl file
-
-=back
 
 =cut
 
@@ -1943,19 +1813,16 @@ sub removeMissingIssue {
         );
         $sth2->execute( $missinglist, $subscriptionid );
     }
+    return;
 }
 
 =head2 updateClaim
-
-=over 4
 
 &updateClaim($serialid)
 
 this function updates the time when a claim is issued for late/missing items
 
 called from claims.pl file
-
-=back
 
 =cut
 
@@ -1968,20 +1835,17 @@ sub updateClaim {
         "
     );
     $sth->execute($serialid);
+    return;
 }
 
 =head2 getsupplierbyserialid
 
-=over 4
-
-($result) = &getsupplierbyserialid($serialid)
+$result = getsupplierbyserialid($serialid)
 
 this function is used to find the supplier id given a serial id
 
 return :
 hashref containing serialid, subscriptionid, and aqbooksellerid
-
-=back
 
 =cut
 
@@ -2003,14 +1867,10 @@ sub getsupplierbyserialid {
 
 =head2 check_routing
 
-=over 4
-
-($result) = &check_routing($subscriptionid)
+$result = &check_routing($subscriptionid)
 
 this function checks to see if a serial has a routing list and returns the count of routingid
 used to show either an 'add' or 'edit' link
-
-=back
 
 =cut
 
@@ -2031,15 +1891,11 @@ sub check_routing {
 
 =head2 addroutingmember
 
-=over 4
+addroutingmember($borrowernumber,$subscriptionid)
 
-&addroutingmember($borrowernumber,$subscriptionid)
-
-this function takes a borrowernumber and subscriptionid and add the member to the
+this function takes a borrowernumber and subscriptionid and adds the member to the
 routing list for that serial subscription and gives them a rank on the list
 of either 1 or highest current rank + 1
-
-=back
 
 =cut
 
@@ -2062,9 +1918,7 @@ sub addroutingmember {
 
 =head2 reorder_members
 
-=over 4
-
-&reorder_members($subscriptionid,$routingid,$rank)
+reorder_members($subscriptionid,$routingid,$rank)
 
 this function is used to reorder the routing list
 
@@ -2073,8 +1927,6 @@ it takes the routingid of the member one wants to re-rank and the rank it is to 
 - removes the one in the array that is $routingid
 - then reinjects $routingid at point indicated by $rank
 - then update the database with the routingids in the new order
-
-=back
 
 =cut
 
@@ -2108,18 +1960,15 @@ sub reorder_members {
         my $sth = $dbh->prepare( "UPDATE subscriptionroutinglist SET ranking = '" . ( $j + 1 ) . "' WHERE routingid = '" . $result[$j] . "'" );
         $sth->execute;
     }
+    return;
 }
 
 =head2 delroutingmember
 
-=over 4
-
-&delroutingmember($routingid,$subscriptionid)
+delroutingmember($routingid,$subscriptionid)
 
 this function either deletes one member from routing list if $routingid exists otherwise
 deletes all members from the routing list
-
-=back
 
 =cut
 
@@ -2136,22 +1985,19 @@ sub delroutingmember {
         my $sth = $dbh->prepare("DELETE FROM subscriptionroutinglist WHERE subscriptionid = ?");
         $sth->execute($subscriptionid);
     }
+    return;
 }
 
 =head2 getroutinglist
 
-=over 4
-
-($count,@routinglist) = &getroutinglist($subscriptionid)
+($count,@routinglist) = getroutinglist($subscriptionid)
 
 this gets the info from the subscriptionroutinglist for $subscriptionid
 
 return :
 a count of the number of members on routinglist
-the routinglist into a table. Each line of this table containts a ref to a hash which containts
+the routinglist as an array. Each element of the array contains a hash_ref containing
 routingid - a unique id, borrowernumber, ranking, and biblionumber of subscription
-
-=back
 
 =cut
 
@@ -2177,12 +2023,10 @@ sub getroutinglist {
 
 =head2 countissuesfrom
 
-=over 4
+$result = countissuesfrom($subscriptionid,$startdate)
 
-$result = &countissuesfrom($subscriptionid,$startdate)
-
-
-=back
+Returns a count of serial rows matching the given subsctiptionid
+with published date greater than startdate
 
 =cut
 
@@ -2203,12 +2047,9 @@ sub countissuesfrom {
 
 =head2 CountIssues
 
-=over 4
+$result = CountIssues($subscriptionid)
 
-$result = &CountIssues($subscriptionid)
-
-
-=back
+Returns a count of serial rows matching the given subsctiptionid
 
 =cut
 
@@ -2228,12 +2069,9 @@ sub CountIssues {
 
 =head2 HasItems
 
-=over 4
+$result = HasItems($subscriptionid)
 
-$result = &HasItems($subscriptionid)
-
-
-=back
+returns a count of items from serial matching the subscriptionid
 
 =cut
 
@@ -2254,16 +2092,12 @@ sub HasItems {
 
 =head2 abouttoexpire
 
-=over 4
-
-$result = &abouttoexpire($subscriptionid)
+$result = abouttoexpire($subscriptionid)
 
 this function alerts you to the penultimate issue for a serial subscription
 
 returns 1 - if this is the penultimate issue
 returns 0 - if not
-
-=back
 
 =cut
 
@@ -2301,13 +2135,21 @@ sub abouttoexpire {
     return 0;
 }
 
+sub in_array {    # used in next sub down
+    my ( $val, @elements ) = @_;
+    foreach my $elem (@elements) {
+        if ( $val == $elem ) {
+            return 1;
+        }
+    }
+    return 0;
+}
+
 =head2 GetNextDate
 
-($resultdate) = &GetNextDate($planneddate,$subscription)
+$resultdate = GetNextDate($planneddate,$subscription)
 
-this function is an extension of GetNextDate which allows for checking for irregularity
-
-it takes the planneddate and will return the next issue's date and will skip dates if there
+this function it takes the planneddate and will return the next issue's date and will skip dates if there
 exists an irregularity
 - eg if periodicity is monthly and $planneddate is 2007-02-10 but if March and April is to be 
 skipped then the returned date will be 2007-05-10
@@ -2318,16 +2160,6 @@ $resultdate - then next date in the sequence
 Return 0 if periodicity==0
 
 =cut
-
-sub in_array {    # used in next sub down
-    my ( $val, @elements ) = @_;
-    foreach my $elem (@elements) {
-        if ( $val == $elem ) {
-            return 1;
-        }
-    }
-    return 0;
-}
 
 sub GetNextDate(@) {
     my ( $planneddate, $subscription ) = @_;
@@ -2472,7 +2304,7 @@ sub GetNextDate(@) {
 
 =head2 itemdata
 
-  $item = &itemdata($barcode);
+  $item = itemdata($barcode);
 
 Looks up the item with the given barcode, and returns a
 reference-to-hash containing information about that item. The keys of
