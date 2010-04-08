@@ -1,4 +1,4 @@
-package C4::Serials;    #assumes C4/Serials.pm
+package C4::Serials;
 
 # Copyright 2000-2002 Katipo Communications
 #
@@ -18,7 +18,8 @@ package C4::Serials;    #assumes C4/Serials.pm
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-use C4::Dates qw(format_date);
+use warnings;
+use C4::Dates qw(format_date format_date_in_iso);
 use Date::Calc qw(:all);
 use POSIX qw(strftime);
 use C4::Suggestions;
@@ -61,8 +62,6 @@ BEGIN {
     );
 }
 
-=head2 GetSuppliersWithLateIssues
-
 =head1 NAME
 
 C4::Serials - Give functions for serializing.
@@ -76,6 +75,8 @@ C4::Serials - Give functions for serializing.
 Give all XYZ functions
 
 =head1 FUNCTIONS
+
+=head2 GetSuppliersWithLateIssues
 
 =over 4
 
@@ -1090,10 +1091,12 @@ sub ModSerialStatus {
 
     # change status & update subscriptionhistory
     my $val;
-    if ( $status eq 6 ) {
-        DelIssue( { 'serialid' => $serialid, 'subscriptionid' => $subscriptionid, 'serialseq' => $serialseq } );
-    } else {
-        my $query = "UPDATE serial SET serialseq=?,publisheddate=?,planneddate=?,status=?,notes=? WHERE  serialid = ?";
+    if ( $status == 6 ) {
+        DelIssue( {'serialid'=>$serialid, 'subscriptionid'=>$subscriptionid,'serialseq'=>$serialseq} );
+    }
+    else {
+        my $query =
+'UPDATE serial SET serialseq=?,publisheddate=?,planneddate=?,status=?,notes=? WHERE  serialid = ?';
         $sth = $dbh->prepare($query);
         $sth->execute( $serialseq, $publisheddate, $planneddate, $status, $notes, $serialid );
         $query = "SELECT * FROM   subscription WHERE  subscriptionid = ?";
@@ -1105,7 +1108,7 @@ sub ModSerialStatus {
             $sth   = $dbh->prepare($query);
             $sth->execute($subscriptionid);
             my ( $missinglist, $recievedlist ) = $sth->fetchrow;
-            if ( $status eq 2 ) {
+            if ( $status == 2 ) {
 
                 $recievedlist .= "; $serialseq"
                   unless ( index( "$recievedlist", "$serialseq" ) >= 0 );
@@ -1113,10 +1116,10 @@ sub ModSerialStatus {
 
             #         warn "missinglist : $missinglist serialseq :$serialseq, ".index("$missinglist","$serialseq");
             $missinglist .= "; $serialseq"
-              if ( $status eq 4
+              if ( $status == 4
                 and not index( "$missinglist", "$serialseq" ) >= 0 );
-            $missinglist .= "; $serialseq"
-              if ( $status eq 5
+            $missinglist .= "; not issued $serialseq"
+              if ( $status == 5
                 and index( "$missinglist", "$serialseq" ) >= 0 );
             $query = "UPDATE subscriptionhistory SET recievedlist=?, missinglist=? WHERE  subscriptionid=?";
             $sth   = $dbh->prepare($query);
@@ -1127,20 +1130,19 @@ sub ModSerialStatus {
     }
 
     # create new waited entry if needed (ie : was a "waited" and has changed)
-    if ( $oldstatus eq 1 && $status ne 1 ) {
+    if ( $oldstatus == 1 && $status != 1 ) {
         my $query = "SELECT * FROM   subscription WHERE  subscriptionid = ?";
         $sth = $dbh->prepare($query);
         $sth->execute($subscriptionid);
         my $val = $sth->fetchrow_hashref;
 
         # next issue number
-        #     warn "Next Seq";
-        my ( $newserialseq, $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1, $newinnerloop2, $newinnerloop3 ) = GetNextSeq($val);
-
-        #     warn "Next Seq End";
+        my (
+            $newserialseq,  $newlastvalue1, $newlastvalue2, $newlastvalue3,
+            $newinnerloop1, $newinnerloop2, $newinnerloop3
+        ) = GetNextSeq($val);
 
         # next date (calculated from actual date & frequency parameters)
-        #         warn "publisheddate :$publisheddate ";
         my $nextpublisheddate = GetNextDate( $publisheddate, $val );
         NewIssue( $newserialseq, $subscriptionid, $val->{'biblionumber'}, 1, $nextpublisheddate, $nextpublisheddate );
         $query = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
@@ -1148,8 +1150,8 @@ sub ModSerialStatus {
         $sth = $dbh->prepare($query);
         $sth->execute( $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1, $newinnerloop2, $newinnerloop3, $subscriptionid );
 
-        # check if an alert must be sent... (= a letter is defined & status became "arrived"
-        if ( $val->{letter} && $status eq 2 && $oldstatus ne 2 ) {
+# check if an alert must be sent... (= a letter is defined & status became "arrived"
+        if ( $val->{letter} && $status == 2 && $oldstatus != 2 ) {
             SendAlerts( 'issue', $val->{subscriptionid}, $val->{letter} );
         }
     }
@@ -1181,13 +1183,17 @@ sub GetNextExpected($) {
 
     # Each subscription has only one 'expected' issue, with serial.status==1.
     $sth->execute( $subscriptionid, 1 );
-    my ($nextissue) = $sth->fetchrow_hashref;
-    if ( not $nextissue ) {
-        $sth = $dbh->prepare('SELECT serialid,planneddate FROM serial WHERE subscriptionid  = ? ORDER BY planneddate DESC LIMIT 1');
-        $sth->execute($subscriptionid);
-        $nextissue = $sth->fetchrow_hashref;
+    my ( $nextissue ) = $sth->fetchrow_hashref;
+    if( !$nextissue){
+         $sth = $dbh->prepare('SELECT serialid,planneddate FROM serial WHERE subscriptionid  = ? ORDER BY planneddate DESC LIMIT 1');
+         $sth->execute( $subscriptionid );  
+         $nextissue = $sth->fetchrow_hashref;       
     }
-    $nextissue->{planneddate} = C4::Dates->new( $nextissue->{planneddate}, 'iso' );
+    if (!defined $nextissue->{planneddate}) {
+        # or should this default to 1st Jan ???
+        $nextissue->{planneddate} = strftime('%Y-%m-%d',localtime);
+    }
+    $nextissue->{planneddate} = C4::Dates->new($nextissue->{planneddate},'iso');
     return $nextissue;
 
 }
@@ -1477,14 +1483,14 @@ sub NewIssue {
     $sth->execute($subscriptionid);
     my ( $missinglist, $recievedlist ) = $sth->fetchrow;
 
-    if ( $status eq 2 ) {
-        ### TODO Add a feature that improves recognition and description.
-        ### As such count (serialseq) i.e. : N18,2(N19),N20
-        ### Would use substr and index But be careful to previous presence of ()
-        $recievedlist .= "; $serialseq" unless ( index( $recievedlist, $serialseq ) > 0 );
+    if ( $status == 2 ) {
+      ### TODO Add a feature that improves recognition and description.
+      ### As such count (serialseq) i.e. : N18,2(N19),N20
+      ### Would use substr and index But be careful to previous presence of ()
+        $recievedlist .= "; $serialseq" unless (index($recievedlist,$serialseq)>0);
     }
-    if ( $status eq 4 ) {
-        $missinglist .= "; $serialseq" unless ( index( $missinglist, $serialseq ) > 0 );
+    if ( $status == 4 ) {
+        $missinglist .= "; $serialseq" unless (index($missinglist,$serialseq)>0);
     }
     $query = qq|
         UPDATE subscriptionhistory
@@ -2265,44 +2271,34 @@ sub abouttoexpire {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
-    my $per              = $subscription->{'periodicity'};
-    if ( $per % 16 > 0 ) {
-        my $expirationdate = $subscription->{enddate};
-        my $sth            = $dbh->prepare("select max(planneddate) from serial where subscriptionid=?");
-        $sth->execute($subscriptionid);
-        my ($res) = $sth->fetchrow;
-        my @res = split( /-/, $res );
-        @res = Date::Calc::Today if ( $res[0] * $res[1] == 0 );
-        my @endofsubscriptiondate = split( /-/, $expirationdate );
-        my $x;
-        if ( $per == 1 ) { $x = 7; }
-        if ( $per == 2 ) { $x = 7; }
-        if ( $per == 3 ) { $x = 14; }
-        if ( $per == 4 ) { $x = 21; }
-        if ( $per == 5 ) { $x = 31; }
-        if ( $per == 6 ) { $x = 62; }
-        if ( $per == 7 || $per == 8 ) { $x = 93; }
-        if ( $per == 9 )  { $x = 190; }
-        if ( $per == 10 ) { $x = 365; }
-        if ( $per == 11 ) { $x = 730; }
-        my @datebeforeend = Add_Delta_Days( $endofsubscriptiondate[0], $endofsubscriptiondate[1], $endofsubscriptiondate[2], -( 3 * $x ) )
-          if ( @endofsubscriptiondate && $endofsubscriptiondate[0] * $endofsubscriptiondate[1] * $endofsubscriptiondate[2] );
-
-        # warn "DATE BEFORE END: $datebeforeend";
-        return 1
-          if (
-            @res
-            && ( @datebeforeend
-                && Delta_Days( $res[0], $res[1], $res[2], $datebeforeend[0], $datebeforeend[1], $datebeforeend[2] ) <= 0 )
-            && ( @endofsubscriptiondate
-                && Delta_Days( $res[0], $res[1], $res[2], $endofsubscriptiondate[0], $endofsubscriptiondate[1], $endofsubscriptiondate[2] ) >= 0 )
-          );
+    my $per = $subscription->{'periodicity'};
+    if ($per && $per % 16 > 0){
+        my $expirationdate   = GetExpirationDate($subscriptionid);
+        my ($res) = $dbh->selectrow_array('select max(planneddate) from serial where subscriptionid = ?', undef, $subscriptionid);
+        my @res;
+        if (defined $res) {
+            @res=split (/-/,$res);
+            @res=Date::Calc::Today if ($res[0]*$res[1]==0);
+        } else { # default an undefined value
+            @res=Date::Calc::Today;
+        }
+        my @endofsubscriptiondate=split(/-/,$expirationdate);
+        my @per_list = (0, 7, 7, 14, 21, 31, 62, 93, 93, 190, 365, 730, 0, 0, 0, 0);
+        my @datebeforeend;
+        @datebeforeend = Add_Delta_Days(  $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2],
+            - (3 * $per_list[$per])) if (@endofsubscriptiondate && $endofsubscriptiondate[0]*$endofsubscriptiondate[1]*$endofsubscriptiondate[2]);
+        return 1 if ( @res &&
+            (@datebeforeend &&
+                Delta_Days($res[0],$res[1],$res[2],
+                    $datebeforeend[0],$datebeforeend[1],$datebeforeend[2]) <= 0) &&
+            (@endofsubscriptiondate &&
+                Delta_Days($res[0],$res[1],$res[2],
+                    $endofsubscriptiondate[0],$endofsubscriptiondate[1],$endofsubscriptiondate[2]) >= 0) );
         return 0;
-    } elsif ( $subscription->{numberlength} > 0 ) {
-        return ( countissuesfrom( $subscriptionid, $subscription->{'startdate'} ) >= $subscription->{numberlength} - 1 );
-    } else {
-        return 0;
+    } elsif ($subscription->{numberlength}>0) {
+        return (countissuesfrom($subscriptionid,$subscription->{'startdate'}) >=$subscription->{numberlength}-1);
     }
+    return 0;
 }
 
 =head2 GetNextDate
