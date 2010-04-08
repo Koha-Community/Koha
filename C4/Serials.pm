@@ -742,8 +742,8 @@ sub GetSerials {
 
 =over 4
 
-($totalissues,@serials) = GetSerials2($subscriptionid,$status);
-this function get every serial waited for a given subscription
+@serials = GetSerials2($subscriptionid,$status);
+this function gets every serial waited for a given subscription
 as well as the number of issues registered in the database (all types)
 this number is used to see if a subscription can be deleted (=it must have only 1 issue)
 
@@ -771,8 +771,7 @@ sub GetSerials2 {
         $line->{"publisheddate"}              = format_date( $line->{"publisheddate"} );
         push @serials, $line;
     }
-    my ($totalissues) = scalar(@serials);
-    return ( $totalissues, @serials );
+    return @serials;
 }
 
 =head2 GetLatestSerials
@@ -808,14 +807,6 @@ sub GetLatestSerials {
         push @serials, $line;
     }
 
-    #     my $query = qq|
-    #         SELECT count(*)
-    #         FROM   serial
-    #         WHERE  subscriptionid=?
-    #     |;
-    #     $sth=$dbh->prepare($query);
-    #     $sth->execute($subscriptionid);
-    #     my ($totalissues) = $sth->fetchrow;
     return \@serials;
 }
 
