@@ -10,7 +10,7 @@ use C4::Output;
 use C4::Bookseller;
 use C4::Context;
 use C4::Letters;
-my $input = new CGI;
+my $input = CGI->new;
 
 my $serialid = $input->param('serialid');
 my $op = $input->param('op');
@@ -18,26 +18,26 @@ my $claimletter = $input->param('claimletter');
 my $supplierid = $input->param('supplierid');
 my $suppliername = $input->param('suppliername');
 my $order = $input->param('order');
-my $supplierlist = GetSuppliersWithLateIssues;
+my $supplierlist = GetSuppliersWithLateIssues();
+if ($supplierid) {
+    foreach my $s ( @{$supplierlist} ) {
+        if ($s->{id} == $supplierid ) {
+            $s->{selected} = 1;
+            last;
+        }
+    }
+}
 
 # open template first (security & userenv set here)
 my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "serials/claims.tmpl",
+= get_template_and_user({template_name => 'serials/claims.tmpl',
             query => $input,
-            type => "intranet",
+            type => 'intranet',
             authnotrequired => 0,
             flagsrequired => {serials => 1},
             debug => 1,
             });
 
-for my $supplier ( @{$supplierlist} ) {
-        my @dummy = GetLateOrMissingIssues($supplier->{id},q{},$order);
-        my $counting = scalar @dummy;
-        $supplier->{name} .= " ($counting)";
-        if ($supplierid && $supplierid == $supplier->{id}) {
-            $supplier->{selected} = 1;
-        }
-}
 
 my $letters = GetLetters('claimissues');
 my @letters;
@@ -47,17 +47,10 @@ foreach (keys %{$letters}){
 
 my $letter=((scalar(@letters)>1) || ($letters[0]->{name}||$letters[0]->{code}));
 my  @missingissues;
+my @supplierinfo;
 if ($supplierid) {
     @missingissues = GetLateOrMissingIssues($supplierid,$serialid,$order);
-}
-
-my ($singlesupplier,@supplierinfo);
-if($supplierid){
-   (@supplierinfo)=GetBookSeller($supplierid);
-} else { # set up supplierid for the claim links out of main table if all suppliers is chosen
-   for my $mi (@missingissues){
-       $mi->{supplierid} = getsupplierbyserialid($mi->{serialid});
-   }
+    @supplierinfo=GetBookSeller($supplierid);
 }
 
 my $preview=0;
@@ -82,7 +75,6 @@ $template->param(
         missingissues => \@missingissues,
         supplierid => $supplierid,
         claimletter => $claimletter,
-        singlesupplier => $singlesupplier,
         supplierloop => \@supplierinfo,
         dateformat    => C4::Context->preference("dateformat"),
     	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
