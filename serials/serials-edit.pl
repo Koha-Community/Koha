@@ -357,11 +357,27 @@ if ( $op and $op eq 'serialchangestatus' ) {
         print $query->redirect($redirect);
     }
 }
+my $default_bib_view = get_default_view();
 
 $template->param(
     serialsadditems => $serialdatalist[0]->{'serialsadditems'},
     bibliotitle     => $bibdata->{'title'},
     biblionumber    => $serialdatalist[0]->{'biblionumber'},
     serialslist     => \@serialdatalist,
+    default_bib_view => $default_bib_view,
 );
 output_html_with_http_headers $query, $cookie, $template->output;
+
+sub get_default_view {
+    my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
+    my $views = { C4::Search::enabled_staff_search_views };
+    if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
+        return 'ISBDdetail';
+    } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
+        return 'MARCdetail';
+    } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
+        return 'labeledMARCdetail';
+    } else {
+        return 'detail';
+    }
+}

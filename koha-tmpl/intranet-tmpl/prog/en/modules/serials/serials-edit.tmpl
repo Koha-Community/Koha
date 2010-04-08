@@ -424,7 +424,7 @@ function CloneSubfield(index){
         <!--TMPL_IF name="abouttoexpire"--><a href="#" onclick="javascript:popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew <!--TMPL_VAR Name="subscriptionid"--></a>
         <!--/TMPL_IF-->
       <!--/TMPL_LOOP-->
-    <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a></li></ul>
+    <li><a href="/cgi-bin/koha/catalogue/<!-- TMPL_VAR NAME='default_bib_view' -->.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" title="go to <!-- TMPL_VAR name="bibliotitle" -->">Show Biblio</a></li></ul>
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
