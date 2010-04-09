@@ -1079,8 +1079,8 @@ sub GetAllIssues {
         # apparently specific to HLT.  Not sure if the ReadingHistory
         # syspref is still required, as old_issues by design
         # is no longer checked with each loan.
-        my $query2 = "SELECT * FROM oldissues
-                      LEFT JOIN items ON items.itemnumber=oldissues.itemnumber
+        my $query2 = "SELECT * FROM old_issues
+                      LEFT JOIN items ON items.itemnumber=old_issues.itemnumber
                       LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
                       LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
                       WHERE borrowernumber=? 
