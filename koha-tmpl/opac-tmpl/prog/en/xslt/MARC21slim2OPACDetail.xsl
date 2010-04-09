@@ -498,6 +498,7 @@
         <!-- 780 -->
         <xsl:if test="marc:datafield[@tag=780]">
         <xsl:for-each select="marc:datafield[@tag=780]">
+        <xsl:if test="@ind1=0">
         <span class="results_summary"><span class="label">
         <xsl:choose>
         <xsl:when test="@ind2=0">
@@ -536,18 +537,16 @@
             </a>
         </span>
  
-        <xsl:choose>
-        <xsl:when test="@ind1=0">
-            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
-        </xsl:when>
-        </xsl:choose>
+        <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
 
+        </xsl:if>
         </xsl:for-each>
         </xsl:if>
 
         <!-- 785 -->
         <xsl:if test="marc:datafield[@tag=785]">
         <xsl:for-each select="marc:datafield[@tag=785]">
+        <xsl:if test="@ind1=0">
         <span class="results_summary"><span class="label">
         <xsl:choose>
         <xsl:when test="@ind2=0">
@@ -591,6 +590,7 @@
             </a>
 
         </span>
+        </xsl:if>
         </xsl:for-each>
         </xsl:if>
 
