@@ -495,6 +495,38 @@
         </xsl:for-each>
         </xsl:if>
 
+        <!-- 773 -->
+        <xsl:if test="marc:datafield[@tag=773]">
+        <xsl:for-each select="marc:datafield[@tag=773]">
+        <xsl:if test="@ind1=0">
+        <span class="results_summary"><span class="label">
+        <xsl:choose>
+        <xsl:when test="@ind2=' '">
+            In:
+        </xsl:when>
+        <xsl:when test="@ind2=8">
+            <xsl:if test="marc:subfield[@code='i']">
+                <xsl:value-of select="marc:subfield[@code='i']"/>
+            </xsl:if>
+        </xsl:when>
+        </xsl:choose>
+        </span>
+                <xsl:variable name="f773">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">at</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:variable>
+             <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
+                <xsl:value-of select="translate($f773, '()', '')"/>
+            </a>
+        </span>
+ 
+            <span class="results_summary"><xsl:value-of select="marc:subfield[@code='n']"/></span>
+
+        </xsl:if>
+        </xsl:for-each>
+        </xsl:if>
+
         <!-- 780 -->
         <xsl:if test="marc:datafield[@tag=780]">
         <xsl:for-each select="marc:datafield[@tag=780]">
