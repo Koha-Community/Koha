@@ -405,7 +405,8 @@ sub draw_label_text {
             $field_data =~ s/\r//g;
         }
         my @label_lines;
-        my @callnumber_list = ('itemcallnumber', '050a', '050b', '082a', '952o'); # Fields which hold call number data  FIXME: ( 060? 090? 092? 099? )
+        # Fields which hold call number data  FIXME: ( 060? 090? 092? 099? )
+        my @callnumber_list = qw(itemcallnumber 050a 050b 082a 952o 995k);
         if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{'printing_type'} eq 'BIB') and ($self->{'callnum_split'})) { # If the field contains the call number, we do some sp
             if ($cn_source eq 'lcc') {
                 @label_lines = _split_lccn($field_data);
