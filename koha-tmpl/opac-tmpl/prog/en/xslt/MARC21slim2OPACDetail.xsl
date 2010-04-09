@@ -28,8 +28,9 @@
             <xsl:choose>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
-                        <xsl:when test="$leader7='a' or $leader7='c' or $leader7='d' or $leader7='m'">BK</xsl:when>
-                        <xsl:when test="$leader7='b' or $leader7='i' or $leader7='s'">SE</xsl:when>
+                        <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'">BK</xsl:when>
+                        <xsl:when test="$leader7='i' or $leader7='s'">SE</xsl:when>
+                        <xsl:when test="$leader7='a' or $leader7='b'">AR</xsl:when>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">BK</xsl:when>
@@ -45,8 +46,9 @@
             <xsl:choose>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
-                        <xsl:when test="$leader7='a' or $leader7='c' or $leader7='d' or $leader7='m'">Book</xsl:when>
-                        <xsl:when test="$leader7='b' or $leader7='i' or $leader7='s'">Continuing Resource</xsl:when>
+                        <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'">Book</xsl:when>
+                        <xsl:when test="$leader7='i' or $leader7='s'">Continuing Resource</xsl:when>
+                        <xsl:when test="$leader7='a' or $leader7='b'">Article</xsl:when>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">Book</xsl:when>
