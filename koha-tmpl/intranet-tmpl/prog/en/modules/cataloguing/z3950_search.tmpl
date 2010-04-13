@@ -18,6 +18,10 @@ $.tablesorter.addParser({
     type: 'text' 
 });
 
+function closemenu(){
+    $(".linktools").hide();
+    $("tr").removeClass("selected");
+}
 $(document).ready(function(){
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
@@ -29,12 +33,35 @@ $(document).ready(function(){
     });
     $("#resultst").tablesorter({
         sortList: [[1,0]],
-        headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false } },
+        headers: { 1: { sorter: 'articles' },7: { sorter: false },8: { sorter: false } },
         widgets: ['zebra']
     }); 
+        /* Inline edit/delete links */
+        $("td").click(function(event){
+            $(".linktools").hide();
+            $("tr").removeClass("selected");
+            var row = $(this).parent();
+            row.addClass("selected");
+
+            var $tgt = $(event.target);
+            if($tgt.is("a")||$tgt.is(":nth-child(7)")||$tgt.is(":nth-child(8)")||$tgt.is(":nth-child(9)")||$tgt.is(":nth-child(10)")){ return true; } else {
+            var position = $(this).offset();
+            var top = position.top+5;
+            var left = position.left+5;
+            $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
+            }
+        });
 });
+
 //]]>
 </script>
+<style type="text/css">
+.linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
+.linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
+.linktools a:hover { background-color:#EEE;color:#CC3300;border-right:1px solid #CCC;}
+tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }
+</style>
+      <!-- TMPL_IF name="opsearch" -->
    <style type="text/css">
 	   #custom-doc { width:53em;*width:51.72em;min-width:689px; margin:auto; text-align:left; }
    </style>
@@ -42,6 +69,11 @@ $(document).ready(function(){
 <body>
 
 <div id="custom-doc" class="yui-t7">
+<!-- TMPL_ELSE -->
+</head>
+<body style="padding:.5em;">
+<div>
+<!-- /TMPL_IF -->
       <div id="bd">
 	  <!-- TMPL_IF name="opsearch" -->
 <h2>Z39.50 Search Points</h2>
@@ -103,13 +135,9 @@ $(document).ready(function(){
     </tr></thead>
     <tbody><!-- TMPL_LOOP name="breeding_loop" -->
         <!-- TMPL_IF NAME="breedingid" -->
-		
-	<!-- TMPL_UNLESS NAME="__odd__" -->
-	<tr class="highlight">
-	<!-- TMPL_ELSE -->
-        <tr>
-	<!-- /TMPL_UNLESS -->
-            <td><!-- TMPL_VAR name="server" --></td>
+
+	    <tr id="row<!-- TMPL_VAR NAME="breedingid" -->">
+	        <td><!-- TMPL_VAR name="server" --> <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" rel="gb_page_center[600,500]">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="breedingid" -->" rel="gb_page_center[600,500]">Preview Card</a> <a href="#" onclick="Import(<!-- TMPL_VAR NAME="breedingid" -->,0); return false">Import</a><a href="#" onclick="closemenu();return false;" title="Close this menu"> X </a></div> </td>
             <td><!-- TMPL_VAR NAME="title" escape="html" --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="date" --></td>
@@ -118,7 +146,7 @@ $(document).ready(function(){
             <td><!-- TMPL_VAR NAME="lccn" --></td>
             <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td>
             <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
-            <td><a href="javascript:Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->)">Import</a></td> 
+            <td><a href="#" onclick="Import(<!-- TMPL_VAR NAME="breedingid" -->,<!-- TMPL_VAR NAME="biblionumber" -->); return false">Import</a></td> 
         </tr>
         <!-- /TMPL_IF -->
     <!-- /TMPL_LOOP --></tbody>
