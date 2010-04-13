@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 print_usage(){
     echo "$0 : generates PDF files from html files in directorys and prints them";
