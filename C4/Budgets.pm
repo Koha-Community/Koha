@@ -41,6 +41,7 @@ BEGIN {
         &GetBudgetSpent
         &GetBudgetOrdered
         &GetPeriodsCount
+        &GetChildBudgetsSpent
 
 	    &GetBudgetPeriod
         &GetBudgetPeriods
@@ -672,6 +673,37 @@ sub GetBudget {
 &GetBudgets($filter, $order_by);
 
 gets all budgets
+
+=back
+
+=cut
+
+# -------------------------------------------------------------------
+sub GetChildBudgetsSpent {
+    my ( $budget_id ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+        SELECT *
+        FROM   aqbudgets
+        WHERE  budget_parent_id=?
+        ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $budget_id );
+    my $result = $sth->fetchall_arrayref({});
+    my $total_spent = GetBudgetSpent($budget_id);
+    if ($result){
+        $total_spent += GetChildBudgetsSpent($_->{"budget_id"}) foreach @$result;    
+    }
+    return $total_spent;
+}
+
+=head3 GetChildBudgetsSpent
+
+=over 4
+
+&GetChildBudgetsSpent($budget-id);
+
+gets the total spent of the level and sublevels of $budget_id
 
 =back
 

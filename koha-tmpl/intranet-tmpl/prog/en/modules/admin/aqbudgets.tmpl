@@ -163,6 +163,7 @@
             <th>Total<br />allocated</th>
             <th>Base-level<br />allocated</th>
             <th>Base-level<br />spent</th>
+            <th>Total sublevels<br />spent</th>
             <th>Base-level<br />remaining</th>
             <th class="tooltipcontent">&nbsp;</th>
             <th>Actions</th>
@@ -173,6 +174,7 @@
     <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated <!--TMPL_IF NAME="budget_period_total" --><!-- TMPL_VAR NAME="budget_period_total"--><!-- /TMPL_IF -->  </th>
     <th nowrap="nowrap" class="data"> <!-- TMPL_VAR NAME="period_alloc_total"--></th>
     <th nowrap="nowrap"  class="data"> <!-- TMPL_VAR NAME="base_alloc_total"--></th>
+    <th class="data"><!-- TMPL_VAR NAME="base_spent_total"--></th>
     <th class="data"><!-- TMPL_VAR NAME="base_spent_total"--></th>
     <th class="data"><!-- TMPL_VAR NAME="base_remaining_total"--></th>
     <th class="tooltipcontent"></th>
@@ -193,6 +195,7 @@
     <td class="data"><!-- TMPL_VAR NAME="budget_amount_total" --></td>
     <td class="data"><!-- TMPL_VAR NAME="budget_amount" --> </td>
     <td class="data"><!-- TMPL_VAR NAME="budget_spent" --> </td>
+    <td class="data"><!-- TMPL_VAR NAME="total_levels_spent" --></td>
     <td class="data"
     <!-- TMPL_IF NAME="remaining_pos" --> style="color: green;" <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="remaining_neg" --> style="color: red;" <!-- /TMPL_IF -->   >
