@@ -41,6 +41,7 @@ To know the bookseller this script has to display details.
 =cut
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Auth;
 use C4::Acquisition;
 use C4::Contract;

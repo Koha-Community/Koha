@@ -44,13 +44,14 @@ list_currency, gst, list_gst, invoice_gst, discount, gstrate.
 =back
 
 =cut
+use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Auth;
 use C4::Bookseller;
 use C4::Biblio;
 use C4::Output;
 use CGI;
-use strict;
 
 my $input=new CGI;
 my ($template, $loggedinuser, $cookie) = get_template_and_user(
