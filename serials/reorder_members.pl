@@ -20,6 +20,7 @@
 # where the hierarchical order can be changed on the fly and a routing list can be
 # printed out
 use strict;
+#use warnings; FIXME - Bug 2505
 use CGI;
 use C4::Auth;
 use C4::Context;
