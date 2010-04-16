@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use HTML::Template::Pro;
 use strict;
+#use warnings; FIXME - Bug 2505
 
 use C4::Record;
 use C4::Auth;
