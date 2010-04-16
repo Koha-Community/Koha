@@ -11,9 +11,9 @@
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
 use warnings;
@@ -101,6 +101,7 @@ if (! $subs->{dow}) {
 if (! $subs->{periodicity}) {
     $subs->{periodicity} = '0';
 }
+my $default_bib_view = get_default_view();
 $template->param(
 	subscriptionid => $subscriptionid,
     serialslist => \@serialslist,
@@ -118,6 +119,21 @@ $template->param(
     intranetstylesheet => C4::Context->preference('intranetstylesheet'),
     intranetcolorstylesheet => C4::Context->preference('intranetcolorstylesheet'),
     irregular_issues => scalar @irregular_issues,
+    default_bib_view => $default_bib_view,
     );
 
 output_html_with_http_headers $query, $cookie, $template->output;
+
+sub get_default_view {
+    my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
+    my $views = { C4::Search::enabled_staff_search_views };
+    if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
+        return 'ISBDdetail';
+    } elsif  ($defaultview eq 'marc' && $views->{can_view_MARC}) {
+        return 'MARCdetail';
+    } elsif  ($defaultview eq 'labeled_marc' && $views->{can_view_labeledMARC}) {
+        return 'labeledMARCdetail';
+    } else {
+        return 'detail';
+    }
+}

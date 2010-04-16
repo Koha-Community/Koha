@@ -167,10 +167,10 @@
     <form id="claims" name="claims" action="claims.pl" method="post">
     <fieldset><label for="supplierid">View: </label>
         <select id="supplierid" size="1" name="supplierid">
-        <!-- TMPL_LOOP name="supplier_loop" -->
-            <option value="<!--TMPL_VAR name="id"-->" <!-- TMPL_IF NAME="selected" -->selected="1"<!-- /TMPL_IF -->>
-                 <!--TMPL_VAR name="name"--></option>
-        <!--/TMPL_LOOP-->
+        <!-- TMPL_LOOP NAME="supplier_loop" -->
+          <option value="<!-- TMPL_VAR NAME="id" -->"<!--  TMPL_IF NAME="selected" --> selected="yes" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" -->       
+          </option>
+        <!-- /TMPL_LOOP -->
         </select>
         <input type="submit" value="OK" />
         <!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
@@ -253,7 +253,7 @@
                     <th>Issue number</th>
                     <th>Status</th>
                     <th>Since</th>
-                    <th>&nbsp;</th>
+                    <th>Claim Date</th>
                 <th>Begin Claim</th>
                 </tr></thead>
                 <tbody><!-- TMPL_LOOP name="missingissues" -->
@@ -292,10 +292,6 @@
                 <!-- /TMPL_LOOP --></tbody>
             </table>
 	     <p><span class="exportSelected"></span></p>
-        <!-- TMPL_IF Name="singlesupplier"-->
-            <input type="hidden" name="supplierid" value="<!--TMPL_VAR NAME="supplierid"-->" />
-            <!-- <a href="claims.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->&amp;op=preview" onclick="popup(<!-- TMPL_VAR name="supplierid" -->,''); return false" class="button">Vendor Group Claim Notice</a></p> -->
-        <!-- /TMPL_IF -->
 
 <!--TMPL_IF Name="letter" -->
         <fieldset class="action"> <label for="letter_code">Select notice:</label>
@@ -306,9 +302,9 @@
 			</select>
 	    <input type="hidden" name="op" value="send_alert" /><input type="submit" name="submit" class="button" value="Send notification" /></fieldset>
             <!--/TMPL_IF-->
+        </form>
 <!-- /TMPL_IF -->
 
-        </form>
 <!-- TMPL_ELSE -->
 
 <div id="doc" class="yui-t7">

@@ -1,5 +1,20 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
 use strict;
 use warnings;
 use CGI;
@@ -32,12 +47,10 @@ my @serialid = $query->param('serialid');
 my $op = $query->param('op') || q{};
 my $serialidcount = @serialid;
 
-my %supplierlist = GetSuppliersWithLateIssues;
-
 my @loop1;
-my ($count, @lateissues);
+my @lateissues;
 if($op ne 'claims'){
-    ($count, @lateissues) = GetLateIssues($supplierid);
+    @lateissues = GetLateIssues($supplierid);
     for my $issue (@lateissues){
         push @loop1,
       [ $issue->{'name'}, $issue->{'title'}, $issue->{'serialseq'}, $issue->{'planneddate'},];
@@ -45,9 +58,9 @@ if($op ne 'claims'){
 }
 my $totalcount2 = 0;
 my @loop2;
-my ($count2, @missingissues);
+my @missingissues;
 for (my $k=0;$k<@serialid;$k++){
-    ($count2, @missingissues) = GetLateOrMissingIssues($supplierid, $serialid[$k]);
+    @missingissues = GetLateOrMissingIssues($supplierid, $serialid[$k]);
 
     for (my $j=0;$j<@missingissues;$j++){
 	my @rows2 = ($missingissues[$j]->{'name'},          # lets build up a row
@@ -57,7 +70,7 @@ for (my $k=0;$k<@serialid;$k++){
                      );
         push (@loop2, \@rows2);
     }
-    $totalcount2 = $totalcount2 + $count2;
+    $totalcount2 += scalar @missingissues;
     # update claim date to let one know they have looked at this missing item
     updateClaim($serialid[$k]);
 }
@@ -107,6 +120,7 @@ for my $row ( @loop2 ) {
 print ",,,,,,,\n";
 print ",,,,,,,\n";
 if($op ne 'claims'){
+    my $count = scalar @lateissues;
     print ",,Total Number Late, $count\n";
 }
 if($serialidcount == 1){
