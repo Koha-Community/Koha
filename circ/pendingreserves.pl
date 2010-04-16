@@ -24,6 +24,7 @@
 # 		The reserve pull lists *works* as long as not for indepencdant branches, I can fix!
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Output;
 use CGI;
