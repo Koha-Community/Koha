@@ -19,6 +19,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Output;
 use C4::Auth;
 use CGI;

@@ -41,6 +41,7 @@ written 20/02/2002 by paul.poulain@free.fr
 =cut
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use CGI;
 
 use List::Util qw/min/;
