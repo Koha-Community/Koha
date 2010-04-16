@@ -1,0 +1,29 @@
+koha packaged for Debian
+========================
+
+When you install the koha.deb package, it does not quite work out of the
+box. Due to various limitations imposed by sanity and the Debian packaging
+policies, it is not yet possible to make it so without excessive work.
+The work will happen later. For now, you get a checklist.
+
+To enable Koha on your machine, after installing this package, do the
+following:
+
+* Make XML::LibXML::SAX:Parser the default parser for Perl's XML SAX
+  implementation.
+  - edit /etc/perl/XML/SAX/ParserDetails.ini to
+    move XML::LibXML::SAX:Parser section last in the file
+* Enable the rewrite module for Apache.
+  - sudo a2enmod rewrite
+* Restart Apache.
+  - sudo service apache2 restart
+
+Then access the following URL:
+
+    http://localhost:8080/
+
+Alternatively, any other name, IP address, and interface will work, too.
+
+This should bring up the Koha intranet administration screen, which will
+let you log in. The username is koha, the password is in the
+/etc/koha/koha-config.xml file (search for "pass").

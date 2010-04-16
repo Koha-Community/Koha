@@ -1,0 +1,59 @@
+#!/bin/sh
+#
+# This script will build a .deb from a git snapshot of koha.
+# Don't use it for building actual versions for uploading to Debian.
+#
+# To use:
+# - commit any changes into git
+# - run this script
+
+set -e
+
+die()
+{
+    echo "$@"
+    exit 1
+}
+
+everything_is_commited()
+{
+    if git status --short | grep -q '^'
+    then
+        return 1
+    else
+        return 0
+    fi
+}
+
+latest_sha1() {
+    git rev-parse --short=8 HEAD
+}
+
+newversion() {
+    printf '3.2.git%s.%s' $(date +%Y%m%d%H%M%S) $(latest_sha1)
+}
+
+adjust_debian_changelog() {
+    dch -v "$1-1" "Building git snapshot."
+    dch -r "Building git snapshot."
+}
+
+reset_debian_changelog() {
+    git checkout -- debian/changelog
+}
+
+build_package() {
+    git archive --format=tar --prefix="koha-$1/" HEAD | 
+        gzip -9 > "../koha_$1.orig.tar.gz"
+    debuild -us -uc
+}
+
+if ! everything_is_commited
+then
+    die "cannot build: uncommited changes"
+fi
+
+version="$(newversion)"
+adjust_debian_changelog "$version"
+build_package "$version"
+reset_debian_changelog

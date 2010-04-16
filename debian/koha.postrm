@@ -1,0 +1,21 @@
+#!/bin/sh
+
+set -e
+
+if [ -f /usr/share/debconf/confmodule ]; then
+    . /usr/share/debconf/confmodule
+fi
+if [ -f /usr/share/dbconfig-common/dpkg/postrm.mysql ]; then
+    . /usr/share/dbconfig-common/dpkg/postrm.mysql
+    dbc_go koha $@
+fi
+
+#if [ "$1" = "purge" ]; then
+#	rm -f /etc/db-test-mysql/debian-db.php
+#	if which ucf >/dev/null 2>&1; then
+#		ucf --purge /etc/db-test-mysql/debian-db.php
+#		ucfr --purge db-test-mysql /etc/db-test-mysql/debian-db.php
+#	fi
+#fi
+
+#DEBHELPER#

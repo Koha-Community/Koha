@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -e
+
+dbc_generate_include="template:/etc/koha/koha-conf.xml"
+dbc_generate_include_args="
+    -o template_infile=/usr/share/koha/koha-conf.xml.in
+    -O root:www-data -m 0640
+"
+
+. /usr/share/debconf/confmodule
+. /usr/share/dbconfig-common/dpkg/postinst.mysql 
+dbc_go koha $@
+
+#DEBHELPER#

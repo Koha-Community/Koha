@@ -1,0 +1,14 @@
+Description: fix #! for cronjob
+Origin: vendor
+Forwarded: no
+Author: Lars Wirzenius <lars@catalyst.net.nz>
+Last-Update: 2010-04-12
+
+--- a/misc/cronjobs/printoverdues.sh
++++ b/misc/cronjobs/printoverdues.sh
+@@ -1,4 +1,4 @@
+-#!/usr/bin/bash
++#!/bin/bash
+ 
+ print_usage(){
+     echo "$0 : generates PDF files from html files in directorys and prints them";
