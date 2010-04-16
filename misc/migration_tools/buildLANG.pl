@@ -3,6 +3,7 @@
 
 # delete  FROM  `marc_subfield_table`  WHERE tag =  "606" AND subfieldcode = 9;
 use strict;
+#use warnings; FIXME - Bug 2505
 
 # Koha modules used
 use C4::Context;

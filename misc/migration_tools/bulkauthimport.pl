@@ -2,6 +2,7 @@
 # small script that import an iso2709 file into koha 2.0
 
 use strict;
+#use warnings; FIXME - Bug 2505
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this

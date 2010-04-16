@@ -1,6 +1,7 @@
 #!/usr/bin/perl 
 #run nightly -- changes J to A on someone's 18th birthday
 use strict;
+#use warnings; FIXME - Bug 2505
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this

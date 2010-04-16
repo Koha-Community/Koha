@@ -14,10 +14,11 @@
 # --> This will be relatively major rework, and requires corresponding
 # rework in tmpl_process.pl
 
+use strict;
+#use warnings; FIXME - Bug 2505
 use Getopt::Long;
 use TmplTokenizer;
 use VerboseWarnings;
-use strict;
 
 use vars qw( $input );
 use vars qw( $debug_dump_only_p );

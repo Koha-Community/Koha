@@ -5,6 +5,9 @@
 # export PERL5LIB
 # then ./check_sysprefs.pl path  (if path is blank it will use .)
 
+#use strict;
+#use warnings; FIXME - Bug 2505
+
 use File::Find;
 use C4::Context;
 

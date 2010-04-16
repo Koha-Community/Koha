@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+#use strict;
+#use warnings; FIXME - Bug 2505
 use XML::SAX;
 my $parser = XML::SAX::ParserFactory->parser(
 Handler => MySAXHandler->new

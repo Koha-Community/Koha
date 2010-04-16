@@ -3,7 +3,7 @@
 # Formerly named rebuildnonmarc.pl
 
 use strict;
-# use warnings; FIXME someday
+#use warnings; FIXME - Bug 2505
 
 BEGIN {
     # find Koha's Perl modules

@@ -39,6 +39,7 @@
 #
 
 use strict;
+#use warnings; FIXME - Bug 2505
 
 my $module_dir;
 BEGIN {

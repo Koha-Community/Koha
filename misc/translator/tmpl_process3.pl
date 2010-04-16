@@ -12,6 +12,7 @@ using gettext-compatible translation files
 =cut
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use Getopt::Long;
 use Locale::PO;
 use File::Temp qw( :POSIX );

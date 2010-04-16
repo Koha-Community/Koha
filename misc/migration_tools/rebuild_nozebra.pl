@@ -6,6 +6,7 @@ use C4::Biblio;
 use C4::AuthoritiesMarc;
 
 use strict;
+#use warnings; FIXME - Bug 2505
 # 
 # script that fills the nozebra table
 #

@@ -2,6 +2,7 @@
 # load records that already have biblionumber set into a koha system
 # Written by TG on 10/04/2006
 use strict;
+#use warnings; FIXME - Bug 2505
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
