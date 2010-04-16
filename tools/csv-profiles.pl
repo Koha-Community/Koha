@@ -35,6 +35,7 @@ This script allow the user to define a new profile for CSV export
 =cut
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use Data::Dumper;
 use Encode;
 
