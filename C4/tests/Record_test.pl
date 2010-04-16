@@ -19,7 +19,8 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 #
-use strict; use warnings; #FIXME: turn off warnings before release
+use strict;
+use warnings;
 
 # specify the number of tests
 use Test::More tests => 23;
