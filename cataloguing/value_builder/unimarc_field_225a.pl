@@ -42,6 +42,7 @@ It need :
 =cut
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Auth;
 use CGI;
 use C4::Context;

@@ -19,7 +19,8 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
+#use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 require C4::Dates;
 my $DEBUG = 0;
