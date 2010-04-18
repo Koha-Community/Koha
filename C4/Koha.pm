@@ -19,6 +19,7 @@ package C4::Koha;
 
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Output;
 use URI::Split qw(uri_split);

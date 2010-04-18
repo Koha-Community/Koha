@@ -19,7 +19,7 @@ package C4::Circulation;
 
 
 use strict;
-#use warnings;  # soon!
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Stats;
 use C4::Reserves;

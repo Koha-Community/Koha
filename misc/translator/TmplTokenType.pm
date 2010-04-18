@@ -1,6 +1,7 @@
 package TmplTokenType;
 
 use strict;
+#use warnings; FIXME - Bug 2505
 require Exporter;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);

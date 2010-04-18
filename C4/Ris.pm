@@ -57,6 +57,8 @@ package C4::Ris;
 #
 #
 
+#use strict;
+#use warnings; FIXME - Bug 2505
 
 use vars qw($VERSION @ISA @EXPORT);
 

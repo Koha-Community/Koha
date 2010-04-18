@@ -18,6 +18,7 @@ package C4::Auth;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use Digest::MD5 qw(md5_base64);
 use Storable qw(thaw freeze);
 use URI::Escape;

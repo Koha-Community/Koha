@@ -18,6 +18,7 @@ package C4::Search::PazPar2;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+#use warnings; FIXME - Bug 2505
 
 use LWP::UserAgent;
 use URI;

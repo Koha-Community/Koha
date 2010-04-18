@@ -19,6 +19,7 @@ package C4::UploadedFile;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Auth qw/get_session/;
 use IO::File;

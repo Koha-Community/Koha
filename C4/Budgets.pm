@@ -18,6 +18,7 @@ package C4::Budgets;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Dates qw(format_date format_date_in_iso);
 use C4::SQLHelper qw<:all>;

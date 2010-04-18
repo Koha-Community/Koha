@@ -21,7 +21,7 @@ package C4::Reserves;
 
 
 use strict;
-# use warnings;  # FIXME: someday
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Biblio;
 use C4::Members;
