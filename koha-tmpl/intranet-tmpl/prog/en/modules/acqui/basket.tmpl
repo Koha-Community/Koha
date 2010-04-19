@@ -151,7 +151,7 @@
                 <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
                 <p>Closed on:  <!-- TMPL_VAR name="closedate" --></p>
                 <!-- TMPL_IF name="basketgroups" -->
-                    <p> basketgroup: <select id="basketgroupid" name="basketgroupid">
+                    <p> Basket group: <select id="basketgroupid" name="basketgroupid">
                         <!-- TMPL_LOOP name="basketgroups" -->
                             <!-- TMPL_IF name="default" -->
                             <option value="<!-- TMPL_VAR name="id" -->" selected="selected"><!-- TMPL_VAR name="name" --></option>
@@ -163,7 +163,7 @@
                         <input type="hidden" id="basketno" value="<!-- TMPL_VAR name="basketno" -->" name="basketno" />
                         <input type="hidden" value="mod_basket" name="op" />
                         <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
-                        <input type="submit" value="Change basketgroup" />
+                        <input type="submit" value="Change basket group" />
                     </p>
                 </form>
                 <!-- /TMPL_IF -->
