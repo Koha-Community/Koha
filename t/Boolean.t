@@ -2,6 +2,7 @@
 #
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Boolean;
 
 use vars qw( @tests );
