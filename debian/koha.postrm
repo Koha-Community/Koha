@@ -16,6 +16,8 @@ if [ "$1" = "purge" ]; then
     if which ucf >/dev/null 2>&1; then
         ucf --purge "$configfile"
     fi
+
+    rm -rf /var/log/koha
 fi
 
 #DEBHELPER#
