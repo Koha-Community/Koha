@@ -41,6 +41,7 @@ To know the bookseller this script has to display details.
 =cut
 
 use strict;
+use warnings;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Contract;
@@ -66,7 +67,10 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 		debug           => 1,
 	}
 );
-my $GST = $booksellers[0]->{'gstrate'} || C4::Context->preference("gist");
+my $seller_gstrate = $booksellers[0]->{'gstrate'};
+# A perl-ism: '0'==false, '0.000'==true, but 0=='0.000' - this accounts for that
+undef $seller_gstrate if ($seller_gstrate == 0);
+my $GST = $seller_gstrate || C4::Context->preference("gist");
 $GST *= 100;
 
 my @contracts = GetContracts($id);
@@ -139,8 +143,6 @@ elsif ($op eq 'delete') {
             push @loop_invoicecurrency, { currency => "<option value=\"$currencies[$i]->{'currency'}\">$currencies[$i]->{'currency'}</option>"};
         }
     }
-    my $GST = $booksellers[0]->{'gstrate'} || C4::Context->preference("gist");
-    $GST *= 100;
 	$template->param(
 		id                   => $id,
 		name                 => $booksellers[0]->{'name'},
