@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Basket grouping for Vendor <!-- TMPL_VAR name="booksellername" --></title>
+<title>Koha &rsaquo; Basket Grouping for <!-- TMPL_VAR name="booksellername" --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="yuipath" -->/fonts/fonts-min.css" />
@@ -132,7 +132,7 @@ function submitForm(form) {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="booksellername" --></a> &rsaquo; Basket grouping for vendor: <!-- TMPL_VAR NAME="booksellername" --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR NAME="booksellername" --></a> &rsaquo; Basket Grouping</div>
 
 <div id="doc" class="yui-t7">
             
@@ -180,7 +180,7 @@ function submitForm(form) {
 				</script>
 				<a href="?op=add&amp;booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->" name="newbasketgroup" id="newbasketgroup">New Basket Group</a>
 			</div>
-			<h1>Basket grouping for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a></h1>
+			<h1>Basket Grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a></h1>
 		</div>
 <!--  TMPL_IF NAME="grouping" -->
 	<div id="bd"> 
@@ -217,7 +217,7 @@ function submitForm(form) {
 		    <div class="yui-u first"> 
 		    	<form action="" method="post" id="groupingform" onsubmit="return submitForm(this)">
 					<fieldset id="various" class='various' >
-						<h3><label for="basketgroupname">Basketgroup Name:</label></h3>
+						<h3><label for="basketgroupname">Basket Group Name:</label></h3>
 						<input type="text" name="basketgroupname" id="basketgroupname" value="<!-- TMPL_VAR NAME="name" -->" />
 						<h3><label for="billingplace">Billing Place:</label></h3>
 						<select name="billingplace" id="billingplace">
@@ -235,7 +235,7 @@ function submitForm(form) {
 						<h3><label for="deliverycomment">Delivery comment:</label></h3>
 						<textarea cols="26" name="deliverycomment" id="deliverycomment"><!-- TMPL_VAR NAME="deliverycomment" --></textarea>
 		         		<div class="workarea">
-							<h3>Grouping</h3>
+							<h3>Grouping:</h3>
 							<ul class="draglist" id="bg">
 								<!-- TMPL_LOOP NAME="selectedbaskets" -->
 				                    <li class="grouped" id="b-<!-- TMPL_VAR NAME="basketno" -->" >
@@ -253,7 +253,7 @@ function submitForm(form) {
 
 							</ul>
 						</div>
-						<div><input type="checkbox" name="close">Close</input></div>
+						<div><input type="checkbox" name="close"> Close</input></div>
 		                <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR name="booksellerid" -->" />
 		                <!-- TMPL_IF NAME="basketgroupid" -->
 		                	<input type="hidden" name="basketgroupid" value="<!-- TMPL_VAR name="basketgroupid" -->" />
