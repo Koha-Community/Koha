@@ -90,7 +90,8 @@ function AreMandatoriesNotOk(){
             <!-- /TMPL_LOOP -->
         <!-- /TMPL_LOOP -->
     <!-- /TMPL_LOOP -->
-    var StrAlert = _("Can't save this record because the following field aren't filled :\n\n");
+    var StrAlert = _("Can't save this record because the following field aren't filled:");
+    StrAlert += "\n\n";
     for(var i=0,len=mandatories.length; i<len ; i++){
         var tag=mandatories[i].substr(4,3);
         var subfield=mandatories[i].substr(17,1);
@@ -153,7 +154,7 @@ function AreMandatoriesNotOk(){
     	
     	if(isempty){
     		flag = 1;
-    		StrAlert += _("\t* Field ") + arr[0] + _(" is mandatory, at least one of its subfields must be filled.\n");
+    		StrAlert += _("\t* Field ") + arr[0] + _(" is mandatory, at least one of its subfields must be filled.") + "\n";
     	}
     	
     }

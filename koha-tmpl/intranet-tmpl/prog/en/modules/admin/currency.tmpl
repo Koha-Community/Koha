@@ -16,18 +16,18 @@
         var _alertString="";
         var alertString2;
         if (f.currency.value.length==0) {
-            _alertString += "- Currency name missing\n";
+            _alertString += _("- Currency name missing") + "\n";
         }
         if (f.rate.value.length==0) {
-            _alertString += "- Rate missing\n";
+            _alertString += _("- Rate missing") + "\n";
         }
         if (f.symbol.value.length==0) {
-            _alertString += "- Symbol missing\n";
+            _alertString += _("- Symbol missing") + "\n";
         }
         if (_alertString.length==0) {
             document.Aform.submit();
         } else {
-            alertString2 = "Form not submitted because of the following problem(s)\n";
+            alertString2 = _("Form not submitted because of the following problem(s)") + "\n";
             alertString2 += "------------------------------------------------------------------------------------\n";
             alertString2 += _alertString;
             alert(alertString2);
