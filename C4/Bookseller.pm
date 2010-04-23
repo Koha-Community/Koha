@@ -18,6 +18,7 @@ package C4::Bookseller;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+#use warnings; FIXME - Bug 2505
 
 use vars qw($VERSION @ISA @EXPORT);
 

@@ -1,6 +1,7 @@
 package TmplTokenizer;
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use TmplTokenType;
 use TmplToken;
 use VerboseWarnings qw( pedantic_p error_normal warn_normal warn_pedantic );

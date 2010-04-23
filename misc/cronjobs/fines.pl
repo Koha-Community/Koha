@@ -28,6 +28,7 @@
 
 # FIXME: use FinesMode as described or change syspref description
 use strict;
+#use warnings; FIXME - Bug 2505
 
 BEGIN {
     # find Koha's Perl modules

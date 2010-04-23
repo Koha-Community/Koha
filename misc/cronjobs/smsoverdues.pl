@@ -27,6 +27,9 @@
 
 # $Id: sendoverdues.pl,v 1.1.2.1 2007/03/26 22:38:09 tgarip1957 Exp $
 
+#use strict;
+#use warnings; FIXME - Bug 2505
+
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this

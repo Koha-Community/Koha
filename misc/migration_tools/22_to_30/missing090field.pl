@@ -3,6 +3,7 @@
 #  Written by TG on 01/10/2005
 #  Revised by Joshua Ferraro on 03/31/2006
 use strict;
+#use warnings; FIXME - Bug 2505
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this

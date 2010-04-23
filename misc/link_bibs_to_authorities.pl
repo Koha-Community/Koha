@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
+use warnings;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this

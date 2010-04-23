@@ -19,7 +19,8 @@ package C4::Record;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 #
-use strict;# use warnings; #FIXME: turn off warnings before release
+use strict;
+#use warnings; FIXME - Bug 2505
 
 # please specify in which methods a given module is used
 use MARC::Record; # marc2marcxml, marcxml2marc, html2marc, changeEncoding

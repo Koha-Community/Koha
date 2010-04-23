@@ -26,7 +26,7 @@ script to execute returns of books
 =cut
 
 use strict;
-# use warnings; # FIXME
+#use warnings; FIXME - Bug 2505
 
 use CGI;
 use C4::Context;

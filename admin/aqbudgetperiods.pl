@@ -42,6 +42,7 @@ script to administer the budget periods table
 
 ## modules
 use strict;
+#use warnings; FIXME - Bug 2505
 use Number::Format qw(format_price);
 use CGI;
 use List::Util qw/min/;

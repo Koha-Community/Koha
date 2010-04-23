@@ -18,8 +18,9 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use CGI;
 use strict;
+#use warnings; FIXME - Bug 2505
+use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Biblio;

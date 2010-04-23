@@ -35,6 +35,7 @@ This script needs a biblionumber as parameter
 =cut
 
 use strict;
+#use warnings; FIXME - Bug 2505
 
 use C4::Auth;
 use C4::Context;

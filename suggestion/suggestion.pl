@@ -16,6 +16,7 @@
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+#use warnings; FIXME - Bug 2505
 require Exporter;
 use CGI;
 use C4::Auth;    # get_template_and_user

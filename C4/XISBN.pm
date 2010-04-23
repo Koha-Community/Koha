@@ -27,6 +27,7 @@ use LWP::UserAgent;
 use HTTP::Request::Common;
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {

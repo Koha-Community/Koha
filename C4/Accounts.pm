@@ -19,6 +19,7 @@ package C4::Accounts;
 
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Stats;
 use C4::Members;

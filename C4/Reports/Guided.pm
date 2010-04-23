@@ -18,7 +18,7 @@ package C4::Reports::Guided;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-# use warnings;  # FIXME: this module needs a lot of repair to run clean under warnings
+#use warnings; FIXME - Bug 2505 this module needs a lot of repair to run clean under warnings
 use CGI;
 use Carp;
 

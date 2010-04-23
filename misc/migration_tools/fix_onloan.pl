@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use  C4::Context;
 use C4::Items;
 use C4::Biblio;

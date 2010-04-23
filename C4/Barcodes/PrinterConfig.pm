@@ -16,6 +16,7 @@ package C4::Barcodes::PrinterConfig;
 # Suite 330, Boston, MA  02111-1307 USA
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use vars qw($VERSION @EXPORT);
 
 use PDF::API2;

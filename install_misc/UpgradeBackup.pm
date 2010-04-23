@@ -18,6 +18,7 @@ package install_misc::UpgradeBackup;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use File::Compare qw(compare);
 use Cwd qw(cwd);
 use File::Copy;

@@ -12,6 +12,7 @@
 
 # NOTE:  If you do something more than once in here, make it table driven.
 use strict;
+#use warnings; FIXME - Bug 2505
 
 # CPAN modules
 use DBI;

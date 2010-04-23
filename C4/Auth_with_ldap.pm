@@ -18,7 +18,7 @@ package C4::Auth_with_ldap;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-# use warnings; almost?
+#use warnings; FIXME - Bug 2505
 use Digest::MD5 qw(md5_base64);
 
 use C4::Debug;

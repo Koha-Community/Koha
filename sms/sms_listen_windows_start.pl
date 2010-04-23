@@ -2,6 +2,7 @@
 # script that starts the zebraqueue
 #  Written by TG on 01/08/2006
 use strict;
+#use warnings; FIXME - Bug 2505
 
 use Win32::Process;
 use Win32;

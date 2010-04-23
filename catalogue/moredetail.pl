@@ -19,6 +19,7 @@
 
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use C4::Koha;
 use CGI;
 use C4::Biblio;

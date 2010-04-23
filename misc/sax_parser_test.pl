@@ -1,11 +1,17 @@
 #!/usr/bin/perl
+
+use strict;
+use warnings;
+
 use XML::SAX;
+use Encode;
+
 my $parser = XML::SAX::ParserFactory->parser(
 Handler => MySAXHandler->new
 );
 binmode STDOUT, ":utf8";
-print "\x{65}\x{301}\n"; 
-use Encode; $parser->parse_string(encode_utf8("<xml>\x{65}\x{301}</xml>"));
+print "\x{65}\x{301}\n";
+$parser->parse_string(encode_utf8("<xml>\x{65}\x{301}</xml>"));
 $parser->parse_string("<xml>\xEF\xBB\xBF\x{65}\x{301}</xml>");
 
 package MySAXHandler;

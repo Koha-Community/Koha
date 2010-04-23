@@ -17,6 +17,7 @@
 
 
 use strict;
+#use warnings; FIXME - Bug 2505
 
 use CGI;
 

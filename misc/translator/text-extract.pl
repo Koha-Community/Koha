@@ -1,4 +1,6 @@
 #!/usr/bin/perl
+#use strict;
+#use warnings; FIXME - Bug 2505
 use HTML::Tree;
 use Getopt::Std;
 getopt("f:");

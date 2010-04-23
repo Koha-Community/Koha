@@ -2,6 +2,7 @@
 # script that rebuild EDITORS
 
 use strict;
+#use warnings; FIXME - Bug 2505
 
 # Koha modules used
 use MARC::File::USMARC;

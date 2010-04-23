@@ -2,6 +2,8 @@
 
 # script to shift marc to biblioitems
 # scraped from updatedatabase for dev week by chris@katipo.co.nz
+use strict;
+#use warnings; FIXME - Bug 2505
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -13,7 +15,6 @@ use C4::AuthoritiesMarc;
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
-use strict;
 print "moving MARC record to marc_header table\n";
 
 my $dbh = C4::Context->dbh();

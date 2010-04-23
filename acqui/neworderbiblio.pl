@@ -56,6 +56,7 @@ the basket number to know on which basket this script have to add a new order.
 =cut
 
 use strict;
+#use warnings; FIXME - Bug 2505
 
 use C4::Search;
 use CGI;

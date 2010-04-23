@@ -19,6 +19,9 @@
 #
 #
 
+#use strict;
+#use warnings; FIXME - Bug 2505
+
 use File::Temp;
 use File::Copy;
 use CGI;

@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use strict;
+#use warnings; FIXME - Bug 2505
 use CGI;
 use C4::Output;
 

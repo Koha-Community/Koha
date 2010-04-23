@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 use strict;
+#use warnings; FIXME - Bug 2505
 require Exporter;
 
 use CGI;
