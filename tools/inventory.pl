@@ -65,13 +65,13 @@ my ($template, $borrowernumber, $cookie)
 
 my $branches = GetBranches();
 my @branch_loop;
-push @branch_loop, {value => "", branchname => "All Locations", };
 for my $branch_hash (keys %$branches) {
 	push @branch_loop, {value => "$branch_hash",
 	                   branchname => $branches->{$branch_hash}->{'branchname'}, 
 	                   selected => ($branch_hash eq $branchcode?1:0)};	
 }
 
+@branch_loop = sort {$a->{branchname} cmp $b->{branchname}} @branch_loop;
 my @authorised_value_list;
 my $authorisedvalue_categories;
 

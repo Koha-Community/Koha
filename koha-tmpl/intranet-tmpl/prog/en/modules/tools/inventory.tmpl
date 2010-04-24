@@ -77,6 +77,7 @@ $(document).ready(function(){
         <legend>Select items you want to check</legend>
         <ol><li>
         <label for="branchloop">Library</label><select id="branchloop" name="branchcode" style="width:12em;">
+            <option value="">All Locations</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
             <!-- TMPL_IF name="selected" -->
                 <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
