@@ -91,8 +91,12 @@ if ($item) {
         ModItemTransfer( $item, $fbr, $tbr );
     }
 }
-$template->param( all_branches_link => $input->url . '?allbranches=1&' . $input->query_string )
-  unless $all_branches;
+if ( C4::Context->preference('IndependantBranches') ) {
+    undef $all_branches;
+} else {
+    $template->param( all_branches_link => $input->url . '?allbranches=1&' . $input->query_string )
+      unless $all_branches;
+}
 
 my (@reservloop, @overloop);
 my ($reservcount, $overcount);
