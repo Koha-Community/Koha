@@ -162,9 +162,12 @@ sub lastseenat {
     $sth->execute( $itm, $brc, $itm, $brc );
     my ($date1) = $sth->fetchrow_array;
     $sth = $dbh->prepare(
-"SELECT max(datearrived) FROM branchtransfers WHERE itemnumber=? AND tobranch = ?"
+    "SELECT MAX(transfer) FROM (SELECT max(datearrived) AS transfer FROM branchtransfers WHERE itemnumber=? AND tobranch = ?
+     UNION ALL
+     SELECT max(datesent) AS transfer FROM branchtransfers WHERE itemnumber=? AND frombranch = ?
+	) tmp"
     );
-    $sth->execute( $itm, $brc );
+    $sth->execute( $itm, $brc, $itm, $brc );
     my ($date2) = $sth->fetchrow_array;
 
     my $date = ( $date1 lt $date2 ) ? $date2 : $date1 ;
