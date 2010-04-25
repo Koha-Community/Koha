@@ -179,6 +179,8 @@ $tabsysprefs{ReturnToShelvingCart}           = "Circulation";
 $tabsysprefs{DisplayClearScreenButton}       = "Circulation";
 $tabsysprefs{AllowAllMessageDeletion}        = "Circulation";
 $tabsysprefs{OverdueNoticeBcc}               = "Circulation";
+$tabsysprefs{OverduesBlockCirc}              = "Circulation";
+
 
 # Staff Client
 $tabsysprefs{TemplateEncoding}        = "StaffClient";

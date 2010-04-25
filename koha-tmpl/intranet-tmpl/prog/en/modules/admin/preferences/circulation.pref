@@ -185,6 +185,13 @@ Circulation:
             - pref: PrintNoticesMaxLines
               class: integer
             - "item lines in a printed overdue notice. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.  Set to 0 to include all overdue items in the notice, no matter how many there are."
+        -
+            - pref: OverduesBlockCirc
+              choices:
+                  block: Block
+                  noblock: "Don't block"
+                  confirmatio: Ask for confirmation
+            - when checking out to a borrower that has overdues outstanding	    
     Holds Policy:
         -
             - pref: AllowHoldPolicyOverride

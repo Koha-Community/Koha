@@ -337,6 +337,10 @@ function refocus(calendar) {
         <!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
             <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
         <!-- /TMPL_IF -->
+	
+	<!-- TMPL_IF NAME="USERBLOCKEDREMAINING" --:
+	    <li>Check out blocked as borrower has overdues outstanding</li>
+	<!-- /TMPL_IF -->
         </ul>
 
     <!-- TMPL_IF NAME="memberofinstution" -->
