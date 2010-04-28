@@ -1,0 +1,73 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Serials &rsaquo; <!-- TMPL_VAR name="bibliotitle" escape="html" --> &rsaquo; Modify subscription history </title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+</head>
+<body>
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="serials-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->"><i><!-- TMPL_VAR NAME="bibliotitle" escape="html" --></i></a> &rsaquo; Modify subscription</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+   <div id="yui-main">
+   <div class="yui-b">
+
+<!--TMPL_IF Name="history"-->
+<!-- TMPL_IF Name="success" -->
+    <!-- TMPL_IF EXPR="success == 1" -->
+	<p>The subscription history has been successfully modified.</p>
+    <!-- TMPL_ELSE -->
+	<p>The subscription history could not be modified.</p>
+    <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+<div id="subscription_form_history">
+    <h2>Subscription history</h2>
+    <form method="post" action="/cgi-bin/koha/serials/subscription-history.pl">
+        <input type="hidden" name="modhistory" value="1" />
+        <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+        <p>Hint : you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify these fields with care, as future serial receive will continue to update them automatically.</p>
+        <fieldset class="rows">
+		<ol>
+            <li>
+            <label for="histstartdate">Subscription start date</label>
+            <input type="text" name="histstartdate" id="histstartdate" value="<!-- TMPL_VAR name="histstartdate" -->" /><div class="hint"> (start date of the 1st subscription)</div>
+            </li>
+            <li>
+            <label for="histenddate">Subscription end date</label>
+            <input type="text" name="histenddate" id="histenddate" value="<!-- TMPL_VAR name="histenddate" -->" /> <div class="hint">(if empty, subscription is still active)</div>
+            </li>
+            <li>
+                <label for="recievedlist">Received issues</label>
+            <textarea name="recievedlist" id="recievedlist" cols="60" rows="5"><!-- TMPL_VAR name="recievedlist" --></textarea>
+            </li>
+            <li>
+                <label for="missinglist">Missing issues</label>
+            <textarea name="missinglist" id="missinglist" cols="60" rows="5"><!-- TMPL_VAR name="missinglist" --></textarea>
+            </li>
+            <li>
+                <label for="opacnote">Note for OPAC</label>
+            <textarea name="opacnote" id="opacnote" cols="60" rows="5"><!-- TMPL_VAR name="opacnote" --></textarea>
+            </li>
+            <li>
+                <label for="librariannote">Note for staff</label>
+            <textarea name="librariannote" id="librariannote" cols="60" rows="5"><!-- TMPL_VAR name="librariannote" --></textarea>
+            </li>
+		</ol>
+        </fieldset>
+    <fieldset class="action"><input type="submit" value="Save subscription history"  /></fieldset>
+    </form>
+</div>
+<!--TMPL_ELSE-->
+    <p>Manual history is not enabled for this subscription.</p>
+<!-- /TMPL_IF -->
+</div>
+</div>
+
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="serials-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

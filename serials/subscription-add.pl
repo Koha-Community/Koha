@@ -278,7 +278,6 @@ if ($op eq 'addsubscription') {
     my $missinglist = $query->param('missinglist');
     my $opacnote = $query->param('opacnote');
     my $librariannote = $query->param('librariannote');
-    my $history_only = $query->param('history_only');
 	#  If it's  a mod, we need to check the current 'expected' issue, and mod it in the serials table if necessary.
     if ( $nextacquidate ne $nextexpected->{planneddate}->output('iso') ) {
         ModNextExpected($subscriptionid,C4::Dates->new($nextacquidate,'iso'));
@@ -286,9 +285,6 @@ if ($op eq 'addsubscription') {
         $firstissuedate = $nextacquidate if($nextexpected->{isfirstissue});
     }
 
-    if ($history_only) {
-        ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
-    } else {
         &ModSubscription(
             $auser,           $branchcode,   $aqbooksellerid, $cost,
             $aqbudgetid,      $startdate,    $periodicity,    $firstissuedate,
@@ -302,7 +298,6 @@ if ($op eq 'addsubscription') {
             $notes,           $letter,       $hemisphere,     $manualhistory,$internalnotes,
             $serialsadditems, $subscriptionid,
         );
-    }
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
 } else {
 
