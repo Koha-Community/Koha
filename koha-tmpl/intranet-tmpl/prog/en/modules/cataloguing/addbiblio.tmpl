@@ -41,7 +41,7 @@ function confirmnotdup(){
  * 
  * 
  */
-function Check(){
+function Check(dest){
     var StrAlert = AreMandatoriesNotOk();
     if( ! StrAlert ){
         document.f.submit();
@@ -631,6 +631,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     </script>
 <!--TMPL_ELSE-->
     <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
+    <input type="hidden" value="" id="redirect" name="redirect" />
 	<input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 <!-- /TMPL_IF -->
 	
@@ -643,27 +644,55 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 	 $(document).ready(function() {
 		$("#z3950searchc").empty();
+        $("#savebutton").empty();
 	    yuiToolbar();
 	 });
+
+    var onOption = function () {
+        return Check();
+    }
+
+    function redirect(dest){
+        $("#redirect").attr("value",dest);
+        return Check();
+    }
+
+    var savemenu = [
+        { text: _("Save and view record"), value: 1, onclick: {fn:function(){redirect("view");}} },
+        { text: _("Save and edit items"), value: 2, onclick: {fn:function(){redirect("items");}} }
+    ];
+
 
 	// YUI Toolbar Functions
 
 	function yuiToolbar() {
-	    new YAHOO.widget.Button("addbiblio");
+	    // new YAHOO.widget.Button("addbiblio");
+
+        var savesplitmenu = new YAHOO.widget.Button({
+            type: "split",
+            label: _("Save"),
+            id: "addbiblio",
+            name: "savemenubutton",
+            menu: savemenu,
+            container: "savebutton"
+         });
+
+        savesplitmenu.on("click", onOption); 
+
 		new YAHOO.widget.Button({
-                                            id: "z3950search", 
-                                            type: "button", 
-                                            label: _("Z39.50 Search"), 
-                                            container: "z3950searchc",
-											onclick: {fn:function(){PopupZ3950()}}
-                                        });
+            id: "z3950search",
+            type: "button",
+            label: _("Z39.50 Search"),
+            container: "z3950searchc",
+			onclick: {fn:function(){PopupZ3950()}}
+        });
 	}
 
 	//]]>
 	</script>
 
 		<ul class="toolbar">
-			<li><input id="addbiblio" type="submit" value="Save" /></li>
+			<li id="savebutton"><input id="addbiblio" type="submit" value="Save" /></li>
 			<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
 			<li id="changeframework"><label for="Frameworks">Change framework: </label>
 			<select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">

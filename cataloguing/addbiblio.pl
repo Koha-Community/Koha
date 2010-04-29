@@ -829,6 +829,7 @@ my $z3950         = $input->param('z3950');
 my $op            = $input->param('op');
 my $mode          = $input->param('mode');
 my $frameworkcode = $input->param('frameworkcode');
+my $redirect      = $input->param('redirect');
 my $dbh           = C4::Context->dbh;
 
 my $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
@@ -930,13 +931,13 @@ if ( $op eq "addbiblio" ) {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
         }
 
-        if ($mode ne "popup" && !$is_a_modif){
+        if (($mode ne "popup" && !$is_a_modif) || $redirect eq "items"){
             print $input->redirect(
                 "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
             );
             exit;
         }
-		elsif($is_a_modif){
+		elsif($is_a_modif || $redirect eq "view"){
             my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
             my $views = { C4::Search::enabled_staff_search_views };
             if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
