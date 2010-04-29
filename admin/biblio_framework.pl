@@ -91,7 +91,7 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	# Check both categoryitem and biblioitems, see Bug 199
-    my $sth = $dbh->prepare("select count(*) as total from marc_tag_structure where frameworkcode=?");
+    my $sth = $dbh->prepare("select count(*) as total from biblio where frameworkcode=?");
     $sth->execute($frameworkcode);
     my $total = $sth->fetchrow_hashref->{total};
 
