@@ -43,42 +43,43 @@ my ($template, $loggedinuser, $cookie)
 				debug => 1,
 				});
 
-    my $subscriptionid = $query->param('subscriptionid');
-    my $modhistory = $query->param('modhistory');
-    my $subs = &GetSubscription($subscriptionid);
+my $subscriptionid = $query->param('subscriptionid');
+my $modhistory = $query->param('modhistory');
+my $subs = &GetSubscription($subscriptionid);
 
 ## FIXME : Check rights to edit if mod. Could/Should display an error message.
-    if ($subs->{'cannotedit'}){
-      warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
-      print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
-    }
+if ($subs->{'cannotedit'}){
+  warn "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+  print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+}
+
+# Modifications has been sent
+if ($modhistory) {
+    my $histstartdate = format_date_in_iso($query->param('histstartdate'));
+    my $histenddate = format_date_in_iso($query->param('histenddate'));
+    my $recievedlist = $query->param('recievedlist');
+    my $missinglist = $query->param('missinglist');
+    my $opacnote = $query->param('opacnote');
+    my $librariannote = $query->param('librariannote');
+    my $return = ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
+    $template->param(success => 1) if ($return == 1);
+
+    # Getting modified data
+    $subs = &GetSubscription($subscriptionid);
+} 
+
+# Date handling
+for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
+    # TODO : Handle date formats properly.
+     if ($subs->{$_} eq '0000-00-00') {
+	$subs->{$_} = ''
+    } else {
+	$subs->{$_} = format_date($subs->{$_});
+    }   
+} 
+
+$template->param($subs);
+$template->param(history => ($subs->{manualhistory} == 1 ));
 
 
-  for (qw(startdate firstacquidate histstartdate enddate histenddate)) {
-        # TODO : Handle date formats properly.
-         if ($subs->{$_} eq '0000-00-00') {
-            $subs->{$_} = ''
-        } else {
-            $subs->{$_} = format_date($subs->{$_});
-        }   
-          } 
-
-
-        $template->param($subs);
-        $template->param(
-                    history => ($subs->{manualhistory} == 1 ),
-                    );
-
-
-    if ($modhistory) {
-	my $histstartdate = format_date_in_iso($query->param('histstartdate'));
-	my $histenddate = format_date_in_iso($query->param('histenddate'));
-	my $recievedlist = $query->param('recievedlist');
-	my $missinglist = $query->param('missinglist');
-	my $opacnote = $query->param('opacnote');
-	my $librariannote = $query->param('librariannote');
-	my $return = ModSubscriptionHistory ($subscriptionid,$histstartdate,$histenddate,$recievedlist,$missinglist,$opacnote,$librariannote);
-	$template->param(success => 1) if ($return == 1);
-    } 
-
-	output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $query, $cookie, $template->output;
