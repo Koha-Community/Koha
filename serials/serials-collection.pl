@@ -105,6 +105,7 @@ if (@subscriptionid){
     $subs->{ "status" . $subs->{'status'} } = 1;
     $subs->{startdate}     = format_date( $subs->{startdate} );
     $subs->{histstartdate} = format_date( $subs->{histstartdate} );
+    
     if ( !defined $subs->{enddate} || $subs->{enddate} eq '0000-00-00' ) {
         $subs->{enddate} = '';
     }
@@ -124,7 +125,7 @@ if (@subscriptionid){
   my $subscriptioninformation = GetFullSubscriptionsFromBiblionumber($biblionumber);
   $subscriptions=PrepareSerialsData($subscriptioninformation);
 }
-
+$template->param($subscriptiondescs->[0]);
 my $title = $subscriptiondescs->[0]{bibliotitle};
 my $yearmax=($subscriptions->[0]{year} eq "manage" && scalar(@$subscriptions)>1)? $subscriptions->[1]{year} :$subscriptions->[0]{year};
 my $yearmin=$subscriptions->[scalar(@$subscriptions)-1]{year};
