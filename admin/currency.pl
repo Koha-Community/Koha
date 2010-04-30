@@ -38,34 +38,27 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use CGI;
 use C4::Context;
 use C4::Auth;
 use C4::Dates qw(format_date);
 use C4::Output;
+use C4::Budgets qw/GetCurrency GetCurrencies/;
 
-sub StringSearch  {
-    my $query = "SELECT * FROM currency WHERE (currency LIKE ?) ORDER BY currency";
-    my $sth = C4::Context->dbh->prepare($query);
-    $sth->execute((shift || '') . '%');
-    return $sth->fetchall_arrayref({});
-}
-
-my $input = new CGI;
-my $searchfield = $input->param('searchfield') || $input->param('description') || '';
+my $input = CGI->new;
+my $searchfield = $input->param('searchfield') || $input->param('description') || q{};
 my $offset      = $input->param('offset') || 0;
-my $op          = $input->param('op')     || '';
-my $script_name = "/cgi-bin/koha/admin/currency.pl";
+my $op          = $input->param('op')     || q{};
+my $script_name = '/cgi-bin/koha/admin/currency.pl';
 my $pagesize = 20;
 
 my ($template, $loggedinuser, $cookie) = get_template_and_user({
-    template_name => "admin/currency.tmpl",
+    template_name => 'admin/currency.tmpl',
     query => $input,
-    type => "intranet",
+    type => 'intranet',
     flagsrequired => {parameters => 1},
     authnotrequired => 0,
-    debug => 1,
 });
 
 $searchfield=~ s/\,//g;
@@ -76,121 +69,150 @@ $template->param(searchfield => $searchfield,
 
 my $dbh = C4::Context->dbh;
 
-################## ADD_FORM ##################################
-# called by default. Used to create form to add or  modify a record
-if ($op eq 'add_form') {
-    $template->param(add_form => 1);
-    #---- if primkey exists, it's a modify action, so read values to modify...
-    my $data;
-    if ($searchfield) {
-        my $sth=$dbh->prepare("select * from currency where currency=?");
-        $sth->execute($searchfield);
-        $data=$sth->fetchrow_hashref;
-    }
-    foreach (keys %$data) {
-        $template->param($_ => $data->{$_});
-    }
+if ( $op eq 'add_form' ) {
+    add_form($searchfield);
+} elsif ( $op eq 'save' ) {
+    add_validate();
+    print $input->redirect('/cgi-bin/koha/admin/currency.pl');
+} elsif ( $op eq 'delete_confirm' ) {
+    delete_confirm($searchfield);
+} elsif ( $op eq 'delete_confirmed' ) {
+    delete_currency($searchfield);
+} else {
+    default_path($searchfield);
+}
 
-    my $date = $template->param('timestamp');
-    ($date) and $template->param('timestamp' => format_date($date));
-                                                    # END $OP eq ADD_FORM
-################## ADD_VALIDATE ##################################
-# called by add_form, used to insert/modify data in DB
-} elsif ($op eq 'save') {
-    my $dbh = C4::Context->dbh;
-    my $check = $dbh->prepare("select count(*) as count from currency where currency = ?");
-
-    $dbh->do("UPDATE currency SET active = 0") if (    $input->param('active')  == 1);
-
-    $check->execute($input->param('currency'));
-    my $count =   $check->fetchrow ;
-    if ( $count > 0  )
-    {
-        my $sth = $dbh->prepare(qq|
-                UPDATE currency
-                    SET rate = ?,
-                    symbol = ?,
-                    active = ?
-            WHERE currency = ?  |  );
-
-        $sth->execute(  $input->param('rate'),
-                        $input->param('symbol')||'',
-                        $input->param('active')||0,
-                        $input->param('currency'),
-                        );
-    }
-    else
-    {
-        my $sth = $dbh->prepare(qq|
-                    INSERT INTO currency (currency, rate, symbol, active) VALUES (?,?,?,?)   |);
-
-        $sth->execute(  $input->param('currency'),
-                        $input->param('rate'),
-                        $input->param('symbol')||'',
-                        $input->param('active')||0,
-                        );
-    }
-
-print $input->redirect("/cgi-bin/koha/admin/currency.pl");
-                                                    # END $OP eq ADD_VALIDATE
-################## DELETE_CONFIRM ##################################
-# called by default form, used to confirm deletion of data in DB
-} elsif ($op eq 'delete_confirm') {
-    $template->param(delete_confirm => 1);
-    my $sth=$dbh->prepare("select count(*) as total from aqbooksellers where currency=?");
-    $sth->execute($searchfield);
-    my $total = $sth->fetchrow_hashref;
-    my $sth2=$dbh->prepare("select currency,rate from currency where currency=?");
-    $sth2->execute($searchfield);
-    my $data=$sth2->fetchrow_hashref;
-
-    if ($total->{'total'} >0) {
-        $template->param(totalgtzero => 1);
-    }
-
-    $template->param(rate => $data->{'rate'},
-            total => $total);
-                                                    # END $OP eq DELETE_CONFIRM
-################## DELETE_CONFIRMED ##################################
-# called by delete_confirm, used to effectively confirm deletion of data in DB
-} elsif ($op eq 'delete_confirmed') {
-    $template->param(delete_confirmed => 1);
-    my $sth=$dbh->prepare("delete from currency where currency=?");
-    $sth->execute($searchfield);
-                                                    # END $OP eq DELETE_CONFIRMED
-################## DEFAULT ##################################
-} else { # DEFAULT
-    $template->param(else => 1);
-
-    my $results = StringSearch($searchfield);
-    my $count = scalar(@$results);
-    my @loop;
-    my $activecurrency;
-    for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
-        # warn Data::Dumper::Dumper($results->[$i]);
-        if($results->[$i]{'active'} == 1){ $activecurrency = 1; }
-        push @loop, {
-            currency  => $results->[$i]{'currency'},
-            rate      => $results->[$i]{'rate'},
-            symbol    => $results->[$i]{'symbol'},
-            timestamp => format_date($results->[$i]{'timestamp'}),
-            active    => $results->[$i]{'active'},
-        };
-    }
-    $template->param(
-        loop => \@loop,
-        activecurrency => $activecurrency,
-    );
-
-    if ($offset>0) {
-        $template->param(offsetgtzero => 1,
-                prevpage => $offset-$pagesize);
-    }
-
-    if ($offset+$pagesize < scalar @$results) {
-        $template->param(ltcount => 1,
-                nextpage => $offset+$pagesize);
-    }
-} #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
 
+sub default_path {
+    my $searchfield = shift;
+    $template->param( else => 1 );
+
+    my @currencies = GetCurrencies();
+    if ($searchfield) {
+        @currencies = grep { $_->{currency} =~ m/^$searchfield/o } @currencies;
+    }
+    my $end_of_page = $offset + $pagesize;
+    if ( $end_of_page > @currencies ) {
+        $end_of_page = @currencies;
+    } else {
+        $template->param(
+            ltcount  => 1,
+            nextpage => $end_of_page
+        );
+    }
+    $end_of_page--;
+    my @display_curr = @currencies[ $offset .. $end_of_page ];
+    for my $c (@display_curr) {
+        $c->{timestamp} = format_date( $c->{timestamp} );
+    }
+    my $activecurrency = GetCurrency();
+
+    $template->param(
+        loop           => \@display_curr,
+        activecurrency => defined $activecurrency,
+    );
+
+    if ( $offset > 0 ) {
+        $template->param(
+            offsetgtzero => 1,
+            prevpage     => $offset - $pagesize
+        );
+    }
+    return;
+}
+
+sub delete_currency {
+    my $curr = shift;
+
+    # TODO This should be a method of Currency
+    # also what about any orders using this currency
+    $template->param( delete_confirmed => 1 );
+    $dbh->do( 'delete from currency where currency=?', {}, $curr );
+    return;
+}
+
+sub delete_confirm {
+    my $curr = shift;
+
+    $template->param( delete_confirm => 1 );
+    my $total_row = $dbh->selectrow_hashref(
+        'select count(*) as total from aqbooksellers where currency=?',
+        {}, $curr );
+
+    my $curr_ref = $dbh->selectrow_hashref(
+        'select currency,rate from currency where currency=?',
+        {}, $curr );
+
+    if ( $total_row->{total} ) {
+        $template->param( totalgtzero => 1 );
+    }
+
+    $template->param(
+        rate  => $curr_ref->{rate},
+        total => $total_row->{total}
+    );
+
+    return;
+}
+
+sub add_form {
+    my $curr = shift;
+
+    $template->param( add_form => 1 );
+
+    #---- if primkey exists, it's a modify action, so read values to modify...
+    if ($curr) {
+        my $curr_rec =
+          $dbh->selectrow_hashref( 'select * from currency where currency=?',
+            {}, $curr );
+        for ( keys %{$curr_rec} ) {
+            $template->param( $_ => $curr_rec->{$_} );
+        }
+    }
+    my $date = $template->param('timestamp');
+    if ($date) {
+        $template->param( 'timestamp' => format_date($date) );
+    }
+
+    return;
+}
+
+sub add_validate {
+    $template->param( add_validate => 1 );
+
+    if ( $input->param('active') == 1 ) {
+        $dbh->do('UPDATE currency SET active = 0');
+    }
+    my $rec = {
+        rate     => $input->param('rate'),
+        symbol   => $input->param('symbol') || q{},
+        active   => $input->param('active') || 0,
+        currency => $input->param('currency'),
+    };
+
+    my ($row_count) = $dbh->selectrow_array(
+        'select count(*) as count from currency where currency = ?',
+        {}, $input->param('currency') );
+    if ($row_count) {
+        $dbh->do(
+q|UPDATE currency SET rate = ?, symbol = ?, active = ? WHERE currency = ? |,
+            {},
+            $rec->{rate},
+            $rec->{symbol},
+            $rec->{active},
+            $rec->{currency}
+        );
+    } else {
+        $dbh->do(
+q|INSERT INTO currency (currency, rate, symbol, active) VALUES (?,?,?,?) |,
+            {},
+            $rec->{currency},
+            $rec->{rate},
+            $rec->{symbol},
+            $rec->{active}
+        );
+
+    }
+    return;
+}
