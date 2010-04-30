@@ -1537,7 +1537,7 @@ sub GetCities {
     $city{""} = "";
     while ( my $data = $sth->fetchrow_hashref ) {
         push @id, $data->{'city_zipcode'}."|".$data->{'city_name'};
-        $city{ $data->{'city_zipcode'}."|".$data->{'city_name'} } = $data->{'city_name'} . " " . $data->{'city_zipcode'};
+        $city{ $data->{'city_zipcode'}."|".$data->{'city_name'} } = $data->{'city_name'};
     }
 
 #test to know if the table contain some records if no the function return nothing
