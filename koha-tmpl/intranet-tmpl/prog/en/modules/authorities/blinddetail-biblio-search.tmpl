@@ -23,9 +23,6 @@
             <!-- TMPL_IF NAME="clear" -->
                 if (subfield){subfield.value="" ;}
             <!--TMPL_ELSE-->      
-                if(code.value=='9'){
-                        subfield.value = "<!-- TMPL_VAR ESCAPE="JS" NAME="authid" -->";
-                }
             <!-- TMPL_LOOP NAME="0XX" -->
                 <!-- TMPL_LOOP NAME="subfield" -->
                     if (code.value == "<!-- TMPL_VAR ESCAPE="JS" NAME="marc_subfield" -->"){
@@ -33,6 +30,9 @@
                     }
                 <!-- /TMPL_LOOP -->
             <!-- /TMPL_LOOP -->
+                if(code.value=='9'){
+                        subfield.value = "<!-- TMPL_VAR ESCAPE="JS" NAME="authid" -->";
+                }
             <!--/TMPL_IF-->
             }
         }
