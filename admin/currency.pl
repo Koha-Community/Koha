@@ -181,15 +181,16 @@ sub add_form {
 sub add_validate {
     $template->param( add_validate => 1 );
 
-    if ( $input->param('active') == 1 ) {
-        $dbh->do('UPDATE currency SET active = 0');
-    }
     my $rec = {
         rate     => $input->param('rate'),
         symbol   => $input->param('symbol') || q{},
         active   => $input->param('active') || 0,
         currency => $input->param('currency'),
     };
+
+    if ( $rec->{active} == 1 ) {
+        $dbh->do('UPDATE currency SET active = 0');
+    }
 
     my ($row_count) = $dbh->selectrow_array(
         'select count(*) as count from currency where currency = ?',
