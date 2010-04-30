@@ -1079,6 +1079,7 @@ sub buildQuery {
 
             # COMBINE OPERANDS, INDEXES AND OPERATORS
             if ( $operands[$i] ) {
+		$operands[$i]=~s/^\s+//;
 
               # A flag to determine whether or not to add the index to the query
                 my $indexes_set;
