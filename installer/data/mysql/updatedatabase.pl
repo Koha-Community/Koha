@@ -3571,6 +3571,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.131";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+	$dbh->do(q{
+INSERT IGNORE INTO message_transport_types (message_transport_type) VALUES ('print'),('feed');
+    });
+    print "Upgrade to $DBversion done (Adding index to language_descriptions table)\n";
+    SetVersion ($DBversion);
+}
+
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table

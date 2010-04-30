@@ -3,4 +3,5 @@ INSERT INTO message_transport_types
 values
 ('email'),
 ('print'),
-('sms');
+('sms'),
+('feed');
