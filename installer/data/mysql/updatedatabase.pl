@@ -3555,7 +3555,7 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.02.00.129";
+$DBversion = "3.01.00.129";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("UPDATE `permissions` SET `code` = 'items_batchdel' WHERE `permissions`.`module_bit` =13 AND `permissions`.`code` = 'batchdel' LIMIT 1 ;");
 	$dbh->do("UPDATE `permissions` SET `code` = 'items_batchmod' WHERE `permissions`.`module_bit` =13 AND `permissions`.`code` = 'batchmod' LIMIT 1 ;");
