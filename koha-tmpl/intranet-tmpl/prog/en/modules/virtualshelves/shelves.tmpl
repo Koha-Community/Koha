@@ -265,7 +265,7 @@ function placeHold () {
         <li><label class="required" for="addshelf">List Name:</label><input id="addshelf" type="text" name="addshelf" size="25" /></li>
         <li><span class="label">Owner: </span><input type="hidden" name="owner" id="owner" value="<!-- TMPL_VAR name="loggedinuser" -->" /><!-- TMPL_VAR name="loggedinusername" --></li>
 		<li><label for="sortfield" >Sort this list by: </label>
-		<select name="sortfield">
+		<select name="sortfield" id="sortfield">
 		<!-- TMPL_IF NAME="sort_title" --><option value="title" selected="selected">Title</option><!-- TMPL_ELSE --><option value="title">Title</option><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="sort_author" --><option value="author" selected="selected">Author</option><!-- TMPL_ELSE --><option value="author">Author</option><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="sort_copyrightdate" --><option value="copyrightdate" selected="selected">Copyrightdate</option><!-- TMPL_ELSE --><option value="copyrightdate">Copyrightdate</option><!-- /TMPL_IF -->
@@ -440,7 +440,7 @@ function placeHold () {
 		</div>
 <!-- /TMPL_UNLESS -->
 
-<form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl"/>
+<form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
     <!-- Value will be set here by placeHold() -->
     <input id="hold_form_biblios" type="hidden" name="biblionumbers" value="" />
     <input type="hidden" name="multi_hold" value="1"/>
