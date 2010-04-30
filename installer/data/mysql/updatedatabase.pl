@@ -1959,6 +1959,14 @@ END_SQL
     print "Upgrade to $DBversion done (warning added to OPACShelfBrowser system preference)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.00.00.108";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE authorised_values SET authorised_value=UPPER(authorised_value) WHERE category='COUNTRY'");
+    print "Upgrade to $DBversion done (Converts COUNTRY authorised values to uppercase)\n";
+    SetVersion ($DBversion);
+}
+
 if (C4::Context->preference("Version") =~/3\.00/) {
         my $perllibdir=C4::Context->config('intranetdir');
 	my $return=do qq($perllibdir/installer/data/mysql/updatedatabase30.pl);
