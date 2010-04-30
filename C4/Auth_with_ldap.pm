@@ -58,7 +58,7 @@ my $prefhost  = $ldap->{hostname}	or die ldapserver_error('hostname');
 my $base      = $ldap->{base}		or die ldapserver_error('base');
 $ldapname     = $ldap->{user}		;
 $ldappassword = $ldap->{pass}		;
-our %mapping  = %{$ldap->{mapping}} || (); #	or die ldapserver_error('mapping');
+our %mapping  = %{$ldap->{mapping}}; # FIXME dpavlin -- don't die because of || (); from 6eaf8511c70eb82d797c941ef528f4310a15e9f9
 my @mapkeys = keys %mapping;
 $debug and print STDERR "Got ", scalar(@mapkeys), " ldap mapkeys (  total  ): ", join ' ', @mapkeys, "\n";
 @mapkeys = grep {defined $mapping{$_}->{is}} @mapkeys;
@@ -122,6 +122,11 @@ sub checkpw_ldap {
             $debug and warn "LDAP bind failed as kohauser $principal_name: ". description($res);
             return 0;
         }
+
+	# FIXME dpavlin -- we really need $userldapentry leater on even if using auth_by_bind!
+	my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
+	$userldapentry = $search->shift_entry;
+
 	} else {
         my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
         $userldapentry = $search->shift_entry;
@@ -150,6 +155,7 @@ sub checkpw_ldap {
             ($cardnumber eq $c2) or warn "update_local returned cardnumber '$c2' instead of '$cardnumber'";
         } else { # C1, D1
             # maybe update just the password?
+		return(1, $cardnumber); # FIXME dpavlin -- don't destroy ExtendedPatronAttributes
         }
     } elsif ($config{replicate}) { # A2, C2
         $borrowernumber = AddMember(%borrower) or die "AddMember failed";
@@ -160,6 +166,7 @@ sub checkpw_ldap {
    		my @types = C4::Members::AttributeTypes::GetAttributeTypes();
 		my @attributes = grep{my $key=$_; any{$_ eq $key}@types;} keys %borrower;
 		my $extended_patron_attributes = map{{code=>$_,value=>$borrower{$_}}}@attributes;
+		my $extended_patron_attributes = [] unless $extended_patron_attributes;
 		my @errors;
 		#Check before add
 		for (my $i; $i< scalar(@$extended_patron_attributes)-1;$i++) {
