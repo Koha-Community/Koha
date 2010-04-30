@@ -115,7 +115,6 @@ my $branches = GetBranches($onlymine);
 my $branchloop;
 for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %{$branches}) {
     my $selected = 0;
-    $selected = 1 if ($thisbranch eq C4::Context->userenv->{'branch'});
     $selected = 1 if (defined($subs) && $thisbranch eq $subs->{'branchcode'});
     push @{$branchloop}, {
         value => $thisbranch,
