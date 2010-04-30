@@ -100,7 +100,8 @@ BEGIN {
         &GetReserveCount
         &GetReserveFee
 		&GetReserveInfo
-    
+        &GetReserveStatus
+        
         &GetOtherReserves
         
         &ModReserveFill
@@ -780,6 +781,18 @@ sub GetReservesForBranch {
     return (@transreserv);
 }
 
+sub GetReserveStatus {
+    my ($itemnumber) = @_;
+    
+    my $dbh = C4::Context->dbh;
+    
+    my $itemstatus = $dbh->prepare("SELECT found FROM reserves WHERE itemnumber = ?");
+    
+    $itemstatus->execute($itemnumber);
+    my ($found) = $itemstatus->fetchrow_array;
+    return $found;
+}
+
 =item CheckReserves
 
   ($status, $reserve) = &CheckReserves($itemnumber);
@@ -1415,7 +1428,7 @@ sub IsAvailableForItemLevelRequest {
     if (C4::Context->preference('AllowOnShelfHolds')) {
         return $available_per_item;
     } else {
-        return ($available_per_item and $item->{onloan}); 
+        return ($available_per_item and ($item->{onloan} or GetReserveStatus($itemnumber) eq "W")); 
     }
 }
 
