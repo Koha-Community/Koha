@@ -142,7 +142,11 @@ sub AddReserve {
     my $const   = lc substr( $constraint, 0, 1 );
     $resdate = format_date_in_iso( $resdate ) if ( $resdate );
     $resdate = C4::Dates->today( 'iso' ) unless ( $resdate );
-    $expdate = format_date_in_iso( $expdate ) if ( $expdate );
+    if ($expdate) {
+        $expdate = format_date_in_iso( $expdate );
+    } else {
+        undef $expdate; # make reserves.expirationdate default to null rather than '0000-00-00'
+    }
     if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
 	# Make room in reserves for this before those of a later reserve date
 	$priority = _ShiftPriorityByDateAndPriority( $biblionumber, $resdate, $priority );

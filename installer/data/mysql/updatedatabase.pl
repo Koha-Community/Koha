@@ -3564,6 +3564,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.130";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE reserves SET expirationdate = NULL WHERE expirationdate = '0000-00-00'");
+    print "Upgrade done (change reserves.expirationdate values of 0000-00-00 to NULL (bug 1532)"; 
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
