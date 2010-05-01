@@ -3576,7 +3576,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(q{
 INSERT IGNORE INTO message_transport_types (message_transport_type) VALUES ('print'),('feed');
     });
-    print "Upgrade to $DBversion done (Adding index to language_descriptions table)\n";
+    print "Upgrade to $DBversion done (adding print and feed message transport types)\n";
     SetVersion ($DBversion);
 }
 
