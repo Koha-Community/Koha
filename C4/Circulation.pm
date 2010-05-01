@@ -732,17 +732,17 @@ sub CanBookBeIssued {
     }
 
     my ($blocktype, $count) = C4::Members::IsMemberBlocked($borrower->{'borrowernumber'});
-    if($blocktype == -1){
-        ## remaining overdue documentsi
-	if ( C4::Context->preference("OverduesBlockCirc") eq 'block'){
-	    $issuingimpossible{USERBLOCKEDREMAINING} = $count;
-	}
-	elsif ( C4::Context->preference("OverduesBlockCirc") eq 'confirmation'){
-	    $needsconfirmation{USERBLOCKEDREMAINING} = $count;
-	}
-    }elsif($blocktype == 1){
-        ## blocked because of overdue return
-        $issuingimpossible{USERBLOCKEDOVERDUE} = $count;
+    if ($blocktype == -1) {
+        ## patron has outstanding overdue loans
+	    if ( C4::Context->preference("OverduesBlockCirc") eq 'block'){
+	        $issuingimpossible{USERBLOCKEDOVERDUE} = $count;
+	    }
+	    elsif ( C4::Context->preference("OverduesBlockCirc") eq 'confirmation'){
+	        $needsconfirmation{USERBLOCKEDOVERDUE} = $count;
+	    }
+    } elsif($blocktype == 1) {
+        # patron has accrued fine days
+        $issuingimpossible{USERBLOCKEDREMAINING} = $count;
     }
 
 #
