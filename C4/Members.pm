@@ -678,7 +678,7 @@ sub GetMemberIssuesAndFines {
     $sth = $dbh->prepare(
         "SELECT COUNT(*) FROM issues 
          WHERE borrowernumber = ? 
-         AND date_due < now()"
+         AND date_due < curdate()"
     );
     $sth->execute($borrowernumber);
     my $overdue_count = $sth->fetchrow_arrayref->[0];
