@@ -2008,7 +2008,7 @@ sub getroutinglist {
     my $sth              = $dbh->prepare(
         "SELECT routingid, borrowernumber, ranking, biblionumber 
             FROM subscription 
-            LEFT JOIN subscriptionroutinglist ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
+            JOIN subscriptionroutinglist ON subscription.subscriptionid = subscriptionroutinglist.subscriptionid
             WHERE subscription.subscriptionid = ? ORDER BY ranking ASC
                               "
     );
