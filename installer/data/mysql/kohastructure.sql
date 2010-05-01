@@ -2013,7 +2013,8 @@ CREATE TABLE language_descriptions (
         description varchar(255),
         id int(11) NOT NULL auto_increment,
         PRIMARY KEY  (`id`),
-        KEY `lang` (`lang`)
+        KEY `lang` (`lang`),
+        KEY `subtag_type_lang` (`subtag`, `type`, `lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- bi-directional support, keyed by script subcode

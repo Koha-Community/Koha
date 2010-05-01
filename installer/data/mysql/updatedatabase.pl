@@ -3581,10 +3581,9 @@ INSERT IGNORE INTO message_transport_types (message_transport_type) VALUES ('pri
 }
 
 $DBversion = "3.01.00.132";
-#3.02.00.023
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do(q{
-    ALTER TABLE language_descriptions ADD INDEX LANG (subtag, type, lang);
+    ALTER TABLE language_descriptions ADD INDEX subtag_type_lang (subtag, type, lang);
     });
     print "Upgrade to $DBversion done (Adding index to language_descriptions table)\n";
     SetVersion ($DBversion);
