@@ -579,16 +579,25 @@ sub GetMember {
 
 =over 4
 
-my $blocked = IsMemberBlocked( $borrowernumber );
-
-return the status, and the number of day or documents, depends his punishment
-
-return :
--1 if the user have overdue returns
-1 if the user is punished X days
-0 if the user is authorised to loan
+my ($block_status, $count) = IsMemberBlocked( $borrowernumber );
 
 =back
+
+Returns whether a patron has overdue items that may result
+in a block or whether the patron has active fine days
+that would block circulation privileges.
+
+C<$block_status> can have the following values:
+
+-1 if the patron has overdue items, in which case C<$count> is the number of them
+
+1 if the patron has outstanding fine days, in which case C<$count> is the number of them
+
+0 if the patron has no overdue items or outstanding fine days, in which case C<$count> is 0
+
+FIXME: this needs to be split into two functions; a potential block
+based on the number of current overdue items could be orthogonal
+to a block based on whether the patron has any fine days accrued.
 
 =cut
 
@@ -600,7 +609,7 @@ sub IsMemberBlocked {
         "SELECT COUNT(*) as latedocs
          FROM issues
          WHERE borrowernumber = ?
-         AND date_due < now()"
+         AND date_due < curdate()"
     );
     $sth->execute($borrowernumber);
     my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
@@ -638,7 +647,7 @@ sub IsMemberBlocked {
 
     return (1, $blockedcount) if $blockedcount > 0;
 
-    return 0
+    return (0, 0);
 }
 
 =head2 GetMemberIssuesAndFines
