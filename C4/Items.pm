@@ -1272,6 +1272,7 @@ sub GetItemsInfo {
            biblioitems.url,
            items.notforloan as itemnotforloan,
            itemtypes.description,
+           itemtypes.notforloan as notforloan_per_itemtype,
            branchurl
      FROM items
      LEFT JOIN branches ON items.homebranch = branches.branchcode
@@ -1355,7 +1356,6 @@ sub GetItemsInfo {
             my ($lib) = $sthnflstatus->fetchrow;
             $data->{notforloanvalue} = $lib;
         }
-		$data->{itypenotforloan} = $data->{notforloan} if (C4::Context->preference('item-level_itypes'));
 
         # my stack procedures
         my $stackstatus = $dbh->prepare(

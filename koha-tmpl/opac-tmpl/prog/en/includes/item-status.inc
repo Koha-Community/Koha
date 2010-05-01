@@ -1,6 +1,4 @@
-<!-- TMPL_IF name="bi_notforloan" -->
-    Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
-<!-- TMPL_ELSIF NAME="itypenotforloan" -->
+<!-- TMPL_IF name="notforloan_per_itemtype" -->
     Not for loan <!-- TMPL_IF NAME="notforloanvalue" -->(<!-- TMPL_VAR NAME="notforloanvalue" -->)<!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
     <!-- TMPL_IF name="datedue" -->
