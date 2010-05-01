@@ -737,7 +737,7 @@ sub CanBookBeIssued {
 	if ( C4::Context->preference("OverduesBlockCirc") eq 'block'){
 	    $issuingimpossible{USERBLOCKEDREMAINING} = $count;
 	}
-	elsif ( C4::Context->preference("OverudesBlockCirc") eq 'confirmation'){
+	elsif ( C4::Context->preference("OverduesBlockCirc") eq 'confirmation'){
 	    $needsconfirmation{USERBLOCKEDREMAINING} = $count;
 	}
     }elsif($blocktype == 1){
