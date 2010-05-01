@@ -44,10 +44,10 @@
 <h5>Catalog</h5>
 <ul>
     <!-- TMPL_IF NAME="CAN_user_tools_items_batchdel" -->
-	<li><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Batch deletion of items</a></li>
+	<li><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Batch item deletion</a></li>
     <!--/TMPL_IF-->
     <!-- TMPL_IF NAME="CAN_user_tools_items_batchmod" -->
-	<li><a href="/cgi-bin/koha/tools/batchMod.pl">Batch modification of items</a></li>
+	<li><a href="/cgi-bin/koha/tools/batchMod.pl">Batch item modification</a></li>
     <!--/TMPL_IF-->
     <!-- TMPL_IF NAME="CAN_user_tools_export_catalog" -->
 	<li><a href="/cgi-bin/koha/tools/export.pl">Export bibs/holdings</a></li>
