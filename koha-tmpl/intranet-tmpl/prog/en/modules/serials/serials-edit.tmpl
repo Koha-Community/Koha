@@ -193,7 +193,11 @@ function CloneSubfield(index){
 		<th>Notes</th>
 	</tr>
 <!-- TMPL_LOOP name="serialslist" -->
+    <!-- TMPL_UNLESS NAME="__odd__" -->
+    <tr class="highlight">
+    <!-- TMPL_ELSE -->
     <tr>
+    <!-- /TMPL_UNLESS -->
         <td>
             <input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->" />
             <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
@@ -210,13 +214,13 @@ function CloneSubfield(index){
         </td>
         <td>
             <!--TMPL_IF name="editdisable"-->
-              <input type="hidden" name="status" id="status<!-- TMPL_VAR NAME="num" -->" value="1">
+              <input type="hidden" name="status" id="status<!-- TMPL_VAR NAME="serialid" -->" value="1">
               <select name="status" size="1"  disabled="disabled">
             <!--TMPL_ELSE-->
               <!--TMPL_IF Name="serialsadditems"-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', '<!--TMPL_VAR Name="serialid"-->')} else { HideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="serialid" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->', '<!--TMPL_VAR Name="serialid"-->')} else { HideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->')}" >
                <!--TMPL_ELSE -->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="num" -->" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="serialid" -->" >
                <!--/TMPL_IF--> 
             <!--/TMPL_IF-->
   <!--TMPL_IF name="status1" -->
@@ -322,7 +326,7 @@ function CloneSubfield(index){
             <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <select name="status" size="1" id="addstatus<!-- TMPL_VAR NAME="num" -->">
+            <select name="status" size="1" id="addstatus<!-- TMPL_VAR NAME="serialid" -->">
                     <option value="">----</option>
   <!--TMPL_IF name="status1" -->
                     <option value="1" selected="selected">Expected</option>
