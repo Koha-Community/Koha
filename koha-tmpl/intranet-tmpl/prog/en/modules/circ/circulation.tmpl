@@ -224,7 +224,7 @@ function refocus(calendar) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RESERVED" -->
-    <li>Item is on reserve for <!-- TMPL_VAR NAME="RESERVED" --></li>
+    <li>Item is on hold for <!-- TMPL_VAR NAME="RESERVED" --></li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
@@ -256,14 +256,14 @@ function refocus(calendar) {
 <!-- TMPL_IF NAME="RESERVED" -->
     <p>
     <input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" />
-    <label for="cancelreserve">Cancel Reserve</label>
+    <label for="cancelreserve">Cancel hold</label>
     </p>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RESERVE_WAITING" -->
     <p>
     <input type="checkbox" id="cancelreserve" name="cancelreserve" value="1" />
-    <label for="cancelreserve">Cancel Reserve</label>
+    <label for="cancelreserve">Cancel hold</label>
     </p>
 <!-- /TMPL_IF -->
 
