@@ -242,8 +242,8 @@ function refocus(calendar) {
 <!-- TMPL_IF NAME="NOT_FOR_LOAN_FORCING" -->
     <li>Item is normally not for loan.  Check out anyway?</li>
 <!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="USERBLOCKEDREMAINING" -->
-    <li>This patron has overdue items.  Check out anyway?</li>
+<!-- TMPL_IF NAME="USERBLOCKEDOVERDUE" -->
+    <li>Patron has <!-- TMPL_VAR NAME="USERBLOCKEDOVERDUE" --> overdue item(s).  Check out anyway?</li>
 <!-- /TMPL_IF -->
 </ul>
 
@@ -340,9 +340,13 @@ function refocus(calendar) {
         <!-- TMPL_IF NAME="NOTSAMEBRANCH" -->
             <li>This item belongs to <!-- TMPL_VAR NAME="itemhomebranch" --> and cannot be issued from this location.</li>
         <!-- /TMPL_IF -->
+
+        <!-- TMPL_IF NAME="USERBLOCKEDREMAINING" -->
+            <li>Patron has had overdue items and is blocked for <!-- TMPL_VAR NAME="USERBLOCKEDREMAINING" --> day(s).</li>
+        <!-- /TMPL_IF -->
 	
-	    <!-- TMPL_IF NAME="USERBLOCKEDREMAINING" -->
-	    <li>Patron has overdue items</li>
+	    <!-- TMPL_IF NAME="USERBLOCKEDOVERDUE" -->
+            <li>Patron has <!-- TMPL_VAR NAME="USERBLOCKEDOVERDUE" --> overdue item(s).  Check out anyway?</li>
         <!-- /TMPL_IF -->
         </ul>
 

@@ -579,41 +579,42 @@ sub GetMember {
 
 =over 4
 
-my $blocked = IsMemberBlocked( $borrowernumber );
-
-return the status, and the number of day or documents, depends his punishment
-
-return :
--1 if the user have overdue returns
-1 if the user is punished X days
-0 if the user is authorised to loan
+my ($block_status, $count) = IsMemberBlocked( $borrowernumber );
 
 =back
+
+Returns whether a patron has overdue items that may result
+in a block or whether the patron has active fine days
+that would block circulation privileges.
+
+C<$block_status> can have the following values:
+
+1 if the patron has outstanding fine days, in which case C<$count> is the number of them
+
+-1 if the patron has overdue items, in which case C<$count> is the number of them
+
+0 if the patron has no overdue items or outstanding fine days, in which case C<$count> is 0
+
+Outstanding fine days are checked before current overdue items
+are.
+
+FIXME: this needs to be split into two functions; a potential block
+based on the number of current overdue items could be orthogonal
+to a block based on whether the patron has any fine days accrued.
 
 =cut
 
 sub IsMemberBlocked {
     my $borrowernumber = shift;
     my $dbh            = C4::Context->dbh;
-    # if he have late issues
-    my $sth = $dbh->prepare(
-        "SELECT COUNT(*) as latedocs
-         FROM issues
-         WHERE borrowernumber = ?
-         AND date_due < now()"
-    );
-    $sth->execute($borrowernumber);
-    my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
 
-    return (-1, $latedocs) if $latedocs > 0;
-
+    # does patron have current fine days?
 	my $strsth=qq{
             SELECT
             ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due) ) AS blockingdate,
             DATEDIFF(ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due)),NOW()) AS blockedcount
             FROM old_issues
 	};
-    # or if he must wait to loan
     if(C4::Context->preference("item-level_itypes")){
         $strsth.=
 		qq{ LEFT JOIN items ON (items.itemnumber=old_issues.itemnumber)
@@ -630,7 +631,7 @@ sub IsMemberBlocked {
             AND borrowernumber = ?
             ORDER BY blockingdate DESC, blockedcount DESC
             LIMIT 1};
-	$sth=$dbh->prepare($strsth);
+	my $sth=$dbh->prepare($strsth);
     $sth->execute($borrowernumber);
     my $row = $sth->fetchrow_hashref;
     my $blockeddate  = $row->{'blockeddate'};
@@ -638,7 +639,19 @@ sub IsMemberBlocked {
 
     return (1, $blockedcount) if $blockedcount > 0;
 
-    return 0
+    # if he have late issues
+    $sth = $dbh->prepare(
+        "SELECT COUNT(*) as latedocs
+         FROM issues
+         WHERE borrowernumber = ?
+         AND date_due < curdate()"
+    );
+    $sth->execute($borrowernumber);
+    my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
+
+    return (-1, $latedocs) if $latedocs > 0;
+
+    return (0, 0);
 }
 
 =head2 GetMemberIssuesAndFines
@@ -669,7 +682,7 @@ sub GetMemberIssuesAndFines {
     $sth = $dbh->prepare(
         "SELECT COUNT(*) FROM issues 
          WHERE borrowernumber = ? 
-         AND date_due < now()"
+         AND date_due < curdate()"
     );
     $sth->execute($borrowernumber);
     my $overdue_count = $sth->fetchrow_arrayref->[0];
