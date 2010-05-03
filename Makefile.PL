@@ -550,6 +550,7 @@ WriteMakefile(
                             'DBD::mysql'                       => 4.004,
                             'DBD::SQLite2'                     => 0.33, # optional, used for offline circulation
                             'DBI'                              => 1.53,
+							'DateTime'                         => 0.51,
                             'Data::Dumper'                     => 2.121,
                             'Data::ICal'                       => 0.13,
                             'Date::Calc'                       => 5.4,
