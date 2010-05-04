@@ -22,11 +22,13 @@
 	<script type="text/javascript">
 	//<![CDATA[
 
-$(document).ready(function(){
-    $("#itemst").tablesorter({
-        headers: { 0: { sorter: false }}
-    });
-});
+$(document).ready(function()
+    {
+        $("#itemst").tablesorter({
+                        headers: { 0: { sorter: false },4:{sorter:false}}
+                });
+    }
+);
 
 <!-- TMPL_IF NAME="TagsEnabled" -->
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
@@ -292,14 +294,14 @@ function tagAdded() {
 
         <tr>
             <th scope="row">Location(s)</th>
-            <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-                <p>
-                    <!-- TMPL_VAR NAME="branchname" --><!-- TMPL_IF NAME="location" -->, <!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
-                    <!-- TMPL_IF name="itemcallnumber" -->
-                        (<!-- TMPL_VAR NAME="itemcallnumber" -->)
-                    <!-- /TMPL_IF -->
-                </p>
-                <!-- /TMPL_LOOP --><!-- TMPL_ELSE -->This record has no items.<!-- /TMPL_IF --></td>
+            <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><ul><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+                            <li>
+                                <strong><!-- TMPL_VAR NAME="branchname" --></strong><!-- TMPL_IF NAME="location" -->, <!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
+                                <!-- TMPL_IF name="itemcallnumber" -->
+                                    (<!-- TMPL_VAR NAME="itemcallnumber" -->)
+                                <!-- /TMPL_IF -->
+                            </li>
+                            <!-- /TMPL_LOOP --></ul><!-- TMPL_ELSE -->This record has no items.<!-- /TMPL_IF --></td>
         </tr>
     </table>
     <!-- /TMPL_LOOP -->
@@ -307,8 +309,8 @@ function tagAdded() {
 
 <!-- TMPL_ELSE -->
 <!-- TMPL_UNLESS NAME="print_basket" -->
-<p style="border-top : 1px solid #E8E8E8;">
-	<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
+<form action="/cgi-bin/koha/opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
+<p style="border-top : 1px solid #E8E8E8;padding:5px 0;">
     <a id="CheckAll" href="#">Select All</a>
     <a id="CheckNone" href="#">Clear All</a>
     | <b>Selected items :</b>
@@ -364,14 +366,14 @@ function tagAdded() {
 		    <!-- TMPL_VAR NAME="copyrightdate" -->
                 <!-- /TMPL_IF -->
 	    </td>
-                <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-                    <p>
+                <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><ul><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
+                    <li>
                         <!-- TMPL_VAR NAME="branchname" --><!-- TMPL_IF NAME="location" -->, <!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="itemcallnumber" -->
                             (<!-- TMPL_VAR NAME="itemcallnumber" -->)
                         <!-- /TMPL_IF -->
-                    </p>
-                    <!-- /TMPL_LOOP --><!-- TMPL_ELSE -->This record has no items.<!-- /TMPL_IF --></td>
+                    </li>
+                    <!-- /TMPL_LOOP --></ul><!-- TMPL_ELSE -->This record has no items.<!-- /TMPL_IF --></td>
             </tr>
         <!-- /TMPL_LOOP -->
     </table></form>
