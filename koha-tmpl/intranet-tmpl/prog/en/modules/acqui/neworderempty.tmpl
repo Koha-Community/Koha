@@ -254,9 +254,11 @@ ff.submit();
                 <label for="budget_id">Budget: </label>
                 <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
                 <!-- TMPL_LOOP NAME="budget_loop" -->
-                    <option value="<!-- TMPL_VAR NAME='b_id' -->"<!-- TMPL_IF NAME="b_sel" -->selected="1"<!-- /TMPL_IF --> >
-                          <!-- TMPL_VAR NAME="b_txt" -->
-                    </option>
+                    <!-- TMPL_IF NAME="b_sel" -->
+                        <option value="<!-- TMPL_VAR NAME='b_id' -->" selected="selected"><!-- TMPL_VAR NAME="b_txt" --></option>
+                    <!-- TMPL_ELSE -->
+                        <option value="<!-- TMPL_VAR NAME='b_id' -->"><!-- TMPL_VAR NAME="b_txt" --></option>
+                    <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
                 </select>
                 <!--/TMPL_IF-->
