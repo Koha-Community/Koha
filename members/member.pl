@@ -80,7 +80,7 @@ if ($orderbyparams){
 	push @orderby, {$orderbyelt[0]=>$orderbyelt[1]||0};
 }
 else {
-	@orderby = ({firstname=>1},{surname=>1});
+	@orderby = ({surname=>0},{firstname=>0});
 }
 
 $member =~ s/,//g;   #remove any commas from search string
