@@ -506,10 +506,14 @@ $(document).ready(function(){
 					<a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
                     <!-- TMPL_IF NAME="OPACAmazonEnabled" --><!-- TMPL_IF NAME="OPACAmazonCoverImages" --><!-- TMPL_IF NAME="normalized_isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-					<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="content_identifier_exists" --><!-- TMPL_IF NAME="using_https" --><img src="https://secure.syndetics.com/index.aspx?isbn=<!-- TMPL_ELSE --><img src="http://www.syndetics.com/index.aspx?isbn=<!-- /TMPL_IF --><!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&amp;type=xw10<!-- TMPL_IF NAME="normalized_upc" -->&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="normalized_oclc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" --><!-- /TMPL_IF -->" alt="" class="thumbnail" /><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
-                    <!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="normalized_isbn" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR name="normalized_isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
-                    </a>
-                    <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="normalized_isbn" --><a href="https://<!-- TMPL_VAR name="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR name="normalized_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR name="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR name="normalized_isbn" -->" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsCoverImages" --><!-- TMPL_IF NAME="using_https" -->
+                <img src="https://secure.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&amp;type=xw10&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" -->" alt="" class="thumbnail" />
+                <!--TMPL_ELSE -->
+                <img src="http://www.syndetics.com/index.aspx?isbn=<!-- TMPL_VAR NAME="normalized_isbn" -->/SC.GIF&amp;client=<!-- TMPL_VAR NAME="SyndeticsClientCode" -->&amp;type=xw10&amp;upc=<!-- TMPL_VAR NAME="normalized_upc" -->&amp;oclc=<!-- TMPL_VAR NAME="normalized_oclc" -->" alt="" class="thumbnail" /><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+                <!-- TMPL_IF NAME="GoogleJackets" --><!-- TMPL_IF NAME="normalized_isbn" --><div style="block" title="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" class="<!-- TMPL_VAR name="normalized_isbn" -->" id="gbs-thumbnail<!--TMPL_VAR NAME="__counter__"-->"></div><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                </a>
+                <!-- TMPL_IF NAME="BakerTaylorEnabled" --><!-- TMPL_IF NAME="normalized_isbn" --><a href="https://<!-- TMPL_VAR name="BakerTaylorBookstoreURL" ESCAPE="HTML" --><!-- TMPL_VAR name="normalized_isbn" -->"><img alt="See Baker &amp; Taylor" src="<!-- TMPL_VAR name="BakerTaylorImageURL" ESCAPE="HTML" --><!-- TMPL_VAR name="normalized_isbn" -->" /></a><!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF -->
 				</td>
                 </tr>
                 <!-- /TMPL_LOOP -->
@@ -542,6 +546,11 @@ $(document).ready(function(){
 </div>
 
 <!-- TMPL_IF NAME="LibraryThingForLibrariesID" -->
-<!-- TMPL_IF NAME="using_https" --><script src="https://ltfl.librarything.com/forlibraries/widget.js?id=<!-- TMPL_ELSE --><script src="http://ltfl.librarything.com/forlibraries/widget.js?id=<!-- /TMPL_IF --><!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->&systype=koha" type="text/javascript"></script>
+<!-- TMPL_IF NAME="using_https" -->
+<script src="https://ltfl.librarything.com/forlibraries/widget.js?id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->&amp;systype=koha" type="text/javascript"></script>
+<!-- TMPL_ELSE -->
+<script src="http://ltfl.librarything.com/forlibraries/widget.js?id=<!--TMPL_VAR NAME="LibraryThingForLibrariesID" -->&amp;systype=koha" type="text/javascript"></script>
+<!-- TMPL_ELSE -->
 <!-- /TMPL_IF -->
+
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
