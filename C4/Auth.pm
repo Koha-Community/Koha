@@ -452,7 +452,19 @@ sub get_template_and_user {
             OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
             OpacAddMastheadLibraryPulldown => C4::Context->preference("OpacAddMastheadLibraryPulldown"),
             OPACXSLTDetailsDisplay           => C4::Context->preference("OPACXSLTDetailsDisplay"),
-            OPACXSLTResultsDisplay           => C4::Context->preference("OPACXSLTResultsDisplay")
+            OPACXSLTResultsDisplay           => C4::Context->preference("OPACXSLTResultsDisplay"),
+            SyndeticsClientCode          => C4::Context->preference("SyndeticsClientCode"),
+            SyndeticsEnabled             => C4::Context->preference("SyndeticsEnabled"),
+            SyndeticsCoverImages         => C4::Context->preference("SyndeticsCoverImages"),
+            SyndeticsTOC                 => C4::Context->preference("SyndeticsTOC"),
+            SyndeticsSummary             => C4::Context->preference("SyndeticsSummary"),
+            SyndeticsEditions            => C4::Context->preference("SyndeticsEditions"),
+            SyndeticsExcerpt             => C4::Context->preference("SyndeticsExcerpt"),
+            SyndeticsReviews             => C4::Context->preference("SyndeticsReviews"),
+            SyndeticsAuthorNotes         => C4::Context->preference("SyndeticsAuthorNotes"),
+            SyndeticsAwards              => C4::Context->preference("SyndeticsAwards"),
+            SyndeticsSeries              => C4::Context->preference("SyndeticsSeries"),
+            SyndeticsCoverImageSize      => C4::Context->preference("SyndeticsCoverImageSize"),
         );
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
