@@ -373,9 +373,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	    <!-- TMPL_IF NAME="itemdata_enumchron" --><th>Vol Info</th><!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="itemdata_uri" --><th>URL</th><!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy</th><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="serial" -->
-	    <th>Serial Data</th>
-		<th>Published</th><!-- /TMPL_IF -->
 		<th>Status</th>
 		<!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Notes</th><!-- /TMPL_IF -->
 		<th>Date Due</th>
@@ -388,8 +385,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		<!-- TMPL_IF NAME="itemdata_enumchron" --><td><!-- TMPL_VAR NAME="enumchron" --></td><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="itemdata_uri" --><td><a href="<!-- TMPL_VAR NAME="uri" -->"><!-- TMPL_VAR NAME="uri" --></a></td><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="itemdata_copynumber" --><td><!-- TMPL_VAR NAME="copynumber" --></td><!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="serial" --><td><!-- TMPL_VAR NAME="serialseq" --> </td>
-		<td><!-- TMPL_VAR NAME="publisheddate" --> </td><!-- /TMPL_IF -->
 		<td><!-- TMPL_INCLUDE NAME="item-status.inc" --></td>
 		<!-- TMPL_IF NAME="itemdata_itemnotes" --><td><!-- TMPL_VAR NAME="itemnotes" --></td><!-- /TMPL_IF -->
 		<td><!-- TMPL_VAR NAME="datedue" --></td>
