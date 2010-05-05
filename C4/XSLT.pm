@@ -206,10 +206,11 @@ sub buildKohaItemsNamespace {
             $status = "available";
         }
         my $homebranch = $branches->{$item->{homebranch}}->{'branchname'};
+	 my $itemcallnumber = $item->{itemcallnumber} || '';
+        $itemcallnumber =~ s/\&/\&amp\;/g;
         $xml.= "<item><homebranch>$homebranch</homebranch>".
 		"<status>$status</status>".
-		(defined $item->{'itemcallnumber'} ? "<itemcallnumber>".$item->{'itemcallnumber'}."</itemcallnumber>" 
-                                           : "<itemcallnumber />")
+		"<itemcallnumber>".$itemcallnumber."</itemcallnumber>"
         . "</item>";
 
     }
