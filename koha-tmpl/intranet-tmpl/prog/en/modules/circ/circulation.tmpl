@@ -47,10 +47,6 @@ var allcheckboxes = $(".checkboxed");
 		$(allcheckboxes).checkCheckboxes(":input[name*=items]"); 
 		$(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]");
 	});
-	$("#return_all").click(function(){
-		$(allcheckboxes).checkCheckboxes(":input[name*=barcodes]");
-		$(allcheckboxes).unCheckCheckboxes(":input[name*=items]");
-	});
 	$("#CheckAllitems").click(function(){
 		$(allcheckboxes).checkCheckboxes(":input[name*=items]");
 		$(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
@@ -813,7 +809,6 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- /TMPL_IF -->
         <input type="submit" name="renew_checked" value="Renew or Return checked items" />
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
-        <input type="submit" id="return_all" name="return_all" value="Return all" />
         </fieldset>
     <!-- /TMPL_IF -->
 </form>
