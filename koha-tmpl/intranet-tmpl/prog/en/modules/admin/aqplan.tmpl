@@ -195,9 +195,11 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
         <div style="display:none;" id='budget_tot_<!-- TMPL_VAR NAME="budget_id" -->'><!-- TMPL_VAR NAME="budget_amount"--></div></td>
 
         <!-- TMPL_LOOP NAME="lines"	-->
-            <td 
-            <!-- TMPL_UNLESS Name="display" --> style="display:none;"<!-- /TMPL_UNLESS -->
-                    class="<!-- TMPL_VAR NAME="colnum"-->"  >  
+            <!-- TMPL_IF NAME="display" -->
+                <td class="<!-- TMPL_VAR NAME="colnum"-->">
+            <!-- TMPL_ELSE -->
+                <td style="display:none;" class="<!-- TMPL_VAR NAME="colnum"-->">
+            <!-- /TMPL_IF -->
             <table class="invis" width="100%">
                 <tr>
                     <!-- TMPL_IF Name="show_actual" -->
@@ -220,19 +222,28 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
         <td>
         <table class="invis" width="100%">
             <tr>
-            <td width="50%"    align="right"  
        <!-- TMPL_IF Name="show_actual" -->
-            <!-- TMPL_IF NAME="act_negative" --> style="color: red;" <!--/TMPL_IF -->
-                <!-- TMPL_IF NAME="act_positive" --> style="color: green;" <!--/TMPL_IF --> >
-                <!-- TMPL_VAR NAME="budget_act_remain"-->
-        <!-- TMPL_ELSE --> >
+            <!-- TMPL_IF NAME="act_negative" -->
+                <td width="50%" align="right" style="color: red;"> 
+            <!-- TMPL_ELSIF NAME="act_positive" -->
+                <td width="50%" align="right" style="color: green;"> 
+            <!-- TMPL_ELSE -->
+                <td width="50%" align="right">
+            <!--/TMPL_IF -->
+                    <!-- TMPL_VAR NAME="budget_act_remain"-->
+        <!-- TMPL_ELSE -->
+            <td width="50%" align="right">
         <!-- /TMPL_IF -->
             </td>
 
-            <td width="50%"    align="right"  
-        <!-- TMPL_IF NAME="est_negative" --> style="color: red;" <!--/TMPL_IF --> 
-        <!-- TMPL_IF NAME="est_positive" --> style="color: green;" <!--/TMPL_IF --> 
-        id='budget_est_<!-- TMPL_VAR NAME="budget_id"-->'>  <!-- TMPL_VAR NAME="budget_est_remain"-->&nbsp;    
+        <!-- TMPL_IF NAME="est_negative" -->
+            <td width="50%"    align="right"  style="color: red;" id='budget_est_<!-- TMPL_VAR NAME="budget_id"-->'> 
+        <!-- TMPL_ELSIF NAME="est_positive" -->
+            <td width="50%"    align="right"  style="color: green;" id='budget_est_<!-- TMPL_VAR NAME="budget_id"-->'> 
+        <!-- TMPL_ELSE -->
+            <td width="50%"    align="right" id='budget_est_<!-- TMPL_VAR NAME="budget_id"-->'> 
+        <!--/TMPL_IF --> 
+                <!-- TMPL_VAR NAME="budget_est_remain"-->&nbsp;    
             </td>
             </tr>
         </table>

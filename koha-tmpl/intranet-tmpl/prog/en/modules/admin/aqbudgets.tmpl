@@ -196,10 +196,14 @@
     <td class="data"><!-- TMPL_VAR NAME="budget_amount" --> </td>
     <td class="data"><!-- TMPL_VAR NAME="budget_spent" --> </td>
     <td class="data"><!-- TMPL_VAR NAME="total_levels_spent" --></td>
-    <td class="data"
-    <!-- TMPL_IF NAME="remaining_pos" --> style="color: green;" <!-- /TMPL_IF -->
-    <!-- TMPL_IF NAME="remaining_neg" --> style="color: red;" <!-- /TMPL_IF -->   >
-    <!-- TMPL_VAR NAME="budget_remaining" --> </td>
+    <!-- TMPL_IF NAME="remaining_pos" -->
+        <td class="data" style="color: green;">
+    <!-- TMPL_ELSIF NAME="remaining_neg" --> 
+        <td class="data" style="color: red;">
+    <!-- TMPL_ELSE -->
+        <td class="data">
+    <!-- /TMPL_IF -->
+            <!-- TMPL_VAR NAME="budget_remaining" --> </td>
 
     <td class="tooltipcontent"><!-- TMPL_IF NAME="budget_owner_id" --><strong>Owner: </strong><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="budget_owner_id" -->"><!-- TMPL_VAR NAME="budget_owner_name" --></a><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="budget_branchcode" --><br /><strong>Library: </strong><!-- TMPL_VAR NAME="budget_branchcode" --><!-- /TMPL_IF -->
@@ -207,7 +211,7 @@
         <!-- TMPL_IF NAME="budget_hierarchy" -->
             <ul class="budget_hierarchy"><!-- TMPL_LOOP name="budget_hierarchy" -->
                 <!-- TMPL_IF NAME="element_id" -->
-                    <li><a href="?op=add_form&budget_id=<!-- TMPL_VAR NAME="element_id" -->&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->"><!-- TMPL_VAR NAME="element_name" --></a></li>
+                    <li><a href="?op=add_form&amp;budget_id=<!-- TMPL_VAR NAME="element_id" -->&amp;budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->"><!-- TMPL_VAR NAME="element_name" --></a></li>
                 <!-- TMPL_ELSE -->
                     <li><strong><!-- TMPL_VAR NAME="element_name" --> : </strong></li>
                 <!-- /TMPL_IF -->
