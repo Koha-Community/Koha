@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Tools &rsaquo; Batch Modification of Items</title>
+<title>Koha &rsaquo; Tools &rsaquo; Batch item modification</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="background-job.inc" -->
 <style type="text/css">
@@ -11,19 +11,21 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
          $(document).ready(function() {
-	    $("#itemst").tablesorter();
-	    $("#selectallbutton").click(function() {
-		$("#itemst").find("input:checkbox").each(function() {
-		    $(this).attr("checked", true);
-		});
-	    });
-	    $("#clearallbutton").click(function() {
-		$("#itemst").find("input:checkbox").each(function() {
-		    $(this).attr("checked", false);
-		});
-	    });
-
-	 });
+      $("#itemst").tablesorter({
+            widgets : ['zebra'],
+        headers: {0:{sorter: false}}
+    });
+      $("#selectallbutton").click(function() {
+    $("#itemst").find("input:checkbox").each(function() {
+        $(this).attr("checked", true);
+    });
+      });
+      $("#clearallbutton").click(function() {
+    $("#itemst").find("input:checkbox").each(function() {
+        $(this).attr("checked", false);
+    });
+      });
+   });
 //]]>
 </script>
 </head>
@@ -32,39 +34,36 @@
 <!-- TMPL_INCLUDE NAME="cat-search.inc"-->
 
 <div id="breadcrumbs">
-	<a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-	<a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-	<a href="/cgi-bin/koha/tools/batchMod.pl">Modify batches of items</a>
+  <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+  <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+  <a href="/cgi-bin/koha/tools/batchMod.pl">Batch item modification</a>
 </div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc3" class="yui-t7">
     <div id="bd">
         <div id="yui-main">
-            <div class="yui-b">
-                <h1>Batch modification</h1>
+            <!-- TMPL_IF NAME="show" --><h1>Batch item modification</h1><!-- TMPL_ELSE --><h1>Batch item modification results</h1><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="barcode_not_unique" --><div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="no_next_barcode" --><div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="book_on_loan" --><div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="book_reserved" --><div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div><!-- /TMPL_IF -->
 
     <!-- TMPL_IF name="notfoundbarcodes" -->
-	    <div class="error"><p>Warning, the following barcodes were not found :</p>
-	    <table>
-		<thead>
-		    <tr>
-			<th>Barcode</th>
-		    </tr>
-		</thead>
-		<tbody>
-		    <!-- TMPL_LOOP name="notfoundbarcodes" -->
-			<tr><td><!-- TMPL_VAR name="barcode" --></td></td>
-		    <!-- /TMPL_LOOP -->
-		</tbody>
-	    </table></div>
-	    <!-- TMPL_UNLESS name="too_many_items" -->
-	    <p>The following barcodes were found : </p>
-	    <!-- /TMPL_UNLESS -->
-	<!-- /TMPL_IF -->
+      <div class="dialog alert"><p>Warning, the following barcodes were not found:</p></div>
+      <table style="margin:auto;">
+    <thead>
+        <tr><th>Barcodes not found</th></tr>
+    </thead>
+    <tbody>
+        <!-- TMPL_LOOP name="notfoundbarcodes" -->
+      <tr><td><!-- TMPL_VAR name="barcode" --></td></td>
+        <!-- /TMPL_LOOP -->
+    </tbody>
+      </table>
+      <!-- TMPL_UNLESS name="too_many_items" -->
+      <h4>The following barcodes were found: </h4>
+      <!-- /TMPL_UNLESS -->
+  <!-- /TMPL_IF --> <!-- /notfoundbarcodes -->
 
 <form name="f" action="batchMod.pl" method="post">
      <input type="hidden" name="op" value="<!-- TMPL_VAR NAME="op" -->" />
@@ -73,62 +72,62 @@
      <input type="hidden" name="completedJobID" id="completedJobID" value="" />
 
 <!-- TMPL_IF name="item_loop" -->
+  <!-- TMPL_IF NAME="show" --><div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div><!-- TMPL_ELSE --><!-- /TMPL_IF -->
 <div id="cataloguing_additem_itemlist">
         <div style="overflow:auto">
-	<div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div>
         <table id="itemst">
-	    <thead>
-		<tr>
-		    <th>&nbsp;</th>
-		    <th>&nbsp;</th>
-		    <!-- TMPL_LOOP NAME="item_header_loop" --> 
-		    <th> <!-- TMPL_VAR NAME="header_value" --> </th>
-		    <!-- /TMPL_LOOP --> 
-		</tr>
-	    </thead>
-	    <tbody>
-            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF-->
+      <thead>
+    <tr>
+        <!-- TMPL_IF NAME="show" --><th>&nbsp;</th><!-- /TMPL_IF -->
+        <th>Title</th>
+        <!-- TMPL_LOOP NAME="item_header_loop" --> 
+        <th> <!-- TMPL_VAR NAME="header_value" --> </th>
+        <!-- /TMPL_LOOP --> 
+    </tr>
+      </thead>
+      <tbody>
+            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF NAME="show" --><!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF--><!-- /TMPL_IF -->
                 <td><!-- TMPL_VAR ESCAPE="HTML" NAME="bibinfo" --></td>
                 <!-- TMPL_LOOP NAME="item_value" --> <td><!-- TMPL_VAR ESCAPE="HTML" NAME="field" --></td> 
-				<!-- /TMPL_LOOP --> </tr>
+        <!-- /TMPL_LOOP --> </tr>
             <!-- /TMPL_LOOP -->
-	    </tbody>
+      </tbody>
         </table>
         </div>
 </div>
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /item_loop -->
 
 <!-- TMPL_IF NAME="simple_items_display" -->
     <p>The following items were modified:</p>
     <ul>
     <!-- TMPL_LOOP NAME="simple_items_display" -->
-	<li>
-	    <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a>
-	</li>
+  <li>
+      <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a>
+  </li>
     <!-- /TMPL_LOOP -->
     </ul>
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /simple_items_display -->
 
 <!-- TMPL_IF name="show" -->
 
 <!-- TMPL_IF name="too_many_items" -->
     <p>Too many items (<!-- TMPL_VAR NAME="too_many_items" -->): not displaying each one individually.</p>
     <!-- TMPL_LOOP name="itemnumbers_hashref" -->
-	<input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+  <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
     <!-- /TMPL_LOOP -->
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /too_many_items -->
 
 <div id="cataloguing_additem_newitem">
         <h2>Edit Items</h2>
-	<fieldset class="rows">
-	<ol>
+  <fieldset class="rows">
+  <ol>
         <!-- TMPL_LOOP NAME="item" -->
                <li><div class="subfield_line" style="<!-- TMPL_VAR NAME='visibility' -->" id="subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->">
                <label><!-- TMPL_VAR NAME="subfield" --> - 
-		      <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
-		      <!-- TMPL_VAR NAME="marc_lib" -->
-		      <!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
-	       </label>
+          <!-- TMPL_IF name="mandatory" --><b><!-- /TMPL_IF -->
+          <!-- TMPL_VAR NAME="marc_lib" -->
+          <!-- TMPL_IF name="mandatory" --> *</b><!-- /TMPL_IF -->
+         </label>
                 <!-- TMPL_VAR NAME="marc_value" -->
                 <input type="hidden" name="tag"       value="<!-- TMPL_VAR NAME="tag" -->" />
                 <input type="hidden" name="subfield"       value="<!-- TMPL_VAR NAME="subfield" -->" />
@@ -142,23 +141,22 @@
     </ol>
     </fieldset>
     <fieldset class="action">    
-	 <div id="jobpanel">
-	     <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-	     <div id="jobfailed"></div>
-	 </div>
-	 <input type="submit" name="mainformsubmit" value="Go" onclick="return submitBackgroundJob(this.form);" />
-         <input type="button" value="Cancel" onclick="javascript:history.back();" />
+   <div id="jobpanel">
+       <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+       <div id="jobfailed"></div>
+   </div>
+   <input type="submit" name="mainformsubmit" value="Save" onclick="return submitBackgroundJob(this.form);" />
+         <a href="/cgi-bin/koha/tools/batchMod.pl" class="cancel" onclick="history.back();return false;">Cancel</a>
     </fieldset>
 </div>
-<!-- TMPL_ELSE --> <!-- // ACTION -->
-         <a href="javascript:window.history.back()">Go back</a>
+<!-- TMPL_ELSE --> <!-- // show -->
+<fieldset class="action">
+  <input type="button" value="&lt;&lt; Back" onclick="window.history.back();return false;">
+  &nbsp; <a href="/cgi-bin/koha/tools/batchMod.pl">Done</a>
+</fieldset>
+         
 <!-- /TMPL_IF -->
-
 </div>
-</div>
-        <div class="yui-b">
-            <!-- TMPL_INCLUDE NAME="tools-menu.inc" -->
-        </div>
     </div>
 </div>
 </body>
