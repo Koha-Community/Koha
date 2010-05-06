@@ -25,6 +25,7 @@ set -e
 
 git ls-files |
 grep -Ev '\.(gif|jpg|png|pdf|ogg|psd|swf|odt|zip|ico|DS_Store|chr|dat)$' |
+grep -v /js/tinymce/ |
 while read filename
 do
     if ! isutf8 -q "$filename" 
