@@ -152,8 +152,8 @@ sub Jpeg {
 sub prAltJpeg
 {  my ($iData, $iWidth, $iHeight, $iFormat,$aiData, $aiWidth, $aiHeight, $aiFormat) = @_;
    my ($namnet, $utrad);
-   if (! $PDF::Reuse::pos)                    # If no output is active, it is no use to continue
-   {   return undef;
+   if (! $PDF::Reuse::pos) {                  # If no output is active, it is no use to continue
+      return;
    }
    prJpegBlob($aiData, $aiWidth, $aiHeight, $aiFormat);
    my $altObjNr = $PDF::Reuse::objNr;
@@ -182,8 +182,8 @@ sub prAltJpeg
 sub prJpegBlob
 {  my ($iData, $iWidth, $iHeight, $iFormat, $altArrayObjNr) = @_;
    my ($iLangd, $namnet, $utrad);
-   if (! $PDF::Reuse::pos)                    # If no output is active, it is no use to continue
-   {   return undef;
+   if (! $PDF::Reuse::pos) {                  # If no output is active, it is no use to continue
+       return;
    }
    my $checkidOld = $PDF::Reuse::checkId;
    if (!$iFormat)

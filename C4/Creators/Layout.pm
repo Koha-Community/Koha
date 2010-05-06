@@ -63,7 +63,7 @@ sub new {
     my $invocant = shift;
     my $self = '';
     if (_check_params(@_) eq 1) {
-        return -1;
+        return;
     }
     my $type = ref($invocant) || $invocant;
     if (grep {$_ eq 'Labels'} @_) {
@@ -101,7 +101,7 @@ sub retrieve {
     $sth->execute($opts{'layout_id'}, $opts{'creator'});
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return -1;
+        return;
     }
     my $self = $sth->fetchrow_hashref;
     bless ($self, $type);
@@ -136,6 +136,7 @@ sub delete {
         warn sprintf('Database returned the following error on attempted DELETE: %s', $sth->errstr);
         return -1;
     }
+    return; # return no error code on success
 }
 
 sub save {
@@ -156,7 +157,7 @@ sub save {
         $sth->execute(@params);
         if ($sth->err) {
             warn sprintf('Database returned the following error: %s', $sth->errstr);
-            return -1;
+            return;
         }
         return $self->{'layout_id'};
     }
@@ -178,7 +179,7 @@ sub save {
         $sth->execute(@params);
         if ($sth->err) {
             warn sprintf('Database returned the following error: %s', $sth->errstr);
-            return -1;
+            return;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(layout_id) FROM creator_layouts;");
         $sth1->execute();
@@ -191,14 +192,11 @@ sub save {
 sub get_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return -1;
+        return;
     }
     my ($attr) = @_;
     if (exists($self->{$attr})) {
         return $self->{$attr};
-    }
-    else {
-        return -1;
     }
     return;
 }
@@ -206,7 +204,7 @@ sub get_attr {
 sub set_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return -1;
+        return;
     }
     my %attrs = @_;
     foreach my $attrib (keys(%attrs)) {
@@ -389,7 +387,7 @@ R       = Right
 
 =head2 get_attr($attribute)
 
-    Invoking the I<get_attr> method will return the value of the requested attribute or -1 on errors.
+    Invoking the I<get_attr> method will return the value of the requested attribute or undef on error.
 
     example:
         C<my $value = $layout->get_attr($attribute);>

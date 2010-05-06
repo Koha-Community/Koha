@@ -152,10 +152,12 @@ sub retrieve {
         push (@{$self->{'items'}}, {$number_type => $record->{$number_type}, label_id => $record->{'label_id'}});
         $record_flag = 1;       # true if one or more rows were retrieved
     }
-    return -2 if $record_flag == 0;     # a hackish sort of way of indicating no such record exists
+    if ($record_flag == 0) {
+        return; # no such record exists return undef
+    }
     if ($sth->err) {
         warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
-        return -1;
+        return;
     }
     $self->{'batch_stat'} = 1;
     bless ($self, $type);
@@ -263,12 +265,12 @@ This module provides methods for creating, and otherwise manipulating batch obje
 
 =head2 C4::Labels::Batch->retrieve(batch_id => $batch_id)
 
-    Invoking the I<retrieve> method constructs a new batch object containing the current values for batch_id. The method returns a new object upon success and 1 upon failure.
+    Invoking the I<retrieve> method constructs a new batch object containing the current values for batch_id. The method returns a new object upon success and undefined upon failure.
     Errors are logged to the Apache log.
 
     examples:
 
-        my $batch = C4::Labels::Batch->retrieve(batch_id => 1); # Retrieves batch 1 and returns an object containing the record
+        my $batch = C4::Labels::Batch->(batch_id => 1); # Retrieves batch 1 and returns an object containing the record
 
 =head2 delete()
 

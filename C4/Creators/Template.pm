@@ -89,7 +89,7 @@ sub new {
     my $invocant = shift;
     my $type = ref($invocant) || $invocant;
     if (_check_params(@_) eq 1) {
-        return -1;
+        return;
     }
     my $self = {
         profile_id      =>      0,
@@ -124,7 +124,7 @@ sub retrieve {
     $sth->execute($opts{'template_id'}, $opts{'creator'});
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return -1;
+        return;
     }
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if (($opts{convert} && $opts{convert} == 1) || $opts{profile_id});
@@ -152,7 +152,7 @@ sub delete {
     if (scalar(@query_params) < 2) {   # If there is no template id or creator type then we cannot delete it
         warn sprintf('%s : Cannot delete template as the template id is invalid or non-existant.', $call_type) if !$query_params[0];
         warn sprintf('%s : Cannot delete template as the creator type is invalid or non-existant.', $call_type) if !$query_params[1];
-        return -1;
+        return;
     }
     my $query = "DELETE FROM " . $opts{'table_name'} . " WHERE template_id = ? AND creator = ?";
     my $sth = C4::Context->dbh->prepare($query);
@@ -178,7 +178,7 @@ sub save {
         $sth->execute(@params);
         if ($sth->err) {
             warn sprintf('Database returned the following error: %s', $sth->errstr);
-            return -1;
+            return;
         }
         $self->{'template_stat'} = 1;
         return $self->{'template_id'};
@@ -202,7 +202,7 @@ sub save {
         $sth->execute(@params);
         if ($sth->err) {
             warn sprintf('Database returned the following error: %s', $sth->errstr);
-            return -1;
+            return;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(template_id) FROM " . $opts{'table_name'} . ";");
         $sth1->execute();
@@ -216,21 +216,19 @@ sub save {
 sub get_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return -1;
+        return;
     }
     my ($attr) = @_;
     if (exists($self->{$attr})) {
         return $self->{$attr};
     }
-    else {
-        return -1;
-    }
+    return;
 }
 
 sub set_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return -1;
+        return;
     }
     my %attrs = @_;
     foreach my $attrib (keys(%attrs)) {
@@ -374,7 +372,7 @@ CM      = SI Centimeters (28.3464567 points per)
 =head2 save()
 
     Invoking the I<save> method attempts to insert the template into the database if the template is new and update the existing template record if
-    the template exists. The method returns the new record template_id upon success and -1 upon failure (This avoids template_ids conflicting with a
+    the template exists. The method returns the new record template_id upon success and undef upon failure (This avoids template_ids conflicting with a
     record template_id of 1). Errors are logged to the Apache log.
 
     example:
@@ -382,7 +380,7 @@ CM      = SI Centimeters (28.3464567 points per)
 
 =head2 get_attr($attribute)
 
-    Invoking the I<get_attr> method will return the value of the requested attribute or -1 on errors.
+    Invoking the I<get_attr> method will return the value of the requested attribute or undef on errors.
 
     example:
         C<my $value = $template->get_attr($attribute);>
