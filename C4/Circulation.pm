@@ -2242,6 +2242,7 @@ sub GetRenewCount {
     
     $renewsallowed = $issuingrule->{'renewalsallowed'};
     $renewsleft    = $renewsallowed - $renewcount;
+    if($renewsleft < 0){ $renewsleft = 0; }
     return ( $renewcount, $renewsallowed, $renewsleft );
 }
 
