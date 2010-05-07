@@ -24,6 +24,7 @@ use C4::Context;
 use YAML::Syck qw( Dump LoadFile );
 use Locale::PO;
 
+$YAML::Syck::ImplicitTyping = 1;
 
 sub set_lang {
     my ($self, $lang) = @_;
