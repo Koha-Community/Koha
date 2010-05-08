@@ -27,6 +27,7 @@ use C4::Koha;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Reserves;
+use C4::Output qw//;
 use Encode;
 use XML::LibXML;
 use XML::LibXSLT;
@@ -146,12 +147,16 @@ sub XSLTParse4Display {
         my $xslfile;
         if ($interface eq 'intranet') {
             $xslfile = C4::Context->config('intrahtdocs') . 
-                      "/prog/en/xslt/" .
+                      '/' . C4::Context->preference("template") . 
+                      '/' . C4::Output::_current_language() .
+                      '/xslt/' .
                       C4::Context->preference('marcflavour') .
                       "slim2intranet$xsl_suffix.xsl";
         } else {
             $xslfile = C4::Context->config('opachtdocs') . 
-                      "/prog/en/xslt/" .
+                      '/' . C4::Context->preference("opacthemes") . 
+                      '/' . C4::Output::_current_language() .
+                      '/xslt/' .
                       C4::Context->preference('marcflavour') .
                       "slim2OPAC$xsl_suffix.xsl";
         }

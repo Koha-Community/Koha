@@ -134,6 +134,17 @@ sub gettemplate {
     return $template;
 }
 
+# FIXME - this is a horrible hack to cache
+# the current known-good language, temporarily
+# put in place to resolve bug 4403.  It is
+# used only by C4::XSLT::XSLTParse4Display;
+# the language is set via the usual call
+# to themelanguage.
+my $_current_language = 'en';
+sub _current_language {
+    return $_current_language;
+}
+
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub themelanguage {
@@ -193,6 +204,8 @@ sub themelanguage {
             #}
         }
     }
+
+    $_current_language = $lang; # FIXME part of bad hack to paper over bug 4403
     return ( $theme, $lang );
 }
 
