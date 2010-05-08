@@ -596,7 +596,7 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
 
 # We try to select the best default tab to show, according to what
 # the user wants, and what's available for display
-my $defaulttab;
+my $defaulttab = '';
 switch (C4::Context->preference('opacSerialDefaultTab')) {
 
     # If the user wants subscriptions by default
@@ -634,7 +634,6 @@ switch (C4::Context->preference('opacSerialDefaultTab')) {
 
 }
 $template->param('defaulttab' => $defaulttab);
-
 
 
 output_html_with_http_headers $query, $cookie, $template->output;
