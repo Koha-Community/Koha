@@ -73,8 +73,7 @@ if ( ! $record ) {
 $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
 if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
-    $template->param(
-        'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail'),'opac' );
+    $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail', 'opac') );
 }
 
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 
