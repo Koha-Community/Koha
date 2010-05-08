@@ -147,7 +147,8 @@ $template->param( letters => \@letters );
 
 $template->param(
     paginationbar => pagination_bar(
-        $base_url,  int( $count / $resultsperpage ) + 1,
+        $base_url,
+        int( $count / $resultsperpage ) + ($count % $resultsperpage ? 1 : 0),
         $startfrom, 'startfrom'
     ),
     startfrom => $startfrom,
