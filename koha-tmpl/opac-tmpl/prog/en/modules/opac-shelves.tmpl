@@ -332,10 +332,10 @@ $(function() {
                         </select>
                       </li>
                       <li>
-                        <label for="category">Category: </label>
+                        <label for="category">Category:</label>
                         <select name="category" id="category">
-                          <option value="1">Private</option>
-                          <option value="2">Public</option>
+                          <!-- TMPL_IF NAME="category1" --><option value="1" selected="selected">Private</option><!-- TMPL_ELSE --><option value="1">Private</option><!-- /TMPL_IF -->
+                          <!-- TMPL_IF NAME="category2" --><option value="2" selected="selected">Public</option><!-- TMPL_ELSE --><option value="2">Public</option><!-- /TMPL_IF -->
                         </select>
                       </li>
                     </ol>
