@@ -1123,14 +1123,14 @@ sub buildQuery {
                 }
 
                 # Set default structure attribute (word list)
-                my $struct_attr;
+                my $struct_attr = q{};
                 unless ( $indexes_set || !$index || $index =~ /(st-|phr|ext|wrdl)/ ) {
                     $struct_attr = ",wrdl";
                 }
 
                 # Some helpful index variants
-                my $index_plus       = $index . $struct_attr . ":" if $index;
-                my $index_plus_comma = $index . $struct_attr . "," if $index;
+                my $index_plus       = $index . $struct_attr . ':';
+                my $index_plus_comma = $index . $struct_attr . ',';
 
                 # Remove Stopwords
                 if ($remove_stopwords) {
