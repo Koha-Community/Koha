@@ -64,10 +64,10 @@ $.tablesorter.addParser({
 </script>
 </head>
 <!-- TMPL_IF NAME="loggedinusername" --><body id="opac-usersuggestions"><!-- TMPL_ELSE --><body id="opac-suggestions"><!-- /TMPL_IF -->
-<!-- TMPL_INCLUDE name="masthead.inc" -->
 
 <div id="doc3" class="yui-t1">
    <div id="bd">
+<!-- TMPL_INCLUDE name="masthead.inc" -->
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
 <div class="container">
@@ -85,10 +85,10 @@ $.tablesorter.addParser({
     <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></li>
     <li><label for="collectiontitle">Collection Title:</label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" /></li>
     <li><label for="place">Publication Place:</label><input type="text" id="place" name="place" size="50" maxlength="80" /></li>
-    <li><label for="itemtype">Item Type:</label><select name="itemtype" >
+    <li><label for="itemtype">Item Type:</label><select name="itemtype" id="itemtype">
             <option value="">Default</option>
         <!-- TMPL_LOOP name="itemtypeloop" -->
-			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="itemtype"-->" selected="selected"> <!--TMPL_ELSE--><option value="<!-- TMPL_VAR name="itemtype" -->"> <!--/TMPL_IF--> <!--TMPL_IF Name="imageurl"--><img alt="<!-- TMPL_VAR name="description" -->" src="<!--TMPL_VAR Name="imageurl"-->" /><!-- TMPL_VAR name="description" --><!--TMPL_ELSE--><!-- TMPL_VAR name="description" --><!--/TMPL_IF--></option>
+			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="itemtype"-->" selected="selected"> <!--TMPL_ELSE--><option value="<!-- TMPL_VAR name="itemtype" -->"> <!--/TMPL_IF--> <!-- TMPL_VAR name="description" --></option>
         <!-- /TMPL_LOOP -->
         </select> </li>
     <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40"></textarea></li>
