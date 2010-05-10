@@ -8,9 +8,7 @@
 		<li><a href="routing.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->&amp;op=new">Create Routing List</a></li>
 	    <!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="manualhistory" -->
-	    <li><a href="subscription-history.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Subscription history</a></li>
-	<!-- /TMPL_IF -->
+	<li><a href="subscription-history.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->">Subscription history</a></li>
 </ul>
 <!-- /TMPL_IF -->
 
