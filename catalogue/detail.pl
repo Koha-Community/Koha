@@ -178,7 +178,7 @@ foreach my $item (@items) {
         $item->{ReservedForSurname}     = $ItemBorrowerReserveInfo->{'surname'};
         $item->{ReservedForFirstname}   = $ItemBorrowerReserveInfo->{'firstname'};
         $item->{ExpectedAtLibrary}      = $branches->{$expectedAt}{branchname};
-	$item->{cardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
+	$item->{Reservedcardnumber}             = $ItemBorrowerReserveInfo->{'cardnumber'};
     }
 
 	# Check the transit status
