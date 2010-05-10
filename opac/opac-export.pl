@@ -39,8 +39,7 @@ if ($op eq "export") {
  				$marc = marc2ris(MARC::Record->new_from_usmarc($marc));
  			}
 			elsif ($format =~ /bibtex/) {
-				my $error;
-				($error,$marc) = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
+				$marc = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
 			}elsif ($format =~ /dc/) {
 				my $error;
 				($error,$marc) = marc2dcxml($marc,1);
