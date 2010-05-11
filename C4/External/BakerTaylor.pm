@@ -45,8 +45,7 @@ sub initialize {
 	$user     = (@_ ? shift : C4::Context->preference('BakerTaylorUsername')    ) || ''; # LL17984
 	$pass     = (@_ ? shift : C4::Context->preference('BakerTaylorPassword')    ) || ''; # CC82349
 	$link_url = (@_ ? shift : C4::Context->preference('BakerTaylorBookstoreURL'));
-	# https://ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&parentNum=10923&key=
-	$image_url = "http://contentcafe2.btol.com/buynow/Jacket.aspx?UserID=$user&Password=$pass&Product=";
+        $image_url = "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$user&Password=$pass&Options=Y&Return=T&Type=S&Value=";
 	$agent = "Koha/$VERSION [en] (Linux)";
 			#"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
 }
