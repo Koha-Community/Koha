@@ -232,7 +232,9 @@ function GetZ3950Terms(){
                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
                 <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
-                | <a href="/cgi-bin/koha/catalogue/search.pl" onclick="placeHold(); return false;">Place Hold</a>
+                	<!-- TMPL_IF NAME="DisplayMultiPlaceHold" -->
+                  <input type="button" onclick="placeHold(); return false;" value="Place Hold"/>
+                	<!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
 		<span class="addto"></span>
 
