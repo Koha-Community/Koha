@@ -122,7 +122,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my @serialdatalist;
 my %processedserialid;
 
-my $today = C4::Dates->new();  
+my $today = C4::Dates->new();
 foreach my $tmpserialid (@serialids) {
 
     #filtering serialid for duplication
@@ -134,7 +134,7 @@ foreach my $tmpserialid (@serialids) {
         my $data = GetSerialInformation($tmpserialid);
         $data->{publisheddate} = format_date( $data->{publisheddate} );
         $data->{planneddate}   = format_date( $data->{planneddate} );
-	$data->{arriveddate}=$today->output('us');
+        $data->{arriveddate}=$today->output('syspref');
         $data->{'editdisable'} = (
             (
                 HasSubscriptionExpired( $data->{subscriptionid} )
