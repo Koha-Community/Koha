@@ -29,12 +29,12 @@
 
     <!-- TMPL_IF NAME="jump_not_found" -->
     <h2>System preferences</h2>
-    <div class="dialog error">
+    <div class="dialog alert">
         Could not find a system preference named <code><!-- TMPL_VAR NAME="jumpfield" --></code>.
     </div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="search_not_found" -->
-    <div class="dialog error">
+    <div class="dialog alert">
         No system preferences matched your search for <strong><!-- TMPL_VAR NAME="searchfield" --></strong>. You can try a different search or <a href="/cgi-bin/koha/admin/preferences.pl?tab=<!-- TMPL_VAR NAME="last_tab" -->">return to where you were before.</a>
     </div>
     <!-- /TMPL_IF -->
