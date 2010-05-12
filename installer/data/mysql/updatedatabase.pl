@@ -2913,6 +2913,8 @@ BUDGETNAME
 SELECT MAX(aqbudgetid) from aqbudgets
 IDsBUDGET
 
+$$maxbudgetid[0] = 0 if !$$maxbudgetid[0];
+
     $dbh->do(<<BUDGETAUTOINCREMENT);
 ALTER TABLE `aqbudgets` AUTO_INCREMENT=$$maxbudgetid[0]
 BUDGETAUTOINCREMENT
