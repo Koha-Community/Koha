@@ -447,7 +447,6 @@ sub getRecords {
                     # not an index scan
                     else {
                         $record = $results[ $i - 1 ]->record($j)->raw();
-            		warn $results[$i-1]->record($j)->render() ;
 
                         # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] = $record;
