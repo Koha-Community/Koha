@@ -41,23 +41,23 @@
 	// to check if the data are correctly entered.
 	function Check(ff) {
 	    var ok=0;
-		var _alertString="Form not submitted because of the following problem(s)\n";
-		_alertString +="-------------------------------------------------------------------\n\n";
+		var _alertString=_("Form not submitted because of the following problem(s)");
+		_alertString +="\n-------------------------------------------------------------------\n\n";
 		if (ff.categorycode.value.length==0) {
 		    ok=1;
-			_alertString += "- categorycode missing\n";
+			_alertString += _("- categorycode missing") + "\n";
 		}
 		if (!(ff.category_type.value)){
 		    ok=1;
-		    _alertString += "- category type missing\n";
+		    _alertString += _("- category type missing") + "\n";
 		}
 		if (!(isNotNull(ff.description,1))) {
 		    ok=1;
-			_alertString += "- description missing\n";
+			_alertString += _("- description missing") + "\n";
 		}
 		if (!isNum(ff.upperagelimit,0) && ff.category_type.value=='C') {
 		    ok=1;
-		  	_alertString += "- upperagelimit is not a number\n";
+			_alertString += _("- upperagelimit is not a number") + "\n";
 				
 		}
 		if(ff.enrolmentperioddate.value && ff.enrolmentperiod.value){
