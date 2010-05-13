@@ -1,15 +1,15 @@
-<div id="toolbar">
+﻿<div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
 
 function confirm_deletion() {
-    var is_confirmed = window.confirm('Are you sure you want to delete this patron? This cannot be undone.');
+    var is_confirmed = window.confirm(_('Are you sure you want to delete this patron? This cannot be undone.'));
     if (is_confirmed) {
             window.location='/cgi-bin/koha/members/deletemem.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->';
     }
 }
 function confirm_updatechild() {
-    var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
+    var is_confirmed = window.confirm(_('Are you sure you want to update this child to an Adult category?  This cannot be undone.'));
    
     if (is_confirmed) {
             window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
@@ -17,7 +17,7 @@ function confirm_updatechild() {
 }
 
 function confirm_reregistration() {
-    var is_confirmed = window.confirm('Are you sure you want to renew this patron\'s registration?');
+    var is_confirmed = window.confirm(_('Are you sure you want to renew this patron\'s registration?'));
     if (is_confirmed) {
     window.location='/cgi-bin/koha/members/moremember.pl?reregistration=y&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->';
     }
