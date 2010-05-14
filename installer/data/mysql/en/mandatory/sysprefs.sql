@@ -204,8 +204,11 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Enable/disable Shelf Browser on item details page. WARNING: this feature is very resource consuming on collections with large numbers of items.','YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
-('XSLTDetailsDisplay','0','','Enable XSL stylesheet control over details page display on OPAC exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl','Textarea'),
-('XSLTResultsDisplay','0','','Enable XSL stylesheet control over results page display on OPAC exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl','Textarea');
+('XSLTDetailsDisplay','0','','Enable XSL stylesheet control over details page display on OPAC','YesNo'),
+('XSLTResultsDisplay','0','','Enable XSL stylesheet control over results page display on OPAC','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
+('XSLTDetailFilename','','','Enable XSL stylesheet control over details page display on OPAC exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl','Textarea'),
+('XSLTResultsFilename','','','Enable XSL stylesheet control over results page display on OPAC exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl','Textarea');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Select which set of fields comprise the Type limit in the advanced search','Choice');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowOnShelfHolds', '0', '', 'Allow hold requests to be placed on items that are not on loan', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Allow hold requests to be placed on damaged items', 'YesNo');

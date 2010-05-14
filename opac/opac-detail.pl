@@ -71,7 +71,7 @@ $template->param( biblionumber => $biblionumber );
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTDetailsDisplay") ) {
     $template->param(
-        'XSLTBloc' => XSLTParse4Display($biblionumber, $record, C4::Context->preference("XSLTDetailsDisplay")) );
+        'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail') );
 }
 
 # change back when ive fixed request.pl
