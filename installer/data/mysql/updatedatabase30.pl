@@ -757,6 +757,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.00.06.010";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACDetails.xsl',type='Free',  variable='XSLTDetailsFilename' ;");
+    $dbh->do("INSERT systempreferences set value='../koha-tmpl/opac-tmpl/prog/en/xslt/".C4::Context->preference('marcflavour')."slim2OPACResults.xsl',type='Free',  variable='XSLTResultsFilename' ;");
+    $dbh->do("UPDATE systempreferences set value=(LENGTH(value)>0),type='YesNo' where variable='XSLTDetailsDisplay';");
+    $dbh->do("UPDATE systempreferences set value=(LENGTH(value)>0),type='YesNo' where variable='XSLTResultsDisplay';");
+    print "Upgrade to $DBversion done (Improvements to XSLT Support)\n";
+    SetVersion ($DBversion);
+}
+
+
 
 =item DropAllForeignKeys($table)
 

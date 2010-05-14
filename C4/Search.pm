@@ -1676,7 +1676,7 @@ sub searchResults {
         # XSLT processing of some stuff
         if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
-                $oldbiblio->{biblionumber}, $marcrecord, C4::Context->preference("XSLTResultsDisplay") );
+                $oldbiblio->{biblionumber}, $marcrecord, 'Results' );
         }
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items

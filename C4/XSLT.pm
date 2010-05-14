@@ -133,7 +133,8 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xslfilename ) = @_;
+    my ( $biblionumber, $orig_record, $type ) = @_;
+    my $xslfilename=C4::Context->preference("XSLT$type"."Filename")||_buildfilename($type);
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
     #return $record->as_formatted();
@@ -172,6 +173,15 @@ sub XSLTParse4Display {
     my $results = $stylesheet->{$xslfilename}->transform($source);
     my $newxmlrecord = $stylesheet->{$xslfilename}->output_string($results);
     return $newxmlrecord;
+}
+
+
+sub _buildfilename{
+    my $type=shift;
+    return C4::Context->config('opachtdocs') .
+                          "/prog/en/xslt/" .
+                          C4::Context->preference('marcflavour') .
+                          "slim2OPAC$type.xsl";
 }
 
 sub buildKohaItemsNamespace {

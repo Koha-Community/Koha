@@ -206,8 +206,11 @@ INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
 	('TagsShowOnList',   '6','','Nombre de tags à afficher sur la page de résultat, 0 désactivant l''affichage.','Integer');
 
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('OPACShelfBrowser','1','','Active le parcours des rayonnages sur la page de détail','YesNo');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTDetailsDisplay','0','','Permet l''utilisation de feuilles de style XSLT pour l''affichage détaillé de notice exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl','Textarea');
-INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTResultsDisplay','0','','Permet l''utilisation de Feuilles de style XSLT pour l''affichage des listes de résultat exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl','Textarea');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES
+('XSLTDetailsDisplay','0','','Active l''affichage détaillé OPAC par la feuille de style XSL stylesheet','YesNo'),
+('XSLTResultsDisplay','0','','Active l''affichage liste de résultat OPAC par la feuille de style XSLT','YesNo');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTDetailFilename','','','Permet l''utilisation de feuilles de style XSLT pour l''affichage détaillé de notice exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl','Textarea');
+INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('XSLTResultsFilename','','','Permet l''utilisation de Feuilles de style XSLT pour l''affichage des listes de résultat exemple : ../koha-tmpl/opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl','Textarea');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AdvancedSearchTypes','itemtypes','itemtypes|ccode','Détermine quel index utiliser lors des recherches par type de document','Choice');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowOnShelfHolds', '0', '', 'Permet la réservation d''exemplaires non disponibles', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES('AllowHoldsOnDamagedItems', '1', '', 'Permet les réservations sur des exemplaires endommagés', 'YesNo');
