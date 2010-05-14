@@ -135,7 +135,7 @@ my $output_formats = [
 
 =head2 C4::Creators::Lib::get_all_templates()
 
-    This function returns a reference to a hash containing all templates upon success and undefined upon failure. Errors are logged to the Apache log.
+    This function returns a reference to a hash containing all templates upon success and 1 upon failure. Errors are logged to the Apache log.
 
     examples:
 
@@ -152,7 +152,7 @@ sub get_all_templates {
     $sth->execute();
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return;
+        return -1;
     }
     ADD_TEMPLATES:
     while (my $template = $sth->fetchrow_hashref) {
@@ -163,7 +163,7 @@ sub get_all_templates {
 
 =head2 C4::Creators::Lib::get_all_layouts()
 
-    This function returns a reference to a hash containing all layouts upon success and undefined upon failure. Errors are logged to the Apache log.
+    This function returns a reference to a hash containing all layouts upon success and 1 upon failure. Errors are logged to the Apache log.
 
     examples:
 
@@ -180,7 +180,7 @@ sub get_all_layouts {
     $sth->execute();
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return;
+        return -1;
     }
     ADD_LAYOUTS:
     while (my $layout = $sth->fetchrow_hashref) {
@@ -191,7 +191,7 @@ sub get_all_layouts {
 
 =head2 C4::Creators::Lib::get_all_profiles()
 
-    This function returns an arrayref whose elements are hashes containing all profiles upon success and undefined upon failure. Errors are logged
+    This function returns an arrayref whose elements are hashes containing all profiles upon success and 1 upon failure. Errors are logged
     to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separted
     fields. ie. "field_1, field_2, ...field_n" The second limits the records returned based on a string containing a valud SQL 'WHERE' filter.
 
@@ -214,7 +214,7 @@ sub get_all_profiles {
     $sth->execute();
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return;
+        return -1;
     }
     ADD_PROFILES:
     while (my $profile = $sth->fetchrow_hashref) {
@@ -235,7 +235,7 @@ sub get_all_image_names {
     $sth->execute();
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return;
+        return -1;
     }
     grep {push @$image_names, {type => $$_[0], name => $$_[0], selected => 0}} @{$sth->fetchall_arrayref([0])};
     return $image_names;
@@ -266,7 +266,7 @@ sub get_batch_summary {
     $sth->execute($params{'creator'});
     if ($sth->err) {
         warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
-        return;
+        return -1;
     }
     ADD_BATCHES:
     while (my $batch = $sth->fetchrow_hashref) {
@@ -275,7 +275,7 @@ sub get_batch_summary {
         $sth1->execute($batch->{'batch_id'}, $params{'creator'});
         if ($sth1->err) {
             warn sprintf('Database returned the following error on attempted SELECT count: %s', $sth1->errstr);
-            return;
+            return -1;
         }
         my $count = $sth1->fetchrow_arrayref;
         $batch->{'_item_count'} = @$count[0];
@@ -315,7 +315,7 @@ sub get_label_summary {
         $sth->execute($item->{'item_number'}, $params{'batch_id'});
         if ($sth->err) {
             warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
-            return;
+            return -1;
         }
         my $record = $sth->fetchrow_hashref;
         my $label_summary;
@@ -361,7 +361,7 @@ sub get_card_summary {
         $sth->execute($item->{'borrower_number'});
         if ($sth->err) {
             warn sprintf('Database returned the following error on attempted SELECT: %s', $sth->errstr);
-            return;
+            return -1;
         }
         my $record = $sth->fetchrow_hashref;
         my $card_summary->{'_card_number'} = $card_number;
@@ -535,10 +535,7 @@ sub get_table_names {
 sub html_table {
     my $headers = shift;
     my $data = shift;
-    # no need to generate a table if there is not data to display
-    unless ( @{$data} ) {
-        return;
-    }
+    return undef if scalar(@$data) == 0;      # no need to generate a table if there is not data to display
     my $table = [];
     my $fields = [];
     my @table_columns = ();
