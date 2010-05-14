@@ -1431,9 +1431,10 @@ sub AddReturn {
     # case of a return of document (deal with issues and holdingbranch)
             
         if ($doreturn) {
-			my $circControlBranch = _GetCircControlBranch($iteminformation,$borrower);
+			my $circControlBranch;
 			if($dropbox) {
 				# don't allow dropbox mode to create an invalid entry in issues (issuedate > returndate) FIXME: actually checks eq, not gt
+                $circControlBranch=_GetCircControlBranch($iteminformation,$borrower) unless ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
 				undef($dropbox) if ( $iteminformation->{'issuedate'} eq C4::Dates->today('iso') );
 			}
             MarkIssueReturned($borrower->{'borrowernumber'}, $iteminformation->{'itemnumber'},$circControlBranch);
