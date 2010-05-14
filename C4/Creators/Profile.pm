@@ -57,8 +57,8 @@ sub _conv_points {
 
 sub new {
     my $invocant = shift;
-    if (_check_params(@_) == 1) {
-        return;
+    if (_check_params(@_) eq 1) {
+        return -1;
     }
     my $type = ref($invocant) || $invocant;
     my $self = {
@@ -85,7 +85,7 @@ sub retrieve {
     $sth->execute($opts{'profile_id'}, $opts{'creator'});
     if ($sth->err) {
         warn sprintf('Database returned the following error: %s', $sth->errstr);
-        return;
+        return -1;
     }
     my $self = $sth->fetchrow_hashref;
     $self = _conv_points($self) if ($opts{convert} && $opts{convert} == 1);
@@ -122,7 +122,6 @@ sub delete {
         warn sprintf('Database returned the following error on attempted DELETE: %s', $sth->errstr);
         return -1;
     }
-    return;
 }
 
 sub save {
@@ -143,7 +142,7 @@ sub save {
         $sth->execute(@params);
         if ($sth->err) {
             warn sprintf('Database returned the following error on attempted UPDATE: %s', $sth->errstr);
-            return;
+            return -1;
         }
         return $self->{'profile_id'};
     }
@@ -165,7 +164,7 @@ sub save {
         $sth->execute(@params);
         if ($sth->err) {
             warn sprintf('Database returned the following error on attempted INSERT: %s', $sth->errstr);
-            return;
+            return -1;
         }
         my $sth1 = C4::Context->dbh->prepare("SELECT MAX(profile_id) FROM printers_profile;");
         $sth1->execute();
@@ -177,7 +176,7 @@ sub save {
 sub get_attr {
     my $self = shift;
     if (_check_params(@_) eq 1) {
-        return;
+        return -1;
     }
     my ($attr) = @_;
     if (exists($self->{$attr})) {
@@ -185,7 +184,7 @@ sub get_attr {
     }
     else {
         warn sprintf('%s is currently undefined.', $attr);
-        return;
+        return -1;
     }
 }
 
@@ -279,14 +278,14 @@ CM      = SI Centimeters (28.3464567 points per)
 =head2 save()
 
     Invoking the I<save> method attempts to insert the profile into the database if the profile is new and update the existing profile record if the profile exists. The method returns
-    the new record profile_id upon success and undef upon failure (This avoids conflicting with a record profile_id of 1). Errors are logged to the Apache log.
+    the new record profile_id upon success and -1 upon failure (This avoids conflicting with a record profile_id of 1). Errors are logged to the Apache log.
 
     example:
         C<my $exitstat = $profile->save(); # to save the record behind the $profile object>
 
 =head2 get_attr($attribute)
 
-    Invoking the I<get_attr> method will return the value of the requested attribute or undef on errors.
+    Invoking the I<get_attr> method will return the value of the requested attribute or -1 on errors.
 
     example:
         C<my $value = $profile->get_attr($attribute);>
