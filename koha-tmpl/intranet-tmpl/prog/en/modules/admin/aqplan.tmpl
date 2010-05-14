@@ -88,7 +88,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
 <form method="post" id="Aform" name="Aform"  action="/cgi-bin/koha/admin/aqplan.pl">
 <h3>Planning for <!-- TMPL_VAR NAME="budget_period_description" --> by <!-- TMPL_VAR NAME="authcat" --></h3>
-
+<input type="hidden" name="authcat" value="<!-- TMPL_VAR NAME="authcat" -->" />
 <!-- Budget Lines -->
 
     <!-- TMPL_IF NAME="budget_lines" -->
