@@ -124,9 +124,6 @@ UPDATE systempreferences SET explanation='Включити можливість 
 UPDATE systempreferences SET explanation='Якщо ввімкнуто, то ЕК буде опитувати один чи більше веб-сервісів ISBN щодо пов’язаних ISBN та відобразить на вкладці «Видання» на сторінці з подробицями' WHERE variable='OPACFRBRizeEditions';
 -- 	If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages
 
-UPDATE systempreferences SET explanation='Використовується з FRBRizeEditions. Якщо ввімкнуто, Коха використає веб-сервіс PINES OISBN для вкладки «Видання» на сторінці з подробицями.' WHERE variable='PINESISBN';
--- 	Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.
-
 UPDATE systempreferences SET explanation='Вмикає або вимикає усі функцій міток. Це основний перемикач для міток.' WHERE variable='TagsEnabled';
 -- 	Enables or disables all tagging features. This is the main switch for tags.
 

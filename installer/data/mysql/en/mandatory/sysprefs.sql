@@ -126,7 +126,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('XISBN',0,'Use with FRBRizeEditions. If ON, Koha will use the OCLC xISBN web service in the Editions tab on the detail pages. See: http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OCLCAffiliateID','','Use with FRBRizeEditions and XISBN. You can sign up for an AffiliateID here: http://www.worldcat.org/wcpa/do/AffiliateUserServices?method=initSelfRegister','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('XISBNDailyLimit',499,'The xISBN Web service is free for non-commercial use when usage does not exceed 500 requests per day','','Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('PINESISBN',0,'Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('ThingISBN',0,'Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','','YesNo');
 
 -- I18N/L10N

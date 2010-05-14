@@ -85,7 +85,7 @@ sub _get_biblio_from_xisbn {
 
 sub get_xisbns {
     my ( $isbn ) = @_;
-    my ($response,$thing_response,$xisbn_response,$gapines_response,$syndetics_response);
+    my ($response,$thing_response,$xisbn_response,$syndetics_response);
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
@@ -113,12 +113,7 @@ sub get_xisbns {
         }
     }
 
-    # PINES ISBN (Experimental)
-    #if ( C4::Context->preference('PINESISBN') ) {
-    #    my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
-    #    $gapines_response = _get_url($url,'thingisbn');
-    #}
-    $response->{isbn} = [ @{ $xisbn_response->{isbn} or [] },  @{ $syndetics_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] }, @{ $gapines_response->{isbn} or [] } ];
+    $response->{isbn} = [ @{ $xisbn_response->{isbn} or [] },  @{ $syndetics_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] } ];
     my @xisbns;
     my $unique_xisbns; # a hashref
 

@@ -291,7 +291,6 @@ $tabsysprefs{FRBRizeEditions}     = "EnhancedContent";
 $tabsysprefs{XISBN}               = "EnhancedContent";
 $tabsysprefs{OCLCAffiliateID}     = "EnhancedContent";
 $tabsysprefs{XISBNDailyLimit}     = "EnhancedContent";
-$tabsysprefs{PINESISBN}           = "EnhancedContent";
 $tabsysprefs{ThingISBN}           = "EnhancedContent";
 $tabsysprefs{OPACFRBRizeEditions} = "EnhancedContent";
 

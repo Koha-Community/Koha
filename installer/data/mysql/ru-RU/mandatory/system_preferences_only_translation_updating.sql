@@ -124,9 +124,6 @@ UPDATE systempreferences SET explanation='Включить возможност�
 UPDATE systempreferences SET explanation='Если включено, то ЭК будет опрашивать один или несколько веб-сервисов ISBN касательно связанных ISBN и отобразит на вкладке «Издания» на странице с подробностями' WHERE variable='OPACFRBRizeEditions';
 -- 	If ON, the OPAC will query one or more ISBN web services for associated ISBNs and display an Editions tab on the details pages
 
-UPDATE systempreferences SET explanation='Используется с FRBRizeEditions. Если включено, Коха использует веб-сервис PINES OISBN для вкладки «Издания» на странице с подробностями.' WHERE variable='PINESISBN';
--- 	Use with FRBRizeEditions. If ON, Koha will use PINES OISBN web service in the Editions tab on the detail pages.
-
 UPDATE systempreferences SET explanation='Включает или выключает все функции меток. Это основной переключатель для меток.' WHERE variable='TagsEnabled';
 -- 	Enables or disables all tagging features. This is the main switch for tags.
 
