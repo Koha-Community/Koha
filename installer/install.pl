@@ -4,15 +4,14 @@ use strict;
 use warnings;
 use diagnostics;
 
-# use Install;
 use InstallAuth;
+use CGI;
+use IPC::Cmd;
+
 use C4::Context;
 use C4::Output;
 use C4::Languages qw(getAllLanguages getTranslatedLanguages);
 use C4::Installer;
-
-use CGI;
-use IPC::Cmd;
 
 my $query = new CGI;
 my $step  = $query->param('step');
@@ -57,126 +56,35 @@ if ( $step && $step == 1 ) {
     #Checking ALL perl Modules and services needed are installed.
     #Whenever there is an error, adding a report to the page
     $template->param( language => 1 );
-    my $problem;
+    $template->param( 'checkmodule' => 1 ); # we start with the assumption that there are no problems and set this to 0 if there are
 
     unless ( $] >= 5.006001 ) {    # Bug 179
-        $template->param( "problems" => 1, "perlversion" => 1 );
-        $problem = 1;
+        $template->param( problems => 1, perlversion => 1, checkmodule => 0 );
     }
 
-    # We could here use a special find
-    my @missing = ();
-    unless ( eval { require ZOOM } ) {
-        push @missing, { name => "ZOOM" };
-    }
-    unless ( eval { require YAML::Syck } ) {
-        push @missing, { name => "YAML::Syck" };
-    }
-    unless ( eval { require LWP::Simple } ) {
-        push @missing, { name => "LWP::Simple" };
-    }
-    unless ( eval { require XML::Simple } ) {
-        push @missing, { name => "XML::Simple" };
-    }
-    unless ( eval { require MARC::File::XML } ) {
-        push @missing, { name => "MARC::File::XML" };
-    }
-    unless ( eval { require MARC::File::USMARC } ) {
-        push @missing, { name => "MARC::File::USMARC" };
-    }
-    unless ( eval { require DBI } ) {
-        push @missing, { name => "DBI" };
-    }
-    unless ( eval { require Date::Manip } ) {
-        push @missing, { name => "Date::Manip" };
-    }
-    unless ( eval { require DBD::mysql } ) {
-        push @missing, { name => "DBD::mysql" };
-    }
-    unless ( eval { require HTML::Template::Pro } ) {
-        push @missing, { name => "HTML::Template::Pro" };
-    }
-    unless ( eval { require Date::Calc } ) {
-        push @missing, { name => "Date::Calc" };
-    }
-    unless ( eval { require Digest::MD5 } ) {
-        push @missing, { name => "Digest::MD5" };
-    }
-    unless ( eval { require MARC::Record } ) {
-        push @missing, { name => "MARC::Record" };
-    }
-    unless ( eval { require Mail::Sendmail } ) {
-        push @missing, { name => "Mail::Sendmail", usagemail => 1 };
-    }
-    unless ( eval { require List::MoreUtils } ) {
-        push @missing, { name => "List::MoreUtils" };
-    }
-    unless ( eval { require XML::RSS } ) {
-        push @missing, { name => "XML::RSS" };
-    }
-    unless ( eval { require CGI::Carp } ) {
-        push @missing, { name => "CGI::Carp" };
-    }
+    my $perl_modules = C4::Installer::PerlModules->new;
+    $perl_modules->version_info;
 
-
-# The following modules are not mandatory, depends on how the library want to use Koha
-    unless ( eval { require PDF::API2 } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing, { name => "PDF::API2", usagebarcode => 1 };
+    my $modules = $perl_modules->get_attr('missing_pm');
+    if (scalar(@$modules)) {
+        my @components = ();
+        my $checkmodule = 1;
+        foreach (@$modules) {
+            my ($module, $stats) = each %$_;
+            $checkmodule = 0 if $stats->{'required'};
+            push(
+                @components,
+                {
+                    name    => $module,
+                    version => $stats->{'min_ver'},
+                    require => $stats->{'required'},
+                    usage   => $stats->{'usage'},
+                }
+            );
         }
+        @components = sort {$a->{'name'} cmp $b->{'name'}} @components;
+        $template->param( missing_modules => \@components, checkmodule => $checkmodule );
     }
-    unless ( eval { require GD::Barcorde } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing,
-              { name => "GD::Barcode", usagebarcode => 1, usagespine => 1 };
-        }
-    }
-    unless ( eval { require GD } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing,
-              { name => "GD", usagepatronimages => 1 };
-        }
-    }
-    unless ( eval { require Graphics::Magick } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing,
-              { name => "Graphics::Magick", usagepatroncards => 1 };
-        }
-    }
-    unless ( eval { require Data::Random } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing, { name => "Data::Random", usagebarcode => 1 };
-        }
-    }
-    unless ( eval { require PDF::Reuse::Barcode } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing, { name => "PDF::Reuse::Barcode", usagebarcode => 1 };
-        }
-    }
-    unless ( eval { require PDF::Report } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing, { name => "PDF::Report", usagebarcode => 1 };
-        }
-    }
-    unless ( eval { require Algorithm::CheckDigits } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing, { name => "Algorithm::CheckDigits", usagebarcode => 1 };
-        }
-    }
-    unless ( eval { require GD::Barcode::UPCE } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing, { name => "GD::Barcode::UPCE", usagepine => 1 };
-        }
-    }
-    unless ( eval { require Net::LDAP } ) {
-        if ( $#missing >= 0 ) {   # only when $#missing >= 0 so this isn't fatal
-            push @missing, { name => "Net::LDAP", usageLDAP => 1 };
-        }
-    }
-    $template->param( missings => \@missing ) if ( scalar(@missing) > 0 );
-    $template->param( 'checkmodule' => 1 )
-      unless ( scalar(@missing) && $problem );
-
 }
 elsif ( $step && $step == 2 ) {
 #
