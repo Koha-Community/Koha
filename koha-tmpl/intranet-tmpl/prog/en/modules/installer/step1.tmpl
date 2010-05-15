@@ -31,32 +31,19 @@ listed, please inform your systems administrator.</p>
 <!--/TMPL_UNLESS-->
 <!--TMPL_IF Name="language"-->
   <!--TMPL_UNLESS Name="checkmodule"-->
-  <!--TMPL_IF Name="missing"-->
-  <p>Some perl modules are missing.<br />
+  <!--TMPL_IF Name="missing_modules"-->
+  <p>Some perl modules are missing. Modules in red <b>must</b> be installed before you may continue.<br />
   <ul>
-  <!--TMPL_LOOP Name="missing"-->
+  <!--TMPL_LOOP Name="missing_modules"-->
+    <!--TMPL_IF Name="require"-->
+    <li style="color:#FF0000;font-weight:bold;"><!--TMPL_VAR Name="name"-->
+    <!-- TMPL_ELSE -->
     <li><!--TMPL_VAR Name="name"-->
-    <!--TMPL_IF Name="usagemail"-->
-      <br /> This module is used whenever Koha has to send email.
-    <!--TMPL_ELSIF Name="usagebarcode"-->
-      <br /> This module is needed if you intend to print barcodes.
-    <!--TMPL_ELSIF Name="usagespine"-->
-      <br /> This module is needed if you intend to print spine labels.
-    <!--TMPL_ELSIF Name="usageLDAP"-->
-      <br /> This module is needed if you intend to use LDAP for authentication.
-    <!--TMPL_ELSIF Name="usagepatronimages"-->
-      <br /> This module is needed if you intend to use patron images.
-    <!--TMPL_ELSIF Name="usagepatroncards"-->
-      <br /> This module is needed if you intend to use the patron card creator.
     <!--/TMPL_IF-->
+      <br /> Version: <!--TMPL_VAR Name="version"-->
+      <br /> Usage: <!--TMPL_VAR Name="usage"-->
     </li>
   <!--/TMPL_LOOP-->
-  Please consider installing these modules before continuing.
-  <pre>
-  <!--TMPL_LOOP Name="missing"-->
-    perl -MCPAN -e "install <!--TMPL_VAR Name="name"-->";
-  <!--/TMPL_LOOP-->
-  </pre>
   <!--/TMPL_IF-->
   <!--TMPL_IF Name="problems"-->
   <p>I encountered some problems.</p>
@@ -68,13 +55,15 @@ listed, please inform your systems administrator.</p>
    </ul>
   <!--/TMPL_IF-->
   <!--/TMPL_UNLESS-->
-  <!--TMPL_IF Name="checkmodule"-->
 <form name="checkmodules" action="install.pl">
-<p> All dependencies installed.
-</p>
+<!--TMPL_IF Name="checkmodule"-->
 <input type="hidden" name="step" value="2" />
+<p> All dependencies installed.</p>
 <p>Please click next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+<!-- TMPL_ELSE -->
+<input type="hidden" name="step" value="1" />
+<p>Click to recheck dependencies <input value="Recheck" type="submit" /></p>
+<!--/TMPL_IF-->
 </form>
-  <!--/TMPL_IF-->
 <!--/TMPL_IF-->
 <!-- TMPL_INCLUDE name="intranet-bottom.inc" -->
