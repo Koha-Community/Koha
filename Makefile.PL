@@ -25,6 +25,13 @@ use ExtUtils::MakeMaker;
 use POSIX;
 use File::Spec;
 use Getopt::Long;
+use FindBin; # we need to enforce which C4::Installer::PerlModule is used in case more than one is installed
+
+use lib $FindBin::Bin;
+
+use C4::Installer;
+
+my $koha_pm = C4::Installer::PerlModules->new;
 
 my $DEBUG = 0;
 die "perl 5.6.1 or later required" unless ($] >= 5.006001);
@@ -537,97 +544,7 @@ WriteMakefile(
               ABSTRACT     => 'Award-winning integrated library system (ILS) and Web OPAC',
               AUTHOR       => 'Koha Developers <koha-devel@nongnu.org>',
               NO_META      => 1,
-              PREREQ_PM => {
-                            'Algorithm::CheckDigits'           => 0.50,
-							'Authen::CAS::Client'              => 0.05,
-                            'Biblio::EndnoteStyle'             => 0.05,
-                            'CGI'                              => 3.15,
-                            'CGI::Carp'                        => 1.29,
-                            'CGI::Session'                     => 4.20,
-                            'CGI::Session::Serialize::yaml'    => 4.20,
-                            'Class::Factory::Util'             => 1.6,
-                            'Class::Accessor'                  => 0.30,
-                            'DBD::mysql'                       => 4.004,
-                            'DBD::SQLite2'                     => 0.33, # optional, used for offline circulation
-                            'DBI'                              => 1.53,
-							'DateTime'                         => 0.51,
-                            'Data::Dumper'                     => 2.121,
-                            'Data::ICal'                       => 0.13,
-                            'Date::Calc'                       => 5.4,
-                            'Date::ICal'                       => 1.72,
-                            'Date::Manip'                      => 5.44,
-                            'Digest::MD5'                      => 2.36,
-                            'Digest::SHA'                      => 5.43,
-                            'Email::Date'                      => 1.103,
-                            'File::Temp'                       => 0.16,
-                            'GD'                               => 2.39,    #optional, used for patron image feature
-                            'GD::Barcode::UPCE'                => 1.1,
-                            'Graphics::Magick'                 => 1.3.7,   #optional, used for patron cards creator
-                            'Getopt::Long'                     => 2.35,
-                            'Getopt::Std'                      => 1.05,
-                            'HTML::Template::Pro'              => 0.69,
-                            'HTML::Scrubber'                   => 0.08,
-                            'HTTP::Cookies'                    => 1.39,
-                            'HTTP::OAI'                        => 3.20,
-                            'HTTP::Request::Common'            => 1.26,
-                            'IPC::Cmd'                         => 0.46,
-                            'JSON'                             => 2.07, # Needed by admin/item_circulation_alerts.pl
-                            'LWP::Simple'                      => 1.41,
-                            'LWP::UserAgent'                   => 2.033,
-                            'Lingua::Stem'                     => 0.82,
-			    'Lingua::Stem::Snowball'	       => 0.952,
-                            'List::Util'                       => 1.18,
-                            'List::MoreUtils'                  => 0.21,
-                            'Locale::Currency::Format'         => 1.28,
-                            'Locale::Language'                 => 2.07,
-                            'Locale::PO'                       => 0.17,
-                            'MARC::Charset'                    => 0.98,
-                            'MARC::Crosswalk::DublinCore'      => 0.02,
-                            'MARC::File::XML'                  => 0.88,
-                            'MARC::Record'                     => 2.00,
-                            'MIME::Base64'                     => 3.07,
-                            'MIME::Lite'                       => 3.00,
-                            'MIME::QuotedPrint'                => 3.07,
-                            'Mail::Sendmail'                   => 0.79,
-                            'Memoize::Memcached'               => 0.03, # optional
-                            'Net::LDAP'                        => 0.33, # optional
-                            'Net::LDAP::Filter'                => 0.14, # optional
-                            'Net::Z3950::ZOOM'                 => 1.16,
-                            'Number::Format'                   => 1.52,
-                            'PDF::API2'                        => 2.000,
-                            'PDF::API2::Page'                  => 2.000,
-                            'PDF::API2::Util'                  => 2.000,
-                            'PDF::API2::Simple'                => 1.000,
-                            'PDF::Table'                       => 0.9.3,
-                            'PDF::Reuse'                       => 0.33,
-                            'PDF::Reuse::Barcode'              => 0.05,
-                            'POE'                              => 0.9999,
-                            'POSIX'                            => 1.09,
-                            'Schedule::At'                     => 1.06,
-                            'Storable'	                       => 2.20,
-                            'SMS::Send'                        => 0.05, # optional
-                            'Term::ANSIColor'                  => 1.10,
-                            'Test'                             => 1.25,
-                            'Test::Harness'                    => 2.56,
-                            'Test::More'                       => 0.80,
-                            'Text::CSV'                        => 0.01,
-                            'Text::CSV_XS'                     => 0.32,
-                            'Text::CSV::Encoded'               => 0.09,
-                            'Text::Iconv'                      => 1.7,
-                            'Text::Wrap'                       => 2005.082401,
-                            'Time::HiRes'                      => 1.86,
-                            'Time::localtime'                  => 1.02,
-                            'Unicode::Normalize'               => 0.32,
-                            'URI::Escape'                      => 1.36,
-                            'XML::Dumper'                      => 0.81,
-                            'XML::LibXML'                      => 1.59,
-                            'XML::LibXSLT'                     => 1.59,
-                            'XML::SAX::ParserFactory'          => 1.01,
-                            'XML::SAX::Writer'                 => 0.44,
-                            'XML::Simple'                      => 2.14,
-                            'XML::RSS'                         => 1.31,
-                            'YAML::Syck'                       => 0.71,
-                        },
+              PREREQ_PM    => $koha_pm->prereq_pm,
 
               # File tree mapping
               PM => $file_map,
