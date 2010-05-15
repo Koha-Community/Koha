@@ -50,15 +50,36 @@
         </table>
         </div>
         <div id="perl">
-            <table>
+            <table style="cursor:pointer">
                 <caption>Perl modules</caption>
+                <!-- TMPL_LOOP name="table" -->
                 <tr>
-                <!-- TMPL_LOOP name="components" -->
-                    <th scope="row"><!-- TMPL_VAR NAME="name" --></th>
-                    <td><!-- TMPL_VAR NAME="version" --></td>
-                    <!-- TMPL_IF name="newrow" --></tr><!-- TMPL_UNLESS NAME="__last__" --><tr><!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
+                    <!-- TMPL_LOOP name="row" -->
+                    <!-- TMPL_IF NAME="current" -->
+                    <!-- TMPL_IF NAME="require" -->
+                    <th scope="row" style="font-weight:bold;" title="Module current">
+                    <!-- TMPL_ELSE -->
+                    <th scope="row" style="font-weight:normal" title="Module current">
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSIF NAME="upgrade" -->
+                    <!-- TMPL_IF NAME="require" -->
+                    <th scope="row" style="background-color:#FFCB2F;font-weight:bold;" title="Module upgrade needed">
+                    <!-- TMPL_ELSE -->
+                    <th scope="row" style="background-color:#FFCB2F;font-weight:normal" title="Module upgrade needed">
+                    <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSE -->
+                    <!-- TMPL_IF NAME="require" -->
+                    <th scope="row" style="background-color:#FF8A8A;font-weight:bold;" title="Required module missing">
+                    <!-- TMPL_ELSE -->
+                    <th scope="row" style="background-color:#FF8A8A;font-weight:normal" title="Optional module missing">
+                    <!-- /TMPL_IF -->
+                    <!-- /TMPL_IF -->
+                        <!-- TMPL_VAR NAME="name" -->
+                    </th>
+                    <!-- TMPL_IF NAME="version" --><td><!-- TMPL_VAR NAME="version" --><!-- TMPL_ELSE --><td style="font-weight:bold">Not Installed<!-- /TMPL_IF --></td>
+                    <!-- /TMPL_LOOP -->
+                </tr>
                 <!-- /TMPL_LOOP -->
-		</tr>
             </table>
         </div>
         <div id="team">
