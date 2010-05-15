@@ -14,27 +14,21 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
 # Routing.pl script used to create a routing list for a serial subscription
 # In this instance it is in fact a setting up of a list of reserves for the item
 # where the hierarchical order can be changed on the fly and a routing list can be
 # printed out
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use CGI;
-use C4::Auth;
-use C4::Context;
-use C4::Output;
-use C4::Koha;
-use C4::Acquisition;
-use C4::Serials;
 
-my $query = new CGI;
+my $query          = CGI->new;
 my $subscriptionid = $query->param('subscriptionid');
-my $routingid = $query->param('routingid');
-my $rank = $query->param('rank');
+my $routingid      = $query->param('routingid');
+my $rank           = $query->param('rank');
 
-reorder_members($subscriptionid,$routingid,$rank);
+reorder_members( $subscriptionid, $routingid, $rank );
 
-print $query->redirect("/cgi-bin/koha/serials/routing.pl?subscriptionid=$subscriptionid");
+print $query->redirect(
+    "/cgi-bin/koha/serials/routing.pl?subscriptionid=$subscriptionid");
 
