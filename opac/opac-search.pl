@@ -461,6 +461,7 @@ for (my $i=0;$i<=@servers;$i++) {
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
+            $template->param(offset     => $offset);
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);
             }

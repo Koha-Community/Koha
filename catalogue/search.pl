@@ -531,6 +531,7 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
+            $template->param(offset     => $offset);
 			$template->param (z3950_search_params => C4::Search::z3950_search_args($query_desc));
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);
