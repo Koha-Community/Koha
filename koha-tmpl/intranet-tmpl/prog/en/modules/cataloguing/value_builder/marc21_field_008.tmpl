@@ -634,7 +634,8 @@ function report() {
 			( document.f_pop.f710.value.match(/^\s*$/)  ? "    " : pad4(document.f_pop.f710.value)  )+
 			( document.f_pop.f1114.value.match(/^\s*$/) ? "    " : pad4(document.f_pop.f1114.value) )+
 			// }
-			document.f_pop.f1517.value+
+			//MR
+			(document.f_pop.f1517.value+"   ").substr(0,3)+
 			document.f_pop.f1821.value+
 			document.f_pop.f22.value+
 			document.f_pop.f23.value+
@@ -645,7 +646,8 @@ function report() {
 			document.f_pop.f31.value+ ' '+
 			document.f_pop.f33.value+
 			document.f_pop.f34.value+
-			document.f_pop.f3537.value+
+			//MR
+			(document.f_pop.f3537.value+"   ").substr(0,3)+
 			document.f_pop.f38.value+
 			document.f_pop.f39.value;
 		self.close();
