@@ -85,9 +85,8 @@ of a work into the item detail pages. New with Koha 3 is service throttling
 for these services, to keep within subscription limits.
 
 4. Cross-platform, multi-RDBMS, Web-server agnostic - Run Koha on the platform
-of your choice: Linux, Windows, Mac OS X, FreeBSD, Solaris. Koha 3 also
-includes better support for multi-RDBMS (MySQL 5.0 and PostgreSQL), and runs
-under Apache2, IIS, or the web server of your choosing.
+of your choice: Linux, Windows, Mac OS X, FreeBSD, Solaris. 
+Koha runs preferrably under Apache2, IIS, or the web server of your choosing.
 
 5. Multi-lingual support - Koha was designed from the ground up for multilingual
 libraries. Koha 3 can handle Chinese, Japanese, and even right-to-left languages
@@ -167,13 +166,14 @@ bug #4276
 
 
 Adds IndependentBranchPatrons system preferences for libraries which would not like to see patrons from other libraries
-Change the XSLT systempreference so that path can be provided
+Adds  XSLT systempreferences so that path can be provided
 Also adds CSV exports
+Adds a page for subscription history management
 Changes the way reserves are allowed. You HAVE TO enter the itemtypes and holds Policy in order to enable your patron to reserve
 
 
 
-It adds 8 changes in database, which adds some new tables required for some partial features ports from 3.2 due to the previous release and updates languages tag for portuguese and updates Calendar SystemPreference.
+It adds 10 changes in database, which adds some new tables required for some partial features ports from 3.2 due to the previous release and updates languages tag for portuguese and updates Calendar SystemPreference.
 
 
 Note that Windows is not supported for this version as there are blockers.
