@@ -21,7 +21,7 @@ use MARC::File::USMARC;
 $|=1;
 my $dbh = C4::Context->dbh;
 
-my $sth=$dbh->prepare("select m.biblionumber,b.biblioitemnumber from biblio m left join biblioitems b on b.biblionumber=m.biblionumber");
+my $sth=$dbh->prepare("SELECT biblionumber, biblioitemnumber FROM biblioitems");
 $sth->execute();
 
 my $i=1;
@@ -35,6 +35,8 @@ while (my ($biblionumber,$biblioitemnumber)=$sth->fetchrow ){
 sub MARCmodbiblionumber{
     my ($biblionumber,$biblioitemnumber,$record)=@_;
     
+    return unless $record;
+
     my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
     my ($tagfield2,$biblioitemtagsubfield) = &GetMarcFromKohaField("biblio.biblioitemnumber","");
         
