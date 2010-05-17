@@ -169,6 +169,7 @@ while (($res,$res2,$field) = $sth->fetchrow) {
     } else {
 	    $template->param(holdingbranch => 1);
 	    $total++;
+	    last; #MR
     }
 }
 
