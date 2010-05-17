@@ -202,7 +202,7 @@ our $PERL_DEPS = {
     'Graphics::Magick' => {
         'usage'    => 'Patron Card Creator Feature',
         'required' => '0',
-        'min_ver'  => '1.3.7'
+        'min_ver'  => '1.3.5'
     },
     'MARC::Charset' => {
         'usage'    => 'Core',
