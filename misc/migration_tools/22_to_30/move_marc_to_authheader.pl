@@ -43,7 +43,7 @@ while ( my ( $authid,$authtypecode ) = $sth->fetchrow ) {
     $string=~s/\-//g;
     $string = sprintf("%-*s",26, $string);
     substr($string,9,6,"frey50");
-    unless ($record->subfield(100,"a")){
+    unless ($record->subfield(100,"a") and length($record->subfield(100,"a")) == 26 ){
       $record->insert_fields_ordered(MARC::Field->new(100,"","","a"=>$string));
     }
     if ($record->field(152)){
