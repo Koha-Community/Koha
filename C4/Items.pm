@@ -395,7 +395,7 @@ my %default_values_for_mod_from_marc = (
     homebranch           => undef, 
     itemcallnumber       => undef, 
     itemlost             => 0,
-    itemnotes            => undef, 
+    itemnotes            => '', 
     itype                => undef, 
     location             => undef, 
     materials            => undef, 
@@ -424,7 +424,7 @@ sub ModItemFromMarc {
     my $item = &TransformMarcToKoha( $dbh, $localitemmarc, $frameworkcode, 'items');
 
     foreach my $item_field (keys %default_values_for_mod_from_marc) {
-        $item->{$item_field} = $default_values_for_mod_from_marc{$item_field} unless (exists $item->{$item_field} or not $default_values_for_mod_from_marc{$item_field});
+        $item->{$item_field} = $default_values_for_mod_from_marc{$item_field} unless (exists $item->{$item_field} or not defined $default_values_for_mod_from_marc{$item_field});
     }
     my $unlinked_item_subfields = _get_unlinked_item_subfields($localitemmarc, $frameworkcode);
 
