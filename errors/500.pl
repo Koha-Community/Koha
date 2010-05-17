@@ -34,4 +34,5 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 $template->param( admin => $admin );
-output_html_with_http_headers $query, $cookie, $template->output, 'html', '500 Internal Server Error';
+output_html_with_http_headers $query, $cookie, $template->output; #, 'html', '500 Internal Server Error';
+
