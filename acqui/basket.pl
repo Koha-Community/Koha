@@ -114,7 +114,6 @@ if ( $op eq 'delete_confirm' ) {
     $basket->{creationdate} = ""            unless ( $basket->{creationdate} );
     $basket->{authorisedby} = $loggedinuser unless ( $basket->{authorisedby} );
     my $contract = &GetContract($basket->{contractnumber});
-    my $count = scalar GetOrders( $basketno);
     $template->param(
         basketno             => $basketno,
         basketname           => $basket->{'basketname'},
@@ -133,7 +132,6 @@ if ( $op eq 'delete_confirm' ) {
         address2             => $bookseller->{'address2'},
         address3             => $bookseller->{'address3'},
         address4             => $bookseller->{'address4'},
-        count               =>     $count,
       );
 } elsif ($op eq 'attachbasket' && $template->{'param_map'}->{'CAN_user_acquisition_group_manage'} == 1) {
       print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?basketno=' . $basket->{'basketno'} . '&op=attachbasket&booksellerid=' . $booksellerid);
@@ -198,9 +196,9 @@ if ( $op eq 'delete_confirm' ) {
     my $member = GetMember(borrowernumber => $loggedinuser);
     if ($basket->{closedate} && haspermission({ flagsrequired   => { acquisition => 'group_manage'} })) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
-        for (my $i=0; $i < scalar(@$basketgroups); $i++) {
-            if ($basket->{basketgroupid} == @$basketgroups[$i]->{id}){
-                @$basketgroups[$i]->{default} = 1;
+        for my $bg ( @{$basketgroups} ) {
+            if ($basket->{basketgroupid} == $bg->{id}){
+                $bg->{default} = 1;
             }
         }
         my %emptygroup = ( id   =>   undef,
@@ -219,7 +217,6 @@ if ( $op eq 'delete_confirm' ) {
       $basket->{creationdate}, $basket->{authorisedby};
 
     my @results = GetOrders( $basketno );
-    my $count = scalar @results;
     
 	my $gist = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
 	my $discount = $bookseller->{'discount'} / 100;
@@ -231,38 +228,40 @@ if ( $op eq 'delete_confirm' ) {
     my $qty_total;
     my @books_loop;
 
-    for ( my $i = 0 ; $i < $count ; $i++ ) {
-        my $rrp = $results[$i]->{'listprice'};
-		my $qty = $results[$i]->{'quantity'} || 0;
-        if (!defined $results[$i]->{quantityreceived}) {
-            $results[$i]->{quantityreceived} = 0;
+    for my $order ( @results ) {
+        my $rrp = $order->{'listprice'} || 0;
+		my $qty = $order->{'quantity'} || 0;
+        if (!defined $order->{quantityreceived}) {
+            $order->{quantityreceived} = 0;
+        }
+        for ( qw(rrp ecost quantityreceived)) {
+            if (!defined $order->{$_}) {
+                $order->{$_} = 0;
+            }
         }
 
-        my $budget = GetBudget(  $results[$i]->{'budget_id'} );
-        $rrp = ConvertCurrency( $results[$i]->{'currency'}, $rrp );
+        my $budget = GetBudget(  $order->{'budget_id'} );
+        $rrp = ConvertCurrency( $order->{'currency'}, $rrp );
 
-        $total_rrp += $qty * $results[$i]->{'rrp'};
-        my $line_total = $qty * $results[$i]->{'ecost'};
+        $total_rrp += $qty * $order->{'rrp'};
+        my $line_total = $qty * $order->{'ecost'};
 		# FIXME: what about the "actual cost" field?
         $qty_total += $qty;
-        my %line = %{ $results[$i] };
-		($i%2) and $line{toggle} = 1;
+        my %line = %{ $order };
 
-        $line{order_received} = ( $qty == $results[$i]->{'quantityreceived'} );
+        $line{order_received} = ( $qty == $order->{'quantityreceived'} );
         $line{basketno}       = $basketno;
-        $line{i}              = $i;
         $line{budget_name}    = $budget->{budget_name};
         $line{rrp}            = sprintf( "%.2f", $line{'rrp'} );
         $line{ecost}          = sprintf( "%.2f", $line{'ecost'} );
         $line{line_total}     = sprintf( "%.2f", $line_total );
-        $line{odd}            = $i % 2;
         if ($line{uncertainprice}) {
             $template->param( uncertainprices => 1 );
             $line{rrp} .= ' (Uncertain)';
         }
 	if ($line{'title'}){
-	    my $volume = $results[$i]->{'volume'};
-	    my $seriestitle = $results[$i]->{'seriestitle'};
+	    my $volume = $order->{'volume'};
+	    my $seriestitle = $order->{'seriestitle'};
 	    $line{'title'} .= " / $seriestitle" if $seriestitle;
 	    $line{'title'} .= " / $volume" if $volume;
 	} else {
@@ -303,7 +302,6 @@ if ( $op eq 'delete_confirm' ) {
         name                 => $bookseller->{'name'},
         entrydate            => C4::Dates->new($results[0]->{'entrydate'},'iso')->output,
         books_loop           => \@books_loop,
-        count                => $count,
         gist_rate            => sprintf( "%.2f", $gist * 100 ) . '%',
         total_rrp_gste       => sprintf( "%.2f", $total_rrp_gste ),
         total_est_gste       => sprintf( "%.2f", $total_est_gste ),
