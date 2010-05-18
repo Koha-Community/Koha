@@ -125,7 +125,7 @@ if (@subscriptionid){
   my $subscriptioninformation = GetFullSubscriptionsFromBiblionumber($biblionumber);
   $subscriptions=PrepareSerialsData($subscriptioninformation);
 }
-$template->param($subscriptiondescs->[0]);
+
 my $title = $subscriptiondescs->[0]{bibliotitle};
 my $yearmax=($subscriptions->[0]{year} eq "manage" && scalar(@$subscriptions)>1)? $subscriptions->[1]{year} :$subscriptions->[0]{year};
 my $yearmin=$subscriptions->[scalar(@$subscriptions)-1]{year};
