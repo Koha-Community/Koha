@@ -67,6 +67,7 @@ foreach (@$issues){
 	$_->{date_due}   = format_date($_->{date_due});
 	$_->{issuedate}  = format_date($_->{issuedate});
 	$_->{returndate} = format_date($_->{returndate});
+	$_->{lastreneweddate} = format_date($_->{lastreneweddate});
 }
 $template->param(
     total        => scalar @$issues,

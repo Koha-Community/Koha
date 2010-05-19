@@ -15,29 +15,26 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Checkout history for <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="author" -->(<!-- TMPL_VAR NAME="author" -->)<!-- /TMPL_IF --> </h1>
+<h1>Checkout history for <!-- TMPL_VAR NAME="title" escape="html" --></h1>
+<!-- TMPL_IF NAME="author" --><h3>by <!-- TMPL_VAR NAME="author" --></h3><!-- /TMPL_IF -->
 
 <div class="searchresults">
     <!-- TMPL_IF NAME="issues" -->
-        <p><b>Has been checked out <!-- TMPL_VAR NAME="total" --> times</b></p>
+        <h4>Checked out <!-- TMPL_VAR NAME="total" --> times</h4>
         <table>
-            <tr>
+            <thead><tr>
             <th>Patron</th>
             <th>Barcode</th>
-            <th>Library</th>
-            <th>Issuing library</th>
+            <th>Checked out from</th>
             <th>Renewed</th>
             <th>Checkout on</th>
             <th>Due date</th>
             <th>Checkin on</th>
-            </tr>
+            </tr></thead>
+            <tbody>
         <!-- TMPL_LOOP NAME="issues" -->
-            <tr>
-                <td><!-- TMPL_IF NAME="issuedate" -->
-                        <!-- TMPL_VAR NAME="issuedate" -->
-                    <!-- TMPL_ELSE -->
-                        &nbsp;
-                    <!-- /TMPL_IF --></td>
+        <!-- TMPL_UNLESS NAME="__odd__" --><tr class="highlight"><!-- TMPL_ELSE
+--><tr><!-- /TMPL_UNLESS -->
                 <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="surname" --><!-- TMPL_IF NAME="firstname" -->, <!-- TMPL_VAR NAME="firstname" --><!-- /TMPL_IF --></a></td>
                 <td><!-- TMPL_IF NAME="barcode" -->
                         <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a>
@@ -49,20 +46,16 @@
                     <!-- TMPL_ELSE -->
                         &nbsp;
                     <!-- /TMPL_IF --></td>
-                <td><!-- TMPL_IF NAME="issuingbranch" -->
-                        <!-- TMPL_VAR NAME="issuingbranch" -->
+                <td><!-- TMPL_IF NAME="renewals"-->
+                        Yes<!-- TMPL_IF NAME="lastreneweddate" -->, <small>last on: <!-- TMPL_VAR NAME="lastreneweddate" --></small>
+                            <!-- /TMPL_IF -->
+                    <!-- TMPL_ELSE -->
+                        No
+                    <!-- /TMPL_IF --></td>
+                <td><!-- TMPL_IF NAME="issuedate" -->
+                        <!-- TMPL_VAR NAME="issuedate" -->
                     <!-- TMPL_ELSE -->
                         &nbsp;
-                    <!-- /TMPL_IF --></td>
-                <td><!-- TMPL_IF NAME="renewals"-->
-                        YES<br />
-                        <small>
-                            <!-- TMPL_IF NAME="lastreneweddate" -->
-                                last on: <!-- TMPL_VAR NAME="lastreneweddate" -->
-                            <!-- /TMPL_IF -->
-                        </small>
-                    <!-- TMPL_ELSE -->
-                        NO
                     <!-- /TMPL_IF --></td>
                 <td><!-- TMPL_IF NAME="date_due" -->
                         <!-- TMPL_VAR NAME="date_due" -->
@@ -76,10 +69,11 @@
                     <!-- /TMPL_IF --></td>
            </tr>
         <!-- /TMPL_LOOP -->
+        </tbody>
 		</table>
     <!-- TMPL_ELSE -->
-        <p>
-        <b><!-- TMPL_VAR NAME="title" escape="html" -->(<!-- TMPL_VAR NAME="author" -->)</b> <span class="problem">has never been checked out.</span></p>
+        <div class="dialog message"><p>
+        <b><!-- TMPL_VAR NAME="title" escape="html" --><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></b> has never been checked out.</p></div>
 
     <!-- /TMPL_IF -->
 </div>
