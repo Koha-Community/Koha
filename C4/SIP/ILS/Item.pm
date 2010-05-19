@@ -10,6 +10,7 @@ package ILS::Item;
 use strict;
 use warnings;
 
+use DateTime;
 use Sys::Syslog qw(syslog);
 
 use ILS::Transaction;
@@ -91,6 +92,14 @@ sub new {
     $item->{'id'} = $item->{'barcode'};
 	# check if its on issue and if so get the borrower
 	my $issue = GetItemIssue($item->{'itemnumber'});
+    if ( $issue ) {
+        my $date = $issue->{ date_due };
+        my $dt = DateTime->new(
+            year  => substr($date, 0, 4),
+            month => substr($date,5,2),
+            day  => substr($date, 8, 2) );
+        $item->{ due_date } = $dt->epoch();
+    }
 	my $borrower = GetMember($issue->{'borrowernumber'},'borrowernumber');
 	$item->{patron} = $borrower->{'cardnumber'};
 	my @reserves = (@{ GetReservesFromBiblionumber($item->{biblionumber}) });
