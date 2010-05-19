@@ -172,7 +172,7 @@ if ( $op eq 'delete_confirm' ) {
             basketgroupname => $basket->{'basketname'});
         
     }
-} elsif ($query->param('op') eq 'reopen') {
+} elsif ($op eq 'reopen') {
     my $basket;
     $basket->{basketno} = $query->param('basketno');
     $basket->{closedate} = undef;
