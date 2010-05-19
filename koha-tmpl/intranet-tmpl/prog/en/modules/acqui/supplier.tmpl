@@ -88,16 +88,22 @@ if (f.company.value == "") {
             <ol>
             <li><label for="list_currency">List Prices are</label>
                     <select name="list_currency" id="list_currency">
-                    <!-- TMPL_LOOP NAME="loop_pricescurrency" -->
-                        <!-- TMPL_VAR NAME="currency" -->
+                    <!-- TMPL_LOOP NAME="loop_currency" -->
+                        <option value="<!-- TMPL_VAR  NAME="currency" -->"
+                            <!-- TMPL_IF NAME="listprice" -->selected="1"<!-- /TMPL_IF -->>
+                            <!--TMPL_VAR NAME="currency" --></option>
                     <!-- /TMPL_LOOP -->
-                    </select></li>
+                    </select>
+            </li>
             <li><label for="invoice_currency">Invoice Prices are</label>
                     <select name="invoice_currency" id="invoice_currency">
-                    <!-- TMPL_LOOP NAME="loop_invoicecurrency" -->
-                        <!-- TMPL_VAR NAME="currency" -->
+                    <!-- TMPL_LOOP NAME="loop_currency" -->
+                        <option value="<!-- TMPL_VAR  NAME="currency" -->"
+                            <!-- TMPL_IF NAME="invoiceprice" -->selected="1"<!-- /TMPL_IF -->>
+                            <!--TMPL_VAR NAME="currency" --></option>
                     <!-- /TMPL_LOOP -->
-                    </select></li>
+                    </select>
+            </li>
             </ol>
             <ol class="radio">
             <!-- TMPL_IF NAME="GST" --><li><label for="gstyes" class="radio">Tax Number Registered:</label>
@@ -129,7 +135,7 @@ if (f.company.value == "") {
             </ol>
             <ol>
             <li><label for="discount">Discount</label>
-                <input type="text" size="3" id="discount" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %</li>
+                <input type="text" size="6" id="discount" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %</li>
             <!-- TMPL_IF NAME="GST" --><li><label for="gstrate">Tax rate</label><input type="text" name="gstrate" id="gstrate" size="5" value="<!-- TMPL_VAR name="gstrate" -->"/>%</li><!-- /TMPL_IF -->
             <li><label for="notes">Notes</label>
                 <textarea cols="40" rows="4" id="notes" name="notes" ><!-- TMPL_VAR NAME="notes" --></textarea></li></ol>			
