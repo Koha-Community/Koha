@@ -152,10 +152,18 @@
 <!-- /TMPL_IF --> <!-- add_form -->
 
 <!-- TMPL_IF name="add_validate" -->
-<h3>Fund added</h3>
-<p>
-  <a href="<!-- TMPL_VAR name="action" -->">Return to fund list</a>
-</p>
+    <!-- TMPL_UNLESS NAME="error_bookfundid_exist" -->
+    <h3>Fund added</h3>
+    <p>
+        <a href="<!-- TMPL_VAR name="action" -->">Return to fund list</a>
+    </p>
+    <!-- TMPL_ELSE -->
+    <h3>Cannot adding this fund</h3>
+    <p class="error-adding-fund">This fund code already exist and can't be added</p>
+    <p>
+        <a href="<!-- TMPL_VAR name="action" -->">Return to fund list</a>
+    </p>
+    <!-- /TMPL_UNLESS -->
 <!-- TMPL_ELSIF name="mod_validate" -->
 <h3>Fund modified</h3>
 <p>

@@ -126,7 +126,7 @@ if ($op eq 'add_form') {
 elsif ($op eq 'add_validate') {
     my $bookfundname = $input->param('bookfundname');
     my $branchcode   = $input->param('branchcode') || undef;
-    my $number = Countbookfund($bookfundid,$branchcodeid);
+    my $number = Countbookfund($bookfundid);
     if ($number == 0 ) {
         NewBookFund(
             $bookfundid,
@@ -134,8 +134,7 @@ elsif ($op eq 'add_validate') {
             $input->param('branchcode')||''
         );
     }
-    print $input->redirect('aqbookfund.pl');    # FIXME: unnecessary redirect
-    exit;
+    $template->param(error_bookfundid_exist   => $number);
 # END $OP eq ADD_VALIDATE
 }
 
