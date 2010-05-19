@@ -164,7 +164,7 @@ function checkMultiHold() {
   <!-- /TMPL_IF -->
 
   <!-- TMPL_UNLESS NAME="multi_hold" -->
-    <h1>Place a hold on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a></h1>
+    <h1>Place a hold on <!-- TMPL_INCLUDE NAME="biblio-default-view.inc" --><!-- TMPL_VAR NAME="title" escape="html" --></a></h1>
   <!-- TMPL_ELSE -->
     <h1>Confirm Holds</h1>
   <!-- /TMPL_UNLESS -->

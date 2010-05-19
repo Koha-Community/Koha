@@ -102,10 +102,10 @@ foreach my $biblionumber ( @bibs ) {
     $dat->{MARCURLS}    = $marcurlsarray;
     $dat->{HASAUTHORS}  = $hasauthors;
 
-    if ( C4::Context->preference("BiblioDefaultView") eq "normal" ) {
+    if ( C4::Context->preference("IntranetBiblioDefaultView") eq "normal" ) {
         $dat->{dest} = "/cgi-bin/koha/catalogue/detail.pl";
     }
-    elsif ( C4::Context->preference("BiblioDefaultView") eq "marc" ) {
+    elsif ( C4::Context->preference("IntranetBiblioDefaultView") eq "marc" ) {
         $dat->{dest} = "/cgi-bin/koha/catalogue/MARCdetail.pl";
     }
     else {
