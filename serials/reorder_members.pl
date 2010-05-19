@@ -21,11 +21,16 @@
 use strict;
 use warnings;
 use CGI;
+use C4::Auth qw( checkauth );
+use C4::Serials qw( reorder_members );
 
 my $query          = CGI->new;
 my $subscriptionid = $query->param('subscriptionid');
 my $routingid      = $query->param('routingid');
 my $rank           = $query->param('rank');
+
+my ( $user, $cookie, $sesion_id, $flags ) =
+  checkauth( $query, 0, { serials => 1 }, 'intranet' );
 
 reorder_members( $subscriptionid, $routingid, $rank );
 
