@@ -2,10 +2,12 @@
 Installation Guide for Installing Koha on Debian Lenny with MySQL 5
 =============================
 
+Some parts copyright 2010 Chris Nighswonger
+
 Feedback/bug reports: Koha Developer's List:
 http://lists.koha.org/mailman/listinfo/koha-devel
 
-This document last modified: 19 December 2009
+This document last modified: 19 May 2010
 
 Installation Instructions
 =============================
@@ -37,7 +39,7 @@ The Index Data packages are signed with a key you can install as follows:
 1.4.1 Option A: Download Koha via Git (optional)
 
     $ sudo apt-get install git-core git-email
-    $ git clone git://git.koha.org/pub/scm/koha.git kohaclone
+    $ git clone git://git.koha-community.org/pub/scm/koha.git kohaclone
     $ cd kohaclone
     $ git checkout -b myinstall origin
 
@@ -45,12 +47,12 @@ Note: for more information about Git, please see the Koha Git Usage Guide:
 
     http://wiki.koha.org/doku.php?id=en:development:git_usage
 
-1.4.2 Option B: Download Koha from http://download.koha.org
+1.4.2 Option B: Download Koha from http://download.koha-community.org
 
-Find the latest Koha stable version on http://download.koha.org
+Find the latest Koha stable version on http://download.koha-community.org
 and get it:
 
-    $ wget <URL> found on download.koha.org
+    $ wget <URL> found on download.koha-community.org
 
 1.5 Install additional Debian dependencies
 
@@ -198,11 +200,9 @@ into Zebra. A specific script must be launched each time a bibliographic
 or an authority record is edited.
 
     $ sudo -u ${KOHA_USER} misc/migration_tools/rebuild_zebra -z -b -a
+    NOTE: This script should be run as the kohauser (the default is 'koha').
 
-    Note: if you are running in this mode, you may wish to defer starting the
-    zebraqueue until you've run the web installer (see below).
-
-Option 2: run automatically Zebra processes as daemons:
+Option 2: run automatically Zebra process as a daemon:
 
 Note that references to $SCRIPT_DIR refer to the directory where
 Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
@@ -213,7 +213,7 @@ Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
     (Note: ${SCRIPT_DIR} is /usr/share/koha/bin/ by default in a standard install)
     $ sudo update-rc.d koha-zebra-daemon defaults
     ( Note: see man chkconfig(8) on other distros )
-    
+
     $ sudo ${SCRIPT_DIR}/koha-zebra-ctl.sh start
 
 1.2 Zebra Indexer
@@ -224,6 +224,7 @@ indexing by Zebra with this command:
   <path/to/koha>/misc/migration_tools/rebuild_zebra -z -b -a
 
 See check misc/cronjobs/crontab.example for usage examples.
+NOTE: This job should be setup under the kohauser (the default is 'koha').
 
 6. Run the Web Installer, populate the database, initial configuration of settings
 
@@ -254,15 +255,14 @@ Authority data in MARC21 format
 7.2 Fast Index:
     $ misc/migration_tools/rebuild_zebra.pl -b -w
 
-    Once the indexing has completed, you will be able to search for records in your
-    system. NOTE: if you don't run the Fast Index utility, and you have the index
-	updates scheduled as per 7.3 the indexing process will happen in the background,
-	but it will be orders of magnitude slower.
+    Once the indexing has completed, you will be able to search for records in your system.
+    NOTE: This script should be run as the kohauser (the default is 'koha').
 
 7.3 Schedule regular index updates
-    run rebuild_zebra.pl -b -a -z as a regular cron job, 
-    check misc/cronjobs/crontab.example	for usage examples
-    
+    You need to run rebuild_zebra.pl -b -a -z as a regular cron job in orde to pick up new bibs
+    and items as you add them. Check misc/cronjobs/crontab.example for usage examples. See 7.0 above.
+    NOTE: This job should be setup under the kohauser (the default is 'koha').
+
 7.4 To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
     change the <listen> options to listen on a TCP port; then restart the zebra daemon.
 
