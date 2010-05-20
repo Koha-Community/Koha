@@ -17,7 +17,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <style type="text/css">
-    #sql { width: 90%; height: 9em; border: 1px solid #EEE; }
+    #sql { width: 90%; height: 9em;}
 </style>
 <script type="text/javascript">
 //<![CDATA[
@@ -69,7 +69,6 @@ $(document).ready(function(){
 <div id="bd">
 <div id="yui-main">
     <div class="yui-b">
-    <div class="details">
 
 <!-- TMPL_IF NAME="start" -->
     <h2>Guided Reports</h2>
@@ -477,8 +476,13 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
             <option value="3" disabled="disabled">Matrix</option>
         </select>
     </li>
-    <li><label for="sql">SQL: </label><textarea  id="sql" name="sql" cols="50" rows="10"><!-- TMPL_VAR NAME="sql" DEFAULT="" --></textarea></li>
 </ol>
+</fieldset>
+<fieldset class="rows">
+<legend>SQL:</legend>
+<div style="margin:1em;">
+<textarea  id="sql" name="sql" cols="50" rows="10"><!-- TMPL_VAR NAME="sql" DEFAULT="" --></textarea>
+</div>
 </fieldset>
 
 <fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
@@ -576,7 +580,6 @@ Sub report:<select name="subreport">
 </form>
 <!-- /TMPL_IF -->
 
-</div>
 </div>
 </div>
 <div class="yui-b">
