@@ -71,6 +71,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Context;
 use C4::Serials;
+use List::MoreUtils qw/uniq/;
 
 my $query           = CGI->new();
 my $dbh             = C4::Context->dbh;
@@ -85,6 +86,7 @@ my $op              = $query->param('op');
 if ( scalar(@subscriptionids) == 1 && index( $subscriptionids[0], q|,| ) > 0 ) {
     @subscriptionids = split( /,/, $subscriptionids[0] );
 }
+my @subscriptionids=uniq @subscriptionids;
 my @errors;
 my @errseq;
 
