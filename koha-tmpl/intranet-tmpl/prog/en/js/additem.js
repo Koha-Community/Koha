@@ -1,8 +1,8 @@
 function deleteItemBlock(index) {
     var aDiv = document.getElementById(index);
     aDiv.parentNode.removeChild(aDiv);
-    var quantityrec = document.getElementById('quantityrec');
-    quantityrec.setAttribute('value',parseFloat(quantityrec.getAttribute('value'))-1);
+    var quantity = document.getElementById('quantity');
+    quantity.setAttribute('value',parseFloat(quantity.getAttribute('value'))-1);
 }
 function cloneItemBlock(index) {    
     var original = document.getElementById(index); //original <div>
