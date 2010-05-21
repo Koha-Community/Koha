@@ -775,11 +775,11 @@ sub GetImportBatchRangeDesc {
                                     WHERE batch_type = 'batch'
                                     ORDER BY import_batch_id DESC";
     my @params;
+    if ($results_per_group){
+        $query .= " LIMIT ?";
+        push(@params, $results_per_group);
+    }
     if ($offset){
-        if ($results_per_group){
-            $query .= " LIMIT ?";
-            push(@params, $results_per_group);
-        }
         $query .= " OFFSET ?";
         push(@params, $offset);
     }
@@ -856,11 +856,11 @@ sub GetImportBibliosRange {
     }
     $query.=" ORDER BY import_record_id";
 
+    if($results_per_group){
+        $query .= " LIMIT ?";
+        push(@params, $results_per_group);
+    }
     if($offset){
-        if($results_per_group){
-            $query .= " LIMIT ?";
-            push(@params, $results_per_group);
-        }
         $query .= " OFFSET ?";
         push(@params, $offset);
     }
