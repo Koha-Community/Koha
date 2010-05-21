@@ -148,6 +148,14 @@ function AreMandatoriesNotOk(){
 					}
 	    		}
 	    	}
+
+	    	elemtextareas = elem.getElementsByTagName('textarea');
+	    	for(var j=0,len2=elemtextareas.length; j<len2; j++){
+                // this bit assumes that the only textareas in this context would be for subfields
+                if (elemtextareas[j].value) {
+                    isempty = false;
+                }
+            }
     	}else{
     		isempty = false;
     	}
