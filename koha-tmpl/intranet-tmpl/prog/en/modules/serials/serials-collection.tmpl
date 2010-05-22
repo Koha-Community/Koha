@@ -75,13 +75,13 @@ $(document).ready(function() {
   <th>Frequency</th>
   <th>Numbering pattern</th>
   <th>Library</th>
-  <th>Call Number</th>
+  <th>Call number</th>
   <th>Notes</th>
   <th>Routing</th>
   <th>Renew</th>
 </tr>
 <!--TMPL_LOOP Name="subscriptions"-->
-	<tr>
+    <!-- TMPL_UNLESS NAME="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
       <td><a href="subscription-detail.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->"># <!-- TMPL_VAR name="subscriptionid" --></a> </td>
       <td>         <!--TMPL_IF name="periodicity1" -->
                         1/day
@@ -176,7 +176,7 @@ $(document).ready(function() {
  <!-- TMPL_LOOP NAME="years" -->
 <div id="subscription-year-<!-- TMPL_VAR NAME="year" -->">
         <table style="width:400px;">
-            <tr>
+	  <tr>
 <!--TMPL_UNLESS Name="onesubscription"-->
                 <th># Subs</th>
 <!--/TMPL_UNLESS-->
@@ -184,19 +184,19 @@ $(document).ready(function() {
                 </th>
                 <th>Date received
                 </th>
-                <th> Number
+                <th>Number
                 </th>
-                <th> Status
+                <th>Status
                 </th>
-                <th> Notes
+                <th>Notes
                 </th>
-                <th>branch
+                <th>Branch
                 </th>
                 <th>Edit
                 </th>
             </tr>
       <!-- TMPL_LOOP Name="serials" -->
-            <tr>
+    <!-- TMPL_UNLESS NAME="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
 <!--TMPL_UNLESS Name="onesubscription"-->
                  <td><a href="serials-collection.pl?subscriptionid=<!--TMPL_VAR Name="subscriptionid"-->"><!--TMPL_VAR Name="subscriptionid"--></a></td>
 <!--/TMPL_UNLESS-->
