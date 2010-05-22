@@ -4,6 +4,10 @@
 
 <script type="text/javascript">
 //<![CDATA[
+function print_slip(subscriptionid,issue){
+    var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
+    window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+}
 function addsubscriptionid()
 {
 	var tab=new Array();
@@ -192,6 +196,8 @@ $(document).ready(function() {
                 </th>
                 <th>Branch
                 </th>
+		<th>Routing
+		</th>
                 <th>Edit
                 </th>
             </tr>
@@ -218,6 +224,9 @@ $(document).ready(function() {
                 <td>
                     <!-- TMPL_VAR Name="branchcode" -->
                 </td>
+		<td>
+		   <a href="" onclick="print_slip(<!-- TMPL_VAR NAME="subscriptionid" ESCAPE="HTML" -->, '<!-- TMPL_VAR NAME="serialseq" ESCAPE="HTML" -->'); return false" />Print list</a>
+		</td>
                 <td>
                   <!--TMPL_IF Name="cannotedit"-->
                     disabled
