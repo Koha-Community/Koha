@@ -1,8 +1,7 @@
 =============================
-Installation Guide for Installing Koha on Debian Etch with MySQL 5
+Installation Guide for Installing Koha on Debian Lenny with MySQL 5
 =============================
 
-Copyright (C) 2007, 2008 LibLime (http://liblime.com)
 Some parts copyright 2010 Chris Nighswonger
 
 Feedback/bug reports: Koha Developer's List:
@@ -18,112 +17,61 @@ as indicated or by running the command directly as root.
 
 1. Prepare System and Install Dependencies
 
-1.1 Install Debian Etch via Businesscard CD
+1.1 Install Debian Lenny via Businesscard CD
 
-See http://www.debian.org/releases/etch/debian-installer/
+See http://www.debian.org/releases/lenny/debian-installer/
 
-WARNING: use Perl 5.8 (a library Koha depends on,
-MARC::File::XML may not work with Perl 5.10, see:
-http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2309),
-
-1.2 Set up your locale
-
-Your locale should be set to UTF-8, as should Apache2 and MySQL 5.
-This step is VERY IMPORTANT for a UNICODE compliant system. Please 
-read over the following document carefully:
-
-http://wiki.koha.org/doku.php?id=encodingscratchpad
-
-IMPORTANT:  You _MUST_ follow all the steps outlined there for
-            Apache2, MySQL 5, etc. BEFORE you install Koha.
-
-1.3 Set up apt sources for Git, Yaz and Zebra packages
+1.3 Set up Indexdata apt sources for Yaz and Zebra packages
 
 Edit your /etc/apt/sources.list file and add the following:
 
     # Index Data
-    deb http://ftp.indexdata.dk/debian etch main
-    deb-src http://ftp.indexdata.dk/debian etch main
-
-    # Backports
-    deb http://www.backports.org/debian etch-backports main contrib non-free
-
-Backports packages are signed with a key you can install as follows:
-
-    $ sudo apt-get update
-    $ sudo apt-get install debian-backports-keyring
+    deb http://ftp.indexdata.dk/debian lenny main
+    deb-src http://ftp.indexdata.dk/debian lenny main
 
 The Index Data packages are signed with a key you can install as follows:
 
     $ wget http://ftp.indexdata.dk/debian/indexdata.asc
     $ sudo apt-key add indexdata.asc
 
-Run the following command to update your system:
-
-    $ sudo apt-get update
-    $ sudo apt-get -t etch-backports install git-core git-email
-    $ sudo apt-get install yaz idzebra-2.0 idzebra-2.0-doc
-
 1.4 Get Koha
 
 1.4.1 Option A: Download Koha via Git (optional)
 
+    $ sudo apt-get install git-core git-email
     $ git clone git://git.koha-community.org/pub/scm/koha.git kohaclone
     $ cd kohaclone
     $ git checkout -b myinstall origin
 
 Note: for more information about Git, please see the Koha Git Usage Guide:
 
-    http://wiki.koha.org/doku.php?id=en:development:git_usage
+    http://wiki.koha-community.org/wiki/Version_Control_Using_Git
 
 1.4.2 Option B: Download Koha from http://download.koha-community.org
 
-    $ wget http://download.koha-community.org/koha-3.00.00-beta.tar.gz
-    ( Note: use the latest stable version)
+Find the latest Koha stable version on http://download.koha-community.org
+and get it:
+
+    $ wget <URL> found on download.koha-community.org
 
 1.5 Install additional Debian dependencies
 
 IMPORTANT:  You should only use CPAN for Perl dependencies which are NOT
             available from the package maintainer. You have been warned!
 
-Using the debian.packages file included in the Koha source tree,
-run the following:
+Run shell script installing all necessary Debian packages, MySQL Server,
+Zebra and all Debian packaged Perl module required by Koha:
 
-    $ sudo dpkg --set-selections < install_misc/debian.packages
+    $ sudo install_misc/apt-get-debian-lenny.sh
 
-Now start dselect:
-
-    $ sudo dselect
-
-Choose [I]nstall and accept packages to be installed (hit return)
-
-(may take a while)
-
-Choose [C]onfigure, [R]emove and [Q]uit until dselect has completed.
-
-1.6 Install Perl dependencies that aren't packaged into Debian Etch
+1.6 Install Perl dependencies that aren't packaged into Debian Lenny
 sources
 
 Run the following command:
 
-    $ sudo cpan MARC::Record Class::Accessor MARC::Charset MARC::File::XML \
-                Net::Z3950::ZOOM HTML::Template::Pro MARC::Crosswalk::DublinCore \
-                PDF::Reuse PDF::Reuse::Barcode Data::ICal GD::Barcode::UPCE \
-                XML::RSS Algorithm::CheckDigits::M43_001 Biblio::EndnoteStyle POE \
-                Schedule::At DBD::SQLite GD SMS::Send HTTP::OAI IPC::Cmd Locale::Currency::Format
-
-
-  WARNINGS:
-  1.6.1 A Perl library Koha depends on, MARC::File::XML may not work with Perl
-    5.10, see: http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2309),
-
-  1.6.2 Recent versions of CGI::Session have caused some issues for users;
-  as of this release date, we suggest downloading the CGI::Session::Serialize::yaml
-  tarball direct from CPAN and install it directly rather than using the cpan command
-
-  1.6.3 There is a known but benign error in the test case for Barcode::Code128, 
-  which is required by PDF::Reuse::Barcode.  If this module is not installed, 
-  you can do a forced installation of Barcode::Code128.
+    $ sudo cpan Algorithm::CheckDigits SMS::Send HTTP::OAI IPC::Cmd \\
+      Memoize::Memcached PDF::API2::Simple PDF::Table Storable Test::More \\
+      Locale::Currency::Format
 
 Note: you may need to run CPAN initialization if you've not run cpan
 before:
@@ -159,7 +107,7 @@ When the configuration is completed CPAN will install the Perl modules.
     
     Welcome to the MySQL monitor.  Commands end with ; or \g.
     Your MySQL connection id is 22
-    Server version: 5.0.32-Debian_7etch3-log Debian etch distribution
+    Server version: 5.0.51a-24 (Debian)
     
     Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
     
@@ -173,7 +121,9 @@ When the configuration is completed CPAN will install the Perl modules.
 
 2.3 Test your SAX Parser and correct where necessary
 
-    You must be sure you're using the XML::LibXML SAX parser, not Expat or PurePerl, both of which have outstanding bugs with pre-composed characters. You can test your SAX parser by running:
+You must be sure you're using the XML::LibXML SAX parser, not Expat or 
+PurePerl, both of which have outstanding bugs with pre-composed characters. 
+You can test your SAX parser by running:
 
     $ cd koha
     $ misc/sax_parser_print.pl 
@@ -187,80 +137,6 @@ When the configuration is completed CPAN will install the Perl modules.
 
     /etc/perl/XML/SAX/ParserDetails.ini
 
-2.4 Install DBD::mysql Perl module
-
-In order to handle UTF-8 correctly, Koha requires at least version 4.004
-of the DBD::mysql Perl module. However, Debian Etch has a stable package
-only for version 3.0008, so it is necessary to install the module  from CPAN.
-DBD::mysql's test suite needs to use a MySQL 'test' DB which doesn't exist 
-anymore. So there are two options to install DBD::mysql: 
-
-  (1) install without test suite,
-  (2) install with test suite requiring a test MySQL DB creation.
-
-2.4.1 Install without test suite
-
-Force install DBD::mysql:
-
-    $ sudo cpan
-    cpan> force install DBD::mysql
-
-2.4.2 Create test database in order to install DBD::mysql
-
-Because of DBD::mysql's test suite, it is necessary to temporarily create a
-test database and user:
-
-    $ mysql -uroot -p<password>
-
-    Create the database and user with associated privileges:
-
-    Welcome to the MySQL monitor.  Commands end with ; or \g.
-    Your MySQL connection id is 22
-    Server version: 5.0.32-Debian_7etch3-log Debian etch distribution
-
-    Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
-
-    mysql> create database test;
-    Query OK, 1 row affected (0.00 sec)
-
-    mysql> grant all on test.* to 'test'@'localhost' identified by 'test';
-    Query OK, 0 rows affected (0.00 sec)
-    (test database, user, and password can be different if need be)
-
-    mysql> flush privileges;
-    Query OK, 0 rows affected (0.00 sec)
-
-    mysql> quit
-
-Next install DBD::mysql:
-
-    $ sudo cpan
-
-    cpan> o conf makepl_arg
-    (get current value of this CPAN parameter)
-
-    cpan> o conf makepl_arg "--testdb=test --testuser=test --testpass=test"
-
-    cpan> install DBD::mysql
-
-    cpan> o conf makepl_arg ''
-
-    OR 
-
-    cpan> o conf makepl_arg '<old setting>'
-
-    (restore this setting so as to not interfere with future CPAN installs).
-
-
-Finally, remove the test database:
-
-    $ mysql -uroot -p<password>
-
-    mysql> drop database test;
-    Query OK, 1 row affected (0.00 sec)
-
-    mysql> exit
-    Bye
 
 3. Run the Koha installer
 
@@ -268,7 +144,7 @@ Finally, remove the test database:
     ( answer questions )
     $ make
     $ make test
-    $ sudo make install  #If doing a -dev install, skip the sudo!
+    $ sudo make install
 
 4. Configure and start Apache
     $ sudo ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
@@ -279,10 +155,6 @@ Add the following lines to /etc/apache2/ports.conf:
 
     Listen 80
     Listen 8080
-
-(Note: It may be productive to use different DNS entries and NamedVirtualHosts
-directives in Apache to separate the staff and OPAC clients, to eliminate a 
-cross-client authentication nuisance, but it will work fine like this.)
 
 Run the following commands:
 
@@ -299,14 +171,14 @@ virtual hosts for full instructions.
 
 Note: it's recommended that you daemonize the Zebra process and add it to your
 startup profile. For a non-production test/development installation, running 
-Zebra from the command line can be useful.  Otherwise you will want zebrasrv
-running when Apache/Koha is.
+Zebra from the command line can be useful. Pick from the two available options
+below, or roll your own :-)
 
 Note: it's also recommended that you create a Koha system user, which you will
 have specified during the install process. Alternatively, Zebra can be
 configured to run as the root user.
 
-Option 1: run the Zebra process from the command line:
+Option 1: run the Zebra processes from the command line:
 
 1.1 Zebra Search Server
 
@@ -330,7 +202,7 @@ or an authority record is edited.
     $ sudo -u ${KOHA_USER} misc/migration_tools/rebuild_zebra -z -b -a
     NOTE: This script should be run as the kohauser (the default is 'koha').
 
-Option 2: run the Zebra process as a daemon, and add to startup process:
+Option 2: run automatically Zebra process as a daemon:
 
 Note that references to $SCRIPT_DIR refer to the directory where
 Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
@@ -370,31 +242,15 @@ NOTE: This job should be setup under the kohauser (the default is 'koha').
     $ export KOHA_CONF=/usr/share/koha/etc/koha-conf.xml
       (note: use the correct path to your koha-conf.xml)
 
-7.0 Schedule crontab jobs
-    Do you want Koha to:
-        send mail?
-        automatically index added records?
-        generate overdue or advance notices?
-        mark items lost after they are long overdue?
-        assess fines?
-
-    All these and other regularly scheduled background tasks are handled by crontab.
-    You need to examine the example crontab file, edit a copy to your liking, and schedule it.
-
-    $ crontab -l           # just check if you have any other jobs already scheduled
-    $ cp ./misc/cronjobs/crontab.example my_crontab
-    $ vi my_crontab        # select jobs or adjust times.
-    $                      # If you had already scheduled lines, add them at the bottom.
-    $ crontab my_crontab   # This overwrites your scheduled jobs with the new ones.
-
-    If you want to check to confirm, you can run crontab -l again.
-    NOTE: Be sure to add KOHA_CONF and PERL5LIB vars to the top of your cron jobs.
-
 7.1 Import:
-    Bibliographic data in MARC21 format
+
+Bibliographic data in MARC21 format
+
     $ misc/migration_tools/bulkmarcimport.pl -file /path/to/marc.iso2709
-    Authority data in MARC21 format
-    $ misc/migration_tools/bulkauthimport.pl -file /path/to/auth.iso2709
+
+Authority data in MARC21 format
+
+    $ misc/migration_tools/bulkmarcimport.pl -a -file /path/to/auth.iso2709
 
 7.2 Fast Index:
     $ misc/migration_tools/rebuild_zebra.pl -b -w
@@ -445,11 +301,7 @@ Uninstall Instructions
 
 Tested on the following operating environments
 ==============================================
-- Debian Etch 4.0
-
-Installer Bug reports
-=====================
-Please send any installer bug reports to jmf AT liblime DOT com
+- Debian Lenny 5.0
 
 Other Notes
 =====================
@@ -463,6 +315,6 @@ version.
 Koha is distributed in the hope that it will be useful, but WITHOUT ANY
 WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
-You should have received a copy of the GNU General Public License along
-with Koha; if not, write to the Free Software Foundation, Inc.,
-51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+You should have received a copy of the GNU General Public License along with
+Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+Suite 330, Boston, MA  02111-1307 USA
