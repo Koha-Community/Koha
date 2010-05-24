@@ -96,7 +96,6 @@ sub plugin {
         }
     # If a prefix is submited, we look for the highest itemcallnumber with this prefix, and return it incremented
     } elsif ( $code =~ m/^[A-Z.\-]+$/ ) {
-        warn $code;
         my $sth = $dbh->prepare("SELECT MAX(CAST(SUBSTRING_INDEX(itemcallnumber,' ',-1) AS SIGNED)) FROM items WHERE itemcallnumber LIKE ?");
         $sth->execute($code.' %');
         if ( my $max = $sth->fetchrow ) {
