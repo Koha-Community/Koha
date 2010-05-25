@@ -1,16 +1,17 @@
 #!/usr/bin/make -f
 
-PACKAGE = $(shell dh_listpackages)
-TMP     = $(CURDIR)/debian/$(PACKAGE)
+TMP = $(CURDIR)/debian/tmp
 
 # Make "perl Makefile.PL" be non-interactive.
 export PERL_MM_USE_DEFAULT=1
 
 %:
-	dh $@
+	dh $@ --fail-missing
 	
 override_dh_auto_install:
 	dh_auto_install
+	rm $(TMP)/etc/koha/README.txt
+	rm -r $(TMP)/usr/share/koha/doc
 	rm -r $(TMP)/var/run
 	rm -r $(TMP)/var/lock
 	rm $(TMP)/var/log/koha/README
@@ -32,6 +33,9 @@ override_dh_auto_install:
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/yui
 	ln -s /usr/share/javascript/yui \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/yui
+	install -d $(TMP)/etc/apache2/sites-available
+	install -d $(TMP)/etc/apache2/sites-enabled
+	install -d $(TMP)/etc/apache2/conf.d
 	ln -s ../../koha/koha-httpd.conf $(TMP)/etc/apache2/sites-available/koha
 	ln -s ../sites-available/koha $(TMP)/etc/apache2/sites-enabled/koha
 	install -m 0644 debian/koha.apache-ports $(TMP)/etc/apache2/conf.d/koha
