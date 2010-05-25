@@ -52,6 +52,6 @@ do
         >> "$temp"
 done
 
-mysql --defaults-extra-file=/etc/mysql/debian.cnf < "$temp"
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf < "$temp"
 
 rm "$temp"

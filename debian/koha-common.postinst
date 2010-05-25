@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+conf=/etc/mysql/koha-common.cnf
+if [ ! -e "$conf" ]
+then
+    ln -s debian.cnf /etc/mysql/koha-common.cnf
+fi
+
+#DEBHELPER#
