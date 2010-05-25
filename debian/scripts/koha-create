@@ -53,6 +53,11 @@ getmysqlhost() {
         /etc/mysql/koha-common.cnf
 }
 
+getinstancemysqlpassword() {
+    sed -n '/<pass>/s:.*>\(.*\)</pass>.*:\1:p' \
+        "/etc/koha/sites/$1/koha-conf.xml"
+}
+
 
 # Set defaults and read config file, if it exists.
 DOMAIN=""
@@ -67,8 +72,16 @@ fi
 
 
 # Parse command line.
-[ "$#" = 1 ] || die "Usage: $0 instancename"
-name="$1"
+[ "$#" = 2 ] || 
+    die "Usage: $0 [--create-db|--request-db|--populate-db] instancename"
+case "$1" in
+  --create-db) op=create ;;
+  --request-db) op=request ;;
+  --populate-db) op=populate ;;
+  *) die "Usage: $0 [--create-db|--request-db|--populate-db] instancename" ;;
+esac
+
+name="$2"
 domain="$name$DOMAIN"
 if [ "$INTRAPORT" = 80 ] || [ "$INTRAPORT" = "" ]
 then
@@ -78,97 +91,139 @@ else
 fi
 
 
-# Create new user and group.
-username="$name-koha"
-if getent passwd "$username" > /dev/null
-then
-    die "User $username already exists."
-fi
-if getent group "$username" > /dev/null
-then
-    die "Group $username already exists."
-fi
-adduser --no-create-home --disabled-login --gecos "Koha instance $username" \
-    --quiet "$username"
-
-
-# Create the site-specific directories.
-koha-create-dirs "$name"
-
-
-# Generate Zebra database password.
-zebrapwd="$(pwgen -1)"
-
-
-# Set up MySQL database for this instance.
 mysqldb="koha_$name"
 mysqlhost="$(getmysqlhost)"
 mysqluser="koha_$name"
-mysqlpwd="$(pwgen -1)"
-mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
+
+if [ "$op" = create ] || [ "$op" = request ]
+then
+    mysqlpwd="$(pwgen -1)"
+else
+    mysqlpwd="$(getinstancemysqlpassword $name)"
+fi
+
+
+if [ "$op" = create ] || [ "$op" = request ]
+then
+    # Create new user and group.
+    username="$name-koha"
+    if getent passwd "$username" > /dev/null
+    then
+        die "User $username already exists."
+    fi
+    if getent group "$username" > /dev/null
+    then
+        die "Group $username already exists."
+    fi
+    adduser --no-create-home --disabled-login \
+        --gecos "Koha instance $username" \
+        --quiet "$username"
+
+    # Create the site-specific directories.
+    koha-create-dirs "$name"
+
+    # Generate Zebra database password.
+    zebrapwd="$(pwgen -1)"
+
+    # Set up MySQL database for this instance.
+    if [ "$op" = create ]
+    then
+        mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 CREATE DATABASE $mysqldb;
 CREATE USER '$mysqluser'@'%' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
 FLUSH PRIVILEGES;
 eof
+    fi
 
 
-# Use the default database content if that exists.
-if [ -e "$DEFAULTSQL" ]
+    # Generate and install Apache site-available file and log dir.
+    generate_config_file apache-site.conf.in \
+        "/etc/apache2/sites-available/$name"
+    mkdir "/var/log/koha/$name"
+    chown "$username:$username" "/var/log/koha/$name"
+
+
+    # Generate and install main Koha config file.
+    generate_config_file koha-conf-site.xml.in \
+        "/etc/koha/sites/$name/koha-conf.xml"
+
+    # Generate and install Zebra config files.
+    generate_config_file zebra-biblios-site.cfg.in \
+        "/etc/koha/sites/$name/zebra-biblios.cfg"
+    generate_config_file zebra-authorities-site.cfg.in \
+        "/etc/koha/sites/$name/zebra-authorities.cfg"
+    generate_config_file zebra-authorities-dom-site.cfg.in \
+        "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
+    generate_config_file zebra.passwd.in \
+        "/etc/koha/sites/$name/zebra.passwd"
+
+
+    # Create a GPG-encrypted file for requesting a DB to be set up.
+    if [ "$op" = request ]
+    then
+        touch "$name-db-request.txt"
+        chmod 0600 "$name-db-request.txt"
+        cat > "$name-db-request.txt" << eof
+Please create a database and user on $mysqlhost as follows:
+
+database name: $mysqldb
+database user: $mysqluser
+     password: $mysqlpwd
+
+Thank you.
+eof
+
+        echo "See $name-db-request.txt for database creation request."
+        echo "Please forward it to the right person, and then run"
+        echo "$0 --populate-db $name"
+        echo "Thanks."
+    fi
+fi
+
+
+if [ "$op" = create ] || [ "$op" = populate ]
 then
-    # Populate the database with default content.
-    zcat "$DEFAULTSQL" |
-    sed "s/__KOHASITE__/$name/g" |
-    mysql --defaults-extra-file=/etc/mysql/koha-common.cnf
+    # Use the default database content if that exists.
+    if [ -e "$DEFAULTSQL" ]
+    then
+        # Populate the database with default content.
+        zcat "$DEFAULTSQL" |
+        sed "s/__KOHASITE__/$name/g" |
+        mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpwd"
 
 
-    # Change the default user's password.
-    staffpass="$(pwgen -1)"
-    staffdigest=$(echo -n "$staffpass" |
-                  perl -e '
-                        use Digest::MD5 qw(md5_base64); 
-                        while (<>) { print md5_base64($_), "\n"; }')
-    mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
+        # Change the default user's password.
+        staffpass="$(pwgen -1)"
+        staffdigest=$(echo -n "$staffpass" |
+                      perl -e '
+                            use Digest::MD5 qw(md5_base64); 
+                            while (<>) { print md5_base64($_), "\n"; }')
+        mysql --host="$mysqlhost" --user="$mysqluser" \
+--password="$mysqlpwd" <<eof
 USE \`$mysqldb\`;
 UPDATE borrowers 
 SET password = '$staffdigest' 
 WHERE borrowernumber = 3;
 eof
-    echo "staff user password is '$staffpass' but keep that secret"
-else
-    echo "Koha instance is empty, no staff user created."
+
+        echo "staff user password is '$staffpass' but keep that secret"
+
+        # Upgrade the database schema, just in case the dump was from an 
+        # old version.
+        koha-upgrade-schema "$name"
+    else
+        echo "Koha instance is empty, no staff user created."
+    fi
 fi
 
 
-# Generate and install Apache site-available file and log dir.
-generate_config_file apache-site.conf.in "/etc/apache2/sites-available/$name"
-mkdir "/var/log/koha/$name"
-chown "$username:$username" "/var/log/koha/$name"
+if [ "$op" = create ] || [ "$op" = populate ]
+then
+    # Reconfigure Apache.
+    a2ensite "$name"
+    service apache2 restart
 
-
-# Generate and install main Koha config file.
-generate_config_file koha-conf-site.xml.in \
-    "/etc/koha/sites/$name/koha-conf.xml"
-
-
-# Generate and install Zebra config files.
-generate_config_file zebra-biblios-site.cfg.in \
-    "/etc/koha/sites/$name/zebra-biblios.cfg"
-generate_config_file zebra-authorities-site.cfg.in \
-    "/etc/koha/sites/$name/zebra-authorities.cfg"
-generate_config_file zebra-authorities-dom-site.cfg.in \
-    "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
-generate_config_file zebra.passwd.in \
-    "/etc/koha/sites/$name/zebra.passwd"
-
-
-# Upgrade the database schema, just in case the dump was from an old version.
-koha-upgrade-schema "$name"
-
-
-# Reconfigure Apache.
-a2ensite "$name"
-service apache2 restart
-
-# Start Zebra.
-koha-start-zebra "$name"
+    # Start Zebra.
+    koha-start-zebra "$name"
+fi
