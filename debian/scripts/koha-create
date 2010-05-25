@@ -167,6 +167,10 @@ generate_config_file zebra-authorities-dom-site.cfg.in \
     "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
 
 
+# Upgrade the database schema, just in case the dump was from an old version.
+koha-upgrade-schema "$name"
+
+
 # Reconfigure Apache.
 a2ensite "$name"
 service apache2 restart
