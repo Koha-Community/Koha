@@ -37,11 +37,20 @@ generate_config_file() {
         -e "s/__INTRASERVER__/$intradomain/g" \
         -e "s/__ZEBRA_PASS__/$zebrapwd/g" \
         -e "s/__DB_NAME__/$mysqldb/g" \
+        -e "s/__DB_HOST__/$mysqlhost/g" \
         -e "s/__DB_USER__/$mysqluser/g" \
         -e "s/__DB_PASS__/$mysqlpwd/g" \
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
         "/etc/koha/$1" > "$2"
+}
+
+getmysqlhost() {
+    awk '
+        /^\[/ { inclient = 0 }
+        /^\[client\]/ { inclient = 1 }
+        inclient && /^ *host *=/ { print $3 }' \
+        /etc/mysql/koha-common.cnf
 }
 
 
@@ -93,11 +102,12 @@ zebrapwd="$(pwgen -1)"
 
 # Set up MySQL database for this instance.
 mysqldb="koha_$name"
+mysqlhost="$(getmysqlhost)"
 mysqluser="koha_$name"
 mysqlpwd="$(pwgen -1)"
 mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 CREATE DATABASE $mysqldb;
-CREATE USER '$mysqluser' IDENTIFIED BY '$mysqlpwd';
+CREATE USER '$mysqluser'@'%' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
 FLUSH PRIVILEGES;
 eof
