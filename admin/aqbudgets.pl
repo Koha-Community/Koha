@@ -239,8 +239,6 @@ if ($op eq 'add_form') {
     my $period_total = 0;
     my ( $period_alloc_total, $base_spent_total );
 
-	use YAML;
-	$debug && warn Dump(@budgets);
 	#This Looks WEIRD to me : should budgets be filtered in such a way ppl who donot own it would not see the amount spent on the budget by others ?
 
     foreach my $budget (@budgets) {

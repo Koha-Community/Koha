@@ -29,7 +29,6 @@ use C4::XSLT;
 use C4::Branch;
 use C4::Reserves;    # CheckReserves
 use C4::Debug;
-use YAML;
 use URI::Escape;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
@@ -651,7 +650,6 @@ sub _remove_stopwords {
 #
 		foreach ( keys %{ C4::Context->stopwords } ) {
 			next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
-			$debug && warn "$_ Dump($operand)";
 			if ( my ($matched) = ($operand =~
 				/([^\X\p{isAlnum}]\Q$_\E[^\X\p{isAlnum}]|[^\X\p{isAlnum}]\Q$_\E$|^\Q$_\E[^\X\p{isAlnum}])/gi))
 			{

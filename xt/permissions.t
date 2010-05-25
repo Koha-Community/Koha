@@ -23,7 +23,6 @@ use warnings;
 use Test::More qw(no_plan);
 
 use C4::Context;
-use YAML;
 
 my $root_dir = C4::Context->config( 'intranetdir' ) . '/installer/data/mysql';
 my $base_perms_file = "en/mandatory/userpermissions.sql";
