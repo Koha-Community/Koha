@@ -18,7 +18,7 @@ override_dh_auto_install:
 	ln -s /usr/share/javascript/jquery/jquery.js \
 	   $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/jquery/jquery.js
 	rm $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/jquery/jquery.js
-	ln -s /usr/share/javascript/jquery \
+	ln -s /usr/share/javascript/jquery/jquery.js \
 	   $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/jquery/jquery.js
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/js/tinymce
