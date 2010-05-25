@@ -84,24 +84,7 @@ adduser --no-create-home --disabled-login --gecos "Koha instance $username" \
 
 
 # Create the site-specific directories.
-mkdir "/etc/koha/sites/$name"
-
-mkdir "/var/lock/koha/$name"
-mkdir "/var/lock/koha/$name/authorities"
-mkdir "/var/lock/koha/$name/biblios"
-chown -R "root:$username" "/var/lock/koha/$name"
-chmod -R g+w "/var/lock/koha/$name"
-[ -d "/var/spool/koha/$name" ] || mkdir "/var/spool/koha/$name"
-
-install -d -o "$username" -g "$username" "/var/lib/koha/$name"
-install -d -o "$username" -g "$username" "/var/lib/koha/$name/authorities"
-install -d -o "$username" -g "$username" "/var/lib/koha/$name/biblios"
-install -d -o "$username" -g "$username" "/var/lib/koha/$name/biblios/key"
-install -d -o "$username" -g "$username" "/var/lib/koha/$name/biblios/register"
-install -d -o "$username" -g "$username" "/var/lib/koha/$name/biblios/shadow"
-
-install -d "/var/run/koha/$name/authorities"
-install -d "/var/run/koha/$name/biblios"
+koha-create-dirs "$name"
 
 
 # Generate Zebra database password.
