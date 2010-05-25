@@ -1,0 +1,128 @@
+.\" Copyright 2010  Catalyst IT, Ltd
+.\" 
+.\" This program is free software: you can redistribute it and/or modify
+.\" it under the terms of the GNU General Public License as published by
+.\" the Free Software Foundation, either version 3 of the License, or
+.\" (at your option) any later version.
+.\" 
+.\" This program is distributed in the hope that it will be useful,
+.\" but WITHOUT ANY WARRANTY; without even the implied warranty of
+.\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+.\" GNU General Public License for more details.
+.\" 
+.\" You should have received a copy of the GNU General Public License
+.\" along with this program.  If not, see <http://www.gnu.org/licenses/>.
+.TH KOHA-CREATE 8 2010-05-03 Koha
+.SH NAME
+koha-create \- create a new Koha instance
+.SH SYNOPSIS
+.B koha-create
+.IR instance-name
+.SH DESCRIPTION
+.B koha-create
+creates a new Koha instance.
+It is meant for a site that provides Koha hosting,
+and serves several sites from the same host.
+.PP
+The name of the instance is used as the domain name for Apache,
+and Unix user and group names, and MySQL username and table names
+are derived from it.
+Unix user and group are named
+.IR instance -koha.
+MySQL username is 
+.RI koha_ instance ,
+and table is
+.RI koha_ instance .
+.PP
+The Unix user has logins disabled.
+The password for MySQL is generated randomly, and printed to the terminal.
+.PP
+The instance name is used as the domain name (ServerName) for Apache.
+The open catalog (OPAC), for library customers, is on port 80.
+The librarian intranet interface is on port 8080.
+.PP
+After the Koha instance is created, it is ready to be used, 
+but the librarian needs to log in via the intranet and configure things.
+.PP
+Several configuration variables are available for adjusting this behavior.
+The variables are put into
+.B /etc/koha/koha-site.conf .
+The following variables are obeyed:
+.PP
+.TP
+.B DOMAIN
+The domain to append to the instance name, for Apache ServerName.
+Default is empty.
+The value must begin with a period.
+.TP
+.B INTRAPORT
+The port for the intranet.
+If you set this to empty or 80, then you
+.I must
+also define
+.B INTRAPREFIX
+or
+.BR INTRASUFFIX .
+.TP
+.B INTRAPREFIX
+This is inserted before the instance name when forming Apache ServerName.
+For subdomains, make sure it ends with a period.
+.TP
+.B INTRASUFFIX
+This is inserted after the instance name,
+but before the domain name,
+when forming Apache ServerName.
+.TP
+.B DEFAULTSQL
+An SQL file (possibly compressed with gzip) that can be fed to
+.BR mysql (1)
+to initialize the database after it has been created.
+Might be created using
+.BR koha-dump-defaults (8).
+.SH FILES
+.TP
+.B /etc/koha/koha-site.conf
+Configuration variables are read from this file, if it exists.
+.SH BUGS
+The program is a bit fragile.
+If something goes wrong, it does not clean up after itself.
+.SH EXAMPLE
+To create a new Koha instance:
+.PP
+.RS
+koha-create hslibrary
+.RE
+.PP
+The public catalog is now at 
+.I http://hslibrary/
+and the librarian interface at
+.IR http://hslibrary:8080/ .
+.PP
+To use full domain names, and have the intranet interface on port 80, but
+on a different domain name, add the following variables to the
+configuration file:
+.PP
+.nf
+.RS
+DOMAIN=".example.com"
+INTRAPORT=""
+INTRASUFFIX="-intra"
+.RE
+.fi
+.PP
+This will result in the addresses for the public and intranet interfaces
+becoming these:
+.PP
+.nf
+.RS
+http://hslibrary.example.com/
+http://hslibrary-intra.example.com/
+.RE
+.fi
+.PP
+Configuration changes only apply to instances created afterwards.
+.SH "SEE ALSO"
+.BR koha-remove (8).
+.PP
+.B http://koha-community.org/
+
