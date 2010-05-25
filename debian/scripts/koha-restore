@@ -74,6 +74,7 @@ CREATE USER '$mysqluser' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
 FLUSH PRIVILEGES;
 eof
+koha-rebuild-zebra --full "$name"
 
 
 # Restart Apache.
