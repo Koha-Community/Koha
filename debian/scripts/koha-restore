@@ -57,6 +57,11 @@ adduser --no-create-home --disabled-login --gecos "Koha instance $username" \
     --quiet "$username"
 
 
+# Create dirs. Some of them will be in the tarball, but not all, e.g.,
+# /var/run and /var/lock.
+koha-create-dirs "$name"
+
+
 # Unpack tarball.
 tar -C / -xf "$configdump"
 
