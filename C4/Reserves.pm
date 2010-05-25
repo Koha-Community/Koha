@@ -1853,7 +1853,7 @@ sub _ShiftPriorityByDateAndPriority {
 
 =head1 AUTHOR
 
-Koha Developement team <info@koha.org>
+Koha Development Team <info@koha.org>
 
 =cut
 

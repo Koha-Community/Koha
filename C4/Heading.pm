@@ -190,7 +190,7 @@ sub _marc_format_handler {
 
 =head1 AUTHOR
 
-Koha Developement team <info@koha.org>
+Koha Development Team <info@koha.org>
 
 Galen Charlton <galen.charlton@liblime.com>
 
