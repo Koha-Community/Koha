@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# koha-remove -- Remove a Koha instance.
+# koha-rebuild-zebra -- Rebuild the Zebra database for a Koha instance.
 # Copyright 2010  Catalyst IT, Ltd
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -20,28 +20,19 @@
 set -e
 
 
+if [ "$1" = --full ]
+then
+    opts="-r"
+    shift
+else
+    opts="-z"
+fi
+
+
 for name in "$@"
 do
-    echo "Removing Koha instance $name"
-
-    mysql --defaults-extra-file=/etc/mysql/debian.cnf <<eof
-DROP USER 'koha_$name';
-DROP DATABASE koha_$name;
-FLUSH PRIVILEGES;
-eof
-    
-    rm "/etc/apache2/sites-available/$name"
-    rm "/etc/koha/sites/$name/koha-conf.xml"
-    rm "/etc/koha/sites/$name/zebra-biblios.cfg"
-    rm "/etc/koha/sites/$name/zebra-authorities.cfg"
-    rm "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
-    rm "/etc/koha/sites/$name/zebra.passwd"
-    rmdir "/etc/koha/sites/$name"
-    rm -r "/var/lock/koha/$name"
-    rm -r "/var/log/koha/$name"
-    rm -r "/var/run/koha/$name"
-    deluser --quiet "$name-koha"
-    a2dissite "$name"
+    sudo -u "$name-koha" \
+    env PERL5LIB=/usr/share/koha/lib \
+        KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
+        /usr/share/koha/bin/migration_tools/rebuild_zebra.pl -b -a $opts
 done
-
-service apache2 restart
