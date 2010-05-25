@@ -26,7 +26,6 @@ use C4::Auth;
 use C4::Items;
 use C4::Biblio;
 use C4::Serials;
-use YAML;
 
 my $input = new CGI;
 my @biblionumber = $input->param('biblionumber');
@@ -69,7 +68,6 @@ if ($merge) {
 
     # Moving items from the other record to the reference record
     my $itemnumbers = get_itemnumbers_of($frombiblio);
-    use Data::Dumper;
     foreach my $itloop ($itemnumbers->{$frombiblio}) {
 	foreach my $itemnumber (@$itloop) {
 	    my $res = MoveItemFromBiblio($itemnumber, $frombiblio, $tobiblio);

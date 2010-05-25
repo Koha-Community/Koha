@@ -31,7 +31,6 @@ use C4::Members;
 use C4::Branch;
 use C4::Category;
 use File::Basename;
-use YAML;
 
 my $input = new CGI;
 my $quicksearch = $input->param('quicksearch');

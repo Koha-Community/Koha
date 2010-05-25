@@ -68,7 +68,7 @@ else {
 	$$suggestion{suggestedby} ||= $borrowernumber unless ($allsuggestions);
 }
 # warn "bornum:",$borrowernumber;
-use YAML;
+
 my $suggestions_loop =
   &SearchSuggestion( $suggestion);
 if ( $op eq "add_confirm" ) {
