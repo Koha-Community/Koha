@@ -148,8 +148,6 @@
 
   <xsl:call-template name="tag_215" />
 
-  <abbr class="unapi-id" title="koha:biblionumber:{marc:datafield[@tag=090]/marc:subfield[@code='a']}"><!-- unAPI --></abbr>
-
   <xsl:if test="marc:datafield[@tag=010]/marc:subfield[@code='a']">
     <span class="results_summary"><span class="label">ISBN: </span>
     <xsl:for-each select="marc:datafield[@tag=010]">
