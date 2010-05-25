@@ -1345,6 +1345,10 @@ sub buildQuery {
 
 =head2 searchResults
 
+  my @search_results = searchResults($search_context, $searchdesc, $hits, 
+                                     $results_per_page, $offset, $scan, 
+                                     @marcresults, $hidelostitems);
+
 Format results in a form suitable for passing to the template
 
 =cut
@@ -1352,9 +1356,11 @@ Format results in a form suitable for passing to the template
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
 sub searchResults {
-    my ( $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults, $hidelostitems ) = @_;
+    my ( $search_context, $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults, $hidelostitems ) = @_;
     my $dbh = C4::Context->dbh;
     my @newresults;
+
+    $search_context = 'opac' unless $search_context eq 'opac' or $search_context eq 'intranet';
 
     #Build branchnames hash
     #find branchname
@@ -1664,9 +1670,11 @@ sub searchResults {
 	use C4::Charset;
 	SetUTF8Flag($marcrecord);
 	$debug && warn $marcrecord->as_formatted;
-        if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
-                $oldbiblio->{biblionumber}, $marcrecord, 'Results' );
+        if (!$scan && $search_context eq 'opac' && C4::Context->preference("OPACXSLTResultsDisplay")) {
+            # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
+            # is not implemented yet
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results', 
+                                                                $search_context);
         }
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
