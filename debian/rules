@@ -7,7 +7,11 @@ export PERL_MM_USE_DEFAULT=1
 
 %:
 	dh $@ --fail-missing
-	
+
+override_dh_gencontrol:
+	debian/bd-to-depends >> debian/koha-common.substvars
+	dh_gencontrol
+
 override_dh_auto_install:
 	dh_auto_install
 	rm $(TMP)/etc/koha/README.txt
