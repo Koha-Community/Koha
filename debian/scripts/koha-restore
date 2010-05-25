@@ -70,11 +70,11 @@ tar -C / -xf "$configdump"
 mysqldb="koha_$name"
 mysqluser="koha_$name"
 mysqlpwd="$(sed -n '/.*<pass>\(.*\)<\/pass>.*/s//\1/p' /etc/koha/sites/$name/koha-conf.xml)"
-zcat "$sqldump" | mysql --defaults-extra-file=/etc/mysql/debian.cnf
-mysql --defaults-extra-file=/etc/mysql/debian.cnf <<eof || true
+zcat "$sqldump" | mysql --defaults-extra-file=/etc/mysql/koha-common.cnf
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof || true
 DROP USER '$mysqluser';
 eof
-mysql --defaults-extra-file=/etc/mysql/debian.cnf << eof || true
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf << eof || true
 CREATE USER '$mysqluser' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
 FLUSH PRIVILEGES;

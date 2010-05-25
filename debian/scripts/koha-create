@@ -95,7 +95,7 @@ zebrapwd="$(pwgen -1)"
 mysqldb="koha_$name"
 mysqluser="koha_$name"
 mysqlpwd="$(pwgen -1)"
-mysql --defaults-extra-file=/etc/mysql/debian.cnf <<eof
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 CREATE DATABASE $mysqldb;
 CREATE USER '$mysqluser' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
@@ -109,7 +109,7 @@ then
     # Populate the database with default content.
     zcat "$DEFAULTSQL" |
     sed "s/__KOHASITE__/$name/g" |
-    mysql --defaults-extra-file=/etc/mysql/debian.cnf
+    mysql --defaults-extra-file=/etc/mysql/koha-common.cnf
 
 
     # Change the default user's password.
@@ -118,7 +118,7 @@ then
                   perl -e '
                         use Digest::MD5 qw(md5_base64); 
                         while (<>) { print md5_base64($_), "\n"; }')
-    mysql --defaults-extra-file=/etc/mysql/debian.cnf <<eof
+    mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 USE \`$mysqldb\`;
 UPDATE borrowers 
 SET password = '$staffdigest' 

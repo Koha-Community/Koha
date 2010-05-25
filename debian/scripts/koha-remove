@@ -24,7 +24,7 @@ for name in "$@"
 do
     echo "Removing Koha instance $name"
 
-    mysql --defaults-extra-file=/etc/mysql/debian.cnf <<eof
+    mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 DROP USER 'koha_$name';
 DROP DATABASE koha_$name;
 FLUSH PRIVILEGES;

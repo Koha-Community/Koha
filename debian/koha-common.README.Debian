@@ -17,3 +17,13 @@ Each Koha instance has files in the following places:
 * /var/run/koha/$name -- run-time sockets etc
 * /var/spool/koha/$name -- database dumps
 
+
+Koha and MySQL
+==============
+
+koha-common's postinst script sets up the /etc/mysql/koha-common.cnf,
+and all scripts use that to access the MySQL database. By default, it
+is a symlink pointing at debian.cnf, and only works on localhost.
+If you wish, you can create a file /etc/mysql/koha-common.cnf instead
+of the symlink, and point it at a remote server. There is currently
+no tool to help you do that, but it should be fairly straightforward.
