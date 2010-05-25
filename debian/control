@@ -5,23 +5,40 @@ Priority: optional
 Standards-Version: 3.8.4
 Build-Depends: koha-dev-env, debhelper (>= 7.0.50), gettext
 
-Package: koha
+Package: koha-common
 Architecture: all
 Depends: ${shlib:Depends}, ${misc:Depends},
- dbconfig-common,
  koha-dev-env,
  apache2,
- mysql-server,
- daemon,
  at,
+ daemon,
  idzebra-2.0,
- yaz,
  libjs-jquery,
+ libjs-yui,
+ mysql-client,
+ mysql-server,
  tinymce2, 
- libjs-yui
-Recommends: mysql-client
+ yaz
 Homepage: http://koha-community.org/
 Description: integrated (physical) library management system
  Koha is an Integrated Library Managment system for real-world libraries
  (the kinds with books).
+ .
+ This package contains everything needed to run Koha, except the site
+ specific configuration files. See the package koha for the rest.
 
+Package: koha
+Architecture: all
+Depends: ${shlib:Depends}, ${misc:Depends},
+ koha-common,
+ dbconfig-common,
+ mysql-server
+Homepage: http://koha-community.org/
+Description: integrated (physical) library management system
+ Koha is an Integrated Library Managment system for real-world libraries
+ (the kinds with books).
+ .
+ This package contains site-specific configuration files and sets up
+ the MySQL database for Koha. For simplicity, the database server is
+ assumed to run on the same host as Koha. This package also does some
+ Apache reconfiguration.

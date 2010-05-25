@@ -1,0 +1,19 @@
+Koha filesystem layout on Debian
+================================
+
+The Debian packaging of Koha puts files in the following places:
+
+* /etc/koha -- system configuration files
+* /etc/cron.hourly/koha-common -- cron job
+* /usr/share/koha -- shared files (HTML templates, Perl code, etc)
+
+Each Koha instance has files in the following places:
+
+* /etc/koha/sites/$name -- confguration files
+* /etc/apache2/sites-available/$name -- Apache config file
+* /var/lib/koha/$name -- Zebra databases
+* /var/log/koha/$name -- log files (Apache, Zebra)
+* /var/lock/koha/$name -- run-time lock files
+* /var/run/koha/$name -- run-time sockets etc
+* /var/spool/koha/$name -- database dumps
+
