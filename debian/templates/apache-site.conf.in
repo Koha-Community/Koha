@@ -8,8 +8,7 @@
 
    ServerName __OPACSERVER__
    SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
-   User __UNIXUSER__
-   Group __UNIXGROUP__
+   AssignUserID __UNIXUSER__ __UNIXGROUP__
 
    ErrorLog    /var/log/koha/__KOHASITE__/opac-error.log
 #  TransferLog /var/log/koha/__KOHASITE__/opac-access_log
@@ -24,6 +23,7 @@
    
    ServerName __INTRASERVER__
    SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
+   AssignUserID __UNIXUSER__ __UNIXGROUP__
 
    ErrorLog    /var/log/koha/__KOHASITE__/intranet-error.log
 #  TransferLog /var/log/koha/__KOHASITE__/intranet-access_log
