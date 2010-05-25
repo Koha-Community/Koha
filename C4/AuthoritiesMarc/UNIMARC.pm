@@ -79,7 +79,7 @@ sub default_auth_type_location {
 
 =head1 AUTHOR
 
-Koha Developement team <info@koha.org>
+Koha Development Team <info@koha.org>
 
 Galen Charlton <galen.charlton@liblime.com>
 
