@@ -1,0 +1,34 @@
+#!/bin/sh
+#
+# koha-dump-defaults: create default contents from an existing Koha site
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+
+# Parse command line.
+[ "$#" = 1 ] || die "Usage: $0 instancename"
+name="$1"
+kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
+date="$(date +%Y-%m-%d)"
+
+
+mysqldb="$(sed -n '/.*<database>\(.*\)<\/database>.*/s::\1:p' $kohaconfig)"
+mysqluser="$(sed -n '/.*<user>\(.*\)<\/user>.*/s::\1:p' $kohaconfig | tail -n1)"
+mysqlpass="$(sed -n '/.*<pass>\(.*\)<\/pass>.*/s::\1:p' $kohaconfig)"
+mysqldump --databases --user="$mysqluser" --password="$mysqlpass" "$mysqldb" |
+    sed "s/$name/__KOHASITE__/g"
