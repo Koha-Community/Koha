@@ -459,7 +459,7 @@ function GetZ3950Terms(){
 
                                 <!-- /TMPL_IF -->
                                   <!-- TMPL_IF NAME="norequests" -->
-                                        No holds allowed
+                                        <p class="noholdstext">No holds allowed</p>
                                     <!-- TMPL_ELSE -->
                                         <a class="reserve" id="reserve_<!-- TMPL_VAR NAME="biblionumber" -->" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
                                     <!-- /TMPL_IF -->
