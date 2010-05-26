@@ -250,7 +250,7 @@ sub GetAuthorityRecords {
     foreach my $authid ( split( / /, $cgi->param('id') ) ) {
 
         # Get the record as XML string, or error code
-        my $record = GetAuthorityXML( $_ ) || "<record><code>RecordNotFound</code></record>";
+        my $record = GetAuthorityXML($authid) || "<record><code>RecordNotFound</code></record>";
         $record =~ s/<\?xml(.*)\?>//go;
         $records .= $record;
     }
