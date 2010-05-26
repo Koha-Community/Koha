@@ -213,7 +213,8 @@ sub GetRecords {
         $biblioitem->{'issues'}->{'issue'}     = $issues;
 
         map { $biblioitem->{$_} = encode_entities( $biblioitem->{$_}, '&' ) } grep( !/marcxml/, keys %$biblioitem );
-
+        
+        push @records, $biblioitem;
     }
 
     return { record => \@records };
