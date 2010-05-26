@@ -208,7 +208,7 @@ if ( $service and any { $service eq $_ } @services ) {
         # GetAvailability is a special case, as it cannot use XML::Simple
         if ( $service eq "GetAvailability" ) {
             print CGI::header('text/xml');
-            print C4::ILSDI::GetAvailability($cgi);
+            print C4::ILSDI::Services::GetAvailability($cgi);
             exit 0;
         } else {
 
