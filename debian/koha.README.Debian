@@ -23,14 +23,20 @@ following:
 * Restart Apache.
   - sudo service apache2 restart
 
-The latter two steps can be done by running the koha-post-install-setup
+The latter three steps can be done by running the koha-post-install-setup
 script.
 
 Then access the following URL:
 
     http://localhost:8080/
 
-Alternatively, any other name, IP address, and interface will work, too.
+Alternatively, any other name, IP address, and interface will work, too,
+although will probably need to configure /etc/apache2/ports.conf to 
+have the following line:
+
+    NameVirtualHost *:8080
+    
+(You'll need to restart apache2 afterwards: /etc/init.d/apache2 restart.)
 
 This should bring up the Koha intranet administration screen, which will
 let you log in. The username is koha, the password is in the
