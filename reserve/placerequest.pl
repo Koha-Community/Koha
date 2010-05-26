@@ -23,17 +23,19 @@
 
 use strict;
 use warnings;
+
+use CGI;
 use C4::Biblio;
 use C4::Items;
-use CGI;
 use C4::Output;
 use C4::Reserves;
 use C4::Circulation;
 use C4::Members;
+use C4::Auth qw/checkauth/;
 
-my $input = new CGI;
-#print $input->header;
+my $input = CGI->new();
 
+my ($user, $cookie, $sesion_id, $flags) = checkauth($input, 0, { reserveforothers => 'place_holds' }, 'intranet');
 
 my @bibitems=$input->param('biblioitem');
 # FIXME I think reqbib does not exist anymore, it's used in line 82, to AddReserve of contraint type 'o'
