@@ -34,7 +34,8 @@ newversion() {
 }
 
 adjust_debian_changelog() {
-    dch -v "$1" "Building git snapshot."
+    dch --force-distribution -D squeeze-dev -v "$1" \
+        "Building git snapshot."
     dch -r "Building git snapshot."
 }
 
