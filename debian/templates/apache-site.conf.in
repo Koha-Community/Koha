@@ -1,0 +1,31 @@
+# Koha instance __KOHASITE__ Apache config.
+
+# OPAC
+<VirtualHost *:__OPACPORT__>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+   Include /etc/koha/apache-shared-opac.conf
+
+   ServerName __OPACSERVER__
+   SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
+   AssignUserID __UNIXUSER__ __UNIXGROUP__
+
+   ErrorLog    /var/log/koha/__KOHASITE__/opac-error.log
+#  TransferLog /var/log/koha/__KOHASITE__/opac-access_log
+#  RewriteLog  /var/log/koha/__KOHASITE__/opac-rewrite.log
+</VirtualHost>
+
+# Intranet
+<VirtualHost *:__INTRAPORT__>
+   Include /etc/koha/apache-shared.conf
+#  Include /etc/koha/apache-shared-disable.conf
+   Include /etc/koha/apache-shared-intranet.conf
+   
+   ServerName __INTRASERVER__
+   SetEnv KOHA_CONF "/etc/koha/sites/__KOHASITE__/koha-conf.xml"
+   AssignUserID __UNIXUSER__ __UNIXGROUP__
+
+   ErrorLog    /var/log/koha/__KOHASITE__/intranet-error.log
+#  TransferLog /var/log/koha/__KOHASITE__/intranet-access_log
+#  RewriteLog  /var/log/koha/__KOHASITE__/intranet-rewrite.log
+</VirtualHost>

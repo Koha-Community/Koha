@@ -13,10 +13,18 @@ following:
   implementation.
   - edit /etc/perl/XML/SAX/ParserDetails.ini to
     move XML::LibXML::SAX:Parser section last in the file
+  - FIXME: This should become unnecessary: Koha is in the process of
+    being patched to specify the parser it needs explicitly, instead
+    of assuming it is the default one.
+* Enable the suexec module for Apache.
+  - sudo a2enmod suexec
 * Enable the rewrite module for Apache.
   - sudo a2enmod rewrite
 * Restart Apache.
   - sudo service apache2 restart
+
+The latter two steps can be done by running the koha-post-install-setup
+script.
 
 Then access the following URL:
 

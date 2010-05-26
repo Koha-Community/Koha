@@ -1,0 +1,14 @@
+# Rotate log files for all Koha instances.
+
+/var/log/koha/*/*.log {
+    rotate 5
+    weekly
+    missingok
+    compress
+    delaycompress
+    notifempty
+    sharedscripts
+    postrotate
+        /etc/init.d/apache2 reload > /dev/null
+    endscript
+}

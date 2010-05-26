@@ -29,7 +29,6 @@ use C4::XSLT;
 use C4::Branch;
 use C4::Reserves;    # CheckReserves
 use C4::Debug;
-use YAML;
 use URI::Escape;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
@@ -651,7 +650,6 @@ sub _remove_stopwords {
 #
 		foreach ( keys %{ C4::Context->stopwords } ) {
 			next if ( $_ =~ /(and|or|not)/ );    # don't remove operators
-			$debug && warn "$_ Dump($operand)";
 			if ( my ($matched) = ($operand =~
 				/([^\X\p{isAlnum}]\Q$_\E[^\X\p{isAlnum}]|[^\X\p{isAlnum}]\Q$_\E$|^\Q$_\E[^\X\p{isAlnum}])/gi))
 			{
@@ -1345,6 +1343,10 @@ sub buildQuery {
 
 =head2 searchResults
 
+  my @search_results = searchResults($search_context, $searchdesc, $hits, 
+                                     $results_per_page, $offset, $scan, 
+                                     @marcresults, $hidelostitems);
+
 Format results in a form suitable for passing to the template
 
 =cut
@@ -1352,9 +1354,11 @@ Format results in a form suitable for passing to the template
 # IMO this subroutine is pretty messy still -- it's responsible for
 # building the HTML output for the template
 sub searchResults {
-    my ( $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults, $hidelostitems ) = @_;
+    my ( $search_context, $searchdesc, $hits, $results_per_page, $offset, $scan, @marcresults, $hidelostitems ) = @_;
     my $dbh = C4::Context->dbh;
     my @newresults;
+
+    $search_context = 'opac' unless $search_context eq 'opac' or $search_context eq 'intranet';
 
     #Build branchnames hash
     #find branchname
@@ -1664,9 +1668,11 @@ sub searchResults {
 	use C4::Charset;
 	SetUTF8Flag($marcrecord);
 	$debug && warn $marcrecord->as_formatted;
-        if (C4::Context->preference("XSLTResultsDisplay") && !$scan) {
-            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display(
-                $oldbiblio->{biblionumber}, $marcrecord, 'Results' );
+        if (!$scan && $search_context eq 'opac' && C4::Context->preference("OPACXSLTResultsDisplay")) {
+            # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
+            # is not implemented yet
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results', 
+                                                                $search_context);
         }
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
@@ -2653,6 +2659,6 @@ __END__
 
 =head1 AUTHOR
 
-Koha Developement team <info@koha.org>
+Koha Development Team <info@koha.org>
 
 =cut

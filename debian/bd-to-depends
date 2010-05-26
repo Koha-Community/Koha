@@ -1,0 +1,21 @@
+#!/usr/bin/python
+
+import re
+import debian.deb822
+
+exclusions = [
+    'debhelper',
+]
+
+exclusions = [re.compile(s) for s in exclusions]
+
+depstring = debian.deb822.Deb822(file('debian/control')).get('Build-Depends')
+deps = [s.strip() for s in depstring.split(',')]
+result = []
+for dep in deps:
+    for ex in exclusions:
+        if ex.match(dep):
+            break
+    else:
+        result.append(dep)
+print 'koha:Depends=%s' % ', '.join(result)

@@ -32,7 +32,6 @@ use C4::BackgroundJob;
 use C4::ClassSource;
 use C4::Dates;
 use C4::Debug;
-use YAML;
 use Switch;
 use MARC::File::XML;
 

@@ -1,0 +1,87 @@
+#!/bin/sh
+#
+# koha-restore: restore a Koha site from a dump (from koha-dump)
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+
+die() {
+    echo "$@" 1>&2
+    exit 1
+}
+
+
+# Parse command line.
+[ "$#" = 2 ] || die "Usage: $0 sqldump configdump"
+sqldump="$1"
+configdump="$2"
+
+
+# Verify that no files in the config dump exist on the filesystem.
+anyexists=no
+tar -tf "$configdump" |
+while read x
+do
+    if [ -e "/$x" ]
+    then
+        anyexists=yes
+        echo "ERROR: File exists: /$x" 1>&2
+    fi
+done
+if [ "$anyexists" = yes ]
+then
+    die "Config dump $configdump has files that exist on the filesystem."
+fi
+
+
+# Create user and group.
+name=$(tar tf "$configdump" | 
+       sed -n '/^etc\/koha\/sites\/\([^/]*\)\/$/s//\1/p')
+username="$name-koha"
+adduser --no-create-home --disabled-login --gecos "Koha instance $username" \
+    --quiet "$username"
+
+
+# Create dirs. Some of them will be in the tarball, but not all, e.g.,
+# /var/run and /var/lock.
+koha-create-dirs "$name"
+
+
+# Unpack tarball.
+tar -C / -xf "$configdump"
+
+
+# Re-create database and database user.
+mysqldb="koha_$name"
+mysqluser="koha_$name"
+mysqlpwd="$(sed -n '/.*<pass>\(.*\)<\/pass>.*/s//\1/p' /etc/koha/sites/$name/koha-conf.xml)"
+zcat "$sqldump" | mysql --defaults-extra-file=/etc/mysql/koha-common.cnf
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof || true
+DROP USER '$mysqluser';
+eof
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf << eof || true
+CREATE USER '$mysqluser' IDENTIFIED BY '$mysqlpwd';
+GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
+FLUSH PRIVILEGES;
+eof
+koha-rebuild-zebra --full "$name"
+
+
+# Restart Apache.
+/etc/init.d/apache2 restart
+

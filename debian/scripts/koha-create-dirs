@@ -1,0 +1,56 @@
+#!/bin/sh
+#
+# koha-create-dirs -- Create dirs for a Koha instance.
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+userdir() {
+    local username="$1-koha"
+    local directory="$2"
+    if [ ! -d "$directory" ]
+    then
+        install -d -o "$username" -g "$username" "$directory"
+    fi
+}
+
+rootdir() {
+    local directory="$1"
+    if [ ! -d "$directory" ]
+    then
+        install -d -o root -g root "$directory"
+    fi
+}
+
+for name in "$@"
+do
+    rootdir "/var/spool/koha/$name"
+    userdir "$name" "/etc/koha/sites/$name"
+    userdir "$name" "/var/lib/koha/$name"
+    userdir "$name" "/var/lib/koha/$name/authorities"
+    userdir "$name" "/var/lib/koha/$name/biblios"
+    userdir "$name" "/var/lib/koha/$name/biblios/key"
+    userdir "$name" "/var/lib/koha/$name/biblios/register"
+    userdir "$name" "/var/lib/koha/$name/biblios/shadow"
+    userdir "$name" "/var/lock/koha/$name"
+    userdir "$name" "/var/lock/koha/$name/authorities"
+    userdir "$name" "/var/lock/koha/$name/biblios"
+    userdir "$name" "/var/run/koha/$name"
+    userdir "$name" "/var/run/koha/$name/authorities"
+    userdir "$name" "/var/run/koha/$name/biblios"
+done
+

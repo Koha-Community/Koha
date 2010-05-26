@@ -1,0 +1,38 @@
+#!/bin/sh
+#
+# koha-rebuild-zebra -- Rebuild the Zebra database for a Koha instance.
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+
+if [ "$1" = --full ]
+then
+    opts="-r"
+    shift
+else
+    opts="-z"
+fi
+
+
+for name in "$@"
+do
+    sudo -u "$name-koha" \
+    env PERL5LIB=/usr/share/koha/lib \
+        KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
+        /usr/share/koha/bin/migration_tools/rebuild_zebra.pl -b -a $opts
+done

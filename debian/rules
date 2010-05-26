@@ -1,16 +1,21 @@
 #!/usr/bin/make -f
 
-PACKAGE = $(shell dh_listpackages)
-TMP     = $(CURDIR)/debian/$(PACKAGE)
+TMP = $(CURDIR)/debian/tmp
 
 # Make "perl Makefile.PL" be non-interactive.
 export PERL_MM_USE_DEFAULT=1
 
 %:
-	dh $@
-	
+	dh $@ --fail-missing
+
+override_dh_gencontrol:
+	debian/bd-to-depends >> debian/koha-common.substvars
+	dh_gencontrol
+
 override_dh_auto_install:
 	dh_auto_install
+	rm $(TMP)/etc/koha/README.txt
+	rm -r $(TMP)/usr/share/koha/doc
 	rm -r $(TMP)/var/run
 	rm -r $(TMP)/var/lock
 	rm $(TMP)/var/log/koha/README
@@ -18,7 +23,7 @@ override_dh_auto_install:
 	ln -s /usr/share/javascript/jquery/jquery.js \
 	   $(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/lib/jquery/jquery.js
 	rm $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/jquery/jquery.js
-	ln -s /usr/share/javascript/jquery \
+	ln -s /usr/share/javascript/jquery/jquery.js \
 	   $(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/jquery/jquery.js
 	rm -r \
 		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/js/tinymce
@@ -32,6 +37,9 @@ override_dh_auto_install:
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/yui
 	ln -s /usr/share/javascript/yui \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/lib/yui
+	install -d $(TMP)/etc/apache2/sites-available
+	install -d $(TMP)/etc/apache2/sites-enabled
+	install -d $(TMP)/etc/apache2/conf.d
 	ln -s ../../koha/koha-httpd.conf $(TMP)/etc/apache2/sites-available/koha
 	ln -s ../sites-available/koha $(TMP)/etc/apache2/sites-enabled/koha
 	install -m 0644 debian/koha.apache-ports $(TMP)/etc/apache2/conf.d/koha
@@ -40,5 +48,16 @@ override_dh_auto_install:
 	mv $(TMP)/etc/koha/koha-conf.xml $(TMP)/usr/share/koha/koha-conf.xml.in
 	sed -i $(TMP)/usr/share/koha/koha-conf.xml.in \
 		-e '/^ <user>/s/>.*</>_DBC_DBUSER_</' \
-		-e '/^ <pass>/s/>.*</>_DBC_DBPASS_</' \
+		-e '/^ <pass>/s/>.*</>_DBC_DBPASS_</'
+	install -m 0644 koha-tmpl/opac-tmpl/prog/en/lib/yui/skin.css \
+		koha-tmpl/opac-tmpl/prog/en/lib/yui/reset-fonts-grids.css \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/opac-tmpl/prog/en/lib/yui/skin.css \
+		koha-tmpl/opac-tmpl/prog/en/lib/yui/reset-fonts-grids.css \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	sed -i -e 's:url(.*/reset-fonts-grids.css.*):url(reset-fonts-grids.css):' \
+		   -e 's:url(.*/skin.css.*):url(skin.css):' \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css/opac.css \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css/sco.css \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css/staff-global*.css
 

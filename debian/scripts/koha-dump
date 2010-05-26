@@ -1,0 +1,66 @@
+#!/bin/sh
+#
+# koha-dump: dump all contents and configs for a Koha site
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+
+# Make sure the files we create are not accessible by anyone else.
+umask 0077
+
+
+die() {
+    echo "$@" 1>&2
+    exit 1
+}
+
+
+# Parse command line.
+[ "$#" = 1 ] || die "Usage: $0 instancename"
+name="$1"
+kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
+date="$(date +%Y-%m-%d)"
+
+echo "Dumping Koha site $name:"
+
+
+# Dump database.
+mysqlhost="$(sed -n '/.*<hostname>\(.*\)<\/hostname>.*/s::\1:p' $kohaconfig)"
+mysqldb="$(sed -n '/.*<database>\(.*\)<\/database>.*/s::\1:p' $kohaconfig)"
+mysqluser="$(sed -n '/.*<user>\(.*\)<\/user>.*/s::\1:p' $kohaconfig | tail -n1)"
+mysqlpass="$(sed -n '/.*<pass>\(.*\)<\/pass>.*/s::\1:p' $kohaconfig)"
+dbdump="/var/spool/koha/$name/$name-$date.sql.gz"
+echo "* DB to $dbdump"
+mysqldump --databases --host="$mysqlhost" \
+    --user="$mysqluser" --password="$mysqlpass" "$mysqldb" | 
+    gzip > "$dbdump"
+chown "root:$name-koha" "$dbdump"
+chmod g+r "$dbdump"
+
+
+# Dump configs, logs, etc.
+metadump="/var/spool/koha/$name/$name-$date.tar.gz"
+echo "* configs, logs to $metadump"
+tar -C / -czf "$metadump" \
+    "etc/koha/sites/$name" \
+    "etc/apache2/sites-available/$name" \
+    "etc/apache2/sites-enabled/$name" \
+    "var/lib/koha/$name" \
+    "var/log/koha/$name"
+
+echo "Done."

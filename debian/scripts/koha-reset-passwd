@@ -1,0 +1,57 @@
+#!/bin/sh
+#
+# koha-reset-passwd -- reset password for a user in a Koha instance
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+
+die() {
+    echo "$@" 1>&2
+    exit 1
+}
+
+
+pwdigest() {
+    echo -n "$1" |
+    perl -e 'use Digest::MD5 qw(md5_base64);
+             while (<>) { print md5_base64($_), "\n"; }'
+}
+
+
+[ $# -lt 2 ] && die "Usage: $0 instancename username..."
+instance="$1"
+shift
+
+temp="$(mktemp)"
+
+cat <<eof > "$temp"
+use koha_$instance;
+eof
+
+for userid in "$@"
+do
+    password="$(pwgen -1)"
+    digest="$(pwdigest $password)"
+    echo "$userid $password"
+    echo "UPDATE borrowers SET password = '$digest' WHERE userid = '$userid';" \
+        >> "$temp"
+done
+
+mysql --defaults-extra-file=/etc/mysql/koha-common.cnf < "$temp"
+
+rm "$temp"

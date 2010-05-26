@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# koha-remove -- Remove a Koha instance.
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+
+for name in "$@"
+do
+    echo "Removing Koha instance $name"
+
+    mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
+DROP USER 'koha_$name';
+DROP DATABASE koha_$name;
+FLUSH PRIVILEGES;
+eof
+    
+    rm "/etc/apache2/sites-available/$name"
+    rm "/etc/koha/sites/$name/koha-conf.xml"
+    rm "/etc/koha/sites/$name/zebra-biblios.cfg"
+    rm "/etc/koha/sites/$name/zebra-authorities.cfg"
+    rm "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
+    rm "/etc/koha/sites/$name/zebra.passwd"
+    rmdir "/etc/koha/sites/$name"
+    rm -r "/var/lock/koha/$name"
+    rm -r "/var/log/koha/$name"
+    rm -r "/var/run/koha/$name"
+    deluser --quiet "$name-koha"
+    a2dissite "$name"
+done
+
+service apache2 restart

@@ -24,7 +24,6 @@ use List::MoreUtils qw(first_value any);
 use C4::Context;
 use C4::Dates qw(format_date_in_iso);
 use C4::Debug;
-use YAML;
 require Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
 

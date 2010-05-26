@@ -87,7 +87,7 @@ sub get_class_sort_key {
 
 =head1 AUTHOR
 
-Koha Developement team <info@koha.org>
+Koha Development Team <info@koha.org>
 
 =cut
 

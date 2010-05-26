@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# koha-instances -- List all Koha instances.
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+set -e
+
+is_enabled() {
+    if grep '^[[:space:]]*Include /etc/koha/apache-shared-disable.conf' \
+            "/etc/apache2/sites-available/$name" > /dev/null
+    then
+        return 1
+    else
+        return 0
+    fi
+}
+
+all=yes
+if [ "$1" = --enabled ]
+then
+    shift
+    all=no
+fi
+
+find /etc/koha/sites -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | 
+sort |
+while read name
+do
+    if [ "$all" = yes ] || is_enabled "$name"
+    then
+        echo "$name"
+    fi
+done

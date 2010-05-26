@@ -187,7 +187,10 @@ function CloneSubfield(index){
 </div>
 <!--/TMPL_IF -->
 
- <input type="hidden" name="op" value="serialchangestatus" />
+    <input type="hidden" name="op" value="serialchangestatus" />
+    <!--TMPL_LOOP Name="subscriptions"-->
+    <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
+    <!--/TMPL_LOOP -->
 	<table>
 	<tr>
 		<th>Numbered</th>
@@ -204,7 +207,6 @@ function CloneSubfield(index){
     <!-- /TMPL_UNLESS -->
         <td>
             <input type="hidden" name="serialid" value="<!-- TMPL_VAR name="serialid" -->" />
-            <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="hidden" name="itemcount" value="<!-- TMPL_VAR name="issuesatonce" -->" />
             <input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->" />
@@ -317,7 +319,6 @@ function CloneSubfield(index){
     <tr>
         <td>
             <input type="hidden" name="serialid" value="NEW" />
-            <input type="hidden" name="subscriptionid" value="<!-- TMPL_VAR name="subscriptionid" -->" />
             <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
             <input type="hidden" name="itemcount" value="<!-- TMPL_VAR name="issuesatonce" -->" />
             <input type="hidden" name="user" value="<!-- TMPL_VAR name="librarian" -->" />

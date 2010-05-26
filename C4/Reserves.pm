@@ -1723,7 +1723,7 @@ sub _koha_notify_reserve {
     my ($itemnumber, $borrowernumber, $biblionumber) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $borrower = C4::Members::GetMember( $borrowernumber );
+    my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
     my $letter_code;
     my $print_mode = 0;
     my $messagingprefs;
@@ -1853,7 +1853,7 @@ sub _ShiftPriorityByDateAndPriority {
 
 =head1 AUTHOR
 
-Koha Developement team <info@koha.org>
+Koha Development Team <info@koha.org>
 
 =cut
 

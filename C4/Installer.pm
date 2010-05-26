@@ -628,7 +628,7 @@ sub get_file_path_from_name {
 C4::Installer is a refactoring of logic originally from installer/installer.pl, which was
 originally written by Henri-Damien Laurant.
 
-Koha Developement team <info@koha.org>
+Koha Development Team <info@koha.org>
 
 Galen Charlton <galen.charlton@liblime.com>
 
