@@ -120,6 +120,7 @@
     &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt;
     &lt;isbn&gt;9782862749198&lt;/isbn&gt;
     &lt;marcxml&gt;
+      &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
       &lt;record
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd"
@@ -208,6 +209,7 @@
     &lt;biblioitemnumber&gt;2&lt;/biblioitemnumber&gt;
     &lt;isbn&gt;9782265078031&lt;/isbn&gt;
     &lt;marcxml&gt;
+      &lt;?xml version="1.0" encoding="UTF-8" ?&gt;
       &lt;record
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd"
@@ -316,41 +318,39 @@
                     ilsdi.pl?service=GetAuthorityRecords&id=1+2+99999
                 </a>
                 <h4>Example Response</h4>
-<pre>&lt;?xml version="1.0" encoding="ISO-8859-1" ?&gt;
+<pre>&lt;xml version="1.0" encoding="UTF-8"&gt;;
 &lt;GetAuthorityRecords&gt;
+  &lt;record&gt;
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
   &lt;record
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd"
     xmlns="http://www.loc.gov/MARC21/slim"&gt;
-    &lt;leader&gt;00126nx  j2200073   4500 &lt;/leader&gt;
+      &lt;leader&gt;00182     2200085   4500&lt;/leader&gt;
     &lt;controlfield tag="001"&gt;1&lt;/controlfield&gt;
-    &lt;datafield tag="250" ind1=" " ind2=" "&gt;
-      &lt;subfield code="a"&gt;TECHNIQUE&lt;/subfield&gt;
+      &lt;datafield tag="200" ind1=" " ind2=" "&gt;
+        &lt;subfield code="a"&gt;Hugo&lt;/subfield&gt;
+        &lt;subfield code="b"&gt;Victor&lt;/subfield&gt;
+    &lt;/datafield&gt;
+      &lt;datafield tag="801" ind1=" " ind2=" "&gt;
+        &lt;subfield code="a"&gt;France&lt;/subfield&gt;
+        &lt;subfield code="b"&gt;Nimes&lt;/subfield&gt;
+        &lt;subfield code="c"&gt;2010/04/13&lt;/subfield&gt;
     &lt;/datafield&gt;
     &lt;datafield tag="100" ind1=" " ind2=" "&gt;
-      &lt;subfield code="a"&gt;20071210afrey50      ba0&lt;/subfield&gt;
+        &lt;subfield code="a"&gt;20100413     50                    &lt;/subfield&gt;
     &lt;/datafield&gt;
     &lt;datafield tag="152" ind1=" " ind2=" "&gt;
-      &lt;subfield code="b"&gt;NC&lt;/subfield&gt;
+        &lt;subfield code="b"&gt;NP&lt;/subfield&gt;
     &lt;/datafield&gt;
   &lt;/record&gt;
-  &lt;record
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd"
-    xmlns="http://www.loc.gov/MARC21/slim"&gt;
-    &lt;leader&gt;00130nx  j2200073   4500 &lt;/leader&gt;
-    &lt;controlfield tag="001"&gt;2&lt;/controlfield&gt;
-    &lt;datafield tag="250" ind1=" " ind2=" "&gt;
-      &lt;subfield code="a"&gt;CHEMIN DE FER&lt;/subfield&gt;
-    &lt;/datafield&gt;
-    &lt;datafield tag="100" ind1=" " ind2=" "&gt;
-      &lt;subfield code="a"&gt;20071210afrey50      ba0&lt;/subfield&gt;
-    &lt;/datafield&gt;
-    &lt;datafield tag="152" ind1=" " ind2=" "&gt;
-      &lt;subfield code="b"&gt;NC&lt;/subfield&gt;
-    &lt;/datafield&gt;
   &lt;/record&gt;
-  &lt;record&gt;RecordNotFound&lt;/record&gt;
+  &lt;record&gt;
+    &lt;code&gt;RecordNotFound&lt;/code&gt;
+  &lt;/record&gt;
+  &lt;record&gt;
+    &lt;code&gt;RecordNotFound&lt;/code&gt;
+  &lt;/record&gt;
 &lt;/GetAuthorityRecords&gt;</pre>
 
 [% ELSIF ( LookupPatron ) %]

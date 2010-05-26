@@ -193,14 +193,11 @@ sub GetRecords {
         # Get the biblioitem from the biblionumber
         my $biblioitem = ( GetBiblioItemByBiblioNumber( $biblionumber, undef ) )[0];
         if ( not $biblioitem->{'biblionumber'} ) {
-            $biblioitem = "RecordNotFound";
+            $biblioitem->{code} = "RecordNotFound";
         }
 
         # We don't want MARC to be displayed
         delete $biblioitem->{'marc'};
-
-        # nor the XML declaration of MARCXML
-        $biblioitem->{'marcxml'} =~ s/<\?xml version="1.0" encoding="UTF-8"\?>//go;
 
         # Get most of the needed data
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
@@ -224,8 +221,6 @@ sub GetRecords {
         $biblioitem->{'reserves'}->{'reserve'} = $reserves[1];
         $biblioitem->{'issues'}->{'issue'}     = $issues;
 
-        map { $biblioitem->{$_} = encode_entities( $biblioitem->{$_}, '&' ) } grep( !/marcxml/, keys %$biblioitem );
-        
         push @records, $biblioitem;
     }
 
@@ -256,18 +251,16 @@ sub GetAuthorityRecords {
         return { code => 'UnsupportedSchema' };
     }
 
-    my $records;
+    my @records;
 
     # Let's loop over the authority IDs
     foreach my $authid ( split( / /, $cgi->param('id') ) ) {
 
         # Get the record as XML string, or error code
-        my $record = GetAuthorityXML($authid) || "<record><code>RecordNotFound</code></record>";
-        $record =~ s/<\?xml(.*)\?>//go;
-        $records .= $record;
+        push @records, GetAuthorityXML($authid) || { code => 'RecordNotFound' };
     }
 
-    return $records;
+    return { record => \@records };
 }
 
 =head2 LookupPatron
