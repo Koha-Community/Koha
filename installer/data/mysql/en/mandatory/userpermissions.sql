@@ -5,6 +5,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 6, 'modify_holds_priority', 'Modify holds priority'),
    ( 9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
    ( 9, 'fast_cataloging', 'Fast cataloging'),
+   ( 9, 'edit_items', 'Edit Items'),
    (11, 'vendors_manage', 'Manage vendors'),
    (11, 'contracts_manage', 'Manage contracts'),
    (11, 'period_manage', 'Manage periods'),

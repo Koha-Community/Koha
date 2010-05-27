@@ -81,11 +81,11 @@ my $frameworkcode = &GetFrameworkCode($biblionumber);
 # Defining which userflag is needing according to the framework currently used
 my $userflags;
 if (defined $input->param('frameworkcode')) {
-    $userflags = ($input->param('frameworkcode') eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+    $userflags = ($input->param('frameworkcode') eq 'FA') ? "fast_cataloging" : "edit_items";
 }
 
 if (not defined $userflags) {
-    $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+    $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_items";
 }
 
 my ($template, $loggedinuser, $cookie)
