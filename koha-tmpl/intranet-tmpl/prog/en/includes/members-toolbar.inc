@@ -1,4 +1,4 @@
-﻿<div id="toolbar">
+<div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
 
@@ -10,7 +10,7 @@ function confirm_deletion() {
 }
 function confirm_updatechild() {
     var is_confirmed = window.confirm(_('Are you sure you want to update this child to an Adult category?  This cannot be undone.'));
-   
+
     if (is_confirmed) {
             window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&catcode=<!-- TMPL_VAR NAME="catcode" -->&catcode_multi=<!-- TMPL_VAR NAME="CATCODE_MULTI" -->';
     }
@@ -54,7 +54,7 @@ function update_child() {
 	        { text: _("Print Slip"), onclick: {fn: function(){printx_window("slip")}} },
 	        { text: _("Quick Slip"), onclick: {fn: function(){printx_window("qslip")}} }
 	    ];
-	
+
 		var moremenu = [
 			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
 			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->"<!-- TMPL_UNLESS NAME="CAN_user_permissions" -->, disabled: true<!-- /TMPL_UNLESS -->},
@@ -68,8 +68,8 @@ function update_child() {
 	        name: "printmenubutton",
 	        menu: printmenu,
 	        container: "printmenuc"
-	    });   
-	
+	    });
+
 	    new YAHOO.widget.Button({
 	        type: "menu",
 	        label: _("More"),
@@ -84,7 +84,7 @@ function update_child() {
 	    new YAHOO.widget.Button("changepassword");
 	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
-	    new YAHOO.widget.Button("renewpatron");		 
+	    new YAHOO.widget.Button("renewpatron");
 		new YAHOO.widget.Button("patronflags");
 		new YAHOO.widget.Button("deletepatron");
 		new YAHOO.widget.Button("updatechild");

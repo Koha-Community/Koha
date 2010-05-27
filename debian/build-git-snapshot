@@ -30,11 +30,12 @@ latest_sha1() {
 }
 
 newversion() {
-    printf '3.2.git%s.%s' $(date +%Y%m%d%H%M%S) $(latest_sha1)
+    printf '3.2~git%s.%s' $(date +%Y%m%d%H%M%S) $(latest_sha1)
 }
 
 adjust_debian_changelog() {
-    dch -v "$1-1" "Building git snapshot."
+    dch --force-distribution -D squeeze-dev -v "$1" \
+        "Building git snapshot."
     dch -r "Building git snapshot."
 }
 
@@ -44,7 +45,7 @@ reset_debian_changelog() {
 
 build_package() {
     git archive --format=tar --prefix="koha-$1/" HEAD | 
-        gzip -9 > "../koha_$1.orig.tar.gz"
+        gzip -9 > "../koha_$1.tar.gz"
     debuild -us -uc
 }
 

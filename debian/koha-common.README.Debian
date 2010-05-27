@@ -1,3 +1,31 @@
+Post-installation configuration
+===============================
+
+You will want to consider doing the following after installing this
+package:
+
+* Install mysql-server, for a local database.
+
+* Alternatively, set up a connection to a remote MySQL server:
+  - rm /etc/mysql/koha-common.cnf
+  - $EDITOR /etc/mysql/koha-common.cnf
+
+        [client]
+        host = some.other.host
+        user = mysqlusername
+        password = mysqlpassword
+        
+* Enable the rewrite module: a2enmod rewrite
+
+* Listen on port 8080: $EDITOR /etc/apache2/ports.conf
+
+* Alternatively, configure koha-create, using /etc/koha/koha-sites.conf
+  (see /usr/sbin/koha-create for which variables to set).
+  
+* After that, you can create a new Koha instance:
+  - koha-create --create-db name
+
+
 Koha filesystem layout on Debian
 ================================
 
