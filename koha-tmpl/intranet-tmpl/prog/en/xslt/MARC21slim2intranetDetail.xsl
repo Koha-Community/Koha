@@ -423,19 +423,18 @@
         </xsl:if>
         <xsl:if test="marc:datafield[@tag=505]">
         <xsl:for-each select="marc:datafield[@tag=505]">
-        <span class="results_summary"><span class="label">
+        <span class="results_summary">
         <xsl:choose>
         <xsl:when test="@ind1=0">
-            Contents:
+            <span class="label">Contents:</span>
         </xsl:when>
         <xsl:when test="@ind1=1">
-            Incomplete contents:
+            <span class="label">Incomplete contents:</span>
         </xsl:when>
         <xsl:when test="@ind1=1">
-            Partial contents:
+            <span class="label">Partial contents:</span>
         </xsl:when>
         </xsl:choose>  
-        </span>
         <xsl:choose>
         <xsl:when test="@ind2=0">
             <xsl:for-each select="marc:subfield[@code='t']">
@@ -455,34 +454,33 @@
         <!-- 780 -->
         <xsl:if test="marc:datafield[@tag=780]">
         <xsl:for-each select="marc:datafield[@tag=780]">
-        <span class="results_summary"><span class="label">
+        <span class="results_summary">
         <xsl:choose>
         <xsl:when test="@ind2=0">
-            Continues:
+            <span class="label">Continues:</span>
         </xsl:when>
         <xsl:when test="@ind2=1">
-            Continues in part:
+            <span class="label">Continues in part:</span>
         </xsl:when>
         <xsl:when test="@ind2=2">
-            Supersedes:
+            <span class="label">Supersedes:</span>
         </xsl:when>
         <xsl:when test="@ind2=3">
-            Supersedes in part:
+            <span class="label">Supersedes in part:</span>
         </xsl:when>
         <xsl:when test="@ind2=4">
-            Formed by the union: ... and: ...
+            <span class="label">Formed by the union: ... and: ...</span>
         </xsl:when>
         <xsl:when test="@ind2=5">
-            Absorbed:
+            <span class="label">Absorbed:</span>
         </xsl:when>
         <xsl:when test="@ind2=6">
-            Absorbed in part:
+            <span class="label">Absorbed in part:</span>
         </xsl:when>
         <xsl:when test="@ind2=7">
-            Separated from:
+            <span class="label">Separated from:</span>
         </xsl:when>
         </xsl:choose>
-        </span>
                 <xsl:variable name="f780">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">at</xsl:with-param>
@@ -505,38 +503,37 @@
         <!-- 785 -->
         <xsl:if test="marc:datafield[@tag=785]">
         <xsl:for-each select="marc:datafield[@tag=785]">
-        <span class="results_summary"><span class="label">
+        <span class="results_summary">
         <xsl:choose>
         <xsl:when test="@ind2=0">
-            Continued by:
+            <span class="label">Continued by:</span>
         </xsl:when>
         <xsl:when test="@ind2=1">
-            Continued in part by:
+            <span class="label">Continued in part by:</span>
         </xsl:when>
         <xsl:when test="@ind2=2">
-            Superseded by:
+            <span class="label">Superseded by:</span>
         </xsl:when>
         <xsl:when test="@ind2=3">
-            Superseded in part by:
+            <span class="label">Superseded in part by:</span>
         </xsl:when>
         <xsl:when test="@ind2=4">
-            Absorbed by:
+            <span class="label">Absorbed by:</span>
         </xsl:when>
         <xsl:when test="@ind2=5">
-            Absorbed in part by:
+            <span class="label">Absorbed in part by:</span>
         </xsl:when>
         <xsl:when test="@ind2=6">
-            Split into .. and ...:
+            <span class="label">Split into .. and ...:</span>
         </xsl:when>
         <xsl:when test="@ind2=7">
-            Merged with ... to form ...
+            <span class="label">Merged with ... to form ...</span>
         </xsl:when>
         <xsl:when test="@ind2=8">
-            Changed back to:
+            <span class="label">Changed back to:</span>
         </xsl:when>
 
         </xsl:choose>
-        </span>
                    <xsl:variable name="f785">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">at</xsl:with-param>
