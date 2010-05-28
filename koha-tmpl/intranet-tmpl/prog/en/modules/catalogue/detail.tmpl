@@ -53,10 +53,28 @@ function verify_images() {
     <div class="yui-b">
 
 <!-- TMPL_INCLUDE NAME="cat-toolbar.inc" -->
-    <!-- TMPL_IF NAME="AmazonEnabled" --><div class="yui-gb"><!-- TMPL_ELSE --><div class="yui-g"><!-- /TMPL_IF -->
-    <div id="catalogue_detail_biblio" class="yui-u first">
+    <!-- TMPL_IF NAME="AmazonEnabled" -->
+        <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
+            <div class="yui-gc">
+            <div id="catalogue_detail_biblio" class="yui-u first">
+        <!-- TMPL_ELSE -->
+            <div class="yui-gb">
+            <div id="catalogue_detail_biblio" class="yui-u first">
+        <!-- /TMPL_IF -->
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
+            <div class="yui-g">
+            <div id="catalogue_detail_biblio">
+        <!-- TMPL_ELSE -->
+            <div class="yui-g">
+            <div id="catalogue_detail_biblio" class="yui-u first">
+        <!-- /TMPL_IF -->
+    <!-- /TMPL_IF -->
+
         <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
         <!-- TMPL_VAR NAME="XSLTBloc" -->
+        <!-- TMPL_IF NAME="AmazonEnabled" --><!-- TMPL_IF NAME="AmazonCoverImages" --></div><div class="yui-u" id="bookcoverimg">
+        <a href="http://www.amazon<!-- TMPL_VAR NAME="AmazonTld" -->/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01.MZZZZZZZ.jpg" alt="" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
 
     <h3><!-- TMPL_VAR NAME="title" escape="html"--></h3>
