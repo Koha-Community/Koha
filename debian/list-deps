@@ -1,0 +1,49 @@
+#!/usr/bin/perl
+#
+# Write dependency list from Koha PerlDependencies.pm, in Debian format.
+#
+# Copyright 2010  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+
+use strict;
+use warnings;
+
+use C4::Installer::PerlDependencies;
+
+my $deps = $C4::Installer::PerlDependencies::PERL_DEPS;
+
+my $prefix = "^/usr/((lib|share)/perl5|(lib|share)/perl/[0-9.]+)";
+
+foreach my $module (keys %$deps) {
+    my $ver = $deps->{$module}->{'min_ver'};
+    my $subpath = $module;
+    $subpath =~ s,::,/,g;
+    my $output = 
+        qx(apt-file -l -x search "$prefix/$subpath.pm\$");
+    my @lines = split(/\n/, $output);
+    if (scalar(@lines) == 1 && $lines[0] ne "") {
+        my $pkg = $lines[0];
+        print "$pkg\n";
+    } elsif (scalar(@lines) > 1) {
+        foreach my $pkg (@lines) {
+            print " | " if ($pkg ne $lines[0]);
+            print "$pkg";
+        }
+        print "\n";
+    } else {
+        print "EEEK: unknown package for $module\n";
+    }
+}
