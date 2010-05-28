@@ -55,7 +55,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_007.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 100\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_007.pl&index=$field_number&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
@@ -108,7 +108,7 @@ my ($template, $loggedinuser, $cookie)
 #FIXME:  There is probably a more-elegant way to do this!
 #FIXME:  Two of the material types treat position 06, 07, and 08 as a single
 #three-char field.  This script works fine for creating values and sending them
-#back to the MARC, but if there is already a value in the 007, it won't send 
+#back to the MARC, but if there is already a value in the 007, it won't send
 #it properly to the value builder for those two instances.  Not sure how to solve.
 	$template->param( index => $index,
 			 f0 => $f0,

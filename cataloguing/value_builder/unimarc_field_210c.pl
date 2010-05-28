@@ -79,7 +79,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(subfield_managed) {
     defaultvalue=escape(document.getElementById(\"$field_number\").value);
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc 225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&index=\"+subfield_managed,\"unimarc_225a\",'width=500,height=600,toolbar=false,scrollbars=yes');
 }
 </script>
 ";
@@ -101,12 +101,12 @@ my ($input) = @_;
     my $category = $query->param('category');
     my $resultstring = $query->param('result');
     my $dbh = C4::Context->dbh;
-    
+
     my $startfrom=$query->param('startfrom');
     $startfrom=0 if(!defined $startfrom);
     my ($template, $loggedinuser, $cookie);
     my $resultsperpage;
-    
+
     my $authtypes = getauthtypes;
     my @authtypesloop;
     foreach my $thisauthtype (keys %$authtypes) {
@@ -126,13 +126,13 @@ my ($input) = @_;
         my @operator = $query->param('operator');
         my @value = $query->param('value');
         my $orderby   = $query->param('orderby');
-        
+
         $resultsperpage= $query->param('resultsperpage');
         $resultsperpage = 19 if(!defined $resultsperpage);
-    
+
         # builds tag and subfield arrays
         my @tags;
-    
+
         my ($results,$total) = SearchAuthorities( \@tags,\@and_or,
                                             \@excluding, \@operator, \@value,
                                             $startfrom*$resultsperpage, $resultsperpage,$authtypecode, $orderby);
@@ -153,16 +153,16 @@ my ($input) = @_;
                     flagsrequired => {editcatalogue => '*'},
                     debug => 1,
                     });
-    
+
         # multi page display gestion
         my $displaynext=0;
         my $displayprev=$startfrom;
         if(($total - (($startfrom+1)*($resultsperpage))) > 0 ) {
             $displaynext = 1;
         }
-    
+
         my @numbers = ();
-    
+
         if ($total>$resultsperpage) {
             for (my $i=1; $i<$total/$resultsperpage+1; $i++) {
                 if ($i<16) {
@@ -174,10 +174,10 @@ my ($input) = @_;
                 }
             }
         }
-    
+
         my $from = $startfrom*$resultsperpage+1;
         my $to;
-    
+
         if($total < (($startfrom+1)*$resultsperpage)) {
             $to = $total;
         } else {
@@ -215,15 +215,15 @@ my ($input) = @_;
                     flagsrequired => {editcatalogue => '*'},
                     debug => 1,
                     });
-    
+
         $template->param(index => $index,
                         resultstring => $resultstring
                         );
     }
-    
+
     $template->param(authtypesloop => \@authtypesloop);
     $template->param(category => $category);
-    
+
     # Print the page
     output_html_with_http_headers $query, $cookie, $template->output;
 }

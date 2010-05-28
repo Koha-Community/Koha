@@ -45,19 +45,19 @@ sub plugin_javascript {
         function Focus$field_number() {
             return 1;
         }
-        
+
         function Blur$field_number() {
                 return 1;
         }
-        
+
         function Clic$field_number() {
                 defaultvalue=document.getElementById(\"$field_number\").value;
-                window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_105.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 105\",'width=1200,height=400,toolbar=false,scrollbars=yes');
-        
+                window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_105.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_105\",'width=1200,height=400,toolbar=false,scrollbars=yes');
+
         }
     </script>
     ";
-    
+
     return ($field_number,$res);
 }
 
@@ -91,7 +91,7 @@ sub plugin {
         my $f11 = substr($result,10,1);
         my $f12 = substr($result,11,1);
         my $f13 = substr($result,12,1);
-        
+
 	$template->param(index => $index,
                         "f1$f1" => 1,
                         "f2$f2" => 1,
