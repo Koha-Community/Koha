@@ -1110,7 +1110,6 @@ Note : if we change from "waited" to something else,then we will have to create 
 sub ModSerialStatus {
     my ( $serialid, $serialseq,  $planneddate,$publisheddate, $status, $notes )
       = @_;
-
     #It is a usual serial
     # 1st, get previous status :
     my $dbh   = C4::Context->dbh;
@@ -1141,7 +1140,9 @@ sub ModSerialStatus {
             $sth->execute($subscriptionid);
             my ( $missinglist, $recievedlist ) = $sth->fetchrow;
             if ( $status eq 2 ) {
-
+                 if (not utf8::is_utf8($serialseq)){
+                    utf8::decode($serialseq);
+                 }
                 $recievedlist .= "; $serialseq"
                   unless ( index( "$recievedlist", "$serialseq" ) >= 0 );
             }
