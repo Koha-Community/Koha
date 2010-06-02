@@ -3662,6 +3662,14 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
+$DBversion = 'XXX';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do(qq{DELETE FROM message_attributes WHERE message_attribute_id=3;});
+    $dbh->do(qq{DELETE FROM letter WHERE code='EVENT' AND title='Upcoming Library Event';});
+    print "Upgrade to $DBversion done Remove upcoming events messaging option (bug 2434)";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 
