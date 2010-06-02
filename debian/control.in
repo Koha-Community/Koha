@@ -7,11 +7,11 @@ Standards-Version: 3.8.4
 # See debian/rules, the override_dh_gencontrol rules. 
 # There are some exceptions.
 Build-Depends:__AUTODEPENDS__, 
- debhelper (>= 7.0.50), gettext
+ debhelper (>= 7.0.50), gettext, python, python-debian
 
 Package: koha-common
 Architecture: all
-Depends: ${shlib:Depends}, ${misc:Depends}, ${koha:Depends},
+Depends: ${misc:Depends}, ${koha:Depends},
  apache2,
  apache2-mpm-itk,
  at,

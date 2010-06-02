@@ -71,15 +71,16 @@ Build-Depends: libalgorithm-checkdigits-perl,
  libxml-sax-perl,
  libxml-sax-writer-perl,
  libxml-simple-perl,
+ libyaml-perl,
  libyaml-syck-perl,
  perl,
  perl-base,
  perl-modules, 
- debhelper (>= 7.0.50), gettext
+ debhelper (>= 7.0.50), gettext, python, python-debian
 
 Package: koha-common
 Architecture: all
-Depends: ${shlib:Depends}, ${misc:Depends}, ${koha:Depends},
+Depends: ${misc:Depends}, ${koha:Depends},
  apache2,
  apache2-mpm-itk,
  at,
