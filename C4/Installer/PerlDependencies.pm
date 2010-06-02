@@ -448,6 +448,11 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '2.07'
+    },
+    'YAML' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.71'
     }
 };
 
