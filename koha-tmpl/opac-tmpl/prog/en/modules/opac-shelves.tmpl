@@ -4,7 +4,8 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
-
+var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
+var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to delete this list?");
 $.tablesorter.addParser({
     id: 'articles', 
     is: function(s) {return false;  }, 
@@ -225,7 +226,7 @@ $(function() {
                          <input type="hidden" name="display" value="privateshelves" />
                     <!-- /TMPL_IF -->
                          <input type="hidden" value="1" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->"/>
-                         <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));"/>
+                         <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                       </form> <!-- /TMPL_IF -->
 
 		      <a class="print tag_hides" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
@@ -304,12 +305,12 @@ $(function() {
               <!-- TMPL_IF NAME="itemsloop" -->
                 <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
                 <input type="hidden" name="modifyshelfcontents" value="1" />
-                <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="submit" value="Remove Selected Items" class="icon delete" onclick="return confirmDelete(_('Are you sure you want to remove these items from the list?'))" />
+                <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /><input type="submit" value="Remove Selected Items" class="icon delete" onclick="return confirmDelete(MSG_REMOVE_FROM_LIST)" />
               <!-- TMPL_ELSE -->
                 <form method="post" action="opac-shelves.pl">
                   <input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelfnumber" -->" value="1" />
                   <input type="hidden" name="shelves" value="1" />
-                  <input type="submit" class="icon delete" value="Delete this List" onclick="return confirmDelete(_('Are you sure you want to delete this List?'))" />
+                  <input type="submit" class="icon delete" value="Delete this List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
               <!-- /TMPL_IF -->
                 </form>
             <!-- /TMPL_IF -->
@@ -411,7 +412,7 @@ $(function() {
                                     <input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
                                     <input type="submit" class="confirm" value="Confirm" />
                               <!-- TMPL_ELSE -->
-                                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+                                    <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
                               <!-- /TMPL_IF -->
                                 </form>
                             <!-- /TMPL_IF -->&nbsp;
@@ -477,7 +478,7 @@ $(function() {
                                   <input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
                                   <input type="submit" class="confirm" value="Confirm" />
                                 <!-- TMPL_ELSE -->
-                                  <input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
+                                  <input type="submit" class="deleteshelf" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);" value="Delete" />
                                 <!-- /TMPL_IF -->
                               </form>
                             <!-- /TMPL_IF -->&nbsp;

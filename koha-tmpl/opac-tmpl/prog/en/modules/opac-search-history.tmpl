@@ -4,6 +4,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
+	var MSG_CONFIRM_DELETE_HISTORY = _("Are you sure you want to delete your search history?");
          $(document).ready(function() {
 		// We show table ordered by descending dates by default
 		// (so that the more recent query is shown first)
@@ -32,7 +33,7 @@
 <div class="yui-b"><div class="yui-g">
         <div id="searchhistory" class="container">
 	<h1>Search history</h1>
-	<!-- TMPL_IF NAME="recentSearches" --><form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="deleteshelf" value="Delete your search history" onclick="return confirm(_('Are you sure you want to delete your search history?'));" /></form><!-- TMPL_ELSE --><!-- TMPL_IF NAME="previousSearches" --><form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="deleteshelf" value="Delete your search history" onclick="return confirm(_('Are you sure you want to delete your search history?'));" /></form><!-- /TMPL_IF --><!-- /TMPL_IF -->
+	<!-- TMPL_IF NAME="recentSearches" --><form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="deleteshelf" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form><!-- TMPL_ELSE --><!-- TMPL_IF NAME="previousSearches" --><form action="/cgi-bin/koha/opac-search-history.pl" method="get"><input type="hidden" name="action" value="delete" /><input type="submit" class="deleteshelf" value="Delete your search history" onclick="return confirm(MSG_CONFIRM_DELETE_HISTORY);" /></form><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 	    <!-- TMPL_IF NAME="recentSearches" -->
 	    <table class="historyt">
