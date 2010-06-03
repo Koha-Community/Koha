@@ -448,6 +448,11 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '2.07'
+    },
+    'YAML' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.71'
     }
 };
 
@@ -467,6 +472,13 @@ A module for cataloging Koha Perl dependencies.
 
 This module's sole purpose for existence is to provide a single location to catalog all Koha Perl dependencies. New dependencies should be added to the
 end of the outer hash and follow the key/value pattern used in the other dependencies.
+
+=head2 Debian
+
+If you change the list of dependencies, and you use Debian, please also
+run the debian/update-control script and commit the modifed version of
+debian/control into git as well. If you're not running Debian, don't
+worry about it.
 
 =head1 AUTHOR
 

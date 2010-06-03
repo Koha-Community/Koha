@@ -1,0 +1,11 @@
+#!/bin/sh
+
+set -e
+
+deps="$(debian/list-deps |
+        sort -u |
+        sed 's/.*/ &,\\n/' | 
+        tr -d '\n' | 
+        sed 's/,\\n$//')"
+sed "s/__AUTODEPENDS__/$deps/" debian/control.in > debian/control
+
