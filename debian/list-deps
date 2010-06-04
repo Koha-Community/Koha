@@ -33,7 +33,16 @@ foreach my $module (keys %$deps) {
     $subpath =~ s,::,/,g;
     my $output = 
         qx(apt-file -l -x search "$prefix/$subpath.pm\$");
-    my @lines = split(/\n/, $output);
+    my @temp = split(/\n/, $output);
+    my @lines = ();
+    # Remove packages that are required/essential and always installed on
+    # a Debian system. Debian packages should not have unversioned 
+    # dependencies on such packages.
+    foreach my $line (@temp) {
+        if ($line ne "perl-base") {
+            @lines = (@lines, $line);
+        }
+    }
     if (scalar(@lines) == 1 && $lines[0] ne "") {
         my $pkg = $lines[0];
         print "$pkg\n";
@@ -43,6 +52,17 @@ foreach my $module (keys %$deps) {
             print "$pkg";
         }
         print "\n";
+    } elsif (scalar(@temp) != 0) {
+        # I'm an Essential and I'm OK,
+        # I install all night, and work all day.
+        # I chomp up strings. I eat my bugs.
+        # I go to the base install.
+        # On Fridays I go drinking,
+        # and have buttered commits for git.
+        # (Beer O'Clock is more than two hours
+        # away. I don't even drink beer. There
+        # is no reason to be suspicious of this
+        # commit.)
     } else {
         print "EEEK: unknown package for $module\n";
     }
