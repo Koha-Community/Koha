@@ -454,12 +454,14 @@ function CloneSubfield(index){
     // Changing the "..." link's onclick attribute for plugin callback
     var links  = clone.getElementsByTagName('a');
     var link = links[0];
-    var buttonDotOnClick = link.getAttribute('onclick');
-    if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
-	var re = /\('.*'\)/i;
-        buttonDotOnClick = buttonDotOnClick.replace(re,"('"+linkid+"')");
-        if(buttonDotOnClick){
-	    link.setAttribute('onclick',buttonDotOnClick);
+    if ( link ) {
+        var buttonDotOnClick = link.getAttribute('onclick');
+        if(buttonDotOnClick.match('Clictag')){   // -1- It s a plugin
+            var re = /\('.*'\)/i;
+            buttonDotOnClick = buttonDotOnClick.replace(re,"('"+linkid+"')");
+            if(buttonDotOnClick){
+                link.setAttribute('onclick',buttonDotOnClick);
+            }
         }
     }
 
