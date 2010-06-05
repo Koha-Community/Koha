@@ -71,16 +71,15 @@ memoize('GetAuthorisedValues');
 
 =head1 NAME
 
-    C4::Koha - Perl Module containing convenience functions for Koha scripts
+C4::Koha - Perl Module containing convenience functions for Koha scripts
 
 =head1 SYNOPSIS
 
-  use C4::Koha;
-
+use C4::Koha;
 
 =head1 DESCRIPTION
 
-    Koha.pm provides many functions for Koha scripts.
+Koha.pm provides many functions for Koha scripts.
 
 =head1 FUNCTIONS
 
@@ -90,8 +89,8 @@ memoize('GetAuthorisedValues');
 
   $slash_date = &slashifyDate($dash_date);
 
-    Takes a string of the form "DD-MM-YYYY" (or anything separated by
-    dashes), converts it to the form "YYYY/MM/DD", and returns the result.
+Takes a string of the form "DD-MM-YYYY" (or anything separated by
+dashes), converts it to the form "YYYY/MM/DD", and returns the result.
 
 =cut
 
@@ -106,7 +105,7 @@ sub slashifyDate {
 
 =head2 DisplayISBN
 
-    my $string = DisplayISBN( $isbn );
+  my $string = DisplayISBN( $isbn );
 
 =cut
 
@@ -219,7 +218,6 @@ sub subfield_is_koha_internal_p ($) {
   $itemtypename = &GetSupportName($codestring);
 
 Returns a string with the name of the itemtype.
-
 
 =cut
 
@@ -396,21 +394,21 @@ build a HTML select with the following code :
 
 =head3 in PERL SCRIPT
 
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (keys %$authtypes) {
-    my $selected = 1 if $thisauthtype eq $authtype;
-    my %row =(value => $thisauthtype,
+   my $authtypes = getauthtypes;
+   my @authtypesloop;
+   foreach my $thisauthtype (keys %$authtypes) {
+       my $selected = 1 if $thisauthtype eq $authtype;
+       my %row =(value => $thisauthtype,
                 selected => $selected,
                 authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
             );
-    push @authtypesloop, \%row;
-}
-$template->param(itemtypeloop => \@itemtypesloop);
+        push @authtypesloop, \%row;
+    }
+    $template->param(itemtypeloop => \@itemtypesloop);
 
 =head3 in TEMPLATE
 
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+  <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
     <select name="authtype">
     <!-- TMPL_LOOP name="authtypeloop" -->
         <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="authtypetext" --></option>
@@ -418,7 +416,7 @@ $template->param(itemtypeloop => \@itemtypesloop);
     </select>
     <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
     <input type="submit" value="OK" class="button">
-</form>
+  </form>
 
 
 =cut
@@ -458,21 +456,21 @@ build a HTML select with the following code :
 
 =head3 in PERL SCRIPT
 
-my $frameworks = frameworks();
-my @frameworkloop;
-foreach my $thisframework (keys %$frameworks) {
+  my $frameworks = frameworks();
+  my @frameworkloop;
+  foreach my $thisframework (keys %$frameworks) {
     my $selected = 1 if $thisframework eq $frameworkcode;
     my %row =(value => $thisframework,
                 selected => $selected,
                 description => $frameworks->{$thisframework}->{'frameworktext'},
             );
     push @frameworksloop, \%row;
-}
-$template->param(frameworkloop => \@frameworksloop);
+  }
+  $template->param(frameworkloop => \@frameworksloop);
 
 =head3 in TEMPLATE
 
-<form action='<!-- TMPL_VAR name="script_name" -->' method=post>
+  <form action='<!-- TMPL_VAR name="script_name" -->' method=post>
     <select name="frameworkcode">
         <option value="">Default</option>
     <!-- TMPL_LOOP name="frameworkloop" -->
@@ -481,8 +479,7 @@ $template->param(frameworkloop => \@frameworksloop);
     </select>
     <input type=text name=searchfield value="<!-- TMPL_VAR name="searchfield" -->">
     <input type="submit" value="OK" class="button">
-</form>
-
+  </form>
 
 =cut
 
@@ -539,17 +536,11 @@ sub getitemtypeinfo {
 
 =head2 getitemtypeimagedir
 
-=over
-
-=item 4
-
   my $directory = getitemtypeimagedir( 'opac' );
 
 pass in 'opac' or 'intranet'. Defaults to 'opac'.
 
 returns the full path to the appropriate directory containing images.
-
-=back
 
 =cut
 
@@ -585,17 +576,16 @@ sub getitemtypeimagelocation($$) {
 
 =head3 _getImagesFromDirectory
 
-  Find all of the image files in a directory in the filesystem
+Find all of the image files in a directory in the filesystem
 
-  parameters:
-    a directory name
+parameters: a directory name
 
-  returns: a list of images in that directory.
+returns: a list of images in that directory.
 
-  Notes: this does not traverse into subdirectories. See
-      _getSubdirectoryNames for help with that.
-    Images are assumed to be files with .gif or .png file extensions.
-    The image names returned do not have the directory name on them.
+Notes: this does not traverse into subdirectories. See
+_getSubdirectoryNames for help with that.
+Images are assumed to be files with .gif or .png file extensions.
+The image names returned do not have the directory name on them.
 
 =cut
 
@@ -616,17 +606,15 @@ sub _getImagesFromDirectory {
 
 =head3 _getSubdirectoryNames
 
-  Find all of the directories in a directory in the filesystem
+Find all of the directories in a directory in the filesystem
 
-  parameters:
-    a directory name
+parameters: a directory name
 
-  returns: a list of subdirectories in that directory.
+returns: a list of subdirectories in that directory.
 
-  Notes: this does not traverse into subdirectories. Only the first
-      level of subdirectories are returned.
-    The directory names returned don't have the parent directory name
-      on them.
+Notes: this does not traverse into subdirectories. Only the first
+level of subdirectories are returned.
+The directory names returned don't have the parent directory name on them.
 
 =cut
 
@@ -647,18 +635,20 @@ sub _getSubdirectoryNames {
 
 =head3 getImageSets
 
-  returns: a listref of hashrefs. Each hash represents another collection of images.
-           { imagesetname => 'npl', # the name of the image set (npl is the original one)
-             images => listref of image hashrefs
-           }
+returns: a listref of hashrefs. Each hash represents another collection of images.
 
-    each image is represented by a hashref like this:
-      { KohaImage     => 'npl/image.gif',
-        StaffImageUrl => '/intranet-tmpl/prog/img/itemtypeimg/npl/image.gif',
-        OpacImageURL  => '/opac-tmpl/prog/itemtypeimg/npl/image.gif'
-        checked       => 0 or 1: was this the image passed to this method?
-                         Note: I'd like to remove this somehow.
-      }
+ { imagesetname => 'npl', # the name of the image set (npl is the original one)
+         images => listref of image hashrefs
+ }
+
+each image is represented by a hashref like this:
+
+ { KohaImage     => 'npl/image.gif',
+   StaffImageUrl => '/intranet-tmpl/prog/img/itemtypeimg/npl/image.gif',
+   OpacImageURL  => '/opac-tmpl/prog/itemtypeimg/npl/image.gif'
+   checked       => 0 or 1: was this the image passed to this method?
+                    Note: I'd like to remove this somehow.
+ }
 
 =cut
 
@@ -722,7 +712,7 @@ sub GetPrinters {
 
 =head2 GetPrinter
 
-$printer = GetPrinter( $query, $printers );
+  $printer = GetPrinter( $query, $printers );
 
 =cut
 
@@ -978,15 +968,9 @@ SELECT lib,
 
 =head2 displayServers
 
-=over 4
-
-my $servers = displayServers();
-
-my $servers = displayServers( $position );
-
-my $servers = displayServers( $position, $type );
-
-=back
+   my $servers = displayServers();
+   my $servers = displayServers( $position );
+   my $servers = displayServers( $position, $type );
 
 displayServers returns a listref of hashrefs, each containing
 information about available z3950 servers. Each hashref has a format
@@ -1003,7 +987,6 @@ like:
       'value'      => 'z3950.loc.gov:7090/',
       'zed'        => 1,
     },
-
 
 =cut
 
@@ -1052,7 +1035,7 @@ sub displayServers {
 
 =head2 GetAuthValCode
 
-$authvalcode = GetAuthValCode($kohafield,$frameworkcode);
+  $authvalcode = GetAuthValCode($kohafield,$frameworkcode);
 
 =cut
 
@@ -1068,7 +1051,7 @@ sub GetAuthValCode {
 
 =head2 GetAuthValCodeFromField
 
-$authvalcode = GetAuthValCodeFromField($field,$subfield,$frameworkcode);
+  $authvalcode = GetAuthValCodeFromField($field,$subfield,$frameworkcode);
 
 C<$subfield> can be undefined
 
@@ -1092,7 +1075,7 @@ sub GetAuthValCodeFromField {
 
 =head2 GetAuthorisedValues
 
-$authvalues = GetAuthorisedValues([$category], [$selected]);
+  $authvalues = GetAuthorisedValues([$category], [$selected]);
 
 This function returns all authorised values from the'authorised_value' table in a reference to array of hashrefs.
 
@@ -1126,7 +1109,7 @@ sub GetAuthorisedValues {
 
 =head2 GetAuthorisedValueCategories
 
-$auth_categories = GetAuthorisedValueCategories();
+  $auth_categories = GetAuthorisedValueCategories();
 
 Return an arrayref of all of the available authorised
 value categories.
@@ -1145,12 +1128,14 @@ sub GetAuthorisedValueCategories {
 }
 
 =head2 GetKohaAuthorisedValues
-	
-	Takes $kohafield, $fwcode as parameters.
-	If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
-	Returns hashref of Code => description
-	Returns undef 
-	  if no authorised value category is defined for the kohafield.
+
+Takes $kohafield, $fwcode as parameters.
+
+If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
+
+Returns hashref of Code => description
+
+Returns undef if no authorised value category is defined for the kohafield.
 
 =cut
 
@@ -1173,13 +1158,15 @@ sub GetKohaAuthorisedValues {
 }
 
 =head2 GetKohaAuthorisedValuesFromField
-	
-	Takes $field, $subfield $fwcode as parameters.
-	If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
-	$subfield can be undefined
-	Returns hashref of Code => description
-	Returns undef 
-	  if no authorised value category is defined for the given field and subfield 
+
+Takes $field, $subfield, $fwcode as parameters.
+
+If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
+$subfield can be undefined
+
+Returns hashref of Code => description
+
+Returns undef if no authorised value category is defined for the given field and subfield 
 
 =cut
 
@@ -1203,12 +1190,9 @@ sub GetKohaAuthorisedValuesFromField {
 
 =head2 display_marc_indicators
 
-=over 4
+  my $display_form = C4::Koha::display_marc_indicators($field);
 
-# field is a MARC::Field object
-my $display_form = C4::Koha::display_marc_indicators($field);
-
-=back
+C<$field> is a MARC::Field object
 
 Generate a display form of the indicators of a variable
 MARC field, replacing any blanks with '#'.
