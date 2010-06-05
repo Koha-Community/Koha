@@ -259,7 +259,7 @@ To add a new barcode format, a developer should:
 	add to the $types hashref in this file; 
 	add tests under the "t" directory; and
 	edit autoBarcode syspref to include new type.
-	
+
 =head2 Adding a new module
 
 Each new module that needs differing behavior must override these subs:

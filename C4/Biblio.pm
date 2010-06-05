@@ -214,11 +214,7 @@ When modifying a biblio or an item, the behaviour is quite similar.
 
 =head2 AddBiblio
 
-=over 4
-
-($biblionumber,$biblioitemnumber) = AddBiblio($record,$frameworkcode);
-
-=back
+  ($biblionumber,$biblioitemnumber) = AddBiblio($record,$frameworkcode);
 
 Exported function (core API) for adding a new biblio to koha.
 
@@ -271,11 +267,7 @@ sub AddBiblio {
 
 =head2 ModBiblio
 
-=over 4
-
-    ModBiblio( $record,$biblionumber,$frameworkcode);
-
-=back
+  ModBiblio( $record,$biblionumber,$frameworkcode);
 
 Replace an existing bib record identified by C<$biblionumber>
 with one supplied by the MARC::Record object C<$record>.  The embedded
@@ -359,8 +351,9 @@ sub ModBiblio {
 
 =head2 ModBiblioframework
 
-    ModBiblioframework($biblionumber,$frameworkcode);
-    Exported function to modify a biblio framework
+   ModBiblioframework($biblionumber,$frameworkcode);
+
+Exported function to modify a biblio framework
 
 =cut
 
@@ -374,17 +367,14 @@ sub ModBiblioframework {
 
 =head2 DelBiblio
 
-=over
+  my $error = &DelBiblio($dbh,$biblionumber);
 
-my $error = &DelBiblio($dbh,$biblionumber);
 Exported function (core API) for deleting a biblio in koha.
 Deletes biblio record from Zebra and Koha tables (biblio,biblioitems,items)
 Also backs it up to deleted* tables
 Checks to make sure there are not issues on any of the items
 return:
 C<$error> : undef unless an error occurs
-
-=back
 
 =cut
 
@@ -447,11 +437,7 @@ sub DelBiblio {
 
 =head2 LinkBibHeadingsToAuthorities
 
-=over 4
-
-my $headings_linked = LinkBibHeadingsToAuthorities($marc);
-
-=back
+  my $headings_linked = LinkBibHeadingsToAuthorities($marc);
 
 Links bib headings to authority records by checking
 each authority-controlled field in the C<MARC::Record>
@@ -504,11 +490,7 @@ sub LinkBibHeadingsToAuthorities {
 
 =head2 GetRecordValue
 
-=over 4
-
-my $values = GetRecordValue($field, $record, $frameworkcode);
-
-=back
+  my $values = GetRecordValue($field, $record, $frameworkcode);
 
 Get MARC fields from a keyword defined in fieldmapping table.
 
@@ -541,11 +523,7 @@ sub GetRecordValue {
 
 =head2 SetFieldMapping
 
-=over 4
-
-SetFieldMapping($framework, $field, $fieldcode, $subfieldcode);
-
-=back
+  SetFieldMapping($framework, $field, $fieldcode, $subfieldcode);
 
 Set a Field to MARC mapping value, if it already exists we don't add a new one.
 
@@ -567,11 +545,7 @@ sub SetFieldMapping {
 
 =head2 DeleteFieldMapping
 
-=over 4
-
-DeleteFieldMapping($id);
-
-=back
+  DeleteFieldMapping($id);
 
 Delete a field mapping from an $id.
 
@@ -587,11 +561,7 @@ sub DeleteFieldMapping {
 
 =head2 GetFieldMapping
 
-=over 4
-
-GetFieldMapping($frameworkcode);
-
-=back
+  GetFieldMapping($frameworkcode);
 
 Get all field mappings for a specified frameworkcode
 
@@ -613,19 +583,17 @@ sub GetFieldMapping {
 
 =head2 GetBiblioData
 
-=over 4
+  $data = &GetBiblioData($biblionumber);
 
-$data = &GetBiblioData($biblionumber);
 Returns information about the book with the given biblionumber.
 C<&GetBiblioData> returns a reference-to-hash. The keys are the fields in
 the C<biblio> and C<biblioitems> tables in the
 Koha database.
+
 In addition, C<$data-E<gt>{subject}> is the list of the book's
 subjects, separated by C<" , "> (space, comma, space).
 If there are multiple biblioitems with the given biblionumber, only
 the first one is considered.
-
-=back
 
 =cut
 
@@ -659,16 +627,12 @@ sub GetBiblioData {
 
 =head2 &GetBiblioItemData
 
-=over 4
-
-$itemdata = &GetBiblioItemData($biblioitemnumber);
+  $itemdata = &GetBiblioItemData($biblioitemnumber);
 
 Looks up the biblioitem with the given biblioitemnumber. Returns a
 reference-to-hash. The keys are the fields from the C<biblio>,
 C<biblioitems>, and C<itemtypes> tables in the Koha database, except
 that C<biblioitems.notes> is given as C<$itemdata-E<gt>{bnotes}>.
-
-=back
 
 =cut
 
@@ -692,11 +656,7 @@ sub GetBiblioItemData {
 
 =head2 GetBiblioItemByBiblioNumber
 
-=over 4
-
 NOTE : This function has been copy/paste from C4/Biblio.pm from head before zebra integration.
-
-=back
 
 =cut
 
@@ -719,9 +679,6 @@ sub GetBiblioItemByBiblioNumber {
 
 =head2 GetBiblionumberFromItemnumber
 
-=over 4
-
-=back
 
 =cut
 
@@ -737,17 +694,13 @@ sub GetBiblionumberFromItemnumber {
 
 =head2 GetBiblioFromItemNumber
 
-=over 4
-
-$item = &GetBiblioFromItemNumber($itemnumber,$barcode);
+  $item = &GetBiblioFromItemNumber($itemnumber,$barcode);
 
 Looks up the item with the given itemnumber. if undef, try the barcode.
 
 C<&itemnodata> returns a reference-to-hash whose keys are the fields
 from the C<biblio>, C<biblioitems>, and C<items> tables in the Koha
 database.
-
-=back
 
 =cut
 
@@ -780,13 +733,9 @@ sub GetBiblioFromItemNumber {
 
 =head2 GetISBDView 
 
-=over 4
-
-$isbd = &GetISBDView($biblionumber);
+  $isbd = &GetISBDView($biblionumber);
 
 Return the ISBD view which can be included in opac and intranet
-
-=back
 
 =cut
 
@@ -901,11 +850,7 @@ sub GetISBDView {
 
 =head2 GetBiblio
 
-=over 4
-
-( $count, @results ) = &GetBiblio($biblionumber);
-
-=back
+  ( $count, @results ) = &GetBiblio($biblionumber);
 
 =cut
 
@@ -926,11 +871,7 @@ sub GetBiblio {
 
 =head2 GetBiblioItemInfosOf
 
-=over 4
-
-GetBiblioItemInfosOf(@biblioitemnumbers);
-
-=back
+  GetBiblioItemInfosOf(@biblioitemnumbers);
 
 =cut
 
@@ -951,15 +892,11 @@ sub GetBiblioItemInfosOf {
 
 =head2 GetMarcStructure
 
-=over 4
-
-$res = GetMarcStructure($forlibrarian,$frameworkcode);
+  $res = GetMarcStructure($forlibrarian,$frameworkcode);
 
 Returns a reference to a big hash of hash, with the Marc structure for the given frameworkcode
 $forlibrarian  :if set to 1, the MARC descriptions are the librarians ones, otherwise it's the public (OPAC) ones
 $frameworkcode : the framework code to read
-
-=back
 
 =cut
 
@@ -1046,16 +983,16 @@ sub GetMarcStructure {
 
 =head2 GetUsedMarcStructure
 
-    the same function as GetMarcStructure except it just takes field
-    in tab 0-9. (used field)
-    
-    my $results = GetUsedMarcStructure($frameworkcode);
-    
-    L<$results> is a ref to an array which each case containts a ref
-    to a hash which each keys is the columns from marc_subfield_structure
-    
-    L<$frameworkcode> is the framework code. 
-    
+The same function as GetMarcStructure except it just takes field
+in tab 0-9. (used field)
+
+  my $results = GetUsedMarcStructure($frameworkcode);
+
+C<$results> is a ref to an array which each case containts a ref
+to a hash which each keys is the columns from marc_subfield_structure
+
+C<$frameworkcode> is the framework code. 
+
 =cut
 
 sub GetUsedMarcStructure($) {
@@ -1074,13 +1011,10 @@ sub GetUsedMarcStructure($) {
 
 =head2 GetMarcFromKohaField
 
-=over 4
+  ($MARCfield,$MARCsubfield)=GetMarcFromKohaField($kohafield,$frameworkcode);
 
-($MARCfield,$MARCsubfield)=GetMarcFromKohaField($kohafield,$frameworkcode);
 Returns the MARC fields & subfields mapped to the koha field 
 for the given frameworkcode
-
-=back
 
 =cut
 
@@ -1093,11 +1027,7 @@ sub GetMarcFromKohaField {
 
 =head2 GetMarcBiblio
 
-=over 4
-
-my $record = GetMarcBiblio($biblionumber);
-
-=back
+  my $record = GetMarcBiblio($biblionumber);
 
 Returns MARC::Record representing bib identified by
 C<$biblionumber>.  If no bib exists, returns undef.
@@ -1128,14 +1058,10 @@ sub GetMarcBiblio {
 
 =head2 GetXmlBiblio
 
-=over 4
-
-my $marcxml = GetXmlBiblio($biblionumber);
+  my $marcxml = GetXmlBiblio($biblionumber);
 
 Returns biblioitems.marcxml of the biblionumber passed in parameter.
 The XML contains both biblio & item datas
-
-=back
 
 =cut
 
@@ -1150,13 +1076,9 @@ sub GetXmlBiblio {
 
 =head2 GetCOinSBiblio
 
-=over 4
-
-my $coins = GetCOinSBiblio($biblionumber);
+  my $coins = GetCOinSBiblio($biblionumber);
 
 Returns the COinS(a span) which can be included in a biblio record
-
-=back
 
 =cut
 
@@ -1284,20 +1206,18 @@ sub GetCOinSBiblio {
 
 =head2 GetAuthorisedValueDesc
 
-=over 4
-
-my $subfieldvalue =get_authorised_value_desc(
+  my $subfieldvalue =get_authorised_value_desc(
     $tag, $subf[$i][0],$subf[$i][1], '', $taglib, $category, $opac);
+
 Retrieve the complete description for a given authorised value.
 
 Now takes $category and $value pair too.
-my $auth_value_desc =GetAuthorisedValueDesc(
+
+  my $auth_value_desc =GetAuthorisedValueDesc(
     '','', 'DVD' ,'','','CCODE');
 
-If the optional $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
-
-
-=back
+If the optional $opac parameter is set to a true value, displays OPAC 
+descriptions rather than normal ones when they exist.
 
 =cut
 
@@ -1335,13 +1255,10 @@ sub GetAuthorisedValueDesc {
 
 =head2 GetMarcNotes
 
-=over 4
+  $marcnotesarray = GetMarcNotes( $record, $marcflavour );
 
-$marcnotesarray = GetMarcNotes( $record, $marcflavour );
 Get all notes from the MARC record and returns them in an array.
 The note are stored in differents places depending on MARC flavour
-
-=back
 
 =cut
 
@@ -1378,13 +1295,10 @@ sub GetMarcNotes {
 
 =head2 GetMarcSubjects
 
-=over 4
+  $marcsubjcts = GetMarcSubjects($record,$marcflavour);
 
-$marcsubjcts = GetMarcSubjects($record,$marcflavour);
 Get all subjects from the MARC record and returns them in an array.
 The subjects are stored in differents places depending on MARC flavour
-
-=back
 
 =cut
 
@@ -1448,13 +1362,10 @@ sub GetMarcSubjects {
 
 =head2 GetMarcAuthors
 
-=over 4
+  authors = GetMarcAuthors($record,$marcflavour);
 
-authors = GetMarcAuthors($record,$marcflavour);
 Get all authors from the MARC record and returns them in an array.
 The authors are stored in differents places depending on MARC flavour
-
-=back
 
 =cut
 
@@ -1520,13 +1431,10 @@ sub GetMarcAuthors {
 
 =head2 GetMarcUrls
 
-=over 4
+  $marcurls = GetMarcUrls($record,$marcflavour);
 
-$marcurls = GetMarcUrls($record,$marcflavour);
 Returns arrayref of URLs from MARC data, suitable to pass to tmpl loop.
 Assumes web resources (not uncommon in MARC21 to omit resource type ind) 
-
-=back
 
 =cut
 
@@ -1578,13 +1486,10 @@ sub GetMarcUrls {
 
 =head2 GetMarcSeries
 
-=over 4
+  $marcseriesarray = GetMarcSeries($record,$marcflavour);
 
-$marcseriesarray = GetMarcSeries($record,$marcflavour);
 Get all series from the MARC record and returns them in an array.
 The series are stored in differents places depending on MARC flavour
-
-=back
 
 =cut
 
@@ -1650,11 +1555,7 @@ sub GetMarcSeries {
 
 =head2 GetFrameworkCode
 
-=over 4
-
-    $frameworkcode = GetFrameworkCode( $biblionumber )
-
-=back
+  $frameworkcode = GetFrameworkCode( $biblionumber )
 
 =cut
 
@@ -1699,14 +1600,12 @@ sub GetPublisherNameFromIsbn($) {
 
 =head2 TransformKohaToMarc
 
-=over 4
-
     $record = TransformKohaToMarc( $hash )
-    This function builds partial MARC::Record from a hash
-    Hash entries can be from biblio or biblioitems.
-    This function is called in acquisition module, to create a basic catalogue entry from user entry
 
-=back
+This function builds partial MARC::Record from a hash
+Hash entries can be from biblio or biblioitems.
+
+This function is called in acquisition module, to create a basic catalogue entry from user entry
 
 =cut
 
@@ -1723,11 +1622,7 @@ sub TransformKohaToMarc {
 
 =head2 TransformKohaToMarcOneField
 
-=over 4
-
     $record = TransformKohaToMarcOneField( $sth, $record, $kohafieldname, $value, $frameworkcode );
-
-=back
 
 =cut
 
@@ -1757,14 +1652,18 @@ sub TransformKohaToMarcOneField {
 
 =head2 TransformHtmlToXml
 
-=over 4
-
-$xml = TransformHtmlToXml( $tags, $subfields, $values, $indicator, $ind_tag, $auth_type )
+  $xml = TransformHtmlToXml( $tags, $subfields, $values, $indicator, 
+                             $ind_tag, $auth_type )
 
 $auth_type contains :
-- nothing : rebuild a biblio, un UNIMARC the encoding is in 100$a pos 26/27
-- UNIMARCAUTH : rebuild an authority. In UNIMARC, the encoding is in 100$a pos 13/14
-- ITEM : rebuild an item : in UNIMARC, 100$a, it's in the biblio ! (otherwise, we would get 2 100 fields !)
+
+=over
+
+=item - nothing : rebuild a biblio. In UNIMARC the encoding is in 100$a pos 26/27
+
+=item - UNIMARCAUTH : rebuild an authority. In UNIMARC, the encoding is in 100$a pos 13/14
+
+=item - ITEM : rebuild an item : in UNIMARC, 100$a, it's in the biblio ! (otherwise, we would get 2 100 fields !)
 
 =back
 
@@ -2015,11 +1914,7 @@ our $inverted_field_map;
 
 =head2 TransformMarcToKoha
 
-=over 4
-
-    $result = TransformMarcToKoha( $dbh, $record, $frameworkcode )
-
-=back
+  $result = TransformMarcToKoha( $dbh, $record, $frameworkcode )
 
 Extract data from a MARC bib record into a hashref representing
 Koha biblio, biblioitems, and items fields. 
@@ -2132,23 +2027,21 @@ sub _get_inverted_marc_field_map {
 
 =head2 _disambiguate
 
-=over 4
-
-$newkey = _disambiguate($table, $field);
+  $newkey = _disambiguate($table, $field);
 
 This is a temporary hack to distinguish between the
 following sets of columns when using TransformMarcToKoha.
 
-items.cn_source & biblioitems.cn_source
-items.cn_sort & biblioitems.cn_sort
+  items.cn_source & biblioitems.cn_source
+  items.cn_sort & biblioitems.cn_sort
 
 Columns that are currently NOT distinguished (FIXME
 due to lack of time to fully test) are:
 
-biblio.notes and biblioitems.notes
-biblionumber
-timestamp
-biblioitemnumber
+  biblio.notes and biblioitems.notes
+  biblionumber
+  timestamp
+  biblioitemnumber
 
 FIXME - this is necessary because prefixing each column
 name with the table name would require changing lots
@@ -2158,8 +2051,6 @@ since biblio and bibloitems may well merge in a future
 version.  In the future, it would also be good to 
 separate DB access and UI presentation field names
 more.
-
-=back
 
 =cut
 
@@ -2184,14 +2075,11 @@ sub _disambiguate {
 
 =head2 get_koha_field_from_marc
 
-=over 4
-
-$result->{_disambiguate($table, $field)} = get_koha_field_from_marc($table,$field,$record,$frameworkcode);
+  $result->{_disambiguate($table, $field)} = 
+     get_koha_field_from_marc($table,$field,$record,$frameworkcode);
 
 Internal function to map data from the MARC record to a specific non-MARC field.
 FIXME: this is meant to replace TransformMarcToKohaOneField after more testing.
-
-=back
 
 =cut
 
@@ -2226,11 +2114,7 @@ sub get_koha_field_from_marc {
 
 =head2 TransformMarcToKohaOneField
 
-=over 4
-
-$result = TransformMarcToKohaOneField( $kohatable, $kohafield, $record, $result, $frameworkcode )
-
-=back
+  $result = TransformMarcToKohaOneField( $kohatable, $kohafield, $record, $result, $frameworkcode )
 
 =cut
 
@@ -2271,15 +2155,11 @@ sub TransformMarcToKohaOneField {
 
 =head2 PrepareItemrecordDisplay
 
-=over 4
-
-PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber,$frameworkcode);
+  PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber,$frameworkcode);
 
 Returns a hash with all the fields for Display a given item data in a template
 
 The $frameworkcode returns the item for the given frameworkcode, ONLY if bibnum is not provided
-
-=back
 
 =cut
 
@@ -2465,19 +2345,19 @@ sub PrepareItemrecordDisplay {
 
 =head2 ModZebra
 
-=over 4
+  ModZebra( $biblionumber, $op, $server, $oldRecord, $newRecord );
 
-ModZebra( $biblionumber, $op, $server, $oldRecord, $newRecord );
+$biblionumber is the biblionumber we want to index
 
-    $biblionumber is the biblionumber we want to index
-    $op is specialUpdate or delete, and is used to know what we want to do
-    $server is the server that we want to update
-    $oldRecord is the MARC::Record containing the previous version of the record.  This is used only when 
-      NoZebra=1, as NoZebra indexing needs to know the previous version of a record in order to
-      do an update.
-    $newRecord is the MARC::Record containing the new record. It is usefull only when NoZebra=1, and is used to know what to add to the nozebra database. (the record in mySQL being, if it exist, the previous record, the one just before the modif. We need both : the previous and the new one.
-    
-=back
+$op is specialUpdate or delete, and is used to know what we want to do
+
+$server is the server that we want to update
+
+$oldRecord is the MARC::Record containing the previous version of the record.  This is used only when 
+NoZebra=1, as NoZebra indexing needs to know the previous version of a record in order to
+do an update.
+
+$newRecord is the MARC::Record containing the new record. It is usefull only when NoZebra=1, and is used to know what to add to the nozebra database. (the record in mySQL being, if it exist, the previous record, the one just before the modif. We need both : the previous and the new one.
 
 =cut
 
@@ -2547,9 +2427,9 @@ sub ModZebra {
 
 =head2 GetNoZebraIndexes
 
-    %indexes = GetNoZebraIndexes;
-    
-    return the data from NoZebraIndexes syspref.
+  %indexes = GetNoZebraIndexes;
+
+return the data from NoZebraIndexes syspref.
 
 =cut
 
@@ -2571,13 +2451,15 @@ sub GetNoZebraIndexes {
 
 =head2 _DelBiblioNoZebra($biblionumber,$record,$server);
 
-    function to delete a biblio in NoZebra indexes
-    This function does NOT delete anything in database : it reads all the indexes entries
-    that have to be deleted & delete them in the hash
-    The SQL part is done either :
-    - after the Add if we are modifying a biblio (delete + add again)
-    - immediatly after this sub if we are doing a true deletion.
-    $server can be 'biblioserver' or 'authorityserver' : it indexes biblios or authorities (in the same table, $server being part of the table itself
+function to delete a biblio in NoZebra indexes
+This function does NOT delete anything in database : it reads all the indexes entries
+that have to be deleted & delete them in the hash
+
+The SQL part is done either :
+ - after the Add if we are modifying a biblio (delete + add again)
+ - immediatly after this sub if we are doing a true deletion.
+
+$server can be 'biblioserver' or 'authorityserver' : it indexes biblios or authorities (in the same table, $server being part of the table itself
 
 =cut
 
@@ -2689,9 +2571,11 @@ sub _DelBiblioNoZebra {
     return %result;
 }
 
-=head2 _AddBiblioNoZebra($biblionumber, $record, $server, %result);
+=head2 _AddBiblioNoZebra
 
-    function to add a biblio in NoZebra indexes
+  _AddBiblioNoZebra($biblionumber, $record, $server, %result);
+
+function to add a biblio in NoZebra indexes
 
 =cut
 
@@ -2829,9 +2713,7 @@ sub _AddBiblioNoZebra {
 
 =head2 _find_value
 
-=over 4
-
-($indicators, $value) = _find_value($tag, $subfield, $record,$encoding);
+  ($indicators, $value) = _find_value($tag, $subfield, $record,$encoding);
 
 Find the given $subfield in the given $tag in the given
 MARC::Record $record.  If the subfield is found, returns
@@ -2841,8 +2723,6 @@ returned.
 PROPOSITION :
 Such a function is used in addbiblio AND additem and serial-edit and maybe could be used in Authorities.
 I suggest we export it from this module.
-
-=back
 
 =cut
 
@@ -2872,14 +2752,11 @@ sub _find_value {
 
 =head2 _koha_marc_update_bib_ids
 
-=over 4
 
-_koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
+  _koha_marc_update_bib_ids($record, $frameworkcode, $biblionumber, $biblioitemnumber);
 
 Internal function to add or update biblionumber and biblioitemnumber to
 the MARC XML.
-
-=back
 
 =cut
 
@@ -2940,11 +2817,7 @@ sub _koha_marc_update_bib_ids {
 
 =head2 _koha_marc_update_biblioitem_cn_sort
 
-=over 4
-
-_koha_marc_update_biblioitem_cn_sort($marc, $biblioitem, $frameworkcode);
-
-=back
+  _koha_marc_update_biblioitem_cn_sort($marc, $biblioitem, $frameworkcode);
 
 Given a MARC bib record and the biblioitem hash, update the
 subfield that contains a copy of the value of biblioitems.cn_sort.
@@ -2979,13 +2852,9 @@ sub _koha_marc_update_biblioitem_cn_sort {
 
 =head2 _koha_add_biblio
 
-=over 4
-
-my ($biblionumber,$error) = _koha_add_biblio($dbh,$biblioitem);
+  my ($biblionumber,$error) = _koha_add_biblio($dbh,$biblioitem);
 
 Internal function to add a biblio ($biblio is a hash with the values)
-
-=back
 
 =cut
 
@@ -3032,13 +2901,9 @@ sub _koha_add_biblio {
 
 =head2 _koha_modify_biblio
 
-=over 4
-
-my ($biblionumber,$error) == _koha_modify_biblio($dbh,$biblio,$frameworkcode);
+  my ($biblionumber,$error) == _koha_modify_biblio($dbh,$biblio,$frameworkcode);
 
 Internal function for updating the biblio table
-
-=back
 
 =cut
 
@@ -3076,14 +2941,10 @@ sub _koha_modify_biblio {
 
 =head2 _koha_modify_biblioitem_nonmarc
 
-=over 4
-
-my ($biblioitemnumber,$error) = _koha_modify_biblioitem_nonmarc( $dbh, $biblioitem );
+  my ($biblioitemnumber,$error) = _koha_modify_biblioitem_nonmarc( $dbh, $biblioitem );
 
 Updates biblioitems row except for marc and marcxml, which should be changed
 via ModBiblioMarc
-
-=back
 
 =cut
 
@@ -3145,13 +3006,9 @@ sub _koha_modify_biblioitem_nonmarc {
 
 =head2 _koha_add_biblioitem
 
-=over 4
-
-my ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $biblioitem );
+  my ($biblioitemnumber,$error) = _koha_add_biblioitem( $dbh, $biblioitem );
 
 Internal function to add a biblioitem
-
-=back
 
 =cut
 
@@ -3214,16 +3071,13 @@ sub _koha_add_biblioitem {
 
 =head2 _koha_delete_biblio
 
-=over 4
-
-$error = _koha_delete_biblio($dbh,$biblionumber);
+  $error = _koha_delete_biblio($dbh,$biblionumber);
 
 Internal sub for deleting from biblio table -- also saves to deletedbiblio
 
 C<$dbh> - the database handle
-C<$biblionumber> - the biblionumber of the biblio to be deleted
 
-=back
+C<$biblionumber> - the biblionumber of the biblio to be deleted
 
 =cut
 
@@ -3264,16 +3118,12 @@ sub _koha_delete_biblio {
 
 =head2 _koha_delete_biblioitems
 
-=over 4
-
-$error = _koha_delete_biblioitems($dbh,$biblioitemnumber);
+  $error = _koha_delete_biblioitems($dbh,$biblioitemnumber);
 
 Internal sub for deleting from biblioitems table -- also saves to deletedbiblioitems
 
 C<$dbh> - the database handle
 C<$biblionumber> - the biblioitemnumber of the biblioitem to be deleted
-
-=back
 
 =cut
 
@@ -3316,11 +3166,11 @@ sub _koha_delete_biblioitems {
 
 =head2 ModBiblioMarc
 
-    &ModBiblioMarc($newrec,$biblionumber,$frameworkcode);
-    
-    Add MARC data for a biblio to koha 
-    
-    Function exported, but should NOT be used, unless you really know what you're doing
+  &ModBiblioMarc($newrec,$biblionumber,$frameworkcode);
+
+Add MARC data for a biblio to koha 
+
+Function exported, but should NOT be used, unless you really know what you're doing
 
 =cut
 
@@ -3370,27 +3220,27 @@ sub ModBiblioMarc {
 
 =head2 z3950_extended_services
 
-z3950_extended_services($serviceType,$serviceOptions,$record);
+  z3950_extended_services($serviceType,$serviceOptions,$record);
 
-    z3950_extended_services is used to handle all interactions with Zebra's extended serices package, which is employed to perform all management of the MARC data stored in Zebra.
+z3950_extended_services is used to handle all interactions with Zebra's extended serices package, which is employed to perform all management of the MARC data stored in Zebra.
 
 C<$serviceType> one of: itemorder,create,drop,commit,update,xmlupdate
 
 C<$serviceOptions> a has of key/value pairs. For instance, if service_type is 'update', $service_options should contain:
 
-    action => update action, one of specialUpdate, recordInsert, recordReplace, recordDelete, elementUpdate.
+ action => update action, one of specialUpdate, recordInsert, recordReplace, recordDelete, elementUpdate.
 
 and maybe
 
-    recordidOpaque => Opaque Record ID (user supplied) or recordidNumber => Record ID number (system number).
-    syntax => the record syntax (transfer syntax)
-    databaseName = Database from connection object
+  recordidOpaque => Opaque Record ID (user supplied) or recordidNumber => Record ID number (system number).
+  syntax => the record syntax (transfer syntax)
+  databaseName = Database from connection object
 
-    To set serviceOptions, call set_service_options($serviceType)
+To set serviceOptions, call set_service_options($serviceType)
 
 C<$record> the record, if one is needed for the service type
 
-    A record should be in XML. You can convert it to XML from MARC by running it through marc2xml().
+A record should be in XML. You can convert it to XML from MARC by running it through marc2xml().
 
 =cut
 
@@ -3445,7 +3295,7 @@ sub z3950_extended_services {
 
 =head2 set_service_options
 
-my $serviceOptions = set_service_options($serviceType);
+  my $serviceOptions = set_service_options($serviceType);
 
 C<$serviceType> itemorder,create,drop,commit,update,xmlupdate
 
@@ -3474,24 +3324,23 @@ sub set_service_options {
     return $serviceOptions;
 }
 
-=head3 get_biblio_authorised_values
+=head2 get_biblio_authorised_values
 
-  find the types and values for all authorised values assigned to this biblio.
+find the types and values for all authorised values assigned to this biblio.
 
-  parameters:
+parameters:
     biblionumber
     MARC::Record of the bib
 
-  returns: a hashref mapping the authorised value to the value set for this biblionumber
+returns: a hashref mapping the authorised value to the value set for this biblionumber
 
-      $authorised_values = {
-                             'Scent'     => 'flowery',
-                             'Audience'  => 'Young Adult',
-                             'itemtypes' => 'SER',
-                           };
+  $authorised_values = {
+                       'Scent'     => 'flowery',
+                       'Audience'  => 'Young Adult',
+                       'itemtypes' => 'SER',
+                        };
 
-  Notes: forlibrarian should probably be passed in, and called something different.
-
+Notes: forlibrarian should probably be passed in, and called something different.
 
 =cut
 
