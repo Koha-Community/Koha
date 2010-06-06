@@ -71,9 +71,7 @@ items to and from virtualshelves.
 
 =head1 FUNCTIONS
 
-=over 2
-
-=item GetShelves
+=head2 GetShelves
 
   ($shelflist, $totshelves) = &GetShelves($mincategory, $row_count, $offset, $owner);
   ($shelfnumber, $shelfhash) = each %{$shelflist};
@@ -85,7 +83,7 @@ When C<$mincategory> is 2 or 3, supply undef as argument for C<$owner>.
 C<$shelflist>is a reference-to-hash. The keys are the virtualshelves numbers (C<$shelfnumber>, above),
 and the values (C<$shelfhash>, above) are themselves references-to-hash, with the following keys:
 
-=over 4
+=over
 
 =item C<$shelfhash-E<gt>{shelfname}>
 
@@ -137,7 +135,7 @@ sub GetShelves ($$$$) {
     return ( \%shelflist, $total );
 }
 
-=item GetShelvesSummary
+=head2 GetShelvesSummary
 
 	($shelves, $total) = GetShelvesSummary($mincategory, $row_count, $offset, $owner)
 
@@ -186,7 +184,7 @@ sub GetShelvesSummary ($$$$) {
 	# 2|6|Josh Ferraro|51|en_fuego|106
 }
 
-=item GetRecentShelves
+=head2 GetRecentShelves
 
 	($shelflist) = GetRecentShelves(1, $limit, $owner)
 
@@ -214,7 +212,7 @@ sub GetRecentShelves ($$$) {
 	return ( \@shelflist, $total );
 }
 
-=item GetShelf
+=head2 GetShelf
 
   (shelfnumber,shelfname,owner,category,sortfield) = &GetShelf($shelfnumber);
 
@@ -237,7 +235,7 @@ sub GetShelf ($) {
     return $sth->fetchrow;
 }
 
-=item GetShelfContents
+=head2 GetShelfContents
 
   $itemlist = &GetShelfContents($shelfnumber);
 
@@ -295,7 +293,7 @@ sub GetShelfContents ($;$$$) {
 	# or newer, for your version of DBI.
 }
 
-=item AddShelf
+=head2 AddShelf
 
   $shelfnumber = &AddShelf( $shelfname, $owner, $category);
 
@@ -329,7 +327,7 @@ sub AddShelf {
     return ($shelfnumber);
 }
 
-=item AddToShelf
+=head2 AddToShelf
 
   &AddToShelf($biblionumber, $shelfnumber);
 
@@ -366,12 +364,12 @@ sub AddToShelf {
 	$sth->execute( $shelfnumber );
 }
 
-=item AddToShelfFromBiblio
- 
+=head2 AddToShelfFromBiblio
+
     &AddToShelfFromBiblio($biblionumber, $shelfnumber)
 
-    this function allow to add a virtual into the shelf number $shelfnumber
-    from biblionumber.
+this function allow to add a virtual into the shelf number $shelfnumber
+from biblionumber.
 
 =cut
 
@@ -402,7 +400,7 @@ sub AddToShelfFromBiblio {
     }
 }
 
-=item ModShelf
+=head2 ModShelf
 
 ModShelf($shelfnumber, $hashref)
 
@@ -451,7 +449,7 @@ sub ModShelf {
    	$sth->execute( @bind_params );
 }
 
-=item ShelfPossibleAction
+=head2 ShelfPossibleAction
 
 ShelfPossibleAction($loggedinuser, $shelfnumber, $action);
 
@@ -484,7 +482,7 @@ sub ShelfPossibleAction {
     return 0;
 }
 
-=item DelFromShelf
+=head2 DelFromShelf
 
   &DelFromShelf( $biblionumber, $shelfnumber);
 
@@ -505,7 +503,7 @@ sub DelFromShelf {
     $sth->execute( $shelfnumber, $biblionumber );
 }
 
-=item DelShelf (old version)
+=head2 DelShelf (old version)
 
   ($status, $msg) = &DelShelf($shelfnumber);
 
@@ -516,7 +514,7 @@ Returns a two-element array, where C<$status> is 0 if the operation
 was successful, or non-zero otherwise. C<$msg> is "Done" in case of
 success, or an error message giving the reason for failure.
 
-=item DelShelf (current version)
+=head2 DelShelf (current version)
 
   $Number = DelShelf($shelfnumber);
 
@@ -533,7 +531,7 @@ sub DelShelf {
 	return $sth->execute(shift);
 }
 
-=item GetBibShelves
+=head2 GetBibShelves
 
 This finds all the public lists that this bib record is in.
 
@@ -553,7 +551,7 @@ sub GetBibliosShelves {
     return $sth->fetchall_arrayref({});
 }
 
-=item RefreshShelvesSummary
+=head2 RefreshShelvesSummary
 
 	($total, $pubshelves, $barshelves) = RefreshShelvesSummary($sessionID, $loggedinuser, $row_count);
 
@@ -627,8 +625,6 @@ sub each_biblionumbers (&$) {
 1;
 
 __END__
-
-=back
 
 =head1 AUTHOR
 

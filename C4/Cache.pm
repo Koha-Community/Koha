@@ -19,22 +19,25 @@ package C4::Cache;
 
 =head1 NAME
 
-    C4::Cache - Handling caching of html and Objects for Koha
+C4::Cache - Handling caching of html and Objects for Koha
 
 =head1 SYNOPSIS
 
   use C4::Cache (cache_type => $cache_type, %params );
 
-
 =head1 DESCRIPTION
 
-  Base class for C4::Cache::X. Subclasses need to provide the following methods
+Base class for C4::Cache::X. Subclasses need to provide the following methods
 
-  B<_cache_handle  ($params_hr)> - cache handle creator                         
-  B<set_in_cache   ($key, $value, $expiry)>                                     
-  B<get_from_cache ($key)>                                                      
-  B<clear_from_cache ($key)>                                                    
-  B<flush_all      ()>  
+B<_cache_handle ($params_hr)> - cache handle creator
+
+B<set_in_cache ($key, $value, $expiry)>
+
+B<get_from_cache ($key)>
+
+B<clear_from_cache ($key)>
+
+B<flush_all ()>
 
 =head1 FUNCTIONS
 
@@ -64,11 +67,11 @@ sub new {
 
 =head2 EXPORT
 
-  None by default.
+None by default.
 
 =head1 SEE ALSO
-  
-  C4::Cache::Memcached
+
+C4::Cache::Memcached
 
 =head1 AUTHOR
 

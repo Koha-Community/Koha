@@ -47,15 +47,13 @@ miscategorized items, etc.
 
 =head1 FUNCTIONS
 
-=over 2
-
 =cut
 
 @ISA = qw(Exporter);
 @EXPORT = qw(&listsubjects &shiftgroup &deletedbib &undeletebib
 &updatetype &logaction);
 
-=item listsubjects
+=head2 listsubjects
 
   ($count, $results) = &listsubjects($subject, $n, $offset);
 
@@ -74,6 +72,7 @@ C<&listsubject> returns up to C<$n> items, starting at C<$offset>. If
 C<$n> is 0, it will return all matching subjects.
 
 =cut
+
 #'
 # FIXME - This API is bogus. The way it's currently used, it should
 # just return a list of strings.
@@ -101,7 +100,7 @@ sub listsubjects {
   return($i,\@results);
 }
 
-=item shiftgroup
+=head2 shiftgroup
 
   &shiftgroup($biblionumber, $biblioitemnumber);
 
@@ -110,6 +109,7 @@ C<$biblioitemnumber> is the number of the biblioitem to change.
 C<$biblionumber> is the biblionumber to associate it with.
 
 =cut
+
 #'
 sub shiftgroup{
   my ($biblionumber,$bi)=@_;
@@ -122,7 +122,7 @@ sub shiftgroup{
   $sth->finish;
 }
 
-=item deletedbib
+=head2 deletedbib
 
   ($count, $results) = &deletedbib($title);
 
@@ -134,6 +134,7 @@ the fields of the deletedbiblio table in the Koha database. C<$count>
 is the number of elements in C<$results>.
 
 =cut
+
 #'
 sub deletedbib{
   my ($title)=@_;
@@ -150,7 +151,7 @@ sub deletedbib{
   return($i,\@results);
 }
 
-=item undeletebib
+=head2 undeletebib
 
   &undeletebib($biblionumber);
 
@@ -159,6 +160,7 @@ biblionumber in the deletedbiblio table of the Koha database, and
 moves its entry to the biblio table.
 
 =cut
+
 #'
 sub undeletebib{
   my ($biblionumber)=@_;
@@ -183,7 +185,7 @@ sub undeletebib{
   $sth->finish;
 }
 
-=item updatetype
+=head2 updatetype
 
   &updatetype($biblioitemnumber, $itemtype);
 
@@ -191,6 +193,7 @@ Changes the type of the item with the given biblioitemnumber to be
 C<$itemtype>.
 
 =cut
+
 #'
 sub updatetype{
   my ($bi,$type)=@_;
@@ -204,8 +207,6 @@ END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
-
-=back
 
 =head1 AUTHOR
 

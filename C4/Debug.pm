@@ -74,8 +74,8 @@ BEGIN {
 __END__
 
 =head1 NAME 
-	
-	C4::Debug - Standardized, centralized, exported debug switches.
+
+C4::Debug - Standardized, centralized, exported debug switches.
 
 =head1 SYNOPSIS
 
@@ -116,7 +116,7 @@ The general purpose debug switch.
 =over
 
 =item environmental variable DEBUG or KOHA_DEBUG.  In bash, you might do:
-	
+
 	export KOHA_DEBUG=1;
 	perl t/Auth.t;
 
@@ -158,6 +158,8 @@ emailing yourself a test message would all be bad actions to tie to $cgi_debug.
 =head1 OTHER SOURCES of Debug Switches
 
 =head2 System Preferences
+
+=cut
 
 =head2 Database Debug
 
