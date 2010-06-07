@@ -47,7 +47,7 @@ C4::Charset - utilities for handling character set conversions.
 
 =head1 SYNOPSIS
 
-use C4::Charset;
+  use C4::Charset;
 
 =head1 DESCRIPTION
 
@@ -76,16 +76,12 @@ on how to deal with the situation.
 
 =head2 IsStringUTF8ish
 
-=over 4
-
-my $is_utf8 = IsStringUTF8ish($str);
-
-=back
+  my $is_utf8 = IsStringUTF8ish($str);
 
 Determines if C<$str> is valid UTF-8.  This can mean
 one of two things:
 
-=over 2
+=over
 
 =item *
 
@@ -115,11 +111,7 @@ sub IsStringUTF8ish {
 
 =head2 SetUTF8Flag
 
-=over 4
-
-my $marc_record = SetUTF8Flag($marc_record);
-
-=back
+  my $marc_record = SetUTF8Flag($marc_record);
 
 This function sets the PERL UTF8 flag for data.
 It is required when using new_from_usmarc 
@@ -156,24 +148,21 @@ sub SetUTF8Flag{
 
 =head2 NormalizeString
 
-=over 4
-
     my $normalized_string=NormalizeString($string);
 
-=back
+Given a string
 
-	Given 
-	    a string
-        nfc : If you want to set NFC and not NFD
-        transform : If you expect all the signs to be removed
-    Sets the PERL UTF8 Flag on your initial data if need be
-    and applies cleaning if required 
-    
-	Returns a utf8 NFD normalized string
-	
-	Sample code :
-	my $string=NormalizeString ("l'ornithoptère");
+nfc : If you want to set NFC and not NFD
+transform : If you expect all the signs to be removed
+Sets the PERL UTF8 Flag on your initial data if need be
+and applies cleaning if required 
+
+Returns a utf8 NFD normalized string
+
+Sample code :
+    my $string=NormalizeString ("l'ornithoptère");
     #results into ornithoptère in NFD form and sets UTF8 Flag
+
 =cut
 
 sub NormalizeString{
@@ -196,11 +185,8 @@ sub NormalizeString{
 
 =head2 MarcToUTF8Record
 
-=over 4
-
-($marc_record, $converted_from, $errors_arrayref) = MarcToUTF8Record($marc_blob, $marc_flavour, [, $source_encoding]);
-
-=back
+  ($marc_record, $converted_from, $errors_arrayref) = MarcToUTF8Record($marc_blob, 
+					$marc_flavour, [, $source_encoding]);
 
 Given a MARC blob or a C<MARC::Record>, the MARC flavour, and an 
 optional source encoding, return a C<MARC::Record> that is 
@@ -313,11 +299,7 @@ sub MarcToUTF8Record {
 
 =head2 SetMarcUnicodeFlag
 
-=over 4
-
-SetMarcUnicodeFlag($marc_record, $marc_flavour);
-
-=back
+  SetMarcUnicodeFlag($marc_record, $marc_flavour);
 
 Set both the internal MARC::Record encoding flag
 and the appropriate Leader/09 (MARC21) or 
@@ -364,11 +346,7 @@ sub SetMarcUnicodeFlag {
 
 =head2 StripNonXmlChars
 
-=over 4
-
-my $new_str = StripNonXmlChars($old_str);
-
-=back
+  my $new_str = StripNonXmlChars($old_str);
 
 Given a string, return a copy with the
 characters that are illegal in XML 
@@ -404,11 +382,7 @@ sub StripNonXmlChars {
 
 =head2 _default_marc21_charconv_to_utf8
 
-=over 4
-
-my ($new_marc_record, $guessed_charset) = _default_marc21_charconv_to_utf8($marc_record);
-
-=back
+  my ($new_marc_record, $guessed_charset) = _default_marc21_charconv_to_utf8($marc_record);
 
 Converts a C<MARC::Record> of unknown character set to UTF-8,
 first by trying a MARC-8 to UTF-8 conversion, then ISO-8859-1
@@ -450,11 +424,7 @@ sub _default_marc21_charconv_to_utf8 {
 
 =head2 _default_unimarc_charconv_to_utf8
 
-=over 4
-
-my ($new_marc_record, $guessed_charset) = _default_unimarc_charconv_to_utf8($marc_record);
-
-=back
+  my ($new_marc_record, $guessed_charset) = _default_unimarc_charconv_to_utf8($marc_record);
 
 Converts a C<MARC::Record> of unknown character set to UTF-8,
 first by trying a ISO-5426 to UTF-8 conversion, then ISO-8859-1
@@ -494,11 +464,7 @@ sub _default_unimarc_charconv_to_utf8 {
 
 =head2 _marc_marc8_to_utf8
 
-=over 4
-
-my @errors = _marc_marc8_to_utf8($marc_record, $marc_flavour, $source_encoding);
-
-=back
+  my @errors = _marc_marc8_to_utf8($marc_record, $marc_flavour, $source_encoding);
 
 Convert a C<MARC::Record> to UTF-8 in-place from MARC-8.
 If the conversion fails for some reason, an
@@ -569,11 +535,7 @@ sub _marc_marc8_to_utf8 {
 
 =head2 _marc_iso5426_to_utf8
 
-=over 4
-
-my @errors = _marc_iso5426_to_utf8($marc_record, $marc_flavour, $source_encoding);
-
-=back
+  my @errors = _marc_iso5426_to_utf8($marc_record, $marc_flavour, $source_encoding);
 
 Convert a C<MARC::Record> to UTF-8 in-place from ISO-5426.
 If the conversion fails for some reason, an
@@ -615,11 +577,7 @@ sub _marc_iso5426_to_utf8 {
 
 =head2 _marc_to_utf8_via_text_iconv 
 
-=over 4
-
-my @errors = _marc_to_utf8_via_text_iconv($marc_record, $marc_flavour, $source_encoding);
-
-=back
+  my @errors = _marc_to_utf8_via_text_iconv($marc_record, $marc_flavour, $source_encoding);
 
 Convert a C<MARC::Record> to UTF-8 in-place using the
 C<Text::Iconv> CPAN module.  Any source encoding accepted
@@ -688,11 +646,7 @@ sub _marc_to_utf8_via_text_iconv {
 
 =head2 _marc_to_utf8_replacement_char 
 
-=over 4
-
-_marc_to_utf8_replacement_char($marc_record, $marc_flavour);
-
-=back
+  _marc_to_utf8_replacement_char($marc_record, $marc_flavour);
 
 Convert a C<MARC::Record> to UTF-8 in-place, adopting the 
 unsatisfactory method of replacing all non-ASCII (e.g.,
@@ -731,11 +685,7 @@ sub _marc_to_utf8_replacement_char {
 
 =head2 char_decode5426
 
-=over 4
-
-my $utf8string = char_decode5426($iso_5426_string);
-
-=back
+  my $utf8string = char_decode5426($iso_5426_string);
 
 Converts a string from ISO-5426 to UTF-8.
 

@@ -45,8 +45,6 @@ C4::RotatingCollections - Functions for managing rotating collections
 
 =head1 FUNCTIONS
 
-=over 2
-
 =cut
 
 @ISA = qw( Exporter );
@@ -67,7 +65,7 @@ C4::RotatingCollections - Functions for managing rotating collections
   GetCollectionItemBranches
 );
 
-=item  CreateCollection
+=head2  CreateCollection
  ( $success, $errorcode, $errormessage ) = CreateCollection( $title, $description );
  Creates a new collection
 
@@ -79,7 +77,9 @@ C4::RotatingCollections - Functions for managing rotating collections
    $success: 1 if all database operations were successful, 0 otherwise
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub CreateCollection {
   my ( $title, $description ) = @_;
 
@@ -102,12 +102,14 @@ sub CreateCollection {
   $sth->finish;
 
   return 1;
-  
+ 
 }
 
-=item UpdateCollection
+=head2 UpdateCollection
+
  ( $success, $errorcode, $errormessage ) = UpdateCollection( $colId, $title, $description );
- Updates a collection
+
+Updates a collection
 
  Input:
    $colId: id of the collection to be updated
@@ -118,7 +120,9 @@ sub CreateCollection {
    $success: 1 if all database operations were successful, 0 otherwise
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub UpdateCollection {
   my ( $colId, $title, $description ) = @_;
 
@@ -147,7 +151,8 @@ sub UpdateCollection {
   
 }
 
-=item DeleteCollection
+=head2 DeleteCollection
+
  ( $success, $errorcode, $errormessage ) = DeleteCollection( $colId );
  Deletes a collection of the given id
 
@@ -158,7 +163,9 @@ sub UpdateCollection {
    $success: 1 if all database operations were successful, 0 otherwise
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub DeleteCollection {
   my ( $colId ) = @_;
 
@@ -178,7 +185,8 @@ sub DeleteCollection {
   return 1;
 }
 
-=item GetCollections
+=head2 GetCollections
+
  $collections = GetCollections();
  Returns data about all collections
 
@@ -188,7 +196,9 @@ sub DeleteCollection {
   On Failure:
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub GetCollections {
 
   my $dbh = C4::Context->dbh;
@@ -206,8 +216,10 @@ sub GetCollections {
   return \@results;
 }
 
-=item GetItemsInCollection
+=head2 GetItemsInCollection
+
  ( $results, $success, $errorcode, $errormessage ) = GetItemsInCollection( $colId );
+
  Returns information about the items in the given collection
  
  Input:
@@ -218,7 +230,9 @@ sub GetCollections {
    $success: 1 if all database operations were successful, 0 otherwise
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub GetItemsInCollection {
   my ( $colId ) = @_;
 
@@ -250,15 +264,19 @@ sub GetItemsInCollection {
   return \@results;
 }
 
-=item GetCollection
+=head2 GetCollection
+
  ( $colId, $colTitle, $colDesc, $colBranchcode ) = GetCollection( $colId );
- Returns information about a collection
+
+Returns information about a collection
 
  Input:
    $colId: Id of the collection
  Output:
    $colId, $colTitle, $colDesc, $colBranchcode
+
 =cut
+
 sub GetCollection {
   my ( $colId ) = @_;
 
@@ -281,9 +299,11 @@ sub GetCollection {
     
 }
 
-=item AddItemToCollection
+=head2 AddItemToCollection
+
  ( $success, $errorcode, $errormessage ) = AddItemToCollection( $colId, $itemnumber );
- Adds an item to a rotating collection.
+
+Adds an item to a rotating collection.
 
  Input:
    $colId: Collection to add the item to.
@@ -292,7 +312,9 @@ sub GetCollection {
    $success: 1 if all database operations were successful, 0 otherwise
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub AddItemToCollection {
   my ( $colId, $itemnumber ) = @_;
 
@@ -322,9 +344,11 @@ sub AddItemToCollection {
   
 }
 
-=item  RemoveItemFromCollection
+=head2  RemoveItemFromCollection
+
  ( $success, $errorcode, $errormessage ) = RemoveItemFromCollection( $colId, $itemnumber );
- Removes an item to a collection
+
+Removes an item to a collection
 
  Input:
    $colId: Collection to add the item to.
@@ -334,7 +358,9 @@ sub AddItemToCollection {
    $success: 1 if all database operations were successful, 0 otherwise
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub RemoveItemFromCollection {
   my ( $colId, $itemnumber ) = @_;
 
@@ -358,9 +384,11 @@ sub RemoveItemFromCollection {
   return 1;
 }
 
-=item TransferCollection
+=head2 TransferCollection
+
  ( $success, $errorcode, $errormessage ) = TransferCollection( $colId, $colBranchcode );
- Transfers a collection to another branch
+
+Transfers a collection to another branch
 
  Input:
    $colId: id of the collection to be updated
@@ -370,7 +398,9 @@ sub RemoveItemFromCollection {
    $success: 1 if all database operations were successful, 0 otherwise
    $errorCode: Code for reason of failure, good for translating errors in templates
    $errorMessage: English description of error
+
 =cut
+
 sub TransferCollection {
   my ( $colId, $colBranchcode ) = @_;
 
@@ -407,9 +437,12 @@ sub TransferCollection {
   
 }
 
-=item GetCollectionItemBranches
- my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+=head2 GetCollectionItemBranches
+
+  my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
+
 =cut
+
 sub GetCollectionItemBranches {
   my ( $itemnumber ) = @_;
 
@@ -436,9 +469,12 @@ sub GetCollectionItemBranches {
   );  
 }
 
-=item isItemInThisCollection
-$inCollection = isItemInThisCollection( $itemnumber, $colId );
-=cut            
+=head2 isItemInThisCollection
+
+  $inCollection = isItemInThisCollection( $itemnumber, $colId );
+
+=cut
+
 sub isItemInThisCollection {
   my ( $itemnumber, $colId ) = @_;
   
@@ -452,9 +488,12 @@ sub isItemInThisCollection {
   return $$row{'inCollection'};
 }
 
-=item isItemInAnyCollection
+=head2 isItemInAnyCollection
+
 $inCollection = isItemInAnyCollection( $itemnumber );
+
 =cut
+
 sub isItemInAnyCollection {
   my ( $itemnumber ) = @_;
   
@@ -478,8 +517,6 @@ sub isItemInAnyCollection {
 1;
 
 __END__
-
-=back
 
 =head1 AUTHOR
 

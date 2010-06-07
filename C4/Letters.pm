@@ -154,7 +154,7 @@ sub addalert ($$$) {
     parameters :
     - alertid : the alert id
     deletes the alert
-    
+
 =cut
 
 sub delalert ($) {
@@ -552,17 +552,14 @@ sub parseletter {
 
 =head2 EnqueueLetter
 
-=over 4
-
-my $success = EnqueueLetter( { letter => $letter, borrowernumber => '12', message_transport_type => 'email' } )
+  my $success = EnqueueLetter( { letter => $letter, 
+        borrowernumber => '12', message_transport_type => 'email' } )
 
 places a letter in the message_queue database table, which will
 eventually get processed (sent) by the process_message_queue.pl
 cronjob when it calls SendQueuedMessages.
 
 return true on success
-
-=back
 
 =cut
 
@@ -609,15 +606,11 @@ ENDSQL
 
 =head2 SendQueuedMessages ([$hashref]) 
 
-=over 4
+  my $sent = SendQueuedMessages( { verbose => 1 } );
 
 sends all of the 'pending' items in the message queue.
 
-my $sent = SendQueuedMessages( { verbose => 1 } );
-
 returns number of messages sent.
-
-=back
 
 =cut
 
@@ -645,13 +638,9 @@ sub SendQueuedMessages (;$) {
 
 =head2 GetRSSMessages
 
-=over 4
-
-my $message_list = GetRSSMessages( { limit => 10, borrowernumber => '14' } )
+  my $message_list = GetRSSMessages( { limit => 10, borrowernumber => '14' } )
 
 returns a listref of all queued RSS messages for a particular person.
-
-=back
 
 =cut
 
@@ -669,14 +658,10 @@ sub GetRSSMessages {
 
 =head2 GetPrintMessages
 
-=over 4
-
-my $message_list = GetPrintMessages( { borrowernumber => $borrowernumber } )
+  my $message_list = GetPrintMessages( { borrowernumber => $borrowernumber } )
 
 Returns a arrayref of all queued print messages (optionally, for a particular
 person).
-
-=back
 
 =cut
 
@@ -689,16 +674,12 @@ sub GetPrintMessages {
 
 =head2 GetQueuedMessages ([$hashref])
 
-=over 4
-
-my $messages = GetQueuedMessage( { borrowernumber => '123', limit => 20 } );
+  my $messages = GetQueuedMessage( { borrowernumber => '123', limit => 20 } );
 
 fetches messages out of the message queue.
 
 returns:
 list of hashes, each has represents a message in the message queue.
-
-=back
 
 =cut
 

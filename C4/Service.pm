@@ -59,11 +59,7 @@ our ( $query, $cookie );
 
 =head2 init
 
-=over 4
-
-    our ( $query, $response ) = C4::Service->init( %needed_flags );
-
-=back
+   our ( $query, $response ) = C4::Service->init( %needed_flags );
 
 Initialize the service and check for the permissions in C<%needed_flags>.
 
@@ -92,11 +88,7 @@ sub init {
 
 =head2 return_error
 
-=over 4
-
     C4::Service->return_error( $type, $error, %flags );
-
-=back
 
 Exit the script with HTTP status 400, and return a JSON error object.
 
@@ -127,22 +119,14 @@ sub return_error {
 
 =head2 return_multi
 
-=over 4
-
-C4::Service->return_multi( \@responses, %flags );
-
-=back
+    C4::Service->return_multi( \@responses, %flags );
 
 return_multi is similar to return_success or return_error, but allows you to
 return different statuses for several requests sent at once (using HTTP status
 "207 Multi-Status", much like WebDAV). The toplevel hashref (turned into the
 JSON response) looks something like this:
 
-=over 4
-
-{ multi => JSON::true, responses => \@responses, %flags }
-
-=back
+    { multi => JSON::true, responses => \@responses, %flags }
 
 Each element of @responses should be either a plain hashref or an arrayref. If
 it is a hashref, it is sent to the browser as-is. If it is an arrayref, it is
@@ -183,11 +167,7 @@ sub return_multi {
 
 =head2 return_success
 
-=over 4
-
     C4::Service->return_success( $response );
-
-=back
 
 Print out the information in the C<C4::Output::JSONStream> C<$response>, then
 exit with HTTP status 200.
@@ -202,11 +182,7 @@ sub return_success {
 
 =head2 require_params
 
-=over 4
-
     my @values = C4::Service->require_params( @params );
-
-=back
 
 Check that each of of the parameters specified in @params was sent in the
 request, then return their values in that order.
@@ -230,14 +206,10 @@ sub require_params {
 
 =head2 dispatch
 
-=over 4
-
-C4::Service->dispatch(
-    [ $path_regex, \@required_params, \&handler ],
-    ...
-);
-
-=back
+    C4::Service->dispatch(
+        [ $path_regex, \@required_params, \&handler ],
+        ...
+    );
 
 dispatch takes several array-refs, each one describing a 'route', to use the
 Rails terminology.

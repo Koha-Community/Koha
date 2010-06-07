@@ -73,11 +73,7 @@ More verbose debugging messages are sent in the presence of non-zero $ENV{"DEBUG
 The default is to scrub everything, leaving no markup at all.  This is compatible with the expectations
 for Tags.
 
-=head2 
-
-=head3 TO DO: Add real perldoc
-
-=head2
+=head2 TODO: Add real perldoc
 
 =cut
 

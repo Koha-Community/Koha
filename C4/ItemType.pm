@@ -90,15 +90,27 @@ These are read-only accessors for attributes of a C4::ItemType object.
 
 =head3 $itemtype->itemtype
 
+=cut
+
 =head3 $itemtype->description
+
+=cut
 
 =head3 $itemtype->renewalsallowed
 
+=cut
+
 =head3 $itemtype->rentalcharge
+
+=cut
 
 =head3 $itemtype->notforloan
 
+=cut
+
 =head3 $itemtype->imageurl
+
+=cut
 
 =head3 $itemtype->summary
 

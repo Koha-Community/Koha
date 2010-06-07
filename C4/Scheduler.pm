@@ -43,14 +43,11 @@ C4::Scheduler - Module for running jobs with the unix at command
 
 =head1 DESCRIPTION
 
+=cut
 
 =head1 METHODS
 
-=over 2
-
-=cut
-
-=item get_jobs();
+=head2 get_jobs();
 
 This will return all scheduled jobs
 
@@ -62,7 +59,7 @@ sub get_jobs {
     return ($jobs);
 }
 
-=item get_at_jobs();
+=head2 get_at_jobs();
 
 This will return all At scheduled jobs
 
@@ -73,7 +70,7 @@ sub get_at_jobs {
 	return (\%jobs);
 }
 
-=item get_at_job($id)
+=head2 get_at_job($id)
 
 This will return the At job with the given id
 
@@ -84,7 +81,7 @@ sub get_at_job {
 	my %jobs = Schedule::At::getJobs(JOBID => $id);
 }
 
-=item add_at_job ($time,$command)
+=head2 add_at_job ($time,$command)
 
 Given a timestamp and a command this will schedule the job to run at that time.
 
@@ -137,13 +134,11 @@ sub remove_at_job {
 1;
 __END__
 
-=back
-
 =head1 BUGS
 
 At some point C<C4::Scheduler> should be refactored:
 
-=over 4
+=over
 
 =item At and C<Schedule::At> does not work on Win32.
 

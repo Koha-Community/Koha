@@ -377,11 +377,19 @@ These are read-only accessors for the various attributes of a preference.
 
 =head3 $pref->id
 
+=cut
+
 =head3 $pref->branchcode
+
+=cut
 
 =head3 $pref->categorycode
 
+=cut
+
 =head3 $pref->item_type
+
+=cut
 
 =head3 $pref->notification
 

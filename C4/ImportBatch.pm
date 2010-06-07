@@ -78,21 +78,13 @@ C4::ImportBatch - manage batches of imported MARC records
 
 =head1 SYNOPSIS
 
-=over 4
-
 use C4::ImportBatch;
-
-=back
 
 =head1 FUNCTIONS
 
 =head2 GetZ3950BatchId
 
-=over 4
-
-my $batchid = GetZ3950BatchId($z3950server);
-
-=back
+  my $batchid = GetZ3950BatchId($z3950server);
 
 Retrieves the ID of the import batch for the Z39.50
 reservoir for the given target.  If necessary,
@@ -121,11 +113,7 @@ sub GetZ3950BatchId {
 
 =head2 GetImportRecordMarc
 
-=over 4
-
-my ($marcblob, $encoding) = GetImportRecordMarc($import_record_id);
-
-=back
+  my ($marcblob, $encoding) = GetImportRecordMarc($import_record_id);
 
 =cut
 
@@ -143,11 +131,8 @@ sub GetImportRecordMarc {
 
 =head2 AddImportBatch
 
-=over 4
-
-my $batch_id = AddImportBatch($overlay_action, $import_status, $type, $file_name, $comments);
-
-=back
+  my $batch_id = AddImportBatch($overlay_action, $import_status, $type, 
+                                $file_name, $comments);
 
 =cut
 
@@ -168,11 +153,7 @@ sub AddImportBatch {
 
 =head2 GetImportBatch 
 
-=over 4
-
-my $row = GetImportBatch($batch_id);
-
-=back
+  my $row = GetImportBatch($batch_id);
 
 Retrieve a hashref of an import_batches row.
 
@@ -193,11 +174,8 @@ sub GetImportBatch {
 
 =head2 AddBiblioToBatch 
 
-=over 4
-
-my $import_record_id = AddBiblioToBatch($batch_id, $record_sequence, $marc_record, $encoding, $z3950random, $update_counts);
-
-=back
+  my $import_record_id = AddBiblioToBatch($batch_id, $record_sequence, 
+                $marc_record, $encoding, $z3950random, $update_counts);
 
 =cut
 
@@ -217,11 +195,7 @@ sub AddBiblioToBatch {
 
 =head2 ModBiblioInBatch
 
-=over 4
-
-ModBiblioInBatch($import_record_id, $marc_record);
-
-=back
+  ModBiblioInBatch($import_record_id, $marc_record);
 
 =cut
 
@@ -235,15 +209,11 @@ sub ModBiblioInBatch {
 
 =head2 BatchStageMarcRecords
 
-=over 4
-
-($batch_id, $num_records, $num_items, @invalid_records) = 
+  ($batch_id, $num_records, $num_items, @invalid_records) = 
     BatchStageMarcRecords($marc_flavor, $marc_records, $file_name, 
                           $comments, $branch_code, $parse_items,
                           $leave_as_staging, 
                           $progress_interval, $progress_callback);
-
-=back
 
 =cut
 
@@ -311,11 +281,8 @@ sub  BatchStageMarcRecords {
 
 =head2 AddItemsToImportBiblio
 
-=over 4
-
-my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, $update_counts);
-
-=back
+  my @import_items_ids = AddItemsToImportBiblio($batch_id, 
+                $import_record_id, $marc_record, $update_counts);
 
 =cut
 
@@ -353,11 +320,8 @@ sub AddItemsToImportBiblio {
 
 =head2 BatchFindBibDuplicates
 
-=over 4
-
-my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, $max_matches, $progress_interval, $progress_callback);
-
-=back
+  my $num_with_matches = BatchFindBibDuplicates($batch_id, $matcher, 
+             $max_matches, $progress_interval, $progress_callback);
 
 Goes through the records loaded in the batch and attempts to 
 find duplicates for each one.  Sets the matching status 
@@ -424,12 +388,9 @@ sub BatchFindBibDuplicates {
 
 =head2 BatchCommitBibRecords
 
-=over 4
-
-my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) = 
-    BatchCommitBibRecords($batch_id, $progress_interval, $progress_callback);
-
-=back
+  my ($num_added, $num_updated, $num_items_added, $num_items_errored, 
+      $num_ignored) = BatchCommitBibRecords($batch_id, 
+                      $progress_interval, $progress_callback);
 
 =cut
 
@@ -550,11 +511,8 @@ sub BatchCommitBibRecords {
 
 =head2 BatchCommitItems
 
-=over 4
-
-($num_items_added, $num_items_errored) = BatchCommitItems($import_record_id, $biblionumber);
-
-=back
+  ($num_items_added, $num_items_errored) = 
+         BatchCommitItems($import_record_id, $biblionumber);
 
 =cut
 
@@ -601,11 +559,8 @@ sub BatchCommitItems {
 
 =head2 BatchRevertBibRecords
 
-=over 4
-
-my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, $num_ignored) = BatchRevertBibRecords($batch_id);
-
-=back
+  my ($num_deleted, $num_errors, $num_reverted, $num_items_deleted, 
+      $num_ignored) = BatchRevertBibRecords($batch_id);
 
 =cut
 
@@ -668,11 +623,7 @@ sub BatchRevertBibRecords {
 
 =head2 BatchRevertItems
 
-=over 4
-
-my $num_items_deleted = BatchRevertItems($import_record_id, $biblionumber);
-
-=back
+  my $num_items_deleted = BatchRevertItems($import_record_id, $biblionumber);
 
 =cut
 
@@ -703,11 +654,7 @@ sub BatchRevertItems {
 
 =head2 CleanBatch
 
-=over 4
-
-CleanBatch($batch_id)
-
-=back
+  CleanBatch($batch_id)
 
 Deletes all staged records from the import batch
 and sets the status of the batch to 'cleaned'.  Note
@@ -726,11 +673,7 @@ sub CleanBatch {
 
 =head2 GetAllImportBatches
 
-=over 4
-
-my $results = GetAllImportBatches();
-
-=back
+  my $results = GetAllImportBatches();
 
 Returns a references to an array of hash references corresponding
 to all import_batches rows (of batch_type 'batch'), sorted in 
@@ -755,11 +698,7 @@ sub  GetAllImportBatches {
 
 =head2 GetImportBatchRangeDesc
 
-=over 4
-
-my $results = GetImportBatchRangeDesc($offset, $results_per_group);
-
-=back
+  my $results = GetImportBatchRangeDesc($offset, $results_per_group);
 
 Returns a reference to an array of hash references corresponding to
 import_batches rows (sorted in descending order by import_batch_id)
@@ -792,6 +731,8 @@ sub GetImportBatchRangeDesc {
 
 =head2 GetItemNumbersFromImportBatch
 
+  my @itemsnos = GetItemNumbersFromImportBatch($batch_id);
+
 =cut
 
 sub GetItemNumbersFromImportBatch {
@@ -808,11 +749,7 @@ sub GetItemNumbersFromImportBatch {
 
 =head2 GetNumberOfImportBatches 
 
-=over 4
-
-my $count = GetNumberOfImportBatches();
-
-=back
+  my $count = GetNumberOfImportBatches();
 
 =cut
 
@@ -827,11 +764,7 @@ sub GetNumberOfNonZ3950ImportBatches {
 
 =head2 GetImportBibliosRange
 
-=over 4
-
-my $results = GetImportBibliosRange($batch_id, $offset, $results_per_group);
-
-=back
+  my $results = GetImportBibliosRange($batch_id, $offset, $results_per_group);
 
 Returns a reference to an array of hash references corresponding to
 import_biblios/import_records rows for a given batch
@@ -874,11 +807,7 @@ sub GetImportBibliosRange {
 
 =head2 GetBestRecordMatch
 
-=over 4
-
-my $record_id = GetBestRecordMatch($import_record_id);
-
-=back
+  my $record_id = GetBestRecordMatch($import_record_id);
 
 =cut
 
@@ -898,11 +827,7 @@ sub GetBestRecordMatch {
 
 =head2 GetImportBatchStatus
 
-=over 4
-
-my $status = GetImportBatchStatus($batch_id);
-
-=back
+  my $status = GetImportBatchStatus($batch_id);
 
 =cut
 
@@ -920,11 +845,7 @@ sub GetImportBatchStatus {
 
 =head2 SetImportBatchStatus
 
-=over 4
-
-SetImportBatchStatus($batch_id, $new_status);
-
-=back
+  SetImportBatchStatus($batch_id, $new_status);
 
 =cut
 
@@ -940,11 +861,7 @@ sub SetImportBatchStatus {
 
 =head2 GetImportBatchOverlayAction
 
-=over 4
-
-my $overlay_action = GetImportBatchOverlayAction($batch_id);
-
-=back
+  my $overlay_action = GetImportBatchOverlayAction($batch_id);
 
 =cut
 
@@ -963,11 +880,7 @@ sub GetImportBatchOverlayAction {
 
 =head2 SetImportBatchOverlayAction
 
-=over 4
-
-SetImportBatchOverlayAction($batch_id, $new_overlay_action);
-
-=back
+  SetImportBatchOverlayAction($batch_id, $new_overlay_action);
 
 =cut
 
@@ -983,11 +896,7 @@ sub SetImportBatchOverlayAction {
 
 =head2 GetImportBatchNoMatchAction
 
-=over 4
-
-my $nomatch_action = GetImportBatchNoMatchAction($batch_id);
-
-=back
+  my $nomatch_action = GetImportBatchNoMatchAction($batch_id);
 
 =cut
 
@@ -1006,11 +915,7 @@ sub GetImportBatchNoMatchAction {
 
 =head2 SetImportBatchNoMatchAction
 
-=over 4
-
-SetImportBatchNoMatchAction($batch_id, $new_nomatch_action);
-
-=back
+  SetImportBatchNoMatchAction($batch_id, $new_nomatch_action);
 
 =cut
 
@@ -1026,11 +931,7 @@ sub SetImportBatchNoMatchAction {
 
 =head2 GetImportBatchItemAction
 
-=over 4
-
-my $item_action = GetImportBatchItemAction($batch_id);
-
-=back
+  my $item_action = GetImportBatchItemAction($batch_id);
 
 =cut
 
@@ -1049,11 +950,7 @@ sub GetImportBatchItemAction {
 
 =head2 SetImportBatchItemAction
 
-=over 4
-
-SetImportBatchItemAction($batch_id, $new_item_action);
-
-=back
+  SetImportBatchItemAction($batch_id, $new_item_action);
 
 =cut
 
@@ -1069,11 +966,7 @@ sub SetImportBatchItemAction {
 
 =head2 GetImportBatchMatcher
 
-=over 4
-
-my $matcher_id = GetImportBatchMatcher($batch_id);
-
-=back
+  my $matcher_id = GetImportBatchMatcher($batch_id);
 
 =cut
 
@@ -1092,11 +985,7 @@ sub GetImportBatchMatcher {
 
 =head2 SetImportBatchMatcher
 
-=over 4
-
-SetImportBatchMatcher($batch_id, $new_matcher_id);
-
-=back
+  SetImportBatchMatcher($batch_id, $new_matcher_id);
 
 =cut
 
@@ -1112,11 +1001,7 @@ sub SetImportBatchMatcher {
 
 =head2 GetImportRecordOverlayStatus
 
-=over 4
-
-my $overlay_status = GetImportRecordOverlayStatus($import_record_id);
-
-=back
+  my $overlay_status = GetImportRecordOverlayStatus($import_record_id);
 
 =cut
 
@@ -1135,11 +1020,7 @@ sub GetImportRecordOverlayStatus {
 
 =head2 SetImportRecordOverlayStatus
 
-=over 4
-
-SetImportRecordOverlayStatus($import_record_id, $new_overlay_status);
-
-=back
+  SetImportRecordOverlayStatus($import_record_id, $new_overlay_status);
 
 =cut
 
@@ -1155,11 +1036,7 @@ sub SetImportRecordOverlayStatus {
 
 =head2 GetImportRecordStatus
 
-=over 4
-
-my $overlay_status = GetImportRecordStatus($import_record_id);
-
-=back
+  my $overlay_status = GetImportRecordStatus($import_record_id);
 
 =cut
 
@@ -1178,11 +1055,7 @@ sub GetImportRecordStatus {
 
 =head2 SetImportRecordStatus
 
-=over 4
-
-SetImportRecordStatus($import_record_id, $new_overlay_status);
-
-=back
+  SetImportRecordStatus($import_record_id, $new_overlay_status);
 
 =cut
 
@@ -1198,11 +1071,7 @@ sub SetImportRecordStatus {
 
 =head2 GetImportRecordMatches
 
-=over 4
-
-my $results = GetImportRecordMatches($import_record_id, $best_only);
-
-=back
+  my $results = GetImportRecordMatches($import_record_id, $best_only);
 
 =cut
 
@@ -1234,11 +1103,7 @@ sub GetImportRecordMatches {
 
 =head2 SetImportRecordMatches
 
-=over 4
-
-SetImportRecordMatches($import_record_id, @matches);
-
-=back
+  SetImportRecordMatches($import_record_id, @matches);
 
 =cut
 

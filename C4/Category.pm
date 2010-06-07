@@ -90,25 +90,47 @@ These are read-only accessors for attributes of a C4::Category object.
 
 =head3 $category->categorycode
 
+=cut
+
 =head3 $category->description
+
+=cut
 
 =head3 $category->enrolmentperiod
 
+=cut
+
 =head3 $category->upperagelimit
+
+=cut
 
 =head3 $category->dateofbirthrequired
 
+=cut
+
 =head3 $category->finetype
+
+=cut
 
 =head3 $category->bulk
 
+=cut
+
 =head3 $category->enrolmentfee
+
+=cut
 
 =head3 $category->overduenoticerequired
 
+=cut
+
 =head3 $category->issuelimit
 
+=cut
+
 =head3 $category->reservefee
+
+=cut
 
 =head3 $category->category_type
 

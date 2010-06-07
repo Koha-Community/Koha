@@ -30,35 +30,25 @@ C4::Installer
 
 =head1 SYNOPSIS
 
-use C4::Installer;
-
-my $installer = C4::Installer->new();
-
-my $all_languages = getAllLanguages();
-
-my $error = $installer->load_db_schema();
-
-my $list = $installer->sql_file_list('en', 'marc21', { optional => 1, mandatory => 1 });
-
-my ($fwk_language, $error_list) = $installer->load_sql_in_order($all_languages, @$list);
-
-$installer->set_version_syspref();
-
-$installer->set_marcflavour_syspref('MARC21');
-
-$installer->set_indexing_engine(0);
+ use C4::Installer;
+ my $installer = C4::Installer->new();
+ my $all_languages = getAllLanguages();
+ my $error = $installer->load_db_schema();
+ my $list = $installer->sql_file_list('en', 'marc21', { optional => 1, mandatory => 1 });
+ my ($fwk_language, $error_list) = $installer->load_sql_in_order($all_languages, @$list);
+ $installer->set_version_syspref();
+ $installer->set_marcflavour_syspref('MARC21');
+ $installer->set_indexing_engine(0);
 
 =head1 DESCRIPTION
+
+=cut
 
 =head1 METHODS
 
 =head2 new
 
-=over 4
-
-my $installer = C4::Installer->new();
-
-=back
+  my $installer = C4::Installer->new();
 
 Creates a new installer.
 
@@ -90,11 +80,7 @@ sub new {
 
 =head2 marcflavour_list
 
-=over 4
-
-my ($marcflavours) = $installer->marcflavour_list($lang);
-
-=back
+  my ($marcflavours) = $installer->marcflavour_list($lang);
 
 Return a arrayref of the MARC flavour sets available for the
 specified language C<$lang>.  Returns 'undef' if a directory
@@ -115,11 +101,8 @@ sub marcflavour_list {
 
 =head2 marc_framework_sql_list
 
-=over 4
-
-my ($defaulted_to_en, $list) = $installer->marc_framework_sql_list($lang, $marcflavour);
-
-=back
+  my ($defaulted_to_en, $list) = 
+     $installer->marc_framework_sql_list($lang, $marcflavour);
 
 Returns in C<$list> a structure listing the filename, description, section,
 and mandatory/optional status of MARC framework scripts available for C<$lang>
@@ -200,11 +183,7 @@ sub marc_framework_sql_list {
 
 =head2 sample_data_sql_list
 
-=over 4
-
-my ($defaulted_to_en, $list) = $installer->sample_data_sql_list($lang);
-
-=back
+  my ($defaulted_to_en, $list) = $installer->sample_data_sql_list($lang);
 
 Returns in C<$list> a structure listing the filename, description, section,
 and mandatory/optional status of sample data scripts available for C<$lang>.
@@ -281,11 +260,7 @@ sub sample_data_sql_list {
 
 =head2 sql_file_list
 
-=over 4
-
-my $list = $installer->sql_file_list($lang, $marcflavour, $subset_wanted);
-
-=back
+  my $list = $installer->sql_file_list($lang, $marcflavour, $subset_wanted);
 
 Returns an arrayref containing the filepaths of installer SQL scripts
 available for laod.  The C<$lang> and C<$marcflavour> arguments
@@ -320,11 +295,7 @@ sub sql_file_list {
 
 =head2 load_db_schema
 
-=over 4
-
-my $error = $installer->load_db_schema();
-
-=back
+  my $error = $installer->load_db_schema();
 
 Loads the SQL script that creates Koha's tables and indexes.  The
 return value is a string containing error messages reported by the
@@ -343,11 +314,7 @@ sub load_db_schema {
 
 =head2 load_sql_in_order
 
-=over 4
-
-my ($fwk_language, $list) = $installer->load_sql_in_order($all_languages, @sql_list);
-
-=back
+  my ($fwk_language, $list) = $installer->load_sql_in_order($all_languages, @sql_list);
 
 Given a list of SQL scripts supplied in C<@sql_list>, loads each of them
 into the database and sets the FrameworksLoaded system preference to names
@@ -358,15 +325,15 @@ directory path).  This means that dependencies among the scripts are to
 be resolved by carefully naming them, keeping in mind that the directory name
 does *not* currently count.
 
-FIXME: this is a rather delicate way of dealing with dependencies between
-       the install scripts.
+B<FIXME:> this is a rather delicate way of dealing with dependencies between
+the install scripts.
 
 The return value C<$list> is an arrayref containing a hashref for each
 "level" or directory containing SQL scripts; the hashref in turns contains
 a list of hashrefs containing a list of each script load and any error
 messages associated with the loading of each script.
 
-FIXME: The C<$fwk_language> code probably doesn't belong and needs to be
+B<FIXME:> The C<$fwk_language> code probably doesn't belong and needs to be
 moved to a different method.
 
 =cut
@@ -433,11 +400,7 @@ sub load_sql_in_order {
 
 =head2 set_marcflavour_syspref
 
-=over 4
-
-$installer->set_marcflavour_syspref($marcflavour);
-
-=back
+  $installer->set_marcflavour_syspref($marcflavour);
 
 Set the 'marcflavour' system preference.  The incoming
 C<$marcflavour> references to a subdirectory of
@@ -466,11 +429,7 @@ sub set_marcflavour_syspref {
 
 =head2 set_indexing_engine
 
-=over 4
-
-$installer->set_indexing_engine($nozebra);
-
-=back
+  $installer->set_indexing_engine($nozebra);
 
 Sets system preferences related to the indexing
 engine.  The C<$nozebra> argument is a boolean;
@@ -495,11 +454,7 @@ sub set_indexing_engine {
 
 =head2 set_version_syspref
 
-=over 4
-
-$installer->set_version_syspref();
-
-=back
+  $installer->set_version_syspref();
 
 Set or update the 'Version' system preference to the current
 Koha software version.
@@ -526,24 +481,20 @@ sub set_version_syspref {
 
 =head2 load_sql
 
-=over 4
-
-my $error = $installer->load_sql($filename);
-
-=back
+  my $error = $installer->load_sql($filename);
 
 Runs a the specified SQL using the DB's command-line
 SQL tool, and returns any strings sent to STDERR
 by the command-line tool.
 
-FIXME: there has been a long-standing desire to
-       replace this with an SQL loader that goes
-       through DBI; partly for portability issues
-       and partly to improve error handling.
+B<FIXME:> there has been a long-standing desire to
+replace this with an SQL loader that goes
+through DBI; partly for portability issues
+and partly to improve error handling.
 
-FIXME: even using the command-line loader, some more
-       basic error handling should be added - deal
-       with missing files, e.g.
+B<FIXME:> even using the command-line loader, some more
+basic error handling should be added - deal
+with missing files, e.g.
 
 =cut
 
@@ -582,11 +533,7 @@ sub load_sql {
 
 =head2 get_file_path_from_name
 
-=over 4
-
-my $filename = $installer->get_file_path_from_name('script_name');
-
-=back
+  my $filename = $installer->get_file_path_from_name('script_name');
 
 searches through the set of known SQL scripts and finds the fully
 qualified path name for the script that mathches the input.

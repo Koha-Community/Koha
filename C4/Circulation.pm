@@ -117,11 +117,9 @@ Also deals with stocktaking.
 
 =head2 barcodedecode
 
-=head3 $str = &barcodedecode($barcode, [$filter]);
+  $str = &barcodedecode($barcode, [$filter]);
 
-=over 4
-
-=item Generic filter function for barcode string.
+Generic filter function for barcode string.
 Called on every circ if the System Pref itemBarcodeInputFilter is set.
 Will do some manipulation of the barcode for systems that deliver a barcode
 to circulation.pl that differs from the barcode stored for the item.
@@ -131,8 +129,6 @@ correct barcode string (items.barcode) should return an unaltered barcode.
 The optional $filter argument is to allow for testing or explicit 
 behavior that ignores the System Pref.  Valid values are the same as the 
 System Pref options.
-
-=back
 
 =cut
 
@@ -165,17 +161,13 @@ sub barcodedecode {
 
 =head2 decode
 
-=head3 $str = &decode($chunk);
+  $str = &decode($chunk);
 
-=over 4
-
-=item Decodes a segment of a string emitted by a CueCat barcode scanner and
+Decodes a segment of a string emitted by a CueCat barcode scanner and
 returns it.
 
 FIXME: Should be replaced with Barcode::Cuecat from CPAN
 or Javascript based decoding on the client side.
-
-=back
 
 =cut
 
@@ -208,7 +200,8 @@ sub decode {
 
 =head2 transferbook
 
-($dotransfer, $messages, $iteminformation) = &transferbook($newbranch, $barcode, $ignore_reserves);
+  ($dotransfer, $messages, $iteminformation) = &transferbook($newbranch, 
+                                            $barcode, $ignore_reserves);
 
 Transfers an item to a new branch. If the item is currently on loan, it is automatically returned before the actual transfer.
 
@@ -221,15 +214,17 @@ Otherwise, if an item is reserved, the transfer fails.
 
 Returns three values:
 
-=head3 $dotransfer 
+=over
+
+=item $dotransfer 
 
 is true if the transfer was successful.
 
-=head3 $messages
+=item $messages
 
 is a reference-to-hash which may have any of the following keys:
 
-=over 4
+=over
 
 =item C<BadBarcode>
 
@@ -254,6 +249,8 @@ The item was reserved. The value is a reference-to-hash whose keys are fields fr
 =item C<WasTransferred>
 
 The item was eligible to be transferred. Barring problems communicating with the database, the transfer should indeed have succeeded. The value should be ignored.
+
+=back
 
 =back
 
@@ -561,9 +558,10 @@ sub itemissues {
 
 =head2 CanBookBeIssued
 
-Check if a book can be issued.
+  ( $issuingimpossible, $needsconfirmation ) =  CanBookBeIssued( $borrower, 
+                                      $barcode, $duedatespec, $inprocess );
 
-( $issuingimpossible, $needsconfirmation ) =  CanBookBeIssued( $borrower, $barcode, $duedatespec, $inprocess );
+Check if a book can be issued.
 
 C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
@@ -620,8 +618,8 @@ item withdrawn.
 
 item is restricted (set by ??)
 
-C<$needsconfirmation> a reference to a hash. It contains reasons why the loan could be prevented, 
-but ones that can be overriden by the operator.
+C<$needsconfirmation> a reference to a hash. It contains reasons why the loan 
+could be prevented, but ones that can be overriden by the operator.
 
 Possible values are :
 
@@ -866,9 +864,9 @@ sub CanBookBeIssued {
 
 =head2 AddIssue
 
-Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this sub, it means the user confirmed if needed.
+  &AddIssue($borrower, $barcode, [$datedue], [$cancelreserve], [$issuedate])
 
-&AddIssue($borrower, $barcode, [$datedue], [$cancelreserve], [$issuedate])
+Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this sub, it means the user confirmed if needed.
 
 =over 4
 
@@ -1076,9 +1074,9 @@ sub AddIssue {
 
 =head2 GetLoanLength
 
-Get loan length for an itemtype, a borrower type and a branch
+  my $loanlength = &GetLoanLength($borrowertype,$itemtype,branchcode)
 
-my $loanlength = &GetLoanLength($borrowertype,$itemtype,branchcode)
+Get loan length for an itemtype, a borrower type and a branch
 
 =cut
 
@@ -1138,14 +1136,14 @@ sub GetLoanLength {
 
 =head2 GetIssuingRule
 
+  my $irule = &GetIssuingRule($borrowertype,$itemtype,branchcode)
+
 FIXME - This is a copy-paste of GetLoanLength
 as a stop-gap.  Do not wish to change API for GetLoanLength 
 this close to release, however, Overdues::GetIssuingRules is broken.
 
 Get the issuing rule for an itemtype, a borrower type and a branch
 Returns a hashref from the issuingrules table.
-
-my $irule = &GetIssuingRule($borrowertype,$itemtype,branchcode)
 
 =cut
 
@@ -1193,11 +1191,7 @@ sub GetIssuingRule {
 
 =head2 GetBranchBorrowerCircRule
 
-=over 4
-
-my $branch_cat_rule = GetBranchBorrowerCircRule($branchcode, $categorycode);
-
-=back
+  my $branch_cat_rule = GetBranchBorrowerCircRule($branchcode, $categorycode);
 
 Retrieves circulation rule attributes that apply to the given
 branch and patron category, regardless of item type.  
@@ -1280,11 +1274,7 @@ sub GetBranchBorrowerCircRule {
 
 =head2 GetBranchItemRule
 
-=over 4
-
-my $branch_item_rule = GetBranchItemRule($branchcode, $itemtype);
-
-=back
+  my $branch_item_rule = GetBranchItemRule($branchcode, $itemtype);
 
 Retrieves circulation rule attributes that apply to the given
 branch and item type, regardless of patron category.
@@ -1344,8 +1334,8 @@ sub GetBranchItemRule {
 
 =head2 AddReturn
 
-($doreturn, $messages, $iteminformation, $borrower) =
-    &AddReturn($barcode, $branch, $exemptfine, $dropbox);
+  ($doreturn, $messages, $iteminformation, $borrower) =
+      &AddReturn($barcode, $branch, $exemptfine, $dropbox);
 
 Returns a book.
 
@@ -1599,11 +1589,7 @@ sub AddReturn {
 
 =head2 MarkIssueReturned
 
-=over 4
-
-MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate);
-
-=back
+  MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate);
 
 Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
@@ -1654,7 +1640,7 @@ sub MarkIssueReturned {
 
 =head2 _FixOverduesOnReturn
 
-    &_FixOverduesOnReturn($brn,$itm, $exemptfine, $dropboxmode);
+   &_FixOverduesOnReturn($brn,$itm, $exemptfine, $dropboxmode);
 
 C<$brn> borrowernumber
 
@@ -1718,7 +1704,7 @@ sub _FixOverduesOnReturn {
 
 =head2 _FixAccountForLostAndReturned
 
-	&_FixAccountForLostAndReturned($itemnumber, [$borrowernumber, $barcode]);
+  &_FixAccountForLostAndReturned($itemnumber, [$borrowernumber, $barcode]);
 
 Calculates the charge for a book lost and returned.
 
@@ -1849,7 +1835,7 @@ sub _GetCircControlBranch {
 
 =head2 GetItemIssue
 
-$issue = &GetItemIssue($itemnumber);
+  $issue = &GetItemIssue($itemnumber);
 
 Returns patron currently having a book, or undef if not checked out.
 
@@ -1876,7 +1862,7 @@ sub GetItemIssue {
 
 =head2 GetOpenIssue
 
-$issue = GetOpenIssue( $itemnumber );
+  $issue = GetOpenIssue( $itemnumber );
 
 Returns the row from the issues table if the item is currently issued, undef if the item is not currently issued
 
@@ -1898,7 +1884,7 @@ sub GetOpenIssue {
 
 =head2 GetItemIssues
 
-$issues = &GetItemIssues($itemnumber, $history);
+  $issues = &GetItemIssues($itemnumber, $history);
 
 Returns patrons that have issued a book
 
@@ -1941,7 +1927,7 @@ sub GetItemIssues {
 
 =head2 GetBiblioIssues
 
-$issues = GetBiblioIssues($biblionumber);
+  $issues = GetBiblioIssues($biblionumber);
 
 this function get all issues from a biblionumber.
 
@@ -1985,11 +1971,7 @@ sub GetBiblioIssues {
 
 =head2 GetUpcomingDueIssues
 
-=over 4
- 
-my $upcoming_dues = GetUpcomingDueIssues( { days_in_advance => 4 } );
-
-=back
+  my $upcoming_dues = GetUpcomingDueIssues( { days_in_advance => 4 } );
 
 =cut
 
@@ -2019,7 +2001,7 @@ END_SQL
 
 =head2 CanBookBeRenewed
 
-($ok,$error) = &CanBookBeRenewed($borrowernumber, $itemnumber[, $override_limit]);
+  ($ok,$error) = &CanBookBeRenewed($borrowernumber, $itemnumber[, $override_limit]);
 
 Find out whether a borrowed item may be renewed.
 
@@ -2111,7 +2093,7 @@ sub CanBookBeRenewed {
 
 =head2 AddRenewal
 
-&AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate]);
+  &AddRenewal($borrowernumber, $itemnumber, $branch, [$datedue], [$lastreneweddate]);
 
 Renews a loan.
 
@@ -2248,7 +2230,7 @@ sub GetRenewCount {
 
 =head2 GetIssuingCharges
 
-($charge, $item_type) = &GetIssuingCharges($itemnumber, $borrowernumber);
+  ($charge, $item_type) = &GetIssuingCharges($itemnumber, $borrowernumber);
 
 Calculate how much it would cost for a given patron to borrow a given
 item, including any applicable discounts.
@@ -2307,7 +2289,7 @@ sub GetIssuingCharges {
 
 =head2 AddIssuingCharge
 
-&AddIssuingCharge( $itemno, $borrowernumber, $charge )
+  &AddIssuingCharge( $itemno, $borrowernumber, $charge )
 
 =cut
 
@@ -2329,7 +2311,7 @@ sub AddIssuingCharge {
 
 =head2 GetTransfers
 
-GetTransfers($itemnumber);
+  GetTransfers($itemnumber);
 
 =cut
 
@@ -2355,7 +2337,7 @@ sub GetTransfers {
 
 =head2 GetTransfersFromTo
 
-@results = GetTransfersFromTo($frombranch,$tobranch);
+  @results = GetTransfersFromTo($frombranch,$tobranch);
 
 Returns the list of pending transfers between $from and $to branch
 
@@ -2385,7 +2367,7 @@ sub GetTransfersFromTo {
 
 =head2 DeleteTransfer
 
-&DeleteTransfer($itemnumber);
+  &DeleteTransfer($itemnumber);
 
 =cut
 
@@ -2403,7 +2385,7 @@ sub DeleteTransfer {
 
 =head2 AnonymiseIssueHistory
 
-$rows = AnonymiseIssueHistory($borrowernumber,$date)
+  $rows = AnonymiseIssueHistory($borrowernumber,$date)
 
 This function write NULL instead of C<$borrowernumber> given on input arg into the table issues.
 if C<$borrowernumber> is not set, it will delete the issue history for all borrower older than C<$date>.
@@ -2500,7 +2482,7 @@ sub SendCirculationAlert {
 
 =head2 updateWrongTransfer
 
-$items = updateWrongTransfer($itemNumber,$borrowernumber,$waitingAtLibrary,$FromLibrary);
+  $items = updateWrongTransfer($itemNumber,$borrowernumber,$waitingAtLibrary,$FromLibrary);
 
 This function validate the line of brachtransfer but with the wrong destination (mistake from a librarian ...), and create a new line in branchtransfer from the actual library to the original library of reservation 
 
@@ -2526,7 +2508,8 @@ sub updateWrongTransfer {
 
 =head2 UpdateHoldingbranch
 
-$items = UpdateHoldingbranch($branch,$itmenumber);
+  $items = UpdateHoldingbranch($branch,$itmenumber);
+
 Simple methode for updating hodlingbranch in items BDD line
 
 =cut
@@ -2578,15 +2561,18 @@ sub CalcDateDue {
 }
 
 =head2 CheckValidDatedue
-       This function does not account for holiday exceptions nor does it handle the 'useDaysMode' syspref .
-       To be replaced by CalcDateDue() once C4::Calendar use is tested.
 
-$newdatedue = CheckValidDatedue($date_due,$itemnumber,$branchcode);
+  $newdatedue = CheckValidDatedue($date_due,$itemnumber,$branchcode);
+
+This function does not account for holiday exceptions nor does it handle the 'useDaysMode' syspref .
+To be replaced by CalcDateDue() once C4::Calendar use is tested.
+
 this function validates the loan length against the holidays calendar, and adjusts the due date as per the 'useDaysMode' syspref.
 C<$date_due>   = returndate calculate with no day check
 C<$itemnumber>  = itemnumber
 C<$branchcode>  = location of issue (affected by 'CircControl' syspref)
 C<$loanlength>  = loan length prior to adjustment
+
 =cut
 
 sub CheckValidDatedue {
@@ -2615,8 +2601,10 @@ return $newdatedue;
 
 =head2 CheckRepeatableHolidays
 
-$countrepeatable = CheckRepeatableHoliday($itemnumber,$week_day,$branchcode);
-this function checks if the date due is a repeatable holiday
+  $countrepeatable = CheckRepeatableHoliday($itemnumber,$week_day,$branchcode);
+
+This function checks if the date due is a repeatable holiday
+
 C<$date_due>   = returndate calculate with no day check
 C<$itemnumber>  = itemnumber
 C<$branchcode>  = localisation of issue 
@@ -2640,8 +2628,10 @@ return $result;
 
 =head2 CheckSpecialHolidays
 
-$countspecial = CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
-this function check if the date is a special holiday
+  $countspecial = CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
+
+This function check if the date is a special holiday
+
 C<$years>   = the years of datedue
 C<$month>   = the month of datedue
 C<$day>     = the day of datedue
@@ -2669,8 +2659,10 @@ return $countspecial;
 
 =head2 CheckRepeatableSpecialHolidays
 
-$countspecial = CheckRepeatableSpecialHolidays($month,$day,$itemnumber,$branchcode);
-this function check if the date is a repeatble special holidays
+  $countspecial = CheckRepeatableSpecialHolidays($month,$day,$itemnumber,$branchcode);
+
+This function check if the date is a repeatble special holidays
+
 C<$month>   = the month of datedue
 C<$day>     = the day of datedue
 C<$itemnumber>  = itemnumber
@@ -2712,7 +2704,7 @@ return $exist;
 
 =head2 IsBranchTransferAllowed
 
-$allowed = IsBranchTransferAllowed( $toBranch, $fromBranch, $code );
+  $allowed = IsBranchTransferAllowed( $toBranch, $fromBranch, $code );
 
 Code is either an itemtype or collection doe depending on the pref BranchTransferLimitsType
 
@@ -2740,7 +2732,7 @@ sub IsBranchTransferAllowed {
 
 =head2 CreateBranchTransferLimit
 
-CreateBranchTransferLimit( $toBranch, $fromBranch, $code );
+  CreateBranchTransferLimit( $toBranch, $fromBranch, $code );
 
 $code is either itemtype or collection code depending on what the pref BranchTransferLimitsType is set to.
 
@@ -2759,7 +2751,7 @@ sub CreateBranchTransferLimit {
 
 =head2 DeleteBranchTransferLimits
 
-DeleteBranchTransferLimits();
+  DeleteBranchTransferLimits();
 
 =cut
 

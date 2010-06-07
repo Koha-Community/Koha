@@ -60,18 +60,11 @@ This module contains routines for adding, modifying and Searching Data in MysqlD
 
 =head1 FUNCTIONS
 
-=over 2
-
-=back
-
-
 =head2 SearchInTable
 
-=over 4
+  $hashref = &SearchInTable($tablename,$data, $orderby, $limit, 
+                      $columns_out, $filtercolumns, $searchtype);
 
-  $hashref = &SearchInTable($tablename,$data, $orderby, $limit, $columns_out, $filtercolumns, $searchtype);
-
-=back
 
 $tablename Name of the table (string)
 
@@ -137,14 +130,10 @@ sub SearchInTable{
 
 =head2 InsertInTable
 
-=over 4
-
   $data_id_in_table = &InsertInTable($tablename,$data_hashref,$withprimarykeys);
 
-=back
+Insert Data in table and returns the id of the row inserted
 
-  Insert Data in table
-  and returns the id of the row inserted
 =cut
 
 sub InsertInTable{
@@ -163,14 +152,10 @@ sub InsertInTable{
 
 =head2 UpdateInTable
 
-=over 4
-
   $status = &UpdateInTable($tablename,$data_hashref);
 
-=back
+Update Data in table and returns the status of the operation
 
-  Update Data in table
-  and returns the status of the operation
 =cut
 
 sub UpdateInTable{
@@ -194,14 +179,10 @@ sub UpdateInTable{
 
 =head2 DeleteInTable
 
-=over 4
-
   $status = &DeleteInTable($tablename,$data_hashref);
 
-=back
+Delete Data in table and returns the status of the operation
 
-  Delete Data in table
-  and returns the status of the operation
 =cut
 
 sub DeleteInTable{
@@ -223,13 +204,10 @@ sub DeleteInTable{
 
 =head2 GetPrimaryKeys
 
-=over 4
-
   @primarykeys = &GetPrimaryKeys($tablename)
 
-=back
+Get the Primary Key field names of the table
 
-	Get the Primary Key field names of the table
 =cut
 
 sub GetPrimaryKeys($) {
@@ -240,11 +218,7 @@ sub GetPrimaryKeys($) {
 
 =head2 _get_columns
 
-=over 4
-
-_get_columns($tablename)
-
-=back
+    _get_columns($tablename)
 
 Given a tablename 
 Returns a hashref of all the fieldnames of the table
@@ -265,11 +239,7 @@ sub _get_columns($) {
 
 =head2 _filter_columns
 
-=over 4
-
-_filter_columns($tablename,$research, $filtercolumns)
-
-=back
+    _filter_columns($tablename,$research, $filtercolumns)
 
 Given 
 	- a tablename 
@@ -298,11 +268,7 @@ sub _filter_columns ($$;$) {
 }
 =head2 _filter_fields
 
-=over 4
-
-_filter_fields
-
-=back
+  _filter_fields
 
 Given 
 	- a tablename
