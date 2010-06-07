@@ -91,8 +91,8 @@ the array is in name order
 
 sub GetSuppliersWithLateIssues {
     my $dbh   = C4::Context->dbh;
-    my $query = q|
-    SELECT DISTINCT aqbooksellerid as id, aqbooksellers.name as name
+    my $query = qq|
+        SELECT DISTINCT id, name
     FROM            subscription
     LEFT JOIN       serial ON serial.subscriptionid=subscription.subscriptionid
     LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
