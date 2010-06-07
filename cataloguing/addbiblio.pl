@@ -852,7 +852,8 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
 	push @frameworkcodeloop, \%row;
 } 
 $template->param( frameworkcodeloop => \@frameworkcodeloop,
-	breedingid => $breedingid );
+	breedingid => $breedingid ,
+	frameworkcode => $frameworkcode||"Default" );
 
 # ++ Global
 $tagslib         = &GetMarcStructure( 1, $frameworkcode );
@@ -994,7 +995,7 @@ elsif ( $op eq "delete" ) {
 $template->param( title => $record->title() ) if ( $record ne "-1" );
 $template->param(
     popup => $mode,
-    frameworkcode => $frameworkcode,
+    frameworkcode => $frameworkcode||'Default',
     itemtype => $frameworkcode,
 );
 
