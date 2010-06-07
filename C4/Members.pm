@@ -133,13 +133,10 @@ This module contains routines for adding, modifying and deleting members/patrons
 
 =head1 FUNCTIONS
 
-=over 2
+=head2 SearchMember
 
-=item SearchMember
-
-  ($count, $borrowers) = &SearchMember($searchstring, $type,$category_type,$filter,$showallbranches);
-
-=back
+  ($count, $borrowers) = &SearchMember($searchstring, $type, 
+                     $category_type, $filter, $showallbranches);
 
 Looks up patrons (borrowers) by name.
 
@@ -245,13 +242,10 @@ sub SearchMember {
     return ( scalar(@$data), $data );
 }
 
-=over 2
+=head2 Search
 
-=item Search
-
-  $borrowers_result_array_ref = &Search($filter,$orderby, $limit, $columns_out, $search_on_fields,$searchtype);
-
-=back
+  $borrowers_result_array_ref = &Search($filter,$orderby, $limit, 
+                       $columns_out, $search_on_fields,$searchtype);
 
 Looks up patrons (borrowers) on filter.
 
@@ -378,9 +372,9 @@ sub GetMemberDetails {
 
  $flags = &patronflags($patron);
 
- This function is not exported.
+This function is not exported.
 
- The following will be set where applicable:
+The following will be set where applicable:
  $flags->{CHARGES}->{amount}        Amount of debt
  $flags->{CHARGES}->{noissues}      Set if debt amount >$5.00 (or syspref noissuescharge)
  $flags->{CHARGES}->{message}       Message -- deprecated
@@ -412,17 +406,17 @@ sub GetMemberDetails {
  $flags->{WAITING}->{message}       Message -- deprecated
  $flags->{WAITING}->{itemlist}      ref-to-array: list of available items
 
-=over 4
+=over 
 
-C<$flags-E<gt>{ODUES}-E<gt>{itemlist}> is a reference-to-array listing the
+=item C<$flags-E<gt>{ODUES}-E<gt>{itemlist}> is a reference-to-array listing the
 overdue items. Its elements are references-to-hash, each describing an
 overdue item. The keys are selected fields from the issues, biblio,
 biblioitems, and items tables of the Koha database.
 
-C<$flags-E<gt>{ODUES}-E<gt>{itemlisttext}> is a string giving a text listing of
+=item C<$flags-E<gt>{ODUES}-E<gt>{itemlisttext}> is a string giving a text listing of
 the overdue items, one per line.  Deprecated.
 
-C<$flags-E<gt>{WAITING}-E<gt>{itemlist}> is a reference-to-array listing the
+=item C<$flags-E<gt>{WAITING}-E<gt>{itemlist}> is a reference-to-array listing the
 available items. Each element is a reference-to-hash whose keys are
 fields from the reserves table of the Koha database.
 
@@ -577,11 +571,7 @@ sub GetMember {
 
 =head2 IsMemberBlocked
 
-=over 4
-
-my ($block_status, $count) = IsMemberBlocked( $borrowernumber );
-
-=back
+  my ($block_status, $count) = IsMemberBlocked( $borrowernumber );
 
 Returns whether a patron has overdue items that may result
 in a block or whether the patron has active fine days
@@ -698,22 +688,18 @@ sub columns(;$) {
     return @{C4::Context->dbh->selectcol_arrayref("SHOW columns from borrowers")};
 }
 
-=head2
-
 =head2 ModMember
 
-=over 4
-
-my $success = ModMember(borrowernumber => $borrowernumber, [ field => value ]... );
+  my $success = ModMember(borrowernumber => $borrowernumber,
+                                            [ field => value ]... );
 
 Modify borrower's data.  All date fields should ALREADY be in ISO format.
 
 return :
 true on success, or false on failure
 
-=back
-
 =cut
+
 sub ModMember {
     my (%data) = @_;
     # test to know if you must update or not the borrower password
@@ -739,8 +725,6 @@ sub ModMember {
     return $execute_success;
 }
 
-
-=head2
 
 =head2 AddMember
 
@@ -1357,8 +1341,9 @@ sub GetborCatFromCatType {
 
 Given the borrower's category code, the function returns the corresponding
 data hashref for a comprehensive information display.
-  
+
   $arrayref_hashref = &GetBorrowercategory;
+
 If no category code provided, the function returns all the categories.
 
 =cut
@@ -1382,7 +1367,7 @@ sub GetBorrowercategory {
 }    # sub getborrowercategory
 
 =head2 GetBorrowercategoryList
- 
+
   $arrayref_hashref = &GetBorrowercategoryList;
 If no category code provided, the function returns all the categories.
 
@@ -1478,6 +1463,7 @@ sub GetAge{
 }    # sub get_age
 
 =head2 get_institutions
+
   $insitutions = get_institutions();
 
 Just returns a list of all the borrowers of type I, borrownumber and name
@@ -1603,7 +1589,7 @@ sub MoveMemberToDeleted {
 
 =head2 DelMember
 
-DelMember($borrowernumber);
+    DelMember($borrowernumber);
 
 This function remove directly a borrower whitout writing it on deleteborrower.
 + Deletes reserves for the borrower
@@ -1813,10 +1799,10 @@ WHERE roadtypeid=?|;
 
 =head2 GetBorrowersWhoHaveNotBorrowedSince
 
-&GetBorrowersWhoHaveNotBorrowedSince($date)
+  &GetBorrowersWhoHaveNotBorrowedSince($date)
 
 this function get all borrowers who haven't borrowed since the date given on input arg.
-      
+
 =cut
 
 sub GetBorrowersWhoHaveNotBorrowedSince {
@@ -1874,9 +1860,9 @@ sub GetBorrowersWhoHaveNotBorrowedSince {
 
 =head2 GetBorrowersWhoHaveNeverBorrowed
 
-$results = &GetBorrowersWhoHaveNeverBorrowed
+  $results = &GetBorrowersWhoHaveNeverBorrowed
 
-this function get all borrowers who have never borrowed.
+This function get all borrowers who have never borrowed.
 
 I<$result> is a ref to an array which all elements are a hasref.
 
@@ -1921,7 +1907,7 @@ sub GetBorrowersWhoHaveNeverBorrowed {
 
 =head2 GetBorrowersWithIssuesHistoryOlderThan
 
-$results = &GetBorrowersWithIssuesHistoryOlderThan($date)
+  $results = &GetBorrowersWithIssuesHistoryOlderThan($date)
 
 this function get all borrowers who has an issue history older than I<$date> given on input arg.
 
@@ -1966,7 +1952,7 @@ sub GetBorrowersWithIssuesHistoryOlderThan {
 
 =head2 GetBorrowersNamesAndLatestIssue
 
-$results = &GetBorrowersNamesAndLatestIssueList(@borrowernumbers)
+  $results = &GetBorrowersNamesAndLatestIssueList(@borrowernumbers)
 
 this function get borrowers Names and surnames and Issue information.
 
@@ -1992,17 +1978,13 @@ sub GetBorrowersNamesAndLatestIssue {
 
 =head2 DebarMember
 
-=over 4
-
-my $success = DebarMember( $borrowernumber );
+  my $success = DebarMember( $borrowernumber );
 
 marks a Member as debarred, and therefore unable to checkout any more
 items.
 
 return :
 true on success, false on failure
-
-=back
 
 =cut
 
@@ -2019,17 +2001,13 @@ sub DebarMember {
 
 =head2 AddMessage
 
-=over 4
-
-AddMessage( $borrowernumber, $message_type, $message, $branchcode );
+  AddMessage( $borrowernumber, $message_type, $message, $branchcode );
 
 Adds a message to the messages table for the given borrower.
 
 Returns:
   True on success
   False on failure
-
-=back
 
 =cut
 
@@ -2051,16 +2029,12 @@ sub AddMessage {
 
 =head2 GetMessages
 
-=over 4
-
-GetMessages( $borrowernumber, $type );
+  GetMessages( $borrowernumber, $type );
 
 $type is message type, B for borrower, or L for Librarian.
 Empty type returns all messages of any type.
 
 Returns all messages for the given borrowernumber
-
-=back
 
 =cut
 
@@ -2096,16 +2070,12 @@ sub GetMessages {
 
 =head2 GetMessages
 
-=over 4
-
-GetMessagesCount( $borrowernumber, $type );
+  GetMessagesCount( $borrowernumber, $type );
 
 $type is message type, B for borrower, or L for Librarian.
 Empty type returns all messages of any type.
 
 Returns the number of messages for the given borrowernumber
-
-=back
 
 =cut
 
@@ -2133,11 +2103,7 @@ sub GetMessagesCount {
 
 =head2 DeleteMessage
 
-=over 4
-
-DeleteMessage( $message_id );
-
-=back
+  DeleteMessage( $message_id );
 
 =cut
 
