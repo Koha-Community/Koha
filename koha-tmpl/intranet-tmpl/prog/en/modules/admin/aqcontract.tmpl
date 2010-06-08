@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Contracts &rsaquo;
+<title>Koha &rsaquo; Acquisitions &rsaquo; Contracts &rsaquo;
 <!-- TMPL_IF NAME="add_form" -->
     <!-- TMPL_IF NAME="contractnumber" -->Modify contract '<!-- TMPL_VAR NAME="contractname" -->'
 <!-- TMPL_ELSE -->New contract<!-- /TMPL_IF -->
@@ -57,7 +57,7 @@ function Check(ff) {
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo;
-    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+    <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
     &rsaquo;
     <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR name="booksellerid" -->"><!-- TMPL_VAR name="booksellername" --></a>
     &rsaquo;
@@ -82,10 +82,9 @@ function Check(ff) {
     <!-- TMPL_IF NAME="else" -->Contracts<!-- /TMPL_IF -->
 </div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc" class="yui-t7">
     <div id="bd">
         <div id="yui-main">
-            <div class="yui-b">
                 <!-- TMPL_IF NAME="add_form" -->
                     <form name="Aform" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
                         <input type="hidden" name="op" value="add_validate" />
@@ -141,7 +140,7 @@ function Check(ff) {
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="button" value="Save" onclick="Check(this.form);" />
+                            <input type="button" value="Save" onclick="Check(this.form);" /> <a class="cancel" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;contractnumber=<!-- TMPL_VAR NAME="contractnumber" -->">Cancel</a>
                         </fieldset>
                     </form>
             <!-- /TMPL_IF -->
@@ -221,12 +220,10 @@ function Check(ff) {
                         </tr>
                     <!-- /TMPL_LOOP -->
                 </table>
+                <!-- TMPL_ELSE -->
+                <div class="dialog message">There are no contracts with this vendor.</div>
                 <!-- /TMPL_IF -->
             <!-- /TMPL_IF -->
         </div>
-    </div>
-    <div class="yui-b">
-        <!-- TMPL_INCLUDE NAME="admin-menu.inc" -->
-    </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
