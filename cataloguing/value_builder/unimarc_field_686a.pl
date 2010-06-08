@@ -57,7 +57,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(subfield_managed) {
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_686a.pl&result=\"+defaultvalue+\"&index=$field_number\",\"value builder\",'width=700,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_686a.pl&result=\"+defaultvalue+\"&index=$field_number\",\"value_builder\",'width=700,height=600,toolbar=false,scrollbars=yes');
 
 }
 </script>

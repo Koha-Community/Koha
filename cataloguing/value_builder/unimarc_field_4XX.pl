@@ -54,7 +54,7 @@ sub plugin_javascript {
 
         function Clic$function_name(i) {
             defaultvalue=document.getElementById(\"$field_number\").value;
-            window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&index=\" + i + \"&result=\"+defaultvalue,\"unimarc field 4\"+i+\"\",'width=900,height=700,toolbar=false,scrollbars=yes');
+            window.open(\"/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&index=\" + i + \"&result=\"+defaultvalue,\"unimarc_field_4\"+i+\"\",'width=900,height=700,toolbar=false,scrollbars=yes');
 
         }
     </script>
@@ -65,11 +65,11 @@ sub plugin_javascript {
 
 # sub plugin
 #
-# input arg : 
+# input arg :
 # -- op could be equals to
-# * fillinput : 
-# * do_search : 
-# 
+# * fillinput :
+# * do_search :
+#
 
 sub plugin {
     my ($input)   = @_;
@@ -424,9 +424,9 @@ sub plugin {
         my $defaultview =
           'BiblioDefaultView' . C4::Context->preference('BiblioDefaultView');
 #         my $link="/cgi-bin/koha/cataloguing/value_builder/unimarc4XX.pl?op=do_search&q=$search_desc&resultsperpage=$resultsperpage&startfrom=$startfrom&search=$search";
-#           foreach my $sort (@sort_by){      
+#           foreach my $sort (@sort_by){
 #             $link.="&sort_by=".$sort."&";
-#           }        
+#           }
 #           $template->param(
 #             pagination_bar => pagination_bar(
 #                     $link,
@@ -434,7 +434,7 @@ sub plugin {
 #                     $page,
 #                     'page'
 #             ),
-#           );     
+#           );
         $template->param(
             result         => \@arrayresults,
             index          => $query->param('index') . "",

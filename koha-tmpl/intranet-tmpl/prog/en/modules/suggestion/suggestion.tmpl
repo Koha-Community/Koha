@@ -131,18 +131,18 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
             <tr>
                 <th><label for="suggesteddate">Suggestion creation</label> </th>
                 <td><input type="text" id="suggesteddate" name="suggesteddate" size="10" maxlength="10" value="<!--TMPL_VAR Name="suggesteddate"-->"/></td>
-                <td><input type="hidden" id="suggestedby" name="suggestedby" value="<!--TMPL_VAR Name="suggestedby"-->"/><!--TMPL_VAR Name="suggestedbyinformation"-->
+                <td><input type="hidden" id="suggestedby" name="suggestedby" value="<!--TMPL_VAR Name="suggestedby"-->"/><!-- TMPL_IF NAME="suggestedby_borrowernumber" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="suggestedby_borrowernumber" -->"><!--TMPL_VAR Name="suggestedby_surname"-->, <!-- TMPL_VAR NAME="suggestedby_firstname" --></a>  <!-- TMPL_VAR NAME="suggestedby_branchcode" --> (<!-- TMPL_VAR NAME="suggestedby_description" -->)<!-- /TMPL_IF -->
                 </td>
             </tr>
             <tr>
                 <th><label for="managedon">Suggestion management</label> </th>
                 <td><input type="text" id="managedon" name="manageddate" size="10" maxlength="10" value="<!--TMPL_VAR Name="manageddate"-->" /></td>
-                <td><input type="hidden" id="managedby" name="managedby" value="<!--TMPL_VAR Name="managedby"-->"/><!--TMPL_VAR Name="managedbyinformation"--></td>
+                <td><input type="hidden" id="managedby" name="managedby" value="<!--TMPL_VAR Name="managedby"-->"/><!-- TMPL_IF NAME="managedby_borrowernumber" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="managedby_borrowernumber" -->"><!--TMPL_VAR Name="managedby_surname"-->, <!-- TMPL_VAR NAME="managedby_firstname" --></a> <!-- TMPL_VAR NAME="managedby_branchcode" --> (<!-- TMPL_VAR NAME="managedby_description" -->)<!-- /TMPL_IF --></td>
             </tr>
             <tr>
                 <th><label for="accepteddate">Suggestion Accepted</label> </th>
                 <td><input type="text" id="accepteddate" name="accepteddate" size="10" maxlength="10" value="<!--TMPL_VAR Name="accepteddate"-->" /></td>
-                <td><input type="hidden" id="acceptedby" name="acceptedby" value="<!--TMPL_VAR Name="acceptedby"-->"/><!--TMPL_VAR Name="acceptedbyinformation"--></td>
+                <td><input type="hidden" id="acceptedby" name="acceptedby" value="<!--TMPL_VAR Name="acceptedby"-->"/><!-- TMPL_IF NAME="acceptedby_borrowernumber" --><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="acceptedby_borrowernumber" -->"><!--TMPL_VAR Name="acceptedby_surname"-->, <!-- TMPL_VAR NAME="acceptedby_firstname" --></a> <!-- TMPL_VAR NAME="acceptedby_branchcode" --> (<!-- TMPL_VAR NAME="acceptedby_description" -->)<!-- /TMPL_IF --></td>
             </tr>
             </tbody>
         </table></li></ol>

@@ -42,27 +42,28 @@
 
                var planning_menu = [
 
-                        { text: _("Plan by MONTHS"),
+                        { text: _("Plan by Months"),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=MONTHS"
                             <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
                         },
 
-                        { text: _("Plan by BRANCHES"),
+                        { text: _("Plan by Branches"),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=BRANCHES"
                             <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
                         },
 
-                        { text: _("Plan by ITEMTYPES"),
+                        { text: _("Plan by Item Types"),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=ITEMTYPES"
                             <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
                         },
-
+           <!-- TMPL_IF NAME="authcat" -->
                 <!-- TMPL_LOOP NAME="auth_cats_loop" -->
                         { text: _("Plan by <!-- TMPL_VAR NAME="authcat" -->    "),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=<!-- TMPL_VAR NAME="authcat" -->"
                             <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
                         },
                 <!-- /TMPL_LOOP -->
+           <!-- /TMPL_IF -->
                 ]
 
 	            new YAHOO.widget.Button({

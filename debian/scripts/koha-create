@@ -227,3 +227,9 @@ then
     # Start Zebra.
     koha-start-zebra "$name"
 fi
+
+
+if [ "$op" = request ]
+then
+    koha-disable "$name"
+fi

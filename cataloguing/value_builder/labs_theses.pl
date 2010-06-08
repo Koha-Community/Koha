@@ -51,7 +51,7 @@ function Blur$function_name(subfield_managed) {
 
 function Clic$function_name(i) {
 	defaultvalue=document.f.field_value[i].value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&cat_auth=LABTHE&index=\"+i+\"&result=\"+defaultvalue,\"unimarc field 328\",'width=700,height=700,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=labs_theses.pl&cat_auth=LABTHE&index=\"+i+\"&result=\"+defaultvalue,\"tag_editor\",'width=700,height=700,toolbar=false,scrollbars=yes');
 
 }
 //]]>
@@ -73,24 +73,24 @@ sub plugin {
 	my ($template, $loggedinuser, $cookie);
 	my $resultsperpage;
 	my $search = $query->param('search');
-	
+
 	if ($op eq "do_search") {
-	
+
 		$resultsperpage= $query->param('resultsperpage');
 		$resultsperpage = 19 if(!defined $resultsperpage);
 # 		my $upperlimit=$startfrom+$resultsperpage;
 		# builds tag and subfield arrays
 		my $strquery = "SELECT authorised_value, lib from authorised_values where category = ? and lib like ?";
 # 		$strquery .= " LIMIT $startfrom,$upperlimit";
-		
+
 		warn 'category : '.$cat_auth.' recherche :'.$search;
 		warn "$strquery";
 		$search=~s/\*/%/g;
 		my $sth = $dbh->prepare($strquery);
 		$sth->execute($cat_auth,$search);
 		$search=~s/%/\*/g;
-		
-		
+
+
 		my @results;
 		my $total;
 		while (my $data = $sth->fetchrow_hashref){
@@ -101,11 +101,11 @@ sub plugin {
 			push @results, {'libjs'=>$libjs,
 							'lib'=>$data->{'lib'},
 							'authjs'=>$authjs,
-							'auth_value'=>$data->{'authorised_value'}} 
+							'auth_value'=>$data->{'authorised_value'}}
 							unless (($total<$startfrom) or ($total>$startfrom+$resultsperpage));
 			$total++;
 		}
-		
+
 		($template, $loggedinuser, $cookie)
 			= get_template_and_user({template_name => "value_builder/labs_theses.tmpl",
 					query => $query,
@@ -113,16 +113,16 @@ sub plugin {
 					authnotrequired => 1,
 					debug => 1,
 					});
-	
+
 		# multi page display gestion
 		my $displaynext=0;
 		my $displayprev=$startfrom;
 		if(($total - (($startfrom+1)*($resultsperpage))) > 0 ){
 			$displaynext = 1;
 		}
-	
+
 		my @numbers = ();
-	
+
 		if ($total>$resultsperpage)
 		{
 			for (my $i=1; (($i<$total/$resultsperpage+1) && ($i<16)); $i++)
@@ -135,10 +135,10 @@ sub plugin {
 						startfrom => $resultsperpage*($i-1)};
 			}
 		}
-	
+
 		my $from = $startfrom+1;
 		my $to;
-	
+
 		if($total < (($startfrom+1)*$resultsperpage))
 		{
 			$to = $total;
@@ -161,7 +161,7 @@ sub plugin {
 								numbers=>\@numbers,
 								resultlist=>1
 								);
-	
+
 	} else {
 		($template, $loggedinuser, $cookie)
 			= get_template_and_user({template_name => "value_builder/labs_theses.tmpl",
@@ -169,7 +169,7 @@ sub plugin {
 						type => "intranet",
 						authnotrequired => 1,
 					});
-		
+
 		$template->param(
 						'search'=>$query->param('search'),
 		);
@@ -180,7 +180,7 @@ sub plugin {
 		$template->param(
  						'cat_auth'=>$cat_auth
 		) if ($cat_auth);
-	}	
+	}
 	output_html_with_http_headers $query, $cookie, $template->output ;
 }
 

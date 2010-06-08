@@ -45,19 +45,19 @@ sub plugin_javascript {
     function Focus$field_number() {
         return 1;
     }
-    
+
     function Blur$field_number() {
             return 1;
     }
-    
+
     function Clic$field_number() {
             defaultvalue=document.getElementById(\"$field_number\").value;
-            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_110.pl&index=$field_number&result=\"+defaultvalue,\"unimarc field 110\",'width=700,height=600,toolbar=false,scrollbars=yes');
-    
+            window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_110.pl&index=$field_number&result=\"+defaultvalue,\"unimarc_field_110\",'width=700,height=600,toolbar=false,scrollbars=yes');
+
     }
     </script>
     ";
-    
+
     return ($field_number,$res);
 }
 sub plugin {

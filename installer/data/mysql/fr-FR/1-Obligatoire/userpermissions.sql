@@ -5,6 +5,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 6, 'modify_holds_priority', 'Modifier la priorité des réservations'),
    ( 9, 'edit_catalogue', 'Ajouter et modifier les notices du catalogue'),
    ( 9, 'fast_cataloging', 'Catalogage rapide'),
+   ( 9, 'edit_items', 'Modification des exemplaires'),
    (13, 'edit_news', 'Ecrire des nouvelles pour l''OPAC et l''interface professionnelle'),
    (13, 'label_creator', 'Créer des étiquettes à partir des données du catalogues et des adhérents'),
    (13, 'edit_calendar', 'Définir les jours de fermeture de la bibliothèque'),

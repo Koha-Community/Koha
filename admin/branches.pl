@@ -131,8 +131,16 @@ elsif ( $op eq 'delete' ) {
     $sthitems->execute( $branchcode, $branchcode );
     $sthborrowers->execute( $branchcode );
     my ($totalitems)     = $sthitems->fetchrow_array;
-    my ($totalborrowers) = $sthitems->fetchrow_array;
-    if ($totalitems or $totalborrowers) {
+    my ($totalborrowers) = $sthborrowers->fetchrow_array;
+    if ($totalitems && !$totalborrowers) {
+        $template->param( else => 1 );
+        default("MESSAGE10", $template);
+    }
+    elsif (!$totalitems && $totalborrowers){
+        $template->param( else => 1 );
+        default("MESSAGE11", $template);
+    }
+    elsif ($totalitems && $totalborrowers){
         $template->param( else => 1 );
         default("MESSAGE7", $template);
     }
