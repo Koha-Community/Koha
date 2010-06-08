@@ -358,6 +358,7 @@ sub generate_deleted_marc_records {
         }
         if (C4::Context->preference("marcflavour") eq "UNIMARC") {
             fix_unimarc_100($marc);
+            fix_unimarc_titles( $marc );
         }
 
         print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
@@ -485,6 +486,27 @@ sub fix_authority_id {
     unless ($marc->field('001') and $marc->field('001')->data() eq $authid){
         $marc->delete_field($marc->field('001'));
         $marc->insert_fields_ordered(MARC::Field->new('001',$authid));
+    }
+}
+
+sub fix_unimarc_titles {
+    my $marc = shift;
+    
+    for my $field ($marc->field('200'), $marc->field('225'), $marc->field('400'), $marc->field('410') ){
+        my $newfield;
+        for ($field->subfields()){
+           # remove SUDOC specific NSB NSE
+           $_->[1] =~ s/\x{98}|\x{9C}/ /g;
+           $_->[1] =~ s/\x{88}|\x{89}/ /g;
+           $_->[1] =~ s/Histoires//g;
+           unless ($newfield) {
+               $newfield = MARC::Field->new($field->tag(), '', '', @$_);
+           }else{
+               $newfield->add_subfields(@$_);
+           }
+           
+        }
+        $field->replace_with($newfield);
     }
 }
 
