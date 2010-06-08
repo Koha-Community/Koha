@@ -498,7 +498,6 @@ sub fix_unimarc_titles {
            # remove SUDOC specific NSB NSE
            $_->[1] =~ s/\x{98}|\x{9C}/ /g;
            $_->[1] =~ s/\x{88}|\x{89}/ /g;
-           $_->[1] =~ s/Histoires//g;
            unless ($newfield) {
                $newfield = MARC::Field->new($field->tag(), '', '', @$_);
            }else{
