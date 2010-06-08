@@ -86,7 +86,6 @@ my $op              = $query->param('op');
 if ( scalar(@subscriptionids) == 1 && index( $subscriptionids[0], q|,| ) > 0 ) {
     @subscriptionids = split( /,/, $subscriptionids[0] );
 }
-my @subscriptionids=uniq @subscriptionids;
 my @errors;
 my @errseq;
 
@@ -104,8 +103,7 @@ unless (@serialids) {
 }
 
 unless ( scalar(@serialids) ) {
-    my $string =
-      "serials-collection.pl?subscriptionid=" . join( ",", @subscriptionids );
+    my $string = "serials-collection.pl?subscriptionid=" . join( ",", uniq @subscriptionids );
     $string =~ s/,$//;
 
     print $query->redirect($string);
