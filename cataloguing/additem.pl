@@ -174,8 +174,10 @@ sub generate_subfield_form {
                 if (do $plugin) {
                     my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, $loop_data );
                     my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, $loop_data );
+		    my $change= index($javascript, 'function Change')>-1?"return Change$function_name($subfield_data{random}, '$subfield_data{id}');": 'return 1;'; #enhancement 4866
                     $subfield_data{marc_value} = qq[<input $attributes
                         onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
+			onchange=" $change"
                          onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
                         <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
                         $javascript];
@@ -453,6 +455,7 @@ foreach my $tag ( keys %{$tagslib}){
     }
 }
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
+@loop_data= sort {$a->{subfield} cmp $b->{subfield}} @loop_data;
 $template->param( title => $record->title() ) if ($record ne "-1");
 $template->param(
     biblionumber => $biblionumber,
