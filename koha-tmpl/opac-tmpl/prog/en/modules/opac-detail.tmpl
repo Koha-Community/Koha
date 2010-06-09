@@ -344,7 +344,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <!-- TMPL_ELSE -->
 	<p>No physical items for this record</p>
 <!-- /TMPL_IF -->
-<!--/TMPL_LOOP-->
+<!-- bug 4489: deleted unmatched end loop here -->
 <!-- TMPL_IF NAME="OpenOPACShelfBrowser" -->
 <div id="shelfbrowser">
 <h5 style="text-align: center;"><!-- TMPL_IF NAME="starting_homebranch" -->Browsing <!-- TMPL_VAR NAME="starting_homebranch" --> Shelves<!-- /TMPL_IF --><!-- TMPL_IF NAME="starting_location" -->, Shelving Location:</span><!-- TMPL_VAR NAME="starting_location" --> <!-- /TMPL_IF --> <a style="font-size: 75%;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Close Shelf Browser</a></h5>
