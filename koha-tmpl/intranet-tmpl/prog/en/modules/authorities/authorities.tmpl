@@ -708,10 +708,10 @@ function searchauthority() {
                     <!-- TMPL_VAR NAME="marc_value" -->
                     
                     <!-- TMPL_IF NAME="repeatable" -->
-                        <span class="buttonPlus" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->')">+</span>
+                        <a href="#" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' -->'); return false;"><img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" /></a>
                     <!-- /TMPL_IF -->
                     <!-- TMPL_UNLESS NAME="mandatory" -->
-                        <span class="buttonMinus" onclick="UnCloneField('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->')">&#8722;</span>
+                        <a href="#" onclick="UnCloneField('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" /></a>
                     <!-- /TMPL_UNLESS -->
                     
                 </div>
