@@ -73,9 +73,9 @@ function tagAdded() {
 }
 
 $(function() {
-    <!-- TMPL_IF NAME="loggedinusername" -->$("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear All')+"<\/a>|");
-    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select All')+"<\/a>");<!-- /TMPL_IF -->
-	$("a.print").show();
+    $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear All')+"<\/a>|");
+    $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select All')+"<\/a>");
+  $("a.print").show();
     <!-- TMPL_IF NAME="RequestOnOpac" -->$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">"+_('Place Hold')+"<\/a>");
 	$("a.hold").click(function(){
 		 holdSelections();
@@ -83,7 +83,6 @@ $(function() {
 	});<!-- /TMPL_IF -->
     $("#listcontents").tablesorter({
         widgets : ['zebra'],
-        <!-- TMPL_IF NAME="manageshelf" -->
           <!-- TMPL_IF NAME="authorsort" -->
           sortList: [[2,0]],
           <!-- TMPL_ELSIF NAME="yearsort" -->
@@ -92,16 +91,6 @@ $(function() {
           sortList: [[1,0]],
           <!-- /TMPL_IF -->
           headers: { 0: { sorter: false },1:{sorter: 'articles'}
-        <!-- TMPL_ELSE -->
-          <!-- TMPL_IF NAME="authorsort" -->
-          sortList: [[1,0]],
-          <!-- TMPL_ELSIF NAME="yearsort" -->
-          sortList: [[2,1]],
-          <!-- TMPL_ELSE -->
-          sortList: [[0,0]],
-          <!-- /TMPL_IF -->
-          headers: { 0:{sorter:'articles'}
-        <!-- /TMPL_IF -->
         }
     }); 
     $("#CheckAll").click(function(){
@@ -196,13 +185,13 @@ $(function() {
             <!-- TMPL_IF NAME="viewshelf" --><!--  Viewing a particular shelf -->
               <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <em><!-- TMPL_VAR NAME="shelfname" ESCAPE="html" --></em></h3>
               <!-- TMPL_IF NAME="itemsloop" -->
-                  <div id="toolbar" class="list-actions">
-<!-- TMPL_IF NAME="loggedinusername" -->                    <span class="checkall"></span>
+                  <div id="toolbar" class="list-actions"> <span class="checkall"></span>
                     <span class="clearall"></span>
 
 <!-- TMPL_IF NAME="RequestOnOpac" -->
                       <span id="placehold"></span><!-- TMPL_UNLESS NAME="TagsEnabled" --> |<!-- /TMPL_UNLESS -->
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="loggedinusername" -->
     <!-- TMPL_IF NAME="TagsEnabled" -->
                     <span id="addtags"></span>               
                     <span id="tagsel_form" style="display:none">
@@ -218,8 +207,9 @@ $(function() {
 
 <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->" class="send tag_hides" onclick="open(CGIBIN+'opac-sendshelf.pl?shelfid=<!-- TMPL_VAR NAME="shelfnumber" -->','win_form','dependant=yes,scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send List</a></span>
 
+<a class="print tag_hides" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
 
-                <!-- TMPL_IF NAME="manageshelf" --><a class="editshelf tag_hides" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a>
+                <!-- TMPL_IF NAME="manageshelf" --> | <a class="editshelf tag_hides" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a>
                       <form method="post" action="opac-shelves.pl" class="tag_hides">
                         <input type="hidden" value="1" name="shelves"/>
                     <!-- TMPL_IF NAME="showprivateshelves" -->
@@ -229,20 +219,18 @@ $(function() {
                          <input type="submit" class="deleteshelf" value="Delete List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                       </form> <!-- /TMPL_IF -->
 
-		      <a class="print tag_hides" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
-<!-- TMPL_UNLESS NAME="loggedinusername" -->
-				| <span><a class="login" href="/cgi-bin/koha/opac-user.pl">Log in</a> to place holds or add tags</span><!-- /TMPL_UNLESS -->
+
                   </div>
 
-                <!-- TMPL_IF NAME="manageshelf" -->
                   <form action="/cgi-bin/koha/opac-shelves.pl" method="post" name="myform" class="checkboxed">
+                <!-- TMPL_IF NAME="manageshelf" -->
                     <input type="hidden" name="viewshelf" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
                     <input type="hidden" name="modifyshelfcontents" value="1" />
                 <!-- /TMPL_IF -->
                 <!-- TMPL_VAR name='pagination_bar'-->
                 <table id="listcontents">
                   <thead><tr>
-                    <!-- TMPL_IF NAME="manageshelf" --><th>&nbsp;</th><!-- /TMPL_IF -->
+                    <th>&nbsp;</th>
                     <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
                     <th>Title</th>
                     <th>Author</th>
@@ -256,10 +244,8 @@ $(function() {
                     <!-- TMPL_ELSE -->
                       <tr>
                     <!-- /TMPL_UNLESS -->
-                    <!-- TMPL_IF NAME="manageshelf" -->
                         <td><input type="checkbox" name="REM-<!-- TMPL_VAR NAME="biblionumber" -->"
                                    value="<!-- TMPL_VAR NAME="biblionumber">" /></td>
-                    <!-- /TMPL_IF -->
                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
                         <td>
                           <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
@@ -312,8 +298,8 @@ $(function() {
                   <input type="hidden" name="shelves" value="1" />
                   <input type="submit" class="icon delete" value="Delete this List" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST)" />
               <!-- /TMPL_IF -->
-                </form>
             <!-- /TMPL_IF -->
+                </form>
 
             
             <!-- TMPL_IF NAME="edit" -->
@@ -423,7 +409,7 @@ $(function() {
                     <!-- TMPL_ELSE -->
                          No Private Lists.
                     <!-- /TMPL_IF --><!-- /shelveslooppriv -->
-                  <!-- /TMPL_IF --><! -- /showprivateshelves -->
+                  <!-- /TMPL_IF --><!-- /showprivateshelves -->
                   <!-- TMPL_ELSE --><!-- /loggedinusername -->
                       <div><a href="/cgi-bin/koha/opac-user.pl">Log in</a> to create new Lists.</div>
                   <!-- /TMPL_IF --><!-- /loggedinusername -->
