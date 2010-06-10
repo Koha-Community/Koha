@@ -95,6 +95,7 @@ my ($template, $loggedinuser, $cookie)
 							"f6$f6" => 1,
 							"f7$f7" => 1,
 							"f8$f8" => 1,
+							"f9a" => 1,
 							"f17$f17" => 1,
 							"f18$f18" => 1,
 							"f19$f19" => 1,
