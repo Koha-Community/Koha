@@ -36,7 +36,7 @@ BEGIN {
 }
 
 =head1 NAME
-   
+
 C4::Reports - Module for generating reports 
 
 =head1 DESCRIPTION
@@ -47,11 +47,7 @@ This module contains functions common to reports.
 
 =head2 GetDelimiterChoices
 
-=over 4
-
-my $delims = GetDelimiterChoices;
-
-=back
+  my $delims = GetDelimiterChoices;
 
 This will return a list of all the available delimiters.
 

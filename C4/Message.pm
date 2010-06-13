@@ -19,7 +19,7 @@ How to add a new message to the queue:
   my $borrower = { borrowernumber => 1 };
   my $item     = C4::Items::GetItem(1);
   my $letter   = C4::Letters::getletter('circulation', 'CHECKOUT');
-  C4::Letters::parseletter($letter, 'biblio',      $item->{biblionumber});
+  C4::Letters::parseletter($letter, 'biblio', $item->{biblionumber});
   C4::Letters::parseletter($letter, 'biblioitems', $item->{biblionumber});
   C4::Message->enqueue($letter, $borrower->{borrowernumber}, 'email');
 
@@ -33,10 +33,11 @@ How to update a borrower's last checkout message:
 
 =head1 DESCRIPTION
 
-This module presents an OO interface to the message_queue.  Previously, you could
-only add messages to the message_queue via C<C4::Letters::EnqueueMessage()>.  With
-this module, you can also get previously inserted messages, manipulate them, and
-save them back to the database.
+This module presents an OO interface to the message_queue.  Previously, 
+you could only add messages to the message_queue via 
+C<C4::Letters::EnqueueMessage()>.  With this module, you can also get 
+previously inserted messages, manipulate them, and save them back to the 
+database.
 
 =cut
 
@@ -302,25 +303,47 @@ sub append {
 
 =head3 $message->message_id
 
+=cut
+
 =head3 $message->borrowernumber
+
+=cut
 
 =head3 $message->subject
 
+=cut
+
 =head3 $message->content
+
+=cut
 
 =head3 $message->metadata
 
+=cut
+
 =head3 $message->letter_code
+
+=cut
 
 =head3 $message->message_transport_type
 
+=cut
+
 =head3 $message->status
+
+=cut
 
 =head3 $message->time_queued
 
+=cut
+
 =head3 $message->to_address
 
+=cut
+
 =head3 $message->from_address
+
+=cut
 
 =head3 $message->content_type
 

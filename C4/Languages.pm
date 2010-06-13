@@ -65,6 +65,8 @@ use C4::Languages;
 
 =head1 DESCRIPTION
 
+=cut
+
 =head1 FUNCTIONS
 
 =head2 getFrameworkLanguages

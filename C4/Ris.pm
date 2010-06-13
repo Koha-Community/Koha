@@ -74,21 +74,13 @@ $VERSION = 3.00;
 );
 
 
-=head2 marc2bibtex - Convert from UNIMARC to RIS
+=head1 marc2bibtex - Convert from UNIMARC to RIS
 
-=over 4
-
-my ($ris) = marc2ris($record);
+  my ($ris) = marc2ris($record);
 
 Returns a RIS scalar
 
-=over 2
-
 C<$record> - a MARC::Record object
-
-=back
-
-=back
 
 =cut
 

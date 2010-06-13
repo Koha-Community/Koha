@@ -188,22 +188,22 @@ sub DelClassSource {
 
   my $sort_rules = GetClassSortRules();
 
-  Returns reference to hash of references to
-  the class sorting rules, keyed on class_sort_rule
-  
+Returns reference to hash of references to
+the class sorting rules, keyed on class_sort_rule
+
 =head3 Example
 
-my $sort_rules = GetClassSortRules();
-my @sort_rules = ();
-foreach my $sort_rule (sort keys %$sort_rules) {
-    my $sort_rule = $sort_rules->{$sort_rule};
-    push @sort_rules,
-      {
-        rule        => $sort_rule->{'class_sort_rule'},
-        description => $sort_rule->{'description'},
-        sort_routine    => $sort_rule->{'sort_routine'}
+  my $sort_rules = GetClassSortRules();
+  my @sort_rules = ();
+  foreach my $sort_rule (sort keys %$sort_rules) {
+      my $sort_rule = $sort_rules->{$sort_rule};
+      push @sort_rules,
+          {
+          rule        => $sort_rule->{'class_sort_rule'},
+          description => $sort_rule->{'description'},
+          sort_routine    => $sort_rule->{'sort_routine'}
       }
-}
+   }
 
 =cut
 

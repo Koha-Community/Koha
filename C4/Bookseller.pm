@@ -263,6 +263,7 @@ delete the supplier identified by $booksellerid
 This sub can be called only if the supplier has no order.
 
 =cut
+
 sub DelBookseller {
     my ($id) = @_;
     my $dbh=C4::Context->dbh;

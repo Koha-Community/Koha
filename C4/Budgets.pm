@@ -77,6 +77,10 @@ BEGIN {
 # ----------------------------BUDGETS.PM-----------------------------";
 
 
+=head1 FUNCTIONS ABOUT BUDGETS
+
+=cut
+
 sub HideCols {
     my ( $authcat, @hide_cols ) = @_;
     my $dbh = C4::Context->dbh;
@@ -632,23 +636,12 @@ sub DelBudget {
 	return $rc;
 }
 
-=head2 FUNCTIONS ABOUT BUDGETS
 
-=over 2
+=head2 GetBudget
 
-=cut
-
-=back
-
-=head3 GetBudget
-
-=over 4
-
-&GetBudget($budget_id);
+  &GetBudget($budget_id);
 
 get a specific budget
-
-=back
 
 =cut
 
@@ -667,15 +660,11 @@ sub GetBudget {
     return $result;
 }
 
-=head3 GetBudgets
+=head2 GetBudgets
 
-=over 4
-
-&GetBudgets($filter, $order_by);
+  &GetBudgets($filter, $order_by);
 
 gets all budgets
-
-=back
 
 =cut
 
@@ -698,15 +687,11 @@ sub GetChildBudgetsSpent {
     return $total_spent;
 }
 
-=head3 GetChildBudgetsSpent
+=head2 GetChildBudgetsSpent
 
-=over 4
-
-&GetChildBudgetsSpent($budget-id);
+  &GetChildBudgetsSpent($budget-id);
 
 gets the total spent of the level and sublevels of $budget_id
-
-=back
 
 =cut
 
@@ -718,9 +703,9 @@ sub GetBudgets {
 
 # -------------------------------------------------------------------
 
-=head3 GetCurrencies
+=head2 GetCurrencies
 
-@currencies = &GetCurrencies;
+  @currencies = &GetCurrencies;
 
 Returns the list of all known currencies.
 
@@ -756,7 +741,7 @@ sub GetCurrency {
     return $r;
 }
 
-=head3 ModCurrencies
+=head2 ModCurrencies
 
 &ModCurrencies($currency, $newrate);
 
@@ -777,15 +762,14 @@ sub ModCurrencies {
 
 # -------------------------------------------------------------------
 
-=head3 ConvertCurrency
+=head2 ConvertCurrency
 
-$foreignprice = &ConvertCurrency($currency, $localprice);
+  $foreignprice = &ConvertCurrency($currency, $localprice);
 
 Converts the price C<$localprice> to foreign currency C<$currency> by
 dividing by the exchange rate, and returns the result.
 
-If no exchange rate is found,e is one
-to one.
+If no exchange rate is found, e is one to one.
 
 =cut
 
@@ -806,9 +790,9 @@ sub ConvertCurrency {
     return ( $price / $cur );
 }
 
-=head3 _columns
+=head2 _columns
 
-	returns an array containing fieldname followed by PRI as value if PRIMARY Key
+returns an array containing fieldname followed by PRI as value if PRIMARY Key
 
 =cut
 

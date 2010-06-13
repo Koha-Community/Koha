@@ -137,8 +137,6 @@ environment variable to the pathname of a configuration file to use.
 
 =head1 METHODS
 
-=over 2
-
 =cut
 
 #'
@@ -186,8 +184,9 @@ $context = undef;        # Initially, no context is set
 @context_stack = ();        # Initially, no saved contexts
 
 
-=item KOHAVERSION
-    returns the kohaversion stored in kohaversion.pl file
+=head2 KOHAVERSION
+
+returns the kohaversion stored in kohaversion.pl file
 
 =cut
 
@@ -203,9 +202,7 @@ sub KOHAVERSION {
     do $cgidir."/kohaversion.pl" || die "NO $cgidir/kohaversion.pl";
     return kohaversion();
 }
-=item read_config_file
-
-=over 4
+=head2 read_config_file
 
 Reads the specified Koha config file. 
 
@@ -227,8 +224,6 @@ The elements nested within the <server> element:
     my $ccl2rpn = $koha->{'server'}->{'biblioserver'}->{'cql2rpn'};
 
 Returns undef in case of error.
-
-=back
 
 =cut
 
@@ -270,7 +265,7 @@ sub import {
     1;
 }
 
-=item new
+=head2 new
 
   $context = new C4::Context;
   $context = new C4::Context("/path/to/koha-conf.xml");
@@ -332,7 +327,7 @@ sub new {
     return $self;
 }
 
-=item set_context
+=head2 set_context
 
   $context = new C4::Context;
   $context->set_context();
@@ -380,7 +375,7 @@ sub set_context
     $context = $new_context;
 }
 
-=item restore_context
+=head2 restore_context
 
   &restore_context;
 
@@ -406,7 +401,7 @@ sub restore_context
     # that was current when this was called?
 }
 
-=item config
+=head2 config
 
   $value = C4::Context->config("config_variable");
 
@@ -444,7 +439,7 @@ sub ModZebrations {
 	return _common_config($_[1],'serverinfo');
 }
 
-=item preference
+=head2 preference
 
   $sys_preference = C4::Context->preference('some_variable');
 
@@ -493,13 +488,13 @@ sub boolean_preference ($) {
     return defined($it)? C4::Boolean::true_p($it): undef;
 }
 
-=item clear_syspref_cache
+=head2 clear_syspref_cache
 
   C4::Context->clear_syspref_cache();
 
-  cleans the internal cache of sysprefs. Please call this method if
-  you update the systempreferences table. Otherwise, your new changes
-  will not be seen by this process.
+cleans the internal cache of sysprefs. Please call this method if
+you update the systempreferences table. Otherwise, your new changes
+will not be seen by this process.
 
 =cut
 
@@ -507,12 +502,12 @@ sub clear_syspref_cache {
     %sysprefs = ();
 }
 
-=item set_preference
+=head2 set_preference
 
   C4::Context->set_preference( $variable, $value );
 
-  This updates a preference's value both in the systempreferences table and in
-  the sysprefs cache.
+This updates a preference's value both in the systempreferences table and in
+the sysprefs cache.
 
 =cut
 
@@ -556,9 +551,9 @@ sub AUTOLOAD
     return $self->config($AUTOLOAD);
 }
 
-=item Zconn
+=head2 Zconn
 
-$Zconn = C4::Context->Zconn
+  $Zconn = C4::Context->Zconn
 
 Returns a connection to the Zebra database for the current
 context. If no connection has yet been made, this method 
@@ -599,7 +594,7 @@ sub Zconn {
     }
 }
 
-=item _new_Zconn
+=head2 _new_Zconn
 
 $context->{"Zconn"} = &_new_Zconn($server,$async);
 
@@ -711,7 +706,7 @@ sub _new_dbh
     return $dbh;
 }
 
-=item dbh
+=head2 dbh
 
   $dbh = C4::Context->dbh;
 
@@ -742,7 +737,7 @@ sub dbh
     return $context->{"dbh"};
 }
 
-=item new_dbh
+=head2 new_dbh
 
   $dbh = C4::Context->new_dbh;
 
@@ -763,7 +758,7 @@ sub new_dbh
     return &_new_dbh();
 }
 
-=item set_dbh
+=head2 set_dbh
 
   $my_dbh = C4::Connect->new_dbh;
   C4::Connect->set_dbh($my_dbh);
@@ -794,7 +789,7 @@ sub set_dbh
     $context->{"dbh"} = $new_dbh;
 }
 
-=item restore_dbh
+=head2 restore_dbh
 
   C4::Context->restore_dbh;
 
@@ -821,7 +816,7 @@ sub restore_dbh
     # return something, then this function should, too.
 }
 
-=item marcfromkohafield
+=head2 marcfromkohafield
 
   $dbh = C4::Context->marcfromkohafield;
 
@@ -862,7 +857,7 @@ sub _new_marcfromkohafield
     return $marcfromkohafield;
 }
 
-=item stopwords
+=head2 stopwords
 
   $dbh = C4::Context->stopwords;
 
@@ -903,7 +898,7 @@ sub _new_stopwords
     return $stopwordlist;
 }
 
-=item userenv
+=head2 userenv
 
   C4::Context->userenv;
 
@@ -934,9 +929,10 @@ sub userenv {
     }
 }
 
-=item set_userenv
+=head2 set_userenv
 
-  C4::Context->set_userenv($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $userflags, $emailaddress);
+  C4::Context->set_userenv($usernum, $userid, $usercnum, $userfirstname, 
+                  $usersurname, $userbranch, $userflags, $emailaddress);
 
 Establish a hash of user environment variables.
 
@@ -985,7 +981,7 @@ sub get_shelves_userenv () {
 	return ($totshelves, $pubshelves, $barshelves);
 }
 
-=item _new_userenv
+=head2 _new_userenv
 
   C4::Context->_new_userenv($session);  # FIXME: This calling style is wrong for what looks like an _internal function
 
@@ -1006,7 +1002,7 @@ sub _new_userenv
      $context->{"activeuser"}=$sessionID;
 }
 
-=item _unset_userenv
+=head2 _unset_userenv
 
   C4::Context->_unset_userenv;
 
@@ -1023,7 +1019,7 @@ sub _unset_userenv
 }
 
 
-=item get_versions
+=head2 get_versions
 
   C4::Context->get_versions
 
@@ -1055,17 +1051,11 @@ sub get_versions {
 1;
 __END__
 
-=back
-
 =head1 ENVIRONMENT
 
-=over 4
-
-=item C<KOHA_CONF>
+=head2 C<KOHA_CONF>
 
 Specifies the configuration file to read.
-
-=back
 
 =head1 SEE ALSO
 

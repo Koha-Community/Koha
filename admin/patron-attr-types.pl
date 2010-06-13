@@ -19,7 +19,7 @@
 #
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use CGI;
 use C4::Auth;
 use C4::Context;
@@ -30,7 +30,7 @@ use C4::Members::AttributeTypes;
 my $script_name = "/cgi-bin/koha/admin/patron-attr-types.pl";
 
 my $input = new CGI;
-my $op = $input->param('op');
+my $op = $input->param('op') || '';
 
 
 my ($template, $loggedinuser, $cookie)

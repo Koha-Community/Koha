@@ -46,7 +46,7 @@ reset_debian_changelog() {
 build_package() {
     git archive --format=tar --prefix="koha-$1/" HEAD | 
         gzip -9 > "../koha_$1.tar.gz"
-    debuild -us -uc
+    pdebuild
 }
 
 if ! everything_is_commited

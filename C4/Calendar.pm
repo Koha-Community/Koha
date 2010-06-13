@@ -58,15 +58,14 @@ C4::Calendar::Calendar - Koha module dealing with holidays.
 
 =head1 DESCRIPTION
 
-This package is used to deal with holidays. Through this package, you can set all kind of holidays for the library.
+This package is used to deal with holidays. Through this package, you can set 
+all kind of holidays for the library.
 
 =head1 FUNCTIONS
 
-=over 2
+=head2 new
 
-=item new
-
-    $calendar = C4::Calendar->new(branchcode => $branchcode);
+  $calendar = C4::Calendar->new(branchcode => $branchcode);
 
 Each library branch has its own Calendar.  
 C<$branchcode> specifies which Calendar you want.
@@ -140,9 +139,9 @@ sub _init {
     return $self;
 }
 
-=item get_week_days_holidays
+=head2 get_week_days_holidays
 
-    $week_days_holidays = $calendar->get_week_days_holidays();
+   $week_days_holidays = $calendar->get_week_days_holidays();
 
 Returns a hash reference to week days holidays.
 
@@ -154,9 +153,9 @@ sub get_week_days_holidays {
     return $week_days_holidays;
 }
 
-=item get_day_month_holidays
-    
-    $day_month_holidays = $calendar->get_day_month_holidays();
+=head2 get_day_month_holidays
+
+   $day_month_holidays = $calendar->get_day_month_holidays();
 
 Returns a hash reference to day month holidays.
 
@@ -168,8 +167,8 @@ sub get_day_month_holidays {
     return $day_month_holidays;
 }
 
-=item get_exception_holidays
-    
+=head2 get_exception_holidays
+
     $exception_holidays = $calendar->exception_holidays();
 
 Returns a hash reference to exception holidays. This kind of days are those
@@ -184,8 +183,8 @@ sub get_exception_holidays {
     return $exception_holidays;
 }
 
-=item get_single_holidays
-    
+=head2 get_single_holidays
+
     $single_holidays = $calendar->get_single_holidays();
 
 Returns a hash reference to single holidays. This kind of holidays are those which
@@ -199,7 +198,7 @@ sub get_single_holidays {
     return $single_holidays;
 }
 
-=item insert_week_day_holiday
+=head2 insert_week_day_holiday
 
     insert_week_day_holiday(weekday => $weekday,
                             title => $title,
@@ -227,7 +226,7 @@ sub insert_week_day_holiday {
     return $self;
 }
 
-=item insert_day_month_holiday
+=head2 insert_day_month_holiday
 
     insert_day_month_holiday(day => $day,
                              month => $month,
@@ -258,7 +257,7 @@ sub insert_day_month_holiday {
     return $self;
 }
 
-=item insert_single_holiday
+=head2 insert_single_holiday
 
     insert_single_holiday(day => $day,
                           month => $month,
@@ -293,7 +292,7 @@ sub insert_single_holiday {
     return $self;
 }
 
-=item insert_exception_holiday
+=head2 insert_exception_holiday
 
     insert_exception_holiday(day => $day,
                              month => $month,
@@ -328,7 +327,7 @@ sub insert_exception_holiday {
     return $self;
 }
 
-=item ModWeekdayholiday
+=head2 ModWeekdayholiday
 
     ModWeekdayholiday(weekday =>$weekday,
                       title => $title,
@@ -354,7 +353,7 @@ sub ModWeekdayholiday {
     return $self;
 }
 
-=item ModDaymonthholiday
+=head2 ModDaymonthholiday
 
     ModDaymonthholiday(day => $day,
                        month => $month,
@@ -385,7 +384,7 @@ sub ModDaymonthholiday {
     return $self;
 }
 
-=item ModSingleholiday
+=head2 ModSingleholiday
 
     ModSingleholiday(day => $day,
                      month => $month,
@@ -420,7 +419,7 @@ sub ModSingleholiday {
     return $self;
 }
 
-=item ModExceptionholiday
+=head2 ModExceptionholiday
 
     ModExceptionholiday(day => $day,
                         month => $month,
@@ -455,7 +454,7 @@ sub ModExceptionholiday {
     return $self;
 }
 
-=item delete_holiday
+=head2 delete_holiday
 
     delete_holiday(weekday => $weekday
                    day => $day,
@@ -530,10 +529,9 @@ sub delete_holiday {
     return $self;
 }
 
-=item isHoliday
-    
-    $isHoliday = isHoliday($day, $month $year);
+=head2 isHoliday
 
+    $isHoliday = isHoliday($day, $month $year);
 
 C<$day> Is the day to check whether if is a holiday or not.
 
@@ -569,7 +567,7 @@ sub isHoliday {
 
 }
 
-=item addDate
+=head2 addDate
 
     my ($day, $month, $year) = $calendar->addDate($date, $offset)
 
@@ -606,7 +604,7 @@ sub addDate {
     return(C4::Dates->new( sprintf("%04d-%02d-%02d",$year,$month,$day),'iso'));
 }
 
-=item daysBetween
+=head2 daysBetween
 
     my $daysBetween = $calendar->daysBetween($startdate, $enddate)
 
@@ -640,8 +638,6 @@ sub daysBetween ($$$) {
 1;
 
 __END__
-
-=back
 
 =head1 AUTHOR
 

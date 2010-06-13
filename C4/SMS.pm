@@ -90,10 +90,6 @@ sub send_sms {
 
 =head2 driver
 
-=over 4
-
-=back
-
 =cut
 
 sub driver {

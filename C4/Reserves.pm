@@ -50,8 +50,8 @@ C4::Reserves - Koha functions for dealing with reservation.
 
 =head1 DESCRIPTION
 
-  this modules provides somes functions to deal with reservations.
-  
+This modules provides somes functions to deal with reservations.
+
   Reserves are stored in reserves table.
   The following columns contains important values :
   - priority >0      : then the reserve is at 1st stage, and not yet affected to any item.
@@ -77,10 +77,8 @@ C4::Reserves - Koha functions for dealing with reservation.
     If transfer needed, write in branchtransfer                   P =0, F=NULL, I=filled
         The pickup library recieve the book, it checks it in      P =0, F=W,    I=filled
   The patron borrow the book                                      P =0, F=F,    I=filled
-  
-=head1 FUNCTIONS
 
-=over 2
+=head1 FUNCTIONS
 
 =cut
 
@@ -124,7 +122,7 @@ BEGIN {
     );
 }    
 
-=item AddReserve
+=head2 AddReserve
 
     AddReserve($branch,$borrowernumber,$biblionumber,$constraint,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found)
 
@@ -233,9 +231,9 @@ sub AddReserve {
     return;     # FIXME: why not have a useful return value?
 }
 
-=item GetReservesFromBiblionumber
+=head2 GetReservesFromBiblionumber
 
-($count, $title_reserves) = &GetReserves($biblionumber);
+  ($count, $title_reserves) = &GetReserves($biblionumber);
 
 This function gets the list of reservations for one C<$biblionumber>, returning a count
 of the reserves and an arrayref pointing to the reserves for C<$biblionumber>.
@@ -313,11 +311,11 @@ sub GetReservesFromBiblionumber {
     return ( $#results + 1, \@results );
 }
 
-=item GetReservesFromItemnumber
+=head2 GetReservesFromItemnumber
 
  ( $reservedate, $borrowernumber, $branchcode ) = GetReservesFromItemnumber($itemnumber);
 
-   TODO :: Description here
+TODO :: Description here
 
 =cut
 
@@ -338,12 +336,12 @@ sub GetReservesFromItemnumber {
     return ( $reservedate, $borrowernumber, $branchcode );
 }
 
-=item GetReservesFromBorrowernumber
+=head2 GetReservesFromBorrowernumber
 
     $borrowerreserv = GetReservesFromBorrowernumber($borrowernumber,$tatus);
-    
-    TODO :: Descritpion
-    
+
+TODO :: Descritpion
+
 =cut
 
 sub GetReservesFromBorrowernumber {
@@ -372,9 +370,9 @@ sub GetReservesFromBorrowernumber {
     return @$data;
 }
 #-------------------------------------------------------------------------------------
-=item CanBookBeReserved
+=head2 CanBookBeReserved
 
-$error = &CanBookBeReserved($borrowernumber, $biblionumber)
+  $error = &CanBookBeReserved($borrowernumber, $biblionumber)
 
 =cut
 
@@ -453,11 +451,11 @@ sub CanBookBeReserved{
     
 }
 
-=item CanItemBeReserved
+=head2 CanItemBeReserved
 
-$error = &CanItemBeReserved($borrowernumber, $itemnumber)
+  $error = &CanItemBeReserved($borrowernumber, $itemnumber)
 
-this function return 1 if an item can be issued by this borrower.
+This function return 1 if an item can be issued by this borrower.
 
 =cut
 
@@ -544,9 +542,9 @@ sub CanItemBeReserved{
     }
 }
 #--------------------------------------------------------------------------------
-=item GetReserveCount
+=head2 GetReserveCount
 
-$number = &GetReserveCount($borrowernumber);
+  $number = &GetReserveCount($borrowernumber);
 
 this function returns the number of reservation for a borrower given on input arg.
 
@@ -568,9 +566,9 @@ sub GetReserveCount {
     return $row->{counter};
 }
 
-=item GetOtherReserves
+=head2 GetOtherReserves
 
-($messages,$nextreservinfo)=$GetOtherReserves(itemnumber);
+  ($messages,$nextreservinfo)=$GetOtherReserves(itemnumber);
 
 Check queued list of this document and check if this document must be  transfered
 
@@ -618,9 +616,9 @@ sub GetOtherReserves {
     return ( $messages, $nextreservinfo );
 }
 
-=item GetReserveFee
+=head2 GetReserveFee
 
-$fee = GetReserveFee($borrowernumber,$biblionumber,$constraint,$biblionumber);
+  $fee = GetReserveFee($borrowernumber,$biblionumber,$constraint,$biblionumber);
 
 Calculate the fee for a reserve
 
@@ -721,9 +719,9 @@ sub GetReserveFee {
     return $fee;
 }
 
-=item GetReservesToBranch
+=head2 GetReservesToBranch
 
-@transreserv = GetReservesToBranch( $frombranch );
+  @transreserv = GetReservesToBranch( $frombranch );
 
 Get reserve list for a given branch
 
@@ -748,9 +746,9 @@ sub GetReservesToBranch {
     return (@transreserv);
 }
 
-=item GetReservesForBranch
+=head2 GetReservesForBranch
 
-@transreserv = GetReservesForBranch($frombranch);
+  @transreserv = GetReservesForBranch($frombranch);
 
 =cut
 
@@ -793,7 +791,7 @@ sub GetReserveStatus {
     return $found;
 }
 
-=item CheckReserves
+=head2 CheckReserves
 
   ($status, $reserve) = &CheckReserves($itemnumber);
   ($status, $reserve) = &CheckReserves(undef, $barcode);
@@ -886,12 +884,12 @@ sub CheckReserves {
     }
 }
 
-=item CancelExpiredReserves
+=head2 CancelExpiredReserves
 
   CancelExpiredReserves();
-  
-  Cancels all reserves with an expiration date from before today.
-  
+
+Cancels all reserves with an expiration date from before today.
+
 =cut
 
 sub CancelExpiredReserves {
@@ -909,7 +907,7 @@ sub CancelExpiredReserves {
   
 }
 
-=item CancelReserve
+=head2 CancelReserve
 
   &CancelReserve($biblionumber, $itemnumber, $borrowernumber);
 
@@ -1011,13 +1009,9 @@ sub CancelReserve {
     }
 }
 
-=item ModReserve
+=head2 ModReserve
 
-=over 4
-
-ModReserve($rank, $biblio, $borrower, $branch[, $itemnumber])
-
-=back
+  ModReserve($rank, $biblio, $borrower, $branch[, $itemnumber])
 
 Change a hold request's priority or cancel it.
 
@@ -1039,7 +1033,7 @@ C<$rank> is a non-zero integer; if supplied, the itemnumber
 of the hold request is set accordingly; if omitted, the itemnumber
 is cleared.
 
-FIXME: Note that the forgoing can have the effect of causing
+B<FIXME:> Note that the forgoing can have the effect of causing
 item-level hold requests to turn into title-level requests.  This
 will be fixed once reserves has separate columns for requested
 itemnumber and supplying itemnumber.
@@ -1093,7 +1087,7 @@ sub ModReserve {
     }
 }
 
-=item ModReserveFill
+=head2 ModReserveFill
 
   &ModReserveFill($reserve);
 
@@ -1161,9 +1155,9 @@ sub ModReserveFill {
     }
 }
 
-=item ModReserveStatus
+=head2 ModReserveStatus
 
-&ModReserveStatus($itemnumber, $newstatus);
+  &ModReserveStatus($itemnumber, $newstatus);
 
 Update the reserve status for the active (priority=0) reserve.
 
@@ -1192,9 +1186,9 @@ sub ModReserveStatus {
     }
 }
 
-=item ModReserveAffect
+=head2 ModReserveAffect
 
-&ModReserveAffect($itemnumber,$borrowernumber,$diffBranchSend);
+  &ModReserveAffect($itemnumber,$borrowernumber,$diffBranchSend);
 
 This function affect an item and a status for a given reserve
 The itemnumber parameter is used to find the biblionumber.
@@ -1204,6 +1198,7 @@ to the correct reserve.
 if $transferToDo is not set, then the status is set to "Waiting" as well.
 otherwise, a transfer is on the way, and the end of the transfer will 
 take care of the waiting status
+
 =cut
 
 sub ModReserveAffect {
@@ -1255,11 +1250,11 @@ sub ModReserveAffect {
     return;
 }
 
-=item ModReserveCancelAll
+=head2 ModReserveCancelAll
 
-($messages,$nextreservinfo) = &ModReserveCancelAll($itemnumber,$borrowernumber);
+  ($messages,$nextreservinfo) = &ModReserveCancelAll($itemnumber,$borrowernumber);
 
-    function to cancel reserv,check other reserves, and transfer document if it's necessary
+function to cancel reserv,check other reserves, and transfer document if it's necessary
 
 =cut
 
@@ -1277,9 +1272,9 @@ sub ModReserveCancelAll {
     return ( $messages, $nextreservinfo );
 }
 
-=item ModReserveMinusPriority
+=head2 ModReserveMinusPriority
 
-&ModReserveMinusPriority($itemnumber,$borrowernumber,$biblionumber)
+  &ModReserveMinusPriority($itemnumber,$borrowernumber,$biblionumber)
 
 Reduce the values of queuded list     
 
@@ -1302,12 +1297,13 @@ sub ModReserveMinusPriority {
     _FixPriority($biblionumber, $borrowernumber, '0');
 }
 
-=item GetReserveInfo
+=head2 GetReserveInfo
 
-&GetReserveInfo($borrowernumber,$biblionumber);
+  &GetReserveInfo($borrowernumber,$biblionumber);
 
- Get item and borrower details for a current hold.
- Current implementation this query should have a single result.
+Get item and borrower details for a current hold.
+Current implementation this query should have a single result.
+
 =cut
 
 sub GetReserveInfo {
@@ -1356,13 +1352,9 @@ sub GetReserveInfo {
 
 }
 
-=item IsAvailableForItemLevelRequest
+=head2 IsAvailableForItemLevelRequest
 
-=over 4
-
-my $is_available = IsAvailableForItemLevelRequest($itemnumber);
-
-=back
+  my $is_available = IsAvailableForItemLevelRequest($itemnumber);
 
 Checks whether a given item record is available for an
 item-level hold request.  An item is available if
@@ -1432,13 +1424,15 @@ sub IsAvailableForItemLevelRequest {
     }
 }
 
-=item AlterPriority
-AlterPriority( $where, $borrowernumber, $biblionumber, $reservedate );
+=head2 AlterPriority
+
+  AlterPriority( $where, $borrowernumber, $biblionumber, $reservedate );
 
 This function changes a reserve's priority up, down, to the top, or to the bottom.
 Input: $where is 'up', 'down', 'top' or 'bottom'. Biblionumber, Date reserve was placed
 
 =cut
+
 sub AlterPriority {
     my ( $where, $borrowernumber, $biblionumber ) = @_;
 
@@ -1467,10 +1461,12 @@ sub AlterPriority {
     }
 }
 
-=item ToggleLowestPriority
-ToggleLowestPriority( $borrowernumber, $biblionumber );
+=head2 ToggleLowestPriority
+
+  ToggleLowestPriority( $borrowernumber, $biblionumber );
 
 This function sets the lowestPriority field to true if is false, and false if it is true.
+
 =cut
 
 sub ToggleLowestPriority {
@@ -1492,16 +1488,16 @@ sub ToggleLowestPriority {
     _FixPriority( $biblionumber, $borrowernumber, '999999' );
 }
 
-=item _FixPriority
+=head2 _FixPriority
 
-&_FixPriority($biblio,$borrowernumber,$rank,$ignoreSetLowestRank);
+  &_FixPriority($biblio,$borrowernumber,$rank,$ignoreSetLowestRank);
 
- Only used internally (so don't export it)
- Changed how this functions works #
- Now just gets an array of reserves in the rank order and updates them with
- the array index (+1 as array starts from 0)
- and if $rank is supplied will splice item from the array and splice it back in again
- in new priority rank
+Only used internally (so don't export it)
+Changed how this functions works #
+Now just gets an array of reserves in the rank order and updates them with
+the array index (+1 as array starts from 0)
+and if $rank is supplied will splice item from the array and splice it back in again
+in new priority rank
 
 =cut 
 
@@ -1593,7 +1589,7 @@ sub _FixPriority {
     }
 }
 
-=item _Findgroupreserve
+=head2 _Findgroupreserve
 
   @results = &_Findgroupreserve($biblioitemnumber, $biblionumber, $itemnumber);
 
@@ -1706,13 +1702,9 @@ sub _Findgroupreserve {
     return @results;
 }
 
-=item _koha_notify_reserve
+=head2 _koha_notify_reserve
 
-=over 4
-
-_koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber );
-
-=back
+  _koha_notify_reserve( $itemnumber, $borrowernumber, $biblionumber );
 
 Sends a notification to the patron that their hold has been filled (through
 ModReserveAffect, _not_ ModReserveFill)
@@ -1796,25 +1788,21 @@ sub _koha_notify_reserve {
     }
 }
 
-=item _ShiftPriorityByDateAndPriority
+=head2 _ShiftPriorityByDateAndPriority
 
-=over 4
-
-$new_priority = _ShiftPriorityByDateAndPriority( $biblionumber, $reservedate, $priority );
-
-=back
+  $new_priority = _ShiftPriorityByDateAndPriority( $biblionumber, $reservedate, $priority );
 
 This increments the priority of all reserves after the one
- with either the lowest date after C<$reservedate>
- or the lowest priority after C<$priority>.
+with either the lowest date after C<$reservedate>
+or the lowest priority after C<$priority>.
 
 It effectively makes room for a new reserve to be inserted with a certain
- priority, which is returned.
+priority, which is returned.
 
 This is most useful when the reservedate can be set by the user.  It allows
- the new reserve to be placed before other reserves that have a later
- reservedate.  Since priority also is set by the form in reserves/request.pl
- the sub accounts for that too.
+the new reserve to be placed before other reserves that have a later
+reservedate.  Since priority also is set by the form in reserves/request.pl
+the sub accounts for that too.
 
 =cut
 
@@ -1848,8 +1836,6 @@ sub _ShiftPriorityByDateAndPriority {
 
     return $new_priority;  # so the caller knows what priority they wind up receiving
 }
-
-=back
 
 =head1 AUTHOR
 

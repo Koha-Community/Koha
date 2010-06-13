@@ -118,11 +118,7 @@ of C<C4::Items>
 
 =head2 GetItem
 
-=over 4
-
-$item = GetItem($itemnumber,$barcode,$serial);
-
-=back
+  $item = GetItem($itemnumber,$barcode,$serial);
 
 Return item information, for a given itemnumber or barcode.
 The return value is a hashref mapping item column
@@ -165,11 +161,7 @@ sub GetItem {
 
 =head2 CartToShelf
 
-=over 4
-
-CartToShelf($itemnumber);
-
-=back
+  CartToShelf($itemnumber);
 
 Set the current shelving location of the item record
 to its stored permanent shelving location.  This is
@@ -193,12 +185,8 @@ sub CartToShelf {
 
 =head2 AddItemFromMarc
 
-=over 4
-
-my ($biblionumber, $biblioitemnumber, $itemnumber) 
-    = AddItemFromMarc($source_item_marc, $biblionumber);
-
-=back
+  my ($biblionumber, $biblioitemnumber, $itemnumber) 
+      = AddItemFromMarc($source_item_marc, $biblionumber);
 
 Given a MARC::Record object containing an embedded item
 record and a biblionumber, create a new item record.
@@ -222,12 +210,8 @@ sub AddItemFromMarc {
 
 =head2 AddItem
 
-=over 4
-
-my ($biblionumber, $biblioitemnumber, $itemnumber) 
-    = AddItem($item, $biblionumber[, $dbh, $frameworkcode, $unlinked_item_subfields]);
-
-=back
+  my ($biblionumber, $biblioitemnumber, $itemnumber) 
+      = AddItem($item, $biblionumber[, $dbh, $frameworkcode, $unlinked_item_subfields]);
 
 Given a hash containing item column names as keys,
 create a new Koha item record.
@@ -286,11 +270,8 @@ sub AddItem {
 
 =head2 AddItemBatchFromMarc
 
-=over 4
-
-($itemnumber_ref, $error_ref) = AddItemBatchFromMarc($record, $biblionumber, $biblioitemnumber, $frameworkcode);
-
-=back
+  ($itemnumber_ref, $error_ref) = AddItemBatchFromMarc($record, 
+             $biblionumber, $biblioitemnumber, $frameworkcode);
 
 Efficiently create item records from a MARC biblio record with
 embedded item fields.  This routine is suitable for batch jobs.
@@ -308,7 +289,7 @@ This function returns an arrayref of new itemsnumbers and an arrayref of item
 errors encountered during the processing.  Each entry in the errors
 list is a hashref containing the following keys:
 
-=over 2
+=over
 
 =item item_sequence
 
@@ -393,11 +374,7 @@ sub AddItemBatchFromMarc {
 
 =head2 ModItemFromMarc
 
-=over 4
-
-ModItemFromMarc($item_marc, $biblionumber, $itemnumber);
-
-=back
+  ModItemFromMarc($item_marc, $biblionumber, $itemnumber);
 
 This function updates an item record based on a supplied
 C<MARC::Record> object containing an embedded item field.
@@ -470,11 +447,8 @@ sub ModItemFromMarc {
 
 =head2 ModItem
 
-=over 4
-
-ModItem({ column => $newvalue }, $biblionumber, $itemnumber[, $original_item_marc]);
-
-=back
+  ModItem({ column => $newvalue }, $biblionumber, 
+                  $itemnumber[, $original_item_marc]);
 
 Change one or more columns in an item record and update
 the MARC representation of the item.
@@ -545,11 +519,7 @@ sub ModItem {
 
 =head2 ModItemTransfer
 
-=over 4
-
-ModItemTransfer($itenumber, $frombranch, $tobranch);
-
-=back
+  ModItemTransfer($itenumber, $frombranch, $tobranch);
 
 Marks an item as being transferred from one branch
 to another.
@@ -574,11 +544,7 @@ sub ModItemTransfer {
 
 =head2 ModDateLastSeen
 
-=over 4
-
-ModDateLastSeen($itemnum);
-
-=back
+  ModDateLastSeen($itemnum);
 
 Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking.
 C<$itemnum> is the item number
@@ -594,11 +560,7 @@ sub ModDateLastSeen {
 
 =head2 DelItem
 
-=over 4
-
-DelItem($dbh, $biblionumber, $itemnumber);
-
-=back
+  DelItem($dbh, $biblionumber, $itemnumber);
 
 Exported function (core API) for deleting an item record in Koha.
 
@@ -635,8 +597,6 @@ sub DelItem {
 
 =head2 CheckItemPreSave
 
-=over 4
-
     my $item_ref = TransformMarcToKoha($marc, 'items');
     # do stuff
     my %errors = CheckItemPreSave($item_ref);
@@ -649,8 +609,6 @@ sub DelItem {
     } else {
         print "item is OK";
     }
-
-=back
 
 Given a hashref containing item fields, determine if it can be
 inserted or updated in the database.  Specifically, checks for
@@ -734,11 +692,7 @@ has copy-and-paste work.
 
 =head2 GetItemStatus
 
-=over 4
-
-$itemstatushash = GetItemStatus($fwkcode);
-
-=back
+  $itemstatushash = GetItemStatus($fwkcode);
 
 Returns a list of valid values for the
 C<items.notforloan> field.
@@ -753,32 +707,24 @@ Create a status selector with the following code
 
 =head3 in PERL SCRIPT
 
-=over 4
-
-my $itemstatushash = getitemstatus;
-my @itemstatusloop;
-foreach my $thisstatus (keys %$itemstatushash) {
-    my %row =(value => $thisstatus,
-                statusname => $itemstatushash->{$thisstatus}->{'statusname'},
-            );
-    push @itemstatusloop, \%row;
-}
-$template->param(statusloop=>\@itemstatusloop);
-
-=back
+ my $itemstatushash = getitemstatus;
+ my @itemstatusloop;
+ foreach my $thisstatus (keys %$itemstatushash) {
+     my %row =(value => $thisstatus,
+                 statusname => $itemstatushash->{$thisstatus}->{'statusname'},
+             );
+     push @itemstatusloop, \%row;
+ }
+ $template->param(statusloop=>\@itemstatusloop);
 
 =head3 in TEMPLATE
 
-=over 4
-
-<select name="statusloop">
-    <option value="">Default</option>
-<!-- TMPL_LOOP name="statusloop" -->
-    <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="statusname" --></option>
-<!-- /TMPL_LOOP -->
-</select>
-
-=back
+ <select name="statusloop">
+     <option value="">Default</option>
+ <!-- TMPL_LOOP name="statusloop" -->
+     <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="statusname" --></option>
+ <!-- /TMPL_LOOP -->
+ </select>
 
 =cut
 
@@ -834,11 +780,7 @@ sub GetItemStatus {
 
 =head2 GetItemLocation
 
-=over 4
-
-$itemlochash = GetItemLocation($fwk);
-
-=back
+  $itemlochash = GetItemLocation($fwk);
 
 Returns a list of valid values for the
 C<items.location> field.
@@ -851,34 +793,26 @@ Create a location selector with the following code
 
 =head3 in PERL SCRIPT
 
-=over 4
-
-my $itemlochash = getitemlocation;
-my @itemlocloop;
-foreach my $thisloc (keys %$itemlochash) {
-    my $selected = 1 if $thisbranch eq $branch;
-    my %row =(locval => $thisloc,
-                selected => $selected,
-                locname => $itemlochash->{$thisloc},
-            );
-    push @itemlocloop, \%row;
-}
-$template->param(itemlocationloop => \@itemlocloop);
-
-=back
+  my $itemlochash = getitemlocation;
+  my @itemlocloop;
+  foreach my $thisloc (keys %$itemlochash) {
+      my $selected = 1 if $thisbranch eq $branch;
+      my %row =(locval => $thisloc,
+                  selected => $selected,
+                  locname => $itemlochash->{$thisloc},
+               );
+      push @itemlocloop, \%row;
+  }
+  $template->param(itemlocationloop => \@itemlocloop);
 
 =head3 in TEMPLATE
 
-=over 4
-
-<select name="location">
-    <option value="">Default</option>
-<!-- TMPL_LOOP name="itemlocationloop" -->
-    <option value="<!-- TMPL_VAR name="locval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="locname" --></option>
-<!-- /TMPL_LOOP -->
-</select>
-
-=back
+  <select name="location">
+      <option value="">Default</option>
+  <!-- TMPL_LOOP name="itemlocationloop" -->
+      <option value="<!-- TMPL_VAR name="locval" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="locname" --></option>
+  <!-- /TMPL_LOOP -->
+  </select>
 
 =cut
 
@@ -932,11 +866,7 @@ sub GetItemLocation {
 
 =head2 GetLostItems
 
-=over 4
-
-$items = GetLostItems( $where, $orderby );
-
-=back
+  $items = GetLostItems( $where, $orderby );
 
 This function gets a list of lost items.
 
@@ -960,9 +890,9 @@ from the "items" table as keys.
 
 =item usage in the perl script:
 
-my $where = { barcode => '0001548' };
-my $items = GetLostItems( $where, "homebranch" );
-$template->param( itemsloop => $items );
+  my $where = { barcode => '0001548' };
+  my $items = GetLostItems( $where, "homebranch" );
+  $template->param( itemsloop => $items );
 
 =back
 
@@ -1007,11 +937,9 @@ sub GetLostItems {
 
 =head2 GetItemsForInventory
 
-=over 4
-
-$itemlist = GetItemsForInventory($minlocation, $maxlocation, $location, $itemtype $datelastseen, $branch, $offset, $size, $statushash);
-
-=back
+  $itemlist = GetItemsForInventory($minlocation, $maxlocation, 
+                 $location, $itemtype $datelastseen, $branch, 
+                 $offset, $size, $statushash);
 
 Retrieve a list of title/authors/barcode/callnumber, for biblio inventory.
 
@@ -1105,10 +1033,7 @@ END_SQL
 
 =head2 GetItemsCount
 
-=over 4
-$count = &GetItemsCount( $biblionumber);
-
-=back
+  $count = &GetItemsCount( $biblionumber);
 
 This function return count of item with $biblionumber
 
@@ -1128,11 +1053,7 @@ sub GetItemsCount {
 
 =head2 GetItemInfosOf
 
-=over 4
-
-GetItemInfosOf(@itemnumbers);
-
-=back
+  GetItemInfosOf(@itemnumbers);
 
 =cut
 
@@ -1149,11 +1070,7 @@ sub GetItemInfosOf {
 
 =head2 GetItemsByBiblioitemnumber
 
-=over 4
-
-GetItemsByBiblioitemnumber($biblioitemnumber);
-
-=back
+  GetItemsByBiblioitemnumber($biblioitemnumber);
 
 Returns an arrayref of hashrefs suitable for use in a TMPL_LOOP
 Called by C<C4::XISBN>
@@ -1205,11 +1122,7 @@ sub GetItemsByBiblioitemnumber {
 
 =head2 GetItemsInfo
 
-=over 4
-
-@results = GetItemsInfo($biblionumber, $type);
-
-=back
+  @results = GetItemsInfo($biblionumber, $type);
 
 Returns information about books with the given biblionumber.
 
@@ -1407,11 +1320,8 @@ sub GetItemsInfo {
 
 =head2 GetLastAcquisitions
 
-=over 4
-
-my $lastacq = GetLastAcquisitions({'branches' => ('branch1','branch2'), 'itemtypes' => ('BK','BD')}, 10);
-
-=back
+  my $lastacq = GetLastAcquisitions({'branches' => ('branch1','branch2'), 
+                                    'itemtypes' => ('BK','BD')}, 10);
 
 =cut
 
@@ -1461,11 +1371,7 @@ sub  GetLastAcquisitions {
 
 =head2 get_itemnumbers_of
 
-=over 4
-
-my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
-
-=back
+  my @itemnumbers_of = get_itemnumbers_of(@biblionumbers);
 
 Given a list of biblionumbers, return the list of corresponding itemnumbers
 for each biblionumber.
@@ -1500,11 +1406,7 @@ sub get_itemnumbers_of {
 
 =head2 GetItemnumberFromBarcode
 
-=over 4
-
-$result = GetItemnumberFromBarcode($barcode);
-
-=back
+  $result = GetItemnumberFromBarcode($barcode);
 
 =cut
 
@@ -1521,11 +1423,7 @@ sub GetItemnumberFromBarcode {
 
 =head2 GetBarcodeFromItemnumber
 
-=over 4
-
-$result = GetBarcodeFromItemnumber($itemnumber);
-
-=back
+  $result = GetBarcodeFromItemnumber($itemnumber);
 
 =cut
 
@@ -1542,12 +1440,11 @@ sub GetBarcodeFromItemnumber {
 
 =head3 get_item_authorised_values
 
-  find the types and values for all authorised values assigned to this item.
+find the types and values for all authorised values assigned to this item.
 
-  parameters:
-    itemnumber
+parameters: itemnumber
 
-  returns: a hashref malling the authorised value to the value set for this itemnumber
+returns: a hashref malling the authorised value to the value set for this itemnumber
 
     $authorised_values = {
              'CCODE'      => undef,
@@ -1563,7 +1460,7 @@ sub GetBarcodeFromItemnumber {
              'itemtypes'  => 'SER',
            };
 
-   Notes: see C4::Biblio::get_biblio_authorised_values for a similar method at the biblio level.
+Notes: see C4::Biblio::get_biblio_authorised_values for a similar method at the biblio level.
 
 =cut
 
@@ -1593,25 +1490,24 @@ sub get_item_authorised_values {
 
 =head3 get_authorised_value_images
 
-  find a list of icons that are appropriate for display based on the
-  authorised values for a biblio.
+find a list of icons that are appropriate for display based on the
+authorised values for a biblio.
 
-  parameters: listref of authorised values, such as comes from
-    get_item_authorised_values or
-    from C4::Biblio::get_biblio_authorised_values
+parameters: listref of authorised values, such as comes from
+get_item_authorised_values or
+from C4::Biblio::get_biblio_authorised_values
 
-  returns: listref of hashrefs for each image. Each hashref looks like
-    this:
+returns: listref of hashrefs for each image. Each hashref looks like this:
 
       { imageurl => '/intranet-tmpl/prog/img/itemtypeimg/npl/WEB.gif',
         label    => '',
         category => '',
         value    => '', }
 
-  Notes: Currently, I put on the full path to the images on the staff
-  side. This should either be configurable or not done at all. Since I
-  have to deal with 'intranet' or 'opac' in
-  get_biblio_authorised_values, perhaps I should be passing it in.
+Notes: Currently, I put on the full path to the images on the staff
+side. This should either be configurable or not done at all. Since I
+have to deal with 'intranet' or 'opac' in
+get_biblio_authorised_values, perhaps I should be passing it in.
 
 =cut
 
@@ -1652,11 +1548,7 @@ without careful thought.
 
 =head2 GetMarcItem
 
-=over 4
-
-my $item_marc = GetMarcItem($biblionumber, $itemnumber);
-
-=back
+  my $item_marc = GetMarcItem($biblionumber, $itemnumber);
 
 Returns MARC::Record of the item passed in parameter.
 This function is meant for use only in C<cataloguing/additem.pl>,
@@ -1743,11 +1635,7 @@ my %derived_columns = (
 
 =head2 _set_derived_columns_for_add 
 
-=over 4
-
-_set_derived_column_for_add($item);
-
-=back
+  _set_derived_column_for_add($item);
 
 Given an item hash representing a new item to be added,
 calculate any derived columns.  Currently the only
@@ -1771,11 +1659,7 @@ sub _set_derived_columns_for_add {
 
 =head2 _set_derived_columns_for_mod 
 
-=over 4
-
-_set_derived_column_for_mod($item);
-
-=back
+  _set_derived_column_for_mod($item);
 
 Given an item hash representing a new item to be modified.
 calculate any derived columns.  Currently the only
@@ -1822,11 +1706,7 @@ sub _set_derived_columns_for_mod {
 
 =head2 _do_column_fixes_for_mod
 
-=over 4
-
-_do_column_fixes_for_mod($item);
-
-=back
+  _do_column_fixes_for_mod($item);
 
 Given an item hashref containing one or more
 columns to modify, fix up certain values.
@@ -1863,11 +1743,7 @@ sub _do_column_fixes_for_mod {
 
 =head2 _get_single_item_column
 
-=over 4
-
-_get_single_item_column($column, $itemnumber);
-
-=back
+  _get_single_item_column($column, $itemnumber);
 
 Retrieves the value of a single column from an C<items>
 row specified by C<$itemnumber>.
@@ -1887,11 +1763,7 @@ sub _get_single_item_column {
 
 =head2 _calc_items_cn_sort
 
-=over 4
-
-_calc_items_cn_sort($item, $source_values);
-
-=back
+  _calc_items_cn_sort($item, $source_values);
 
 Helper routine to calculate C<items.cn_sort>.
 
@@ -1906,11 +1778,7 @@ sub _calc_items_cn_sort {
 
 =head2 _set_defaults_for_add 
 
-=over 4
-
-_set_defaults_for_add($item_hash);
-
-=back
+  _set_defaults_for_add($item_hash);
 
 Given an item hash representing an item to be added, set
 correct default values for columns whose default value
@@ -1951,11 +1819,7 @@ sub _set_defaults_for_add {
 
 =head2 _koha_new_item
 
-=over 4
-
-my ($itemnumber,$error) = _koha_new_item( $item, $barcode );
-
-=back
+  my ($itemnumber,$error) = _koha_new_item( $item, $barcode );
 
 Perform the actual insert into the C<items> table.
 
@@ -2048,16 +1912,14 @@ sub _koha_new_item {
 
 =head2 MoveItemFromBiblio
 
-=over 4
-
-MoveItemFromBiblio($itenumber, $frombiblio, $tobiblio);
-
-=back
+  MoveItemFromBiblio($itenumber, $frombiblio, $tobiblio);
 
 Moves an item from a biblio to another
 
 Returns undef if the move failed or the biblionumber of the destination record otherwise
+
 =cut
+
 sub MoveItemFromBiblio {
     my ($itemnumber, $frombiblio, $tobiblio) = @_;
     my $dbh = C4::Context->dbh;
@@ -2124,11 +1986,7 @@ sub MoveItemFromBiblio {
 
 =head2 DelItemCheck
 
-=over 4
-
-DelItemCheck($dbh, $biblionumber, $itemnumber);
-
-=back
+   DelItemCheck($dbh, $biblionumber, $itemnumber);
 
 Exported function (core API) for deleting an item record in Koha if there no current issue.
 
@@ -2163,11 +2021,7 @@ sub DelItemCheck {
 
 =head2 _koha_modify_item
 
-=over 4
-
-my ($itemnumber,$error) =_koha_modify_item( $item );
-
-=back
+  my ($itemnumber,$error) =_koha_modify_item( $item );
 
 Perform the actual update of the C<items> row.  Note that this
 routine accepts a hashref specifying the columns to update.
@@ -2199,11 +2053,7 @@ sub _koha_modify_item {
 
 =head2 _koha_delete_item
 
-=over 4
-
-_koha_delete_item( $dbh, $itemnum );
-
-=back
+  _koha_delete_item( $dbh, $itemnum );
 
 Internal function to delete an item record from the koha tables
 
@@ -2234,11 +2084,7 @@ sub _koha_delete_item {
 
 =head2 _marc_from_item_hash
 
-=over 4
-
-my $item_marc = _marc_from_item_hash($item, $frameworkcode[, $unlinked_item_subfields]);
-
-=back
+  my $item_marc = _marc_from_item_hash($item, $frameworkcode[, $unlinked_item_subfields]);
 
 Given an item hash representing a complete item record,
 create a C<MARC::Record> object containing an embedded
@@ -2285,11 +2131,7 @@ sub _marc_from_item_hash {
 
 =head2 _add_item_field_to_biblio
 
-=over 4
-
-_add_item_field_to_biblio($item_marc, $biblionumber, $frameworkcode);
-
-=back
+  _add_item_field_to_biblio($item_marc, $biblionumber, $frameworkcode);
 
 Adds the fields from a MARC record containing the
 representation of a Koha item record to the MARC
@@ -2312,11 +2154,7 @@ sub _add_item_field_to_biblio {
 
 =head2 _replace_item_field_in_biblio
 
-=over
-
-&_replace_item_field_in_biblio($item_marc, $biblionumber, $itemnumber, $frameworkcode)
-
-=back
+  &_replace_item_field_in_biblio($item_marc, $biblionumber, $itemnumber, $frameworkcode)
 
 Given a MARC::Record C<$item_marc> containing one tag with the MARC 
 representation of the item, examine the biblio MARC
@@ -2381,11 +2219,7 @@ sub _repack_item_errors {
 
 =head2 _get_unlinked_item_subfields
 
-=over 4
-
-my $unlinked_item_subfields = _get_unlinked_item_subfields($original_item_marc, $frameworkcode);
-
-=back
+  my $unlinked_item_subfields = _get_unlinked_item_subfields($original_item_marc, $frameworkcode);
 
 =cut
 
@@ -2415,11 +2249,7 @@ sub _get_unlinked_item_subfields {
 
 =head2 _get_unlinked_subfields_xml
 
-=over 4
-
-my $unlinked_subfields_xml = _get_unlinked_subfields_xml($unlinked_item_subfields);
-
-=back
+  my $unlinked_subfields_xml = _get_unlinked_subfields_xml($unlinked_item_subfields);
 
 =cut
 
@@ -2441,11 +2271,7 @@ sub _get_unlinked_subfields_xml {
 
 =head2 _parse_unlinked_item_subfields_from_xml
 
-=over 4
-
-my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($whole_item->{'more_subfields_xml'}):
-
-=back
+  my $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($whole_item->{'more_subfields_xml'}):
 
 =cut
 

@@ -38,26 +38,23 @@ for later processing.
 
 =head1 SYNOPSIS
 
-=over 4
-
-# create and store data
-my $uploaded_file = C4::UploadedFile->new($sessionID);
-my $fileID = $uploaded_file->id();
-$uploaded_file->name('c:\temp\file.mrc');
-$uploaded_file->max_size(1024);
-while ($have_more_data) {
+ # create and store data
+ my $uploaded_file = C4::UploadedFile->new($sessionID);
+ my $fileID = $uploaded_file->id();
+ $uploaded_file->name('c:\temp\file.mrc');
+ $uploaded_file->max_size(1024);
+ while ($have_more_data) {
     $uploaded_file->stash($data, $bytes_read);
-}
-$uploaded_file->done();
+ }
+ $uploaded_file->done();
 
-# check status of current file upload
-my $progress = C4::UploadedFile->upload_progress($sessionID);
+ # check status of current file upload
+ my $progress = C4::UploadedFile->upload_progress($sessionID);
 
-# get file handle for reading uploaded file
-my $uploaded_file = C4::UploadedFile->fetch($fileID);
-my $fh = $uploaded_file->fh();
+ # get file handle for reading uploaded file
+ my $uploaded_file = C4::UploadedFile->fetch($fileID);
+ my $fh = $uploaded_file->fh();
 
-=back
 
 Stores files uploaded by the user from their web browser.  The
 uploaded files are temporary and at present are not guaranteed
@@ -76,11 +73,7 @@ TODO: implement secure persistant storage of uploaded files.
 
 =head2 new
 
-=over 4
-
-my $uploaded_file = C4::UploadedFile->new($sessionID);
-
-=back
+  my $uploaded_file = C4::UploadedFile->new($sessionID);
 
 Creates a new object to represent the uploaded file.  Requires
 the current session ID.
@@ -138,11 +131,7 @@ sub _serialize {
 
 =head2 id
 
-=over 4
-
-my $fileID = $uploaded_file->id();
-
-=back
+  my $fileID = $uploaded_file->id();
 
 =cut
 
@@ -153,12 +142,8 @@ sub id {
 
 =head2 name
 
-=over 4
-
-my $name = $uploaded_file->name();
-$uploaded_file->name($name);
-
-=back
+  my $name = $uploaded_file->name();
+  $uploaded_file->name($name);
 
 Accessor method for the name by which the file is to be known.
 
@@ -176,12 +161,8 @@ sub name {
 
 =head2 max_size
 
-=over 4
-
-my $max_size = $uploaded_file->max_size();
-$uploaded_file->max_size($max_size);
-
-=back
+  my $max_size = $uploaded_file->max_size();
+  $uploaded_file->max_size($max_size);
 
 Accessor method for the maximum size of the uploaded file.
 
@@ -194,11 +175,7 @@ sub max_size {
 
 =head2 stash
 
-=over 4
-
-$uploaded_file->stash($dataref, $bytes_read);
-
-=back
+  $uploaded_file->stash($dataref, $bytes_read);
 
 Write C<$dataref> to the temporary file.  C<$bytes_read> represents
 the number of bytes (out of C<$max_size>) transmitted so far.
@@ -222,11 +199,7 @@ sub stash {
 
 =head2 done
 
-=over 4
-
-$uploaded_file->done();
-
-=back
+  $uploaded_file->done();
 
 Indicates that all of the bytes have been uploaded.
 
@@ -241,11 +214,7 @@ sub done {
 
 =head2 upload_progress
 
-=over 4
-
-my $upload_progress = C4::UploadFile->upload_progress($sessionID);
-
-=back
+  my $upload_progress = C4::UploadFile->upload_progress($sessionID);
 
 Returns (as an integer from 0 to 100) the percentage
 progress of the current file upload.
@@ -276,11 +245,7 @@ sub upload_progress {
 
 =head2 fetch
 
-=over 4
-
-    my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
-
-=back
+  my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
 
 Retrieves an uploaded file object from the current session.
 
@@ -303,11 +268,7 @@ sub fetch {
 
 =head2 fh
 
-=over
-
-my $fh = $uploaded_file->fh();
-
-=back
+  my $fh = $uploaded_file->fh();
 
 Returns an IO::File handle to read the uploaded file.
 

@@ -156,7 +156,7 @@ LEFT JOIN biblioitems USING (biblioitemnumber)
 
 =head2 checkoverdues
 
-($count, $overdueitems) = checkoverdues($borrowernumber);
+    ($count, $overdueitems) = checkoverdues($borrowernumber);
 
 Returns a count and a list of overdueitems for a given borrowernumber
 
@@ -180,8 +180,9 @@ sub checkoverdues {
 
 =head2 CalcFine
 
-  ($amount, $chargename, $daycount, $daycounttotal) =
-    &CalcFine($item, $categorycode, $branch, $days_overdue, $description, $start_date, $end_date );
+    ($amount, $chargename, $daycount, $daycounttotal) = &CalcFine($item, 
+                                  $categorycode, $branch, $days_overdue, 
+                                  $description, $start_date, $end_date );
 
 Calculates the fine for a book.
 
@@ -277,7 +278,7 @@ sub CalcFine {
 
 =head2 GetSpecialHolidays
 
-&GetSpecialHolidays($date_dues,$itemnumber);
+    &GetSpecialHolidays($date_dues,$itemnumber);
 
 return number of special days  between date of the day and date due
 
@@ -335,7 +336,7 @@ AND branchcode=?
 
 =head2 GetRepeatableHolidays
 
-&GetRepeatableHolidays($date_dues, $itemnumber, $difference,);
+    &GetRepeatableHolidays($date_dues, $itemnumber, $difference,);
 
 return number of day closed between date of the day and date due
 
@@ -373,7 +374,7 @@ sub GetRepeatableHolidays {
 
 =head2 GetWayFromItemnumber
 
-&Getwdayfromitemnumber($itemnumber);
+    &Getwdayfromitemnumber($itemnumber);
 
 return the different week day from repeatable_holidays table
 
@@ -401,7 +402,7 @@ sub GetWdayFromItemnumber {
 
 =head2 GetIssuesIteminfo
 
-&GetIssuesIteminfo($itemnumber);
+    &GetIssuesIteminfo($itemnumber);
 
 return all data from issues about item
 
@@ -425,7 +426,7 @@ sub GetIssuesIteminfo {
 
 =head2 UpdateFine
 
-  &UpdateFine($itemnumber, $borrowernumber, $amount, $type, $description);
+    &UpdateFine($itemnumber, $borrowernumber, $amount, $type, $description);
 
 (Note: the following is mostly conjecture and guesswork.)
 
@@ -552,7 +553,7 @@ sub UpdateFine {
 
 =head2 BorType
 
-  $borrower = &BorType($borrowernumber);
+    $borrower = &BorType($borrowernumber);
 
 Looks up a patron by borrower number.
 
@@ -578,7 +579,7 @@ sub BorType {
 
 =head2 ReplacementCost
 
-  $cost = &ReplacementCost($itemnumber);
+    $cost = &ReplacementCost($itemnumber);
 
 Returns the replacement cost of the item with the given item number.
 
@@ -599,7 +600,7 @@ sub ReplacementCost {
 
 =head2 GetFine
 
-$data->{'sum(amountoutstanding)'} = &GetFine($itemnum,$borrowernumber);
+    $data->{'sum(amountoutstanding)'} = &GetFine($itemnum,$borrowernumber);
 
 return the total of fine
 
@@ -628,7 +629,7 @@ sub GetFine {
 FIXME - This sub should be deprecated and removed.
 It ignores branch and defaults.
 
-$data = &GetIssuingRules($itemtype,$categorycode);
+    $data = &GetIssuingRules($itemtype,$categorycode);
 
 Looks up for all issuingrules an item info 
 
@@ -675,7 +676,7 @@ sub ReplacementCost2 {
 
 =head2 GetNextIdNotify
 
-($result) = &GetNextIdNotify($reference);
+    ($result) = &GetNextIdNotify($reference);
 
 Returns the new file number
 
@@ -714,7 +715,7 @@ sub GetNextIdNotify {
 
 =head2 NumberNotifyId
 
-(@notify) = &NumberNotifyId($borrowernumber);
+    (@notify) = &NumberNotifyId($borrowernumber);
 
 Returns amount for all file per borrowers
 C<@notify> array contains all file per borrowers
@@ -740,7 +741,7 @@ sub NumberNotifyId{
 
 =head2 AmountNotify
 
-($totalnotify) = &AmountNotify($notifyid);
+    ($totalnotify) = &AmountNotify($notifyid);
 
 Returns amount for all file per borrowers
 C<$notifyid> is the file number
@@ -767,7 +768,7 @@ sub AmountNotify{
 
 =head2 GetNotifyId
 
-($notify_id) = &GetNotifyId($borrowernumber,$itemnumber);
+    ($notify_id) = &GetNotifyId($borrowernumber,$itemnumber);
 
 Returns the file number per borrower and itemnumber
 
@@ -797,7 +798,9 @@ sub GetNotifyId {
 
 =head2 CreateItemAccountLine
 
-() = &CreateItemAccountLine($borrowernumber,$itemnumber,$date,$amount,$description,$accounttype,$amountoutstanding,$timestamp,$notify_id,$level);
+    () = &CreateItemAccountLine($borrowernumber, $itemnumber, $date, $amount,
+                               $description, $accounttype, $amountoutstanding, 
+                               $timestamp, $notify_id, $level);
 
 update the account lines with file number or with file level
 
@@ -850,7 +853,7 @@ sub CreateItemAccountLine {
 
 =head2 UpdateAccountLines
 
-() = &UpdateAccountLines($notify_id,$notify_level,$borrowernumber,$itemnumber);
+    () = &UpdateAccountLines($notify_id,$notify_level,$borrowernumber,$itemnumber);
 
 update the account lines with file number or with file level
 
@@ -893,7 +896,7 @@ sub UpdateAccountLines {
 
 =head2 GetItems
 
-($items) = &GetItems($itemnumber);
+    ($items) = &GetItems($itemnumber);
 
 Returns the list of all delays from overduerules.
 
@@ -922,7 +925,7 @@ sub GetItems {
 
 =head2 GetOverdueDelays
 
-(@delays) = &GetOverdueDelays($categorycode);
+    (@delays) = &GetOverdueDelays($categorycode);
 
 Returns the list of all delays from overduerules.
 
@@ -945,13 +948,9 @@ sub GetOverdueDelays {
 
 =head2 GetBranchcodesWithOverdueRules
 
-=over 4
-
-my @branchcodes = C4::Overdues::GetBranchcodesWithOverdueRules()
+    my @branchcodes = C4::Overdues::GetBranchcodesWithOverdueRules()
 
 returns a list of branch codes for branches with overdue rules defined.
-
-=back
 
 =cut
 
@@ -965,7 +964,7 @@ sub GetBranchcodesWithOverdueRules {
 
 =head2 CheckAccountLineLevelInfo
 
-($exist) = &CheckAccountLineLevelInfo($borrowernumber,$itemnumber,$accounttype,notify_level);
+    ($exist) = &CheckAccountLineLevelInfo($borrowernumber,$itemnumber,$accounttype,notify_level);
 
 Check and Returns the list of all overdue books.
 
@@ -999,7 +998,7 @@ sub CheckAccountLineLevelInfo {
 
 =head2 GetOverduerules
 
-($overduerules) = &GetOverduerules($categorycode);
+    ($overduerules) = &GetOverduerules($categorycode);
 
 Returns the value of borrowers (debarred or not) with notify level
 
@@ -1026,7 +1025,7 @@ sub GetOverduerules {
 
 =head2 CheckBorrowerDebarred
 
-($debarredstatus) = &CheckBorrowerDebarred($borrowernumber);
+    ($debarredstatus) = &CheckBorrowerDebarred($borrowernumber);
 
 Check if the borrowers is already debarred
 
@@ -1053,7 +1052,7 @@ sub CheckBorrowerDebarred {
 
 =head2 UpdateBorrowerDebarred
 
-($borrowerstatut) = &UpdateBorrowerDebarred($borrowernumber);
+    ($borrowerstatut) = &UpdateBorrowerDebarred($borrowernumber);
 
 update status of borrowers in borrowers table (field debarred)
 
@@ -1076,7 +1075,7 @@ sub UpdateBorrowerDebarred{
 
 =head2 CheckExistantNotifyid
 
-  ($exist) = &CheckExistantNotifyid($borrowernumber,$itemnumber,$accounttype,$notify_id);
+    ($exist) = &CheckExistantNotifyid($borrowernumber,$itemnumber,$accounttype,$notify_id);
 
 Check and Returns the notify id if exist else return 0.
 
@@ -1103,7 +1102,7 @@ sub CheckExistantNotifyid {
 
 =head2 CheckAccountLineItemInfo
 
-  ($exist) = &CheckAccountLineItemInfo($borrowernumber,$itemnumber,$accounttype,$notify_id);
+    ($exist) = &CheckAccountLineItemInfo($borrowernumber,$itemnumber,$accounttype,$notify_id);
 
 Check and Returns the list of all overdue items from the same file number(notify_id).
 
@@ -1228,9 +1227,9 @@ sub GetOverduesForBranch {
 
 =head2 AddNotifyLine
 
-&AddNotifyLine($borrowernumber, $itemnumber, $overduelevel, $method, $notifyId)
+    &AddNotifyLine($borrowernumber, $itemnumber, $overduelevel, $method, $notifyId)
 
-Creat a line into notify, if the method is phone, the notification_send_date is implemented to
+Create a line into notify, if the method is phone, the notification_send_date is implemented to
 
 =cut
 
@@ -1258,7 +1257,7 @@ sub AddNotifyLine {
 
 =head2 RemoveNotifyLine
 
-&RemoveNotifyLine( $borrowernumber, $itemnumber, $notify_date );
+    &RemoveNotifyLine( $borrowernumber, $itemnumber, $notify_date );
 
 Cancel a notification
 

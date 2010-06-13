@@ -453,7 +453,17 @@ our $PERL_DEPS = {
         'usage'    => 'Core',
         'required' => '1',
         'min_ver'  => '0.71'
-    }
+    },
+    'UNIVERSAL::require' => {
+        'usage'    => 'SipServer',
+        'required' => '0',
+        'min_ver'  => '0.13',
+    },
+    'Net::Server' => {
+        'usage'    => 'SipServer',
+        'required' => '0',
+        'min_ver'  => '0.97',
+    },
 };
 
 1;

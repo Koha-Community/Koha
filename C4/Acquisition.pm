@@ -128,16 +128,11 @@ orders, basket and parcels.
 
 =head3 GetBasket
 
-=over 4
-
-$aqbasket = &GetBasket($basketnumber);
+  $aqbasket = &GetBasket($basketnumber);
 
 get all basket informations in aqbasket for a given basket
 
-return :
-informations for a given basket returned as a hashref.
-
-=back
+B<returns:> informations for a given basket returned as a hashref.
 
 =cut
 
@@ -162,15 +157,12 @@ sub GetBasket {
 
 =head3 NewBasket
 
-=over 4
-
-$basket = &NewBasket( $booksellerid, $authorizedby, $basketname, $basketnote, $basketbooksellernote, $basketcontractnumber );
-
-=back
+  $basket = &NewBasket( $booksellerid, $authorizedby, $basketname, 
+      $basketnote, $basketbooksellernote, $basketcontractnumber );
 
 Create a new basket in aqbasket table
 
-=over 2
+=over
 
 =item C<$booksellerid> is a foreign key in the aqbasket table
 
@@ -204,13 +196,9 @@ sub NewBasket {
 
 =head3 CloseBasket
 
-=over 4
-
-&CloseBasket($basketno);
+  &CloseBasket($basketno);
 
 close a basket (becomes unmodifiable,except for recieves)
-
-=back
 
 =cut
 
@@ -230,15 +218,12 @@ sub CloseBasket {
 
 =head3 GetBasketAsCSV
 
-=over 4
-
-&GetBasketAsCSV($basketno);
+  &GetBasketAsCSV($basketno);
 
 Export a basket as CSV
 
-=back
-
 =cut
+
 sub GetBasketAsCSV {
     my ($basketno) = @_;
     my $basket = GetBasket($basketno);
@@ -290,13 +275,9 @@ sub GetBasketAsCSV {
 
 =head3 CloseBasketgroup
 
-=over 4
-
-&CloseBasketgroup($basketgroupno);
+  &CloseBasketgroup($basketgroupno);
 
 close a basketgroup
-
-=back
 
 =cut
 
@@ -315,13 +296,9 @@ sub CloseBasketgroup {
 
 =head3 ReOpenBaskergroup($basketgroupno)
 
-=over 4
-
-&ReOpenBaskergroup($basketgroupno);
+  &ReOpenBaskergroup($basketgroupno);
 
 reopen a basketgroup
-
-=back
 
 =cut
 
@@ -341,21 +318,18 @@ sub ReOpenBasketgroup {
 
 =head3 DelBasket
 
-=over 4
-
-&DelBasket($basketno);
+  &DelBasket($basketno);
 
 Deletes the basket that has basketno field $basketno in the aqbasket table.
 
-=over 2
+=over
 
 =item C<$basketno> is the primary key of the basket in the aqbasket table.
 
 =back
 
-=back
-
 =cut
+
 sub DelBasket {
     my ( $basketno ) = @_;
     my $query = "DELETE FROM aqbasket WHERE basketno=?";
@@ -369,21 +343,18 @@ sub DelBasket {
 
 =head3 ModBasket
 
-=over 4
-
-&ModBasket($basketinfo);
+  &ModBasket($basketinfo);
 
 Modifies a basket, using a hashref $basketinfo for the relevant information, only $basketinfo->{'basketno'} is required.
 
-=over 2
+=over
 
 =item C<$basketno> is the primary key of the basket in the aqbasket table.
 
 =back
 
-=back
-
 =cut
+
 sub ModBasket {
     my $basketinfo = shift;
     my $query = "UPDATE aqbasket SET ";
@@ -412,13 +383,11 @@ sub ModBasket {
 
 =head3 ModBasketHeader
 
-=over 4
-
-&ModBasketHeader($basketno, $basketname, $note, $booksellernote, $contractnumber);
+  &ModBasketHeader($basketno, $basketname, $note, $booksellernote, $contractnumber);
 
 Modifies a basket's header.
 
-=over 2
+=over
 
 =item C<$basketno> is the "basketno" field in the "aqbasket" table;
 
@@ -432,9 +401,8 @@ Modifies a basket's header.
 
 =back
 
-=back
-
 =cut
+
 sub ModBasketHeader {
     my ($basketno, $basketname, $note, $booksellernote, $contractnumber) = @_;
     my $query = "UPDATE aqbasket SET basketname=?, note=?, booksellernote=? WHERE basketno=?";
@@ -454,24 +422,20 @@ sub ModBasketHeader {
 
 =head3 GetBasketsByBookseller
 
-=over 4
-
-@results = &GetBasketsByBookseller($booksellerid, $extra);
+  @results = &GetBasketsByBookseller($booksellerid, $extra);
 
 Returns a list of hashes of all the baskets that belong to bookseller 'booksellerid'.
 
-=over 2
+=over
 
 =item C<$booksellerid> is the 'id' field of the bookseller in the aqbooksellers table
 
 =item C<$extra> is the extra sql parameters, can be
 
-- $extra->{groupby}: group baskets by column
+ $extra->{groupby}: group baskets by column
     ex. $extra->{groupby} = aqbasket.basketgroupid
-- $extra->{orderby}: order baskets by column
-- $extra->{limit}: limit number of results (can be helpful for pagination)
-
-=back
+ $extra->{orderby}: order baskets by column
+ $extra->{limit}: limit number of results (can be helpful for pagination)
 
 =back
 
@@ -503,17 +467,9 @@ sub GetBasketsByBookseller {
 
 =head3 GetBasketsByBasketgroup
 
-=over 4
-
-$baskets = &GetBasketsByBasketgroup($basketgroupid);
-
-=over 2
+  $baskets = &GetBasketsByBasketgroup($basketgroupid);
 
 Returns a reference to all baskets that belong to basketgroup $basketgroupid.
-
-=back
-
-=back
 
 =cut
 
@@ -533,11 +489,7 @@ sub GetBasketsByBasketgroup {
 
 =head3 NewBasketgroup
 
-=over 4
-
-$basketgroupid = NewBasketgroup(\%hashref);
-
-=over 2
+  $basketgroupid = NewBasketgroup(\%hashref);
 
 Adds a basketgroup to the aqbasketgroups table, and add the initial baskets to it.
 
@@ -552,10 +504,6 @@ $hashref->{'deliveryplace'} is the 'deliveryplace' field of the basketgroup in t
 $hashref->{'deliverycomment'} is the 'deliverycomment' field of the basketgroup in the aqbasketgroups table,
 
 $hashref->{'closed'} is the 'closed' field of the aqbasketgroups table, it is false if 0, true otherwise.
-
-=back
-
-=back
 
 =cut
 
@@ -594,11 +542,7 @@ sub NewBasketgroup {
 
 =head3 ModBasketgroup
 
-=over 4
-
-ModBasketgroup(\%hashref);
-
-=over 2
+  ModBasketgroup(\%hashref);
 
 Modifies a basketgroup in the aqbasketgroups table, and add the baskets to it.
 
@@ -615,10 +559,6 @@ $hashref->{'deliveryplace'} is the 'deliveryplace' field of the basketgroup in t
 $hashref->{'deliverycomment'} is the 'deliverycomment' field of the basketgroup in the aqbasketgroups table,
 
 $hashref->{'closed'} is the 'closed' field of the aqbasketgroups table, it is false if 0, true otherwise.
-
-=back
-
-=back
 
 =cut
 
@@ -658,15 +598,11 @@ sub ModBasketgroup {
 
 =head3 DelBasketgroup
 
-=over 4
-
-DelBasketgroup($basketgroupid);
-
-=back
+  DelBasketgroup($basketgroupid);
 
 Deletes a basketgroup in the aqbasketgroups table, and removes the reference to it from the baskets,
 
-=over 2
+=over
 
 =item C<$basketgroupid> is the 'id' field of the basket in the aqbasketgroup table
 
@@ -689,25 +625,11 @@ sub DelBasketgroup {
 
 =head2 FUNCTIONS ABOUT ORDERS
 
-=over 2
-
-=cut
-
-=back
-
 =head3 GetBasketgroup
 
-=over 4
-
-$basketgroup = &GetBasketgroup($basketgroupid);
-
-=over 2
+  $basketgroup = &GetBasketgroup($basketgroupid);
 
 Returns a reference to the hash containing all infermation about the basketgroup.
-
-=back
-
-=back
 
 =cut
 
@@ -727,17 +649,9 @@ sub GetBasketgroup {
 
 =head3 GetBasketgroups
 
-=over 4
-
-$basketgroups = &GetBasketgroups($booksellerid);
-
-=over 2
+  $basketgroups = &GetBasketgroups($booksellerid);
 
 Returns a reference to the array of all the basketgroups of bookseller $booksellerid.
-
-=back
-
-=back
 
 =cut
 
@@ -763,9 +677,7 @@ sub GetBasketgroups {
 
 =head3 GetPendingOrders
 
-=over 4
-
-$orders = &GetPendingOrders($booksellerid, $grouped, $owner);
+  $orders = &GetPendingOrders($booksellerid, $grouped, $owner);
 
 Finds pending orders from the bookseller with the given ID. Ignores
 completed and cancelled orders.
@@ -779,7 +691,7 @@ reference-to-hash with the following fields:
 C<$grouped> is a boolean that, if set to 1 will group all order lines of the same basket
 in a single result line
 
-=over 2
+=over
 
 =item C<authorizedby>
 
@@ -787,12 +699,10 @@ in a single result line
 
 =item C<basketno>
 
+=back
+
 These give the value of the corresponding field in the aqorders table
 of the Koha database.
-
-=back
-
-=back
 
 Results are ordered from most to least recent.
 
@@ -847,9 +757,7 @@ sub GetPendingOrders {
 
 =head3 GetOrders
 
-=over 4
-
-@orders = &GetOrders($basketnumber, $orderby);
+  @orders = &GetOrders($basketnumber, $orderby);
 
 Looks up the pending (non-cancelled) orders with the given basket
 number. If C<$booksellerID> is non-empty, only orders from that seller
@@ -859,8 +767,6 @@ return :
 C<&basket> returns a two-element array. C<@orders> is an array of
 references-to-hash, whose keys are the fields from the aqorders,
 biblio, and biblioitems tables in the Koha database.
-
-=back
 
 =cut
 
@@ -893,23 +799,20 @@ sub GetOrders {
 
 =head3 GetOrderNumber
 
-=over 4
-
-$ordernumber = &GetOrderNumber($biblioitemnumber, $biblionumber);
-
-=back
+  $ordernumber = &GetOrderNumber($biblioitemnumber, $biblionumber);
 
 Looks up the ordernumber with the given biblionumber and biblioitemnumber.
 
 Returns the number of this order.
 
-=over 4
+=over
 
 =item C<$ordernumber> is the order number.
 
 =back
 
 =cut
+
 sub GetOrderNumber {
     my ( $biblionumber,$biblioitemnumber ) = @_;
     my $dbh = C4::Context->dbh;
@@ -929,16 +832,12 @@ sub GetOrderNumber {
 
 =head3 GetOrder
 
-=over 4
-
-$order = &GetOrder($ordernumber);
+  $order = &GetOrder($ordernumber);
 
 Looks up an order by order number.
 
 Returns a reference-to-hash describing the order. The keys of
 C<$order> are fields from the biblio, biblioitems, aqorders tables of the Koha database.
-
-=back
 
 =cut
 
@@ -964,18 +863,15 @@ sub GetOrder {
 
 =head3 NewOrder
 
-=over 4
-
-&NewOrder(\%hashref);
+  &NewOrder(\%hashref);
 
 Adds a new order to the database. Any argument that isn't described
 below is the new value of the field with the same name in the aqorders
 table of the Koha database.
 
-=over 4
+=over
 
 =item $hashref->{'basketno'} is the basketno foreign key in aqorders, it is mandatory
-
 
 =item $hashref->{'ordernumber'} is a "minimum order number."
 
@@ -990,8 +886,6 @@ Else, the upcoming July 1st is used.
 =item defaults entrydate to Now
 
 The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "biblioitemnumber", "rrp", "ecost", "gst", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "bookfundid".
-
-=back
 
 =back
 
@@ -1029,12 +923,7 @@ sub NewOrder {
 
 =head3 NewOrderItem
 
-=over 4
-
-&NewOrderItem();
-
-
-=back
+  &NewOrderItem();
 
 =cut
 
@@ -1055,19 +944,12 @@ sub NewOrderItem {
 
 =head3 ModOrder
 
-=over 4
-
-&ModOrder(\%hashref);
-
-=over 2
+  &ModOrder(\%hashref);
 
 Modifies an existing order. Updates the order with order number
-$hashref->{'ordernumber'} and biblionumber $hashref->{'biblionumber'}. All other keys of the hash
-update the fields with the same name in the aqorders table of the Koha database.
-
-=back
-
-=back
+$hashref->{'ordernumber'} and biblionumber $hashref->{'biblionumber'}. All 
+other keys of the hash update the fields with the same name in the aqorders 
+table of the Koha database.
 
 =cut
 
@@ -1106,18 +988,15 @@ sub ModOrder {
 
 =head3 ModOrderItem
 
-=over 4
-
-&ModOrderItem(\%hashref);
-
-=over 2
+  &ModOrderItem(\%hashref);
 
 Modifies the itemnumber in the aqorders_items table. The input hash needs three entities:
-- itemnumber: the old itemnumber
-- ordernumber: the order this item is attached to
-- newitemnumber: the new itemnumber we want to attach the line to
 
-=back
+=over
+
+=item - itemnumber: the old itemnumber
+=item - ordernumber: the order this item is attached to
+=item - newitemnumber: the new itemnumber we want to attach the line to
 
 =back
 
@@ -1145,14 +1024,10 @@ sub ModOrderItem {
 
 =head3 ModOrderBibliotemNumber
 
-=over 4
-
-&ModOrderBiblioitemNumber($biblioitemnumber,$ordernumber, $biblionumber);
+  &ModOrderBiblioitemNumber($biblioitemnumber,$ordernumber, $biblionumber);
 
 Modifies the biblioitemnumber for an existing order.
 Updates the order with order number C<$ordernum> and biblionumber C<$biblionumber>.
-
-=back
 
 =cut
 
@@ -1173,9 +1048,7 @@ sub ModOrderBiblioitemNumber {
 
 =head3 ModReceiveOrder
 
-=over 4
-
-&ModReceiveOrder($biblionumber, $ordernumber, $quantityreceived, $user,
+  &ModReceiveOrder($biblionumber, $ordernumber, $quantityreceived, $user,
     $unitprice, $booksellerinvoicenumber, $biblioitemnumber,
     $freight, $bookfund, $rrp);
 
@@ -1188,8 +1061,6 @@ portion must have a booksellerinvoicenumber.
 
 Updates the order with bibilionumber C<$biblionumber> and ordernumber
 C<$ordernumber>.
-
-=back
 
 =cut
 
@@ -1331,15 +1202,11 @@ sub SearchOrder {
 
 =head3 DelOrder
 
-=over 4
-
-&DelOrder($biblionumber, $ordernumber);
+  &DelOrder($biblionumber, $ordernumber);
 
 Cancel the order with the given order and biblio numbers. It does not
 delete any entries in the aqorders table, it merely marks them as
 cancelled.
-
-=back
 
 =cut
 
@@ -1364,9 +1231,7 @@ sub DelOrder {
 
 =head3 GetParcel
 
-=over 4
-
-@results = &GetParcel($booksellerid, $code, $date);
+  @results = &GetParcel($booksellerid, $code, $date);
 
 Looks up all of the received items from the supplier with the given
 bookseller ID at the given date, for the given code (bookseller Invoice number). Ignores cancelled and completed orders.
@@ -1375,8 +1240,6 @@ C<@results> is an array of references-to-hash. The keys of each element are fiel
 the aqorders, biblio, and biblioitems tables of the Koha database.
 
 C<@results> is sorted alphabetically by book title.
-
-=back
 
 =cut
 
@@ -1437,16 +1300,13 @@ sub GetParcel {
 
 =head3 GetParcels
 
-=over 4
+  $results = &GetParcels($bookseller, $order, $code, $datefrom, $dateto);
 
-$results = &GetParcels($bookseller, $order, $code, $datefrom, $dateto);
 get a lists of parcels.
-
-=back
 
 * Input arg :
 
-=over 4
+=over
 
 =item $bookseller
 is the bookseller this function has to get parcels.
@@ -1460,8 +1320,12 @@ is the booksellerinvoicenumber.
 =item $datefrom & $dateto
 to know on what date this function has to filter its search.
 
+=back
+
 * return:
 a pointer on a hash list containing parcel informations as such :
+
+=over
 
 =item Creation date
 
@@ -1523,16 +1387,12 @@ sub GetParcels {
 
 =head3 GetLateOrders
 
-=over 4
-
-@results = &GetLateOrders;
+  @results = &GetLateOrders;
 
 Searches for bookseller with late orders.
 
 return:
 the table of supplier with late issues. This table is full of hashref.
-
-=back
 
 =cut
 
@@ -1625,9 +1485,7 @@ sub GetLateOrders {
 
 =head3 GetHistory
 
-=over 4
-
-(\@order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on );
+  (\@order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on );
 
 Retreives some acquisition history information
 
@@ -1652,8 +1510,6 @@ returns:
     $total_qty is the sum of all of the quantities in $order_loop
     $total_price is the cost of each in $order_loop times the quantity
     $total_qtyreceived is the sum of all of the quantityreceived entries in $order_loop
-
-=back
 
 =cut
 
@@ -1751,7 +1607,7 @@ sub GetHistory {
 
 =head2 GetRecentAcqui
 
-$results = GetRecentAcqui($days);
+  $results = GetRecentAcqui($days);
 
 C<$results> is a ref to a table which containts hashref
 
@@ -1774,17 +1630,13 @@ sub GetRecentAcqui {
 
 =head3 GetContracts
 
-=over 4
-
-$contractlist = &GetContracts($booksellerid, $activeonly);
-
-=back
+  $contractlist = &GetContracts($booksellerid, $activeonly);
 
 Looks up the contracts that belong to a bookseller
 
 Returns a list of contracts
 
-=over 2
+=over
 
 =item C<$booksellerid> is the "id" field in the "aqbooksellers" table.
 
@@ -1793,6 +1645,7 @@ Returns a list of contracts
 =back
 
 =cut
+
 sub GetContracts {
     my ( $booksellerid, $activeonly ) = @_;
     my $dbh = C4::Context->dbh;
@@ -1823,17 +1676,14 @@ sub GetContracts {
 
 =head3 GetContract
 
-=over 4
-
-$contract = &GetContract($contractID);
+  $contract = &GetContract($contractID);
 
 Looks up the contract that has PRIMKEY (contractnumber) value $contractID
 
 Returns a contract
 
-=back
-
 =cut
+
 sub GetContract {
     my ( $contractno ) = @_;
     my $dbh = C4::Context->dbh;

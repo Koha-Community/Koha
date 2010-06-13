@@ -38,37 +38,33 @@ C4::Matcher - find MARC records matching another one
 
 =head1 SYNOPSIS
 
-=over 4
+  my @matchers = C4::Matcher::GetMatcherList();
 
-my @matchers = C4::Matcher::GetMatcherList();
+  my $matcher = C4::Matcher->new($record_type);
+  $matcher->threshold($threshold);
+  $matcher->code($code);
+  $matcher->description($description);
 
-my $matcher = C4::Matcher->new($record_type);
-$matcher->threshold($threshold);
-$matcher->code($code);
-$matcher->description($description);
+  $matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
+  $matcher->add_simple_matchpoint('Date', 1000, '008', '', 7, 4, '');
+  $matcher->add_matchpoint('isbn', 1000, [ { tag => '020', subfields => 'a', norms => [] } ]);
 
-$matcher->add_simple_matchpoint('isbn', 1000, '020', 'a', -1, 0, '');
-$matcher->add_simple_matchpoint('Date', 1000, '008', '', 7, 4, '');
-$matcher->add_matchpoint('isbn', 1000, [ { tag => '020', subfields => 'a', norms => [] } ]);
+  $matcher->add_simple_required_check('245', 'a', -1, 0, '', '245', 'a', -1, 0, '');
+  $matcher->add_required_check([ { tag => '245', subfields => 'a', norms => [] } ], 
+                               [ { tag => '245', subfields => 'a', norms => [] } ]);
 
-$matcher->add_simple_required_check('245', 'a', -1, 0, '', '245', 'a', -1, 0, '');
-$matcher->add_required_check([ { tag => '245', subfields => 'a', norms => [] } ], 
-                             [ { tag => '245', subfields => 'a', norms => [] } ]);
+  my @matches = $matcher->get_matches($marc_record, $max_matches);
 
-my @matches = $matcher->get_matches($marc_record, $max_matches);
+  foreach $match (@matches) {
 
-foreach $match (@matches) {
+      # matches already sorted in order of
+      # decreasing score
+      print "record ID: $match->{'record_id'};
+      print "score:     $match->{'score'};
 
-    # matches already sorted in order of
-    # decreasing score
-    print "record ID: $match->{'record_id'};
-    print "score:     $match->{'score'};
+  }
 
-}
-
-my $matcher_description = $matcher->dump();
-
-=back
+  my $matcher_description = $matcher->dump();
 
 =head1 FUNCTIONS
 
@@ -76,18 +72,14 @@ my $matcher_description = $matcher->dump();
 
 =head2 GetMatcherList
 
-=over 4
-
-my @matchers = C4::Matcher::GetMatcherList();
-
-=back
+  my @matchers = C4::Matcher::GetMatcherList();
 
 Returns an array of hashrefs list all matchers
 present in the database.  Each hashref includes:
 
-matcher_id
-code
-description
+ * matcher_id
+ * code
+ * description
 
 =cut
 
@@ -105,15 +97,9 @@ sub GetMatcherList {
 
 =head1 METHODS
 
-=cut
-
 =head2 new
 
-=over 4
-
-my $matcher = C4::Matcher->new($record_type, $threshold);
-
-=back
+  my $matcher = C4::Matcher->new($record_type, $threshold);
 
 Creates a new Matcher.  C<$record_type> indicates which search
 database to use, e.g., 'biblio' or 'authority' and defaults to
@@ -152,11 +138,7 @@ sub new {
 
 =head2 fetch
 
-=over 4
-
-my $matcher = C4::Matcher->fetch($id);
-
-=back
+  my $matcher = C4::Matcher->fetch($id);
 
 Creates a matcher object from the version stored
 in the database.  If a matcher with the given
@@ -245,11 +227,7 @@ sub _fetch_matchpoint {
 
 =head2 store
 
-=over 4
-
-my $id = $matcher->store();
-
-=back
+  my $id = $matcher->store();
 
 Stores matcher in database.  The return value is the ID 
 of the marc_matchers row.  If the matcher was 
@@ -374,11 +352,7 @@ sub _store_matchpoint {
 
 =head2 delete
 
-=over 4
-
-C4::Matcher->delete($id);
-
-=back
+  C4::Matcher->delete($id);
 
 Deletes the matcher of the specified ID
 from the database.
@@ -396,12 +370,8 @@ sub delete {
 
 =head2 threshold
 
-=over 4
-
-$matcher->threshold(1000);
-my $threshold = $matcher->threshold();
-
-=back
+  $matcher->threshold(1000);
+  my $threshold = $matcher->threshold();
 
 Accessor method.
 
@@ -414,12 +384,8 @@ sub threshold {
 
 =head2 _id
 
-=over 4
-
-$matcher->_id(123);
-my $id = $matcher->_id();
-
-=back
+  $matcher->_id(123);
+  my $id = $matcher->_id();
 
 Accessor method.  Note that using this method
 to set the DB ID of the matcher should not be
@@ -434,12 +400,8 @@ sub _id {
 
 =head2 code
 
-=over 4
-
-$matcher->code('ISBN');
-my $code = $matcher->code();
-
-=back
+  $matcher->code('ISBN');
+  my $code = $matcher->code();
 
 Accessor method.
 
@@ -452,12 +414,8 @@ sub code {
 
 =head2 description
 
-=over 4
-
-$matcher->description('match on ISBN');
-my $description = $matcher->description();
-
-=back
+  $matcher->description('match on ISBN');
+  my $description = $matcher->description();
 
 Accessor method.
 
@@ -470,11 +428,7 @@ sub description {
 
 =head2 add_matchpoint
 
-=over 4
-
-$matcher->add_matchpoint($index, $score, $matchcomponents);
-
-=back
+  $matcher->add_matchpoint($index, $score, $matchcomponents);
 
 Adds a matchpoint that may include multiple components.  The $index
 parameter identifies the index that will be searched, while $score
@@ -512,13 +466,10 @@ sub add_matchpoint {
 
 =head2 add_simple_matchpoint
 
-=over 4
+  $matcher->add_simple_matchpoint($index, $score, $source_tag,
+                            $source_subfields, $source_offset, 
+                            $source_length, $source_normalizer);
 
-$matcher->add_simple_matchpoint($index, $score, $source_tag, $source_subfields, 
-                                $source_offset, $source_length,
-                                $source_normalizer);
-
-=back
 
 Adds a simple matchpoint rule -- after composing a key based on the source tag and subfields,
 normalized per the normalization fuction, search the index.  All records retrieved
@@ -540,11 +491,7 @@ sub add_simple_matchpoint {
 
 =head2 add_required_check
 
-=over 4
-
-$match->add_required_check($source_matchpoint, $target_matchpoint);
-
-=back
+  $match->add_required_check($source_matchpoint, $target_matchpoint);
 
 Adds a required check definition.  A required check means that in 
 order for a match to be considered valid, the key derived from the
@@ -596,15 +543,13 @@ sub add_required_check {
 
 =head2 add_simple_required_check
 
-$matcher->add_simple_required_check($source_tag, $source_subfields, $source_offset, $source_length, $source_normalizer,
-                                    $target_tag, $target_subfields, $target_offset, $target_length, $target_normalizer);
-
-=over 4
+  $matcher->add_simple_required_check($source_tag, $source_subfields,
+                $source_offset, $source_length, $source_normalizer, 
+                $target_tag, $target_subfields, $target_offset, 
+                $target_length, $target_normalizer);
 
 Adds a required check, which requires that the normalized keys made from the source and targets
 must match for a match to be considered valid.
-
-=back
 
 =cut
 
@@ -623,17 +568,13 @@ sub add_simple_required_check {
 
 =head2 find_matches
 
-=over 4
-
-my @matches = $matcher->get_matches($marc_record, $max_matches);
-foreach $match (@matches) {
-  # matches already sorted in order of
-  # decreasing score
-  print "record ID: $match->{'record_id'};
-  print "score:     $match->{'score'};
-}
-
-=back
+  my @matches = $matcher->get_matches($marc_record, $max_matches);
+  foreach $match (@matches) {
+      # matches already sorted in order of
+      # decreasing score
+      print "record ID: $match->{'record_id'};
+      print "score:     $match->{'score'};
+  }
 
 Identifies all of the records matching the given MARC record.  For a record already 
 in the database to be considered a match, it must meet the following criteria:
@@ -697,11 +638,7 @@ sub get_matches {
 
 =head2 dump
 
-=over 4
-
-$description = $matcher->dump();
-
-=back
+  $description = $matcher->dump();
 
 Returns a reference to a structure containing all of the information
 in the matcher object.  This is mainly a convenience method to

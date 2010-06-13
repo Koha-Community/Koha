@@ -38,43 +38,31 @@ initiated from the web staff interface
 
 =head1 SYNOPSIS
 
-=over 4
+ # start tracking a job
+ my $job = C4::BackgroundJob->new($sessionID, $job_name, $job_invoker, $num_work_units);
+ my $jobID = $job->id();
+ $job->progress($work_units_processed);
+ $job->finish($job_result_hashref);
 
-# start tracking a job
-my $job = C4::BackgroundJob->new($sessionID, $job_name, $job_invoker, $num_work_units);
-my $jobID = $job->id();
-$job->progress($work_units_processed);
-$job->finish($job_result_hashref);
-
-# get status and results of a job
-my $job = C4::BackgroundJob->fetch($sessionID, $jobID);
-my $max_work_units = $job->size();
-my $work_units_processed = $job->progress();
-my $job_status = $job->status();
-my $job_name = $job->name();
-my $job_invoker = $job->invoker();
-my $results_hashref = $job->results();
-
-=back
+ # get status and results of a job
+ my $job = C4::BackgroundJob->fetch($sessionID, $jobID);
+ my $max_work_units = $job->size();
+ my $work_units_processed = $job->progress();
+ my $job_status = $job->status();
+ my $job_name = $job->name();
+ my $job_invoker = $job->invoker();
+ my $results_hashref = $job->results();
 
 This module manages tracking the progress and results
 of (potentially) long-running jobs initiated from 
 the staff user interface.  Such jobs can include
 batch MARC and patron record imports.
 
-=cut
-
 =head1 METHODS
-
-=cut
 
 =head2 new
 
-=over 4
-
-my $job = C4::BackgroundJob->new($sessionID, $job_name, $job_invoker, $num_work_units);
-
-=back
+ my $job = C4::BackgroundJob->new($sessionID, $job_name, $job_invoker, $num_work_units);
 
 Create a new job object and set its status to 'running'.  C<$num_work_units>
 should be a number representing the size of the job; the units of the
@@ -114,11 +102,7 @@ sub _serialize {
 
 =head2 id
 
-=over 4
-
-my $jobID = $job->id();
-
-=back
+ my $jobID = $job->id();
 
 Read-only accessor for job ID.
 
@@ -131,12 +115,8 @@ sub id {
 
 =head2 name
 
-=over 4
-
-my $name = $job->name();
-$job->name($name);
-
-=back
+ my $name = $job->name();
+ $job->name($name);
 
 Read/write accessor for job name.
 
@@ -154,12 +134,8 @@ sub name {
 
 =head2 invoker
 
-=over 4
-
-my $invoker = $job->invoker();
-$job->invoker($invoker);
-
-=back
+ my $invoker = $job->invoker();
+i $job->invoker($invoker);
 
 Read/write accessor for job invoker.
 
@@ -177,12 +153,8 @@ sub invoker {
 
 =head2 progress
 
-=over 4
-
-my $progress = $job->progress();
-$job->progress($progress);
-
-=back
+ my $progress = $job->progress();
+ $job->progress($progress);
 
 Read/write accessor for job progress.
 
@@ -200,11 +172,7 @@ sub progress {
 
 =head2 status
 
-=over 4
-
-my $status = $job->status();
-
-=back
+ my $status = $job->status();
 
 Read-only accessor for job status.
 
@@ -217,12 +185,8 @@ sub status {
 
 =head2 size
 
-=over 4
-
-my $size = $job->size();
-$job->size($size);
-
-=back
+ my $size = $job->size();
+ $job->size($size);
 
 Read/write accessor for job size.
 
@@ -240,11 +204,7 @@ sub size {
 
 =head2 finish
 
-=over 4
-
-$job->finish($results_hashref);
-
-=back
+ $job->finish($results_hashref);
 
 Mark the job as finished, setting its status to 'completed'.
 C<$results_hashref> should be a reference to a hash containing
@@ -262,11 +222,7 @@ sub finish {
 
 =head2 results
 
-=over 4
-
-my $results_hashref = $job->results();
-
-=back
+ my $results_hashref = $job->results();
 
 Retrieve the results of the current job.  Returns undef 
 if the job status is not 'completed'.
@@ -281,11 +237,7 @@ sub results {
 
 =head2 fetch
 
-=over 4
-
-my $job = C4::BackgroundJob->fetch($sessionID, $jobID);
-
-=back
+ my $job = C4::BackgroundJob->fetch($sessionID, $jobID);
 
 Retrieve a job that has been serialized to the database. 
 Returns C<undef> if the job does not exist in the current 

@@ -581,6 +581,8 @@ More verose debugging messages are sent in the presence of non-zero $ENV{"DEBUG"
 
 =head3 TO DO: Add real perldoc
 
+=cut
+
 =head2 External Dictionary (Ispell) [Recommended]
 
 An external dictionary can be used as a means of "pre-populating" and tracking

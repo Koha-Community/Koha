@@ -33,12 +33,12 @@ C4::Heading
 
 =head1 SYNOPSIS
 
-use C4::Heading;
-my $heading = C4::Heading->new_from_bib_field($field);
-my $thesaurus = $heading->thesaurus();
-my $type = $heading->type();
-my $display_heading = $heading->display();
-my $search_string = $heading->search_string();
+ use C4::Heading;
+ my $heading = C4::Heading->new_from_bib_field($field);
+ my $thesaurus = $heading->thesaurus();
+ my $type = $heading->type();
+ my $display_heading = $heading->display();
+ my $search_string = $heading->search_string();
 
 =head1 DESCRIPTION
 
@@ -49,11 +49,7 @@ headings found in bibliographic and authority records.
 
 =head2 new_from_bib_field
 
-=over 4
-
-my $heading = C4::Heading->new_from_bib_field($field[, $marc_flavour]);
-
-=back
+  my $heading = C4::Heading->new_from_bib_field($field[, $marc_flavour]);
 
 Given a C<MARC::Field> object containing a heading from a 
 bib record, create a C<C4::Heading> object.
@@ -88,11 +84,7 @@ sub new_from_bib_field {
 
 =head2 display_form
 
-=over 4
-
-my $display = $heading->display_form();
-
-=back
+  my $display = $heading->display_form();
 
 Return the "canonical" display form of the heading.
 
@@ -105,11 +97,7 @@ sub display_form {
 
 =head2 authorities
 
-=over 4
-
-my $authorities = $heading->authorities;
-
-=back
+  my $authorities = $heading->authorities;
 
 Return a list of authority records for this 
 heading.
@@ -126,11 +114,7 @@ sub authorities {
 
 =head2 preferred_authorities
 
-=over 4
-
-my $preferred_authorities = $heading->preferred_authorities;
-
-=back
+  my $preferred_authorities = $heading->preferred_authorities;
 
 Return a list of authority records for headings
 that are a preferred form of the heading.

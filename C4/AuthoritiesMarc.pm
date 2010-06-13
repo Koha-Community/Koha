@@ -64,17 +64,19 @@ BEGIN {
  	);
 }
 
+
+=head1 NAME
+
+C4::AuthoritiesMarc
+
 =head2 GetAuthMARCFromKohaField 
 
-=over 4
+  ( $tag, $subfield ) = &GetAuthMARCFromKohaField ($kohafield,$authtypecode);
 
-( $tag, $subfield ) = &GetAuthMARCFromKohaField ($kohafield,$authtypecode);
 returns tag and subfield linked to kohafield
 
 Comment :
 Suppose Kohafield is only linked to ONE subfield
-
-=back
 
 =cut
 
@@ -94,12 +96,10 @@ sub GetAuthMARCFromKohaField {
 
 =head2 SearchAuthorities 
 
-=over 4
+  (\@finalresult, $nbresults)= &SearchAuthorities($tags, $and_or, 
+     $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby)
 
-(\@finalresult, $nbresults)= &SearchAuthorities($tags, $and_or, $excluding, $operator, $value, $offset,$length,$authtypecode,$sortby)
 returns ref to array result and count of results returned
-
-=back
 
 =cut
 
@@ -344,12 +344,9 @@ sub SearchAuthorities {
 
 =head2 CountUsage 
 
-=over 4
+  $count= &CountUsage($authid)
 
-$count= &CountUsage($authid)
 counts Usage of Authid in bibliorecords. 
-
-=back
 
 =cut
 
@@ -371,12 +368,9 @@ sub CountUsage {
 
 =head2 CountUsageChildren 
 
-=over 4
+  $count= &CountUsageChildren($authid)
 
-$count= &CountUsageChildren($authid)
 counts Usage of narrower terms of Authid in bibliorecords.
-
-=back
 
 =cut
 
@@ -386,12 +380,9 @@ sub CountUsageChildren {
 
 =head2 GetAuthTypeCode
 
-=over 4
+  $authtypecode= &GetAuthTypeCode($authid)
 
-$authtypecode= &GetAuthTypeCode($authid)
 returns authtypecode of an authid
-
-=back
 
 =cut
 
@@ -407,11 +398,7 @@ sub GetAuthTypeCode {
  
 =head2 GuessAuthTypeCode
 
-=over 4
-
-my $authtypecode = GuessAuthTypeCode($record);
-
-=back
+  my $authtypecode = GuessAuthTypeCode($record);
 
 Get the record and tries to guess the adequate authtypecode from its content.
 
@@ -486,11 +473,7 @@ my $heading_fields = {
 
 =head2 GuessAuthId
 
-=over 4
-
-my $authtid = GuessAuthId($record);
-
-=back
+  my $authtid = GuessAuthId($record);
 
 Get the record and tries to guess the adequate authtypecode from its content.
 
@@ -508,14 +491,16 @@ sub GuessAuthId {
 
 =head2 GetTagsLabels
 
-=over 4
+  $tagslabel= &GetTagsLabels($forlibrarian,$authtypecode)
 
-$tagslabel= &GetTagsLabels($forlibrarian,$authtypecode)
 returns a ref to hashref of authorities tag and subfield structure.
 
 tagslabel usage : 
-$tagslabel->{$tag}->{$subfield}->{'attribute'}
+
+  $tagslabel->{$tag}->{$subfield}->{'attribute'}
+
 where attribute takes values in :
+
   lib
   tab
   mandatory
@@ -528,8 +513,6 @@ where attribute takes values in :
   hidden
   isurl
   link
-
-=back
 
 =cut
 
@@ -605,14 +588,10 @@ ORDER BY tagfield,tagsubfield"
 
 =head2 AddAuthority
 
-=over 4
-
-$authid= &AddAuthority($record, $authid,$authtypecode)
-returns authid of the newly created authority
+  $authid= &AddAuthority($record, $authid,$authtypecode)
 
 Either Create Or Modify existing authority.
-
-=back
+returns authid of the newly created authority
 
 =cut
 
@@ -722,15 +701,11 @@ sub AddAuthority {
 
 =head2 DelAuthority
 
-=over 4
+  $authid= &DelAuthority($authid)
 
-$authid= &DelAuthority($authid)
 Deletes $authid
 
-=back
-
 =cut
-
 
 sub DelAuthority {
     my ($authid) = @_;
@@ -771,12 +746,9 @@ sub ModAuthority {
 
 =head2 GetAuthorityXML 
 
-=over 4
+  $marcxml= &GetAuthorityXML( $authid)
 
-$marcxml= &GetAuthorityXML( $authid)
 returns xml form of record $authid
-
-=back
 
 =cut
 
@@ -804,12 +776,9 @@ sub GetAuthorityXML {
 
 =head2 GetAuthority 
 
-=over 4
+  $record= &GetAuthority( $authid)
 
-$record= &GetAuthority( $authid)
 Returns MARC::Record of the authority passed in parameter.
-
-=back
 
 =cut
 
@@ -832,11 +801,7 @@ sub GetAuthority {
 
 =head2 GetAuthType 
 
-=over 4
-
-$result = &GetAuthType($authtypecode)
-
-=back
+  $result = &GetAuthType($authtypecode)
 
 If the authority type specified by C<$authtypecode> exists,
 returns a hashref of the type's fields.  If the type
@@ -909,14 +874,11 @@ sub AUTHhtml2marc {
 
 =head2 FindDuplicateAuthority
 
-=over 4
+  $record= &FindDuplicateAuthority( $record, $authtypecode)
 
-$record= &FindDuplicateAuthority( $record, $authtypecode)
 return $authid,Summary if duplicate is found.
 
 Comments : an improvement would be to return All the records that match.
-
-=back
 
 =cut
 
@@ -951,16 +913,13 @@ sub FindDuplicateAuthority {
 
 =head2 BuildSummary
 
-=over 4
+  $text= &BuildSummary( $record, $authid, $authtypecode)
 
-$text= &BuildSummary( $record, $authid, $authtypecode)
 return HTML encoded Summary
 
 Comment : authtypecode can be infered from both record and authid.
 Moreover, authid can also be inferred from $record.
 Would it be interesting to delete those things.
-
-=back
 
 =cut
 
@@ -1133,16 +1092,13 @@ sub BuildSummary{
 
 =head2 BuildUnimarcHierarchies
 
-=over 4
+  $text= &BuildUnimarcHierarchies( $authid, $force)
 
-$text= &BuildUnimarcHierarchies( $authid, $force)
 return text containing trees for hierarchies
 for them to be stored in auth_header
 
 Example of text:
 122,1314,2452;1324,2342,3,2452
-
-=back
 
 =cut
 
@@ -1192,9 +1148,8 @@ sub BuildUnimarcHierarchies{
 
 =head2 BuildUnimarcHierarchy
 
-=over 4
+  $ref= &BuildUnimarcHierarchy( $record, $class,$authid)
 
-$ref= &BuildUnimarcHierarchy( $record, $class,$authid)
 return a hashref in order to display hierarchy for record and final Authid $authid
 
 "loopparents"
@@ -1207,8 +1162,6 @@ return a hashref in order to display hierarchy for record and final Authid $auth
 "ifparents"  
 "ifchildren" 
 Those two latest ones should disappear soon.
-
-=back
 
 =cut
 
@@ -1244,12 +1197,9 @@ sub BuildUnimarcHierarchy{
 
 =head2 GetHeaderAuthority
 
-=over 4
+  $ref= &GetHeaderAuthority( $authid)
 
-$ref= &GetHeaderAuthority( $authid)
 return a hashref in order auth_header table data
-
-=back
 
 =cut
 
@@ -1265,12 +1215,9 @@ sub GetHeaderAuthority{
 
 =head2 AddAuthorityTrees
 
-=over 4
+  $ref= &AddAuthorityTrees( $authid, $trees)
 
-$ref= &AddAuthorityTrees( $authid, $trees)
 return success or failure
-
-=back
 
 =cut
 
@@ -1285,15 +1232,10 @@ sub AddAuthorityTrees{
 
 =head2 merge
 
-=over 4
-
-$ref= &merge(mergefrom,$MARCfrom,$mergeto,$MARCto)
-
+  $ref= &merge(mergefrom,$MARCfrom,$mergeto,$MARCto)
 
 Could add some feature : Migrating from a typecode to an other for instance.
 Then we should add some new parameter : bibliotargettag, authtargettag
-
-=back
 
 =cut
 
@@ -1465,11 +1407,7 @@ sub merge {
 
 =head2 get_auth_type_location
 
-=over 4
-
-my ($tag, $subfield) = get_auth_type_location($auth_type_code);
-
-=back
+  my ($tag, $subfield) = get_auth_type_location($auth_type_code);
 
 Get the tag and subfield used to store the heading type
 for indexing purposes.  The C<$auth_type> parameter is

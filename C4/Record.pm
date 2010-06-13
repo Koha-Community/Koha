@@ -71,13 +71,9 @@ New in Koha 3.x. This module handles all record-related management functions.
 
 =head2 marc2marc - Convert from one flavour of ISO-2709 to another
 
-=over 4
-
-my ($error,$newmarc) = marc2marc($marc,$to_flavour,$from_flavour,$encoding);
+  my ($error,$newmarc) = marc2marc($marc,$to_flavour,$from_flavour,$encoding);
 
 Returns an ISO-2709 scalar
-
-=back
 
 =cut
 
@@ -89,13 +85,9 @@ sub marc2marc {
 
 =head2 marc2marcxml - Convert from ISO-2709 to MARCXML
 
-=over 4
-
-my ($error,$marcxml) = marc2marcxml($marc,$encoding,$flavour);
+  my ($error,$marcxml) = marc2marcxml($marc,$encoding,$flavour);
 
 Returns a MARCXML scalar
-
-=over 2
 
 C<$marc> - an ISO-2709 scalar or MARC::Record object
 
@@ -104,10 +96,6 @@ C<$encoding> - UTF-8 or MARC-8 [UTF-8]
 C<$flavour> - MARC21 or UNIMARC
 
 C<$dont_entity_encode> - a flag that instructs marc2marcxml not to entity encode the xml before returning (optional)
-
-=back
-
-=back
 
 =cut
 
@@ -175,23 +163,15 @@ sub marc2marcxml {
 
 =head2 marcxml2marc - Convert from MARCXML to ISO-2709
 
-=over 4
-
-my ($error,$marc) = marcxml2marc($marcxml,$encoding,$flavour);
+  my ($error,$marc) = marcxml2marc($marcxml,$encoding,$flavour);
 
 Returns an ISO-2709 scalar
-
-=over 2
 
 C<$marcxml> - a MARCXML record
 
 C<$encoding> - UTF-8 or MARC-8 [UTF-8]
 
 C<$flavour> - MARC21 or UNIMARC
-
-=back
-
-=back
 
 =cut
 
@@ -215,23 +195,15 @@ sub marcxml2marc {
 
 =head2 marc2dcxml - Convert from ISO-2709 to Dublin Core
 
-=over 4
-
-my ($error,$dcxml) = marc2dcxml($marc,$qualified);
+  my ($error,$dcxml) = marc2dcxml($marc,$qualified);
 
 Returns a DublinCore::Record object, will eventually return a Dublin Core scalar
 
 FIXME: should return actual XML, not just an object
 
-=over 2
-
 C<$marc> - an ISO-2709 scalar or MARC::Record object
 
 C<$qualified> - specify whether qualified Dublin Core should be used in the input or output [0]
-
-=back
-
-=back
 
 =cut
 
@@ -269,15 +241,12 @@ sub marc2dcxml {
 	$dcxmlfinal .= "\n</metadata>";
 	return ($error,$dcxmlfinal);
 }
+
 =head2 marc2modsxml - Convert from ISO-2709 to MODS
 
-=over 4
-
-my ($error,$modsxml) = marc2modsxml($marc);
+  my ($error,$modsxml) = marc2modsxml($marc);
 
 Returns a MODS scalar
-
-=back
 
 =cut
 
@@ -330,25 +299,19 @@ sub marc2endnote {
 }
 
 =head2 marc2csv - Convert several records from UNIMARC to CSV
+
+  my ($csv) = marc2csv($biblios, $csvprofileid);
+
 Pre and postprocessing can be done through a YAML file
 
-=over 4
-
-my ($csv) = marc2csv($biblios, $csvprofileid);
-
 Returns a CSV scalar
-
-=over 2
 
 C<$biblio> - a list of biblionumbers
 
 C<$csvprofileid> - the id of the CSV profile to use for the export (see export_format.export_format_id and the GetCsvProfiles function in C4::Csv)
 
-=back
-
-=back
-
 =cut
+
 sub marc2csv {
     my ($biblios, $id) = @_;
     my $output;
@@ -379,13 +342,9 @@ sub marc2csv {
 
 =head2 marcrecord2csv - Convert a single record from UNIMARC to CSV
 
-=over 4
-
-my ($csv) = marcrecord2csv($biblio, $csvprofileid, $header);
+  my ($csv) = marcrecord2csv($biblio, $csvprofileid, $header);
 
 Returns a CSV scalar
-
-=over 2
 
 C<$biblio> - a biblionumber
 
@@ -394,10 +353,6 @@ C<$csvprofileid> - the id of the CSV profile to use for the export (see export_f
 C<$header> - true if the headers are to be printed (typically at first pass)
 
 C<$csv> - an already initialised Text::CSV object
-
-=back
-
-=back
 
 =cut
 
@@ -539,9 +494,7 @@ sub marcrecord2csv {
 
 =head2 html2marcxml
 
-=over 4
-
-my ($error,$marcxml) = html2marcxml($tags,$subfields,$values,$indicator,$ind_tag);
+  my ($error,$marcxml) = html2marcxml($tags,$subfields,$values,$indicator,$ind_tag);
 
 Returns a MARCXML scalar
 
@@ -549,8 +502,6 @@ this is used in addbiblio.pl and additem.pl to build the MARCXML record from
 the form submission.
 
 FIXME: this could use some better code documentation
-
-=back
 
 =cut
 
@@ -628,11 +579,7 @@ sub html2marcxml {
 
 =head2 html2marc
 
-=over 4
-
 Probably best to avoid using this ... it has some rather striking problems:
-
-=over 2
 
 * saves blank subfields
 
@@ -642,11 +589,7 @@ Probably best to avoid using this ... it has some rather striking problems:
 
 * the underlying routines didn't support subfield reordering or subfield repeatability.
 
-=back 
-
 I've left it in here because it could be useful if someone took the time to fix it. -- kados
-
-=back
 
 =cut
 
@@ -717,13 +660,9 @@ sub html2marc {
 
 =head2 changeEncoding - Change the encoding of a record
 
-=over 4
-
-my ($error, $newrecord) = changeEncoding($record,$format,$flavour,$to_encoding,$from_encoding);
+  my ($error, $newrecord) = changeEncoding($record,$format,$flavour,$to_encoding,$from_encoding);
 
 Changes the encoding of a record
-
-=over 2
 
 C<$record> - the record itself can be in ISO-2709, a MARC::Record object, or MARCXML for now (required)
 
@@ -735,15 +674,11 @@ C<$to_encoding> - the encoding you want the record to end up in (optional) [UTF-
 
 C<$from_encoding> - the encoding the record is currently in (optional, it will probably be able to tell unless there's a problem with the record)
 
-=back 
-
 FIXME: the from_encoding doesn't work yet
 
 FIXME: better handling for UNIMARC, it should allow management of 100 field
 
 FIXME: shouldn't have to convert to and from xml/marc just to change encoding someone needs to re-write MARC::Record's 'encoding' method to actually alter the encoding rather than just changing the leader
-
-=back
 
 =cut
 
@@ -780,21 +715,13 @@ sub changeEncoding {
 
 =head2 marc2bibtex - Convert from MARC21 and UNIMARC to BibTex
 
-=over 4
-
-my ($bibtex) = marc2bibtex($record, $id);
+  my ($bibtex) = marc2bibtex($record, $id);
 
 Returns a BibTex scalar
-
-=over 2
 
 C<$record> - a MARC::Record object
 
 C<$id> - an id for the BibTex record (might be the biblionumber)
-
-=back
-
-=back
 
 =cut
 
@@ -870,17 +797,13 @@ sub marc2bibtex {
 
 =head2 _entity_encode - Entity-encode an array of strings
 
-=over 4
-
-my ($entity_encoded_string) = _entity_encode($string);
+  my ($entity_encoded_string) = _entity_encode($string);
 
 or
 
-my (@entity_encoded_strings) = _entity_encode(@strings);
+  my (@entity_encoded_strings) = _entity_encode(@strings);
 
 Entity-encode an array of strings
-
-=back
 
 =cut
 
