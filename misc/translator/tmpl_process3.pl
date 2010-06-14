@@ -74,10 +74,16 @@ sub text_replace_tag ($$) {
             sprintf(' %s=%s', $_, $attr->{$_}->[2]) #FIXME
         } sort {
             $attr->{$a}->[3] <=> $attr->{$b}->[3] #FIXME
-        } keys %$attr)
-        . '>';
-    } else {
-    $it = $t;
+        } keys %$attr);
+	if ($tag eq 'img'){
+	    $it .= ' />';
+	}
+	else {	    
+           $it .= ' >';
+	}
+    } 
+    else {
+        $it = $t;
     }
     return $it;
 }
