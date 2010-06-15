@@ -292,8 +292,8 @@ if($barcodefilter){
 	$strsth .= "select distinctrow $linefield from biblioitems left join items on (items.biblioitemnumber = biblioitems.biblioitemnumber) where barcode $not LIKE ? AND $line is not null ";
 	if ( @linefilter ) {
 		if ($linefilter[1]){
-			$strsth .= " and $line >= ? " ;
-			$strsth .= " and $line <= ? " ;
+			$strsth .= $linefilter[0] =~ /^\d+$/ ? " and $line >= CAST('?' AS UNSIGNED) " : " and $line >= ? " ;
+			$strsth .= $linefilter[1] =~ /^\d+$/ ? " and $line <= CAST('?' AS UNSIGNED) " : " and $line <= ? " ;
 		} elsif ($linefilter[0]) {
 			$linefilter[0] =~ s/\*/%/g;
 			$strsth .= " and $line LIKE ? " ;
@@ -402,12 +402,12 @@ if($barcodefilter){
 	}
 	if (@$filters[4]){
 		@$filters[4]=~ s/\*/%/g ;
-		$strcalc .= " AND items.itemcallnumber >=" . $dbh->quote(@$filters[4]);
+		$strcalc .= @$filters[4] =~ /^\d+$/ ? " AND items.itemcallnumber >= CAST(" . $dbh->quote(@$filters[4]) . " AS UNSIGNED)" : " AND items.itemcallnumber >= " . $dbh->quote(@$filters[4]);
 	}
 	
 	if (@$filters[5]){
 		@$filters[5]=~ s/\*/%/g;
-		$strcalc .= " AND items.itemcallnumber <=" . $dbh->quote(@$filters[5]);
+		$strcalc .= @$filters[5] =~ /^\d+$/ ? " AND items.itemcallnumber <= CAST(" . $dbh->quote(@$filters[5]) . " AS UNSIGNED)" : " AND items.itemcallnumber <= " . $dbh->quote(@$filters[5]);
 	}
 	
 	if (@$filters[6]){
