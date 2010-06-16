@@ -39,12 +39,18 @@ my $op = $query->param('op') || '';
 my $dbh = C4::Context->dbh;
 my $sub_length;
 
+my @budgets;
+
+# Permission needed if it is a modification : edit_subscription
+# Permission needed otherwise (nothing or dup) : create_subscription
+my $permission = ($op eq "mod") ? "edit_subscription" : "create_subscription";
+
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-add.tmpl",
 				query => $query,
 				type => "intranet",
 				authnotrequired => 0,
-				flagsrequired => {serials => 1},
+				flagsrequired => {serials => $permission},
 				debug => 1,
 				});
 

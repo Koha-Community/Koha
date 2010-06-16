@@ -49,7 +49,7 @@ my ($template, $loggedinuser, $cookie)
             query => $input,
             type => 'intranet',
             authnotrequired => 0,
-            flagsrequired => {serials => 1},
+            flagsrequired => {serials => 'claim_serials'},
             debug => 1,
             });
 

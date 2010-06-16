@@ -35,12 +35,32 @@ my ($template, $loggedinuser, $cookie, $hemisphere);
 my $subscriptionid = $query->param('subscriptionid');
 my $subs = GetSubscription($subscriptionid);
 
+$subs->{enddate} = GetExpirationDate($subscriptionid);
+
+if ($op && $op eq 'del') {
+	if ($subs->{'cannotedit'}){
+		carp "Attempt to delete subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
+		print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
+	}
+	DelSubscription($subscriptionid);
+	print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=serials-home.pl\"></html>";
+	exit;
+}
+my ($routing, @routinglist) = getroutinglist($subscriptionid);
+my ($totalissues,@serialslist) = GetSerials($subscriptionid);
+$totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
+# the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
+
+# Permission needed if it is a deletion (del) : delete_subscription
+# Permission needed otherwise : *
+my $permission = ($op eq "del") ? "delete_subscription" : "*";
+
 ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-detail.tmpl",
                 query => $query,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {serials => 1},
+                flagsrequired => {serials => $permission},
                 debug => 1,
                 });
 

@@ -122,8 +122,7 @@ if ($op eq "do_search" && $query) {
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {serials => 1},
-                flagsrequired => {catalogue => 1},
+                flagsrequired => {catalogue => 1, serials => '*'},
                 debug => 1,
                 });
 
@@ -178,7 +177,17 @@ if ($op eq "do_search" && $query) {
                             numbers=>\@numbers,
                             );
 } # end of if ($op eq "do_search" & $query)
- else {
+else {
+    ($template, $loggedinuser, $cookie)
+        = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
+                query => $input,
+                type => "intranet",
+                authnotrequired => 0,
+                flagsrequired => {catalogue => 1, serials => '*'},
+                debug => 1,
+                });
+    # load the itemtypes
+    my $itemtypes = GetItemTypes;
     my @itemtypesloop;
     if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	# load the itemtypes
@@ -219,7 +228,7 @@ if ($op eq "do_search" && $query) {
                 query => $input,
                 type => "intranet",
                 authnotrequired => 0,
-                flagsrequired => {catalogue => 1, serials=>1},
+                flagsrequired => {catalogue => 1, serials => '*'},
                 debug => 1,
                 });
 
