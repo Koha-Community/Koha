@@ -1,6 +1,5 @@
     <!-- TMPL_IF NAME="intranetbookbag" --><div id="cartDetails">Your cart is empty.</div><!-- /TMPL_IF -->
 
-<<<<<<< HEAD:koha-tmpl/intranet-tmpl/prog/en/includes/header.inc
     <div id="header" class="clearfix">
         <div id="toplevelnav">
             <ul id="toplevelmenu">
