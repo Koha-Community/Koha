@@ -5,6 +5,7 @@
    ( 6, 'modify_holds_priority', 'Vormerkungspriorität verändern'),
    ( 9, 'edit_catalogue', 'Katalogdaten bearbeiten (Titel- und Exemplardaten ändern)'),
    ( 9, 'fast_cataloging', 'Schnellaufnahmen anlegen'),
+   ( 9, 'edit_items', 'Exemplare bearbeiten'),
    (11, 'vendors_manage', 'Lieferanten verwalten'),
    (11, 'contracts_manage', 'Vereinbarungen verwalten'),
    (11, 'period_manage', 'Etats verwalten'),

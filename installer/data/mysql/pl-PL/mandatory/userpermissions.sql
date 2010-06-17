@@ -5,6 +5,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 6, 'modify_holds_priority', 'Modify holds priority'),
    ( 9, 'edit_catalogue', 'Edit catalogue'),
    ( 9, 'fast_cataloging', 'Szybkie katalogowanie'),
+   ( 9, 'edit_items', 'Edit Items'),
    (11, 'vendors_manage', 'Zarządzanei dostawcami'),
    (11, 'contracts_manage', 'Zarządzanie kontraktami'),
    (11, 'period_manage', 'Manage periods'),
@@ -30,9 +31,11 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'delete_anonymize_patrons', 'Delete old borrowers and anonymize circulation history (deletes borrower reading history)'),
    (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
    (13, 'schedule_tasks', 'Schedule tasks to run'),
-   (13, 'batchmod', 'Perform batch modification of items'),
-   (13, 'batchdel', 'Perform batch deletion of items'),
+   (13, 'items_batchmod', 'Perform batch modification of items'),
+   (13, 'items_batchdel', 'Perform batch deletion of items'),
    (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
+   (13, 'moderate_tags', 'Moderate patron tags'),
    (16, 'execute_reports', 'Execute SQL reports'),
+   (13, 'rotating_collections', 'Manage rotating collections'),
    (16, 'create_reports', 'Create SQL Reports')
 ;
