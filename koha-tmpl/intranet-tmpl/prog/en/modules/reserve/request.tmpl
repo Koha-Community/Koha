@@ -47,14 +47,14 @@ function check() {
     }
 
     if (count_reserv == "0"){
-		msg += (_("- Please select an item to place a hold\n"));
+		msg += (_("- Please select an item to place a hold") + "\n");
     }
     if (count_reserv >= "2"){
-		msg += (_("- You may only place a hold on one item at a time\n"));
+		msg += (_("- You may only place a hold on one item at a time") + "\n");
     }
 
     if (alreadyreserved > "0"){
-		msg += (_("- This patron had already placed a hold on this item\n Please cancel the previous hold first \n"));
+		msg += (_("- This patron had already placed a hold on this item") + "\n" + _("Please cancel the previous hold first") + "\n");
     }
 
 	if (msg == "") return(true);

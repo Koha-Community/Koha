@@ -96,14 +96,14 @@ function placeHold () {
 		var alertString2;
 
 	    if(f.addshelf.value.length ==0){
-			_alertString += _("- You must enter a List Name\n");
+			_alertString += _("- You must enter a List Name") + "\n";
 		}
 
 		if (_alertString.length==0) {
 			document.Aform.submit();
 		} else {
-			alertString2 = _("Form not submitted because of the following problem(s)\n");
-			alertString2 += "------------------------------------------------------------------------------------\n\n";
+			alertString2 = _("Form not submitted because of the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n\n";
 			alertString2 += _alertString;
 			alert(alertString2);
 		}

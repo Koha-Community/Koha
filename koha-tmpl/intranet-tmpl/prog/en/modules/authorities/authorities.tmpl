@@ -91,14 +91,14 @@ function AreMandatoriesNotOk(){
     	
     	if(isempty){
     		flag = 1;
-    		StrAlert += "\t* Field " + arr[0] + " is mandatory, at least one of its subfields must be filled\n";
+			StrAlert += "\t* Field " + arr[0] + _(" is mandatory, at least one of its subfields must be filled") + "\n";
     	}
     	
     }
     
     
     if(StrAlert){
-        return _("Can't save this record because the following field aren't filled :\n\n") + StrAlert;
+        return _("Can't save this record because the following field aren't filled :") + "\n\n" + StrAlert;
     }
     return false;
 }

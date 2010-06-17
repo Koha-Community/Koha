@@ -21,15 +21,15 @@
         // var actTotal ="";
 
         if (!(isNotNull(f.budget_code,1))) {
-            _alertString += _("- Budget code cannot be blank\n");
+            _alertString += _("- Budget code cannot be blank") + "\n";
         }
 
         if (!(isNotNull(f.budget_name,1))) {
-            _alertString += _("- Budget name cannot be blank\n");
+            _alertString += _("- Budget name cannot be blank") + "\n";
         }
 
         if (!(isNotNull(f.budget_amount,1))) {
-            _alertString += _("- Budget amount cannot be blank\n");
+            _alertString += _("- Budget amount cannot be blank") + "\n";
         }
 
         var budgetId;
@@ -52,7 +52,7 @@
             if   (budgetId  > 0)  {  ; //its a mod ...
                 // if parent eq curent-budget, fail...
                 if ( newBudgetParent  ==  budgetId     ) {
-                        _alertString += _("- Budget parent is current budget\n");
+                        _alertString += _("- Budget parent is current budget") + "\n";
                 }
 
                 else if (newBudgetParent) {
@@ -74,8 +74,8 @@
         if (_alertString.length==0) {
             document.Aform.submit();
         } else {
-            alertString2 = _("Form not submitted because of the following problem(s)\n");
-            alertString2 += "------------------------------------------------------------------------------------\n\n";
+            alertString2 = _("Form not submitted because of the following problem(s)");
+            alertString2 += "\n------------------------------------------------------------------------------------\n\n";
             alertString2 += _alertString;
             alert(alertString2);
         }
