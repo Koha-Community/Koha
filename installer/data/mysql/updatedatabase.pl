@@ -3641,13 +3641,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
 $DBversion = "3.01.00.138";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DELETE FROM systempreferences WHERE variable = 'GranularPermissions'");
     print "Upgrade to $DBversion done (bug 4896: removing GranularPermissions syspref; use of granular permissions is now the default)";
     SetVersion ($DBversion);
 }
+
+$DBversion = '3.01.00.XXX';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do("ALTER TABLE message_attributes CHANGE message_name message_name varchar(40);");
+    print "Upgrade to $DBversion done (bug 3682: change message_name from varchar(20) to varchar(40))\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 

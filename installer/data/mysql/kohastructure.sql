@@ -2154,7 +2154,7 @@ CREATE TABLE `message_transport_types` (
 DROP TABLE IF EXISTS `message_attributes`;
 CREATE TABLE `message_attributes` (
   `message_attribute_id` int(11) NOT NULL auto_increment,
-  `message_name` varchar(20) NOT NULL default '',
+  `message_name` varchar(40) NOT NULL default '',
   `takes_days` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`message_attribute_id`),
   UNIQUE KEY `message_name` (`message_name`)
