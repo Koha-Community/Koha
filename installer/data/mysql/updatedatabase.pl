@@ -3648,7 +3648,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.01.00.XXX';
+$DBversion = '3.01.00.139';
 if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     $dbh->do("ALTER TABLE message_attributes CHANGE message_name message_name varchar(40);");
     print "Upgrade to $DBversion done (bug 3682: change message_name from varchar(20) to varchar(40))\n";
