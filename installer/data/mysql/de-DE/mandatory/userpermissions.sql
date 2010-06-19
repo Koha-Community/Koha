@@ -36,6 +36,14 @@
    (13, 'manage_csv_profiles', 'CSV-Profile für Export verwalten'),
    (13, 'moderate_tags', 'Von Benutzern vergebene Tags moderieren'),
    (13, 'rotating_collections', 'Wandernde Sammlungen verwalten'),
+   (15, 'check_expiration', 'Ablauf eines Abonnements prüfen'),
+   (15, 'claim_serials', 'Fehlende Hefte reklamieren'),
+   (15, 'create_subscription', 'Neues Abonnement anlegen'),
+   (15, 'delete_subscription', 'Bestehende Abonnements löschen'),
+   (15, 'edit_subscription', 'Bestehende Abonnements bearbeiten'),
+   (15, 'receive_serials', 'Zugang von Heften'),
+   (15, 'renew_subscription', 'Abonnements verlängern'),
+   (15, 'routing', 'Umlauflisten verwalten'),
    (16, 'execute_reports', 'SQL-Reports ausführen'),
    (16, 'create_reports', 'SQL-Reports erstellen')
 ;
