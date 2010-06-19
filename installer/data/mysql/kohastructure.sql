@@ -421,6 +421,27 @@ CREATE TABLE `categories` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table: collections
+--
+CREATE TABLE collections (
+  colId integer(11) NOT NULL auto_increment,
+  colTitle varchar(100) NOT NULL DEFAULT '',
+  colDesc text NOT NULL,
+  colBranchcode varchar(4) DEFAULT NULL comment 'branchcode for branch where item should be held.',
+  PRIMARY KEY (colId)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
+
+--
+-- Table: collections_tracking
+--
+CREATE TABLE collections_tracking (
+  ctId integer(11) NOT NULL auto_increment,
+  colId integer(11) NOT NULL DEFAULT 0 comment 'collections.colId',
+  itemnumber integer(11) NOT NULL DEFAULT 0 comment 'items.itemnumber',
+  PRIMARY KEY (ctId)
+) ENGINE=InnoDB DEFAULT CHARACTER SET utf8;
+
+--
 -- Table structure for table `borrower_branch_circ_rules`
 --
 
