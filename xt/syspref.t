@@ -24,12 +24,13 @@ use Test::More qw(no_plan);
 
 use C4::Context;
 
-my $root_dir = C4::Context->config( 'intranetdir' ) . '/installer/data/mysql';
+my $root_dir = 'installer/data/mysql';
 my $base_syspref_file = "en/mandatory/sysprefs.sql";
 my @trans_syspref_files = qw(
+    de-DE/mandatory/sysprefs.sql
     fr-FR/1-Obligatoire/unimarc_standard_systemprefs.sql
-    uk-UA/mandatory/system_preferences_optimal.sql
-    ru-RU/mandatory/system_preferences_optimal.sql
+    uk-UA/mandatory/system_preferences_full_optimal_for_install_only.sql
+    ru-RU/mandatory/system_preferences_full_optimal_for_install_only.sql
     pl-PL/mandatory/sysprefs.sql
 );
 
@@ -64,6 +65,8 @@ sub get_syspref_from_file {
         /\(\'([\w\-:]+)\'/;
         my $variable = $1;
         next unless $variable;
+        # lowercase syspref - at present, systempreference lookup is not case-sensitive
+        $variable = lc $variable;
         $syspref{$variable} = 1;
     }
     return \%syspref;
