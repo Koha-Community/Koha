@@ -182,6 +182,7 @@ CREATE TABLE `biblioitems` (
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
   KEY `isbn` (`isbn`),
+  KEY `issn` (`issn`),
   KEY `publishercode` (`publishercode`),
   CONSTRAINT `biblioitems_ibfk_1` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -254,6 +255,7 @@ CREATE TABLE `borrowers` (
   `altcontactcountry` text default NULL,
   `altcontactphone` varchar(50) default NULL,
   `smsalertnumber` varchar(50) default NULL,
+  `privacy` integer(11) DEFAULT '1' NOT NULL,
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
@@ -2072,7 +2074,8 @@ CREATE TABLE `serialitems` (
 	`serialid` int(11) NOT NULL,
 	UNIQUE KEY `serialitemsidx` (`itemnumber`),
 	KEY `serialitems_sfk_1` (`serialid`),
-	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
+	CONSTRAINT serialitems_sfk_2 FOREIGN KEY (itemnumber) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_permissions`;
