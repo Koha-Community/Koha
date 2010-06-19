@@ -13,9 +13,6 @@ UPDATE systempreferences SET explanation='Символ-роздільник по
 UPDATE systempreferences SET explanation='Перелік завантажених структур у веб-встановлювачі' WHERE variable='FrameworksLoaded';	
 -- Frameworks loaded through webinstaller
 
-UPDATE systempreferences SET explanation='Використання підрозділення привілеїв для працівників' WHERE variable='GranularPermissions';	
--- Use detailed staff user permissions
-
 UPDATE systempreferences SET explanation='Якщо ввімкнуто, то підвищує безпеку між бібліотеками. Використовується, коли бібліотеки використовують одну інсталяцію Коха.' WHERE variable='IndependantBranches';	
 -- If ON, increases security between libraries
 

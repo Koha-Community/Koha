@@ -187,7 +187,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CircControl',"ItemHomeLibrary",'Précise la bibliothèque qui contrôle les règles de prêt et d''amende',"PickupLibrary|PatronLibrary|ItemHomeLibrary",'Choice');
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemHolds','1','Si activé, les adhérents peuvent placer des réservations sur un exemplaire spécifique. Sinon, il ne peuvent que réserver le prochain disponible.','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('GranularPermissions','0','Utiliser les permissions détaillées',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable, value,options,type, explanation) VALUES ('AddPatronLists','categorycode','categorycode|category_type','Choice','Slectionner categorycode ou category_type permet d''afficher la liste des catégories ou des types de catégories à l''ajout d''un lecteur');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ExtendedPatronAttributes','0','Utiliser les attributs étendus pour les adhérents',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RenewSerialAddsSuggestion','0','Si activé, génère une suggestion d''achat à chaque Renouvellement d''abonnement',NULL,'YesNo');

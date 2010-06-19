@@ -66,19 +66,17 @@ if ($input->param('newflags')) {
     $sth = $dbh->prepare("UPDATE borrowers SET flags=? WHERE borrowernumber=?");
     $sth->execute($module_flags, $member);
     
-    if (C4::Context->preference('GranularPermissions')) {
-        # deal with subpermissions
-        $sth = $dbh->prepare("DELETE FROM user_permissions WHERE borrowernumber = ?");
-        $sth->execute($member); 
-        $sth = $dbh->prepare("INSERT INTO user_permissions (borrowernumber, module_bit, code)
-                            SELECT ?, bit, ?
-                            FROM userflags
-                            WHERE flag = ?");
-        foreach my $module (keys %sub_perms) {
-            next if exists $all_module_perms{$module};
-            foreach my $sub_perm (@{ $sub_perms{$module} }) {
-                $sth->execute($member, $sub_perm, $module);
-            }
+    # deal with subpermissions
+    $sth = $dbh->prepare("DELETE FROM user_permissions WHERE borrowernumber = ?");
+    $sth->execute($member); 
+    $sth = $dbh->prepare("INSERT INTO user_permissions (borrowernumber, module_bit, code)
+                        SELECT ?, bit, ?
+                        FROM userflags
+                        WHERE flag = ?");
+    foreach my $module (keys %sub_perms) {
+        next if exists $all_module_perms{$module};
+        foreach my $sub_perm (@{ $sub_perms{$module} }) {
+            $sth->execute($member, $sub_perm, $module);
         }
     }
     
@@ -104,53 +102,51 @@ if ($input->param('newflags')) {
 		    checked => $checked,
 		    flagdesc => $flagdesc );
 
-        if (C4::Context->preference('GranularPermissions')) {
-            my @sub_perm_loop = ();
-            my $expand_parent = 0;
-            if ($checked) {
-                if (exists $all_perms->{$flag}) {
-                    $expand_parent = 1;
-                    foreach my $sub_perm (sort keys %{ $all_perms->{$flag} }) {
-                        push @sub_perm_loop, {
-                            id => "${flag}_$sub_perm",
-                            perm => "$flag:$sub_perm",
-                            code => $sub_perm,
-                            description => $all_perms->{$flag}->{$sub_perm},
-                            checked => 1
-                        };
-                    }
-                }
-            } else {
-                if (exists $user_perms->{$flag}) {
-                    $expand_parent = 1;
-                    # put selected ones first
-                    foreach my $sub_perm (sort keys %{ $user_perms->{$flag} }) {
-                        push @sub_perm_loop, {
-                            id => "${flag}_$sub_perm",
-                            perm => "$flag:$sub_perm",
-                            code => $sub_perm,
-                            description => $all_perms->{$flag}->{$sub_perm},
-                            checked => 1
-                        };
-                    }
-                }
-                # then ones not selected
-                if (exists $all_perms->{$flag}) {
-                    foreach my $sub_perm (sort keys %{ $all_perms->{$flag} }) {
-                        push @sub_perm_loop, {
-                            id => "${flag}_$sub_perm",
-                            perm => "$flag:$sub_perm",
-                            code => $sub_perm,
-                            description => $all_perms->{$flag}->{$sub_perm},
-                            checked => 0
-                        } unless exists $user_perms->{$flag} and exists $user_perms->{$flag}->{$sub_perm};
-                    }
+        my @sub_perm_loop = ();
+        my $expand_parent = 0;
+        if ($checked) {
+            if (exists $all_perms->{$flag}) {
+                $expand_parent = 1;
+                foreach my $sub_perm (sort keys %{ $all_perms->{$flag} }) {
+                    push @sub_perm_loop, {
+                        id => "${flag}_$sub_perm",
+                        perm => "$flag:$sub_perm",
+                        code => $sub_perm,
+                        description => $all_perms->{$flag}->{$sub_perm},
+                        checked => 1
+                    };
                 }
             }
-            $row{expand} = $expand_parent;
-            if ($#sub_perm_loop > -1) {
+        } else {
+            if (exists $user_perms->{$flag}) {
+                $expand_parent = 1;
+                # put selected ones first
+                foreach my $sub_perm (sort keys %{ $user_perms->{$flag} }) {
+                    push @sub_perm_loop, {
+                        id => "${flag}_$sub_perm",
+                        perm => "$flag:$sub_perm",
+                        code => $sub_perm,
+                        description => $all_perms->{$flag}->{$sub_perm},
+                        checked => 1
+                    };
+                }
+            }
+            # then ones not selected
+            if (exists $all_perms->{$flag}) {
+                foreach my $sub_perm (sort keys %{ $all_perms->{$flag} }) {
+                    push @sub_perm_loop, {
+                        id => "${flag}_$sub_perm",
+                        perm => "$flag:$sub_perm",
+                        code => $sub_perm,
+                        description => $all_perms->{$flag}->{$sub_perm},
+                        checked => 0
+                    } unless exists $user_perms->{$flag} and exists $user_perms->{$flag}->{$sub_perm};
+                }
+            }
+        }
+        $row{expand} = $expand_parent;
+        if ($#sub_perm_loop > -1) {
             $row{sub_perm_loop} = \@sub_perm_loop;
-            }
         }
 	    push @loop, \%row;
     }

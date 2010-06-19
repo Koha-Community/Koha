@@ -3642,6 +3642,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
+$DBversion = "3.01.00.138";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DELETE FROM systempreferences WHERE variable = 'GranularPermissions'");
+    print "Upgrade to $DBversion done (bug 4896: removing GranularPermissions syspref; use of granular permissions is now the default)";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
