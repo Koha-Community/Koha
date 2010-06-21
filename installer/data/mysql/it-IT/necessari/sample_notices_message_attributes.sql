@@ -5,7 +5,6 @@ insert into `message_attributes`
 values
 (1, 'Copia scaduta', 0),
 (2, 'Avviso preventivo', 1),
-(3, 'Eventi in arrivo', 1),
 (4, 'Prenotazione compilata', 0),
 (5, 'Check In', 0),
 (6, 'Check Out', 0);
