@@ -16,6 +16,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'delete_anonymize_patrons', 'Delete old borrowers and anonymize circulation history (deletes borrower reading history)'),
    (13, 'batch_upload_patron_images', 'Upload patron images in batch or one at a time'),
    (13, 'schedule_tasks', 'Schedule tasks to run'),
+   (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
    (15, 'check_expiration', 'Check the expiration of a serial'),
    (15, 'claim_serials', 'Claim missing serials'),
    (15, 'create_subscription', 'Create a new subscription'),
