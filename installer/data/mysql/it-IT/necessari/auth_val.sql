@@ -83,14 +83,14 @@ INSERT INTO `authorised_values` (`category`, `authorised_value`, `lib`) VALUES
 
 -- Codici dei Paesi (COUNTRY)
 INSERT INTO `authorised_values` (`category`, `authorised_value`, `lib`) VALUES
-('COUNTRY', 'it', 'Italia'),
-('COUNTRY', 'us', 'Stati Uniti'),
-('COUNTRY', 'gb', 'Regno Unito - UK '),
-('COUNTRY', 'de', 'Germania'),
-('COUNTRY', 'fr', 'Francia'),
-('COUNTRY', 'va', 'Vaticano'),
-('COUNTRY', 'cn', 'Cina'),
-('COUNTRY', 'in', 'India');
+('COUNTRY', 'IT', 'Italia'),
+('COUNTRY', 'US', 'Stati Uniti'),
+('COUNTRY', 'GB', 'Regno Unito - UK '),
+('COUNTRY', 'DE', 'Germania'),
+('COUNTRY', 'FR', 'Francia'),
+('COUNTRY', 'VA', 'Vaticano'),
+('COUNTRY', 'CN', 'Cina'),
+('COUNTRY', 'IN', 'India');
 
 -- Codici delle lingue (LANG)
 INSERT INTO `authorised_values` (`category`, `authorised_value`, `lib`) VALUES
