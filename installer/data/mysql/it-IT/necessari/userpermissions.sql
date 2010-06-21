@@ -18,6 +18,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'delete_anonymize_patrons', 'Cancella i vecchi prestiti e rendi anonimo lo storico della circolazione (canella in lettura lo storico utenti prestito)'),
    (13, 'batch_upload_patron_images', 'Aggiorna le foto utente in modalità batch o al momento'),
    (13, 'schedule_tasks', 'Schedula i task da far andare'),
+   (13, 'manage_csv_profiles', 'Gestisci i profili CSV di export'),
    (15, 'check_expiration', 'Controlla la scadenza di una risora in continuazione'),
    (15, 'claim_serials', 'Richiedi i fascicoli non arrivati'),
    (15, 'create_subscription', 'Crea un nuovo abbonamento'),
