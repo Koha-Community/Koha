@@ -226,8 +226,8 @@ my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM auth
 my $branches = GetBranchesLoop();  # build once ahead of time, instead of multiple times later.
 
 # Adding a default choice, in case the user does not want to modify the branch
-my @nochange_branch = { branchname => '', value => '', selected => 1 };
-unshift (@$branches, @nochange_branch);
+my $nochange_branch = { branchname => '', value => '', selected => 1 };
+unshift (@$branches, $nochange_branch);
 
 my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
 
@@ -280,8 +280,8 @@ foreach my $tag (sort keys %{$tagslib}) {
 	    foreach my $thisbranch (@$branches) {
 		push @authorised_values, $thisbranch->{value};
 		$authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
-		$value = $thisbranch->{value} if $thisbranch->{selected};
 	    }
+        $value = "";
 	}
 	elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
 	    push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
