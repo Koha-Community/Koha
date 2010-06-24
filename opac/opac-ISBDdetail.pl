@@ -75,7 +75,10 @@ $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $record = GetMarcBiblio($biblionumber);
-
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it

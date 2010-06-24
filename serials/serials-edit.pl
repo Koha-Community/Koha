@@ -108,14 +108,15 @@ unless ( scalar(@serialids) ) {
 
     print $query->redirect($string);
 }
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "serials/serials-edit.tmpl",
-        query           => $query,
-        type            => "intranet",
-        authnotrequired => 0,
-        flagsrequired   => { serials => 1 },
-        debug           => 1,
+	template_name   => "serials/serials-edit.tmpl",
+	query           => $query,
+	type            => "intranet",
+	authnotrequired => 0,
+	flagsrequired   => {serials => 'receive_serials'},
+	debug           => 1,
     }
 );
 

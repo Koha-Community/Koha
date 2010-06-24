@@ -69,7 +69,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { serials => 1 },
+        flagsrequired   => { serials => 'renew_subscription' },
         debug           => 1,
     }
 );

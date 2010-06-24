@@ -60,7 +60,10 @@ my $itemtype     = &GetFrameworkCode($biblionumber);
 my $tagslib      = &GetMarcStructure( 0, $itemtype );
 my $biblio = GetBiblioData($biblionumber);
 my $record = GetMarcBiblio($biblionumber);
-
+if ( ! $record ) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+    exit;
+}
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

@@ -43,6 +43,8 @@ foreach (keys %$patron){
 
 my @categories=C4::Category->all;
 my $branches=(defined $$patron{branchcode}?GetBranchesLoop($$patron{branchcode}):GetBranchesLoop());
+my $subscriptionid = $cgi->param('subscriptionid');
+my $searchstring   = $cgi->param('member');
 
 my %categories_dislay;
 my ($template, $loggedinuser, $cookie);
@@ -51,7 +53,7 @@ my ($template, $loggedinuser, $cookie);
                  query => $cgi,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {borrowers => 1},
+                 flagsrequired => { serials => 'routing' },
                  });
 
 foreach my $category (@categories){

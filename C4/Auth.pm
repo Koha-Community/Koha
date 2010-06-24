@@ -206,24 +206,16 @@ sub get_template_and_user {
             }
         }
 
-        if (C4::Context->preference('GranularPermissions')) {
-            if ( $flags ) {
-                foreach my $module (keys %$all_perms) {
-                    if ( $flags->{$module} == 1) {
-                        foreach my $subperm (keys %{ $all_perms->{$module} }) {
-                            $template->param( "CAN_user_${module}_${subperm}" => 1 );
-                        }
-                    } elsif ( ref($flags->{$module}) ) {
-                        foreach my $subperm (keys %{ $flags->{$module} } ) {
-                            $template->param( "CAN_user_${module}_${subperm}" => 1 );
-                        }
-                    }
-                }
-            }
-        } else {
+        if ( $flags ) {
             foreach my $module (keys %$all_perms) {
-                foreach my $subperm (keys %{ $all_perms->{$module} }) {
-                    $template->param( "CAN_user_${module}_${subperm}" => 1 );
+                if ( $flags->{$module} == 1) {
+                    foreach my $subperm (keys %{ $all_perms->{$module} }) {
+                        $template->param( "CAN_user_${module}_${subperm}" => 1 );
+                    }
+                } elsif ( ref($flags->{$module}) ) {
+                    foreach my $subperm (keys %{ $flags->{$module} } ) {
+                        $template->param( "CAN_user_${module}_${subperm}" => 1 );
+                    }
                 }
             }
         }
@@ -512,9 +504,10 @@ that the user must have the "circulate" privilege in order to
 proceed. To make sure that access control is correct, the
 C<$flagsrequired> parameter must be specified correctly.
 
-If the GranularPermissions system preference is ON, the
-value of each key in the C<flagsrequired> hash takes on an additional
-meaning, e.g.,
+Koha also has a concept of sub-permissions, also known as
+granular permissions.  This makes the value of each key
+in the C<flagsrequired> hash take on an additional
+meaning, i.e.,
 
  1
 
@@ -1577,20 +1570,16 @@ sub haspermission {
     }
     return $flags if $flags->{superlibrarian};
     foreach my $module ( keys %$flagsrequired ) {
-        if (C4::Context->preference('GranularPermissions')) {
-            my $subperm = $flagsrequired->{$module};
-            if ($subperm eq '*') {
-                return 0 unless ( $flags->{$module} == 1 or ref($flags->{$module}) );
-            } else {
-                return 0 unless ( $flags->{$module} == 1 or
-                                    ( ref($flags->{$module}) and
-                                      exists $flags->{$module}->{$subperm} and
-                                      $flags->{$module}->{$subperm} == 1
-                                    )
-                                );
-            }
+        my $subperm = $flagsrequired->{$module};
+        if ($subperm eq '*') {
+            return 0 unless ( $flags->{$module} == 1 or ref($flags->{$module}) );
         } else {
-            return 0 unless ( $flags->{$module} );
+            return 0 unless ( $flags->{$module} == 1 or
+                                ( ref($flags->{$module}) and
+                                  exists $flags->{$module}->{$subperm} and
+                                  $flags->{$module}->{$subperm} == 1
+                                )
+                            );
         }
     }
     return $flags;

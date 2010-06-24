@@ -36,6 +36,14 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (13, 'manage_csv_profiles', 'Manage CSV export profiles'),
    (13, 'moderate_tags', 'Moderate patron tags'),
    (13, 'rotating_collections', 'Manage rotating collections'),
+   (15, 'check_expiration', 'Check the expiration of a serial'),
+   (15, 'claim_serials', 'Claim missing serials'),
+   (15, 'create_subscription', 'Create a new subscription'),
+   (15, 'delete_subscription', 'Delete an existing subscription'),
+   (15, 'edit_subscription', 'Edit an existing subscription'),
+   (15, 'receive_serials', 'Serials receiving'),
+   (15, 'renew_subscription', 'Renew a subscription'),
+   (15, 'routing', 'Routing'),
    (16, 'execute_reports', 'Execute SQL reports'),
    (16, 'create_reports', 'Create SQL Reports')
 ;

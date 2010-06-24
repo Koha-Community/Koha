@@ -337,7 +337,9 @@ if (nodename =="barcodes[]"){
       <li><span class="label">Address 2: </span><!-- TMPL_VAR NAME="B_address2" --></li>
       <li><span class="label">City, State: </span><!-- TMPL_VAR NAME="B_city" --></li>
       <li><span class="label">Zip/Postal Code: </span><!-- TMPL_VAR NAME="B_zipcode" --></li>
-      <li><span class="label">Country: </span><!-- TMPL_VAR NAME="B_country" --></li></ol></div>
+      <li><span class="label">Country: </span><!-- TMPL_VAR NAME="B_country" --></li>
+      <!-- TMPL_IF NAME="B_phone"--><li><span class="label">Phone: </span><!-- TMPL_VAR NAME="B_phone" --></li><!-- /TMPL_IF -->
+      <!-- TMPL_IF NAME="B_email"--><li><span class="label">Email: </span><!-- TMPL_VAR NAME="B_email" --></li><!-- /TMPL_IF --></ol></div>
     <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
      <!-- TMPL_IF NAME="C" -->
    <div class="rows"> <ol><li><span class="label">Surname: </span><!-- TMPL_VAR NAME="contactname" --></li>

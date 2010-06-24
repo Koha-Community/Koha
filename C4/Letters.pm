@@ -803,7 +803,12 @@ sub _send_message_by_email ($;$$$) {
             return;
         }
         my $which_address = C4::Context->preference('AutoEmailPrimaryAddress');
-        $to_address = $member->{$which_address};
+        # If the system preference is set to 'first valid' (value == OFF), look up email address
+        if ($which_address eq 'OFF') {
+            $to_address = GetFirstValidEmailAddress( $message->{'borrowernumber'} );
+        } else {
+            $to_address = $member->{$which_address};
+        }
         unless ($to_address) {  
             # warn "FAIL: No 'to_address' and no email for " . ($member->{surname} ||'') . ", borrowernumber ($message->{borrowernumber})";
             # warning too verbose for this more common case?

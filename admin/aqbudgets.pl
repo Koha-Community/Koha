@@ -293,11 +293,11 @@ if ($op eq 'add_form') {
         $budget->{'remaining_pos'} = 1 if $budget->{'budget_remaining'} > 0;
         $budget->{'remaining_neg'} = 1 if $budget->{'budget_remaining'} < 0;
 		for (grep {/total_levels_spent|budget_spent|budget_amount|budget_remaining|budget_unalloc/} keys %$budget){
-        $$budget{$_}               = $num->format_price( $$budget{$_} ) if defined($$budget{$_})
+            $budget->{$_}               = $num->format_price( $budget->{$_} ) if defined($budget->{$_})
 		}
 
         # Value of budget_spent equals 0 instead of undefined value
-        $$budget{"budget_spent"} = $num->format_price(0) unless defined($$budget{"budget_spent"});
+        $budget->{"budget_spent"} = $num->format_price(0) unless defined($budget->{"budget_spent"});
 
         my $borrower = &GetMember( borrowernumber=>$budget->{budget_owner_id} );
         $budget->{"budget_owner_name"}     = $borrower->{'firstname'} . ' ' . $borrower->{'surname'};

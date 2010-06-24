@@ -56,6 +56,8 @@ BEGIN {
 		&getzipnamecity 
 		&getidcity
 
+                &GetFirstValidEmailAddress
+
 		&GetAge 
 		&GetCities 
 		&GetRoadTypes 
@@ -1247,6 +1249,33 @@ sub getidcity {
     return $data;
 }
 
+=head2 GetFirstValidEmailAddress
+
+  $email = GetFirstValidEmailAddress($borrowernumber);
+
+Return the first valid email address for a borrower, given the borrowernumber.  For now, the order 
+is defined as email, emailpro, B_email.  Returns the empty string if the borrower has no email 
+addresses.
+
+=cut
+
+sub GetFirstValidEmailAddress {
+    my $borrowernumber = shift;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( "SELECT email, emailpro, B_email FROM borrowers where borrowernumber = ? ");
+    $sth->execute( $borrowernumber );
+    my $data = $sth->fetchrow_hashref;
+
+    if ($data->{'email'}) {
+       return $data->{'email'};
+    } elsif ($data->{'emailpro'}) {
+       return $data->{'emailpro'};
+    } elsif ($data->{'B_email'}) {
+       return $data->{'B_email'};
+    } else {
+       return '';
+    }
+}
 
 =head2 GetExpiryDate 
 

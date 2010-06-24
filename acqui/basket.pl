@@ -205,6 +205,7 @@ if ( $op eq 'delete_confirm' ) {
                            name =>   "No group");
         if ( ! $basket->{basketgroupid} ) {
             $emptygroup{default} = 1;
+            $emptygroup{nogroup} = 1;
         }
         unshift( @$basketgroups, \%emptygroup );
     }

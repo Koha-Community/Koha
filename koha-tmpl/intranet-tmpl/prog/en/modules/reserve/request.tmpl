@@ -47,14 +47,14 @@ function check() {
     }
 
     if (count_reserv == "0"){
-		msg += (_("- Please select an item to place a hold\n"));
+		msg += (_("- Please select an item to place a hold") + "\n");
     }
     if (count_reserv >= "2"){
-		msg += (_("- You may only place a hold on one item at a time\n"));
+		msg += (_("- You may only place a hold on one item at a time") + "\n");
     }
 
     if (alreadyreserved > "0"){
-		msg += (_("- This patron had already placed a hold on this item\n Please cancel the previous hold first \n"));
+		msg += (_("- This patron had already placed a hold on this item") + "\n" + _("Please cancel the previous hold first") + "\n");
     }
 
 	if (msg == "") return(true);
@@ -164,7 +164,7 @@ function checkMultiHold() {
   <!-- /TMPL_IF -->
 
   <!-- TMPL_UNLESS NAME="multi_hold" -->
-    <h1>Place a hold on <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a></h1>
+    <h1>Place a hold on <!-- TMPL_INCLUDE NAME="biblio-default-view.inc" --><!-- TMPL_VAR NAME="title" escape="html" --></a></h1>
   <!-- TMPL_ELSE -->
     <h1>Confirm Holds</h1>
   <!-- /TMPL_UNLESS -->
@@ -585,7 +585,11 @@ function checkMultiHold() {
           <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
           <select name="rank-request">
     <!-- TMPL_IF Name="wait" -->
+        <!-- TMPL_IF NAME="intransit" -->
+            <option value="T" selected="selected">In transit</option>
+        <!-- TMPL_ELSE -->
             <option value="W" selected="selected">Waiting</option>
+        <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" --><!-- TMPL_LOOP Name="optionloop" -->
         <!-- TMPL_IF Name="selected" --><option value="<!-- TMPL_VAR NAME="num" -->" selected="selected"><!-- TMPL_VAR NAME="num" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="num" -->"><!-- TMPL_VAR NAME="num" --></option><!-- /TMPL_IF -->

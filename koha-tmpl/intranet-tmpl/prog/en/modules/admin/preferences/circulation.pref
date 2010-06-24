@@ -140,11 +140,12 @@ Circulation:
               class: date
             - .
         -
+            - Calculate the due date using 
             - pref: useDaysMode
               choices:
-                  Days: Include
-                  Calendar: "Don't include"
-            - days when the library in closed when calculating due dates.
+                  Days: circulation rules only.
+                  Calendar: the calendar to skip all days the library is closed.
+                  Datedue: the calendar to push the due date to the next open day
         -
             - When renewing checkouts, base the new due date on
             - pref: RenewalPeriodBase

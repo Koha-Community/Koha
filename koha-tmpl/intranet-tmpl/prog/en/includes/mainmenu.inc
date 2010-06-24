@@ -47,7 +47,11 @@
     <li><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a><ul>
         <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC Record</a></li>
         <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_serials" -->
         <li><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></li>
+    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="CAN_user_editcatalogue" -->
     </ul></li>
     
     <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>

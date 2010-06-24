@@ -24,12 +24,13 @@ use Test::More qw(no_plan);
 
 use C4::Context;
 
-my $root_dir = C4::Context->config( 'intranetdir' ) . '/installer/data/mysql';
+my $root_dir = 'installer/data/mysql';
 my $base_perms_file = "en/mandatory/userpermissions.sql";
 my @trans_perms_files = qw(
+    de-DE/mandatory/userpermissions.sql
     fr-FR/1-Obligatoire/userpermissions.sql
-    uk-UA/mandatory/userpermissions.sql
-    ru-RU/mandatory/userpermissions.sql
+    uk-UA/mandatory/permissions_and_user_flags.sql
+    ru-RU/mandatory/permissions_and_user_flags.sql
     pl-PL/mandatory/userpermissions.sql
 );
 
@@ -58,8 +59,11 @@ foreach my $file_name ( @trans_perms_files ) {
 sub get_perms_from_file {
     my $fh = shift;
     my %perm;
+    my $found_insert = 0;
     while ( <$fh> ) {
         next if /^--/; # Comment line
+        $found_insert = 1 if /insert\s+into/i and /permissions/i;
+        next unless $found_insert;
         #/VALUES.*\(\'([\w\-:]+)\'/;
         /,\s*\'(.*?)\'/;
         my $variable = $1;

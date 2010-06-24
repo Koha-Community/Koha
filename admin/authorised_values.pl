@@ -52,14 +52,10 @@ $searchfield =~ s/\,//g;
 my $script_name = "/cgi-bin/koha/admin/authorised_values.pl";
 my $dbh = C4::Context->dbh;
 
-# my $subpermission = C4::Context->preference('GranularPermissions') ? 
-#     { editcatalogue => ... } :
-#     {    parameters => 1   } ;
-
 my ($template, $borrowernumber, $cookie)= get_template_and_user({
     template_name => "admin/authorised_values.tmpl",
     authnotrequired => 0,
-    flagsrequired => {parameters => 1},     # soon $subpermission
+    flagsrequired => {parameters => 1},
     query => $input,
     type => "intranet",
     debug => 1,

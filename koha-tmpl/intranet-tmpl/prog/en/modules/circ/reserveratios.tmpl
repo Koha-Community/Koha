@@ -92,14 +92,7 @@ $.tablesorter.addParser({
            	<td><p><!-- TMPL_VAR NAME="itemcount" --></p></td>
            	<td><p class="ratiolimit"><!-- TMPL_VAR NAME="thisratio" --></p></td>
             <td><p>
-                   <!-- TMPL_IF name="BiblioDefaultViewmarc" -->
-                   <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                   <!-- TMPL_ELSIF name="BiblioDefaultViewisbd" -->
-                   <a href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                   <!-- TMPL_ELSE -->
-                   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
-                   <!-- /TMPL_IF -->
-                      <!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
+                <!-- TMPL_INCLUDE NAME="biblio-default-view.inc" --><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
                    </a>
                 </p>
                 <p><!-- TMPL_VAR NAME="notes" --></p>

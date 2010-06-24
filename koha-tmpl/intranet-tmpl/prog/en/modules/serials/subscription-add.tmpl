@@ -985,8 +985,15 @@ $(document).ready(function() {
             
                 <input type="text" name="biblionumber" id="biblionumber" value="<!-- TMPL_VAR name="bibnum" -->" size="8" /> 
                 (<input type="text" name="title" value="<!-- TMPL_VAR name="bibliotitle" -->" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
-               <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a> | <!--TMPL_IF Name="mod"--><a href="#" onclick="addbiblioPopup(<!-- TMPL_VAR NAME="bibnum" -->); return false;">Edit biblio</a><!-- TMPL_ELSE -->
-                <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a><!--/TMPL_IF--></div>
+               <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a>
+		    <!-- TMPL_IF name="CAN_user_editcatalogue" --> 
+		       <!--TMPL_IF Name="mod"-->
+		       | <a href="#" onclick="addbiblioPopup(<!-- TMPL_VAR NAME="bibnum" -->); return false;">Edit biblio</a>
+		       <!-- TMPL_ELSE -->
+		       | <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a>
+		       <!--/TMPL_IF-->
+		    <!--/TMPL_IF-->
+	       </div>
             
         </li>
         <li class="radio">
