@@ -80,16 +80,17 @@ sub version_info {
         }
     }
     else {
-        for (keys(%$PERL_DEPS)) {
-            eval "require $_";
+        for (sort keys(%{$PERL_DEPS})) {
+            my $pkg = $_;  #  $_ holds the string
+            eval "require $pkg";
             if ($@) {
                 push (@{$self->{'missing_pm'}}, {$_ => {cur_ver => 0, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
             }
-            elsif ($_->VERSION lt $PERL_DEPS->{$_}->{'min_ver'}) {
-                push (@{$self->{'upgrade_pm'}}, {$_ => {cur_ver => $_->VERSION, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
+            elsif ($pkg->VERSION lt $PERL_DEPS->{$_}->{'min_ver'}) {
+                push (@{$self->{'upgrade_pm'}}, {$_ => {cur_ver => $pkg->VERSION, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
             }
             else {
-                push (@{$self->{'current_pm'}}, {$_ => {cur_ver => $_->VERSION, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
+                push (@{$self->{'current_pm'}}, {$_ => {cur_ver => $pkg->VERSION, min_ver => $PERL_DEPS->{$_}->{'min_ver'}, required => $PERL_DEPS->{$_}->{'required'}, usage => $PERL_DEPS->{$_}->{'usage'}}});
             }
         }
         return;
