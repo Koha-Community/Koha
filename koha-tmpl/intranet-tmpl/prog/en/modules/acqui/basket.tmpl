@@ -177,6 +177,8 @@
                         <input type="submit" value="Change basket group" />
                     </p>
                 </form>
+                <!-- TMPL_ELSE -->
+                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=<!-- TMPL_VAR name="basketgroups" -->&basketgroupid=<!-- TMPL_VAR name="id" -->"><!-- TMPL_VAR name="name" --></a>
                 <!-- /TMPL_IF -->
                 <!-- /TMPL_IF -->
             </div>
