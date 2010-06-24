@@ -305,11 +305,11 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                                                                      </select></li>
                     <li><label for="suggesteddate"> Suggested on:</label><!--TMPL_VAR Name="suggesteddate"--></li>
                     <li><label for="suggestionmanagedby"> Managed by:</label><select id="suggestionmanagedby" name="suggestionmanagedby"><option value="">Any</option>
-<!-- TMPL_LOOP name="suggestionmanagedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP name="managedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                                      </select></li>
                     <li><label for="manageddate"> Management date:</label><!--TMPL_VAR Name="manageddate"--></li>
                     <li><label for="suggestionacceptedby"> Accepted by:</label><select id="suggestionacceptedby" name="suggestionacceptedby"><option value="">Any</option>
-<!-- TMPL_LOOP name="suggestionacceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+<!-- TMPL_LOOP name="acceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
 		                                      </select></li>
                     <li><label for="accepteddate"> Accepted on:</label><!--TMPL_VAR Name="accepteddate"--></li><li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
