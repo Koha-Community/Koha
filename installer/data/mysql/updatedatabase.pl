@@ -3655,7 +3655,7 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = '3.01.00.140';
 if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     $dbh->do("UPDATE systempreferences SET value = '0' WHERE variable = 'TagsModeration' AND value is NULL");
     print "Upgrade to $DBversion done (bug 4312 TagsModeration changed from NULL to 0)\n";
