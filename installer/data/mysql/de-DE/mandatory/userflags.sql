@@ -1,4 +1,4 @@
-﻿INSERT INTO `userflags` VALUES(0,'superlibrarian','Zugang zu allen bibliothekarischen Funktionen',0);
+INSERT INTO `userflags` VALUES(0,'superlibrarian','Zugang zu allen bibliothekarischen Funktionen',0);
 INSERT INTO `userflags` VALUES(1,'circulate','Medien ausleihen/zurückgeben',0);
 INSERT INTO `userflags` VALUES(2,'catalogue','Katalogsuche verwenden (Dienstoberfläche)',0);
 INSERT INTO `userflags` VALUES(3,'parameters','Systemparameter verändern',0);

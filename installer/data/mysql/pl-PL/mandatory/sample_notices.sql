@@ -1,4 +1,4 @@
-﻿INSERT INTO `letter` (module, code, name, title, content) 
+INSERT INTO `letter` (module, code, name, title, content) 
 VALUES 
 ('circulation','ODUE','Overdue Notice',
 'Item Overdue','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nAccording to our current records, you have items that are overdue.Your library does not charge late fines, but please return or renew them at the branch below as soon as possible.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nPhone: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nIf you have registered a password with the library, and you have a renewal available, you may renew online. If an item becomes more than 30 days overdue, you will be unable to use your library card until the item is returned.\n\nThe following item(s) is/are currently overdue:\n\n<item>"<<biblio.title>>" by <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Fine: <fine>GBP</fine></item>\n\nThank-you for your prompt attention to this matter.\n\n<<branches.branchname>> Staff\n'),

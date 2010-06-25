@@ -1,4 +1,4 @@
-﻿INSERT INTO `itemtypes` VALUES ('BK', 'Bücher',5,0,'bridge/book.gif',NULL);
+INSERT INTO `itemtypes` VALUES ('BK', 'Bücher',5,0,'bridge/book.gif',NULL);
 INSERT INTO `itemtypes` VALUES ('MX', 'Medienkombinationen',5,0,'bridge/kit.gif',NULL);
 INSERT INTO `itemtypes` VALUES ('CF', 'Datenträger',5,0,'bridge/computer_file.gif',NULL);
 INSERT INTO `itemtypes` VALUES ('MP', 'Karten',5,0,'bridge/map.gif',NULL);

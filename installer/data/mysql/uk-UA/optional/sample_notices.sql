@@ -1,4 +1,4 @@
-﻿truncate letter;
+truncate letter;
 
 INSERT INTO `letter`
 (module, code, name, title, content)

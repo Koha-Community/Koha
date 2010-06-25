@@ -1,4 +1,4 @@
-﻿-- INSERT INTO branchcategories ( `categorycode`,`categoryname`,`codedescription`) VALUES
+-- INSERT INTO branchcategories ( `categorycode`,`categoryname`,`codedescription`) VALUES
 
 INSERT INTO branches ( `branchcode`,`branchname`,`branchaddress1`) VALUES
 

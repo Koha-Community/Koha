@@ -1,4 +1,4 @@
-﻿INSERT INTO stopwords VALUES
+INSERT INTO stopwords VALUES
 ('a'),
 ('about'),
 ('also'),

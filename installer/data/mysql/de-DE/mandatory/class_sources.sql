@@ -1,4 +1,4 @@
-﻿-- 
+-- 
 -- Default classification sources and filing rules
 -- for Koha.
 --

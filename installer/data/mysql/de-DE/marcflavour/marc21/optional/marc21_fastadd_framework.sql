@@ -1,4 +1,4 @@
-﻿INSERT IGNORE INTO biblio_framework VALUES ( 'FA','Schnellaufnahme' );
+INSERT IGNORE INTO biblio_framework VALUES ( 'FA','Schnellaufnahme' );
 INSERT IGNORE INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES
                 ('000', 'Satzkennung', 'Satzkennung', 0, 1, '', 'FA'),
                 ('008', 'Feld mit fester Länge zur physischen Beschreibung - Allgemeine Angaben', 'Feld mit fester Länge zur physischen Beschreibung - Allgemeine Angaben', 0, 1, '', 'FA'),

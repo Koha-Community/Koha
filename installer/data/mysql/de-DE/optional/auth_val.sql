@@ -1,4 +1,4 @@
-﻿-- Reasons for acceptance or rejection of suggestions in acquisitions
+-- Reasons for acceptance or rejection of suggestions in acquisitions
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','BSELL','Bestseller');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','SCD','Vorhandenes Exemplar beschädigt');
 INSERT INTO authorised_values (category, authorised_value, lib) VALUES ('SUGGEST','LCL','Biblitoheksexemplar vermisst');

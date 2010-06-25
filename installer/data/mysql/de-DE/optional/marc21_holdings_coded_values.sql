@@ -1,4 +1,4 @@
-﻿-- Coded values conforming to the Z39.77-2006 Holdings Statements for Bibliographic Items');
+-- Coded values conforming to the Z39.77-2006 Holdings Statements for Bibliographic Items');
 -- ISSN: 1041-5653
 -- Refer to http://www.niso.org/standards/index.html
 
