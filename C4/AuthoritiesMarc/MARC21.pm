@@ -119,7 +119,7 @@ sub fix_marc21_auth_type_location {
 
 =head1 AUTHOR
 
-Koha Development Team <info@koha.org>
+Koha Development Team <http://koha-community.org/>
 
 Galen Charlton <galen.charlton@liblime.com>
 

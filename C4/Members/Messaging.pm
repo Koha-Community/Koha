@@ -307,7 +307,7 @@ L<C4::Letters>
 
 =head1 AUTHOR
 
-Koha Development Team <info@koha.org>
+Koha Development Team <http://koha-community.org/>
 
 Andrew Moore <andrew.moore@liblime.com>
 

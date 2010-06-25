@@ -86,7 +86,7 @@ Code based on parts of ExtUtils::Install in order to
 approximately track how it identifies files to
 install.
 
-Koha Development Team <info@koha.org>
+Koha Development Team <http://koha-community.org/>
 
 Galen Charlton <galen.charlton@liblime.com>
 
