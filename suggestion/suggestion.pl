@@ -57,9 +57,13 @@ sub GetCriteriumDesc{
     if ($displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
         return "" unless $borr;
-#		warn '$borr : ',Data::Dumper::Dumper($borr);
-        return $$borr{firstname}.", ".$$borr{surname};
-    }  
+        return $$borr{firstname} . ", " . $$borr{surname};
+    }
+    if ( $displayby =~ /budgetid/) {
+        my $budget = GetBudget($criteriumvalue);
+        return "" unless $budget;
+        return $$budget{budget_name};
+    }
 }
 
 my $input           = CGI->new;
@@ -265,8 +269,8 @@ foreach my $budget (@$budgets){
 
 $template->param( budgetsloop => $budgets);
 
-my %hashlists; 
-foreach my $field qw(managedby acceptedby suggestedby STATUS){
+my %hashlists;
+foreach my $field qw(managedby acceptedby suggestedby budgetid STATUS) {
     my $values_list;
     $values_list=GetDistinctValues("suggestions.".$field) ;
     my @codes_list = map{

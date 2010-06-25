@@ -304,20 +304,20 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
 <!-- TMPL_LOOP name="suggestedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                                      </select></li>
                     <li><label for="suggesteddate"> Suggested on:</label><!--TMPL_VAR Name="suggesteddate"--></li>
-                    <li><label for="suggestionmanagedby"> Managed by:</label><select id="suggestionmanagedby" name="suggestionmanagedby"><option value="">Any</option>
+                    <li><label for="managedby"> Managed by:</label><select id="managedby" name="managedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="managedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                                      </select></li>
                     <li><label for="manageddate"> Management date:</label><!--TMPL_VAR Name="manageddate"--></li>
-                    <li><label for="suggestionacceptedby"> Accepted by:</label><select id="suggestionacceptedby" name="suggestionacceptedby"><option value="">Any</option>
+                    <li><label for="acceptedby"> Accepted by:</label><select id="acceptedby" name="acceptedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="acceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
 		                                      </select></li>
                     <li><label for="accepteddate"> Accepted on:</label><!--TMPL_VAR Name="accepteddate"--></li><li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
 
 				<fieldset class="brief"><h4 class="collapse"><a href="#">Acquistion information</a></h4>
-                    <ol><li><label for="bookfundid"> Book fund:</label>
-                    <select name="bookfundid" id="bookfundid"><option value="">Any</option><!-- TMPL_LOOP name="bookfundsloop" -->
-                        <!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="bookfundid" -->" selected="selected"><!-- TMPL_VAR name="bookfundname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="bookfundid" -->"><!-- TMPL_VAR name="bookfundname" --></option><!-- /TMPL_IF -->
+                    <ol><li><label for="budgetid"> Book fund:</label>
+                    <select name="budgetid" id="budgetid"><option value="">Any</option><!-- TMPL_LOOP name="budgetid_loop" -->
+                        <!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF -->
                         <!-- /TMPL_LOOP -->
                     </select></li>
                     <li><label for="branchcode"> For:</label>
