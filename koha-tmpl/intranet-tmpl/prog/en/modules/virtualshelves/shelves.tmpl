@@ -347,7 +347,7 @@ function placeHold () {
                     <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
         <td><a href="shelves.pl?<!-- TMPL_IF NAME="showprivateshelves" -->display=privateshelves&amp;<!-- /TMPL_IF -->viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
         <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
-        <td><!-- TMPL_VAR NAME="sortfield" --></td>
+        <td><!-- TMPL_IF NAME="authorsort" -->Author<!-- TMPL_ELSIF NAME="yearsort" -->Year<!-- TMPL_ELSE -->Title<!-- /TMPL_IF --></td>
         <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->
@@ -398,7 +398,7 @@ function placeHold () {
                 <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!--TMPL_ELSE--><tr><!-- /TMPL_IF -->
 		<td><a href="shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
 		<td><!-- TMPL_VAR NAME="count" --> item(s)</td>
-        <td><!-- TMPL_VAR NAME="sortfield" --></td>
+        <td><!-- TMPL_IF NAME="authorsort" -->Author<!-- TMPL_ELSIF NAME="yearsort" -->Year<!-- TMPL_ELSE -->Title<!-- /TMPL_IF --></td>
         <td><!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
 			<!-- TMPL_IF NAME="viewcategory3" -->Open<!-- /TMPL_IF -->

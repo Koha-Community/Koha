@@ -376,7 +376,8 @@ $(function() {
                           <!-- /TMPL_UNLESS -->
                               <td><a href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves&amp;viewshelf=<!-- TMPL_VAR NAME="shelf" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
                               <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
-                              <td><!-- TMPL_VAR NAME="sortfield" --></td>
+                              <td><!-- TMPL_IF NAME="authorsort" -->Author<!-- TMPL_ELSIF NAME="yearsort" -->Year<!-- TMPL_ELSE -->Title<!-- /TMPL_IF -->
+                          </td>
                               <td>
                                 <!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
                                 <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
@@ -444,7 +445,8 @@ $(function() {
                       <!-- /TMPL_UNLESS -->
                           <td><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelf" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"  --></a></td>
                           <td><!-- TMPL_VAR NAME="count" --> item(s)</td>
-                          <td><!-- TMPL_VAR NAME="sortfield" --></td>
+                          <td><!-- TMPL_IF NAME="authorsort" -->Author<!-- TMPL_ELSIF NAME="yearsort" -->Year<!-- TMPL_ELSE -->Title<!-- /TMPL_IF -->
+                          </td>
                           <td>
                             <!-- TMPL_IF NAME="viewcategory1" -->Private<!-- /TMPL_IF -->
                             <!-- TMPL_IF NAME="viewcategory2" -->Public<!-- /TMPL_IF -->
