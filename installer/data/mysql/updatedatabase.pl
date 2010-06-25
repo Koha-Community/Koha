@@ -3662,7 +3662,7 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = '3.01.00.141';
 if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     $dbh->do(qq{DELETE FROM message_attributes WHERE message_attribute_id=3;});
     $dbh->do(qq{DELETE FROM letter WHERE code='EVENT' AND title='Upcoming Library Event';});
