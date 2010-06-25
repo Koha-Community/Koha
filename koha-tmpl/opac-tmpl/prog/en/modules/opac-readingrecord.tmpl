@@ -1,12 +1,17 @@
 <!-- TMPL_INCLUDE name="doc-head-open.inc" --><!-- TMPL_VAR NAME="LibraryNameTitle" DEFAULT="Koha Online" --> Catalog &rsaquo;  Account for <!-- TMPL_LOOP name="BORROWER_INFO" --><!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" --><!-- /TMPL_LOOP -->
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<!-- TMPL_IF NAME="GoogleJackets" --><script type="text/javascript">
+<style type="text/css">ul.ui-tabs-nav li a, ul.ui-tabs-nav li span.a  { padding:0.6em 1em; }</style>
+<script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
-    KOHA.Google.GetCoverFromIsbn();
+    <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
+        $('#sortsubmit').hide();
+    $('#order').change(function() {
+        $('#sortform').submit();
+    });
 });
 //]]>
-</script><!-- /TMPL_IF -->
+</script>
 </head>
 <body id="opac-readingrecord">
 <div id="doc3" class="yui-t1">
@@ -23,26 +28,35 @@ $(document).ready(function(){
 You have never borrowed anything from this library.
 <!-- TMPL_ELSE -->
 <div id="opac-user-readingrec" class="toptabs">
-<ul class="tabs-nav">
+
+<div class="resultscontrol resort"> <form id="sortform" action="/cgi-bin/koha/opac-readingrecord.pl" method="get">
+<!-- TMPL_UNLESS NAME="limit" --><input type="hidden" name="limit" value="full" /><!-- /TMPL_UNLESS -->
+<select name="order" id="order">
+
+<!-- TMPL_IF NAME="orderbydate" --><option value="" selected="selected">Order by date</option><!-- TMPL_ELSE --><option value="">Order by date</option><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="orderbytitle" --><option value="title" selected="selected">Order by title</option><!-- TMPL_ELSE --><option value="title">Order by title</option><!-- /TMPL_IF -->
+
+ </select> <input type="submit" value="Go" id="sortsubmit" class="submit clearfix" /></form></div>
+
+<ul class="ui-tabs-nav">
 
 <!-- TMPL_IF NAME="showfulllink" -->
 <!-- TMPL_IF NAME="limit" -->
-<li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full">Show All Items</a></li><li class="tabs-selected"><a href="#readingrec">Showing Last 50 Items</a></li>
+<li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=full<!-- TMPL_IF NAME="orderbytitle" -->&amp;order=title<!-- /TMPL_IF -->">Show All Items</a></li><li class="ui-tabs-selected"><a href="#readingrec">Showing Last 50 Items</a></li>
 <!-- TMPL_ELSE -->
-<li class="tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50">Show Last 50 Items Only</a></li>
+<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li><li><a href="/cgi-bin/koha/opac-readingrecord.pl?limit=50<!-- TMPL_IF NAME="orderbytitle" -->&amp;order=title<!-- /TMPL_IF -->">Show Last 50 Items Only</a></li>
 <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-<li class="tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li>
+<li class="ui-tabs-selected"><a href="/cgi-bin/koha/opac-readingrecord.pl#readingrec">Showing All Items</a></li>
 <!-- /TMPL_IF -->
 </ul>
-<div class="tabs-container"><table id="readingrec">
+<div class="ui-tabs-panel"><table id="readingrec">
 <tr>
-<th colspan="2"><!-- TMPL_UNLESS NAME="orderbytitle" --><a
-href="/cgi-bin/koha/opac-readingrecord.pl?order=title">Title</a><!--
-TMPL_ELSE -->Title<!-- /TMPL_UNLESS --></th>
+<th colspan="2">Title</th>
 <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
 <th>Call No.</th>
-<th><!-- TMPL_UNLESS NAME="orderbydate" --><a href="/cgi-bin/koha/opac-readingrecord.pl">Date</a><!-- TMPL_ELSE -->Date<!-- /TMPL_UNLESS --></th>
+<th>Date</th>
 </tr>
 
 <!-- TMPL_LOOP NAME="READING_RECORD" -->
