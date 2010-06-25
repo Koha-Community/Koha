@@ -601,18 +601,6 @@ sub header_cell_loop {
     return \@headers;
 }
 
-# pass $sth, get back an array of names for the column headers
-sub header_cell_values {
-    my $sth = shift or return ();
-    return @{$sth->{NAME}};
-}
-
-# pass $sth, get back a TMPL_LOOP-able set of names for the column headers
-sub header_cell_loop {
-    my @headers = map { +{ cell => $_ } } header_cell_values (shift);
-    return \@headers;
-}
-
 foreach (1..6) {
     $template->param('build' . $_) and $template->param(buildx => $_) and last;
 }
