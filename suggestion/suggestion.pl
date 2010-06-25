@@ -282,5 +282,5 @@ foreach my $field qw(managedby acceptedby suggestedby budgetid STATUS) {
     $hashlists{lc($field)."_loop"}=\@codes_list;
 }
 $template->param(%hashlists);
-
+$template->param(DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),);
 output_html_with_http_headers $input, $cookie, $template->output;

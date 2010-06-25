@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><title>Koha &rsaquo; Acquisitions  &rsaquo;
 <!-- TMPL_IF name="op_save" --><!-- TMPL_IF name="suttesionid" -->Edit purchase suggestion #<!-- TMPL_VAR name="suggestionid" --><!--TMPL_ELSE-->Enter a new purchase suggestion<!-- /TMPL_IF --><!--TMPL_ELSE-->Suggestions Management<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <!--TMPL_IF Name="op_else"--> <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/JavaScript">
@@ -277,11 +278,9 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
 <form name="suggestionfilter" action="suggestion.pl" method="get">
 <fieldset class="brief"><ol style="display:block;"><li><label for="displayby">Organize by: </label>
                 <select name="displayby" id="displayby" style="width:auto;">
-                    <option value="">No tabs</option>
                     <option value="STATUS">Status</option>
                     <option value="branchcode">Library</option>
                     <option value="itemtype">Item Type</option>
-                    <option value="sort1">Sort1</option>
                     <option value="managedby">Managed by</option>
                     <option value="acceptedby">Accepted by</option>
                 </select> <input type="submit" value="Go" /></li></ol></fieldset>
@@ -303,15 +302,97 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                     <li><label for="suggestedby"> Suggested By:</label><select id="suggestedby" name="suggestedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="suggestedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                                      </select></li>
-                    <li><label for="suggesteddate"> Suggested on:</label><!--TMPL_VAR Name="suggesteddate"--></li>
+                    <li><label for="suggesteddate_from"> Suggested on:</label><!--TMPL_VAR Name="suggesteddate"-->
+                        <table class="invis">
+                        <tr>
+                        <td>from :</td><td><input type="text" id="suggesteddate_from" name="suggesteddate_from" style="width:80px;" /><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="suggesteddate_from_button" alt="Show Calendar" />
+                        <script language="JavaScript" type="text/javascript">
+                            Calendar.setup(
+                            {
+                                inputField : "suggesteddate_from",
+                                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                                //ifFormat : "%Y-%m-%d", 
+                                button : "suggesteddate_from_button"
+                            });
+                        </script></td>
+                        </tr>
+                        <tr>
+                        <td>to :</td><td><input type="text" id="suggesteddate_to" name="suggesteddate_to" style="width:80px;" /><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="suggesteddate_to_button" alt="Show Calendar" />
+                        <script language="JavaScript" type="text/javascript">
+                            Calendar.setup(
+                            {
+                                inputField : "suggesteddate_to",
+                                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                                //ifFormat : "%Y-%m-%d", 
+                                button : "suggesteddate_to_button"
+                            });
+                        </script></td>
+                        </tr>
+                        </table>
+                    </li>
                     <li><label for="managedby"> Managed by:</label><select id="managedby" name="managedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="managedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
                                                                      </select></li>
-                    <li><label for="manageddate"> Management date:</label><!--TMPL_VAR Name="manageddate"--></li>
+                    <li><label for="manageddate_from"> Management date:</label><!--TMPL_VAR Name="manageddate"-->
+                        <table class="invis">
+                        <tr>
+                        <td>from :</td><td><input type="text" id="manageddate_from" name="manageddate_from" style="width:80px;" /><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="manageddate_from_button" alt="Show Calendar" />
+                        <script language="JavaScript" type="text/javascript">
+                            Calendar.setup(
+                            {
+                                inputField : "manageddate_from",
+                                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                                //ifFormat : "%Y-%m-%d", 
+                                button : "manageddate_from_button"
+                            });
+                        </script></td>
+                        </tr>
+                        <tr>
+                        <td>to :</td><td><input type="text" id="manageddate_to" name="manageddate_to" style="width:80px;" /><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="manageddate_to_button" alt="Show Calendar" />
+                        <script language="JavaScript" type="text/javascript">
+                            Calendar.setup(
+                            {
+                                inputField : "manageddate_to",
+                                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                                //ifFormat : "%Y-%m-%d", 
+                                button : "manageddate_to_button"
+                            });
+                        </script></td>
+                        </tr>
+                        </table>
+                    </li>
                     <li><label for="acceptedby"> Accepted by:</label><select id="acceptedby" name="acceptedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="acceptedby_loop" --><!-- TMPL_IF NAME="selected" --> <option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
 		                                      </select></li>
-                    <li><label for="accepteddate"> Accepted on:</label><!--TMPL_VAR Name="accepteddate"--></li><li><input type="submit" value="Go" /></li></ol>
+                    <li><label for="accepteddate_from"> Accepted on:</label><!--TMPL_VAR Name="accepteddate"-->
+                        <table class="invis">
+                        <tr>
+                        <td>from :</td><td><input type="text" id="accepteddate_from" name="accepteddate_from" style="width:80px;" /><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="accepteddate_from_button" alt="Show Calendar" />
+                        <script language="JavaScript" type="text/javascript">
+                            Calendar.setup(
+                            {
+                                inputField : "accepteddate_from",
+                                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                                //ifFormat : "%Y-%m-%d", 
+                                button : "accepteddate_from_button"
+                            });
+                        </script></td>
+                        </tr>
+                        <tr>
+                        <td>to :</td><td><input type="text" id="accepteddate_to" name="accepteddate_to" style="width:80px;" /><img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="accepteddate_to_button" alt="Show Calendar" />
+                        <script language="JavaScript" type="text/javascript">
+                            Calendar.setup(
+                            {
+                                inputField : "accepteddate_to",
+                                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                                //ifFormat : "%Y-%m-%d", 
+                                button : "accepteddate_to_button"
+                            });
+                        </script></td>
+                        </tr>
+                        </table>
+                    </li>
+                    <li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
 
 				<fieldset class="brief"><h4 class="collapse"><a href="#">Acquistion information</a></h4>
