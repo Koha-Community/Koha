@@ -388,7 +388,6 @@ sub output_html_with_http_headers ($$$;$$) {
 
     $content_type = "text/html" unless $content_type =~ m!/!; # very basic sanity check
     print $query->header(
-        -status  => $status,
         -type    => $content_type,
         -charset => 'UTF-8',
         -cookie  => $cookie,
