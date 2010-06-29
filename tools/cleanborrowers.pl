@@ -40,6 +40,75 @@ use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Members;        # GetBorrowersWhoHavexxxBorrowed.
 use C4::Circulation;    # AnonymiseIssueHistory.
 use Date::Calc qw/Today Add_Delta_YM/;
+use Getopt::Long;
+
+if ( scalar @ARGV > 0 ) {
+    my ($untildate, $delete, $full, $anonymize, $help, $test);
+    my ($totalDel, $totalAno, $membersToDelete, $membersToAnonymize) = (0,0,0,0);
+    GetOptions( 'until=s'   => \$untildate,
+                'delete'    => \$delete,
+                'anonymize' => \$anonymize,
+                'full'      => \$full,
+                'help|h'    => \$help,
+                'test|t'    => \$test,
+                );
+    
+    if($help or not $untildate){            
+        print <<EOF
+        This script anonymize history, and delete olds borrowers.
+        Parameters :
+        -delete to delete borrowers that have not borrowed until the specified date
+        -full do not move borrowers to deletedborrowers, delete really from the database.
+        -anonymize to anonmize history of borrowers until the specified date
+        -until=s date until to clean borrowers and/or history
+        -test|t to test and do not delete anything
+        -help|h this help
+         
+         example :
+         export PERL5LIB=/path/to/koha;export KOHA_CONF=/etc/koha/koha-conf.xml; ./tools/cleanborrowers.pl -delete -anonymize -until 2009-01-01
+EOF
+;
+        exit;
+    }
+    if($delete){
+        $membersToDelete    = GetBorrowersWhoHaveNotBorrowedSince($untildate, 1);
+        $totalDel = scalar @$membersToDelete;
+    }
+    if($anonymize){
+        $membersToAnonymize = GetBorrowersWithIssuesHistoryOlderThan($untildate);
+        $totalAno = scalar @$membersToAnonymize;
+    }
+    
+    print <<EOF
+        Anonymization Report:
+           * $totalDel patrons will be deleted
+           * $totalAno check-out history will be anonymized  
+EOF
+;
+    exit if $test;
+    
+    if($delete){
+        print "Deleting patrons...\n";
+        if($full){
+            foreach my $member (@$membersToDelete){
+                DelMember( $member->{'borrowernumber'} );
+            }
+        }else{
+            foreach my $member (@$membersToDelete){
+                MoveMemberToDeleted( $member->{'borrowernumber'} );
+                DelMember( $member->{'borrowernumber'} );
+            }
+        }
+    }
+    
+    if($anonymize){
+        print "Anonimyzing check-out history...\n";
+        AnonymiseIssueHistory($untildate);
+    }
+    
+    print "Cleaning borrowers successfully finished.\n";
+    exit;
+}
 
 my $cgi = new CGI;
 
