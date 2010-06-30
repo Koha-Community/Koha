@@ -300,8 +300,8 @@ for my $subfield_code ( @item_subfield_codes ) {
      }
 }
 
-if(C4::Context->preference("ISBD")) {
-	$template->param(ISBD => 1);
+if ( C4::Context->preference("OPACISBD") ) {
+    $template->param( ISBD => 1 );
 }
 
 #Search for title in links
