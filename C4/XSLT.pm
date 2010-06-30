@@ -165,7 +165,6 @@ sub XSLTParse4Display {
         }
         else {
             use Cwd;
-            warn getcwd;
             $style_doc = $parser->parse_file($xslfilename);
         }
         $stylesheet->{$xslfilename} = $xslt->parse_stylesheet($style_doc);
