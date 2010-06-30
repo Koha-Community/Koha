@@ -199,7 +199,11 @@ sub GetOverduesByBorrowers{
             surname,
             firstname,
             title,
-            CONCAT(borrowers.streetnumber, ' ', borrowers.address, '\n', borrowers.address2) as address,
+            CONCAT(
+                IFNULL(borrowers.streetnumber,''), ' ', 
+                IFNULL(borrowers.streettype,'') , ' ' , 
+                IFNULL(borrowers.address,''), '\n', IFNULL(borrowers.address2,'')
+                ) as address,
             city,
             zipcode,
             email,
