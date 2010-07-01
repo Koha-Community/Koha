@@ -3670,7 +3670,7 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = '3.01.00.142';
 if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     $dbh->do(qq{DELETE FROM message_transports WHERE message_attribute_id=3;});
     print "Upgrade to $DBversion done Remove upcoming events messaging option part 2 (bug 2434)";
