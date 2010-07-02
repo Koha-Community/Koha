@@ -307,7 +307,7 @@ foreach my $tag (sort keys %{$tagslib}) {
               push @authorised_values, $class_source;
               $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
           }
-		  $value = $default_source unless ($value);
+		  $value = '';
 
           #---- "true" authorised value
       }
