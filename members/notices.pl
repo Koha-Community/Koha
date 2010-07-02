@@ -52,7 +52,6 @@ $template->param( picture => 1 ) if $picture;
 # Getting the messages
 my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
 
-warn Data::Dumper::Dumper( $queued_messages );
 $template->param(
 			QUEUED_MESSAGES 	=> $queued_messages,
  			BORROWER_INFO         	=> [ $borrower ],

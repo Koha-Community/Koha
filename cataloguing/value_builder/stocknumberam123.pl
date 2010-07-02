@@ -111,7 +111,6 @@ sub plugin {
             return => $code,
         );
     }
-    warn $code;
     output_html_with_http_headers $input, $cookie, $template->output;
 }
 

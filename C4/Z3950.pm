@@ -232,7 +232,6 @@ sub addz3950queue {
 				# spawn a separate 'cat' process.
 				my $pid=`cat $pidfile`;
 				chomp $pid;
-				warn "PID : $pid";
 				# Kill -HUP the Z39.50 daemon to tell it to process
 				# this query.
 				my $processcount=kill 1, $pid;

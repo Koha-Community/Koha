@@ -100,7 +100,6 @@ my ( $builterror, $builtquery, $simple_query, $query_cgi, $query_desc, $limit, $
 my ( $error, $marcresults, $total_hits ) = SimpleSearch( $builtquery, $results_per_page * ( $page - 1 ), $results_per_page );
 
 if (defined $error) {
-    warn "error: ".$error;
     $template->param(
         query_error => $error,
         basketno             => $basketno,

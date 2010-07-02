@@ -1913,7 +1913,6 @@ sub NZanalyse {
         # depending of operand, intersect, union or exclude both lists
         # to get a result list
         if ( $operator eq ' and ' ) {
-            warn "NZAND";
             return NZoperatorAND($leftresult,$rightresult);
         }
         elsif ( $operator eq ' or ' ) {

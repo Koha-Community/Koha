@@ -234,7 +234,6 @@ elsif ( $phase eq 'Choose these criteria' ) {
             $query_criteria .= " AND $crit='$value'";
         }
 	}
-	warn $query_criteria;
     }
 
     $template->param(

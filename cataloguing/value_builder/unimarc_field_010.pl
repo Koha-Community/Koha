@@ -92,7 +92,6 @@ sub plugin {
     my $sth = $dbh->prepare('SELECT publishercode FROM biblioitems WHERE isbn LIKE ? OR isbn LIKE ? LIMIT 1');
     
     $isbn =~ s/-//g;
-    warn $isbn;
     if (length ($isbn) == 13){
         $isbn = substr($isbn, 3, length($isbn)-3);
     }

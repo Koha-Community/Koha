@@ -600,7 +600,6 @@ for (my $i=0;$i<=@servers;$i++) {
         for my $sup_record ( @{$results_hashref->{$server}->{"RECORDS"}} ) {
             my $marc_record_object = MARC::Record->new_from_usmarc($sup_record);
             my $title_field = $marc_record_object->field(100);
-             warn "Authority Found: ".$marc_record_object->as_formatted();
             push @inner_sup_results_array, {
                 'title' => $title_field->subfield('a'),
                 'link' => "&amp;idx=an&amp;q=".$marc_record_object->field('001')->as_string(),

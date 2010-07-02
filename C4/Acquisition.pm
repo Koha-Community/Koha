@@ -1012,8 +1012,6 @@ sub ModOrderItem {
 
     my $query = "UPDATE aqorders_items set itemnumber=? where itemnumber=? and ordernumber=?";
     my @params = ($orderiteminfo->{'newitemnumber'}, $orderiteminfo->{'itemnumber'}, $orderiteminfo->{'ordernumber'});
-    warn $query;
-    warn Data::Dumper::Dumper(@params);
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
     return 0;
@@ -1587,7 +1585,6 @@ sub GetHistory {
             }
         }
         $query .= " ORDER BY id";
-	warn $query;
         my $sth = $dbh->prepare($query);
         $sth->execute( @query_params );
         my $cnt = 1;

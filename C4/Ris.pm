@@ -278,8 +278,6 @@ sub marc2ris {
 	## end RIS dataset
 	print "ER  - \n";
 
-    warn $outvar;
-
     # Let's re-redirect stdout
     close STDOUT;
     open STDOUT, ">&", $oldout;
@@ -947,7 +945,6 @@ sub charconv {
     }
     elsif ($uniout eq "t") {
 	## convert to utf-8
-	warn "marc8_to_utf8";
 	return marc8_to_utf8("@_");
     }
     else {
