@@ -386,7 +386,7 @@
         <xsl:if test="$display880">
            <xsl:call-template name="m880Select">
               <xsl:with-param name="basetags">245</xsl:with-param>
-              <xsl:with-param name="codes">abh</xsl:with-param>
+              <xsl:with-param name="codes">abhfgknps</xsl:with-param>
               <xsl:with-param name="bibno"><xsl:value-of  select="$biblionumber"/></xsl:with-param>
            </xsl:call-template>
         </xsl:if>
