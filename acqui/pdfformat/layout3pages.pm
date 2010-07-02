@@ -373,11 +373,8 @@ sub printfooters {
 sub printpdf {
     my ($basketgroup, $bookseller, $baskets, $orders, $GST) = @_;
     # open the default PDF that will be used for base (1st page already filled)
-    use FindBin qw( $Bin );
-    open(my $fh, "$Bin/pdfformat/layout3pages.pdf") or die "$@";
-    my @pdf = <$fh>;
-    close($fh);
-    my $pdf = PDF::API2->openScalar(join('', @pdf));
+    my $pdf_template = C4::Context->config('intrahtdocs') . '/' . C4::Context->preference('template') . '/pdf/layout3pages.pdf';
+    my $pdf = PDF::API2->open($pdf_template);
     $pdf->pageLabel( 0, {
         -style => 'roman',
     } ); # start with roman numbering
