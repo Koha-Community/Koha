@@ -44,6 +44,7 @@ my $pagesize = $input->param('pagesize');
 $pagesize=50 unless $pagesize;
 my $uploadbarcodes = $input->param('uploadbarcodes');
 my $branchcode = $input->param('branchcode');
+my $branch     = $input->param('branch');
 my $op = $input->param('op');
 # warn "uploadbarcodes : ".$uploadbarcodes;
 # use Data::Dumper; warn Dumper($input);
@@ -156,7 +157,7 @@ if ($uploadbarcodes && length($uploadbarcodes)>0){
         }
     }
     if ($markseen or $op) {
-        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$itemtype,$ignoreissued,$datelastseen,$branchcode,$offset,$pagesize);
+        my $res = GetItemsForInventory($minlocation,$maxlocation,$location,$itemtype,$ignoreissued,$datelastseen,$branchcode,$branch,$offset,$pagesize);
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),
