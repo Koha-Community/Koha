@@ -246,6 +246,11 @@ if ($op eq 'save' || $op eq 'insert'){
 	  $template->param('ERROR_age_limitations' => "$low to $high");
     }
   }
+  
+    if(C4::Context->preference('uppercasesurnames')) {
+        $newdata{'surname'} = uc($newdata{'surname'});
+    }
+
   if (C4::Context->preference("IndependantBranches")) {
     if ($userenv && $userenv->{flags} % 2 != 1){
       $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
