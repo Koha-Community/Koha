@@ -284,13 +284,14 @@ foreach my $tag (sort keys %{$tagslib}) {
         $value = "";
 	}
 	elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-	    push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+	    push @authorised_values, "";
 	    my $sth = $dbh->prepare("select itemtype,description from itemtypes order by description");
 	    $sth->execute;
 	    while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
 		push @authorised_values, $itemtype;
 		$authorised_lib{$itemtype} = $description;
 	    }
+        $value = "";
 
           #---- class_sources
       }
@@ -307,7 +308,7 @@ foreach my $tag (sort keys %{$tagslib}) {
               push @authorised_values, $class_source;
               $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
           }
-		  $value = $default_source unless ($value);
+		  $value = '';
 
           #---- "true" authorised value
       }

@@ -5,7 +5,6 @@ insert into `message_attributes`
 values
 (1, 'Одиниця заборгована'   , 0),
 (2, 'Попереднє повідомлення', 1),
-(3, 'Майбутні події'        , 1),
 (4, 'Hold Filled'           , 0),
 (5, 'Item Check-in'         , 0),
 (6, 'Item Checkout'         , 0);

@@ -349,8 +349,6 @@ sub SendAlerts {
                 'Content-Type' => 'text/plain; charset="utf8"',
             );
             sendmail(%mail) or carp $Mail::Sendmail::error;
-            warn
-"sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
         }
         if ( C4::Context->preference("LetterLog") ) {
             logaction(
@@ -439,8 +437,6 @@ sub SendAlerts {
                   . $innerletter->{content}
             ) if C4::Context->preference("LetterLog");
         }
-        warn
-"sending to From $userenv->{emailaddress} subj $innerletter->{title} Mess $innerletter->{content}";
     }    
    # send an "account details" notice to a newly created user 
     elsif ( $type eq 'members' ) {

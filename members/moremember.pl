@@ -76,10 +76,23 @@ for my $failedret (@failedreturns) { $return_failed{$failedret} = 1; }
 my $template_name;
 my $quickslip = 0;
 
-if    ($print eq "page") { $template_name = "members/moremember-print.tmpl";   }
-elsif ($print eq "slip") { $template_name = "members/moremember-receipt.tmpl"; }
-elsif ($print eq "qslip") { $template_name = "members/moremember-receipt.tmpl"; $quickslip = 1; }
-else {                     $template_name = "members/moremember.tmpl";         }
+my $flagsrequired;
+if ($print eq "page") {
+    $template_name = "members/moremember-print.tmpl";
+    $flagsrequired = { borrowers => 1 };
+} elsif ($print eq "slip") {
+    $template_name = "members/moremember-receipt.tmpl";
+    # circ staff who process checkouts but can't edit
+    # patrons still need to be able to print receipts
+    $flagsrequired =  { circulate => "circulate_remaining_permissions" };
+} elsif ($print eq "qslip") {
+    $template_name = "members/moremember-receipt.tmpl";
+    $quickslip = 1;
+    $flagsrequired =  { circulate => "circulate_remaining_permissions" };
+} else {
+    $template_name = "members/moremember.tmpl";
+    $flagsrequired = { borrowers => 1 };
+}
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -87,7 +100,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { borrowers => 1 },
+        flagsrequired   => $flagsrequired,
         debug           => 1,
     }
 );

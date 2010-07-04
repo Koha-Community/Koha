@@ -158,7 +158,7 @@ L<C4::Members::Messaging>, F<admin/categorie.pl>, F<opac/opac-messaging.pl>, F<m
 
 =head1 AUTHOR
 
-Koha Development Team <info@koha.org>
+Koha Development Team <http://koha-community.org/>
 
 Galen Charlton <galen.charlton@liblime.com> refactoring code by Andrew Moore.
 

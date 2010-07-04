@@ -1,4 +1,4 @@
-﻿INSERT INTO permissions (module_bit, code, description) VALUES
+INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'circulate_remaining_permissions', 'Übrige Ausleihberechtigungen'),
    ( 1, 'override_renewals', 'Gesperrte Verlängerungen überschreiben'),
    ( 6, 'place_holds', 'Vormerkungen für Benutzer setzen'),

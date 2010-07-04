@@ -1,4 +1,4 @@
-﻿-- 
+-- 
 -- Default MARC matching rules for Koha
 --
 -- Copyright (C) 2007 LiblimeA

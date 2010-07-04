@@ -184,7 +184,6 @@ sub printbasketgrouppdf{
     
     my $pdfformat = C4::Context->preference("OrderPdfFormat");
     eval "use $pdfformat" ;
-    warn @_;
     eval "use C4::Branch";
     
     my $basketgroup = GetBasketgroup($basketgroupid);
@@ -386,9 +385,7 @@ if ( $op eq "add" ) {
     printbasketgrouppdf($basketgroupid);
 }elsif( $op eq "delete"){
     my $basketgroupid = $input->param('basketgroupid');
-    warn $basketgroupid;
     DelBasketgroup($basketgroupid);
-    warn "---------------";
     print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' . $booksellerid);
     
 }elsif ( $op eq 'reopen'){

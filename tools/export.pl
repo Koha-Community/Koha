@@ -123,7 +123,6 @@ if ($op eq "export") {
         $query .= (C4::Context->preference('item-level_itypes')) ? " AND items.itype = ? " : " AND biblioitems.itemtype = ?";
         push @sql_params, $itemtype;
     }
-    warn "$query, @sql_params";
     my $sth = $dbh->prepare($query);
     $sth->execute(@sql_params);
     

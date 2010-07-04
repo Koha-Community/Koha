@@ -41,7 +41,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $op = $cgi->param('op');
-warn "operation = $op\n";
 my $template_id = $cgi->param('template_id') || $cgi->param('element_id');
 my $label_template = undef;
 my $profile_list = undef;

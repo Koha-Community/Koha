@@ -52,7 +52,9 @@ function update_child() {
 
 	function yuiToolbar() {
 	    var printmenu = [
+            <!-- TMPL_IF NAME="CAN_user_borrowers" -->
 	        { text: _("Print Page"), onclick: {fn: function(){printx_window("page")}} },
+            <!-- /TMPL_IF -->
 	        { text: _("Print Slip"), onclick: {fn: function(){printx_window("slip")}} },
 	        { text: _("Quick Slip"), onclick: {fn: function(){printx_window("qslip")}} }
 	    ];

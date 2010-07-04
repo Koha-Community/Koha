@@ -83,8 +83,6 @@ sub plugin {
 		my $strquery = "SELECT authorised_value, lib from authorised_values where category = ? and lib like ?";
 # 		$strquery .= " LIMIT $startfrom,$upperlimit";
 
-		warn 'category : '.$cat_auth.' recherche :'.$search;
-		warn "$strquery";
 		$search=~s/\*/%/g;
 		my $sth = $dbh->prepare($strquery);
 		$sth->execute($cat_auth,$search);
@@ -176,7 +174,6 @@ sub plugin {
 		$template->param(
 						'index'=>''.$query->param('index')
 		) if ($query->param('index'));
-		warn 'index : '.$query->param('index');
 		$template->param(
  						'cat_auth'=>$cat_auth
 		) if ($cat_auth);

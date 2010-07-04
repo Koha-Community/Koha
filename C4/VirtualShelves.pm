@@ -628,7 +628,7 @@ __END__
 
 =head1 AUTHOR
 
-Koha Development Team <info@koha.org>
+Koha Development Team <http://koha-community.org/>
 
 =head1 SEE ALSO
 

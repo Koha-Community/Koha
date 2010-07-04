@@ -153,6 +153,7 @@ while ( my ($category) = $sth->fetchrow_array ) {
 push( @category_list, 'MONTHS' );
 push( @category_list, 'ITEMTYPES' );
 push( @category_list, 'BRANCHES' );
+push( @category_list, $$_{'authcat'} ) foreach @$auth_cats_loop;
 
 #reorder the list
 @category_list = sort { $a cmp $b } @category_list;
@@ -173,9 +174,7 @@ my $CGISort;
 my @authvals;
 my %labels;
 
-
-    my @names = $input->param();
-
+my @names = $input->param();
 # ------------------------------------------------------------
 if ( $op eq 'save' ) {
     #get budgets
@@ -289,6 +288,18 @@ elsif ( $authcat eq 'ITEMTYPES' ) {
             my $results = $sth->fetchrow_hashref;
             push @authvals, $results->{branchcode};
             $labels{ $results->{branchcode} } = $results->{branchname};
+        }
+    }
+    $sth->finish;
+} elsif ($authcat) {
+    my $query = qq{ SELECT * FROM authorised_values WHERE category=? order by lib };
+    my $sth   = $dbh->prepare($query);
+    $sth->execute($authcat);
+    if ( $sth->rows > 0 ) {
+        for ( my $i = 0 ; $i < $sth->rows ; $i++ ) {
+            my $results = $sth->fetchrow_hashref;
+            push @authvals, $results->{authorised_value};
+            $labels{ $results->{authorised_value} } = $results->{lib};
         }
     }
     $sth->finish;

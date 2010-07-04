@@ -31,6 +31,7 @@
     // Collapse pending items table
     function pendingCollapse() {
 	$("#pendingcollapserow").remove();
+    $("#pendingt tr").show();
 	$("#pendingt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
 	$("#pendingt").before("<p id=\"pendingcollapserow\">" + _("Only the first ")  + rowsToCollapse +  _(" items are displayed.") + "<a href=\"javascript:pendingExpand();\">" + _("Click here to show all ")  + rowCountPending + _(" items") + "<\/a>.<\/p>");
 
@@ -40,6 +41,7 @@
     function pendingExpand() {
 	$("#pendingcollapserow").remove();
 	$("#pendingt tr").show();
+    $("#pendingt tbody.filterclass tr.orderfound").remove();
 	$("#pendingt").before("<p id=\"pendingcollapserow\">" + rowCountPending + _(" items are displayed.") + "<a href=\"javascript:pendingCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
     }
 
@@ -114,7 +116,7 @@
     function clearFilters() {
 	$("#nothingfoundrow").remove();
         $("#pendingt tbody.filterclass tr").show();
-        $("#pendingt tbody.filterclass tr.orderfound").remove();
+        //$("#pendingt tbody.filterclass tr.orderfound").remove();
 	pendingExpand();
     }
 

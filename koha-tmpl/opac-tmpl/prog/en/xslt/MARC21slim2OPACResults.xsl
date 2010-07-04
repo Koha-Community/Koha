@@ -386,7 +386,7 @@
         <xsl:if test="$display880">
            <xsl:call-template name="m880Select">
               <xsl:with-param name="basetags">245</xsl:with-param>
-              <xsl:with-param name="codes">abh</xsl:with-param>
+              <xsl:with-param name="codes">abhfgknps</xsl:with-param>
               <xsl:with-param name="bibno"><xsl:value-of  select="$biblionumber"/></xsl:with-param>
            </xsl:call-template>
         </xsl:if>
@@ -514,8 +514,9 @@
             <xsl:choose>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
-                        <xsl:when test="$leader7='a' or $leader7='c' or $leader7='d' or $leader7='m'"><img src="/opac-tmpl/prog/famfamfam/silk/book.png" alt="book" title="book"/> Book</xsl:when>
-                        <xsl:when test="$leader7='b' or $leader7='i' or $leader7='s'"><img src="/opac-tmpl/prog/famfamfam/silk/newspaper.png" alt="serial" title="serial"/> Continuing Resource</xsl:when>
+                        <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'"><img src="/opac-tmpl/prog/famfamfam/silk/book.png" alt="book" title="book"/> Book</xsl:when>
+                        <xsl:when test="$leader7='i' or $leader7='s'"><img src="/opac-tmpl/prog/famfamfam/silk/newspaper.png" alt="serial" title="serial"/> Continuing Resource</xsl:when>
+                        <xsl:when test="$leader7='a' or $leader7='b'"><img src="/opac-tmpl/prog/famfamfam/silk/book_open.png" alt="article" title="article"/> Article</xsl:when>
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'"><img src="/opac-tmpl/prog/famfamfam/silk/book.png" alt="book" title="book"/> Book</xsl:when>

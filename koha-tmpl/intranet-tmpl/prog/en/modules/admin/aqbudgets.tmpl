@@ -129,6 +129,11 @@
         <!-- TMPL_ELSE -->
         $("#budgeth").treeTable();
         <!-- /TMPL_IF -->
+
+        $("#filterbutton").click(function() {
+            $("#fundfilters").slideToggle(0);
+            $("#content").css({ marginLeft:  $("#content").css("marginLeft") == "4em"?"15em":"4em"});
+        });
     });
 //]]>
 </script>
@@ -147,7 +152,7 @@
 <div id="doc3" class="yui-t2">
 <div id="bd">
 <div id="yui-main">
-<div class="yui-b">
+<div class="yui-b" id="content">
 
 <!-- TMPL_UNLESS name="delete_confirm" --><!-- TMPL_INCLUDE NAME="budgets-admin-toolbar.inc" --><!-- /TMPL_UNLESS -->
 <!-- TMPL_IF name="else" -->
@@ -393,7 +398,8 @@
 </div>
 <div class="yui-b">
 <!-- TMPL_IF NAME="else" --><form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
-    <fieldset class="brief">
+    <a href="#" id="filterbutton">Filters</a>
+    <fieldset class="brief" id="fundfilters">
     <h4>Fund filters</h4>
         <ol>
         <li>

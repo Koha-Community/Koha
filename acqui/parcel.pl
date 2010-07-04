@@ -166,8 +166,6 @@ if ($action eq "cancelorder") {
     }
 
     if ($error_delitem || $error_delbiblio) {
-	warn $error_delitem;
-	warn $error_delbiblio;
 	if ($error_delitem)   { $template->param(error_delitem => 1); }
 	if ($error_delbiblio) { $template->param(error_delbiblio => 1); }
     } else {

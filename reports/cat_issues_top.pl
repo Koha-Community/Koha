@@ -272,7 +272,6 @@ sub calculate {
         }
         $strsth2 .=" group by $colfield";
         $strsth2 .=" order by $colorder";
-        warn "". $strsth2;
         
         my $sth2 = $dbh->prepare( $strsth2 );
         if (( @colfilter ) and ($colfilter[1])){

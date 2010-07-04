@@ -19,8 +19,6 @@ VALUES
 
 ('circulation','PREDUEDGST','Предварительное уведомление о задолженности единицы (сборник)','Предварительное уведомление о задолженности единицы','В ближайшем времени Вам нужно возвратить <<count>> единиц'),
 
-('circulation','EVENT','Предстоящее библиотечное событие','Предстоящее библиотечное событие','Любезный <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nЭто напоминание о предстоящем библиотечном событии, в котором Вы проявили интерес.'),
-
 ('reserves', 'HOLD', 'Hold Available for Pickup', 'Hold Available for Pickup at <<branches.branchname>>', 'Dear <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nYou have a hold available for pickup as of <<reserves.waitingdate>>:\r\n\r\nTitle: <<biblio.title>>\r\nAuthor: <<biblio.author>>\r\nCopy: <<items.copynumber>>\r\nLocation: <<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n<<branches.branchaddress3>>'),
 
 ('circulation','CHECKIN','Item Check-in (Digest)','Check-ins','The following items have been checked in:\r\n----\r\n<<biblio.title>>\r\n----\r\nThank you.'),

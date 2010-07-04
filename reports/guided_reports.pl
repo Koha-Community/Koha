@@ -234,7 +234,6 @@ elsif ( $phase eq 'Choose these criteria' ) {
             $query_criteria .= " AND $crit='$value'";
         }
 	}
-	warn $query_criteria;
     }
 
     $template->param(
@@ -587,18 +586,6 @@ elsif ($phase eq 'Save Compound'){
 		master=>$mastertables,
 		subsql=>$subtables
 	);
-}
-
-# pass $sth, get back an array of names for the column headers
-sub header_cell_values {
-    my $sth = shift or return ();
-    return @{$sth->{NAME}};
-}
-
-# pass $sth, get back a TMPL_LOOP-able set of names for the column headers
-sub header_cell_loop {
-    my @headers = map { +{ cell => $_ } } header_cell_values (shift);
-    return \@headers;
 }
 
 # pass $sth, get back an array of names for the column headers

@@ -48,7 +48,6 @@ my $error        = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 $biblionumber = 0 unless $biblionumber;
 my $frameworkcode = $input->param('frameworkcode');
-warn($frameworkcode);
 my $title         = $input->param('title');
 my $author        = $input->param('author');
 my $isbn          = $input->param('isbn');

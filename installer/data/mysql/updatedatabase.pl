@@ -3655,6 +3655,28 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.140';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do("UPDATE systempreferences SET value = '0' WHERE variable = 'TagsModeration' AND value is NULL");
+    print "Upgrade to $DBversion done (bug 4312 TagsModeration changed from NULL to 0)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.141';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do(qq{DELETE FROM message_attributes WHERE message_attribute_id=3;});
+    $dbh->do(qq{DELETE FROM letter WHERE code='EVENT' AND title='Upcoming Library Event';});
+    print "Upgrade to $DBversion done Remove upcoming events messaging option (bug 2434)";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.01.00.142';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do(qq{DELETE FROM message_transports WHERE message_attribute_id=3;});
+    print "Upgrade to $DBversion done Remove upcoming events messaging option part 2 (bug 2434)";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 

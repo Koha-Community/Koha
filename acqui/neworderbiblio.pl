@@ -91,10 +91,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # Searching the catalog.
-my ($error, $marcresults, $total_hits) = SimpleSearch($query, $results_per_page * ($page - 1), $results_per_page);
+my @operands = $query;
+my ( @operators, @indexes, @sort_by, @limits ) = ();
+my ( $builterror, $builtquery, $simple_query, $query_cgi, $query_desc, $limit, $limit_cgi, $limit_desc, $stopwords_removed, $query_type ) =
+      buildQuery( \@operators, \@operands, \@indexes, @limits, \@sort_by, undef, undef );
+
+    # find results
+my ( $error, $marcresults, $total_hits ) = SimpleSearch( $builtquery, $results_per_page * ( $page - 1 ), $results_per_page );
 
 if (defined $error) {
-    warn "error: ".$error;
     $template->param(
         query_error => $error,
         basketno             => $basketno,

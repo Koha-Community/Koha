@@ -451,7 +451,6 @@ sub calculate {
     }
     $strsth2 .=" GROUP BY $colfield";
     $strsth2 .=" ORDER BY $colorder";
-    warn "". $strsth2;
     
     my $sth2 = $dbh->prepare( $strsth2 );
     if (( @colfilter ) and ($colfilter[1])){
@@ -522,7 +521,6 @@ sub calculate {
     $strcalc .= " AND monthname(returndate) like '" . @$filters[6] ."'" if ( @$filters[6] );
     
     $strcalc .= " group by  $linefield, $colfield, issuedate, returndate order by $linefield, $colfield";
-    warn "SQL :". $strcalc;
     
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;

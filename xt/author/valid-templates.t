@@ -83,7 +83,7 @@ sub gen_template_test {
 
 =head1 AUTHOR
 
-Koha Developement team <info@koha.org>
+Koha Developement Team <http://koha-community.org>
 
 Galen Charlton <galen.charlton@liblime.com>
 

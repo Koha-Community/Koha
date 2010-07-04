@@ -148,7 +148,6 @@ sub GetItem {
     my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=?");
         $ssth->execute($data->{'itemnumber'}) ;
         ($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
-		warn $data->{'serialseq'} , $data->{'publisheddate'};
     }
 	#if we don't have an items.itype, use biblioitems.itemtype.
 	if( ! $data->{'itype'} ) {
