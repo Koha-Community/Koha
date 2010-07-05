@@ -160,6 +160,7 @@ if ($op eq 'addsubscription') {
         }
     $template->param(subtype => \@sub_type_data);
 
+    letter_loop( '', $template ) if ($op ne 'modsubscription' && $op ne 'dup' && $op ne 'mod');
 
     my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
     if (defined $new_biblionumber) {
