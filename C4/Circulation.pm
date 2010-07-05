@@ -1429,7 +1429,6 @@ sub AddReturn {
         $borrower = C4::Members::GetMemberDetails( $iteminformation->{borrowernumber}, 0 );
     
     # case of a return of document (deal with issues and holdingbranch)
-            
         if ($doreturn) {
 			my $circControlBranch;
 			if($dropbox) {
@@ -1517,7 +1516,7 @@ sub AddReturn {
             and ($validTransfert ne 1) 
             and ($reserveDone ne 1) ){
 			if (C4::Context->preference("AutomaticItemReturn") == 1) {
-				ModItemTransfer($iteminformation->{'itemnumber'}, $branch, $iteminformation->{$hbr});
+				ModItemTransfer($iteminformation->{'itemnumber'}, $branch, $hbr);
 				$messages->{'WasTransfered'} = 1;
 			}
 			else {
