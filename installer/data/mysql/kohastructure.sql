@@ -104,7 +104,8 @@ CREATE TABLE `authorised_values` (
   `imageurl` varchar(200) default NULL,
   PRIMARY KEY  (`id`),
   KEY `name` (`category`),
-  KEY `lib` (`lib`)
+  KEY `lib` (`lib`),
+  KEY `auth_value_idx` (`authorised_value`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -279,7 +280,8 @@ CREATE TABLE `borrower_attribute_types` (
   `password_allowed` tinyint(1) NOT NULL default 0,
   `staff_searchable` tinyint(1) NOT NULL default 0,
   `authorised_value_category` varchar(10) default NULL,
-  PRIMARY KEY  (`code`)
+  PRIMARY KEY  (`code`),
+  KEY `auth_val_cat_idx` (`authorised_value_category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --

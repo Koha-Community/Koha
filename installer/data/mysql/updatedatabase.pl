@@ -3677,6 +3677,14 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
+$DBversion = 'XXXX';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do(qq{CREATE INDEX auth_value_idx ON authorised_values (authorised_value)});
+    $dbh->do(qq{CREATE INDEX auth_val_cat_idx ON borrower_attribute_types (authorised_value_category)});
+    print "Create index on authorised_values and borrower_attribute_types (bug 4139)";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 
