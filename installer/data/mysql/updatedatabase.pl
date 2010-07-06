@@ -3677,7 +3677,7 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
-$DBversion = 'XXXX';
+$DBversion = '3.01.00.143';
 if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     $dbh->do(qq{CREATE INDEX auth_value_idx ON authorised_values (authorised_value)});
     $dbh->do(qq{CREATE INDEX auth_val_cat_idx ON borrower_attribute_types (authorised_value_category)});
