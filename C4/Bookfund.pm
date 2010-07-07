@@ -19,6 +19,7 @@ package C4::Bookfund;
 
 
 use strict;
+use C4::Context;
 # use Smart::Comments;
 
 use vars qw($VERSION @ISA @EXPORT);
