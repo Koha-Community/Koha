@@ -133,7 +133,7 @@ my $suggestions_loop =
                 author		  	=> $author, 
                 title			=> $title, 
                 publishercode	=> $publishercode,
-                status		    => 'ACCEPTED'});
+                STATUS        => 'ACCEPTED'});
 my $vendor = GetBookSellerFromId($supplierid);
 $template->param(
     suggestions_loop        => $suggestions_loop,
