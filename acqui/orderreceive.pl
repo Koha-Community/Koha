@@ -77,7 +77,7 @@ my $search       = $input->param('receive');
 my $invoice      = $input->param('invoice');
 my $freight      = $input->param('freight');
 my $biblionumber = $input->param('biblionumber');
-my $datereceived = C4::Dates->new($input->param('datereceived'),'iso') || C4::Dates->new();
+my $datereceived = C4::Dates->new($input->param('datereceived')||'','iso') || C4::Dates->new();
 my $catview      = $input->param('catview');
 my $gst          = $input->param('gst');
 
@@ -181,6 +181,7 @@ else {
         my %line = %{ $results[$i] };
         $line{title}        = $results[$i]->{'title'};
         $line{author}       = $results[$i]->{'author'};
+        $line{datereceived}       = $results[$i]->{'datereceived'};
         push @loop, \%line;
     }
     $template->param(
