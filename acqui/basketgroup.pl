@@ -238,7 +238,10 @@ sub printbasketgrouppdf{
         }
         $orders{$basket->{basketno}}=\@ba_orders;
     }
-    print $input->header( -type => 'application/pdf', -attachment => $basketgroup->{name}.'.pdf' );
+    print $input->header(
+        -type       => 'application/pdf',
+        -attachment => ( $basketgroup->{name} || $basketgroupid ) . '.pdf'
+    );
     my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} || C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
     exit;

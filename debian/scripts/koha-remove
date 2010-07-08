@@ -30,6 +30,7 @@ DROP DATABASE koha_$name;
 FLUSH PRIVILEGES;
 eof
     
+    koha-stop-zebra $name
     rm "/etc/apache2/sites-available/$name"
     rm "/etc/koha/sites/$name/koha-conf.xml"
     rm "/etc/koha/sites/$name/zebra-biblios.cfg"

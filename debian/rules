@@ -55,6 +55,38 @@ override_dh_auto_install:
 	install -m 0644 koha-tmpl/opac-tmpl/prog/en/lib/yui/skin.css \
 		koha-tmpl/opac-tmpl/prog/en/lib/yui/reset-fonts-grids.css \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/menu-button-arrow-disabled.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/menu-button-arrow-disabled.png \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/menu-button-arrow.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/menu-button-arrow.png \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-active.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-active.png \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-disabled.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-disabled.png \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-focus.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-focus.png \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-hover.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow-hover.png \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/split-button-arrow.png \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/sprite.png \
+		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css
+	install -m 0644 koha-tmpl/intranet-tmpl/prog/en/lib/yui/sprite.png  \
+		$(TMP)/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/css
 	sed -i -e 's:url(.*/reset-fonts-grids.css.*):url(reset-fonts-grids.css):' \
 		   -e 's:url(.*/skin.css.*):url(skin.css):' \
 		$(TMP)/usr/share/koha/opac/htdocs/opac-tmpl/prog/en/css/opac.css \

@@ -50,6 +50,7 @@ use C4::Output;
 use CGI;
 use MARC::Record;
 use C4::Biblio;
+use C4::Items;
 use C4::Acquisition;
 use C4::Review;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
@@ -123,9 +124,19 @@ $template->param(
     subscriptionsnumber => $subscriptionsnumber,
 );
 
-# my @blocs = split /\@/,$ISBD;
-# my @fields = $record->fields();
+my $norequests = 1;
 my $res = GetISBDView($biblionumber, "opac");
+my @items = &GetItemsInfo($biblionumber, 'opac');
+
+my $itemtypes = GetItemTypes();
+for my $itm (@items) {
+    $norequests = 0
+       if ( (not $itm->{'wthdrawn'} )
+         && (not $itm->{'itemlost'} )
+         && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'} )
+		 && (not $itemtypes->{$itm->{'itype'}}->{notforloan} )
+         && ($itm->{'itemnumber'} ) );
+}
 
 my $reviews = getreviews( $biblionumber, 1 );
 foreach ( @$reviews ) {
@@ -139,6 +150,9 @@ foreach ( @$reviews ) {
 
 
 $template->param(
+    RequestOnOpac       => C4::Context->preference("RequestOnOpac"),
+    AllowOnShelfHolds   => C4::Context->preference('AllowOnShelfHolds'),
+    norequests   => $norequests,
     ISBD         => $res,
     biblionumber => $biblionumber,
     reviews             => $reviews,

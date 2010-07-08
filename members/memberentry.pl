@@ -246,6 +246,11 @@ if ($op eq 'save' || $op eq 'insert'){
 	  $template->param('ERROR_age_limitations' => "$low to $high");
     }
   }
+  
+    if(C4::Context->preference('uppercasesurnames')) {
+        $newdata{'surname'} = uc($newdata{'surname'});
+    }
+
   if (C4::Context->preference("IndependantBranches")) {
     if ($userenv && $userenv->{flags} % 2 != 1){
       $debug and print STDERR "  $newdata{'branchcode'} : ".$userenv->{flags}.":".$userenv->{branch};
@@ -273,7 +278,7 @@ if ($op eq 'save' || $op eq 'insert'){
   }
 }
 
-if ($op eq 'modify' || $op eq 'insert' || $op eq 'save' ){
+if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save') and ($step == 0 or $step == 3 )){
     if (exists ($newdata{'dateexpiry'}) && !($newdata{'dateexpiry'})){
         my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
         $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);

@@ -66,6 +66,7 @@ if ($bib_list && $format) {
 	foreach my $biblio (@bibs) {
 
 	    my $record = GetMarcBiblio($biblio);
+        next unless $record;
 
 	    switch ($format) {
 		case "iso2709" { $output .= $record->as_usmarc(); }
