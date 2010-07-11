@@ -320,7 +320,7 @@ sub chargelostitem{
         warn " $issues->{'borrowernumber'}  /  $itemnumber ";
         C4::Circulation::MarkIssueReturned($issues->{borrowernumber},$itemnumber);
 	#  Shouldn't MarkIssueReturned do this?
-        ModItem({ onloan => undef }, undef, $itemnumber);
+        C4::Items::ModItem({ onloan => undef }, undef, $itemnumber);
     }
     $sth->finish;
 }
