@@ -95,8 +95,39 @@ $tabsysprefs{Intranet_includes}     = "Admin";
 $tabsysprefs{AutoLocation}          = "Admin";
 $tabsysprefs{DebugLevel}            = "Admin";
 $tabsysprefs{SessionStorage}        = "Admin";
+
+# This script is depricated so all of these prefs are lumped here to avoid their being displayed in the local use prefs tab
+
 $tabsysprefs{noItemTypeImages}      = "Admin";
 $tabsysprefs{OPACBaseURL}           = "Admin";
+$tabsysprefs{AnonymousPatron}       = "Admin";
+$tabsysprefs{casAuthentication}     = "Admin";
+$tabsysprefs{casLogout}             = "Admin";
+$tabsysprefs{casServerUrl}          = "Admin";
+$tabsysprefs{Disable_Dictionary}    = "Admin";
+$tabsysprefs{EnableOpacSearchHistory}   = "Admin";
+$tabsysprefs{'ILS-DI:AuthorizedIPs'}    = "Admin";
+$tabsysprefs{Intranetbookbag}       = "Admin";
+$tabsysprefs{maxitemsinSearchResults}   = "Admin";
+$tabsysprefs{noOPACUserLogin}       = "Admin";
+$tabsysprefs{'OAI-PMH:ConfFile'}    = "Admin";
+$tabsysprefs{OpacAddMastheadLibraryPulldown}    = "Admin";
+$tabsysprefs{opaclargeimage}        = "Admin";
+$tabsysprefs{OpacPrivacy}           = "Admin";
+$tabsysprefs{OPACXSLTDetailsDisplay}    = "Admin";
+$tabsysprefs{OPACXSLTResultsDisplay}    = "Admin";
+$tabsysprefs{PDFFontType}           = "Admin";
+$tabsysprefs{PINESISBN}             = "Admin";
+$tabsysprefs{PrintNoticesMaxLines}  = "Admin";
+$tabsysprefs{ReservesControlBranch} = "Admin";
+$tabsysprefs{ResultsDisplay}        = "Admin";
+$tabsysprefs{NoReturnSetLost}       = "Admin";
+$tabsysprefs{SearchURL}             = "Admin";
+$tabsysprefs{ShowPictures}          = "Admin";
+$tabsysprefs{soundon}               = "Admin";
+$tabsysprefs{SpineLabelShowPrintOnBibDetails}   = "Admin";
+$tabsysprefs{WebBasedSelfCheckHeader}           = "Admin";
+$tabsysprefs{WebBasedSelfCheckTimeout}          = "Admin";
 
 # Authorities
 $tabsysprefs{authoritysep}          = "Authorities";
