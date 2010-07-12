@@ -64,6 +64,7 @@ my $onlymine=(C4::Context->preference('IndependantBranches') &&
 if ( $onlymine ) { 
     $branch = C4::Context->userenv->{'branch'};
 }
+my $branchname = GetBranchName($branch);
 my $branches = GetBranches($onlymine);
 my @branchloop;
 for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
@@ -136,15 +137,16 @@ foreach my $yearMonthDay (keys %$single_holidays) {
 }
 
 $template->param(WEEK_DAYS_LOOP => \@week_days,
-				branchloop => \@branchloop, 
-				HOLIDAYS_LOOP => \@holidays,
-				EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays,
-				DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays,
-				calendardate => $calendardate,
-				keydate => $keydate,
-				branchcodes => $branchcodes,
-				branch => $branch
-	);
+        branchloop => \@branchloop, 
+        HOLIDAYS_LOOP => \@holidays,
+        EXCEPTION_HOLIDAYS_LOOP => \@exception_holidays,
+        DAY_MONTH_HOLIDAYS_LOOP => \@day_month_holidays,
+        calendardate => $calendardate,
+        keydate => $keydate,
+        branchcodes => $branchcodes,
+        branch => $branch,
+        branchname => $branchname
+  );
 
 # Shows the template with the real values replaced
 output_html_with_http_headers $input, $cookie, $template->output;
