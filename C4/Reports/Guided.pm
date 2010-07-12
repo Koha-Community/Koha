@@ -460,7 +460,7 @@ sub execute_query ($;$$$) {
     if (defined($userlimit)) {
         if ($offset + $limit > $userlimit ) {
             $limit = $userlimit - $offset;
-        } elsif ( ! $offset && $limit > $userlimit ) {
+        } elsif ( ! $offset && $limit < $userlimit ) {
             $limit = $userlimit;
         }
     }
