@@ -37,7 +37,7 @@ BEGIN {
         &insert_day_month_holiday
         &insert_single_holiday
         &insert_exception_holiday
-	&ModWeekdayholiday
+        &ModWeekdayholiday
         &ModDaymonthholiday
         &ModSingleholiday
         &ModExceptionholiday
