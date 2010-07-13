@@ -216,7 +216,7 @@ sub ldap_entry_2_hash ($$) {
 	$debug and print STDERR "Finsihed \%memberhash has ", scalar(keys %memberhash), " keys\n",
 					"Referencing \%mapping with ", scalar(keys %mapping), " keys\n";
 	foreach my $key (keys %mapping) {
-		my  $data = $memberhash{$mapping{$key}->{is}}; 
+		my  $data = $memberhash{ lc($mapping{$key}->{is}) }; # Net::LDAP returns all names in lowercase
 		$debug and printf STDERR "mapping %20s ==> %-20s (%s)\n", $key, $mapping{$key}->{is}, $data;
 		unless (defined $data) { 
 			$data = $mapping{$key}->{content} || '';	# default or failsafe ''
