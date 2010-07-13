@@ -262,6 +262,7 @@ CREATE TABLE `borrowers` (
   KEY `categorycode` (`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `userid` (`userid`),
+  KEY `guarantorid` (`guarantorid`),
   CONSTRAINT `borrowers_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`),
   CONSTRAINT `borrowers_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
