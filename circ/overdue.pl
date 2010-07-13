@@ -122,6 +122,27 @@ my $datedueto   = format_date_in_iso($input->param( 'datedueto' ));
 
 my @overduedata = @{GetOverduesByBorrowers($branchfilter, $borcatfilter, $itemtypefilter, $borflagsfilter, $bornamefilter, $order, $dateduefrom, $datedueto)};
 
+# Generate letters
+
+for my $borrower (@overduedata){
+    my $letter = C4::Letters::getletter( 'circulation', 'MANUAL_ODUE' );
+    
+    my $itemscontent;
+    for my $overdue( @{$borrower->{overdues}} ){
+        $itemscontent .= 
+             "$overdue->{title} $overdue->{author}  $overdue->{barcode} $overdue->{itemcallnumber} $overdue->{issuedate}\n";
+    } 
+    $letter->{content}   =~ s/<<items.content>>/$itemscontent/g;
+   
+    C4::Letters::parseletter( $letter, 'borrowers', $borrower->{borrowernumber});
+    C4::Letters::parseletter( $letter, 'branches', $borrower->{'branchcode'} );
+
+    $letter->{content} =~ s/\n/%0D%0A/g;
+
+    $borrower->{letter_content} = $letter->{content};
+    $borrower->{letter_title}   = $letter->{title};
+}
+
 $template->param(
     todaysdate  => format_date($todaysdate),
     overdueloop => \@overduedata 

@@ -39,7 +39,9 @@
 <tbody><!-- TMPL_LOOP NAME="overdueloop" -->
     <tr>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber"-->"><!-- TMPL_VAR NAME="surname" --> <!-- TMPL_VAR NAME="firstname" --></a>
-        <!-- TMPL_IF NAME="email" -->[<a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" -->">email</a>]<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="email" -->
+            [<a href="mailto:<!-- TMPL_VAR NAME="email" -->?subject=<!-- TMPL_VAR ESCAPE="HTML" NAME="letter_title" -->&amp;body=<!-- TMPL_VAR ESCAPE="HTML" NAME="letter_content" -->">email</a>]
+        <!-- /TMPL_IF -->
         (<!--TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSIF NAME="mobile" --><!-- TMPL_VAR NAME="mobile" --><!-- TMPL_ELSIF NAME="phonepro" --><!-- TMPL_VAR NAME="phonepro" --><!-- /TMPL_IF -->)</td>
         <td><!-- TMPL_VAR name="branchcode" --></td>
         <td>
