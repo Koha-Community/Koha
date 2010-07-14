@@ -90,10 +90,10 @@ my $DEBUG = 0;    # if set to 1, many debug message are send on syslog.
 my $frameworks = getframeworks;
 my @frameworkcodeloop;
 foreach my $thisframeworkcode ( keys %$frameworks ) {
-    my %row = {
+    my %row = (
         value         => $thisframeworkcode,
         frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
-    };
+    );
     if ( $row{'value'} eq $frameworkcode){
         $row{'active'} = 'true';
     }
@@ -247,8 +247,8 @@ sub displayresults {
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
 ##Add necessary encoding changes to here -TG
                         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
-                        $oldbiblio->{isbn}   =~ s/ |-|\.//g,
-                          $oldbiblio->{issn} =~ s/ |-|\.//g,
+                        $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
+                         $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
                           my (
                             $notmarcrecord, $alreadyindb, $alreadyinfarm,
                             $imported,      $breedingid
@@ -284,14 +284,13 @@ sub displayresults {
         server        => $servername[$k],
         numberpending => $numberpending,
     );
-    
     output_html_with_http_headers $input, $cookie, $template->output if $numberpending == 0;
 
     #  	print  $template->output  if $firstresult !=1;
     $firstresult++;
 }
 displayresults();
-if ( --$nremaining > 0 ) {
+while ( --$nremaining > 0 ) {
         displayresults();
     }
 }    ## if op=search
