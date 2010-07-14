@@ -225,7 +225,7 @@ $(document).ready(function() {
     remove it from all classification source definitions before trying again.
     </p>
     <form action="<!-- TMPL_VAR name="script_name" -->" method="get">
-        <input type="button" value="OK" class="approve" />
+        <input type="submit" value="OK" class="approve" />
     </form>
 </div>
 <!-- /TMPL_IF -->
@@ -240,13 +240,13 @@ $(document).ready(function() {
 
 <h2>Classification Sources</h2>
 <!-- TMPL_IF name="added_source" -->
-<span class="problem">Added classification source <!-- TMPL_VAR name="added_source" --></span>
+<div class="dialog message">Added classification source <!-- TMPL_VAR name="added_source" --></div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="edited_source" -->
-<span class="problem">Modified classification source <!-- TMPL_VAR name="edited_source" --></span>
+<div class="dialog message">Modified classification source <!-- TMPL_VAR name="edited_source" --></div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="deleted_source" -->
-<span class="problem">Deleted classification source <!-- TMPL_VAR name="deleted_source" --></span>
+<div class="dialog message">Deleted classification source <!-- TMPL_VAR name="deleted_source" --></div>
 <!-- /TMPL_IF -->
 <table>
   <tr>
@@ -279,13 +279,13 @@ $(document).ready(function() {
 <div class="paginationBar"><!-- TMPL_VAR NAME="pagination_bar" --></div>
 <h2>Classification Filing Rules</h2>
 <!-- TMPL_IF name="added_rule" -->
-<span class="problem">Added filing rule <!-- TMPL_VAR name="added_rule" --></span>
+<div class="dialog message">Added filing rule <!-- TMPL_VAR name="added_rule" --></div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="edited_rule" -->
-<span class="problem">Modified filing rule <!-- TMPL_VAR name="edited_rule" --></span>
+<div class="dialog message">Modified filing rule <!-- TMPL_VAR name="edited_rule" --></div>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF name="deleted_rule" -->
-<span class="problem">Deleted filing rule <!-- TMPL_VAR name="deleted_rule" --></span>
+<div class="dialog message">Deleted filing rule <!-- TMPL_VAR name="deleted_rule" --></div>
 <!-- /TMPL_IF -->
 <table>
   <tr>
