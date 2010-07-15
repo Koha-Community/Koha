@@ -23,7 +23,7 @@
 
 		var newmenu = [
 <!--TMPL_IF Name="AddPatronLists_categorycode"-->
-<!--TMPL_LOOP Name="categoryloop"-->
+<!--TMPL_LOOP Name="categories"-->
 { text: "<!--TMPL_VAR Name="description"-->",  url: "/cgi-bin/koha/members/memberentry.pl?op=add&amp;categorycode=<!--TMPL_VAR Name="categorycode"-->" },
 <!--/TMPL_LOOP-->
 <!--TMPL_ELSE-->
