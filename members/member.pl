@@ -157,7 +157,7 @@ $template->param(
 );
 $template->param(
     branchloop=>$branches,
-	categoryloop=>\@categories,
+    categories=>\@categories,
 );
 
 
