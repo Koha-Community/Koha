@@ -133,16 +133,20 @@ foreach my $item (@items){
     $item->{'datelastseen'}            = format_date( $item->{'datelastseen'} );
     $item->{'copyvol'}                 = $item->{'copynumber'};
 
+
     # item has a host number if its biblio number does not match the current bib
     if ($item->{biblionumber} ne $biblionumber){
         $item->{hostbiblionumber} = $item->{biblionumber};
         $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
     }
 
-    my $order = GetOrderFromItemnumber( $item->{'itemnumber'} );
+    my $order  = GetOrderFromItemnumber( $item->{'itemnumber'} );
+    my $basket = GetBasket( $order->{'basketno'} );
+    $item->{'booksellerid'}            = $basket->{'booksellerid'};
     $item->{'ordernumber'}             = $order->{'ordernumber'};
     $item->{'basketno'}                = $order->{'basketno'};
     $item->{'booksellerinvoicenumber'} = $order->{'booksellerinvoicenumber'};
+    $item->{'datereceived'}            = $order->{'datereceived'};
 
     if ($item->{notforloantext} or $item->{itemlost} or $item->{damaged} or $item->{wthdrawn}) {
         $item->{status_advisory} = 1;
