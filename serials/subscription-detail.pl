@@ -93,9 +93,6 @@ if ($op eq 'del') {
     }
 }
 my $hasRouting = check_routing($subscriptionid);
-my ($totalissues,@serialslist) = GetSerials($subscriptionid);
-$totalissues-- if $totalissues; # the -1 is to have 0 if this is a new subscription (only 1 issue)
-# the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
 
 my ($user, $sessionID, $flags);
 ($user, $cookie, $sessionID, $flags)
