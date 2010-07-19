@@ -3687,6 +3687,13 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.01.00.144';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do(qq{UPDATE systempreferences SET value='normal' where value='default' and variable='IntranetBiblioDefaultView'});
+    print "Update the 'default' to 'normal' for the IntranetBiblioDefaultView syspref (bug 5007)";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 
