@@ -312,6 +312,7 @@ my $target_map = {
                                            # that should go in /var/tmp/koha
   './tools'                     => 'INTRANET_CGI_DIR',
   './virtualshelves'            => 'INTRANET_CGI_DIR',
+  './xml_sax.pl'                => 'PERL_MODULE_DIR',
   # ignore files and directories created by the install itself
   './pm_to_blib'                => 'NONE',
   './blib'                      => 'NONE',
