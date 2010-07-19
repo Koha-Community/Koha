@@ -52,6 +52,8 @@ use C4::Languages qw(getTranslatedLanguages);
 use C4::ClassSource;
 use C4::Log;
 use C4::Output;
+use YAML::Syck qw( Dump LoadFile );
+
 
 # use Smart::Comments;
 
@@ -95,8 +97,39 @@ $tabsysprefs{Intranet_includes}     = "Admin";
 $tabsysprefs{AutoLocation}          = "Admin";
 $tabsysprefs{DebugLevel}            = "Admin";
 $tabsysprefs{SessionStorage}        = "Admin";
+
+# This script is depricated so all of these prefs are lumped here to avoid their being displayed in the local use prefs tab
+
 $tabsysprefs{noItemTypeImages}      = "Admin";
 $tabsysprefs{OPACBaseURL}           = "Admin";
+$tabsysprefs{AnonymousPatron}       = "Admin";
+$tabsysprefs{casAuthentication}     = "Admin";
+$tabsysprefs{casLogout}             = "Admin";
+$tabsysprefs{casServerUrl}          = "Admin";
+$tabsysprefs{Disable_Dictionary}    = "Admin";
+$tabsysprefs{EnableOpacSearchHistory}   = "Admin";
+$tabsysprefs{'ILS-DI:AuthorizedIPs'}    = "Admin";
+$tabsysprefs{Intranetbookbag}       = "Admin";
+$tabsysprefs{maxitemsinSearchResults}   = "Admin";
+$tabsysprefs{noOPACUserLogin}       = "Admin";
+$tabsysprefs{'OAI-PMH:ConfFile'}    = "Admin";
+$tabsysprefs{OpacAddMastheadLibraryPulldown}    = "Admin";
+$tabsysprefs{opaclargeimage}        = "Admin";
+$tabsysprefs{OpacPrivacy}           = "Admin";
+$tabsysprefs{OPACXSLTDetailsDisplay}    = "Admin";
+$tabsysprefs{OPACXSLTResultsDisplay}    = "Admin";
+$tabsysprefs{PDFFontType}           = "Admin";
+$tabsysprefs{PINESISBN}             = "Admin";
+$tabsysprefs{PrintNoticesMaxLines}  = "Admin";
+$tabsysprefs{ReservesControlBranch} = "Admin";
+$tabsysprefs{ResultsDisplay}        = "Admin";
+$tabsysprefs{NoReturnSetLost}       = "Admin";
+$tabsysprefs{SearchURL}             = "Admin";
+$tabsysprefs{ShowPictures}          = "Admin";
+$tabsysprefs{soundon}               = "Admin";
+$tabsysprefs{SpineLabelShowPrintOnBibDetails}   = "Admin";
+$tabsysprefs{WebBasedSelfCheckHeader}           = "Admin";
+$tabsysprefs{WebBasedSelfCheckTimeout}          = "Admin";
 
 # Authorities
 $tabsysprefs{authoritysep}          = "Authorities";
@@ -427,12 +460,14 @@ sub StringSearch {
               ORDER BY VARIABLE" );
             $sth->execute( "%$searchstring%", "%$searchstring%" );
         } else {
-            my $strsth = "Select variable,value,explanation,type,options from systempreferences where variable not in (";
-            foreach my $syspref ( keys %tabsysprefs ) {
-                $strsth .= $dbh->quote($syspref) . ",";
+            my $strsth = "Select variable,value,explanation,type,options from systempreferences where variable in (";
+            my $first = 1;
+            for my $name ( get_local_prefs() ) {
+                $strsth .= ',' unless $first;
+                $strsth .= "'$name'";
+                $first = 0;
             }
-            $strsth =~ s/,$/) /;
-            $strsth .= " order by variable";
+            $strsth .= ") order by variable";
             $sth = $dbh->prepare($strsth);
             $sth->execute();
         }
@@ -779,3 +814,79 @@ if ( $op eq 'add_form' ) {
     $template->param( tab => $tab, );
 }    #---- END $OP eq DEFAULT
 output_html_with_http_headers $input, $cookie, $template->output;
+
+
+# Return an array containing all preferences defined in current Koha instance
+# .pref files.
+
+sub get_prefs_from_files {
+    my $context       = C4::Context->new();
+    my $path_pref_en  = $context->config('intrahtdocs') .
+                        '/prog/en/modules/admin/preferences';
+    # Get all .pref file names
+    opendir ( my $fh, $path_pref_en );
+    my @pref_files = grep { /.pref/ } readdir($fh);
+    close $fh;
+
+    my @names = ();
+    my $append = sub {
+        my $prefs = shift;
+        for my $pref ( @$prefs ) {
+            for my $element ( @$pref ) {
+                if ( ref( $element) eq 'HASH' ) {
+                    my $name = $element->{pref};
+                    next unless $name;
+                    push @names, $name;
+                    last;
+                }
+            }
+        }
+    };
+    for my $file (@pref_files) {
+        my $pref = LoadFile( "$path_pref_en/$file" );
+        for my $tab ( keys %$pref ) {
+            my $content = $pref->{$tab};
+            if ( ref($content) eq 'ARRAY' ) {
+                $append->($content);
+                next;
+            }
+            for my $section ( keys %$content ) {
+                my $syspref = $content->{$section};
+                $append->($syspref);
+            }
+        }
+    }
+    return @names;
+}
+
+
+# Return an array containg all preferences defined in DB
+
+sub get_prefs_from_db {
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT variable FROM systempreferences");
+    $sth->execute;
+    my @names = ();
+    while ( (my $name) = $sth->fetchrow_array ) {
+        push @names, $name if $name;
+    }
+    return @names;
+}
+
+
+# Return an array containing all local preferences: those which are defined in
+# DB and not defined in Koha .pref files.
+
+sub get_local_prefs {
+    my @prefs_file = get_prefs_from_files();
+    my @prefs_db = get_prefs_from_db();
+
+    my %prefs_file = map { $_ => 1 } @prefs_file;
+    my @names = ();
+    foreach my $name (@prefs_db) {
+        push @names, $name  unless $prefs_file{$name};
+    }
+
+    return @names;
+}
+

@@ -52,7 +52,7 @@ libidzebra-2.0-mod-grs-regx \
 libidzebra-2.0-mod-grs-xml \
 libidzebra-2.0-mod-text \
 libidzebra-2.0-modules \
-libimage-magick-perl  \
+libgraphics-magick-perl  \
 libjson-perl \
 libjson-xs-perl \
 liblingua-ispell-perl \

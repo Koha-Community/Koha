@@ -54,7 +54,7 @@ if($quicksearch){
 my @categories=C4::Category->all;
 $template->param(
     branchloop=>(defined $branch?GetBranchesLoop($branch):GetBranchesLoop()),
-	categoryloop=>\@categories,
+	categories=>\@categories,
 );
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",

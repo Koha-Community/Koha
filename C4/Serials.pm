@@ -405,14 +405,17 @@ sub PrepareSerialsData {
     my $first;
     my $previousnote = "";
 
-    foreach my $subs (@$lines) {
-        $subs->{'publisheddate'} = (
-            $subs->{'publisheddate'}
-            ? format_date( $subs->{'publisheddate'} )
-            : "XXX"
-        );
+    foreach my $subs (@{$lines}) {
+        for my $datefield ( qw(publisheddate planneddate) ) {
+            # handle both undef and undef returned as 0000-00-00
+            if (!defined $subs->{$datefield} or $subs->{$datefield}=~m/^00/) {
+                $subs->{$datefield} = 'XXX';
+            }
+            else {
+                $subs->{$datefield} = format_date( $subs->{$datefield}  );
+            }
+        }
         $subs->{'branchname'} = GetBranchName( $subs->{'branchcode'} );
-        $subs->{'planneddate'}                  = format_date( $subs->{'planneddate'} );
         $subs->{ "status" . $subs->{'status'} } = 1;
         $subs->{"checked"}                      = $subs->{'status'} =~ /1|3|4|7/;
 
