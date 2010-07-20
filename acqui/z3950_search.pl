@@ -97,7 +97,7 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
     if ( $row{'value'} eq $frameworkcode){
         $row{'active'} = 'true';
     }
-    push @frameworkcodeloop, $row;
+    push @frameworkcodeloop, \%row;
 }
 
 $template->param( frameworkcode => $frameworkcode, 
