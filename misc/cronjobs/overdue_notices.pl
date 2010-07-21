@@ -103,6 +103,12 @@ Produces CSV data. if -n (no mail) flag is set, then this CSV data is
 sent to standard out or to a filename if provided. Otherwise, only
 overdues that could not be emailed are sent in CSV format to the admin.
 
+=item B<-html>
+
+Produces html data. if patron does not have a mail address or
+-n (no mail) flag is set, an html file is generated in the specified
+directory. This can be downloaded or futher processed by library staff.
+
 =item B<-itemscontent>
 
 comma separated list of fields that get substituted into templates in
