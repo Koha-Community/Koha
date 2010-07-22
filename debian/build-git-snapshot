@@ -46,7 +46,7 @@ reset_debian_changelog() {
 build_package() {
     git archive --format=tar --prefix="koha-$1/" HEAD | 
         gzip -9 > "../koha_$1.tar.gz"
-    pdebuild
+    pdebuild $2
 }
 
 if ! everything_is_commited
@@ -55,6 +55,10 @@ then
 fi
 
 version="$(newversion)"
+if [ -n "$1" ]
+then
+    pdebuildopts="--buildresult $1"
+fi
 adjust_debian_changelog "$version"
-build_package "$version"
+build_package "$version" "$pdebuildopts"
 reset_debian_changelog
