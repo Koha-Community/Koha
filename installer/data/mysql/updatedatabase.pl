@@ -3694,12 +3694,13 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.02.00.025";
+$DBversion = "3.01.00.145";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE borrowers ADD KEY `guarantorid` (guarantorid);");
     print "Upgrade to $DBversion done (Add index on guarantorid)\n";
     SetVersion ($DBversion);
 }
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
