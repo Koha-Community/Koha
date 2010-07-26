@@ -1,135 +1,133 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 124c builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 124c builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 124c builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>  Presentation Technique for Photographic or Non-Photographic Image:</td>
+		<td><label for="f1">  Presentation Technique for Photographic or Non-Photographic Image:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 
 			<!-- TMPL_IF name="f1aa" -->
-				<option value="aa" SELECTED>anaglyphic</option>
+				<option value="aa" selected="selected">anaglyphic</option>
 			<!-- TMPL_ELSE -->
 				<option value="aa">anaglyphic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ab" -->
-				<option value="ab" SELECTED>polarized</option>
+				<option value="ab" selected="selected">polarized</option>
 			<!-- TMPL_ELSE -->
 				<option value="ab">polarized</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ac" -->
-				<option value="ac" SELECTED>planimetric</option>
+				<option value="ac" selected="selected">planimetric</option>
 			<!-- TMPL_ELSE -->
 				<option value="ac">planimetric</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ad" -->
-				<option value="ad" SELECTED>diagram map</option>
+				<option value="ad" selected="selected">diagram map</option>
 			<!-- TMPL_ELSE -->
 				<option value="ad">diagram map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ae" -->
-				<option value="ae" SELECTED>flowline map, flow map</option>
+				<option value="ae" selected="selected">flowline map, flow map</option>
 			<!-- TMPL_ELSE -->
 				<option value="ae">flowline map, flow map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1af" -->
-				<option value="af" SELECTED>dot map</option>
+				<option value="af" selected="selected">dot map</option>
 			<!-- TMPL_ELSE -->
 				<option value="af">dot map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ag" -->
-				<option value="ag" SELECTED>diagrammatric map</option>
+				<option value="ag" selected="selected">diagrammatric map</option>
 			<!-- TMPL_ELSE -->
 				<option value="ag">diagrammatric map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ah" -->
-				<option value="ah" SELECTED>choropleth</option>
+				<option value="ah" selected="selected">choropleth</option>
 			<!-- TMPL_ELSE -->
 				<option value="ah">choropleth</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ai" -->
-				<option value="ai" SELECTED>chorochromatic</option>
+				<option value="ai" selected="selected">chorochromatic</option>
 			<!-- TMPL_ELSE -->
 				<option value="ai">chorochromatic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1aj" -->
-				<option value="aj" SELECTED>dasymetric</option>
+				<option value="aj" selected="selected">dasymetric</option>
 			<!-- TMPL_ELSE -->
 				<option value="aj">dasymetric</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ak" -->
-				<option value="ak" SELECTED>isopleth</option>
+				<option value="ak" selected="selected">isopleth</option>
 			<!-- TMPL_ELSE -->
 				<option value="ak">isopleth</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1am" -->
-				<option value="am" SELECTED>anamorphic</option>
+				<option value="am" selected="selected">anamorphic</option>
 			<!-- TMPL_ELSE -->
 				<option value="am">anamorphic</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1an" -->
-				<option value="an" SELECTED>pictorial map</option>
+				<option value="an" selected="selected">pictorial map</option>
 			<!-- TMPL_ELSE -->
 				<option value="an">pictorial map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ao" -->
-				<option value="ao" SELECTED>spatial model on two dimensional surface</option>
+				<option value="ao" selected="selected">spatial model on two dimensional surface</option>
 			<!-- TMPL_ELSE -->
 				<option value="ao">spatial model on two dimensional surface</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ap" -->
-				<option value="ap" SELECTED>mental or cognitive map</option>
+				<option value="ap" selected="selected">mental or cognitive map</option>
 			<!-- TMPL_ELSE -->
 				<option value="ap">mental or cognitive map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1aq" -->
-				<option value="aq" SELECTED>views with horizon showing</option>
+				<option value="aq" selected="selected">views with horizon showing</option>
 			<!-- TMPL_ELSE -->
 				<option value="aq">views with horizon showing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ar" -->
-				<option value="ar" SELECTED>views without horizon showing</option>
+				<option value="ar" selected="selected">views without horizon showing</option>
 			<!-- TMPL_ELSE -->
 				<option value="ar">views without horizon showing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1as" -->
-				<option value="as" SELECTED>map view</option>
+				<option value="as" selected="selected">map view</option>
 			<!-- TMPL_ELSE -->
 				<option value="as">map view</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1da" -->
-				<option value="da" SELECTED>picto map</option>
+				<option value="da" selected="selected">picto map</option>
 			<!-- TMPL_ELSE -->
 				<option value="da">picto map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1db" -->
-				<option value="db" SELECTED>random dot map</option>
+				<option value="db" selected="selected">random dot map</option>
 			<!-- TMPL_ELSE -->
 				<option value="db">random dot map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1dc" -->
-				<option value="dc" SELECTED>screened</option>
+				<option value="dc" selected="selected">screened</option>
 			<!-- TMPL_ELSE -->
 				<option value="dc">screened</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1dd" -->
-				<option value="dd" SELECTED>not screened</option>
+				<option value="dd" selected="selected">not screened</option>
 			<!-- TMPL_ELSE -->
 				<option value="dd">not screened</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -137,6 +135,7 @@
 	    window.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

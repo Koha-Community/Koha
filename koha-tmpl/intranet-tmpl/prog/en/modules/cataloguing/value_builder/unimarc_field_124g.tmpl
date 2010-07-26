@@ -1,75 +1,73 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 124g builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 124g builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 124g builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Recording Technique for Remote Sensing Image:</td>
+		<td><label for="f1">Recording Technique for Remote Sensing Image:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 
 			<!-- TMPL_IF name="f1aa" -->
-				<option value="aa" SELECTED>video recording</option>
+				<option value="aa" selected="selected">video recording</option>
 			<!-- TMPL_ELSE -->
 				<option value="aa">video recording</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ab" -->
-				<option value="ab" SELECTED>false colour photography</option>
+				<option value="ab" selected="selected">false colour photography</option>
 			<!-- TMPL_ELSE -->
 				<option value="ab">false colour photography</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ac" -->
-				<option value="ac" SELECTED>multispectral photography</option>
+				<option value="ac" selected="selected">multispectral photography</option>
 			<!-- TMPL_ELSE -->
 				<option value="ac">multispectral photography</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ad" -->
-				<option value="ad" SELECTED>multispectral scanning</option>
+				<option value="ad" selected="selected">multispectral scanning</option>
 			<!-- TMPL_ELSE -->
 				<option value="ad">multispectral scanning</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1av" -->
-				<option value="av" SELECTED>combination of various light emission techniques</option>
+				<option value="av" selected="selected">combination of various light emission techniques</option>
 			<!-- TMPL_ELSE -->
 				<option value="av">combination of various light emission techniques</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1da" -->
-				<option value="da" SELECTED>infrared line scanning</option>
+				<option value="da" selected="selected">infrared line scanning</option>
 			<!-- TMPL_ELSE -->
 				<option value="da">infrared line scanning</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1dv" -->
-				<option value="dv" SELECTED>combination of various thermal infrared scanning</option>
+				<option value="dv" selected="selected">combination of various thermal infrared scanning</option>
 			<!-- TMPL_ELSE -->
 				<option value="dv">combination of various thermal infrared scanning</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ga" -->
-				<option value="ga" SELECTED>Sidelooking Airbone Radar</option>
+				<option value="ga" selected="selected">Sidelooking Airbone Radar</option>
 			<!-- TMPL_ELSE -->
 				<option value="ga">Sidelooking Airbone Radar</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gb" -->
-				<option value="gb" SELECTED>Synthetic Aperture Radar</option>
+				<option value="gb" selected="selected">Synthetic Aperture Radar</option>
 			<!-- TMPL_ELSE -->
 				<option value="gb">Synthetic Aperture Radar</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gc" -->
-				<option value="gc" SELECTED>passive microwave mapping</option>
+				<option value="gc" selected="selected">passive microwave mapping</option>
 			<!-- TMPL_ELSE -->
 				<option value="gc">passive microwave mapping</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -77,6 +75,7 @@
 	    window.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

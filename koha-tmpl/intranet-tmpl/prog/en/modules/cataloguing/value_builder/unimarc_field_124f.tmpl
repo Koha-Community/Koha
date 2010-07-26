@@ -1,114 +1,112 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 124f builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 124f builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 124f builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Name of Satellite for Remote Sensing Image:</td>
+		<td><label for="f1">Name of Satellite for Remote Sensing Image:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 			<!-- TMPL_IF name="f1aa" -->
-				<option value="aa" SELECTED>Tiros</option>
+				<option value="aa" selected="selected">Tiros</option>
 			<!-- TMPL_ELSE -->
 				<option value="aa">Tiros</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ab" -->
-				<option value="ab" SELECTED>ATS</option>
+				<option value="ab" selected="selected">ATS</option>
 			<!-- TMPL_ELSE -->
 				<option value="ab">ATS</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ac" -->
-				<option value="ac" SELECTED>NOAA</option>
+				<option value="ac" selected="selected">NOAA</option>
 			<!-- TMPL_ELSE -->
 				<option value="ac">NOAA</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ad" -->
-				<option value="ad" SELECTED>Nimbus</option>
+				<option value="ad" selected="selected">Nimbus</option>
 			<!-- TMPL_ELSE -->
 				<option value="ad">Nimbus</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ae" -->
-				<option value="ae" SELECTED>METEOSAT</option>
+				<option value="ae" selected="selected">METEOSAT</option>
 			<!-- TMPL_ELSE -->
 				<option value="ae">METEOSAT</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ma" -->
-				<option value="ma" SELECTED>Explorer I</option>
+				<option value="ma" selected="selected">Explorer I</option>
 			<!-- TMPL_ELSE -->
 				<option value="ma">Explorer I</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1mb" -->
-				<option value="mb" SELECTED>Explorer II</option>
+				<option value="mb" selected="selected">Explorer II</option>
 			<!-- TMPL_ELSE -->
 				<option value="mb">Explorer II</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ga" -->
-				<option value="ga" SELECTED>ERTS</option>
+				<option value="ga" selected="selected">ERTS</option>
 			<!-- TMPL_ELSE -->
 				<option value="ga">ERTS</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gb" -->
-				<option value="gb" SELECTED>Landsat I</option>
+				<option value="gb" selected="selected">Landsat I</option>
 			<!-- TMPL_ELSE -->
 				<option value="gb">Landsat I</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gc" -->
-				<option value="gc" SELECTED>Landsat II</option>
+				<option value="gc" selected="selected">Landsat II</option>
 			<!-- TMPL_ELSE -->
 				<option value="gc">Landsat II</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gd" -->
-				<option value="gd" SELECTED>Landsat III</option>
+				<option value="gd" selected="selected">Landsat III</option>
 			<!-- TMPL_ELSE -->
 				<option value="gd">Landsat III</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1ge" -->
-				<option value="ge" SELECTED>Seasat</option>
+				<option value="ge" selected="selected">Seasat</option>
 			<!-- TMPL_ELSE -->
 				<option value="ge">Seasat</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gf" -->
-				<option value="gf" SELECTED>Skylab</option>
+				<option value="gf" selected="selected">Skylab</option>
 			<!-- TMPL_ELSE -->
 				<option value="gf">Skylab</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gg" -->
-				<option value="gg" SELECTED>Spacelab</option>
+				<option value="gg" selected="selected">Spacelab</option>
 			<!-- TMPL_ELSE -->
 				<option value="gg">Spacelab</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gk" -->
-				<option value="gk" SELECTED>Spot 1</option>
+				<option value="gk" selected="selected">Spot 1</option>
 			<!-- TMPL_ELSE -->
 				<option value="gk">Spot 1</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gl" -->
-				<option value="gl" SELECTED>Spot 2</option>
+				<option value="gl" selected="selected">Spot 2</option>
 			<!-- TMPL_ELSE -->
 				<option value="gl">Spot 2</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gm" -->
-				<option value="gm" SELECTED>Spot 3</option>
+				<option value="gm" selected="selected">Spot 3</option>
 			<!-- TMPL_ELSE -->
 				<option value="gm">Spot 3</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1gz" -->
-				<option value="gz" SELECTED>other</option>
+				<option value="gz" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="gz">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -116,6 +114,7 @@
 	    self.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

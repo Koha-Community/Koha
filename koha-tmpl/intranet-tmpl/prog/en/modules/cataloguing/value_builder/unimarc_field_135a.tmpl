@@ -1,64 +1,63 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 135a builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 135a builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 135a builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Type of electronic resource:</td>
+		<td><label for="f1">Type of electronic resource:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
             
 			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>non required value</option>
+				<option value=" " selected="selected">non required value</option>
 			<!-- TMPL_ELSE -->
 				<option value=" ">non required value</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>numeric</option>
+				<option value="a" selected="selected">numeric</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">numeric</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>computer program(s)</option>
+				<option value="b" selected="selected">computer program(s)</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">computer program(s)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>representational</option>
+				<option value="c" selected="selected">representational</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">representational</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>text</option>
+				<option value="d" selected="selected">text</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">text</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1v" -->
-				<option value="v" SELECTED>combination</option>
+				<option value="v" selected="selected">combination</option>
 			<!-- TMPL_ELSE -->
 				<option value="v">combination</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>other</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
+			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<p><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></p>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -67,6 +66,7 @@
             window.close();
             return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

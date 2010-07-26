@@ -1,134 +1,132 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 125b builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 125b builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 125b builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Literary Text Indicator:</td>
+		<td><label for="f1">Literary Text Indicator:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 			<!-- TMPL_IF name="f1 " -->
-				<option value=" " SELECTED>non required value</option>
+				<option value=" " selected="selected">non required value</option>
 			<!-- TMPL_ELSE -->
 				<option value=" ">non required value</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>poetry</option>
+				<option value="a" selected="selected">poetry</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">poetry</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>drama</option>
+				<option value="b" selected="selected">drama</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">drama</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>fiction</option>
+				<option value="c" selected="selected">fiction</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">fiction</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>history</option>
+				<option value="d" selected="selected">history</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">history</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>lectures, speeches</option>
+				<option value="e" selected="selected">lectures, speeches</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">lectures, speeches</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1f" -->
-				<option value="f" SELECTED>instructions</option>
+				<option value="f" selected="selected">instructions</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">instructions</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1g" -->
-				<option value="g" SELECTED>sounds</option>
+				<option value="g" selected="selected">sounds</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">sounds</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1h" -->
-				<option value="h" SELECTED>autobiography</option>
+				<option value="h" selected="selected">autobiography</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">autobiography</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1i" -->
-				<option value="i" SELECTED>biography</option>
+				<option value="i" selected="selected">biography</option>
 			<!-- TMPL_ELSE -->
 				<option value="i">biography</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1j" -->
-				<option value="j" SELECTED>essays</option>
+				<option value="j" selected="selected">essays</option>
 			<!-- TMPL_ELSE -->
 				<option value="j">essays</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1k" -->
-				<option value="k" SELECTED>reporting</option>
+				<option value="k" selected="selected">reporting</option>
 			<!-- TMPL_ELSE -->
 				<option value="k">reporting</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1l" -->
-				<option value="l" SELECTED>memoirs</option>
+				<option value="l" selected="selected">memoirs</option>
 			<!-- TMPL_ELSE -->
 				<option value="l">memoirs</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1m" -->
-				<option value="m" SELECTED>rehearsals</option>
+				<option value="m" selected="selected">rehearsals</option>
 			<!-- TMPL_ELSE -->
 				<option value="m">rehearsals</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1n" -->
-				<option value="n" SELECTED>interviews</option>
+				<option value="n" selected="selected">interviews</option>
 			<!-- TMPL_ELSE -->
 				<option value="n">interviews</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1o" -->
-				<option value="o" SELECTED>advertising texts</option>
+				<option value="o" selected="selected">advertising texts</option>
 			<!-- TMPL_ELSE -->
 				<option value="o">advertising texts</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1p" -->
-				<option value="p" SELECTED>instruction (language)</option>
+				<option value="p" selected="selected">instruction (language)</option>
 			<!-- TMPL_ELSE -->
 				<option value="p">instruction (language)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1q" -->
-				<option value="q" SELECTED>conference proceedings</option>
+				<option value="q" selected="selected">conference proceedings</option>
 			<!-- TMPL_ELSE -->
 				<option value="q">conference proceedings</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1r" -->
-				<option value="r" SELECTED>comedy</option>
+				<option value="r" selected="selected">comedy</option>
 			<!-- TMPL_ELSE -->
 				<option value="r">comedy</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1s" -->
-				<option value="s" SELECTED>folktales</option>
+				<option value="s" selected="selected">folktales</option>
 			<!-- TMPL_ELSE -->
 				<option value="s">folktales</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1t" -->
-				<option value="t" SELECTED>sacred texts</option>
+				<option value="t" selected="selected">sacred texts</option>
 			<!-- TMPL_ELSE -->
 				<option value="t">sacred texts</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>other types of literary text</option>
+				<option value="z" selected="selected">other types of literary text</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other types of literary text</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -137,6 +135,7 @@
 	    window.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

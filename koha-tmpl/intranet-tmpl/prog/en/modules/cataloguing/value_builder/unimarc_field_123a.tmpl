@@ -1,47 +1,46 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 123a builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 123a builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 123a builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Type of Scale:</td>
+		<td><label for="f1">Type of Scale:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>linear scale</option>
+				<option value="a" selected="selected">linear scale</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">linear scale</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>angular scale</option>
+				<option value="b" selected="selected">angular scale</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">angular scale</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>other type of scale (e.g., time scale, quantitative statistical scale)</option>
+				<option value="z" selected="selected">other type of scale (e.g., time scale, quantitative statistical scale)</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other type of scale (e.g., time scale, quantitative statistical scale)</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-
-	<tr><td colspan=2><input type="button" value="OK"  onclick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
-	function report() {
+//<![CDATA[
+function report() {
 	    var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
             field.value =  document.f_pop.f1.value;
 	    self.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
