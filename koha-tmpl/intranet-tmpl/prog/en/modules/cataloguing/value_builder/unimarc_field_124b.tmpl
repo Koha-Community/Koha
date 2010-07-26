@@ -1,80 +1,78 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 124b builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 124b builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 124b builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Form of Cartographic Item:</td>
+		<td><label for="f1">Form of Cartographic Item:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
             
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>atlas</option>
+				<option value="a" selected="selected">atlas</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">atlas</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>diagram</option>
+				<option value="b" selected="selected">diagram</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">diagram</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>globe</option>
+				<option value="c" selected="selected">globe</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">globe</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>map</option>
+				<option value="d" selected="selected">map</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">map</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>model</option>
+				<option value="e" selected="selected">model</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">model</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1f" -->
-				<option value="f" SELECTED>profile</option>
+				<option value="f" selected="selected">profile</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">profile</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1g" -->
-				<option value="g" SELECTED>remote sensing image</option>
+				<option value="g" selected="selected">remote sensing image</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">remote sensing image</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1h" -->
-				<option value="h" SELECTED>section</option>
+				<option value="h" selected="selected">section</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">section</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1i" -->
-				<option value="i" SELECTED>view</option>
+				<option value="i" selected="selected">view</option>
 			<!-- TMPL_ELSE -->
 				<option value="i">view</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1j" -->
-				<option value="j" SELECTED>plan</option>
+				<option value="j" selected="selected">plan</option>
 			<!-- TMPL_ELSE -->
 				<option value="j">plan</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>other</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -83,6 +81,7 @@
 	    self.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

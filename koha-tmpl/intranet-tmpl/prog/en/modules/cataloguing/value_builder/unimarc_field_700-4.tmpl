@@ -1,17 +1,14 @@
-﻿<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_constructeur champ 700-4</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 700-4 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
+<body style="padding:1em;">
+<h3>UNIMARC Field 700-4 builder</h3>
 <p>Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement reportée dans la zone 700 $8 qui suit.</p>
-<form name="f_pop" onSubmit="report()">
+<form name="f_pop" onsubmit="report()" action="">
 <table>
 	<tr>
-		<td>Code date publication </td><td><select name="f1" size="1">
+		<td><label for="f1">Code date publication </label></td><td><select name="f1" id="f1" size="1">
 			<!-- TMPL_IF name="f1_075" -->
 			<option value="075 - postface" selected="selected">postface</option>
 			<!-- TMPL_ELSE -->
@@ -44,10 +41,11 @@
 			</select>
 		</td>
 	</tr>
-	<tr><td colspan="2"><input type="submit" value="OK" /></td></tr>
 </table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script>
+<script type="text/javascript">
+//<![CDATA[
 	function report() {
 		x = document.f_pop.f1.value.split(' - ');
 		var doc   = opener.document; 
@@ -60,6 +58,7 @@
 		self.close();
 		return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

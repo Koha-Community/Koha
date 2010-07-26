@@ -1,18 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 141 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 141 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 141 builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Binding Material 1:</td>
+		<td><label for="f1">Binding Material 1:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
             
 			<!-- TMPL_IF name="f1 " -->
 				<option value=" " SELECTED>non required value</option>
@@ -66,9 +63,9 @@
 			<!-- /TMPL_IF -->
 	</select>
 		</td></tr>	<tr>
-		<td>Binding Material 2:</td>
+		<td><label for="f2">Binding Material 2:</label></td>
 		<td>
-			<select name="f2" size="1">
+			<select name="f2" id="f2" size="1">
             
 			<!-- TMPL_IF name="f2 " -->
 				<option value=" " SELECTED>non required value</option>
@@ -123,9 +120,9 @@
 	</select>
 		</td></tr>
                 <tr>
-		<td>Binding Material 3:</td>
+		<td><label for="f3">Binding Material 3:</label></td>
 		<td>
-			<select name="f3" size="1">
+			<select name="f3" id="f3" size="1">
                         <!-- TMPL_IF name="f3 " -->
                                 <option value=" " SELECTED>non required value</option>
                         <!-- TMPL_ELSE -->
@@ -178,9 +175,10 @@
 			<!-- /TMPL_IF -->
 	</select>
 		</td></tr>
-		<td>Types of Binding:</td>
+		<tr>
+		<td><label for="f4">Types of Binding:</label></td>
 		<td>
-			<select name="f4" size="1">
+			<select name="f4" id="f4" size="1">
 
 			<!-- TMPL_IF name="f4a" -->
 				<option value="a" SELECTED>original, i.e. primary</option>
@@ -222,25 +220,27 @@
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
+			</select>
 		</td></tr>	<tr>
-		<td>Bound with':</td>
+		<td><label for="f5">Bound with':</label></td>
 		<td>
-			<select name="f5" size="1">
+			<select name="f5" id="f5" size="1">
 
-			<!-- TMPL_IF name="f50" -->
+			<!-- TMPL_IF name="f50" id="f50" -->
 				<option value="0" SELECTED>single item</option>
 			<!-- TMPL_ELSE -->
 				<option value="0">single item</option>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_IF name="f51" -->
+			<!-- TMPL_IF name="f51" id="f51" -->
 				<option value="1" SELECTED>bound with one or more others</option>
 			<!-- TMPL_ELSE -->
 				<option value="1">bound with one or more others</option>
 			<!-- /TMPL_IF -->
+			</select>
 		</td></tr><tr>
-	<td>State of Preservation - Binding:</td>
+	<td><label for="f6">State of Preservation - Binding:</label></td>
 		<td>
-			<select name="f6" size="1">
+			<select name="f6" id="f6" size="1">
 
 			<!-- TMPL_IF name="f6a" -->
 				<option value="a" SELECTED>excellent</option>
@@ -277,10 +277,11 @@
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
+			</select>
 </td></tr><tr>
-	<td>State of Preservation - Body of the Book 1 :</td>
+	<td><label for="f7">State of Preservation - Body of the Book 1 :</label></td>
 		<td>
-			<select name="f7" size="1">
+			<select name="f7" id="f7" size="1">
 
 			<!-- TMPL_IF name="f7a" -->
 				<option value="a" SELECTED>excellent</option>
@@ -317,10 +318,11 @@
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
+			</select>
 </td></tr><tr>
-	<td>State of Preservation - Body of the Book 2 :</td>
+	<td><label for="f8">State of Preservation - Body of the Book 2 :</label></td>
 		<td>
-			<select name="f8" size="1">
+			<select name="f8" id="f8" size="1">
 
 			<!-- TMPL_IF name="f8a" -->
 				<option value="a" SELECTED>excellent</option>
@@ -357,11 +359,13 @@
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
+			</select>
 </td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onclick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
     function report() {
         var doc   = opener.document; 
         var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
@@ -370,6 +374,7 @@
         self.close();
         return false;
     }
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

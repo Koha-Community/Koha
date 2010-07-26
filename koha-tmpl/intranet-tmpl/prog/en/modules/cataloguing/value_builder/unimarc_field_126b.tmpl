@@ -1,178 +1,176 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 126b builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 126b builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 126b builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Kind of disc, cylinder or tape:</td>
+		<td><label for="f1">Kind of disc, cylinder or tape:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>instantaneous (unique, cut on the spot)</option>
+				<option value="a" selected="selected">instantaneous (unique, cut on the spot)</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">instantaneous (unique, cut on the spot)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>mass produced</option>
+				<option value="b" selected="selected">mass produced</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">mass produced</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>master tape</option>
+				<option value="c" selected="selected">master tape</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">master tape</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>tape duplication master</option>
+				<option value="d" selected="selected">tape duplication master</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">tape duplication master</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>disc master (negative)</option>
+				<option value="e" selected="selected">disc master (negative)</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">disc master (negative)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1f" -->
-				<option value="f" SELECTED>mother (positive)</option>
+				<option value="f" selected="selected">mother (positive)</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">mother (positive)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1g" -->
-				<option value="g" SELECTED>stamper (negative)</option>
+				<option value="g" selected="selected">stamper (negative)</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">stamper (negative)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1h" -->
-				<option value="h" SELECTED>test pressing</option>
+				<option value="h" selected="selected">test pressing</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">test pressing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>other</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Kind of material:</td>
+		<td><label for="f2">Kind of material:</label></td>
 		<td>
-			<select name="f2" size="1">
+			<select name="f2" id="f2" size="1">
 
 			<!-- TMPL_IF name="f2u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2x" -->
-				<option value="x" SELECTED>not applicable</option>
+				<option value="x" selected="selected">not applicable</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2z" -->
-				<option value="z" SELECTED>other</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2g" -->
-				<option value="g" SELECTED>wax (instantaneous)</option>
+				<option value="g" selected="selected">wax (instantaneous)</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">wax (instantaneous)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2h" -->
-				<option value="h" SELECTED>plastic (mass produced)</option>
+				<option value="h" selected="selected">plastic (mass produced)</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">plastic (mass produced)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2a" -->
-				<option value="a" SELECTED>lacquered (e.g. acetate)</option>
+				<option value="a" selected="selected">lacquered (e.g. acetate)</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">lacquered (e.g. acetate)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2b" -->
-				<option value="b" SELECTED>metal (e.g. aluminium)</option>
+				<option value="b" selected="selected">metal (e.g. aluminium)</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">metal (e.g. aluminium)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2c" -->
-				<option value="c" SELECTED>shellac pressing</option>
+				<option value="c" selected="selected">shellac pressing</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">shellac pressing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2d" -->
-				<option value="d" SELECTED>plastic pressing</option>
+				<option value="d" selected="selected">plastic pressing</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">plastic pressing</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2e" -->
-				<option value="e" SELECTED>metal and plastic (compact discs)</option>
+				<option value="e" selected="selected">metal and plastic (compact discs)</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">metal and plastic (compact discs)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2i" -->
-				<option value="i" SELECTED>paper backed</option>
+				<option value="i" selected="selected">paper backed</option>
 			<!-- TMPL_ELSE -->
 				<option value="i">paper backed</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2j" -->
-				<option value="j" SELECTED>acetate</option>
+				<option value="j" selected="selected">acetate</option>
 			<!-- TMPL_ELSE -->
 				<option value="j">acetate</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2k" -->
-				<option value="k" SELECTED>P.V.C.</option>
+				<option value="k" selected="selected">P.V.C.</option>
 			<!-- TMPL_ELSE -->
 				<option value="k">P.V.C.</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2l" -->
-				<option value="l" SELECTED>polyester</option>
+				<option value="l" selected="selected">polyester</option>
 			<!-- TMPL_ELSE -->
 				<option value="l">polyester</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Kind of cutting:</td>
+		<td><label for="f3">Kind of cutting:</label></td>
 		<td>
-			<select name="f3" size="1">
+			<select name="f3" id="f3" size="1">
 			<!-- TMPL_IF name="f3a" -->
-				<option value="a" SELECTED>lateral or combined cutting</option>
+				<option value="a" selected="selected">lateral or combined cutting</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">lateral or combined cutting</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3b" -->
-				<option value="b" SELECTED>vertical (hill and dale) cutting</option>
+				<option value="b" selected="selected">vertical (hill and dale) cutting</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">vertical (hill and dale) cutting</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3x" -->
-				<option value="x" SELECTED>not applicable</option>
+				<option value="x" selected="selected">not applicable</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script>
+<script type="text/javascript">
+//<![CDATA[
 	function report() {
 
 
@@ -183,6 +181,7 @@
 		self.close();
 		return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

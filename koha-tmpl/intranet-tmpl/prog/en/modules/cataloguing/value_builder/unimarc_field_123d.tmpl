@@ -1,63 +1,53 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 123d builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 123d builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 123d builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Hemisphere:</td>
+		<td><label for="f1">Hemisphere:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 
 			<!-- TMPL_IF name="f1w" -->
-				<option value="w" SELECTED>west</option>
+				<option value="w" selected="selected">west</option>
 			<!-- TMPL_ELSE -->
 				<option value="w">west</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>east</option>
+				<option value="e" selected="selected">east</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">east</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1n" -->
-				<option value="n" SELECTED>north</option>
+				<option value="n" selected="selected">north</option>
 			<!-- TMPL_ELSE -->
 				<option value="n">north</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1s" -->
-				<option value="s" SELECTED>south</option>
+				<option value="s" selected="selected">south</option>
 			<!-- TMPL_ELSE -->
 				<option value="s">south</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 
-<tr>          <td>Degree (complete with 0):</td>
-                         <td><input type="text" name="f2" maxlength=3
-                         size=4
-                   value="<!-- TMPL_VAR name="f2" -->"></td>
+<tr>          <td><label for="f2">Degree (complete with 0):</label></td>
+                         <td><input type="text" name="f2" id="f2" maxlength="3" size="4" value="<!-- TMPL_VAR name="f2" -->" /></td>
 </tr>
-<tr>          <td>Minute (complete with 0):</td>
-                         <td><input type="text" name="f3" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f3" -->"></td>
+<tr>          <td><label for="f3">Minute (complete with 0):</label></td>
+                         <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="<!-- TMPL_VAR name="f3" -->" /></td>
 </tr>
-<tr>          <td>Second (complete with 0):</td>
-                         <td><input type="text" name="f4" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f4" -->"></td>
+<tr>          <td><label for="f4">Second (complete with 0):</label></td>
+                         <td><input type="text" name="f4" id="f4" maxlength="2" size="3" value="<!-- TMPL_VAR name="f4" -->" /></td>
 </tr>
-
-
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
             document.f_pop.f2.value=document.f_pop.f2.value+'   ';
             document.f_pop.f3.value=document.f_pop.f3.value+'  ';
@@ -73,6 +63,7 @@
 	    window.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
