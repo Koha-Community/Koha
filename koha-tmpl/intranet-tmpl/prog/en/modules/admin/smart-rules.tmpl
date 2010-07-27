@@ -89,7 +89,7 @@ $(document).ready(function() {
                             <!-- TMPL_VAR NAME="humanitemtype" -->
                         <!-- /TMPL_IF -->
                     </td>
-                    <td>$<!-- TMPL_VAR NAME="fine" --></td>
+                    <td><span class="currency-symbol">$</span><!-- TMPL_VAR NAME="fine" --></td>
                     <td>
                         <!-- TMPL_IF NAME="finedays" -->
                             <!-- TMPL_VAR NAME="finedays" --> day(s)
@@ -126,7 +126,7 @@ $(document).ready(function() {
                         <!-- /TMPL_LOOP -->
                         </select>
                     </td>
-                    <td>$<input name="fine" size="4" /></td>
+                    <td><span class="currency-symbol">$</span><input name="fine" size="4" /></td>
                     <td><input name="finedays" size="2" /> day(s)</td>
                     <td><input name="firstremind" size="2" /> day(s)</td>
                     <td><input name="chargeperiod" size="2" /> day(s)</td>
