@@ -837,7 +837,7 @@ sub get_prefs_from_files {
                     my $name = $element->{pref};
                     next unless $name;
                     push @names, $name;
-                    last;
+                    next;
                 }
             }
         }
