@@ -564,7 +564,7 @@ sub checkauth {
             $session->flush;      
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
-            _session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,localtime);
+            _session_log(sprintf "%20s from %16s logged out at %30s (manually).\n", $userid,$ip,scalar localtime);
             $sessionID = undef;
             $userid    = undef;
         }
@@ -573,7 +573,7 @@ sub checkauth {
             $info{'timed_out'} = 1;
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
-            _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,localtime);
+            _session_log(sprintf "%20s from %16s logged out at %30s (inactivity).\n", $userid,$ip,scalar localtime);
             $userid    = undef;
             $sessionID = undef;
         }
@@ -584,7 +584,7 @@ sub checkauth {
             $info{'different_ip'} = 1;
             $session->delete();
             C4::Context->_unset_userenv($sessionID);
-            _session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,localtime, $info{'newip'});
+            _session_log(sprintf "%20s from %16s logged out at %30s (ip changed to %16s).\n", $userid,$ip,scalar localtime, $info{'newip'});
             $sessionID = undef;
             $userid    = undef;
         }
@@ -611,7 +611,7 @@ sub checkauth {
             my $password = $query->param('password');
             my ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password );
             if ($return) {
-                _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
+                _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},scalar localtime);
                 if ( $flags = haspermission($userid, $flagsrequired) ) {
                     $loggedin = 1;
                 }
