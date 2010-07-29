@@ -291,6 +291,18 @@ if ( $op eq 'delete_confirm' ) {
 
     my $contract = &GetContract($basket->{contractnumber});
     my @orders = GetOrders($basketno);
+
+    my $borrower= GetMember('borrowernumber' => $loggedinuser);
+    my $budgets = GetBudgetHierarchy(q{},$borrower->{branchcode},$borrower->{borrowernumber});
+    my $has_budgets = 0;
+    foreach my $r (@{$budgets}) {
+        if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
+            next;
+        }
+        $has_budgets = 1;
+        last;
+    }
+
     $template->param(
         basketno             => $basketno,
         basketname           => $basket->{'basketname'},
@@ -321,6 +333,7 @@ if ( $op eq 'delete_confirm' ) {
         basketgroups         => $basketgroups,
         grouped              => $basket->{basketgroupid},
         unclosable           => @orders ? 0 : 1, 
+        has_budgets          => $has_budgets,
     );
 }
 
