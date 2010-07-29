@@ -93,7 +93,7 @@ use C4::ImportBatch qw/GetImportRecordMarc SetImportRecordStatus/;
 
 my $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
-my $budget_id       = $input->param('budget_id') || 0;	# FIXME: else ERROR!
+my $budget_id       = $input->param('budget_id') || 0;
 my $title           = $input->param('title');
 my $author          = $input->param('author');
 my $publicationyear = $input->param('publicationyear');

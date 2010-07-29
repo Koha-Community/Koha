@@ -666,11 +666,11 @@ sub GetBudget {
     return $result;
 }
 
-=head2 GetBudgets
+=head2 GetChildBudgetsSpent
 
-  &GetBudgets($filter, $order_by);
+  &GetChildBudgetsSpent($budget-id);
 
-gets all budgets
+gets the total spent of the level and sublevels of $budget_id
 
 =cut
 
@@ -693,11 +693,11 @@ sub GetChildBudgetsSpent {
     return $total_spent;
 }
 
-=head2 GetChildBudgetsSpent
+=head2 GetBudgets
 
-  &GetChildBudgetsSpent($budget-id);
+  &GetBudgets($filter, $order_by);
 
-gets the total spent of the level and sublevels of $budget_id
+gets all budgets
 
 =cut
 
