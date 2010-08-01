@@ -937,22 +937,16 @@ with the modified information
 
 #'
 sub UpdateGuarantees {
-    my (%data) = @_;
+    my %data = shift;
     my $dbh = C4::Context->dbh;
     my ( $count, $guarantees ) = GetGuarantees( $data{'borrowernumber'} );
-    for ( my $i = 0 ; $i < $count ; $i++ ) {
-
-        # FIXME
-        # It looks like the $i is only being returned to handle walking through
-        # the array, which is probably better done as a foreach loop.
-        #
+    foreach my $guarantee (@$guarantees){
         my $guaquery = qq|UPDATE borrowers 
-              SET address='$data{'address'}',fax='$data{'fax'}',
-                  B_city='$data{'B_city'}',mobile='$data{'mobile'}',city='$data{'city'}',phone='$data{'phone'}'
-              WHERE borrowernumber='$guarantees->[$i]->{'borrowernumber'}'
+              SET address=?,fax=?,B_city=?,mobile=?,city=?,phone=?
+              WHERE borrowernumber=?
         |;
-        my $sth3 = $dbh->prepare($guaquery);
-        $sth3->execute;
+        my $sth = $dbh->prepare($guaquery);
+        $sth->execute($data{'address'},$data{'fax'},$data{'B_city'},$data{'mobile'},$data{'city'},$data{'phone'},$guarantee->{'borrowernumber'});
     }
 }
 =head2 GetPendingIssues
