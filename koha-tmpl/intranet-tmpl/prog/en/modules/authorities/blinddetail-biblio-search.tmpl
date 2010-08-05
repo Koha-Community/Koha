@@ -2,9 +2,8 @@
 <Title>Koha -- Authority details</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
-    window.onload = go();
-    
-    function go(){
+//<![CDATA[
+    $(document).ready(function(){
         var index_start = "<!-- TMPL_VAR NAME='index' -->";
         var whichfield;
         try {
@@ -40,7 +39,8 @@
        	window.close();
             
        	return false;
-    }
+    });
+//]]>
 </script>
 </head>
 <body>
@@ -55,4 +55,4 @@
 </div>
 </div>
 
-<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->
