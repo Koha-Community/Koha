@@ -340,7 +340,7 @@ $template->param(
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
     author           => $data->{'author'},
-    publicationyear  => $data->{'publicationyear'},
+    publicationyear  => $data->{'publicationyear'} ? $data->{'publicationyear'} : $data->{'copyrightdate'},
     budget_loop      => $budget_loop,
     isbn             => $data->{'isbn'},
     seriestitle      => $data->{'seriestitle'},
