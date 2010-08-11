@@ -91,6 +91,7 @@ if($op eq 'gennext' && @subscriptionid){
     print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
 }
 
+my ($location, $callnumber);
 if (@subscriptionid){
    my @subscriptioninformation=();
    foreach my $subscriptionid (@subscriptionid){
@@ -113,6 +114,8 @@ if (@subscriptionid){
     $subs->{'abouttoexpire'}=abouttoexpire($subs->{'subscriptionid'});
     $subs->{'subscriptionexpired'}=HasSubscriptionExpired($subs->{'subscriptionid'});
     $subs->{'subscriptionid'} = $subscriptionid;  # FIXME - why was this lost ?
+	$location = GetAuthorisedValues('LOC', $subs->{'location'});
+	$callnumber = $subs->{callnumber};
     push @$subscriptiondescs,$subs;
     my $tmpsubscription= GetFullSubscription($subscriptionid);
     @subscriptioninformation=(@$tmpsubscription,@subscriptioninformation);
@@ -135,6 +138,11 @@ foreach my $subscription (@$subscriptiondescs){
 
 # warn "title : $title yearmax : $yearmax nombre d'elements dans le tableau :".scalar(@$subscriptions);
 #  use Data::Dumper; warn Dumper($subscriptions);
+my $locationlib;
+foreach (@$location) {
+    $locationlib = $_->{'lib'} if $_->{'selected'};
+}
+
 chop $subscriptionidlist;
 $template->param(
           onesubscription => (scalar(@$subscriptiondescs)==1),
@@ -148,6 +156,8 @@ $template->param(
           suggestion => C4::Context->preference("suggestion"),
           virtualshelves => C4::Context->preference("virtualshelves"),
           subscr=>$query->param('subscriptionid'),
+    location	       => $locationlib,
+    callnumber	       => $callnumber,
           );
 
 output_html_with_http_headers $query, $cookie, $template->output;

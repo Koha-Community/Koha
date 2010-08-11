@@ -369,14 +369,21 @@ if ( $op and $op eq 'serialchangestatus' ) {
         print $query->redirect($redirect);
     }
 }
+my $location = GetAuthorisedValues('LOC', $serialdatalist[0]->{'location'});
+my $locationlib;
+foreach (@$location) {
+    $locationlib = $_->{'lib'} if $_->{'selected'};
+}
 my $default_bib_view = get_default_view();
 
 $template->param(
     serialsadditems => $serialdatalist[0]->{'serialsadditems'},
+    callnumber	     => $serialdatalist[0]->{'callnumber'},
     bibliotitle     => $bibdata->{'title'},
     biblionumber    => $serialdatalist[0]->{'biblionumber'},
     serialslist     => \@serialdatalist,
     default_bib_view => $default_bib_view,
+    location         => $locationlib,
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 

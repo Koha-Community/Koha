@@ -64,7 +64,8 @@ $(document).ready(function() {
 <!-- TMPL_UNLESS name="popup" -->
 	<!-- TMPL_INCLUDE NAME="serials-toolbar.inc" -->
 
-	<h1>Serial Collection information for  <i><!-- TMPL_VAR name="bibliotitle" --></i></h1>
+	<h1>Serial Collection information for  <i><!-- TMPL_VAR name="bibliotitle" --></i> (<!-- TMPL_VAR name="location" --> ) 
+		<!--TMPL_IF Name="callnumber"-->callnumber: <!-- TMPL_VAR name="callnumber" --><!--/TMPL_IF--></h1>
 <!-- /TMPL_UNLESS -->
 
 <!--TMPL_IF Name="subscriptions"-->

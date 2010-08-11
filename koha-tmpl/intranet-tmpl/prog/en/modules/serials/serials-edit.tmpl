@@ -177,7 +177,8 @@ $(document).ready(function() {
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --> <!-- TMPL_IF name="callnumber" -->(<!-- TMPL_VAR name="callnumber" -->)<!-- /TMPL_IF --></i></h1>
+<h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --></i>
+	( <!-- TMPL_VAR name="location" --> ) <!-- TMPL_IF name="callnumber" --> callnumber: <!-- TMPL_VAR name="callnumber" --><!-- /TMPL_IF --></h1>
 <form method="post" name="f" action="serials-edit.pl" id="serials_edit">
 <!--onsubmit="return barcode_check()">-->
 
