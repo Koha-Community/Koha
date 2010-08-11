@@ -991,8 +991,8 @@
 			[% ELSE %]
 				[% UNLESS ( opadd ) %]
 				<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry %]" />
-
-				<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" value="[% UNLESS ( opadd ) %][% dateexpiry %][% END %]" />
+				[% ELSE %]
+				<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" />
 				[% END %]
 			[% END %]
             <img src="[% themelang %]/lib/calendar/cal.gif" id="dateexpiry_button" alt="Show Calendar" />
