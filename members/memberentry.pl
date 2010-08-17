@@ -412,9 +412,12 @@ if ($ethnicitycategoriescount>=0) {
 }
 
 my @typeloop;
+my $no_categories = 1;
+my $no_add;
 foreach (qw(C A S P I X)) {
     my $action="WHERE category_type=?";
 	($categories,$labels)=GetborCatFromCatType($_,$action);
+    if(scalar(@$categories) > 0){ $no_categories = 0; }
 	my @categoryloop;
 	foreach my $cat (@$categories){
 		push @categoryloop,{'categorycode' => $cat,
@@ -431,9 +434,10 @@ foreach (qw(C A S P I X)) {
 	push @typeloop,{'typename' => $_,
         $typedescription => 1,
 	  'categoryloop' => \@categoryloop};
-}  
-$template->param('typeloop' => \@typeloop);
-
+}
+$template->param('typeloop' => \@typeloop,
+        no_categories => $no_categories);
+if($no_categories){ $no_add = 1; }
 # test in city
 if ( $guarantorid ) {
     $select_city = getidcity($data{city});
@@ -526,17 +530,18 @@ my $onlymine=(C4::Context->preference('IndependantBranches') &&
               
 my $branches=GetBranches($onlymine);
 my $default;
-
+my $CGIbranch;
 for my $branch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
     push @select_branch,$branch;
     $select_branches{$branch} = $branches->{$branch}->{'branchname'};
     $default = C4::Context->userenv->{'branch'} if (C4::Context->userenv && C4::Context->userenv->{'branch'});
 }
+if(scalar(@select_branch) > 0){
 # --------------------------------------------------------------------------------------------------------
   #in modify mod :default value from $CGIbranch comes from borrowers table
   #in add mod: default value come from branches table (ip correspendence)
 $default=$data{'branchcode'}  if ($op eq 'modify' || ($op eq 'add' && $category_type eq 'C'));
-my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
+$CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
             -name   => 'branchcode',
             -values => \@select_branch,
             -labels => \%select_branches,
@@ -545,6 +550,17 @@ my $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
             -multiple =>0,
             -default => $default,
         );
+}
+
+if(!$CGIbranch){
+    $no_add = 1;
+    $template->param(no_branches => 1);
+}
+if($no_categories){
+    $no_add = 1;
+    $template->param(no_categories => 1);
+}
+$template->param(no_add => $no_add);
 my $CGIorganisations;
 my $member_of_institution;
 if (C4::Context->preference("memberofinstitution")){
@@ -635,6 +651,7 @@ $template->param(
   check_member    => $check_member,#to know if the borrower already exist(=>1) or not (=>0) 
   "op$op"   => 1);
 
+$template->param(CGIbranch=>$CGIbranch) if ($CGIbranch);
 $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number
@@ -652,7 +669,6 @@ $template->param(
   category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to konw if an error 
-  CGIbranch => $CGIbranch,
   memberofinstution => $member_of_institution,
   CGIorganisations => $CGIorganisations,
   NoUpdateLogin =>  $NoUpdateLogin

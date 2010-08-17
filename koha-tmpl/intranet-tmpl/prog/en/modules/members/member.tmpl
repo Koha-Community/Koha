@@ -17,6 +17,11 @@
 
 				<!-- TMPL_INCLUDE NAME="patron-toolbar.inc" -->
 
+	<!-- TMPL_IF NAME="no_add" --><div class="dialog alert"><h3>Cannot add patron</h3>
+		<!-- TMPL_IF NAME="no_branches" --><p>There are <strong>no libraries defined</strong>. <!-- TMPL_IF NAME="CAN_user_parameters" -->Please <a href="/cgi-bin/koha/admin/branches.pl">add a library</a>.<!-- TMPL_ELSE -->An administrator must define at least one library.<!-- /TMPL_IF --></p><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_categories" --><p>There are <strong>no patron categories defined</strong>. <!-- TMPL_IF NAME="CAN_user_parameters" -->Please <a href="/cgi-bin/koha/admin/categorie.pl">add a patron category</a>.<!-- TMPL_ELSE -->An administrator must define at least one patron category.<!-- /TMPL_IF --></p><!-- /TMPL_IF --></div>
+	<!-- /TMPL_IF -->
+
 						<div class="browse">
 							Browse by last name:
 							<!-- TMPL_LOOP name="letters" -->

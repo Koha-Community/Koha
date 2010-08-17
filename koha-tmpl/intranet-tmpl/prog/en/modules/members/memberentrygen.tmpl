@@ -1,6 +1,6 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Patrons &rsaquo; 
-<!-- TMPL_IF NAME="opadd" -->	Add<!-- TMPL_ELSE --> Modify<!--/TMPL_IF--> <!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organization patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF --><!--TMPL_UNLESS Name="opadd"--> <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!--/TMPL_UNLESS--></title>
+<!-- TMPL_IF NAME="opadd" -->Add<!-- TMPL_ELSE --> Modify<!--/TMPL_IF--> <!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organization patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF --><!--TMPL_UNLESS Name="opadd"--> <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!--/TMPL_UNLESS--></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/JavaScript" language="JavaScript">
@@ -80,7 +80,11 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
+	<!-- TMPL_IF NAME="no_add" --><div class="dialog alert"><h3>Cannot add patron</h3>
+		<!-- TMPL_IF NAME="no_branches" --><p>There are <strong>no libraries defined</strong>. <!-- TMPL_IF NAME="CAN_user_parameters" -->Please <a href="/cgi-bin/koha/admin/branches.pl">add a library</a>.<!-- TMPL_ELSE -->An administrator must define at least one library.<!-- /TMPL_IF --></p><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="no_categories" --><p>There are <strong>no patron categories defined</strong>. <!-- TMPL_IF NAME="CAN_user_parameters" -->Please <a href="/cgi-bin/koha/admin/categorie.pl">add a patron category</a>.<!-- TMPL_ELSE -->An administrator must define at least one patron category.</p><!-- /TMPL_IF --><!-- /TMPL_IF --></div><!-- /TMPL_IF -->
 
+	<!-- TMPL_UNLESS NAME="no_add" -->
 	<!-- TMPL_IF NAME="opadd" -->
 	<h1>
 		Add<!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organization patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF --> <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR NAME="surname" --> 
@@ -731,7 +735,6 @@
 	  <!-- TMPL_IF NAME="mandatorybranchcode" --><span class="required">Required</span><!-- /TMPL_IF -->
     </li>
     <li>
-    <!-- TMPL_IF NAME="typeloop" -->
         <label for="categorycode">Category: </label>
         <select id="categorycode" name="categorycode">
         <!-- TMPL_LOOP NAME="typeloop" -->
@@ -755,10 +758,6 @@
             <!-- /TMPL_LOOP -->
        <!-- /TMPL_LOOP -->
        </select>
-    <!-- TMPL_ELSE -->
-        <span class="problem">There is no category type to add <!--TMPL_IF Name="A"-->an Adult<!--/TMPL_IF--><!--TMPL_IF Name="C"-->a Child<!--/TMPL_IF--><!--TMPL_IF Name="I"-->an Institution<!--/TMPL_IF--><!--TMPL_IF Name="P"-->a Professional<!--/TMPL_IF--><!--TMPL_IF Name="S"-->a Staff Member<!--/TMPL_IF-->.</span>
-              <a href="/cgi-bin/koha/admin/categorie.pl">Please create one</a>
-    <!-- /TMPL_IF -->
     </li>
     <li>
       <!-- TMPL_IF NAME="mandatorysort1" -->
@@ -1070,6 +1069,7 @@
 <!-- TMPL_UNLESS NAME="opadd" --><div class="yui-b">
 <!-- TMPL_INCLUDE NAME="members-menu.inc" -->
 </div><!-- /TMPL_UNLESS -->
+<!-- /TMPL_UNLESS -->
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
 
