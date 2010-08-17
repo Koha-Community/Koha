@@ -1,3 +1,4 @@
+<!-- TMPL_UNLESS NAME="no_add" -->
 <div id="toolbar">
 	<script type="text/javascript">
 	//<![CDATA[
@@ -69,3 +70,4 @@
 	</li>
 </ul>
 </div>
+<!-- /TMPL_UNLESS -->

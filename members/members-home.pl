@@ -63,13 +63,30 @@ foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} 
   push @branchloop, \%row;
 }
 
-my @categories=C4::Category->all;
-$template->param(
-    branchloop=>\@branchloop,
-	categories=>\@categories,
-);
+my @categories;
+my $no_categories;
+my $no_add = 0;
+my $branchloop = (defined $branch?GetBranchesLoop($branch):GetBranchesLoop());
+if(scalar(@$branchloop) < 1){
+    $no_add = 1;
+    $template->param(no_branches => 1);
+} else {
+    $template->param(branchloop=>\@$branchloop);
+}
+
+@categories=C4::Category->all;
+if(scalar(@categories) < 1){ $no_categories = 1; }
+if($no_categories && C4::Context->preference("AddPatronLists")=~/code/){
+    $no_add = 1;
+    $template->param(no_categories => 1);
+} else {
+    $template->param(categories=>\@categories);
+}
+
+
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+        no_add => $no_add,
             );
 my @letters = map { {letter => $_} } ( 'A' .. 'Z');
 $template->param( letters => \@letters );
