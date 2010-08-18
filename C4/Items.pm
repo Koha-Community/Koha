@@ -1626,7 +1626,11 @@ sub GetMarcItem {
     if (defined $unlinked_item_subfields and $#$unlinked_item_subfields > -1) {
         my @fields = $itemmarc->fields();
         if ($#fields > -1) {
-            $fields[0]->add_subfields(@$unlinked_item_subfields);
+            if( $fields[0]->tag() == 100 ){
+                $fields[1]->add_subfields(@$unlinked_item_subfields);
+            }else{
+                $fields[0]->add_subfields(@$unlinked_item_subfields);
+            }
         }
     }
     
