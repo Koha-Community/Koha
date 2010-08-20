@@ -598,6 +598,7 @@ sub _getImagesFromDirectory {
     if ( opendir ( my $dh, $directoryname ) ) {
         my @images = grep { /\.(gif|png)$/i } readdir( $dh );
         closedir $dh;
+        @images = sort(@images);
         return @images;
     } else {
         warn "unable to opendir $directoryname: $!";
