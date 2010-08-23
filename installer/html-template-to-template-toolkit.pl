@@ -1,0 +1,147 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Carp;
+use Data::Dumper;
+
+use Getopt::Long;
+use File::Basename;
+use File::Copy;
+
+my $help_msg = <<EOH;
+This script does a first-cut conversion of koha HTML::Template template files (.tmpl).
+It creates a mirror of koha-tmpl called koha-tt where converted files will be placed.
+By default all files will be converted: use the --file (-f) argument to specify
+  individual files to process.
+
+Options:
+    --koharoot (-r): Root directory of koha installation.
+    --type (-t): template file extenstions to match
+        (defaults to tmpl|inc|xsl).
+    --copyall (-c): Also copy across all files in template directory
+    --file (-f): specify individual files to process
+    --debug (-d): output more information.
+EOH
+
+my $tmpl_in_dir      = 'koha-tmpl';
+my $tmpl_out_dir     = 'koha-tt';
+
+# Arguments:
+my $KOHA_ROOT;
+my $tmpl_extn_match  = "tmpl|inc|xsl"; # Type match defaults to *.tmpl plus *.inc if not specified
+my $copy_other_files = 0;
+my @template_files;
+my @files_w_tmpl_loops;
+my $verbose          = 0;
+GetOptions (
+    "koharoot=s"        => \$KOHA_ROOT,
+    "type|t=s"          => \$tmpl_extn_match,
+    "copyall|c"         => \$copy_other_files,
+    "file|f=s"          => \@template_files,         # array of filenames
+    "verbose+"          => \$verbose,                # incremental flag
+) or die $help_msg;
+
+if ( ! $KOHA_ROOT || ! -d $KOHA_ROOT ) {
+    croak "Koha root not passed or is not correct.";
+}
+if ( ! -d "$KOHA_ROOT/$tmpl_in_dir" ) {
+    croak "Cannot find template dir ($tmpl_in_dir)";
+}
+
+# Attempt to create koha-tt dir..
+if ( ! -d "$KOHA_ROOT/$tmpl_out_dir" ) {
+    mkdir("$KOHA_ROOT/$tmpl_out_dir") #, '0755'
+       or croak "Cannot create $tmpl_out_dir directory in $KOHA_ROOT: $!";
+}
+
+# Obtain list of files to process - go recursively through tmpl_in_dir and subdirectories..
+unless ( scalar(@template_files) ) {
+    @template_files = mirror_template_dir_structure_return_files("$KOHA_ROOT/$tmpl_in_dir", "$tmpl_extn_match");
+}
+foreach my $file (@template_files) {
+    (my $new_path = $file) =~ s/$tmpl_in_dir/$tmpl_out_dir/;
+    $new_path = "$KOHA_ROOT/$new_path" unless ( $new_path =~ m/^$KOHA_ROOT/ );
+
+    open my $ITMPL, '<', $file or croak "Can't open $file for input: $!";
+    open my $OTT, '>', $new_path or croak "Can't open $new_path for output: $!";
+
+    # Slurp in input file..
+    my $input_tmpl = do { local $/; <$ITMPL> };
+    close $ITMPL;
+
+    # Process..
+    # variables
+    $input_tmpl =~ s/<!--\s*TMPL_VAR\s+NAME="(.*?)"\s*-->/[% $1 %]/ig;
+    # if and unless blocks
+    $input_tmpl =~ s/<!--\s*TMPL_IF\s+NAME="(.*?)"\s*-->/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<!--\s*TMPL_UNLESS\s+NAME="(.*?)"\s*-->/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<!--\s*TMPL_ELSE\s*-->/[% ELSE %]/ig;
+    $input_tmpl =~ s/<!--\s*\/TMPL_IF\s*-->/[% END %]/ig;
+    $input_tmpl =~ s/<!--\s*\/TMPL_UNLESS\s*-->/[% END %]/ig;
+    # includes
+    $input_tmpl =~ s/<!--\s*TMPL_INCLUDE\s+NAME="(.*?\.inc)"\s*-->/[% INCLUDE '$1' %]/ig;
+    $input_tmpl =~ s/<!--\s*TMPL_INCLUDE\s+NAME="(.*?)"\s*-->/[% INCLUDE $1 %]/ig;
+
+    if ( $input_tmpl =~ m/<!--[\s\/]*TMPL_LOOP\s*-->/i ) {
+        push(@files_w_tmpl_loops, $new_path);
+    }
+
+    $input_tmpl =~ s/<!--\s*TMPL_LOOP\s+NAME="(.*?)"\s*-->/"[% FOREACH ".substr($1, 0 , -1)." IN (".$1.") %]"/ieg;
+    $input_tmpl =~ s/<!--\s*\/TMPL_LOOP\s*-->/[% END %]/ig;
+
+    # Write out..
+    print $OTT $input_tmpl;
+    close $OTT;
+}
+
+if ( scalar(@files_w_tmpl_loops) && $verbose ) {
+    print "\nThese files contain TMPL_LOOPs that need double checking:\n";
+    foreach my $file (@files_w_tmpl_loops) {
+        print "$file\n";
+    }
+}
+
+## SUB-ROUTINES ##
+
+# Create new directory structure and return list of template files
+sub mirror_template_dir_structure_return_files {
+    my($dir, $type) = @_;
+
+    my @files = ();
+    if ( opendir(DIR, $dir) ) {
+        my @dirent = readdir DIR;   # because DIR is shared when recursing
+        closedir DIR;
+        for my $dirent (@dirent) {
+            my $path = "$dir/$dirent";
+            if ( $dirent =~ /^\./ ) {
+              ;
+            }
+            elsif ( -f $path ) {
+                (my $new_path = $path) =~ s/$tmpl_in_dir/$tmpl_out_dir/;
+                $new_path = "$KOHA_ROOT/$new_path" unless ( $new_path =~ m/^$KOHA_ROOT/ );
+                if ( !defined $type || $dirent =~ /\.(?:$type)$/) {
+                    push(@files, $path);
+                }
+                elsif ( $copy_other_files ) {
+                    copy($path, $new_path)
+                      or croak "Failed to copy $path to $new_path: $!";
+                }
+            }
+            elsif ( -d $path ) {
+                (my $new_path = $path) =~ s/$tmpl_in_dir/$tmpl_out_dir/;
+                $new_path = "$KOHA_ROOT/$new_path" unless ( $new_path =~ m/^$KOHA_ROOT/ );
+                if ( ! -d $new_path ) {
+                    mkdir($new_path) #, '0755'
+                      or croak "Failed to create " . $new_path ." directory: $!";
+                }
+                my @sub_files = mirror_template_dir_structure_return_files($path, $type);
+                push(@files, @sub_files) if ( scalar(@sub_files) );
+            }
+        }
+    } else {
+        warn("Cannot open $dir: $! ... skipping");
+    }
+
+    return @files;
+}
