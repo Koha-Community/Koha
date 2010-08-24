@@ -76,6 +76,16 @@ my $query = $input->param('q');
 # don't run the search if no search term !
 if ($op eq "do_search" && $query) {
 
+    ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+        {   template_name   => "serials/result.tmpl",
+            query           => $input,
+            type            => "intranet",
+            authnotrequired => 0,
+            flagsrequired => {catalogue => 1, serials => '*'},
+            debug           => 1,
+        }
+    );
+
     # add the itemtype limit if applicable
     my $itemtypelimit = $input->param('itemtypelimit');
     if ( $itemtypelimit ) {
@@ -90,7 +100,10 @@ if ($op eq "do_search" && $query) {
     $resultsperpage = 20 if(!defined $resultsperpage);
 
     my ($error, $marcrecords, $total_hits) = SimpleSearch($query, $startfrom*$resultsperpage, $resultsperpage);
-    my $total = scalar @$marcrecords;
+    my $total = 0;
+    if (defined $marcrecords ) {
+        $total = scalar @{$marcrecords};
+    }
 
     if (defined $error) {
         $template->param(query_error => $error);
@@ -116,15 +129,6 @@ if ($op eq "do_search" && $query) {
 
         push @results, \%resultsloop;
     }
-
-    ($template, $loggedinuser, $cookie)
-        = get_template_and_user({template_name => "serials/result.tmpl",
-                query => $input,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {catalogue => 1, serials => '*'},
-                debug => 1,
-                });
 
     # multi page display gestion
     my $displaynext=0;
@@ -222,15 +226,6 @@ else {
 	    push @itemtypesloop, \%row;
 	}
     }
-
-    ($template, $loggedinuser, $cookie)
-        = get_template_and_user({template_name => "serials/subscription-bib-search.tmpl",
-                query => $input,
-                type => "intranet",
-                authnotrequired => 0,
-                flagsrequired => {catalogue => 1, serials => '*'},
-                debug => 1,
-                });
 
 
     if ($op eq "do_search") {
