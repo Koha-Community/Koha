@@ -31,7 +31,7 @@ fi
 
 for name in "$@"
 do
-    sudo -u "$name-koha" \
+    sudo -u "$name-koha" -H \
     env PERL5LIB=/usr/share/koha/lib \
         KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
         /usr/share/koha/bin/migration_tools/rebuild_zebra.pl -b -a $opts

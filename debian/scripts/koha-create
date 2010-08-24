@@ -117,6 +117,7 @@ then
     fi
     adduser --no-create-home --disabled-login \
         --gecos "Koha instance $username" \
+        --home "/var/lib/koha/$name" \
         --quiet "$username"
 
     # Create the site-specific directories.
