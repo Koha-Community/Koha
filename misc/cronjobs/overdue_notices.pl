@@ -511,8 +511,8 @@ END_SQL
         } else {
             # Generate the content of the csv with headers
             my $content = join(";", qw(title name surname address1 address2 zipcode city email itemcount itemsinfo due_date issue_date)) . "\n";
-            $content .= join( "\n", @output_chunks );
-            
+            $content .= join( "\n", map { m/(.+)/ } @output_chunks );
+
             my $attachment = {
                 filename => defined $csvfilename ? 'attachment.csv' : 'attachment.txt',
                 type => 'text/plain',
