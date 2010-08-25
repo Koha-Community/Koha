@@ -74,7 +74,7 @@ window.onload=function(){
         <!-- TMPL_IF NAME="101" -->
         The database returned an error while <!-- TMPL_IF NAME="card_element" -->saving <!-- TMPL_VAR NAME="card_element" --> <!-- TMPL_VAR NAME="element_id" --><!-- TMPL_ELSE -->attempting a save operation<!-- /TMPL_IF -->. Please have your system administrator check the error log for details.
         <!-- TMPL_ELSIF NAME="102" -->
-        The database returned an error while <!-- TMPL_IF NAME="card_element" -->deleteing <!-- TMPL_VAR NAME="card_element" --> <!-- TMPL_VAR NAME="element_id" --><!-- TMPL_ELSIF NAME=image_ids --><!-- TMPL_VAR NAME="image_ids" --><!-- TMPL_ELSE -->attempting a delete operation<!-- /TMPL_IF -->. Please have your system administrator check the error log for details.
+        The database returned an error while <!-- TMPL_IF NAME="card_element" -->deleting <!-- TMPL_VAR NAME="card_element" --> <!-- TMPL_VAR NAME="element_id" --><!-- TMPL_ELSIF NAME=image_ids --><!-- TMPL_VAR NAME="image_ids" --><!-- TMPL_ELSE -->attempting a delete operation<!-- /TMPL_IF -->. Please have your system administrator check the error log for details.
         <!-- TMPL_ELSIF NAME="201" -->
         An unsupported operation was attempted<!-- TMPL_IF NAME="element_id" --> on <!-- TMPL_VAR NAME="card_element" --> <!-- TMPL_VAR NAME="element_id" --><!-- /TMPL_IF -->. Please have your system administrator check the error log for details.
         <!-- TMPL_ELSIF NAME="202" -->
