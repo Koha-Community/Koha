@@ -1426,12 +1426,11 @@ sub searchResults {
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
-        if ($bibliotag<10){
-            $fw = GetFrameworkCode($marcrecord->field($bibliotag)->data);
-        }else{
-            $fw = GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
-        }
-
+        $fw = $scan
+             ? undef
+             : $bibliotag < 10
+               ? GetFrameworkCode($marcrecord->field($bibliotag)->data)
+               : GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, $fw );
         $oldbiblio->{subtitle} = GetRecordValue('subtitle', $marcrecord, $fw);
         $oldbiblio->{result_number} = $i + 1;
