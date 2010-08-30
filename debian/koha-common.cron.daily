@@ -1,6 +1,5 @@
 #!/bin/sh
-#
-# koha-enable -- enable a Koha instance.
+# /etc/cron.daily/koha-common -- Daily housekeeping tasks for all Kohas.
 # Copyright 2010  Catalyst IT, Ltd
 # 
 # This program is free software: you can redistribute it and/or modify
@@ -16,24 +15,10 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-
-set -e
-
-
-die() {
-    echo "$@" 1>&2
-    exit 1
-}
-
-
-# Parse command line.
-[ "$#" = 1 ] || die "Usage: $0 instancename..."
-
-
-for name in "$@"
-do
-    sed -i 's:^\(\s*Include /etc/koha/apache-shared-disable.conf\)$:#\1:' \
-        "/etc/apache2/sites-available/$name"
-done
-
-/etc/init.d/apache2 restart
+koha-foreach --enabled --email /usr/share/koha/bin/cronjobs/overdue_notices.pl -t
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/fines.pl
+koha-foreach --enabled --email /usr/share/koha/bin/cronjobs/advance_notices.pl -c
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/holds/cancel_expired_holds.pl >/dev/null 2>&1
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/services_throttle.pl > /dev/null 2>&1
+koha-foreach --enabled /usr/share/koha/bin/cronjobs/cleanup_database.pl --sessions --zebraqueue 10
+koha-foreach --enabled --noemail /usr/share/koha/bin/cronjobs/cleanup_database.pl --mail

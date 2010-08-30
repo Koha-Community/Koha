@@ -29,19 +29,46 @@ is_enabled() {
     fi
 }
 
-all=yes
-if [ "$1" = --enabled ]
-then
+help() {
+    echo <<eoh
+Lists Koha instances, optionally only those that are enabled or have
+email turned on.
+    
+Usage: $0 [--enabled] [--email] [-h]
+Options:
+    --enabled       only show instances that are enabled
+    --email         only show instances that have email enabled
+    --noemail       only show instances that do not have email enabled
+    -h              this help
+
+The filtering options can be combined, and you probably want to do this
+(except --email and --noemail, that's just silly.)
+eoh
+}
+
+enabled=no
+email=no
+noemail=no
+args=$(getopt -l enabled,email,noemail -o h -n $0 -- "$@")
+set -- $args
+while [ ! -z "$1" ]
+do
+    case "$1" in
+         -h) help; exit;;
+    --email) email=yes;;
+  --enabled) enabled=yes;;
+  --noemail) noemail=yes;;
+          *) break;;
+    esac
     shift
-    all=no
-fi
+done
 
 find /etc/koha/sites -mindepth 1 -maxdepth 1 -type d -printf '%f\n' | 
 sort |
 while read name
 do
-    if [ "$all" = yes ] || is_enabled "$name"
-    then
-        echo "$name"
-    fi
+    [ "$enabled" = yes ] && ! is_enabled "$name" && continue
+    [ "$email" = yes ] && [ ! -e /var/lib/koha/$name/email.enabled ] && continue
+    [ "$noemail" = yes ] && [ -e /var/lib/koha/$name/email.enabled ] && continue
+    echo "$name"
 done
