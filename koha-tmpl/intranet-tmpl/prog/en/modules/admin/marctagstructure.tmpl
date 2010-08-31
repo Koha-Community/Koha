@@ -5,6 +5,14 @@
 <!-- TMPL_IF name="delete_confirmed" -->MARC Frameworks &rsaquo;  Data Deleted<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->MARC Frameworks<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+	$("#table_marctagstructure").tablesorter({
+		sortList: [[0,0]],
+		headers: { 5: { sorter: false},6: { sorter: false},7: { sorter: false}}
+	}).tablesorterPager({container: $("#pagertable_marctagstructure"),positionFixed: false,size: 20});
+}); </script>
 <script type="text/javascript">
 //<![CDATA[
 function Check(f) {
@@ -153,9 +161,26 @@ $(document).ready(function() {
     </p>
 </form>
 <p>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/batchRebuildBiblioTables.pl script.</p>
-
-    <table>
-    <tr>
+<span id="pagertable_marctagstructure" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/next.png" class="next"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/last.png" class="last"/>
+		, entries/page : 
+		<select class="pagesize">
+        	<option value="10">10</option>
+			<option selected="selected" value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</form>
+</span>
+    <table id="table_marctagstructure">
+    <thead>
         <th>Tag</th>
         <th>Lib</th>
         <th>Repeatable</th>
@@ -164,7 +189,7 @@ $(document).ready(function() {
         <th>Subfields</th>
         <th>Edit</th>
         <th>Delete</th>
-	</tr>
+	</thead>
 
     <!-- TMPL_IF NAME="select_display" -->
         <!-- TMPL_LOOP NAME="loop" -->
@@ -205,13 +230,7 @@ $(document).ready(function() {
     <!--/TMPL_IF -->
     </table>
 
-    <!-- TMPL_IF NAME="isprevpage" -->
-    <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="prevpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">&lt;&lt; Previous</a>
-    <!-- /TMPL_IF -->
 
-    <!-- TMPL_IF NAME="nextpage" -->
-    <a href="<!-- TMPL_VAR NAME="script_name" -->?offset=<!-- TMPL_VAR NAME="nextpage" -->&amp;searchfield=<!-- TMPL_VAR NAME="searchfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" --><!--TMPL_IF Name="select_display"-->&amp;select_display=True<!--/TMPL_IF -->">Next &gt;&gt;</a>
-    <!-- /TMPL_IF -->
 
 <!-- /TMPL_IF -->
 
