@@ -24,8 +24,8 @@ Data Deleted
 	// call the tablesorter plugin
 	$("#table_item_type").tablesorter({
 		sortList: [[1,0]],
-		headers: { 0: { sorter: false}}
-		   		}).tablesorterPager({container: $("#pagertable_item_type"),positionFixed: false,size: 20});
+		headers: { 0: { sorter: false},5: { sorter: false}}
+		   		}).tablesorterPager({container: $("#pagertable_item_type"),positionFixed: false,size: 10});
 	
 }); </script>
 <script type="text/javascript">
@@ -294,8 +294,8 @@ Item Types Administration
 		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/last.png" class="last"/>
 		, entries/page : 
 		<select class="pagesize">
-        	<option value="10">10</option>
-			<option selected="selected" value="20">20</option>
+        	<option selected="selected" value="10">10</option>
+			<option value="20">20</option>
 			<option value="30">30</option>
 			<option value="40">40</option>
 			<option value="50">50</option>

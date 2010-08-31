@@ -10,7 +10,8 @@
 <script type="text/javascript" id="js">$(document).ready(function() {
 	// call the tablesorter plugin
 	$("#table_authorized_values").tablesorter({
-		sortList: [[1,0]]
+		sortList: [[1,0]],
+		headers: { 4: { sorter: false}, 5: { sorter: false}}
 		   		}).tablesorterPager({container: $("#pagertable_authorized_values"),positionFixed: false,size: 20});
 	
 }); </script>
