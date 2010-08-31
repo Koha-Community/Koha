@@ -39,7 +39,7 @@ my $offset      = $input->param('offset') || 0;
 my $op          = $input->param('op')     || '';
 $searchfield =~ s/\,//g;
 
-my $pagesize    = 20;
+
 my $script_name = "/cgi-bin/koha/admin/auth_tag_structure.pl";
 
 my $dbh = C4::Context->dbh;
@@ -221,7 +221,7 @@ if ($op eq 'add_form') {
 	}
 	my ($count,$results)=StringSearch($searchfield,$authtypecode);
 	my @loop_data = ();
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+    for ( my $i = $offset ; $i < $count ; $i++ ) {
 		my %row_data;  # get a fresh hash for the row data
         $row_data{tagfield}         = $results->[$i]{'tagfield'};
         $row_data{liblibrarian}     = $results->[$i]{'liblibrarian'};
@@ -237,15 +237,12 @@ if ($op eq 'add_form') {
 					authtypecode => $authtypecode,
 	);
 	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
 		$template->param(isprevpage => $offset,
-						prevpage=> $prevpage,
 						searchfield => $searchfield,
 		 );
 	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(nextpage =>$nextpage,
+    if ( $offset < $count ) {
+		$template->param(
 						searchfield => $searchfield,
 		);
 	}
