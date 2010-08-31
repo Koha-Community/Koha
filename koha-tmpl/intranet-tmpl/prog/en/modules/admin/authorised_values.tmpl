@@ -12,7 +12,7 @@
 	$("#table_authorized_values").tablesorter({
 		sortList: [[1,0]],
 		headers: { 4: { sorter: false}, 5: { sorter: false}}
-		   		}).tablesorterPager({container: $("#pagertable_authorized_values"),positionFixed: false,size: 20});
+		   		}).tablesorterPager({container: $("#pagertable_authorized_values"),positionFixed: false,size: 50});
 	
 }); </script>
 
@@ -233,11 +233,12 @@
 		, entries/page : 
 		<select class="pagesize">
         	<option value="10">10</option>
-			<option selected="selected" value="20">20</option>
+			<option value="20">20</option>
 			<option value="30">30</option>
 			<option value="40">40</option>
-			<option value="50">50</option>
+			<option selected="selected" value="50">50</option>
 			<option value="100">100</option>
+			<option value="200">200</option>
 		</select>
 	</form>
 </span>
