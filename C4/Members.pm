@@ -484,7 +484,7 @@ sub patronflags {
         $flags{'NOTES'}      = \%flaginfo;
     }
     my ( $odues, $itemsoverdue ) = checkoverdues($patroninformation->{'borrowernumber'});
-    if ( $odues > 0 ) {
+    if ( $odues && $odues > 0 ) {
         my %flaginfo;
         $flaginfo{'message'}  = "Yes";
         $flaginfo{'itemlist'} = $itemsoverdue;
