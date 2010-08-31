@@ -5,6 +5,16 @@
 <!-- TMPL_IF name="delete_confirm" --> &rsaquo; Confirm Deletion<!-- /TMPL_IF -->
 <!-- TMPL_IF name="else" -->Authorized values<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+	// call the tablesorter plugin
+	$("#table_authorized_values").tablesorter({
+		sortList: [[1,0]]
+		   		}).tablesorterPager({container: $("#pagertable_authorized_values"),positionFixed: false,size: 20});
+	
+}); </script>
+
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
      $(document).ready(function() {
@@ -21,7 +31,6 @@
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
-
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <!-- TMPL_IF name="add_form" --> <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; <!-- TMPL_IF name="action_modify" -->Modify authorized value<!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="action_add_value" -->New authorized value<!-- /TMPL_IF -->
 	   <!-- TMPL_IF name="action_add_category" -->New category<!-- /TMPL_IF --><!-- /TMPL_IF -->
@@ -211,9 +220,29 @@
  <!-- TMPL_IF EXPR="category eq 'NOT_LOAN'" -->
     <p>Statuses to describe why an item is not for loan</p>
  <!-- /TMPL_IF -->
-<table>
-<caption>Authorized values for category <!-- TMPL_VAR name="category" --> :</caption>
-<tr>
+<h3>Authorized values for category <!-- TMPL_VAR name="category" --> :</h3>
+
+<span id="pagertable_authorized_values" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/next.png" class="next"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/last.png" class="last"/>
+		, entries/page : 
+		<select class="pagesize">
+        	<option value="10">10</option>
+			<option selected="selected" value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</form>
+</span>
+
+<table id="table_authorized_values" cellspacing="1" class="tablesorter">
+<thead><tr>
 	<th>Authorized value</th>
 	<th>Description</th>
 	<th>Description (OPAC)</th>
@@ -221,9 +250,10 @@
 	<th>Edit</th>
 	<th>Delete</th>
 	</tr>
+</thead><tbody>
 <!-- TMPL_LOOP name="loop" -->
 <!-- TMPL_UNLESS name="__odd__" -->
-<tr class="highlight">
+<tr>
 <!-- TMPL_ELSE -->
 <tr>
 <!-- /TMPL_UNLESS -->
@@ -235,19 +265,13 @@
 	<td><a href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
 </tr>
 <!-- /TMPL_LOOP -->
-</table>
+</tbody></table>
 
 <!-- TMPL_IF NAME="isprevpage" -->
 <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
 <input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="prevpage" -->" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 	<input type="submit" value="&lt;&lt; Previous" /></form>
 <!-- /TMPL_IF --> 
-
-<!-- TMPL_IF NAME="nextpage" -->
-<form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-<input type="hidden" name="offset" value="<!-- TMPL_VAR NAME="nextpage" -->" /><input type="hidden" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-	<input type="submit" value="Next Page &gt;&gt;" /></form>
-<!-- /TMPL_IF -->
 
 <!-- /TMPL_IF -->
 
