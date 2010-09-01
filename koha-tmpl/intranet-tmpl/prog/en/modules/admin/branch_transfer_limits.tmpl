@@ -1,6 +1,8 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; Library Checkin and Transfer Policy</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
@@ -90,6 +92,31 @@
 	<div id="<!-- TMPL_VAR NAME="code" -->set">
 		<h4>Policy for <!--TMPL_VAR NAME="limit_phrase" -->: <!-- TMPL_VAR NAME="code" --></h4>
 	<p><a id="CheckAll<!-- TMPL_VAR NAME="code" -->table" class="checkall" href="#">Check All</a> | <a id="UncheckAll<!-- TMPL_VAR NAME="code" -->table" class="uncheckall" href="#">Uncheck All</a></p>
+	<script type="text/javascript" id="js">$(document).ready(function() {
+	$("#<!-- TMPL_VAR NAME="code" -->table").tablesorter({
+		sortList: [[0,0]],
+		headers: { 1: { sorter: false}}
+	}).tablesorterPager({container: $("#pager<!-- TMPL_VAR NAME="code" -->table"),positionFixed: false,size: 10});
+}); </script>
+	
+	<span id="pager<!-- TMPL_VAR NAME="code" -->table" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/next.png" class="next"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/last.png" class="last"/>
+		, entries/page : 
+		<select class="pagesize">
+        	<option selected="selected" value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</form>
+</span>
 		<table id="<!-- TMPL_VAR NAME="code" -->table">
 			<thead>
 				<tr>
