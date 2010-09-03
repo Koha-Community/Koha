@@ -313,29 +313,6 @@ sub ModBiblio {
         $record->delete_field($field);
     }
 
-    # parse each item, and, for an unknown reason, re-encode each subfield
-    # if you don't do that, the record will have encoding mixed
-    # and the biblio will be re-encoded.
-    # strange, I (Paul P.) searched more than 1 day to understand what happends
-    # but could only solve the problem this way...
-    my @fields = $oldRecord->field($itemtag);
-    foreach my $fielditem (@fields) {
-        my $field;
-        foreach ( $fielditem->subfields() ) {
-            # re-encode the subfield only if it isn't already in utf-8.
-            my ($tag, $value) = @$_;
-            $tag = Encode::encode('utf-8', $tag) unless utf8::is_utf8($tag);
-            $value = Encode::encode('utf-8', $value) unless utf8::is_utf8($value);
-
-            if ($field) {
-                $field->add_subfields( $tag => $value );
-            } else {
-                $field = MARC::Field->new( "$itemtag", '', '', $tag => $value );
-            }
-        }
-        $record->append_fields($field);
-    }
-
     foreach my $field ($record->fields()) {
         if (! $field->is_control_field()) {
             if (scalar($field->subfields()) == 0) {
@@ -1067,6 +1044,7 @@ sub GetMarcBiblio {
     if ($marcxml) {
         $record = eval { MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour') ) };
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
+        return unless $record;
 
         #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;
