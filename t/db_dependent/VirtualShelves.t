@@ -116,7 +116,7 @@ for(my $i=0; $i<10;$i++){
 
     
     # same thing with AddToShelfFromBiblio
-    my $biblionumber = $biblionumbers[int(rand(10))];
+    my $biblionumber = $biblionumbers[int(rand(9))];
     &AddToShelfFromBiblio($biblionumber, $shelfnumber);
     my ($AfterAgain,$countagain) = GetShelfContents($shelfnumber);
     ok($countafter, $countagain -1);
