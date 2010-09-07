@@ -43,6 +43,15 @@
     <!-- /TMPL_IF -->
     </fieldset>
 </div>
+
+<!-- TMPL_IF NAME="suggestion" --><!-- TMPL_IF name="suggestions_count" -->
+<div id="acqui_acqui_home_suggestions">
+    <fieldset>
+    <legend>Pending suggestions</legend>
+        <p><!--TMPL_VAR NAME="suggestions_count" --> suggestions waiting. <a href="/cgi-bin/koha/suggestion/suggestion.pl">Manage suggestions</a>.</p>
+    </fieldset>
+</div><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
 </div>
 
 <div class="yui-u">
