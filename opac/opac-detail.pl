@@ -40,7 +40,6 @@ use C4::Serials;
 use C4::Members;
 use C4::VirtualShelves;
 use C4::XSLT;
-use Switch;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -597,42 +596,39 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
 # We try to select the best default tab to show, according to what
 # the user wants, and what's available for display
 my $defaulttab = '';
-switch (C4::Context->preference('opacSerialDefaultTab')) {
-
-    # If the user wants subscriptions by default
-    case "subscriptions" { 
-	# And there are subscriptions, we display them
-	if ($subscriptionsnumber) {
-	    $defaulttab = 'subscriptions';
-	} else {
-	   # Else, we try next option
-	   next; 
-	}
+my $deftab = C4::Context->preference('opacSerialDefaultTab');
+# If the user wants subscriptions by default
+if ($deftab eq 'subscriptions') { 
+    # And there are subscriptions, we display them
+    if ($subscriptionsnumber) {
+        $defaulttab = 'subscriptions';
+    } else {
+        # Else, we try next option
+        $deftab = 'serialcollection'; 
     }
-
-    case "serialcollection" {
-	if (scalar(@serialcollections) > 0) {
-	    $defaulttab = 'serialcollection' ;
-	} else {
-	    next;
-	}
+}
+if ($deftab eq 'serialcollection') {
+    if (scalar(@serialcollections) > 0) {
+        $defaulttab = 'serialcollection' ;
+    } else {
+        $deftab = 'holdings';
     }
+}
 
-    case "holdings" {
-	if ($dat->{'count'} > 0) {
-	   $defaulttab = 'holdings'; 
-	} else {
-	     # As this is the last option, we try other options if there are no items
-	     if ($subscriptionsnumber) {
-		$defaulttab = 'subscriptions';
-	     } elsif (scalar(@serialcollections) > 0) {
-		$defaulttab = 'serialcollection' ;
-	     }
-	}
-
+if ($deftab eq 'holdings') {
+    if ($dat->{'count'} > 0) {
+        $defaulttab = 'holdings'; 
+    } else {
+        # As this is the last option, we try other options if there are no items
+        if ($subscriptionsnumber) {
+            $defaulttab = 'subscriptions';
+        } elsif (scalar(@serialcollections) > 0) {
+            $defaulttab = 'serialcollection' ;
+        }
     }
 
 }
+
 $template->param('defaulttab' => $defaulttab);
 
 

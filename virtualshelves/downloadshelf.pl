@@ -22,7 +22,6 @@ use warnings;
 
 use CGI;
 use Encode qw(encode);
-use Switch;
 
 use C4::Auth;
 use C4::Biblio;
@@ -65,19 +64,23 @@ if ($shelfid && $format) {
 	$output = marc2csv(\@biblios, $format);
 
     # Other formats
-    } else {
-	foreach my $biblio (@$items) {
-	    my $biblionumber = $biblio->{biblionumber};
+} else {
+    foreach my $biblio (@$items) {
+        my $biblionumber = $biblio->{biblionumber};
 
-	    my $record = GetMarcBiblio($biblionumber);
+        my $record = GetMarcBiblio($biblionumber);
 
-	    switch ($format) {
-		case "iso2709" { $output .= $record->as_usmarc(); }
-		case "ris"     { $output .= marc2ris($record); }
-		case "bibtex"  { $output .= marc2bibtex($record, $biblionumber); }
-	    }
-	}
+        if ($format eq 'iso2709') {
+            $output .= $record->as_usmarc();
+        }
+        elsif ($format eq 'ris') {
+            $output .= marc2ris($record);
+        }
+        elsif ($format eq 'bibtex') {
+            $output .= marc2bibtex($record, $biblionumber);
+        }
     }
+}
 
     # If it was a CSV export we change the format after the export so the file extension is fine
     $format = "csv" if ($format =~ m/^\d+$/);
