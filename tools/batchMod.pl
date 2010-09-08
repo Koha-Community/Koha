@@ -82,7 +82,6 @@ my @not_deleted;           # List of the itemnumbers that could not be deleted
 
 my %cookies = parse CGI::Cookie($cookie);
 my $sessionID = $cookies{'CGISESSID'}->value;
-my $dbh = C4::Context->dbh;
 
 
 #--- ----------------------------------------------------------------------------
@@ -492,7 +491,7 @@ sub BuildItemsData{
 # Where subfield is not repeated
 # And where we are sure that field should correspond
 # And $tag>10
-sub UpdateMarcWith($$){
+sub UpdateMarcWith {
   my ($marcfrom,$marcto)=@_;
   #warn "FROM :",$marcfrom->as_formatted;
 	my (  $itemtag,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
