@@ -35,7 +35,7 @@ function popup(subscriptionid) {
 }
 
 function generateNext(subscriptionid) {
-	if(confirm("Do you really want to generate next serial?")){
+	if(confirm(_("Do you really want to generate next serial?"))){
 		document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid;
 	}
 }
