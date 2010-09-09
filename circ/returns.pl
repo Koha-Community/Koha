@@ -208,6 +208,7 @@ if ($barcode) {
 #
     ( $returned, $messages, $issueinformation, $borrower ) =
       AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode);     # do the return
+    my $homeorholdingbranchreturn = C4::Context->preference('HomeOrHoldingBranchReturn') or 'homebranch';
 
     # get biblio description
     my $biblio = GetBiblioFromItemNumber($itemnumber);
@@ -217,7 +218,7 @@ if ($barcode) {
     $template->param(
         title            => $biblio->{'title'},
         homebranch       => $biblio->{'homebranch'},
-        homebranchname   => GetBranchName( $biblio->{'homebranch'} ),
+        homebranchname   => GetBranchName( $biblio->{$homeorholdingbranchreturn} ),
         author           => $biblio->{'author'},
         itembarcode      => $biblio->{'barcode'},
         itemtype         => $biblio->{'itemtype'},
