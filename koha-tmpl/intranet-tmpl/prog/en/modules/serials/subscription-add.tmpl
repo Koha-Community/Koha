@@ -974,11 +974,12 @@ $(document).ready(function() {
     <fieldset id="subscription_add_information" class="rows">
 	<legend>Subscription details</legend>
 	<ol>
+	    <!-- TMPL_IF name="subscriptionid" -->
         <li><span class="label">Subscription #</span> <!--TMPL_VAR name="subscriptionid"--></li>
-        <li><span class="label">Librarian: </span> <!-- TMPL_VAR name="loggedinusername" --></li>
+        <!-- /TMPL_IF -->
         <li>
             <label for="aqbooksellerid">Vendor: </label>
-            <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <div class="inputnote"><a href="#" onclick="FindAcqui(f)">Search for a vendor</a></div>
+            <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="<!-- TMPL_VAR name="aqbooksellerid" -->" size="8" /> (<input type="text" name="aqbooksellername" value="<!-- TMPL_VAR name="aqbooksellername" -->" disabled="disabled" readonly="readonly" />) <a href="#" onclick="FindAcqui(f)">Search for a vendor</a>
         </li>
         <li>
             <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Biblio:</label>
@@ -1030,8 +1031,8 @@ $(document).ready(function() {
             <input type="text" name="callnumber" id="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" />
         </li>
         <li>
-    		<label for="graceperiod">Grace period:</label> <input type="text" name="graceperiod" id="graceperiod" value="<!-- TMPL_VAR name="graceperiod" -->" /> day(s)
-	    </li>
+            <label for="graceperiod">Grace period:</label> <input type="text" name="graceperiod" id="graceperiod" value="<!-- TMPL_VAR name="graceperiod" -->" size="5"/> day(s)
+        </li>
         <li>
             <label for="notes">Public note:</label>
             <textarea name="notes" id="notes" cols="30" rows="2"><!-- TMPL_VAR name="notes" --></textarea>
@@ -1060,27 +1061,15 @@ $(document).ready(function() {
 				<div class="hint">To notify patrons of new serial issues, you must <a href="/cgi-bin/koha/tools/letter.pl">define a notice</a>.</div>
 				<!-- /TMPL_IF -->
         </li>
-		<li class="radio">
-			<label for="staffdisplaycount">Staff and Public Display</label>
-			<p>
+		<li>
 			 <label class="widelabel" for="staffdisplaycount">Number of issues to display to staff: </label>
 			 <input type="text" name="staffdisplaycount" id="staffdisplaycount" value="<!-- TMPL_VAR NAME="staffdisplaycount" -->" size="4"/>
-			</p>
-			<p>
+		 </li>
+		 <li>
 			<label class="widelabel" for="opacdisplaycount">Number of issues to display to the public: </label>
 			<input type="text" name="opacdisplaycount" id="opacdisplaycount" value="<!-- TMPL_VAR NAME="opacdisplaycount" -->" size="4"/>
-			</p>
 		</li>
 	</ol>
-
-            <div style="float:left;clear:left;margin:1em;"><strong>Note:</strong>
-            
-                <ul>
-                    <li>The subscription <strong>must</strong> be associated with a bibliographic record.</li>
-                    <li>You have to select a vendor if you wish to generate claims.</li>
-                </ul></div>
-            
-            
 	</fieldset>
 	</div>
 	
@@ -1327,9 +1316,9 @@ $(document).ready(function() {
             <label for="subtype" class="required">Subscription length:</label>
             
                 <select name="subtype" id="subtype">
+					<!--TMPL_IF Name="subtype_monthlength"--><option value="monthlength" selected="selected"><!--TMPL_ELSE--><option value="monthlength"><!--/TMPL_IF--> Number of months</option>					
 					<!--TMPL_IF Name="subtype_numberlength"--><option value="numberlength" selected="selected"><!--TMPL_ELSE--><option value="numberlength"><!--/TMPL_IF--> Number of issues</option>					
 					<!--TMPL_IF Name="subtype_weeklength"--><option value="weeklength" selected="selected"><!--TMPL_ELSE--><option value="weeklength"><!--/TMPL_IF--> Number of weeks</option>					
-					<!--TMPL_IF Name="subtype_monthlength"--><option value="monthlength" selected="selected"><!--TMPL_ELSE--><option value="monthlength"><!--/TMPL_IF--> Number of months</option>					
                 </select>
                 <input type="text" name="sublength" value="<!-- TMPL_VAR name="sublength" -->" size="3" onkeypress="return check_input(event)" /> (enter amount in numerals)
             <span class="required">Required</span>
