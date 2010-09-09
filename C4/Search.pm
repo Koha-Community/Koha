@@ -2335,8 +2335,10 @@ sub NZorder {
             $counter++
           )
         {
-            $result_hash->{'RECORDS'}[$counter] =
-              GetMarcBiblio( $result_hash->{'RECORDS'}[$counter] )->as_usmarc;
+             $result_hash->{'RECORDS'}[$counter] =
+              GetMarcBiblio( $result_hash->{'RECORDS'}[$counter] )->as_usmarc
+                if $result_hash->{'RECORDS'}[$counter];
+
         }
         my $finalresult = ();
         $result_hash->{'hits'}         = $numbers;
