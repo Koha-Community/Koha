@@ -1006,17 +1006,6 @@ $(document).ready(function() {
             <!-- /TMPL_IF -->
         </li>
         <li>
-            <label for="location">Location:</label>
-            <select name="location" id="location">
-                <option value="">None</option>
-                <!-- TMPL_LOOP NAME="locations_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
-            </select>
-        </li>
-         <li>
-            <label for="callnumber">Call Number:</label>
-            <input type="text" name="callnumber" id="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" />
-        </li>
-        <li>
             <label for="branchcode">Library:</label>
             
                 <select name="branchcode" id="branchcode" style="width: 20em;">
@@ -1028,6 +1017,17 @@ $(document).ready(function() {
                     <!-- /TMPL_LOOP -->
                 </select> (select a library)
             
+        </li>
+        <li>
+            <label for="location">Location:</label>
+            <select name="location" id="location">
+                <option value="">None</option>
+                <!-- TMPL_LOOP NAME="locations_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+            </select>
+        </li>
+         <li>
+            <label for="callnumber">Call Number:</label>
+            <input type="text" name="callnumber" id="callnumber" value="<!-- TMPL_VAR name="callnumber" -->" size="20" />
         </li>
         <li>
     		<label for="graceperiod">Grace period:</label> <input type="text" name="graceperiod" id="graceperiod" value="<!-- TMPL_VAR name="graceperiod" -->" /> day(s)
