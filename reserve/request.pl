@@ -428,10 +428,7 @@ foreach my $biblionumber (@biblionumbers) {
             }
             
             if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve} and CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber) ) {
-                if ( not $policy_holdallowed and C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
-                    $item->{override} = 1;
-                    $num_override++;
-                } elsif ( $policy_holdallowed ) {
+                if ( $policy_holdallowed ) {
                     $item->{available} = 1;
                     $num_available++;
                 }
@@ -439,6 +436,12 @@ foreach my $biblionumber (@biblionumbers) {
                     $item->{override} = 1;
                     $num_override++;
             }
+            # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
+            if (C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
+                $item->{override} = 1;
+                $num_override++;
+            }   
+
             # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
             
             # FIXME: move this to a pm
