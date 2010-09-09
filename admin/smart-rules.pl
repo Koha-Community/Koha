@@ -74,6 +74,28 @@ elsif ($op eq 'delete-branch-cat') {
         $sth_delete->execute($branch, $categorycode);
     }
 }
+elsif ($op eq 'delete-branch-item') {
+    my $itemtype  = $input->param('itemtype');
+    if ($branch eq "*") {
+        if ($itemtype eq "*") {
+            my $sth_delete = $dbh->prepare("DELETE FROM default_circ_rules");
+            $sth_delete->execute();
+        } else {
+            my $sth_delete = $dbh->prepare("DELETE FROM default_branch_item_rules
+                                            WHERE itemtype = ?");
+            $sth_delete->execute($itemtype);
+        }
+    } elsif ($itemtype eq "*") {
+        my $sth_delete = $dbh->prepare("DELETE FROM default_branch_circ_rules
+                                        WHERE branchcode = ?");
+        $sth_delete->execute($branch);
+    } else {
+        my $sth_delete = $dbh->prepare("DELETE FROM branch_item_rules
+                                        WHERE branchcode = ?
+                                        AND itemtype = ?");
+        $sth_delete->execute($branch, $itemtype);
+    }
+}
 # save the values entered
 elsif ($op eq 'add') {
     my $sth_search = $dbh->prepare("SELECT COUNT(*) AS total FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?");
