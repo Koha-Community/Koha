@@ -42,7 +42,6 @@
 <div id="doc3" class="yui-t7">
     <div id="bd">
         <div id="yui-main">
-            <div class="yui-b">
                 <!-- TMPL_IF NAME="show" --><h1>Batch item deletion</h1><!-- TMPL_ELSE --><h1>Batch item deletion results</h1><!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="barcode_not_unique" --><div class="dialog alert"><strong>Error saving item</strong>: Barcode must be unique.</div><!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="no_next_barcode" --><div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div><!-- /TMPL_IF -->
@@ -142,6 +141,7 @@
 	<p><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a></p>
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
+	</form>
     <!-- /TMPL_UNLESS -->
 
 <!-- TMPL_IF name="action" -->
@@ -174,9 +174,6 @@
 
 	<p><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a></p>
 <!-- /TMPL_IF -->
-
-</div>
     </div>
-</div>
-</body>
-</html>
+    </div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
