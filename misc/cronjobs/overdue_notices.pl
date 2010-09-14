@@ -662,10 +662,7 @@ sub parse_letter { # FIXME: this code should probably be moved to C4::Letters:pa
                 $item_format = $1;
             }
             if ($params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/) { # process any fine tags...
-                no strict; # currency_format behaves badly if we quote the bareword for some reason...
                 my $formatted_fine = currency_format("$1", "$fine", FMT_SYMBOL);
-                use strict;
-                $formatted_fine = Encode::encode("utf8", $formatted_fine);
                 $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/$formatted_fine/;
             }
             $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblio',      $item );
