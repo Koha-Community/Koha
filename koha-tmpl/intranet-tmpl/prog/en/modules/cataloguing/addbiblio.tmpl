@@ -324,12 +324,12 @@ function CloneField(index) {
             
             // setting its '+' and '-' buttons
             try {
-                var spans = divs[i].getElementsByTagName('span');
-                for (var j = 0; j < spans.length; j++) {
-                    if(spans[j].getAttribute('class') == 'buttonPlus'){
-                        spans[j].setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
-                    } else if (spans[j].getAttribute('class') == 'buttonMinus') {
-                        spans[j].setAttribute('onclick',"UnCloneField('" + divs[i].getAttribute('id') + "')");
+                var anchors = divs[i].getElementsByTagName('a');
+                for (var j = 0; j < anchors.length; j++) {
+                    if(anchors[j].getAttribute('class') == 'buttonPlus'){
+                        anchors[j].setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
+                    } else if (anchors[j].getAttribute('class') == 'buttonMinus') {
+                        anchors[j].setAttribute('onclick',"UnCloneField('" + divs[i].getAttribute('id') + "')");
                     }
                 }
             }
@@ -479,19 +479,19 @@ function CloneSubfield(index){
     label.setAttribute('for',id_input);
     <!-- /TMPL_UNLESS -->
     
-    // setting a new if for the parent div
+    // setting a new id for the parent div
     clone.setAttribute('id',new_id);
     
     try {
         var buttonUp = clone.getElementsByTagName('img')[0];
         buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
-    	var spans = clone.getElementsByTagName('span');
-    	if(spans.length){
-        	for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
-        		if(spans[i].getAttribute('class') == 'buttonPlus'){
-                    spans[i].setAttribute('onclick',"CloneSubfield('" + new_id + "')");
-                } else if (spans[i].getAttribute('class') == 'buttonMinus') {
-                    spans[i].setAttribute('onclick',"UnCloneField('" + new_id + "')");
+        var anchors = clone.getElementsByTagName('a');
+        if(anchors.length){
+            for(var i = 0 ,lenanchors = anchors.length ; i < lenanchors ; i++){
+                if(anchors[i].getAttribute('class') == 'buttonPlus'){
+                    anchors[i].setAttribute('onclick',"CloneSubfield('" + new_id + "')");
+                } else if (anchors[i].getAttribute('class') == 'buttonMinus') {
+                    anchors[i].setAttribute('onclick',"UnCloneField('" + new_id + "')");
                 }
             }
         }
@@ -810,8 +810,8 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                 <!-- TMPL_VAR NAME="marc_value" -->
                 
                 <!-- TMPL_IF NAME="repeatable" -->
-                    <span class="subfield_controls"><a href="#" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" /></a>
-                                        <a href="#" onclick="UnCloneField('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" /></a></span>
+                    <span class="subfield_controls"><a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" /></a>
+                                        <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" /></a></span>
                 <!-- /TMPL_IF -->
 
                 
