@@ -381,7 +381,7 @@
         </xsl:if>
 
         <xsl:if test="marc:datafield[substring(@tag, 1, 1) = '6']">
-            <span class="results_summary"><span class="label">Related Subjects: </span>
+            <span class="results_summary"><span class="label">Subject(s): </span>
             <xsl:for-each select="marc:datafield[substring(@tag, 1, 1) = '6']">
             <a>
             <xsl:choose>
