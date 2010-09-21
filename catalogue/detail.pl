@@ -102,6 +102,9 @@ my $dbh = C4::Context->dbh;
 my @items = &GetItemsInfo( $biblionumber, 'intra' );
 my $dat = &GetBiblioData($biblionumber);
 
+# get count of holds
+my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);
+
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
@@ -215,6 +218,7 @@ $template->param(
 	volinfo				=> $itemfields{enumchron},
     itemdata_itemnotes  => $itemfields{itemnotes},
 	z3950_search_params	=> C4::Search::z3950_search_args($dat),
+    holdcount           => $holdcount,
 	C4::Search::enabled_staff_search_views,
 );
 
