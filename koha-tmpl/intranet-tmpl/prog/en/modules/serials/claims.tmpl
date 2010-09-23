@@ -55,6 +55,10 @@
         $("#titlefilter").keyup(function() {
             $.uiTableFilter($("#claimst"), $("#titlefilter").val())
 	    });
+
+        $("#branchfilter").keyup(function() {
+            $.uiTableFilter($("#claimst"), $("#branchfilter").val())
+	    });
 	 });
 
 	// Checks if the form can be sent (at least one checkbox must be checked)
@@ -72,10 +76,20 @@
 		clearFilters();
 	    } else {
 		$("table#claimst tbody tr").hide();
-		$("table#claimst tbody tr:contains(" + selectedStatus + ")").show();		    
+		$("table#claimst tbody tr:contains(" + selectedStatus + ")").show();
 	    }
 	}
 
+	// Filter by branch
+	function filterByBranch() {
+	    selectedBranch = $("#branchfilter").val();
+	    if (selectedBranch == "all") {
+		clearFilters();
+	    } else {
+		$("table#claimst tbody tr").hide();
+		$("table#claimst tbody tr:contains(" + selectedBranch + ")").show();
+	    }
+	}
 	// Filter by date
 	function filterByDate() {
 	    var beginDate = Date_from_syspref($("#begindate").val()).getTime();
@@ -200,6 +214,16 @@
 	<li>
 	    <label for="titlefilter">Title : </label>
 	    <input id="titlefilter" type="text" />
+	    <label for="branchfilter">Branch: </label>
+	    <select id="branchfilter" onchange="filterByBranch();">
+            <!-- TMPL_LOOP Name="branchloop" -->
+                <!-- TMPL_IF NAME="selected" -->
+                <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+        </select>
 	</li>
 	
 	<li>
@@ -247,6 +271,7 @@
                     <th><input type="checkbox" id="CheckAll"></th>
                     <!--/TMPL_IF-->
                     <th>Vendor</th>
+                    <th>Branch</th>
                     <th>Title</th>
                     <th>Issue number</th>
                     <th>Status</th>
@@ -263,6 +288,9 @@
                         <!--/TMPL_IF-->
                         <td>
                         <!-- TMPL_VAR name="name" -->
+                        </td>
+                        <td>
+                        <!-- TMPL_VAR name="branchcode" -->
                         </td>
                         <td>
                         <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->"><!-- TMPL_VAR name="title" escape="html" --></a>
