@@ -114,6 +114,7 @@ foreach my $item (@{$items}) {
                                         format_string       => $layout->get_attr('format_string'),
                                         text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
                                           );
+        $pdf->Add($label_a->draw_guide_box) if $layout->get_attr('guidebox');
         my $label_a_text = $label_a->create_label();
         _print_text($label_a_text);
         ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
@@ -136,6 +137,7 @@ foreach my $item (@{$items}) {
                                         format_string       => $layout->get_attr('format_string'),
                                         text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
                                           );
+        $pdf->Add($label_b->draw_guide_box) if $layout->get_attr('guidebox');
         my $label_b_text = $label_b->create_label();
         ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
         next LABEL_ITEMS;
@@ -161,6 +163,7 @@ foreach my $item (@{$items}) {
                                         format_string       => $layout->get_attr('format_string'),
                                         text_wrap_cols      => $layout->get_text_wrap_cols(label_width => $template->get_attr('label_width'), left_text_margin => $template->get_attr('left_text_margin')),
                                           );
+        $pdf->Add($label->draw_guide_box) if $layout->get_attr('guidebox');
         my $label_text = $label->create_label();
         _print_text($label_text) if $label_text;
         ($row_count, $col_count, $llx, $lly) = _calc_next_label_pos($row_count, $col_count, $llx, $lly);
