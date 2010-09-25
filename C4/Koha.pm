@@ -24,6 +24,7 @@ use C4::Context;
 use C4::Output;
 use URI::Split qw(uri_split);
 use Memoize;
+use Business::ISBN;
 
 use vars qw($VERSION @ISA @EXPORT $DEBUG);
 
@@ -1235,6 +1236,7 @@ sub GetNormalizedUPC {
 }
 
 # Normalizes and returns the first valid ISBN found in the record
+# ISBN13 are converted into ISBN10. This is required to get Amazon cover book.
 sub GetNormalizedISBN {
     my ($isbn,$record,$marcflavour) = @_;
     my @fields;
@@ -1321,19 +1323,12 @@ sub _normalize_match_point {
 }
 
 sub _isbn_cleanup ($) {
-    my $normalized_isbn = shift;
-    $normalized_isbn =~ s/-//g;
-    $normalized_isbn =~/([0-9x]{1,})/i;
-    $normalized_isbn = $1;
-    if (
-        $normalized_isbn =~ /\b(\d{13})\b/ or
-        $normalized_isbn =~ /\b(\d{12})\b/i or
-        $normalized_isbn =~ /\b(\d{10})\b/ or
-        $normalized_isbn =~ /\b(\d{9}X)\b/i
-    ) { 
-        return $1;
-    }
-    return undef;
+    my $isbn = Business::ISBN->new( shift );
+    return undef unless $isbn;
+    $isbn = $isbn->as_isbn10 if $isbn->type eq 'ISBN13';
+    $isbn = $isbn->as_string;
+    $isbn =~ s/-//g;
+    return $isbn;
 }
 
 1;

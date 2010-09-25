@@ -12,6 +12,7 @@ idzebra-2.0 \
 idzebra-2.0-utils \
 libalgorithm-checkdigits-perl \
 libbiblio-endnotestyle-perl \
+libbusiness-isbn-perl \
 libcgi-session-perl \
 libcgi-session-serialize-yaml-perl \
 libclass-accessor-perl \
