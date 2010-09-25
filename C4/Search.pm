@@ -2573,7 +2573,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   #There are no results, build authority record, add it to Authorities, get authid and add it to 9
   ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode
   ###NOTICE : This can be a problem. We should also look into other types and rejected forms.
-         my $authtypedata=C4::AuthoritiesMarc->GetAuthType($data->{authtypecode});
+         my $authtypedata=C4::AuthoritiesMarc::GetAuthType($data->{authtypecode});
          next unless $authtypedata;
          my $marcrecordauth=MARC::Record->new();
          my $authfield=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$field->subfield('a'));
