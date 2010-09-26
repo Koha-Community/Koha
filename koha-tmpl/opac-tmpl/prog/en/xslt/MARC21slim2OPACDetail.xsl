@@ -17,6 +17,7 @@
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
+    <xsl:variable name="UseControlNumber" select="1"/>
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
     <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
     <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
@@ -230,6 +231,23 @@
                     <xsl:call-template name="part"/>
         <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
+        </span>
+        </xsl:if>
+        
+        <!-- Volumes -->
+        <xsl:if test="$materialTypeCode='ST'">
+        <span class="results_summary"><span class="label">Volumes: </span>
+            <a>
+            <xsl:choose>
+            <xsl:when test="$UseControlNumber = '1'">
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="marc:controlfield[@tag=001]"/></xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Title:<xsl:value-of select="translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', '')"/></xsl:attribute>
+            </xsl:otherwise>
+            </xsl:choose>
+            <xsl:text>Show volumes</xsl:text>
+            </a>
         </span>
         </xsl:if>
 
