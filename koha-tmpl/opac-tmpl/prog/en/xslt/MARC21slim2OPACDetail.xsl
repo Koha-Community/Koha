@@ -524,8 +524,8 @@
                         <xsl:with-param name="codes">at</xsl:with-param>
                     </xsl:call-template>
                 </xsl:variable>
-             <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
-                <xsl:value-of select="translate($f773, '()', '')"/>
+             <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Title:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
+                <xsl:value-of select="$f773"/>
             </a>
         </span>
 
