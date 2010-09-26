@@ -231,6 +231,23 @@
             </a>
         </span>
         </xsl:if>
+        
+        <!-- Set -->
+        <xsl:if test="$leader19='c'">
+        <span class="results_summary"><span class="label">Set: </span>
+            <a>
+            <xsl:choose>
+            <xsl:when test="$UseControlNumber = '1'">
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:value-of select="marc:datafield[@tag=773]/marc:subfield[@code='w']"/></xsl:attribute>
+            </xsl:when>
+            <xsl:otherwise>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Title:<xsl:value-of select="translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '.', '')"/></xsl:attribute>
+            </xsl:otherwise>
+            </xsl:choose>
+            <xsl:value-of select="translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '.', '')" />
+            </a>
+        </span>
+        </xsl:if>
 
         <!-- Publisher Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
