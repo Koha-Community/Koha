@@ -24,9 +24,11 @@
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
+        <xsl:variable name="leader19" select="substring($leader,20,1)"/>
         <xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
         <xsl:variable name="materialTypeCode">
             <xsl:choose>
+                <xsl:when test="$leader19='a'">ST</xsl:when>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
                         <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'">BK</xsl:when>
@@ -45,6 +47,7 @@
         </xsl:variable>
         <xsl:variable name="materialTypeLabel">
             <xsl:choose>
+                <xsl:when test="$leader19='a'">Set</xsl:when>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
                         <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'">Book</xsl:when>
