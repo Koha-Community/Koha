@@ -52,7 +52,12 @@
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
                         <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'">Book</xsl:when>
-                        <xsl:when test="$leader7='i' or $leader7='s'">Continuing Resource</xsl:when>
+                        <xsl:when test="$leader7='i' or $leader7='s'">
+                            <xsl:choose>
+                                <xsl:when test="substring($controlField008,22,1)!='m'">Continuing Resource</xsl:when>
+                                <xsl:otherwise>Series</xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
                         <xsl:when test="$leader7='a' or $leader7='b'">Article</xsl:when>
                     </xsl:choose>
                 </xsl:when>
@@ -269,9 +274,9 @@
         </xsl:if>
         </span>
         </xsl:if>
-        
-        <!-- Volumes -->
-        <xsl:if test="$materialTypeCode='ST'">
+
+        <!-- Volumes of sets and traced series -->
+        <xsl:if test="$materialTypeCode='ST' or substring($controlField008,22,1)='m'">
         <span class="results_summary"><span class="label">Volumes: </span>
             <a>
             <xsl:choose>
