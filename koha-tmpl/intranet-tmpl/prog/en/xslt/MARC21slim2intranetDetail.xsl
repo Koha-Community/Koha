@@ -647,9 +647,18 @@
                         <xsl:with-param name="codes">at</xsl:with-param>
                     </xsl:call-template>
                 </xsl:variable>
-             <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="translate($f780, '()', '')"/></xsl:attribute>
-                <xsl:value-of select="translate($f780, '()', '')"/>
-            </a>
+            <xsl:choose>
+                <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                    <a href="/cgi-bin/koha/catalogue/search.pl?q=Control-number:{marc:subfield[@code='w']}">
+                        <xsl:value-of select="translate($f780, '()', '')"/>
+                    </a>
+                </xsl:when>
+                <xsl:otherwise>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="translate($f780, '()', '')"/></xsl:attribute>
+                        <xsl:value-of select="translate($f780, '()', '')"/>
+                    </a>
+                </xsl:otherwise>
+            </xsl:choose>
         </span>
  
         <xsl:choose>
@@ -701,9 +710,18 @@
                     </xsl:call-template>
                 </xsl:variable>
 
-                <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="translate($f785, '()', '')"/></xsl:attribute>
-                <xsl:value-of select="translate($f785, '()', '')"/>
-            </a>
+            <xsl:choose>
+                <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                    <a href="/cgi-bin/koha/catalogue/search.pl?q=Control-number:{marc:subfield[@code='w']}">
+                        <xsl:value-of select="translate($f785, '()', '')"/>
+                    </a>
+                </xsl:when>
+                <xsl:otherwise>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="translate($f785, '()', '')"/></xsl:attribute>
+                        <xsl:value-of select="translate($f785, '()', '')"/>
+                    </a>
+                </xsl:otherwise>
+            </xsl:choose>
 
         </span>
         </xsl:for-each>
