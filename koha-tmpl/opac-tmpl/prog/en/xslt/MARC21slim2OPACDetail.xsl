@@ -609,9 +609,18 @@
                         <xsl:with-param name="codes">at</xsl:with-param>
                     </xsl:call-template>
                 </xsl:variable>
-             <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Title:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
-                <xsl:value-of select="$f773"/>
-            </a>
+            <xsl:choose>
+                <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
+                    <a href="/cgi-bin/koha/opac-search.pl?q=Control-number:{marc:subfield[@code='w']}">
+                        <xsl:value-of select="translate($f773, '()', '')"/>
+                    </a>
+                </xsl:when>
+                <xsl:otherwise>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Title:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
+                        <xsl:value-of select="$f773"/>
+                    </a>
+                </xsl:otherwise>
+            </xsl:choose>
         </span>
 
         <xsl:if test="marc:subfield[@code='n']">
