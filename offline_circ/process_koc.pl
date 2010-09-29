@@ -176,6 +176,7 @@ returns a hashref containing the information from the header.
 sub parse_header_line {
     my $header_line = shift;
     chomp($header_line);
+    $header_line =~ s/\r//g;
 
     my @fields = split( /\t/, $header_line );
     my %header_info = map { split( /=/, $_ ) } @fields;
