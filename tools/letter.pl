@@ -172,7 +172,7 @@ sub add_form {
         push @{$field_selection}, add_fields('biblio','biblioitems'),
             {value => q{},             text => '---ITEMS---'  },
             {value => 'items.content', text => 'items.content'},
-            add_fields('borrowers');
+            add_fields('issues','borrowers');
     }
 
     $template->param(
@@ -309,6 +309,7 @@ sub get_columns_for {
     my $table_prefix = $table . q|.|;
     my $rows = C4::Context->dbh->selectall_arrayref($sql, { Slice => {} });
     for my $row (@{$rows}) {
+        next if $row->{'Field'} eq 'timestamp'; # this is really an irrelevant field and there may be other common fields that should be excluded from the list
         push @fields, {
             value => $table_prefix . $row->{Field},
             text  => $table_prefix . $row->{Field},
