@@ -89,7 +89,8 @@ sub shelfpage ($$$$$) {
         if ( $shelfnumber = $query->param('viewshelf') ) {
             if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' ) ) {
                 if ( $barcode = $query->param('addbarcode') ) {
-                    if ( $item = GetItem( 0, $barcode ) ) {
+                    $item = GetItem( 0, $barcode );
+                    if (defined $item && $item->{'itemnumber'}){
                         $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'} );
                         AddToShelf( $biblio->{'biblionumber'}, $shelfnumber )
                           or push @paramsloop, { duplicatebiblio => $barcode };
