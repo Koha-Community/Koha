@@ -433,7 +433,10 @@ foreach my $tag (sort keys %{$tagslib}) {
           foreach my $thisbranch (@$branches) {
               push @authorised_values, $thisbranch->{value};
               $authorised_lib{$thisbranch->{value}} = $thisbranch->{branchname};
-             # $value = $thisbranch->{value} if $thisbranch->{selected};
+              # in edit item this is set to the data value otherwise use default
+              if ($op ne 'edititem' && $thisbranch->{selected} ) {
+                  $value = $thisbranch->{value};
+              }
           }
       }
       elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
