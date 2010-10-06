@@ -237,8 +237,15 @@ warn "query ".$query  if $DEBUG;
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
 ##Add necessary encoding changes to here -TG
                         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
-                        $oldbiblio->{isbn}   =~ s/ |-|\.//g,
-                          $oldbiblio->{issn} =~ s/ |-|\.//g,
+                        $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{isbn} =~ s/\|/ \| /g if $oldbiblio->{isbn};
+                        $oldbiblio->{isbn} =~ s/\(/ \(/g if $oldbiblio->{isbn};
+
+                        $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{issn} =~ s/\|/ \| /g if $oldbiblio->{issn};
+                        $oldbiblio->{issn} =~ s/\(/ \(/g if $oldbiblio->{issn};
                           my (
                             $notmarcrecord, $alreadyindb, $alreadyinfarm,
                             $imported,      $breedingid

@@ -254,7 +254,14 @@ sub displayresults {
 ##Add necessary encoding changes to here -TG
                         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
                         $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
-                         $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{isbn} =~ s/\|/ \| /g if $oldbiblio->{isbn};
+                        $oldbiblio->{isbn} =~ s/\(/ \(/g if $oldbiblio->{isbn};
+
+                        $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{issn} =~ s/\|/ \| /g if $oldbiblio->{issn};
+                        $oldbiblio->{issn} =~ s/\(/ \(/g if $oldbiblio->{issn};
                           my (
                             $notmarcrecord, $alreadyindb, $alreadyinfarm,
                             $imported,      $breedingid
