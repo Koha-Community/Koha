@@ -95,8 +95,6 @@ sub retrieve {
     my %opts = @_;
     my $type = ref($invocant) || $invocant;
     my $query = "SELECT * FROM creator_layouts WHERE layout_id = ? AND creator = ?";
-    #warn "QUERY: $query\n";    #XXX Remove
-    #warn "PARAMS: layout_id=" . $opts{'layout_id'} . " creator=" . $opts{'creator'} . "\n";    #XXX Remove
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{'layout_id'}, $opts{'creator'});
     if ($sth->err) {
@@ -221,7 +219,7 @@ sub get_text_wrap_cols {
     my $string = '';
     my $strwidth = 0;
     my $col_count = 0;
-    my $textlimit = $params{'label_width'} - ( 3 * $params{'left_text_margin'});
+    my $textlimit = $params{'label_width'} - (( 3 * $params{'left_text_margin'} ) || 13.5 );
 
     while ($strwidth < $textlimit) {
         $string .= '0';
