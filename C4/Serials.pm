@@ -287,10 +287,10 @@ sub UpdateClaimdateIssues {
     my $dbh = C4::Context->dbh;
     $date = strftime( "%Y-%m-%d", localtime ) unless ($date);
     my $query = "
-        UPDATE serial SET claimdate=$date,status=7
-        WHERE  serialid in (" . join( ",", @$serialids ) . ")";
+        UPDATE serial SET claimdate = ?, status = 7
+        WHERE  serialid in (" . join( ",", map { '?' } @$serialids ) . ")";
     my $rq = $dbh->prepare($query);
-    $rq->execute;
+    $rq->execute($date, @$serialids);
     return $rq->rows;
 }
 
