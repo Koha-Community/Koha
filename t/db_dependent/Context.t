@@ -4,7 +4,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 91;
+use Test::More;
 use vars qw($debug $koha $dbh $config $ret);
 
 BEGIN {
@@ -42,8 +42,6 @@ foreach (grep {defined $koha->{$_}} sort @keys) {
 }
 ok($config = $koha->{config}, 'Getting $koha->{config} ');
 
-# diag("Examining configuration.");
-diag("Note: The overall number of tests may vary by configuration.  Disregard the projected number.");
-1;
-__END__
+done_testing();
 
+1;

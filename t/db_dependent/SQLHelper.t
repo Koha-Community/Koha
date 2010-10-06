@@ -10,7 +10,7 @@ use YAML;
 use C4::Debug;
 use C4::SQLHelper qw(:all);
 
-use Test::More tests => 20;
+use Test::More tests => 22;
 
 use_ok('C4::SQLHelper');
 
@@ -64,3 +64,6 @@ ok(@$borrowers>0 && !($@), "Search on simple value in firstname");
 $status=DeleteInTable("borrowers",{borrowernumber=>$borrid});
 ok($status>0 && !($@), "DeleteInTable OK");
 $status=DeleteInTable("borrowers",{borrowernumber=>$borrtmp});
+ok($status>0 && !($@), "DeleteInTable OK");
+$status=DeleteInTable("branches", {branchcode => 'ZZZZ'});
+ok($status>0 && !($@), "DeleteInTable (branch) OK");
