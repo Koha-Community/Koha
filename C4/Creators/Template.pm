@@ -154,7 +154,7 @@ sub delete {
         warn sprintf('%s : Cannot delete template as the creator type is invalid or non-existant.', $call_type) if !$query_params[1];
         return -1;
     }
-    my $query = "DELETE FROM " . $opts{'table_name'} . " WHERE template_id = ? AND creator = ?";
+    my $query = "DELETE FROM creator_templates WHERE template_id = ? AND creator = ?";
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute(@query_params);
     $self->{'template_stat'} = 0;
