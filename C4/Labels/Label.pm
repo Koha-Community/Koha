@@ -470,6 +470,10 @@ sub draw_label_text {
     return \@label_text;
 }
 
+sub draw_guide_box {
+    return $_[0]->{'guidebox'};
+}
+
 sub barcode {
     my $self = shift;
     my %params = @_;
