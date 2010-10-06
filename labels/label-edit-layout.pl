@@ -122,15 +122,15 @@ elsif  ($op eq 'save') {
         $cgi->param('format_string', $format_string);
     }
     my @params = (
-                    barcode_type    => $cgi->param('barcode_type'),
-                    printing_type   => $cgi->param('printing_type'),
-                    layout_name     => $cgi->param('layout_name'),
+                    barcode_type    => $cgi->param('barcode_type') || 'CODE39',
+                    printing_type   => $cgi->param('printing_type') || 'BAR',
+                    layout_name     => $cgi->param('layout_name') || 'DEFAULT',
                     guidebox        => ($cgi->param('guidebox') ? 1 : 0),
-                    font            => $cgi->param('font'),
-                    font_size       => $cgi->param('font_size'),
+                    font            => $cgi->param('font') || 'TR',
+                    font_size       => $cgi->param('font_size') || 3,
                     callnum_split   => ($cgi->param('callnum_split') ? 1 : 0),
-                    text_justify    => $cgi->param('text_justify'),
-                    format_string   => $cgi->param('format_string'),
+                    text_justify    => $cgi->param('text_justify') || 'L',
+                    format_string   => $cgi->param('format_string') || 'title, author, isbn, issn, itemtype, barcode, callnumber',
     );
     if ($layout_id) {   # if a label_id was passed in, this is an update to an existing layout
         $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
