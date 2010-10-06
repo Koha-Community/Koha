@@ -14,6 +14,7 @@ $.tablesorter.addParser({
 });
 
 	$(document).ready(function(){
+    $.tablesorter.defaults.widgets = ['zebra'];
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
         return false;
@@ -22,23 +23,48 @@ $.tablesorter.addParser({
         $(".checkboxed").unCheckCheckboxes();
         return false;
     });
+
+    $("#closemenu").click(function(e){
+        $(".linktools").hide();
+        $("tr").removeClass("selected");
+    });
+
 	$("#resultst").tablesorter({
 		sortList: [[1,0]],
-		headers: { 0: {sorter:false}, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+		headers: { 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
 	});
+        /* Inline edit/delete links */
+        $("td").click(function(event){
+            var $tgt = $(event.target);
+            $(".linktools").hide();
+            $("tr").removeClass("selected");
+            if($tgt.is("a")||$tgt.is(":nth-child(5)")||$tgt.is(":nth-child(6)")||$tgt.is(":nth-child(7)")||$tgt.is(":nth-child(8)")){
+                return true;
+            } else {
+                var position = $(this).offset();
+                var top = position.top+5;
+                var left = position.left+5;
+                $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
+            }
+            var row = $(this).parent();
+            row.addClass("selected");
+        });
 });
 //]]>
 </script>
-   <style type="text/css">
-   #custom-doc { width:54.92em;*width:53.55em;min-width:720px; margin:auto; text-align:left; }
-   </style>
+<style type="text/css">
+.linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
+.linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
+.linktools a:hover { background-color:#EEE;color:#CC3300;border-right:1px solid #CCC;}
+tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent !important; }
+</style>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Order from Z39.50 search</div>
-<div id="custom-doc" class="yui-t7">
+<div id="doc3" class="yui-t7">
       <div id="bd">
 	  <!-- TMPL_IF name="opsearch" -->
 <h2>Z39.50 Search Points</h2>
@@ -114,13 +140,13 @@ $.tablesorter.addParser({
         <!-- TMPL_IF NAME="breedingid" -->
 
         <!-- TMPL_IF NAME="toggle" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_IF -->
-            <td><!-- TMPL_VAR name="server" --></td>
+            <td><!-- TMPL_VAR name="server" --> <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" rel="gb_page_center[600,500]">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="breedingid" -->" rel="gb_page_center[600,500]">Preview Card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&amp;breedingid=<!-- TMPL_VAR NAME="breedingid" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->&amp;basketno=<!-- TMPL_VAR name="basketno" -->">Order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
             <td><!-- TMPL_VAR NAME="title" ESCAPE="html" --></td>
             <td><!-- TMPL_VAR NAME="author" --></td>
             <td><!-- TMPL_VAR NAME="isbn" --></td>
             <td><!-- TMPL_VAR NAME="lccn" --></td>
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td><td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
-			<td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&breedingid=<!-- TMPL_VAR NAME="breedingid" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->&basketno=<!-- TMPL_VAR name="basketno" -->">Order</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a></td><td><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="breedingid" -->" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+			<td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=<!-- TMPL_VAR name="frameworkcode" -->&amp;breedingid=<!-- TMPL_VAR NAME="breedingid" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->&amp;basketno=<!-- TMPL_VAR name="basketno" -->">Order</a></td>
 
         </tr>
         <!-- /TMPL_IF -->
