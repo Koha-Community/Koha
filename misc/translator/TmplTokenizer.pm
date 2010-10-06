@@ -473,7 +473,8 @@ sub _next_token_internal {
 		    ($kind, $it) = (TmplTokenType::TAG, "$head>");
 		    $this->_set_readahead( $post );
 		    $ok_p = 1;
-		    warn_normal "SGML \"closed start tag\" notation: $head<\n", $this->line_number if $tail eq '';
+		    warn_normal "SGML \"closed start tag\" notation: $head<\n", $this->line_number if $tail eq '' 
+                and $head ne '<!DOCTYPE stylesheet ['; # another bit of temporary ugliness for bug 4472
 		}
 	    } elsif ($this->_peek_readahead =~ /^<!--(?:(?!-->)$re_directive*.)*-->/os) {
 		($kind, $it) = (TmplTokenType::COMMENT, $&);
