@@ -19,7 +19,7 @@ use C4::Branch;
 my @categories=C4::Category->all;
 my $insert;
 ok(($insert=InsertInTable("branches",{branchcode=>"ZZZZ",branchname=>"Brancheinconnue",city=>" ",zipcode=>" "},1))==0,"AddBranch (Insert In Table with primary key defined)");
-my $branches=C4::Branch->GetBranches;
+my $branches=C4::Branch::GetBranches;
 my @branchcodes=keys %$branches;
 my ($borrid, $borrtmp);
 ok($borrid=InsertInTable("borrowers",{firstname=>"Jean",surname=>"Valjean",city=>" ",zipcode=>" ",email=>"email",categorycode=>$categories[0]->{categorycode}, branchcode=>$branchcodes[0]}),"Insert In Table");
