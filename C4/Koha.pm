@@ -1242,6 +1242,9 @@ sub GetNormalizedISBN {
     my ($isbn,$record,$marcflavour) = @_;
     my @fields;
     if ($isbn) {
+        # Koha attempts to store multiple ISBNs in biblioitems.isbn, separated by " | "
+        # anything after " | " should be removed, along with the delimiter
+        $isbn =~ s/(.*)( \| )(.*)/$1/;
         return _isbn_cleanup($isbn);
     }
     return undef unless $record;
