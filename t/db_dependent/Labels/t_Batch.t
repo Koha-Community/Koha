@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 22;
+use Test::More tests => 23;
 use C4::Context;
 use Data::Dumper;
 
@@ -33,6 +33,7 @@ $sth->execute();
 my $branch_code = $sth->fetchrow_hashref()->{'branchcode'};
 diag sprintf('Database returned the following error: %s', $sth->errstr) if $sth->errstr;
 my $expected_batch = {
+        creator         => 'Labels',
         items           => [],
         branch_code     => $branch_code,
         batch_stat      => 0,   # False if any data has changed and the db has not been updated

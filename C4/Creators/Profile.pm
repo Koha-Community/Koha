@@ -122,6 +122,7 @@ sub delete {
         warn sprintf('Database returned the following error on attempted DELETE: %s', $sth->errstr);
         return -1;
     }
+    return 0;
 }
 
 sub save {

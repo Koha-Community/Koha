@@ -40,6 +40,8 @@ sub _check_params {
         'format_string',
         'layout_xml',           # FIXME: all layouts should be stored in xml format to greatly simplify handling -chris_n
         'creator',
+        'units',
+        'start_label',
     );
     if (scalar(@_) >1) {
         my %given_params = @_;
@@ -68,6 +70,9 @@ sub new {
     my $type = ref($invocant) || $invocant;
     if (grep {$_ eq 'Labels'} @_) {
        $self = {
+            layout_xml      =>      '',
+            units           =>      'POINT',
+            start_label     =>      1,
             barcode_type    =>      'CODE39',
             printing_type   =>      'BAR',
             layout_name     =>      'DEFAULT',

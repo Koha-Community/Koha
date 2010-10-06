@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 28;
+use Test::More tests => 36;
 use C4::Context;
 use Data::Dumper;
 
@@ -29,6 +29,10 @@ BEGIN {
 }
 
 my $default_layout = {
+        creator         =>      'Labels',
+        layout_xml      =>      '',
+        units           =>      'POINT',
+        start_label     =>      1,
         barcode_type    =>      'CODE39',
         printing_type   =>      'BAR',
         layout_name     =>      'TEST',
@@ -53,6 +57,10 @@ foreach my $key (keys %{$default_layout}) {
 
 diag "Testing Layout->set_attr() method.";
 my $new_attr = {
+        creator         =>      'Labels',
+        layout_xml      =>      '',
+        units           =>      'POINT',
+        start_label     =>      1,
         barcode_type    =>      'CODE39',
         printing_type   =>      'BIBBAR',
         layout_name     =>      'TEST',
@@ -97,4 +105,4 @@ ok($updated_layout->get_text_wrap_cols(label_width => 180, left_text_margin => 1
 diag "Testing Layout->delete() method.";
 
 my $del_results = $updated_layout->delete();
-ok($del_results eq 0) || diag "Layout->delete() FAILED";
+ok($del_results ne -1) || diag "Layout->delete() FAILED";
