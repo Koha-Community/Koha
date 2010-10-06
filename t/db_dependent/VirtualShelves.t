@@ -91,7 +91,7 @@ for(my $i=0; $i<10;$i++){
     my $shelfnumber = $shelves[int(rand(9))];
   
     my $key = "$bib\t$shelfnumber";
-    my $should_fail if exists $used{$key};
+    my $should_fail = exists($used{$key}) ? 1 : 0;
  
     my ($biblistBefore,$countbefore) = GetShelfContents($shelfnumber);
     my $status = AddToShelf($bib,$shelfnumber);
