@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 25;
+use Test::More tests => 27;
 use C4::Context;
 use Data::Dumper;
 
@@ -29,6 +29,7 @@ BEGIN {
 }
 
 my $expected_profile = {
+        creator         => 'Labels',
         printer_name    => 'Circulation Desk',
         template_id     => '',
         paper_bin       => 'bypass',
@@ -60,6 +61,7 @@ my $new_attr = {
     creep_horz      => 0.156,
     creep_vert      => 0.67,
     units           => 'INCH',
+    creator         => 'Labels',
 };
 
 foreach my $key (keys %{$new_attr}) {
