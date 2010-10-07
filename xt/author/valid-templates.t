@@ -69,11 +69,14 @@ sub gen_template_test {
         my $pid = open3(\*CHILD_IN, \*CHILD_OUT, \*CHILD_ERR, 
                         "$FindBin::Bin/test_template.pl", $File::Find::name, $include_dir);
         my @errors = ();
+        while (<CHILD_OUT>) {
+            #FIXME: This is here just to ensure that STDOUT is read which avoids a deadlock in some instances, but probably not all
+            #FIXME: The real solution probably lies within the information found here: http://www.perlmonks.org/?node_id=150748
+        }
         while (<CHILD_ERR>) {
             push @errors, $_;
         }
         waitpid($pid, 0);
-
         @errors = grep { ! /^EXPR:.*non-initialized variable/ } @errors; # ignoring EXPR errors for now
         my $rel_filename = File::Spec->abs2rel($File::Find::name);
         ok(@errors == 0, "no errors in $rel_filename") or diag(join("", @errors) );
