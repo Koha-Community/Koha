@@ -527,7 +527,10 @@ sub _next_token_intermediate {
     if (!$this->cdata_mode_p) {
 	$it = $this->_next_token_internal($h);
 	if (defined $it && $it->type == TmplTokenType::TAG) {
-	    if ($it->string =~ /^<(script|style|textarea)\b/is) {
+	    if ($it->string =~ /^<(script|style|textarea)\b/is ||
+            ($this->filename =~ /opensearch/ && $it->string =~ /^<(description)\b/) # FIXME special case to handle
+                                                                                    # a CDATA in opac-opensearch.tmpl
+           ) {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
 		$this->_set_pcdata_mode( 0 );
