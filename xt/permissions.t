@@ -28,6 +28,7 @@ my $root_dir = 'installer/data/mysql';
 my $base_perms_file = "en/mandatory/userpermissions.sql";
 my @trans_perms_files = qw(
     de-DE/mandatory/userpermissions.sql
+    it-IT/necessari/userpermissions.sql
     fr-FR/1-Obligatoire/userpermissions.sql
     uk-UA/mandatory/permissions_and_user_flags.sql
     ru-RU/mandatory/permissions_and_user_flags.sql
