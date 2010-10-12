@@ -61,6 +61,7 @@ libmarc-crosswalk-dublincore-perl \
 libmarc-record-perl \
 libmarc-xml-perl \
 libmime-lite-perl \
+libmodule-install-perl \
 libmysqlclient15-dev  \
 libnet-ldap-perl \
 libnet-z3950-zoom-perl \
