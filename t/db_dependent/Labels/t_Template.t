@@ -20,7 +20,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 52;
+use Test::More tests => 54;
 use C4::Context;
 use Data::Dumper;
 
@@ -29,6 +29,7 @@ BEGIN {
 }
 
 my $expect_template = {
+        creator         =>      'Labels',
         profile_id      =>      0,
         template_code   =>      'DEFAULT TEMPLATE',
         template_desc   =>      'Default description',
@@ -61,6 +62,7 @@ foreach my $key (keys %{$expect_template}) {
 
 diag "Testing Template->set_attr() method.";
 my $new_attr = {
+    creator             => 'Labels',
     profile_id          => 0,
     template_code       => 'Avery 5160 | 1 x 2-5/8',
     template_desc       => '3 columns, 10 rows of labels',

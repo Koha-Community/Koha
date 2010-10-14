@@ -473,7 +473,8 @@ sub _next_token_internal {
 		    ($kind, $it) = (TmplTokenType::TAG, "$head>");
 		    $this->_set_readahead( $post );
 		    $ok_p = 1;
-		    warn_normal "SGML \"closed start tag\" notation: $head<\n", $this->line_number if $tail eq '';
+		    warn_normal "SGML \"closed start tag\" notation: $head<\n", $this->line_number if $tail eq '' 
+                and $head ne '<!DOCTYPE stylesheet ['; # another bit of temporary ugliness for bug 4472
 		}
 	    } elsif ($this->_peek_readahead =~ /^<!--(?:(?!-->)$re_directive*.)*-->/os) {
 		($kind, $it) = (TmplTokenType::COMMENT, $&);
@@ -526,7 +527,10 @@ sub _next_token_intermediate {
     if (!$this->cdata_mode_p) {
 	$it = $this->_next_token_internal($h);
 	if (defined $it && $it->type == TmplTokenType::TAG) {
-	    if ($it->string =~ /^<(script|style|textarea)\b/is) {
+	    if ($it->string =~ /^<(script|style|textarea)\b/is ||
+            ($this->filename =~ /opensearch/ && $it->string =~ /^<(description)\b/) # FIXME special case to handle
+                                                                                    # a CDATA in opac-opensearch.tmpl
+           ) {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
 		$this->_set_pcdata_mode( 0 );

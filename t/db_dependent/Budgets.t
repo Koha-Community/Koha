@@ -1,12 +1,11 @@
 use strict;
 use warnings;
-use Test::More tests=>18;
+use Test::More tests=>17;
 
 BEGIN {use_ok('C4::Budgets') }
 use C4::Budgets;
 use C4::Dates;
 
-print "ok 1\n";
 use YAML;
 
 #
@@ -22,21 +21,6 @@ ok($bpid=AddBudgetPeriod(
 						, budget_period_enddate		=> '2008-12-31'
 						, budget_description		=> "MAPERI"}),
 	"AddBudgetPeriod with iso dates OK");
-
-if (C4::Context->preference('dateformat') eq "metric"){
-	ok($bpid=AddBudgetPeriod(
-						{ budget_period_startdate	=> '01-01-2008'
-						, budget_period_enddate		=> '31-12-2008'
-						, budget_description		=> "MAPERI"}),
-	"AddBudgetPeriod returned $bpid");
-} 
-elsif (C4::Context->preference('dateformat') eq "us"){
-	ok($bpid=AddBudgetPeriod(
-						{ budget_period_startdate	=> '01-01-2008'
-						, budget_period_enddate		=> '12-31-2008'
-						, budget_description		=> "MAPERI"}),
-	"AddBudgetPeriod returned $bpid");
-}
 
 ok($budgetperiod=GetBudgetPeriod($bpid),
 	"GetBudgetPeriod($bpid) returned ".Dump($budgetperiod));
@@ -95,7 +79,6 @@ ok($budget_id=AddBudget(
 #| budget_encumb          | decimal(28,6) | YES  |     | 0.000000          |       | 
 #| budget_expend          | decimal(28,6) | YES  |     | 0.000000          |       | 
 #| budget_notes           | mediumtext    | YES  |     | NULL              |       | 
-#| budget_description     | mediumtext    | YES  |     | NULL              |       | 
 #| timestamp              | timestamp     | NO   |     | CURRENT_TIMESTAMP |       | 
 #| budget_period_id       | int(11)       | YES  | MUL | NULL              |       | 
 #| sort1_authcat          | varchar(80)   | YES  |     | NULL              |       | 
@@ -111,9 +94,9 @@ ok(GetBudgets()>0,
 	"GetBudgets OK");
 ok(GetBudgets({budget_period_id=>$bpid})>0,
 	"GetBudgets With Filter OK");
-ok(GetBudgets({budget_period_id=>$bpid},{"budget_description"=>0})>0,
+ok(GetBudgets({budget_period_id=>$bpid},[{"budget_name"=>0}])>0,
 	"GetBudgets With Order OK");
-ok(GetBudgets({budget_period_id=>GetBudgetPeriod(0)->{budget_period_id}},{"budget_description"=>0})>0,
+ok(GetBudgets({budget_period_id=>GetBudgetPeriod($bpid)->{budget_period_id}},[{"budget_name"=>0}])>0,
 	"GetBudgets With Order 
 	Getting Active budgetPeriod OK");
 ok($del_status=DelBudget($budget_id),

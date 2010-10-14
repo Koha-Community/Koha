@@ -116,6 +116,8 @@ sub text_replace (**) {
         }
         }
     } elsif (defined $t) {
+        # Quick fix to bug 4472
+        $t = "<!DOCTYPE stylesheet ["  if $t =~ /DOCTYPE stylesheet/ ;
         print $output $t;
     }
     }

@@ -141,13 +141,13 @@ foreach my $item (@{$items}) {
                 elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'creator_images') {
                     my $dbh = C4::Context->dbh();
                     $dbh->{LongReadLen} = 1000000;      # allows us to read approx 1MB
-                    $image_data = $dbh->selectrow_hashref("SELECT imagefile FROM creator_images WHERE image_name = \'$$layout_xml{'images'}{$_}{'data_source'}{'image_name'}\'");
+                    $image_data = $dbh->selectrow_hashref("SELECT imagefile FROM creator_images WHERE image_name = \'$images->{$_}->{'data_source'}->[0]->{'image_name'}\'");
                     warn sprintf('Database returned the following error: %s.', $error) if $error;
-                    warn sprintf('Image does not exists in db table %s.', $$layout_xml{'images'}{$_}{'data_source'}{'image_source'}) if !$image_data;
+                    warn sprintf('Image does not exists in db table %s.', $images->{$_}->{'data_source'}->[0]->{'image_name'}) if !$image_data;
                     next PROCESS_IMAGES if !$image_data;
                 }
                 else {
-                    warn sprintf('No retrieval method for image source %s.', $$layout_xml{'images'}{$_}{'data_source'}{'image_source'});
+                    warn sprintf('No retrieval method for image source %s.', $images->{$_}->{'data_source'}->[0]->{'image_source'});
                     next PROCESS_IMAGES;
                 }
             }

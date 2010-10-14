@@ -247,7 +247,7 @@ if ($op eq 'save' || $op eq 'insert'){
     }
   }
   
-    if(C4::Context->preference('uppercasesurnames')) {
+    if($newdata{surname} && C4::Context->preference('uppercasesurnames')) {
         $newdata{'surname'} = uc($newdata{'surname'});
     }
 

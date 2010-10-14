@@ -67,7 +67,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
         <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
       <!-- /TMPL_LOOP --></select>
                  <label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
-        <option value="">Any</option><!-- TMPL_LOOP name="categoryloop" -->
+        <option value="">Any</option><!-- TMPL_LOOP name="categories" -->
         <!-- TMPL_IF NAME="selected" -->
         <option value="<!-- TMPL_VAR name="categorycode" -->" selected="selected"><!-- TMPL_VAR name="description" --></option><!-- TMPL_ELSE -->
         <option value="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="description" --></option><!-- /TMPL_IF -->

@@ -213,7 +213,7 @@
             <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
         </xsl:for-each>
 
-        <xsl:for-each select="marc:datafield[@tag=490][@ind1=0]">
+        <xsl:for-each select="marc:datafield[@tag=490]">
              <a href="/cgi-bin/koha/opac-search.pl?q=se:{marc:subfield[@code='a']}">
                         <xsl:call-template name="chopPunctuation">
                             <xsl:with-param name="chopString">
@@ -245,7 +245,7 @@
                 <xsl:call-template name="chopPunctuation">
                   <xsl:with-param name="chopString">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">bcg</xsl:with-param>
+                        <xsl:with-param name="codes">abcg</xsl:with-param>
                     </xsl:call-template>
                    </xsl:with-param>
                </xsl:call-template>
@@ -395,7 +395,7 @@
             <xsl:call-template name="chopPunctuation">
                 <xsl:with-param name="chopString">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">abcdvxyz</xsl:with-param>
+                        <xsl:with-param name="codes">abcdtvxyz</xsl:with-param>
                         <xsl:with-param name="subdivCodes">vxyz</xsl:with-param>
                         <xsl:with-param name="subdivDelimiter">-- </xsl:with-param>
                     </xsl:call-template>

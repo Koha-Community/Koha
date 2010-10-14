@@ -2871,12 +2871,28 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (adding basketgroups)\n";
     SetVersion ($DBversion);
 }
-
 $DBversion = '3.01.00.077';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
     $dbh->do("SET FOREIGN_KEY_CHECKS=0 ");
+    # create a mapping table holding the info we need to match orders to budgets
+    $dbh->do('DROP TABLE IF EXISTS fundmapping');
+    $dbh->do(
+        q|CREATE TABLE fundmapping AS
+        SELECT aqorderbreakdown.ordernumber, branchcode, bookfundid, budgetdate, entrydate
+        FROM aqorderbreakdown JOIN aqorders ON aqorderbreakdown.ordernumber = aqorders.ordernumber|);
+    # match the new type of the corresponding field
+    $dbh->do('ALTER TABLE fundmapping modify column bookfundid varchar(30)');
+    # System did not ensure budgetdate was valid historically
+    $dbh->do(q|UPDATE fundmapping SET budgetdate = entrydate WHERE budgetdate = '0000-00-00' OR budgetdate IS NULL|);
+    # We save the map in fundmapping in case you need later processing
+    $dbh->do(q|ALTER TABLE fundmapping add column aqbudgetid integer|);
+    # these can speed processing up
+    $dbh->do(q|CREATE INDEX fundmaporder ON fundmapping (ordernumber)|);
+    $dbh->do(q|CREATE INDEX fundmapid ON fundmapping (bookfundid)|);
+
     $dbh->do("DROP TABLE IF EXISTS `aqbudgetperiods` ");
+
     $dbh->do(qq|
                     CREATE TABLE `aqbudgetperiods` (
                     `budget_period_id` int(11) NOT NULL auto_increment,
@@ -2995,10 +3011,31 @@ BUDGETDROPDATES
                     ADD COLUMN `budgetgroup_id` int(11) NOT NULL,
                     ADD COLUMN  `sort1_authcat` varchar(10) default NULL,
                     ADD COLUMN  `sort2_authcat` varchar(10) default NULL" );
+                # We need to map the orders to the budgets
+                # For Historic reasons this is more complex than it should be on occasions
+                my $budg_arr = $dbh->selectall_arrayref(
+                    q|SELECT aqbudgets.budget_id, aqbudgets.budget_code, aqbudgetperiods.budget_period_startdate,
+                    aqbudgetperiods.budget_period_enddate
+                    FROM aqbudgets JOIN aqbudgetperiods ON aqbudgets.budget_period_id = aqbudgetperiods.budget_period_id
+                    ORDER BY budget_code, budget_period_startdate|, { Slice => {} });
+                # We arbitarily order on start date, this means if you have overlapping periods the order will be
+                # linked to the latest matching budget YMMV
+                my $b_sth = $dbh->prepare(
+                    'UPDATE fundmapping set aqbudgetid = ? where bookfundid =? AND budgetdate >= ? AND budgetdate <= ?');
+                for my $b ( @{$budg_arr}) {
+                    $b_sth->execute($b->{budget_id}, $b->{budget_code}, $b->{budget_period_startdate}, $b->{budget_period_enddate});
+                }
+                # move the budgetids to aqorders
+                $dbh->do(q|UPDATE aqorders, fundmapping SET aqorders.budget_id = fundmapping.aqbudgetid
+                    WHERE aqorders.ordernumber = fundmapping.ordernumber AND fundmapping.aqbudgetid IS NOT NULL|);
+                # NB fundmapping is left as an accontants trail also if you have budgetids that werent set
+                # you can decide what to do with them
 
+     $dbh->do(
+         q|UPDATE aqorders, aqbudgets SET aqorders.budgetgroup_id = aqbudgets.budget_period_id
+         WHERE aqorders.budget_id = aqbudgets.budget_id|);
                 # cannot do until aqorderbreakdown removed
 #    $dbh->do("DROP TABLE aqbookfund ");
-
 #    $dbh->do("ALTER TABLE aqorders  ADD FOREIGN KEY (`budget_id`) REFERENCES `aqbudgets` (`budget_id`) ON UPDATE CASCADE  " ); ????
     $dbh->do("SET FOREIGN_KEY_CHECKS=1 ");
 
@@ -3700,6 +3737,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Add index on guarantorid)\n";
     SetVersion ($DBversion);
 }
+
+$DBversion = '3.01.00.999';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (3.2.0 release candidate)\n";
+    SetVersion ($DBversion);
+}
+
 
 =item DropAllForeignKeys($table)
 

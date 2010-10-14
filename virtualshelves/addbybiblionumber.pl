@@ -77,7 +77,7 @@ sub AddBibliosToShelf {
         @biblionumber = (split /\//,$biblionumber[0]);
     }
     for my $bib (@biblionumber){
-        AddToShelfFromBiblio($bib, $shelfnumber);
+        AddToShelf($bib, $shelfnumber);
     }
 }
 

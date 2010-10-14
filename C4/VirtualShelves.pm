@@ -40,7 +40,7 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
             &GetShelves &GetShelfContents &GetShelf
-            &AddToShelf &AddToShelfFromBiblio &AddShelf
+            &AddToShelf &AddShelf
             &ModShelf
             &ShelfPossibleAction
             &DelFromShelf &DelShelf
@@ -67,7 +67,7 @@ C4::VirtualShelves - Functions for manipulating Koha virtual virtualshelves
 
 This module provides functions for manipulating virtual virtualshelves,
 including creating and deleting virtualshelves, and adding and removing
-items to and from virtualshelves.
+bibs to and from virtualshelves.
 
 =head1 FUNCTIONS
 
@@ -237,7 +237,7 @@ sub GetShelf ($) {
 
 =head2 GetShelfContents
 
-  $itemlist = &GetShelfContents($shelfnumber);
+  $biblist = &GetShelfContents($shelfnumber);
 
 Looks up information about the contents of virtual virtualshelves number
 C<$shelfnumber>.  Sorted by a field in the biblio table.  copyrightdate 
@@ -331,8 +331,8 @@ sub AddShelf {
 
   &AddToShelf($biblionumber, $shelfnumber);
 
-Adds item number C<$biblionumber> to virtual virtualshelves number
-C<$shelfnumber>, unless that item is already on that shelf.
+Adds bib number C<$biblionumber> to virtual virtualshelves number
+C<$shelfnumber>, unless that bib is already on that shelf.
 
 =cut
 
@@ -362,42 +362,6 @@ sub AddToShelf {
 				WHERE shelfnumber = ?);
 	$sth = $dbh->prepare($query);
 	$sth->execute( $shelfnumber );
-}
-
-=head2 AddToShelfFromBiblio
-
-    &AddToShelfFromBiblio($biblionumber, $shelfnumber)
-
-this function allow to add a virtual into the shelf number $shelfnumber
-from biblionumber.
-
-=cut
-
-sub AddToShelfFromBiblio {
-    my ( $biblionumber, $shelfnumber ) = @_;
-    return unless $biblionumber;
-    my $query = qq(
-        SELECT *
-        FROM   virtualshelfcontents
-        WHERE  shelfnumber=? AND biblionumber=?
-    );
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $shelfnumber, $biblionumber );
-    unless ( $sth->rows ) {
-        my $query =qq(
-            INSERT INTO virtualshelfcontents
-                (shelfnumber, biblionumber, flags)
-            VALUES
-                (?, ?, 0)
-        );
-        $sth = $dbh->prepare($query);
-        $sth->execute( $shelfnumber, $biblionumber );
-		$query = qq(UPDATE virtualshelves
-					SET lastmodified = CURRENT_TIMESTAMP
-					WHERE shelfnumber = ?);
-		$sth = $dbh->prepare($query);
-		$sth->execute( $shelfnumber );
-    }
 }
 
 =head2 ModShelf
@@ -486,8 +450,8 @@ sub ShelfPossibleAction {
 
   &DelFromShelf( $biblionumber, $shelfnumber);
 
-Removes item number C<$biblionumber> from virtual virtualshelves number
-C<$shelfnumber>. If the item wasn't on that virtualshelves to begin with,
+Removes bib number C<$biblionumber> from virtual virtualshelves number
+C<$shelfnumber>. If the bib wasn't on that virtualshelves to begin with,
 nothing happens.
 
 =cut

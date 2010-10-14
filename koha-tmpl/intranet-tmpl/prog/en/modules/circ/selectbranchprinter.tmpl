@@ -37,7 +37,7 @@ Updated:<ul>
 <form method="post" action="<!-- TMPL_VAR NAME='referer' ESCAPE='HTML' DEFAULT='/cgi-bin/koha/circ/circulation.pl' -->">
     <div class="noshow">
         <!-- TMPL_LOOP NAME="recycle_loop" -->
-        <input name="<!-- TMPL_VAR NAME="param" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE='HTML' -->" />
+        <input type="text" name="<!-- TMPL_VAR NAME="param" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE='HTML' -->" />
         <!-- /TMPL_LOOP -->
     </div>
     <button type="submit">Continue</button>
@@ -80,7 +80,7 @@ Updated:<ul>
 <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
 <div class="noshow">
     <!-- TMPL_LOOP Name="recycle_loop" -->
-    <input name="<!-- TMPL_VAR NAME="param" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE='HTML' -->" />
+    <input type="text" name="<!-- TMPL_VAR NAME="param" -->" value="<!-- TMPL_VAR NAME="value" ESCAPE='HTML' -->" />
     <!-- /TMPL_LOOP -->
     <input type="hidden" name="oldreferer" value="<!-- TMPL_VAR NAME='referer' ESCAPE='HTML' DEFAULT='/cgi-bin/koha/circ/circulation.pl' -->" />
 </div>

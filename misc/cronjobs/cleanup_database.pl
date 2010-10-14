@@ -38,21 +38,27 @@ use Getopt::Long;
 sub usage {
     print STDERR <<USAGE;
 Usage: $0 [-h|--help] [--sessions] [-v|--verbose] [--zebraqueue DAYS]
-   -h --help         prints this help message, and exits, ignoring all other options
-   --sessions        purge the sessions table.  If you use this while users are logged
-                     into Koha, they will have to reconnect.
-   -v --verbose      will cause the script to give you a bit more information about the run.
-   --zebraqueue DAYS purge completed entries from the zebraqueue from more than DAYS days ago.
+        [-m|--mail]
+   -h --help          prints this help message, and exits, ignoring all
+                      other options
+   --sessions         purge the sessions table.  If you use this while users 
+                      are logged into Koha, they will have to reconnect.
+   -v --verbose       will cause the script to give you a bit more information
+                      about the run.
+   --zebraqueue DAYS  purge completed entries from the zebraqueue from 
+                      more than DAYS days ago.
+   -m --mail          purge the mail queue. 
 USAGE
     exit $_[0];
 }
 
-my ($help, $sessions, $verbose, $zebraqueue_days);
+my ($help, $sessions, $verbose, $zebraqueue_days, $mail);
 
 GetOptions(
-    'h|help' => \$help,
-    'sessions' => \$sessions,
+    'h|help'    => \$help,
+    'sessions'  => \$sessions,
     'v|verbose' => \$verbose,
+    'm|mail'    => \$mail,
     'zebraqueue:i' => \$zebraqueue_days,
 ) || usage(1);
 
@@ -60,7 +66,7 @@ if ($help) {
     usage(0);
 }
 
-if (!($sessions || $zebraqueue_days)){
+if (!($sessions || $zebraqueue_days || $mail)){
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
 }
@@ -102,5 +108,17 @@ if ($zebraqueue_days){
     if ($verbose){
         print "$count records were deleted.\nDone with zebraqueue purge.\n";
     }
+}
+
+if ($mail) {
+    if ($verbose) {
+        $sth = $dbh->prepare("SELECT COUNT(*) FROM message_queue");
+        $sth->execute() or die $dbh->errstr;
+        my @count_arr = $sth->fetchrow_array;
+        print "Deleting $count_arr[0] entries from the mail queue.\n";
+    }
+    $sth = $dbh->prepare("TRUNCATE message_queue");
+    $sth->execute() or $dbh->errstr;
+    print "Done with purging the mail queue.\n" if ($verbose);
 }
 exit(0);

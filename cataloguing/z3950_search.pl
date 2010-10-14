@@ -41,6 +41,7 @@ my $author        = $input->param('author');
 my $isbn          = $input->param('isbn');
 my $issn          = $input->param('issn');
 my $lccn          = $input->param('lccn');
+my $lccall        = $input->param('lccall');
 my $subject       = $input->param('subject');
 my $dewey         = $input->param('dewey');
 my $controlnumber	= $input->param('controlnumber');
@@ -88,6 +89,7 @@ if ( $op ne "do_search" ) {
         isbn         => $isbn,
         issn         => $issn,
         lccn         => $lccn,
+        lccall       => $lccall,
         title        => $title,
         author       => $author,
         controlnumber=> $controlnumber,
@@ -134,6 +136,10 @@ else {
     }
 	if ($lccn) {	
         $query .= " \@attr 1=9 $lccn ";
+        $nterms++;
+    }
+    if ($lccall) {
+        $query .= " \@attr 1=16 \@attr 2=3 \@attr 3=1 \@attr 4=1 \@attr 5=1 \@attr 6=1 \"$lccall\" ";
         $nterms++;
     }
     if ($controlnumber) {

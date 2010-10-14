@@ -189,17 +189,18 @@ my $bibitemnum;
 if ( $orderinfo->{quantity} ne '0' ) {
     #TODO:check to see if biblio exists
     unless ( $$orderinfo{biblionumber} ) {
-
         #if it doesnt create it
         my $record = TransformKohaToMarc(
             {
                 "biblio.title"                => "$$orderinfo{title}",
-                "biblio.author"               => "$$orderinfo{author}",
+                "biblio.author"               => $$orderinfo{author}          ? $$orderinfo{author}        : "",
                 "biblio.seriestitle"          => $$orderinfo{series}          ? $$orderinfo{series}        : "",
                 "biblioitems.isbn"            => $$orderinfo{isbn}            ? $$orderinfo{isbn}          : "",
                 "biblioitems.publishercode"   => $$orderinfo{publishercode}   ? $$orderinfo{publishercode} : "",
                 "biblioitems.publicationyear" => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
+                "biblio.copyrightdate"        => $$orderinfo{publicationyear} ? $$orderinfo{publicationyear}: "",
             });
+
         # create the record in catalogue, with framework ''
         my ($biblionumber,$bibitemnum) = AddBiblio($record,'');
         # change suggestion status if applicable
