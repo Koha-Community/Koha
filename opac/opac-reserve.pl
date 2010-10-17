@@ -158,7 +158,8 @@ if ( $query->param('place_reserve') ) {
         $selectedItems = "$bib/$item/$branch/";
     }
 
-    my @selectedItems = split /\//, $selectedItems;
+    $selectedItems =~ s!/$!!;
+    my @selectedItems = split /\//, $selectedItems, -1;
 
     # Make sure there is a biblionum/itemnum/branch triplet for each item.
     # The itemnum can be 'any', meaning next available.
