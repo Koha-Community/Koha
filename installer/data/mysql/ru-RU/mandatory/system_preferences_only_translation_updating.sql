@@ -26,9 +26,6 @@ UPDATE systempreferences SET explanation='Папка «includes» может б�
 UPDATE systempreferences SET explanation='Адрес электронной почты, на который приходят запросы посетителей касательно модификации их учётных записей' WHERE variable='KohaAdminEmailAddress';	
 -- Define the email address where patron modification requests are sent
 
-UPDATE systempreferences SET explanation='Адрес, используемый при печати квитанций, просрочек и т.п., если отличается от физического адреса' WHERE variable='libraryAddress';	
--- The address to use for printing receipts, overdues, etc. if different than physical address
-
 UPDATE systempreferences SET explanation='Программа по умолчанию для экспорта файлов отчётов' WHERE variable='MIME';	
 -- Define the default application for exporting report data
 
@@ -58,9 +55,6 @@ UPDATE systempreferences SET explanation='Версия базы данных К�
 
 
 -- Acquisitions - Поступления
-
-UPDATE systempreferences SET explanation='Обычные (normal) приобретения на основе статей расходов или же простые (simple) поступления библиографических данных' WHERE variable='acquisitions';
--- Choose Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions
 
 UPDATE systempreferences SET explanation='Если включено, то высылать предложения посетителей по электронной почте, а не управлять ими в поступлениях' WHERE variable='emailPurchaseSuggestions';
 -- 	If ON, patron suggestions are emailed rather than managed in Acquisitions
@@ -197,8 +191,6 @@ UPDATE systempreferences SET explanation='МАРК-поле/подполе, ко
 UPDATE systempreferences SET explanation='Определение, как будет отображаться МАРК-запись' WHERE variable='LabelMARCView';
 -- 	Define how a MARC record will display
 
-UPDATE systempreferences SET explanation='Включение поддержки МАРК-стандарта' WHERE variable='marc';
--- 	Turn on MARC support
 
 UPDATE systempreferences SET explanation='Определение глобального МАРК-стандарта (MARC21 или UNIMARC/РусМарк/Укрмарк), который используется для кодирования символов' WHERE variable='marcflavour';
 -- 	Define global MARC flavor (MARC21 or UNIMARC) used for character encoding
@@ -369,12 +361,6 @@ UPDATE systempreferences SET explanation='Если установлено, вы�
 -- UPDATE systempreferences SET explanation='' WHERE variable='OAI-PMH:MaxCount';
 -- 	OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries
 
--- UPDATE systempreferences SET explanation='' WHERE variable='OAI-PMH:Set';
--- 	OAI-PMH exported set, the set name is followed by a comma and a short description, one set by line
-
--- UPDATE systempreferences SET explanation='' WHERE variable='OAI-PMH:Subset';
--- 	Restrict answer to matching raws of the biblioitems table EXPERIMENTAL
-
 
 -- OPAC - Электронный каталог
 
@@ -386,9 +372,6 @@ UPDATE systempreferences SET explanation='Если установлено, вы�
 
 -- UPDATE systempreferences SET explanation='Показувати чи приховувати \"втрачені\" одиниці у ЕК.' WHERE variable='hidelostitems';
 -- 	If ON, disables display of"lost" items in OPAC.
-
--- UPDATE systempreferences SET explanation='' WHERE variable='kohaspsuggest';
--- 	Track search queries, turn on by defining host:dbname:user:pass
 
 -- UPDATE systempreferences SET explanation='Електронічний каталог бібліотеки', 'Ім\'я бібліотеки або повідомлення, яке буде показане на головній сторінці електронічнго каталогу' WHERE variable='LibraryName';
 -- 	Define the library name as displayed on the OPAC
@@ -678,12 +661,6 @@ UPDATE systempreferences SET explanation='Если установлено, вы�
 -- 	Allow display of MARC view of bibiographic records
 
 -- Serials --------------------------------------------------------------------------------------------------------------------------------
-
--- UPDATE systempreferences SET explanation='' WHERE variable='OPACDisplayExtendedSubInfo';
--- 	If ON, extended subscription information is displayed in the OPAC
-
--- UPDATE systempreferences SET explanation='' WHERE variable='OPACSubscriptionDisplay';
--- 	Specify how to display subscription information in the OPAC
 
 UPDATE systempreferences SET explanation='Если включено, добавляет новое предложение при восстановлении подписки серийного издания' WHERE variable='RenewSerialAddsSuggestion';
 -- 	If ON, adds a new suggestion at serial subscription renewal 

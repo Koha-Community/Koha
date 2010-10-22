@@ -70,13 +70,11 @@ use YAML::Syck qw( Dump LoadFile );
 my %tabsysprefs;
 
 # Acquisitions
-    $tabsysprefs{acquisitions}="Acquisitions";
     $tabsysprefs{gist}="Acquisitions";
     $tabsysprefs{emailPurchaseSuggestions}="Acquisitions";
     $tabsysprefs{RenewSerialAddsSuggestion}="Acquisitions";
     $tabsysprefs{AcqCreateItem}="Acquisitions";
     $tabsysprefs{OrderPdfFormat}="Acquisitions";
-    $tabsysprefs{OrderPdfTemplate}="Acquisitions";
     $tabsysprefs{CurrencyFormat}="Acquisitions";
 
 # Admin
@@ -85,7 +83,6 @@ $tabsysprefs{staffClientBaseURL}    = "Admin";
 $tabsysprefs{Version}               = "Admin";
 $tabsysprefs{OpacMaintenance}       = "Admin";
 $tabsysprefs{FrameworksLoaded}      = "Admin";
-$tabsysprefs{libraryAddress}        = "Admin";
 $tabsysprefs{delimiter}             = "Admin";
 $tabsysprefs{IndependantBranches}   = "Admin";
 $tabsysprefs{insecure}              = "Admin";
@@ -108,7 +105,6 @@ $tabsysprefs{casLogout}             = "Admin";
 $tabsysprefs{casServerUrl}          = "Admin";
 $tabsysprefs{Disable_Dictionary}    = "Admin";
 $tabsysprefs{EnableOpacSearchHistory}   = "Admin";
-$tabsysprefs{'ILS-DI:AuthorizedIPs'}    = "Admin";
 $tabsysprefs{Intranetbookbag}       = "Admin";
 $tabsysprefs{maxitemsinSearchResults}   = "Admin";
 $tabsysprefs{noOPACUserLogin}       = "Admin";
@@ -144,7 +140,6 @@ $tabsysprefs{IntranetBiblioDefaultView}   = "Cataloging";
 $tabsysprefs{ISBD}                        = "Cataloging";
 $tabsysprefs{itemcallnumber}              = "Cataloging";
 $tabsysprefs{LabelMARCView}               = "Cataloging";
-$tabsysprefs{marc}                        = "Cataloging";
 $tabsysprefs{marcflavour}                 = "Cataloging";
 $tabsysprefs{MARCOrgCode}                 = "Cataloging";
 $tabsysprefs{z3950AuthorAuthFields}       = "Cataloging";
@@ -381,7 +376,6 @@ $tabsysprefs{AnonSuggestions}      = "OPAC";
 $tabsysprefs{suggestion}           = "OPAC";
 $tabsysprefs{OpacTopissue}         = "OPAC";
 $tabsysprefs{OpacBrowser}          = "OPAC";
-$tabsysprefs{kohaspsuggest}        = "OPAC";
 $tabsysprefs{OpacRenewalAllowed}   = "OPAC";
 $tabsysprefs{OPACItemHolds}        = "OPAC";
 $tabsysprefs{OPACGroupResults}     = "OPAC";
@@ -393,8 +387,6 @@ $tabsysprefs{OPACShowCheckoutName}   = "OPAC";
 $tabsysprefs{RoutingListAddReserves}  	   = "Serials";
 $tabsysprefs{OPACSerialIssueDisplayCount}  = "Serials";
 $tabsysprefs{StaffSerialIssueDisplayCount} = "Serials";
-$tabsysprefs{OPACDisplayExtendedSubInfo}   = "Serials";
-$tabsysprefs{OPACSubscriptionDisplay}      = "Serials";
 $tabsysprefs{RenewSerialAddsSuggestion}    = "Serials";
 $tabsysprefs{SubscriptionHistory}          = "Serials";
 
@@ -411,8 +403,6 @@ $tabsysprefs{FinesLog}        = "Logs";
 $tabsysprefs{'OAI-PMH'}           = "OAI-PMH";
 $tabsysprefs{'OAI-PMH:archiveID'} = "OAI-PMH";
 $tabsysprefs{'OAI-PMH:MaxCount'}  = "OAI-PMH";
-$tabsysprefs{'OAI-PMH:Set'}       = "OAI-PMH";
-$tabsysprefs{'OAI-PMH:Subset'}    = "OAI-PMH";
 
 # ILS-DI variables
 $tabsysprefs{'ILS-DI'} = "ILS-DI";

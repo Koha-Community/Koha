@@ -54,11 +54,9 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemcallnumber', '676a', 'Ce paramètre définit le champ/sous-champ que Koha va utiliser pour pré-remplir la cote des exemplaires. Par exemple, en cas de cote basée sur dewey, mettre 676a.', '', 'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('DefaultClassificationSource','ddc','Modèle de classification utilisé dans le catalogue, par exemple : Dewey, LCC, etc.', NULL,'ClassSources');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('KohaAdminEmailAddress', '', 'Ce paramètre contient l''adresse de l''administrateur du système', '', 'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('kohaspsuggest','','Enregistre les recherches. Actier en définissant : host:dbname:user:pass','','');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LabelMARCView', 'standard', 'Ca paramètre définit comment une notice MARC est affichée. Habituellement, c''est "standard". "Economical" est plus court, mais moins lisible', 'standard|economical', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LetterLog', '0', 'Activer ce paramètre pour enregistrer les actions sur les notifications par mail', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('LibraryName', 'Ma bibliothèque', 'Ce paramètre définit le nom de la bibliothèque, qui apparaît sur chaque page de l''OPAC', '', '');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('marc', '1', 'Ce paramètre active le support du MARC. Dans Koha 3.0, doit être à 1.', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MARCOrgCode', '0', 'Ce paramètre définit votre code organisme MARC. Utilisé en MARC21. Voir  - http://www.loc.gov/marc/organizations/orgshome.html', '', '');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine','9999','Amende maximum qu''un ahdérent peut avoir pour un retour en retard','','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxoutstanding', '5', 'Ce paramètre définit le montant maximal des dettes au dela duquel le lecteur ne peut plus faire de réservation', '', 'Integer');
@@ -154,7 +152,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('minPasswordLength',3,'Spécifie la longueur minimale des mots de passe',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noItemTypeImages',0,'Si activé, n''affiche pas les vignettes de type de document',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('emailLibrarianWhenHoldIsPlaced',0,'Si activé, envoie un mail à la bibliothèque lorsqu''une réservation est posée',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('libraryAddress','','L''adresse pour l''impression des reçus, des amendes... si elle est différente de l''adresse physique de la bibliothèque',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numReturnedItemsToShow','20','Nombre d''exemplaires rendus à afficher sur la page de retour',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesMode','test','Choisissez un mode pour le calcul des amendes : Test ou Production.','test|production','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('globalDueDate','','Si défini, autorise une date de retour statique pour tous les prêts','10','free');
@@ -162,8 +159,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeInputFilter','','Si activé, permet de définir le format des codes à barre','whitespace|T-prefix|cuecat','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('singleBranchMode',0,'Activer s''il n''y a qu''une seule bibliothèque sur ce catalogue, cela cache le sélecteur de bibliothèque inutile',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('URLLinkText','','Texte à afficher dans l''ancre du logo de l''OPAC',NULL,'free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACSubscriptionDisplay','economical','Spécifie comment afficher les informations de périodique à l''OPAC','economical|off|full','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACDisplayExtendedSubInfo',1,'Si activé, les informations étendues d''abonnement sont affichées à l''OPAC',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACViewOthersSuggestions',0,'Si activé, toutes les suggestions sont affichées à l''OPAC',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACURLOpenInNewWindow',0,'Si activé, les URLs s''ouvrent dans une nouvelle fenêtre à l''OPAC',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hideBiblioNumber',0,'Si activé, le numéro de notice Koha est caché dans la page de détail de l''OPAC',NULL,'YesNo');
@@ -177,7 +172,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH','0','Si activé, le service OAI-PMH est disponible',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:archiveID','KOHA-OAI-TEST','Identification de l''archive OAI-PMH',NULL,'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:MaxCount','50','Nombre maximum d''enregistrements retournés simultanément aux requêtes ListRecords et ListIdentifiers',NULL,'Integer');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:Set','SET,Set experimental\r\nSET:SUBSET,Sous-set experimental','Sets OAI-PMH exportés, Le nom du set est d''une virgule et d''une brève description. Un set par ligne.','30|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OAI-PMH:ConfFile','','Si vide, le serveur OAI de Koha fonctionne en mode normal, sino il fonctionne en mode étendu.',NULL,'File');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('language','fr-FR','Définit les langues accessibles dans l''interface professionnelle',NULL,'Languages');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacheader','','HTML spécifique à ajouter à l''OPAC','70|10','Textarea');
@@ -223,7 +217,6 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowNotForLoanOverride', '0', 'Si activé, permet au bibliothécaire de choisir de prêter tout de même un exemplaire normalement exclu du prêt',NULL,'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('RenewalPeriodBase', 'date_due', 'Permet de déterminer si la période de renouvellement doit être calculée sur la date de retour ou sur le jour du renouvellement','date_due|now','Choice');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('OrderPdfFormat','pdfformat::layout3pages','Détermine le script utilisé pour imprimer les groupes de paniers','','free');
-INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OrderPdfTemplate','','Modèle de PDF téléchargé, utilisé pour les bons de commande','NULL','Upload');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type)  VALUES ('CurrencyFormat','US','US|FR','Précise comment les montant financiers sont affichés. Ex: ''36000'' est affiché ''360 000,00''  en ''FR'' ou 360,000.00''  en ''US''.','Choice');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Indique quand les exemplaires sont créés : à la commande, à la réception, dans le module catalogage','Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowRenewalLimitOverride', '0', 'S''il est activé, autorise le dépassement des limites du renouvellement sur la page de circulation',NULL,'YesNo');
