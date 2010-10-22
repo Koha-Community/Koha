@@ -23,8 +23,8 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 # please specify in which methods a given module is used
-use MARC::Record; # marc2marcxml, marcxml2marc, html2marc, changeEncoding
-use MARC::File::XML; # marc2marcxml, marcxml2marc, html2marcxml, changeEncoding
+use MARC::Record; # marc2marcxml, marcxml2marc, changeEncoding
+use MARC::File::XML; # marc2marcxml, marcxml2marc, changeEncoding
 use MARC::Crosswalk::DublinCore; # marc2dcxml
 use Biblio::EndnoteStyle;
 use Unicode::Normalize; # _entity_encode
@@ -54,8 +54,6 @@ $VERSION = 3.00;
   &marc2modsxml
   &marc2bibtex
   &marc2csv
-  &html2marcxml
-  &html2marc
   &changeEncoding
 );
 
@@ -490,172 +488,6 @@ sub marcrecord2csv {
 
 }
 
-
-=head2 html2marcxml
-
-  my ($error,$marcxml) = html2marcxml($tags,$subfields,$values,$indicator,$ind_tag);
-
-Returns a MARCXML scalar
-
-this is used in addbiblio.pl and additem.pl to build the MARCXML record from 
-the form submission.
-
-FIXME: this could use some better code documentation
-
-=cut
-
-sub html2marcxml {
-    my ($tags,$subfields,$values,$indicator,$ind_tag) = @_;
-	my $error;
-	# add the header info
-    my $marcxml= MARC::File::XML::header(C4::Context->preference('TemplateEncoding'),C4::Context->preference('marcflavour'));
-
-	# some flags used to figure out where in the record we are
-    my $prevvalue;
-    my $prevtag=-1;
-    my $first=1;
-    my $j = -1;
-
-	# handle characters that would cause the parser to choke FIXME: is there a more elegant solution?
-    for (my $i=0;$i<=@$tags;$i++){
-		@$values[$i] =~ s/&/&amp;/g;
-		@$values[$i] =~ s/</&lt;/g;
-		@$values[$i] =~ s/>/&gt;/g;
-		@$values[$i] =~ s/"/&quot;/g;
-		@$values[$i] =~ s/'/&apos;/g;
-        
-		if ((@$tags[$i] ne $prevtag)){
-			$j++ unless (@$tags[$i] eq "");
-			#warn "IND:".substr(@$indicator[$j],0,1).substr(@$indicator[$j],1,1)." ".@$tags[$i];
-			if (!$first){
-				$marcxml.="</datafield>\n";
-				if ((@$tags[$i] > 10) && (@$values[$i] ne "")){
-                	my $ind1 = substr(@$indicator[$j],0,1);
-					my $ind2 = substr(@$indicator[$j],1,1);
-					$marcxml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-					$marcxml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
-					$first=0;
-				} else {
-					$first=1;
-				}
-			} else {
-				if (@$values[$i] ne "") {
-					# handle the leader
-					if (@$tags[$i] eq "000") {
-						$marcxml.="<leader>@$values[$i]</leader>\n";
-						$first=1;
-					# rest of the fixed fields
-					} elsif (@$tags[$i] lt '010') { # don't compare numerically 010 == 8
-						$marcxml.="<controlfield tag=\"@$tags[$i]\">@$values[$i]</controlfield>\n";
-						$first=1;
-					} else {
-						my $ind1 = substr(@$indicator[$j],0,1);
-						my $ind2 = substr(@$indicator[$j],1,1);
-						$marcxml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-						$marcxml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
-						$first=0;
-					}
-				}
-			}
-		} else { # @$tags[$i] eq $prevtag
-			if (@$values[$i] eq "") {
-			} else {
-				if ($first){
-					my $ind1 = substr(@$indicator[$j],0,1);
-					my $ind2 = substr(@$indicator[$j],1,1);
-					$marcxml.="<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
-					$first=0;
-				}
-				$marcxml.="<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
-			}
-		}
-		$prevtag = @$tags[$i];
-	}
-	$marcxml.= MARC::File::XML::footer();
-	#warn $marcxml;
-	return ($error,$marcxml);
-}
-
-=head2 html2marc
-
-Probably best to avoid using this ... it has some rather striking problems:
-
-* saves blank subfields
-
-* subfield order is hardcoded to always start with 'a' for repeatable tags (because it is hardcoded in the addfield routine).
-
-* only possible to specify one set of indicators for each set of tags (ie, one for all the 650s). (because they were stored in a hash with the tag as the key).
-
-* the underlying routines didn't support subfield reordering or subfield repeatability.
-
-I've left it in here because it could be useful if someone took the time to fix it. -- kados
-
-=cut
-
-sub html2marc {
-    my ($dbh,$rtags,$rsubfields,$rvalues,%indicators) = @_;
-    my $prevtag = -1;
-    my $record = MARC::Record->new();
-#   my %subfieldlist=();
-    my $prevvalue; # if tag <10
-    my $field; # if tag >=10
-    for (my $i=0; $i< @$rtags; $i++) {
-        # rebuild MARC::Record
-#           warn "0=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ";
-        if (@$rtags[$i] ne $prevtag) {
-            if ($prevtag < 10) {
-                if ($prevvalue) {
-                    if (($prevtag ne '000') && ($prevvalue ne "")) {
-                        $record->add_fields((sprintf "%03s",$prevtag),$prevvalue);
-                    } elsif ($prevvalue ne ""){
-                        $record->leader($prevvalue);
-                    }
-                }
-            } else {
-                if (($field) && ($field ne "")) {
-                    $record->add_fields($field);
-                }
-            }
-            $indicators{@$rtags[$i]}.='  ';
-                # skip blank tags, I hope this works
-                if (@$rtags[$i] eq ''){
-                $prevtag = @$rtags[$i];
-                undef $field;
-                next;
-            }
-            if (@$rtags[$i] <10) {
-                $prevvalue= @$rvalues[$i];
-                undef $field;
-            } else {
-                undef $prevvalue;
-                if (@$rvalues[$i] eq "") {
-                undef $field;
-                } else {
-                $field = MARC::Field->new( (sprintf "%03s",@$rtags[$i]), substr($indicators{@$rtags[$i]},0,1),substr($indicators{@$rtags[$i]},1,1), @$rsubfields[$i] => @$rvalues[$i]);
-                }
-#           warn "1=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
-            }
-            $prevtag = @$rtags[$i];
-        } else {
-            if (@$rtags[$i] <10) {
-                $prevvalue=@$rvalues[$i];
-            } else {
-                if (length(@$rvalues[$i])>0) {
-                    $field->add_subfields(@$rsubfields[$i] => @$rvalues[$i]);
-#           warn "2=>".@$rtags[$i].@$rsubfields[$i]." = ".@$rvalues[$i].": ".$field->as_formatted;
-                }
-            }
-            $prevtag= @$rtags[$i];
-        }
-    }
-    #}
-    # the last has not been included inside the loop... do it now !
-    #use Data::Dumper;
-    #warn Dumper($field->{_subfields});
-    $record->add_fields($field) if (($field) && $field ne "");
-    #warn "HTML2MARC=".$record->as_formatted;
-    return $record;
-}
 
 =head2 changeEncoding - Change the encoding of a record
 
