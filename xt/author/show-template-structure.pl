@@ -165,7 +165,7 @@ exit 0;
 
 =head1 AUTHOR
 
-Koha Development team <info@koha.org>
+Koha Development Team <http://koha-community.org/>
 
 Galen Charlton <gmcharlt@gmail.com>
 
