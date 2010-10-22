@@ -404,6 +404,7 @@ $tabsysprefs{'OAI-PMH:MaxCount'}  = "OAI-PMH";
 
 # ILS-DI variables
 $tabsysprefs{'ILS-DI'} = "ILS-DI";
+$tabsysprefs{'ILS-DI:AuthorizedIPs'}    = "Admin";
 
 # Creator variables
 

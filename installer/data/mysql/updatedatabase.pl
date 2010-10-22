@@ -3582,7 +3582,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ILS-DI','0','Enable ILS-DI services. See http://your.opac.name/cgi-bin/koha/ilsdi.pl for online documentation.','','YesNo')");
 	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ILS-DI:AuthorizedIPs','127.0.0.1','A comma separated list of IP addresses authorized to access the web services.','','free')");
 	
-    print "Upgrade to $DBversion done (Adding ILS-DI updates and ILS-DI:Authorized_IPs)\n";
+    print "Upgrade to $DBversion done (Adding ILS-DI updates and ILS-DI:AuthorizedIPs)\n";
     SetVersion ($DBversion);
 }
 
@@ -3767,7 +3767,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                 'OPACDisplayExtendedSubInfo',
                 'OAI-PMH:Set',
                 'OAI-PMH:Subset',
-                'ILS-DI:AuthorizedIPs',
                 'libraryAddress',
                 'kohaspsuggest',
                 'OrderPdfTemplate',
@@ -3784,6 +3783,13 @@ $DBversion = "3.02.00.002";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do(q{DELETE FROM systempreferences WHERE variable = 'OpacPrivacy'});
     print "Upgrade to $DBversion done (bug 3881: remove unused OpacPrivacy system preference)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.02.00.003";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{UPDATE systempreferences SET variable = 'ILS-DI:AuthorizedIPs' WHERE variable = 'ILS-DI:Authorized_IPs'});
+    print "Upgrade to $DBversion done (correct ILS-DI:AuthorizedIPs)\n";
     SetVersion ($DBversion);
 }
 
