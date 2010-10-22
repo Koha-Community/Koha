@@ -3752,6 +3752,29 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.02.00.001";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{DELETE FROM systempreferences WHERE variable IN (
+                'holdCancelLength',
+                'PINESISBN',
+                'sortbynonfiling',
+                'TemplateEncoding',
+                'OPACSubscriptionDisplay',
+                'OPACDisplayExtendedSubInfo',
+                'OAI-PMH:Set',
+                'OAI-PMH:Subset',
+                'ILS-DI:AuthorizedIPs',
+                'libraryAddress',
+                'kohaspsuggest',
+                'OrderPdfTemplate',
+                'marc',
+                'acquisitions',
+                'MIME')
+               }
+    );
+    print "Upgrade to $DBversion done (bug 3756: remove disused system preferences)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 
