@@ -26,9 +26,6 @@ UPDATE systempreferences SET explanation='Папка «includes» может б�
 UPDATE systempreferences SET explanation='Адрес электронной почты, на который приходят запросы посетителей касательно модификации их учётных записей' WHERE variable='KohaAdminEmailAddress';	
 -- Define the email address where patron modification requests are sent
 
-UPDATE systempreferences SET explanation='Программа по умолчанию для экспорта файлов отчётов' WHERE variable='MIME';	
--- Define the default application for exporting report data
-
 UPDATE systempreferences SET explanation='Если включено, то будут отключены изображения типов единиц' WHERE variable='noItemTypeImages';	
 -- If ON, disables item-type images
 

@@ -88,7 +88,6 @@ $tabsysprefs{IndependantBranches}   = "Admin";
 $tabsysprefs{insecure}              = "Admin";
 $tabsysprefs{KohaAdmin}             = "Admin";
 $tabsysprefs{KohaAdminEmailAddress} = "Admin";
-$tabsysprefs{MIME}                  = "Admin";
 $tabsysprefs{timeout}               = "Admin";
 $tabsysprefs{Intranet_includes}     = "Admin";
 $tabsysprefs{AutoLocation}          = "Admin";

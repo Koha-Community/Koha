@@ -55,7 +55,6 @@ foreach ( @filters[0..3] ) {
 }
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
-# my $mime     = $input->param("MIME");
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
                 query => $input,
@@ -110,7 +109,7 @@ my $dbh = C4::Context->dbh;
 my @values;
 
 # here each element returned by map is a hashref, get it?
-my @mime  = ( map { {type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
+my @mime  = ( map { {type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
 my $delims = GetDelimiterChoices;
 my $branches = GetBranches;
 my @branchloop;

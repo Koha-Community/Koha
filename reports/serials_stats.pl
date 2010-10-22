@@ -48,7 +48,6 @@ my $expired    = $input->param("expired");
 my $order      = $input->param("order");
 my $output     = $input->param("output");
 my $basename   = $input->param("basename");
-my $mime       = $input->param("MIME");
 our $sep       = $input->param("sep") || '';
 $sep = "\t" if ($sep eq 'tabulation');
 
@@ -154,12 +153,10 @@ if($do_it){
 		push @branchloop, \%row;
 	} 
     
-    my @mime = ( C4::Context->preference("MIME") );
-	# warn 'MIME(s): ' . join ' ', @mime;
 	my $CGIextChoice=CGI::scrolling_list(
 				-name => 'MIME',
 				-id => 'MIME',
-				-values   => \@mime,
+				-values   => ['CSV'], # FIXME translation
 				-size     => 1,
 				-multiple => 0 );
 	my $CGIsepChoice=GetDelimiterChoices;
