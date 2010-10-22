@@ -269,7 +269,10 @@ if ($op eq "additem") {
         my $items = &GetItemsByBiblioitemnumber($biblioitem->{biblioitemnumber});
 
         foreach my $item (@$items){
-            &DelItem($dbh,$biblionumber,$item->{itemnumber});
+            # FIXME although it won't delete items that have loans
+            # or waiting holds on them, should explicitly tell operator
+            # about items that are not deleted
+            &DelItemCheck($dbh,$biblionumber,$item->{itemnumber});
         }
 	}
 #-------------------------------------------------------------------------------
