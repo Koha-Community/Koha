@@ -1,4 +1,4 @@
-Koha 3 - the next-generation release of the award-winning Koha open-source
+Koha 3.2 - the next-generation release of the award-winning Koha open-source
 integrated library system.
 
 Koha is the first open-source Integrated Library System. Developed initially in
@@ -10,13 +10,7 @@ more about the Koha project at http://koha-community.org.
 INSTALLATION
 ============
 
-Koha 3 comes with a new installer, based on MakeMaker, the tool that
-is usually used to install CPAN modules.  This means that if you know
-how to customise CPAN-installed modules, the same things should work
-for you with Koha.  If not, don't worry.  If you want to customise the
-installation more than described below, run "man ExtUtils::MakeMaker"
-
-You need to have a server running Perl 5.8, MySQL 5 or PostgreSQL 8.2.5, Zebra
+You need to have a server running Perl 5.8.8 or later, MySQL 5, Zebra
 2.0.22 or greater and a webserver (preferably Apache2) before installing
 Koha.
 
@@ -25,22 +19,14 @@ user, with a password set. Note: kohaadmin must have at least the
 following privileges: SELECT, INSERT, UPDATE, DELETE, CREATE, DROP,
 ALTER, and LOCK TABLES.
 
-PostgreSQL 8.2.5: Create a database called 'koha,' owned by 'kohaadmin' 
-user, with a password set. Note: kohaadmin must be a superuser. You
-must also add plpgsql to the koha database. NOTE: PostgreSQL support in
-Koha is experimental and should not be attempted for production systems
-without a heavy investment in testing.
-
 Default installation instructions:
 
 1. perl Makefile.PL
   (you will be prompted to answer a number of questions and you will
   need to install some Perl dependencies)
   WARNING:
-  1.1 A Perl library Koha depends on, MARC::File::XML may not work with Perl
-    5.10, see: http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2309),
 
-  1.2 recent versions of CGI::Session have caused some issues for users;
+  1.1 recent versions of CGI::Session have caused some issues for users;
   as of this release date, we suggest downloading the CGI::Session::serialize::yaml
   tarball direct from CPAN and install it directly rather than using the cpan command
 
@@ -73,12 +59,12 @@ For full instructions on how to override the default settings, run
 
 $ perldoc rewrite-config.PL
 
-
 UPGRADE
 =======
-If you are upgrading from a previous installation of Koha 3, you can
+If you are upgrading from a previous installation of Koha 3.x, you can
 use the following:
 
+ ./koha_perl_deps.pl -u -m # to identify new Perl dependencies
  perl Makefile.PL --prev-install-log /path/to/koha-install-log
  make
  make test
@@ -132,7 +118,7 @@ http://dir.gmane.org/gmane.education.libraries.koha.devel
 IF THIS IS A RELEASED VERSION: please see the support pages at
 http://www.koha-community.org/
 
-Released versions usually have three-digit numbers, like 3.00.01,
+Released versions usually have three-digit numbers, like 3.02.00,
 while other version number styles are usually snapshots or previews.
 
 
