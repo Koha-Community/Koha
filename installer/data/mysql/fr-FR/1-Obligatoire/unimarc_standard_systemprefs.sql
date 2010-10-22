@@ -118,7 +118,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionLog', '0', 'Activer ce paramètre pour enregistrer les actions sur le bulletinage', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('suggestion', '1', 'Si ce paramètre est activé, les adhérents (identifiés) peuvent saisir des suggestions d''achat', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('template', 'prog', 'Ce paramètre permet de définir le thème de l''interface professionnelle. "prog", sauf si vous avez défini un thème spécifique', '', 'Themes');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TemplateEncoding', 'utf-8', 'Ce paramètre permet de définir l''encodage de votre base. Normalement, utf-8', 'iso-8859-1|utf-8', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('timeout', '30600', 'Ce paramètre définit la durée d''inactivité au delà de laquelle l''utilisateur (professionnel ou opac) est automatiquement déconnecté', '', 'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('TransfersMaxDaysWarning', '3', 'Délai maximum au delà duquel un transfert sera considéré comme ayant rencontré un problème', '', 'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('uppercasesurnames', '0', 'Force les noms de famille à être en majuscule', NULL, 'YesNo');
@@ -155,7 +154,6 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('minPasswordLength',3,'Spécifie la longueur minimale des mots de passe',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noItemTypeImages',0,'Si activé, n''affiche pas les vignettes de type de document',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('emailLibrarianWhenHoldIsPlaced',0,'Si activé, envoie un mail à la bibliothèque lorsqu''une réservation est posée',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('holdCancelLength','','Spécifie le nombre de jours avant qu''une réservation soit annulée',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('libraryAddress','','L''adresse pour l''impression des reçus, des amendes... si elle est différente de l''adresse physique de la bibliothèque',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numReturnedItemsToShow','20','Nombre d''exemplaires rendus à afficher sur la page de retour',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesMode','test','Choisissez un mode pour le calcul des amendes : Test ou Production.','test|production','Choice');

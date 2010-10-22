@@ -119,7 +119,6 @@ $tabsysprefs{OpacPrivacy}           = "Admin";
 $tabsysprefs{OPACXSLTDetailsDisplay}    = "Admin";
 $tabsysprefs{OPACXSLTResultsDisplay}    = "Admin";
 $tabsysprefs{PDFFontType}           = "Admin";
-$tabsysprefs{PINESISBN}             = "Admin";
 $tabsysprefs{PrintNoticesMaxLines}  = "Admin";
 $tabsysprefs{ReservesControlBranch} = "Admin";
 $tabsysprefs{ResultsDisplay}        = "Admin";
@@ -184,7 +183,6 @@ $tabsysprefs{finesMode}                      = "Circulation";
 $tabsysprefs{numReturnedItemsToShow}         = "Circulation";
 $tabsysprefs{emailLibrarianWhenHoldIsPlaced} = "Circulation";
 $tabsysprefs{globalDueDate}                  = "Circulation";
-$tabsysprefs{holdCancelLength}               = "Circulation";
 $tabsysprefs{itemBarcodeInputFilter}         = "Circulation";
 $tabsysprefs{WebBasedSelfCheck}              = "Circulation";
 $tabsysprefs{ShowPatronImageInWebBasedSelfCheck} = "Circulation";
@@ -216,7 +214,6 @@ $tabsysprefs{OverduesBlockCirc}              = "Circulation";
 
 
 # Staff Client
-$tabsysprefs{TemplateEncoding}        = "StaffClient";
 $tabsysprefs{template}                = "StaffClient";
 $tabsysprefs{intranetstylesheet}      = "StaffClient";
 $tabsysprefs{IntranetNav}             = "StaffClient";
@@ -270,7 +267,6 @@ $tabsysprefs{QueryFuzzy}              = "Searching";
 $tabsysprefs{QueryStemming}           = "Searching";
 $tabsysprefs{QueryWeightFields}       = "Searching";
 $tabsysprefs{expandedSearchOption}    = "Searching";
-$tabsysprefs{sortbynonfiling}         = "Searching";
 $tabsysprefs{QueryAutoTruncate}       = "Searching";
 $tabsysprefs{QueryRemoveStopwords}    = "Searching";
 $tabsysprefs{AdvancedSearchTypes}     = "Searching";

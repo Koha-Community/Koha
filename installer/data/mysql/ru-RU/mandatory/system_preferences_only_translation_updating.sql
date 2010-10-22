@@ -260,9 +260,6 @@ UPDATE systempreferences SET explanation='Выберите режим для ш�
 UPDATE systempreferences SET explanation='Если установлено, разрешается указывать глобальную статическую дату для всех выдач' WHERE variable='globalDueDate';
 -- 	If set, allows a global static due date for all checkouts
 
-UPDATE systempreferences SET explanation='Указывается, сколько дней должно пройти до отмены резервирования' WHERE variable='holdCancelLength';
--- 	Specify how many days before a hold is canceled
-
 UPDATE systempreferences SET explanation='Используется в обороте для определения того, какое подразделение экземпляра проверять при включенных независимых подразделениях, и при поиске, чтобы определить, какие подразделения выбирать для наличия' WHERE variable='HomeOrHoldingBranch';
 -- 	Used by Circulation to determine which branch of an item to check with independent branches on, and by search to determine which branch to choose for availability
 
@@ -603,10 +600,6 @@ UPDATE systempreferences SET explanation='Если установлено, вы�
 -- UPDATE systempreferences SET explanation='' WHERE variable='QueryWeightFields';
 -- 	If ON, enables field weighting
 
--- UPDATE systempreferences SET explanation='Сортувати результати пошуку за необліковуваними МАРК-символами' WHERE variable='sortbynonfiling';
--- 	Sort search results by MARC nonfiling characters (deprecated)
-
-
 -- StaffClient - Клиент для библиотекарей
 
 -- UPDATE systempreferences SET explanation='Введіть назву таблиці стилів кольорів для внутрішньобібліотечного інтерфейсу' WHERE variable='intranetcolorstylesheet';
@@ -626,9 +619,6 @@ UPDATE systempreferences SET explanation='Если установлено, вы�
 
 -- UPDATE systempreferences SET explanation='Вибір варіанту шаблону для внутрішньобібліотечного інтерфейсу' WHERE variable='template';
 -- 	Define the preferred staff interface template
-
--- UPDATE systempreferences SET explanation='Зазначення кодування шаблонів' WHERE variable='TemplateEncoding';
--- 	Globally define the default character encoding
 
 -- UPDATE systempreferences SET explanation='' WHERE variable='yuipath';
 -- 	Insert the path to YUI libraries, choose local if you use koha offline
