@@ -110,7 +110,6 @@ $tabsysprefs{noOPACUserLogin}       = "Admin";
 $tabsysprefs{'OAI-PMH:ConfFile'}    = "Admin";
 $tabsysprefs{OpacAddMastheadLibraryPulldown}    = "Admin";
 $tabsysprefs{opaclargeimage}        = "Admin";
-$tabsysprefs{OpacPrivacy}           = "Admin";
 $tabsysprefs{OPACXSLTDetailsDisplay}    = "Admin";
 $tabsysprefs{OPACXSLTResultsDisplay}    = "Admin";
 $tabsysprefs{PDFFontType}           = "Admin";

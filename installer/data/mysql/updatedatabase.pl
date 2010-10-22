@@ -4,7 +4,7 @@
 # Database Updater
 # This script checks for required updates to the database.
 
-# Part of the Koha Library Software www.koha.org
+# Part of the Koha Library Software www.koha-community.org
 # Licensed under the GPL.
 
 # Bugs/ToDo:
@@ -3773,6 +3773,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
                }
     );
     print "Upgrade to $DBversion done (bug 3756: remove disused system preferences)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.02.00.002";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{DELETE FROM systempreferences WHERE variable = 'OpacPrivacy'});
+    print "Upgrade to $DBversion done (bug 3881: remove unused OpacPrivacy system preference)\n";
     SetVersion ($DBversion);
 }
 
