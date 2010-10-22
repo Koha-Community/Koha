@@ -122,7 +122,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 
 INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value`, `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES
 		('995', '0', 'Withdrawn status', 'Withdrawn status', 0, 0, 'items.wthdrawn', 10, 'WTHDRAWN', '', '', 0, 0, '', '', '', NULL),
-i		('995', '2', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
+		('995', '2', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST', '', '', 0, 0, '', '', '', NULL),
 		('995', '3', 'Use restrictions', 'Use restrictions', 0, 0, 'items.restricted', 10, 'RESTRICTED', '', '', 0, 0, '', '', '', NULL),
 		('995', '5', 'Date acquired', 'Coded location qualifier', 0, 0, 'items.dateaccessioned', 10, '', '', '', NULL, 0, '', '', '', NULL),
 		('995', '6', 'Copy number', 'Copy number', 0, 0, 'items.copynumber', 10, '', '', '', NULL, 0, '', '', '', NULL),
@@ -141,7 +141,7 @@ i		('995', '2', 'Lost status', 'Lost status', 0, 0, 'items.itemlost', 10, 'LOST'
 		('995', 'm', 'Date of loan or deposit', 'Date of loan or deposit', 0, 0, 'items.datelastborrowed', 10, '', '', '', 0, -5, '', '', '', NULL),
 		('995', 'n', 'Expiration of loan date', 'Expiration of loan date', 0, 0, 'items.onloan', 10, '', '', '', 0, -1, '', '', '', NULL),
 		('995', 'o', 'Circulation type (not for loan)', 'Circulation type (not for loan)', 0, 0, 'items.notforloan', 10, '', '', '', 0, 0, '', '', '', NULL),
-+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 1, 'items.itype', 10, 'itemtypes', '', '', 0, 0, '', '', '', NULL),
+		('995', 'r', 'Type of item and material', 'Type of item and material', 0, 1, 'items.itype', 10, 'itemtypes', '', '', 0, 0, '', '', '', NULL),
 		('995', 'u', 'Copy note', 'Copy note', 0, 0, 'items.itemnotes', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('995', 'v', 'Serial Enumeration / chronology', 'Serial Enumeration / chronology', 0, 0, 'items.enumchron', 10, '', '', '', 0, -1, '', '', '', NULL);
  
