@@ -3,11 +3,11 @@
 # Script for testing progressbar, part 1 - initial screem
 # it is split into two scripts so we can use firebug to debug it
 
-# Koha library project  www.koha.org
+# Koha library project  www.koha-community.org
 
 # Licensed under the GPL
 
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2010 Catalyst IT, Ltd
 #
 # This file is part of Koha.
 #
@@ -25,7 +25,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 
 # standard or CPAN modules used
 use CGI;
