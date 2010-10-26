@@ -84,8 +84,8 @@ if ($completedJobID) {
             close STDERR;
 
             foreach (1..100) {
-                sleep 1;
                 $job->progress( $_ );
+                sleep 1;
             }
             $job->finish();
         } else {
