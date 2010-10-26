@@ -46,7 +46,13 @@
                 }
             };
             function Add() {
-                window.open("/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
+                var barcodes = document.getElementById("barcode");
+                if (barcodes.value == '') {
+                    window.open("/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
+                }
+                else {
+                    document.forms["add_by_barcode"].submit();
+                }
             };
             function DeDuplicate() {
                 window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=de_duplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";

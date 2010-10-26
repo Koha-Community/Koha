@@ -1,9 +1,26 @@
+    <!-- PLEASE MAINTAIN PROPER INDENTATION!!!!  -->
     <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
     <title>Koha &rsaquo; Tools &rsaquo; Labels &rsaquo; Manage Label Batches</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
     <!-- TMPL_INCLUDE NAME="greybox.inc" -->
+    <script type="text/javascript">
+    //<![CDATA[
+        function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
+            $(".focus:last").select();
+        }
+        function verifyBarcodes(barcodes) {
+            if (barcodes.value == '') {
+                alert("Please add barcodes using either the direct entry text area or the item search.");
+                return false;   // not ok
+            }
+            else {
+                return true;    // ok
+            };
+        }
+    //]]>
+    </script>
 </head>
-<body>
+<body onload="dofocus();">
     <!-- TMPL_INCLUDE NAME="header.inc" -->
     <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
     <div id="breadcrumbs">
@@ -21,6 +38,21 @@
                     <div class="yui-g">
                         <div class="yui-u first" id="manage-label-batches">
                             <div class="hint">Current Branch: <!-- TMPL_VAR NAME="LoginBranchname" --></div>
+                            <form name="add_by_barcode" action="/cgi-bin/koha/labels/label-edit-batch.pl" method="post">
+                                <div>
+                                    <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
+                                    <ol><li>
+                                    <input type="hidden" name="op" value="add" \>
+                                    <input type="hidden" name="batch_id" value="<!-- TMPL_VAR NAME="batch_id" -->" \>
+                                    <label for="barcode">Add by Barcode(s): 
+                                        <br \> <span class="hint">One barcode per line.</span>
+                                        <br \> <span class="hint">Leave empty to add via item search.</span>
+                                    </label>
+                                    <textarea rows="5" id="barcode" name="barcode" tabindex="1" class="focus"></textarea>
+                                    </li></ol>
+                                    </fieldset>
+                                </div>
+                            </form>
                                 <!-- TMPL_IF NAME="table_loop" -->
                                 <form name="items" class="checkboxed">
                                     <h2>Items in batch number <!-- TMPL_VAR NAME="batch_id" --></h2>
@@ -47,8 +79,14 @@
                                     </table>
                                 </form>
                                 <!-- TMPL_ELSE -->
-                                    <div class="dialog message"><h4>There are no items in Batch <!-- TMPL_VAR NAME="batch_id" --> yet</h4>
-                                    <p>Use the toolbar above to add items.</p></div>
+                                <fieldset class="rows" style="border-bottom: 0px; border: 0px;">
+                                <ol><li>
+                                    <div class="dialog message">
+                                        <h4>There are no items in Batch <!-- TMPL_VAR NAME="batch_id" --> yet</h4>
+                                        <p>Add items by barcode using the text area above or leave empty to add via item search.</p>
+                                    </div>
+                                </li></ol>
+                                </fieldset>
                                 <!-- /TMPL_IF -->
                             </div>
                             <!-- TMPL_IF NAME="err" -->

@@ -27,6 +27,7 @@ use CGI;
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
 use C4::Branch qw(get_branch_code_from_name);
+use C4::Items qw(GetItemnumberFromBarcode);
 use C4::Creators 1.000000;
 use C4::Labels 1.000000;
 
@@ -57,7 +58,8 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
 my $op = $cgi->param('op') || 'edit';
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
 my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
-my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
+my @item_numbers = $cgi->param('item_number') || ();
+my $barcode = $cgi->param('barcode') if $cgi->param('barcode');
 
 my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));
 
@@ -76,6 +78,15 @@ elsif ($op eq 'delete') {
     $errstr = "batch $batch_id was not deleted." if $err;
 }
 elsif ($op eq 'add') {
+    if ($barcode) {
+        my @barcodes = split /\n/, $barcode; # $barcode is effectively passed in as a <cr> separated list
+        foreach my $number (@barcodes) {
+            $number =~ s/\r$//; # strip any naughty return chars
+            if (my $item_number = GetItemnumberFromBarcode($number)) {  # we must test in case an invalid barcode is passed in; we effectively disgard them atm
+                push @item_numbers, $item_number;
+            }
+        }
+    }
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
     $batch = C4::Labels::Batch->new(branch_code => $branch_code) if $batch == -2;
     if ($branch_code){
