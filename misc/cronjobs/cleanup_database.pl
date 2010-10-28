@@ -37,12 +37,13 @@ use Getopt::Long;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [-v|--verbose] [--zebraqueue DAYS]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS]
         [-m|--mail]
    -h --help          prints this help message, and exits, ignoring all
                       other options
    --sessions         purge the sessions table.  If you use this while users 
                       are logged into Koha, they will have to reconnect.
+   --sessdays DAYS   purge only sessions older than DAYS days (use together with sessions parameter).
    -v --verbose       will cause the script to give you a bit more information
                       about the run.
    --zebraqueue DAYS  purge completed entries from the zebraqueue from 
@@ -52,11 +53,12 @@ USAGE
     exit $_[0];
 }
 
-my ($help, $sessions, $verbose, $zebraqueue_days, $mail);
+my ($help, $sessions, $sess_days, $verbose, $zebraqueue_days, $mail);
 
 GetOptions(
     'h|help'    => \$help,
     'sessions'  => \$sessions,
+    'sessdays:i' => \$sess_days,
     'v|verbose' => \$verbose,
     'm|mail'    => \$mail,
     'zebraqueue:i' => \$zebraqueue_days,
@@ -77,7 +79,7 @@ my $sth;
 my $sth2;
 my $count;
 
-if ($sessions) {
+if ($sessions && !$sess_days) { #old behavior
     if ($verbose){
         print "Session purge triggered.\n";
         $sth = $dbh->prepare("SELECT COUNT(*) FROM sessions");
@@ -89,6 +91,15 @@ if ($sessions) {
     $sth->execute() or die $dbh->errstr;;
     if ($verbose){
         print "Done with session purge.\n";
+    }
+}
+elsif($sessions && $sess_days>0) { #new behavior with number of days old
+    if ($verbose){
+        print "Session purge triggered with days>$sess_days.\n";
+    }
+    RemoveOldSessions();
+    if ($verbose){
+        print "Done with session purge with days>$sess_days.\n";
     }
 }
 
@@ -122,3 +133,31 @@ if ($mail) {
     print "Done with purging the mail queue.\n" if ($verbose);
 }
 exit(0);
+
+sub RemoveOldSessions {
+  my ($id, $a_session, $limit, $lasttime);
+  $limit= time() - 24*3600*$sess_days;
+
+  $sth= $dbh->prepare("SELECT id, a_session FROM sessions");
+  $sth->execute or die $dbh->errstr;
+  $sth->bind_columns(\$id, \$a_session);
+  $sth2 = $dbh->prepare("DELETE FROM sessions WHERE id=?");
+  $count=0;
+
+  while ($sth->fetch) {
+    $lasttime=0;
+    if($a_session =~ /lasttime:\s+(\d+)/) {
+	$lasttime= $1;
+    }
+    elsif($a_session =~ /(ATIME|CTIME):\s+(\d+)/ ) {
+	$lasttime= $2;
+    }
+    if($lasttime && $lasttime < $limit) {
+	$sth2->execute($id) or die $dbh->errstr;
+	$count++;
+    }
+  }
+  if ($verbose){
+      print "$count sessions were deleted.\n";
+  }
+}
