@@ -1,6 +1,7 @@
 package C4::Koha;
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright 2010 Nelsonville Public Library
 #
 # This file is part of Koha.
 #
@@ -672,6 +673,7 @@ sub getImageSets {
     foreach my $imagesubdir ( @subdirectories ) {
         my @imagelist     = (); # hashrefs of image info
         my @imagenames = _getImagesFromDirectory( File::Spec->catfile( $paths->{'staff'}{'filesystem'}, $imagesubdir ) );
+        my $imagesetactive = 0;
         foreach my $thisimage ( @imagenames ) {
             push( @imagelist,
                   { KohaImage     => "$imagesubdir/$thisimage",
@@ -680,8 +682,10 @@ sub getImageSets {
                     checked       => "$imagesubdir/$thisimage" eq $checked ? 1 : 0,
                }
              );
+             $imagesetactive = 1 if "$imagesubdir/$thisimage" eq $checked;
         }
         push @imagesets, { imagesetname => $imagesubdir,
+                           imagesetactive => $imagesetactive,
                            images       => \@imagelist };
         
     }
