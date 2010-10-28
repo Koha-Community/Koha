@@ -142,8 +142,9 @@
 <div class="yui-u">
 <h2>Notes:</h2>
 <ul>
+<li>The first line in the file must be a header row defining which columns you are supplying in the import file.</li>
 <li><b>Download a starter CSV file with all the columns <a href="?sample=1">here</a>.</b>  Values are comma-separated.</li>
-<li>OR format your file in CSV format with the following fields:<ul><li>
+<li>OR choose which fields you want to supply from the following list:<ul><li>
     <!-- TMPL_LOOP name="columnkeys" -->'<!-- TMPL_VAR name="key" -->', <!-- /TMPL_LOOP -->
 </li></ul></li>
 <!-- TMPL_IF NAME="ExtendedPatronAttributes" -->
@@ -151,9 +152,10 @@
 </li>
 <!-- /TMPL_IF -->
 <li>The fields 'branchcode' and 'categorycode' are <b>required</b> and <b>must match</b> valid entries in your database.</li>
-<li>'password' should be stored in plaintext, and will be converted to a md5 hash (if your passwords are already encrypted, talk to your systems administrator about options).</li>
-<li>Date formats should match your system preference, and <b>must</b> be zero-padded, e.g. '01/02/2008'.</li>
-<li>You may optionally include a header row, defining which columns you are supplying in the import file.</li>
+<li>'password' should be stored in plaintext, and will be converted to a MD5 hash (if your passwords are already encrypted, talk to your system administrator about options).</li>
+<li>Date formats should match your system preference, and <b>must</b> be zero-padded, e.g. '01/02/2008'.  Alternatively,
+you can supply dates in ISO format (e.g., '2010-10-28').
+</li>
 </ul>
 
      </div>
