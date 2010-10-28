@@ -50,9 +50,9 @@ $(document).ready(function(){
 &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
 &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a>
 &rsaquo; 
-<!-- TMPL_IF NAME="saved1"  --><strong>Saved Reports</strong>
-<!-- TMPL_ELSIF NAME="create"  --><strong>Create from SQL</strong>
-<!-- TMPL_ELSIF NAME="showsql" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports</a> &rsaquo; <strong>SQL View</strong>
+<!-- TMPL_IF NAME="saved1"  -->Saved Reports
+<!-- TMPL_ELSIF NAME="create"  -->Create from SQL
+<!-- TMPL_ELSIF NAME="showsql" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports</a> &rsaquo; SQL View
 <!-- TMPL_ELSIF NAME="execute" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports</a> &rsaquo; <em><!-- TMPL_VAR NAME="name" --></em> Report
 <!-- TMPL_ELSIF NAME="buildx"  --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a> &rsaquo; Step <!-- TMPL_VAR NAME="buildx" --> of 6:
     <!-- TMPL_IF    NAME="build1" -->Choose a Module
