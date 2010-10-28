@@ -289,7 +289,7 @@ Item Types Administration
     <!-- TMPL_ELSE -->
   <tr>
     <!-- /TMPL_IF -->
-   <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <td><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /></td><!-- /TMPL_UNLESS -->
+   <!-- TMPL_UNLESS NAME="noItemTypeImages" --> <td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF --></td><!-- /TMPL_UNLESS -->
     <td>
       <a href="<!-- TMPL_VAR name="script_name" -->?op=add_form&amp;itemtype=<!-- TMPL_VAR name="itemtype" escape="HTML" -->">
         <!-- TMPL_VAR name="itemtype" -->
