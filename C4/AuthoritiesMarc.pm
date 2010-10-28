@@ -901,7 +901,7 @@ sub FindDuplicateAuthority {
         $_->[1]=~s/$filtervalues/ /g; $query.= " and he,wrdl=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
       }
     }
-    my ($error, $results, $total_hits)=SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
+    my ($error, $results, $total_hits) = C4::Search::SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
     if (@$results>0) {
       my $marcrecord = MARC::File::USMARC::decode($results->[0]);
