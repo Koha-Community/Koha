@@ -70,7 +70,7 @@
 			<ul>
 					<li><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->#none">None</a></li>
 				  <!-- TMPL_LOOP NAME="imagesets" -->
-				  	<li><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->#<!-- TMPL_VAR NAME="imagesetname" -->"><!-- TMPL_VAR name="imagesetname" --></a></li>
+					<!-- TMPL_IF NAME="imagesetactive" --><li class="ui-tabs-selected"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=<!-- TMPL_VAR NAME="category" -->#<!-- TMPL_VAR NAME="imagesetname" -->"><!-- TMPL_VAR name="imagesetname" --></a></li>
 				  <!-- /TMPL_LOOP -->
 			</ul>
 		</div>
