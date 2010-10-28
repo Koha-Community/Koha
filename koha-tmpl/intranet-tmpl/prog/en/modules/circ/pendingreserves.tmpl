@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Circulation &rsaquo; Pending Holds</title>
+<title>Koha &rsaquo; Circulation &rsaquo; Holds to Pull</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- Additions to enable Calendar system -->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
@@ -34,7 +34,7 @@ $.tablesorter.addParser({
 <!-- TMPL_INCLUDE NAME="circ-search.inc" -->
 
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Pending Holds</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds to Pull</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -42,7 +42,7 @@ $.tablesorter.addParser({
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h2>Pending holds<!-- TMPL_IF NAME="run_report" --> placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --><!-- /TMPL_IF --></h2>
+<h2>Holds to Pull<!-- TMPL_IF NAME="run_report" --> placed between <!-- TMPL_VAR NAME="from" --> and <!-- TMPL_VAR NAME="to" --><!-- /TMPL_IF --></h2>
 <!-- TMPL_IF NAME="run_report" -->
 <h3>Reported on <!-- TMPL_VAR NAME="todaysdate" --></h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
