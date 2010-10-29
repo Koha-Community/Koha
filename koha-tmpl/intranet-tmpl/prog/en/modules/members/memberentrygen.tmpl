@@ -46,7 +46,8 @@
         $("select", clone).attr('name', function() {
             return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
         });
-        $("input,select", clone).attr('value','');
+        $("input#patron_attr_" + newId, clone).attr('value','');
+        $("select#patron_attr_" + newId, clone).attr('value','');
         original.parentNode.insertBefore(clone, original.nextSibling);
     }
 
