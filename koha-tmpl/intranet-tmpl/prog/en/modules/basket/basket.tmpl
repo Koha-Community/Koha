@@ -118,6 +118,8 @@ function placeHold () {
 <!-- TMPL_IF NAME="verbose" -->
 	<!-- TMPL_UNLESS NAME="print_basket" --><p style="padding: 7px 0; border-top : 1px solid #E8E8E8;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
 
+    <a href="#" onclick="delSelRecords(); return false;">Remove</a>
+
 <!-- TMPL_IF NAME="loggedinusername" -->
      | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
 <!-- /TMPL_IF -->
