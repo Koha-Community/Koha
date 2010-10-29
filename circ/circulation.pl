@@ -413,9 +413,7 @@ my $todaysissues = '';
 my $previssues   = '';
 my @todaysissues;
 my @previousissues;
-## ADDED BY JF: new itemtype issuingrules counter stuff
-my $issued_itemtypes_count;
-my @issued_itemtypes_count_loop;
+
 my $totalprice = 0;
 
 if ($borrower) {
@@ -449,8 +447,6 @@ if ($borrower) {
         $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
-        # ADDED BY JF: NEW ITEMTYPE COUNT DISPLAY
-        $issued_itemtypes_count->{ $it->{'itemtype'} }++;
 
         if ( $todaysdate eq $it->{'issuedate'} or $todaysdate eq $it->{'lastreneweddate'} ) {
             push @todaysissues, $it;
@@ -472,38 +468,6 @@ if ($borrower) {
     }
 }
 
-#### ADDED BY JF FOR COUNTS BY ITEMTYPE RULES
-# FIXME: This should utilize all the issuingrules options rather than just the defaults
-# and it should be moved to a module
-my $dbh = C4::Context->dbh;
-
-# how many of each is allowed?
-my $issueqty_sth = $dbh->prepare(
-    'SELECT itemtypes.description AS description,issuingrules.itemtype,maxissueqty ' .
-    'FROM issuingrules LEFT JOIN itemtypes ON (itemtypes.itemtype=issuingrules.itemtype) ' .
-    'WHERE categorycode=?'
-);
-$issueqty_sth->execute(q{*}); # This is a literal asterisk, not a wildcard.
-
-while ( my $data = $issueqty_sth->fetchrow_hashref() ) {
-
-    # subtract how many of each this borrower has
-    $data->{'count'} = $issued_itemtypes_count->{ $data->{'description'} };  
-    $data->{'left'}  =
-      ( $data->{'maxissueqty'} -
-          $issued_itemtypes_count->{ $data->{'description'} } );
-
-    # can't have a negative number of remaining
-    if ( $data->{'left'} < 0 ) { $data->{'left'} = '0' }
-    if ( $data->{maxissueqty} <= $data->{count} ) {
-        $data->{flag} = 1;
-    }
-    if ( $data->{maxissueqty} > 0 && $data->{itemtype} !~m/^(\*|CIRC)$/ ) {
-        push @issued_itemtypes_count_loop, $data;
-    }
-}
-
-#### / JF
 
 my @values;
 my %labels;
@@ -646,7 +610,6 @@ my (undef, $roadttype_hashref) = &GetRoadTypes();
 my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
 
 $template->param(
-    issued_itemtypes_count_loop => \@issued_itemtypes_count_loop,
     lib_messages_loop => $lib_messages_loop,
     bor_messages_loop => $bor_messages_loop,
     all_messages_del  => C4::Context->preference('AllowAllMessageDeletion'),
@@ -700,6 +663,7 @@ my ($picture, $dberror) = GetPatronImage($borrower->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
 
 # get authorised values with type of BOR_NOTES
+my $dbh = C4::Context->dbh;
 my @canned_notes;
 my $sth = $dbh->prepare('SELECT * FROM authorised_values WHERE category = "BOR_NOTES"');
 $sth->execute();
