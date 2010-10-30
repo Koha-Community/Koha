@@ -68,10 +68,7 @@ function CheckAttributeTypeForm(f) {
     <div class="yui-b">
 
 <!-- TMPL_IF name="WARNING_extended_attributes_off" -->
-<div class="dialog message">Because the 'ExtendedPatronAttributes` system preference is currently OFF, extended patron attributes 
-cannot be given to patron records.  Go 
-<a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=ExtendedPatronAttributes">here</a> if you wish to turn 
-this feature on.</div>
+<div class="dialog message">Because the 'ExtendedPatronAttributes` system preference is currently not enabled, extended patron attributes cannot be given to patron records.  Go <a href="/cgi-bin/koha/admin/preferences.pl?tab=patrons">here</a> if you wish to enable this feature.</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF name="attribute_type_form" -->
