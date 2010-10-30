@@ -67,6 +67,26 @@ function PopupZ3950() {
     } 
 }
 
+function PopupMARCFieldDoc(field) {
+    if(field == 0) {
+        window.open("http://www.loc.gov/marc/bibliographic/bdleader.html");
+    } else if (field < 900) {
+        window.open("http://www.loc.gov/marc/bibliographic/bd"+field+".html");
+    } else {
+        window.open("http://www.loc.gov/marc/bibliographic/bd9xx.html");
+    }
+}
+
+function PopupUNIMARCFieldDoc(field,fieldnumber) {
+    if(field == 0) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni.htm");
+    } else if (field < 900) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#b"+field);
+    } else {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni9.htm");
+    }
+}
+
 /**
  * check if mandatory subfields are written
  */
@@ -749,7 +769,10 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             	<!-- TMPL_IF NAME="advancedMARCEditor" -->
 		<a href="#" tabindex="1" class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib"--> - Click to Expand this Tag" onclick="ExpandField('tag_<!-- TMPL_VAR NAME="tag"-->_<!-- TMPL_VAR NAME='index' --><!-- TMPL_VAR NAME="random" -->'); return false;"><!-- TMPL_VAR NAME="tag" --></a>
 		<!-- TMPL_ELSE -->
-                	<span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+                        <span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --><a 
+                 onClick="<!-- TMPL_IF NAME="MARC21" -->PopupMARCFieldDoc(<!-- TMPL_VAR NAME="tag" -->)
+                          <!-- TMPL_ELSE -->PopupUNIMARCFieldDoc(<!-- TMPL_VAR NAME="tag" -->,<!-- TMPL_VAR NAME="number" -->)
+                          <!-- /TMPL_IF -->;return false;">&nbsp;?</a></span>
 		<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="fixedfield" -->
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator1" -->" />
