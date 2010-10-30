@@ -85,7 +85,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	}
 	$(document).ready(function() {
 		$('.ajax_buttons' ).css({visibility:"visible"});
-		$("p.check").html("<strong>Select: <\/strong><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\">All<\/a> <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\">Pending<\/a> <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\">None<\/a>");
+		$("p.check").html("<strong>"+_("Select:")+" <\/strong><a id=\"CheckAll\" href=\"/cgi-bin/koha/tags/review.pl\">"+_("All")+"<\/a> <a id=\"CheckPending\" href=\"/cgi-bin/koha/tags/review.pl\">"+_("Pending")+"<\/a> <a id=\"CheckNone\" href=\"/cgi-bin/koha/tags/review.pl\">"+_("None")+"<\/a>");
 	    $("#CheckAll").click(function(){
 	        $(".checkboxed").checkCheckboxes();
 	        return false;
@@ -107,7 +107,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 					"success": count_approve // success_approve
 				});
 				$(event.target).next(".rej").removeAttr("disabled").attr("value","Reject").css("color","#000");
-				$(event.target).attr(   "value","Approved").attr("disabled","disabled").css("color","#666");
+				$(event.target).attr(   "value",_("Approved")).attr("disabled","disabled").css("color","#666");
 				return false;	// cancel submit
 			}
 			if ($(event.target).is('.rej')) {
@@ -116,11 +116,11 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 					"success": count_reject // success_reject
 				});
 				$(event.target).prev(".ok").removeAttr("disabled").attr("value","Approve").css("color","#000");
-				$(event.target).attr(   "value","Rejected").attr("disabled","disabled").css("color","#666");
+				$(event.target).attr(   "value",_("Rejected")).attr("disabled","disabled").css("color","#666");
 				return false;	// cancel submit
 			}
 			if ($(event.target).is('#test_button')) {
-				$(event.target).attr(   "value","Testing...").attr("disabled","disabled");
+				$(event.target).attr(   "value",_("Testing...")).attr("disabled","disabled");
 				$.ajax({
 					"data": {test: $('#test').attr("value")},
 					"success": success_test_call // success_reject
@@ -129,7 +129,7 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 			}
 		});
 		$("*").ajaxError(function(evt, request, settings){
-			if ((alerted +=1) <= 1){ window.alert("AJAX error (" + alerted + " alert)"); }
+			if ((alerted +=1) <= 1){ window.alert(_("AJAX error")+" (" + alerted + " alert)"); }
 		});
 	});
 //]]>
