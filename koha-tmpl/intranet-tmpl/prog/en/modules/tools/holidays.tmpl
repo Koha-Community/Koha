@@ -21,7 +21,7 @@
 		$("#showHoliday").slideDown("fast");
 		$('#showDaynameOutput').html(dayName);
 		$('#showDayname').val(dayName);
-		$('#showBranchNameOutput').html($("#branch").val());
+		$('#showBranchNameOutput').html($("#branch :selected").text());
 		$('#showBranchName').val($("#branch").val());
 		$('#showDayOutput').html(day);
 		$('#showDay').val(day);
@@ -35,14 +35,14 @@
 		$('#showHolidayType').val(holidayType);
 
 		if (holidayType == 'exception') {
-			$("#showOperationDelLabel").html('Delete this exception.');
-			$("#holtype").attr("class","key exception").html("Holiday exception");
+			$("#showOperationDelLabel").html(_('Delete this exception.'));
+			$("#holtype").attr("class","key exception").html(_("Holiday exception"));
 		} else if(holidayType == 'weekday') {
-			$("#showOperationDelLabel").html('Delete this holiday.');
-			$("#holtype").attr("class","key repeatableday").html("Repeatable holiday");
+			$("#showOperationDelLabel").html(_('Delete this holiday.'));
+			$("#holtype").attr("class","key repeatableday").html(_("Repeatable holiday"));
 		} else {
-			$("#showOperationDelLabel").html('Delete this holiday.');
-			$("#holtype").attr("class","key holiday").html("Unique holiday");
+			$("#showOperationDelLabel").html(_('Delete this holiday.'));
+			$("#holtype").attr("class","key holiday").html(_("Unique holiday"));
 		}
 		
 		if (exceptionPosibility == 1) {
@@ -58,7 +58,7 @@
 		$("#newHoliday").slideDown("fast");
 		$("#newDaynameOutput").html(dayName);
 		$("#newDayname").val(dayName);
-		$("#newBranchNameOutput").html($('#branch').val());
+		$("#newBranchNameOutput").html($('#branch :selected').text());
 		$("#newBranchName").val($('#branch').val());
 		$("#newDayOutput").html(day);
 		$("#newDay").val(day);
@@ -201,7 +201,7 @@
 			<h3>Add new holiday</h3>
 			<ol>
 			<li>
-				<strong>Library</strong>
+				<strong>Library:</strong>
 				<span id="newBranchNameOutput"></span>
 				<input type="hidden" id="newBranchName" name="newBranchName" />
 			</li>
@@ -224,7 +224,7 @@
 			<li class="radio"><input type="radio" name="newOperation" id="newOperationOnce" value="holiday" checked="checked" />
 			<label for="newOperationOnce">Holiday only on this day</label>.
 			<a href="#" class="helptext">[?]</a>
-			<div class="hint">Make a single holiday. For example, selecting August 1st, 2012 will make it holiday, but will not affect August 1st in other years.</div>
+			<div class="hint">Make a single holiday. For example, selecting August 1st, 2012 will make it a holiday, but will not affect August 1st in other years.</div>
 			</li>
 			<li class="radio"><input type="radio" name="newOperation" id="newOperationDay" value="weekday" />
 							<label for="newOperationDay">Holiday repeated every same day of the week</label>.
@@ -234,7 +234,7 @@
 			<li class="radio"><input type="radio" name="newOperation" id="newOperationYear" value="repeatable" />
 							<label for="newOperationYear">Holiday repeated yearly on the same date</label>.
 							<a href="#" class="helptext">[?]</a>
-							<div class="hint">This will take this day and month as a reference to make it holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.</div>
+							<div class="hint">This will take this day and month as a reference to make it a holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.</div>
 							</li>
 				<li class="radio">
 				<input type="checkbox" name="allBranches" id="allBranches" />
