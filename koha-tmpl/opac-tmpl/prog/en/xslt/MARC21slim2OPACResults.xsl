@@ -391,7 +391,7 @@
            </xsl:call-template>
         </xsl:if>
 
-     	<a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+        <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
@@ -440,7 +440,7 @@
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
 
-    by 
+    by <span class="author">
         <xsl:for-each select="marc:datafield[@tag=100 or @tag=700]">
             <xsl:choose>
             <xsl:when test="position()=last()">
@@ -492,6 +492,7 @@
             </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
+    </span>
     </xsl:when>
     </xsl:choose>
     </p>
