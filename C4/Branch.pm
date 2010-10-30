@@ -46,6 +46,7 @@ BEGIN {
 		&DelBranch
 		&DelBranchCategory
 	        &CheckCategoryUnique
+		&mybranch
 	);
 	@EXPORT_OK = qw( &onlymine &mybranch get_branch_code_from_name );
 }
