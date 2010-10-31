@@ -2005,7 +2005,7 @@ sub DelItemCheck {
         $error = "book_on_loan" 
     }else{
         # check it doesnt have a waiting reserve
-        $sth=$dbh->prepare("SELECT * FROM reserves WHERE found = 'W' AND itemnumber = ?");
+        $sth=$dbh->prepare("SELECT * FROM reserves WHERE (found = 'W' or found = 'T') AND itemnumber = ?");
         $sth->execute($itemnumber);
         my $reserve=$sth->fetchrow;
         if ($reserve){

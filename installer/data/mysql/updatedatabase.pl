@@ -4,7 +4,7 @@
 # Database Updater
 # This script checks for required updates to the database.
 
-# Part of the Koha Library Software www.koha.org
+# Part of the Koha Library Software www.koha-community.org
 # Licensed under the GPL.
 
 # Bugs/ToDo:
@@ -2818,6 +2818,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = '3.01.00.073';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('SET FOREIGN_KEY_CHECKS=0 ');
     $dbh->do(<<'END_SQL');
 CREATE TABLE IF NOT EXISTS `aqcontract` (
   `contractnumber` int(11) NOT NULL auto_increment,
@@ -2831,6 +2832,7 @@ CREATE TABLE IF NOT EXISTS `aqcontract` (
         REFERENCES `aqbooksellers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 END_SQL
+    $dbh->do('SET FOREIGN_KEY_CHECKS=1 ');
     print "Upgrade to $DBversion done (adding aqcontract table)\n";
     SetVersion ($DBversion);
 }
@@ -2856,6 +2858,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 $DBversion = '3.01.00.076';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do('SET FOREIGN_KEY_CHECKS=0 ');
     $dbh->do("CREATE TABLE IF NOT EXISTS `aqbasketgroups` (
                          `id` int(11) NOT NULL auto_increment,
                          `name` varchar(50) default NULL,
@@ -2868,6 +2871,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE aqbasket ADD COLUMN `basketgroupid` int(11)");
     $dbh->do("ALTER TABLE aqbasket ADD FOREIGN KEY (`basketgroupid`) REFERENCES `aqbasketgroups` (`id`) ON UPDATE CASCADE ON DELETE SET NULL");
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('pdfformat','pdfformat::layout2pages','Controls what script is used for printing (basketgroups)','','free')");
+    $dbh->do('SET FOREIGN_KEY_CHECKS=1 ');
     print "Upgrade to $DBversion done (adding basketgroups)\n";
     SetVersion ($DBversion);
 }
@@ -3578,7 +3582,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ILS-DI','0','Enable ILS-DI services. See http://your.opac.name/cgi-bin/koha/ilsdi.pl for online documentation.','','YesNo')");
 	$dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ILS-DI:AuthorizedIPs','127.0.0.1','A comma separated list of IP addresses authorized to access the web services.','','free')");
 	
-    print "Upgrade to $DBversion done (Adding ILS-DI updates and ILS-DI:Authorized_IPs)\n";
+    print "Upgrade to $DBversion done (Adding ILS-DI updates and ILS-DI:AuthorizedIPs)\n";
     SetVersion ($DBversion);
 }
 
@@ -3744,6 +3748,56 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.02.00.000";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $value = $dbh->selectrow_array("SELECT value FROM systempreferences WHERE variable = 'HomeOrHoldingBranch'");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('HomeOrHoldingBranchReturn','$value','Used by Circulation to determine which branch of an item to check checking-in items','holdingbranch|homebranch','Choice');");
+    print "Upgrade to $DBversion done (Add HomeOrHoldingBranchReturn system preference)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.02.00.001";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{DELETE FROM systempreferences WHERE variable IN (
+                'holdCancelLength',
+                'PINESISBN',
+                'sortbynonfiling',
+                'TemplateEncoding',
+                'OPACSubscriptionDisplay',
+                'OPACDisplayExtendedSubInfo',
+                'OAI-PMH:Set',
+                'OAI-PMH:Subset',
+                'libraryAddress',
+                'kohaspsuggest',
+                'OrderPdfTemplate',
+                'marc',
+                'acquisitions',
+                'MIME')
+               }
+    );
+    print "Upgrade to $DBversion done (bug 3756: remove disused system preferences)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.02.00.002";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{DELETE FROM systempreferences WHERE variable = 'OpacPrivacy'});
+    print "Upgrade to $DBversion done (bug 3881: remove unused OpacPrivacy system preference)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.02.00.003";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(q{UPDATE systempreferences SET variable = 'ILS-DI:AuthorizedIPs' WHERE variable = 'ILS-DI:Authorized_IPs'});
+    print "Upgrade to $DBversion done (correct ILS-DI:AuthorizedIPs)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.02.00.004";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (3.2.0 general release)\n";
+    SetVersion ($DBversion);
+}
 
 =item DropAllForeignKeys($table)
 

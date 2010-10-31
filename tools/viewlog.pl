@@ -53,7 +53,6 @@ my $info     = $input->param("info");
 my $datefrom = $input->param("from");
 my $dateto   = $input->param("to");
 my $basename = $input->param("basename");
-my $mime     = $input->param("MIME");
 #my $del      = $input->param("sep");
 my $output   = $input->param("output") || "screen";
 my $src      = $input->param("src");    # this param allows us to be told where we were called from -fbcit
@@ -102,29 +101,7 @@ $template->param(
 				       debug => $debug,
 	C4::Search::enabled_staff_search_views,
 );
-#
-#### This code was never really used - maybe some day some will fix it ###
-#my @mime = ( C4::Context->preference("MIME") );
-#my $CGIextChoice = CGI::scrolling_list(
-#        -name     => 'MIME',
-#        -id       => 'MIME',
-#        -values   => \@mime,
-#        -size     => 1,
-#        -multiple => 0
-#);
-#my @dels         = ( C4::Context->preference("delimiter") );
-#my $CGIsepChoice = CGI::scrolling_list(
-#        -name     => 'sep',
-#        -id       => 'sep',
-#        -values   => \@dels,
-#        -size     => 1,
-#        -multiple => 0
-#);
-#$template->param(
-#        CGIextChoice => $CGIextChoice,
-#        CGIsepChoice => $CGIsepChoice,
-#);
-#
+
 if ($do_it) {
 
     my $results = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info);

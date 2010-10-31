@@ -15,7 +15,7 @@
 # Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 # Suite 330, Boston, MA  02111-1307 USA
 #
-# for context, see http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=2691
+# for context, see http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2691
 
 use strict;
 use warnings;

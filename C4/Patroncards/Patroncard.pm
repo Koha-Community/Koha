@@ -127,7 +127,7 @@ sub draw_text {
             while (1) {
 #                $line =~ m/^.*(\s\b.*\b\s*|\s&|\<\b.*\b\>)$/; # original regexp... can be removed after dev stage is over
                 $line =~ m/^.*(\s.*\s*|\s&|\<.*\>)$/;
-                warn sprintf('Line wrap failed. DEBUG INFO: Data: \'%s\'\n Method: C4::Patroncards->draw_text Additional Information: Line wrap regexp failed. (Please file in this information in a bug report at http://bugs.koha.org', $line) and last WRAP_LINES if !$1;
+                warn sprintf('Line wrap failed. DEBUG INFO: Data: \'%s\'\n Method: C4::Patroncards->draw_text Additional Information: Line wrap regexp failed. (Please file in this information in a bug report at http://bugs.koha-community.org', $line) and last WRAP_LINES if !$1;
                 $trim = $1 . $trim;
                 $line =~ s/$1//;
                 $string_width = C4::Creators::PDF->StrWidth($line, $text_attribs->{'font'}, $text_attribs->{'font_size'});

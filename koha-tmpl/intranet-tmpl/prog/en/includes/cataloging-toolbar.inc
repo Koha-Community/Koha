@@ -16,10 +16,6 @@
 
 	function yuiToolbar() {
 	
-    <!-- TMPL_IF NAME="NOTMARC" -->
-	    new YAHOO.widget.Button("newrecord");
-	<!-- TMPL_ELSE -->
-	
 		var newmenu = [
 			{ text: _("Default Framework"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=" },
 			<!-- TMPL_LOOP NAME="frameworkcodeloop" -->{ text: "<!-- TMPL_VAR name="frameworktext" -->", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=<!-- TMPL_VAR name="value" -->"},
@@ -64,9 +60,6 @@
 	</script>
 	
   <div id="newmenuc">
-    <!-- TMPL_IF NAME="NOTMARC" -->
-		<a id="newrecord" href="/cgi-bin/koha/cataloging/addbiblio.pl">New Record</a>
-	<!-- TMPL_ELSE -->
 		<form name="f" action="addbiblio.pl" method="post">
 		<label for="frameworkcode">New Record with framework:</label>
 			<select name="frameworkcode" id="frameworkcode">
@@ -80,7 +73,6 @@
 			<input type="submit" value="Add Record Without Search" />
 		</form>
         <a id="z3950search" onclick="PopupZ3950(); return false;">Z39.50 Search</a>
-    <!-- /TMPL_IF -->  
 
   </div>
 </div>

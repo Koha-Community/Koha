@@ -1439,7 +1439,8 @@ sub AddReturn {
     my $item = GetItem($itemnumber) or die "GetItem($itemnumber) failed";
         # full item data, but no borrowernumber or checkout info (no issue)
         # we know GetItem should work because GetItemnumberFromBarcode worked
-    my $hbr = $item->{C4::Context->preference("HomeOrHoldingBranch")} || '';
+    my $hbr      = C4::Context->preference("HomeOrHoldingBranchReturn") || "homebranch";
+    $hbr = $item->{$hbr} || '';
         # item must be from items table -- issues table has branchcode and issuingbranch, not homebranch nor holdingbranch
 
     my $borrowernumber = $borrower->{'borrowernumber'} || undef;    # we don't know if we had a borrower or not

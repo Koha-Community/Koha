@@ -25,12 +25,6 @@ UPDATE systempreferences SET explanation='Тека «includes» може бут�
 UPDATE systempreferences SET explanation='Адреса електронної пошти, на яку приходять запити відвідувачів щодо модифікації їх облікових записів' WHERE variable='KohaAdminEmailAddress';	
 -- Define the email address where patron modification requests are sent
 
-UPDATE systempreferences SET explanation='Адреса що використовується при друці квитанцій, прострочень тощо, якщо відрізняється від фізичної адреси' WHERE variable='libraryAddress';	
--- The address to use for printing receipts, overdues, etc. if different than physical address
-
-UPDATE systempreferences SET explanation='Програма за умовчанням для експорту файлів звітів' WHERE variable='MIME';	
--- Define the default application for exporting report data
-
 UPDATE systempreferences SET explanation='Якщо вімкнуто, то будуть відключені зображення типів одиниць' WHERE variable='noItemTypeImages';	
 -- If ON, disables item-type images
 
@@ -57,9 +51,6 @@ UPDATE systempreferences SET explanation='Версія бази даних Ко�
 
 
 -- Acquisitions - Надходження
-
-UPDATE systempreferences SET explanation='Звичайні (normal) придбання на основі статей витрат або ж прості (simple) надходження бібліографічних даних' WHERE variable='acquisitions';
--- Choose Normal, budget-based acquisitions, or Simple bibliographic-data acquisitions
 
 UPDATE systempreferences SET explanation='Якщо ввімкнуто, то висилати пропозиції відвідувачів електронною поштою, а не керувати ними у надходженнях' WHERE variable='emailPurchaseSuggestions';
 -- 	If ON, patron suggestions are emailed rather than managed in Acquisitions
@@ -196,8 +187,6 @@ UPDATE systempreferences SET explanation='МАРК-поле/підполе, як
 UPDATE systempreferences SET explanation='Визначення, як буде відображатися МАРК-запис' WHERE variable='LabelMARCView';
 -- 	Define how a MARC record will display
 
-UPDATE systempreferences SET explanation='Увімкнення підтримки МАРК-стандарту' WHERE variable='marc';
--- 	Turn on MARC support
 
 UPDATE systempreferences SET explanation='Визначення глобального МАРК-стандарту (MARC21 чи UNIMARC/Укрмарк), що використовується для кодування символів' WHERE variable='marcflavour';
 -- 	Define global MARC flavor (MARC21 or UNIMARC) used for character encoding
@@ -258,9 +247,6 @@ UPDATE systempreferences SET explanation='Виберіть режим для ш�
 
 UPDATE systempreferences SET explanation='Якщо встановлено, дозволяється вказувати загальну статичну дату для усіх видач' WHERE variable='globalDueDate';
 -- 	If set, allows a global static due date for all checkouts
-
-UPDATE systempreferences SET explanation='Вказується, скільки днів має пройти до відміни резервування' WHERE variable='holdCancelLength';
--- 	Specify how many days before a hold is canceled
 
 UPDATE systempreferences SET explanation='Використовується в обігу для визначення який підрозділ примірника перевіряти при включених незалежних підрозділах, і при пошуку, щоб визначити, які підрозділи вибирати для наявності' WHERE variable='HomeOrHoldingBranch';
 -- 	Used by Circulation to determine which branch of an item to check with independent branches on, and by search to determine which branch to choose for availability
@@ -371,12 +357,6 @@ UPDATE systempreferences SET explanation='Якщо встановлено, ви�
 -- UPDATE systempreferences SET explanation='' WHERE variable='OAI-PMH:MaxCount';
 -- 	OAI-PMH maximum number of records by answer to ListRecords and ListIdentifiers queries
 
--- UPDATE systempreferences SET explanation='' WHERE variable='OAI-PMH:Set';
--- 	OAI-PMH exported set, the set name is followed by a comma and a short description, one set by line
-
--- UPDATE systempreferences SET explanation='' WHERE variable='OAI-PMH:Subset';
--- 	Restrict answer to matching raws of the biblioitems table EXPERIMENTAL
-
 
 -- OPAC - Електронний каталог
 
@@ -388,9 +368,6 @@ UPDATE systempreferences SET explanation='Якщо встановлено, ви�
 
 -- UPDATE systempreferences SET explanation='Якщо увімкнуто, то Показувати чи приховувати „втрачені“ одиниці у ЕК.' WHERE variable='hidelostitems';
 -- 	If ON, disables display of"lost" items in OPAC.
-
--- UPDATE systempreferences SET explanation='' WHERE variable='kohaspsuggest';
--- 	Track search queries, turn on by defining host:dbname:user:pass
 
 -- UPDATE systempreferences SET explanation='Електронічний каталог бібліотеки', 'Ім’я бібліотеки або повідомлення, яке буде показане на головній сторінці електронічнго каталогу' WHERE variable='LibraryName';
 -- 	Define the library name as displayed on the OPAC
@@ -602,10 +579,6 @@ UPDATE systempreferences SET explanation='Якщо встановлено, ви�
 -- UPDATE systempreferences SET explanation='Якщо увімкнуто, то ' WHERE variable='QueryWeightFields';
 -- 	If ON, enables field weighting
 
--- UPDATE systempreferences SET explanation='Сортувати результати пошуку за необліковуваними МАРК-символами' WHERE variable='sortbynonfiling';
--- 	Sort search results by MARC nonfiling characters (deprecated)
-
-
 -- StaffClient - Клієнт для бібліотекарів
 
 -- UPDATE systempreferences SET explanation='Введіть назву таблиці стилів кольорів для внутрішньобібліотечного інтерфейсу' WHERE variable='intranetcolorstylesheet';
@@ -625,9 +598,6 @@ UPDATE systempreferences SET explanation='Якщо встановлено, ви�
 
 -- UPDATE systempreferences SET explanation='Вибір варіанту шаблону для внутрішньобібліотечного інтерфейсу' WHERE variable='template';
 -- 	Define the preferred staff interface template
-
--- UPDATE systempreferences SET explanation='Зазначення кодування шаблонів' WHERE variable='TemplateEncoding';
--- 	Globally define the default character encoding
 
 -- UPDATE systempreferences SET explanation='' WHERE variable='yuipath';
 -- 	Insert the path to YUI libraries, choose local if you use koha offline
@@ -688,12 +658,6 @@ UPDATE systempreferences SET explanation='Якщо встановлено, ви�
 
 
 -- Serials --------------------------------------------------------------------------------------------------------------------------------
-
--- UPDATE systempreferences SET explanation='Якщо увімкнуто, то ' WHERE variable='OPACDisplayExtendedSubInfo';
--- 	If ON, extended subscription information is displayed in the OPAC
-
--- UPDATE systempreferences SET explanation='Вказується ' WHERE variable='OPACSubscriptionDisplay';
--- 	Specify how to display subscription information in the OPAC
 
 UPDATE systempreferences SET explanation='Якщо ввімкнуто, додає нову пропозицію при відновленні передплати серійного видання' WHERE variable='RenewSerialAddsSuggestion';
 -- 	If ON, adds a new suggestion at serial subscription renewal 

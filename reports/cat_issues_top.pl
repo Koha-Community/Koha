@@ -53,7 +53,6 @@ $filters[2]=format_date_in_iso($filters[2]);
 $filters[3]=format_date_in_iso($filters[3]);
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-my $mime = $input->param("MIME");
 #warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
@@ -119,15 +118,10 @@ if ($do_it) {
     my %select;
     my $req;
     
-    my @mime = ( C4::Context->preference("MIME") );
-#	foreach my $mime (@mime){
-#		warn "".$mime;
-#	}
-    
     my $CGIextChoice=CGI::scrolling_list(
                 -name     => 'MIME',
                 -id       => 'MIME',
-                -values   => \@mime,
+                -values   => ['CSV'], # FIXME translation
                 -size     => 1,
                 -multiple => 0 );
     

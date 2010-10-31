@@ -95,7 +95,6 @@ my $show_actual  = $input->param('show_actual');
 my $show_percent = $input->param('show_percent');
 my $output       = $input->param("output");
 my $basename     = $input->param("basename");
-my $mime         = $input->param("MIME");
 my $del          = $input->param("sep");
 
 my $show_mine       = $input->param('show_mine') ;
@@ -332,11 +331,10 @@ foreach my $n (@names) {
 # ------------------------------------------------------------
 #         DEFAULT DISPLAY BEGINS
 
-my @mime = ( C4::Context->preference("MIME") );
 my $CGIextChoice = CGI::scrolling_list(
     -name     => 'MIME',
     -id       => 'MIME',
-    -values   => \@mime,
+    -values   => ['CSV'], # FIXME translation
     -size     => 1,
     -multiple => 0
 );

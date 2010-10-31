@@ -61,7 +61,6 @@ my $monthsel = $input->param("PeriodMonthSel");
 my $calc     = $input->param("Cellvalue");
 my $output   = $input->param("output");
 my $basename = $input->param("basename");
-my $mime     = $input->param("MIME");
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
 	template_name => $fullreportname,
 	query => $input,
@@ -149,13 +148,10 @@ foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
 	push @ccodes, { code => $_, description => $ccodes->{$_} };
 }
 
-# various
-my @mime = (C4::Context->preference("MIME"));
-
 my $CGIextChoice=CGI::scrolling_list(
 	-name     => 'MIME',
 	-id       => 'MIME',
-	-values   => \@mime,
+	-values   => ['CSV'], # FIXME translation
 	-size     => 1,
 	-multiple => 0 );
     

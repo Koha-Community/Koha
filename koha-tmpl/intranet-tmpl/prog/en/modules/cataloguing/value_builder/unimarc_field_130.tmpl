@@ -1,335 +1,332 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 130 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 130 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 130 builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Specific Material Designation:</td>
+		<td><label for="f1">Specific Material Designation:</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 			<!-- TMPL_IF name="f1a" -->
-				<option value="a" SELECTED>aperture card</option>
+				<option value="a" selected="selected">aperture card</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">aperture card</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1b" -->
-				<option value="b" SELECTED>microform cartridge</option>
+				<option value="b" selected="selected">microform cartridge</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">microform cartridge</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1c" -->
-				<option value="c" SELECTED>microfilm cassette</option>
+				<option value="c" selected="selected">microfilm cassette</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">microfilm cassette</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1d" -->
-				<option value="d" SELECTED>microfilm reel</option>
+				<option value="d" selected="selected">microfilm reel</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">microfilm reel</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1e" -->
-				<option value="e" SELECTED>microfiche</option>
+				<option value="e" selected="selected">microfiche</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">microfiche</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1f" -->
-				<option value="f" SELECTED>microfiche cassette</option>
+				<option value="f" selected="selected">microfiche cassette</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">microfiche cassette</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1g" -->
-				<option value="g" SELECTED>micro opaque</option>
+				<option value="g" selected="selected">micro opaque</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">micro opaque</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1h" -->
-				<option value="h" SELECTED>microfilm slip</option>
+				<option value="h" selected="selected">microfilm slip</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">microfilm slip</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f1z" -->
-				<option value="z" SELECTED>other</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Polarity:</td>
+		<td><label for="f2">Polarity:</label></td>
 		<td>
-			<select name="f2" size="1">
+			<select name="f2" id="f2" size="1">
 
 			<!-- TMPL_IF name="f2a" -->
-				<option value="a" SELECTED>positive</option>
+				<option value="a" selected="selected">positive</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">positive</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2b" -->
-				<option value="b" SELECTED>negative</option>
+				<option value="b" selected="selected">negative</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">negative</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2c" -->
-				<option value="c" SELECTED>unknown</option>
+				<option value="c" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f2d" -->
-				<option value="d" SELECTED>mixed polarity</option>
+				<option value="d" selected="selected">mixed polarity</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">mixed polarity</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Dimensions:</td>
+		<td><label for="f3">Dimensions:</label></td>
 		<td>
-			<select name="f3" size="1">
+			<select name="f3" id="f3" size="1">
 
 			<!-- TMPL_IF name="f3 " -->
-				<option value=" " SELECTED>non required value</option>
+				<option value=" " selected="selected">non required value</option>
 			<!-- TMPL_ELSE -->
 				<option value=" ">non required value</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3a" -->
-				<option value="a" SELECTED>8 mm (microfilm)</option>
+				<option value="a" selected="selected">8 mm (microfilm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">8 mm (microfilm)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3d" -->
-				<option value="d" SELECTED>16 mm (microfilm)</option>
+				<option value="d" selected="selected">16 mm (microfilm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">16 mm (microfilm)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3f" -->
-				<option value="f" SELECTED>35 mm (microfilm)</option>
+				<option value="f" selected="selected">35 mm (microfilm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="f">35 mm (microfilm)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3g" -->
-				<option value="g" SELECTED>70 mm (microfilm)</option>
+				<option value="g" selected="selected">70 mm (microfilm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="g">70 mm (microfilm)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3h" -->
-				<option value="h" SELECTED>105 mm (microfilm)</option>
+				<option value="h" selected="selected">105 mm (microfilm)</option>
 			<!-- TMPL_ELSE -->
 				<option value="h">105 mm (microfilm)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3l" -->
-				<option value="l" SELECTED>3 x 5 in.</option>
+				<option value="l" selected="selected">3 x 5 in.</option>
 			<!-- TMPL_ELSE -->
 				<option value="l">3 x 5 in.</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3m" -->
-				<option value="m" SELECTED>4 x 6 in.</option>
+				<option value="m" selected="selected">4 x 6 in.</option>
 			<!-- TMPL_ELSE -->
 				<option value="m">4 x 6 in.</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3o" -->
-				<option value="o" SELECTED>6 x 9 in.</option>
+				<option value="o" selected="selected">6 x 9 in.</option>
 			<!-- TMPL_ELSE -->
 				<option value="o">6 x 9 in.</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3p" -->
-				<option value="p" SELECTED>9 x 19 cm</option>
+				<option value="p" selected="selected">9 x 19 cm</option>
 			<!-- TMPL_ELSE -->
 				<option value="p">9 x 19 cm</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f3z" -->
-				<option value="z" SELECTED>other</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Reduction ratio:</td>
+		<td><label for="f4">Reduction ratio:</label></td>
 		<td>
-			<select name="f4" size="1">		
+			<select name="f4" id="f4" size="1">		
 			<!-- TMPL_IF name="f4a" -->
-				<option value="a" SELECTED>low reduction</option>
+				<option value="a" selected="selected">low reduction</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">low reduction</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4b" -->
-				<option value="b" SELECTED>Normal (16x - 30x)</option>
+				<option value="b" selected="selected">Normal (16x - 30x)</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">Normal (16x - 30x)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4c" -->
-				<option value="c" SELECTED>high (31x - 60x)</option>
+				<option value="c" selected="selected">high (31x - 60x)</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">high (31x - 60x)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4d" -->
-				<option value="d" SELECTED>very high (61x - 90x)</option>
+				<option value="d" selected="selected">very high (61x - 90x)</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">very high (61x - 90x)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4e" -->
-				<option value="e" SELECTED>ultrahigh (91x -)</option>
+				<option value="e" selected="selected">ultrahigh (91x -)</option>
 			<!-- TMPL_ELSE -->
 				<option value="e">ultrahigh (91x -)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f4v" -->
-				<option value="v" SELECTED>varies</option>
+				<option value="v" selected="selected">varies</option>
 			<!-- TMPL_ELSE -->
 				<option value="v">varies</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
     <tr>
-                <td>Specific reduction ratio</td>
-                <td><input type="text" name="f5" maxlength=3 size=4 
-value="<!-- TMPL_VAR name="f5" -->"></td>
+                <td><label for="f5">Specific reduction ratio</label></td>
+                <td><input type="text" name="f5" id="f5" maxlength="3" size="4" 
+value="<!-- TMPL_VAR name="f5" -->" /></td>
         </tr>
 
-		</td></tr>
 	<tr>
-		<td>Colour:</td>
+		<td><label for="f6">Color:</label></td>
 		<td>
-			<select name="f6" size="1">
+			<select name="f6" id="f6" size="1">
 			<!-- TMPL_IF name="f6a" -->
-				<option value="a" SELECTED>monochrome</option>
+				<option value="a" selected="selected">monochrome</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">monochrome</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6b" -->
-				<option value="b" SELECTED>colour</option>
+				<option value="b" selected="selected">color</option>
 			<!-- TMPL_ELSE -->
-				<option value="b">colour</option>
+				<option value="b">color</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f6v" -->
-				<option value="v" SELECTED>varies</option>
+				<option value="v" selected="selected">varies</option>
 			<!-- TMPL_ELSE -->
 				<option value="v">varies</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Emulsion on film:</td>
+		<td><label for="f7">Emulsion on film:</label></td>
 		<td>
-			<select name="f7" size="1">
+			<select name="f7" id="f7" size="1">
 			<!-- TMPL_IF name="f7a" -->
-				<option value="a" SELECTED>silver halide</option>
+				<option value="a" selected="selected">silver halide</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">silver halide</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7b" -->
-				<option value="b" SELECTED>diazo</option>
+				<option value="b" selected="selected">diazo</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">diazo</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7c" -->
-				<option value="c" SELECTED>vesicular</option>
+				<option value="c" selected="selected">vesicular</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">vesicular</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7d" -->
-				<option value="d" SELECTED>unknown</option>
+				<option value="d" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="d">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7u" -->
-				<option value="u" SELECTED>mixed emulsion</option>
+				<option value="u" selected="selected">mixed emulsion</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">mixed emulsion</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7x" -->
-				<option value="x" SELECTED>not applicable</option>
+				<option value="x" selected="selected">not applicable</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f7z" -->
-				<option value="z" SELECTED>other</option>
+				<option value="z" selected="selected">other</option>
 			<!-- TMPL_ELSE -->
 				<option value="z">other</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Generation:</td>
+		<td><label for="f8">Generation:</label></td>
 		<td>
-			<select name="f8" size="1">
+			<select name="f8" id="f8" size="1">
 			<!-- TMPL_IF name="f8a" -->
-				<option value="a" SELECTED>first generation (Master)</option>
+				<option value="a" selected="selected">first generation (Master)</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">first generation (Master)</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8b" -->
-				<option value="b" SELECTED>printing master</option>
+				<option value="b" selected="selected">printing master</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">printing master</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8c" -->
-				<option value="c" SELECTED>service copy</option>
+				<option value="c" selected="selected">service copy</option>
 			<!-- TMPL_ELSE -->
 				<option value="c">service copy</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f8v" -->
-				<option value="v" SELECTED>mixed generations</option>
+				<option value="v" selected="selected">mixed generations</option>
 			<!-- TMPL_ELSE -->
 				<option value="v">mixed generations</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
 	<tr>
-		<td>Base of film:</td>
+		<td><label for="f9">Base of film:</label></td>
 		<td>
-			<select name="f9" size="1">
+			<select name="f9" id="f9" size="1">
 			<!-- TMPL_IF name="f9a" -->
-				<option value="a" SELECTED>safety base</option>
+				<option value="a" selected="selected">safety base</option>
 			<!-- TMPL_ELSE -->
 				<option value="a">safety base</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9b" -->
-				<option value="b" SELECTED>not a safety base</option>
+				<option value="b" selected="selected">not a safety base</option>
 			<!-- TMPL_ELSE -->
 				<option value="b">not a safety base</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9u" -->
-				<option value="u" SELECTED>unknown</option>
+				<option value="u" selected="selected">unknown</option>
 			<!-- TMPL_ELSE -->
 				<option value="u">unknown</option>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_IF name="f9x" -->
-				<option value="x" SELECTED>not applicable</option>
+				<option value="x" selected="selected">not applicable</option>
 			<!-- TMPL_ELSE -->
 				<option value="x">not applicable</option>
 			<!-- /TMPL_IF -->
 			</select>
 		</td></tr>
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
 	function report() {
 	    document.f_pop.f5.value=document.f_pop.f5.value+'   ';
 	    document.f_pop.f5.value=document.f_pop.f5.value.substring(0,3);
@@ -339,6 +336,7 @@ value="<!-- TMPL_VAR name="f5" -->"></td>
 	    window.close();
 	    return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

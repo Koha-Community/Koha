@@ -3,7 +3,7 @@
 # Script for handling import of MARC data into Koha db
 #   and Z39.50 lookups
 
-# Koha library project  www.koha.org
+# Koha library project  www.koha-community.org
 
 # Licensed under the GPL
 

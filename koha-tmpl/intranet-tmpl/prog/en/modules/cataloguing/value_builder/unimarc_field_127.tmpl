@@ -1,34 +1,30 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 127 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 127 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 127 builder</h3>
+<form name="f_pop" action="">
 <table>
-<tr>(Complete with 0 on the left)</tr>
-<tr>          <td>Hours:</td>
-                         <td><input type="text" name="f1" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f1" -->"></td>
-          <td>Minutes:</td>
-                         <td><input type="text" name="f2" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f2" -->"></td>
-          <td>Seconds:</td>
-                         <td><input type="text" name="f3" maxlength=2
-                         size=3
-                   value="<!-- TMPL_VAR name="f3" -->"></td>
+<tr><th colspan="9">(Complete with 0 on the left)</th></tr>
+<tr>          <td><label for="f1">Hours:</label></td>
+                         <td><input type="text" name="f1" id="f1" maxlength="2"
+                         size="3"
+                   value="<!-- TMPL_VAR name="f1" -->" /></td>
+          <td><label for="f2">Minutes:</label></td>
+                         <td><input type="text" name="f2" id="f2" maxlength="2"
+                         size="3"
+                   value="<!-- TMPL_VAR name="f2" -->" /></td>
+          <td><label for="f3">Seconds:</label></td>
+                         <td><input type="text" name="f3" id="f3" maxlength="2"
+                         size="3"
+                   value="<!-- TMPL_VAR name="f3" -->" /></td>
 </tr>
-
-
-	<tr><td colspan=2><input type="button" value="OK"  onClick="javascript:report()"></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
-<script>
+<script type="text/javascript">
+//<![CDATA[
 	function report() {
 document.f_pop.f1.value=document.f_pop.f1.value+'   ';
 document.f_pop.f2.value=document.f_pop.f2.value+'  ';
@@ -48,6 +44,7 @@ document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
 		self.close();
 		return false;
 	}
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

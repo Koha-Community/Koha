@@ -31,7 +31,7 @@ Your locale should be set to UTF-8, as should Apache2 and MySQL 5.
 This step is VERY IMPORTANT for a UNICODE compliant system. Please
 read over the following document carefully:
 
-http://wiki.koha.org/doku.php?id=encodingscratchpad
+http://wiki.koha-community.org/wiki/Encoding_and_Character_Sets_in_Koha
 
 You can verify your system locale by typing the following command:
 
@@ -371,6 +371,7 @@ UPGRADE
 If you are upgrading from a previous installation of Koha 3, you can
 use the following:
 
+ ./koha_perl_deps.pl -u -m # to identify new Perl dependencies
  perl Makefile.PL --prev-install-log /path/to/koha-install-log
  make
  make test

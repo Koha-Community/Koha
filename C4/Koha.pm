@@ -1330,6 +1330,7 @@ sub _isbn_cleanup ($) {
     my $isbn = Business::ISBN->new( shift );
     return undef unless $isbn;
     $isbn = $isbn->as_isbn10 if $isbn->type eq 'ISBN13';
+    return undef unless $isbn;
     $isbn = $isbn->as_string;
     $isbn =~ s/-//g;
     return $isbn;

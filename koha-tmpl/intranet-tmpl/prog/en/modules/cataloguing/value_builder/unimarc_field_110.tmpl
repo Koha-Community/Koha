@@ -1,18 +1,15 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<html>
-<head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>UNIMARC_Field 110 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>UNIMARC Field 110 builder</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 </head>
-<body>
-<form name="f_pop">
+<body style="padding:1em;">
+<h3>UNIMARC Field 110 builder</h3>
+<form name="f_pop" action="">
 <table>
 	<tr>
-		<td>Type of continuing resource designator</td>
+		<td><label for="f1">Type of continuing resource designator</label></td>
 		<td>
-			<select name="f1" size="1">
+			<select name="f1" id="f1" size="1">
 			<!-- TMPL_IF name="f1|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -45,9 +42,9 @@
 	</tr>
 
 	<tr>
-		<td>Frequency of issue</td>
+		<td><label for="f2">Frequency of issue</label></td>
 		<td>
-			<select name="f2" size="1">
+			<select name="f2" id="f2" size="1">
 			<!-- TMPL_IF name="f2|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -155,9 +152,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td>Regularity</td>
+		<td><label for="f3">Regularity</label></td>
 		<td>
-			<select name="f3" size="1">
+			<select name="f3" id="f3" size="1">
 			<!-- TMPL_IF name="f3|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -192,9 +189,9 @@
 	</tr>
 
 	<tr>
-		<td>Type of material code</td>
+		<td><label for="f4">Type of material code</label></td>
 		<td>
-			<select name="f4" size="1">
+			<select name="f4" id="f4" size="1">
 			<!-- TMPL_IF name="f4|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -327,14 +324,14 @@
 
         </tr>
    <tr>
-                <td>Nature of contents code</td>
-                <td><input type="text" name="f5" maxlength="3" size="4" value="<!-- TMPL_VAR name="f5" -->"></td>
+                <td><label for="f5">Nature of contents code</label></td>
+                <td><input type="text" name="f5" id="f5" maxlength="3" size="4" value="<!-- TMPL_VAR name="f5" -->" /></td>
 
 	</tr>
 	<tr>
-		<td>Conference publication indicator</td>
+		<td><label for="f6">Conference publication indicator</label></td>
 		<td>
-			<select name="f6" size="1">
+			<select name="f6" id="f6" size="1">
 			<!-- TMPL_IF name="f6|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -354,10 +351,10 @@
 				</select>
 		</td>
 	</tr>
-
-			<td>Title-page availability code</td>
+	<tr>
+			<td><label for="f7">Title-page availability code</label></td>
 		<td>
-			<select name="f7" size="1">
+			<select name="f7" id="f7" size="1">
 			<!-- TMPL_IF name="f7|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -439,9 +436,9 @@
 	</tr>
 
 	<tr>
-		<td>Index availability code</td>
+		<td><label for="f8">Index availability code</label></td>
 		<td>
-			<select name="f8" size="1">
+			<select name="f8" id="f8" size="1">
 			<!-- TMPL_IF name="f8|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -569,9 +566,9 @@
 		</td>
 	</tr>
 	<tr>
-		<td>Cumulative index availability code</td>
+		<td><label for="f9">Cumulative index availability code</label></td>
 		<td>
-			<select name="f9" size="1">
+			<select name="f9" id="f9" size="1">
 			<!-- TMPL_IF name="f9|" -->
                             <option value="|" selected="selected">|- Filling character</option>
                         <!-- TMPL_ELSE -->
@@ -591,11 +588,11 @@
 				</select>
 		</td>
 	</tr>
-
-	<tr><td colspan="2"><input type="button" value="OK"  onclick="report();" /></td></tr>
 </table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
 <script type="text/javascript">
+//<![CDATA[
     function report() {
         document.f_pop.f5.value=document.f_pop.f5.value+'   ';
         document.f_pop.f5.value=document.f_pop.f5.value.substring(0,3);
@@ -605,6 +602,7 @@
         self.close();
         return false;
     }
+//]]>
 </script>
-</body>
-</html>
+
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

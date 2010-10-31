@@ -4,7 +4,7 @@
 </head>
 <body style="padding:1em;">
 <h3>000 - Leader</h3>
-<form name="f_pop" onsubmit="report()">
+<form name="f_pop" onsubmit="report()" action="">
 <input type="hidden" name="plugin_name" value="marc21_leader_authorities.pl" />
 <table>
 	<tr>
@@ -57,7 +57,7 @@
 	<tr>
 		<td><label for="f6">6- Type of record</label></td>
 		<td>
-            <input name="f6" value="z" type="hidden" />
+            <input name="f6" id="f6" value="z" type="hidden" />
             z- Authority data
 		</td>
 	</tr>
@@ -86,6 +86,7 @@
 	<tr>
 		<td>10-16 indicator/subfields/size</td>
 		<td>(auto-filled)</td>
+	</tr>
 	<tr>
 		<td><label for="f17">17- Encoding level</label></td>
 		<td>
@@ -112,7 +113,7 @@
 	<tr>
 		<td>20-24 entry map &amp; lengths</td>
 		<td>(auto-filled)</td>
-	<tr>
+	</tr>
 
 </table>
 <fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>

@@ -52,10 +52,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $marc_p = C4::Context->boolean_preference("marc");
-
 $template->param(
-    NOTMARC       => !$marc_p,
     authtypesloop => \@authtypesloop
 );
 

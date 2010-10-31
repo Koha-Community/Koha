@@ -51,7 +51,6 @@ my $lccndigits  = $input->param("lccndigits");
 my $cotedigits  = $input->param("cotedigits");
 my $output      = $input->param("output");
 my $basename    = $input->param("basename");
-my $mime        = $input->param("MIME");
 our $sep        = $input->param("sep");
 $sep = "\t" if ($sep eq 'tabulation');
 my $item_itype;
@@ -159,7 +158,7 @@ if ($do_it) {
 		push @locations, { code => $_, description => "$_ - " . $locations->{$_} };
 	}
 	
-	my @mime  = ( map { +{type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
+	my @mime  = ( map { +{type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
 	
 	$template->param(hasdewey=>$hasdewey,
 					haslccn   => $haslccn,
