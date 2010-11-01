@@ -1791,10 +1791,15 @@ CREATE TABLE `subscriptionhistory` (
 DROP TABLE IF EXISTS `subscriptionroutinglist`;
 CREATE TABLE `subscriptionroutinglist` (
   `routingid` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) default NULL,
+  `borrowernumber` int(11) NOT NULL,
   `ranking` int(11) default NULL,
-  `subscriptionid` int(11) default NULL,
-  PRIMARY KEY  (`routingid`)
+  `subscriptionid` int(11) NOT NULL,
+  PRIMARY KEY  (`routingid`),
+  UNIQUE (`subscriptionid`, `borrowernumber`),
+  CONSTRAINT `subscriptionroutinglist_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
+    ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `subscriptionroutinglist_ibfk_2` FOREIGN KEY (`subscriptionid`) REFERENCES `subscription` (`subscriptionid`)
+    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
