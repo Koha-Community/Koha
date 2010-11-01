@@ -1,7 +1,6 @@
 <form name="f" method="get" action="auth_finder.pl">
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
-            <input type="hidden" name="nbstatements" value="<!-- TMPL_VAR NAME="nbstatements" -->" />
             <input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
                 <fieldset class="rows"><ol><li>
                     <span class="label">Authority type</span>
