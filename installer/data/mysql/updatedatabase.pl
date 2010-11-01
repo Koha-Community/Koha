@@ -3814,6 +3814,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DELETE FROM subscriptionroutinglist
               WHERE routingid IN (SELECT routingid FROM del_subscriptionroutinglist);");
     $dbh->do("ALTER TABLE subscriptionroutinglist ADD UNIQUE (subscriptionid, borrowernumber);");
+    $dbh->do("ALTER TABLE subscriptionroutinglist 
+                ADD CONSTRAINT `subscriptionroutinglist_ibfk_1` FOREIGN KEY (`borrowernumber`) 
+                REFERENCES `borrowers` (`borrowernumber`)
+                ON DELETE CASCADE ON UPDATE CASCADE");
+    $dbh->do("ALTER TABLE subscriptionroutinglist 
+                ADD CONSTRAINT `subscriptionroutinglist_ibfk_2` FOREIGN KEY (`subscriptionid`) 
+                REFERENCES `subscription` (`subscriptionid`)
+                ON DELETE CASCADE ON UPDATE CASCADE");
     print "Upgrade to $DBversion done (Make subscriptionroutinglist more strict)\n";
     SetVersion ($DBversion);
 }
