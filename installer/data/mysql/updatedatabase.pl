@@ -4598,10 +4598,24 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+
 $DBversion = "3.07.00.007";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE items MODIFY materials text;");
     print "Upgrade to $DBversion done alter items.material from varchar(10) to text \n";
+    SetVersion($DBversion);
+}
+
+$DBversion = '3.07.00.008';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    if (C4::Context->preference("marcflavour") eq 'MARC21') {
+        if (C4::Context->preference("opaclanguages") eq "de") {
+            $dbh->do("INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES ('545', 'Fußnote zu biografischen oder historischen Daten', 'Fußnote zu biografischen oder historischen Daten', 1, 0, NULL, '');");
+        } else {
+            $dbh->do("INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES ('545', 'BIOGRAPHICAL OR HISTORICAL DATA', 'BIOGRAPHICAL OR HISTORICAL DATA', 1, 0, NULL, '');");
+        }
+    }
+    print "Upgrade to $DBversion done (add MARC21 field 545 to framework)\n";
     SetVersion ($DBversion);
 }
 

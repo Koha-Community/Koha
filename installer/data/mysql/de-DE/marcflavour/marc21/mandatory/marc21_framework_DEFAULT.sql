@@ -347,6 +347,7 @@ INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeat
 		('541', 'Fußnote zur Herkunft', 'Fußnote zur Herkunft', 1, 0, NULL, ''),
 		('543', 'SOLICITATION INFORMATION NOTE (AM) [OBSOLETE]', 'SOLICITATION INFORMATION NOTE (AM) [OBSOLETE]', 1, 0, NULL, ''),
 		('544', 'Fußnote zum Standort anderer Archivmaterialien', 'Fußnote zum Standort anderer Archivmaterialien', 1, 0, NULL, ''),
+        ('545', 'Fußnote zu biografischen oder historischen Daten', 'Fußnote zu biografischen oder historischen Daten', 1, 0, NULL, ''),
 		('546', 'Fußnote zur Sprache', 'Fußnote zur Sprache', 1, 0, NULL, ''),
 		('547', 'Fußnote zu früheren Titeln', 'Fußnote zu früheren Titeln', 1, 0, NULL, ''),
 		('550', 'Fußnote zur herausgebenden Körperschaft', 'Fußnote zur herausgebenden Körperschaft', 1, 0, NULL, ''),
