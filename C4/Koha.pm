@@ -62,6 +62,7 @@ BEGIN {
 		&GetNormalizedISBN
 		&GetNormalizedEAN
 		&GetNormalizedOCLCNumber
+        &xml_escape
 
 		$DEBUG
 	);
@@ -1192,6 +1193,25 @@ sub GetKohaAuthorisedValuesFromField {
   } else {
   	return undef;
   }
+}
+
+=head2 xml_escape
+
+  my $escaped_string = C4::Koha::xml_escape($string);
+
+Convert &, <, >, ', and " in a string to XML entities
+
+=cut
+
+sub xml_escape {
+    my $str = shift;
+    return '' unless defined $str;
+    $str =~ s/&/&amp;/g;
+    $str =~ s/</&lt;/g;
+    $str =~ s/>/&gt;/g;
+    $str =~ s/'/&apos;/g;
+    $str =~ s/"/&quot;/g;
+    return $str;
 }
 
 =head2 display_marc_indicators
