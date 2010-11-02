@@ -4465,6 +4465,19 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.04.07.002';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    if (C4::Context->preference("marcflavour") eq 'MARC21') {
+        if (C4::Context->preference("opaclanguages") eq "de") {
+            $dbh->do("INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES ('545', 'Fußnote zu biografischen oder historischen Daten', 'Fußnote zu biografischen oder historischen Daten', 1, 0, NULL, '');");
+        } else {
+            $dbh->do("INSERT INTO `marc_tag_structure` (`tagfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `authorised_value`, `frameworkcode`) VALUES ('545', 'BIOGRAPHICAL OR HISTORICAL DATA', 'BIOGRAPHICAL OR HISTORICAL DATA', 1, 0, NULL, '');");
+        }
+    }
+    print "Upgrade to $DBversion done (add MARC21 field 545 to framework)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
