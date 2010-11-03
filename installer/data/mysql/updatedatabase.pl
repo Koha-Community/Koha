@@ -3799,6 +3799,33 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DELETE FROM subscriptionroutinglist WHERE borrowernumber IS NULL;");
+    $dbh->do("ALTER TABLE subscriptionroutinglist MODIFY COLUMN `borrowernumber` int(11) NOT NULL;");
+    $dbh->do("DELETE FROM subscriptionroutinglist WHERE subscriptionid IS NULL;");
+    $dbh->do("ALTER TABLE subscriptionroutinglist MODIFY COLUMN `subscriptionid` int(11) NOT NULL;");
+    $dbh->do("CREATE TEMPORARY TABLE del_subscriptionroutinglist 
+              SELECT s1.routingid FROM subscriptionroutinglist s1
+              WHERE EXISTS (SELECT * FROM subscriptionroutinglist s2
+                            WHERE s2.borrowernumber = s1.borrowernumber
+                            AND   s2.subscriptionid = s1.subscriptionid 
+                            AND   s2.routingid < s1.routingid);");
+    $dbh->do("DELETE FROM subscriptionroutinglist
+              WHERE routingid IN (SELECT routingid FROM del_subscriptionroutinglist);");
+    $dbh->do("ALTER TABLE subscriptionroutinglist ADD UNIQUE (subscriptionid, borrowernumber);");
+    $dbh->do("ALTER TABLE subscriptionroutinglist 
+                ADD CONSTRAINT `subscriptionroutinglist_ibfk_1` FOREIGN KEY (`borrowernumber`) 
+                REFERENCES `borrowers` (`borrowernumber`)
+                ON DELETE CASCADE ON UPDATE CASCADE");
+    $dbh->do("ALTER TABLE subscriptionroutinglist 
+                ADD CONSTRAINT `subscriptionroutinglist_ibfk_2` FOREIGN KEY (`subscriptionid`) 
+                REFERENCES `subscription` (`subscriptionid`)
+                ON DELETE CASCADE ON UPDATE CASCADE");
+    print "Upgrade to $DBversion done (Make subscriptionroutinglist more strict)\n";
+    SetVersion ($DBversion);
+}
+
 =item DropAllForeignKeys($table)
 
   Drop all foreign keys of the table $table
