@@ -3799,7 +3799,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.01.00.XXX";
+$DBversion = "3.03.00.001";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("DELETE FROM subscriptionroutinglist WHERE borrowernumber IS NULL;");
     $dbh->do("ALTER TABLE subscriptionroutinglist MODIFY COLUMN `borrowernumber` int(11) NOT NULL;");
