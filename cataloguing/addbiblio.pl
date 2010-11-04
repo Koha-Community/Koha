@@ -1018,6 +1018,9 @@ elsif ( $op eq "delete" ) {
 }
 
 $template->param( title => $record->title() ) if ( $record ne "-1" );
+if (C4::Context->preference("marcflavour") eq "MARC21"){
+    $template->param(MARC21 => 1);
+}
 $template->param(
     popup => $mode,
     frameworkcode => $frameworkcode,

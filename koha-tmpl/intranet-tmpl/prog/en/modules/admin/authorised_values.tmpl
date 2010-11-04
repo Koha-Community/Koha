@@ -46,7 +46,7 @@
         <fieldset class="rows"><ol>
         <li>
 			 <!-- TMPL_IF name="action_add_category" --><label for="category">Category</label>
-		<input type="text" name="category"  id="category" size="16" maxlength="16" /> 
+		<input type="text" name="category"  id="category" size="10" maxlength="10" />
 			 <!-- TMPL_ELSE --><span class="label">Category</span>
 		<input type="hidden" name="category" value="<!-- TMPL_VAR NAME='category' -->" />	 <!-- TMPL_VAR NAME='category' -->
 			 <!-- /TMPL_IF -->
@@ -54,15 +54,15 @@
         <li>
             <label for="authorised_value">Authorized value</label>
      <!-- TMPL_IF name="action_modify" --><input type="hidden" id="id" name="id" value="<!-- TMPL_VAR name="id" -->" /><!-- /TMPL_IF -->
-            <input type="text" id="authorised_value" name="authorised_value" value="<!-- TMPL_VAR name="authorised_value" -->" />
+            <input type="text" id="authorised_value" name="authorised_value" value="<!-- TMPL_VAR name="authorised_value" -->" maxlength="80" />
         </li>
         <li>
             <label for="lib">Description</label>
-            <input type="text" name="lib" id="lib" value="<!-- TMPL_VAR name="lib" -->" />
+            <input type="text" name="lib" id="lib" value="<!-- TMPL_VAR name="lib" -->" maxlength="80" />
         </li>
 	<li>
             <label for="lib_opac">Description (OPAC)</label>
-            <input type="text" name="lib_opac" id="lib_opac" value="<!-- TMPL_VAR name="lib_opac" -->" />
+            <input type="text" name="lib_opac" id="lib_opac" value="<!-- TMPL_VAR name="lib_opac" -->" maxlength="80" />
         </li>
 		</ol>
 		<div id="icons" class="toptabs">

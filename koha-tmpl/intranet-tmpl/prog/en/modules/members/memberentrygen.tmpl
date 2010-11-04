@@ -2,7 +2,6 @@
 <title>Koha &rsaquo; Patrons &rsaquo; 
 <!-- TMPL_IF NAME="opadd" -->	Add<!-- TMPL_ELSE --> Modify<!--/TMPL_IF--> <!--TMPL_IF Name="categoryname"--> <!--TMPL_VAR Name="categoryname"--> patron<!-- TMPL_ELSE --><!--TMPL_IF Name="I"--> Organization patron<!--/TMPL_IF --><!--TMPL_IF Name="A"--> Adult patron<!--/TMPL_IF --><!--TMPL_IF Name="C"--> Child patron<!--/TMPL_IF --><!--TMPL_IF Name="P"--> Professional patron<!--/TMPL_IF --><!--TMPL_IF Name="S"--> Staff patron<!--/TMPL_IF --><!--/TMPL_IF --><!--TMPL_UNLESS Name="opadd"--> <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR name="firstname" --><!--/TMPL_UNLESS--></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/members.js"></script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
@@ -50,9 +49,18 @@
         $("select#patron_attr_" + newId, clone).attr('value','');
         original.parentNode.insertBefore(clone, original.nextSibling);
     }
-
+		var MSG_SEPARATOR = _("Separator must be / in field ");
+        var MSG_INCORRECT_DAY = _("Invalid day entered in field ");
+        var MSG_INCORRECT_MONTH = _("Invalid month entered in field ");
+        var MSG_INCORRECT_YEAR = _("Invalid year entered in field ");
+        var MSG_DUPLICATE_PATRON = _("Warning: Duplicate patron");
+        var MSG_DUPLICATE_ORGANIZATION = _("Warning: Duplicate organization");
+        var MSG_LATE_EXPIRY = _("Warning: Expiration date falls before enrollment date");
+        var MSG_MISSING_MANDATORY = _("The following fields are mandatory:");
+        var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
 //]]>
 </script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/members.js"></script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->

@@ -315,7 +315,11 @@
 
     <li>
     <label for="budget_permission">Restrict access to: </label>
-    <!-- TMPL_VAR name="budget_perm_dropbox" -->
+    <select name="budget_permission" id="budget_permission">
+    <!-- TMPL_IF NAME="budget_perm_0" --><option value="0" selected="selected">None</option><!-- TMPL_ELSE --><option value="0">None</option><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="budget_perm_1" --><option value="1" selected="selected">Owner</option><!-- TMPL_ELSE --><option value="1">Owner</option><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="budget_perm_2" --><option value="2" selected="selected">Library</option><!-- TMPL_ELSE --><option value="2">Library</option><!-- /TMPL_IF -->
+    </option>
     </li>
 
     <li>
@@ -428,6 +432,9 @@
     </fieldset>
 </form><!-- /TMPL_IF -->
 
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

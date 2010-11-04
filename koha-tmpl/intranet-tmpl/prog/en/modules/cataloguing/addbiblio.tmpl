@@ -67,6 +67,41 @@ function PopupZ3950() {
     } 
 }
 
+function PopupMARCFieldDoc(field, fieldnumber) {
+    <!-- TMPL_IF NAME="MARC21" -->
+        _MARC21FieldDoc(field);
+    <!-- TMPL_ELSE -->
+        _UNIMARCFieldDoc(field, fieldnumber);
+    <!-- /TMPL_IF -->
+}
+
+function _MARC21FieldDoc(field) {
+    if(field == 0) {
+        window.open("http://www.loc.gov/marc/bibliographic/bdleader.html");
+    } else if (field < 900) {
+        window.open("http://www.loc.gov/marc/bibliographic/bd" + ("000"+field).slice(-3) + ".html");
+    } else {
+        window.open("http://www.loc.gov/marc/bibliographic/bd9xx.html");
+    }
+}
+
+function _UNIMARCFieldDoc(field,fieldnumber) {
+    /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
+       seems to be the only version available that can be linked to per tag.  More recent
+       versions of the UNIMARC standard are available on the IFLA website only as
+       PDFs!
+    */
+    if(field == 0) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni.htm");
+    } else if (field < 100) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#b" + ("000"+field).slice(-3));
+    } else if (field < 900) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#" + ("000"+field).slice(-3));
+    } else {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni9.htm");
+    }
+}
+
 /**
  * check if mandatory subfields are written
  */
@@ -749,7 +784,8 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             	<!-- TMPL_IF NAME="advancedMARCEditor" -->
 		<a href="#" tabindex="1" class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib"--> - Click to Expand this Tag" onclick="ExpandField('tag_<!-- TMPL_VAR NAME="tag"-->_<!-- TMPL_VAR NAME='index' --><!-- TMPL_VAR NAME="random" -->'); return false;"><!-- TMPL_VAR NAME="tag" --></a>
 		<!-- TMPL_ELSE -->
-                	<span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+                        <span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --><a 
+                 onclick="PopupMARCFieldDoc(<!-- TMPL_VAR NAME="tag" -->, <!-- TMPL_VAR NAME="number" -->); return false;">&nbsp;?</a></span>
 		<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="fixedfield" -->
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator1" -->" />

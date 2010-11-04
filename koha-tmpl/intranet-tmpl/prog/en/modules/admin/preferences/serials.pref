@@ -17,3 +17,20 @@ Serials:
               yes: Place
               no: "Don't place"
         - received serials on hold if they are on a routing list.
+    -
+        - Show the
+        - pref: StaffSerialIssueDisplayCount
+          class: integer
+        - previous issues of a serial on the staff client.
+    -
+        - Show the
+        - pref: OPACSerialIssueDisplayCount
+          class: integer
+        - previous issues of a serial on the OPAC.
+    -
+        - When showing the subscription information for a biblio, show
+        - pref: SubscriptionHistory
+          choices:
+              simplified: a summary
+              full: a full list
+        - of the serial issues.

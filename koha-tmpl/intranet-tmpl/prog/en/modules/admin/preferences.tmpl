@@ -75,7 +75,7 @@
                     <!-- TMPL_IF NAME="type_text" -->
                     <!-- TMPL_VAR NAME="contents" -->
                     <!-- TMPL_ELSIF NAME="type_input" -->
-                    <input type="<!-- TMPL_VAR NAME="input_type" DEFAULT="text" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="pref_<!-- TMPL_VAR NAME="name" -->" class="preference preference-<!-- TMPL_VAR NAME="class" DEFAULT="short" -->" value="<!-- TMPL_VAR NAME="value" -->" autocomplete="off" />
+                    <input type="<!-- TMPL_VAR NAME="input_type" DEFAULT="text" -->" name="pref_<!-- TMPL_VAR NAME="name" -->" id="pref_<!-- TMPL_VAR NAME="name" -->" class="preference preference-<!-- TMPL_VAR NAME="class" DEFAULT="short" -->" value="<!-- TMPL_VAR NAME="value" -->" autocomplete="off" /> <!-- TMPL_IF NAME="dateinput" --><span class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></span><!-- /TMPL_IF -->
                     <!-- TMPL_ELSIF NAME="type_select" -->
                     <select name="pref_<!-- TMPL_VAR NAME="name" -->" id="pref_<!-- TMPL_VAR NAME="name" -->" class="preference preference-<!-- TMPL_VAR NAME="class" DEFAULT="choice" -->">
                         <!-- TMPL_LOOP NAME="CHOICES" -->
