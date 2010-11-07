@@ -218,7 +218,7 @@ sub buildKohaItemsNamespace {
         . "</item>";
 
     }
-    $xml = "<items xmlns=\"http://www.koha.org/items\">".$xml."</items>";
+    $xml = "<items xmlns=\"http://www.koha-community.org/items\">".$xml."</items>";
     return $xml;
 }
 
