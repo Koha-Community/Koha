@@ -2,7 +2,7 @@
 
 # Licensed under the GPL
 # Copyright 2008 Biblibre.com
-# Koha library project  www.koha.org
+# Koha library project  www.koha-community.org
 #
 # this script follow all the installtion procedure described in INSTALL.Debian
 # with some additions to use lenny packages.
@@ -270,11 +270,11 @@ get_koha_git_clone () {
 
     dpkg -l git-core ||
 	aptitude -y  install git-core git-email
-    git clone git://git.koha.org/pub/scm/koha.git "$base"
+    git clone git://git.koha-community.org/koha.git "$base"
 }
 
 get_koha_release () {
-    wget -O- http://download.koha.org/koha-3.00.00.tar.gz |
+    wget -O- http://download.koha-community.org/koha-3.00.00.tar.gz |
 	tar xzf - 
 }
 
@@ -292,7 +292,7 @@ get_koha_beta () {
     local i basename; i=2
     while [ $i != 11 ]; do
 	basename=koha-3.00.00-beta$i
-	wget -O- http://download.koha.org/$basename.tar.gz |
+	wget -O- http://download.koha-community.org/$basename.tar.gz |
 	    tar xzf - &&
 		mv $basename "$base" &&
 		return 0
