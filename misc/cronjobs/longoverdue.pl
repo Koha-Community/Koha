@@ -81,7 +81,7 @@ WARNING:  Flippant use of this script could set all or most of the items in your
 patrons for them!
 
 WARNING:  This script is known to be faulty.  It is NOT recommended to use multiple --lost options.
-          See http://bugs.koha.org/cgi-bin/bugzilla/show_bug.cgi?id=2881
+          See http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2883
 
 ENDUSAGE
 
