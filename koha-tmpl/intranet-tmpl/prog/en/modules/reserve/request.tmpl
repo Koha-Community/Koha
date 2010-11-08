@@ -405,7 +405,7 @@ function checkMultiHold() {
             </td>
             <!-- TMPL_IF NAME="item-level_itypes" -->
                 <td>
-                    <img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /> <br /> <!-- TMPL_VAR NAME="itypename" -->
+                    <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /> <br /> <!-- /TMPL_IF --><!-- TMPL_VAR NAME="itypename" -->
                 </td>
             <!-- /TMPL_IF -->
 
@@ -563,7 +563,7 @@ function checkMultiHold() {
       <tr>
         <!-- TMPL_IF NAME="CAN_user_reserveforothers_modify_holds_priority" -->
             <th>Priority</th>
-	        <th>&nbsp</th>
+	        <th>&nbsp;</th>
         <!-- TMPL_ELSE -->
             <th>Delete?</th>
         <!-- /TMPL_IF -->
