@@ -205,9 +205,10 @@ RECORD: while (  ) {
             }
         } else {
             if (my $f020 = $record->field('020')) {
-                $isbn = $f020->subfield('a');
-                $isbn =~ s/-//g;
-                $f020->update('a' => $isbn);
+                if ($isbn = $f020->subfield('a')) {
+                    $isbn =~ s/-//g;
+                    $f020->update('a' => $isbn);
+                }
             }
         }
     }
