@@ -81,12 +81,12 @@
                 <!-- TMPL_IF name="ERRORS" -->
                 <div class="dialog alert">
                     <!-- TMPL_LOOP name="ERRORS" -->
-                        <!-- TMPL_IF name="NOTZIP" --><li><b>The upload file does not appear to be a zip file.  The extention is not '.zip'.</b></li>
+                        <!-- TMPL_IF name="NOTZIP" --><li><b>The upload file does not appear to be a zip file.  The extension is not '.zip'.</b></li>
                         <!-- TMPL_ELSIF name="NOWRITETEMP" --><li><b>This script is not able to create/write to the necessary temporary directory.</b></li>
                         <!-- TMPL_ELSIF name="EMPTYUPLOAD" --><li><b>The upload file appears to be empty.</b></li>
                         <!-- TMPL_ELSIF name="OPNLINK" --><li><b>Cannot open <!-- TMPL_VAR NAME="OPNLINK" --> to read.<br />Please verify that it exists.</b></li>
                         <!-- TMPL_ELSIF name="OPNIMG" --><li><b>Cannot open <!-- TMPL_VAR NAME="OPNIMG" --> to read.<br />Please verify that it exists.</b></li>
-                        <!-- TMPL_ELSIF name="DELERR" --><li><b>Unrecognized or missing field delimeter.<br />Please verify that you are using either a single quote or a tab.</b></li>
+                        <!-- TMPL_ELSIF name="DELERR" --><li><b>Unrecognized or missing field delimiter.<br />Please verify that you are using either a single quote or a tab.</b></li>
                         <!-- TMPL_ELSIF name="UZIPFAIL" --><li><b><!-- TMPL_VAR name="UZIPFAIL" --> failed to unpack.<br />Please verify the integrity of the zip file and retry.</b></li>
                         <!-- TMPL_ELSE --><li><b><!-- TMPL_VAR name ="CORERR" --> An unknown error has occurred.<br />Please review the error log for more details.</b></li><!-- /TMPL_IF -->
                     <!-- /TMPL_LOOP -->

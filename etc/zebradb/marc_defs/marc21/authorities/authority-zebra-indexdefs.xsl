@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xslo:stylesheet xmlns:xslo="http://www.w3.org/1999/XSL/Transform" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:z="http://indexdata.com/zebra-2.0" xmlns:kohaidx="http://www.koha.org/schemas/index-defs" version="1.0">
+<xslo:stylesheet xmlns:xslo="http://www.w3.org/1999/XSL/Transform" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:z="http://indexdata.com/zebra-2.0" xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs" version="1.0">
   <xslo:output indent="yes" method="xml" version="1.0" encoding="UTF-8"/>
   <xslo:template match="text()"/>
   <xslo:template match="text()" mode="index_subfields"/>

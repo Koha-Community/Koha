@@ -169,13 +169,14 @@ RECORD: while (  ) {
     # get records
     eval { $record = $batch->next() };
     if ( $@ ) {
-        print "Bad MARC record: skipped\n";
+        print "Bad MARC record $i: $@ skipped\n";
         # FIXME - because MARC::Batch->next() combines grabbing the next
         # blob and parsing it into one operation, a correctable condition
         # such as a MARC-8 record claiming that it's UTF-8 can't be recovered
         # from because we don't have access to the original blob.  Note
         # that the staging import can deal with this condition (via
         # C4::Charset::MarcToUTF8Record) because it doesn't use MARC::Batch.
+        $i++;
         next;
     }
     # skip if we get an empty record (that is MARC valid, but will result in AddBiblio failure
@@ -205,9 +206,10 @@ RECORD: while (  ) {
             }
         } else {
             if (my $f020 = $record->field('020')) {
-                $isbn = $f020->subfield('a');
-                $isbn =~ s/-//g;
-                $f020->update('a' => $isbn);
+                if ($isbn = $f020->subfield('a')) {
+                    $isbn =~ s/-//g;
+                    $f020->update('a' => $isbn);
+                }
             }
         }
     }

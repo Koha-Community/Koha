@@ -4,7 +4,7 @@
                 xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:xslo="http://www.w3.org/1999/XSL/TransformAlias"
                 xmlns:z="http://indexdata.com/zebra-2.0"
-                xmlns:kohaidx="http://www.koha.org/schemas/index-defs">
+                xmlns:kohaidx="http://www.koha-community.org/schemas/index-defs">
 
     <xsl:namespace-alias stylesheet-prefix="xslo" result-prefix="xsl"/>
     <xsl:output indent="yes" method="xml" version="1.0" encoding="UTF-8"/>

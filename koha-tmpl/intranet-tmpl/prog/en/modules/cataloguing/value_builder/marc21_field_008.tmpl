@@ -112,7 +112,7 @@
 		</td>
 	</tr>
 	<tr>
-		<td><label for="f710">7-10 Date1 / Begininning date of publication</label> </td>
+		<td><label for="f710">7-10 Date1 / Beginning date of publication</label> </td>
 		<td>
 			<input type="text" name="f710" id="f710" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f710" -->"/>
 		</td>
@@ -131,7 +131,7 @@
         </tr>
 	 <tr>
                 <td><label for="f1821">18-21 Illustrations</label> </td>
-		<td>(auto-filled from 300)<input type="hidden" name="f1821" id="f1821" size="4"  maxlength="4" value="<!-- TMPL_VAR NAME="f1821" -->"/></td>
+		<td><input type="text" name="f1821" id="f1821" size="4"  maxlength="4" value="<!-- TMPL_VAR NAME="f1821" -->"/></td>
         </tr>
 	<tr>
                 <!-- 22 Target Audience -->
@@ -264,8 +264,8 @@
 	</tr>
 	<tr>
                 <td><label for="f2427">24-27 Nature of contents</label> </td>
-                <td>(Derived value)
-                        <input type="hidden" name="f2427" id="f2427" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f2427" -->"/>                </td>
+                <td>
+                        <input type="text" name="f2427" id="f2427" size="4" maxlength="4" value="<!-- TMPL_VAR NAME="f2427" -->"/>                </td>
         </tr>
         <tr>
                 <td><label for="f28">28- Government Publication</label></td>
@@ -420,7 +420,7 @@
 			<!-- TMPL_IF name="f33c" -->
                         <option value="c" selected="selected">c- Comic strips</option>
                         <!-- TMPL_ELSE -->
-                        <option value="c">c- Comic stripts</option>
+                        <option value="c">c- Comic strips</option>
                         <!-- /TMPL_IF -->
 			
                         <!-- TMPL_IF name="f33d" -->
@@ -636,10 +636,10 @@ function report() {
 			// }
 			//MR
 			(document.f_pop.f1517.value+"   ").substr(0,3)+
-			document.f_pop.f1821.value+
+			(document.f_pop.f1821.value+"    ").substr(0,4)+
 			document.f_pop.f22.value+
 			document.f_pop.f23.value+
-			document.f_pop.f2427.value+
+			(document.f_pop.f2427.value+"    ").substr(0,4)+
 			document.f_pop.f28.value+
 			document.f_pop.f29.value+
 			document.f_pop.f30.value+

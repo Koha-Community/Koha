@@ -15,7 +15,7 @@
             if (json.job_status == 'completed') {
                 percentage = 100;
             }
-				var bgproperty = (parseInt(percentage)*2-300)+"px 0px";
+				var bgproperty = (parseInt(percentage/2)*3-300)+"px 0px";
                 $("#jobprogress").css("background-position",bgproperty);
 				$("#jobprogresspercent").text(percentage);
 
@@ -47,7 +47,7 @@
             // gather up form submission
             var inputs = [];
             $(':input', f).each(function() {
-                if (this.type == 'radio') {
+                if (this.type == 'radio' || this.type == 'checkbox') {
                     if (this.checked) {
                         inputs.push(this.name + '=' + escape(this.value));
                     }
@@ -66,7 +66,7 @@
                 data: inputs.join('&'),
                 url: f.action,
                 dataType: 'json',
-		type: 'post',
+		        type: 'post',
                 success: function(json) {
                     jobID = json.jobID;
                     inBackgroundJobProgressTimer = false;

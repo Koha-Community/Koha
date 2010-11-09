@@ -210,16 +210,15 @@ sub buildKohaItemsNamespace {
         } else {
             $status = "available";
         }
-        my $homebranch = $branches->{$item->{homebranch}}->{'branchname'};
-	 my $itemcallnumber = $item->{itemcallnumber} || '';
-        $itemcallnumber =~ s/\&/\&amp\;/g;
+        my $homebranch = xml_escape($branches->{$item->{homebranch}}->{'branchname'});
+	    my $itemcallnumber = xml_escape($item->{itemcallnumber});
         $xml.= "<item><homebranch>$homebranch</homebranch>".
 		"<status>$status</status>".
 		"<itemcallnumber>".$itemcallnumber."</itemcallnumber>"
         . "</item>";
 
     }
-    $xml = "<items xmlns=\"http://www.koha.org/items\">".$xml."</items>";
+    $xml = "<items xmlns=\"http://www.koha-community.org/items\">".$xml."</items>";
     return $xml;
 }
 

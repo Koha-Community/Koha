@@ -431,7 +431,7 @@ if ($@ || $error) {
 # At this point, each server has given us a result set
 # now we build that set for template display
 my @sup_results_array;
-for (my $i=0;$i<=@servers;$i++) {
+for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
     if ($server && $server =~/biblioserver/) { # this is the local bibliographic server
         $hits = $results_hashref->{$server}->{"hits"};
@@ -482,10 +482,10 @@ for (my $i=0;$i<=@servers;$i++) {
  	    }
  
  	    # Adding the new search if needed
- 	    if ($borrowernumber eq '') {
+           if (!$borrowernumber || $borrowernumber eq '') {
  	    # To a cookie (the user is not logged in)
  
-     		if ($params->{'offset'} eq '') {
+               if (($params->{'offset'}||'') eq '') {
  
      		    push @recentSearches, {
      					    "query_desc" => $query_desc || "unknown", 
@@ -507,7 +507,7 @@ for (my $i=0;$i<=@servers;$i++) {
  	    } 
 		else {
  	    # To the session (the user is logged in)
- 			if ($params->{'offset'} eq '') {
+                       if (($params->{'offset'}||'') eq '') {
 				AddSearchHistory($borrowernumber, $cgi->cookie("CGISESSID"), $query_desc, $query_cgi, $total);
      		    $template->param(ShowOpacRecentSearchLink => 1);
      		}

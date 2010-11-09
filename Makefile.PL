@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 # Current maintainer MJR http://mjr.towers.org.uk/
-# See http://www.koha.org/wiki/?page=KohaInstaller
 #
 
 use strict;

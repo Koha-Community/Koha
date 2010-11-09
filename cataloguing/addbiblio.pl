@@ -299,7 +299,7 @@ sub create_input {
     }
 
     # if there is no value provided but a default value in parameters, get it
-    unless ($value) {
+    if ( $value eq '' ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 
         # get today date & replace YYYY, MM, DD if provided in the default value
@@ -1018,6 +1018,9 @@ elsif ( $op eq "delete" ) {
 }
 
 $template->param( title => $record->title() ) if ( $record ne "-1" );
+if (C4::Context->preference("marcflavour") eq "MARC21"){
+    $template->param(MARC21 => 1);
+}
 $template->param(
     popup => $mode,
     frameworkcode => $frameworkcode,

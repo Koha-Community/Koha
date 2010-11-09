@@ -3448,11 +3448,11 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     my $value = C4::Context->preference("XSLTResultsDisplay");
     $dbh->do(
         "INSERT INTO systempreferences (variable,value,type)
-         VALUES('OPACXSLTResultsDisplay',$value,'YesNo')");
+         VALUES('OPACXSLTResultsDisplay',?,'YesNo')", {}, $value ? 1 : 0);
     $value = C4::Context->preference("XSLTDetailsDisplay");
     $dbh->do(
         "INSERT INTO systempreferences (variable,value,type)
-         VALUES('OPACXSLTDetailsDisplay',$value,'YesNo')");
+         VALUES('OPACXSLTDetailsDisplay',?,'YesNo')", {}, $value ? 1 : 0);
     print "Upgrade done (added two new syspref: OPACXSLTResultsDisplay and OPACXSLTDetailDisplay). You may have to go in Admin > System preference to tweak XSLT related syspref both in OPAC and Search tabs.\n     ";
     SetVersion ($DBversion);
 }
@@ -3796,6 +3796,49 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 $DBversion = "3.02.00.004";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.2.0 general release)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.03.00.001";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("DELETE FROM subscriptionroutinglist WHERE borrowernumber IS NULL;");
+    $dbh->do("ALTER TABLE subscriptionroutinglist MODIFY COLUMN `borrowernumber` int(11) NOT NULL;");
+    $dbh->do("DELETE FROM subscriptionroutinglist WHERE subscriptionid IS NULL;");
+    $dbh->do("ALTER TABLE subscriptionroutinglist MODIFY COLUMN `subscriptionid` int(11) NOT NULL;");
+    $dbh->do("CREATE TEMPORARY TABLE del_subscriptionroutinglist 
+              SELECT s1.routingid FROM subscriptionroutinglist s1
+              WHERE EXISTS (SELECT * FROM subscriptionroutinglist s2
+                            WHERE s2.borrowernumber = s1.borrowernumber
+                            AND   s2.subscriptionid = s1.subscriptionid 
+                            AND   s2.routingid < s1.routingid);");
+    $dbh->do("DELETE FROM subscriptionroutinglist
+              WHERE routingid IN (SELECT routingid FROM del_subscriptionroutinglist);");
+    $dbh->do("ALTER TABLE subscriptionroutinglist ADD UNIQUE (subscriptionid, borrowernumber);");
+    $dbh->do("ALTER TABLE subscriptionroutinglist 
+                ADD CONSTRAINT `subscriptionroutinglist_ibfk_1` FOREIGN KEY (`borrowernumber`) 
+                REFERENCES `borrowers` (`borrowernumber`)
+                ON DELETE CASCADE ON UPDATE CASCADE");
+    $dbh->do("ALTER TABLE subscriptionroutinglist 
+                ADD CONSTRAINT `subscriptionroutinglist_ibfk_2` FOREIGN KEY (`subscriptionid`) 
+                REFERENCES `subscription` (`subscriptionid`)
+                ON DELETE CASCADE ON UPDATE CASCADE");
+    print "Upgrade to $DBversion done (Make subscriptionroutinglist more strict)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.002';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='arm' WHERE rfc4646_subtag='hy';");
+    $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='eng' WHERE rfc4646_subtag='en';");
+    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'fi','fin');");
+    $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='fre' WHERE rfc4646_subtag='fr';");
+    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'lo','lao');");
+    $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='ita' WHERE rfc4646_subtag='it';");
+    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'sr','srp');");
+    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'tet','tet');");
+    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'ur','urd');");
+
+    print "Upgrade to $DBversion done (Correct language mappings)\n";
     SetVersion ($DBversion);
 }
 

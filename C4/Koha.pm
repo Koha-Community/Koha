@@ -1,6 +1,7 @@
 package C4::Koha;
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright 2010 Nelsonville Public Library
 #
 # This file is part of Koha.
 #
@@ -61,6 +62,7 @@ BEGIN {
 		&GetNormalizedISBN
 		&GetNormalizedEAN
 		&GetNormalizedOCLCNumber
+        &xml_escape
 
 		$DEBUG
 	);
@@ -672,6 +674,7 @@ sub getImageSets {
     foreach my $imagesubdir ( @subdirectories ) {
         my @imagelist     = (); # hashrefs of image info
         my @imagenames = _getImagesFromDirectory( File::Spec->catfile( $paths->{'staff'}{'filesystem'}, $imagesubdir ) );
+        my $imagesetactive = 0;
         foreach my $thisimage ( @imagenames ) {
             push( @imagelist,
                   { KohaImage     => "$imagesubdir/$thisimage",
@@ -680,8 +683,10 @@ sub getImageSets {
                     checked       => "$imagesubdir/$thisimage" eq $checked ? 1 : 0,
                }
              );
+             $imagesetactive = 1 if "$imagesubdir/$thisimage" eq $checked;
         }
         push @imagesets, { imagesetname => $imagesubdir,
+                           imagesetactive => $imagesetactive,
                            images       => \@imagelist };
         
     }
@@ -1188,6 +1193,25 @@ sub GetKohaAuthorisedValuesFromField {
   } else {
   	return undef;
   }
+}
+
+=head2 xml_escape
+
+  my $escaped_string = C4::Koha::xml_escape($string);
+
+Convert &, <, >, ', and " in a string to XML entities
+
+=cut
+
+sub xml_escape {
+    my $str = shift;
+    return '' unless defined $str;
+    $str =~ s/&/&amp;/g;
+    $str =~ s/</&lt;/g;
+    $str =~ s/>/&gt;/g;
+    $str =~ s/'/&apos;/g;
+    $str =~ s/"/&quot;/g;
+    return $str;
 }
 
 =head2 display_marc_indicators
