@@ -48,6 +48,7 @@
 <h3>Search for guarantor</h3>
 	<form action="/cgi-bin/koha/members/guarantor_search.pl" method="post">
 		<fieldset>
+		<input type="hidden" name="category_type" id="category_type" value="<!-- TMPL_VAR NAME="category_type" -->" />
 		<input type="text" name="member" id="member" value="<!-- TMPL_VAR NAME="member" -->" class="focus" /> Ordered by
 		<select name="orderby">
 			<option value="surname,firstname">Surname</option>
