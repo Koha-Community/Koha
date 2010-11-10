@@ -187,7 +187,7 @@ sub calculate {
 # Checking filters
 #
 	my @loopfilter;
-	for (my $i=0;$i<=10;$i++) {
+	for (my $i=0;$i<=12;$i++) {
 		my %cell;
 		(@$filters[$i]) or next;
         if (($i==1) and (@$filters[$i-1])) {
@@ -211,8 +211,8 @@ sub calculate {
           : ( $i == 8 )  ? "Item callnumber <"
           : ( $i == 9 )  ? "sort1 ="
           : ( $i == 10 ) ? "sort2 ="
-          : ( $i == 11 ) ? "Home branch ="
-          : ( $i == 12 )? "Holding branch ="
+          : ( $i == 11 ) ? "Home library ="
+          : ( $i == 12 )? "Holding library ="
           :                "UNKNOWN FILTER ($i)";
 
 		# FIXME - no translation mechanism !
@@ -231,7 +231,7 @@ sub calculate {
 	    ( $line =~ /datetime/ ) ? @$filters[0]
       : ( $line =~ /category/ ) ? @$filters[2]
       : ( $line =~ /itemtype/ ) ? @$filters[3]
-      : ( $line =~ /branch/ )   ? @$filters[4]
+      : ( $line =~ /^branch/ )   ? @$filters[4]
       : ( $line =~ /ccode/ )    ? @$filters[5]
       : ( $line =~ /location/ ) ? @$filters[6]
       : ( $line =~ /sort1/ )    ? @$filters[9]
@@ -250,7 +250,7 @@ sub calculate {
         ( $column =~ /datetime/ ) ? @$filters[0]
       : ( $column =~ /category/ ) ? @$filters[2]
       : ( $column =~ /itemtype/ ) ? @$filters[3]
-      : ( $column =~ /branch/ )   ? @$filters[4]
+      : ( $column =~ /^branch/ )   ? @$filters[4]
       : ( $column =~ /ccode/ )    ? @$filters[5]
       : ( $column =~ /location/ ) ? @$filters[6]
       : ( $column =~ /sort1/ )    ? @$filters[9]
