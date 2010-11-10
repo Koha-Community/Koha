@@ -648,6 +648,7 @@ $template->param(
   dateformat      => C4::Dates->new()->visual(),
   C4::Context->preference('dateformat') => 1,
   check_categorytype =>$check_categorytype,#to recover the category type with checkcategorytype function
+  category_type =>$category_type,
   modify          => $modify,
   nok     => $nok,#flag to konw if an error 
   CGIbranch => $CGIbranch,
