@@ -40,7 +40,6 @@ use C4::Serials;
 use C4::Members;
 use C4::VirtualShelves;
 use C4::XSLT;
-use Switch;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
