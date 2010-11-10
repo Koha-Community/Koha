@@ -134,7 +134,12 @@ canned reports and writing custom SQL reports.</p>
 <!-- /TMPL_LOOP -->
 </table>
 </form>
-<!-- TMPL_ELSE --><h4>There are no saved reports. <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new?</a></h4><!-- /TMPL_IF -->
+<!-- TMPL_ELSE --><h4>There are no saved reports. 
+    <!-- TMPL_IF name="CAN_user_reports_create_reports" -->
+        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new?</a>
+    <!-- /TMPL_IF -->
+</h4>
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 
