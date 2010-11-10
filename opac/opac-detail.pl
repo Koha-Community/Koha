@@ -596,44 +596,18 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
 
 # We try to select the best default tab to show, according to what
 # the user wants, and what's available for display
-my $defaulttab = '';
-switch (C4::Context->preference('opacSerialDefaultTab')) {
-
-    # If the user wants subscriptions by default
-    case "subscriptions" { 
-	# And there are subscriptions, we display them
-	if ($subscriptionsnumber) {
-	    $defaulttab = 'subscriptions';
-	} else {
-	   # Else, we try next option
-	   next; 
-	}
-    }
-
-    case "serialcollection" {
-	if (scalar(@serialcollections) > 0) {
-	    $defaulttab = 'serialcollection' ;
-	} else {
-	    next;
-	}
-    }
-
-    case "holdings" {
-	if ($dat->{'count'} > 0) {
-	   $defaulttab = 'holdings'; 
-	} else {
-	     # As this is the last option, we try other options if there are no items
-	     if ($subscriptionsnumber) {
-		$defaulttab = 'subscriptions';
-	     } elsif (scalar(@serialcollections) > 0) {
-		$defaulttab = 'serialcollection' ;
-	     }
-	}
-
-    }
-
-}
+my $opac_serial_default = C4::Context->preference('opacSerialDefaultTab');
+my $defaulttab = 
+    $opac_serial_default eq 'subscriptions' && $subscriptionsnumber
+        ? 'subscriptions' :
+    $opac_serial_default eq 'serialcollection' && @serialcollections > 0
+        ? 'serialcollection' :
+    $opac_serial_default eq 'holdings' && $dat->{'count'} > 0
+        ? 'holdings' :
+    $subscriptionsnumber
+        ? 'subscriptions' :
+    @serialcollections > 0 
+        ? 'serialcollection' : 'subscription';
 $template->param('defaulttab' => $defaulttab);
-
 
 output_html_with_http_headers $query, $cookie, $template->output;
