@@ -73,6 +73,11 @@ C<$pageType> Page type to print (eg: a4, legal, etc).
 
 =cut
 
+# Globals used by the functions
+my @positionsForX;
+my @positionsForY;
+my $firstLabel = 1;
+
 sub setPositionsForX {
 	my ($marginLeft, $labelWidth, $columns, $pageType) = @_;
 	my $defaultDpi = 72/25.4; # By default we know 25.4 mm -> 1 inch -> 72 dots per inch
