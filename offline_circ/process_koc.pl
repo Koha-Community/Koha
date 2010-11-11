@@ -158,7 +158,9 @@ if ($completedJobID) {
 
 output_html_with_http_headers $query, $cookie, $template->output;
 
-=head3 parse_header_line
+=head1 FUNCTIONS
+
+=head2 parse_header_line
 
 parses the header line from a .koc file. This is the line that
 specifies things such as the file version, and the name and version of
@@ -183,7 +185,7 @@ sub parse_header_line {
     return \%header_info;
 }
 
-=head3 parse_command_line
+=head2 parse_command_line
 
 =cut
 
@@ -210,7 +212,7 @@ sub parse_command_line {
 
 }
 
-=head3 arguments_for_command
+=head2 arguments_for_command
 
 fetches the names of the columns (and function arguments) found in the
 .koc file for a particular command name. For instance, the C<issue>
@@ -367,7 +369,7 @@ sub kocMakePayment {
     } );
 }
 
-=head3 _get_borrowernumber_from_barcode
+=head2 _get_borrowernumber_from_barcode
 
 pass in a barcode
 get back the borrowernumber of the patron who has it checked out.

@@ -23,14 +23,13 @@ csv-profile.pl : Defines a CSV export profile
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 
 This script allow the user to define a new profile for CSV export
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 

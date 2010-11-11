@@ -345,7 +345,7 @@ Print this help page.
 =back
 
 =head1 CONFIGURATION
-    
+
 Configuration file looks like that:
 
  --- 

@@ -20,8 +20,7 @@
 
 =head1 NAME
 
-opac-ISBDdetail.pl : script to show a biblio in ISBD format
-
+opac-ISBDdetail.pl - script to show a biblio in ISBD format
 
 =head1 DESCRIPTION
 
@@ -36,8 +35,6 @@ The first 10 tabs present the biblio, the 11th one presents
 the items attached to the biblio
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 

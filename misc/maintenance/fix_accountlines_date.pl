@@ -81,6 +81,8 @@ be in whatever format your 'dateformat' system preference specifies.
 Run in debugging mode; this prints out a lot of information and should be used
 only if there is a problem and with the '-n' option.
 
+=back
+
 =cut
 
 my $mode = '';

@@ -36,8 +36,6 @@ guided_reports.pl
 
 Script to control the guided report creation
 
-=over2
-
 =cut
 
 my $input = new CGI;
