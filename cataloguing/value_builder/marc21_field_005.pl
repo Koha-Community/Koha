@@ -46,6 +46,7 @@ returns :
 the 3 scripts are inserted after the <input> in the html code
 
 =cut
+
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;

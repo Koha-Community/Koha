@@ -43,22 +43,14 @@ C4::Members::Attributes - manage extend patron attributes
 
 =head1 SYNOPSIS
 
-=over 4
-
-    use C4::Members::Attributes;
-    my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-
-=back
+  use C4::Members::Attributes;
+  my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
 
 =head1 FUNCTIONS
 
 =head2 GetBorrowerAttributes
 
-=over 4
-
-my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber[, $opac_only]);
-
-=back
+  my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber[, $opac_only]);
 
 Retrieve an arrayref of extended attributes associated with the
 patron specified by C<$borrowernumber>.  Each entry in the arrayref
@@ -104,12 +96,7 @@ sub GetBorrowerAttributes {
 
 =head2 SearchIdMatchingAttribute
 
-=over 4
-
-my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
-
-=back
-
+  my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
 
 =cut
 
@@ -130,11 +117,7 @@ AND attribute like ?};
 
 =head2 CheckUniqueness
 
-=over 4
-
-    my $ok = CheckUniqueness($code, $value[, $borrowernumber]);
-
-=back
+  my $ok = CheckUniqueness($code, $value[, $borrowernumber]);
 
 Given an attribute type and value, verify if would violate
 a unique_id restriction if added to the patron.  The
@@ -178,11 +161,7 @@ sub CheckUniqueness {
 
 =head2 SetBorrowerAttributes 
 
-=over 4
-
-    SetBorrowerAttributes($borrowernumber, [ { code => 'CODE', value => 'value', password => 'password' }, ... ] );
-
-=back
+  SetBorrowerAttributes($borrowernumber, [ { code => 'CODE', value => 'value', password => 'password' }, ... ] );
 
 Set patron attributes for the patron identified by C<$borrowernumber>,
 replacing any that existed previously.
@@ -207,12 +186,8 @@ sub SetBorrowerAttributes {
 
 =head2 extended_attributes_code_value_arrayref 
 
-=over 4
-
-    my $patron_attributes = "homeroom:1150605,grade:01,extradata:foobar";
-    my $aref = extended_attributes_code_value_arrayref($patron_attributes);
-
-=back
+   my $patron_attributes = "homeroom:1150605,grade:01,extradata:foobar";
+   my $aref = extended_attributes_code_value_arrayref($patron_attributes);
 
 Takes a comma-delimited CSV-style string argument and returns the kind of data structure that SetBorrowerAttributes wants, 
 namely a reference to array of hashrefs like:
@@ -238,16 +213,12 @@ sub extended_attributes_code_value_arrayref {
 
 =head2 extended_attributes_merge
 
-=over 4
+  my $old_attributes = extended_attributes_code_value_arrayref("homeroom:224,grade:04,deanslist:2007,deanslist:2008,somedata:xxx");
+  my $new_attributes = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2009,extradata:foobar");
+  my $merged = extended_attributes_merge($patron_attributes, $new_attributes, 1);
 
-    my $old_attributes = extended_attributes_code_value_arrayref("homeroom:224,grade:04,deanslist:2007,deanslist:2008,somedata:xxx");
-    my $new_attributes = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2009,extradata:foobar");
-    my $merged = extended_attributes_merge($patron_attributes, $new_attributes, 1);
-
-    # assuming deanslist is a repeatable code, value same as:
-    # $merged = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2007,deanslist:2008,deanslist:2009,extradata:foobar,somedata:xxx");
-
-=back
+  # assuming deanslist is a repeatable code, value same as:
+  # $merged = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2007,deanslist:2008,deanslist:2009,extradata:foobar,somedata:xxx");
 
 Takes three arguments.  The first two are references to array of hashrefs, each like:
  [ { code => 'CODE', value => 'value' }, { code => 'CODE2', value => 'othervalue' } ... ]

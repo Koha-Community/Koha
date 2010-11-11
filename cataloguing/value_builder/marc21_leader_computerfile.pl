@@ -32,6 +32,7 @@ use C4::Output;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
 my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 return "";

@@ -37,7 +37,13 @@ use vars qw( $is_a_modif );
 my $itemtype; # created here because it can be used in build_authorized_values_list sub
 our($authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
 
+=head1 FUNCTIONS
+
+=over
+
 =item build_authorized_values_list
+
+builds list, depending on authorised value...
 
 =cut
 
@@ -47,7 +53,6 @@ sub build_authorized_values_list ($$$$$$$) {
     my @authorised_values;
     my %authorised_lib;
 
-    # builds list, depending on authorised value...
 
     #---- branch
     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
@@ -111,7 +116,9 @@ sub build_authorized_values_list ($$$$$$$) {
 
 
 =item create_input
+
 builds the <input ...> entry for a subfield.
+
 =cut
 
 sub create_input {
@@ -310,7 +317,7 @@ sub format_indicator {
 
 =item CreateKey
 
-    Create a random value to set it into the input name
+Create a random value to set it into the input name
 
 =cut
 
@@ -518,6 +525,11 @@ sub build_hidden_data () {
         }
     }
 }
+
+=back
+
+=cut
+
 
 # ======================== 
 #          MAIN 

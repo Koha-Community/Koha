@@ -3538,12 +3538,12 @@ my $DBversion = "3.00.00.000";
     print "upgrade to Koha 3.0 done\n";
     SetVersion ($DBversion);
 
-
-=item GetDefaultClause
+=head1 GetDefaultClause
 
 Generate a default clause (for an ALTER TABLE command)
 
 =cut
+
 sub GetDefaultClause {
     my $default = shift;
 
@@ -3554,11 +3554,11 @@ sub GetDefaultClause {
     return "default " . $dbh->quote($default);
 }
 
-=item TransformToNum
+=head1 TransformToNum
 
-  Transform the Koha version from a 4 parts string
-  to a number, with just 1 .
-  
+Transform the Koha version from a 4 parts string
+to a number, with just 1.
+
 =cut
 
 sub TransformToNum {
@@ -3568,8 +3568,10 @@ sub TransformToNum {
     return $version;
 }
 
-=item SetVersion
-    set the DBversion in the systempreferences
+=head1 SetVersion
+
+set the DBversion in the systempreferences
+
 =cut
 
 sub SetVersion {

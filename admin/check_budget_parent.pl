@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Auth;
 use C4::Budgets;
 
-=head1
+=head1 DESCRIPTION
 
 fetches the budget amount fron the DB,
 called by aqbudgets.pl and neworderempty.pl

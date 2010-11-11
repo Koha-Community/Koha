@@ -25,7 +25,7 @@ use C4::Output;
 use C4::Auth;
 use C4::Budgets;
 
-=head1
+=head1 DESCRIPTION
 
 This script checks the amount unallocated from the new parent budget , or the period - if no parent_id is given
 

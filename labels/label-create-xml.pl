@@ -11,10 +11,6 @@ use C4::Debug;
 use C4::Creators 1.000000;
 use C4::Labels 1.000000;
 
-=head
-
-=cut
-
 my $cgi = new CGI;
 
 my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');

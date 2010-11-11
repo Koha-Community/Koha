@@ -51,7 +51,7 @@ sub memcached_memoize {
 __END__                                                                         
                                                                                   
 =head1 NAME                                                                     
-                                                                                
-  C4::Cache::Memoize::Memcached - subclass of C4::Cache                
-                                                                                  
+
+C4::Cache::Memoize::Memcached - subclass of C4::Cache
+
 =cut
