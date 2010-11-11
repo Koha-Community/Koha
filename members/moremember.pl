@@ -168,7 +168,7 @@ if ( $category_type eq 'C') {
 if ( $data->{'ethnicity'} || $data->{'ethnotes'} ) {
     $template->param( printethnicityline => 1 );
 }
-if ( $category_type eq 'A' ) {
+if ( $category_type eq 'A' || $category_type eq 'I') {
     $template->param( isguarantee => 1 );
 
     # FIXME
@@ -188,7 +188,7 @@ if ( $category_type eq 'A' ) {
         );
     }
     $template->param( guaranteeloop => \@guaranteedata );
-    ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' );
+    ( $template->param( adultborrower => 1 ) ) if ( $category_type eq 'A' || $category_type eq 'I' );
 }
 else {
     if ($data->{'guarantorid'}){
