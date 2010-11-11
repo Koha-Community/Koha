@@ -30,17 +30,21 @@ addorder.pl
 this script allows to add an order.
 It is called by :
 
+=over
+
 =item neworderbiblio.pl to add an order from nothing.
 
 =item neworderempty.pl to add an order from an existing biblio.
 
 =item newordersuggestion.pl to add an order from an existing suggestion.
 
+=back
+
 =head1 CGI PARAMETERS
 
 All of the cgi parameters below are related to the new order.
 
-=over 4
+=over
 
 =item C<ordernumber>
 the number of this new order.

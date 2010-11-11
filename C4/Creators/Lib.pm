@@ -47,6 +47,16 @@ BEGIN {
     );
 }
 
+=head1 NAME
+
+C4::Creators::Lib
+
+=cut
+
+=head1 FUNCTIONS
+
+=cut
+
 #=head2 C4::Creators::Lib::_SELECT()
 #
 #    This function returns a recordset upon success and 1 upon failure. Errors are logged to the Apache log.
@@ -135,11 +145,9 @@ my $output_formats = [
 
 =head2 C4::Creators::Lib::get_all_templates()
 
-    This function returns a reference to a hash containing all templates upon success and 1 upon failure. Errors are logged to the Apache log.
+  my $templates = get_all_templates();
 
-    examples:
-
-        my $templates = get_all_templates();
+This function returns a reference to a hash containing all templates upon success and 1 upon failure. Errors are logged to the Apache log.
 
 =cut
 
@@ -163,11 +171,9 @@ sub get_all_templates {
 
 =head2 C4::Creators::Lib::get_all_layouts()
 
-    This function returns a reference to a hash containing all layouts upon success and 1 upon failure. Errors are logged to the Apache log.
+  my $layouts = get_all_layouts();
 
-    examples:
-
-        my $layouts = get_all_layouts();
+This function returns a reference to a hash containing all layouts upon success and 1 upon failure. Errors are logged to the Apache log.
 
 =cut
 
@@ -191,16 +197,15 @@ sub get_all_layouts {
 
 =head2 C4::Creators::Lib::get_all_profiles()
 
-    This function returns an arrayref whose elements are hashes containing all profiles upon success and 1 upon failure. Errors are logged
-    to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separted
-    fields. ie. "field_1, field_2, ...field_n" The second limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+  my $profiles = get_all_profiles();
 
-    NOTE: Do not pass in the keyword 'WHERE.'
+  my $profiles = get_all_profiles(field_list => field_list, filter => filter_string);
 
-    examples:
+This function returns an arrayref whose elements are hashes containing all profiles upon success and 1 upon failure. Errors are logged
+to the Apache log. Two parameters are accepted. The first limits the field(s) returned. This parameter should be string of comma separted
+fields. ie. "field_1, field_2, ...field_n" The second limits the records returned based on a string containing a valud SQL 'WHERE' filter.
 
-        my $profiles = get_all_profiles();
-        my $profiles = get_all_profiles(field_list => field_list, filter => filter_string);
+NOTE: Do not pass in the keyword 'WHERE.'
 
 =cut
 
@@ -243,16 +248,15 @@ sub get_all_image_names {
 
 =head2 C4::Creators::Lib::get_batch_summary()
 
-    This function returns an arrayref whose elements are hashes containing the batch_ids of current batches along with the item count
-    for each batch upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
-    One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+  my $batches = get_batch_summary();
 
-    NOTE: Do not pass in the keyword 'WHERE.'
+  my $batches = get_batch_summary(filter => filter_string);
 
-    examples:
+This function returns an arrayref whose elements are hashes containing the batch_ids of current batches along with the item count
+for each batch upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
+One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
 
-        my $batches = get_batch_summary();
-        my $batches = get_batch_summary(filter => filter_string);
+NOTE: Do not pass in the keyword 'WHERE.'
 
 =cut
 
@@ -286,16 +290,15 @@ sub get_batch_summary {
 
 =head2 C4::Creators::Lib::get_label_summary()
 
-    This function returns an arrayref whose elements are hashes containing the label_ids of current labels along with the item count
-    for each label upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
-    One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+  my $labels = get_label_summary();
 
-    NOTE: Do not pass in the keyword 'WHERE.'
+  my $labels = get_label_summary(items => @item_list);
 
-    examples:
+This function returns an arrayref whose elements are hashes containing the label_ids of current labels along with the item count
+for each label upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
+One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
 
-        my $labels = get_label_summary();
-        my $labels = get_label_summary(items => @item_list);
+NOTE: Do not pass in the keyword 'WHERE.'
 
 =cut
 
@@ -337,16 +340,15 @@ sub get_label_summary {
 
 =head2 C4::Creators::Lib::get_card_summary()
 
-    This function returns an arrayref whose elements are hashes containing the label_ids of current cards along with the item count
-    for each card upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
-    One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
+  my $cards = get_card_summary();
 
-    NOTE: Do not pass in the keyword 'WHERE.'
+  my $cards = get_card_summary(items => @item_list);
 
-    examples:
+This function returns an arrayref whose elements are hashes containing the label_ids of current cards along with the item count
+for each card upon success and 1 upon failure. Item counts are stored under the key '_item_count' Errors are logged to the Apache log.
+One parameter is accepted which limits the records returned based on a string containing a valud SQL 'WHERE' filter.
 
-        my $cards = get_card_summary();
-        my $cards = get_card_summary(items => @item_list);
+NOTE: Do not pass in the keyword 'WHERE.'
 
 =cut
 
@@ -375,11 +377,9 @@ sub get_card_summary {
 
 =head2 C4::Creators::Lib::get_barcode_types()
 
-    This function returns a reference to an array of hashes containing all barcode types along with their name and description.
+  my $barcode_types = get_barcode_types();
 
-    examples:
-
-        my $barcode_types = get_barcode_types();
+This function returns a reference to an array of hashes containing all barcode types along with their name and description.
 
 =cut
 
@@ -389,11 +389,9 @@ sub get_barcode_types {
 
 =head2 C4::Creators::Lib::get_label_types()
 
-    This function returns a reference to an array of hashes containing all label types along with their name and description.
+  my $label_types = get_label_types();
 
-    examples:
-
-        my $label_types = get_label_types();
+This function returns a reference to an array of hashes containing all label types along with their name and description.
 
 =cut
 
@@ -403,11 +401,9 @@ sub get_label_types {
 
 =head2 C4::Creators::Lib::get_font_types()
 
-    This function returns a reference to an array of hashes containing all font types along with their name and description.
+  my $font_types = get_font_types();
 
-    examples:
-
-        my $font_types = get_font_types();
+This function returns a reference to an array of hashes containing all font types along with their name and description.
 
 =cut
 
@@ -417,11 +413,9 @@ sub get_font_types {
 
 =head2 C4::Creators::Lib::get_text_justification_types()
 
-    This function returns a reference to an array of hashes containing all text justification types along with their name and description.
+  my $text_justification_types = get_text_justification_types();
 
-    examples:
-
-        my $text_justification_types = get_text_justification_types();
+This function returns a reference to an array of hashes containing all text justification types along with their name and description.
 
 =cut
 
@@ -431,12 +425,11 @@ sub get_text_justification_types {
 
 =head2 C4::Creators::Lib::get_unit_values()
 
-    This function returns a reference to an array of  hashes containing all unit types along with their description and multiplier. NOTE: All units are relative to a PostScript Point.
-    There are 72 PS points to the inch.
+  my $unit_values = get_unit_values();
 
-    examples:
-
-        my $unit_values = get_unit_values();
+This function returns a reference to an array of  hashes containing all unit types along with their description and multiplier.
+NOTE: All units are relative to a PostScript Point.
+There are 72 PS points to the inch.
 
 =cut
 
@@ -446,11 +439,9 @@ sub get_unit_values {
 
 =head2 C4::Creators::Lib::get_output_formats()
 
-    This function returns a reference to an array of hashes containing all label output formats along with their description.
+  my $label_output_formats = get_output_formats();
 
-    examples:
-
-        my $label_output_formats = get_output_formats();
+This function returns a reference to an array of hashes containing all label output formats along with their description.
 
 =cut
 
@@ -494,15 +485,13 @@ sub get_table_names {
 
 =head2 C4::Creators::Lib::html_table()
 
-    This function returns an arrayref of an array of hashes contianing the supplied data formatted suitably to
-    be passed off as a T::P template parameter and used to build an html table.
+This function returns an arrayref of an array of hashes contianing the supplied data formatted suitably to
+be passed off as a T::P template parameter and used to build an html table.
 
-    examples:
-
-       my $table = html_table(header_fields, array_of_row_data);
-       $template->param(
-            TABLE => $table,
-       );
+   my $table = html_table(header_fields, array_of_row_data);
+   $template->param(
+       TABLE => $table,
+   );
 
     html example:
 

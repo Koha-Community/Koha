@@ -34,43 +34,35 @@ C4::Members::AttributeTypes - mananage extended patron attribute types
 
 =head1 SYNOPSIS
 
-=over 4
+  my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes();
 
-my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes();
+  my $attr_type = C4::Members::AttributeTypes->new($code, $description);
+  $attr_type->code($code);
+  $attr_type->description($description);
+  $attr_type->repeatable($repeatable);
+  $attr_type->unique_id($unique_id);
+  $attr_type->opac_display($opac_display);
+  $attr_type->password_allowed($password_allowed);
+  $attr_type->staff_searchable($staff_searchable);
+  $attr_type->authorised_value_category($authorised_value_category);
+  $attr_type->store();
+  $attr_type->delete();
 
-my $attr_type = C4::Members::AttributeTypes->new($code, $description);
-$attr_type->code($code);
-$attr_type->description($description);
-$attr_type->repeatable($repeatable);
-$attr_type->unique_id($unique_id);
-$attr_type->opac_display($opac_display);
-$attr_type->password_allowed($password_allowed);
-$attr_type->staff_searchable($staff_searchable);
-$attr_type->authorised_value_category($authorised_value_category);
-$attr_type->store();
-$attr_type->delete();
-
-my $attr_type = C4::Members::AttributeTypes->fetch($code);
-$attr_type = C4::Members::AttributeTypes->delete($code);
-
-=back
+  my $attr_type = C4::Members::AttributeTypes->fetch($code);
+  $attr_type = C4::Members::AttributeTypes->delete($code);
 
 =head1 FUNCTIONS
 
 =head2 GetAttributeTypes
 
-=over 4
-
-my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes($all_fields);
-
-=back
+  my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes($all_fields);
 
 Returns an array of hashrefs of each attribute type defined
 in the database.  The array is sorted by code.  Each hashref contains
 at least the following fields:
 
-code
-description
+ - code
+ - description
 
 If $all_fields is true, then each hashref also contains the other fields from borrower_attribute_types.
 
@@ -93,11 +85,7 @@ sub GetAttributeTypes_hashref {
 
 =head1 METHODS 
 
-=over 4
-
-my $attr_type = C4::Members::AttributeTypes->new($code, $description);
-
-=back
+  my $attr_type = C4::Members::AttributeTypes->new($code, $description);
 
 Create a new attribute type.
 
@@ -122,11 +110,7 @@ sub new {
 
 =head2 fetch
 
-=over 4
-
-my $attr_type = C4::Members::AttributeTypes->fetch($code);
-
-=back
+  my $attr_type = C4::Members::AttributeTypes->fetch($code);
 
 Fetches an attribute type from the database.  If no
 type with the given C<$code> exists, returns undef.
@@ -160,11 +144,7 @@ sub fetch {
 
 =head2 store
 
-=over 4
-
-$attr_type->store();
-
-=back
+  $attr_type->store();
 
 Stores attribute type in the database.  If the type
 previously retrieved from the database via the fetch()
@@ -209,12 +189,8 @@ sub store {
 
 =head2 code
 
-=over 4
-
-my $code = $attr_type->code();
-$attr_type->code($code);
-
-=back
+  my $code = $attr_type->code();
+  $attr_type->code($code);
 
 Accessor.  Note that the code is immutable once
 a type is created or fetched from the database.
@@ -228,12 +204,8 @@ sub code {
 
 =head2 description
 
-=over 4
-
-my $description = $attr_type->description();
-$attr_type->description($description);
-
-=back
+  my $description = $attr_type->description();
+  $attr_type->description($description);
 
 Accessor.
 
@@ -246,12 +218,8 @@ sub description {
 
 =head2 repeatable
 
-=over 4
-
-my $repeatable = $attr_type->repeatable();
-$attr_type->repeatable($repeatable);
-
-=back
+  my $repeatable = $attr_type->repeatable();
+  $attr_type->repeatable($repeatable);
 
 Accessor.  The C<$repeatable> argument
 is interpreted as a Perl boolean.
@@ -265,12 +233,8 @@ sub repeatable {
 
 =head2 unique_id
 
-=over 4
-
-my $unique_id = $attr_type->unique_id();
-$attr_type->unique_id($unique_id);
-
-=back
+  my $unique_id = $attr_type->unique_id();
+  $attr_type->unique_id($unique_id);
 
 Accessor.  The C<$unique_id> argument
 is interpreted as a Perl boolean.
@@ -283,12 +247,8 @@ sub unique_id {
 }
 =head2 opac_display
 
-=over 4
-
-my $opac_display = $attr_type->opac_display();
-$attr_type->opac_display($opac_display);
-
-=back
+  my $opac_display = $attr_type->opac_display();
+  $attr_type->opac_display($opac_display);
 
 Accessor.  The C<$opac_display> argument
 is interpreted as a Perl boolean.
@@ -301,12 +261,8 @@ sub opac_display {
 }
 =head2 password_allowed
 
-=over 4
-
-my $password_allowed = $attr_type->password_allowed();
-$attr_type->password_allowed($password_allowed);
-
-=back
+  my $password_allowed = $attr_type->password_allowed();
+  $attr_type->password_allowed($password_allowed);
 
 Accessor.  The C<$password_allowed> argument
 is interpreted as a Perl boolean.
@@ -319,12 +275,8 @@ sub password_allowed {
 }
 =head2 staff_searchable
 
-=over 4
-
-my $staff_searchable = $attr_type->staff_searchable();
-$attr_type->staff_searchable($staff_searchable);
-
-=back
+  my $staff_searchable = $attr_type->staff_searchable();
+  $attr_type->staff_searchable($staff_searchable);
 
 Accessor.  The C<$staff_searchable> argument
 is interpreted as a Perl boolean.
@@ -338,12 +290,8 @@ sub staff_searchable {
 
 =head2 authorised_value_category
 
-=over 4
-
-my $authorised_value_category = $attr_type->authorised_value_category();
-$attr_type->authorised_value_category($authorised_value_category);
-
-=back
+  my $authorised_value_category = $attr_type->authorised_value_category();
+  $attr_type->authorised_value_category($authorised_value_category);
 
 Accessor.
 
@@ -356,12 +304,8 @@ sub authorised_value_category {
 
 =head2 delete
 
-=over 4
-
-$attr_type->delete();
-C4::Members::AttributeTypes->delete($code);
-
-=back
+  $attr_type->delete();
+  C4::Members::AttributeTypes->delete($code);
 
 Delete an attribute type from the database.  The attribute
 type may be specified either by an object or by a code.
@@ -384,11 +328,7 @@ sub delete {
 
 =head2 num_patrons
 
-=over 4
-
-my $count = $attr_type->num_patrons();
-
-=back
+  my $count = $attr_type->num_patrons();
 
 Returns the number of patron records that use
 this attribute type.
@@ -410,11 +350,7 @@ sub num_patrons {
 
 =head2 get_patrons
 
-=over 4
-
-my @borrowernumbers = $attr_type->get_patrons($attribute);
-
-=back
+  my @borrowernumbers = $attr_type->get_patrons($attribute);
 
 Returns the borrowernumber of the patron records that
 have an attribute with the specifie value.

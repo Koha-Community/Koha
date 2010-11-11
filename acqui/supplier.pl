@@ -24,6 +24,7 @@
 supplier.pl
 
 =head1 DESCRIPTION
+
 this script shows the details for a bookseller given on input arg.
 It allows to edit & save information about this bookseller.
 
@@ -32,6 +33,7 @@ It allows to edit & save information about this bookseller.
 =over 4
 
 =item supplierid
+
 To know the bookseller this script has to display details.
 
 =back

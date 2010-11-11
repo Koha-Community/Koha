@@ -30,7 +30,7 @@ BEGIN {
 1;
 __END__
 
-=head2
+=head1 NOTES
 
 Since incremental is the default in C4::Barcodes, we do not override anything here.
 In fact, this file is more of a place holder.

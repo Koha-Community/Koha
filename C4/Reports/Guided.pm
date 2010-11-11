@@ -106,7 +106,7 @@ if (C4::Context->preference('item-level_itypes')) {
 }
 
 =head1 NAME
-   
+
 C4::Reports::Guided - Module for generating guided reports 
 
 =head1 SYNOPSIS
@@ -115,6 +115,7 @@ C4::Reports::Guided - Module for generating guided reports
 
 =head1 DESCRIPTION
 
+=cut
 
 =head1 METHODS
 
@@ -374,25 +375,22 @@ sub get_criteria {
 
 =item execute_query
 
-=over
+  ($results, $total, $error) = execute_query($sql, $offset, $limit)
 
-($results, $total, $error) = execute_query($sql, $offset, $limit)
 
-=back
+When passed C<$sql>, this function returns an array ref containing a result set
+suitably formatted for display in html or for output as a flat file when passed in
+C<$format> and C<$id>. It also returns the C<$total> records available for the
+supplied query. If passed any query other than a SELECT, or if there is a db error,
+C<$errors> an array ref is returned containing the error after this manner:
 
-    When passed C<$sql>, this function returns an array ref containing a result set
-    suitably formatted for display in html or for output as a flat file when passed in
-    C<$format> and C<$id>. It also returns the C<$total> records available for the
-    supplied query. If passed any query other than a SELECT, or if there is a db error,
-    C<$errors> an array ref is returned containing the error after this manner:
+C<$error->{'sqlerr'}> contains the offending SQL keyword.
+C<$error->{'queryerr'}> contains the native db engine error returned for the query.
 
-    C<$error->{'sqlerr'}> contains the offending SQL keyword.
-    C<$error->{'queryerr'}> contains the native db engine error returned for the query.
-    
-    Valid values for C<$format> are 'text,' 'tab,' 'csv,' or 'url. C<$sql>, C<$type>,
-    C<$offset>, and C<$limit> are required parameters. If a valid C<$format> is passed
-    in, C<$offset> and C<$limit> are ignored for obvious reasons. A LIMIT specified by
-    the user in a user-supplied SQL query WILL apply in any case.
+Valid values for C<$format> are 'text,' 'tab,' 'csv,' or 'url. C<$sql>, C<$type>,
+C<$offset>, and C<$limit> are required parameters. If a valid C<$format> is passed
+in, C<$offset> and C<$limit> are ignored for obvious reasons. A LIMIT specified by
+the user in a user-supplied SQL query WILL apply in any case.
 
 =cut
 

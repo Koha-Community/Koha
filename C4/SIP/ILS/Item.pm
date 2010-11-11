@@ -32,9 +32,9 @@ BEGIN {
 	@EXPORT_OK = qw();
 }
 
-=head2 EXAMPLE
+=head1 EXAMPLE
 
-our %item_db = (
+ our %item_db = (
     '1565921879' => {
         title => "Perl 5 desktop reference",
         id => '1565921879',
@@ -234,7 +234,7 @@ sub status_update {     # FIXME: this looks unimplemented
     $status->{ok} = 1;
     return $status;
 }
-    
+
 sub title_id {
     my $self = shift;
     return $self->{title};

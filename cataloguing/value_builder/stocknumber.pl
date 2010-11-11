@@ -21,19 +21,20 @@
 #use warnings; FIXME - Bug 2505
 use C4::Context;
 
-=head1
+=head1 plugin_parameters
 
-plugin_parameters : other parameters added when the plugin is called by the dopop function
+other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
 #   my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
     return "";
 }
 
-=head1
+=head1 plugin_javascript
 
-plugin_javascript : the javascript function called when the user enters the subfield.
+The javascript function called when the user enters the subfield.
 contain 3 javascript functions :
 * one called when the field is entered (OnFocus). Named FocusXXX
 * one called when the field is leaved (onBlur). Named BlurXXX
@@ -45,6 +46,7 @@ returns :
 the 3 scripts are inserted after the <input> in the html code
 
 =cut
+
 sub plugin_javascript {
 	my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
 	my $function_name= "inventory".(int(rand(100000))+1);

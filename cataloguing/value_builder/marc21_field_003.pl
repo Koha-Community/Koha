@@ -27,6 +27,7 @@ use C4::Context;
 plugin_parameters : other parameters added when the plugin is called by the dopop function
 
 =cut
+
 sub plugin_parameters {
     # my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
     return "";
@@ -46,6 +47,7 @@ returns :
 the 3 scripts are inserted after the <input> in the html code
 
 =cut
+
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;

@@ -21,7 +21,7 @@
 
  FIXME: individual fields in branch address need to be exported to templates,
         in order to fix bug 180; need to notify translators
-FIXME: looped html (e.g., list of checkboxes) need to be properly
+ FIXME: looped html (e.g., list of checkboxes) need to be properly
         TMPL_LOOP'ized; doing this properly will fix bug 130; need to
         notify translators
  FIXME: need to implement the branch categories stuff
@@ -34,7 +34,7 @@ FIXME: looped html (e.g., list of checkboxes) need to be properly
 
  Finlay working on this file from 26-03-2002
  Reorganising this branches admin page.....
- 
+
 =cut
 
 use strict;
