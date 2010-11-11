@@ -1350,14 +1350,15 @@ sub _normalize_match_point {
     return $normalized_match_point;
 }
 
-sub _isbn_cleanup ($) {
-    my $isbn = Business::ISBN->new( shift );
-    return undef unless $isbn;
-    $isbn = $isbn->as_isbn10 if $isbn->type eq 'ISBN13';
-    return undef unless $isbn;
-    $isbn = $isbn->as_string;
-    $isbn =~ s/-//g;
-    return $isbn;
+sub _isbn_cleanup {
+    my $isbn = Business::ISBN->new( $_[0] );
+    if ( $isbn ) {
+        $isbn = $isbn->as_isbn10 if $isbn->type eq 'ISBN13';
+        if (defined $isbn) {
+            return $isbn->as_string([]);
+        }
+    }
+    return;
 }
 
 1;
