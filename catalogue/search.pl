@@ -79,7 +79,7 @@ There are several additional secondary functions performed that I will
 not cover in detail.
 
 =head3 1. Building Query Strings
-    
+
 There are several types of queries needed in the process of search and retrieve:
 
 =over

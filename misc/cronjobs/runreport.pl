@@ -57,7 +57,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
 
 =head1 OPTIONS
 
-=over 8
+=over
 
 =item B<-help>
 
@@ -90,11 +90,19 @@ Same as above, but also runs report #17.
 
 =head1 TO DO
 
-=over 8
+=over
 
- ~ Complete testing for Sendmail related options: --email, --to, and --from.
- ~ Allow Saved Results option.
- ~ Possible --format option for CSV or tab-delimited output.
+=item * 
+
+Complete testing for Sendmail related options: --email, --to, and --from.
+
+=item *
+
+Allow Saved Results option.
+
+=item *
+
+Possible --format option for CSV or tab-delimited output.
 
 =back
 

@@ -50,11 +50,8 @@ GetOptions(
 my $dbh = C4::Context->dbh;
 $|=1; # flushes output
 
-=item
 
-    Deal with virtualshelves
-
-=cut
+# Deal with virtualshelves
 
 my $DBversion = "3.00.00.001";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -2789,11 +2786,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	print "Upgrade to $DBversion done ( Adding enddate to subscription)\n";
 }
 
-=item
-
-Acquisitions update
-
-=cut
+# Acquisitions update
 
 $DBversion = "3.01.00.072";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -3842,9 +3835,11 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-=item DropAllForeignKeys($table)
+=head1 FUNCTIONS
 
-  Drop all foreign keys of the table $table
+=head2 DropAllForeignKeys($table)
+
+Drop all foreign keys of the table $table
 
 =cut
 
@@ -3871,10 +3866,10 @@ sub DropAllForeignKeys {
 }
 
 
-=item TransformToNum
+=head2 TransformToNum
 
-  Transform the Koha version from a 4 parts string
-  to a number, with just 1 .
+Transform the Koha version from a 4 parts string
+to a number, with just 1 .
 
 =cut
 
@@ -3885,9 +3880,9 @@ sub TransformToNum {
     return $version;
 }
 
-=item SetVersion
+=head2 SetVersion
 
-    set the DBversion in the systempreferences
+set the DBversion in the systempreferences
 
 =cut
 

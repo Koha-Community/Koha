@@ -25,9 +25,11 @@ use CGI;
 use C4::Context;
 
 
-=head1
+=head1 FUNCTIONS
 
-plugin_parameters : other parameters added when the plugin is called by the dopop function
+=head2 plugin_parameters
+
+other parameters added when the plugin is called by the dopop function
 
 =cut
 

@@ -19,10 +19,11 @@
 
 =head1 NAME
 
-etail.pl : script to show an authority in MARC format
+detail-biblio-search.pl - script to show an authority in MARC format
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 
@@ -32,8 +33,6 @@ It shows the authority in a (nice) MARC format depending on authority MARC
 parameters tables.
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 
