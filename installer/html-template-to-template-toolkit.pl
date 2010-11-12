@@ -71,24 +71,53 @@ foreach my $file (@template_files) {
     close $ITMPL;
 
     # Process..
+    # NB: if you think you're seeing double, you probably are, *some* (read:most) patterns appear twice: once with quotations marks, once without.
+    #     trying to combine them into a single pattern proved troublesome as a regex like ['"]?(.*?)['"]? was causing problems and fixing the problem caused (alot) more complex regex
     # variables
-    $input_tmpl =~ s/<!--\s*TMPL_VAR\s+NAME="(.*?)"\s*-->/[% $1 %]/ig;
-    # if and unless blocks
-    $input_tmpl =~ s/<!--\s*TMPL_IF\s+NAME="(.*?)"\s*-->/[% IF ( $1 ) %]/ig;
-    $input_tmpl =~ s/<!--\s*TMPL_UNLESS\s+NAME="(.*?)"\s*-->/[% IF ( $1 ) %]/ig;
-    $input_tmpl =~ s/<!--\s*TMPL_ELSE\s*-->/[% ELSE %]/ig;
-    $input_tmpl =~ s/<!--\s*\/TMPL_IF\s*-->/[% END %]/ig;
-    $input_tmpl =~ s/<!--\s*\/TMPL_UNLESS\s*-->/[% END %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]\s*(\w*?)\s*['"]\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2%]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?(\w*?)\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2%]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+ESCAPE=['"]?(\w*?)['"]?\s+NAME\s?=\s?['"]?([\w-]*?)['"]?\s*-*>/[% $1 |$2%]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?(\w*?)['"]?\s+DEFAULT=['"](.*?)['"]\s*-*>/[% DEFAULT $1="$2"%]/ig; # if a value being assigned is wrapped in quotes, keep them intact
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+DEFAULT=(.*?)\s*-*>/[% DEFAULT $1=$2%]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+NAME\s?=\s?['"]?(\w*?)['"]?\s*-*>/[% $1 %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% $1 %]/ig;     # TMPL_VAR NAME and TMPL_VAR EXPR are logically equiv, see http://search.cpan.org/~samtregar/HTML-Template-Expr-0.07/Expr.pm
+    $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?(.*?)\s*-*>/[% $1 %]/ig;
+    # if, elseif and unless blocks
+    $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+EXPR\s?=\s?(.*?)\s*-*>/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+NAME\s?=\s?['"]\s*(\w*?)\s*['"]\s*-*>/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+NAME\s?=\s?(\w*?)\s*-*>/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+['"](.*?)['"]\s*-*>/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+([\w\s]*?)\s*-*>/[% IF ( $1 ) %]/ig;
+
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% ELSEIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+EXPR\s?=\s?(.*?)\s*-*>/[% ELSEIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+NAME\s?=\s?['"](\w*?)['"]\s*-*>/[% ELSEIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+NAME\s?=\s?(\w*?)\s*-*>/[% ELSEIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+['"](\w*?)['"]\s*-*>/[% ELSEIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+(\w*?)\s*-*>/[% ELSEIF ( $1 ) %]/ig;
+
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSE\s*-*>/[% ELSE %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*\/TMPL_IF\s*-*>/[% END %]/ig;
+
+    $input_tmpl =~ s/<[!-]*\s*TMPL_UNLESS\s+NAME\s?=\s?['"]?(\w*?)['"]?\s*-*>/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*\/TMPL_UNLESS\s*-*>/[% END %]/ig;
     # includes
-    $input_tmpl =~ s/<!--\s*TMPL_INCLUDE\s+NAME="(.*?\.inc)"\s*-->/[% INCLUDE '$1' %]/ig;
-    $input_tmpl =~ s/<!--\s*TMPL_INCLUDE\s+NAME="(.*?)"\s*-->/[% INCLUDE $1 %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_INCLUDE\s+NAME\s?=\s?"(.*?\.inc)"\s*-*>/[% INCLUDE '$1' %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_INCLUDE\s+NAME\s?=\s?"(.*?)"\s*-*>/[% INCLUDE $1 %]/ig;
 
     if ( $input_tmpl =~ m/<!--[\s\/]*TMPL_LOOP\s*-->/i ) {
         push(@files_w_tmpl_loops, $new_path);
     }
 
-    $input_tmpl =~ s/<!--\s*TMPL_LOOP\s+NAME="(.*?)"\s*-->/"[% FOREACH ".substr($1, 0 , -1)." IN (".$1.") %]"/ieg;
-    $input_tmpl =~ s/<!--\s*\/TMPL_LOOP\s*-->/[% END %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_LOOP\s+NAME\s?=\s?['"](.*?)['"]\s*-*>/"[% FOREACH ".substr($1, 0 , -1)." = ".$1." %]"/ieg;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_LOOP\s+NAME\s?=\s?(.*?)\s*-*>/"[% FOREACH ".substr($1, 0 , -1)." = ".$1." %]"/ieg;
+    $input_tmpl =~ s/<[!-]*\s*\/TMPL_LOOP\s*-*>/[% END %]/ig;
+
+    # misc 'patches'
+    $input_tmpl =~ s/\seq\s/ == /ig;
+    $input_tmpl =~ s/HTML/html/ig;
+    $input_tmpl =~ s/URL/url/ig;
 
     # Write out..
     print $OTT $input_tmpl;
