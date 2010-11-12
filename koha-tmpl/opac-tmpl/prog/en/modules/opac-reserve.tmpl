@@ -231,7 +231,7 @@
                 <!-- TMPL_UNLESS NAME="none_available" --><tr>
                   <th>Hold</th>
                   <th>Title</th>
-                  <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                  <!-- TMPL_UNLESS NAME="item_level_itypes" -->
                     <th>Item Type</th>
                   <!-- /TMPL_UNLESS -->
                   <!-- TMPL_IF NAME="showpriority" -->
@@ -287,13 +287,17 @@
                         <!-- /TMPL_UNLESS -->
 
                     </td>
-                    <!-- TMPL_IF NAME="holdable" --><!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                    <!-- TMPL_IF NAME="holdable" --><!-- TMPL_UNLESS NAME="item_level_itypes" -->
                                           <td>
                                             <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
                                 <!-- TMPL_VAR NAME="description" -->
                                           </td>
                                         <!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
-                    <!-- TMPL_IF NAME="holdable" --><!-- TMPL_IF NAME="showpriority" --><td><!-- TMPL_VAR name="rank" --> out of <!-- TMPL_VAR NAME="reservecount" --></td><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="holdable" -->
+                    <!-- TMPL_IF NAME="showpriority" -->
+                    <td>
+                    <!-- TMPL_VAR name="rank" --> out of <!-- TMPL_VAR NAME="reservecount" -->
+                    </td><!-- /TMPL_IF --><!-- /TMPL_IF -->
 		    <!-- TMPL_IF NAME="reserve_in_future" -->
 		    <!-- TMPL_IF NAME="holdable" --><td>
               <input name="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10">
@@ -437,7 +441,7 @@
                           <caption>Select a specific copy:</caption>
                           <tr>
                             <th>Copy</th>
-                            <!-- TMPL_IF NAME="item-level_itypes" -->
+                            <!-- TMPL_IF NAME="item_level_itypes" -->
                               <th>Item Type</th>
                             <!-- /TMPL_IF -->
                             <th>Barcode</th>
@@ -463,7 +467,7 @@
                                   <img src="/opac-tmpl/<!-- TMPL_VAR NAME="theme" -->/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
                                 <!-- /TMPL_IF --> <!-- TMPL_IF NAME="copynumber" --><!-- TMPL_VAR NAME="copynumber" --><!-- /TMPL_IF -->
                               </td>
-                              <!-- TMPL_IF NAME="item-level_itypes" -->
+                              <!-- TMPL_IF NAME="item_level_itypes" -->
                                 <td>
                                   <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
                                   <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->

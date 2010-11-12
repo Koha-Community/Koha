@@ -372,8 +372,9 @@ $(document).ready(function(){
 <!-- TMPL_IF NAME="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></td>
                 <td class="select selectcol"><!-- TMPL_VAR NAME="result_number" -->.</td>
 
-				<!-- TMPL_UNLESS NAME="item-level_itypes" -->
+				<!-- TMPL_UNLESS NAME="item_level_itypes" -->
                 <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
+
 				<td class="itypecol">
                 <!-- TMPL_IF name="imageurl" -->
 				<img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" />

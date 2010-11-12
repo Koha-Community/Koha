@@ -28,13 +28,13 @@ $.tablesorter.addParser({
 				widgets : ['zebra'],
 				<!-- TMPL_IF NAME="JacketImages" -->
 					sortList: [[3,0]],
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
 						<!-- TMPL_ELSE -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
 						<!-- /TMPL_IF -->
 				<!-- TMPL_ELSE -->
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							sortList: [[2,0]],
 							headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }}
 						<!-- TMPL_ELSE -->
@@ -48,13 +48,13 @@ $.tablesorter.addParser({
 				widgets : ['zebra'],
 				<!-- TMPL_IF NAME="JacketImages" -->
 					sortList: [[1,0]],
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
 						<!-- TMPL_ELSE -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
 						<!-- /TMPL_IF -->
 				<!-- TMPL_ELSE -->
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							sortList: [[0,0]],
 							headers: { 0: { sorter: 'articles' },3: { sorter: false }}
 						<!-- TMPL_ELSE -->
@@ -200,7 +200,7 @@ $.tablesorter.addParser({
        <thead><tr>
 		<!-- TMPL_IF NAME="JacketImages" --><th>&nbsp;</th><!-- /TMPL_IF -->
         <th>Title</th>
-		<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
+		<!-- TMPL_UNLESS NAME="item_level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
         <th>Call No.</th>
         <th>Due</th>
         <!-- TMPL_IF name="OpacRenewalAllowed" -->
@@ -240,7 +240,7 @@ $.tablesorter.addParser({
                 <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span></td>
-                <!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
+                <!-- TMPL_UNLESS NAME="item_level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
                 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                 <!-- TMPL_IF NAME="overdue" -->
                     <td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td>
@@ -291,7 +291,7 @@ $.tablesorter.addParser({
 <thead><tr>
 <!-- TMPL_IF NAME="JacketImages" --><th>&nbsp;</th><!-- /TMPL_IF -->
 <th>Title</th>
-<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS NAME="item_level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
 <th>Call No.</th>
 <th>Due</th>
 <!-- TMPL_IF name="OpacRenewalAllowed" -->
@@ -322,7 +322,7 @@ $.tablesorter.addParser({
 
 <td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> <span class="item-details"><!-- TMPL_VAR NAME="author" --></span></td>
 
-<!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS NAME="item_level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>
                 <!-- TMPL_IF name="OpacRenewalAllowed" -->

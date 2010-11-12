@@ -170,7 +170,7 @@ function placeHold () {
     <table>
             <tr>
                 <!--TMPL_IF NAME="manageshelf" --><th class="checkall">&nbsp;</th><!-- /TMPL_IF -->
-                <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
+                <!-- TMPL_UNLESS NAME="item_level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
                 <th>Title</th>
                 <th>Author</th>
                 <th>Date Added</th>
@@ -192,7 +192,7 @@ function placeHold () {
 				<!-- /TMPL_IF -->
 			</td>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
+			<!-- TMPL_UNLESS NAME="item_level_itypes" --><td>
                 <!-- TMPL_UNLESS NAME="noItemTypeImages" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_UNLESS --><!-- TMPL_VAR NAME="description" -->
 			</td><!-- /TMPL_UNLESS -->
 			<td>
