@@ -135,8 +135,8 @@ if (f.company.value == "") {
             </ol>
             <ol>
             <li><label for="discount">Discount</label>
-                <input type="text" size="6" id="discount" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %</li>
-            <!-- TMPL_IF NAME="GST" --><li><label for="gstrate">Tax rate</label><input type="text" name="gstrate" id="gstrate" size="5" value="<!-- TMPL_VAR name="gstrate" -->"/>%</li><!-- /TMPL_IF -->
+                <input type="text" size="5" id="discount" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" /> %</li>
+            <!-- TMPL_IF NAME="GST" --><li><label for="gstrate">Tax rate</label><input type="text" name="gstrate" id="gstrate" size="5" value="<!-- TMPL_VAR name="gstrate" -->"/> %</li><!-- /TMPL_IF -->
             <li><label for="notes">Notes</label>
                 <textarea cols="40" rows="4" id="notes" name="notes" ><!-- TMPL_VAR NAME="notes" --></textarea></li></ol>			
             <!-- TMPL_UNLESS NAME="GST" -->
