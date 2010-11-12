@@ -102,13 +102,13 @@ $.tablesorter.addParser({
 		<div class="dialog alert">
         <ul>
             <!-- TMPL_IF NAME="debarred" -->
-                <li><strong>Please note:</strong> Your account has been frozen. Usually the reason for freezing an account is old overdues or damage fees.If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.</li>
+                <li><strong>Please note:</strong> Your account has been frozen. Usually the reason for freezing an account is old overdues or damage fees.If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="gonenoaddress" -->
-                <li><strong>Please note:</strong> According to our records, we don't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.  Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)</li>
+                <li><strong>Please note:</strong> According to our records, we don't have up-to-date <!-- TMPL_UNLESS NAME="OPACPatronDetails" --><a href="/cgi-bin/koha/opac-userupdate.pl">contact information</a><!-- TMPL_ELSE -->contact information<!-- /TMPL_UNLESS --> on file.  Please contact the library<!-- TMPL_IF NAME="OPACPatronDetails" --> or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)<!-- /TMPL_IF -->.</li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="lost" -->
-                <li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</li>
+                <li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please contact the library.</li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="renewal_blocked_fines" -->
                 <li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than <!-- TMPL_VAR NAME="renewal_blocked_fines" --></a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li>
