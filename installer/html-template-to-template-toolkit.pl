@@ -70,18 +70,32 @@ foreach my $file (@template_files) {
     my $input_tmpl = do { local $/; <$ITMPL> };
     close $ITMPL;
 
+    # handle poorly names variable such as f1!, f1+, f1-, f1| and mod
+    $input_tmpl =~ s/"(\w+)\|"/"$1pipe"/ig;
+    $input_tmpl =~ s/"(\w+)\+"/"$1plus"/ig;
+    $input_tmpl =~ s/"(\w+)\-"/"$1minus"/ig;
+    $input_tmpl =~ s/"(\w+)!"/"$1exclamation"/ig;
+    $input_tmpl =~ s/"(\w+),(\w+)"/"$1comma$2"/ig;
+    $input_tmpl =~ s/NAME="mod"/NAME="modname"/ig;
+    # handle 'naked' TMPL_VAR "parameter" by turning them into what they should be, TMPL_VAR NAME="parameter"
+    $input_tmpl =~ s/TMPL_VAR\s+"(\w+)"/TMPL_VAR NAME="$1"/ig;
+    # make an end (ESCAPE NAME DEFAULT) into a ned (NAME ESCAPE DEFAULT)
+    $input_tmpl =~ s/ESCAPE="(\w+?)"\s+NAME=['"](\w+?)['"]\s+DEFAULT=['"](.+?)['"]/NAME="$2" ESCAPE="$1" DEFAULT="$3"/ig;
+
     # Process..
     # NB: if you think you're seeing double, you probably are, *some* (read:most) patterns appear twice: once with quotations marks, once without.
     #     trying to combine them into a single pattern proved troublesome as a regex like ['"]?(.*?)['"]? was causing problems and fixing the problem caused (alot) more complex regex
     # variables
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+ESCAPE=['"](\w*?)['"]\s+DEFAULT=['"]?(.*?)['"]?\s*-*>/[% DEFAULT $1="$3" |$2%]/ig; # CHECK ME PLEASE
     $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]\s*(\w*?)\s*['"]\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2%]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?(\w*?)\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2%]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+ESCAPE=['"]?(\w*?)['"]?\s+NAME\s?=\s?['"]?([\w-]*?)['"]?\s*-*>/[% $1 |$2%]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?(\w*?)['"]?\s+DEFAULT=['"](.*?)['"]\s*-*>/[% DEFAULT $1="$2"%]/ig; # if a value being assigned is wrapped in quotes, keep them intact
     $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+DEFAULT=(.*?)\s*-*>/[% DEFAULT $1=$2%]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+NAME\s?=\s?['"]?(\w*?)['"]?\s*-*>/[% $1 %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s*-*>/[% $1 %]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% $1 %]/ig;     # TMPL_VAR NAME and TMPL_VAR EXPR are logically equiv, see http://search.cpan.org/~samtregar/HTML-Template-Expr-0.07/Expr.pm
     $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?(.*?)\s*-*>/[% $1 %]/ig;
+
     # if, elseif and unless blocks
     $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% IF ( $1 ) %]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+EXPR\s?=\s?(.*?)\s*-*>/[% IF ( $1 ) %]/ig;
