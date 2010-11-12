@@ -3735,6 +3735,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+<<<<<<< HEAD:installer/data/mysql/updatedatabase.pl
 $DBversion = '3.01.00.999';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (3.2.0 release candidate)\n";
@@ -3832,6 +3833,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'ur','urd');");
 
     print "Upgrade to $DBversion done (Correct language mappings)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.003';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseTablesortForCirc','0','If on, use the JQuery tablesort function on the list of current borrower checkouts on the circulation page. Note that the use of this function may slow down circ for patrons with may checkouts.','','YesNo');");
+    print "Upgrade to $DBversion done (Add UseTablesortForCirc syspref)\n";
     SetVersion ($DBversion);
 }
 
