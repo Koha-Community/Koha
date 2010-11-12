@@ -66,7 +66,7 @@ my $columnkeystpl = [ map { {'key' => $_} }  grep {$_ ne 'borrowernumber' && $_ 
 
 my $input = CGI->new();
 our $csv  = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
-# push @feedback, {feedback=>1, name=>'backend', value=>$csv->backend, backend=>$csv->backend};
+#push @feedback, {feedback=>1, name=>'backend', value=>$csv->backend, backend=>$csv->backend}; #XXX
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "tools/import_borrowers.tmpl",
@@ -193,6 +193,9 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         }
         if ($extended) {
             my $attr_str = $borrower{patron_attributes};
+            $attr_str =~ s/\xe2\x80\x9c/"/g; # fixup double quotes in case we are passed smart quotes
+            $attr_str =~ s/\xe2\x80\x9d/"/g;
+            push @feedback, {feedback=>1, name=>'attribute string', value=>$attr_str, filename=>$uploadborrowers};
             delete $borrower{patron_attributes};    # not really a field in borrowers, so we don't want to pass it to ModMember.
             $patron_attributes = extended_attributes_code_value_arrayref($attr_str); 
         }
@@ -246,6 +249,8 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
             }
             unless (ModMember(%borrower)) {
                 $invalid++;
+                # untill we have better error trapping, we have no way of knowing why ModMember errored out...
+                push @errors, {unknown_error => 1};
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / '.$borrowernumber);
                 next LINE;
             }
@@ -254,7 +259,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                     my $old_attributes = GetBorrowerAttributes($borrowernumber);
                     $patron_attributes = extended_attributes_merge($old_attributes, $patron_attributes);  #TODO: expose repeatable options in template
                 }
-                SetBorrowerAttributes($borrower{'borrowernumber'}, $patron_attributes);
+                push @errors, {unknown_error => 1} unless SetBorrowerAttributes($borrower{'borrowernumber'}, $patron_attributes);
             }
             $overwritten++;
             $template->param('lastoverwritten'=>$borrower{'surname'}.' / '.$borrowernumber);
@@ -276,6 +281,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
                 $template->param('lastimported'=>$borrower{'surname'}.' / '.$borrowernumber);
             } else {
                 $invalid++;
+                push @errors, {unknown_error => 1};
                 $template->param('lastinvalid'=>$borrower{'surname'}.' / AddMember');
             }
         }
