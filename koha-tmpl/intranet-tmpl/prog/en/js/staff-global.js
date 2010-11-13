@@ -43,35 +43,34 @@ function _(s) { return s } // dummy function for gettext
                 YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMoremenu);
             });
 
+// build Change Language menus
 YAHOO.util.Event.onContentReady("changelanguage", function () {
-                var oMenu = new YAHOO.widget.Menu("sublangs", { zindex: 2 });
+	$(".sublangs").each(function(){
+		var menuid = $(this).attr("id");
+		var menuid = menuid.replace("show","");
 
-	            function positionoMenu() {
-                    oMenu.align("bl", "tl");
-                }
-
-                oMenu.subscribe("beforeShow", function () {
-                    if (this.getRoot() == this) {
-						positionoMenu();
-                    }
-                });
-
-                oMenu.render();
-
-				oMenu.cfg.setProperty("context", ["showlang", "bl", "tl"]);
-
-				function onYahooClick(p_oEvent) {
-                    // Position and display the menu        
-                    positionoMenu();
-                    oMenu.show();
-                    // Stop propagation and prevent the default "click" behavior
-                    YAHOO.util.Event.stopEvent(p_oEvent);
-                }
-
-				YAHOO.util.Event.addListener("showlang", "click", onYahooClick);
-
-				YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
-            });
+		var oMenu = new YAHOO.widget.Menu("sub"+menuid, { zindex: 2 });
+		function positionoMenu() {
+			oMenu.align("bl", "tl");
+		}
+		oMenu.subscribe("beforeShow", function () {
+		if (this.getRoot() == this) {
+			positionoMenu();
+		}
+		});
+		oMenu.render();
+		oMenu.cfg.setProperty("context", ["show"+menuid, "bl", "tl"]);
+		function onYahooClick(p_oEvent) {
+			// Position and display the menu
+			positionoMenu();
+			oMenu.show();
+			// Stop propagation and prevent the default "click" behavior
+			YAHOO.util.Event.stopEvent(p_oEvent);
+		}
+		YAHOO.util.Event.addListener("show"+menuid, "click", onYahooClick);
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
+	});
+});
 			
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html
 function checkEnter(e){ //e is event object passed from function invocation
