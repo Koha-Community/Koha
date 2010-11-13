@@ -147,9 +147,10 @@ EOF
 }
 
 $borr->{'dateenrolled'} = format_date( $borr->{'dateenrolled'} );
-$borr->{'dateexpiry'}       = format_date( $borr->{'dateexpiry'} );
+$borr->{'dateexpiry'}   = format_date( $borr->{'dateexpiry'} );
 $borr->{'dateofbirth'}  = format_date( $borr->{'dateofbirth'} );
 $borr->{'ethnicity'}    = fixEthnicity( $borr->{'ethnicity'} );
+$borr->{'branchcode'}   = GetBranchName($borr->{'branchcode'});
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, 'opac');
