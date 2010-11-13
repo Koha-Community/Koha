@@ -169,7 +169,7 @@ if ($op eq "show"){
     my @contentlist;
     if ($filefh){
         while (my $content=<$filefh>){
-            $content =~ s/[\r\n]*$//g;
+            $content =~ s/[\r\n]*$//;
             push @contentlist, $content if $content;
         }
 
