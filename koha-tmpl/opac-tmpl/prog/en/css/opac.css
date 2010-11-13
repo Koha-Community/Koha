@@ -25,8 +25,9 @@ body {
 
 caption {
 	font-size : 140%;
-	text-align : left;
 	font-weight : bold;
+	line-height : 144%;
+	text-align : left;
 }
 
 fieldset {
@@ -53,7 +54,7 @@ fieldset.rows legend {
 	font-size : 110%;
 }
 
-fieldset.rows label, fieldset.rows span.label {  
+fieldset.rows label, fieldset.rows span.label {
 	float: left;  
 	font-weight : bold;
 	width: 9em;  
@@ -866,12 +867,45 @@ em {
 	font-style : italic;
 }
 
-#catalogue_detail_biblio p span.label {  
+
+table#marc,
+table#marc td,
+table#marc th {
+	background-color : transparent;
+	border : 0;
+}
+
+table#marc p span.label {
 	font-weight : bold;
 }
 
-#catalogue_detail_biblio p, #catalogue_detail_biblio ul {  
+table#marc p,
+table#marc ul {
 	padding-bottom: .6em;
+}
+
+table#items,
+table#items td
+table#items th {
+	border-width : 1px solid #EEE;
+	font-size : 90%;
+}
+
+
+table#marc div.results_summary {
+	clear :  left;
+}
+table#marc div.results_summary ul {
+	display : inline;
+	float :  none;
+	clear :  none;
+	margin: 0;
+	padding: 0;
+	list-style : none;
+}
+
+table#marc div.results_summary ul li {
+	display : inline;
 }
 
 #basketcount {
@@ -1182,11 +1216,6 @@ div.tab-container {
 	width : 90%;
 }
 
-#catalogue_detail_biblio table, #catalogue_detail_biblio td, #catalogue_detail_biblio th {
-	background-color : transparent;
-	border : 0;
-}
-
 tr.overdue td {
 	background-color : #ffcccc;
 	border-bottom : 1px solid #ffaeae;
@@ -1292,22 +1321,6 @@ padding-left : .4em;
 .actions a.addtoshelf {
 	background : url("../../images/addtolist-small.gif") center left no-repeat;
 	padding-left : 13px;
-}
-
-#catalogue_detail_biblio div.results_summary {
-	clear :  left;
-}
-#catalogue_detail_biblio div.results_summary ul {
-	display : inline;
-	float :  none;
-	clear :  none;
-	margin: 0;
-	padding: 0;
-	list-style : none;
-}
-
-#catalogue_detail_biblio div.results_summary ul li {
-	display : inline;
 }
 
 .dialog {
