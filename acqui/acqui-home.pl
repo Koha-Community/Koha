@@ -38,6 +38,7 @@ use C4::Budgets;
 use C4::Members;
 use C4::Branch;
 use C4::Debug;
+use C4::Suggestions;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -73,6 +74,9 @@ if ( $cur_format eq 'FR' ) {
         'mon_decimal_point' => '.'
     );
 }
+
+my $status           = $query->param('status') || "ASKED";
+my $suggestions_count       = CountSuggestion($status);
 
 my $budget_arr =
   GetBudgetHierarchy( '', $user->{branchcode},
@@ -123,7 +127,6 @@ foreach my $budget ( @{$budget_arr} ) {
 }
 
 $template->param(
-
     type          => 'intranet',
     loop_budget   => $budget_arr,
     branchname    => $branchname,
@@ -132,6 +135,7 @@ $template->param(
     totordered    => $num_formatter->format_price($totordered),
     totcomtd      => $num_formatter->format_price($totcomtd),
     totavail      => $num_formatter->format_price($totavail),
+    suggestions_count    => $suggestions_count,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
