@@ -82,7 +82,9 @@ my ($template, $borrowernumber, $cookie, $staff_flags ) = get_template_and_user(
 
 
 my $cur = GetCurrency();
-$template->param( cur => $cur->{symbol} );
+$template->param( symbol => $cur->{symbol},
+                  currency => $cur->{currency}
+               );
 my $cur_format = C4::Context->preference("CurrencyFormat");
 my $num;
 
