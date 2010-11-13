@@ -210,9 +210,7 @@ function showCartUpdate(msg){
 
 function showListsUpdate(msg){
        // set body of popup window
-       $("#listsDetails").html(msg);
-       showLists();
-       setTimeout("hideLists()",2000); 
+       alert(msg);
 }
 
 function selRecord(num, status) {
