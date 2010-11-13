@@ -439,7 +439,7 @@ function GetZ3950Terms(){
                                         <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="cn_class" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="cn_class" --></a>]<!-- /TMPL_IF -->
                                     </p>
-                                    <p class="searchhighlightblob"><!-- TMPL_VAR NAME="searchhighlightblob" --></p>
+                                    <!-- TMPL_IF NAME="searchhighlightblob" --><p class="searchhighlightblob"><!-- TMPL_VAR NAME="searchhighlightblob" --></p><!-- /TMPL_IF -->
 
                                     <!-- TMPL_IF NAME="authorised_value_images" -->
                                 <p>
@@ -450,11 +450,17 @@ function GetZ3950Terms(){
                                 <!-- /TMPL_IF -->
 
                                 <!-- /TMPL_IF -->
-                                  <!-- TMPL_IF NAME="norequests" -->
-                                        <span class="noholdstext">No holds allowed</span>
-                                    <!-- TMPL_ELSE -->
-                                        <a class="reserve" id="reserve_<!-- TMPL_VAR NAME="biblionumber" -->" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
-                                    <!-- /TMPL_IF -->
+                                  <p class="hold"><!-- TMPL_IF NAME="norequests" -->
+                                  <span class="noholdstext">No holds allowed</span>
+                              <!-- TMPL_ELSE -->
+                                  <a id="reserve_<!-- TMPL_VAR NAME="biblionumber" -->" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
+                              <!-- /TMPL_IF -->
+                          <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
+                          | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit record</a>
+                          <!-- /TMPL_IF -->
+                          <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
+                          | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit items</a>
+                          <!-- /TMPL_IF --></p>
                                 </td>
 
                                 <td><div class="availability">
