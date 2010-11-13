@@ -383,6 +383,7 @@ sub ModSuggestion {
     if ($$suggestion{STATUS}){
         my $letter=C4::Letters::getletter('suggestions',$suggestion->{STATUS});
         if ($letter){
+            C4::Letters::parseletter($letter, 'branches', $suggestion->{branchcode});
             C4::Letters::parseletter($letter, 'borrowers', $suggestion->{suggestedby});
             C4::Letters::parseletter($letter, 'suggestions', $suggestion->{suggestionid});
             C4::Letters::parseletter($letter, 'biblio', $suggestion->{biblionumber});
