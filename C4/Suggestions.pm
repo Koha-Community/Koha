@@ -379,20 +379,22 @@ Note that there is no function to modify a suggestion.
 sub ModSuggestion {
     my ($suggestion)=@_;
     my $status_update_table=UpdateInTable("suggestions", $suggestion);
-# check mail sending.
-    if ($$suggestion{STATUS}){
-        my $letter=C4::Letters::getletter('suggestions',$suggestion->{STATUS});
-        if ($letter){
-            C4::Letters::parseletter($letter, 'branches', $suggestion->{branchcode});
-            C4::Letters::parseletter($letter, 'borrowers', $suggestion->{suggestedby});
-            C4::Letters::parseletter($letter, 'suggestions', $suggestion->{suggestionid});
-            C4::Letters::parseletter($letter, 'biblio', $suggestion->{biblionumber});
+
+    if ($suggestion->{STATUS}) {
+        # fetch the entire updated suggestion so that we can populate the letter
+        my $full_suggestion = GetSuggestion($suggestion->{suggestionid});
+        my $letter = C4::Letters::getletter('suggestions', $full_suggestion->{STATUS});
+        if ($letter) {
+            C4::Letters::parseletter($letter, 'branches',    $full_suggestion->{branchcode});
+            C4::Letters::parseletter($letter, 'borrowers',   $full_suggestion->{suggestedby});
+            C4::Letters::parseletter($letter, 'suggestions', $full_suggestion->{suggestionid});
+            C4::Letters::parseletter($letter, 'biblio',      $full_suggestion->{biblionumber});
             my $enqueued = C4::Letters::EnqueueLetter({
-            letter=>$letter,
-            borrowernumber=>$suggestion->{suggestedby},
-            suggestionid=>$suggestion->{suggestionid},
-            LibraryName => C4::Context->preference("LibraryName"),
-            message_transport_type=>'email'
+                letter                  => $letter,
+                borrowernumber          => $full_suggestion->{suggestedby},
+                suggestionid            => $full_suggestion->{suggestionid},
+                LibraryName             => C4::Context->preference("LibraryName"),
+                message_transport_type  => 'email',
             });
             if (!$enqueued){warn "can't enqueue letter $letter";}
         }
