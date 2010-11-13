@@ -339,6 +339,7 @@ sub get_template_and_user {
             XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
             BranchesLoop                 => GetBranchesLoop(),
             using_https                  => $in->{'query'}->https() ? 1 : 0,
+            noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
     );
 
     if ( $in->{'type'} eq "intranet" ) {
@@ -363,7 +364,6 @@ sub get_template_and_user {
             intranetstylesheet          => C4::Context->preference("intranetstylesheet"),
             intranetuserjs              => C4::Context->preference("intranetuserjs"),
             intranetbookbag             => C4::Context->preference("intranetbookbag"),
-            noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
             suggestion                  => C4::Context->preference("suggestion"),
             virtualshelves              => C4::Context->preference("virtualshelves"),
             StaffSerialIssueDisplayCount => C4::Context->preference("StaffSerialIssueDisplayCount"),
