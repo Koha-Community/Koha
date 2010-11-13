@@ -214,6 +214,7 @@ function verify_images() {
                 <!-- TMPL_IF NAME="volinfo" --><th>Publication Details</th><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="itemdata_uri" --><th>URL</th><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="itemdata_copynumber" --><th>Copy No.</th><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="itemdata_itemnotes" --><th>Public notes</th><!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="SpineLabelShowPrintOnBibDetails" --><th>Spine Label</th><!-- /TMPL_IF -->
             </tr>
             <!-- TMPL_LOOP NAME="itemloop" -->
@@ -333,6 +334,7 @@ function verify_images() {
 				<!-- TMPL_IF NAME="itemdata_copynumber" -->
 					<td class="copynumber"><!-- TMPL_VAR NAME="copynumber" --></td>
 				<!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="itemdata_itemnotes" --><td><div class="itemnotes"><!-- TMPL_VAR NAME="itemnotes" --></div></td><!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="type" -->
                     <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;item=<!-- TMPL_VAR NAME="itemtype" -->">Fix Itemtype</a></td>
                 <!-- /TMPL_IF -->
