@@ -309,6 +309,7 @@ $(function() {
                 <h3><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> <a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><em><!-- TMPL_VAR NAME="shelfname" ESCAPE="html" --></em></a> <img src="<!-- TMPL_VAR NAME="themelang" -->/../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Editing</h3>
                 <form method="post" action="/cgi-bin/koha/opac-shelves.pl">
                   <input type="hidden" name="op" value="modifsave" />
+                   <!-- TMPL_IF NAME="showprivateshelves" --><input type="hidden" name="display" value="privateshelves" /><!-- /TMPL_IF -->
                   <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" />
                   <fieldset class="rows">
                     <ol>
@@ -330,7 +331,7 @@ $(function() {
                       </li>
                     </ol>
                   </fieldset>
-                  <fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->">Cancel</a></fieldset>
+                  <fieldset class="action"><input type="submit" value="Save" class="submit" /> <!-- TMPL_IF NAME="showprivateshelves" --><a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;display=privateshelves">Cancel</a><!-- TMPL_ELSE --><a class="cancel" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->">Cancel</a><!-- /TMPL_IF --></fieldset>
                 </form>
             <!-- /TMPL_IF --><!-- /edit -->
 
