@@ -93,22 +93,15 @@
 	<!-- /TMPL_IF -->
   
 	<!-- TMPL_IF NAME="check_member" -->
-		<p>
-		<form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post">
 			<div class="dialog alert">
-				<h3>Duplicate suspected</h3>
-				<a href="javascript:Dopop('borrowers_details.pl?borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" >Detail</a>
-				Duplicate ?
-				<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=<!--TMPL_VAR NAME="check_member"-->&amp;category_type=<!--TMPL_VAR NAME="check_categorytype"-->">Yes</a>
-				&nbsp;&nbsp;&nbsp; No, it is not
-				<!-- TMPL_IF NAME="checked"-->
-					<input type="checkbox" checked="checked" name="answernodouble" >
-				<!-- TMPL_ELSE -->
-					<input type="checkbox" name="answernodouble" />
-				<!-- /TMPL_IF -->
+				<h3>Duplicate patron record?</h3>
+				<p><a class="popup" href="javascript:Dopop('moremember.pl?print=brief&amp;borrowernumber=<!--TMPL_VAR NAME="check_member"-->');" >View existing record</a></p>
+				<form action="/cgi-bin/koha/members/memberentry.pl" method="get"><input type="hidden" name="op" value="modify" /><input type="hidden" name="borrowernumber" value="<!--TMPL_VAR NAME="check_member"-->" /><input type="hidden" name="category_type" value="<!--TMPL_VAR NAME="check_categorytype"-->" /><input class="edit" type="submit" value="It is a duplicate. Edit existing record" /></form>
+
+				<form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post">
+				<input type="hidden" name="nodouble" value="1" />
+				<input class="new" type="submit" value="Not a duplicate. Save as new record" />
 			</div>
-		</form>
-		</p>
 	<!--/TMPL_IF-->
 
 	<!-- TMPL_IF Name="debug" -->
@@ -154,7 +147,8 @@
 	<!-- /TMPL_IF -->
 	
   
-<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post"> 
+<!-- TMPL_UNLESS NAME="check_member" --><form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post">
+<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" /> <!-- /TMPL_UNLESS -->
 <!--    field always hidden in different form (1,2,3) -->
 <input type="hidden" name="BorrowerMandatoryField" value="<!--TMPL_VAR NAME="BorrowerMandatoryField"-->" />
 <input type="hidden" name="category_type" value="<!-- TMPL_VAR name="category_type" -->" />
@@ -163,7 +157,6 @@
 <input type="hidden" name="destination" value="<!-- TMPL_VAR NAME="destination" -->" />
 <input type="hidden" name="check_member" value="<!-- TMPL_VAR NAME="check_member" -->" />
 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
-<input type="hidden" name="nodouble"  value="<!-- TMPL_VAR NAME="nodouble" -->" />
 <!--TMPL_IF Name="step"--><input type="hidden" name="step"  value="<!-- TMPL_VAR NAME="step" -->" /><!--/TMPL_IF-->
 <!-- TMPL_IF NAME="opadd" --><input type="hidden" name="op" value="insert" /><!-- TMPL_ELSE --><input type="hidden" name="op" value="save" /><!-- /TMPL_IF -->
 
