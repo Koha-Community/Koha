@@ -71,8 +71,18 @@ function verify_images() {
         <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 
-        <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
+    <!-- TMPL_IF NAME="XSLTDetailsDisplay" -->
         <!-- TMPL_VAR NAME="XSLTBloc" -->
+
+        <!-- TMPL_IF NAME="GetShelves" -->
+            <span class="results_summary"><span class="label">Lists that include this title: </span>
+            <!-- TMPL_LOOP NAME="GetShelves" -->
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->"><!-- TMPL_VAR NAME="shelfname" --></a>
+                <!-- TMPL_IF NAME="__LAST__" --><!-- TMPL_ELSE -->|<!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+            </span>
+        <!-- /TMPL_IF -->
+
         <!-- TMPL_IF NAME="AmazonEnabled" --><!-- TMPL_IF NAME="AmazonCoverImages" --></div><div class="yui-u" id="bookcoverimg">
         <a href="http://www.amazon<!-- TMPL_VAR NAME="AmazonTld" -->/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01.MZZZZZZZ.jpg" alt="" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
