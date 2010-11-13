@@ -200,11 +200,12 @@ function highlightOn() {
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_IF NAME="isbn" --><img src="http://images.amazon.com/images/P/<!-- TMPL_VAR name="isbn" -->.01.TZZZZZZZ.jpg" alt="" class="thumbnail" /><!-- TMPL_ELSE --><img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" /><!-- /TMPL_IF -->
                         </a>
                         <!-- TMPL_ELSE -->
-                        <!-- TMPL_IF name="imageurl" -->
-                        <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
-                        <!-- TMPL_ELSE -->
+                        <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
+                            <!-- TMPL_IF name="imageurl" -->
+                                <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
+                            <!-- /TMPL_IF -->
+                        <!-- /TMPL_UNLESS -->
                         <!-- TMPL_VAR name="description" -->
-                        <!-- /TMPL_IF -->
                         <!-- /TMPL_IF -->
                     </td>
                     <td><!-- TMPL_VAR NAME="result_number" -->. <!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title"><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="subtitle" --></a>

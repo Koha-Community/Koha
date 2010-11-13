@@ -296,7 +296,9 @@
                     </td>
                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
                       <td>
+                        <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
                         <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
+                        <!-- /TMPL_UNLESS -->
 						<!-- TMPL_VAR NAME="description" -->
                       </td>
                     <!-- /TMPL_UNLESS -->
@@ -472,7 +474,9 @@
                               </td>
                               <!-- TMPL_IF NAME="item-level_itypes" -->
                                 <td>
+                                  <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
                                   <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
+                                  <!-- /TMPL_UNLESS -->
 								<!-- TMPL_VAR NAME="description" -->
                                 </td>
                               <!-- /TMPL_IF -->

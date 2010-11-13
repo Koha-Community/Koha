@@ -248,7 +248,10 @@ $(function() {
                                    value="<!-- TMPL_VAR NAME="biblionumber">" /></td>
                     <!-- TMPL_UNLESS NAME="item-level_itypes" -->
                         <td>
-                          <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
+                          <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
+                          <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
+                          <!-- /TMPL_UNLESS -->
+                          <!-- TMPL_VAR NAME="description" -->
                         </td>
                     <!-- /TMPL_UNLESS -->
                         <td><!-- TMPL_IF NAME="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --><!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></a><!-- TMPL_ELSE -->
