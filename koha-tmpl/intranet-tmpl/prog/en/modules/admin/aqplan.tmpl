@@ -139,7 +139,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
     <!-- TMPL_IF NAME="budget_lines" -->
 
-    <!-- TMPL_IF name="cur" --><p><b>Currency = <!-- TMPL_VAR name="cur" --></b></p><!-- TMPL_ELSE --><div class="dialog alert"><h3>No active currency is defined</h3><p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p></div><!-- /TMPL_IF -->
+    <!-- TMPL_INCLUDE NAME="budgets-active-currency.inc" -->
 
     <table id="plan" width="100%">
     <thead>

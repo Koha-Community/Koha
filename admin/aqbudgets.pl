@@ -52,7 +52,9 @@ my ($template, $borrowernumber, $cookie, $staffflags ) = get_template_and_user(
 );
 
 my $cur = GetCurrency();
-$template->param( cur => $cur->{symbol} );
+$template->param( symbol => $cur->{symbol},
+                  currency => $cur->{currency}
+               );
 
 my $op = $input->param('op');
 
