@@ -54,7 +54,7 @@ You have never borrowed anything from this library.
 <div class="ui-tabs-panel"><table id="readingrec">
 <tr>
 <th colspan="2">Title</th>
-<!-- TMPL_UNLESS NAME="noItemTypeImages" --><th>Item Type</th><!-- /TMPL_UNLESS -->
+<th>Item Type</th>
 <th>Call No.</th>
 <th>Date</th>
 </tr>
@@ -80,7 +80,7 @@ You have never borrowed anything from this library.
                     <span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span></td>
-<!-- TMPL_UNLESS NAME="noItemTypeImages" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
+<td><!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR name="description" --></td>
 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 <td><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE --><em>(Checked out)</em><!-- /TMPL_IF --></td>
 </tr>
