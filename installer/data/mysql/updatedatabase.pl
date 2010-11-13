@@ -3848,6 +3848,40 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.02.01.001';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $count = $dbh->selectrow_array('SELECT COUNT(*) FROM letter WHERE module = ? AND code = ?', {}, 'suggestions', 'ACCEPTED');
+    $dbh->do(q/
+INSERT INTO `letter`
+(module, code, name, title, content)
+VALUES
+('suggestions','ACCEPTED','Suggestion accepted', 'Purchase suggestion accepted','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nThe library has reviewed your suggestion today. The item will be ordered as soon as possible. You will be notified by mail when the order is completed, and again when the item arrives at the library.\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>')
+/) unless $count > 0;
+    $count = $dbh->selectrow_array('SELECT COUNT(*) FROM letter WHERE module = ? AND code = ?', {}, 'suggestions', 'AVAILABLE');
+    $dbh->do(q/
+INSERT INTO `letter`
+(module, code, name, title, content)
+VALUES
+('suggestions','AVAILABLE','Suggestion available', 'Suggested purchase available','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nWe are pleased to inform you that the item you requested is now part of the collection.\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>')
+/) unless $count > 0;
+    $count = $dbh->selectrow_array('SELECT COUNT(*) FROM letter WHERE module = ? AND code = ?', {}, 'suggestions', 'ORDERED');
+    $dbh->do(q/
+INSERT INTO `letter`
+(module, code, name, title, content)
+VALUES
+('suggestions','ORDERED','Suggestion ordered', 'Suggested item ordered','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nWe are pleased to inform you that the item you requested has now been ordered. It should arrive soon, at which time it will be processed for addition into the collection.\n\nYou will be notified again when the book is available.\n\nIf you have any questions, please email us at <<branches.branchemail>>\n\nThank you,\n\n<<branches.branchname>>')
+/) unless $count > 0;
+    $count = $dbh->selectrow_array('SELECT COUNT(*) FROM letter WHERE module = ? AND code = ?', {}, 'suggestions', 'REJECTED');
+    $dbh->do(q/
+INSERT INTO `letter`
+(module, code, name, title, content)
+VALUES
+('suggestions','REJECTED','Suggestion rejected', 'Purchase suggestion declined','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nYou have suggested that the library acquire <<suggestions.title>> by <<suggestions.author>>.\n\nThe library has reviewed your request today, and has decided not to accept the suggestion at this time.\n\nThe reason given is: <<suggestions.reason>>\n\nIf you have any questions, please email us at <<branches.branchemail>>.\n\nThank you,\n\n<<branches.branchname>>')
+/) unless $count > 0;
+    print "Upgrade to $DBversion done (bug 5127: add default templates for suggestion status change notifications)\n";
+    SetVersion ($DBversion);
+};
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
