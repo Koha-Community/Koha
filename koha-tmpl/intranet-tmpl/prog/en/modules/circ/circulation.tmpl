@@ -167,7 +167,7 @@ function refocus(calendar) {
     </li>
     <!-- TMPL_IF NAME="canned_bor_notes_loop" -->
         <li>
-                <label for="canned_notes">Predefined notes: </label>
+                <label for="type">Predefined notes: </label>
                 <select name="type" id="type" onchange="this.form.borrower_message.value=this.options[this.selectedIndex].value;">
                     <option value="">Select Note</option>
                     <!-- TMPL_LOOP NAME="canned_bor_notes_loop" -->
@@ -184,7 +184,7 @@ function refocus(calendar) {
         <input type="submit" value="Save" /> <a href="#" class="cancel">Cancel</a>
     </fieldset>
 
-        <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
         <input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branch" -->" />
 </fieldset>
 </form>
@@ -633,36 +633,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
     </tr>
 <!-- TMPL_IF NAME="todayissues" --></thead>
-<tfoot>
-		<tr>
-            <td colspan="5" style="text-align: right; font-weight:bold;">Totals:</td>
-			<td><!-- TMPL_VAR NAME="totaldue" --></td>
-            <td><!-- TMPL_VAR NAME="totalprice" --></td>
-            <td colspan="2">      
-                <p>
-                    Renewal due date: <input type="text" size="8" id="newduedate" name="newduedate" value="<!-- TMPL_VAR Name="newduedate" -->" />
-                    <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="newduedate_button" alt="Show Calendar" />
- <script type="text/javascript"> //<![CDATA[
-				//#TODO - ADD syspref (AllowPostDatedCheckouts).
-                     Calendar.setup(
-                          {
-                             inputField : "newduedate",
-                             ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-                             button : "newduedate_button",
-                             disableFunc : validate1,
-                             dateStatusFunc : validate1,
-                             onClose : refocus
-                           }
-                        );
-				//]]>
-				 </script>
-                </p>
-                <p>
-                    <label>Forgive fines on return: <input type="checkbox" name="exemptfine" value="1" /></label>
-                </p>
-            </td>
-        </tr>
-		</tfoot>
+<!-- TMPL_INCLUDE NAME="checkouts-table-footer.inc" -->
 	<tbody>
 
     <!-- TMPL_LOOP NAME="todayissues" -->
@@ -725,6 +696,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_IF NAME="previssues" -->
 <!-- TMPL_IF NAME="todayissues" --><tr><th colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr><!-- TMPL_ELSE -->
 <tr><th class="{sorter: false}" colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
+<!-- TMPL_INCLUDE NAME="checkouts-table-footer.inc" -->
 	<tbody>
 <!-- /TMPL_IF -->
     <!-- TMPL_LOOP NAME="previssues" -->
