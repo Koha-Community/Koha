@@ -532,8 +532,12 @@ foreach my $tag (sort keys %{$tagslib}) {
         if (do $plugin) {
             my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
             my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, \@loop_data );
+            my $change = index($javascript, 'function Change') > -1 ?
+                "return Change$function_name($subfield_data{random}, '$subfield_data{id}');" :
+                'return 1;';
             $subfield_data{marc_value} = qq[<input $attributes
                 onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
+                onchange=" $change"
                  onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
                 <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
                 $javascript];
