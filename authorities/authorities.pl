@@ -191,13 +191,13 @@ sub create_input {
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
         $subfield_data{marc_value} =
     "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-    value=\"$value\"
-    class=\"input_marceditor\"
-    tabindex=\"1\"                     
-        readonly=\"readonly\" \/>
-    <a href=\"#\" class=\"buttonDot\"
+            id=\"".$subfield_data{id}."\"
+            name=\"".$subfield_data{id}."\"
+            value=\"$value\"
+            class=\"input_marceditor readonly\"
+            tabindex=\"1\"
+            readonly=\"readonly\" \/>
+        <a href=\"#\" class=\"buttonDot\"
         onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
     ";
     # it's a plugin field
