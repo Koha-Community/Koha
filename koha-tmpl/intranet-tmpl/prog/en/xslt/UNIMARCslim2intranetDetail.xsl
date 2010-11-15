@@ -55,49 +55,49 @@
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">700</xsl:with-param>
-    <xsl:with-param name="label">Auteur principal</xsl:with-param>
+    <xsl:with-param name="label">Main Author</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">710</xsl:with-param>
-    <xsl:with-param name="label">Collectivité principale</xsl:with-param>
+    <xsl:with-param name="label">Corporate Author (Main)</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">701</xsl:with-param>
-    <xsl:with-param name="label">Co-auteur</xsl:with-param>
+    <xsl:with-param name="label">Coauthor</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">702</xsl:with-param>
-    <xsl:with-param name="label">Auteur</xsl:with-param>
+    <xsl:with-param name="label">Secondary Author</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">711</xsl:with-param>
-    <xsl:with-param name="label">Collectivité co-auteur</xsl:with-param>
+    <xsl:with-param name="label">Corporate Author (Coauthor)</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">712</xsl:with-param>
-    <xsl:with-param name="label">Collectivité secondaire</xsl:with-param>
+    <xsl:with-param name="label">Corporate Author (Secondary)</xsl:with-param>
   </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=101]">
     <li>
-      <strong>Langue: </strong>
+      <strong>Language: </strong>
       <xsl:for-each select="marc:datafield[@tag=101]">
         <xsl:for-each select="marc:subfield">
           <xsl:choose>
-            <xsl:when test="@code='b'">de la trad. intermédiaire, </xsl:when>
-            <xsl:when test="@code='c'">de l'œuvre originale, </xsl:when>
-            <xsl:when test="@code='d'">du résumé, </xsl:when>
-            <xsl:when test="@code='e'">de la table des matières, </xsl:when>
-            <xsl:when test="@code='f'">de la page de titre, </xsl:when>
-            <xsl:when test="@code='g'">du titre propre, </xsl:when>
-            <xsl:when test="@code='h'">d'un livret, </xsl:when>
-            <xsl:when test="@code='i'">des textes d'accompagnement, </xsl:when>
-            <xsl:when test="@code='j'">des sous-titres, </xsl:when>
+            <xsl:when test="@code='b'">of intermediate text, </xsl:when>
+            <xsl:when test="@code='c'">of original work, </xsl:when>
+            <xsl:when test="@code='d'">of summary, </xsl:when>
+            <xsl:when test="@code='e'">of contents page, </xsl:when>
+            <xsl:when test="@code='f'">of title page, </xsl:when>
+            <xsl:when test="@code='g'">of title proper, </xsl:when>
+            <xsl:when test="@code='h'">of libretto, </xsl:when>
+            <xsl:when test="@code='i'">of accompanying material, </xsl:when>
+            <xsl:when test="@code='j'">of subtitles, </xsl:when>n>
           </xsl:choose>
           <xsl:value-of select="text()"/>
           <xsl:choose>
@@ -115,7 +115,7 @@
 
   <xsl:if test="marc:datafield[@tag=102]">
     <li>
-      <strong>Pays: </strong>
+      <strong>Country: </strong>
       <xsl:for-each select="marc:datafield[@tag=102]">
         <xsl:for-each select="marc:subfield">
           <xsl:value-of select="text()"/>
@@ -136,7 +136,7 @@
   <xsl:call-template name="tag_215" />
 
 <xsl:if test="marc:controlfield[@tag=009]">
-    <li><strong>PPN: </strong>
+    <li><strong>Tag 009: </strong>
       <xsl:value-of select="marc:controlfield[@tag=009]"/>
     </li>
   </xsl:if>
@@ -177,7 +177,7 @@
 
   <xsl:call-template name="tag_title">
     <xsl:with-param name="tag">225</xsl:with-param>
-    <xsl:with-param name="label">Collection</xsl:with-param>
+    <xsl:with-param name="label">Series</xsl:with-param>
   </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=676]">
@@ -220,7 +220,7 @@
 
   <xsl:if test="marc:datafield[@tag=327]">
     <li>
-      <strong>Note de contenu: </strong>
+      <strong>Contents note: </strong>
       <xsl:for-each select="marc:datafield[@tag=327]">
         <xsl:call-template name="chopPunctuation">
           <xsl:with-param name="chopString">
@@ -237,7 +237,7 @@
 
   <xsl:if test="marc:datafield[@tag=330]">
     <li>
-      <strong>Résumé: </strong>
+      <strong>Abstract: </strong>
       <xsl:for-each select="marc:datafield[@tag=330]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
         <xsl:choose>
@@ -254,7 +254,7 @@
 
   <xsl:if test="marc:datafield[@tag=317]">
     <li>
-      <strong>Note sur la provenance: </strong>
+      <strong>Provenance note: </strong>
       <xsl:for-each select="marc:datafield[@tag=317]">
           <xsl:value-of select="marc:subfield[@code='a']"/>
       </xsl:for-each>
@@ -263,7 +263,7 @@
 
   <xsl:if test="marc:datafield[@tag=320]">
     <li>
-      <strong>Bibliographie: </strong>
+      <strong>Bibliography: </strong>
       <xsl:for-each select="marc:datafield[@tag=320]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
         <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
@@ -273,7 +273,7 @@
 
   <xsl:if test="marc:datafield[@tag=328]">
     <li>
-      <strong>Thèse: </strong>
+      <strong>Thesis: </strong>
       <xsl:for-each select="marc:datafield[@tag=328]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
         <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
@@ -283,7 +283,7 @@
 
   <xsl:if test="marc:datafield[@tag=333]">
     <li>
-      <strong>Public: </strong>
+      <strong>Audience: </strong>
       <xsl:for-each select="marc:datafield[@tag=333]">
         <xsl:value-of select="marc:subfield[@code='a']"/>
         <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
@@ -315,52 +315,52 @@
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">600</xsl:with-param>
-    <xsl:with-param name="label">Sujet - Nom de personne</xsl:with-param>
+    <xsl:with-param name="label">Subject - Personal Name</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">601</xsl:with-param>
-    <xsl:with-param name="label">Sujet - Collectivité</xsl:with-param>
+    <xsl:with-param name="label">Subject - Corporate Author</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">602</xsl:with-param>
-    <xsl:with-param name="label">Sujet - Famille</xsl:with-param>
+    <xsl:with-param name="label">Subject - Family</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">604</xsl:with-param>
-    <xsl:with-param name="label">Sujet - Auteur/titre</xsl:with-param>
+    <xsl:with-param name="label">Subject - Author/Title</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">606</xsl:with-param>
-    <xsl:with-param name="label">Sujet - Nom commun</xsl:with-param>
+    <xsl:with-param name="label">SSubject - Topical Name</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">607</xsl:with-param>
-    <xsl:with-param name="label">Sujet - Nom géographique</xsl:with-param>
+    <xsl:with-param name="label">Subject - Geographical Name</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">608</xsl:with-param>
-    <xsl:with-param name="label">Sujet - Forme</xsl:with-param>
+    <xsl:with-param name="label">Subject - Form</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">610</xsl:with-param>
-    <xsl:with-param name="label">Sujet</xsl:with-param>
+    <xsl:with-param name="label">Subject</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">615</xsl:with-param>
-    <xsl:with-param name="label">Catégorie sujet</xsl:with-param>
+    <xsl:with-param name="label">Subject Category</xsl:with-param>
   </xsl:call-template>
 
   <xsl:call-template name="tag_subject">
     <xsl:with-param name="tag">616</xsl:with-param>
-    <xsl:with-param name="label">Marque déposée</xsl:with-param>
+    <xsl:with-param name="label">Trademark</xsl:with-param>
   </xsl:call-template>
 
   <xsl:if test="marc:datafield[@tag=856]">

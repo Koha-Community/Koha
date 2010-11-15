@@ -70,7 +70,7 @@
   <xsl:call-template name="tag_215" />
 
   <span class="results_summary">
-    <span class="label">Disponibilité: </span>
+    <span class="label">Availability: </span>
     <xsl:choose>
       <xsl:when test="marc:datafield[@tag=856]">
         <xsl:for-each select="marc:datafield[@tag=856]">
@@ -100,11 +100,11 @@
         </xsl:for-each>
       </xsl:when>
       <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0">
-        Pas de copie disponible
+        No copies available
       </xsl:when>
       <xsl:when test="count(key('item-by-status', 'available'))>0">
         <span class="available">
-          <b><xsl:text>pour le prêt: </xsl:text></b>
+          <b><xsl:text>Copies available for loan: </xsl:text></b>
           <xsl:variable name="available_items" select="key('item-by-status', 'available')"/>
           <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
             <xsl:value-of select="items:homebranch"/>
