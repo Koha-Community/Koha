@@ -696,7 +696,7 @@ for (my $i=0;$i<@servers;$i++) {
             $hide = ($hide =~ m/\S/) if $hide; # Just in case it has some spaces/new lines
             $template->param(
                 SEARCH_RESULTS => \@newresults,
-                OPACItemsResultsDisplay => (C4::Context->preference("OPACItemsResultsDisplay") eq "itemdetails"?1:0),
+                OPACItemsResultsDisplay => (C4::Context->preference("OPACItemsResultsDisplay")),
                 suppress_result_number => $hide,
                             );
 	    if (C4::Context->preference("OPACLocalCoverImages")){
