@@ -118,12 +118,12 @@ if ($op eq 'add_form') {
 	if ($searchfield) {
         $template->param(searchfield => $searchfield);
 		$template->param(action => "Modify tag");
-		$template->param('heading-modify-tag-p' => 1);
+		$template->param('heading_modify_tag_p' => 1);
 	} else {
 		$template->param(action => "Add tag");
-		$template->param('heading-add-tag-p' => 1);
+		$template->param('heading_add_tag_p' => 1);
 	}
-	$template->param('use-heading-flags-p' => 1);
+	$template->param('use_heading_flags_p' => 1);
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 			libopac => $data->{'libopac'},
 			repeatable => CGI::checkbox(-name=>'repeatable',

@@ -486,30 +486,30 @@ sub GetPrefParams {
     $params->{'prefoptions'} = $data->{'options'};
 
     if ( not defined( $data->{'type'} ) ) {
-        $params->{'type-free'} = 1;
+        $params->{'type_free'} = 1;
         $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 );
     } elsif ( $data->{'type'} eq 'Upload' ) {
-        $params->{'type-upload'} = 1;
+        $params->{'type_upload'} = 1;
     } elsif ( $data->{'type'} eq 'Choice' ) {
-        $params->{'type-choice'} = 1;
+        $params->{'type_choice'} = 1;
     } elsif ( $data->{'type'} eq 'YesNo' ) {
-        $params->{'type-yesno'} = 1;
+        $params->{'type_yesno'} = 1;
         $data->{'value'}        = C4::Context->boolean_preference( $data->{'variable'} );
         if ( defined( $data->{'value'} ) and $data->{'value'} eq '1' ) {
-            $params->{'value-yes'} = 1;
+            $params->{'value_yes'} = 1;
         } else {
-            $params->{'value-no'} = 1;
+            $params->{'value_no'} = 1;
         }
     } elsif ( $data->{'type'} eq 'Integer' || $data->{'type'} eq 'Float' ) {
-        $params->{'type-free'} = 1;
+        $params->{'type_free'} = 1;
         $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 ) ? $data->{'options'} : 10;
     } elsif ( $data->{'type'} eq 'Textarea' ) {
-        $params->{'type-textarea'} = 1;
+        $params->{'type_textarea'} = 1;
         $data->{options} =~ /(.*)\|(.*)/;
         $params->{'cols'} = $1;
         $params->{'rows'} = $2;
     } elsif ( $data->{'type'} eq 'Themes' ) {
-        $params->{'type-choice'} = 1;
+        $params->{'type_choice'} = 1;
         my $type = '';
         ( $data->{'variable'} =~ m#opac#i ) ? ( $type = 'opac' ) : ( $type = 'intranet' );
         @options = ();
@@ -527,7 +527,7 @@ sub GetPrefParams {
             $counter++;
         }
     } elsif ( $data->{'type'} eq 'ClassSources' ) {
-        $params->{'type-choice'} = 1;
+        $params->{'type_choice'} = 1;
         my $type = '';
         @options = ();
         my $sources = GetClassSources();
@@ -564,13 +564,13 @@ sub GetPrefParams {
         my $languages_loop = getTranslatedLanguages( $interface, $theme, $lang, $currently_selected_languages );
 
         $params->{'languages_loop'}    = $languages_loop;
-        $params->{'type-langselector'} = 1;
+        $params->{'type_langselector'} = 1;
     } else {
-        $params->{'type-free'} = 1;
+        $params->{'type_free'} = 1;
         $params->{'fieldlength'} = ( defined( $data->{'options'} ) and $data->{'options'} and $data->{'options'} > 0 ) ? $data->{'options'} : 30;
     }
 
-    if ( $params->{'type-choice'} || $params->{'type-free'} || $params->{'type-yesno'} ) {
+    if ( $params->{'type_choice'} || $params->{'type_free'} || $params->{'type_yesno'} ) {
         $params->{'oneline'} = 1;
     }
 
