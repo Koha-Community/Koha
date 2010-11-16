@@ -13,11 +13,13 @@
 <div id="receipt">
 <!-- The table with the account items -->
 <table>
+<!-- TMPL_IF NAME="LibraryName -->
   <tr>
 	<th colspan=3 class="centerednames">
 		<h3><!-- TMPL_VAR name="LibraryName" --></h3>
 	</th>
   </tr>
+<!-- /TMPL_IF -->
   <tr>
 	<th colspan=3 class="centerednames">
 		<h2><u>INVOICE</u></h2>
@@ -30,7 +32,7 @@
   </tr>
   <tr>
 	<th colspan=3 >
-		To,<br />  <!-- TMPL_VAR NAME="firstname"> <!-- TMPL_VAR NAME="surname"> <br />
+		Bill To: <!-- TMPL_VAR NAME="firstname"> <!-- TMPL_VAR NAME="surname"> <br />
 		Card Number : <!-- TMPL_VAR NAME="cardnumber" --><br />
 	</th>
   </tr>
