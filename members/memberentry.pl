@@ -429,8 +429,10 @@ foreach (qw(C A S P I X)) {
 	}
 	my %typehash;
 	$typehash{'typename'}=$_;
+    my $typedescription = "typename_".$typehash{'typename'};
 	$typehash{'categoryloop'}=\@categoryloop;
 	push @typeloop,{'typename' => $_,
+        $typedescription => 1,
 	  'categoryloop' => \@categoryloop};
 }  
 $template->param('typeloop' => \@typeloop);
