@@ -717,7 +717,7 @@ sub checkauth {
 		    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
 		}
 		if ($return) {
-            	_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
+               _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
             	if ( $flags = haspermission(  $userid, $flagsrequired ) ) {
 					$loggedin = 1;
             	}
