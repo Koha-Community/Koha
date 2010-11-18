@@ -32,8 +32,9 @@ use C4::Context;
 use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );
 use C4::Dates qw(format_date);
 use C4::Budgets qw(GetCurrency);
+use C4::Templates;
 
-use HTML::Template::Pro;
+#use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
@@ -95,14 +96,16 @@ sub gettemplate {
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
     my ( $htdocs, $theme, $lang, $filename ) = _get_template_file( $tmplbase, $interface, $query );
 
-    my $template       = HTML::Template::Pro->new(
-        filename          => $filename,
-        die_on_bad_params => 1,
-        global_vars       => 1,
-        case_sensitive    => 1,
-        loop_context_vars => 1, # enable: __first__, __last__, __inner__, __odd__, __counter__ 
-        path              => ["$htdocs/$theme/$lang/$path"]
-    );
+#    my $template       = HTML::Template::Pro->new(
+#        filename          => $filename,
+#        die_on_bad_params => 1,
+#        global_vars       => 1,
+#        case_sensitive    => 1,
+#        loop_context_vars => 1, # enable: __first__, __last__, __inner__, __odd__, __counter__ 
+#        path              => ["$htdocs/$theme/$lang/$path"]
+#    );
+    $filename =~ s/\.tmpl$/.tt/;
+    my $template = C4::Templates->new( $interface, $filename);
     my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
           . "/$theme/$lang";
     $template->param(
