@@ -50,7 +50,6 @@ use Carp;
 use base qw(Class::Accessor);
 
 use C4::Cache::Memcached;
-use C4::Cache::FastMemcached;
 
 __PACKAGE__->mk_ro_accessors( qw( cache ) );
 

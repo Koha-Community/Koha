@@ -1426,12 +1426,11 @@ sub searchResults {
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
         my $marcrecord = MARC::File::USMARC::decode( $marcresults[$i] );
-        if ($bibliotag<10){
-            $fw = GetFrameworkCode($marcrecord->field($bibliotag)->data);
-        }else{
-            $fw = GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
-        }
-
+        $fw = $scan
+             ? undef
+             : $bibliotag < 10
+               ? GetFrameworkCode($marcrecord->field($bibliotag)->data)
+               : GetFrameworkCode($marcrecord->subfield($bibliotag,$bibliosubf));
         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, $fw );
         $oldbiblio->{subtitle} = GetRecordValue('subtitle', $marcrecord, $fw);
         $oldbiblio->{result_number} = $i + 1;
@@ -2573,7 +2572,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   #There are no results, build authority record, add it to Authorities, get authid and add it to 9
   ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode
   ###NOTICE : This can be a problem. We should also look into other types and rejected forms.
-         my $authtypedata=C4::AuthoritiesMarc->GetAuthType($data->{authtypecode});
+         my $authtypedata=C4::AuthoritiesMarc::GetAuthType($data->{authtypecode});
          next unless $authtypedata;
          my $marcrecordauth=MARC::Record->new();
          my $authfield=MARC::Field->new($authtypedata->{auth_tag_to_report},'','',"a"=>"".$field->subfield('a'));

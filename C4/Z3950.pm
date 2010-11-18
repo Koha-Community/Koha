@@ -3,7 +3,7 @@ package C4::Z3950;
 
 # Routines for handling Z39.50 lookups
 
-# Koha library project  www.koha.org
+# Koha library project  www.koha-community.org
 
 # Licensed under the GPL
 

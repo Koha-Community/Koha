@@ -56,7 +56,6 @@ my $rodsp = $input->param("ReturnDisplay");
 my $calc = $input->param("Cellvalue");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-my $mime = $input->param("MIME");
 #warn "calcul : ".$calc;
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => $fullreportname,
@@ -201,15 +200,10 @@ if ($do_it) {
                 -size     => 1,
                 -multiple => 0 );
     
-    my @mime = ( C4::Context->preference("MIME") );
-#	foreach my $mime (@mime){
-#		warn "".$mime;
-#	}
-    
     my $CGIextChoice=CGI::scrolling_list(
                 -name     => 'MIME',
                 -id       => 'MIME',
-                -values   => \@mime,
+                -values   => ['CSV'], # FIXME translation
                 -size     => 1,
                 -multiple => 0 );
     

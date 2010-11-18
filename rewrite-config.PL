@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 # Current maintainer MJR http://mjr.towers.org.uk/
-# See http://www.koha.org/wiki/?page=KohaInstaller
 # 
 # 2007/11/12	Added DB_PORT and changed other keywords to reflect multi-dbms support.	-fbcit
 

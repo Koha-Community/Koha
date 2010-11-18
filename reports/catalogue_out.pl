@@ -45,7 +45,6 @@ my $column   = $input->param("Criteria");
 my @filters  = $input->param("Filter");
 my $output   = $input->param("output");
 my $basename = $input->param("basename") || 'catalogue_out';
-my $mime     = $input->param("MIME");
 my ($template, $borrowernumber, $cookie) = get_template_and_user({
     template_name => "reports/catalogue_out.tmpl",
     query => $input,
@@ -104,7 +103,7 @@ if ($do_it) {
 my @values;
 my %select;
 
-my @mime  = ( map { +{type =>$_} } (split /[;:]/,C4::Context->preference("MIME")) );
+my @mime  = ( map { +{type =>$_} } (split /[;:]/, 'CSV') ); # FIXME translation
 my $itemtypes = GetItemTypes;
 my @itemtypeloop;
 foreach (sort {$itemtypes->{$a}->{description} cmp $itemtypes->{$b}->{description}} keys %$itemtypes) {

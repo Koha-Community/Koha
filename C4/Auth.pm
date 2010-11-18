@@ -356,7 +356,6 @@ sub get_template_and_user {
             IntranetmainUserblock       => C4::Context->preference("IntranetmainUserblock"),
             LibraryName                 => C4::Context->preference("LibraryName"),
             LoginBranchname             => (C4::Context->userenv?C4::Context->userenv->{"branchname"}:"insecure"),
-            TemplateEncoding            => C4::Context->preference("TemplateEncoding"),
             advancedMARCEditor          => C4::Context->preference("advancedMARCEditor"),
             canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
             intranetcolorstylesheet     => C4::Context->preference("intranetcolorstylesheet"),
@@ -387,6 +386,15 @@ sub get_template_and_user {
         } elsif($mylibraryfirst){
             $opac_name = C4::Branch::GetBranchName($mylibraryfirst);
         }
+	my $checkstyle = C4::Context->preference("opaccolorstylesheet");
+	if ($checkstyle =~ /http/)
+	{
+            	$template->param( opacexternalsheet => $checkstyle);
+	} else
+	{
+		my $opaccolorstylesheet = C4::Context->preference("opaccolorstylesheet");  
+            $template->param( opaccolorstylesheet => $opaccolorstylesheet);
+	}
         $template->param(
             AmazonContent             => "" . C4::Context->preference("AmazonContent"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
@@ -421,12 +429,10 @@ sub get_template_and_user {
             OPACFinesTab              => C4::Context->preference("OPACFinesTab"),
             OpacTopissue              => C4::Context->preference("OpacTopissue"),
             RequestOnOpac             => C4::Context->preference("RequestOnOpac"),
-            TemplateEncoding          => "". C4::Context->preference("TemplateEncoding"),
             'Version'                 => C4::Context->preference('Version'),
             hidelostitems             => C4::Context->preference("hidelostitems"),
             mylibraryfirst            => (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv) ? C4::Context->userenv->{'branch'} : '',
             opaclayoutstylesheet      => "" . C4::Context->preference("opaclayoutstylesheet"),
-            opaccolorstylesheet       => "" . C4::Context->preference("opaccolorstylesheet"),
             opacstylesheet            => "" . C4::Context->preference("opacstylesheet"),
             opacbookbag               => "" . C4::Context->preference("opacbookbag"),
             opaccredits               => "" . C4::Context->preference("opaccredits"),
@@ -910,6 +916,15 @@ sub checkauth {
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
     my $template = gettemplate( $template_name, $type, $query );
     $template->param(branchloop => \@branch_loop,);
+    my $checkstyle = C4::Context->preference("opaccolorstylesheet");
+    if ($checkstyle =~ /\//)
+	{
+            	$template->param( opacexternalsheet => $checkstyle);
+	} else
+	{
+		my $opaccolorstylesheet = C4::Context->preference("opaccolorstylesheet");  
+            $template->param( opaccolorstylesheet => $opaccolorstylesheet);
+	}
     $template->param(
     login        => 1,
         INPUTS               => \@inputs,
@@ -923,7 +938,6 @@ sub checkauth {
         opacreadinghistory   => C4::Context->preference("opacreadinghistory"),
         opacsmallimage       => C4::Context->preference("opacsmallimage"),
         opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-        opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
         opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
         opacuserjs           => C4::Context->preference("opacuserjs"),
         opacbookbag          => "" . C4::Context->preference("opacbookbag"),
@@ -940,7 +954,6 @@ sub checkauth {
         intranetbookbag    => C4::Context->preference("intranetbookbag"),
         IntranetNav        => C4::Context->preference("IntranetNav"),
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
-        TemplateEncoding   => C4::Context->preference("TemplateEncoding"),
         IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
 		wrongip            => $info{'wrongip'}

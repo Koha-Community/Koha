@@ -287,10 +287,10 @@ sub UpdateClaimdateIssues {
     my $dbh = C4::Context->dbh;
     $date = strftime( "%Y-%m-%d", localtime ) unless ($date);
     my $query = "
-        UPDATE serial SET claimdate=$date,status=7
-        WHERE  serialid in (" . join( ",", @$serialids ) . ")";
+        UPDATE serial SET claimdate = ?, status = 7
+        WHERE  serialid in (" . join( ",", map { '?' } @$serialids ) . ")";
     my $rq = $dbh->prepare($query);
-    $rq->execute;
+    $rq->execute($date, @$serialids);
     return $rq->rows;
 }
 
@@ -2082,15 +2082,15 @@ returns a count of items from serial matching the subscriptionid
 sub HasItems {
     my ($subscriptionid) = @_;
     my $dbh              = C4::Context->dbh;
-    my $query = qq|
+    my $query = q|
             SELECT COUNT(serialitems.itemnumber)
             FROM   serial 
 			LEFT JOIN serialitems USING(serialid)
-            WHERE  subscriptionid=? AND serialitems.serialid NOT NULL
+            WHERE  subscriptionid=? AND serialitems.serialid IS NOT NULL
         |;
     my $sth=$dbh->prepare($query);
     $sth->execute($subscriptionid);
-    my ($countitems)=$sth->fetchrow;
+    my ($countitems)=$sth->fetchrow_array();
     return $countitems;  
 }
 

@@ -67,6 +67,41 @@ function PopupZ3950() {
     } 
 }
 
+function PopupMARCFieldDoc(field, fieldnumber) {
+    <!-- TMPL_IF NAME="MARC21" -->
+        _MARC21FieldDoc(field);
+    <!-- TMPL_ELSE -->
+        _UNIMARCFieldDoc(field, fieldnumber);
+    <!-- /TMPL_IF -->
+}
+
+function _MARC21FieldDoc(field) {
+    if(field == 0) {
+        window.open("http://www.loc.gov/marc/bibliographic/bdleader.html");
+    } else if (field < 900) {
+        window.open("http://www.loc.gov/marc/bibliographic/bd" + ("000"+field).slice(-3) + ".html");
+    } else {
+        window.open("http://www.loc.gov/marc/bibliographic/bd9xx.html");
+    }
+}
+
+function _UNIMARCFieldDoc(field,fieldnumber) {
+    /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
+       seems to be the only version available that can be linked to per tag.  More recent
+       versions of the UNIMARC standard are available on the IFLA website only as
+       PDFs!
+    */
+    if(field == 0) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni.htm");
+    } else if (field < 100) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#b" + ("000"+field).slice(-3));
+    } else if (field < 900) {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#" + ("000"+field).slice(-3));
+    } else {
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni9.htm");
+    }
+}
+
 /**
  * check if mandatory subfields are written
  */
@@ -324,12 +359,12 @@ function CloneField(index) {
             
             // setting its '+' and '-' buttons
             try {
-                var spans = divs[i].getElementsByTagName('span');
-                for (var j = 0; j < spans.length; j++) {
-                    if(spans[j].getAttribute('class') == 'buttonPlus'){
-                        spans[j].setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
-                    } else if (spans[j].getAttribute('class') == 'buttonMinus') {
-                        spans[j].setAttribute('onclick',"UnCloneField('" + divs[i].getAttribute('id') + "')");
+                var anchors = divs[i].getElementsByTagName('a');
+                for (var j = 0; j < anchors.length; j++) {
+                    if(anchors[j].getAttribute('class') == 'buttonPlus'){
+                        anchors[j].setAttribute('onclick',"CloneSubfield('" + divs[i].getAttribute('id') + "')");
+                    } else if (anchors[j].getAttribute('class') == 'buttonMinus') {
+                        anchors[j].setAttribute('onclick',"UnCloneField('" + divs[i].getAttribute('id') + "')");
                     }
                 }
             }
@@ -479,19 +514,19 @@ function CloneSubfield(index){
     label.setAttribute('for',id_input);
     <!-- /TMPL_UNLESS -->
     
-    // setting a new if for the parent div
+    // setting a new id for the parent div
     clone.setAttribute('id',new_id);
     
     try {
         var buttonUp = clone.getElementsByTagName('img')[0];
         buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
-    	var spans = clone.getElementsByTagName('span');
-    	if(spans.length){
-        	for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
-        		if(spans[i].getAttribute('class') == 'buttonPlus'){
-                    spans[i].setAttribute('onclick',"CloneSubfield('" + new_id + "')");
-                } else if (spans[i].getAttribute('class') == 'buttonMinus') {
-                    spans[i].setAttribute('onclick',"UnCloneField('" + new_id + "')");
+        var anchors = clone.getElementsByTagName('a');
+        if(anchors.length){
+            for(var i = 0 ,lenanchors = anchors.length ; i < lenanchors ; i++){
+                if(anchors[i].getAttribute('class') == 'buttonPlus'){
+                    anchors[i].setAttribute('onclick',"CloneSubfield('" + new_id + "')");
+                } else if (anchors[i].getAttribute('class') == 'buttonMinus') {
+                    anchors[i].setAttribute('onclick',"UnCloneField('" + new_id + "')");
                 }
             }
         }
@@ -749,7 +784,8 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             	<!-- TMPL_IF NAME="advancedMARCEditor" -->
 		<a href="#" tabindex="1" class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib"--> - Click to Expand this Tag" onclick="ExpandField('tag_<!-- TMPL_VAR NAME="tag"-->_<!-- TMPL_VAR NAME='index' --><!-- TMPL_VAR NAME="random" -->'); return false;"><!-- TMPL_VAR NAME="tag" --></a>
 		<!-- TMPL_ELSE -->
-                	<span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --></span>
+                        <span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --><a 
+                 onclick="PopupMARCFieldDoc(<!-- TMPL_VAR NAME="tag" -->, <!-- TMPL_VAR NAME="number" -->); return false;">&nbsp;?</a></span>
 		<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="fixedfield" -->
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator1" -->" />
@@ -810,8 +846,8 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                 <!-- TMPL_VAR NAME="marc_value" -->
                 
                 <!-- TMPL_IF NAME="repeatable" -->
-                    <span class="subfield_controls"><a href="#" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" /></a>
-                                        <a href="#" onclick="UnCloneField('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" /></a></span>
+                    <span class="subfield_controls"><a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/clone-subfield.png" alt="Clone" title="Clone this subfield" /></a>
+                                        <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield<!-- TMPL_VAR NAME='tag' --><!-- TMPL_VAR NAME='subfield' --><!-- TMPL_VAR name="random" -->'); return false;"><img src="/intranet-tmpl/prog/img/delete-subfield.png" alt="Delete" title="Delete this subfield" /></a></span>
                 <!-- /TMPL_IF -->
 
                 

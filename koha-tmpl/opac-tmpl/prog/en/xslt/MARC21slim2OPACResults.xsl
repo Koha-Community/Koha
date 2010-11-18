@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- $Id: MARC21slim2DC.xsl,v 1.1 2003/01/06 08:20:27 adam Exp $ -->
+<!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
 <xsl:stylesheet version="1.0"
   xmlns:marc="http://www.loc.gov/MARC21/slim"
-  xmlns:items="http://www.koha.org/items"
+  xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   exclude-result-prefixes="marc items">
     <xsl:import href="MARC21slimUtils.xsl"/>
@@ -391,7 +392,7 @@
            </xsl:call-template>
         </xsl:if>
 
-     	<a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
+        <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute><xsl:attribute name="class">title</xsl:attribute>
 
         <xsl:if test="marc:datafield[@tag=245]">
         <xsl:for-each select="marc:datafield[@tag=245]">
@@ -440,7 +441,7 @@
     <xsl:choose>
     <xsl:when test="marc:datafield[@tag=100] or marc:datafield[@tag=110] or marc:datafield[@tag=111] or marc:datafield[@tag=700] or marc:datafield[@tag=710] or marc:datafield[@tag=711]">
 
-    by 
+    by <span class="author">
         <xsl:for-each select="marc:datafield[@tag=100 or @tag=700]">
             <xsl:choose>
             <xsl:when test="position()=last()">
@@ -492,6 +493,7 @@
             </xsl:otherwise>
             </xsl:choose>
         </xsl:for-each>
+    </span>
     </xsl:when>
     </xsl:choose>
     </p>
@@ -866,7 +868,7 @@
     <span class="label">Publisher: </span> 
             <xsl:for-each select="marc:datafield[@tag=260]">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">bcg</xsl:with-param>
+                        <xsl:with-param name="codes">abcg</xsl:with-param>
                     </xsl:call-template>
             </xsl:for-each>
 	</span>
@@ -893,11 +895,9 @@
             </xsl:for-each>
 	</span>
     </xsl:if>
-
-    <span class="results_summary">
-			   <span class="label">Availability: </span>
-			        <xsl:choose>
-                        <xsl:when test="marc:datafield[@tag=856]">
+    <xsl:if test="marc:datafield[@tag=856]">
+         <span class="results_summary">
+			   <span class="label">Online Access: </span>
                             <xsl:for-each select="marc:datafield[@tag=856]">
                             <xsl:if test="$OPACURLOpenInNewWindow='0'">
                                    <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
@@ -942,13 +942,15 @@
                                     </a>
                               </xsl:if>
                                     <xsl:choose>
-                                    <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
+                                    <xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when>
                                     <xsl:otherwise> | </xsl:otherwise>
                                     </xsl:choose>
                             </xsl:for-each>
-                        </xsl:when>
-
-
+                            </span>
+                        </xsl:if>
+                        <span class="results_summary">
+                        <span class="label">Availability: </span>
+                        <xsl:choose>
 				   <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0">No copies available
 				   </xsl:when>
                    <xsl:when test="count(key('item-by-status', 'available'))>0">
@@ -958,7 +960,7 @@
                            select="key('item-by-status', 'available')"/>
                        <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
                            <xsl:value-of select="items:homebranch"/>
-						   <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber">[<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
+						   <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
                            <xsl:text> (</xsl:text>
                            <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
                            <xsl:text>)</xsl:text>
@@ -976,7 +978,7 @@
                            select="key('item-by-status', 'reference')"/>
                        <xsl:for-each select="$reference_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
                            <xsl:value-of select="items:homebranch"/>
-						   <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber">[<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
+						   <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> [<xsl:value-of select="items:itemcallnumber"/>]</xsl:if>
                            <xsl:text> (</xsl:text>
                            <xsl:value-of select="count(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch)))"/>
                            <xsl:text>)</xsl:text>

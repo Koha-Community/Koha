@@ -16,7 +16,6 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 #
 # Current maintainer MJR http://mjr.towers.org.uk/
-# See http://www.koha.org/wiki/?page=KohaInstaller
 #
 
 use strict;
@@ -542,7 +541,7 @@ WriteMakefile(
               #VERSION     => strftime('2.9.%Y%m%d%H',gmtime),
               VERSION_FROM => 'kohaversion.pl',
               ABSTRACT     => 'Award-winning integrated library system (ILS) and Web OPAC',
-              AUTHOR       => 'Koha Developers <koha-devel@nongnu.org>',
+              AUTHOR       => 'Koha Contributors <http://koha-community.org/>',
               NO_META      => 1,
               PREREQ_PM    => $koha_pm->prereq_pm,
 

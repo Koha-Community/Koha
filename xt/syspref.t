@@ -28,6 +28,7 @@ my $root_dir = 'installer/data/mysql';
 my $base_syspref_file = "en/mandatory/sysprefs.sql";
 my @trans_syspref_files = qw(
     de-DE/mandatory/sysprefs.sql
+    it-IT/necessari/sysprefs.sql
     fr-FR/1-Obligatoire/unimarc_standard_systemprefs.sql
     uk-UA/mandatory/system_preferences_full_optimal_for_install_only.sql
     ru-RU/mandatory/system_preferences_full_optimal_for_install_only.sql

@@ -163,7 +163,7 @@ output_html_with_http_headers $query, $cookie, $template->output;
 parses the header line from a .koc file. This is the line that
 specifies things such as the file version, and the name and version of
 the offline circulation tool that generated the file. See
-L<http://wiki.koha.org/doku.php?id=koha_offline_circulation_file_format>
+L<http://wiki.koha-community.org/wiki/Koha_offline_circulation_file_format>
 for more information.
 
 pass in a string containing the header line (the first line from th
@@ -176,6 +176,7 @@ returns a hashref containing the information from the header.
 sub parse_header_line {
     my $header_line = shift;
     chomp($header_line);
+    $header_line =~ s/\r//g;
 
     my @fields = split( /\t/, $header_line );
     my %header_info = map { split( /=/, $_ ) } @fields;
@@ -189,7 +190,8 @@ sub parse_header_line {
 sub parse_command_line {
     my $command_line = shift;
     chomp($command_line);
-
+    $command_line =~ s/\r//g;
+    
     my ( $timestamp, $command, @args ) = split( /\t/, $command_line );
     my ( $date,      $time,    $id )   = split( /\s/, $timestamp );
 
@@ -248,11 +250,11 @@ sub kocIssueItem {
   my ( $year, $month, $day ) = split( /-/, $circ->{'date'} );
   ( $year, $month, $day ) = Add_Delta_Days( $year, $month, $day, $issuelength );
   my $date_due = sprintf("%04d-%02d-%02d", $year, $month, $day);
-  
+
   if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
 #warn "Item Currently Issued.";
     my $issue = GetOpenIssue( $item->{'itemnumber'} );
-
+    
     if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
 #warn "Item issued to this member already, renewing.";
     

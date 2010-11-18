@@ -103,6 +103,12 @@ Produces CSV data. if -n (no mail) flag is set, then this CSV data is
 sent to standard out or to a filename if provided. Otherwise, only
 overdues that could not be emailed are sent in CSV format to the admin.
 
+=item B<-html>
+
+Produces html data. if patron does not have a mail address or
+-n (no mail) flag is set, an html file is generated in the specified
+directory. This can be downloaded or futher processed by library staff.
+
 =item B<-itemscontent>
 
 comma separated list of fields that get substituted into templates in
@@ -662,10 +668,7 @@ sub parse_letter { # FIXME: this code should probably be moved to C4::Letters:pa
                 $item_format = $1;
             }
             if ($params->{'letter'}->{'content'} =~ m/<fine>(.*)<\/fine>/) { # process any fine tags...
-                no strict; # currency_format behaves badly if we quote the bareword for some reason...
                 my $formatted_fine = currency_format("$1", "$fine", FMT_SYMBOL);
-                use strict;
-                $formatted_fine = Encode::encode("utf8", $formatted_fine);
                 $params->{'letter'}->{'content'} =~ s/<fine>.*<\/fine>/$formatted_fine/;
             }
             $params->{'letter'} = C4::Letters::parseletter( $params->{'letter'}, 'biblio',      $item );

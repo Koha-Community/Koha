@@ -5,13 +5,11 @@
 # Author : Antoine Farnault, antoine@koha-fr.org
 #
 
-use Test;
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use C4::Context;
 
-# Making 30 tests.
-BEGIN { plan tests => 112 }
+use Test::More tests => 92;
 
 # Getting some borrowers from database.
 my $dbh = C4::Context->dbh;
@@ -27,26 +25,13 @@ while(my $borrower = $sth->fetchrow){
     push @borrowers, $borrower;
 }
 
-# Getting some itemnumber from database
-my $query = qq/
-    SELECT itemnumber
-    FROM   items
-    LIMIT  10
-/;
-my $sth = $dbh->prepare($query);
-$sth->execute;
-my @items;
-while(my $item = $sth->fetchrow){
-    push @items, $item;
-}
-
 # Getting some biblionumbers from database
-my $query = qq/
+$query = qq/
     SELECT biblionumber
     FROM   biblio
     LIMIT  10
 /;
-my $sth = $dbh->prepare($query);
+$sth = $dbh->prepare($query);
 $sth->execute;
 my @biblionumbers;
 while(my $biblionumber = $sth->fetchrow){
@@ -61,9 +46,9 @@ my $delete_virtualshelfcontent =qq/
     DELETE  FROM  virtualshelfcontents WHERE 1
 /;
 
-my $sth = $dbh->prepare($delete_virtualshelf);
+$sth = $dbh->prepare($delete_virtualshelf);
 $sth->execute;
-my $sth = $dbh->prepare($delete_virtualshelfcontent);
+$sth = $dbh->prepare($delete_virtualshelfcontent);
 $sth->execute;
 # ---
 
@@ -73,12 +58,7 @@ $sth->execute;
 #
 #----------------------------------------------------------------------#
 
-use C4::VirtualShelves;
-my $version = C4::VirtualShelves->VERSION;
-print "\n----------Testing C4::VirtualShelves version ".$version."--------\n";
-
-ok($version);   # First test: the module is loaded & the version is readable.
-
+use_ok('C4::VirtualShelves');
 
 #-----------------------TEST AddShelf function------------------------#
 # usage : $shelfnumber = &AddShelf( $shelfname, $owner, $category);
@@ -88,38 +68,49 @@ my @shelves;
 for(my $i=0; $i<10;$i++){
      my $ShelfNumber = AddShelf("Shelf_".$i,$borrowers[$i] || '',int(rand(3))+1);
      die "test Not ok, remove some shelves before" if ($ShelfNumber == -1);
-     ok($ShelfNumber);   # Shelf creation successful;
-     push @shelves, $ShelfNumber if ok($ShelfNumber);
+     ok($ShelfNumber > -1, "created shelf");   # Shelf creation successful;
+     push @shelves, $ShelfNumber if $ShelfNumber > -1;
 }
 
-ok(10,scalar @shelves); # 10 shelves in @shelves;
+ok(10 == scalar @shelves, 'created 10 lists'); # 10 shelves in @shelves;
 
 # try to create some shelf which already exists.
 for(my $i=0;$i<10;$i++){
     my $badNumShelf = AddShelf("Shelf_".$i,$borrowers[$i] || '','');
-    ok(-1,$badNumShelf);   # AddShelf returns -1 if name already exist.
+    ok(-1 == $badNumShelf, 'do not create lists with duplicate names');   # AddShelf returns -1 if name already exist.
 }
 
-#-----------TEST AddToShelf & &AddToShelfFromBiblio & GetShelfContents &  DelFromShelf functions--------------#
-# usage : &AddToShelf($itemnumber, $shelfnumber);
-# usage : $itemlist = &GetShelfContents($shelfnumber);
-# usage : $itemlist = GetShelfContents($shelfnumber);
+#-----------TEST AddToShelf & GetShelfContents &  DelFromShelf functions--------------#
+# usage : &AddToShelf($biblionumber, $shelfnumber);
+# usage : $biblist = &GetShelfContents($shelfnumber);
+# usage : $biblist = GetShelfContents($shelfnumber);
 
+my %used = ();
 for(my $i=0; $i<10;$i++){
-    my $item = $items[int(rand(9))];
+    my $bib = $biblionumbers[int(rand(9))];
     my $shelfnumber = $shelves[int(rand(9))];
-    
-    my ($itemlistBefore,$countbefore) = GetShelfContents($shelfnumber);
-    AddToShelf($item,$shelfnumber);
-    my ($itemlistAfter,$countafter) = GetShelfContents($shelfnumber);
-    ok($countbefore,$countafter - 1);  # the item has been successfuly added.
+  
+    my $key = "$bib\t$shelfnumber";
+    my $should_fail = exists($used{$key}) ? 1 : 0;
+ 
+    my ($biblistBefore,$countbefore) = GetShelfContents($shelfnumber);
+    my $status = AddToShelf($bib,$shelfnumber);
+    my ($biblistAfter,$countafter) = GetShelfContents($shelfnumber);
 
-    
-    # same thing with AddToShelfFromBiblio
-    my $biblionumber = $biblionumbers[int(rand(10))];
-    &AddToShelfFromBiblio($biblionumber, $shelfnumber);
-    my ($AfterAgain,$countagain) = GetShelfContents($shelfnumber);
-    ok($countafter, $countagain -1);
+    if ($should_fail) {
+        ok(!defined($status), 'failed to add to list when we should');
+    } else {
+        ok(defined($status), 'added to list when we should');
+    }
+
+    if (defined $status) {
+        ok($countbefore == $countafter - 1, 'added bib to list');  # the bib has been successfuly added.
+    } else {
+        ok($countbefore == $countafter,     'did not add duplicate bib to list');  # the bib has been successfuly added.
+    }
+
+    $used{$key}++;
+
 }
 
 #-----------------------TEST ModShelf & GetShelf functions------------------------#
@@ -136,25 +127,17 @@ for(my $i=0; $i<10;$i++){
     ModShelf($numA,$shelf);
     my ($numB,$nameB,$ownerB,$categoryB) = GetShelf($numA);
     
-    ok($numA,$numB);
-    ok($shelf->{shelfname},$nameB);
-    ok($shelf->{owner},$ownerB);
-    ok($shelf->{category},$categoryB);
+    ok($numA == $numB, 'modified shelf');
+    ok($shelf->{shelfname} eq $nameB,     '... and name change took');
+    ok($shelf->{owner}     eq $ownerB,    '... and owner change took');
+    ok($shelf->{category}  eq $categoryB, '... and category change took');
 }
 
 #-----------------------TEST DelShelf & DelFromShelf functions------------------------#
 # usage : ($status) = &DelShelf($shelfnumber);
-# usage : &DelFromShelf( $itemnumber, $shelfnumber);
 
 for(my $i=0; $i<10;$i++){
     my $shelfnumber = $shelves[$i];
     my $status = DelShelf($shelfnumber);
-    if($status){
-        my ($items,$count) = GetShelfContents($shelfnumber);
-        ok($status,$count);
-        foreach (@$items){ # delete all the item in this shelf
-            DelFromShelf($_{'itemnumber'},$shelfnumber);
-        }
-        ok(DelShelf($shelfnumber));
-    }
+    ok(1 == $status, "deleted shelf $shelfnumber and its contents");
 }

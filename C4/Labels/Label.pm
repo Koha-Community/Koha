@@ -417,7 +417,7 @@ sub draw_label_text {
                 @label_lines = _split_ccn($field_data) if !@label_lines;
                 push (@label_lines, $field_data) if !@label_lines;
             } else {
-                warn sprintf('Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha.org', $field_data);
+                warn sprintf('Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha-community.org', $field_data);
                 push @label_lines, $field_data;
             }
         }
@@ -468,6 +468,10 @@ sub draw_label_text {
         $font = $self->{'font'};        # reset font for next field
     }	#foreach field
     return \@label_text;
+}
+
+sub draw_guide_box {
+    return $_[0]->{'guidebox'};
 }
 
 sub barcode {

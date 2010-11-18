@@ -59,7 +59,6 @@ my $borstat = $input->param("status");
 my $borstat1 = $input->param("activity");
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-my $mime = $input->param("MIME");
 our $sep     = $input->param("sep");
 $sep = "\t" if ($sep eq 'tabulation');
 my $selected_branch; # = $input->param("?");
@@ -131,12 +130,10 @@ if ($do_it) {
 	$req->execute;
 	$template->param( SORT2_LOOP => $req->fetchall_arrayref({}));
 	
-	my @mime = ( C4::Context->preference("MIME") );
-	# warn 'MIME(s): ' . join ' ', @mime;
 	my $CGIextChoice=CGI::scrolling_list(
 				-name => 'MIME',
 				-id => 'MIME',
-				-values   => \@mime,
+				-values   => ['CSV'], # FIXME translation
 				-size     => 1,
 				-multiple => 0 );
 	my $CGIsepChoice=GetDelimiterChoices;

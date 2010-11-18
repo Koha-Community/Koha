@@ -41,6 +41,7 @@ my $author        = $input->param('author');
 my $isbn          = $input->param('isbn');
 my $issn          = $input->param('issn');
 my $lccn          = $input->param('lccn');
+my $lccall        = $input->param('lccall');
 my $subject       = $input->param('subject');
 my $dewey         = $input->param('dewey');
 my $controlnumber	= $input->param('controlnumber');
@@ -88,6 +89,7 @@ if ( $op ne "do_search" ) {
         isbn         => $isbn,
         issn         => $issn,
         lccn         => $lccn,
+        lccall       => $lccall,
         title        => $title,
         author       => $author,
         controlnumber=> $controlnumber,
@@ -134,6 +136,10 @@ else {
     }
 	if ($lccn) {	
         $query .= " \@attr 1=9 $lccn ";
+        $nterms++;
+    }
+    if ($lccall) {
+        $query .= " \@attr 1=16 \@attr 2=3 \@attr 3=1 \@attr 4=1 \@attr 5=1 \@attr 6=1 \"$lccall\" ";
         $nterms++;
     }
     if ($controlnumber) {
@@ -231,8 +237,15 @@ warn "query ".$query  if $DEBUG;
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
 ##Add necessary encoding changes to here -TG
                         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
-                        $oldbiblio->{isbn}   =~ s/ |-|\.//g,
-                          $oldbiblio->{issn} =~ s/ |-|\.//g,
+                        $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{isbn} =~ s/\|/ \| /g if $oldbiblio->{isbn};
+                        $oldbiblio->{isbn} =~ s/\(/ \(/g if $oldbiblio->{isbn};
+
+                        $oldbiblio->{issn} =~ s/ |-|\.//g if $oldbiblio->{issn};
+                        # pad | and ( with spaces to allow line breaks in the HTML
+                        $oldbiblio->{issn} =~ s/\|/ \| /g if $oldbiblio->{issn};
+                        $oldbiblio->{issn} =~ s/\(/ \(/g if $oldbiblio->{issn};
                           my (
                             $notmarcrecord, $alreadyindb, $alreadyinfarm,
                             $imported,      $breedingid

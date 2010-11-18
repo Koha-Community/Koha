@@ -149,6 +149,7 @@ sub retrieve {
     };
     while (my $record = $sth->fetchrow_hashref) {
         $self->{'branch_code'} = $record->{'branch_code'};
+        $self->{'creator'} = $record->{'creator'};
         push (@{$self->{'items'}}, {$number_type => $record->{$number_type}, label_id => $record->{'label_id'}});
         $record_flag = 1;       # true if one or more rows were retrieved
     }

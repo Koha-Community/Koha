@@ -26,6 +26,7 @@ use warnings;
 use CGI;
 use C4::Circulation;
 use C4::Auth;
+use URI::Escape;
 use C4::Dates qw/format_date_in_iso/;
 my $input = new CGI;
 
@@ -99,6 +100,7 @@ foreach my $barcode (@barcodes) {
 # redirection to the referrer page
 #
 if ($input->param('destination') eq "circ"){
+    $cardnumber = uri_escape($cardnumber);
     print $input->redirect(
         '/cgi-bin/koha/circ/circulation.pl?findborrower='.$cardnumber.$failedrenews.$failedreturn
     );

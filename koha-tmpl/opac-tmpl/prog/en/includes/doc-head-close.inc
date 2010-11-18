@@ -7,6 +7,9 @@
 <!-- TMPL_IF name="opaccolorstylesheet" -->
     <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opaccolorstylesheet" -->" />
 <!-- /TMPL_IF -->
+<!-- TMPL_IF name="opacexternalsheet" -->
+    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="opacexternalsheet" -->" />
+<!-- /TMPL_IF -->
 <!-- TMPL_IF name="opac_css_override" -->
     <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="opac_css_override" -->" />
 <!-- /TMPL_IF -->

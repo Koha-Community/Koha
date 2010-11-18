@@ -59,9 +59,11 @@
 	<li><a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a></li>
 	<li><a href="/cgi-bin/koha/labels/spinelabel-home.pl">Quick spine label creator</a></li>
     <!-- /TMPL_IF -->
+<!--
     <!-- TMPL_IF NAME="CAN_user_tools_rotating_collections" -->
     <li><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></li>
     <!-- /TMPL_IF -->
+-->
     <!-- TMPL_IF NAME="CAN_user_tools_stage_marc_import" -->
 	<li><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC for import</a></li>
     <!-- /TMPL_IF -->

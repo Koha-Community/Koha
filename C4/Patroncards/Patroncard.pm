@@ -83,8 +83,8 @@ sub draw_text {
     my ($self, $pdf, %params) = @_;
     warn sprintf('No pdf object passed in.') and return -1 if !$pdf;
     my @card_text = ();
+    return unless (ref($self->{'layout'}->{'text'}) eq 'ARRAY'); # just in case there is not text
     my $text = [@{$self->{'layout'}->{'text'}}]; # make a copy of the arrayref *not* simply a pointer
-    return unless (ref($text) eq 'ARRAY'); # just in case there is not text
     while (scalar @$text) {
         my $line = shift @$text;
         my $parse_line = $line;
@@ -127,7 +127,7 @@ sub draw_text {
             while (1) {
 #                $line =~ m/^.*(\s\b.*\b\s*|\s&|\<\b.*\b\>)$/; # original regexp... can be removed after dev stage is over
                 $line =~ m/^.*(\s.*\s*|\s&|\<.*\>)$/;
-                warn sprintf('Line wrap failed. DEBUG INFO: Data: \'%s\'\n Method: C4::Patroncards->draw_text Additional Information: Line wrap regexp failed. (Please file in this information in a bug report at http://bugs.koha.org', $line) and last WRAP_LINES if !$1;
+                warn sprintf('Line wrap failed. DEBUG INFO: Data: \'%s\'\n Method: C4::Patroncards->draw_text Additional Information: Line wrap regexp failed. (Please file in this information in a bug report at http://bugs.koha-community.org', $line) and last WRAP_LINES if !$1;
                 $trim = $1 . $trim;
                 $line =~ s/$1//;
                 $string_width = C4::Creators::PDF->StrWidth($line, $text_attribs->{'font'}, $text_attribs->{'font_size'});

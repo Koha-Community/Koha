@@ -1,7 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
-<html>
 <head>
 <title>Gestion_des_index_MACLES</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
@@ -18,14 +17,14 @@
 <body  class="yui-skin-sam" onload="Activate(0);load_macles();" >
 
 <h1>Gestion des index MACLES</h1>
-<form name="f_pop">
+<form name="f_pop" action="">
 
 <div id="macles" class="toptabs numbered">
-    <ul>
+    <!-- TMPL_IF name="BIGLOOP" --><ul>
     <!--TMPL_LOOP name="BIGLOOP" -->
         <li><a href="#tab<!-- TMPL_VAR name="number" -->XX"><!-- TMPL_VAR name="number"--></a></li>
     <!--/TMPL_LOOP -->
-    </ul>
+    </ul><!-- /TMPL_IF -->
     <!-- RESET PAGINATION -->
     <!-- TMPL_LOOP name="BIGLOOP" -->
     <!-- TMPL_IF name="number" -->
@@ -89,7 +88,8 @@
     <!-- /TMPL_LOOP -->
 </div>
 </form>
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
+//<![CDATA[
 function Activate(numlayer)
 {
 	for (var i=0; i <= 9 ; i++ ) {
@@ -243,6 +243,7 @@ function load_macles()
   } 
   return false;
 }
+//]]>
 </script>
 </body>
 </html>

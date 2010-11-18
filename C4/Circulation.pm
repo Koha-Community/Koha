@@ -69,7 +69,6 @@ BEGIN {
 		&AddRenewal
 		&GetRenewCount
 		&GetItemIssue
-                &GetOpenIssue
 		&GetItemIssues
 		&GetBorrowerIssues
 		&GetIssuingCharges
@@ -77,6 +76,7 @@ BEGIN {
         &GetBranchBorrowerCircRule
         &GetBranchItemRule
 		&GetBiblioIssues
+		&GetOpenIssue
 		&AnonymiseIssueHistory
 	);
 
@@ -904,7 +904,6 @@ sub AddIssue {
     my ( $borrower, $barcode, $datedue, $cancelreserve, $issuedate, $sipmode) = @_;
     my $dbh = C4::Context->dbh;
 	my $barcodecheck=CheckValidBarcode($barcode);
-
     # $issuedate defaults to today.
     if ( ! defined $issuedate ) {
         $issuedate = strftime( "%Y-%m-%d", localtime );
@@ -1440,7 +1439,8 @@ sub AddReturn {
     my $item = GetItem($itemnumber) or die "GetItem($itemnumber) failed";
         # full item data, but no borrowernumber or checkout info (no issue)
         # we know GetItem should work because GetItemnumberFromBarcode worked
-    my $hbr = $item->{C4::Context->preference("HomeOrHoldingBranch")} || '';
+    my $hbr      = C4::Context->preference("HomeOrHoldingBranchReturn") || "homebranch";
+    $hbr = $item->{$hbr} || '';
         # item must be from items table -- issues table has branchcode and issuingbranch, not homebranch nor holdingbranch
 
     my $borrowernumber = $borrower->{'borrowernumber'} || undef;    # we don't know if we had a borrower or not

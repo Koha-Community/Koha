@@ -49,7 +49,6 @@ my @filters = $input->param("Filter");
 $filters[1] = format_date_in_iso($filters[1]) if $filters[1];
 my $output = $input->param("output");
 my $basename = $input->param("basename");
-my $mime = $input->param("MIME");
 our $sep     = $input->param("sep") || '';
 $sep = "\t" if ($sep eq 'tabulation');
 my ($template, $borrowernumber, $cookie)
@@ -114,15 +113,10 @@ if ($do_it) {
     my %select;
     my $req;
     
-    my @mime = ( C4::Context->preference("MIME") );
-#	foreach my $mime (@mime){
-#		warn "".$mime;
-#	}
-    
     my $CGIextChoice=CGI::scrolling_list(
                 -name     => 'MIME',
                 -id       => 'MIME',
-                -values   => \@mime,
+                -values   => ['CSV'], # FIXME translation
                 -size     => 1,
                 -multiple => 0 );
     

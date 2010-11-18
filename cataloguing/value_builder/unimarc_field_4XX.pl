@@ -345,7 +345,7 @@ sub plugin {
                   "cataloguing/value_builder/unimarc_field_4XX.tmpl",
                 query           => $query,
                 type            => 'intranet',
-                authnotrequired => 1,
+                authnotrequired => 0,
                 debug           => 1,
             }
         );
@@ -463,7 +463,7 @@ sub plugin {
                   "cataloguing/value_builder/unimarc_field_4XX.tmpl",
                 query           => $query,
                 type            => "intranet",
-                authnotrequired => 1,
+                authnotrequired => 0,
             }
         );
 

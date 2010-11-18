@@ -40,6 +40,8 @@ sub _check_params {
         'format_string',
         'layout_xml',           # FIXME: all layouts should be stored in xml format to greatly simplify handling -chris_n
         'creator',
+        'units',
+        'start_label',
     );
     if (scalar(@_) >1) {
         my %given_params = @_;
@@ -68,6 +70,9 @@ sub new {
     my $type = ref($invocant) || $invocant;
     if (grep {$_ eq 'Labels'} @_) {
        $self = {
+            layout_xml      =>      '',
+            units           =>      'POINT',
+            start_label     =>      1,
             barcode_type    =>      'CODE39',
             printing_type   =>      'BAR',
             layout_name     =>      'DEFAULT',
@@ -95,8 +100,6 @@ sub retrieve {
     my %opts = @_;
     my $type = ref($invocant) || $invocant;
     my $query = "SELECT * FROM creator_layouts WHERE layout_id = ? AND creator = ?";
-    #warn "QUERY: $query\n";    #XXX Remove
-    #warn "PARAMS: layout_id=" . $opts{'layout_id'} . " creator=" . $opts{'creator'} . "\n";    #XXX Remove
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute($opts{'layout_id'}, $opts{'creator'});
     if ($sth->err) {
@@ -221,7 +224,7 @@ sub get_text_wrap_cols {
     my $string = '';
     my $strwidth = 0;
     my $col_count = 0;
-    my $textlimit = $params{'label_width'} - ( 3 * $params{'left_text_margin'});
+    my $textlimit = $params{'label_width'} - (( 3 * $params{'left_text_margin'} ) || 13.5 );
 
     while ($strwidth < $textlimit) {
         $string .= '0';

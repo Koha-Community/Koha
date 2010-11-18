@@ -7,7 +7,7 @@ Some parts copyright 2010 Chris Nighswonger
 Feedback/bug reports: Koha Developer's List:
 http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-devel
 
-This document last modified: 19 May 2010
+This document last modified: October 8, 2010
 
 Installation Instructions
 =============================
@@ -19,9 +19,9 @@ as indicated or by running the command directly as root.
 
 1.1 Install Debian Lenny via Businesscard CD
 
-See http://www.debian.org/releases/lenny/debian-installer/
+    See http://www.debian.org/releases/lenny/debian-installer/
 
-1.3 Set up Indexdata apt sources for Yaz and Zebra packages
+1.2 Set up Indexdata apt sources for Yaz and Zebra packages
 
 Edit your /etc/apt/sources.list file and add the following:
 
@@ -31,30 +31,33 @@ Edit your /etc/apt/sources.list file and add the following:
 
 The Index Data packages are signed with a key you can install as follows:
 
-    $ wget http://ftp.indexdata.dk/debian/indexdata.asc
-    $ sudo apt-key add indexdata.asc
+    $ wget -O- http://ftp.indexdata.dk/debian/indexdata.asc | sudo apt-key add -
 
-1.4 Get Koha
+Finally, update your apt sources:
+    $ sudo apt-get update
 
-1.4.1 Option A: Download Koha via Git (optional)
+1.3 Get Koha
+Choose one of these options:
+
+1.3.1 Option A: Download Koha via Git (optional)
 
     $ sudo apt-get install git-core git-email
-    $ git clone git://git.koha-community.org/pub/scm/koha.git kohaclone
-    $ cd kohaclone
+    $ git clone git://git.koha-community.org/koha.git koha
+    $ cd koha
     $ git checkout -b myinstall origin
 
 Note: for more information about Git, please see the Koha Git Usage Guide:
 
     http://wiki.koha-community.org/wiki/Version_Control_Using_Git
 
-1.4.2 Option B: Download Koha from http://download.koha-community.org
+1.3.2 Option B: Download Koha from http://download.koha-community.org
 
 Find the latest Koha stable version on http://download.koha-community.org
 and get it:
 
     $ wget <URL> found on download.koha-community.org
 
-1.5 Install additional Debian dependencies
+1.4 Install additional Debian dependencies
 
 IMPORTANT:  You should only use CPAN for Perl dependencies which are NOT
             available from the package maintainer. You have been warned!
@@ -64,20 +67,21 @@ Zebra and all Debian packaged Perl module required by Koha:
 
     $ sudo install_misc/apt-get-debian-lenny.sh
 
-1.6 Install Perl dependencies that aren't packaged into Debian Lenny
+1.5 Install Perl dependencies that aren't packaged into Debian Lenny
 sources
 
 Run the following command:
 
-    $ sudo cpan Algorithm::CheckDigits SMS::Send HTTP::OAI IPC::Cmd \\
-      Memoize::Memcached PDF::API2::Simple PDF::Table Storable Test::More \\
-      Locale::Currency::Format
+    $ sudo cpan Algorithm::CheckDigits SMS::Send HTTP::OAI IPC::Cmd \
+      Memoize::Memcached PDF::API2::Simple PDF::Table Storable Test::More \
+      Locale::Currency::Format DateTime Lingua::Stem::Snowball Text::CSV::Encoded \
+      UNIVERSAL::require YAML Authen::CAS::Client
 
 Note: you may need to run CPAN initialization if you've not run cpan
 before:
 
     /etc/perl/CPAN/Config.pm initialized.
-    
+
     CPAN is the world-wide archive of perl resources. It consists of about
     100 sites that all replicate the same contents all around the globe.
     Many countries have at least one CPAN site already. The resources
@@ -94,23 +98,20 @@ When the configuration is completed CPAN will install the Perl modules.
 
 2. Configuration of dependencies
 
-2.1 Update root MySQL password (if dselect didn't do it for you already)
+2.1 Create the Koha database
 
-    $ sudo mysqladmin password <password>
-
-2.2 Create the Koha database
-
-    Create the database and user with associated privileges:
+ Create the database and user with associated privileges (information inside <> brackets is
+ data you assign specifically to your installation. Do not include the <>'s when entering the commands):
 
     $ mysqladmin -uroot -p<password> create <kohadatabasename>
     $ mysql -uroot -p<password>
-    
+
     Welcome to the MySQL monitor.  Commands end with ; or \g.
     Your MySQL connection id is 22
     Server version: 5.0.51a-24 (Debian)
-    
+
     Type 'help;' or '\h' for help. Type '\c' to clear the buffer.
-    
+
     mysql> grant all on <kohadatabasename>.* to '<kohadatabaseuser>'@'localhost' identified by '<kohadatabaseuserpassword>';
     Query OK, 0 rows affected (0.00 sec)
 
@@ -119,37 +120,64 @@ When the configuration is completed CPAN will install the Perl modules.
 
     mysql> quit
 
-2.3 Test your SAX Parser and correct where necessary
+You may want to document the database name, the database username, and the database password you just set.
+Step 3 will require them.
 
-You must be sure you're using the XML::LibXML SAX parser, not Expat or 
-PurePerl, both of which have outstanding bugs with pre-composed characters. 
+2.2 Test your SAX Parser and correct where necessary
+
+You must be sure you're using the XML::LibXML SAX parser, not Expat or
+PurePerl, both of which have outstanding bugs with pre-composed characters.
 You can test your SAX parser by running:
 
     $ cd koha
     $ misc/sax_parser_print.pl 
 
-    You should see something like::
+You should see something like:
 
     XML::LibXML::SAX::Parser=HASH(0x81fe220)
 
-    If you're using PurePerl or Expat, you'll need to edit your
-    ini file, typically located at:
+If you are configured to use PurePerl or Expat, the script will say you have a problem and 
+you'll need to edit your ini file to correct it.
+
+The file is typically located at:
 
     /etc/perl/XML/SAX/ParserDetails.ini
 
+The correct parser entry will need to be moved to the bottom of the file.
+The following is the entry you are looking for:
+
+    [XML::LibXML::SAX::Parser]
+	http://xml.org/sax/features/namespaces = 1
+
+2.3 Create your Koha system user (if you haven't created one already)
+
+    $ sudo adduser koha
+
+You can substitute any username for "koha," just be sure to write it down, you will need to know what it is in step 3.
 
 3. Run the Koha installer
 
     $ perl Makefile.PL
-    ( answer questions )
+      ( answer questions )
     $ make
     $ make test
     $ sudo make install
 
+3.1 Export the environment variables
+Make install will tell you what the proper path for these environment variables is.
+In case you missed it at the end of make install, here are some examples:
+
+Example (for standard install):
+    $ export KOHA_CONF=/etc/koha/koha-conf.xml
+    $ export PERL5LIB=/usr/share/koha/lib
+
+Example (for dev install. These paths are set during Makefile.PL.):
+    $ export KOHA_CONF=/path/to/your/koha-conf.xml
+    $ export PERL5LIB=/path/to/koha/lib
+
 4. Configure and start Apache
     $ sudo ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
-    (note that the path to koha-httpd.conf may be different depending on your
-    installation choices)
+(note that the path to koha-httpd.conf may be different if you chose a dev install)
 
 Add the following lines to /etc/apache2/ports.conf:
 
@@ -163,75 +191,98 @@ Run the following commands:
     $ sudo apache2ctl restart
 
 Note: you may still see the usual Apache default site if your VirtualHost
-configuration isn't correct.  The command "sudo a2dissite default" may be a
-quick fix, but may have side-effects.  See the Apache HTTPD manual section on
-virtual hosts for full instructions.
+      configuration isn't correct.  If Koha is the only web application running on the server,
+      the command "sudo a2dissite default" may be a quick fix. For servers running other sites
+      alongside Koha, see the Apache HTTPD manual section on virtual hosts for full
+      instructions (http://httpd.apache.org/docs/2.0/vhosts/).
 
-5. Configure and start Zebra
+5. Run the Web Installer, populate the database, initial configuration of settings
+
+Point your browser to http://<servername>:8080/
+
+Note: <servername> is (usually) the IP of your server, or localhost (if you are connecting
+      from the same machine Koha is installed on. You can verify the location by checking 
+      the VirtualHost settings for both the opac and intranet virtual hosts in koha-httpd.conf
+
+Koha will redirect you to the Web Installer where you can continue the setup. You will be prompted to enter in your DATABASE username and password. It is through this interface 
+that 
+you can install the sample data for libraries, patrons, and much more.
+
+Be aware that removing sample data at a later time (when you may want to take the 
+server into production) may not be easy, and if your intent is to take this 
+install from testing to production, go with minimal sample data (no patrons or bibliographic records).
+
+6. Configure and start Zebra
 
 Note: it's recommended that you daemonize the Zebra process and add it to your
-startup profile. For a non-production test/development installation, running 
-Zebra from the command line can be useful. Pick from the two available options
-below, or roll your own :-)
+      startup profile. For a non-production test/development installation, running
+      Zebra from the command line can be useful. Pick one of the options below (or roll your own).
 
 Note: it's also recommended that you create a Koha system user, which you will
-have specified during the install process. Alternatively, Zebra can be
-configured to run as the root user.
+      have specified during the install process. Alternatively, Zebra can be
+      configured to run as the root user.
 
-Option 1: run the Zebra processes from the command line:
+Option 1: run the Zebra processes from the command line (manual indexing):
 
-1.1 Zebra Search Server
+6.1.1 Zebra Search Server
 
 This process send responses to search requests sent by Koha or
 Z39.50/SRU/SRW clients.
 
-    $ sudo -u ${KOHA_USER} zebrasrv -f /etc/koha/koha-conf.xml
-    (note that the path to koha-conf.xml may be different depending on your
-    installation choices)
+    $ sudo -u <kohauser> zebrasrv -f /etc/koha/koha-conf.xml
+    (note that the path to koha-conf.xml may be different if you chose a dev install, and that
+    <kohauser> refers to the user you set up in step 2.3)
 
 Note: the user you run Zebra as will be the only user with write permission
       on the Zebra index; in development mode, you may wish to use your
       system user.
 
-1.2 Zebra Indexer
+
+6.1.2 Zebra Indexer
 
 Added/updated/deleted records in Koha MySQL database must be indexed
 into Zebra. A specific script must be launched each time a bibliographic
 or an authority record is edited.
 
-    $ sudo -u ${KOHA_USER} misc/migration_tools/rebuild_zebra -z -b -a
-    NOTE: This script should be run as the kohauser (the default is 'koha').
+    $ sudo -u <kohauser> misc/migration_tools/rebuild_zebra.pl -z -b -a
 
-Option 2: run automatically Zebra process as a daemon:
+Note: This script should be run as the kohauser (the default is 'koha', but
+this is the user you set up in step 2.3).
 
-Note that references to $SCRIPT_DIR refer to the directory where
-Koha's command-line scripts are installed, e.g., /usr/share/koha/bin.
+Option 2: run the Zebra process as a daemon (automatic indexing):
 
-1.1 Zebra Search Server
+Note: References to <script_dir> refer to the directory where
+      Koha's command-line scripts are installed, the path
+      is /usr/share/koha/bin/ by default in a standard install.
 
-    $ sudo ln -s ${SCRIPT_DIR}/koha-zebra-ctl.sh  /etc/init.d/koha-zebra-daemon
-    (Note: ${SCRIPT_DIR} is /usr/share/koha/bin/ by default in a standard install)
+6.2.1 Zebra Search Server
+
+    $ sudo ln -s <script_dir>/koha-zebra-ctl.sh  /etc/init.d/koha-zebra-daemon
+    (Note: <script_dir> is /usr/share/koha/bin/ by default in a standard install)
     $ sudo update-rc.d koha-zebra-daemon defaults
-    ( Note: see man chkconfig(8) on other distros )
 
-    $ sudo ${SCRIPT_DIR}/koha-zebra-ctl.sh start
+    $ sudo <script_dir>/koha-zebra-ctl.sh start
+    (Note: <script_dir> is /usr/share/koha/bin/ by default in a standard install)
 
-1.2 Zebra Indexer
 
-Add an entry in Koha user crontab to scheduled added/updated/deleted records
-indexing by Zebra with this command:
+6.2.2 Zebra Indexer
 
-  <path/to/koha>/misc/migration_tools/rebuild_zebra -z -b -a
+Add an entry in Koha user crontab to process scheduled added/updated/deleted records
+indexing by Zebra. <script_dir>cronjobs/crontab.example contains examples for these cron jobs (and many more).
 
-See check misc/cronjobs/crontab.example for usage examples.
-NOTE: This job should be setup under the kohauser (the default is 'koha').
+NOTE: The cronjobs should be setup under the kohauser (the default is 'koha', but
+this is the user you set up in step 2.3).
 
-6. Run the Web Installer, populate the database, initial configuration of settings
+Edit the crontab for the koha user by running
+    $ sudo -u <kohauser> crontab -e
 
-    Point your browser to http://<servername>:8080/
+For Zebra indexing, you are looking for the example that begins with
+    
+    # ZEBRA INDEX UPDATES with -z option, incremental index updates throughout the day
+    # for both authorities and bibs
 
-    It should redirect you to the Web Installer where you can continue the setup.
-    You can install the sample data for libraries, patrons, etc. via the Web Installer
+It may be easiest to copy/paste the example into your own crontab and modify as necessary.
+
 
 7. What next?
 
@@ -256,12 +307,12 @@ Authority data in MARC21 format
     $ misc/migration_tools/rebuild_zebra.pl -b -w
 
     Once the indexing has completed, you will be able to search for records in your system.
-    NOTE: This script should be run as the kohauser (the default is 'koha').
+    NOTE: This script should be run as the kohauser (the default is 'koha', this is the user we set up in step 2.3).
 
 7.3 Schedule regular index updates
     You need to run rebuild_zebra.pl -b -a -z as a regular cron job in orde to pick up new bibs
     and items as you add them. Check misc/cronjobs/crontab.example for usage examples. See 7.0 above.
-    NOTE: This job should be setup under the kohauser (the default is 'koha').
+    NOTE: This job should be setup under the kohauser (the default is 'koha', this is the user we set up in step 2.3).
 
 7.4 To enable public Z39.50/SRU servers, you'll need to edit your koha-conf.xml and
     change the <listen> options to listen on a TCP port; then restart the zebra daemon.
@@ -271,6 +322,7 @@ UPGRADE
 If you are upgrading from a previous installation of Koha 3, you can
 use the following:
 
+ ./koha_perl_deps.pl -u -m # to identify new Perl dependencies
  perl Makefile.PL --prev-install-log /path/to/koha-install-log
  make
  make test
@@ -318,3 +370,4 @@ A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 You should have received a copy of the GNU General Public License along with
 Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
 Suite 330, Boston, MA  02111-1307 USA
+

@@ -46,8 +46,15 @@ my ($template, $loggedinuser, $cookie)
 # get framework list
 my $frameworks = getframeworks();
 my @frameworkloop;
+my $selected;
+my $frameworktext;
 foreach my $thisframeworkcode (keys %$frameworks) {
-	my $selected = 1 if $thisframeworkcode eq $framework;
+	 if ($thisframeworkcode eq $framework){
+		 $selected = 1;
+		 $frameworktext = $frameworks->{$thisframeworkcode}->{'frameworktext'};
+     } else {
+		$selected = 0;
+     }
 	my %row =(value => $thisframeworkcode,
 				selected => $selected,
 				frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
@@ -70,6 +77,7 @@ my $fieldloop = GetFieldMapping($framework);
 
 $template->param( frameworkloop => \@frameworkloop, 
                   framework     => $framework,
+                  frameworktext => $frameworktext,
                   fields        => $fieldloop,
                 );
 

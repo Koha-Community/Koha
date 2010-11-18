@@ -104,7 +104,7 @@
 
                 </td>
                 <td>
-                    <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add holdings</a>
+                    <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add/Edit Items</a>
                 </td>
             </tr>
     <!-- /TMPL_LOOP -->
@@ -147,10 +147,9 @@
                 <td><!-- TMPL_VAR NAME="file" --></td>
                 <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=<!-- TMPL_VAR NAME="id" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=<!-- TMPL_VAR NAME="id" -->" title="MARC" rel="gb_page_center[600,500]">Card</a>
 				</td>
-                <td><!-- TMPL_IF NAME="NOTMARC" -->
-                <!-- TMPL_ELSE -->
+                <td>
                 	<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=<!-- TMPL_VAR NAME="id" -->" <!-- TMPL_UNLESS NAME="CAN_user_editcatalogue_edit_catalogue" --> class="disabled" onclick="return false;"<!-- /TMPL_UNLESS -->>Add biblio</a>
-                <!-- /TMPL_IF --></td>
+                </td>
             </tr>
             <!-- /TMPL_LOOP -->
         </table>

@@ -87,7 +87,7 @@ function confirm_items_deletion() {
 	        { text: _("Attach Item"), url: "/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
 	        { text: _("Edit as New (Duplicate)"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;frameworkcode=&amp;op=duplicate" },
 			{ text: _("Delete Record"), onclick: {fn: confirm_deletion }<!-- TMPL_IF NAME="count" -->,id:'disabled'<!-- /TMPL_IF --> },
-            { text: _("Delete all Items"), onclick: {fn: confirm_items_deletion } }
+            { text: _("Delete all Items"), onclick: {fn: confirm_items_deletion }<!-- TMPL_UNLESS NAME="count" -->,id:'disabled'<!-- /TMPL_UNLESS --> }
 	    ];
 		
 		var savemenu = [

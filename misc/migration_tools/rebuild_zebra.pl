@@ -16,7 +16,9 @@ use C4::AuthoritiesMarc;
 #
 
 $|=1; # flushes output
-
+# If the cron job starts us in an unreadable dir, we will break without
+# this.
+chdir $ENV{HOME} if (!(-r '.'));
 my $directory;
 my $nosanitize;
 my $skip_export;

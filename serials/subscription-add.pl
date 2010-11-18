@@ -85,7 +85,9 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
             $subs->{$_} = format_date($subs->{$_});
         }
 	  }
-    $subs->{'letter'}='' unless($subs->{'letter'});
+      if (!defined $subs->{letter}) {
+          $subs->{letter}= q{};
+      }
     letter_loop($subs->{'letter'}, $template);
     $nextexpected = GetNextExpected($subscriptionid);
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate}->output('iso') eq $firstissuedate ;
@@ -131,10 +133,11 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
 $template->param(branchloop => $branchloop,
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 );
-my $count = 0;
 # prepare template variables common to all $op conditions:
-$template->param(  'dateformat_' . C4::Context->preference('dateformat') => 1 ,
-                );
+$template->param(  'dateformat_' . C4::Context->preference('dateformat') => 1 );
+if ($op!~/^mod/) {
+    letter_loop(q{}, $template);
+}
 
 if ($op eq 'addsubscription') {
     redirect_add_subscription();
@@ -151,10 +154,8 @@ if ($op eq 'addsubscription') {
            }
            push( @sub_type_data, \%row );
         }
-    $template->param(subtype => \@sub_type_data,
-	);
+    $template->param(subtype => \@sub_type_data);
 
-    letter_loop('', $template);
 
     my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
     if (defined $new_biblionumber) {
@@ -170,16 +171,15 @@ if ($op eq 'addsubscription') {
 sub letter_loop {
     my ($selected_letter, $templte) = @_;
     my $letters = GetLetters('serial');
-    my @letterloop;
-    foreach my $thisletter (keys %$letters) {
-        my $selected = $thisletter eq $selected_letter ? 1 : 0;
-        push @letterloop, {
+    my $letterloop;
+    foreach my $thisletter (keys %{$letters}) {
+        push @{$letterloop}, {
             value => $thisletter,
-            selected => $selected,
+            selected => $thisletter eq $selected_letter,
             lettername => $letters->{$thisletter},
         };
     }
-    $templte->param(letterloop => \@letterloop) if @letterloop;
+    $templte->param(letterloop => $letterloop);
     return;
 }
 

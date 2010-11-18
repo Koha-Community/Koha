@@ -276,7 +276,6 @@ sub returnlost{
 
 
 sub chargelostitem{
-# http://wiki.koha.org/doku.php?id=en:development:kohastatuses
 # lost ==1 Lost, lost==2 longoverdue, lost==3 lost and paid for
 # FIXME: itemlost should be set to 3 after payment is made, should be a warning to the interface that
 # a charge has been added

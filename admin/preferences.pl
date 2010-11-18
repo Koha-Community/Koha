@@ -63,6 +63,8 @@ sub _get_chunk {
 
     if ( $options{'class'} && $options{'class'} eq 'password' ) {
         $chunk->{'input_type'} = 'password';
+    } elsif ( $options{'class'} && $options{'class'} eq 'date' ) {
+        $chunk->{'dateinput'} = 1;
     } elsif ( $options{'type'} && ( $options{'type'} eq 'opac-languages' || $options{'type'} eq 'staff-languages' ) ) {
         my $current_languages = { map { +$_, 1 } split( /\s*,\s*/, $value ) };
 
@@ -266,7 +268,8 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 $lang = $template->param( 'lang' );
 my $op = $input->param( 'op' ) || '';
 my $tab = $input->param( 'tab' );
-$tab ||= 'local-use';
+$tab ||= 'acquisitions'; # Ideally this should be "local-use" but preferences.pl
+                         # does not presently support local use preferences
 
 my $highlighted;
 

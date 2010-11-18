@@ -901,7 +901,7 @@ sub FindDuplicateAuthority {
         $_->[1]=~s/$filtervalues/ /g; $query.= " and he,wrdl=\"".$_->[1]."\"" if ($_->[0]=~/[A-z]/);
       }
     }
-    my ($error, $results, $total_hits)=SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
+    my ($error, $results, $total_hits) = C4::Search::SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
     if (@$results>0) {
       my $marcrecord = MARC::File::USMARC::decode($results->[0]);
@@ -1327,9 +1327,17 @@ sub merge {
                 my $tag=$field->tag();          
                 if ($auth_number==$mergefrom) {
                 my $field_to=MARC::Field->new(($tag_to?$tag_to:$tag),$field->indicator(1),$field->indicator(2),"9"=>$mergeto);
+		my $exclude='9';
                 foreach my $subfield (@record_to) {
                     $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
+		    $exclude.= $subfield->[0];
                 }
+		$exclude='['.$exclude.']';
+#		add subfields in $field not included in @record_to
+		my @restore= grep {$_->[0]!~/$exclude/} $field->subfields();
+                foreach my $subfield (@restore) {
+                   $field_to->add_subfields($subfield->[0] =>$subfield->[1]);
+		}
                 $marcrecord->delete_field($field);
                 $marcrecord->insert_grouped_field($field_to);            
                 $update=1;

@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Biblio;
+use C4::Items;
 use C4::Search;		# enabled_staff_search_views
 
 my $query        = new CGI;
@@ -51,7 +52,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-$template->param( count => 1, bibliotitle => $biblio->{title} );
+#count of item linked
+my $itemcount = GetItemsCount($biblionumber);
+$template->param( count => $itemcount,
+					bibliotitle => $biblio->{title}, );
 
 #Getting the list of all frameworks
 my $queryfwk =

@@ -184,16 +184,17 @@ if ($op eq 'add_form') {
     $template->param(authorised_value_categories1 => \@auth_cats_loop1);
     $template->param(authorised_value_categories2 => \@auth_cats_loop2);
 
-    my $budget_perm_dropbox =
-    GetBudgetPermDropbox($budget->{'budget_permission'});
-    
+    if($budget->{'budget_permission'}){
+        my $budget_permission = "budget_perm_".$budget->{'budget_permission'};
+        $template->param($budget_permission => 1);
+    }
+
     # if no buget_id is passed then its an add
     $template->param(
         add_validate                  => 1,
         dateformat                => C4::Dates->new()->visual(),
         budget_parent_id    		  => $budget_parent->{'budget_id'},
         budget_parent_name    		  => $budget_parent->{'budget_name'},
-        budget_perm_dropbox       => $budget_perm_dropbox,
         branchloop_select         => \@branchloop_select,
 		%$period,
 		%$budget,

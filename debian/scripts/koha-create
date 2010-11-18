@@ -117,6 +117,7 @@ then
     fi
     adduser --no-create-home --disabled-login \
         --gecos "Koha instance $username" \
+        --home "/var/lib/koha/$name" \
         --quiet "$username"
 
     # Create the site-specific directories.
@@ -233,3 +234,9 @@ if [ "$op" = request ]
 then
     koha-disable "$name"
 fi
+
+echo <<eoh
+
+Email for this instance is disabled. When you're ready to enable it, use:
+koha-email-enable $name
+eoh

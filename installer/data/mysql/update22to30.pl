@@ -4,7 +4,7 @@
 # Database Updater
 # This script checks for required updates to the database.
 
-# Part of the Koha Library Software www.koha.org
+# Part of the Koha Library Software www.koha-community.org
 # Licensed under the GPL.
 
 # Bugs/ToDo:
