@@ -1,4 +1,4 @@
-RELEASE NOTES FOR KOHA 3.2.1 - 22 October 2010
+RELEASE NOTES FOR KOHA 3.2.1 - 20 November 2010
 ========================================================================
 
 Koha is the first free and open source software library automation package 
@@ -16,10 +16,164 @@ Installation instructions can be found at:
 
     http://wiki.koha-community.org/wiki/Installation_Documentation
 
-Koha 3.2.1 is a bugfix release.
+Koha 3.2.1 is a bugfix/maintenance release.
+
+Highlights of 3.2.1
+======================
+
+Some of the higher profile bugs addressed in this release are:
+
+    * Further fixes smoothing the upgrade process from 3.0.x to 3.2.x. (Bug 4141)
+    * Subject links in search results are now properly formed. (Bug 4074)
+    * Advanced notice preferences set during new patron creation are now saved
+      correctly. (Bug 4254)
+    * Img tags in XSLT templates are now handled correctly during automatic
+      translation. (Bug 4472)
+    * The "Show More" link listed with facets has been made to work. (Bug 4520)
+    * Amanzon book covers will now work with ISBN13. (Bug 4305)
+    * The staff client XSLT templates are now unique. (Bug 4423)
+    * The Unimarc XSLT templates are now translated in English. (Bug 5204)
+
+Other notable fixes in this release include:
+
+    * A number of spelling corrections
+    * Various fixes to formerly non-translatable phrases
+    * Some tweaks to fix display problems in Internet Explorer
+
+This release also contains a variety of minor enhancements improving Koha's interface.
+
+Maintenance activities performed in this release include:
+
+    * A number of new and improved test cases
+    * Removal of unused dependencies
 
 Bugs fixed in 3.2.1
 ======================
+
+2122    Grayed out Fields not always visible
+2567    008 editor falsely populating Illustrations and Nature of Contents positions
+3013    Value builder for 006 and 008 need choices for all format types
+3211    cataloging value plugin forms should be valid XHTML
+3271    Missing message when adding to a list with no items selected
+3811    biblios record.abs indexes 008 language as numeric (marc21)
+4074    The 'Subject(s)' link(s) are malformed resulting in no search results
+4141    reconcile 3.0.x and HEAD database updates for 3.2.0
+4254    adding new patron advanced notice doesn't save
+4261    keyword mapping should show which framework the map is for
+4305    Amazon book covers do not work with ISBN13
+4359    noItemTypeImages not active in OPAC
+4423    Staff Client XSLT is just a copy of the OPAC one
+4472    img tags in xslt broken after automatic translation
+4498    Acq always shows '1 suggestions waiting'
+4515    Few very small errors in opac-search.pl
+4520    facets "show more" doesn't work
+4866    Optionally enable Change event for item plugins
+4912    After editing private list, user should be redirect to private lists
+4913    Budget planning pages should show currency name instead of symbol
+4924    Public/Internal notes missing in staff normal view
+4933    Link to subfield's edit tab from MARC subfield structure admin summary
+4963    sys prefs need date hints and/or picker
+4979    Acq: input fields for new record are too short
+4980    Acq: pull down 'Restrict access to:' for funds not translatable
+4986    move serials prefs from cataloging tab
+4991    Overhaul Calendar interface
+5003    Can not search for organisation by name
+5004    Do not block deletion of cities when instances exist in borrowers table
+5008    "Remove" link missing when viewing Cart in expanded "More details" view
+5019    funds link doesn't go to list
+5037    If patron category is empty it shouldn't show
+5050    Staff client's language preference should be grouped with I18N/L10N preferences
+5056    Untranslatable strings in members.js
+5059    Inconsistent use of ordering price and list price in vendor form
+5066    Incorrect use of localtime function when calling _session_log
+5075    Terms not highlighted w/ xslt on
+5082    Not translatable name of default framework 'Default' in MARCdetail.tmpl
+5110    NewItemsDefaultLocation should be under cataloging
+5112    Organisation does not show links to professional patrons
+5114    Can't edit basket in Internet Explorer
+5117    Misspelled word: Orgnisztion
+5118    Misspelled word: Currencey
+5119    Misspelled word: correspounding
+5121    Misspelled words: stripts biographyl Begininning
+5122    Misspelled word: Transfered/transfered
+5123    Misspelled words: Depdending Commited flutucations
+5124    Duplicate and Misspelled words: periodicy outputing
+5128    Define default 9xx fields for Unimarc setup in all languages
+5130    Misspelled words: biblographic delimeter extention
+5132    Misspelled words: Acquistion Succesfully professionnal
+5133    Misspelled words: reservior notifiying deleete
+5134    Misspelled words: exisiting anomolies genereated
+5135    Authorized value input maxlength should match table column
+5136    Replace embedded SQL query with call to GetAuthorisedValues
+5137    Remove obsolete code for counting issues by item type in circulation
+5142    Untranslatable strings in tag review template
+5146    Patron Import Requires Header Row
+5149    Link to noItemTypeImages pref on item types is wrong
+5151    Saved Report Breadcrumb in bold
+5152    confirm buttons different styles on lists
+5162    patron attributes 'new' link should create blank value
+5163    holds to pull is titled pending holds
+5168    add holdings' should read 'add/edit items'
+5171    edit items should be edit item when under 1 item
+5175    The opac XSLTDetails view field Publisher: doesn't provide a hyperlink as the non XSLT view does.
+5177    Descending sort search result defined by syspref doesn't work
+5190    MARC and UNIMARC bibliographic fields documentation accesible when cataloging
+5204    Unimarc xslt default templates are in french
+5210    Function of back button on batch modification result page unclear
+5214    undefined itype images cause broken image icon in request.pl
+5219    Perltidy code
+5221    Preselect tab containing itemtype/authorized value image in use
+5223    related subjects' should read 'subjects'
+5224    Replace Shopping Basket with basket
+5235    checkout receipt should include patron name
+5236    "hide my tags" link does nothing
+5237    Special characters in patron barcodes cause renewals to fail.
+5243    C4::Search::SimpleSearch call in AuthoritiesMarc.pm
+5254    no need to scroll left to right on acq z search
+5258    Order should read 'order line' in receive table
+5301    In C4/XSLT.pm, itemcallnumber can contain special XML characters
+5308    subscriptionroutinglist table is too lax
+5309    Progress bar inaccurate
+5311    Language dropdown in advanced search broken?
+5315    Authority search Templates refer to unused variable
+5318    rank weight error in ccl.properties
+5322    pwgen not a dependency for the packages
+5326    when ExtendedPatronAttributes off error links to old sys prefs
+5327    Unit tests required for all C4 modules
+5363    Remove dependency on Cache::Memcached::Fast
+5368    Browse Shelf link appears even if there isn't an itemcallnumber
+5370    Fix all the references to koha.org
+5372    Editing a bilbio record, existing value can be replace by default value
+5380    an end to copy-and-paste-itis
+5381    Fines in notices prints always 0.00
+5385    Correct POD errors as highlighted by podchecker
+5389    Business::ISBN should be marked as required dependency
+5392    reserve/renewscript logging lots of warnings
+5393    test case for verifying XML/XSLT files are well-formed
+5396    UseTablesortForCirc syspref to toggle table sorter on circ/circulation.pl
+5400    add test case to detect merge conflict markers in the code
+5412    Double quotes in publisher name, no date cause search results links to break
+
+Commits in 3.2.1 without a referenced bug report:
+
+    * Adding a simple test for Service.pm
+    * create unit test files
+    * Create Unit Test for ImportBatch
+    * unit test stub for Z3950.pm
+    * Test modules compile
+    * Updated links in Main Page Help
+    * remove extraneous semicolon
+    * History updates
+    * history updates - recent releases
+    * Adding 3.2 Release Maintainer to Release Team List
+    * Adding possibility to cleanup_database.pl to purge only older sessions
+    * Display available error information during bulkmarcimport
+    * add missing help file for merging records
+    * (MT 2985) simplify CanBookBeReserved
+    * fix use of outdated boilerplate
+    * remove unused template include
+    * Misspells: deleteing -> deleting
+    * Misspell: Quanity -> Quantity
 
 System requirements
 ======================
@@ -81,6 +235,13 @@ interface are available in this release for the following languages:
   * Spanish
   * Turkish
 
+Translation related commits new to 3.2.1:
+
+  * Staff interface .po file updates
+  * Russian and Ukranian opac language updates
+  * Ukranian and Russian syspref language updates
+  * German and italian language updates
+
 Partial translations are available for various other languages.
 
 The Koha team welcomes additional translations; please see
@@ -112,18 +273,51 @@ Release Maintainer (3.2.x):
 Credits
 ======================
 
-We thank the following individuals who contributed patches to
-Koha 3.2.1.
+We thank the following individuals who contributed patches to Koha 3.2.1.
+
+Nahuel Angelinetti
+Tomás Cohen Arazi
+Jared Camins-Esakov
+Colin Campbell
+Galen Charlton
+Chris Cormack
+Nate Curulla
+Frédéric Demians
+Andrew Elwell
+Brian Engard
+Nicole Engard
+Magnus Enger
+Katrin Fischer
+Daniel Grobani
+Kyle M Hall
+Srdjan Jankovic
+Bernardo Gonzalez Kriegel
+Henri-Damien Laurent
+Owen Leonard
+Chris Nighswonger
+Paul Poulain
+MJ Ray
+Liz Rea
+Marcel de Rooy
+Robin Sheat
+ByWater Solutions
+Zeno Tajoli
+Ian Walls
 
 We regret any omissions.  If a contributor has been inadvertantly missed,
-please send patch against these release notes to 
+please send patch against these release notes to
 koha-patches@lists.koha-community.org.
+
+The 3.2.x Release Maintainer especially thanks the 3.4 Release Team and all
+who participated in QA for their diligent labors in testing and pushing well
+over 100 patches since the 3.2.0 relese. Their work very much makes possible
+the release of 3.2.1 on its announced schedule.
 
 Revision control notes
 ======================
 
-The Koha project uses Git for version control.  The current development 
-version of Koha can be retrieved by checking out the master branch of 
+The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of
 
     git://git.koha-community.org/koha.git
 
