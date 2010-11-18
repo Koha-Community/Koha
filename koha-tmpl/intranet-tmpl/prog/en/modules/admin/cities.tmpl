@@ -69,14 +69,8 @@
 
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirm" -->
-    <!-- TMPL_IF NAME="total" -->
-    <div class="dialog message">
-    <h3>Cannot Delete City "<!-- TMPL_VAR NAME="city_name" -->"</h3>
-    <p>This record is used <!-- TMPL_VAR NAME="total" --> times. Impossible to delete it</p>
-    <!-- TMPL_ELSE -->
     <div class="dialog alert">
     <h3>Delete City "<!-- TMPL_VAR NAME="city_name" -->?"</h3>
-    <!-- /TMPL_IF -->
     <table>
         <tr><th>City id</th>
             <td><!-- TMPL_VAR NAME="cityid" --></td>
@@ -89,16 +83,12 @@
         </tr>
     </table>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-    <!-- TMPL_IF NAME="total" -->
-        <input type="submit" class="approv" value="OK" />
-    <!-- TMPL_ELSE -->
         <input type="hidden" name="op" value="delete_confirmed" />
         <input type="hidden" name="cityid" value="<!-- TMPL_VAR NAME="cityid" -->" />
         <input type="submit" class="approve" value="Yes, Delete" />
     </form>
     <form action="<!-- TMPL_VAR NAME="script_name" -->" method="get">
         <input type="submit" class="deny" value="No, do not Delete" />
-    <!-- /TMPL_IF -->
     </form>
 </div>
 <!-- /TMPL_IF -->

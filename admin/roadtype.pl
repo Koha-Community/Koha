@@ -98,18 +98,10 @@ if ($op eq 'add_form') {
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
 	my $dbh = C4::Context->dbh;
-	my $sth=$dbh->prepare("select count(*) as total from borrowers,roadtype where borrowers.streettype=roadtype.road_type and roadtypeid=?");
-	$sth->execute($roadtypeid);
-	my $total = $sth->fetchrow_hashref;
-	$sth->finish;
-	$template->param(total => $total->{'total'});	
 	my $sth2=$dbh->prepare("select roadtypeid,road_type from roadtype where  roadtypeid=?");
 	$sth2->execute($roadtypeid);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
-	if ($total->{'total'} >0) {
-		$template->param(totalgtzero => 1);
-	}
 
         $template->param(	
 				road_type       =>	( $data->{'road_type'}),

@@ -86,15 +86,10 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
-	my $sth=$dbh->prepare("select count(*) as total from borrowers,cities where borrowers.city=cities.city_name and cityid=?");
-    # FIXME: this check used to pretend there was a FK "select_city" in borrowers.
+	my $sth=$dbh->prepare("select cityid,city_name,city_zipcode from cities where  cityid=?");
 	$sth->execute($cityid);
-	my $total = $sth->fetchrow_hashref;
-	my $sth2=$dbh->prepare("select cityid,city_name,city_zipcode from cities where  cityid=?");
-	$sth2->execute($cityid);
-	my $data=$sth2->fetchrow_hashref;
+	my $data=$sth->fetchrow_hashref;
     $template->param(
-        total        => $total->{'total'},
         city_name    =>	$data->{'city_name'},
         city_zipcode => $data->{'city_zipcode'},
     );
