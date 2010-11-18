@@ -29,7 +29,7 @@ my $tmpl_out_dir     = 'koha-tt';
 
 # Arguments:
 my $KOHA_ROOT;
-my $tmpl_extn_match  = "tmpl|inc|xsl"; # Type match defaults to *.tmpl plus *.inc if not specified
+my $tmpl_extn_match  = "tmpl|inc|xsl|pref"; # Type match defaults to *.tmpl plus *.inc if not specified
 my $copy_other_files = 0;
 my @template_files;
 my @files_w_tmpl_loops;
