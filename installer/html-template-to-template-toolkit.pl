@@ -61,6 +61,7 @@ unless ( scalar(@template_files) ) {
 }
 foreach my $file (@template_files) {
     (my $new_path = $file) =~ s/$tmpl_in_dir/$tmpl_out_dir/;
+    $new_path =~ s/\.tmpl/.tt/;
     $new_path = "$KOHA_ROOT/$new_path" unless ( $new_path =~ m/^$KOHA_ROOT/ );
 
     open my $ITMPL, '<', $file or croak "Can't open $file for input: $!";
@@ -86,12 +87,12 @@ foreach my $file (@template_files) {
     # NB: if you think you're seeing double, you probably are, *some* (read:most) patterns appear twice: once with quotations marks, once without.
     #     trying to combine them into a single pattern proved troublesome as a regex like ['"]?(.*?)['"]? was causing problems and fixing the problem caused (alot) more complex regex
     # variables
-    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+ESCAPE=['"](\w*?)['"]\s+DEFAULT=['"]?(.*?)['"]?\s*-*>/[% DEFAULT $1="$3" |$2%]/ig; # CHECK ME PLEASE
-    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]\s*(\w*?)\s*['"]\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2%]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?(\w*?)\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2%]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+ESCAPE=['"]?(\w*?)['"]?\s+NAME\s?=\s?['"]?([\w-]*?)['"]?\s*-*>/[% $1 |$2%]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?(\w*?)['"]?\s+DEFAULT=['"](.*?)['"]\s*-*>/[% DEFAULT $1="$2"%]/ig; # if a value being assigned is wrapped in quotes, keep them intact
-    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+DEFAULT=(.*?)\s*-*>/[% DEFAULT $1=$2%]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+ESCAPE=['"](\w*?)['"]\s+DEFAULT=['"]?(.*?)['"]?\s*-*>/[% DEFAULT $1="$3" |$2 %]/ig; # CHECK ME PLEASE
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]\s*(\w*?)\s*['"]\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2 %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?(\w*?)\s+ESCAPE=['"]?(\w*?)['"]?\s*-*>/[% $1 |$2 %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+ESCAPE=['"]?(\w*?)['"]?\s+NAME\s?=\s?['"]?([\w-]*?)['"]?\s*-*>/[% $2 |$1 %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?(\w*?)['"]?\s+DEFAULT=['"](.*?)['"]\s*-*>/[% DEFAULT $1="$2" %]/ig; # if a value being assigned is wrapped in quotes, keep them intact
+    $input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+DEFAULT=(.*?)\s*-*>/[% DEFAULT $1=$2 %]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s*-*>/[% $1 %]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% $1 %]/ig;     # TMPL_VAR NAME and TMPL_VAR EXPR are logically equiv, see http://search.cpan.org/~samtregar/HTML-Template-Expr-0.07/Expr.pm
     $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?(.*?)\s*-*>/[% $1 %]/ig;
@@ -114,7 +115,7 @@ foreach my $file (@template_files) {
     $input_tmpl =~ s/<[!-]*\s*TMPL_ELSE\s*-*>/[% ELSE %]/ig;
     $input_tmpl =~ s/<[!-]*\s*\/TMPL_IF\s*-*>/[% END %]/ig;
 
-    $input_tmpl =~ s/<[!-]*\s*TMPL_UNLESS\s+NAME\s?=\s?['"]?(\w*?)['"]?\s*-*>/[% IF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_UNLESS\s+NAME\s?=\s?['"]?(\w*?)['"]?\s*-*>/[% UNLESS ( $1 ) %]/ig;
     $input_tmpl =~ s/<[!-]*\s*\/TMPL_UNLESS\s*-*>/[% END %]/ig;
     # includes
     $input_tmpl =~ s/<[!-]*\s*TMPL_INCLUDE\s+NAME\s?=\s?"(.*?\.inc)"\s*-*>/[% INCLUDE '$1' %]/ig;
@@ -132,6 +133,9 @@ foreach my $file (@template_files) {
     $input_tmpl =~ s/\seq\s/ == /ig;
     $input_tmpl =~ s/HTML/html/ig;
     $input_tmpl =~ s/URL/url/ig;
+
+    #hack to get around lack of javascript filter
+    $input_tmpl =~ s/\|JS/|replace("'", "\\'") |replace('"', '\\"') |replace('\\n', '\\\\n') |replace('\\r', '\\\\r')/ig;
 
     # Write out..
     print $OTT $input_tmpl;
