@@ -29,7 +29,7 @@ my $tmpl_out_dir     = 'koha-tt';
 
 # Arguments:
 my $KOHA_ROOT;
-my $tmpl_extn_match  = "tmpl|inc|xsl|pref"; # Type match defaults to *.tmpl plus *.inc if not specified
+my $tmpl_extn_match  = "tmpl|inc|xsl"; # Type match defaults to *.tmpl plus *.inc if not specified
 my $copy_other_files = 0;
 my @template_files;
 my @files_w_tmpl_loops;
@@ -125,14 +125,16 @@ foreach my $file (@template_files) {
         push(@files_w_tmpl_loops, $new_path);
     }
 
-    $input_tmpl =~ s/<[!-]*\s*TMPL_LOOP\s+NAME\s?=\s?['"](.*?)['"]\s*-*>/"[% FOREACH ".substr($1, 0 , -1)." = ".$1." %]"/ieg;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_LOOP\s+NAME\s?=\s?(.*?)\s*-*>/"[% FOREACH ".substr($1, 0 , -1)." = ".$1." %]"/ieg;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_LOOP\s+NAME\s?=\s?['"](.*?)['"]\s*-*>/"[% FOREACH ".$1." %]"/ieg;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_LOOP\s+NAME\s?=\s?(.*?)\s*-*>/"[% FOREACH ".$1." %]"/ieg;
     $input_tmpl =~ s/<[!-]*\s*\/TMPL_LOOP\s*-*>/[% END %]/ig;
 
     # misc 'patches'
     $input_tmpl =~ s/\seq\s/ == /ig;
     $input_tmpl =~ s/HTML/html/ig;
     $input_tmpl =~ s/URL/url/ig;
+    $input_tmpl =~ s/__first__/loop.first/ig;
+    $input_tmpl =~ s/__last__/loop.last/ig;
 
     #hack to get around lack of javascript filter
     $input_tmpl =~ s/\|JS/|replace("'", "\\'") |replace('"', '\\"') |replace('\\n', '\\\\n') |replace('\\r', '\\\\r')/ig;
