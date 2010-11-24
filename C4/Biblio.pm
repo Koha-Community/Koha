@@ -67,6 +67,7 @@ BEGIN {
 
       &GetISBDView
 
+      &GetMarcControlnumber
       &GetMarcNotes
       &GetMarcSubjects
       &GetMarcBiblio
@@ -1251,6 +1252,24 @@ sub GetAuthorisedValueDesc {
         return ( $opac && $data->{'lib_opac'} ) ? $data->{'lib_opac'} : $data->{'lib'};
     } else {
         return $value;    # if nothing is found return the original value
+    }
+}
+
+=head2 GetMarcControlnumber
+
+  $marccontrolnumber = GetMarcControlnumber($record,$marcflavour);
+
+Get the control number / record Identifier from the MARC record and return it.
+
+=cut
+
+sub GetMarcControlnumber {
+    my ( $record, $marcflavour ) = @_;
+    my $controlnumber = "";
+    # Control number or Record identifier are the same field in MARC21 and UNIMARC
+    # Keep $marcflavour for possible later use
+    if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC") {
+        $controlnumber = $record->field('001')->data();
     }
 }
 
