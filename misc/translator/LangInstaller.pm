@@ -23,6 +23,7 @@ use warnings;
 use C4::Context;
 use YAML::Syck qw( Dump LoadFile );
 use Locale::PO;
+use FindBin qw( $Bin );
 
 $YAML::Syck::ImplicitTyping = 1;
 
@@ -46,7 +47,7 @@ sub new {
                                '/prog/en/modules/admin/preferences';
     set_lang( $self, $lang ) if $lang;
     $self->{pref_only}       = $pref_only;
-    $self->{translator_path} = $context->config('intranetdir') . "/misc/translator";
+    $self->{translator_path} = $Bin;
     $self->{path_po}         = $self->{translator_path} . "/po";
     $self->{po}              = {};
 
