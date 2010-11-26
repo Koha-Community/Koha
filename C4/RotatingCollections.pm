@@ -504,7 +504,7 @@ sub isItemInAnyCollection {
       
   my $row = $sth->fetchrow_hashref;
         
-  my $itemnumber = $$row{'itemnumber'};
+  $itemnumber = $row->{itemnumber};
   $sth->finish;
             
   if ( $itemnumber ) {

@@ -2,7 +2,7 @@ package C4::Patroncards;
 
 BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
-    use vars qw(@EXPORT, @ISA);
+    use vars qw(@EXPORT @ISA);
     @ISA = qw(Exporter);
     our @EXPORT = qw(unpack_UTF8
                      text_alignment
