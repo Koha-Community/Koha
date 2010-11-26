@@ -164,7 +164,7 @@ sub TransformPrefsToHTML {
                 }
             }
 
-            push @lines, { CHUNKS => \@chunks, NAMES => \@names };
+            push @lines, { CHUNKS => \@chunks, NAMES => \@names, is_group_title => 0 };
         }
     }
 
