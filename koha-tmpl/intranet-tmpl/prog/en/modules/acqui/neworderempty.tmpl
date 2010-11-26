@@ -36,7 +36,20 @@ function Check(ff) {
 
     if (totalExceedsBudget(ff.budget_id.value, ff.total.value  )  ) {
         ok=1;
-        _alertString += "\n- " + "Order total (" + ff.total.value + ") exceeds budget available ("+actTotal+")";
+        _alertString += "\n- " + _("Order total (") + ff.total.value +
+            _(") exceeds budget available (") + actTotal+")";
+    }
+
+    var empty_item_mandatory = 0;
+    for (i = 0; i < ff.field_value.length; i++) {
+        if (ff.field_value[i].value.length == 0 && ff.mandatory[i].value == 1) {
+            empty_item_mandatory++;
+        }
+    }
+    if (empty_item_mandatory > 0) {
+        ok = 1;
+        _alertString +=
+            "\n- " + empty_item_mandatory + _(" item mandatory fields empty");
     }
 
 if (ok) {
