@@ -787,7 +787,7 @@ if ( $op eq 'add_form' ) {
         $row_data->{delete} = "$script_name?op=delete_confirm&amp;searchfield=" . $results->[$i]{'variable'};
         push( @loop_data, $row_data );
     }
-    $tab = ( $tab ? $tab : "local-use" );
+    $tab = ( $tab ? $tab : "local_use" );
     $template->param( loop => \@loop_data, $tab => 1 );
     if ( $offset > 0 ) {
         my $prevpage = $offset - $pagesize;
