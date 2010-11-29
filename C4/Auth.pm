@@ -137,12 +137,15 @@ sub get_template_and_user {
     my $in       = shift;
     my $template =
       gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
-    my ( $user, $cookie, $sessionID, $flags ) = checkauth(
-        $in->{'query'},
-        $in->{'authnotrequired'},
-        $in->{'flagsrequired'},
-        $in->{'type'}
-    ) unless ($in->{'template_name'}=~/maintenance/);
+    my ( $user, $cookie, $sessionID, $flags );
+    if ( $in->{'template_name'} !~m/maintenance/ ) {
+        ( $user, $cookie, $sessionID, $flags ) = checkauth(
+            $in->{'query'},
+            $in->{'authnotrequired'},
+            $in->{'flagsrequired'},
+            $in->{'type'}
+        );
+    }
 
     my $borrowernumber;
     my $insecure = C4::Context->preference('insecure');

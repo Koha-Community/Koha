@@ -1177,9 +1177,11 @@ sub GetMemberAccountRecords {
     $sth->execute( @bind );
     my $total = 0;
     while ( my $data = $sth->fetchrow_hashref ) {
-		my $biblio = GetBiblioFromItemNumber($data->{itemnumber}) if $data->{itemnumber};
-		$data->{biblionumber} = $biblio->{biblionumber};
-	        $data->{title} = $biblio->{title};
+        if ( $data->{itemnumber} ) {
+            my $biblio = GetBiblioFromItemNumber( $data->{itemnumber} );
+            $data->{biblionumber} = $biblio->{biblionumber};
+            $data->{title}        = $biblio->{title};
+        }
         $acctlines[$numlines] = $data;
         $numlines++;
         $total += int(1000 * $data->{'amountoutstanding'}); # convert float to integer to avoid round-off errors

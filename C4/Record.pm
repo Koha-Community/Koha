@@ -266,12 +266,19 @@ sub marc2modsxml {
 sub marc2endnote {
     my ($marc) = @_;
 	my $marc_rec_obj =  MARC::Record->new_from_usmarc($marc);
-	my $f260 = $marc_rec_obj->field('260');
-	my $f260a = $f260->subfield('a') if $f260;
+    my ( $abstract, $f260a, $f710a );
+    my $f260 = $marc_rec_obj->field('260');
+    if ($f260) {
+        $f260a = $f260->subfield('a') if $f260;
+    }
     my $f710 = $marc_rec_obj->field('710');
-    my $f710a = $f710->subfield('a') if $f710;
-	my $f500 = $marc_rec_obj->field('500');
-	my $abstract = $f500->subfield('a') if $f500;
+    if ($f710) {
+        $f710a = $f710->subfield('a');
+    }
+    my $f500 = $marc_rec_obj->field('500');
+    if ($f500) {
+        $abstract = $f500->subfield('a');
+    }
 	my $fields = {
 		DB => C4::Context->preference("LibraryName"),
 		Title => $marc_rec_obj->title(),	

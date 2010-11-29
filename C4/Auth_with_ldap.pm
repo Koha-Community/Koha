@@ -171,8 +171,9 @@ sub checkpw_ldap {
 	if (C4::Context->preference('ExtendedPatronAttributes') && $borrowernumber && ($config{update} ||$config{replicate})) {
    		my @types = C4::Members::AttributeTypes::GetAttributeTypes();
 		my @attributes = grep{my $key=$_; any{$_ eq $key}@types;} keys %borrower;
-		my $extended_patron_attributes = map{{code=>$_,value=>$borrower{$_}}}@attributes;
-		my $extended_patron_attributes = [] unless $extended_patron_attributes;
+        my $extended_patron_attributes;
+        @{$extended_patron_attributes} =
+          map { { code => $_, value => $borrower{$_} } } @attributes;
 		my @errors;
 		#Check before add
 		for (my $i; $i< scalar(@$extended_patron_attributes)-1;$i++) {

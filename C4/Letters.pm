@@ -323,12 +323,14 @@ sub SendAlerts {
         $letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/g;
         $letter->{content} =~
           s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
-        foreach my $data (@$dataorders) {
-            my $line = $1 if ( $letter->{content} =~ m/(<<.*>>)/ );
-            foreach my $field ( keys %$data ) {
-                $line =~ s/(<<[^\.]+.$field>>)/$data->{$field}/;
+        foreach my $data ( @{$dataorders} ) {
+            if ( $letter->{content} =~ m/(<<.*>>)/ ) {
+                my $line = $1;
+                foreach my $field ( keys %{$data} ) {
+                    $line =~ s/(<<[^\.]+.$field>>)/$data->{$field}/;
+                }
+                $letter->{content} =~ s/(<<.*>>)/$line\n$1/;
             }
-            $letter->{content} =~ s/(<<.*>>)/$line\n$1/;
         }
         $letter->{content} =~ s/<<[^>]*>>//g;
         my $innerletter = $letter;
@@ -391,12 +393,14 @@ sub SendAlerts {
         $letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/g;
         $letter->{content} =~
           s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
-        foreach my $data (@$dataorders) {
-            my $line = $1 if ( $letter->{content} =~ m/(<<.*>>)/ );
-            foreach my $field ( keys %$data ) {
-                $line =~ s/(<<[^\.]+.$field>>)/$data->{$field}/;
+        foreach my $data ( @{$dataorders} ) {
+            if ( $letter->{content} =~ m/(<<.*>>)/ ) {
+                my $line = $1;
+                foreach my $field ( keys %{$data} ) {
+                    $line =~ s/(<<[^\.]+.$field>>)/$data->{$field}/;
+                }
+                $letter->{content} =~ s/(<<.*>>)/$line\n$1/;
             }
-            $letter->{content} =~ s/(<<.*>>)/$line\n$1/;
         }
         $letter->{content} =~ s/<<[^>]*>>//g;
         my $innerletter = $letter;

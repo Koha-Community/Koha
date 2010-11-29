@@ -590,7 +590,10 @@ sub GetBudgetHierarchy {
 # add budget-percent and allocation, and flags for html-template
 	foreach my $r (@sort) {
 		my $subs_href = $r->{'child'};
-        my @subs_arr = @$subs_href if defined $subs_href;
+        my @subs_arr = ();
+        if ( defined $subs_href ) {
+            @subs_arr = @{$subs_href};
+        }
 
         my $moo = $r->{'budget_code_indent'};
         $moo =~ s/\ /\&nbsp\;/g;
