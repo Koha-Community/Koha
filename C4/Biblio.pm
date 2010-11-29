@@ -1269,8 +1269,12 @@ sub GetMarcControlnumber {
     # Control number or Record identifier are the same field in MARC21 and UNIMARC
     # Keep $marcflavour for possible later use
     if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC") {
-        $controlnumber = $record->field('001')->data();
+        my $controlnumberField = $record->field('001');
+        if ($controlnumberField) {
+            $controlnumber = $controlnumberField->data();
+        }
     }
+    return $controlnumber;
 }
 
 =head2 GetMarcNotes
