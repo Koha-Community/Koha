@@ -72,18 +72,28 @@ var allcheckboxes = $(".checkboxed");
     } ).attr( 'checked', false );
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
+    // Clicking the table cell checks the checkbox inside it
 	$("td").click(function(e){
 		if(e.target.tagName.toLowerCase() == 'td'){
-           $(this).find("input:checkbox").each( function() {
-               $(this).attr('checked', !$(this).attr('checked'));
-			   if($(this).attr('checked')){
-                    $(this).parent().siblings().find("input:checkbox").each(function(){
-                       if($(this).attr('checked')){ $(this).attr('checked',''); }
-                   });
-			   }
+           $(this).find("input:checkbox:visible").each( function() {
+                if($(this).attr("checked")){
+                    $(this).attr("checked",'');
+                } else {
+                    $(this).attr("checked","checked");
+                    radioCheckBox($(this));
+                }
            });
-		}
+        }
 	});
+    // prevent adjacent checkboxes from being checked simultaneously
+    function radioCheckBox(box){
+            box.parents("td").siblings().find("input:checkbox:visible").each(function(){
+                if($(this).attr("checked")){
+                    $(this).attr("checked",'');
+                }
+             });
+     }
+
 	$("#messages ul").after("<a href=\"#\" id=\"addmessage\">"+_("Add a new message")+"</a>");
 	$("#borrower_messages .cancel").click(function(){
 		$("#add_message_form").hide();
@@ -93,30 +103,12 @@ var allcheckboxes = $(".checkboxed");
         $(this).hide();
 		$("#add_message_form").show();
 	 });
- });
-function uncheck_sibling(me){
-nodename=me.getAttribute("name");
-if (nodename =="barcodes[]"){
-    var Node=me.parentNode.previousSibling;
-    while (Node.nodeName!="TD"){Node=Node.previousSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
 
-}else {
-    var Node=me.parentNode.nextSibling;
-    while (Node.nodeName!="TD"){Node=Node.nextSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
-}
-}
+     $("input.radio").click(function(){
+        radioCheckBox($(this));
+     });
+ });
+
 function validate1(date) {
     var today = new Date();
     if ( date < today ) {
@@ -693,17 +685,17 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         <!-- TMPL_IF NAME="od" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
         <!-- TMPL_ELSE -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
                 <!-- TMPL_IF NAME="od" -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
                 <!-- TMPL_ELSE -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                 <!-- /TMPL_IF -->
                 </span>
                 <span class="renewals-disabled">
@@ -723,7 +715,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
   <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Checkin Failed</td>
       <!--TMPL_ELSE-->
-            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
+            <td><input type="checkbox" class="radio" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" />
                 <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
@@ -759,17 +751,17 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         <!-- TMPL_IF NAME="od" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
         <!-- TMPL_ELSE -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
                 <!-- TMPL_IF NAME="od" -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
                 <!-- TMPL_ELSE -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                 <!-- /TMPL_IF -->
                 </span>
                 <span class="renewals-disabled">
@@ -789,7 +781,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		  <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Checkin Failed</td>
         <!--TMPL_ELSE-->
-            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
+            <td><input type="checkbox" class="radio" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" />
                 <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
