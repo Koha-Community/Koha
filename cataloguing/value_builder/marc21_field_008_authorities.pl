@@ -27,6 +27,9 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 
+use constant FIXLEN_DATA_ELTS => '|| aca||aabn           | a|a     d';
+use constant PREF_008 => 'MARCAuthorityControlField008';
+
 =head1 DESCRIPTION
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
@@ -38,6 +41,8 @@ my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
 
 $year +=1900; $mon +=1;
 my $dateentered = substr($year,2,2).sprintf ("%0.2d", $mon).sprintf ("%0.2d",$mday);
+my $defaultval = Field008();
+
 sub plugin_parameters {
 	my ($dbh,$record,$tagslib,$i,$tabloop) = @_;
 	return "";
@@ -52,7 +57,12 @@ sub plugin_javascript {
 
 function Focus$function_name(subfield_managed) {
     if (!document.getElementById(\"$field_number\").value) {
-        document.getElementById(\"$field_number\").value='$dateentered' + '|| aca||aabn           | a|a     d';
+	var authtype=document.forms['f'].elements['authtypecode'].value;
+	var fieldval='$dateentered$defaultval';
+	if(authtype && (authtype == 'TOPIC_TERM' || authtype == 'GENRE/FORM' || authtype == 'CHRON_TERM')) {
+	  fieldval= fieldval.substr(0,14)+'b'+fieldval.substr(15);
+	}
+        document.getElementById(\"$field_number\").value=fieldval;
     }
     return 1;
 }
@@ -62,8 +72,9 @@ function Blur$function_name(subfield_managed) {
 }
 
 function Clic$function_name(i) {
+	var authtype=document.forms['f'].elements['authtypecode'].value;
 	defaultvalue=document.getElementById(\"$field_number\").value;
-	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$field_number&result=\"+defaultvalue,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+	newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008_authorities.pl&index=$field_number&result=\"+defaultvalue+\"&authtypecode=\"+authtype,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
@@ -76,7 +87,8 @@ sub plugin {
 	my ($input) = @_;
 	my $index= $input->param('index');
 	my $result= $input->param('result');
-
+	my $authtype= $input->param('authtypecode')||'';
+	substr($defaultval,14-6,1)='b' if $authtype=~ /TOPIC_TERM|GENRE.FORM|CHRON_TERM/;
 
 	my $dbh = C4::Context->dbh;
 
@@ -88,7 +100,7 @@ sub plugin {
 			     flagsrequired => {editcatalogue => '*'},
 			     debug => 1,
 			     });
-	$result = "$dateentered".'|| aca||aabn           | a|a     d' unless $result;
+	$result = "$dateentered$defaultval" unless $result;
 	my $f1 = substr($result,0,6);
 	my $f6 = substr($result,6,1);
 	my $f7 = substr($result,7,1);
@@ -105,7 +117,7 @@ sub plugin {
 	my $f28 = substr($result,28,1);
 	my $f29 = substr($result,29,1);
 	my $f31 = substr($result,31,1);
-	my $f32 = substr($result,32,2);
+	my $f32 = substr($result,32,1);
 	my $f33 = substr($result,33,1);
 	my $f38 = substr($result,38,1);
 	my $f39 = substr($result,39,1);
@@ -156,6 +168,18 @@ if ((!$f1) ||($f1 =~ m/ /)){
                             "f39$f39" => $f39,
 					);
         output_html_with_http_headers $input, $cookie, $template->output;
+}
+
+sub Field008 {
+  my $pref= C4::Context->preference(PREF_008);
+  if(!$pref) {
+    return FIXLEN_DATA_ELTS;
+  }
+  elsif(length($pref)<34) {
+    warn "marc21_field_008_authorities.pl: Syspref ".PREF_008." should be 34 characters long ";
+    return FIXLEN_DATA_ELTS;
+  }
+  return substr($pref,0,34);  #ignore remainder
 }
 
 1;
