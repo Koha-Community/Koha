@@ -184,16 +184,17 @@ else {
        push @itemtypesloop, \%row;
     }
     my @branchloop;
-	for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-        my $selected = 1 if $thisbranch eq $branch;
-        my %row = (
-            value => $thisbranch,
-            selected => $selected,
+    for my $thisbranch (
+        sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} }
+        keys %{$branches}
+      ) {
+        push @branchloop,
+          { value      => $thisbranch,
+            selected   => $thisbranch eq $branch,
             branchname => $branches->{$thisbranch}->{'branchname'},
-       );
-       push @branchloop, \%row;
+          };
     }
-    
+
     $template->param(
         branchloop   => \@branchloop,
         itemtypeloop => \@itemtypesloop,

@@ -65,18 +65,20 @@ if ( $onlymine ) {
     $branch = C4::Context->userenv->{'branch'};
 }
 my $branchname = GetBranchName($branch);
-my $branches = GetBranches($onlymine);
+my $branches   = GetBranches($onlymine);
 my @branchloop;
-for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    my $selected = 1 if $thisbranch eq $branch;
-    my %row =(value => $thisbranch,
-                selected => $selected,
-                branchname => $branches->{$thisbranch}->{'branchname'},
-            );
-    push @branchloop, \%row;
+for my $thisbranch (
+    sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} }
+    keys %{$branches} ) {
+    push @branchloop,
+      { value      => $thisbranch,
+        selected   => $thisbranch eq $branch,
+        branchname => $branches->{$thisbranch}->{'branchname'},
+      };
 }
+
 # branches calculated - put branch codes in a single string so they can be passed in a form
-my $branchcodes = join("|", keys %$branches);
+my $branchcodes = join '|', keys %{$branches};
 
 # Get all the holidays
 

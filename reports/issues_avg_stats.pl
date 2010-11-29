@@ -554,8 +554,23 @@ sub calculate {
     # and the number matches the number of columns
         my $colcount=0;
         foreach my $col ( @loopcol ) {
-            my $value =$table{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}} / $wgttable{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}} if ($table{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}});
-
+            my $value;
+            if ($table{$row}->{
+                    (        ( $col->{coltitle} eq 'NULL' )
+                          or ( $col->{coltitle} eq q{} )
+                      ) ? 'zzEMPTY' : $col->{coltitle}
+                }
+              ) {
+                $value = $table{$row}->{
+                    (        ( $col->{coltitle} eq 'NULL' )
+                          or ( $col->{coltitle} eq q{} )
+                      ) ? 'zzEMPTY' : $col->{coltitle}
+                  } / $wgttable{$row}->{
+                    (        ( $col->{coltitle} eq 'NULL' )
+                          or ( $col->{coltitle} eq q{} )
+                      ) ? 'zzEMPTY' : $col->{coltitle}
+                  };
+            }
             $table{$row}->{(($col->{coltitle} eq "NULL")or ($col->{coltitle} eq ""))?"zzEMPTY":$col->{coltitle}} = $value;
             $table{$row}->{totalrow}+=$value;
             #warn "row : $row col:$col  $cnttable{$row}->{(($col->{coltitle} eq \"NULL\")or ($col->{coltitle} eq \"\"))?\"zzEMPTY\":$col->{coltitle}}";
@@ -563,12 +578,16 @@ sub calculate {
             push @loopcell, {value => ($value)?sprintf("%.2f",$value):0  } ;
         }
         #warn "row : $row colcount:$colcount";
-        my $total = $table{$row}->{totalrow}/$colcount if ($colcount>0);
-        push @looprow,{ 'rowtitle' => ($row eq "zzEMPTY")?"NULL":$row,
-                        'loopcell' => \@loopcell,
-                        'hilighted' => ($hilighted >0),
-                        'totalrow' => ($total)?sprintf("%.2f",$total):0
-                    };
+        my $total;
+        if ( $colcount > 0 ) {
+            $total = $table{$row}->{totalrow} / $colcount;
+        }
+        push @looprow,
+          { 'rowtitle' => ( $row eq "zzEMPTY" ) ? "NULL" : $row,
+            'loopcell' => \@loopcell,
+            'hilighted' => ( $hilighted > 0 ),
+            'totalrow'  => ($total) ? sprintf( "%.2f", $total ) : 0
+          };
         $hilighted = -$hilighted;
     }
 # 	

@@ -920,7 +920,10 @@ if ( $op eq "addbiblio" ) {
     my @params = $input->param();
     $record = TransformHtmlToMarc( \@params , $input );
     # check for a duplicate
-    my ($duplicatebiblionumber,$duplicatetitle) = FindDuplicate($record) if (!$is_a_modif);
+    my ( $duplicatebiblionumber, $duplicatetitle );
+    if ( !$is_a_modif ) {
+        ( $duplicatebiblionumber, $duplicatetitle ) = FindDuplicate($record);
+    }
     my $confirm_not_duplicate = $input->param('confirm_not_duplicate');
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if ( !$duplicatebiblionumber or $confirm_not_duplicate ) {

@@ -288,10 +288,16 @@ my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG",$$suggestion_ref{'patron
 $template->param(patron_reason_loop=>$patron_reason_loop);
 
 #Budgets management
-my $searchbudgets={ budget_branchcode=>$branchfilter} if $branchfilter;
-my $budgets = GetBudgets($searchbudgets);
+my $budgets = [];
+if ($branchfilter) {
+    my $searchbudgets = { budget_branchcode => $branchfilter };
+    $budgets = GetBudgets($searchbudgets);
+} else {
+    $budgets = GetBudgets(undef);
+}
 
-foreach my $budget (@$budgets){
+foreach my $budget ( @{$budgets} ) {
+## Please see file perltidy.ERR
     $budget->{'selected'}=1 if ($$suggestion_ref{'budgetid'} && $budget->{'budget_id'} eq $$suggestion_ref{'budgetid'})
 };
 

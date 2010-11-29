@@ -78,7 +78,10 @@ my ( $total, $handled, @counts, $tempfile, $tfh );
 if ( ($op eq 'Upload') && $uploadfile ) {       # Case is important in these operational values as the template must use case to be visually pleasing!
     my $dirname = File::Temp::tempdir( CLEANUP => 1);
     $debug and warn "dirname = $dirname";
-    my $filesuffix = $1 if $uploadfilename =~ m/(\..+)$/i;
+    my $filesuffix;
+    if ( $uploadfilename =~ m/(\..+)$/i ) {
+        my $filesuffix = $1;
+    }
     ( $tfh, $tempfile ) = File::Temp::tempfile( SUFFIX => $filesuffix, UNLINK => 1 );
     $debug and warn "tempfile = $tempfile";
     my ( @directories, $errors );
@@ -254,8 +257,11 @@ sub handle_file {
 					undef $srcimage;    # This object can get big...
 				}
 				$debug and warn "Image is of mimetype $mimetype";
-				my $dberror = PutPatronImage($cardnumber,$mimetype, $imgfile) if $mimetype;
-				if ( !$dberror && $mimetype ) { # Errors from here on are fatal only to the import of a particular image, so don't bail, just note the error and keep going
+                my $dberror;
+                if ($mimetype) {
+                    $dberror = PutPatronImage( $cardnumber, $mimetype, $imgfile );
+                }
+                if ( !$dberror && $mimetype ) { # Errors from here on are fatal only to the import of a particular image, so don't bail, just note the error and keep going
 					$count{count}++;
 					push @{ $count{filenames} }, { source => $filename, cardnumber => $cardnumber };
 				} elsif ( $dberror ) {
