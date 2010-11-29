@@ -289,9 +289,13 @@ if ( $template_type eq 'advsearch' ) {
     $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
 
     # set the default sorting
-    my $default_sort_by = C4::Context->preference('defaultSortField')."_".C4::Context->preference('defaultSortOrder')
-        if (C4::Context->preference('OPACdefaultSortField') && C4::Context->preference('OPACdefaultSortOrder'));
-    $template->param($default_sort_by => 1);
+    if (   C4::Context->preference('OPACdefaultSortField')
+        && C4::Context->preference('OPACdefaultSortOrder') ) {
+        my $default_sort_by =
+            C4::Context->preference('defaultSortField') . '_'
+          . C4::Context->preference('defaultSortOrder');
+        $template->param( $default_sort_by => 1 );
+    }
 
     # determine what to display next to the search boxes (ie, boolean option
     # shouldn't appear on the first one, scan indexes should, adding a new
@@ -354,8 +358,13 @@ my $params = $cgi->Vars;
 # sort by is used to sort the query
 # in theory can have more than one but generally there's just one
 my @sort_by;
-my $default_sort_by = C4::Context->preference('defaultSortField')."_".C4::Context->preference('defaultSortOrder') 
-    if (C4::Context->preference('defaultSortField') && C4::Context->preference('defaultSortOrder'));
+my $default_sort_by;
+if (   C4::Context->preference('defaultSortField')
+    && C4::Context->preference('defaultSortOrder') ) {
+    $default_sort_by =
+        C4::Context->preference('defaultSortField') . '_'
+      . C4::Context->preference('defaultSortOrder');
+}
 
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
 $sort_by[0] = $default_sort_by unless $sort_by[0];
@@ -585,7 +594,10 @@ for (my $i=0;$i<@servers;$i++) {
             # default page number
             my $current_page_number = 1;
             $current_page_number = ($offset / $results_per_page + 1) if $offset;
-            my $previous_page_offset = $offset - $results_per_page unless ($offset - $results_per_page <0);
+            my $previous_page_offset;
+            if ( $offset >= $results_per_page ) {
+                $previous_page_offset = $offset - $results_per_page;
+            }
             my $next_page_offset = $offset + $results_per_page;
             # If we're within the first 10 pages, keep it simple
             #warn "current page:".$current_page_number;
@@ -599,10 +611,14 @@ for (my $i=0;$i<@servers;$i++) {
                     my $this_offset = (($i*$results_per_page)-$results_per_page);
                     # the page number for this page
                     my $this_page_number = $i;
-                    # it should only be highlighted if it's the current page
-                    my $highlight = 1 if ($this_page_number == $current_page_number);
                     # put it in the array
-                    push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+                    push @page_numbers,
+                      { offset    => $this_offset,
+                        pg        => $this_page_number,
+                        # it should only be highlighted if it's the current page
+                        highlight => $this_page_number == $current_page_number,
+                        sort_by   => join ' ', @sort_by
+                      };
                                 
                 }
                         
@@ -613,9 +629,13 @@ for (my $i=0;$i<@servers;$i++) {
                 for (my $i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
                     my $this_offset = ((($i-9)*$results_per_page)-$results_per_page);
                     my $this_page_number = $i-9;
-                    my $highlight = 1 if ($this_page_number == $current_page_number);
-                    if ($this_page_number <= $pages) {
-                        push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight, sort_by => join " ",@sort_by };
+                    if ( $this_page_number <= $pages ) {
+                        push @page_numbers,
+                          { offset    => $this_offset,
+                            pg        => $this_page_number,
+                            highlight => $this_page_number == $current_page_number,
+                            sort_by   => join ' ', @sort_by
+                          };
                     }
                 }
             }
