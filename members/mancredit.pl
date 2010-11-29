@@ -45,7 +45,10 @@ my $add=$input->param('add');
 if ($add){
     if(checkauth($input)) {
         my $barcode = $input->param('barcode');
-        my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
+        my $itemnum;
+        if ($barcode) {
+            $itemnum = GetItemnumberFromBarcode($barcode);
+        }
         my $desc    = $input->param('desc');
         my $note    = $input->param('note');
         my $amount  = $input->param('amount') || 0;

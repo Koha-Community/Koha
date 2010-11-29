@@ -183,24 +183,28 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
 }
 
 #############test for member being unique #############
-if (($op eq 'insert') and !$nodouble){
-        my $category_type_send=$category_type if ($category_type eq 'I'); 
-        my $check_category; # recover the category code of the doublon suspect borrowers
-			#   ($result,$categorycode) = checkuniquemember($collectivity,$surname,$firstname,$dateofbirth)
-        ($check_member,$check_category) = checkuniquemember(
-			$category_type_send, 
-			($newdata{surname}     ? $newdata{surname}     : $data{surname}    ),
-			($newdata{firstname}   ? $newdata{firstname}   : $data{firstname}  ),
-			($newdata{dateofbirth} ? $newdata{dateofbirth} : $data{dateofbirth})
-		);
-        if(!$check_member){
-            $nodouble = 1;
-        }
-  #   recover the category type if the borrowers is a doublon
+if ( ( $op eq 'insert' ) and !$nodouble ) {
+    my $category_type_send;
+    if ( $category_type eq 'I' ) {
+        $category_type_send = $category_type;
+    }
+    my $check_category;    # recover the category code of the doublon suspect borrowers
+     #   ($result,$categorycode) = checkuniquemember($collectivity,$surname,$firstname,$dateofbirth)
+    ( $check_member, $check_category ) = checkuniquemember(
+        $category_type_send,
+        ( $newdata{surname}     ? $newdata{surname}     : $data{surname} ),
+        ( $newdata{firstname}   ? $newdata{firstname}   : $data{firstname} ),
+        ( $newdata{dateofbirth} ? $newdata{dateofbirth} : $data{dateofbirth} )
+    );
+    if ( !$check_member ) {
+        $nodouble = 1;
+    }
+
+    #   recover the category type if the borrowers is a doublon
     if ($check_category) {
-      my $tmpborrowercategory=GetBorrowercategory($check_category);
-      $check_categorytype=$tmpborrowercategory->{'category_type'};
-    }   
+        my $tmpborrowercategory = GetBorrowercategory($check_category);
+        $check_categorytype = $tmpborrowercategory->{'category_type'};
+    }
 }
 
   #recover all data from guarantor address phone ,fax... 
