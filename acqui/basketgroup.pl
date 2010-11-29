@@ -305,26 +305,22 @@ if ( $op eq "add" ) {
         # Build the combobox to select the billing place
         my @billingplaceloop;
         for (sort keys %$branches) {
-            my $selected = 1 if $_ eq $billingplace;
-            my %row = (
+            push @billingplaceloop, {
                 value      => $_,
-                selected   => $selected,
+                selected   => $_ eq $billingplace,
                 branchname => $branches->{$_}->{branchname},
-            );
-            push @billingplaceloop, \%row;
+            };
         }
         $template->param( billingplaceloop => \@billingplaceloop );
         
         # Build the combobox to select the delivery place
         my @deliveryplaceloop;
         for (sort keys %$branches) {
-            my $selected = 1 if $_ eq $deliveryplace;
-            my %row = (
+            push @deliveryplaceloop, {
                 value      => $_,
-                selected   => $selected,
+                selected   => $_ eq $deliveryplace,
                 branchname => $branches->{$_}->{branchname},
-            );
-            push @deliveryplaceloop, \%row;
+            };
         }
         $template->param( deliveryplaceloop => \@deliveryplaceloop );
 

@@ -75,11 +75,17 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $from_iso = C4::Dates->new($input->param('from'))->output('iso') if $input->param('from');
-my   $to_iso =   C4::Dates->new($input->param('to'))->output('iso') if $input->param('iso');
+my ( $from_iso, $to_iso, $d );
+if ( $d = $input->param('from') ) {
+    $from_iso = C4::Dates->new($d)->output('iso');
+}
+if ( $d = $input->param('iso') ) {
+    $to_iso = C4::Dates->new($d)->output('iso');
+}
+
 my ( $order_loop, $total_qty, $total_price, $total_qtyreceived ) =
-  &GetHistory( $title, $author, $name, $from_iso, $to_iso );
-  
+  GetHistory( $title, $author, $name, $from_iso, $to_iso );
+
 $template->param(
     suggestions_loop        => $order_loop,
     total_qty               => $total_qty,
