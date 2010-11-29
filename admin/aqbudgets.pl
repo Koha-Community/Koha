@@ -323,7 +323,11 @@ if ($op eq 'add_form') {
         );
     }
 
-    my $budget_period_total = $num->format_price($$period{budget_period_total}) if $$period{budget_period_total};
+    my $budget_period_total;
+    if ( $period->{budget_period_total} ) {
+        $budget_period_total =
+          $num->format_price( $period->{budget_period_total} );
+    }
     $template->param(
         else                   => 1,
         budget                 => \@loop,

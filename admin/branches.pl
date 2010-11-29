@@ -189,12 +189,10 @@ elsif ( $op eq 'addcategory_validate' ) {
 elsif ( $op eq 'delete_category' ) {
 
     # if the user has pressed the "delete branch" button.
-    my $message = "MESSAGE8" if CheckBranchCategorycode($categorycode);
-    if ($message) {
+    if ( CheckBranchCategorycode($categorycode) ) {
         $template->param( else => 1 );
-        default($message,$template);
-    }
-    else {
+        default( 'MESSAGE8', $template );
+    } else {
         $template->param( delete_category => 1 );
         $template->param( categorycode    => $categorycode );
     }

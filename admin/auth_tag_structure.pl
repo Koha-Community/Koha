@@ -55,15 +55,14 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 # get authtype list
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (keys %$authtypes) {
-	my $selected = 1 if $thisauthtype eq $authtypecode;
-	my %row =(value => $thisauthtype,
-				selected => $selected,
-				authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
-			);
-	push @authtypesloop, \%row;
+my $authtypes     = getauthtypes;
+my @authtypesloop = ();
+foreach my $thisauthtype ( keys %{$authtypes} ) {
+    push @authtypesloop,
+      { value        => $thisauthtype,
+        selected     => $thisauthtype eq $authtypecode,
+        authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
+      };
 }
 
 my $sth;

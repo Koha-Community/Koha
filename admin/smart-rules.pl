@@ -339,12 +339,11 @@ elsif ($op eq "add-branch-item") {
 my $branches = GetBranches();
 my @branchloop;
 for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    my $selected = 1 if $thisbranch eq $branch;
-    my %row =(value => $thisbranch,
-                selected => $selected,
-                branchname => $branches->{$thisbranch}->{'branchname'},
-            );
-    push @branchloop, \%row;
+    push @branchloop, {
+        value      => $thisbranch,
+        selected   => $thisbranch eq $branch,
+        branchname => $branches->{$thisbranch}->{'branchname'},
+    };
 }
 
 my $sth=$dbh->prepare("SELECT description,categorycode FROM categories ORDER BY description");
@@ -426,7 +425,7 @@ foreach my $entry (@sorted_branch_cat_rules, @sorted_row_loop) {
     $entry->{unlimited_maxissueqty} = 1 unless defined($entry->{maxissueqty});
 }
 
-my @sorted_row_loop = sort by_category_and_itemtype @row_loop;
+@sorted_row_loop = sort by_category_and_itemtype @row_loop;
 
 my $sth_branch_item;
 if ($branch eq "*") {

@@ -59,17 +59,29 @@ $template->param(
 if ( $op eq 'add_form' ) {
     $template->param( add_form => 1 );
 
-    # if contractnumber exists, it's a modify action, so read values to modify...
-    my $contract = @{GetContract( { contractnumber => $contractnumber } )}[0] if $contractnumber;
+   # if contractnumber exists, it's a modify action, so read values to modify...
+    if ($contractnumber) {
+        my $contract =
+          @{ GetContract( { contractnumber => $contractnumber } ) }[0];
 
-    $template->param(
-        contractnumber           => $$contract{contractnumber},
-        contractname             => $$contract{contractname},
-        contractdescription      => $$contract{contractdescription},
-        contractstartdate        => format_date( $$contract{contractstartdate} ),
-        contractenddate          => format_date( $$contract{contractenddate} ),
-        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar,
-    );
+        $template->param(
+            contractnumber      => $contract->{contractnumber},
+            contractname        => $contract->{contractname},
+            contractdescription => $contract->{contractdescription},
+            contractstartdate => format_date( $contract->{contractstartdate} ),
+            contractenddate   => format_date( $contract->{contractenddate} ),
+            DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar,
+        );
+    } else {
+        $template->param(
+            contractnumber           => undef,
+            contractname             => undef,
+            contractdescription      => undef,
+            contractstartdate        => undef,
+            contractenddate          => undef,
+            DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar,
+        );
+    }
 
     # END $OP eq ADD_FORM
 }
