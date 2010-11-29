@@ -41,18 +41,20 @@ $startfrom = 0 if ( !defined $startfrom );
 my ( $template, $loggedinuser, $cookie );
 my $resultsperpage;
 
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype ( sort { $authtypes->{$a}{'authtypetext'} cmp $authtypes->{$b}{'authtypetext'} }
-    keys %$authtypes )
-{
-    my $selected = 1 if $thisauthtype eq $authtypecode;
-    my %row = (
-        value        => $thisauthtype,
-        selected     => $selected,
-        authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-    );
-    push @authtypesloop, \%row;
+my $authtypes     = getauthtypes();
+my @authtypesloop = ();
+foreach my $thisauthtype (
+    sort {
+        $authtypes->{$a}->{'authtypetext'}
+          cmp $authtypes->{$b}->{'authtypetext'}
+    }
+    keys %{$authtypes}
+  ) {
+    push @authtypesloop,
+      { value        => $thisauthtype,
+        selected     => $thisauthtype eq $authtypecode,
+        authtypetext => $authtypes->{$thisauthtype}->{'authtypetext'},
+      };
 }
 
 if ( $op eq "do_search" ) {

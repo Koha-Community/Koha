@@ -127,13 +127,11 @@ $template->param( branchloop => GetBranchesLoop(C4::Context->userenv->{'branch'}
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 $itemtypes = GetItemTypes;
 my @itemtypesloop;
-my $selected=1;
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
         foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-        my $selected = 1 if $thisitemtype eq $itemtype;
         my %row =( value => $thisitemtype,
                    description => $itemtypes->{$thisitemtype}->{'description'},
-                   selected => $selected,
+                   selected    => $thisitemtype eq $itemtype,
             );
         push @itemtypesloop, \%row;
         }
@@ -142,7 +140,7 @@ if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
         for my $thisitemtype (@$advsearchtypes) {
                 my $selected = 1 if $thisitemtype->{authorised_value} eq $itemtype;
                 my %row =( value => $thisitemtype->{authorised_value},
-                selected => $selected,
+                selected    => $thisitemtype eq $itemtype,
                 description => $thisitemtype->{'lib'},
             );
                 push @itemtypesloop, \%row;

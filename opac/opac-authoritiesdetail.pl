@@ -170,16 +170,14 @@ foreach my $field (@fields) {
 }
 $template->param( "Tab0XX" => \@loop_data );
 
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype ( keys %$authtypes ) {
-    my $selected = 1 if $thisauthtype eq $authtypecode;
-    my %row = (
-        value        => $thisauthtype,
-        selected     => $selected,
+my $authtypes     = getauthtypes();
+my @authtypesloop = ();
+foreach my $thisauthtype ( keys %{$authtypes} ) {
+    push @authtypesloop,
+      { value        => $thisauthtype,
+        selected     => $thisauthtype eq $authtypecode,
         authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-    );
-    push @authtypesloop, \%row;
+      };
 }
 
 $template->param(
