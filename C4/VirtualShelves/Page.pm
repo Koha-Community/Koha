@@ -174,13 +174,22 @@ sub shelfpage ($$$$$) {
             last SWITCH;
         }
         if ( $shelfnumber = $query->param('viewshelf') ) {
+            # explicitly fetch this shelf
+            my ($shelfnumber2,$shelfname,$owner,$category,$sorton) = GetShelf($shelfnumber);
 
             #check that the user can view the shelf
             if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
                 my $items;
                 my $authorsort;
                 my $yearsort;
-                my $sortfield = ( $query->param('sortfield') ? $query->param('sortfield') : 'title' );
+                my $sortfield;
+                if ( $query->param('sortfield')) {
+                   $sortfield = $query->param('sortfield');
+                } elsif ($sorton) {
+                   $sortfield = $sorton;
+                } else {
+                   $sortfield = 'title';
+                }
                 if ( $sortfield eq 'author' ) {
                     $authorsort = 'author';
                 }
@@ -210,7 +219,7 @@ sub shelfpage ($$$$$) {
                 my $i = 0;
                 my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
                 $template->param(
-                    shelfname => $shelflist->{$shelfnumber}->{'shelfname'} || $privshelflist->{$shelfnumber}->{'shelfname'},
+                    shelfname   => $shelfname,
                     shelfnumber => $shelfnumber,
                     viewshelf   => $shelfnumber,
                     authorsort  => $authorsort,
