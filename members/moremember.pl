@@ -89,6 +89,9 @@ if ($print eq "page") {
     $template_name = "members/moremember-receipt.tmpl";
     $quickslip = 1;
     $flagsrequired =  { circulate => "circulate_remaining_permissions" };
+} elsif ($print eq "brief") {
+    $template_name = "members/moremember-brief.tmpl";
+    $flagsrequired = { borrowers => 1 };
 } else {
     $template_name = "members/moremember.tmpl";
     $flagsrequired = { borrowers => 1 };
