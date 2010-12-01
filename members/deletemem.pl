@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Members;
+use C4::Branch; # GetBranches
 
 my $input = new CGI;
 
@@ -80,7 +81,28 @@ $sth->execute($member);
 my $data=$sth->fetchrow_hashref;
 if ($countissues > 0 or $flags->{'CHARGES'}  or $data->{'borrowernumber'}){
     #   print $input->header;
-    $template->param(borrowernumber => $member);
+
+    my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
+    $template->param( picture => 1 ) if $picture;
+
+    $template->param(borrowernumber => $member,
+        surname => $bor->{'surname'},
+        title => $bor->{'title'},
+        cardnumber => $bor->{'cardnumber'},
+        firstname => $bor->{'firstname'},
+        categorycode => $bor->{'categorycode'},
+        category_type => $bor->{'category_type'},
+        categoryname  => $bor->{'description'},
+        address => $bor->{'address'},
+        address2 => $bor->{'address2'},
+        city => $bor->{'city'},
+        zipcode => $bor->{'zipcode'},
+        country => $bor->{'country'},
+        phone => $bor->{'phone'},
+        email => $bor->{'email'},
+        branchcode => $bor->{'branchcode'},
+        branchname => GetBranchName($bor->{'branchcode'}),
+    );
     if ($countissues >0) {
         $template->param(ItemsOnIssues => $countissues);
     }

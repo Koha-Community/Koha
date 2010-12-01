@@ -12,7 +12,9 @@
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
-<!-- TMPL_INCLUDE NAME="members-toolbar.inc" --><h3>Cannot Delete Patron</h3>
+	<!-- TMPL_INCLUDE NAME="members-toolbar.inc" -->
+	<div class="dialog alert">
+	<h3>Cannot Delete Patron</h3>
 		<ul><!-- TMPL_IF name="ItemsOnIssues" -->
 			<li>Patron has <!-- TMPL_VAR name="ItemsOnIssues" --> item(s) checked out.</li>
 		<!-- /TMPL_IF -->
@@ -22,12 +24,12 @@
 		<!-- TMPL_IF name="guarantees" -->
 			<li>Patron's record has guaranteed accounts attached.</li>
 		<!-- /TMPL_IF --></ul>
-
+	</div>
 </div>
 </div>
 
 <div class="yui-b">
-<!-- TMPL_INCLUDE NAME="members-menu.inc" -->
+<!-- TMPL_INCLUDE NAME="circ-menu.inc" -->
 </div>
 </div>
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
