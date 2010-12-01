@@ -24,26 +24,15 @@ package C4::Boolean;
 use strict;
 use warnings;
 
-use POSIX;
+use Carp;
+use base qw(Exporter);
 
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK);
-
-BEGIN {
-	# set the version for version checking
-	$VERSION = 0.02;
-	require Exporter;
-	@EXPORT = qw(
-		&INVALID_BOOLEAN_STRING_EXCEPTION
-    );
-	@EXPORT_OK = qw(
-		true_p
-    );
-	@ISA = qw(Exporter);
-}
+our    $VERSION = 0.03;
+our    @EXPORT_OK = qw( true_p);
 
 =head1 NAME
 
-C4::Boolean - Convenience functions to handle boolean values
+C4::Boolean - Convenience function to handle boolean values
 in the parameter table
 
 =head1 SYNOPSIS
@@ -63,25 +52,23 @@ Boolean values in a consistent way which makes common sense.
 
 =cut
 
-sub INVALID_BOOLEAN_STRING_EXCEPTION ()
-    { 'The given value does not seem to be interpretable as a Boolean value' }
+use constant INVALID_BOOLEAN_STRING_EXCEPTION =>
+  q{The given value does not seem to be interpretable as a Boolean value};
 
-use vars qw( %strings );
-
-%strings = (
-   '0'     => 0,	'1'     => 1,	# C
-   			'-1'    => 1,	# BASIC
-   'nil'   => 0,	't'     => 1,	# LISP
-   'false' => 0,	'true'  => 1,	# Pascal
-   'off'   => 0,	'on'    => 1,
-   'no'    => 0,	'yes'   => 1,
-   'n'     => 0,	'y'     => 1,
+our %strings = (
+   '0'     => 0,    '1'     => 1,    # C
+                    '-1'    => 1,    # BASIC
+   'nil'   => 0,    't'     => 1,    # LISP
+   'false' => 0,    'true'  => 1,    # Pascal
+   'off'   => 0,    'on'    => 1,
+   'no'    => 0,    'yes'   => 1,
+   'n'     => 0,    'y'     => 1,
 );
 
 =item true_p
 
     if ( C4::Boolean::true_p(C4::Context->preference("insecure")) ) {
-	...
+    ...
     }
 
 Tries to interpret the passed string as a Boolean value. Returns
@@ -90,26 +77,22 @@ exception is thrown.
 
 =cut
 
-sub true_p ($) {
-    my($x) = @_;
+sub true_p  {
+    my $x = shift;
     my $it;
-    if (!defined $x || ref($x) ne '') {
-	warn INVALID_BOOLEAN_STRING_EXCEPTION;
+    if (!defined $x || ref $x ) {
+        carp INVALID_BOOLEAN_STRING_EXCEPTION;
+        return;
     }
-    $x = lc($x);
+    $x = lc $x;
     $x =~ s/\s//g;
     if (defined $strings{$x}) {
-	$it = $strings{$x};
+        $it = $strings{$x};
     } else {
-	warn INVALID_BOOLEAN_STRING_EXCEPTION;
+        carp INVALID_BOOLEAN_STRING_EXCEPTION;
     }
     return $it;
 }
-
-
-#---------------------------------
-
-END { }       # module clean-up code here (global destructor)
 
 1;
 __END__
