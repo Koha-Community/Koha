@@ -203,6 +203,9 @@ if ($op eq "show"){
 
         }
     }
+
+    # Flag to tell the template there are valid results, hidden or not
+    if(scalar(@itemnumbers) > 0){ $template->param("itemresults" => 1); }
     # Only display the items if there are no more than 1000
     if (scalar(@itemnumbers) <= 1000) {
         $items_display_hashref=BuildItemsData(@itemnumbers);
