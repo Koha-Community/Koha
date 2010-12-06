@@ -19,7 +19,7 @@
 
 =head1 NAME
 
-serials-recieve.pl
+serials-edit.pl
 
 =head1 Parameters
 
@@ -133,8 +133,14 @@ foreach my $tmpserialid (@serialids) {
         && !$processedserialid{$tmpserialid} )
     {
         my $data = GetSerialInformation($tmpserialid);
-        $data->{publisheddate} = format_date( $data->{publisheddate} );
-        $data->{planneddate}   = format_date( $data->{planneddate} );
+        for my $datefield ( qw( publisheddate planneddate) ) {
+            if ($data->{$datefield} && $data->{$datefield}!~m/^00/) {
+                $data->{$datefield} = format_date( $data->{$datefield} );
+            }
+            else {
+                $data->{$datefield} = q{};
+            }
+        }
         $data->{arriveddate}=$today->output('syspref');
         $data->{'editdisable'} = (
             (
@@ -173,6 +179,8 @@ foreach my $subscriptionid (@subscriptionids) {
         $cell->{'itemid'}         = "NNEW";
         $cell->{'serialid'}       = "NEW";
         $cell->{'issuesatonce'}   = 1;
+        $cell->{arriveddate}=$today->output('syspref');
+
         push @newserialloop, $cell;
         push @subscriptionloop,
           {
@@ -198,7 +206,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
                 ### FIXME if NewIssue is modified to use subscription biblionumber, then biblionumber would not be useful.
                 $newserial = NewIssue(
                     $serialseqs[$i],
-                    $subscriptionids[$i],
+                    $subscriptionids[0],
                     $serialdatalist[0]->{'biblionumber'},
                     $status[$i],
                     format_date_in_iso( $planneddates[$i] ),

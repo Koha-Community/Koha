@@ -659,8 +659,13 @@ sub GetSerials {
 
     while ( my $line = $sth->fetchrow_hashref ) {
         $line->{ "status" . $line->{status} } = 1;                                         # fills a "statusX" value, used for template status select list
-        $line->{"publisheddate"}              = format_date( $line->{"publisheddate"} );
-        $line->{"planneddate"}                = format_date( $line->{"planneddate"} );
+        for my $datefield ( qw( planneddate publisheddate) ) {
+            if ($line->{$datefield} && $line->{$datefield}!~m/^00/) {
+                $line->{$datefield} = format_date( $line->{$datefield});
+            } else {
+                $line->{$datefield} = q{};
+            }
+        }
         push @serials, $line;
     }
 
@@ -676,8 +681,14 @@ sub GetSerials {
     while ( ( my $line = $sth->fetchrow_hashref ) && $counter < $count ) {
         $counter++;
         $line->{ "status" . $line->{status} } = 1;                                         # fills a "statusX" value, used for template status select list
-        $line->{"planneddate"}                = format_date( $line->{"planneddate"} );
-        $line->{"publisheddate"}              = format_date( $line->{"publisheddate"} );
+        for my $datefield ( qw( planneddate publisheddate) ) {
+            if ($line->{$datefield} && $line->{$datefield}!~m/^00/) {
+                $line->{$datefield} = format_date( $line->{$datefield});
+            } else {
+                $line->{$datefield} = q{};
+            }
+        }
+
         push @serials, $line;
     }
 
