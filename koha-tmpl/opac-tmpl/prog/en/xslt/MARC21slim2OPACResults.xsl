@@ -37,10 +37,10 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">BK</xsl:when>
-                <xsl:when test="$leader6='p'">MX</xsl:when>
+                <xsl:when test="$leader6='o' or $leader6='p'">MX</xsl:when>
                 <xsl:when test="$leader6='m'">CF</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">MP</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">VM</xsl:when>
+                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'">VM</xsl:when>
                 <xsl:when test="$leader6='i' or $leader6='j'">MU</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'">PR</xsl:when>
             </xsl:choose>
@@ -522,10 +522,11 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'"><img src="/opac-tmpl/prog/famfamfam/silk/book.png" alt="book" title="book"/> Book</xsl:when>
-                <xsl:when test="$leader6='p'"><img src="/opac-tmpl/prog/famfamfam/silk/report_disk.png" alt="mixed materials" title="mixed materials"/>Mixed Materials</xsl:when>
+				<xsl:when test="$leader6='o'"><img src="/opac-tmpl/prog/famfamfam/silk/report_disk.png" alt="kit" title="kit"/> Kit</xsl:when>
+				<xsl:when test="$leader6='p'"><img src="/opac-tmpl/prog/famfamfam/silk/report_disk.png" alt="mixed materials" title="mixed materials"/>Mixed Materials</xsl:when>
                 <xsl:when test="$leader6='m'"><img src="/opac-tmpl/prog/famfamfam/silk/computer_link.png" alt="computer file" title="computer file"/> Computer File</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'"><img src="/opac-tmpl/prog/famfamfam/silk/map.png" alt="map" title="map"/> Map</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'"><img src="/opac-tmpl/prog/famfamfam/silk/film.png" alt="visual material" title="visual material"/> Visual Material</xsl:when>
+                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'"><img src="/opac-tmpl/prog/famfamfam/silk/film.png" alt="visual material" title="visual material"/> Visual Material</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'"><img src="/opac-tmpl/prog/famfamfam/silk/music.png" alt="score" title="score"/> Score</xsl:when>
                 <xsl:when test="$leader6='i'"><img src="/opac-tmpl/prog/famfamfam/silk/sound.png" alt="sound" title="sound"/> Sound</xsl:when>
                 <xsl:when test="$leader6='j'"><img src="/opac-tmpl/prog/famfamfam/silk/sound.png" alt="music" title="music"/> Music</xsl:when>

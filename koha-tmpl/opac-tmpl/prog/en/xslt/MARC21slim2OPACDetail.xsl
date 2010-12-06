@@ -35,10 +35,10 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">BK</xsl:when>
-                <xsl:when test="$leader6='p'">MX</xsl:when>
+                <xsl:when test="$leader6='o' or $leader6='p'">MX</xsl:when>
                 <xsl:when test="$leader6='m'">CF</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">MP</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">VM</xsl:when>
+                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'">VM</xsl:when>
                 <xsl:when test="$leader6='i' or $leader6='j'">MU</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'">PR</xsl:when>
             </xsl:choose>
@@ -53,10 +53,11 @@
                     </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$leader6='t'">Book</xsl:when>
+				<xsl:when test="$leader6='o'">Kit</xsl:when>
                 <xsl:when test="$leader6='p'">Mixed Materials</xsl:when>
                 <xsl:when test="$leader6='m'">Computer File</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">Map</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='o' or $leader6='r'">Visual Material</xsl:when>
+                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'">Visual Material</xsl:when>
                 <xsl:when test="$leader6='j'">Music</xsl:when>
                 <xsl:when test="$leader6='i'">Sound</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'">Score</xsl:when>
