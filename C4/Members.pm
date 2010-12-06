@@ -2073,7 +2073,7 @@ sub GetMessages {
     my $query = "SELECT
                   branches.branchname,
                   messages.*,
-                  DATE_FORMAT( message_date, '%m/%d/%Y' ) AS message_date_formatted,
+                  message_date,
                   messages.branchcode LIKE '$branchcode' AS can_delete
                   FROM messages, branches
                   WHERE borrowernumber = ?
@@ -2085,6 +2085,8 @@ sub GetMessages {
     my @results;
 
     while ( my $data = $sth->fetchrow_hashref ) {
+        my $d = C4::Dates->new( $data->{message_date}, 'iso' );
+        $data->{message_date_formatted} = $d->output;
         push @results, $data;
     }
     return \@results;
