@@ -88,6 +88,10 @@ function changeDate(adate) {
     var elem = document.getElementById("expecteddate");
     elem.value = adate;
 }
+function changeDate2(adate) {
+   var elem = document.getElementById("supexpecteddate");
+    elem.value = adate;
+}
 function CloneSubfield(index){
     var original = document.getElementById(index); //original <div>
     var clone = original.cloneNode(true);
@@ -331,10 +335,10 @@ function CloneSubfield(index){
             <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
+            <input type="text" name="planneddate" id="supexpecteddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <select name="status" size="1" id="addstatus<!-- TMPL_VAR NAME="serialid" -->">
+            <select name="status" size="1" id="addstatus<!-- TMPL_VAR NAME="serialid" -->" onchange="if (this.value==2 || this.value==7){changeDate2('<!-- TMPL_VAR NAME="arriveddate" -->')} else {changeDate2('<!-- TMPL_VAR NAME="planneddate" -->')}" >
                     <option value="">----</option>
   <!--TMPL_IF name="status1" -->
                     <option value="1" selected="selected">Expected</option>
