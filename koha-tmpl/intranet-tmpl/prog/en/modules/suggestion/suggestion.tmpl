@@ -110,7 +110,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
         <li><label for="itemtype">Document Type:</label>
             <select id="itemtype" name="itemtype" >
             <!--TMPL_LOOP Name="itemtypeloop"-->
-                <!--TMPL_IF Name="selected"--><option selected="selected" value="<!--TMPL_VAR Name="code" -->"><!--TMPL_ELSE--><option value="<!--TMPL_VAR Name="code" -->"><!--/TMPL_IF-->
+                <!--TMPL_IF Name="selected"--><option selected="selected" value="<!--TMPL_VAR Name="itemtype" -->"><!--TMPL_ELSE--><option value="<!--TMPL_VAR Name="itemtype" -->"><!--/TMPL_IF-->
                 <!-- TMPL_IF name="imageurl"--><img border="0" src="<!--TMPL_VAR Name="imageurl" -->" alt="<!--TMPL_VAR Name="description" -->" /><!-- /TMPL_IF -->
                 <!--TMPL_VAR Name="description" --></option>
             <!--/TMPL_LOOP-->

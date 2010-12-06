@@ -249,7 +249,7 @@ $template->param( branchloop => \@branchloop,
 # the index parameter is different for item-level itemtypes
 my $supportlist=GetSupportList();				
 foreach my $support(@$supportlist){
-    $$support{'selected'}= $$support{'code'} eq $$suggestion_ref{'itemtype'};
+    $$support{'selected'}= $$support{'itemtype'} eq $$suggestion_ref{'itemtype'};
     if ($$support{'imageurl'}){
         $$support{'imageurl'}= getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
     }
