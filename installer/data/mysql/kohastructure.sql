@@ -642,7 +642,7 @@ CREATE TABLE `deletedbiblioitems` (
 DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` (
   `borrowernumber` int(11) NOT NULL default 0,
-  `cardnumber` varchar(9) NOT NULL default '',
+  `cardnumber` varchar(16) NOT NULL default '',
   `surname` mediumtext NOT NULL,
   `firstname` text,
   `title` mediumtext,
@@ -703,6 +703,7 @@ CREATE TABLE `deletedborrowers` (
   `altcontactcountry` text default NULL,
   `altcontactphone` varchar(50) default NULL,
   `smsalertnumber` varchar(50) default NULL,
+  `privacy` integer(11) DEFAULT '1' NOT NULL,
   KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
