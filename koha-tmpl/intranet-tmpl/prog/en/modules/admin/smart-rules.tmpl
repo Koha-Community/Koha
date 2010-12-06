@@ -2,12 +2,54 @@
 <title>Koha &rsaquo; Administration &rsaquo; Issuing Rules</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.uitablefilter.js"></script>
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/ui.tabs.js"></script>
+<link rel="stylesheet" type="text/css" href="/intranet-tmpl/prog/en/lib/jquery/plugins/ui.tabs.css" />
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function() {
         $('#selectlibrary').find("input:submit").hide();
         $('#branch').change(function() {
                 $('#selectlibrary').submit();
+        });
+        $('#filter').keyup(function() {
+                $.uiTableFilter( $('#smartrules'), this.value );
+        });
+        $('#nofilter').click(function() {
+            $('.issues').show();
+            $('.fines').show();
+            $('.reserves').show();
+            $(this).parent().attr('class','ui-tabs-selected');
+            $('#issuesfilter').parent().attr('class',null);
+            $('#finesfilter').parent().attr('class',null);
+            $('#reservesfilter').parent().attr('class',null);
+        });
+        $('#issuesfilter').click(function() {
+            $('.issues').show();
+            $('.fines').hide();
+            $('.reserves').hide();
+            $(this).parent().attr('class','ui-tabs-selected');
+            $('#nofilter').parent().attr('class',null);
+            $('#finesfilter').parent().attr('class',null);
+            $('#reservesfilter').parent().attr('class',null);
+        });
+        $('#finesfilter').click(function() {
+            $('.issues').hide();
+            $('.fines').show();
+            $('.reserves').hide();
+            $(this).parent().attr('class','ui-tabs-selected');
+            $('#issuesfilter').parent().attr('class',null);
+            $('#nofilter').parent().attr('class',null);
+            $('#reservesfilter').parent().attr('class',null);
+        });
+        $('#reservesfilter').click(function() {
+            $('.issues').hide();
+            $('.fines').hide();
+            $('.reserves').show();
+            $(this).parent().attr('class','ui-tabs-selected');
+            $('#issuesfilter').parent().attr('class',null);
+            $('#finesfilter').parent().attr('class',null);
+            $('#nofilter').parent().attr('class',null);
         });
 });
 //]]>
@@ -46,36 +88,48 @@ $(document).ready(function() {
         </ul>
         <p>To modify a rule, create a new one with the same patron type and item type.</p>
     </div>
-    <div>
+    <div id="bloc100">
         <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
         Select a library :
             <select name="branch" id="branch" style="width:20em;">
                 <option value="*">Default</option>
             <!-- TMPL_LOOP NAME="branchloop" -->
-				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
             </select>
         </form>
 <!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="branch" -->" />
             <select name="tobranch" id="tobranch"><!-- TMPL_LOOP NAME="branchloop" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_LOOP --></select> <input type="submit" value="Clone" /></form><!-- /TMPL_IF --></fieldset>
 
-        <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
+        <div class="toptabs">
+            <ul class="ui-tabs-nav">
+                <li class="ui-tabs-selected"><a id="nofilter">All</a></li>
+                <li><a id="issuesfilter">Issues</a></li>
+                <li><a id="finesfilter">Fines</a></li>
+                <li><a id="reservesfilter">Reserves</a></li>
+                <div style="text-align:right;"><label for="filter">Filter: </label><input type="text" name="filter" id="filter" /></div>
+            </ul>
+            <div class="tabs-container">
+            <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add" />
-            <table>
-            <tr>
-                <th>Patron Category</th>
-                <th>Item Type</th>
-                <th>Current Checkouts Allowed</th>
-                <th>Loan Period (day)</th>
-                <th>Fine Amount</th>
-                <th>Fine Charging Interval</th>
-                <th>Fine Grace period (day)</th>
-                <th>Suspension in Days (day)</th>
-                <th>Renewals Allowed (count)</th>
-                <th>Holds Allowed (count)</th>
-		        <th>Rental Discount (%)</th>
-				<th>&nbsp;</th>
-            </tr>
+            <table id="smartrules" width="100%">
+                <thead>
+                    <tr>
+                        <th>Patron Category</th>
+                        <th>Item Type</th>
+                        <th class="issues">Current Checkouts Allowed</th>
+                        <th class="issues">Loan Period (day)</th>
+                        <th class="fines">Fine Amount</th>
+                        <th class="fines">Fine Charging Interval</th>
+                        <th class="fines">Fine Grace period (day)</th>
+                        <th class="fines">Suspension in Days (day)</th>
+                        <th class="issues">Renewals Allowed (count)</th>
+                        <th class="reserves">Holds Allowed (count)</th>
+                        <th class="issues">Rental Discount (%)</th>
+                        <th>&nbsp;</th>
+                    </tr>
+                </thead>
+                <tbody>
 				<!-- TMPL_LOOP NAME="rules" -->
 					<!-- TMPL_UNLESS NAME="__odd__" -->
 					<tr class="highlight">
@@ -94,25 +148,27 @@ $(document).ready(function() {
 									<!-- TMPL_VAR NAME="humanitemtype" -->
 								<!-- /TMPL_IF -->
 							</td>
-							<td><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
-									Unlimited
-								<!-- TMPL_ELSE -->
-									<!-- TMPL_VAR NAME="maxissueqty" -->
-								<!-- /TMPL_IF -->
-							</td>
-							<td><!-- TMPL_VAR NAME="issuelength" --></td>
-							<td><!-- TMPL_VAR NAME="fine" --></td>
-							<td><!-- TMPL_VAR NAME="chargeperiod" --></td>
-							<td><!-- TMPL_VAR NAME="firstremind" --></td>
-							<td><!-- TMPL_VAR NAME="finedays" --></td>
-							<td><!-- TMPL_VAR NAME="renewalsallowed" --></td>
-							<td><!-- TMPL_VAR NAME="reservesallowed" --></td>
-							<td><!-- TMPL_VAR NAME="rentaldiscount" --></td>
+						            <td class="issues"><!-- TMPL_IF NAME="unlimited_maxissueqty" -->
+                                            Unlimited
+                                        <!-- TMPL_ELSE -->
+                                            <!-- TMPL_VAR NAME="maxissueqty" -->
+                                        <!-- /TMPL_IF -->
+                                    </td>
+                                    <td class="issues"><!-- TMPL_IF NAME="issuelength" --><!-- TMPL_VAR NAME="issuelength" --> <!-- /TMPL_IF --></td>
+                                    <td class="fines"><!-- TMPL_VAR NAME="fine" --></td>
+                                    <td class="fines"><!-- TMPL_IF NAME="chargeperiod" --><!-- TMPL_VAR NAME="chargeperiod" --> <!-- /TMPL_IF --></td>
+                                    <td class="fines"><!-- TMPL_IF NAME="firstremind" --><!-- TMPL_VAR NAME="firstremind" --> <!-- /TMPL_IF --></td>
+                                    <td class="fines"><!-- TMPL_IF NAME="finedays" --> <!-- TMPL_VAR NAME="finedays" --> <!-- /TMPL_IF --></td>
+                                    <td class="issues"><!-- TMPL_IF NAME="renewalsallowed" --><!-- TMPL_VAR NAME="renewalsallowed" --> <!-- /TMPL_IF --></td>
+                                    <td class="reserves"><!-- TMPL_IF NAME="reservesallowed" --><!-- TMPL_VAR NAME="reservesallowed" --> <!-- /TMPL_IF --></td>
+							<td class="issues"><!-- TMPL_VAR NAME="rentaldiscount" --></td>
 							<td>
 								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
 							</td>
                 	</tr>
             	<!-- /TMPL_LOOP -->
+                </tbody>
+                <tfoot>
                 <tr>
                     <td>
                         <select name="categorycode">
@@ -130,19 +186,22 @@ $(document).ready(function() {
                         <!-- /TMPL_LOOP -->
                         </select>
                     </td>
-                    <td><input name="maxissueqty" size="3" /></td>
-                    <td><input name="issuelength" size="3" /> </td>
-                    <td><input name="fine" size="4" /></td>
-                    <td><input name="chargeperiod" size="2" /></td>
-                    <td><input name="firstremind" size="2" /> </td>
-                    <td><input name="finedays" size="3" /> </td>
-                    <td><input name="renewalsallowed" size="2" /></td>
-                    <td><input name="reservesallowed" size="2" /></td>
-		    <td><input name="rentaldiscount" size="2" /></td>
+                        <td class="issues"><input name="maxissueqty" size="3" /></td>
+                                <td class="issues"><input name="issuelength" size="3" /> </td>
+                                <td class="fines"><input name="fine" size="4" /></td>
+                                <td class="fines"><input name="chargeperiod" size="2" /></td>
+                                <td class="fines"><input name="firstremind" size="2" /> </td>
+                                <td class="fines"><input name="finedays" size="3" /> </td>
+                                <td class="issues"><input name="renewalsallowed" size="2" /></td>
+                                <td class="reserves"><input name="reservesallowed" size="2" /></td>
+		    <td><input class="issues" name="rentaldiscount" size="2" /></td>
                     <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/><input type="submit" value="Add" class="submit" /></td>
                 </tr>
+                </tfoot>
             </table>
         </form>
+            </div><!-- tabs-container -->
+        </div><!-- toptabs -->
     </div>
     <div class="help">
         <h4>Defaults for this library</h4>
