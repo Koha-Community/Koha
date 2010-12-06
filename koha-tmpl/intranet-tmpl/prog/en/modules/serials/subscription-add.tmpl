@@ -1007,7 +1007,10 @@ $(document).ready(function() {
         </li>
         <li>
             <label for="location">Location:</label>
-            <input type="text" name="location" id="location" value="<!-- TMPL_VAR name="location" -->" size="30" />
+            <select name="location" id="location">
+                <option value="">None</option>
+                <!-- TMPL_LOOP NAME="locations_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+            </select>
         </li>
          <li>
             <label for="callnumber">Call Number:</label>

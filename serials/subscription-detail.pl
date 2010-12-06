@@ -103,8 +103,8 @@ my ($user, $sessionID, $flags);
 for my $date qw(startdate enddate firstacquidate histstartdate histenddate){
     $$subs{$date}      = format_date($$subs{$date}) if $date && $$subs{$date};
 }
+$subs->{location} = GetKohaAuthorisedValueLib("LOC",$subs->{location});
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
-
 $template->param($subs);
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});
 my @irregular_issues = split /,/, $subs->{irregularity};

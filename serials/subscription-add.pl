@@ -130,8 +130,12 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
         branchname => $branches->{$thisbranch}->{'branchname'},
     };
 }
+
+my $locations_loop = GetAuthorisedValues("LOC",$subs->{'location'});
+
 $template->param(branchloop => $branchloop,
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    locations_loop=>$locations_loop,
 );
 # prepare template variables common to all $op conditions:
 $template->param(  'dateformat_' . C4::Context->preference('dateformat') => 1 );
