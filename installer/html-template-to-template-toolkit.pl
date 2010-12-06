@@ -97,7 +97,7 @@ foreach my $file (@template_files) {
     $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% $1 %]/ig;     # TMPL_VAR NAME and TMPL_VAR EXPR are logically equiv, see http://search.cpan.org/~samtregar/HTML-Template-Expr-0.07/Expr.pm
     $input_tmpl =~ s/<[!-]*\s*TMPL[_\s]VAR\s+EXPR\s?=\s?(.*?)\s*-*>/[% $1 %]/ig;
 
-    # if, elseif and unless blocks
+    # if, elsif and unless blocks
     $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% IF ( $1 ) %]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+EXPR\s?=\s?(.*?)\s*-*>/[% IF ( $1 ) %]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+NAME\s?=\s?['"]\s*(\w*?)\s*['"]\s*-*>/[% IF ( $1 ) %]/ig;
@@ -105,12 +105,12 @@ foreach my $file (@template_files) {
     $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+['"](.*?)['"]\s*-*>/[% IF ( $1 ) %]/ig;
     $input_tmpl =~ s/<[!-]*\s*TMPL_IF\s+([\w\s]*?)\s*-*>/[% IF ( $1 ) %]/ig;
 
-    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% ELSEIF ( $1 ) %]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+EXPR\s?=\s?(.*?)\s*-*>/[% ELSEIF ( $1 ) %]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+NAME\s?=\s?['"](\w*?)['"]\s*-*>/[% ELSEIF ( $1 ) %]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+NAME\s?=\s?(\w*?)\s*-*>/[% ELSEIF ( $1 ) %]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+['"](\w*?)['"]\s*-*>/[% ELSEIF ( $1 ) %]/ig;
-    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+(\w*?)\s*-*>/[% ELSEIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+EXPR\s?=\s?['"](.*?)['"]\s*-*>/[% ELSIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+EXPR\s?=\s?(.*?)\s*-*>/[% ELSIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+NAME\s?=\s?['"](\w*?)['"]\s*-*>/[% ELSIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+NAME\s?=\s?(\w*?)\s*-*>/[% ELSIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+['"](\w*?)['"]\s*-*>/[% ELSIF ( $1 ) %]/ig;
+    $input_tmpl =~ s/<[!-]*\s*TMPL_ELSIF\s+(\w*?)\s*-*>/[% ELSIF ( $1 ) %]/ig;
 
     $input_tmpl =~ s/<[!-]*\s*TMPL_ELSE\s*-*>/[% ELSE %]/ig;
     $input_tmpl =~ s/<[!-]*\s*\/TMPL_IF\s*-*>/[% END %]/ig;
