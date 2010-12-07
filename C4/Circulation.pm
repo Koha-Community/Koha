@@ -137,6 +137,7 @@ System Pref options.
 #
 sub barcodedecode {
     my ($barcode, $filter) = @_;
+    my $branch = C4::Branch::mybranch();
     $filter = C4::Context->preference('itemBarcodeInputFilter') unless $filter;
     $filter or return $barcode;     # ensure filter is defined, else return untouched barcode
 	if ($filter eq 'whitespace') {
@@ -155,6 +156,14 @@ sub barcodedecode {
         # FIXME: $barcode could be "T1", causing warning: substr outside of string
         # Why drop the nonzero digit after the T?
         # Why pass non-digits (or empty string) to "T%07d"?
+	} elsif ($filter eq 'libsuite8') {
+		unless($barcode =~ m/^($branch)-/i){	#if barcode starts with branch code its in Koha style. Skip it.
+			if($barcode =~ m/^(\d)/i){	#Some barcodes even start with 0's & numbers and are assumed to have b as the item type in the libsuite8 software
+                                $barcode =~ s/^[0]*(\d+)$/$branch-b-$1/i;
+                        }else{
+				$barcode =~ s/^(\D+)[0]*(\d+)$/$branch-$1-$2/i;
+			}
+		}
 	}
     return $barcode;    # return barcode, modified or not
 }

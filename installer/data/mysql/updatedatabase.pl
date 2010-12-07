@@ -3876,6 +3876,14 @@ VALUES
     SetVersion ($DBversion);
 };
 
+$DBversion = '3.0X.0X.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("update `systempreferences` set options='whitespace|T-prefix|cuecat|libsuite8' where variable='itemBarcodeInputFilter'");
+    print "Upgrade to $DBversion done (Add itemBarcodeInputFilter choice libsuite8)\n";
+    SetVersion ($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
