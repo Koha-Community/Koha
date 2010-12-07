@@ -46,7 +46,7 @@ my ($template, $borrowernumber, $cookie)
 	= get_template_and_user({template_name => 'opac-topissues.tmpl',
 				query => $input,
 				type => "opac",
-				authnotrequired => 1,
+               authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
 				debug => 1,
 				});
 my $dbh = C4::Context->dbh;

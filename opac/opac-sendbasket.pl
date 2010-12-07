@@ -38,7 +38,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
         template_name   => "opac-sendbasketform.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 0,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         flagsrequired   => { borrow => 1 },
     }
 );

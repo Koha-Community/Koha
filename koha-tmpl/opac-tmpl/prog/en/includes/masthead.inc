@@ -25,6 +25,8 @@
    <!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
 
 <div id="fluid">
+
+<!-- TMPL_IF NAME="OpacPublic" -->
 <div id="fluid-offset">
 <!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
     <label for="masthead_search" class="left"> Search 
@@ -119,6 +121,8 @@
 </div>
  </div>
 </div>
+
+<!-- /TMPL_IF -->  <!-- OpacPublic --> 
 
 <!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails">Your cart is empty.</div><!-- /TMPL_IF -->
 

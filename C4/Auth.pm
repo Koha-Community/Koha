@@ -455,6 +455,8 @@ sub get_template_and_user {
             SyndeticsSeries              => C4::Context->preference("SyndeticsSeries"),
             SyndeticsCoverImageSize      => C4::Context->preference("SyndeticsCoverImageSize"),
         );
+
+        $template->param(OpacPublic => '1') if ($template->param( 'loggedinusername') || C4::Context->preference("OpacPublic"));
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
     return ( $template, $borrowernumber, $cookie, $flags);
@@ -941,8 +943,10 @@ sub checkauth {
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
-		wrongip            => $info{'wrongip'}
+		wrongip            => $info{'wrongip'},
     );
+
+    $template->param( OpacPublic => C4::Context->preference("OpacPublic"));
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     if ($cas) { 

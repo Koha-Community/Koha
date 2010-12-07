@@ -46,7 +46,7 @@ my $biblionumber = $query->param('biblionumber');
         template_name   => "opac-alert-subscribe.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         debug           => 1,
     }
 );

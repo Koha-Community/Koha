@@ -44,7 +44,7 @@ if ( C4::Context->preference("AnonSuggestions") ) {
             template_name   => "opac-suggestions.tmpl",
             query           => $input,
             type            => "opac",
-            authnotrequired => 1,
+            authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         }
     );
     if ( !$$suggestion{suggestedby} ) {

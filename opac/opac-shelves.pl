@@ -29,7 +29,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "opac-shelves.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     });
 $template->param(listsview => 1);
 # if $loggedinuser is not defined, set it to -1, which should
