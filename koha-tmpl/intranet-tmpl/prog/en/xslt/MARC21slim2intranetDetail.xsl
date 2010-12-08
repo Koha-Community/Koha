@@ -253,7 +253,7 @@
             <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
         </xsl:if>
-        
+
         </span>
         </xsl:if>
 
@@ -273,7 +273,7 @@
             </a>
         </span>
         </xsl:if>
-        
+
         <!-- Set -->
         <xsl:if test="$leader19='c'">
         <span class="results_summary"><span class="label">Set: </span>
