@@ -545,7 +545,9 @@ my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
 
 my $dbh = C4::Context->dbh;
-$authtypecode = &GetAuthTypeCode($authid) if !$authtypecode;
+if(!$authtypecode) {
+  $authtypecode = $authid? &GetAuthTypeCode($authid): '';
+}
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "authorities/authorities.tmpl",
