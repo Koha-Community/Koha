@@ -456,8 +456,11 @@ sub BuildItemsData{
 
             # grab title, author, and ISBN to identify bib that the item
             # belongs to in the display
-			my $biblio=GetBiblioData($$itemdata{biblionumber});
-            $this_row{bibinfo} = join("\n", @$biblio{qw(title author ISBN)});
+			 my $biblio=GetBiblioData($$itemdata{biblionumber});
+            $this_row{title} = $biblio->{title};
+            $this_row{author} = $biblio->{author};
+            $this_row{isbn} = $biblio->{isbn};
+            $this_row{biblionumber} = $biblio->{biblionumber};
 
 			if (%this_row) {
 				push(@big_array, \%this_row);
@@ -476,7 +479,11 @@ sub BuildItemsData{
 			$row_data{itemnumber} = $row->{itemnumber};
 			#reporting this_row values
 			$row_data{'nomod'} = $row->{'nomod'};
-            $row_data{bibinfo} = $row->{bibinfo};
+      $row_data{bibinfo} = $row->{bibinfo};
+      $row_data{author} = $row->{author};
+      $row_data{title} = $row->{title};
+      $row_data{isbn} = $row->{isbn};
+      $row_data{biblionumber} = $row->{biblionumber};
 			push(@item_value_loop,\%row_data);
 		}
 		my @header_loop=map { { header_value=> $witness{$_}} } @witnesscodessorted;

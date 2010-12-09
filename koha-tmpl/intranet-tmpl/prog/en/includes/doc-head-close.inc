@@ -62,7 +62,7 @@
 
 <!-- yui js --> 
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/utilities/utilities.js"></script> 
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/datasource/datasource.js"></script> 
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/datasource/datasource-min.js"></script>
 <!-- TMPL_IF NAME="CircAutocompl" -->
     <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/autocomplete/autocomplete-min.js"></script>
 <!-- /TMPL_IF -->
