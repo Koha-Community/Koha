@@ -1836,6 +1836,10 @@ CREATE TABLE `suggestions` (
    branchcode VARCHAR(10) default NULL,
    collectiontitle text default NULL,
    itemtype VARCHAR(30) default NULL,
+	quantity SMALLINT(6) default NULL,
+	currency VARCHAR(3) default NULL,
+	price DECIMAL(28,6) default NULL,
+	total DECIMAL(28,6) default NULL,
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`)

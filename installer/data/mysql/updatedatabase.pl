@@ -3891,6 +3891,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.007';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER table suggestions ADD quantity SMALLINT(6) default NULL,
+		ADD currency VARCHAR(3) default NULL,
+		ADD price DECIMAL(28,6) default NULL,
+		ADD total DECIMAL(28,6) default NULL;
+		");
+    print "Upgrade to $DBversion done (Added acq related columns to suggestions)\n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

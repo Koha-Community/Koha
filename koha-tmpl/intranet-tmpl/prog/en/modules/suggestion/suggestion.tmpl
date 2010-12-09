@@ -81,8 +81,9 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
 .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; }
 </style>
 <!--/TMPL_IF-->
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
 </head>
-<body>
+<body onload="calcNewsuggTotal();">
 <!-- TMPL_INCLUDE name="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <!-- TMPL_IF name="op_save" --> <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; <!-- TMPL_IF name="suggestionid" -->Suggestion edit #<!-- TMPL_VAR name="suggestionid" --><!--TMPL_ELSE-->New purchase suggestion<!-- /TMPL_IF --><!--TMPL_ELSE-->Suggestions Management<!-- /TMPL_IF --> </div>
@@ -160,7 +161,21 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                 <option value="">Any</option><!-- TMPL_LOOP name="budgetsloop" -->
                 <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="budget_id" -->" selected="selected"><!-- TMPL_VAR name="budget_name" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="budget_id" -->"><!-- TMPL_VAR name="budget_name" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
             </select>
-		</li></ol>
+		</li><li><label for="quantity">Copies:</label>
+			<input type="text" size="10" id="quantity" name="quantity" value="<!-- TMPL_VAR name="quantity" -->" onchange="calcNewsuggTotal();" />
+                </li><li><label for="currency">Currency:</label>
+		        <!-- TMPL_LOOP NAME="loop_currency" -->
+		            <input type="hidden" id="<!-- TMPL_VAR NAME="currcode" -->" name="<!-- TMPL_VAR NAME="currcode" -->" value="<!-- TMPL_VAR NAME="rate" -->" />
+		        <!-- /TMPL_LOOP -->
+            <select name="currency" id="currency" onchange="calcNewsuggTotal();">
+                <!-- TMPL_LOOP name="loop_currency" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="currcode" -->" selected="selected"><!-- TMPL_VAR name="currcode" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="currcode" -->"><!-- TMPL_VAR name="currcode" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+            </select>
+                </li><li><label for="price">Price:</label>
+			<input type="text" size="20" name="price" id="price" value="<!-- TMPL_VAR NAME="price" -->" onchange="calcNewsuggTotal();" />
+                </li><li><label for="total">Total</label>
+			<input type="text" readonly="readonly" id="total" name="total" size="10" value="<!--TMPL_VAR Name="total"-->"/>
+                </li></ol>
     </fieldset>
     <fieldset class="action"><input type="hidden" name="op" value="<!--TMPL_VAR Name="op"-->" /><!--TMPL_IF Name="suggestionid"--><input type="submit" value="Save" /> <a class="cancel" href="suggestion.pl?suggestionid=<!--TMPL_VAR Name="suggestionid"-->">Cancel</a><!--TMPL_ELSE--><input type="submit" value="Submit Your Suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a><!--/TMPL_IF-->
     </fieldset>
