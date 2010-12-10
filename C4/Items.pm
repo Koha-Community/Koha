@@ -1270,6 +1270,31 @@ sub GetItemsInfo {
             $data->{notforloanvalue} = $lib;
         }
 
+        # get restricted status and description if applicable
+        my $restrictedstatus = $dbh->prepare(
+            'SELECT authorised_value
+            FROM   marc_subfield_structure
+            WHERE  kohafield="items.restricted"
+        '
+        );
+
+        $restrictedstatus->execute;
+        my ($authorised_valuecode) = $restrictedstatus->fetchrow;
+        if ($authorised_valuecode) {
+            $restrictedstatus = $dbh->prepare(
+                "SELECT lib,lib_opac FROM authorised_values
+                 WHERE  category=?
+                 AND authorised_value=?"
+            );
+            $restrictedstatus->execute( $authorised_valuecode,
+                $data->{restricted} );
+
+            if ( my $rstdata = $restrictedstatus->fetchrow_hashref ) {
+                $data->{restricted} = $rstdata->{'lib'};
+                $data->{restrictedopac} = $rstdata->{'lib_opac'};
+            }
+        }
+
         # my stack procedures
         my $stackstatus = $dbh->prepare(
             'SELECT authorised_value
