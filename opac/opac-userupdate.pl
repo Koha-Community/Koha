@@ -53,7 +53,7 @@ my $lib = GetBranchDetail($borr->{'branchcode'});
 # handle the new information....
 # collect the form values and send an email.
 my @fields = (
-    'surname','firstname','othernames','streetnumber','address','address2','city','zipcode','country','phone','mobile','fax','phonepro', 'emailaddress','emailpro','B_streetnumber','B_address','B_address2','B_city','B_zipcode','B_country','B_phone','B_email','dateofbirth','sex'
+    'surname','firstname','othernames','streetnumber','address','address2','city','zipcode','country','phone','mobile','fax','phonepro', 'email','emailpro','B_streetnumber','B_address','B_address2','B_city','B_zipcode','B_country','B_phone','B_email','dateofbirth','sex'
 );
 my $update;
 my $updateemailaddress = $lib->{'branchemail'};
@@ -84,7 +84,7 @@ if ( $query->param('modify') ) {
 
     # get all the fields:
     my $message = <<"EOF";
-Borrower $borr->{'cardnumber'}
+Patron $borr->{'cardnumber'}
 
 has requested to change her/his personal details.
 Please check these new details and make the changes:
@@ -102,16 +102,6 @@ EOF
         my $borrowerfield = '';
         if($borr->{$field}) {
             $borrowerfield = $borr->{$field};
-        }
-        
-        # reconstruct the address
-        if($field eq "address") {
-            $borrowerfield = "$streetnumber $address, $address2";
-        }
-        
-        # reconstruct the alternate address
-        if($field eq "B_address") {
-            $borrowerfield = "$B_streetnumber $B_address, $B_address2";
         }
         
         if($field eq "dateofbirth") {
