@@ -160,12 +160,13 @@ foreach my $file (@template_files) {
 	$input_tmpl =~ s/\w*\.__even__/loop.even/ig;
 	$input_tmpl =~ s/\w*\.__counter__/loop.count/ig; #loop.count gives the range (0..max) whereas loop.index gives the range (1..max+1), __counter__ is unknown
 
-	#hack to get around lack of javascript filter
+	# hack to get around lack of javascript filter
 	$input_tmpl =~ s/\|JS/|replace("'", "\\'") |replace('"', '\\"') |replace('\\n', '\\\\n') |replace('\\r', '\\\\r')/ig;
     
 	# Write out..
 	print $OTT $input_tmpl;
     }
+    close $ITMPL
     close $OTT;
 }
 
