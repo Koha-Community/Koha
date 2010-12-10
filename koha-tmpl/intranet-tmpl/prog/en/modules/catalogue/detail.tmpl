@@ -326,6 +326,8 @@ function verify_images() {
                 <!-- TMPL_UNLESS name="itemnotforloan" --><!-- TMPL_UNLESS NAME="onloan" --><!-- TMPL_UNLESS NAME="itemlost" --><!-- TMPL_UNLESS NAME="wthdrawn" --><!-- TMPL_UNLESS NAME="damaged" --><!-- TMPL_UNLESS NAME="transfertwhen" --><!-- TMPL_UNLESS NAME="reservedate" -->
                                         Available
                 <!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
+
+                <!-- TMPL_IF NAME="restricted" --><span class="restricted">(<!-- TMPL_VAR NAME="restricted" -->)</span><!-- /TMPL_IF -->
                         
                     </td>
                     <td class="datelastseen"><!-- TMPL_VAR NAME="datelastseen" --></td>
