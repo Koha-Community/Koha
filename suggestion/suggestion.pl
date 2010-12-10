@@ -259,6 +259,9 @@ foreach my $support(@$supportlist){
 }
 $template->param(itemtypeloop=>$supportlist);
 
+my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG",$$suggestion_ref{'patronreason'});
+$template->param(patron_reason_loop=>$patron_reason_loop);
+
 #Budgets management
 my $searchbudgets={ budget_branchcode=>$branchfilter} if $branchfilter;
 my $budgets = GetBudgets($searchbudgets);

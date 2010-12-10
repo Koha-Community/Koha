@@ -115,17 +115,22 @@ foreach my $suggestion(@$suggestions_loop) {
     } else {
         $suggestion->{'showcheckbox'} = 0;
     }
+    if($suggestion->{'patronreason'}){
+        $suggestion->{'patronreason'} = GetKohaAuthorisedValueLib("OPAC_SUG",$suggestion->{'patronreason'},1);
+    }
 }
+
+my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 
 $template->param(
 	%$suggestion,
 	itemtypeloop=> $supportlist,
     suggestions_loop => $suggestions_loop,
+    patron_reason_loop => $patron_reason_loop,
     showall    => $allsuggestions,
     "op_$op"         => 1,
     suggestionsview => 1,
 );
-
 
 output_html_with_http_headers $input, $cookie, $template->output;
 

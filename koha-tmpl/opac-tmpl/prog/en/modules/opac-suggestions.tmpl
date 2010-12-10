@@ -91,6 +91,9 @@ $.tablesorter.addParser({
 			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="itemtype"-->" selected="selected"> <!--TMPL_ELSE--><option value="<!-- TMPL_VAR name="itemtype" -->"> <!--/TMPL_IF--> <!-- TMPL_VAR name="description" --></option>
         <!-- /TMPL_LOOP -->
         </select> </li>
+    <!-- TMPL_IF NAME="patron_reason_loop" --><li><label for="patronreason">Reason for suggestion: </label><select name="patronreason" id="patronreason"><option value="">-- Choose --</option><!-- TMPL_LOOP NAME="patron_reason_loop" -->
+           <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!--TMPL_VAR NAME="lib" --></option>
+    <!-- /TMPL_LOOP --></select></li><!-- /TMPL_IF -->
     <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40"></textarea></li>
     </ol></fieldset>
         <fieldset class="action"><input type="hidden" name="suggestedby" value="<!--TMPL_VAR Name="suggestedbyme"-->" /><input type="hidden" name="op" value="add_confirm" /><input type="submit" onclick="Check(this.form); return false;" value="Submit Your Suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a></fieldset>

@@ -117,6 +117,9 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
             <!--/TMPL_LOOP-->
             </select>
         </li>
+        <!-- TMPL_IF NAME="patron_reason_loop" --><li><label for="patronreason">Reason for suggestion: </label><select name="patronreason" id="patronreason"><option value=""> -- Choose -- </option><!-- TMPL_LOOP NAME="patron_reason_loop" -->
+                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!--TMPL_VAR NAME="lib" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!--TMPL_VAR NAME="lib" --></option><!-- /TMPL_IF -->
+           <!-- /TMPL_LOOP --></select></li><!-- /TMPL_IF -->
         <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40"><!--TMPL_VAR Name="note"--></textarea></li>
         </ol>
     </fieldset>
