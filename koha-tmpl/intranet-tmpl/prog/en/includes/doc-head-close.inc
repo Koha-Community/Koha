@@ -25,6 +25,7 @@
     <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="widget" -->" />
     <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="IntranetUserCSS" --><style type="text/css"><!-- TMPL_VAR NAME="IntranetUserCSS" --></style><!-- /TMPL_IF -->
 
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ui.tabs.js"></script>
