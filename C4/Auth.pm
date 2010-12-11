@@ -362,6 +362,7 @@ sub get_template_and_user {
             intranetcolorstylesheet     => C4::Context->preference("intranetcolorstylesheet"),
             intranetreadinghistory      => C4::Context->preference("intranetreadinghistory"),
             intranetstylesheet          => C4::Context->preference("intranetstylesheet"),
+            IntranetUserCSS             => C4::Context->preference("IntranetUserCSS"),
             intranetuserjs              => C4::Context->preference("intranetuserjs"),
             intranetbookbag             => C4::Context->preference("intranetbookbag"),
             suggestion                  => C4::Context->preference("suggestion"),

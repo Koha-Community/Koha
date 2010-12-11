@@ -74,6 +74,7 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('IntranetNav','','70|10','Usare tab HTML per aggiungere link nella barra sinistra di navigazione dello Staff Client','Textarea');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('intranetreadinghistory','1','','Se ON, si abilita per tutti gli utenti lo storico dei documenti richiesti.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('intranetstylesheet','','50','Inserire qui un URL completo da usare come foglio di stile alternativo per il layout della Intranet','free');
+INSERT INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES('IntranetUserCSS','',NULL,'Add CSS to be included in the intranet in an embedded <style> tag.','free');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('intranetuserjs','','70|10','Imposta il javascript da includere nella intranet.','Textarea');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('intranet_includes','includes','','Definisci il nome della dir in cui mettere gli includes  per i templates di Koha. Il valore di default  è ‘includes’. Se vuoi personalizzare gli includes per cambiare come appare l’Opac, crea una tua dir e inserisci qui il nome da te scelto.','Free');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('ISBD','#200|<span style=\"font-weight:bold\">|{200a}{. 200c}{ : 200e}{200d}{ / 200f}{ ; 200g}{. 200h}{. 200i}|</span>\r\n#210|. &ndash; |{210a}{ : 210c}{, 210d}|\r\n#215|. &ndash; |{215a}{ ; 215d}|\r\n#225|. &ndash; |{(225a}{ ; 225v)}|\r\n#010|. &ndash; |{ISBN 010a}|','70|10','Parametri per la visualizzazione ISBD','Textarea');
@@ -204,7 +205,8 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('yuipath','local','local|http://yui.yahooapis.com/2.5.1/build','Inserire qui il percorso alle biblioteche YUI, se si usa Koha offline scegliere la voce local','Choice');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('z3950AuthorAuthFields','701,702,700','','Definisce i campi dei record MARC per le Personal Name Authorities che andranno a riempire il biblio.author','free');
-insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('z3950NormalizeAuthor','0','','Se ON, le Personal Name Authorities rimpiazzeranno gli autori nel biblio.author','YesNo');---
+insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('z3950NormalizeAuthor','0','','Se ON, le Personal Name Authorities rimpiazzeranno gli autori nel biblio.author','YesNo');
+---
 --- Add from eng
 ---
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqCreateItem','cataloguing','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice');

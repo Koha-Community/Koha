@@ -52,6 +52,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetNav','','Use HTML tabs to add navigational links to the left-hand navigational bar in the Staff Client','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranetreadinghistory',1,'If ON, Reading History is enabled for all patrons','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranetstylesheet','','Enter a complete URL to use an alternate layout stylesheet in Intranet',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetUserCSS','','Add CSS to be included in the intranet in an embedded <style> tag.',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranetuserjs','','Custom javascript for inclusion in Intranet','50|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('intranet_includes','includes','The includes directory you want for specific look of Koha (includes or includes_npl for example)',NULL,'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ISBD','#942|<code><b>|{942j}|</b></code><br/>

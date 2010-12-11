@@ -3880,6 +3880,11 @@ $DBversion = '3.03.00.005';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("update `systempreferences` set options='whitespace|T-prefix|cuecat|libsuite8' where variable='itemBarcodeInputFilter'");
     print "Upgrade to $DBversion done (Add itemBarcodeInputFilter choice libsuite8)\n";
+
+$DBversion = '3.XX.XX.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetUserCSS','','Add CSS to be included in the Intranet',NULL,'free')");
+    print "Upgrade to $DBversion done (Add IntranetUserCSS syspref)\n";
     SetVersion ($DBversion);
 }
 
