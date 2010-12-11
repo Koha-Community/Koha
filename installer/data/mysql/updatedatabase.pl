@@ -3902,6 +3902,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.008';
+if (C4::Context->preference('Version') < TransformToNum($DBversion)){
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACNoResultsFound','','Display this HTML when no results are found for a search in the OPAC','70|10','Textarea')");
+    print "Upgrade to $DBversion done adding syspref OPACNoResultsFound to control what displays when no results are found for a search in the OPAC.";
+    SetVersion ($DBversion);
+}
 
 =head1 FUNCTIONS
 

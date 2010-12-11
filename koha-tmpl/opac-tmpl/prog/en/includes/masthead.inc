@@ -173,7 +173,7 @@
 <!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"--> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" ESCAPE="HTML"--> results. <!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
 <a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" ESCAPE="HTML" --><!-- /TMPL_IF -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
 <!-- TMPL_ELSE -->
-<strong>No Result found!</strong>
+<strong>No Results Found!</strong>
 <p>
     <!-- TMPL_IF NAME="searchdesc" -->
     No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML" --> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog. <a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" ESCAPE="HTML" -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
@@ -181,5 +181,11 @@
     You did not specify any search criteria.
     <!-- /TMPL_IF -->
 </p>
+<!-- TMPL_IF name="OPACNoResultsFound" -->
+<div id="noresultsfound">
+<!-- TMPL_VAR NAME="OPACNoResultsFound" -->
+</div>
+<!-- /TMPL_IF -->
+
 </div>
 <!-- /TMPL_IF --></p><!-- /TMPL_IF --></div>
