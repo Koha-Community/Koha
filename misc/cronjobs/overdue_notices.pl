@@ -112,9 +112,9 @@ directory. This can be downloaded or futher processed by library staff.
 
 comma separated list of fields that get substituted into templates in
 places of the E<lt>E<lt>items.contentE<gt>E<gt> placeholder. This
-defaults to issuedate,title,barcode,author
+defaults to due date,title,barcode,author
 
-Other possible values come from fields in the biblios, items, and
+Other possible values come from fields in the biblios, items and
 issues tables.
 
 =item B<-borcat>
@@ -255,7 +255,7 @@ my $csvfilename;
 my $htmlfilename;
 my $triggered = 0;
 my $listall = 0;
-my $itemscontent = join( ',', qw( issuedate title barcode author itemnumber ) );
+my $itemscontent = join( ',', qw( date_due title barcode author itemnumber ) );
 my @myborcat;
 my @myborcatout;
 
