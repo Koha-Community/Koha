@@ -497,7 +497,7 @@ sub UpdateMarcWith {
 	my @fields_to=$marcto->field($itemtag);
     foreach my $subfield ($fieldfrom->subfields()){
 		foreach my $field_to_update (@fields_to){
-				$field_to_update->update($$subfield[0]=>$$subfield[1]) if ($$subfield[1]);
+				$field_to_update->update($$subfield[0]=>$$subfield[1]) if ($$subfield[1] != '' or $$subfield[1] == '0');
 		}
     }
   #warn "TO edited:",$marcto->as_formatted;
