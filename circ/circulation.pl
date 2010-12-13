@@ -146,13 +146,13 @@ if($duedatespec_allow){
     if ($duedatespec) {
         if ($duedatespec =~ C4::Dates->regexp('syspref')) {
             my $tempdate = C4::Dates->new($duedatespec);
-            if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
-                # i.e., it has to be later than today/now
+#           if ($tempdate and $tempdate->output('iso') gt C4::Dates->new()->output('iso')) {
+#               # i.e., it has to be later than today/now
                 $datedue = $tempdate;
-            } else {
-                $invalidduedate = 1;
-                $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
-            }
+#           } else {
+#               $invalidduedate = 1;
+#               $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
+#           }
         } else {
             $invalidduedate = 1;
             $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);

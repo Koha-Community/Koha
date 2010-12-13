@@ -258,7 +258,14 @@ function refocus(calendar) {
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
     <input type="hidden" name="issueconfirmed" value="1" />
     <!-- TMPL_IF NAME="DEBT" --><input type="hidden" name="debt_confirmed" value="1" /><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="INVALID_DATE" -->
+    <p>
+    <input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <label for="duedatespec">Due Date</label>
+    </p>
+    <!-- TMPL_ELSE -->
     <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <!-- /TMPL_IF -->
     <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
@@ -411,7 +418,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
 	    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
     <!-- TMPL_ELSE -->
-	    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
+	    <!-- TMPL_IF NAME="barcode" -->><input type="text" name="barcode" id="barcode" class="barcode focus" size="14" value="<!-- TMPL_VAR NAME="barcode" -->"/><!-- TMPL_ELSE --><input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <input type="submit" value="Check Out" />
 
@@ -440,8 +447,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                              inputField : "duedatespec",
                              ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                              button : "CalendarDueDate",
-                             disableFunc : validate1,
-                             dateStatusFunc : validate1,
+//                           disableFunc : validate1,
+//                           dateStatusFunc : validate1,
                              onClose : refocus
                            }
                         );
