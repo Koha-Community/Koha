@@ -1279,7 +1279,7 @@ sub GetItemsInfo {
         );
 
         $restrictedstatus->execute;
-        my ($authorised_valuecode) = $restrictedstatus->fetchrow;
+        ($authorised_valuecode) = $restrictedstatus->fetchrow;
         if ($authorised_valuecode) {
             $restrictedstatus = $dbh->prepare(
                 "SELECT lib,lib_opac FROM authorised_values
