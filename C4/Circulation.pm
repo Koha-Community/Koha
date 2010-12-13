@@ -641,7 +641,7 @@ reserved for someone else.
 
 =head3 INVALID_DATE
 
-sticky due date is invalid
+sticky due date is invalid or due date in the past
 
 =head3 TOO_MANY
 
@@ -679,7 +679,12 @@ sub CanBookBeIssued {
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
     }
-    $issuingimpossible{INVALID_DATE} = $duedate->output('syspref') unless ( $duedate && $duedate->output('iso') ge C4::Dates->today('iso') );
+    if ($duedate) {
+        $needsconfirmation{INVALID_DATE} = $duedate->output('syspref')
+          unless $duedate->output('iso') ge C4::Dates->today('iso');
+    } else {
+        $issuingimpossible{INVALID_DATE} = $duedate->output('syspref');
+    }
 
     #
     # BORROWER STATUS
