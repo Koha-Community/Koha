@@ -3880,8 +3880,6 @@ $DBversion = '3.03.00.005';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("update `systempreferences` set options='whitespace|T-prefix|cuecat|libsuite8' where variable='itemBarcodeInputFilter'");
     print "Upgrade to $DBversion done (Add itemBarcodeInputFilter choice libsuite8)\n";
-    SetVersion ($DBversion);
-}
 
 $DBversion = '3.03.00.006';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -3908,6 +3906,15 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
     print "Upgrade to $DBversion done adding syspref OPACNoResultsFound to control what displays when no results are found for a search in the OPAC.";
     SetVersion ($DBversion);
 }
+
+$DBversion = '3.03.00.009';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetUserCSS','','Add CSS to be included in the Intranet',NULL,'free')");
+    print "Upgrade to $DBversion done (Add IntranetUserCSS syspref)\n";
+    SetVersion ($DBversion);
+}
+
+
 
 =head1 FUNCTIONS
 
