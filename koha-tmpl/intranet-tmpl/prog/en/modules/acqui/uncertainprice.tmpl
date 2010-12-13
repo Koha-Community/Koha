@@ -22,7 +22,7 @@ function check(form) {
         <!-- TMPL_IF name="validate" -->
             <META HTTP-EQUIV=Refresh CONTENT="0; URL=<!-- TMPL_VAR name="scriptname" -->?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->">
         <!-- TMPL_ELSE -->
-        <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!--TMPL_VAR name="booksellername" --></a> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->&op=enter">(edit)</a></h1>
+        <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->"><!--TMPL_VAR name="booksellername" --></a> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;op=enter">(edit)</a></h1>
         <h2>Contact information</h2>
         <p><strong>Address: </strong>
             <!-- TMPL_VAR name="booksellerpostal" -->
@@ -35,8 +35,8 @@ function check(form) {
         <p><strong>Phone: </strong>
             <!--TMPL_VAR name="booksellerphone" --> / Fax:
             <!--TMPL_VAR name="booksellerfax" --></p>
-        <p><dl>
-            <dt><strong>Contact: </strong> 
+        <dl>
+            <dt><strong>Contact: </strong></dt>
             <dd><!--TMPL_VAR name="booksellercontact" -->
             <!--TMPL_VAR name="booksellercontpos" -->
             <!--TMPL_VAR name="booksellercontphone" -->
@@ -44,7 +44,7 @@ function check(form) {
             <!--TMPL_VAR name="booksellercontemail" -->
             <!--TMPL_VAR name="booksellercontnotes" -->
             </dd>
-        </dl></p>
+        </dl>
         <!-- TMPL_IF name="booksellernotes" -->
         <p><strong>Notes: </strong>
             <!--TMPL_VAR name="booksellernotes" --></p>
@@ -84,7 +84,7 @@ function check(form) {
         </td>
 	    <td>
 	        <!-- TMPL_VAR name="bibtitle" --> / <!-- TMPL_VAR name="bibauthor" --> <br /> <!-- TMPL_VAR name="bibpublishercode" -->, <!-- TMPL_VAR name="bibpublicationyear" --><br /><!-- TMPL_VAR name="bibisbn" --><br />
-	        <a href="neworderempty.pl?ordernumber=<!-- TMPL_VAR name="ordernumber" -->&booksellerid=<!-- TMPL_VAR name="booksellerid" -->&basketno=<!-- TMPL_VAR name="basketno" -->">
+	        <a href="neworderempty.pl?ordernumber=<!-- TMPL_VAR name="ordernumber" -->&amp;booksellerid=<!-- TMPL_VAR name="booksellerid" -->&amp;basketno=<!-- TMPL_VAR name="basketno" -->">
 	            edit
 	        </a>
 	    </td>
@@ -92,25 +92,22 @@ function check(form) {
             <!-- TMPL_VAR name="firstname" --> <!-- TMPL_VAR name="surname" -->
         </td>
 	    <td>
-	        <input type="checkbox" name="uncertainprice<!-- TMPL_VAR name="ordernumber" -->" value="1" checked>
+	        <input type="checkbox" name="uncertainprice<!-- TMPL_VAR name="ordernumber" -->" value="1" checked="checked" />
 	    </td>
 	    <td>
 	        <input type="text" size="10" name="price<!-- TMPL_VAR name="ordernumber"-->" value="<!-- TMPL_VAR name="listprice" -->"
-	                                        onChange="uncheckbox(this.form, <!-- TMPL_VAR name="ordernumber" -->);" />
+	                                        onchange="uncheckbox(this.form, <!-- TMPL_VAR name="ordernumber" -->);" />
 	    </td>
 	    <td>
 	        
 	        <input type="text" size="10" name="qty<!-- TMPL_VAR name="ordernumber"-->" value="<!-- TMPL_VAR name="quantity" -->"
-	                                        onChange="uncheckbox(this.form, <!-- TMPL_VAR name="ordernumber" -->);" />
+	                                        onchange="uncheckbox(this.form, <!-- TMPL_VAR name="ordernumber" -->);" />
 	    </td>
 	    </tr>
 	    <!-- /TMPL_LOOP -->
 	</table>
-	<input type="button" value="Save" onclick="check(this.form)" />
+	<fieldset class="action"><input type="button" value="Save" onclick="check(this.form)" /></fieldset>
 	</form>
 	<!-- /TMPL_IF -->
 </div>
-</div>
-</div>
-</body>
-</html>
+</div><!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
