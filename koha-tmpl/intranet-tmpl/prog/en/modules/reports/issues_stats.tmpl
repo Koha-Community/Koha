@@ -271,6 +271,30 @@
             </td> 
         </tr>
         <!-- /TMPL_IF -->
+        <tr><td>Home branch</td>
+            <td><input type="radio" name="Line" value="items.homebranch" /></td>
+            <td><input type="radio" name="Column" value="items.homebranch" /></td>
+            <td><select name="Filter" id="homebranch">
+                    <option value=""> </option>
+                    <!-- TMPL_LOOP NAME="branchloop" -->
+                        <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_IF -->
+				    <!-- /TMPL_LOOP -->
+                </select>
+            </td>
+        </tr>
+
+        <tr><td>Holding branch</td>
+            <td><input type="radio" name="Line" value="items.holdingbranch" /></td>
+            <td><input type="radio" name="Column" value="items.holdingbranch" /></td>
+            <td><select name="Filter" id="holdingbranch">
+                    <option value=""> </option>
+                    <!-- TMPL_LOOP NAME="branchloop" -->
+                        <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_IF -->
+				    <!-- /TMPL_LOOP -->
+                </select>
+            </td>
+        </tr>
+
         </tbody>
     </table><br /></fieldset>
 
