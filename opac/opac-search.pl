@@ -97,6 +97,7 @@ elsif (C4::Context->preference("marcflavour") eq "MARC21" ) {
     $template->param('usmarc' => 1);
 }
 $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+$template->param( 'OPACNoResultsFound' => C4::Context->preference('OPACNoResultsFound') );
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
 	$template->param(

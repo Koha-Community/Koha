@@ -129,6 +129,7 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OpacMaintenance','0','','Se Attivo, abilita l\'avviso di manutenzione nell\'OPAC.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OpacMainUserBlock','<h3>Benvenuto !!</h3>','70|10','Inserire qui una stringa in HTML personalizzata che comparirà nell’area principale della prima pagina dell’OPAC.','Textarea');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OpacNav','Links importanti qui.','70|10','Usare tag HTML per aggiungere link nella barra di navigazione dell\'OPAC posta a sinistra. ','Textarea');
+insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OPACNoResultsFound','','Display this HTML when no results are found for a search in the OPAC','70|10','Textarea');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OPACnumSearchResults','20','','Specifica il numero massimo di risposte da visualizzare nella pagina dei risultati ','Integer');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OpacPasswordChange','1','','Se ON, abilita l\'utente alla modifica della password nell\'OPAC (disabiltare la funzione quando è usato LDAP auth)','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('opacreadinghistory','1','','Se ON, si abilita la visualizzazione dello storico circolazione utente nell\'OPAC','YesNo');
@@ -204,7 +205,8 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('yuipath','local','local|http://yui.yahooapis.com/2.5.1/build','Inserire qui il percorso alle biblioteche YUI, se si usa Koha offline scegliere la voce local','Choice');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('z3950AuthorAuthFields','701,702,700','','Definisce i campi dei record MARC per le Personal Name Authorities che andranno a riempire il biblio.author','free');
-insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('z3950NormalizeAuthor','0','','Se ON, le Personal Name Authorities rimpiazzeranno gli autori nel biblio.author','YesNo');---
+insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('z3950NormalizeAuthor','0','','Se ON, le Personal Name Authorities rimpiazzeranno gli autori nel biblio.author','YesNo');
+---
 --- Add from eng
 ---
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqCreateItem','cataloguing','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice');
