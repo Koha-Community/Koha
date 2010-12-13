@@ -162,7 +162,7 @@
 		    <!-- TMPL_LOOP name="not_deleted_loop" -->
 			<tr>
 			    <td><!-- TMPL_VAR name="itemnumber" --></td>
-			    <td><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR name="barcode" --></a></td>
+			    <td><!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR name="barcode" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="barcode" --><!-- /TMPL_IF --></td>
 			    <td><!-- TMPL_IF name="book_on_loan" -->Item is checked out<!-- TMPL_ELSIF name="book_reserved" -->Item has a waiting hold<!-- /TMPL_IF --></td>
 			</tr>
 		    <!-- /TMPL_LOOP -->
