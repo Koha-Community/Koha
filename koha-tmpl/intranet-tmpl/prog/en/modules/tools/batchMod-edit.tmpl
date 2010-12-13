@@ -100,7 +100,7 @@ for( x=0; x<allColumns.length; x++ ){
     <ul>
     <!-- TMPL_LOOP NAME="simple_items_display" -->
   <li>
-      <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a>
+      <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="barcode" --><!-- /TMPL_IF -->
   </li>
     <!-- /TMPL_LOOP -->
     </ul>
