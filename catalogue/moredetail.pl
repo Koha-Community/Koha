@@ -87,7 +87,7 @@ my $itemnumber;
 foreach my $item (@items){
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
     $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
-    $item->{'collection'}              = $ccodes->{ $item->{ccode} };
+    $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
     $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
     $item->{'datelastborrowed'}        = format_date( $item->{'datelastborrowed'} );
