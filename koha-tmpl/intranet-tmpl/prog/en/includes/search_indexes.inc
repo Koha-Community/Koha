@@ -1,4 +1,4 @@
-<select name="idx">
+<select class="advsearch" name="idx">
     <option value="kw">Keyword</option>
     <option value="au">Author</option>
     <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author as Phrase</option>
