@@ -3882,6 +3882,15 @@ VALUES
     SetVersion ($DBversion);
 };
 
+$DBversion = '3.02.01.002';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE deletedborrowers ADD `privacy` int(11) AFTER smsalertnumber;");
+    $dbh->do("ALTER TABLE deletedborrowers CHANGE `cardnumber` `cardnumber` varchar(16);");
+    print "Upgrade to $DBversion done (Fix differences between borrowers and deletedborrowers)\n";
+    SetVersion ($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
