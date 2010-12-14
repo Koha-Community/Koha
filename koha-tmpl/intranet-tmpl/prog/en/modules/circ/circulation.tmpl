@@ -418,7 +418,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- TMPL_IF NAME="NEEDSCONFIRMATION" -->
 	    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" disabled="disabled" />
     <!-- TMPL_ELSE -->
-	    <!-- TMPL_IF NAME="barcode" -->><input type="text" name="barcode" id="barcode" class="barcode focus" size="14" value="<!-- TMPL_VAR NAME="barcode" -->"/><!-- TMPL_ELSE --><input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /><!-- /TMPL_IF -->
+	    <!-- TMPL_IF NAME="barcode" --><input type="text" name="barcode" id="barcode" class="barcode focus" size="14" value="<!-- TMPL_VAR NAME="barcode" -->"/><!-- TMPL_ELSE --><input type="text" name="barcode" id="barcode" class="barcode focus" size="14" /><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <input type="submit" value="Check Out" />
 
