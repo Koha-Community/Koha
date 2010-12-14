@@ -25,11 +25,13 @@
         <xsl:variable name="leader" select="marc:leader"/>
         <xsl:variable name="leader6" select="substring($leader,7,1)"/>
         <xsl:variable name="leader7" select="substring($leader,8,1)"/>
+        <xsl:variable name="leader19" select="substring($leader,20,1)"/>
         <xsl:variable name="biblionumber" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
         <xsl:variable name="isbn" select="marc:datafield[@tag=020]/marc:subfield[@code='a']"/>
         <xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
         <xsl:variable name="typeOf008">
             <xsl:choose>
+                <xsl:when test="$leader19='a'">ST</xsl:when>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
                         <xsl:when test="$leader7='a' or $leader7='c' or $leader7='d' or $leader7='m'">BK</xsl:when>
@@ -514,6 +516,7 @@
     <xsl:if test="$typeOf008!=''">
         <span class="label">Type: </span>
             <xsl:choose>
+                <xsl:when test="$leader19='a'"><img src="/opac-tmpl/prog/famfamfam/silk/book_link.png" alt="book" title="book"/> Set</xsl:when>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
                         <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'"><img src="/opac-tmpl/prog/famfamfam/silk/book.png" alt="book" title="book"/> Book</xsl:when>
