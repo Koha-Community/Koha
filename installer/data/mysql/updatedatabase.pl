@@ -3890,6 +3890,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.02.01.003';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetUserCSS','','Add CSS to be included in the Intranet',NULL,'free')");
+    print "Upgrade to $DBversion done (Add IntranetUserCSS syspref)\n";
+    SetVersion ($DBversion);
+}
 
 =head1 FUNCTIONS
 
