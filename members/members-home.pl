@@ -29,20 +29,9 @@ use C4::Category;
 my $query = new CGI;
 my $quicksearch = $query->param('quicksearch');
 my $branch = $query->param('branchcode');
-my ($template, $loggedinuser, $cookie);
 my $template_name;
 
-if($quicksearch){
-($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/member-quicksearch.tmpl",
-                 query => $query,
-                 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {borrowers => 1},
-                 debug => 1,
-                 });
-} else {
-($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tmpl",
                  query => $query,
                  type => "intranet",
@@ -82,7 +71,6 @@ if($no_categories && C4::Context->preference("AddPatronLists")=~/code/){
 } else {
     $template->param(categories=>\@categories);
 }
-
 
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
