@@ -64,7 +64,7 @@
             <span class="loggedinusername">
                 <!-- TMPL_VAR NAME="loggedinusername" -->
             </span>
-            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>) |
+            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1"<!-- TMPL_IF NAME="intranetbookbag" --> onclick="javascript:delBasket(true);"<!-- /TMPL_IF -->>Log Out</a>) |
         <!-- TMPL_ELSE -->
             You are not logged in |
         <!-- /TMPL_IF -->
