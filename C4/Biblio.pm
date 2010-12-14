@@ -82,7 +82,6 @@ BEGIN {
       &GetMarcStructure
       &GetMarcFromKohaField
       &GetFrameworkCode
-      &GetPublisherNameFromIsbn
       &TransformKohaToMarc
 
       &CountItemsIssued
@@ -1608,36 +1607,6 @@ sub GetFrameworkCode {
     $sth->execute($biblionumber);
     my ($frameworkcode) = $sth->fetchrow;
     return $frameworkcode;
-}
-
-=head2 GetPublisherNameFromIsbn
-
-    $name = GetPublishercodeFromIsbn($isbn);
-    if(defined $name){
-        ...
-    }
-
-=cut
-
-sub GetPublisherNameFromIsbn($) {
-    my $isbn = shift;
-    $isbn =~ s/[- _]//g;
-    $isbn =~ s/^0*//;
-    my @codes = ( split '-', DisplayISBN($isbn) );
-    my $code  = $codes[0] . $codes[1] . $codes[2];
-    my $dbh   = C4::Context->dbh;
-    my $query = qq{
-        SELECT distinct publishercode
-        FROM   biblioitems
-        WHERE  isbn LIKE ?
-        AND    publishercode IS NOT NULL
-        LIMIT 1
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute("$code%");
-    my $name = $sth->fetchrow;
-    return $name if length $name;
-    return undef;
 }
 
 =head2 TransformKohaToMarc
