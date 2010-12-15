@@ -3218,6 +3218,15 @@ sub ModBiblioMarc {
             $record->insert_grouped_field( MARC::Field->new( 100, "", "", "a" => $string ) );
         }
     }
+
+    #enhancement 5374: update transaction date (005) for marc21/unimarc
+    if($encoding =~ /MARC21|UNIMARC/) {
+      my @a= (localtime) [5,4,3,2,1,0]; $a[0]+=1900; $a[1]++;
+        # YY MM DD HH MM SS (update year and month)
+      my $f005= $record->field('005');
+      $f005->update(sprintf("%4d%02d%02d%02d%02d%04.1f",@a)) if $f005;
+    }
+
     my $oldRecord;
     if ( C4::Context->preference("NoZebra") ) {
 
