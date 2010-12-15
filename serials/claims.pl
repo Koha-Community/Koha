@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Parts Copyright 2010 Biblibre
+
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the

@@ -1,6 +1,7 @@
 package C4::Serials;
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright 2010 Biblibre
 #
 # This file is part of Koha.
 #
