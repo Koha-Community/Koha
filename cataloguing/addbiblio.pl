@@ -757,7 +757,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   my ($countcreated,$countlinked);
   while (my $data=$query->fetchrow_hashref){
     foreach my $field ($record->field($data->{tagfield})){
-      next if ($field->subfield('3')||$field->subfield('9'));
+      next if ($field->subfield('9'));
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
