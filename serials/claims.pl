@@ -35,15 +35,6 @@ my $claimletter = $input->param('claimletter');
 my $supplierid = $input->param('supplierid');
 my $suppliername = $input->param('suppliername');
 my $order = $input->param('order');
-my $supplierlist = GetSuppliersWithLateIssues();
-if ($supplierid) {
-    foreach my $s ( @{$supplierlist} ) {
-        if ($s->{id} == $supplierid ) {
-            $s->{selected} = 1;
-            last;
-        }
-    }
-}
 
 # open template first (security & userenv set here)
 my ($template, $loggedinuser, $cookie)
@@ -55,14 +46,13 @@ my ($template, $loggedinuser, $cookie)
             debug => 1,
             });
 
-my @suploop;
-for my $s ( sort {$a->{name} cmp $b->{name} } @$supplierlist ) {
-    my @list = GetLateOrMissingIssues($s, "", $order);
-    push @suploop, {
-        %$s,
-        count    => scalar(@list),
-        selected => $s->{id} == $supplierid,
-    };
+# supplierlist is returned in name order
+my $supplierlist = GetSuppliersWithLateIssues();
+for my $s (@{$supplierlist} ) {
+    $s->{count} = scalar  GetLateOrMissingIssues($s->{id}, q{}, $order);
+    if ($supplierid && $s->{id} == $supplierid) {
+        $s->{selected} = 1;
+    }
 }
 
 my $letters = GetLetters('claimissues');
@@ -96,7 +86,7 @@ if($op && $op eq 'preview'){
 $template->param('letters'=>\@letters,'letter'=>$letter);
 $template->param(
         order =>$order,
-        suploop => \@suploop,
+        suploop => $supplierlist,
         phone => $supplierinfo[0]->{phone},
         booksellerfax => $supplierinfo[0]->{booksellerfax},
         bookselleremail => $supplierinfo[0]->{bookselleremail},
