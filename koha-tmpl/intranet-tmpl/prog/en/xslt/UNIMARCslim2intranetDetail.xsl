@@ -28,7 +28,7 @@
         <xsl:call-template name="addClassRtl" />
         <xsl:variable name="title" select="marc:subfield[@code='a']"/>
         <xsl:variable name="ntitle"
-         select="translate($title, '&#x0098;&#x009C;','')"/>
+         select="translate($title, '&#x0098;&#x009C;&#xC29C;&#xC29B;&#xC298;&#xC288;&#xC289;','')"/>
         <xsl:value-of select="$ntitle" />
         <xsl:if test="marc:subfield[@code='e']">
           <xsl:text> : </xsl:text>
