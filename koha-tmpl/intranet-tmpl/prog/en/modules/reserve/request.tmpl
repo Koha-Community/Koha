@@ -405,7 +405,10 @@ function checkMultiHold() {
             </td>
             <!-- TMPL_IF NAME="item-level_itypes" -->
                 <td>
-                    <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /> <br /> <!-- /TMPL_IF --><!-- TMPL_VAR NAME="itypename" -->
+                    <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
+                        <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /> <br /> <!-- /TMPL_IF -->
+                    <!-- /TMPL_UNLESS -->
+                    <!-- TMPL_VAR NAME="itypename" -->
                 </td>
             <!-- /TMPL_IF -->
 
