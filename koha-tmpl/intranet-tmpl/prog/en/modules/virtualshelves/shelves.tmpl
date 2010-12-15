@@ -193,7 +193,7 @@ function placeHold () {
 			</td>
 			<!-- /TMPL_IF -->
 			<!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
-                <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
+                <!-- TMPL_UNLESS NAME="noItemTypeImages" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_UNLESS --><!-- TMPL_VAR NAME="description" -->
 			</td><!-- /TMPL_UNLESS -->
 			<td>
 			<!-- TMPL_INCLUDE NAME="biblio-default-view.inc" -->
