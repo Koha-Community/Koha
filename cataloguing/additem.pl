@@ -602,13 +602,16 @@ foreach my $tag ( keys %{$tagslib}){
         next if ($tagslib->{$tag}->{$subtag}->{'tab'} ne "10");
         next if any { /^$tag$subtag$/ }  @fields;
 
-        my $value = "";
-        my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i);
-
-        push (@loop_data, $subfield_data);
-        $i++;
-    }
+        my @values = (undef);
+        @values = $itemrecord->field($tag)->subfield($subtag) if ($itemrecord && defined($itemrecord->field($tag)->subfield($subtag)));
+        for my $value (@values){
+            my $subfield_data = generate_subfield_form($tag, $subtag, $value, $tagslib, $tagslib->{$tag}->{$subtag}, $branches, $today_iso, $biblionumber, $temp, \@loop_data, $i); 
+            push (@loop_data, $subfield_data);
+            $i++;
+        } 
   }
+}
+
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param( title => $record->title() ) if ($record ne "-1");
 $template->param(
