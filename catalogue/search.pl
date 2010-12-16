@@ -499,6 +499,12 @@ if (C4::Context->preference('NoZebra')) {
         ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
+# This sorts the facets into alphabetical order
+if ($facets) {
+    foreach my $f (@$facets) {
+        $f->{facets} = [ sort { uc($a->{facet_title_value}) cmp uc($b->{facet_title_value}) } @{ $f->{facets} } ];
+    }
+}
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
     output_html_with_http_headers $cgi, $cookie, $template->output;
