@@ -139,6 +139,8 @@ my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
 my $authvalcode_items_damaged  = GetAuthValCode('items.damaged', $fw);
 foreach my $item (@items) {
 
+    $item->{homebranch}        = GetBranchName($item->{homebranch});
+
     # can place holds defaults to yes
     $norequests = 0 unless ( ( $item->{'notforloan'} > 0 ) || ( $item->{'itemnotforloan'} > 0 ) );
 
