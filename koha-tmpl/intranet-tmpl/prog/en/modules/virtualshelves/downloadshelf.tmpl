@@ -6,9 +6,10 @@
 <!-- TMPL_IF NAME="format" -->
     <p>Your download should begin automatically.</p>
 <!-- TMPL_ELSE -->
+<div id="export" class="detailtagcell">    <form method="post" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
 <form method="post" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
 	<fieldset class="rows">
-	<legend>Download Shelf</legend>
+	<legend>Download List</legend>
 	<ol><li>
 	<label for="format">Format : </label>
         <select name="format" id="format">

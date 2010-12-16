@@ -1,6 +1,7 @@
 package C4::Serials;
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright 2010 Biblibre
 #
 # This file is part of Koha.
 #
@@ -91,12 +92,12 @@ the array is in name order
 
 sub GetSuppliersWithLateIssues {
     my $dbh   = C4::Context->dbh;
-    my $query = q|
-    SELECT DISTINCT aqbooksellerid as id, aqbooksellers.name as name
+    my $query = qq|
+        SELECT DISTINCT id, name
     FROM            subscription
     LEFT JOIN       serial ON serial.subscriptionid=subscription.subscriptionid
     LEFT JOIN aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
-    WHERE id > 0 AND (planneddate < now() OR serial.STATUS = 3 OR serial.STATUS = 4) ORDER BY name|;
+    WHERE id > 0 AND ((planneddate < now() AND serial.status=1) OR serial.STATUS = 3 OR serial.STATUS = 4) ORDER BY name|;
     return $dbh->selectall_arrayref($query, { Slice => {} });
 }
 
@@ -607,15 +608,15 @@ sub GetSubscriptions {
     $sth = $dbh->prepare($sql);
     $sth->execute(@bind_params);
     my @results;
-    my $previoustitle = "";
+    my $previousbiblio = "";
     my $odd           = 1;
 
     while ( my $line = $sth->fetchrow_hashref ) {
-        if ( $previoustitle eq $line->{title} ) {
+        if ( $previousbiblio eq $line->{biblionumber} ) {
             $line->{title} = "";
             $line->{issn}  = "";
         } else {
-            $previoustitle = $line->{title};
+            $previousbiblio = $line->{biblionumber};
             $odd           = -$odd;
         }
         $line->{toggle} = 1 if $odd == 1;
@@ -909,7 +910,7 @@ sub GetSeq {
 
 =head2 GetExpirationDate
 
-$sensddate = GetExpirationDate($subscriptionid, [$startdate])
+$enddate = GetExpirationDate($subscriptionid, [$startdate])
 
 this function return the next expiration date for a subscription given on input args.
 
@@ -1252,8 +1253,18 @@ sub NewSubscription {
         $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount, $graceperiod,   $location,     $enddate
     );
 
-    #then create the 1st waited number
     my $subscriptionid = $dbh->{'mysql_insertid'};
+    unless ($enddate){
+       $enddate = GetExpirationDate($subscriptionid,$startdate);
+        $query = q|
+            UPDATE subscription
+            SET    enddate=?
+            WHERE  subscriptionid=?
+        |;
+        $sth = $dbh->prepare($query);
+        $sth->execute( $enddate, $subscriptionid );
+    }
+    #then create the 1st waited number
     $query = qq(
         INSERT INTO subscriptionhistory
             (biblionumber, subscriptionid, histstartdate,  opacnote, librariannote)
@@ -1604,7 +1615,7 @@ sub HasSubscriptionExpired {
     my $dbh              = C4::Context->dbh;
     my $subscription     = GetSubscription($subscriptionid);
     if ( ( $subscription->{periodicity} % 16 ) > 0 ) {
-        my $expirationdate = $subscription->{enddate};
+        my $expirationdate = $subscription->{enddate} || GetExpirationDate($subscriptionid);
         if (!defined $expirationdate) {
             $expirationdate = q{};
         }
@@ -1750,7 +1761,8 @@ sub GetLateOrMissingIssues {
             "SELECT
                 serialid,      aqbooksellerid,        name,
                 biblio.title,  planneddate,           serialseq,
-                serial.status, serial.subscriptionid, claimdate
+                serial.status, serial.subscriptionid, claimdate,
+                subscription.branchcode
             FROM      serial 
                 LEFT JOIN subscription  ON serial.subscriptionid=subscription.subscriptionid 
                 LEFT JOIN biblio        ON subscription.biblionumber=biblio.biblionumber
@@ -1766,7 +1778,8 @@ sub GetLateOrMissingIssues {
             "SELECT 
             serialid,      aqbooksellerid,         name,
             biblio.title,  planneddate,           serialseq,
-            serial.status, serial.subscriptionid, claimdate
+                serial.status, serial.subscriptionid, claimdate,
+                subscription.branchcode
             FROM serial 
                 LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid 
                 LEFT JOIN biblio ON subscription.biblionumber=biblio.biblionumber

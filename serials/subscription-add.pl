@@ -160,6 +160,7 @@ if ($op eq 'addsubscription') {
         }
     $template->param(subtype => \@sub_type_data);
 
+    letter_loop( '', $template ) if ($op ne 'modsubscription' && $op ne 'dup' && $op ne 'mod');
 
     my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
     if (defined $new_biblionumber) {
@@ -198,52 +199,52 @@ sub _get_sub_length {
 }
 
 sub redirect_add_subscription {
-    my $auser           = $query->param('user');
-    my $branchcode      = $query->param('branchcode');
-    my $aqbooksellerid  = $query->param('aqbooksellerid');
-    my $cost            = $query->param('cost');
-    my $aqbudgetid      = $query->param('aqbudgetid');
-    my $periodicity     = $query->param('periodicity');
-    my $dow             = $query->param('dow');
-    my @irregularity    = $query->param('irregularity_select');
-    my $numberpattern   = $query->param('numbering_pattern');
-    my $graceperiod     = $query->param('graceperiod') || 0;
+    my $auser          = $query->param('user');
+    my $branchcode     = $query->param('branchcode');
+    my $aqbooksellerid = $query->param('aqbooksellerid');
+    my $cost           = $query->param('cost');
+    my $aqbudgetid     = $query->param('aqbudgetid');
+    my $periodicity    = $query->param('periodicity');
+    my $dow            = $query->param('dow');
+    my @irregularity   = $query->param('irregularity_select');
+    my $numberpattern  = $query->param('numbering_pattern');
+    my $graceperiod    = $query->param('graceperiod') || 0;
 
-    my ($numberlength, $weeklength, $monthlength)
+    my ( $numberlength, $weeklength, $monthlength )
         = _get_sub_length( $query->param('subtype'), $query->param('sublength') );
-    my $add1 = $query->param('add1');
-    my $every1 = $query->param('every1');
-    my $whenmorethan1 = $query->param('whenmorethan1');
-    my $setto1 = $query->param('setto1');
-    my $lastvalue1 = $query->param('lastvalue1');
-    my $innerloop1 =$query->param('innerloop1');
-    my $add2 = $query->param('add2');
-    my $every2 = $query->param('every2');
-    my $whenmorethan2 = $query->param('whenmorethan2');
-    my $setto2 = $query->param('setto2');
-    my $innerloop2 =$query->param('innerloop2');
-    my $lastvalue2 = $query->param('lastvalue2');
-    my $add3 = $query->param('add3');
-    my $every3 = $query->param('every3');
-    my $whenmorethan3 = $query->param('whenmorethan3');
-    my $setto3 = $query->param('setto3');
-    my $lastvalue3 = $query->param('lastvalue3');
-    my $innerloop3 =$query->param('innerloop3');
-    my $numberingmethod = $query->param('numberingmethod');
-    my $status = 1;
-    my $biblionumber = $query->param('biblionumber');
-    my $callnumber = $query->param('callnumber');
-    my $notes = $query->param('notes');
-    my $internalnotes = $query->param('internalnotes');
-    my $hemisphere = $query->param('hemisphere') || 1;
-	my $letter = $query->param('letter');
-    my $manualhistory = $query->param('manualhist');
-    my $serialsadditems = $query->param('serialsadditems');
-	my $staffdisplaycount = $query->param('staffdisplaycount');
-	my $opacdisplaycount = $query->param('opacdisplaycount');
-    my $location = $query->param('location');
-    my $startdate       = format_date_in_iso($query->param('startdate'));
-    my $enddate       = format_date_in_iso($query->param('enddate'));
+    my $add1              = $query->param('add1');
+    my $every1            = $query->param('every1');
+    my $whenmorethan1     = $query->param('whenmorethan1');
+    my $setto1            = $query->param('setto1');
+    my $lastvalue1        = $query->param('lastvalue1');
+    my $innerloop1        = $query->param('innerloop1');
+    my $add2              = $query->param('add2');
+    my $every2            = $query->param('every2');
+    my $whenmorethan2     = $query->param('whenmorethan2');
+    my $setto2            = $query->param('setto2');
+    my $innerloop2        = $query->param('innerloop2');
+    my $lastvalue2        = $query->param('lastvalue2');
+    my $add3              = $query->param('add3');
+    my $every3            = $query->param('every3');
+    my $whenmorethan3     = $query->param('whenmorethan3');
+    my $setto3            = $query->param('setto3');
+    my $lastvalue3        = $query->param('lastvalue3');
+    my $innerloop3        = $query->param('innerloop3');
+    my $numberingmethod   = $query->param('numberingmethod');
+    my $status            = 1;
+    my $biblionumber      = $query->param('biblionumber');
+    my $callnumber        = $query->param('callnumber');
+    my $notes             = $query->param('notes');
+    my $internalnotes     = $query->param('internalnotes');
+    my $hemisphere        = $query->param('hemisphere') || 1;
+    my $letter            = $query->param('letter');
+    my $manualhistory     = $query->param('manualhist');
+    my $serialsadditems   = $query->param('serialsadditems');
+    my $staffdisplaycount = $query->param('staffdisplaycount');
+    my $opacdisplaycount  = $query->param('opacdisplaycount');
+    my $location          = $query->param('location');
+    my $startdate = format_date_in_iso( $query->param('startdate') );
+    my $enddate = format_date_in_iso( $query->param('enddate') );
     my $firstacquidate  = format_date_in_iso($query->param('firstacquidate'));
     my $histenddate = format_date_in_iso($query->param('histenddate'));
     my $histstartdate = format_date_in_iso($query->param('histstartdate'));
