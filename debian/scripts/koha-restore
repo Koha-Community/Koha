@@ -69,7 +69,7 @@ tar -C / -xf "$configdump"
 # Re-create database and database user.
 mysqldb="koha_$name"
 mysqluser="koha_$name"
-mysqlpwd="$(sed -n '/.*<pass>\(.*\)<\/pass>.*/s//\1/p' /etc/koha/sites/$name/koha-conf.xml)"
+mysqlpwd="$( xmlstarlet sel -t -v 'yazgfs/config/pass' /etc/koha/sites/$name/koha-conf.xml )"
 zcat "$sqldump" | mysql --defaults-extra-file=/etc/mysql/koha-common.cnf
 mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof || true
 DROP USER '$mysqluser';
