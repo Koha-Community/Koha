@@ -215,7 +215,8 @@ function verify_images() {
         <table>
             <tr>
                 <!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
-                <th>Location</th>
+                <th>Current Location</th>
+                <th>Home Library</th>
                 <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
                 <th>Call Number</th>
                 <th>Status</th>
@@ -242,7 +243,8 @@ function verify_images() {
                         <!-- /TMPL_IF --></td>
                     <!-- /TMPL_IF -->
                     <td class="location"><!-- TMPL_UNLESS NAME="singlebranchmode" --><!-- TMPL_VAR NAME="branchname" --> <!-- /TMPL_UNLESS --><span class="shelvingloc"><!-- TMPL_VAR NAME="location" --></span> </td>
-                    <!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR name="ccode" --></td><!-- /TMPL_IF -->
+                    <td class="homebranch"><!-- TMPL_VAR NAME="homebranch" -->
+		    <!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR name="ccode" --></td><!-- /TMPL_IF -->
                     <td class="itemcallnumber"><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- /TMPL_IF --></td>
                     <td class="status">
 
