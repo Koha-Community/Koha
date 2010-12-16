@@ -302,6 +302,7 @@ if ($barcode) {
                 $template->param(
                     $needsconfirmation => $$question{$needsconfirmation},
                     getTitleMessageIteminfo => $getmessageiteminfo->{'title'},
+                    getBarcodeMessageIteminfo => $getmessageiteminfo->{'barcode'},
                     NEEDSCONFIRMATION  => 1
                 );
                 $confirm_required = 1;

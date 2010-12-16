@@ -203,23 +203,23 @@ function refocus(calendar) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RENEW_ISSUE" -->
-    <li>Item is currently checked out to this patron.  Renew?</li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) is currently checked out to this patron.  Renew?</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RESERVE_WAITING" -->
-    <li>Item is consigned for <!-- TMPL_VAR NAME="RESERVE_WAITING" --></li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="resborrowernumber" -->"><!-- TMPL_VAR NAME="resfirstname" --> <!-- TMPL_VAR NAME="ressurname" --></a> (<!-- TMPL_VAR NAME="rescardnumber" -->) at <!-- TMPL_VAR NAME="resbranchname" --> since <!-- TMPL_VAR NAME="reswaitingdate" --></li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RESERVED" -->
-    <li>Item is on hold for <!-- TMPL_VAR NAME="RESERVED" --></li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="resborrowernumber" -->"><!-- TMPL_VAR NAME="resfirstname" --> <!-- TMPL_VAR NAME="ressurname" --></a> (<!-- TMPL_VAR NAME="rescardnumber" -->) at <!-- TMPL_VAR NAME="resbranchname" --> since <!-- TMPL_VAR NAME="resreservedate" --></li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
-    <li>Item ( <!-- TMPL_VAR NAME="getTitleMessageIteminfo" --> ) checked out to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Check in and check out?</li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="issued_borrowernumber" -->"><!-- TMPL_VAR NAME="issued_firstname" --> <!-- TMPL_VAR NAME="issued_surname" --></a> (<!-- TMPL_VAR NAME="issued_cardnumber" -->). Check in and check out?</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="TOO_MANY" -->
-    <li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
+    <li>Too many checked out. <!-- TMPL_VAR NAME="current_loan_count" --> checked out, only <!-- TMPL_VAR NAME="max_loans_allowed" --> are allowed.</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="BORRNOTSAMEBRANCH" -->

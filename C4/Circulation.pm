@@ -31,6 +31,7 @@ use C4::Dates;
 use C4::Calendar;
 use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
+use C4::Dates qw(format_date);
 use C4::Message;
 use C4::Debug;
 use Date::Calc qw(
@@ -412,7 +413,7 @@ sub TooMany {
 
         my $max_loans_allowed = $issuing_rule->{'maxissueqty'};
         if ($current_loan_count >= $max_loans_allowed) {
-            return "$current_loan_count / $max_loans_allowed";
+            return ($current_loan_count, $max_loans_allowed);
         }
     }
 
@@ -440,7 +441,7 @@ sub TooMany {
 
         my $max_loans_allowed = $branch_borrower_circ_rule->{maxissueqty};
         if ($current_loan_count >= $max_loans_allowed) {
-            return "$current_loan_count / $max_loans_allowed";
+            return ($current_loan_count, $max_loans_allowed);
         }
     }
 
@@ -752,12 +753,16 @@ sub CanBookBeIssued {
 #
     # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
     #
-	my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
-    # if TooMany return / 0, then the user has no permission to check out this book
-    if ($toomany =~ /\/ 0/) {
+	my ($current_loan_count, $max_loans_allowed) = TooMany( $borrower, $item->{biblionumber}, $item );
+    # if TooMany max_loans_allowed returns 0 the user doesn't have permission to check out this book
+    if ($max_loans_allowed eq 0) {
         $needsconfirmation{PATRON_CANT} = 1;
     } else {
-        $needsconfirmation{TOO_MANY} = $toomany if $toomany;
+        if($max_loans_allowed){
+            $needsconfirmation{TOO_MANY} = 1;
+            $needsconfirmation{current_loan_count} = $current_loan_count;
+            $needsconfirmation{max_loans_allowed} = $max_loans_allowed;
+        }
     }
 
     #
@@ -840,8 +845,11 @@ sub CanBookBeIssued {
         my $currborinfo =    C4::Members::GetMemberDetails( $issue->{borrowernumber} );
 
 #        warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
-        $needsconfirmation{ISSUED_TO_ANOTHER} =
-"$currborinfo->{'reservedate'} : $currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
+        $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
+        $needsconfirmation{issued_firstname} = $currborinfo->{'firstname'};
+        $needsconfirmation{issued_surname} = $currborinfo->{'surname'};
+        $needsconfirmation{issued_cardnumber} = $currborinfo->{'cardnumber'};
+        $needsconfirmation{issued_borrowernumber} = $currborinfo->{'borrowernumber'};
     }
 
     # See if the item is on reserve.
@@ -855,13 +863,23 @@ sub CanBookBeIssued {
         {
             # The item is on reserve and waiting, but has been
             # reserved by some other patron.
-            $needsconfirmation{RESERVE_WAITING} =
-"$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
+            $needsconfirmation{RESERVE_WAITING} = 1;
+            $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
+            $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
+            $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
+            $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
+            $needsconfirmation{'resbranchname'} = $branchname;
+            $needsconfirmation{'reswaitingdate'} = format_date($res->{'waitingdate'});
         }
         elsif ( $restype eq "Reserved" ) {
             # The item is on reserve for someone else.
-            $needsconfirmation{RESERVED} =
-"$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
+            $needsconfirmation{RESERVED} = 1;
+            $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
+            $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
+            $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
+            $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
+            $needsconfirmation{'resbranchname'} = $branchname;
+            $needsconfirmation{'resreservedate'} = format_date($res->{'reservedate'});
         }
     }
 	return ( \%issuingimpossible, \%needsconfirmation );
