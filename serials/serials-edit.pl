@@ -145,7 +145,7 @@ foreach my $tmpserialid (@serialids) {
         $data->{arriveddate}=$today->output('syspref');
         $data->{'editdisable'} = (
             (
-                HasSubscriptionExpired( $data->{subscriptionid} )
+                HasSubscriptionExpired( $data->{subscriptionid} ) == 1
                   && $data->{'status1'}
             )
               || $data->{'cannotedit'}
