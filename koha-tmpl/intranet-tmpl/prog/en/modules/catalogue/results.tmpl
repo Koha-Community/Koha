@@ -426,13 +426,10 @@ function GetZ3950Terms(){
                                         <!-- TMPL_ELSE -->
                                             &nbsp;
                                         <!-- /TMPL_IF -->
-
-                                        <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
-										<!-- TMPL_IF NAME="edition" -->Edition: <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF -->
                                         Description:
-                                        <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
-										<!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" -->
-										<!-- TMPL_ELSIF name="copyrightdate"-->, <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" --> <!-- TMPL_VAR name="publicationyear" --> <!-- TMPL_ELSIF name="copyrightdate"--> <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF -->
+										<!-- TMPL_IF NAME="edition" -->Edition: <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="pages" -->: <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="normalized_isbn" -->ISBN: <!-- TMPL_VAR NAME="normalized_isbn" --><!-- /TMPL_IF -->
                                         <!-- TMPL_VAR name="description" -->
