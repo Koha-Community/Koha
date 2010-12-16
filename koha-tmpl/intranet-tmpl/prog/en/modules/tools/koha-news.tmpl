@@ -55,6 +55,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             <label for="lang">Display Location</label>
             <select id="lang" name="lang">
                 <option value="koha">Librarian interface</option>
+		<option value="slip">Slip</option>
                 <!-- TMPL_LOOP name="lang_list" -->
                     <!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="language" -->" selected="selected">OPAC (<!-- TMPL_VAR name="language" -->)</option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="language" -->">OPAC (<!-- TMPL_VAR name="language" -->)</option><!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
@@ -116,6 +117,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             <select name="lang" id="lang">
             <option value="">All</option>
             <option value="koha">Librarian interface</option>
+	    <option value="slip">Slip</option>
                 <!-- TMPL_LOOP name="lang_list" -->
                     <!-- TMPL_IF name="selected" -->
                         <option value="<!-- TMPL_VAR name="language" -->" selected="selected">
@@ -151,7 +153,13 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                             <td>
                                 <input type="checkbox" name="ids" value="<!-- TMPL_VAR NAME="idnew" -->" />
                             </td>
-                            <td><!-- TMPL_IF EXPR="lang eq 'koha'" -->Librarian interface<!-- TMPL_ELSE -->OPAC (<!-- TMPL_VAR NAME="lang" -->)<!-- /TMPL_IF --></td>
+                            <td><!-- TMPL_IF EXPR="lang eq 'koha'" -->Librarian interface<!-- /TMPL_IF -->
+                                 <!-- /TMPL_ELSE -->
+                                 <!-- TMPL_IF EXPR="lang eq 'slip'" -->Slip<!-- /TMPL_IF -->
+                                 <!-- /TMPL_ELSE -->
+                                 <!-- TMPL_IF EXPR="lang ne 'slip'" --><!-- TMPL_IF EXPR="lang ne 'koha'" -->OPAC<!-- /TMPL_IF --><!-- /TMPL_IF -->
+                             </td>
+
                             <td><!-- TMPL_VAR NAME="number" --></td>
                             <td><!-- TMPL_VAR NAME="newdate" --></td>
                             <td><!-- TMPL_VAR NAME="expirationdate" --> <!-- TMPL_IF NAME="expired" -->(<span class="expired">expired</span>)<!-- /TMPL_IF --></td>
