@@ -5,6 +5,20 @@
 	$(document).ready(function() {
 		$('#bibliodescriptions > ul').tabs();
 	}); 
+    YAHOO.util.Event.onContentReady("furtherm", function () {
+        $("#furtherm").css("display","block").css("visibility","hidden");
+        $("#furthersearches").parent().show();
+        var furthersearchesMenu = new YAHOO.widget.Menu("furtherm");
+            furthersearchesMenu.render();
+            furthersearchesMenu.cfg.setProperty("context", ["furthersearches", "tr", "br"]);
+            furthersearchesMenu.subscribe("beforeShow",positionfurthersearchesMenu);
+            furthersearchesMenu.subscribe("show", furthersearchesMenu.focus);
+            function positionfurthersearchesMenu() {
+                        furthersearchesMenu.align("tr", "br");
+            }
+            YAHOO.util.Event.addListener("furthersearches", "click", furthersearchesMenu.show, null, furthersearchesMenu);
+            YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionfurthersearchesMenu);
+     });
 //]]>
 </script>
 <!-- TMPL_IF NAME="OPACXSLTDetailsDisplay" --><script type="text/javascript">
@@ -71,7 +85,21 @@
         <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">
             Add to Your Cart
         </a></li><!-- /TMPL_IF -->
+		<li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
 </ul>
+
+<!-- TMPL_IF name="OPACSearchForTitleIn" -->
+<div id="furtherm" class="yuimenu">
+<div class="bd">
+<h4>Search for this title in:</h4>
+<ul class="first-of-type">
+
+<!-- TMPL_VAR NAME="OPACSearchForTitleIn" -->
+
+</ul>
+</div>
+</div>
+<!-- /TMPL_IF -->
 
 		<div id="export">
 		<form method="get" action="/cgi-bin/koha/opac-export.pl">

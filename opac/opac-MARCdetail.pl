@@ -269,6 +269,16 @@ if(C4::Context->preference("ISBD")) {
 	$template->param(ISBD => 1);
 }
 
+#Search for title in links
+if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
+    $biblio->{author} ? $search_for_title =~ s/{AUTHOR}/$biblio->{author}/g : $search_for_title =~ s/{AUTHOR}//g;
+    $biblio->{title} =~ s/\/+$//; # remove trailing slash
+    $biblio->{title} =~ s/\s+$//; # remove trailing space
+    $biblio->{title} ? $search_for_title =~ s/{TITLE}/$biblio->{title}/g : $search_for_title =~ s/{TITLE}//g;
+    $biblio->{isbn} ? $search_for_title =~ s/{ISBN}/$biblio->{isbn}/g : $search_for_title =~ s/{ISBN}//g;
+ $template->param('OPACSearchForTitleIn' => $search_for_title);
+}
+
 $template->param(
     item_loop        => \@item_value_loop,
     item_header_loop => \@header_value_loop,
