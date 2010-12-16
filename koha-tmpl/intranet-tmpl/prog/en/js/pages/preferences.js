@@ -1,3 +1,10 @@
+$(document).ready(function() {
+    $("table.preferences").tablesorter({
+        sortList: [[0,0]],
+        headers: { 1: { sorter:false}}
+    });
+});
+
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 
 KOHA.Preferences = {

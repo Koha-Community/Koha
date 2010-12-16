@@ -1,6 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Administration &rsaquo; System Preferences</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/preferences.css" />
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/humanmsg.css" />
 <script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
@@ -48,11 +49,12 @@
             <!-- TMPL_LOOP NAME="LINES" -->
             <!-- TMPL_IF NAME="is_group_title" -->
             <!-- TMPL_UNLESS NAME="__first__" --></tbody></table><!-- /TMPL_UNLESS -->
-            <h3><!-- TMPL_VAR NAME="title" --></h3><table>
+            <h3><!-- TMPL_VAR NAME="title" --></h3>
+            <table class="preferences">
             <thead><tr><th>Preference</th><th>Value</th></tr></thead>
             <!-- TMPL_UNLESS NAME="__last__" --><tbody><!-- /TMPL_UNLESS -->
             <!-- TMPL_ELSE -->
-            <!-- TMPL_IF NAME="__first__" --><table><thead><tr><th>Preference</th><th>Value</th></tr></thead><tbody><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="__first__" --><table class="preferences"><thead><tr><th>Preference</th><th>Value</th></tr></thead><tbody><!-- /TMPL_IF -->
             <tr class="name-row">
                 <td class="name-cell">
                     <code>
