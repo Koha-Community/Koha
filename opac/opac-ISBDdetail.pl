@@ -155,6 +155,16 @@ $template->param(
     reviews             => $reviews,
 );
 
+#Search for title in links
+if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
+    $dat->{author} ? $search_for_title =~ s/{AUTHOR}/$dat->{author}/g : $search_for_title =~ s/{AUTHOR}//g;
+    $dat->{title} =~ s/\/+$//; # remove trailing slash
+    $dat->{title} =~ s/\s+$//; # remove trailing space
+    $dat->{title} ? $search_for_title =~ s/{TITLE}/$dat->{title}/g : $search_for_title =~ s/{TITLE}//g;
+    $isbn ? $search_for_title =~ s/{ISBN}/$isbn/g : $search_for_title =~ s/{ISBN}//g;
+ $template->param('OPACSearchForTitleIn' => $search_for_title);
+}
+
 ## Amazon.com stuff
 #not used unless preference set
 if ( C4::Context->preference("OPACAmazonEnabled") == 1 ) {
