@@ -1612,6 +1612,7 @@ sub _Findgroupreserve {
         SELECT reserves.biblionumber               AS biblionumber,
                reserves.borrowernumber             AS borrowernumber,
                reserves.reservedate                AS reservedate,
+               reserves.waitingdate                AS waitingdate,
                reserves.branchcode                 AS branchcode,
                reserves.cancellationdate           AS cancellationdate,
                reserves.found                      AS found,
