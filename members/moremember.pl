@@ -49,6 +49,7 @@ use C4::Biblio;
 use C4::Reserves;
 use C4::Branch; # GetBranchName
 use C4::Form::MessagingPreferences;
+use C4::NewsChannels; #get slip news
 
 #use Smart::Comments;
 #use Data::Dumper;
@@ -441,6 +442,15 @@ $template->param(
     "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
+);
+
+#Get the slip news items
+my $all_koha_news   = &GetNewsToDisplay("slip");
+my $koha_news_count = scalar @$all_koha_news;
+
+$template->param(
+    koha_news       => $all_koha_news,
+    koha_news_count => $koha_news_count
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
