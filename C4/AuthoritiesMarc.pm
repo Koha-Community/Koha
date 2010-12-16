@@ -610,6 +610,16 @@ sub AddAuthority {
         $format= 'MARC21';
     }
 
+    #update date/time to 005 for marc and unimarc
+    my $time=POSIX::strftime("%Y%m%d%H%M%S",localtime);
+    my $f5=$record->field('005');
+    if (!$f5) {
+      $record->insert_fields_ordered( MARC::Field->new('005',$time.".0") );
+    }
+    else {
+      $f5->update($time.".0");
+    }
+
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
 			$record->leader($leader);
@@ -617,12 +627,6 @@ sub AddAuthority {
 		if (!$record->field('003')) {
 			$record->insert_fields_ordered(
 				MARC::Field->new('003',C4::Context->preference('MARCOrgCode'))
-			);
-		}
-		my $time=POSIX::strftime("%Y%m%d%H%M%S",localtime);
-		if (!$record->field('005')) {
-			$record->insert_fields_ordered(
-				MARC::Field->new('005',$time.".0")
 			);
 		}
 		my $date=POSIX::strftime("%y%m%d",localtime);
