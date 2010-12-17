@@ -149,7 +149,8 @@ if ($op eq ""){
                   eval "use C4::Bookseller qw/GetBookSellerFromId/;";
                   my $basket = GetBasket($orderinfo{basketno});
                   my $bookseller = GetBookSellerFromId($basket->{booksellerid});
-                  my $gst = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+                  # '//' is like '||' but tests for defined, rather than true
+                  my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
                   $orderinfo{'unitprice'} = $orderinfo{listprice} - ($orderinfo{listprice} * ($bookseller->{discount} / 100));
                   $orderinfo{'ecost'} = $orderinfo{unitprice};
               } else {
@@ -166,7 +167,7 @@ if ($op eq ""){
                   eval "use C4::Bookseller qw/GetBookSellerFromId/;";
                   my $basket = GetBasket($orderinfo{basketno});
                   my $bookseller = GetBookSellerFromId($basket->{booksellerid});
-                  my $gst = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+                  my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
                   $orderinfo{'unitprice'} = $orderinfo{listprice} - ($orderinfo{listprice} * ($bookseller->{discount} / 100));
                   $orderinfo{'ecost'} = $orderinfo{unitprice};
               } else {

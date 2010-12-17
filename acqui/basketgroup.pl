@@ -137,8 +137,8 @@ sub BasketTotal {
     my @orders = GetOrders($basketno);
     for my $order (@orders){
         $total = $total + ( $order->{ecost} * $order->{quantity} );
-        if ($bookseller->{invoiceincgst} && ! $bookseller->{listincgst} && ( $bookseller->{gstrate} || C4::Context->preference("gist") )) {
-            my $gst = $bookseller->{gstrate} || C4::Context->preference("gist");
+        if ($bookseller->{invoiceincgst} && ! $bookseller->{listincgst} && ( $bookseller->{gstrate} // C4::Context->preference("gist") )) {
+            my $gst = $bookseller->{gstrate} // C4::Context->preference("gist");
             $total = $total * ( $gst / 100 +1);
         }
     }
@@ -220,7 +220,7 @@ sub printbasketgrouppdf{
                     push(@ba_order, $ord->{$key});                                                  #Order lines
                 }
                 push(@ba_order, $bookseller->{discount});
-                push(@ba_order, $bookseller->{gstrate}*100 || C4::Context->preference("gist") || 0);
+                push(@ba_order, $bookseller->{gstrate}*100 // C4::Context->preference("gist") // 0);
                 push(@ba_orders, \@ba_order);
                 # Editor Number
                 my $en;
@@ -242,7 +242,7 @@ sub printbasketgrouppdf{
         -type       => 'application/pdf',
         -attachment => ( $basketgroup->{name} || $basketgroupid ) . '.pdf'
     );
-    my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} || C4::Context->preference("gist")) || die "pdf generation failed";
+    my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} // C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
     exit;
 }
