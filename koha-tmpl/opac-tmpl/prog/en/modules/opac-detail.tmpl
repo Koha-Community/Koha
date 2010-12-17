@@ -22,7 +22,7 @@
             widgets : ['zebra'],
             sortList: [[0,0]]
         });<!-- TMPL_IF NAME="GoogleJackets" -->
-        KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" -->
+        KOHA.Google.GetCoverFromIsbn(<!-- TMPL_VAR name="covernewwindow" -->);<!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="opacbookbag" -->$("a.print").parent().after("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">"+_("Add to Your Cart")+"<\/a><\/li>");
 <!-- /TMPL_IF -->});

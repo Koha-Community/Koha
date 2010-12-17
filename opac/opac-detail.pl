@@ -582,6 +582,14 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 								'sort'=>'-weight', limit=>$tag_quantity}));
 }
 
+if (C4::Context->preference("OPACURLOpenInNewWindow")) {
+    # These values are going to be read by Javascript, at least in the case
+    # of the google covers
+    $template->param(covernewwindow => 'true');
+} else {
+    $template->param(covernewwindow => 'false');
+}
+
 #Search for title in links
 my $marccontrolnumber   = GetMarcControlnumber   ($record, $marcflavour);
 
