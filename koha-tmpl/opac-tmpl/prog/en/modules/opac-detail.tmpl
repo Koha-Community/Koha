@@ -4,9 +4,9 @@
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
      $(document).ready(function() { 
-        $("#tagform").hide();
-        $("#addtagl").show();
         $('#bibliodescriptions > ul').tabs();
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->$("#tagform").hide();
+        $("#addtagl").show();
         $("#addtagl a").click(function(){
             $("#addtagl").hide();
             $("#tagform, #tagform a").show();
@@ -16,7 +16,7 @@
             $("#addtagl").show();
             $("#tagform").hide();
             return false;
-        });
+        });<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
         $("#holdingst").tablesorter({<!-- TMPL_IF EXPR="dateformat eq 'metric'" -->
     dateFormat: 'uk',<!-- /TMPL_IF -->
             widgets : ['zebra'],
@@ -44,9 +44,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	
 //]]>
 </script>
-<style type="text/css">
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" --><style type="text/css">
     #addtagl { display: none; }
-</style>
+</style><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="OPACXSLTDetailsDisplay" --><script type="text/javascript">
     var GB_ROOT_DIR = "/opac-tmpl/prog/en/lib/greybox/";                               
 </script>
@@ -234,6 +234,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	</span>
 <!-- /TMPL_IF -->
 
+<!-- TMPL_IF NAME="TagsEnabled" -->
     <!-- TMPL_IF NAME="TagsShowOnDetail" -->
         <div class="results_summary">
         <!-- TMPL_IF NAME="TagLoop" -->
@@ -242,9 +243,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
             <!-- /TMPL_LOOP -->
             </ul><!-- TMPL_ELSE --><span class="label">Tags from this library:</span><div>No tags from this library for this title.</div> 
-        <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="TagsInputOnDetail" -->
-            <!-- TMPL_IF NAME="loggedinusername" -->
+    <!-- /TMPL_IF -->
+        </div>
+<!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacuserlogin" -->
+  <!-- TMPL_IF NAME="loggedinusername" -->
+   <!-- TMPL_IF NAME="TagsEnabled" -->
+      <!-- TMPL_IF NAME="TagsInputOnDetail" -->
+      <div class="results_summary">
         <span class="label" id="addtagl"><a href="#">Add</a></span>
          <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl" id="tagform">
                 <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New:</label><input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
@@ -261,6 +267,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <!-- /TMPL_IF -->
         </div>
     <!-- /TMPL_IF -->
+   <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="SyndeticsEnabled" --><!-- TMPL_IF NAME="SyndeticsSeries" --><!-- TMPL_IF NAME="SyndeticsSERIES1Exists" -->
         <span class="results_summary">

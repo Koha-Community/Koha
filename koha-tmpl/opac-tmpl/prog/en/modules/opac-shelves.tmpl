@@ -1,7 +1,7 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;   <!-- TMPL_IF NAME="viewshelf" -->Contents of <!-- TMPL_VAR NAME="shelfname" ESCAPE="html" --><!-- TMPL_ELSE -->My Lists<!-- /TMPL_IF --><!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/javascript">
 //<![CDATA[
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
 var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
@@ -12,7 +12,7 @@ $.tablesorter.addParser({
     format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
     type: 'text' 
 });
-
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="RequestOnOpac" -->
 function holdSelections() {
     var checkedBoxes = $(":checkbox:checked");
     if ($(checkedBoxes).size() == 0) {
@@ -27,9 +27,8 @@ function holdSelections() {
         document.location = "/cgi-bin/koha/opac-reserve.pl?biblionumbers="+bibs;
     }
 }
-
-function tagSelected() {
-    <!-- TMPL_IF NAME="loggedinusername" -->
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->function tagSelected() {
     var checkedBoxes = $("input:checkbox:checked");
     if ($(checkedBoxes).size()) {
         $("#tagsel_tag").hide();
@@ -38,9 +37,6 @@ function tagSelected() {
     } else {
         alert(MSG_NO_RECORD_SELECTED);
     }
-    <!-- TMPL_ELSE -->
-    window.location = "/cgi-bin/koha/opac-user.pl";
-    <!-- /TMPL_IF -->
 }
 
 function tagCanceled() {
@@ -70,17 +66,17 @@ function tagAdded() {
 
     KOHA.Tags.add_multitags_button(bibs, tag);
     return false;
-}
+}<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 $(function() {
     $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_('Clear All')+"<\/a>|");
     $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_('Select All')+"<\/a>");
   $("a.print").show();
-    <!-- TMPL_IF NAME="RequestOnOpac" -->$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">"+_('Place Hold')+"<\/a>");
-	$("a.hold").click(function(){
-		 holdSelections();
-		 return false;
-	});<!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="RequestOnOpac" -->$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">"+_('Place Hold')+"<\/a>");
+      $("a.hold").click(function(){
+         holdSelections();
+         return false;
+      });<!-- /TMPL_IF --><!-- /TMPL_IF -->
     $("#listcontents").tablesorter({
         widgets : ['zebra'],
           <!-- TMPL_IF NAME="authorsort" -->
@@ -101,17 +97,17 @@ $(function() {
         $(".checkboxed").unCheckCheckboxes();
         return false;
     });
-    <!-- TMPL_IF NAME="TagsEnabled" -->
-	$("#addtags").click(function(){
-		tagSelected();
-		return false;
-	});
-	$("#addtags").html("<a id=\"tagsel_tag\" href=\"#\">"+_("Tag")+"<\/a> |");
-    $("#tagsel_button").click(function(){
-        tagAdded();
-        return false;
-    });
-    <!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->
+          $("#addtags").click(function(){
+            tagSelected();
+            return false;
+          });
+          $("#addtags").html("<a id=\"tagsel_tag\" href=\"#\">"+_("Tag")+"<\/a> |");
+            $("#tagsel_button").click(function(){
+                tagAdded();
+                return false;
+            });
+            <!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 });
       function Check(f) {
 		var _alertString="";
@@ -193,7 +189,7 @@ $(function() {
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="loggedinusername" -->
     <!-- TMPL_IF NAME="TagsEnabled" -->
-                    <span id="addtags"></span>               
+                    <span id="addtags"></span>
                     <span id="tagsel_form" style="display:none">
                       <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
                       <input name="tagsel_new" id="tagsel_new" maxlength="100" style="display:inline"/>
@@ -258,8 +254,8 @@ $(function() {
                         <!-- TMPL_IF NAME="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --><!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></a><!-- TMPL_ELSE --><a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --><!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
                     <!-- COinS / OpenURL -->
                           <!-- COinS / OpenURL --><span class="Z3988" title="<!-- TMPL_VAR NAME="coins" -->"></span>
-                          <br/>
-                          <div id="newtag<!-- TMPL_VAR NAME="biblionumber">_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>
+                          <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" --><br/>
+                          <div id="newtag<!-- TMPL_VAR NAME="biblionumber">_status" class="tagstatus results_summary" style="display:none">Tag status here.</div><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
                         </td>
                         <td><!-- TMPL_VAR NAME="author" --></td>
                         <td>
