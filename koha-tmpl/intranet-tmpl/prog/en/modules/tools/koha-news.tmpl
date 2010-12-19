@@ -153,11 +153,15 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
                             <td>
                                 <input type="checkbox" name="ids" value="<!-- TMPL_VAR NAME="idnew" -->" />
                             </td>
-                            <td><!-- TMPL_IF EXPR="lang eq 'koha'" -->Librarian interface<!-- /TMPL_IF -->
-                                 <!-- /TMPL_ELSE -->
-                                 <!-- TMPL_IF EXPR="lang eq 'slip'" -->Slip<!-- /TMPL_IF -->
-                                 <!-- /TMPL_ELSE -->
-                                 <!-- TMPL_IF EXPR="lang ne 'slip'" --><!-- TMPL_IF EXPR="lang ne 'koha'" -->OPAC<!-- /TMPL_IF --><!-- /TMPL_IF -->
+                            <td><!-- TMPL_IF EXPR="lang eq 'koha'" -->
+			            Librarian interface
+                                 <!-- TMPL_ELSE -->
+                                    <!-- TMPL_IF EXPR="lang eq 'slip'" -->
+				        Slip
+                                    <!-- TMPL_ELSE -->
+                                        OPAC
+				    <!-- /TMPL_IF -->
+				 <!-- /TMPL_IF -->
                              </td>
 
                             <td><!-- TMPL_VAR NAME="number" --></td>
