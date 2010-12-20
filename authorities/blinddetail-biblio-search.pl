@@ -75,46 +75,27 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 # fill arrays
-my @loop_data = ();
+my @subfield_loop;
 if ($authid) {
-    foreach my $field ( $record->field( $auth_type->{auth_tag_to_report} ) ) {
-        my @subfields_data;
-        my @subf = $field->subfields;
-
-        # loop through each subfield
-        my %result;
-        for my $i ( 0 .. $#subf ) {
-            $subf[$i][0] = "@" unless $subf[$i][0];
-            $result{ $subf[$i][0] } .= $subf[$i][1] . "|";
-        }
-        foreach ( keys %result ) {
-            my %subfield_data;
-            chop $result{$_};
-            $subfield_data{marc_value}    = $result{$_};
-            $subfield_data{marc_subfield} = $_;
-
-            # $subfield_data{marc_tag}=$field->tag();
-            push( @subfields_data, \%subfield_data );
-        }
-        if ( $#subfields_data >= 0 ) {
-            my %tag_data;
-            $tag_data{tag} = $field->tag() . ' -' . $tagslib->{ $field->tag() }->{lib};
-            $tag_data{subfield} = \@subfields_data;
-            push( @loop_data, \%tag_data );
-        }
+    my @fields = $record->field( $auth_type->{auth_tag_to_report} );
+    my $repet = ($query->param('repet') || 1) - 1;
+    my $field = $fields[$repet];
+    for ( $field->subfields ) {
+        my ($letter, $value) = @$_;
+        $letter = '@' unless $letter;
+        push @subfield_loop, { marc_subfield => $letter, marc_value => $value };
     }
-} else {
+}
+else {
     # authid is empty => the user want to empty the entry.
     $template->param( "clear" => 1 );
-#     warn Data::Dumper::Dumper(\@loop_data);
 }
 
-$template->param( "0XX" => \@loop_data );
-
 $template->param(
-    authid => $authid ? $authid : "",
-    index  => $index,
-    tagid  => $tagid,
+    authid          => $authid ? $authid : "",
+    index           => $index,
+    tagid           => $tagid,
+    SUBFIELD_LOOP   => \@subfield_loop,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
