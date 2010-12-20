@@ -528,8 +528,8 @@ sub _next_token_intermediate {
 	$it = $this->_next_token_internal($h);
 	if (defined $it && $it->type == TmplTokenType::TAG) {
 	    if ($it->string =~ /^<(script|style|textarea)\b/is ||
-            ($this->filename =~ /opensearch/ && $it->string =~ /^<(description)\b/) # FIXME special case to handle
-                                                                                    # a CDATA in opac-opensearch.tmpl
+            ($this->filename =~ /(opensearch)|(opac-showreviews-rss)/ && $it->string =~ /^<(description)\b/) # FIXME special case to handle
+                                                                                    # a CDATA in opac-opensearch.tmpl and opac-showreviews-rss.tmpl
            ) {
 		$this->_set_cdata_mode( 1 );
 		$this->_set_cdata_close( "</$1\\s*>" );
