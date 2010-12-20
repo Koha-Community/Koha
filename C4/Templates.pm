@@ -98,6 +98,7 @@ sub output {
 	$vars->{$k} = $self->{VARS}->{$k};
     }
     my $data;
+    binmode( STDOUT, ":utf8" );
     $template->process( $self->filename, $vars, \$data) || die "Template process failed: ", $template->error();; 
     return $data;
 }
