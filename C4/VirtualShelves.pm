@@ -116,9 +116,9 @@ sub GetShelves ($$$$) {
     $query .= ($mincategory == 1) ? "WHERE  owner=? AND category=?" : "WHERE category>=?";
 	$query .= qq(
         GROUP BY virtualshelves.shelfnumber
-        ORDER BY virtualshelves.category
-		DESC 
+        ORDER BY virtualshelves.shelfname
 		LIMIT ?, ?);
+    warn $query;
     my $sth2 = $dbh->prepare($query);
     $sth2->execute(@params);
     my %shelflist;
