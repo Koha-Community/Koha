@@ -61,19 +61,25 @@ if ($importid) {
 		$xmlrecord = $record->as_xml();
 	} 
 }
-		
-if ($view eq 'card') {
-$xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
-my $xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/compact.xsl";
-my $parser = XML::LibXML->new();
-my $xslt   = XML::LibXSLT->new();
-my $source = $parser->parse_string($xmlrecord);
-my $style_doc = $parser->parse_file($xslfile);
-my $stylesheet = $xslt->parse_stylesheet($style_doc);
-my $results = $stylesheet->transform($source);
-my $newxmlrecord = $stylesheet->output_string($results);
-#warn $newxmlrecord;
-print $input->header(), $newxmlrecord;
+
+
+if ($view eq 'card' || $view eq 'html') {
+    $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
+    my $xslfile;
+    if ($view eq 'card'){
+	$xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/compact.xsl";
+    }
+    else { # must be html
+	$xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACMARCdetail.xsl";	
+    }
+    my $parser = XML::LibXML->new();
+    my $xslt   = XML::LibXSLT->new();
+    my $source = $parser->parse_string($xmlrecord);
+    my $style_doc = $parser->parse_file($xslfile);
+    my $stylesheet = $xslt->parse_stylesheet($style_doc);
+    my $results = $stylesheet->transform($source);
+    my $newxmlrecord = $stylesheet->output_string($results);
+    print $input->header(), $newxmlrecord;
     exit;
 } else {
     $record =GetMarcBiblio($biblionumber) unless $record; 
