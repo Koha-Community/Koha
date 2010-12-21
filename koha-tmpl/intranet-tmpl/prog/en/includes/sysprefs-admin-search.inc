@@ -3,7 +3,7 @@
 <div id="header_search">
 	<div id="syspref_search" class="residentsearch">
 	<p class="tip">System preference search:</p>
-	    <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+	    <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
         <input type="text" size="40" name="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
 		<input type="hidden" value="all" name="tab" />
         <input type="submit" name="ok" class="submit" value="Search" />

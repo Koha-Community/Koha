@@ -25,7 +25,6 @@ function displayMoreConstraint(numlayer){
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
-
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
   <!-- TMPL_IF NAME="else" -->Authority MARC subfield structure
   <!-- TMPL_ELSE --><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;tagsubfield=<!-- TMPL_VAR NAME="tagsubfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Authority MARC subfield structure</a> &rsaquo;
@@ -54,7 +53,7 @@ function displayMoreConstraint(numlayer){
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="tagfield" value="<!-- TMPL_VAR name="tagfield" -->" />
         <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
-        <fieldset class="action"><input type="submit" class="submit" value="Save Changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" class="submit" value="Save Changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;authtypecode=<!-- TMPL_VAR NAME="authtypecode" -->">Cancel</a></fieldset>
         <div id="subfieldtabs" class="toptabs numbered">
             <ul>
                 <!-- TMPL_LOOP NAME="loop" -->

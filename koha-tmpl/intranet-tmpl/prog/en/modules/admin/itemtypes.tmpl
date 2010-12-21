@@ -17,7 +17,18 @@ Delete Item Type '<!-- TMPL_VAR name="itemtype" -->'?
 Data Deleted
 <!-- /TMPL_IF -->
 </title>
-<!-- TMPL_INCLUDE NAME="doc-head-close.inc" --><script type="text/javascript">
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+	// call the tablesorter plugin
+	$("#table_item_type").tablesorter({
+		sortList: [[1,0]],
+		headers: { 0: { sorter: false},5: { sorter: false}}
+		   		}).tablesorterPager({container: $("#pagertable_item_type"),positionFixed: false,size: 10});
+	
+}); </script>
+<script type="text/javascript">
 //<![CDATA[
 
 function isNotNull(f,noalert) {
@@ -274,15 +285,33 @@ Item Types Administration
 
 <!-- TMPL_IF name="else" -->
 <h2>Item Types Administration</h2>
-<table>
-  <tr>
+<span id="pagertable_item_type" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/next.png" class="next"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/last.png" class="last"/>
+		, entries/page : 
+		<select class="pagesize">
+        	<option selected="selected" value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</form>
+</span>
+<table id="table_item_type">
+  <thead>
     <!-- TMPL_UNLESS NAME="noItemTypeImages" --><th>Image</th><!-- /TMPL_UNLESS -->
     <th>Code</th>
     <th>Description</th>
     <th>Not for loan</th>
     <th>Charge</th>
     <th>Actions</th>
-  </tr>
+  </thead>
   <!-- TMPL_LOOP name="loop" -->
     <!-- TMPL_UNLESS name="__odd__" -->
   <tr class="highlight">
