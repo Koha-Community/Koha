@@ -1,0 +1,275 @@
+RELEASE NOTES FOR KOHA 3.2.2 - 22 December 2010
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.2.2 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.02.02.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+Koha 3.2.2 is a bugfix/maintenance release.
+
+Highlights of 3.2.2
+======================
+
+Some of the higher profile bugs addressed in this release are:
+
+Bug 3285    Location on "Add Subscription" should be supplied in a drop-down list (Partial fix)
+Bug 3575    Conflits of template variables and the same "use" statement appearing twice in the same script
+Bug 4211    Acquisitions actions on suggestions now generate email
+Bug 4218    Staff client detail page now shows item hold status
+Bug 4252    Edit authorities permission now checked on 'More' list
+Bug 4832    Re-editing a suggestion no longer changes the item type
+Bug 5022    Supplements now show in serials
+Bug 5041    Non repeatable fields are now deletable
+Bug 5127    Sample suggestions notices are installed by default
+Bug 5154    "Patrons checking out the most" report now works as expected
+Bug 5484    List member search internal server errors if a borrower has an invalid category now handled gracefully
+
+Other notable fixes in this release include:
+
+    * A number of template bugs
+    * Various fixes to Koha's interface
+
+This release also contains a variety of minor enhancements improving Koha's interface and underlying scripts.
+
+Maintenance activities performed in this release include:
+
+    * Language updates
+
+Bugs fixed in 3.2.2
+======================
+
+2170    Adding 'edititems' user-permission
+2808    Hold queue not alphabetizing
+2965    Allow the user to specify due dates in the past
+2981    Misleading interface for selecting patron from circulation search results
+3285    Location on Add Subscription should be pull down
+3575    conflits of template var and 2 times the same "use"
+3789    Set off Shelving Location in staff and OPAC title display
+4173    Statuses not appearing in the OPAC
+4211    Acquisitions actions on suggestions don't generate email
+4218    Staff client detail page does not show item hold status
+4252    edit authorities permission not checked on 'More' list
+4449    Cannot place holds on unchecked-out missing items if AllowShelfHolds turned off
+4451    Batch item tool cannot process barcode file with Windows line endings
+4500    Cant edit budget because of currency formatting
+4832    Re-editing a suggestion changes the item type
+4851    Batch delete shouldn't show delete button if no items were found
+4908    OPAC patron details page doesn't show patron's home library
+4935    Batch Modify tool cannot "unset" options such as Lost status
+4937    XHTML error in pagination links of saved reports results.
+4977    Acq: link to Z39.50 search missing from no results page
+4981    Tweak style of item listing on MARC display
+4983    Add edit record / edit item links to search results
+5000    Uncertain prices misses option to choose display language
+5022    supplements not showing in serials
+5029    Update patron deletion error page
+5030    Improve handling of duplicate patrons
+5033    Makefile.PL doesn't know about the xml_sax.pl fix
+5041    Non repeatable fields are not deletable
+5048    Error in bottom menu/submenu for select language in intranet
+5051    Renewal due date doesn't always show on patron Checkout tab
+5084    GetBudgetHierarchy doesn't respect the 'active' switch on budgets
+5125    Cursor default location on circulation-home.pl
+5127    No sample suggestions notices are installed by default
+5143    Subtitles not showing on view_holdsqueue.pl
+5150    Issuing should read Circulation
+5154    the most Checkouts reports problem
+5228    Sometimes the zebra server directories break and rebuild_zebra fails
+5232    Shelfname does not display on high numbered lists
+5255    document type should say item type
+5269    link to patron edit form when editing turned off
+5281    "Check in" then "Renew" checkboxes checked in the same time
+5313    koha-create script doesn't allow libraries with a '-' in their name
+5397    number of renewals not displayed consistently
+5402    "add to cart" shown on checkbox hover even if cart disabled
+5405    catalogue/suggest.pl is no longer used
+5416    Template syntax error in moredetails.tmpl
+5443    Inaccurate highlighting of fields in request for update of record email
+5446    Item creation in Acquisition module doesn't control mandatory fields
+5448    Boolean.pm's interface could be cleaned up
+5450    Name clash between ILSDI::Utility and Reserves
+5455    Fix uninitialized-warnings on authorities.pl
+5457    gather_print_notices.pl requires explicit stylesheet
+5460    AutoEmailPrimaryAddress set to invalid value in sysprefs.sql
+5467    LDR pos 6 o = Kit should not show as visual material
+5475    Wrong messages date formating on Check Out page
+5479    Update packaging scripts to account for the new version number
+5484    Routing list member search internal server errors, if a borrower has an invalid category
+
+Commits in 3.2.2 without a referenced bug report:
+
+    * Fix some compile time errors reported in test suite
+    * Fixing formatting and links in the history document
+    * Adding 3.2.1 release to the history
+    * Add BSZ to Koha's About page
+    * Ergonomy improvement in smart rule management
+    * Updating test for systprefs to give more useful output
+    * Adding another developer to the Koha history, 120 now!
+    * Update Debian changelog for 3.2.1 release
+    * Variable redeclared in same scope
+    * Fix for intranet-tmpl had one /TMPL_IF to many
+    * Revert "Ergonomy improvement in smart rule management"
+    * Add .packages file for Ubuntu 10.10
+
+System requirements
+======================
+
+    Changes since 3.0:
+
+    * The minimum version of Perl required is now 5.8.8.
+    * There are a number of new Perl module dependencies.
+      Run ./koha_perl_deps.pl -u -m to get a list of
+      any new modules to install during upgrade.
+
+Upgrades
+======================
+
+The structure of the acquisitions tables have changed significantly
+from 3.0.x.  In particular, the budget hierarchy is quite different.
+During an upgrade, a new database table is created called fundmapping
+that contains a record of how budgets were mapped.  It is strongly
+recommended that users of Koha 3.0.x acquisitions carefully review
+the results of the upgrade before resuming ordering in Koha 3.2.x.
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, several translations of the
+Koha manual are available:
+
+English: http://koha-community.org/documentation/3-2-manual/
+Spanish: http://koha-community.org/documentation/3-2-manual-es/
+French:  http://koha-community.org/documentation/3-2-manual-fr/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Translation related commits new to 3.2.2:
+
+  * 2307    Calendar widget cannot be translated
+  * 5142    Untranslatable strings in tag review template
+  * 5208    Language chooser missing on Batch item deletion/modification
+  * 5444    Installaling translation fails for 'standard' installed Koha
+  * 5506    Translation Process Simplification
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://www.kohadocs.org/usersguide/apb.html
+
+for information about translating Koha, and join the koha-translate
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha.org/
+
+Release Team
+======================
+
+The release team for Koha 3.2 is
+
+Release Manager:        Galen Charlton <gmcharlt@gmail.com>
+Documentation Manager:  Nicole Engard <nengard@gmail.com>
+Translation Manager:    Chris Cormack <chris@bigallofwax.co.nz>
+Release Maintainer (3.0.x):
+                        Henri-Damien Laurent <henridamien.laurent@biblibre.com>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to Koha 3.2.2:
+
+Nahuel Angelinetti
+Colin Campbell
+Galen Charlton
+Garry Collum
+Chris Cormack
+Frédéric Demians
+Nicole Engard
+Katrin Fischer
+Srdjan Jankovic
+Owen Leonard
+Chris Nighswonger
+Liz Rea
+Marcel de Rooy
+Jean-André Santoni
+Robin Sheat
+Jane Wagner
+Ian Walls
+Jesse Weaver
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send patch against these release notes to
+koha-patches@lists.koha-community.org.
+
+The 3.2.x Release Maintainer especially thanks the 3.4 Release Team and all
+who participated in QA for their diligent labors in testing and pushing well
+over 180 patches since the 3.2.0 relese. Their work very much makes possible
+the release of 3.2.2 on its announced schedule.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.2.x (i.e., this version of Koha and future bugfix
+releases) is 3.2.x.
+
+The next major feature release of Koha will be Koha 3.4.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+Naku te rourou, nau te rourou, ka ora ai te iwi.
