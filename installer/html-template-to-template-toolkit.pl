@@ -166,7 +166,7 @@ foreach my $file (@template_files) {
 	# Write out..
 	print $OTT $input_tmpl;
     }
-    close $ITMPL
+    close $ITMPL;
     close $OTT;
 }
 
