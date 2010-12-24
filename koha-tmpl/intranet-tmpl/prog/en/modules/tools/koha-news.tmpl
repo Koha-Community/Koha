@@ -55,7 +55,7 @@ Edit News Item<!-- TMPL_ELSE -->Add News Item<!-- /TMPL_IF --><!-- TMPL_ELSE -->
             <label for="lang">Display Location</label>
             <select id="lang" name="lang">
                 <option value="koha">Librarian interface</option>
-		<option value="slip">Slip</option>
+                <!-- TMPL_IF NAME="slip" --><option value="slip" selected="selected">Slip</option><!-- TMPL_ELSE --><option value="slip">Slip</option><!-- /TMPL_IF -->
                 <!-- TMPL_LOOP name="lang_list" -->
                     <!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="language" -->" selected="selected">OPAC (<!-- TMPL_VAR name="language" -->)</option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="language" -->">OPAC (<!-- TMPL_VAR name="language" -->)</option><!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
