@@ -118,7 +118,6 @@ sub GetShelves ($$$$) {
         GROUP BY virtualshelves.shelfnumber
         ORDER BY virtualshelves.shelfname
 		LIMIT ?, ?);
-    warn $query;
     my $sth2 = $dbh->prepare($query);
     $sth2->execute(@params);
     my %shelflist;
