@@ -626,7 +626,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('034', 'm', 'Right ascension--eastern limit', 'Right ascension--eastern limit', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('034', 'n', 'Right ascension--western limit', 'Right ascension--western limit', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('034', 'p', 'Equinox', 'Equinox', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
-		('034', 'r', 'Distrance from earth', 'Distrance from earth', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
+		('034', 'r', 'Distance from earth', 'Distance from earth', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('034', 's', 'G-ring latitude', 'G-ring latitude', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('034', 't', 'G-ring longitude', 'G-ring longitude', 1, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
 		('034', 'x', 'Beginning date', 'Beginning date', 0, 0, '', 0, '', '', '', 0, -6, '', '', '', NULL),
