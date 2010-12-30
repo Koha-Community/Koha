@@ -82,6 +82,17 @@
     </fieldset>
 <!-- /BOOLEAN SEARCH OPTIONS -->
 
+<!-- SEARCH BUTTONS -->
+            <p><input class="submit" type="submit" accesskey="s" value="Search" />
+            <!-- TMPL_IF NAME="expanded_options" -->
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0">[Fewer Options]</a>
+            <!-- TMPL_ELSE -->
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1">[More options]</a>
+            <!-- /TMPL_IF -->
+            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear">[New search]</a>
+            </p>
+<!-- /SEARCH BUTTONS -->
+
     <div id="itemtypelist">
 <!-- ITEMTYPE LIMITS -->
 	<fieldset>
