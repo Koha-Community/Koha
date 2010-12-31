@@ -45,7 +45,8 @@
 		<xsl:for-each select="marc:datafield[@tag=700]|marc:datafield[@tag=701]|marc:datafield[@tag=702]|marc:datafield[@tag=710]|marc:datafield[@tag=711]|marc:datafield[@tag=712]">
 	      <dc:creator>
     	    <xsl:value-of select="marc:subfield[@code='a']"/>
-    		<xsl:if test="marc:subfield[@code='b']">,
+		<xsl:if test="marc:subfield[@code='b']">
+               <xsl:text>, </xsl:text>
     		   <xsl:value-of select="marc:subfield[@code='b']"/>
     		</xsl:if>
 			<xsl:choose>
