@@ -68,6 +68,6 @@
         <!-- TMPL_ELSE -->
             You are not logged in |
         <!-- /TMPL_IF -->
-        <a href="/cgi-bin/koha/help.pl" id="helper" onclick="window.open('/cgi-bin/koha/help.pl','Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes'); return false;">[ ? ]</a>
+        <a href="/cgi-bin/koha/help.pl" id="helper" onclick="window.open('/cgi-bin/koha/help.pl?url='+escape(document.URL),'Koha_Help','width=600,height=600,toolbar=false,scrollbars=yes'); return false;">[ ? ]</a>
     </div>
 </div>	
