@@ -68,16 +68,20 @@
 			_alertString += _("- upperagelimit is not a number") + "\n";
 				
 		}
+                if(!(ff.enrolmentperioddate.value || ff.enrolmentperiod.value)) {
+                    ok=1;
+                    _alertString += _("- either Enrollment period or Until date must be provided") + "\n";
+                }
 		if(ff.enrolmentperioddate.value && ff.enrolmentperiod.value){
 			document.getElementById('enrolmentmessage').className = "error";
 			return false;
 		}
 		
 		if (ok) { // if there is a problem
-			alert(_alertString);
-             return false;
-        }
-        // if all is good
+		    alert(_alertString);
+                    return false;
+                }
+                // if all is good
 		ff.submit();
 	}
 	//]]>
