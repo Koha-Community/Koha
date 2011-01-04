@@ -51,9 +51,21 @@ if($quicksearch){
                  debug => 1,
                  });
 }
+
+my $branches = GetBranches;
+my @branchloop;
+foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+  my $selected = 1 if $branches->{$_}->{branchcode} eq $branch;
+  my %row = ( value => $_,
+        selected => $selected,
+        branchname => $branches->{$_}->{branchname},
+      );
+  push @branchloop, \%row;
+}
+
 my @categories=C4::Category->all;
 $template->param(
-    branchloop=>(defined $branch?GetBranchesLoop($branch):GetBranchesLoop()),
+    branchloop=>\@branchloop,
 	categories=>\@categories,
 );
 $template->param( 
