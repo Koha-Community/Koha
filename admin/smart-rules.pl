@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-# vim: et ts=4 sw=4
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
-# written 8/5/2002 by Finlay
 # script to execute issuing of books
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

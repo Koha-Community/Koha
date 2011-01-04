@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2006 SAN OUEST PROVENCE et Paul POULAIN
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

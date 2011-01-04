@@ -3,6 +3,7 @@
 # For documentation try 'perldoc /path/to/search'
 #
 # Copyright 2006 LibLime
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha
 #

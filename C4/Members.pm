@@ -1,6 +1,7 @@
 package C4::Members;
 
 # Copyright 2000-2003 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

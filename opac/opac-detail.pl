@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

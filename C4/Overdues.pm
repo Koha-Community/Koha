@@ -2,6 +2,7 @@ package C4::Overdues;
 
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

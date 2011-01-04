@@ -2,7 +2,7 @@ package C4::Reserves;
 
 # Copyright 2000-2002 Katipo Communications
 #           2006 SAN Ouest Provence
-#           2007 BibLibre Paul POULAIN
+#           2007-2010 BibLibre Paul POULAIN
 #
 # This file is part of Koha.
 #

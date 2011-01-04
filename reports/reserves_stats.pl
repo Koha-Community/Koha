@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
-
-# Copyright 2010 Biblibre
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
