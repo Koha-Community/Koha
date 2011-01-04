@@ -221,8 +221,7 @@ if ( C4::Context->preference("IndependantBranches") ) {
     $samebranch = 1;
 }
 my $branchdetail = GetBranchDetail( $data->{'branchcode'});
-$data->{'branchname'} = $branchdetail->{branchname};
-
+@{$data}{keys %$branchdetail} = values %$branchdetail; # merge in all branch columns
 
 my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
 my $lib1 = &GetSortDetails( "Bsort1", $data->{'sort1'} );
