@@ -321,10 +321,10 @@ function GetZ3950Terms(){
             </form>
         <!-- TMPL_ELSE -->
 
-            <!-- ######### -->
-            <div id="facets">
-                <dl>
                 <!-- TMPL_IF NAME="NoZebra" -->
+                <!-- ######### -->
+                <div id="facets">
+                <dl>
                 <!-- FACETS START -->
                 <!-- TMPL_IF NAME="opacfacets" -->
                     <dt id="facets1" onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
@@ -356,10 +356,10 @@ function GetZ3950Terms(){
                     </dd>
                 <!-- /TMPL_IF -->
                 <!-- FACETS END -->
-                <!-- /TMPL_IF --> <!-- NoZebra -->
                 </dl>
             </div>
             <!-- ######### -->
+            <!-- NoZebra --><!-- /TMPL_IF -->
 
             <div id="searchresults">
                 <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
@@ -386,7 +386,7 @@ function GetZ3950Terms(){
                                 <td>
                                     <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
 									
-                                        <img src="<!-- TMPL_IF NAME="normalized_isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="normalized_isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" /> 
+                                        <img src="<!-- TMPL_IF NAME="normalized_isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="normalized_isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="" class="thumbnail" />
                                     </a></td>
                             <!-- /TMPL_IF --><!-- /TMPL_IF -->
                             <td>
@@ -441,7 +441,7 @@ function GetZ3950Terms(){
                                     <!-- TMPL_IF NAME="authorised_value_images" -->
                                 <p>
                                   <!-- TMPL_LOOP NAME="authorised_value_images" -->
-                                  <img src="<!-- TMPL_VAR name="imageurl" -->" />
+                                  <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" />
                                   <!-- /TMPL_LOOP -->
                                 </p>
                                 <!-- /TMPL_IF -->
@@ -469,7 +469,7 @@ function GetZ3950Terms(){
                                     <ul>
                                     <!-- TMPL_LOOP NAME="available_items_loop" -->
 
-                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" /><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" /><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
@@ -483,7 +483,7 @@ function GetZ3950Terms(){
                                     <!-- TMPL_LOOP NAME="onloan_items_loop" -->
                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" />
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
@@ -500,7 +500,7 @@ function GetZ3950Terms(){
                                     <!-- TMPL_LOOP NAME="other_items_loop" -->
                                         <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" />
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
