@@ -426,6 +426,7 @@ $template->param(
     categoryname    => $data->{'description'},
     reregistration  => $reregistration,
     branch          => $branch,
+    todaysdate      => C4::Dates->today(),
     totalprice      => sprintf("%.2f", $totalprice),
     totaldue        => sprintf("%.2f", $total),
     totaldue_raw    => $total,
