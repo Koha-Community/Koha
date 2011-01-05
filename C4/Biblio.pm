@@ -1901,8 +1901,13 @@ sub TransformHtmlToMarc {
             if ( $tag < 10 ) {                              # no code for theses fields
                                                             # in MARC editor, 000 contains the leader.
                 if ( $tag eq '000' ) {
-                    $record->leader( $cgi->param( $params->[ $j + 1 ] ) ) if length( $cgi->param( $params->[ $j + 1 ] ) ) == 24;
-
+                    # Force a fake leader even if not provided to avoid crashing
+                    # during decoding MARC record containing UTF-8 characters
+                    $record->leader(
+                        length( $cgi->param($params->[$j+1]) ) == 24
+                        ? $cgi->param( $params->[ $j + 1 ] )
+                        : '     nam a22        4500'
+                    ;
                     # between 001 and 009 (included)
                 } elsif ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {
                     $newfield = MARC::Field->new( $tag, $cgi->param( $params->[ $j + 1 ] ), );
