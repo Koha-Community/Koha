@@ -220,6 +220,7 @@ sub SearchAuthorities {
         my $dosearch;
         my $and=" \@and " ;
         my $q2;
+        my $attr_cnt = 0;
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
             if (@$value[$i]){
@@ -246,15 +247,16 @@ sub SearchAuthorities {
                 }
                 $attr =$attr."\"".@$value[$i]."\"";
                 $q2 .=$attr;
-            $dosearch=1;
+                $dosearch=1;
+                ++$attr_cnt;
             }#if value
         }
         ##Add how many queries generated
-        if ($query=~/\S+/){    
-          $query= $and.$query.$q2 
+        if ($query=~/\S+/){
+          $query= $and x $attr_cnt . $query . $q2;
         } else {
-          $query=$q2;    
-        }         
+          $query= $q2;
+        }
         ## Adding order
         #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading 1'.$query if ($sortby eq "HeadingDsc");
         my $orderstring= ($sortby eq "HeadingAsc"?
