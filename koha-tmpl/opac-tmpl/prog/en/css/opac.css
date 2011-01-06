@@ -443,6 +443,14 @@ a .term {
 
 /* toolbar buttons */
 
+#toolbar { 
+background-color:#EEEEEE;
+border:1px solid #E8E8E8;
+margin : .5em 0;
+padding:3px 3px 5px 5px;
+vertical-align:middle;
+}
+
 #toolbar a,
 #toolbar input {
 	white-space : nowrap;
@@ -1094,38 +1102,9 @@ td.resultscontrol img {
 	line-height : 1.8em;
 	text-align: center;
 }
-a:link.current {
-	background-color: transparent;
-	color: #3366CC;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
-a:visited.current {
-	background-color: transparent;
-	color: #3366CC;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
 
-a:hover.current {
-	background-color: #CCFF00;
-	color: #CC3333;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
-
-a:active.current {
-	background-color: #99CC00;
-	color: #FFFF99;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
-
-.current {
+.current,
+.currentPage {
 	background-color: #FFFFFF;
 	color: #3366CC;
 	font-weight: bold;
@@ -1133,7 +1112,8 @@ a:active.current {
 	text-decoration: none;
 }
 
-a:link.nav {
+a:link.nav,
+div.pages a:link {
 	background-color: #EEE;
 	border: 1px solid #CCCC99;
 	color: #3366CC;
@@ -1142,7 +1122,8 @@ a:link.nav {
 	text-decoration: none;
 }
 
-a:visited.nav {
+a:visited.nav,
+div.pages a:visited {
 	background-color: #EEE;
 	border: 1px solid #CCCC99;
 	color: #3366CC;
@@ -1151,7 +1132,8 @@ a:visited.nav {
 	text-decoration: none;
 }
 
-a:hover.nav {
+a:hover.nav,
+div.pages a:hover {
 	background-color: #FFFFCC;
 	border: 1px solid #CCCC99;
 	color: #CC3333;
@@ -1160,7 +1142,8 @@ a:hover.nav {
 	text-decoration: none;
 }
 
-a:active.nav {
+a:active.nav,
+div.pages a:active {
 	background-color: #FFFFCC;
 	border: 1px solid #CCCC99;
 	color: #D25500;
