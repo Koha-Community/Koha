@@ -785,7 +785,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 		<a href="#" tabindex="1" class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib"--> - Click to Expand this Tag" onclick="ExpandField('tag_<!-- TMPL_VAR NAME="tag"-->_<!-- TMPL_VAR NAME='index' --><!-- TMPL_VAR NAME="random" -->'); return false;"><!-- TMPL_VAR NAME="tag" --></a>
 		<!-- TMPL_ELSE -->
                         <span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --><a 
-                 onclick="PopupMARCFieldDoc(<!-- TMPL_VAR NAME="tag" -->, <!-- TMPL_VAR NAME="number" -->); return false;">&nbsp;?</a></span>
+                 onclick="PopupMARCFieldDoc('<!-- TMPL_VAR NAME="tag" -->', <!-- TMPL_VAR NAME="number" -->); return false;">&nbsp;?</a></span>
 		<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="fixedfield" -->
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator1" -->" />
