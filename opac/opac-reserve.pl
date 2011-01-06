@@ -289,6 +289,7 @@ my $notforloan_label_of = get_notforloan_label_of();
 my $biblioLoop = [];
 my $numBibsAvailable = 0;
 my $itemdata_enumchron = 0;
+my $anyholdable;
 my $itemLevelTypes = C4::Context->preference('item-level_itypes');
 $template->param('item-level_itypes' => $itemLevelTypes);
 
@@ -335,8 +336,6 @@ foreach my $biblioNum (@biblionumbers) {
             $biblioLoopIter{forloan} = 1;
         }
     }
-
-    $biblioLoopIter{itemTypeDescription} = $itemTypes->{$biblioData->{itemtype}}{description};
 
     $biblioLoopIter{itemLoop} = [];
     my $numCopiesAvailable = 0;
@@ -455,19 +454,22 @@ foreach my $biblioNum (@biblionumbers) {
         $numBibsAvailable++;
         $biblioLoopIter{bib_available} = 1;
         $biblioLoopIter{holdable} = 1;
+        $anyholdable = 1;
     }
     if ($biblioLoopIter{already_reserved}) {
         $biblioLoopIter{holdable} = undef;
+        $anyholdable = undef;
     }
     if(not CanBookBeReserved($borrowernumber,$biblioNum)){
         $biblioLoopIter{holdable} = undef;
+        $anyholdable = undef;
     }
 
     push @$biblioLoop, \%biblioLoopIter;
 }
 
-if ( $numBibsAvailable == 0 ) {
-    $template->param( none_available => 1, message => 1 );
+if ( $numBibsAvailable == 0 || !$anyholdable) {
+    $template->param( none_available => 1 );
 }
 
 my $itemTableColspan = 5;
