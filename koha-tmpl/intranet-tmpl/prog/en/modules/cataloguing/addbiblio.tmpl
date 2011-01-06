@@ -67,11 +67,11 @@ function PopupZ3950() {
     } 
 }
 
-function PopupMARCFieldDoc(field, fieldnumber) {
+function PopupMARCFieldDoc(field, blocknumber) {
     <!-- TMPL_IF NAME="MARC21" -->
         _MARC21FieldDoc(field);
     <!-- TMPL_ELSE -->
-        _UNIMARCFieldDoc(field, fieldnumber);
+        _UNIMARCFieldDoc(field, blocknumber);
     <!-- /TMPL_IF -->
 }
 
@@ -85,7 +85,7 @@ function _MARC21FieldDoc(field) {
     }
 }
 
-function _UNIMARCFieldDoc(field,fieldnumber) {
+function _UNIMARCFieldDoc(field, blocknumber) {
     /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
        seems to be the only version available that can be linked to per tag.  More recent
        versions of the UNIMARC standard are available on the IFLA website only as
@@ -94,9 +94,9 @@ function _UNIMARCFieldDoc(field,fieldnumber) {
     if(field == 0) {
         window.open("http://archive.ifla.org/VI/3/p1996-1/uni.htm");
     } else if (field < 100) {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#b" + ("000"+field).slice(-3));
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+blocknumber+".htm#b" + ("000"+field).slice(-3));
     } else if (field < 900) {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#" + ("000"+field).slice(-3));
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+blocknumber+".htm#" + ("000"+field).slice(-3));
     } else {
         window.open("http://archive.ifla.org/VI/3/p1996-1/uni9.htm");
     }
