@@ -239,8 +239,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <div class="results_summary">
         <!-- TMPL_IF NAME="TagLoop" -->
         <span class="label">Tags from this library:</span>
-            <ul><!-- TMPL_LOOP NAME="TagLoop" -->
-            <li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
+            <ul id="tagslist"><!-- TMPL_LOOP NAME="TagLoop" -->
+            <li><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" ESCAPE="HTML" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span><!-- TMPL_IF NAME="__LAST__" --><!-- TMPL_ELSE -->, <!-- /TMPL_IF --></li>
             <!-- /TMPL_LOOP -->
             </ul><!-- TMPL_ELSE --><span class="label">Tags from this library:</span><div>No tags from this library for this title.</div> 
     <!-- /TMPL_IF -->
