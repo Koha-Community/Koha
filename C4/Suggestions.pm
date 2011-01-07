@@ -29,46 +29,22 @@ use C4::SQLHelper qw(:all);
 use C4::Debug;
 use C4::Letters;
 use List::MoreUtils qw<any>;
-use base 'Exporter';  # parent would be better there
+use C4::Dates qw(format_date_in_iso);
+use base qw(Exporter);
 our $VERSION = 3.01;
 our @EXPORT  = qw<
-    &ConnectSuggestionAndBiblio
-    &CountSuggestion
-    &DelSuggestion
-    &GetSuggestion
-    &GetSuggestionByStatus
-    &GetSuggestionFromBiblionumber
-    &ModStatus
-    &ModSuggestion
-    &NewSuggestion
-    &SearchSuggestion
+    ConnectSuggestionAndBiblio
+    CountSuggestion
+    DelSuggestion
+    GetSuggestion
+    GetSuggestionByStatus
+    GetSuggestionFromBiblionumber
+    ModStatus
+    ModSuggestion
+    NewSuggestion
+    SearchSuggestion
 >;
-use C4::Dates qw(format_date_in_iso);
-use vars qw($VERSION @ISA @EXPORT);
 
-BEGIN {
-    # set the version for version checking
-    $VERSION = 3.01;
-    require Exporter;
-    @ISA = qw(Exporter);
-    @EXPORT = qw(
-        &NewSuggestion
-        &SearchSuggestion
-        &GetSuggestion
-        &GetSuggestionByStatus
-        &DelSuggestion
-        &CountSuggestion
-        &ModSuggestion
-        &ConnectSuggestionAndBiblio
-        &GetSuggestionFromBiblionumber
-        &ConnectSuggestionAndBiblio
-        &DelSuggestion
-        &GetSuggestion
-        &GetSuggestionByStatus
-        &GetSuggestionFromBiblionumber
-        &ModStatus
-    );
-}
 
 =head1 NAME
 
