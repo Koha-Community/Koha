@@ -28,6 +28,7 @@ use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Debug;
 use Date::Calc qw/Today Add_Delta_YM/;
+use C4::Biblio qw/GetMarcBiblio GetRecordValue GetFrameworkCode/;
 
 my $input = new CGI;
 my $order     = $input->param('order') || '';
@@ -144,6 +145,8 @@ while ( my $data = $sth->fetchrow_hashref ) {
     my $thisratio = $data->{reservecount} / $data->{itemcount};
     my $ratiocalc = ($thisratio / $ratio);
     ($thisratio / $ratio) >= 1 or next;  # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
+    my $record = GetMarcBiblio($data->{biblionumber});
+    $data->{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($data->{biblionumber}));
     push(
         @reservedata,
         {
@@ -151,6 +154,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             priority         => $data->{priority},
             name             => $data->{borrower},
             title            => $data->{title},
+            subtitle            => $data->{subtitle},
             author           => $data->{author},
             notes            => $data->{notes},
             itemnum          => $data->{itemnumber},
