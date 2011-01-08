@@ -56,6 +56,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('MaxFine','9999','Amende maximum qu''un ahdérent peut avoir pour un retour en retard','','Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxoutstanding', '5', 'Ce paramètre définit le montant maximal des dettes au dela duquel le lecteur ne peut plus faire de réservation', '', 'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxreserves', '2', 'Ce paramètre définit le nombre maximal de réservations qu''un lecteur peut faire.', '', 'Integer');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxItemsInSearchResults',20,'Specify the maximum number of items to display for each result on a page of results',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('memberofinstitution', '0', 'Vos adhérents sont ils membres d''une institution ?', NULL, 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('noissuescharge', '5', 'Ce paramètre définit le montant maximal des dettes au delà duquel le lecteur ne peut plus emprunter', '', 'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('NotifyBorrowerDeparture', '0', 'Ce paramètre permet d''être prévenu N jours avant l''expiration de la carte d''un adhérent, à la banque de prêt.', '', 'Integer');
