@@ -176,13 +176,13 @@ my %handlers = (
 		    handler => \&handle_fee_paid,
 		    protocol => {
 			2 => {
-			    template => "A18A2A3",
-			    template_len => 0,
+			    template => "A18A2A2A3",
+			    template_len => 25,
 			    fields => [(FID_FEE_AMT), (FID_INST_ID),
 				       (FID_PATRON_ID), (FID_TERMINAL_PWD),
 				       (FID_PATRON_PWD), (FID_FEE_ID),
-				       (FID_TRANSACTION_ID)],
-			}
+                       (FID_TRANSACTION_ID)],
+               }
 		    }
 		},
 		(ITEM_INFORMATION) => {

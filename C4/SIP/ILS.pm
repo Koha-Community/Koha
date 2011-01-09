@@ -32,7 +32,7 @@ my %supports = (
     "login"                 => 1,
     "patron information"    => 1,
     "end patron session"    => 1,
-    "fee paid"              => 0,
+    "fee paid"              => 1,
     "item information"      => 1,
     "item status update"    => 0,
     "patron enable"         => 1,
@@ -214,14 +214,18 @@ sub pay_fee {
     my ($self, $patron_id, $patron_pwd, $fee_amt, $fee_type,
 	$pay_type, $fee_id, $trans_id, $currency) = @_;
     my $trans;
-    my $patron;
 
-#    $trans = new ILS::Transaction::FeePayment;
+    $trans = ILS::Transaction::FeePayment->new();
 
-    $patron = new ILS::Patron $patron_id;
 
     $trans->transaction_id($trans_id);
-    $trans->patron($patron);
+    my $patron;
+    $trans->patron($patron = ILS::Patron->new($patron_id));
+    if (!$patron) {
+        $trans->screen_msg('Invalid patron barcode.');
+        return $trans;
+    }
+    $trans->pay($patron->{borrowernumber},$fee_amt);
     $trans->ok(1);
 
     return $trans;
