@@ -64,11 +64,11 @@ sub shelfpage ($$$$$) {
     my ( $shelflimit, $shelfoffset, $shelveslimit, $shelvesoffset );
     my $marcflavour = C4::Context->preference("marcflavour");
 
-    # FIXME: These limits should not be hardcoded...
-    $shelflimit    = 20;                        # Limits number of items returned for a given query
-    $shelfoffset   = ( $itemoff - 1 ) * 20;     # Sets the offset to begin retrieving items at
-    $shelveslimit  = 20;                        # Limits number of shelves returned for a given query (row_count)
-    $shelvesoffset = ( $shelfoff - 1 ) * 20;    # Sets the offset to begin retrieving shelves at (offset)
+    $shelflimit = ( $type eq 'opac' ? C4::Context->preference('OPACnumSearchResults') : C4::Context->preference('numSearchResults') );
+    $shelflimit = $shelflimit || 20;
+    $shelfoffset   = ( $itemoff - 1 ) * $shelflimit;     # Sets the offset to begin retrieving items at
+    $shelveslimit  = $shelflimit;                        # Limits number of shelves returned for a given query (row_count)
+    $shelvesoffset = ( $shelfoff - 1 ) * $shelflimit;    # Sets the offset to begin retrieving shelves at (offset)
                                                 # getting the Shelves list
     my $category = ( ( $displaymode eq 'privateshelves' ) ? 1 : 2 );
     my ( $shelflist, $totshelves ) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
