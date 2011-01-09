@@ -219,7 +219,7 @@ if ( $op eq 'delete_confirm' ) {
 
     my @results = GetOrders( $basketno );
     
-	my $gist = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+	my $gist = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 	my $discount = $bookseller->{'discount'} / 100;
     my $total_rrp;      # RRP Total, its value will be assigned to $total_rrp_gsti or $total_rrp_gste depending of $bookseller->{'listincgst'}
 	my $total_rrp_gsti; # RRP Total, GST included

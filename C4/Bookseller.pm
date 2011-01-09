@@ -173,10 +173,10 @@ sub AddBookseller {
                 postal,    phone,         fax,        url,           contact,
                 contpos,   contphone,     contfax,    contaltphone,  contemail,
                 contnotes, active,        listprice,  invoiceprice,  gstreg,
-                listincgst,invoiceincgst,   discount,
+                listincgst,invoiceincgst, gstrate,    discount,
                 notes
             )
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
     ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
@@ -191,6 +191,7 @@ sub AddBookseller {
         $data->{'active'},       $data->{'listprice'},
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
+        $data->{'gstrate'},
         $data->{'discount'},     $data->{'notes'}
     );
 

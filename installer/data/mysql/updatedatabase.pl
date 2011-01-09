@@ -3923,6 +3923,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.01.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE aqbooksellers SET gstrate=NULL WHERE gstrate=0.0");
+    print "Upgrade to $DBversion done (Bug 5186: allow GST rate to be set to 0)\n";
+    SetVersion ($DBversion);
+}
 
 =head1 FUNCTIONS
 

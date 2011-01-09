@@ -71,10 +71,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $seller_gstrate = $supplier->{'gstrate'};
 
 # ensure the scalar isn't flagged as a string
-$seller_gstrate = ( defined $seller_gstrate ) ? $seller_gstrate + 0 : 0;
-my $tax_rate = $seller_gstrate || C4::Context->preference('gist');
+$seller_gstrate = ( defined $seller_gstrate ) ? $seller_gstrate + 0 : undef;
+my $tax_rate = $seller_gstrate // C4::Context->preference('gist') // 0;
 $tax_rate *= 100;
-
 #build array for currencies
 if ( $op eq 'display' ) {
 
@@ -84,8 +83,6 @@ if ( $op eq 'display' ) {
         $_->{contractstartdate} = format_date( $_->{contractstartdate} );
         $_->{contractenddate}   = format_date( $_->{contractenddate} );
     }
-
-    my $gstrate = defined $supplier->{gstrate} ? $supplier->{gstrate} * 100 : 0;
 
     $template->param(
         id            => $id,
@@ -110,13 +107,13 @@ if ( $op eq 'display' ) {
         gstreg        => $supplier->{'gstreg'},
         listincgst    => $supplier->{'listincgst'},
         invoiceincgst => $supplier->{'invoiceincgst'},
-        gstrate       => $gstrate,
         discount      => $supplier->{'discount'},
         invoiceprice  => $supplier->{'invoiceprice'},
         listprice     => $supplier->{'listprice'},
         GST           => $tax_rate,
+        default_tax   => defined($seller_gstrate),
         basketcount   => $supplier->{'basketcount'},
-        contracts     => $contracts
+        contracts     => $contracts,
     );
 } elsif ( $op eq 'delete' ) {
     DelBookseller($id);
@@ -133,7 +130,9 @@ if ( $op eq 'display' ) {
           };
     }
 
-    my $gstrate = defined $supplier->{gstrate} ? $supplier->{gstrate} * 100 : 0;
+    my $default_gst_rate = (C4::Context->preference('gist') * 100) || '0.0';
+
+    my $gstrate = defined $supplier->{gstrate} ? $supplier->{gstrate} * 100 : '';
     $template->param(
         id           => $id,
         name         => $supplier->{'name'},
@@ -163,6 +162,7 @@ if ( $op eq 'display' ) {
         loop_currency => $loop_currency,
         GST           => $tax_rate,
         enter         => 1,
+        default_gst_rate => $default_gst_rate,
     );
 }
 
