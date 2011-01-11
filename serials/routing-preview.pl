@@ -136,6 +136,7 @@ $template->param(
     subscriptionid => $subscriptionid,
     memberloop => \@results,
     routingnotes => $routingnotes,
+    hasRouting => check_routing($subscriptionid),
     );
 
 output_html_with_http_headers $query, $cookie, $template->output;
