@@ -30,19 +30,18 @@ BEGIN {
 	# @ISA = qw(HTML::Scrubber);
 }
 
-INIT {
-	%scrubbertypes = (
-		default => {},	# place holder, default settings are below as fallbacks in call to constructor
-		    tag => {},	# uses defaults
-		comment => {
-			allow   => [qw( br b i em big small strong )],
-		},
-		staff   => {
-			default => [ 1 =>{'*'=>1} ],
-			comment => 1,
-		},
-	);
-}
+
+my %scrubbertypes = (
+	default => {},	# place holder, default settings are below as fallbacks in call to constructor
+	    tag => {},	# uses defaults
+	comment => {
+	allow   => [qw( br b i em big small strong )],
+	},
+	staff   => {
+	default => [ 1 =>{'*'=>1} ],
+	comment => 1,
+	},
+);
 
 
 sub new {
