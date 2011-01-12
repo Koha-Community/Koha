@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
@@ -46,6 +46,9 @@ At the end here, I actually have some regular text.
 print pretty_line("Original HTML:"), $html, "\n", pretty_line();
 $collapse and diag "Note: scrubber test output will have whitespace collapsed for readability\n";
 ok($scrubber = C4::Scrubber->new(), "Constructor: C4::Scrubber->new()");
+
+isa_ok($scrubber, 'HTML::Scrubber', 'Constructor returns HTML::Scrubber object');
+
 ok(printf("# scrubber settings: default %s, comment %s, process %s\n",
 	$scrubber->default(),$scrubber->comment(),$scrubber->process()),
 	"Outputting settings from scrubber object (type: [default])"
