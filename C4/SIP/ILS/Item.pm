@@ -9,7 +9,6 @@ package ILS::Item;
 use strict;
 use warnings;
 
-use DateTime;
 use Sys::Syslog qw(syslog);
 use Carp;
 
@@ -98,13 +97,8 @@ sub new {
 
 	# check if its on issue and if so get the borrower
 	my $issue = GetItemIssue($item->{'itemnumber'});
-    if ( $issue ) {
-        my $date = $issue->{ date_due };
-        my $dt = DateTime->new(
-            year  => substr($date, 0, 4),
-            month => substr($date,5,2),
-            day  => substr($date, 8, 2) );
-        $item->{ due_date } = $dt->epoch();
+    if ($issue) {
+        $item->{due_date} = $issue->{date_due};
     }
 	my $borrower = GetMember(borrowernumber=>$issue->{'borrowernumber'});
 	$item->{patron} = $borrower->{'cardnumber'};
@@ -112,7 +106,6 @@ sub new {
 	$item->{hold_queue} = [ sort priority_sort @$arrayref ];
 	$item->{hold_shelf}    = [( grep {   defined $_->{found}  and $_->{found} eq 'W' } @{$item->{hold_queue}} )];
 	$item->{pending_queue} = [( grep {(! defined $_->{found}) or  $_->{found} ne 'W' } @{$item->{hold_queue}} )];
-    $item->{due_date} = $issue->{date_due};
 	$self = $item;
 	bless $self, $type;
 

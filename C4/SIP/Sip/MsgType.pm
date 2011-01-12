@@ -1127,8 +1127,8 @@ sub handle_item_information {
 	if (($i = scalar @{$item->hold_queue}) > 0) {
 	    $resp .= add_field(FID_HOLD_QUEUE_LEN, $i);
 	}
-	if (($i = $item->due_date) != 0) {
-	    $resp .= add_field(FID_DUE_DATE, Sip::timestamp($i));
+	if ($item->due_date) {
+	    $resp .= add_field(FID_DUE_DATE, Sip::timestamp($item->due_date));
 	}
 	if (($i = $item->recall_date) != 0) {
 	    $resp .= add_field(FID_RECALL_DATE, Sip::timestamp($i));
