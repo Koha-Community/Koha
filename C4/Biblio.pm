@@ -69,6 +69,7 @@ BEGIN {
 
       &GetMarcControlnumber
       &GetMarcNotes
+      &GetMarcISBN
       &GetMarcSubjects
       &GetMarcBiblio
       &GetMarcAuthors
@@ -1276,6 +1277,46 @@ sub GetMarcControlnumber {
     }
     return $controlnumber;
 }
+
+=head2 GetMarcISBN
+
+  $marcisbnsarray = GetMarcISBN( $record, $marcflavour );
+
+Get all ISBNs from the MARC record and returns them in an array.
+ISBNs stored in differents places depending on MARC flavour
+
+=cut
+
+sub GetMarcISBN {
+    my ( $record, $marcflavour ) = @_;
+    my $scope;
+    if ( $marcflavour eq "MARC21" ) {
+        $scope = '020';
+    } else {    # assume unimarc if not marc21
+        $scope = '010';
+    }
+    my @marcisbns;
+    my $isbn = "";
+    my $tag  = "";
+    my $marcisbn;
+    foreach my $field ( $record->field($scope) ) {
+        my $value = $field->as_string();
+        if ( $isbn ne "" ) {
+            $marcisbn = { marcisbn => $isbn, };
+            push @marcisbns, $marcisbn;
+            $isbn = $value;
+        }
+        if ( $isbn ne $value ) {
+            $isbn = $isbn . " " . $value;
+        }
+    }
+
+    if ($isbn) {
+        $marcisbn = { marcisbn => $isbn };
+        push @marcisbns, $marcisbn;    #load last tag into array
+    }
+    return \@marcisbns;
+}    # end GetMarcISBN
 
 =head2 GetMarcNotes
 

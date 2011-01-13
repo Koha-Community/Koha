@@ -148,8 +148,12 @@ function verify_images() {
         
         <div class="yui-u" style="margin-top: 1em;">
         <ul>
-        <!-- TMPL_IF name="normalized_isbn" -->
-            <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="normalized_isbn" --></li>
+        <!-- TMPL_IF NAME="MARCISBNS" -->
+            <li><strong>ISBN:</strong><ul><!-- TMPL_LOOP NAME="MARCISBNS" --><li><!-- TMPL_VAR NAME="marcisbn" --></li><!-- /TMPL_LOOP --></ul></li>
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_IF name="normalized_isbn" -->
+                <li><strong>ISBN:</strong> <!-- TMPL_VAR NAME="normalized_isbn" --></li>
+            <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
         <!-- TMPL_IF name="issn" -->
             <li><strong>ISSN:</strong><!-- TMPL_VAR NAME="issn" --></li>

@@ -87,6 +87,7 @@ unless (defined($record)) {
 }
 
 my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
+my $marcisbnsarray   = GetMarcISBN( $record, $marcflavour );
 my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
 my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
@@ -212,6 +213,7 @@ $template->param(
 	MARCAUTHORS => $marcauthorsarray,
 	MARCSERIES  => $marcseriesarray,
 	MARCURLS => $marcurlsarray,
+    MARCISBNS => $marcisbnsarray,
 	subtitle    => $subtitle,
 	itemdata_ccode      => $itemfields{ccode},
 	itemdata_enumchron  => $itemfields{enumchron},
