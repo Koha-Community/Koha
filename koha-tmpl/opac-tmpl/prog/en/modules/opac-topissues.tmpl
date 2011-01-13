@@ -27,7 +27,19 @@ function Dopop(link) {
 </style>
 </head>
 <body id="opac-topissues">
-	<!-- TMPL_IF EXPR="OpacNav||results_loop" --><div id="doc3" class="yui-t1"><!-- TMPL_ELSE --><div id="doc3" class="yui-t7"><!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="results_loop" -->
+<div id="doc3" class="yui-t1">
+<!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="OpacNav" -->
+<div id="doc3" class="yui-t1">
+<!-- TMPL_ELSE -->
+<div id="doc3" class="yui-t7">
+<!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
+	
+
    <div id="bd">
 <!-- TMPL_INCLUDE name="masthead.inc" -->
 
@@ -51,7 +63,7 @@ function Dopop(link) {
     </caption>
             <thead><tr>
                 <th>Title</th>
-                <th>Itemtype</th>
+                <th><!-- TMPL_IF NAME="ccodesearch" -->Collection<!-- TMPL_ELSE -->Item type<!-- /TMPL_IF --></th>
                 <th>Checkouts</th>
 				<!-- TMPL_IF NAME="opacuserlogin" --><th>&nbsp;</th><!-- /TMPL_IF -->
 				
@@ -100,13 +112,11 @@ function Dopop(link) {
             </li>
             <li><label for="itemtype">Limit to: </label>
                     <select name="itemtype" id="itemtype">
-                        <option value="">All item types</option>
-                       <!-- TMPL_LOOP name="itemtypeloop" -->
-                           <!-- TMPL_IF name="selected" -->
-                               <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="description" --></option>
-                           <!-- TMPL_ELSE -->
-                               <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="description" --></option>
-                           <!-- /TMPL_IF -->
+                        <!-- TMPL_IF NAME="ccodesearch" --><option value="">All collections</option><!-- TMPL_ELSE --><option value="">All item types</option><!-- /TMPL_IF -->
+                        <!-- TMPL_LOOP name="itemtypeloop" -->
+                            <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF -->
+                                <!-- TMPL_VAR name="description" -->
+                            </option>
                         <!-- /TMPL_LOOP -->
                     </select></li>
 			<li>
@@ -126,11 +136,19 @@ function Dopop(link) {
 	</div>
 </div>
 </div>
-</div><!-- TMPL_IF EXPR="OpacNav||results_loop" -->
+</div>
+<!-- TMPL_IF NAME="results_loop" -->
 <div class="yui-b"><div class="container">
-<!-- TMPL_IF NAME="results_loop" --><!-- TMPL_INCLUDE NAME="opac-topissues.inc" --><!-- /TMPL_IF -->
+<!-- TMPL_INCLUDE NAME="opac-topissues.inc" -->
+<!-- TMPL_IF NAME="OpacNav" --><!--TMPL_INCLUDE NAME="navigation.inc" --><!-- /TMPL_IF -->
+</div></div>
+<!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="OpacNav" -->
+<div class="yui-b"><div class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 </div></div>
 <!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
+
 </div>
 <!-- TMPL_INCLUDE NAME="opac-bottom.inc" -->
