@@ -197,6 +197,7 @@ for my $itm (@items) {
 my $dbh              = C4::Context->dbh;
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
+my $marcisbnsarray   = GetMarcISBN   ($record,$marcflavour);
 my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
 my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
@@ -209,6 +210,7 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      MARCAUTHORS             => $marcauthorsarray,
                      MARCSERIES              => $marcseriesarray,
                      MARCURLS                => $marcurlsarray,
+                     MARCISBNS               => $marcisbnsarray,
                      norequests              => $norequests,
                      RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
                      itemdata_ccode          => $itemfields{ccode},

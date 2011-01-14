@@ -140,8 +140,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     
     <!-- TMPL_IF NAME="pages" --><span class="results_summary"><span class="label">Physical details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></span><!-- /TMPL_IF -->
 
-    <!-- TMPL_IF name="normalized_isbn" -->
-        <span class="results_summary"><span class="label">ISBN: </span><!-- TMPL_VAR NAME="normalized_isbn" --></span>
+    <!-- TMPL_IF NAME="MARCISBNS" -->
+        <span class="results_summary"><span class="label">ISBN:</span><!-- TMPL_LOOP NAME="MARCISBNS" --><!-- TMPL_VAR NAME="marcisbn" --><!-- TMPL_IF NAME="__LAST__" -->.<!-- TMPL_ELSE -->; <!-- /TMPL_IF --><!-- /TMPL_LOOP --></span>
+    <!-- TMPL_ELSE -->
+        <!-- TMPL_IF name="normalized_isbn" -->
+            <span class="results_summary"><span class="label">ISBN: </span><!-- TMPL_VAR NAME="normalized_isbn" --></span>
+        <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="issn" -->
     <span class="results_summary"><span class="label">ISSN:</span><!-- TMPL_VAR NAME="issn" --></span>
