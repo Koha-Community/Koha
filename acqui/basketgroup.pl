@@ -183,8 +183,9 @@ sub printbasketgrouppdf{
     my ($basketgroupid) = @_;
     
     my $pdfformat = C4::Context->preference("OrderPdfFormat");
-    eval "use $pdfformat" ;
-    eval "use C4::Branch";
+    eval "use $pdfformat";
+    # FIXME consider what would happen if $pdfformat does not
+    # contain the name of a valid Perl module.
     
     my $basketgroup = GetBasketgroup($basketgroupid);
     my $bookseller = GetBookSellerFromId($basketgroup->{'booksellerid'});
@@ -244,7 +245,7 @@ sub printbasketgrouppdf{
     );
     my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} // C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
-    exit;
+    exit; # FIXME bad form to exit out of a subroutine like this
 }
 
 my $op = $input->param('op');
