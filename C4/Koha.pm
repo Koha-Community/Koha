@@ -115,6 +115,9 @@ sub slashifyDate {
 
 sub DisplayISBN {
     my ($isbn) = @_;
+		if (!length ($isbn)==13 && !length ($isbn)==10) {
+			$isbn=_isbn_cleanup($isbn);
+		}
     if (length ($isbn)<13){
     my $seg1;
     if ( substr( $isbn, 0, 1 ) <= 7 ) {
