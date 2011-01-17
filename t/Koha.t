@@ -2,7 +2,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 12;
+use Test::More tests => 8;
 
 use_ok('C4::Koha');
 
@@ -28,8 +28,4 @@ is(C4::Koha::_isbn_cleanup('0-590-35340-3'), '0590353403', '_isbn_cleanup remove
 is(C4::Koha::_isbn_cleanup('0590353403 (pbk.)'), '0590353403', '_isbn_cleanup removes parenthetical');
 is(C4::Koha::_isbn_cleanup('978-0-321-49694-2'), '0321496949', '_isbn_cleanup converts ISBN-13 to ISBN-10');
 
-is(C4::Koha::DisplayISBN($isbn13),$isbn13D,'DisplayISBN splits an ISBN-13 into 5 segments');
-is(C4::Koha::DisplayISBN($isbn10),$isbn10D,'DisplayISBN splits an ISBN-10 into 4 segments');
 
-is(C4::Koha::DisplayISBN('9780330356473'),$isbn13D,'DisplayISBN splits an ISBN-13 into 5 segments after fixing the ISBN by using _isbn_cleanup');
-is(C4::Koha::DisplayISBN('033035647X'),$isbn10D,'DisplayISBN splits an ISBN-10 into 4 segments after fixing the ISBN by using _isbn_cleanup');
