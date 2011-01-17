@@ -49,6 +49,7 @@ my $biblionumber = $query->param('biblionumber');
 my @subscriptionid = $query->param('subscriptionid');
 
 @subscriptionid= uniq @subscriptionid;
+@subscriptionid= sort @subscriptionid;
 my $subscriptiondescs;
 my $subscriptions;
 

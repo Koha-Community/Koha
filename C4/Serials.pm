@@ -724,9 +724,16 @@ sub GetSerials2 {
     my @serials;
 
     while ( my $line = $sth->fetchrow_hashref ) {
-        $line->{ "status" . $line->{status} } = 1;                                         # fills a "statusX" value, used for template status select list
-        $line->{"planneddate"}                = format_date( $line->{"planneddate"} );
-        $line->{"publisheddate"}              = format_date( $line->{"publisheddate"} );
+        $line->{ "status" . $line->{status} } = 1; # fills a "statusX" value, used for template status select list
+        # Format dates for display
+        for my $datefield ( qw( planneddate publisheddate ) ) {
+            if ($line->{$datefield} =~m/^00/) {
+                $line->{$datefield} = q{};
+            }
+            else {
+                $line->{$datefield} = format_date( $line->{$datefield} );
+            }
+        }
         push @serials, $line;
     }
     return @serials;
