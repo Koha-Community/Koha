@@ -31,6 +31,7 @@ use C4::Auth;
 use C4::Serials;
 use C4::Dates qw/format_date/;
 use C4::Circulation;  # to use itemissues
+use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 
 my $query=new CGI;
@@ -47,6 +48,16 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     authnotrequired => 0,
     flagsrequired   => {catalogue => 1},
     });
+
+if($query->cookie("holdfor")){
+    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    $template->param(
+        holdfor => $query->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
 
 # get variables
 
