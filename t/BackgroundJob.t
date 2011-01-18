@@ -5,16 +5,19 @@
 
 use strict;
 use warnings;
-
+use C4::Auth;
+use CGI;
 use Test::More tests => 8;
 
 BEGIN {
         use_ok('C4::BackgroundJob');
 }
-
+my $query = new CGI;
+my ($userid, $cookie, $sessionID) = &checkauth($query, 1);
 #my ($sessionID, $job_name, $job_invoker, $num_work_units) = @_;
 my $background;
-ok ($background=C4::BackgroundJob->new);
+diag $sessionID;
+ok ($background=C4::BackgroundJob->new($sessionID));
 ok ($background->id);
 
 $background->name("George");
