@@ -13,7 +13,7 @@ use C4::Context;
 use Data::Dumper;
 use Test::More;
 
-use Test::Class::Load qw ( . ); # run from the t directory
+use Test::Class::Load qw ( . ); # run from the t/db_dependent directory
 
 KohaTest::clear_test_database();
 KohaTest::create_test_database();
