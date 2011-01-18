@@ -98,8 +98,8 @@ my $test5xml=qq(\@book{,
 
 is ($bibtex, $test5xml, "testing bibtex");
 
-my @entity=C4::Record::_entity_encode("BJ??RN");
-is ($entity[0], "BJ&#xC3;&#x96;RN", "Html umluts");
+my @entity=C4::Record::_entity_encode("Björn");
+is ($entity[0], "Bj&#xC3;&#xB6;rn", "Html umlauts");
 
 
 
