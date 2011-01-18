@@ -5,7 +5,7 @@
 
 use strict;
 use warnings;
-use Test::Class::Load qw ( . );
+use Test::Class::Load qw ( t/db_dependent/ );
 use Test::More tests => 4;
 use MARC::Record;
 use C4::Biblio;
