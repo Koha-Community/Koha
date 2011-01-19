@@ -281,3 +281,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetBiblioDefaultView','normal','Choix de la vue par défaut d''une notice détaillée à l''intranet : normal, labeled_marc, marc or isbd','normal|marc|isbd|labeled_marc','Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('IntranetUserCSS','','Add CSS to be included in the intranet in an embedded <style> tag.',NULL,'free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACNoResultsFound','','Display this HTML when no results are found for a search in the OPAC','70|10','Textare    a');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacPublic',1,'Turn on/off public OPAC',NULL,'YesNo');
