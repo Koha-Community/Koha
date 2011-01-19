@@ -1,11 +1,10 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!  
-# Add more tests here!!!
+# This is to test C4/Members
+# It requires a working Koha database with the sample data
 
 use strict;
 use warnings;
-use Test::Class::Load qw(t/);
 
 use Test::More tests => 15;
 
@@ -13,26 +12,30 @@ BEGIN {
         use_ok('C4::Members');
 }
 
-#KohaTest::clear_test_database();
-#KohaTest::create_test_database();
 
-#my %data;
-#$data{cardnumber}=51;
-#my $addmem=AddMember(%data);
-#warn $addmem;
+# Make a borrower for testing
+my $data = { cardnumber => 'TESTCARD01',
+    firstname => 'Marie',
+    surname => 'McKnight',
+    categorycode => 'S',
+    branchcode => 's'
+    };
 
-my $member=GetMemberDetails("","23529000878885");
+my $addmem=AddMember(%$data);
+
+
+my $member=GetMemberDetails("","TESTCARD01");
 is ($member->{firstname}, "Marie", "Got member");
 
 $member->{firstname}="Claire";
 ModMember(%$member);
-my $changedmember=GetMemberDetails("","23529000878885");
+my $changedmember=GetMemberDetails("","TESTCARD01");
 is ($changedmember->{firstname}, "Claire", "Member Changed");
 
 $member->{firstname}="Marie";
 ModMember(%$member);
-my $changedmember=GetMemberDetails("","23529000878885");
-is ($changedmember->{firstname}, "Marie", "Membered Returned");
+$changedmember=GetMemberDetails("","TESTCARD01");
+is ($changedmember->{firstname}, "Marie", "Member Returned");
 
 $member->{email}="Marie\@email.com";
 ModMember(%$member);
@@ -51,20 +54,20 @@ is ($results->[0]->{surname}, "Mcknight", "Surname Search works");
 $member->{phone}="555-12123";
 ModMember(%$member);
 
-my @searchstring=("555-12123");
-my ($results) = Search(\@searchstring,undef,undef,undef,["phone"]);
+@searchstring=("555-12123");
+($results) = Search(\@searchstring,undef,undef,undef,["phone"]);
 is ($results->[0]->{phone}, "555-12123", "phone Search works");
 
-my $checkcardnum=C4::Members::checkcardnumber("23529000878885", "");
+my $checkcardnum=C4::Members::checkcardnumber("TESTCARD01", "");
 is ($checkcardnum, "1", "Card No. in use");
 
-my $checkcardnum=C4::Members::checkcardnumber("67", "");
+$checkcardnum=C4::Members::checkcardnumber("67", "");
 is ($checkcardnum, "0", "Card No. not used");
 
 my $age=GetAge("1992-08-14", "2011-01-19");
 is ($age, "18", "Age correct");
 
-my $age=GetAge("2011-01-19", "1992-01-19");
+$age=GetAge("2011-01-19", "1992-01-19");
 is ($age, "-19", "Birthday In the Future");
 
 my $sortdet=C4::Members::GetSortDetails("lost", "3");
@@ -76,4 +79,5 @@ is ($sortdet2, "Children's Area", "Child area works");
 my $sortdet3=C4::Members::GetSortDetails("withdrawn", "1");
 is ($sortdet3, "Withdrawn", "Withdrawn works");
 
-
+# clean up 
+DelMember($member->{borrowernumber});
