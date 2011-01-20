@@ -192,6 +192,9 @@ $.tablesorter.addParser({
     <!-- /TMPL_IF -->
 
     <div id="opac-user-checkouts"><!-- TMPL_IF NAME="issues_count" -->
+        <form action="/cgi-bin/koha/opac-renew.pl" method="post">
+	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
+	<input type="hidden" name="from" value="opac_user" />
         <table id="checkoutst">
         <caption><!-- TMPL_VAR NAME="issues_count" --> Items Checked Out</caption>
        <thead><tr>
@@ -246,7 +249,7 @@ $.tablesorter.addParser({
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="OpacRenewalAllowed" -->
                     <!-- TMPL_UNLESS name="patron_flagged" -->
-                    <td><!-- TMPL_IF NAME="status" --><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
+                    <td><!-- TMPL_IF NAME="status" --><input type="checkbox" name="item" value="<!-- TMPL_VAR NAME="itemnumber"-->"/><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
                         <!-- TMPL_ELSE -->
                         Not renewable<!-- TMPL_IF NAME="too_many" --> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span><!-- TMPL_ELSE --><!-- TMPL_IF NAME="on_reserve" --> <span class="renewals">(On hold)</span><!-- /TMPL_IF --><!-- /TMPL_IF --> 
                         <!-- /TMPL_IF --></td>
@@ -258,7 +261,13 @@ $.tablesorter.addParser({
             </tr>
         <!-- /TMPL_LOOP --></tbody>
         </table>
+	
 		<!-- TMPL_IF name="OpacRenewalAllowed" -->
+		<input type="submit" value="Renew Selected" />
+		<!-- /TMPL_IF -->
+		</form>
+		<!-- TMPL_IF name="OpacRenewalAllowed" -->
+		
 		<form action="/cgi-bin/koha/opac-renew.pl" method="post">
 			<input type="hidden" name="from" value="opac_user" />
 			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
