@@ -6,7 +6,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 5;
+use Test::More tests => 8;
 
 BEGIN {
         use_ok('C4::Output::JSONStream');
