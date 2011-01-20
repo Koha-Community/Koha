@@ -16,7 +16,7 @@ BEGIN {
 # Make a borrower for testing
 my $data = { cardnumber => 'TESTCARD01',
     firstname => 'Marie',
-    surname => 'McKnight',
+    surname => 'Mcknight',
     categorycode => 'S',
     branchcode => 's'
     };
