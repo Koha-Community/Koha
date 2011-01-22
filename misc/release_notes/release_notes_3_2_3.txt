@@ -1,0 +1,258 @@
+RELEASE NOTES FOR KOHA 3.2.3 - 22 January 2011
+========================================================================
+
+Koha is the first free and open source software library automation package
+(ILS). Development is sponsored by libraries of varying types and sizes,
+volunteers, and support companies from around the world.
+The website for the Koha project is
+
+    http://koha-community.org/
+
+Koha 3.2.3 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.02.03.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+Koha 3.2.3 is a bugfix/maintenance release.
+
+Highlights of 3.2.3
+======================
+
+Some of the higher profile bugs addressed in this release are:
+
+4286    Subscription expired at its creation
+4438    incorrect "Budget total exceeds period allocation" error when editing fund
+4945    Patron search is limited by default to the currently logged-in library
+5480    Some usual UNIMARC cataloguing plugins doesn't work anymore
+5542    Limit to availability not working
+5611    can't add comments and tags in the OPAC when mod_perl is activated
+
+This release also contains a variety of minor enhancements improving
+Koha's interface and underlying scripts.
+
+Bugs fixed in 3.2.3
+======================
+
+3153    'maxoutstanding' syspref does not disallow placing holds on staff side
+3199    batchRebuildBiblioTables.pl failed due to missing argument
+3262    OPAC needs syspref to show homebranch instead of current location on detail page
+3347    Inconsistencies with tables in opac-shelves.tmpl
+3459    topissues doesn't take care of ccode.
+3550    Use GetRecordValue to get the subtitle
+3737    search order title should me more fuzzy
+3743    Acquisition stats ordering by month
+3859    Attach Item Clarification
+3918    Add to order lists inconsistent
+3987    New Sys Prefs Branch - Alphabetize prefs in sections
+4131    link on subscripton page says 'create routing' even when one exists
+4473    Recent comments view for the OPAC
+4826    Choose either 'new basket' or 'add basket'
+4885    Only 1 ISBN shows in non-XSL detail view
+4891    Order facets in left sidebar of search results
+4908    OPAC patron details page doesn't show patron's home library
+4942    When a new patron is created and the expiry date is left blank, it comes up with an invalid date
+4946    hold warning needs rewording
+4950    checkbox should be removed when can't place a hold
+4984    Invalid XHTML in staff client search results
+4997    More searches menu not on OPAC MARC and ISBD detail pages
+5006    Invalid XHTML in record matching rules template
+5040    "Distance" misspelled in default framework
+5045    The help doesn't work if something strips the referrers
+5055    crontab.example should use standard file paths
+5143    Subtitles not showing on view_holdsqueue.pl
+5294    Vendor name shows with '%20'
+5327    Unit tests required for all C4 modules
+5374    Update date/time last transaction (MARC 005) when saving biblio record
+5375    Update date/time last transaction (MARC 005) when saving authority record
+5398    several pages in the staff interface do not obey noItemTypeImages
+5399    remove useless eval 'use C4::Foo'
+5403    C4::Koha::DisplayISBN should be wrapper for Business::ISBN->as_string
+5419    account fees not showing as reason to not check out
+5446    Item creation in Acquisition module doesn't control mandatory fields
+5451    can add tags with userlogin turned off
+5470    improvements to results display in the staff client
+5486    HomeOrHoldingBranch description inaccurate
+5489    Send hold email to branch email address if it exists instead of koha email address
+5492    import patrons page title reads 'cataloging'
+5497    add option to supply library phone #, address, and other fields to circ receipts
+5510    Hard to tell what instance a cron error comes from
+5518    Add to shelf icon doesn't appear in OPAC results page
+5526    List of lists should be in alphabetical order by list name
+5531    Missing sysprefs in language specific files
+5550    Wrong file name in package-installed docs
+5556    OPAC does not display the type of authority
+5557    Logs cannot be viewed by user with granular permission view_system_logs
+5562    circ history says 'issues' instead of 'checkouts'
+5563    note on enhanced content about cover images inaccurate
+5570    item types not showing on other editions
+5571    tags as bulleted list too long
+5582    MARC Field Documentation links incorrect on tags < 080
+5583    Rename variable to reflect what it is
+5585    today's date does not display on receipts and slips
+5589    Duplicate Code in Suggestions
+5601    SIP Due dates miscalculated via DateTime
+5603    advance_notices.pl generating "uninitialized value in hash element"
+5604    additional icons for the Seshat set
+
+Commits in 3.2.3 without a referenced bug report:
+
+    * Added more unit tests to check when JSONStream should fail.
+    * Added unit tests to test all of get_amazon_tld in Amazon.pm.
+    * Added unit tests for Biblio and moved it to db_dependent as it requires the database.
+    * Added unit tests using a test database for XISBN.
+    * Created unit testing using the testdatabase for XISBN.
+    * Added extra unit tests to Debug.t
+    * Adding new developers to the history
+    * Removing OPACNoResultsFound Enhancement Syspref
+    * Deleted old sample budget sql-data for Ukrainian and Russian
+
+System requirements
+======================
+
+    Changes since 3.0:
+
+    * The minimum version of Perl required is now 5.8.8.
+    * There are a number of new Perl module dependencies.
+      Run ./koha_perl_deps.pl -u -m to get a list of
+      any new modules to install during upgrade.
+
+Upgrades
+======================
+
+The structure of the acquisitions tables have changed significantly
+from 3.0.x.  In particular, the budget hierarchy is quite different.
+During an upgrade, a new database table is created called fundmapping
+that contains a record of how budgets were mapped.  It is strongly
+recommended that users of Koha 3.0.x acquisitions carefully review
+the results of the upgrade before resuming ordering in Koha 3.2.x.
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, several translations of the
+Koha manual are available:
+
+English: http://koha-community.org/documentation/3-2-manual/
+Spanish: http://koha-community.org/documentation/3-2-manual-es/
+French:  http://koha-community.org/documentation/3-2-manual-fr/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://www.kohadocs.org/usersguide/apb.html
+
+for information about translating Koha, and join the koha-translate
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.2 is
+
+Release Manager:        Galen Charlton <gmcharlt@gmail.com>
+Documentation Manager:  Nicole Engard <nengard@gmail.com>
+Translation Manager:    Chris Cormack <chris@bigallofwax.co.nz>
+Release Maintainer (3.0.x):
+                        Henri-Damien Laurent <henridamien.laurent@biblibre.com>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to Koha 3.2.3:
+
+Nahuel Angelinetti
+Claudia
+Colin Campbell
+Galen Charlton
+Chris Cormack
+Frédéric Demians
+Johnboy
+Marcel de Rooy
+Serhij Dubyk {Сергій Дубик}
+Nicole Engard
+Magnus Enger
+Amit Gupta
+Srdjan Jankovic
+Henri-Damien Laurent
+Owen Leonard
+Chris Nighswonger
+Liz Rea
+Bryce Sanchez
+Robin Sheat
+Spartaness
+Zach Sim
+Ian Walls
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send patch against these release notes to
+koha-patches@lists.koha-community.org.
+
+The 3.2.x Release Maintainer especially thanks the 3.4 Release Team and all
+who participated in QA for their diligent labors in testing and pushing well
+over 287 patches since the 3.2.0 relese. Their continued work very much makes
+possible the release of 3.2.3 on its announced schedule.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.2.x (i.e., this version of Koha and future bugfix
+releases) is 3.2.x.
+
+The next major feature release of Koha will be Koha 3.4.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+Naku te rourou, nau te rourou, ka ora ai te iwi.
