@@ -208,12 +208,6 @@ OPAC:
                   no: "Don't allow"
             - patrons to see what books they have checked out in the past.
         -
-            - pref: OPACShelfBrowser
-              choices:
-                  yes: Show
-                  no: "Don't show"
-            - "a shelf browser on item details pages, allowing patrons to see what's near that item on the shelf. Note that this uses up a fairly large amount of resources on your server, and should be avoided if your collection has a large number of items."
-        -
             - pref: OpacTopissue
               choices:
                   yes: Allow
@@ -300,3 +294,31 @@ OPAC:
                   yes: Keep
                   no: "Don't keep"
             - patron search history in the OPAC.
+    Shelf Browser:
+        -
+            - pref: OPACShelfBrowser
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - "a shelf browser on item details pages, allowing patrons to see what's near that item on the shelf. Note that this uses up a fairly large amount of resources on your server, and should be avoided if your collection has a large number of items."
+        -
+            - pref: ShelfBrowserUsesLocation
+              default: 1
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - "the item location when finding items for the shelf browser."
+        -
+            - pref: ShelfBrowserUsesHomeBranch
+              default: 1
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - "the item home branch when finding items for the shelf browser."      
+        -
+            - pref: ShelfBrowserUsesCcode
+              default: 0
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - "the item collection code when finding items for the shelf browser."      
