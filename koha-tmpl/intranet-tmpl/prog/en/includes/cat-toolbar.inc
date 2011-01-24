@@ -148,31 +148,7 @@ function confirm_items_deletion() {
 	        container: this,
 			onclick: {fn: printBiblio }
 		});
-		<!-- TMPL_IF NAME="CAN_user_reserveforothers" --><!-- TMPL_UNLESS NAME="norequests" -->
-		<!-- TMPL_IF NAME="holdfor" -->
-		//	Create an array of YAHOO.widget.MenuItem configuration properties
-		var onButtonClick = function () {
-			location.href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->";
-		}
-		var HoldForButtonMenu = [
-			{ text: "Place hold", url: "/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" },
-			{ text: "Place hold for <!-- TMPL_VAR NAME="holdfor_firstname" --> <!-- TMPL_VAR NAME="holdfor_surname" --> (<!-- TMPL_VAR NAME="holdfor_cardnumber" -->)", url: "/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&findborrower=<!-- TMPL_VAR NAME="holdfor_cardnumber" -->" }
-		];
 
-		//	Instantiate a Split Button using the array of YAHOO.widget.MenuItem
-		//	configuration properties as the value for the "menu"
-		//	configuration attribute.
-
-		var HoldForButton = new YAHOO.widget.Button({
-				id: "holdfor",
-				type: "split",
-				label: "Place hold",
-				name: "holdfor",
-				menu: HoldForButtonMenu,
-				container: this,
-				onclick: { fn: onButtonClick }
-		});
-	    <!-- TMPL_ELSE -->
 	    new YAHOO.widget.Button({
 			id: "placehold",
 			type: "link",
@@ -180,8 +156,6 @@ function confirm_items_deletion() {
 			container: this,
 			href: "/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"
 	     });
-	    <!-- /TMPL_IF -->
-	    <!-- /TMPL_IF --><!-- /TMPL_IF -->
 	    <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
 		new YAHOO.widget.Button({
 			id: "z3950search",

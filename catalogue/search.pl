@@ -145,7 +145,6 @@ use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Languages qw(getAllLanguages);
 use C4::Koha;
-use C4::Members qw(GetMember);
 use C4::VirtualShelves qw(GetRecentShelves);
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
@@ -180,16 +179,6 @@ else {
 );
 if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
-}
-
-if($cgi->cookie("holdfor")){
-    my $holdfor_patron = GetMember('borrowernumber' => $cgi->cookie("holdfor"));
-    $template->param(
-        holdfor => $cgi->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->{'surname'},
-        holdfor_firstname => $holdfor_patron->{'firstname'},
-        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
-    );
 }
 
 ## URI Re-Writing

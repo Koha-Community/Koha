@@ -30,7 +30,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Branch;
 use C4::Reserves;
-use C4::Members; # to use GetMember
+use C4::Members;
 use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
@@ -50,16 +50,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         flagsrequired   => { catalogue => 1 },
     }
 );
-
-if($query->cookie("holdfor")){
-    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
-    $template->param(
-        holdfor => $query->cookie("holdfor"),
-        holdfor_surname => $holdfor_patron->{'surname'},
-        holdfor_firstname => $holdfor_patron->{'firstname'},
-        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
-    );
-}
 
 my $biblionumber = $query->param('biblionumber');
 my $fw = GetFrameworkCode($biblionumber);
