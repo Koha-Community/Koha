@@ -62,9 +62,10 @@ foreach my $item (@$items) {
                                     format_string       => $layout->get_attr('format_string'),
                                       );
     my $format_string = $layout->get_attr('format_string');
-    my @data_fields = split(/, /, $format_string);
+    my @data_fields = map { $_ eq 'callnumber' ? 'itemcallnumber' : $_ } # see bug 5653 
+                      split(/, /, $format_string);
     my $csv_data = $label->csv_data();
-    for (my $i = 0; $i < (scalar(@data_fields) - 1); $i++) {
+    for (my $i = 0; $i <= (scalar(@data_fields) - 1); $i++) {
         push(@{$xml_data->{'label'}[$item_count]->{$data_fields[$i]}}, $$csv_data[$i]);
     }
     $item_count++;

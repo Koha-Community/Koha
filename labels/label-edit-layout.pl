@@ -130,7 +130,7 @@ elsif  ($op eq 'save') {
                     font_size       => $cgi->param('font_size') || 3,
                     callnum_split   => ($cgi->param('callnum_split') ? 1 : 0),
                     text_justify    => $cgi->param('text_justify') || 'L',
-                    format_string   => $cgi->param('format_string') || 'title, author, isbn, issn, itemtype, barcode, callnumber',
+                    format_string   => $cgi->param('format_string') || 'title, author, isbn, issn, itemtype, barcode, itemcallnumber',
     );
     if ($layout_id) {   # if a label_id was passed in, this is an update to an existing layout
         $layout = C4::Labels::Layout->retrieve(layout_id => $layout_id);
