@@ -60,7 +60,6 @@ my ($template, $borrowernumber, $cookie)= get_template_and_user({
     type => "intranet",
     debug => 1,
 });
-my $pagesize = 20;
 
 $template->param(  script_name => $script_name,
                  ($op||'else') => 1 );
@@ -220,7 +219,7 @@ sub default_form {
     my $count = scalar(@$results);
 	my @loop_data = ();
 	# builds value list
-	for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+	for (my $i=0; $i < $count; $i++){
 		my %row_data;  # get a fresh hash for the row data
 		$row_data{category}              = $results->[$i]{'category'};
 		$row_data{authorised_value}      = $results->[$i]{'authorised_value'};
@@ -235,19 +234,5 @@ sub default_form {
 	$template->param( loop     => \@loop_data,
                           tab_list => $tab_list,
                           category => $searchfield );
-
-	if ($offset>0) {
-		my $prevpage = $offset-$pagesize;
-		$template->param(isprevpage => $offset,
-						prevpage=> $prevpage,
-						searchfield => $searchfield,
-		 );
-	}
-	if ($offset+$pagesize<$count) {
-		my $nextpage =$offset+$pagesize;
-		$template->param(nextpage =>$nextpage,
-						searchfield => $searchfield,
-		);
-	}
 }
 

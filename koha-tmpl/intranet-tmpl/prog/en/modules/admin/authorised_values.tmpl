@@ -221,9 +221,9 @@
  <!-- TMPL_IF EXPR="category eq 'NOT_LOAN'" -->
     <p>Statuses to describe why an item is not for loan</p>
  <!-- /TMPL_IF -->
-<h3>Authorized values for category <!-- TMPL_VAR name="category" --> :</h3>
+<h3>Authorized values for category <!-- TMPL_VAR name="category" -->:</h3>
 
-<span id="pagertable_authorized_values" class="pager">
+<!-- TMPL_IF NAME="loop" --><span id="pagertable_authorized_values" class="pager">
 	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
 		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
 		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/prev.png" class="prev"/>
@@ -241,9 +241,9 @@
 			<option value="200">200</option>
 		</select>
 	</form>
-</span>
+</span><!-- /TMPL_IF -->
 
-<table id="table_authorized_values" cellspacing="1" class="tablesorter">
+<!-- TMPL_IF NAME="loop" --><table id="table_authorized_values" class="tablesorter">
 <thead><tr>
 	<th>Authorized value</th>
 	<th>Description</th>
@@ -267,7 +267,9 @@
 	<td><a href="<!-- TMPL_VAR name="delete" -->">Delete</a></td>
 </tr>
 <!-- /TMPL_LOOP -->
-</tbody></table>
+</tbody></table><!-- TMPL_ELSE -->
+<div class="dialog message">There are no authorized values defined for <!-- TMPL_VAR NAME="category" --></div>
+<!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="isprevpage" -->
 <form class="inline" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
