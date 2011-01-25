@@ -108,7 +108,7 @@ sub param{
     while(@_){
 	my $key = shift;
 	my $val = shift;
-        utf8::decode($val) if utf::is_utf8($val);
+        utf8::decode($val) if utf8::is_utf8($val);
 	$self->{VARS}->{$key} = $val;
     }
 }
