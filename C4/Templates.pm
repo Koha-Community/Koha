@@ -109,6 +109,7 @@ sub param{
     while(@_){
 	my $key = shift;
 	my $val = shift;
+        utf8::decode($val) if $key eq "XSLTBloc";
 	$self->{VARS}->{$key} = $val;
     }
 }
