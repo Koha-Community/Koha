@@ -429,7 +429,8 @@ sub BuildItemsData{
 			my %this_row;
 			foreach my $field (grep {$_->tag() eq $itemtagfield} $itemmarc->fields()) {
 				# loop through each subfield
-				if (my $itembranchcode=$field->subfield($branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+				my $itembranchcode=$field->subfield($branchtagsubfield);
+				if ($itembranchcode && C4::Context->preference("IndependantBranches")) {
 						#verifying rights
 						my $userenv = C4::Context->userenv();
 						unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $itembranchcode))){
