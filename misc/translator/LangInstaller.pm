@@ -86,7 +86,7 @@ sub po_filename {
     my $self = shift;
 
     my $context    = C4::Context->new;
-    my $trans_path = $context->config('intranetdir') . '/misc/translator/po';
+    my $trans_path = $Bin . '/po';
     my $trans_file = "$trans_path/" . $self->{lang} . "-pref.po";
     return $trans_file;
 }
