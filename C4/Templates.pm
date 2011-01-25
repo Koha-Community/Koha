@@ -98,7 +98,6 @@ sub output {
 	$vars->{$k} = $self->{VARS}->{$k};
     }
     my $data;
-    binmode( STDOUT, ":utf8" );
     $template->process( $self->filename, $vars, \$data) || die "Template process failed: ", $template->error();; 
     return $data;
 }
@@ -109,7 +108,7 @@ sub param{
     while(@_){
 	my $key = shift;
 	my $val = shift;
-        utf8::decode($val) if $key eq "XSLTBloc";
+        utf8::decode($val) if utf::is_utf8($val);
 	$self->{VARS}->{$key} = $val;
     }
 }
