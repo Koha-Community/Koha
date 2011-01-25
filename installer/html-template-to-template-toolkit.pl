@@ -27,6 +27,9 @@ EOH
 my $tmpl_in_dir      = 'koha-tmpl';
 my $tmpl_out_dir     = 'koha-tt';
 
+# variables NOT to scope, in other words, variables that need to remain global (case sensitive)
+my @globals = ("themelang");
+
 # Arguments:
 my $KOHA_ROOT;
 my $tmpl_extn_match  = "tmpl|inc|xsl"; # Type match defaults to *.tmpl plus *.inc if not specified
@@ -128,7 +131,13 @@ foreach my $file (@template_files) {
 	$input_tmpl =~ s/<[!-]*\s*TMPL_INCLUDE\s+NAME\s?=\s?"(.*?\.inc)"\s*-*>/[% INCLUDE '$1' %]/ig;
 	$input_tmpl =~ s/<[!-]*\s*TMPL_INCLUDE\s+NAME\s?=\s?"(.*?)"\s*-*>/[% INCLUDE $1 %]/ig;
 
-	if ($input_tmpl =~ m/<[!-]*\s*TMPL_LOOP/i ){
+        #reverse scoping bug fix
+        for my $tag (@globals){
+            next unless $cur_scope[-1];
+            $input_tmpl =~ s/$cur_scope[-1]$tag/$tag/g;
+        }
+
+ 	if ($input_tmpl =~ m/<[!-]*\s*TMPL_LOOP/i ){
 	    $for_loop_found = 1;
 	}
 
