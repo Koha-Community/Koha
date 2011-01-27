@@ -1,9 +1,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: FaMAF\n"
-"POT-Creation-Date: 2010-12-15 10:22+0100\n"
-"PO-Revision-Date: 2010-12-21 15:54+0200\n"
-"Last-Translator: Martin <jmlongo@uncu.edu.ar>\n"
+"POT-Creation-Date: 2011-01-15 10:37+0100\n"
+"PO-Revision-Date: 2011-01-17 19:18+0200\n"
+"Last-Translator: shermira <santiago.hermira@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@lists.koha.org>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
@@ -22,7 +22,7 @@ msgid "#"
 msgstr "#"
 
 #. A
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:170
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:174
 msgid "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
 msgstr "$<!-- TMPL_VAR NAME=\"code\" --> <!-- TMPL_VAR NAME=\"value\" -->"
 
@@ -41,7 +41,7 @@ msgstr "%s %s %s %s (%s)"
 #. %1$s: TMPL_VAR name=firstname
 #. %2$s: TMPL_VAR name=surname
 #. %3$s: TMPL_VAR name=cardnumber
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:223
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:219
 #, c-format
 msgid "%s %s (%s)"
 msgstr "%s %s (%s)"
@@ -75,26 +75,26 @@ msgstr "%s &rsaquo; Autopréstamo"
 
 #. %1$s: TMPL_VAR name=description
 #. %2$s: TMPL_VAR name=categorycode
-#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:153
+#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:154
 #, c-format
 msgid "%s (%s)"
 msgstr "%s (%s)"
 
 #. %1$s: TMPL_VAR name=bibliotitle
 #. %2$s: TMPL_VAR name=biblionumber
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:38
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:57
 #, c-format
 msgid "%s (Record no. %s)"
 msgstr "%s (Registro nro. %s)"
 
 #. %1$s: TMPL_VAR name=unititle
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:160
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:164
 #, c-format
 msgid "%s ;"
 msgstr "%s;"
 
 #. %1$s: TMPL_VAR name=review
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:661
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:673
 #, c-format
 msgid "%s <a1>Edit</a>"
 msgstr "%s <a1>Editar</a>"
@@ -163,14 +163,6 @@ msgstr "%s registros"
 msgid "%s issues"
 msgstr "%s ejemplares"
 
-#. For the first occurrence,
-#. %1$s: TMPL_VAR name=count
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:382
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:451
-#, c-format
-msgid "%s item(s)"
-msgstr "%s ítem(s)"
-
 #. %1$s: TMPL_VAR name=monthlength
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:82
 #, c-format
@@ -179,13 +171,13 @@ msgstr "%s meses"
 
 #. %1$s: TMPL_VAR name=rank
 #. %2$s: TMPL_VAR name=reservecount
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:305
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:296
 #, c-format
 msgid "%s out of %s"
 msgstr "%s de %s"
 
 #. %1$s: TMPL_VAR name=ExpectedAtLibrary
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:507
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:498
 #, c-format
 msgid "%s since"
 msgstr "%s desde"
@@ -271,7 +263,7 @@ msgid "&#8225;<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->"
 msgstr "&#8225;<!-- TMPL_VAR NAME=code --> <!-- TMPL_VAR NAME=value -->"
 
 #. %1$s: TMPL_VAR name=copyrightdate
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:719
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:731
 #, c-format
 msgid "&copy;%s"
 msgstr "&copy;%s"
@@ -282,8 +274,8 @@ msgstr "&copy;%s"
 #: opac-tmpl/prog/en/modules/opac-account.tmpl:14
 #: opac-tmpl/prog/en/modules/opac-messaging.tmpl:28
 #: opac-tmpl/prog/en/modules/opac-passwd.tmpl:12
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:186
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:309
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:188
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:373
 #: opac-tmpl/prog/en/modules/opac-userdetails.tmpl:12
 msgid "&gt;"
 msgstr "&gt;"
@@ -914,21 +906,22 @@ msgstr "(%s total)"
 #: opac-tmpl/prog/en/includes/item-status.inc:31
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:159
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:180
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:63
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:75
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:466
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tmpl:38
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:15
 #: opac-tmpl/prog/en/modules/opac-alert-subscribe.tmpl:29
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:137
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:242
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:521
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:582
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:721
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:247
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:533
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:594
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:733
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:200
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:301
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:373
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:298
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:372
 #: opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:37
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:277
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:272
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:281
 #: opac-tmpl/prog/en/modules/sco/sco-main.tmpl:202
 #, c-format
 msgid "(%s)"
@@ -942,7 +935,7 @@ msgstr "(%s)"
 msgid "(%s),"
 msgstr "(%s),"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:401
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:413
 #, c-format
 msgid "(<a1>Browse Shelf</a>)"
 msgstr "(<a1>Navegar en estantería</a>)"
@@ -1072,36 +1065,37 @@ msgstr "(búsquedas relacionadas:"
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:1
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:108
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:137
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:721
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:299
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:371
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:275
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:733
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:296
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:370
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:266
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:270
 #: opac-tmpl/prog/en/modules/opac-opensearch.tmpl:34
 #, c-format
 msgid ", %s"
 msgstr ", %s"
 
 #. %1$s: TMPL_VAR name=collectionissn
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:152
-#, c-format, 
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:156
+#, c-format
 msgid ", ISSN %s"
 msgstr ", ISSN %s"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:421
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:433
 msgid ", Shelving Location:"
 msgstr ", Ubicación en el estante:"
 
 #. %1$s: TMPL_VAR name=author
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:295
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:272
 #, c-format
 msgid ", by %s"
 msgstr ", por %s"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:215
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:212
 msgid ", none of these items can be placed on hold."
 msgstr ", no se puede reservar ninguno de estos items."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:167
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:166
 #, c-format
 msgid ""
 ", you cannot place holds because the library doesn't have up-to-date "
@@ -1110,11 +1104,11 @@ msgstr ""
 ", no puede hacer reservas porque la biblioteca no tiene actualizada su "
 "<a1>informacion de contacto</a>."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:181
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:178
 msgid ", you cannot place holds because your account has been frozen."
 msgstr ", no puede reservar porque su cuenta está congelada."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:174
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:172
 msgid ""
 ", you cannot place holds because your library card has been marked as lost "
 "or stolen."
@@ -1126,13 +1120,13 @@ msgstr ""
 #. %1$s: TMPL_VAR name=publishercode
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:158
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:161
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:62
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:63
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:65
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:74
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:75
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:77
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:218
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:219
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:221
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:246
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:243
 #, c-format
 msgid "- %s"
 msgstr "- %s"
@@ -1144,7 +1138,7 @@ msgid "- %s,"
 msgstr "- %s"
 
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "- You must enter a List Name"
 msgstr "- Debe introducir un nombre de lista"
 
@@ -1153,9 +1147,9 @@ msgstr "- Debe introducir un nombre de lista"
 msgid "- You must enter a Title"
 msgstr "- Debe introducir un título"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:80
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:197
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:828
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:108
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:230
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:835
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tmpl:11
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tmpl:17
 msgid "-- Choose Format --"
@@ -1165,6 +1159,7 @@ msgstr "-- Escoja Formato --"
 #. %1$s: TMPL_VAR name=pages
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:414
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:125
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:265
 #, c-format
 msgid ". %s"
 msgstr ". %s"
@@ -1232,12 +1227,12 @@ msgid "/opac-tmpl/prog/famfamfam/"
 msgstr "/opac-tmpl/prog/famfamfam/"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:6
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:79
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:91
 msgid "10 titles"
 msgstr "10 títulos"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:12
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:85
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:97
 msgid "100 titles"
 msgstr "100 títulos"
 
@@ -1247,7 +1242,7 @@ msgid "100,110,111,700,710,711"
 msgstr "100,110,111,700,710,711"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:39
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:116
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:126
 msgid "12 months"
 msgstr "12 meses"
 
@@ -1256,7 +1251,7 @@ msgid "130,240"
 msgstr "130,240"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:7
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:80
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:92
 msgid "15 titles"
 msgstr "15 títulos"
 
@@ -1277,12 +1272,12 @@ msgid "2 years"
 msgstr "2 años"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:8
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:81
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:93
 msgid "20 titles"
 msgstr "20 títulos"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:37
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:114
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:124
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:43
 msgid "3 months"
 msgstr "3 meses"
@@ -1292,12 +1287,12 @@ msgid "3 weeks"
 msgstr "3 semanas"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:9
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:82
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:94
 msgid "30 titles"
 msgstr "30 títulos"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:10
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:83
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:95
 msgid "40 titles"
 msgstr "40 títulos"
 
@@ -1306,12 +1301,12 @@ msgid "440,490"
 msgstr "440,490"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:11
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:84
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:96
 msgid "50 titles"
 msgstr "50 títulos"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:38
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:115
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:125
 msgid "6 months"
 msgstr "6 meses"
 
@@ -1329,11 +1324,11 @@ msgstr ":,;/"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=place
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:64
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:66
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:76
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:78
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:220
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:223
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:153
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:157
 #, c-format
 msgid "; %s"
 msgstr "; %s"
@@ -1371,7 +1366,8 @@ msgstr "; Tipo de material visual:"
 #. LINK
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:9
 msgid "<!-- TMPL_VAR NAME=\"LibraryName\" ESCAPE=\"HTML\" --> Search RSS Feed"
-msgstr "<!-- TMPL_VAR NAME=\"LibraryName\" ESCAPE=\"HTML\" --> Buscar fuente RSS"
+msgstr ""
+"<!-- TMPL_VAR NAME=\"LibraryName\" ESCAPE=\"HTML\" --> Buscar fuente RSS"
 
 #. INPUT type=text
 #: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:78
@@ -1496,13 +1492,13 @@ msgstr ""
 msgid "<a1>HELP</a> with the self checkout system"
 msgstr "<a1>AYUDA</a> con el sistema de autopréstamo"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:688
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:700
 #, c-format
 msgid "<a1>Log in to your account</a> to post a comment."
 msgstr "<a1>Ingrese a su cuenta</a> para hacer un comentario."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:419
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:433
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:480
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:494
 #, c-format
 msgid "<a1>Log in</a> to create new Lists."
 msgstr "<a1>Ingrese</a> para crear nuevas listas."
@@ -1517,8 +1513,8 @@ msgstr "<a1>Ingrese</a> para ver sus etiquetas."
 msgid "<a1>Search history</a> [<a2>x</a>]"
 msgstr "<a1>Historial de búsqueda</a> [<a2>x</a>]"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:141
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:314
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:137
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:311
 #, c-format
 msgid "<a1>Select All</a> <a2>Clear All</a>"
 msgstr "<a1>Seleccionar todo</a> <a2>Limpiar todo</a>"
@@ -1588,18 +1584,18 @@ msgid "<em>MESSAGE 9:</em> This item is reserved for another patron."
 msgstr "<em>MENSAJE 9:</em> Este ítem está reservado para otro socio."
 
 #. %1$s: TMPL_VAR name=already
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:148
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:151
 #, c-format
 msgid "A List named <b>%s</b> already exists!"
 msgstr "¡Ya existe una lista llamada <b>%s</b>!"
 
 #. %1$s: TMPL_VAR name=duplicatebiblio
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:166
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:169
 #, c-format
 msgid "A record matching barcode <b>%s</b> has already been added."
 msgstr "Un registro con el inventario <b>%s</b> ya ha sido agregado."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:416
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:407
 msgid "A specific copy"
 msgstr "Una copia específica"
 
@@ -1607,7 +1603,7 @@ msgstr "Una copia específica"
 msgid "AR"
 msgstr "AR"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:332
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:344
 msgid "About the Author"
 msgstr "Acerca del autor"
 
@@ -1657,7 +1653,7 @@ msgid "Account Frozen"
 msgstr "Cuenta congelada"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:36
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:113
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:123
 msgid "Acquired in the last:"
 msgstr "Adquirido en los últimos:"
 
@@ -1672,17 +1668,19 @@ msgid "Acquisition Date: Oldest to Newest"
 msgstr "Fecha de adquisición: Antiguos primero"
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:489
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:303
 msgid "Actions:"
 msgstr "Acciones:"
 
 #. INPUT type=submit name=tagsel_button
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:350
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:475
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:248
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:251
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:156
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:329
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:201
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:258
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:261
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:153
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:328
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:203
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:290
 msgid "Add"
 msgstr "Agregar"
 
@@ -1702,11 +1700,12 @@ msgid "Add to"
 msgstr "Agregar a"
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:507
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:321
 msgid "Add to Cart"
 msgstr "Agregar a la bolsa"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:72
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:189
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:86
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:208
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:46
 msgid "Add to Your Cart"
 msgstr "Agregar a su bolsa"
@@ -1715,8 +1714,8 @@ msgstr "Agregar a su bolsa"
 msgid "Add to a New List:"
 msgstr "Agregar a una nueva lista:"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:145
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:320
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:142
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:318
 msgid "Add to a list"
 msgstr "Agregar a la lista"
 
@@ -1734,8 +1733,8 @@ msgstr "Agregar a la lista: "
 msgid "Add to: "
 msgstr "Agregar a: "
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:759
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:771
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:766
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:778
 msgid "Add your own review"
 msgstr "Agregar su comentario"
 
@@ -1781,12 +1780,17 @@ msgid "All Tags"
 msgstr "Todas las etiquetas"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:18
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:91
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:103
 msgid "All branches"
 msgstr "Todas las sedes"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:28
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:103
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:115
+msgid "All collections"
+msgstr "Todas las colecciones"
+
+#: opac-tmpl/prog/en/includes/opac-topissues.inc:28
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:115
 msgid "All item types"
 msgstr "Todos los tipos de ítem"
 
@@ -1812,7 +1816,7 @@ msgstr "Información de contacto alternativa"
 msgid "Alternate Contact:"
 msgstr "Contacto alternativo:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:350
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:362
 msgid "Amazon Reviews"
 msgstr "Resúmenes de Amazon"
 
@@ -1907,7 +1911,7 @@ msgid "Are you sure you want to cancel this hold?"
 msgstr "¿Está seguro de querer cancelar esta reserva?"
 
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "Are you sure you want to delete this list?"
 msgstr "¿Está seguro de querer eliminar esta lista?"
 
@@ -1927,11 +1931,11 @@ msgid "Are you sure you want to remove the selected items?"
 msgstr "¿Está seguro de querer remover los items seleccionados?"
 
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "Are you sure you want to remove these items from the list?"
 msgstr "¿Está seguro de querer remover estos items de la lista?"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:600
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:612
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:195
 msgid "Arrived"
 msgstr "Llegado"
@@ -1942,13 +1946,13 @@ msgid "Article"
 msgstr "Artículo"
 
 #. %1$s: TMPL_VAR name=branchcode
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:578
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:590
 #, c-format
 msgid "At branch: %s"
 msgstr "En sede: %s"
 
 #. %1$s: TMPL_VAR name=branchname
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:577
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:589
 #, c-format
 msgid "At library: %s"
 msgstr "En biblioteca: %s"
@@ -1961,7 +1965,7 @@ msgstr "Audiencia"
 msgid "Audience:"
 msgstr "Audiencia:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:277
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:289
 msgid "Audiovisual Profile:"
 msgstr "Perfil audiovisual:"
 
@@ -1985,12 +1989,9 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:276
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:73
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:127
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:338
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:236
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:321
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:383
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:452
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:511
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:337
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:385
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:569
 msgid "Author"
 msgstr "Autor"
 
@@ -2004,11 +2005,11 @@ msgstr "Autor (A-Z)"
 msgid "Author (Z-A)"
 msgstr "Autor (Z-A)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:561
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:573
 msgid "Author Notes provided by Syndetics"
 msgstr "Notas de autor proporcionadas por Syndetics"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:186
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:183
 msgid "Author(s)"
 msgstr "Autor(es)"
 
@@ -2075,20 +2076,20 @@ msgid "Available in the library"
 msgstr "Disponible en la biblioteca"
 
 #. %1$s: TMPL_VAR name=AmazonTld
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:759
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:766
 #, c-format
 msgid "Average Rating (from Amazon%s):"
 msgstr "Calificación media (de Amazon%s):"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:598
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:610
 msgid "Awaited"
 msgstr "Esperado"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:295
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:307
 msgid "Awards:"
 msgstr "Premios:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:829
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:836
 msgid "BIBTEX"
 msgstr "BIBTEX"
 
@@ -2099,7 +2100,7 @@ msgstr "BIBTEX"
 msgid "BK"
 msgstr "BK"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:351
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:363
 msgid "Babelthèque"
 msgstr "Babelthèque"
 
@@ -2108,7 +2109,7 @@ msgstr "Babelthèque"
 msgid "Back to lists"
 msgstr "Volver las listas"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:452
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:443
 msgid "Barcode"
 msgstr "Código de barras"
 
@@ -2116,7 +2117,7 @@ msgstr "Código de barras"
 msgid "Biannual"
 msgstr "Bianual"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:81
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:109
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tmpl:14
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tmpl:20
 msgid "BibTex"
@@ -2167,11 +2168,11 @@ msgstr "Braille"
 msgid "Braille or Moon script"
 msgstr "Braille o escritura lunar"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:363
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:375
 msgid "Branch"
 msgstr "Sede"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:130
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:126
 msgid "Brief Display"
 msgstr "Vista breve"
 
@@ -2193,7 +2194,7 @@ msgid "Browse our catalogue"
 msgstr "Explore nuestro catálogo"
 
 #. %1$s: TMPL_VAR name=starting_homebranch
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:421
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:433
 #, c-format
 msgid "Browsing %s Shelves"
 msgstr "Navegando %s estantes"
@@ -2243,8 +2244,8 @@ msgstr "Signatura topo."
 #: opac-tmpl/prog/en/includes/masthead.inc:68
 #: opac-tmpl/prog/en/includes/masthead.inc:70
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:71
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:457
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:389
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:448
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:401
 msgid "Call Number"
 msgstr "Signatura topográfica"
 
@@ -2263,13 +2264,13 @@ msgstr "Signatura topográfica (No-Ficción 9-0 a Ficción A-Z)"
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:351
 #: opac-tmpl/prog/en/modules/opac-review.tmpl:75
 #: opac-tmpl/prog/en/modules/opac-messaging.tmpl:103
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:252
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:157
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:330
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:262
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:154
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:329
 #: opac-tmpl/prog/en/modules/opac-passwd.tmpl:36
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:202
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:334
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:526
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:204
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:398
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:584
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
 #: opac-tmpl/prog/en/modules/sco/sco-main.tmpl:132
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:403
@@ -2294,7 +2295,7 @@ msgid "Cancels an active hold request for the patron."
 msgstr "Cancela un requerimiento activo de reserva para el socio."
 
 #. IMG
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:472
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:463
 msgid "Cannot be put on hold"
 msgstr "No puede reservarse"
 
@@ -2472,8 +2473,8 @@ msgstr ""
 msgid "Catalogs"
 msgstr "Catálogos"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:326
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:516
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:390
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:574
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:53
 msgid "Category:"
 msgstr "Categoría:"
@@ -2533,7 +2534,7 @@ msgstr "Prestado a %s %s %s"
 msgid "Checkout History"
 msgstr "Historial de préstamos"
 
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:55
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:67
 msgid "Checkouts"
 msgstr "Prestamos"
 
@@ -2554,7 +2555,7 @@ msgstr "Ciudad, Estado:"
 msgid "Claimed"
 msgstr "Reclamado"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:271
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:268
 msgid "Classification"
 msgstr "Clasificación"
 
@@ -2577,11 +2578,11 @@ msgstr "Limpiar"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:136
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:227
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "Clear All"
 msgstr "Limpiar todo"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:374
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:365
 msgid "Clear Date"
 msgstr "Limpiar fecha"
 
@@ -2599,14 +2600,14 @@ msgstr "Haga clic aquí para acceso en linea"
 msgid "Click to add to cart"
 msgstr "Cliquee para añadir a la bolsa"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:269
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:271
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:278
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:280
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:287
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:289
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:297
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:298
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:281
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:283
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:290
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:292
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:299
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:301
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:309
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:310
 msgid "Click to open in new window"
 msgstr "Haga clic para abrir en una nueva ventana"
 
@@ -2616,7 +2617,7 @@ msgstr "Haga clic para abrir en una nueva ventana"
 msgid "Click to view in Google Books"
 msgstr "Cliquee para ver en Google Books"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:421
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:433
 msgid "Close Shelf Browser"
 msgstr "Cerrar el navegador de estanterías"
 
@@ -2640,8 +2641,9 @@ msgstr "Coautor"
 msgid "Coded Fields"
 msgstr "Campos codificados"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:388
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:219
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:66
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:400
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:216
 msgid "Collection"
 msgstr "Colección"
 
@@ -2649,7 +2651,7 @@ msgstr "Colección"
 msgid "Collection Title:"
 msgstr "Título de colección:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:150
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:154
 msgid "Collection:"
 msgstr "Colección:"
 
@@ -2664,7 +2666,7 @@ msgstr "Colección: %s"
 #. %1$s: TMPL_VAR name=title
 #. %2$s: TMPL_VAR name=firstname
 #. %3$s: TMPL_VAR name=surname
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:667
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:679
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "Comentario por %s %s %s"
@@ -2674,7 +2676,7 @@ msgstr "Comentario por %s %s %s"
 msgid "Comment:"
 msgstr "Comentario:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:344
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:356
 msgid "Comments"
 msgstr "Comentarios"
 
@@ -2691,12 +2693,12 @@ msgid "Computer File"
 msgstr "Archivo de computadora"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:404
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:471
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:464
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:528
 msgid "Confirm"
 msgstr "Confirmar"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:221
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:217
 msgid "Confirm holds for:"
 msgstr "Confirmar reservas para:"
 
@@ -2713,7 +2715,7 @@ msgstr "Información de contacto"
 msgid "Content"
 msgstr "Contenido"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:305
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:317
 msgid "Content Cafe"
 msgstr "Café de contenidos"
 
@@ -2721,14 +2723,14 @@ msgstr "Café de contenidos"
 msgid "Content advice:"
 msgstr "Café de contenidos"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:370
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:440
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:433
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:500
 msgid "Contents"
 msgstr "Contenidos"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:233
 msgid "Contents note:"
-msgstr "Nota de Contenidos:"
+msgstr "Nota de contenidos:"
 
 #. %1$s: TMPL_VAR name=shelfname
 #: opac-tmpl/prog/en/modules/opac-shelves.tmpl:1
@@ -2765,7 +2767,7 @@ msgstr "Continua:"
 msgid "Continuing Resource"
 msgstr "Recursos continuo"
 
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:141
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:160
 msgid "Copies"
 msgstr "Copias"
 
@@ -2787,12 +2789,12 @@ msgstr "Copias disponibles para referencia:"
 msgid "Copies available:"
 msgstr "Copias disponibles:"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:448
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:392
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:439
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:404
 msgid "Copy"
 msgstr "Copia"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:236
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:233
 msgid "Copyright"
 msgstr "Copyright"
 
@@ -2840,7 +2842,7 @@ msgstr "País:"
 msgid "Cover Image"
 msgstr "Imagen de tapa"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:495
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:553
 msgid "Create a New List"
 msgstr "Crear una nueva lista"
 
@@ -2898,16 +2900,16 @@ msgstr "Dañado (%s),"
 #: opac-tmpl/prog/en/modules/opac-search-history.tmpl:62
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:59
 #: opac-tmpl/prog/en/modules/opac-account.tmpl:21
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:588
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:600
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:172
 msgid "Date"
 msgstr "Fecha"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:113
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:112
 msgid "Date Added"
 msgstr "Fecha de incorporación"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:395
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:407
 msgid "Date Due"
 msgstr "Fecha de devolución"
 
@@ -2945,10 +2947,10 @@ msgstr ""
 "Define el esquema de metadatos con el cual se retornan los registros, "
 "valores posibles:"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:113
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:122
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:406
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:473
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:112
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:121
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:466
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:530
 msgid "Delete"
 msgstr "Borrar"
 
@@ -2958,12 +2960,12 @@ msgid "Delete Checked Items"
 msgstr "Borrar los Items seleccionados"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:219
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:221
 msgid "Delete List"
 msgstr "Borrar Lista"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:302
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:366
 msgid "Delete this List"
 msgstr "Borrar esta Lista"
 
@@ -2982,11 +2984,11 @@ msgstr "Descripción"
 msgid "Description:"
 msgstr "Descripción:"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:213
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:210
 msgid "Details"
 msgstr "Detalles"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:265
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:262
 msgid "Dewey"
 msgstr "Dewey"
 
@@ -3046,11 +3048,11 @@ msgstr "¿No tiene carnet de la biblioteca?"
 msgid "Don't have a password yet?"
 msgstr "¿No tiene una contraseña aún?"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:132
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:128
 msgid "Download"
 msgstr "Descargar"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:206
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:208
 msgid "Download List"
 msgstr "Descargar lista"
 
@@ -3062,9 +3064,9 @@ msgstr "Descargar carrito:"
 msgid "Download list:"
 msgstr "Descargar lista:"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:82
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:199
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:830
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:110
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:232
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:837
 msgid "Dublin Core (XML)"
 msgstr "Dublin Core (XML)"
 
@@ -3075,49 +3077,49 @@ msgid "Due"
 msgstr "Devolución"
 
 #. %1$s: TMPL_VAR name=date_due
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:494
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:485
 #, c-format
 msgid "Due %s"
 msgstr "Devolución %s"
 
 #. %1$s: TMPL_VAR name=delete_fail
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:172
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:175
 #, c-format
 msgid "ERROR: Database error. Delete (list number %s) failed."
 msgstr "ERROR: Error de base de datos. La eliminación (lista número %s) falló."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:212
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:208
 msgid "ERROR: Internal error: incomplete hold request."
 msgstr "ERROR: Error interno: requerimiento de reserva incompleto."
 
 #. %1$s: TMPL_VAR name=unrecognized
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:175
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:178
 #, c-format
 msgid "ERROR: List number %s unrecognized."
 msgstr "ERROR: Número de lista %s no reconocido."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:150
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:153
 msgid "ERROR: No barcode given."
 msgstr "ERROR: No se suministró inventario."
 
 #. %1$s: TMPL_VAR name=bad_biblionumber
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:196
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:192
 #, c-format
 msgid "ERROR: No biblio record found for biblionumber %s."
 msgstr ""
 "ERROR: No hay registro bibliográfico correspondiente a biblionumber %s."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:209
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:205
 msgid "ERROR: No biblionumber received."
 msgstr "ERROR: No se recibió biblionumber."
 
 #. %1$s: TMPL_VAR name=failgetitem
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:163
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:166
 #, c-format
 msgid "ERROR: No item found with barcode %s."
 msgstr "ERROR: No se encontró item con inventario %s."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:151
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:154
 msgid "ERROR: No shelfnumber given."
 msgstr "ERROR: No se suministró número de estantería."
 
@@ -3128,7 +3130,7 @@ msgid "ERROR: You cannot delete the tag %s."
 msgstr "ERROR: No puede borrar la etiqueta %s."
 
 #. %1$s: TMPL_VAR name=nopermission
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:160
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:163
 #, c-format
 msgid "ERROR: You do not have adequate permission for that action on list %s."
 msgstr "ERROR: No tiene permiso para realizar esa acción en la lista %s."
@@ -3148,16 +3150,16 @@ msgid "Easy"
 msgstr "Facil"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:396
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:464
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:456
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:521
 msgid "Edit"
 msgstr "Editar"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:212
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:214
 msgid "Edit List"
 msgstr "Editar lista"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:309
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:373
 msgid "Editing"
 msgstr "Editando"
 
@@ -3171,7 +3173,7 @@ msgstr "Declaración de edición:"
 msgid "Edition:"
 msgstr "Edición:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:348
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:360
 msgid "Editions"
 msgstr "Ediciones"
 
@@ -3192,7 +3194,11 @@ msgstr "Dirección de email:"
 msgid "Email:"
 msgstr "Email:"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:444
+msgid "Empty"
+msgstr "Vacío"
+
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:130
 msgid "Empty and Close"
 msgstr "Vaciar y cerrar"
 
@@ -3200,11 +3206,11 @@ msgstr "Vaciar y cerrar"
 msgid "Encyclopedias"
 msgstr "Enciclopedias"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:305
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:317
 msgid "Enhanced Content:"
 msgstr "Contenido mejorado:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:494
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:506
 msgid "Enhanced Descriptions from Syndetics:"
 msgstr "Descripciones mejoradas de Syndetics:"
 
@@ -3281,18 +3287,18 @@ msgstr "Error:"
 msgid "Example Call"
 msgstr "Llamada de ejemplo"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:322
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:334
 msgid "Excerpt"
 msgstr "Extracto"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:532
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:544
 msgid "Excerpt provided by Syndetics"
 msgstr "Extracto provisto por Syndetics"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:176
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:63
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:35
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:31
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:49
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:50
 msgid "Expanded MARC View"
 msgstr "Vista MARC expandida"
 
@@ -3306,7 +3312,7 @@ msgid "Expires On"
 msgstr "Expira en"
 
 #: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:80
-#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:155
+#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:156
 #: opac-tmpl/prog/en/modules/opac-userdetails.tmpl:46
 msgid "Expires:"
 msgstr "Expira:"
@@ -3339,7 +3345,7 @@ msgstr "Feschrift Ind."
 msgid "Fiction"
 msgstr "Ficción"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:286
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:298
 msgid "Fiction Notes:"
 msgstr "Nota de Ficción:"
 
@@ -3374,7 +3380,7 @@ msgstr "Finalizar"
 msgid "First Name:"
 msgstr "Nombre:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:409
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:421
 msgid "Fix Itemtype"
 msgstr "Fijar tipo de artículo"
 
@@ -3389,7 +3395,7 @@ msgstr ""
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:64
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "Form not submitted because of the following problem(s)"
 msgstr "Formulario no enviado debido al o los siguientes problemas"
 
@@ -3399,13 +3405,13 @@ msgid "Formed by the union: ... and: ..."
 msgstr "Formado por la union: ... y: ..."
 
 #. %1$s: TMPL_VAR name=Source
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:485
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:497
 #, c-format
 msgid "From %s:"
 msgstr "De %s:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:16
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:89
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:101
 msgid "From:"
 msgstr "De:"
 
@@ -3493,12 +3499,12 @@ msgstr ""
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/includes/masthead.inc:96
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:89
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:203
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:117
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:236
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:330
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:40
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:181
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:837
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:844
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tmpl:23
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tmpl:28
 msgid "Go"
@@ -3578,19 +3584,19 @@ msgstr ""
 "registros bibliográficos MARC que puede ser importado en un software "
 "bibliográfico personal como IsisMARC, EndNote, Reference Manager o ProCite."
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:135
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:131
 msgid "Hide Window"
 msgstr "Ocultar Ventana"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:236
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:232
 msgid "Hold"
 msgstr "Reservado"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:247
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:243
 msgid "Hold Not Needed After"
 msgstr "Reserva no necesaria después"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:245
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:241
 msgid "Hold Starts on Date"
 msgstr "La reserva comienza en la fecha"
 
@@ -3609,7 +3615,7 @@ msgid "HoldTitle"
 msgstr "HoldTitle"
 
 #. %1$s: TMPL_VAR name=count
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:313
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:325
 #, c-format
 msgid "Holdings ( %s )"
 msgstr "Existencias ( %s )"
@@ -3617,6 +3623,10 @@ msgstr "Existencias ( %s )"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:560
 msgid "Holdings Note:"
 msgstr "Nota de existencias:"
+
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:269
+msgid "Holdings:"
+msgstr "Existencias:"
 
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:129
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:341
@@ -3627,7 +3637,7 @@ msgstr "Reservas"
 msgid "Holds Waiting"
 msgstr "Reservas en espera"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:454
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:445
 msgid "Home Library"
 msgstr "Biblioteca de origen"
 
@@ -3637,6 +3647,7 @@ msgid "Home Phone:"
 msgstr "Teléfono personal:"
 
 #: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:76
+#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:152
 msgid "Home library:"
 msgstr "Biblioteca de origen:"
 
@@ -3648,9 +3659,9 @@ msgstr "ILS-DI"
 msgid "IP address where the end user request is being placed"
 msgstr "Dirección IP desde donde se realiza el requerimiento del usuario final"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:32
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:38
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:36
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:46
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:52
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:55
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:97
 msgid "ISBD View"
 msgstr "Vista ISBD"
@@ -3660,13 +3671,14 @@ msgstr "Vista ISBD"
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:283
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:94
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:134
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:179
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:176
 msgid "ISBN"
 msgstr "ISBN"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:318
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:155
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:144
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:147
 msgid "ISBN:"
 msgstr "ISBN:"
 
@@ -3685,7 +3697,7 @@ msgstr "ISSN"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:328
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:173
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:147
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:151
 msgid "ISSN:"
 msgstr "ISSN:"
 
@@ -3693,7 +3705,7 @@ msgstr "ISSN:"
 msgid "Identity Details"
 msgstr "Detalles de identidad"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:176
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:173
 msgid ""
 "If this is an error, please take your card to the circulation desk at your "
 "local library and the error will be corrected."
@@ -3784,7 +3796,7 @@ msgstr "En tránsito de %s a %s desde %s"
 #. %1$s: TMPL_VAR name=transfertfrom
 #. %2$s: TMPL_VAR name=transfertto
 #. %3$s: TMPL_VAR name=transfertwhen
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:496
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:487
 #, c-format
 msgid "In transit from %s, to %s, since %s"
 msgstr "En tránsito de %s a %s, desde %s"
@@ -3806,16 +3818,16 @@ msgstr "Indexado en:"
 msgid "Indexes"
 msgstr "Índices"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:461
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:452
 msgid "Information"
 msgstr "Información"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:587
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:599
 msgid "Issue #"
 msgstr "Ejemplar #"
 
 #. %1$s: TMPL_VAR name=histstartdate
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:580
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:592
 #, c-format
 msgid "Issues between: %s and:"
 msgstr "Ejemplares entre: %s y:"
@@ -3829,15 +3841,14 @@ msgid "Issues summary"
 msgstr "Resumen de ejemplares"
 
 #. %1$s: TMPL_VAR name=count
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:155
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:158
 #, c-format
-msgid "It has <b>%s</b> entries."
-msgstr "Tiene <b>%s</b> entradas."
+msgid "It has <b>%s</b>"
+msgstr "Tiene <b>%s</b>"
 
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:57
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:239
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:450
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:234
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:235
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:441
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:200
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:285
 msgid "Item Type"
@@ -3872,12 +3883,13 @@ msgstr "Artículo en transito a <b> %s</b>"
 msgid "Item lost"
 msgstr "Ítem perdido"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:386
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:66
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:398
 msgid "Item type"
 msgstr "Tipo de ítem"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:181
-msgid "Item type :"
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:185
+msgid "Item type:"
 msgstr "Tipo de ítem :"
 
 #. %1$s: TMPL_VAR name=wbrname
@@ -3896,12 +3908,8 @@ msgstr "Ítem esperando a ser retirado de <b> %s</b>"
 msgid "Item withdrawn"
 msgstr "Ítem retirado"
 
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:54
-msgid "Itemtype"
-msgstr "Tipo de ítem"
-
 #: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:79
-#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:154
+#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:155
 #: opac-tmpl/prog/en/modules/opac-userdetails.tmpl:44
 msgid "Joined:"
 msgstr "Asociado:"
@@ -3987,7 +3995,7 @@ msgstr "Koha en línea"
 msgid "Koha Online Catalog"
 msgstr "Catálogo en línea Koha"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:277
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:274
 msgid "LCCN"
 msgstr "LCCN"
 
@@ -4020,7 +4028,7 @@ msgstr "Idiomas:"
 msgid "Large print"
 msgstr "Impresión grande"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:455
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:446
 msgid "Last Location"
 msgstr "Última ubicación"
 
@@ -4028,7 +4036,7 @@ msgstr "Última ubicación"
 msgid "Last Name:"
 msgstr "Apellido:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:602
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:614
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:196
 msgid "Late"
 msgstr "Retrasado"
@@ -4097,7 +4105,7 @@ msgid "Limit to any of the following:"
 msgstr "Limitar a uno de los siguientes:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:26
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:101
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:113
 msgid "Limit to:"
 msgstr "Limitar a:"
 
@@ -4106,31 +4114,31 @@ msgid "Linked with:"
 msgstr "Enlazado con:"
 
 #. %1$s: TMPL_VAR name=delete_ok
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:169
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:172
 #, c-format
 msgid "List %s Deleted."
 msgstr "Lista %s borrada."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:369
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:439
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:432
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:499
 msgid "List Name"
 msgstr "Nombre de la lista"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:316
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:499
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:380
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:557
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:49
 msgid "List Name:"
 msgstr "Nombre de la lista:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:229
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:233
 msgid "List(s) this item appears in:"
 msgstr "Lista(s) en las que aparece esté ítem:"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:99
 #: opac-tmpl/prog/en/includes/masthead.inc:103
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:186
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:309
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:342
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:188
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:373
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:406
 msgid "Lists"
 msgstr "Listas"
 
@@ -4138,9 +4146,8 @@ msgstr "Listas"
 msgid "Local Login"
 msgstr "Usuario local"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:387
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:340
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:238
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:399
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:339
 msgid "Location"
 msgstr "Ubicación"
 
@@ -4148,7 +4155,7 @@ msgstr "Ubicación"
 msgid "Location and availability:"
 msgstr "Ubicación y disponibilidad:"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:296
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:293
 msgid "Location(s)"
 msgstr "Ubicación(es)"
 
@@ -4179,7 +4186,8 @@ msgid "Log in to Your Account:"
 msgstr "Ingresar a su cuenta:"
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:480
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:259
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:269
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:295
 msgid "Log in to add tags."
 msgstr "Ingresar para agregar etiquetas."
 
@@ -4226,20 +4234,20 @@ msgstr "Perdido (%s),"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:176
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:60
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:63
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:34
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:30
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:48
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:49
 msgid "MARC"
 msgstr "MARC"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:85
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:202
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:833
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:113
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:235
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:840
 msgid "MARC (Unicode/UTF-8)"
 msgstr "MARC (Unicode/UTF-8)"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:84
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:201
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:832
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:112
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:234
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:839
 msgid "MARC (non-Unicode/MARC-8)"
 msgstr "MARC (no-Unicode/MARC-8)"
 
@@ -4249,21 +4257,21 @@ msgstr "Vista MARC"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:175
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:60
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:34
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:37
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:25
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:30
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:33
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:48
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:51
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:44
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:49
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:52
 #: opac-tmpl/prog/en/modules/opac-showmarc.tmpl:1
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:97
 msgid "MARC View"
 msgstr "Vista MARC"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:83
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:200
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:111
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:233
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:108
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:310
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:831
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:838
 msgid "MARCXML"
 msgstr "MARCXML"
 
@@ -4283,9 +4291,9 @@ msgstr "MENSAJE 15:"
 msgid "MESSAGE 8:"
 msgstr "MENSAJE 8:"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:86
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:198
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:834
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:114
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:231
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:841
 msgid "MODS (XML)"
 msgstr "MODS (XML)"
 
@@ -4378,13 +4386,13 @@ msgstr "Mensaje enviado"
 msgid "Messages For You"
 msgstr "Mensajes para usted"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:604
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:616
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:197
 msgid "Missing"
 msgstr "Perdido"
 
 #. %1$s: TMPL_VAR name=missinglist
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:581
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:593
 #, c-format
 msgid "Missing issues: %s"
 msgstr "Ejemplares perdidos: %s"
@@ -4416,15 +4424,17 @@ msgstr "Series monográficas"
 msgid "Monthly"
 msgstr "Mensual"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:130
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:126
 msgid "More Details"
 msgstr "Más detalles"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:620
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:632
 msgid "More details"
 msgstr "Más detalles"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:808
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:88
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:210
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:815
 msgid "More searches"
 msgstr "Mas búsquedas"
 
@@ -4449,7 +4459,7 @@ msgstr "Mi"
 msgid "My Lists"
 msgstr "Mis Listas"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:111
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:110
 msgid "My Tags"
 msgstr "Mis etiquetas"
 
@@ -4474,8 +4484,8 @@ msgstr "Nunca expira"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:227
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:363
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:431
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:427
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:492
 msgid "New List"
 msgstr "Nueva Lista"
 
@@ -4493,16 +4503,17 @@ msgid "New purchase suggestion"
 msgstr "Nueva sugerencia de compra"
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:473
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:288
 msgid "New tag:"
 msgstr "Nueva etiqueta:"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:153
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:327
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:198
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:150
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:326
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:200
 msgid "New&nbsp;Tag:"
 msgstr "Nueva etiqueta:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:250
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:260
 msgid "New:"
 msgstr "Nuevo:"
 
@@ -4511,7 +4522,7 @@ msgid "Newspaper"
 msgstr "Periodico"
 
 #. IMG
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:459
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:471
 msgid "Next"
 msgstr "Siguiente"
 
@@ -4519,8 +4530,8 @@ msgstr "Siguiente"
 msgid "Next &gt;&gt;"
 msgstr "Siguiente &gt;&gt;"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:268
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:397
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:264
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:388
 msgid "Next available copy"
 msgstr "Siguiente copia disponible"
 
@@ -4540,7 +4551,7 @@ msgstr "Sin límite"
 msgid "No Private Lists"
 msgstr "No hay listas privadas"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:415
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:476
 msgid "No Private Lists."
 msgstr "No hay listas privadas."
 
@@ -4548,7 +4559,7 @@ msgstr "No hay listas privadas."
 msgid "No Public Lists"
 msgstr "No hay listas públicas"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:482
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:540
 msgid "No Public Lists."
 msgstr "No hay listas públicas."
 
@@ -4560,7 +4571,7 @@ msgstr "¡No se encontraron resultados!"
 msgid "No alternate contact on file."
 msgstr "No existe contacto alternativo."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:287
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:280
 msgid "No available items."
 msgstr "No hay items disponibles."
 
@@ -4569,7 +4580,7 @@ msgstr "No hay items disponibles."
 msgid "No copies available"
 msgstr "No hay copias disponibles"
 
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:155
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:174
 msgid "No copies available."
 msgstr "No hay copias disponibles."
 
@@ -4586,16 +4597,19 @@ msgstr "No hay copias disponibles."
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:68
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:70
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:80
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:428
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:433
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:434
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:436
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:440
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:445
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:451
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:453
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:455
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:716
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:746
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:446
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:448
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:457
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:463
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:465
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:467
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:728
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:753
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:333
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:340
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:342
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:224
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:226
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:228
@@ -4622,11 +4636,11 @@ msgid "No items available:"
 msgstr "No hay items disponibles:"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:40
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:117
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:127
 msgid "No limit"
 msgstr "Sin límite"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:416
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:428
 msgid "No physical items for this record"
 msgstr "No existen ítems para este registro"
 
@@ -4648,17 +4662,18 @@ msgstr "Ningún resultado coincide con su búsqueda de"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:118
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:114
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "No tag was specified."
 msgstr "No se especificó etiqueta."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:244
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:249
 msgid "No tags from this library for this title."
 msgstr "No hay etiquetas de esta biblioteca para este título."
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:305
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:407
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:258
 msgid "No title"
 msgstr "Sin título"
 
@@ -4676,8 +4691,8 @@ msgstr "Nada"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:174
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:57
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:33
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:27
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:47
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:46
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tmpl:15
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:97
 msgid "Normal View"
@@ -4695,7 +4710,7 @@ msgstr "Irregular normalizado"
 msgid "Not Available"
 msgstr "No disponible"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:606
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:618
 msgid "Not Issued"
 msgstr "No prestado"
 
@@ -4714,12 +4729,12 @@ msgid "Not for loan"
 msgstr "No para prestamo"
 
 #. %1$s: TMPL_VAR name=notforloanvalue
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:503
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:494
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "No para prestamo (%s)"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:512
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:503
 msgid "Not on hold"
 msgstr "No está reservado"
 
@@ -4728,7 +4743,7 @@ msgid "Not renewable"
 msgstr "No renovable"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:142
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:590
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:602
 msgid "Note"
 msgstr "Nota"
 
@@ -4772,9 +4787,9 @@ msgstr "Nota: su etiqueta tenía código ilegal. NO ha sido guardada."
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:281
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:132
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:394
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:406
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:174
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:243
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:240
 msgid "Notes"
 msgstr "Notas"
 
@@ -4810,7 +4825,7 @@ msgid "On Reserve"
 msgstr "Reservado"
 
 #: opac-tmpl/prog/en/includes/item-status.inc:11
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:506
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:497
 msgid "On hold"
 msgstr "Reservado"
 
@@ -4844,7 +4859,7 @@ msgstr "Acceso en Línea:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:425
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:367
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:190
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:194
 msgid "Online Resources:"
 msgstr "Recursos en Línea:"
 
@@ -4862,8 +4877,8 @@ msgstr ""
 "le resultará a los bibliotecarios encontrar el ejemplar requerido. El campo "
 "\"Notas\" puede utilizarse para proveer información adicional."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:388
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:457
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:448
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:514
 msgid "Open"
 msgstr "Abierto"
 
@@ -4888,7 +4903,7 @@ msgstr "Pedido por la biblioteca"
 msgid "Other"
 msgstr "Otro"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:705
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:717
 msgid "Other Editions of this Work"
 msgstr "Otras ediciones de este trabajo"
 
@@ -4969,12 +4984,12 @@ msgid "Patent document"
 msgstr "Documento de patente"
 
 #: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:78
-#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:153
+#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:154
 msgid "Patron Category:"
 msgstr "Categoría de socio:"
 
 #: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:77
-#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:152
+#: opac-tmpl/prog/en/modules/opac-userupdate.tmpl:153
 msgid "Patron Number:"
 msgstr "Número de socio:"
 
@@ -5028,7 +5043,7 @@ msgstr "Biblioteca para retirar"
 msgid "Pick Up Location"
 msgstr "Sede para retirar"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:252
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:248
 msgid "Pickup Location"
 msgstr "Sede de retiro"
 
@@ -5036,30 +5051,31 @@ msgstr "Sede de retiro"
 msgid "Picture"
 msgstr "Imagen"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:53
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:56
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:168
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:171
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:70
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:67
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:70
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:187
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:190
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:82
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:227
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:494
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:497
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:527
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:529
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:520
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:257
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:260
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:791
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:794
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:798
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:801
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:308
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:311
 msgid "Place Hold"
 msgstr "Hacer reserva"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:249
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:245
 msgid "Place On"
 msgstr "Ubicado en"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:148
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:322
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:144
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:320
 msgid "Place hold"
 msgstr "Hacer reserva"
 
@@ -5083,7 +5099,7 @@ msgstr ""
 msgid "Please confirm the checkout:"
 msgstr "Por favor confirme el préstamo:"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:169
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:167
 #, c-format
 msgid ""
 "Please contact your librarian, or use the <a1>online update form</a> to "
@@ -5145,7 +5161,7 @@ msgstr "Popularidad (Menor a Mayor)"
 msgid "Popularity (Most to Least)"
 msgstr "Popularidad (Mayor a Menor)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:684
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:696
 msgid "Post or edit your comments on this item."
 msgstr "Agregue o edite sus comentarios sobre este ítem."
 
@@ -5158,7 +5174,7 @@ msgid "Preschool;"
 msgstr "Pre-escolar;"
 
 #. IMG
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:425
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:437
 msgid "Previous"
 msgstr "Anteriores"
 
@@ -5175,26 +5191,26 @@ msgid "Primary;"
 msgstr "Primariamente;"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:18
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:63
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:179
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:800
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:133
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:77
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:198
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:807
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:129
 msgid "Print"
 msgstr "Imprimir"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:210
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:212
 msgid "Print List"
 msgstr "Imprimir Lista"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:242
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:238
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:349
 msgid "Priority"
 msgstr "Prioridad"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:328
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:386
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:455
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:518
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:392
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:446
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:512
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:576
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:55
 msgid "Private"
 msgstr "Privado"
@@ -5215,17 +5231,15 @@ msgstr "Textos programados"
 msgid "Provenance note:"
 msgstr "Procedencia en cuenta:"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:329
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:387
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:456
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:519
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:393
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:447
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:513
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:577
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:56
 msgid "Public"
 msgstr "Público"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:128
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:350
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:352
 msgid "Public Lists"
 msgstr "Listas públicas"
 
@@ -5234,6 +5248,11 @@ msgstr "Listas públicas"
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:227
 msgid "Public Lists:"
 msgstr "Listas Públicas:"
+
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:414
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:416
+msgid "Public lists"
+msgstr "Listas públicas"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:122
 msgid "Publication Date Range:"
@@ -5255,6 +5274,7 @@ msgstr "Publicación/Fecha de Copyright: Antigüos a Nuevos"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:28
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:411
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:262
 msgid "Publication:"
 msgstr "Publicación:"
 
@@ -5273,7 +5293,7 @@ msgstr "Publicado por: %s"
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:280
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:86
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:131
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:206
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:203
 msgid "Publisher"
 msgstr "Editor"
 
@@ -5304,8 +5324,8 @@ msgstr "Trimestral"
 msgid "RECEIPT"
 msgstr "RECIBO"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:87
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:835
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:115
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:842
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tmpl:13
 #: opac-tmpl/prog/en/modules/opac-downloadshelf.tmpl:19
 msgid "RIS"
@@ -5341,11 +5361,11 @@ msgstr "Impresión regular"
 msgid "Regularity"
 msgstr "Regularidad"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:346
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:358
 msgid "Related"
 msgstr "Relacionado"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:737
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:744
 msgid "Related Titles"
 msgstr "Títulos relacionados"
 
@@ -5357,13 +5377,13 @@ msgstr "Relacionado:"
 msgid "Relevance"
 msgstr "Relevancia"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:143
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:318
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:139
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:315
 msgid "Remove"
 msgstr "Remover"
 
 #. INPUT type=submit
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:297
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:361
 msgid "Remove Selected Items"
 msgstr "Borrar items seleccionados"
 
@@ -5469,15 +5489,15 @@ msgid "Review:"
 msgstr "Revisión:"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:211
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:325
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:337
 msgid "Reviews"
 msgstr "Comentarios"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:222
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:226
 msgid "Reviews from LibraryThing.com:"
 msgstr "Comentarios de LibraryThing.com:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:541
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:553
 msgid "Reviews provided by Syndetics"
 msgstr "Comentarios provistos por Syndetics"
 
@@ -5500,17 +5520,17 @@ msgstr "Historial de seriales SUDOC:"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:227
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:334
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:525
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:398
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:583
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:31
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:40
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tmpl:59
 msgid "Save"
 msgstr "Guardar"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:78
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:195
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:826
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:106
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:228
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:833
 msgid "Save Record:"
 msgstr "Guardar registro:"
 
@@ -5518,11 +5538,15 @@ msgstr "Guardar registro:"
 msgid "Save to Lists"
 msgstr "Guardar en listas"
 
-#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:67
-#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:184
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:804
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:81
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:203
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:811
 msgid "Save to Your Lists"
 msgstr "Guardar en sus listas"
+
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:318
+msgid "Save to another list"
+msgstr "Guardar en otra lista"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:701
 msgid "Scan"
@@ -5575,7 +5599,9 @@ msgstr "Puntuación"
 msgid "Search"
 msgstr "Buscar"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:814
+#: opac-tmpl/prog/en/modules/opac-ISBDdetail.tmpl:94
+#: opac-tmpl/prog/en/modules/opac-MARCdetail.tmpl:216
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:821
 msgid "Search for this title in:"
 msgstr "Buscar para este título en:"
 
@@ -5610,20 +5636,21 @@ msgstr "Autor secundario"
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:520
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:70
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:83
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:436
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:455
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:448
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:467
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:342
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:228
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:303
 msgid "See Baker &amp; Taylor"
 msgstr "Ver Baker &amp; Taylor"
 
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:77
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:89
 msgid "See the Most Popular Titles"
 msgstr "Ver los títulos mas populares"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:135
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:227
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "Select All"
 msgstr "Seleccionar todo"
 
@@ -5631,7 +5658,7 @@ msgstr "Seleccionar todo"
 msgid "Select a List"
 msgstr "Seleccionar una lista"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:446
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:437
 msgid "Select a specific copy:"
 msgstr "Seleccione una copia específica:"
 
@@ -5643,8 +5670,8 @@ msgstr "Seleccionar la base de datos local:"
 msgid "Select remote databases:"
 msgstr "Seleccionar la base de datos remota:"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:141
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:316
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:137
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:313
 msgid "Selected items :"
 msgstr "Items seleccionados :"
 
@@ -5668,13 +5695,13 @@ msgstr "Bimensual"
 msgid "Semiweekly"
 msgstr "Bisemanal"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:131
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:127
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tmpl:33
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tmpl:39
 msgid "Send"
 msgstr "Enviar"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:208
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:210
 msgid "Send List"
 msgstr "Enviar lista"
 
@@ -5691,11 +5718,11 @@ msgstr "Enviando su lista"
 msgid "Separated from:"
 msgstr "Separado de:"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:259
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:256
 msgid "Serial"
 msgstr "Publicación periódica"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:354
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:366
 msgid "Serial Collection"
 msgstr "Colección de publicaciones periódicas"
 
@@ -5703,7 +5730,7 @@ msgstr "Colección de publicaciones periódicas"
 msgid "Serial Type"
 msgstr "Tipo de publicación periódica"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:364
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:376
 msgid "Serial collection"
 msgstr "Colección de publicaciones periódicas"
 
@@ -5728,7 +5755,7 @@ msgstr "Publicaciones periódicas"
 msgid "Series"
 msgstr "Series"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:267
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:279
 msgid "Series Information:"
 msgstr "Información de serie:"
 
@@ -5771,7 +5798,7 @@ msgid "Show All Items"
 msgstr "Mostrar todos los items"
 
 #. IMG
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:348
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:339
 msgid "Show Calendar"
 msgstr "Mostrar calendario"
 
@@ -5784,15 +5811,15 @@ msgid "Show More"
 msgstr "Mostrar más"
 
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:5
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:78
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:90
 msgid "Show the top"
 msgstr "Mostrar los primeros"
 
 #. %1$S: type=text name=limit
 #: opac-tmpl/prog/en/modules/opac-tags.tmpl:80
 #, c-format
-msgid "Show up to %S tags from other users."
-msgstr "Mostrar hasta %S etiquetas de otros usuarios."
+msgid "Show up to %S tags"
+msgstr "Mostrar hasta la etiqueta %S"
 
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:158
 msgid "Show year:"
@@ -5811,7 +5838,7 @@ msgstr "Mostrando los últimos 50 items"
 msgid "Showing only"
 msgstr "Mostrando sólo"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:337
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:349
 msgid "Similar Items"
 msgstr "Items similares"
 
@@ -5825,10 +5852,10 @@ msgstr ""
 "Debido a que tiene <a1>más de %s</a> en multas, no puede renovar sus libros "
 "en linea. Por favor pague sus multas si desea renovar sus libros."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:167
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:174
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:181
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:215
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:166
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:172
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:178
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:212
 #: opac-tmpl/prog/en/modules/sco/sco-main.tmpl:166
 #: opac-tmpl/prog/en/modules/sco/sco-main.tmpl:172
 msgid "Sorry"
@@ -5861,20 +5888,20 @@ msgstr ""
 "Lo sentimos, el sistema considera que no tiene permisos para acceder a esta "
 "página."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:771
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:778
 msgid "Sorry, there are no reviews from this library available for this title."
 msgstr ""
 "Lo sentimos, no existen comentarios de esta biblioteca disponibles para este "
 "título."
 
 #. %1$s: TMPL_VAR name=too_much_oweing
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:188
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:184
 #, c-format
 msgid "Sorry, you cannot place holds because you owe %s."
 msgstr "Lo sentimos, usted no puede hacer reservas porque debe %s."
 
 #. %1$s: TMPL_VAR name=too_many_reserves
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:192
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:188
 #, c-format
 msgid "Sorry, you cannot place more than %s holds."
 msgstr "Lo sentimos, usted no puede hacer más de %s reservas."
@@ -5887,17 +5914,12 @@ msgstr "Lo sentimos, su sesión ha expirado, por favor ingrese nuevamente."
 msgid "Sorry, your session has timed out. Please log in again."
 msgstr "Lo sentimos, su sesión ha expirado. Por favor ingrese nuevamente."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:371
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:441
-msgid "Sort by"
-msgstr "Ordenado por"
-
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:256
 msgid "Sort by:"
 msgstr "Ordenado por:"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:318
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:508
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:382
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:566
 msgid "Sort this list by:"
 msgstr "Ordenar esta lista por:"
 
@@ -5928,8 +5950,8 @@ msgid "Statistics"
 msgstr "Estadísticas"
 
 #: opac-tmpl/prog/en/modules/opac-suggestions.tmpl:145
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:393
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:589
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:405
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:601
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:177
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:351
 msgid "Status"
@@ -6001,13 +6023,13 @@ msgstr "Frase de temas"
 msgid "Subject cloud"
 msgstr "Nube de temas"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:226
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:223
 msgid "Subject(s)"
 msgstr "Tema(s)"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:394
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:167
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:174
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:171
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:178
 msgid "Subject(s):"
 msgstr "Tema(s):"
 
@@ -6026,7 +6048,7 @@ msgstr "Tema: %s"
 #. INPUT type=submit
 #: opac-tmpl/prog/en/includes/opac-topissues.inc:45
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tmpl:68
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:123
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:133
 #: opac-tmpl/prog/en/modules/sco/sco-main.tmpl:184
 #: opac-tmpl/prog/en/modules/sco/sco-main.tmpl:235
 msgid "Submit"
@@ -6081,7 +6103,7 @@ msgstr "Suscripción :"
 msgid "Subscription information for %s"
 msgstr "Información de la suscripción para %s"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:342
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:354
 msgid "Subscriptions"
 msgstr "Suscripciones"
 
@@ -6137,21 +6159,21 @@ msgstr "Revisiones"
 msgid "System Maintenance"
 msgstr "Mantenimiento del sistema"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:318
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:330
 msgid "TOC"
 msgstr "TOC"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:517
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:529
 msgid "Table of Contents provided by Syndetics"
 msgstr "Tabla de contenidos provista por Syndetics"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:150
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:324
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:134
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:146
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:322
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:137
 msgid "Tag"
 msgstr "Etiqueta"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:338
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:350
 msgid "Tag Browser"
 msgstr "Navegador de etiquetas"
 
@@ -6161,18 +6183,20 @@ msgstr "Nube de etiquetas"
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:354
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:478
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:255
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:359
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:262
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:265
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:358
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:293
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:329
 msgid "Tag status here."
 msgstr "Estado de estiqueta aqui."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:240
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:244
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:245
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:249
 msgid "Tags from this library:"
 msgstr "Etiquetas de esta biblioteca:"
 
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:465
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:280
 msgid "Tags:"
 msgstr "Etiquetas:"
 
@@ -6180,7 +6204,7 @@ msgstr "Etiquetas:"
 msgid "Technical reports"
 msgstr "Informes técnicos"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:113
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:112
 #: opac-tmpl/prog/en/modules/opac-authoritiesdetail.tmpl:48
 msgid "Term"
 msgstr "Término"
@@ -6199,13 +6223,13 @@ msgid "The"
 msgstr "El"
 
 #. %1$s: TMPL_VAR name=opacdisplaycount
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:584
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:596
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "Los %s últimos números para esta suscripción:"
 
 #. %1$s: TMPL_VAR name=limit
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:40
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:52
 #, c-format
 msgid "The %s most checked-out"
 msgstr "Los %s más prestados"
@@ -6244,7 +6268,7 @@ msgid "The first subscription was started on %s"
 msgstr "La primera suscripción comenzó en %s"
 
 #. %1$s: TMPL_VAR name=need_confirm
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:154
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:157
 #, c-format
 msgid "The list <i>%s</i> is not empty."
 msgstr "La lista <i>%s</i> no está vacía."
@@ -6276,12 +6300,12 @@ msgid "The userid"
 msgstr "El userid"
 
 #. %1$s: TMPL_VAR name=subscriptionsnumber
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:575
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:587
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
 msgstr "Hay %s suscripción(es) asociadas con este título."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:679
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:691
 msgid "There are no comments for this item."
 msgstr "No hay comentarios para este ítem."
 
@@ -6313,7 +6337,7 @@ msgstr ""
 "Esta &quot;nube&quot; muestra los temas más consultados en nuestro catálogo. "
 "Cliquee en cualquier tema para ver los items en nuestra colección."
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:287
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:351
 #, c-format
 msgid ""
 "This List is empty. You can add to your lists from the results of any "
@@ -6347,7 +6371,7 @@ msgstr ""
 "Este error indica que por alguna razón no tiene permitido acceder a esta "
 "página."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:574
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:586
 msgid "This is a serial"
 msgstr "Esta es una publicación periódica"
 
@@ -6369,10 +6393,10 @@ msgstr "Este ítem ya lo tiene prestado. ¿Lo devuelve?"
 msgid "This item is already in your cart"
 msgstr "Este ítem ya está en su bolsa"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:326
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:328
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:851
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:855
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:338
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:340
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:858
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:862
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -6381,7 +6405,7 @@ msgstr ""
 "Esta página contiene contenido mejorado visible cuando se habilita "
 "JavaScript o haciendo clic <a1>aqui</a>."
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:382
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:394
 #, c-format
 msgid ""
 "This record has many physical items. <a1>Click here to view them all.</a>"
@@ -6389,13 +6413,13 @@ msgstr ""
 "Este registro tiene muchos items físicos. <a1>Haga clic para verlos a todos</"
 "a>"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:304
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:376
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:280
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:301
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:375
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:274
 msgid "This record has no items."
 msgstr "Este registro no tiene items."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:289
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:282
 msgid "This title cannot be requested."
 msgstr "Este título no se puede requerir."
 
@@ -6415,19 +6439,17 @@ msgstr "Tres veces al año"
 #: opac-tmpl/prog/en/includes/resort_form.inc:30
 #: opac-tmpl/prog/en/includes/masthead.inc:43
 #: opac-tmpl/prog/en/includes/masthead.inc:45
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:53
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:65
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:274
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:113
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:112
 #: opac-tmpl/prog/en/modules/opac-readingrecord.tmpl:56
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:67
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:237
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:233
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:250
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:125
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:337
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:235
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:320
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:383
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:452
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:510
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:336
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:384
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:568
 #: opac-tmpl/prog/en/modules/sco/sco-main.tmpl:194
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:171
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:199
@@ -6446,7 +6468,7 @@ msgstr "Título (A-Z)"
 msgid "Title (Z-A)"
 msgstr "Título (Z-A)"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:316
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:328
 msgid "Title Notes"
 msgstr "Notas de título"
 
@@ -6514,8 +6536,8 @@ msgstr "Trienal"
 msgid "Try logging in to the catalog"
 msgstr "Trate ingresando al catágolo"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:372
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:442
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:434
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:501
 msgid "Type"
 msgstr "Tipo"
 
@@ -6528,7 +6550,7 @@ msgstr "Tipo de encabezamiento"
 msgid "Type:"
 msgstr "Tipo:"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:391
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:403
 msgid "URL"
 msgstr "URL"
 
@@ -6540,11 +6562,11 @@ msgstr "URL"
 msgid "URL : %s"
 msgstr "URL : %s"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:284
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:281
 msgid "URL(s)"
 msgstr "URL(s)"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:500
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:491
 msgid "Unavailable (lost or missing)"
 msgstr "No disponible (perdido o desaparecido)"
 
@@ -6552,7 +6574,7 @@ msgstr "No disponible (perdido o desaparecido)"
 msgid "Unavailable Issues"
 msgstr "Ejemplares no disponibles"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:253
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:250
 msgid "Unified title"
 msgstr "Título unificado"
 
@@ -6569,7 +6591,7 @@ msgid "Uniform Title:"
 msgstr "Título uniforme:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:372
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:158
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:162
 msgid "Uniform titles:"
 msgstr "Títulos uniformes:"
 
@@ -6587,7 +6609,7 @@ msgstr "Error desconocido."
 msgid "Unsubscribe"
 msgstr "Desuscribirse"
 
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:156
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:159
 msgid "Use the \"Confirm\" button below to confirm deletion."
 msgstr "Usar el botón \"Confirmar\" para confirmar el borrado."
 
@@ -6607,7 +6629,7 @@ msgstr "Usar la barra de menú superior para navegar por Koha."
 msgid "Used in <a1>%s records</a>"
 msgstr "Utilizado en <a1>%s registros</a>"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:183
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:179
 #, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
@@ -6660,6 +6682,9 @@ msgstr "Ver en Amazon.com"
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:211
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:213
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:214
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:252
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:254
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:255
 msgid "View details for this title"
 msgstr "Ver detalles para este título"
 
@@ -6668,12 +6693,12 @@ msgstr "Ver detalles para este título"
 msgid "Visual Material"
 msgstr "Material Visual"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:459
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:390
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:450
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:402
 msgid "Vol Info"
 msgstr "Información de volumen"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:506
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:497
 #: opac-tmpl/prog/en/modules/opac-full-serial-issues.tmpl:194
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:128
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:184
@@ -6727,17 +6752,14 @@ msgstr "Teléfono laboral:"
 msgid "Written on %s by %s"
 msgstr "Escrito el %s por %s"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:339
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:237
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:322
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:383
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:452
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:512
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:338
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:386
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:570
 msgid "Year"
 msgstr "Año"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:178
-msgid "Year :"
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:182
+msgid "Year:"
 msgstr "Año :"
 
 #. INPUT type=submit
@@ -6805,7 +6827,7 @@ msgstr ""
 msgid "You have a credit of:"
 msgstr "Usted tiene un crédito de:"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:284
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:277
 msgid "You have already requested this title."
 msgstr "Usted ya ha requerido este título."
 
@@ -6830,11 +6852,11 @@ msgstr ""
 "Usted está suscripto a la notificación por email de nuevos números <a1> "
 "Cancelar notificación por email </a>"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:205
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:201
 msgid "You must select a library for pickup."
 msgstr "Debe seleccionar una biblioteca para hacer el retiro."
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:200
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:196
 msgid "You must select at least one item."
 msgstr "Debe seleccionar al menos un ítem."
 
@@ -6843,12 +6865,12 @@ msgstr "Debe seleccionar al menos un ítem."
 msgid "Young Adult"
 msgstr "Adulto joven"
 
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:125
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:121
 #: opac-tmpl/prog/en/modules/opac-sendbasket.tmpl:2
 msgid "Your Cart"
 msgstr "Su bolsa de libros"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:657
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:669
 msgid "Your Comment"
 msgstr "Su comentario"
 
@@ -6859,8 +6881,6 @@ msgid "Your List : %s"
 msgstr "Sus Listas: %s"
 
 #: opac-tmpl/prog/en/includes/masthead.inc:145
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:345
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:347
 msgid "Your Lists"
 msgstr "Sus Listas"
 
@@ -6942,6 +6962,11 @@ msgstr "Su contraseña ha sido cambiada"
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Su contraseña debe tener al menos %s caracteres de largo."
+
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:409
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:411
+msgid "Your private lists"
+msgstr "Sus listas privadas"
 
 #: opac-tmpl/prog/en/modules/opac-search-history.tmpl:76
 msgid "Your search history is empty."
@@ -7133,13 +7158,13 @@ msgstr "artículo"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:654
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:424
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:477
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:507
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:498
 msgid "at"
 msgstr "en"
 
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=branch
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:45
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:57
 #: opac-tmpl/prog/en/modules/opac-user.tmpl:184
 #, c-format
 msgid "at %s"
@@ -7228,7 +7253,7 @@ msgstr "por"
 #. For the first occurrence,
 #. %1$s: TMPL_VAR name=author
 #: opac-tmpl/prog/en/modules/opac-review.tmpl:71
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:719
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:731
 #, c-format
 msgid "by %s"
 msgstr "por %s"
@@ -7238,6 +7263,7 @@ msgstr "por %s"
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:408
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tmpl:216
 #: opac-tmpl/prog/en/modules/opac-detail.tmpl:96
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:259
 #, c-format
 msgid "by <a1>%s</a>"
 msgstr "por <a1>%s</a>"
@@ -7350,8 +7376,8 @@ msgid "contains biogr. data"
 msgstr "contiene datos biograficos"
 
 #. SPAN
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:175
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:358
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:172
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:357
 msgid ""
 "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;"
 "rft.au=<!-- TMPL_VAR NAME=\"author\" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="
@@ -7484,6 +7510,14 @@ msgstr "enciclopedia"
 msgid "encyclopedia"
 msgstr "enciclopedia"
 
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:158
+msgid "entries"
+msgstr "entradas"
+
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:158
+msgid "entry"
+msgstr "entrada"
+
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:686
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:726
 msgid "essay"
@@ -7497,7 +7531,7 @@ msgstr "ensayos"
 msgid "examination paper"
 msgstr "trabajo de examinación"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:507
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:498
 msgid "expected at"
 msgstr "esperado en"
 
@@ -7588,13 +7622,17 @@ msgstr "para"
 msgid "for '%s'"
 msgstr "para '%s'"
 
-#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:506
+#: opac-tmpl/prog/en/modules/opac-reserve.tmpl:497
 msgid "for patron"
 msgstr "para socio"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:73
 msgid "forms"
 msgstr "formularios"
+
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:81
+msgid "from other users"
+msgstr "de otros usuarios"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:657
@@ -7675,7 +7713,7 @@ msgid "in %s Catalog. <a1>"
 msgstr "en Catálogo %s. <a1>"
 
 #. %1$s: TMPL_VAR name=timeLimitFinite
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:49
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:61
 #, c-format
 msgid "in the past %s months"
 msgstr "en los últimos %s meses"
@@ -7706,8 +7744,14 @@ msgstr "iso2709"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:26
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:33
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:444
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:510
 msgid "item"
 msgstr "ítem"
+
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:510
+msgid "item(s)"
+msgstr "ítem(s)"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:564
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:586
@@ -7715,6 +7759,10 @@ msgstr "ítem"
 #: opac-tmpl/prog/en/modules/ilsdi.tmpl:673
 msgid "item_id"
 msgstr "item_id"
+
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:444
+msgid "items"
+msgstr "ítems"
 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
@@ -7960,6 +8008,10 @@ msgstr "formato de períodico"
 msgid "no illustrations"
 msgstr "sin ilustraciones"
 
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:321
+msgid "nocart"
+msgstr "sin carro"
+
 #: opac-tmpl/prog/en/modules/opac-advsearch.tmpl:56
 msgid "not"
 msgstr "not"
@@ -7981,7 +8033,7 @@ msgstr "música anotada"
 msgid "novel"
 msgstr "novela"
 
-#: opac-tmpl/prog/en/modules/opac-detail.tmpl:580
+#: opac-tmpl/prog/en/modules/opac-detail.tmpl:592
 msgid "now (current)"
 msgstr "ahora (actual)"
 
@@ -7997,7 +8049,7 @@ msgstr "tabla numérica"
 msgid "of accompanying material,"
 msgstr "de material complementario,"
 
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:50
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:62
 msgid "of all time"
 msgstr "de todos los tiempos"
 
@@ -8449,11 +8501,11 @@ msgstr "estadísticas"
 msgid "stone"
 msgstr "piedra"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:102
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:101
 msgid "successfully added."
 msgstr "agregado exitósamente."
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:105
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:104
 msgid "successfully deleted."
 msgstr "borrado exitósamente."
 
@@ -8479,21 +8531,21 @@ msgstr "identificador de ítem del sistema"
 msgid "tactile, with no writing system"
 msgstr "táctil, sin sistema de escritura"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:102
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:105
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:101
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:104
 msgid "tag"
 msgstr "etiqueta"
 
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:102
-#: opac-tmpl/prog/en/modules/opac-tags.tmpl:105
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:101
+#: opac-tmpl/prog/en/modules/opac-tags.tmpl:104
 msgid "tags"
 msgstr "etiquetas"
 
 #. INPUT type=submit name=tagsel_button
 #: opac-tmpl/prog/en/modules/opac-results.tmpl:350
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:156
-#: opac-tmpl/prog/en/modules/opac-basket.tmpl:329
-#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:201
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:153
+#: opac-tmpl/prog/en/modules/opac-basket.tmpl:328
+#: opac-tmpl/prog/en/modules/opac-shelves.tmpl:203
 msgid "tagsel_button"
 msgstr "tagsel_button"
 
@@ -8589,7 +8641,7 @@ msgstr "tesis"
 msgid "title"
 msgstr "título"
 
-#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:43
+#: opac-tmpl/prog/en/modules/opac-topissues.tmpl:55
 msgid "titles"
 msgstr "títulos"
 
@@ -8792,6 +8844,9 @@ msgstr "•"
 #~ msgid "Issues for %s"
 #~ msgstr "Ejemplares para %s"
 
+#~ msgid "Itemtype"
+#~ msgstr "Tipo de ítem"
+
 #~ msgid "Langue:"
 #~ msgstr "Idioma:"
 
@@ -8831,8 +8886,8 @@ msgstr "•"
 #~ msgid "Show my tags"
 #~ msgstr "Mostrar mis etiquetas"
 
-#~ msgid "Show up to"
-#~ msgstr "Mostrar hasta"
+#~ msgid "Sort by"
+#~ msgstr "Ordenado por"
 
 #~ msgid "Sujet"
 #~ msgstr "Tema"
