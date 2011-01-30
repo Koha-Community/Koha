@@ -1516,7 +1516,7 @@ sub AddReturn {
         }
 
         if ($borrowernumber) {
-            MarkIssueReturned($borrowernumber, $item->{'itemnumber'}, $circControlBranch);
+            MarkIssueReturned($borrowernumber, $item->{'itemnumber'}, $circControlBranch, '', $borrower->{'privacy'});
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?  This could be the borrower hash.
         }
 
@@ -1621,7 +1621,7 @@ sub AddReturn {
 
 =head2 MarkIssueReturned
 
-  MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate);
+  MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy);
 
 Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
@@ -1633,6 +1633,9 @@ it's safe to do this, i.e. last non-holiday > issuedate.
 if C<$returndate> is specified (in iso format), it is used as the date
 of the return. It is ignored when a dropbox_branch is passed in.
 
+C<$privacy> contains the privacy parameter. If the patron has set privacy to 2,
+the old_issue is immediately anonymised
+
 Ideally, this function would be internal to C<C4::Circulation>,
 not exported, but it is currently needed by one 
 routine in C<C4::Accounts>.
@@ -1640,7 +1643,7 @@ routine in C<C4::Accounts>.
 =cut
 
 sub MarkIssueReturned {
-    my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate ) = @_;
+    my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "UPDATE issues SET returndate=";
     my @bind;
@@ -1664,6 +1667,16 @@ sub MarkIssueReturned {
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
     $sth_copy->execute($borrowernumber, $itemnumber);
+    # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
+    if ( $privacy == 2) {
+        # The default of 0 does not work due to foreign key constraints
+        # The anonymisation will fail quietly if AnonymousPatron is not a valid entry
+        my $anonymouspatron = (C4::Context->preference('AnonymousPatron')) ? C4::Context->preference('AnonymousPatron') : 0;
+        my $sth_ano = $dbh->prepare("UPDATE old_issues SET borrowernumber=?
+                                  WHERE borrowernumber = ?
+                                  AND itemnumber = ?");
+       $sth_ano->execute($anonymouspatron, $borrowernumber, $itemnumber);
+    }
     my $sth_del  = $dbh->prepare("DELETE FROM issues
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
@@ -2417,10 +2430,13 @@ sub DeleteTransfer {
 
 =head2 AnonymiseIssueHistory
 
-  $rows = AnonymiseIssueHistory($borrowernumber,$date)
+  $rows = AnonymiseIssueHistory($date,$borrowernumber)
 
 This function write NULL instead of C<$borrowernumber> given on input arg into the table issues.
 if C<$borrowernumber> is not set, it will delete the issue history for all borrower older than C<$date>.
+
+If c<$borrowernumber> is set, it will delete issue history for only that borrower, regardless of their opac privacy
+setting (force delete).
 
 return the number of affected rows.
 
@@ -2432,12 +2448,24 @@ sub AnonymiseIssueHistory {
     my $dbh            = C4::Context->dbh;
     my $query          = "
         UPDATE old_issues
-        SET    borrowernumber = NULL
-        WHERE  returndate < '".$date."'
+        SET    borrowernumber = ?
+        WHERE  returndate < ?
           AND borrowernumber IS NOT NULL
     ";
-    $query .= " AND borrowernumber = '".$borrowernumber."'" if defined $borrowernumber;
-    my $rows_affected = $dbh->do($query);
+
+    # The default of 0 does not work due to foreign key constraints
+    # The anonymisation will fail quietly if AnonymousPatron is not a valid entry
+    my $anonymouspatron = (C4::Context->preference('AnonymousPatron')) ? C4::Context->preference('AnonymousPatron') : 0;
+    my @bind_params = ($anonymouspatron, $date);
+    if (defined $borrowernumber) {
+       $query .= " AND borrowernumber = ?";
+       push @bind_params, $borrowernumber;
+    } else {
+       $query .= " AND (SELECT privacy FROM borrowers WHERE borrowers.borrowernumber=old_issues.borrowernumber) <> 0";
+    }
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@bind_params);
+    my $rows_affected = $sth->rows;  ### doublecheck row count return function
     return $rows_affected;
 }
 

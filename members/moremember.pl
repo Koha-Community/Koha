@@ -230,6 +230,12 @@ my $lib2 = &GetSortDetails( "Bsort2", $data->{'sort2'} );
 $template->param( lib1 => $lib1 ) if ($lib1);
 $template->param( lib2 => $lib2 ) if ($lib2);
 
+# Show OPAC privacy preference is system preference is set
+if ( C4::Context->preference('OPACPrivacy') ) {
+    $template->param( OPACPrivacy => 1);
+    $template->param( "privacy".$data->{'privacy'} => 1);
+}
+
 # current issues
 #
 my $issue = GetPendingIssues($borrowernumber);

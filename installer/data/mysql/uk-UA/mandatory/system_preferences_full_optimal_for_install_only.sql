@@ -24,8 +24,8 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonLocale','US','Use to set the Locale of your Amazon.com Web Services','US|CA|DE|FR|JP|UK','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AWSAccessKeyID','','See:  http://aws.amazon.com','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AmazonAssocTag','','See:  http://aws.amazon.com','','free');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonSuggestions',0,'Set to anonymous borrowernumber to enable Anonymous suggestions',NULL,'free');
-
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonSuggestions',0,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AnonymousPatron', '0', 'Set the identifier (borrowernumber) of the anonymous patron. Used for Suggestion and reading history privacy',NULL,'');
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('authoritysep','--','Used to separate a list of authorities in a display. Usually --',10,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('autoBarcode','incremental','Used to autogenerate a barcode: incremental will be of the form 1, 2, 3; annual of the form 2007-0001, 2007-0002; hbyymmincr of the form HB08010001 where HB=Home Branch','incremental|annual|hbyymmincr|OFF','Choice');
@@ -107,6 +107,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacMainUserBlock','Вітаємо у АБІС Koha...\r\n<hr>','A user-defined block of HTML  in the main content area of the opac main page','50|20','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacNav','Тут будуть важливі посилання.','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacPasswordChange',1,'If ON, enables patron-initiated password change in OPAC (disable it when using LDAP auth)',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacPrivacy', '0', 'if ON, allows patrons to define their privacy rules (reading history)',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacreadinghistory',1,'If ON, enables display of Patron Circulation History in OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacsmallimage','','Enter a complete URL to an image to replace the default Koha logo','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacstylesheet','','Enter a complete URL to use an alternate layout stylesheet in OPAC','','free');

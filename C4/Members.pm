@@ -93,6 +93,7 @@ BEGIN {
 	push @EXPORT, qw(
 		&ModMember
 		&changepassword
+         &ModPrivacy
 	);
 
 	#Delete data
@@ -2020,6 +2021,31 @@ sub DebarMember {
     return ModMember( borrowernumber => $borrowernumber,
                       debarred       => 1 );
     
+}
+
+=head2 ModPrivacy
+
+=over 4
+
+my $success = ModPrivacy( $borrowernumber, $privacy );
+
+Update the privacy of a patron.
+
+return :
+true on success, false on failure
+
+=back
+
+=cut
+
+sub ModPrivacy {
+    my $borrowernumber = shift;
+    my $privacy = shift;
+    return unless defined $borrowernumber;
+    return unless $borrowernumber =~ /^\d+$/;
+
+    return ModMember( borrowernumber => $borrowernumber,
+                      privacy        => $privacy );
 }
 
 =head2 AddMessage

@@ -48,7 +48,7 @@ if ( C4::Context->preference("AnonSuggestions") ) {
         }
     );
     if ( !$$suggestion{suggestedby} ) {
-        $$suggestion{suggestedby} = C4::Context->preference("AnonSuggestions");
+        $$suggestion{suggestedby} = C4::Context->preference("AnonymousPatron");
     }
 }
 else {

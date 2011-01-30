@@ -3970,6 +3970,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.xxx';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # reimplement OpacPrivacy system preference
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacPrivacy', '0', 'if ON, allows patrons to define their privacy rules (reading history)',NULL,'YesNo')");
+    $dbh->do("ALTER TABLE `borrowers` ADD `privacy` INTEGER NOT NULL DEFAULT 1;");
+    $dbh->do("ALTER TABLE `deletedborrowers` ADD `privacy` INTEGER NOT NULL DEFAULT 1;");
+    print "Upgrade to $DBversion done (OpacPrivacy reimplementation)\n";
+    SetVersion($DBversion);
+};
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

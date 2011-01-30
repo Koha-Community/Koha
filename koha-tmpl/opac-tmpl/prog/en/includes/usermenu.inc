@@ -17,6 +17,9 @@
   <!-- /TMPL_IF -->
   <!-- TMPL_IF NAME="opacreadinghistory" -->
   <!-- TMPL_IF NAME="readingrecview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-readingrecord.pl">my reading history</a></li>
+     <!-- TMPL_IF NAME="OPACPrivacy" -->
+       <!-- TMPL_IF NAME="privacyview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-privacy.pl">my privacy</a></li>
+     <!-- /TMPL_IF -->
   <!-- /TMPL_IF -->
   <!-- TMPL_IF name="suggestion" -->
     <!-- TMPL_UNLESS NAME="AnonSuggestions" -->

@@ -202,12 +202,6 @@ OPAC:
                   no: "Don't allow"
             - patrons to store items in a temporary "Cart" on the OPAC.
         -
-            - pref: opacreadinghistory
-              choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - patrons to see what books they have checked out in the past.
-        -
             - pref: OpacTopissue
               choices:
                   yes: Allow
@@ -245,12 +239,6 @@ OPAC:
                   yes: Limit
                   no: "Don't limit"
             - "patrons' searches to the library they are registered at."
-        -
-            - pref: AnonSuggestions
-              choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - "patrons that aren't logged in to make purchase suggestions."
 #        -
 #            This system preference does not actually affect anything
 #            - pref: OpacBrowser
@@ -288,12 +276,37 @@ OPAC:
             - purchase suggestions from other patrons on the OPAC.
     Privacy:
         -
+            - pref: AnonSuggestions
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - "patrons that aren't logged in to make purchase suggestions. Suggestions are connected to the AnonymousPatron syspref"
+        -
+            - pref: opacreadinghistory
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to see what books they have checked out in the past.
+        -
             - pref: EnableOpacSearchHistory
               default: 0
               choices:
                   yes: Keep
                   no: "Don't keep"
             - patron search history in the OPAC.
+        -
+            - pref: OPACPrivacy
+              default: 0
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to choose their own privacy settings for their reading history.  This requires opacreadinghistory and AnonymousPatron
+        -
+            - Use borrowernumber
+            - pref: AnonymousPatron
+              class: integer
+            - as the Anonymous Patron (for anonymous suggestions and reading history)
+
     Shelf Browser:
         -
             - pref: OPACShelfBrowser
