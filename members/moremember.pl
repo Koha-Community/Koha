@@ -155,7 +155,7 @@ $data->{ "sex_".$data->{'sex'}."_p" } = 1;
 
 my $catcode;
 if ( $category_type eq 'C') {
-	if ($data->{'guarantorid'} ne '0' ) {
+	if ($data->{guarantorid} ) {
     	my $data2 = GetMember( 'borrowernumber' => $data->{'guarantorid'} );
     	foreach (qw(address city B_address B_city phone mobile zipcode country B_country)) {
     	    $data->{$_} = $data2->{$_};

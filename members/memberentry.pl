@@ -198,10 +198,7 @@ if (($op eq 'insert') and !$nodouble){
 }
 
   #recover all data from guarantor address phone ,fax... 
-if ( defined($guarantorid) and
-     ( $category_type eq 'C' || $category_type eq 'P' ) and
-     $guarantorid ne ''  and
-     $guarantorid ne '0' ) {
+if ( $guarantorid and ( $category_type eq 'C' || $category_type eq 'P' )) {
     if (my $guarantordata=GetMember(borrowernumber => $guarantorid)) {
         $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
         if ( !defined($data{'contactname'}) or $data{'contactname'} eq '' or
@@ -438,7 +435,9 @@ foreach (qw(C A S P I X)) {
 $template->param('typeloop' => \@typeloop);
 
 # test in city
-$select_city=getidcity($data{'city'}) if defined $guarantorid and ($guarantorid ne '0');
+if ( $guarantorid ) {
+    $select_city = getidcity($data{city});
+}
 ($default_city=$select_city) if ($step eq 0);
 if (!defined($select_city) or $select_city eq '' ){
 	$default_city = &getidcity($data{'city'});
@@ -639,7 +638,7 @@ $template->param(
 $template->param(
   nodouble  => $nodouble,
   borrowernumber  => $borrowernumber, #register number
-  guarantorid => (defined($borrower_data->{'guarantorid'})) ? $borrower_data->{'guarantorid'} : $guarantorid,
+  guarantorid => (($borrower_data->{'guarantorid'})) ? $borrower_data->{'guarantorid'} : $guarantorid,
   ethcatpopup => $ethcatpopup,
   relshiploop => \@relshipdata,
   city_loop => $city_arrayref,
