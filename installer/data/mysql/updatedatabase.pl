@@ -3970,7 +3970,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.03.00.xxx';
+$DBversion = '3.03.00.016';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # reimplement OpacPrivacy system preference
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacPrivacy', '0', 'if ON, allows patrons to define their privacy rules (reading history)',NULL,'YesNo')");
