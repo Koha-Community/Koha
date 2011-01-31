@@ -1610,7 +1610,7 @@ sub searchResults {
                 if (   $item->{wthdrawn}
                     || $item->{itemlost}
                     || $item->{damaged}
-                    || $item->{notforloan}
+                    || $item->{notforloan} > 0
 		    || $reservestatus eq 'Waiting'
                     || ($transfertwhen ne ''))
                 {
