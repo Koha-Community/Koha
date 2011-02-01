@@ -318,12 +318,12 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                         <label for="scan-index">Indexed in:</label>
                         <select name="idx" id="scan-index">
                             <option value="">Any Word</option>
-                            <option [% IF ( ms_anycommaphr ) %] selected="selected" [% END %] value="anycommaphr">Any Phrase</option>
+                            <option <!-- TMPL_IF NAME="ms_any,phr" --> selected="selected" [% END %] value="any,phr">Any Phrase</option>
                             <option [% IF ( ms_ti ) %] selected="selected" [% END %] value="ti">Title</option>
-                            <option [% IF ( ms_ticommaphr ) %] selected="selected" [% END %] value="ticommaphr">Title Phrase</option>
-                            <option [% IF ( ms_aucommaphr ) %] selected="selected" [% END %] value="aucommaphr">Author</option>
+                            <option <!-- TMPL_IF NAME="ms_ti,phr" --> selected="selected" [% END %] value="ti,phr">Title Phrase</option>
+                            <option <!-- TMPL_IF NAME="ms_au,phr" --> selected="selected" [% END %] value="au,phr">Author</option>
                             <option [% IF ( ms_su ) %] selected="selected" [% END %] value="su">Subject</option>
-                            <option [% IF ( ms_sucommaphr ) %] selected="selected" [% END %] value="sucommaphr">Subject Phrase</option>
+                            <option <!-- TMPL_IF NAME="ms_su,phr" --> selected="selected" [% END %] value="su,phr">Subject Phrase</option>
                             <option [% IF ( ms_se ) %] selected="selected" [% END %] value="se">Series</option>
                             <option [% IF ( ms_pb ) %] selected="selected" [% END %] value="pb">Publisher</option>
                             <option [% IF ( ms_nt ) %] selected="selected" [% END %] value="nt">Notes</option>
