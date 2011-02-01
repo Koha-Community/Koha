@@ -161,7 +161,7 @@ foreach my $file (@template_files) {
 
 	# misc 'patches'
 	$input_tmpl =~ s/\seq\s/ == /ig;
-	$input_tmpl =~ s/HTML/html/ig;
+	$input_tmpl =~ s/HTML/html/g;
 	$input_tmpl =~ s/URL/url/g;
 	$input_tmpl =~ s/\w*\.__first__/loop.first/ig;
 	$input_tmpl =~ s/\w*\.__last__/loop.last/ig;
