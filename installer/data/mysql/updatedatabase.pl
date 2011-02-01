@@ -3980,7 +3980,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 };
 
-$DBversion = '3.03.00.00X';
+$DBversion = '3.03.00.017';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE  `currency` CHANGE `rate` `rate` FLOAT( 15, 5 ) NULL DEFAULT NULL;");
     print "Upgrade to $DBversion done (Enable currency rates >= 100)\n";
