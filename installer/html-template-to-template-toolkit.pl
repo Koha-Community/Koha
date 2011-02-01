@@ -27,7 +27,7 @@ EOH
 my $tmpl_in_dir      = 'koha-tmpl';
 my $tmpl_out_dir     = 'koha-tt';
 
-# variables NOT to scope, in other words, variables that need to remain global (case sensitive)
+# template toolkit variables NOT to scope, in other words, variables that need to remain global (case sensitive)
 my @globals = ("themelang");
 
 # Arguments:
@@ -85,7 +85,7 @@ foreach my $file (@template_files) {
 	$input_tmpl =~ s/"(\w+)\+"/"$1plus"/ig;
 	$input_tmpl =~ s/"(\w+)\-"/"$1minus"/ig;
 	$input_tmpl =~ s/"(\w+)!"/"$1exclamation"/ig;
-	$input_tmpl =~ s/"(\w+),(\w+)"/"$1comma$2"/ig;
+#	$input_tmpl =~ s/"(\w+),(\w+)"/"$1comma$2"/ig; #caused a problem in patron search
 	$input_tmpl =~ s/NAME="mod"/NAME="modname"/ig;
 	# handle 'naked' TMPL_VAR "parameter" by turning them into what they should be, TMPL_VAR NAME="parameter"
 	$input_tmpl =~ s/TMPL_VAR\s+"(\w+)"/TMPL_VAR NAME="$1"/ig;
@@ -173,7 +173,7 @@ foreach my $file (@template_files) {
 	$input_tmpl =~ s/\|JS/|replace("'", "\\'") |replace('"', '\\"') |replace('\\n', '\\\\n') |replace('\\r', '\\\\r')/ig;
     
 	# Write out..
-	print $OTT $input_tmpl;
+        print $OTT $input_tmpl;
     }
     close $ITMPL;
     close $OTT;
