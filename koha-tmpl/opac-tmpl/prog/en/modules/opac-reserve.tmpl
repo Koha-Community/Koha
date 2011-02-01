@@ -245,7 +245,9 @@
                     <th id="place_on_hdr" style="display:none">Place On</th>
                   <!-- /TMPL_IF -->
                   <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-                    <th>Pickup Location</th>
+		    <!-- TMPL_IF NAME="choose_branch"-->
+                        <th>Pickup Location</th>
+		    <!-- /TMPL_IF -->
                   <!-- /TMPL_UNLESS -->
                 </tr><!-- TMPL_ELSE --><tr><th colspan="5">Title</th></tr><!-- /TMPL_UNLESS -->
 
@@ -416,7 +418,9 @@
                                         <!-- /TMPL_IF --><!-- /TMPL_IF -->
 
                     <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-                      <!-- TMPL_IF NAME="holdable" --><td>
+                        <!-- TMPL_IF NAME="holdable" -->
+			    <!-- TMPL_IF NAME="choose_branch" -->
+			                   <td>
                                               <select name="branch" id="branch_<!-- TMPL_VAR NAME="biblionumber" -->"
                                                 <!-- TMPL_UNLESS NAME="holdable" -->disabled="disabled"<!-- /TMPL_UNLESS --> >
                                                 <!-- TMPL_LOOP NAME="branchChoicesLoop" -->
@@ -427,7 +431,9 @@
                                                   <!-- /TMPL_IF -->
                                                 <!-- /TMPL_LOOP -->
                                               </select>
-                                            </td><!-- /TMPL_IF -->
+                                           </td>
+			    <!-- /TMPL_IF -->
+		        <!-- /TMPL_IF -->
                     <!-- /TMPL_UNLESS -->
                   </tr>
 

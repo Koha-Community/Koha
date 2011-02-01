@@ -88,13 +88,18 @@ if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
 }
 
 # pass the pickup branch along....
-my $branch = $query->param('branch') || C4::Context->userenv->{branch} || '' ;
+my $branch = $query->param('branch') || $borr->{'branchcode'} || C4::Context->userenv->{branch} || '' ;
 ($branches->{$branch}) or $branch = "";     # Confirm branch is real
 $template->param( branch => $branch );
 
 # make branch selection options...
 my $CGIbranchloop = GetBranchesLoop($branch);
 $template->param( CGIbranch => $CGIbranchloop );
+
+# Is the person allowed to choose their branch
+my $OPACChooseBranch = (C4::Context->preference("OPACAllowUserToChooseBranch")) ? 1 : 0;
+
+$template->param( choose_branch => $OPACChooseBranch);
 
 #
 #
@@ -175,7 +180,7 @@ if ( $query->param('place_reserve') ) {
         my $branch    = shift(@selectedItems); # i.e., branch code, not name
 
         my $singleBranchMode = $template->param('singleBranchMode');
-        if ($singleBranchMode) {
+        if ($singleBranchMode || ! $OPACChooseBranch) { # single branch mode or disabled user choosing
             $branch = $borr->{'branchcode'};
         }
 
