@@ -266,8 +266,9 @@ sub SearchAuthorities {
                             '@attr 7=2 @attr 1=Heading 0'
                            :''
                         );            
-        $query=($query?"\@or $orderstring $query":"\@or \@attr 1=_ALLRECORDS \@attr 2=103 '' $orderstring ");
-        
+        $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
+        $query="\@or $orderstring $query" if $orderstring;
+
         $offset=0 unless $offset;
         my $counter = $offset;
         $length=10 unless $length;
