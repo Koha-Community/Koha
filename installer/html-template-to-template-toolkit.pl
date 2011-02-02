@@ -163,6 +163,7 @@ foreach my $file (@template_files) {
 	$input_tmpl =~ s/\seq\s/ == /ig;
 	$input_tmpl =~ s/HTML/html/g;
 	$input_tmpl =~ s/URL/url/g;
+        $input_tmpl =~ s/dhtmlcalendar_dateformat/DHTMLcalendar_dateformat/ig;
 	$input_tmpl =~ s/\w*\.__first__/loop.first/ig;
 	$input_tmpl =~ s/\w*\.__last__/loop.last/ig;
 	$input_tmpl =~ s/\w*\.__odd__/loop.odd/ig;
@@ -170,7 +171,7 @@ foreach my $file (@template_files) {
 	$input_tmpl =~ s/\w*\.__counter__/loop.count/ig; #loop.count gives the range (0..max) whereas loop.index gives the range (1..max+1), __counter__ is unknown
 
 	# hack to get around lack of javascript filter
-	$input_tmpl =~ s/\|JS/|replace("'", "\\'") |replace('"', '\\"') |replace('\\n', '\\\\n') |replace('\\r', '\\\\r')/ig;
+	$input_tmpl =~ s/\|\s*JS/|replace("'", "\\'") |replace('"', '\\"') |replace('\\n', '\\\\n') |replace('\\r', '\\\\r')/ig;
     
 	# Write out..
         print $OTT $input_tmpl;
