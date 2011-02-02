@@ -325,6 +325,14 @@ sub ModBiblio {
         $record->append_fields($field);
     }
 
+    foreach my $field ($record->fields()) {
+        if (! $field->is_control_field()) {
+            if (scalar($field->subfields()) == 0) {
+                $record->delete_fields($field);
+            }
+        }
+    }
+
     # update biblionumber and biblioitemnumber in MARC
     # FIXME - this is assuming a 1 to 1 relationship between
     # biblios and biblioitems
