@@ -78,6 +78,9 @@ foreach my $file (@template_files) {
     my $for_loop_found = 0;
 
     for my $input_tmpl(<$ITMPL>){
+        my @parts = split "<", $input_tmpl;
+        for( my $i=0; $i<=$#parts; ++$i ){
+            my $input_tmpl = $i ? "<" . $parts[$i] : $parts[$i]; # add < sign back in to every part except the first
 	$for_loop_found = 0;
 
 	# handle poorly names variable such as f1!, f1+, f1-, f1| and mod
@@ -175,6 +178,7 @@ foreach my $file (@template_files) {
     
 	# Write out..
         print $OTT $input_tmpl;
+        }
     }
     close $ITMPL;
     close $OTT;
