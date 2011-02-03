@@ -9,7 +9,8 @@ $(document).ready(function() {
 
 KOHA.Preferences = {
     Save: function ( form ) {
-        data = $( form ).find( '.modified' ).serialize();
+        modified_prefs = $( form ).find( '.modified' );
+        data = modified_prefs.serialize();
         if ( !data ) {
             humanMsg.displayAlert( MSG_NOTHING_TO_SAVE );
             return;
@@ -23,7 +24,13 @@ KOHA.Preferences = {
         } );
     },
     Success: function ( form ) {
-        humanMsg.displayAlert( 'Saved' );
+        var msg = "";
+        modified_prefs.each(function(){
+            var modified_pref = $(this).attr("id");
+            modified_pref = modified_pref.replace("pref_","");
+            msg += '<strong>Saved preference '+modified_pref+'</strong>\n';
+        });
+        humanMsg.displayAlert(msg);
 
         $( form )
             .find( '.modified-warning' ).remove().end()
