@@ -76,6 +76,10 @@ $(document).ready(function(){
         <fieldset class="rows">
         <legend>Select items you want to check</legend>
         <ol><li>
+        <label for="branch">Branch</label>
+            <input type="radio" name="branch" value="homebranch">Home Branch</input>
+            <input type="radio" name="branch" value="holdingbranch">Holding Branch</input>
+        </li><li>
         <label for="branchloop">Library</label><select id="branchloop" name="branchcode" style="width:12em;">
             <option value="">All Locations</option>
         <!-- TMPL_LOOP NAME="branchloop" -->
@@ -228,6 +232,7 @@ $(document).ready(function(){
     </form>
     <!-- TMPL_IF NAME="offset" -->
     <form method="post" action="/cgi-bin/koha/tools/inventory.pl">
+        <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
         <input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" />
         <input type="hidden" name="maxlocation" value="<!-- TMPL_VAR NAME="maxlocation" -->" />
         <input type="hidden" name="location" value="<!-- TMPL_VAR NAME="location" -->" />
@@ -241,6 +246,7 @@ $(document).ready(function(){
     <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="nextoffset" -->
     <form method="post">
+        <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
         <input type="hidden" name="location" value="<!-- TMPL_VAR NAME="location" -->" />
         <input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branchcode" -->" />
         <input type="hidden" name="minlocation" value="<!-- TMPL_VAR NAME="minlocation" -->" />
