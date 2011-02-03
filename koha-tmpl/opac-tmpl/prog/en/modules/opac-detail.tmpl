@@ -89,7 +89,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <div id="views"><span class="view"><span id="Normalview">Normal View</span></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">MARC View</a></span> <!-- TMPL_IF NAME="ISBD" --><span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">ISBD View</a></span><!-- /TMPL_IF -->
     </div>
 
-    <span class="results_summary"><!-- TMPL_UNLESS NAME="item-level_itypes" -->
+    <span class="results_summary"><!-- TMPL_UNLESS NAME="item_level_itypes" -->
         [
         <!-- TMPL_IF name="description" -->
             <!-- TMPL_VAR NAME="description" -->
@@ -173,7 +173,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <!-- TMPL_IF name="copyrightdate" -->
     <span class="results_summary"><span class="label">Year: </span><!-- TMPL_VAR NAME="copyrightdate" --></span>
     <!-- /TMPL_IF -->
-    <!-- TMPL_UNLESS NAME="item-level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
+    <!-- TMPL_UNLESS NAME="item_level_itypes" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" />
     <span class="results_summary"><span class="label">Item type: </span>
         <!-- TMPL_IF name="description" -->
         <!-- TMPL_VAR NAME="description" -->
@@ -387,7 +387,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     <!-- TMPL_ELSE -->
 	<table id="holdingst">
 	    <thead><tr>
-		<!-- TMPL_IF NAME="item-level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
+		<!-- TMPL_IF NAME="item_level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
 		<th>Location</th>
 	    <!-- TMPL_IF NAME="itemdata_ccode" --><th>Collection</th><!-- /TMPL_IF -->
 	    <th>Call Number</th>
@@ -399,7 +399,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		<th>Date Due</th>
 	    </tr></thead>
 	    <tbody><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
-	    <tr><!-- TMPL_IF NAME="item-level_itypes" --><td><!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_IF -->
+	    <tr><!-- TMPL_IF NAME="item_level_itypes" --><td><!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR NAME="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_IF -->
 		<td><!-- TMPL_UNLESS NAME="singleBranchMode" --><!-- TMPL_IF name="branchurl" --><a href="<!-- TMPL_VAR NAME="branchurl" -->"><!-- TMPL_VAR NAME="branchname" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <span class="shelvingloc"><!-- TMPL_VAR NAME="location_description" --></span> </td>
 		<!-- TMPL_IF NAME="itemdata_ccode" --><td><!-- TMPL_VAR NAME="ccode" --></td><!-- /TMPL_IF -->
 		<td><!-- TMPL_IF NAME="itemcallnumber" --> <!-- TMPL_VAR NAME="itemcallnumber" --><!-- TMPL_IF NAME="OPACShelfBrowser" -->(<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;shelfbrowse_itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#shelfbrowser">Browse Shelf</a>)<!-- /TMPL_IF --><!-- /TMPL_IF --></td>
@@ -720,7 +720,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <!-- TMPL_ELSE --><span class="no-image">No cover image available</span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 </td>
-<!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_UNLESS --><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
+<!-- TMPL_UNLESS NAME="item_level_itypes" --><td><!-- TMPL_VAR NAME="description" --></td><!-- /TMPL_UNLESS --><td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" ESCAPE="HTML" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="copyrightdate" --> &copy;<!-- TMPL_VAR NAME="copyrightdate" --><!-- /TMPL_IF --><!-- TMPL_IF name="publishercode" -->
     <p><!-- TMPL_VAR NAME="publishercode" ESCAPE="HTML" --> 
        <!-- TMPL_IF name="place" -->(<!-- TMPL_VAR NAME="place"-->)<!--/TMPL_IF--> <!-- TMPL_IF NAME="publicationyear" -->, <!-- TMPL_VAR NAME="publicationyear" --><!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="pages" --><!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" --></p><!-- /TMPL_IF -->

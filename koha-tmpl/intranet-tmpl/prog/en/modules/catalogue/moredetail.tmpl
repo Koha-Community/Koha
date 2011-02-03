@@ -22,7 +22,7 @@
     <h2><!-- TMPL_VAR NAME="title" ESCAPE="html" --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h2>
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> <!-- TMPL_VAR NAME="biblionumber" -->&nbsp;</li>
-        <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+        <!-- TMPL_UNLESS NAME="item_level_itypes" -->
         <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="itemtypename" -->&nbsp;</li>
         <!-- /TMPL_UNLESS -->
         <!-- deprecated? <li><span class="label">Loan length:</span> <!-- TMPL_VAR NAME="loanlength" -->&nbsp;</li> -->
@@ -49,7 +49,7 @@
          <!-- /TMPL_UNLESS --><!-- /TMPL_IF --></h4>
             <ol class="bibliodetails">
             <li><span class="label">Home Library:</span> <!-- TMPL_VAR NAME="homebranchname" -->&nbsp;</li>
-	    <!-- TMPL_IF NAME="item-level_itypes" -->
+	    <!-- TMPL_IF NAME="item_level_itypes" -->
             <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="itype" -->&nbsp;</li>
 	    <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="collection" --><li><span class="label">Collection:</span> <!-- TMPL_VAR NAME="collection" --></li> <!-- /TMPL_IF -->

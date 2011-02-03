@@ -45,36 +45,36 @@
       <!-- TMPL_ELSE -->
       <td>-</td>
       <!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="transport-sms" -->
+      <!-- TMPL_IF NAME="transport_sms" -->
       <!-- TMPL_IF NAME="SMSSendDriver" --><td>
           <!-- TMPL_IF NAME="messaging_form_inactive" -->
                  <input type="checkbox"
                  id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="sms"   <!-- TMPL_VAR NAME="transport-sms" --> disabled="disabled" />
+                 value="sms"   <!-- TMPL_VAR NAME="transport_sms" --> disabled="disabled" />
           <!-- TMPL_ELSE -->
                  <input type="checkbox"
                  id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="sms"   <!-- TMPL_VAR NAME="transport-sms"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
+                 value="sms"   <!-- TMPL_VAR NAME="transport_sms"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
           <!-- /TMPL_IF -->
       </td><!-- /TMPL_IF -->
       <!-- TMPL_ELSE -->
       <td>-</td>
       <!-- /TMPL_IF -->
 
-      <!-- TMPL_IF NAME="transport-email" -->
+      <!-- TMPL_IF NAME="transport_email" -->
       <td>
           <!-- TMPL_IF NAME="messaging_form_inactive" -->
             <input type="checkbox"
                  id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="email"   <!-- TMPL_VAR NAME="transport-email"   --> disabled="disabled" />
+                 value="email"   <!-- TMPL_VAR NAME="transport_email"   --> disabled="disabled" />
           <!-- TMPL_ELSE -->
             <input type="checkbox"
                  id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="email"   <!-- TMPL_VAR NAME="transport-email"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
+                 value="email"   <!-- TMPL_VAR NAME="transport_email"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
           <!-- /TMPL_IF -->
       </td>
       <!-- TMPL_ELSE -->
@@ -99,18 +99,18 @@
       <td>-</td>
       <!-- /TMPL_IF -->
 
-<!--       <!-- TMPL_IF NAME="transport-rss" -->
+<!--       <!-- TMPL_IF NAME="transport_rss" -->
       <td>
           <!-- TMPL_IF NAME="messaging_form_inactive" -->
             <input type="checkbox"
                  id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="rss"   <!-- TMPL_VAR NAME="transport-rss"   --> disabled="disabled" />
+                 value="rss"   <!-- TMPL_VAR NAME="transport_rss"   --> disabled="disabled" />
           <!-- TMPL_ELSE -->
             <input type="checkbox"
                  id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="rss"   <!-- TMPL_VAR NAME="transport-rss"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
+                 value="rss"   <!-- TMPL_VAR NAME="transport_rss"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
           <!-- /TMPL_IF -->
       </td>
       <!-- TMPL_ELSE -->

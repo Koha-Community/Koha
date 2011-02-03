@@ -13,7 +13,7 @@ $.tablesorter.addParser({
 $(document).ready(function() {
     <!-- TMPL_LOOP NAME="branchesloop" -->
     $.tablesorter.defaults.widgets = ['zebra'];
-    $("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF ="dateformat_metric" -->
+    $("#transferst<!-- TMPL_VAR NAME="branchcode" -->").tablesorter({<!-- TMPL_IF NAME="dateformat_metric" -->
         dateFormat: 'uk',<!-- /TMPL_IF -->
         sortList: [[0,0]],
         headers: { 1: { sorter: 'articles' }}

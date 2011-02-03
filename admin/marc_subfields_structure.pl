@@ -364,8 +364,8 @@ if ( $op eq 'add_form' ) {
         $row_data{row}    = $j;
         push( @loop_data, \%row_data );
     }
-    $template->param( 'use-heading-flags-p'      => 1 );
-    $template->param( 'heading-edit-subfields-p' => 1 );
+    $template->param( 'use_heading_flags_p'      => 1 );
+    $template->param( 'heading_edit_subfields_p' => 1 );
     $template->param(
         action   => "Edit subfields",
         tagfield => $tagfield,
