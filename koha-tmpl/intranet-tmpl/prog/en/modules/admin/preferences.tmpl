@@ -6,15 +6,21 @@
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang"-->/css/humanmsg.css" />
 <script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
 <script src="<!-- TMPL_VAR NAME="themelang" -->/js/ajax.js" type="text/javascript"></script>
-<script src="<!-- TMPL_VAR NAME="themelang" -->/js/pages/preferences.js" type="text/javascript"></script>
-<script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js" type="text/javascript"></script>
 <script type="text/javascript">
- //<![CDATA[
+//<![CDATA[
     // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
     var to_highlight = "<!-- TMPL_VAR NAME="searchfield" ESCAPE="JS"-->";
     var search_jumped = <!-- TMPL_IF NAME="search_jumped" -->true<!-- TMPL_ELSE -->false<!-- /TMPL_IF -->;
+    var MSG_NOTHING_TO_SAVE = _("Nothing to save");
+    var MSG_SAVING = _("Saving...");
+    var MSG_MODIFIED = _("modified");
+    var MSG_MADE_CHANGES = _("You have made changes to system preferences.");
+    var MSG_CLICK_TO_EXPAND = _("Click to expand this section");
+    var MSG_CLICK_TO_COLLAPSE = _("Click to collapse this section");
 //]]>
 </script>
+<script src="<!-- TMPL_VAR NAME="themelang" -->/js/pages/preferences.js" type="text/javascript"></script>
+<script src="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js" type="text/javascript"></script>
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
