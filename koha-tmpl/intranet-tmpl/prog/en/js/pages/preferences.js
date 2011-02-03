@@ -11,10 +11,10 @@ KOHA.Preferences = {
     Save: function ( form ) {
         data = $( form ).find( '.modified' ).serialize();
         if ( !data ) {
-            humanMsg.displayAlert( 'Nothing to save' );
+            humanMsg.displayAlert( MSG_NOTHING_TO_SAVE );
             return;
         }
-        KOHA.AJAX.MarkRunning( $( form ).find( '.save-all' ), _( 'Saving...' ) );
+        KOHA.AJAX.MarkRunning( $( form ).find( '.save-all' ), _( MSG_SAVING ) );
         KOHA.AJAX.Submit( {
             data: data,
             url: '/cgi-bin/koha/svc/config/systempreferences/',
@@ -38,7 +38,7 @@ $( document ).ready( function () {
         $( this ).addClass( 'modified' );
         var name_cell = $( this ).parents( '.name-row' ).find( '.name-cell' );
 		if ( !name_cell.find( '.modified-warning' ).length )
-            name_cell.append( '<em class="modified-warning">(modified)</em>' );
+            name_cell.append( '<em class="modified-warning">('+MSG_MODIFIED+')</em>' );
         KOHA.Preferences.Modified = true;
     }
 
@@ -54,7 +54,7 @@ $( document ).ready( function () {
 
     window.onbeforeunload = function () {
         if ( KOHA.Preferences.Modified ) {
-            return _( "You have made changes to system preferences." );
+            return MSG_MADE_CHANGES;
         }
     }
 
@@ -73,16 +73,16 @@ $( document ).ready( function () {
         return false;
     } ).nextAll( 'textarea, input[type=submit]' ).hide().css( { opacity: 0 } );
 
-    $("h3").attr("class","expanded").attr("title",_("Click to expand this section"));
+    $("h3").attr("class","expanded").attr("title",MSG_CLICK_TO_EXPAND);
     var collapsible = $(".collapsed,.expanded");
 
     $(collapsible).toggle(
         function () {
-            $(this).addClass("collapsed").removeClass("expanded").attr("title",_("Click to expand this section"));
+            $(this).addClass("collapsed").removeClass("expanded").attr("title",MSG_CLICK_TO_EXPAND);
             $(this).next("table").hide();
         },
         function () {
-            $(this).addClass("expanded").removeClass("collapsed").attr("title",_("Click to collapse this section"));
+            $(this).addClass("expanded").removeClass("collapsed").attr("title",MSG_CLICK_TO_COLLAPSE);
             $(this).next("table").show();
         }
     );
