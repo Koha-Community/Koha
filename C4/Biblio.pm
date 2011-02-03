@@ -1680,13 +1680,18 @@ sub TransformKohaToMarcOneField {
     }
     $sth->execute( $frameworkcode, $kohafieldname );
     if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
+        my @values = split(/\s?\|\s?/, $value, -1);
+        
+        foreach my $itemvalue (@values){
         my $tag = $record->field($tagfield);
         if ($tag) {
-            $tag->update( $tagsubfield => $value );
+                $tag->add_subfields( $tagsubfield => $itemvalue );
             $record->delete_field($tag);
             $record->insert_fields_ordered($tag);
-        } else {
-            $record->add_fields( $tagfield, " ", " ", $tagsubfield => $value );
+            }
+            else {
+                $record->add_fields( $tagfield, " ", " ", $tagsubfield => $itemvalue );
+            }
         }
     }
     return $record;
