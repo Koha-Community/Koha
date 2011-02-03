@@ -1930,6 +1930,7 @@ sub TransformHtmlToMarc {
                         length( $cgi->param($params->[$j+1]) ) == 24
                         ? $cgi->param( $params->[ $j + 1 ] )
                         : '     nam a22        4500'
+			)
                     ;
                     # between 001 and 009 (included)
                 } elsif ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {
