@@ -1779,6 +1779,9 @@ sub _do_column_fixes_for_mod {
     if (exists $item->{'location'} && !exists $item->{'permanent_location'}) {
         $item->{'permanent_location'} = $item->{'location'};
     }
+    if (exists $item->{'timestamp'}) {
+        delete $item->{'timestamp'};
+    }
 }
 
 =head2 _get_single_item_column
