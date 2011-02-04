@@ -191,6 +191,7 @@ function set_to_today(id, force) {
 <!-- TMPL_IF NAME="no_next_barcode" --><div class="dialog alert"><strong>Error saving items</strong>: Unable to automatically determine values for barcodes. No item has been inserted.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="book_on_loan" --><div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="book_reserved" --><div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div><!-- /TMPL_IF -->
+<!-- TMPL_IF Name="not_same_branch" --><div class="dialog alert"><strong>Cannot Delete</strong>: The items do not belong to your branch.</div><!-- /TMPL_IF -->
 
 <div id="cataloguing_additem_itemlist">
     <!-- TMPL_IF name="item_loop" -->

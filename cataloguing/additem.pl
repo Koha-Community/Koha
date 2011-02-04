@@ -435,14 +435,28 @@ if ($op eq "additem") {
 } elsif ($op eq "delallitems") {
 #-------------------------------------------------------------------------------
     my @biblioitems = &GetBiblioItemByBiblioNumber($biblionumber);
-    foreach my $biblioitem (@biblioitems){
-        my $items = &GetItemsByBiblioitemnumber($biblioitem->{biblioitemnumber});
+    my $errortest=0;
+    my $itemfail;
+    foreach my $biblioitem (@biblioitems) {
+        my $items = &GetItemsByBiblioitemnumber( $biblioitem->{biblioitemnumber} );
 
-        foreach my $item (@$items){
-            # FIXME although it won't delete items that have loans
-            # or waiting holds on them, should explicitly tell operator
-            # about items that are not deleted
-            &DelItemCheck($dbh,$biblionumber,$item->{itemnumber});
+        foreach my $item (@$items) {
+            $error =&DelItemCheck( $dbh, $biblionumber, $item->{itemnumber} );
+            $itemfail =$item;
+        if($error == 1){
+            next
+            }
+        else {
+            push @errors,$error;
+            $errortest++
+            }
+        }
+        if($errortest > 0){
+            $nextop="additem";
+        } 
+        else {
+            print $input->redirect("/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=$biblionumber");
+            exit;
         }
 	}
 #-------------------------------------------------------------------------------

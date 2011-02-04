@@ -1,6 +1,7 @@
 package C4::Items;
 
 # Copyright 2007 LibLime, Inc.
+# Parts Copyright Biblibre 2010
 #
 # This file is part of Koha.
 #
@@ -2043,21 +2044,31 @@ sub DelItemCheck {
     my $sth=$dbh->prepare("select * from issues i where i.itemnumber=?");
     $sth->execute($itemnumber);
 
-    my $onloan=$sth->fetchrow;
-
-    if ($onloan){
-        $error = "book_on_loan" 
-    }else{
-        # check it doesnt have a waiting reserve
-        $sth=$dbh->prepare("SELECT * FROM reserves WHERE (found = 'W' or found = 'T') AND itemnumber = ?");
-        $sth->execute($itemnumber);
-        my $reserve=$sth->fetchrow;
-        if ($reserve){
-            $error = "book_reserved";
-        }else{
-            DelItem($dbh, $biblionumber, $itemnumber);
-            return 1;
-        }
+    my $item = GetItem($itemnumber);
+    my $onloan = $sth->fetchrow;
+    if ($onloan) {
+        $error = "book_on_loan";
+    }
+    elsif (C4::Context->preference("IndependantBranches") and (C4::Context->userenv->{branch} ne $item->{C4::Context->preference("HomeOrHoldingBranch")||'homebranch'})){
+        $error = "not_same_branch";
+    } 
+    else {
+	if ($onloan){ 
+	    $error = "book_on_loan" 
+	}
+	else {
+	    # check it doesnt have a waiting reserve
+	    $sth=$dbh->prepare("SELECT * FROM reserves WHERE (found = 'W' or found = 'T') AND itemnumber = ?");
+	    $sth->execute($itemnumber);
+	    my $reserve=$sth->fetchrow;
+	    if ($reserve) {
+		$error = "book_reserved";
+	    } 
+	    else {
+		DelItem($dbh, $biblionumber, $itemnumber);
+		return 1;
+	    }
+	}
     }
     return $error;
 }
