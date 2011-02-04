@@ -383,7 +383,7 @@ sub branchinfotable {
                 categorytype    => $cat->{'categorytype'},
             };
     	}
-        push @branchcategories, { categorytype => $ctype , $ctype => 1 , catloop => \@categories};
+        push @branchcategories, { categorytype => $ctype , $ctype => 1 , catloop => ( @categories ? \@categories : undef) };
 	}
     $innertemplate->param(
         branches         => \@loop_data,
