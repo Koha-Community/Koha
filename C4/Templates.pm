@@ -109,6 +109,8 @@ sub param{
 	my $key = shift;
 	my $val = shift;
         utf8::encode($val) if utf8::is_utf8($val);
+        if( ref($val) eq 'ARRAY' && ! scalar @$val ){ $val = undef; }
+        elsif( ref($val) eq 'HASH' && ! scalar %$val ){ $val = undef; }
 	$self->{VARS}->{$key} = $val;
     }
 }
