@@ -153,7 +153,7 @@ $template->param(search_languages_loop => $languages_limit_loop,);
 # load the Type stuff
 my $itemtypes = GetItemTypes;
 # the index parameter is different for item-level itemtypes
-my $itype_or_itemtype = (C4::Context->preference("item_level_itypes"))?'itype':'itemtype';
+my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
 my @itemtypesloop;
 my $selected=1;
 my $cnt;
