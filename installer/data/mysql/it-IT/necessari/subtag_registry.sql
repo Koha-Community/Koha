@@ -137,7 +137,7 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES( 'da','dan');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'da', 'language', 'da', 'D&aelig;nsk');
+VALUES ( 'da', 'language', 'da', 'Dansk');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'da', 'language', 'en', 'Danish');
@@ -153,7 +153,7 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES( 'nl','dut');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'nl', 'language', 'nl', 'ned&#601;rl&#593;ns');
+VALUES ( 'nl', 'language', 'nl', 'Nederlands');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'nl', 'language', 'en', 'Dutch');
