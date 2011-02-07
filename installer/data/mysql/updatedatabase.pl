@@ -3924,6 +3924,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do( q|update language_descriptions set description = 'Nederlands' where lang = 'nl' and subtag = 'nl'|);
+    $dbh->do( q|update language_descriptions set description = 'Dansk' where lang = 'da' and subtag = 'da'|);
+    print "Upgrade to $DBversion done (Correct lnaguage descriptions)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
