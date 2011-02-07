@@ -383,7 +383,7 @@ if ($nok or !$nodouble){
 } 
 if (C4::Context->preference("IndependantBranches")) {
     my $userenv = C4::Context->userenv;
-    if ($userenv->{flags} % 2 != 1 && $data{branchcode}){
+    if ($userenv->{flags} % 2 != 1 && $data{'branchcode'}){
         unless ($userenv->{branch} eq $data{'branchcode'}){
             print $input->redirect("/cgi-bin/koha/members/members-home.pl");
             exit;
@@ -501,7 +501,7 @@ my $borrotitlepopup = CGI::popup_menu(-name=>'title',
         -default=>$default_borrowertitle
         );    
 
-my @relationships = split /,|\|/, C4::Context->preference('BorrowerRelationship');
+my @relationships = split /,|\|/, C4::Context->preference('borrowerRelationship');
 my @relshipdata;
 while (@relationships) {
   my $relship = shift @relationships || '';
@@ -557,7 +557,9 @@ if(scalar(@select_branch) > 0){
 # --------------------------------------------------------------------------------------------------------
   #in modify mod :default value from $CGIbranch comes from borrowers table
   #in add mod: default value come from branches table (ip correspendence)
-$default=$data{'branchcode'}  if ($op eq 'modify' || ($op eq 'add' && $category_type eq 'C' && $data{'branchcode'}));
+if (defined ($data{'branchcode'}) and ( $op eq 'modify' || ( $op eq 'add' && $category_type eq 'C' ) )) {
+    $default = $data{'branchcode'};
+}
 $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
             -name   => 'branchcode',
             -values => \@select_branch,
