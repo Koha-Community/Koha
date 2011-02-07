@@ -18,6 +18,11 @@ function Check(ff) {
         ok=1;
                     _alertString += "\n- " + _("Title cannot be empty");
     }
+    
+    if(isNull(ff.budget_id,1)){
+		ok=1;
+					_alertString += "\n- "+ _("You must select a budget");
+    }
 
     if (!(isNum(ff.quantity,0))){
         ok=1;
