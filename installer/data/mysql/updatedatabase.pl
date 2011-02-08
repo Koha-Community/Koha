@@ -3987,7 +3987,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.03.00.XXX';
+$DBversion = '3.03.00.018';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do( q|update language_descriptions set description = 'Nederlands' where lang = 'nl' and subtag = 'nl'|);
     $dbh->do( q|update language_descriptions set description = 'Dansk' where lang = 'da' and subtag = 'da'|);
