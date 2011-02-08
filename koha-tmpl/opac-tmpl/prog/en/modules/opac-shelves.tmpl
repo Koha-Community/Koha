@@ -142,7 +142,7 @@ $(function() {
       <!-- TMPL_INCLUDE NAME="masthead.inc" -->
       <div id="yui-main">
         <div class="yui-b">
-          <div class="container">
+          <div id="usershelves" class="container">
           
             <!-- TMPL_IF NAME="paramsloop" -->
               <!-- TMPL_LOOP NAME="paramsloop" -->
@@ -594,7 +594,7 @@ $(function() {
       </div>
       <!-- TMPL_IF EXPR="OpacNav||loggedinusername" -->
         <div class="yui-b">
-          <div class="container">
+          <div is="leftmenus" class="container">
             <!-- TMPL_INCLUDE NAME="navigation.inc" -->
             <!-- TMPL_INCLUDE NAME="usermenu.inc" -->
           </div>
