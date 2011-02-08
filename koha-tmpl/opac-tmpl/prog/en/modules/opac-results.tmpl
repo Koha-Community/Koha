@@ -332,8 +332,10 @@ $(document).ready(function(){
             <!-- checkall, clearall are now needed for placehold -->
             <span class="checkall"></span>
         	<span class="clearall"></span>
-            <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
-            <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+            <!-- TMPL_IF NAME="OpacHighlightedWords" -->
+            	<a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+            	<a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+            <!-- /TMPL_IF -->
             <!-- TMPL_IF EXPR="opacbookbag || virtualshelves" -->
     	    	<span class="addto"></span>
             <!-- /TMPL_IF -->
