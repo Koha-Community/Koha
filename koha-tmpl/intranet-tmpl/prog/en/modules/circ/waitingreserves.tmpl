@@ -116,6 +116,7 @@ $.tablesorter.addParser({
         <!-- /TMPL_IF -->
         </div>
         <div id="holdsover">
+                <p>Holds listed here have been awaiting pickup for more than <!-- TMPL_VAR NAME="ReservesMaxPickUpDelay" --> days.</p>
                 <!-- TMPL_IF NAME="overloop" -->
                <table id="holdso">
                <thead><tr>
@@ -130,7 +131,7 @@ $.tablesorter.addParser({
                         <td><p><!-- TMPL_VAR NAME="waitingdate" --></p></td>
                         <td><!-- TMPL_INCLUDE NAME="biblio-default-view.inc" --><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" ESCAPE="html" -->
                         </a>
-                            &nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)
+                            <!-- TMPL_UNLESS NAME="item_level_itypes" --><!-- TMPL_IF NAME="itemtype" -->&nbsp; (<b><!-- TMPL_VAR NAME="itemtype" --></b>)<!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
                         <br />Barcode: <!-- TMPL_VAR NAME="barcode" -->
                     </td>
                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernum"-->"><!-- TMPL_VAR NAME="borrowername" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
