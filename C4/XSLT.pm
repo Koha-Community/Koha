@@ -129,9 +129,9 @@ sub XSLTParse4Display {
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
     my $sysxml = "<sysprefs>\n";
     foreach my $syspref ( qw/OPACURLOpenInNewWindow DisplayOPACiconsXSLT URLLinkText viewISBD OPACBaseURL/ ) {
-        $sysxml .= "<syspref name=\"$syspref\">" .
-                   C4::Context->preference( $syspref ) .
-                   "</syspref>\n";
+        my $sp = C4::Context->preference( $syspref );
+        next unless defined($sp);
+        $sysxml .= "<syspref name=\"$syspref\">$sp</syspref>\n";
     }
     $sysxml .= "</sysprefs>\n";
     $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
