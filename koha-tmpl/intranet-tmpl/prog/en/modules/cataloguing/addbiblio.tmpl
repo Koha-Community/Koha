@@ -436,20 +436,13 @@ function CloneField(index) {
                             anchors[j].setAttribute('onclick',"CloneField('" + new_id + "')");
                         } else if (anchors[j].getAttribute('class') == 'buttonMinus') {
                             anchors[j].setAttribute('onclick',"UnCloneField('" + new_id + "')");
+                        } else if (anchors[j].getAttribute('class') == 'expandfield') {
+                            anchors[j].setAttribute('onclick',"ExpandField('" + new_id + "')");
                         }
                     }
                 }
                 catch(e){
                     // do nothig CloneButtonPlus doesn't exist.
-                }
-                // setting its 'Expand' property
-                var ExpandFieldA=0;
-                try {
-                    ExpandFieldA = divs[i].getElementsByTagName('a')[0];
-                    ExpandFieldA.setAttribute('onclick',"ExpandField('" + divs[i].parentNode.getAttribute('id') + "')");
-                }
-                catch(e){
-                    // do nothig if ButtonPlus & CloneButtonPlus don t exist.
                 }
 
             }
