@@ -1307,6 +1307,7 @@ sub merge {
     } else {
         #zebra connection  
         my $oConnection=C4::Context->Zconn("biblioserver",0);
+        my $oldSyntax = $oConnection->option("preferredRecordSyntax");
         $oConnection->option("preferredRecordSyntax"=>"XML");
         my $query;
         $query= "an=".$mergefrom;
@@ -1323,7 +1324,8 @@ sub merge {
             push @reccache, $marcdata;
             $z++;
         }
-        $oConnection->destroy();    
+        $oResult->destroy();
+        $oConnection->option("preferredRecordSyntax"=>$oldSyntax);
     }
     #warn scalar(@reccache)." biblios to update";
     # Get All candidate Tags for the change 
