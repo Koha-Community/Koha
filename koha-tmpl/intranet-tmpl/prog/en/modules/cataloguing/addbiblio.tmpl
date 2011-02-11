@@ -30,18 +30,17 @@
 	 
 	 $('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
 
-function confirmnotdup(){
+function confirmnotdup(redirect){
 	$("#confirm_not_duplicate").attr("value","1");
-	// alert(_("Not a duplicate confirmed. Please click on Add biblio to save the record"));
-	var checkform =	$("#f");
-	Check(checkform);
+    $("#redirect").attr("value",redirect);
+	Check();
 }
 
 /**
  * 
  * 
  */
-function Check(dest){
+function Check(){
     var StrAlert = AreMandatoriesNotOk();
     if( ! StrAlert ){
         document.f.submit();
@@ -656,12 +655,15 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                     <div class="dialog alert">
                         <h4>Duplicate Record suspected</h4>
                         <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&amp;popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
-                        <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
-                            <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" />
-                            <input type="submit" class="edit" value="Yes: Edit existing items" />
-                        </form>
+                        <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
+                                                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" />
+                                                    <input type="submit" class="edit" value="Yes: Edit existing items" />
+                                                </form><!-- TMPL_ELSE --><form action="/cgi-bin/koha/catalogue/detail.pl" method="get">
+                                                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" />
+                                                    <input type="submit" value="Yes: View existing items" />
+                                                </form><!-- /TMPL_IF -->
                         <form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get">
-                            <input type="submit" class="save" onclick="confirmnotdup(); return false;" value="No: Save as New Record" />
+                        <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><input type="button" class="save" onclick="confirmnotdup('items'); return false;" value="No: Save as New Record" /><!-- TMPL_ELSE --><input type="button" class="save" onclick="confirmnotdup('view'); return false;" value="No: Save as New Record" /><!-- /TMPL_IF -->
                         </form>
                     </div>
         <!-- /TMPL_IF -->
@@ -675,7 +677,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     </script>
 <!--TMPL_ELSE-->
     <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
-    <input type="hidden" value="" id="redirect" name="redirect" />
+    <input type="hidden" value="<!-- tmpl_if name="biblionumber" -->view<!-- tmpl_else -->items<!-- /tmpl_if -->" id="redirect" name="redirect" />
 	<input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 <!-- /TMPL_IF -->
 	
@@ -692,12 +694,12 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	    yuiToolbar();
 	 });
 
-    var onOption = function () {
-        return Check();
-    }
-
     function redirect(dest){
         $("#redirect").attr("value",dest);
+        return Check();
+    }
+<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
+    var onOption = function () {
         return Check();
     }
 
@@ -705,13 +707,12 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         { text: _("Save and view record"), value: 1, onclick: {fn:function(){redirect("view");}} },
         { text: _("Save and edit items"), value: 2, onclick: {fn:function(){redirect("items");}} }
     ];
-
+<!-- /TMPL_IF -->
 
 	// YUI Toolbar Functions
 
 	function yuiToolbar() {
-	    // new YAHOO.widget.Button("addbiblio");
-
+<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
         var savesplitmenu = new YAHOO.widget.Button({
             type: "split",
             label: _("Save"),
@@ -722,7 +723,15 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
          });
 
         savesplitmenu.on("click", onOption); 
-
+<!-- TMPL_ELSE -->
+        new YAHOO.widget.Button({
+            id: "addbiblio",
+            type: "button",
+            label: _("Save"),
+            container: "savebutton",
+            onclick: {fn:function(){redirect("view");}}
+        });
+<!-- /TMPL_IF -->
 		new YAHOO.widget.Button({
             id: "z3950search",
             type: "button",
