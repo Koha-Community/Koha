@@ -213,7 +213,7 @@ END_SQL
         $choices->{ $row->{'message_name'} }->{'message_name'}         = $row->{'message_name'};
         $choices->{ $row->{'message_name'} }->{'takes_days'}           = $row->{'takes_days'};
         $choices->{ $row->{'message_name'} }->{'has_digest'}           = 1 if $row->{'is_digest'};
-        $choices->{ $row->{'message_name'} }->{'transport-' . $row->{'message_transport_type'}} = ' ';
+        $choices->{ $row->{'message_name'} }->{'transport_' . $row->{'message_transport_type'}} = ' ';
     }
 
     my @return = values %$choices;
