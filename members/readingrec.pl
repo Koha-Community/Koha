@@ -50,21 +50,11 @@ if ($input->param('borrowernumber')) {
     $data = GetMember(borrowernumber => $borrowernumber);
 }
 
-my $order=$input->param('order') || 'date_due desc';
-my $limit=$input->param('limit');
-
-if ($limit){
-    if ($limit eq 'full'){
-		$limit=0;
-    }
-}
-else {
-  $limit=50;
-}
+my $order = 'date_due desc';
+my $limit = 0;
 my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
 
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "members/readingrec.tmpl",
+my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tmpl",
 				query => $input,
 				type => "intranet",
 				authnotrequired => 0,

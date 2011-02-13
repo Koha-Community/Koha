@@ -4,8 +4,16 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
 <script type="text/javascript" id="js">$(document).ready(function() {
+	$.tablesorter.addParser({
+		id: 'articles',
+		is: function(s) {return false;  },
+		format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+		type: 'text'
+	});
+	$.tablesorter.defaults.widgets = ['zebra'];
 	$("#table_readingrec").tablesorter({
-		sortList: [[1,0]],
+		sortList: [[8,1]],
+		headers: { 1: { sorter: 'articles' }}
 	}).tablesorterPager({container: $("#pagertable_readingrec"),positionFixed: false,size: 20});
 }); </script>
 </head>
@@ -23,9 +31,7 @@
 <!-- TMPL_INCLUDE NAME="circ-toolbar.inc" -->
 <h1>Circulation History</h1>
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" /></form>
-<p><!-- TMPL_IF NAME="showfulllink" -->Showing All Items |
-	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=50">Show Last 50 Items Only</a> <!-- TMPL_ELSE -->	Showing Last 50 Items | 
-	<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;limit=full">Show All Items</a><!-- /TMPL_IF --></p>
+
 <span id="pagertable_readingrec" class="pager">
 	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
 		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
@@ -46,39 +52,23 @@
 </span>
 <table id="table_readingrec">
 <thead>
-    <th>
-        <a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=issuestimestamp&amp;limit=<!-- TMPL_VAR name="limit" -->">Date</a>
-    </th>
-	<th>
-		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=title&amp;limit=<!-- TMPL_VAR name="limit" -->">Title</a>
-	</th>
-	<th>
-		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=author&amp;limit=<!-- TMPL_VAR name="limit" -->">Author</a>
-	</th>
+    <th>Date</th>
+	<th>Title</th>
+	<th>Author</th>
 	<th>Call No.</th>
 	<th>Barcode</th>
 	<th>Number of Renewals</th>
 	<th>Checked out on</th>
 	<th>Checked out from</th>
 	<th>Date Due</th>
-	<th>
-		<a href="readingrec.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->&amp;order=returndate%20DESC&amp;limit=<!-- TMPL_VAR name="limit" -->">Return Date</a>
-	</th>
+	<th>Return Date</th>
 </thead>
 <!-- TMPL_LOOP name="loop_reading" -->
-<!-- TMPL_UNLESS NAME="__odd__" -->
-    <!-- TMPL_IF NAME="returndate" --><tr class="highlight"><!-- TMPL_ELSE --><tr class="highlight onissue"><!-- /TMPL_IF -->
-<!-- TMPL_ELSE -->
     <!-- TMPL_IF NAME="returndate" --><tr><!-- TMPL_ELSE --><tr class="onissue"><!-- /TMPL_IF -->
-<!-- /TMPL_UNLESS -->
         <td>
             <!-- TMPL_VAR name="issuestimestamp" -->
         </td>
-        <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">
-                <!-- TMPL_VAR name="title" escape="html" -->
-            </a>
-        </td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR name="title" escape="html" --></a></td>
 
         <td><!-- TMPL_VAR name="author" --></td>
 
