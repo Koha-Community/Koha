@@ -472,7 +472,7 @@ Calendar.calDragIt = function (ev) {
 		posX = ev.pageX;
 		posY = ev.pageY;
 	}
-	cal.hideShowCovered();
+	// cal.hideShowCovered();
 	var st = cal.element.style;
 	st.left = (posX - cal.xOffs) + "px";
 	st.top = (posY - cal.yOffs) + "px";
@@ -490,7 +490,7 @@ Calendar.calDragEnd = function (ev) {
 		removeEvent(document, "mouseup", calDragEnd);
 		tableMouseUp(ev);
 	}
-	cal.hideShowCovered();
+	// cal.hideShowCovered();
 };
 
 Calendar.dayMouseDown = function(ev) {
@@ -1200,7 +1200,7 @@ Calendar.prototype.callCloseHandler = function () {
 	if (this.onClose) {
 		this.onClose(this);
 	}
-	this.hideShowCovered();
+	// this.hideShowCovered();
 };
 
 /** Removes the calendar object from the DOM tree and destroys it. */
@@ -1258,7 +1258,7 @@ Calendar.prototype.show = function () {
 		Calendar.addEvent(document, "keypress", Calendar._keyEvent);
 		Calendar.addEvent(document, "mousedown", Calendar._checkCalendar);
 	}
-	this.hideShowCovered();
+	// this.hideShowCovered();
 };
 
 /**
@@ -1273,7 +1273,7 @@ Calendar.prototype.hide = function () {
 	}
 	this.element.style.display = "none";
 	this.hidden = true;
-	this.hideShowCovered();
+	// this.hideShowCovered();
 };
 
 /**
@@ -1463,7 +1463,7 @@ Calendar.prototype.parseDate = function (str, fmt) {
 	}
 };
 
-Calendar.prototype.hideShowCovered = function () {
+/* Calendar.prototype.hideShowCovered = function () {
 	var self = this;
 	Calendar.continuation_for_the_fucking_khtml_browser = function() {
 		function getVisib(obj){
@@ -1523,7 +1523,7 @@ Calendar.prototype.hideShowCovered = function () {
 		setTimeout("Calendar.continuation_for_the_fucking_khtml_browser()", 10);
 	else
 		Calendar.continuation_for_the_fucking_khtml_browser();
-};
+}; */
 
 /** Internal function; it displays the bar with the names of the weekday. */
 Calendar.prototype._displayWeekdays = function () {
