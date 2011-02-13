@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# Parts Copyright Biblibre 2010
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -27,7 +28,6 @@ use C4::Branch;
 use C4::Category;
 
 my $query = new CGI;
-my $quicksearch = $query->param('quicksearch');
 my $branch = $query->param('branchcode');
 my $template_name;
 
@@ -39,7 +39,6 @@ my ($template, $loggedinuser, $cookie)
                  flagsrequired => {borrowers => 1},
                  debug => 1,
                  });
-}
 
 my $branches = GetBranches;
 my @branchloop;
@@ -59,16 +58,21 @@ my $branchloop = (defined $branch?GetBranchesLoop($branch):GetBranchesLoop());
 if(scalar(@$branchloop) < 1){
     $no_add = 1;
     $template->param(no_branches => 1);
-} else {
+} 
+else {
     $template->param(branchloop=>\@$branchloop);
 }
 
 @categories=C4::Category->all;
-if(scalar(@categories) < 1){ $no_categories = 1; }
+if(scalar(@categories) < 1){ 
+    $no_categories = 1; 
+}
+
 if($no_categories && C4::Context->preference("AddPatronLists")=~/code/){
     $no_add = 1;
     $template->param(no_categories => 1);
-} else {
+} 
+else {
     $template->param(categories=>\@categories);
 }
 
