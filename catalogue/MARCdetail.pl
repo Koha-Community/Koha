@@ -227,7 +227,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             undef @subfields_data;
         }
     }
-    $template->param( $tabloop . "XX" => \@loop_data );
+    $template->param( "tab" . $tabloop . "XX" => \@loop_data );
 }
 
 # now, build item tab !
