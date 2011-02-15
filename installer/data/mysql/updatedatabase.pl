@@ -3932,6 +3932,25 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    # Fix bokmål
+    $dbh->do("UPDATE language_subtag_registry SET description = 'Norwegian bokm&#229;l' WHERE subtag = 'nb';");
+    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'nb','nob');");
+    $dbh->do("UPDATE language_descriptions SET description = 'Norsk bokm&#229;l' WHERE subtag = 'nb' AND lang = 'nb';");
+    $dbh->do("UPDATE language_descriptions SET description = 'Norwegian bokm&#229;l' WHERE subtag = 'nb' AND lang = 'en';");
+    $dbh->do("UPDATE language_descriptions SET description = 'Norvégien bokm&#229;l' WHERE subtag = 'nb' AND lang = 'fr';");
+    # Add nynorsk
+    $dbh->do("INSERT INTO language_subtag_registry( subtag, type, description, added) VALUES ( 'nn', 'language', 'Norwegian nynorsk','2011-02-14' )");
+    $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'nn','nno')");
+    $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'nn', 'language', 'nb', 'Norsk nynorsk')");
+    $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'nn', 'language', 'nn', 'Norsk nynorsk')");
+    $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'nn', 'language', 'en', 'Norwegian nynorsk')");
+    $dbh->do("INSERT INTO language_descriptions(subtag, type, lang, description) VALUES( 'nn', 'language', 'fr', 'Norvégien nynorsk')");
+    print "Upgrade to $DBversion done (Correct language descriptions for Norwegian)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
