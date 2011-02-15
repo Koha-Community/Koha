@@ -14,7 +14,7 @@
 			         ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 			         button : "newduedate_button",
 			         disableFunc : validate1,
-			         dateStatusFunc : validate1,
+			         dateStatusFunc : validate1
 			       }
 			    );
 			//]]>
