@@ -227,8 +227,8 @@ my $action = shift or usage_error('You must specify an ACTION.');
 usage_error('You must at least specify input and string list filenames.')
     if !@in_files || !defined $str_file;
 
-# Type match defaults to *.tmpl plus *.inc if not specified
-$type = "tmpl|inc|xsl" if !defined($type);
+# Type match defaults to *.tt plus *.inc if not specified
+$type = "tt|inc|xsl" if !defined($type);
 
 # Check the inputs for being files or directories
 for my $input (@in_files) {
