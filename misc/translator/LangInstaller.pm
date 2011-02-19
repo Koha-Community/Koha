@@ -131,7 +131,7 @@ sub add_prefs {
                     }
                 }
             }
-            elsif ( $element ) {
+            elsif ( $element && $pref_name ) {
                 $self->po_append( $self->{file} . "#$pref_name# $element", $comment );
             }
         }
@@ -173,7 +173,7 @@ sub update_tab_prefs {
                     }
                 }
             }
-            elsif ( $element ) {
+            elsif ( $element && $pref_name ) {
                 my $id = $self->{file} . "#$pref_name# $element";
                 my $text = $self->get_trans_text( $id );
                 $p->[$i] = $text if $text;
@@ -189,6 +189,8 @@ sub get_po_from_prefs {
     for my $file ( @{$self->{pref_files}} ) {
         my $pref = LoadFile( $self->{path_pref_en} . "/$file" );
         $self->{file} = $file;
+        # Entries for tab titles
+        $self->po_append( $self->{file}, $_ ) for keys %$pref;
         while ( my ($tab, $tab_content) = each %$pref ) {
             if ( ref($tab_content) eq 'ARRAY' ) {
                 $self->add_prefs( $tab, $tab_content );
@@ -254,6 +256,13 @@ sub install_prefs {
     for my $file ( @{$self->{pref_files}} ) {
         my $pref = LoadFile( $self->{path_pref_en} . "/$file" );
         $self->{file} = $file;
+        # First, keys are replaced (tab titles)
+        $pref = do {
+            my %pref = map { 
+                $self->get_trans_text( $self->{file} ) || $_ => $pref->{$_}
+            } keys %$pref;
+            \%pref;
+        };
         while ( my ($tab, $tab_content) = each %$pref ) {
             if ( ref($tab_content) eq 'ARRAY' ) {
                 $self->update_tab_prefs( $pref, $tab_content );
