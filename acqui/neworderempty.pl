@@ -134,7 +134,14 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 
     my $duplicatetitle;
 #look for duplicates
-    if (! (($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord))){
+    ($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord);
+    if($biblionumber && !$input->param('use_external_source')) {
+	#if duplicate record found and user did not decide yet, first warn user
+	#and let him choose between using new record or existing record
+	Load_Duplicate($duplicatetitle);
+	exit;
+    }
+    #from this point: add a new record
         if (C4::Context->preference("BiblioAddsAuthorities")){
             my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $params->{'frameworkcode'});
         }
@@ -163,7 +170,6 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
             }
         }
         SetImportRecordStatus($params->{'breedingid'}, 'imported');
-    }
 }
 
 
@@ -471,3 +477,26 @@ sub MARCfindbreeding {
     return -1;
 }
 
+sub Load_Duplicate {
+  my ($duplicatetitle)= @_;
+  ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "acqui/neworderempty_duplicate.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 'order_manage' },
+#        debug           => 1,
+    }
+  );
+
+  $template->param(
+    biblionumber        => $biblionumber,
+    basketno            => $basketno,
+    booksellerid        => $basket->{'booksellerid'},
+    breedingid          => $params->{'breedingid'},
+    duplicatetitle      => $duplicatetitle,
+  );
+
+  output_html_with_http_headers $input, $cookie, $template->output;
+}

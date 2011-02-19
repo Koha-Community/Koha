@@ -1,0 +1,43 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Acquisitions &rsaquo; Basket <!-- TMPL_VAR NAME="basketno" --> &rsaquo; Duplicate warning</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/acq.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR NAME='themelang' -->/js/additem.js"></script>
+<script type="text/javascript">
+</script>
+</head>
+<body>
+
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Basket <!-- TMPL_VAR NAME="basketno" --></a> &rsaquo; Duplicate warning</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<h2>Duplicate warning</h2>
+
+<p>You selected a record from an external source that matches an existing record in your catalog!</p>
+<p>Click Use Existing if you do not want to create a duplicate record, but you want to add an order from the existing record in your catalog. Click Create New if you still want to create a new record by importing the external (duplicate) record. Click Cancel to return to the basket without making a new order.</p>
+<p>The existing catalog record can be viewed in a new window by clicking <a target="_blank" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="duplicatetitle" --></a>
+
+<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform">
+    <fieldset class="action">
+        <input type="button" value="Use Existing" onclick="window.location='/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'" />
+        <input type="button" value="Create New" onclick="window.location='/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&basketno=<!-- TMPL_VAR NAME="basketno" -->&breedingid=<!-- TMPL_VAR NAME="breedingid" -->&use_external_source=1'" />
+        <input type="button" value="Cancel" onclick="window.location='/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->'" />
+    </fieldset>
+</form>
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->
