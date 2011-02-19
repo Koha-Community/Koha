@@ -54,13 +54,12 @@ foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} 
 my @categories;
 my $no_categories;
 my $no_add = 0;
-my $branchloop = (defined $branch?GetBranchesLoop($branch):GetBranchesLoop());
-if(scalar(@$branchloop) < 1){
+if(scalar(@branchloop) < 1){
     $no_add = 1;
     $template->param(no_branches => 1);
 } 
 else {
-    $template->param(branchloop=>\@$branchloop);
+    $template->param(branchloop=>\@branchloop);
 }
 
 @categories=C4::Category->all;
