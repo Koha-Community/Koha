@@ -639,7 +639,7 @@ function checkMultiHold() {
                 <!-- TMPL_IF name="found" -->
                 Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
             <!-- TMPL_ELSE -->
-                Waiting to be pulled
+                Waiting to be pulled <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
             <!-- /TMPL_IF -->
           <!-- TMPL_ELSE -->
             Item being transferred to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
