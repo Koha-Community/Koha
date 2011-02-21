@@ -69,8 +69,10 @@ $(document).ready(function(){
 
 <!-- TMPL_UNLESS name="batch_list" -->
    <!-- TMPL_UNLESS name="batch_info" -->
-     <span class="problem">No records have been staged.</span>
-     <a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a>.
+   <div class="dialog message">
+     <p>No records have been staged.</p>
+     <p><a href="/cgi-bin/koha/tools/stage-marc-import.pl">Stage MARC records for import</a>.</p>
+   </div>
    <!-- /TMPL_UNLESS -->
 <!-- /TMPL_UNLESS -->
 
