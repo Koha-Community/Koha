@@ -17,16 +17,29 @@
 
 <h1>Circulation: Overdues at <!-- TMPL_VAR NAME="LoginBranchname" --></h1>
 
+<!-- selector of location -->
+<!-- TMPL_IF NAME="location" -->
+<h4>Location selected</h4>
+<form name="changelocation" action="branchoverdues.pl">
+    <ul>
+        <li>
+            You are working actually on the overdues for the location : <b><!-- TMPL_VAR NAME="location" --></b>
+    <input type="submit" name="changelocation" class="submit" value="change location" />
+        </li>
+    </ul>
+</form>
+<!-- TMPL_ELSE -->
 <form name="selectlocation" action="branchoverdues.pl" method="post">
-    <label for="location">Shelving location selected: </label><select id="location" name="location">
-        <option value="">All shelving locations</option>
+    <label for="location">Select a location: </label><select id="location" name="location">
+        <option value="">All locations</option>
         <!-- TMPL_LOOP NAME="locationsloop" -->
-            <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option><!-- /TMPL_IF -->
+            <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!-- TMPL_VAR NAME="lib" --></option>
         <!-- /TMPL_LOOP -->
     </select>
     <input type="submit" name="location" class="submit" value="OK" />
 </form>
 
+<!-- /TMPL_IF -->
     <!-- TMPL_IF name="overduesloop" -->
         <table style="width:100%;">
         <tr>
@@ -43,12 +56,12 @@
                         <!-- TMPL_VAR NAME="date_due" -->
                     </td>
                     <td>
-                    <!-- TMPL_INCLUDE NAME="biblio-default-view.inc" --><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --><!-- TMPL_VAR NAME="subtitle" --><!-- /TMPL_IF --></a> <!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
-
+                    <!-- TMPL_INCLUDE NAME="biblio-default-view.inc" -->
+                            &nbsp; (<b><!-- TMPL_VAR NAME="description" --></b>)
                             <br />Barcode : <!-- TMPL_VAR NAME="barcode" -->
                     </td>
                     <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="borrowersurname" -->, <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="borrowernumber"-->"><!-- TMPL_VAR NAME="borrowersurname" --> &nbsp; <!-- TMPL_VAR NAME="borrowerfirstname" --></a><br /><!-- TMPL_VAR NAME="borrowerphone" --><br />
                     <!-- TMPL_IF NAME="borroweremail" --><a href="mailto:<!-- TMPL_VAR NAME="borroweremail" -->?subject=Overdue: <!-- TMPL_VAR NAME="title" ESCAPE="html" -->">
                     <!-- TMPL_VAR NAME="borroweremail" --></a><!--/TMPL_IF-->
                     </td>
@@ -96,7 +109,7 @@
             <!-- /TMPL_LOOP -->
         </table>
     <!-- TMPL_ELSE -->
-        <div class="dialog message">There are no overdues for today<!-- TMPL_IF NAME="location" --> at the selected location<!-- /TMPL_IF -->.</div>
+        <div class="dialog message">There are no overdues for today.</div>
     <!-- /TMPL_IF -->
     <!-- TMPL_IF name="todayoverduesloop" -->
         <div id="branch_odues_today_odues">
