@@ -730,17 +730,24 @@ sub CanBookBeIssued {
     # DEBTS
     my ($amount) =
       C4::Members::GetMemberAccountRecords( $borrower->{'borrowernumber'}, '' && $duedate->output('iso') );
+    my $amountlimit = C4::Context->preference("noissuescharge");
+    my $allowfineoverride = C4::Context->preference("AllowFineOverride");
+    my $allfinesneedoverride = C4::Context->preference("AllFinesNeedOverride");
     if ( C4::Context->preference("IssuingInProcess") ) {
-        my $amountlimit = C4::Context->preference("noissuescharge");
-        if ( $amount > $amountlimit && !$inprocess ) {
+        if ( $amount > $amountlimit && !$inprocess && !$allowfineoverride) {
             $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
-        }
-        elsif ( $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
+        } elsif ( $amount > $amountlimit && !$inprocess && $allowfineoverride) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $allfinesneedoverride && $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
     else {
-        if ( $amount > 0 ) {
+        if ( $amount > $amountlimit && $allowfineoverride ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $amount > $amountlimit && !$allowfineoverride) {
+            $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $amount > 0 && $allfinesneedoverride ) {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
