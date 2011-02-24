@@ -1041,7 +1041,13 @@ sub buildQuery {
 # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
 # DIAGNOSTIC ONLY!!
     if ( $query =~ /^ccl=/ ) {
-        return ( undef, $', $', "q=ccl=$'", $', '', '', '', '', 'ccl' );
+        my $q=$';
+        # This is needed otherwise ccl= and &limit won't work together, and
+        # this happens when selecting a subject on the opac-detail page
+        if (@limits) {
+            $q .= ' and '.join(' and ', @limits);
+        }
+        return ( undef, $q, $q, "q=ccl=$q", $q, '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
         return ( undef, $', $', "q=cql=$'", $', '', '', '', '', 'cql' );
