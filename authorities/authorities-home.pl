@@ -147,9 +147,6 @@ if ( $op eq "do_search" ) {
 
 }
 elsif ( $op eq "delete" ) {
-
-    &DelAuthority( $authid, 1 );
-
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
             template_name   => "authorities/authorities-home.tmpl",
@@ -160,7 +157,7 @@ elsif ( $op eq "delete" ) {
             debug           => 1,
         }
     );
-
+    &DelAuthority( $authid, 1 );
 }
 else {
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
