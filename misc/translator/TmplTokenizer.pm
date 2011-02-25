@@ -14,15 +14,11 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 =head1 NAME
 
-TmplTokenizer.pm - Simple-minded tokenizer class for HTML::Template .tmpl files
+TmplTokenizer.pm - Simple-minded wrapper class for TTParser
 
 =head1 DESCRIPTION
 
-Because .tmpl files contains HTML::Template directives
-that tend to confuse real parsers (e.g., HTML::Parse),
-it might be better to create a customized scanner
-to scan the template files for tokens.
-This module is a simple-minded attempt at such a scanner.
+A wrapper for the functionality found in TTParser to allow an easier transition to Template Toolkit
 
 =cut
 
@@ -148,44 +144,44 @@ sub _split_js ($) {
     my ($s0) = @_;
     my @it = ();
     while (length $s0) {
-	if ($s0 =~ /^\s+/s) {				# whitespace
-	    push @it, $&;
-	    $s0 = $';
-	} elsif ($s0 =~ /^\/\/[^\r\n]*(?:[\r\n]|$)/s) {	# C++-style comment
-	    push @it, $&;
-	    $s0 = $';
-	} elsif ($s0 =~ /^\/\*(?:(?!\*\/).)*\*\//s) {	# C-style comment
-	    push @it, $&;
-	    $s0 = $';
-	# Keyword or identifier, ECMA-262 p.13 (section 7.5)
-	} elsif ($s0 =~ /^[A-Z_\$][A-Z\d_\$]*/is) {	# IdentifierName
-	    push @it, $&;
-	    $s0 = $';
-	# Punctuator, ECMA-262 p.13 (section 7.6)
-	} elsif ($s0 =~ /^(?:[\(\){}\[\];]|>>>=|<<=|>>=|[-\+\*\/\&\|\^\%]=|>>>|<<|>>|--|\+\+|\|\||\&\&|==|<=|>=|!=|[=><,!~\?:\.\-\+\*\/\&\|\^\%])/s) {
-	    push @it, $&;
-	    $s0 = $';
-	# DecimalLiteral, ECMA-262 p.14 (section 7.7.3); note: bug in the spec
-	} elsif ($s0 =~ /^(?:0|[1-9]\d+(?:\.\d*(?:[eE][-\+]?\d+)?)?)/s) {
-	    push @it, $&;
-	    $s0 = $';
-	# HexIntegerLiteral, ECMA-262 p.15 (section 7.7.3)
-	} elsif ($s0 =~ /^0[xX][\da-fA-F]+/s) {
-	    push @it, $&;
-	    $s0 = $';
-	# OctalIntegerLiteral, ECMA-262 p.15 (section 7.7.3)
-	} elsif ($s0 =~ /^0[\da-fA-F]+/s) {
-	    push @it, $&;
-	    $s0 = $';
-	# StringLiteral, ECMA-262 p.17 (section 7.7.4)
-	# XXX SourceCharacter doesn't seem to be defined (?)
-	} elsif ($s0 =~ /^(?:"(?:(?!["\\\r\n]).|$js_EscapeSequence)*"|'(?:(?!['\\\r\n]).|$js_EscapeSequence)*')/os) {
-	    push @it, $&;
-	    $s0 = $';
-	} elsif ($s0 =~ /^./) {				# UNKNOWN TOKEN !!!
-	    push @it, $&;
-	    $s0 = $';
-	}
+        if ($s0 =~ /^\s+/s) {				# whitespace
+          push @it, $&;
+          $s0 = $';
+        } elsif ($s0 =~ /^\/\/[^\r\n]*(?:[\r\n]|$)/s) {	# C++-style comment
+        push @it, $&;
+        $s0 = $';
+        } elsif ($s0 =~ /^\/\*(?:(?!\*\/).)*\*\//s) {	# C-style comment
+            push @it, $&;
+            $s0 = $';
+        # Keyword or identifier, ECMA-262 p.13 (section 7.5)
+        } elsif ($s0 =~ /^[A-Z_\$][A-Z\d_\$]*/is) {	# IdentifierName
+            push @it, $&;
+            $s0 = $';
+        # Punctuator, ECMA-262 p.13 (section 7.6)
+        } elsif ($s0 =~ /^(?:[\(\){}\[\];]|>>>=|<<=|>>=|[-\+\*\/\&\|\^\%]=|>>>|<<|>>|--|\+\+|\|\||\&\&|==|<=|>=|!=|[=><,!~\?:\.\-\+\*\/\&\|\^\%])/s) {
+            push @it, $&;
+            $s0 = $';
+        # DecimalLiteral, ECMA-262 p.14 (section 7.7.3); note: bug in the spec
+        } elsif ($s0 =~ /^(?:0|[1-9]\d+(?:\.\d*(?:[eE][-\+]?\d+)?)?)/s) {
+            push @it, $&;
+            $s0 = $';
+        # HexIntegerLiteral, ECMA-262 p.15 (section 7.7.3)
+        } elsif ($s0 =~ /^0[xX][\da-fA-F]+/s) {
+            push @it, $&;
+            $s0 = $';
+        # OctalIntegerLiteral, ECMA-262 p.15 (section 7.7.3)
+        } elsif ($s0 =~ /^0[\da-fA-F]+/s) {
+            push @it, $&;
+            $s0 = $';
+        # StringLiteral, ECMA-262 p.17 (section 7.7.4)
+        # XXX SourceCharacter doesn't seem to be defined (?)
+        } elsif ($s0 =~ /^(?:"(?:(?!["\\\r\n]).|$js_EscapeSequence)*"|'(?:(?!['\\\r\n]).|$js_EscapeSequence)*')/os) {
+            push @it, $&;
+            $s0 = $';
+        } elsif ($s0 =~ /^./) {				# UNKNOWN TOKEN !!!
+            push @it, $&;
+            $s0 = $';
+        }
     }
     return @it;
 }
@@ -202,28 +198,28 @@ sub _identify_js_translatables (@) {
     # We mark a JavaScript translatable string as in C, i.e., _("literal")
     # For simplicity, we ONLY look for "_" "(" StringLiteral ")"
     for (my $i = 0, my $state = 0, my($j, $q, $s); $i <= $#input; $i += 1) {
-	my $reset_state_p = 0;
-	push @output, [0, $input[$i]];
-	if ($input[$i] !~ /\S/s) {
-	    ;
-	} elsif ($state == 0) {
-	    $state = STATE_UNDERSCORE if $input[$i] eq '_';
-	} elsif ($state == STATE_UNDERSCORE) {
-	    $state = $input[$i] eq parenleft ? STATE_PARENLEFT : 0;
-	} elsif ($state == STATE_PARENLEFT) {
-	    if ($input[$i] =~ /^(['"])(.*)\1$/s) {
-		($state, $j, $q, $s) = (STATE_STRING_LITERAL, $#output, $1, $2);
-	    } else {
-		$state = 0;
-	    }
-	} elsif ($state == STATE_STRING_LITERAL) {
-	    if ($input[$i] eq parenright) {
-		$output[$j] = [1, $output[$j]->[1], $q, $s];
-	    }
-	    $state = 0;
-	} else {
-	    die "identify_js_translatables internal error: Unknown state $state"
-	}
+        my $reset_state_p = 0;
+        push @output, [0, $input[$i]];
+        if ($input[$i] !~ /\S/s) {
+          ;
+        } elsif ($state == 0) {
+          $state = STATE_UNDERSCORE if $input[$i] eq '_';
+        } elsif ($state == STATE_UNDERSCORE) {
+          $state = $input[$i] eq parenleft ? STATE_PARENLEFT : 0;
+        } elsif ($state == STATE_PARENLEFT) {
+          if ($input[$i] =~ /^(['"])(.*)\1$/s) {
+            ($state, $j, $q, $s) = (STATE_STRING_LITERAL, $#output, $1, $2);
+          } else {
+            $state = 0;
+          }
+        } elsif ($state == STATE_STRING_LITERAL) {
+          if ($input[$i] eq parenright) {
+            $output[$j] = [1, $output[$j]->[1], $q, $s];
+          }
+          $state = 0;
+        } else {
+          die "identify_js_translatables internal error: Unknown state $state"
+        }
     }
     return \@output;
 }
@@ -233,9 +229,18 @@ sub _identify_js_translatables (@) {
 sub string_canon ($) {
   my $s = shift;
   # Fold all whitespace into single blanks
-  $s =~ s/\s+/ /gs;
+  $s =~ s/\s+/ /g;
   return $s;
 }
+
+# safer version used internally, preserves new lines
+sub string_canon_safe ($) {
+  my $s = shift;
+  # fold tabs and spaces into single spaces
+  $s =~ s/[\ \t]+/ /gs;
+  return $s;
+}
+
 
 sub _quote_cformat{
   my $s = shift;
@@ -245,7 +250,7 @@ sub _quote_cformat{
 
 sub _formalize_string_cformat{
   my $s = shift;
-  return _quote_cformat( string_canon $s );
+  return _quote_cformat( string_canon_safe $s );
 }
 
 sub _formalize{
@@ -312,7 +317,7 @@ sub next_token {
             # if there is nothing in parts, return this token
             return $next unless @parts;
             # OTHERWISE, put this token back and return the parametrized string of @parts
-            $self->{_parser}->return_token($next);
+            $self->{_parser}->unshift_token($next);
             return $self->_parametrize_internal(@parts);
         }
     }
@@ -320,7 +325,7 @@ sub next_token {
 
 ###############################################################################
 
-# ugly method taken from old version
+# function taken from old version
 # used by tmpl_process3
 sub parametrize ($$$$) {
     my($fmt_0, $cformat_p, $t, $f) = @_;
@@ -527,7 +532,7 @@ is different (replacing %s with %1$s, %2$s, etc.), or when certain
 words will require certain inflectional suffixes in sentences.
 
 Because this is an incompatible change, this mode must be explicitly
-turned on using the set_cformat(1) method call.
+turned on using the set_allow_cformat(1) method call.
 
 =head2 The flag characters
 

@@ -21,7 +21,7 @@ sub next_token{
 }
 
 #unshift token back on @tokens
-sub return_token{
+sub unshift_token{
     my $self = shift;
     unshift @tokens, shift;
 }
@@ -39,8 +39,9 @@ sub build_tokens{
     $self->{filename} = $filename;
     $self->handler(start => "start", "self, line, tagname, attr, text"); #signature is start( self, linenumber, tagname, hash of attributes, origional text )
     $self->handler(text => "text", "self, line, text, is_cdata"); #signature is text( self, linenumber, origional text, is_cdata )
-    $self->handler(end => ""); #ignore end tags
+    $self->handler(end => "end", "self, line, tag, text"); #signature is end( self, linenumber, tagename, origional text )
     $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a TmplTokenType::CDATA
+    $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
     $self->parse_file($filename);
     return $self;
 }
@@ -52,7 +53,7 @@ sub text{
     my $work = shift; # original text
     my $is_cdata = shift;
     while($work){
-        return if $work =~ m/^\s*$/;
+#        return if $work =~ m/^\s*$/;
         # if there is a template_toolkit tag
         if( $work =~ m/\[%.*?\]/ ){
             #everything before this tag is text (or possibly CDATA), add a text token to tokens if $`
@@ -81,19 +82,30 @@ sub start{
     my $self = shift;
     my $line = shift;
     my $tag = shift;
-    my $hash = shift;
-    my $text = shift; #unused atm...
+    my $hash = shift; #hash of attr/value pairs
+    my $text = shift; #origional text
     #return if ! $interesting_tags{$tag};
     # was $hash->{$key}
     # print "#### " . $self->{filename}  . " " . $tag . "####\n";
-    my $t = TmplToken->new( $tag, TmplTokenType::TAG, $line, $self->{filename});
+    my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename});
     my %attr;
+    # tags seem to be uses in an 'interesting' way elsewhere..
     for my $key( %$hash ) {
         next unless defined $hash->{$key};
         $attr{+lc($key)} = [ $key, $hash->{$key}, $key."=".$hash->{$key}, 0 ];
     }
     $t->set_attributes( \%attr );
     push @tokens, $t;
+}
+
+#handle closing html tags
+sub end{
+  my $self = shift;
+  my $line = shift;
+  my $tag = shift;
+  my $text = shift;
+  # what format should this be in?
+  my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename} );
 }
 
 1;

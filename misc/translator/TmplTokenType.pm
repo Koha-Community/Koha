@@ -108,7 +108,7 @@ something that has the form of an SGML processing instruction
 
 =item DIRECTIVE
 
-a HTML::Template directive (whether or not embedded in an SGML comment)
+a Template Toolkit directive
 
 =item COMMENT
 
