@@ -125,10 +125,11 @@ sub GetLateIssues {
             LEFT JOIN  biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
             WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
-            AND        subscription.aqbooksellerid=$supplierid
+            AND        subscription.aqbooksellerid=?
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
+        $sth->execute($supplierid);
     } else {
         my $query = qq|
             SELECT     name,title,planneddate,serialseq,serial.subscriptionid
@@ -140,8 +141,8 @@ sub GetLateIssues {
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
+        $sth->execute;
     }
-    $sth->execute;
     my @issuelist;
     my $last_title;
     my $odd   = 0;
