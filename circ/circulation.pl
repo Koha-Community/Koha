@@ -494,6 +494,7 @@ if ($borrowerslist) {
         -id       => 'borrowernumber',
         -values   => \@values,
         -labels   => \%labels,
+        -ondblclick => 'document.forms[\'mainform\'].submit()',
         -size     => 7,
         -tabindex => '',
         -multiple => 0
