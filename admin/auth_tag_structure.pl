@@ -188,9 +188,10 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	unless (C4::Context->config('demo') eq 1) {
-		$dbh->do("delete from auth_tag_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
-		$dbh->do("delete from auth_subfield_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
-        # FIXME: Secuity vulnerability -- use placeholders, prepare and execute!
+		my $sth = $dbh->prepare("delete from auth_tag_structure where tagfield=? and authtypecode=?");
+		$sth->execute($searchfield,$authtypecode);
+		my $sth = $dbh->prepare("delete from auth_subfield_structure where tagfield=? and authtypecode=?");
+		$sth->execute($searchfield,$authtypecode);
 	}
     print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=".$input->param('tagfield')."&authtypecode=$authtypecode\">";
     exit;
