@@ -169,13 +169,11 @@ sub makepayment {
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
 
-    $dbh->do(
-        "UPDATE  accountlines
-        SET     amountoutstanding = 0
-        WHERE   borrowernumber = $borrowernumber
-          AND   accountno = $accountno
-        "
-    );
+    my $sth = $dbh->prepare("UPDATE accountlines
+			        SET amountoutstanding = 0
+			      WHERE borrowernumber = ?
+				AND accountno = ?");
+    $sth->execute($borrowernumber, $accountno);
 
     #  print $updquery;
 #    $dbh->do( "
@@ -187,20 +185,18 @@ sub makepayment {
 
     # create new line
     my $payment = 0 - $amount;
-    $dbh->do( "
-        INSERT INTO     accountlines
-                        (borrowernumber, accountno, date, amount,
-                         description, accounttype, amountoutstanding)
-        VALUES          ($borrowernumber, $nextaccntno, now(), $payment,
-                        'Payment,thanks - $user', 'Pay', 0)
-        " );
+    my $sth = $dbh->prepare("INSERT INTO accountlines
+					 (borrowernumber, accountno, date, amount,
+					  description, accounttype, amountoutstanding)
+				  VALUES (?,?,now(),?,?,'Pay',0)");
+    $sth->execute($borrowernumber, $nextaccntno, $payment, "Payment,thanks - $user");
 
     # FIXME - The second argument to &UpdateStats is supposed to be the
     # branch code.
     # UpdateStats is now being passed $accountno too. MTJ
     UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber,
         $accountno );
-    $sth->finish;
+    #from perldoc: for SELECT only #$sth->finish;
 
     #check to see what accounttype
     if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
