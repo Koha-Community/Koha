@@ -70,14 +70,15 @@ my $destination    = $input->param('destination');
 my $cardnumber     = $input->param('cardnumber');
 my $check_member   = $input->param('check_member');
 my $nodouble       = $input->param('nodouble');
-$nodouble = 1 if $op eq 'modify'; # FIXME hack to represent fact that if we're
-                                  # modifying an existing patron, it ipso facto
-                                  # isn't a duplicate.  Marking FIXME because this
-                                  # script needs to be refactored.
-my $select_city    = $input->param('select_city');
-my $nok            = $input->param('nok');
-my $guarantorinfo  = $input->param('guarantorinfo');
-my $step           = $input->param('step') || 0;
+my $duplicate      = $input->param('duplicate');
+$nodouble = 1 if ($op eq 'modify' or $op eq 'duplicate');    # FIXME hack to represent fact that if we're
+                                     # modifying an existing patron, it ipso facto
+                                     # isn't a duplicate.  Marking FIXME because this
+                                     # script needs to be refactored.
+my $select_city   = $input->param('select_city');
+my $nok           = $input->param('nok');
+my $guarantorinfo = $input->param('guarantorinfo');
+my $step          = $input->param('step') || 0;
 my @errors;
 my $default_city;
 # $check_categorytype contains the value of duplicate borrowers category type to redirect in good template in step =2
@@ -98,9 +99,10 @@ my @field_check=split(/\|/,$check_BorrowerMandatoryField);
 foreach (@field_check) {
 	$template->param( "mandatory$_" => 1);    
 }
-$template->param("add"=>1) if ($op eq 'add');
-$template->param("checked" => 1) if (defined($nodouble) && $nodouble eq 1);
-($borrower_data = GetMember( 'borrowernumber'=>$borrowernumber )) if ($op eq 'modify' or $op eq 'save');
+$template->param( "add" => 1 ) if ( $op eq 'add' );
+$template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
+$template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
+( $borrower_data = GetMember( 'borrowernumber' => $borrowernumber ) ) if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' );
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type');
 my $new_c_type = $category_type; #if we have input param, then we've already chosen the cat_type.
@@ -116,9 +118,9 @@ $category_type="A" unless $category_type; # FIXME we should display a error mess
 %data = %$borrower_data if ($borrower_data);
 
 # initialize %newdata
-my %newdata;	# comes from $input->param()
-if ($op eq 'insert' || $op eq 'modify' || $op eq 'save') {
-    my @names= ($borrower_data && $op ne 'save') ? keys %$borrower_data : $input->param();
+my %newdata;                                                                             # comes from $input->param()
+if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' ) {
+    my @names = ( $borrower_data && $op ne 'save' ) ? keys %$borrower_data : $input->param();
     foreach my $key (@names) {
         if (defined $input->param($key)) {
             $newdata{$key} = $input->param($key);
@@ -275,8 +277,8 @@ if ($op eq 'save' || $op eq 'insert'){
   }
 }
 
-if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save') and ($step == 0 or $step == 3 )){
-    if (exists ($newdata{'dateexpiry'}) && !($newdata{'dateexpiry'})){
+if ( ($op eq 'modify' || $op eq 'insert' || $op eq 'save'|| $op eq 'duplicate') and ($step == 0 or $step == 3 )){
+    unless ($newdata{'dateexpiry'}){
         my $arg2 = $newdata{'dateenrolled'} || C4::Dates->today('iso');
         $newdata{'dateexpiry'} = GetExpiryDate($newdata{'categorycode'},$arg2);
     }
@@ -384,6 +386,11 @@ if ($op eq "modify")  {
     $template->param( updtype => 'M',modify => 1 );
     $template->param( step_1=>1, step_2=>1, step_3=>1, step_4=>1, step_5 => 1, step_6 => 1) unless $step;
 }
+if ( $op eq "duplicate" ) {
+    $template->param( updtype => 'I' );
+    $template->param( step_1 => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1 ) unless $step;
+}
+
 # my $cardnumber=$data{'cardnumber'};
 $data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';
 if(!defined($data{'sex'})){
