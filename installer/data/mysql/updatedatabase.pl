@@ -4022,6 +4022,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 };
 
+$DBversion = "3.03.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE items MODIFY enumchron TEXT");
+    $dbh->do("ALTER TABLE deleteditems MODIFY enumchron TEXT");
+    print "Upgrade to $DBversion done (bug 5642: longer serial enumeration)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
