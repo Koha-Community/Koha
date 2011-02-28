@@ -717,7 +717,7 @@ sub DelAuthority {
     my $dbh=C4::Context->dbh;
 
     ModZebra($authid,"recordDelete","authorityserver",GetAuthority($authid),undef);
-    my $sth = prepare("DELETE FROM auth_header WHERE authid=?");
+    my $sth = $dbh->prepare("DELETE FROM auth_header WHERE authid=?");
     $sth->execute($authid);
 }
 
