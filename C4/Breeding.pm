@@ -169,7 +169,7 @@ C<import_biblios> tables of the Koha database.
 =cut
 
 sub BreedingSearch {
-    my ($title,$isbn,$z3950random) = @_;
+    my ($search,$isbn,$z3950random) = @_;
     my $dbh   = C4::Context->dbh;
     my $count = 0;
     my ($query,@bind);
@@ -185,12 +185,13 @@ sub BreedingSearch {
         $query .= "z3950random = ?";
         @bind=($z3950random);
     } else {
+        $search =~ s/(\s+)/\%/g;
         @bind=();
-        if ($title) {
-            $query .= "title like ?";
-            push(@bind,"$title%");
+    if ($search) {
+            $query .= "title like ? OR author like ?";
+            push(@bind,"%$search%", "%$search%");
         }
-        if ($title && $isbn) {
+        if ($search && $isbn) {
             $query .= " and ";
         }
         if ($isbn) {
