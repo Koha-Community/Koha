@@ -56,7 +56,8 @@ $(document).ready(function() {
             <!-- /TMPL_LOOP -->
             </select>
         </form>
-<!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="branch" -->" />
+<!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label 
+for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="current_branch" -->" />
             <select name="tobranch" id="tobranch"><!-- TMPL_LOOP NAME="branchloop" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_LOOP --></select> <input type="submit" value="Clone" /></form><!-- /TMPL_IF --></fieldset>
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
@@ -109,7 +110,7 @@ $(document).ready(function() {
 							<td><!-- TMPL_VAR NAME="reservesallowed" --></td>
 							<td><!-- TMPL_VAR NAME="rentaldiscount" --></td>
 							<td>
-								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Delete</a>
 							</td>
                 	</tr>
             	<!-- /TMPL_LOOP -->
@@ -139,7 +140,7 @@ $(document).ready(function() {
                     <td><input name="renewalsallowed" size="2" /></td>
                     <td><input name="reservesallowed" size="2" /></td>
 		    <td><input name="rentaldiscount" size="2" /></td>
-                    <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/><input type="submit" value="Add" class="submit" /></td>
+                    <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/><input type="submit" value="Add" class="submit" /></td>
                 </tr>
             </table>
         </form>
@@ -151,7 +152,7 @@ $(document).ready(function() {
     <div>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
-            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/>
             <table>
                 <tr>
                     <th>&nbsp;</th>
@@ -190,7 +191,7 @@ $(document).ready(function() {
                     </td>
                     <td><input type="submit" value="Save" class="submit" /></td>
                     <td>
-                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Unset</a>
+                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Unset</a>
                     </td>
                 </tr>
             </table>
@@ -208,7 +209,7 @@ $(document).ready(function() {
     <div>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add-branch-cat" />
-            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/>
             <table>
                 <tr>
                     <th>Patron Category</th>
@@ -234,7 +235,7 @@ $(document).ready(function() {
                             <!-- /TMPL_IF -->
                         </td>
                         <td>
-                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Delete</a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
@@ -278,7 +279,7 @@ $(document).ready(function() {
     <div>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add-branch-item" />
-            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/>
             <table>
                 <tr>
                     <th>Item Type</th>
@@ -306,7 +307,7 @@ $(document).ready(function() {
                             <!-- /TMPL_IF -->
                         </td>
                         <td>
-                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Delete</a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
