@@ -38,6 +38,7 @@ sub test_string_extraction {
     while (<PH>) {
         # ignore some noise on STDERR
         next if /^\.* done\.$/;
+	next if /^\.* termin\?\.$/;
         next if /^Warning: Can't determine original templates' charset/;
         next if /^Warning: Charset Out defaulting to/;
         next if /^Removing empty file /;
