@@ -264,10 +264,10 @@ ff.submit();
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-            <span class="label">Budget: </span>
+            <span class="label">Fund: </span>
                     <input type="hidden" size="20" name="budget_id" id="budget_id" value="<!-- TMPL_VAR NAME="budget_id" -->" /><!-- TMPL_VAR NAME="Budget_name" -->
                 <!-- TMPL_ELSE -->
-                <label for="budget_id">Budget: </label>
+                <label for="budget_id">Fund: </label>
                 <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
                 <!-- TMPL_LOOP NAME="budget_loop" -->
                     <!-- TMPL_IF NAME="b_sel" -->
