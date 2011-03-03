@@ -463,7 +463,7 @@ my %sysprefs;
 
 sub preference {
     my $self = shift;
-    my $var  = shift;                          # The system preference to return
+    my $var  = lc(shift);                          # The system preference to return
 
     if (exists $sysprefs{$var}) {
         return $sysprefs{$var};
