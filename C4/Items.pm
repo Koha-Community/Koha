@@ -2074,59 +2074,18 @@ sub MoveItemFromBiblio {
     $sth = $dbh->prepare("UPDATE items SET biblioitemnumber = ?, biblionumber = ? WHERE itemnumber = ? AND biblionumber = ?");
     my $return = $sth->execute($tobiblioitem, $tobiblio, $itemnumber, $frombiblio);
     if ($return == 1) {
-
-	# Getting framework
-	my $frameworkcode = GetFrameworkCode($frombiblio);
-
-	# Getting marc field for itemnumber
-	my ($itemtag, $itemsubfield) = GetMarcFromKohaField('items.itemnumber', $frameworkcode);
-
-	# Getting the record we want to move the item from
-	my $record = GetMarcBiblio($frombiblio);
-
-	# The item we want to move
-	my $item;
-
-	# For each item
-	foreach my $fielditem ($record->field($itemtag)){
-		# If it is the item we want to move
-		if ($fielditem->subfield($itemsubfield) == $itemnumber) {
-		    # We save it
-		    $item = $fielditem;
-		    # Then delete it from the record
-		    $record->delete_field($fielditem) 
-		}
-	}
-
-	# If we found an item (should always true, except in case of database-marcxml inconsistency)
-	if ($item) {
-
+        ModZebra( $tobiblio, "specialUpdate", "biblioserver", undef, undef );
+        ModZebra( $frombiblio, "specialUpdate", "biblioserver", undef, undef );
 	    # Checking if the item we want to move is in an order 
-	    my $order = GetOrderFromItemnumber($itemnumber);
+        my $order = GetOrderFromItemnumber($itemnumber);
 	    if ($order) {
-		# Replacing the biblionumber within the order if necessary
-		$order->{'biblionumber'} = $tobiblio;
+		    # Replacing the biblionumber within the order if necessary
+		    $order->{'biblionumber'} = $tobiblio;
 	        ModOrder($order);
 	    }
-
-	    # Saving the modification
-	    #ModBiblioMarc($record, $frombiblio, $frameworkcode);
-
-	    # Getting the record we want to move the item to
-	    #$record = GetMarcBiblio($tobiblio);
-
-	    # Inserting the previously saved item
-	    #$record->insert_fields_ordered($item);	
-
-	    # Saving the modification
-	    #ModBiblioMarc($record, $tobiblio, $frameworkcode);
-
-	} else {
-	    return undef;
+        return $tobiblio;
 	}
-    } else {
-	return undef;
-    }
+    return;
 }
 
 =head2 DelItemCheck
