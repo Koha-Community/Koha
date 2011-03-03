@@ -247,12 +247,6 @@ sub kocIssueItem {
   my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
   my $issue = GetItemIssue( $item->{'itemnumber'} );
 
-  my $issuingrule = GetIssuingRule( $borrower->{ 'categorycode' }, $item->{ 'itemtype' }, $branchcode );
-  my $issuelength = $issuingrule->{ 'issuelength' };
-  my ( $year, $month, $day ) = split( /-/, $circ->{'date'} );
-  ( $year, $month, $day ) = Add_Delta_Days( $year, $month, $day, $issuelength );
-  my $date_due = sprintf("%04d-%02d-%02d", $year, $month, $day);
-
   if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
 #warn "Item Currently Issued.";
     my $issue = GetOpenIssue( $item->{'itemnumber'} );
@@ -260,12 +254,11 @@ sub kocIssueItem {
     if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
 #warn "Item issued to this member already, renewing.";
     
-    my $date_due_object = C4::Dates->new($date_due ,'iso');
     C4::Circulation::AddRenewal(
         $issue->{'borrowernumber'},    # borrowernumber
         $item->{'itemnumber'},         # itemnumber
         undef,                         # branch
-        $date_due_object,              # datedue
+        undef,                         # datedue - let AddRenewal calculate it automatically
         $circ->{'date'},               # issuedate
     ) unless ($DEBUG);
 
@@ -288,8 +281,7 @@ sub kocIssueItem {
       my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
       
       if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
-        my $date_due_object = C4::Dates->new($date_due ,'iso');
-        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
+        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
         push( @output, { issue => 1,
     title => $item->{ 'title' },
     biblionumber => $item->{'biblionumber'},
@@ -309,8 +301,7 @@ sub kocIssueItem {
     
     }
   } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
-      my $date_due_object = C4::Dates->new($date_due ,'iso');
-      C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
+      C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
     push( @output, { issue => 1,
     title => $item->{ 'title' },
     biblionumber => $item->{'biblionumber'},
