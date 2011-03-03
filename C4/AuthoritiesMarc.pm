@@ -26,6 +26,7 @@ use C4::Search;
 use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
+use C4::Log;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -701,6 +702,7 @@ sub AddAuthority {
     $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
   }
+  logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
   ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
   return ($authid);
 }
@@ -718,6 +720,7 @@ sub DelAuthority {
     my ($authid) = @_;
     my $dbh=C4::Context->dbh;
 
+    logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     ModZebra($authid,"recordDelete","authorityserver",GetAuthority($authid),undef);
     my $sth = $dbh->prepare("DELETE FROM auth_header WHERE authid=?");
     $sth->execute($authid);
@@ -748,6 +751,7 @@ sub ModAuthority {
       print AUTH $authid;
       close AUTH;
   }
+  logaction( "AUTHORITIES", "MODIFY", $authid, "BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
   return $authid;
 }
 
