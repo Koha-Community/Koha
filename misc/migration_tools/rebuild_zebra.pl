@@ -320,26 +320,22 @@ sub export_marc_records_from_sth {
                           ? GetXmlBiblio( $record_number )
                           : GetAuthorityXML( $record_number );
             if ($record_type eq 'biblio'){
-                #CALL  sub ProcessItems
-                my @items=GetItemsInfo($record_number,'intra',30);
+                my @items = GetItemsInfo($record_number, 'intra');
                 if (@items){
-                    my $record=MARC::Record->new;
+                    my $record = MARC::Record->new;
                     my @itemsrecord;
                     foreach my $item (@items){
-                        my $record=Item2Marc($item, $record_number);                        
+                        my $record = Item2Marc($item, $record_number);                        
                         push @itemsrecord, $record->field($itemtag);
-                        #if xml then print itemfield as xml
-                        # and update marcxml
-                        # else push field
                     }
                     $record->insert_fields_ordered(@itemsrecord);
                     my $itemsxml=$record->as_xml_record();
-                    my $searchstring='<record>\n';
-                    my $index=index($itemsxml,'<record>\n',0);
-                    $itemsxml=substr($itemsxml,$index+length($searchstring));
-                    $searchstring='</record>';
-                    $marcxml=substr($marcxml,0,index($marcxml,$searchstring));
-                    $marcxml.=$itemsxml;
+                    my $searchstring = '<record>\n';
+                    my $index = index($itemsxml, '<record>\n', 0);
+                    $itemsxml = substr($itemsxml, $index + length($searchstring));
+                    $searchstring = '</record>';
+                    $marcxml = substr($marcxml, 0, index($marcxml, $searchstring));
+                    $marcxml .= $itemsxml;
                 }
             }
             if ( $marcxml ) {
@@ -469,6 +465,8 @@ sub get_raw_marc_record {
                 return;
             }
         }
+        # ITEM
+        C4::Biblio::EmbedItemsInMarcBiblio($marc, $record_number);
     } else {
         eval { $marc = GetAuthority($record_number); };
         if ($@) {

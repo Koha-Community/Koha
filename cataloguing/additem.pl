@@ -494,13 +494,14 @@ if ($op eq "additem") {
 
 # now, build existiing item list
 my $temp = GetMarcBiblio( $biblionumber );
-my @fields = $temp->fields();
 #my @fields = $record->fields();
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
 my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", $frameworkcode);
 my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", $frameworkcode);
+C4::Biblio::EmbedItemsInMarcBiblio($temp, $biblionumber);
+my @fields = $temp->fields();
 
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );

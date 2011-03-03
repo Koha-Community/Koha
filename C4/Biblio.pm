@@ -2,6 +2,7 @@ package C4::Biblio;
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2010 BibLibre
+# Copyright 2011 Equinox Software, Inc.
 #
 # This file is part of Koha.
 #
@@ -35,6 +36,7 @@ use C4::ClassSource;
 use C4::Charset;
 require C4::Heading;
 require C4::Serials;
+require C4::Items;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -2630,6 +2632,37 @@ sub GetNoZebraIndexes {
         $indexes{$index} = $fields;
     }
     return %indexes;
+}
+
+=head2 EmbedItemsInMarcBiblio
+
+    EmbedItemsInMarcBiblio($marc, $biblionumber);
+
+Given a MARC::Record object containing a bib record,
+modify it to include the items attached to it as 9XX
+per the bib's MARC framework.
+
+=cut
+
+sub EmbedItemsInMarcBiblio {
+    my ($marc, $biblionumber) = @_;
+
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField('items.itemnumber', GetFrameworkCode($biblionumber));
+    # delete any fields already in the record that use the item tag
+    foreach my $field ( $marc->field($itemtag) ) {
+        $marc->delete_field($field);
+    }
+
+    # ... and embed the current items
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
+    $sth->execute($biblionumber);
+    my @item_fields;
+    while (my ($itemnumber) = $sth->fetchrow_array) {
+        my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
+        push @item_fields, $item_marc->field($itemtag);
+    }
+    $marc->insert_fields_ordered(@item_fields);
 }
 
 =head1 INTERNAL FUNCTIONS
