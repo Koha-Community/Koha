@@ -1276,7 +1276,14 @@ sub buildQuery {
         # group_OR_limits, prefixed by mc-
         # OR every member of the group
         elsif ( $this_limit =~ /mc/ ) {
-#        if ( $this_limit =~ /mc/ ) {
+        
+            if ( $this_limit =~ /mc-ccode:/ ) {
+                # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
+                $this_limit =~ tr/"//d;
+                my ($k,$v) = split(/:/, $this_limit,2);
+                $this_limit = $k.":\"".$v."\"";
+            }
+
             $group_OR_limits .= " or " if $group_OR_limits;
             $limit_desc      .= " or " if $group_OR_limits;
             $group_OR_limits .= "$this_limit";
