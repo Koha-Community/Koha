@@ -37,7 +37,7 @@ my $verbose_logging;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
     'd:s'           => \$directory,
-    'reset'         => \$reset,
+    'r|reset'       => \$reset,
     's'             => \$skip_export,
     'k'             => \$keep_export,
     'nosanitize'    => \$nosanitize,
