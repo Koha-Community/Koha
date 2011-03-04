@@ -511,15 +511,7 @@ sub ModItem {
     my $whole_item = GetItem($itemnumber) or die "FAILED GetItem($itemnumber)";
     ModZebra( $whole_item->{biblionumber}, "specialUpdate", "biblioserver", undef, undef );
 
-    unless (defined $unlinked_item_subfields) {
-        $unlinked_item_subfields = _parse_unlinked_item_subfields_from_xml($whole_item->{'more_subfields_xml'});
-    }
-    my $new_item_marc = _marc_from_item_hash($whole_item, $frameworkcode, $unlinked_item_subfields) 
-        or die "FAILED _marc_from_item_hash($whole_item, $frameworkcode)";
-    
-    #_replace_item_field_in_biblio($new_item_marc, $biblionumber, $itemnumber, $frameworkcode);
-	($new_item_marc       eq '0') and die "$new_item_marc is '0', not hashref";  # logaction line would crash anyway
-    logaction("CATALOGUING", "MODIFY", $itemnumber, $new_item_marc->as_formatted) if C4::Context->preference("CataloguingLog");
+    logaction("CATALOGUING", "MODIFY", $itemnumber, Dumper($item)) if C4::Context->preference("CataloguingLog");
 }
 
 =head2 ModItemTransfer
