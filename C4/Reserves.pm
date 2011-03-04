@@ -804,6 +804,12 @@ sub CheckReserves {
             } else {
                 # See if this item is more important than what we've got so far
                 if ( $res->{'priority'} && $res->{'priority'} < $priority ) {
+                    my $borrowerinfo=C4::Members::GetMemberDetails($res->{'borrowernumber'});
+                    my $iteminfo=C4::Items::GetItem($itemnumber);
+                    my $branch=C4::Circulation::_GetCircControlBranch($iteminfo,$borrowerinfo);
+                    my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$iteminfo->{'itype'});
+                    next if ($branchitemrule->{'holdallowed'} == 0);
+                    next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $borrowerinfo->{'branchcode'}));
                     $priority = $res->{'priority'};
                     $highest  = $res;
                 }
