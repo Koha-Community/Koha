@@ -4022,7 +4022,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 };
 
-$DBversion = "3.03.00.XXX";
+$DBversion = "3.03.00.021";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE items MODIFY enumchron TEXT");
     $dbh->do("ALTER TABLE deleteditems MODIFY enumchron TEXT");
