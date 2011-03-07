@@ -2352,6 +2352,9 @@ CREATE TABLE `aqbasketgroups` (
   `name` varchar(50) default NULL,
   `closed` tinyint(1) default NULL,
   `booksellerid` int(11) NOT NULL,
+  `deliveryplace` varchar(10) default NULL,
+  `deliverycomment` varchar(255) default NULL,
+  `billingplace` varchar(10) default NULL,
   PRIMARY KEY  (`id`),
   KEY `booksellerid` (`booksellerid`),
   CONSTRAINT `aqbasketgroups_ibfk_1` FOREIGN KEY (`booksellerid`) REFERENCES `aqbooksellers` (`id`) ON UPDATE CASCADE ON DELETE CASCADE
