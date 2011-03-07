@@ -249,6 +249,10 @@ $(function() {
                         </td>
                     <!-- /TMPL_UNLESS -->
                         <td>
+                        <!-- TMPL_IF NAME="XSLTBloc" -->
+                         <!-- TMPL_VAR NAME="XSLTBloc" -->
+                        <!-- TMPL_ELSE -->
+
                                 <!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title">
                                 <!-- TMPL_ELSE -->
                                 <!-- TMPL_IF name="BiblioDefaultViewisbd" --><a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->" title="View details for this title">
@@ -272,7 +276,7 @@ $(function() {
         (<!-- TMPL_VAR NAME="itemcallnumber" -->)<!-- TMPL_IF NAME="__LAST__" -->.<!-- TMPL_ELSE -->,<!-- /TMPL_IF -->
           <!-- /TMPL_IF -->
           <!-- /TMPL_LOOP --><!-- TMPL_ELSE -->This record has no items.<!-- /TMPL_IF --></span>
-
+            <!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="TagsEnabled" -->
                 <!-- TMPL_IF NAME="TagsShowOnList" -->
                 <!-- TMPL_IF NAME="TagLoop" -->

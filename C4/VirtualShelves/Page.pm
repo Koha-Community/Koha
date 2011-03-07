@@ -35,6 +35,7 @@ use C4::Tags qw(get_tags);
 use Exporter;
 use Data::Dumper;
 use C4::Csv;
+use C4::XSLT;
 
 use vars qw($debug @EXPORT @ISA $VERSION);
 
@@ -201,7 +202,11 @@ sub shelfpage ($$$$$) {
                 }
                 ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset );
                 for my $this_item (@$items) {
-                    my $record = GetMarcBiblio( $this_item->{'biblionumber'} );
+                    my $biblionumber = $this_item->{'biblionumber'};
+                    my $record = GetMarcBiblio($biblionumber);
+                    $this_item->{XSLTBloc} =
+                        XSLTParse4Display($biblionumber, $record, 'Results', 'opac')
+                            if C4::Context->preference("OPACXSLTResultsDisplay");
 
                     # the virtualshelfcontents table does not store these columns nor are they retrieved from the items
                     # and itemtypes tables, so I'm commenting them out for now to quiet the log -crn
