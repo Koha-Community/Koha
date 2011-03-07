@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<xs:schema xmlns="http://koha-community.org" xmlns:xs="http://www.w3.org/2001/XMLSchema" targetNamespace="http://koha-community.org" elementFormDefault="qualified" attributeFormDefault="unqualified" version="1.1">
+  <xs:annotation>
+    <xs:documentation>Control Field Plugin Type of Materials schema</xs:documentation>
+  </xs:annotation>
+
+
+  <xs:element name="Tagfield" type="TagfieldType" nillable="false">
+    <xs:annotation>
+      <xs:documentation>Element indicating the control field</xs:documentation>
+    </xs:annotation>
+  </xs:element>
+
+
+  <xs:complexType name="TagfieldType">
+    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="Material" type="MaterialType"/>
+    </xs:sequence>
+    <xs:attribute name="tag" type="controltagDataType" use="required"/>
+  </xs:complexType>
+
+
+  <xs:simpleType name="controltagDataType">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="00[1-9A-Za-z]{1}"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:complexType name="MaterialType">
+    <xs:sequence minOccurs="1" maxOccurs="unbounded">
+      <xs:element name="Position" type="PositionType"/>
+    </xs:sequence>
+    <xs:attribute name="id" type="idDataType" use="required"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+  </xs:complexType>
+
+
+  <xs:simpleType name="idDataType">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:enumeration value="BKS"/>
+      <xs:enumeration value="CF"/>
+      <xs:enumeration value="MP"/>
+      <xs:enumeration value="MU"/>
+      <xs:enumeration value="CR"/>
+      <xs:enumeration value="VM"/>
+      <xs:enumeration value="MX"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:complexType name="PositionType">
+    <xs:sequence minOccurs="0" maxOccurs="unbounded">
+      <xs:element name="Value" type="ValueType"/>
+    </xs:sequence>
+    <xs:attribute name="pos" type="posDataType" use="required"/>
+    <xs:attribute name="url" type="xs:anyURI" use="optional"/>
+    <xs:attribute name="urltext" type="xs:string" use="optional"/>
+    <xs:attribute name="name" type="xs:string" use="required"/>
+    <xs:attribute name="description" type="xs:string" use="required"/>
+  </xs:complexType>
+
+
+  <xs:simpleType name="posDataType">
+    <xs:restriction base="xs:string">
+      <xs:whiteSpace value="collapse"/>
+      <xs:pattern value="[0-9]+(-[0-9]+)?"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:complexType name="ValueType">
+    <xs:simpleContent>
+      <xs:extension base="xs:string">
+        <xs:attribute name="description" type="xs:string" />
+      </xs:extension>
+    </xs:simpleContent>
+  </xs:complexType>
+
+</xs:schema>

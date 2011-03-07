@@ -26,6 +26,8 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 
+use XML::LibXML;
+
 =head1 DESCRIPTION
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
@@ -82,46 +84,25 @@ sub plugin {
     );
     $result = "a|||||r|||| 00| 0 " unless $result;
 
-    #	$result = "a     r     00  0 " unless $result;
-    my $f0   = substr($result, 0,  1);
-    my $f014 = substr($result, 1,  4);
-    my $f5   = substr($result, 5,  1);
-    my $f6   = substr($result, 6,  1);
-    my $f710 = substr($result, 7,  4);
-    my $f11  = substr($result, 11, 1);
-    my $f12  = substr($result, 12, 1);
-    my $f13  = substr($result, 13, 1);
-    my $f14  = substr($result, 14, 1);
-    my $f15  = substr($result, 15, 1);
-    my $f16  = substr($result, 16, 1);
-    my $f17  = substr($result, 17, 1);
-
-    $template->param(
-        index       => $index,
-        f0          => $f0,
-        "f0$f0"     => $f0,
-        f014        => $f014,
-        "f014$f014" => $f014,
-        f5          => $f5,
-        "f5$f5"     => $f5,
-        f6          => $f6,
-        "f6$f6"     => $f6,
-        f710        => $f710,
-        "f710$f710" => $f710,
-        f11         => $f11,
-        "f11$f11"   => $f11,
-        f12         => $f12,
-        "f12$f12"   => $f12,
-        f13         => $f13,
-        "f13$f13"   => $f13,
-        f14         => $f14,
-        "f14$f14"   => $f14,
-        f15         => $f15,
-        "f15$f15"   => $f15,
-        f16         => $f16,
-        "f16$f16"   => $f16,
-        f17         => $f17,
-        "f17$f17"   => $f17,
+    my $errorXml = '';
+    # Check if the xml, xsd exists and is validated
+    my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->param('lang') . '/modules/cataloguing/value_builder/';
+    if (-r $dir . 'marc21_field_006.xml') {
+        my $doc = XML::LibXML->new->parse_file($dir . 'marc21_field_006.xml');
+        if (-r $dir . 'marc21_field_CF.xsd') {
+            my $xmlschema = XML::LibXML::Schema->new(location => $dir . 'marc21_field_CF.xsd');
+            eval {
+                $xmlschema->validate( $doc );
+            };
+            $errorXml = 'Can\'t validate the xml data from ' . $dir . 'marc21_field_006.xml' if ($@);
+        }
+    } else {
+        $errorXml = 'Can\'t read the xml file ' . $dir . 'marc21_field_006.xml';
+    }
+    $template->param(tagfield => '006',
+            index => $index,
+            result => $result,
+            errorXml => $errorXml,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
