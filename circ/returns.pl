@@ -243,7 +243,7 @@ if ($barcode) {
         push( @inputloop, \%input );
 
         my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrower->{'borrowernumber'} );
-        if ($fines) {
+        if ($fines > 0) {
             $template->param( fines => sprintf("%.2f",$fines) );
             $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
         }
