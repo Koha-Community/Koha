@@ -181,7 +181,7 @@ sub calculate {
         $colorder .= $column;
         
         my $strsth2;
-        $strsth2 .= "select distinctrow $colfield FROM borrowers LEFT JOIN `old_issues` USING(borrowernumber)";
+        $strsth2 .= "select distinct $colfield FROM borrowers WHERE 1";
         if ($colfilter[0]) {
             $colfilter[0] =~ s/\*/%/g;
             $strsth2 .= " and $column LIKE '$colfilter[0]' " ;
@@ -229,10 +229,18 @@ sub calculate {
     $strcalc .= "WHERE 1 ";
     @$filters[0]=~ s/\*/%/g if (@$filters[0]);
     $strcalc .= " AND borrowers.categorycode like '" . @$filters[0] ."'" if ( @$filters[0] );
-    my $strqueryfilter = "SELECT DISTINCT borrowernumber FROM old_issues WHERE borrowernumber IS NOT NULL ";
-    if (@$filters[1]){
-        my $strqueryfilter .= "AND old_issues.timestamp> @$filters[1] ";
+
+    my $strqueryfilter = "SELECT DISTINCT borrowernumber FROM  ";
+    $strqueryfilter .= "(SELECT borrowernumber from old_issues WHERE borrowernumber IS NOT NULL ";
+    if ($filters->[1]){
+        $strqueryfilter .= "AND old_issues.timestamp> '$filters->[1]' ";
     }
+    $strqueryfilter .= "UNION SELECT borrowernumber FROM issues WHERE 1 ";
+    if ($filters->[1]){
+        $strqueryfilter .= "AND issues.timestamp> '$filters->[1]' ";
+    }
+    $strqueryfilter .= ") active_borrowers";
+
     $strcalc .= " AND borrowers.borrowernumber not in ($strqueryfilter)";
     $strcalc .= " group by borrowers.borrowernumber";
     $strcalc .= ", $colfield" if ($column);
