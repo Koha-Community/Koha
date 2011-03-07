@@ -39,8 +39,16 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $dbh = C4::Context->dbh;
+my $branchcode;
+if((!defined($input->param('branchcode'))) & mybranch() ne '')
+{
+	$branchcode = mybranch();
+}
+else
+{
+	$branchcode = $input->param('branchcode');
+}
 
-my $branchcode = $input->param('branchcode');
 my $branchname = GetBranchName($branchcode);
 
 # Getting the branches for user selection

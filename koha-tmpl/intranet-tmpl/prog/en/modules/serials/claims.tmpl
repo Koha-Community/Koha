@@ -3,7 +3,7 @@
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.uitablefilter.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
 	 $(document).ready(function() {
@@ -24,14 +24,12 @@
 
 
 	    // Checkboxes : Select All / None
-	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All"));
+	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
 	    $("span.exportSelected").html("<a id=\"ExportSelected\" href=\"/cgi-bin/koha/serials/claims.pl\"> "+_("Export selected items data") +"<\/a>");
 
-
-	    $("#CheckAll").click(function(){ 
-		          $("#claimst :checkbox").attr('checked', $("#CheckAll").is(':checked')); 
-	    });
-
+        $("#CheckAll").click(function() {
+            $("#claimst tr:visible :checkbox").attr('checked', $("#CheckAll").is(':checked'));
+        });
 
 	    // Generates a dynamic link for exporting the selection's data as CSV
 	    $("#ExportSelected").click(function() {
@@ -54,7 +52,13 @@
 		return false;
 	    });	
 
+        $("#titlefilter").keyup(function() {
+            $.uiTableFilter($("#claimst"), $("#titlefilter").val())
+	    });
 
+        $("#branchfilter").keyup(function() {
+            $.uiTableFilter($("#claimst"), $("#branchfilter").val())
+	    });
 	 });
 
 	// Checks if the form can be sent (at least one checkbox must be checked)
@@ -72,18 +76,20 @@
 		clearFilters();
 	    } else {
 		$("table#claimst tbody tr").hide();
-		$("table#claimst tbody tr:contains(" + selectedStatus + ")").show();		    
+		$("table#claimst tbody tr:contains(" + selectedStatus + ")").show();
 	    }
 	}
 
-	// Filter by title
-	function filterByTitle() {
-		var title = $("#titlefilter").val();
+	// Filter by branch
+	function filterByBranch() {
+	    selectedBranch = $("#branchfilter").val();
+	    if (selectedBranch == "all") {
+		clearFilters();
+	    } else {
 		$("table#claimst tbody tr").hide();
-                $("table#claimst tbody tr:icontains("  + title + ")").show();                
-
+		$("table#claimst tbody tr:contains(" + selectedBranch + ")").show();
+	    }
 	}
-
 	// Filter by date
 	function filterByDate() {
 	    var beginDate = Date_from_syspref($("#begindate").val()).getTime();
@@ -165,13 +171,20 @@
      <!-- /TMPL_IF -->
 <!-- TMPL_UNLESS NAME="letter" --><div class="dialog alert">No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>.</div><!-- /TMPL_UNLESS -->
     <form id="claims" name="claims" action="claims.pl" method="post">
-    <fieldset><label for="supplierid">View: </label>
-        <select id="supplierid" size="1" name="supplierid">
-        <!-- TMPL_LOOP NAME="supplier_loop" -->
-          <option value="<!-- TMPL_VAR NAME="id" -->"<!--  TMPL_IF NAME="selected" --> selected="yes" <!-- /TMPL_IF -->><!-- TMPL_VAR NAME="name" -->       
-          </option>
-        <!-- /TMPL_LOOP -->
-        </select>
+    <fieldset>
+	    <label for="supplierid">Supplier: </label>
+	    <select id="supplierid" name="supplierid">
+	        <!-- TMPL_LOOP name="suploop"-->
+	            <!-- TMPL_IF name="selected" -->
+	            <option value="<!-- TMPL_VAR name="id" -->" selected="selected" >
+	            <!-- TMPL_ELSE -->
+	            <option value="<!-- TMPL_VAR name="id" -->">
+	            <!-- /TMPL_IF -->
+	                <!-- TMPL_VAR name="name" -->
+	                (<!-- TMPL_VAR name="count" -->)
+	            </option>
+	        <!-- /TMPL_LOOP -->
+	    </select>
         <input type="submit" value="OK" />
         <!-- TMPL_IF name="phone" -->Phone: <!-- TMPL_VAR name="phone" --><!-- /TMPL_IF -->
         <!-- TMPL_IF name="booksellerfax" -->Fax: <!-- TMPL_VAR name="booksellerfax" --><!-- /TMPL_IF -->
@@ -181,7 +194,7 @@
 
    <!-- TMPL_IF NAME="missingissues" -->	
     <h3>Missing Issues</h3>
-    <form action="claims.pl" onsubmit="filterByTitle(); return false;">
+    <form action="claims.pl" onsubmit="return false;">
 	<fieldset class="rows">
 	<legend>Filters :</legend>
 	
@@ -201,7 +214,16 @@
 	<li>
 	    <label for="titlefilter">Title : </label>
 	    <input id="titlefilter" type="text" />
-	    <input type="submit" value="OK" />
+	    <label for="branchfilter">Branch: </label>
+	    <select id="branchfilter" onchange="filterByBranch();">
+            <!-- TMPL_LOOP Name="branchloop" -->
+                <!-- TMPL_IF NAME="selected" -->
+                <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+                <!-- TMPL_ELSE -->
+                <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+                <!-- /TMPL_IF -->
+            <!-- /TMPL_LOOP -->
+        </select>
 	</li>
 	
 	<li>
@@ -240,15 +262,16 @@
 	</fieldset>
     </form>
 
+    <fieldset>
 	<form action="claims.pl" method="post" class="checkboxed" onsubmit="return checkForm()">
         <input type="hidden" name="order" value="<!--TMPL_VAR Name="order"-->" />
-	    	    <p><span class="checkall"></span><span class="clearall"></span></p> 
          <table id="claimst">
                 <thead><tr>
                     <!--TMPL_IF NAME="letter"-->
-                    <th>Claim</th>
+                    <th><input type="checkbox" id="CheckAll"></th>
                     <!--/TMPL_IF-->
                     <th>Vendor</th>
+                    <th>Branch</th>
                     <th>Title</th>
                     <th>Issue number</th>
                     <th>Status</th>
@@ -265,6 +288,9 @@
                         <!--/TMPL_IF-->
                         <td>
                         <!-- TMPL_VAR name="name" -->
+                        </td>
+                        <td>
+                        <!-- TMPL_VAR name="branchcode" -->
                         </td>
                         <td>
                         <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="subscriptionid" -->"><!-- TMPL_VAR name="title" escape="html" --></a>
@@ -303,6 +329,7 @@
 	    <input type="hidden" name="op" value="send_alert" /><input type="submit" name="submit" class="button" value="Send notification" /></fieldset>
             <!--/TMPL_IF-->
         </form>
+    </fieldset>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_ELSE -->

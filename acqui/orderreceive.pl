@@ -90,7 +90,8 @@ my $datereceived = $input->param('datereceived');
 $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
 my $bookseller = GetBookSellerFromId($supplierid);
-my $gst= $input->param('gst') || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
+my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $results = SearchOrder($ordernumber,$search);
 
 

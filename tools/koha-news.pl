@@ -74,6 +74,7 @@ my $op = $cgi->param('op');
 if ( $op eq 'add_form' ) {
     $template->param( add_form => 1 );
     if ($id) {
+        if($new_detail->{lang} eq "slip"){ $template->param( slip => 1); }
         $template->param( 
             op => 'edit',
             id => $new_detail->{'idnew'}

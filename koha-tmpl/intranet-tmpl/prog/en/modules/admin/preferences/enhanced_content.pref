@@ -1,0 +1,283 @@
+Enhanced Content:
+    All:
+        -
+            - <strong>NOTE:</strong> you can only choose one source of cover images from below, otherwise Koha will show the images from all sources selected.
+        -
+            - pref: FRBRizeEditions
+              default: 0
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - other editions of an item on the staff client (if found by one of the services below).
+        -
+            - pref: OPACFRBRizeEditions
+              default: 0
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - other editions of an item on the OPAC.
+    Amazon:
+        -
+            - pref: AmazonEnabled
+              default: 0
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - data from Amazon on the staff interface (including reviews and "Search Inside" links on item detail pages). This requires that you have signed up for and entered an access key.
+        -
+            - pref: OPACAmazonEnabled
+              default: 0
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - data from Amazon on the OPAC (including reviews and "Search Inside" links on item detail pages). This requires that you have signed up for and entered an access key.
+        -
+            - Use Amazon data from its
+            - pref: AmazonLocale
+              choices:
+                  US: American
+                  CA: Canadian
+                  DE: German
+                  FR: French
+                  JP: Japanese
+                  UK: British
+            - website.
+        -
+            - Access Amazon content using the access key
+            - pref: AWSAccessKeyID
+            - (free, at <a href="http://aws.amazon.com/">http://aws.amazon.com/</a>).
+        -
+            - Access Amazon content (other than book jackets) using the private key
+            - pref: AWSPrivateKey
+            - (free, at <a href="http://aws.amazon.com/">http://aws.amazon.com/</a>).
+        -
+            - Put the associate tag
+            - pref: AmazonAssocTag
+            - on links to Amazon. This can net your library referral fees if a patron decides to buy an item.
+        -
+            - pref: AmazonCoverImages
+              default: 1
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - cover images from Amazon on search results and item detail pages on the staff interface.
+        -
+            - pref: AmazonReviews
+              default: 1
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - reviews from Amazon on item detail pages on the staff interface.
+        -
+            - pref: AmazonSimilarItems
+              default: 1
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - similar items, as determined by Amazon, on item detail pages on the staff interface.
+        -
+            - pref: OPACAmazonCoverImages
+              default: 1
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - cover images from Amazon on search results and item detail pages on the OPAC.
+        -
+            - pref: OPACAmazonSimilarItems
+              default: 1
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - similar items, as determined by Amazon, on item detail pages on the OPAC.
+        -
+            - pref: OPACAmazonReviews
+              default: 1
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - reviews from Amazon on item detail pages on the OPAC.
+    Babelthèque:
+        -
+            - pref: Babeltheque
+              choices:
+                  yes: Do
+                  no: "Don't"
+            - include information (such as reviews and citations) from Babelthèque in item detail pages on the OPAC.
+    Baker and Taylor:
+        -
+            - pref: BakerTaylorEnabled
+              choices:
+                  yes: Add
+                  no: "Don't add"
+            - Baker and Taylor links and cover images to the OPAC and staff client. This requires that you have entered in a username and password (which can be seen in image links).
+        -
+            - 'Baker and Taylor "My Library Bookstore" links should be accessed at <code>https://'
+            - pref: BakerTaylorBookstoreURL
+              class: url
+            - <em>isbn</em></code> (this should be filled in with something like <code>ocls.mylibrarybookstore.com/MLB/actions/searchHandler.do?nextPage=bookDetails&amp;parentNum=10923&amp;key=</code>). Leave it blank to disable these links.
+        -
+            - Access Baker and Taylor using username
+            - pref: BakerTaylorUsername
+              class: password
+            - and password
+            - pref: BakerTaylorPassword
+              class: password
+            - .
+    Google:
+        -
+            - pref: GoogleJackets
+              choices:
+                  yes: Add
+                  no: "Don't add"
+            - cover images from Google Books to search results and item detail pages on the OPAC.
+    Library Thing:
+        # Awkward syntax below, due to quoting conflicts
+        -
+            - pref: ThingISBN
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - the ThingISBN service to show other editions of a title (when either FRBRizeEditions or OPACFRBRizeEditions is on). This is separate from Library Thing for Libraries.
+        -
+            - pref: LibraryThingForLibrariesEnabled
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - "reviews, similar items, and tags from Library Thing for Libraries on item detail pages on the OPAC. If you've enabled this, you need to "
+            - <a href="http://www.librarything.com/forlibraries/">sign up</a>, then enter in your ID below.
+        -
+            - Access Library Thing for Libraries using the customer ID
+            - pref: LibraryThingForLibrariesID
+            - .
+        -
+            - Show Library Thing for Libraries content
+            - pref: LibraryThingForLibrariesTabbedView
+              choices:
+                  yes: in tabs.
+                  no: in line with the bibliographic information.
+    OCLC:
+        -
+            - pref: XISBN
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - the OCLC xISBN service to show other editions of a title (when either FRBRizeEditions or OPACFRBRizeEditions is on).
+        -
+            - Use the <a href="http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp">OCLC affiliate ID</a>
+            - pref: OCLCAffiliateID
+            - to access the xISBN service. Note that unless you have signed up for an ID, you are limited to 1000 requests per day.
+        -
+            - Only use the xISBN service
+            - pref: XISBNDailyLimit
+              class: integer
+            - times a day. Unless you are paying for the xISBN service, you should leave this at the default of 999 (as detailed above).
+    Syndetics:
+        -
+            - pref: SyndeticsEnabled
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - content from Syndetics. Note that this requires that you have signed up for the service and entered in your client code below.
+        -
+            - Use the client code
+            - pref: SyndeticsClientCode
+            - to access Syndetics.
+        -
+            - pref: SyndeticsCoverImages
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - cover images from Syndetics on search results and item detail pages on the OPAC in a
+            - pref: SyndeticsCoverImageSize
+              choices:
+                  MC: medium
+                  LC: large
+            - size.
+        -
+            - pref: SyndeticsAuthorNotes
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - notes about the author of a title from Syndetics on item detail pages on the OPAC.
+        -
+            - pref: SyndeticsAwards
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - information from Syndetics about the awards a title has won on item detail pages on the OPAC.
+        -
+            - pref: SyndeticsEditions
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - information about other editions of a title from Syndetics on item detail pages on the OPAC (when OPACFRBRizeEditions is on).
+        -
+            - pref: SyndeticsExcerpt
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - excerpts from of a title from Syndetics on item detail pages on the OPAC.
+        -
+            - pref: SyndeticsReviews
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - reviews of a title from Syndetics on item detail pages on the OPAC.
+        -
+            - pref: SyndeticsSeries
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - "information on other books in a title's series from Syndetics on item detail pages on the OPAC."
+        -
+            - pref: SyndeticsSummary
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - a summary of a title from Syndetics on item detail pages on the OPAC.
+        -
+            - pref: SyndeticsTOC
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - the table of contents of a title from Syndetics on item detail pages on the OPAC.
+    Tagging:
+        -
+            - pref: TagsEnabled
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons and staff to put tags on items.
+        -
+            - pref: TagsModeration
+              choices:
+                  yes: Require
+                  no: "Don't require"
+            - that tags submitted by patrons be reviewed by a staff member before being shown.
+        -
+            - Show
+            - pref: TagsShowOnList
+              class: integer
+            - tags on search results on the OPAC.
+        -
+            - pref: TagsInputOnList
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to input tags on search results on the OPAC.
+        -
+            - Show
+            - pref: TagsShowOnDetail
+              class: integer
+            - tags on item detail pages on the OPAC.
+        -
+            - pref: TagsInputOnDetail
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to input tags on item detail pages on the OPAC.
+        -
+            - Allow tags in the dictionary of the ispell executable
+            - pref: TagsExternalDictionary
+              class: file
+            - on the server to be approved without moderation.

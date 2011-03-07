@@ -132,7 +132,7 @@ sub set_form_values {
             } ( 0..30 ); # FIXME: 30 is a magic number.
         }
         foreach my $transport ( @{$pref->{'transports'}} ) {
-            $option->{'transport-'.$transport} = 'checked="checked"';
+            $option->{'transport_'.$transport} = 'checked="checked"';
         }
         $option->{'digest'} = 'checked="checked"' if $pref->{'wants_digest'};
     }

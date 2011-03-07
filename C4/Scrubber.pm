@@ -22,43 +22,36 @@ use HTML::Scrubber;
 use C4::Context;
 use C4::Debug;
 
-use vars qw($VERSION @ISA);
-use vars qw(%scrubbertypes $scrubbertype);
+our $VERSION = 0.02;
 
-BEGIN {
-	$VERSION = 0.02;
-	# @ISA = qw(HTML::Scrubber);
-}
 
-INIT {
-	%scrubbertypes = (
-		default => {},	# place holder, default settings are below as fallbacks in call to constructor
-		    tag => {},	# uses defaults
-		comment => {
-			allow   => [qw( br b i em big small strong )],
-		},
-		staff   => {
-			default => [ 1 =>{'*'=>1} ],
-			comment => 1,
-		},
-	);
-}
+my %scrubbertypes = (
+    default => {}, # place holder, default settings are below as fallbacks in call to constructor
+    tag     => {},                                               # uses defaults
+    comment => { allow => [qw( br b i em big small strong )], },
+    staff   => {
+        default => [ 1 => { '*' => 1 } ],
+        comment => 1,
+    },
+);
 
 
 sub new {
-	my $fakeself = shift;	# not really OO, we return an HTML::Scrubber object.
-	my $type  = (@_) ? shift : 'default';
-	exists $scrubbertypes{$type} or croak "New called with unrecognized type '$type'";
-	$debug and print STDERR "Building new Scrubber of type '$type'\n";
-	my $settings = $scrubbertypes{$type};
-	my $scrubber = HTML::Scrubber->new(
-		allow   => exists $settings->{allow}   ? $settings->{allow}   : [],
-		rules   => exists $settings->{rules}   ? $settings->{rules}   : [],
-		default => exists $settings->{default} ? $settings->{default} : [ 0 =>{'*'=>0} ],
-		comment => exists $settings->{comment} ? $settings->{comment} : 0,
-		process => 0,
-	);
-	return $scrubber;
+    shift; # ignore our class we are wrapper
+    my $type = (@_) ? shift : 'default';
+    if ( !exists $scrubbertypes{$type} ) {
+        croak "New called with unrecognized type '$type'";
+    }
+    $debug and carp "Building new Scrubber of type '$type'";
+    my $settings = $scrubbertypes{$type};
+    my $scrubber = HTML::Scrubber->new(
+        allow   => exists $settings->{allow} ? $settings->{allow} : [],
+        rules   => exists $settings->{rules} ? $settings->{rules} : [],
+        default => exists $settings->{default} ? $settings->{default} : [ 0 => { '*' => 0 } ],
+        comment => exists $settings->{comment} ? $settings->{comment} : 0,
+        process => 0,
+    );
+    return $scrubber;
 }
 
 

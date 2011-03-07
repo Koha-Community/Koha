@@ -37,29 +37,6 @@ function barcode_check(){
     }
     <!--/TMPL_IF-->
 }
-
-function Check(f) {
-    var total_errors=0;
-//	alert(f.field_value.length);
-    for (i=0 ; i<f.field_value.length ; i++) {
-//	alert (f.field_value[i].value);
-        if (f.field_value[i].value.length==0 && f.mandatory[i].value==1) {
-            document.getElementById("error"+i).style.backgroundColor="#FF0000";
-            total_errors++;
-        } else {
-//			document.getElementById("error"+i).style.backgroundColor="#FFFFFF";
-        }
-    }
-    var alertString2;
-    if (total_errors==0) {
-        document.f.submit();
-    } else {
-        alertString2  = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
-        alert(alertString2);
-    }
-}
 function unHideItems(index,labelindex, serialId) {
 	subfield = document.getElementById(index);
 	subfield.style.display = 'block';
@@ -86,6 +63,10 @@ function setStatus(serialid){
 }
 function changeDate(adate) {
     var elem = document.getElementById("expecteddate");
+    elem.value = adate;
+}
+function changeDate2(adate) {
+   var elem = document.getElementById("supexpecteddate");
     elem.value = adate;
 }
 function CloneSubfield(index){
@@ -152,6 +133,24 @@ function CloneSubfield(index){
     // insert this line on the page
     original.parentNode.insertBefore(clone,original.nextSibling);
 }
+$(document).ready(function() {
+	$("form#serials_edit").submit(function() {
+	    var total_errors = 0;
+        $(".subfield_line:visible", this).each(function() {
+            if ($("*[name=field_value]", this).val().length == 0 &&
+                $("*[name=mandatory]", this).val() == 1) {
+                total_errors++;
+            }
+        });
+        if ( total_errors > 0 ) {
+            var mes  = _("Form not submitted because of the following problem(s)");
+            mes += "\n------------------------------------------------------------------------------------\n";
+            mes += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+            alert(mes);
+            return false;
+        }
+    });
+});
 //]]>
 </script>
 <style type="text/css">#serials_edit fieldset.rows label, #serials_edit fieldset.rows span.label {
@@ -178,7 +177,8 @@ function CloneSubfield(index){
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --> <!-- TMPL_IF name="callnumber" -->(<!-- TMPL_VAR name="callnumber" -->)<!-- /TMPL_IF --></i></h1>
+<h1>Serial Edition <i><!-- TMPL_VAR name="bibliotitle" --></i>
+	( <!-- TMPL_VAR name="location" --> ) <!-- TMPL_IF name="callnumber" --> callnumber: <!-- TMPL_VAR name="callnumber" --><!-- /TMPL_IF --></h1>
 <form method="post" name="f" action="serials-edit.pl" id="serials_edit">
 <!--onsubmit="return barcode_check()">-->
 
@@ -331,10 +331,10 @@ function CloneSubfield(index){
             <input type="text" name="publisheddate" value="<!-- TMPL_VAR name="publisheddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <input type="text" name="planneddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
+            <input type="text" name="planneddate" id="supexpecteddate" value="<!-- TMPL_VAR name="planneddate" -->" size="10" maxlength="15" />
         </td>
         <td>
-            <select name="status" size="1" id="addstatus<!-- TMPL_VAR NAME="serialid" -->">
+            <select name="status" size="1" id="addstatus<!-- TMPL_VAR NAME="serialid" -->" onchange="if (this.value==2 || this.value==7){changeDate2('<!-- TMPL_VAR NAME="arriveddate" -->')} else {changeDate2('<!-- TMPL_VAR NAME="planneddate" -->')}" >
                     <option value="">----</option>
   <!--TMPL_IF name="status1" -->
                     <option value="1" selected="selected">Expected</option>
@@ -420,7 +420,7 @@ function CloneSubfield(index){
 <!-- /TMPL_LOOP -->
 
 </table>
-    <fieldset class="action"><input type="submit" value="Save"  class="button" accesskey="w" /> <!--onclick="Check(this.form)" --></fieldset>
+    <fieldset class="action"><input type="submit" value="Save"  class="button" accesskey="w" />
 </form>
 
 </div>

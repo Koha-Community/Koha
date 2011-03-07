@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo;<!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="use-heading-flags-p" --><!-- TMPL_IF NAME="heading-edit-subfields-p" --> MARC Subfield Structure &rsaquo; Edit MARC subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --> MARC Subfield Structure &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<title>Koha &rsaquo; Administration &rsaquo;<!-- TMPL_IF name="add_form" --><!-- TMPL_IF NAME="use_heading_flags_p" --><!-- TMPL_IF NAME="heading_edit_subfields_p" --> MARC Subfield Structure &rsaquo; Edit MARC subfields constraints<!-- /TMPL_IF --><!-- TMPL_ELSE --> MARC Subfield Structure &rsaquo; <!-- TMPL_VAR NAME="action" --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF name="delete_confirm" --> MARC Subfield Structure &rsaquo; Confirm Deletion of Subfield <!-- TMPL_VAR NAME="tagsubfield" --><!-- /TMPL_IF --><!-- TMPL_IF name="delete_confirmed" --> MARC Subfield Structure &rsaquo; Subfield Deleted<!-- /TMPL_IF --><!-- TMPL_IF name="else" -->MARC Subfield Structure<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <script type="text/javascript">
@@ -38,8 +38,8 @@
 <div id="breadcrumbs">
   <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC Frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->&amp;searchfield=<!-- TMPL_VAR name="tagfield" -->"><!-- TMPL_VAR NAME="frameworkcode" --> Framework Structure</a> &rsaquo;
   <!-- TMPL_IF name="add_form" -->
-  <!-- TMPL_IF NAME="use-heading-flags-p" -->
-  <!-- TMPL_IF NAME="heading-edit-subfields-p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Edit subfields constraints
+  <!-- TMPL_IF NAME="use_heading_flags_p" -->
+  <!-- TMPL_IF NAME="heading_edit_subfields_p" --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; Edit subfields constraints
   <!-- /TMPL_IF -->
   <!-- TMPL_ELSE --> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=<!-- TMPL_VAR NAME="tagfield" -->&amp;frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->">Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Structure</a> &rsaquo; <!-- TMPL_VAR NAME="action" -->
   <!-- /TMPL_IF -->
@@ -59,8 +59,8 @@
 
 <!-- TMPL_IF NAME="add_form" -->
     <h1>
-        <!-- TMPL_IF NAME="use-heading-flags-p" -->
-            <!-- TMPL_IF NAME="heading-edit-subfields-p" -->Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Constraints<!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="use_heading_flags_p" -->
+            <!-- TMPL_IF NAME="heading_edit_subfields_p" -->Tag <!-- TMPL_VAR NAME="tagfield" --> Subfield Constraints<!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_VAR NAME="action" -->
         <!-- /TMPL_IF -->
@@ -75,9 +75,7 @@
    <ul>
         <!-- TMPL_LOOP NAME="loop" -->
             <!-- TMPL_IF NAME="new_subfield" -->
-                <!-- TMPL_IF EXPR="tagfield >=10" --><!-- display new only for > 10 fields -->
                 <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">New</a></li>
-                <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
                 <li><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl#sub<!-- TMPL_VAR NAME="urisubfieldcode" -->field" title="<!-- TMPL_VAR NAME="liblibrarian" -->">
                     <!-- TMPL_VAR NAME="subfieldcode" -->

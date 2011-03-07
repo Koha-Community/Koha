@@ -42,11 +42,11 @@ my $input = new CGI;
 
 my $phase = $input->param('phase');
 my $flagsrequired;
-if ( $phase eq 'Build new' ) {
-    $flagsrequired = 'create_report';
+if ( $phase eq 'Build new' or $phase eq 'Delete Saved' ) {
+    $flagsrequired = 'create_reports';
 }
 elsif ( $phase eq 'Use saved' ) {
-    $flagsrequired = 'execute_report';
+    $flagsrequired = 'execute_reports';
 } else {
     $flagsrequired = '*';
 }
@@ -498,7 +498,7 @@ elsif ($phase eq 'Run this report'){
         }
 
         my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
-        my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report&phase=Run%20this%20report";
+        my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report&amp;phase=Run%20this%20report";
         $template->param(
             'results' => \@rows,
             'sql'     => $sql,

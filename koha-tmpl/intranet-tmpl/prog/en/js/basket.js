@@ -299,10 +299,10 @@ function delRecord (n, s) {
 }
 
 
-function delBasket() {
-
-    var rep = false;
-    rep = confirm(MSG_CONFIRM_DEL_BASKET);
+function delBasket(rep) {
+    if (rep == undefined){
+        rep = confirm(MSG_CONFIRM_DEL_BASKET);
+    }
     if (rep) {
         delCookie(nameCookie);
         document.location = "about:blank";

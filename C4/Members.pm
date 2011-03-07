@@ -93,6 +93,7 @@ BEGIN {
 	push @EXPORT, qw(
 		&ModMember
 		&changepassword
+         &ModPrivacy
 	);
 
 	#Delete data
@@ -443,7 +444,7 @@ sub patronflags {
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
         $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $amount;
         $flaginfo{'amount'}  = sprintf "%.02f", $amount;
-        if ( $amount > $noissuescharge ) {
+        if ( $amount > $noissuescharge && !C4::Context->preference("AllowFineOverride") ) {
             $flaginfo{'noissues'} = 1;
         }
         $flags{'CHARGES'} = \%flaginfo;
@@ -2022,6 +2023,31 @@ sub DebarMember {
     
 }
 
+=head2 ModPrivacy
+
+=over 4
+
+my $success = ModPrivacy( $borrowernumber, $privacy );
+
+Update the privacy of a patron.
+
+return :
+true on success, false on failure
+
+=back
+
+=cut
+
+sub ModPrivacy {
+    my $borrowernumber = shift;
+    my $privacy = shift;
+    return unless defined $borrowernumber;
+    return unless $borrowernumber =~ /^\d+$/;
+
+    return ModMember( borrowernumber => $borrowernumber,
+                      privacy        => $privacy );
+}
+
 =head2 AddMessage
 
   AddMessage( $borrowernumber, $message_type, $message, $branchcode );
@@ -2073,7 +2099,7 @@ sub GetMessages {
     my $query = "SELECT
                   branches.branchname,
                   messages.*,
-                  DATE_FORMAT( message_date, '%m/%d/%Y' ) AS message_date_formatted,
+                  message_date,
                   messages.branchcode LIKE '$branchcode' AS can_delete
                   FROM messages, branches
                   WHERE borrowernumber = ?
@@ -2085,6 +2111,8 @@ sub GetMessages {
     my @results;
 
     while ( my $data = $sth->fetchrow_hashref ) {
+        my $d = C4::Dates->new( $data->{message_date}, 'iso' );
+        $data->{message_date_formatted} = $d->output;
         push @results, $data;
     }
     return \@results;

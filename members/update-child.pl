@@ -81,7 +81,7 @@ if ( $op eq 'multi' ) {
 
 elsif ( $op eq 'update' ) {
     my $member = GetMember('borrowernumber'=>$borrowernumber);
-    $member->{'guarantorid'}  = '0';
+    $member->{'guarantorid'}  = 0;
     $member->{'categorycode'} = $catcode;
     my $borcat = GetBorrowercategory($catcode);
     $member->{'category_type'} = $borcat->{'category_type'};

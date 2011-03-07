@@ -1,96 +1,21 @@
-#!/usr/bin/perl
-#
 
 use strict;
-#use warnings; FIXME - Bug 2505
-use C4::Boolean;
+use warnings;
 
-use vars qw( @tests );
-use vars qw( $loaded );
+use Test::More tests => 12;
 
-sub f ($) {
-   my($x) = @_;
-   my $it;
-   # Returns either the value returned prefixed with 'OK:',
-   # or the caught exception (string expected)
-   local($@);
-   eval {
-      $it = 'OK:' . C4::Boolean::true_p($x);
-   };
-   if ($@) {
-      $it = $@;
-      $it =~ s/ at \S+ line \d+\.\n//s;
-   }
-   return $it;
-}
+BEGIN { use_ok( 'C4::Boolean', qw( true_p ) ); }
 
-BEGIN {
-   @tests = (
-   [
-      'control',
-      sub { C4::Boolean::INVALID_BOOLEAN_STRING_EXCEPTION },
-      'The given value does not seem to be interpretable as a Boolean value',
-      undef
+is( true_p('0'),     '0', 'recognizes \'0\' as false' );
+is( true_p('false'), '0', 'recognizes \'false\' as false' );
+is( true_p('off'),   '0', 'recognizes \'off\' as false' );
+is( true_p('no'),    '0', 'recognizes \'no\' as false' );
 
-   # False strings
-   ], [
-      '"0"',     \&f, 'OK:0', '0'
-   ], [
-      '"false"', \&f, 'OK:0', 'false'
-   ], [
-      '"off"',   \&f, 'OK:0', 'off'
-   ], [
-      '"no"',    \&f, 'OK:0', 'no'
+is( true_p('1'),    '1', 'recognizes \'1\' as true' );
+is( true_p('true'), '1', 'recognizes \'true\' as true' );
+is( true_p('on'),   '1', 'recognizes \'on\' as true' );
+is( true_p('yes'),  '1', 'recognizes \'yes\' as true' );
+is( true_p('YES'),  '1', 'verified case insensitivity' );
 
-   # True strings
-   ], [
-      '"1"',     \&f, 'OK:1', '1'
-   ], [
-      '"true"',  \&f, 'OK:1', 'true'
-   ], [
-      '"on"',    \&f, 'OK:1', 'on'
-   ], [
-      '"yes"',   \&f, 'OK:1', 'yes'
-   ], [
-      '"YES"',   \&f, 'OK:1', 'YES'	# verify case insensitivity
-
-   # Illegal strings
-   ], [
-      'undef',   \&f, 'OK:', undef
-   ], [
-      '"foo"',   \&f, 'OK:', 'foo'
-   ],
-);
-}
-
-BEGIN { $| = 1; printf "1..%d\n", scalar(@tests); }
-END {print "not ok 1\n" unless $loaded;}
-$loaded = 1;
-
-
-# Run all tests in sequence
-for (my $i = 1; $i <= scalar @tests; $i += 1) {
-   my $test = $tests[$i - 1];
-   my($title, $f, $expected, $input) = @$test;
-   die "not ok $i (malformed test case)\n"
-      unless @$test == 4 && ref $f eq 'CODE';
-
-   my $output = &$f($input);
-   if (
-	 (!defined $output && !defined $expected)
-      || (defined $output && defined $expected && $output eq $expected)
-   ) {
-      print "ok $i - $title\n";
-   } else {
-      print "not ok $i - $title: got ",
-	    (defined $output? "\"$output\"": 'undef'),
-	    ', expected ',
-	    (defined $expected? "\"$expected\"": 'undef'),
-	    "\n";
-   }
-}
-
-
-
-
-
+is( true_p(undef), undef, 'recognizes undefined as not boolean' );
+is( true_p('foo'), undef, 'recognizes \'foo\' as not boolean' );

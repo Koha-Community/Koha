@@ -2,6 +2,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2004-2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -366,7 +367,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     value=\"$value\"
-                    class=\"input_marceditor\"
+                    class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"5\"
                     maxlength=\"$max_length\"
@@ -382,7 +383,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     value=\"$value\"
-                    class=\"input_marceditor\"
+                    class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"67\"
                     maxlength=\"$max_length\"
@@ -396,7 +397,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     value=\"$value\"
-                    class=\"input_marceditor\"
+                    class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"67\"
                     maxlength=\"$max_length\"
@@ -757,7 +758,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   my ($countcreated,$countlinked);
   while (my $data=$query->fetchrow_hashref){
     foreach my $field ($record->field($data->{tagfield})){
-      next if ($field->subfield('3')||$field->subfield('9'));
+      next if ($field->subfield('9'));
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
@@ -932,8 +933,7 @@ if ( $op eq "addbiblio" ) {
         else {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
         }
-
-        if (($mode ne "popup" && !$is_a_modif) || $redirect eq "items"){
+        if ($mode ne "popup" && !$is_a_modif && $redirect eq "items"){
             print $input->redirect(
                 "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
             );

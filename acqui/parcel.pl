@@ -75,7 +75,8 @@ my $bookseller=GetBookSellerFromId($supplierid);
 
 my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
-my $gst= $input->param('gst') || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
+my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $datereceived =  ($input->param('op') eq 'new') ? C4::Dates->new($input->param('datereceived')) 
 					:  C4::Dates->new($input->param('datereceived'), 'iso')   ;
 $datereceived = C4::Dates->new() unless $datereceived;

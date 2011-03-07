@@ -4,6 +4,7 @@
 #written by john.soros@biblibre.com 01/10/2008
 
 # Copyright 2008 - 2009 BibLibre SARL
+# Parts Copyright Catalyst 2010
 #
 # This file is part of Koha.
 #
@@ -137,8 +138,8 @@ sub BasketTotal {
     my @orders = GetOrders($basketno);
     for my $order (@orders){
         $total = $total + ( $order->{ecost} * $order->{quantity} );
-        if ($bookseller->{invoiceincgst} && ! $bookseller->{listincgst} && ( $bookseller->{gstrate} || C4::Context->preference("gist") )) {
-            my $gst = $bookseller->{gstrate} || C4::Context->preference("gist");
+        if ($bookseller->{invoiceincgst} && ! $bookseller->{listincgst} && ( $bookseller->{gstrate} // C4::Context->preference("gist") )) {
+            my $gst = $bookseller->{gstrate} // C4::Context->preference("gist");
             $total = $total * ( $gst / 100 +1);
         }
     }
@@ -183,8 +184,9 @@ sub printbasketgrouppdf{
     my ($basketgroupid) = @_;
     
     my $pdfformat = C4::Context->preference("OrderPdfFormat");
-    eval "use $pdfformat" ;
-    eval "use C4::Branch";
+    eval "use $pdfformat";
+    # FIXME consider what would happen if $pdfformat does not
+    # contain the name of a valid Perl module.
     
     my $basketgroup = GetBasketgroup($basketgroupid);
     my $bookseller = GetBookSellerFromId($basketgroup->{'booksellerid'});
@@ -220,7 +222,7 @@ sub printbasketgrouppdf{
                     push(@ba_order, $ord->{$key});                                                  #Order lines
                 }
                 push(@ba_order, $bookseller->{discount});
-                push(@ba_order, $bookseller->{gstrate}*100 || C4::Context->preference("gist") || 0);
+                push(@ba_order, $bookseller->{gstrate}*100 // C4::Context->preference("gist") // 0);
                 push(@ba_orders, \@ba_order);
                 # Editor Number
                 my $en;
@@ -242,9 +244,8 @@ sub printbasketgrouppdf{
         -type       => 'application/pdf',
         -attachment => ( $basketgroup->{name} || $basketgroupid ) . '.pdf'
     );
-    my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} || C4::Context->preference("gist")) || die "pdf generation failed";
+    my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} // C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
-    exit;
 }
 
 my $op = $input->param('op');
@@ -382,10 +383,12 @@ if ( $op eq "add" ) {
     CloseBasketgroup($basketgroupid);
     
     printbasketgrouppdf($basketgroupid);
+    exit;
 }elsif ($op eq 'print'){
     my $basketgroupid = $input->param('basketgroupid');
     
     printbasketgrouppdf($basketgroupid);
+    exit;
 }elsif( $op eq "delete"){
     my $basketgroupid = $input->param('basketgroupid');
     DelBasketgroup($basketgroupid);

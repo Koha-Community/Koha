@@ -20,7 +20,6 @@ package C4::XISBN;
 use XML::Simple;
 #use LWP::Simple;
 use C4::Biblio;
-use C4::Items;
 use C4::Koha;
 use C4::External::Syndetics qw(get_syndetics_editions);
 use LWP::UserAgent;
@@ -72,7 +71,6 @@ sub _get_biblio_from_xisbn {
     if ($xbib_data->{biblionumber}) {
         $xbiblio = GetBiblioData($xbib_data->{biblionumber});
         $xbiblio->{normalized_isbn} = GetNormalizedISBN($xbiblio->{isbn});
-        $xbiblio->{items} = GetItemsByBiblioitemnumber($xbib_data->{biblionumber});
     }
     return ($xbiblio);
 }

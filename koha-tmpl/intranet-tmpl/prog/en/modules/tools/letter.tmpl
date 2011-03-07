@@ -190,10 +190,10 @@ $(document).ready(function() {
                                     <!--TMPL_ELSE-->
                                     <option value="catalogue" >Catalog</option>
                                     <!--/TMPL_IF-->
-                                    <!--TMPL_IF Name="serial"-->
-                                    <option value="serial" selected="selected">Serials (Routing List)</option>
+                                    <!--TMPL_IF Name="circulation"-->
+                                    <option value="circulation" selected="selected">Circulation</option>
                                     <!--TMPL_ELSE-->
-                                    <option value="serial">Serials (Routing List)</option>
+                                    <option value="circulation">Circulation</option>
                                     <!--/TMPL_IF-->
                                     <!--TMPL_IF Name="claimacquisition"-->
                                     <option value="claimacquisition" selected="selected">Claim Acquisition</option>
@@ -205,20 +205,25 @@ $(document).ready(function() {
                                     <!--TMPL_ELSE-->
                                     <option value="claimissues">Claim Serial Issue</option>
                                     <!--/TMPL_IF-->
-                                    <!--TMPL_IF Name="circulation"-->
-                                    <option value="circulation" selected="selected">Circulation</option>
+                                    <!--TMPL_IF Name="reserves"-->
+                                    <option value="reserves" selected="selected">Holds</option>
                                     <!--TMPL_ELSE-->
-                                    <option value="circulation">Circulation</option>
+                                    <option value="reserves">Holds</option>
                                     <!--/TMPL_IF-->
                                     <!--TMPL_IF Name="members"-->
                                     <option value="members" selected="selected">Members</option>
                                     <!--TMPL_ELSE-->
                                     <option value="members">Members</option>
                                     <!--/TMPL_IF-->
-                                    <!--TMPL_IF Name="reserves"-->
-                                    <option value="reserves" selected="selected">Holds</option>
+                                    <!--TMPL_IF Name="serial"-->
+                                    <option value="serial" selected="selected">Serials (Routing List)</option>
                                     <!--TMPL_ELSE-->
-                                    <option value="reserves">Holds</option>
+                                    <option value="serial">Serials (Routing List)</option>
+                                    <!--/TMPL_IF-->
+                                    <!--TMPL_IF Name="suggestions"-->
+                                    <option value="suggestions" selected="selected">Suggestions</option>
+                                    <!--TMPL_ELSE-->
+                                    <option value="suggestions">Suggestions</option>
                                     <!--/TMPL_IF-->
 				</select>
 			</li>

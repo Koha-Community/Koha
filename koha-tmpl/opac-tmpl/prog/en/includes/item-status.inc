@@ -19,14 +19,14 @@
     <!-- /TMPL_IF -->
 <!-- TMPL_ELSIF name="itemnotforloan" -->
     <!-- TMPL_IF NAME="notforloanvalue" -->
-        <!-- TMPL_VAR NAME="notforloanvalue" -->
+        <!-- TMPL_VAR NAME="notforloanvalue" --> <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
     <!-- TMPL_ELSE -->
-        Not for loan
+        Not for loan <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
 <!-- TMPL_ELSIF name="notforloan_per_itemtype" -->
-    Not for loan
+    Not for loan <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
 <!-- TMPL_ELSIF NAME="damaged" -->
     Item damaged
 <!-- TMPL_ELSE -->
-    Available
+    Available <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->

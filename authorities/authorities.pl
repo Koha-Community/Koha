@@ -191,13 +191,13 @@ sub create_input {
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
         $subfield_data{marc_value} =
     "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-    value=\"$value\"
-    class=\"input_marceditor\"
-    tabindex=\"1\"                     
-        readonly=\"readonly\" \/>
-    <a href=\"#\" class=\"buttonDot\"
+            id=\"".$subfield_data{id}."\"
+            name=\"".$subfield_data{id}."\"
+            value=\"$value\"
+            class=\"input_marceditor readonly\"
+            tabindex=\"1\"
+            readonly=\"readonly\" \/>
+        <a href=\"#\" class=\"buttonDot\"
         onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
     ";
     # it's a plugin field
@@ -545,7 +545,9 @@ my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
 
 my $dbh = C4::Context->dbh;
-$authtypecode = &GetAuthTypeCode($authid) if !$authtypecode;
+if(!$authtypecode) {
+  $authtypecode = $authid? &GetAuthTypeCode($authid): '';
+}
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "authorities/authorities.tmpl",

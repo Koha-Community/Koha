@@ -90,7 +90,7 @@ sub compare_syspref {
        push @to_add_sysprefs, $_ if ! $trans_syspref->{$_};
     }
     if ( $#to_add_sysprefs >= 0 ) {
-        fail( 'No syspref to add') or diag( "Sysprefs to add in $trans_file: " . join(', ', @to_add_sysprefs ) );
+	fail("Sysprefs to add in $trans_file: " . join(', ', @to_add_sysprefs ) );
     }
     else {
         pass( 'No syspref to add' );
@@ -101,7 +101,7 @@ sub compare_syspref {
        push @to_delete_sysprefs, $_ if ! $ref_syspref->{$_};
     }
     if ( $#to_delete_sysprefs >= 0 ) {
-        fail( 'No syspref to delete' );
+        fail( 'sysprefs to delete' );
         diag( "Sysprefs to delete in $trans_file: " . join(', ', @to_delete_sysprefs ) );
         diag( 'Warning: Some of those sysprefs may rather have to be added to English sysprefs' );
     }

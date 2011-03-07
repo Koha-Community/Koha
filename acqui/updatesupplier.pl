@@ -98,7 +98,12 @@ $data{'gstreg'}=$input->param('gst');
 $data{'listincgst'}=$input->param('list_gst');
 $data{'invoiceincgst'}=$input->param('invoice_gst');
 #have to transform this into fraction so it's easier to use
-$data{'gstrate'}=$input->param('gstrate')/100;
+my $gstrate = $input->param('gstrate');
+if ($gstrate eq '') {
+    $data{'gstrate'} = undef;
+} else {
+    $data{'gstrate'} = $input->param('gstrate')/100;
+}
 $data{'discount'}=$input->param('discount');
 $data{'active'}=$input->param('status');
 if($data{'name'}) {

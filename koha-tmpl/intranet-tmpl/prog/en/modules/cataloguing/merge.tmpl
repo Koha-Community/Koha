@@ -195,8 +195,8 @@ $(document).ready(function(){
     <fieldset class="rows">
 	<legend>Merge reference</legend>
 	<ol>
-	<li class="radio"><input type="radio" value="<!-- TMPL_VAR NAME="biblio1" -->" checked="checked" id="mergereference1" name="mergereference" /><label for="mergereference1"><!-- TMPL_VAR NAME="title1" --> (<!-- TMPL_VAR NAME="biblio1" -->)</label></li>
-	<li class="radio"><input type="radio" value="<!-- TMPL_VAR NAME="biblio2" -->" id="mergereference2" name="mergereference" /><label for="mergereference2"><!-- TMPL_VAR NAME="title2" --> (<!-- TMPL_VAR NAME="biblio2" -->)</label></li>
+	<li class="radio"><input type="radio" value="<!-- TMPL_VAR NAME="biblio1" -->" checked="checked" id="mergereference1" name="mergereference" /><label style="float:none" for="mergereference1"><!-- TMPL_VAR NAME="title1" --> (<!-- TMPL_VAR NAME="biblio1" -->)</label></li>
+	<li class="radio"><input type="radio" value="<!-- TMPL_VAR NAME="biblio2" -->" id="mergereference2" name="mergereference" /><label style="float:none" for="mergereference2"><!-- TMPL_VAR NAME="title2" --> (<!-- TMPL_VAR NAME="biblio2" -->)</label></li>
 </ol>
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblio1" -->" />
 	<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblio2" -->" />
@@ -254,6 +254,7 @@ $(document).ready(function(){
 		<!-- /TMPL_LOOP -->
 		</ul>
 	    </div><!-- /div.record -->
+<!-- /TMPL_IF -->
     </div><!-- /div#tabrecord1 -->
     <div id="tabrecord2">
 	<!-- TMPL_IF name="record2" -->

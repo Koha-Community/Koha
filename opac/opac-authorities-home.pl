@@ -141,6 +141,7 @@ if ( $op eq "do_search" ) {
         to             => $to,
         numbers        => \@numbers,
         authtypecode   => $authtypecode,
+        authtypetext   => $authtypes->{$authtypecode}{'authtypetext'},
         isEDITORS      => $authtypecode eq 'EDITORS',
     );
 
@@ -151,7 +152,7 @@ else {
             template_name   => "opac-authorities-home.tmpl",
             query           => $query,
             type            => 'opac',
-            authnotrequired => 1,
+            authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
             debug           => 1,
         }
     );

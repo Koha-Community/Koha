@@ -49,6 +49,7 @@ $offset=0 unless $offset;
 my $pagesize = $input->param('pagesize');
 $pagesize=50 unless $pagesize;
 my $branchcode = $input->param('branchcode');
+my $branch     = $input->param('branch');
 my $op = $input->param('op');
 my $res;    #contains the results loop
 # warn "uploadbarcodes : ".$uploadbarcodes;
@@ -129,6 +130,7 @@ $template->param(branchloop => \@branch_loop,
                 location=>$location,
                 ignoreissued=>$ignoreissued,
                 branchcode=>$branchcode,      
+                branch    => $branch,
                 offset => $offset,
                 pagesize => $pagesize,
                 datelastseen => $datelastseen,
@@ -183,7 +185,7 @@ if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compa
         }
     }
     if ($markseen or $op) {
-        $res = GetItemsForInventory($minlocation,$maxlocation,$location, $ignoreissued,$itemtype,$datelastseen,$branchcode,$offset,$pagesize,$staton);
+        $res = GetItemsForInventory( $minlocation, $maxlocation, $location, $ignoreissued, $itemtype, $datelastseen, $branchcode, $branch, $offset, $pagesize, $staton );
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),

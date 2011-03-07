@@ -1,0 +1,73 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Acquisitions &rsaquo; Basket <!-- TMPL_VAR NAME="basketno" --> &rsaquo; Duplicate warning</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body>
+
+<!-- TMPL_INCLUDE NAME="header.inc" -->
+<!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=<!-- TMPL_VAR NAME="basketno" -->">Basket <!-- TMPL_VAR NAME="basketno" --></a> &rsaquo; Duplicate warning</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<div class="dialog alert">
+<h4>Duplicate warning</h4>
+<p>You selected a record from an external source that matches an existing record in your catalog: <!-- TMPL_IF name="BiblioDefaultViewmarc" --><a class="popup" target="_blank" title="Open in new window" href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+<!-- TMPL_ELSIF NAME="BiblioDefaultViewlabeled_marc" --><a class="popup" target="_blank" title="Open in new window" href="/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+<!-- TMPL_ELSIF NAME="BiblioDefaultViewisbd" --><a class="popup" target="_blank" title="Open in new window" href="/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
+<!-- TMPL_ELSE --><a class="popup" target="_blank" title="Open in new window" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="duplicatetitle" --></a></p>
+</div>
+
+<div class="yui-gb">
+<div class="yui-u first">
+<div style="border: 1px solid #DDD; padding:1em;">
+<form action="/cgi-bin/koha/acqui/neworderempty.pl">
+<h4>Use existing record</h4>
+<p>Do not create a duplicate record. Add an order from the existing record in your catalog.</p>
+<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
+<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
+<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
+<input type="submit" value="Use Existing" />
+</form>
+</div>
+</div>
+
+<div class="yui-u">
+<div style="border: 1px solid #DDD; padding:1em;">
+<form action="/cgi-bin/koha/acqui/basket.pl">
+<h4>Cancel and return to order</h4>
+<p>Return to the basket without making a new order.</p>
+<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
+<input type="submit" value="Cancel" />
+</form>
+</div>
+</div>
+
+<div class="yui-u">
+<div style="border: 1px solid #DDD; padding:1em;">
+<form action="/cgi-bin/koha/acqui/neworderempty.pl">
+<h4>Create new record</h4>
+<p>Create a new record by importing the external (duplicate) record.</p>
+<input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
+<input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
+<input type="hidden" name="breedingid" value="<!-- TMPL_VAR NAME="breedingid" -->" />
+<input type="hidden" name="use_external_source" value="1" />
+<input type="submit" value="Create New" />
+</form>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+<div class="yui-b">
+<!-- TMPL_INCLUDE NAME="acquisitions-menu.inc" -->
+</div>
+</div>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

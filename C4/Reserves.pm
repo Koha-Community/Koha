@@ -194,7 +194,9 @@ sub AddReserve {
         my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
         my $biblio   = GetBiblioData($biblionumber);
         my $letter = C4::Letters::getletter( 'reserves', 'HOLDPLACED');
-        my $admin_email_address = C4::Context->preference('KohaAdminEmailAddress');
+	my $branchcode = $borrower->{branchcode};
+        my $branch_details = C4::Branch::GetBranchDetail($branchcode);
+        my $admin_email_address =$branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
 
         my %keys = (%$borrower, %$biblio);
         foreach my $key (keys %keys) {
@@ -1612,6 +1614,7 @@ sub _Findgroupreserve {
         SELECT reserves.biblionumber               AS biblionumber,
                reserves.borrowernumber             AS borrowernumber,
                reserves.reservedate                AS reservedate,
+               reserves.waitingdate                AS waitingdate,
                reserves.branchcode                 AS branchcode,
                reserves.cancellationdate           AS cancellationdate,
                reserves.found                      AS found,

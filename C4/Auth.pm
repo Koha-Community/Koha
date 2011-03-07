@@ -332,7 +332,7 @@ sub get_template_and_user {
             LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
             TagsEnabled                  => C4::Context->preference("TagsEnabled"),
             hide_marc                    => C4::Context->preference("hide_marc"),
-            'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
+            item_level_itypes            => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
             XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
@@ -362,6 +362,7 @@ sub get_template_and_user {
             intranetcolorstylesheet     => C4::Context->preference("intranetcolorstylesheet"),
             intranetreadinghistory      => C4::Context->preference("intranetreadinghistory"),
             intranetstylesheet          => C4::Context->preference("intranetstylesheet"),
+            IntranetUserCSS             => C4::Context->preference("IntranetUserCSS"),
             intranetuserjs              => C4::Context->preference("intranetuserjs"),
             intranetbookbag             => C4::Context->preference("intranetbookbag"),
             suggestion                  => C4::Context->preference("suggestion"),
@@ -417,6 +418,7 @@ sub get_template_and_user {
             OpacNav                   => "" . C4::Context->preference("OpacNav"),
             OpacPasswordChange        => C4::Context->preference("OpacPasswordChange"),
             OPACPatronDetails        => C4::Context->preference("OPACPatronDetails"),
+            OPACPrivacy               => C4::Context->preference("OPACPrivacy"),
             OPACFinesTab              => C4::Context->preference("OPACFinesTab"),
             OpacTopissue              => C4::Context->preference("OpacTopissue"),
             RequestOnOpac             => C4::Context->preference("RequestOnOpac"),
@@ -454,6 +456,8 @@ sub get_template_and_user {
             SyndeticsSeries              => C4::Context->preference("SyndeticsSeries"),
             SyndeticsCoverImageSize      => C4::Context->preference("SyndeticsCoverImageSize"),
         );
+
+        $template->param(OpacPublic => '1') if ($template->param( 'loggedinusername') || C4::Context->preference("OpacPublic"));
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
     return ( $template, $borrowernumber, $cookie, $flags);
@@ -717,7 +721,7 @@ sub checkauth {
 		    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
 		}
 		if ($return) {
-            	_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},localtime);
+               _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
             	if ( $flags = haspermission(  $userid, $flagsrequired ) ) {
 					$loggedin = 1;
             	}
@@ -940,8 +944,10 @@ sub checkauth {
         intranetuserjs     => C4::Context->preference("intranetuserjs"),
         IndependantBranches=> C4::Context->preference("IndependantBranches"),
         AutoLocation       => C4::Context->preference("AutoLocation"),
-		wrongip            => $info{'wrongip'}
+		wrongip            => $info{'wrongip'},
     );
+
+    $template->param( OpacPublic => C4::Context->preference("OpacPublic"));
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
     if ($cas) { 

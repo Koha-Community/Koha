@@ -563,7 +563,7 @@ CREATE TABLE `currency` (
   `currency` varchar(10) NOT NULL default '',
   `symbol` varchar(5) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `rate` float(7,5) default NULL,
+  `rate` float(15,5) default NULL,
   `active` tinyint(1) default NULL,
   PRIMARY KEY  (`currency`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -642,7 +642,7 @@ CREATE TABLE `deletedbiblioitems` (
 DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` (
   `borrowernumber` int(11) NOT NULL default 0,
-  `cardnumber` varchar(9) NOT NULL default '',
+  `cardnumber` varchar(16) NOT NULL default '',
   `surname` mediumtext NOT NULL,
   `firstname` text,
   `title` mediumtext,
@@ -703,6 +703,7 @@ CREATE TABLE `deletedborrowers` (
   `altcontactcountry` text default NULL,
   `altcontactphone` varchar(50) default NULL,
   `smsalertnumber` varchar(50) default NULL,
+  `privacy` integer(11) DEFAULT '1' NOT NULL,
   KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -749,7 +750,7 @@ CREATE TABLE `deleteditems` (
   `uri` varchar(255) default NULL,
   `itype` varchar(10) default NULL,
   `more_subfields_xml` longtext default NULL,
-  `enumchron` varchar(80) default NULL,
+  `enumchron` text default NULL,
   `copynumber` varchar(32) default NULL,
   `stocknumber` varchar(32) default NULL,
   `marc` longblob,
@@ -1014,7 +1015,7 @@ CREATE TABLE `items` (
   `uri` varchar(255) default NULL,
   `itype` varchar(10) default NULL,
   `more_subfields_xml` longtext default NULL,
-  `enumchron` varchar(80) default NULL,
+  `enumchron` text default NULL,
   `copynumber` varchar(32) default NULL,
   `stocknumber` varchar(32) default NULL,
   PRIMARY KEY  (`itemnumber`),
@@ -1835,6 +1836,10 @@ CREATE TABLE `suggestions` (
    branchcode VARCHAR(10) default NULL,
    collectiontitle text default NULL,
    itemtype VARCHAR(30) default NULL,
+	quantity SMALLINT(6) default NULL,
+	currency VARCHAR(3) default NULL,
+	price DECIMAL(28,6) default NULL,
+	total DECIMAL(28,6) default NULL,
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`)

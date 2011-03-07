@@ -2,7 +2,8 @@
 <title>Print Receipt for <!-- TMPL_VAR NAME="cardnumber" --></title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/print.css" />
+ <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/print.css" />
+
 <script language="javascript">
         window.print();
         window.close();
@@ -56,5 +57,18 @@ Date due: <!-- TMPL_VAR NAME="date_due" --></p>
 <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
+
+<!-- TMPL_IF NAME="koha_news_count" -->
+            <hr><h4 style="text-align: center; font-style:italic;">News</h4>
+                       <!-- <!-- TMPL_VAR name="koha_news_count" --> recent news item(s) -->
+            <!-- TMPL_LOOP name="koha_news" -->
+                    <div class="newsitem" id="news<!-- TMPL_VAR NAME="idnew" -->"><h5 style="margin-bottom: 1px; margin-top: 1px"><b><!-- TMPL_VAR name="title" --></b></h5>
+                                        <p style="margin-bottom: 1px; margin-top: 1px"><!-- TMPL_VAR name="new" --></p>
+                                       <p class="newsfooter" style="font-size: 8pt; font-style:italic; margin-bottom: 1px; margin-top: 1px"> Posted on <!-- TMPL_VAR name="newdate" -->
+
+</p><hr /></div>
+            <!-- /TMPL_LOOP -->
+<!-- /TMPL_IF -->
+
 
 <!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

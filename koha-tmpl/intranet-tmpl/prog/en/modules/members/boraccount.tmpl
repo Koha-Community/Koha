@@ -35,6 +35,7 @@
     <!-- TMPL_IF NAME="reverse_col" -->
     <th>&nbsp;</th>
     <!-- /TMPL_IF -->
+    <th>Print</th>
   </tr>
 
 	<!-- FIXME: Shouldn't hardcode dollar signs, since Euro or Pound might be needed -->
@@ -48,18 +49,25 @@
     <!-- TMPL_IF NAME="reverse_col" -->
       <td>
 	<!-- TMPL_IF NAME="payment" -->
-		<a href="boraccount.pl?action=reverse&borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&accountno=<!-- TMPL_VAR NAME="accountno" -->">Reverse</a>
+		<a href="boraccount.pl?action=reverse&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;accountno=<!-- TMPL_VAR NAME="accountno" -->">Reverse</a>
 	<!-- TMPL_ELSE -->
 		&nbsp;
 	<!-- /TMPL_IF -->
       </td>
 	<!-- /TMPL_IF -->
+<td>
+	<!-- TMPL_IF NAME="payment" -->
+		<a target="_blank" href="printfeercpt.pl?action=print&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;accountno=<!-- TMPL_VAR NAME="accountno" -->">Print</a>
+	<!-- TMPL_ELSE -->
+		<a target="_blank" href="printinvoice.pl?action=print&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;accountno=<!-- TMPL_VAR NAME="accountno" -->">Print</a>
+	<!-- /TMPL_IF -->
+      </td>
     </tr>
 
   <!-- /TMPL_LOOP -->
 <tfoot>
   <tr>
-    <td colspan="3">Total due</td>
+    <td colspan="4">Total due</td>
     <!-- TMPL_IF NAME="totalcredit" --><td colspan="2" class="credit"><!-- TMPL_ELSE --><td colspan="2" class="debit"><!-- /TMPL_IF --><!-- TMPL_VAR NAME="total" --></td>
   </tr>
   </tfoot>

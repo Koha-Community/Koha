@@ -241,6 +241,13 @@ if ($barcode) {
         $input{duedate}        = $duedate;
         $input{return_overdue} = 1 if ($duedate and $duedate lt $today->output('iso'));
         push( @inputloop, \%input );
+
+        my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrower->{'borrowernumber'} );
+        if ($fines) {
+            $template->param( fines => sprintf("%.2f",$fines) );
+            $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
+        }
+
     }
     elsif ( !$messages->{'BadBarcode'} ) {
         $input{duedate}   = 0;

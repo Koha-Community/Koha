@@ -69,7 +69,6 @@ my $input       = new CGI;
 my $searchfield = $input->param('description');
 my $script_name = "/cgi-bin/koha/admin/itemtypes.pl";
 my $itemtype    = $input->param('itemtype');
-my $pagesize    = 10;
 my $op          = $input->param('op');
 $searchfield =~ s/\,//g;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -230,14 +229,8 @@ elsif ( $op eq 'delete_confirmed' ) {
 }
 else {    # DEFAULT
     my ($results) = StringSearch( $searchfield, 'web' );
-    my $page = $input->param('page') || 1;
-    my $first = ( $page - 1 ) * $pagesize;
-
-    # if we are on the last page, the number of the last word to display
-    # must not exceed the length of the results array
-    my $last = min( $first + $pagesize - 1, scalar @{$results} - 1, );
     my @loop;
-    foreach my $itemtype ( @{$results}[ $first .. $last ] ) {
+    foreach my $itemtype ( @{$results} ) {
         $itemtype->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtype->{imageurl} );
         $itemtype->{rentalcharge} = sprintf( '%.2f', $itemtype->{rentalcharge} );
         push( @loop, $itemtype );
@@ -245,10 +238,6 @@ else {    # DEFAULT
 
     $template->param(
         loop           => \@loop,
-        pagination_bar => pagination_bar(
-            $script_name, getnbpages( scalar @{$results}, $pagesize ),
-            $page,        'page'
-        )
     );
 }    #---- END $OP eq DEFAULT
 

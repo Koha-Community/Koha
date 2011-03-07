@@ -679,6 +679,24 @@ function calcNeworderTotal(){
     return true;
 }
 
+// Calculates total amount in a suggestion
+
+function calcNewsuggTotal(){
+    //collect values
+    var quantity = new Number(document.getElementById('quantity').value);
+//    var currency = f.currency.value;
+    var currcode = new String(document.getElementById('currency').value);
+    var price   =  new Number(document.getElementById('price').value);
+    var exchangerate =  new Number(document.getElementById(currcode).value);
+
+    var total =  new Number(quantity*price*exchangerate);
+
+    document.getElementById('total').value = total.toFixed(2);
+    document.getElementById('price').value =  listprice.toFixed(2);
+    return true;
+}
+
+
 // ----------------------------------------
 //USED BY NEWORDEREMPTY.PL
 /*

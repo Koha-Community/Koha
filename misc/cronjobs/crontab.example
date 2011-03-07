@@ -18,21 +18,21 @@
 # ENVIRONMENT:
 # First, establish Koha's two important ENV variables.
 
-PERL5LIB=/home/liblime/kohaclone
-KOHA_CONF=/home/liblime/kohaclone/etc/koha-conf.xml
+PERL5LIB=/usr/share/koha/lib
+KOHA_CONF=/etc/koha/koha-conf.xml
 
 # Some additional variables to save you typing
-KOHA_CRON_PATH = /home/liblime/kohaclone/misc/cronjobs
+KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 #
 # MULTIPLE KOHA SUPPORT:
 # You can still run jobs for this user's additional koha installs, 
 # by manipulating those variables in the command.
 #
 # For example, on the same codebase:
-# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml /home/liblime/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+# */10 * * * *    KOHA_CONF=/etc/koha/koha-conf.xml /usr/share/koha/bin/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 #
 # For example, on a separate codebase:
-# */10 * * * *    KOHA_CONF=/home/liblime/koha-test/etc/koha-conf.xml PERL5LIB=/home/liblime/koha-test /home/liblime/koha-test/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
+# */10 * * * *    KOHA_CONF=/etc/koha/koha-conf.xml PERL5LIB=/home/koha/kohaclone /home/koha/kohaclone/misc/migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 # 
 # ADDITIONAL INFO:
 # See the perldoc of individual scripts to determine what other options
@@ -73,10 +73,6 @@ KOHA_CRON_PATH = /home/liblime/kohaclone/misc/cronjobs
 
 # services_throttle -- resets the xISBN service
 59 23 * * *  $KOHA_CRON_PATH/services_throttle.pl > /dev/null 2>&1
-
-# ROTATE LOGS
-# Obviously, one needs logrotate(8) to do this
-# 20 1 * * *  /usr/sbin/logrotate -s /home/liblime/kohaclone/var/run/zebradb/logstatus /home/liblime/kohaclone/etc/logrotate.conf
 
 # clean up databases nightly.  Be sure not to run this with --sessions during a time when the system is in use!
 16 1 * * * $KOHA_CRON_PATH/cleanup_database.pl --sessions --zebraqueue 10

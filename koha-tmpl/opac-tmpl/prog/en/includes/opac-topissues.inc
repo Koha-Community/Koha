@@ -25,9 +25,9 @@
             </li>
             <li><label for="itemtype">Limit to: </label>
                     <select name="itemtype" id="itemtype" style="width: 10em;">
-                        <option value="">All item types</option>
+                        <!-- TMPL_IF NAME="ccodesearch" --><option value="">All collections</option><!-- TMPL_ELSE --><option value="">All item types</option><!-- /TMPL_IF -->
                         <!-- TMPL_LOOP name="itemtypeloop" -->
-                            <!-- TMPL_IF EXPR="itemtype eq description" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="value" -->"><!-- /TMPL_IF -->
                                 <!-- TMPL_VAR name="description" -->
                             </option>
                         <!-- /TMPL_LOOP -->

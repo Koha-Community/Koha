@@ -7,7 +7,7 @@
         <!-- TMPL_LOOP NAME="languages_loop" -->
             <!-- TMPL_IF NAME="group_enabled" -->
             <!-- TMPL_IF NAME="plural" -->
-            <li class="more"><a id="showlang" href="#"><!-- TMPL_VAR NAME="native_description" --> (<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</a><div id="sublangs">
+            <li class="more"><a class="sublangs" id="show<!-- TMPL_VAR NAME="rfc4646_subtag" -->" href="#"><!-- TMPL_VAR NAME="native_description" --> (<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</a><div id="sub<!-- TMPL_VAR NAME="rfc4646_subtag" -->">
             <div class="bd"><ul>
             <!-- TMPL_LOOP NAME="sublanguages_loop" -->
 		<!-- TMPL_IF NAME="enabled" -->

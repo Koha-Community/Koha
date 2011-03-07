@@ -19,8 +19,8 @@
 
 
 <!-- TMPL_IF NAME="total" -->
-<b><!-- TMPL_VAR NAME="total" --> results found </b> 
-<!-- TMPL_VAR name='pagination_bar'-->
+<b><!-- TMPL_VAR NAME="total" --> results found </b>
+<div class="pages"><!-- TMPL_VAR name='pagination_bar'--></div>
 <!-- TMPL_ELSE -->
 <h3> No results found</h3>
 <p>
@@ -77,18 +77,7 @@
 </div>
 <!-- /TMPL_IF -->
 
-<fieldset id="acqui_basket_add">
-        <legend>Add To Order</legend>
-        <form action="/cgi-bin/koha/acqui/neworderbiblio.pl" method="post">
-            <input type="hidden" name="booksellerid" value="<!-- TMPL_VAR NAME="booksellerid" -->" />
-            <input type="hidden" name="basketno" value="<!-- TMPL_VAR NAME="basketno" -->" />
-            <ul><li><label for="q">From an existing record: </label><input id="q" type="text"  size="25" name="q" />
-            <input type="submit" class="submit" value="Search" /></li>
-            <li><a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">From a Suggestion</a></li>
-            <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=<!-- TMPL_VAR NAME="booksellerid" -->&amp;basketno=<!-- TMPL_VAR NAME="basketno" -->">From a new (empty) record</a></li>
-            </ul>
-        </form>
-    </fieldset>
+<!-- TMPL_INCLUDE NAME="acquisitions-add-to-basket.inc" -->
 
 </div>
 </div>

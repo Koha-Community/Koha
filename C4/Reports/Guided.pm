@@ -715,8 +715,9 @@ sub _get_column_defs {
 	my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
 	open (COLUMNS,$full_path_to_columns_def_file);
 	while (my $input = <COLUMNS>){
+		chomp $input;
 		my @row =split(/\t/,$input);
-		$columns{$row[0]}=$row[1];
+		$columns{$row[0]}= $row[1];
 	}
 
 	close COLUMNS;

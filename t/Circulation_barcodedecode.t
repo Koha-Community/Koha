@@ -4,7 +4,9 @@
 use strict;
 use warnings;
 
-use Test::More tests => 16;
+use Test::More tests => 24;
+C4::Context->_new_userenv(123456);
+C4::Context->set_userenv(1,'kmkale' , 1, 'kk1' , 'IMS', 0, 'kmkale@anantcorp.com');
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -15,12 +17,14 @@ our %inputs = (
                     'q.C3nZC3nZC3nWDNzYDxf2CNnY.fHmc.C3DWC3nZCNjXD3nW.', '.C3nZC3nZC3nWCxjWE3D1C3nX.cGf2.ENr7C3v7D3T3ENj3C3zYDNnZ.' ],
     whitespace => [" 26002315", "26002315 ", "\n\t26002315\n"],
     'T-prefix' => [qw(T0031472 T32)],
+    'libsuite8' => ['b000126', 'b12', 'B0126', 'IMS-B-126', 'ims-b-126','CD0000024','00123','11998'],
     other      => [qw(26002315 T0031472 T32 Alphanum123), "Alpha Num 345"],
 );
 our %outputs = (
     cuecat     => ["26002315", "046675000808", "046675000808", "043000112403", "978068484914051500"],
     whitespace => [qw(26002315 26002315 26002315)],
     'T-prefix' => [qw(T0031472 T0000002         )],
+    'libsuite8' => ['IMS-b-126', 'IMS-b-12', 'IMS-B-126', 'IMS-B-126', 'ims-b-126','IMS-CD-24','IMS-b-123','IMS-b-11998'],
     other      => [qw(26002315 T0031472 T32 Alphanum123), "Alpha Num 345"],
 );
     

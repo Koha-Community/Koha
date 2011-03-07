@@ -49,37 +49,34 @@
     		   <xsl:value-of select="marc:subfield[@code='b']"/>
     		</xsl:if>
 			<xsl:choose>
-    		  <xsl:when test="marc:subfield[@code='4']='010'">, adaptateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='020'">, annotatateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='075'">, postfacier</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='080'">, préfacier</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='100'">, auteur œuvre adapté</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='205'">, collaborateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='212'">, commentaire</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='220'">, compilateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='230'">, compositeur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='245'">, concepteur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='295'">, donneur de grades</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='340'">, éditeur scientifique</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='370'">, réalisateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='395'">, fondateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='440'">, illustrateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='520'">, parolier</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='557'">, organisateur congrès</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='570'">, autre</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='573'">, diffuseur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='574'">, présentateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='575'">, responsable</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='600'">, photographe</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='605'">, présentateur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='650'">, éditeur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='651'">, directeur de la publication</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='673'">, directeur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='675'">, critique</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='710'">, rédacteur</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='723'">, commenditaire</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='727'">, directeur de thèse</xsl:when>
-    		  <xsl:when test="marc:subfield[@code='4']='730'">, traducteur</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='010'">, adapter</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='020'">, annotator</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='075'">, author of afterword</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='080'">, prefacer</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='100'">, bibliographic antecedent</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='205'">, collaborator</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='212'">, commentator</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='220'">, compiler</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='230'">, composer</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='245'">, conceptor</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='295'">, degree-grantor</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='340'">, editor</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='370'">, film editor</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='395'">, founder</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='440'">, illustrator</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='520'">, lyricist</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='557'">, organiser of meeting</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='570'">, other</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='600'">, photographer</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='605'">, presenter</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='650'">, publisher</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='651'">, publishing director</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='673'">, research team head</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='675'">, reviewer</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='710'">, redactor</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='723'">, sponsor</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='727'">, thesis advisor</xsl:when>
+    		  <xsl:when test="marc:subfield[@code='4']='730'">, translator</xsl:when>
     		</xsl:choose>
 		  </dc:creator>
 		</xsl:for-each>

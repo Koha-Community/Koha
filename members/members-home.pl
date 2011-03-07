@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# Parts Copyright Biblibre 2010
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -27,22 +28,10 @@ use C4::Branch;
 use C4::Category;
 
 my $query = new CGI;
-my $quicksearch = $query->param('quicksearch');
 my $branch = $query->param('branchcode');
-my ($template, $loggedinuser, $cookie);
 my $template_name;
 
-if($quicksearch){
-($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/member-quicksearch.tmpl",
-                 query => $query,
-                 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {borrowers => 1},
-                 debug => 1,
-                 });
-} else {
-($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tmpl",
                  query => $query,
                  type => "intranet",
@@ -50,14 +39,45 @@ if($quicksearch){
                  flagsrequired => {borrowers => 1},
                  debug => 1,
                  });
+
+my $branches = GetBranches;
+my @branchloop;
+foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+  my $selected = 1 if $branches->{$_}->{branchcode} eq $branch;
+  my %row = ( value => $_,
+        selected => $selected,
+        branchname => $branches->{$_}->{branchname},
+      );
+  push @branchloop, \%row;
 }
-my @categories=C4::Category->all;
-$template->param(
-    branchloop=>(defined $branch?GetBranchesLoop($branch):GetBranchesLoop()),
-	categories=>\@categories,
-);
+
+my @categories;
+my $no_categories;
+my $no_add = 0;
+if(scalar(@branchloop) < 1){
+    $no_add = 1;
+    $template->param(no_branches => 1);
+} 
+else {
+    $template->param(branchloop=>\@branchloop);
+}
+
+@categories=C4::Category->all;
+if(scalar(@categories) < 1){ 
+    $no_categories = 1; 
+}
+
+if($no_categories && C4::Context->preference("AddPatronLists")=~/code/){
+    $no_add = 1;
+    $template->param(no_categories => 1);
+} 
+else {
+    $template->param(categories=>\@categories);
+}
+
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+        no_add => $no_add,
             );
 my @letters = map { {letter => $_} } ( 'A' .. 'Z');
 $template->param( letters => \@letters );

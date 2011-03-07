@@ -2,32 +2,26 @@
 <title>Koha &rsaquo; Tools &rsaquo; Batch item modification</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_INCLUDE NAME="background-job.inc" -->
-<style type="text/css">
-        #jobpanel,#jobstatus,#jobfailed { display : none; }
-        #jobstatus { margin:.4em; }
-        #jobprogress{ width:200px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }
-</style>
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/css/pages/batchMod.css" />
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script src="<!-- TMPL_VAR name="themelang" -->/lib/yui/cookie/cookie-min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript">
 //<![CDATA[
-         $(document).ready(function() {
-      $("#itemst").tablesorter({
-            widgets : ['zebra'],
-        headers: {0:{sorter: false}}
-    });
-      $("#selectallbutton").click(function() {
-    $("#itemst").find("input:checkbox").each(function() {
-        $(this).attr("checked", true);
-    });
-      });
-      $("#clearallbutton").click(function() {
-    $("#itemst").find("input:checkbox").each(function() {
-        $(this).attr("checked", false);
-    });
-      });
-   });
+
+// Prepare array of all column headers, incrementing each index by
+// two to accomodate control and title columns
+var allColumns = new Array(<!-- TMPL_LOOP NAME="item_header_loop" -->'<!-- TMPL_VAR NAME="__counter__" -->'<!-- TMPL_UNLESS NAME="__last__" -->,<!-- /TMPL_UNLESS --><!-- /TMPL_LOOP -->);
+for( x=0; x<allColumns.length; x++ ){
+  allColumns[x] = Number(allColumns[x]) + 2;
+}
 //]]>
 </script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/pages/batchMod.js"></script>
+<!--[if IE]>
+<style type="text/css">#selections { display: none; }</style>
+<![endif]-->
+<link type="text/css" rel="stylesheet" href="<!-- TMPL_VAR NAME="themelang" -->/css/addbiblio.css" />
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -74,26 +68,30 @@
 <!-- TMPL_IF name="item_loop" -->
   <!-- TMPL_IF NAME="show" --><div id="toolbar"><a id="selectallbutton" href="#">Select All</a> | <a id="clearallbutton" href="#">Clear All</a></div><!-- TMPL_ELSE --><!-- /TMPL_IF -->
 <div id="cataloguing_additem_itemlist">
-        <div style="overflow:auto">
+
+<p id="selections"><strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span> 
+        <!-- TMPL_LOOP NAME="item_header_loop" -->
+        <span class="selected"><input id="checkheader<!-- TMPL_VAR NAME="__counter" -->" type="checkbox" checked="checked" /> <label for="checkheader<!-- TMPL_VAR NAME="__counter__" -->"><!-- TMPL_VAR NAME="header_value" --></label> </span>
+        <!-- /TMPL_LOOP -->
+</p>
         <table id="itemst">
       <thead>
     <tr>
-        <!-- TMPL_IF NAME="show" --><th>&nbsp;</th><!-- /TMPL_IF -->
+        <th>&nbsp;</th>
         <th>Title</th>
-        <!-- TMPL_LOOP NAME="item_header_loop" --> 
+        <!-- TMPL_LOOP NAME="item_header_loop" -->
         <th> <!-- TMPL_VAR NAME="header_value" --> </th>
         <!-- /TMPL_LOOP --> 
     </tr>
       </thead>
       <tbody>
-            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF NAME="show" --><!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF--><!-- /TMPL_IF -->
-                <td><!-- TMPL_VAR ESCAPE="HTML" NAME="bibinfo" --></td>
+            <!-- TMPL_LOOP NAME="item_loop" --> <tr> <!-- TMPL_IF NAME="show" --><!-- TMPL_IF Name="nomod"--> <td class="error">Cannot Edit</td><!--TMPL_ELSE--><td><input type="checkbox" name="itemnumber" value="<!--TMPL_VAR Name="itemnumber"-->" id="row<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" /></td><!--/TMPL_IF--><!--TMPL_ELSE--><td>&nbsp;</td><!-- /TMPL_IF -->
+                <td><label for="row<!-- TMPL_VAR NAME="itemnumber" -->"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" --></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></label></td>
                 <!-- TMPL_LOOP NAME="item_value" --> <td><!-- TMPL_VAR ESCAPE="HTML" NAME="field" --></td> 
         <!-- /TMPL_LOOP --> </tr>
             <!-- /TMPL_LOOP -->
       </tbody>
         </table>
-        </div>
 </div>
 <!-- /TMPL_IF --><!-- /item_loop -->
 
@@ -102,7 +100,7 @@
     <ul>
     <!-- TMPL_LOOP NAME="simple_items_display" -->
   <li>
-      <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a>
+      <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="barcode" --><!-- /TMPL_IF -->
   </li>
     <!-- /TMPL_LOOP -->
     </ul>
@@ -157,6 +155,4 @@
 <!-- /TMPL_IF -->
 </div>
     </div>
-</div>
-</body>
-</html>
+<!-- TMPL_INCLUDE NAME="intranet-bottom.inc" -->

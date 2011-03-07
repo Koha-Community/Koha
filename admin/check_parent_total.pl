@@ -75,7 +75,7 @@ if ($parent) {
 # ELSE , IF NO PARENT PASSED, THEN CHECK UNALLOCATED FOR PERIOD, IF NOT THEN RETURN 2
 else {
     my $query = qq| SELECT SUM(budget_amount) as sum
-                FROM aqbudgets WHERE budget_period_id = ?|;
+                FROM aqbudgets WHERE budget_period_id = ? and budget_parent_id IS NULL|;
 
     my $sth   = $dbh->prepare($query);
     $sth->execute(  $period_id  ); 
@@ -95,7 +95,6 @@ if ( $parent_id) {
     $returncode = 0;
 }
 
-$template->param( return => $returncode );
 
-output_html_with_http_headers $input, $cookie, $template->output;
+output_html_with_http_headers $input, $cookie, $returncode;
 1;

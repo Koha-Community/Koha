@@ -135,14 +135,11 @@ sub next_value ($;$) {
 		# Note, this enlargement might be undesireable for some barcode formats.
 		# Those should override next_value() to work accordingly.
 	$incr++;
-	my $width = $self->width || undef;
-	# we would want to use %$x.$xd, but that would break on large values, like 2160700004168
-	# so we let the object tell us if it has a width to focus on.  If not, we use float.
-	my $format = ($width ? '%'."$width.$width".'d' : '%.0f');
-	$debug and warn "sprintf(\"$format\",$incr)";
+
+	$debug and warn "$incr";
 	$head = $self->process_head($head,$max,$specific);
 	$tail = $self->process_tail($tail,$max,$specific);
-	my $next_value = $head . sprintf($format,$incr) . $tail;
+	my $next_value = $head . $incr . $tail;
 	$debug and print STDERR "(  next ) max barcode found: $next_value\n";
 	return $next_value;
 }

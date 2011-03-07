@@ -36,10 +36,10 @@ use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 use C4::External::Syndetics qw(get_syndetics_index get_syndetics_summary get_syndetics_toc get_syndetics_excerpt get_syndetics_reviews get_syndetics_anotes );
 use C4::Review;
-use C4::Serials;
 use C4::Members;
 use C4::VirtualShelves;
 use C4::XSLT;
+use C4::ShelfBrowser;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -54,7 +54,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         template_name   => "opac-detail.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         flagsrequired   => { borrow => 1 },
     }
 );
@@ -198,6 +198,7 @@ for my $itm (@items) {
 my $dbh              = C4::Context->dbh;
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
+my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
 my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
 my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
@@ -445,111 +446,23 @@ if ( C4::Context->preference("Babeltheque") ) {
 if (C4::Context->preference("OPACShelfBrowser")) {
     # pick the first itemnumber unless one was selected by the user
     my $starting_itemnumber = $query->param('shelfbrowse_itemnumber'); # || $items[0]->{itemnumber};
-    $template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
-    # find the right cn_sort value for this item
-    my ($starting_cn_sort, $starting_homebranch, $starting_location);
-    my $sth_get_cn_sort = $dbh->prepare("SELECT cn_sort,homebranch,location from items where itemnumber=?");
-    $sth_get_cn_sort->execute($starting_itemnumber);
-    while (my $result = $sth_get_cn_sort->fetchrow_hashref()) {
-        $starting_cn_sort = $result->{'cn_sort'};
-        $starting_homebranch->{code} = $result->{'homebranch'};
-        $starting_homebranch->{description} = $branches->{$result->{'homebranch'}}{branchname};
-        $starting_location->{code} = $result->{'location'};
-        $starting_location->{description} = GetAuthorisedValueDesc('','',   $result->{'location'} ,'','','LOC', 'opac');
-    
+    if (defined($starting_itemnumber)) {
+        $template->param( OpenOPACShelfBrowser => 1) if $starting_itemnumber;
+        my $nearby = GetNearbyItems($starting_itemnumber,3);
+
+        $template->param(
+            starting_homebranch => $nearby->{starting_homebranch}->{description},
+            starting_location => $nearby->{starting_location}->{description},
+            starting_ccode => $nearby->{starting_ccode}->{description},
+            starting_itemnumber => $nearby->{starting_itemnumber},
+            shelfbrowser_prev_itemnumber => $nearby->{prev_itemnumber},
+            shelfbrowser_next_itemnumber => $nearby->{next_itemnumber},
+            shelfbrowser_prev_biblionumber => $nearby->{prev_biblionumber},
+            shelfbrowser_next_biblionumber => $nearby->{next_biblionumber},
+            PREVIOUS_SHELF_BROWSE => $nearby->{prev},
+            NEXT_SHELF_BROWSE => $nearby->{next},
+        );
     }
-    
-    ## List of Previous Items
-    # order by cn_sort, which should include everything we need for ordering purposes (though not
-    # for limits, those need to be handled separately
-    my $sth_shelfbrowse_previous;
-    if (defined $starting_location->{code}) {
-      $sth_shelfbrowse_previous = $dbh->prepare("
-        SELECT *
-        FROM items
-        WHERE
-            ((cn_sort = ? AND itemnumber < ?) OR cn_sort < ?) AND
-            homebranch = ? AND location = ?
-        ORDER BY cn_sort DESC, itemnumber LIMIT 3
-        ");
-      $sth_shelfbrowse_previous->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
-    } else {
-      $sth_shelfbrowse_previous = $dbh->prepare("
-        SELECT *
-        FROM items
-        WHERE
-            ((cn_sort = ? AND itemnumber < ?) OR cn_sort < ?) AND
-            homebranch = ?
-        ORDER BY cn_sort DESC, itemnumber LIMIT 3
-        ");
-      $sth_shelfbrowse_previous->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code});
-    }
-    my @previous_items;
-    while (my $this_item = $sth_shelfbrowse_previous->fetchrow_hashref()) {
-        my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
-        $sth_get_biblio->execute($this_item->{biblionumber});
-        while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
-			$this_item->{'title'} = $this_biblio->{'title'};
-			my $this_record = GetMarcBiblio($this_biblio->{'biblionumber'});
-			$this_item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
-			$this_item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
-			$this_item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
-        }
-        unshift @previous_items, $this_item;
-    }
-    
-    ## List of Next Items; this also intentionally catches the current item
-    my $sth_shelfbrowse_next;
-    if (defined $starting_location->{code}) {
-      $sth_shelfbrowse_next = $dbh->prepare("
-        SELECT *
-        FROM items
-        WHERE
-            ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) AND
-            homebranch = ? AND location = ?
-        ORDER BY cn_sort, itemnumber LIMIT 3
-        ");
-      $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code}, $starting_location->{code});
-    } else {
-      $sth_shelfbrowse_next = $dbh->prepare("
-        SELECT *
-        FROM items
-        WHERE
-            ((cn_sort = ? AND itemnumber >= ?) OR cn_sort > ?) AND
-            homebranch = ?
-        ORDER BY cn_sort, itemnumber LIMIT 3
-        ");
-      $sth_shelfbrowse_next->execute($starting_cn_sort, $starting_itemnumber, $starting_cn_sort, $starting_homebranch->{code});
-    }
-    my @next_items;
-    while (my $this_item = $sth_shelfbrowse_next->fetchrow_hashref()) {
-        my $sth_get_biblio = $dbh->prepare("SELECT biblio.*,biblioitems.isbn AS isbn FROM biblio LEFT JOIN biblioitems ON biblio.biblionumber=biblioitems.biblionumber WHERE biblio.biblionumber=?");
-        $sth_get_biblio->execute($this_item->{biblionumber});
-        while (my $this_biblio = $sth_get_biblio->fetchrow_hashref()) {
-            $this_item->{'title'} = $this_biblio->{'title'};
-			my $this_record = GetMarcBiblio($this_biblio->{'biblionumber'});
-            $this_item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
-            $this_item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
-            $this_item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
-        }
-        push @next_items, $this_item;
-    }
-    
-    # alas, these won't auto-vivify, see http://www.perlmonks.org/?node_id=508481
-    my $shelfbrowser_next_itemnumber = $next_items[-1]->{itemnumber} if @next_items;
-    my $shelfbrowser_next_biblionumber = $next_items[-1]->{biblionumber} if @next_items;
-    
-    $template->param(
-        starting_homebranch => $starting_homebranch->{description},
-        starting_location => $starting_location->{description},
-        starting_itemnumber => $starting_itemnumber,
-        shelfbrowser_prev_itemnumber => (@previous_items ? $previous_items[0]->{itemnumber} : 0),
-        shelfbrowser_next_itemnumber => $shelfbrowser_next_itemnumber,
-        shelfbrowser_prev_biblionumber => (@previous_items ? $previous_items[0]->{biblionumber} : 0),
-        shelfbrowser_next_biblionumber => $shelfbrowser_next_biblionumber,
-        PREVIOUS_SHELF_BROWSE => \@previous_items,
-        NEXT_SHELF_BROWSE => \@next_items,
-    );
 }
 
 if (C4::Context->preference("BakerTaylorEnabled")) {
@@ -583,13 +496,24 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 								'sort'=>'-weight', limit=>$tag_quantity}));
 }
 
+if (C4::Context->preference("OPACURLOpenInNewWindow")) {
+    # These values are going to be read by Javascript, at least in the case
+    # of the google covers
+    $template->param(covernewwindow => 'true');
+} else {
+    $template->param(covernewwindow => 'false');
+}
+
 #Search for title in links
+my $marccontrolnumber   = GetMarcControlnumber   ($record, $marcflavour);
+
 if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $dat->{author} ? $search_for_title =~ s/{AUTHOR}/$dat->{author}/g : $search_for_title =~ s/{AUTHOR}//g;
     $dat->{title} =~ s/\/+$//; # remove trailing slash
     $dat->{title} =~ s/\s+$//; # remove trailing space
     $dat->{title} ? $search_for_title =~ s/{TITLE}/$dat->{title}/g : $search_for_title =~ s/{TITLE}//g;
     $isbn ? $search_for_title =~ s/{ISBN}/$isbn/g : $search_for_title =~ s/{ISBN}//g;
+    $marccontrolnumber ? $search_for_title =~ s/{CONTROLNUMBER}/$marccontrolnumber/g : $search_for_title =~ s/{CONTROLNUMBER}//g;
  $template->param('OPACSearchForTitleIn' => $search_for_title);
 }
 

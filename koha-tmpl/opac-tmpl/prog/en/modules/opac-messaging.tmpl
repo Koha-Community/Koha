@@ -52,20 +52,20 @@
       <!-- TMPL_ELSE -->
       <td>-</td>
       <!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="transport-sms" -->
+      <!-- TMPL_IF NAME="transport_sms" -->
       <!-- TMPL_IF NAME="SMSSendDriver" --><td><input type="checkbox"
                  id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="sms" <!-- TMPL_VAR NAME="transport-sms"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" /></td><!-- /TMPL_IF -->
+                 value="sms" <!-- TMPL_VAR NAME="transport_sms"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" /></td><!-- /TMPL_IF -->
       <!-- TMPL_ELSE -->
       <td>-</td>
       <!-- /TMPL_IF -->
 
-      <!-- TMPL_IF NAME="transport-email" -->
+      <!-- TMPL_IF NAME="transport_email" -->
       <td><input type="checkbox"
                  id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="email"   <!-- TMPL_VAR NAME="transport-email"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" />
+                 value="email"   <!-- TMPL_VAR NAME="transport_email"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" />
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
@@ -81,11 +81,11 @@
       <td>-</td>
       <!-- /TMPL_IF -->
 
-<!--       <!-- TMPL_IF NAME="transport-rss" -->
+<!--       <!-- TMPL_IF NAME="transport_rss" -->
       <td><input type="checkbox"
                  id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="rss"  <!-- TMPL_VAR NAME="transport-rss"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" />
+                 value="rss"  <!-- TMPL_VAR NAME="transport_rss"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" />
       </td>
       <!-- TMPL_ELSE -->
       <td>-</td>
@@ -108,7 +108,7 @@
 </div>
 </div>
 <div class="yui-b">
-<div class="container">
+<div id="leftmenus" class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div>

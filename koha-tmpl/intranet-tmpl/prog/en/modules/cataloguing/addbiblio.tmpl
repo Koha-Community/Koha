@@ -30,18 +30,17 @@
 	 
 	 $('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
 
-function confirmnotdup(){
+function confirmnotdup(redirect){
 	$("#confirm_not_duplicate").attr("value","1");
-	// alert(_("Not a duplicate confirmed. Please click on Add biblio to save the record"));
-	var checkform =	$("#f");
-	Check(checkform);
+    $("#redirect").attr("value",redirect);
+	Check();
 }
 
 /**
  * 
  * 
  */
-function Check(dest){
+function Check(){
     var StrAlert = AreMandatoriesNotOk();
     if( ! StrAlert ){
         document.f.submit();
@@ -67,11 +66,11 @@ function PopupZ3950() {
     } 
 }
 
-function PopupMARCFieldDoc(field, fieldnumber) {
+function PopupMARCFieldDoc(field, blocknumber) {
     <!-- TMPL_IF NAME="MARC21" -->
         _MARC21FieldDoc(field);
     <!-- TMPL_ELSE -->
-        _UNIMARCFieldDoc(field, fieldnumber);
+        _UNIMARCFieldDoc(field, blocknumber);
     <!-- /TMPL_IF -->
 }
 
@@ -85,7 +84,7 @@ function _MARC21FieldDoc(field) {
     }
 }
 
-function _UNIMARCFieldDoc(field,fieldnumber) {
+function _UNIMARCFieldDoc(field, blocknumber) {
     /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
        seems to be the only version available that can be linked to per tag.  More recent
        versions of the UNIMARC standard are available on the IFLA website only as
@@ -94,9 +93,9 @@ function _UNIMARCFieldDoc(field,fieldnumber) {
     if(field == 0) {
         window.open("http://archive.ifla.org/VI/3/p1996-1/uni.htm");
     } else if (field < 100) {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#b" + ("000"+field).slice(-3));
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+blocknumber+".htm#b" + ("000"+field).slice(-3));
     } else if (field < 900) {
-        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+fieldnumber+".htm#" + ("000"+field).slice(-3));
+        window.open("http://archive.ifla.org/VI/3/p1996-1/uni"+blocknumber+".htm#" + ("000"+field).slice(-3));
     } else {
         window.open("http://archive.ifla.org/VI/3/p1996-1/uni9.htm");
     }
@@ -436,20 +435,13 @@ function CloneField(index) {
                             anchors[j].setAttribute('onclick',"CloneField('" + new_id + "')");
                         } else if (anchors[j].getAttribute('class') == 'buttonMinus') {
                             anchors[j].setAttribute('onclick',"UnCloneField('" + new_id + "')");
+                        } else if (anchors[j].getAttribute('class') == 'expandfield') {
+                            anchors[j].setAttribute('onclick',"ExpandField('" + new_id + "')");
                         }
                     }
                 }
                 catch(e){
                     // do nothig CloneButtonPlus doesn't exist.
-                }
-                // setting its 'Expand' property
-                var ExpandFieldA=0;
-                try {
-                    ExpandFieldA = divs[i].getElementsByTagName('a')[0];
-                    ExpandFieldA.setAttribute('onclick',"ExpandField('" + divs[i].parentNode.getAttribute('id') + "')");
-                }
-                catch(e){
-                    // do nothig if ButtonPlus & CloneButtonPlus don t exist.
                 }
 
             }
@@ -656,12 +648,15 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                     <div class="dialog alert">
                         <h4>Duplicate Record suspected</h4>
                         <p>Is this a duplicate of <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->" onclick="openWindow('../MARCdetail.pl?biblionumber=<!-- TMPL_VAR name="duplicatebiblionumber" -->&amp;popup=1', 'Duplicate biblio'; return false;)"><!-- TMPL_VAR name="duplicatetitle" --></a>?</p>
-                        <form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
-                            <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" />
-                            <input type="submit" class="edit" value="Yes: Edit existing items" />
-                        </form>
+                        <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><form action="/cgi-bin/koha/cataloguing/additem.pl" method="get">
+                                                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" />
+                                                    <input type="submit" class="edit" value="Yes: Edit existing items" />
+                                                </form><!-- TMPL_ELSE --><form action="/cgi-bin/koha/catalogue/detail.pl" method="get">
+                                                    <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="duplicatebiblionumber" -->" />
+                                                    <input type="submit" value="Yes: View existing items" />
+                                                </form><!-- /TMPL_IF -->
                         <form action="/cgi-bin/koha/cataloguing/addbiblio.pl" method="get">
-                            <input type="submit" class="save" onclick="confirmnotdup(); return false;" value="No: Save as New Record" />
+                        <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><input type="button" class="save" onclick="confirmnotdup('items'); return false;" value="No: Save as New Record" /><!-- TMPL_ELSE --><input type="button" class="save" onclick="confirmnotdup('view'); return false;" value="No: Save as New Record" /><!-- /TMPL_IF -->
                         </form>
                     </div>
         <!-- /TMPL_IF -->
@@ -675,7 +670,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     </script>
 <!--TMPL_ELSE-->
     <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
-    <input type="hidden" value="" id="redirect" name="redirect" />
+    <input type="hidden" value="<!-- tmpl_if name="biblionumber" -->view<!-- tmpl_else -->items<!-- /tmpl_if -->" id="redirect" name="redirect" />
 	<input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
 <!-- /TMPL_IF -->
 	
@@ -692,12 +687,12 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	    yuiToolbar();
 	 });
 
-    var onOption = function () {
-        return Check();
-    }
-
     function redirect(dest){
         $("#redirect").attr("value",dest);
+        return Check();
+    }
+<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
+    var onOption = function () {
         return Check();
     }
 
@@ -705,13 +700,12 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         { text: _("Save and view record"), value: 1, onclick: {fn:function(){redirect("view");}} },
         { text: _("Save and edit items"), value: 2, onclick: {fn:function(){redirect("items");}} }
     ];
-
+<!-- /TMPL_IF -->
 
 	// YUI Toolbar Functions
 
 	function yuiToolbar() {
-	    // new YAHOO.widget.Button("addbiblio");
-
+<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
         var savesplitmenu = new YAHOO.widget.Button({
             type: "split",
             label: _("Save"),
@@ -722,7 +716,15 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
          });
 
         savesplitmenu.on("click", onOption); 
-
+<!-- TMPL_ELSE -->
+        new YAHOO.widget.Button({
+            id: "addbiblio",
+            type: "button",
+            label: _("Save"),
+            container: "savebutton",
+            onclick: {fn:function(){redirect("view");}}
+        });
+<!-- /TMPL_IF -->
 		new YAHOO.widget.Button({
             id: "z3950search",
             type: "button",
@@ -785,7 +787,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 		<a href="#" tabindex="1" class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib"--> - Click to Expand this Tag" onclick="ExpandField('tag_<!-- TMPL_VAR NAME="tag"-->_<!-- TMPL_VAR NAME='index' --><!-- TMPL_VAR NAME="random" -->'); return false;"><!-- TMPL_VAR NAME="tag" --></a>
 		<!-- TMPL_ELSE -->
                         <span class="tagnum" title="<!-- TMPL_VAR NAME="tag_lib" -->"><!-- TMPL_VAR NAME="tag" --><a 
-                 onclick="PopupMARCFieldDoc(<!-- TMPL_VAR NAME="tag" -->, <!-- TMPL_VAR NAME="number" -->); return false;">&nbsp;?</a></span>
+                 onclick="PopupMARCFieldDoc('<!-- TMPL_VAR NAME="tag" -->', <!-- TMPL_VAR NAME="number" -->); return false;">&nbsp;?</a></span>
 		<!-- /TMPL_IF -->
                 <!-- TMPL_IF NAME="fixedfield" -->
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_<!-- TMPL_VAR NAME="tag" -->_indicator1_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->" size="1" maxlength="1" value="<!-- TMPL_VAR NAME="indicator1" -->" />
@@ -809,8 +811,8 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             <!-- /TMPL_UNLESS -->
             <!-- TMPL_IF name="repeatable" -->
                 <a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->'); return false;" title="Repeat this Tag">+</a>
-                <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->'); return false;" title="Delete this Tag">&#8722;</a>
             <!-- /TMPL_IF -->
+                <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_<!-- TMPL_VAR name="tag"-->_<!-- TMPL_VAR NAME='index'--><!-- TMPL_VAR name="random" -->'); return false;" title="Delete this Tag">&#8722;</a>
             
         </div>
 	

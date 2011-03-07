@@ -56,7 +56,7 @@
 
 <div id="yui-main">
   <div class="yui-b"><div class="yui-g">
-	<div class="container">
+	<div id="usertags" class="container">
 	<!-- TMPL_IF NAME="ERRORS" -->
 	<!-- TMPL_LOOP NAME="ERRORS" -->
 		<div class="dialog alert">There was a problem with this operation:
@@ -78,12 +78,11 @@
 	
 		<form method="get" action="opac-tags.pl">
 		<fieldset>Show up to <input type="text" name="limit" style="text-align: right;" maxlength="4" size="4" value="<!-- TMPL_VAR NAME="limit" DEFAULT="100" -->" />
-			tags from other users.
+			tags<!-- TMPL_IF NAME="opacuserlogin" --> from other users<!-- /TMPL_IF -->.
 			<input type="submit" value="OK" />
-                        <!-- TMPL_UNLESS NAME="loggedinusername" -->
-                          <a href="/cgi-bin/koha/opac-user.pl">Log in</a> to see your own saved tags.
-                        <!-- TMPL_ELSE -->
-                        <!-- /TMPL_UNLESS --></fieldset>
+            <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_UNLESS NAME="loggedinusername" -->
+            <a href="/cgi-bin/koha/opac-user.pl">Log in</a> to see your own saved tags.
+            <!-- /TMPL_UNLESS --><!-- /TMPL_IF --></fieldset>
 		</form>
 	
 	<!-- TMPL_IF NAME="TAGLOOP" -->
@@ -131,7 +130,7 @@
 </div>
 </div>
 <!-- TMPL_IF EXPR="OpacNav||loggedinusername" -->
-<div class="yui-b"><div class="container">
+<div class="yui-b"><div id="leftmenus" class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!--TMPL_INCLUDE NAME="usermenu.inc" -->
 </div></div>

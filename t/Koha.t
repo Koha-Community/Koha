@@ -11,6 +11,10 @@ use_ok('C4::Koha');
 #
 my $date = "01/01/2002";
 my $newdate = &slashifyDate("2002-01-01");
+my $isbn13 = "9780330356473";
+my $isbn13D = "978-0-330-35647-3";
+my $isbn10 = "033035647X";
+my $isbn10D = "0-330-35647-X";
 
 ok($date eq $newdate, 'slashifyDate');
 
@@ -23,3 +27,5 @@ is($str, q{'"&<>'}, '... and does not change input in place');
 is(C4::Koha::_isbn_cleanup('0-590-35340-3'), '0590353403', '_isbn_cleanup removes hyphens');
 is(C4::Koha::_isbn_cleanup('0590353403 (pbk.)'), '0590353403', '_isbn_cleanup removes parenthetical');
 is(C4::Koha::_isbn_cleanup('978-0-321-49694-2'), '0321496949', '_isbn_cleanup converts ISBN-13 to ISBN-10');
+
+

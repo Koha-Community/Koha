@@ -16,6 +16,12 @@ OPAC:
               class: long
             - as the name of the library on the OPAC.
         -
+            - pref: OpacPublic
+              choices:
+                  yes: Enable
+                  no: Disable
+            - "Koha OPAC as public. Private OPAC requires authentification before accessing the OPAC."
+        -
             - pref: OpacMaintenance
               choices:
                   yes: Show
@@ -137,7 +143,7 @@ OPAC:
               class: code
         -
             - 'Include a "More Searches" box on the detail pages of items on the OPAC, with the following HTML (leave blank to disable):'
-            - '<br />Note: The placeholders {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record.'
+            - '<br />Note: The placeholders {CONTROLNUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record.'
             - pref: OPACSearchForTitleIn
               type: textarea
               class: code
@@ -147,6 +153,11 @@ OPAC:
                   yes: Add
                   no: "Don't add"
             - a library select pulldown menu on the OPAC masthead.
+        -
+            - 'Display this HTML when no results are found for a search in the OPAC:'
+            - pref: OPACNoResultsFound
+              type: textarea
+              class: code
     Features:
         -
             - pref: opacuserlogin
@@ -191,18 +202,6 @@ OPAC:
                   no: "Don't allow"
             - patrons to store items in a temporary "Cart" on the OPAC.
         -
-            - pref: opacreadinghistory
-              choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - patrons to see what books they have checked out in the past.
-        -
-            - pref: OPACShelfBrowser
-              choices:
-                  yes: Show
-                  no: "Don't show"
-            - "a shelf browser on item details pages, allowing patrons to see what's near that item on the shelf. Note that this uses up a fairly large amount of resources on your server, and should be avoided if your collection has a large number of items."
-        -
             - pref: OpacTopissue
               choices:
                   yes: Allow
@@ -240,12 +239,6 @@ OPAC:
                   yes: Limit
                   no: "Don't limit"
             - "patrons' searches to the library they are registered at."
-        -
-            - pref: AnonSuggestions
-              choices:
-                  yes: Allow
-                  no: "Don't allow"
-            - "patrons that aren't logged in to make purchase suggestions."
 #        -
 #            This system preference does not actually affect anything
 #            - pref: OpacBrowser
@@ -283,9 +276,62 @@ OPAC:
             - purchase suggestions from other patrons on the OPAC.
     Privacy:
         -
+            - pref: AnonSuggestions
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - "patrons that aren't logged in to make purchase suggestions. Suggestions are connected to the AnonymousPatron syspref"
+        -
+            - pref: opacreadinghistory
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to see what books they have checked out in the past.
+        -
             - pref: EnableOpacSearchHistory
               default: 0
               choices:
                   yes: Keep
                   no: "Don't keep"
             - patron search history in the OPAC.
+        -
+            - pref: OPACPrivacy
+              default: 0
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to choose their own privacy settings for their reading history.  This requires opacreadinghistory and AnonymousPatron
+        -
+            - Use borrowernumber
+            - pref: AnonymousPatron
+              class: integer
+            - as the Anonymous Patron (for anonymous suggestions and reading history)
+
+    Shelf Browser:
+        -
+            - pref: OPACShelfBrowser
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - "a shelf browser on item details pages, allowing patrons to see what's near that item on the shelf. Note that this uses up a fairly large amount of resources on your server, and should be avoided if your collection has a large number of items."
+        -
+            - pref: ShelfBrowserUsesLocation
+              default: 1
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - "the item location when finding items for the shelf browser."
+        -
+            - pref: ShelfBrowserUsesHomeBranch
+              default: 1
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - "the item home branch when finding items for the shelf browser."      
+        -
+            - pref: ShelfBrowserUsesCcode
+              default: 0
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - "the item collection code when finding items for the shelf browser."      

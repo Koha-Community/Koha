@@ -187,7 +187,7 @@ sub calculate {
 # Checking filters
 #
 	my @loopfilter;
-	for (my $i=0;$i<=10;$i++) {
+	for (my $i=0;$i<=12;$i++) {
 		my %cell;
 		(@$filters[$i]) or next;
         if (($i==1) and (@$filters[$i-1])) {
@@ -200,17 +200,21 @@ sub calculate {
           	$cell{filter} = format_date(@$filters[$i]);
 		}
 		$cell{crit} = 
-		($i==0) ? "Period From"        :
-		($i==1) ? "Period To"          :
-		($i==2) ? "Patron Category ="  :
-		($i==3) ? "Item Type ="        :
-		($i==4) ? "Library ="          :
-		($i==5) ? "Collection ="       :
-		($i==6) ? "Location ="         :
-		($i==7) ? "Item callnumber >=" :
-		($i==8) ? "Item callnumber <"  :
-		($i==9) ? "sort1 ="            :
-		($i==10)? "sort2 ="            : "UNKNOWN FILTER ($i)";
+            ( $i == 0 )  ? "Period From"
+          : ( $i == 1 )  ? "Period To"
+          : ( $i == 2 )  ? "Patron Category ="
+          : ( $i == 3 )  ? "Item Type ="
+          : ( $i == 4 )  ? "Library ="
+          : ( $i == 5 )  ? "Collection ="
+          : ( $i == 6 )  ? "Location ="
+          : ( $i == 7 )  ? "Item callnumber >="
+          : ( $i == 8 )  ? "Item callnumber <"
+          : ( $i == 9 )  ? "sort1 ="
+          : ( $i == 10 ) ? "sort2 ="
+          : ( $i == 11 ) ? "Home library ="
+          : ( $i == 12 )? "Holding library ="
+          :                "UNKNOWN FILTER ($i)";
+
 		# FIXME - no translation mechanism !
 		push @loopfilter, \%cell;
     }
@@ -223,29 +227,39 @@ sub calculate {
 	$debug and warn "filtres ". join "|", @filters;
 	my ($colsource, $linesource);
 	$linefilter[1] = @$filters[1] if ($line =~ /datetime/);
-	$linefilter[0] = ($line =~ /datetime/) ? @$filters[0]  :
-					 ($line =~ /category/) ? @$filters[2]  :
-					 ($line =~ /itemtype/) ? @$filters[3]  :
-					 ($line =~ /branch/  ) ? @$filters[4]  :
-					 ($line =~ /ccode/   ) ? @$filters[5]  :
-					 ($line =~ /location/) ? @$filters[6]  :
-					 ($line =~ /sort1/   ) ? @$filters[9]  :
-					 ($line =~ /sort2/   ) ? @$filters[10] : undef ;
-	if ($line =~ /ccode/ or $line =~ /location/) {
+	$linefilter[0] = 
+	    ( $line =~ /datetime/ ) ? @$filters[0]
+      : ( $line =~ /category/ ) ? @$filters[2]
+      : ( $line =~ /itemtype/ ) ? @$filters[3]
+      : ( $line =~ /^branch/ )   ? @$filters[4]
+      : ( $line =~ /ccode/ )    ? @$filters[5]
+      : ( $line =~ /location/ ) ? @$filters[6]
+      : ( $line =~ /sort1/ )    ? @$filters[9]
+      : ( $line =~ /sort2/ )    ? @$filters[10]
+      : ( $line =~ /homebranch/)    ? @$filters[11]
+      : ( $line =~ /holdingbranch/) ? @$filters[12]
+      :                           undef;
+
+    if ( $line =~ /ccode/ or $line =~ /location/ or $line =~ /homebranch/ or $line =~ /holdingbranch/ ) {
 		$linesource = 'items';
 	}
 
 	my @colfilter;
 	$colfilter[1] = @$filters[1] if ($column =~ /datetime/);
-	$colfilter[0] = ($column =~ /datetime/) ? @$filters[0]  :
-					($column =~ /category/) ? @$filters[2]  :
-					($column =~ /itemtype/) ? @$filters[3]  :
-					($column =~ /branch/  ) ? @$filters[4]  :
-					($column =~ /ccode/   ) ? @$filters[5]  :
-					($column =~ /location/) ? @$filters[6]  :
-					($column =~ /sort1/   ) ? @$filters[9]  :
-					($column =~ /sort1/   ) ? @$filters[10] : undef ;
-	if ($column =~ /ccode/ or $column =~ /location/) {
+	$colfilter[0] = 
+        ( $column =~ /datetime/ ) ? @$filters[0]
+      : ( $column =~ /category/ ) ? @$filters[2]
+      : ( $column =~ /itemtype/ ) ? @$filters[3]
+      : ( $column =~ /^branch/ )   ? @$filters[4]
+      : ( $column =~ /ccode/ )    ? @$filters[5]
+      : ( $column =~ /location/ ) ? @$filters[6]
+      : ( $column =~ /sort1/ )    ? @$filters[9]
+      : ( $column =~ /sort1/ )    ? @$filters[10]
+      : ( $column =~ /homebranch/)    ? @$filters[11]
+      : ( $column =~ /holdingbranch/) ? @$filters[12]
+      :                             undef;
+
+    if ( $column =~ /ccode/ or $column =~ /location/ or $column =~ /homebranch/ or $column =~ /holdingbranch/ ) {
 		$colsource = 'items';
 	}
 # 1st, loop rows.

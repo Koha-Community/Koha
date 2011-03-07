@@ -21,6 +21,11 @@ a.overdue,.overdue {
 	color : #cc0000;
 }
 
+a.popup {
+	background : transparent url("../../img/pop-up-link.png") center right no-repeat;
+	padding-right : 15px;
+}
+
 body {
 	text-align : left;
   	padding:0 0 2.5em 0;
@@ -232,11 +237,11 @@ table {
 	border-right : 1px solid #BCBCBC;
 }
 
-table.invis{
-	border : white;
-}
-table.invis tr,table.invis td {
-	border : white;
+table.invis,
+table.invis tr,
+table.invis td,
+tr.highlight table.invis td {
+	border : none;
 }
 
 td, th {
@@ -299,7 +304,7 @@ tr.onissue td {
 	background-color: #FFFFCC;
 }
 
-tr.highlight.onissue td {
+tr.odd.onissue td {
 	background-color: #FFFFE1;
 }
 
@@ -432,6 +437,9 @@ ul.toolbar {
 	padding-left : 0;
 }
 
+ul.toolbar button {
+	padding-bottom : 2px;
+}
 .yui-menu-button  {
 	
 }
@@ -918,7 +926,8 @@ fieldset.rows .inputnote {
 	background-repeat : no-repeat;
 }
 
-#placehold a {
+#placehold a,
+#placehold button {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-hold.gif");
 	background-position : center left;
@@ -1110,6 +1119,10 @@ div.first fieldset {
 	margin : .4em;
 	padding : .4em .4em .4em 25px;
  }
+
+ .dialog input[type="submit"] {
+	background : #FFF none;
+ }
  
 .dialog input.approve, td input.approve {
  	background : #FFF url(../../img/approve.gif) no-repeat 4px center;
@@ -1130,11 +1143,21 @@ td input.approve {
 	color:black;
 	padding: .4em .4em .4em 34px;
 }
- 
+
 .dialog input.edit {
 	background: #fff url(../../img/toolbar-edit.gif) no-repeat 4px center;
 	color:black;
+	max-width : 13em;
 	padding: .4em .4em .4em 34px;
+	white-space: normal;
+}
+
+.dialog input.new {
+	background: #fff url(../../img/toolbar-new.gif) no-repeat 4px center;
+	color:black;
+	max-width : 13em;
+	padding: .4em .4em .4em 34px;
+	white-space: normal;
 }
 
 .dialog input.print {
@@ -1200,6 +1223,12 @@ span.required {
 
 a .term {
 	 text-decoration : underline;
+}
+
+/* style for shelving location in catalogsearch */
+.shelvingloc {
+    display : block;
+    font-style : italic;
 }
 
 a:hover .term {
@@ -1339,9 +1368,10 @@ li.email {
 	font-size : 105%;
 }
 
-.reserve {
+.hold {
 	float : right;
-	font-weight : bold;
+	font-size: 90%;
+	margin: 0;
 }
 
 .thumbnail {
@@ -1885,3 +1915,12 @@ ul.budget_hierarchy li:last-child:after {
 ul.budget_hierarchy li:first-child:after {
     content: "";
 }
+.holdcount { font-size : 105%; line-height : 200%; }
+.holdcount a { border : 1px solid #a4bedd; background-color : #e4ecf5; font-weight : bold; -moz-border-radius: 4px; padding : .1em .4em; text-decoration : none; }
+.holdcount a:hover { background-color : #ebeff7; }
+.container {
+	border : 1px solid #EEE;
+	padding : 1em;
+	margin : 1em 0;
+}
+fieldset.rows+h3 {clear:both;padding-top:.5em;}

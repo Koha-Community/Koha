@@ -61,7 +61,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "opac-ISBDdetail.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         debug           => 1,
     }
 );
@@ -154,6 +154,16 @@ $template->param(
     biblionumber => $biblionumber,
     reviews             => $reviews,
 );
+
+#Search for title in links
+if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
+    $dat->{author} ? $search_for_title =~ s/{AUTHOR}/$dat->{author}/g : $search_for_title =~ s/{AUTHOR}//g;
+    $dat->{title} =~ s/\/+$//; # remove trailing slash
+    $dat->{title} =~ s/\s+$//; # remove trailing space
+    $dat->{title} ? $search_for_title =~ s/{TITLE}/$dat->{title}/g : $search_for_title =~ s/{TITLE}//g;
+    $isbn ? $search_for_title =~ s/{ISBN}/$isbn/g : $search_for_title =~ s/{ISBN}//g;
+ $template->param('OPACSearchForTitleIn' => $search_for_title);
+}
 
 ## Amazon.com stuff
 #not used unless preference set

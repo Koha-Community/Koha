@@ -67,7 +67,9 @@ BEGIN {
 
       &GetISBDView
 
+      &GetMarcControlnumber
       &GetMarcNotes
+      &GetMarcISBN
       &GetMarcSubjects
       &GetMarcBiblio
       &GetMarcAuthors
@@ -81,7 +83,6 @@ BEGIN {
       &GetMarcStructure
       &GetMarcFromKohaField
       &GetFrameworkCode
-      &GetPublisherNameFromIsbn
       &TransformKohaToMarc
 
       &CountItemsIssued
@@ -323,6 +324,14 @@ sub ModBiblio {
             }
         }
         $record->append_fields($field);
+    }
+
+    foreach my $field ($record->fields()) {
+        if (! $field->is_control_field()) {
+            if (scalar($field->subfields()) == 0) {
+                $record->delete_fields($field);
+            }
+        }
     }
 
     # update biblionumber and biblioitemnumber in MARC
@@ -1198,6 +1207,7 @@ sub GetCOinSBiblio {
     my $coins_value =
 "ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear";
     $coins_value =~ s/(\ |&[^a])/\+/g;
+    $coins_value =~ s/\"/\&quot\;/g;
 
 #<!-- TMPL_VAR NAME="ocoins_format" -->&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.pages=<!-- TMPL_VAR NAME="pages" -->&amp;rft.isbn=<!-- TMPL_VAR NAME=amazonisbn -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publishercode" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="
 
@@ -1252,6 +1262,68 @@ sub GetAuthorisedValueDesc {
         return $value;    # if nothing is found return the original value
     }
 }
+
+=head2 GetMarcControlnumber
+
+  $marccontrolnumber = GetMarcControlnumber($record,$marcflavour);
+
+Get the control number / record Identifier from the MARC record and return it.
+
+=cut
+
+sub GetMarcControlnumber {
+    my ( $record, $marcflavour ) = @_;
+    my $controlnumber = "";
+    # Control number or Record identifier are the same field in MARC21 and UNIMARC
+    # Keep $marcflavour for possible later use
+    if ($marcflavour eq "MARC21" || $marcflavour eq "UNIMARC") {
+        my $controlnumberField = $record->field('001');
+        if ($controlnumberField) {
+            $controlnumber = $controlnumberField->data();
+        }
+    }
+    return $controlnumber;
+}
+
+=head2 GetMarcISBN
+
+  $marcisbnsarray = GetMarcISBN( $record, $marcflavour );
+
+Get all ISBNs from the MARC record and returns them in an array.
+ISBNs stored in differents places depending on MARC flavour
+
+=cut
+
+sub GetMarcISBN {
+    my ( $record, $marcflavour ) = @_;
+    my $scope;
+    if ( $marcflavour eq "MARC21" ) {
+        $scope = '020';
+    } else {    # assume unimarc if not marc21
+        $scope = '010';
+    }
+    my @marcisbns;
+    my $isbn = "";
+    my $tag  = "";
+    my $marcisbn;
+    foreach my $field ( $record->field($scope) ) {
+        my $value = $field->as_string();
+        if ( $isbn ne "" ) {
+            $marcisbn = { marcisbn => $isbn, };
+            push @marcisbns, $marcisbn;
+            $isbn = $value;
+        }
+        if ( $isbn ne $value ) {
+            $isbn = $isbn . " " . $value;
+        }
+    }
+
+    if ($isbn) {
+        $marcisbn = { marcisbn => $isbn };
+        push @marcisbns, $marcisbn;    #load last tag into array
+    }
+    return \@marcisbns;
+}    # end GetMarcISBN
 
 =head2 GetMarcNotes
 
@@ -1568,36 +1640,6 @@ sub GetFrameworkCode {
     return $frameworkcode;
 }
 
-=head2 GetPublisherNameFromIsbn
-
-    $name = GetPublishercodeFromIsbn($isbn);
-    if(defined $name){
-        ...
-    }
-
-=cut
-
-sub GetPublisherNameFromIsbn($) {
-    my $isbn = shift;
-    $isbn =~ s/[- _]//g;
-    $isbn =~ s/^0*//;
-    my @codes = ( split '-', DisplayISBN($isbn) );
-    my $code  = $codes[0] . $codes[1] . $codes[2];
-    my $dbh   = C4::Context->dbh;
-    my $query = qq{
-        SELECT distinct publishercode
-        FROM   biblioitems
-        WHERE  isbn LIKE ?
-        AND    publishercode IS NOT NULL
-        LIMIT 1
-    };
-    my $sth = $dbh->prepare($query);
-    $sth->execute("$code%");
-    my $name = $sth->fetchrow;
-    return $name if length $name;
-    return undef;
-}
-
 =head2 TransformKohaToMarc
 
     $record = TransformKohaToMarc( $hash )
@@ -1638,13 +1680,18 @@ sub TransformKohaToMarcOneField {
     }
     $sth->execute( $frameworkcode, $kohafieldname );
     if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
+        my @values = split(/\s?\|\s?/, $value, -1);
+        
+        foreach my $itemvalue (@values){
         my $tag = $record->field($tagfield);
         if ($tag) {
-            $tag->update( $tagsubfield => $value );
+                $tag->add_subfields( $tagsubfield => $itemvalue );
             $record->delete_field($tag);
             $record->insert_fields_ordered($tag);
-        } else {
-            $record->add_fields( $tagfield, " ", " ", $tagsubfield => $value );
+            }
+            else {
+                $record->add_fields( $tagfield, " ", " ", $tagsubfield => $itemvalue );
+            }
         }
     }
     return $record;
@@ -1877,8 +1924,14 @@ sub TransformHtmlToMarc {
             if ( $tag < 10 ) {                              # no code for theses fields
                                                             # in MARC editor, 000 contains the leader.
                 if ( $tag eq '000' ) {
-                    $record->leader( $cgi->param( $params->[ $j + 1 ] ) ) if length( $cgi->param( $params->[ $j + 1 ] ) ) == 24;
-
+                    # Force a fake leader even if not provided to avoid crashing
+                    # during decoding MARC record containing UTF-8 characters
+                    $record->leader(
+                        length( $cgi->param($params->[$j+1]) ) == 24
+                        ? $cgi->param( $params->[ $j + 1 ] )
+                        : '     nam a22        4500'
+			)
+                    ;
                     # between 001 and 009 (included)
                 } elsif ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {
                     $newfield = MARC::Field->new( $tag, $cgi->param( $params->[ $j + 1 ] ), );
@@ -3217,6 +3270,15 @@ sub ModBiblioMarc {
             $record->insert_grouped_field( MARC::Field->new( 100, "", "", "a" => $string ) );
         }
     }
+
+    #enhancement 5374: update transaction date (005) for marc21/unimarc
+    if($encoding =~ /MARC21|UNIMARC/) {
+      my @a= (localtime) [5,4,3,2,1,0]; $a[0]+=1900; $a[1]++;
+        # YY MM DD HH MM SS (update year and month)
+      my $f005= $record->field('005');
+      $f005->update(sprintf("%4d%02d%02d%02d%02d%04.1f",@a)) if $f005;
+    }
+
     my $oldRecord;
     if ( C4::Context->preference("NoZebra") ) {
 

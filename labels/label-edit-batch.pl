@@ -58,7 +58,7 @@ my $display_columns = [ {_label_number  => {label => 'Label Number', link_field 
 my $op = $cgi->param('op') || 'edit';
 my $batch_id = $cgi->param('element_id') || $cgi->param('batch_id') || undef;
 my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
-my @item_numbers = $cgi->param('item_number') || ();
+my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
 my $barcode = $cgi->param('barcode') if $cgi->param('barcode');
 
 my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));

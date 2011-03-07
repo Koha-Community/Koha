@@ -125,18 +125,16 @@ then
 
     # Generate Zebra database password.
     zebrapwd="$(pwgen -1)"
-
     # Set up MySQL database for this instance.
     if [ "$op" = create ]
     then
         mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
-CREATE DATABASE $mysqldb;
-CREATE USER '$mysqluser'@'%' IDENTIFIED BY '$mysqlpwd';
-GRANT ALL PRIVILEGES ON $mysqldb.* TO '$mysqluser';
+CREATE DATABASE \`$mysqldb\`;
+CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
+GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
 FLUSH PRIVILEGES;
 eof
     fi
-
 
     # Generate and install Apache site-available file and log dir.
     generate_config_file apache-site.conf.in \

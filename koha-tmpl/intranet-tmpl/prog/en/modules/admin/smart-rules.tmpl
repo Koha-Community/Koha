@@ -1,5 +1,5 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
-<title>Koha &rsaquo; Administration &rsaquo; Issuing Rules</title>
+<title>Koha &rsaquo; Administration &rsaquo; Circulation and Fine Rules</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 
 <script type="text/javascript">
@@ -18,7 +18,7 @@ $(document).ready(function() {
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Issuing Rules</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Circulation and Fine Rules</div>
 
 <div id="doc3" class="yui-t1">
 
@@ -27,22 +27,22 @@ $(document).ready(function() {
     <div class="yui-b">
     <h1 class="parameters">
         <!-- TMPL_IF NAME="humanbranch" -->
-            Defining issuing rules for "<!-- TMPL_VAR NAME="humanbranch" -->"
+            Defining circulation and fine rules for "<!-- TMPL_VAR NAME="humanbranch" -->"
         <!-- TMPL_ELSE -->
-            Defining default issuing rules
+            Defining circulation and fine rules for all libraries
         <!-- /TMPL_IF -->
     </h1>
     <div class="help">
         <p>The rules are applied from most specific to less specific, using the first found in this order:</p>
         <ul>
             <li>same library, same patron type, same item type</li>
-            <li>same library, same patron type, default item type</li>
-            <li>same library, default patron type, same item type</li>
-            <li>same library, default patron type, default item type</li>
-            <li>default library, same patron type, same item type</li>
-            <li>default library, same patron type, default item type</li>
-            <li>default library, default patron type, same item type</li>
-            <li>default library, default patron type, default item type</li>
+            <li>same library, same patron type, all item types</li>
+            <li>same library, all patron types, same item type</li>
+            <li>same library, all patron types, all item types</li>
+            <li>all libraries, same patron type, same item type</li>
+            <li>all libraries, same patron type, all item types</li>
+            <li>all libraries, all patron types, same item type</li>
+            <li>all libraries, all patron types, all item types</li>
         </ul>
         <p>To modify a rule, create a new one with the same patron type and item type.</p>
     </div>
@@ -50,13 +50,14 @@ $(document).ready(function() {
         <form method="get" action="/cgi-bin/koha/admin/smart-rules.pl" id="selectlibrary">
         Select a library :
             <select name="branch" id="branch" style="width:20em;">
-                <option value="*">Default</option>
+                <option value="*">All libraries</option>
             <!-- TMPL_LOOP NAME="branchloop" -->
 				<!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
             </select>
         </form>
-<!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="branch" -->" />
+<!-- TMPL_IF Name="definedbranch" --><form action="/cgi-bin/koha/admin/clone-rules.pl" method="post"><label 
+for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidden" name="frombranch" value="<!-- TMPL_VAR NAME="current_branch" -->" />
             <select name="tobranch" id="tobranch"><!-- TMPL_LOOP NAME="branchloop" --><option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option><!-- /TMPL_LOOP --></select> <input type="submit" value="Clone" /></form><!-- /TMPL_IF --></fieldset>
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
@@ -83,13 +84,13 @@ $(document).ready(function() {
 					<tr>
 					<!-- /TMPL_UNLESS -->
 							<td><!-- TMPL_IF NAME="default_humancategorycode" -->
-									<em>Default</em>
+									<em>All</em>
 								<!-- TMPL_ELSE -->
 									<!-- TMPL_VAR NAME="humancategorycode" -->
 								<!-- /TMPL_IF -->
 							</td>
 							<td><!-- TMPL_IF NAME="default_humanitemtype" -->
-									<em>Default</em>
+									<em>All</em>
 								<!-- TMPL_ELSE -->
 									<!-- TMPL_VAR NAME="humanitemtype" -->
 								<!-- /TMPL_IF -->
@@ -109,14 +110,14 @@ $(document).ready(function() {
 							<td><!-- TMPL_VAR NAME="reservesallowed" --></td>
 							<td><!-- TMPL_VAR NAME="rentaldiscount" --></td>
 							<td>
-								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+								<a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Delete</a>
 							</td>
                 	</tr>
             	<!-- /TMPL_LOOP -->
                 <tr>
                     <td>
                         <select name="categorycode">
-                            <option value="*">Default</option>
+                            <option value="*">All</option>
                         <!-- TMPL_LOOP NAME="categoryloop" -->
                             <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="description" --></option>
                         <!-- /TMPL_LOOP -->
@@ -124,7 +125,7 @@ $(document).ready(function() {
                     </td>
                     <td>
                         <select name="itemtype" style="width:13em;">
-                            <option value="*">Default</option>
+                            <option value="*">All</option>
                         <!-- TMPL_LOOP NAME="itemtypeloop" -->
                             <option value="<!-- TMPL_VAR NAME="itemtype" -->"><!-- TMPL_VAR NAME="description" --></option>
                         <!-- /TMPL_LOOP -->
@@ -139,19 +140,17 @@ $(document).ready(function() {
                     <td><input name="renewalsallowed" size="2" /></td>
                     <td><input name="reservesallowed" size="2" /></td>
 		    <td><input name="rentaldiscount" size="2" /></td>
-                    <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/><input type="submit" value="Add" class="submit" /></td>
+                    <td><input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/><input type="submit" value="Add" class="submit" /></td>
                 </tr>
             </table>
         </form>
     </div>
-    <div class="help">
-        <h4>Defaults for this library</h4>
+    <div id="defaults-for-this-library" class="container">
+    <h3>Default checkout and hold policy for <!-- TMPL_IF NAME="humanbranch" --><!-- TMPL_VAR NAME="humanbranch" --><!-- TMPL_ELSE -->all libraries<!-- /TMPL_IF --></h3>
         <p>You can set a default maximum number of checkouts and hold policy that will be used if none is defined below for a particular item type or category.</p>
-    </div>
-    <div>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="set-branch-defaults" />
-            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/>
             <table>
                 <tr>
                     <th>&nbsp;</th>
@@ -190,25 +189,24 @@ $(document).ready(function() {
                     </td>
                     <td><input type="submit" value="Save" class="submit" /></td>
                     <td>
-                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Unset</a>
+                        <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=*&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Unset</a>
                     </td>
                 </tr>
             </table>
         </form>
     </div>
     <!-- TMPL_IF NAME="show_branch_cat_rule_form" -->
-    <div class="help">
+    <div id="holds-policy-by-patron-category" class="container">
+    <h3>Checkout limit by patron category for <!-- TMPL_IF NAME="humanbranch" --><!-- TMPL_VAR NAME="humanbranch" --><!-- TMPL_ELSE -->all libraries<!-- /TMPL_IF --></h3>
         <p>For this library, you can specify the maximum number of loans that
             a patron of a given category can make, regardless of the item type.
         </p>
         <p>If the total amount loanable for a given patron category is left blank,
            no limit applies, except possibly for a limit you define for a specific item type.
         </p>
-    </div>
-    <div>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add-branch-cat" />
-            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/>
             <table>
                 <tr>
                     <th>Patron Category</th>
@@ -234,7 +232,7 @@ $(document).ready(function() {
                             <!-- /TMPL_IF -->
                         </td>
                         <td>
-                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-cat&amp;categorycode=<!-- TMPL_VAR NAME="categorycode" -->&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Delete</a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->
@@ -253,7 +251,8 @@ $(document).ready(function() {
         </form>
     </div>
     <!-- /TMPL_IF -->
-    <div class="help">
+    <div id="holds-policy-by-item-type" class="container">
+    <h3>Holds policy by item type for <!-- TMPL_IF NAME="humanbranch" --><!-- TMPL_VAR NAME="humanbranch" --><!-- TMPL_ELSE -->all libraries<!-- /TMPL_IF --></h3>
         <p>
             For this library, you can edit rules for given itemtypes, regardless
             of the patron's category.
@@ -271,14 +270,12 @@ $(document).ready(function() {
             Note that if the system preference
             <code>AllowHoldPolicyOverride</code> is enabled, these policies can
             be overridden by your circulation staff. Also, these policies are
-            based on the patron's home branch, <em>not</em> the branch that
-            the reserving staff member is from.
+            based on the patron's home library, <em>not</em> the library where the hold is being placed..
         </p>
-    </div>
-    <div>
+
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
             <input type="hidden" name="op" value="add-branch-item" />
-            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->"/>
+            <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="current_branch" -->"/>
             <table>
                 <tr>
                     <th>Item Type</th>
@@ -306,7 +303,7 @@ $(document).ready(function() {
                             <!-- /TMPL_IF -->
                         </td>
                         <td>
-                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;branch=<!-- TMPL_VAR NAME="branch" -->">Delete</a>
+                            <a class="button" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=<!-- TMPL_VAR NAME="itemtype" -->&amp;branch=<!-- TMPL_VAR NAME="current_branch" -->">Delete</a>
                         </td>
                     </tr>
                 <!-- /TMPL_LOOP -->

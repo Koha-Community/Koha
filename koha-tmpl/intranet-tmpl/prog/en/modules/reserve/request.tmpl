@@ -307,7 +307,7 @@ function checkMultiHold() {
 				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 				button : "CalendarReserveDate",
 				disableFunc : validate1,
-				dateStatusFunc : validate1,
+				dateStatusFunc : validate1
 			}
 		);
 		//]]>
@@ -338,7 +338,7 @@ function checkMultiHold() {
 				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
 				button : "CalendarExpirationDate",
 				disableFunc : validate1,
-				dateStatusFunc : validate1,
+				dateStatusFunc : validate1
 			}
 		);
 		//]]>
@@ -369,7 +369,7 @@ function checkMultiHold() {
         </fieldset>
         <!-- TMPL_LOOP name="bibitemloop" -->
           <ol>
-            <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+            <!-- TMPL_UNLESS NAME="item_level_itypes" -->
               <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="description" --></li>
             <!-- /TMPL_UNLESS -->
 
@@ -380,7 +380,7 @@ function checkMultiHold() {
         <caption>Place a hold on a specific copy</caption>
 		<tr>
             <th>Hold</th>
-            <!-- TMPL_IF NAME="item-level_itypes" -->
+            <!-- TMPL_IF NAME="item_level_itypes" -->
                 <th>Item type</th>
             <!-- /TMPL_IF -->
             <th>Barcode</th>
@@ -403,9 +403,12 @@ function checkMultiHold() {
                 <img src="/intranet-tmpl/<!-- TMPL_VAR NAME="theme" -->/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
             <!-- /TMPL_IF -->
             </td>
-            <!-- TMPL_IF NAME="item-level_itypes" -->
+            <!-- TMPL_IF NAME="item_level_itypes" -->
                 <td>
-                    <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /> <br /> <!-- /TMPL_IF --><!-- TMPL_VAR NAME="itypename" -->
+                    <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
+                        <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR name="imageurl" -->" alt="" /> <br /> <!-- /TMPL_IF -->
+                    <!-- /TMPL_UNLESS -->
+                    <!-- TMPL_VAR NAME="itypename" -->
                 </td>
             <!-- /TMPL_IF -->
 
@@ -465,7 +468,7 @@ function checkMultiHold() {
     <table id="requesttitles">
       <tr>
         <th>Title</th>
-        <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+        <!-- TMPL_UNLESS NAME="item_level_itypes" -->
           <th>Item Type</th>
         <!-- /TMPL_UNLESS -->
         <th>Priority</th>
@@ -490,7 +493,7 @@ function checkMultiHold() {
               <span class="not_holdable" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
             <!-- /TMPL_UNLESS -->
           </td>
-          <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+          <!-- TMPL_UNLESS NAME="item_level_itypes" -->
             <td>
               <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="itypename" -->" title="<!-- TMPL_VAR NAME="itypename" -->" />
             </td>
@@ -636,7 +639,7 @@ function checkMultiHold() {
                 <!-- TMPL_IF name="found" -->
                 Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
             <!-- TMPL_ELSE -->
-                Waiting to be pulled
+                Waiting to be pulled <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
             <!-- /TMPL_IF -->
           <!-- TMPL_ELSE -->
             Item being transferred to <b> <!-- TMPL_VAR NAME="wbrname" --></b> <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcode" -->" />
