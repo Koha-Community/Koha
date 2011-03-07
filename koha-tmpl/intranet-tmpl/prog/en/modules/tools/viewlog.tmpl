@@ -44,6 +44,7 @@
 								<select name="modules" id="modules" multiple="multiple">
 									<option value="" selected="selected">All</option>
 									<option value ="CATALOGUING">Catalog</option>
+									<option value ="AUTHORITIES">Authorities</option>
 									<option value ="MEMBERS">Patrons</option>
 									<option value ="ACQUISITION">Acquisitions</option>
 									<option value ="SERIAL">Serials</option>
@@ -172,7 +173,11 @@
 														<!-- TMPL_IF EXPR="module eq 'SERIAL'" -->
 															<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="object" -->"> <!-- TMPL_VAR NAME="object" --> </a>
 														<!-- TMPL_ELSE -->
-															<!-- TMPL_VAR NAME="object" -->
+															<!-- TMPL_IF EXPR="module eq 'AUTHORITIES'" -->
+																<a href="/cgi-bin/koha/authorities/detail.pl?authid=<!-- TMPL_VAR NAME="object" -->" title="Display detail for this authority">auth <!-- TMPL_VAR NAME="object" --></a>
+															<!-- TMPL_ELSE -->
+																<!-- TMPL_VAR NAME="object" -->
+															<!-- /TMPL_IF -->
 														<!-- /TMPL_IF -->
 													<!-- /TMPL_IF -->
 												<!-- /TMPL_IF -->
