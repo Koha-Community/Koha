@@ -26,6 +26,8 @@ use C4::Context;
 use C4::Search;
 use C4::Output;
 
+use XML::LibXML;
+
 =head1 DESCRIPTION
 
 plugin_parameters : other parameters added when the plugin is called by the dopop function
@@ -96,65 +98,25 @@ sub plugin {
 
     #	$result = "      t        xxu           00  0 eng d" unless $result;
     $result = "$dateentered" . "t        xxu||||| |||| 00| 0 eng d" unless $result;
-    my $f1    = substr($result, 0,  6);
-    my $f6    = substr($result, 6,  1);
-    my $f710  = substr($result, 7,  4);
-    my $f1114 = substr($result, 11, 4);
-    my $f1517 = substr($result, 15, 3);
-    my $f1821 = substr($result, 18, 4);
-    my $f22   = substr($result, 22, 1);
-    my $f23   = substr($result, 23, 1);
-    my $f2427 = substr($result, 24, 4);
-    my $f28   = substr($result, 28, 1);
-    my $f29   = substr($result, 29, 1);
-    my $f30   = substr($result, 30, 1);
-    my $f31   = substr($result, 31, 1);
-    my $f33   = substr($result, 33, 1);
-    my $f34   = substr($result, 34, 1);
-    my $f3537 = substr($result, 35, 3);
-    my $f38   = substr($result, 38, 1);
-    my $f39   = substr($result, 39, 1);
-
-    # bug 2563
-    $f710  = "" if ($f710  =~ /^\s*$/);
-    $f1114 = "" if ($f1114 =~ /^\s*$/);
-
-    if ((!$f1) || ($f1 =~ m/ /)) {
-        $f1 = $dateentered;
+    my $errorXml = '';
+    # Check if the xml, xsd exists and is validated
+    my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->param('lang') . '/modules/cataloguing/value_builder/';
+    if (-r $dir . 'marc21_field_008.xml') {
+        my $doc = XML::LibXML->new->parse_file($dir . 'marc21_field_008.xml');
+        if (-r $dir . 'marc21_field_CF.xsd') {
+            my $xmlschema = XML::LibXML::Schema->new(location => $dir . 'marc21_field_CF.xsd');
+            eval {
+                $xmlschema->validate( $doc );
+            };
+            $errorXml = 'Can\'t validate the xml data from ' . $dir . 'marc21_field_008.xml' if ($@);
+        }
+    } else {
+        $errorXml = 'Can\'t read the xml file ' . $dir . 'marc21_field_008.xml';
     }
-
-    $template->param(
-        index       => $index,
-        f1          => $f1,
-        f6          => $f6,
-        "f6$f6"     => $f6,
-        f710        => $f710,
-        f1114       => $f1114,
-        f1517       => $f1517,
-        f1821       => $f1821,
-        f22         => $f22,
-        "f22$f22"   => $f22,
-        f23         => $f23,
-        "f23$f23"   => $f23,
-        f2427       => $f2427,
-        "f24$f2427" => $f2427,
-        f28         => $f28,
-        "f28$f28"   => $f28,
-        f29         => $f29,
-        "f29$f29"   => $f29,
-        f30         => $f30,
-        "f30$f30"   => $f30,
-        f31         => $f31,
-        "f31$f31"   => $f31,
-        f33         => $f33,
-        "f33$f33"   => $f33,
-        f34         => $f34,
-        "f34$f34"   => $f34,
-        f3537       => $f3537,
-        f38         => $f38,
-        "f38$f38"   => $f38,
-        f39         => $f39,
-        "f39$f39"   => $f39,
+    $template->param(tagfield => '008',
+            index => $index,
+            result => $result,
+            errorXml => $errorXml,
     );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
