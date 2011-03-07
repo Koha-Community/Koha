@@ -1610,7 +1610,7 @@ sub GetMarcSeries {
             if ($volume_number) {
                 push @subfields_loop, { volumenum => $value };
             } else {
-                push @subfields_loop, { code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number };
+                push @subfields_loop, { code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number } unless ( $series_subfield->[0] eq '9' );
             }
             $counter++;
         }
