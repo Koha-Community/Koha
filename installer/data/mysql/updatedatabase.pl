@@ -4036,7 +4036,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 };
 
-$DBversion = "3.03.00.021";
+$DBversion = '3.03.00.021';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE items MODIFY enumchron TEXT");
     $dbh->do("ALTER TABLE deleteditems MODIFY enumchron TEXT");
@@ -4044,7 +4044,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = '3.03.00.022';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AuthoritiesLog','0','If ON, log edit/create/delete actions on authorities.','','YesNo');");
     print "Upgrade to $DBversion done (Add AuthoritiesLog syspref)\n";
