@@ -48,7 +48,8 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Auth;
-use C4::Bookseller;
+
+use C4::Bookseller qw( ModBookseller AddBookseller );
 use C4::Biblio;
 use C4::Output;
 use CGI;

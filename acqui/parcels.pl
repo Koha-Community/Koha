@@ -74,7 +74,7 @@ use C4::Output;
 
 use C4::Dates qw/format_date/;
 use C4::Acquisition;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 
 my $input          = CGI->new;
 my $supplierid     = $input->param('supplierid');

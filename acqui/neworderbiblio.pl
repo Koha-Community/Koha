@@ -60,7 +60,7 @@ use strict;
 
 use C4::Search;
 use CGI;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Biblio;
 use C4::Auth;
 use C4::Output;

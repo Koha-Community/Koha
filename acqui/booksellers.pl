@@ -62,7 +62,7 @@ use CGI;
 
 use C4::Acquisition;
 use C4::Dates qw/format_date/;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId GetBookSeller /;
 use C4::Members qw/GetMember/;
 
 my $query = new CGI;

@@ -47,7 +47,7 @@ use C4::Output;
 use CGI;
 use C4::Acquisition;
 use C4::Dates qw/format_date/;
-use C4::Bookseller;
+use C4::Bookseller qw( GetBookSeller );
 
 my $query=new CGI;
 my ($template, $loggedinuser, $cookie)

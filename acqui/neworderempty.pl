@@ -77,7 +77,7 @@ use C4::Budgets;
 use C4::Input;
 use C4::Dates;
 
-use C4::Bookseller;		# GetBookSellerFromId
+use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
 use C4::Suggestions;	# GetSuggestion
 use C4::Biblio;			# GetBiblioData
