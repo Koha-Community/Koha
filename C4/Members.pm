@@ -278,22 +278,30 @@ C<&searchtype> is a string telling the type of search you want todo : start_with
 =cut
 
 sub Search {
-    my ($filter,$orderby, $limit, $columns_out, $search_on_fields,$searchtype) = @_;
-	my @filters;
-	if (ref($filter) eq "ARRAY"){
-		push @filters,@$filter;
-	}
-	else {
-		push @filters,$filter;
-	}
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-		my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
-		push @filters,@$matching_records;
+    my ( $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype ) = @_;
+    my @filters;
+    my %filtersmatching_record;
+    my @finalfilter;
+    if ( ref($filter) eq "ARRAY" ) {
+        push @filters, @$filter;
+    } else {
+        push @filters, $filter;
     }
-	$searchtype||="start_with";
-	my $data=SearchInTable("borrowers",\@filters,$orderby,$limit,$columns_out,$search_on_fields,$searchtype);
-
-    return ( $data );
+    if ( C4::Context->preference('ExtendedPatronAttributes') ) {
+        my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
+        if(scalar(@$matching_records)>0) {
+			foreach my $matching_record (@$matching_records) {
+				$filtersmatching_record{$$matching_record[0]}=1;
+			}
+			foreach my $k (keys(%filtersmatching_record)) {
+				push @filters, {"borrowernumber"=>$k};
+			}
+		}
+    }
+    $searchtype ||= "start_with";
+	push @finalfilter, \@filters;
+	my $data = SearchInTable( "borrowers", \@finalfilter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype );
+    return ($data);
 }
 
 =head2 GetMemberDetails
