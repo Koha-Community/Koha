@@ -131,9 +131,11 @@ function AreMandatoriesNotOk(){
         var tag=mandatories[i].substr(4,3);
         var subfield=mandatories[i].substr(17,1);
         var tagnumber=mandatories[i].substr(19,mandatories[i].lastIndexOf("_")-19);
-        tabflag[tag+subfield+tagnumber]=new Array();
-        tabflag[tag+subfield+tagnumber][0]=0;
-        if( ! document.getElementById(mandatories[i]).value){
+        if (tabflag[tag+subfield+tagnumber] ==  null) { 
+	    tabflag[tag+subfield+tagnumber]=new Array();
+            tabflag[tag+subfield+tagnumber][0]=0; 
+	}
+        if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(mandatories[i]) != null && ! document.getElementById(mandatories[i]).value || document.getElementById(mandatories[i]) == null)){
             tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
             document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
             document.getElementById(mandatories[i]).focus();
