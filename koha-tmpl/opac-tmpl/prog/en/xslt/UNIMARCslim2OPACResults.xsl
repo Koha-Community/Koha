@@ -26,6 +26,8 @@
   <xsl:variable name="isbn"
    select="marc:datafield[@tag=010]/marc:subfield[@code='a']"/>
 
+  <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
+
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
       <xsl:variable name="title" select="marc:subfield[@code='a']"/>
@@ -163,7 +165,7 @@
         <xsl:text>). </xsl:text>
       </span>
     </xsl:if>
-    <xsl:if test="count(key('item-by-status', 'Lost'))>0">
+    <xsl:if test="$hidelostitems='0' and count(key('item-by-status', 'Lost'))>0">
       <span class="unavailable">
         <xsl:text>Lost (</xsl:text>
         <xsl:value-of select="count(key('item-by-status', 'Lost'))"/>

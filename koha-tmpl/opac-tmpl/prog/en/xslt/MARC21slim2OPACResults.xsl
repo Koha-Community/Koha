@@ -19,6 +19,7 @@
         <!-- Option: Display Alternate Graphic Representation (MARC 880)  -->
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
+    <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
     <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
     <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
@@ -1002,7 +1003,7 @@
                        <xsl:value-of select="count(key('item-by-status', 'Withdrawn'))"/>
                        <xsl:text>). </xsl:text>                   </span>
 				   </xsl:if>
-                    <xsl:if test="count(key('item-by-status', 'Lost'))>0">
+                    <xsl:if test="$hidelostitems='0' and count(key('item-by-status', 'Lost'))>0">
                    <span class="unavailable">
                        <xsl:text>Lost (</xsl:text>
                        <xsl:value-of select="count(key('item-by-status', 'Lost'))"/>
