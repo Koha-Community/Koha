@@ -3985,6 +3985,25 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+# due to a mismatch in kohastructure.sql some koha will have missing columns in aqbasketgroup
+# this attempts to fix that
+$DBversion = '3.02.05.002';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $sth = $dbh->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'aqbasketgroups' AND COLUMN_NAME = 'billingplace'");
+    $sth->execute;
+    $dbh->do("ALTER TABLE aqbasketgroups ADD billingplace VARCHAR(10)") if ! $sth->fetchrow_hashref;
+    $sth = $dbh->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'aqbasketgroups' AND COLUMN_NAME = 'deliveryplace'");
+    $sth->execute;
+    $dbh->do("ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10)") if ! $sth->fetchrow_hashref;
+    $sth = $dbh->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'aqbasketgroups' AND COLUMN_NAME = 'deliverycomment'");
+    $sth->execute;
+    $dbh->do("ALTER TABLE aqbasketgroups ADD deliverycomment VARCHAR(255)") if ! $sth->fetchrow_hashref;
+    print "Upgrade to $DBversion done (Reconcile aqbasketgroups)\n";
+    SetVersion ($DBversion);
+}
+
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
