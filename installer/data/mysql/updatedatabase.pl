@@ -4004,6 +4004,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 
 
 
+$DBversion = 'XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE `message_attributes` SET message_name='Item Due' WHERE message_attribute_id=1 AND message_name LIKE 'Item DUE'");
+	print "Upgrade to $DBversion done ( fix capitalization in message type )\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
