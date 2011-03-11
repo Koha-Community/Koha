@@ -72,7 +72,7 @@ if ($completedJobID) {
 
             my $reply = CGI->new("");
             print $reply->header(-type => 'text/html');
-            print "{ jobID: '$jobID' }";
+            print '{"jobID":"' . $jobID . '"}';
             exit 0;
         } elsif (defined $pid) {
         # if we get here, we're a child that has detached

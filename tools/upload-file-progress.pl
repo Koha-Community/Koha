@@ -35,7 +35,7 @@ my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, 
 if ($auth_status ne "ok") {
     my $reply = CGI->new("");
     print $reply->header(-type => 'text/html');
-    print "{ progress: 0 }";
+    print '{"progress":"0"}';
     exit 0;
 }
 
@@ -44,4 +44,4 @@ my $reported_progress = C4::UploadedFile->upload_progress($sessionID);
 my $reply = CGI->new("");
 print $reply->header(-type => 'text/html');
 # response will be sent back as JSON
-print "{ progress: $reported_progress }";
+print '{"progress":"' . $reported_progress . '"}';

@@ -36,7 +36,7 @@ my ($auth_status, $sessionID) = check_cookie_auth($cookies{'CGISESSID'}->value, 
 if ($auth_status ne "ok") {
     my $reply = CGI->new("");
     print $reply->header(-type => 'text/html');
-    print "{ progress: 0 }";
+    print '{"progress":"0"}';
     exit 0;
 }
 
@@ -54,4 +54,4 @@ if (defined $job) {
 my $reply = CGI->new("");
 print $reply->header(-type => 'text/html');
 # response will be sent back as JSON
-print "{ progress: $reported_progress, job_size: $job_size, job_status: '$job_status' }";
+print '{"progress":"' . $reported_progress . '","job_size":"' . $job_size . '","job_status":"' . $job_status . '"}';
