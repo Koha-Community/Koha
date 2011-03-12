@@ -127,7 +127,7 @@
                                 <xsl:value-of select="$str"/>
                             </a>
                         </xsl:when>
-                       <xsl:when test="boolean($index) and boolean(marc:subfield[@code=9])">
+                       <xsl:when test="boolean($index) and boolean(marc:subfield[@code=9]) and $UseAuthoritiesForTracings='1'">
                             <a>
                                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of  select="marc:subfield[@code=9]"/></xsl:attribute>
                                   <xsl:value-of select="$str"/>

@@ -804,7 +804,7 @@
         </xsl:choose>
         <a>
         <xsl:choose>
-            <xsl:when test="marc:subfield[@code=9]">
+            <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
