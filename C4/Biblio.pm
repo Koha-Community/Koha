@@ -1390,6 +1390,8 @@ sub GetMarcSubjects {
     my $subfield = "";
     my $marcsubject;
 
+    my $subject_limit = C4::Context->preference("TraceCompleteSubfields") ? 'su,complete-subfield' : 'su';
+
     foreach my $field ( $record->field('6..') ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
         my @subfields_loop;
@@ -1416,7 +1418,7 @@ sub GetMarcSubjects {
                 @link_loop = ( { 'limit' => 'an', link => "$linkvalue" } );
             }
             if ( not $found9 ) {
-                push @link_loop, { 'limit' => 'su', link => $linkvalue, operator => $operator };
+                push @link_loop, { 'limit' => $subject_limit, link => $linkvalue, operator => $operator };
             }
             my $separator = C4::Context->preference("authoritysep") unless $counter == 0;
 
