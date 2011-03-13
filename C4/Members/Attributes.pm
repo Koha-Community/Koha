@@ -102,16 +102,16 @@ sub GetBorrowerAttributes {
 
 sub SearchIdMatchingAttribute{
     my $filter = shift;
-	my $finalfilter=$$filter[0];
+    my $finalfilter=$filter->[0];
     my $dbh   = C4::Context->dbh();
     my $query = qq{
 SELECT borrowernumber
 FROM borrower_attributes
 JOIN borrower_attribute_types USING (code)
 WHERE staff_searchable = 1
-AND attribute like "%$finalfilter%"};
+AND attribute like ?};
     my $sth = $dbh->prepare_cached($query);
-    $sth->execute();
+    $sth->execute("%$finalfilter%");
     return $sth->fetchall_arrayref;
 }
 
