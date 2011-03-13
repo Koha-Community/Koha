@@ -88,7 +88,7 @@
         </xsl:if>
 
         <xsl:if test="marc:datafield[@tag=245]">
-        <h1>
+        <h1 class="title">
             <xsl:for-each select="marc:datafield[@tag=245]">
                     <xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">a</xsl:with-param>
@@ -182,13 +182,6 @@
         </h5>
         </xsl:when>
         </xsl:choose>
-        <div id="views">
-        <span class="view"><span id="Normalview">Normal View</span> </span>
-        <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber={marc:datafield[@tag=999]/marc:subfield[@code='c']}" title="MARC">MARC View</a></span>
-<xsl:if test="$ShowISBD!='0'">
-        <span class="view"><a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=999]/marc:subfield[@code='c']}">ISBD View</a></span>
-</xsl:if>
-        </div>
 
    <xsl:if test="$DisplayOPACiconsXSLT!='0'">
         <xsl:if test="$materialTypeCode!=''">
