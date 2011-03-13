@@ -614,6 +614,11 @@ if($bor_messages_loop){ $template->param(flagged => 1 ); }
 my (undef, $roadttype_hashref) = &GetRoadTypes();
 my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
 
+my $fast_cataloging = 0;
+    if (defined getframeworkinfo('FA')) {
+    $fast_cataloging = 1 
+    }
+
 $template->param(
     lib_messages_loop => $lib_messages_loop,
     bor_messages_loop => $bor_messages_loop,
@@ -657,6 +662,7 @@ $template->param(
     is_child          => ($borrower->{'category_type'} eq 'C'),
     circview => 1,
     soundon           => C4::Context->preference("SoundOn"),
+    fast_cataloging   => $fast_cataloging,
 );
 
 # save stickyduedate to session
