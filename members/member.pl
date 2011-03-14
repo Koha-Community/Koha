@@ -99,14 +99,20 @@ my ($count,$results);
 
 my @searchpatron;
 push @searchpatron, $member if ($member);
-push @searchpatron, $patron if (keys %$patron);
-my $from= ($startfrom-1)*$resultsperpage;
-my $to=$from+$resultsperpage;
- #($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
- my $search_scope=($quicksearch?"field_start_with":"contain");
- ($results)=Search(\@searchpatron,\@orderby,undef,undef,["firstname","surname","email","othernames","cardnumber","userid"],$search_scope  ) if (@searchpatron);
-if ($results){
-	$count =scalar(@$results);
+push @searchpatron, $patron if ( keys %$patron );
+my $from = ( $startfrom - 1 ) * $resultsperpage;
+my $to   = $from + $resultsperpage;
+
+#($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
+my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
+($results) = Search( \@searchpatron, \@orderby, undef, undef, [ "firstname", "surname", "othernames", "cardnumber", "userid" ], $search_scope ) if (@searchpatron);
+
+if ($results) {
+	for my $field ('categorycode','branchcode'){
+		next unless ($patron->{$field});
+		@$results = grep { $_->{$field} eq $patron->{$field} } @$results; 
+	}
+    $count = scalar(@$results);
 }
 my @resultsdata;
 $to=($count>$to?$to:$count);
