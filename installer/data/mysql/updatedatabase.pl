@@ -4002,9 +4002,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-
-
-$DBversion = 'XXX';
+$DBversion = '3.02.05.003';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE `message_attributes` SET message_name='Item Due' WHERE message_attribute_id=1 AND message_name LIKE 'Item DUE'");
 	print "Upgrade to $DBversion done ( fix capitalization in message type )\n";
