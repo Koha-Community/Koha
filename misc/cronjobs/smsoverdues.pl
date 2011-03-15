@@ -40,13 +40,13 @@ BEGIN {
 use C4::Context;
 use C4::Search;
 use C4::Circulation;
-use C4::Circulation::Fines;
 use C4::Members;
 use C4::Dates qw/format_date/;
 use HTML::Template::Pro;
 use Mail::Sendmail;
 use Mail::RFC822::Address;
 use C4::SMS;
+use Carp;
 use utf8;
 my ($res,$ua);##variables for SMS
 
@@ -312,8 +312,7 @@ sub	sendEmail {
 
                 
 	if (not(sendmail %mail)) {       
-warn  $Mail::Sendmail::error;
-		warn "sendEmail to $to failed.";
+carp  "sendEmail to $to failed: " . $Mail::Sendmail::error;
 		return 0;	
 	}
 	
