@@ -22,10 +22,10 @@
             widgets : ['zebra'],
             sortList: [[0,0]]
         });<!-- TMPL_IF NAME="GoogleJackets" -->
-        KOHA.Google.GetCoverFromIsbn(<!-- TMPL_VAR name="covernewwindow" -->);<!-- /TMPL_IF --><!-- TMPL_IF NAME="TagsEnabled" -->
-        $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="opacbookbag" -->$("a.print").parent().after("<li><a class=\"addtocart\" href=\"#\" onclick=\"addRecord('"+$("input[name=bib]").val()+"'); return false;\">"+_("Add to Your Cart")+"<\/a><\/li>");
-<!-- /TMPL_IF -->});
+        KOHA.Google.GetCoverFromIsbn(<!-- TMPL_VAR name="covernewwindow" -->);<!-- /TMPL_IF --><!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->
+        $(".tagbutton").click(KOHA.Tags.add_tag_button);<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
+
+});
 
 YAHOO.util.Event.onContentReady("furtherm", function () {
     $("#furtherm").css("display","block").css("visibility","hidden");
@@ -805,6 +805,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </a></li>
     <!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="opacbookbag" --><li><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to Your Cart</a></li><!-- /TMPL_IF -->
 		<li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
 </ul>
 
