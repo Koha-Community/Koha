@@ -490,9 +490,9 @@
         </xsl:choose>  
         <xsl:choose>
         <xsl:when test="@ind2=0">
-            <xsl:for-each select="marc:subfield[@code='t']">
-                <xsl:value-of select="marc:subfield[@code=t]"/> <xsl:value-of select="marc:subfield[@code=r]"/>
-            </xsl:for-each> 
+            <xsl:call-template name="subfieldSelect">
+                <xsl:with-param name="codes">tru</xsl:with-param>
+            </xsl:call-template>
         </xsl:when>
         <xsl:otherwise>
             <xsl:call-template name="subfieldSelect">
