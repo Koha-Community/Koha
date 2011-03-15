@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2010 Biblibre
 #
 # This file is part of Koha.
 #
@@ -15,8 +15,9 @@
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
 # You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+# Koha; if not, write to the Free Software Foundation, Inc., 
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
 
 use strict;
 
