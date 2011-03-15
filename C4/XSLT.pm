@@ -120,7 +120,7 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xsl_suffix, $interface ) = @_;
+    my ( $biblionumber, $orig_record, $xsl_suffix, $interface, $fixamps ) = @_;
     $interface = 'opac' unless $interface;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
@@ -139,8 +139,11 @@ sub XSLTParse4Display {
     }
     $sysxml .= "</sysprefs>\n";
     $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
+    if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
+        $xmlrecord =~ s/\&amp;/\&/g;
+    }
     $xmlrecord =~ s/\& /\&amp\; /;
-    $xmlrecord=~ s/\&amp\;amp\; /\&amp\; /;
+    $xmlrecord =~ s/\&amp\;amp\; /\&amp\; /;
 
     my $parser = XML::LibXML->new();
     # don't die when you find &, >, etc

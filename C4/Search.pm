@@ -1687,7 +1687,9 @@ sub searchResults {
             # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
             # is not implemented yet
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results', 
-                                                                $search_context);
+                                                                $search_context, 1);
+                # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
+
         }
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
