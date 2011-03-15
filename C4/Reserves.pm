@@ -1662,10 +1662,21 @@ sub _koha_notify_reserve {
 
     my $dbh = C4::Context->dbh;
     my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
+    
+    # Try to get the borrower's email address
+    my $to_address;
+    my $which_address = C4::Context->preference('AutoEmailPrimaryAddress');
+    # If the system preference is set to 'first valid' (value == OFF), look up email address
+    if ($which_address eq 'OFF') {
+        $to_address = C4::Members::GetFirstValidEmailAddress( $borrowernumber );
+    } else {
+        $to_address = $borrower->{$which_address};
+    }
+    
     my $letter_code;
     my $print_mode = 0;
     my $messagingprefs;
-    if ( $borrower->{'email'} || $borrower->{'smsalertnumber'} ) {
+    if ( $to_address || $borrower->{'smsalertnumber'} ) {
         $messagingprefs = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber, message_name => 'Hold_Filled' } );
 
         return if ( !defined( $messagingprefs->{'letter_code'} ) );
