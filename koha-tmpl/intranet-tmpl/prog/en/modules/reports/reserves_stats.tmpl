@@ -10,7 +10,7 @@
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="cat-search.inc" -->
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/reserves_stats.pl">Reserves statistics</a> &rsaquo; Results <!-- TMPL_ELSE -->&rsaquo; Reserves statistics<!-- /TMPL_IF --></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> <!-- TMPL_IF NAME="do_it" -->&rsaquo; <a href="/cgi-bin/koha/reports/reserves_stats.pl">Holds statistics</a> &rsaquo; Results <!-- TMPL_ELSE -->&rsaquo; Holds statistics<!-- /TMPL_IF --></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -20,7 +20,7 @@
 
 <!-- TMPL_IF NAME="do_it" -->
     <!-- TMPL_IF NAME="mainloop" -->
-        <h1>Reserves statistics</h1>
+        <h1>Holds statistics</h1>
         <!-- TMPL_IF NAME="loopfilter" -->
             <p>Filtered on</p>
             <ul>
@@ -70,7 +70,7 @@
 
     <form method="post" action="/cgi-bin/koha/reports/reserves_stats.pl">
     <fieldset class="rows">
-	<legend>Reserve statistics</legend><table>
+	<legend>Holds statistics</legend><table>
         <thead>
             <tr>
                 <th>Title</th>
@@ -81,19 +81,19 @@
         </thead>
         <tbody>
         	<tr >
-                <td>Reserve status </td>
+                <td>Hold Status </td>
                 <td><input type="radio" name="Line" value="reservestatus" /></td>
                 <td><input type="radio" name="Column" value="reservestatus" checked="checked" /></td>
                 <td>
-				<input type="checkbox" name="filter_reservestatus_or_1" value="1">Asked</input>
+				<input type="checkbox" name="filter_reservestatus_or_1" value="1"> Asked</input>
 				<input type="checkbox" name="filter_reservestatus_or_2" value="2"> Processing</input>
-				<input type="checkbox" name="filter_reservestatus_or_3" value="3">Waiting</input>
-				<input type="checkbox" name="filter_reservestatus_or_4" value="4">Satisfied</input>
-				<input type="checkbox" name="filter_reservestatus_or_5" value="5">cancelled</input>
+				<input type="checkbox" name="filter_reservestatus_or_3" value="3"> Waiting</input>
+				<input type="checkbox" name="filter_reservestatus_or_4" value="4"> Satisfied</input>
+				<input type="checkbox" name="filter_reservestatus_or_5" value="5"> Cancelled</input>
 				</td>
              </tr>
              <tr class="highlight">
-                <td>reserve date</td>
+                <td>Hold Date</td>
                 <td><input type="radio" name="Line" value="reservedate" /></td>
                 <td><input type="radio" name="Column" value="reservedate" /></td>
                 <td><label for="reservedate_begin">From</label> <input type="text"  size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
@@ -155,7 +155,7 @@
                     </td>
                 </tr>
             <tr>
-                <td>notification date</td>
+                <td>Notification Date</td>
                 <td><input type="radio" name="Line" value="notificationdate" /></td>
                 <td><input type="radio" name="Column" value="notificationdate" /></td>
                 <td><label for="filter_notificationdate_begin">From</label> <input type="text"  size="10" id="filter_notificationdate_begin" name="filter_notificationdate_begin" />
@@ -217,7 +217,7 @@
                     </td>
              </tr>
             <tr>
-                <td>Reminder date</td>
+                <td>Reminder Date</td>
                 <td><input type="radio" name="Line" value="reminderdate" /></td>
                 <td><input type="radio" name="Column" value="reminderdate" /></td>
                 <td><label for="filter_reminderdate_begin">From</label> <input type="text"  size="10" id="filter_reminderdate_begin" name="Filter" />
@@ -279,7 +279,7 @@
                     </td>
              </tr>
             <tr>
-                <td>Waiting date</td>
+                <td>Waiting Date</td>
                 <td><input type="radio" name="Line" value="waitingdate" /></td>
                 <td><input type="radio" name="Column" value="waitingdate" /></td>
                 <td><label for="filter_waitingdate_begin">From</label> <input type="text"  size="10" id="filter_waitingdate_begin" name="filter_waitingdate_begin" />
@@ -341,7 +341,7 @@
                     </td>
              </tr>
 			 <tr>
-                <td>cancellation date</td>
+                <td>Cancellation Date</td>
                 <td><input type="radio" name="Line" value="cancellationdate" /></td>
                 <td><input type="radio" name="Column" value="cancellationdate" /></td>
                 <td><label for="filter_cancellationdate_begin">From</label> <input type="text"  size="10" id="filter_cancellationdate_begin" name="filter_cancellationdate_begin" />
@@ -521,7 +521,7 @@
         </tbody>
     </table><br /></fieldset>
 
-<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count reserves</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
+<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count holds</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
             <li><label for="cellvalue2">Count unique borrowers</label> <input type="radio" name="Cellvalue" value="2" id="cellvalue2" /> </li><li><label for="cellvalue3">Count unique items</label> <input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li><li><label for="cellvalue4">Count unique biblios</label> <input type="radio" name="Cellvalue" id="cellvalue4" value="4" /> </li></ol></fieldset>
 			
 	<fieldset class="rows">
