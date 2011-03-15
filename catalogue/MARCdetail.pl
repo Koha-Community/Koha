@@ -54,6 +54,7 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Items;
 use C4::Acquisition;
+use C4::Members; # to use GetMember
 use C4::Serials;    #uses getsubscriptionsfrombiblionumber GetSubscriptionsFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
 
@@ -83,6 +84,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+if($query->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    $template->param(
+        holdfor => $query->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
 
 #count of item linked
 my $itemcount = GetItemsCount($biblionumber);

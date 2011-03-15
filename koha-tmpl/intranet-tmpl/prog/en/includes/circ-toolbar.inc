@@ -36,11 +36,8 @@ function update_child() {
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
-	    $("#printslip").parent().remove();
-		$("#patronflags").parent().remove();
-		$("#deletepatron").parent().remove();
-		$("#moremenuc").empty();
-	    $("#printmenuc").empty();
+	    $("#printslip,#patronflags,#deletepatron").parent().remove();
+		$("#moremenuc,#printmenuc,#searchtoholdc").empty();
 	    yuiToolbar();
 	 });
 
@@ -49,7 +46,12 @@ function update_child() {
 		window.open("/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=" + print_type, "printwindow");
 		return false;
 	}
-
+	function searchToHold(){
+		var date = new Date();
+		date.setTime(date.getTime() + (10 * 60 * 1000));
+	    $.cookie("holdfor", "<!-- TMPL_VAR NAME="borrowernumber" -->", { path: "/", expires: date });
+	    location.href="/cgi-bin/koha/catalogue/search.pl";
+	}
 	function yuiToolbar() {
 	    var printmenu = [
             <!-- TMPL_IF NAME="CAN_user_borrowers" -->
@@ -76,8 +78,14 @@ function update_child() {
 	        name: "printmenubutton",
 	        menu: printmenu,
 	        container: "printmenuc"
-	    });   
-	
+	    });
+	    new YAHOO.widget.Button({
+	        id: "searchtohold",
+	        type: "button",
+	        label: _("Search to hold"),
+	        container: "searchtoholdc",
+			onclick: {fn: searchToHold }
+		});
 	    new YAHOO.widget.Button({
 	        type: "menu",
 	        label: _("More"),
@@ -85,7 +93,7 @@ function update_child() {
 	        menu: moremenu,
 	        container: "moremenuc"
 	    });
-	
+
 	    <!-- TMPL_IF name="adultborrower" -->new YAHOO.widget.Button("addchild");<!-- /TMPL_IF -->
 	    new YAHOO.widget.Button("editpatron");
 	    new YAHOO.widget.Button("addnote");
@@ -93,7 +101,7 @@ function update_child() {
             <!-- TMPL_ELSE--> new YAHOO.widget.Button("changepassword"); <!-- /TMPL_IF -->
 	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
-	    new YAHOO.widget.Button("renewpatron");		 
+	    new YAHOO.widget.Button("renewpatron");
         <!-- TMPL_IF NAME="CAN_user_permissions" -->
           <!-- TMPL_IF NAME="StaffMember" -->
             <!-- TMPL_IF NAME="CAN_user_staffaccess" -->
@@ -127,12 +135,12 @@ function update_child() {
 	<!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="CAN_user_borrowers" -->
 	<!-- TMPL_IF name="adultborrower" --><li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=C">Add child</a></li><!-- /TMPL_IF -->
-<!--	<li><a id="addnote" href="/cgi-bin/koha/members/addnotes.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Add Note</a></li> -->
 <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --> <li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li><!-- /TMPL_IF-->
           <!-- TMPL_ELSE--> <li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li><!-- /TMPL_IF -->	
 	  <!-- /TMPL_IF -->
 	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Print Slip</a></li>
+	<li id="searchtoholdc"><a id="searchtohold" href="#">Search to hold</a></li>
 	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li>
     <!-- TMPL_IF NAME="CAN_user_permissions" -->
         <!-- TMPL_IF NAME="StaffMember" -->
