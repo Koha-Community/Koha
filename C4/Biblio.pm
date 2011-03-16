@@ -754,7 +754,7 @@ sub GetISBDView {
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
     my $tagslib = &GetMarcStructure( 1, $itemtype );
 
-    my $ISBD = C4::Context->preference('ISBD');
+    my $ISBD = C4::Context->preference('isbd');
     my $bloc = $ISBD;
     my $res;
     my $blocres;
@@ -2262,6 +2262,14 @@ sub PrepareItemrecordDisplay {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
                         $defaultvalue = $defaultvalues->{branchcode} if $defaultvalues;
+                    }
+                }
+                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.location' )
+                    && $defaultvalues
+                    && $defaultvalues->{'location'} ) {
+                    my $temp = $itemrecord->field($subfield) if ($itemrecord);
+                    unless ($temp) {
+                        $defaultvalue = $defaultvalues->{location} if $defaultvalues;
                     }
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
