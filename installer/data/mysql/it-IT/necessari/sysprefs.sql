@@ -118,6 +118,7 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('opaccredits','','70|10','Per impostare i credits HTML in fondo alla pagina dell\'OPAC','Textarea');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OPACdefaultSortField','relevance','relevance|popularity|call_number|pubdate|acqdate|title|author','Specifica il campo usato di default per l\'ordinamento','Choice');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OPACdefaultSortOrder','asc','asc|dsc|za|az','Specifica l\'ordine di default ','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FacetLabelTruncationLength',20,'Specify the facet max length in OPAC',NULL,'Integer');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OPACFRBRizeEditions','1','','Se ON, Koha farà delle richieste a uno o più ISBN web services per trovare gli ISBN associabili e li visualizzarà in un tab \'Edizioni\' nella visualizzazione dettagliata','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('opacheader','','70|10','Inserire qui HTML da includere come header nell\'OPAC','Textarea');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('OpacHighlightedWords','1','','Se impostato, le parole cercate nell\'OPAC vengono poi evidenziate ','YesNo');
@@ -280,3 +281,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAllowUserToChooseBranch', 1,       'Allow the user to choose the branch they want to pickup their hold from','1','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('displayFacetCount', '0', NULL, NULL, 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxRecordsForFacets', '20', NULL, NULL, 'Integer');
+
