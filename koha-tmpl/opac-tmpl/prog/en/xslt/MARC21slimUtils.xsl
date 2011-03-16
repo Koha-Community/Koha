@@ -24,13 +24,15 @@
 		<xsl:param name="delimeter"><xsl:text> </xsl:text></xsl:param>
 		<xsl:param name="subdivCodes"/>
 		<xsl:param name="subdivDelimiter"/>
+        <xsl:param name="prefix"/>
+        <xsl:param name="suffix"/>
 		<xsl:variable name="str">
 			<xsl:for-each select="marc:subfield">
 				<xsl:if test="contains($codes, @code)">
                     <xsl:if test="contains($subdivCodes, @code)">
                         <xsl:value-of select="$subdivDelimiter"/>
                     </xsl:if>
-					<xsl:value-of select="text()"/><xsl:value-of select="$delimeter"/>
+					<xsl:value-of select="$prefix"/><xsl:value-of select="text()"/><xsl:value-of select="$suffix"/><xsl:value-of select="$delimeter"/>
 				</xsl:if>
 			</xsl:for-each>
 		</xsl:variable>

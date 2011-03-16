@@ -131,7 +131,7 @@ sub XSLTParse4Display {
     foreach my $syspref ( qw/ hidelostitems OPACURLOpenInNewWindow
                               DisplayOPACiconsXSLT URLLinkText viewISBD
                               OPACBaseURL TraceCompleteSubfields
-                              UseAuthoritiesForTracings / )
+                              UseAuthoritiesForTracings TraceSubjectSubdivisions / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);
