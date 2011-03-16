@@ -389,13 +389,14 @@ sub BatchFindBibDuplicates {
 =head2 BatchCommitBibRecords
 
   my ($num_added, $num_updated, $num_items_added, $num_items_errored, 
-      $num_ignored) = BatchCommitBibRecords($batch_id, 
+      $num_ignored) = BatchCommitBibRecords($batch_id, $framework,
                       $progress_interval, $progress_callback);
 
 =cut
 
 sub BatchCommitBibRecords {
     my $batch_id = shift;
+    my $framework = shift;
 
     # optional callback to monitor status 
     # of job
@@ -451,7 +452,7 @@ sub BatchCommitBibRecords {
 
         if ($bib_result eq 'create_new') {
             $num_added++;
-            my ($biblionumber, $biblioitemnumber) = AddBiblio($marc_record, '');
+            my ($biblionumber, $biblioitemnumber) = AddBiblio($marc_record, $framework);
             my $sth = $dbh->prepare_cached("UPDATE import_biblios SET matched_biblionumber = ? WHERE import_record_id = ?");
             $sth->execute($biblionumber, $rowref->{'import_record_id'});
             $sth->finish();
