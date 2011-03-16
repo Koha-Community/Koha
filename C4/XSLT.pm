@@ -140,7 +140,7 @@ sub XSLTParse4Display {
     $sysxml .= "</sysprefs>\n";
     $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
     if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
-        $xmlrecord =~ s/\&amp;/\&/g;
+        $xmlrecord =~ s/\&amp;amp;/\&amp;/g;
     }
     $xmlrecord =~ s/\& /\&amp\; /;
     $xmlrecord =~ s/\&amp\;amp\; /\&amp\; /;
