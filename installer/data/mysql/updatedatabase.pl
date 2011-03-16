@@ -4098,6 +4098,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.03.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('FacetLabelTruncationLength', 20, 'Truncate facets length to','','free')");
+    print "Upgrade to $DBversion done (Add FacetLabelTruncationLength syspref to control facets displayed length)\n";
+    SetVersion ($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
