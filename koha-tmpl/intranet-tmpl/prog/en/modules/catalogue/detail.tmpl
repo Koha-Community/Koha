@@ -82,6 +82,7 @@ function verify_images() {
             <!-- /TMPL_LOOP -->
             </span>
         <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="holdcount" --><span class="results_summary"><span class="label">Holds:</span> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="holdcount" --></a></span></span><!-- TMPL_ELSE --><!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="AmazonEnabled" --><!-- TMPL_IF NAME="AmazonCoverImages" --></div><div class="yui-u" id="bookcoverimg">
         <a href="http://www.amazon<!-- TMPL_VAR NAME="AmazonTld" -->/gp/reader/<!-- TMPL_VAR NAME="normalized_isbn" -->/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/<!-- TMPL_VAR NAME="normalized_isbn" -->.01.MZZZZZZZ.jpg" alt="" /></a><!-- /TMPL_IF --><!-- /TMPL_IF -->
