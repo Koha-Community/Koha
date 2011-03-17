@@ -65,6 +65,24 @@
 <xsl:text> </xsl:text>
 	</xsl:template>
 
+	<!-- Function extractControlNumber is used to extract the control number (record number) from MARC tags 773/80/85 [etc.] subfield $w.
+	     Parameter: control number string.
+	     Assumes LOC convention: (OrgCode)recordNumber.
+	     If OrgCode is not present, return full string.
+	     Additionally, handle various brackets/parentheses. Chop leading and trailing spaces.
+	-->
+	<xsl:template name="extractControlNumber">
+	    <xsl:param name="subfieldW"/>
+	    <xsl:variable name="tranW" select="translate($subfieldW,']})&gt;','))))')"/>
+	    <xsl:choose>
+	      <xsl:when test="contains($tranW,')')">
+	        <xsl:value-of select="normalize-space(translate(substring-after($tranW,')'),'[]{}()&lt;&gt;',''))"/>
+	      </xsl:when>
+	      <xsl:otherwise>
+	        <xsl:value-of select="normalize-space($subfieldW)"/>
+	      </xsl:otherwise>
+	    </xsl:choose>
+	</xsl:template>
 
     <!-- Function m880Select:  Display Alternate Graphic Representation (MARC 880) for selected latin "base"tags
         - should be called immediately before the corresonding latin tags are processed 

@@ -521,19 +521,19 @@
         </xsl:choose>
         </span>
                 <xsl:variable name="f773">
-                    <xsl:call-template name="subfieldSelect">
+                    <xsl:call-template name="chopPunctuation"><xsl:with-param name="chopString"><xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">at</xsl:with-param>
-                    </xsl:call-template>
+                    </xsl:call-template></xsl:with-param></xsl:call-template>
                 </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
-                    <a href="/cgi-bin/koha/catalogue/search.pl?q=Control-number:{marc:subfield[@code='w']}">
-                        <xsl:value-of select="translate($f773, '()', '')"/>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                        <xsl:value-of select="translate($f773, '()', '')"/><xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
                     <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Title:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
-                        <xsl:value-of select="$f773"/>
+                        <xsl:value-of select="$f773"/><xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
                     </a>
                 </xsl:otherwise>
             </xsl:choose>
