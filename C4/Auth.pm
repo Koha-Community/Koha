@@ -232,7 +232,7 @@ sub get_template_and_user {
         }
 		# Logged-in opac search history
 		# If the requested template is an opac one and opac search history is enabled
-		if ($in->{'type'} == "opac" && C4::Context->preference('EnableOpacSearchHistory')) {
+		if ($in->{type} eq 'opac' && C4::Context->preference('EnableOpacSearchHistory')) {
 			my $dbh = C4::Context->dbh;
 			my $query = "SELECT COUNT(*) FROM search_history WHERE userid=?";
 			my $sth = $dbh->prepare($query);
