@@ -52,21 +52,6 @@
     </xsl:for-each>
   </xsl:if>
 
-  <div id="views">
-    <span class="view">
-      <span id="Normalview">Normal View</span>
-    </span>
-    <span class="view">
-      <a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC" rel="gb_page_center[600,500]">MARC View</a>
-    </span>
-    <span class="view">
-      <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC">Expanded MARC View</a>
-    </span>
-    <span class="view">
-      <a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}">Card View (ISBD)</a>
-    </span>
-  </div>
-
   <xsl:call-template name="tag_4xx" />
 
   <xsl:call-template name="tag_7xx">
