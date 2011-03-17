@@ -39,7 +39,10 @@ sub usage {
 
 
 sub force_borrower_messaging_defaults {
-    my ($doit, $truncate) = @_;
+    my ($doit, $truncate, $since) = @_;
+
+    $since = '0000-00-00' if (!$since);
+    print $since;
 
     my $dbh = C4::Context->dbh;
     $dbh->{AutoCommit} = 0;
@@ -49,8 +52,8 @@ sub force_borrower_messaging_defaults {
         $sth->execute();
     }
 
-    my $sth = $dbh->prepare("SELECT borrowernumber, categorycode FROM borrowers");
-    $sth->execute();
+    my $sth = $dbh->prepare("SELECT borrowernumber, categorycode FROM borrowers WHERE dateenrolled >= ?");
+    $sth->execute($since);
     while ( my ($borrowernumber, $categorycode) = $sth->fetchrow ) {
         print "$borrowernumber: $categorycode\n";
         next unless $doit;
@@ -63,16 +66,17 @@ sub force_borrower_messaging_defaults {
 }
 
 
-my ($doit, $truncate, $help);
+my ($doit, $truncate, $since, $help);
 my $result = GetOptions(
     'doit'     => \$doit,
     'truncate' => \$truncate,
+    'since:s'  => \$since,
     'help|h'   => \$help,
 );
 
 usage() if $help;
 
-force_borrower_messaging_defaults( $doit, $truncate);
+force_borrower_messaging_defaults( $doit, $truncate, $since );
 
 =head1 NAME
 
