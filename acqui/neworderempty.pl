@@ -209,8 +209,9 @@ my $count = scalar @rates;
 my @loop_currency = ();
 for ( my $i = 0 ; $i < $count ; $i++ ) {
     my %line;
-    $line{currency} = $rates[$i]->{'currency'};
+    $line{currcode} = $rates[$i]->{'currency'};
     $line{rate}     = $rates[$i]->{'rate'};
+	$line{selected} = 1 if ($line{currcode} eq $data->{currency});
     push @loop_currency, \%line;
 }
 
@@ -342,7 +343,7 @@ $template->param(
     name             => $bookseller->{'name'},
     cur_active_sym   => $cur->{'symbol'},
     cur_active       => $cur->{'currency'},
-    currency         => $bookseller->{'listprice'} || $cur->{'currency'}, # eg: 'EUR'
+#    currency         => $bookseller->{'listprice'} || $cur->{'currency'}, # eg: 'EUR'
     loop_currencies  => \@loop_currency,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
@@ -354,7 +355,7 @@ $template->param(
     quantity         => $data->{'quantity'},
     quantityrec      => $data->{'quantity'},
     rrp              => $data->{'rrp'},
-    listprice        => sprintf("%.2f", $data->{'listprice'}||$listprice),
+    listprice        => sprintf("%.2f", $data->{'listprice'}||$data->{'price'}||$listprice),
     total            => sprintf("%.2f", ($data->{'ecost'}||0)*($data->{'quantity'}||0) ),
     ecost            => $data->{'ecost'},
     notes            => $data->{'notes'},
