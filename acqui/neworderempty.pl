@@ -173,7 +173,6 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 }
 
 
-my $cur = GetCurrency();
 
 if ( $ordernumber eq '' ) {    # create order
     $new = 'yes';
@@ -201,18 +200,35 @@ else {    #modify order
 }
 
 # get currencies (for change rates calcs if needed)
+my $active_currency = GetCurrency();
+my $default_currency;
+if (! $data->{currency} ) { # New order no currency set
+    if ( $bookseller->{listprice} ) {
+        $default_currency = $bookseller->{listprice};
+    }
+    else {
+        $default_currency = $active_currency->{currency};
+    }
+}
+
 my @rates = GetCurrencies();
-my $count = scalar @rates;
 
 # ## @rates
 
 my @loop_currency = ();
-for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my %line;
-    $line{currcode} = $rates[$i]->{'currency'};
-    $line{rate}     = $rates[$i]->{'rate'};
-	$line{selected} = 1 if ($line{currcode} eq $data->{currency});
-    push @loop_currency, \%line;
+for my $curr ( @rates ) {
+    my $selected;
+    if ($data->{currency} ) {
+        $selected = $curr->{currency} eq $data->{currency};
+    }
+    else {
+        $selected = $curr->{currency} eq $default_currency;
+    }
+    push @loop_currency, {
+        currcode => $curr->{currency},
+        rate     => $curr->{rate},
+        selected => $selected,
+    }
 }
 
 # build branches list
@@ -341,9 +357,8 @@ $template->param(
     listincgst       => $bookseller->{'listincgst'},
     invoiceincgst    => $bookseller->{'invoiceincgst'},
     name             => $bookseller->{'name'},
-    cur_active_sym   => $cur->{'symbol'},
-    cur_active       => $cur->{'currency'},
-#    currency         => $bookseller->{'listprice'} || $cur->{'currency'}, # eg: 'EUR'
+    cur_active_sym   => $active_currency->{'symbol'},
+    cur_active       => $active_currency->{'currency'},
     loop_currencies  => \@loop_currency,
     orderexists      => ( $new eq 'yes' ) ? 0 : 1,
     title            => $data->{'title'},
