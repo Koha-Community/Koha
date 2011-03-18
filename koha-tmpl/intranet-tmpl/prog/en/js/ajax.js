@@ -7,7 +7,7 @@ KOHA.AJAX = {
             cache: false,
             dataType: 'json',
             type: 'POST',
-            error: function ( xhr, stat, error ) { KOHA.AJAX.BaseError( error_callback, xhr, stat, error ) },
+            error: function ( xhr, stat, error ) { KOHA.AJAX.BaseError( error_callback, xhr, stat, error ) }
         } );
         $.ajax( options );
     },
@@ -37,7 +37,9 @@ KOHA.AJAX = {
             .attr( 'disabled', 'disabled' )
             .each( function () {
                 var $image = $( '<img src="/intranet-tmpl/prog/img/spinner-small.gif" alt="" class="spinner" />' );
-                switch ( this.localName.toLowerCase() ) {
+                var selector_type = this.localName;
+                if (selector_type == undefined) selector_type = this.nodeName; // IE only
+                switch ( selector_type.toLowerCase() ) {
                     case 'input':
                         $( this ).data( 'original-text', this.value );
                         this.value = text;
@@ -62,7 +64,9 @@ KOHA.AJAX = {
         $( selector )
             .removeAttr( 'disabled' )
             .each( function () {
-                switch ( this.localName.toLowerCase() ) {
+                var selector_type = this.localName;
+                if (selector_type == undefined) selector_type = this.nodeName; // IE only
+                switch ( selector_type.toLowerCase() ) {
                     case 'input':
                         this.value = $( this ).data( 'original-text' );
                         break;
