@@ -91,6 +91,19 @@ $.tablesorter.addParser({
 			<!-- TMPL_IF name="selected" --><option value="<!-- TMPL_VAR name="itemtype"-->" selected="selected"> <!--TMPL_ELSE--><option value="<!-- TMPL_VAR name="itemtype" -->"> <!--/TMPL_IF--> <!-- TMPL_VAR name="description" --></option>
         <!-- /TMPL_LOOP -->
         </select> </li>
+    <!-- TMPL_IF NAME="branch_loop" -->
+    <li><label for="branch">Branch:</label>
+        <select name="branch" id="branch"
+        <!-- TMPL_LOOP NAME="branch_loop" -->
+            <!-- TMPL_IF name="selected" -->
+            <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+            <!-- TMPL_ELSE -->
+            <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+            <!-- /TMPL_IF -->
+        <!-- /TMPL_LOOP -->
+        </select>
+    </li>
+    <!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="patron_reason_loop" --><li><label for="patronreason">Reason for suggestion: </label><select name="patronreason" id="patronreason"><option value="">-- Choose --</option><!-- TMPL_LOOP NAME="patron_reason_loop" -->
            <option value="<!-- TMPL_VAR NAME="authorised_value" -->"><!--TMPL_VAR NAME="lib" --></option>
     <!-- /TMPL_LOOP --></select></li><!-- /TMPL_IF -->
