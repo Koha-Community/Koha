@@ -1694,9 +1694,12 @@ sub searchResults {
 
         }
 
-        # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
-        $can_place_holds = 0
-          if $itemtypes{ $oldbiblio->{itemtype} }->{notforloan};
+        # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
+        if (!C4::Context->preference("item-level_itypes")) {
+            if ($itemtypes{ $oldbiblio->{itemtype} }->{notforloan}) {
+                $can_place_holds = 0;
+            }
+        }
         $oldbiblio->{norequests} = 1 unless $can_place_holds;
         $oldbiblio->{itemsplural}          = 1 if $items_count > 1;
         $oldbiblio->{items_count}          = $items_count;
