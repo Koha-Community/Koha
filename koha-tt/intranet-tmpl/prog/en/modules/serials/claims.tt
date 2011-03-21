@@ -1,0 +1,408 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% INCLUDE 'calendar.inc' %]
+    <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.uitablefilter.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	 $(document).ready(function() {
+		[% UNLESS ( preview ) %]$("#claimst").tablesorter({[% IF ( dateformat == 'metric' ) %]
+			dateFormat: 'uk',[% END %]
+			headers: { 0: { sorter: false },1:{sorter:false}}
+		});[% END %]
+	    $('#supplierid').change(function() {
+    	    $('#claims').submit();
+	    });
+
+	    // Case-insensitive version of jquery's contains function
+	    jQuery.extend(
+		jQuery.expr[':'], { 
+		    icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0" 
+		}
+	    );
+
+
+	    // Checkboxes : Select All / None
+	    $("span.checkall").html("<input type=\"checkbox\" name=\"CheckAll\"> "+_("Check All")+"</input>");
+	    $("span.exportSelected").html("<a id=\"ExportSelected\" href=\"/cgi-bin/koha/serials/claims.pl\"> "+_("Export selected items data") +"<\/a>");
+
+        $("#CheckAll").click(function() {
+            $("#claimst tr:visible :checkbox").attr('checked', $("#CheckAll").is(':checked'));
+        });
+
+	    // Generates a dynamic link for exporting the selection's data as CSV
+	    $("#ExportSelected").click(function() {
+		// We use input:checked because it's faster, but if there must new checkboxes  
+		// used for other purpose on this page, please use [name=serialid]:checked instead
+		var selected = $("input:checked");
+
+		if (selected.length == 0) {
+			alert(_('Please select at least one item to export.'));
+			return false;
+		}
+		
+		// Building the url from currently checked boxes
+		var url = '/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=&amp;op=claims';
+		for (var i = 0; i < selected.length; i++) {
+		    url += '&amp;serialid=' + selected[i].value;
+		}
+		// And redirecting to the CSV page
+		location.href = url;
+		return false;
+	    });	
+
+        $("#titlefilter").keyup(function() {
+            $.uiTableFilter($("#claimst"), $("#titlefilter").val())
+	    });
+
+        $("#branchfilter").keyup(function() {
+            $.uiTableFilter($("#claimst"), $("#branchfilter").val())
+	    });
+	 });
+
+	// Checks if the form can be sent (at least one checkbox must be checked)
+	function checkForm() {
+	    if ($("input:checked").length == 0) {
+		alert(_('Please select at least one item.'));
+		return false;
+	    }
+	}
+
+	// Filter by status
+	function filterByStatus() {
+	    selectedStatus = $("#statusfilter").val();
+	    if (selectedStatus == "all") {
+		clearFilters();
+	    } else {
+		$("table#claimst tbody tr").hide();
+		$("table#claimst tbody tr:contains(" + selectedStatus + ")").show();
+	    }
+	}
+
+	// Filter by branch
+	function filterByBranch() {
+	    selectedBranch = $("#branchfilter").val();
+	    if (selectedBranch == "all") {
+		clearFilters();
+	    } else {
+		$("table#claimst tbody tr").hide();
+		$("table#claimst tbody tr:contains(" + selectedBranch + ")").show();
+	    }
+	}
+	// Filter by date
+	function filterByDate() {
+	    var beginDate = Date_from_syspref($("#begindate").val()).getTime();
+	    var endDate   = Date_from_syspref($("#enddate").val()).getTime();
+	    
+	    // Checks if the beginning date is valid
+	    if (!parseInt(beginDate)) {
+		alert(_('The beginning date is missing or invalid.'));
+		return false;
+	    }
+
+	    // Checks if the ending date is valid
+	    if (!parseInt(endDate)) {
+		alert(_('The ending date is missing or invalid.'));
+		return false;
+	    }
+
+	    // Checks if beginning date is before ending date
+	    if (beginDate > endDate) {
+		// If not, we swap them
+		var tmpDate = endDate;
+		endDate = beginDate;
+		beginDate = tmpDate;
+	    }
+	   
+	    // We hide everything
+	    $("table#claimst tbody tr").hide();
+
+	    // For each date in the table
+	    $(".planneddate").each(function() {
+
+		// We make a JS Date Object, according to the locale
+		var pdate = Date_from_syspref($(this).text()).getTime();
+
+		// And checks if the date is between the beginning and ending dates
+		if (pdate > beginDate && 
+		    pdate < endDate) {
+			// If so, we can show the row
+			$(this).parent().show();
+		    }
+
+	    });
+	}
+
+	// Clears filters : shows everything
+	function clearFilters() {
+	    $("table#claimst tbody tr").show();
+	}
+
+	function popup(supplierid,serialid){
+		window.open('claims.pl?supplierid='+ supplierid +'&amp;serialid='+ serialid +'&amp;op=preview' ,'popup', 'width=600,height=400,toolbar=no,scrollbars=yes');
+	}
+
+//]]>
+</script>
+</head>
+<body>
+    [% INCLUDE 'header.inc' %]
+[% UNLESS ( preview ) %]
+    [% INCLUDE 'serials-search.inc' %]
+[% END %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Claims</div>
+
+[% UNLESS ( preview ) %]
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+    <h1>Claims</h1>
+
+[% IF ( letter ) %][% UNLESS ( missingissues ) %][% IF ( supplierid ) %] <div class="dialog alert">No missing issues found.</div>[% ELSE %]<div class="dialog message">Please choose a vendor.</div>[% END %][% END %][% END %]
+	
+	     [% IF ( SHOWCONFIRMATION ) %]
+     <div class="dialog alert">Your notification has been sent.</div>
+     [% END %]
+[% UNLESS ( letter ) %]<div class="dialog alert">No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>.</div>[% END %]
+    <form id="claims" name="claims" action="claims.pl" method="post">
+    <fieldset>
+	    <label for="supplierid">Supplier: </label>
+	    <select id="supplierid" name="supplierid">
+	        [% FOREACH suploo IN suploop %]
+	            [% IF ( suploo.selected ) %]
+	            <option value="[% suploo.id %]" selected="selected" >
+	            [% ELSE %]
+	            <option value="[% suploo.id %]">
+	            [% END %]
+	                [% suploo.name %]
+	                ([% suploo.count %])
+	            </option>
+	        [% END %]
+	    </select>
+        <input type="submit" value="OK" />
+        [% IF ( phone ) %]Phone: [% phone %][% END %]
+        [% IF ( booksellerfax ) %]Fax: [% booksellerfax %][% END %]
+        [% IF ( bookselleremail ) %]</p><p><a href="mailto:[% bookselleremail %]">[% bookselleremail %]</a>[% END %]
+    </fieldset>
+</form>
+
+   [% IF ( missingissues ) %]	
+    <h3>Missing Issues</h3>
+    <form action="claims.pl" onsubmit="return false;">
+	<fieldset class="rows">
+	<legend>Filters :</legend>
+	
+	<ol>
+	<li>
+	    <label for="statusfilter">Status : </label>
+	    <select id="statusfilter" onchange="filterByStatus();">
+		<option value="all" selected="selected">(All)</option>
+		<option>Expected</option>
+		<option>Arrived</option>
+		<option>Late</option>
+		<option>Missing</option>
+		<option>Claimed</option>
+	    </select>
+	</li>
+	
+	<li>
+	    <label for="titlefilter">Title : </label>
+	    <input id="titlefilter" type="text" />
+	    <label for="branchfilter">Branch: </label>
+	    <select id="branchfilter" onchange="filterByBranch();">
+            [% FOREACH branchloo IN branchloop %]
+                [% IF ( branchloo.selected ) %]
+                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                [% ELSE %]
+                <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                [% END %]
+            [% END %]
+        </select>
+	</li>
+	
+	<li>
+	    <label for="begindate">From</label>
+	    <img src="[% themelang %]/lib/calendar/cal.gif" id="begindatebutton" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+	    <input type="text" name="begindate" id="begindate" value="[% begindate %]" size="10" maxlength="10" />
+	    <script type="text/javascript">
+		 //<![CDATA[ 
+		Calendar.setup({
+		    inputField	: "begindate", 
+		    button		: "begindatebutton",
+		    ifFormat	: "[% DHTMLcalendar_dateformat %]"
+		});
+		//]]>
+	    </script>
+
+	    <label for="enddate" style="float:none;">To</label>
+	    <img src="[% themelang %]/lib/calendar/cal.gif" id="enddatebutton" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
+	    <input type="text" name="enddate" id="enddate" value="[% enddate %]" size="10" maxlength="10" />
+	    <script type="text/javascript">
+		 //<![CDATA[ 
+		 Calendar.setup({
+		    inputField      : "enddate", 
+		    button          : "enddatebutton",
+		    ifFormat        : "[% DHTMLcalendar_dateformat %]"
+		});
+		//]]>
+	    </script> <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+	    <input type="button" value="OK" onclick="filterByDate();" />
+        </li>
+	
+	<li>
+	    <input type="reset" value="Clear Filters" onclick="clearFilters();" />
+	</li>
+	</ol>
+	</fieldset>
+    </form>
+
+    <fieldset>
+	<form action="claims.pl" method="post" class="checkboxed" onsubmit="return checkForm()">
+        <input type="hidden" name="order" value="[% order %]" />
+         <table id="claimst">
+                <thead><tr>
+                    [% IF ( letter ) %]
+                    <th><input type="checkbox" id="CheckAll"></th>
+                    [% END %]
+                    <th>Vendor</th>
+                    <th>Branch</th>
+                    <th>Title</th>
+                    <th>Issue number</th>
+                    <th>Status</th>
+                    <th>Since</th>
+                    <th>Claim Date</th>
+                <th>Begin Claim</th>
+                </tr></thead>
+                <tbody>[% FOREACH missingissue IN missingissues %]
+                    <tr>
+                        [% IF ( missingissue.letter ) %]
+                            <td>
+                    <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
+                            </td>
+                        [% END %]
+                        <td>
+                        [% missingissue.name %]
+                        </td>
+                        <td>
+                        [% missingissue.branchcode %]
+                        </td>
+                        <td>
+                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid %]">[% missingissue.title |html %]</a>
+                        </td>
+                        <td>
+                        [% missingissue.serialseq %]
+                        </td>
+                        <td>
+                            [% IF ( missingissue.status1 ) %]Expected[% END %]
+                            [% IF ( missingissue.status2 ) %]Arrived[% END %]
+                            [% IF ( missingissue.status3 ) %]Late[% END %]
+                            [% IF ( missingissue.status4 ) %]Missing[% END %]
+                            [% IF ( missingissue.status7 ) %]Claimed[% END %]
+                        </td>
+                        <td class="planneddate">
+                        [% missingissue.planneddate %]
+                        </td>
+                        <td>
+                        [% missingissue.claimdate %]
+                        </td>
+                        <td>
+                            <a href="/cgi-bin/koha/serials/lateissues-excel.pl?supplierid=[% missingissue.supplieri %]&amp;serialid=[% missingissue.serialid %]&amp;op=claims">Export item data</a>
+                        </td>
+                    </tr>
+                [% END %]</tbody>
+            </table>
+	     <p><span class="exportSelected"></span></p>
+
+[% IF ( letter ) %]
+        <fieldset class="action"> <label for="letter_code">Select notice:</label>
+            <select name="letter_code" id="letter_code">
+                [% FOREACH letter IN letters %]
+                    <option value="[% letter.code %]">[% letter.name %]</option>
+                [% END %]
+			</select>
+	    <input type="hidden" name="op" value="send_alert" /><input type="submit" name="submit" class="button" value="Send notification" /></fieldset>
+            [% END %]
+        </form>
+    </fieldset>
+[% END %]
+
+[% ELSE %]
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	
+[% IF ( supplierloop ) %]
+        [% FOREACH supplierloo IN supplierloop %]
+        [% IF ( supplierloo.name ) %]
+        <p><b>[% supplierloo.name %]</b><br />
+        [% END %]
+        [% IF ( supplierloo.postal ) %]
+        [% supplierloo.postal %]<br />
+        [% END %]
+        [% IF ( supplierloo.contphone ) %]
+        Ph: [% supplierloo.contphone %]<br />
+        [% END %]
+        [% IF ( supplierloo.contfax ) %]
+        Fax: [% supplierloo.contfax %]<br />
+        [% END %]
+        [% IF ( supplierloo.contemail ) %]
+        Email: [% supplierloo.contemail %]<br />
+        [% END %]
+        [% IF ( supplierloo.accountnumber ) %]
+        A/C: [% supplierloo.accountnumber %]</p>
+        [% END %]
+        [% IF ( supplierloo.contact ) %]
+        <p>Dear [% supplierloo.contact %]</p>
+        [% ELSE %]
+        <p>To whom it may concern</p>
+        [% END %]
+        <p>The following items have not been received from you and are now considered missing:</p>
+        [% END %]
+[% END %]
+        [% IF ( missingissues ) %]
+        <h3>Missing Issues</h3>
+        <table>
+            <tr>
+                <td><b>Vendor<b></td>
+                <td><b>Title</b></td>
+                <td><b>Issue number</b></td>
+                <td><b>Missing since</b></td>
+            </tr>
+            [% FOREACH missingissue IN missingissues %]
+                <tr>
+                    <td>
+                    [% missingissue.name %]
+                    </td>
+                    <td>
+                    [% missingissue.Title |html %]
+                    </td>
+                    <td>
+                    [% missingissue.serialseq %]
+                    </td>
+                    <td>
+                    [% missingissue.planneddate %]
+                    </td>
+                </tr>
+            [% END %]
+        </table>
+        [% END %]
+
+<p class="noprint"><a href="#" onclick="window.print(); return false;">Print</a> &nbsp; <a href="#" class="close">Close</a></p>
+[% END %]
+
+</div>
+</div>
+
+[% UNLESS ( preview ) %]
+<div class="yui-b">
+[% INCLUDE 'serials-menu.inc' %]
+</div>
+[% END %]
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

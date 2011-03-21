@@ -1,0 +1,113 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Order Staged MARC Records
+[% IF ( batch_details ) %]
+ &rsaquo; Batch [% import_batch_id %]
+[% ELSE %]
+ &rsaquo; Batch List
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#files").tablesorter({
+            headers: {
+                5: { sorter: false },
+            }
+        });
+    });
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket #[% basketno %]</a> &rsaquo;  Add orders from iso2709 file</div>
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+       <div id="yui-main">
+           <div class="yui-b">
+             <h1>Add orders from staged file: [% comments %]</h1>
+             [% IF ( batch_details ) %]
+               <div>
+                     <dl>
+                       <dd><strong>File name:</strong> [% file_name %]</dd>
+                       <dd><strong>Staged on:</strong> [% upload_timestamp %]</dd>
+                     </dl>
+               </div>
+               <div>
+                   <form action="[% scriptname %]" method="post" name="import_biblios">
+                     <table>
+                     <tr>
+                         <th>#</th>
+                         <th>Citation</th>
+                         <th>Match?</th>
+                         <th>Order</th>
+                       </tr>
+                       [% FOREACH biblio_lis IN biblio_list %]
+                         <tr>
+                             <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio_lis.import_record_id %]" rel="gb_page_center[600,500]">[% biblio_lis.record_sequence %]</a></td>
+                             <td>
+                                [% biblio_lis.citation %]
+
+                             </td>
+                             <td>[% biblio_lis.overlay_status %]</td>
+                             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% biblio_lis.booksellerid %]&amp;basketno=[% biblio_lis.basketno %]&amp;booksellerid=[% biblio_lis.booksellerid %]&amp;breedingid=[% biblio_lis.import_record_id %]&amp;import_batch_id=[% biblio_lis.import_batch_id %]">Add order</a></td>
+                         </tr>
+                         [% IF ( biblio_lis.match_biblionumber ) %]
+                           <tr>
+                             <td />
+                             <td class="highlight" colspan="3">Matches biblio [% biblio_lis.match_biblionumber %] (score = [% biblio_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_lis.match_biblionumber %]">[% biblio_lis.match_citation %]</a></td>
+                           </tr>
+                         [% END %]
+                       [% END %]
+                     </table>
+                     <input type="button" value="Save" onclick="this.form.submit()" />
+                   </form>
+               </div>
+              [% IF ( pages ) %]
+                <div class="pages">
+                Page 
+                  [% FOREACH page IN pages %]
+                    [% IF ( page.current_page ) %]
+                      <span class="current">[% page.page_number %]</span>
+                    [% ELSE %]
+                      <a class="nav" href="[% page.script_name %]?import_batch_id=[% page.import_batch_id %]&amp;offset=[% page.offset %]">[% page.page_number %]</a>
+                    [% END %]
+                  [% END %]
+              [% END %]
+             [% ELSE %]
+               <div>
+                   <table id="files">
+                     <thead>
+                     <tr>
+                       <th>File name</th>
+                       <th>Comments</th>
+                       <th>Status</th>
+                       <th>Staged</th>
+                       <th># Bibs</th>
+                       <th>&nbsp;</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     [% FOREACH batch_lis IN batch_list %]
+                     <tr>
+                        <td>[% batch_lis.file_name %]</td>
+                       <td>[% batch_lis.comments %]</td>
+                       <td>[% batch_lis.import_status %]</td>
+                       <td>[% batch_lis.upload_timestamp %]</td>
+                       <td>[% batch_lis.num_biblios %]</td>
+                       <td><a href="[% batch_lis.scriptname %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;basketno=[% batch_lis.basketno %]&amp;booksellerid=[% batch_lis.booksellerid %]">Add orders</a></td>
+                     </tr>
+                     [% END %]
+                     </tbody>
+                   </table>
+               </div>
+             [% END %]
+           </div>
+       </div>
+   </div>
+</div>
+</body>
+</html>

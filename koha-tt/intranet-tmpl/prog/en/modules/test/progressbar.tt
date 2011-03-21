@@ -1,0 +1,43 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Stage MARC Records For Import</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'file-upload.inc' %]
+[% INCLUDE 'background-job.inc' %]
+<style type="text/css">
+	#uploadpanel,#fileuploadstatus,#fileuploadfailed,#jobpanel,#jobstatus,#jobfailed { display : none; }
+	#fileuploadstatus,#jobstatus { margin:.4em; }
+	#fileuploadprogress,#jobprogress{ width:150px;height:10px;border:1px solid #666;background:url('/intranet-tmpl/prog/img/progress.png') -300px 0px no-repeat; }</style>
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+});
+function CheckForm(f) {
+    submitBackgroundJob(f);
+    return false;
+}
+
+//]]>
+</script>
+</head>
+<body>
+<div id="doc3" class="yui-t2">
+   
+<form method="post" action="progressbarsubmit.pl">
+<input type="hidden" name="submitted" id="submitted" value="1" />
+<input type="hidden" name="runinbackground" id="runinbackground" value="" />
+<input type="hidden" name="completedJobID" id="completedJobID" value="" />
+
+<input type="button" id="mainformsubmit" onclick="return CheckForm(this.form);" value="Start" />
+ 
+       <div id="jobpanel">
+           <div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
+           <div id="jobfailed"></div>
+       </div>
+  
+</form>
+</div>
+
+<div>
+Completed: <span id="completed">[% completedJobID %] </span>
+</div>
+</body>

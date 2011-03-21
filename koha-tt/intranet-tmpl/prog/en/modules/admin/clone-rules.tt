@@ -1,0 +1,72 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Issuing Rules &rsaquo; Clone Issuing Rules</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/smart-rules.pl">Issuing rules</a> &rsaquo; Clone issuing rules</div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+    <h2>Cloning issuing rules
+        [% IF ( frombranchname || tobranchname ) %]
+            [% IF ( frombranchname ) %] from "[% frombranchname %]"[% END %]
+	    [% IF ( tobranchname ) %] to "[% tobranchname %]"[% END %]
+	[% END %]
+    </h2>
+
+    [% IF ( result ) %]
+	[% IF ( error ) %]
+	    <div class="dialog alert">Cloning of issuing rules failed!</div>
+	[% ELSE %]
+	    <div class="dialog message"><p>The rules have been cloned.</p></div>
+	[% END %]
+	<a href="/cgi-bin/koha/admin/smart-rules.pl">Return to Issuing rules</a>
+    [% ELSE %]
+
+	<p class="help">Use carefully ! If the destination library already has issuing rules, they will be deleted without warning !</p> 
+	<form action="/cgi-bin/koha/admin/clone-rules.pl" method="post">
+	    [% UNLESS ( frombranch ) %]
+	    <fieldset>
+		<legend>Please choose a library to clone rules from:</legend> 
+		<label for="frombranch">Source library:</label>
+		<select name="frombranch" id="frombranch">
+			<option value="">Default</option>
+			[% FOREACH branchloo IN branchloop %]
+			<option value="[% branchloo.value %]" [% IF ( branchloo.selected ) %]selected[% END %]>[% branchloo.branchname %]</option>
+			[% END %]
+		</select>
+		[% IF ( tobranch ) %]<input type="hidden" name="tobranch" value="[% tobranch %]" />[% END %]
+	    </fieldset>
+	    [% END %]
+
+	    [% UNLESS ( tobranch ) %]
+	    <fieldset>
+		<legend>Please choose the library to clone the rules to:</legend> 
+		<label for="tobranch">Destination library:</label>
+		<select name="tobranch" id="tobranch">
+			<option value="">Default</option>
+			[% FOREACH branchloo IN branchloop %]
+			<option value="[% branchloo.value %]" [% IF ( branchloo.selected ) %]selected[% END %]>[% branchloo.branchname %]</option>
+			[% END %]
+		</select>
+		[% IF ( frombranch ) %]<input type="hidden" name="frombranch" value="[% frombranch %]" />[% END %]
+	    </fieldset>
+	[% END %]
+	<input type="submit" value="Submit" />
+	</form>
+
+    [% END %]
+    </div>
+
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

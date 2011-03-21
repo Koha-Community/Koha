@@ -1,0 +1,209 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Item Circulation Alerts</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css">
+table.grid thead th {
+  vertical-align: bottom;
+}
+
+table.grid tbody th {
+  text-align: right;
+}
+
+table.grid tbody td {
+  font-size: xx-small;
+}
+
+table.grid tbody td.info {
+  background: #fff;
+}
+
+table.grid.active tbody td {
+  width: 10%;
+  cursor: pointer;
+}
+
+table.grid tbody td {
+  background: #cfc;
+  color: #111;
+}
+
+table.grid td.disabled {
+  background: #fcc;
+}
+
+table.grid td.default {
+  background: #f88;
+}
+</style>
+
+<script type="text/javascript">//<![CDATA[
+var $branch = "[% branch %]";
+$(function(){
+    $('#alerttabs > ul').tabs();
+
+    var blocked            = _('Blocked!');
+    var saving             = _('Saving...');
+    var disabledForAll     = _('Disabled for all');
+    var disabledForCurrent = _('Disabled for') + ' ' + $branch;
+
+    $('#branch_selector input:submit').hide();
+    $('#branch').change(function(){
+        $('#branch_selector').submit();
+    });
+
+    $('table.grid.active tbody td').click(function(ev){
+        var id = this.id;
+        var td = $(this);
+        if (td.hasClass('default') && $branch != '*') {
+            td.html(blocked);
+            window.setTimeout(
+              function(){ td.html(disabledForAll) },
+              3000
+            );
+        } else {
+            td.html(saving);
+            $.ajax({
+                url      : '/cgi-bin/koha/admin/item_circulation_alerts.pl',
+                type     : 'POST',
+                dataType : 'json',
+                data     : { action: 'toggle', id: id, branch: $branch },
+                success  : function(response){
+                    if ($branch == '*' && response.classes.match(/default/)) {
+                        td.html(disabledForAll);
+                    } else if (response.classes.match(/disabled/)) {
+                        td.html(disabledForCurrent);
+                    } else {
+                        td.html(' ');
+                    }
+                    td.attr('class', response.classes);
+                }
+            });
+        }
+    });
+
+}); //]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Item Circulation Alerts </div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+
+<div id="yui-main" class="circulation-alert">
+<div class="yui-b">
+
+<div class="yui-g">
+<div class="yui-u first">
+<h1>Item Circulation Alerts</h1>
+<h2>Select a library:</h2>
+<form id="branch_selector" method="get" action="/cgi-bin/koha/admin/item_circulation_alerts.pl">
+<select id="branch" name="branch">
+[% FOREACH branche IN branches %]
+[% IF ( branche.selected ) %]
+<option value="[% branche.branchcode %]" selected="selected">[% branche.branchname %]</option>
+[% ELSE %]
+<option value="[% branche.branchcode %]">[% branche.branchname %]</option>
+[% END %]
+[% END %]
+</select>
+<input type="submit" name="pick" value="Pick" />
+</form>
+</div>
+<div class="yui-u">
+<table class="grid">
+<caption>Legend</caption>
+<thead>
+<tr>
+  <th>Color</th>
+  <th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+  <tr>
+    <td width="100" class="default">&nbsp;</td>
+    <td class="info">These are disabled for ALL libraries.  To change these settings, choose the "Default" library.</td>
+  </tr>
+  <tr>
+    <td class="disabled">&nbsp;</td>
+    <td class="info">These are disabled for the current library.</td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+    <td class="info">These are enabled.</td>
+  </tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<h2>Circulation Alerts for [% branch_name %]</h2>
+<p>Click on the grid to toggle the settings.</p>
+
+<div id="alerttabs" class="toptabs">
+<ul>
+<li><a href="#checkout">Checkout</a></li>
+<li><a href="#checkin">Check-in</a></li>
+</ul>
+
+<div id="checkout">
+<h3>Checkout</h3>
+<table class="grid active" width="100%">
+<thead>
+<tr>
+  <th>&nbsp;</th>
+  [% FOREACH item_type IN item_types %]
+  <th>[% item_type.br_description %]</th>
+  [% END %]
+</tr>
+</thead>
+<tbody>
+[% FOREACH grid_checkou IN grid_checkout %]
+<tr>
+  <th>[% grid_checkou.description %]</th>
+  [% FOREACH item IN grid_checkou.items %]
+  <td class="[% item.class %]" id="[% item.id %]">[% item.text %]</td>
+  [% END %]
+</tr>
+[% END %]
+</tbody>
+</table>
+</div>
+
+<div id="checkin">
+<h3>Check-in</h3>
+<table class="grid active" width="100%">
+<thead>
+<tr>
+  <th>&nbsp;</th>
+  [% FOREACH item_type IN item_types %]
+  <th>[% item_type.br_description %]</th>
+  [% END %]
+</tr>
+</thead>
+<tbody>
+[% FOREACH grid_checki IN grid_checkin %]
+<tr>
+  <th>[% grid_checki.description %]</th>
+  [% FOREACH item IN grid_checki.items %]
+  <td class="[% item.class %]" id="[% item.id %]">[% item.text %]</td>
+  [% END %]
+</tr>
+[% END %]
+</tbody>
+</table>
+</div>
+</div>
+
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

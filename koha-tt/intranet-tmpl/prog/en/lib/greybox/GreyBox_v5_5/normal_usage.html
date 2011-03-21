@@ -1,0 +1,126 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+    <title>GreyBox - Normal usage</title>
+
+    <script type="text/javascript">
+        var GB_ROOT_DIR = "./greybox/";
+    </script>
+
+    <script type="text/javascript" src="greybox/AJS.js"></script>
+    <script type="text/javascript" src="greybox/AJS_fx.js"></script>
+    <script type="text/javascript" src="greybox/gb_scripts.js"></script>
+    <link href="greybox/gb_styles.css" rel="stylesheet" type="text/css" media="all" />
+
+    <script type="text/javascript" src="static_files/help.js"></script>
+    <link href="static_files/help.css" rel="stylesheet" type="text/css" media="all" />
+</head>
+
+<body>
+
+<script>
+    insertHeader();
+    insertMenu('nrm_usage');
+</script>
+
+<h2>Showing images</h2>
+
+<h3 class="first">Showing one image:</h3>
+<h4>Syntax:</h4>
+<pre>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_image[]"&gt;HTML&lt;/a&gt;</code>
+</pre>
+
+<h4>Example:</h4>
+<pre>
+<code>&lt;a href="http://static.flickr.com/119/294309231_a3d2a339b9.jpg" title="Flower" rel="gb_image[]"&gt;Show flower&lt;/a&gt;</code>
+</pre>
+
+<h4>Example rendered:</h4>
+<a href="http://static.flickr.com/119/294309231_a3d2a339b9.jpg" title="Flower" rel="gb_image[]">Show flower</a>
+
+
+<h3>Showing a group of images:</h3>
+<h4>Syntax:</h4>
+<pre>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_imageset[NAME]"&gt;HTML&lt;/a&gt;</code>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_imageset[NAME]"&gt;HTML&lt;/a&gt;</code>
+</pre>
+
+<h4>Example:</h4>
+<pre>
+<code>&lt;a href="static_files/salt.jpg" rel="gb_imageset[nice_pics]" title="Salt flats in Chile"&gt;Salt flats&lt;/a&gt;</code>
+<code>&lt;a href="static_files/night_valley.jpg" rel="gb_imageset[nice_pics]" title="Night valley"&gt;Night valley&lt;/a&gt;</code>
+</pre>
+
+<h4>Example rendered:</h4>
+<a href="static_files/salt.jpg" rel="gb_imageset[nice_pics]" title="Salt flats in Chile">Salt flats</a>
+<a href="static_files/night_valley.jpg" rel="gb_imageset[nice_pics]" title="Night valley">Night valley</a>
+
+
+<h2>Showing pages</h2>
+
+<h3>Showing one page:</h3>
+<h4>Syntax:</h4>
+<pre>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_page[WIDTH, HEIGHT]"&gt;HTML&lt;/a&gt;</code>
+</pre>
+
+<h4>Example:</h4>
+<pre>
+<code>&lt;a href="http://google.com/" title="Google" rel="gb_page[500, 500]"&gt;Launch Google.com&lt;/a&gt;</code>
+</pre>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com/" title="Google" rel="gb_page[500, 500]">Launch Google.com</a>
+
+
+<h3>Showing one page as center window:</h3>
+<h4>Syntax:</h4>
+<pre>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_page_center[WIDTH, HEIGHT]"&gt;HTML&lt;/a&gt;</code>
+</pre>
+
+<h4>Example:</h4>
+<pre>
+<code>&lt;a href="http://google.com/" title="Google" rel="gb_page_center[500, 500]"&gt;Launch Google.com&lt;/a&gt;</code>
+</pre>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com/" title="Google" rel="gb_page_center[500, 500]">Launch Google.com</a>
+
+
+<h3>Showing one page in fullscreen:</h3>
+<h4>Syntax:</h4>
+<pre>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_page_fs[]"&gt;HTML&lt;/a&gt;</code>
+</pre>
+
+<h4>Example:</h4>
+<pre>
+<code>&lt;a href="http://google.com/" title="Google" rel="gb_page_fs[]"&gt;Launch Google.com&lt;/a&gt;</code>
+</pre>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com/" title="Google" rel="gb_page_fs[]">Launch Google.com</a>
+
+<h3>Showing a group of pages:</h3>
+<h4>Syntax:</h4>
+<pre>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_pageset[NAME]"&gt;HTML&lt;/a&gt;</code>
+<code>&lt;a href="URL" title="CAPTION" rel="gb_pageset[NAME]"&gt;HTML&lt;/a&gt;</code>
+</pre>
+
+<h4>Example:</h4>
+<pre>
+<code>&lt;a href="http://google.com/" title="Google" rel="gb_pageset[search_sites]"&gt;Launch Google search&lt;/a&gt;</code>
+<code>&lt;a href="http://search.yahoo.com/" rel="gb_pageset[search_sites]"&gt;Launch Yahoo search&lt;/a&gt;</code>
+</pre>
+
+<h4>Example rendered:</h4>
+<a href="http://google.com/" title="Google" rel="gb_pageset[search_sites]">Launch Google search</a>
+<a href="http://search.yahoo.com/" rel="gb_pageset[search_sites]">Launch Yahoo search</a>
+
+
+</body>
+</html>

@@ -1,0 +1,326 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports &rsaquo; Circulation statistics [% IF ( do_it ) %]&rsaquo; Results[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+<style type="text/css">
+	.sql {display:none;}
+</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> [% IF ( do_it ) %]&rsaquo; <a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation statistics</a> &rsaquo; Results [% ELSE %]&rsaquo; Circulation statistics[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+[% IF ( do_it ) %]
+    [% FOREACH mainloo IN mainloop %]
+        <h1>Circulation statistics</h1>
+        [% IF ( mainloo.loopfilter ) %]
+            <p>Filtered on</p>
+            <ul>
+            [% FOREACH loopfilte IN mainloo.loopfilter %]
+                [% IF ( loopfilte.err ) %]<li class="error">Error:
+				[% ELSIF ( loopfilte.sql ) %]<li class="sql">
+				[% ELSE %]<li>
+				[% END %]
+					[% loopfilte.crit %] [% loopfilte.filter %]
+				</li>
+            [% END %]
+            </ul>
+        [% END %]
+        
+        <table> 
+            <tr>
+                <th>[% mainloo.line %] / [% mainloo.column %]</th>
+                [% FOREACH loopco IN mainloo.loopcol %]
+                    <th>[% loopco.coltitle_display |html %]</th>
+                [% END %]
+                <th>TOTAL</th>
+                </tr>
+                [% FOREACH loopro IN mainloo.looprow %]
+                    <tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]>
+                        <td>[% DEFAULT loopro.rowtitle_display="UNKNOWN VALUE" |html %]</td>
+                    [% FOREACH loopcel IN loopro.loopcell %]
+						<td>[% DEFAULT loopcel.value="&nbsp;" %]</td>
+                    [% END %]
+						<td>[% loopro.totalrow %]</td>
+                    </tr>
+                [% END %]
+            <tr>
+                <th>TOTAL</th>
+                [% FOREACH loopfoote IN mainloo.loopfooter %]
+                <th>[% loopfoote.totalcol %]</th>
+                [% END %]
+                <th>[% mainloo.total %]</th>
+            </tr>
+        </table>
+    [% END %]
+[% ELSE %]
+
+    <form method="post" action="/cgi-bin/koha/reports/issues_stats.pl">
+    <fieldset class="rows">
+	<legend>Circulation statistics</legend><table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Row</th>
+                <th>Column</th>
+                <th>Filter</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Period</td>
+                <td><input type="radio" name="Line" value="datetime" /></td>
+                <td><input type="radio" name="Column" value="datetime" /></td>
+                <td><label for="from">From</label> <input type="text" readonly="readonly" size="10" id="from" name="Filter" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openCalendarFrom" style="cursor: pointer;" />
+                   <script type="text/javascript">
+				   //<![CDATA[ 
+				   function validate1(date) {
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        var weekDay = date.getDay();
+                        var dayMonth = month + '-' + day;
+                        var dateString = year + '-' + month + '-' + day;
+                        var dateTo = document.getElementById('to').value.split("-");
+                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+                        if (date > limitDate) {
+                             return true;
+                        } else {
+                             return false;
+                        }
+                    }
+                    Calendar.setup({
+                            inputField : "from",
+                            ifFormat : "[% DHTMLcalendar_dateformat %]",
+                            button : "openCalendarFrom",
+                            disableFunc : validate1,
+                            dateStatusFunc : validate1
+                    });
+					//]]>
+					</script>
+                    <label for="to">To</label> <input readonly="readonly" size="10" id="to" name="Filter" value="" type="text" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="openCalendarTo" style="cursor: pointer;" border="0" />
+                    <script type="text/javascript">
+					//<![CDATA[  
+					function validate2(date) {
+                         var day = date.getDate();
+                         var month = date.getMonth() + 1;
+                         var year = date.getFullYear();
+                         var weekDay = date.getDay();
+                         var dayMonth = month + '-' + day;
+                         var dateString = year + '-' + month + '-' + day;
+                         var dateFrom = document.getElementById('from').value.split("-");
+                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+                         if (limitDate > date) {
+                              return true;
+                         } else {
+                              return false;
+                         }
+                     }
+                     Calendar.setup({
+                             inputField : "to",
+                             ifFormat : "[% DHTMLcalendar_dateformat %]",
+                             button : "openCalendarTo",
+                             disableFunc : validate2,
+                             dateStatusFunc : validate2
+                     });
+					//]]>
+					</script> <span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+                    </td>
+                </tr>
+                <tr class="highlight"> 
+                <td><label for="PeriodTypeSel">Type:</label><select name="PeriodTypeSel" id="PeriodTypeSel">
+                    <option value ="issue">Checkout</option>
+                    <option value ="renew">Renewal</option>
+                    <option value ="return">Checkin</option>
+                    <option value ="localuse">Local Use</option>
+                    </select></td>
+                <td colspan="2"><label for="DisplayBy">group by</label> <select name="DisplayBy" id="DisplayBy">
+                    <option value="">None</option>
+                    <option value ="1">Day of week</option>
+                    <option value ="2">Month</option>
+                    <option value ="3">Year</option>
+                    </select>
+                </td>
+                <td>
+                    <label for="PeriodDaySel">Select Day: </label><select name="PeriodDaySel" id="PeriodDaySel">
+                    <option value =""></option>
+                    <option value ="Monday">Monday</option>
+                    <option value ="Tuesday">Tuesday</option>
+                    <option value ="Wednesday">Wednesday</option>
+                    <option value ="Thursday">Thursday</option>
+                    <option value ="Friday">Friday</option>
+                    <option value ="Saturday">Saturday</option>
+                    <option value ="Sunday">Sunday</option>
+                    </select>
+                    <label for="PeriodMonthSel">Select Month:</label> <select name="PeriodMonthSel" id="PeriodMonthSel">
+                    <option value =""></option>
+                    <option value ="January">January</option>
+                    <option value ="February">February</option>
+                    <option value ="March">March</option>
+                    <option value ="April">April</option>
+                    <option value ="May">May</option>
+                    <option value ="June">June</option>
+                    <option value ="July">July</option>
+                    <option value ="August">August</option>
+                    <option value ="September">September</option>
+                    <option value ="October">October</option>
+                    <option value ="November">November</option>
+                    <option value ="December">December</option>
+                    </select>
+                </td>
+        </tr>
+        <tr>
+            <td>Patron Category</td>
+            <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
+            <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
+           <td><select name="Filter" id="borcat">
+               <option value=""> </option>
+               [% FOREACH categoryloo IN categoryloop %]
+                 [% IF ( categoryloo.selected ) %]<option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.description %]</option>[% ELSE %]<option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>[% END %]
+               [% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr class="highlight">
+            <td>Item Type</td>
+            <td><input type="radio" name="Line" value="itemtype" /></td>
+            <td><input type="radio" name="Column" value="itemtype" /></td>
+           <td><select name="Filter" id="itemtype">
+               <option value=""> </option>
+               [% FOREACH itemtypeloo IN itemtypeloop %]
+                 [% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.code %]" selected="selected">[% itemtypeloo.description %]</option>[% ELSE %]<option value="[% itemtypeloo.code %]">[% itemtypeloo.description %]</option>[% END %]
+               [% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr>
+            <td>Library</td>
+            <td><input type="radio" name="Line" value="branch" /></td>
+            <td><input type="radio" name="Column" value="branch" /></td>
+            <td><select name="Filter" id="branch">
+               <option value=""> </option>
+               [% FOREACH branchloo IN branchloop %]
+[% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+				[% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr class="highlight">
+            <td>Collection</td>
+            <td><input type="radio" name="Line"   value="items.ccode" /></td>
+            <td><input type="radio" name="Column" value="items.ccode" /></td>
+            <td><select name="Filter" id="ccode">
+                <option value=""> </option>
+                [% FOREACH ccodeloo IN ccodeloop %]
+					[% IF ( ccodeloo.selected ) %] <option value="[% ccodeloo.code %]" selected="selected">[% ccodeloo.description %]</option>[% ELSE %]<option value="[% ccodeloo.code %]">[% ccodeloo.description %]</option>[% END %]
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Shelving Location</td>
+            <td><input type="radio" name="Line" value="items.location" /></td>
+            <td><input type="radio" name="Column" value="items.location" /></td>
+            <td><select name="Filter" id="location">
+                <option value=""> </option>
+                [% FOREACH locationloo IN locationloop %]
+					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
+				[% END %]
+               </select>
+            </td> 
+        </tr>
+        <tr class="highlight">
+            <td>Item Call Number</td>
+            <td></td>
+            <td></td>
+            <td>From <input type="text" name="Filter" size="10" /> (inclusive) to <input type="text" name="Filter" size="10" /> (exclusive) </td>
+        </tr>
+        [% IF ( hassort1 ) %]
+        <tr><td>Patron sort1</td>
+			<td><input type="radio" name="Line" value="borrowers.sort1" /></td>
+			<td><input type="radio" name="Column" value="borrowers.sort1" /></td>
+			<td><select name="Filter" id="sort1">
+               <option value=""> </option>
+               [% FOREACH Bsort IN Bsort1 %]
+			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+               [% END %]
+               </select>
+            </td> 
+        </tr>
+        [% END %]
+        [% IF ( hassort2 ) %]
+        <tr class="highlight"><td>Patron sort2</td>
+            <td><input type="radio" name="Line" value="borrowers.sort2" /></td>
+            <td><input type="radio" name="Column" value="borrowers.sort2" /></td>
+           	<td><select name="Filter" id="sort2">
+               <option value=""> </option>
+               [% FOREACH Bsort IN Bsort2 %]
+			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+               [% END %]
+               </select>
+            </td> 
+        </tr>
+        [% END %]
+        <tr><td>Home branch</td>
+            <td><input type="radio" name="Line" value="items.homebranch" /></td>
+            <td><input type="radio" name="Column" value="items.homebranch" /></td>
+            <td><select name="Filter" id="homebranch">
+                    <option value=""> </option>
+                    [% FOREACH branchloo IN branchloop %]
+                        [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+				    [% END %]
+                </select>
+            </td>
+        </tr>
+
+        <tr><td>Holding branch</td>
+            <td><input type="radio" name="Line" value="items.holdingbranch" /></td>
+            <td><input type="radio" name="Column" value="items.holdingbranch" /></td>
+            <td><select name="Filter" id="holdingbranch">
+                    <option value=""> </option>
+                    [% FOREACH branchloo IN branchloop %]
+                        [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+				    [% END %]
+                </select>
+            </td>
+        </tr>
+
+        </tbody>
+    </table><br /></fieldset>
+
+<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count total items</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
+            <li><label for="cellvalue3">Count unique items</label> <input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li></ol></fieldset>
+			
+	<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+<li><label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+		</label>[% CGIextChoice %]
+		[% CGIsepChoice %]</li></ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
+	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
+	</form>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

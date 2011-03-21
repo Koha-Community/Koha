@@ -1,0 +1,135 @@
+    [% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Tools &rsaquo; Patron Cards &rsaquo; Patron Card Printing/Exporting</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    <script type="text/JavaScript" language="JavaScript">
+        //<![CDATA[
+            function Done() {
+                window.location = "[% referer %]";
+            };
+        //]]>
+    </script>
+    <style type="text/css">#custom-doc {width:47.23em; *width:46.04em; min-width:610px; margin:auto; margin-top:0.4em;}</style>
+    <style type="text/css">table {border-collapse: separate; border-spacing: 0; border: hidden none;} .header {cursor: auto; background-position: center center; background-repeat: repeat;} .tr {border-collapse: separate;}</style>
+</head>
+<body>
+    <div id="custom-doc" class="yui-t2">
+        <div id="bd">
+            [% IF ( batches ) %]
+            <form>
+                <div align="center">
+                    <div class="message">
+                        <b>Click on the following link(s) to download the exported batch(es).</b>
+                    </div>
+                </div>
+                <fieldset class="rows">
+                    <table class="borderless">
+                        [% FOREACH batche IN batches %]
+                        <tr>
+                            [% IF ( batche.label_ids ) %]
+                            <td class="borderless">
+                                [% batche.card_count %] Single Patron Cards
+                            </td>
+                            <td class="borderless">
+                                <h1 id="pdf">
+                                    <a href="/cgi-bin/koha/patroncards/[% batche.create_script %]?batch_id=[% batche.batch_id %]&amp;template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;start_card=[% batche.start_card %][% batche.label_ids %]">label_single_[% batche.card_count %].pdf</a>
+                                </h1>
+                            </td>
+                            [% ELSIF ( batche.borrower_numbers ) %]
+                            <td class="borderless">
+                                [% batche.card_count %] Single Patron Cards
+                            </td>
+                            <td class="borderless">
+                                <h1 id="pdf">
+                                    <a href="/cgi-bin/koha/patroncards/[% batche.create_script %]?template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;start_card=[% batche.start_card %][% batche.borrower_numbers %]">label_single_[% batche.card_count %].pdf</a>
+                                </h1>
+                            </td>
+                            [% ELSE %]
+                            <td class="borderless">
+                                Card Batch Number [% batche.batch_id %]
+                            </td>
+                            <td class="borderless">
+                                <h1 id="pdf">
+                                    <a href="/cgi-bin/koha/patroncards/create-pdf.pl?batch_id=[% batche.batch_id %]&amp;template_id=[% batche.template_id %]&amp;layout_id=[% batche.layout_id %]&amp;start_card=[% batche.start_card %]">label_batch_[% batche.batch_id %].pdf</a>
+                                </h1>
+                            </td>
+                            [% END %]
+                        </tr>
+                        [% END %]
+                    </table>
+                </fieldset>
+                <fieldset class="action">
+                    <div style="margin: 10px 10px 10px 0px;">
+                        <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="done" onclick="parent.parent.GB_hide();" value="Done"></span></span>
+                    </div>
+                </fieldset>
+            </form>
+            [% ELSE %]
+            <div align="center">
+                <div class="message">
+                    [% IF ( label_ids ) %]
+                    <b>Exporting [% card_count %] patroncard(s).</b>
+                    [% ELSIF ( borrower_numbers ) %]
+                    <b>Exporting [% borrower_count %] patroncard(s).</b>
+                    [% ELSE %]
+                    <b>[% multi_batch_count %] batch(es) to export.</b>
+                    [% END %]
+                </div>
+            </div>
+            <form name="exporting" method="post" action="/cgi-bin/koha/patroncards/print.pl">
+                <input type="hidden" name="op" value="export" />
+                <input type="hidden" name="referer" value="[% referer %]" />
+                [% FOREACH batch_id IN batch_ids %]
+                    <input type="hidden" name="batch_id" value="[% batch_id.batch_id %]" />
+                [% END %]
+                [% FOREACH label_id IN label_ids %]
+                    <input type="hidden" name="label_id" value="[% label_id.label_id %]" />
+                [% END %]
+                [% FOREACH borrower_number IN borrower_numbers %]
+                    <input type="hidden" name="borrower_number" value="[% borrower_number.borrower_number %]" />
+                [% END %]
+                <fieldset class="rows">
+                    <table class="borderless">
+                        <tr>
+                            <td class="borderless">
+                                <label for="template">Select a template to be applied: </label>
+                            </td>
+                            <td class="borderless">
+                                <select name="template_id">
+                                    [% FOREACH template IN templates %]
+                                    <option value="[% template.template_id %]">[% template.template_code %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderless">
+                                <label for="layout">Select a layout to be applied: </label>
+                            </td>
+                            <td class="borderless">
+                                <select name="layout_id">
+                                    [% FOREACH layout IN layouts %]
+                                    <option value="[% layout.layout_id %]">[% layout.layout_name %]</option>
+                                    [% END %]
+                                </select>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="borderless">
+                                <label for="start_card">Enter starting card number: </label>
+                            </td>
+                            <td class="borderless">
+                                <input type="text" size="5" id="start_card" name="start_card" class="focus" title="Starting card number" value="1"/>
+                            </td>
+                        </tr>
+                    </table>
+                </fieldset>
+                <fieldset class="action">
+                    <div style="margin: 10px 10px 10px 0px;">
+                        <span class="yui-button yui-link-button"><span class="first-child"><input type="submit" value="Export" /></span></span>
+                        <span class="yui-button yui-link-button"><span class="first-child"><input type="button" id="done" onclick="parent.parent.GB_hide();" value="Cancel"></span></span>
+                    </div>
+                </fieldset>
+            </form>
+            [% END %]
+        </div>
+    [% INCLUDE 'intranet-bottom.inc' %]

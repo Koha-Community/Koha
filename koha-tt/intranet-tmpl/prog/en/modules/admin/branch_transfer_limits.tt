@@ -1,0 +1,155 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Library Checkin and Transfer Policy</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		$("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes();});
+		$("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes();});
+		$("#SwapAll").click(function(){ $("#transferlimit_tabs").toggleCheckboxes();});
+	    $('#transferlimit_tabs > ul').tabs();
+
+		 $('#branchselect').change(function() {
+		    $('#selectlibrary').submit();
+		 });
+
+
+		var checkcolumn = $(".checkcolumn");
+		var checkrow = $(".checkrow");
+		var checkall = $(".checkall");
+		var uncheckall = $(".uncheckall");
+
+		$(checkcolumn).click(function(){
+			if(this.checked){ status = "checked" } else { status = "" }
+			var tableid = $(this).parent().parent().parent().parent().attr("id");
+			var columncontext = $(this).parent();
+			var tdindex = columncontext.parent().children().index(columncontext);
+			$("#"+tableid+" tr td:nth-child("+(tdindex+2)+") input[type='checkbox']").attr("checked",status);
+		});
+
+		$(checkrow).click(function(){
+			if(this.checked){ status = "checked" } else { status = "" }
+			$(this).parent().siblings().each(function(){
+				$(this).find("input[type='checkbox']").attr("checked",status);
+			})
+		});
+
+		$(checkall).click(function(){
+			var tid = $(this).attr("id");
+			tid = tid.replace("CheckAll","");
+			$("#"+tid).checkCheckboxes();
+			return false;
+		});
+
+		$(uncheckall).click(function(){
+			var tid = $(this).attr("id");
+			tid = tid.replace("UncheckAll","");
+			$("#"+tid).unCheckCheckboxes();
+			return false;
+		});
+
+	});
+</script>
+<style type="text/css">td { text-align: center; }</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Set Library Checkin and Transfer Policy</div>
+
+<div id="doc3" class="yui-t1">
+
+<div id="bd">
+     <div id="yui-main">
+    <div class="yui-b">
+
+<h1>Library [% branchcode %] - [% branchname %] Checkin and Transfer Policy</h1>
+    <form method="get" action="/cgi-bin/koha/admin/branch_transfer_limits.pl" id="selectlibrary">
+        <label for="branchselect">Select a library :</label>
+            <select name="branchcode" id="branchselect">
+		[% FOREACH branch_loo IN branch_loop %]
+                <option value="[% branch_loo.value %]">[% branch_loo.branchname %]</option>
+		[% END %]
+            </select>
+	    <input type="submit" value="Choose" />	    
+    </form>
+
+<p class="help">Check the boxes for the libraries you accept to checkin items from.</p>
+<fieldset>For <strong>all</strong> [% limit_phrase %]s: <a id="CheckAll" href="#">Check All</a> | <a id="UncheckAll" href="#">Uncheck All</a></fieldset>
+
+
+  <div id="transferlimit_tabs" class="toptabs">
+	<ul class="ui-tabs-nav">
+      [% FOREACH codes_loo IN codes_loop %]<li><a href="#[% codes_loo.code %]set">[% codes_loo.code %]</a></li>[% END %]
+	</ul>
+
+		<form method="post" action="branch_transfer_limits.pl">
+
+	[% FOREACH codes_loo IN codes_loop %]
+	<div id="[% codes_loo.code %]set">
+		<h4>Policy for [% codes_loo.limit_phrase %]: [% codes_loo.code %]</h4>
+	<p><a id="CheckAll[% codes_loo.code %]table" class="checkall" href="#">Check All</a> | <a id="UncheckAll[% codes_loo.code %]table" class="uncheckall" href="#">Uncheck All</a></p>
+	<script type="text/javascript" id="js">$(document).ready(function() {
+	$("#[% codes_loo.code %]table").tablesorter({
+		sortList: [[0,0]],
+		headers: { 1: { sorter: false}}
+	}).tablesorterPager({container: $("#pager[% codes_loo.code %]table"),positionFixed: false,size: 10});
+}); </script>
+	
+	<span id="pager[% codes_loo.code %]table" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="[% codes_loo.interface %]/prog/img/first.png" class="first"/>
+		<img src="[% codes_loo.interface %]/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="[% codes_loo.interface %]/prog/img/next.png" class="next"/>
+		<img src="[% codes_loo.interface %]/prog/img/last.png" class="last"/>
+		, entries/page : 
+		<select class="pagesize">
+        	<option selected="selected" value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</form>
+</span>
+		<table id="[% codes_loo.code %]table">
+			<thead>
+				<tr>
+				    <th>Library</th>
+				    <th>Allow transfer?</th>
+				</tr>
+			</thead>
+
+			<tbody>
+					[% FOREACH to_branch_loo IN codes_loo.to_branch_loop %]
+						[% UNLESS ( loop.odd ) %]<tr class="highlight"><!-- TMPL_ELSE
+--><tr>[% END %]
+							<td><label style="min-width:400px;" for="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row">[% to_branch_loo.toBranch %] - [% to_branch_loo.toBranchname %]</label></td>
+							<td><input type="checkbox" id="[% to_branch_loo.code %][% to_branch_loo.toBranch %]row" name="[% to_branch_loo.code %]_[% to_branch_loo.toBranch %]" [% IF ( to_branch_loo.isChecked ) %]checked="checked" [% END %] /></td>
+						</tr>
+					[% END %]
+			</tbody>
+		</table>
+		</div>
+				[% END %]
+		
+		<fieldset class="action">
+		    <input type="hidden" name="updateLimits" value="1" />
+		    <input type="hidden" name="branchcode" value="[% branchcode %]" />
+		    <input type="submit" value="Save" /> 
+		    <a class="cancel" href="/cgi-bin/koha/admin/admin-home.pl">Cancel</a>
+		</fieldset>
+		</form>
+		</div>
+  </div>
+</div>
+<div class="yui-b">
+  [% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

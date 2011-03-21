@@ -1,0 +1,101 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( suggestions_loop ) %]Orders search &rsaquo; Search Results[% ELSE %]Order search[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-history-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( suggestions_loop ) %]<a href="/cgi-bin/koha/acqui/histsearch.pl">Orders search</a> &rsaquo; Search Results[% ELSE %]Order search[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	
+		[% UNLESS ( suggestions_loop ) %]<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+<fieldset class="rows">
+	<legend>Search Orders</legend>
+		<ol>
+		<li><label for="title">Title: </label> <input type="text" name="title" id="title" value="[% title %]" /></li>
+		<li><label for="author">Author: </label> <input type="text" name="author" id="author" value="[% author %]" /></li>
+		<li><label for="name">Vendor: </label> <input type="text" name="name" id="name" value="[% name %]" /></li>
+		<li><label for="from">From: </label> 
+			<input type="text" size="10" id="from" name="from" value="[% from_placed_on %]" />
+			<img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarFrom" style="cursor: pointer;" alt="Show Calendar" />
+				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+		</li>
+		<li><label for="to">To: </label> 
+			<input type="text" size="10" id="to" name="to" value="[% to_placed_on %]" />
+			<img src="[% themelang %]/lib/calendar/cal.gif" id="openCalendarTo" style="cursor: pointer;" alt="Show Calendar" />
+			<script type="text/javascript">
+				// return true if the date is blocked.
+				function disable_from(date) {var limit = get_Calendar_limit(date,'to'  ); return (limit && limit < date);}  // true or false
+				function disable_to  (date) {var limit = get_Calendar_limit(date,'from'); return (limit && limit > date);}  // true or false
+				Calendar.setup({
+					inputField : "from",
+					ifFormat : "[% DHTMLcalendar_dateformat %]",
+					button : "openCalendarFrom",
+					disableFunc : disable_from,
+					dateStatusFunc : disable_from
+				});
+				Calendar.setup({
+					inputField : "to",
+					ifFormat : "[% DHTMLcalendar_dateformat %]",
+					button : "openCalendarTo",
+					disableFunc : disable_to,
+					dateStatusFunc : disable_to
+   	             });
+			</script>
+				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+		</li>
+		</ol>
+	</fieldset>
+	<fieldset class="action"><input type="submit" value="Search" /></fieldset>
+	</form>[% END %]
+	[% IF ( suggestions_loop ) %]<h1>Search Results</h1>
+	<div id="acqui_histsearch">
+		<table>
+			<tr>
+				<th>Basket</th>
+				<th>Basket group</th>
+				<th>Invoice Number</th>
+				<th>Summary</th>
+				<th>Vendor</th>
+				<th>Placed on</th>
+				<th>Received on</th>
+				<th>Quantity ordered</th>
+				<th>Unit cost</th>
+			</tr>
+			
+			[% FOREACH suggestions_loo IN suggestions_loop %]
+				<tr>
+                    <td>[% suggestions_loo.basketname %] (<a href="basket.pl?basketno=[% suggestions_loo.basketno %]">[% suggestions_loo.basketno %]</a>)</td>
+			<td>[% suggestions_loo.groupname %] (<a href="basketgroup.pl?booksellerid=[% suggestions_loo.id %]">[% suggestions_loo.basketgroupid %]</a>)</td>
+					<td>[% IF ( suggestions_loo.invoicenumber ) %]
+					        <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% suggestions_loo.invoicenumber %]&amp;supplierid=[% suggestions_loo.id %]&amp;datereceived=[% suggestions_loo.datereceived %]">[% suggestions_loo.invoicenumber %]</a>
+					    [% ELSE %]
+					        &nbsp;
+					    [% END %]
+					</td>
+					<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% suggestions_loo.biblionumber %]">[% suggestions_loo.title |html %]</a>
+                        <br />[% suggestions_loo.author %]</td>
+					<td><a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% suggestions_loo.id %]">[% suggestions_loo.name %]</a></td>
+					<td>[% suggestions_loo.creationdate %]</td>
+					<td>[% suggestions_loo.datereceived %]</td>
+					<td>[% suggestions_loo.quantity %]</td>
+					<td>[% suggestions_loo.ecost %]</td>
+				</tr>
+			[% END %]
+		</table>
+	</div>[% ELSE %][% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,1 @@
+[% IF ( currency ) %]<p><b>Currency = [% currency %]</b></p>[% ELSE %]<div class="dialog alert"><h3>No active currency is defined</h3><p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p></div>[% END %]

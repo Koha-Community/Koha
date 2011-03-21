@@ -1,0 +1,61 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Circulation</div>
+
+<div id="doc" class="yui-t7">
+   
+   <div id="bd">
+	<div class="yui-g"> 
+
+<h1>Circulation</h1>
+
+<div class="yui-u first">	
+	<ul>
+		<li><a href="/cgi-bin/koha/circ/circulation.pl">Check Out</a></li>
+		<li><a href="/cgi-bin/koha/circ/returns.pl">Check In</a></li>
+		<li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
+	[% IF ( AutoLocation ) %][% ELSE %][% IF ( IndependantBranches ) %][% ELSE %]<li><a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a></li>[% END %][% END %]
+	[% IF ( fast_cataloging ) %]
+	    [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
+		<li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a></li>
+	    [% END %]
+	[% END %]
+	</ul>
+	</div>
+
+	<div class="yui-u">
+	
+<h5>Circulation Reports</h5>
+<ul>
+    <li>    <a href="/cgi-bin/koha/circ/view_holdsqueue.pl" title="holds queue">Holds Queue</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/pendingreserves.pl" title="holds to retrieve off the shelf">Holds to pull</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/waitingreserves.pl" title="holds waiting for patron pickup">Holds awaiting pickup</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/transferstoreceive.pl" title="transfers to receive at your library">Transfers to receive</a></li>
+	<li>    <a href="/cgi-bin/koha/circ/overdue.pl">Overdues</a>
+	- <b>Warning:</b> This report is very resource intensive on
+	systems with large numbers of overdue items.</li>
+	<li>    <a href="/cgi-bin/koha/circ/branchoverdues.pl">Overdues with fines</a> - Limited to your library.  See report help for other details.</li>
+<!--	<li>    <a href="/cgi-bin/koha/circ/billing.pl">Billing</a></li> -->
+<!--	<li>    <a href="/cgi-bin/koha/circ/stats.pl?time=yesterday">Daily reconciliation</a></li> -->
+</ul>
+	
+	</div>
+
+
+	<div class="yui-u">
+		<h5>Offline Circulation</h5>
+		<ul>
+			<li><a href="/cgi-bin/koha/offline_circ/process_koc.pl">Offline Circulation File (.koc) Uploader</a></li>
+		</ul>
+	</div>
+</div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,35 @@
+﻿[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Send SMS Message</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Send SMS Message</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+       <div id="yui-main">
+	       <div class="yui-b">
+
+[% IF ( error ) %]<div class="dialog alert">[% error %] </div>[% END %]
+<form action="/cgi-bin/koha/sms/sms.pl" method="post">
+<fieldset class="rows">
+<legend>SMS Messaging</legend>
+<ol>
+	<li><label for="message">Your Message: </label><textarea name="message" id="message" cols="35" rows="4">[% message %]</textarea></li>
+	<li><label for="phone">Phone:</label><input type="text" name="phone" id="phone" value="[% phone %]"/> (e.g., 5338644143)</li>
+</ol>
+</fieldset>
+<fieldset class="action"><input type="submit" value="Send SMS"><a class="cancel" href="/cgi-bin/koha/sms/sms.pl">Cancel</a></fieldset>
+</form>
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'tools-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

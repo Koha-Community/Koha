@@ -1,0 +1,54 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports &rsaquo; Item Types</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( do_it ) %] &rsaquo; <a href="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">Item Types</a> &rsaquo; Results[% ELSE %] &rsaquo; Item Types[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+[% IF ( do_it ) %]
+[% FOREACH mainloo IN mainloop %]
+	<h1>Reports on item types [% IF ( mainloo.branch ) %] for branch = [% mainloo.branch %][% END %]</h1>
+	<table>
+		<tr>
+			<th>Item type</th>
+			<th>count</th>
+		</tr>
+			[% FOREACH loopitemtyp IN mainloo.loopitemtype %]
+				<tr>
+					<td>[% loopitemtyp.itemtype %]</td>
+					<td>[% loopitemtyp.count %]</td>
+				</tr>
+			[% END %]
+			<tr>
+				<th>TOTAL</th>
+				<th>[% mainloo.total %]</th>
+			</tr>
+	</table>
+[% END %]
+[% ELSE %]
+
+	<form method="post" action="/cgi-bin/koha/reports/manager.pl?report_name=itemtypes">
+		<fieldset class="rows"><legend>View catalog group by item types</legend><ol><li><label for="value">Select a branch</label> [% CGIbranch %]
+		<span class="tip">Select none to see all branches</span></li></ol></fieldset>
+		<fieldset class="action"><input type="submit" value="Submit" />
+		<input type="hidden" name="report_name" value="[% report_name %]" />
+		<input type="hidden" name="do_it" value="1" /></fieldset>
+	</form>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,96 @@
+Administration:
+# Only used internally, omitted: FrameworksLoaded, Version
+    Interface options:
+        -
+            - Use
+            - pref: KohaAdminEmailAddress
+              class: email
+            - "as the email address for the administrator of Koha. (This is the default From: address for emails unless there is one for the particular branch, and is referred to when an internal error occurs.)"
+        -
+            - Show
+            - pref: DebugLevel
+              default: 0
+              choices:
+                  0: "no"
+                  1: some
+                  2: lots of
+            - debugging information in the browser when an internal error occurs.
+        -
+            - pref: noItemTypeImages
+              default: 0
+              choices:
+                  yes: "Don't show"
+                  no: Show
+            - itemtype icons in the catalog.
+        -
+            - Separate columns in an exported report file with
+            - pref: delimiter
+              default: ","
+              choices:
+                  ';': semicolons
+                  tabulation: tabs
+                  ',': commas
+                  '/': slashes
+                  '\': backslashes
+                  '#': "#'s"
+            - by default.
+        -
+            - pref: virtualshelves
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff and patrons to create and view saved lists of books.
+    Login options:
+        -
+            - pref: insecure
+              default: 0
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to access the staff client without logging in. Enabling this is dangerous, and should not be done in production environments.
+        -
+            - Automatically log out users after
+            - pref: timeout
+              class: integer
+            - seconds of inactivity.
+        -
+            - pref: AutoLocation
+              default: 0
+              choices:
+                  yes: Require
+                  no: "Don't require"
+            - staff to log in from a computer in the IP address range <a href="/cgi-bin/koha/admin/branches.pl">specified by their library</a> (if any).
+        # PostgreSQL is supported by CGI::Session but not by Koha.
+        -
+            - Store login session information
+            - pref: SessionStorage
+              default: mysql
+              choices:
+                  mysql: in the MySQL database.
+                  Pg: in the PostgreSQL database (not supported).
+                  tmp: as temporary files.
+        -
+            - pref: IndependantBranches
+              default: 0
+              choices:
+                  yes: Prevent
+                  no: "Don't prevent"
+            - staff (but not superlibrarians) from modifying objects (holds, items, patrons, etc.) belonging to other libraries.
+    CAS Authentication:
+        -
+            - pref: casAuthentication
+              default: 0
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - CAS for login authentication.
+        -
+            - pref: casLogout
+              default: 0
+              choices:
+                  yes: Logout
+                  no: "Don't Logout"
+            - of CAS when logging out of Koha.
+        -
+            - The CAS Authentication Server can be found at
+            - pref: casServerUrl           

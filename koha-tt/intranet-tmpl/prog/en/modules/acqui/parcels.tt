@@ -1,0 +1,150 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Receive shipment from vendor [% name %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% supplierid %]">[% name %]</a> &rsaquo; Receive shipment from vendor [% name %]</div>
+
+[% IF ( count ) %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc" class="yui-t7">[% END %]
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	
+<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% supplierid %]">[% name %]</a></h1>
+
+[% IF ( count ) %]
+<p> [% count %] shipments</p>
+<div id="resultlist">
+<!-- Search Results Table -->
+
+<table class="small">
+        <tr>
+            <th>Line</th>
+            <th>Date Received</th>
+            <th>Invoice Number</th>
+            <th>Item Count</th>
+            <th>Biblio count</th>
+            <th>Items expected</th>
+        </tr>
+<!-- Actual Search Results -->
+[% FOREACH searchresult IN searchresults %]
+    [% UNLESS ( loop.odd ) %]
+    <tr class="highlight">
+    [% ELSE %]
+    <tr>
+    [% END %]
+        <td>
+            [% searchresult.number %]
+        </td>
+        <td>
+            <a href="/cgi-bin/koha/acqui/parcel.pl?type=intra&amp;supplierid=[% searchresult.supplierid |url %]&amp;datereceived=[% searchresult.raw_datereceived |url %][% IF ( searchresult.code ) %]&amp;invoice=[% searchresult.code |url %][% END %]">
+                [% searchresult.datereceived %]</a>
+        </td>
+        <td>
+            [% IF ( searchresult.code ) %][% searchresult.code %][% ELSE %]<acronym title="not available">n/a</acronym>[% END %]
+        </td>
+        <td>
+            [% searchresult.reccount %] 
+        </td>
+        <td>
+            [% searchresult.bibcount %]
+        </td>
+        <td>
+            [% searchresult.itemcount %]
+        </td>
+    </tr>
+[% END %]
+</table>
+
+<div id="resultnumber">
+<!-- Row of numbers corresponding to search result pages -->
+[% IF ( displayprev ) %]
+    <a href="parcels.pl?supplierid=[% supplierid %]&amp;startfrom=[% prevstartfrom %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto %][% END %][% IF ( code ) %]&amp;filter=[% code %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]&amp;type=intra">&lt;&lt; Previous</a>
+[% END %]
+[% FOREACH number IN numbers %]
+    [% IF ( number.highlight ) %]
+    <span class="current">[% number.number %]</span>
+    [% ELSE %]
+    <a href="parcels.pl?supplierid=[% number.supplierid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]&amp;type=intra">[% number.number %]</a>
+    [% END %]
+[% END %]
+[% IF ( displaynext ) %]
+    <a href="parcels.pl?supplierid=[% supplierid %]&amp;startfrom=[% nextstartfrom %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto %][% END %][% IF ( code ) %]&amp;filter=[% code %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]&amp;type=intra">Next &gt;&gt;</a>
+[% END %]
+</div>
+</div>
+[% END %]
+
+    <div id="parcels_new_parcel">
+        <form method="get" action="parcel.pl">
+    <fieldset class="rows">
+    <legend>Receive a new shipment</legend>
+       <ol> <li>
+            <label for="invoice">Vendor Invoice </label>
+            <input type="hidden" name="supplierid" value="[% supplierid %]" />
+            <input type="hidden" name="op" value="new" />
+			<input type="text" size="20" id="invoice" name="invoice" />
+        </li>
+		[% IF ( gst ) %]
+        <li>
+            <label for="gst">GST:</label>
+            <input type="text" size="20" id="gst" name="gst" />
+        </li>
+		[% END %]
+      <!--  // Removing freight input until shipping can be proplerly handled .
+	  <li>
+            <label for="freight">Shipping:</label>
+            <input type="text" size="20" id="freight" name="freight" />
+        </li> -->
+         <li><label for="datereceived">Shipment date: </label>
+            <input type="text" id="datereceived" name="datereceived"  maxlength="10" size="10"  value="[% datereceived_today %]" />
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="datereceived_button" alt="Show Calendar" />
+      <script language="JavaScript" type="text/javascript">
+        Calendar.setup(
+          {
+            inputField : "datereceived",
+            ifFormat : "[% DHTMLcalendar_dateformat %]",
+            button : "datereceived_button"          }
+        );
+      </script>
+				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>	</li>
+		</ol>
+    </fieldset>
+            <fieldset class="action"><input type="submit" class="button" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% supplierid %]">Cancel</a></fieldset>
+        </form>
+    </div>
+</div>
+</div>
+<div class="yui-b">
+[% IF ( count ) %]<form method="get" action="parcels.pl">
+    <fieldset class="brief">
+	<h4>Filter</h4>
+        <ol>
+            <li> <input type="hidden" name="supplierid" value="[% supplierid %]" /></li>
+            <li><label for="filter">Invoice number:</label><input type="text" size="20" name="filter" value="[% filter %]" id="filter" /></li>
+            <li><label for="datefrom">From:</label><input type="text" size="9" id="datefrom" name="datefrom" value="[% datefrom %]" /><br /> 
+                <label for="dateto">To:</label><input type="text" size="9" id="dateto" name="dateto" value="[% dateto %]" /></li>
+            <li><label for="orderby">Sort by :</label><select name="orderby" id="orderby">
+                <option value="aqorders.booksellerinvoicenumber">Invoice number</option>
+                <option value="datereceived"> Date Received</option>
+                <option value="datereceived desc"> Date Received reverse</option>
+                <option value="aqorders.booksellerinvoicenumber desc"> Invoice number reverse</option>
+                </select><br />
+                <label for="resultsperpage">Results per page :</label><select name="resultsperpage" id="resultsperpage">
+                <option value="20">20</option>
+                <option value="30">30</option>
+                <option value="50">50</option>
+                <option value="100">100</option>
+                </select></li>
+        </ol>
+	<fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?supplierid=[% supplierid %]">Clear</a></fieldset>
+	</fieldset>
+</form>[% END %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,0 +1,38 @@
+[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Lists &rsaquo;  Sending your list</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding: 1em;" id="sendbasket">
+<div class="container">[% IF ( email ) %]
+
+    [% IF ( SENT ) %]
+        <h3>Message sent</h3>
+        <p>The list was sent to: [% email %]</p>
+        <p><a class="close focus" href="#">Close window</a></p>
+    [% END %]
+    [% IF ( error ) %]
+    <p>Problem sending the list...</p>
+    [% END %]
+    
+[% ELSE %]
+
+<form action="[% url %]" method="post">
+
+<fieldset class="rows"> 
+<legend>Sending your list</legend>
+<ol>   <li>
+        <label for="email">Email address:</label>
+        <input type="text" id="email" name="email" size="43" class="focus" />
+    </li>
+    <li>
+            <label for="comment">Comment:</label>
+            <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+    </li>
+    <li>
+        <input type="hidden" name="shelfid" value="[% shelfid %]" />
+    </li></ol></fieldset>
+       <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
+</form>
+
+[% END %]</div>
+</body>
+</html>

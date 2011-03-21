@@ -1,0 +1,69 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Web Installer &rsaquo; Step 1</title>
+[% INCLUDE 'installer-doc-head-close.inc' %]
+<div>
+<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/img/koha.org-logo.gif" /> Web Installer &rsaquo; Step 1</h1>
+[% UNLESS ( language ) %]
+<p>You are about to install Koha.</p>
+
+<p>Please pick your language from the following list. If your language is not
+listed, please inform your systems administrator.</p>
+<form name="language" method="post">
+<select name="language">
+[% IF ( installer_languages_loop ) %]
+        [% FOREACH installer_languages_loo IN installer_languages_loop %]
+            [% IF ( installer_languages_loo.plural ) %]
+            <optgroup label="[% installer_languages_loo.language %]">
+            [% FOREACH sublanguages_loo IN installer_languages_loo.sublanguages_loop %]
+                <option value="[% sublanguages_loo.rfc4646_subtag %]">[% IF ( sublanguages_loo.native_description ) %][% sublanguages_loo.native_description %][% ELSE %][% sublanguages_loo.rfc4646_subtag %][% END %]</option>
+            [% END %]
+            </optgroup>
+            [% ELSE %]
+		<option value="[% installer_languages_loo.rfc4646_subtag %]">[% IF ( installer_languages_loo.native_description ) %][% installer_languages_loo.native_description %][% ELSE %][% installer_languages_loo.rfc4646_subtag %][% END %]</option>
+            [% END %]
+        [% END %]
+[% END %]
+</select>
+</p>
+
+<p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+</form>
+[% END %]
+[% IF ( language ) %]
+  [% UNLESS ( checkmodule ) %]
+  [% IF ( missing_modules ) %]
+  <p>Some perl modules are missing. Modules in red <b>must</b> be installed before you may continue.<br />
+  <ul>
+  [% FOREACH missing_module IN missing_modules %]
+    [% IF ( missing_module.require ) %]
+    <li style="color:#FF0000;font-weight:bold;">[% missing_module.name %]
+    [% ELSE %]
+    <li>[% missing_module.name %]
+    [% END %]
+      <br /> Version: [% missing_module.version %]
+      <br /> Usage: [% missing_module.usage %]
+    </li>
+  [% END %]
+  [% END %]
+  [% IF ( problems ) %]
+  <p>I encountered some problems.</p>
+   <ul>
+    [% IF ( perlversion ) %]
+    <li>Your perl version seems to be obsolete.
+      Please upgrade to a newer version of Perl (at least Version 5.006001).</li>
+    [% END %]
+   </ul>
+  [% END %]
+  [% END %]
+<form name="checkmodules" action="install.pl">
+[% IF ( checkmodule ) %]
+<input type="hidden" name="step" value="2" />
+<p> All dependencies installed.</p>
+<p>Please click next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+[% ELSE %]
+<input type="hidden" name="step" value="1" />
+<p>Click to recheck dependencies <input value="Recheck" type="submit" /></p>
+[% END %]
+</form>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

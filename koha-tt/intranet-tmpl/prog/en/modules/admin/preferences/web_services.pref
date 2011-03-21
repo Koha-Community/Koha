@@ -1,0 +1,34 @@
+Web Services:
+    OAI-PMH:
+        -
+            - pref: OAI-PMH
+              choices:
+                  yes: Enable
+                  no: Disable
+            - "Koha's"
+            - '<a href="http://www.openarchives.org/pmh/">OAI-PMH</a> server.'
+        -
+            - Identify records at this site with the prefix
+            - pref: "OAI-PMH:archiveID"
+            - ": ."
+        -
+            - Only return
+            - pref: "OAI-PMH:MaxCount"
+              class: integer
+            - records at a time in response to a ListRecords or ListIdentifiers query.
+        -
+            - YAML OAI Koha server configuration file:
+            - pref: "OAI-PMH:ConfFile"
+              class: file
+            - . If empty, Koha OAI Server operates in normal mode, otherwise it operates in extended mode. In extended mode, it's possible to parameter other formats than marcxml or Dublin Core. OAI-PMH:ConfFile specify a YAML configuration file which list available metadata formats and XSL file used to create them from marcxml records.
+    ILS-DI:
+        -
+            - pref: ILS-DI
+              choices:
+                yes: Enable
+                no: Disable
+            - ILS-DI services for OPAC users
+        -
+            - pref: ILS-DI:AuthorizedIPs
+              class: Text
+            - allowed IPs to use the ILS-DI services

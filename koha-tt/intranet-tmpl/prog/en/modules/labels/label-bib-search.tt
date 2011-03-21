@@ -1,0 +1,34 @@
+[% INCLUDE 'doc-head-open.inc' %]Koha &rsaquo; Tools &rsaquo; Labels &rsaquo;: Search[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+<div id="main-compact">
+
+<h1>Search</h1>
+
+<form name="f" method="post">
+	<input type="hidden" name="op" value="do_search" />
+	<input type="hidden" name="type" value="intranet" />
+	<div class="details">
+		<h2>Search on</h2>
+		<p>
+			<label for="category">Name or ISSN: </label>
+			[% category %]
+		</p>
+		<p>
+			<label for="index">Search value: </label>
+			<input type="text" name="value" value="[% value %]" />
+			<input type="hidden" name="authtypecode" value="[% category %]" />
+			<input type="hidden" name="marclist" value="" />
+			<input type="hidden" name="and_or" value="and" />
+			<input type="hidden" name="excluding" value="" />
+			<input type="hidden" name="operator" value="contains" />
+			<input type="hidden" id="index" name="index" value="[% index %]" />
+		</p>
+		<p>
+			<input type="submit" value="Start search" class="submit" />
+		</p>
+	</div>
+</form>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

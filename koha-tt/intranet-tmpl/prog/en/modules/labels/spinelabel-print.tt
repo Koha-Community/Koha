@@ -1,0 +1,34 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="[% lang %]" xml:lang="[% lang %]" [% IF ( bidi ) %]dir="[% bidi %]"[% END %] xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>Koha &rsaquo; Tools &rsaquo; Spine Labels</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" type="text/css" href="[% themelang %]/css/spinelabel.css" />
+
+		<style type="text/css">
+		@media print {
+			.noprint { display: none; }
+		}
+	</style>
+</head>
+	[% IF ( BarcodeNotFound ) %]
+		<body>
+			<p>The barcode [% Barcode %] was not found.</p>
+			<p><a href="spinelabel-home.pl">Return To Spine Label Printer</a></p>
+		</body>
+	[% ELSE %]
+		[% IF ( autoprint ) %]
+			<body onLoad="window.print()">
+		[% ELSE %]	
+			<body>
+		[% END %] 
+			<span id="spinelabel" class="label">
+				[% content %]
+			</span>
+			<span id="print_button" class="noprint">
+				<button onclick="window.print()">Print This Label</button>
+			</span>
+		</body>
+	[% END %]
+</html>

@@ -1,0 +1,57 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Preview Routing List</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+<!--
+
+function print_slip(subscriptionid,issue){
+    var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
+window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+    window.location.href='serials-home.pl';
+}
+//-->
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'serials-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% title |html %]</i></a> &rsaquo; Preview routing list</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h2>Preview Routing List for <i>[% title |html %]</i></h2>
+
+<form method="post" action="routing-preview.pl">
+<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
+<fieldset class="rows">
+	<ol>
+		<li><span class="label">Issue:</span>[% issue %]</li>
+		<li><span class="label">List Member:</span><table style="clear:none;margin:0;">
+        <tr><th>Name</th></tr>
+[% FOREACH memberloo IN memberloop %]
+        <tr><td>[% memberloo.surname %], [% memberloo.firstname %]</td></tr>
+[% END %]
+        </table></li>
+		<li><span class="label">Notes:</span>[% routingnotes %]</li>
+	</ol>
+</fieldset>
+
+<fieldset class="action">
+<input type="submit" name="ok" class="button" value="Save and preview routing slip" onclick="print_slip([% subscriptionid %],'[% issue_escaped %]'); return false" />
+<input type="submit" name="edit" class="button" value="Edit" />
+<input type="submit" name="delete" class="button" value="Delete" /></fieldset>
+</form>
+
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'serials-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

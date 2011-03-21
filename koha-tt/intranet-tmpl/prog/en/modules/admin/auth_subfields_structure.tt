@@ -1,0 +1,225 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Authority MARC subfield structure</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+
+	 $(document).ready(function() {
+ 		$('#subfieldtabs > ul').tabs();
+	 });
+
+function displayMoreConstraint(numlayer){
+    var thisdiv = document.getElementById(numlayer);
+    if(thisdiv.getAttribute("class") == "content_hidden"){
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_visible");
+    } else {
+        thisdiv.removeAttribute('class');
+        thisdiv.setAttribute("class","content_hidden");
+    }
+}
+
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+  [% IF ( else ) %]Authority MARC subfield structure
+  [% ELSE %]<a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield %]&amp;tagsubfield=[% tagsubfield %]&amp;authtypecode=[% authtypecode %]">Authority MARC subfield structure</a> &rsaquo;
+  [% END %]
+  [% IF ( delete_confirm ) %]Confirm Deletion of Subfield [% tagsubfield %]?[% END %]
+  [% IF ( delete_confirmed ) %]Data deleted[% END %]
+  [% IF ( add_form ) %]
+  [% IF ( use_heading_flags_p ) %]
+  [% IF ( heading_edit_subfields_p ) %]Edit MARC subfields constraints[% END %]
+  [% ELSE %][% action %][% END %]
+  [% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% IF ( add_form ) %]
+
+    <h1>[% IF ( use_heading_flags_p ) %]
+    [% IF ( heading_edit_subfields_p ) %]Edit MARC subfields constraints for field [% tagfield %] authority [% authtypecode %][% END %]
+    [% ELSE %][% action %][% END %]</h1>
+    <form action="[% script_name %]" name="Aform" method="post">
+        <input type="hidden" name="op" value="add_validate" />
+        <input type="hidden" name="tagfield" value="[% tagfield %]" />
+        <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
+        <fieldset class="action"><input type="submit" class="submit" value="Save Changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield %]&amp;authtypecode=[% authtypecode %]">Cancel</a></fieldset>
+        <div id="subfieldtabs" class="toptabs numbered">
+            <ul>
+                [% FOREACH loo IN loop %]
+                    [% IF ( loo.new_subfield ) %]
+                        [% IF ( tagfield >=10 ) %]<!-- display new only for > 10 fields -->
+                        <li><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">New</a></li>
+                        [% END %]
+                    [% ELSE %]
+                        <li><a href="/cgi-bin/koha/admin/auth_subfields_structure.pl#sub[% loo.tagsubfield %]field" title="[% loo.liblibrarian %]">
+                            [% loo.tagsubfield %]
+                    </a></li>
+                    [% END %]
+                [% END %]
+            </ul>
+
+        [% FOREACH loo IN loop %]
+        <div id="sub[% loo.tagsubfield %]field">
+			<fieldset class="rows"><ol>
+
+                    [% IF ( loo.new_subfield ) %]
+                <li><label for="tagsubfieldinput[% loo.row %]">Subfield code: </label>[% loo.tagsubfieldinput %]&nbsp;</li>
+                    [% ELSE %]
+                <li>
+                <input type="hidden" name="tagsubfield" value="[% loo.tagsubfield %]" />
+                 </li>
+                    [% END %]
+                <li><label for="repeatable[% loo.row %]">Repeatable: </label>[% loo.repeatable %]&nbsp;</li>
+                <li><label for="mandatory[% loo.row %]">Mandatory: </label>[% loo.mandatory %]&nbsp;</li>
+                <li><label for="liblibrarian[% loo.row %]">Text for librarian: </label><input id="liblibrarian[% loo.row %]" type="text" name="liblibrarian" value="[% loo.liblibrarian %]" size="40" maxlength="80" /></li>
+                <li><label for="libopac[% loo.row %]">Text for OPAC: </label><input type="text" id="libopac[% loo.row %]" name="libopac" value="[% loo.libopac %]" size="40" maxlength="80" /></li>
+                <li><label for="tab[% loo.row %]">Managed in tab: </label>[% loo.tab %] (ignore means that the subfield does not display in the record editor)</li>
+                <li>
+                    <fieldset>
+                        <legend>Display</legend>
+                        <ol>
+                            <li><label for="ohidden[% loo.row %]">Select to display or not:</label>[% loo.ohidden %]  </li>
+                            <!-- <li><label for="ihidden[% loo.row %]">Intranet:</label>[% loo.ihidden %] </li> -->
+                            <!-- <li><label for="ehidden[% loo.row %]">Editor:</label>[% loo.ehidden %] (see online help)</li> -->
+                        </ol>
+                    </fieldset>
+                </li>
+                <li><label for="isurl[% loo.row %]">Is a url:</label>[% loo.isurl %] (if checked, it means that the subfield is a url and can be clicked)</li>
+                <li>
+                    <fieldset><legend>Help input</legend>	
+                        <ol>
+                            <li><label for="authorised_value[% loo.row %]">Authorized value:</label> [% loo.authorised_value %]</li>
+                            <li><label for="frameworkcode[% loo.row %]">Thesaurus:</label> [% loo.frameworkcode %]</li>
+                            <li><label for="value_builder[% loo.row %]">Plugin:</label> [% loo.value_builder %]</li>
+                        </ol>
+                    </fieldset>
+                </li>
+            </ol></fieldset><br class="clear" />
+        </div>
+        [% END %]
+        </div>
+    </form>
+[% END %]
+
+[% IF ( delete_confirm ) %]
+
+	<div class="dialog alert"><h3>Delete Subfield <span class="ex">'[% tagsubfield %]'?</span></h3>
+    <form action="[% delete_link %]" method="post"><input type="hidden" name="op" value="delete_confirmed" />
+    <table><tr><th scope="row">Subfield:</th> <td>[% tagsubfield %]</td></tr>
+    <tr><th scope="row">Description:</th> <td>[% liblibrarian %]</td></tr></table>
+        <input type="hidden" name="searchfield" value="[% searchfield %]" />
+        <input type="hidden" name="tagfield" value="[% tagfield %]" />
+        <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
+        <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
+        <input type="submit" class="approve" value="Yes, Delete this Subfield" />
+		</form>
+		<form action="[% delete_link %]" method="get">
+		 <input type="hidden" name="searchfield" value="[% searchfield %]" />
+        <input type="hidden" name="tagfield" value="[% tagfield %]" />
+        <input type="hidden" name="tagsubfield" value="[% tagsubfield %]" />
+        <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
+        <input type="submit" class="deny" value="No, Do Not Delete" />
+		</form>
+    </form></div>
+[% END %]
+
+[% IF ( delete_confirmed ) %]
+
+   <div class="dialog message"> <h3>Data deleted</h3>
+    <form action="[% script_name %]" method="post">
+        <input type="hidden" name="tagfield" value="[% tagfield %]" />
+        <input type="submit" class="approve" value="OK" />
+    </form></div>
+[% END %]
+
+
+[% IF ( else ) %]
+<h1>Authority MARC subfield structure admin for [% tagfield %] (authority: [% authtypecode %])</h1>
+<p>This screen shows the subfields associated with the selected tag. You can edit subfields or add a new one by clicking on edit. </p>
+<p>The column <b>Koha field</b> shows that the subfield is linked with a Koha field. Koha can manage a MARC interface, and a Koha interface. This link ensures that both DB are synchronized</p>
+
+<table>
+    <tr>
+        <th>Subfield</th>
+        <th>Text</th>
+        <th>Constraints</th>
+        <th>Delete</th>
+    </tr>
+    [% FOREACH loo IN loop %]
+    [% UNLESS ( loop.odd ) %]
+    <tr class="highlight">
+    [% ELSE %]
+    <tr>
+    [% END %]
+        <td>[% loo.tagsubfield %]</td>
+        <td>
+            [% IF ( loo.subfield_ignored ) %]
+                    <i>[% loo.liblibrarian %]</i>
+            [% ELSE %]
+                    [% loo.liblibrarian %]
+            [% END %]
+        </td>
+        <td>
+            [% IF ( loo.subfield_ignored ) %]
+                    <i>subfield ignored</i>
+            [% ELSE %]
+                <strong>Tab:</strong>[% loo.tab %],
+                [% IF ( loo.kohafield ) %] | <strong>Koha field:</strong> [% loo.kohafield %], [% END %]
+                [% IF ( loo.repeatable ) %]Repeatable, [% ELSE %]Not repeatable,
+                [% END %]
+                        [% IF ( loo.mandatory ) %]Mandatory, [% ELSE %]Not mandatory,
+                [% END %]
+                        [% IF ( loo.hidden ) %]hidden,
+                [% END %]
+                        [% IF ( loo.isurl ) %]is a url,
+                [% END %]
+                        [% IF ( loo.authorised_value ) %] | <strong>Auth value:</strong>[% loo.authorised_value %],
+                [% END %]
+                        [% IF ( loo.frameworkcode ) %] | <strong>Authority:</strong>[% loo.frameworkcode %],
+                [% END %]
+                [% IF ( loo.value_builder ) %] | <strong>Plugin:</strong>[% loo.value_builder %],[% END %]
+            [% END %]
+        </td>
+        <td><a href="[% loo.delete %]">Delete</a></td>
+    </tr>
+    [% END %]
+</table>
+
+	<form action="[% script_name %]" method="get">
+	<fieldset class="action"><input type="hidden" name="op" value="add_form" />
+	<input type="hidden" name="tagfield" value="[% edit_tagfield %]" />
+	<input type="hidden" name="authtypecode" value="[% edit_authtypecode %]" />
+	<input type="submit" value="Edit subfields" />
+	<a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield %]&amp;authtypecode=[% authtypecode %]">Cancel</a></fieldset>
+	</form>
+
+    [% IF ( previous ) %]
+    <input type="image" src="[% interface %]/[% theme %]/images/1leftarrow.png" title="previous" alt="previous" border="0" />
+    </a>
+    [% END %]
+    [% IF ( next ) %]
+        [% next %]
+    <input type="image" src="[% interface %]/[% theme %]/images/1rightarrow.png" title="next" alt="next" border="0" />
+    </a>
+    [% END %]
+
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

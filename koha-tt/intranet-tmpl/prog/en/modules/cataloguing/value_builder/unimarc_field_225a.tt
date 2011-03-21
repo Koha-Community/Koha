@@ -1,0 +1,27 @@
+[% INCLUDE 'doc-head-open.inc' %]
+    <title>UNIMARC Field 225a builder</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding:1em;">
+<h3>UNIMARC Field 225a builder</h3>
+    <div id="mainbloc">
+        <form name="f_pop" onsubmit="report()" action="">
+            <h2 class="authority">Collection</h2>
+            <p><label>Select a collection</label>[% collection %]</p>
+            <input type="submit" value="OK" class="button authority" />
+        </form>
+    </div>
+    
+<script type="text/javascript">
+//<![CDATA[
+function report() {
+            var doc   = opener.document; 
+            var field = doc.getElementById("[% index %]");
+            field.value =  document.f_pop.f1.value;
+            window.close();
+            return false;
+        }
+    //]]>
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

@@ -1,0 +1,288 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Authorized Values [% IF ( add_form ) %] &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
+	   [% IF ( action_add_value ) %] &rsaquo;  New authorized value[% END %]
+	   [% IF ( action_add_category ) %] &rsaquo; New category[% END %][% END %]
+[% IF ( delete_confirm ) %] &rsaquo; Confirm Deletion[% END %]
+[% IF ( else ) %]Authorized values[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+	// call the tablesorter plugin
+	$("#table_authorized_values").tablesorter({
+		sortList: [[1,0]],
+		headers: { 4: { sorter: false}, 5: { sorter: false}}
+		   		}).tablesorterPager({container: $("#pagertable_authorized_values"),positionFixed: false,size: 50});
+	
+}); </script>
+
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+     $(document).ready(function() {
+        $('#icons > ul').tabs();
+     });
+//]]>
+</script>
+<style type="text/css">
+	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
+	fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-selected {background-color : transparent; }
+	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
+</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; [% IF ( action_modify ) %]Modify authorized value[% END %]
+	   [% IF ( action_add_value ) %]New authorized value[% END %]
+	   [% IF ( action_add_category ) %]New category[% END %][% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/authorised_values.pl">Authorized Values</a> &rsaquo; Confirm Deletion[% END %]
+[% IF ( else ) %]Authorized values[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+[% IF ( add_form ) %]
+	<h1>
+	   [% IF ( action_modify ) %]Modify authorized value[% END %]
+	   [% IF ( action_add_value ) %]New authorized value[% END %]
+	   [% IF ( action_add_category ) %]New category[% END %]
+	</h1>
+	<form action="[% script_name %]" name="Aform" method="post">
+	<input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="offset" value="[% offset %]" />
+        <fieldset class="rows"><ol>
+        <li>
+			 [% IF ( action_add_category ) %]<label for="category">Category</label>
+		<input type="text" name="category"  id="category" size="10" maxlength="10" />
+			 [% ELSE %]<span class="label">Category</span>
+		<input type="hidden" name="category" value="[% category %]" />	 [% category %]
+			 [% END %]
+        </li>
+        <li>
+            <label for="authorised_value">Authorized value</label>
+     [% IF ( action_modify ) %]<input type="hidden" id="id" name="id" value="[% id %]" />[% END %]
+            <input type="text" id="authorised_value" name="authorised_value" value="[% authorised_value %]" maxlength="80" />
+        </li>
+        <li>
+            <label for="lib">Description</label>
+            <input type="text" name="lib" id="lib" value="[% lib %]" maxlength="80" />
+        </li>
+	<li>
+            <label for="lib_opac">Description (OPAC)</label>
+            <input type="text" name="lib_opac" id="lib_opac" value="[% lib_opac %]" maxlength="80" />
+        </li>
+		</ol>
+		<div id="icons" class="toptabs">
+		<h5 style="margin-left:10px;">Choose an Icon:</h5>
+			<ul>
+					<li><a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]#none">None</a></li>
+				  [% FOREACH imageset IN imagesets %]
+					[% IF ( imageset.imagesetactive ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% imageset.category %]#[% imageset.imagesetname %]">[% imageset.imagesetname %]</a></li>
+				  [% END %]
+			</ul>
+		</div>
+  <div id="none"><ul>
+  <li><label for="noimage">No image: </label><input type="radio" name="imageurl" id="noimage" value="removeImage" /></li>
+  </ul>
+  <br class="clear" /></div>
+  [% FOREACH imageset IN imagesets %]
+  <div id="[% imageset.imagesetname %]"><ul>
+  [% FOREACH image IN imageset.images %]
+  			<li style="float: none; display: inline; clear : none; width: auto;">
+            <label> [% IF ( image.StaffImageUrl ) %]
+              <img src="[% image.StaffImageUrl %]" alt="[% image.StaffImageUrl %]" title="[% image.StaffImageUrl %]" />
+        [% ELSE %]
+        [% END %]
+    [% IF ( image.checked ) %]
+              <input type="radio" name="imageurl" value="[% image.KohaImage %]" checked="checked" />
+    [% ELSE %]
+              [% IF ( image.KohaImage ) %] <!-- to delete the radio button if there is no image after -->
+              <input type="radio" name="imageurl" value="[% image.KohaImage %]" />
+              [% END %]
+    [% END %]
+            </label>
+			</li>
+  [% END %]</ul>
+  <br class="clear" />
+  </div>
+  [% END %]
+  
+        </fieldset>
+       <fieldset class="action"> <input type="hidden" name="id" value="[% id %]" />
+        <input type="submit" value="Save" /> <a class="cancel" href="/cgi-bin/koha/admin/authorised_values.pl?searchfield=[% category %]">Cancel</a></fieldset>
+    </form>
+[% END %]
+
+
+[% IF ( delete_confirm ) %]
+	<div class="dialog alert">
+<h3>Confirm Deletion</h3>
+<table>
+	<tr>
+		<th>Category</th>
+		<th>Value</th>
+		<th>Description</th>
+		<th>Description (OPAC)</th>
+	</tr>
+	<tr>
+	    <td>[% searchfield %]</td>
+	    <td>[% Tvalue %]</td>
+	    <td>[% Tlib %]</td>
+	    <td>[% Tlib_opac %]</td>
+	</tr>
+	</table>
+	<form action="[% script_name %]" method="post">
+		<input type="hidden" name="op" value="delete_confirmed" />
+		<input type="hidden" name="id" value="[% id %]" />
+		<input type="hidden" name="searchfield" value="[% searchfield %]" /><fieldset class="action"><input type="submit" value="Yes, Delete" class="approve" /></form>
+<form action="[% script_name %]" method="get"><input type="hidden" name="searchfield" value="[% searchfield %]" /><input type="submit" value="No, Do Not Delete" class="deny" /></form>
+</div>
+[% END %]
+
+[% IF ( else ) %]
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+
+	// prepare DOM for YUI Toolbar
+
+	 $(document).ready(function() {
+	    yuiToolbar();
+		$('#category').find("input:submit").hide();
+		$('#searchfield').change(function() {
+		$('#category').submit();
+		});
+	 });
+
+	// YUI Toolbar Functions
+
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("addauth");
+	    new YAHOO.widget.Button("addcat");
+	}
+
+	//]]>
+	</script>
+	<ul class="toolbar">
+	 <li><a id="addauth" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form&amp;category=[% category %]">New Authorized value for [% category %]</a></li>
+    <li><a id="addcat" href= "/cgi-bin/koha/admin/authorised_values.pl?op=add_form">New Category</a></li>
+</ul></div>
+
+<h1>Authorized values</h1>
+<p>These values can be used in many pull down menus throughout the Koha system. You can define as many categories as you want, and as many authorized values as you want in each category.</p>
+
+<p>When you define the MARC subfield structure, you can link a subfield to a authorized-value category. When the user ask for adding of modifying a biblio, the subfield is not entered through a free field, but though a list of authorized values</p>
+
+[% IF ( duplicate_category ) %]
+<div>
+<span class="problem">Could not add value &quot;[% duplicate_value %]&quot; for category 
+    &quot;[% duplicate_category %]&quot; &mdash; value already present.
+</span>
+</div>
+[% END %]
+<form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category"><label for="searchfield">Show Category: </label>[% tab_list %] <input type="submit" value="Submit" /></form>
+[% IF ( category == 'Bsort1' ) %]
+    <p>An authorized value attached to patrons, that can be used for stats purposes</p>
+[% END %]
+[% IF ( category == 'Bsort2' ) %]
+    <p>An authorized value attached to patrons, that can be used for stats purposes</p>
+[% END %]
+[% IF ( category == 'Asort1' ) %]
+    <p>An authorized value attached to acquisitions, that can be used for stats purposes</p>
+[% END %]
+[% IF ( category == 'Asort2' ) %]
+    <p>An authorized value attached to acquisitions, that can be used for stats purposes</p>
+[% END %]
+[% IF ( category == 'SUGGEST' ) %]
+    <p>Reasons to reject or accept patron suggestions</p>
+[% END %]
+[% IF ( category == 'DAMAGED' ) %]
+    <p>Statuses to describe a damaged item</p>
+[% END %]
+[% IF ( category == 'LOST' ) %]
+   <p>Statuses to describe a lost item</p>
+[% END %]
+[% IF ( category == 'MANUAL_INV' ) %]
+    <p>Additional values for manual invoice types</p>
+[% END %]
+[% IF ( category == 'BOR_NOTES' ) %]
+    <p>Values for custom patron notes</p>
+[% END %]
+[% IF ( category == 'LOC' ) %]
+    <p>Values for shelving locations</p>
+[% END %]
+[% IF ( category == 'CCODE' ) %]
+    <p>Values for collection codes</p>
+ [% END %]
+ [% IF ( category == 'NOT_LOAN' ) %]
+    <p>Statuses to describe why an item is not for loan</p>
+ [% END %]
+<h3>Authorized values for category [% category %]:</h3>
+
+[% IF ( loop ) %]<span id="pagertable_authorized_values" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="[% interface %]/prog/img/first.png" class="first"/>
+		<img src="[% interface %]/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="[% interface %]/prog/img/next.png" class="next"/>
+		<img src="[% interface %]/prog/img/last.png" class="last"/>
+		, entries/page : 
+		<select class="pagesize">
+        	<option value="10">10</option>
+			<option value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option selected="selected" value="50">50</option>
+			<option value="100">100</option>
+			<option value="200">200</option>
+		</select>
+	</form>
+</span>[% END %]
+
+[% IF ( loop ) %]<table id="table_authorized_values" class="tablesorter">
+<thead><tr>
+	<th>Authorized value</th>
+	<th>Description</th>
+	<th>Description (OPAC)</th>
+	<th>Icon</th>
+	<th>Edit</th>
+	<th>Delete</th>
+	</tr>
+</thead><tbody>
+[% FOREACH loo IN loop %]
+[% UNLESS ( loop.odd ) %]
+<tr>
+[% ELSE %]
+<tr>
+[% END %]
+	<td>[% loo.authorised_value %]</td>
+	<td>[% loo.lib %]</td>
+	<td>[% loo.lib_opac %]</td>
+	<td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
+	<td><a href="[% loo.edit %]">Edit</a></td>
+	<td><a href="[% loo.delete %]">Delete</a></td>
+</tr>
+[% END %]
+</tbody></table>[% ELSE %]
+<div class="dialog message">There are no authorized values defined for [% category %]</div>
+[% END %]
+
+[% IF ( isprevpage ) %]
+<form class="inline" action="[% script_name %]" method="post">
+<input type="hidden" name="offset" value="[% prevpage %]" /><input type="hidden" name="searchfield" value="[% searchfield %]" />
+	<input type="submit" value="&lt;&lt; Previous" /></form>
+[% END %] 
+
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

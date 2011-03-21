@@ -1,0 +1,66 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Attach an item to [% bibliotitle |html %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloging/addbooks.pl">Cataloging</a>  &rsaquo; Attach an item to <i>[% bibliotitle |html %]</i></div>
+<div id="doc" class="yui-t7">
+
+[% IF ( error ) %]
+    <div class="dialog alert">
+	[% IF ( errornonewitem ) %]ERROR: Unable to create the new item.[% END %]
+	[% IF ( errornoitem ) %]ERROR: Unable to get the item.[% END %]
+	[% IF ( errornoitemnumber ) %]ERROR: Unable to get the item number from this barcode.[% END %]
+    </div>
+    <form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+	<input type="submit" value="OK" />
+	<input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+    </form>
+[% ELSE %]
+    [% IF ( success ) %]
+	<div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle |html %]</i></a>.[% IF ( BiblioDefaultViewmarc ) %]
+	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
+[% ELSIF ( BiblioDefaultViewlabeled_marc ) %]
+	<form action="/cgi-bin/koha/catalogue/labeledMARCdetail.pl" method="post">
+[% ELSIF ( BiblioDefaultViewisbd ) %]
+	<form action="/cgi-bin/koha/catalogue/ISBDdetail.pl" method="post">
+[% ELSE %]
+	<form action="/cgi-bin/koha/catalogue/detail.pl" method="post">
+[% END %]
+	    <input type="submit"  class="approve" value="OK" />
+	    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+	</form></div>
+
+    [% ELSE %]
+	[% IF ( missingparameter ) %]
+	<form method="post" action="/cgi-bin/koha/cataloguing/moveitem.pl">
+	    [% IF ( missingbiblionumber ) %]
+	    <fieldset id="biblionumber_fieldset">
+		<label for="biblionumber">Select the biblionumber to attach the item to</label>
+		    <div class="hint">Enter biblionumber:</div>
+		    <input type="text" name="biblionumber" id="biblionumber" class="focus" size="14" />
+		    <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
+	    </fieldset>
+	    [% ELSE %]
+	    <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+	    [% END %]
+
+		[% IF ( missingbarcode ) %]
+		<h3>Attach an item[% IF ( bibliotitle ) %] to <i>[% bibliotitle |html %]</i>[% END %]</h3>
+	    <fieldset id="barcode_fieldset">
+		<label for="barcode">Enter the barcode of the item to attach:</label>
+		    <p class="hint">The item you select will be moved to the target record.</p>
+		    <input type="text" name="barcode" id="barcode" class="barcode focus" size="14" />
+		    <fieldset class="action"><input type="submit" value="Submit" /></fieldset>
+	    </fieldset>
+	    [% ELSE %]
+	    <input type="hidden" name="barcode" id="barcode" value="[% barcode %]" />
+	    [% END %]
+
+	</form>
+	[% END %]
+    [% END %]
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

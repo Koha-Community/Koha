@@ -1,0 +1,122 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Catalog Maintenance</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+[% IF ( allsub_p ) %]
+<table>
+<caption>Results</caption>
+[% FOREACH loo IN loop %]
+<tr><td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=allsub&amp;sub=[% loo.sub |url %]" onclick="messenger('/cgi-bin/koha/maint/catmaintain.pl?type=modsub&amp;sub=[% loo.sub2 |url %]');window1.focus()">[% loo.subject |html %]</a></td></tr>
+[% END %]
+</table>
+[% END %]
+
+
+[% IF ( modsub_p ) %]
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
+This will change the subject headings on <strong>all</strong> the records this subject is applied to.
+<table>
+<caption>Subject Heading Global Update</caption>
+<tr><th scope="row"><label for="sub">Subject:</label></th><td><input type="text" value="[% sub |html %]" name="sub" id="sub" size="40" /><input type="hidden" name="type" value="upsub" />
+<input type="hidden" name="oldsub" value="[% sub |html %]" /></td></tr>
+</table>
+<input type="submit" value="Modify" />
+</form>
+[% END %]
+
+
+[% IF ( upsub_p ) %]
+Successfully modified [% oldsub |html %]
+is now [% sub |html %]
+<!-- <![ IGNORE [
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl" onclick="window0.focus()">Back to catalogue maintenance</a><br />
+<a href=nowhere onclick="self.close()">Close this window</a>
+]]> -->
+[% END %]
+
+
+[% IF ( undel_p ) %]
+<table>
+<thead>
+<tr><th>Title</th><th>Author</th><th>Undelete</th></tr>
+[% FOREACH loo IN loop %]
+<tr>
+<td>[% loo.title |html %]</td>
+<td>[% loo.author |html %]</td>
+<td><a href="/cgi-bin/koha/maint/catmaintain.pl?[% loo.undelete |url %]">Undelete</a></td>
+</tr>
+[% END %]
+</table>
+[% END %]
+
+
+[% IF ( finun_p ) %]
+<h3>Successfully undeleted</h3>
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Back to Catalog Maintenance</a></p>
+[% END %]
+
+
+[% IF ( fixitemtype_p ) %]
+<form method="post" action="/cgi-bin/koha/maint/catmaintain.pl">
+<table>
+<tr><th scope="row"><label for="itemtype">Itemtype:</label></th><td><input type="hidden" name="bi" value="[% bi |html %]" />
+<input type="hidden" name="type" value="updatetype" />
+<input type="text" name="itemtype" id="itemtype" value="[% item |html %]" /></td></tr>
+</table>
+<input type="submit" value="Change" />
+</form>
+[% END %]
+
+
+[% IF ( updatetype_p ) %]
+<h3>Updated successfully</h3>
+<p><a href="/cgi-bin/koha/maint/catmaintain.pl">Back to Catalog Maintenance</a></p>
+[% END %]
+
+
+[% IF ( mainmenu_p ) %]
+
+<h1>Catalog Maintenance</h1>
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
+<table>
+<caption>Subject Maintenance</caption>
+<tr><th scope="row"><label for="sub">Show all subjects beginning with: </label></th><td><input type="text" name="sub" id="sub"><input type="hidden" name="type" value="allsub" /></td></tr>
+</table>
+<input type="submit" value="Show" />
+</form>
+
+<form action="/cgi-bin/koha/search.pl" method="post">
+<table>
+<caption>Group Maintenance</caption>
+<tr><th scope="row"><label for="title">Show all Titles beginning with:</label></th><td><input type="hidden" name="type" value="catmain"><input type="text" name="title" id="title" /></td></tr>
+<tr><th scope="row"><label for="item">Item Number:</label></th><td><input type="text" size="25" id="item" name="item" /></td></tr>
+</table>
+<input type="submit" value="Show" />
+</form>
+
+<form action="/cgi-bin/koha/maint/catmaintain.pl" method="post">
+<table>
+<caption>Undelete Biblio</caption>
+<tr><th scope="row"><label for="title">Show all Titles beginning with</label></th><td><input type="text" name="title" id="title" /><input type="hidden" name="type" value="undel" /></td></tr>
+</table>
+<input type="submit" value="Show" />
+</form>
+
+[% END %]
+
+</div>
+</div>
+</div>
+
+[% INCLUDE 'mainmenu.inc' %]
+[% INCLUDE 'intranet-bottom.inc' %]
+

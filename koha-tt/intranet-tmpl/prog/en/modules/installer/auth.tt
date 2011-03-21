@@ -1,0 +1,51 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; 
+    [% IF ( nopermission ) %]Access denied[% END %]
+    [% IF ( timed_out ) %]Session timed out[% END %]
+    [% IF ( different_ip ) %]IP address change[% END %]
+    [% IF ( invalid_username_or_password ) %]Invalid username or password[% END %]
+    [% IF ( loginprompt ) %]Log in to Koha[% END %]
+</title>
+
+[% INCLUDE 'installer-doc-head-close.inc' %]
+<div id="login">
+<h1><a>Koha 3.0 Installer</a></h1>
+[% IF ( nopermission ) %]
+<div id="login_error"><strong>Error: </strong>Unauthorized user <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
+[% END %]
+
+[% IF ( timed_out ) %]
+<div id="login_error"><strong>Error: </strong>Session timed out, please log in again</div>
+[% END %]
+
+[% IF ( different_ip ) %]
+<div id="login_error"><strong>Error: </strong>IP address has changed, please log in again </div>
+[% END %]
+
+[% IF ( invalid_username_or_password ) %]
+<div id="login_error"><strong>Error: </strong>Invalid username or password</div>
+[% END %]
+
+[% IF ( loginprompt ) %]
+<!-- login prompt time-->
+<form action="[% url %]" method="post" name="mainform" id="mainform">
+[% FOREACH INPUT IN INPUTS %]
+    <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+[% END %]
+<h3>Welcome to the Koha Web Installer</h3>
+<p>Before we begin, please verify you have the correct credentials to continue. Please log in
+with the username and password given to you by your systems administrator and located in your
+<code>koha-conf.xml</code> configuration file.</p>
+<p>Please enter your username and password:</p>
+<p><label>Username:<br />
+<input type="text" name="userid" id="userid" class="input" value="[% userid %]" size="20" tabindex="1" /></label>
+</p>
+<p><label>Password:<br />
+<input type="password" name="password" id="password" class="input" value="" size="20" tabindex="2" /></label>
+</p>
+<p class="submit"><input id="submit" type="submit" value="Login &raquo;" tabindex="4" /></p>
+</form>
+
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

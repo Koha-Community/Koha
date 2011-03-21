@@ -1,0 +1,113 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; ISBD View
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+	$(document).ready(function() {
+		$('#bibliodescriptions > ul').tabs();
+	}); 
+    YAHOO.util.Event.onContentReady("furtherm", function () {
+        $("#furtherm").css("display","block").css("visibility","hidden");
+        $("#furthersearches").parent().show();
+        var furthersearchesMenu = new YAHOO.widget.Menu("furtherm");
+            furthersearchesMenu.render();
+            furthersearchesMenu.cfg.setProperty("context", ["furthersearches", "tr", "br"]);
+            furthersearchesMenu.subscribe("beforeShow",positionfurthersearchesMenu);
+            furthersearchesMenu.subscribe("show", furthersearchesMenu.focus);
+            function positionfurthersearchesMenu() {
+                        furthersearchesMenu.align("tr", "br");
+            }
+            YAHOO.util.Event.addListener("furthersearches", "click", furthersearchesMenu.show, null, furthersearchesMenu);
+            YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionfurthersearchesMenu);
+     });
+//]]>
+</script>
+</head>
+<body id="opac-isbddetail">
+
+<div id="doc3" class="yui-t7">
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+
+    <div id="yui-main">
+    <div class="yui-b">
+    <div id="opac-detail" class="yui-ge">
+    <div class="yui-u first">
+    <div id="userisbddetail" class="container">
+    <div id="catalogue_detail_biblio">
+	
+     <div id="views">
+	 <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Normal View</a></span> <span class="view"><a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% biblionumber %]">MARC View</a></span> <span class="view"><span id="ISBDview">ISBD View</span></span></div>
+
+    <div id="isbdcontents">[% ISBD %]</div>
+
+	</div>
+	</div>
+	</div>
+	<div class="yui-u">
+	<div id="ulactioncontainer" class="container">
+<ul id="action">
+
+[% UNLESS ( norequests ) %]
+        [% IF ( opacuserlogin ) %]
+		[% IF ( RequestOnOpac ) %]
+			[% IF ( AllowOnShelfHolds ) %]
+				<li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place Hold</a></li>
+			[% ELSE %]
+				[% IF ( ItemsIssued ) %]
+					<li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place Hold</a></li>
+				[% END %]
+			[% END %]
+
+        	[% END %]
+	[% END %]
+[% END %]
+        <li><a class="print" href="javascript:window.print();">Print</a></li>
+[% IF ( virtualshelves ) %]
+   [% IF ( opacuserlogin ) %] [% IF ( loggedinusername ) %]
+        <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]'); return false;">
+            Save to Your Lists
+        </a></li>
+    [% END %][% END %]
+[% END %]
+        [% IF ( opacbookbag ) %]<li><a class="addtocart" href="#" onclick="addRecord('[% biblionumber %]'); return false;">
+            Add to Your Cart
+        </a></li>[% END %]
+		<li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
+</ul>
+
+[% IF ( OPACSearchForTitleIn ) %]
+<div id="furtherm" class="yuimenu">
+<div class="bd">
+<h4>Search for this title in:</h4>
+<ul class="first-of-type">
+
+[% OPACSearchForTitleIn %]
+
+</ul>
+</div>
+</div>
+[% END %]
+
+		<div id="export">
+		<form method="get" action="/cgi-bin/koha/opac-export.pl">
+		<label for="format">Save Record:</label>
+	    <select name="format" id="format">
+		<option value="">-- Choose Format --</option>
+ 	    <option value="bibtex">BibTex</option>
+        <option value="dc">Dublin Core (XML)</option>
+        <option value="marcxml">MARCXML</option>
+        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+        <option value="utf8">MARC (Unicode/UTF-8)</option>
+        <option value="mods">MODS (XML)</option>
+ 	    <option value="ris">RIS</option>    
+		</select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber %]" />
+<input type="submit" name="save" value="Go" /></form></div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+[% INCLUDE 'opac-bottom.inc' %]

@@ -1,0 +1,165 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports &rsaquo; Items with no checkouts</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css">
+	.sql {display: none;}
+</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; Items with no checkouts</div>
+
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+[% IF ( do_it ) %]
+	<h1>Items with no checkouts</h1>
+	[% FOREACH mainloo IN mainloop %]
+		[% IF ( mainloo.loopfilter ) %]
+			<p>Filtered on</p>
+			[% FOREACH loopfilte IN mainloo.loopfilter %]
+				[% IF ( loopfilte.err ) %]<p class="error">Error: 
+				[% ELSE %]<p>
+				[% END %]
+					[% IF ( loopfilte.sql ) %]<span class="sql">[% END %]
+					[% loopfilte.crit %] = [% loopfilte.filter %]
+					[% IF ( loopfilte.sql ) %]</span>[% END %]
+				</p>
+			[% END %]
+		[% END %]
+		
+		[% IF ( mainloo.looptables ) %]
+			<h3><a name="summary" id="summary"></a>Summary</h3>
+			<table id="summary_table">
+				<tr><th>Group</th><th>Call Number Range</th><th>Number of Items Displayed</th><th>Total Items in Group</th>
+				</tr>
+			[% FOREACH looptable IN mainloo.looptables %]
+				<tr><td><a href="#table[% looptable.coltitle %]">[% looptable.coltitle %]</a></td>
+					<td>[% IF ( looptable.looptable_count ) %]
+						[% looptable.looptable_first %] to [% looptable.looptable_last %]
+						[% END %]
+					</td>
+					<td>[% looptable.looptable_count %]</td>
+					<td>[% looptable.coltitle_count %]</td>
+				</tr>
+			[% END %]
+				<tr><th>TOTAL</th><th></th><th>[% mainloo.total_looptable_count %]</th><th>[% mainloo.total_coltitle_count %]</th>
+				</tr>
+			</table>
+
+		[% END %]
+		[% FOREACH looptable IN mainloo.looptables %]
+		<h3><a id="table[% looptable.coltitle %]"></a>
+			[% looptable.coltitle %]
+		</h3>
+		<table>
+			<tr>
+				<th>#</th>
+				<th>Call Number</th>
+				<th>Barcode</th>
+				<th>Item Details</th>
+			</tr>
+				[% IF ( looptable.looprow ) %]
+				[% FOREACH loopro IN looptable.looprow %]
+					<tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]>
+						<td>[% loop.count %]</td>
+						<td>[% DEFAULT loopro.itemcallnumber="No Call Number" %]</td>
+						<td>[% DEFAULT loopro.barcode="No Barcode" %]</td>
+						<td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber %]">[% DEFAULT loopro.title="NO TITLE" %]</a></p>
+							[% DEFAULT loopro.author="" %]
+							[% IF ( loopro.branch ) %]at [% loopro.branch %][% END %]
+						</td>
+					</tr>
+				[% END %]
+				[% ELSE %]
+					<tr><td colspan="4">No items for [% looptable.coltitle %]</td>
+					</tr>
+				[% END %]
+		</table>
+		[% END %]
+	[% END %]
+[% ELSE %]
+	<h1>Items with no checkouts</h1>
+	<form method="post" action="/cgi-bin/koha/reports/catalogue_out.pl">
+	
+	<fieldset class="rows">
+		<ol>
+			<li><label for="branch">Library: </label>
+	<select name="Filter" id="branch">
+		<option value="">Any Library</option>
+    [% FOREACH branchloo IN branchloop %]
+        <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>  
+     [% END %] 
+    </select></li>
+      <li> 
+        <label for="documenttype">Item Type: </label><select name="Filter" id="documenttype">
+		<option value="">Any Item Type</option>
+    [% FOREACH itemtypeloo IN itemtypeloop %]
+        <option value="[% itemtypeloo.value %]">[% itemtypeloo.description %]</option>  
+     [% END %] 
+    </select>
+    </li>
+		</ol>	
+	</fieldset>
+	
+	<fieldset class="rows">
+	<legend>Limits</legend>
+		<ol>
+		<li><label for="numberlimit">Limit to: </label> <select name="Limit" id="numberlimit">
+						<option value ="" selected="selected">None</option>
+						<option value ="5"> 5</option>
+						<option value ="10">10</option>
+						<option value ="15">15</option>
+						<option value ="20">20</option>
+						<option value ="25">25</option>
+						<option value ="40">40</option>
+						<option value ="50">50</option>
+						<option value ="100">100</option>
+						<option value ="250">250</option>
+						<option value ="500">500</option>
+						<option value ="700">750</option>
+						<option value ="1000">1000</option>
+					</select></li>
+		<li><label for="criteria">By: </label><select name="Criteria" id="criteria">
+						<option value ="" selected="selected">None</option>
+						<option value ="homebranch">Library</option>
+						<option value ="itype">Itemtype</option>
+					</select></li>
+		</ol>
+	</fieldset>
+	
+	<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+	<li><label for="outputfile">To a file: </label><input type="radio" name="output" value="file" id="outputfile" disabled="disabled" /><!-- FIXME: Not implemented -->
+		<label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
+		<label class="inline" for="MIME">Into an application </label>
+        <select name="MIME" id="MIME">
+        [% FOREACH CGIextChoic IN CGIextChoice %]
+          <option value="[% CGIextChoic.type %]">[% CGIextChoic.type %]</option>
+        [% END %]
+        </select>
+        [% CGIsepChoice %]
+	</li>
+</ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
+	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
+	</form>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

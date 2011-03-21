@@ -1,0 +1,23 @@
+Authorities:
+    -
+        - When editing records,
+        - pref: BiblioAddsAuthorities
+          default: no
+          choices:
+              yes: allow
+              no: "don't allow"
+        - them too automatically create new authority records if needed, rather than having to reference existing authorities.
+    -
+        - pref: dontmerge
+          default: yes
+          choices:
+              yes: "Don't"
+              no: Do
+        - automatically update attached biblios when changing an authority record. If this is off, please ask your administrator to enable the merge_authorities.pl cronjob.
+    -
+        - pref: UseAuthoritiesForTracings
+          default: yes
+          choices:
+              yes: Use
+              no: "Don't use"
+        - authority record numbers instead of text strings for searches from subject tracings.

@@ -1,0 +1,44 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Catalog search</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	
+
+<h1>Catalog search</h1>
+[% IF ( no_query ) %]
+    <div class="warning">You must enter a term to search on </div>
+[% END %]
+<form name="f" action="/cgi-bin/koha/serials/subscription-bib-search.pl" method="get">
+    <input type="hidden" name="op" value="do_search" />
+    <input type="hidden" name="type" value="intranet" />
+	<fieldset class="rows">
+	<ol>
+    <li><label for="q">Keyword: </label>
+    <input type="text" id="q"  name="q" /></li>
+    
+    <!-- ITEMTYPE LIMITS -->
+        <li><label for="itemtypelimit">Limit type to: </label>
+        <select name="itemtypelimit" id="itemtypelimit">
+	    <option value="">All</option>
+        [% FOREACH itemtypeloo IN itemtypeloop %]
+            <option value="[% itemtypeloo.code %]">
+                [% itemtypeloo.description |html %]
+            </option>
+        [% END %]
+        </select>
+        </li>
+    <!-- /ITEMTYPE LIMITS -->
+	</ol>
+</fieldset>
+<fieldset class="action"><input type="submit" value="Search" /></fieldset>
+
+
+</form>
+
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

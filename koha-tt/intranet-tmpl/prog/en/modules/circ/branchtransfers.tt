@@ -1,0 +1,185 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Transfers</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Transfers</div>
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+
+[% IF ( found ) %]
+   <div class="yui-g"> <h3>Reserve Found</h3>
+    <table>
+        <caption>
+            [% IF ( reserved ) %]
+                Reserve found for [% name %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowernumber %]</a>).
+            [% END %]
+            [% IF ( waiting ) %]
+                Item is marked waiting at [% branchname %] for [% name %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowernumber %]</a>).
+            [% END %]
+        </caption>
+        <tr>
+            <th>
+                [% IF ( reserved ) %]Set reserve to waiting and transfer book to [% branchname %]: [% END %]
+                [% IF ( waiting ) %]Cancel reservation and then attempt transfer: [% END %]
+            </th>
+            <td>
+                <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+                    [% FOREACH trsfitemloo IN trsfitemloop %]
+                        <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
+                        <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
+                        <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+                    [% END %]
+                    <input type="hidden" name="itemnumber" value="[% itemnumber %]" />
+                    <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                    [% IF ( waiting ) %]
+                        <input type="hidden" name="barcode" value="[% barcode %]" />
+                        <input type="hidden" name="request" value="KillWaiting" />
+                        <input type="submit" value="Cancel" />
+                    [% END %]
+                    [% IF ( reserved ) %]
+                        <input type="hidden" name="request" value="SetWaiting" />
+                        <input type="submit" value="Waiting" />
+                    [% END %]
+                </form>
+            </td>
+        </tr>
+            [% IF ( reserved ) %]
+                <tr>
+                    <th>Cancel reservation and then attempt transfer:</th>
+                    <td>
+                        <form method="post" name="mainform" id="mainform" action="branchtransfers.pl">
+                            [% FOREACH trsfitemloo IN trsfitemloop %]
+                                <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
+                                <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
+                                <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+                            [% END %]
+                            <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                            <input type="hidden" name="tobranchcd" value="[% tobranchcd %]" />
+                            <input type="hidden" name="barcode" value="[% barcode %]" />
+                            <input type="hidden" name="request" value="KillReserved" />
+                            <input type="submit" value="Cancel" />
+                        </form>
+                    </td>
+                </tr>
+            [% END %]
+                <tr>
+                    <th>Ignore and return to transfers: </th>
+                        <td>
+                            <form method="post" name="mainform" id="mainform" action="branchtransfers.pl" />
+                                <input type="hidden" name="tobranchcd" value="[% tobranchcd %]" />
+                                <input type="hidden" name="barcode" />
+                                [% FOREACH trsfitemloo IN trsfitemloop %]
+                                    <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
+                                    <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
+                                    <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+                                [% END %]
+                                <input type="submit" value="Ignore" />
+                            </form>
+                        </td>
+                </tr>
+    </table></div>
+
+[% ELSE %]
+<div class="yui-ge">
+   <div class="yui-u first">     
+    <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
+        <fieldset class="brief">
+            <legend>Transfer</legend>
+            <ol>
+			<li>
+                <label for="tobranchcd">Destination library: </label>
+                    <select name="tobranchcd" id="tobranchcd">
+                        [% FOREACH branchoptionloo IN branchoptionloop %]
+						[% IF ( branchoptionloo.selected ) %]
+                            <option value="[% branchoptionloo.value %]" selected="selected">
+						[% ELSE %]
+                            <option value="[% branchoptionloo.value %]">
+						[% END %]
+                                [% branchoptionloo.branchname %]
+                            </option>
+                        [% END %]
+                    </select>
+            </li>
+            <li>
+                <label for="barcode">Enter barcode: </label>
+                <input name="barcode" id="barcode" size="15" class="focus" /> <input type="submit" value="Submit" />
+            </li>
+			</ol>
+        </fieldset>
+        <input type="hidden" name="tobranchcd" value="[% tobrancd %]" />
+        [% FOREACH trsfitemloo IN trsfitemloop %]
+            <input type="hidden" name="bc-[% trsfitemloo.counter %]" value="[% trsfitemloo.barcode %]" />
+            <input type="hidden" name="fb-[% trsfitemloo.counter %]" value="[% trsfitemloo.frombrcd %]" />
+            <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
+        [% END %]
+    </form></div>
+ 
+	 <div class="yui-u"><h4>Messages</h4>
+		<ul>
+                [% IF ( reqmessage ) %]
+                    [% IF ( cancelled ) %]
+                        <li>Reserve Cancelled</li>
+                    [% END %]
+                    [% IF ( setwaiting ) %]
+                        <li>Item should now be waiting at library: [% reqbrchname %]</li>
+                    [% END %]
+                [% END %]
+                [% FOREACH errmsgloo IN errmsgloop %]
+                    [% IF ( errmsgloo.errbadcode ) %]
+                        <li>No Item with barcode: [% errmsgloo.msg %]</li>
+                    [% END %]
+                    [% IF ( errmsgloo.errispermanent ) %]
+                        <li>Please return item to home library: [% errmsgloo.msg %]</li>
+                    [% END %]
+                    [% IF ( errmsgloo.errnotallowed ) %]
+                        <li>You cannot transfer items of [% errmsgloo.codeType %] <b>[% errmsgloo.code %]</b> to <b>[% errmsgloo.tbr %]</b></li>
+                    [% END %]
+                    [% IF ( errmsgloo.errdesteqholding ) %]
+                        <li>Item is already at destination library.</li>
+                    [% END %]
+                    [% IF ( errmsgloo.errwasreturned ) %]
+                        <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.borrowernumber %]">
+[% errmsgloo.firstname %] [% errmsgloo.surname %]
+([% errmsgloo.cardnumber %])</a> and has been returned.</li>
+                    [% END %]
+                [% END %]
+        </ul>
+    </div><!-- /yui-u -->
+</div><!-- /yui-ge -->
+	 
+    [% IF ( trsfitemloop ) %]
+        <div class="yui-g">
+		<table>
+            <caption>Transferred Items</caption>
+            <tr>
+                <th>Bar Code</th>
+                <th>Title</th>
+                <th>To</th>
+            </tr>
+            [% FOREACH trsfitemloo IN trsfitemloop %]
+                <tr>
+                    <td>
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber %]">[% trsfitemloo.barcode %]</a>
+                    </td>
+                    <td>
+                        <p>[% trsfitemloo.title |html %] ([% trsfitemloo.author %])</p>
+                        <p>[% trsfitemloo.ccode %]</p>
+                    </td>
+                    <td>[% trsfitemloo.tobrname %]</td>
+                </tr>
+            [% END %]
+        </table>
+		</div>
+    [% END %]
+	
+	
+[% END %]
+
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

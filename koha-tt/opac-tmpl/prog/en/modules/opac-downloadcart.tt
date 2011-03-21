@@ -1,0 +1,31 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Download cart[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="opac-downloadcart" style="padding:1em;">
+<div id="userdownloadcart" class="container">[% IF ( format ) %]
+    <p>Your download should begin automatically.</p>
+[% ELSE %]
+<form method="post" action="/cgi-bin/koha/opac-downloadcart.pl">
+	<fieldset class="rows">
+	<ol><li><label for="format">Download cart:</label>
+        <select name="format" id="format">
+	    <option value="">-- Choose Format --</option>
+	    <option value="iso2709">iso2709</option>
+	    <option value="ris">RIS</option>
+	    <option value="bibtex">BibTex</option>
+	    [% FOREACH csv_profile IN csv_profiles %]
+	    <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
+	    [% END %]
+
+	</select></li></ol>
+</fieldset>
+<fieldset class="action">
+	<input type="hidden" name="bib_list" value="[% bib_list %]" />
+	<input type="submit" name="save" value="Go" />
+</fieldset>
+    </form>
+
+    <p><a class="button close" href="#">Close this window</a></p>
+
+[% END %]
+</body>
+</html>

@@ -1,0 +1,46 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Select Vendor</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" language="Javascript">
+
+function GetIt(aqbooksellerid,name)
+{
+  opener.document.f.aqbooksellerid.value = aqbooksellerid;
+  opener.document.f.aqbooksellername.value = unescape(name);
+  window.close();
+}
+</script>
+</head>
+<body>
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	
+
+<h1>Vendor Search Results</h1>
+<h2>You searched on <b>vendor [% supplier %],</b> [% count %] results found</h2>
+
+[% IF ( loop_suppliers ) %]
+<table>
+	<tr>
+		<th>Vendor</th>
+		<th>Select</th>
+	</tr>
+	[% FOREACH loop_supplier IN loop_suppliers %]
+        [% UNLESS ( loop.odd ) %]
+        <tr class="highlight">
+        [% ELSE %]
+        <tr>
+        [% END %]
+			<td>[% loop_supplier.name %]</td>
+			<td><a href="#" onclick="GetIt([% loop_supplier.aqbooksellerid %],'[% loop_supplier.name |url %]')">Choose</a></td>
+		</tr>
+	[% END %]
+</table>
+[% END %]
+
+    <p><a href="/cgi-bin/koha/serials/acqui-search.pl">Perform a new search</a>  <a class="button" href="#" onclick="window.close()">Close</a></p>
+
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

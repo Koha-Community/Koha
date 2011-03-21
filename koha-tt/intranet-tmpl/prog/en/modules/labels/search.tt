@@ -1,0 +1,127 @@
+[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo;  Labels</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+<style type="text/css">#custom-doc { width:47.23em;*width:46.04em;min-width:610px; margin:auto;margin-top: .4em; text-align:left; }</style>
+</head>
+<body>
+
+<div id="custom-doc" class="yui-t7">
+   <div id="bd">
+
+<h1>Search for items
+[% IF ( batch_id ) %]
+to add to Batch [% batch_id %]
+[% END %]
+</h1>
+
+<form name="f" method="post" action="/cgi-bin/koha/labels/label-item-search.pl">
+	<input type="hidden" name="op" value="do_search" />
+	<input type="hidden" name="batch_id" value="[% batch_id %]" />
+	<input type="hidden" name="type" value="[% type %]" />
+
+	<fieldset class="rows">
+<ol><li>
+<select name="idx" >   <!-- FIXME: script does keyword search regardless -->
+
+[% IF ( selected ) %]<option value="kw" selected="selected">Keyword</option>
+[% ELSE %]<option value="kw">Keyword</option>[% END %]
+
+[% IF ( selected ) %]<option value="au" selected="selected">Author</option>
+[% ELSE %]<option value="au">Author</option>[% END %]
+
+[% IF ( selected ) %]<option value="yr" selected="selected">Publication Date</option>
+[% ELSE %]<option value="yr">Publication Date</option>[% END %]
+
+[% IF ( selected ) %]<option value="sn" selected="selected">Standard Number</option>
+[% ELSE %]<option value="sn">Standard Number</option>[% END %]
+
+[% IF ( selected ) %]<option value="nb" selected="selected">ISBN</option>
+[% ELSE %]<option value="nb">ISBN</option>[% END %]
+
+[% IF ( selected ) %]<option value="ns" selected="selected">ISSN</option>
+[% ELSE %]<option value="ns">ISSN</option>[% END %]
+
+[% IF ( selected ) %]<option value="lcn,phr" selected="selected">Call Number</option>
+[% ELSE %]<option value="lcn,phr">Call Number</option>[% END %]
+
+[% IF ( selected ) %]<option value="su" selected="selected">Subject</option>
+[% ELSE %]<option value="su">Subject</option>[% END %]
+
+[% IF ( selected ) %]
+   <option value="ti" selected="selected">Title</option>
+[% ELSE %]
+   <option value="ti" selected="selected">Title</option>[% END %]
+
+[% IF ( selected ) %]<option value="ti,phr" selected="selected">Title Phrase</option>
+[% ELSE %]<option value="ti,phr">Title Phrase</option>[% END %]
+
+[% IF ( selected ) %]<option value="se" selected="selected">Series Title</option>
+[% ELSE %]<option value="se">Series Title</option>[% END %]
+
+[% IF ( selected ) %]<option value="bc" selected="selected">Barcode</option>
+[% ELSE %]<option value="bc">Barcode</option>[% END %]
+
+[% IF ( selected ) %]<option value="acqdate" selected="selected">Acquisition Date</option>
+[% ELSE %]<option value="acqdate">Acquisition Date</option>[% END %]
+</select>
+
+   <input type="text" size="30" id="ccl_textbox" name="ccl_textbox" class="focus" title="Enter search terms" value=""/>
+
+</li>
+</ol>
+</fieldset>
+
+[% IF ( sort_by_loop ) %]
+<fieldset><legend>Sort by: </legend>
+    <p><select id="sort_by" name="sort_by">
+        <option value="">Field-weighted, Relevance Ranked</option>
+        [% FOREACH sort_by_loo IN sort_by_loop %]
+
+[% IF ( sort_by_loo.selected ) %]<option value="[% sort_by_loo.value %]" selected="selected">[% sort_by_loo.label %]</option>[% ELSE %]<option value="[% sort_by_loo.value %]">[% sort_by_loo.label %]</option>[% END %]
+
+        [% END %]
+    </select>
+        </p>
+</fieldset>[% END %]
+
+
+
+
+<fieldset class="rows">
+<ol>
+	<li>
+		<label for="datefrom">Added on or after date</label>
+	     <input type="text" size="10" id="datefrom" name="datefrom" value="" />
+  <img src="[% themelang %]/lib/calendar/cal.gif" border="0" id="openCalendarFrom" alt="Show Calendar" />
+<script type="text/javascript">
+    Calendar.setup({
+        inputField     :    "datefrom",
+      ifFormat : "[% DHTMLcalendar_dateformat %]",
+        button         :    "openCalendarFrom",
+        align          :    "Tl",
+        singleClick    :    false
+    });
+</script>
+<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+</li>
+<li>
+		<label for="dateto">Added on or before date</label>
+  <input type="text" size="10" id="dateto" name="dateto" value="" />
+  <img src="[% themelang %]/lib/calendar/cal.gif" border="0" id="openCalendarTo" alt="Show Calendar" />
+
+<script type="text/javascript">
+    Calendar.setup({
+        inputField     :    "dateto",
+      ifFormat : "[% DHTMLcalendar_dateformat %]",
+        button         :    "openCalendarTo",
+        align          :    "Tl"
+    });
+</script>
+<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+</li></ol>
+</fieldset>
+
+<fieldset class="action"><input type="submit" value="Search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
+</form>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

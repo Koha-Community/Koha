@@ -1,0 +1,126 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Rotating Collections &rsaquo; Edit Collections</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating Collections</a> &rsaquo; Edit Collections</div>
+
+<div id="doc3">
+<div id="bd">
+        <div class="yui-gb">
+      <h1>Rotating Collections: Edit Collections</h1>
+
+<!--
+      [% IF ( previousActionCreate ) %]
+        [% IF ( createSuccess ) %]
+          <div>Collection '[% createdTitle %]' Created Successfully!</div>
+        [% ELSE %]
+          <div>Collection '[% createdTitle %]' Failed To Be Created!</div>
+          <div>Reason: <strong>[% failureMessage %]</strong></div>
+        [% END %]
+      [% END %]
+
+      [% IF ( previousActionDelete ) %]
+        [% IF ( DeleteSuccess ) %]
+          <div>Collection Deleted Successfully!</div>
+        [% ELSE %]
+          <div>Collection Failed To Be Deleted!</div>
+        [% END %]
+      [% END %]
+-->
+
+      [% IF ( previousActionUpdate ) %]
+        [% IF ( updateSuccess ) %]
+          <div>Collection '[% updatedTitle %]' Updated Successfully!</div>
+        [% ELSE %]
+          <div>Collection '[% updatedTitle %]' Failed To Be Updated!</div>
+          <div>Reason: <strong>[% failureMessage %]</strong></div>
+        [% END %]
+      [% END %]
+
+      <div>
+        [% IF ( collectionsLoop ) %]
+          <table>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Holding Library</th>
+              <td></td>
+              <td></td>
+            </tr>
+            [% FOREACH collectionsLoo IN collectionsLoop %]
+              <tr>
+                <td>[% collectionsLoo.colTitle %]</td>
+                <td>[% collectionsLoo.colDesc %]</td>
+                <td>[% collectionsLoo.colBranchcode %]</td>
+                <td><a href="editCollections.pl?action=edit&colId=[% collectionsLoo.colId %]">Edit</a></td>
+                <td><a href="editCollections.pl?action=delete&colId=[% collectionsLoo.colId %]">Delete</a></td>
+              </tr>
+            [% END %]
+          </table>
+        [% ELSE %]
+          There are no Collections currently defined.
+        [% END %]
+      </div>    
+
+      <div>
+        <br />
+
+        [% IF ( previousActionEdit ) %]
+          <h1>Edit Collection</h1>
+        [% ELSE %]
+          <h1>Create New Collection</h1>
+        [% END %]
+
+        <form action="editCollections.pl" method="post">
+          [% IF ( previousActionEdit ) %]
+            <input type="hidden" name="action" value="update" />
+            <input type="hidden" name="colId" value="[% editColId %]" />
+          [% ELSE %]
+            <input type="hidden" name="action" value="create" />
+          [% END %]
+
+          <table>
+            <tr>
+              <td>
+                <label for="title">Title: </label>
+              </td>
+              <td>
+               <input type="text" name="title" [% IF ( editColTitle ) %] value="[% editColTitle %]" [% END %] />
+              </td>
+            </tr>
+        
+            <tr>
+              <td>
+                <label for="description">Description: </label>
+              </td>
+              <td>
+                <input type="text" size="50" name="description" [% IF ( editColDescription ) %] value="[% editColDescription %]" [% END %] />
+              </td>
+            </tr>
+
+            <tr>
+              <td colspan="2">
+                [% IF ( previousActionEdit ) %]
+                  <input type="submit" value="Update" />
+                [% ELSE %]
+                  <input type="submit" value="Create" />
+                [% END %]
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+
+      <div>
+        <br/>
+        <input type="button" value="Return to Rotating Collections Home" onclick="window.location.href='rotatingCollections.pl'">
+      </div>
+
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
+

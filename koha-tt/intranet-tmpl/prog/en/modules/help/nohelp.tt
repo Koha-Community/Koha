@@ -1,0 +1,11 @@
+[% INCLUDE 'help-top.inc' %]
+	
+	<h1>Online Help</h1>
+	<p>Sorry, there is no help available for this topic</p>
+<form action="/cgi-bin/koha/edithelp.pl" method="post">
+<input type="hidden" name="referer" value="[% referer %]" />
+<input type="hidden" name="type" value="addnew" />
+<input type="submit" name="submit" class="submit" value="Add help" />
+</form>
+	
+[% INCLUDE 'help-bottom.inc' %]

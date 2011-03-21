@@ -1,0 +1,233 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Catalog statistics &rsaquo; Results[% ELSE %]&rsaquo; Catalog statistics[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> [% IF ( do_it ) %]&rsaquo; <a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalog statistics</a> &rsaquo; Results[% ELSE %]&rsaquo; Catalog statistics[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+[% IF ( do_it ) %]
+	[% FOREACH mainloo IN mainloop %]
+		<h1>Catalog statistics</h1>
+		[% IF ( mainloo.loopfilter ) %]
+			<p>Filtered on</p>
+			[% FOREACH loopfilte IN mainloo.loopfilter %]
+					<p>[% loopfilte.crit %] =[% loopfilte.filter %]</p>
+			[% END %]
+		[% END %]
+		
+		<table>
+			<tr>
+				<th>[% mainloo.line %] / [% mainloo.column %]</th>
+				[% FOREACH loopco IN mainloo.loopcol %]
+					<th>[% loopco.coltitle %]</th>
+				[% END %]
+				<th>TOTAL</th>
+			</tr>
+				[% FOREACH loopro IN mainloo.looprow %]
+					<tr>
+						[% IF ( loopro.hilighted ) %]<td class="hilighted">[% ELSE %]<td>[% END %]
+						[% loopro.rowtitle %]</td>
+						[% FOREACH loopcel IN loopro.loopcell %]
+							[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
+								[% IF ( loopcel.value ) %][% loopcel.value %]
+								[% ELSE %]&nbsp;
+								[% END %]
+							</td>
+						[% END %]
+						[% IF ( loopro.hilighted ) %]<td>[% ELSE %]<td>[% END %]
+							[% loopro.totalrow %]
+						</td>
+					</tr>
+				[% END %]
+				<tr>
+					<th>TOTAL</th>
+					[% FOREACH loopfoote IN mainloo.loopfooter %]
+						<th>
+							[% loopfoote.totalcol %]
+						</th>
+					[% END %]
+					<th>[% mainloo.total %]</th>
+				</tr>
+		</table>
+	[% END %]
+[% ELSE %]
+
+	<form method="post" action="/cgi-bin/koha/reports/catalogue_stats.pl">
+	<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
+	[% UNLESS ( haslccn ) %]
+	<input type="hidden" name="Filter" /> <input type="hidden" name="Filter" />
+	[% END %]
+	<fieldset class="rows">
+	<legend>Catalog statistics</legend>
+	<table>
+		<thead>
+			<tr>
+			<th>Title</th>
+			<th>Row</th>
+			<th>Column</th>
+			<th>Filter</th>
+			</tr>
+		</thead>
+		<tbody>
+			[% IF ( haslccn ) %]
+					<tr>
+					<td>LoC Classification</td>
+					<td><input type="radio" name="Line" value="lccn" /></td>
+					<td><input type="radio" name="Column" value="lccn" /></td>
+					<td> <label for="locFrom">From</label> <input type="text" name="Filter" id="locFrom" /> <label for="locTo">To</label> <input type="text" name="Filter" id="locTo" /></td>
+				</tr>
+					<tr>
+					<td>&nbsp;</td>
+					<td colspan="2"><select name="lccndigits" id="lccndigits">
+						<option value=""> </option>
+						<option value ="1">1</option>
+						<option value ="2">2</option>
+						<option value ="3">3</option>
+						<option value ="4">4</option>
+						<option value ="5">5</option>
+						</select>
+						<label for="lccndigits">characters</label>
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+			[% END %]
+			[% IF ( hascote ) %]
+			  <tr>
+					<td>Koha Full Call Number</td>
+					<td><input type="radio" name="Line" value="items.itemcallnumber" /></td>
+					<td><input type="radio" name="Column" value="items.itemcallnumber" /></td>
+					<td><label for="callnoFrom">From</label> <input type="text" name="Filter" id="callnoFrom" /> <label for="callnoTo">To</label> <input type="text" name="Filter" id="callnoTo" /></td>
+				</tr>
+			 <tr>
+					<td>&nbsp;</td>
+					<td colspan="2"><select name="cotedigits" id="cotedigits">
+						<option value=""> </option>
+						<option value ="1">1</option>
+						<option value ="2">2</option>
+						<option value ="3">3</option>
+						<option value ="4">4</option>
+						<option value ="5">5</option>
+						</select>
+						<label for="cotedigits">characters</label> 
+					</td>
+					<td>&nbsp;</td>
+				</tr>
+				[% ELSE %]
+				<tr><td colspan="4"><input type="hidden" name="Filter" /> <input type="hidden" name="Filter" /></td></tr>
+			[% END %]
+			 <tr>
+				<td>Item Type</td>
+				<td><input type="radio" name="Line" value="[% item_itype %]" /></td>
+				<td><input type="radio" name="Column" value="[% item_itype %]" /></td>
+				<td><select name="Filter" id="[% item_itype %]">
+					<option value=""> </option>
+					[% FOREACH CGIItemTyp IN CGIItemType %]
+					[% IF ( CGIItemTyp.selected ) %]
+					<option value="[% CGIItemTyp.itemtype %]" selected="selected">[% CGIItemTyp.description %]</option>[% ELSE %]<option value="[% CGIItemTyp.itemtype %]">[% CGIItemTyp.description %]</option>[% END %]
+
+					[% END %]
+					</select>
+				</td>
+			</tr>
+			 <tr>
+				<td>Publisher</td>
+				<td><input type="radio" name="Line" value="publishercode" /></td>
+				<td><input type="radio" name="Column" value="publishercode" /></td>
+				<td><input type="text" name="Filter" /></td>
+			</tr>
+			<tr>
+				<td>Publication Year</td>
+				<td><input type="radio" name="Line" value="publicationyear" /></td>
+				<td><input type="radio" name="Column" value="publicationyear" /></td>
+				<td><label for="pubyearFrom">From</label> <input type="text" name="Filter" id="pubyearFrom" /> <label for="pubyearTo">To</label> <input type="text" name="Filter" id="pubyearTo" /></td>
+			</tr>
+			<tr>
+				<td>Home Library</td>
+				<td><input type="radio" name="Line" value="items.homebranch" /></td>
+				<td><input type="radio" name="Column" value="items.homebranch" /></td>
+				<td><select name="Filter" id="branch">
+					<option value=""> </option>
+					[% FOREACH CGIBranc IN CGIBranch %]
+					[% IF ( CGIBranc.selected ) %]<option value="[% CGIBranc.value %]" selected="selected">[% CGIBranc.branchname %]</option>[% ELSE %]<option value="[% CGIBranc.value %]">[% CGIBranc.branchname %]</option>[% END %]
+					[% END %]
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Shelving Location</td>
+				<td><input type="radio" name="Line" value="items.location" /></td>
+				<td><input type="radio" name="Column" value="items.location" /></td>
+				<td><select name="Filter" id="location">
+					<option value=""> </option>
+					[% FOREACH locationloo IN locationloop %]
+					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
+					[% END %]
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td>Collection</td>
+				<td><input type="radio" name="Line"   value="items.ccode" /></td>
+				<td><input type="radio" name="Column" value="items.ccode" /></td>
+				<td><select name="Filter" id="ccode">
+					<option value=""> </option>
+					[% FOREACH authval IN authvals %]
+					[% IF ( authval.selected ) %]<option value="[% authval.code %]" selected="selected">[% authval.description %]</option>[% ELSE %]<option value="[% authval.code %]">[% authval.description %]</option>[% END %]
+					[% END %]
+					</select>
+				</td>
+			</tr>
+            <tr>
+                <td colspan="3">Filter barcode</td>
+                <td>
+                    <select name="Filter" id="like">
+                        <option value="1">like</option>
+                        <option value="0">not like</option>
+                    </select>
+                    <input type="text" name="Filter" id="barcode" />
+                    (use * to do a fuzzy search)
+                </td>
+            </tr>
+		</tbody>
+	</table><br /></fieldset>
+	
+	<fieldset class="rows">
+	<legend>Output</legend>
+	<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /></li>
+		<li><label for="outputfile">To a file: </label><input type="radio" name="output" value="file" id="outputfile" />
+			<label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" />
+			<label class="inline" for="MIME">Into an application: </label>
+			<select name="MIME" id="MIME">
+			[% FOREACH CGIextChoic IN CGIextChoice %]
+			<option value="[% CGIextChoic.type %]">[% CGIextChoic.type %]</option>
+			[% END %]
+			</select>
+			<!-- <label class="inline" for="sep">Delimiter: </label> -->
+			[% CGIsepChoice %]
+		</li>
+	</ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
+	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
+	</form>
+[% END %]
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

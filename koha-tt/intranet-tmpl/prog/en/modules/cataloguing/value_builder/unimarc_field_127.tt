@@ -1,0 +1,50 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>UNIMARC Field 127 builder</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding:1em;">
+<h3>UNIMARC Field 127 builder</h3>
+<form name="f_pop" action="">
+<table>
+<tr><th colspan="9">(Complete with 0 on the left)</th></tr>
+<tr>          <td><label for="f1">Hours:</label></td>
+                         <td><input type="text" name="f1" id="f1" maxlength="2"
+                         size="3"
+                   value="[% f1 %]" /></td>
+          <td><label for="f2">Minutes:</label></td>
+                         <td><input type="text" name="f2" id="f2" maxlength="2"
+                         size="3"
+                   value="[% f2 %]" /></td>
+          <td><label for="f3">Seconds:</label></td>
+                         <td><input type="text" name="f3" id="f3" maxlength="2"
+                         size="3"
+                   value="[% f3 %]" /></td>
+</tr>
+</table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+	function report() {
+document.f_pop.f1.value=document.f_pop.f1.value+'   ';
+document.f_pop.f2.value=document.f_pop.f2.value+'  ';
+document.f_pop.f3.value=document.f_pop.f3.value+'  ';
+
+
+
+document.f_pop.f1.value=document.f_pop.f1.value.substring(0,2);
+document.f_pop.f2.value=document.f_pop.f2.value.substring(0,2);
+document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
+
+
+		var doc   = opener.document; 
+            var field = doc.getElementById("[% index %]");
+        
+            field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value;
+		self.close();
+		return false;
+	}
+//]]>
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

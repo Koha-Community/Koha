@@ -1,0 +1,69 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>UNIMARC Field 123e builder</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding:1em;">
+<h3>UNIMARC Field 123e builder</h3>
+<form name="f_pop" action="">
+<table>
+	<tr>
+		<td><label for="f1">Hemisphere:</label></td>
+		<td>
+			<select name="f1" id="f1" size="1">
+            
+			[% IF ( f1w ) %]
+				<option value="w" selected="selected">west</option>
+			[% ELSE %]
+				<option value="w">west</option>
+			[% END %]
+			[% IF ( f1e ) %]
+				<option value="e" selected="selected">east</option>
+			[% ELSE %]
+				<option value="e">east</option>
+			[% END %]
+			[% IF ( f1n ) %]
+				<option value="n" selected="selected">north</option>
+			[% ELSE %]
+				<option value="n">north</option>
+			[% END %]
+			[% IF ( f1s ) %]
+				<option value="s" selected="selected">south</option>
+			[% ELSE %]
+				<option value="s">south</option>
+			[% END %]
+			</select>
+		</td></tr>
+
+<tr>          <td><label for="f2">Degree (complete with 0):</label></td>
+                         <td><input type="text" name="f2" id="f2" maxlength="3" size="4" value="[% f2 %]" /></td>
+</tr>
+<tr>          <td><label for="f3">Minute (complete with 0):</label></td>
+                         <td><input type="text" name="f3" id="f3" maxlength="2" size="3" value="[% f3 %]" /></td>
+</tr>
+<tr>          <td><label for="f4">Second (complete with 0):</label></td>
+                         <td><input type="text" name="f4" id="f4" maxlength="2" size="3" value="[% f4 %]" /></td>
+</tr>
+</table>
+<fieldset class="action"><input type="button" value="OK" onclick="report();" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+	function report() {
+            document.f_pop.f2.value=document.f_pop.f2.value+'   ';
+            document.f_pop.f3.value=document.f_pop.f3.value+'  ';
+            document.f_pop.f4.value=document.f_pop.f4.value+'  ';
+            document.f_pop.f2.value=document.f_pop.f2.value.substring(0,3);
+            document.f_pop.f3.value=document.f_pop.f3.value.substring(0,2);
+            document.f_pop.f4.value=document.f_pop.f4.value.substring(0,2);
+
+            var doc   = opener.document; 
+            var field = doc.getElementById("[% index %]");
+        
+            field.value =  document.f_pop.f1.value+document.f_pop.f2.value+document.f_pop.f3.value+document.f_pop.f4.value;
+	    window.close();
+	    return false;
+	}
+//]]>
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

@@ -1,0 +1,87 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Advanced Search
+[% INCLUDE 'doc-head-close.inc' %]
+[% IF ( displayhierarchy ) %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/hierarchy.css">
+<script language="JavaScript" type="text/javascript">
+function showParents(mynumber) {
+  var parents=document.getElementsByName(mynumber+'p')
+  for(i=0;i<parents.length;i++){
+    if (parents[i].style.display == "none") {
+      parents[i].style.display ="block";
+    } else {
+      parents[i].style.display ="none";
+    }
+  } 
+}
+function showChildren(mynumber) {
+  var children=document.getElementsByName(mynumber+'c')
+  for(i=0;i<children.length;i++){
+    if (children[i].style.display == "none") {
+      children[i].style.display = "block";
+    } else {
+      children[i].style.display = "none";
+    }
+  }
+}
+</script>
+[% END %]
+</head>
+<body id="opac-authoritiesdetail">
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+<div id="userauthdetails" class="container">
+
+[% IF ( displayhierarchy ) %]
+
+<div class="hierarchies">
+[% FOREACH loophierarchie IN loophierarchies %]
+  <div class="hierarchy">
+  [% FOREACH loopelemen IN loophierarchie.loopelement %]
+    <div id="[% loopelemen.loopauthid %]" class="[% loopelemen.class %]">
+    [% IF ( loopelemen.current_value ) %]
+        [% loopelemen.value %]
+    [% ELSE %]
+        <a href="opac-authoritiesdetail.pl?authid=[% loopelemen.loopauthid %]" title="Term">[% loopelemen.value %]</a>
+    [% END %]
+    [% IF ( loopelemen.ifchildren ) %]
+      <sub><a class="parents" title="Narrower terms" href="JavaScript:showChildren('[% loopelemen.loopauthid %]');">+</a></sub><br/>
+      [% FOREACH loopchildre IN loopelemen.loopchildren %]
+        <div name="[% loopchildre.loopauthid %]c" class="child"> <a href="opac-authoritiesdetail.pl?authid=[% loopchildre.childauthid %]">[% loopchildre.childvalue %]</a></div>
+      [% END %]
+    [% END %]
+    </div>
+  [% END %]
+    
+  </div>
+[% END %]
+</div>
+[% END %]
+<h1>Authority #[% authid %] ([% authtypetext %])</h1>
+	<p>Used in <a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an">[% count %] records</a></p>
+<table>[% FOREACH 0X IN 0XX %]
+        <tr><td colspan="3" class="marctag"><b>[% 0X.tag %]</b></td></tr>
+        [% FOREACH subfiel IN 0X.subfield %]
+                <tr><td class="marcsubfieldletter" >[% subfiel.marc_subfield %]</td>
+                    <td class="marcsubfieldname" >[% subfiel.marc_lib %]</td>
+                    <td class="subfieldvalue" >[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+</table>
+</div>	
+
+</div>
+</div>
+</div>
+[% IF ( OpacNav ) %]
+<div class="yui-b">
+<div id="leftmenus" class="container">
+[% INCLUDE 'navigation.inc' %]
+</div>
+</div>[% END %]
+</div>
+[% INCLUDE 'opac-bottom.inc' %]

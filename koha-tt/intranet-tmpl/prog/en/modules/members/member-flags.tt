@@ -1,0 +1,139 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patrons &rsaquo; Set Privileges for [% surname %], [% firstname %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/treeview/jquery.treeview.css"/>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.treeview.pack.js"></script>
+<!-- set up tree -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("#permissionstree").treeview({animated: "fast", collapsed: true});
+    });
+</script>
+<!-- manage checking/unchecking parent permissions -->
+<script type="text/javascript">
+    var originalChildStates = {}; /* keep track of subpermission checkbox values
+                                     so that user can recover from accidentally
+                                     toggling a parent/module permission */
+    function selectChildren(parentInput) {
+        var childListId = parentInput.id + '-children';
+        var list = document.getElementById(childListId);
+        var children = [];
+        if (list) {
+            var inputs = list.getElementsByTagName('input');
+            for (var i = 0; i < inputs.length; i++) {
+                if (inputs[i].type == 'checkbox') {
+                    children.push(inputs[i]);
+                }
+            }
+            
+        } 
+        return children;
+    }
+
+    function toggleChildren(parentInput) {
+        var children = selectChildren(parentInput);
+        if (children.length == 0) {
+            return;
+        }
+        var checked = parentInput.checked;
+        if (checked && parentInput.parentNode.className == 'expandable') {
+            /* expand the tree */
+            $(".hitarea", parentInput.parentNode).click();
+        }
+        for (var i = 0; i < children.length; i++) {
+            if (checked) {
+                originalChildStates[children[i].id] = children[i].checked;
+                children[i].checked = checked;
+            } else {
+                if (children[i].id in originalChildStates) {
+                    children[i].checked = originalChildStates[children[i].id];
+                } else {
+                    children[i].checked = checked;
+                }
+            }
+        }
+    }
+
+    function toggleParent(childInput) {
+        originalChildStates[childInput.id] = childInput.checked;
+        if (childInput.checked) {
+            return;
+        }
+        var parentId = childInput.parentNode.parentNode.id.replace(/-children$/, '');;
+        var parentInput = document.getElementById(parentId);
+        if (parentInput) {  
+            parentInput.checked = false;
+        }
+    }
+
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Set Privileges for [% surname %], [% firstname %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+[% INCLUDE 'members-toolbar.inc' %]
+
+<form method="post" action="/cgi-bin/koha/members/member-flags.pl">
+    <input type="hidden" name="member" id="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="newflags" value="1" />
+    <h1>Set Privileges for [% surname %], [% firstname %]</h1>
+    <!-- <ul id="permissionstree"><li class="root">All privileges<ul> -->
+    <ul id="permissionstree" class="treeview-grey">
+        <!-- <li class="folder-close">One level down<ul> -->
+    [% FOREACH loo IN loop %]
+        [% IF ( loo.expand ) %]
+        <li class="open">
+        [% ELSE %]
+        <li>
+        [% END %]
+			[% IF ( loo.checked ) %]
+			   <input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" checked="checked" onchange="toggleChildren(this)" />
+			[% ELSE %]
+				<input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]"  onchange="toggleChildren(this)" />
+			[% END %]
+                <label class="permissioncode" for="flag-[% loo.bit %]">[% loo.flag %]</label>
+                <span class="permissiondesc">[% loo.flagdesc %]</span>
+            [% IF ( loo.sub_perm_loop ) %]
+                <ul id="flag-[% loo.bit %]-children">
+                    [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
+                        <li>
+			            [% IF ( sub_perm_loo.checked ) %]
+			                <input type="checkbox" id="[% sub_perm_loo.id %]" 
+                                name="flag" value="[% sub_perm_loo.perm %]" checked="checked" onchange="toggleParent(this)" />
+			            [% ELSE %]
+			                <input type="checkbox" id="[% sub_perm_loo.id %]" 
+                                name="flag" value="[% sub_perm_loo.perm %]" onchange="toggleParent(this)" />
+			            [% END %]
+                    <label class="permissioncode" for="[% sub_perm_loo.id %]">[% sub_perm_loo.code %]</label>
+                             <span class="permissiondesc">[% sub_perm_loo.description %]</span>
+                        </li>
+                    [% END %]
+                </ul>
+                </li>
+            [% ELSE %]
+                </li>
+			[% END %]
+    [% END %]
+        <!-- </ul></li> -->
+    <!-- </ul></li></ul> -->
+    </ul>
+
+<fieldset class="action"><input type="submit" value="Set Flags" /> <a class="cancel" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Cancel</a></fieldset>
+
+</form>
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'circ-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
