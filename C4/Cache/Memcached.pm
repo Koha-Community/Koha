@@ -69,8 +69,8 @@ sub flush_all {
 1;
 __END__                                                                         
                                                                                   
-=head1 NAME                                                                     
-                                                                                
-  C4::Cache::Memcached - memcached subclass of C4::Cache                
-                                                                                  
+=head1 NAME
+
+C4::Cache::Memcached - memcached subclass of C4::Cache
+
 =cut

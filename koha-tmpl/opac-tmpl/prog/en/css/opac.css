@@ -25,8 +25,9 @@ body {
 
 caption {
 	font-size : 140%;
-	text-align : left;
 	font-weight : bold;
+	line-height : 144%;
+	text-align : left;
 }
 
 fieldset {
@@ -53,7 +54,7 @@ fieldset.rows legend {
 	font-size : 110%;
 }
 
-fieldset.rows label, fieldset.rows span.label {  
+fieldset.rows label, fieldset.rows span.label {
 	float: left;  
 	font-weight : bold;
 	width: 9em;  
@@ -377,6 +378,12 @@ a .term {
 	text-decoration : underline;
 }
 
+/* style for shelving location in catalogsearch */
+.shelvingloc {
+    display : block;
+    font-style : italic;
+}
+
 .transfered {
 	background-color : #F9FF9A;
 }
@@ -435,6 +442,14 @@ a .term {
 }
 
 /* toolbar buttons */
+
+#toolbar {
+background-color:#EEEEEE;
+border:1px solid #E8E8E8;
+margin : .5em 0;
+padding:3px 3px 5px 5px;
+vertical-align:middle;
+}
 
 #toolbar a,
 #toolbar input {
@@ -572,7 +587,10 @@ input.deleteshelf {
 }
 
 
-#toolbar input.editshelf:active,input.deleteshelf:active {
+#toolbar input.editshelf:active,
+input.editshelf:active,
+#toolbar input.deleteshelf:active,
+input.deleteshelf:active {
 	border : 0;
 }
 
@@ -584,6 +602,8 @@ input.deleteshelf {
 	padding-left : 25px;
 	text-decoration: none;
 }
+
+#tagslist li { display : inline; }
 
 #placehold input.submit:hover,
 #tagsel_span input.submit:hover {
@@ -863,12 +883,45 @@ em {
 	font-style : italic;
 }
 
-#catalogue_detail_biblio p span.label {  
+
+table#marc,
+table#marc td,
+table#marc th {
+	background-color : transparent;
+	border : 0;
+}
+
+table#marc p span.label {
 	font-weight : bold;
 }
 
-#catalogue_detail_biblio p, #catalogue_detail_biblio ul {  
+table#marc p,
+table#marc ul {
 	padding-bottom: .6em;
+}
+
+table#items,
+table#items td
+table#items th {
+	border-width : 1px solid #EEE;
+	font-size : 90%;
+}
+
+
+table#marc div.results_summary {
+	clear :  left;
+}
+table#marc div.results_summary ul {
+	display : inline;
+	float :  none;
+	clear :  none;
+	margin: 0;
+	padding: 0;
+	list-style : none;
+}
+
+table#marc div.results_summary ul li {
+	display : inline;
 }
 
 #basketcount {
@@ -984,8 +1037,7 @@ a.cancel {
 
 .searchresults p {
 	margin: 0;
-	padding: 0;
-	padding-top : .6em;
+	padding: 0 0 .6em 0;
 }
 
 td.resultscontrol img {
@@ -1049,38 +1101,9 @@ td.resultscontrol img {
 	line-height : 1.8em;
 	text-align: center;
 }
-a:link.current {
-	background-color: transparent;
-	color: #3366CC;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
-a:visited.current {
-	background-color: transparent;
-	color: #3366CC;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
 
-a:hover.current {
-	background-color: #CCFF00;
-	color: #CC3333;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
-
-a:active.current {
-	background-color: #99CC00;
-	color: #FFFF99;
-	font-weight: bold;
-	padding: 1px 5px 1px 5px;
-	text-decoration: none;
-}
-
-.current {
+.current,
+.currentPage {
 	background-color: #FFFFFF;
 	color: #3366CC;
 	font-weight: bold;
@@ -1088,7 +1111,8 @@ a:active.current {
 	text-decoration: none;
 }
 
-a:link.nav {
+a:link.nav,
+div.pages a:link {
 	background-color: #EEE;
 	border: 1px solid #CCCC99;
 	color: #3366CC;
@@ -1097,7 +1121,8 @@ a:link.nav {
 	text-decoration: none;
 }
 
-a:visited.nav {
+a:visited.nav,
+div.pages a:visited {
 	background-color: #EEE;
 	border: 1px solid #CCCC99;
 	color: #3366CC;
@@ -1106,7 +1131,8 @@ a:visited.nav {
 	text-decoration: none;
 }
 
-a:hover.nav {
+a:hover.nav,
+div.pages a:hover {
 	background-color: #FFFFCC;
 	border: 1px solid #CCCC99;
 	color: #CC3333;
@@ -1115,7 +1141,8 @@ a:hover.nav {
 	text-decoration: none;
 }
 
-a:active.nav {
+a:active.nav,
+div.pages a:active {
 	background-color: #FFFFCC;
 	border: 1px solid #CCCC99;
 	color: #D25500;
@@ -1177,11 +1204,6 @@ div.tab-container {
 	margin-top : 4px;
 	padding : .7em;
 	width : 90%;
-}
-
-#catalogue_detail_biblio table, #catalogue_detail_biblio td, #catalogue_detail_biblio th {
-	background-color : transparent;
-	border : 0;
 }
 
 tr.overdue td {
@@ -1291,22 +1313,6 @@ padding-left : .4em;
 	padding-left : 13px;
 }
 
-#catalogue_detail_biblio div.results_summary {
-	clear :  left;
-}
-#catalogue_detail_biblio div.results_summary ul {
-	display : inline;
-	float :  none;
-	clear :  none;
-	margin: 0;
-	padding: 0;
-	list-style : none;
-}
-
-#catalogue_detail_biblio div.results_summary ul li {
-	display : inline;
-}
-
 .dialog {
   border: 1px solid #bcbcbc;
 	padding : .5em;
@@ -1402,6 +1408,7 @@ div#changelanguage{
 	color : #666;
 	font-size : 85%;
 	padding : 1em;
+	margin-top : 2em;
  }
  
 div#changelanguage a {
@@ -1954,3 +1961,45 @@ div.ft {
 	list-style:disc outside url("../../images/item-bullet.gif");
 	padding:0.2em 0;
 }
+
+#recentcomments {
+	margin:auto;
+	max-width:750px;
+}
+
+.searchresults .commentline {
+	background-color : rgb(255, 255, 204);
+	background-color : rgba(255, 255, 204, 0.4);
+	border : 1px solid #CCC;
+	display: inline-block;
+	-webkit-border-radius: 4px;
+	-moz-border-radius: 4px;
+	border-radius: 4px;
+	-webkit-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	-moz-box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.2);
+	margin : .3em;
+	padding : .4em;
+}
+
+.searchresults .commentline.yours {
+	background-color : rgb(239, 254, 213);
+	background-color : rgba(239, 254, 213, 0.4);
+}
+
+#plainmarc table { border: 0; margin: .7em 0 0 0; font-family: monospace; font-size: 95%; }
+#plainmarc th { background-color : #FFF; border: 0; white-space: nowrap; text-align:left; vertical-align: top; padding: 2px; }
+#plainmarc td { border: 0; padding : 2px; vertical-align: top; }
+
+#catalogue_detail_biblio h1 { float:left; margin:0 1em 1em 0; }
+#catalogue_detail_biblio h1.title { float:none; margin-top:1em; }
+#catalogue_detail_biblio h3 {clear:both; }
+
+#opac-detail #Normalview { font-weight:bold; }
+#opac-marcdetail #Normalview { font-weight:normal; }
+#opac-marcdetail #MARCview { font-weight:bold; }
+#opac-isbddetail #Normalview { font-weight:normal; }
+#opac-isbddetail #ISBDview { font-weight:bold; }
+#opac-isbddetail #isbdcontents { margin-top: 2em; }
+
+div.bibmessage { background-color : #ffffb0; border-radius : 5px; padding : 3px; margin : 2px; }

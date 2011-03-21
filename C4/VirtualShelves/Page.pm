@@ -31,9 +31,11 @@ use C4::Auth qw/get_session/;
 use C4::Members;
 use C4::Output;
 use C4::Dates qw/format_date/;
+use C4::Tags qw(get_tags);
 use Exporter;
 use Data::Dumper;
 use C4::Csv;
+use C4::XSLT;
 
 use vars qw($debug @EXPORT @ISA $VERSION);
 
@@ -61,12 +63,13 @@ sub shelfpage ($$$$$) {
     my $itemoff     = ( $query->param('itemoff')  ? $query->param('itemoff')  : 1 );
     my $displaymode = ( $query->param('display')  ? $query->param('display')  : 'publicshelves' );
     my ( $shelflimit, $shelfoffset, $shelveslimit, $shelvesoffset );
+    my $marcflavour = C4::Context->preference("marcflavour");
 
-    # FIXME: These limits should not be hardcoded...
-    $shelflimit    = 20;                        # Limits number of items returned for a given query
-    $shelfoffset   = ( $itemoff - 1 ) * 20;     # Sets the offset to begin retrieving items at
-    $shelveslimit  = 20;                        # Limits number of shelves returned for a given query (row_count)
-    $shelvesoffset = ( $shelfoff - 1 ) * 20;    # Sets the offset to begin retrieving shelves at (offset)
+    $shelflimit = ( $type eq 'opac' ? C4::Context->preference('OPACnumSearchResults') : C4::Context->preference('numSearchResults') );
+    $shelflimit = $shelflimit || 20;
+    $shelfoffset   = ( $itemoff - 1 ) * $shelflimit;     # Sets the offset to begin retrieving items at
+    $shelveslimit  = $shelflimit;                        # Limits number of shelves returned for a given query (row_count)
+    $shelvesoffset = ( $shelfoff - 1 ) * $shelflimit;    # Sets the offset to begin retrieving shelves at (offset)
                                                 # getting the Shelves list
     my $category = ( ( $displaymode eq 'privateshelves' ) ? 1 : 2 );
     my ( $shelflist, $totshelves ) = GetShelves( $category, $shelveslimit, $shelvesoffset, $loggedinuser );
@@ -174,12 +177,22 @@ sub shelfpage ($$$$$) {
             last SWITCH;
         }
         if ( $shelfnumber = $query->param('viewshelf') ) {
+            # explicitly fetch this shelf
+            my ($shelfnumber2,$shelfname,$owner,$category,$sorton) = GetShelf($shelfnumber);
 
+            $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+            if (C4::Context->preference('TagsEnabled')) {
+                $template->param(TagsEnabled => 1);
+                    foreach (qw(TagsShowOnList TagsInputOnList)) {
+                    C4::Context->preference($_) and $template->param($_ => 1);
+                }
+            }
             #check that the user can view the shelf
             if ( ShelfPossibleAction( $loggedinuser, $shelfnumber, 'view' ) ) {
                 my $items;
                 my $authorsort;
                 my $yearsort;
+                my $tag_quantity;
                 my $sortfield = ( $query->param('sortfield') ? $query->param('sortfield') : 'title' );
                 if ( $sortfield eq 'author' ) {
                     $authorsort = 'author';
@@ -189,7 +202,11 @@ sub shelfpage ($$$$$) {
                 }
                 ( $items, $totitems ) = GetShelfContents( $shelfnumber, $shelflimit, $shelfoffset );
                 for my $this_item (@$items) {
-                    my $record = GetMarcBiblio( $this_item->{'biblionumber'} );
+                    my $biblionumber = $this_item->{'biblionumber'};
+                    my $record = GetMarcBiblio($biblionumber);
+                    $this_item->{XSLTBloc} =
+                        XSLTParse4Display($biblionumber, $record, 'Results', 'opac')
+                            if C4::Context->preference("OPACXSLTResultsDisplay");
 
                     # the virtualshelfcontents table does not store these columns nor are they retrieved from the items
                     # and itemtypes tables, so I'm commenting them out for now to quiet the log -crn
@@ -199,10 +216,21 @@ sub shelfpage ($$$$$) {
                     $this_item->{'imageurl'}  = getitemtypeinfo( $this_item->{'itemtype'} )->{'imageurl'};
                     $this_item->{'coins'}     = GetCOinSBiblio( $this_item->{'biblionumber'} );
                     $this_item->{'subtitle'} = GetRecordValue('subtitle', $record, GetFrameworkCode($this_item->{'biblionumber'}));
-
+                    $this_item->{'normalized_upc'}  = GetNormalizedUPC(       $record,$marcflavour);
+                    $this_item->{'normalized_ean'}  = GetNormalizedEAN(       $record,$marcflavour);
+                    $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber($record,$marcflavour);
+                    $this_item->{'normalized_isbn'} = GetNormalizedISBN(undef,$record,$marcflavour);
                     # Getting items infos for location display
                     my @items_infos = &GetItemsInfo( $this_item->{'biblionumber'}, $type );
+                    $this_item->{'itemsissued'} = CountItemsIssued( $this_item->{'biblionumber'} );
                     $this_item->{'ITEM_RESULTS'} = \@items_infos;
+
+                    if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->preference('TagsShowOnList')) {
+                        $this_item->{'TagLoop'} = get_tags({
+                            biblionumber=>$this_item->{'biblionumber'}, approved=>1, 'sort'=>'-weight',
+                            limit=>$tag_quantity
+                            });
+                    }
 
                 }
                 push @paramsloop, { display => 'privateshelves' } if $category == 1;
@@ -210,7 +238,7 @@ sub shelfpage ($$$$$) {
                 my $i = 0;
                 my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
                 $template->param(
-                    shelfname => $shelflist->{$shelfnumber}->{'shelfname'} || $privshelflist->{$shelfnumber}->{'shelfname'},
+                    shelfname   => $shelfname,
                     shelfnumber => $shelfnumber,
                     viewshelf   => $shelfnumber,
                     authorsort  => $authorsort,
@@ -256,7 +284,7 @@ sub shelfpage ($$$$$) {
                 if ( my $count = scalar @$contents ) {
                     unless ( scalar grep { /^CONFIRM-$number$/ } $query->param() ) {
                         if ( defined $shelflist->{$number} ) {
-                            push( @paramsloop, { need_confirm => $shelflist->{$number}->{shelfname}, count => $count } );
+                            push( @paramsloop, { need_confirm => $shelflist->{$number}->{shelfname}, count => $count, single => ($count eq 1 ? 1:0) } );
                             $shelflist->{$number}->{confirm} = $number;
                         } else {
                             push( @paramsloop, { need_confirm => $privshelflist->{$number}->{shelfname}, count => $count } );
@@ -387,11 +415,11 @@ __END__
 
 =head1 NAME
 
-    VirtualShelves/Page.pm
+VirtualShelves/Page.pm
 
 =head1 DESCRIPTION
 
-    Module used for both OPAC and intranet pages.
+Module used for both OPAC and intranet pages.
 
 =head1 CGI PARAMETERS
 
@@ -399,31 +427,31 @@ __END__
 
 =item C<modifyshelfcontents>
 
-    If this script has to modify the shelf content.
+If this script has to modify the shelf content.
 
 =item C<shelfnumber>
 
-    To know on which shelf to work.
+To know on which shelf to work.
 
 =item C<addbarcode>
 
 =item C<op>
 
-    Op can be:
-        * modif: show the template allowing modification of the shelves;
-        * modifsave: save changes from modif mode.
+ Op can be:
+    * modif: show the template allowing modification of the shelves;
+    * modifsave: save changes from modif mode.
 
 =item C<viewshelf>
 
-    Load template with 'viewshelves param' displaying the shelf's information.
+Load template with 'viewshelves param' displaying the shelf's information.
 
 =item C<shelves>
 
-    If the param shelves == 1, then add or delete a shelf.
+If the param shelves == 1, then add or delete a shelf.
 
 =item C<addshelf>
 
-    If the param shelves == 1, then addshelf is the name of the shelf to add.
+If the param shelves == 1, then addshelf is the name of the shelf to add.
 
 =back
 

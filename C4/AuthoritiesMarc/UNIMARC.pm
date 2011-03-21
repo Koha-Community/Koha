@@ -47,11 +47,7 @@ function based on the marcflavour system preference.
 
 =head2 get_heading_type_from_marc
 
-=over 4
-
-my $auth_type = get_auth_type_from_marc($marc);
-
-=back
+  my $auth_type = get_auth_type_from_marc($marc);
 
 Given a MARC::Record object containing an authority record,
 determine its heading type (e.g., personal name, topical term,
@@ -61,11 +57,7 @@ etc.).
 
 =head2 default_auth_type_location
 
-=over 4
-
-my ($tag, $subfield) = default_auth_type_location();
-
-=back
+  my ($tag, $subfield) = default_auth_type_location();
 
 Get the tag and subfield used to store the heading type
 if not specified in the MARC framework.  For UNIMARC,

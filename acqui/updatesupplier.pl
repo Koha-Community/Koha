@@ -23,32 +23,33 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 =head1 NAME
+
 updatesupplier.pl
 
 =head1 DESCRIPTION
+
 this script allow to update or create (if id == 0)
 a supplier. This script is called from acqui/supplier.pl.
 
 =head1 CGI PARAMETERS
 
-=over 4
-
 All informations regarding this supplier are listed on input parameter.
 Here is the list :
+
 supplier, id, company, company_postal, physical, company_phone,
 physical, company_phone, company_fax, website, company_contact_name,
 company_contact_position, contact_phone, contact_phone_2, contact_fax,
 company_email, contact_notes, notes, status, publishers_imprints,
 list_currency, gst, list_gst, invoice_gst, discount, gstrate.
 
-=back
-
 =cut
+
 use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Auth;
-use C4::Bookseller;
+
+use C4::Bookseller qw( ModBookseller AddBookseller );
 use C4::Biblio;
 use C4::Output;
 use CGI;
@@ -98,7 +99,12 @@ $data{'gstreg'}=$input->param('gst');
 $data{'listincgst'}=$input->param('list_gst');
 $data{'invoiceincgst'}=$input->param('invoice_gst');
 #have to transform this into fraction so it's easier to use
-$data{'gstrate'}=$input->param('gstrate')/100;
+my $gstrate = $input->param('gstrate');
+if ($gstrate eq '') {
+    $data{'gstrate'} = undef;
+} else {
+    $data{'gstrate'} = $input->param('gstrate')/100;
+}
 $data{'discount'}=$input->param('discount');
 $data{'active'}=$input->param('status');
 if($data{'name'}) {

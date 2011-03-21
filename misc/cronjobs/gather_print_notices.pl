@@ -73,9 +73,11 @@ open OUTPUT, '>', File::Spec->catdir( $output_directory, "holdnotices-" . $today
 my $template = C4::Output::gettemplate( 'batch/print-notices.tmpl', 'intranet', new CGI );
 my $stylesheet_contents = '';
 
-open STYLESHEET, '<', $stylesheet;
-while ( <STYLESHEET> ) { $stylesheet_contents .= $_ }
-close STYLESHEET;
+if ($stylesheet) {
+  open STYLESHEET, '<', $stylesheet;
+  while ( <STYLESHEET> ) { $stylesheet_contents .= $_ }
+  close STYLESHEET;
+}
 
 $template->param(
     stylesheet => $stylesheet_contents,

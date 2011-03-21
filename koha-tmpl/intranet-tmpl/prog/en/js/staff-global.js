@@ -4,12 +4,12 @@ if ( KOHA === undefined ) var KOHA = {};
 function _(s) { return s } // dummy function for gettext
 
  $(document).ready(function() {
- 	$(".focus").focus();
 	$('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
 	$(".close").click(function(){ window.close(); });
 	if($("#header_search #checkin_search").length > 0){ $(document).bind('keydown','Alt+r',function (){ $("#header_search > ul").tabs("select","#checkin_search"); $("#ret_barcode").focus(); }); } else { $(document).bind('keydown','Alt+r',function (){ location.href="/cgi-bin/koha/circ/returns.pl"; }); }
 	if($("#header_search #circ_search").length > 0){ $(document).bind('keydown','Alt+u',function (){ $("#header_search > ul").tabs("select","#circ_search"); $("#findborrower").focus(); }); } else { $(document).bind('keydown','Alt+u',function(){ location.href="/cgi-bin/koha/circ/circulation.pl"; }); }
 	if($("#header_search #catalog_search").length > 0){ $(document).bind('keydown','Alt+q',function (){ $("#header_search > ul").tabs("select","#catalog_search"); $("#search-form").focus(); }); } else { $(document).bind('keydown','Alt+q',function(){ location.href="/cgi-bin/koha/catalogue/search.pl"; }); }
+ 	$(".focus").focus();
  });
  
              YAHOO.util.Event.onContentReady("header", function () {
@@ -43,35 +43,34 @@ function _(s) { return s } // dummy function for gettext
                 YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMoremenu);
             });
 
+// build Change Language menus
 YAHOO.util.Event.onContentReady("changelanguage", function () {
-                var oMenu = new YAHOO.widget.Menu("sublangs", { zindex: 2 });
+	$(".sublangs").each(function(){
+		var menuid = $(this).attr("id");
+		var menuid = menuid.replace("show","");
 
-	            function positionoMenu() {
-                    oMenu.align("bl", "tl");
-                }
-
-                oMenu.subscribe("beforeShow", function () {
-                    if (this.getRoot() == this) {
-						positionoMenu();
-                    }
-                });
-
-                oMenu.render();
-
-				oMenu.cfg.setProperty("context", ["showlang", "bl", "tl"]);
-
-				function onYahooClick(p_oEvent) {
-                    // Position and display the menu        
-                    positionoMenu();
-                    oMenu.show();
-                    // Stop propagation and prevent the default "click" behavior
-                    YAHOO.util.Event.stopEvent(p_oEvent);
-                }
-
-				YAHOO.util.Event.addListener("showlang", "click", onYahooClick);
-
-				YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
-            });
+		var oMenu = new YAHOO.widget.Menu("sub"+menuid, { zindex: 2 });
+		function positionoMenu() {
+			oMenu.align("bl", "tl");
+		}
+		oMenu.subscribe("beforeShow", function () {
+		if (this.getRoot() == this) {
+			positionoMenu();
+		}
+		});
+		oMenu.render();
+		oMenu.cfg.setProperty("context", ["show"+menuid, "bl", "tl"]);
+		function onYahooClick(p_oEvent) {
+			// Position and display the menu
+			positionoMenu();
+			oMenu.show();
+			// Stop propagation and prevent the default "click" behavior
+			YAHOO.util.Event.stopEvent(p_oEvent);
+		}
+		YAHOO.util.Event.addListener("show"+menuid, "click", onYahooClick);
+		YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionoMenu);
+	});
+});
 			
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html
 function checkEnter(e){ //e is event object passed from function invocation

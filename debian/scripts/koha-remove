@@ -25,8 +25,8 @@ do
     echo "Removing Koha instance $name"
 
     mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
-DROP USER 'koha_$name';
-DROP DATABASE koha_$name;
+DROP USER \`koha_$name\`;
+DROP DATABASE \`koha_$name\`;
 FLUSH PRIVILEGES;
 eof
     

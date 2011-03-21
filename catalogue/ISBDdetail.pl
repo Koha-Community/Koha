@@ -23,14 +23,13 @@ ISBDdetail.pl : script to show a biblio in ISBD format
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 
 This script needs a biblionumber as parameter 
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 
@@ -44,6 +43,7 @@ use CGI;
 use C4::Koha;
 use C4::Biblio;
 use C4::Items;
+use C4::Members; # to use GetMember
 use C4::Branch;     # GetBranchDetail
 use C4::Serials;    # CountSubscriptionFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
@@ -66,6 +66,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 	flagsrequired   => { catalogue => 1 },
     }
 );
+
+if($query->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    $template->param(
+        holdfor => $query->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
 
 # my @blocs = split /\@/,$ISBD;
 # my @fields = $record->fields();

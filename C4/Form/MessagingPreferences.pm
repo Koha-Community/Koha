@@ -122,6 +122,7 @@ sub set_form_values {
     my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
     PREF: foreach my $option ( @$messaging_options ) {
         my $pref = C4::Members::Messaging::GetMessagingPreferences( { %{ $target_params }, message_name => $option->{'message_name'} } );
+        $option->{ $option->{'message_name'} } = 1;
         # make a hashref of the days, selecting one.
         if ( $option->{'takes_days'} ) {
             my $days_in_advance = $pref->{'days_in_advance'} ? $pref->{'days_in_advance'} : 0;
@@ -132,7 +133,7 @@ sub set_form_values {
             } ( 0..30 ); # FIXME: 30 is a magic number.
         }
         foreach my $transport ( @{$pref->{'transports'}} ) {
-            $option->{'transport-'.$transport} = 'checked="checked"';
+            $option->{'transport_'.$transport} = 'checked="checked"';
         }
         $option->{'digest'} = 'checked="checked"' if $pref->{'wants_digest'};
     }

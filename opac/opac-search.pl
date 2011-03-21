@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2008 Garry Collum and the Koha Koha Development team
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -80,7 +81,7 @@ else {
     template_name => $template_name,
     query => $cgi,
     type => "opac",
-    authnotrequired => 1,
+    authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     }
 );
 
@@ -97,6 +98,7 @@ elsif (C4::Context->preference("marcflavour") eq "MARC21" ) {
     $template->param('usmarc' => 1);
 }
 $template->param( 'AllowOnShelfHolds' => C4::Context->preference('AllowOnShelfHolds') );
+$template->param( 'OPACNoResultsFound' => C4::Context->preference('OPACNoResultsFound') );
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
 	$template->param(
@@ -421,6 +423,13 @@ elsif (C4::Context->preference('NoZebra')) {
         ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
+# This sorts the facets into alphabetical order
+if ($facets) {
+    foreach my $f (@$facets) {
+        $f->{facets} = [ sort { uc($a->{facet_title_value}) cmp uc($b->{facet_title_value}) } @{ $f->{facets} } ];
+    }
+}
+
 # use Data::Dumper; print STDERR "-" x 25, "\n", Dumper($results_hashref);
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
@@ -535,6 +544,7 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
+            $template->param(offset     => $offset);
             $template->param(DisplayMultiPlaceHold => $DisplayMultiPlaceHold);
             if ($query_desc || $limit_desc) {
                 $template->param(searchdesc => 1);

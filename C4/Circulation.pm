@@ -1,6 +1,7 @@
 package C4::Circulation;
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -31,6 +32,7 @@ use C4::Dates;
 use C4::Calendar;
 use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
+use C4::Dates qw(format_date);
 use C4::Message;
 use C4::Debug;
 use Date::Calc qw(
@@ -137,6 +139,7 @@ System Pref options.
 #
 sub barcodedecode {
     my ($barcode, $filter) = @_;
+    my $branch = C4::Branch::mybranch();
     $filter = C4::Context->preference('itemBarcodeInputFilter') unless $filter;
     $filter or return $barcode;     # ensure filter is defined, else return untouched barcode
 	if ($filter eq 'whitespace') {
@@ -155,6 +158,14 @@ sub barcodedecode {
         # FIXME: $barcode could be "T1", causing warning: substr outside of string
         # Why drop the nonzero digit after the T?
         # Why pass non-digits (or empty string) to "T%07d"?
+	} elsif ($filter eq 'libsuite8') {
+		unless($barcode =~ m/^($branch)-/i){	#if barcode starts with branch code its in Koha style. Skip it.
+			if($barcode =~ m/^(\d)/i){	#Some barcodes even start with 0's & numbers and are assumed to have b as the item type in the libsuite8 software
+                                $barcode =~ s/^[0]*(\d+)$/$branch-b-$1/i;
+                        }else{
+				$barcode =~ s/^(\D+)[0]*(\d+)$/$branch-$1-$2/i;
+			}
+		}
 	}
     return $barcode;    # return barcode, modified or not
 }
@@ -412,7 +423,7 @@ sub TooMany {
 
         my $max_loans_allowed = $issuing_rule->{'maxissueqty'};
         if ($current_loan_count >= $max_loans_allowed) {
-            return "$current_loan_count / $max_loans_allowed";
+            return ($current_loan_count, $max_loans_allowed);
         }
     }
 
@@ -440,7 +451,7 @@ sub TooMany {
 
         my $max_loans_allowed = $branch_borrower_circ_rule->{maxissueqty};
         if ($current_loan_count >= $max_loans_allowed) {
-            return "$current_loan_count / $max_loans_allowed";
+            return ($current_loan_count, $max_loans_allowed);
         }
     }
 
@@ -641,7 +652,7 @@ reserved for someone else.
 
 =head3 INVALID_DATE
 
-sticky due date is invalid
+sticky due date is invalid or due date in the past
 
 =head3 TOO_MANY
 
@@ -679,7 +690,12 @@ sub CanBookBeIssued {
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
     }
-    $issuingimpossible{INVALID_DATE} = $duedate->output('syspref') unless ( $duedate && $duedate->output('iso') ge C4::Dates->today('iso') );
+    if ($duedate) {
+        $needsconfirmation{INVALID_DATE} = $duedate->output('syspref')
+          unless $duedate->output('iso') ge C4::Dates->today('iso');
+    } else {
+        $issuingimpossible{INVALID_DATE} = $duedate->output('syspref');
+    }
 
     #
     # BORROWER STATUS
@@ -715,17 +731,24 @@ sub CanBookBeIssued {
     # DEBTS
     my ($amount) =
       C4::Members::GetMemberAccountRecords( $borrower->{'borrowernumber'}, '' && $duedate->output('iso') );
+    my $amountlimit = C4::Context->preference("noissuescharge");
+    my $allowfineoverride = C4::Context->preference("AllowFineOverride");
+    my $allfinesneedoverride = C4::Context->preference("AllFinesNeedOverride");
     if ( C4::Context->preference("IssuingInProcess") ) {
-        my $amountlimit = C4::Context->preference("noissuescharge");
-        if ( $amount > $amountlimit && !$inprocess ) {
+        if ( $amount > $amountlimit && !$inprocess && !$allowfineoverride) {
             $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
-        }
-        elsif ( $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
+        } elsif ( $amount > $amountlimit && !$inprocess && $allowfineoverride) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $allfinesneedoverride && $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
     else {
-        if ( $amount > 0 ) {
+        if ( $amount > $amountlimit && $allowfineoverride ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $amount > $amountlimit && !$allowfineoverride) {
+            $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $amount > 0 && $allfinesneedoverride ) {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
@@ -747,12 +770,16 @@ sub CanBookBeIssued {
 #
     # JB34 CHECKS IF BORROWERS DONT HAVE ISSUE TOO MANY BOOKS
     #
-	my $toomany = TooMany( $borrower, $item->{biblionumber}, $item );
-    # if TooMany return / 0, then the user has no permission to check out this book
-    if ($toomany =~ /\/ 0/) {
+	my ($current_loan_count, $max_loans_allowed) = TooMany( $borrower, $item->{biblionumber}, $item );
+    # if TooMany max_loans_allowed returns 0 the user doesn't have permission to check out this book
+    if ($max_loans_allowed eq 0) {
         $needsconfirmation{PATRON_CANT} = 1;
     } else {
-        $needsconfirmation{TOO_MANY} = $toomany if $toomany;
+        if($max_loans_allowed){
+            $needsconfirmation{TOO_MANY} = 1;
+            $needsconfirmation{current_loan_count} = $current_loan_count;
+            $needsconfirmation{max_loans_allowed} = $max_loans_allowed;
+        }
     }
 
     #
@@ -835,8 +862,11 @@ sub CanBookBeIssued {
         my $currborinfo =    C4::Members::GetMemberDetails( $issue->{borrowernumber} );
 
 #        warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
-        $needsconfirmation{ISSUED_TO_ANOTHER} =
-"$currborinfo->{'reservedate'} : $currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
+        $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
+        $needsconfirmation{issued_firstname} = $currborinfo->{'firstname'};
+        $needsconfirmation{issued_surname} = $currborinfo->{'surname'};
+        $needsconfirmation{issued_cardnumber} = $currborinfo->{'cardnumber'};
+        $needsconfirmation{issued_borrowernumber} = $currborinfo->{'borrowernumber'};
     }
 
     # See if the item is on reserve.
@@ -850,13 +880,23 @@ sub CanBookBeIssued {
         {
             # The item is on reserve and waiting, but has been
             # reserved by some other patron.
-            $needsconfirmation{RESERVE_WAITING} =
-"$resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'}, $branchname)";
+            $needsconfirmation{RESERVE_WAITING} = 1;
+            $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
+            $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
+            $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
+            $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
+            $needsconfirmation{'resbranchname'} = $branchname;
+            $needsconfirmation{'reswaitingdate'} = format_date($res->{'waitingdate'});
         }
         elsif ( $restype eq "Reserved" ) {
             # The item is on reserve for someone else.
-            $needsconfirmation{RESERVED} =
-"$res->{'reservedate'} : $resborrower->{'firstname'} $resborrower->{'surname'} ($resborrower->{'cardnumber'})";
+            $needsconfirmation{RESERVED} = 1;
+            $needsconfirmation{'resfirstname'} = $resborrower->{'firstname'};
+            $needsconfirmation{'ressurname'} = $resborrower->{'surname'};
+            $needsconfirmation{'rescardnumber'} = $resborrower->{'cardnumber'};
+            $needsconfirmation{'resborrowernumber'} = $resborrower->{'borrowernumber'};
+            $needsconfirmation{'resbranchname'} = $branchname;
+            $needsconfirmation{'resreservedate'} = format_date($res->{'reservedate'});
         }
     }
 	return ( \%issuingimpossible, \%needsconfirmation );
@@ -1484,7 +1524,7 @@ sub AddReturn {
         }
 
         if ($borrowernumber) {
-            MarkIssueReturned($borrowernumber, $item->{'itemnumber'}, $circControlBranch);
+            MarkIssueReturned($borrowernumber, $item->{'itemnumber'}, $circControlBranch, '', $borrower->{'privacy'});
             $messages->{'WasReturned'} = 1;    # FIXME is the "= 1" right?  This could be the borrower hash.
         }
 
@@ -1589,7 +1629,7 @@ sub AddReturn {
 
 =head2 MarkIssueReturned
 
-  MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate);
+  MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy);
 
 Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
@@ -1601,6 +1641,9 @@ it's safe to do this, i.e. last non-holiday > issuedate.
 if C<$returndate> is specified (in iso format), it is used as the date
 of the return. It is ignored when a dropbox_branch is passed in.
 
+C<$privacy> contains the privacy parameter. If the patron has set privacy to 2,
+the old_issue is immediately anonymised
+
 Ideally, this function would be internal to C<C4::Circulation>,
 not exported, but it is currently needed by one 
 routine in C<C4::Accounts>.
@@ -1608,7 +1651,7 @@ routine in C<C4::Accounts>.
 =cut
 
 sub MarkIssueReturned {
-    my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate ) = @_;
+    my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = "UPDATE issues SET returndate=";
     my @bind;
@@ -1632,6 +1675,16 @@ sub MarkIssueReturned {
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
     $sth_copy->execute($borrowernumber, $itemnumber);
+    # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
+    if ( $privacy == 2) {
+        # The default of 0 does not work due to foreign key constraints
+        # The anonymisation will fail quietly if AnonymousPatron is not a valid entry
+        my $anonymouspatron = (C4::Context->preference('AnonymousPatron')) ? C4::Context->preference('AnonymousPatron') : 0;
+        my $sth_ano = $dbh->prepare("UPDATE old_issues SET borrowernumber=?
+                                  WHERE borrowernumber = ?
+                                  AND itemnumber = ?");
+       $sth_ano->execute($anonymouspatron, $borrowernumber, $itemnumber);
+    }
     my $sth_del  = $dbh->prepare("DELETE FROM issues
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
@@ -2385,10 +2438,13 @@ sub DeleteTransfer {
 
 =head2 AnonymiseIssueHistory
 
-  $rows = AnonymiseIssueHistory($borrowernumber,$date)
+  $rows = AnonymiseIssueHistory($date,$borrowernumber)
 
 This function write NULL instead of C<$borrowernumber> given on input arg into the table issues.
 if C<$borrowernumber> is not set, it will delete the issue history for all borrower older than C<$date>.
+
+If c<$borrowernumber> is set, it will delete issue history for only that borrower, regardless of their opac privacy
+setting (force delete).
 
 return the number of affected rows.
 
@@ -2400,12 +2456,24 @@ sub AnonymiseIssueHistory {
     my $dbh            = C4::Context->dbh;
     my $query          = "
         UPDATE old_issues
-        SET    borrowernumber = NULL
-        WHERE  returndate < '".$date."'
+        SET    borrowernumber = ?
+        WHERE  returndate < ?
           AND borrowernumber IS NOT NULL
     ";
-    $query .= " AND borrowernumber = '".$borrowernumber."'" if defined $borrowernumber;
-    my $rows_affected = $dbh->do($query);
+
+    # The default of 0 does not work due to foreign key constraints
+    # The anonymisation will fail quietly if AnonymousPatron is not a valid entry
+    my $anonymouspatron = (C4::Context->preference('AnonymousPatron')) ? C4::Context->preference('AnonymousPatron') : 0;
+    my @bind_params = ($anonymouspatron, $date);
+    if (defined $borrowernumber) {
+       $query .= " AND borrowernumber = ?";
+       push @bind_params, $borrowernumber;
+    } else {
+       $query .= " AND (SELECT privacy FROM borrowers WHERE borrowers.borrowernumber=old_issues.borrowernumber) <> 0";
+    }
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@bind_params);
+    my $rows_affected = $sth->rows;  ### doublecheck row count return function
     return $rows_affected;
 }
 

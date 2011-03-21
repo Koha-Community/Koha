@@ -26,6 +26,7 @@
 parcel.pl
 
 =head1 DESCRIPTION
+
 This script shows all orders receipt or pending for a given supplier.
 It allows to write an order as 'received' when he arrives.
 
@@ -34,9 +35,11 @@ It allows to write an order as 'received' when he arrives.
 =over 4
 
 =item supplierid
+
 To know the supplier this script has to show orders.
 
 =item code
+
 is the bookseller invoice number.
 
 =item freight
@@ -46,6 +49,7 @@ is the bookseller invoice number.
 
 
 =item datereceived
+
 To filter the results list on this given date.
 
 =back
@@ -57,7 +61,7 @@ use strict;
 use C4::Auth;
 use C4::Acquisition;
 use C4::Budgets;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Biblio;
 use C4::Items;
 use CGI;
@@ -71,7 +75,8 @@ my $bookseller=GetBookSellerFromId($supplierid);
 
 my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
-my $gst= $input->param('gst') || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
+my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $datereceived =  ($input->param('op') eq 'new') ? C4::Dates->new($input->param('datereceived')) 
 					:  C4::Dates->new($input->param('datereceived'), 'iso')   ;
 $datereceived = C4::Dates->new() unless $datereceived;

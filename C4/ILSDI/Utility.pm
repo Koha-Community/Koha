@@ -24,7 +24,7 @@ use C4::Members;
 use C4::Items;
 use C4::Circulation;
 use C4::Biblio;
-use C4::Reserves;
+use C4::Reserves qw(GetReservesFromBorrowernumber);
 use C4::Context;
 use C4::Branch qw/GetBranchName/;
 use Digest::MD5 qw(md5_base64);

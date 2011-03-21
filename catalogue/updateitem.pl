@@ -31,7 +31,7 @@ use C4::Reserves;
 
 my $cgi= new CGI;
 
-my ($loggedinuser, $cookie, $sessionID) = checkauth($cgi, 0, {circulate => 1}, 'intranet');
+my ($loggedinuser, $cookie, $sessionID) = checkauth($cgi, 0, {circulate => 'circulate_remaining_permissions'}, 'intranet');
 
 my $biblionumber=$cgi->param('biblionumber');
 my $itemnumber=$cgi->param('itemnumber');

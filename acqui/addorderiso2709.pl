@@ -37,7 +37,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Koha qw/GetItemTypes/;
 use C4::Budgets qw/GetBudgets/;
-use C4::Acquisition qw/NewOrderItem/;
+use C4::Acquisition qw/NewOrderItem GetBasket/;
 use C4::Bookseller qw/GetBookSellerFromId/;
 
 my $input = new CGI;
@@ -145,11 +145,10 @@ if ($op eq ""){
               if ($orderinfo{'listprice'} =~ /^([\d\.,]*)/) {
                   $orderinfo{'listprice'} = $1;
                   $orderinfo{'listprice'} =~ s/,/\./;
-                  eval "use C4::Acquisition qw/GetBasket/;";
-                  eval "use C4::Bookseller qw/GetBookSellerFromId/;";
                   my $basket = GetBasket($orderinfo{basketno});
                   my $bookseller = GetBookSellerFromId($basket->{booksellerid});
-                  my $gst = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+                  # '//' is like '||' but tests for defined, rather than true
+                  my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
                   $orderinfo{'unitprice'} = $orderinfo{listprice} - ($orderinfo{listprice} * ($bookseller->{discount} / 100));
                   $orderinfo{'ecost'} = $orderinfo{unitprice};
               } else {
@@ -162,11 +161,9 @@ if ($op eq ""){
               if ($orderinfo{'listprice'} =~ /^([\d\.,]*)/) {
                   $orderinfo{'listprice'} = $1;
                   $orderinfo{'listprice'} =~ s/,/\./;
-                  eval "use C4::Acquisition qw/GetBasket/;";
-                  eval "use C4::Bookseller qw/GetBookSellerFromId/;";
                   my $basket = GetBasket($orderinfo{basketno});
                   my $bookseller = GetBookSellerFromId($basket->{booksellerid});
-                  my $gst = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+                  my $gst = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
                   $orderinfo{'unitprice'} = $orderinfo{listprice} - ($orderinfo{listprice} * ($bookseller->{discount} / 100));
                   $orderinfo{'ecost'} = $orderinfo{unitprice};
               } else {

@@ -25,10 +25,12 @@
     <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="widget" -->" />
     <!-- /TMPL_LOOP -->
 <!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="IntranetUserCSS" --><style type="text/css"><!-- TMPL_VAR NAME="IntranetUserCSS" --></style><!-- /TMPL_IF -->
 
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ui.tabs.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.hotkeys.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
 
 <!-- TMPL_IF NAME="js_libs" -->
@@ -62,7 +64,7 @@
 
 <!-- yui js --> 
 <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/utilities/utilities.js"></script> 
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/datasource/datasource.js"></script> 
+<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/datasource/datasource-min.js"></script>
 <!-- TMPL_IF NAME="CircAutocompl" -->
     <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/autocomplete/autocomplete-min.js"></script>
 <!-- /TMPL_IF -->

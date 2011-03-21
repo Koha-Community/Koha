@@ -170,7 +170,7 @@ function placeHold () {
     <table>
             <tr>
                 <!--TMPL_IF NAME="manageshelf" --><th class="checkall">&nbsp;</th><!-- /TMPL_IF -->
-                <!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
+                <!-- TMPL_UNLESS NAME="item_level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
                 <th>Title</th>
                 <th>Author</th>
                 <th>Date Added</th>
@@ -192,8 +192,8 @@ function placeHold () {
 				<!-- /TMPL_IF -->
 			</td>
 			<!-- /TMPL_IF -->
-			<!-- TMPL_UNLESS NAME="item-level_itypes" --><td>
-                <img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- TMPL_VAR NAME="description" -->
+			<!-- TMPL_UNLESS NAME="item_level_itypes" --><td>
+                <!-- TMPL_UNLESS NAME="noItemTypeImages" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" title="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_UNLESS --><!-- TMPL_VAR NAME="description" -->
 			</td><!-- /TMPL_UNLESS -->
 			<td>
 			<!-- TMPL_INCLUDE NAME="biblio-default-view.inc" -->
@@ -274,6 +274,7 @@ function placeHold () {
 
     <!-- TMPL_IF name="edit" -->
 		<input type="hidden" name="op" value="modifsave" />
+        <!-- TMPL_IF NAME="showprivateshelves" --><input type="hidden" name="display" value="privateshelves" /><!-- /TMPL_IF -->
 		<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR name="shelfnumber" -->" />
 		<legend>Edit List <i><!-- TMPL_VAR name="shelfname" --></i></legend>
 		<ol>
@@ -306,7 +307,9 @@ function placeHold () {
 	<!-- /TMPL_IF -->
 
 		</fieldset>
-		<fieldset class="action"><input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" /><a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a></fieldset>
+		<fieldset class="action"><input type="submit" onclick="Check(this.form); return false;" value="Save" class="submit" />
+        <!-- TMPL_IF NAME="showprivateshelves" --><a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves" class="cancel">Cancel</a><!-- TMPL_ELSE --><a href="/cgi-bin/koha/virtualshelves/shelves.pl" class="cancel">Cancel</a><!-- /TMPL_IF -->
+    </fieldset>
     </form>
     </div>
     <div class="yui-u">
@@ -360,6 +363,7 @@ function placeHold () {
 				<form action="shelves.pl" method="get">
 					<input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelf" -->" />
 					<input type="hidden" name="op" value="modif" />
+                    <input type="hidden" name="display" value="privateshelves" />
 					<input type="submit" class="editshelf" value="Edit" />
 				</form>
 				<form action="shelves.pl" method="post">
@@ -415,7 +419,7 @@ function placeHold () {
 					<input type="hidden" name="DEL-<!-- TMPL_VAR NAME="shelf" -->" value="1" />
 					<!-- TMPL_IF NAME="confirm" -->
 					<input type="hidden" name="CONFIRM-<!-- TMPL_VAR NAME="confirm" -->" value="1" />
-					<input type="submit" class="confirm" value="Confirm" />
+					<input type="submit" class="approve" value="Confirm" />
 					<!-- TMPL_ELSE -->
 					<input type="submit" class="deleteshelf" onclick="return confirmDelete(_('Are you sure you want to remove this List?'));" value="Delete" />
 					<!-- /TMPL_IF -->

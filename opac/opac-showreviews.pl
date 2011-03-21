@@ -1,5 +1,8 @@
 #!/usr/bin/perl
 
+# Copyright 2000-2002 Katipo Communications
+# Parts copyright 2010 Nelsonville Public Library
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -25,26 +28,135 @@ use C4::Output;
 use C4::Circulation;
 use C4::Review;
 use C4::Biblio;
+use C4::Dates qw/format_date/;
+use C4::Members qw/GetMemberDetails/;
+use POSIX qw(ceil strftime);
 
-my $query        = new CGI;
-my $biblionumber = $query->param('biblionumber');
+my $template_name;
+my $query = new CGI;
+my $format = $query->param("format") || '';
+my $count = C4::Context->preference('OPACnumSearchResults') || 20;
+my $results_per_page = $query->param('count') || $count;
+my $offset = $query->param('offset') || 0;
+my $page = $query->param('page') || 1;
+$offset = ($page-1)*$results_per_page if $page>1;
+
+if ($format eq "rss") {
+    $template_name = "opac-showreviews-rss.tmpl";
+} else {
+    $template_name = "opac-showreviews.tmpl",
+}
 
 my ( $template, $borrowernumber, $cookie ) = &get_template_and_user(
     {
-        template_name   => "opac-showreviews.tmpl",
+        template_name   => $template_name,
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     }
 );
 
-my $biblio  = GetBiblioData( $biblionumber );
-my $reviews = getreviews( $biblionumber, 1 );
+if($format eq "rss"){
+    my $lastbuilddate = C4::Dates->new();
+    my $lastbuilddate_output = $lastbuilddate->output("rfc822");
+    $template->param(
+        rss => 1,
+        timestamp => $lastbuilddate_output
+        );
+}
+
+my $reviews = getallreviews(1,$offset,$results_per_page);
+my $marcflavour      = C4::Context->preference("marcflavour");
+my $hits = numberofreviews();
+my $i = 0;
+my $latest_comment_date;
+for my $result (@$reviews){
+    my $biblionumber = $result->{biblionumber};
+	my $bib = &GetBiblioData($biblionumber);
+    my $record = GetMarcBiblio($biblionumber);
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+	my ( $borr ) = GetMemberDetails( $result->{borrowernumber} );
+	$result->{normalized_upc} = GetNormalizedUPC($record,$marcflavour);
+	$result->{normalized_ean} = GetNormalizedEAN($record,$marcflavour);
+	$result->{normalized_oclc} = GetNormalizedOCLCNumber($record,$marcflavour);
+	$result->{normalized_isbn} = GetNormalizedISBN(undef,$record,$marcflavour);
+	$result->{title} = $bib->{'title'};
+	$result->{subtitle} = GetRecordValue('subtitle', $record, $frameworkcode);
+	$result->{author} = $bib->{'author'};
+	$result->{place} = $bib->{'place'};
+	$result->{publishercode} = $bib->{'publishercode'};
+	$result->{copyrightdate} = $bib->{'copyrightdate'};
+	$result->{pages} = $bib->{'pages'};
+	$result->{size} = $bib->{'size'};
+	$result->{notes} = $bib->{'notes'};
+	$result->{timestamp} = $bib->{'timestamp'};
+	$result->{firstname} = $borr->{'firstname'};
+	$result->{surname} = $borr->{'surname'};
+    if ($result->{borrowernumber} eq $borrowernumber) {
+		$result->{your_comment} = 1;
+	}
+
+    if($format eq "rss"){
+        my $rsstimestamp = C4::Dates->new($result->{datereviewed},"iso");
+        my $rsstimestamp_output = $rsstimestamp->output("rfc822");
+        $result->{timestamp} = $rsstimestamp_output;
+        $result->{datereviewed} = format_date($result->{datereviewed});
+    } else {
+        $result->{datereviewed} = format_date($result->{datereviewed});
+    }
+}
+## Build the page numbers on the bottom of the page
+            my @page_numbers;
+            my $previous_page_first;
+            my $previous_page_offset;
+            # total number of pages there will be
+            my $pages = ceil($hits / $results_per_page);
+            # default page number
+            my $current_page_number = 1;
+            $current_page_number = ($offset / $results_per_page + 1) if $offset;
+            if($offset - $results_per_page == 0){
+                $previous_page_first = 1;
+            } elsif ($offset - $results_per_page > 0){
+                $previous_page_offset = $offset - $results_per_page;
+            }
+            my $next_page_offset = $offset + $results_per_page;
+            # If we're within the first 10 pages, keep it simple
+            if ($current_page_number < 10) {
+                # just show the first 10 pages
+                # Loop through the pages
+                my $pages_to_show = 10;
+                $pages_to_show = $pages if $pages<10;
+                for ($i=1; $i<=$pages_to_show;$i++) {
+                    # the offset for this page
+                    my $this_offset = (($i*$results_per_page)-$results_per_page);
+                    # the page number for this page
+                    my $this_page_number = $i;
+                    # it should only be highlighted if it's the current page
+                    my $highlight = 1 if ($this_page_number == $current_page_number);
+                    # put it in the array
+                    push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight };
+
+                }
+
+            }
+            # now, show twenty pages, with the current one smack in the middle
+            else {
+                for ($i=$current_page_number; $i<=($current_page_number + 20 );$i++) {
+                    my $this_offset = ((($i-9)*$results_per_page)-$results_per_page);
+                    my $this_page_number = $i-9;
+                    my $highlight = 1 if ($this_page_number == $current_page_number);
+                    if ($this_page_number <= $pages) {
+                        push @page_numbers, { offset => $this_offset, pg => $this_page_number, highlight => $highlight };
+                    }
+                }
+            }
+$template->param(   PAGE_NUMBERS => \@page_numbers,
+                    previous_page_first => $previous_page_first,
+                    previous_page_offset => $previous_page_offset) unless $pages < 2;
+$template->param(next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
 
 $template->param(
     reviews => $reviews,
-    title   => $biblio->{'title'},
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
-

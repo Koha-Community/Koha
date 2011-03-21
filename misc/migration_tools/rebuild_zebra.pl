@@ -37,7 +37,7 @@ my $verbose_logging;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
     'd:s'           => \$directory,
-    'reset'         => \$reset,
+    'r|reset'       => \$reset,
     's'             => \$skip_export,
     'k'             => \$keep_export,
     'nosanitize'    => \$nosanitize,
@@ -130,13 +130,13 @@ if ($do_munge) {
 }
 
 if ($authorities) {
-    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
+    index_records('authority', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $authorityserverdir);
 } else {
     print "skipping authorities\n" if ( $verbose_logging );
 }
 
 if ($biblios) {
-    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt);
+    index_records('biblio', $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $biblioserverdir);
 } else {
     print "skipping biblios\n" if ( $verbose_logging );
 }
@@ -168,11 +168,34 @@ if ($keep_export) {
     }
 }
 
+# This checks to see if the zebra directories exist under the provided path.
+# If they don't, then zebra is likely to spit the dummy. This returns true
+# if the directories had to be created, false otherwise.
+sub check_zebra_dirs {
+	my ($base) = shift() . '/';
+	my $needed_repairing = 0;
+	my @dirs = ( '', 'key', 'register', 'shadow' );
+	foreach my $dir (@dirs) {
+		my $bdir = $base . $dir;
+        if (! -d $bdir) {
+        	$needed_repairing = 1;
+        	mkdir $bdir || die "Unable to create '$bdir': $!\n";
+        	print "$0: needed to create '$bdir'\n";
+        }
+    }
+    return $needed_repairing;
+}	# ----------  end of subroutine check_zebra_dirs  ----------
+
 sub index_records {
-    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt) = @_;
+    my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $server_dir) = @_;
 
     my $num_records_exported = 0;
     my $num_records_deleted = 0;
+    my $need_reset = check_zebra_dirs($server_dir);
+    if ($need_reset) {
+    	print "$0: found broken zebra server directories: forcing a rebuild\n";
+    	$reset = 1;
+    }
     if ($skip_export && $verbose_logging) {
         print "====================\n";
         print "SKIPPING $record_type export\n";
@@ -223,6 +246,7 @@ sub index_records {
             if ($num_records_exported or $skip_export);
     }
 }
+
 
 sub select_zebraqueue_records {
     my ($record_type, $update_type) = @_;

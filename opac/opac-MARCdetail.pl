@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -23,6 +24,7 @@ MARCdetail.pl : script to show a biblio in MARC format
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 
@@ -70,7 +72,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "opac-MARCdetail.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         debug           => 1,
     }
 );
@@ -266,6 +268,16 @@ foreach my $subfield_code ( keys(%witness) ) {
 
 if(C4::Context->preference("ISBD")) {
 	$template->param(ISBD => 1);
+}
+
+#Search for title in links
+if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
+    $biblio->{author} ? $search_for_title =~ s/{AUTHOR}/$biblio->{author}/g : $search_for_title =~ s/{AUTHOR}//g;
+    $biblio->{title} =~ s/\/+$//; # remove trailing slash
+    $biblio->{title} =~ s/\s+$//; # remove trailing space
+    $biblio->{title} ? $search_for_title =~ s/{TITLE}/$biblio->{title}/g : $search_for_title =~ s/{TITLE}//g;
+    $biblio->{isbn} ? $search_for_title =~ s/{ISBN}/$biblio->{isbn}/g : $search_for_title =~ s/{ISBN}//g;
+ $template->param('OPACSearchForTitleIn' => $search_for_title);
 }
 
 $template->param(

@@ -39,7 +39,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { circulate => 1 },
+        flagsrequired   => { circulate => 'circulate_remaining_permissions' },
         debug           => 0,
     }
 );
@@ -77,7 +77,7 @@ my $cardnumber = $input->param("cardnumber");
 my $borrowernumber = $input->param("borrowernumber");
 my $exemptfine = $input->param("exemptfine") || 0;
 my $override_limit = $input->param("override_limit") || 0;
-my $failedrenews;
+my $failedrenews = q{};
 foreach my $itemno (@data) {
     # check status before renewing issue
 	my ($renewokay,$error) = CanBookBeRenewed($borrowernumber,$itemno,$override_limit);
@@ -88,7 +88,7 @@ foreach my $itemno (@data) {
 		$failedrenews.="&failedrenew=$itemno";        
 	}
 }
-my $failedreturn;
+my $failedreturn = q{};
 foreach my $barcode (@barcodes) {
     # check status before renewing issue
    my ( $returned, $messages, $issueinformation, $borrower ) = 

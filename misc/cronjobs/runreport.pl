@@ -28,6 +28,7 @@ use Pod::Usage;
 use Mail::Sendmail;
 use Text::CSV_XS;
 use CGI;
+use Carp;
 
 use vars qw($VERSION);
 
@@ -57,7 +58,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
 
 =head1 OPTIONS
 
-=over 8
+=over
 
 =item B<-help>
 
@@ -90,11 +91,19 @@ Same as above, but also runs report #17.
 
 =head1 TO DO
 
-=over 8
+=over
 
- ~ Complete testing for Sendmail related options: --email, --to, and --from.
- ~ Allow Saved Results option.
- ~ Possible --format option for CSV or tab-delimited output.
+=item * 
+
+Complete testing for Sendmail related options: --email, --to, and --from.
+
+=item *
+
+Allow Saved Results option.
+
+=item *
+
+Possible --format option for CSV or tab-delimited output.
 
 =back
 
@@ -151,7 +160,7 @@ unless (scalar(@ARGV)) {
 foreach my $report (@ARGV) {
     my ($sql, $type) = get_saved_report($report);
     unless ($sql) {
-        warn "ERROR: No saved report $report found";
+        carp "ERROR: No saved report $report found";
         next;
     }
     $verbose and print "SQL: $sql\n\n";
@@ -180,7 +189,7 @@ foreach my $report (@ARGV) {
             Subject => $subject,
             Message => $message 
         );
-        sendmail(%mail) or warn "mail not sent";
+        sendmail(%mail) or carp 'mail not sent:' . $Mail::Sendmail::error;
     } else {
         print $message;
     }

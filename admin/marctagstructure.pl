@@ -118,12 +118,12 @@ if ($op eq 'add_form') {
 	if ($searchfield) {
         $template->param(searchfield => $searchfield);
 		$template->param(action => "Modify tag");
-		$template->param('heading-modify-tag-p' => 1);
+		$template->param('heading_modify_tag_p' => 1);
 	} else {
 		$template->param(action => "Add tag");
-		$template->param('heading-add-tag-p' => 1);
+		$template->param('heading_add_tag_p' => 1);
 	}
-	$template->param('use-heading-flags-p' => 1);
+	$template->param('use_heading_flags_p' => 1);
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 			libopac => $data->{'libopac'},
 			repeatable => CGI::checkbox(-name=>'repeatable',
@@ -255,7 +255,7 @@ if ($op eq 'add_form') {
 		my @loop_data = ();
 		my $j=1;
 		my $i=$offset;
-		while ($i < ($offset+$pagesize<$cnt?$offset+$pagesize:$cnt)) {
+        while ( $i < $cnt ) {
 			my %row_data;  # get a fresh hash for the row data
 			$row_data{tagfield}         = $results[$i]->{'mts_tagfield'};
 			$row_data{liblibrarian}     = $results[$i]->{'mts_liblibrarian'};
@@ -267,7 +267,7 @@ if ($op eq 'add_form') {
 			$row_data{delete}        = "$script_name?op=delete_confirm&amp;searchfield="      .$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			$j=$i;
 			my @internal_loop = ();
-			while (($results[$i]->{'tagfield'}==$results[$j]->{'tagfield'}) and ($j< ($offset+$pagesize<$cnt?$offset+$pagesize:$cnt))) {
+			while ( ( $results[$i]->{'tagfield'} == $results[$j]->{'tagfield'} ) and ( $j < $cnt ) ) {
 				my %subfield_data;
 				$subfield_data{tagsubfield}      = $results[$j]->{'tagsubfield'};
 				$subfield_data{liblibrarian}     = $results[$j]->{'liblibrarian'};
@@ -294,7 +294,7 @@ if ($op eq 'add_form') {
 		my ($count,$results)=StringSearch($searchfield,$frameworkcode);
 		$cnt = $count;
 		my @loop_data = ();
-		for (my $i=$offset; $i < ($offset+$pagesize<$count?$offset+$pagesize:$count); $i++){
+        for ( my $i = $offset ; $i < $count ; $i++ ) {
 			my %row_data;  # get a fresh hash for the row data
 			$row_data{tagfield}         = $results->[$i]{'tagfield'};
 			$row_data{liblibrarian}     = $results->[$i]{'liblibrarian'};

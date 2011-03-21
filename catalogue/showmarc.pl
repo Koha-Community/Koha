@@ -1,13 +1,11 @@
 #!/usr/bin/perl
 
-# $Id: showmarc.pl,v 1.1.2.1 2007/06/18 21:57:23 rangi Exp $
-
-
 # Koha library project  www.koha-community.org
 
 # Licensed under the GPL
 
 # Copyright 2007 Liblime
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -79,6 +77,7 @@ my $results = $stylesheet->transform($source);
 my $newxmlrecord = $stylesheet->output_string($results);
 #warn $newxmlrecord;
 print "Content-type: text/html\n\n";
+utf8::encode($newxmlrecord);
 print $newxmlrecord;
 
 } else {

@@ -23,6 +23,7 @@ opac-authoritiesdetail.pl : script to show an authority in MARC format
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 
@@ -32,8 +33,6 @@ It shows the authority in a (nice) MARC format depending on authority MARC
 parameters tables.
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 
@@ -63,7 +62,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "opac-authoritiesdetail.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         debug           => 1,
     }
 );

@@ -32,7 +32,6 @@ use C4::BackgroundJob;
 use C4::ClassSource;
 use C4::Dates;
 use C4::Debug;
-use Switch;
 use MARC::File::XML;
 
 my $input = new CGI;
@@ -163,59 +162,58 @@ if ($op eq "action") {
 #-------------------------------------------------------------------------------
 
 if ($op eq "show"){
-	my $filefh = $input->upload('uploadfile');
-	my $filecontent = $input->param('filecontent');
-	my @notfoundbarcodes;
+    my $filefh = $input->upload('uploadfile');
+    my $filecontent = $input->param('filecontent');
+    my @notfoundbarcodes;
 
     my @contentlist;
     if ($filefh){
         while (my $content=<$filefh>){
-            chomp $content;
+            $content =~ s/[\r\n]*$//;
             push @contentlist, $content if $content;
         }
 
-	switch ($filecontent) {
-	    case "barcode_file" {
-		foreach my $barcode (@contentlist) {
+        if ($filecontent eq 'barcode_file') {
+            foreach my $barcode (@contentlist) {
 
-		    my $itemnumber = GetItemnumberFromBarcode($barcode);
-		    if ($itemnumber) {
-			push @itemnumbers,$itemnumber;
-		    } else {
-			push @notfoundbarcodes, $barcode;
-		    }
-		}
-
-	    }
-
-	    case "itemid_file" {
-		@itemnumbers = @contentlist;
-	    }
-	}
+                my $itemnumber = GetItemnumberFromBarcode($barcode);
+                if ($itemnumber) {
+                    push @itemnumbers,$itemnumber;
+                } else {
+                    push @notfoundbarcodes, $barcode;
+                }
+            }
+        }
+        elsif ( $filecontent eq 'itemid_file') {
+            @itemnumbers = @contentlist;
+        }
     } else {
-       if ( my $list=$input->param('barcodelist')){
-        push my @barcodelist, split(/\s\n/, $list);
+        if ( my $list=$input->param('barcodelist')){
+            push my @barcodelist, split(/\s\n/, $list);
 
-	foreach my $barcode (@barcodelist) {
+            foreach my $barcode (@barcodelist) {
 
-	    my $itemnumber = GetItemnumberFromBarcode($barcode);
-	    if ($itemnumber) {
-		push @itemnumbers,$itemnumber;
-	    } else {
-		push @notfoundbarcodes, $barcode;
-	    }
-	}
+                my $itemnumber = GetItemnumberFromBarcode($barcode);
+                if ($itemnumber) {
+                    push @itemnumbers,$itemnumber;
+                } else {
+                    push @notfoundbarcodes, $barcode;
+                }
+            }
 
+        }
     }
-}
+
+    # Flag to tell the template there are valid results, hidden or not
+    if(scalar(@itemnumbers) > 0){ $template->param("itemresults" => 1); }
     # Only display the items if there are no more than 1000
     if (scalar(@itemnumbers) <= 1000) {
-	$items_display_hashref=BuildItemsData(@itemnumbers);
+        $items_display_hashref=BuildItemsData(@itemnumbers);
     } else {
-	$template->param("too_many_items" => scalar(@itemnumbers));
-	# Even if we do not display the items, we need the itemnumbers
-	my @itemnumbers_hashref = map {{itemnumber => $_}} @itemnumbers;
-	$template->param("itemnumbers_hashref" => \@itemnumbers_hashref);
+        $template->param("too_many_items" => scalar(@itemnumbers));
+        # Even if we do not display the items, we need the itemnumbers
+        my @itemnumbers_hashref = map {{itemnumber => $_}} @itemnumbers;
+        $template->param("itemnumbers_hashref" => \@itemnumbers_hashref);
     }
 # now, build the item form for entering a new item
 my @loop_data =();
@@ -431,7 +429,8 @@ sub BuildItemsData{
 			my %this_row;
 			foreach my $field (grep {$_->tag() eq $itemtagfield} $itemmarc->fields()) {
 				# loop through each subfield
-				if (my $itembranchcode=$field->subfield($branchtagsubfield) && C4::Context->preference("IndependantBranches")) {
+				my $itembranchcode=$field->subfield($branchtagsubfield);
+				if ($itembranchcode && C4::Context->preference("IndependantBranches")) {
 						#verifying rights
 						my $userenv = C4::Context->userenv();
 						unless (($userenv->{'flags'} == 1) or (($userenv->{'branch'} eq $itembranchcode))){
@@ -458,8 +457,11 @@ sub BuildItemsData{
 
             # grab title, author, and ISBN to identify bib that the item
             # belongs to in the display
-			my $biblio=GetBiblioData($$itemdata{biblionumber});
-            $this_row{bibinfo} = join("\n", @$biblio{qw(title author ISBN)});
+			 my $biblio=GetBiblioData($$itemdata{biblionumber});
+            $this_row{title} = $biblio->{title};
+            $this_row{author} = $biblio->{author};
+            $this_row{isbn} = $biblio->{isbn};
+            $this_row{biblionumber} = $biblio->{biblionumber};
 
 			if (%this_row) {
 				push(@big_array, \%this_row);
@@ -478,7 +480,11 @@ sub BuildItemsData{
 			$row_data{itemnumber} = $row->{itemnumber};
 			#reporting this_row values
 			$row_data{'nomod'} = $row->{'nomod'};
-            $row_data{bibinfo} = $row->{bibinfo};
+      $row_data{bibinfo} = $row->{bibinfo};
+      $row_data{author} = $row->{author};
+      $row_data{title} = $row->{title};
+      $row_data{isbn} = $row->{isbn};
+      $row_data{biblionumber} = $row->{biblionumber};
 			push(@item_value_loop,\%row_data);
 		}
 		my @header_loop=map { { header_value=> $witness{$_}} } @witnesscodessorted;
@@ -499,7 +505,7 @@ sub UpdateMarcWith {
 	my @fields_to=$marcto->field($itemtag);
     foreach my $subfield ($fieldfrom->subfields()){
 		foreach my $field_to_update (@fields_to){
-				$field_to_update->update($$subfield[0]=>$$subfield[1]) if ($$subfield[1]);
+				$field_to_update->update($$subfield[0]=>$$subfield[1]) if ($$subfield[1] != '' or $$subfield[1] == '0');
 		}
     }
   #warn "TO edited:",$marcto->as_formatted;

@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 # This file is part of Koha.
+# Copyright 2006-2010 BibLibre
+
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -249,7 +251,7 @@ $template->param( branchloop => \@branchloop,
 # the index parameter is different for item-level itemtypes
 my $supportlist=GetSupportList();				
 foreach my $support(@$supportlist){
-    $$support{'selected'}= $$support{'code'} eq $$suggestion_ref{'itemtype'};
+    $$support{'selected'}= $$support{'itemtype'} eq $$suggestion_ref{'itemtype'};
     if ($$support{'imageurl'}){
         $$support{'imageurl'}= getitemtypeimagelocation( 'intranet', $$support{'imageurl'} );
     }
@@ -258,6 +260,9 @@ foreach my $support(@$supportlist){
     }
 }
 $template->param(itemtypeloop=>$supportlist);
+
+my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG",$$suggestion_ref{'patronreason'});
+$template->param(patron_reason_loop=>$patron_reason_loop);
 
 #Budgets management
 my $searchbudgets={ budget_branchcode=>$branchfilter} if $branchfilter;
@@ -268,6 +273,26 @@ foreach my $budget (@$budgets){
 };
 
 $template->param( budgetsloop => $budgets);
+
+# get currencies and rates
+my @rates = GetCurrencies();
+my $count = scalar @rates;
+
+my @loop_currency = ();
+for ( my $i = 0 ; $i < $count ; $i++ ) {
+    my %line;
+    $line{currcode} = $rates[$i]->{'currency'};
+    $line{rate}     = $rates[$i]->{'rate'};
+	$line{selected} = 1 if ($$suggestion_ref{'currency'} && $line{'currcode'} eq $$suggestion_ref{'currency'});
+    push @loop_currency, \%line;
+}
+
+$template->param(loop_currency => \@loop_currency);
+
+$template->param(
+	price        => sprintf("%.2f", $$suggestion_ref{'price'}||0),
+	total            => sprintf("%.2f", $$suggestion_ref{'total'}||0),
+);
 
 my %hashlists;
 foreach my $field qw(managedby acceptedby suggestedby budgetid STATUS) {

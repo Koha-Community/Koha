@@ -160,27 +160,23 @@
     <div id="bd">
 	  <div id="yui-g">
         <div id="holds" class="container">
-
-          <!-- TMPL_IF NAME="message" -->
+        <!-- TMPL_IF NAME="message" -->
             <!-- TMPL_IF NAME="GNA" -->
-              <div class="dialog alert">
-                <strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.
-              </div>
-              <div class="dialog alert">Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)
+              <div id="gna" class="dialog alert">
+                <p><strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userupdate.pl">contact information</a> on file.</p>
+              <p>Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)</p>
               </div>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="lost" -->
-              <div class="dialog alert">
-                <strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.
-              </div>
-              <div class="dialog alert">If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.
+              <div id="lost" class="dialog alert">
+                <p><strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.</p>
+                <p>If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</p>
               </div>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="debarred" -->
-              <div class="dialog alert">
-                <strong>Sorry</strong>, you cannot place holds because your account has been frozen.
-              </div>
-              <div class="dialog alert">Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.
+              <div id="debarred" class="dialog alert">
+                <p><strong>Sorry</strong>, you cannot place holds because your account has been frozen.</p>
+                <p>Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.</p>
               </div>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="too_much_oweing" -->
@@ -211,18 +207,18 @@
             <!-- TMPL_IF NAME="bad_data" -->
               <div class="dialog alert">ERROR: Internal error: incomplete hold request.</div>
             <!-- /TMPL_IF -->
+          <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="none_available" -->
-              <div class="dialog alert"><strong>Sorry</strong>, none of these items can be placed on hold.
-              </div>
-            <!-- /TMPL_IF -->
+                <div class="dialog alert"><strong>Sorry</strong>, none of these items can be placed on hold.
+                </div>
+              <!-- /TMPL_IF -->
           <!-- /TMPL_IF --><!-- NAME="message" -->
 
-          <!-- TMPL_UNLESS NAME="message" -->
-              <h3>Confirm holds for:
-                <!-- TMPL_LOOP NAME="USER_INFO" -->
-                  <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
-                <!-- /TMPL_LOOP -->
-              </h3>
+      <!-- TMPL_UNLESS NAME="message" --><!-- TMPL_UNLESS NAME="none_available" --><h3>Confirm holds for:
+                      <!-- TMPL_LOOP NAME="USER_INFO" -->
+                        <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)
+                      <!-- /TMPL_LOOP -->
+                    </h3><!-- /TMPL_UNLESS -->
 
             <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
             <input type="hidden" name="place_reserve" value="1"/>
@@ -232,10 +228,10 @@
             <input type="hidden" name="selecteditems" id="selections"/>
             <div id="bigloop">
               <table id="bibitemloop">
-                <tr>
-                  <th colspan="2">Hold</th>
+                <!-- TMPL_UNLESS NAME="none_available" --><tr>
+                  <th>Hold</th>
                   <th>Title</th>
-                  <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                  <!-- TMPL_UNLESS NAME="item_level_itypes" -->
                     <th>Item Type</th>
                   <!-- /TMPL_UNLESS -->
                   <!-- TMPL_IF NAME="showpriority" -->
@@ -249,14 +245,16 @@
                     <th id="place_on_hdr" style="display:none">Place On</th>
                   <!-- /TMPL_IF -->
                   <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-                    <th>Pickup Location</th>
+		    <!-- TMPL_IF NAME="choose_branch"-->
+                        <th>Pickup Location</th>
+		    <!-- /TMPL_IF -->
                   <!-- /TMPL_UNLESS -->
-                </tr>
+                </tr><!-- TMPL_ELSE --><tr><th colspan="5">Title</th></tr><!-- /TMPL_UNLESS -->
 
                 <!-- TMPL_LOOP name="bibitemloop" -->
                   <tr>
                       <!-- TMPL_IF NAME="holdable" -->
-					  <td colspan="2">
+					  <td>
                       <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
                       <input class="single_bib" name="single_bib" type="hidden" value="<!-- TMPL_VAR NAME="biblionumber" -->"/>
                         <span class="confirmjs_hold" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
@@ -269,173 +267,178 @@
                         </span>
 					</td>
                       <!-- TMPL_ELSE -->
-					  <td>
-                      <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
-                      <input class="single_bib" name="single_bib" type="hidden" value="<!-- TMPL_VAR NAME="biblionumber" -->"/>
-                        <span class="confirmjs_nohold" title="<!-- TMPL_VAR NAME="biblionumber" -->"></span>
-                        <span class="confirm_nonjs">
-                          <input type="radio" class="confirmbox checkitem <!-- TMPL_VAR NAME="checkitem_bib" -->"
-                                 name="<!-- TMPL_VAR NAME="checkitem_bib" -->" disabled="disabled"
-                                 id="<!-- TMPL_VAR NAME="checkitem_bib" -->"
-                                 value="any" />
-                        </span>
-					</td><td>
-                        <!-- TMPL_IF NAME="already_reserved" -->
-                          <div class="bibmessage">You have already requested this title.</div>
-                        <!-- /TMPL_IF -->
-                        <!-- TMPL_UNLESS NAME="bib_available" -->
-                          <div class="bibmessage">No available items.</div>
-                        <!-- TMPL_ELSE -->
-                          <div class="bibmessage">This title cannot be requested.</div>
-                        <!-- /TMPL_UNLESS -->
-                    </td>
+					  <!-- TMPL_UNLESS NAME="none_available" --><td>&nbsp;</td><!-- /TMPL_UNLESS -->
                       <!-- /TMPL_IF -->
-                    <td>
+                    <!-- TMPL_IF NAME="holdable" --><td><!-- TMPL_ELSE --><td colspan="5"><!-- /TMPL_IF -->
                       <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --><!-- TMPL_IF NAME="subtitle" --> <!-- TMPL_LOOP NAME="subtitle" --><!--TMPL VAR Name="subfield"--><!--/TMPL_LOOP--><!-- /TMPL_IF --></a>
                       <!-- TMPL_IF NAME="author" -->,  by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
+
+                      <!-- TMPL_UNLESS NAME="holdable" -->
+
+                        <!-- TMPL_IF NAME="already_reserved" -->
+                          <div class="bibmessage">You have already requested this title.</div>
+                        <!-- TMPL_ELSE -->
+                          <!-- TMPL_UNLESS NAME="bib_available" -->
+                            <div class="bibmessage">No available items.</div>
+                          <!-- TMPL_ELSE -->
+                            <div class="bibmessage">This title cannot be requested.</div>
+                          <!-- /TMPL_UNLESS -->
+                        <!-- /TMPL_IF -->
+
+
+                        <!-- /TMPL_UNLESS -->
+
                     </td>
-                    <!-- TMPL_UNLESS NAME="item-level_itypes" -->
-                      <td>
-                        <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
-						<!-- TMPL_VAR NAME="description" -->
-                      </td>
-                    <!-- /TMPL_UNLESS -->
-                    <!-- TMPL_IF NAME="showpriority" --><td><!-- TMPL_VAR name="rank" --> out of <!-- TMPL_VAR NAME="reservecount" --></td><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="holdable" --><!-- TMPL_UNLESS NAME="item_level_itypes" -->
+                                          <td>
+                                            <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
+                                <!-- TMPL_VAR NAME="description" -->
+                                          </td>
+                                        <!-- /TMPL_UNLESS --><!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="holdable" -->
+                    <!-- TMPL_IF NAME="showpriority" -->
+                    <td>
+                    <!-- TMPL_VAR name="rank" --> out of <!-- TMPL_VAR NAME="reservecount" -->
+                    </td><!-- /TMPL_IF --><!-- /TMPL_IF -->
 		    <!-- TMPL_IF NAME="reserve_in_future" -->
-		    <td>
-			<input name="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10">
-		  <script language="JavaScript" type="text/javascript">
-			//<![CDATA[
-			$("#reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").attr( 'readonly', 'readonly' );
+		    <!-- TMPL_IF NAME="holdable" --><td>
+              <input name="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10">
+              <script language="JavaScript" type="text/javascript">
+              //<![CDATA[
+              $("#reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").attr( 'readonly', 'readonly' );
 
-			var cal_img = document.createElement('img');
-			cal_img.src = "<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif";
-			cal_img.alt = "Show Calendar";
-			cal_img.border = "0";
-			cal_img.id = "CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->";
-			cal_img.style.cursor = "pointer";
-			document.getElementById("reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").parentNode.appendChild( cal_img );
+              var cal_img = document.createElement('img');
+              cal_img.src = "<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif";
+              cal_img.alt = "Show Calendar";
+              cal_img.border = "0";
+              cal_img.id = "CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->";
+              cal_img.style.cursor = "pointer";
+              document.getElementById("reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->").parentNode.appendChild( cal_img );
 
-			function validate<!-- TMPL_VAR NAME="biblionumber" -->(date) {
-			    var today = new Date();
-                if ( (date > today) ||
-                        ( date.getDate() == today.getDate() &&
-                          date.getMonth() == today.getMonth() &&
-                          date.getFullYear() == today.getFullYear() ) ) {
-                    return false;
-                } else {
-                    return true;
-                }
-			};
-			Calendar.setup(
-			{
-				inputField : "reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->",
-				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-				button : "CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->",
-				disableFunc : validate<!-- TMPL_VAR NAME="biblionumber" -->,
-				dateStatusFunc : validate<!-- TMPL_VAR NAME="biblionumber" -->,
-			}
-			);
-			//]]>
-			</script>
-		    </td>
+              function validate<!-- TMPL_VAR NAME="biblionumber" -->(date) {
+                  var today = new Date();
+                        if ( (date > today) ||
+                                ( date.getDate() == today.getDate() &&
+                                  date.getMonth() == today.getMonth() &&
+                                  date.getFullYear() == today.getFullYear() ) ) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+              };
+              Calendar.setup(
+              {
+                inputField : "reserve_date_<!-- TMPL_VAR NAME="biblionumber" -->",
+                ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+                button : "CalendarReserveDate<!-- TMPL_VAR NAME="biblionumber" -->",
+                disableFunc : validate<!-- TMPL_VAR NAME="biblionumber" -->,
+                dateStatusFunc : validate<!-- TMPL_VAR NAME="biblionumber" -->
+              }
+              );
+              //]]>
+              </script>
+                </td><!-- /TMPL_IF -->
 
 		    <!-- /TMPL_IF -->
-	<td>
-	    <input name="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10" readonly="readonly" />
-	    <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate_<!-- TMPL_VAR NAME="biblionumber" -->" style="cursor: pointer;" />
-	    <script language="JavaScript" type="text/javascript">
-		//<![CDATA[
-		function validate1(date) {
-			var today = new Date();
-			if ( (date > today) ||
-                    ( date.getDate() == today.getDate() &&
-                      date.getMonth() == today.getMonth() &&
-                      date.getFullYear() == today.getFullYear() ) ) {
-				return false;
-			} else {
-				return true;
-			}
-		};
-		Calendar.setup(
-			{
-				inputField : "expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->",
-				ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-				button : "CalendarExpirationDate_<!-- TMPL_VAR NAME="biblionumber" -->",
-				disableFunc : validate1,
-				dateStatusFunc : validate1,
-			}
-		);
-		//]]>
-	    </script>
-		<p style="margin:.3em 2em;">
-		<a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->').value='';return false;">Clear Date</a></p>
-	</td>
+	<!-- TMPL_IF NAME="holdable" --><td>
+        <input name="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" id="expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->" size="10" readonly="readonly" />
+        <img src="<!-- TMPL_VAR NAME="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate_<!-- TMPL_VAR NAME="biblionumber" -->" style="cursor: pointer;" />
+        <script language="JavaScript" type="text/javascript">
+      //<![CDATA[
+      function validate1(date) {
+        var today = new Date();
+        if ( (date > today) ||
+                      ( date.getDate() == today.getDate() &&
+                        date.getMonth() == today.getMonth() &&
+                        date.getFullYear() == today.getFullYear() ) ) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+      Calendar.setup(
+        {
+          inputField : "expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->",
+          ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+          button : "CalendarExpirationDate_<!-- TMPL_VAR NAME="biblionumber" -->",
+          disableFunc : validate1,
+          dateStatusFunc : validate1
+        }
+      );
+      //]]>
+        </script>
+      <p style="margin:.3em 2em;">
+      <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_<!-- TMPL_VAR NAME="biblionumber" -->').value='';return false;">Clear Date</a></p>
+    </td><!-- /TMPL_IF -->
 
-                    <!-- TMPL_IF NAME="OPACItemHolds" -->
-                      <td class="place_on_type" style="display:none">
-                        <table>
-                          <tr>
-                            <td>
-                              <!-- TMPL_UNLESS NAME="holdable" -->
-                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       id="reqany_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       class="selectany"
-                                       value="Any"
-                                       disabled="disabled"
-                                />
-                              <!-- TMPL_ELSE -->
-                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       id="reqany_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       class="selectany"
-                                       value="Any"
-                                       checked="checked"
-                                />
-                              <!-- /TMPL_UNLESS -->
-                              <label for="reqany_<!-- TMPL_VAR NAME="biblionumber" -->">Next available copy</label>
-                            </td>
-                          </tr>
-                          <tr>
-                            <td>
-                              <!-- TMPL_UNLESS NAME="holdable" -->
-                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       id="reqspecific_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       class="selectspecific"
-                                       disabled="disabled"
-                                       value="Specific"
-                                />
-                              <!-- TMPL_ELSE -->
-                                <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       id="reqspecific_<!-- TMPL_VAR NAME="biblionumber" -->"
-                                       class="selectspecific"
-                                       value="Specific"
-                                />
-                              <!-- /TMPL_UNLESS -->
-                              <label for="reqspecific_<!-- TMPL_VAR NAME="biblionumber"-->">A specific copy</label>
-                            </td>
-                          </tr>
-                        </table>
-                      </td>
-                    <!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="holdable" --><!-- TMPL_IF NAME="OPACItemHolds" -->
+                                          <td class="place_on_type" style="display:none">
+                                            <table>
+                                              <tr>
+                                                <td>
+                                                  <!-- TMPL_UNLESS NAME="holdable" -->
+                                                    <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           id="reqany_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           class="selectany"
+                                                           value="Any"
+                                                           disabled="disabled"
+                                                    />
+                                                  <!-- TMPL_ELSE -->
+                                                    <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           id="reqany_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           class="selectany"
+                                                           value="Any"
+                                                           checked="checked"
+                                                    />
+                                                  <!-- /TMPL_UNLESS -->
+                                                  <label for="reqany_<!-- TMPL_VAR NAME="biblionumber" -->">Next available copy</label>
+                                                </td>
+                                              </tr>
+                                              <tr>
+                                                <td>
+                                                  <!-- TMPL_UNLESS NAME="holdable" -->
+                                                    <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           id="reqspecific_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           class="selectspecific"
+                                                           disabled="disabled"
+                                                           value="Specific"
+                                                    />
+                                                  <!-- TMPL_ELSE -->
+                                                    <input type="radio" name="reqtype_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           id="reqspecific_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                           class="selectspecific"
+                                                           value="Specific"
+                                                    />
+                                                  <!-- /TMPL_UNLESS -->
+                                                  <label for="reqspecific_<!-- TMPL_VAR NAME="biblionumber"-->">A specific copy</label>
+                                                </td>
+                                              </tr>
+                                            </table>
+                                          </td>
+                                        <!-- /TMPL_IF --><!-- /TMPL_IF -->
 
                     <!-- TMPL_UNLESS NAME="singleBranchMode" -->
-                      <td>
-                        <select name="branch" id="branch_<!-- TMPL_VAR NAME="biblionumber" -->"
-                          <!-- TMPL_UNLESS NAME="holdable" -->disabled="disabled"<!-- /TMPL_UNLESS --> >
-                          <!-- TMPL_LOOP NAME="branchChoicesLoop" -->
-                            <!-- TMPL_IF name="selected" -->
-                              <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
-                            <!-- TMPL_ELSE -->
-                              <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
-                            <!-- /TMPL_IF -->
-                          <!-- /TMPL_LOOP -->
-                        </select>
-                      </td>
+                        <!-- TMPL_IF NAME="holdable" -->
+			    <!-- TMPL_IF NAME="choose_branch" -->
+			                   <td>
+                                              <select name="branch" id="branch_<!-- TMPL_VAR NAME="biblionumber" -->"
+                                                <!-- TMPL_UNLESS NAME="holdable" -->disabled="disabled"<!-- /TMPL_UNLESS --> >
+                                                <!-- TMPL_LOOP NAME="branchChoicesLoop" -->
+                                                  <!-- TMPL_IF name="selected" -->
+                                                    <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="branchname" --></option>
+                                                  <!-- TMPL_ELSE -->
+                                                    <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="branchname" --></option>
+                                                  <!-- /TMPL_IF -->
+                                                <!-- /TMPL_LOOP -->
+                                              </select>
+                                           </td>
+			    <!-- /TMPL_IF -->
+		        <!-- /TMPL_IF -->
                     <!-- /TMPL_UNLESS -->
                   </tr>
 
                   <!-- TMPL_IF NAME="OPACItemHolds" -->
-                  <!-- TMPL_IF NAME="bib_available" -->
+                  <!-- TMPL_IF NAME="holdable" -->
                     <tr class="copiesrow" id="copiesrow_<!-- TMPL_VAR NAME="biblionumber"-->">
                       <td colspan="1">
                       </td>
@@ -444,7 +447,7 @@
                           <caption>Select a specific copy:</caption>
                           <tr>
                             <th>Copy</th>
-                            <!-- TMPL_IF NAME="item-level_itypes" -->
+                            <!-- TMPL_IF NAME="item_level_itypes" -->
                               <th>Item Type</th>
                             <!-- /TMPL_IF -->
                             <th>Barcode</th>
@@ -470,9 +473,11 @@
                                   <img src="/opac-tmpl/<!-- TMPL_VAR NAME="theme" -->/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
                                 <!-- /TMPL_IF --> <!-- TMPL_IF NAME="copynumber" --><!-- TMPL_VAR NAME="copynumber" --><!-- /TMPL_IF -->
                               </td>
-                              <!-- TMPL_IF NAME="item-level_itypes" -->
+                              <!-- TMPL_IF NAME="item_level_itypes" -->
                                 <td>
+                                  <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
                                   <!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF -->
+                                  <!-- /TMPL_UNLESS -->
 								<!-- TMPL_VAR NAME="description" -->
                                 </td>
                               <!-- /TMPL_IF -->
@@ -517,17 +522,16 @@
                   <!-- /TMPL_IF --><!-- OPACItemHolds -->
                 <!-- /TMPL_LOOP -->
               </table><!-- bibitemloop -->
+              <!-- /TMPL_UNLESS --> <!-- if message -->
             </div><!-- bigloop -->
 
-            <!-- TMPL_IF NAME="none_available" -->
-            <input type="submit" disabled="disabled" value="Place Hold" />
-            <!-- TMPL_ELSE -->
+            <!-- TMPL_UNLESS NAME="message" -->
+            <!-- TMPL_UNLESS NAME="none_available" -->
             <input type="submit" value="Place Hold" class="placehold" />
-            <!-- /TMPL_IF -->
+            <!-- /TMPL_UNLESS -->
+            <!-- /TMPL_UNLESS -->
 
             </form>
-
-          <!-- /TMPL_UNLESS --><!-- message -->
 
         </div><!-- holds -->
       </div><!-- yui-g -->

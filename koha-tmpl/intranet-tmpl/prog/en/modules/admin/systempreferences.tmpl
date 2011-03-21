@@ -88,7 +88,7 @@
 
 <!-- TMPL_IF NAME="add_form" -->
     
-        <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post" <!-- TMPL_IF NAME="type-upload" -->enctype="multipart/form-data"<!-- /TMPL_IF -->>
+        <form action="<!-- TMPL_VAR NAME="script_name" -->" name="Aform" method="post" <!-- TMPL_IF NAME="type_upload" -->enctype="multipart/form-data"<!-- /TMPL_IF -->>
                 
         <fieldset class="rows"><legend>
         <!-- TMPL_IF NAME="modify" -->Modify
@@ -98,13 +98,13 @@
             <li><!-- TMPL_IF NAME="searchfield" --><span class="label">Variable: </span><!-- TMPL_VAR NAME="searchfield" --><input type="hidden" name="variable" value="<!-- TMPL_VAR NAME="searchfield" -->" />
             <!-- TMPL_ELSE --><label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" /><!-- /TMPL_IF --></li>
             <li><label for="value">Value: </label>
-                <!-- TMPL_IF NAME="type-free" -->
+                <!-- TMPL_IF NAME="type_free" -->
                     <textarea id="value" name="value" cols="<!-- TMPL_VAR NAME="fieldlength" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
-                <!-- TMPL_ELSIF NAME="type-upload" -->
+                <!-- TMPL_ELSIF NAME="type_upload" -->
                     <input type="file" name="value" />
-                <!-- TMPL_ELSIF NAME="type-textarea" -->
+                <!-- TMPL_ELSIF NAME="type_textarea" -->
                     <textarea name="value" id="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
-                <!-- TMPL_ELSIF NAME="type-choice" -->
+                <!-- TMPL_ELSIF NAME="type_choice" -->
                     <select name="value" id="value">
                         <!-- TMPL_LOOP NAME="options" -->
                             <!-- TMPL_IF NAME="selected" -->
@@ -115,7 +115,7 @@
                         <!-- /TMPL_LOOP -->
                     </select>
                 <!-- /TMPL_IF -->
-        <!-- TMPL_IF NAME="type-langselector" -->
+        <!-- TMPL_IF NAME="type_langselector" -->
         <!-- TMPL_IF NAME="languages_loop" -->
     <table>
         <!-- TMPL_LOOP NAME="languages_loop" -->
@@ -149,12 +149,12 @@
 
         <!-- /TMPL_IF -->
 
-                <!-- TMPL_IF NAME="type-yesno" -->
-                    <!-- TMPL_IF NAME="value-yes" -->
+                <!-- TMPL_IF NAME="type_yesno" -->
+                    <!-- TMPL_IF NAME="value_yes" -->
                         <input type="radio" name="value" id="value" value="1" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value" value="1" />
                     <!-- /TMPL_IF -->
                     <label for="value" class="yesno">ON</label>
-                    <!-- TMPL_IF NAME="value-no" -->    
+                    <!-- TMPL_IF NAME="value_no" -->
                         <input type="radio" name="value" id="value-no" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" id="value-no" value="0" />
                     <!-- /TMPL_IF -->
                     <label for="value-no" class="yesno">OFF</label>
@@ -260,19 +260,19 @@
         <!-- TMPL_ELSE -->
         <td>
         <!-- /TMPL_IF -->
-            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" <!-- TMPL_IF NAME="type-upload" -->enctype="multipart/form-data"<!-- /TMPL_IF -->>
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" <!-- TMPL_IF NAME="type_upload" -->enctype="multipart/form-data"<!-- /TMPL_IF -->>
 
-                <!-- TMPL_IF NAME="type-free" -->
+                <!-- TMPL_IF NAME="type_free" -->
                 <input type="text" name="value" size="<!-- TMPL_VAR NAME="fieldlength" -->" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" />
                 <!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="type-upload" -->
+                <!-- TMPL_IF NAME="type_upload" -->
                 <input type="file" name="value" value="<!-- TMPL_VAR NAME="value" escape="HTML" -->" />
                 <!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="type-textarea" -->
+                <!-- TMPL_IF NAME="type_textarea" -->
                 <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
                 <textarea name="value" rows="<!--TMPL_VAR NAME="rows" -->" cols="<!-- TMPL_VAR NAME="cols" -->"><!-- TMPL_VAR NAME="value" escape="HTML" --></textarea>
                 <!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="type-choice" -->
+                <!-- TMPL_IF NAME="type_choice" -->
                 <select name="value">
                     <!-- TMPL_LOOP NAME="options" -->
                         <!-- TMPL_IF NAME="selected" -->
@@ -283,7 +283,7 @@
                     <!-- /TMPL_LOOP -->
                 </select>
                 <!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="type-langselector" -->
+                <!-- TMPL_IF NAME="type_langselector" -->
                 <!-- TMPL_IF NAME="languages_loop" -->
                 <table>
                 <!-- TMPL_LOOP NAME="languages_loop" -->
@@ -304,10 +304,10 @@
                     <!-- TMPL_ELSE -->
                         <!-- TMPL_IF NAME="current" -->
                     <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)
-                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="group_enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="opac<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="group_enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
                         <!-- TMPL_ELSE -->
                     <label for="<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_VAR NAME="native_description" -->(<!-- TMPL_VAR NAME="rfc4646_subtag" -->)
-                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="group_enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
+                            <input value="<!-- TMPL_VAR NAME="rfc4646_subtag" -->" name="value" id="opac<!-- TMPL_VAR NAME="rfc4646_subtag" -->" type="checkbox" <!-- TMPL_IF NAME="group_enabled" -->checked="checked"<!-- /TMPL_IF --> /> </label>
                         <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 </td></tr>
@@ -317,12 +317,12 @@
 
                 <!-- /TMPL_IF -->
 
-                <!-- TMPL_IF NAME="type-yesno" -->
-                    <!-- TMPL_IF NAME="value-yes" -->
+                <!-- TMPL_IF NAME="type_yesno" -->
+                    <!-- TMPL_IF NAME="value_yes" -->
                         <input type="radio" name="value" value="1" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="1" />
                     <!-- /TMPL_IF -->
                     <label for="value" class="yesno">ON</label>
-                    <!-- TMPL_IF NAME="value-no" -->    
+                    <!-- TMPL_IF NAME="value_no" -->
                         <input type="radio" name="value" value="0" checked="checked" /><!-- TMPL_ELSE --><input type="radio" name="value" value="0" />
                     <!-- /TMPL_IF -->
                     <label for="value-no" class="yesno">OFF</label>

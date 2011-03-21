@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -39,8 +40,16 @@ my ($template, $loggedinuser, $cookie)
 			     });
 
 my $dbh = C4::Context->dbh;
+my $branchcode;
+if((!defined($input->param('branchcode'))) & mybranch() ne '')
+{
+	$branchcode = mybranch();
+}
+else
+{
+	$branchcode = $input->param('branchcode');
+}
 
-my $branchcode = $input->param('branchcode');
 my $branchname = GetBranchName($branchcode);
 
 # Getting the branches for user selection

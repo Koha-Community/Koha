@@ -25,9 +25,9 @@ use C4::Output;
 use C4::Auth;
 use C4::Budgets;
 
-=head1
+=head1 NAME
 
-fetch_sort_dropbox : 
+fetch_sort_dropbox
 
 =cut
 

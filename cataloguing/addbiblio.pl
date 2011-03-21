@@ -2,6 +2,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2004-2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -45,7 +46,9 @@ if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
 
 our($tagslib,$authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
 
-=item MARCfindbreeding
+=head1 FUNCTIONS
+
+=head2 MARCfindbreeding
 
     $record = MARCfindbreeding($breedingid);
 
@@ -152,7 +155,7 @@ sub MARCfindbreeding {
     return -1;
 }
 
-=item build_authorized_values_list
+=head2 build_authorized_values_list
 
 =cut
 
@@ -243,7 +246,7 @@ sub build_authorized_values_list ($$$$$$$) {
     );
 }
 
-=item CreateKey
+=head2 CreateKey
 
     Create a random value to set it into the input name
 
@@ -253,11 +256,11 @@ sub CreateKey(){
     return int(rand(1000000));
 }
 
-=item GetMandatoryFieldZ3950
+=head2 GetMandatoryFieldZ3950
 
     This function return an hashref which containts all mandatory field
     to search with z3950 server.
-    
+
 =cut
 
 sub GetMandatoryFieldZ3950($){
@@ -277,7 +280,7 @@ sub GetMandatoryFieldZ3950($){
     };
 }
 
-=item create_input
+=head2 create_input
 
  builds the <input ...> entry for a subfield.
 
@@ -364,7 +367,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     value=\"$value\"
-                    class=\"input_marceditor\"
+                    class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"5\"
                     maxlength=\"$max_length\"
@@ -380,7 +383,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     value=\"$value\"
-                    class=\"input_marceditor\"
+                    class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"67\"
                     maxlength=\"$max_length\"
@@ -394,7 +397,7 @@ sub create_input {
                     id=\"".$subfield_data{id}."\"
                     name=\"".$subfield_data{id}."\"
                     value=\"$value\"
-                    class=\"input_marceditor\"
+                    class=\"input_marceditor readonly\"
                     tabindex=\"1\"
                     size=\"67\"
                     maxlength=\"$max_length\"
@@ -514,7 +517,7 @@ sub create_input {
 }
 
 
-=item format_indicator
+=head2 format_indicator
 
 Translate indicator value for output form - specifically, map
 indicator = ' ' to ''.  This is for the convenience of a cataloger
@@ -755,7 +758,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   my ($countcreated,$countlinked);
   while (my $data=$query->fetchrow_hashref){
     foreach my $field ($record->field($data->{tagfield})){
-      next if ($field->subfield('3')||$field->subfield('9'));
+      next if ($field->subfield('9'));
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
@@ -930,8 +933,7 @@ if ( $op eq "addbiblio" ) {
         else {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
         }
-
-        if (($mode ne "popup" && !$is_a_modif) || $redirect eq "items"){
+        if ($mode ne "popup" && !$is_a_modif && $redirect eq "items"){
             print $input->redirect(
                 "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
             );

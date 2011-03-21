@@ -28,7 +28,7 @@ $.tablesorter.addParser({
         );
 		$.tablesorter.defaults.widgets = ['zebra']; 
 		$("#holdst:has(tbody tr)").tablesorter({    // only add sort if the table has a body and rows
-			sortList: [[0,0]],
+			sortList: [[0,1]],
 			headers: { 1: { sorter: 'articles' }}
 		}); 
 	 });
@@ -91,11 +91,7 @@ $.tablesorter.addParser({
            	<td><p><!-- TMPL_VAR NAME="reservecount" --></p></td>
            	<td><p><!-- TMPL_VAR NAME="itemcount" --></p></td>
            	<td><p class="ratiolimit"><!-- TMPL_VAR NAME="thisratio" --></p></td>
-            <td><p>
-                <!-- TMPL_INCLUDE NAME="biblio-default-view.inc" --><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_VAR NAME="subtitle" -->
-                   </a>
-                </p>
-                <p><!-- TMPL_VAR NAME="notes" --></p>
+            <td><!-- TMPL_INCLUDE NAME="biblio-default-view.inc" --><!-- TMPL_VAR NAME="title" escape="html" --> <!-- TMPL_IF NAME="subtitle" --><!-- TMPL_LOOP NAME="subtitle" --><!-- TMPL_VAR NAME="subfield" --><!-- /TMPL_LOOP --><!-- /TMPL_IF --></a><!-- TMPL_IF NAME="author" --> by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF -->
             </td>
             <td><p><!-- TMPL_VAR NAME="listbranch" --></p></td>
             <td><p><!-- TMPL_VAR NAME="location" --></p></td>

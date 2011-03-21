@@ -6,6 +6,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -49,11 +50,21 @@ my $theme = $input->param('theme') || "default";
 
 my $patron = $input->Vars;
 foreach (keys %$patron){
-	delete $$patron{$_} unless($$patron{$_}); 
+	delete $$patron{$_} unless($$patron{$_});
 }
-
 my @categories=C4::Category->all;
-my $branches=(defined $$patron{branchcode}?GetBranchesLoop($$patron{branchcode}):GetBranchesLoop());
+
+my $branches = GetBranches;
+my @branchloop;
+
+foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
+  my $selected = 1 if $branches->{$_}->{branchcode} eq $$patron{branchcode};
+  my %row = ( value => $_,
+        selected => $selected,
+        branchname => $branches->{$_}->{branchname},
+      );
+  push @branchloop, \%row;
+}
 
 my %categories_dislay;
 
@@ -89,14 +100,20 @@ my ($count,$results);
 
 my @searchpatron;
 push @searchpatron, $member if ($member);
-push @searchpatron, $patron if (keys %$patron);
-my $from= ($startfrom-1)*$resultsperpage;
-my $to=$from+$resultsperpage;
- #($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
- my $search_scope=($quicksearch?"field_start_with":"contain");
- ($results)=Search(\@searchpatron,\@orderby,undef,undef,["firstname","surname","email","othernames","cardnumber","userid"],$search_scope  ) if (@searchpatron);
-if ($results){
-	$count =scalar(@$results);
+push @searchpatron, $patron if ( keys %$patron );
+my $from = ( $startfrom - 1 ) * $resultsperpage;
+my $to   = $from + $resultsperpage;
+
+#($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
+my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
+($results) = Search( \@searchpatron, \@orderby, undef, undef, [ "firstname", "surname", "othernames", "cardnumber", "userid" ], $search_scope ) if (@searchpatron);
+
+if ($results) {
+	for my $field ('categorycode','branchcode'){
+		next unless ($patron->{$field});
+		@$results = grep { $_->{$field} eq $patron->{$field} } @$results; 
+	}
+    $count = scalar(@$results);
 }
 my @resultsdata;
 $to=($count>$to?$to:$count);
@@ -119,11 +136,6 @@ foreach my $borrower(@$results[$from..$to-1]){
   push(@resultsdata, \%row);
 }
 
-if ($$patron{branchcode}){
-	foreach my $branch (grep{$_->{value} eq $$patron{branchcode}}@$branches){
-		$$branch{selected}=1;
-	}
-}
 if ($$patron{categorycode}){
 	foreach my $category (grep{$_->{categorycode} eq $$patron{categorycode}}@categories){
 		$$category{selected}=1;
@@ -142,9 +154,9 @@ my $base_url =
   );
 
 my @letters = map { {letter => $_} } ( 'A' .. 'Z');
-$template->param( letters => \@letters );
 
 $template->param(
+    letters => \@letters,
     paginationbar => pagination_bar(
         $base_url,
         int( $count / $resultsperpage ) + ($count % $resultsperpage ? 1 : 0),
@@ -154,15 +166,10 @@ $template->param(
     from      => ($startfrom-1)*$resultsperpage+1,  
     to        => $to,
     multipage => ($count != $to+1 || $startfrom!=1),
-);
-$template->param(
-    branchloop=>$branches,
+    advsearch => ($$patron{categorycode} || $$patron{branchcode}),
+    branchloop=>\@branchloop,
     categories=>\@categories,
-);
-
-
-$template->param( 
-        searching       => "1",
+    searching       => "1",
 		actionname		=>basename($0),
 		%$patron,
         numresults      => $count,

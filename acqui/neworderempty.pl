@@ -26,6 +26,7 @@
 neworderempty.pl
 
 =head1 DESCRIPTION
+
 this script allows to create a new record to order it. This record shouldn't exist
 on database.
 
@@ -76,7 +77,7 @@ use C4::Budgets;
 use C4::Input;
 use C4::Dates;
 
-use C4::Bookseller;		# GetBookSellerFromId
+use C4::Bookseller  qw/ GetBookSellerFromId /;
 use C4::Acquisition;
 use C4::Suggestions;	# GetSuggestion
 use C4::Biblio;			# GetBiblioData
@@ -133,7 +134,14 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 
     my $duplicatetitle;
 #look for duplicates
-    if (! (($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord))){
+    ($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord);
+    if($biblionumber && !$input->param('use_external_source')) {
+	#if duplicate record found and user did not decide yet, first warn user
+	#and let him choose between using new record or existing record
+	Load_Duplicate($duplicatetitle);
+	exit;
+    }
+    #from this point: add a new record
         if (C4::Context->preference("BiblioAddsAuthorities")){
             my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $params->{'frameworkcode'});
         }
@@ -162,7 +170,6 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
             }
         }
         SetImportRecordStatus($params->{'breedingid'}, 'imported');
-    }
 }
 
 
@@ -356,16 +363,16 @@ $template->param(
     import_batch_id  => $import_batch_id,
 
 # CHECKME: gst-stuff needs verifing, mason.
-    gstrate          => $bookseller->{'gstrate'} || C4::Context->preference("gist"),
+    gstrate          => $bookseller->{'gstrate'} // C4::Context->preference("gist") // 0,
     gstreg           => $bookseller->{'gstreg'},
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
 
-=item MARCfindbreeding
+=head2 MARCfindbreeding
 
-    $record = MARCfindbreeding($breedingid);
+  $record = MARCfindbreeding($breedingid);
 
 Look up the import record repository for the record with
 record with id $breedingid.  If found, returns the decoded
@@ -470,3 +477,26 @@ sub MARCfindbreeding {
     return -1;
 }
 
+sub Load_Duplicate {
+  my ($duplicatetitle)= @_;
+  ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "acqui/neworderempty_duplicate.tmpl",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { acquisition => 'order_manage' },
+#        debug           => 1,
+    }
+  );
+
+  $template->param(
+    biblionumber        => $biblionumber,
+    basketno            => $basketno,
+    booksellerid        => $basket->{'booksellerid'},
+    breedingid          => $params->{'breedingid'},
+    duplicatetitle      => $duplicatetitle,
+  );
+
+  output_html_with_http_headers $input, $cookie, $template->output;
+}

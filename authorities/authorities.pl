@@ -37,7 +37,13 @@ use vars qw( $is_a_modif );
 my $itemtype; # created here because it can be used in build_authorized_values_list sub
 our($authorised_values_sth,$is_a_modif,$usedTagsLib,$mandatory_z3950);
 
+=head1 FUNCTIONS
+
+=over
+
 =item build_authorized_values_list
+
+builds list, depending on authorised value...
 
 =cut
 
@@ -47,7 +53,6 @@ sub build_authorized_values_list ($$$$$$$) {
     my @authorised_values;
     my %authorised_lib;
 
-    # builds list, depending on authorised value...
 
     #---- branch
     if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
@@ -111,7 +116,9 @@ sub build_authorized_values_list ($$$$$$$) {
 
 
 =item create_input
+
 builds the <input ...> entry for a subfield.
+
 =cut
 
 sub create_input {
@@ -130,7 +137,7 @@ sub create_input {
     }
 
     # if there is no value provided but a default value in parameters, get it
-    unless ($value) {
+    if ($value eq '') {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
         if (!defined $value) {
             $value = q{};
@@ -184,13 +191,13 @@ sub create_input {
     elsif ( $tagslib->{$tag}->{$subfield}->{authtypecode} ) {
         $subfield_data{marc_value} =
     "<input type=\"text\"
-                        id=\"".$subfield_data{id}."\"
-                        name=\"".$subfield_data{id}."\"
-    value=\"$value\"
-    class=\"input_marceditor\"
-    tabindex=\"1\"                     
-        readonly=\"readonly\" \/>
-    <a href=\"#\" class=\"buttonDot\"
+            id=\"".$subfield_data{id}."\"
+            name=\"".$subfield_data{id}."\"
+            value=\"$value\"
+            class=\"input_marceditor readonly\"
+            tabindex=\"1\"
+            readonly=\"readonly\" \/>
+        <a href=\"#\" class=\"buttonDot\"
         onclick=\"openAuth(this.parentNode.getElementsByTagName('input')[1].id,'".$tagslib->{$tag}->{$subfield}->{authtypecode}."'); return false;\" tabindex=\"1\" title=\"Tag Editor\">...</a>
     ";
     # it's a plugin field
@@ -310,7 +317,7 @@ sub format_indicator {
 
 =item CreateKey
 
-    Create a random value to set it into the input name
+Create a random value to set it into the input name
 
 =cut
 
@@ -519,6 +526,11 @@ sub build_hidden_data () {
     }
 }
 
+=back
+
+=cut
+
+
 # ======================== 
 #          MAIN 
 #=========================
@@ -533,7 +545,9 @@ my $linkid=$input->param('linkid');
 my $authtypecode = $input->param('authtypecode');
 
 my $dbh = C4::Context->dbh;
-$authtypecode = &GetAuthTypeCode($authid) if !$authtypecode;
+if(!$authtypecode) {
+  $authtypecode = $authid? &GetAuthTypeCode($authid): '';
+}
 
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "authorities/authorities.tmpl",

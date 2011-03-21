@@ -120,7 +120,7 @@ sub getAuthorisedValues4MARCSubfields {
 my $stylesheet;
 
 sub XSLTParse4Display {
-    my ( $biblionumber, $orig_record, $xsl_suffix, $interface ) = @_;
+    my ( $biblionumber, $orig_record, $xsl_suffix, $interface, $fixamps ) = @_;
     $interface = 'opac' unless $interface;
     # grab the XML, run it through our stylesheet, push it out to the browser
     my $record = transformMARCXML4XSLT($biblionumber, $orig_record);
@@ -128,15 +128,22 @@ sub XSLTParse4Display {
     my $itemsxml  = buildKohaItemsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
     my $sysxml = "<sysprefs>\n";
-    foreach my $syspref ( qw/OPACURLOpenInNewWindow DisplayOPACiconsXSLT URLLinkText viewISBD OPACBaseURL/ ) {
-        $sysxml .= "<syspref name=\"$syspref\">" .
-                   C4::Context->preference( $syspref ) .
-                   "</syspref>\n";
+    foreach my $syspref ( qw/ hidelostitems OPACURLOpenInNewWindow
+                              DisplayOPACiconsXSLT URLLinkText viewISBD
+                              OPACBaseURL TraceCompleteSubfields
+                              UseAuthoritiesForTracings / )
+    {
+        my $sp = C4::Context->preference( $syspref );
+        next unless defined($sp);
+        $sysxml .= "<syspref name=\"$syspref\">$sp</syspref>\n";
     }
     $sysxml .= "</sysprefs>\n";
     $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml\<\/record\>/;
+    if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
+        $xmlrecord =~ s/\&amp;amp;/\&amp;/g;
+    }
     $xmlrecord =~ s/\& /\&amp\; /;
-    $xmlrecord=~ s/\&amp\;amp\; /\&amp\; /;
+    $xmlrecord =~ s/\&amp\;amp\; /\&amp\; /;
 
     my $parser = XML::LibXML->new();
     # don't die when you find &, >, etc

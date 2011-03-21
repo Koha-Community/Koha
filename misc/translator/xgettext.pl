@@ -212,6 +212,7 @@ EOF
 	for my $token (@{$text{$t}}) {
 	    my $pathname = $token->pathname;
 	    $pathname =~ s/^$directory_re//os;
+        $pathname =~ s/^.*\/koha-tmpl\/(.*)$/$1/;
 	    printf OUTPUT "#: %s:%d\n", $pathname, $token->line_number
 		    if defined $pathname && defined $token->line_number;
 	    $cformat_p = 1 if $token->type == TmplTokenType::TEXT_PARAMETRIZED;

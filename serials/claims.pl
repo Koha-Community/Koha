@@ -1,5 +1,7 @@
 #!/usr/bin/perl
 
+# Parts Copyright 2010 Biblibre
+
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -22,9 +24,11 @@ use C4::Auth;
 use C4::Serials;
 use C4::Acquisition;
 use C4::Output;
-use C4::Bookseller;
+use C4::Bookseller qw( GetBookSeller );
 use C4::Context;
 use C4::Letters;
+use C4::Branch;    # GetBranches GetBranchesLoop
+
 my $input = CGI->new;
 
 my $serialid = $input->param('serialid');
@@ -33,15 +37,6 @@ my $claimletter = $input->param('claimletter');
 my $supplierid = $input->param('supplierid');
 my $suppliername = $input->param('suppliername');
 my $order = $input->param('order');
-my $supplierlist = GetSuppliersWithLateIssues();
-if ($supplierid) {
-    foreach my $s ( @{$supplierlist} ) {
-        if ($s->{id} == $supplierid ) {
-            $s->{selected} = 1;
-            last;
-        }
-    }
-}
 
 # open template first (security & userenv set here)
 my ($template, $loggedinuser, $cookie)
@@ -53,6 +48,14 @@ my ($template, $loggedinuser, $cookie)
             debug => 1,
             });
 
+# supplierlist is returned in name order
+my $supplierlist = GetSuppliersWithLateIssues();
+for my $s (@{$supplierlist} ) {
+    $s->{count} = scalar  GetLateOrMissingIssues($s->{id}, q{}, $order);
+    if ($supplierid && $s->{id} == $supplierid) {
+        $s->{selected} = 1;
+    }
+}
 
 my $letters = GetLetters('claimissues');
 my @letters;
@@ -68,6 +71,9 @@ if ($supplierid) {
     @supplierinfo=GetBookSeller($supplierid);
 }
 
+my $branchloop = GetBranchesLoop();
+unshift @$branchloop, {value=> 'all',name=>''};
+
 my $preview=0;
 if($op && $op eq 'preview'){
     $preview = 1;
@@ -82,7 +88,7 @@ if($op && $op eq 'preview'){
 $template->param('letters'=>\@letters,'letter'=>$letter);
 $template->param(
         order =>$order,
-        supplier_loop => $supplierlist,
+        suploop => $supplierlist,
         phone => $supplierinfo[0]->{phone},
         booksellerfax => $supplierinfo[0]->{booksellerfax},
         bookselleremail => $supplierinfo[0]->{bookselleremail},
@@ -91,6 +97,7 @@ $template->param(
         supplierid => $supplierid,
         claimletter => $claimletter,
         supplierloop => \@supplierinfo,
+        branchloop   => $branchloop,
         dateformat    => C4::Context->preference("dateformat"),
     	DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         );

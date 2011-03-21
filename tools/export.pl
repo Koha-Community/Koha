@@ -101,12 +101,12 @@ if ($op eq "export") {
     }
     
     if ( $start_callnumber ) {
-        $query .= " AND biblioitems.biblionumber = items.biblionumber AND itemcallnumber <= ? ";
+        $query .= " AND biblioitems.biblionumber = items.biblionumber AND itemcallnumber >= ? ";
         push @sql_params, $start_callnumber;
     }
     
     if ( $end_callnumber ) {
-        $query .= " AND biblioitems.biblionumber = items.biblionumber AND itemcallnumber >= ? ";
+        $query .= " AND biblioitems.biblionumber = items.biblionumber AND itemcallnumber <= ? ";
         push @sql_params, $end_callnumber;
     }
     if ( $start_accession ) {

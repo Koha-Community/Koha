@@ -4,6 +4,14 @@
 <!-- TMPL_IF NAME="delete_confirm" --><!-- TMPL_IF NAME="totalgtzero" -->Cannot Delete: Category <!-- TMPL_VAR NAME="categorycode" escape="html" --> in Use<!-- TMPL_ELSE -->Confirm Deletion of Category '<!-- TMPL_VAR NAME="categorycode" escape="html" -->'<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="delete_confirmed" -->Category Deleted<!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+	$("#table_categorie").tablesorter({
+		sortList: [[0,0]],
+		headers: { 10: { sorter: false}}
+	}).tablesorterPager({container: $("#pagertable_categorie"),positionFixed: false,size: 20});
+}); </script>
 <!-- TMPL_INCLUDE NAME="calendar.inc" -->
 <script type="text/javascript">
 //<![CDATA[
@@ -60,16 +68,20 @@
 			_alertString += _("- upperagelimit is not a number") + "\n";
 				
 		}
+                if(!(ff.enrolmentperioddate.value || ff.enrolmentperiod.value)) {
+                    ok=1;
+                    _alertString += _("- either Enrollment period or Until date must be provided") + "\n";
+                }
 		if(ff.enrolmentperioddate.value && ff.enrolmentperiod.value){
 			document.getElementById('enrolmentmessage').className = "error";
 			return false;
 		}
 		
 		if (ok) { // if there is a problem
-			alert(_alertString);
-             return false;
-        }
-        // if all is good
+		    alert(_alertString);
+                    return false;
+                }
+                // if all is good
 		ff.submit();
 	}
 	//]]>
@@ -147,7 +159,7 @@
 					<!-- TMPL_IF NAME="type_S" --><option value="S" selected="selected">Staff</option><!-- TMPL_ELSE --><option value="S">Staff</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_I" --><option value="I" selected="selected">Organization</option><!-- TMPL_ELSE --><option value="I">Organization</option><!-- /TMPL_IF -->
 					<!-- TMPL_IF NAME="type_P" --><option value="P" selected="selected">Professional</option><!-- TMPL_ELSE --><option value="P">Professional</option><!-- /TMPL_IF -->
-					<!-- TMPL_IF NXME="type_X" --><option value="X" selected="selected">Statistical</option><!-- TMPL_ELSE --><option value="X">Statistical</option><!-- /TMPL_IF -->
+					<!-- TMPL_IF NAME="type_X" --><option value="X" selected="selected">Statistical</option><!-- TMPL_ELSE --><option value="X">Statistical</option><!-- /TMPL_IF -->
 					</select>
 	</li></ol>
 </fieldset>
@@ -242,9 +254,26 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 <!-- TMPL_IF NAME="searchfield" -->
 		You Searched for <!-- TMPL_VAR NAME="searchfield" --></span>
 	<!-- /TMPL_IF -->
-
-        <table>
-		<tr>
+<span id="pagertable_categorie" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/next.png" class="next"/>
+		<img src="<!-- TMPL_VAR name="interface" -->/prog/img/last.png" class="last"/>
+		, entries/page : 
+		<select class="pagesize">
+        	<option value="10">10</option>
+			<option selected="selected" value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</form>
+</span>
+        <table id="table_categorie">
+		<thead>
 			<th scope="col">Code</th>
 			<th scope="col">Category name</th>
 			<th scope="col">Type</th>
@@ -258,7 +287,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
             <th scope="col">Messaging</th>
             <!-- /TMPL_IF -->
 			<th scope="col" colspan="2">&nbsp; </th>
-		</tr>
+		</thead>
 		<!-- TMPL_LOOP NAME="loop" -->
 		<!-- TMPL_UNLESS NAME="__odd__" -->
 			<tr class="highlight">
@@ -294,7 +323,13 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
                         <td>
                             <!-- TMPL_IF NAME="messaging_prefs" -->
                                 <!-- TMPL_LOOP NAME="messaging_prefs" -->
-                                    <!-- TMPL_VAR NAME="message_name" --> :
+                                    <!-- TMPL_IF NAME="Item DUE" -->Item DUE
+                                    <!-- TMPL_ELSIF NAME="Advance Notice" -->Advance Notice
+                                    <!-- TMPL_ELSIF NAME="Upcoming Events" -->Upcoming Events
+                                    <!-- TMPL_ELSIF NAME="Hold Filled" -->Hold Filled
+                                    <!-- TMPL_ELSIF NAME="Item Check-in" -->Item Check-in
+                                    <!-- TMPL_ELSIF NAME="Item Checkout" -->Item Checkout
+                                    <!-- TMPL_ELSE -->Unknown <!-- /TMPL_IF --> :
                                     <!-- TMPL_LOOP NAME="transports" -->
                                         <!-- TMPL_VAR NAME="transport" -->
                                     <!-- /TMPL_LOOP -->

@@ -24,12 +24,12 @@
     <!-- TMPL_IF NAME="holdsview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF -->">Holds</a></li>
     <!-- /TMPL_IF -->
 
-    <!-- TMPL_IF name="subscriptionsnumber" --><li><a href="/cgi-bin/koha/serials/serials-home.pl?searched=1&amp;title_filter=<!-- TMPL_VAR NAME="subscriptiontitle" -->">Subscription(s)</a></li><!-- /TMPL_IF -->
+    <!-- TMPL_IF name="subscriptionsnumber" --><li><a href="/cgi-bin/koha/serials/serials-home.pl?searched=1&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Subscription(s)</a></li><!-- /TMPL_IF -->
 </ul>
 <ul>
 <!-- TMPL_IF NAME="issuehistoryview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
 <a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=<!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_IF NAME="object" --><!-- TMPL_VAR NAME="object" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="biblionumber" --><!-- /TMPL_IF --><!-- /TMPL_IF -->" >Checkout history</a></li>
-<!-- TMPL_IF NAME="CAN_user_parameters"--><!-- TMPL_IF NAME="logview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=CATALOGUING&amp;action=MODIFY&amp;object=<!-- TMPL_VAR NAME="biblionumber"-->">Modification log</a> </li><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="CAN_user_tools_view_system_logs"--><!-- TMPL_IF NAME="logview" --><li class="active"><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=CATALOGUING&amp;action=MODIFY&amp;object=<!-- TMPL_VAR NAME="biblionumber"-->">Modification log</a> </li><!-- /TMPL_IF -->
 </ul>
 </div>
 

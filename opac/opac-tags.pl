@@ -18,7 +18,11 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 
-=head1 
+=head1 NAME
+
+opac-tags.pl
+
+=head1 DESCRIPTION
 
 TODO :: Description here
 
@@ -289,7 +293,7 @@ if ($add_op) {
 	}
 }
 (scalar @errors  ) and $template->param(ERRORS  => \@errors);
-my @orderedresult = sort { $a->{'term'} cmp $b->{'term'} } @$results;
+my @orderedresult = sort { uc($a->{'term'}) cmp uc($b->{'term'}) } @$results;
 (scalar @$results) and $template->param(TAGLOOP => \@orderedresult );
 (scalar @$my_tags) and $template->param(MY_TAGS => $my_tags);
 

@@ -36,7 +36,23 @@ function Check(ff) {
 
     if (totalExceedsBudget(ff.budget_id.value, ff.total.value  )  ) {
         ok=1;
-        _alertString += "\n- " + "Order total (" + ff.total.value + ") exceeds budget available ("+actTotal+")";
+        _alertString += "\n- " + _("Order total (") + ff.total.value +
+            _(") exceeds budget available (") + actTotal+")";
+    }
+
+    if ( ff.field_value ) {
+        var empty_item_mandatory = 0;
+        for (i = 0; i < ff.field_value.length; i++) {
+            //alert("i = " + i + " => " + ff.kohafield[i] );
+            if (ff.field_value[i].value.length == 0 && ff.mandatory[i].value == 1) {
+                empty_item_mandatory++;
+            }
+        }
+        if (empty_item_mandatory > 0) {
+            ok = 1;
+            _alertString +=
+                "\n- " + empty_item_mandatory + _(" item mandatory fields empty");
+        }
     }
 
 if (ok) {
@@ -52,7 +68,7 @@ ff.submit();
 //]]>
 </script>
 </head>
-<body onload="calcNeworderTotal()">
+<body>
 
 <!-- TMPL_INCLUDE NAME="header.inc" -->
 <!-- TMPL_INCLUDE NAME="acquisitions-search.inc" -->
@@ -140,55 +156,55 @@ ff.submit();
         <ol><li>
             <!-- TMPL_IF name="biblionumber" -->
             <span class="label">Title</span>
-                <input type="hidden" size="20" name="title" value="<!-- TMPL_VAR NAME="title" ESCAPE="HTML" -->" /> <span class="title"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></span>
+                <input type="hidden" size="50" name="title" value="<!-- TMPL_VAR NAME="title" ESCAPE="HTML" -->" /> <span class="title"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></span>
             <!-- TMPL_ELSE -->
             <label for="entertitle" class="required">Title: </label>
-                <input type="text" id="entertitle" size="20" name="title" value="<!-- TMPL_VAR NAME="title" ESCAPE="html" -->" />
+                <input type="text" id="entertitle" size="50" name="title" value="<!-- TMPL_VAR NAME="title" ESCAPE="html" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblionumber" -->
             <span class="label">Author: </span>
-                <input type="hidden" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" /><!-- TMPL_VAR NAME="author" -->
+                <input type="hidden" size="50" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" /><!-- TMPL_VAR NAME="author" -->
             <!-- TMPL_ELSE -->
             <label for="author">Author: </label>
-                <input type="text" size="20" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" />
+                <input type="text" size="50" name="author" id="author" value="<!-- TMPL_VAR NAME="author" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblionumber" -->
             <span class="label">Publisher: </span>
-                <input type="hidden" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /><!-- TMPL_VAR NAME="publishercode" -->
+                <input type="hidden" size="50" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" /><!-- TMPL_VAR NAME="publishercode" -->
             <!-- TMPL_ELSE -->
             <label for="publishercode"> Publisher: </label>
-                <input type="text" size="20" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
+                <input type="text" size="50" name="publishercode" id="publishercode" value="<!-- TMPL_VAR NAME="publishercode" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblionumber" -->
             <span class="label">Publication year: </span>
-                <input type="hidden" size="20" name="publicationyear" id="publicationyear" value="<!-- TMPL_VAR NAME="publicationyear" -->" /><!-- TMPL_VAR NAME="publicationyear" -->
+                <input type="hidden" size="10" name="publicationyear" id="publicationyear" value="<!-- TMPL_VAR NAME="publicationyear" -->" /><!-- TMPL_VAR NAME="publicationyear" -->
             <!-- TMPL_ELSE -->
             <label for="publicationyear">Publication year: </label>
-                <input type="text" size="20" name="publicationyear" id="publicationyear" value="<!-- TMPL_VAR NAME="publicationyear" -->" />
+                <input type="text" size="10" name="publicationyear" id="publicationyear" value="<!-- TMPL_VAR NAME="publicationyear" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblionumber" -->
             <span class="label">ISBN: </span>
-                <input type="hidden" size="20" name="isbn" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_VAR NAME="isbn" -->
+                <input type="hidden" size="50" name="isbn" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" /><!-- TMPL_VAR NAME="isbn" -->
             <!-- TMPL_ELSE -->
             <label for="ISBN">ISBN: </label>
-                <input type="text" size="20" name="isbn" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
+                <input type="text" size="50" name="isbn" id="ISBN" value="<!-- TMPL_VAR NAME="isbn" -->" />
             <!-- /TMPL_IF -->
         </li>
         <li>
             <!-- TMPL_IF name="biblionumber" -->
             <span class="label">Series: </span>
-                <input type="hidden" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><!-- TMPL_VAR NAME="seriestitle" -->
+                <input type="hidden" size="50" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" /><!-- TMPL_VAR NAME="seriestitle" -->
             <!-- TMPL_ELSE -->
             <label for="series">Series: </label>
-                <input type="text" size="20" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
+                <input type="text" size="50" name="series" id="series" value="<!-- TMPL_VAR NAME="seriestitle" -->" />
             <!-- /TMPL_IF -->
         </li>
         </ol>
@@ -248,10 +264,10 @@ ff.submit();
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-            <span class="label">Budget: </span>
+            <span class="label">Fund: </span>
                     <input type="hidden" size="20" name="budget_id" id="budget_id" value="<!-- TMPL_VAR NAME="budget_id" -->" /><!-- TMPL_VAR NAME="Budget_name" -->
                 <!-- TMPL_ELSE -->
-                <label for="budget_id">Budget: </label>
+                <label for="budget_id">Fund: </label>
                 <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
                 <!-- TMPL_LOOP NAME="budget_loop" -->
                     <!-- TMPL_IF NAME="b_sel" -->

@@ -1,7 +1,7 @@
 package C4::Record;
 #
 # Copyright 2006 (C) LibLime
-# Joshua Ferraro <jmf@liblime.com>
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

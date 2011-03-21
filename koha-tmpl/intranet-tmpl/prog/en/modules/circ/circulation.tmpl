@@ -5,20 +5,21 @@
 (<!-- TMPL_VAR NAME="cardnumber" -->)
 <!-- /TMPL_IF --></title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<!-- TMPL_IF NAME="UseTablesortForCirc" --><script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script><!-- /TMPL_IF -->
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-$.tablesorter.addParser({
+if($.cookie("holdfor") != <!-- TMPL_VAR NAME="borrowernumber" -->){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }
+<!-- TMPL_IF NAME="UseTablesortForCirc" -->$.tablesorter.addParser({
     id: 'articles',
     is: function(s) {return false;  },
     format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
     type: 'text'
-});
+});<!-- /TMPL_IF -->
 <!-- TMPL_UNLESS NAME="borrowernumber" --><!-- TMPL_UNLESS NAME="CGIselectborrower" -->window.onload=function(){ $('#findborrower').focus(); };<!-- /TMPL_UNLESS --><!-- /TMPL_UNLESS -->
 	 $(document).ready(function() {
  		$('#patronlists > ul').tabs();
-		$.tablesorter.defaults.widgets = ['zebra'];
+		<!-- TMPL_IF NAME="UseTablesortForCirc" -->$.tablesorter.defaults.widgets = ['zebra'];
 		$("#issuest").tablesorter({<!-- TMPL_IF NAME="dateformat_metric" -->
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 		headers: { 1: { sorter: 'articles' },5: { sorter: false },6:{sorter:false},7:{sorter:false},8:{sorter:false}}
@@ -30,8 +31,7 @@ $.tablesorter.addParser({
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[0,0]],
 			headers: { 1: { sorter: 'articles' }}
-		});
-
+		});<!-- /TMPL_IF -->
         <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
         $( '#override_limit' ).click( function () {
             if ( this.checked ) {
@@ -73,18 +73,28 @@ var allcheckboxes = $(".checkboxed");
     } ).attr( 'checked', false );
     <!-- /TMPL_IF -->
     <!-- /TMPL_IF -->
+    // Clicking the table cell checks the checkbox inside it
 	$("td").click(function(e){
 		if(e.target.tagName.toLowerCase() == 'td'){
-           $(this).find("input:checkbox").each( function() {
-               $(this).attr('checked', !$(this).attr('checked'));
-			   if($(this).attr('checked')){
-                    $(this).parent().siblings().find("input:checkbox").each(function(){
-                       if($(this).attr('checked')){ $(this).attr('checked',''); }
-                   });
-			   }
+           $(this).find("input:checkbox:visible").each( function() {
+                if($(this).attr("checked")){
+                    $(this).attr("checked",'');
+                } else {
+                    $(this).attr("checked","checked");
+                    radioCheckBox($(this));
+                }
            });
-		}
+        }
 	});
+    // prevent adjacent checkboxes from being checked simultaneously
+    function radioCheckBox(box){
+            box.parents("td").siblings().find("input:checkbox:visible").each(function(){
+                if($(this).attr("checked")){
+                    $(this).attr("checked",'');
+                }
+             });
+     }
+
 	$("#messages ul").after("<a href=\"#\" id=\"addmessage\">"+_("Add a new message")+"</a>");
 	$("#borrower_messages .cancel").click(function(){
 		$("#add_message_form").hide();
@@ -94,30 +104,12 @@ var allcheckboxes = $(".checkboxed");
         $(this).hide();
 		$("#add_message_form").show();
 	 });
- });
-function uncheck_sibling(me){
-nodename=me.getAttribute("name");
-if (nodename =="barcodes[]"){
-    var Node=me.parentNode.previousSibling;
-    while (Node.nodeName!="TD"){Node=Node.previousSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
 
-}else {
-    var Node=me.parentNode.nextSibling;
-    while (Node.nodeName!="TD"){Node=Node.nextSibling}
-    var Nodes=Node.childNodes;
-    for (var i=0;i<Nodes.length;i++){
-      if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
-        Nodes[i].checked=false;
-      }     
-   }   
-}
-}
+     $("input.radio").click(function(){
+        radioCheckBox($(this));
+     });
+ });
+
 function validate1(date) {
     var today = new Date();
     if ( date < today ) {
@@ -176,7 +168,7 @@ function refocus(calendar) {
     </li>
     <!-- TMPL_IF NAME="canned_bor_notes_loop" -->
         <li>
-                <label for="canned_notes">Predefined notes: </label>
+                <label for="type">Predefined notes: </label>
                 <select name="type" id="type" onchange="this.form.borrower_message.value=this.options[this.selectedIndex].value;">
                     <option value="">Select Note</option>
                     <!-- TMPL_LOOP NAME="canned_bor_notes_loop" -->
@@ -193,7 +185,7 @@ function refocus(calendar) {
         <input type="submit" value="Save" /> <a href="#" class="cancel">Cancel</a>
     </fieldset>
 
-        <input type="hidden" name="borrowernumber" id="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+        <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
         <input type="hidden" name="branchcode" value="<!-- TMPL_VAR NAME="branch" -->" />
 </fieldset>
 </form>
@@ -212,23 +204,23 @@ function refocus(calendar) {
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RENEW_ISSUE" -->
-    <li>Item is currently checked out to this patron.  Renew?</li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) is currently checked out to this patron.  Renew?</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RESERVE_WAITING" -->
-    <li>Item is consigned for <!-- TMPL_VAR NAME="RESERVE_WAITING" --></li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="resborrowernumber" -->"><!-- TMPL_VAR NAME="resfirstname" --> <!-- TMPL_VAR NAME="ressurname" --></a> (<!-- TMPL_VAR NAME="rescardnumber" -->) at <!-- TMPL_VAR NAME="resbranchname" --> since <!-- TMPL_VAR NAME="reswaitingdate" --></li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="RESERVED" -->
-    <li>Item is on hold for <!-- TMPL_VAR NAME="RESERVED" --></li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="resborrowernumber" -->"><!-- TMPL_VAR NAME="resfirstname" --> <!-- TMPL_VAR NAME="ressurname" --></a> (<!-- TMPL_VAR NAME="rescardnumber" -->) at <!-- TMPL_VAR NAME="resbranchname" --> since <!-- TMPL_VAR NAME="resreservedate" --></li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="ISSUED_TO_ANOTHER" -->
-    <li>Item ( <!-- TMPL_VAR NAME="getTitleMessageIteminfo" --> ) checked out to <!-- TMPL_VAR NAME="ISSUED_TO_ANOTHER" -->. Check in and check out?</li>
+    <li>Item <i><!-- TMPL_VAR NAME="getTitleMessageIteminfo" --></i> (<!-- TMPL_VAR NAME="getBarcodeMessageIteminfo" -->) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="issued_borrowernumber" -->"><!-- TMPL_VAR NAME="issued_firstname" --> <!-- TMPL_VAR NAME="issued_surname" --></a> (<!-- TMPL_VAR NAME="issued_cardnumber" -->). Check in and check out?</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="TOO_MANY" -->
-    <li>Too many checked out (already checked out / max : <!-- TMPL_VAR name="TOO_MANY" -->)</li>
+    <li>Too many checked out. <!-- TMPL_VAR NAME="current_loan_count" --> checked out, only <!-- TMPL_VAR NAME="max_loans_allowed" --> are allowed.</li>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="BORRNOTSAMEBRANCH" -->
@@ -267,7 +259,14 @@ function refocus(calendar) {
     <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
     <input type="hidden" name="issueconfirmed" value="1" />
     <!-- TMPL_IF NAME="DEBT" --><input type="hidden" name="debt_confirmed" value="1" /><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="INVALID_DATE" -->
+    <p>
+    <input type="text" size="10" id="duedatespec" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <label for="duedatespec">Due Date</label>
+    </p>
+    <!-- TMPL_ELSE -->
     <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
+    <!-- /TMPL_IF -->
     <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
     <input type="hidden" name="branch" value="<!-- TMPL_VAR NAME="branch" -->" />
     <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
@@ -302,7 +301,12 @@ function refocus(calendar) {
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="UNKNOWN_BARCODE" -->
-            <li>The barcode was not found</li>
+            <li>The barcode was not found <!-- TMPL_VAR NAME="barcode" --></li>
+	    <!-- TMPL_IF NAME="fast_cataloging" -->
+	        <!-- TMPL_IF NAME="CAN_user_editcatalogue_fast_cataloging" -->
+                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a>
+		<!-- /TMPL_IF -->
+	    <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 
         <!-- TMPL_IF NAME="NOT_FOR_LOAN" -->
@@ -449,8 +453,8 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                              inputField : "duedatespec",
                              ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
                              button : "CalendarDueDate",
-                             disableFunc : validate1,
-                             dateStatusFunc : validate1,
+//                           disableFunc : validate1,
+//                           dateStatusFunc : validate1,
                              onClose : refocus
                            }
                         );
@@ -487,7 +491,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <div id="circmessages" class="circmessage attention">
 		<!-- /TMPL_IF -->
 
-		<h3><!-- TMPL_IF NAME="noissues" -->Cannot Check Out!<!-- TMPL_ELSE -->Attention:<!-- /TMPL_IF --></h3>
+		<h3><!-- TMPL_IF NAME="noissues" -->
+		        Cannot check out!
+		<!-- TMPL_ELSE -->Attention:<!-- /TMPL_IF --></h3>
 		<ul>
 
 			<!-- TMPL_IF NAME = "warndeparture" -->
@@ -526,14 +532,10 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <!-- /TMPL_IF -->
 
         	<!-- TMPL_IF NAME="charges" -->
-                <!-- TMPL_IF NAME="charges_is_blocker" -->
-			        <li class="blocker">
-                <!-- TMPL_ELSE -->
-			        <li>
-                <!-- /TMPL_IF -->
+			    <li>
             <span class="circ-hlt">Fines:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Outstanding fines<!-- TMPL_IF NAME="chargesamount" --> of <!-- TMPL_VAR NAME="chargesamount" --><!-- /TMPL_IF --></a>.
                 <!-- TMPL_IF NAME="charges_is_blocker" -->
-                    Checkouts are blocked because fine balance is over the limit.
+                    Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
                 <!-- /TMPL_IF -->
             Make <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=<!-- TMPL_VAR name="borrowernumber" -->">Payment</a></li>
 			<!-- /TMPL_IF -->
@@ -642,36 +644,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <th scope="col">Check in <p class="column-tool"><a href="#" id="CheckAllreturns">select all</a> | <a href="#" id="CheckNoreturns">none</a></p></th>
     </tr>
 <!-- TMPL_IF NAME="todayissues" --></thead>
-<tfoot>
-		<tr>
-            <td colspan="5" style="text-align: right; font-weight:bold;">Totals:</td>
-			<td><!-- TMPL_VAR NAME="totaldue" --></td>
-            <td><!-- TMPL_VAR NAME="totalprice" --></td>
-            <td colspan="2">      
-                <p>
-                    Renewal due date: <input type="text" size="8" id="newduedate" name="newduedate" value="<!-- TMPL_VAR Name="newduedate" -->" />
-                    <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="newduedate_button" alt="Show Calendar" />
- <script type="text/javascript"> //<![CDATA[
-				//#TODO - ADD syspref (AllowPostDatedCheckouts).
-                     Calendar.setup(
-                          {
-                             inputField : "newduedate",
-                             ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
-                             button : "newduedate_button",
-                             disableFunc : validate1,
-                             dateStatusFunc : validate1,
-                             onClose : refocus
-                           }
-                        );
-				//]]>
-				 </script>
-                </p>
-                <p>
-                    <label>Forgive fines on return: <input type="checkbox" name="exemptfine" value="1" /></label>
-                </p>
-            </td>
-        </tr>
-		</tfoot>
+<!-- TMPL_INCLUDE NAME="checkouts-table-footer.inc" -->
 	<tbody>
 
     <!-- TMPL_LOOP NAME="todayissues" -->
@@ -680,7 +653,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- TMPL_ELSE -->
     <tr class="highlight">
     <!-- /TMPL_IF -->
-        <td><!-- TMPL_VAR NAME="dd" --></td>
+        <!-- TMPL_IF NAME="od" --><td class="od"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+        <!-- TMPL_VAR NAME="dd" -->
+        </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <span class="circ-hlt"><!-- TMPL_VAR name="itemnotes" --></span><!-- /TMPL_IF --> <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
         <td><!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" --><img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" /><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- TMPL_VAR NAME="itemtype" --></td>
         <td><!-- TMPL_VAR NAME="checkoutdate" --></td>
@@ -690,21 +665,21 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
       <!-- TMPL_IF NAME="renew_failed" -->
             <td class="problem">Renewal Failed</td>
       <!-- TMPL_ELSE -->
-        <td><span style="padding: 0 1em;"><!-- TMPL_VAR NAME="renewals" --></span>
+        <td><span style="padding: 0 1em;"><!-- TMPL_IF NAME="renewals" --><!-- TMPL_VAR NAME="renewals" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF --></span>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         <!-- TMPL_IF NAME="od" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
         <!-- TMPL_ELSE -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
                 <!-- TMPL_IF NAME="od" -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
                 <!-- TMPL_ELSE -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                 <!-- /TMPL_IF -->
                 </span>
                 <span class="renewals-disabled">
@@ -724,7 +699,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
   <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Checkin Failed</td>
       <!--TMPL_ELSE-->
-            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
+            <td><input type="checkbox" class="radio" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" />
                 <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
@@ -734,6 +709,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <!-- TMPL_IF NAME="previssues" -->
 <!-- TMPL_IF NAME="todayissues" --><tr><th colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr><!-- TMPL_ELSE -->
 <tr><th class="{sorter: false}" colspan="10"><a name="previous" id="previous"></a>Previous checkouts</th></tr></thead>
+<!-- TMPL_INCLUDE NAME="checkouts-table-footer.inc" -->
 	<tbody>
 <!-- /TMPL_IF -->
     <!-- TMPL_LOOP NAME="previssues" -->
@@ -760,17 +736,17 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <!-- TMPL_IF NAME="can_renew" -->
         <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
         <!-- TMPL_IF NAME="od" -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
         <!-- TMPL_ELSE -->
-            <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+            <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
         <!-- /TMPL_IF -->
         <!-- TMPL_ELSE -->
             <!-- TMPL_IF NAME="can_confirm" --><span class="renewals-allowed" style="display: none">
                 <input type="checkbox" name="all_items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" style="display: none;" />
                 <!-- TMPL_IF NAME="od" -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" checked="checked" />
                 <!-- TMPL_ELSE -->
-                    <input type="checkbox" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
+                    <input type="checkbox" class="radio" name="items[]" value="<!-- TMPL_VAR NAME="itemnumber" -->" />
                 <!-- /TMPL_IF -->
                 </span>
                 <span class="renewals-disabled">
@@ -790,7 +766,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 		  <!-- TMPL_IF NAME="return_failed" -->
             <td class="problem">Checkin Failed</td>
         <!--TMPL_ELSE-->
-            <td><input type="checkbox" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" onclick="uncheck_sibling(this);" />
+            <td><input type="checkbox" class="radio" name="barcodes[]"  value="<!-- TMPL_VAR NAME="barcode" -->" />
                 <input type="checkbox" name="all_barcodes[]" value="<!-- TMPL_VAR NAME="barcode" -->" checked="checked" style="display: none;" />
             </td>
       <!-- /TMPL_IF -->
@@ -854,6 +830,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
                 </select>
                 <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR name="biblionumber" -->" />
                 <input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR name="borrowernumber" -->" />
+                <input type="hidden" name="reservenumber" value="<!-- TMPL_VAR name="reservenumber" -->" />
             </td>
             </tr>
         <!-- /TMPL_LOOP --></tbody>

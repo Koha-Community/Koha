@@ -2,7 +2,7 @@ package C4::Creators;
 
 BEGIN {
     use version; our $VERSION = qv('1.0.0_1');
-    use vars qw(@EXPORT, @ISA);
+    use vars qw(@EXPORT @ISA);
     @ISA = qw(Exporter);
     our @EXPORT = qw(get_all_templates
                      get_all_layouts

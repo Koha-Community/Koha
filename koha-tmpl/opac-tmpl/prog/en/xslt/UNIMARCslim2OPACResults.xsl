@@ -26,6 +26,8 @@
   <xsl:variable name="isbn"
    select="marc:datafield[@tag=010]/marc:subfield[@code='a']"/>
 
+  <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
+
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
       <xsl:variable name="title" select="marc:subfield[@code='a']"/>
@@ -70,7 +72,7 @@
   <xsl:call-template name="tag_215" />
 
   <span class="results_summary">
-    <span class="label">Disponibilité: </span>
+    <span class="label">Availability: </span>
     <xsl:choose>
       <xsl:when test="marc:datafield[@tag=856]">
         <xsl:for-each select="marc:datafield[@tag=856]">
@@ -100,11 +102,11 @@
         </xsl:for-each>
       </xsl:when>
       <xsl:when test="count(key('item-by-status', 'available'))=0 and count(key('item-by-status', 'reference'))=0">
-        Pas de copie disponible
+        No copies available
       </xsl:when>
       <xsl:when test="count(key('item-by-status', 'available'))>0">
         <span class="available">
-          <b><xsl:text>pour le prêt: </xsl:text></b>
+          <b><xsl:text>Copies available for loan: </xsl:text></b>
           <xsl:variable name="available_items" select="key('item-by-status', 'available')"/>
           <xsl:for-each select="$available_items[generate-id() = generate-id(key('item-by-status-and-branch', concat(items:status, ' ', items:homebranch))[1])]">
             <xsl:value-of select="items:homebranch"/>
@@ -163,7 +165,7 @@
         <xsl:text>). </xsl:text>
       </span>
     </xsl:if>
-    <xsl:if test="count(key('item-by-status', 'Lost'))>0">
+    <xsl:if test="$hidelostitems='0' and count(key('item-by-status', 'Lost'))>0">
       <span class="unavailable">
         <xsl:text>Lost (</xsl:text>
         <xsl:value-of select="count(key('item-by-status', 'Lost'))"/>

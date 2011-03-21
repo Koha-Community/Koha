@@ -29,7 +29,7 @@ BEGIN {
 	$VERSION = 3.00;
 	require Exporter;
 	@ISA    = qw(Exporter);
-	@EXPORT = qw(getreview savereview updatereview numberofreviews
+	@EXPORT = qw(getreview savereview updatereview numberofreviews numberofreviewsbybiblionumber
 		getreviews getallreviews approvereview deletereview);
 }
 
@@ -91,6 +91,15 @@ sub updatereview {
 }
 
 sub numberofreviews {
+    my $dbh            = C4::Context->dbh;
+    my $query          =
+      "SELECT count(*) FROM reviews WHERE approved=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( 1 );
+  return $sth->fetchrow;
+}
+
+sub numberofreviewsbybiblionumber {
     my ($biblionumber) = @_;
     my $dbh            = C4::Context->dbh;
     my $query          =
@@ -111,12 +120,13 @@ sub getreviews {
 }
 
 sub getallreviews {
-    my ($status) = @_;
+    my ($status, $offset, $row_count) = @_;
+    my @params = ($status,($offset ? $offset : 0),($row_count ? $row_count : 20));
     my $dbh      = C4::Context->dbh;
     my $query    =
-      "SELECT * FROM reviews WHERE approved=? order by datereviewed desc";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($status);
+      "SELECT * FROM reviews WHERE approved=? order by datereviewed desc LIMIT ?, ?";
+    my $sth = $dbh->prepare($query) || warn $dbh->err_str;
+    $sth->execute(@params);
 	return $sth->fetchall_arrayref({});
 }
 

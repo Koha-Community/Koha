@@ -20,7 +20,7 @@ a:hover {
 }
 
 body	{
-	background: #f9fcfe;
+	background: #f5f5f5;
 }
 
 form, label input {
@@ -52,13 +52,29 @@ label {
 }
 
 #login #login_error {
-	background: #c00;
+	background: #D23F3F;
 	border: 1px solid #a40000;
 	color: #fff;
-	font-size: 16px;
+	font-size: 120%;
+	line-height: 140%;
 	font-weight: bold;
+	margin: 1em 0;
 	padding: .5em;
 	text-align: center;
+	text-shadow: 0px 1px 1px #6C1010;
+	filter: dropshadow(color=#6C1010, offx=0, offy=1);
+	-moz-border-radius: 5px;
+	border-radius: 5px;
+}
+
+#login #login_error a:link,
+#login #login_error a:visited {
+	color : #FFC;
+}
+
+#login #login_error a:hover,
+#login #login_error a:active {
+	color : #FCFC4D;
 }
 
 #login h1 {

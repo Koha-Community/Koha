@@ -87,11 +87,7 @@ my %subdivisions = (
 
 =head2 new
 
-=over 4
-
-my $marc_handler = C4::Heading::MARC21->new();
-
-=back
+  my $marc_handler = C4::Heading::MARC21->new();
 
 =cut
 

@@ -13,7 +13,7 @@
 <!-- TMPL_IF NAME="OpacHighlightedWords" --><script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <!-- /TMPL_IF --><script type="text/javascript">
 //<![CDATA[
-<!-- TMPL_IF name="RequestOnOpac" -->
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF name="RequestOnOpac" -->
 function holdMultiple() {
     var checkedBiblioNums = ""; // Separated by "/"
     var checkedCount = 0;
@@ -77,7 +77,7 @@ function tagAdded() {
 
     KOHA.Tags.add_multitags_button(bibs, tag);
     return false;
-}<!-- /TMPL_IF -->
+}<!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="OpacHighlightedWords" -->
 var q_array = new Array();  // holds search terms if available
 
@@ -150,7 +150,7 @@ $(document).ready(function(){
 	});
 	<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-    $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
+    <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="TagsEnabled" -->$("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");<!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 	function cartList(){
 			if($("#addto").find("option:selected").attr("value") == "addtolist"){
@@ -197,10 +197,10 @@ $(document).ready(function(){
         $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
         $("#highlight_toggle_off").show().click(function() {highlightOff();});<!-- /TMPL_IF --><!-- /TMPL_IF -->
 
-	<!-- TMPL_IF NAME="TagsEnabled" -->
+<!-- TMPL_IF NAME="opacuserlogin" -->    <!-- TMPL_IF NAME="TagsEnabled" -->
         $(".tagbutton").click(KOHA.Tags.add_tag_button);
-	    <!-- TMPL_IF NAME="TagsInputOnList" -->
-	    <!-- TMPL_IF NAME="loggedinusername" -->
+        <!-- TMPL_IF NAME="TagsInputOnList" -->
+        <!-- TMPL_IF NAME="loggedinusername" -->
             $("#tagsel_tag").click(function(){
                 tagSelected();
                 return false;
@@ -220,7 +220,7 @@ $(document).ready(function(){
             });
         <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->
+    <!-- /TMPL_IF --><!-- /TMPL_IF -->
     <!-- TMPL_IF NAME="GoogleJackets" -->KOHA.Google.GetCoverFromIsbn();<!-- /TMPL_IF -->
 });
 //]]>
@@ -235,7 +235,7 @@ $(document).ready(function(){
 
 	<div id="yui-main">
 	<div class="yui-b">
-	<div class="container">
+	<div id="userresults" class="container">
   <!-- TMPL_IF NAME="koha_spsuggest" -->
 	Did you mean:
     <ul style="list-style: none;">
@@ -332,30 +332,32 @@ $(document).ready(function(){
             <!-- checkall, clearall are now needed for placehold -->
             <span class="checkall"></span>
         	<span class="clearall"></span>
-            <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
-            <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+            <!-- TMPL_IF NAME="OpacHighlightedWords" -->
+            	<a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+            	<a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+            <!-- /TMPL_IF -->
             <!-- TMPL_IF EXPR="opacbookbag || virtualshelves" -->
     	    	<span class="addto"></span>
             <!-- /TMPL_IF -->
 		    <span id="placehold"><!-- input class="submit" type="submit" value="Place Hold"/ --></span>
             <div id="holdDetails"></div>
 
-			<!-- TMPL_IF NAME="TagsEnabled" -->
-            <!-- TMPL_IF NAME="TagsInputOnList" -->
-                <span id="tagsel_span"></span>
-              <!-- TMPL_IF NAME="loggedinusername" -->
-                <span id="tagsel_form" style="display:none">
-                  <label for="tagsel_new">New Tag:</label>
-                  <input name="tagsel_new" id="tagsel_new" maxlength="100" />
-                  <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" />
-                  <a href="#" id="tagsel_cancel">Cancel</a>
-                </span>
-                <span id="tagsel_status" class="tagsel_tatus" style="display:none;">
-                  Tag status here.
-                </span>
-              <!-- /TMPL_IF -->
-            <!-- /TMPL_IF -->
-            <!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->
+                        <!-- TMPL_IF NAME="TagsInputOnList" -->
+                            <span id="tagsel_span"></span>
+                          <!-- TMPL_IF NAME="loggedinusername" -->
+                            <span id="tagsel_form" style="display:none">
+                              <label for="tagsel_new">New Tag:</label>
+                              <input name="tagsel_new" id="tagsel_new" maxlength="100" />
+                              <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add" />
+                              <a href="#" id="tagsel_cancel">Cancel</a>
+                            </span>
+                            <span id="tagsel_status" class="tagsel_tatus" style="display:none;">
+                              Tag status here.
+                            </span>
+                          <!-- /TMPL_IF -->
+                        <!-- /TMPL_IF -->
+                <!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
         </div>
 
         </td></tr>
@@ -367,17 +369,20 @@ $(document).ready(function(){
                 <tr>
             <!-- /TMPL_UNLESS -->
 
-                <td class="select selectcol"><!--TMPL_IF NAME="opacbookbag" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- TMPL_ELSE -->
-<!-- TMPL_IF NAME="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" title="Click to add to cart" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></td>
+                <td class="select selectcol"><!--TMPL_IF NAME="opacbookbag" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="virtualshelves" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- TMPL_ELSE -->
+<!-- TMPL_IF NAME="RequestOnOpac" --><!-- TMPL_UNLESS NAME="norequests" --><!-- TMPL_IF NAME="opacuserlogin" --><input type="checkbox" id="bib<!-- TMPL_VAR NAME="biblionumber" -->" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /> <label for="bib<!-- TMPL_VAR NAME="biblionumber" -->"></label><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF --></td>
                 <td class="select selectcol"><!-- TMPL_VAR NAME="result_number" -->.</td>
 
-				<!-- TMPL_UNLESS NAME="item-level_itypes" -->
+				<!-- TMPL_UNLESS NAME="item_level_itypes" -->
+                <!-- TMPL_UNLESS NAME="noItemTypeImages" -->
+
 				<td class="itypecol">
                 <!-- TMPL_IF name="imageurl" -->
 				<img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" />
                 <!-- /TMPL_IF -->
 				</td>
+                <!-- /TMPL_UNLESS-->
                 <!-- /TMPL_UNLESS-->
 
 				<!-- TMPL_IF NAME="AuthorisedValueImages" -->
@@ -456,32 +461,32 @@ $(document).ready(function(){
 
 				<!-- /TMPL_IF -->
 				<!-- TMPL_IF NAME="LibraryThingForLibrariesID" --><div class="ltfl_reviews"></div><!-- /TMPL_IF -->
-				<!-- TMPL_IF NAME="TagsEnabled" -->
-                <!-- TMPL_IF NAME="TagsShowOnList" -->
-                <!-- TMPL_IF NAME="TagLoop" -->
-					<div class="results_summary">
-                        <span class="label">Tags:</span>
-                        <ul style="display: inline; list-style: none;"><!-- TMPL_LOOP NAME="TagLoop" --><li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
-                            <!-- /TMPL_LOOP -->
-                        </ul>
-               	<!-- /TMPL_IF -->
-                <!-- TMPL_IF NAME="TagsInputOnList" -->
-					<!-- TMPL_IF NAME="loggedinusername" -->
-                    <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
-                        <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New tag:</label>
-                        <input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
-                        <input name="tagbutton" class="tagbutton" title="<!-- TMPL_VAR NAME="biblionumber" -->" type="submit" value="Add" />
-                    </form>
-                    <span id="newtag<!-- TMPL_VAR NAME="biblionumber" -->_status" class="tagstatus" style="display:none;">
-                        Tag status here.
-                    </span>
-                   	<!-- TMPL_ELSIF NAME="__first__" --><span class="tagstatus" id="login4tags">Log in to add tags.</span>
-                	<!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
-                	<!-- TMPL_IF NAME="TagLoop" -->
-					</div><!-- /TMPL_IF -->
-				<!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="TagsEnabled" -->
+                                <!-- TMPL_IF NAME="TagsShowOnList" -->
+                                <!-- TMPL_IF NAME="TagLoop" -->
+                                    <div class="results_summary">
+                                        <span class="label">Tags:</span>
+                                        <ul style="display: inline; list-style: none;"><!-- TMPL_LOOP NAME="TagLoop" --><li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->&amp;q=<!-- TMPL_VAR NAME="term" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="term" --></a> <span class="weight">(<!-- TMPL_VAR NAME="weight_total" -->)</span></li>
+                                            <!-- /TMPL_LOOP -->
+                                        </ul>
+                                   <!-- /TMPL_IF -->
+                                <!-- TMPL_IF NAME="TagsInputOnList" -->
+                                    <!-- TMPL_IF NAME="loggedinusername" -->
+                                    <form name="tagform<!-- TMPL_VAR NAME="biblionumber" -->" method="post" action="/cgi-bin/koha/opac-tags.pl">
+                                        <label for="newtag<!-- TMPL_VAR NAME="biblionumber" -->">New tag:</label>
+                                        <input name="newtag<!-- TMPL_VAR NAME="biblionumber" -->" id="newtag<!-- TMPL_VAR NAME="biblionumber" -->" maxlength="100" />
+                                        <input name="tagbutton" class="tagbutton" title="<!-- TMPL_VAR NAME="biblionumber" -->" type="submit" value="Add" />
+                                    </form>
+                                    <span id="newtag<!-- TMPL_VAR NAME="biblionumber" -->_status" class="tagstatus" style="display:none;">
+                                        Tag status here.
+                                    </span>
+                                       <!-- TMPL_ELSIF NAME="__first__" --><span class="tagstatus" id="login4tags">Log in to add tags.</span>
+                                    <!-- /TMPL_IF -->
+                                <!-- /TMPL_IF -->
+                                    <!-- TMPL_IF NAME="TagLoop" -->
+                                    </div><!-- /TMPL_IF -->
+                                <!-- /TMPL_IF -->
+                                <!-- /TMPL_IF --><!-- /TMPL_IF -->
 				<!-- TMPL_IF Name="searchhighlightblob" --><span class="results_summary"><span class="label">Match:</span> <!-- TMPL_VAR NAME="searchhighlightblob" --></span><!-- /TMPL_IF -->
 
 <span class="results_summary actions"><span class="label">Actions:</span>
@@ -500,7 +505,7 @@ $(document).ready(function(){
 				<!-- /TMPL_IF -->
 
 
-				<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="virtualshelves" --><a class="addtolist" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Save to Lists</a>
+				<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="virtualshelves" --><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Save to Lists</a>
     			<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
         		<!-- TMPL_IF NAME="opacbookbag" --><a class="addtocart" href="#" onclick="addRecord('<!-- TMPL_VAR NAME="biblionumber" -->'); return false;">Add to Cart</a><!-- /TMPL_IF -->
 				</span>
@@ -539,7 +544,7 @@ $(document).ready(function(){
 </div>
 </div>
         <!-- TMPL_IF NAME="opacfacets" -->
-<div class="yui-b"><div class="container">
+<div class="yui-b"><div id="facetcontainer" class="container">
         <!-- FACETS START -->
 		<!-- TMPL_INCLUDE NAME="opac-facets.inc" -->
         <!-- FACETS END -->

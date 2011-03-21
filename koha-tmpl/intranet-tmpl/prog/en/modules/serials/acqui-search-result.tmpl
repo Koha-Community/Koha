@@ -6,7 +6,7 @@
 function GetIt(aqbooksellerid,name)
 {
   opener.document.f.aqbooksellerid.value = aqbooksellerid;
-  opener.document.f.aqbooksellername.value = name;
+  opener.document.f.aqbooksellername.value = unescape(name);
   window.close();
 }
 </script>

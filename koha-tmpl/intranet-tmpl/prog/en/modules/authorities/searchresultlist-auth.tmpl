@@ -70,7 +70,13 @@ function jumpfull(page)
                         <td><!-- TMPL_VAR NAME="summary" --></td>
                         <td><!-- TMPL_VAR NAME="used" --> times</td>
                         <td>
+                          <!-- TMPL_IF name="repets" -->
+                            <!-- TMPL_LOOP NAME="repets" -->
+                              <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR NAME="authid" -->&amp;index=<!-- TMPL_VAR NAME="index" -->&amp;repet=<!-- TMPL_VAR NAME="repet" -->')" title="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="repet" --></a>
+                            <!-- /TMPL_LOOP -->
+                          <!-- TMPL_ELSE -->
                             <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=<!-- TMPL_VAR NAME="authid" -->&amp;index=<!-- TMPL_VAR NAME="index" -->')">choose</a>
+                          <!-- /TMPL_IF -->
                         </td>
                         <td><a href="authorities.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Edit authority</a></td>
                     </tr>

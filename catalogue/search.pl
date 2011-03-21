@@ -3,6 +3,7 @@
 # For documentation try 'perldoc /path/to/search'
 #
 # Copyright 2006 LibLime
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha
 #
@@ -79,7 +80,7 @@ There are several additional secondary functions performed that I will
 not cover in detail.
 
 =head3 1. Building Query Strings
-    
+
 There are several types of queries needed in the process of search and retrieve:
 
 =over
@@ -145,6 +146,7 @@ use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Languages qw(getAllLanguages);
 use C4::Koha;
+use C4::Members qw(GetMember);
 use C4::VirtualShelves qw(GetRecentShelves);
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
@@ -181,6 +183,16 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
 
+if($cgi->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $cgi->cookie("holdfor"));
+    $template->param(
+        holdfor => $cgi->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
+
 ## URI Re-Writing
 # Deprecated, but preserved because it's interesting :-)
 # The same thing can be accomplished with mod_rewrite in
@@ -207,16 +219,20 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 
 # load the branches
 my $branches = GetBranches();
-my @branch_loop;
 
-# we need to know the borrower branch code to set a default branch
-my $borrowerbranchcode = C4::Context->userenv->{'branch'};
-
-for my $branch_hash (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    # if independantbranches is activated, set the default branch to the borrower branch
-    my $selected = (C4::Context->preference("independantbranches") and ($borrowerbranchcode eq $branch_hash)) ? 1 : undef;
-    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, selected => $selected};
-}
+# Populate branch_loop with all branches sorted by their name.  If
+# independantbranches is activated, set the default branch to the borrower
+# branch, except for superlibrarian who need to search all libraries.
+my $user = C4::Context->userenv;
+my @branch_loop = map {
+     {
+        value      => $_,
+        branchname => $branches->{$_}->{branchname},
+        selected   => $user->{branch} eq $_ && C4::Branch::onlymine(),
+     }
+} sort {
+    $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
+} keys %$branches;
 
 my $categories = GetBranchCategories(undef,'searchdomain');
 
@@ -499,6 +515,12 @@ if (C4::Context->preference('NoZebra')) {
         ($error, $results_hashref, $facets) = getRecords($query,$simple_query,\@sort_by,\@servers,$results_per_page,$offset,$expanded_facet,$branches,$query_type,$scan);
     };
 }
+# This sorts the facets into alphabetical order
+if ($facets) {
+    foreach my $f (@$facets) {
+        $f->{facets} = [ sort { uc($a->{facet_title_value}) cmp uc($b->{facet_title_value}) } @{ $f->{facets} } ];
+    }
+}
 if ($@ || $error) {
     $template->param(query_error => $error.$@);
     output_html_with_http_headers $cgi, $cookie, $template->output;
@@ -543,6 +565,7 @@ for (my $i=0;$i<@servers;$i++) {
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
+            $template->param(offset     => $offset);
             $template->param(DisplayMultiPlaceHold => $DisplayMultiPlaceHold);
 			$template->param (z3950_search_params => C4::Search::z3950_search_args($query_desc));
             if ($query_desc || $limit_desc) {

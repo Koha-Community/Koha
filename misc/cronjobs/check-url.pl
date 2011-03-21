@@ -38,7 +38,7 @@ C4::URL::Checker - base object for checking URL stored in Koha DB
            "is_success: ", $url->{ is_success }, "\n",
            "status:     ", $url->{ status     }, "\n";
  }
- 
+
 =head1 FUNCTIONS
 
 =head2 new

@@ -2,7 +2,7 @@ package C4::Reserves;
 
 # Copyright 2000-2002 Katipo Communications
 #           2006 SAN Ouest Provence
-#           2007 BibLibre Paul POULAIN
+#           2007-2010 BibLibre Paul POULAIN
 #
 # This file is part of Koha.
 #
@@ -194,7 +194,9 @@ sub AddReserve {
         my $borrower = C4::Members::GetMember(borrowernumber => $borrowernumber);
         my $biblio   = GetBiblioData($biblionumber);
         my $letter = C4::Letters::getletter( 'reserves', 'HOLDPLACED');
-        my $admin_email_address = C4::Context->preference('KohaAdminEmailAddress');
+	my $branchcode = $borrower->{branchcode};
+        my $branch_details = C4::Branch::GetBranchDetail($branchcode);
+        my $admin_email_address =$branch_details->{'branchemail'} || C4::Context->preference('KohaAdminEmailAddress');
 
         my %keys = (%$borrower, %$biblio);
         foreach my $key (keys %keys) {
@@ -802,6 +804,12 @@ sub CheckReserves {
             } else {
                 # See if this item is more important than what we've got so far
                 if ( $res->{'priority'} && $res->{'priority'} < $priority ) {
+                    my $borrowerinfo=C4::Members::GetMemberDetails($res->{'borrowernumber'});
+                    my $iteminfo=C4::Items::GetItem($itemnumber);
+                    my $branch=C4::Circulation::_GetCircControlBranch($iteminfo,$borrowerinfo);
+                    my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$iteminfo->{'itype'});
+                    next if ($branchitemrule->{'holdallowed'} == 0);
+                    next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $borrowerinfo->{'branchcode'}));
                     $priority = $res->{'priority'};
                     $highest  = $res;
                 }
@@ -1612,6 +1620,7 @@ sub _Findgroupreserve {
         SELECT reserves.biblionumber               AS biblionumber,
                reserves.borrowernumber             AS borrowernumber,
                reserves.reservedate                AS reservedate,
+               reserves.waitingdate                AS waitingdate,
                reserves.branchcode                 AS branchcode,
                reserves.cancellationdate           AS cancellationdate,
                reserves.found                      AS found,

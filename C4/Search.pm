@@ -855,7 +855,9 @@ sub getIndexes{
                     'id-other',
                     'Illustration-code',
                     'ISBN',
+                    'isbn',
                     'ISSN',
+                    'issn',
                     'itemtype',
                     'kw',
                     'Koha-Auth-Number',
@@ -874,12 +876,14 @@ sub getIndexes{
                     'mc-itemtype',
                     'mc-rtype',
                     'mus',
+                    'name',
                     'Name-geographic',
                     'Name-geographic-heading',
                     'Name-geographic-see',
                     'Name-geographic-seealso',
                     'nb',
                     'Note',
+                    'notes',
                     'ns',
                     'nt',
                     'pb',
@@ -893,6 +897,8 @@ sub getIndexes{
                     'popularity',
                     'pubdate',
                     'Publisher',
+                    'Record-control-number',
+                    'rcn',
                     'Record-type',
                     'rtype',
                     'se',
@@ -1041,7 +1047,13 @@ sub buildQuery {
 # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
 # DIAGNOSTIC ONLY!!
     if ( $query =~ /^ccl=/ ) {
-        return ( undef, $', $', "q=ccl=$'", $', '', '', '', '', 'ccl' );
+        my $q=$';
+        # This is needed otherwise ccl= and &limit won't work together, and
+        # this happens when selecting a subject on the opac-detail page
+        if (@limits) {
+            $q .= ' and '.join(' and ', @limits);
+        }
+        return ( undef, $q, $q, "q=ccl=$q", $q, '', '', '', '', 'ccl' );
     }
     if ( $query =~ /^cql=/ ) {
         return ( undef, $', $', "q=cql=$'", $', '', '', '', '', 'cql' );
@@ -1254,21 +1266,28 @@ sub buildQuery {
     my $group_OR_limits;
     my $availability_limit;
     foreach my $this_limit (@limits) {
-#        if ( $this_limit =~ /available/ ) {
+        if ( $this_limit =~ /available/ ) {
 #
 ## 'available' is defined as (items.onloan is NULL) and (items.itemlost = 0)
 ## In English:
 ## all records not indexed in the onloan register (zebra) and all records with a value of lost equal to 0
-#            $availability_limit .=
-#"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
-#            $limit_cgi  .= "&limit=available";
-#            $limit_desc .= "";
-#        }
-#
+            $availability_limit .=
+"( ( allrecords,AlwaysMatches='' not onloan,AlwaysMatches='') and (lost,st-numeric=0) )"; #or ( allrecords,AlwaysMatches='' not lost,AlwaysMatches='')) )";
+            $limit_cgi  .= "&limit=available";
+            $limit_desc .= "";
+        }
+
         # group_OR_limits, prefixed by mc-
         # OR every member of the group
-#        elsif ( $this_limit =~ /mc/ ) {
-        if ( $this_limit =~ /mc/ ) {
+        elsif ( $this_limit =~ /mc/ ) {
+        
+            if ( $this_limit =~ /mc-ccode:/ ) {
+                # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
+                $this_limit =~ tr/"//d;
+                my ($k,$v) = split(/:/, $this_limit,2);
+                $this_limit = $k.":\"".$v."\"";
+            }
+
             $group_OR_limits .= " or " if $group_OR_limits;
             $limit_desc      .= " or " if $group_OR_limits;
             $group_OR_limits .= "$this_limit";
@@ -1308,10 +1327,11 @@ sub buildQuery {
     # if user wants to do ccl or cql, start the query with that
 #    $query =~ s/:/=/g;
     $query =~ s/(?<=(ti|au|pb|su|an|kw|mc)):/=/g;
-    $query =~ s/(?<=rtrn):/=/g;
+    $query =~ s/(?<=(wrdl)):/=/g;
+    $query =~ s/(?<=(trn|phr)):/=/g;
     $limit =~ s/:/=/g;
     for ( $query, $query_desc, $limit, $limit_desc ) {
-        s/  / /g;    # remove extra spaces
+        s/  +/ /g;    # remove extra spaces
         s/^ //g;     # remove any beginning spaces
         s/ $//g;     # remove any ending spaces
         s/==/=/g;    # remove double == from query
@@ -1609,7 +1629,7 @@ sub searchResults {
                 if (   $item->{wthdrawn}
                     || $item->{itemlost}
                     || $item->{damaged}
-                    || $item->{notforloan}
+                    || $item->{notforloan} > 0
 		    || $reservestatus eq 'Waiting'
                     || ($transfertwhen ne ''))
                 {
@@ -1671,7 +1691,9 @@ sub searchResults {
             # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
             # is not implemented yet
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results', 
-                                                                $search_context);
+                                                                $search_context, 1);
+                # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
+
         }
 
         # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items

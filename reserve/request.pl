@@ -435,6 +435,9 @@ foreach my $biblionumber (@biblionumbers) {
                     $item->{available} = 1;
                     $num_available++;
                 }
+            } elsif (C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
+                    $item->{override} = 1;
+                    $num_override++;
             }
             # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
             

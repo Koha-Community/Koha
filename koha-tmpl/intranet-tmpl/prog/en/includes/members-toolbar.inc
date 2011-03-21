@@ -34,11 +34,8 @@ function update_child() {
 	// prepare DOM for YUI Toolbar
 
 	 $(document).ready(function() {
-	    $("#printslip").parent().remove();
-		$("#patronflags").parent().remove();
-		$("#deletepatron").parent().remove();
-		$("#moremenuc").empty();
-	    $("#printmenuc").empty();
+	    $("#printslip,#patronflags,#deletepatron").parent().remove();
+		$("#moremenuc,#printmenuc,#searchtoholdc").empty();
 	    yuiToolbar();
 	 });
 
@@ -47,7 +44,12 @@ function update_child() {
 		window.open("/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=" + print_type, "printwindow");
 		return false;
 	}
-
+	function searchToHold(){
+		var date = new Date();
+		date.setTime(date.getTime() + (10 * 60 * 1000));
+	    $.cookie("holdfor", "<!-- TMPL_VAR NAME="borrowernumber" -->", { path: "/", expires: date });
+	    location.href="/cgi-bin/koha/catalogue/search.pl";
+	}
 	function yuiToolbar() {
 	    var printmenu = [
 	        { text: _("Print Page"), onclick: {fn: function(){printx_window("page")}} },
@@ -71,6 +73,14 @@ function update_child() {
 	    });
 
 	    new YAHOO.widget.Button({
+	        id: "searchtohold",
+	        type: "button",
+	        label: _("Search to hold"),
+	        container: "searchtoholdc",
+			onclick: {fn: searchToHold }
+		});
+
+	    new YAHOO.widget.Button({
 	        type: "menu",
 	        label: _("More"),
 	        name: "moremenubutton",
@@ -82,6 +92,7 @@ function update_child() {
 	    new YAHOO.widget.Button("editpatron");
 	    new YAHOO.widget.Button("addnote");
 	    new YAHOO.widget.Button("changepassword");
+	    new YAHOO.widget.Button("duplicate");
 	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
 	    new YAHOO.widget.Button("renewpatron");
@@ -108,9 +119,10 @@ function update_child() {
             <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
 	<!-- TMPL_IF name="adultborrower" --><li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=C">Add child</a></li><!-- /TMPL_IF -->
-<!--	<li><a id="addnote" href="/cgi-bin/koha/members/addnotes.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Add Note</a></li> -->
 	<li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li>
-	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
+	<li><a id="duplicate" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=<!-- TMPL_VAR NAME="category_type"-->">Duplicate</a></li>
+    <li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Print Slip</a></li>
+	<li id="searchtoholdc"><a id="searchtohold" href="#">Search to hold</a></li>
 	<li id="moremenuc"><a id="renewpatron" href="/cgi-bin/koha/members/moremember.pl?reregistration=y&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew Account</a></li><!-- TMPL_IF NAME="CAN_user_permissions" --><li><a id="patronflags" href="/cgi-bin/koha/members/member-flags.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Set Permissions</a></li><!-- /TMPL_IF --><li><a id="deletepatron" href="javascript:confirm_deletion();">Delete</a></li>
 </ul></div>

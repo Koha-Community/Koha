@@ -5,7 +5,8 @@
 <script type="text/javascript">
 //<![CDATA[
 var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
-var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be reserved.");
+var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
+var q_array = new Array();  // will hold search terms, if present
 <!-- TMPL_IF NAME="AmazonEnabled" -->
 // http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
 function verify_images() {
@@ -21,7 +22,6 @@ function verify_images() {
         }
     });
 }
-var q_array = new Array();  // will hold search terms, if present
 
 $(window).load(function() {
         verify_images();
@@ -30,13 +30,33 @@ $(window).load(function() {
 function Dopop(link) {
         newin=window.open(link,'popup','width=500,height=500,toolbar=false,scrollbars=yes,resizeable=yes');
 }
+function cartList(){
+    if($("#addto").find("option:selected").attr("value") == "addtolist"){
+        var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
+        if (vShelfAdd()) {
+             Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vShelfAdd());
+        }
+        return false;
+    } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+        if (vShelfAdd()) {
+            Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
+        }
+        return false;
+    }
+    if($("#addto").find("option:selected").attr("value") == "addtocart"){
+        addMultiple();
+        return false;
+    }
+}
+$(window).load(function() {
+        new YAHOO.widget.Button("cartsubmit", { onclick: { fn: cartList }});
+});
 $(document).ready(function() {
+$("#placeholdc").empty();
 $('#sortbyform').find("input:submit").hide();
 $('#sort_by').change(function() {
         $('#sortbyform').submit();
     });
-
-
 $(".addtocart").show();
         var param1 = "<label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
         <!-- TMPL_IF name="intranetbookbag" -->     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>"; <!-- /TMPL_IF -->
@@ -48,7 +68,7 @@ $(".addtocart").show();
         param1 +="<\/optgroup><option value=\"newlist\">"+_("[ New List ]")+"<\/option>"
 <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->
-        param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
+        param1 += "<\/select> <input id=\"cartsubmit\" type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
  $('#sortsubmit').hide();
         $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
         $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
@@ -62,26 +82,6 @@ $(".addtocart").show();
 	});
 
  $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
-
-        function cartList(){
-                        if($("#addto").find("option:selected").attr("value") == "addtolist"){
-                        var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
-                        if (vShelfAdd()) {
-			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vShelfAdd());
-                        }
-                        return false;
-                } else if($("#addto").find("option:selected").attr("value") == "newlist"){
-                        if (vShelfAdd()) {
-			    Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
-                        }
-                        return false;
-                }
-		if($("#addto").find("option:selected").attr("value") == "addtocart"){
-                        addMultiple();
-                        return false;
-                 }
-
-        }
 
     $("#selection_ops").show();
     $(".selection").show();
@@ -167,6 +167,41 @@ function GetZ3950Terms(){
 	<!-- /TMPL_LOOP -->
 	return strQuery;
 }
+
+YAHOO.util.Event.onContentReady("searchheader", function () {
+        new YAHOO.widget.Button( "z3950submit", { onclick: { fn: PopupZ3950 }});
+        <!-- TMPL_IF NAME="holdfor" -->
+        var holdFor = function (){
+            $("#holdFor").val("");
+            placeHold();
+        }
+        var holdForPatron = function () {
+            $("#holdFor").val("<!-- TMPL_VAR NAME="holdfor_cardnumber" -->");
+            placeHold();
+        }
+        var HoldForButtonMenu = [
+            { text: "Place hold", onclick: { fn: holdFor }},
+            { text: "Place hold for <!-- TMPL_VAR NAME="holdfor_firstname" --> <!-- TMPL_VAR NAME="holdfor_surname" --> (<!-- TMPL_VAR NAME="holdfor_cardnumber" -->)", onclick: { fn: holdForPatron }}
+        ];
+
+        var HoldForButton = new YAHOO.widget.Button({
+                type: "split",
+                label: "Place hold",
+                name: "holdfor",
+                menu: HoldForButtonMenu,
+                container: "placeholdc",
+                onclick: { fn: holdFor }
+        });
+        <!-- TMPL_ELSE -->
+        new YAHOO.widget.Button({
+            id: "placehold",
+            type: "link",
+            label: _("Place hold"),
+            container: "placeholdc",
+            onclick: { fn: placeHold }
+         });
+        <!-- /TMPL_IF -->
+}); // YAHOO onContentReady
 //]]>
 </script>
 </head>
@@ -231,14 +266,15 @@ function GetZ3950Terms(){
                 |
                 <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
                 <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
-                <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
-                	<!-- TMPL_IF NAME="DisplayMultiPlaceHold" -->
-                  <input type="button" onclick="placeHold(); return false;" value="Place Hold"/>
-                	<!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
+                |
 		<span class="addto"></span>
+                <!-- TMPL_IF NAME="CAN_user_reserveforothers" -->
+                    <!-- TMPL_IF NAME="DisplayMultiPlaceHold" -->
+                  | <span id="placeholdc"><input type="button" id="placehold" onclick="placeHold(); return false;" value="Place Hold"/></span>
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
 
-				<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><input type="button" onclick="PopupZ3950(); return false;" value="Z39.50 Search"/><!-- /TMPL_IF -->
+				<!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --> | <input type="button" id="z3950submit" onclick="PopupZ3950(); return false;" value="Z39.50 Search"/><!-- /TMPL_IF -->
             </div>
         </div>
     <!-- TMPL_IF NAME="stopwords_removed" --><div><p class="tip">Ignored the following common words: "<!-- TMPL_VAR NAME="stopwords_removed" -->"<p></div><!-- /TMPL_IF -->
@@ -321,10 +357,10 @@ function GetZ3950Terms(){
             </form>
         <!-- TMPL_ELSE -->
 
-            <!-- ######### -->
-            <div id="facets">
-                <dl>
                 <!-- TMPL_IF NAME="NoZebra" -->
+                <!-- ######### -->
+                <div id="facets">
+                <dl>
                 <!-- FACETS START -->
                 <!-- TMPL_IF NAME="opacfacets" -->
                     <dt id="facets1" onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
@@ -356,10 +392,10 @@ function GetZ3950Terms(){
                     </dd>
                 <!-- /TMPL_IF -->
                 <!-- FACETS END -->
-                <!-- /TMPL_IF --> <!-- NoZebra -->
                 </dl>
             </div>
             <!-- ######### -->
+            <!-- NoZebra --><!-- /TMPL_IF -->
 
             <div id="searchresults">
                 <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
@@ -386,7 +422,7 @@ function GetZ3950Terms(){
                                 <td>
                                     <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" ESCAPE="URL" -->">
 									
-                                        <img src="<!-- TMPL_IF NAME="normalized_isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="normalized_isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="image" class="thumbnail" /> 
+                                        <img src="<!-- TMPL_IF NAME="normalized_isbn" -->http://images.amazon.com/images/P/<!-- TMPL_VAR name="normalized_isbn" -->.01.TZZZZZZZ.jpg<!-- TMPL_ELSE -->http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif<!-- /TMPL_IF -->" alt="" class="thumbnail" />
                                     </a></td>
                             <!-- /TMPL_IF --><!-- /TMPL_IF -->
                             <td>
@@ -407,7 +443,7 @@ function GetZ3950Terms(){
                                             &nbsp;
                                         <!-- /TMPL_IF -->
                                     <p>
-                                    <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                                    <!-- TMPL_UNLESS NAME="item_level_itypes" -->
                                     <!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF name="imageurl" -->
                                     <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="" />
                                     <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
@@ -415,7 +451,7 @@ function GetZ3950Terms(){
                                     <!-- TMPL_VAR name="summary" --></p>
                                 <!-- TMPL_ELSE -->
                                     <p>
-                                    <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+                                    <!-- TMPL_UNLESS NAME="item_level_itypes" -->
                                     <!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF name="imageurl" -->
                                     <img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" style="float: left; margin: .1em;" alt="" />
                                     <!-- /TMPL_IF --><!-- /TMPL_UNLESS -->
@@ -426,35 +462,39 @@ function GetZ3950Terms(){
                                         <!-- TMPL_ELSE -->
                                             &nbsp;
                                         <!-- /TMPL_IF -->
-
-                                        <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF -->
-										<!-- TMPL_IF NAME="edition" -->Edition: <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF -->
                                         Description:
-                                        <!-- TMPL_IF name="place" --> ; <!-- TMPL_VAR name="place" --><!-- /TMPL_IF -->
-										<!-- TMPL_IF name="publicationyear" -->, <!-- TMPL_VAR name="publicationyear" -->
-										<!-- TMPL_ELSIF name="copyrightdate"-->, <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="place" --><!-- TMPL_VAR name="place" --> <!-- /TMPL_IF -->
+                                        <!-- TMPL_IF name="publishercode" --><!-- TMPL_VAR name="publishercode" --><!-- /TMPL_IF --> <!-- TMPL_IF name="publicationyear" --> <!-- TMPL_VAR name="publicationyear" --> <!-- TMPL_ELSIF name="copyrightdate"--> <!-- TMPL_VAR name="copyrightdate" --><!-- /TMPL_IF -->
+										<!-- TMPL_IF NAME="edition" -->Edition: <!-- TMPL_VAR NAME="edition" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="pages" -->: <!-- TMPL_VAR name="pages" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="size" --> ; <!-- TMPL_VAR name="size" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="normalized_isbn" -->ISBN: <!-- TMPL_VAR NAME="normalized_isbn" --><!-- /TMPL_IF -->
                                         <!-- TMPL_VAR name="description" -->
                                         <!-- TMPL_IF name="timestamp" --> <i>(modified on <!-- TMPL_VAR name="timestamp" -->)</i><!-- /TMPL_IF -->
                                         <!-- TMPL_IF name="cn_class" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="cn_class" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="cn_class" --></a>]<!-- /TMPL_IF -->
                                     </p>
-                                    <p class="searchhighlightblob"><!-- TMPL_VAR NAME="searchhighlightblob" --></p>
+                                    <!-- TMPL_IF NAME="searchhighlightblob" --><p class="searchhighlightblob"><!-- TMPL_VAR NAME="searchhighlightblob" --></p><!-- /TMPL_IF -->
 
                                     <!-- TMPL_IF NAME="authorised_value_images" -->
                                 <p>
                                   <!-- TMPL_LOOP NAME="authorised_value_images" -->
-                                  <img src="<!-- TMPL_VAR name="imageurl" -->" />
+                                  <img src="<!-- TMPL_VAR name="imageurl" -->" alt="<!-- TMPL_VAR NAME="description" -->" />
                                   <!-- /TMPL_LOOP -->
                                 </p>
                                 <!-- /TMPL_IF -->
 
                                 <!-- /TMPL_IF -->
-                                  <!-- TMPL_IF NAME="norequests" -->
-                                        <span class="noholdstext">No holds allowed</span>
-                                    <!-- TMPL_ELSE -->
-                                        <a class="reserve" id="reserve_<!-- TMPL_VAR NAME="biblionumber" -->" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
-                                    <!-- /TMPL_IF -->
+                                  <p class="hold"><!-- TMPL_IF NAME="norequests" -->
+                                  <span class="noholdstext">No holds allowed</span>
+                              <!-- TMPL_ELSE -->
+                                  <a id="reserve_<!-- TMPL_VAR NAME="biblionumber" -->" href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Holds</a>
+                                  <!-- TMPL_IF NAME="holdfor" --> | <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;findborrower=<!-- TMPL_VAR NAME="holdfor_cardnumber" -->">Hold for <!-- TMPL_VAR NAME="holdfor_firstname" --> <!-- TMPL_VAR NAME="holdfor_surname" --> (<!-- TMPL_VAR NAME="holdfor_cardnumber" -->)</a><!-- /TMPL_IF -->
+                              <!-- /TMPL_IF -->
+                          <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" -->
+                          | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit record</a>
+                          <!-- /TMPL_IF -->
+                          <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
+                          | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit items</a>
+                          <!-- /TMPL_IF --></p>
                                 </td>
 
                                 <td><div class="availability">
@@ -466,7 +506,7 @@ function GetZ3950Terms(){
                                     <ul>
                                     <!-- TMPL_LOOP NAME="available_items_loop" -->
 
-                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" --><!-- TMPL_IF name="imageurl" --><li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" /><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
+                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item_level_itypes" --><!-- TMPL_IF name="imageurl" --><li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" /><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="branchname" --><!-- TMPL_VAR NAME="branchname" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="location" --><!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
                                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
@@ -478,9 +518,9 @@ function GetZ3950Terms(){
                                    <span class="status"><!-- TMPL_IF NAME="onloancount" --><!-- TMPL_VAR NAME="onloancount" --><!-- /TMPL_IF --> on loan:</span>
                                     <ul>
                                     <!-- TMPL_LOOP NAME="onloan_items_loop" -->
-                                       <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
+                                       <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item_level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" />
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
@@ -495,9 +535,9 @@ function GetZ3950Terms(){
                                     <span class="unavailable"><!-- TMPL_IF NAME="othercount" --><!-- TMPL_VAR NAME="othercount" --><!-- /TMPL_IF --> unavailable:</span>
                                     <ul>
                                     <!-- TMPL_LOOP NAME="other_items_loop" -->
-                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item-level_itypes" -->
+                                        <!-- TMPL_IF NAME="noItemTypeImages" --><li><!-- TMPL_ELSE --><!-- TMPL_IF NAME="item_level_itypes" -->
                                         <!-- TMPL_IF name="imageurl" -->
-                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" />
+                                        <li style="list-style: none; list-style-type: none;"><img src="<!-- TMPL_VAR name="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR name="description" -->" />
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF -->
                                         <!-- TMPL_ELSE --><li><!-- /TMPL_IF --><!-- /TMPL_IF -->
 
@@ -536,7 +576,7 @@ function GetZ3950Terms(){
     <!-- TMPL_IF NAME="inner_sup_results_loop" -->
         <!-- TMPL_VAR NAME="servername" -->
         <!-- TMPL_LOOP NAME="inner_sup_results_loop" -->
-        <div><a href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" --><!-- TMPL_VAR NAME="sort_by" --><!-- TMPL_VAR NAME="link" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a></div>
+        <div><a href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" --><!-- TMPL_VAR NAME="limit_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="sort_by" --><!-- TMPL_VAR NAME="link" -->"><!-- TMPL_VAR NAME="title" ESCAPE="html" --></a></div>
         <!-- /TMPL_LOOP -->
     <!-- /TMPL_IF -->
 <!-- </div> -->
@@ -548,6 +588,7 @@ function GetZ3950Terms(){
 <form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
     <!-- Value will be set here by placeHold() -->
     <input id="hold_form_biblios" type="hidden" name="biblionumbers" value="" />
+    <input type="hidden" name="findborrower" id="holdFor" value="" />
     <input type="hidden" name="multi_hold" value="1"/>
 </form>
 

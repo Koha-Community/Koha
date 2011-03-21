@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -23,6 +24,7 @@ MARCdetail.pl : script to show a biblio in MARC format
 
 =head1 SYNOPSIS
 
+=cut
 
 =head1 DESCRIPTION
 
@@ -39,8 +41,6 @@ the items attached to the biblio
 
 =head1 FUNCTIONS
 
-=over 2
-
 =cut
 
 use strict;
@@ -55,6 +55,7 @@ use MARC::Record;
 use C4::Biblio;
 use C4::Items;
 use C4::Acquisition;
+use C4::Members; # to use GetMember
 use C4::Serials;    #uses getsubscriptionsfrombiblionumber GetSubscriptionsFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
 
@@ -84,6 +85,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+if($query->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    $template->param(
+        holdfor => $query->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
 
 #count of item linked
 my $itemcount = GetItemsCount($biblionumber);
@@ -228,7 +239,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             undef @subfields_data;
         }
     }
-    $template->param( $tabloop . "XX" => \@loop_data );
+    $template->param( "tab" . $tabloop . "XX" => \@loop_data );
 }
 
 # now, build item tab !

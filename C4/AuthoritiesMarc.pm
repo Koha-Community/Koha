@@ -26,6 +26,7 @@ use C4::Search;
 use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
+use C4::Log;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -220,6 +221,7 @@ sub SearchAuthorities {
         my $dosearch;
         my $and=" \@and " ;
         my $q2;
+        my $attr_cnt = 0;
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
             if (@$value[$i]){
@@ -246,15 +248,16 @@ sub SearchAuthorities {
                 }
                 $attr =$attr."\"".@$value[$i]."\"";
                 $q2 .=$attr;
-            $dosearch=1;
+                $dosearch=1;
+                ++$attr_cnt;
             }#if value
         }
         ##Add how many queries generated
-        if ($query=~/\S+/){    
-          $query= $and.$query.$q2 
+        if ($query=~/\S+/){
+          $query= $and x $attr_cnt . $query . $q2;
         } else {
-          $query=$q2;    
-        }         
+          $query= $q2;
+        }
         ## Adding order
         #$query=' @or  @attr 7=2 @attr 1=Heading 0 @or  @attr 7=1 @attr 1=Heading 1'.$query if ($sortby eq "HeadingDsc");
         my $orderstring= ($sortby eq "HeadingAsc"?
@@ -264,8 +267,9 @@ sub SearchAuthorities {
                             '@attr 7=2 @attr 1=Heading 0'
                            :''
                         );            
-        $query=($query?"\@or $orderstring $query":"\@or \@attr 1=_ALLRECORDS \@attr 2=103 '' $orderstring ");
-        
+        $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
+        $query="\@or $orderstring $query" if $orderstring;
+
         $offset=0 unless $offset;
         my $counter = $offset;
         $length=10 unless $length;
@@ -610,6 +614,16 @@ sub AddAuthority {
         $format= 'MARC21';
     }
 
+    #update date/time to 005 for marc and unimarc
+    my $time=POSIX::strftime("%Y%m%d%H%M%S",localtime);
+    my $f5=$record->field('005');
+    if (!$f5) {
+      $record->insert_fields_ordered( MARC::Field->new('005',$time.".0") );
+    }
+    else {
+      $f5->update($time.".0");
+    }
+
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
 			$record->leader($leader);
@@ -617,12 +631,6 @@ sub AddAuthority {
 		if (!$record->field('003')) {
 			$record->insert_fields_ordered(
 				MARC::Field->new('003',C4::Context->preference('MARCOrgCode'))
-			);
-		}
-		my $time=POSIX::strftime("%Y%m%d%H%M%S",localtime);
-		if (!$record->field('005')) {
-			$record->insert_fields_ordered(
-				MARC::Field->new('005',$time.".0")
 			);
 		}
 		my $date=POSIX::strftime("%y%m%d",localtime);
@@ -693,6 +701,7 @@ sub AddAuthority {
     my $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
     $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
+    logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
   }
   ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
   return ($authid);
@@ -711,9 +720,10 @@ sub DelAuthority {
     my ($authid) = @_;
     my $dbh=C4::Context->dbh;
 
+    logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     ModZebra($authid,"recordDelete","authorityserver",GetAuthority($authid),undef);
-    $dbh->do("delete from auth_header where authid=$authid") ;
-
+    my $sth = $dbh->prepare("DELETE FROM auth_header WHERE authid=?");
+    $sth->execute($authid);
 }
 
 sub ModAuthority {
@@ -741,6 +751,7 @@ sub ModAuthority {
       print AUTH $authid;
       close AUTH;
   }
+  logaction( "AUTHORITIES", "MODIFY", $authid, "BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
   return $authid;
 }
 

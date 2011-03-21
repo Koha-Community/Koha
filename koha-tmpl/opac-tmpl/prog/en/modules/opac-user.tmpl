@@ -28,13 +28,13 @@ $.tablesorter.addParser({
 				widgets : ['zebra'],
 				<!-- TMPL_IF NAME="JacketImages" -->
 					sortList: [[3,0]],
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
 						<!-- TMPL_ELSE -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
 						<!-- /TMPL_IF -->
 				<!-- TMPL_ELSE -->
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							sortList: [[2,0]],
 							headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }}
 						<!-- TMPL_ELSE -->
@@ -48,13 +48,13 @@ $.tablesorter.addParser({
 				widgets : ['zebra'],
 				<!-- TMPL_IF NAME="JacketImages" -->
 					sortList: [[1,0]],
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
 						<!-- TMPL_ELSE -->
 							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
 						<!-- /TMPL_IF -->
 				<!-- TMPL_ELSE -->
-						<!-- TMPL_IF NAME="item-level_itypes" -->
+						<!-- TMPL_IF NAME="item_level_itypes" -->
 							sortList: [[0,0]],
 							headers: { 0: { sorter: 'articles' },3: { sorter: false }}
 						<!-- TMPL_ELSE -->
@@ -102,13 +102,13 @@ $.tablesorter.addParser({
 		<div class="dialog alert">
         <ul>
             <!-- TMPL_IF NAME="debarred" -->
-                <li><strong>Please note:</strong> Your account has been frozen. Usually the reason for freezing an account is old overdues or damage fees.If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.</li>
+                <li><strong>Please note:</strong> Your account has been frozen. Usually the reason for freezing an account is old overdues or damage fees.If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="gonenoaddress" -->
-                <li><strong>Please note:</strong> According to our records, we don't have up-to-date <a href="/cgi-bin/koha/opac-userdetails.pl">contact information</a> on file.  Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)</li>
+                <li><strong>Please note:</strong> According to our records, we don't have up-to-date <!-- TMPL_UNLESS NAME="OPACPatronDetails" --><a href="/cgi-bin/koha/opac-userupdate.pl">contact information</a><!-- TMPL_ELSE -->contact information<!-- /TMPL_UNLESS --> on file.  Please contact the library<!-- TMPL_IF NAME="OPACPatronDetails" --> or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)<!-- /TMPL_IF -->.</li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="lost" -->
-                <li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</li>
+                <li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please contact the library.</li>
             <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="renewal_blocked_fines" -->
                 <li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than <!-- TMPL_VAR NAME="renewal_blocked_fines" --></a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li>
@@ -192,12 +192,15 @@ $.tablesorter.addParser({
     <!-- /TMPL_IF -->
 
     <div id="opac-user-checkouts"><!-- TMPL_IF NAME="issues_count" -->
+        <form action="/cgi-bin/koha/opac-renew.pl" method="post">
+	<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->">
+	<input type="hidden" name="from" value="opac_user" />
         <table id="checkoutst">
         <caption><!-- TMPL_VAR NAME="issues_count" --> Items Checked Out</caption>
        <thead><tr>
 		<!-- TMPL_IF NAME="JacketImages" --><th>&nbsp;</th><!-- /TMPL_IF -->
         <th>Title</th>
-		<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
+		<!-- TMPL_UNLESS NAME="item_level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
         <th>Call No.</th>
         <th>Due</th>
         <!-- TMPL_IF name="OpacRenewalAllowed" -->
@@ -237,7 +240,7 @@ $.tablesorter.addParser({
                 <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a><span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span></td>
-                <!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
+                <!-- TMPL_UNLESS NAME="item_level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
                 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
                 <!-- TMPL_IF NAME="overdue" -->
                     <td class="overdue"><!-- TMPL_VAR NAME="date_due" --></td>
@@ -246,7 +249,7 @@ $.tablesorter.addParser({
                 <!-- /TMPL_IF -->
                 <!-- TMPL_IF name="OpacRenewalAllowed" -->
                     <!-- TMPL_UNLESS name="patron_flagged" -->
-                    <td><!-- TMPL_IF NAME="status" --><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
+                    <td><!-- TMPL_IF NAME="status" --><input type="checkbox" name="item" value="<!-- TMPL_VAR NAME="itemnumber"-->"/><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=<!-- TMPL_VAR NAME="itemnumber" -->&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->">Renew</a> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span>
                         <!-- TMPL_ELSE -->
                         Not renewable<!-- TMPL_IF NAME="too_many" --> <span class="renewals">(<!-- TMPL_VAR NAME="renewsleft" --> of <!-- TMPL_VAR NAME="renewsallowed" --> renewals remaining)</span><!-- TMPL_ELSE --><!-- TMPL_IF NAME="on_reserve" --> <span class="renewals">(On hold)</span><!-- /TMPL_IF --><!-- /TMPL_IF --> 
                         <!-- /TMPL_IF --></td>
@@ -258,7 +261,13 @@ $.tablesorter.addParser({
             </tr>
         <!-- /TMPL_LOOP --></tbody>
         </table>
+	
 		<!-- TMPL_IF name="OpacRenewalAllowed" -->
+		<input type="submit" value="Renew Selected" />
+		<!-- /TMPL_IF -->
+		</form>
+		<!-- TMPL_IF name="OpacRenewalAllowed" -->
+		
 		<form action="/cgi-bin/koha/opac-renew.pl" method="post">
 			<input type="hidden" name="from" value="opac_user" />
 			<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
@@ -282,7 +291,7 @@ $.tablesorter.addParser({
 <thead><tr>
 <!-- TMPL_IF NAME="JacketImages" --><th>&nbsp;</th><!-- /TMPL_IF -->
 <th>Title</th>
-<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS NAME="item_level_itypes" --><th>Item Type</th> <!-- /TMPL_UNLESS -->
 <th>Call No.</th>
 <th>Due</th>
 <!-- TMPL_IF name="OpacRenewalAllowed" -->
@@ -313,7 +322,7 @@ $.tablesorter.addParser({
 
 <td><a href="/cgi-bin/koha/opac-detail.pl?bib=<!-- TMPL_VAR NAME="biblionumber" -->"><!-- TMPL_VAR NAME="title" escape="html" --></a> <span class="item-details"><!-- TMPL_VAR NAME="author" --></span></td>
 
-<!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
+<!-- TMPL_UNLESS NAME="item_level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="description" -->" alt="<!-- TMPL_VAR NAME="description" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="description" --></td><!-- /TMPL_UNLESS -->
 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 <td><!-- TMPL_VAR NAME="date_due" --></td>
                 <!-- TMPL_IF name="OpacRenewalAllowed" -->
@@ -379,7 +388,7 @@ $.tablesorter.addParser({
                     <!-- TMPL_IF NAME="wait" -->
                         <!-- TMPL_IF NAME="atdestination" -->
                             <!-- TMPL_IF NAME="found" -->
-                            Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b>
+                            Item waiting at <b> <!-- TMPL_VAR NAME="wbrname" --></b><!-- TMPL_IF NAME="formattedwaitingdate" --> until <!-- TMPL_VAR NAME="formattedwaitingdate" --><!-- /TMPL_IF -->
                             <input type="hidden" name="pickup" value="<!-- TMPL_VAR NAME="wbrcd" -->" />
                             <!-- TMPL_ELSE -->
                             Item waiting to be pulled from <b> <!-- TMPL_VAR NAME="wbrname" --></b>
@@ -400,7 +409,8 @@ $.tablesorter.addParser({
 		<!-- TMPL_IF NAME="cancelable" -->
 			<form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
 			<input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" />
-			<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);" /></form>
+		<input type="hidden" name="reservenumber" value="<!-- TMPL_VAR NAME="reservenumber" -->" />
+			<input type="submit" name="submit" class="icon delete cancel" value="Cancel" onclick="return confirmDelete('Are you sure you want to cancel this hold?');" /></form>
 		<!-- TMPL_ELSE -->
 			&nbsp;
 		<!-- /TMPL_IF -->
@@ -418,7 +428,7 @@ $.tablesorter.addParser({
 </div>
 </div>
 <div class="yui-b">
-<div class="container">
+<div id="leftmenus" class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div>

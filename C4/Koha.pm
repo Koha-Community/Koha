@@ -2,6 +2,7 @@ package C4::Koha;
 
 # Copyright 2000-2002 Katipo Communications
 # Parts Copyright 2010 Nelsonville Public Library
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -35,7 +36,6 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&slashifyDate
-		&DisplayISBN
 		&subfield_is_koha_internal_p
 		&GetPrinters &GetPrinter
 		&GetItemTypes &getitemtypeinfo
@@ -57,6 +57,9 @@ BEGIN {
 		&GetAuthorisedValueCategories
 		&GetKohaAuthorisedValues
 		&GetKohaAuthorisedValuesFromField
+    &GetKohaAuthorisedValueLib
+      &GetAuthorisedValueByCode
+      &GetKohaImageurlFromAuthorisedValues
 		&GetAuthValCode
 		&GetNormalizedUPC
 		&GetNormalizedISBN
@@ -103,106 +106,6 @@ sub slashifyDate {
     # form xx/xx/xx[xx]
     my @dateOut = split( '-', shift );
     return ("$dateOut[2]/$dateOut[1]/$dateOut[0]");
-}
-
-
-=head2 DisplayISBN
-
-  my $string = DisplayISBN( $isbn );
-
-=cut
-
-sub DisplayISBN {
-    my ($isbn) = @_;
-    if (length ($isbn)<13){
-    my $seg1;
-    if ( substr( $isbn, 0, 1 ) <= 7 ) {
-        $seg1 = substr( $isbn, 0, 1 );
-    }
-    elsif ( substr( $isbn, 0, 2 ) <= 94 ) {
-        $seg1 = substr( $isbn, 0, 2 );
-    }
-    elsif ( substr( $isbn, 0, 3 ) <= 995 ) {
-        $seg1 = substr( $isbn, 0, 3 );
-    }
-    elsif ( substr( $isbn, 0, 4 ) <= 9989 ) {
-        $seg1 = substr( $isbn, 0, 4 );
-    }
-    else {
-        $seg1 = substr( $isbn, 0, 5 );
-    }
-    my $x = substr( $isbn, length($seg1) );
-    my $seg2;
-    if ( substr( $x, 0, 2 ) <= 19 ) {
-
-        # if(sTmp2 < 10) sTmp2 = "0" sTmp2;
-        $seg2 = substr( $x, 0, 2 );
-    }
-    elsif ( substr( $x, 0, 3 ) <= 699 ) {
-        $seg2 = substr( $x, 0, 3 );
-    }
-    elsif ( substr( $x, 0, 4 ) <= 8399 ) {
-        $seg2 = substr( $x, 0, 4 );
-    }
-    elsif ( substr( $x, 0, 5 ) <= 89999 ) {
-        $seg2 = substr( $x, 0, 5 );
-    }
-    elsif ( substr( $x, 0, 6 ) <= 9499999 ) {
-        $seg2 = substr( $x, 0, 6 );
-    }
-    else {
-        $seg2 = substr( $x, 0, 7 );
-    }
-    my $seg3 = substr( $x, length($seg2) );
-    $seg3 = substr( $seg3, 0, length($seg3) - 1 );
-    my $seg4 = substr( $x, -1, 1 );
-    return "$seg1-$seg2-$seg3-$seg4";
-    } else {
-      my $seg1;
-      $seg1 = substr( $isbn, 0, 3 );
-      my $seg2;
-      if ( substr( $isbn, 3, 1 ) <= 7 ) {
-          $seg2 = substr( $isbn, 3, 1 );
-      }
-      elsif ( substr( $isbn, 3, 2 ) <= 94 ) {
-          $seg2 = substr( $isbn, 3, 2 );
-      }
-      elsif ( substr( $isbn, 3, 3 ) <= 995 ) {
-          $seg2 = substr( $isbn, 3, 3 );
-      }
-      elsif ( substr( $isbn, 3, 4 ) <= 9989 ) {
-          $seg2 = substr( $isbn, 3, 4 );
-      }
-      else {
-          $seg2 = substr( $isbn, 3, 5 );
-      }
-      my $x = substr( $isbn, length($seg2) +3);
-      my $seg3;
-      if ( substr( $x, 0, 2 ) <= 19 ) {
-  
-          # if(sTmp2 < 10) sTmp2 = "0" sTmp2;
-          $seg3 = substr( $x, 0, 2 );
-      }
-      elsif ( substr( $x, 0, 3 ) <= 699 ) {
-          $seg3 = substr( $x, 0, 3 );
-      }
-      elsif ( substr( $x, 0, 4 ) <= 8399 ) {
-          $seg3 = substr( $x, 0, 4 );
-      }
-      elsif ( substr( $x, 0, 5 ) <= 89999 ) {
-          $seg3 = substr( $x, 0, 5 );
-      }
-      elsif ( substr( $x, 0, 6 ) <= 9499999 ) {
-          $seg3 = substr( $x, 0, 6 );
-      }
-      else {
-          $seg3 = substr( $x, 0, 7 );
-      }
-      my $seg4 = substr( $x, length($seg3) );
-      $seg4 = substr( $seg4, 0, length($seg4) - 1 );
-      my $seg5 = substr( $x, -1, 1 );
-      return "$seg1-$seg2-$seg3-$seg4-$seg5";       
-    }    
 }
 
 # FIXME.. this should be moved to a MARC-specific module
@@ -670,8 +573,9 @@ sub getImageSets {
 
     my @imagesets = (); # list of hasrefs of image set data to pass to template
     my @subdirectories = _getSubdirectoryNames( $paths->{'staff'}{'filesystem'} );
-
+warn $paths->{'staff'}{'filesystem'};
     foreach my $imagesubdir ( @subdirectories ) {
+	warn $imagesubdir;
         my @imagelist     = (); # hashrefs of image info
         my @imagenames = _getImagesFromDirectory( File::Spec->catfile( $paths->{'staff'}{'filesystem'}, $imagesubdir ) );
         my $imagesetactive = 0;
@@ -1040,6 +944,25 @@ sub displayServers {
     return \@primaryserverloop;
 }
 
+
+=head2 GetKohaImageurlFromAuthorisedValues
+
+$authhorised_value = GetKohaImageurlFromAuthorisedValues( $category, $authvalcode );
+
+Return the first url of the authorised value image represented by $lib.
+
+=cut
+
+sub GetKohaImageurlFromAuthorisedValues {
+    my ( $category, $lib ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT imageurl FROM authorised_values WHERE category=? AND lib =?");
+    $sth->execute( $category, $lib );
+     while ( my $data = $sth->fetchrow_hashref ) {
+     	return $data->{'imageurl'};
+     }
+}
+
 =head2 GetAuthValCode
 
   $authvalcode = GetAuthValCode($kohafield,$frameworkcode);
@@ -1134,6 +1057,25 @@ sub GetAuthorisedValueCategories {
     return \@results;
 }
 
+=head2 GetAuthorisedValueByCode
+
+$authhorised_value = GetAuthorisedValueByCode( $category, $authvalcode );
+
+Return an hashref of the authorised value represented by $authvalcode.
+
+=cut
+
+sub GetAuthorisedValueByCode {
+	my ( $category, $authvalcode ) = @_;
+	
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT lib FROM authorised_values WHERE category=? AND authorised_value =?");
+    $sth->execute( $category, $authvalcode );
+     while ( my $data = $sth->fetchrow_hashref ) {
+     	return $data->{'lib'};
+     }
+}
+
 =head2 GetKohaAuthorisedValues
 
 Takes $kohafield, $fwcode as parameters.
@@ -1212,6 +1154,27 @@ sub xml_escape {
     $str =~ s/'/&apos;/g;
     $str =~ s/"/&quot;/g;
     return $str;
+}
+
+=head2 GetKohaAuthorisedValueLib
+
+Takes $category, $authorised_value as parameters.
+
+If $opac parameter is set to a true value, displays OPAC descriptions rather than normal ones when they exist.
+
+Returns authorised value description
+
+=cut
+
+sub GetKohaAuthorisedValueLib {
+  my ($category,$authorised_value,$opac) = @_;
+  my $value;
+  my $dbh = C4::Context->dbh;
+  my $sth = $dbh->prepare("select lib, lib_opac from authorised_values where category=? and authorised_value=?");
+  $sth->execute($category,$authorised_value);
+  my $data = $sth->fetchrow_hashref;
+  $value = ($opac && $$data{'lib_opac'}) ? $$data{'lib_opac'} : $$data{'lib'};
+  return $value;
 }
 
 =head2 display_marc_indicators
@@ -1350,14 +1313,15 @@ sub _normalize_match_point {
     return $normalized_match_point;
 }
 
-sub _isbn_cleanup ($) {
-    my $isbn = Business::ISBN->new( shift );
-    return undef unless $isbn;
-    $isbn = $isbn->as_isbn10 if $isbn->type eq 'ISBN13';
-    return undef unless $isbn;
-    $isbn = $isbn->as_string;
-    $isbn =~ s/-//g;
-    return $isbn;
+sub _isbn_cleanup {
+    my $isbn = Business::ISBN->new( $_[0] );
+    if ( $isbn ) {
+        $isbn = $isbn->as_isbn10 if $isbn->type eq 'ISBN13';
+        if (defined $isbn) {
+            return $isbn->as_string([]);
+        }
+    }
+    return;
 }
 
 1;

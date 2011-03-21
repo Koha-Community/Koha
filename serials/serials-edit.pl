@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright 2010 Biblibre
 #
 # This file is part of Koha.
 #
@@ -19,7 +20,7 @@
 
 =head1 NAME
 
-serials-recieve.pl
+serials-edit.pl
 
 =head1 Parameters
 
@@ -71,6 +72,7 @@ use C4::Koha;
 use C4::Output;
 use C4::Context;
 use C4::Serials;
+use List::MoreUtils qw/uniq/;
 
 my $query           = CGI->new();
 my $dbh             = C4::Context->dbh;
@@ -90,20 +92,18 @@ my @errseq;
 
 # If user comes from subscription details
 unless (@serialids) {
-    foreach my $subscriptionid (@subscriptionids) {
-        my $serstatus = $query->param('serstatus');
-        if ($serstatus) {
+    my $serstatus = $query->param('serstatus');
+    if ($serstatus) {
+        foreach my $subscriptionid (@subscriptionids) {
             my @tmpser = GetSerials2( $subscriptionid, $serstatus );
-            foreach (@tmpser) {
-                push @serialids, $_->{'serialid'};
-            }
+            push @serialids, map { $_->{serialid} } @tmpser;
         }
     }
 }
 
-unless ( scalar(@serialids) ) {
+unless ( @serialids ) {
     my $string =
-      "serials-collection.pl?subscriptionid=" . join( ",", @subscriptionids );
+      'serials-collection.pl?subscriptionid=' . join ',', uniq @subscriptionids;
     $string =~ s/,$//;
 
     print $query->redirect($string);
@@ -111,12 +111,12 @@ unless ( scalar(@serialids) ) {
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-	template_name   => "serials/serials-edit.tmpl",
-	query           => $query,
-	type            => "intranet",
-	authnotrequired => 0,
-	flagsrequired   => {serials => 'receive_serials'},
-	debug           => 1,
+        template_name   => 'serials/serials-edit.tmpl',
+        query           => $query,
+        type            => 'intranet',
+        authnotrequired => 0,
+        flagsrequired   => { serials => 1 },
+        debug           => 1,
     }
 );
 
@@ -124,30 +124,37 @@ my @serialdatalist;
 my %processedserialid;
 
 my $today = C4::Dates->new();
-foreach my $tmpserialid (@serialids) {
+foreach my $serialid (@serialids) {
 
     #filtering serialid for duplication
     #NEW serial should appear only once and are created afterwards
-    if (   defined($tmpserialid)
-        && $tmpserialid =~ /^[0-9]+$/
-        && !$processedserialid{$tmpserialid} )
+    if (   $serialid
+        && $serialid =~ /^[0-9]+$/
+        && !$processedserialid{$serialid} )
     {
-        my $data = GetSerialInformation($tmpserialid);
-        $data->{publisheddate} = format_date( $data->{publisheddate} );
-        $data->{planneddate}   = format_date( $data->{planneddate} );
-        $data->{arriveddate}=$today->output('syspref');
-        $data->{'editdisable'} = (
+        my $serinfo = GetSerialInformation($serialid); #TODO duplicates work done by GetSerials2 above
+        for my $d ( qw( publisheddate planneddate )){
+            if ( $serinfo->{$d} =~m/^00/ ) {
+                $serinfo->{$d} = q{};
+            }
+            else {
+                $serinfo->{$d} = format_date( $serinfo->{$d} );
+            }
+        }
+        $serinfo->{arriveddate}=$today->output('syspref');
+
+        $serinfo->{'editdisable'} = (
             (
-                HasSubscriptionExpired( $data->{subscriptionid} )
-                  && $data->{'status1'}
+                HasSubscriptionExpired( $serinfo->{subscriptionid} )
+                && $serinfo->{'status1'}
             )
-              || $data->{'cannotedit'}
+            || $serinfo->{'cannotedit'}
         );
-        push @serialdatalist, $data;
-        $processedserialid{$tmpserialid} = 1;
+        push @serialdatalist, $serinfo;
+        $processedserialid{$serialid} = 1;
     }
 }
-my $bibdata = GetBiblioData( $serialdatalist[0]->{'biblionumber'} );
+my $biblio = GetBiblioData( $serialdatalist[0]->{'biblionumber'} );
 
 my @newserialloop;
 my @subscriptionloop;
@@ -157,8 +164,7 @@ my %processedsubscriptionid;
 foreach my $subscriptionid (@subscriptionids) {
 
     #Do not process subscriptionid twice if it was already processed.
-    if ( defined($subscriptionid)
-        && !$processedsubscriptionid{$subscriptionid} )
+    if ( $subscriptionid && !$processedsubscriptionid{$subscriptionid} )
     {
         my $cell;
         if ( $serialdatalist[0]->{'serialsadditems'} ) {
@@ -170,9 +176,11 @@ foreach my $subscriptionid (@subscriptionids) {
             $cell->{serialsadditems} = 1;
         }
         $cell->{'subscriptionid'} = $subscriptionid;
-        $cell->{'itemid'}         = "NNEW";
-        $cell->{'serialid'}       = "NEW";
+        $cell->{'itemid'}         = 'NNEW';
+        $cell->{'serialid'}       = 'NEW';
         $cell->{'issuesatonce'}   = 1;
+        $cell->{arriveddate}=$today->output('syspref');
+
         push @newserialloop, $cell;
         push @subscriptionloop,
           {
@@ -190,19 +198,27 @@ if ( $op and $op eq 'serialchangestatus' ) {
 
     my $newserial;
     for ( my $i = 0 ; $i <= $#serialids ; $i++ ) {
+        my ($plan_date, $pub_date);
 
-        if ( $serialids[$i] && $serialids[$i] eq "NEW" ) {
+        if (defined $planneddates[$i] && $planneddates[$i] ne 'XXX') {
+            $plan_date = format_date_in_iso( $planneddates[$i] );
+        }
+        if (defined $publisheddates[$i] && $publisheddates[$i] ne 'XXX') {
+            $pub_date = format_date_in_iso( $publisheddates[$i] );
+        }
+
+        if ( $serialids[$i] && $serialids[$i] eq 'NEW' ) {
             if ( $serialseqs[$i] ) {
 
             #IF newserial was provided a name Then we have to create a newSerial
                 ### FIXME if NewIssue is modified to use subscription biblionumber, then biblionumber would not be useful.
                 $newserial = NewIssue(
                     $serialseqs[$i],
-                    $subscriptionids[$i],
+                    $subscriptionids[0],
                     $serialdatalist[0]->{'biblionumber'},
                     $status[$i],
-                    format_date_in_iso( $planneddates[$i] ),
-                    format_date_in_iso( $publisheddates[$i] ),
+                    $plan_date,
+                    $pub_date,
                     $notes[$i]
                 );
             }
@@ -211,8 +227,8 @@ if ( $op and $op eq 'serialchangestatus' ) {
             ModSerialStatus(
                 $serialids[$i],
                 $serialseqs[$i],
-                format_date_in_iso( $planneddates[$i] ),
-                format_date_in_iso( $publisheddates[$i] ),
+                $plan_date,
+                $pub_date,
                 $status[$i],
                 $notes[$i]
             );
@@ -291,14 +307,14 @@ if ( $op and $op eq 'serialchangestatus' ) {
                             $serialdatalist[0]->{'biblionumber'}
                         )
                       );
-                    if ( C4::Context->preference("autoBarcode") eq
+                    if ( C4::Context->preference('autoBarcode') eq
                         'incremental' )
                     {
                         if ( !$bib_record->field($barcodetagfield)
                             ->subfield($barcodetagsubfield) )
                         {
                             my $sth_barcode = $dbh->prepare(
-                                "select max(abs(barcode)) from items");
+                                'select max(abs(barcode)) from items');
                             $sth_barcode->execute;
                             my ($newbarcode) = $sth_barcode->fetchrow;
 
@@ -356,19 +372,26 @@ if ( $op and $op eq 'serialchangestatus' ) {
         }
     }
     else {
-        my $redirect = "serials-collection.pl?";
-        $redirect .= join( '&', map { "subscriptionid=" . $_ } sort @subscriptionids );# ID The sort necessary
+        my $redirect = 'serials-collection.pl?';
+        $redirect .= join( '&', map { 'subscriptionid=' . $_ } @subscriptionids );
         print $query->redirect($redirect);
     }
+}
+my $location = GetAuthorisedValues('LOC', $serialdatalist[0]->{'location'});
+my $locationlib;
+foreach (@$location) {
+    $locationlib = $_->{'lib'} if $_->{'selected'};
 }
 my $default_bib_view = get_default_view();
 
 $template->param(
     serialsadditems => $serialdatalist[0]->{'serialsadditems'},
-    bibliotitle     => $bibdata->{'title'},
+    callnumber	     => $serialdatalist[0]->{'callnumber'},
+    bibliotitle     => $biblio->{'title'},
     biblionumber    => $serialdatalist[0]->{'biblionumber'},
     serialslist     => \@serialdatalist,
     default_bib_view => $default_bib_view,
+    location         => $locationlib,
 );
 output_html_with_http_headers $query, $cookie, $template->output;
 

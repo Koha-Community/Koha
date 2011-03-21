@@ -36,9 +36,9 @@
         <tr>
             <th>Title</th>
             <th>Location</th>
-            <th>preview</th>
-            <th>&nbsp;</th>
-            <th>&nbsp;</th>
+            <th>Preview</th>
+            <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><th>&nbsp;</th><!-- TMPL_ELSE --><!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><th>&nbsp;</th><!-- /TMPL_IF -->
         </tr>
     <!-- TMPL_LOOP NAME="resultsloop" -->
         <!-- TMPL_IF name="even" -->
@@ -98,14 +98,8 @@
                 </td>
 				<td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=<!-- TMPL_VAR NAME="biblionumber" -->" title="MARC" rel="gb_page_center[600,500]">Card</a>
                 </td>
-                <td><!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue"--><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit biblio</a>
-					<!-- TMPL_ELSE --><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->" class="disabled" onclick="return false;">Edit biblio</a>
-					<!-- /TMPL_IF -->
-
-                </td>
-                <td>
-                    <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add/Edit Items</a>
-                </td>
+                <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue"--><td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Edit biblio</a></td><!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" --><td><a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Add/Edit Items</a></td><!-- /TMPL_IF -->
             </tr>
     <!-- /TMPL_LOOP -->
     </table>

@@ -16,15 +16,15 @@
 <div id="login">
 <h1><a href="http://koha-community.org">Koha</a></h1>
 <!-- TMPL_IF NAME="nopermission" -->
-<div id="login_error"><strong>Error: </strong>Unauthorized user<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">click to log out</a></div>
+<div id="login_error"><strong>Error:</strong> You do not have permission to access this page. <a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Click to log out</a></div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="timed_out" -->
-<div id="login_error"><strong>Error: </strong>Session timed out, please log in again</div>
+<div id="login_error"><strong>Error: </strong>Session timed out.<br /> Please log in again</div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="different_ip" -->
-<div id="login_error"><strong>Error: </strong>IP address has changed, please log in again </div>
+<div id="login_error"><strong>Error: </strong>IP address has changed. Please log in again </div>
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="wrongip" -->

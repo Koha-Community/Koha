@@ -36,6 +36,7 @@
 	- we delete the designated record
 
 =cut
+
 # TODO This script drives the CRUD operations on the letter table
 # The DB interaction should be handled by calls to C4/Letters.pm
 
@@ -45,42 +46,6 @@ use CGI;
 use C4::Auth;
 use C4::Context;
 use C4::Output;
-
-sub StringSearch {
-    my ($searchstring) = @_;
-    my $dbh = C4::Context->dbh;
-    $searchstring =~ s/\'/\\\'/g;
-    my @data = split( ' ', $searchstring );
-    $data[0] = '' unless @data;
-    my $sth = $dbh->prepare("SELECT * FROM letter WHERE (code LIKE ?) ORDER BY module, code");
-    $sth->execute("$data[0]%");     # slightly bogus, only searching on first string.
-    return $sth->fetchall_arrayref({});
-}
-
-# FIXME untranslateable
-our %column_map = (
-    aqbooksellers => 'BOOKSELLERS',
-    aqorders => 'ORDERS',
-    serial => 'SERIALS',
-    reserves => 'HOLDS',
-    suggestions => 'SUGGESTIONS',
-);
-
-sub column_picks ($) {
-    # returns @array of values
-    my $table = shift or return ();
-    my $sth = C4::Context->dbh->prepare("SHOW COLUMNS FROM $table");
-    $sth->execute;
-    my @SQLfieldname = ();
-    push @SQLfieldname, {'value' => "", 'text' => '---' . uc($column_map{$table} || $table) . '---'};
-    while (my ($field) = $sth->fetchrow_array) {
-        push @SQLfieldname, {
-            value => $table . ".$field",
-             text => $table . ".$field"
-        };
-    }
-    return @SQLfieldname;
-}
 
 # letter_exists($module, $code)
 # - return true if a letter with the given $module and $code exists
@@ -181,26 +146,7 @@ sub add_form {
         $template->param( adding => 1 );
     }
 
-    # add acquisition specific tables
-    my @SQLfieldname;
     my $field_selection;
-    if ( $module eq "suggestions" ) {
-        push @SQLfieldname, column_picks('borrowers'),
-                            column_picks('suggestions'),
-                            column_picks('aqbooksellers'),
-                            column_picks('biblio'),
-                            column_picks('items');
-	}
-    elsif ( $module eq "reserves" ) {
-        push @SQLfieldname, column_picks('borrowers'),
-                            column_picks('reserves'),
-                            column_picks('biblio'),
-                            column_picks('items');
-    }
-    elsif ( index( $module, "acquisition" ) > 0 ) {	# FIXME: imprecise comparison
-        push @SQLfieldname, column_picks('aqbooksellers'), column_picks('aqorders');
-        # add issues specific tables
-    }
     push @{$field_selection}, add_fields('branches');
     if ($module eq 'reserves') {
         push @{$field_selection}, add_fields('borrowers', 'reserves', 'biblio', 'items');
@@ -218,6 +164,9 @@ sub add_form {
         foreach(qw(title author serial)) {
             push @{$field_selection}, {value => "biblio.$_", text => ucfirst $_ };
         }
+    }
+    elsif ($module eq 'suggestions') {
+        push @{$field_selection}, add_fields('suggestions', 'borrowers', 'biblio');
     }
     else {
         push @{$field_selection}, add_fields('biblio','biblioitems'),
@@ -339,6 +288,7 @@ sub get_columns_for {
         aqorders      => '---ORDERS---',
         serial        => '---SERIALS---',
         reserves      => '---HOLDS---',
+        suggestions   => '---SUGGESTIONS---',
     );
     my @fields = ();
     if (exists $column_map{$table} ) {

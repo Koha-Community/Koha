@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 	<div id="yui-main">
 	<div class="yui-b"><div class="yui-g">
-<div class="container">
+<div id="userreadingrecord" class="container">
 <!--CONTENT-->
 <h3><a href="/cgi-bin/koha/opac-user.pl"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->'s account</a> <img src="<!-- TMPL_VAR NAME="themelang" -->../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
 
@@ -54,7 +54,7 @@ You have never borrowed anything from this library.
 <div class="ui-tabs-panel"><table id="readingrec">
 <tr>
 <th colspan="2">Title</th>
-<!-- TMPL_UNLESS NAME="item-level_itypes" --><th>Item Type</th><!-- /TMPL_UNLESS -->
+<th>Item Type</th>
 <th>Call No.</th>
 <th>Date</th>
 </tr>
@@ -80,7 +80,7 @@ You have never borrowed anything from this library.
                     <span class="item-details">
                         <!-- TMPL_VAR NAME="author" -->
                     </span></td>
-<!-- TMPL_UNLESS NAME="item-level_itypes" --><td><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" title="<!-- TMPL_VAR name="itypedescription" -->" alt="<!-- TMPL_VAR NAME="itypedescription" -->" /><!-- /TMPL_IF --> <!-- TMPL_VAR name="itypedescription" --></td><!-- /TMPL_UNLESS -->
+<td><!-- TMPL_UNLESS NAME="noItemTypeImages" --><!-- TMPL_IF NAME="imageurl" --><img src="<!-- TMPL_VAR NAME="imageurl" -->" alt="" /><!-- /TMPL_IF --><!-- /TMPL_UNLESS --> <!-- TMPL_VAR name="description" --></td>
 <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
 <td><!-- TMPL_IF NAME="returndate" --><!-- TMPL_VAR NAME="returndate" --><!-- TMPL_ELSE --><em>(Checked out)</em><!-- /TMPL_IF --></td>
 </tr>
@@ -94,7 +94,7 @@ You have never borrowed anything from this library.
 </div>
 </div>
 <div class="yui-b">
-<div class="container">
+<div id="leftmenus" class="container">
 <!--TMPL_INCLUDE NAME="navigation.inc" -->
 <!-- TMPL_INCLUDE name="usermenu.inc" -->
 </div>

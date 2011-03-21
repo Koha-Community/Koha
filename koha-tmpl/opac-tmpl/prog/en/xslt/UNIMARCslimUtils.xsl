@@ -25,7 +25,7 @@
 
   <xsl:template name="tag_210">
     <span class="results_summary">
-      <span class="label">Édition: </span>
+      <span class="label">Publication: </span>
       <xsl:for-each select="marc:datafield[@tag=210]">
         <span>
           <xsl:call-template name="addClassRtl" />
@@ -85,7 +85,7 @@
 	<xsl:template name="tag_4xx">
     <xsl:for-each select="marc:datafield[@tag=464 or @tag=461]">
     	  <span class="results_summary">
-        <span class="label">Extrait de: </span>
+        <span class="label">Linked with: </span>
         <span>
           <xsl:call-template name="addClassRtl" />
           <xsl:if test="marc:subfield[@code='t']">

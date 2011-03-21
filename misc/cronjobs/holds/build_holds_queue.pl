@@ -64,13 +64,11 @@ foreach my $biblionumber (@$bibs_with_pending_requests) {
 
 exit 0;
 
+=head1 FUNCTIONS
+
 =head2 GetBibsWithPendingHoldRequests
 
-=over 4
-
-my $biblionumber_aref = GetBibsWithPendingHoldRequests();
-
-=back
+  my $biblionumber_aref = GetBibsWithPendingHoldRequests();
 
 Return an arrayref of the biblionumbers of all bibs
 that have one or more unfilled hold requests.
@@ -95,11 +93,7 @@ sub GetBibsWithPendingHoldRequests {
 
 =head2 GetPendingHoldRequestsForBib
 
-=over 4
-
-my $requests = GetPendingHoldRequestsForBib($biblionumber);
-
-=back
+  my $requests = GetPendingHoldRequestsForBib($biblionumber);
 
 Returns an arrayref of hashrefs to pending, unfilled hold requests
 on the bib identified by $biblionumber.  The following keys
@@ -142,11 +136,7 @@ sub GetPendingHoldRequestsForBib {
 
 =head2 GetItemsAvailableToFillHoldRequestsForBib
 
-=over 4
-
-my $available_items = GetItemsAvailableToFillHoldRequestsForBib($biblionumber);
-
-=back
+  my $available_items = GetItemsAvailableToFillHoldRequestsForBib($biblionumber);
 
 Returns an arrayref of items available to fill hold requests
 for the bib identified by C<$biblionumber>.  An item is available
@@ -205,11 +195,7 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
 
 =head2 MapItemsToHoldRequests
 
-=over 4
-
-MapItemsToHoldRequests($hold_requests, $available_items);
-
-=back
+  MapItemsToHoldRequests($hold_requests, $available_items);
 
 =cut
 

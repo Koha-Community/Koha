@@ -12,7 +12,8 @@
 
 <ul><li><!-- TMPL_VAR NAME="address" --><br /><!-- TMPL_VAR NAME="address2" --></li><li><!-- TMPL_VAR NAME="city" -->, <!-- TMPL_VAR NAME="zipcode" --></li>
 <li><!-- TMPL_IF NAME="phone" --><!-- TMPL_VAR NAME="phone" --><!-- TMPL_ELSE -->(no phone number on file)<!-- /TMPL_IF --></li>
-<li><!-- TMPL_IF NAME="email" --><!-- TMPL_VAR NAME="email" --><!-- TMPL_ELSE -->(no email on file)<!-- /TMPL_IF --></li>
+<li><!-- TMPL_IF NAME="email" --><!-- TMPL_VAR NAME="email" --><!-- TMPL_ELSE -->(no primary email on file)<!-- /TMPL_IF --></li>
+<!-- TMPL_IF NAME="emailpro" --><li><!-- TMPL_VAR NAME="emailpro" --></li><!-- /TMPL_IF -->
 </ul>
 
 <!-- TMPL_IF NAME="issueloop" -->

@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -20,8 +21,7 @@
 
 =head1 NAME
 
-opac-ISBDdetail.pl : script to show a biblio in ISBD format
-
+opac-ISBDdetail.pl - script to show a biblio in ISBD format
 
 =head1 DESCRIPTION
 
@@ -36,8 +36,6 @@ The first 10 tabs present the biblio, the 11th one presents
 the items attached to the biblio
 
 =head1 FUNCTIONS
-
-=over 2
 
 =cut
 
@@ -64,7 +62,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         template_name   => "opac-ISBDdetail.tmpl",
         query           => $query,
         type            => "opac",
-        authnotrequired => 1,
+        authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
         debug           => 1,
     }
 );
@@ -100,8 +98,8 @@ $template->param(
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my $dbh = C4::Context->dbh;
 my $dat                 = TransformMarcToKoha( $dbh, $record );
-my @subscriptions       =
-  GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
+my @subscriptions       = GetSubscriptions( undef, undef, $biblionumber );
+
 my @subs;
 foreach my $subscription (@subscriptions) {
     my %cell;
@@ -157,6 +155,16 @@ $template->param(
     biblionumber => $biblionumber,
     reviews             => $reviews,
 );
+
+#Search for title in links
+if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
+    $dat->{author} ? $search_for_title =~ s/{AUTHOR}/$dat->{author}/g : $search_for_title =~ s/{AUTHOR}//g;
+    $dat->{title} =~ s/\/+$//; # remove trailing slash
+    $dat->{title} =~ s/\s+$//; # remove trailing space
+    $dat->{title} ? $search_for_title =~ s/{TITLE}/$dat->{title}/g : $search_for_title =~ s/{TITLE}//g;
+    $isbn ? $search_for_title =~ s/{ISBN}/$isbn/g : $search_for_title =~ s/{ISBN}//g;
+ $template->param('OPACSearchForTitleIn' => $search_for_title);
+}
 
 ## Amazon.com stuff
 #not used unless preference set

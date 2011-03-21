@@ -76,7 +76,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
-my $pagesize = 30;
+
 my $op       = $input->param('op');
 $tagfield =~ s/\,//g;
 
@@ -364,8 +364,8 @@ if ( $op eq 'add_form' ) {
         $row_data{row}    = $j;
         push( @loop_data, \%row_data );
     }
-    $template->param( 'use-heading-flags-p'      => 1 );
-    $template->param( 'heading-edit-subfields-p' => 1 );
+    $template->param( 'use_heading_flags_p'      => 1 );
+    $template->param( 'heading_edit_subfields_p' => 1 );
     $template->param(
         action   => "Edit subfields",
         tagfield => $tagfield,
@@ -531,12 +531,7 @@ elsif ( $op eq 'delete_confirmed' ) {
 else {    # DEFAULT
     my ( $count, $results ) = string_search( $tagfield, $frameworkcode );
     my @loop_data = ();
-    for (
-        my $i = $offset ;
-        $i < ( $offset + $pagesize < $count ? $offset + $pagesize : $count ) ;
-        $i++
-      )
-    {
+    for ( my $i = 0; $i < $count; $i++ ) {
         my %row_data;    # get a fresh hash for the row data
         $row_data{tagfield}         = $results->[$i]{'tagfield'};
         $row_data{tagsubfield}      = $results->[$i]{'tagsubfield'};
@@ -552,10 +547,6 @@ else {    # DEFAULT
         $row_data{hidden}           = $results->[$i]{'hidden'};
         $row_data{isurl}            = $results->[$i]{'isurl'};
         $row_data{link}             = $results->[$i]{'link'};
-        $row_data{delete}           =
-"$script_name?op=delete_confirm&amp;tagfield=$tagfield&amp;tagsubfield="
-          . $results->[$i]{'tagsubfield'}
-          . "&amp;frameworkcode=$frameworkcode";
 
         if ( $row_data{tab} eq -1 ) {
             $row_data{subfield_ignored} = 1;
@@ -569,16 +560,6 @@ else {    # DEFAULT
         edit_frameworkcode => $frameworkcode
     );
 
-    if ( $offset > 0 ) {
-        my $prevpage = $offset - $pagesize;
-        $template->param(
-            prev => "<a href=\"$script_name?offset=$prevpage\&tagfield=$tagfield\&frameworkcode=$frameworkcode \">" );
-    }
-    if ( $offset + $pagesize < $count ) {
-        my $nextpage = $offset + $pagesize;
-        $template->param(
-            next => "<a href=\"$script_name?offset=$nextpage\&tagfield=$tagfield\&frameworkcode=$frameworkcode \">" );
-    }
 }    #---- END $OP eq DEFAULT
 
 output_html_with_http_headers $input, $cookie, $template->output;

@@ -45,7 +45,7 @@ IMPORTANT:  You _MUST_ follow all the steps outlined there for
 1.3.1 Option A: Download Koha via Git (optional)
 
     $ sudo apt-get install git-core git-email
-    $ git clone git://git.koha-community.org/pub/scm/koha.git kohaclone
+    $ git clone git://git.koha-community.org/koha.git kohaclone
     $ cd kohaclone
     $ git checkout -b myinstall origin
 
@@ -191,7 +191,7 @@ named virtual hosts.), comment out the following line:
 
 Run the following commands:
 
-    $ sudo a2enmod rewrite
+    $ sudo a2enmod rewrite deflate
     $ sudo a2ensite koha
     $ sudo apache2ctl restart
 

@@ -22,7 +22,7 @@
     <h2><!-- TMPL_VAR NAME="title" ESCAPE="html" --> <!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --></h2>
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> <!-- TMPL_VAR NAME="biblionumber" -->&nbsp;</li>
-        <!-- TMPL_UNLESS NAME="item-level_itypes" -->
+        <!-- TMPL_UNLESS NAME="item_level_itypes" -->
         <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="itemtypename" -->&nbsp;</li>
         <!-- /TMPL_UNLESS -->
         <!-- deprecated? <li><span class="label">Loan length:</span> <!-- TMPL_VAR NAME="loanlength" -->&nbsp;</li> -->
@@ -42,10 +42,14 @@
     <!-- TMPL_LOOP NAME="ITEM_DATA" -->
     <div class="yui-g">
         <h3 id="item<!-- TMPL_VAR NAME="itemnumber" -->">Barcode <!-- TMPL_VAR NAME="barcode" -->  <!-- TMPL_IF name="notforloantext" --><!-- TMPL_VAR name="notforloantext" --> <!-- /TMPL_IF --></h3>
-        <div class="listgroup"><h4>Item Information <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><!-- TMPL_UNLESS name="nomod" --><a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">[Edit Item]</a><!-- /TMPL_IF --><!-- /TMPL_UNLESS --></h4>
+        <div class="listgroup"><h4>Item Information <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_catalogue" --><!-- TMPL_UNLESS name="nomod" -->
+         <!-- TMPL_IF NAME="CAN_user_editcatalogue_edit_items" -->
+         <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->">[Edit Item]</a>
+         <!-- /TMPL_IF -->
+         <!-- /TMPL_UNLESS --><!-- /TMPL_IF --></h4>
             <ol class="bibliodetails">
             <li><span class="label">Home Library:</span> <!-- TMPL_VAR NAME="homebranchname" -->&nbsp;</li>
-	    <!-- TMPL_IF NAME="item-level_itypes" -->
+	    <!-- TMPL_IF NAME="item_level_itypes" -->
             <li><span class="label">Item type:</span> <!-- TMPL_VAR NAME="itype" -->&nbsp;</li>
 	    <!-- /TMPL_IF -->
             <!-- TMPL_IF NAME="collection" --><li><span class="label">Collection:</span> <!-- TMPL_VAR NAME="collection" --></li> <!-- /TMPL_IF -->
@@ -63,6 +67,7 @@
             <ol class="bibliodetails">
             <li><span class="label">Current Location:</span> <!-- TMPL_VAR NAME="holdingbranchname" -->&nbsp;</li>
             <li><span class="label">Checkout Status:</span> <!-- TMPL_IF NAME="issue" -->Checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="cardnumber" --></a>, Due back on <!-- TMPL_VAR NAME="datedue" --><!-- TMPL_ELSE -->Not Checked out <!-- /TMPL_IF --></li>
+            <li><span class="label">Current Renewals:</span> <!-- TMPL_VAR NAME="renewals" -->&nbsp;</li>
             <!-- TMPL_IF name="itemlostloop" -->
                 <li><span class="label">Lost Status:</span>
                     <!-- TMPL_IF NAME="CAN_user_circulate" -->
@@ -71,6 +76,7 @@
                         <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
                         <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
                         <select name="itemlost" >
+                                    <option value="">Choose</option>
                         <!-- TMPL_LOOP NAME="itemlostloop" -->
                             <!-- TMPL_IF NAME="selected" -->
                                     <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
@@ -100,6 +106,7 @@
                     <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR Name="biblioitemnumber" -->" />
                     <input type="hidden" name="itemnumber" value="<!-- TMPL_VAR Name="itemnumber" -->" />
                     <select name="damaged" >
+                    <option value="">Choose</option>
             <!-- TMPL_LOOP NAME="itemdamagedloop" -->
                 <!-- TMPL_IF NAME="selected" -->
                     <option value="<!-- TMPL_VAR NAME="authorised_value" -->" selected="selected"><!-- TMPL_VAR NAME="lib" --></option>
@@ -156,8 +163,7 @@
                     <!-- TMPL_VAR NAME="dateaccessioned" -->
                 <!-- /TMPL_IF --> </li>
 
-                <li><span class="label">Total Renewals:</span> <!-- TMPL_VAR NAME="renewals" -->&nbsp;</li>
-
+                
                 <li><span class="label">Total Checkouts:</span><!-- TMPL_IF NAME="issues" --><!-- TMPL_VAR NAME="issues" --><!-- TMPL_ELSE -->0<!-- /TMPL_IF -->  (<a href="/cgi-bin/koha/circ/bookcount.pl?&amp;biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->&amp;itm=<!-- TMPL_VAR NAME="itemnumber" -->">View item's checkout history</a>)</li>
 
                 <li><span class="label">Last seen:</span> <!-- TMPL_VAR NAME="datelastseen" -->&nbsp;</li>

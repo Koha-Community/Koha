@@ -95,6 +95,7 @@ foreach my $issue (@{$issues} ) {
     $line{date_due}        = format_date( $issue->{'date_due'} );
     $line{returndate}      = format_date( $issue->{'returndate'} );
     $line{volumeddesc}     = $issue->{'volumeddesc'};
+    $issue->{'itemtype'}   = C4::Context->preference('item-level_itypes') ? $issue->{'itype'} : $issue->{'itemtype'};
     if($issue->{'itemtype'}) {
         $line{'description'}   = $itemtypes->{ $issue->{'itemtype'} }->{'description'};
         $line{imageurl}        = getitemtypeimagelocation( 'opac', $itemtypes->{ $issue->{'itemtype'}  }->{'imageurl'} );

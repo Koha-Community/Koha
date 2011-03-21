@@ -210,9 +210,7 @@ function showCartUpdate(msg){
 
 function showListsUpdate(msg){
        // set body of popup window
-       $("#listsDetails").html(msg);
-       showLists();
-       setTimeout("hideLists()",2000); 
+       alert(msg);
 }
 
 function selRecord(num, status) {
@@ -301,10 +299,10 @@ function delRecord (n, s) {
 }
 
 
-function delBasket() {
-
-    var rep = false;
-    rep = confirm(MSG_CONFIRM_DEL_BASKET);
+function delBasket(rep) {
+    if (rep == undefined){
+        rep = confirm(MSG_CONFIRM_DEL_BASKET);
+    }
     if (rep) {
         delCookie(nameCookie);
         document.location = "about:blank";

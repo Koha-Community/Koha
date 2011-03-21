@@ -30,11 +30,10 @@ $(document).ready(function()
     }
 );
 
-<!-- TMPL_IF NAME="TagsEnabled" -->
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->
 var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
 
 function tagSelected() {
-    <!-- TMPL_IF NAME="loggedinusername" -->
     var bibs = document.getElementById('records').value;
     if (bibs) {
         $("#tagsel_tag").hide();
@@ -43,9 +42,6 @@ function tagSelected() {
     } else {
         alert(MSG_NO_RECORD_SELECTED);
     }
-    <!-- TMPL_ELSE -->
-    window.location = "/cgi-bin/koha/opac-user.pl";
-    <!-- /TMPL_IF -->
 }
 
 function tagCanceled() {
@@ -76,7 +72,7 @@ function tagAdded() {
     KOHA.Tags.add_multitags_button(bibs, tag);
     return false;
 }
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	$(document).ready(function(){
 		$("#CheckAll").click(function(){
 		var checked = [];
@@ -97,14 +93,14 @@ function tagAdded() {
 	        return false;
 	    });
 
-        <!-- TMPL_IF NAME="TagsEnabled" -->
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->
           $("#tagsel_button").click(function(){
               tagAdded();
               return false;
           });
-        <!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 	});
-<!-- TMPL_IF NAME="RequestOnOpac" -->
+<!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="RequestOnOpac" -->
     function holdSel() {
         var items = document.getElementById('records').value;
         if (items) {
@@ -113,7 +109,7 @@ function tagAdded() {
             alert(MSG_NO_RECORD_SELECTED);
         }
     }
-<!-- /TMPL_IF -->
+<!-- /TMPL_IF --><!-- /TMPL_IF -->
 	//]]>
 	</script>
 	<!-- /TMPL_IF -->
@@ -121,7 +117,7 @@ function tagAdded() {
 <body id="basket">
 
 <div id="doc" class="yui-t7">
-<div class="container">
+<div id="userbasket" class="container">
 <h1>Your Cart</h1>
 
 <!-- TMPL_UNLESS NAME="print_basket" -->
@@ -141,13 +137,14 @@ function tagAdded() {
 	<!-- TMPL_UNLESS NAME="print_basket" --><p style="padding: 7px 0; border-top : 1px solid #E8E8E8;"><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <b>Selected items :</b>
 <span id="tag_hides">
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
-<!-- TMPL_IF NAME="loggedinusername" -->
-     | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
+<!-- TMPL_IF NAME="opacuserlogin" -->
+    <!-- TMPL_IF name="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->
+         | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
+    <!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="RequestOnOpac" -->| <a href="#" onclick="holdSel(); return false;">Place hold</a><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->
+    | <a href="#" onclick="tagSelected(); return false;">Tag</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
-
-     <!-- TMPL_IF NAME="RequestOnOpac" -->| <a href="#" onclick="holdSel(); return false;">Place hold</a><!-- /TMPL_IF -->
-     <!-- TMPL_IF NAME="TagsEnabled" -->
-     | <a href="#" onclick="tagSelected(); return false;">Tag</a><!-- /TMPL_IF -->
 </span>
      <span id="tagsel_form" style="display:none">
        <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
@@ -316,19 +313,21 @@ function tagAdded() {
     | <b>Selected items :</b>
 <span id="tag_hides">
 <a href="#" onclick="delSelRecords(); return false;">Remove</a>
-<!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->
+<!-- TMPL_IF NAME="opacuserlogin" -->
+    <!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" -->
      | <a href="#" onclick="addSelToShelf(); return false;">Add to a list</a>
-<!-- /TMPL_IF --><!-- /TMPL_IF -->
-     <!-- TMPL_IF NAME="RequestOnOpac" -->| <a href="#" onclick="holdSel(); return false;">Place hold</a><!-- /TMPL_IF -->
-     <!-- TMPL_IF NAME="TagsEnabled" -->
-     | <a href="#" onclick="tagSelected(); return false;">Tag</a><!-- /TMPL_IF -->
+    <!-- /TMPL_IF --><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="RequestOnOpac" -->| <a href="#" onclick="holdSel(); return false;">Place hold</a><!-- /TMPL_IF -->
+    <!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" -->
+    | <a href="#" onclick="tagSelected(); return false;">Tag</a><!-- /TMPL_IF --><!-- /TMPL_IF -->
+<!-- /TMPL_IF -->
 </span>
-     <span id="tagsel_form" style="display:none">
+     <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" --><span id="tagsel_form" style="display:none">
        <label for="tagsel_new" style="display:inline">New&nbsp;Tag:</label>
        <input name="tagsel_new" id="tagsel_new" maxlength="100"  style="display:inline"/>
        <input id="tagsel_button" name="tagsel_button" class="input tagsel_button" title="tagsel_button" type="submit" value="Add"  style="display:inline"/>
        <a href="#" id="tagsel_cancel" onclick="tagCanceled(); return false;" style="display:inline">Cancel</a>
-     </span>
+     </span><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
 </p>
 <!-- /TMPL_UNLESS -->
     <table id="itemst">
@@ -356,7 +355,7 @@ function tagAdded() {
                 </a>
                 <!-- COinS / OpenURL -->
 		    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=<!-- TMPL_VAR NAME="author" -->&amp;rft.btitle=<!-- TMPL_VAR NAME="title" ESCAPE="url" -->&amp;rft.date=<!-- TMPL_VAR NAME="publicationyear" -->&amp;rft.tpages=<!-- TMPL_VAR NAME="size" -->&amp;rft.isbn=<!-- TMPL_VAR NAME="isbn"  ESCAPE="url" -->&amp;rft.aucorp=&amp;rft.place=<!-- TMPL_VAR NAME="place" -->&amp;rft.pub=<!-- TMPL_VAR NAME="publisher" ESCAPE="url" -->&amp;rft.edition=<!-- TMPL_VAR NAME="edition" -->&amp;rft.series=<!-- TMPL_VAR NAME="series" -->&amp;rft.genre="></span>
-		    <div id="newtag<!-- TMPL_VAR NAME="biblionumber">_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>
+		    <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="TagsEnabled" --><div id="newtag<!-- TMPL_VAR NAME="biblionumber">_status" class="tagstatus results_summary" style="display:none">Tag status here.</div><!-- /TMPL_IF --><!-- /TMPL_IF --><!-- /TMPL_IF -->
     	    </td>
 	    <td><!-- TMPL_VAR NAME="author" --></td>
 	    <td>

@@ -170,7 +170,7 @@
         inputField     :    "budget_period_enddate",
         ifFormat         :    "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
         button         :    "openCalendarTo",
-        align          :    "Tl",
+        align          :    "Tl"
         });
     </script>
 				<div class="hint"><!-- TMPL_INCLUDE NAME="date-format.inc" --></div>
@@ -254,7 +254,9 @@
 <!--  DEFAULT  display budget periods list -->
 <!-- TMPL_IF name="else" -->
     <h2>Budgets administration</h2>
-    <!-- TMPL_IF name="cur" --><p><b>Currency = <!-- TMPL_VAR name="cur" --></b></p><!-- TMPL_ELSE --><div class="dialog alert"><h3>No active currency is defined</h3><p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p></div><!-- /TMPL_IF -->
+
+    <!-- TMPL_INCLUDE NAME="budgets-active-currency.inc" -->
+
     <table id="periodsh">
     <thead>
 	    <tr>

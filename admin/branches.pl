@@ -21,7 +21,7 @@
 
  FIXME: individual fields in branch address need to be exported to templates,
         in order to fix bug 180; need to notify translators
-FIXME: looped html (e.g., list of checkboxes) need to be properly
+ FIXME: looped html (e.g., list of checkboxes) need to be properly
         TMPL_LOOP'ized; doing this properly will fix bug 130; need to
         notify translators
  FIXME: need to implement the branch categories stuff
@@ -34,7 +34,7 @@ FIXME: looped html (e.g., list of checkboxes) need to be properly
 
  Finlay working on this file from 26-03-2002
  Reorganising this branches admin page.....
- 
+
 =cut
 
 use strict;
@@ -76,14 +76,14 @@ $template->param( ($op || 'else') => 1 );
 if ( $op eq 'add' ) {
 
     # If the user has pressed the "add new branch" button.
-    $template->param( 'heading-branches-add-branch-p' => 1 );
+    $template->param( 'heading_branches_add_branch_p' => 1 );
     editbranchform($branchcode,$template);
 
 }
 elsif ( $op eq 'edit' ) {
 
     # if the user has pressed the "edit branch settings" button.
-    $template->param( 'heading-branches-add-branch-p' => 0,
+    $template->param( 'heading_branches_add_branch_p' => 0,
                         'add' => 1, );
     editbranchform($branchcode,$template);
 }
@@ -103,7 +103,7 @@ elsif ( $op eq 'add_validate' ) {
             if ($existing > 0) {
                 $mod_branch = 0;
                 _branch_to_template($params, $template); # preserve most (FIXME) of user's input
-                $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, 'ERROR1' => 1 );
+                $template->param( 'heading_branches_add_branch_p' => 1, 'add' => 1, 'ERROR1' => 1 );
             }
         }
         if ($mod_branch) {
@@ -113,7 +113,7 @@ elsif ( $op eq 'add_validate' ) {
                 # copy input parameters back to form
                 # FIXME - doing this doesn't preserve any branch group selections, but good enough for now
                 editbranchform($branchcode,$template);
-                $template->param( 'heading-branches-add-branch-p' => 1, 'add' => 1, "ERROR$error" => 1 );
+                $template->param( 'heading_branches_add_branch_p' => 1, 'add' => 1, "ERROR$error" => 1 );
             } else {
                 $template->param( else => 1);
                 default("MESSAGE2",$template);
@@ -160,7 +160,7 @@ elsif ( $op eq 'delete_confirmed' ) {
 elsif ( $op eq 'editcategory' ) {
 
     # If the user has pressed the "add new category" or "modify" buttons.
-    $template->param( 'heading-branches-edit-category-p' => 1 );
+    $template->param( 'heading_branches_edit_category_p' => 1 );
     editcatform($categorycode,$template);
 }
 elsif ( $op eq 'addcategory_validate' ) {
@@ -221,7 +221,7 @@ sub default {
     my $innertemplate = shift or return;
     $innertemplate->param($message => 1) if $message;
     $innertemplate->param(
-        'heading-branches-p' => 1,
+        'heading_branches_p' => 1,
     );
     branchinfotable("",$innertemplate);
 }

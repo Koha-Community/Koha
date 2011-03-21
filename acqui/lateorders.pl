@@ -45,7 +45,7 @@ To know on which branch this script have to display late order.
 use strict;
 use warnings;
 use CGI;
-use C4::Bookseller;
+use C4::Bookseller qw( GetBooksellersWithLateOrders );
 use C4::Auth;
 use C4::Koha;
 use C4::Output;
@@ -76,7 +76,7 @@ unless ($delay =~ /^\d{1,3}$/) {
 	$delay = 30;	#default value for delay
 }
 
-my %supplierlist = GetBooksellersWithLateOrders($delay,$branch);
+my %supplierlist = GetBooksellersWithLateOrders($delay);
 my (@sloopy);	# supplier loop
 foreach (keys %supplierlist){
 	push @sloopy, (($supplierid and $supplierid eq $_ )            ? 

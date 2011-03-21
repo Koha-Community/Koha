@@ -2,6 +2,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

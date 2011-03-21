@@ -19,7 +19,7 @@
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use C4::Context;
+#use C4::Context;
 
 =head1
 
@@ -46,31 +46,15 @@ returns :
 the 3 scripts are inserted after the <input> in the html code
 
 =cut
+
 sub plugin_javascript {
     my ($dbh,$record,$tagslib,$field_number,$tabloop) = @_;
     my $function_name= $field_number;
 
     # find today's date
-    my ($sec,$min,$hour,$mday,$mon,$year,$wday,$yday,$isdst) = localtime(time);
-    $year +=1900;
-    $mon +=1;
-    if (length($mon)==1) {
-        $mon = "0".$mon;
-    }
-    if (length($mday)==1) {
-        $mday = "0".$mday;
-    }
-    if (length($hour)==1) {
-        $hour = "0".$hour;
-    }
-    if (length($min)==1) {
-        $min = "0".$min;
-    }
-    if (length($sec)==1) {
-        $hour = "0".$sec;
-    }
+    my @a= (localtime) [5,4,3,2,1,0]; $a[0]+=1900; $a[1]++;
+    my $date = sprintf("%4d%02d%02d%02d%02d%04.1f",@a);
 
-    my $date = "$year$mon$mday$hour$min$sec".".0";
     my $res  = "
 <script type=\"text/javascript\">
 //<![CDATA[

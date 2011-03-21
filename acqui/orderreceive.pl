@@ -26,6 +26,7 @@
 orderreceive.pl
 
 =head1 DESCRIPTION
+
 This script shows all order already receive and all pendings orders.
 It permit to write a new order as 'received'.
 
@@ -34,16 +35,19 @@ It permit to write a new order as 'received'.
 =over 4
 
 =item supplierid
+
 to know on what supplier this script has to display receive order.
 
 =item receive
 
 =item invoice
+
 the number of this invoice.
 
 =item freight
 
 =item biblio
+
 The biblionumber of this order.
 
 =item datereceived
@@ -65,7 +69,7 @@ use C4::Acquisition;
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Members;
 use C4::Branch;    # GetBranches
 use C4::Items;
@@ -86,7 +90,8 @@ my $datereceived = $input->param('datereceived');
 $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
 my $bookseller = GetBookSellerFromId($supplierid);
-my $gst= $input->param('gst') || $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
+my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
+my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $results = SearchOrder($ordernumber,$search);
 
 

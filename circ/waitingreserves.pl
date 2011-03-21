@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -155,7 +156,8 @@ $template->param(
     overloop    => \@overloop,
     overcount   => $overcount,
     show_date   => format_date(C4::Dates->today('iso')),
-	dateformat  => C4::Context->preference("dateformat"),
+    dateformat  => C4::Context->preference("dateformat"),
+    ReservesMaxPickUpDelay => C4::Context->preference('ReservesMaxPickUpDelay')
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

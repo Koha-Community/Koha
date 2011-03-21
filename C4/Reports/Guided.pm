@@ -29,7 +29,6 @@ use C4::Output;
 use C4::Dates;
 use XML::Simple;
 use XML::Dumper;
-use Switch;
 use C4::Debug;
 # use Smart::Comments;
 # use Data::Dumper;
@@ -107,7 +106,7 @@ if (C4::Context->preference('item-level_itypes')) {
 }
 
 =head1 NAME
-   
+
 C4::Reports::Guided - Module for generating guided reports 
 
 =head1 SYNOPSIS
@@ -116,6 +115,7 @@ C4::Reports::Guided - Module for generating guided reports
 
 =head1 DESCRIPTION
 
+=cut
 
 =head1 METHODS
 
@@ -311,95 +311,86 @@ sub get_criteria {
     my ($area,$cgi) = @_;
     my $dbh    = C4::Context->dbh();
     my $crit   = $criteria{$area};
-	my $column_defs = _get_column_defs($cgi);
+    my $column_defs = _get_column_defs($cgi);
     my @criteria_array;
     foreach my $localcrit (@$crit) {
         my ( $value, $type )   = split( /\|/, $localcrit );
         my ( $table, $column ) = split( /\./, $value );
-	switch ($type) {
-	    case 'textrange' {
-		my %temp;
-		$temp{'name'}        = $value;
-		$temp{'from'}        = "from_" . $value;
-		$temp{'to'}          = "to_" . $value;
-		$temp{'textrange'}   = 1;
-		$temp{'description'} = $column_defs->{$value};
-		push @criteria_array, \%temp;
-	    }
+        if ($type eq 'textrange') {
+            my %temp;
+            $temp{'name'}        = $value;
+            $temp{'from'}        = "from_" . $value;
+            $temp{'to'}          = "to_" . $value;
+            $temp{'textrange'}   = 1;
+            $temp{'description'} = $column_defs->{$value};
+            push @criteria_array, \%temp;
+        }
+        elsif ($type eq 'date') {
+            my %temp;
+            $temp{'name'}        = $value;
+            $temp{'date'}        = 1;
+            $temp{'description'} = $column_defs->{$value};
+            push @criteria_array, \%temp;
+        }
+        elsif ($type eq 'daterange') {
+            my %temp;
+            $temp{'name'}        = $value;
+            $temp{'from'}        = "from_" . $value;
+            $temp{'to'}          = "to_" . $value;
+            $temp{'daterange'}   = 1;
+            $temp{'description'} = $column_defs->{$value};
+            push @criteria_array, \%temp;
+        }
+        else {
+            my $query =
+            "SELECT distinct($column) as availablevalues FROM $table";
+            my $sth = $dbh->prepare($query);
+            $sth->execute();
+            my @values;
+            # push the runtime choosing option
+            my $list;
+            $list='branches' if $column eq 'branchcode' or $column eq 'holdingbranch' or $column eq 'homebranch';
+            $list='categorycode' if $column eq 'categorycode';
+            $list='itemtype' if $column eq 'itype';
+            $list='ccode' if $column eq 'ccode';
+            # TODO : improve to let the librarian choose the description at runtime
+            push @values, { availablevalues => "<<$column".($list?"|$list":'').">>" };
+            while ( my $row = $sth->fetchrow_hashref() ) {
+                push @values, $row;
+                if ($row->{'availablevalues'} eq '') { $row->{'default'} = 1 };
+            }
+            $sth->finish();
 
-	    case 'date' {
-		my %temp;
-		$temp{'name'}        = $value;
-		$temp{'date'}        = 1;
-		$temp{'description'} = $column_defs->{$value};
-		push @criteria_array, \%temp;
-	    }
+            my %temp;
+            $temp{'name'}        = $value;
+            $temp{'description'} = $column_defs->{$value};
+            $temp{'values'}      = \@values;
 
-	    case 'daterange' {
-		my %temp;
-		$temp{'name'}        = $value;
-		$temp{'from'}        = "from_" . $value;
-		$temp{'to'}          = "to_" . $value;
-		$temp{'daterange'}   = 1;
-		$temp{'description'} = $column_defs->{$value};
-		push @criteria_array, \%temp;
-	    }
+            push @criteria_array, \%temp;
+        }
 
-	    else {
-		my $query =
-		  "SELECT distinct($column) as availablevalues FROM $table";
-		my $sth = $dbh->prepare($query);
-		$sth->execute();
-		my @values;
-        # push the runtime choosing option
-        my $list;
-        $list='branches' if $column eq 'branchcode' or $column eq 'holdingbranch' or $column eq 'homebranch';
-        $list='categorycode' if $column eq 'categorycode';
-        $list='itemtype' if $column eq 'itype';
-        $list='ccode' if $column eq 'ccode';
-        # TODO : improve to let the librarian choose the description at runtime
-        push @values, { availablevalues => "<<$column".($list?"|$list":'').">>" };
-		while ( my $row = $sth->fetchrow_hashref() ) {
-		    push @values, $row;
-		    if ($row->{'availablevalues'} eq '') { $row->{'default'} = 1 };
-		}
-		$sth->finish();
-
-		my %temp;
-		$temp{'name'}        = $value;
-	    	$temp{'description'} = $column_defs->{$value};
-		$temp{'values'}      = \@values;
-		
-		push @criteria_array, \%temp;
-     
-	    }
-
-	}
     }
     return ( \@criteria_array );
 }
 
 =item execute_query
 
-=over
+  ($results, $total, $error) = execute_query($sql, $offset, $limit)
 
-($results, $total, $error) = execute_query($sql, $offset, $limit)
 
-=back
+When passed C<$sql>, this function returns an array ref containing a result set
+suitably formatted for display in html or for output as a flat file when passed in
+C<$format> and C<$id>. It also returns the C<$total> records available for the
+supplied query. If passed any query other than a SELECT, or if there is a db error,
+C<$errors> an array ref is returned containing the error after this manner:
 
-    When passed C<$sql>, this function returns an array ref containing a result set
-    suitably formatted for display in html or for output as a flat file when passed in
-    C<$format> and C<$id>. It also returns the C<$total> records available for the
-    supplied query. If passed any query other than a SELECT, or if there is a db error,
-    C<$errors> an array ref is returned containing the error after this manner:
+C<$error->{'sqlerr'}> contains the offending SQL keyword.
+C<$error->{'queryerr'}> contains the native db engine error returned for the query.
 
-    C<$error->{'sqlerr'}> contains the offending SQL keyword.
-    C<$error->{'queryerr'}> contains the native db engine error returned for the query.
-    
-    Valid values for C<$format> are 'text,' 'tab,' 'csv,' or 'url. C<$sql>, C<$type>,
-    C<$offset>, and C<$limit> are required parameters. If a valid C<$format> is passed
-    in, C<$offset> and C<$limit> are ignored for obvious reasons. A LIMIT specified by
-    the user in a user-supplied SQL query WILL apply in any case.
+Valid values for C<$format> are 'text,' 'tab,' 'csv,' or 'url. C<$sql>, C<$type>,
+C<$offset>, and C<$limit> are required parameters. If a valid C<$format> is passed
+in, C<$offset> and C<$limit> are ignored for obvious reasons. A LIMIT specified by
+the user in a user-supplied SQL query WILL apply in any case.
 
 =cut
 
@@ -724,8 +715,9 @@ sub _get_column_defs {
 	my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
 	open (COLUMNS,$full_path_to_columns_def_file);
 	while (my $input = <COLUMNS>){
+		chomp $input;
 		my @row =split(/\t/,$input);
-		$columns{$row[0]}=$row[1];
+		$columns{$row[0]}= $row[1];
 	}
 
 	close COLUMNS;
