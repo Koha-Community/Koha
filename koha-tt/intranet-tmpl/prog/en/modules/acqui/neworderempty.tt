@@ -143,7 +143,7 @@ ff.submit();
         <input type="hidden" name="biblioitemnumber" value="[% biblioitemnumber %]" />
         <input type="hidden" name="discount" value="[% discount %]" />
         <input type="hidden" name="listinc" value="[% listincgst %]" />
-        <input type="hidden" name="currency" value="[% currency %]" />
+<!--        <input type="hidden" name="currency" value="[% currency %]" />-->
         <input type="hidden" name="applygst" value="[% gstreg %]" />
         <input type="hidden" name="invoiceincgst" value="[% invoiceincgst %]" />
         <input type="hidden" name="gstrate" value="[% gstrate %]" />
@@ -151,7 +151,7 @@ ff.submit();
         <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
 
         [% FOREACH loop_currencie IN loop_currencies %]
-            <input type="hidden" name="[% loop_currencie.currency %]" value="[% loop_currencie.rate %]" />
+            <input type="hidden" id="[% loop_currencie.currcode %]"  name="[% loop_currencie.currcode %]" value="[% loop_currencie.rate %]" />
         [% END %]
         <ol><li>
             [% IF ( biblionumber ) %]
@@ -279,14 +279,25 @@ ff.submit();
                 </select>
                 [% END %]
             </li>
+		<li>
+                [% IF ( close ) %]
+			<span class="label">Currency: </span>
+			<input type="hidden" size="10" name="currency" id="currency" value="[% currency %]" />[% currency %]
+                [% ELSE %]
+			<label for="currency">Currency:</label>
+			<select name="currency" id="currency" onchange="calcNeworderTotal();">
+			[% FOREACH loop_currencie IN loop_currencies %]
+	                [% IF ( loop_currencie.selected ) %]<option value="[% loop_currencie.currcode %]" selected="selected">[% loop_currencie.currcode %]</option>[% ELSE %]<option value="[% loop_currencie.currcode %]">[% loop_currencie.currcode %]</option>[% END %][% END %]
+			</select>
+		[% END %]
+                </li>
             <li>
                 [% IF ( close ) %]
             <span class="label">Vendor price: </span>
                     <input type="hidden" size="20" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %]
                 [% ELSE %]
                 <label for="listprice">Vendor price: </label>
-                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="calcNeworderTotal()" /> (entered as [% currency %])
-
+                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="calcNeworderTotal()" />
                 [% END %]
             </li>
             [% UNLESS ( close ) %]
