@@ -19,6 +19,9 @@
 <style type="text/css">
     #sql { width: 90%; height: 9em;}
 </style>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+
 <script type="text/javascript">
 //<![CDATA[
 $(document).ready(function(){
@@ -38,6 +41,21 @@ $(document).ready(function(){
         }
     });
 <!-- /TMPL_IF -->
+  // call the tablesorter plugin
+  $("#table_reports").tablesorter({
+    sortList: [[1,0]],
+    headers: {
+       6: { sorter: false},
+       7: { sorter: false},
+       8: { sorter: false},
+       9: { sorter: false},
+      10: { sorter: false}
+    }
+  }).tablesorterPager({
+    container:     $("#pagertable_reports"),
+    positionFixed: false,
+    size:          50
+  });
 });
 //]]>
 </script>
@@ -106,9 +124,41 @@ canned reports and writing custom SQL reports.</p>
 <!-- TMPL_IF NAME="saved1" -->
 <!-- TMPL_IF NAME="savedreports" --><h1>Saved Reports</h1>
 <p>Choose the report to run from the list</p>
-<form action="/cgi-bin/koha/reports/guided_reports.pl">
-<table>
-<tr><th>ID</th><th>Report Name</th><th>Type</th><th>Notes</th><th>Author</th><th>Creation Date</th><th>Saved Results</th><th>Saved SQL</th><th colspan="3">&nbsp;</th></tr>
+
+<span id="pagertable_reports" class="pager">
+ <form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+  <img src="<!-- TMPL_VAR name="interface" -->/prog/img/first.png" class="first"/>
+  <img src="<!-- TMPL_VAR name="interface" -->/prog/img/prev.png" class="prev"/>
+  <input type="text" size="5" class="pagedisplay"/>
+  <img src="<!-- TMPL_VAR name="interface" -->/prog/img/next.png" class="next"/>
+  <img src="<!-- TMPL_VAR name="interface" -->/prog/img/last.png" class="last"/>
+  , entries/page:
+  <select class="pagesize">
+   <option value="10">10</option>
+   <option value="25" selected="selected">25</option>
+   <option value="50">50</option>
+   <option value="100">100</option>
+   <option value="200">200</option>
+  </select>
+ </form>
+</span>
+
+<table id="table_reports" class="tablesorter">
+<thead>
+ <tr>
+  <th>ID</th>
+  <th>Report Name</th>
+  <th>Type</th>
+  <th>Notes</th>
+  <th>Author</th>
+  <th>Creation Date</th>
+  <th>Saved Results</th>
+  <th>Saved SQL</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+ </tr>
+</thead>
+<tbody>
 <!-- TMPL_LOOP NAME="savedreports" -->
 <!-- TMPL_UNLESS NAME="__odd__" --><tr class="highlight"><!-- TMPL_ELSE --><tr><!-- /TMPL_UNLESS -->
 <td><!-- TMPL_VAR NAME="id" --></td>
@@ -120,20 +170,20 @@ canned reports and writing custom SQL reports.</p>
 <td><!-- TMPL_IF NAME="date_run" --><a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=<!-- TMPL_VAR NAME="id" -->"><!-- TMPL_VAR NAME="date_run" --></a><!-- /TMPL_IF -->
 </td>
     <td>
-        <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show SQL</a> 
+        <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Show%20SQL">Show</a> 
         <!-- TMPL_IF name="CAN_user_reports_create_reports" -->
-            &nbsp; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Edit%20SQL">Edit SQL</a>
+            &nbsp; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Edit%20SQL">Edit</a>
         <!-- /TMPL_IF -->
     </td>
-<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Run%20this%20report">Run</a></td>
-<td><a href="/cgi-bin/koha/tools/scheduler.pl?id=<!-- TMPL_VAR NAME="id" -->">Schedule</a></td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Run%20this%20report">Run</a>
+<a href="/cgi-bin/koha/tools/scheduler.pl?id=<!-- TMPL_VAR NAME="id" -->">Schedule</a></td>
     <!-- TMPL_IF name="CAN_user_reports_create_reports" -->
         <td><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=<!-- TMPL_VAR NAME="id" -->&amp;phase=Delete%20Saved">Delete</a></td>
     <!-- /TMPL_IF -->
 </tr>
 <!-- /TMPL_LOOP -->
+</tbody>
 </table>
-</form>
 <!-- TMPL_ELSE --><h4>There are no saved reports. 
     <!-- TMPL_IF name="CAN_user_reports_create_reports" -->
         <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new?</a>
