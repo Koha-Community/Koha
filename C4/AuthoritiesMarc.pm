@@ -621,6 +621,7 @@ sub AddAuthority {
       $f5->update($time.".0");
     }
 
+    SetUTF8Flag($record);
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
 			$record->leader($leader);
@@ -647,7 +648,7 @@ sub AddAuthority {
 	}
 
   if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a'))){
-        $record->leader("     nx  j22             ");
+        $record->leader("     nx  j22             ") unless ($record->leader());
         my $date=POSIX::strftime("%Y%m%d",localtime);    
         if ($record->field('100')){
           $record->field('100')->update('a'=>$date."afrey50      ba0");

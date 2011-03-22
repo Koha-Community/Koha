@@ -248,6 +248,7 @@ sub AddBiblio {
     my $dbh = C4::Context->dbh;
 
     # transform the data into koha-table style data
+    SetUTF8Flag($record);
     my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
     ( $biblionumber, $error ) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
@@ -292,6 +293,7 @@ sub ModBiblio {
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "BEFORE=>" . $newrecord->as_formatted );
     }
 
+    SetUTF8Flag($record);
     my $dbh = C4::Context->dbh;
 
     $frameworkcode = "" unless $frameworkcode;
