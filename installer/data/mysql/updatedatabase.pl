@@ -4106,7 +4106,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 
-$DBversion = "3.03.00.XXX";
+$DBversion = "3.03.00.029";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowPurchaseSuggestionBranchChoice', 0, 'Allow user to choose branch when making a purchase suggestion','1','YesNo')");
     print "Upgrade to $DBversion done (Add syspref to control if user can choose branch when making purchase suggestion)\n";
