@@ -239,11 +239,11 @@
         
         <select name="limit" id="branchloop">
         <option value="">All libraries</option>
-        [% FOREACH branchloo IN branchloop %]
-        [% IF ( branchloo.selected ) %]
-        <option value="branch:[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+        [% FOREACH BranchesLoo IN BranchesLoop %]
+        [% IF ( BranchesLoo.selected ) %]
+        <option value="branch:[% BranchesLoo.value %]" selected="selected">[% BranchesLoo.branchname %]</option>
         [% ELSE %]    
-        <option value="branch:[% branchloo.value %]">[% branchloo.branchname %]</option>
+        <option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
         [% END %]    
         [% END %]
         </select>

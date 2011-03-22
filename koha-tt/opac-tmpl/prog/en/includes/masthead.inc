@@ -84,14 +84,15 @@
          [% END %]
       </select>
    [% ELSE %]
-      [% UNLESS ( opac_limit_override ) %]
+      [% IF ( opac_limit_override ) %]
+          [% IF ( opac_search_limit ) %]
+            <input name="limit" value="[% opac_search_limit %]" type="hidden" />
+          [% END %]
+      [% ELSE %]
           [% IF ( mylibraryfirst ) %] 
                <input name="limit" value="branch:[% mylibraryfirst %]" type="hidden" />
           [% END %]
-       [% END %]
-   [% END %]
-   [% IF ( opac_search_limit ) %]
-      <input name="limit" value="[% opac_search_limit %]" type="hidden" />
+      [% END %]
    [% END %]
 
 
