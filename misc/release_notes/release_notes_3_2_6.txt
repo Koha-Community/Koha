@@ -1,0 +1,232 @@
+RELEASE NOTES FOR KOHA 3.2.6 - 22 March 2011
+========================================================================
+
+Koha is the first free and open source software library automation package
+(ILS). Development is sponsored by libraries of varying types and sizes,
+volunteers, and support companies from around the world.
+The website for the Koha project is
+
+    http://koha-community.org/
+
+Koha 3.2.6 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.02.06.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+Koha 3.2.6 is a bugfix/maintenance release.
+
+Highlights of 3.2.6
+======================
+
+Some of the higher profile bugs addressed in this release are:
+
+3624    Basket group delivery place
+2975    Offline circ tries to circ on biblio-level "itemtype"
+5824    Creating a circ rule for a library other than default causes set library anomalies
+3341    fines calculation erroneous when a repeatable holiday is added.
+4438    incorrect "Budget total exceeds period allocation" error when editing fund
+4853    Rights needed to renew a document
+5064    Poor response time on acquisitions screen
+5527    Reports: Patrons who haven't checked out misses active users from issues table
+5595    can't search 'searchable' patron attributes
+5818    date picker broken on label batches
+
+Bugs fixed in 3.2.6
+======================
+
+1953    remove possible SQL injection attacks
+2742    Wrong language name in the preferences
+3319    Need a nicer error message when attempting to add a patron with no libraries defined
+4072    hidelostitems hides all results when searching (nozebra)
+4290    search for author in repository
+5157    borrowers top issuers filters problems
+5693    if parentheses used in ccode then searches against ccode fail
+5736    Fixing some zebra configuration errors in marc21/biblios/record.abs
+5819    No toolbar in record view when quotes present in title
+5820    funds/budget language inconsistency when ordering
+4852    Facets doesn't work with direct CCL queries
+4885    Only 1 ISBN shows in non-XSL detail view
+5642    Item field serial enumeration (enumchron) should be longer
+5703    Content of the $9 subfield is shown for series when in Normal view.
+5799    language inconsistency
+5812    Tag Cloud - capitalized words come before lower-case words
+5814    Style error message on manage staged records page according to standard style
+5846    mod_gzip can missing compressing Javascript files
+3670    Why is DUE all caps on enhanced messages
+5569    addbiblio fails while editing and deleting mandatory repeatable subfields
+5813    ersatz file in source tree
+5733    Empty cart in intranet when session is closed
+5792    new reference icon for bridge set
+5831    rebuild_zebra.pl does not respect -r flag
+
+Bugs with no bug number fixed in 3.2.6
+======================
+
+Adding release dates and 2 new developers
+BZ3624, proposed patch for kohastructure.sql rewritten
+Fixing a utf8 issue with the translator tests
+Fixing license and copyright statement for updatedatabase.pl
+Fixing the translatable tests to work in french locales
+update INSTALL* to acknowledge the use of mod_deflate
+System requirements
+
+Translations new/updated in 3.2.6
+======================
+
+de-DE
+es-ES
+nl-NL
+pt-BR
+pt-PT
+ru-RU
+tet-i
+tr-TR
+uk-UA
+
+======================
+
+    Changes since 3.0:
+
+    * The minimum version of Perl required is now 5.8.8.
+    * There are a number of new Perl module dependencies.
+      Run ./koha_perl_deps.pl -u -m to get a list of
+      any new modules to install during upgrade.
+
+Upgrades
+======================
+
+The structure of the acquisitions tables have changed significantly
+from 3.0.x.  In particular, the budget hierarchy is quite different.
+During an upgrade, a new database table is created called fundmapping
+that contains a record of how budgets were mapped.  It is strongly
+recommended that users of Koha 3.0.x acquisitions carefully review
+the results of the upgrade before resuming ordering in Koha 3.2.x.
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, several translations of the
+Koha manual are available:
+
+English: http://koha-community.org/documentation/3-2-manual/
+Spanish: http://koha-community.org/documentation/3-2-manual-es/
+French:  http://koha-community.org/documentation/3-2-manual-fr/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://www.kohadocs.org/usersguide/apb.html
+
+for information about translating Koha, and join the koha-translate
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.2 is
+
+Release Manager:        Galen Charlton <gmcharlt@gmail.com>
+Documentation Manager:  Nicole Engard <nengard@gmail.com>
+Translation Manager:    Chris Cormack <chris@bigallofwax.co.nz>
+Release Maintainer (3.0.x):
+                        Henri-Damien Laurent <henridamien.laurent@biblibre.com>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to Koha 3.2.6:
+
+Nahuel Angelinetti
+Tomás Cohen Arazi
+Colin Campbell
+Frédérick Capovilla
+Galen Charlton
+Chris Cormack
+Stéphane Delaune
+Frédéric Demians
+Marcel de Rooy
+Nicole C. Engard
+Katrin Fischer
+Janusz Kaczmarek
+Henri-Damien LAURENT
+Owen Leonard
+Chris Nighswonger
+Paul Poulain
+MJ Ray
+Robin Sheat
+Reed Wade
+Ian Walls 
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send patch against these release notes to
+koha-patches@lists.koha-community.org.
+
+The 3.2.x Release Maintainer especially thanks the 3.4 Release Team and all
+who participated in QA for their diligent labors in testing and pushing well
+over 500 patches since the 3.2.0 relese. Their continued work very much makes
+possible the release of 3.2.6 on its announced schedule.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.2.x (i.e., this version of Koha and future bugfix
+releases) is 3.2.x.
+
+The next major feature release of Koha will be Koha 3.4.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+Naku te rourou, nau te rourou, ka ora ai te iwi.
