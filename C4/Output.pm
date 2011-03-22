@@ -95,15 +95,6 @@ sub gettemplate {
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
     my ( $htdocs, $theme, $lang, $filename ) = _get_template_file( $tmplbase, $interface, $query );
-
-#    my $template       = HTML::Template::Pro->new(
-#        filename          => $filename,
-#        die_on_bad_params => 1,
-#        global_vars       => 1,
-#        case_sensitive    => 1,
-#        loop_context_vars => 1, # enable: __first__, __last__, __inner__, __odd__, __counter__ 
-#        path              => ["$htdocs/$theme/$lang/$path"]
-#    );
     $filename =~ s/\.tmpl$/.tt/;
     my $template = C4::Templates->new( $interface, $filename);
     my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
