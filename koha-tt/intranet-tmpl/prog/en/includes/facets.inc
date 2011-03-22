@@ -17,7 +17,7 @@
 [% IF ( facets_loo.type_label_Series ) %]Series[% END %]
 [% IF ( facets_loo.type_label_Libraries ) %]Libraries[% END %]
 <ul>
-        [% FOREACH facet IN facets_loo.facets %]<li><a href="/cgi-bin/koha/catalogue/search.pl?[% facet.query_cgi |html %][% facet.limit_cgi |html %][% IF ( facet.sort_by ) %]&amp;sort_by=[% facet.sort_by %][% END %]&amp;limit=[% facet.type_link_value %]:[% facet.facet_link_value %]" title="[% facet.facet_title_value %]">[% facet.facet_label_value %]</a> <!-- ([% facet.facet_count %]) --></li>[% END %][% IF ( facets_loo.expandable ) %]
+        [% FOREACH facet IN facets_loo.facets %]<li><a href="/cgi-bin/koha/catalogue/search.pl?[% facet.query_cgi |html %][% facet.limit_cgi |html %][% IF ( facet.sort_by ) %]&amp;sort_by=[% facet.sort_by %][% END %]&amp;limit=[% facet.type_link_value %]:[% facet.facet_link_value %]" title="[% facet.facet_title_value %]">[% facet.facet_label_value %]</a> [% IF ( facet.displayFacetCount ) %]([% facet.facet_count %])[% END %]</li>[% END %][% IF ( facets_loo.expandable ) %]
         <li class="showmore"><a href="/cgi-bin/koha/catalogue/search.pl?[% facets_loo.query_cgi |html %][% facets_loo.limit_cgi |html %][% IF ( facets_loo.sort_by ) %]&amp;sort_by=[% facets_loo.sort_by %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">Show More</a></li>
 [% END %]
 </ul></li>
