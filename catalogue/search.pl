@@ -657,6 +657,7 @@ $template->param(
             total => $total,
             opacfacets => 1,
             facets_loop => $facets,
+	    displayFacetCount=> C4::Context->preference('displayFacetCount')||0,
             scan => $scan,
             search_error => $error,
 );

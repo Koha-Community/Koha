@@ -99,6 +99,14 @@ Searching:
                   az: from A to Z.
                   za: from Z to A.
         -
+            - pref: displayFacetCount
+              type: boolean
+              default: no
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - facet counts. The relevance of these numbers highly depends on the value of the maxRecordsForFacets preference. Applies to OPAC and staff interface.
+        -
             - By default, show
             - pref: numSearchResults
               class: integer
@@ -128,6 +136,12 @@ Searching:
             - pref: maxItemsInSearchResults
               class: integer
             - items per biblio in the search results
+        -
+            - Build facets based on
+            - pref: maxRecordsForFacets
+              class: integer
+              default: 20
+            - records from the search results.
         -
             - By default, show
             - pref: OPACnumSearchResults

@@ -309,6 +309,7 @@ sub getRecords {
     my $facets_counter = ();
     my $facets_info    = ();
     my $facets         = getFacets();
+    my $facets_maxrecs = C4::Context->preference('maxRecordsForFacets')||20;
 
     my @facets_loop;    # stores the ref to array of hashes for template facets loop
 
@@ -418,7 +419,6 @@ sub getRecords {
                 for ( my $j = $offset ; $j < $times ; $j++ ) {
                     my $records_hash;
                     my $record;
-                    my $facet_record;
 
                     ## Check if it's an index scan
                     if ($scan) {
@@ -451,33 +451,55 @@ sub getRecords {
 
                         # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] = $record;
-
-            # Fill the facets while we're looping, but only for the biblioserver
-                        $facet_record = MARC::Record->new_from_usmarc($record)
-                          if $servers[ $i - 1 ] =~ /biblioserver/;
-
-                    #warn $servers[$i-1]."\n".$record; #.$facet_record->title();
-                        if ($facet_record) {
-                            for ( my $k = 0 ; $k <= @$facets ; $k++ ) {
-                                ($facets->[$k]) or next;
-                                my @fields = map {$facet_record->field($_)} @{$facets->[$k]->{'tags'}} ;
-                                for my $field (@fields) {
-                                    my @subfields = $field->subfields();
-                                    for my $subfield (@subfields) {
-                                        my ( $code, $data ) = @$subfield;
-                                        ($code eq $facets->[$k]->{'subfield'}) or next;
-                                        $facets_counter->{ $facets->[$k]->{'link_value'} }->{$data}++;
-                                    }
-                                }
-                                $facets_info->{ $facets->[$k]->{'link_value'} }->{'label_value'} =
-                                    $facets->[$k]->{'label_value'};
-                                $facets_info->{ $facets->[$k]->{'link_value'} }->{'expanded'} =
-                                    $facets->[$k]->{'expanded'};
-                            }
-                        }
                     }
+
                 }
                 $results_hashref->{ $servers[ $i - 1 ] } = $results_hash;
+
+                # Fill the facets while we're looping, but only for the biblioserver and not for a scan
+                if ( !$scan && $servers[ $i - 1 ] =~ /biblioserver/ ) {
+
+                    my $jmax = $size>$facets_maxrecs? $facets_maxrecs: $size;
+
+                    for ( my $k = 0 ; $k <= @$facets ; $k++ ) {
+                        ($facets->[$k]) or next;
+                        my @fcodes = @{$facets->[$k]->{'tags'}};
+                        my $sfcode = $facets->[$k]->{'subfield'};
+
+		                for ( my $j = 0 ; $j < $jmax ; $j++ ) {
+		                    my $render_record = $results[ $i - 1 ]->record($j)->render();
+                            my @used_datas = ();
+
+                            foreach my $fcode (@fcodes) {
+
+                                # avoid first line
+                                my $field_pattern = '\n'.$fcode.' ([^\n]+)';
+                                my @field_tokens = ( $render_record =~ /$field_pattern/g ) ;
+
+                                foreach my $field_token (@field_tokens) {
+                                    my $subfield_pattern = '\$'.$sfcode.' ([^\$]+)';
+                                    my @subfield_values = ( $field_token =~ /$subfield_pattern/g );
+
+                                    foreach my $subfield_value (@subfield_values) {
+
+                                        my $data = $subfield_value;
+                                        $data =~ s/^\s+//; # trim left
+                                        $data =~ s/\s+$//; # trim right
+
+                                        unless ( $data ~~ @used_datas ) {
+                                            $facets_counter->{ $facets->[$k]->{'link_value'} }->{$data}++;
+                                            push @used_datas, $data;
+                                        }
+                                    } # subfields
+                                } # fields
+                            } # field codes
+                        } # records
+
+                        $facets_info->{ $facets->[$k]->{'link_value'} }->{'label_value'} = $facets->[$k]->{'label_value'};
+                        $facets_info->{ $facets->[$k]->{'link_value'} }->{'expanded'} = $facets->[$k]->{'expanded'};
+                    } # facets
+                }
+                # End PROGILONE
             }
 
             # warn "connection ", $i-1, ": $size hits";
