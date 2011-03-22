@@ -1043,7 +1043,7 @@ sub BuildSummary{
             $narrowerterms =~s/-- \n$//;
             $seealso =~s/-- \n$//;
             $see =~s/-- \n$//;
-      $summary = "<b><a href=\"detail.pl?authid=$authid\">".$heading."</a></b><br />".($notes?"$notes <br />":"");
+      $summary = "<b>".$heading."</b><br />".($notes?"$notes <br />":"");
       $summary.= '<p><div class="label">TG : '.$broaderterms.'</div></p>' if ($broaderterms);
       $summary.= '<p><div class="label">TS : '.$narrowerterms.'</div></p>' if ($narrowerterms);
       $summary.= '<p><div class="label">TA : '.$seealso.'</div></p>' if ($seealso);
