@@ -84,14 +84,15 @@
          <!-- /TMPL_LOOP -->
       </select>
    <!-- TMPL_ELSE -->
-      <!-- TMPL_UNLESS NAME="opac_limit_override" -->
+      <!-- TMPL_IF NAME="opac_limit_override" -->
+          <!-- TMPL_IF NAME="opac_search_limit" -->
+            <input name="limit" value="<!-- TMPL_VAR name="opac_search_limit" -->" type="hidden" />
+          <!-- /TMPL_IF -->
+      <!-- TMPL_ELSE -->
           <!-- TMPL_IF name="mylibraryfirst" --> 
                <input name="limit" value="branch:<!-- TMPL_VAR name="mylibraryfirst" -->" type="hidden" />
           <!-- /TMPL_IF -->
-       <!-- /TMPL_UNLESS -->
-   <!-- /TMPL_IF -->
-   <!-- TMPL_IF NAME="opac_search_limit" -->
-      <input name="limit" value="<!-- TMPL_VAR name="opac_search_limit" -->" type="hidden" />
+      <!-- /TMPL_IF -->
    <!-- /TMPL_IF -->
 
 

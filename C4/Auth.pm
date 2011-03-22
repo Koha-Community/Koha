@@ -337,7 +337,6 @@ sub get_template_and_user {
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
             XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
             XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
-            BranchesLoop                 => GetBranchesLoop(),
             using_https                  => $in->{'query'}->https() ? 1 : 0,
             noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
     );
@@ -380,12 +379,11 @@ sub get_template_and_user {
         # variables passed from CGI: opac_css_override and opac_search_limits.
         my $opac_search_limit = $ENV{'OPAC_SEARCH_LIMIT'};
         my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
-        my $mylibraryfirst = C4::Context->preference("SearchMyLibraryFirst");
-        my $opac_name;
-        if($opac_limit_override && ($opac_search_limit =~ /branch:(\w+)/) ){
-             $opac_name = C4::Branch::GetBranchName($1)   # opac_search_limit is a branch, so we use it.
-        } elsif($mylibraryfirst){
-            $opac_name = C4::Branch::GetBranchName($mylibraryfirst);
+        my $opac_name = '';
+        if (($opac_search_limit =~ /branch:(\w+)/ && $opac_limit_override) || $in->{'query'}->param('limit') =~ /branch:(\w+)/){
+            $opac_name = $1;   # opac_search_limit is a branch, so we use it.
+        } elsif (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv && C4::Context->userenv->{'branch'}) {
+            $opac_name = C4::Context->userenv->{'branch'};
         }
 	my $checkstyle = C4::Context->preference("opaccolorstylesheet");
 	if ($checkstyle =~ /http/)
@@ -400,6 +398,7 @@ sub get_template_and_user {
             AmazonContent             => "" . C4::Context->preference("AmazonContent"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
+            BranchesLoop              => GetBranchesLoop($opac_name),
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
@@ -417,7 +416,6 @@ sub get_template_and_user {
             OpacAuthorities           => C4::Context->preference("OpacAuthorities"),
             OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") . $ENV{'SERVER_NAME'} .
                    ($ENV{'SERVER_PORT'} eq ($in->{'query'}->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}"),
-            opac_name             => $opac_name,
             opac_css_override           => $ENV{'OPAC_CSS_OVERRIDE'},
             opac_search_limit         => $opac_search_limit,
             opac_limit_override       => $opac_limit_override,
