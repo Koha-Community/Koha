@@ -4105,14 +4105,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.03.00.XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','','free')");
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','','free')");
-    print "Upgrade to $DBversion done (Add sysprefs to control custom favicons)\n";
-    SetVersion ($DBversion);
-}
-
 $DBversion = "3.03.00.029";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowPurchaseSuggestionBranchChoice', 0, 'Allow user to choose branch when making a purchase suggestion','1','YesNo')");
@@ -4120,6 +4112,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.03.00.030";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','','free')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','','free')");
+    print "Upgrade to $DBversion done (Add sysprefs to control custom favicons)\n";
+    SetVersion ($DBversion);
+}
 
 =head1 FUNCTIONS
 
