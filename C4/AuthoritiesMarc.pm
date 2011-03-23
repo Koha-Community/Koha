@@ -624,6 +624,7 @@ sub AddAuthority {
       $f5->update($time.".0");
     }
 
+    SetUTF8Flag($record);
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
 			$record->leader($leader);
@@ -650,7 +651,7 @@ sub AddAuthority {
 	}
 
   if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a'))){
-        $record->leader("     nx  j22             ");
+        $record->leader("     nx  j22             ") unless ($record->leader());
         my $date=POSIX::strftime("%Y%m%d",localtime);    
         if ($record->field('100')){
           $record->field('100')->update('a'=>$date."afrey50      ba0");
@@ -1042,7 +1043,7 @@ sub BuildSummary{
             $narrowerterms =~s/-- \n$//;
             $seealso =~s/-- \n$//;
             $see =~s/-- \n$//;
-      $summary = "<b><a href=\"detail.pl?authid=$authid\">".$heading."</a></b><br />".($notes?"$notes <br />":"");
+      $summary = "<b>".$heading."</b><br />".($notes?"$notes <br />":"");
       $summary.= '<p><div class="label">TG : '.$broaderterms.'</div></p>' if ($broaderterms);
       $summary.= '<p><div class="label">TS : '.$narrowerterms.'</div></p>' if ($narrowerterms);
       $summary.= '<p><div class="label">TA : '.$seealso.'</div></p>' if ($seealso);

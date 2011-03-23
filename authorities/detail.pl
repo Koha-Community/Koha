@@ -174,7 +174,8 @@ my $authid = $query->param('authid');
 
 
 
-my $authtypecode = &GetAuthTypeCode($authid);
+# Using default authtypecode, so all fields are seen
+my $authtypecode = '';
 $tagslib = &GetTagsLabels(1,$authtypecode);
 
 my $record;
