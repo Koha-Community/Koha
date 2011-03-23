@@ -320,10 +320,15 @@ sub ModBiblio {
     foreach my $fielditem (@fields) {
         my $field;
         foreach ( $fielditem->subfields() ) {
+            # re-encode the subfield only if it isn't already in utf-8.
+            my ($tag, $value) = @$_;
+            $tag = Encode::encode('utf-8', $tag) unless utf8::is_utf8($tag);
+            $value = Encode::encode('utf-8', $value) unless utf8::is_utf8($value);
+
             if ($field) {
-                $field->add_subfields( Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
+                $field->add_subfields( $tag => $value );
             } else {
-                $field = MARC::Field->new( "$itemtag", '', '', Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
+                $field = MARC::Field->new( "$itemtag", '', '', $tag => $value );
             }
         }
         $record->append_fields($field);
