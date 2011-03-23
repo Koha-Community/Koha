@@ -533,9 +533,11 @@ sub getRecords {
 
                             # fix the length that will display in the label,
                             my $facet_label_value = $one_facet;
+                            my $facet_max_length =
+                                C4::Context->preference('FacetLabelTruncationLength') || 20;
                             $facet_label_value =
-                              substr( $one_facet, 0, 20 ) . "..."
-                              unless length($facet_label_value) <= 20;
+                              substr( $one_facet, 0, $facet_max_length ) . "..."
+                                if length($facet_label_value) > $facet_max_length;
 
                             # if it's a branch, label by the name, not the code,
                             if ( $link_value =~ /branch/ ) {
