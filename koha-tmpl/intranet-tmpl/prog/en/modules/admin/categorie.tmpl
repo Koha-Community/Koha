@@ -298,7 +298,13 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
                         <td>
                             <!-- TMPL_IF NAME="messaging_prefs" -->
                                 <!-- TMPL_LOOP NAME="messaging_prefs" -->
-                                    <!-- TMPL_VAR NAME="message_name" --> :
+                                    <!-- TMPL_IF NAME="Item DUE" -->Item DUE
+                                    <!-- TMPL_ELSIF NAME="Advance Notice" -->Advance Notice
+                                    <!-- TMPL_ELSIF NAME="Upcoming Events" -->Upcoming Events
+                                    <!-- TMPL_ELSIF NAME="Hold Filled" -->Hold Filled
+                                    <!-- TMPL_ELSIF NAME="Item Check-in" -->Item Check-in
+                                    <!-- TMPL_ELSIF NAME="Item Checkout" -->Item Checkout
+                                    <!-- TMPL_ELSE -->Unknown <!-- /TMPL_IF --> :
                                     <!-- TMPL_LOOP NAME="transports" -->
                                         <!-- TMPL_VAR NAME="transport" -->
                                     <!-- /TMPL_LOOP -->

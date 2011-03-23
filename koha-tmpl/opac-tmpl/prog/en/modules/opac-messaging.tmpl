@@ -39,7 +39,13 @@
     <tr><th>&nbsp;</th><th>Days in advance</th><!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF --><th>Email</th><th>Digests only?</th><!-- <th>RSS</th> --><th>Do not notify</th></tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
-      <td><!-- TMPL_VAR NAME="message_name" --></td>
+      <td><!-- TMPL_IF NAME="Item DUE" -->Item DUE
+          <!-- TMPL_ELSIF NAME="Advance Notice" -->Advance Notice
+          <!-- TMPL_ELSIF NAME="Upcoming Events" -->Upcoming Events
+          <!-- TMPL_ELSIF NAME="Hold Filled" -->Hold Filled
+          <!-- TMPL_ELSIF NAME="Item Check-in" -->Item Check-in
+          <!-- TMPL_ELSIF NAME="Item Checkout" -->Item Checkout
+          <!-- TMPL_ELSE -->Unknown <!-- /TMPL_IF --></td>
       <!-- TMPL_IF NAME="takes_days" -->
       <td><select name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS">
           <!-- TMPL_LOOP name="select_days" -->
@@ -52,14 +58,14 @@
       <!-- TMPL_ELSE -->
       <td>-</td>
       <!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="transport-sms" -->
+<!--      <!-- TMPL_IF NAME="transport-sms" -->
       <!-- TMPL_IF NAME="SMSSendDriver" --><td><input type="checkbox"
                  id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
                  value="sms" <!-- TMPL_VAR NAME="transport-sms"   --> onclick = "document.opacmessaging.none<!-- TMPL_VAR NAME="message_attribute_id" -->.checked=false;" /></td><!-- /TMPL_IF -->
       <!-- TMPL_ELSE -->
       <td>-</td>
-      <!-- /TMPL_IF -->
+      <!-- /TMPL_IF --> -->
 
       <!-- TMPL_IF NAME="transport-email" -->
       <td><input type="checkbox"
