@@ -1,6 +1,7 @@
 package C4::Suggestions;
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright Biblibre 2011
 #
 # This file is part of Koha.
 #
@@ -43,8 +44,8 @@ our @EXPORT  = qw<
     ModSuggestion
     NewSuggestion
     SearchSuggestion
+    DelSuggestionsOlderThan
 >;
-
 
 =head1 NAME
 
@@ -427,6 +428,23 @@ sub DelSuggestion {
         my $suggestiondeleted=$sth->execute($suggestionid);
         return $suggestiondeleted;  
     }
+}
+
+=head2 DelSuggestionsOlderThan
+    &DelSuggestionsOlderThan($days)
+    
+    Delete all suggestions older than TODAY-$days , that have be accepted or rejected.
+    
+=cut
+sub DelSuggestionsOlderThan {
+    my ($days) = @_;
+    return if not $days;
+    my $dbh = C4::Context->dbh;
+    
+    my $sth = $dbh->prepare("
+        DELETE FROM suggestions WHERE STATUS <> 'ASKED' AND date < ADDDATE(NOW(), ?);
+    ");
+    $sth->execute("-$days");
 }
 
 1;
