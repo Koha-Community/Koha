@@ -124,10 +124,11 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
     </fieldset>
     <fieldset class="rows"> <legend>Suggestion management</legend>
        <ol>
-            <!--TMPL_IF Name="suggestionid"--><li><label for="status">Status:</label><select id="status" name="status"><option value="">No Status</option>
-                <!-- TMPL_LOOP name="status_loop" -->
-                    <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF -->
-                <!-- /TMPL_LOOP -->
+            <!--TMPL_IF Name="suggestionid"--><li><label for="status">Status:</label><select id="STATUS" name="STATUS"><option value="">No Status</option>
+                <option value="ASKED"<!-- TMPL_IF NAME="statusselected_ASKED" --> selected="selected"<!--/TMPL_IF-->>Asked</option>
+                <option value="ACCEPTED"<!-- TMPL_IF NAME="statusselected_ACCEPTED" --> selected="selected"<!--/TMPL_IF-->>Accepted</option>
+                <option value="CHECKED"<!-- TMPL_IF NAME="statusselected_CHECKED" --> selected="selected"<!--/TMPL_IF-->>Checked</option>
+                <option value="REJECTED"<!-- TMPL_IF NAME="statusselected_REJECTED" --> selected="selected"<!--/TMPL_IF-->>Rejected</option>
             </select></li><!--/TMPL_IF-->
         <li><table>
             <thead><tr><th>&nbsp;</th><th>Date</th><th>By</th></tr></thead>
@@ -178,8 +179,8 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                 </li><li><label for="total">Total</label>
 			<input type="text" readonly="readonly" id="total" name="total" size="10" value="<!--TMPL_VAR Name="total"-->"/>
                 </li></ol>
-    </fieldset>
-    <fieldset class="action"><input type="hidden" name="op" value="<!--TMPL_VAR Name="op"-->" /><!--TMPL_IF Name="suggestionid"--><input type="submit" value="Save" /> <a class="cancel" href="suggestion.pl?suggestionid=<!--TMPL_VAR Name="suggestionid"-->">Cancel</a><!--TMPL_ELSE--><input type="submit" value="Submit Your Suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a><!--/TMPL_IF-->
+    </fieldset><input type="hidden" id="returnsuggested" name="returnsuggested" value="<!--TMPL_IF Name="returnsuggestedby"--><!--TMPL_VAR Name="returnsuggestedby"--><!-- TMPL_ELSE -->noone<!--/TMPL_IF-->"/>
+    <fieldset class="action"><input type="hidden" name="op" value="<!--TMPL_VAR Name="op"-->" /><!--TMPL_IF Name="suggestionid"--><input type="submit" value="Save" /> <a class="cancel" href="<!--TMPL_IF Name="returnsuggestedby"-->/cgi-bin/koha/members/moremember.pl?borrowernumber=<!--TMPL_VAR Name="returnsuggestedby"-->#suggestions<!-- TMPL_ELSE -->suggestion.pl?suggestionid=<!--TMPL_VAR Name="suggestionid"--><!--/TMPL_IF-->">Cancel</a><!--TMPL_ELSE--><input type="submit" value="Submit Your Suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a><!--/TMPL_IF-->
     </fieldset>
     </form>
 <!-- /TMPL_IF -->
@@ -250,7 +251,7 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                     <!-- TMPL_VAR name="budget_name" -->
                 </td>
                 <td>
-                    <!-- TMPL_IF name="ASKED" -->Requested<!-- /TMPL_IF --> <!-- TMPL_IF name="ACCEPTED" -->Accepted<!-- /TMPL_IF --> <!-- TMPL_IF name="ORDERED" -->Ordered<!-- /TMPL_IF --> <!-- TMPL_IF name="REJECTED" -->Rejected<!-- /TMPL_IF --> <!-- TMPL_IF name="CHECKED" -->Checked<!-- /TMPL_IF --> <!-- TMPL_IF name="reason" --><br />(<!-- TMPL_VAR name="reason" -->)<!-- /TMPL_IF -->
+                    <!-- TMPL_IF name="ASKED" -->Asked<!-- /TMPL_IF --> <!-- TMPL_IF name="ACCEPTED" -->Accepted<!-- /TMPL_IF --> <!-- TMPL_IF name="ORDERED" -->Ordered<!-- /TMPL_IF --> <!-- TMPL_IF name="REJECTED" -->Rejected<!-- /TMPL_IF --> <!-- TMPL_IF name="CHECKED" -->Checked<!-- /TMPL_IF --> <!-- TMPL_IF name="reason" --><br />(<!-- TMPL_VAR name="reason" -->)<!-- /TMPL_IF -->
                 </td>
         </tr>
         <!-- /TMPL_LOOP --></tbody>
@@ -259,9 +260,10 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
         <div id="status<!-- TMPL_VAR NAME="suggestiontype" -->">
 	<label for="STATUS<!-- TMPL_VAR NAME="suggestiontype" -->">Mark selected as: </label><select name="STATUS" id="STATUS<!-- TMPL_VAR NAME="suggestiontype" -->">
 	<option value=""> -- Choose a status --</option>
-	<option value="ACCEPTED">Accepted</option>
-	<option value="CHECKED">Checked</option>
-	<option value="REJECTED">Rejected</option>
+	<option value="ASKED"<!-- TMPL_IF NAME="statusselected_ASKED" --> selected="selected"<!--/TMPL_IF-->>Asked</option>
+	<option value="ACCEPTED"<!-- TMPL_IF NAME="statusselected_ACCEPTED" --> selected="selected"<!--/TMPL_IF-->>Accepted</option>
+	<option value="CHECKED"<!-- TMPL_IF NAME="statusselected_CHECKED" --> selected="selected"<!--/TMPL_IF-->>Checked</option>
+	<option value="REJECTED"<!-- TMPL_IF NAME="statusselected_REJECTED" --> selected="selected"<!--/TMPL_IF-->>Rejected</option>
 	</select>
     <label for="reason<!-- TMPL_VAR NAME="suggestiontype" -->">with this reason:</label>                 <select id="reason<!-- TMPL_VAR NAME="suggestiontype" -->" name="reason<!-- TMPL_VAR NAME="suggestiontype" -->">
                     <option value=""> -- Choose a reason -- </option>
@@ -313,8 +315,11 @@ h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { di
                     <li><label for="collectiontitle"> Collection Title:</label><input type="text" id="collectiontitle" name="collectiontitle" value="<!-- TMPL_VAR name="collectiontitle"-->" /></li><li><input type="submit" value="Go" /></li></ol>
                 </fieldset>
 				 <fieldset class="brief"><h4 class="collapse"><a href="#">Suggestion information</a></h4>
-                    <ol><li><label for="status"> Status:</label><select name="status" id="status"><option value="">Any</option>
-<!-- TMPL_LOOP name="status_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+                    <ol><li><label for="status"> Status:</label><select name="STATUS" id="STATUS"><option value="">Any</option>
+                    	<option value="ASKED"<!-- TMPL_IF NAME="statusselected_ASKED" --> selected="selected"<!--/TMPL_IF-->>Asked</option>
+						<option value="ACCEPTED"<!-- TMPL_IF NAME="statusselected_ACCEPTED" --> selected="selected"<!--/TMPL_IF-->>Accepted</option>
+						<option value="CHECKED"<!-- TMPL_IF NAME="statusselected_CHECKED" --> selected="selected"<!--/TMPL_IF-->>Checked</option>
+						<option value="REJECTED"<!-- TMPL_IF NAME="statusselected_REJECTED" --> selected="selected"<!--/TMPL_IF-->>Rejected</option>
                                                           </select></li>
                     <li><label for="suggestedby"> Suggested By:</label><select id="suggestedby" name="suggestedby"><option value="">Any</option>
 <!-- TMPL_LOOP name="suggestedby_loop" --><!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="code" -->" selected="selected"><!-- TMPL_VAR name="desc" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="code" -->"><!-- TMPL_VAR name="desc" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->

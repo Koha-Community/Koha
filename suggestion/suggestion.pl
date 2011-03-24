@@ -74,12 +74,15 @@ my $op              = $input->param('op')||'else';
 my @editsuggestions = $input->param('edit_field');
 my $branchfilter   = $input->param('branchcode');
 my $suggestedby    = $input->param('suggestedby');
+my $returnsuggested = $input->param('returnsuggested');
+my $returnsuggestedby = $input->param('returnsuggestedby');
 my $managedby    = $input->param('managedby');
 my $displayby    = $input->param('displayby');
 my $tabcode    = $input->param('tabcode');
 
 # filter informations which are not suggestion related.
 my $suggestion_ref  = $input->Vars;
+
 delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
@@ -201,7 +204,7 @@ if ($op=~/else/) {
     );
 }
 
-foreach my $element qw(managedby suggestedby){
+foreach my $element qw(managedby suggestedby acceptedby) {
 #    $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
         my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
@@ -222,6 +225,10 @@ $template->param(
     "op"             =>$op,
 );
 
+if(defined($returnsuggested) and $returnsuggested ne "noone")
+{
+	print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=".$returnsuggested."#suggestions");
+}
 
 ####################
 ## Initializing selection lists
@@ -260,6 +267,7 @@ foreach my $support(@$supportlist){
     }
 }
 $template->param(itemtypeloop=>$supportlist);
+$template->param( returnsuggestedby => $returnsuggestedby );
 
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG",$$suggestion_ref{'patronreason'});
 $template->param(patron_reason_loop=>$patron_reason_loop);
@@ -273,6 +281,7 @@ foreach my $budget (@$budgets){
 };
 
 $template->param( budgetsloop => $budgets);
+$template->param( "statusselected_$$suggestion_ref{'STATUS'}" =>1);
 
 # get currencies and rates
 my @rates = GetCurrencies();
@@ -295,7 +304,7 @@ $template->param(
 );
 
 my %hashlists;
-foreach my $field qw(managedby acceptedby suggestedby budgetid STATUS) {
+foreach my $field qw(managedby acceptedby suggestedby budgetid) {
     my $values_list;
     $values_list=GetDistinctValues("suggestions.".$field) ;
     my @codes_list = map{
