@@ -251,7 +251,7 @@
                         </a>
                     </xsl:when>
                     <xsl:otherwise>
-                        <a href="/cgi-bin/koha/opac-search.pl?q=se:{marc:subfield[@code='t']}">
+                        <a href="/cgi-bin/koha/opac-search.pl?q=se:{marc:subfield[@code='a']}">
                             <xsl:call-template name="chopPunctuation">
                                 <xsl:with-param name="chopString">
                                     <xsl:call-template name="subfieldSelect">
