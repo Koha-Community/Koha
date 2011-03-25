@@ -4014,6 +4014,105 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.020';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowFineOverride','0','If on, staff will be able to issue books to patrons with fines greater than noissuescharge.','0','YesNo')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllFinesNeedOverride','1','If on, staff will be asked to override every fine, even if it is below noissuescharge.','0','YesNo')");
+    print "Upgrade to $DBversion done (Bug 5811: Add sysprefs controlling overriding fines)\n";
+    SetVersion($DBversion);
+};
+
+$DBversion = '3.03.00.021';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE items MODIFY enumchron TEXT");
+    $dbh->do("ALTER TABLE deleteditems MODIFY enumchron TEXT");
+    print "Upgrade to $DBversion done (bug 5642: longer serial enumeration)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.022';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AuthoritiesLog','0','If ON, log edit/create/delete actions on authorities.','','YesNo');");
+    print "Upgrade to $DBversion done (Add AuthoritiesLog syspref)\n";
+    SetVersion ($DBversion);
+}
+
+# due to a mismatch in kohastructure.sql some koha will have missing columns in aqbasketgroup
+# this attempts to fix that
+$DBversion = '3.03.00.023';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    my $sth = $dbh->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'aqbasketgroups' AND COLUMN_NAME = 'billingplace'");
+    $sth->execute;
+    $dbh->do("ALTER TABLE aqbasketgroups ADD billingplace VARCHAR(10)") if ! $sth->fetchrow_hashref;
+    $sth = $dbh->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'aqbasketgroups' AND COLUMN_NAME = 'deliveryplace'");
+    $sth->execute;
+    $dbh->do("ALTER TABLE aqbasketgroups ADD deliveryplace VARCHAR(10)") if ! $sth->fetchrow_hashref;
+    $sth = $dbh->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'aqbasketgroups' AND COLUMN_NAME = 'deliverycomment'");
+    $sth->execute;
+    $dbh->do("ALTER TABLE aqbasketgroups ADD deliverycomment VARCHAR(255)") if ! $sth->fetchrow_hashref;
+    print "Upgrade to $DBversion done (Reconcile aqbasketgroups)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.024';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('TraceCompleteSubfields','0','Force subject tracings to only match complete subfields.','0','YesNo')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('UseAuthoritiesForTracings','1','Use authority record numbers for subject tracings instead of heading strings.','0','YesNo')");
+    print "Upgrade to $DBversion done (Add syspref to force whole-subfield matching on subject tracings)\n";
+    SetVersion($DBversion);
+};
+
+$DBversion = "3.03.00.025";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OPACAllowUserToChooseBranch', 1, 'Allow the user to choose the branch they want to pickup their hold from','1','YesNo')");
+    print "Upgrade to $DBversion done (Add syspref to control if user can choose pickup branch for holds)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.026';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE `message_attributes` SET message_name='Item Due' WHERE message_attribute_id=1 AND message_name LIKE 'Item DUE'");
+	print "Upgrade to $DBversion done ( fix capitalization in message type )\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.027'; 
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('displayFacetCount', '0', NULL, NULL, 'YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('maxRecordsForFacets', '20', NULL, NULL, 'Integer')");
+    print "Upgrade to $DBversion done (Preferences for facet count)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.03.00.028";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('FacetLabelTruncationLength', 20, 'Truncate facets length to','','free')");
+    print "Upgrade to $DBversion done (Add FacetLabelTruncationLength syspref to control facets displayed length)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.03.00.029";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowPurchaseSuggestionBranchChoice', 0, 'Allow user to choose branch when making a purchase suggestion','1','YesNo')");
+    print "Upgrade to $DBversion done (Add syspref to control if user can choose branch when making purchase suggestion)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.03.00.030";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','','free')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','','free')");
+    print "Upgrade to $DBversion done (Add sysprefs to control custom favicons)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.03.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FineNotifyAtCheckin',0,'If ON notify librarians of overdue fines on the items they are checking in.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref FineNotifyAtCheckin)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
