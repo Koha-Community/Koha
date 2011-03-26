@@ -4187,6 +4187,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowSelfCheckReturns',0,'If enabled, patrons may return items through the Web-based Self Checkout','','YesNo')");
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SelfCheckHelpMessage','','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','70|10','Textarea')");
     print "Upgrade to $DBversion done ( Add Self-checkout by Login system preferences )\n";
+}
+
+$DBversion = "3.03.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsField','','The MARC field/subfield that contains alternate holdings information for bibs taht do not have items attached (e.g. 852abchi for libraries converting from MARC Magician).',NULL,'free')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsSeparator','','The string to use to separate subfields in alternate holdings displays.',NULL,'free')");
+    print "Upgrade to $DBversion done (Add sysprefs to control alternate holdings information display)\n";
     SetVersion ($DBversion);
 }
 

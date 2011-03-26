@@ -378,7 +378,13 @@ function verify_images() {
 		</table>
                 <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-    <p>No physical items for this record</p>
+    <!-- TMPL_IF NAME="ALTERNATEHOLDINGS" -->
+    <!-- TMPL_LOOP NAME="ALTERNATEHOLDINGS" -->
+        <div id="alternateholdings"><span class="holdings_label">Holdings:</span> <!-- TMPL_VAR NAME="holding" --></div>
+    <!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
+    <div id="noitems">No physical items for this record</div>
+    <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
     </div>
     

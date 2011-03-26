@@ -1,6 +1,7 @@
 package C4::XSLT;
 # Copyright (C) 2006 LibLime
 # <jmf at liblime dot com>
+# Parts Copyright ByWater Solutions 2011
 #
 # This file is part of Koha.
 #
@@ -132,7 +133,8 @@ sub XSLTParse4Display {
                               DisplayOPACiconsXSLT URLLinkText viewISBD
                               OPACBaseURL TraceCompleteSubfields
                               UseAuthoritiesForTracings TraceSubjectSubdivisions
-                              Display856uAsImage OPACDisplay856uAsImage / )
+                              Display856uAsImage OPACDisplay856uAsImage 
+                              AlternateHoldingsField AlternateHoldingsSeparator / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);

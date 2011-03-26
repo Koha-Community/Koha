@@ -42,6 +42,8 @@ use C4::VirtualShelves;
 use C4::XSLT;
 use C4::ShelfBrowser;
 use C4::Charset;
+use MARC::Record;
+use MARC::Field;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -226,6 +228,33 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      authorised_value_images => $biblio_authorised_value_images,
                      subtitle                => $subtitle,
     );
+
+if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
+    my $fieldspec = C4::Context->preference("AlternateHoldingsField");
+    my $subfields = substr $fieldspec, 3;
+    my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
+    my @alternateholdingsinfo = ();
+    my @holdingsfields = $record->field(substr $fieldspec, 0, 3);
+
+    for my $field (@holdingsfields) {
+        my %holding = ( holding => '' );
+        my $havesubfield = 0;
+        for my $subfield ($field->subfields()) {
+            if ((index $subfields, $$subfield[0]) >= 0) {
+                $holding{'holding'} .= $holdingsep if (length $holding{'holding'} > 0);
+                $holding{'holding'} .= $$subfield[1];
+                $havesubfield++;
+            }
+        }
+        if ($havesubfield) {
+            push(@alternateholdingsinfo, \%holding);
+        }
+    }
+
+    $template->param(
+        ALTERNATEHOLDINGS   => \@alternateholdingsinfo,
+        );
+}
 
 foreach ( keys %{$dat} ) {
     $template->param( "$_" => defined $dat->{$_} ? $dat->{$_} : '' );
