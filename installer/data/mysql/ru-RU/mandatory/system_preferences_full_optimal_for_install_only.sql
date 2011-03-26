@@ -125,6 +125,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReturnBeforeExpiry',0,'If ON, checkout will be prevented if returndate is after patron card expiry',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReturnLog',1,'If ON, enables the circulation (returns) log',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('reviewson',1,'If ON, enables patron reviews of bibliographic records in the OPAC','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SpecifyDueDate',1,'Define whether to display \"Specify Due Date\" form in Circulation','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionHistory',';','Define the display preference for serials issue history in OPAC','simplified|full','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionLog',1,'If ON, enables subscriptions log',NULL,'YesNo');
@@ -358,3 +359,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('StaffAuthorisedValueImages','1','',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACDisplay856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding OPACXSLT option must be on','OFF|Details|Results|Both','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Display856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding Staff Client XSLT option must be on','OFF|Details|Results|Both','Choice');
+

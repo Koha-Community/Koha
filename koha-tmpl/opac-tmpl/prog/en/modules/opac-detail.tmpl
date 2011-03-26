@@ -668,12 +668,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </p></div>
             <!-- TMPL_ELSE -->
             <div class="commentline">
+            <!-- TMPL_IF NAME="ShowReviewer" -->
             <h5>
                 Comment by
                 <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_VAR NAME="firstname" -->
                 <!-- TMPL_VAR NAME="surname" -->
             </h5>
+            <!-- /TMPL_IF -->
             <small><!-- TMPL_VAR NAME="datereviewed" --></small>
         <p>
           <!-- TMPL_VAR NAME="review" ESCAPE=0 -->

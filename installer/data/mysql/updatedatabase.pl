@@ -4187,6 +4187,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowSelfCheckReturns',0,'If enabled, patrons may return items through the Web-based Self Checkout','','YesNo')");
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('SelfCheckHelpMessage','','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','70|10','Textarea')");
     print "Upgrade to $DBversion done ( Add Self-checkout by Login system preferences )\n";
+}
+
+$DBversion = "3.03.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref ShowReviewer)\n";
     SetVersion ($DBversion);
 }
 
