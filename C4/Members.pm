@@ -45,6 +45,7 @@ BEGIN {
 		&Search
 		&SearchMember 
 		&GetMemberDetails
+        &GetMemberRelatives
 		&GetMember
 
 		&GetGuarantees 
@@ -582,6 +583,46 @@ sub GetMember {
     return;
 }
 
+=head2 GetMemberRelatives
+
+ @borrowernumbers = GetMemberRelatives($borrowernumber);
+
+ C<GetMemberRelatives> returns a borrowersnumber's list of guarantor/guarantees of the member given in parameter
+
+=cut 
+sub GetMemberRelatives {
+    my $borrowernumber = shift;
+    my $dbh = C4::Context->dbh;
+    my @glist;
+
+    # Getting guarantor
+    my $query = "SELECT guarantorid FROM borrowers WHERE borrowernumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    my $data = $sth->fetchrow_arrayref();
+    push @glist, $data->[0] if $data->[0];
+    my $guarantor = $data->[0] if $data->[0];
+
+    # Getting guarantees
+    $query = "SELECT borrowernumber FROM borrowers WHERE guarantorid=?";
+    $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    while ($data = $sth->fetchrow_arrayref()) {
+       push @glist, $data->[0];
+    }
+
+    # Getting sibling guarantees
+    if ($guarantor) {
+        $query = "SELECT borrowernumber FROM borrowers WHERE guarantorid=?";
+        $sth = $dbh->prepare($query);
+        $sth->execute($guarantor);
+        while ($data = $sth->fetchrow_arrayref()) {
+           push @glist, $data->[0] if ($data->[0] != $borrowernumber);
+        }
+    }
+
+    return @glist;
+}
 
 =head2 IsMemberBlocked
 
@@ -963,7 +1004,7 @@ sub UpdateGuarantees {
 }
 =head2 GetPendingIssues
 
-  my $issues = &GetPendingIssues($borrowernumber);
+  my $issues = &GetPendingIssues(@borrowernumber);
 
 Looks up what the patron with the given borrowernumber has borrowed.
 
@@ -976,14 +1017,22 @@ The keys include C<biblioitems> fields except marc and marcxml.
 
 #'
 sub GetPendingIssues {
-    my ($borrowernumber) = @_;
+    my (@borrowernumbers) = @_;
+
+    # Borrowers part of the query
+    my $bquery = '';
+    for (my $i = 0; $i < @borrowernumbers; $i++) {
+        $bquery .= " borrowernumber = ?";
+        $bquery .= " OR" if ($i < (scalar(@borrowernumbers) - 1));
+    }
+
     # must avoid biblioitems.* to prevent large marc and marcxml fields from killing performance
     # FIXME: namespace collision: each table has "timestamp" fields.  Which one is "timestamp" ?
     # FIXME: circ/ciculation.pl tries to sort by timestamp!
     # FIXME: C4::Print::printslip tries to sort by timestamp!
     # FIXME: namespace collision: other collisions possible.
     # FIXME: most of this data isn't really being used by callers.
-    my $sth = C4::Context->dbh->prepare(
+    my $query =
    "SELECT issues.*,
             items.*,
            biblio.*,
@@ -1000,16 +1049,19 @@ sub GetPendingIssues {
            biblioitems.url,
            issues.timestamp AS timestamp,
            issues.renewals  AS renewals,
+           issues.borrowernumber AS borrowernumber,
             items.renewals  AS totalrenewals
     FROM   issues
     LEFT JOIN items       ON items.itemnumber       =      issues.itemnumber
     LEFT JOIN biblio      ON items.biblionumber     =      biblio.biblionumber
     LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
     WHERE
-      borrowernumber=?
+      $bquery
     ORDER BY issues.issuedate"
-    );
-    $sth->execute($borrowernumber);
+    ;
+
+    my $sth = C4::Context->dbh->prepare($query);
+    $sth->execute(@borrowernumbers);
     my $data = $sth->fetchall_arrayref({});
     my $today = C4::Dates->new->output('iso');
     foreach (@$data) {

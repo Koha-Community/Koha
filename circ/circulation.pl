@@ -42,6 +42,7 @@ use Date::Calc qw(
   Add_Delta_Days
   Date_to_Days
 );
+use List::MoreUtils qw/uniq/;
 
 
 #
@@ -403,15 +404,24 @@ my $todaysissues = '';
 my $previssues   = '';
 my @todaysissues;
 my @previousissues;
+my @relissues;
+my @relprevissues;
+my $displayrelissues;
 
 my $totalprice = 0;
 
-if ($borrower) {
-# get each issue of the borrower & separate them in todayissues & previous issues
-    my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
+sub build_issue_data {
+    my $issueslist = shift;
+    my $relatives = shift;
+
     # split in 2 arrays for today & previous
     foreach my $it ( @$issueslist ) {
         my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $it->{'itype'} : $it->{'itemtype'} );
+
+        # Getting borrower details
+        my $memberdetails = GetMemberDetails($it->{'borrowernumber'});
+        $it->{'borrowername'} = $memberdetails->{'firstname'} . " " . $memberdetails->{'surname'};
+
         # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
         $it->{'itemtype'} = ( C4::Context->preference( 'item-level_itypes' ) ) ? $it->{'itype'} : $it->{'itemtype'};
 
@@ -439,11 +449,28 @@ if ($borrower) {
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
 
         if ( $todaysdate eq $it->{'issuedate'} or $todaysdate eq $it->{'lastreneweddate'} ) {
-            push @todaysissues, $it;
+            (!$relatives) ? push @todaysissues, $it : push @relissues, $it;
         } else {
-            push @previousissues, $it;
+            (!$relatives) ? push @previousissues, $it : push @relprevissues, $it;
         }
     }
+}
+
+if ($borrower) {
+
+    # Getting borrower relatives
+    my @relborrowernumbers = GetMemberRelatives($borrower->{'borrowernumber'});
+    #push @borrowernumbers, $borrower->{'borrowernumber'};
+
+    # get each issue of the borrower & separate them in todayissues & previous issues
+    my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
+    my ($relissueslist) = GetPendingIssues(@relborrowernumbers);
+
+    build_issue_data($issueslist, 0);
+    build_issue_data($relissueslist, 1);
+  
+    $displayrelissues = scalar($relissueslist);
+
     if ( C4::Context->preference( "todaysIssuesDefaultSortOrder" ) eq 'asc' ) {
         @todaysissues   = sort { $a->{'timestamp'} cmp $b->{'timestamp'} } @todaysissues;
     }
@@ -641,6 +668,9 @@ $template->param(
     totaldue          => sprintf('%.2f', $total),
     todayissues       => \@todaysissues,
     previssues        => \@previousissues,
+    relissues			=> \@relissues,
+    relprevissues		=> \@relprevissues,
+    displayrelissues		=> $displayrelissues,
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,

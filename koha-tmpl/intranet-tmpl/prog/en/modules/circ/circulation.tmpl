@@ -24,9 +24,19 @@ if($.cookie("holdfor") != <!-- TMPL_VAR NAME="borrowernumber" -->){ $.cookie("ho
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 		headers: { 1: { sorter: 'articles' },5: { sorter: false },6:{sorter:false},7:{sorter:false},8:{sorter:false}}
 		});
+		$("#relissuest").tablesorter({<!-- TMPL_IF NAME="dateformat_metric" -->
+		dateFormat: 'uk',<!-- /TMPL_IF -->
+		headers: { 1: { sorter: 'articles' },5: { sorter: false },6:{sorter:false},7:{sorter:false},8:{sorter:false}}
+		});
+
+		//FIXME: Sorting does not work when there are previous checkouts only
+		// (It works fine when there are only checkouts of the day, or both previous and today checkouts)
 		$("#issuest").bind("sortEnd",function() {
         	$("#previous").parents("tr").remove();  // 'previous checkouts' header chokes table sorter
 	    });
+		$("#relissuest").bind("sortEnd",function() {
+		    $("#relprevious").parents("tr").remove();  // 'previous checkouts' header chokes table sorter
+		});
 		$("#holdst").tablesorter({<!-- TMPL_IF NAME="dateformat_metric" -->
 		dateFormat: 'uk',<!-- /TMPL_IF -->
 			sortList: [[0,0]],
@@ -61,6 +71,25 @@ var allcheckboxes = $(".checkboxed");
     $("#CheckNoreturns" ).click(function(){
 		$(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
 	});
+
+    $("#relrenew_all").click(function(){
+        $(allcheckboxes).checkCheckboxes(":input[name*=items]");
+        $(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]");
+    });
+    $("#relCheckAllitems").click(function(){
+        $(allcheckboxes).checkCheckboxes(":input[name*=items]");
+        $(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
+    });
+    $("#relCheckNoitems").click(function(){
+        $(allcheckboxes).unCheckCheckboxes(":input[name*=items]"); return false;
+    });
+    $("#relCheckAllreturns").click(function(){
+        $(allcheckboxes).checkCheckboxes(":input[name*=barcodes]");
+        $(allcheckboxes).unCheckCheckboxes(":input[name*=items]"); return false;
+    });
+    $("#relCheckNoreturns").click(function(){
+        $(allcheckboxes).unCheckCheckboxes(":input[name*=barcodes]"); return false;
+    });
 
     <!-- TMPL_IF NAME="CAN_user_circulate_override_renewals" -->
     <!-- TMPL_IF NAME="AllowRenewalLimitOverride" -->
@@ -659,6 +688,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <span class="circ-hlt"><!-- TMPL_VAR name="itemnotes" --></span><!-- /TMPL_IF --> <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
         <td><!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" --><img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" /><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- TMPL_VAR NAME="itemtype" --></td>
         <td><!-- TMPL_VAR NAME="checkoutdate" --></td>
+        <!-- TMPL_IF NAME="multiple_borrowers" --><td><!-- TMPL_VAR NAME="borrowername" --></td><!-- /TMPL_IF -->
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
             <td><!-- TMPL_VAR NAME="charge" --></td>
             <td><!-- TMPL_VAR NAME="replacementprice" --></td>
@@ -726,6 +756,7 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
             <!-- TMPL_VAR NAME="itemtype" -->
         </td>
         <td><!-- TMPL_VAR NAME="displaydate" --></td>
+        <!-- TMPL_IF NAME="multiple_borrowers" --><td><!-- TMPL_VAR NAME="borrowername" --></td><!-- /TMPL_IF -->
         <td><!-- TMPL_VAR NAME="itemcallnumber" --></td>
         <td><!-- TMPL_VAR NAME="charge" --></td>
         <td><!-- TMPL_VAR NAME="replacementprice" --></td>
@@ -787,10 +818,77 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
         </fieldset>
     <!-- /TMPL_IF -->
-</form>
 <!-- TMPL_ELSE -->
 <p>Patron has nothing checked out.</p>
 <!-- /TMPL_IF -->
+
+
+<!-- TMPL_IF NAME="displayrelissues" -->
+<h2>Relatives issues</h2>
+    <table id="relissuest">
+    <thead>
+    <tr>
+        <th scope="col">Due date</th>
+        <th scope="col">Title</th>
+        <th scope="col">Item Type</th>
+        <th scope="col">Branch</th>
+        <th scope="col">Checked out on</th> 
+        <th scope="col">Charge</th>
+	<th scope="col">Borrower</th>
+        <th scope="col">Material</th>
+    </tr>
+    </thead>
+<!-- TMPL_IF NAME="relissues" -->	<tbody>
+
+    <!-- TMPL_LOOP NAME="relissues" -->
+    <!-- TMPL_IF NAME="__odd__" -->
+    <tr>
+    <!-- TMPL_ELSE -->
+    <tr class="highlight">
+    <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="overdue" --><td class="od"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+            <!-- TMPL_VAR NAME="dd" --></td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --><!-- TMPL_IF NAME="itemnotes" -->- <span class="circ-hlt"><!-- TMPL_VAR name="itemnotes" --></span><!-- /TMPL_IF --> <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+        <td><!-- TMPL_UNLESS NAME="noItemTypeImages" --> <!-- TMPL_IF NAME="itemtype_image" --><img src="<!-- TMPL_VAR NAME="itemtype_image" -->" alt="" /><!-- /TMPL_IF --><!-- /TMPL_UNLESS --><!-- TMPL_VAR NAME="itemtype" --></td>
+	<td><!-- TMPL_VAR NAME="branchdisplay" -->
+        <!--TMPL_IF Name="itemcallnumber"-->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!--/TMPL_IF--></td>
+        <td><!-- TMPL_VAR NAME="displaydate" --></td>
+            <td><!-- TMPL_VAR NAME="charge" --></td>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowername" --></a></td>
+            <td><!-- TMPL_VAR NAME="materials" --></td>
+    </tr>
+    <!-- /TMPL_LOOP --> <!-- /loop todayissues -->
+    <!-- /if todayissues --><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="relprevissues" -->
+<tr><th class="{sorter: false}" colspan="10"><a name="relprevious" id="relprevious"></a>Previous checkouts</th></tr>
+    <!-- TMPL_LOOP NAME="relprevissues" -->
+    <!-- TMPL_IF NAME="__odd__" -->
+        <tr>
+    <!-- TMPL_ELSE -->
+        <tr class="highlight">
+    <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="overdue" --><td class="od"><!-- TMPL_ELSE --><td><!-- /TMPL_IF -->
+        <!-- TMPL_VAR NAME="dd" -->
+        </td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;type=intra"><strong><!-- TMPL_VAR NAME="title" escape="html" --></strong></a><!-- TMPL_IF NAME="author" -->, by <!-- TMPL_VAR NAME="author" --><!-- /TMPL_IF --> <!-- TMPL_IF NAME="itemnotes" -->- <!-- TMPL_VAR name="itemnotes" --><!-- /TMPL_IF --> <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR NAME="barcode" --></a></td>
+        <td>
+            <!-- TMPL_VAR NAME="itemtype" -->
+        </td>
+	<td><!-- TMPL_VAR NAME="branchdisplay" -->
+        <!--TMPL_IF NAME="itemcallnumber"-->(<!-- TMPL_VAR NAME="itemcallnumber" -->)<!--/TMPL_IF--></td>
+        <td><!-- TMPL_VAR NAME="displaydate" --></td>
+	<!-- TMPL_IF NAME="multiple_borrowers" --><td><!-- TMPL_VAR NAME="borrowername" --></td><!-- /TMPL_IF -->
+        <td><!-- TMPL_VAR NAME="charge" --></td>
+	<td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->"><!-- TMPL_VAR NAME="borrowername" --></a></td>
+        <td><!-- TMPL_VAR NAME="materials" --></td>
+    </tr>
+    <!-- /loop previssues --><!-- /TMPL_LOOP -->
+<!--/if previssues --><!-- /TMPL_IF -->
+      </tbody>
+    </table>
+</form>
+<!-- /TMPL_IF --><!-- end displayrelissues --> 
+
 </div>
 
 
