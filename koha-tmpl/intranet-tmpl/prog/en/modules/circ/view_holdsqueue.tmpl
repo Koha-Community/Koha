@@ -57,9 +57,9 @@
             <td class="hq-callnumber"><!-- TMPL_VAR NAME="location" --> <!-- TMPL_VAR NAME="itemcallnumber"--> <!-- TMPL_VAR NAME="enumchron" --></td>
             <td class="hq-barcode">
                 <!-- TMPL_IF NAME="item_level_request" -->
-			<em>Only Item: </em><!-- TMPL_VAR NAME="barcode" -->
+			<em>Only Item:</em> <strong><!-- TMPL_VAR NAME="barcode" --></strong>
                 <!-- TMPL_ELSE -->
-                    <strong><!-- TMPL_VAR NAME="barcode" --></strong></br><em>or Any available</em>
+                    <strong><!-- TMPL_VAR NAME="barcode" --></strong> <em>or any available</em>
                 <!-- /TMPL_IF -->
             </td>
 			<td class="hq-patron"><p><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=<!-- TMPL_VAR NAME="cardnumber" -->#reserves"><!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a></p> <p><!-- TMPL_VAR NAME="phone" --></p></td>
