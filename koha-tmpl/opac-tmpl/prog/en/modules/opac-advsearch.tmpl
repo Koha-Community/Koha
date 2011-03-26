@@ -245,7 +245,15 @@
         <!--/TMPL_IF-->    
         <!-- /TMPL_LOOP -->
         </select>
-        
+        <!-- TMPL_IF NAME="searchdomainloop" -->
+            <p>OR</p> <!-- should addjs to grey out group pulldown if a library is selected. -->
+                <label for="categoryloop">Groups of Libraries</label><select name="multibranchlimit" id="categoryloop">
+                <option value=""> -- none -- </option>
+                <!-- TMPL_LOOP NAME="searchdomainloop" -->
+                <option value="<!-- TMPL_VAR NAME="categorycode" -->"><!-- TMPL_VAR NAME="categoryname" --></option>
+                <!-- /TMPL_LOOP -->
+                </select>
+        <!-- /TMPL_IF -->        
         <div style="margin-top:.4em"><label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available for loan or reference</label></div>
     </fieldset></div>
     <!-- /TMPL_UNLESS -->
