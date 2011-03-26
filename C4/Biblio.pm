@@ -1119,50 +1119,57 @@ sub GetCOinSBiblio {
     my $isbn      = '';
     my $issn      = '';
     my $publisher = '';
+    my $pages     = '';
+    my $titletype = 'b';
 
-    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
-        my $fmts6;
-        my $fmts7;
-        %$fmts6 = (
-            'a' => 'book',
-            'b' => 'manuscript',
-            'c' => 'book',
-            'd' => 'manuscript',
-            'e' => 'map',
-            'f' => 'map',
-            'g' => 'film',
-            'i' => 'audioRecording',
-            'j' => 'audioRecording',
-            'k' => 'artwork',
-            'l' => 'document',
-            'm' => 'computerProgram',
-            'r' => 'document',
+    # For the purposes of generating COinS metadata, LDR/06-07 can be
+    # considered the same for UNIMARC and MARC21
+    my $fmts6;
+    my $fmts7;
+    %$fmts6 = (
+                'a' => 'book',
+                'b' => 'manuscript',
+                'c' => 'book',
+                'd' => 'manuscript',
+                'e' => 'map',
+                'f' => 'map',
+                'g' => 'film',
+                'i' => 'audioRecording',
+                'j' => 'audioRecording',
+                'k' => 'artwork',
+                'l' => 'document',
+                'm' => 'computerProgram',
+                'o' => 'document',
+                'r' => 'document',
+            );
+    %$fmts7 = (
+                    'a' => 'journalArticle',
+                    's' => 'journal',
+              );
 
-        );
-        %$fmts7 = (
-            'a' => 'journalArticle',
-            's' => 'journal',
-        );
+    $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
 
-        $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
-
-        if ( $genre eq 'book' ) {
+    if ( $genre eq 'book' ) {
             $genre = $fmts7->{$pos7} if $fmts7->{$pos7};
-        }
+    }
 
-        ##### We must transform mtx to a valable mtx and document type ####
-        if ( $genre eq 'book' ) {
+    ##### We must transform mtx to a valable mtx and document type ####
+    if ( $genre eq 'book' ) {
             $mtx = 'book';
-        } elsif ( $genre eq 'journal' ) {
+    } elsif ( $genre eq 'journal' ) {
             $mtx = 'journal';
-        } elsif ( $genre eq 'journalArticle' ) {
+            $titletype = 'j';
+    } elsif ( $genre eq 'journalArticle' ) {
             $mtx   = 'journal';
             $genre = 'article';
-        } else {
+            $titletype = 'a';
+    } else {
             $mtx = 'dc';
-        }
+    }
 
-        $genre = ( $mtx eq 'dc' ) ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
+    $genre = ( $mtx eq 'dc' ) ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
+
+    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 
         # Setting datas
         $aulast  = $record->subfield( '700', 'a' );
@@ -1186,9 +1193,6 @@ sub GetCOinSBiblio {
     } else {
 
         # MARC21 need some improve
-        my $fmts;
-        $mtx   = 'book';
-        $genre = "&amp;rft.genre=book";
 
         # Setting datas
         if ( $record->field('100') ) {
@@ -1201,17 +1205,34 @@ sub GetCOinSBiblio {
                 $oauthors .= "&amp;rft.au=$au";
             }
         }
-        $title = "&amp;rft.btitle=" . $record->subfield( '245', 'a' );
+        $title = "&amp;rft." . $titletype . "title=" . $record->subfield( '245', 'a' );
         $subtitle = $record->subfield( '245', 'b' ) || '';
         $title .= $subtitle;
-        $pubyear   = $record->subfield( '260', 'c' ) || '';
-        $publisher = $record->subfield( '260', 'b' ) || '';
-        $isbn      = $record->subfield( '020', 'a' ) || '';
-        $issn      = $record->subfield( '022', 'a' ) || '';
+        if ($titletype eq 'a') {
+            $pubyear   = substr $record->field('008')->data(), 7, 4;
+            $isbn      = $record->subfield( '773', 'z' ) || '';
+            $issn      = $record->subfield( '773', 'x' ) || '';
+            if ($mtx eq 'journal') {
+                $title    .= "&amp;rft.title=" . (($record->subfield( '773', 't' ) || $record->subfield( '773', 'a')));
+            } else {
+                $title    .= "&amp;rft.btitle=" . (($record->subfield( '773', 't' ) || $record->subfield( '773', 'a')) || '');
+            }
+            foreach my $rel ($record->subfield( '773', 'g' )) {
+                if ($pages) {
+                    $pages .= ', ';
+                }
+                $pages .= $rel;
+            }
+        } else {
+            $pubyear   = $record->subfield( '260', 'c' ) || '';
+            $publisher = $record->subfield( '260', 'b' ) || '';
+            $isbn      = $record->subfield( '020', 'a' ) || '';
+            $issn      = $record->subfield( '022', 'a' ) || '';
+        }
 
     }
     my $coins_value =
-"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear";
+"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear&amp;rft.pages=$pages";
     $coins_value =~ s/(\ |&[^a])/\+/g;
     $coins_value =~ s/\"/\&quot\;/g;
 
