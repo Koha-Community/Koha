@@ -393,6 +393,9 @@ function validate1(date) {
 <div id="finesholdsissues" class="toptabs">
 	<ul>
 		<li><a href="/cgi-bin/koha/members/moremember.pl#checkedout"><!-- TMPL_VAR NAME="issuecount"--> Checkout(s)</a></li>
+    <!-- TMPL_IF NAME="relissuecount" -->
+        <li><a href="/cgi-bin/koha/members/moremember.pl#relissues">Relatives issues</a></li>
+    <!-- /TMPL_IF -->
 		<li><a href="/cgi-bin/koha/members/moremember.pl#finesandcharges">Fines &amp; Charges</a></li>
 		<li><!-- TMPL_IF NAME="countreserv"-->
             <a href="/cgi-bin/koha/members/moremember.pl#onhold"><!--TMPL_VAR NAME="countreserv"--> Hold(s)</a>
@@ -507,8 +510,11 @@ function validate1(date) {
         </fieldset>
     <!-- TMPL_ELSE --><p>Patron has nothing checked out.</p>
 <!-- /TMPL_IF -->
+</div>
+
 
 <!-- TMPL_IF NAME="relissuecount" -->
+<div id="relissues">
 	<h2>Relatives issues</h2>
  <table id="relissuest">
     <thead>
@@ -556,8 +562,8 @@ function validate1(date) {
   <!-- /tmpl_loop -->
         </tbody>
        </table>
-<!-- /TMPL_IF -->
 	</div>
+<!-- /TMPL_IF -->
 	
 <div id="onhold">
 <!-- TMPL_IF NAME="reservloop" -->

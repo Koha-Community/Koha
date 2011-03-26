@@ -644,6 +644,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
     <!-- TMPL_ELSE -->
             <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 Checkouts</a>
     <!-- /TMPL_IF --></li>
+<!-- TMPL_IF NAME="displayrelissues" -->
+<li><a href="/cgi-bin/koha/circ/circulation.pl#relissues">Relatives Issues</a></li>
+<!-- /TMPL_IF -->
 <li><!-- TMPL_IF NAME="countreserv"-->
             <a href="/cgi-bin/koha/circ/circulation.pl#reserves"><!--TMPL_VAR NAME="countreserv"--> Hold(s)</a>
     <!-- TMPL_ELSE -->
@@ -822,8 +825,11 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
 <p>Patron has nothing checked out.</p>
 <!-- /TMPL_IF -->
 
+</div>
+
 
 <!-- TMPL_IF NAME="displayrelissues" -->
+<div id="relissues">
 <h2>Relatives issues</h2>
     <table id="relissuest">
     <thead>
@@ -887,9 +893,9 @@ No patron matched <span class="ex"><!-- TMPL_VAR name="message" --></span>
       </tbody>
     </table>
 </form>
-<!-- /TMPL_IF --><!-- end displayrelissues --> 
 
 </div>
+<!-- /TMPL_IF --><!-- end displayrelissues --> 
 
 
 <div id="reserves">
