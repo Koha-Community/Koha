@@ -1,4 +1,4 @@
-<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Advanced Search
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" --><!-- TMPL_IF NAME="LibraryNameTitle" --><!-- TMPL_VAR NAME="LibraryNameTitle" --><!-- TMPL_ELSE -->Koha Online<!-- /TMPL_IF --> Catalog &rsaquo;  Entry
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
 <!-- TMPL_IF Name="displayhierarchy"-->
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/hierarchy.css">
@@ -60,18 +60,16 @@ function showChildren(mynumber) {
 <!--/TMPL_LOOP-->
 </div>
 <!-- /TMPL_IF -->
-<h1>Authority #<!-- TMPL_VAR NAME="authid" --> (<!-- TMPL_VAR name="authtypetext" -->)</h1>
+<h1>Entry <!-- TMPL_VAR name="authtypetext" --></h1>
 	<p>Used in <a href="opac-search.pl?type=opac&amp;q=<!-- TMPL_VAR NAME="authid" -->&amp;idx=an"><!-- TMPL_VAR name="count" --> records</a></p>
-<table><!-- TMPL_LOOP name="0XX" -->
-        <tr><td colspan="3" class="marctag"><b><!-- TMPL_VAR name="tag" --></b></td></tr>
+        <!-- TMPL_LOOP name="0XX" -->
+        <p><b><!-- TMPL_VAR name="tag" --></b></p>
+        <ul>
         <!-- TMPL_LOOP name="subfield" -->
-                <tr><td class="marcsubfieldletter" ><!-- TMPL_VAR name="marc_subfield" --></td>
-                    <td class="marcsubfieldname" ><!-- TMPL_VAR name="marc_lib" --></td>
-                    <td class="subfieldvalue" ><!-- TMPL_VAR name="marc_value" --></td>
-                </tr>
+                <p><b><!-- TMPL_VAR name="marc_lib" -->:</b> <!-- TMPL_VAR name="marc_value" --></p>
             <!-- /TMPL_LOOP -->
+        </ul>
         <!-- /TMPL_LOOP -->
-</table>
 </div>	
 
 </div>

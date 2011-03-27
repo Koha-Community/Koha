@@ -1182,16 +1182,17 @@ sub BuildUnimarcHierarchy{
   my $class = shift @_;
   my $authid_constructed = shift @_;
   return undef unless ($record);
-  my $authid=$record->subfield('2..','3');
+  my $authid=$record->field('001')->data();
   my %cell;
   my $parents=""; my $children="";
   my (@loopparents,@loopchildren);
-  foreach my $field ($record->field('550')){
+  foreach my $field ($record->field('5..')){
+	my $subfauthid=_get_authid_subfield($field);
     if ($field->subfield('5') && $field->subfield('a')){
       if ($field->subfield('5') eq 'h'){
-        push @loopchildren, { "childauthid"=>$field->subfield('3'),"childvalue"=>$field->subfield('a')};
+        push @loopchildren, { "childauthid"=>$subfauthid,"childvalue"=>$field->subfield('a')};
       }elsif ($field->subfield('5') eq 'g'){
-        push @loopparents, { "parentauthid"=>$field->subfield('3'),"parentvalue"=>$field->subfield('a')};
+        push @loopparents, { "parentauthid"=>$subfauthid,"parentvalue"=>$field->subfield('a')};
       }
           # brothers could get in there with an else
     }
@@ -1207,6 +1208,10 @@ sub BuildUnimarcHierarchy{
   return \%cell;
 }
 
+sub _get_authid_subfield{
+    my ($field)=@_;
+    return $field->subfield('9')||$field->subfield('3');
+}
 =head2 GetHeaderAuthority
 
   $ref= &GetHeaderAuthority( $authid)
