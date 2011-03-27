@@ -172,6 +172,7 @@
                 [% IF ( ITEM_DAT.card1 ) %]<li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower1 %]">[% ITEM_DAT.card1 %]</a>&nbsp;</li>[% END %]
 		[% IF ( ITEM_DAT.card2 ) %]<li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower2 %]">[% ITEM_DAT.card2 %]</a>&nbsp;</li>[% END %]
                 <li><span class="label">Paid for?:</span> [% ITEM_DAT.paidfor %]&nbsp;</li>
+            <li><span class="label">Serial enumeration/chronology:</span> [% ITEM_DAT.enumchron %]&nbsp;</li>
             <li><span class="label">Public Note:</span>
                 [% IF ( ITEM_DAT.CAN_user_editcatalogue_edit_items ) %]
               <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
