@@ -293,6 +293,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 	if ($op eq 'insert'){
 		# we know it's not a duplicate borrowernumber or there would already be an error
         $borrowernumber = &AddMember(%newdata);
+        $newdata{'borrowernumber'} = $borrowernumber;
 
         # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
         if ( C4::Context->preference("AutoEmailOpacUser") == 1 && $newdata{'userid'}  && $newdata{'password'}) {

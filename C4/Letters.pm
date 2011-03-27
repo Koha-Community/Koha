@@ -26,6 +26,7 @@ use Encode;
 use Carp;
 
 use C4::Members;
+use C4::Branch;
 use C4::Log;
 use C4::SMS;
 use C4::Debug;
@@ -440,15 +441,16 @@ sub SendAlerts {
     }    
    # send an "account details" notice to a newly created user 
     elsif ( $type eq 'members' ) {
-        $letter->{content} =~ s/<<borrowers.title>>/$externalid->{'title'}/g;
-        $letter->{content} =~ s/<<borrowers.firstname>>/$externalid->{'firstname'}/g;
-        $letter->{content} =~ s/<<borrowers.surname>>/$externalid->{'surname'}/g;
-        $letter->{content} =~ s/<<borrowers.userid>>/$externalid->{'userid'}/g;
+        # must parse the password special, before it's hashed.
         $letter->{content} =~ s/<<borrowers.password>>/$externalid->{'password'}/g;
 
+        parseletter( $letter, 'borrowers', $externalid->{'borrowernumber'});
+        parseletter( $letter, 'branches', $externalid->{'branchcode'} );
+
+        my $branchdetails = GetBranchDetail($externalid->{'branchcode'});
         my %mail = (
                 To      =>     $externalid->{'emailaddr'},
-                From    =>  C4::Context->preference("KohaAdminEmailAddress"),
+                From    =>  $branchdetails->{'branchemail'} || C4::Context->preference("KohaAdminEmailAddress"),
                 Subject => $letter->{'title'}, 
                 Message => $letter->{'content'},
                 'Content-Type' => 'text/plain; charset="utf8"',
