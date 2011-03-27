@@ -4193,6 +4193,12 @@ $DBversion = "3.03.00.039";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC',NULL,'YesNo');");
     print "Upgrade to $DBversion done (Add syspref ShowReviewer)\n";
+}
+    
+$DBversion = "3.03.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseControlNumber',0,'If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','','YesNo');");
+    print "Upgrade to $DBversion done (Add syspref UseControlNumber)\n";
     SetVersion ($DBversion);
 }
 
