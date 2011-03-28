@@ -57,6 +57,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $multihold = $input->param('multi_hold');
 $template->param(multi_hold => $multihold);
+my $showallitems = $input->param('showallitems');
 
 # get Branches and Itemtypes
 my $branches = GetBranches();
@@ -319,6 +320,7 @@ foreach my $biblionumber (@biblionumbers) {
         my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
         my $num_available = 0;
         my $num_override  = 0;
+        my $hiddencount   = 0;
         
         $biblioitem->{description} =
           $itemtypes->{ $biblioitem->{itemtype} }{description};
@@ -376,7 +378,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $item->{notforloanvalue} =
                   $notforloan_label_of->{ $item->{notforloan} };
             }
-            
+     
             # Management of lost or long overdue items
             if ( $item->{itemlost} ) {
                 
@@ -386,6 +388,10 @@ foreach my $biblionumber (@biblionumbers) {
                     : $item->{itemlost} == 2 ? "(long overdue)"
                       : "";
                 $item->{backgroundcolor} = 'other';
+                if (GetHideLostItemsPreference($borrowernumber) && !$showallitems) {
+                    $item->{hide} = 1;
+                    $hiddencount++;
+                }
             }
             
             # Check the transit status
@@ -458,6 +464,7 @@ foreach my $biblionumber (@biblionumbers) {
             $biblioloopiter{warn} = 1;
             $biblioloopiter{none_avail} = 1;
         }
+        $template->param( hiddencount => $hiddencount);
         
         push @bibitemloop, $biblioitem;
     }

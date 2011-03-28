@@ -391,6 +391,7 @@ function checkMultiHold() {
             <th>Information</th>
         </tr>
     <!-- TMPL_LOOP Name="itemloop" -->
+        <!-- TMPL_UNLESS NAME="hide"-->
         <tr class="<!-- TMPL_VAR NAME="backgroundcolor" -->">
             <td>
             <!-- TMPL_IF NAME="available" -->
@@ -458,9 +459,14 @@ function checkMultiHold() {
             <!-- /TMPL_IF -->
             </td>
         </tr>
+      <!-- /TMPL_UNLESS --> <!--UNLESS item hide-->
     <!-- /TMPL_LOOP --> <!-- itemloop -->
         </table>
-
+    <!-- TMPL_IF NAME=hiddencount -->
+        <form>
+        <p class="hiddencount"><a href="request.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&cardnumber=<!-- TMPL_VAR NAME="cardnumber" -->&showallitems=1">Show all items (<!--TMPL_VAR NAME="hiddencount" --> hidden)</a></p>
+        </form>
+    <!-- /TMPL_IF --> <!-- hiddencount -->
     <!-- /TMPL_LOOP --> <!-- bibitemloop -->
 
   <!-- TMPL_ELSE --><!-- UNLESS multi_hold -->

@@ -217,6 +217,7 @@ function verify_images() {
 
 <div id="holdings">
 <!-- TMPL_IF name="count" -->
+    <!-- TMPL_IF name="showncount" -->
         <table>
             <tr>
                 <!-- TMPL_IF NAME="item_level_itypes" --><th>Item type</th><!-- /TMPL_IF -->
@@ -364,6 +365,10 @@ function verify_images() {
                 </tr>
             <!-- /TMPL_LOOP -->
         </table>
+        <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="hiddencount" -->
+                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&showallitems=1">Show all items (<!-- TMPL_VAR NAME="hiddencount" --> hidden)</a>
+                <!-- /TMPL_IF --> 		
 		<!-- TMPL_IF NAME="debug_display" -->
 		<br /><br />
 		<table>
@@ -371,7 +376,7 @@ function verify_images() {
 			<tr><td>itemdata_copynumber</td><td><!-- TMPL_VAR NAME="itemdata_copynumber" --></td></tr>
 			<tr><td>serial</td><td><!-- TMPL_VAR NAME="serial" --></td></tr>
 		</table>
-		<!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
     <p>No physical items for this record</p>
 <!-- /TMPL_IF -->
