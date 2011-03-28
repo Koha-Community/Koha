@@ -684,8 +684,7 @@ sub CanBookBeIssued {
 
         my $branch = _GetCircControlBranch($item,$borrower);
         my $itype = ( C4::Context->preference('item-level_itypes') ) ? $item->{'itype'} : $biblioitem->{'itemtype'};
-        my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
-        $duedate = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
+        $duedate = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $itype, $branch, $borrower );
 
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
@@ -1042,8 +1041,7 @@ sub AddIssue {
           );
         unless ($datedue) {
             my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
-            my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
-            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
+            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $itype, $branch, $borrower );
 
         }
         $sth->execute(
@@ -1171,6 +1169,66 @@ sub GetLoanLength {
 
     # if no rule is set => 21 days (hardcoded)
     return 21;
+}
+
+
+=head2 GetHardDueDate
+
+  my ($hardduedate,$hardduedatecompare) = &GetHardDueDate($borrowertype,$itemtype,branchcode)
+
+Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a branch
+
+=cut
+
+sub GetHardDueDate {
+    my ( $borrowertype, $itemtype, $branchcode ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth =
+      $dbh->prepare(
+"select hardduedate, hardduedatecompare from issuingrules where categorycode=? and itemtype=? and branchcode=?"
+      );
+    $sth->execute( $borrowertype, $itemtype, $branchcode );
+    my $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( $borrowertype, "*", $branchcode );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", $itemtype, $branchcode );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", "*", $branchcode );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( $borrowertype, $itemtype, "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( $borrowertype, "*", "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", $itemtype, "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", "*", "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    # if no rule is set => return undefined
+    return (undef, undef);
 }
 
 =head2 GetIssuingRule
@@ -2197,15 +2255,12 @@ sub AddRenewal {
     unless ($datedue) {
 
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
-        my $loanlength = GetLoanLength(
-                    $borrower->{'categorycode'},
-                    (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
-			        $issuedata->{'branchcode'}  );   # that's the circ control branch.
+        my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         C4::Dates->new($issuedata->{date_due}, 'iso') :
                                         C4::Dates->new();
-        $datedue =  CalcDateDue($datedue,$loanlength,$issuedata->{'branchcode'},$borrower);
+        $datedue =  CalcDateDue($datedue,$itemtype,$issuedata->{'branchcode'},$borrower);
     }
 
     # Update the issues record to have the new due date, and a new count
@@ -2628,17 +2683,20 @@ sub UpdateHoldingbranch {
 
 =head2 CalcDateDue
 
-$newdatedue = CalcDateDue($startdate,$loanlength,$branchcode);
-this function calculates the due date given the loan length ,
+$newdatedue = CalcDateDue($startdate,$itemtype,$branchcode,$borrower);
+
+this function calculates the due date given the start date and configured circulation rules,
 checking against the holidays calendar as per the 'useDaysMode' syspref.
 C<$startdate>   = C4::Dates object representing start date of loan period (assumed to be today)
+C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
-C<$loanlength>  = loan length prior to adjustment
+C<$borrower> = Borrower object
 =cut
 
 sub CalcDateDue { 
-	my ($startdate,$loanlength,$branch,$borrower) = @_;
+	my ($startdate,$itemtype,$branch,$borrower) = @_;
 	my $datedue;
+        my $loanlength = GetLoanLength($borrower->{'categorycode'},$itemtype, $branch);
 
 	if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
 		my $timedue = time + ($loanlength) * 86400;
@@ -2650,19 +2708,27 @@ sub CalcDateDue {
 		$datedue = $calendar->addDate($startdate, $loanlength);
 	}
 
+	# if Hard Due Dates are used, retreive them and apply as necessary
+        my ($hardduedate, $hardduedatecompare) = GetHardDueDate($borrower->{'categorycode'},$itemtype, $branch);
+	if ( $hardduedate->output('iso') && $hardduedate->output('iso') ne '0000-00-00') {
+            # if the calculated due date is after the 'before' Hard Due Date (ceiling), override
+            if ( $datedue->output( 'iso' ) gt $hardduedate->output( 'iso' ) && $hardduedatecompare == -1) {
+                $datedue = $hardduedate;
+            # if the calculated date is before the 'after' Hard Due Date (floor), override
+            } elsif ( $datedue->output( 'iso' ) lt $hardduedate->output( 'iso' ) && $hardduedatecompare == 1) {
+                $datedue = $hardduedate;               
+            # if the hard due date is set to 'exactly', overrride
+            } elsif ( $hardduedatecompare == 0) {
+                $datedue = $hardduedate;
+            }
+            # in all other cases, keep the date due as it is
+	}
+
 	# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
 	if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
 	    $datedue = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
 	}
 
-	# if ceilingDueDate ON the datedue can't be after the ceiling date
-	if ( C4::Context->preference('ceilingDueDate')
-             && ( C4::Context->preference('ceilingDueDate') =~ C4::Dates->regexp('syspref') ) ) {
-            my $ceilingDate = C4::Dates->new( C4::Context->preference('ceilingDueDate') );
-            if ( $datedue->output( 'iso' ) gt $ceilingDate->output( 'iso' ) ) {
-                $datedue = $ceilingDate;
-            }
-	}
 
 	return $datedue;
 }

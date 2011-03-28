@@ -37,6 +37,7 @@ use Getopt::Long;
 # Koha modules
 use C4::Context;
 use C4::Installer;
+use C4::Dates;
 
 use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
@@ -4145,6 +4146,23 @@ $DBversion = '3.03.00.034';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `categories` ADD `hidelostitems` tinyint(1) NOT NULL default '0' AFTER `reservefee`");
     print "Upgrade to $DBversion done (Add hidelostitems preference to borrower categories)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `issuingrules` ADD hardduedate date default NULL AFTER issuelength");
+    $dbh->do("ALTER TABLE `issuingrules` ADD hardduedatecompare tinyint NOT NULL default 0 AFTER hardduedate");
+    my $duedate;
+    if (C4::Context->preference("globalDueDate")) {
+      $duedate = C4::Dates::format_date_in_iso(C4::Context->preference("globalDueDate"));
+      $dbh->do("UPDATE `issuingrules` SET hardduedate = '$duedate', hardduedatecompare = 0");
+    } elsif (C4::Context->preference("ceilingDueDate")) {
+      $duedate = C4::Dates::format_date_in_iso(C4::Context->preference("ceilingDueDate"));
+      $dbh->do("UPDATE `issuingrules` SET hardduedate = '$duedate', hardduedatecompare = -1");
+    }
+    $dbh->do("DELETE FROM `systempreferences` WHERE variable = 'globalDueDate' OR variable = 'ceilingDueDate'");
+    print "Upgrade to $DBversion done (Move global and ceiling due dates to Circ Rules level)\n";
     SetVersion ($DBversion);
 }
 

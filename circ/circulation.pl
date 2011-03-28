@@ -136,11 +136,8 @@ if ( $barcode ) {
     }
 }
 
-my ($datedue,$invalidduedate,$globalduedate);
+my ($datedue,$invalidduedate);
 
-if(C4::Context->preference('globalDueDate') && (C4::Context->preference('globalDueDate') =~ C4::Dates->regexp('syspref'))){
-        $globalduedate = C4::Dates->new(C4::Context->preference('globalDueDate'));
-}
 my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
 if($duedatespec_allow){
     if ($duedatespec) {
@@ -157,16 +154,7 @@ if($duedatespec_allow){
             $invalidduedate = 1;
             $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
         }
-    } else {
-        # pass global due date to tmpl if specifyduedate is true 
-        # and we have no barcode (loading circ page but not checking out)
-        if($globalduedate &&  ! $barcode ){
-            $duedatespec = $globalduedate->output();
-            $stickyduedate = 1;
-        }
     }
-} else {
-    $datedue = $globalduedate if ($globalduedate);
 }
 
 my $todaysdate = C4::Dates->new->output('iso');
@@ -311,10 +299,6 @@ if ($barcode) {
         unless($confirm_required) {
             AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
             $inprocess = 1;
-            if($globalduedate && ! $stickyduedate && $duedatespec_allow ){
-                $duedatespec = $globalduedate->output();
-                $stickyduedate = 1;
-            }
         }
     }
     
