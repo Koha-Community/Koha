@@ -63,13 +63,9 @@ function update_child() {
 	
 		var moremenu = [
 			{ text: _("Renew Patron"),  onclick: { fn: confirm_reregistration } },
-            { text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]"
-                [% IF ( CAN_user_permissions ) %][% IF ( StaffMember ) %]
-                    [% UNLESS ( CAN_user_staffaccess ) %], disabled: true[% END %]
-                    [% ELSE %][% END %]
-                [% ELSE %], disabled: true[% END %]},
-            { text: _("Delete"), [% IF ( StaffMember ) %][% UNLESS ( CAN_user_staffaccess ) %]disabled: true, [% END %][% ELSE %][% UNLESS ( CAN_user_borrowers ) %]disabled: true, [% END %][% END %] onclick: { fn: confirm_deletion } },
-			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }[% UNLESS ( is_child ) %], disabled: true[% END %]}
+			{ text: _("Set Permissions"), url: "/cgi-bin/koha/members/member-flags.pl?member=[% borrowernumber %]"[% UNLESS CAN_user_permissions %], disabled: true[% END %]},
+            { text: _("Delete"), [% UNLESS CAN_user_borrowers %]disabled: true, [% END %] onclick: { fn: confirm_deletion } },
+			{ text: _("Update Child to Adult Patron") , onclick: { fn: update_child }[% UNLESS is_child %], disabled: true[% END %]}
 		];
 
 	    new YAHOO.widget.Button({
@@ -97,23 +93,10 @@ function update_child() {
 	    [% IF ( adultborrower ) %]new YAHOO.widget.Button("addchild");[% END %]
 	    new YAHOO.widget.Button("editpatron");
 	    new YAHOO.widget.Button("addnote");
-        [% IF ( StaffMember ) %][% IF ( CAN_user_staffaccess ) %] new YAHOO.widget.Button("changepassword");  [% END %]
-            [% ELSE %] new YAHOO.widget.Button("changepassword"); [% END %]
+        [% IF CAN_user_staffaccess %] new YAHOO.widget.Button("changepassword");  [% END %]
 	    new YAHOO.widget.Button("duplicate");
 	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
-	    new YAHOO.widget.Button("renewpatron");
-        [% IF ( CAN_user_permissions ) %]
-          [% IF ( StaffMember ) %]
-            [% IF ( CAN_user_staffaccess ) %]
-              new YAHOO.widget.Button("patronflags");
-            [% END %]
-          [% ELSE %]
-          new YAHOO.widget.Button("patronflags");
-          [% END %]
-        [% END %]
-        [% IF ( StaffMember ) %][% UNLESS ( CAN_user_staffaccess ) %]new YAHOO.widget.Button("deletepatron");[% END %]
-            [% ELSE %]new YAHOO.widget.Button("deletepatron");[% END %]
 	}
 
 	//]]>
@@ -135,11 +118,10 @@ function update_child() {
         [% END %]
 	[% END %]
 	[% IF ( CAN_user_borrowers ) %]
-	[% IF ( adultborrower ) %]<li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]&amp;category_type=C">Add child</a></li>[% END %]
-[% IF ( StaffMember ) %][% IF ( CAN_user_staffaccess ) %] <li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change Password</a></li>[% END %]
-          [% ELSE %] <li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change Password</a></li>[% END %]	
-	  [% END %]
-	<li><a id="duplicate" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;category_type=[% category_type %]">Duplicate</a></li>
+        [% IF ( adultborrower ) %]<li><a id="addchild" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% borrowernumber %]&amp;category_type=C">Add child</a></li>[% END %]
+        [% IF ( CAN_user_staffaccess ) %] <li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Change Password</a></li>[% END %]
+    [% END %]
+    <li><a id="duplicate" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;category_type=[% category_type %]">Duplicate</a></li>
 	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]&amp;print=slip">Print Slip</a></li>
 	<li id="searchtoholdc"><a id="searchtohold" href="#">Search to hold</a></li>
