@@ -568,7 +568,7 @@ sub ModBasketgroup {
     my $dbh = C4::Context->dbh;
     my $query = "UPDATE aqbasketgroups SET ";
     my @params;
-    foreach my $field (qw(name billingplace deliveryplace deliverycomment closed)) {
+    foreach my $field (qw(name billingplace deliveryplace freedeliveryplace deliverycomment closed)) {
         if ( defined $basketgroupinfo->{$field} ) {
             $query .= "$field=?, ";
             push(@params, $basketgroupinfo->{$field});
