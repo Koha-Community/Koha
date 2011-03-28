@@ -363,10 +363,10 @@ sub getRecords {
                 $sort_by .= "1=9003 >i ";
             }
             elsif ( $sort eq "call_number_asc" ) {
-                $sort_by .= "1=20  <i ";
+                $sort_by .= "1=8007  <i ";
             }
             elsif ( $sort eq "call_number_dsc" ) {
-                $sort_by .= "1=20 >i ";
+                $sort_by .= "1=8007 >i ";
             }
             elsif ( $sort eq "pubdate_asc" ) {
                 $sort_by .= "1=31 <i ";
