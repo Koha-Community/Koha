@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -101,7 +102,7 @@ my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
+my @subscriptions       = GetSubscriptions( undef, undef, $biblionumber );
 
 my @subs;
 $dat->{'serial'}=1 if $subscriptionsnumber;

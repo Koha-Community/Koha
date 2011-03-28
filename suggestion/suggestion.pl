@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 # This file is part of Koha.
+# Copyright 2006-2010 BibLibre
+
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software

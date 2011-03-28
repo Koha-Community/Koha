@@ -150,7 +150,19 @@ $(document).ready(function(){
     <input type="hidden" name="runinbackground" value="" />
     <input type="hidden" name="completedJobID" value="" />
     <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
-    <fieldset class="action"><input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" onclick="return submitBackgroundJob(this.form);" /></fieldset>
+    <fieldset class="action">
+    <input type="submit" class="button" name="mainformsubmit" value="Import this batch into the catalog" onclick="return submitBackgroundJob(this.form);" />
+    <br/>
+    Add new bibliographic records into this framework:
+    <select name="framework" id="frameworks">
+      <option value="">Default</option>
+      <!-- TMPL_LOOP NAME="frameworks" -->
+      <option value="<!-- TMPL_VAR NAME="value"-->" <!-- TMPL_VAR NAME="selected" -->>
+      <!-- TMPL_VAR NAME="label" -->
+      </option>
+      <!-- /TMPL_LOOP -->
+    </select>
+    </fieldset>
   </form>
   <div id="jobpanel"><div id="jobstatus">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
      <div id="jobfailed"></div></div>

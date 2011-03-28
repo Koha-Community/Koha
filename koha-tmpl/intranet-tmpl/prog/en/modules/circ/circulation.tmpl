@@ -9,6 +9,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
 //<![CDATA[
+if($.cookie("holdfor") != <!-- TMPL_VAR NAME="borrowernumber" -->){ $.cookie("holdfor",null, { path: "/", expires: 0 }); }
 <!-- TMPL_IF NAME="UseTablesortForCirc" -->$.tablesorter.addParser({
     id: 'articles',
     is: function(s) {return false;  },
@@ -303,7 +304,7 @@ function refocus(calendar) {
             <li>The barcode was not found <!-- TMPL_VAR NAME="barcode" --></li>
 	    <!-- TMPL_IF NAME="fast_cataloging" -->
 	        <!-- TMPL_IF NAME="CAN_user_editcatalogue_fast_cataloging" -->
-                    <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a></li>
+                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a>
 		<!-- /TMPL_IF -->
 	    <!-- /TMPL_IF -->
         <!-- /TMPL_IF -->

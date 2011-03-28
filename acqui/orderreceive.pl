@@ -69,7 +69,7 @@ use C4::Acquisition;
 use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Members;
 use C4::Branch;    # GetBranches
 use C4::Items;

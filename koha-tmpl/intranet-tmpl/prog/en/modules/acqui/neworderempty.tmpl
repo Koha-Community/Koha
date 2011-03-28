@@ -143,7 +143,7 @@ ff.submit();
         <input type="hidden" name="biblioitemnumber" value="<!-- TMPL_VAR NAME="biblioitemnumber" -->" />
         <input type="hidden" name="discount" value="<!-- TMPL_VAR NAME="discount" -->" />
         <input type="hidden" name="listinc" value="<!-- TMPL_VAR NAME="listincgst" -->" />
-        <input type="hidden" name="currency" value="<!-- TMPL_VAR NAME="currency" -->" />
+<!--        <input type="hidden" name="currency" value="<!-- TMPL_VAR NAME="currency" -->" />-->
         <input type="hidden" name="applygst" value="<!-- TMPL_VAR NAME="gstreg" -->" />
         <input type="hidden" name="invoiceincgst" value="<!-- TMPL_VAR NAME="invoiceincgst" -->" />
         <input type="hidden" name="gstrate" value="<!-- TMPL_VAR NAME="gstrate" -->" />
@@ -151,7 +151,7 @@ ff.submit();
         <input type="hidden" name="import_batch_id" value="<!-- TMPL_VAR name="import_batch_id" -->" />
 
         <!-- TMPL_LOOP NAME="loop_currencies" -->
-            <input type="hidden" name="<!-- TMPL_VAR NAME="currency" -->" value="<!-- TMPL_VAR NAME="rate" -->" />
+            <input type="hidden" id="<!-- TMPL_VAR NAME="currcode" -->"  name="<!-- TMPL_VAR NAME="currcode" -->" value="<!-- TMPL_VAR NAME="rate" -->" />
         <!-- /TMPL_LOOP -->
         <ol><li>
             <!-- TMPL_IF name="biblionumber" -->
@@ -264,10 +264,10 @@ ff.submit();
             </li>
             <li>
                 <!-- TMPL_IF name="close" -->
-            <span class="label">Budget: </span>
+            <span class="label">Fund: </span>
                     <input type="hidden" size="20" name="budget_id" id="budget_id" value="<!-- TMPL_VAR NAME="budget_id" -->" /><!-- TMPL_VAR NAME="Budget_name" -->
                 <!-- TMPL_ELSE -->
-                <label for="budget_id">Budget: </label>
+                <label for="budget_id">Fund: </label>
                 <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
                 <!-- TMPL_LOOP NAME="budget_loop" -->
                     <!-- TMPL_IF NAME="b_sel" -->
@@ -279,14 +279,25 @@ ff.submit();
                 </select>
                 <!--/TMPL_IF-->
             </li>
+		<li>
+                <!-- TMPL_IF name="close" -->
+			<span class="label">Currency: </span>
+			<input type="hidden" size="10" name="currency" id="currency" value="<!-- TMPL_VAR NAME="currency" -->" /><!-- TMPL_VAR NAME="currency" -->
+                <!-- TMPL_ELSE -->
+			<label for="currency">Currency:</label>
+			<select name="currency" id="currency" onchange="calcNeworderTotal();">
+			<!-- TMPL_LOOP name="loop_currencies" -->
+	                <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR name="currcode" -->" selected="selected"><!-- TMPL_VAR name="currcode" --></option><!-- TMPL_ELSE --><option value="<!-- TMPL_VAR name="currcode" -->"><!-- TMPL_VAR name="currcode" --></option><!-- /TMPL_IF --><!-- /TMPL_LOOP -->
+			</select>
+		<!-- /TMPL_IF-->
+                </li>
             <li>
                 <!-- TMPL_IF name="close" -->
             <span class="label">Vendor price: </span>
                     <input type="hidden" size="20" name="listprice" id="listprice" value="<!-- TMPL_VAR NAME="listprice" -->" /><!-- TMPL_VAR NAME="listprice" -->
                 <!-- TMPL_ELSE -->
                 <label for="listprice">Vendor price: </label>
-                    <input type="text" size="20" name="listprice" id="listprice" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="calcNeworderTotal()" /> (entered as <!-- TMPL_VAR NAME="currency" -->)
-
+                    <input type="text" size="20" name="listprice" id="listprice" value="<!-- TMPL_VAR NAME="listprice" -->" onchange="calcNeworderTotal()" />
                 <!--/TMPL_IF-->
             </li>
             <!-- TMPL_UNLESS NAME="close" -->

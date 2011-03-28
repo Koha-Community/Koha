@@ -2,7 +2,7 @@
 
 # Copyright 2000-2002 Katipo Communications
 #           2006 SAN-OP
-#           2007 BibLibre, Paul POULAIN
+#           2007-2010 BibLibre, Paul POULAIN
 #
 # This file is part of Koha.
 #
@@ -242,10 +242,12 @@ if ($barcode) {
         $input{return_overdue} = 1 if ($duedate and $duedate lt $today->output('iso'));
         push( @inputloop, \%input );
 
-        my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrower->{'borrowernumber'} );
-        if ($fines) {
-            $template->param( fines => sprintf("%.2f",$fines) );
-            $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
+        if ( C4::Context->preference("FineNotifyAtCheckin") ) {
+            my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrower->{'borrowernumber'} );
+            if ($fines > 0) {
+                $template->param( fines => sprintf("%.2f",$fines) );
+                $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
+            }
         }
 
     }

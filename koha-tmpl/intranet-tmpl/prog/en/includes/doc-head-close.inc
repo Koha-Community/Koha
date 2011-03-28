@@ -1,5 +1,5 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="<!-- TMPL_IF NAME="IntranetFavicon" --><!-- TMPL_VAR NAME="IntranetFavicon" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico<!-- /TMPL_IF -->" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/ui.tabs.css" />
 <link rel="stylesheet" type="text/css" media="print" href="<!-- TMPL_VAR name="themelang" -->/css/print.css" />
 <!-- TMPL_IF name="intranetstylesheet" -->
@@ -30,6 +30,7 @@
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ui.tabs.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.hotkeys.min.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.cookie.min.js"></script>
 <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
 
 <!-- TMPL_IF NAME="js_libs" -->

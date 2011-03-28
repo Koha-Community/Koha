@@ -240,9 +240,11 @@ sub _get_brief_messaging_prefs {
         my $pref = C4::Members::Messaging::GetMessagingPreferences( { categorycode => $categorycode,
                                                                     message_name       => $option->{'message_name'} } );
         next unless  $pref->{'transports'};
-        my $brief_pref = { message_attribute_id => $option->{'message_attribute_id'},
-                           message_name => $option->{'message_name'},
-                         };
+        my $brief_pref = {
+            message_attribute_id    => $option->{'message_attribute_id'},
+            message_name            => $option->{'message_name'},
+            $option->{'message_name'} => 1
+        };
         foreach my $transport ( @{$pref->{'transports'}} ) {
             push @{ $brief_pref->{'transports'} }, { transport => $transport };
         }

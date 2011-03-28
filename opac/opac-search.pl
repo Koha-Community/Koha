@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2008 Garry Collum and the Koha Koha Development team
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -139,10 +140,9 @@ if (C4::Context->preference('TagsEnabled')) {
 #}
 
 # load the branches
-my $mybranch = ( C4::Context->preference('SearchMyLibraryFirst') && C4::Context->userenv && C4::Context->userenv->{branch} ) ? C4::Context->userenv->{branch} : '';
+
 my $branches = GetBranches();   # used later in *getRecords, probably should be internalized by those functions after caching in C4::Branch is established
 $template->param(
-    branchloop       => GetBranchesLoop($mybranch, 0),
     searchdomainloop => GetBranchCategories(undef,'searchdomain'),
 );
 
@@ -628,6 +628,7 @@ $template->param(
             total => $total,
             opacfacets => 1,
             facets_loop => $facets,
+	    displayFacetCount=> C4::Context->preference('displayFacetCount')||0,
             scan => $scan,
             search_error => $error,
 );

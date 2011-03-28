@@ -309,6 +309,7 @@ sub getRecords {
     my $facets_counter = ();
     my $facets_info    = ();
     my $facets         = getFacets();
+    my $facets_maxrecs = C4::Context->preference('maxRecordsForFacets')||20;
 
     my @facets_loop;    # stores the ref to array of hashes for template facets loop
 
@@ -418,7 +419,6 @@ sub getRecords {
                 for ( my $j = $offset ; $j < $times ; $j++ ) {
                     my $records_hash;
                     my $record;
-                    my $facet_record;
 
                     ## Check if it's an index scan
                     if ($scan) {
@@ -451,33 +451,55 @@ sub getRecords {
 
                         # warn "RECORD $j:".$record;
                         $results_hash->{'RECORDS'}[$j] = $record;
-
-            # Fill the facets while we're looping, but only for the biblioserver
-                        $facet_record = MARC::Record->new_from_usmarc($record)
-                          if $servers[ $i - 1 ] =~ /biblioserver/;
-
-                    #warn $servers[$i-1]."\n".$record; #.$facet_record->title();
-                        if ($facet_record) {
-                            for ( my $k = 0 ; $k <= @$facets ; $k++ ) {
-                                ($facets->[$k]) or next;
-                                my @fields = map {$facet_record->field($_)} @{$facets->[$k]->{'tags'}} ;
-                                for my $field (@fields) {
-                                    my @subfields = $field->subfields();
-                                    for my $subfield (@subfields) {
-                                        my ( $code, $data ) = @$subfield;
-                                        ($code eq $facets->[$k]->{'subfield'}) or next;
-                                        $facets_counter->{ $facets->[$k]->{'link_value'} }->{$data}++;
-                                    }
-                                }
-                                $facets_info->{ $facets->[$k]->{'link_value'} }->{'label_value'} =
-                                    $facets->[$k]->{'label_value'};
-                                $facets_info->{ $facets->[$k]->{'link_value'} }->{'expanded'} =
-                                    $facets->[$k]->{'expanded'};
-                            }
-                        }
                     }
+
                 }
                 $results_hashref->{ $servers[ $i - 1 ] } = $results_hash;
+
+                # Fill the facets while we're looping, but only for the biblioserver and not for a scan
+                if ( !$scan && $servers[ $i - 1 ] =~ /biblioserver/ ) {
+
+                    my $jmax = $size>$facets_maxrecs? $facets_maxrecs: $size;
+
+                    for ( my $k = 0 ; $k <= @$facets ; $k++ ) {
+                        ($facets->[$k]) or next;
+                        my @fcodes = @{$facets->[$k]->{'tags'}};
+                        my $sfcode = $facets->[$k]->{'subfield'};
+
+		                for ( my $j = 0 ; $j < $jmax ; $j++ ) {
+		                    my $render_record = $results[ $i - 1 ]->record($j)->render();
+                            my @used_datas = ();
+
+                            foreach my $fcode (@fcodes) {
+
+                                # avoid first line
+                                my $field_pattern = '\n'.$fcode.' ([^\n]+)';
+                                my @field_tokens = ( $render_record =~ /$field_pattern/g ) ;
+
+                                foreach my $field_token (@field_tokens) {
+                                    my $subfield_pattern = '\$'.$sfcode.' ([^\$]+)';
+                                    my @subfield_values = ( $field_token =~ /$subfield_pattern/g );
+
+                                    foreach my $subfield_value (@subfield_values) {
+
+                                        my $data = $subfield_value;
+                                        $data =~ s/^\s+//; # trim left
+                                        $data =~ s/\s+$//; # trim right
+
+                                        unless ( $data ~~ @used_datas ) {
+                                            $facets_counter->{ $facets->[$k]->{'link_value'} }->{$data}++;
+                                            push @used_datas, $data;
+                                        }
+                                    } # subfields
+                                } # fields
+                            } # field codes
+                        } # records
+
+                        $facets_info->{ $facets->[$k]->{'link_value'} }->{'label_value'} = $facets->[$k]->{'label_value'};
+                        $facets_info->{ $facets->[$k]->{'link_value'} }->{'expanded'} = $facets->[$k]->{'expanded'};
+                    } # facets
+                }
+                # End PROGILONE
             }
 
             # warn "connection ", $i-1, ": $size hits";
@@ -511,9 +533,11 @@ sub getRecords {
 
                             # fix the length that will display in the label,
                             my $facet_label_value = $one_facet;
+                            my $facet_max_length =
+                                C4::Context->preference('FacetLabelTruncationLength') || 20;
                             $facet_label_value =
-                              substr( $one_facet, 0, 20 ) . "..."
-                              unless length($facet_label_value) <= 20;
+                              substr( $one_facet, 0, $facet_max_length ) . "..."
+                                if length($facet_label_value) > $facet_max_length;
 
                             # if it's a branch, label by the name, not the code,
                             if ( $link_value =~ /branch/ ) {
@@ -855,7 +879,9 @@ sub getIndexes{
                     'id-other',
                     'Illustration-code',
                     'ISBN',
+                    'isbn',
                     'ISSN',
+                    'issn',
                     'itemtype',
                     'kw',
                     'Koha-Auth-Number',
@@ -874,12 +900,14 @@ sub getIndexes{
                     'mc-itemtype',
                     'mc-rtype',
                     'mus',
+                    'name',
                     'Name-geographic',
                     'Name-geographic-heading',
                     'Name-geographic-see',
                     'Name-geographic-seealso',
                     'nb',
                     'Note',
+                    'notes',
                     'ns',
                     'nt',
                     'pb',
@@ -1276,7 +1304,14 @@ sub buildQuery {
         # group_OR_limits, prefixed by mc-
         # OR every member of the group
         elsif ( $this_limit =~ /mc/ ) {
-#        if ( $this_limit =~ /mc/ ) {
+        
+            if ( $this_limit =~ /mc-ccode:/ ) {
+                # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
+                $this_limit =~ tr/"//d;
+                my ($k,$v) = split(/:/, $this_limit,2);
+                $this_limit = $k.":\"".$v."\"";
+            }
+
             $group_OR_limits .= " or " if $group_OR_limits;
             $limit_desc      .= " or " if $group_OR_limits;
             $group_OR_limits .= "$this_limit";
@@ -1445,7 +1480,7 @@ sub searchResults {
         $oldbiblio->{result_number} = $i + 1;
 
         # add imageurl to itemtype if there is one
-        $oldbiblio->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
+        $oldbiblio->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
         $oldbiblio->{'authorised_value_images'}  = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) );
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
@@ -1566,7 +1601,7 @@ sub searchResults {
 				$onloan_items->{$key}->{branchname} = $item->{branchname};
 				$onloan_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 				$onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
-				$onloan_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+				$onloan_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
                     $onloan_items->{$prefix}->{longoverdue}++;
@@ -1639,7 +1674,7 @@ sub searchResults {
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
 					$other_items->{$key}->{count}++ if $item->{$hbranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
-					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
                 # item is available
                 else {
@@ -1650,7 +1685,7 @@ sub searchResults {
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
 					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
-					$available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+					$available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
             }
         }    # notforloan, item level and biblioitem level
@@ -1680,12 +1715,17 @@ sub searchResults {
             # FIXME note that XSLTResultsDisplay (use of XSLT to format staff interface bib search results)
             # is not implemented yet
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results', 
-                                                                $search_context);
+                                                                $search_context, 1);
+                # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
+
         }
 
-        # last check for norequest : if itemtype is notforloan, it can't be reserved either, whatever the items
-        $can_place_holds = 0
-          if $itemtypes{ $oldbiblio->{itemtype} }->{notforloan};
+        # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
+        if (!C4::Context->preference("item-level_itypes")) {
+            if ($itemtypes{ $oldbiblio->{itemtype} }->{notforloan}) {
+                $can_place_holds = 0;
+            }
+        }
         $oldbiblio->{norequests} = 1 unless $can_place_holds;
         $oldbiblio->{itemsplural}          = 1 if $items_count > 1;
         $oldbiblio->{items_count}          = $items_count;

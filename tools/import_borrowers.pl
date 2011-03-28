@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
-# Copyright 2007 Liblime Ltd
+# Copyright 2007 Liblime
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

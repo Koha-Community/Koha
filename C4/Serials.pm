@@ -1481,9 +1481,9 @@ sub ItemizeSerials {
     my $fwk = GetFrameworkCode( $data->{'biblionumber'} );
     if ( $info->{barcode} ) {
         my @errors;
-        my $exists = itemdata( $info->{'barcode'} );
-        push @errors, "barcode_not_unique" if ($exists);
-        unless ($exists) {
+        if ( is_barcode_in_use( $info->{barcode} ) ) {
+            push @errors, 'barcode_not_unique';
+        } else {
             my $marcrecord = MARC::Record->new();
             my ( $tag, $subfield ) = GetMarcFromKohaField( "items.barcode", $fwk );
             my $newField = MARC::Field->new( "$tag", '', '', "$subfield" => $info->{barcode} );
@@ -2338,29 +2338,24 @@ sub GetNextDate(@) {
     return "$resultdate";
 }
 
-=head2 itemdata
+=head2 is_barcode_in_use
 
-  $item = itemdata($barcode);
-
-Looks up the item with the given barcode, and returns a
-reference-to-hash containing information about that item. The keys of
-the hash are the fields from the C<items> and C<biblioitems> tables in
-the Koha database.
+Returns number of occurence of the barcode in the items table
+Can be used as a boolean test of whether the barcode has
+been deployed as yet
 
 =cut
 
-#'
-sub itemdata {
-    my ($barcode) = @_;
+sub is_barcode_in_use {
+    my $barcode = shift;
     my $dbh       = C4::Context->dbh;
-    my $sth       = $dbh->prepare(
-        "Select * from items LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber 
-        WHERE barcode=?"
+    my $occurences = $dbh->selectall_arrayref(
+        'SELECT itemnumber from items where barcode = ?',
+        {}, $barcode
+
     );
-    $sth->execute($barcode);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
+
+    return @{$occurences};
 }
 
 1;

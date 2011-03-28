@@ -29,7 +29,7 @@ use CGI;
 use C4::Acquisition;
 use C4::Budgets;
 
-use C4::Bookseller;
+use C4::Bookseller qw( GetBookSellerFromId);
 use C4::Dates qw/format_date/;
 use C4::Debug;
 
@@ -217,6 +217,10 @@ if ( $op eq 'delete_confirm' ) {
       "loggedinuser: $loggedinuser; creationdate: %s; authorisedby: %s",
       $basket->{creationdate}, $basket->{authorisedby};
 
+	#to get active currency
+	my $cur = GetCurrency();
+
+
     my @results = GetOrders( $basketno );
     
 	my $gist = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
@@ -310,7 +314,8 @@ if ( $op eq 'delete_confirm' ) {
         gist_rrp             => sprintf( "%.2f", $gist_rrp ),        
         total_rrp_gsti       => sprintf( "%.2f", $total_rrp_gsti ),
         total_est_gsti       => sprintf( "%.2f", $total_est_gsti ),
-        currency             => $bookseller->{'listprice'},
+#        currency             => $bookseller->{'listprice'},
+	currency		=> $cur->{'currency'},
         qty_total            => $qty_total,
         GST                  => $gist,
         basketgroups         => $basketgroups,

@@ -1,6 +1,7 @@
 package C4::Biblio;
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -249,6 +250,7 @@ sub AddBiblio {
     my $dbh = C4::Context->dbh;
 
     # transform the data into koha-table style data
+    SetUTF8Flag($record);
     my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
     ( $biblionumber, $error ) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
@@ -293,6 +295,7 @@ sub ModBiblio {
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "BEFORE=>" . $newrecord->as_formatted );
     }
 
+    SetUTF8Flag($record);
     my $dbh = C4::Context->dbh;
 
     $frameworkcode = "" unless $frameworkcode;
@@ -317,10 +320,15 @@ sub ModBiblio {
     foreach my $fielditem (@fields) {
         my $field;
         foreach ( $fielditem->subfields() ) {
+            # re-encode the subfield only if it isn't already in utf-8.
+            my ($tag, $value) = @$_;
+            $tag = Encode::encode('utf-8', $tag) unless utf8::is_utf8($tag);
+            $value = Encode::encode('utf-8', $value) unless utf8::is_utf8($value);
+
             if ($field) {
-                $field->add_subfields( Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
+                $field->add_subfields( $tag => $value );
             } else {
-                $field = MARC::Field->new( "$itemtag", '', '', Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
+                $field = MARC::Field->new( "$itemtag", '', '', $tag => $value );
             }
         }
         $record->append_fields($field);
@@ -755,7 +763,7 @@ sub GetISBDView {
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
     my $tagslib = &GetMarcStructure( 1, $itemtype );
 
-    my $ISBD = C4::Context->preference('ISBD');
+    my $ISBD = C4::Context->preference('isbd');
     my $bloc = $ISBD;
     my $res;
     my $blocres;
@@ -1390,6 +1398,8 @@ sub GetMarcSubjects {
     my $subfield = "";
     my $marcsubject;
 
+    my $subject_limit = C4::Context->preference("TraceCompleteSubfields") ? 'su,complete-subfield' : 'su';
+
     foreach my $field ( $record->field('6..') ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
         my @subfields_loop;
@@ -1416,7 +1426,7 @@ sub GetMarcSubjects {
                 @link_loop = ( { 'limit' => 'an', link => "$linkvalue" } );
             }
             if ( not $found9 ) {
-                push @link_loop, { 'limit' => 'su', link => $linkvalue, operator => $operator };
+                push @link_loop, { 'limit' => $subject_limit, link => $linkvalue, operator => $operator };
             }
             my $separator = C4::Context->preference("authoritysep") unless $counter == 0;
 
@@ -1610,7 +1620,7 @@ sub GetMarcSeries {
             if ($volume_number) {
                 push @subfields_loop, { volumenum => $value };
             } else {
-                push @subfields_loop, { code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number };
+                push @subfields_loop, { code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number } unless ( $series_subfield->[0] eq '9' );
             }
             $counter++;
         }
@@ -2285,6 +2295,14 @@ sub PrepareItemrecordDisplay {
                     my $temp = $itemrecord->field($subfield) if ($itemrecord);
                     unless ($temp) {
                         $defaultvalue = $defaultvalues->{branchcode} if $defaultvalues;
+                    }
+                }
+                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.location' )
+                    && $defaultvalues
+                    && $defaultvalues->{'location'} ) {
+                    my $temp = $itemrecord->field($subfield) if ($itemrecord);
+                    unless ($temp) {
+                        $defaultvalue = $defaultvalues->{location} if $defaultvalues;
                     }
                 }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {

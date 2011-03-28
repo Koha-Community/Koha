@@ -10,7 +10,7 @@ plan skip_all => "Test::Class required for performing database tests" if $@;
 
 use C4::Auth;
 use C4::Biblio;
-use C4::Bookseller;
+use C4::Bookseller qw( AddBookseller );
 use C4::Context;
 use C4::Items;
 use C4::Members;

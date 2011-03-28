@@ -645,11 +645,14 @@ function calcNeworderTotal(){
     var quantity = new Number(f.quantity.value);
     var discount = new Number(f.discount.value);
     var listinc  = new Number (f.listinc.value);
-    var currency = f.currency.value;
+    //var currency = f.currency.value;
     var applygst = new Number (f.applygst.value);
     var listprice   =  new Number(f.listprice.value);
     var invoiceingst =  new Number (f.invoiceincgst.value);
-    var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
+//    var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
+        var currcode = new String(document.getElementById('currency').value);
+	var exchangerate =  new Number(document.getElementById(currcode).value);
+
     var gst_on=(!listinc && invoiceingst);
 
     //do real stuff

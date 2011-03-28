@@ -61,6 +61,12 @@ Circulation:
               class: integer
             - last returned items on the checkin screen.
         -
+            - pref: FineNotifyAtCheckin
+              choices:
+                  yes: Notify
+                  no: "Don't notify"
+            - librarians of overdue fines on the items they are checking in.
+        -
             - pref: FilterBeforeOverdueReport
               choices:
                   yes: Require
@@ -265,6 +271,12 @@ Circulation:
                   yes: Allow
                   no: "Don't allow (with independent branches)"
             - a user from one library to place a hold on an item from another library
+        -
+            - pref: OPACAllowUserToChooseBranch
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - a user to choose the branch to pick up a hold from.
         -
             - pref: ReservesNeedReturns
               choices:

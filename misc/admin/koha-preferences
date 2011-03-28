@@ -1,0 +1,324 @@
+#!/usr/bin/perl
+#
+# Copyright 2010 Jesse Weaver, Koha Dev Team
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+#
+
+use C4::Boolean;
+use C4::Context;
+use C4::Debug;
+use C4::Log;
+use Getopt::Long;
+use Pod::Usage;
+use YAML::Syck qw();
+$YAML::Syck::ImplicitTyping = 1;
+$YAML::Syck::SortKeys = 1;
+our %NOT_SET_PREFS = map { $_, 1 } qw( Version );
+
+=head1 NAME
+
+koha-preferences - Get, set, dump and load Koha system preferences
+
+=head1 SYNOPSIS
+
+misc/admin/koha-preferences COMMAND ...
+
+=cut
+
+sub print_usage {
+    my ( $annoyed ) = @_;
+
+    if ( $annoyed ) {
+        pod2usage( -verbose => 1, -exitval => 1, -output => \*STDERR );
+    } else {
+        pod2usage( -verbose => 1, -exitval => 0 );
+    }
+}
+
+sub _debug {
+    my ( $message ) = @_;
+
+    print STDERR $message . "\n" if ( $C4::Debug::debug );
+}
+
+sub _normalize_value {
+    my ($row) = @_;
+
+    # AFAIK, there are no sysprefs where NULL has a different meaning than ''.
+    return ( $row->{'value'} || '' ) unless ( $row->{'type'} eq 'YesNo' );
+
+    #
+    # In theory, YesNo sysprefs should always contain 1/0.
+    # In practice, however, they don't.
+    # - Yogi Berra
+    #
+    my $bool_value = eval {
+        return C4::Boolean::true_p( $row->{'value'} ) ? 1 : 0;
+    };
+    if ( $@ ) {
+        return 0;
+    } else {
+        return $bool_value;
+    }
+}
+
+sub _set_preference {
+    my ( $preference, $value ) = @_;
+
+    _debug( "Setting $preference to $value" );
+
+    C4::Context->set_preference( $preference, $value );
+    logaction( 'SYSTEMPREFERENCE', 'MODIFY', undef, $preference . " | " . $value );
+}
+
+sub GetPreferences {
+    my $dbh = C4::Context->dbh;
+
+    return {
+        map { $_->{'variable'},  _normalize_value($_) }
+        @{ $dbh->selectall_arrayref( "
+            SELECT
+              variable, value, type
+              FROM systempreferences
+        ", { Slice => {} } ) }
+    };
+}
+
+sub SetPreferences {
+    my ( %preferences ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    # First, a quick check to make sure all of the system preferences exist
+    my $current_state = $dbh->selectall_arrayref( "
+        SELECT
+          variable, type, value
+          FROM systempreferences
+          WHERE variable IN (" . join( ', ', map( "?", keys %preferences ) ) . ")
+    ", { Slice => {} }, keys %preferences );
+
+    exit 2 if ( scalar( @$current_state ) != scalar( keys %preferences ) );
+
+    foreach my $row ( @$current_state ) {
+        # YAML::Syck encodes no as '', so deal with that
+        $preferences{$row->{'variable'}} = $preferences{$row->{'variable'}} eq '' ? 0 : C4::Boolean::true_p( $preferences{$row->{'variable'}} ) if ( $row->{'type'} eq 'YesNo' );
+    }
+
+    # Iterate through again, now that we've checked all of the YesNo sysprefs
+
+    foreach my $row ( @$current_state ) {
+        next if ( $preferences{$row->{'variable'}} eq $row->{'value'} );
+
+        _set_preference( $row->{'variable'}, $preferences{$row->{'variable'}} );
+    }
+}
+
+sub _fetch_preference {
+    my ( $preference ) = @_;
+
+    my $dbh = C4::Context->dbh;
+
+    my $row = $dbh->selectrow_hashref( "
+        SELECT
+          variable, value, type
+          FROM systempreferences
+          WHERE variable = ?
+          LIMIT 1
+    ", {}, $preference );
+
+    exit 2 unless ( $row );
+
+    return $row;
+}
+
+sub GetPreference {
+    my ( $preference ) = @_;
+
+    my $row = _fetch_preference( $preference );
+
+    return _normalize_value( $row );
+}
+
+sub SetPreference {
+    my ( $preference, $value ) = @_;
+
+    my $row = _fetch_preference( $preference );
+
+    $value = C4::Boolean::true_p($value) ? 1 : 0 if ( $row->{'type'} eq 'YesNo' );
+
+    exit 3 if ( $value eq $row->{'value'} );
+
+    _set_preference( $preference, $value );
+}
+
+sub ClearPreference {
+    my ( $preference ) = @_;
+
+    my $value = '';
+
+    my $row = _fetch_preference( $preference );
+
+    $value = 0 if ( $row->{'type'} eq 'YesNo' );
+
+    exit 3 if ( $value eq $row->{'value'} );
+
+    _set_preference( $preference, $value );
+}
+
+=head1 OPTIONS
+
+COMMAND can be any of the following:
+
+=over
+
+=item B<dump> [ -o I<OUTFILE> ]
+
+Dump all of Koha's system preferences as a simple YAML mapping into OUTFILE or
+STDOUT.
+
+=item B<load> [ -i I<INFILE> ] [ -f|--force ]
+
+Reads system preferences specified in YAML in INFILE or STDIN.  Will exit with a
+status of 2, without setting any sysprefs, if any of the sysprefs do not exist.
+Will also exit if any of the sysprefs are YesNo and have an invalid value.
+
+If there is a Version syspref in the input, it will not be set in the database,
+but it will be checked to make sure the running Koha version is equal or higher.
+The script will exit with a status of 4 if this is not true. Pass the -f option
+to skip this check.
+
+=item B<get> I<PREFERENCE>
+
+Print the value of the system preference PREFERENCE, followed by a newline.  If
+no such syspref exists, will exit with a status of 2.
+
+=item B<set> I<PREFERENCE> I<VALUE>
+
+Set the system preference PREFERENCE to the value VALUE. If no such syspref
+exists, will exit with a status of 2. If the syspref already has that value,
+will exit with a status of 3.
+
+If the syspref is YesNo, will accept only a boolean value, but the syntax for
+these is fairly lax (yes/no, on/off, 1/0, n/y, true/false are all accepted).
+
+=item B<clear> I<PREFERENCE>
+
+Clears the value of the system preference PREFERENCE. If no such syspref exists,
+will exit with a status of 2. Will set YesNo sysprefs to 'false'.
+
+=item B<manual>
+
+Print a longer, more detailed manual.
+
+=cut
+
+my %commands = (
+    dump => sub{
+        my ( $outfile );
+
+        GetOptions(
+            'o:s' => \$outfile
+        ) || _print_usage( 1 );
+
+        if ( $outfile ) {
+            YAML::Syck::DumpFile( $outfile, GetPreferences() );
+        } else {
+            print YAML::Syck::Dump( GetPreferences() );
+        }
+    },
+    load => sub {
+        my ( $infile, $force_version );
+
+        GetOptions(
+            'i:s' => \$infile,
+            'f' => \$force_version,
+        );
+
+        my $preferences = YAML::Syck::LoadFile($infile || \*STDIN);
+
+        die "Expected a YAML mapping" if ( ref($preferences) ne 'HASH' );
+
+        die "Tried to load preferences for version " . $preferences->{'Version'} . ", we are " . C4::Context->preference( 'Version' ) if ( $preferences->{'Version'} && C4::Context->preference( 'Version' ) < $preferences->{'Version'} );
+
+        my %prefs_to_set = (
+            map { $_, $preferences->{$_} }
+            grep { !$NOT_SET_PREFS{$_} }
+            keys %$preferences
+        );
+
+        SetPreferences( %prefs_to_set );
+    },
+    get => sub {
+        my ( $preference ) = @_;
+
+        print_usage() unless ( $preference );
+
+        print GetPreference( $preference ) . "\n";
+    },
+    set => sub {
+        my ( $preference, $value ) = @_;
+
+        print_usage() unless ( $preference && defined($value) );
+
+        SetPreference( $preference, $value );
+    },
+    clear => sub {
+        my ( $preference ) = @_;
+
+        print_usage() unless ( $preference );
+
+        ClearPreference( $preference );
+    },
+    manual => sub {
+        pod2usage( -verbose => 2 );
+    }
+);
+
+print_usage() if ( $ARGV[0] =~ /^(-h|--help|-help|help)$/ );
+
+print_usage( 1 ) if ( !$ARGV[0] || ref($commands{$ARGV[0]}) ne 'CODE' );
+
+$command = $commands{$ARGV[0]};
+shift @ARGV;
+$command->(@ARGV);
+
+=item B<help>
+
+Print a short usage message.
+
+=back
+
+=head1 EXAMPLES
+
+  $ export KOHA_DEBUG=1 # Used here to show what is being stored
+  $ misc/admin/koha-preferences get viewISBD
+  0
+  $ misc/admin/koha-preferences set viewISBD on
+  Setting viewISBD to 1
+  $ misc/admin/koha-preferences dump -o preferences.yaml
+  $ [ edit preferences.yaml ]
+  $ misc/admin/koha-preferences load -i preferences.yaml
+  $ misc/admin/koha-preferences load -i preferences-too-new.yaml
+  Tried to load preferences for version 3.0500012, we are 3.0300009 at misc/admin/koha-preferences line 255
+  $ misc/admin/koha-preferences load # Can also work from STDIN
+  XISBN: false
+  viewMARC: y
+  [ Control-D ]
+  Setting viewMARC to 1
+  Setting XISBN to 0
+
+=cut

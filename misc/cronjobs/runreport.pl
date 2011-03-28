@@ -28,6 +28,7 @@ use Pod::Usage;
 use Mail::Sendmail;
 use Text::CSV_XS;
 use CGI;
+use Carp;
 
 use vars qw($VERSION);
 
@@ -159,7 +160,7 @@ unless (scalar(@ARGV)) {
 foreach my $report (@ARGV) {
     my ($sql, $type) = get_saved_report($report);
     unless ($sql) {
-        warn "ERROR: No saved report $report found";
+        carp "ERROR: No saved report $report found";
         next;
     }
     $verbose and print "SQL: $sql\n\n";
@@ -188,7 +189,7 @@ foreach my $report (@ARGV) {
             Subject => $subject,
             Message => $message 
         );
-        sendmail(%mail) or warn "mail not sent";
+        sendmail(%mail) or carp 'mail not sent:' . $Mail::Sendmail::error;
     } else {
         print $message;
     }

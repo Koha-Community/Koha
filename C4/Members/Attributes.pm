@@ -102,8 +102,8 @@ sub GetBorrowerAttributes {
 
 sub SearchIdMatchingAttribute{
     my $filter = shift;
-
-    my $dbh = C4::Context->dbh();
+    my $finalfilter=$filter->[0];
+    my $dbh   = C4::Context->dbh();
     my $query = qq{
 SELECT borrowernumber
 FROM borrower_attributes
@@ -111,8 +111,8 @@ JOIN borrower_attribute_types USING (code)
 WHERE staff_searchable = 1
 AND attribute like ?};
     my $sth = $dbh->prepare_cached($query);
-    $sth->execute($filter);
-	return $sth->fetchall_arrayref;
+    $sth->execute("%$finalfilter%");
+    return $sth->fetchall_arrayref;
 }
 
 =head2 CheckUniqueness

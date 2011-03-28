@@ -31,6 +31,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('delimiter', ';', 'Ce paramètre définit le séparateur par défaut lors des exports (au format csv) de données (Rapports, statistiques...)', ';|tabulation|,|/|\\|#', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnhancedMessagingPreferences',0,'Si ce paramètre est activé, permet aux adhérents de choisir de recevoir des messages supplémentaires pour les documents dûs ou bientôt dûsIf ON.','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('expandedSearchOption', '1', 'active par défaut la recherche la plus avancée', '', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FineNotifyAtCheckin',0,'If ON notify librarians of overdue fines on the items they are checking in.',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FinesLog', '0', 'Activer ce paramètre pour enregistrer les actions sur les pénalités financières', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('gist', '0', 'Ce paramètre définit le taux de TVA. Attention : ce n''est pas un % mais un nombre (0.055 et pas 5.5%) Laisser à 0 si vous ne récupérez pas la TVA, ce qui est le cas de la plupart des bibliothèques françaises', '', 'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('hidelostitems', '0', 'Si ce paramètre est activé, l''OPAC n''affichera pas les notices pour lesquelles le ou les exemplaires sont marqués "perdus"', '', 'YesNo');
@@ -289,3 +290,15 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('ShelfBrowserUsesCcode','1','Use the item collection code when finding items for the shelf browser.','0','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowFineOverride','0','If on, staff will be able to issue books to patrons with fines greater than noissuescharge.','0','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllFinesNeedOverride','1','If on, staff will be asked to override every fine, even if it is below noissuescharge.','0','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AuthoritiesLog','0','If ON, log edit/create/delete actions on authorities.','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('TraceCompleteSubfields','0','Force subject tracings to only match complete subfields.','0','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('UseAuthoritiesForTracings','1','Use authority record numbers for subject tracings instead of heading strings.','0','YesNo');
+INSERT INTO systempreferences (variable,value,explanation,options,type)   VALUES ('OPACAllowUserToChooseBranch', 1,       'Allow the user to choose the branch they want to pickup their hold from','1','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('displayFacetCount', '0', NULL, NULL, 'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('maxRecordsForFacets', '20', NULL, NULL, 'Integer');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FacetLabelTruncationLength',20,'Specify the facet max length in OPAC',NULL,'Integer');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('AllowPurchaseSuggestionBranchChoice', 0, 'Allow user to choose branch when making a purchase suggestion','1','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the OPAC','','free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','','free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('TraceSubjectSubdivisions', '0', 'Create searches on all subdivisions for subject tracings.','1','YesNo');
+

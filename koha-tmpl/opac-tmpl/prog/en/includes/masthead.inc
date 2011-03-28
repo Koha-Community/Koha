@@ -84,14 +84,15 @@
          <!-- /TMPL_LOOP -->
       </select>
    <!-- TMPL_ELSE -->
-      <!-- TMPL_UNLESS NAME="opac_limit_override" -->
+      <!-- TMPL_IF NAME="opac_limit_override" -->
+          <!-- TMPL_IF NAME="opac_search_limit" -->
+            <input name="limit" value="<!-- TMPL_VAR name="opac_search_limit" -->" type="hidden" />
+          <!-- /TMPL_IF -->
+      <!-- TMPL_ELSE -->
           <!-- TMPL_IF name="mylibraryfirst" --> 
                <input name="limit" value="branch:<!-- TMPL_VAR name="mylibraryfirst" -->" type="hidden" />
           <!-- /TMPL_IF -->
-       <!-- /TMPL_UNLESS -->
-   <!-- /TMPL_IF -->
-   <!-- TMPL_IF NAME="opac_search_limit" -->
-      <input name="limit" value="<!-- TMPL_VAR name="opac_search_limit" -->" type="hidden" />
+      <!-- /TMPL_IF -->
    <!-- /TMPL_IF -->
 
 
@@ -109,7 +110,7 @@
 <div id="moresearches">
 <a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a>
 <!-- TMPL_IF NAME="OpacBrowser"     --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="OpacAuthorities" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF -->
+<!-- TMPL_IF NAME="OpacAuthorities" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by author or subject</a><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="TagsEnabled"     --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag Cloud</a><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="OpacCloud"       --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject Cloud</a><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="OpacTopissue"    --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF -->

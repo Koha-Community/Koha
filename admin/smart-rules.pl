@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-# vim: et ts=4 sw=4
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -481,7 +481,7 @@ $template->param(categoryloop => \@category_loop,
                         rules => \@sorted_row_loop,
                         branchloop => \@branchloop,
                         humanbranch => ($branch ne '*' ? $branches->{$branch}->{branchname} : ''),
-                        branch => $branch,
+                        current_branch => $branch,
                         definedbranch => scalar(@sorted_row_loop)>0 
                         );
 output_html_with_http_headers $input, $cookie, $template->output;

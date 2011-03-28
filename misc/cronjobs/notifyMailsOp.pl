@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 use strict;
 #use warnings; FIXME - Bug 2505
+use Carp;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -201,12 +202,12 @@ foreach my $num (@getnofifys) {
 								'content-type' => 'text/html; charset="utf-8"',
 					);
 				# if we don't have any content for the mail, we don't launch mail, but notify it in a file
-					if ($mailtext ne 'nonotifys') {
-					sendmail(%mail);
-					}
-					else {
-					print OUT $email ;
-					}
+                if ($mailtext ne 'nonotifys') {
+                    sendmail(%mail) or carp $Mail::Sendmail::error;
+                }
+                else {
+                    print OUT $email ;
+                }
 					
 # now deal with the debarred mode
 #		if ($debarred eq 1) {

@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # This file is part of Koha.
+# parts copyright 2010 BibLibre
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -194,6 +195,7 @@ foreach my $res (@reserves) {
     my $publictype = $res->{'publictype'};
     $res->{$publictype} = 1;
     $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
+    $res->{'formattedwaitingdate'} = format_date($res->{'waitingdate'});
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};

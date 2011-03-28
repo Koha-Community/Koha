@@ -66,16 +66,15 @@ $(document).ready(function(){
     <div id="usermarcdetail" class="container">
     <div id="catalogue_detail_biblio">
 
-    <h2 style="float:left;margin: 0 1em 1em 0;">MARC View</h2>
     <div id="views">
     <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">Normal View</a></span>
 
 <span class="view"><span id="MARCview">MARC View</span></span>
 <!-- TMPL_IF NAME="ISBD" --><span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->">ISBD View</a></span><!-- /TMPL_IF -->
 </div>
-    <h3 style="clear:both;"><!-- TMPL_VAR NAME="bibliotitle" --> (Record no. <!-- TMPL_VAR NAME="biblionumber" -->)</h3>
+    <h1 class="title"><!-- TMPL_VAR NAME="bibliotitle" --> (Record no. <!-- TMPL_VAR NAME="biblionumber" -->)</h1>
     <!-- TMPL_IF NAME="OPACXSLTDetailsDisplay" -->
-    <div>[ <a id="switchview" href="/cgi-bin/koha/opac-showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->&amp;viewas=html">view plain</a> ]</div>
+    <div id="switchview_div">[ <a id="switchview" href="/cgi-bin/koha/opac-showmarc.pl?id=<!-- TMPL_VAR NAME="biblionumber" -->&amp;viewas=html">view plain</a> ]</div>
     <div id="plainmarc"></div><!-- /TMPL_IF -->
     <div id="labeledmarc">
     <table id="marc">

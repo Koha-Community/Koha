@@ -232,7 +232,7 @@ sub get_template_and_user {
         }
 		# Logged-in opac search history
 		# If the requested template is an opac one and opac search history is enabled
-		if ($in->{'type'} == "opac" && C4::Context->preference('EnableOpacSearchHistory')) {
+		if ($in->{type} eq 'opac' && C4::Context->preference('EnableOpacSearchHistory')) {
 			my $dbh = C4::Context->dbh;
 			my $query = "SELECT COUNT(*) FROM search_history WHERE userid=?";
 			my $sth = $dbh->prepare($query);
@@ -337,7 +337,6 @@ sub get_template_and_user {
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
             XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
             XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
-            BranchesLoop                 => GetBranchesLoop(),
             using_https                  => $in->{'query'}->https() ? 1 : 0,
             noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
     );
@@ -360,6 +359,7 @@ sub get_template_and_user {
             advancedMARCEditor          => C4::Context->preference("advancedMARCEditor"),
             canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
             intranetcolorstylesheet     => C4::Context->preference("intranetcolorstylesheet"),
+            IntranetFavicon             => C4::Context->preference("IntranetFavicon"),
             intranetreadinghistory      => C4::Context->preference("intranetreadinghistory"),
             intranetstylesheet          => C4::Context->preference("intranetstylesheet"),
             IntranetUserCSS             => C4::Context->preference("IntranetUserCSS"),
@@ -380,17 +380,17 @@ sub get_template_and_user {
         # variables passed from CGI: opac_css_override and opac_search_limits.
         my $opac_search_limit = $ENV{'OPAC_SEARCH_LIMIT'};
         my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
-        my $mylibraryfirst = C4::Context->preference("SearchMyLibraryFirst");
-        my $opac_name;
-        if($opac_limit_override && ($opac_search_limit =~ /branch:(\w+)/) ){
-             $opac_name = C4::Branch::GetBranchName($1)   # opac_search_limit is a branch, so we use it.
-        } elsif($mylibraryfirst){
-            $opac_name = C4::Branch::GetBranchName($mylibraryfirst);
+        my $opac_name = '';
+        if (($opac_search_limit =~ /branch:(\w+)/ && $opac_limit_override) || $in->{'query'}->param('limit') =~ /branch:(\w+)/){
+            $opac_name = $1;   # opac_search_limit is a branch, so we use it.
+        } elsif (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv && C4::Context->userenv->{'branch'}) {
+            $opac_name = C4::Context->userenv->{'branch'};
         }
         $template->param(
             AmazonContent             => "" . C4::Context->preference("AmazonContent"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
+            BranchesLoop              => GetBranchesLoop($opac_name),
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
@@ -408,7 +408,6 @@ sub get_template_and_user {
             OpacAuthorities           => C4::Context->preference("OpacAuthorities"),
             OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") . $ENV{'SERVER_NAME'} .
                    ($ENV{'SERVER_PORT'} eq ($in->{'query'}->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}"),
-            opac_name             => $opac_name,
             opac_css_override           => $ENV{'OPAC_CSS_OVERRIDE'},
             opac_search_limit         => $opac_search_limit,
             opac_limit_override       => $opac_limit_override,
@@ -430,6 +429,7 @@ sub get_template_and_user {
             opacstylesheet            => "" . C4::Context->preference("opacstylesheet"),
             opacbookbag               => "" . C4::Context->preference("opacbookbag"),
             opaccredits               => "" . C4::Context->preference("opaccredits"),
+            OpacFavicon               => C4::Context->preference("OpacFavicon"),
             opacheader                => "" . C4::Context->preference("opacheader"),
             opaclanguagesdisplay      => "" . C4::Context->preference("opaclanguagesdisplay"),
             opacreadinghistory        => C4::Context->preference("opacreadinghistory"),
@@ -922,6 +922,7 @@ sub checkauth {
         opacuserlogin        => C4::Context->preference("opacuserlogin"),
         OpacNav              => C4::Context->preference("OpacNav"),
         opaccredits          => C4::Context->preference("opaccredits"),
+        OpacFavicon          => C4::Context->preference("OpacFavicon"),
         opacreadinghistory   => C4::Context->preference("opacreadinghistory"),
         opacsmallimage       => C4::Context->preference("opacsmallimage"),
         opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),

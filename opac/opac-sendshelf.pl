@@ -22,6 +22,7 @@ use warnings;
 
 use CGI;
 use Encode qw(encode);
+use Carp;
 
 use Mail::Sendmail;
 use MIME::QuotedPrint;
@@ -162,7 +163,7 @@ END_OF_BODY
     }
     else {
         # do something if it doesnt work....
-        warn "Error sending mail: $Mail::Sendmail::error \n";
+        carp "Error sending mail: $Mail::Sendmail::error \n";
         $template->param( error => 1 );
     }
 

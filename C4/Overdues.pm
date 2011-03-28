@@ -2,6 +2,7 @@ package C4::Overdues;
 
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -488,12 +489,12 @@ sub UpdateFine {
 
     if ( my $data = $sth->fetchrow_hashref ) {
 
-		# we're updating an existing fine.  Only modify if we're adding to the charge.
+		# we're updating an existing fine.  Only modify if amount changed
         # Note that in the current implementation, you cannot pay against an accruing fine
         # (i.e. , of accounttype 'FU').  Doing so will break accrual.
     	if ( $data->{'amount'} != $amount ) {
             my $diff = $amount - $data->{'amount'};
-            $diff = 0 if ( $data->{amount} > $amount);
+	    #3341: diff could be positive or negative!
             my $out  = $data->{'amountoutstanding'} + $diff;
             my $query = "
                 UPDATE accountlines
