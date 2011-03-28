@@ -99,11 +99,18 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 #########################################
 ##  Operations
 ##
-if ($op =~/save/i){
-    if ($$suggestion_ref{'suggestionid'}>0){
-    &ModSuggestion($suggestion_ref);
-    }  
-    else {
+if ( $op =~ /save/i ) {
+	if ( $$suggestion_ref{"STATUS"} ) {
+        if ( my $tmpstatus = lc( $$suggestion_ref{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
+            $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "date" } = C4::Dates->today;
+            $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
+        }
+        $$suggestion_ref{"manageddate"} = C4::Dates->today;
+        $$suggestion_ref{"managedby"}   = C4::Context->userenv->{number};
+    }
+    if ( $$suggestion_ref{'suggestionid'} > 0 ) {
+        &ModSuggestion($suggestion_ref);
+    } else {
         ###FIXME:Search here if suggestion already exists.
         my $suggestions_loop =
             SearchSuggestion( $suggestion_ref );
