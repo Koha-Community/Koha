@@ -4134,6 +4134,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('StaffAuthorisedValueImages', '1', '', NULL, 'YesNo')");
+    print "Upgrade to $DBversion done (System pref StaffAuthorisedValueImages)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
