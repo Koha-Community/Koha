@@ -30,6 +30,8 @@ use C4::XSLT;
 use C4::Branch;
 use C4::Reserves;    # CheckReserves
 use C4::Debug;
+use C4::Items;
+use YAML;
 use URI::Escape;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
@@ -1594,8 +1596,14 @@ sub searchResults {
                 $item->{$code} = $field->subfield( $subfieldstosearch{$code} );
             }
 
-			my $hbranch     = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'homebranch'    : 'holdingbranch';
-			my $otherbranch = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'holdingbranch' : 'homebranch';
+	        # Hidden items
+	        my @items = ($item);
+	        my (@hiddenitems) = GetHiddenItemnumbers(@items);
+    	    $item->{'hideatopac'} = 1 if (@hiddenitems); 
+
+            my $hbranch     = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'homebranch'    : 'holdingbranch';
+            my $otherbranch = C4::Context->preference('HomeOrHoldingBranch') eq 'homebranch' ? 'holdingbranch' : 'homebranch';
+
             # set item's branch name, use HomeOrHoldingBranch syspref first, fall back to the other one
             if ($item->{$hbranch}) {
                 $item->{'branchname'} = $branches{$item->{$hbranch}};
@@ -1668,6 +1676,7 @@ sub searchResults {
                     || $item->{itemlost}
                     || $item->{damaged}
                     || $item->{notforloan} > 0
+                    || $item->{hideatopac}
 		    || $reservestatus eq 'Waiting'
                     || ($transfertwhen ne ''))
                 {
@@ -1679,11 +1688,11 @@ sub searchResults {
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
                     $other_count++;
 
-					my $key = $prefix . $item->{status};
-					foreach (qw(wthdrawn itemlost damaged branchname itemcallnumber)) {
-                    	$other_items->{$key}->{$_} = $item->{$_};
-					}
-                    $other_items->{$key}->{intransit} = ($transfertwhen ne '') ? 1 : 0;
+                    my $key = $prefix . $item->{status};
+                    foreach (qw(wthdrawn itemlost damaged branchname itemcallnumber hideatopac)) {
+                        $other_items->{$key}->{$_} = $item->{$_};
+                    }
+                    $other_items->{$key}->{intransit} = ( $transfertwhen ne '' ) ? 1 : 0;
                     $other_items->{$key}->{onhold} = ($reservestatus) ? 1 : 0;
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
 					$other_items->{$key}->{count}++ if $item->{$hbranch};
@@ -1695,7 +1704,7 @@ sub searchResults {
                     $can_place_holds = 1;
                     $available_count++;
 					$available_items->{$prefix}->{count}++ if $item->{$hbranch};
-					foreach (qw(branchname itemcallnumber)) {
+					foreach (qw(branchname itemcallnumber hideatopac)) {
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
 					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };

@@ -44,6 +44,7 @@ use C4::ShelfBrowser;
 use C4::Charset;
 use MARC::Record;
 use MARC::Field;
+use List::MoreUtils qw/any none/;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -86,14 +87,27 @@ $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowChec
 # change back when ive fixed request.pl
 my @all_items = &GetItemsInfo( $biblionumber, 'opac' );
 my @items;
-@items = @all_items unless C4::Context->preference('hidelostitems');
 
-if (C4::Context->preference('hidelostitems')) {
-    # Hide host items
+# Getting items to be hidden
+my @hiddenitems = GetHiddenItemnumbers(@all_items);
+
+# Are there items to hide?
+my $hideitems = 1 if C4::Context->preference('hidelostitems') or scalar(@hiddenitems) > 0;
+
+# Hide items
+if ($hideitems) {
     for my $itm (@all_items) {
-        push @items, $itm unless $itm->{itemlost};
+	if  ( C4::Context->preference('hidelostitems') ) {
+	    push @items, $itm unless $itm->{itemlost} or any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
+	} else {
+	    push @items, $itm unless any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
     }
 }
+} else {
+    # Or not
+    @items = @all_items;
+}
+
 my $dat = &GetBiblioData($biblionumber);
 
 my $itemtypes = GetItemTypes();
