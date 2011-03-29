@@ -40,6 +40,14 @@ my $data = undef;
 my $borrowernumber = undef;
 my $cardnumber = undef;
 
+my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+				});
+
 if ($input->param('cardnumber')) {
     $cardnumber = $input->param('cardnumber');
     $data = GetMember(cardnumber => $cardnumber);
@@ -53,14 +61,6 @@ if ($input->param('borrowernumber')) {
 my $order = 'date_due desc';
 my $limit = 0;
 my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
-
-my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				debug => 1,
-				});
 
 my @loop_reading;
 

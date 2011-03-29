@@ -195,6 +195,7 @@ foreach my $res (@reserves) {
     my $publictype = $res->{'publictype'};
     $res->{$publictype} = 1;
     $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
+    $res->{'formattedwaitingdate'} = format_date($res->{'waitingdate'});
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};

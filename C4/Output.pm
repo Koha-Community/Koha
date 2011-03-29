@@ -470,7 +470,7 @@ sub output_with_http_headers($$$$;$) {
 
 sub output_html_with_http_headers ($$$;$) {
     my ( $query, $cookie, $data, $status ) = @_;
-    $data =~ s/\&amp\;amp\; /\&amp\; /;
+    $data =~ s/\&amp\;amp\; /\&amp\; /g;
     output_with_http_headers( $query, $cookie, $data, 'html', $status );
 }
 

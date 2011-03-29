@@ -4124,6 +4124,13 @@ $DBversion = "3.03.00.031";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('FineNotifyAtCheckin',0,'If ON notify librarians of overdue fines on the items they are checking in.',NULL,'YesNo');");
     print "Upgrade to $DBversion done (Add syspref FineNotifyAtCheckin)\n";
+    SetVersion ($DBversion);    
+}
+
+$DBversion = '3.03.00.032';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('TraceSubjectSubdivisions', 1, 'Create searches on all subdivisions for subject tracings.','1','YesNo')");
+    print "Upgrade to $DBversion done ( include subdivisions when generating subject tracing searches )\n";
     SetVersion ($DBversion);
 }
 
