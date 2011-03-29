@@ -2277,37 +2277,76 @@ sub GetIssuingCharges {
     my $item_type;
 
     # Get the book's item type and rental charge (via its biblioitem).
-    my $qcharge =     "SELECT itemtypes.itemtype,rentalcharge FROM items
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
-	$qcharge .= (C4::Context->preference('item-level_itypes'))
-                ? " LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype "
-                : " LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
-	
-    $qcharge .=      "WHERE items.itemnumber =?";
-   
-    my $sth1 = $dbh->prepare($qcharge);
-    $sth1->execute($itemnumber);
-    if ( my $data1 = $sth1->fetchrow_hashref ) {
-        $item_type = $data1->{'itemtype'};
-        $charge    = $data1->{'rentalcharge'};
-        my $q2 = "SELECT rentaldiscount FROM borrowers
+    my $charge_query = 'SELECT itemtypes.itemtype,rentalcharge FROM items
+        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber';
+    $charge_query .= (C4::Context->preference('item-level_itypes'))
+        ? ' LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype'
+        : ' LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype';
+
+    $charge_query .= ' WHERE items.itemnumber =?';
+
+    my $sth = $dbh->prepare($charge_query);
+    $sth->execute($itemnumber);
+    if ( my $item_data = $sth->fetchrow_hashref ) {
+        $item_type = $item_data->{itemtype};
+        $charge    = $item_data->{rentalcharge};
+        my $branch = C4::Branch::mybranch();
+        my $discount_query = q|SELECT rentaldiscount,
+            issuingrules.itemtype, issuingrules.branchcode
+            FROM borrowers
             LEFT JOIN issuingrules ON borrowers.categorycode = issuingrules.categorycode
             WHERE borrowers.borrowernumber = ?
-            AND (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')";
-        my $sth2 = $dbh->prepare($q2);
-        $sth2->execute( $borrowernumber, $item_type );
-        if ( my $data2 = $sth2->fetchrow_hashref ) {
-            my $discount = $data2->{'rentaldiscount'};
-            if ( $discount eq 'NULL' ) {
-                $discount = 0;
-            }
+            AND (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')
+            AND (issuingrules.branchcode = ? OR issuingrules.branchcode = '*')|;
+        my $discount_sth = $dbh->prepare($discount_query);
+        $discount_sth->execute( $borrowernumber, $item_type, $branch );
+        my $discount_rules = $discount_sth->fetchall_arrayref({});
+        if (@{$discount_rules}) {
+            # We may have multiple rules so get the most specific
+            my $discount = _get_discount_from_rule($discount_rules, $branch, $item_type);
             $charge = ( $charge * ( 100 - $discount ) ) / 100;
         }
-        $sth2->finish;
     }
 
-    $sth1->finish;
+    $sth->finish; # we havent _explicitly_ fetched all rows
     return ( $charge, $item_type );
+}
+
+# Select most appropriate discount rule from those returned
+sub _get_discount_from_rule {
+    my ($rules_ref, $branch, $itemtype) = @_;
+    my $discount;
+
+    if (@{$rules_ref} == 1) { # only 1 applicable rule use it
+        $discount = $rules_ref->[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # could have up to 4 does one match $branch and $itemtype
+    my @d = grep { $_->{branchcode} eq $branch && $_->{itemtype} eq $itemtype } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # do we have item type + all branches
+    @d = grep { $_->{branchcode} eq q{*} && $_->{itemtype} eq $itemtype } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # do we all item types + this branch
+    @d = grep { $_->{branchcode} eq $branch && $_->{itemtype} eq q{*} } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # so all and all (surely we wont get here)
+    @d = grep { $_->{branchcode} eq q{*} && $_->{itemtype} eq q{*} } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # none of the above
+    return 0;
 }
 
 =head2 AddIssuingCharge
