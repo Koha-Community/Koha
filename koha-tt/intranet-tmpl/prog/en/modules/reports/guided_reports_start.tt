@@ -499,8 +499,8 @@ NAME="name" -->">[% order_b.name %]</label></td><td>
 <h1>[% name %]</h1>
 [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
 [% IF ( unlimited_total ) %]<p>Total number of rows matching the (unlimited) query is [% unlimited_total %].</p>[% END %]
-[% sql %]
-[% DEFAULT pagination_bar="" %]
+<pre id="sql_output">[% sql %]</pre>
+<p>[% DEFAULT pagination_bar="" %]</p>
 [% UNLESS ( errors ) %]
 <table>
 <tr>[% FOREACH header_ro IN header_row %]<th>[% header_ro.cell %]</th>[% END %]</tr>

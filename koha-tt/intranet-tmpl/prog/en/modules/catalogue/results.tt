@@ -438,7 +438,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                 </p>
                                 [% IF ( SEARCH_RESULT.summary ) %]
                                         [% IF ( SEARCH_RESULT.author ) %]
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
                                         [% ELSE %]
                                             &nbsp;
                                         [% END %]
@@ -458,7 +458,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     [% END %]
 
                                         [% IF ( SEARCH_RESULT.author ) %]
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
                                         [% ELSE %]
                                             &nbsp;
                                         [% END %]
@@ -470,7 +470,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                         [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size %][% END %] [% IF ( SEARCH_RESULT.normalized_isbn ) %]ISBN: [% SEARCH_RESULT.normalized_isbn %][% END %]
                                         [% SEARCH_RESULT.description %]
                                         [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp %])</i>[% END %]
-                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:[% SEARCH_RESULT.cn_class |url %]">[% SEARCH_RESULT.cn_class %]</a>][% END %]
+                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% SEARCH_RESULT.cn_class |url %]">[% SEARCH_RESULT.cn_class %]</a>][% END %]
                                     </p>
                                     [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<p class="searchhighlightblob">[% SEARCH_RESULT.searchhighlightblob %]</p>[% END %]
 
@@ -509,7 +509,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                         [% IF ( available_items_loo.noItemTypeImages ) %]<li>[% ELSE %][% IF ( available_items_loo.item_level_itypes ) %][% IF ( available_items_loo.imageurl ) %]<li style="list-style: none; list-style-type: none;"><img src="[% available_items_loo.imageurl %]" title="[% available_items_loo.description %]" alt="[% available_items_loo.description %]" />[% ELSE %]<li>[% END %][% ELSE %]<li>[% END %][% END %]
                                         [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]
                                         [% IF ( available_items_loo.location ) %][% available_items_loo.location %][% END %]
-                                        [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
+                                        [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
                                         ([% available_items_loo.count %])</li>
                                     [% END %]</ul>
                                     [% END %]
@@ -526,7 +526,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
 
                                         [% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname %][% END %]
                                         [% IF ( onloan_items_loo.location ) %][% onloan_items_loo.location %][% END %]
-                                        [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:[% onloan_items_loo.itemcallnumber |url %]">[% onloan_items_loo.itemcallnumber %]</a>][% END %]
+                                        [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% onloan_items_loo.itemcallnumber |url %]">[% onloan_items_loo.itemcallnumber %]</a>][% END %]
                                         ([% onloan_items_loo.count %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue %] long overdue[% END %]) date due: [% onloan_items_loo.due_date %]</li>
                                     [% END %]</ul>
                                     [% END %]
@@ -543,7 +543,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
 
                                         [% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname %][% END %]
                                         [% IF ( other_items_loo.location ) %][% other_items_loo.location %][% END %]
-                                        [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:[% other_items_loo.itemcallnumber |url %]">[% other_items_loo.itemcallnumber %]</a>][% END %]
+                                        [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% other_items_loo.itemcallnumber |url %]">[% other_items_loo.itemcallnumber %]</a>][% END %]
                                         [% IF ( other_items_loo.wthdrawn ) %](Withdrawn)[% END %]
                                         [% IF ( other_items_loo.itemlost ) %](Lost)[% END %]
                                         [% IF ( other_items_loo.damaged ) %](Damaged)[% END %]
