@@ -1,37 +1,142 @@
 <!-- TMPL_INCLUDE NAME="help-top.inc" -->
 
-<h1>MARC tag structure administration</h1>
+<h1>MARC Record Subfields</h1>
 
-<p>Koha allows you to specify which MARC tags you want to use and which you want to ignore. When you downloaded and installed Koha, you also got the entire list of MARC21 tags and subfields in current use. Now you need to use the administration page to edit this list and tell Koha which tags you want to use and how you want to use them.</p>
-<p>You can define as the marc tag structure for each biblio framework you have defined</p>
+<p>Frameworks are made up of MARC fields and subfields. To make edits to most Frameworks you must edit the fields and subfields. Clicking 'Edit' to the right of each subfield will allow you to make changes to the text associated with the field</p>
 
-<p>If you are CERTAIN that you will never use a MARC tag, then you can delete it, but since this will not result in any appreciable improvement in performance, it is probably better to leave it. There will be tags you want to add, however. If you are using older MARC tags that are not in the list of tags supplied with Koha, then use the MARC tag structure administration page to add them. Similarly, you will probably need to add the holdings tag you currently use, or at least check the subfield structure of the 852 tag if you use it for holdings.</p>
-
-<p>Editing the SubFields from the MARC tag structure page is very time-consuming, but also very important; be sure to click the subfield link for each tag in your MARC tag structure.</p>
-<p>For each subfield you can set :</p>
 <ul>
-<li>repeatable : whether it can be repeated or not. If it can be repeated, separate the values by a | in the MARC editor when you want to have the subfield twice</li>
-<li>Mandatory : whether the field is mandatory or not. If mandatory, the cataloger can't validate the biblio if the subfield is empty.</li>
-<li>Search also : a list of field that Koha will also search on when the user do a search on the subfield</li>
-<li>Koha link : <b>very important</b>. Koha is multi-MARC compliant. So, it does not know what the 245$a means, neither what 200$f (those 2 fields being both the title in MARC21 and UNIMARC !). So, in this list you can "map" a MARC subfield to it's meaning. Koha constantly maintains consistency between a subfield and it's meaning. When the user want to search on "title", this link is used to find what is searched (245 if you're MARC21, 200 if you're UNIMARC).</li>
-<li>Text for librarian : what appears before the subfield in the librarian interface</li>
-<li>Text for OPAC : what appears before the field in the OPAC. If empty, the text for librarian is used instead</li>
-<li>Managed in tab : deals with the tab where the subfield is shown. Ignore means that the subfield is not managed. </li>
-<!-- <li>hidden : allows you to select possible visibility conditions. Each section OPAC INTRANET or Editor can be set separately:</li> -->
- <li>Display: allows you to select possible visibility conditions. It is used only with the 'MARC View'. </li> 
-<li><b>Is a linking field : Select this if you want to use this field for linking other authorities to this authority. The kohafield should be set to auth_header.linkid in this subfield(preferred) or any other subfield in this field :</b>
-<li>URL : if checked, the subfield is an URL, and can be clicked</li>
-<li>Auth value : means the value is not free, but in the authorized value list of the selected type</li>
-<li>thesaurus : shows the authority type</li>
-<li>plugin : means the value is calculated or managed by a plugin. Plugins can do almost anything. For example, in UNIMARC there are plugins for every 1xx fields that are coded fields. The plugin is a huge help for cataloger ! There are also two plugins (unimarc_plugin_210c and unimarc_plugin_225a that can "magically" find the editor from an ISBN, and the collection list for the editor)</li>
-<li>
-<li><b>Example MARC21 Subject Headings Authority</b>
-<ul><li>Use field 035$a for your auth_header.authid and 035$8 for auth_header.authtypecode. Make sure your zebra authorities index these fields</li>
-<li>Use field 150 for your subject headings</li>
-<li>Use field 750$9 (add subfield if not present) for auth_header.linkid . Select <b>Is a linking field</b>. You may use any subfield for linking as $9 is not hardcoded
-<li>When you add or modify an authority clicking on ... that will appear next to 750$9 will let you search any authority and link it to this record. You may repeat tag 750 and add as many linkages as you like</li></ul>
+	<li>Each field has a tag (which is the MARC tag)
+<ul>
+	<li>The 'Label for lib' is what will show in the staff client if you have advancedMARCeditor set to display labels</li>
+	<li>The 'Label for OPAC' is what will show on the MARC view in the OPAC</li>
+	<li>If you check 'Repeatable' then the field will have a plus sign next to it allowing you to add multiples of that tag</li>
+	<li>If you check 'Mandatory' the record will not be allowed to save unless you have a value assigned to this tag</li>
+	<li>'Authorized value' is where you define an authorized value that your catalogers can choose from a pull down to fill this field in
+To edit the subfields associated with the tag, click 'Subfields' to the right of the tag on the 'MARC Structure' listing</li>
+</ul>
+</li>
+	<li>From the list of subfields you can click 'Delete' to the right of each to delete the subfields</li>
+	<li>To edit the subfields click 'Edit Subfields'</li>
+	<li>For each subfield you can set the following values
+<ul>
+	<li>Text for librarian
+<ul>
+	<li>what appears before the subfield in the librarian interface</li>
+</ul>
+</li>
+	<li>Text for OPAC
+<ul>
+	<li>what appears before the field in the OPAC.</li>
+	<li>If left empty, the text for librarian is used instead</li>
+</ul>
+</li>
+	<li>Repeatable
+<ul>
+	<li>the field will have a plus sign next to it allowing you to add multiples of that tag</li>
+</ul>
+</li>
+	<li>Mandatory
+<ul>
+	<li>the record will not be allowed to save unless you have a value assigned to this tag</li>
+</ul>
+</li>
+	<li>Managed in tab
+<ul>
+	<li>defines the tab where the subfield is shown. All subfields of a given field must be in the same tab or ignored. Ignore means that the subfield is not managed.</li>
+</ul>
 </li>
 </ul>
+<ul>
+	<li>Default value
+<ul>
+	<li>defines what you want to appear in the field by default, this will be editable, but it saves time if you use the same note over and over or the same value in a field often.</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>hidden
+<ul>
+	<li>allows you to select from 19 possible visibility conditions, 17 of which are implemented. They are the following:
+<ul>
+	<li>-9 =&gt; Future use</li>
+	<li>-8 =&gt; Flag</li>
+	<li>-7 =&gt; OPAC !Intranet !Editor Collapsed</li>
+	<li>-6 =&gt; OPAC Intranet !Editor !Collapsed</li>
+	<li>-5 =&gt; OPAC Intranet !Editor Collapsed</li>
+	<li>-4 =&gt; OPAC !Intranet !Editor !Collapsed</li>
+	<li>-3 =&gt; OPAC !Intranet Editor Collapsed</li>
+	<li>-2 =&gt; OPAC !Intranet Editor !Collapsed</li>
+	<li>-1 =&gt; OPAC Intranet Editor Collapsed</li>
+	<li>0 =&gt; OPAC Intranet Editor !Collapsed</li>
+	<li>1 =&gt; !OPAC Intranet Editor Collapsed</li>
+	<li>2 =&gt; !OPAC !Intranet Editor !Collapsed</li>
+	<li>3 =&gt; !OPAC !Intranet Editor Collapsed</li>
+	<li>4 =&gt; !OPAC Intranet Editor !Collapsed</li>
+	<li>5 =&gt; !OPAC !Intranet !Editor Collapsed</li>
+	<li>6 =&gt; !OPAC Intranet !Editor !Collapsed</li>
+	<li>7 =&gt; !OPAC Intranet !Editor Collapsed</li>
+	<li>8 =&gt; !OPAC !Intranet !Editor !Collapsed</li>
+	<li>9 =&gt; Future use</li>
+</ul>
+</li>
+	<li>( ! means 'not visible' or in the case of Collapsed 'not Collapsed')</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Is a URL
+<ul>
+	<li>if checked, it means that the subfield is a URL and can be clicked</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Link
+<ul>
+	<li>If you enter a field/subfield here (200b), a link appears after the subfield in the MARC Detail view. This view is present only in the staff client, not the OPAC. If the librarian clicks on the link, a search is done on the database for the field/subfield with the same value. This can be used for 2 main topics :
+<ul>
+	<li>on a field like author (200f in UNIMARC), put 200f here, you will be able to see all bib records with the same author.</li>
+	<li>on a field that is a link (4xx) to reach another bib record. For example, put 011a in 464$x, will find the serials that are with this ISSN.</li>
+</ul>
+</li>
+	<li style="color: #990000;">Important: This value should not change after data has been added to your catalog</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Koha link
+<ul>
+	<li>Koha is multi-MARC compliant. So, it does not know what the 245$a means, neither what 200$f (those 2 fields being both the title in MARC21 and UNIMARC). So, in this list you can "map" a MARC subfield to its meaning. Koha constantly maintains consistency between a subfield and its meaning. When the user want to search on "title", this link is used to find what is searched (245 if you're MARC21, 200 if you're UNIMARC).</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Authorized value
+<ul>
+	<li>means the value cannot by typed by the librarian, but must be chosen from a pull down generated by the authorized value list</li>
+	<li>In the example above, the 504a field will show the MARC504 Authorized Values when cataloging</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Thesaurus
+<ul>
+	<li>means that the value is not free text, but must be searched in the authority/thesaurus of the selected category</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Plugin
+<ul>
+	<li>means the value is calculated or managed by a plugin. Plugins can do almost anything.</li>
+	<li>For example, in UNIMARC there are plugins for every 1xx fields that are coded fields. The plugin is a huge help for cataloger ! There are also two plugins (unimarc_plugin_210c and unimarc_plugin_225a that can "magically" find the editor from an ISBN, and the collection list for the editor)</li>
+</ul>
+</li>
+</ul>
+</li>
+	<li>To save your changes simply click the 'Save Changes' button at the top of the screen</li>
+</ul>
+
 
 <!-- TMPL_INCLUDE name="help-bottom.inc" -->
 
