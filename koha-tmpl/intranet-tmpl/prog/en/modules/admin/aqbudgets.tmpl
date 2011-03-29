@@ -411,7 +411,9 @@
             <select name="filter_budgetbranch" id="filter_budgetbranch2" style="width:10em;">
                 <option value=""></option>
                 <!-- TMPL_LOOP name="branchloop" -->
-                <option value="<!-- TMPL_VAR name="value" -->" <!-- TMPL_IF name="selected" -->selected<!-- /TMPL_IF -->><!-- TMPL_VAR name="branchname" --></option>
+                <!-- TMPL_UNLESS Name="selected"--><option value="<!-- TMPL_VAR name="value" -->">
+                <!--TMPL_ELSE--><option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- /TMPL_UNLESS -->
+                <!-- TMPL_VAR name="branchname" --></option>
                 <!-- /TMPL_LOOP -->
             </select>
         </li>
