@@ -391,6 +391,7 @@ function checkMultiHold() {
             <th>Information</th>
         </tr>
     [% FOREACH itemloo IN bibitemloo.itemloop %]
+        [% UNLESS ( itemloo.hide ) %]
         <tr class="[% itemloo.backgroundcolor %]">
             <td>
             [% IF ( itemloo.available ) %]
@@ -458,9 +459,14 @@ function checkMultiHold() {
             [% END %]
             </td>
         </tr>
+      [% END %] <!--UNLESS item hide-->
     [% END %] <!-- itemloop -->
         </table>
-
+    [% IF ( bibitemloo.hiddencount ) %]
+        <form>
+        <p class="hiddencount"><a href="request.pl?biblionumber=[% bibitemloo.biblionumber %]&cardnumber=[% bibitemloo.cardnumber %]&showallitems=1">Show all items ([% bibitemloo.hiddencount %] hidden)</a></p>
+        </form>
+    [% END %] <!-- hiddencount -->
     [% END %] <!-- bibitemloop -->
 
   [% ELSE %]<!-- UNLESS multi_hold -->

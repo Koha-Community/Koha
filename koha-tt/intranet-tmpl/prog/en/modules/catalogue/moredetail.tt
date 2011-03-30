@@ -32,7 +32,8 @@
         [% IF ( BIBITEM_DAT.volumeddesc ) %]<li><span class="label">Volume:</span> [% BIBITEM_DAT.volumeddesc %]</li>[% END %]
         <li><span class="label">Physical Details:</span> [% BIBITEM_DAT.pages %] [% BIBITEM_DAT.illus %] [% BIBITEM_DAT.size %]&nbsp;</li>
         [% IF ( BIBITEM_DAT.bnotes ) %]<li><span class="label">Notes:</span> [% BIBITEM_DAT.bnotes %]</li>[% END %]
-        <li><span class="label">No. of Items:</span> [% BIBITEM_DAT.count %]&nbsp;</li>
+        <li><span class="label">No. of Items:</span> [% BIBITEM_DAT.count %]&nbsp;[% IF ( BIBITEM_DAT.hiddencount ) %]total ([% BIBITEM_DAT.showncount %] shown / [% BIBITEM_DAT.hiddencount %] hidden) 
+<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% BIBITEM_DAT.biblionumber %]&showallitems=1">Show all items</a>[% END %]</li>
     </ol>
     [% END %]
     <br clear="all" />

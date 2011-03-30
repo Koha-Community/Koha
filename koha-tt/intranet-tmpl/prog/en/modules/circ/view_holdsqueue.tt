@@ -57,9 +57,9 @@
             <td class="hq-callnumber">[% itemsloo.location %] [% itemsloo.itemcallnumber %] [% itemsloo.enumchron %]</td>
             <td class="hq-barcode">
                 [% IF ( itemsloo.item_level_request ) %]
-			<em>Only Item: </em>[% itemsloo.barcode %]
+			<em>Only Item:</em> <strong>[% itemsloo.barcode %]</strong>
                 [% ELSE %]
-                    <strong>[% itemsloo.barcode %]</strong></br><em>or Any available</em>
+                    <strong>[% itemsloo.barcode %]</strong> <em>or any available</em>
                 [% END %]
             </td>
 			<td class="hq-patron"><p><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% itemsloo.cardnumber %]#reserves">[% itemsloo.surname %], [% itemsloo.firstname %] ([% itemsloo.cardnumber %])</a></p> <p>[% itemsloo.phone %]</p></td>

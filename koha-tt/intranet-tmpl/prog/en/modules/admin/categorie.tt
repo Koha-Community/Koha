@@ -151,6 +151,15 @@
 						<option value="1">Yes</option>
 			[% END %]
 					</select></li>
+	<li><label for="hidelostitems">Lost items in staff client</label> &nbsp; <select name="hidelostitems" id="hidelostitems">
+			[% IF ( hidelostitems ) %]
+						<option value="0">Shown</option>
+						<option value="1" selected="selected">Hidden by default</option>
+			[% ELSE %]
+						<option value="0" selected="selected">Shown</option>
+						<option value="1">Hidden by default</option>
+			[% END %]
+					</select></li>
 	<li><label for="reservefee">Hold fee: </label><input type="text" name="reservefee" id="reservefee" size="6" value="[% reservefee %]" /></li>
 	<li><label for="category_type">Category type: </label> &nbsp; <select name="category_type" id="category_type">
 						[% IF ( type_n ) %]<option value="" selected="selected">Select a Category type</option>[% ELSE %]<option value="">Select a Category type</option>[% END %]
@@ -208,6 +217,7 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 	<tr><th scope="row">Upperage limit: </th><td>[% upperagelimit %] years</td></tr>
 	<tr><th scope="row">Enrollment fee: </th><td>[% enrolmentfee %]</td></tr>
 	<tr><th scope="row">Receives overdue notices: </th><td>[% IF ( overduenoticerequired ) %]Yes[% ELSE %]No[% END %]</td></tr>
+	<tr><th scope="row">Lost items in staff client</th><td>[% IF ( hidelostitems ) %]Hidden by default[% ELSE %]Shown[% END %]</td></tr>
 	<tr><th scope="row">Hold fee: </th><td>[% reservefee %]</td></tr>
 </table>
 		<fieldset class="action">[% IF ( totalgtzero ) %]
@@ -282,6 +292,7 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 			<th scope="col">Upper age limit</th>
 			<th scope="col">Enrollment fee</th>
 			<th scope="col">Overdue</th>
+			<th scope="col">Lost Items</th>
  			<th scope="col">Hold fee</th>
             [% IF ( EnhancedMessagingPreferences ) %]
             <th scope="col">Messaging</th>
@@ -318,6 +329,7 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 			<td>[% loo.upperagelimit %] years</td>
                         <td>[% loo.enrolmentfee %]</td>
                         <td>[% IF ( loo.overduenoticerequired ) %]Yes[% ELSE %]No[% END %]</td>
+                        <td>[% IF ( loo.hidelostitems ) %]Hidden[% ELSE %]Shown[% END %]</td>
                         <td>[% loo.reservefee %]</td>
                         [% IF ( loo.EnhancedMessagingPreferences ) %]
                         <td>

@@ -411,7 +411,9 @@
             <select name="filter_budgetbranch" id="filter_budgetbranch2" style="width:10em;">
                 <option value=""></option>
                 [% FOREACH branchloo IN branchloop %]
-                <option value="[% branchloo.value %]" [% IF ( branchloo.selected ) %]selected[% END %]>[% branchloo.branchname %]</option>
+                [% UNLESS ( branchloo.selected ) %]<option value="[% branchloo.value %]">
+                [% ELSE %]<option value="[% branchloo.value %]" selected="selected">[% END %]
+                [% branchloo.branchname %]</option>
                 [% END %]
             </select>
         </li>

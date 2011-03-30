@@ -217,6 +217,7 @@ function verify_images() {
 
 <div id="holdings">
 [% IF ( count ) %]
+    [% IF ( showncount ) %]
         <table>
             <tr>
                 [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
@@ -364,6 +365,10 @@ function verify_images() {
                 </tr>
             [% END %]
         </table>
+        [% END %]
+                [% IF ( hiddencount ) %]
+                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&showallitems=1">Show all items ([% hiddencount %] hidden)</a>
+                [% END %] 		
 		[% IF ( debug_display ) %]
 		<br /><br />
 		<table>
@@ -371,7 +376,7 @@ function verify_images() {
 			<tr><td>itemdata_copynumber</td><td>[% itemdata_copynumber %]</td></tr>
 			<tr><td>serial</td><td>[% serial %]</td></tr>
 		</table>
-		[% END %]
+                [% END %]
 [% ELSE %]
     <p>No physical items for this record</p>
 [% END %]

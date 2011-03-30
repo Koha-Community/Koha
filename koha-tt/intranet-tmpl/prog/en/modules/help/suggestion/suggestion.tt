@@ -1,65 +1,24 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Suggestions Management</h1>
-<h2>What are Purchase Suggestions?</h2>
-<p>
-Purchase suggestions give the users of the OPAC a way to lodge requests for the library to purchase for items.
-</p>
-<p>
-<span style="color: #990000">IMPORTANT: To use this feature, purchase suggestions need to be turned on in
-system preferences.</span> <br />
+<h1>Purchase Suggestions</h1>
 
-</p>
-<ul>
-	<li><em>Get there:</em> More &gt; Administration &gt; Global System Preferences &gt; OPAC &gt; suggestion</li>
-</ul>
-<span style="color: #990000">IMPORTANT: Suggestions are only managed here if the emailPurchaseSuggestions preference is turned off.<br /></span>
+<p>Depending on your settings in the suggestion system preference, patrons may be able to make purchase suggestions via the OPAC. When a suggestion is waiting for library review, it will appear on the Acquisitions home page in the list of links on the left of the page.</p>
 
-<ul>
-	<li><em>Get there:</em> More &gt; Administration &gt; Global System Preferences &gt; Acquisitions &gt; emailPurchaseSuggestions</li>
-</ul>
-<h2>Manage Suggestions<br />
-</h2>
-<p>
-To manage suggestions, go to More &gt; Acquisitions
-</p>
-<ul>
-	<li>Click 'Manage suggestions'</li>
-	<li>If you have suggestions to manage they will appear here
-	</li>
-	<li style="color: #990000">IMPORTANT: You need to have authorized values for 'Reason' already set before working with suggestions</li>
-	<ul>
-		<li style="background-color: #ffe599">TIP: Reasons are the librarian's reason for accepting/rejecting request</li>
-		<li>If reasons are not set the Suggestions page will look like this:<br />
-		</li>
-		<li>If you get this error, click 'authorized values'
-		<ul>
-			<li style="background-color: #ffe599">TIP: You can also edit these values by going to More &gt; Administration &gt; Authorized Values</li>
-		</ul>
-		</li>
-		<li>Choose SUGGEST from the pull down
-		<br />
-		</li>
-		<li>Enter a short 'Authorized value' and a longer 'Description' (this second field is optional)<br />
-		</li>
-		<li>This will result in a list of values that can be added to or edited at any time
-		<br />
-		</li>
-		<li>It will also add these values to the pull down on the manage suggestions page
-		<br />
-		</li>
-	</ul>
-	<li>If there are no errors, continue to approving or rejecting the request and submitting a reason
-	<br />
-	</li>
-	<li style="background-color: #ffe599">TIP: By choosing 'Others...' from the reason pull down you will be able to enter a free text reason.<br />
-	</li>
-	<li>After choosing your reason, click 'Change Status'</li>
-	<li style="background-color: #ffe599">TIP: Statuses can be updated in bulk by choosing from the pull down at the bottom and clicking 'Mark all with this reason'<br />
-	</li>
-	<li>The item will be moved to the 'Accepted' or 'Rejected' menu</li>
-	<li>If you accidentally pick the wrong option (accept or reject) you can always edit your selection by visiting the appropriate tab</li>
-</ul>
+<p>Clicking 'Manage suggestions' will take you to the suggestion management tool. If there are no pending suggestions you can access the suggestion management tool by clicking the 'Manage suggestions' link on the menu on the left of the Acquisitions page.</p>
+
+<p>Your suggestions will be sorted into three categories: Accepted, Pending, and Rejected. Each accepted or rejected suggestion will show the name of the librarian who managed the suggestion and the reason they gave for accepting or rejecting it (found under 'Status').</p>
+
+<p>For libraries with lots of suggestions, there are filters on the left hand side of the Manage Suggestions page to assist in limiting the number of titles displayed on the screen.</p>
+
+<p>Clicking on the blue headings will expand the filtering options and clicking '[clear]' will clear all filters and show all suggestions.</p>
+
+<p>When reviewing 'Pending' suggestions you can choose to check the box next to the item(s) you want to approve/reject and then choose the status and reason for your selection. You can also choose to completely delete the suggestion by checking the 'Delete selected' box.</p>
+
+<p>Reasons for accepting and rejecting suggestions are defined by the SUGGEST authorized value.</p>
+
+<p>If you choose 'Others...' as your reason you will be prompted to enter your reason in a text box. Clicking 'Cancel' to the right of the box will bring back the pull down menu with authorized reasons.</p>
+
+<p>Once you have clicked 'Submit' the suggestion will be moved to the matching tab. The status will also be updated on the patron's account in the OPAC and an email notice will be sent to the patron using the template that matches the status you have chosen.</p>
 
 [% INCLUDE 'help-bottom.inc' %]
 

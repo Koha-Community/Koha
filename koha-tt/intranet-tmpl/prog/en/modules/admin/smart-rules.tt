@@ -12,7 +12,12 @@ $(document).ready(function() {
 });
 //]]>
 </script>
-
+<!-- Enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css" />
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
+<!-- End Calendar system additions -->
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -68,6 +73,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Item Type</th>
                 <th>Current Checkouts Allowed</th>
                 <th>Loan Period (day)</th>
+                <th>Hard Due Date</th>
                 <th>Fine Amount</th>
                 <th>Fine Charging Interval</th>
                 <th>Fine Grace period (day)</th>
@@ -102,6 +108,13 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 								[% END %]
 							</td>
 							<td>[% rule.issuelength %]</td>
+                                                        <td>[% IF ( rule.hardduedate ) %]
+                                                               [% IF ( rule.hardduedatebefore ) %]before [% rule.hardduedate %]</td>
+                                                               [% ELSE %][% IF ( rule.hardduedateexact ) %]on [% rule.hardduedate %]</td>
+                                                                                 [% ELSE %][% IF ( rule.hardduedateafter ) %]after [% rule.hardduedate %]</td>[% END %]
+                                                                                 [% END %]
+                                                               [% END %]
+                                                            [% ELSE %]None defined[% END %]   
 							<td>[% rule.fine %]</td>
 							<td>[% rule.chargeperiod %]</td>
 							<td>[% rule.firstremind %]</td>
@@ -133,6 +146,29 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="issuelength" size="3" /> </td>
+                    <td><select name="hardduedatecompare">
+                           <option value="-1">Before</option>
+                           <option value="0">Exactly on</option>
+                           <option value="1">After</option>
+                        </select>
+                        <input type="text" size="10" id="hardduedate" name="hardduedate" value="[% hardduedate %]" />
+                        [% INCLUDE 'date-format.inc' %]
+                        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;"/>
+                        <script language="JavaScript" type="text/javascript">
+                             function refocus(calendar) {
+                                 document.getElementById('hardduedate').focus();
+                                 calendar.hide();
+                             };
+                             Calendar.setup(
+                             {
+                             inputField : "hardduedate",
+                             ifFormat : "%m/%d/%Y",
+                             button : "CalendarDueDate",
+                             onClose: refocus
+                             }
+                             );
+                 </script>
+                    </td>
                     <td><input name="fine" size="4" /></td>
                     <td><input name="chargeperiod" size="2" /></td>
                     <td><input name="firstremind" size="2" /> </td>

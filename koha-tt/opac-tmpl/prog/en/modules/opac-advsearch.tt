@@ -247,7 +247,15 @@
         [% END %]    
         [% END %]
         </select>
-        
+        [% IF ( searchdomainloop ) %]
+            <p>OR</p> <!-- should addjs to grey out group pulldown if a library is selected. -->
+                <label for="categoryloop">Groups of Libraries</label><select name="multibranchlimit" id="categoryloop">
+                <option value=""> -- none -- </option>
+                [% FOREACH searchdomainloo IN searchdomainloop %]
+                <option value="[% searchdomainloo.categorycode %]">[% searchdomainloo.categoryname %]</option>
+                [% END %]
+                </select>
+        [% END %]        
         <div style="margin-top:.4em"><label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available for loan or reference</label></div>
     </fieldset></div>
     [% END %]
