@@ -22,6 +22,7 @@ function closemenu(){
     $(".linktools").hide();
     $("tr").removeClass("selected");
 }
+
 $(document).ready(function(){
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
@@ -52,6 +53,13 @@ $(document).ready(function(){
             var row = $(this).parent();
             row.addClass("selected");
         });
+    $("form[name='f']").submit(function(){
+        if ($('input[type=checkbox]').filter(':checked').length == 0) {
+            alert(_("Please choose at least one Z39.50 target"));
+            return false;
+        } else
+            return true;
+    });
 });
 
 //]]>
@@ -153,9 +161,13 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     <!-- /TMPL_LOOP --></tbody>
 </table>
     <!-- TMPL_ELSE -->
-        <!-- TMPL_LOOP name="errconn" -->
-            Connection failed to <!-- TMPL_VAR NAME="server" -->
-        <!-- /TMPL_LOOP -->
+        <!-- TMPL_IF NAME="emptyserverlist" -->
+            You didn't select any Z39.50 target.
+        <!-- TMPL_ELSE -->
+            <!-- TMPL_LOOP name="errconn" -->
+                Connection failed to <!-- TMPL_VAR NAME="server" -->
+            <!-- /TMPL_LOOP -->
+        <!-- /TMPL_IF -->
 	<p>Nothing found. <a href="/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->">Try another search</a>.</p>
     <!-- /TMPL_IF -->
 
