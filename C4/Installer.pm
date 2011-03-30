@@ -508,8 +508,13 @@ sub load_sql {
     my $datadir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}";
     my $error;
     my $strcmd;
+    my $cmd;
     if ( $self->{dbms} eq 'mysql' ) {
-        $strcmd = "mysql "
+        $cmd = qx(which mysql 2>/dev/null || whereis mysql 2>/dev/null);
+        chomp $cmd;
+        $cmd = $1 if ($cmd && $cmd =~ /^(.+?)[\r\n]+$/);
+        $cmd = 'mysql' if (!$cmd || !-x $cmd);
+        $strcmd = "$cmd "
             . ( $self->{hostname} ? " -h $self->{hostname} " : "" )
             . ( $self->{port}     ? " -P $self->{port} "     : "" )
             . ( $self->{user}     ? " -u $self->{user} "     : "" )
@@ -517,7 +522,11 @@ sub load_sql {
             . " $self->{dbname} ";
         $error = qx($strcmd --default-character-set=utf8 <$filename 2>&1 1>/dev/null);
     } elsif ( $self->{dbms} eq 'Pg' ) {
-        $strcmd = "psql "
+        $cmd = qx(which psql 2>/dev/null || whereis psql 2>/dev/null);
+        chomp $cmd;
+        $cmd = $1 if ($cmd && $cmd =~ /^(.+?)[\r\n]+$/);
+        $cmd = 'psql' if (!$cmd || !-x $cmd);
+        $strcmd = "$cmd "
             . ( $self->{hostname} ? " -h $self->{hostname} " : "" )
             . ( $self->{port}     ? " -p $self->{port} "     : "" )
             . ( $self->{user}     ? " -U $self->{user} "     : "" )
