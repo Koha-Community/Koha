@@ -12,7 +12,12 @@ $(document).ready(function() {
 });
 //]]>
 </script>
-
+<!-- Enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css" />
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
+<!-- End Calendar system additions -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -68,6 +73,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Item Type</th>
                 <th>Current Checkouts Allowed</th>
                 <th>Loan Period (day)</th>
+                <th>Hard Due Date</th>
                 <th>Fine Amount</th>
                 <th>Fine Charging Interval</th>
                 <th>Fine Grace period (day)</th>
@@ -102,6 +108,13 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 								<!-- /TMPL_IF -->
 							</td>
 							<td><!-- TMPL_VAR NAME="issuelength" --></td>
+                                                        <td><!-- TMPL_IF NAME="hardduedate" -->
+                                                               <!-- TMPL_IF NAME="hardduedatebefore" -->before <!-- TMPL_VAR NAME="hardduedate" --></td>
+                                                               <!-- TMPL_ELSE --><!-- TMPL_IF NAME="hardduedateexact" -->on <!-- TMPL_VAR NAME="hardduedate" --></td>
+                                                                                 <!-- TMPL_ELSE --><!-- TMPL_IF NAME="hardduedateafter" -->after <!-- TMPL_VAR NAME="hardduedate" --></td><!-- /TMPL_IF -->
+                                                                                 <!-- /TMPL_IF -->
+                                                               <!-- /TMPL_IF -->
+                                                            <!-- TMPL_ELSE -->None defined<!-- /TMPL_IF -->   
 							<td><!-- TMPL_VAR NAME="fine" --></td>
 							<td><!-- TMPL_VAR NAME="chargeperiod" --></td>
 							<td><!-- TMPL_VAR NAME="firstremind" --></td>
@@ -133,6 +146,29 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="issuelength" size="3" /> </td>
+                    <td><select name="hardduedatecompare">
+                           <option value="-1">Before</option>
+                           <option value="0">Exactly on</option>
+                           <option value="1">After</option>
+                        </select>
+                        <input type="text" size="10" id="hardduedate" name="hardduedate" value="<!-- TMPL_VAR NAME="hardduedate" -->" />
+                        <!-- TMPL_INCLUDE NAME="date-format.inc" -->
+                        <img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" alt="Show Calendar"  border="0" id="CalendarDueDate" style="cursor: pointer;"/>
+                        <script language="JavaScript" type="text/javascript">
+                             function refocus(calendar) {
+                                 document.getElementById('hardduedate').focus();
+                                 calendar.hide();
+                             };
+                             Calendar.setup(
+                             {
+                             inputField : "hardduedate",
+                             ifFormat : "%m/%d/%Y",
+                             button : "CalendarDueDate",
+                             onClose: refocus
+                             }
+                             );
+                 </script>
+                    </td>
                     <td><input name="fine" size="4" /></td>
                     <td><input name="chargeperiod" size="2" /></td>
                     <td><input name="firstremind" size="2" /> </td>

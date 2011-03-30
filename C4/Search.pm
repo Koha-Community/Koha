@@ -25,6 +25,7 @@ use Lingua::Stem;
 use C4::Search::PazPar2;
 use XML::Simple;
 use C4::Dates qw(format_date);
+use C4::Members qw(GetHideLostItemsPreference);
 use C4::XSLT;
 use C4::Branch;
 use C4::Reserves;    # CheckReserves
@@ -391,7 +392,7 @@ sub getRecords {
                 warn "Ignoring unrecognized sort '$sort' requested" if $sort_by;
             }
         }
-        if ($sort_by) {
+        if ($sort_by && !$scan) {
             if ( $results[$i]->sort( "yaz", $sort_by ) < 0 ) {
                 warn "WARNING sort $sort_by failed";
             }
@@ -1482,7 +1483,7 @@ sub searchResults {
         # add imageurl to itemtype if there is one
         $oldbiblio->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
-        $oldbiblio->{'authorised_value_images'}  = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) );
+        $oldbiblio->{'authorised_value_images'}  = ($search_context eq 'opac' && C4::Context->preference('AuthorisedValueImages')) || ($search_context eq 'intranet' && C4::Context->preference('StaffAuthorisedValueImages')) ? C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) ) : [];
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_ean}  = GetNormalizedEAN(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
@@ -1593,7 +1594,8 @@ sub searchResults {
 
 			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
-            if ( $item->{onloan} ) {
+            my $userenv = C4::Context->userenv;
+            if ( $item->{onloan} && !(C4::Members::GetHideLostItemsPreference($userenv->{'number'}) && $item->{itemlost}) ) {
                 $onloan_count++;
 				my $key = $prefix . $item->{onloan} . $item->{barcode};
 				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});

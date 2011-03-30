@@ -151,6 +151,15 @@
 						<option value="1">Yes</option>
 			<!-- /TMPL_IF -->
 					</select></li>
+	<li><label for="hidelostitems">Lost items in staff client</label> &nbsp; <select name="hidelostitems" id="hidelostitems">
+			<!-- TMPL_IF NAME="hidelostitems" -->
+						<option value="0">Shown</option>
+						<option value="1" selected="selected">Hidden by default</option>
+			<!-- TMPL_ELSE -->
+						<option value="0" selected="selected">Shown</option>
+						<option value="1">Hidden by default</option>
+			<!-- /TMPL_IF -->
+					</select></li>
 	<li><label for="reservefee">Hold fee: </label><input type="text" name="reservefee" id="reservefee" size="6" value="<!-- TMPL_VAR NAME="reservefee" -->" /></li>
 	<li><label for="category_type">Category type: </label> &nbsp; <select name="category_type" id="category_type">
 						<!-- TMPL_IF NAME="type_n" --><option value="" selected="selected">Select a Category type</option><!-- TMPL_ELSE --><option value="">Select a Category type</option><!-- /TMPL_IF -->
@@ -208,6 +217,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 	<tr><th scope="row">Upperage limit: </th><td><!-- TMPL_VAR NAME="upperagelimit" --> years</td></tr>
 	<tr><th scope="row">Enrollment fee: </th><td><!-- TMPL_VAR NAME="enrolmentfee" --></td></tr>
 	<tr><th scope="row">Receives overdue notices: </th><td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td></tr>
+	<tr><th scope="row">Lost items in staff client</th><td><!-- TMPL_IF NAME="hidelostitems" -->Hidden by default<!-- TMPL_ELSE -->Shown<!-- /TMPL_IF --></td></tr>
 	<tr><th scope="row">Hold fee: </th><td><!-- TMPL_VAR NAME="reservefee" --></td></tr>
 </table>
 		<fieldset class="action"><!-- TMPL_IF NAME="totalgtzero" -->
@@ -282,6 +292,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 			<th scope="col">Upper age limit</th>
 			<th scope="col">Enrollment fee</th>
 			<th scope="col">Overdue</th>
+			<th scope="col">Lost Items</th>
  			<th scope="col">Hold fee</th>
             <!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
             <th scope="col">Messaging</th>
@@ -318,6 +329,7 @@ Confirm Deletion of Category <!-- TMPL_VAR NAME="categorycode" escape="html" -->
 			<td><!-- TMPL_VAR NAME="upperagelimit" --> years</td>
                         <td><!-- TMPL_VAR NAME="enrolmentfee" --></td>
                         <td><!-- TMPL_IF NAME="overduenoticerequired" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
+                        <td><!-- TMPL_IF NAME="hidelostitems" -->Hidden<!-- TMPL_ELSE -->Shown<!-- /TMPL_IF --></td>
                         <td><!-- TMPL_VAR NAME="reservefee" --></td>
                         <!-- TMPL_IF NAME="EnhancedMessagingPreferences" -->
                         <td>

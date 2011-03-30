@@ -383,7 +383,7 @@ my @indexes;
 @indexes = split("\0",$params->{'idx'});
 
 # if a simple index (only one)  display the index used in the top search box
-if ($indexes[0] && !$indexes[1]) {
+if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
     $template->param("ms_".$indexes[0] => 1);}
 
 
@@ -396,7 +396,7 @@ my @limits;
 @limits = split("\0",$params->{'limit'}) if $params->{'limit'};
 
 if($params->{'multibranchlimit'}) {
-push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
+    push @limits, '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
 }
 
 my $available;
