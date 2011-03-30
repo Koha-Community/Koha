@@ -504,6 +504,7 @@ for (my $i=0;$i<@servers;$i++) {
      		    $template->param(ShowOpacRecentSearchLink => 1);
      		}
  
+            shift @recentSearches if (@recentSearches > 15);
      		# Pushing the cookie back 
      		$newsearchcookie = $cgi->cookie(
  					    -name => 'KohaOpacRecentSearches',
