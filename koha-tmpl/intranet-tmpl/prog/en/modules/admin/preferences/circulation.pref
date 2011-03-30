@@ -321,6 +321,28 @@ Circulation:
                   no: "Don't enable"
             - "the web-based self checkout system. (available at: /cgi-bin/koha/sco/sco-main.pl)"
         -
+            - Have patrons login into the web-based self checkout system with their 
+            - pref: SelfCheckoutByLogin
+              choices:
+                  yes: Username and Password
+                  no: Barcode
+        -
+            - "Time out the current patron's web-based self checkout system login after"
+            - pref: SelfCheckTimeout
+              class: integer
+            - seconds.
+        -
+            - pref: AllowSelfCheckReturns
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to return items through web-based self checkout system. 
+        -
+            - "Include the following HTML in the Help page of the web-based self checkout system:"
+            - pref: SelfCheckHelpMessage
+              type: textarea
+              class: code
+        -
             - pref: AutoSelfCheckAllowed
               choices:
                   yes: Allow

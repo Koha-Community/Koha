@@ -14,9 +14,9 @@ package C4::Circulation;
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, write to the Free Software Foundation, Inc.,
-# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
 
 
 use strict;
@@ -2691,6 +2691,7 @@ C<$startdate>   = C4::Dates object representing start date of loan period (assum
 C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
 C<$borrower> = Borrower object
+
 =cut
 
 sub CalcDateDue { 
@@ -2698,14 +2699,21 @@ sub CalcDateDue {
 	my $datedue;
         my $loanlength = GetLoanLength($borrower->{'categorycode'},$itemtype, $branch);
 
-	if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
-		my $timedue = time + ($loanlength) * 86400;
-	#FIXME - assumes now even though we take a startdate 
-		my @datearr  = localtime($timedue);
-		$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+	# if globalDueDate ON the datedue is set to that date
+	if ( C4::Context->preference('globalDueDate')
+             && ( C4::Context->preference('globalDueDate') =~ C4::Dates->regexp('syspref') ) ) {
+            $datedue = C4::Dates->new( C4::Context->preference('globalDueDate') );
 	} else {
-		my $calendar = C4::Calendar->new(  branchcode => $branch );
-		$datedue = $calendar->addDate($startdate, $loanlength);
+	# otherwise, calculate the datedue as normal
+		if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
+			my $timedue = time + ($loanlength) * 86400;
+		#FIXME - assumes now even though we take a startdate 
+			my @datearr  = localtime($timedue);
+			$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+		} else {
+			my $calendar = C4::Calendar->new(  branchcode => $branch );
+			$datedue = $calendar->addDate($startdate, $loanlength);
+		}
 	}
 
 	# if Hard Due Dates are used, retreive them and apply as necessary
@@ -2728,7 +2736,6 @@ sub CalcDateDue {
 	if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
 	    $datedue = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
 	}
-
 
 	return $datedue;
 }

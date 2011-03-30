@@ -140,6 +140,9 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ThingISBN',0,'Utilisé avec ''FRBRizeEditions''. Si activé, Koha utilisera le service ''ThingISBN'' dans l''onglet  supplémentaire de la page de détail de notice.','','YesNo');
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WebBasedSelfCheck',0,'Si activé, permet le système de prêt auto-controlé à partir de l''opac (/cgi-bin/koha/sco/sco-main.pl',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckTimeout',120,'Define the number of seconds before the Web-based Self Checkout times out a patron','','Integer');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AllowSelfCheckReturns',0,'If enabled, patrons may return items through the Web-based Self Checkout','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckHelpMessage','','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numSearchResults',20,'Spécifie le nombre maximum de réponses à afficher sur les pages de résultats',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACnumSearchResults',20,'Spécifie le nombre maximum de réponses à afficher sur les pages de résultats',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortField',NULL,'Spécifie le champ utilisé par défaut pour le tri','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');

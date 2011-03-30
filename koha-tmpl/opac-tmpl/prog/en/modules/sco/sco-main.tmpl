@@ -7,7 +7,7 @@
 <script type="text/javascript">//<![CDATA[
 function sco_init(valid_session) {
     if (valid_session == 1) {
-        setTimeout("location.href='/cgi-bin/koha/sco/sco-main.pl?op=logout';",120000); // TODO: syspref for timeout
+        setTimeout("location.href='/cgi-bin/koha/sco/sco-main.pl?op=logout';",<!-- TMPL_VAR name="SelfCheckTimeout" -->); 
     }
 }
 function dofocus() {    // named function req'd for body onload event by some FF and IE7 security models
@@ -110,15 +110,17 @@ $(document).ready(function() {
 <input type="hidden" name="op" value="login" />
 <input type="hidden" name="patronid" value="<!-- TMPL_VAR NAME="patronid" -->" />
 <!-- TMPL_IF NAME="returnitem" -->
+<!-- TMPL_IF NAME="AllowSelfCheckReturns" -->
 <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
 <input type="button" name="returnbook" value="Return this item" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <input type="submit" name= "confirm" value="Return to Account Summary" class="back focus" />
 </form>
 <!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="confirm" --><!-- We need to confirm the issue.. -->
 <div class="dialog alert"><h3>Please confirm the checkout:</h3>
-<p><!-- TMPL_IF NAME="confirm_renew_issue" -->This item is already checked out to you.  Return it?<!-- /TMPL_IF --></p>
+<p><!-- TMPL_IF NAME="confirm_renew_issue" -->This item is already checked out to you.<!-- /TMPL_IF --></p>
 
 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" method="post">
 <input type="hidden" name="op" value="checkout" />
@@ -126,7 +128,9 @@ $(document).ready(function() {
 <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
 <input type="hidden" name="confirmed" value="" />
 <!-- TMPL_IF NAME="renew" -->
+<!-- TMPL_IF NAME="AllowSelfCheckReturns" -->
 <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+<!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 <input type="button" value="Renew Item" <!-- TMPL_UNLESS NAME="renew" --> name="confirm"<!-- /TMPL_UNLESS --> class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
 <input type="button" value="Cancel" class="cancel" onclick="this.form.op.value='';this.form.submit();return true;"  />
@@ -175,7 +179,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_IF NAME="validuser" -->
 	<div id="newcheckout" class="sco_entry">
 	<form id="scan_form" name="scan_form" method="post" action="/cgi-bin/koha/sco/sco-main.pl" onsubmit="return checkout_confirm('<!-- TMPL_VAR NAME='patronid' -->');">
-	<fieldset><legend> Check out or return an item: </legend>
+	<fieldset><legend> Check out<!--TMPL_IF NAME="AllowSelfCheckReturns" -->, return<!--/TMPL_IF --> or renew an item: </legend>
 	<label for="barcode">Scan a new item or enter its barcode:</label>
 	<input id="barcode" name="barcode" size="20" class="focus" />
 	<input type="hidden" name="op" value="checkout" />
@@ -209,7 +213,11 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
     <input type="hidden" name="barcode" value="<!-- TMPL_VAR NAME="barcode" -->" />
     <input type="hidden" name="confirmed" value=""  />
         <!-- TMPL_IF NAME="norenew" -->
-        <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+          <!-- TMPL_IF NAME="AllowSelfCheckReturns" -->
+          <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
+          <!-- TMPL_ELSE -->
+          <span>No renewals allowed</span>
+          <!-- /TMPL_IF -->
         <!-- TMPL_ELSE  -->
         <input type="button" value="Renew Item" <!-- TMPL_UNLESS NAME="renew" --> name="confirm"<!-- /TMPL_UNLESS --> class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
         <!-- /TMPL_IF -->
@@ -227,8 +235,17 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	<!-- TMPL_ELSE --><!-- not validuser -->
 	<div class="sco_entry" >
 	<form id="mainform" action="/cgi-bin/koha/sco/sco-main.pl" name="mainform" method="post">
+       <!-- TMPL_IF NAME="authbylogin" -->
+	<fieldset class="checkout">
+       <legend>Please login with your username and password</legend>
+       <label for="patronlogin">Username:</label>
+	<input type="text" id="patronlogin" class="focus" size="20" name="patronlogin" />
+       <label for="patronpw">Password:</label>
+	<input type="password" id="patronpw" size="20" name="patronpw" />
+       <!-- TMPL_ELSE -->
 	<fieldset class="checkout"><label for="patronid">Please enter your card number:</label> 
 	<input type="text" id="patronid" class="focus" size="20" name="patronid" />
+	<!-- /TMPL_IF -->
 
  	<!-- TMPL_LOOP NAME="INPUTS" --><input type="hidden" name="<!-- TMPL_VAR ESCAPE=HTML NAME="name" -->" value="<!-- TMPL_VAR ESCAPE=HTML NAME="value" -->"><!-- /TMPL_LOOP -->
 	<input type="hidden" name="op" value="login" />
