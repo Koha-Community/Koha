@@ -293,7 +293,7 @@ function tagAdded() {
             <th scope="row">Location(s)</th>
             <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><ul><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
                             <li>
-                                <strong><!-- TMPL_VAR NAME="branchname" --></strong><!-- TMPL_IF NAME="location" -->, <!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
+                                <strong><!-- TMPL_VAR NAME="homebranch" --></strong><!-- TMPL_IF NAME="location_opac" -->, <!-- TMPL_VAR NAME="location_opac" --><!-- /TMPL_IF -->
                                 <!-- TMPL_IF name="itemcallnumber" -->
                                     (<!-- TMPL_VAR NAME="itemcallnumber" -->)
                                 <!-- /TMPL_IF -->
@@ -367,7 +367,7 @@ function tagAdded() {
 	    </td>
                 <td><!-- TMPL_IF NAME="ITEM_RESULTS" --><ul><!-- TMPL_LOOP NAME="ITEM_RESULTS" -->
                     <li>
-                        <!-- TMPL_VAR NAME="branchname" --><!-- TMPL_IF NAME="location" -->, <!-- TMPL_VAR NAME="location" --><!-- /TMPL_IF -->
+                        <!-- TMPL_VAR NAME="homebranch" --><!-- TMPL_IF NAME="location_opac" -->, <!-- TMPL_VAR NAME="location_opac" --><!-- /TMPL_IF -->
                         <!-- TMPL_IF name="itemcallnumber" -->
                             (<!-- TMPL_VAR NAME="itemcallnumber" -->)
                         <!-- /TMPL_IF -->

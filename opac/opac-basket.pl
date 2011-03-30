@@ -68,7 +68,7 @@ foreach my $biblionumber ( @bibs ) {
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
     my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-    my @items            = &GetItemsInfo( $biblionumber, 'opac' );
+    my @items            = &GetItemsLocationInfo( $biblionumber );
     my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
 
     my $hasauthors = 0;

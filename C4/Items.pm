@@ -65,6 +65,7 @@ BEGIN {
         GetItemInfosOf
         GetItemsByBiblioitemnumber
         GetItemsInfo
+	GetItemsLocationInfo
         get_itemnumbers_of
         GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
@@ -1346,6 +1347,72 @@ sub GetItemsInfo {
     	return (@results);
 	}
 }
+
+=head2 GetItemsLocationInfo
+
+  my @itemlocinfo = GetItemsLocationInfo($biblionumber);
+
+Returns the branch names, shelving location and itemcallnumber for each item attached to the biblio in question
+
+C<GetItemsInfo> returns a list of references-to-hash. Data returned:
+
+=over 2
+
+=item C<$data-E<gt>{homebranch}>
+
+Branch Name of the item's homebranch
+
+=item C<$data-E<gt>{holdingbranch}>
+
+Branch Name of the item's holdingbranch
+
+=item C<$data-E<gt>{location}>
+
+Item's shelving location code
+
+=item C<$data-E<gt>{location_intranet}>
+
+The intranet description for the Shelving Location as set in authorised_values 'LOC'
+
+=item C<$data-E<gt>{location_opac}>
+
+The OPAC description for the Shelving Location as set in authorised_values 'LOC'.  Falls back to intranet description if no OPAC 
+description is set.
+
+=item C<$data-E<gt>{itemcallnumber}>
+
+Item's itemcallnumber
+
+=item C<$data-E<gt>{cn_sort}>
+
+Item's call number normalized for sorting
+
+=back
+  
+=cut
+
+sub GetItemsLocationInfo {
+        my $biblionumber = shift;
+        my @results;
+
+	my $dbh = C4::Context->dbh;
+	my $query = "SELECT a.branchname as homebranch, b.branchname as holdingbranch, 
+			    location, itemcallnumber, cn_sort
+		     FROM items, branches as a, branches as b
+		     WHERE homebranch = a.branchcode AND holdingbranch = b.branchcode 
+		     AND biblionumber = ?
+		     ORDER BY cn_sort ASC";
+	my $sth = $dbh->prepare($query);
+        $sth->execute($biblionumber);
+
+        while ( my $data = $sth->fetchrow_hashref ) {
+             $data->{location_intranet} = GetKohaAuthorisedValueLib('LOC', $data->{location});
+             $data->{location_opac}= GetKohaAuthorisedValueLib('LOC', $data->{location}, 1);
+	     push @results, $data;
+	}
+	return @results;
+}
+
 
 =head2 GetLastAcquisitions
 
