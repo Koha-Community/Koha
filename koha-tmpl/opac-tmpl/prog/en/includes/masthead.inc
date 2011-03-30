@@ -155,7 +155,7 @@
 		<!-- /TMPL_IF -->
 		<!-- TMPL_IF NAME="bartotal" -->
 			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all <!--TMPL_VAR NAME="bartotal" --> of your lists</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all <!--TMPL_VAR NAME="bartotal" --> of your private lists</a></li>
 			</ul>
 		<!-- /TMPL_IF -->
 		<ul class="second-of-type">

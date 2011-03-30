@@ -105,9 +105,11 @@ $(document).ready(function(){
 	<!-- /TMPL_IF --><!-- TMPL_IF NAME="virtualshelves" --><!-- TMPL_IF NAME="loggedinusername" --><!-- TMPL_IF NAME="addbarshelves" -->
 	param1 += "<optgroup label=\""+_("Your Lists:")+"\">";<!-- TMPL_LOOP NAME="addbarshelvesloop" -->
 	param1 += "<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP -->
+    <!-- TMPL_IF NAME="bartotal" -->param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";<!-- /TMPL_IF -->
 	param1 += "<\/optgroup>";<!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="addpubshelves" -->param1 += "<optgroup label=\""+_("Public Lists:")+"\">"<!-- TMPL_LOOP NAME="addpubshelvesloop" -->+"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>"<!-- /TMPL_LOOP --><!-- /TMPL_IF -->
-	param1 +="<\/optgroup><option value=\"newlist\">[ "+_("New List")+" ]<\/option>"
+	<!-- TMPL_IF NAME="addpubshelves" -->param1 += "<optgroup label=\""+_("Public Lists:")+"\">"<!-- TMPL_LOOP NAME="addpubshelvesloop" -->+"<option id=\"s<!-- TMPL_VAR NAME="shelfnumber" -->\" value=\"addtolist\"><!-- TMPL_VAR NAME="shelfname" ESCAPE="html"--><\/option>";<!-- /TMPL_LOOP --><!-- /TMPL_IF -->
+	param1 += "<\/optgroup>";
+    param1 += "<option value=\"newlist\">[ "+_("New List")+" ]<\/option>";
 	<!-- /TMPL_IF -->
 	<!-- /TMPL_IF -->
 	param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
@@ -153,7 +155,7 @@ $(document).ready(function(){
     <!-- TMPL_IF NAME="opacuserlogin" --><!-- TMPL_IF NAME="TagsEnabled" -->$("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");<!-- /TMPL_IF --><!-- /TMPL_IF -->
 
 	function cartList(){
-			if($("#addto").find("option:selected").attr("value") == "addtolist"){
+		if($("#addto").find("option:selected").attr("value") == "addtolist"){
 			var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
 			if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
@@ -164,6 +166,11 @@ $(document).ready(function(){
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
 			}<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
 			return false;
+        } else if($("#addto").find("option:selected").attr("value") == "morelists"){
+            <!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {
+            Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());
+            }<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
+            return false;
 		}
 		if($("#addto").find("option:selected").attr("value") == "addtocart" || $("#addto").attr("class") == "addtocart"){
 			addMultiple();

@@ -47,7 +47,7 @@ BEGIN {
             &GetBibliosShelves
 	);
         @EXPORT_OK = qw(
-            &GetShelvesSummary &GetRecentShelves
+            &GetShelvesSummary &GetRecentShelves &GetAllShelves
             &RefreshShelvesSummary &SetShelvesLimit
         );
 }
@@ -210,6 +210,29 @@ sub GetRecentShelves ($$$) {
 	$sth->execute(@params);
 	@shelflist = $sth->fetchall_arrayref({});
 	return ( \@shelflist, $total );
+}
+
+=head2 GetAllShelves
+
+    ($shelflist) = GetAllShelves($owner)
+
+This function returns a references to an array of hashrefs containing all shelves sorted
+by the shelf name.
+
+This function is intended to return a dataset reflecting all the shelves for
+the submitted parameters.
+
+=cut
+
+sub GetAllShelves ($$) {
+    my ($category,$owner) = @_;
+    my (@shelflist);
+    my @params = ($category,$owner);
+    my $query = "SELECT * FROM virtualshelves WHERE category = ? AND owner = ? ORDER BY shelfname ASC";
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@params);
+    @shelflist = $sth->fetchall_arrayref({});
+    return ( \@shelflist );
 }
 
 =head2 GetShelf
