@@ -71,6 +71,8 @@ if ( ! $record ) {
     exit;
 }
 $template->param( biblionumber => $biblionumber );
+	use C4::Charset;
+	SetUTF8Flag($record);
 # XSLT processing of some stuff
 if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
     $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail', 'opac') );
