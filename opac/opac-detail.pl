@@ -41,6 +41,7 @@ use C4::Members;
 use C4::VirtualShelves;
 use C4::XSLT;
 use C4::ShelfBrowser;
+use C4::Charset;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -71,8 +72,9 @@ if ( ! $record ) {
     exit;
 }
 $template->param( biblionumber => $biblionumber );
-	use C4::Charset;
-	SetUTF8Flag($record);
+
+SetUTF8Flag($record);
+
 # XSLT processing of some stuff
 if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
     $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail', 'opac') );
