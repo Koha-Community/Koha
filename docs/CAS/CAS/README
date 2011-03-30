@@ -1,0 +1,8 @@
+CAS authentication is available through CasAuthentication and casServerUrl sysprefs.
+
+However, if you plan to use multi-CAS (ie: authentication against multiple CAS server,
+you'll have to use C4/Auth_cas_servers.yaml.
+
+Anyway, please keep in mind that if you want to authenticate through https against the
+CAS serveur, you have to install Crypt::SSLeay package, or the authentication will 
+silently fail.
