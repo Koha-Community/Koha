@@ -147,7 +147,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         } elsif (@columns == @columnkeys) {
             @borrower{@columnkeys} = @columns;
             # MJR: try to fill blanks gracefully by using default values
-            foreach my $key (@criticals) {
+            foreach my $key (@columnkeys) {
                 if ($borrower{$key} !~ /\S/) {
                     $borrower{$key} = $defaults{$key};
                 }
