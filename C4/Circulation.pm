@@ -2255,7 +2255,7 @@ sub AddRenewal {
     unless ($datedue) {
 
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
-        my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
+        my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         C4::Dates->new($issuedata->{date_due}, 'iso') :
