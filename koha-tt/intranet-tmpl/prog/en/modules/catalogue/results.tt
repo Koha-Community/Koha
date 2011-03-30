@@ -430,6 +430,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                             </td>
                             <td>
                                 <p>[% SEARCH_RESULT.result_number %].
+                                [% biblionumber = SEARCH_RESULT.biblionumber %]
                                 [% INCLUDE 'biblio-default-view.inc' %]
                                             <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title |html %][% ELSE %]No title[% END %]</b>
                                             </a>
