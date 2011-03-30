@@ -216,7 +216,7 @@ sub shelfpage ($$$$$) {
                     $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber($record,$marcflavour);
                     $this_item->{'normalized_isbn'} = GetNormalizedISBN(undef,$record,$marcflavour);
                     # Getting items infos for location display
-                    my @items_infos = &GetItemsInfo( $this_item->{'biblionumber'}, $type );
+                    my @items_infos = &GetItemsLocationInfo( $this_item->{'biblionumber'});
                     $this_item->{'itemsissued'} = CountItemsIssued( $this_item->{'biblionumber'} );
                     $this_item->{'ITEM_RESULTS'} = \@items_infos;
 
