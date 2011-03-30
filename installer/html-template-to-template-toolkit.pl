@@ -88,7 +88,7 @@ foreach my $file (@template_files) {
 	$input_tmpl =~ s/"(\w+)\+"/"$1plus"/ig;
 	$input_tmpl =~ s/"(\w+)\-"/"$1minus"/ig;
 	$input_tmpl =~ s/"(\w+)!"/"$1exclamation"/ig;
-#	$input_tmpl =~ s/"(\w+),(\w+)"/"$1comma$2"/ig; #caused a problem in patron search
+	$input_tmpl =~ s/"(\w+),(\w+)"/"$1comma$2"/ig; #caused a problem in patron search
 	$input_tmpl =~ s/NAME="mod"/NAME="modname"/ig;
 	# handle 'naked' TMPL_VAR "parameter" by turning them into what they should be, TMPL_VAR NAME="parameter"
 	$input_tmpl =~ s/TMPL_VAR\s+"(\w+)"/TMPL_VAR NAME="$1"/ig;

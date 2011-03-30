@@ -384,7 +384,10 @@ my @indexes;
 
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
-    $template->param("ms_".$indexes[0] => 1);}
+    my $idx = "ms_".$indexes[0];
+    $idx =~ s/\,/comma/g;  # template toolkit doesnt like variables with a , in it
+    $template->param($idx => 1);
+}
 
 
 # an operand can be a single term, a phrase, or a complete ccl query
