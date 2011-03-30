@@ -1,0 +1,12 @@
+# This file is used for authenticating against multiple CAS servers
+# If the file Auth_cas_servers.yaml exists, then the casServerUrl syspref will be ignored
+
+# If you have to authenticate against only one CAS server, which is usually the case,
+# don't use this file, but the casServerUrl syspref instead
+
+default: ServerName
+---
+  ServerName: "https://example.com/cas"
+  OtherServerName: "https://example.org/cas"
+  ThirdServerName: "https://example.edu/cas"
+
