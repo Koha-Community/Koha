@@ -84,6 +84,9 @@ else {
     authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     }
 );
+if ($template_name = 'opac-results.tmpl') {
+   $template->param('COinSinOPACResults' => C4::Context->preference('COinSinOPACResults'));
+}
 
 if ($format eq 'rss2' or $format eq 'opensearchdescription' or $format eq 'atom') {
 	$template->param($format => 1);
@@ -468,9 +471,11 @@ for (my $i=0;$i<@servers;$i++) {
 										limit=>$tag_quantity });
 			}
 		}
-		foreach (@newresults) {
-		    $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
-		}
+                if (C4::Context->preference('COinSinOPACResults')) {
+		    foreach (@newresults) {
+		      $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
+		    }
+                }
       
 	if ($results_hashref->{$server}->{"hits"}){
 	    $total = $total + $results_hashref->{$server}->{"hits"};
