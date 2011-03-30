@@ -32,27 +32,34 @@ use C4::Koha;
 use C4::Branch; # GetBranches
 use C4::VirtualShelves;
 use POSIX qw/strftime/;
+use List::MoreUtils qw/ any /;
 
 # use utf8;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $servers $memcached);
 
 BEGIN {
-    $VERSION = 3.02;        # set version for version checking
-    $debug = $ENV{DEBUG};
-    @ISA   = qw(Exporter);
-    @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
-    @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
-    %EXPORT_TAGS = (EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)]);
-    $ldap = C4::Context->config('useldapserver') || 0;
-    $cas = C4::Context->preference('casAuthentication');
-    $caslogout = C4::Context->preference('casLogout');
+    sub psgi_env { any { /^psgi\./ } keys %ENV }
+    sub safe_exit {
+	if ( psgi_env ) { die 'psgi:exit' }
+	else { exit }
+    }
+
+    $VERSION     = 3.02;                                                                                                            # set version for version checking
+    $debug       = $ENV{DEBUG};
+    @ISA         = qw(Exporter);
+    @EXPORT      = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
+    @EXPORT_OK   = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &get_all_subpermissions &get_user_subpermissions);
+    %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
+    $ldap        = C4::Context->config('useldapserver') || 0;
+    $cas         = C4::Context->preference('casAuthentication');
+    $caslogout   = C4::Context->preference('casLogout');
+    require C4::Auth_with_cas;             # no import
     if ($ldap) {
-        require C4::Auth_with_ldap;             # no import
-        import  C4::Auth_with_ldap qw(checkpw_ldap);
+	require C4::Auth_with_ldap;
+	# no import import C4::Auth_with_ldap qw(checkpw_ldap);
     }
     if ($cas) {
-        require C4::Auth_with_cas;             # no import
-        import  C4::Auth_with_cas qw(checkpw_cas login_cas logout_cas login_cas_url);
+        import  C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
     }
     $servers = C4::Context->config('memcached_servers');
     if ($servers) {
@@ -130,8 +137,8 @@ Output.pm module.
 =cut
 
 my $SEARCH_HISTORY_INSERT_SQL =<<EOQ;
-INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, total, time            )
-VALUES                    (     ?,         ?,          ?,         ?,     ?, FROM_UNIXTIME(?))
+INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, limit_desc, limit_cgi, total, time            )
+VALUES                    (     ?,         ?,          ?,         ?,          ?,         ?,     ?, FROM_UNIXTIME(?))
 EOQ
 sub get_template_and_user {
     my $in       = shift;
@@ -264,13 +271,9 @@ sub get_template_and_user {
 			        my @recentSearches = @{thaw($searchcookie) || []};
 				if (@recentSearches) {
 					my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
-					$sth->execute( $borrowernumber,
-						       $in->{'query'}->cookie("CGISESSID"),
-						       $_->{'query_desc'},
-						       $_->{'query_cgi'},
-						       $_->{'total'},
-						       $_->{'time'},
-                                        ) foreach @recentSearches;
+                    
+                    $sth->execute( $borrowernumber, $in->{'query'}->cookie("CGISESSID"), $_->{'query_desc'}, $_->{'query_cgi'}, $_->{'limit_desc'}, $_->{'limit_cgi'}, $_->{'total'}, $_->{'time'}, )
+                                foreach @recentSearches;
 
 					# And then, delete the cookie's content
 					my $newsearchcookie = $in->{'query'}->cookie(
@@ -572,19 +575,18 @@ sub _version_check ($$) {
     # and so we must redirect to OPAC maintenance page or to the WebInstaller
 	# also, if OpacMaintenance is ON, OPAC should redirect to maintenance
 	if (C4::Context->preference('OpacMaintenance') && $type eq 'opac') {
-		warn "OPAC Install required, redirecting to maintenance";
-		print $query->redirect("/cgi-bin/koha/maintenance.pl");
-	}
-    unless ($version = C4::Context->preference('Version')) {    # assignment, not comparison
-      if ($type ne 'opac') {
-        warn "Install required, redirecting to Installer";
-        print $query->redirect("/cgi-bin/koha/installer/install.pl");
-      }
-      else {
         warn "OPAC Install required, redirecting to maintenance";
         print $query->redirect("/cgi-bin/koha/maintenance.pl");
-      }
-      exit;
+    }
+    unless ( $version = C4::Context->preference('Version') ) {    # assignment, not comparison
+        if ( $type ne 'opac' ) {
+            warn "Install required, redirecting to Installer";
+            print $query->redirect("/cgi-bin/koha/installer/install.pl");
+        } else {
+            warn "OPAC Install required, redirecting to maintenance";
+            print $query->redirect("/cgi-bin/koha/maintenance.pl");
+        }
+        safe_exit;
     }
 
     # check that database and koha version are the same
@@ -604,7 +606,7 @@ sub _version_check ($$) {
             warn sprintf("OPAC: " . $warning, 'maintenance');
             print $query->redirect("/cgi-bin/koha/maintenance.pl");
         }
-        exit;
+        safe_exit;
     }
 }
 
@@ -638,6 +640,10 @@ sub checkauth {
     my %info;
     my ( $userid, $cookie, $sessionID, $flags, $barshelves, $pubshelves );
     my $logout = $query->param('logout.x');
+
+    # This parameter is the name of the CAS server we want to authenticate against,
+    # when using authentication against multiple CAS servers, as configured in Auth_cas_servers.yaml
+    my $casparam = $query->param('cas');
 
     if ( $userid = $ENV{'REMOTE_USER'} ) {
         # Using Basic Authentication, no cookies required
@@ -986,11 +992,28 @@ sub checkauth {
     $template->param( OpacPublic => C4::Context->preference("OpacPublic"));
     $template->param( loginprompt => 1 ) unless $info{'nopermission'};
 
-    if ($cas) { 
+    if ($cas) {
+
+	# Is authentication against multiple CAS servers enabled?
+        if (C4::Auth_with_cas::multipleAuth && !$casparam) {
+	    my $casservers = C4::Auth_with_cas::getMultipleAuth();		    
+	    my @tmplservers;
+	    foreach my $key (keys %$casservers) {
+		push @tmplservers, {name => $key, value => login_cas_url($query, $key) . "?cas=$key" };
+	    }
+	    #warn Data::Dumper::Dumper(\@tmplservers);
+	    $template->param(
+		casServersLoop => \@tmplservers
+	    );
+	} else {
+        $template->param(
+            casServerUrl    => login_cas_url($query),
+	    );
+	}
+
 	$template->param(
-	    casServerUrl    => login_cas_url(),
-	    invalidCasLogin => $info{'invalidCasLogin'}
-	);
+            invalidCasLogin => $info{'invalidCasLogin'}
+        );
     }
 
     my $self_url = $query->url( -absolute => 1 );
@@ -1007,7 +1030,7 @@ sub checkauth {
         -cookie => $cookie
       ),
       $template->output;
-    exit;
+    safe_exit;
 }
 
 =head2 check_api_auth
@@ -1080,7 +1103,7 @@ sub check_api_auth {
     unless ($query->param('userid')) {
         $sessionID = $query->cookie("CGISESSID");
     }
-    if ($sessionID) {
+    if ($sessionID && not $cas) {
         my $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         if ($session) {
@@ -1130,18 +1153,24 @@ sub check_api_auth {
         # new login
         my $userid = $query->param('userid');
         my $password = $query->param('password');
-        unless ($userid and $password) {
-            # caller did something wrong, fail the authenticateion
-            return ("failed", undef, undef);
-        }
-	my ($return, $cardnumber);
-	if ($cas && $query->param('ticket')) {
+       	my ($return, $cardnumber);
+
+	# Proxy CAS auth
+	if ($cas && $query->param('PT')) {
 	    my $retuserid;
-	    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
-	    $userid = $retuserid;
+	    $debug and print STDERR "## check_api_auth - checking CAS\n";
+	    # In case of a CAS authentication, we use the ticket instead of the password
+	    my $PT = $query->param('PT');
+	    ($return,$cardnumber,$userid) = check_api_auth_cas($dbh, $PT, $query);    # EXTERNAL AUTH
 	} else {
+	    # User / password auth
+	    unless ($userid and $password) {
+		# caller did something wrong, fail the authenticateion
+		return ("failed", undef, undef);
+	    }
 	    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
 	}
+
         if ($return and haspermission(  $userid, $flagsrequired)) {
             my $session = get_session("");
             return ("failed", undef, undef) unless $session;
@@ -1398,7 +1427,7 @@ sub checkpw {
         ($retval) and return ($retval,$retcard);
     }
 
-    if ($cas && $query->param('ticket')) {
+    if ($cas && $query && $query->param('ticket')) {
         $debug and print STDERR "## checkpw - checking CAS\n";
 	# In case of a CAS authentication, we use the ticket instead of the password
 	my $ticket = $query->param('ticket');
