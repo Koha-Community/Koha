@@ -228,6 +228,17 @@ sub ldap_entry_2_hash ($$) {
 		( substr($borrower{'firstname'},0,1)
   		. substr($borrower{ 'surname' },0,1)
   		. " ");
+
+	# check if categorycode exists, if not, fallback to default from koha-conf.xml
+	my $dbh = C4::Context->dbh;
+	my $sth = $dbh->prepare("SELECT categorycode FROM categories WHERE categorycode = ?");
+	$sth->execute( uc($borrower{'categorycode'}) );
+	unless ( my $row = $sth->fetchrow_hashref ) {
+		my $default = $mapping{'categorycode'}->{content};
+		$debug && warn "Can't find ", $borrower{'categorycode'}, " default to: $default for ", $borrower{userid};
+		$borrower{'categorycode'} = $default
+	}
+
 	return %borrower;
 }
 
