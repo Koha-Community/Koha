@@ -420,6 +420,7 @@ CREATE TABLE `categories` (
   `overduenoticerequired` tinyint(1) default NULL,
   `issuelimit` smallint(6) default NULL,
   `reservefee` decimal(28,6) default NULL,
+  `hidelostitems` tinyint(1) NOT NULL default '0',
   `category_type` varchar(1) NOT NULL default 'A',
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
@@ -965,6 +966,8 @@ CREATE TABLE `issuingrules` (
   `chargename` varchar(100) default NULL,
   `maxissueqty` int(4) default NULL,
   `issuelength` int(4) default NULL,
+  `hardduedate` date default NULL,
+  `hardduedatecompare` tinyint NOT NULL default "0",
   `renewalsallowed` smallint(6) NOT NULL default "0",
   `reservesallowed` smallint(6) NOT NULL default "0",
   `branchcode` varchar(10) NOT NULL default '',

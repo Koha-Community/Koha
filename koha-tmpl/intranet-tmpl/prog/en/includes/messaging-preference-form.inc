@@ -27,7 +27,7 @@
     </tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
-      <td><!-- TMPL_IF NAME="Item DUE" -->Item DUE
+      <td><!-- TMPL_IF NAME="Item Due" -->Item Due
           <!-- TMPL_ELSIF NAME="Advance Notice" -->Advance Notice
           <!-- TMPL_ELSIF NAME="Upcoming Events" -->Upcoming Events
           <!-- TMPL_ELSIF NAME="Hold Filled" -->Hold Filled

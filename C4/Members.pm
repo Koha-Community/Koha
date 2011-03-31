@@ -70,6 +70,8 @@ BEGIN {
     &PutPatronImage
     &RmPatronImage
 
+                &GetHideLostItemsPreference
+
 		&IsMemberBlocked
 		&GetMemberAccountRecords
 		&GetBorNotifyAcctRecord
@@ -1805,6 +1807,25 @@ sub RmPatronImage {
     my $dberror = $sth->errstr;
     warn "Database error!" if $sth->errstr;
     return $dberror;
+}
+
+=head2 GetHideLostItemsPreference
+
+  $hidelostitemspref = &GetHideLostItemsPreference($borrowernumber);
+
+Returns the HideLostItems preference for the patron category of the supplied borrowernumber
+C<&$hidelostitemspref>return value of function, 0 or 1
+
+=cut
+
+sub GetHideLostItemsPreference {
+    my ($borrowernumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT hidelostitems FROM borrowers,categories WHERE borrowers.categorycode = categories.categorycode AND borrowernumber = ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    my $hidelostitems = $sth->fetchrow;    
+    return $hidelostitems;    
 }
 
 =head2 GetRoadTypeDetails (OUEST-PROVENCE)

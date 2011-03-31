@@ -25,6 +25,7 @@ use Lingua::Stem;
 use C4::Search::PazPar2;
 use XML::Simple;
 use C4::Dates qw(format_date);
+use C4::Members qw(GetHideLostItemsPreference);
 use C4::XSLT;
 use C4::Branch;
 use C4::Reserves;    # CheckReserves
@@ -364,10 +365,10 @@ sub getRecords {
                 $sort_by .= "1=9003 >i ";
             }
             elsif ( $sort eq "call_number_asc" ) {
-                $sort_by .= "1=20  <i ";
+                $sort_by .= "1=8007  <i ";
             }
             elsif ( $sort eq "call_number_dsc" ) {
-                $sort_by .= "1=20 >i ";
+                $sort_by .= "1=8007 >i ";
             }
             elsif ( $sort eq "pubdate_asc" ) {
                 $sort_by .= "1=31 <i ";
@@ -391,7 +392,7 @@ sub getRecords {
                 warn "Ignoring unrecognized sort '$sort' requested" if $sort_by;
             }
         }
-        if ($sort_by) {
+        if ($sort_by && !$scan) {
             if ( $results[$i]->sort( "yaz", $sort_by ) < 0 ) {
                 warn "WARNING sort $sort_by failed";
             }
@@ -1480,9 +1481,9 @@ sub searchResults {
         $oldbiblio->{result_number} = $i + 1;
 
         # add imageurl to itemtype if there is one
-        $oldbiblio->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
+        $oldbiblio->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $oldbiblio->{itemtype} }->{imageurl} );
 
-        $oldbiblio->{'authorised_value_images'}  = C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) );
+        $oldbiblio->{'authorised_value_images'}  = ($search_context eq 'opac' && C4::Context->preference('AuthorisedValueImages')) || ($search_context eq 'intranet' && C4::Context->preference('StaffAuthorisedValueImages')) ? C4::Items::get_authorised_value_images( C4::Biblio::get_biblio_authorised_values( $oldbiblio->{'biblionumber'}, $marcrecord ) ) : [];
 		$oldbiblio->{normalized_upc}  = GetNormalizedUPC(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_ean}  = GetNormalizedEAN(       $marcrecord,$marcflavour);
 		$oldbiblio->{normalized_oclc} = GetNormalizedOCLCNumber($marcrecord,$marcflavour);
@@ -1593,7 +1594,8 @@ sub searchResults {
 
 			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
-            if ( $item->{onloan} ) {
+            my $userenv = C4::Context->userenv;
+            if ( $item->{onloan} && !(C4::Members::GetHideLostItemsPreference($userenv->{'number'}) && $item->{itemlost}) ) {
                 $onloan_count++;
 				my $key = $prefix . $item->{onloan} . $item->{barcode};
 				$onloan_items->{$key}->{due_date} = format_date($item->{onloan});
@@ -1601,7 +1603,7 @@ sub searchResults {
 				$onloan_items->{$key}->{branchname} = $item->{branchname};
 				$onloan_items->{$key}->{location} = $shelflocations->{ $item->{location} };
 				$onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
-				$onloan_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+				$onloan_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
                     $onloan_items->{$prefix}->{longoverdue}++;
@@ -1674,7 +1676,7 @@ sub searchResults {
 					$other_items->{$key}->{notforloan} = GetAuthorisedValueDesc('','',$item->{notforloan},'','',$notforloan_authorised_value) if $notforloan_authorised_value;
 					$other_items->{$key}->{count}++ if $item->{$hbranch};
 					$other_items->{$key}->{location} = $shelflocations->{ $item->{location} };
-					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+					$other_items->{$key}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
                 # item is available
                 else {
@@ -1685,7 +1687,7 @@ sub searchResults {
                     	$available_items->{$prefix}->{$_} = $item->{$_};
 					}
 					$available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
-					$available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( 'opac', $itemtypes{ $item->{itype} }->{imageurl} );
+					$available_items->{$prefix}->{imageurl} = getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
                 }
             }
         }    # notforloan, item level and biblioitem level

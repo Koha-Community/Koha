@@ -32,7 +32,8 @@
         <!-- TMPL_IF NAME="volumeddesc" --><li><span class="label">Volume:</span> <!-- TMPL_VAR NAME="volumeddesc" --></li><!-- /TMPL_IF -->
         <li><span class="label">Physical Details:</span> <!-- TMPL_VAR NAME="pages" --> <!-- TMPL_VAR NAME="illus" --> <!-- TMPL_VAR NAME="size" -->&nbsp;</li>
         <!-- TMPL_IF NAME="bnotes" --><li><span class="label">Notes:</span> <!-- TMPL_VAR NAME="bnotes" --></li><!-- /TMPL_IF -->
-        <li><span class="label">No. of Items:</span> <!-- TMPL_VAR NAME="count" -->&nbsp;</li>
+        <li><span class="label">No. of Items:</span> <!-- TMPL_VAR NAME="count" -->&nbsp;<!-- TMPL_IF NAME="hiddencount" -->total (<!-- TMPL_VAR NAME="showncount" --> shown / <!-- TMPL_VAR NAME="hiddencount" --> hidden) 
+<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&showallitems=1">Show all items</a><!-- /TMPL_IF --></li>
     </ol>
     <!-- /TMPL_LOOP -->
     <br clear="all" />

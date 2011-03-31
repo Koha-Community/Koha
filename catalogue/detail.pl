@@ -64,6 +64,8 @@ if($query->cookie("holdfor")){
 my $biblionumber = $query->param('biblionumber');
 my $fw = GetFrameworkCode($biblionumber);
 
+my $showallitems = $query->param('showallitems');
+
 ## get notes and subjects from MARC record
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $record           = GetMarcBiblio($biblionumber);
@@ -109,8 +111,12 @@ my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 my $dbh = C4::Context->dbh;
 
-# change back when ive fixed request.pl
-my @items = &GetItemsInfo( $biblionumber, 'intra' );
+# 'intra' param included, even though it's not respected in GetItemsInfo currently
+my @all_items= GetItemsInfo($biblionumber, 'intra');
+my @items;
+for my $itm (@all_items) {
+    push @items, $itm unless ( $itm->{itemlost} && GetHideLostItemsPreference($borrowernumber) && !$showallitems);
+}
 my $dat = &GetBiblioData($biblionumber);
 
 # get count of holds
@@ -141,7 +147,11 @@ foreach my $subscription (@subscriptions) {
 if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
 }
-$dat->{'count'} = scalar @items;
+
+$dat->{'count'} = scalar @all_items;
+$dat->{'showncount'} = scalar @items;
+$dat->{'hiddencount'} = scalar @all_items - scalar @items;
+
 my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
 my (@itemloop, %itemfields);

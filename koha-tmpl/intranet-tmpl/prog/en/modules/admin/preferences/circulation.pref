@@ -61,6 +61,12 @@ Circulation:
               class: integer
             - last returned items on the checkin screen.
         -
+            - pref: FineNotifyAtCheckin
+              choices:
+                  yes: Notify
+                  no: "Don't notify"
+            - librarians of overdue fines on the items they are checking in.
+        -
             - pref: FilterBeforeOverdueReport
               choices:
                   yes: Require
@@ -141,16 +147,6 @@ Circulation:
               choices:
                   homebranch: the library the item is from.
                   holdingbranch: the library the item was checked out from.
-        -
-            - Make all checkouts have a due date of
-            - pref: globalDueDate
-              class: date
-            - .
-        -
-            - Make all checkouts due on or before
-            - pref: ceilingDueDate
-              class: date
-            - .
         -
             - Calculate the due date using 
             - pref: useDaysMode
