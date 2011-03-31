@@ -19,20 +19,42 @@
 
 set -e
 
+opt_idx="-z"
+opt_xml="-x"
+opts_other=""
 
-if [ "$1" = --full ]
-then
-    opts="-r"
+while [ -n "$*" ]; do
+    case "$1" in
+        -u|--usmarc)
+             opt_xml=""
+             ;;
+        -f|--full)
+             opt_idx="-r"
+             ;;
+        -*)
+            opts_other="$opts_other $1";
+            ;;
+        *)
+            break
+            ;;
+    esac
+
     shift
-else
-    opts="-z"
-fi
+done
 
 
-for name in "$@"
-do
+
+function run_zebra () {
+    name=$1; shift
+
     sudo -u "$name-koha" -H \
     env PERL5LIB=/usr/share/koha/lib \
         KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml" \
-        /usr/share/koha/bin/migration_tools/rebuild_zebra.pl -b -a $opts
+        /usr/share/koha/bin/migration_tools/rebuild_zebra.pl $@
+}
+
+for name in "$@"
+do
+    run_zebra $name -b $opt_idx $opt_xml $opts_other
+    run_zebra $name -a $opt_idx $opts_other
 done
