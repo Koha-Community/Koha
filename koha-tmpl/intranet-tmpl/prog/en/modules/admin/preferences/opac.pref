@@ -169,6 +169,15 @@ OPAC:
             - pref: OPACNoResultsFound
               type: textarea
               class: code
+        -
+            - 'Display the URI in the 856u field as an image on: '
+            - pref: OPACDisplay856uAsImage
+              choices:
+                  OFF: "Neither Details or Results pages"
+                  Details: "Details page only"
+                  Results: "Results page only"
+                  Both: "Both Details and Results pages"
+            - 'Note: The corresponding OPACXSLT option must be turned on.'
     Features:
         -
             - pref: opacuserlogin
