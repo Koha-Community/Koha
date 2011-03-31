@@ -4166,7 +4166,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.03.00.XXX';
+$DBversion = '3.03.00.036';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('COinSinOPACResults', 1, 'If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','','YesNo')");
     print "Upgrade to $DBversion done ( Make COinS optional in OPAC search results )\n";
