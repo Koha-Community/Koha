@@ -388,7 +388,7 @@ function Dopop(link) {
 <!-- TMPL_IF Name="riloop" -->
     <h2>Checked-In items</h2>
     <table>
-	<tr><th>Due Date</th><th>Title</th>	<th>Author</th>	<th>Barcode</th><th>Type</th>	<th>Patron</th><th>Note</th></tr>
+	<tr><th>Due Date</th><th>Title</th>	<th>Author</th>	<th>Barcode</th><th>Call Number</th><th>Type</th>	<th>Patron</th><th>Note</th></tr>
 
         <!-- TMPL_LOOP Name="riloop" -->
             <tr>
@@ -404,6 +404,7 @@ function Dopop(link) {
                     <!-- TMPL_VAR Name="itemtitle" escape="html" --></a></td>
 			<td><!-- TMPL_VAR Name="itemauthor" --></td>
             <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=<!-- TMPL_VAR NAME="itembiblionumber" -->&amp;itemnumber=<!-- TMPL_VAR NAME="itemnumber" -->#item<!-- TMPL_VAR NAME="itemnumber" -->"><!-- TMPL_VAR Name="barcode" --></a></td>
+            <td><!-- TMPL_VAR Name="itemcallnumber" --></td>
             <td><!-- TMPL_VAR Name="itemtype" --> <!-- TMPL_VAR Name="ccode" --></td>
 			<td><!-- TMPL_IF Name="duedate" -->
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR Name="borrowernumber" -->">
