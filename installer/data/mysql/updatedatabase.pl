@@ -4189,7 +4189,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done ( Add Self-checkout by Login system preferences )\n";
 }
 
-$DBversion = "3.03.00.XXX";
+$DBversion = "3.03.00.039";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC',NULL,'YesNo');");
     print "Upgrade to $DBversion done (Add syspref ShowReviewer)\n";
