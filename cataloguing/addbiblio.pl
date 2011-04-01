@@ -189,7 +189,7 @@ sub build_authorized_values_list ($$$$$$$) {
             "select itemtype,description from itemtypes order by description");
         $sth->execute;
         push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          unless ( $tagslib->{$tag}->{$subfield}->{defaultvalue} and $tagslib->{$tag}->{$subfield}->{mandatory} );
           
         my $itemtype;
         
