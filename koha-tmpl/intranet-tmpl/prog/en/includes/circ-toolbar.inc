@@ -99,6 +99,7 @@ function update_child() {
 	    new YAHOO.widget.Button("addnote");
         <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --> new YAHOO.widget.Button("changepassword");  <!-- /TMPL_IF-->
             <!-- TMPL_ELSE--> new YAHOO.widget.Button("changepassword"); <!-- /TMPL_IF -->
+	    new YAHOO.widget.Button("duplicate");
 	    new YAHOO.widget.Button("printslip");
 		new YAHOO.widget.Button("printpage");
 	    new YAHOO.widget.Button("renewpatron");
@@ -138,6 +139,7 @@ function update_child() {
 <!-- TMPL_IF NAME="StaffMember" --><!-- TMPL_IF NAME="CAN_user_staffaccess" --> <li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li><!-- /TMPL_IF-->
           <!-- TMPL_ELSE--> <li><a id="changepassword" href="/cgi-bin/koha/members/member-password.pl?member=<!-- TMPL_VAR NAME="borrowernumber" -->">Change Password</a></li><!-- /TMPL_IF -->	
 	  <!-- /TMPL_IF -->
+	<li><a id="duplicate" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;category_type=<!-- TMPL_VAR NAME="category_type"-->">Duplicate</a></li>
 	<li id="printmenuc"><a id="printpage" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=page">Print Page</a></li>
 	<li><a id="printslip" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="borrowernumber" -->&amp;print=slip">Print Slip</a></li>
 	<li id="searchtoholdc"><a id="searchtohold" href="#">Search to hold</a></li>
