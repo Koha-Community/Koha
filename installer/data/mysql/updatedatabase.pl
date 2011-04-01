@@ -4195,7 +4195,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Add syspref ShowReviewer)\n";
 }
     
-$DBversion = "3.03.00.XXX";
+$DBversion = "3.03.00.040";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseControlNumber',0,'If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','','YesNo');");
     print "Upgrade to $DBversion done (Add syspref UseControlNumber)\n";
