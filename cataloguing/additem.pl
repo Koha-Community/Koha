@@ -65,11 +65,15 @@ sub get_item_from_barcode {
 
 sub set_item_default_location {
     my $itemnumber = shift;
+    my $item = GetItem( $itemnumber );
     if ( C4::Context->preference('NewItemsDefaultLocation') ) {
-        my $item = GetItem( $itemnumber );
         $item->{'permanent_location'} = $item->{'location'};
         $item->{'location'} = C4::Context->preference('NewItemsDefaultLocation');
         ModItem( $item, undef, $itemnumber);
+    }
+    else {
+      $item->{'permanent_location'} = $item->{'location'} if !defined($item->{'permanent_location'});
+      ModItem( $item, undef, $itemnumber);
     }
 }
 
