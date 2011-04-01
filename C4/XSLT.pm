@@ -2,6 +2,8 @@ package C4::XSLT;
 # Copyright (C) 2006 LibLime
 # <jmf at liblime dot com>
 # Parts Copyright Katrin Fischer 2011
+# Parts Copyright ByWater Solutions 2011
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -133,7 +135,8 @@ sub XSLTParse4Display {
                               OPACBaseURL TraceCompleteSubfields
                               UseAuthoritiesForTracings TraceSubjectSubdivisions
                               Display856uAsImage OPACDisplay856uAsImage 
-                              UseControlNumber / )
+                              UseControlNumber
+                              AlternateHoldingsField AlternateHoldingsSeparator / )
     {
         my $sp = C4::Context->preference( $syspref );
         next unless defined($sp);

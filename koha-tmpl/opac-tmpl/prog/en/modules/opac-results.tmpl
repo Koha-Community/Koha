@@ -455,7 +455,13 @@ $(document).ready(function(){
                     <!-- /TMPL_LOOP -->
                     </span>
                     <!-- TMPL_ELSE -->
-                    <span class="unavailable">No items available:</span>
+                    <!-- TMPL_IF NAME="ALTERNATEHOLDINGS" -->
+                    <!-- TMPL_LOOP NAME="ALTERNATEHOLDINGS" -->
+                        &nbsp;<span id="alternateholdings"><!-- TMPL_VAR NAME="holding" --></span>,
+                    <!-- /TMPL_LOOP -->
+                    <!-- TMPL_ELSE -->
+                        <span class="unavailable">No items available:</span>
+                    <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                     <span class="unavailable">
                     <!-- TMPL_IF NAME="onloancount" --> Checked out (<!-- TMPL_VAR NAME="onloancount" -->), <!-- /TMPL_IF -->

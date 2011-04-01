@@ -4199,6 +4199,13 @@ $DBversion = "3.03.00.040";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseControlNumber',0,'If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','','YesNo');");
     print "Upgrade to $DBversion done (Add syspref UseControlNumber)\n";
+}
+
+$DBversion = "3.03.00.041";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsField','','The MARC field/subfield that contains alternate holdings information for bibs taht do not have items attached (e.g. 852abchi for libraries converting from MARC Magician).',NULL,'free')");
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsSeparator','','The string to use to separate subfields in alternate holdings displays.',NULL,'free')");
+    print "Upgrade to $DBversion done (Add sysprefs to control alternate holdings information display)\n";
     SetVersion ($DBversion);
 }
 

@@ -246,6 +246,33 @@ $template->param(
 	C4::Search::enabled_staff_search_views,
 );
 
+if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
+    my $fieldspec = C4::Context->preference("AlternateHoldingsField");
+    my $subfields = substr $fieldspec, 3;
+    my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
+    my @alternateholdingsinfo = ();
+    my @holdingsfields = $record->field(substr $fieldspec, 0, 3);
+
+    for my $field (@holdingsfields) {
+        my %holding = ( holding => '' );
+        my $havesubfield = 0;
+        for my $subfield ($field->subfields()) {
+            if ((index $subfields, $$subfield[0]) >= 0) {
+                $holding{'holding'} .= $holdingsep if (length $holding{'holding'} > 0);
+                $holding{'holding'} .= $$subfield[1];
+                $havesubfield++;
+            }
+        }
+        if ($havesubfield) {
+            push(@alternateholdingsinfo, \%holding);
+        }
+    }
+
+    $template->param(
+        ALTERNATEHOLDINGS   => \@alternateholdingsinfo,
+        );
+}
+
 my @results = ( $dat, );
 foreach ( keys %{$dat} ) {
     $template->param( "$_" => defined $dat->{$_} ? $dat->{$_} : '' );
