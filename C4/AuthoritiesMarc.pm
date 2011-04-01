@@ -244,6 +244,7 @@ sub SearchAuthorities {
                 } else {
                     $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
                 }
+                @$value[$i] =~ s/"/\\"/g; # Escape the double-quotes in the search value
                 $attr =$attr."\"".@$value[$i]."\"";
                 $q2 .=$attr;
             $dosearch=1;
