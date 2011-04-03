@@ -262,9 +262,6 @@ sub AddItem {
 	my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
     $item->{'itemnumber'} = $itemnumber;
 
-    # create MARC tag representing item and add to bib
-    #my $new_item_marc = _marc_from_item_hash($item, $frameworkcode, $unlinked_item_subfields);
-    #_add_item_field_to_biblio($new_item_marc, $item->{'biblionumber'}, $frameworkcode );
     ModZebra( $item->{biblionumber}, "specialUpdate", "biblioserver", undef, undef );
    
     logaction("CATALOGUING", "ADD", $itemnumber, "item") if C4::Context->preference("CataloguingLog");
@@ -507,9 +504,9 @@ sub ModItem {
     # update items table
     _koha_modify_item($item);
 
-    # update biblio MARC XML
-    my $whole_item = GetItem($itemnumber) or die "FAILED GetItem($itemnumber)";
-    ModZebra( $whole_item->{biblionumber}, "specialUpdate", "biblioserver", undef, undef );
+    # request that bib be reindexed so that searching on current
+    # item status is possible
+    ModZebra( $biblionumber, "specialUpdate", "biblioserver", undef, undef );
 
     logaction("CATALOGUING", "MODIFY", $itemnumber, Dumper($item)) if C4::Context->preference("CataloguingLog");
 }
@@ -2237,68 +2234,6 @@ sub _marc_from_item_hash {
     }
 
     return $item_marc;
-}
-
-=head2 _add_item_field_to_biblio
-
-  _add_item_field_to_biblio($item_marc, $biblionumber, $frameworkcode);
-
-Adds the fields from a MARC record containing the
-representation of a Koha item record to the MARC
-biblio record.  The input C<$item_marc> record
-is expect to contain just one field, the embedded
-item information field.
-
-=cut
-
-sub _add_item_field_to_biblio {
-    my ($item_marc, $biblionumber, $frameworkcode) = @_;
-
-    my $biblio_marc = GetMarcBiblio($biblionumber);
-    foreach my $field ($item_marc->fields()) {
-        $biblio_marc->append_fields($field);
-    }
-
-    ModBiblioMarc($biblio_marc, $biblionumber, $frameworkcode);
-}
-
-=head2 _replace_item_field_in_biblio
-
-  &_replace_item_field_in_biblio($item_marc, $biblionumber, $itemnumber, $frameworkcode)
-
-Given a MARC::Record C<$item_marc> containing one tag with the MARC 
-representation of the item, examine the biblio MARC
-for the corresponding tag for that item and 
-replace it with the tag from C<$item_marc>.
-
-=cut
-
-sub _replace_item_field_in_biblio {
-    my ($ItemRecord, $biblionumber, $itemnumber, $frameworkcode) = @_;
-    my $dbh = C4::Context->dbh;
-    
-    # get complete MARC record & replace the item field by the new one
-    my $completeRecord = GetMarcBiblio($biblionumber);
-    my ($itemtag,$itemsubfield) = GetMarcFromKohaField("items.itemnumber",$frameworkcode);
-    my $itemField = $ItemRecord->field($itemtag);
-    my @items = $completeRecord->field($itemtag);
-    my $found = 0;
-    foreach (@items) {
-        if ($_->subfield($itemsubfield) eq $itemnumber) {
-            $_->replace_with($itemField);
-            $found = 1;
-        }
-    }
-  
-    unless ($found) { 
-        # If we haven't found the matching field,
-        # just add it.  However, this means that
-        # there is likely a bug.
-        $completeRecord->append_fields($itemField);
-    }
-
-    # save the record
-    #ModBiblioMarc($completeRecord, $biblionumber, $frameworkcode);
 }
 
 =head2 _repack_item_errors
