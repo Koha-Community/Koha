@@ -430,7 +430,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                             </td>
                             <td>
                                 <p>[% SEARCH_RESULT.result_number %].
-                                [% biblionumber = SEARCH_RESULT.biblionumber %]
+				[% biblionumber = SEARCH_RESULT.biblionumber %]
                                 [% INCLUDE 'biblio-default-view.inc' %]
                                             <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title |html %][% ELSE %]No title[% END %]</b>
                                             </a>
@@ -464,12 +464,12 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                             &nbsp;
                                         [% END %]
                                         Description:
-                                        [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place %] [% END %]
-                                        [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode %][% END %] [% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear %] [% ELSIF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate %][% END %]
-										[% IF ( SEARCH_RESULT.edition ) %]Edition: [% SEARCH_RESULT.edition %][% END %]
-                                        [% IF ( SEARCH_RESULT.pages ) %]: [% SEARCH_RESULT.pages %][% END %]
-                                        [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size %][% END %] [% IF ( SEARCH_RESULT.normalized_isbn ) %]ISBN: [% SEARCH_RESULT.normalized_isbn %][% END %]
-                                        [% SEARCH_RESULT.description %]
+                                        <span class="results_imprint">[% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place %] [% END %]
+                                        [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode %][% END %] [% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear %] [% ELSIF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate %][% END %]</span>
+										[% IF ( SEARCH_RESULT.edition ) %]<span class="results_edition">Edition: [% SEARCH_RESULT.edition %]</span>[% END %]
+                                        <span class="results_physicaldesc">[% IF ( SEARCH_RESULT.pages ) %]: [% SEARCH_RESULT.pages %][% END %]
+                                        [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size %][% END %]</span> [% IF ( SEARCH_RESULT.normalized_isbn ) %]<span class="results_isbn">ISBN: [% SEARCH_RESULT.normalized_isbn %]</span>[% END %]
+                                        <span class="results_itemtype">[% SEARCH_RESULT.description %]</span>
                                         [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp %])</i>[% END %]
                                         [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% SEARCH_RESULT.cn_class |url %]">[% SEARCH_RESULT.cn_class %]</a>][% END %]
                                     </p>
@@ -555,7 +555,16 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     [% END %]</ul>
                                     [% END %]
                                     [% ELSE %]
+                                    [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS ) %]
+                                    <strong id="altholdings_heading">Other holdings:</strong>
+                                    <ul>
+                                    [% FOREACH ALTERNATEHOLDING IN SEARCH_RESULT.ALTERNATEHOLDINGS %]
+                                    <li id="alternateholdings">[% ALTERNATEHOLDING.holding %]</li>
+                                    [% END %]
+                                    </li>
+                                    [% ELSE %]
                                     <span class="unavailable">No items</span>
+                                    [% END %]
                                     [% END %] <!-- /items count -->
                                     </div></td>
 

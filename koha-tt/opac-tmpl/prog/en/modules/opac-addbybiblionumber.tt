@@ -22,10 +22,21 @@
         	</li>
         [% END %]
 		</ul>
-		[% IF ( CGIvirtualshelves ) %]
+		[% IF ( existingshelves ) %]
 			<form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
     		<fieldset class="rows"><legend>Select a List</legend>
-			<ol><li>    <label for="shelfnumber">Add to list:</label> [% CGIvirtualshelves %]</li></ol>
+			<ol><li>    <label for="shelfnumber">Add to list:</label> <select name="shelfnumber" id="shelfnumber">
+				[% IF ( privatevirtualshelves ) %]<optgroup label="Private Lists">
+					[% FOREACH privatevirtualshelve IN privatevirtualshelves %]
+					<option value="[% privatevirtualshelve.shelfnumber %]">[% privatevirtualshelve.shelfname %]</option>
+					[% END %]
+				</optgroup>[% END %]
+				[% IF ( publicvirtualshelves ) %]<optgroup label="Public Lists">
+					[% FOREACH publicvirtualshelve IN publicvirtualshelves %]
+					<option value="[% publicvirtualshelve.shelfnumber %]">[% publicvirtualshelve.shelfname %]</option>
+					[% END %]
+				</optgroup>[% END %]
+			</select></li></ol>
  			[% FOREACH biblio IN biblios %] <input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
     		<input type="hidden" name="modifyshelfcontents" value="1" /></fieldset>
     		<fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>

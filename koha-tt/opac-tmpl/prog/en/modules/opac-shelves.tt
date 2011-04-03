@@ -271,7 +271,7 @@ $(function() {
                         [% IF ( itemsloo.size ) %] [% itemsloo.size %][% END %]
                 </span>
                 <span class="results_summary"><span class="label">Holdings:</span>[% IF ( itemsloo.ITEM_RESULTS ) %][% FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS %]
-          [% ITEM_RESULT.branchname %][% IF ( ITEM_RESULT.location ) %], [% ITEM_RESULT.location %][% END %]
+          [% ITEM_RESULT.homebranch %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac %][% END %]
           [% IF ( ITEM_RESULT.itemcallnumber ) %]
         ([% ITEM_RESULT.itemcallnumber %])[% IF ( loop.last ) %].[% ELSE %],[% END %]
           [% END %]

@@ -1,33 +1,59 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Patron attribute types</h1>A patron attribute (or extended patron attribute) is an additional piece of information associated with a patron record.  Each attribute has a type that specifies whether the attribute is repeatable, can serve as a unique identifier, can take a password, and whether it can be used to search for patron records in the staff interface.
-The list of attribute types is controlled by staff with 'superlibrarian' permissions.<br/>
-	<ul>
-		<li>Get there: Patrons &gt; Patron Record &gt; More &gt; Set Permissions</li>
-	</ul>Once an attribute type is defined, values for that attribute can be added to the patron record via the staff interface or the batch patron import.
-Two uses of extended attributes are:
+<h1>Patron Attribute Types</h1>
 
-	<ul>
-		<li>defining additional unique identifiers, such as a campus student ID number, a library staff HR number, and so on.  These IDs can be used for searching or matching and overlaying records during a batch import.</li>
-		<li>additional statistical categories.  For example, a library could define an attribute type for tracking the academic major of a student patron. Any number of attributes of this sort could be defined.</li>
-	</ul>The extended attributes feature is completely optional.  If the 'ExtendPatronAttributes' system preference is OFF, customizable patron attributes will not be usable.
-<h2>Add Patron Attribute</h2>
-	<ul>
-		<li>Click 'Patron attribute types'</li>
-		<li>	   
-	   IMPORTANT: You will need to have ExtendedPatronAttributes turned on
-		<ul>
-			<li>Get there: More &gt; Administration &gt; General system preferences &gt; Patrons &gt; ExtendedPatronAttributes</li>
-		</ul></li>
-		<li>To add a new Patron Attribute, click 'New Patron Attribute Type'</li>
-		<li>The 'Patron attribute type code' should be unique and is the only required field
-		<ul>
-			<li>TIP: This field is not editable once it is set</li>
-		</ul></li>
-		<li>Fill in all of the fields you need for your attribute
-		<ul>
-			<li>TIP: The repeatibility and unique_id settings of an attribute type cannot be changed after creation - this is to avoid having to deal with changing constraints if an attribute type is already in use by patron records</li>
-		</ul></li>
-		<li>Click 'Save'</li>
-		<li>TIP: An attribute type cannot be deleted if it is used by any patron records</li>
-	</ul>[% INCLUDE 'help-bottom.inc' %]
+<p>Patron attributes can be used to define custom fields to associate with your patron records. In order to enable the use of custom fields you need to set the ExtendedPatronAttributes system preference.</p>
+
+<p>A common use for this field would be for a student ID number or a Driver's license number.</p>
+
+<h2>Adding Patron Attributes</h2>
+
+<p>To add a new Patron Attribute Type, click the 'New Patron Attribute Type' button at the top of the page</p>
+
+<ul>
+	<li>In the 'Patron attribute type code', enter a short code to identify this field
+<ul>
+	<li>This field is limited to 10 characters (numbers and letters only)</li>
+	<li>This setting cannot be changed after an attribute is defined</li>
+</ul>
+</li>
+	<li>In the 'Description' field, enter a longer (plain text) explanation of what this field will contain</li>
+	<li>Check the box next to 'Repeatable' to let a patron record have multiple values of this attribute.
+<ul>
+	<li>This setting cannot be changed after an attribute is defined</li>
+</ul>
+</li>
+	<li>If 'Unique identifier' is checked, the attribute will be a unique identifier which means, if a value is given to a patron record, the same value cannot be given to a different record.
+<ul>
+	<li>This setting cannot be changed after an attribute is defined</li>
+</ul>
+</li>
+	<li>Check 'Allow password' to make it possible to associate a password with this attribute.</li>
+	<li>Check 'Display in OPAC' to display this attribute on a patron's details page in the OPAC.</li>
+	<li>Check 'Searchable' to make this attribute searchable in the staff patron search.</li>
+	<li>Authorized value category; if one is selected, the patron record input page will only allow values to be chosen from the authorized value list.
+<ul>
+	<li>You will first need to add an authorized value list for it to appear in this menu</li>
+	<li>An authorized value list is not enforced during batch patron import.</li>
+</ul>
+</li>
+	<li>Click Save to save your new attribute</li>
+</ul>
+
+<p>Once added your attribute will appear on the list of attributes and also on the patron record add/edit form</p>
+
+<h2>Editing/Deleting Patron Attributes</h2>
+
+<p>Each patron attribute has an edit and a delete link beside it on the list of attributes.</p>
+
+<p>Some fields in the attribute will not be editable once created:</p>
+
+<ul>
+	<li>Patron attribute type code</li>
+	<li>Repeatable</li>
+	<li>Unique identifier</li>
+</ul>
+
+<p>You will be unable to delete an attribute if it's in use.</p>
+
+[% INCLUDE 'help-bottom.inc' %]

@@ -105,9 +105,11 @@ $(document).ready(function(){
 	[% END %][% IF ( virtualshelves ) %][% IF ( loggedinusername ) %][% IF ( addbarshelves ) %]
 	param1 += "<optgroup label=\""+_("Your Lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
 	param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
+    [% IF ( bartotal ) %]param1 += "<option value=\"morelists\">[ "+_("More lists")+" ]<\/option>";[% END %]
 	param1 += "<\/optgroup>";[% END %]
-	[% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %][% END %]
-	param1 +="<\/optgroup><option value=\"newlist\">[ "+_("New List")+" ]<\/option>"
+	[% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>";[% END %][% END %]
+	param1 += "<\/optgroup>";
+    param1 += "<option value=\"newlist\">[ "+_("New List")+" ]<\/option>";
 	[% END %]
 	[% END %]
 	param1 += "<\/select> <input type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
@@ -153,7 +155,7 @@ $(document).ready(function(){
     [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]$("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");[% END %][% END %]
 
 	function cartList(){
-			if($("#addto").find("option:selected").attr("value") == "addtolist"){
+		if($("#addto").find("option:selected").attr("value") == "addtolist"){
 			var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
 			if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?selectedshelf='+shelfnumber+'&' + vShelfAdd());
@@ -164,6 +166,11 @@ $(document).ready(function(){
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
 			}[% ELSE %] alert('You must be logged in to create or add to Lists'); [% END %]
 			return false;
+        } else if($("#addto").find("option:selected").attr("value") == "morelists"){
+            [% IF ( loggedinusername ) %]if (vShelfAdd()) {
+            Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());
+            }[% ELSE %] alert('You must be logged in to create or add to Lists'); [% END %]
+            return false;
 		}
 		if($("#addto").find("option:selected").attr("value") == "addtocart" || $("#addto").attr("class") == "addtocart"){
 			addMultiple();
@@ -394,8 +401,10 @@ $(document).ready(function(){
                 [% END %]
 
 				<td>
-                [% IF ( SEARCH_RESULT.coins ) %]
-                    <!-- COinS / Openurl --><span class="Z3988" title="[% SEARCH_RESULT.coins %]"></span>
+                [% IF ( SEARCH_RESULT.COinSinOPACResults ) %]
+                    [% IF ( SEARCH_RESULT.coins ) %]
+                        <!-- COinS / Openurl --><span class="Z3988" title="[% SEARCH_RESULT.coins %]"></span>
+                    [% END %]
                 [% END %]
 
 				[% IF ( SEARCH_RESULT.OPACXSLTResultsDisplay ) %]
@@ -446,7 +455,13 @@ $(document).ready(function(){
                     [% END %]
                     </span>
                     [% ELSE %]
-                    <span class="unavailable">No items available:</span>
+                    [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS ) %]
+                    [% FOREACH ALTERNATEHOLDING IN SEARCH_RESULT.ALTERNATEHOLDINGS %]
+                        &nbsp;<span id="alternateholdings">[% ALTERNATEHOLDING.holding %]</span>,
+                    [% END %]
+                    [% ELSE %]
+                        <span class="unavailable">No items available:</span>
+                    [% END %]
                     [% END %]
                     <span class="unavailable">
                     [% IF ( SEARCH_RESULT.onloancount ) %] Checked out ([% SEARCH_RESULT.onloancount %]), [% END %]

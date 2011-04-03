@@ -1,15 +1,41 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Z39.50 servers administration</h1>
+<h1>Z39.50 Servers</h1>
 
-<p>Defines the Z39.50 servers you want Koha to search.</p>
+<p>Koha has a powerful copy cataloging tool. Using Koha you can connect to any Z39.50 target that is publicly available or that you have the log in information to.</p>
 
-<p>Koha comes with one Z39.50 server site defined (the U.S. Library of Congress) for finding catalog records to import directly into your catalog. In this area, you can define other servers for searching.</p>
+<p>Koha comes with a default list of Z39.50 targets set up that you can add to, edit or delete.</p>
 
-<p>To add servers, you will need to know the domain name or IP address of the server, the port number to use, and the name of the database to access. This information is available for many servers worldwide by acessing the Index Data website at http://www.indexdata.dk/targettest/. All of the servers listed there accept anonymous connections. (Be sure to choose servers which deliver records in the proper MARC format for your Koha installation.)</p>
+<p>To find additional targets you use IndexData's IRSpy: <a href="http://irspy.indexdata.com">http://irspy.indexdata.com</a></p>
 
-<p>If you have a login name and password for other Z39.50 servers, Koha will save your user ID and password in addition to the other information it needs to make a connection. (For anonymous servers, leave the userid and password fields blank.) The other fields on the form control whether or not the server is automatically searched when you request a Z39.50 search (put a "1" in the "Checked" field) and the order in which it is checked.</p>
+<h2>Add a Z39.50 Target</h2>
+<ul>
+	<li>From the main Z39.50 page, click 'New Z39.50 Server'
+<ul>
+	<li>Userid and Password are only required for servers that are password protected</li>
+</ul>
+</li>
+</ul>
 
-<p>It is a good idea to be selective in choosing servers. Defining more than five or six checked servers may slow down your Z39.50 search results, even if they are queried all together.</p>
+<h2>Suggested Z39.50 Targets</h2>
+
+<p>The following targets have been used successfully by other Koha libraries (in the Americas):</p>
+
+<ul>
+	<li>BIBLIOS z3950.biblios.net:210 bibliographic</li>
+	<li>BIG COUNTRY KOHA bcls.kohalibrary.com:210 bcls_koha</li>
+	<li>CUYAHOGA COUNTY PUBLIC webcat.cuyahoga.lib.oh.us:210 INNOPAC</li>
+	<li>GREATER SUDBURY PUBLIC 216.223.90.51:210 INNOPAC</li>
+	<li>HALIFAX PUBLIC catalogue.halifaxpubliclibraries.ca:210 horizon</li>
+	<li>HALTON HILLS PUBLIC cat.hhpl.on.ca:210 halton_hills</li>
+	<li>LIBRARY OF CONGRESS z3950.loc.gov:7090 Voyager</li>
+	<li>LONDON PUBLIC LIBRARY catalogue.londonpubliclibrary.ca:210 INNOPAC</li>
+	<li>MANITOBA PUBLIC library.gov.mb.ca:210 horizon</li>
+	<li>MILTON PL cat.mpl.on.ca:210 horizon</li>
+	<li>NATIONAL LIBRARY OF WALES cat.llgc.org.uk:210 default</li>
+	<li>TORONTO PUBLIC symphony.torontopubliclibrary.ca:2200 unicorn</li>
+	<li>TRI-UNI 129.97.129.194:7090 voyager</li>
+	<li>VANCOUVER PUBLIC LIBRARY z3950.vpl.ca:210 Horizon</li>
+</ul>
 
 [% INCLUDE 'help-bottom.inc' %]

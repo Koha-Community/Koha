@@ -248,8 +248,8 @@ function verify_images() {
                           [% END %]
                         [% END %]</td>
                     [% END %]
-                    <td class="location">[% UNLESS ( itemloo.singlebranchmode ) %][% itemloo.branchname %] [% END %]<span class="shelvingloc">[% itemloo.location %]</span> </td>
-                    <td class="homebranch">[% itemloo.homebranch %]
+                    <td class="location">[% UNLESS ( itemloo.singlebranchmode ) %][% itemloo.branchname %] [% END %]</td>
+                    <td class="homebranch">[% itemloo.homebranch %]<span class="shelvingloc">[% itemloo.location %]</span> </td>
 		    [% IF ( itemloo.itemdata_ccode ) %]<td>[% itemloo.ccode %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( itemloo.itemcallnumber ) %] [% itemloo.itemcallnumber %][% END %]</td>
                     <td class="status">
@@ -378,7 +378,13 @@ function verify_images() {
 		</table>
                 [% END %]
 [% ELSE %]
-    <p>No physical items for this record</p>
+    [% IF ( ALTERNATEHOLDINGS ) %]
+    [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
+        <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding %]</div>
+    [% END %]
+    [% ELSE %]
+    <div id="noitems">No physical items for this record</div>
+    [% END %]
 [% END %]
     </div>
     

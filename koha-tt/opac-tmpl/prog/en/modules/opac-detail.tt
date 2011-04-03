@@ -418,7 +418,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	</table>
     [% END %]
 [% ELSE %]
-<p>No physical items for this record</p>
+    [% IF ( ALTERNATEHOLDINGS ) %]
+    [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
+        <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding %]</div>
+    [% END %]
+    [% ELSE %]
+    <div id="noitems">No physical items for this record</div>
+    [% END %]
 [% END %]
 
 [% IF ( OpenOPACShelfBrowser ) %]
@@ -668,12 +674,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </p></div>
             [% ELSE %]
             <div class="commentline">
+            [% IF ( review.ShowReviewer ) %]
             <h5>
                 Comment by
                 [% review.title %]
                 [% review.firstname %]
                 [% review.surname %]
             </h5>
+            [% END %]
             <small>[% review.datereviewed %]</small>
         <p>
           [% review.review |0 %]

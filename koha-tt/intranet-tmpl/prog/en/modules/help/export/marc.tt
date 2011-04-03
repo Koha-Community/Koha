@@ -2,10 +2,36 @@
 
 <h1>MARC Export</h1>
 
-<p>This is a tool to export your bibliographic records in standard MARC communications format (ISO 2709). It exports only the basic bibliographic information with no holdings information other than any holdings information originally loaded into Koha using the bulkmarcimport tool.</p>
+<p>Koha comes with a tool that will allow you to export your bibliographic and/or holdings data in bulk. This can be used to send your records to fellow libraries, organizations or services; or simply for backup purposes.</p>
 
-<p>You are asked to provide a starting bibliographic record number and an ending number for the export. If you want to export all of your records, leave the start and end numbers blank.</p>
-
-<p>Records are downloaded to the workstation that requests the export and are saved in a file called "marc.pl."</p>
+<ul>
+	<li>Fill in the form in order to limit your export to a specific range (all fields are optional)
+<ul>
+	<li>Choose to limit your export by any one or more of the following options
+<ul>
+	<li>Limit to a bib number range</li>
+	<li>Limit to a specific item type</li>
+	<li>Limit to a specific library</li>
+	<li>Limit to a call number range</li>
+	<li>Limit to an acquisition date range</li>
+</ul>
+</li>
+	<li>Next choose what to skip when exporting
+<ul>
+	<li>By default items will be exported, if you would like to only export bibliographic data, check the 'Don't export items' box</li>
+	<li>To limit your export only to items from the library you're logged in as (if you leave the 'Library' field set to 'All') or to the library you selected above check the 'Remove non-local items' box</li>
+	<li>You can also choose what fields you don't want to export. This can be handy if you're sharing your data, you can remove all local fields before sending your data to another library</li>
+</ul>
+</li>
+	<li>Finally choose the file type and file name
+<ul>
+	<li>Choose to export your data in marc or marcxml format</li>
+	<li>Choose the name you want your file to save as</li>
+</ul>
+</li>
+	<li>Click 'Export'</li>
+</ul>
+</li>
+</ul>
 
 [% INCLUDE 'help-bottom.inc' %]

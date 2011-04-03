@@ -1,14 +1,15 @@
 [% INCLUDE 'help-top.inc' %]
 
-<h1>Stop word administration page</h1>
+<h1>Stop Words</h1>
 
-<p>Here you should list all of the words you wish Koha to ignore when performing catalog searches or building the keyword index.</p>
-<h3>Koha with Zebra</h3>
-<p>Zebra handles stopwords internally, and does so effectively and efficiently.  In normal circumstances, there should be no reason for Koha to remove stopwords prior to submitting the search query to Zebra, and in most cases doing so will actually negatively affect relevance ranking and phrase searching without giving any performance benefit.</p>
+<p style="color: #990000">Important: If NoZebra is set to 'Use' this option will not appear on the administration menu</p>
 
-<h3>Koha without Zebra</h3>
-<p>Normally, you will not want Koha to save keyword references to articles like "The" and "A" and other very common words. Saving keyword references to these words does not help to limit a search and will make the keyword index very large and "cluttered" with words that are not really useful. The "stopwords" list defines these unnecessary words for your installation.</p>
+<p>Stop words are words that you want the search system to ignore.</p>
 
-<p>(Hint: If you are proficient at MySQL, it is often faster and easier to find an existing stopwords list, edit it, put it in the correct format, and use the MySQL "Load Data Infile" command to import the list into the stopwords table. Many academic libraries publish their stopwords list on the Internet, or you can ask other Koha libraries if they would share their stopword list.)</p>
+<p>Koha comes with a standard list of stop words that can be edited by visiting the Stop Word administration area.</p>
+
+<p>To add a new stop word to the list, click the 'New Stop Word' button and add the word you'd like ignored</p>
+
+<p style="color: #990000">Important: If you change something in this table, ask your administrator to run misc/batchRebuildBiblioTables.pl script.</p>
 
 [% INCLUDE 'help-bottom.inc' %]

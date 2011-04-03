@@ -159,7 +159,7 @@
 		[% END %]
 		[% IF ( bartotal ) %]
 			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all [% bartotal %] of your lists</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all [% bartotal %] of your private lists</a></li>
 			</ul>
 		[% END %]
 		<ul class="second-of-type">
