@@ -1,6 +1,6 @@
 <tfoot>
 	<tr>
-		<td colspan="5" style="text-align: right; font-weight:bold;">Totals:</td>
+        <td colspan="5" style="text-align: right; font-weight:bold;">Totals:</td>
 		<td><!-- TMPL_VAR NAME="totaldue" --></td>
 		<td><!-- TMPL_VAR NAME="totalprice" --></td>
 		<td colspan="2">

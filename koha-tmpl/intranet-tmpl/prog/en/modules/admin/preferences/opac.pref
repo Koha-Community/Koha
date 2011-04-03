@@ -67,6 +67,12 @@ OPAC:
                   no: "don't show"
             - icons for itemtype and authorized values.
         -
+            - pref: COinSinOPACResults
+              choices:
+                  yes: Include
+                  no: "Don't include"
+            - "COinS / OpenURL / Z39.88 in OPAC search results.  <br/>Warning: Enabling this feature will slow OPAC search response times."
+        -
             - pref: OPACDisplayRequestPriority
               choices:
                   yes: Show
@@ -163,6 +169,15 @@ OPAC:
             - pref: OPACNoResultsFound
               type: textarea
               class: code
+        -
+            - 'Display the URI in the 856u field as an image on: '
+            - pref: OPACDisplay856uAsImage
+              choices:
+                  OFF: "Neither Details or Results pages"
+                  Details: "Details page only"
+                  Results: "Results page only"
+                  Both: "Both Details and Results pages"
+            - 'Note: The corresponding OPACXSLT option must be turned on.'
     Features:
         -
             - pref: opacuserlogin
@@ -225,6 +240,12 @@ OPAC:
                   no: "Don't allow"
             - patrons to make comments on items on the OPAC.
         -
+            - pref: ShowReviewer
+              choices:
+                  yes: Show
+                  no: Hide
+            - reviewer's name above comments in OPAC.
+        -
             - pref: RequestOnOpac
               choices:
                   yes: Allow
@@ -286,12 +307,6 @@ OPAC:
                   no: "Don't allow"
                   yes: Allow
             - patrons to select branch when making a purchase suggestion
-        -
-            - pref: SearchMyLibraryFirst
-              choices:
-                  yes: Limit
-                  no: "Don't limit"
-            - "patrons' searches to the library they are registered at."
     Privacy:
         -
             - pref: AnonSuggestions

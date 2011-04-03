@@ -2,12 +2,14 @@
 <title>Koha -- Circulation: Transfers</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close-receipt.inc" -->
 <script language="javascript">
+function printandclose()
+{
 window.print();
 window.close();
+}
 </script>
 </head>
-<body onload="window.print();">
-<div id="main">
+<body onload="printandclose();"><div id="main">
 
 <!-- TMPL_LOOP NAME="reservedata" -->
 

@@ -1669,7 +1669,7 @@ sub AddReturn {
     #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
     #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
 
-    if ($doreturn and ($branch ne $hbr) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) ){
+    if (($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $hbr) and not $messages->{'WrongTransfer'}){
         if ( C4::Context->preference("AutomaticItemReturn"    ) or
             (C4::Context->preference("UseBranchTransferLimits") and
              ! IsBranchTransferAllowed($branch, $hbr, $item->{C4::Context->preference("BranchTransferLimitsType")} )
@@ -2255,7 +2255,7 @@ sub AddRenewal {
     unless ($datedue) {
 
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
-        my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
+        my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         C4::Dates->new($issuedata->{date_due}, 'iso') :
@@ -2691,6 +2691,7 @@ C<$startdate>   = C4::Dates object representing start date of loan period (assum
 C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
 C<$borrower> = Borrower object
+
 =cut
 
 sub CalcDateDue { 
@@ -2698,19 +2699,26 @@ sub CalcDateDue {
 	my $datedue;
         my $loanlength = GetLoanLength($borrower->{'categorycode'},$itemtype, $branch);
 
-	if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
-		my $timedue = time + ($loanlength) * 86400;
-	#FIXME - assumes now even though we take a startdate 
-		my @datearr  = localtime($timedue);
-		$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+	# if globalDueDate ON the datedue is set to that date
+	if ( C4::Context->preference('globalDueDate')
+             && ( C4::Context->preference('globalDueDate') =~ C4::Dates->regexp('syspref') ) ) {
+            $datedue = C4::Dates->new( C4::Context->preference('globalDueDate') );
 	} else {
-		my $calendar = C4::Calendar->new(  branchcode => $branch );
-		$datedue = $calendar->addDate($startdate, $loanlength);
+	# otherwise, calculate the datedue as normal
+		if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
+			my $timedue = time + ($loanlength) * 86400;
+		#FIXME - assumes now even though we take a startdate 
+			my @datearr  = localtime($timedue);
+			$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+		} else {
+			my $calendar = C4::Calendar->new(  branchcode => $branch );
+			$datedue = $calendar->addDate($startdate, $loanlength);
+		}
 	}
 
 	# if Hard Due Dates are used, retreive them and apply as necessary
         my ($hardduedate, $hardduedatecompare) = GetHardDueDate($borrower->{'categorycode'},$itemtype, $branch);
-	if ( $hardduedate->output('iso') && $hardduedate->output('iso') ne '0000-00-00') {
+	if ( $hardduedate && $hardduedate->output('iso') && $hardduedate->output('iso') ne '0000-00-00') {
             # if the calculated due date is after the 'before' Hard Due Date (ceiling), override
             if ( $datedue->output( 'iso' ) gt $hardduedate->output( 'iso' ) && $hardduedatecompare == -1) {
                 $datedue = $hardduedate;
@@ -2728,7 +2736,6 @@ sub CalcDateDue {
 	if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
 	    $datedue = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
 	}
-
 
 	return $datedue;
 }

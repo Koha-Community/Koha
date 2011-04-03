@@ -27,6 +27,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('casServerUrl', 'https://localhost:8443/cas', 'L''URL du serveur CAS', '', 'Free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('CataloguingLog', '0', 'Activer ce paramètre pour enregistrer les actions sur le catalogage', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('checkdigit','none','Active la vérification des cartes adhérents sur aucun ou selon la méthode \"Katipo\"','none|katipo','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('COinSinOPACResults', 1, 'If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat', 'us', 'Ce paramètre définit le format d''affichage des dates (us mm/jj/aaaa, metric jj/mm/aaaa, ISO aaaa/mm/jj)', 'metric|us|iso', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('delimiter', ';', 'Ce paramètre définit le séparateur par défaut lors des exports (au format csv) de données (Rapports, statistiques...)', ';|tabulation|,|/|\\|#', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('EnhancedMessagingPreferences',0,'Si ce paramètre est activé, permet aux adhérents de choisir de recevoir des messages supplémentaires pour les documents dûs ou bientôt dûsIf ON.','','YesNo');
@@ -109,6 +110,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReturnBeforeExpiry', '0', 'Si ce paramètre est positionné, la date de retour d''un document ne peut pas dépasser la date de fin d''inscription d''un lecteur.', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ReturnLog', '0', 'Activer ce paramètre pour enregistrer les actions sur la circulation (les retours)', '', 'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('reviewson', '1', 'Active ou non les commentaires sur notice à l''OPAC', '', 'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SessionStorage', 'mysql', 'Utiliser mySQL ou un fichier temporaire pour stocker les informations de session. mySQL pose problème dans certains cas en France. Si vous avez des problèmes de perte d''identifiant, choisissez tmp', 'mysql|tmp', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionHistory', 'simplified', 'Ce paramètre définit la vue par défaut de l''état de collection, pour les abonnements. Habituellement, c''est "simplified". Choisissez "full" pour avoir l''état de collection complet par défaut', 'simplified|full', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionLog', '0', 'Activer ce paramètre pour enregistrer les actions sur le bulletinage', '', 'YesNo');
@@ -139,6 +141,9 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ThingISBN',0,'Utilisé avec ''FRBRizeEditions''. Si activé, Koha utilisera le service ''ThingISBN'' dans l''onglet  supplémentaire de la page de détail de notice.','','YesNo');
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WebBasedSelfCheck',0,'Si activé, permet le système de prêt auto-controlé à partir de l''opac (/cgi-bin/koha/sco/sco-main.pl',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckTimeout',120,'Define the number of seconds before the Web-based Self Checkout times out a patron','','Integer');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AllowSelfCheckReturns',0,'If enabled, patrons may return items through the Web-based Self Checkout','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckHelpMessage','','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numSearchResults',20,'Spécifie le nombre maximum de réponses à afficher sur les pages de résultats',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACnumSearchResults',20,'Spécifie le nombre maximum de réponses à afficher sur les pages de résultats',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('defaultSortField',NULL,'Spécifie le champ utilisé par défaut pour le tri','relevance|popularity|call_number|pubdate|acqdate|title|author','Choice');
@@ -300,3 +305,9 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','','free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('TraceSubjectSubdivisions', '0', 'Create searches on all subdivisions for subject tracings.','1','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('StaffAuthorisedValueImages','1','',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACDisplay856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding OPACXSLT option must be on','OFF|Details|Results|Both','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Display856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding Staff Client XSLT option must be on','OFF|Details|Results|Both','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseControlNumber',0,'If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsField','','The MARC field/subfield that contains alternate holdings information for bibs taht do not have items attached (e.g. 852abchi for libraries converting from MARC Magician).',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsSeparator','','The string to use to separate subfields in alternate holdings displays.',NULL,'free');
+

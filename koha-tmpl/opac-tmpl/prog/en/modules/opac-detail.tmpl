@@ -418,7 +418,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	</table>
     <!-- /TMPL_IF -->
 <!-- TMPL_ELSE -->
-<p>No physical items for this record</p>
+    <!-- TMPL_IF NAME="ALTERNATEHOLDINGS" -->
+    <!-- TMPL_LOOP NAME="ALTERNATEHOLDINGS" -->
+        <div id="alternateholdings"><span class="holdings_label">Holdings:</span> <!-- TMPL_VAR NAME="holding" --></div>
+    <!-- /TMPL_LOOP -->
+    <!-- TMPL_ELSE -->
+    <div id="noitems">No physical items for this record</div>
+    <!-- /TMPL_IF -->
 <!-- /TMPL_IF -->
 
 <!-- TMPL_IF NAME="OpenOPACShelfBrowser" -->
@@ -668,12 +674,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         </p></div>
             <!-- TMPL_ELSE -->
             <div class="commentline">
+            <!-- TMPL_IF NAME="ShowReviewer" -->
             <h5>
                 Comment by
                 <!-- TMPL_VAR NAME="title" -->
                 <!-- TMPL_VAR NAME="firstname" -->
                 <!-- TMPL_VAR NAME="surname" -->
             </h5>
+            <!-- /TMPL_IF -->
             <small><!-- TMPL_VAR NAME="datereviewed" --></small>
         <p>
           <!-- TMPL_VAR NAME="review" ESCAPE=0 -->

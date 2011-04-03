@@ -43,6 +43,7 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('checkdigit','none','none|katipo','Se ON, abilita i controlli sulle tessere utenti: gli stili di controllo tra cui scegliere sono none o \"Katipo\".','Choice');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('CircAutocompl','1','','Se ON, si abilita l\'autocompletamento per l\'inserimento dei dati nella circolazione ','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('CircControl','ItemHomeLibrary','PickupLibrary|PatronLibrary|ItemHomeLibrary','Specifica la biblioteca che definisce le politiche di prestito; se ItemLoanLibrary si userà la sottobiblioteca collegata alla copia. Se PatronLibrary la sottobiblioteca a cui e’ iscritto l’utente; se PickupLibrary la sottobiblioteca dove si prende la copia','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('COinSinOPACResults', 1, 'If ON, use COinS in OPAC search results page.  NOTE: this can slow down search response time significantly','','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('dateformat','metric','metric|us|iso','Definisce il formato data (ovvero us  mm/gg/aaaa, metric gg/mm/aaaa o ISO aaaa/mm/gg)','Choice');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('DebugLevel','2','0|1|2','Definisce il livello delle informazioni di debug da mandare al browser qualora dovessero verificarsi degli errori (in produzione impostare sempre il valore 0): 0=nessuno 1=medio 2=massimo','Choice');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('DefaultClassificationSource','ddc','','Per indicare il sistema di classificazione usato di default dalla bilbioteca. Ad es. Dewey, LCC, ecc.','ClassSources');
@@ -165,6 +166,7 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('ReturnBeforeExpiry','1','','Se su ON, la durata del prestito sarà anticipata se la data di rientro prevista è successiva alla scadenza della tessera dell\'utente.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('ReturnLog','1','','Se su ON, abilita i log delle restituzioni dal prestito.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('reviewson','1','','Se ON, abilita la possibilità per gli utenti a inserire recensioni di record bibliografici nell\'OPAC.','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC','','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('RoutingSerials','1','','Se ON, il serial routing è attivato.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('SearchMyLibraryFirst','0','','Se ON, le ricerche in OPAC restituiranno risultati limitatamente alla biblioteca impostata di default dell’utente  se questi si è loggato.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('SessionStorage','mysql','mysql|Pg|tmp','Per usare un database o un file temporaneo per l\'archiviazione dei dati della sessione.','Choice');
@@ -210,6 +212,9 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 ---
 --- Add from eng
 ---
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckTimeout',120,'Define the number of seconds before the Web-based Self Checkout times out a patron','','Integer');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AllowSelfCheckReturns',0,'If enabled, patrons may return items through the Web-based Self Checkout','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SelfCheckHelpMessage','','Enter HTML to include under the basic Web-based Self Checkout instructions on the Help page','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,options,explanation,type) VALUES ('AcqCreateItem','cataloguing','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('AllowAllMessageDeletion','0','Allow any Library to delete any message','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('AllowHoldDateInFuture','0','If set a date field is displayed on the Hold screen of the Staff Interface, allowing the hold date to be set in the future.','','YesNo');
@@ -285,3 +290,8 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetFavicon','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','','free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('TraceSubjectSubdivisions', '0', 'Create searches on all subdivisions for subject tracings.','1','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('StaffAuthorisedValueImages','1','',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACDisplay856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding OPACXSLT option must be on','OFF|Details|Results|Both','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('Display856uAsImage','OFF','Display the URI in the 856u field as an image, the corresponding Staff Client XSLT option must be on','OFF|Details|Results|Both','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseControlNumber',0,'If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsField','','The MARC field/subfield that contains alternate holdings information for bibs taht do not have items attached (e.g. 852abchi for libraries converting from MARC Magician).',NULL,'free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsSeparator','','The string to use to separate subfields in alternate holdings displays.',NULL,'free');

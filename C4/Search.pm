@@ -1748,6 +1748,35 @@ sub searchResults {
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{isbn} =~
           s/-//g;    # deleting - in isbn to enable amazon content
+
+        if (C4::Context->preference("AlternateHoldingsField") && $items_count == 0) {
+            my $fieldspec = C4::Context->preference("AlternateHoldingsField");
+            my $subfields = substr $fieldspec, 3;
+            my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
+            my @alternateholdingsinfo = ();
+            my @holdingsfields = $marcrecord->field(substr $fieldspec, 0, 3);
+            my $alternateholdingscount = 0;
+
+            for my $field (@holdingsfields) {
+                my %holding = ( holding => '' );
+                my $havesubfield = 0;
+                for my $subfield ($field->subfields()) {
+                    if ((index $subfields, $$subfield[0]) >= 0) {
+                        $holding{'holding'} .= $holdingsep if (length $holding{'holding'} > 0);
+                        $holding{'holding'} .= $$subfield[1];
+                        $havesubfield++;
+                    }
+                }
+                if ($havesubfield) {
+                    push(@alternateholdingsinfo, \%holding);
+                    $alternateholdingscount++;
+                }
+            }
+
+            $oldbiblio->{'ALTERNATEHOLDINGS'} = \@alternateholdingsinfo;
+            $oldbiblio->{'alternateholdings_count'} = $alternateholdingscount;
+        }
+
         push( @newresults, $oldbiblio )
             if(not $hidelostitems
                or (($items_count > $itemlost_count )
