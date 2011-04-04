@@ -2356,6 +2356,7 @@ CREATE TABLE `aqbasketgroups` (
   `closed` tinyint(1) default NULL,
   `booksellerid` int(11) NOT NULL,
   `deliveryplace` varchar(10) default NULL,
+  `freedeliveryplace` text default NULL,
   `deliverycomment` varchar(255) default NULL,
   `billingplace` varchar(10) default NULL,
   PRIMARY KEY  (`id`),
