@@ -22,7 +22,7 @@
     <h2>[% BIBITEM_DAT.title |html %] [% IF ( BIBITEM_DAT.author ) %], by [% BIBITEM_DAT.author %][% END %]</h2>
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> [% BIBITEM_DAT.biblionumber %]&nbsp;</li>
-        [% UNLESS ( BIBITEM_DAT.item_level_itypes ) %]
+        [% UNLESS ( item_level_itypes ) %]
         <li><span class="label">Item type:</span> [% BIBITEM_DAT.itemtypename %]&nbsp;</li>
         [% END %]
         <!-- deprecated? <li><span class="label">Loan length:</span> [% BIBITEM_DAT.loanlength %]&nbsp;</li> -->
@@ -50,7 +50,7 @@
          [% END %][% END %]</h4>
             <ol class="bibliodetails">
             <li><span class="label">Home Library:</span> [% ITEM_DAT.homebranchname %]&nbsp;</li>
-	    [% IF ( ITEM_DAT.item_level_itypes ) %]
+	    [% IF ( item_level_itypes ) %]
             <li><span class="label">Item type:</span> [% ITEM_DAT.itype %]&nbsp;</li>
 	    [% END %]
             [% IF ( ITEM_DAT.collection ) %]<li><span class="label">Collection:</span> [% ITEM_DAT.collection %]</li> [% END %]

@@ -63,13 +63,13 @@ You have never borrowed anything from this library.
 
 [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
 <td>
-[% IF ( READING_RECOR.OPACAmazonEnabled ) %][% IF ( READING_RECOR.OPACAmazonCoverImages ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="http://www.amazon.com/gp/reader/[% READING_RECOR.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% READING_RECOR.normalized_isbn %].01.THUMBZZZ.jpg" alt="Cover Image" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
+[% IF ( READING_RECOR.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="http://www.amazon.com/gp/reader/[% READING_RECOR.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% READING_RECOR.normalized_isbn %].01.THUMBZZZ.jpg" alt="Cover Image" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
 
-    [% IF ( READING_RECOR.GoogleJackets ) %][% IF ( READING_RECOR.normalized_isbn ) %]<div style="block" title="[% READING_RECOR.biblionumber |url %]" class="[% READING_RECOR.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+    [% IF ( GoogleJackets ) %][% IF ( READING_RECOR.normalized_isbn ) %]<div style="block" title="[% READING_RECOR.biblionumber |url %]" class="[% READING_RECOR.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
 
-    [% IF ( READING_RECOR.BakerTaylorEnabled ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="https://[% READING_RECOR.BakerTaylorBookstoreurl |html %][% READING_RECOR.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% READING_RECOR.BakerTaylorImageurl |html %][% READING_RECOR.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+    [% IF ( BakerTaylorEnabled ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="https://[% READING_RECOR.BakerTaylorBookstoreurl |html %][% READING_RECOR.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% READING_RECOR.BakerTaylorImageurl |html %][% READING_RECOR.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
 
-	[% IF ( READING_RECOR.SyndeticsEnabled ) %][% IF ( READING_RECOR.SyndeticsCoverImages ) %][% IF ( READING_RECOR.using_https ) %]
+	[% IF ( SyndeticsEnabled ) %][% IF ( READING_RECOR.SyndeticsCoverImages ) %][% IF ( READING_RECOR.using_https ) %]
 	<img src="https://secure.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% READING_RECOR.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />
 	[% ELSE %]
 	<img src="http://www.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% READING_RECOR.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]

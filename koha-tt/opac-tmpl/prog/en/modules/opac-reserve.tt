@@ -289,7 +289,7 @@
                         [% END %]
 
                     </td>
-                    [% IF ( bibitemloo.holdable ) %][% UNLESS ( bibitemloo.item_level_itypes ) %]
+                    [% IF ( bibitemloo.holdable ) %][% UNLESS ( item_level_itypes ) %]
                                           <td>
                                             [% IF ( bibitemloo.imageurl ) %]<img src="[% bibitemloo.imageurl %]" alt="" />[% END %]
                                 [% bibitemloo.description %]
@@ -447,7 +447,7 @@
                           <caption>Select a specific copy:</caption>
                           <tr>
                             <th>Copy</th>
-                            [% IF ( bibitemloo.item_level_itypes ) %]
+                            [% IF ( item_level_itypes ) %]
                               <th>Item Type</th>
                             [% END %]
                             <th>Barcode</th>
@@ -473,7 +473,7 @@
                                   <img src="/opac-tmpl/[% itemLoo.theme %]/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
                                 [% END %] [% IF ( itemLoo.copynumber ) %][% itemLoo.copynumber %][% END %]
                               </td>
-                              [% IF ( itemLoo.item_level_itypes ) %]
+                              [% IF ( item_level_itypes ) %]
                                 <td>
                                   [% UNLESS ( itemLoo.noItemTypeImages ) %]
                                   [% IF ( itemLoo.imageurl ) %]<img src="[% itemLoo.imageurl %]" alt="" />[% END %]

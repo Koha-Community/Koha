@@ -369,7 +369,7 @@ function checkMultiHold() {
         </fieldset>
         [% FOREACH bibitemloo IN bibitemloop %]
           <ol>
-            [% UNLESS ( bibitemloo.item_level_itypes ) %]
+            [% UNLESS ( item_level_itypes ) %]
               <li><span class="label">Item type:</span> [% bibitemloo.description %]</li>
             [% END %]
 
@@ -380,7 +380,7 @@ function checkMultiHold() {
         <caption>Place a hold on a specific copy</caption>
 		<tr>
             <th>Hold</th>
-            [% IF ( bibitemloo.item_level_itypes ) %]
+            [% IF ( item_level_itypes ) %]
                 <th>Item type</th>
             [% END %]
             <th>Barcode</th>
@@ -404,7 +404,7 @@ function checkMultiHold() {
                 <img src="/intranet-tmpl/[% itemloo.theme %]/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
             [% END %]
             </td>
-            [% IF ( itemloo.item_level_itypes ) %]
+            [% IF ( item_level_itypes ) %]
                 <td>
                     [% UNLESS ( itemloo.noItemTypeImages ) %]
                         [% IF ( itemloo.imageurl ) %]<img src="[% itemloo.imageurl %]" alt="" /> <br /> [% END %]
@@ -499,7 +499,7 @@ function checkMultiHold() {
               <span class="not_holdable" title="[% biblioloo.biblionumber %]"></span>
             [% END %]
           </td>
-          [% UNLESS ( biblioloo.item_level_itypes ) %]
+          [% UNLESS ( item_level_itypes ) %]
             <td>
               <img src="[% biblioloo.imageurl %]" alt="[% biblioloo.itypename %]" title="[% biblioloo.itypename %]" />
             </td>

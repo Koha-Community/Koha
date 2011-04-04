@@ -131,7 +131,7 @@ $.tablesorter.addParser({
                         <td><p>[% overloo.waitingdate %]</p></td>
                         <td>[% INCLUDE 'biblio-default-view.inc' %][% overloo.title |html %] [% overloo.subtitle |html %]
                         </a>
-                            [% UNLESS ( overloo.item_level_itypes ) %][% IF ( overloo.itemtype ) %]&nbsp; (<b>[% overloo.itemtype %]</b>)[% END %][% END %]
+                            [% UNLESS ( item_level_itypes ) %][% IF ( overloo.itemtype ) %]&nbsp; (<b>[% overloo.itemtype %]</b>)[% END %][% END %]
                         <br />Barcode: [% overloo.barcode %]
                     </td>
                     <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overloo.borrowernum %]">[% overloo.borrowername %], [% overloo.borrowerfirstname %]</a><br />[% overloo.borrowerphone %]<br />

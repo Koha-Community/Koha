@@ -240,7 +240,7 @@ $(function() {
                     [% END %]
                         <td><input type="checkbox" name="REM-[% itemsloo.biblionumber %]"
                                    value="[% itemsloo.biblionumber %]" /></td>
-                    [% UNLESS ( itemsloo.item_level_itypes ) %]
+                    [% UNLESS ( item_level_itypes ) %]
                         <td>
                           [% UNLESS ( itemsloo.noItemTypeImages ) %]
                           <img src="[% itemsloo.imageurl %]" alt="[% itemsloo.description %]" title="[% itemsloo.description %]" />
@@ -334,16 +334,16 @@ $(function() {
                         </td>
           <td>
           <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber %]">
-                    [% IF ( itemsloo.OPACAmazonEnabled ) %][% IF ( itemsloo.OPACAmazonCoverImages ) %][% IF ( itemsloo.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
+                    [% IF ( itemsloo.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( itemsloo.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
 
-          [% IF ( itemsloo.SyndeticsEnabled ) %][% IF ( itemsloo.SyndeticsCoverImages ) %][% IF ( itemsloo.using_https ) %]
+          [% IF ( SyndeticsEnabled ) %][% IF ( itemsloo.SyndeticsCoverImages ) %][% IF ( itemsloo.using_https ) %]
                 <img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% itemsloo.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" />
                 [% ELSE %]
                 <img src="http://www.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% itemsloo.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
 
-                [% IF ( itemsloo.GoogleJackets ) %][% IF ( itemsloo.normalized_isbn ) %]<div style="block" title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                [% IF ( GoogleJackets ) %][% IF ( itemsloo.normalized_isbn ) %]<div style="block" title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 </a>
-                [% IF ( itemsloo.BakerTaylorEnabled ) %][% IF ( itemsloo.normalized_isbn ) %]<a href="https://[% itemsloo.BakerTaylorBookstoreurl |html %][% itemsloo.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% itemsloo.BakerTaylorImageurl |html %][% itemsloo.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                [% IF ( BakerTaylorEnabled ) %][% IF ( itemsloo.normalized_isbn ) %]<a href="https://[% itemsloo.BakerTaylorBookstoreurl |html %][% itemsloo.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% itemsloo.BakerTaylorImageurl |html %][% itemsloo.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
         </td>
                       </tr>
                   [% END %]<!-- /itemsloop -->

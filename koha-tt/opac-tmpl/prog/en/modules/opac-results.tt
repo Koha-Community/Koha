@@ -381,7 +381,7 @@ $(document).ready(function(){
 [% IF ( SEARCH_RESULT.RequestOnOpac ) %][% UNLESS ( SEARCH_RESULT.norequests ) %][% IF ( SEARCH_RESULT.opacuserlogin ) %]<input type="checkbox" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" /> <label for="bib[% SEARCH_RESULT.biblionumber %]"></label>[% END %][% END %][% END %][% END %][% END %]</td>
                 <td class="select selectcol">[% SEARCH_RESULT.result_number %].</td>
 
-				[% UNLESS ( SEARCH_RESULT.item_level_itypes ) %]
+				[% UNLESS ( item_level_itypes ) %]
                 [% UNLESS ( SEARCH_RESULT.noItemTypeImages ) %]
 
 				<td class="itypecol">
@@ -526,16 +526,16 @@ $(document).ready(function(){
 				</span>
 				</td><td>
 					<a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">
-                    [% IF ( SEARCH_RESULT.OPACAmazonEnabled ) %][% IF ( SEARCH_RESULT.OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
+                    [% IF ( SEARCH_RESULT.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
 
-					[% IF ( SEARCH_RESULT.SyndeticsEnabled ) %][% IF ( SEARCH_RESULT.SyndeticsCoverImages ) %][% IF ( SEARCH_RESULT.using_https ) %]
+					[% IF ( SyndeticsEnabled ) %][% IF ( SEARCH_RESULT.SyndeticsCoverImages ) %][% IF ( SEARCH_RESULT.using_https ) %]
                 <img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="thumbnail" />
                 [% ELSE %]
                 <img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
 
-                [% IF ( SEARCH_RESULT.GoogleJackets ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<div style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                [% IF ( GoogleJackets ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<div style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 </a>
-                [% IF ( SEARCH_RESULT.BakerTaylorEnabled ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<a href="https://[% SEARCH_RESULT.BakerTaylorBookstoreurl |html %][% SEARCH_RESULT.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% SEARCH_RESULT.BakerTaylorImageurl |html %][% SEARCH_RESULT.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                [% IF ( BakerTaylorEnabled ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<a href="https://[% SEARCH_RESULT.BakerTaylorBookstoreurl |html %][% SEARCH_RESULT.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% SEARCH_RESULT.BakerTaylorImageurl |html %][% SEARCH_RESULT.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
 				</td>
                 </tr>
                 [% END %]
