@@ -1023,7 +1023,7 @@ CREATE TABLE `items` (
   `stocknumber` varchar(32) default NULL,
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
-  UNIQUE KEY `itemstocknumberidx` (`stocknumber`),
+  KEY `itemstocknumberidx` (`stocknumber`),
   KEY `itembinoidx` (`biblioitemnumber`),
   KEY `itembibnoidx` (`biblionumber`),
   KEY `homebranch` (`homebranch`),
