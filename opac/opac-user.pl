@@ -27,12 +27,16 @@ use C4::Koha;
 use C4::Circulation;
 use C4::Reserves;
 use C4::Members;
+use C4::Members::AttributeTypes;
+use C4::Members::Attributes qw/GetBorrowerAttributeValue/;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Dates qw/format_date/;
 use C4::Letters;
 use C4::Branch; # GetBranches
+
+use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
 my $query = new CGI;
 
@@ -166,6 +170,13 @@ $template->param( issues_count => $count );
 
 $template->param( OVERDUES       => \@overdues );
 $template->param( overdues_count => $overdues_count );
+
+my $show_barcode = C4::Members::AttributeTypes::AttributeTypeExists( ATTRIBUTE_SHOW_BARCODE );
+if ($show_barcode) {
+    my $patron_show_barcode = GetBorrowerAttributeValue($borrowernumber, ATTRIBUTE_SHOW_BARCODE);
+    undef $show_barcode if defined($patron_show_barcode) && !$patron_show_barcode;
+}
+$template->param( show_barcode => 1 ) if $show_barcode;
 
 # load the branches
 my $branches = GetBranches();
