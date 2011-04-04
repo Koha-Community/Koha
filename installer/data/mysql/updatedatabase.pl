@@ -4029,6 +4029,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `items` DROP INDEX `itemsstocknumberidx`;");
+    $dbh->do("ALTER TABLE items ADD INDEX itemstocknumberidx (stocknumber);");
+    print "Upgrade to $DBversion done (Change items.stocknumber to be not unique)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
