@@ -68,8 +68,29 @@ if (ok) {
 ff.submit();
 
 }
-
-
+$(document).ready(function() 
+    {
+        //We apply the fonction only for modify option
+        <!--TMPL_IF NAME="quantityrec"-->
+        $('#quantity').blur(function() 
+        {
+            // if user decreases the quantity
+            if($(this).val() < <!-- TMPL_VAR name="quantityrec" -->) 
+            {
+                alert("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog");   
+                return true;
+            } 
+            else 
+            {
+                // if user increases the quantity
+                alert("You can't add a new item, please create a new order line");
+                // and we replace the original value
+                $(this).val(<!-- TMPL_VAR name="quantityrec" -->)
+                return false;
+            }
+        });
+        <!-- /TMPL_IF -->
+    });
 //]]>
 </script>
 </head>
@@ -88,7 +109,7 @@ ff.submit();
 
 <h2>
     <!-- TMPL_IF name="ordernumber" -->
-        Modify order details (line #<!-- TMPL_VAR NAME="ordernumber" -->)
+        Modify order line
     <!-- TMPL_ELSE -->
         New order
     <!-- /TMPL_IF -->
@@ -137,7 +158,10 @@ ff.submit();
 <form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform">
 
 <fieldset class="rows">
-        <legend>Catalog details</legend>
+        <legend>
+            Catalog details
+            <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!--TMPL_VAR NAME= "biblionumber"-->"> Edit record</a></span>
+        </legend>
         <!-- TMPL_UNLESS name="existing" -->
         <input type="hidden" name="existing" value="no" />
         <!-- /TMPL_UNLESS -->
@@ -355,10 +379,10 @@ ff.submit();
             </li>
             <li>
                 <label for="notes">Notes: </label>
-                <textarea id="notes" cols="30" rows="3" name="notes"><!-- TMPL_VAR NAME="notes" --></textarea>
+                <textarea id="notes" cols="30" rows="3" name="notes"></textarea>
             </li>
             <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
-                <label for="sort1">Planning value1: </label>
+                <label for="sort1">Statistic 1: </label>
 
                 <!-- TMPL_IF Name="CGIsort1" -->
                     <!-- TMPL_VAR Name="CGIsort1" -->
@@ -368,7 +392,7 @@ ff.submit();
                 <!--/TMPL_IF -->
             </li>
             <li>
-                <label for="sort2">Planning value2: </label>
+                <label for="sort2">Statistic 2: </label>
 
                 <!-- TMPL_IF Name="CGIsort2" -->
                     <!-- TMPL_VAR Name="CGIsort2" -->
