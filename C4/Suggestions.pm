@@ -127,7 +127,7 @@ sub SearchSuggestion  {
             if ($userenv) {
                 if (($userenv->{flags} % 2) != 1 && !$suggestion->{branchcode}){
                 push @sql_params,$$userenv{branch};
-                push @query,q{ and (branchcode = ? or branchcode ='')};
+                push @query,q{ and (suggestions.branchcode = ? or suggestions.branchcode ='')};
                 }
             }
     }
