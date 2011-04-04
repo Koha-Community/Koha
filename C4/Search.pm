@@ -993,6 +993,8 @@ sub getIndexes{
                     'reserves',
                     'restricted',
                     'stack',
+                    'stocknumber',
+                    'inv',
                     'uri',
                     'withdrawn',
 
