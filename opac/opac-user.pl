@@ -108,7 +108,7 @@ my @issuedat;
 my $itemtypes = GetItemTypes();
 my ($issues) = GetPendingIssues($borrowernumber);
 if ($issues){
-	foreach my $issue ( sort sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
+	foreach my $issue ( sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
 		# check for reserves
 		my ( $restype, $res ) = CheckReserves( $issue->{'itemnumber'} );
 		if ( $restype ) {
@@ -228,7 +228,7 @@ foreach my $res (@reserves) {
             $res->{'wait'}= 1; 
             $res->{'holdingbranch'}=$item->{'holdingbranch'};
             $res->{'biblionumber'}=$item->{'biblionumber'};
-            $res->{'barcodenumber'} = $item->{'barcode'};
+            $res->{'barcode'} = $item->{'barcode'};
             $res->{'wbrcode'} = $res->{'branchcode'};
             $res->{'itemnumber'}    = $res->{'itemnumber'};
             $res->{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};
