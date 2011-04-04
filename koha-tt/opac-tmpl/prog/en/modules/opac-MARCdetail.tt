@@ -78,18 +78,18 @@ $(document).ready(function(){
     <div id="plainmarc"></div>[% END %]
     <div id="labeledmarc">
     <table id="marc">
-        [% FOREACH 0X IN 0XX %]
-        <tr><th colspan="2">[% 0X.tag %]</th></tr>
-        [% FOREACH subfiel IN 0X.subfield %]
+        [% FOREACH tab0X IN tab0XX %]
+        <tr><th colspan="2">[% tab0X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab0X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
                 </tr>
             [% END %]
         [% END %]
-        [% FOREACH 1X IN 1XX %]
-        <tr><th colspan="2">[% 1X.tag %]</th></tr>
-        [% FOREACH subfiel IN 1X.subfield %]
+        [% FOREACH tab1X IN tab1XX %]
+        <tr><th colspan="2">[% tab1X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab1X.subfield %]
                 <tr>
                     <td  >[% subfiel.marc_lib %]</td>
                     <td  >[% subfiel.marc_value %]</td>
@@ -97,9 +97,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 2X IN 2XX %]
-        <tr><th colspan="2">[% 2X.tag %]</th></tr>
-        [% FOREACH subfiel IN 2X.subfield %]
+        [% FOREACH tab2X IN tab2XX %]
+        <tr><th colspan="2">[% tab2X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab2X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
@@ -107,9 +107,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 3X IN 3XX %]
-        <tr><th colspan="2">[% 3X.tag %]</th></tr>
-        [% FOREACH subfiel IN 3X.subfield %]
+        [% FOREACH tab3X IN tab3XX %]
+        <tr><th colspan="2">[% tab3X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab3X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
@@ -117,9 +117,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 4X IN 4XX %]
-        <tr><th colspan="2" >[% 4X.tag %]</th></tr>
-        [% FOREACH subfiel IN 4X.subfield %]
+        [% FOREACH tab4X IN tab4XX %]
+        <tr><th colspan="2" >[% tab4X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab4X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
@@ -127,9 +127,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 5X IN 5XX %]
-        <tr><th colspan="2">[% 5X.tag %]</th></tr>
-        [% FOREACH subfiel IN 5X.subfield %]
+        [% FOREACH tab5X IN tab5XX %]
+        <tr><th colspan="2">[% tab5X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab5X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
@@ -137,9 +137,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 6X IN 6XX %]
-        <tr><th colspan="2">[% 6X.tag %]</th></tr>
-        [% FOREACH subfiel IN 6X.subfield %]
+        [% FOREACH tab6X IN tab6XX %]
+        <tr><th colspan="2">[% tab6X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab6X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
@@ -147,9 +147,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 7X IN 7XX %]
-        <tr><th colspan="2">[% 7X.tag %]</th></tr>
-        [% FOREACH subfiel IN 7X.subfield %]
+        [% FOREACH tab7X IN tab7XX %]
+        <tr><th colspan="2">[% tab7X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab7X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
@@ -157,9 +157,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 8X IN 8XX %]
-        <tr><th colspan="2">[% 8X.tag %]</th></tr>
-        [% FOREACH subfiel IN 8X.subfield %]
+        [% FOREACH tab8X IN tab8XX %]
+        <tr><th colspan="2">[% tab8X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab8X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
@@ -167,9 +167,9 @@ $(document).ready(function(){
             [% END %]
         [% END %]
 
-        [% FOREACH 9X IN 9XX %]
-        <tr><th colspan="2">[% 9X.tag %]</th></tr>
-        [% FOREACH subfiel IN 9X.subfield %]
+        [% FOREACH tab9X IN tab9XX %]
+        <tr><th colspan="2">[% tab9X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab9X.subfield %]
                 <tr>
                     <td>[% subfiel.marc_lib %]</td>
                     <td>[% subfiel.marc_value %]</td>
