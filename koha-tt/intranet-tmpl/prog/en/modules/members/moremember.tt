@@ -448,7 +448,7 @@ function validate1(date) {
                 [% END %]
 </td>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issueloo.biblionumber %]"><strong>[% issueloo.title |html %]</strong></a>[% IF ( issueloo.author ) %], by [% issueloo.author %][% END %] [% IF ( issueloo.publishercode ) %]; [% issueloo.publishercode %] [% END %] [% IF ( issueloo.publicationyear ) %], [% issueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issueloo.biblionumber %]&amp;itemnumber=[% issueloo.itemnumber %]#item[% issueloo.itemnumber %]">[% issueloo.barcode %]</a></td>
-<td>[% UNLESS ( issueloo.noItemTypeImages ) %] [% IF ( issueloo.itemtype_image ) %]<img src="[% issueloo.itemtype_image %]" alt="" />[% END %][% END %][% issueloo.itemtype_description %]</td>
+<td>[% UNLESS ( noItemTypeImages ) %] [% IF ( issueloo.itemtype_image ) %]<img src="[% issueloo.itemtype_image %]" alt="" />[% END %][% END %][% issueloo.itemtype_description %]</td>
             <td>[% issueloo.issuedate %]</td>
 	        <td>[% issueloo.itemcallnumber %]</td>
             <td>[% issueloo.charge %]</td>
@@ -552,7 +552,7 @@ function validate1(date) {
             <td>[% relissueloo.collection %]</td>
             <td>[% relissueloo.stocknumber %]</td>
             <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissueloo.biblionumber %]&amp;itemnumber=[% relissueloo.itemnumber %]#item[% relissueloo.itemnumber %]">[% relissueloo.barcode %]</a></td>
-<td>[% UNLESS ( relissueloo.noItemTypeImages ) %] [% IF ( relissueloo.itemtype_image ) %]<img src="[% relissueloo.itemtype_image %]" alt="" />[% END %][% END %][% relissueloo.itemtype_description %]</td>
+<td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissueloo.itemtype_image ) %]<img src="[% relissueloo.itemtype_image %]" alt="" />[% END %][% END %][% relissueloo.itemtype_description %]</td>
             <td>[% relissueloo.issuedate %]</td>
 	    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissueloo.borrowernumber %]">[% relissueloo.borrowername %]</a></td>
 	    <td>[% relissueloo.itemcallnumber %]</td>

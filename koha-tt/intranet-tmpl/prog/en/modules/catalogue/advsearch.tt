@@ -101,7 +101,7 @@
         <tr>
       [% FOREACH itemtypeloo IN itemtypeloop %]
         <td>
-        [% UNLESS ( itemtypeloo.noItemTypeImages ) %]
+        [% UNLESS ( noItemTypeImages ) %]
         [% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]
         [% END %]
 		<input type="checkbox" id="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]" />&nbsp;

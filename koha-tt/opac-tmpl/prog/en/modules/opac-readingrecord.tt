@@ -80,7 +80,7 @@ You have never borrowed anything from this library.
                     <span class="item-details">
                         [% READING_RECOR.author %]
                     </span></td>
-<td>[% UNLESS ( READING_RECOR.noItemTypeImages ) %][% IF ( READING_RECOR.imageurl ) %]<img src="[% READING_RECOR.imageurl %]" alt="" />[% END %][% END %] [% READING_RECOR.description %]</td>
+<td>[% UNLESS ( noItemTypeImages ) %][% IF ( READING_RECOR.imageurl ) %]<img src="[% READING_RECOR.imageurl %]" alt="" />[% END %][% END %] [% READING_RECOR.description %]</td>
 <td>[% READING_RECOR.itemcallnumber %]</td>
 <td>[% IF ( READING_RECOR.returndate ) %][% READING_RECOR.returndate %][% ELSE %]<em>(Checked out)</em>[% END %]</td>
 </tr>

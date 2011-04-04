@@ -318,7 +318,7 @@ Item Types Administration
     [% ELSE %]
   <tr>
     [% END %]
-   [% UNLESS ( loo.noItemTypeImages ) %] <td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl %]" alt="" />[% ELSE %]&nbsp;[% END %]</td>[% END %]
+   [% UNLESS ( noItemTypeImages ) %] <td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl %]" alt="" />[% ELSE %]&nbsp;[% END %]</td>[% END %]
     <td>
       <a href="[% loo.script_name %]?op=add_form&amp;itemtype=[% loo.itemtype |html %]">
         [% loo.itemtype %]
