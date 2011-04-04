@@ -24,7 +24,7 @@ use CGI;
 
 use C4::Context;
 use C4::Output;
-use C4::Dates qw(format_date);
+use C4::Dates qw(format_date format_date_in_iso);
 use C4::SQLHelper qw(:all);
 use C4::Debug;
 use C4::Letters;
@@ -144,6 +144,17 @@ sub SearchSuggestion  {
         else {
             push @query, " and (suggestions.$field='' OR suggestions.$field IS NULL)";
         }
+    }
+
+    my $today = C4::Dates->today('iso');
+
+    foreach ( qw( suggesteddate manageddate accepteddate ) ) {
+        my $from = $_ . "_from";
+        my $to = $_ . "_to";
+        if ($$suggestion{$from} || $$suggestion{$to}) {
+            push @query, " AND suggestions.suggesteddate BETWEEN '" 
+                . (format_date_in_iso($$suggestion{$from}) || 0000-00-00) . "' AND '" . (format_date_in_iso($$suggestion{$to}) || $today) . "'";
+        } 
     }
 
     $debug && warn "@query";
