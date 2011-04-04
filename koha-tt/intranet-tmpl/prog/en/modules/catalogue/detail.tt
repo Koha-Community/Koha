@@ -236,9 +236,9 @@ function verify_images() {
             </tr>
             [% FOREACH itemloo IN itemloop %]
                 <tr>
-                    [% IF ( itemloo.item_level_itypes ) %]
+                    [% IF ( item_level_itypes ) %]
                       <td class="itype">
-                        [% IF ( itemloo.noItemTypeImages ) %]
+                        [% IF ( noItemTypeImages ) %]
                           [% itemloo.description %]
                         [% ELSE %]
                           [% IF ( itemloo.imageurl ) %]
@@ -248,9 +248,9 @@ function verify_images() {
                           [% END %]
                         [% END %]</td>
                     [% END %]
-                    <td class="location">[% UNLESS ( itemloo.singlebranchmode ) %][% itemloo.branchname %] [% END %]</td>
+                    <td class="location">[% UNLESS ( singlebranchmode ) %][% itemloo.branchname %] [% END %]</td>
                     <td class="homebranch">[% itemloo.homebranch %]<span class="shelvingloc">[% itemloo.location %]</span> </td>
-		    [% IF ( itemloo.itemdata_ccode ) %]<td>[% itemloo.ccode %]</td>[% END %]
+		    [% IF ( itemdata_ccode ) %]<td>[% itemloo.ccode %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( itemloo.itemcallnumber ) %] [% itemloo.itemcallnumber %][% END %]</td>
                     <td class="status">
 
@@ -258,7 +258,7 @@ function verify_images() {
 						<span class="datedue">Checked out
                     [% UNLESS ( itemloo.NOTSAMEBRANCH ) %]
                           to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.borrowernumber %]">
-			  [% IF ( itemloo.hidepatronname ) %]
+			  [% IF ( hidepatronname ) %]
 			      [% itemloo.cardnumber %]
 			  [% ELSE %]
 			      [% itemloo.firstname %] [% itemloo.surname %]
@@ -315,8 +315,8 @@ function verify_images() {
                     [% ELSE %]
                         On hold
                     [% END %]
-                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
-		        [% IF ( itemloo.hidepatronname ) %]
+                    [% IF ( canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
+		        [% IF ( hidepatronname ) %]
 		            [% itemloo.Reservedcardnumber %]
 		        [% ELSE %]
 		            [% itemloo.ReservedForFirstname %] [% itemloo.ReservedForSurname %]
@@ -341,24 +341,24 @@ function verify_images() {
                     <td class="datelastseen">[% itemloo.datelastseen %]</td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% itemloo.type %]&amp;itemnumber=[% itemloo.itemnumber %]&amp;biblionumber=[% itemloo.biblionumber %]&amp;bi=[% itemloo.biblioitemnumber %]#item[% itemloo.itemnumber %]">[% itemloo.barcode %]</a></td>
 				[% IF ( itemloo.volinfo ) %]	<td class="enumchron">
-					[% IF ( itemloo.itemdata_enumchron ) %]
+					[% IF ( itemdata_enumchron ) %]
 						[% IF ( itemloo.enumchron ) %]
 						[% itemloo.enumchron %][% IF ( itemloo.serialseq ) %] -- [% END %]
 						[% END %]
 					[% END %]
 					[% itemloo.serialseq %][% IF ( itemloo.publisheddate ) %] ([% itemloo.publisheddate %])[% END %]
 				</td>[% END %]
-				[% IF ( itemloo.itemdata_uri ) %]
+				[% IF ( itemdata_uri ) %]
 					<td class="uri"><a href="[% itemloo.uri %]">[% itemloo.uri %]</a></td>
 				[% END %]
-				[% IF ( itemloo.itemdata_copynumber ) %]
+				[% IF ( itemdata_copynumber ) %]
 					<td class="copynumber">[% itemloo.copynumber %]</td>
 				[% END %]
-                [% IF ( itemloo.itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
+                [% IF ( itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
                 [% IF ( itemloo.type ) %]
                     <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=[% itemloo.biblioitemnumber %]&amp;item=[% itemloo.itemtype %]">Fix Itemtype</a></td>
                 [% END %]
-		[% IF ( itemloo.SpineLabelShowPrintOnBibDetails ) %]
+		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
 			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>
 		[% END %]
 
