@@ -27,12 +27,12 @@
     </tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
-      <td><!-- TMPL_IF NAME="Item Due" -->Item Due
-          <!-- TMPL_ELSIF NAME="Advance Notice" -->Advance Notice
-          <!-- TMPL_ELSIF NAME="Upcoming Events" -->Upcoming Events
-          <!-- TMPL_ELSIF NAME="Hold Filled" -->Hold Filled
-          <!-- TMPL_ELSIF NAME="Item Check-in" -->Item Check-in
-          <!-- TMPL_ELSIF NAME="Item Checkout" -->Item Checkout
+      <td><!-- TMPL_IF NAME="Item_Due" -->Item Due
+          <!-- TMPL_ELSIF NAME="Advance_Notice" -->Advance Notice
+          <!-- TMPL_ELSIF NAME="Upcoming_Events" -->Upcoming Events
+          <!-- TMPL_ELSIF NAME="Hold_Filled" -->Hold Filled
+          <!-- TMPL_ELSIF NAME="Item_Check-in" -->Item Check-in
+          <!-- TMPL_ELSIF NAME="Item_Checkout" -->Item Checkout
           <!-- TMPL_ELSE -->Unknown <!-- /TMPL_IF --></td>
       <!-- TMPL_IF NAME="takes_days" -->
       <td>
