@@ -427,7 +427,7 @@ $template->param( picture => 1 ) if $picture;
 
 my $branch=C4::Context->userenv->{'branch'};
 
-$template->param($data);
+$template->param(%$data);
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     $template->param(ExtendedPatronAttributes => 1);
