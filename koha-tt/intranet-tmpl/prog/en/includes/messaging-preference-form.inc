@@ -27,12 +27,12 @@
     </tr>
     [% FOREACH messaging_preference IN messaging_preferences %]
     <tr>
-      <td><!-- TMPL_IF NAME="Item Due" -->Item Due
-          <!-- TMPL_ELSIF NAME="Advance Notice" -->Advance Notice
-          <!-- TMPL_ELSIF NAME="Upcoming Events" -->Upcoming Events
-          <!-- TMPL_ELSIF NAME="Hold Filled" -->Hold Filled
-          <!-- TMPL_ELSIF NAME="Item Check-in" -->Item Check-in
-          <!-- TMPL_ELSIF NAME="Item Checkout" -->Item Checkout
+      <td>[% IF ( messaging_preference.Item_Due ) %]Item Due
+          [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance Notice
+          [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming Events
+          [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold Filled
+          [% ELSIF ( messaging_preference.Item_Check_in ) %]Item Check-in
+          [% ELSIF ( messaging_preference.Item_Checkout ) %]Item Checkout
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>

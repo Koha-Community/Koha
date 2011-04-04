@@ -31,7 +31,7 @@
           <!-- TMPL_ELSIF NAME="Advance_Notice" -->Advance Notice
           <!-- TMPL_ELSIF NAME="Upcoming_Events" -->Upcoming Events
           <!-- TMPL_ELSIF NAME="Hold_Filled" -->Hold Filled
-          <!-- TMPL_ELSIF NAME="Item_Check-in" -->Item Check-in
+          <!-- TMPL_ELSIF NAME="Item_Check_in" -->Item Check-in
           <!-- TMPL_ELSIF NAME="Item_Checkout" -->Item Checkout
           <!-- TMPL_ELSE -->Unknown <!-- /TMPL_IF --></td>
       <!-- TMPL_IF NAME="takes_days" -->
