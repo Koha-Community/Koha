@@ -39,12 +39,12 @@
     <tr><th>&nbsp;</th><th>Days in advance</th><!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF --><th>Email</th><th>Digests only?</th><!-- <th>RSS</th> --><th>Do not notify</th></tr>
     <!-- TMPL_LOOP name="messaging_preferences" -->
     <tr>
-      <td><!-- TMPL_IF NAME="Item DUE" -->Item DUE
-          <!-- TMPL_ELSIF NAME="Advance Notice" -->Advance Notice
-          <!-- TMPL_ELSIF NAME="Upcoming Events" -->Upcoming Events
-          <!-- TMPL_ELSIF NAME="Hold Filled" -->Hold Filled
-          <!-- TMPL_ELSIF NAME="Item Check-in" -->Item Check-in
-          <!-- TMPL_ELSIF NAME="Item Checkout" -->Item Checkout
+      <td><!-- TMPL_IF NAME="Item_Due" -->Item Due
+          <!-- TMPL_ELSIF NAME="Advance_Notice" -->Advance Notice
+          <!-- TMPL_ELSIF NAME="Upcoming_Events" -->Upcoming Events
+          <!-- TMPL_ELSIF NAME="Hold_Filled" -->Hold Filled
+          <!-- TMPL_ELSIF NAME="Item_Check_in" -->Item Check-in
+          <!-- TMPL_ELSIF NAME="Item_Checkout" -->Item Checkout
           <!-- TMPL_ELSE -->Unknown <!-- /TMPL_IF --></td>
       <!-- TMPL_IF NAME="takes_days" -->
       <td><select name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS">
