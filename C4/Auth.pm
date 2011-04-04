@@ -981,7 +981,7 @@ sub checkauth {
         url         => $self_url,
         LibraryName => C4::Context->preference("LibraryName"),
     );
-    $template->param( \%info );
+    $template->param( %info );
 #    $cookie = $query->cookie(CGISESSID => $session->id
 #   );
     print $query->header(
