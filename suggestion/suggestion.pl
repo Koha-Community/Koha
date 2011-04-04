@@ -54,7 +54,7 @@ sub GetCriteriumDesc{
     return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
     return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
-    if ($displayby =~/managedby/||$displayby =~/acceptedby/){
+    if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
         return "" unless $borr;
         return $$borr{firstname} . ", " . $$borr{surname};
