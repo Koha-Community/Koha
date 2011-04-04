@@ -121,6 +121,7 @@ sub set_form_values {
     # walk through the options and update them with these borrower_preferences
     my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
     PREF: foreach my $option ( @$messaging_options ) {
+        $option=~ s/ /_/g;
         my $pref = C4::Members::Messaging::GetMessagingPreferences( { %{ $target_params }, message_name => $option->{'message_name'} } );
         $option->{ $option->{'message_name'} } = 1;
         # make a hashref of the days, selecting one.
