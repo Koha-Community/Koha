@@ -4,7 +4,7 @@
 function uncheckbox(form, field) {
     var price = new Number(form.elements['price' + field].value);
     var tmpprice = "";
-    var errmsg = "ERROR: Price is not a valid number, please check the price and try again!"
+    var errmsg = _("ERROR: Price is not a valid number, please check the price and try again!")
     if (isNaN(price)) {
         alert(errmsg);
         for(var i=0; i<form.elements['price' + field].value.length; ++i) {
