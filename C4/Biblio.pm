@@ -79,6 +79,8 @@ BEGIN {
       &GetUsedMarcStructure
       &GetXmlBiblio
       &GetCOinSBiblio
+      &GetMarcPrice
+      &GetMarcQuantity
 
       &GetAuthorisedValueDesc
       &GetMarcStructure
@@ -1242,6 +1244,72 @@ sub GetCOinSBiblio {
 
     return $coins_value;
 }
+
+
+=head2 GetMarcPrice
+
+return the prices in accordance with the Marc format.
+=cut
+
+sub GetMarcPrice {
+    my ( $record, $marcflavour ) = @_;
+    my @listtags;
+    my $subfield;
+    
+    if ( $marcflavour eq "MARC21" ) {
+        @listtags = ('345', '020');
+        $subfield="c";
+    } elsif ( $marcflavour eq "UNIMARC" ) {
+        @listtags = ('345', '010');
+        $subfield="d";
+    } else {
+        return;
+    }
+    
+    for my $field ( $record->field(@listtags) ) {
+        for my $subfield_value  ($field->subfield($subfield)){
+            #check value
+            return $subfield_value if ($subfield_value);
+        }
+    }
+    return 0; # no price found
+}
+
+=head2 GetMarcQuantity
+
+return the quantity of a book. Used in acquisition only, when importing a file an iso2709 from a bookseller
+Warning : this is not really in the marc standard. In Unimarc, Electre (the most widely used bookseller) use the 969$a
+
+=cut
+
+sub GetMarcQuantity {
+    my ( $record, $marcflavour ) = @_;
+    my @listtags;
+    my $subfield;
+    
+    if ( $marcflavour eq "MARC21" ) {
+        return 0
+    } elsif ( $marcflavour eq "UNIMARC" ) {
+        @listtags = ('969');
+        $subfield="a";
+    } else {
+        return;
+    }
+    
+    for my $field ( $record->field(@listtags) ) {
+        for my $subfield_value  ($field->subfield($subfield)){
+            #check value
+            if ($subfield_value) {
+                 # in France, the cents separator is the , but sometimes, ppl use a .
+                 # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
+                $subfield_value =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
+                return $subfield_value;
+            }
+        }
+    }
+    return 0; # no price found
+}
+
 
 =head2 GetAuthorisedValueDesc
 
