@@ -4227,7 +4227,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	SetVersion ($DBversion);
 }
 
-$DBversion = 'XXX';
+$DBversion = '3.03.00.044';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE `aqbasketgroups` ADD `freedeliveryplace` TEXT NULL AFTER `deliveryplace`;");
     print "Upgrade to $DBversion done (adding freedeliveryplace to basketgroups)\n";
