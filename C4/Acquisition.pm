@@ -961,6 +961,10 @@ sub ModOrder {
 
     my $dbh = C4::Context->dbh;
     my @params;
+
+    # update uncertainprice to an integer, just in case (under FF, checked boxes have the value "ON" by default)
+    $orderinfo->{uncertainprice}=1 if $orderinfo->{uncertainprice};
+
 #    delete($orderinfo->{'branchcode'});
     # the hash contains a lot of entries not in aqorders, so get the columns ...
     my $sth = $dbh->prepare("SELECT * FROM aqorders LIMIT 1;");
