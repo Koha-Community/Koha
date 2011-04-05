@@ -228,7 +228,7 @@ sub SearchAuthorities {
 
 # FIXME: 'Heading-Main' index not yet defined in zebra
 #                $attr =" \@attr 1=Heading-Main "; 
-                $attr =" \@attr 1=Heading ";
+                $attr =" \@attr 1=Heading-Main ";
 
                 }elsif (@$tags[$i] eq "mainentry") {
                 $attr =" \@attr 1=Heading ";
