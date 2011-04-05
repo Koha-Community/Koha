@@ -401,14 +401,14 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 	    </tr></thead>
 	    <tbody>[% FOREACH ITEM_RESULT IN ITEM_RESULTS %]
 	    <tr>[% IF ( item_level_itypes ) %]<td>[% UNLESS ( noItemTypeImages ) %][% IF ( ITEM_RESULT.imageurl ) %]<img src="[% ITEM_RESULT.imageurl %]" title="[% ITEM_RESULT.description %]" alt="[% ITEM_RESULT.description %]" />[% END %][% END %] [% ITEM_RESULT.description %]</td>[% END %]
-		<td>[% UNLESS ( ITEM_RESULT.singleBranchMode ) %][% IF ( ITEM_RESULT.branchurl ) %]<a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>[% ELSE %][% ITEM_RESULT.branchname %][% END %][% END %] <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span> </td>
-		[% IF ( ITEM_RESULT.itemdata_ccode ) %]<td>[% ITEM_RESULT.ccode %]</td>[% END %]
+		<td>[% UNLESS ( singleBranchMode ) %][% IF ( ITEM_RESULT.branchurl ) %]<a href="[% ITEM_RESULT.branchurl %]">[% ITEM_RESULT.branchname %]</a>[% ELSE %][% ITEM_RESULT.branchname %][% END %][% END %] <span class="shelvingloc">[% ITEM_RESULT.location_description %]</span> </td>
+		[% IF ( itemdata_ccode ) %]<td>[% ITEM_RESULT.ccode %]</td>[% END %]
 		<td>[% IF ( ITEM_RESULT.itemcallnumber ) %] [% ITEM_RESULT.itemcallnumber %][% IF ( ITEM_RESULT.OPACShelfBrowser ) %] (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber %]#shelfbrowser">Browse Shelf</a>)[% END %][% END %]</td>
-		[% IF ( ITEM_RESULT.itemdata_enumchron ) %]<td>[% ITEM_RESULT.enumchron %]</td>[% END %]
-		[% IF ( ITEM_RESULT.itemdata_uri ) %]<td><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
-		[% IF ( ITEM_RESULT.itemdata_copynumber ) %]<td>[% ITEM_RESULT.copynumber %]</td>[% END %]
+		[% IF ( itemdata_enumchron ) %]<td>[% ITEM_RESULT.enumchron %]</td>[% END %]
+		[% IF ( itemdata_uri ) %]<td><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
+		[% IF ( itemdata_copynumber ) %]<td>[% ITEM_RESULT.copynumber %]</td>[% END %]
 		<td>[% INCLUDE 'item-status.inc' %]</td>
-		[% IF ( ITEM_RESULT.itemdata_itemnotes ) %]<td>[% ITEM_RESULT.itemnotes %]</td>[% END %]
+		[% IF ( itemdata_itemnotes ) %]<td>[% ITEM_RESULT.itemnotes %]</td>[% END %]
 		<td>[% ITEM_RESULT.datedue %]</td>
 		[% IF ( ITEM_RESULT.type ) %]
 		<td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=[% ITEM_RESULT.biblioitemnumber %]&amp;item=[% ITEM_RESULT.itemtype %]">Fix Itemtype</a></td>

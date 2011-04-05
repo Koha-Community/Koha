@@ -119,17 +119,17 @@ $.tablesorter.addParser({
 <div id="opac-user-views" class="toptabs">
         <ul>
             <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked Out</a></li>
-            [% IF ( BORROWER_INF.overdues_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li>[% END %]
-[% IF ( BORROWER_INF.OPACFinesTab ) %]
-            [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
-            [% IF ( BORROWER_INF.amountoverzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
-            [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li>[% END %]
+            [% IF ( overdues_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li>[% END %]
+[% IF ( OPACFinesTab ) %]
+            [% IF ( amountoverfive ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
+            [% IF ( amountoverzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
+            [% IF ( amountlessthanzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li>[% END %]
 [% END %]
-            [% IF ( BORROWER_INF.waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-waiting">Waiting</a></li>[% END %][% END %]
-            [% IF ( BORROWER_INF.reserves_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">Holds</a></li>[% END %]
+            [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-waiting">Waiting</a></li>[% END %][% END %]
+            [% IF ( reserves_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">Holds</a></li>[% END %]
         </ul>
         
-[% IF ( BORROWER_INF.OPACFinesTab ) %]
+[% IF ( OPACFinesTab ) %]
         <!-- FINES BOX -->
         [% IF ( BORROWER_INF.amountoverfive ) %]
             <div id="opac-user-fines"> <h3>Fines and Charges</h3>
@@ -242,7 +242,7 @@ $.tablesorter.addParser({
                         [% ISSUE.author %]
                     </span></td>
                 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( ISSUE.imageurl ) %]<img src="[% ISSUE.imageurl %]" title="[% ISSUE.description %]" alt="[% ISSUE.description %]" />[% END %] [% ISSUE.description %]</td>[% END %]
-                [% IF ( ISSUE.show_barcode ) %]<td>[% ISSUE.barcode %]</td>[% END %]
+                [% IF ( show_barcode ) %]<td>[% ISSUE.barcode %]</td>[% END %]
                 <td>[% ISSUE.itemcallnumber %]</td>
                 [% IF ( ISSUE.overdue ) %]
                     <td class="overdue">[% ISSUE.date_due %]</td>
@@ -326,7 +326,7 @@ $.tablesorter.addParser({
 <td><a href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber %]">[% OVERDUE.title |html %]</a> <span class="item-details">[% OVERDUE.author %]</span></td>
 
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( OVERDUE.imageurl ) %]<img src="[% OVERDUE.imageurl %]" title="[% OVERDUE.description %]" alt="[% OVERDUE.description %]" />[% END %] [% OVERDUE.description %]</td>[% END %]
-[% IF ( OVERDUE.show_barcode ) %]<td>[% OVERDUE.barcode %]</td>[% END %]
+[% IF ( show_barcode ) %]<td>[% OVERDUE.barcode %]</td>[% END %]
 <td>[% OVERDUE.itemcallnumber %]</td>
 <td>[% OVERDUE.date_due %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
