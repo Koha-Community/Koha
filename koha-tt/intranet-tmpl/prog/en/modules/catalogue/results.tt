@@ -444,16 +444,16 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                             &nbsp;
                                         [% END %]
                                     <p>
-                                    [% UNLESS ( SEARCH_RESULT.item_level_itypes ) %]
-                                    [% UNLESS ( SEARCH_RESULT.noItemTypeImages ) %][% IF ( SEARCH_RESULT.imageurl ) %]
+                                    [% UNLESS ( item_level_itypes ) %]
+                                    [% UNLESS ( noItemTypeImages ) %][% IF ( SEARCH_RESULT.imageurl ) %]
                                     <img src="[% SEARCH_RESULT.imageurl %]" title="[% SEARCH_RESULT.description %]" style="float: left; margin: .1em;" alt="" />
                                     [% END %][% END %]
                                     [% END %]
                                     [% SEARCH_RESULT.summary %]</p>
                                 [% ELSE %]
                                     <p>
-                                    [% UNLESS ( SEARCH_RESULT.item_level_itypes ) %]
-                                    [% UNLESS ( SEARCH_RESULT.noItemTypeImages ) %][% IF ( SEARCH_RESULT.imageurl ) %]
+                                    [% UNLESS ( item_level_itypes ) %]
+                                    [% UNLESS ( noItemTypeImages ) %][% IF ( SEARCH_RESULT.imageurl ) %]
                                     <img src="[% SEARCH_RESULT.imageurl %]" title="[% SEARCH_RESULT.description %]" style="float: left; margin: .1em;" alt="" />
                                     [% END %][% END %]
                                     [% END %]
@@ -507,7 +507,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     <ul>
                                     [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
 
-                                        [% IF ( available_items_loo.noItemTypeImages ) %]<li>[% ELSE %][% IF ( available_items_loo.item_level_itypes ) %][% IF ( available_items_loo.imageurl ) %]<li style="list-style: none; list-style-type: none;"><img src="[% available_items_loo.imageurl %]" title="[% available_items_loo.description %]" alt="[% available_items_loo.description %]" />[% ELSE %]<li>[% END %][% ELSE %]<li>[% END %][% END %]
+                                        [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %][% IF ( available_items_loo.imageurl ) %]<li style="list-style: none; list-style-type: none;"><img src="[% available_items_loo.imageurl %]" title="[% available_items_loo.description %]" alt="[% available_items_loo.description %]" />[% ELSE %]<li>[% END %][% ELSE %]<li>[% END %][% END %]
                                         [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]
                                         [% IF ( available_items_loo.location ) %][% available_items_loo.location %][% END %]
                                         [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
@@ -519,7 +519,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                    <span class="status">[% IF ( SEARCH_RESULT.onloancount ) %][% SEARCH_RESULT.onloancount %][% END %] on loan:</span>
                                     <ul>
                                     [% FOREACH onloan_items_loo IN SEARCH_RESULT.onloan_items_loop %]
-                                       [% IF ( onloan_items_loo.noItemTypeImages ) %]<li>[% ELSE %][% IF ( onloan_items_loo.item_level_itypes ) %]
+                                       [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %]
                                         [% IF ( onloan_items_loo.imageurl ) %]
                                         <li style="list-style: none; list-style-type: none;"><img src="[% onloan_items_loo.imageurl %]" title="[% onloan_items_loo.description %]" alt="[% onloan_items_loo.description %]" />
                                         [% ELSE %]<li>[% END %]
@@ -536,7 +536,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     <span class="unavailable">[% IF ( SEARCH_RESULT.othercount ) %][% SEARCH_RESULT.othercount %][% END %] unavailable:</span>
                                     <ul>
                                     [% FOREACH other_items_loo IN SEARCH_RESULT.other_items_loop %]
-                                        [% IF ( other_items_loo.noItemTypeImages ) %]<li>[% ELSE %][% IF ( other_items_loo.item_level_itypes ) %]
+                                        [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %]
                                         [% IF ( other_items_loo.imageurl ) %]
                                         <li style="list-style: none; list-style-type: none;"><img src="[% other_items_loo.imageurl %]" title="[% other_items_loo.description %]" alt="[% other_items_loo.description %]" />
                                         [% ELSE %]<li>[% END %]
