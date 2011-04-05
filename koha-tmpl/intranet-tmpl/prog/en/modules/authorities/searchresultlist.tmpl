@@ -51,7 +51,7 @@ function searchauthority() {
 <div id="authorities_searchresultlist_results">
   <table>
     <tr>
-      <th>Summary</th>
+      <th colspan="2">Summary</th>
 <!-- TMPL_UNLESS name="isEDITORS" -->
       <th>Used in</th>
 <!-- /TMPL_UNLESS -->
@@ -63,7 +63,8 @@ function searchauthority() {
     <!-- TMPL_ELSE -->
     <tr>
     <!-- /TMPL_UNLESS -->
-      <td><a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->"><!-- TMPL_VAR NAME="summary" --></a></td>
+      <td><!-- TMPL_VAR NAME="summary" --></td>
+      <td><a href="detail.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Details</a></td>
   <!-- TMPL_UNLESS name="isEDITORS" -->
       <td>
         <a href="../catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=<!--TMPL_VAR Name="authid" -->" class="button"><!-- TMPL_VAR NAME="used" --> biblio(s)</a>
