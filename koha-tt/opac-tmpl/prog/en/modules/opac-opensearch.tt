@@ -35,9 +35,9 @@
        <isbn>[% SEARCH_RESULT.isbn |html %]</isbn>
        <link>[% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %][% SEARCH_RESULT.OPACBaseurl %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %][% ELSE %][% IF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %][% SEARCH_RESULT.OPACBaseurl %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %][% ELSE %][% SEARCH_RESULT.OPACBaseurl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber %][% END %][% END %]</link>
        <description><![CDATA[
-[% IF ( SEARCH_RESULT.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %][% END %]
+[% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %][% END %]
 
-[% IF ( SyndeticsEnabled ) %][% IF ( SEARCH_RESULT.SyndeticsCoverImages ) %][% IF ( SEARCH_RESULT.content_identifier_exists ) %][% IF ( SEARCH_RESULT.using_https ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" />
+[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( SEARCH_RESULT.content_identifier_exists ) %][% IF ( SEARCH_RESULT.using_https ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" />
 [% ELSE %]
 <img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" />
 [% END %][% END %][% END %][% END %]
@@ -50,7 +50,7 @@
                         [% IF ( SEARCH_RESULT.notes ) %], [% SEARCH_RESULT.notes |html %][% END %]
                         [% IF ( SEARCH_RESULT.size ) %] [% SEARCH_RESULT.size |html %]. [% END %]
                         [% IF ( SEARCH_RESULT.isbn ) %] [% SEARCH_RESULT.isbn |html %][% END %] </p><p>
-[% IF ( SEARCH_RESULT.RequestOnOpac ) %]
+[% IF ( RequestOnOpac ) %]
 <a href="[% SEARCH_RESULT.OPACBaseurl %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Place Hold on <i>[% SEARCH_RESULT.title |html %]</i></a></p>
 [% END %]
 						]]></description>

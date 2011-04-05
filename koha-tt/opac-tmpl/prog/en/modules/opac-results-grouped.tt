@@ -198,7 +198,7 @@ function highlightOn() {
             [% ELSE %]
                 <tr>
             [% END %]
-                    <td>[% IF ( GROUP_RESULT.OPACAmazonEnabled ) %]
+                    <td>[% IF ( OPACAmazonEnabled ) %]
                         <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% GROUP_RESULT.biblionumber |url %]">[% IF ( GROUP_RESULT.isbn ) %]<img src="http://images.amazon.com/images/P/[% GROUP_RESULT.isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<img src="http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif" alt="" class="thumbnail" />[% END %]
                         </a>
                         [% ELSE %]
@@ -236,7 +236,7 @@ function highlightOn() {
 					<span class="available"><strong>Copies available at:</strong>
 					[% FOREACH available_items_loo IN GROUP_RESULT.available_items_loop %]
 					[% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]
-					[% IF ( available_items_loo.OPACItemsResultsDisplay ) %]
+					[% IF ( OPACItemsResultsDisplay ) %]
                         [% IF ( available_items_loo.location ) %][% available_items_loo.location %][% END %]
                         [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/opac-search.pl?q=callnum:[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
                     [% END %]
@@ -257,10 +257,10 @@ function highlightOn() {
 				</p>
 
 				<p>
-                                [% IF ( GROUP_RESULT.RequestOnOpac ) %]
+                                [% IF ( RequestOnOpac ) %]
 					[% UNLESS ( GROUP_RESULT.norequests ) %]
-						[% IF ( GROUP_RESULT.opacuserlogin ) %]
-							[% IF ( GROUP_RESULT.AllowOnShelfHolds ) %]
+						[% IF ( opacuserlogin ) %]
+							[% IF ( AllowOnShelfHolds ) %]
 								<a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% GROUP_RESULT.biblionumber %]">Place Hold</a><!-- add back when available 0 holds in queue-->
 							[% ELSE %]
 								[% IF ( GROUP_RESULT.itemsissued ) %]

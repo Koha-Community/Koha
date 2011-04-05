@@ -162,7 +162,7 @@ $.tablesorter.addParser({
         </tr></thead>
         <tbody>[% FOREACH suggestions_loo IN suggestions_loop %]
             [% IF ( suggestions_loo.even ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
-[% IF ( suggestions_loo.loggedinusername ) %]<td>
+[% IF ( loggedinusername ) %]<td>
     [% IF ( suggestions_loo.showcheckbox ) %]
                     <input type="checkbox" name="delete_field" value="[% suggestions_loo.suggestionid %]" />
     [% END %]

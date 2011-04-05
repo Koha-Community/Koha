@@ -436,8 +436,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         <td rowspan="2" style="width:20px;"><a style="height: 10em;" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% IF ( shelfbrowser_prev_biblionumber ) %][% shelfbrowser_prev_biblionumber %][% ELSE %][% biblionumber %][% END %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_itemnumber %]#shelfbrowser"><img src="/opac-tmpl/prog/images/browse-prev.gif" alt="Previous" border="0" /></a></td>
 [% FOREACH PREVIOUS_SHELF_BROWS IN PREVIOUS_SHELF_BROWSE %]
         <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% PREVIOUS_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% PREVIOUS_SHELF_BROWS.itemnumber %]#shelfbrowser">
-    [% IF ( PREVIOUS_SHELF_BROWS.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]<img border="0" src="http://images.amazon.com/images/P/[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
-    [% IF ( SyndeticsEnabled ) %][% IF ( PREVIOUS_SHELF_BROWS.SyndeticsCoverImages ) %][% IF ( PREVIOUS_SHELF_BROWS.content_identifier_exists ) %]
+    [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_isbn ) %]<img border="0" src="http://images.amazon.com/images/P/[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
+    [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( PREVIOUS_SHELF_BROWS.content_identifier_exists ) %]
     [% IF ( PREVIOUS_SHELF_BROWS.using_https ) %]
     <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% PREVIOUS_SHELF_BROWS.SyndeticsClientCode %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% PREVIOUS_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% PREVIOUS_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
     [% ELSE %]<img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% PREVIOUS_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% PREVIOUS_SHELF_BROWS.SyndeticsClientCode %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% PREVIOUS_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( PREVIOUS_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% PREVIOUS_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />[% END %]
@@ -452,10 +452,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% FOREACH NEXT_SHELF_BROWS IN NEXT_SHELF_BROWSE %]
        <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% NEXT_SHELF_BROWS.biblionumber %]&amp;shelfbrowse_itemnumber=[% NEXT_SHELF_BROWS.itemnumber %]#shelfbrowser">
 
-    [% IF ( NEXT_SHELF_BROWS.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
+    [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( NEXT_SHELF_BROWS.browser_normalized_isbn ) %]
     <img border="0" src="http://images.amazon.com/images/P/[% NEXT_SHELF_BROWS.browser_normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
 
-	[% IF ( SyndeticsEnabled ) %][% IF ( NEXT_SHELF_BROWS.SyndeticsCoverImages ) %][% IF ( NEXT_SHELF_BROWS.content_identifier_exists ) %]
+	[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( NEXT_SHELF_BROWS.content_identifier_exists ) %]
     [% IF ( NEXT_SHELF_BROWS.using_https ) %]
     <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% NEXT_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% NEXT_SHELF_BROWS.SyndeticsClientCode %][% IF ( NEXT_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% NEXT_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( NEXT_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% NEXT_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
     [% ELSE %]<img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% NEXT_SHELF_BROWS.browser_normalized_isbn %]/SC.GIF&amp;client=[% NEXT_SHELF_BROWS.SyndeticsClientCode %][% IF ( NEXT_SHELF_BROWS.browser_normalized_upc ) %]&amp;upc=[% NEXT_SHELF_BROWS.browser_normalized_upc %][% END %][% IF ( NEXT_SHELF_BROWS.browser_normalized_oclc ) %]&amp;oclc=[% NEXT_SHELF_BROWS.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />[% END %]
@@ -720,9 +720,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% FOREACH XISBN IN XISBNS %]
 <tr>
 <td>
-[% IF ( XISBN.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %]<img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% END %][% END %]
+[% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %]<img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" alt="" />[% END %][% END %]
 
-[% IF ( SyndeticsEnabled ) %][% IF ( XISBN.SyndeticsCoverImages ) %][% IF ( XISBN.content_identifier_exists ) %]
+[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( XISBN.content_identifier_exists ) %]
 [% IF ( XISBN.using_https ) %]
 <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn %]/SC.GIF&amp;client=[% XISBN.SyndeticsClientCode %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
 [% ELSE %]<img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% XISBN.browser_normalized_isbn %]/SC.GIF&amp;client=[% XISBN.SyndeticsClientCode %][% IF ( XISBN.browser_normalized_upc ) %]&amp;upc=[% XISBN.browser_normalized_upc %][% END %][% IF ( XISBN.browser_normalized_oclc ) %]&amp;oclc=[% XISBN.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />[% END %]
@@ -747,7 +747,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% FOREACH AMAZON_SIMILAR_PRODUCT IN AMAZON_SIMILAR_PRODUCTS %]
 [% FOREACH similar_biblionumber IN AMAZON_SIMILAR_PRODUCT.similar_biblionumbers %]
 <td>[% IF ( OPACAmazonCoverImages ) %]<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% similar_biblionumber.biblionumber %]"><img alt="" src="http://images.amazon.com/images/P/[% similar_biblionumber.ASIN %].01._SS50_.jpg" />[% END %]
-    [% IF ( SyndeticsEnabled ) %][% IF ( similar_biblionumber.SyndeticsCoverImages ) %][% IF ( similar_biblionumber.content_identifier_exists ) %]
+    [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( similar_biblionumber.content_identifier_exists ) %]
     [% IF ( similar_biblionumber.using_https ) %]
     <img border="0" src="https://secure.syndetics.com/index.aspx?isbn=[% similar_biblionumber.browser_normalized_isbn %]/SC.GIF&amp;client=[% similar_biblionumber.SyndeticsClientCode %][% IF ( similar_biblionumber.browser_normalized_upc ) %]&amp;upc=[% similar_biblionumber.browser_normalized_upc %][% END %][% IF ( similar_biblionumber.browser_normalized_oclc ) %]&amp;oclc=[% similar_biblionumber.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
     [% ELSE %]<img border="0" src="http://www.syndetics.com/index.aspx?isbn=[% similar_biblionumber.browser_normalized_isbn %]/SC.GIF&amp;client=[% similar_biblionumber.SyndeticsClientCode %][% IF ( similar_biblionumber.browser_normalized_upc ) %]&amp;upc=[% similar_biblionumber.browser_normalized_upc %][% END %][% IF ( similar_biblionumber.browser_normalized_oclc ) %]&amp;oclc=[% similar_biblionumber.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />[% END %]

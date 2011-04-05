@@ -79,7 +79,7 @@ function Dopop(link) {
                         </td>
                         <td>[% results_loo.description %]</td>
                         <td>[% results_loo.tot %]</td>
-						[% IF ( results_loo.opacuserlogin ) %]<td>[% IF ( results_loo.RequestOnOpac ) %][% UNLESS ( results_loo.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% results_loo.biblionumber %]">Place Hold</a>[% END %][% END %]</td>[% END %]
+						[% IF ( opacuserlogin ) %]<td>[% IF ( RequestOnOpac ) %][% UNLESS ( results_loo.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% results_loo.biblionumber %]">Place Hold</a>[% END %][% END %]</td>[% END %]
                         </tr>
                 [% END %]</tbody>
         </table>

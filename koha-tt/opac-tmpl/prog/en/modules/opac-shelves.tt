@@ -277,8 +277,8 @@ $(function() {
           [% END %]
           [% END %][% ELSE %]This record has no items.[% END %]</span>
             [% END %]
-        [% IF ( itemsloo.TagsEnabled ) %]
-                [% IF ( itemsloo.TagsShowOnList ) %]
+        [% IF ( TagsEnabled ) %]
+                [% IF ( TagsShowOnList ) %]
                 [% IF ( itemsloo.TagLoop ) %]
           <div class="results_summary">
                         <span class="label">Tags:</span>
@@ -286,8 +286,8 @@ $(function() {
                             [% END %]
                         </ul>
                 [% END %]
-                [% IF ( itemsloo.TagsInputOnList ) %]
-          [% IF ( itemsloo.loggedinusername ) %]
+                [% IF ( TagsInputOnList ) %]
+          [% IF ( loggedinusername ) %]
                     <form name="tagform[% itemsloo.biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl">
                         <label for="newtag[% itemsloo.biblionumber %]">New tag:</label>
                         <input name="newtag[% itemsloo.biblionumber %]" id="newtag[% itemsloo.biblionumber %]" maxlength="100" />
@@ -305,10 +305,10 @@ $(function() {
                 [% END %]
 
 <span class="results_summary actions"><span class="label">Actions:</span>
-      [% IF ( itemsloo.RequestOnOpac ) %]
+      [% IF ( RequestOnOpac ) %]
           [% UNLESS ( itemsloo.norequests ) %]
-            [% IF ( itemsloo.opacuserlogin ) %]
-              [% IF ( itemsloo.AllowOnShelfHolds ) %]
+            [% IF ( opacuserlogin ) %]
+              [% IF ( AllowOnShelfHolds ) %]
                 <a class="hold" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% itemsloo.biblionumber %]">Place Hold</a><!-- add back when available 0 holds in queue-->
               [% ELSE %]
                 [% IF ( itemsloo.itemsissued ) %]
@@ -319,24 +319,24 @@ $(function() {
           [% END %]
         [% END %]
 
-        [% IF ( itemsloo.opacuserlogin ) %][% IF ( itemsloo.loggedinusername ) %][% IF ( itemsloo.virtualshelves ) %]<a class="addtolist" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]'); return false;">Save to another list</a>
+        [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( virtualshelves ) %]<a class="addtolist" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% itemsloo.biblionumber %]'); return false;">Save to another list</a>
           [% END %][% END %][% END %]
 
-            [% IF ( itemsloo.opacbookbag ) %]<a class="addtocart" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">Add to Cart</a>[% ELSE %]nocart[% END %]
+            [% IF ( opacbookbag ) %]<a class="addtocart" href="#" onclick="addRecord('[% itemsloo.biblionumber %]'); return false;">Add to Cart</a>[% ELSE %]nocart[% END %]
         </span>
 
 
 
                     <!-- COinS / Openurl -->
                           <!-- COinS / Openurl --><span class="Z3988" title="[% itemsloo.coins %]"></span>
-                          [% IF ( itemsloo.opacuserlogin ) %][% IF ( itemsloo.loggedinusername ) %][% IF ( itemsloo.TagsEnabled ) %]<br/>
+                          [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<br/>
                           <div id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>[% END %][% END %][% END %]
                         </td>
           <td>
           <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% itemsloo.biblionumber %]">
-                    [% IF ( itemsloo.OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( itemsloo.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
+                    [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( itemsloo.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% itemsloo.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
 
-          [% IF ( SyndeticsEnabled ) %][% IF ( itemsloo.SyndeticsCoverImages ) %][% IF ( itemsloo.using_https ) %]
+          [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( itemsloo.using_https ) %]
                 <img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% itemsloo.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" />
                 [% ELSE %]
                 <img src="http://www.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% itemsloo.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]

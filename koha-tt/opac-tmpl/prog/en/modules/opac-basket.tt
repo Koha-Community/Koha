@@ -355,7 +355,7 @@ function tagAdded() {
                 </a>
                 <!-- COinS / Openurl -->
 		    <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.size %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
-		    [% IF ( BIBLIO_RESULT.opacuserlogin ) %][% IF ( BIBLIO_RESULT.loggedinusername ) %][% IF ( BIBLIO_RESULT.TagsEnabled ) %]<div id="newtag[% BIBLIO_RESULT.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>[% END %][% END %][% END %]
+		    [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]<div id="newtag[% BIBLIO_RESULT.biblionumber %]_status" class="tagstatus results_summary" style="display:none">Tag status here.</div>[% END %][% END %][% END %]
     	    </td>
 	    <td>[% BIBLIO_RESULT.author %]</td>
 	    <td>
