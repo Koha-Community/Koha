@@ -1122,10 +1122,12 @@ sub buildQuery {
                 my $indexes_set;
 
 # If the user is sophisticated enough to specify an index, turn off field weighting, stemming, and stopword handling
-                if ( $operands[$i] =~ /(:|=)/ || $scan ) {
+                if ( $operands[$i] =~ /\w(:|=)/ || $scan ) {
                     $weight_fields    = 0;
                     $stemming         = 0;
                     $remove_stopwords = 0;
+                } else {
+                    $operands[$i] =~ s/\?/{?}/g; # need to escape question marks
                 }
                 my $operand = $operands[$i];
                 my $index   = $indexes[$i];
