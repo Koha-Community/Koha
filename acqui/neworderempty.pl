@@ -263,6 +263,7 @@ foreach my $r (@{$budgets}) {
     push @{$budget_loop}, {
         b_id  => $r->{budget_id},
         b_txt => $r->{budget_name},
+        b_active => $r->{budget_period_active},
         b_sel => ( $r->{budget_id} == $budget_id ) ? 1 : 0,
     };
 }

@@ -56,7 +56,7 @@ sub GetCriteriumDesc{
     return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
     return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
-    if ($displayby =~/managedby/||$displayby =~/acceptedby/){
+    if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
         return "" unless $borr;
         return $$borr{firstname} . ", " . $$borr{surname};
@@ -138,11 +138,16 @@ elsif ($op=~/edit/) {
     $op ='save';
 }  
 elsif ($op eq "change" ) {
+    # set accepted/rejected/managed informations if applicable
+    # ie= if the librarian has choosen some action on the suggestions
+    if ($$suggestion_ref{"STATUS"} eq "ACCEPTED"){
+        $$suggestion_ref{"accepteddate"}=C4::Dates->today;
+        $$suggestion_ref{"acceptedby"}=C4::Context->userenv->{number};
+    } elsif ($$suggestion_ref{"STATUS"} eq "REJECTED"){
+        $$suggestion_ref{"rejecteddate"}=C4::Dates->today;
+        $$suggestion_ref{"rejectedby"}=C4::Context->userenv->{number};
+    }
 	if ($$suggestion_ref{"STATUS"}){
-		if (my $tmpstatus=lc($$suggestion_ref{"STATUS"}) =~/ACCEPTED|REJECTED/i){
-			$$suggestion_ref{"$tmpstatus"."date"}=C4::Dates->today;
-			$$suggestion_ref{"$tmpstatus"."by"}=C4::Context->userenv->{number};
-		}
 		$$suggestion_ref{"manageddate"}=C4::Dates->today;
 		$$suggestion_ref{"managedby"}=C4::Context->userenv->{number};
 	}

@@ -389,6 +389,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '4.2'
     },
+    'CGI::Session::Driver::memcached' => {
+        'usage'    => 'Memcached Feature (Experimental)',
+        'required' => '0',
+        'min_ver'  => '0.04',
+    },
     'POSIX' => {
         'usage'    => 'Core',
         'required' => '1',

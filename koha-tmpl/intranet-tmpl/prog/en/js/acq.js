@@ -695,7 +695,7 @@ function calcNewsuggTotal(){
     var total =  new Number(quantity*price*exchangerate);
 
     document.getElementById('total').value = total.toFixed(2);
-    document.getElementById('price').value =  listprice.toFixed(2);
+    document.getElementById('price').value =  price.toFixed(2);
     return true;
 }
 

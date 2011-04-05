@@ -121,6 +121,7 @@ INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`
 		('952', 'f', 'Kodierter Standort-Qualifier', 'Kodierter Standort-Qualifier', 0, 0, 'items.coded_location_qualifier', 10, '', '', '', NULL, 0, '', '', '', NULL),
 		('952', 'g', 'Kaufpreis', 'Kaufpreis', 0, 0, 'items.price', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('952', 'h', 'Heft/Jahrgang','Jahrgang/Heft', 0, 0, 'items.enumchron', 10, '', '', '', 0, 0, '', '', '', NULL),
+        ('952', 'i', 'Inventarnummer','Inventarnummer', 0, 0, 'items.stocknumber', 10, '', '', '', 0, 0, '', '', '', NULL),
 		('952', 'j', 'Aufstellungsnummer', 'Aufstellungsnummer', 0, 0, 'items.stack', 10, 'STACK', '', '', NULL, -1, '', '', '', NULL),
 		('952', 'l', 'Anzahl Ausleihen', 'Anzahl Ausleihen', 0, 0, 'items.issues', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 'm', 'Anzahl Verlängerungen', 'Anzahl Verlängerungen', 0, 0, 'items.renewals', 10, '', '', '', NULL, -5, '', '', '', NULL),

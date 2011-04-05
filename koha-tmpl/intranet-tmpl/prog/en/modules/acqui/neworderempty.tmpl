@@ -18,6 +18,11 @@ function Check(ff) {
         ok=1;
                     _alertString += "\n- " + _("Title cannot be empty");
     }
+    
+    if(isNull(ff.budget_id,1)){
+		ok=1;
+					_alertString += "\n- "+ _("You must select a budget");
+    }
 
     if (!(isNum(ff.quantity,0))){
         ok=1;
@@ -64,7 +69,39 @@ ff.submit();
 
 }
 
-
+$(document).ready(function() 
+    {
+        //We apply the fonction only for modify option
+        <!--TMPL_IF NAME="quantityrec"-->
+        $('#quantity').blur(function() 
+        {
+            // if user decreases the quantity
+            if($(this).val() < <!-- TMPL_VAR name="quantityrec" -->) 
+            {
+                alert("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog");   
+                return true;
+            } 
+            else 
+            {
+                // if user increases the quantity
+                alert("You can't add a new item, please create a new order line");
+                // and we replace the original value
+                $(this).val(<!-- TMPL_VAR name="quantityrec" -->)
+                return false;
+            }
+        });
+        <!-- /TMPL_IF -->
+        
+        $('#showallbudgets').click(function() {
+            if ( $('#budget_id .b_inactive').is(":visible") )
+            {
+            $('#budget_id .b_inactive').hide();
+            }
+            else {
+            $('#budget_id .b_inactive').show();
+            }
+        });
+    });
 //]]>
 </script>
 </head>
@@ -83,7 +120,7 @@ ff.submit();
 
 <h2>
     <!-- TMPL_IF name="ordernumber" -->
-        Modify order details (line #<!-- TMPL_VAR NAME="ordernumber" -->)
+        Modify order line
     <!-- TMPL_ELSE -->
         New order
     <!-- /TMPL_IF -->
@@ -132,7 +169,10 @@ ff.submit();
 <form action="/cgi-bin/koha/acqui/addorder.pl" method="post" id="Aform">
 
 <fieldset class="rows">
-        <legend>Catalog details</legend>
+        <legend>
+            Catalog details
+            <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!--TMPL_VAR NAME= "biblionumber"-->"> Edit record</a></span>
+        </legend>
         <!-- TMPL_UNLESS name="existing" -->
         <input type="hidden" name="existing" value="no" />
         <!-- /TMPL_UNLESS -->
@@ -273,10 +313,14 @@ ff.submit();
                     <!-- TMPL_IF NAME="b_sel" -->
                         <option value="<!-- TMPL_VAR NAME='b_id' -->" selected="selected"><!-- TMPL_VAR NAME="b_txt" --></option>
                     <!-- TMPL_ELSE -->
-                        <option value="<!-- TMPL_VAR NAME='b_id' -->"><!-- TMPL_VAR NAME="b_txt" --></option>
+                        <!-- TMPL_IF NAME="b_active" --><option value="<!-- TMPL_VAR NAME='b_id' -->"><!-- TMPL_VAR NAME="b_txt" --></option>
+                        <!-- TMPL_ELSE --><option value="<!-- TMPL_VAR NAME='b_id' -->" class="b_inactive" style="display : none;"><!-- TMPL_VAR NAME="b_txt" --></option>    
+                        <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 <!-- /TMPL_LOOP -->
                 </select>
+                <label for="showallbudgets" style="float:none;width:auto;">&nbsp;Show all:</label>
+                <input type="checkbox" id="showallbudgets" />
                 <!--/TMPL_IF-->
             </li>
 		<li>
@@ -361,10 +405,10 @@ ff.submit();
             </li>
             <li>
                 <label for="notes">Notes: </label>
-                <textarea id="notes" cols="30" rows="3" name="notes"><!-- TMPL_VAR NAME="notes" --></textarea>
+                <textarea id="notes" cols="30" rows="3" name="notes"></textarea>
             </li>
             <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
-                <label for="sort1">Planning value1: </label>
+                <label for="sort1">Statistic 1: </label>
 
                 <!-- TMPL_IF Name="CGIsort1" -->
                     <!-- TMPL_VAR Name="CGIsort1" -->
@@ -374,7 +418,7 @@ ff.submit();
                 <!--/TMPL_IF -->
             </li>
             <li>
-                <label for="sort2">Planning value2: </label>
+                <label for="sort2">Statistic 2: </label>
 
                 <!-- TMPL_IF Name="CGIsort2" -->
                     <!-- TMPL_VAR Name="CGIsort2" -->

@@ -4209,6 +4209,24 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.042';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `items` DROP INDEX `itemsstocknumberidx`;");
+    $dbh->do("ALTER TABLE items ADD INDEX itemstocknumberidx (stocknumber);");
+    print "Upgrade to $DBversion done (Change items.stocknumber to be not unique)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.03.00.043";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+
+    $dbh->do("INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('YES_NO','0','No','No')");
+    $dbh->do("INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('YES_NO','1','Yes','Yes')");
+
+	print "Upgrade to $DBversion done ( add generic boolean YES_NO authorised_values pair )\n";
+	SetVersion ($DBversion);
+}
+
 $DBversion = "3.03.00.XXX";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Remove spaces and dashes from message_attribute names)\n";

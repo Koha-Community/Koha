@@ -75,9 +75,9 @@ my $budget_hash               = $input->Vars;
 my $budget_id                 = $$budget_hash{budget_id};
 my $budget_permission         = $input->param('budget_permission');
 my $budget_period_dropbox     = $input->param('budget_period_dropbox');
+my $filter_budgetbranch       = $input->param('filter_budgetbranch');
 #filtering non budget keys
 delete $$budget_hash{$_} foreach grep {/filter|^op$|show/} keys %$budget_hash;
-my $filter_budgetbranch       = $input->param('filter_budgetbranch');
 my $filter_budgetname         = $input->param('filter_budgetname');
 $template->param(
     notree => ($filter_budgetbranch or $show_mine)

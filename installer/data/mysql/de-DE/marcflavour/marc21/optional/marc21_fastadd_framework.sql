@@ -118,6 +118,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952','f','Kodierter Standort-Qualifier','Kodierter Standort-Qualifier',0,0,'items.coded_location_qualifier',10,'','','',NULL,-5,'FA','',NULL,NULL),
 		('952','g','Kaufpreis','Kaufpreis',0,0,'items.price',10,'','','',NULL,0,'FA','',NULL,NULL),
 		('952','h','Jahrgang/Heft','Jahrgang/Heft',0,0,'items.enumchron',10,'','','',NULL,0,'FA','',NULL,NULL),
+        ('952','i','Inventarnummer','Inventarnummer', 0, 0, 'items.stocknumber', 10, '', '', '', 0, 0, 'FA', '', NULL, NULL),
 		('952','j','Aufstellungsnummer','Aufstellungsnummer',0,0,'items.stack',10,'STACK','','',NULL,-5,'FA','',NULL,NULL),
 		('952','l','Anzahl Ausleihen','Anzahl Ausleihen',0,0,'items.issues',10,'','','',NULL,-5,'FA','',NULL,NULL),
 		('952','m','Anzahl Verlängerungen','Anzahl Verlängerungen',0,0,'items.renewals',10,'','','',NULL,-5,'FA','',NULL,NULL),
