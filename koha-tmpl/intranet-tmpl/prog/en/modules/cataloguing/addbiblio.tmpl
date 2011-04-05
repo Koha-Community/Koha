@@ -113,42 +113,16 @@ function _UNIMARCFieldDoc(field, blocknumber) {
 }
 
 /*
- * Functions to load/unload css from the head element
- */
-function loadCSS(id,cssDef) {
-
-  var cssElem=document.createElement("style");
-  cssElem.setAttribute("type", "text/css");
-  cssElem.setAttribute("id", id);
-  cssElem.innerHTML = cssDef;
- 
-  document.getElementsByTagName("head")[0].appendChild(cssElem);
-}
-
-function unloadCSS(id) {
-  var elem = document.getElementById(id);
-  elem.parentNode.removeChild(elem);
-}
-
-/*
  * Functions to hide/show marc docs links
  */
 function hideMARCdocLinks() {
-	loadCSS("marcDocsCSS",".marcdocs{display: none;}");
+	$(".marcdocs").hide();
 	$.cookie("marcdocs_<!-- TMPL_VAR NAME="borrowernumber" -->",'false', { path: "/", expires: 365 });
 }
 
 function showMARCdocLinks() {
-	unloadCSS("marcDocsCSS");
+	$(".marcdocs").show();
 	$.cookie("marcdocs_<!-- TMPL_VAR NAME="borrowernumber" -->",'true', { path: "/", expires: 365 });
-}
-
-function toggleMARCDocs(checked) {
-  if (checked) {
-    showMARCdocLinks();
-  } else {
-    hideMARCdocLinks();
-  }
 }
 
 /**
@@ -693,7 +667,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 
 <h1><!-- TMPL_IF NAME="biblionumber" -->Editing <em><!-- TMPL_VAR NAME="title" escape="html" --></em> (Record Number <!-- TMPL_VAR name="biblionumber" -->)</h1><!-- TMPL_ELSE -->Add MARC Record</h1><!-- /TMPL_IF -->
-<div><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" onclick="toggleMARCDocs(this.checked)"/> Show MARC tag documentation links<br/></div>
+<div><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" /> Show MARC tag documentation links<br/></div>
 
 <!-- TMPL_UNLESS name="number" -->
     <!-- show duplicate warning on tab 0 only -->
@@ -738,6 +712,14 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 		$("#z3950searchc").empty();
         $("#savebutton").empty();
 	    yuiToolbar();
+
+        $("#marcDocsSelect").click(function(){
+            if($(this).attr("checked")){
+                showMARCdocLinks();
+            } else {
+                hideMARCdocLinks();
+            }
+        });
 	 });
 
     function redirect(dest){
