@@ -102,7 +102,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacbookbag',1,'If ON, enables display of Cart feature','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacBrowser',0,'If ON, enables subject authorities browser on OPAC (needs to set misc/cronjob/sbuild_browser_and_cloud.pl)',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacCloud',0,'If ON, enables subject cloud on OPAC',NULL,'YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaccolorstylesheet','colors.css','Define the color stylesheet to use in the OPAC','','free');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaccolorstylesheet','colors.css','Define an auxiliary stylesheet for OPAC use, to override specified settings from the primary opac.css stylesheet. Enter the filename (if the file is in the server's css directory) or a complete URL beginning with http (if the file lives on a remote server).','','free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaccredits','','Define HTML Credits at the bottom of the OPAC page','70|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opacheader','','Add HTML to be included as a custom header in the OPAC','30|10','Textarea');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclayoutstylesheet','opac.css','Enter the name of the layout CSS stylesheet to use in the OPAC','','free');
