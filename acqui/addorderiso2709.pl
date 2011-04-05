@@ -180,6 +180,7 @@ if ($op eq ""){
                 }
             }
             ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
+            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
             # 2nd add authorities if applicable
             if (C4::Context->preference("BiblioAddsAuthorities")){
                 my ($countlinked,$countcreated)=BiblioAddAuthorities($marcrecord, $cgiparams->{'frameworkcode'});
@@ -262,6 +263,8 @@ if ($op eq ""){
                 my ( $biblionumber, $bibitemnum, $itemnumber ) = AddItemFromMarc( $record, $biblionumber );
                 NewOrderItem( $itemnumber, $ordernumber );
             }
+        } else {
+            SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }
     }
     # go to basket page
@@ -337,15 +340,22 @@ sub import_batches_list {
     my @list = ();
     foreach my $batch (@$batches) {
         if ($batch->{'import_status'} eq "staged") {
-        push @list, {
-                import_batch_id => $batch->{'import_batch_id'},
-                num_biblios => $batch->{'num_biblios'},
-                num_items => $batch->{'num_items'},
-                upload_timestamp => $batch->{'upload_timestamp'},
-                import_status => $batch->{'import_status'},
-                file_name => $batch->{'file_name'},
-                comments => $batch->{'comments'},
-            };
+            # check if there is at least 1 line still staged
+            my $stagedList=GetImportBibliosRange($batch->{'import_batch_id'}, undef, undef, 'staged');
+            if (scalar @$stagedList) {
+                push @list, {
+                        import_batch_id => $batch->{'import_batch_id'},
+                        num_biblios => $batch->{'num_biblios'},
+                        num_items => $batch->{'num_items'},
+                        upload_timestamp => $batch->{'upload_timestamp'},
+                        import_status => $batch->{'import_status'},
+                        file_name => $batch->{'file_name'},
+                        comments => $batch->{'comments'},
+                };
+            } else {
+                # if there are no more line to includes, set the status to imported
+                SetImportBatchStatus( $batch->{'import_batch_id'}, 'imported' );
+            }
         }
     }
     $template->param(batch_list => \@list); 
