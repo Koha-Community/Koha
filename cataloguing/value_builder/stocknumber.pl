@@ -53,14 +53,11 @@ sub plugin_javascript {
 
 	my $branchcode = C4::Context->userenv->{'branch'};
 
-	$query = "SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,'_',-1) AS SIGNED)) FROM items WHERE homebranch = ?";
+	$query = "SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,'_',-1) AS SIGNED))+1 FROM items WHERE homebranch = ? AND stocknumber LIKE ?";
 	my $sth=$dbh->prepare($query);
-	$sth->execute($branchcode);
-	while (my ($count)= $sth->fetchrow_array) {
-		$nextnum = $count;
-	}
-	$nextnum++;
 
+	$sth->execute($branchcode,$branchcode."_%");
+	my ($nextnum) = $sth->fetchrow;
 	my $nextnum = $branchcode.'_'.$nextnum;
 
     my $scr = <<END_OF_JS;
