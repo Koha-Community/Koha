@@ -4,7 +4,7 @@
 [% INCLUDE 'calendar.inc' %]
 [% IF ( op_else ) %] <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
-<script type="text/JavaScript">
+<script type="text/javascript">
 // <![CDATA[
 
     function yuiToolbar() {
@@ -79,11 +79,16 @@ $(document).ready(function() {
 <style type="text/css">
 h4.collapse a { font-size : 80%; text-decoration: none; } fieldset.brief ol { display : none; }
 .overlay { top: 180px; left: 50%; position: absolute; margin-left: -100px; width: 200px; text-align: center; display: none; margin-top: -10px; background: #eeffd4; padding: .5em; color: #000; } .note { -moz-border-radius: 3px; border-radius:3px; background: transparent url("/intranet-tmpl/prog/img/famfamfam/silk/comment.png") top left no-repeat; padding : 1px 3px 1px 18px; font-size : 90%; }
-</style>
+</style>[% ELSE %]
+<script type="text/javascript">
+// <![CDATA[
+$(document).ready(function() { calcNewsuggTotal(); });
+// ]]>
+</script>
 [% END %]
 <script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
 </head>
-<body onload="calcNewsuggTotal();">
+<body>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( op_save ) %] <a href="/cgi-bin/koha/suggestion/suggestion.pl">Suggestions</a> &rsaquo; [% IF ( suggestionid ) %]Suggestion edit #[% suggestionid %][% ELSE %]New purchase suggestion[% END %][% ELSE %]Suggestions Management[% END %] </div>

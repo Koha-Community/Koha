@@ -252,6 +252,7 @@
 		<th>Order Line</th>
 		<th>Summary</th>
 		<th>View Record</th>
+		<th>Quantity</th>  
 		<th>Est cost</th>
 		<th>Actual cost</th>
 		<th>TOTAL</th>
@@ -260,20 +261,22 @@
 <tfoot>
 	    <tr>
 		<td colspan="4" class="total">SUBTOTAL</td>
-		<td>&nbsp;</td>
+		<td colspan="2">&nbsp;</td>
 		<td>[% totalprice %]</td>
 		<td>[% tototal %]</td>
 	    </tr>
+	      
 	      [% IF ( totalfreight ) %]
 		    <tr>
-		<td colspan="5">&nbsp;
+			<td colspan="6">&nbsp;
 		</td>
 			    <td>Shipping</td>
 		<td>[% totalfreight %]</td>
-	    </tr> [% END %]
+	    	</tr> 
+	    [% END %]
 	      [% IF ( gst ) %]
 		    <tr>
-		<td colspan="5">
+			<td colspan="6">
 		<p class="message">
 			    <b>HELP</b><br />
 		    The total at the bottom of the page should be within a few cents of the total for the invoice.
@@ -281,9 +284,11 @@
 		</td>
 			    <td><b>Tax rate</b></td>
 		<td>[% gst %]</td>
-	    </tr> [% END %]
+	    	</tr> 
+	    [% END %]
 	    <tr>
 	    <td colspan="4" class="total">TOTAL</td>
+		<td>[% totalquantity %]</td>
 		<td colspan="2">&nbsp;</td>
 		<td>[% grandtot %]</td>
 	    </tr>
@@ -303,6 +308,7 @@
                 [% IF ( loop_receive.publishercode ) %]<br />Publisher :[% loop_receive.publishercode %][% END %]
                 </td>
                 <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td>[% loop_receive.quantityreceived %]</td>
                 <td>[% loop_receive.ecost %]</td>
                 <td>[% loop_receive.unitprice %]</td>
                 <td>[% loop_receive.total %]</td>
@@ -351,3 +357,4 @@
 </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
+ 

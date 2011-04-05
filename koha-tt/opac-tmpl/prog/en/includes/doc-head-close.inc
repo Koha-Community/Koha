@@ -51,7 +51,7 @@
     var MSG_NO_RECORD_ADDED = _("No item was added to your cart");
     var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
     var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
-	$("#cartDetails").ready(function(){ $("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i><\/i><span><i><\/i><span><\/span><img src=\"/opac-tmpl/prog/images/cart.gif\" width=\"14\" height=\"14\" alt=\"\" border=\"0\" /> "+_("Cart")+"<span id=\"basketcount\"><\/span><\/span><\/a>"); }); [% ELSE %][% IF ( virtualshelves ) %]
+	$("#cartDetails").ready(function(){ $("#cmspan").html("<a href=\"#\" id=\"cartmenulink\" class=\"\"><i><\/i><span><i><\/i><span><\/span><span id=\"carticon\"></span> "+_("Cart")+"<span id=\"basketcount\"><\/span><\/span><\/a>"); }); [% ELSE %][% IF ( virtualshelves ) %]
     var MSG_NO_RECORD_SELECTED = _("No item was selected");[% END %][% END %]
     [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]var MSG_TAGS_DISABLED = _("Sorry, tags are not enabled on this system.");
     var MSG_TAG_ALL_BAD = _("Error! Your tag was entirely markup code.  It was NOT added.  Please try again with plain text.");

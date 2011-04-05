@@ -248,9 +248,9 @@ function verify_images() {
                           [% END %]
                         [% END %]</td>
                     [% END %]
-                    <td class="location">[% UNLESS ( singlebranchmode ) %][% itemloo.branchname %] [% END %]</td>
+                    <td class="location">[% UNLESS ( itemloo.singlebranchmode ) %][% itemloo.branchname %] [% END %]</td>
                     <td class="homebranch">[% itemloo.homebranch %]<span class="shelvingloc">[% itemloo.location %]</span> </td>
-		    [% IF ( itemdata_ccode ) %]<td>[% itemloo.ccode %]</td>[% END %]
+		    [% IF ( itemloo.itemdata_ccode ) %]<td>[% itemloo.ccode %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( itemloo.itemcallnumber ) %] [% itemloo.itemcallnumber %][% END %]</td>
                     <td class="status">
 
@@ -258,7 +258,7 @@ function verify_images() {
 						<span class="datedue">Checked out
                     [% UNLESS ( itemloo.NOTSAMEBRANCH ) %]
                           to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.borrowernumber %]">
-			  [% IF ( hidepatronname ) %]
+			  [% IF ( itemloo.hidepatronname ) %]
 			      [% itemloo.cardnumber %]
 			  [% ELSE %]
 			      [% itemloo.firstname %] [% itemloo.surname %]
@@ -315,8 +315,8 @@ function verify_images() {
                     [% ELSE %]
                         On hold
                     [% END %]
-                    [% IF ( canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
-		        [% IF ( hidepatronname ) %]
+                    [% IF ( itemloo.canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
+		        [% IF ( itemloo.hidepatronname ) %]
 		            [% itemloo.Reservedcardnumber %]
 		        [% ELSE %]
 		            [% itemloo.ReservedForFirstname %] [% itemloo.ReservedForSurname %]
@@ -341,24 +341,24 @@ function verify_images() {
                     <td class="datelastseen">[% itemloo.datelastseen %]</td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% itemloo.type %]&amp;itemnumber=[% itemloo.itemnumber %]&amp;biblionumber=[% itemloo.biblionumber %]&amp;bi=[% itemloo.biblioitemnumber %]#item[% itemloo.itemnumber %]">[% itemloo.barcode %]</a></td>
 				[% IF ( itemloo.volinfo ) %]	<td class="enumchron">
-					[% IF ( itemdata_enumchron ) %]
+					[% IF ( itemloo.itemdata_enumchron ) %]
 						[% IF ( itemloo.enumchron ) %]
 						[% itemloo.enumchron %][% IF ( itemloo.serialseq ) %] -- [% END %]
 						[% END %]
 					[% END %]
 					[% itemloo.serialseq %][% IF ( itemloo.publisheddate ) %] ([% itemloo.publisheddate %])[% END %]
 				</td>[% END %]
-				[% IF ( itemdata_uri ) %]
+				[% IF ( itemloo.itemdata_uri ) %]
 					<td class="uri"><a href="[% itemloo.uri %]">[% itemloo.uri %]</a></td>
 				[% END %]
-				[% IF ( itemdata_copynumber ) %]
+				[% IF ( itemloo.itemdata_copynumber ) %]
 					<td class="copynumber">[% itemloo.copynumber %]</td>
 				[% END %]
-                [% IF ( itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
+                [% IF ( itemloo.itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
                 [% IF ( itemloo.type ) %]
                     <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=[% itemloo.biblioitemnumber %]&amp;item=[% itemloo.itemtype %]">Fix Itemtype</a></td>
                 [% END %]
-		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
+		[% IF ( itemloo.SpineLabelShowPrintOnBibDetails ) %]
 			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>
 		[% END %]
 
@@ -464,7 +464,7 @@ function verify_images() {
 <div id="editions"><h4>Editions</h4>
 <table>
 [% FOREACH XISBN IN XISBNS %]<tr>[% IF ( XISBN.AmazonEnabled ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
-[% UNLESS ( XISBN.item_level_itypes ) %]<td>[% IF ( XISBN.noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
+[% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author %] &copy;[% XISBN.copyrightdate %]
   [% IF ( XISBN.publishercode ) %]
 [% XISBN.publishercode %] [% IF ( XISBN.place ) %]([% XISBN.place %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement %][% END %] [% IF ( XISBN.editionresponsability ) %][% XISBN.editionresponsability %][% END %]
