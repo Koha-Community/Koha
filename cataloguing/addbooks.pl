@@ -85,8 +85,8 @@ if ($query) {
 
     # format output
     # SimpleSearch() give the results per page we want, so 0 offet here
-    my $total = scalar @$marcresults;
-    my @newresults = searchResults( 'intranet', $query, $total, $results_per_page, 0, 0, @$marcresults );
+    my $total = @{$marcresults};
+    my @newresults = searchResults( 'intranet', $query, $total, $results_per_page, 0, 0, @{$marcresults} );
     $template->param(
         total          => $total_hits,
         query          => $query,

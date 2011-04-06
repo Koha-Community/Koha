@@ -364,7 +364,12 @@ sub CountUsage {
         my $query;
         $query= "an=".$authid;
   		my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
-        return ($result);
+        if ($err) {
+            warn "Error: $err from search $query";
+            $result = 0;
+        }
+
+        return $result;
     }
 }
 
@@ -917,7 +922,7 @@ sub FindDuplicateAuthority {
     }
     my ($error, $results, $total_hits) = C4::Search::SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
-    if (@$results>0) {
+    if (!defined $error && @{$results} ) {
       my $marcrecord = MARC::File::USMARC::decode($results->[0]);
       return $marcrecord->field('001')->data,BuildSummary($marcrecord,$marcrecord->field('001')->data,$authtypecode);
     }

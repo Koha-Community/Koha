@@ -92,8 +92,8 @@ if ( $op eq "do_search" ) {
     ( $error, $marcresults, $total_hits ) =
       SimpleSearch( $ccl_query, $offset, $resultsperpage );
 
-    if (scalar($marcresults) > 0) {
-        $show_results = scalar @$marcresults;
+    if (!defined $error && @{$marcresults} ) {
+        $show_results = @{$marcresults};
     }
     else {
         $debug and warn "ERROR label-item-search: no results from SimpleSearch";

@@ -590,8 +590,8 @@ sub add_biblios {
 
     $self->reindex_marc();
     my $query = 'Finn Test';
-    my ( $error, $results ) = SimpleSearch( $query );
-    if ( $param{'count'} <= scalar( @$results ) ) {
+    my ( $error, $results, undef ) = SimpleSearch( $query );
+    if ( !defined $error && $param{'count'} <=  @{$results} ) {
         pass( "found all $param{'count'} titles" );
     } else {
         fail( "we never found all $param{'count'} titles" );

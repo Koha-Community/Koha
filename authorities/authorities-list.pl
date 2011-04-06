@@ -25,6 +25,9 @@ foreach my $authority (@$dataauthorities){
   $query= "an=".$authority->{'authid'};
   # search for biblios mapped
   my ($err,$res,$used) = C4::Search::SimpleSearch($query,0,10);
+  if (defined $err) {
+      $used = 0;
+  }
   if ($marcauthority && $marcauthority->field($authtypes{$authority->{'authtypecode'}}->{'tag'})){
     print qq("),$marcauthority->field($authtypes{$authority->{'authtypecode'}}->{"tag"})->as_string(),qq(";),qq($authority->{'authid'};"),$authtypes{$authority->{'authtypecode'}}->{'lib'},qq(";$used\n);
   }

@@ -222,15 +222,15 @@ RECORD: while (  ) {
        my ($error, $results,$totalhits)=C4::Search::SimpleSearch( $query, 0, 3, [$server] );
        die "unable to search the database for duplicates : $error" if (defined $error);
        #warn "$query $server : $totalhits";
-       if ($results && scalar(@$results)==1){
+       if ( @{$results} == 1 ){
            my $marcrecord = MARC::File::USMARC::decode($results->[0]);
 	   	   $id=GetRecordId($marcrecord,$tagid,$subfieldid);
        } 
-       elsif  ($results && scalar(@$results)>1){
-       $debug && warn "more than one match for $query";
+       elsif  ( @{$results} > 1){
+           $debug && warn "more than one match for $query";
        } 
        else {
-       $debug && warn "nomatch for $query";
+           $debug && warn "nomatch for $query";
        }
     }
 	my $originalid;
