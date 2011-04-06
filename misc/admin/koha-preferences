@@ -125,6 +125,8 @@ sub SetPreferences {
 
         _set_preference( $row->{'variable'}, $preferences{$row->{'variable'}} );
     }
+
+    C4::Context->clear_syspref_cache();
 }
 
 sub _fetch_preference {
