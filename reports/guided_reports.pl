@@ -22,7 +22,7 @@ use strict;
 use CGI;
 use Text::CSV;
 use C4::Reports::Guided;
-use C4::Auth;
+use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Dates;
 use C4::Debug;
@@ -61,8 +61,20 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+my $session = $cookie ? get_session($cookie->value) : undef;
 
-    my @errors = ();
+my $filter;
+if ( $input->param("filter_set") ) {
+    $filter = {};
+    $filter->{$_} = $input->param("filter_$_") foreach qw/date author keyword/;
+    $session->param('report_filter', $filter) if $session;
+}
+elsif ($session) {
+    $filter = $session->param('report_filter');
+}
+
+
+my @errors = ();
 if ( !$phase ) {
     $template->param( 'start' => 1 );
     # show welcome page
@@ -75,8 +87,15 @@ elsif ( $phase eq 'Build new' ) {
 elsif ( $phase eq 'Use saved' ) {
     # use a saved report
     # get list of reports and display them
-    $template->param( 'saved1' => 1 );
-    $template->param( 'savedreports' => get_saved_reports() ); 
+    $template->param(
+        'saved1' => 1,
+        'savedreports' => get_saved_reports($filter),
+    );
+    if ($filter) {
+        while ( my ($k, $v) = each %$filter ) {
+            $template->param( "filter_$k" => $v ) if $v;
+        }
+    }
 }
 
 elsif ( $phase eq 'Delete Saved') {

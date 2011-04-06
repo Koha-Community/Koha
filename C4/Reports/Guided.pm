@@ -24,7 +24,7 @@ use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
-use C4::Dates qw/format_date/;
+use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Output;
 use C4::Dates;
 use XML::Simple;
@@ -547,22 +547,52 @@ sub delete_report {
 	$sth->execute($id);
 }	
 
+# $filter is either { date => $d, author => $a, keyword => $kw }
+# or $keyword. Optional.
+my $DATE_FORMAT = "%d/%m/%Y";
 sub get_saved_reports {
+    my ($filter) = @_;
+    $filter = { keyword => $filter } if $filter && !ref( $filter );
+
     my $dbh   = C4::Context->dbh();
-    my $query = "SELECT *,saved_sql.id AS id FROM saved_sql 
-    LEFT JOIN saved_reports ON saved_reports.report_id = saved_sql.id
-    ORDER by date_created";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute();
-    
-    my $result = $sth->fetchall_arrayref({});
-    foreach (@$result){
-        $_->{date_created} = format_date($_->{date_created}); 
-        
-        my $member = C4::Members::GetMember(borrowernumber=>$_->{borrowernumber});
-        $_->{borrowerfirstname} = $member->{firstname};
-        $_->{borrowersurname}   = $member->{surname};
+    my (@cond,@args);
+    my $query = "SELECT saved_sql.id, report_id, report,
+                        date_run, date_created, last_modified, savedsql, last_run,
+                        report_name, type, notes,
+                        borrowernumber, surname as borrowersurname, firstname as borrowerfirstname
+                 FROM saved_sql 
+                 LEFT JOIN saved_reports ON saved_reports.report_id = saved_sql.id
+                 LEFT OUTER JOIN borrowers USING (borrowernumber)";
+    if ($filter) {
+        if (my $date = $filter->{date}) {
+            $date = format_date_in_iso($date);
+            push @cond, "DATE(date_run) = ? OR
+                         DATE(date_created) = ? OR
+                         DATE(last_modified) = ? OR
+                         DATE(last_run) = ?";
+            push @args, $date, $date, $date, $date;
+        }
+        if (my $author = $filter->{author}) {
+            $author = "%$author%";
+            push @cond, "surname LIKE ? OR
+                         firstname LIKE ?";
+            push @args, $author, $author;
+        }
+        if (my $keyword = $filter->{keyword}) {
+            $keyword = "%$keyword%";
+            push @cond, "report LIKE ? OR
+                         report_name LIKE ? OR
+                         notes LIKE ? OR
+                         savedsql LIKE ?";
+            push @args, $keyword, $keyword, $keyword, $keyword;
+        }
     }
+    $query .= " WHERE ".join( " AND ", map "($_)", @cond ) if @cond;
+    $query .= " ORDER by date_created";
+    
+    my $result = $dbh->selectall_arrayref($query, {Slice => {}}, @args);
+    $_->{date_created} = format_date($_->{date_created}) foreach @$result;
+
     return $result;
 }
 
