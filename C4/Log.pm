@@ -214,31 +214,27 @@ sub GetLogs {
     $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$iso_datefrom."\" " if $iso_datefrom;   #fix me - mysql specific
     $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"".$iso_dateto."\" " if $iso_dateto;
     if($user) {
-    	$query .= " AND user LIKE ? ";
-    	push(@parameters,"%".$user."%");
+    	$query .= " AND user = ? ";
+    	push(@parameters,$user);
     }
     if(scalar @$modules > 1 or @$modules[0] ne "") {
-	    $query .= " AND (1 = 2";  #always false but used to build the query
-	    foreach my $module (@$modules) {
-	    	next if $module eq "";
-	   	$query .= " or module = ?";
-		push(@parameters,$module);
-	    }
-	    $query .= ")";
+    	$query .= " AND module IN (".join(",",map {"?"} @$modules).") ";
+	push(@parameters,@$modules);
     }
-    if($action) {
-    	$query .= " AND action LIKE ? ";
-	push(@parameters,"%".$action."%");
+    if($action && scalar(@$action)) {
+    	$query .= " AND action IN (".join(",",map {"?"} @$action).") ";
+	push(@parameters,@$action);
     }
     if($object) {
-    	$query .= " AND object LIKE ? ";
-	push(@parameters,"%".$object."%");
+    	$query .= " AND object = ? ";
+	push(@parameters,$object);
     }
     if($info) {
     	$query .= " AND info LIKE ? ";
 	push(@parameters,"%".$info."%");
     }
    
+    warn $query, join("/",@parameters);
     my $sth = $dbh->prepare($query);
     $sth->execute(@parameters);
     
