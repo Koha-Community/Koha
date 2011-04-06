@@ -5,7 +5,7 @@
 
 use strict;
 use warnings;
-use Test::More tests => 6;
+use Test::More tests => 9;
 use MARC::Record;
 use C4::Biblio;
 
@@ -34,6 +34,40 @@ my $itemdata = &GetBiblioItemData($biblioitemnumber);
 is($itemdata->{title},$title,'First test of GetBiblioItemData to get same result of previous two GetBiblioData tests.');
 is($itemdata->{isbn},$isbn,'Second test checking it returns the correct isbn.');
 
+my $success = 0;
+$field = MARC::Field->new(
+        655, ' ', ' ',
+        'a' => 'Auction catalogs',
+        '9' => '1'
+        );
+eval {
+    $marc_record->append_fields($field);
+    $success = ModBiblio($marc_record,$biblionumber,'');
+} or do {
+    diag($@);
+    $success = 0;
+};
+ok($success, "ModBiblio handles authority-linked 655");
+
+eval {
+    $field->delete_subfields('a');
+    $marc_record->append_fields($field);
+    $success = ModBiblio($marc_record,$biblionumber,'');
+} or do {
+    diag($@);
+    $success = 0;
+};
+ok($success, "ModBiblio handles 655 with authority link but no heading");
+
+eval {
+    $field->delete_subfields('9');
+    $marc_record->append_fields($field);
+    $success = ModBiblio($marc_record,$biblionumber,'');
+} or do {
+    diag($@);
+    $success = 0;
+};
+ok($success, "ModBiblio handles 655 with no subfields");
 
 # clean up after ourselves
 DelBiblio($biblionumber);
