@@ -27,6 +27,7 @@
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+                <!-- TMPL_IF Name="CAN_user_reports"-->
 				<h1>Browse system logs</h1>
 				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
 					<!-- TMPL_IF NAME="do_it" -->
@@ -201,7 +202,79 @@
 							</div>
 						<!-- /TMPL_IF -->
 					<!-- /TMPL_IF -->
+
 				</form>
+                <!-- /TMPL_IF -->
+                <!-- TMPL_IF NAME="do_it" -->
+                    <!-- TMPL_IF NAME="total" -->
+                        <h4><!-- TMPL_VAR NAME="total" --> lines found.</h4>
+                        <table>
+                            <tr>
+                                <th>Date</th>
+                                <th>Librarian</th>
+                                <th>Module</th>
+                                <th>Action</th>
+                                <th>Object</th>
+                                <th>Info</th>
+                            </tr>
+                            <!-- TMPL_LOOP NAME="looprow" -->
+                                <tr>
+                                    <td><!-- TMPL_VAR NAME="timestamp" --></td>
+                                    <td>
+                                       <!-- TMPL_IF EXPR="module eq 'CIRCULATION'" -->
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="user" -->" title="display detail for this user."> <!-- TMPL_VAR NAME="user" --> </a>
+                                        <!--TMPL_ELSE-->
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="user" -->" title="display detail for this librarian."> <!-- TMPL_VAR NAME="user" --> </a>
+                                        <!--/TMPL_IF-->
+                                    </td>
+                                    <td><!-- TMPL_VAR NAME="module" --></td>
+                                    <td><!-- TMPL_VAR NAME="action" --></td>
+                                    <td>
+                                        <!-- TMPL_IF EXPR="module eq 'MEMBERS'"-->
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->" title="Display member details."> member <!-- TMPL_VAR NAME="object" --> </a>
+                                        <!-- TMPL_ELSE -->
+                                            <!-- TMPL_IF EXPR="module eq 'CIRCULATION'" -->
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->" title="Display member details."> member <!-- TMPL_VAR NAME="object" --> </a>
+                                            <!-- TMPL_ELSE -->
+                                                <!-- TMPL_IF EXPR="module eq 'CATALOGUING'" -->
+                                                    <!-- TMPL_IF EXPR="info eq 'item'" -->
+                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=<!-- TMPL_VAR NAME="object" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="object" -->">Item <!-- TMPL_VAR NAME="object" --></a>
+                                                    <!-- TMPL_ELSE -->
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->" title="Display detail for this biblio">biblio <!-- TMPL_VAR NAME="object" --></a>
+                                                    <!-- /TMPL_IF -->
+                                                <!-- TMPL_ELSE-->
+                                                    <!-- TMPL_IF EXPR="module eq 'SERIAL'" -->
+                                                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=<!-- TMPL_VAR NAME="object" -->"> <!-- TMPL_VAR NAME="object" --> </a>
+                                                    <!-- TMPL_ELSE -->
+                                                        <!-- TMPL_VAR NAME="object" -->
+                                                    <!-- /TMPL_IF -->
+                                                <!-- /TMPL_IF -->
+                                            <!-- /TMPL_IF -->
+                                        <!-- /TMPL_IF -->
+                                    </td>
+                                    <td>
+                                        <!-- TMPL_IF NAME="CIRCULATION" -->
+                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=<!-- TMPL_VAR NAME="info" -->&biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->&bi=<!-- TMPL_VAR NAME="biblioitemnumber" -->#item<!-- TMPL_VAR NAME="object" -->" title="Display detail for this biblio">Item <!-- TMPL_VAR NAME="info" escape="html" --></a>
+                                        <!-- TMPL_ELSE -->
+                                            <!-- TMPL_VAR NAME="info" escape="html"-->
+                                        <!-- /TMPL_IF -->
+                                    </td>
+                                </tr>
+                            <!-- /TMPL_LOOP -->
+                        </table>
+                    <!-- TMPL_ELSE -->
+                        <div class="dialog alert">
+                            No log found
+                            <!-- TMPL_IF NAME="CATALOGUING" -->
+                                for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=<!-- TMPL_VAR NAME="object" -->">Bibliographic Record <!-- TMPL_VAR NAME="object" --></a>
+                            <!-- /TMPL_IF -->
+                            <!-- TMPL_IF NAME="MEMBERS" -->
+                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=<!-- TMPL_VAR NAME="object" -->"><!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --> (<!-- TMPL_VAR NAME="cardnumber" -->)</a>
+                            <!-- /TMPL_IF -->
+                            .
+                        </div>
+                    <!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
 			</div>
 		</div>
 		<div class="yui-b noprint">
