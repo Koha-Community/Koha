@@ -142,7 +142,7 @@ if ($cardnumber) {
     my $number_reserves =
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
-    if ( $number_reserves > C4::Context->preference('maxreserves') ) {
+    if ( C4::Context->preference('maxreserves') && $number_reserves >= C4::Context->preference('maxreserves') ) {
 		$warnings = 1;
         $maxreserves = 1;
     }
