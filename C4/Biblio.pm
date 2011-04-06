@@ -299,20 +299,22 @@ sub ModBiblio {
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "BEFORE=>" . $newrecord->as_formatted );
     }
 
+    # Cleaning up invalid fields must be done early or SetUTF8Flag is liable to
+    # throw an exception which probably won't be handled.
+    foreach my $field ($record->fields()) {
+        if (! $field->is_control_field()) {
+            if (scalar($field->subfields()) == 0 || (scalar($field->subfields()) == 1 && $field->subfield('9'))) {
+                $record->delete_field($field);
+            }
+        }
+    }
+
     SetUTF8Flag($record);
     my $dbh = C4::Context->dbh;
 
     $frameworkcode = "" unless $frameworkcode;
 
     _strip_item_fields($record, $frameworkcode);
-
-    foreach my $field ($record->fields()) {
-        if (! $field->is_control_field()) {
-            if (scalar($field->subfields()) == 0) {
-                $record->delete_fields($field);
-            }
-        }
-    }
 
     # update biblionumber and biblioitemnumber in MARC
     # FIXME - this is assuming a 1 to 1 relationship between
