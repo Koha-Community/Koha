@@ -2299,6 +2299,8 @@ CREATE TABLE `accountlines` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `notify_id` int(11) NOT NULL default 0,
   `notify_level` int(2) NOT NULL default 0,
+  `note` text NULL default NULL,
+  `manager_id` int(11) NULL,
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
   KEY `itemnumber` (`itemnumber`),
