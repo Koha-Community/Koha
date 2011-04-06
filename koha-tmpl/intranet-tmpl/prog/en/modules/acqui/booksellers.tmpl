@@ -58,10 +58,12 @@
         <!-- TMPL_ELSE -->
             <tr>
         <!-- /TMPL_UNLESS -->
-                <td>	<!-- TMPL_IF name="active" -->
+                <td><!-- TMPL_IF name="CAN_user_acquisition_order_manage" -->
+                    <!-- TMPL_IF name="active" -->
                         <a href="basketheader.pl?booksellerid=<!-- TMPL_VAR name="supplierid" -->&amp;op=add_form">New basket</a>
                     <!-- TMPL_ELSE -->
                         Inactive
+                    <!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                 </td>
                 <td>	<a href="parcels.pl?supplierid=<!-- TMPL_VAR name="supplierid" -->">Receive shipment</a>
