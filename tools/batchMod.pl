@@ -89,13 +89,16 @@ if ($op eq "action") {
     my @tags      = $input->param('tag');
     my @subfields = $input->param('subfield');
     my @values    = $input->param('field_value');
+    my @disabled  = $input->param('disable_input');
     # build indicator hash.
     my @ind_tag   = $input->param('ind_tag');
     my @indicator = $input->param('indicator');
 
     # Is there something to modify ?
     # TODO : We shall use this var to warn the user in case no modification was done to the items
-    my $something_to_modify = scalar(grep {!/^$/} @values);
+    my $values_to_modify = scalar(grep {!/^$/} @values);
+    my $values_to_blank  = scalar(@disabled);
+    my $marcitem;
 
     # Once the job is done
     if ($completedJobID) {
@@ -114,8 +117,8 @@ if ($op eq "action") {
 	# Calling the template
         add_saved_job_results_to_template($template, $completedJobID);
 
-    # While the job is getting done
     } else {
+    # While the job is getting done
 
 	# Job size is the number of items we have to process
 	my $job_size = scalar(@itemnumbers);
@@ -127,6 +130,24 @@ if ($op eq "action") {
 	    $job = put_in_background($job_size);
 	    $callback = progress_callback($job, $dbh);
 	}
+
+	#initializing values for updates
+	my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
+	if ($values_to_modify){
+	    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
+	    $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
+        }
+        if ($values_to_blank){
+	    foreach my $disabledsubf (@disabled){
+		if ($marcitem && $marcitem->field($itemtagfield)){
+		    $marcitem->field($itemtagfield)->update( $disabledsubf => "" );
+		}
+		else {
+		    $marcitem = MARC::Record->new();
+		    $marcitem->append_fields( MARC::Field->new( $itemtagfield, '', '', $disabledsubf => "" ) );
+		}
+	    }
+        }
 
 	# For each item
 	my $i = 1; 
@@ -140,16 +161,19 @@ if ($op eq "action") {
 			    $deleted_items++;
 			} else {
 			    $not_deleted_items++;
-			    push @not_deleted, { biblionumber => $itemdata->{'biblionumber'}, itemnumber => $itemdata->{'itemnumber'}, barcode => $itemdata->{'barcode'}, title => $itemdata->{'title'}, $return => 1 };
+			    push @not_deleted,
+				{ biblionumber => $itemdata->{'biblionumber'},
+				  itemnumber => $itemdata->{'itemnumber'},
+				  barcode => $itemdata->{'barcode'},
+				  title => $itemdata->{'title'},
+				  $return => 1
+				};
 			}
 		} else {
-		    if ($something_to_modify) {
-			my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
-			my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
-			my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
-			my $localmarcitem=Item2Marc($itemdata);
-			UpdateMarcWith($marcitem,$localmarcitem);
-			eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
+		    if ($values_to_modify || $values_to_blank) {
+			my $localmarcitem = Item2Marc($itemdata);
+			UpdateMarcWith( $marcitem, $localmarcitem );
+			eval{ my ( $oldbiblionumber, $oldbibnum, $oldbibitemnum ) = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) };
 		    }
 		}
 		$i++;
@@ -505,7 +529,12 @@ sub UpdateMarcWith {
 	my @fields_to=$marcto->field($itemtag);
     foreach my $subfield ($fieldfrom->subfields()){
 		foreach my $field_to_update (@fields_to){
-				$field_to_update->update($$subfield[0]=>$$subfield[1]) if ($$subfield[1] != '' or $$subfield[1] == '0');
+		    if ($subfield->[1]){
+			$field_to_update->update($subfield->[0]=>$subfield->[1]);
+		    }
+		    else {
+			$field_to_update->delete_subfield(code=> $subfield->[0]);
+		    }
 		}
     }
   #warn "TO edited:",$marcto->as_formatted;

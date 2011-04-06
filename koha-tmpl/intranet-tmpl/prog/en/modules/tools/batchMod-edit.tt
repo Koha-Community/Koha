@@ -16,6 +16,27 @@ console.log(allColumns);
 for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
 }
+$("#itemst").tablesorter({ widgets : ['zebra'], headers: {0:{sorter: false}} });
+$("#selectallbutton").click(function() {
+    $("#itemst").find("input:checkbox").each(function() {
+ $(this).attr("checked", true);
+    });
+});
+$("#clearallbutton").click(function() {
+    $("#itemst").find("input:checkbox").each(function() {
+ $(this).attr("checked", false);
+    });
+});
+$("input[name='disable_input']").click(function() {
+    if ($(this).is(":checked")){
+ $(this).val($(this).siblings("[name='subfield']").val());
+ $(this).siblings().attr('disabled',true);
+    }
+    else {
+ $(this).siblings().removeAttr('disabled');
+    }
+});
+
 //]]>
 </script>
 <script type="text/javascript" src="[% themelang %]/js/pages/batchMod.js"></script>
@@ -118,6 +139,7 @@ for( x=0; x<allColumns.length; x++ ){
 
 <div id="cataloguing_additem_newitem">
         <h2>Edit Items</h2>
+        <div class="hint">Checking the box right next the subfield label will disable the entry and delete the values of that subfield on all selected items</div>
   <fieldset class="rows">
   <ol>
         [% FOREACH ite IN item %]
@@ -127,6 +149,7 @@ for( x=0; x<allColumns.length; x++ ){
           [% ite.marc_lib %]
           [% IF ( ite.mandatory ) %] *</b>[% END %]
          </label>
+                <input type="checkbox" title="check to delete subfield [% ite.subfield %]" name="disable_input" value="[% ite.subfield %]" />
                 [% ite.marc_value %]
                 <input type="hidden" name="tag"       value="[% ite.tag %]" />
                 <input type="hidden" name="subfield"       value="[% ite.subfield %]" />
