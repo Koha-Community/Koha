@@ -1148,7 +1148,6 @@ sub buildQuery {
                 }
                 # ISBN,ISSN,Standard Number, don't need special treatment
                 elsif ( $index eq 'nb' || $index eq 'ns' ) {
-                    $indexes_set++;
                     (
                         $stemming,      $auto_truncation,
                         $weight_fields, $fuzzy_enabled,
@@ -1163,7 +1162,7 @@ sub buildQuery {
 
                 # Set default structure attribute (word list)
                 my $struct_attr = q{};
-                unless ( $indexes_set || !$index || $index =~ /(st-|phr|ext|wrdl)/ ) {
+                unless ( $indexes_set || !$index || $index =~ /(st-|phr|ext|wrdl|nb|ns)/ ) {
                     $struct_attr = ",wrdl";
                 }
 
@@ -1355,7 +1354,7 @@ sub buildQuery {
     # This is flawed , means we can't search anything with : in it
     # if user wants to do ccl or cql, start the query with that
 #    $query =~ s/:/=/g;
-    $query =~ s/(?<=(ti|au|pb|su|an|kw|mc)):/=/g;
+    $query =~ s/(?<=(ti|au|pb|su|an|kw|mc|nb|ns)):/=/g;
     $query =~ s/(?<=(wrdl)):/=/g;
     $query =~ s/(?<=(trn|phr)):/=/g;
     $limit =~ s/:/=/g;
