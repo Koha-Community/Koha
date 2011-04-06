@@ -90,35 +90,35 @@
     <legend>Accounting details</legend>
        <ol>
        <li><label for="datereceived">Date received: </label><span class="label"> <!-- TMPL_VAR NAME="datereceived" --> </span></li>
-       <li><label for="quantity">Quantity to receive: </label><span class="label">
+       <li><label for="quantityto">Quantity to receive: </label><span class="label">
            <!-- TMPL_IF name="edit" -->
                <input type="text" name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" />
            <!-- TMPL_ELSE -->
                <input type="text" READONLY name="quantity" value="<!-- TMPL_VAR NAME="quantity" -->" />
            <!-- /TMPL_IF -->
            </span></li>
-        <li><label for="quantityrec">Quantity received: </label>
+        <li><label for="quantity">Quantity received: </label>
             <!-- TMPL_IF NAME="quantityreceived" -->
                 <!-- TMPL_IF name="edit" -->
-                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
+                    <input type="text" size="20" name="quantityrec" id="quantity" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
                     <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
                 <!-- TMPL_ELSE -->
                 <!-- TMPL_IF name="items" -->
-                    <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
+                    <input READONLY type="text" size="20" name="quantityrec" id="quantity" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
                 <!-- TMPL_ELSE -->
-                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
+                    <input type="text" size="20" name="quantityrec" id="quantity" value="<!-- TMPL_VAR NAME="quantityreceivedplus1" -->" />
                 <!-- /TMPL_IF -->
                 <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" />
                 <!-- /TMPL_IF -->
             <!-- TMPL_ELSE -->
                 <!-- TMPL_IF name="items" -->
-                    <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="1" />
+                    <input READONLY type="text" id="quantity" size="20" name="quantityrec" value="1" />
                 <!-- TMPL_ELSE -->
-                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="1" />
+                    <input type="text" size="20" id="quantity" name="quantityrec" value="1" />
                 <!-- /TMPL_IF -->
                 <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
             <!-- /TMPL_IF -->
-		<!-- 	<input type="text" size="20" name="quantityrec" id="quantityrec" value="<!-- TMPL_VAR NAME="quantityreceived" -->" /> --></li>
+		</li>
         <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="<!-- TMPL_VAR NAME="rrp" -->" /></li>
         <li><label for="ecost">Budgeted cost: </label><input type="text" size="20" name="ecost" id="ecost" value="<!-- TMPL_VAR NAME="ecost" -->" /></li>
         <li><label for="cost">Actual cost:</label>
