@@ -281,7 +281,7 @@ if ( $template_type eq 'advsearch' ) {
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
     my @search_boxes_array;
-    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") || 3; # FIXME: using OPAC sysprefs?
+    my $search_boxes_count = 3; # begin whith 3 boxes
     # FIXME: all this junk can be done in TMPL using __first__ and __last__
     for (my $i=1;$i<=$search_boxes_count;$i++) {
         # if it's the first one, don't display boolean option, but show scan indexes
