@@ -121,18 +121,19 @@ sub FindDuplicate {
         }
     }
 
-    # FIXME: add error handling
-    my ( $error, $searchresults ) = SimpleSearch($query); # FIXME :: hardcoded !
+    my ( $error, $searchresults, undef ) = SimpleSearch($query); # FIXME :: hardcoded !
     my @results;
-    foreach my $possible_duplicate_record (@$searchresults) {
-        my $marcrecord =
-          MARC::Record->new_from_usmarc($possible_duplicate_record);
-        my $result = TransformMarcToKoha( $dbh, $marcrecord, '' );
+    if (!defined $error) {
+        foreach my $possible_duplicate_record (@{$searchresults}) {
+            my $marcrecord =
+            MARC::Record->new_from_usmarc($possible_duplicate_record);
+            my $result = TransformMarcToKoha( $dbh, $marcrecord, '' );
 
-        # FIXME :: why 2 $biblionumber ?
-        if ($result) {
-            push @results, $result->{'biblionumber'};
-            push @results, $result->{'title'};
+            # FIXME :: why 2 $biblionumber ?
+            if ($result) {
+                push @results, $result->{'biblionumber'};
+                push @results, $result->{'title'};
+            }
         }
     }
     return @results;
@@ -154,11 +155,15 @@ This function provides a simple search API on the bibliographic catalog
     * $max_results - if present, determines the maximum number of records to fetch. undef is All. defaults to undef.
 
 
-=item C<Output:>
+=item C<Return:>
 
-    * $error is a empty unless an error is detected
-    * \@results is an array of records.
+    Returns an array consisting of three elements
+    * $error is undefined unless an error is detected
+    * $results is a reference to an array of records.
     * $total_hits is the number of hits that would have been returned with no limit
+
+    If an error is returned the two other return elements are undefined. If error itself is undefined
+    the other two elements are always defined
 
 =item C<usage in the script:>
 
@@ -173,23 +178,23 @@ if (defined $error) {
     exit;
 }
 
-my $hits = scalar @$marcresults;
+my $hits = @{$marcresults};
 my @results;
 
-for my $i (0..$hits) {
-    my %resultsloop;
-    my $marcrecord = MARC::File::USMARC::decode($marcresults->[$i]);
-    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,'');
+for my $r ( @{$marcresults} ) {
+    my $marcrecord = MARC::File::USMARC::decode($r);
+    my $biblio = TransformMarcToKoha(C4::Context->dbh,$marcrecord,q{});
 
-    #build the hash for the template.
-    $resultsloop{title}           = $biblio->{'title'};
-    $resultsloop{subtitle}        = $biblio->{'subtitle'};
-    $resultsloop{biblionumber}    = $biblio->{'biblionumber'};
-    $resultsloop{author}          = $biblio->{'author'};
-    $resultsloop{publishercode}   = $biblio->{'publishercode'};
-    $resultsloop{publicationyear} = $biblio->{'publicationyear'};
+    #build the iarray of hashs for the template.
+    push @results, {
+        title           => $biblio->{'title'},
+        subtitle        => $biblio->{'subtitle'},
+        biblionumber    => $biblio->{'biblionumber'},
+        author          => $biblio->{'author'},
+        publishercode   => $biblio->{'publishercode'},
+        publicationyear => $biblio->{'publicationyear'},
+        };
 
-    push @results, \%resultsloop;
 }
 
 $template->param(result=>\@results);
@@ -207,14 +212,14 @@ sub SimpleSearch {
         return ( undef, $search_result, scalar($result->{hits}) );
     }
     else {
+        return ( 'No query entered', undef, undef ) unless $query;
         # FIXME hardcoded value. See catalog/search.pl & opac-search.pl too.
-        my @servers = defined ( $servers ) ? @$servers : ( "biblioserver" );
-        my @results;
+        my @servers = defined ( $servers ) ? @$servers : ( 'biblioserver' );
         my @zoom_queries;
         my @tmpresults;
         my @zconns;
-        my $total_hits;
-        return ( "No query entered", undef, undef ) unless $query;
+        my $results = [];
+        my $total_hits = 0;
 
         # Initialize & Search Zebra
         for ( my $i = 0 ; $i < @servers ; $i++ ) {
@@ -258,7 +263,7 @@ sub SimpleSearch {
 
                 for my $j ( $first_record..$last_record ) {
                     my $record = $tmpresults[ $i - 1 ]->record( $j-1 )->raw(); # 0 indexed
-                    push @results, $record;
+                    push @{$results}, $record;
                 }
             }
         }
@@ -270,7 +275,7 @@ sub SimpleSearch {
             $zoom_query->destroy();
         }
 
-        return ( undef, \@results, $total_hits );
+        return ( undef, $results, $total_hits );
     }
 }
 
@@ -2641,11 +2646,11 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
         warn "BIBLIOADDSAUTHORITIES: $error";
             return (0,0) ;
           }
-      if ($results && scalar(@$results)==1) {
+      if ( @{$results} == 1 ) {
         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
         $field->add_subfields('9'=>$marcrecord->field('001')->data);
         $countlinked++;
-      } elsif (scalar(@$results)>1) {
+      } elsif ( @{$results} > 1 ) {
    #More than One result
    #This can comes out of a lack of a subfield.
 #         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
