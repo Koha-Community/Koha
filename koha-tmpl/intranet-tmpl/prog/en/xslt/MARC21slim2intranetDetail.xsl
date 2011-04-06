@@ -426,13 +426,13 @@
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:call-template name="subfieldSelect">
                         <xsl:with-param name="codes">abcdfgklmnopqrstvxyz</xsl:with-param>
                         <xsl:with-param name="delimeter"> and </xsl:with-param>
-                        <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:"</xsl:with-param>
-                        <xsl:with-param name="suffix">")</xsl:with-param>
+                        <xsl:with-param name="prefix">(su<xsl:value-of select="$SubjectModifier"/>:{</xsl:with-param>
+                        <xsl:with-param name="suffix">})</xsl:with-param>
                     </xsl:call-template>
                 </xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:{<xsl:value-of select="marc:subfield[@code='a']"/>}</xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="chopPunctuation">
