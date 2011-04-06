@@ -91,7 +91,7 @@ $data{'contnotes'}=$input->param('contact_notes');
 # warn "".$data{'contnotes'};
 $data{'notes'}=$input->param('notes');
 $data{'active'}=$input->param('status');
-$data{'specialty'}=$input->param('publishers_imprints');
+
 $data{'listprice'}=$input->param('list_currency');
 $data{'invoiceprice'}=$input->param('invoice_currency');
 $data{'gstreg'}=$input->param('gst');

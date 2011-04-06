@@ -4037,6 +4037,24 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = '3.02.07.001';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    #Remove obsolete columns from aqbooksellers if needed
+    my $a = $dbh->selectall_hashref('SHOW columns from aqbooksellers','Field');
+    my $sqldrop="ALTER TABLE aqbooksellers DROP COLUMN ";
+    foreach(qw/deliverydays followupdays followupscancel invoicedisc nocalc specialty/) {
+      $dbh->do($sqldrop.$_) if exists $a->{$_};
+    }
+    #Remove obsolete column from aqbudgets if needed
+    #The correct column is budget_notes
+    $a = $dbh->selectall_hashref('SHOW columns from aqbudgets','Field');
+    if(exists $a->{budget_description}) {
+      $dbh->do("ALTER TABLE aqbudgets DROP COLUMN budget_description");
+    }
+    print "Upgrade to $DBversion done (Remove obsolete columns from aqbooksellers and aqbudgets if needed)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
