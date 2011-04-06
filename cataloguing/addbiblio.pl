@@ -341,14 +341,14 @@ sub create_input {
     if(exists $mandatory_z3950->{$tag.$subfield}){
         $subfield_data{z3950_mandatory} = $mandatory_z3950->{$tag.$subfield};
     }
-    # decide if the subfield must be expanded (visible) by default or not
-    # if it is mandatory, then expand. If it is hidden explicitly by the hidden flag, hidden anyway
+    # Subfield is hidden depending of hidden and mandatory flag, and is always
+    # shown if it contains anything or if its field is mandatory.
+    my $tdef = $tagslib->{$tag};
     $subfield_data{visibility} = "display:none;"
-        if (    ($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1) and $value ne ''
-            or ($value eq '' and !$tagslib->{$tag}->{$subfield}->{mandatory})
-        );
-    # always expand all subfields of a mandatory field
-    $subfield_data{visibility} = "" if $tagslib->{$tag}->{mandatory};
+        if $tdef->{$subfield}->{hidden} % 2 == 1 &&
+           $value eq '' &&
+           !$tdef->{$subfield}->{mandatory} &&
+           !$tdef->{mandatory};
     # it's an authorised field
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
         $subfield_data{marc_value} =
