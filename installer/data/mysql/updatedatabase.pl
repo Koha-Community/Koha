@@ -4277,7 +4277,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.03.00.049';
+$DBversion = '3.03.00.XXX';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE `accountlines` ADD `note` text NULL default NULL");
     $dbh->do("ALTER TABLE `accountlines` ADD `manager_id` int( 11 ) NULL ");
