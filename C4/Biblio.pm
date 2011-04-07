@@ -1025,16 +1025,18 @@ sub GetMarcFromKohaField {
 
 =head2 GetMarcBiblio
 
-  my $record = GetMarcBiblio($biblionumber);
+  my $record = GetMarcBiblio($biblionumber, [$embeditems]);
 
 Returns MARC::Record representing bib identified by
 C<$biblionumber>.  If no bib exists, returns undef.
-The MARC record contains both biblio & item data.
+C<$embeditems>.  If set to true, items data are included.
+The MARC record contains biblio data, and items data if $embeditems is set to true.
 
 =cut
 
 sub GetMarcBiblio {
     my $biblionumber = shift;
+    my $embeditems   = shift || 0;
     my $dbh          = C4::Context->dbh;
     my $sth          = $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
@@ -1047,6 +1049,8 @@ sub GetMarcBiblio {
         $record = eval { MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour') ) };
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
         return unless $record;
+
+	C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
 
         #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;

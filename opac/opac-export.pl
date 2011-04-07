@@ -35,15 +35,11 @@ my $op=$query->param("op");
 my $format=$query->param("format");
 if ($op eq "export") {
 	my $biblionumber = $query->param("bib");
-	my $dbh=C4::Context->dbh;
-	my $sth;
-	if ($biblionumber) {
-		$sth=$dbh->prepare("SELECT marc FROM biblioitems WHERE biblionumber =?");
-		$sth->execute($biblionumber);
-	}
-    my $error;
-	while (my ($marc) = $sth->fetchrow) {
-		if ($marc){
+	my $error;
+
+		if ($biblionumber){
+
+			my $marc = GetMarcBiblio($biblionumber, 1);
 
 			if ($format =~ /endnote/) {
 				$marc = marc2endnote($marc);
@@ -60,32 +56,34 @@ if ($op eq "export") {
  			}
 			elsif ($format =~ /bibtex/) {
 				$marc = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
-			}elsif ($format =~ /dc/) {
-                ($error,$marc) = marc2dcxml($marc,1);
+			}
+			elsif ($format =~ /dc/) {
+				($error,$marc) = marc2dcxml($marc,1);
 				$format = "dublin-core.xml";
 			}
 			elsif ($format =~ /marc8/) {
 				($error,$marc) = changeEncoding($marc,"MARC","MARC21","MARC-8");
-                if (! $error){
-                    $marc = $marc->as_usmarc();
-                }
+				if (! $error){
+				    $marc = $marc->as_usmarc();
+				}
 			}
 			elsif ($format =~ /utf8/) {
-				#default
+				C4::Charset::SetUTF8Flag($marc,1);
+				$marc = $marc->as_usmarc();
 			}
-            if ($error){
-                print $query->header();
-                print $query->start_html();
-                print "<h1>An error occured </h1>";
-                print $error;
-                print $query->end_html();
-            }
-            else {
-                print $query->header(
-				-type => 'application/octet-stream',
-                -attachment=>"bib-$biblionumber.$format");
-                print $marc;
-            }
+
+		if ($error){
+		    print $query->header();
+		    print $query->start_html();
+		    print "<h1>An error occured </h1>";
+		    print $error;
+		    print $query->end_html();
 		}
-	}
+		else {
+		    print $query->header(
+				    -type => 'application/octet-stream',
+		    -attachment=>"bib-$biblionumber.$format");
+		    print $marc;
+		}
+	    }
 }

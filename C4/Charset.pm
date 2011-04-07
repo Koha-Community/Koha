@@ -112,13 +112,15 @@ sub IsStringUTF8ish {
 
 =head2 SetUTF8Flag
 
-  my $marc_record = SetUTF8Flag($marc_record);
+  my $marc_record = SetUTF8Flag($marc_record, $nfd);
 
 This function sets the PERL UTF8 flag for data.
 It is required when using new_from_usmarc 
 since MARC::File::USMARC does not handle PERL UTF8 setting.
 When editing unicode marc records fields and subfields, you
 would end up in double encoding without using this function. 
+
+If $nfd is set, string normalization will use NFD instead of NFC
 
 FIXME
 In my opinion, this function belongs to MARC::Record and not
@@ -128,13 +130,13 @@ But since it handles charset, and MARC::Record, it finds its way in that package
 =cut
 
 sub SetUTF8Flag{
-	my ($record)=@_;
+	my ($record, $nfd)=@_;
 	return unless ($record && $record->fields());
 	foreach my $field ($record->fields()){
 		if ($field->tag()>=10){
 			my @subfields;
 			foreach my $subfield ($field->subfields()){
-				push @subfields,($$subfield[0],NormalizeString($$subfield[1]));
+				push @subfields,($$subfield[0],NormalizeString($$subfield[1],$nfd));
 			}
 			my $newfield=MARC::Field->new(
 							$field->tag(),

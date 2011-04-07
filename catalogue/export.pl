@@ -15,14 +15,9 @@ my $op=$query->param("op");
 my $format=$query->param("format");
 if ($op eq "export") {
 	my $biblionumber = $query->param("bib");
-	my $dbh=C4::Context->dbh;
-	my $sth;
-	if ($biblionumber) {
-		$sth=$dbh->prepare("SELECT marc FROM biblioitems WHERE biblionumber =?");
-		$sth->execute($biblionumber);
-	}
-	while (my ($marc) = $sth->fetchrow) {
-		if ($marc){
+		if ($biblionumber){
+
+			my $marc = GetMarcBiblio($biblionumber, 1);
 
 			if ($format =~ /endnote/) {
 				$marc = marc2endnote($marc);
@@ -44,12 +39,12 @@ if ($op eq "export") {
 				$marc = $marc->as_usmarc();
 			}
 			elsif ($format =~ /utf8/) {
-				#default
+				C4::Charset::SetUTF8Flag($marc, 1);
+				$marc = $marc->as_usmarc();
 			}
 			print $query->header(
 				-type => 'application/octet-stream',
                 -attachment=>"bib-$biblionumber.$format");
 			print $marc;
 		}
-	}
 }
