@@ -739,7 +739,7 @@ Return the ISBD view which can be included in opac and intranet
 
 sub GetISBDView {
     my ( $biblionumber, $template ) = @_;
-    my $record   = GetMarcBiblio($biblionumber);
+    my $record   = GetMarcBiblio($biblionumber, 1);
     my $itemtype = &GetFrameworkCode($biblionumber);
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
     my $tagslib = &GetMarcStructure( 1, $itemtype );
