@@ -4259,6 +4259,18 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.03.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE borrowers ADD `state` mediumtext AFTER city;");
+    $dbh->do("ALTER TABLE borrowers ADD `B_state` mediumtext AFTER B_city;");
+    $dbh->do("ALTER TABLE borrowers ADD `altcontactstate` mediumtext AFTER altcontactaddress3;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `state` mediumtext AFTER city;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `B_state` mediumtext AFTER B_city;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `altcontactstate` mediumtext AFTER altcontactaddress3;");
+    print "Upgrade to $DBversion done (Add state field to patron's addresses)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
