@@ -157,6 +157,7 @@ $template->param( picture => 1 ) if $picture;
 	address => $data->{'address'},
 	address2 => $data->{'address2'},
 	city => $data->{'city'},
+    state => $data->{'state'},
 	zipcode => $data->{'zipcode'},
 	country => $data->{'country'},
 	phone => $data->{'phone'},

@@ -111,6 +111,7 @@ if ($add){
 		address => $data->{'address'},
 		address2 => $data->{'address2'},
 		city => $data->{'city'},
+		state => $data->{'state'},
 		zipcode => $data->{'zipcode'},
 		country => $data->{'country'},
 		phone => $data->{'phone'},
