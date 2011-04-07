@@ -75,23 +75,17 @@ unless ($noconfirm || $batch) {
 my $starttime = gettimeofday;
 print "Merging\n" unless $noconfirm;
 if ($batch) {
-  my @authlist;
-  my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-  unless (opendir(DIR, "$cgidir/tmp/modified_authorities")) {
-    $cgidir = C4::Context->intranetdir;
-    opendir(DIR, "$cgidir/tmp/modified_authorities") || die "can't opendir $cgidir/tmp/modified_authorities: $!";
-  } 
-  while (my $authid = readdir(DIR)) {
-    if ($authid =~ /\.authid$/) {
-      $authid =~ s/\.authid$//;
+  my $authref;
+  $dbh->do("update need_merge_authorities set done=2 where done=0"); #temporary status 2 means: selected for merge
+  $authref=$dbh->selectall_arrayref("select distinct authid from need_merge_authorities where done=2");
+  foreach(@$authref) {
+      my $authid=$_->[0];
       print "managing $authid\n" if $verbose;
       my $MARCauth = GetAuthority($authid) ;
       next unless ($MARCauth);
       merge($authid,$MARCauth,$authid,$MARCauth) if ($MARCauth);
-      unlink $cgidir.'/tmp/modified_authorities/'.$authid.'.authid';
-    }
   }
-  closedir DIR;
+  $dbh->do("update need_merge_authorities set done=1 where done=2"); #DONE
 } else {
   my $MARCfrom = GetAuthority($mergefrom);
   my $MARCto = GetAuthority($mergeto);

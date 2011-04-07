@@ -734,30 +734,33 @@ sub DelAuthority {
     $sth->execute($authid);
 }
 
+=head2 ModAuthority
+
+  $authid= &ModAuthority($authid,$record,$authtypecode)
+
+Modifies authority record, optionally updates attached biblios.
+
+=cut
+
 sub ModAuthority {
-  my ($authid,$record,$authtypecode,$merge)=@_;
+  my ($authid,$record,$authtypecode)=@_; # deprecated $merge parameter removed
+
   my $dbh=C4::Context->dbh;
   #Now rewrite the $record to table with an add
   my $oldrecord=GetAuthority($authid);
   $authid=AddAuthority($record,$authid,$authtypecode);
 
-### If a library thinks that updating all biblios is a long process and wishes to leave that to a cron job to use merge_authotities.p
-### they should have a system preference "dontmerge=1" otherwise by default biblios will be updated
-### the $merge flag is now depreceated and will be removed at code cleaning
-  if (C4::Context->preference('MergeAuthoritiesOnUpdate') ){
+  # If a library thinks that updating all biblios is a long process and wishes
+  # to leave that to a cron job, use misc/migration_tools/merge_authority.pl.
+  # In that case set system preference "dontmerge" to 1. Otherwise biblios will
+  # be updated.
+  unless(C4::Context->preference('dontmerge') eq '1'){
       &merge($authid,$oldrecord,$authid,$record);
   } else {
-  # save the file in tmp/modified_authorities
-      my $cgidir = C4::Context->intranetdir ."/cgi-bin";
-      unless (opendir(DIR,"$cgidir")) {
-              $cgidir = C4::Context->intranetdir."/";
-              closedir(DIR);
-      }
-  
-      my $filename = $cgidir."/tmp/modified_authorities/$authid.authid";
-      open AUTH, "> $filename";
-      print AUTH $authid;
-      close AUTH;
+      # save a record in need_merge_authorities table
+      my $sqlinsert="INSERT INTO need_merge_authorities (authid, done) ".
+	"VALUES (?,?)";
+      $dbh->do($sqlinsert,undef,($authid,0));
   }
   logaction( "AUTHORITIES", "MODIFY", $authid, "BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
   return $authid;
