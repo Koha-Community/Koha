@@ -283,6 +283,7 @@ sub printhead {
     # get branch details
     my $billingdetails  = GetBranchDetail( $basketgroup->{billingplace} );
     my $deliverydetails = GetBranchDetail( $basketgroup->{deliveryplace} );
+    my $freedeliveryplace = $basketgroup->{freedeliveryplace};
     # get the subject
     my $subject;
 
@@ -348,13 +349,23 @@ sub printhead {
     # print delivery infos
     $text->font( $pdf->corefont("Times-Bold", -encoding => "utf8"), 4/mm );
     $text->translate(50/mm,  ($height-237)/mm);
-    $text->text($deliverydetails->{branchaddress1});
-    $text->translate(50/mm,  ($height-242)/mm);
-    $text->text($deliverydetails->{branchaddress2});
-    $text->translate(50/mm,  ($height-247)/mm);
-    $text->text($deliverydetails->{branchaddress3});
-    $text->translate(50/mm,  ($height-252)/mm);
-    $text->text(join(' ', $deliverydetails->{branchzip}, $deliverydetails->{branchcity}, $deliverydetails->{branchcountry}));
+    if ($freedeliveryplace) {
+        my $start = 242;
+        my @fdp = split('\n', $freedeliveryplace);
+        foreach (@fdp) {
+            $text->text($_);
+            $text->translate( 50 / mm, ( $height - $start ) / mm );
+            $start += 5;
+        }
+    } else {
+        $text->text($deliverydetails->{branchaddress1});
+        $text->translate(50/mm,  ($height-242)/mm);
+        $text->text($deliverydetails->{branchaddress2});
+        $text->translate(50/mm,  ($height-247)/mm);
+        $text->text($deliverydetails->{branchaddress3});
+        $text->translate(50/mm,  ($height-252)/mm);
+        $text->text(join(' ', $deliverydetails->{branchzip}, $deliverydetails->{branchcity}, $deliverydetails->{branchcountry}));
+    }
     $text->translate(50/mm,  ($height-262)/mm);
     $text->text($basketgroup->{deliverycomment});
 }

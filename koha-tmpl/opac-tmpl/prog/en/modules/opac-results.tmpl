@@ -164,12 +164,12 @@ $(document).ready(function(){
 		} else if($("#addto").find("option:selected").attr("value") == "newlist"){
 			<!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {
 			Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
-			}<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
+			}<!-- TMPL_ELSE --> alert(_('You must be logged in to create or add to Lists')); <!-- /TMPL_IF -->
 			return false;
         } else if($("#addto").find("option:selected").attr("value") == "morelists"){
             <!-- TMPL_IF NAME="loggedinusername" -->if (vShelfAdd()) {
             Dopop('/cgi-bin/koha/opac-addbybiblionumber.pl?' + vShelfAdd());
-            }<!-- TMPL_ELSE --> alert('You must be logged in to create or add to Lists'); <!-- /TMPL_IF -->
+            }<!-- TMPL_ELSE --> alert(_('You must be logged in to create or add to Lists')); <!-- /TMPL_IF -->
             return false;
 		}
 		if($("#addto").find("option:selected").attr("value") == "addtocart" || $("#addto").attr("class") == "addtocart"){

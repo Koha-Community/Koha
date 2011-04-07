@@ -432,7 +432,7 @@ sub execute_query ($;$$$) {
         return;
     }
     $offset = 0    unless $offset;
-    $limit  = 9999 unless $limit;
+    $limit  = 999999 unless $limit;
     $debug and print STDERR "execute_query($sql, $offset, $limit)\n";
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         return (undef, {  sqlerr => $1} );

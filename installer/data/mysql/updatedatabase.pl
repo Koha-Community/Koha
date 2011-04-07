@@ -4227,6 +4227,38 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 	SetVersion ($DBversion);
 }
 
+$DBversion = '3.03.00.044';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE `aqbasketgroups` ADD `freedeliveryplace` TEXT NULL AFTER `deliveryplace`;");
+    print "Upgrade to $DBversion done (adding freedeliveryplace to basketgroups)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = '3.03.00.045';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    #Remove obsolete columns from aqbooksellers if needed
+    my $a = $dbh->selectall_hashref('SHOW columns from aqbooksellers','Field');
+    my $sqldrop="ALTER TABLE aqbooksellers DROP COLUMN ";
+    foreach(qw/deliverydays followupdays followupscancel invoicedisc nocalc specialty/) {
+      $dbh->do($sqldrop.$_) if exists $a->{$_};
+    }
+    #Remove obsolete column from aqbudgets if needed
+    #The correct column is budget_notes
+    $a = $dbh->selectall_hashref('SHOW columns from aqbudgets','Field');
+    if(exists $a->{budget_description}) {
+      $dbh->do("ALTER TABLE aqbudgets DROP COLUMN budget_description");
+    }
+    print "Upgrade to $DBversion done (Remove obsolete columns from aqbooksellers and aqbudgets if needed)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = "3.03.00.046";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE overduerules ALTER delay1 SET DEFAULT NULL, ALTER delay2 SET DEFAULT NULL, ALTER delay3 SET DEFAULT NULL");
+    print "Upgrade to $DBversion done (Setting NULL default value for delayn columns in table overduerules)\n";
+    SetVersion($DBversion);
+}
+
 $DBversion = "3.03.00.XXX";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Remove spaces and dashes from message_attribute names)\n";

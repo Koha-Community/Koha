@@ -10,7 +10,7 @@ $(document).ready(function(){
 });
 function CheckUpload(f){
 	if(f.fileToUpload.value == ""){
-		alert("Please choose a file to upload");
+		alert(_("Please choose a file to upload"));
 	} else {
 		return ajaxFileUpload()
 	}
@@ -18,7 +18,7 @@ function CheckUpload(f){
 }
 function CheckForm(f) {
     if (f.uploadedfileid.value == '') {
-        alert('Please upload a file first.');
+        alert(_('Please upload a file first.'));
     } else {
 		$("#fileuploadstatus").hide();
 		$("#fileuploadform").slideUp();
