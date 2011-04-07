@@ -1028,7 +1028,7 @@ sub GetAuthorisedValueCategories {
     my $sth = $dbh->prepare("SELECT DISTINCT category FROM authorised_values ORDER BY category");
     $sth->execute;
     my @results;
-    while (my $category = $sth->fetchrow_array) {
+    while (defined (my $category  = $sth->fetchrow_array) ) {
         push @results, $category;
     }
     return \@results;
