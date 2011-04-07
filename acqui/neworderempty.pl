@@ -220,7 +220,7 @@ foreach my $thisbranch ( sort {$branches->{$a}->{'branchname'} cmp $branches->{$
         value      => $thisbranch,
         branchname => $branches->{$thisbranch}->{'branchname'},
     );
-    $row{'selected'} = 1 if( $thisbranch eq $data->{branchcode}) ;
+    $row{'selected'} = 1 if( $thisbranch && $data->{branchcode} && $thisbranch eq $data->{branchcode}) ;
     push @branchloop, \%row;
 }
 $template->param( branchloop => \@branchloop );
