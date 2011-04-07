@@ -209,7 +209,7 @@ $(function() {
 
 <a class="print tag_hides" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
 
-                <!-- TMPL_IF NAME="manageshelf" --> | <a class="editshelf tag_hides" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;op=modif">Edit List</a>
+                <!-- TMPL_IF NAME="manageshelf" --> | <form method="get" action="opac-shelves.pl" class="tag_hides"><input type="hidden" name="op" value="modif" /><!-- TMPL_IF NAME="showprivateshelves" --><input type="hidden" name="display" value="privateshelves" /><!-- /TMPL_IF --> <input type="hidden" name="shelfnumber" value="<!-- TMPL_VAR NAME="shelfnumber" -->" /> <input type="submit" class="editshelf tag_hides" value="Edit List" /></form>
                       <form method="post" action="opac-shelves.pl" class="tag_hides">
                         <input type="hidden" value="1" name="shelves"/>
                     <!-- TMPL_IF NAME="showprivateshelves" -->
@@ -412,7 +412,7 @@ $(function() {
                         <!-- /TMPL_LOOP -->
                       </table>
                     <!-- TMPL_ELSE -->
-                         No Private Lists.
+                         <p>No private lists.</p>
                     <!-- /TMPL_IF --><!-- /shelveslooppriv -->
                   <!-- /TMPL_IF --><!-- /showprivateshelves -->
                   <!-- TMPL_ELSE --><!-- /loggedinusername -->
@@ -479,7 +479,7 @@ $(function() {
                     <!-- /TMPL_LOOP --><!-- /shelvesloop -->
                       </table>
                   <!-- TMPL_ELSE --><!-- /shelvesloop -->
-                    <!-- TMPL_IF NAME="showpublicshelves" -->No Public Lists.<!-- /TMPL_IF -->
+                    <!-- TMPL_IF NAME="showpublicshelves" --><p>No public lists.</p><!-- /TMPL_IF -->
                   <!-- /TMPL_IF --><!-- /shelvesloop -->
                   
                     </div><!-- /publicshelves -->
