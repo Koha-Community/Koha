@@ -611,6 +611,10 @@ if ($nok) {
 if (!defined($data{'dateenrolled'}) or $data{'dateenrolled'} eq ''){
   $data{'dateenrolled'}=C4::Dates->today('iso');
 }
+if ( $op eq 'duplicate' ) {
+    $data{'dateenrolled'} = C4::Dates->today('iso');
+    $data{'dateexpiry'} = GetExpiryDate( $data{'categorycode'}, $data{'dateenrolled'} );
+}
 if (C4::Context->preference('uppercasesurnames')) {
 	$data{'surname'}    =uc($data{'surname'}    );
 	$data{'contactname'}=uc($data{'contactname'});
