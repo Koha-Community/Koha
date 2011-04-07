@@ -154,19 +154,19 @@ sub get_template_and_user {
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
-		my ($total, $pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
-		if (defined($pubshelves)) {
-        	$template->param( 	pubshelves     	=> scalar (@$pubshelves),
-        						pubshelvesloop 	=> $pubshelves,
-							);
-			$template->param(	pubtotal		=> $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@$pubshelves));
-		}
-		if (defined($barshelves)) {
-        	$template->param(	barshelves     	=> scalar (@$barshelves),
-        						barshelvesloop 	=> $barshelves,
-							);
-			$template->param(	bartotal		=> $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@$barshelves));
-		}
+        my ($total, $pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
+        if (defined($pubshelves)) {
+            $template->param( pubshelves     => scalar @{$pubshelves},
+                              pubshelvesloop => $pubshelves,
+            );
+            $template->param( pubtotal   => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar @{$pubshelves});
+        }
+        if (defined($barshelves)) {
+            $template->param( barshelves      => scalar @{$barshelves},
+                              barshelvesloop  => $barshelves,
+            );
+            $template->param( bartotal  => $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar @{$barshelves});
+        }
 
         $borrowernumber = getborrowernumber($user) if defined($user);
 
@@ -287,11 +287,11 @@ sub get_template_and_user {
         $template->param( sessionID        => $sessionID );
         
         my ($total, $pubshelves) = C4::Context->get_shelves_userenv();  # an anonymous user has no 'barshelves'...
-        if (defined(($pubshelves))) {
-            $template->param(   pubshelves      => scalar (@$pubshelves),
+        if (defined $pubshelves) {
+            $template->param(   pubshelves      => scalar @{$pubshelves},
                                 pubshelvesloop  => $pubshelves,
                             );
-            $template->param(   pubtotal        => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@$pubshelves));
+            $template->param(   pubtotal        => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar @{$pubshelves});
         }
 
     }
@@ -836,12 +836,12 @@ sub checkauth {
 				$total->{'bartotal'} = $totshelves;
 				($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
 				$total->{'pubtotal'} = $totshelves;
-				$session->param('barshelves', $barshelves->[0]);
-				$session->param('pubshelves', $pubshelves->[0]);
+				$session->param('barshelves', $barshelves);
+				$session->param('pubshelves', $pubshelves);
 				$session->param('totshelves', $total);
 
-				C4::Context::set_shelves_userenv('bar',$barshelves->[0]);
-				C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
+				C4::Context::set_shelves_userenv('bar',$barshelves);
+				C4::Context::set_shelves_userenv('pub',$pubshelves);
 				C4::Context::set_shelves_userenv('tot',$total);
 			}
         	else {
@@ -861,9 +861,9 @@ sub checkauth {
 			my ($total, $totshelves, $pubshelves);
 			($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
 			$total->{'pubtotal'} = $totshelves;
-			$session->param('pubshelves', $pubshelves->[0]);
+			$session->param('pubshelves', $pubshelves);
 			$session->param('totshelves', $total);
-			C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
+			C4::Context::set_shelves_userenv('pub',$pubshelves);
 			C4::Context::set_shelves_userenv('tot',$total);
 
 			# setting a couple of other session vars...

@@ -186,9 +186,9 @@ sub GetShelvesSummary ($$$$) {
 
 =head2 GetRecentShelves
 
-	($shelflist) = GetRecentShelves(1, $limit, $owner)
+	($shelflist, $total) = GetRecentShelves(1, $limit, $owner)
 
-This function returns a references to an array of hashrefs containing specified shelves sorted
+This function returns a reference to an array of hashrefs containing specified shelves sorted
 by the date the shelf was last modified in descending order limited to the number of records
 specified by C<$row_count>. If calling with C<$mincategory> other than 1, use undef as C<$owner>.
 
@@ -197,19 +197,25 @@ the submitted parameters.
 
 =cut
 
-sub GetRecentShelves ($$$) {
-	my ($mincategory, $row_count, $owner) = @_;
-    my (@shelflist);
-	my $total = _shelf_count($owner, $mincategory);
-	my @params = ($owner, $mincategory, 0, $row_count);	 #FIXME: offset is hardcoded here, but could be passed in for enhancements
-	shift @params if (not defined $owner);
-	my $query = "SELECT * FROM virtualshelves";
-	$query .= ((defined $owner) ? " WHERE owner = ? AND category = ?" : " WHERE category >= ? ");
-	$query .= " ORDER BY lastmodified DESC LIMIT ?, ?";
-	my $sth = $dbh->prepare($query);
-	$sth->execute(@params);
-	@shelflist = $sth->fetchall_arrayref({});
-	return ( \@shelflist, $total );
+sub GetRecentShelves {
+    my ($mincategory, $row_count, $owner) = @_;
+    my $total = _shelf_count($owner, $mincategory);
+    my @params;
+    my $selection;
+    if (defined $owner) {
+        @params = ($owner, $mincategory, $row_count);
+        $selection = ' WHERE owner = ? AND category = ?';
+    } else {
+        @params = ( $mincategory, $row_count);
+        $selection = ' WHERE category >= ? ';
+    }
+    my $query = 'SELECT * FROM virtualshelves';
+    $query .= $selection;
+    $query .= ' ORDER BY lastmodified DESC LIMIT ?';
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@params);
+    my $shelflist = $sth->fetchall_arrayref({});
+    return ( $shelflist, $total );
 }
 
 =head2 GetAllShelves
@@ -563,13 +569,13 @@ sub RefreshShelvesSummary ($$$) {
 	$total->{'pubtotal'} = $totshelves;
 
 	# Update the current session with the latest shelves...
-	$session->param('barshelves', $barshelves->[0]);
-	$session->param('pubshelves', $pubshelves->[0]);
+	$session->param('barshelves', $barshelves);
+	$session->param('pubshelves', $pubshelves);
 	$session->param('totshelves', $total);
 
 	# likewise the userenv...
-	C4::Context->set_shelves_userenv('bar',$barshelves->[0]);
-	C4::Context->set_shelves_userenv('pub',$pubshelves->[0]);
+	C4::Context->set_shelves_userenv('bar',$barshelves);
+	C4::Context->set_shelves_userenv('pub',$pubshelves);
 	C4::Context::set_shelves_userenv('tot',$total);
 
 	return ($total, $pubshelves, $barshelves);

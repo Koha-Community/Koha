@@ -656,17 +656,14 @@ my $row_count = 10; # FIXME:This probably should be a syspref
 my ($pubshelves, $total) = GetRecentShelves(2, $row_count, undef);
 my ($barshelves, $total) = GetRecentShelves(1, $row_count, $borrowernumber);
 
-my @pubshelves = @{$pubshelves};
-my @barshelves = @{$barshelves};
-
-if (@pubshelves) {
-        $template->param( addpubshelves     => scalar (@pubshelves));
-        $template->param( addpubshelvesloop => @pubshelves);
+if (@{$pubshelves}) {
+        $template->param( addpubshelves     => scalar @{$pubshelves});
+        $template->param( addpubshelvesloop => $pubshelves);
 }
 
-if (@barshelves) {
-        $template->param( addbarshelves     => scalar (@barshelves));
-        $template->param( addbarshelvesloop => @barshelves);
+if (@{$barshelves}) {
+        $template->param( addbarshelves     => scalar @{$barshelves});
+        $template->param( addbarshelvesloop => $barshelves);
 }
 
 

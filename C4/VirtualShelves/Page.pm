@@ -388,18 +388,18 @@ sub shelfpage ($$$$$) {
 
     if ( defined $barshelves ) {
         $template->param(
-            barshelves     => scalar( @{ $barshelves->[0] } ),
-            barshelvesloop => $barshelves->[0],
+            barshelves     => scalar( @{ $barshelves } ),
+            barshelvesloop => $barshelves,
         );
-        $template->param( bartotal => $total->{'bartotal'}, ) if ( $total->{'bartotal'} > scalar( @{ $barshelves->[0] } ) );
+        $template->param( bartotal => $total->{'bartotal'}, ) if ( $total->{'bartotal'} > scalar( @{ $barshelves } ) );
     }
 
     if ( defined $pubshelves ) {
         $template->param(
-            pubshelves     => scalar( @{ $pubshelves->[0] } ),
-            pubshelvesloop => $pubshelves->[0],
+            pubshelves     => scalar( @{ $pubshelves } ),
+            pubshelvesloop => $pubshelves,
         );
-        $template->param( pubtotal => $total->{'pubtotal'}, ) if ( $total->{'pubtotal'} > scalar( @{ $pubshelves->[0] } ) );
+        $template->param( pubtotal => $total->{'pubtotal'}, ) if ( $total->{'pubtotal'} > scalar( @{ $pubshelves } ) );
     }
 
     output_html_with_http_headers $query, $cookie, $template->output;
