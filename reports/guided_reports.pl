@@ -367,9 +367,10 @@ elsif ( $phase eq 'Save Report' ) {
         );
     }
     else {
-        save_report( $borrowernumber, $sql, $name, $type, $notes );
+        my $id = save_report( $borrowernumber, $sql, $name, $type, $notes );
         $template->param(
             'save_successful'       => 1,
+            'id'                    => $id,
         );
     }
 }
