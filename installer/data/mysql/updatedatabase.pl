@@ -4234,7 +4234,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.03.00.XXX';
+$DBversion = '3.03.00.045';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     #Remove obsolete columns from aqbooksellers if needed
     my $a = $dbh->selectall_hashref('SHOW columns from aqbooksellers','Field');
