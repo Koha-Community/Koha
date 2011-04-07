@@ -160,7 +160,9 @@ $(document).ready(function()
 <fieldset class="rows">
         <legend>
             Catalog details
-            <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!--TMPL_VAR NAME= "biblionumber"-->"> Edit record</a></span>
+            <!-- TMPL_IF name="biblionumber" -->
+                <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=<!--TMPL_VAR NAME= "biblionumber"-->"> Edit record</a></span>
+            <!-- /TMPL_IF -->
         </legend>
         <!-- TMPL_UNLESS name="existing" -->
         <input type="hidden" name="existing" value="no" />
