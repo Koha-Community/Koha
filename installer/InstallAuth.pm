@@ -110,18 +110,15 @@ InstallAuth - Authenticates Koha users for Install process
 sub get_template_and_user {
     my $in       = shift;
     my $query    = $in->{'query'};
-    my $language = $query->cookie('KohaOpacLanguage');
-    my $path =
-      C4::Context->config('intrahtdocs') . "/prog/"
-      . ( $language ? $language : "en" );
-    
+    my $language =_get_template_language($query->cookie('KohaOpacLanguage'));
+    my $path     = C4::Context->config('intrahtdocs'). "/prog/". $language;
+
     my $tmplbase = $in->{template_name};
     $tmplbase=~ s/\.tmpl$/.tt/;
     my $filename = "$path/modules/" . $tmplbase;
     my $interface = 'intranet';
     my $template = C4::Templates->new( $interface, $filename, $tmplbase);
     
-
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
         $in->{'query'},
         $in->{'authnotrequired'},
@@ -158,6 +155,21 @@ sub get_template_and_user {
         }
     }
     return ( $template, $borrowernumber, $cookie );
+}
+
+sub _get_template_language {
+  #verify if opac language exists in staff (bug 5660)
+  #conditions are 1) dir exists and 2) enabled in prefs
+  my ($opaclang)= @_;
+  return 'en' unless $opaclang;
+  my $path= C4::Context->config('intrahtdocs')."/prog/$opaclang";
+  my $pref= ','.C4::Context->preference('language').',';
+  if(-d $path) {
+    if($pref =~ /,$opaclang,/ ) {
+      return $opaclang;
+    }
+  }
+  return 'en';
 }
 
 =item checkauth
