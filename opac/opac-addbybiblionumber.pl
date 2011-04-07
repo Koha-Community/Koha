@@ -98,19 +98,16 @@ else {
 	} else {
 
         my $privateshelves = GetAllShelves(1,$loggedinuser);
-        my @privateshelves = @{$privateshelves};
-        warn scalar($privateshelves);
-        if(@privateshelves){
+        if(@{$privateshelves}){
 			$template->param (
-				privatevirtualshelves          => @privateshelves,
+				privatevirtualshelves          => $privateshelves,
 				existingshelves => 1
 			);
 		}
         my $publicshelves = GetAllShelves(2,$loggedinuser);
-        my @publicshelves = @{$publicshelves};
-        if(@publicshelves){
+        if(@{$publicshelves}){
 			$template->param (
-				publicvirtualshelves          => @publicshelves,
+				publicvirtualshelves          => $publicshelves,
 				existingshelves => 1
 			);
         }
