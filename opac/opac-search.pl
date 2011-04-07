@@ -84,7 +84,7 @@ else {
     authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     }
 );
-if ($template_name = 'opac-results.tmpl') {
+if ($template_name eq 'opac-results.tmpl') {
    $template->param('COinSinOPACResults' => C4::Context->preference('COinSinOPACResults'));
 }
 
