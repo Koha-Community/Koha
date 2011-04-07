@@ -133,7 +133,7 @@ if ($op eq 'add_form') {
             $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','hidelostitems','overduenoticerequired','category_type','categorycode'));
             $sth->finish;
         } else {
-            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,hidelostitems,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?,?)");
+            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,hidelostitems,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?,?,?)");
             $sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','hidelostitems','overduenoticerequired','category_type'));
             $sth->finish;
         }
