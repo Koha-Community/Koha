@@ -27,6 +27,7 @@
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
+                [% IF ( CAN_user_reports ) %]
 				<h1>Browse system logs</h1>
 				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
 					[% IF ( do_it ) %]
@@ -206,7 +207,79 @@
 							</div>
 						[% END %]
 					[% END %]
+
 				</form>
+                [% END %]
+                [% IF ( do_it ) %]
+                    [% IF ( total ) %]
+                        <h4>[% total %] lines found.</h4>
+                        <table>
+                            <tr>
+                                <th>Date</th>
+                                <th>Librarian</th>
+                                <th>Module</th>
+                                <th>Action</th>
+                                <th>Object</th>
+                                <th>Info</th>
+                            </tr>
+                            [% FOREACH loopro IN looprow %]
+                                <tr>
+                                    <td>[% loopro.timestamp %]</td>
+                                    <td>
+                                       [% IF ( module == 'CIRCULATION' ) %]
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.user %]" title="display detail for this user."> [% loopro.user %] </a>
+                                        [% ELSE %]
+                                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.user %]" title="display detail for this librarian."> [% loopro.user %] </a>
+                                        [% END %]
+                                    </td>
+                                    <td>[% loopro.module %]</td>
+                                    <td>[% loopro.action %]</td>
+                                    <td>
+                                        [% IF ( module == 'MEMBERS' ) %]
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> member [% loopro.object %] </a>
+                                        [% ELSE %]
+                                            [% IF ( module == 'CIRCULATION' ) %]
+                                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.object %]" title="Display member details."> member [% loopro.object %] </a>
+                                            [% ELSE %]
+                                                [% IF ( module == 'CATALOGUING' ) %]
+                                                    [% IF ( info == 'item' ) %]
+                                                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object %]&biblionumber=[% loopro.biblionumber %]&bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]">Item [% loopro.object %]</a>
+                                                    [% ELSE %]
+                                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object %]" title="Display detail for this biblio">biblio [% loopro.object %]</a>
+                                                    [% END %]
+                                                [% ELSE %]
+                                                    [% IF ( module == 'SERIAL' ) %]
+                                                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% loopro.object %]"> [% loopro.object %] </a>
+                                                    [% ELSE %]
+                                                        [% loopro.object %]
+                                                    [% END %]
+                                                [% END %]
+                                            [% END %]
+                                        [% END %]
+                                    </td>
+                                    <td>
+                                        [% IF ( loopro.CIRCULATION ) %]
+                                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.info %]&biblionumber=[% loopro.biblionumber %]&bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]" title="Display detail for this biblio">Item [% loopro.info |html %]</a>
+                                        [% ELSE %]
+                                            [% loopro.info |html %]
+                                        [% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </table>
+                    [% ELSE %]
+                        <div class="dialog alert">
+                            No log found
+                            [% IF ( CATALOGUING ) %]
+                                for <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% object %]">Bibliographic Record [% object %]</a>
+                            [% END %]
+                            [% IF ( MEMBERS ) %]
+                                for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% object %]">[% firstname %] [% surname %] ([% cardnumber %])</a>
+                            [% END %]
+                            .
+                        </div>
+                    [% END %]
+                [% END %]
 			</div>
 		</div>
 		<div class="yui-b noprint">

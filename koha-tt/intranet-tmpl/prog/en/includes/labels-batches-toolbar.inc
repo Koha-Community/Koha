@@ -22,7 +22,7 @@
                         }
                     }
                     if (items.length < 1) {
-                        alert("Please select at least one item to delete.");
+                        alert(_("Please select at least one item to delete."));
                         return;     // no item selected
                     }
                     getstr = items.join("&");
@@ -34,7 +34,7 @@
 //                    var msg = "Are you sure you want to remove selected item from this batch?"
 //                }
                 else {
-                    alert("Please select at least label to delete.");
+                    alert(_("Please select at least label to delete."));
                     return;     // no item selected
                 }
                 var answer = confirm(msg);
@@ -67,7 +67,7 @@
                             }
                         }
                         if (labels.length < 1) {
-                            alert("Please select at least one label to export.");
+                            alert(_("Please select at least one label to export."));
                             return;     // no batch selected
                         }
                         getstr = labels.join("&");
@@ -76,7 +76,7 @@
                         getstr = document.items.action.value;
                     }
                     else {
-                        alert("Please select at least one label to export.");
+                        alert(_("Please select at least one label to export."));
                         return;     // no batch selected
                     }
                     return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
@@ -101,7 +101,7 @@
                         return(document.items.action.value);
                     }
                 };
-                alert("Please select at least one item.");
+                alert(_("Please select at least one item."));
                 return (-1);
             };
 

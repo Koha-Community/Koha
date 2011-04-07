@@ -32,7 +32,7 @@
                 else if (document.delete_images.action.checked){
                         return {images:"batch_id="+document.delete_images.action.value, image_ids:document.delete_images.action.value};
                 };
-                alert("Please select image(s) to " + op + ".");
+                alert(_("Please select image(s) to ") + op + ".");
                 return (-1);
             };
             function showHideLayers(element, time, action) {

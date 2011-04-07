@@ -90,35 +90,35 @@
     <legend>Accounting details</legend>
        <ol>
        <li><label for="datereceived">Date received: </label><span class="label"> [% datereceived %] </span></li>
-       <li><label for="quantity">Quantity to receive: </label><span class="label">
+       <li><label for="quantityto">Quantity to receive: </label><span class="label">
            [% IF ( edit ) %]
                <input type="text" name="quantity" value="[% quantity %]" />
            [% ELSE %]
                <input type="text" READONLY name="quantity" value="[% quantity %]" />
            [% END %]
            </span></li>
-        <li><label for="quantityrec">Quantity received: </label>
+        <li><label for="quantity">Quantity received: </label>
             [% IF ( quantityreceived ) %]
                 [% IF ( edit ) %]
-                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="[% quantityreceived %]" />
+                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived %]" />
                     <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
                 [% ELSE %]
                 [% IF ( items ) %]
-                    <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="[% quantityreceivedplus1 %]" />
+                    <input READONLY type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
                 [% ELSE %]
-                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="[% quantityreceivedplus1 %]" />
+                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
                 [% END %]
                 <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
                 [% END %]
             [% ELSE %]
                 [% IF ( items ) %]
-                    <input id="quantityrec" READONLY type="text" size="20" name="quantityrec" value="1" />
+                    <input READONLY type="text" id="quantity" size="20" name="quantityrec" value="1" />
                 [% ELSE %]
-                    <input id="quantityrec" type="text" size="20" name="quantityrec" value="1" />
+                    <input type="text" size="20" id="quantity" name="quantityrec" value="1" />
                 [% END %]
                 <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
             [% END %]
-		<!-- 	<input type="text" size="20" name="quantityrec" id="quantityrec" value="[% quantityreceived %]" /> --></li>
+		</li>
         <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /></li>
         <li><label for="ecost">Budgeted cost: </label><input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" /></li>
         <li><label for="cost">Actual cost:</label>

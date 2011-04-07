@@ -88,7 +88,7 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
 
 <form method="post" id="Aform" name="Aform"  action="/cgi-bin/koha/admin/aqplan.pl">
 <h3>Planning for [% budget_period_description %] by [% authcat %]</h3>
-
+<input type="hidden" name="authcat" value="[% authcat %]" />
 <!-- Budget Lines -->
 
     [% IF ( budget_lines ) %]

@@ -232,6 +232,9 @@ function submitForm(form) {
 							<option value="[% deliveryplaceloo.value %]" [% IF ( deliveryplaceloo.selected ) %]selected[% END %]>[% deliveryplaceloo.branchname %]</option>
 							[% END %]
 						</select>
+                        <p>or</p>
+                        <h3><label for="freedeliveryplace">Delivery Place:</label></h3>
+                        <textarea cols="26" name="freedeliveryplace" id="freedeliveryplace">[% freedeliveryplace %]</textarea>
 						<h3><label for="deliverycomment">Delivery comment:</label></h3>
 						<textarea cols="26" name="deliverycomment" id="deliverycomment">[% deliverycomment %]</textarea>
 		         		<div class="workarea">
