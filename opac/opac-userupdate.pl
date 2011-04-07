@@ -53,7 +53,7 @@ my $lib = GetBranchDetail($borr->{'branchcode'});
 # handle the new information....
 # collect the form values and send an email.
 my @fields = (
-    'surname','firstname','othernames','streetnumber','address','address2','city','zipcode','country','phone','mobile','fax','phonepro', 'email','emailpro','B_streetnumber','B_address','B_address2','B_city','B_zipcode','B_country','B_phone','B_email','dateofbirth','sex'
+    'surname','firstname','othernames','streetnumber','address','address2','city','state','zipcode','country','phone','mobile','fax','phonepro', 'emailaddress','emailpro','B_streetnumber','B_address','B_address2','B_city','B_state','B_zipcode','B_country','B_phone','B_email','dateofbirth','sex'
 );
 my $update;
 my $updateemailaddress = $lib->{'branchemail'};

@@ -185,7 +185,8 @@ function validate1(date) {
         <!-- /TMPL_IF -->
         <!-- TMPL_VAR NAME="address" --><br />
         <!-- TMPL_IF NAME="address2" --><!-- TMPL_VAR NAME="address2"--><br /><!-- /TMPL_IF -->
-    	<!-- TMPL_IF NAME="city" --><!-- TMPL_VAR NAME="city" --><!-- /TMPL_IF -->
+    	<!-- TMPL_IF NAME="city" --><!-- TMPL_VAR NAME="city" --><!-- /TMPL_IF --> 
+    	<!-- TMPL_IF NAME="state" --><!-- TMPL_VAR NAME="state" --><!-- /TMPL_IF -->
     	<!-- TMPL_IF NAME="zipcode" --><!-- TMPL_VAR NAME="zipcode" --><br /><!-- /TMPL_IF -->
 	<!-- TMPL_IF NAME="country" --><!-- TMPL_VAR NAME="country" --><!-- /TMPL_IF --></p>
 		    
@@ -358,7 +359,8 @@ function validate1(date) {
     <!-- TMPL_UNLESS NAME="I"--><!-- TMPL_UNLESS NAME="C"-->
     <div class="rows">  <ol><li><span class="label">Address: </span><!-- TMPL_VAR NAME="B_address" --></li>
       <li><span class="label">Address 2: </span><!-- TMPL_VAR NAME="B_address2" --></li>
-      <li><span class="label">City, State: </span><!-- TMPL_VAR NAME="B_city" --></li>
+      <li><span class="label">City: </span><!-- TMPL_VAR NAME="B_city" --></li>
+      <!-- TMPL_IF NAME="B_state"--><li><span class="label">State: </span><!-- TMPL_VAR NAME="B_state" --></li><!-- /TMPL_IF -->
       <li><span class="label">Zip/Postal Code: </span><!-- TMPL_VAR NAME="B_zipcode" --></li>
       <li><span class="label">Country: </span><!-- TMPL_VAR NAME="B_country" --></li>
       <!-- TMPL_IF NAME="B_phone"--><li><span class="label">Phone: </span><!-- TMPL_VAR NAME="B_phone" --></li><!-- /TMPL_IF -->
@@ -380,7 +382,8 @@ function validate1(date) {
     <li><span class="label">First name: </span><!-- TMPL_VAR NAME="altcontactfirstname" --></li>    
     <li><span class="label">Address: </span><!-- TMPL_VAR NAME="altcontactaddress1" --></li>
     <li><span class="label">Address 2: </span><!-- TMPL_VAR NAME="altcontactaddress2" --></li>
-	<li><span class="label">City, State: </span><!-- TMPL_VAR NAME="altcontactaddress3" --></li>
+	<li><span class="label">City: </span><!-- TMPL_VAR NAME="altcontactaddress3" --></li>
+	 <!-- TMPL_IF NAME="altcontactstate"--><li><span class="label">State: </span><!-- TMPL_VAR NAME="altcontactstate" --></li><!-- /TMPL_IF -->
 	<li><span class="label">Zip/Postal Code: </span><!-- TMPL_VAR NAME="altcontactzipcode" --></li>
 	<li><span class="label">Country: </span><!-- TMPL_VAR NAME="altcontactcountry" --></li>
     <li><span class="label">Phone: </span><!-- TMPL_VAR NAME="altcontactphone" --></li></ol></div>
