@@ -375,10 +375,11 @@ foreach my $branchcode (@branches) {
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
 
     my $sth2 = $dbh->prepare( <<'END_SQL' );
-SELECT biblio.*, items.*, issues.*, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_overdue
-  FROM issues,items,biblio
+SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_overdue
+  FROM issues,items,biblio, biblioitems
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber   = items.biblionumber
+    AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
     AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ?
 END_SQL
