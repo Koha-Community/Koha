@@ -73,7 +73,7 @@ $(document).ready(function() {
 
         var matches = new RegExp("\\?error_import_export=(.+)$").exec(window.location.search);
         if (matches && matches.length > 1) {
-            alert("Error importing the framework " + decodeURIComponent(matches[1]));
+            alert(_("Error importing the framework ") + decodeURIComponent(matches[1]));
         }
     });
     

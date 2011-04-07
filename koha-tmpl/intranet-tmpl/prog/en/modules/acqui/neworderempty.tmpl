@@ -78,13 +78,13 @@ $(document).ready(function()
             // if user decreases the quantity
             if($(this).val() < <!-- TMPL_VAR name="quantityrec" -->) 
             {
-                alert("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog");   
+                alert(_("You have deleted item(s) in the order, don't forget to delete it(them) in the catalog"));
                 return true;
             } 
             else 
             {
                 // if user increases the quantity
-                alert("You can't add a new item, please create a new order line");
+                alert(_("You can't add a new item, please create a new order line"));
                 // and we replace the original value
                 $(this).val(<!-- TMPL_VAR name="quantityrec" -->)
                 return false;

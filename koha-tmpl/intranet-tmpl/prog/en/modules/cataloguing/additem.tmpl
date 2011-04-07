@@ -160,7 +160,7 @@ $(document).ready(function() {
 });
 
 function set_to_today(id, force) {
-    if (! id) { alert("Bad id " + id + " sent to set_to_today()"); return 0; }
+    if (! id) { alert(_("Bad id ") + id + _(" sent to set_to_today()")); return 0; }
     if ($("#" + id).val() == '' || $("#" + id).val() == '0000-00-00' || force) {
         $("#" + id).val("<!-- TMPL_VAR NAME="today_iso" -->");
     }

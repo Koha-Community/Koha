@@ -8,7 +8,7 @@
 	 $(document).ready(function() {
 	 	var inject_old = function(comment) {
 			<!-- TMPL_IF NAME="reviewid" -->
-			<!-- TMPL_IF NAME="cgi_debug" -->alert("injecting OLD comment: " +comment);<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="cgi_debug" -->alert(_('injecting OLD comment: ')+comment);<!-- /TMPL_IF -->
 			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').prev("small").prev("h5").html("Your Edited Comment (preview, pending approval)");
 			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').html(comment);
 			parent.opener.$('#c<!-- TMPL_VAR NAME="reviewid" --> p').append(" <a href=\"#comment\" onclick=\"Dopop(\'/cgi-bin/koha/opac-review.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber"-->&amp;reviewid=<!-- TMPL_VAR NAME="reviewid" -->\');\">Edit<\/a>");
@@ -16,7 +16,7 @@
 			return 1;
 		};
 	 	var inject_new = function(comment) {
-			<!-- TMPL_IF NAME="cgi_debug" -->alert("injecting NEW comment: " +comment);<!-- /TMPL_IF -->
+			<!-- TMPL_IF NAME="cgi_debug" -->alert(_("injecting NEW comment: ") +comment);<!-- /TMPL_IF -->
 			parent.opener.$('#newcomment').attr("class","yours");
 			parent.opener.$('#newcomment').html(
 				"<h5>Your Comment (preview, pending approval)<\/h5>" +
