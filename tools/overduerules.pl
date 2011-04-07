@@ -142,13 +142,13 @@ if ($op eq 'save') {
                     my $res = $sth_search->fetchrow_hashref();
                     if ($res->{'total'}>0) {
                         $sth_update->execute(
-                            ($temphash{$bor}->{"delay1"}?$temphash{$bor}->{"delay1"}:0),
+                            ($temphash{$bor}->{"delay1"}?$temphash{$bor}->{"delay1"}:undef),
                             ($temphash{$bor}->{"letter1"}?$temphash{$bor}->{"letter1"}:""),
                             ($temphash{$bor}->{"debarred1"}?$temphash{$bor}->{"debarred1"}:0),
-                            ($temphash{$bor}->{"delay2"}?$temphash{$bor}->{"delay2"}:0),
+                            ($temphash{$bor}->{"delay2"}?$temphash{$bor}->{"delay2"}:undef),
                             ($temphash{$bor}->{"letter2"}?$temphash{$bor}->{"letter2"}:""),
                             ($temphash{$bor}->{"debarred2"}?$temphash{$bor}->{"debarred2"}:0),
-                            ($temphash{$bor}->{"delay3"}?$temphash{$bor}->{"delay3"}:0),
+                            ($temphash{$bor}->{"delay3"}?$temphash{$bor}->{"delay3"}:undef),
                             ($temphash{$bor}->{"letter3"}?$temphash{$bor}->{"letter3"}:""),
                             ($temphash{$bor}->{"debarred3"}?$temphash{$bor}->{"debarred3"}:0),
                             $branch ,$bor

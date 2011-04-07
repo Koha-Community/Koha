@@ -1404,13 +1404,13 @@ DROP TABLE IF EXISTS `overduerules`;
 CREATE TABLE `overduerules` (
   `branchcode` varchar(10) NOT NULL default '',
   `categorycode` varchar(10) NOT NULL default '',
-  `delay1` int(4) default 0,
+  `delay1` int(4) default NULL,
   `letter1` varchar(20) default NULL,
   `debarred1` varchar(1) default 0,
-  `delay2` int(4) default 0,
+  `delay2` int(4) default NULL,
   `debarred2` varchar(1) default 0,
   `letter2` varchar(20) default NULL,
-  `delay3` int(4) default 0,
+  `delay3` int(4) default NULL,
   `letter3` varchar(20) default NULL,
   `debarred3` int(1) default 0,
   PRIMARY KEY  (`branchcode`,`categorycode`)
