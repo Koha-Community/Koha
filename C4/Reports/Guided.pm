@@ -466,7 +466,8 @@ sub execute_query ($;$$$) {
 
 =item save_report($sql,$name,$type,$notes)
 
-Given some sql and a name this will saved it so that it can resued
+Given some sql and a name this will saved it so that it can reused
+Returns id of the newly created report
 
 =cut
 
@@ -476,8 +477,10 @@ sub save_report {
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
     my $query =
 "INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,type,notes)  VALUES (?,now(),now(),?,?,?,?)";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $sql, $name, $type, $notes );
+    $dbh->do( $query, undef, $borrowernumber, $sql, $name, $type, $notes );
+    my $id = $dbh->selectrow_array("SELECT max(id) FROM saved_sql WHERE borrowernumber=? AND report_name=?", undef,
+                                   $borrowernumber, $name);
+    return $id;
 }
 
 sub update_sql {
