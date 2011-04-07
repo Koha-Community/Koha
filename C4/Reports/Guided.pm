@@ -43,7 +43,7 @@ BEGIN {
 	    save_report get_saved_reports execute_query get_saved_report create_compound run_compound
 		get_column_type get_distinct_values save_dictionary get_from_dictionary
 		delete_definition delete_report format_results get_sql
-        select_2_select_count_value update_sql
+        nb_rows update_sql
 	);
 }
 
@@ -373,6 +373,14 @@ sub get_criteria {
     return ( \@criteria_array );
 }
 
+sub nb_rows($) {
+    my $sql = shift or return;
+    my $sth = C4::Context->dbh->prepare($sql);
+    $sth->execute();
+    my $rows = $sth->fetchall_arrayref();
+    return scalar (@$rows);
+}
+
 =item execute_query
 
   ($results, $total, $error) = execute_query($sql, $offset, $limit)
@@ -399,16 +407,6 @@ the user in a user-supplied SQL query WILL apply in any case.
 #  ~ remove any LIMIT clause
 #  ~ repace SELECT clause w/ SELECT count(*)
 
-sub select_2_select_count_value ($) {
-    my $sql = shift or return;
-    my $countsql = select_2_select_count($sql);
-    $debug and warn "original query: $sql\ncount query: $countsql\n";
-    my $sth1 = C4::Context->dbh->prepare($countsql);
-    $sth1->execute();
-    my $total = $sth1->fetchrow();
-    $debug and warn "total records for this query: $total\n";
-    return $total;
-}
 sub select_2_select_count ($) {
     # Modify the query passed in to create a count query... (I think this covers all cases -crn)
     my ($sql) = strip_limit(shift) or return;

@@ -484,7 +484,7 @@ elsif ($phase eq 'Run this report'){
             $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
         }
         my ($sth, $errors) = execute_query($sql, $offset, $limit);
-        my $total = select_2_select_count_value($sql) || 0;
+        my $total = nb_rows($sql) || 0;
         unless ($sth) {
             die "execute_query failed to return sth for report $report: $sql";
         } else {
