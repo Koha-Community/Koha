@@ -133,6 +133,7 @@ elsif ( $phase eq 'Update SQL'){
         update_sql( $id, $sql, $reportname, $notes );
         $template->param(
             'save_successful'       => 1,
+            'id'                    => $id,
         );
     }
     
