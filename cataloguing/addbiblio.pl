@@ -838,7 +838,7 @@ my $dbh           = C4::Context->dbh;
 my $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
 
 $frameworkcode = &GetFrameworkCode($biblionumber)
-  if ( $biblionumber and not($frameworkcode) );
+  if ( $biblionumber and not($frameworkcode) and $op ne 'addbiblio' );
 
 $frameworkcode = '' if ( $frameworkcode eq 'Default' );
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
