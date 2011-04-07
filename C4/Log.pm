@@ -234,7 +234,6 @@ sub GetLogs {
 	push(@parameters,"%".$info."%");
     }
    
-    warn $query, join("/",@parameters);
     my $sth = $dbh->prepare($query);
     $sth->execute(@parameters);
     
