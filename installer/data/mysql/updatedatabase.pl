@@ -4268,6 +4268,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE deletedborrowers ADD `B_state` mediumtext AFTER B_city;");
     $dbh->do("ALTER TABLE deletedborrowers ADD `altcontactstate` mediumtext AFTER altcontactaddress3;");
     print "Upgrade to $DBversion done (Add state field to patron's addresses)\n";
+}
+
+$DBversion = '3.0X.XX.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE branches ADD `branchstate` mediumtext AFTER `branchcity`;");
+    print "Upgrade to $DBversion done (Add state to branch address)\n";
     SetVersion ($DBversion);
 }
 
