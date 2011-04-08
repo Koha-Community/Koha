@@ -112,16 +112,15 @@ if (defined $error) {
 
 my @results;
 
-if ($marcresults) {
-    foreach my $result ( @{$marcresults} ) {
-        my $marcrecord = MARC::File::USMARC::decode( $result );
-        my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
+foreach my $result ( @{$marcresults} ) {
+    my $marcrecord = MARC::File::USMARC::decode( $result );
+    my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
 
-        $biblio->{booksellerid} = $booksellerid;
-        push @results, $biblio;
+    $biblio->{booksellerid} = $booksellerid;
+    push @results, $biblio;
 
-    }
 }
+
 $template->param(
     basketno             => $basketno,
     booksellerid     => $bookseller->{'id'},

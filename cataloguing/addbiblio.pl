@@ -769,16 +769,16 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
         warn "BIBLIOADDSAUTHORITIES: $error";
 	    return (0,0) ;
 	  }
-      if ($results && scalar(@$results)==1) {
+      if ( @{$results} == 1) {
         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
         $field->add_subfields('9'=>$marcrecord->field('001')->data);
         $countlinked++;
-      } elsif (scalar(@$results)>1) {
+      } elsif (@{$results} > 1) {
    #More than One result 
    #This can comes out of a lack of a subfield.
 #         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
 #         $record->field($data->{tagfield})->add_subfields('9'=>$marcrecord->field('001')->data);
-  $countlinked++;
+        $countlinked++;
       } else {
   #There are no results, build authority record, add it to Authorities, get authid and add it to 9
   ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode     
@@ -838,7 +838,7 @@ my $dbh           = C4::Context->dbh;
 my $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
 
 $frameworkcode = &GetFrameworkCode($biblionumber)
-  if ( $biblionumber and not($frameworkcode) );
+  if ( $biblionumber and not($frameworkcode) and $op ne 'addbiblio' );
 
 $frameworkcode = '' if ( $frameworkcode eq 'Default' );
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

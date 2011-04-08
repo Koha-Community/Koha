@@ -164,6 +164,7 @@ sub UpdateInTable{
     my @ids=@$data{@field_ids};
     my $dbh      = C4::Context->dbh;
     my ($keys,$values)=_filter_hash($tablename,$data,0);
+    return unless ($keys);
     my $query = 
     qq{     UPDATE $tablename
             SET  }.join(",",@$keys).qq{
