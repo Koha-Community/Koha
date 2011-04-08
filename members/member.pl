@@ -158,7 +158,7 @@ $template->param(
     startfrom => $startfrom,
     from      => ($startfrom-1)*$resultsperpage+1,  
     to        => $to,
-    multipage => ($count != $to+1 || $startfrom!=1),
+    multipage => ($count != $to || $startfrom!=1),
     advsearch => ($$patron{categorycode} || $$patron{branchcode}),
     branchloop=>\@branchloop,
     categories=>\@categories,
