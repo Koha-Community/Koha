@@ -815,7 +815,9 @@ sub _send_message_by_email ($;$$$) {
         }
     }
 
-	my $content = encode('utf8', $message->{'content'});
+    my $utf8   = decode('MIME-Header', $message->{'subject'} );
+    $message->{subject}= encode('MIME-Header', $utf8);
+    my $content = encode('utf8', $message->{'content'});
     my %sendmail_params = (
         To   => $to_address,
         From => $message->{'from_address'} || C4::Context->preference('KohaAdminEmailAddress'),
