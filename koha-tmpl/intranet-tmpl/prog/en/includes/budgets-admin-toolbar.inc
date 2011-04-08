@@ -33,7 +33,7 @@
         <!-- TMPL_IF NAME="budget_period_id" -->
                 var periods_menu = [
                         { text: _("Edit budget") + " '<!-- TMPL_VAR NAME="budget_period_description" -->'", url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
-                        { text: _("Duplicate budget") + " '<!-- TMPL_VAR NAME="budget_period_description" -->'" }
+                        <!-- { text: _("Duplicate budget") + " '<!-- TMPL_VAR NAME="budget_period_description" -->'" } -->
                 ]
         <!-- /TMPL_IF -->
 
