@@ -41,7 +41,7 @@ $(document).ready(function() {
 &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
 &rsaquo; <!-- TMPL_VAR name="action" --> <!-- TMPL_VAR NAME="searchfield" -->
 <!-- TMPL_ELSIF name="else" -->
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_IF NAME="frameworkcode" --><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)<!-- TMPL_ELSE -->Default MARC framework<!-- /TMPL_IF --></a>
 <!-- TMPL_ELSIF name="delete_confirm" -->
 &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=<!-- TMPL_VAR NAME="frameworkcode" -->"><!-- TMPL_VAR NAME="frameworktext" --> (<!-- TMPL_VAR NAME="frameworkcode" -->)</a>
 &rsaquo; Confirm Deletion of Tag '<!-- TMPL_VAR name="searchfield" -->'
@@ -124,33 +124,30 @@ $(document).ready(function() {
 
 
 <!-- TMPL_IF NAME="else" -->
-
 <form name="f" action="<!-- TMPL_VAR NAME="script_name" -->" method="post">
-    <p><label for="frameworkcode">Framework</label>
+<fieldset style="padding:.5em;">
+        <label for="searchfield"><strong>Search for tag:</strong> </label>
+        <input type="text" name="searchfield" id="searchfield" size="4" value="<!-- TMPL_VAR NAME="searchfield" -->" />
+
+<label for="frameworkcode"><strong>In framework:</strong> </label>
         <select id="frameworkcode" name="frameworkcode">
             <option value="">Default</option>
             <!-- TMPL_LOOP NAME="frameworkloop" -->
-			<!-- TMPL_IF NAME="selected" -->
+            <!-- TMPL_IF NAME="selected" -->
                 <option value="<!-- TMPL_VAR NAME="value" -->" selected="selected"><!-- TMPL_VAR NAME="frameworktext" --></option>
-				<!-- TMPL_ELSE -->
+                <!-- TMPL_ELSE -->
                 <option value="<!-- TMPL_VAR NAME="value" -->"><!-- TMPL_VAR NAME="frameworktext" --></option>
-				<!-- /TMPL_IF -->
+                <!-- /TMPL_IF -->
             <!-- /TMPL_LOOP -->
         </select>
-    </p>
-    <p>
-        <label for="searchfield">Search for Tag</label>
-        <input type="text" name="searchfield" id="searchfield" value="<!-- TMPL_VAR NAME="searchfield" -->" />
-        <input type="submit" value="Search" />
-    </p>
-    <p>
-        <label for="select_display">Display only used Tags/Subfields</label>
+    <input type="submit" value="Search" />
+<p>        <label for="select_display">Display only used Tags/Subfields</label>
         <!-- TMPL_IF Name="select_display"-->
             <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked"  onchange="this.form.submit();" />
         <!-- TMPL_ELSE -->
             <input type="checkbox" name="select_display" id="select_display" value="True" onchange="this.form.submit();" />
-        <!--/TMPL_IF -->
-    </p>
+        <!--/TMPL_IF --></p>
+</fieldset>
 </form>
 <p>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/batchRebuildBiblioTables.pl script.</p>
 
