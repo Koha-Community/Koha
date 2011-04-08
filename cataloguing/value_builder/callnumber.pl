@@ -95,7 +95,7 @@ sub plugin {
             );
         }
     # If a prefix is submited, we look for the highest itemcallnumber with this prefix, and return it incremented
-    } elsif ( $code =~ m/^[A-Z.\-]+$/ ) {
+    } elsif ( $code =~ m/^[A-Z.\-']+$/ ) {
         my $sth = $dbh->prepare("SELECT MAX(CAST(SUBSTRING_INDEX(itemcallnumber,' ',-1) AS SIGNED)) FROM items WHERE itemcallnumber LIKE ?");
         $sth->execute($code.' %');
         if ( my $max = $sth->fetchrow ) {
@@ -103,10 +103,16 @@ sub plugin {
                 return => $code.' '.($max+1)
             );
         }
+        else {
+            $template->param(
+                return => $code.' 1'
+            );
+        }
+
     # The user entered a custom value, we don't touch it, this could be handled in js
     } else {
         $template->param(
-            return => $code,
+            return => $code
         );
     }
     output_html_with_http_headers $input, $cookie, $template->output;
