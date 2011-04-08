@@ -4259,7 +4259,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.03.00.XXX';
+$DBversion = '3.03.00.047';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE borrowers ADD `state` mediumtext AFTER city;");
     $dbh->do("ALTER TABLE borrowers ADD `B_state` mediumtext AFTER B_city;");
