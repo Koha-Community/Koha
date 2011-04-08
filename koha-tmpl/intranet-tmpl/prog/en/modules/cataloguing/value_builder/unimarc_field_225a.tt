@@ -8,6 +8,8 @@
         <form name="f_pop" onsubmit="report()" action="">
             <h2 class="authority">Collection</h2>
             <p><label>Select a collection</label>[% collection %]</p>
+            OR new collection: <input type="text" value="" name="f2"/>
+            <br/>
             <input type="submit" value="OK" class="button authority" />
         </form>
     </div>
@@ -17,7 +19,7 @@
 function report() {
             var doc   = opener.document; 
             var field = doc.getElementById("[% index %]");
-            field.value =  document.f_pop.f1.value;
+            field.value = document.f_pop.f2.value || document.f_pop.f1.value;
             window.close();
             return false;
         }
