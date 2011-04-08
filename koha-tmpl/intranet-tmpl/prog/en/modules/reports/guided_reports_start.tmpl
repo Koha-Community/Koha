@@ -500,7 +500,7 @@ NAME="name" -->"><!-- TMPL_VAR NAME="name"--></label></td><td>
 <!-- TMPL_IF NAME="notes" --><p><!-- TMPL_VAR NAME="notes" --></p><!-- /TMPL_IF -->
 <!-- TMPL_IF NAME="unlimited_total" --><p>Total number of rows matching the (unlimited) query is <!-- TMPL_VAR NAME="unlimited_total" -->.</p><!-- /TMPL_IF -->
 <pre id="sql_output"><!-- TMPL_VAR name="sql" --></pre>
-<p><!-- TMPL_VAR NAME='pagination_bar' DEFAULT="" --></p>
+<div class="pages"><!-- TMPL_VAR NAME="pagination_bar" DEFAULT="" --></div>
 <!-- TMPL_UNLESS name="errors" -->
 <table>
 <tr><!-- TMPL_LOOP NAME="header_row" --><th><!-- TMPL_VAR NAME="cell" --></th><!-- /TMPL_LOOP --></tr>
