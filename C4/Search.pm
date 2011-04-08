@@ -956,6 +956,7 @@ sub getIndexes{
                     'Title',
                     'Title-cover',
                     'Title-series',
+                    'Title-host',
                     'Title-uniform',
                     'Title-uniform-heading',
                     'Title-uniform-see',
