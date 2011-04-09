@@ -458,8 +458,8 @@ my %valid_config_values = (
   'INSTALL_ZEBRA' => { 'yes' => 1, 'no' => 1 },
   'INSTALL_SRU' => { 'yes' => 1, 'no' => 1 },
   'AUTH_INDEX_MODE' => { 'grs1' => 1, 'dom' => 1 },
-  'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
-  'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1 }, # FIXME should generate from contents of distribution
+  'ZEBRA_MARC_FORMAT' => { 'marc21' => 1, 'normarc' => 1, 'unimarc' => 1 }, # FIXME should generate from contents of distributation
+  'ZEBRA_LANGUAGE'    => { 'en' => 1, 'fr' => 1, 'nb' => 1 }, # FIXME should generate from contents of distribution
   'RUN_DATABASE_TESTS' => { 'yes' => 1, 'no' => 1 },
   'USE_MEMCACHED'      => { 'yes' => 1, 'no' => 1 },
 );
