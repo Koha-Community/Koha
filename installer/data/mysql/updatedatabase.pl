@@ -4270,7 +4270,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Add state field to patron's addresses)\n";
 }
 
-$DBversion = '3.0X.XX.XXX';
+$DBversion = '3.03.00.048';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE branches ADD `branchstate` mediumtext AFTER `branchcity`;");
     print "Upgrade to $DBversion done (Add state to branch address)\n";
