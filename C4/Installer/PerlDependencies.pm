@@ -474,6 +474,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '2.05',
     },
+    'Template' => {
+	'usage'    => 'Core',
+	'required' => '1',
+	'min_ver'  => '2.22',
+    },
 };
 
 1;
