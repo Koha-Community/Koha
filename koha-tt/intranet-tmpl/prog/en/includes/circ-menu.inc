@@ -21,9 +21,8 @@
         <li>[% address2 %]</li>
     [% END %]<li> 
     [% IF ( city ) %]
-            [% city %]
-	    [% zipcode %]
-	    [% IF ( country ) %], [% country %][% END %]
+            [% city %][% IF ( state ) %], [% state %][% END %]
+	    [% zipcode %][% IF ( country ) %], [% country %][% END %]
     [% ELSE %]
         <span class="empty">No city stored.</span>
     [% END %]</li>

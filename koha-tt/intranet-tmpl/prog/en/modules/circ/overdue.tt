@@ -69,6 +69,7 @@
 <style type="text/css">
     .sql {display:none;}
 </style>
+[% INCLUDE 'calendar.inc' %]
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -137,6 +138,35 @@
   <fieldset class="brief">
 <h4>Filter On:</h4>
 	<ol>
+    <li style="border: dashed; border-width:1px;">Date due:
+	<label for="dateduefrom">From:
+	<img src="[% themelang %]/lib/calendar/cal.gif" id="dateduefrom_button" alt="Show Calendar" />
+	</label>
+	<input type="text" id="dateduefrom" name="dateduefrom" size="20" value="[% dateduefrom %]" />
+	<script language="JavaScript" type="text/javascript">
+	    Calendar.setup(
+	    {
+		inputField : "dateduefrom",
+		ifFormat : "[% DHTMLcalendar_dateformat %]",
+		button : "dateduefrom_button"
+	    }
+	    );
+	</script>
+
+	<label for="datedueto">To:
+	<img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" />
+	</label>
+	<input type="text" id="datedueto" name="datedueto" size="20" value="[% datedueto %]" />
+	<script language="JavaScript" type="text/javascript">
+	    Calendar.setup(
+	    {
+		inputField : "datedueto",
+		ifFormat : "[% DHTMLcalendar_dateformat %]",
+		button : "datedueto_button"
+	    }
+	    );
+	</script>
+    </li>
     <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% borname |html %]" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       [% FOREACH borcatloo IN borcatloop %]

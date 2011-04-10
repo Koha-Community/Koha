@@ -49,7 +49,7 @@ $(document).ready(function() {
 &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
 &rsaquo; [% action %] [% searchfield %]
 [% ELSIF ( else ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% IF ( frameworkcode ) %][% frameworktext %] ([% frameworkcode %])[% ELSE %]Default MARC framework[% END %]</a>
 [% ELSIF ( delete_confirm ) %]
 &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode %]">[% frameworktext %] ([% frameworkcode %])</a>
 &rsaquo; Confirm Deletion of Tag '[% searchfield %]'
@@ -132,35 +132,31 @@ $(document).ready(function() {
 
 
 [% IF ( else ) %]
-
 <form name="f" action="[% script_name %]" method="post">
-    <p><label for="frameworkcode">Framework</label>
+<fieldset style="padding:.5em;">
+        <label for="searchfield"><strong>Search for tag:</strong> </label>
+        <input type="text" name="searchfield" id="searchfield" size="4" value="[% searchfield %]" />
+
+<label for="frameworkcode"><strong>In framework:</strong> </label>
         <select id="frameworkcode" name="frameworkcode">
             <option value="">Default</option>
             [% FOREACH frameworkloo IN frameworkloop %]
-			[% IF ( frameworkloo.selected ) %]
+            [% IF ( frameworkloo.selected ) %]
                 <option value="[% frameworkloo.value %]" selected="selected">[% frameworkloo.frameworktext %]</option>
-				[% ELSE %]
+                [% ELSE %]
                 <option value="[% frameworkloo.value %]">[% frameworkloo.frameworktext %]</option>
-				[% END %]
+                [% END %]
             [% END %]
         </select>
-    </p>
-    <p>
-        <label for="searchfield">Search for Tag</label>
-        <input type="text" name="searchfield" id="searchfield" value="[% searchfield %]" />
-        <input type="submit" value="Search" />
-    </p>
-    <p>
-        <label for="select_display">Display only used Tags/Subfields</label>
+    <input type="submit" value="Search" />
+<p>        <label for="select_display">Display only used Tags/Subfields</label>
         [% IF ( select_display ) %]
             <input type="checkbox" name="select_display" id="select_display" value="True" checked="checked"  onchange="this.form.submit();" />
         [% ELSE %]
             <input type="checkbox" name="select_display" id="select_display" value="True" onchange="this.form.submit();" />
-        [% END %]
-    </p>
+        [% END %]</p>
+</fieldset>
 </form>
-<p>NOTE : if you change the link between a MARC subfield and a non-MARC field, ask your administrator to run misc/batchRebuildBiblioTables.pl script.</p>
 <span id="pagertable_marctagstructure" class="pager">
 	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
 		<img src="[% interface %]/prog/img/first.png" class="first"/>

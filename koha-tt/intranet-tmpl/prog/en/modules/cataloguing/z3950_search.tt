@@ -22,6 +22,7 @@ function closemenu(){
     $(".linktools").hide();
     $("tr").removeClass("selected");
 }
+
 $(document).ready(function(){
     $("#CheckAll").click(function(){
         $(".checkboxed").checkCheckboxes();
@@ -52,6 +53,13 @@ $(document).ready(function(){
             var row = $(this).parent();
             row.addClass("selected");
         });
+    $("form[name='f']").submit(function(){
+        if ($('input[type=checkbox]').filter(':checked').length == 0) {
+            alert(_("Please choose at least one Z39.50 target"));
+            return false;
+        } else
+            return true;
+    });
 });
 
 //]]>
@@ -110,7 +118,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             [% ELSE %]
                 <input type="checkbox" name="id" id="z3950_[% serverloo.id %]" value="[% serverloo.id %]" />
             [% END %]
-            <label for="z3950_[% serverloo.id %]">[% serverloo.name %] [[% serverloo.host %]]</label>  
+            <label for="z3950_[% serverloo.id %]">[% serverloo.name %]</label>  
 
         </p>
     [% END %]
@@ -153,8 +161,12 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
     [% END %]</tbody>
 </table>
     [% ELSE %]
-        [% FOREACH errcon IN errconn %]
-            Connection failed to [% errcon.server %]
+        [% IF ( emptyserverlist ) %]
+            You didn't select any Z39.50 target.
+        [% ELSE %]
+            [% FOREACH errcon IN errconn %]
+                Connection failed to [% errcon.server %]
+            [% END %]
         [% END %]
 	<p>Nothing found. <a href="/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]">Try another search</a>.</p>
     [% END %]

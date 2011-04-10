@@ -171,7 +171,9 @@ $(document).ready(function()
 <fieldset class="rows">
         <legend>
             Catalog details
-            <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]"> Edit record</a></span>
+            [% IF ( biblionumber ) %]
+                <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]"> Edit record</a></span>
+            [% END %]
         </legend>
         [% UNLESS ( existing ) %]
         <input type="hidden" name="existing" value="no" />

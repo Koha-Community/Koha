@@ -30,6 +30,7 @@
   <tr>
   	<th>Date</th>
     <th>Description of charges</th>
+    <th>Note</th>
     <th>Amount</th>
     <th>Outstanding</th>
     [% IF ( reverse_col ) %]
@@ -44,6 +45,7 @@
    [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
       <td>[% account.date %]</td>
       <td>[% account.description %]&nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.biblionumber %]&amp;itemnumber=[% account.itemnumber %]">View item</a>&nbsp;[% END %][% IF ( account.printtitle ) %] [% account.title |html %][% END %]</td>
+      <td>[% account.note %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding %]</td>
     [% IF ( account.reverse_col ) %]

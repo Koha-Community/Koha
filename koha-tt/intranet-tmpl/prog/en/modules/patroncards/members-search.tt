@@ -89,7 +89,7 @@ function add_item(borrowernum,batch_id,type_id){
 
 [% IF ( resultsloop ) %]
 <div id="searchheader"> <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]name: '<span class="ex">[% member %][% ELSIF ( category_type ) %]category code: '<span class="ex">[% category_type %][% END %]</span>'</h3></div>
-[% IF ( paginationbar ) %]<div id="pagination_top">[% paginationbar %]</div>[% END %]
+[% IF ( paginationbar ) %]<div id="pagination_top" class="pages">[% paginationbar %]</div>[% END %]
 <form name="resultform" action="/cgi-bin/koha/patroncards/members-search.pl" method="get" class="checkboxed"><div style="float: right; margin-top: .5em;"><input type="submit" class="icon addchecked" value="Add checked" onclick="add_item('checked',[% batch_id %]); return false" /> <input type="button" class="close" value="Done" /></div>
 <div style="line-height: 2em; margin-left: .7em;"><a id="CheckAll" href="/cgi-bin/koha/patroncards/members-search.pl">Select All</a><a id="CheckNone" href="/cgi-bin/koha/patroncards/members-search.pl">Clear All</a></div>
 <div class="searchresults">

@@ -1,6 +1,27 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#showallbudgets').click(function() {
+	if ( $('#showallbudgets:checked').val() !== undefined) {
+	    $('.b_inactive').show();
+	    $('#b_inactive').show();
+	    $('.bu_active').show();
+	    $('.bu_inactive').hide();
+	}
+	else {
+	    $('.b_inactive').hide();
+	    $('#b_inactive').hide();
+	    $('.bu_inactive').show();
+	    $('.bu_active').hide();
+	}
+    });
+});
+//]]>
+</script>
+
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -83,14 +104,15 @@
             <th>Total</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
-            <th align="right" >[% total %]</th>
-            <th align="right" >[% totordered %]</th>
-            <th align="right" >[% totspent %]</th>
-            <th align="right" >[% totavail %]</th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% total %]</span><span class="bu_inactive" >[% total_active %]</span></th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% totordered %]</span><span class="bu_inactive" >[% totordered_active %]</span></th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% totspent %]</span><span class="bu_inactive" >[% totspent_active %]</span></th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% totavail %]</span><span class="bu_inactive" >[% totavail_active %]</span></th>
         </tr>
         </tfoot>
         <tbody>
         [% FOREACH loop_budge IN loop_budget %]
+	    [% IF ( loop_budge.budget_period_active ) %]
             [% IF ( loop.odd ) %]
                 <tr>
             [% ELSE %]
@@ -104,10 +126,24 @@
                 <td align="right" >[% loop_budge.budget_spent %]</td>
                 <td align="right" >[% loop_budge.budget_avail %]</td>
             </tr>
+            [% ELSE %]
+            [% IF ( loop.odd ) %]
+                <tr class="b_inactive" style="display : none;">
+            [% ELSE %]
+                <tr class="highlight" id = "b_inactive" style="display : none;">
+            [% END %]
+            <td align="center" >[% loop_budge.budget_code %]</td>
+                <td align="center">[% loop_budge.budget_owner %]</td>
+                <td align="center">[% loop_budge.budget_branchname %]</td>
+                <td align="right" >[% loop_budge.budget_amount %]</td>
+                <td align="right" >[% loop_budge.budget_ordered %]</td>
+                <td align="right" >[% loop_budge.budget_spent %]</td>
+                <td align="right" >[% loop_budge.budget_avail %]</td>
+            [% END %]
         [% END %]
         </tbody>
     </table>
-    </div>
+    </div><span class="label">Show all :&nbsp;</span><input type="checkbox" id="showallbudgets" />
     [% END %]
 </div>
 

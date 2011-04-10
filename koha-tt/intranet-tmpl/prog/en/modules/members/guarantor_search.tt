@@ -6,7 +6,7 @@
     </style>
     <script type="text/javascript">
         <!--
-        function fillguarantor(id, surname, firstname, streetnumber, address, city, zipcode) {
+        function fillguarantor(id, surname, firstname, streetnumber, address, address2, city, state, zipcode, country) {
             var $ = window.opener.$;
             var form = $('#entryform').get(0);
 
@@ -30,8 +30,11 @@
 
             form.streetnumber.value = streetnumber;
             form.address.value = address;
+            form.address2.value = address2;
             form.city.value = city;
+            form.state.value = state;
             form.zipcode.value = zipcode;
+            form.country.value = country;
 
             form.guarantorsearch.value = 'Change';
             self.close();
@@ -73,10 +76,10 @@
                     [% resultsloo.surname %], [% resultsloo.firstname %]
                 </td> 
 				<td>[% resultsloo.dateofbirth %]</td>
-				<td><p>[% resultsloo.address %] [% resultsloo.city %]</p></td>
+				<td><p>[% resultsloo.address %] [% resultsloo.address2 %] [% resultsloo.city %] [% resultsloo.state %] [% resultsloo.zipcode %] [% resultsloo.country %]</p></td>
                 <td>
                     <form action="">
-                        <input type="button" onclick="fillguarantor('[% resultsloo.borrowernumber %]', '[% resultsloo.surname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.firstname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.streetnumber |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.address |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.city |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.zipcode |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]'); return false;" value="Select"/>
+                        <input type="button" onclick="fillguarantor('[% resultsloo.borrowernumber %]', '[% resultsloo.surname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.firstname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.streetnumber |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.address |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.address2 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.city |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.state |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.zipcode |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.country |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]'); return false;" value="Select"/>
                     </form>
                 </td>
 			</tr>

@@ -69,7 +69,7 @@ function add_member(subscriptionid,borrowernumber){
 		[% END %]
 	</tbody>
 </table>
-<div class="pages">[% IF ( multipage ) %][% paginationbar %][% END %]</div>
+[% IF ( multipage ) %]<div class="pages">[% paginationbar %]</div>[% END %]
 </div>
 [% ELSE %]
 [% IF ( searching ) %]

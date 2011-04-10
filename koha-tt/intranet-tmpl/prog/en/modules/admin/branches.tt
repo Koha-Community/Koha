@@ -109,7 +109,8 @@
         <li><label for="branchaddress1">Address Line 1</label><input type="text" name="branchaddress1" id="branchaddress1" value="[% branchaddress1 |html %]" /></li>
         <li><label for="branchaddress2">Address Line 2</label><input type="text" name="branchaddress2" id="branchaddress2" value="[% branchaddress2 |html %]" /></li>
         <li><label for="branchaddress3">Address Line 3</label><input type="text" name="branchaddress3" id="branchaddress3" value="[% branchaddress3 |html %]" /></li>
-        <li><label for="branchcity">City, State</label><input type="text" name="branchcity" id="branchcity" value="[% branchcity |html %]" /></li>
+        <li><label for="branchcity">City</label><input type="text" name="branchcity" id="branchcity" value="[% branchcity |html %]" /></li>
+        <li><label for="branchstate">State</label><input type="text" name="branchstate" id="branchstate" value="[% branchstate |html %]" /></li>
         <li><label for="branchzip">Zip/Postal Code</label><input type="text" name="branchzip" id="branchzip" value="[% branchzip |html %]" /></li>
         <li><label for="branchcountry">Country</label><input type="text" name="branchcountry" id="branchcountry" value="[% branchcountry |html %]" /></li>
         <li><label for="branchphone">Phone</label><input type="text" name="branchphone" id="branchphone" value="[% branchphone |html %]" /></li>
@@ -211,7 +212,8 @@
                         [% IF ( branche.branchzip ) %]
                             <br />[% branche.branchzip |html %][% END %]
                         [% IF ( branche.branchcity ) %]
-                            <br />[% branche.branchcity |html %][% END %]
+                            <br />[% branche.branchcity |html %][% END %][% IF ( branche.branchstate ) %], 
+                            [% branche.branchstate |html %][% END %]
                         [% IF ( branche.branchcountry ) %]
                             <br />[% branche.branchcountry |html %][% END %]
                         [% IF ( branche.branchphone ) %]

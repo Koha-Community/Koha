@@ -21,9 +21,11 @@
         new YAHOO.widget.Button("editcontracts");
 
         var manageorders = [
-            { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form"},
-            { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=[% id %]"},
-            { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% id %]"},
+            [% IF ( CAN_user_acquisition_order_manage ) %]
+                { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form"},
+                { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=[% id %]"},
+                { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% id %]"},
+            [% END %]
             { text: _("Receive shipments"), url: "/cgi-bin/koha/acqui/parcels.pl?supplierid=[% id %]" },
             [% IF ( basketno ) %]
                 { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% id %]&basketno=[% basketno %]&owner=1"}
@@ -42,11 +44,13 @@
     </script>
     <ul id="toolbar-list" class="toolbar">
         [% IF ( id ) %]
-            <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]&amp;op=enter">Edit</a></li>
-            <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=[% id %]">New Contract</a></li>
-            <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% id %]">Contracts</a></li>
-            [% UNLESS ( basketcount ) %]
-                <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form">New Basket</a></li>
+            [% IF ( CAN_user_acquisition_vendors_manage ) %]
+                <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]&amp;op=enter">Edit</a></li>
+                <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=[% id %]">New Contract</a></li>
+                <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% id %]">Contracts</a></li>
+                [% UNLESS ( basketcount ) %]
+                    <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form">New Basket</a></li>
+                [% END %]
             [% END %]
         [% ELSE %]
             <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New Vendor</a></li>

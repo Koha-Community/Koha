@@ -32,6 +32,7 @@
 <tr>
 	<th>Fines &amp; Charges</th>
 	<th>Description</th>
+    <th>Note</th>
 	<th>Account Type</th>
 	<th>Notify id</th>
 	<th>Level</th>
@@ -61,6 +62,13 @@
 	<input type="hidden" name="totals[% loop_pa.i %]" value="[% loop_pa.totals %]" />
 	</td>
 	<td>[% loop_pa.description %] [% loop_pa.title |html %]</td>
+    <td>
+        [% IF ( loop_pa.net_balance ) %]
+        <input type="text" name="note[% loop_pa.i %]" value="
+        [% END %]
+        [% loop_pa.note %]
+        [% IF ( loop_pa.net_balance ) %]" />[% END %]
+    </td>
 	<td>[% loop_pa.accounttype %]</td>
 	<td>[% loop_pa.notify_id %]</td>
 	<td>[% loop_pa.notify_level %]</td>
@@ -71,13 +79,13 @@
 [% IF ( allfil.total ) %]
 <tr>
 
-	<td colspan="6">Sub Total</td>
+	<td colspan="7">Sub Total</td>
 	<td>[% allfil.total %]</td>
 </tr>
 [% END %]
 [% END %]
 <tr>
-	<td colspan="6">Total Due</td>
+	<td colspan="7">Total Due</td>
 	<td>[% total %]</td>
 </tr>
 </table>

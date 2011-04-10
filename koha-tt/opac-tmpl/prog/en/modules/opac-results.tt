@@ -440,7 +440,7 @@ $(document).ready(function(){
                     [% IF ( SEARCH_RESULT.available_items_loop ) %]
                     <span class="available"><strong>Copies available:</strong>
                     [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
-
+                    [% UNLESS ( available_items_loo.hideatopac ) %]
                     [% IF ( available_items_loo.singleBranchMode ) %]
                         [% available_items_loo.location %]
                     [% ELSE %]
@@ -452,6 +452,7 @@ $(document).ready(function(){
                         [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/opac-search.pl?q=callnum:[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
                     [% END %]
                     ([% available_items_loo.count %]),
+                    [% END %]
                     [% END %]
                     </span>
                     [% ELSE %]

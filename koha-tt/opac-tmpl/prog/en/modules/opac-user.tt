@@ -29,17 +29,17 @@ $.tablesorter.addParser({
 				[% IF ( JacketImages ) %]
 					sortList: [[3,0]],
 						[% IF ( item_level_itypes ) %]
-							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false },6: { sorter: false }}
 						[% ELSE %]
-							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false },7: { sorter: false }}
 						[% END %]
 				[% ELSE %]
 						[% IF ( item_level_itypes ) %]
 							sortList: [[2,0]],
-							headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }}
+							headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false },5: { sorter: false }}
 						[% ELSE %]
 							sortList: [[3,0]],
-							headers: { 0: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+							headers: { 0: { sorter: 'articles' },4: { sorter: false },5: { sorter: false },6: { sorter: false }}
 					[% END %]
 				[% END %]
 			}); 
@@ -210,6 +210,9 @@ $.tablesorter.addParser({
 [% IF ( OPACFinesTab ) %]
         <th>Fines</th>
 [% END %]
+        [% IF ( OPACMySummaryhtml ) %]
+        <th>Links</th>
+        [% END %]
         </tr></thead>
         <tbody>
 		<!-- FIXME: the styling for highlight overrides the overdue red background,
@@ -260,6 +263,9 @@ $.tablesorter.addParser({
 [% IF ( ISSUE.OPACFinesTab ) %]
                 <td>[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
 [% END %]
+            [% IF ( ISSUE.OPACMySummaryhtml ) %]
+                <td>[% ISSUE.MySummaryhtml %]</td>
+            [% END %]
             </tr>
         [% END %]</tbody>
         </table>

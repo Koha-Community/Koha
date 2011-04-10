@@ -211,7 +211,7 @@ $(function() {
 
 <a class="print tag_hides" href="opac-shelves.pl" onclick="print(); return false;">Print List</a>
 
-                [% IF ( manageshelf ) %] | <a class="editshelf tag_hides" href="/cgi-bin/koha/opac-shelves.pl?shelfnumber=[% shelfnumber %]&amp;op=modif">Edit List</a>
+                [% IF ( manageshelf ) %] | <form method="get" action="opac-shelves.pl" class="tag_hides"><input type="hidden" name="op" value="modif" />[% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves" />[% END %] <input type="hidden" name="shelfnumber" value="[% shelfnumber %]" /> <input type="submit" class="editshelf tag_hides" value="Edit List" /></form>
                       <form method="post" action="opac-shelves.pl" class="tag_hides">
                         <input type="hidden" value="1" name="shelves"/>
                     [% IF ( showprivateshelves ) %]
@@ -477,7 +477,7 @@ $(function() {
                       </table>
                       <div class="pages">[% pagination_bar %]</div>
                     [% ELSE %]
-                         No Private Lists.
+                         <p>No private lists.</p>
                     [% END %]<!-- /shelveslooppriv -->
                   [% END %]<!-- /showprivateshelves -->
                   [% ELSE %]<!-- /loggedinusername -->
@@ -541,7 +541,7 @@ $(function() {
                       </table>
                   [% IF ( pagination_bar ) %]<div class="pages">[% pagination_bar %]</div>[% END %]
                   [% ELSE %]<!-- /shelvesloop -->
-                    [% IF ( showpublicshelves ) %]No Public Lists.[% END %]
+                    [% IF ( showpublicshelves ) %]<p>No public lists.</p>[% END %]
                   [% END %]<!-- /shelvesloop -->
                   
                     </div><!-- /publicshelves -->

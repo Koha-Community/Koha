@@ -26,9 +26,20 @@
                 fields_in_use[field_id] = 1;
             }
         });
-	 });
-	 
-	 $('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
+		/* check cookie to hide/show marcdocs*/
+		if($.cookie("marcdocs_[% borrowernumber %]") == 'false'){
+			hideMARCdocLinks();
+			$("#marcDocsSelect").attr('checked',false);
+		} else {
+			/* reset cookie expire date */
+			$.cookie("marcdocs_[% borrowernumber %]",'true',
+						{ path: "/", expires: 365 });
+		}
+
+	});
+
+	$('#header_search > ul').tabs().bind('show.ui-tabs', function(e, ui) { $('#header_search > div:not(.ui-tabs-hide)').find('input').eq(0).focus(); });
+
 
 function confirmnotdup(redirect){
 	$("#confirm_not_duplicate").attr("value","1");
@@ -99,6 +110,19 @@ function _UNIMARCFieldDoc(field, blocknumber) {
     } else {
         window.open("http://archive.ifla.org/VI/3/p1996-1/uni9.htm");
     }
+}
+
+/*
+ * Functions to hide/show marc docs links
+ */
+function hideMARCdocLinks() {
+	$(".marcdocs").hide();
+	$.cookie("marcdocs_[% borrowernumber %]",'false', { path: "/", expires: 365 });
+}
+
+function showMARCdocLinks() {
+	$(".marcdocs").show();
+	$.cookie("marcdocs_[% borrowernumber %]",'true', { path: "/", expires: 365 });
 }
 
 /**
@@ -643,6 +667,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 
 
 <h1>[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record Number [% biblionumber %])</h1>[% ELSE %]Add MARC Record</h1>[% END %]
+<div><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" /> Show MARC tag documentation links<br/></div>
 
 [% UNLESS ( number ) %]
     <!-- show duplicate warning on tab 0 only -->
@@ -687,6 +712,14 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 		$("#z3950searchc").empty();
         $("#savebutton").empty();
 	    yuiToolbar();
+
+        $("#marcDocsSelect").click(function(){
+            if($(this).attr("checked")){
+                showMARCdocLinks();
+            } else {
+                hideMARCdocLinks();
+            }
+        });
 	 });
 
     function redirect(dest){
@@ -788,7 +821,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             	[% IF ( innerloo.advancedMARCEditor ) %]
 		<a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
 		[% ELSE %]
-                        <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]<a 
+                        <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]<a class="marcdocs"
                  onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% innerloo.number %]); return false;">&nbsp;?</a></span>
 		[% END %]
                 [% IF ( innerloo.fixedfield ) %]
