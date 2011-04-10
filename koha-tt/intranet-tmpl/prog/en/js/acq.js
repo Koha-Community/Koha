@@ -384,7 +384,7 @@ function closeandprint(bg){
 	if(document.location = '/cgi-bin/koha/acqui/basketgroup.pl?op=closeandprint&amp;basketgroupid=' + bg ){
 		setTimeout("window.location.reload();",3000);
 	}else{
-		alert('Error downloading the file');
+		alert(_('Error downloading the file'));
 	}
 }
 
@@ -557,12 +557,14 @@ function getElementsByClass( searchClass, domNode, tagName) {
 
 function calcTotalRow(cell) {
 
-    var bud_id =  cell.className;
+    var string = cell.name;
+    var pos = string.indexOf(",", 0);
+    var bud_id = string.substring(0, pos);
     var val1 =    cell.value;
-    var remainingTotal =   document.getElementById("budget_est_"+bud_id).textContent;
+    var remainingTotal =   document.getElementById("budget_est_"+bud_id);
     var remainingNew =0;
     var budgetTotal  =  document.getElementById("budget_tot_"+bud_id ).textContent;
-    var arr =  getElementsByClass(bud_id);
+    var arr =  getElementsByClass(cell.className);
 
     budgetTotal   =  budgetTotal.replace(/\,/, "");
 
@@ -594,7 +596,7 @@ function calcTotalRow(cell) {
 
 function autoFillRow(bud_id) {
 
-    var remainingTotal =   document.getElementById("budget_est_"+bud_id).textContent;
+    var remainingTotal =   document.getElementById("budget_est_"+bud_id);
     var remainingNew = new Number;
     var budgetTotal  =  document.getElementById("budget_tot_"+bud_id ).textContent;
     var arr =  getElementsByClass("plan_entry_" + bud_id);
@@ -602,20 +604,25 @@ function autoFillRow(bud_id) {
     budgetTotal   =  budgetTotal.replace(/\,/, "");
     var qty = new Number;
 // get the totals
+    var novalueArr = new Array();
     for ( var i=0, len=arr.length; i<len; ++i ) {
         remainingNew   +=   Math.abs (arr[i].value );
 
         if ( arr[i].value == 0 ) {
+	    novalueArr[qty] = arr[i];
             qty += 1;
         }
     }
 
     remainingNew    =    Math.abs( budgetTotal) -  remainingNew   ;
     var newCell = new Number (remainingNew / qty);
+    var rest = new Number (remainingNew - (newCell.toFixed(2) * (novalueArr.length - 1)));
 
-    for ( var i=0, len=arr.length; i<len; ++i ) {
-        if (  Math.abs(arr[i].value) == 0 ) {
-            arr[i].value = newCell.toFixed(2) ;
+    for (var i = 0; i<novalueArr.length; ++i) {
+         if (i == novalueArr.length - 1) {
+             novalueArr[i].value = rest.toFixed(2);
+         }else {
+             novalueArr[i].value = newCell.toFixed(2);
         }
     }
 
@@ -645,11 +652,14 @@ function calcNeworderTotal(){
     var quantity = new Number(f.quantity.value);
     var discount = new Number(f.discount.value);
     var listinc  = new Number (f.listinc.value);
-    var currency = f.currency.value;
+    //var currency = f.currency.value;
     var applygst = new Number (f.applygst.value);
     var listprice   =  new Number(f.listprice.value);
     var invoiceingst =  new Number (f.invoiceincgst.value);
-    var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
+//    var exchangerate =  new Number(f.elements[currency].value);      //get exchange rate
+        var currcode = new String(document.getElementById('currency').value);
+	var exchangerate =  new Number(document.getElementById(currcode).value);
+
     var gst_on=(!listinc && invoiceingst);
 
     //do real stuff
@@ -692,7 +702,7 @@ function calcNewsuggTotal(){
     var total =  new Number(quantity*price*exchangerate);
 
     document.getElementById('total').value = total.toFixed(2);
-    document.getElementById('price').value =  listprice.toFixed(2);
+    document.getElementById('price').value =  price.toFixed(2);
     return true;
 }
 

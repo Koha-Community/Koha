@@ -39,6 +39,7 @@ Cataloging:
               choices:
                   MARC21: MARC21
                   UNIMARC: UNIMARC
+                  NORMARC: NORMARC
             - format.
         -
             - Use the item type of the
@@ -51,6 +52,12 @@ Cataloging:
             - Map the MARC subfield
             - pref: itemcallnumber
             - "to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples: <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
+        -
+            - Display MARC subfield
+            - pref: AlternateHoldingsField
+            - "as holdings information for records that do not have items (This can contain multiple subfields to look in; for instance <code>852abhi</code> would look in 852 subfields a, b, h, and i.), with the subfields separated by"
+            - pref: AlternateHoldingsSeparator
+            - "."
         -
             - Fill in the <a href="http://www.loc.gov/marc/organizations/orgshome.html">MARC organization code</a>
             - pref: MARCOrgCode
@@ -87,6 +94,12 @@ Cataloging:
             - Show
             - pref: URLLinkText
             - as the text of links embedded in MARC records.
+        -
+            - pref: UseControlNumber
+              choices:
+                  yes: Use
+                  no: "Don't use"
+            - record control number ($w subfields) and control number (001) for linking of bibliographic records.
         -
             - pref: hide_marc
               choices:
