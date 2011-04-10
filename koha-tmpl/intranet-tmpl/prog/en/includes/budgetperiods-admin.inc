@@ -31,7 +31,7 @@
 	<ul class="toolbar">
   <li id="periods_menuc"><a id="periods_menu" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">Budgets</a></li>     
   <li id="budgets_menuc"><a id="budgets_menu" href="/cgi-bin/koha/cataloguing/aqbudgets.pl">Funds</a></li>     
-  <li id="planning_menuc"><a id="planning_menu" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Budget planning</a></li>     
+  <li id="planning_menuc"><a id="planning_menu" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]">Budget planning</a></li>     
 
 </ul>
 </div>

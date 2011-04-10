@@ -18,8 +18,8 @@
 	
 		var newmenu = [
 			{ text: _("Default Framework"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=" },
-			<!-- TMPL_LOOP NAME="frameworkcodeloop" -->{ text: "<!-- TMPL_VAR name="frameworktext" -->", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=<!-- TMPL_VAR name="value" -->"},
-<!-- /TMPL_LOOP -->
+			[% FOREACH frameworkcodeloo IN frameworkcodeloop %]{ text: "[% frameworkcodeloo.frameworktext %]", url: "/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=[% frameworkcodeloo.value %]"},
+[% END %]
 		]
 
 	    new YAHOO.widget.Button({
@@ -35,15 +35,15 @@
     function PopupZ3950() {
         var strQuery = GetZ3950Terms();
         if(strQuery){
-            window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=<!-- TMPL_VAR NAME="biblionumber" -->"+strQuery,"z3950search",'width=760,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+            window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=760,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
         }
     }
     /* provide Z3950 search points */
     function GetZ3950Terms(){
         var strQuery="&frameworkcode=";
-        <!-- TMPL_LOOP NAME='z3950_search_params' -->
-            strQuery += "&" + "<!-- TMPL_VAR NAME="name" -->" + "=" + "<!-- TMPL_VAR NAME="encvalue" -->";
-        <!-- /TMPL_LOOP -->
+        [% FOREACH z3950_search_param IN z3950_search_params %]
+            strQuery += "&" + "[% z3950_search_param.name %]" + "=" + "[% z3950_search_param.encvalue %]";
+        [% END %]
         return strQuery;
     }
     /* prepare DOM for Z39.50 Search Button */
@@ -64,11 +64,11 @@
 		<label for="frameworkcode">New Record with framework:</label>
 			<select name="frameworkcode" id="frameworkcode">
 				<option value="">Default</option>
-				<!-- TMPL_LOOP NAME="frameworkcodeloop" -->
-					<option value="<!-- TMPL_VAR NAME="value" -->">
-						<!-- TMPL_VAR NAME="frameworktext" -->
+				[% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+					<option value="[% frameworkcodeloo.value %]">
+						[% frameworkcodeloo.frameworktext %]
 					</option>
-				<!-- /TMPL_LOOP -->
+				[% END %]
 			</select>
 			<input type="submit" value="Add Record Without Search" />
 		</form>

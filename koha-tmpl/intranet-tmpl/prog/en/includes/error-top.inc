@@ -1,4 +1,4 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+<!DOCTYPE html PUBLIC "-//W3C//DTD Xhtml 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
@@ -20,7 +20,7 @@ function Help() {
 }
 </script>
 
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/css/staff.css" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff.css" />
 <style type="text/css">
 .catalogue {
 	background-color:#ad11ad;
@@ -58,8 +58,8 @@ a.catalogue:hover {
 	<a href="/cgi-bin/koha/cataloguing/addbiblio.pl" class="submenu2">Add biblio</a>
 	<a href="/cgi-bin/koha/maint/catmaintain.pl" class="submenu">Cat maintenance</a>
 </div>
-<!-- TMPL_IF NAME="loggedinusername" -->
-    <p align="left">Logged in as: <!-- TMPL_VAR NAME="loggedinusername" --> [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
-<!-- TMPL_ELSE -->
+[% IF ( loggedinusername ) %]
+    <p align="left">Logged in as: [% loggedinusername %] [<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>]</p>
+[% ELSE %]
     <p align="left"><a href="/cgi-bin/koha/opac-user.pl">Log In</a> to Koha</p>
-<!-- /TMPL_IF -->
+[% END %]

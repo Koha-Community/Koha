@@ -1,4 +1,4 @@
-<!-- TMPL_IF NAME="CAN_user_circulate" --><!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+[% IF ( CAN_user_circulate ) %][% IF ( CircAutocompl ) %]<script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
@@ -41,33 +41,33 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 }
 });    
 //]]>
-</script><!-- /TMPL_IF -->
+</script>[% END %]
 	<div id="circ_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
-    <!-- TMPL_IF NAME="CircAutocompl" -->
+    [% IF ( CircAutocompl ) %]
     <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" size="40" class="focus" type="text" /> <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
                 <div id="yborrowercontainer"></div>
-                <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
+                <input name="branch" value="[% branch %]" type="hidden" />
                 <input name="printer" value="" type="hidden" />
-            <!-- TMPL_IF NAME="stickyduedate" -->
-                <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
-                <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
-            <!-- /TMPL_IF -->
+            [% IF ( stickyduedate ) %]
+                <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+                <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+            [% END %]
             </div>
         </div>
-	<!-- TMPL_ELSE -->
+	[% ELSE %]
             <input id="findborrower" name="findborrower" size="40" class="focus" type="text" />
-            <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
+            <input name="branch" value="[% branch %]" type="hidden" />
             <input name="printer" value="" type="hidden" />
-            <!-- TMPL_IF NAME="stickyduedate" -->
-            <input type="hidden" name="duedatespec" value="<!-- TMPL_VAR NAME="duedatespec" -->" />
-            <input type="hidden" name="stickyduedate" value="<!-- TMPL_VAR NAME="stickyduedate" -->" />
-            <!-- /TMPL_IF -->
+            [% IF ( stickyduedate ) %]
+            <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+            <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+            [% END %]
             <input value="Submit" class="submit" type="submit" />
-	<!-- /TMPL_IF -->
+	[% END %]
     </form>
 	</div>
-	<!-- /TMPL_IF -->
+	[% END %]

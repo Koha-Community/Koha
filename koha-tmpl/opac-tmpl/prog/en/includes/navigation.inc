@@ -1,1 +1,1 @@
-<!-- TMPL_VAR NAME="OpacNav" -->
+[% OpacNav %]
