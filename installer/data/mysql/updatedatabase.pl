@@ -4233,15 +4233,6 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     print "Upgrade to $DBversion done (adding freedeliveryplace to basketgroups)\n";
 }
 
-$DBversion = "3.03.00.045";
-if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
-    $dbh->do("
-	INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
-	");
-    print "Upgrade to $DBversion done (Adding OpacHiddenItems syspref)\n";
-    SetVersion($DBversion);
-}
-
 $DBversion = '3.03.00.045';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     #Remove obsolete columns from aqbooksellers if needed
@@ -4290,6 +4281,15 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE `accountlines` ADD `note` text NULL default NULL");
     $dbh->do("ALTER TABLE `accountlines` ADD `manager_id` int( 11 ) NULL ");
     print "Upgrade to $DBversion done (adding note and manager_id fields in accountlines table)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.03.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("
+	INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
+	");
+    print "Upgrade to $DBversion done (Adding OpacHiddenItems syspref)\n";
     SetVersion($DBversion);
 }
 
