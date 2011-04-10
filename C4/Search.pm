@@ -350,10 +350,10 @@ sub getRecords {
         # Note: sort will override rank
         my $sort_by;
         foreach my $sort (@sort_by) {
-            if ( $sort eq "author_az" ) {
+            if ( $sort eq "author_az" || $sort eq "author_asc" ) {
                 $sort_by .= "1=1003 <i ";
             }
-            elsif ( $sort eq "author_za" ) {
+            elsif ( $sort eq "author_za" || $sort eq "author_dsc" ) {
                 $sort_by .= "1=1003 >i ";
             }
             elsif ( $sort eq "popularity_asc" ) {
@@ -380,10 +380,10 @@ sub getRecords {
             elsif ( $sort eq "acqdate_dsc" ) {
                 $sort_by .= "1=32 >i ";
             }
-            elsif ( $sort eq "title_az" ) {
+            elsif ( $sort eq "title_az" || $sort eq "title_asc" ) {
                 $sort_by .= "1=4 <i ";
             }
-            elsif ( $sort eq "title_za" ) {
+            elsif ( $sort eq "title_za" || $sort eq "title_dsc" ) {
                 $sort_by .= "1=4 >i ";
             }
             else {
@@ -2210,7 +2210,7 @@ sub NZorder {
     # sort the hash and return the same structure as GetRecords (Zebra querying)
         my $result_hash;
         my $numbers = 0;
-        if ( $ordering eq 'author_za' ) {    # sort by author desc
+        if ( $ordering eq 'author_za' || $ordering eq 'author_dsc' ) {    # sort by author desc
             foreach my $key ( sort { $b cmp $a } ( keys %result ) ) {
                 $result_hash->{'RECORDS'}[ $numbers++ ] =
                   $result{$key}->as_usmarc();
