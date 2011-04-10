@@ -343,6 +343,11 @@
         <xsl:if test="marc:datafield[@tag=260]">
         <span class="results_summary"><span class="label">Publisher: </span>
             <xsl:for-each select="marc:datafield[@tag=260]">
+                <xsl:if test="marc:subfield[@code='a']">
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">a</xsl:with-param>
+                    </xsl:call-template>&nbsp;
+                </xsl:if>
                 <xsl:if test="marc:subfield[@code='b']">
                 <a href="/cgi-bin/koha/opac-search.pl?q=pb:{marc:subfield[@code='b']}">
                     <xsl:call-template name="subfieldSelect">
@@ -354,7 +359,7 @@
                 <xsl:call-template name="chopPunctuation">
                   <xsl:with-param name="chopString">
                     <xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">acg</xsl:with-param>
+                        <xsl:with-param name="codes">cg</xsl:with-param>
                     </xsl:call-template>
                    </xsl:with-param>
                </xsl:call-template>
