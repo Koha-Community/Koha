@@ -90,10 +90,10 @@ sub output {
     $vars->{themelang} .= '/' . $self->theme . '/' . $self->lang;
     $vars->{yuipath} =
       ( C4::Context->preference("yuipath") eq "local"
-        ? $self->{themelang} . "/lib/yui"
+        ? $vars->{themelang} . "/lib/yui"
         : C4::Context->preference("yuipath") );
     $vars->{interface} =
-      ( $vars->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
+      ( $self->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
     $vars->{theme} = $self->theme;
     $vars->{opaccolorstylesheet} =
       C4::Context->preference('opaccolorstylesheet');
