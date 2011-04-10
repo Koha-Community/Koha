@@ -83,7 +83,7 @@
                     [% IF ( CHUNK.type_text ) %]
                     [% CHUNK.contents %]
                     [% ELSIF ( CHUNK.type_input ) %]
-                    <input type="[% DEFAULT CHUNK.input_type="text" %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="short" %]" value="[% CHUNK.value %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
+                    <input type="[%IF CHUNK.input_type %][% CHUNK.input_type %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="short" %]" value="[% CHUNK.value %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
                     [% ELSIF ( CHUNK.type_select ) %]
                     <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="choice" %]">
                         [% FOREACH CHOICE IN CHUNK.CHOICES %]
@@ -110,9 +110,9 @@
                         <dd>
                             <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])</label>
                             [% IF ( sublanguages_loo.enabled ) %]
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% sublanguages_loo.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             [% ELSE %]
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% sublanguages_loo.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
                             [% END %]
                         </dd>
                         [% END %]
@@ -120,9 +120,9 @@
                         <dt>
                             <label for="[% language.rfc4646_subtag %]">[% language.native_description %]([% language.rfc4646_subtag %])</label>
                             [% IF ( language.group_enabled ) %]
-                            <input value="[% language.rfc4646_subtag %]" name="pref_[% language.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
                             [% ELSE %]
-                            <input value="[% language.rfc4646_subtag %]" name="pref_[% language.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
                             [% END %]
                         </dt>
                         [% END %]
