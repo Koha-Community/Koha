@@ -389,72 +389,77 @@ __END__
   );
 
  From borrowers table:
- +---------------------+--------------+------+-----+
- | Field               | Type         | Null | Key |
- +---------------------+--------------+------+-----+
- | borrowernumber      | int(11)      | NO   | PRI |
- | cardnumber          | varchar(16)  | YES  | UNI |
- | surname             | mediumtext   | NO   |     |
- | firstname           | text         | YES  |     |
- | title               | mediumtext   | YES  |     |
- | othernames          | mediumtext   | YES  |     |
- | initials            | text         | YES  |     |
- | streetnumber        | varchar(10)  | YES  |     |
- | streettype          | varchar(50)  | YES  |     |
- | address             | mediumtext   | NO   |     |
- | address2            | text         | YES  |     |
- | city                | mediumtext   | NO   |     |
- | zipcode             | varchar(25)  | YES  |     |
- | country             | text         | YES  |     |
- | email               | mediumtext   | YES  |     |
- | phone               | text         | YES  |     |
- | mobile              | varchar(50)  | YES  |     |
- | fax                 | mediumtext   | YES  |     |
- | emailpro            | text         | YES  |     |
- | phonepro            | text         | YES  |     |
- | B_streetnumber      | varchar(10)  | YES  |     |
- | B_streettype        | varchar(50)  | YES  |     |
- | B_address           | varchar(100) | YES  |     |
- | B_address2          | text         | YES  |     |
- | B_city              | mediumtext   | YES  |     |
- | B_zipcode           | varchar(25)  | YES  |     |
- | B_country           | text         | YES  |     |
- | B_email             | text         | YES  |     |
- | B_phone             | mediumtext   | YES  |     |
- | dateofbirth         | date         | YES  |     |
- | branchcode          | varchar(10)  | NO   | MUL |
- | categorycode        | varchar(10)  | NO   | MUL |
- | dateenrolled        | date         | YES  |     |
- | dateexpiry          | date         | YES  |     |
- | gonenoaddress       | tinyint(1)   | YES  |     |
- | lost                | tinyint(1)   | YES  |     |
- | debarred            | tinyint(1)   | YES  |     |
- | contactname         | mediumtext   | YES  |     |
- | contactfirstname    | text         | YES  |     |
- | contacttitle        | text         | YES  |     |
- | guarantorid         | int(11)      | YES  |     |
- | borrowernotes       | mediumtext   | YES  |     |
- | relationship        | varchar(100) | YES  |     |
- | ethnicity           | varchar(50)  | YES  |     |
- | ethnotes            | varchar(255) | YES  |     |
- | sex                 | varchar(1)   | YES  |     |
- | password            | varchar(30)  | YES  |     |
- | flags               | int(11)      | YES  |     |
- | userid              | varchar(30)  | YES  | MUL |
- | opacnote            | mediumtext   | YES  |     |
- | contactnote         | varchar(255) | YES  |     |
- | sort1               | varchar(80)  | YES  |     |
- | sort2               | varchar(80)  | YES  |     |
- | altcontactfirstname | varchar(255) | YES  |     |
- | altcontactsurname   | varchar(255) | YES  |     |
- | altcontactaddress1  | varchar(255) | YES  |     |
- | altcontactaddress2  | varchar(255) | YES  |     |
- | altcontactaddress3  | varchar(255) | YES  |     |
- | altcontactzipcode   | varchar(50)  | YES  |     |
- | altcontactcountry   | text         | YES  |     |
- | altcontactphone     | varchar(50)  | YES  |     |
- | smsalertnumber      | varchar(50)  | YES  |     |
- +---------------------+--------------+------+-----+
++---------------------+--------------+------+-----+---------+----------------+
+| Field               | Type         | Null | Key | Default | Extra          |
++---------------------+--------------+------+-----+---------+----------------+
+| borrowernumber      | int(11)      | NO   | PRI | NULL    | auto_increment |
+| cardnumber          | varchar(16)  | YES  | UNI | NULL    |                |
+| surname             | mediumtext   | NO   |     | NULL    |                |
+| firstname           | text         | YES  |     | NULL    |                |
+| title               | mediumtext   | YES  |     | NULL    |                |
+| othernames          | mediumtext   | YES  |     | NULL    |                |
+| initials            | text         | YES  |     | NULL    |                |
+| streetnumber        | varchar(10)  | YES  |     | NULL    |                |
+| streettype          | varchar(50)  | YES  |     | NULL    |                |
+| address             | mediumtext   | NO   |     | NULL    |                |
+| address2            | text         | YES  |     | NULL    |                |
+| city                | mediumtext   | NO   |     | NULL    |                |
+| state               | mediumtext   | YES  |     | NULL    |                |
+| zipcode             | varchar(25)  | YES  |     | NULL    |                |
+| country             | text         | YES  |     | NULL    |                |
+| email               | mediumtext   | YES  |     | NULL    |                |
+| phone               | text         | YES  |     | NULL    |                |
+| mobile              | varchar(50)  | YES  |     | NULL    |                |
+| fax                 | mediumtext   | YES  |     | NULL    |                |
+| emailpro            | text         | YES  |     | NULL    |                |
+| phonepro            | text         | YES  |     | NULL    |                |
+| B_streetnumber      | varchar(10)  | YES  |     | NULL    |                |
+| B_streettype        | varchar(50)  | YES  |     | NULL    |                |
+| B_address           | varchar(100) | YES  |     | NULL    |                |
+| B_address2          | text         | YES  |     | NULL    |                |
+| B_city              | mediumtext   | YES  |     | NULL    |                |
+| B_state             | mediumtext   | YES  |     | NULL    |                |
+| B_zipcode           | varchar(25)  | YES  |     | NULL    |                |
+| B_country           | text         | YES  |     | NULL    |                |
+| B_email             | text         | YES  |     | NULL    |                |
+| B_phone             | mediumtext   | YES  |     | NULL    |                |
+| dateofbirth         | date         | YES  |     | NULL    |                |
+| branchcode          | varchar(10)  | NO   | MUL |         |                |
+| categorycode        | varchar(10)  | NO   | MUL |         |                |
+| dateenrolled        | date         | YES  |     | NULL    |                |
+| dateexpiry          | date         | YES  |     | NULL    |                |
+| gonenoaddress       | tinyint(1)   | YES  |     | NULL    |                |
+| lost                | tinyint(1)   | YES  |     | NULL    |                |
+| debarred            | tinyint(1)   | YES  |     | NULL    |                |
+| contactname         | mediumtext   | YES  |     | NULL    |                |
+| contactfirstname    | text         | YES  |     | NULL    |                |
+| contacttitle        | text         | YES  |     | NULL    |                |
+| guarantorid         | int(11)      | YES  | MUL | NULL    |                |
+| borrowernotes       | mediumtext   | YES  |     | NULL    |                |
+| relationship        | varchar(100) | YES  |     | NULL    |                |
+| ethnicity           | varchar(50)  | YES  |     | NULL    |                |
+| ethnotes            | varchar(255) | YES  |     | NULL    |                |
+| sex                 | varchar(1)   | YES  |     | NULL    |                |
+| password            | varchar(30)  | YES  |     | NULL    |                |
+| flags               | int(11)      | YES  |     | NULL    |                |
+| userid              | varchar(30)  | YES  | MUL | NULL    |                |
+| opacnote            | mediumtext   | YES  |     | NULL    |                |
+| contactnote         | varchar(255) | YES  |     | NULL    |                |
+| sort1               | varchar(80)  | YES  |     | NULL    |                |
+| sort2               | varchar(80)  | YES  |     | NULL    |                |
+| altcontactfirstname | varchar(255) | YES  |     | NULL    |                |
+| altcontactsurname   | varchar(255) | YES  |     | NULL    |                |
+| altcontactaddress1  | varchar(255) | YES  |     | NULL    |                |
+| altcontactaddress2  | varchar(255) | YES  |     | NULL    |                |
+| altcontactaddress3  | varchar(255) | YES  |     | NULL    |                |
+| altcontactstate     | mediumtext   | YES  |     | NULL    |                |
+| altcontactzipcode   | varchar(50)  | YES  |     | NULL    |                |
+| altcontactcountry   | text         | YES  |     | NULL    |                |
+| altcontactphone     | varchar(50)  | YES  |     | NULL    |                |
+| smsalertnumber      | varchar(50)  | YES  |     | NULL    |                |
+| privacy             | int(11)      | NO   |     | 1       |                |
++---------------------+--------------+------+-----+---------+----------------+
+
 
  From C4::Members
 

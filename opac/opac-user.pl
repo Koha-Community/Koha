@@ -97,9 +97,10 @@ $borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
 my @bordat;
 $bordat[0] = $borr;
 
-$template->param(   BORROWER_INFO  => \@bordat,
-                    borrowernumber => $borrowernumber,
-                    patron_flagged => $borr->{flagged},
+$template->param(   BORROWER_INFO     => \@bordat,
+                    borrowernumber    => $borrowernumber,
+                    patron_flagged    => $borr->{flagged},
+                    OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
                 );
 
 #get issued items ....
@@ -163,6 +164,17 @@ if ($issues){
 		
 		my $isbn = GetNormalizedISBN($issue->{'isbn'});
 		$issue->{normalized_isbn} = $isbn;
+
+                # My Summary HTML
+                if (my $my_summary_html = C4::Context->preference('OPACMySummaryHTML')){
+                    $issue->{author} ? $my_summary_html =~ s/{AUTHOR}/$issue->{author}/g : $my_summary_html =~ s/{AUTHOR}//g;
+                    $issue->{title} =~ s/\/+$//; # remove trailing slash
+                    $issue->{title} =~ s/\s+$//; # remove trailing space
+                    $issue->{title} ? $my_summary_html =~ s/{TITLE}/$issue->{title}/g : $my_summary_html =~ s/{TITLE}//g;
+                    $issue->{isbn} ? $my_summary_html =~ s/{ISBN}/$isbn/g : $my_summary_html =~ s/{ISBN}//g;
+                    $issue->{biblionumber} ? $my_summary_html =~ s/{BIBLIONUMBER}/$issue->{biblionumber}/g : $my_summary_html =~ s/{BIBLIONUMBER}//g;
+                    $issue->{MySummaryHTML} = $my_summary_html;
+                }
 	}
 }
 $template->param( ISSUES       => \@issuedat );

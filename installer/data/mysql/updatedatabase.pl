@@ -4231,7 +4231,6 @@ $DBversion = '3.03.00.044';
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE `aqbasketgroups` ADD `freedeliveryplace` TEXT NULL AFTER `deliveryplace`;");
     print "Upgrade to $DBversion done (adding freedeliveryplace to basketgroups)\n";
-    SetVersion($DBversion);
 }
 
 $DBversion = '3.03.00.045';
@@ -4259,6 +4258,41 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '3.03.00.047';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE borrowers ADD `state` mediumtext AFTER city;");
+    $dbh->do("ALTER TABLE borrowers ADD `B_state` mediumtext AFTER B_city;");
+    $dbh->do("ALTER TABLE borrowers ADD `altcontactstate` mediumtext AFTER altcontactaddress3;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `state` mediumtext AFTER city;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `B_state` mediumtext AFTER B_city;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD `altcontactstate` mediumtext AFTER altcontactaddress3;");
+    print "Upgrade to $DBversion done (Add state field to patron's addresses)\n";
+}
+
+$DBversion = '3.03.00.048';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE branches ADD `branchstate` mediumtext AFTER `branchcity`;");
+    print "Upgrade to $DBversion done (Add state to branch address)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.03.00.049';
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE `accountlines` ADD `note` text NULL default NULL");
+    $dbh->do("ALTER TABLE `accountlines` ADD `manager_id` int( 11 ) NULL ");
+    print "Upgrade to $DBversion done (adding note and manager_id fields in accountlines table)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.03.00.050";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("
+	INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
+	");
+    print "Upgrade to $DBversion done (Adding OpacHiddenItems syspref)\n";
+    SetVersion($DBversion);
+}
+
 $DBversion = "3.03.00.XXX";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Remove spaces and dashes from message_attribute names)\n";
@@ -4269,7 +4303,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE message_attributes SET message_name = 'Item_Checkout' WHERE message_name='Item Checkout'");    
     SetVersion ($DBversion);
 }
-
 
 =head1 FUNCTIONS
 

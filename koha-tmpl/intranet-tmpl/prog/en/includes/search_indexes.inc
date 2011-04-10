@@ -14,6 +14,7 @@
     <option value="su">Subject</option>
     <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject as Phrase</option>
     <option value="bc">Barcode</option>
+    <option value="location">Shelving Location</option>
     <option value="sn">Standard Number</option>
     <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
     <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>

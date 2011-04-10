@@ -1,0 +1,223 @@
+<!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
+<title>Koha &rsaquo; Cataloging &rsaquo; 000 - Bygging av postens hode</title>
+<!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+</head>
+<body style="padding:1em;">
+<form name="f_pop" onsubmit="report()">
+<input type="hidden" name="plugin_name" value="normarc_leader.pl" />
+<h3>000 - Postens hode</h3>
+<table>
+	<tr>
+		<td><span class="label">00-04 Systemgenerert informasjon</span></td>
+		<td>(autofylt)</td>
+	</tr>
+	<tr>
+		<td><label for="f5">05 Postens status</label></td>
+		<td>
+			<select name="f5" id="f5" size="1">
+			
+			<!-- TMPL_IF name="f5c" -->
+				<option value="c" selected="selected">c Rettet post</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">c Rettet post</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5d" -->
+				<option value="d" selected="selected">d Slettet post</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">d Slettet post</option>
+			<!-- /TMPL_IF -->
+
+			<!-- TMPL_IF name="f5n" -->
+				<option value="n" selected="selected">n Ny post</option>
+			<!-- TMPL_ELSE -->
+				<option value="n">n Ny post</option>
+			<!-- /TMPL_IF -->
+			
+			<!-- TMPL_IF name="f5p" -->
+				<option value="p" selected="selected">p Oppgradert post</option>
+			<!-- TMPL_ELSE -->
+				<option value="p">p Oppgradert post</option>
+			<!-- /TMPL_IF -->
+
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f6">06 Materialtype</label></td>
+		<td>
+			<select name="f6" id="f6" size="1">
+			
+			<!-- TMPL_IF name="f6a" -->
+				<option value="a" selected="selected">a Tekstlig materiale</option>
+			<!-- TMPL_ELSE -->
+				<option value="a">a Tekstlig materiale</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6b" -->
+				<option value="b" selected="selected">b Manuskripter (kap.4)</option>
+			<!-- TMPL_ELSE -->
+				<option value="b">b Manuskripter (kap.4)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6c" -->
+				<option value="c" selected="selected">c Musikktrykk (kap.5)</option>
+			<!-- TMPL_ELSE -->
+				<option value="c">c Musikktrykk (kap.5)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6d" -->
+				<option value="d" selected="selected">d Musikkmanuskripter (kap.5)</option>
+			<!-- TMPL_ELSE -->
+				<option value="d">d Musikkmanuskripter (kap.5)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6e" -->
+				<option value="e" selected="selected">e Kartografisk materiale (kap.3)</option>
+			<!-- TMPL_ELSE -->
+				<option value="e">e Kartografisk materiale (kap.3)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6f" -->
+				<option value="f" selected="selected">f Kartmanuskripter (kap.3)</option>
+			<!-- TMPL_ELSE -->
+				<option value="f">f Kartmanuskripter (kap.3)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6g" -->
+				<option value="g" selected="selected">g Filmer og videoopptak (kap.7)</option>
+			<!-- TMPL_ELSE -->
+				<option value="g">g Filmer og videoopptak (kap.7)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6i" -->
+				<option value="i" selected="selected">i Lydopptak (ikke musikk) (kap.6)</option>
+			<!-- TMPL_ELSE -->
+				<option value="i">i Lydopptak (ikke musikk) (kap.6)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6j" -->
+				<option value="j" selected="selected">j Lydopptak av musikkverk (kap.6)</option>
+			<!-- TMPL_ELSE -->
+				<option value="j">j Lydopptak av musikkverk (kap.6)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6k" -->
+				<option value="k" selected="selected">k Grafisk materiale (kap.8)</option>
+			<!-- TMPL_ELSE -->
+				<option value="k">k Grafisk materiale (kap.8)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6m" -->
+				<option value="m" selected="selected">m Maskinlesbare filer (kap.9)</option>
+			<!-- TMPL_ELSE -->
+				<option value="m">m Maskinlesbare filer (kap.9)</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6o" -->
+				<option value="o" selected="selected">o Kombidokumenter</option>
+			<!-- TMPL_ELSE -->
+				<option value="o">o Kombidokumenter</option>
+			<!-- /TMPL_IF -->
+			<!-- TMPL_IF name="f6r" -->
+				<option value="r" selected="selected">r Tre-dimensjonale gjenstander (kap.10)</option>
+			<!-- TMPL_ELSE -->
+				<option value="r">r Tre-dimensjonale gjenstander (kap.10)</option>
+			<!-- /TMPL_IF -->
+
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f7">07 Bibliografisk kategori</label></td>
+		<td>
+			<select name="f7" id="f7" size="1">
+			
+				<!-- TMPL_IF name="f7a" -->
+					<option value="a" selected="selected">a Analytt til ikke-periodisk dokument</option>
+				<!-- TMPL_ELSE -->
+					<option value="a">a Analytt til ikke-periodisk dokument</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f7b" -->
+					<option value="b" selected="selected">b Serieanalytt</option>
+				<!-- TMPL_ELSE -->
+					<option value="b">b Serieanalytt</option>
+				<!-- /TMPL_IF -->				
+				<!-- TMPL_IF name="f7c" -->
+					<option value="c" selected="selected">c Samling</option>
+				<!-- TMPL_ELSE -->
+					<option value="c">c Samling</option>
+				<!-- /TMPL_IF -->				
+				<!-- TMPL_IF name="f7m" -->
+					<option value="m" selected="selected">m Monografi</option>
+				<!-- TMPL_ELSE -->
+					<option value="m">m Monografi</option>
+				<!-- /TMPL_IF -->				
+				<!-- TMPL_IF name="f7p" -->
+					<option value="p" selected="selected">p Analytt til periodikum</option>
+				<!-- TMPL_ELSE -->
+					<option value="p">p Analytt til periodikum</option>
+				<!-- /TMPL_IF -->				
+				<!-- TMPL_IF name="f7s" -->
+					<option value="s" selected="selected">s Periodikum </option>
+				<!-- TMPL_ELSE -->
+					<option value="s">s Periodikum </option>
+				<!-- /TMPL_IF -->				
+
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>08-16 Systemgenerert informasjon</td>
+		<td>(autofylt)</td>
+    </tr>
+    <tr>
+		<td><label for="f17">17 Beskrivelsesnivå</label></td>
+		<td>
+			<select name="f17" id="f17" size="1">
+				<!-- TMPL_IF name="f170" -->
+					<option value="0" selected="selected">0	Fullstendig beskrivelse</option>
+				<!-- TMPL_ELSE -->
+					<option value="0">0	Fullstendig beskrivelse</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f171" -->
+					<option value="1" selected="selected">1 Nivå 2, iflg. KAT.</option>
+				<!-- TMPL_ELSE -->
+					<option value="1">1 Nivå 2, iflg. KAT.</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f172" -->
+					<option value="2" selected="selected">2 Nivå 1, iflg. KAT.</option>
+				<!-- TMPL_ELSE -->
+					<option value="2">2 Nivå 1, iflg. KAT.</option>
+				<!-- /TMPL_IF -->
+				<!-- TMPL_IF name="f175" -->
+					<option value="5" selected="selected">5 Foreløpig katalogisering.</option>
+				<!-- TMPL_ELSE -->
+					<option value="5">5 Foreløpig katalogisering.</option>
+				<!-- /TMPL_IF -->
+
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td>18-23 Systemgenerert informasjon</td>
+		<td>(autofylt)</td>
+	</tr>
+
+</table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Avbryt</a></fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+function report() {
+            var doc   = opener.document; 
+            var field = doc.getElementById("<!-- TMPL_VAR NAME='index'-->");
+        
+            field.value = 
+			'     '+
+			document.f_pop.f5.value+
+			document.f_pop.f6.value+
+			document.f_pop.f7.value+
+			' '+ // document.f_pop.f8.value+
+			'a'+ // MARC21 UNICODE flag - must be 'a' for Koha
+			'22     '+
+			document.f_pop.f17.value+
+			' '+ // document.f_pop.f18.value+
+			' '+ // document.f_pop.f19.value+
+			'4500';
+		self.close();
+		return false;
+	}
+	//]]>
+</script>
+<!-- TMPL_INCLUDE NAME="popup-bottom.inc" -->

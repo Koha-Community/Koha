@@ -32,6 +32,7 @@
 <tr>
 	<th>Fines &amp; Charges</th>
 	<th>Description</th>
+    <th>Note</th>
 	<th>Account Type</th>
 	<th>Notify id</th>
 	<th>Level</th>
@@ -61,6 +62,13 @@
 	<input type="hidden" name="totals<!-- TMPL_VAR name="i" -->" value="<!-- TMPL_VAR name="totals" -->" />
 	</td>
 	<td><!-- TMPL_VAR name="description" --> <!-- TMPL_VAR name="title" escape="html" --></td>
+    <td>
+        <!-- TMPL_IF NAME="net_balance" -->
+        <input type="text" name="note<!-- TMPL_VAR name="i" -->" value="
+        <!-- /TMPL_IF -->
+        <!-- TMPL_VAR name="note" -->
+        <!-- TMPL_IF NAME="net_balance" -->" /><!-- /TMPL_IF -->
+    </td>
 	<td><!-- TMPL_VAR name="accounttype" --></td>
 	<td><!-- TMPL_VAR name="notify_id" --></td>
 	<td><!-- TMPL_VAR name="notify_level" --></td>
@@ -71,13 +79,13 @@
 <!-- TMPL_IF  NAME="total"-->
 <tr>
 
-	<td colspan="6">Sub Total</td>
+	<td colspan="7">Sub Total</td>
 	<td><!-- TMPL_VAR name="total" --></td>
 </tr>
 <!--/TMPL_IF-->
 <!-- /TMPL_LOOP  -->
 <tr>
-	<td colspan="6">Total Due</td>
+	<td colspan="7">Total Due</td>
 	<td><!-- TMPL_VAR name="total" --></td>
 </tr>
 </table>

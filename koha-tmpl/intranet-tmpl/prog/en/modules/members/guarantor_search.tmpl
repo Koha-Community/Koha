@@ -6,7 +6,7 @@
     </style>
     <script type="text/javascript">
         <!--
-        function fillguarantor(id, surname, firstname, streetnumber, address, city, zipcode) {
+        function fillguarantor(id, surname, firstname, streetnumber, address, address2, city, state, zipcode, country) {
             var $ = window.opener.$;
             var form = $('#entryform').get(0);
 
@@ -30,8 +30,11 @@
 
             form.streetnumber.value = streetnumber;
             form.address.value = address;
+            form.address2.value = address2;
             form.city.value = city;
+            form.state.value = state;
             form.zipcode.value = zipcode;
+            form.country.value = country;
 
             form.guarantorsearch.value = 'Change';
             self.close();
@@ -73,10 +76,10 @@
                     <!-- TMPL_VAR NAME="surname" -->, <!-- TMPL_VAR NAME="firstname" -->
                 </td> 
 				<td><!-- TMPL_VAR NAME="dateofbirth" --></td>
-				<td><p><!-- TMPL_VAR NAME="address" --> <!-- TMPL_VAR NAME="city" --></p></td>
+				<td><p><!-- TMPL_VAR NAME="address" --> <!-- TMPL_VAR NAME="address2" --> <!-- TMPL_VAR NAME="city" --> <!-- TMPL_VAR NAME="state" --> <!-- TMPL_VAR NAME="zipcode" --> <!-- TMPL_VAR NAME="country" --></p></td>
                 <td>
                     <form action="">
-                        <input type="button" onclick="fillguarantor('<!-- TMPL_VAR NAME="borrowernumber" -->', '<!-- TMPL_VAR NAME="surname" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="firstname" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="streetnumber" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="address" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="city" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="zipcode" ESCAPE=JS -->'); return false;" value="Select"/>
+                        <input type="button" onclick="fillguarantor('<!-- TMPL_VAR NAME="borrowernumber" -->', '<!-- TMPL_VAR NAME="surname" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="firstname" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="streetnumber" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="address" ESCAPE=JS -->','<!-- TMPL_VAR NAME="address2" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="city" ESCAPE=JS -->', '<!-- TMPL_VAR NAME="state" ESCAPE=JS -->','<!-- TMPL_VAR NAME="zipcode" ESCAPE=JS -->','<!-- TMPL_VAR NAME="country" ESCAPE=JS -->'); return false;" value="Select"/>
                     </form>
                 </td>
 			</tr>

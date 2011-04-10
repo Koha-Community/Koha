@@ -654,6 +654,7 @@ $template->param(
     emailpro          => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
+    state              => $borrower->{'state'},
     zipcode           => $borrower->{'zipcode'},
     country           => $borrower->{'country'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},

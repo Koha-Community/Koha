@@ -1,6 +1,27 @@
 <!-- TMPL_INCLUDE NAME="doc-head-open.inc" -->
 <title>Koha &rsaquo; Acquisitions</title>
 <!-- TMPL_INCLUDE NAME="doc-head-close.inc" -->
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#showallbudgets').click(function() {
+	if ( $('#showallbudgets:checked').val() !== undefined) {
+	    $('.b_inactive').show();
+	    $('#b_inactive').show();
+	    $('.bu_active').show();
+	    $('.bu_inactive').hide();
+	}
+	else {
+	    $('.b_inactive').hide();
+	    $('#b_inactive').hide();
+	    $('.bu_inactive').show();
+	    $('.bu_active').hide();
+	}
+    });
+});
+//]]>
+</script>
+
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -83,14 +104,15 @@
             <th>Total</th>
             <th>&nbsp;</th>
             <th>&nbsp;</th>
-            <th align="right" ><!-- TMPL_VAR name="total" --></th>
-            <th align="right" ><!-- TMPL_VAR name="totordered" --></th>
-            <th align="right" ><!-- TMPL_VAR name="totspent" --></th>
-            <th align="right" ><!-- TMPL_VAR name="totavail" --></th>
+            <th align="right" ><span class="bu_active" style="display : none;"><!-- TMPL_VAR name="total" --></span><span class="bu_inactive" ><!-- TMPL_VAR name="total_active" --></span></th>
+            <th align="right" ><span class="bu_active" style="display : none;"><!-- TMPL_VAR name="totordered" --></span><span class="bu_inactive" ><!-- TMPL_VAR name="totordered_active" --></span></th>
+            <th align="right" ><span class="bu_active" style="display : none;"><!-- TMPL_VAR name="totspent" --></span><span class="bu_inactive" ><!-- TMPL_VAR name="totspent_active" --></span></th>
+            <th align="right" ><span class="bu_active" style="display : none;"><!-- TMPL_VAR name="totavail" --></span><span class="bu_inactive" ><!-- TMPL_VAR name="totavail_active" --></span></th>
         </tr>
         </tfoot>
         <tbody>
         <!-- TMPL_LOOP name="loop_budget" -->
+	    <!-- TMPL_IF NAME="budget_period_active" -->
             <!--TMPL_IF NAME="__odd__" -->
                 <tr>
             <!--TMPL_ELSE-->
@@ -104,10 +126,24 @@
                 <td align="right" ><!-- TMPL_VAR name="budget_spent" --></td>
                 <td align="right" ><!-- TMPL_VAR name="budget_avail" --></td>
             </tr>
+            <!--TMPL_ELSE -->
+            <!--TMPL_IF NAME="__odd__" -->
+                <tr class="b_inactive" style="display : none;">
+            <!--TMPL_ELSE-->
+                <tr class="highlight" id = "b_inactive" style="display : none;">
+            <!--/TMPL_IF-->
+            <td align="center" ><!-- TMPL_VAR name="budget_code" --></td>
+                <td align="center"><!-- TMPL_VAR name="budget_owner" --></td>
+                <td align="center"><!-- TMPL_VAR name="budget_branchname" --></td>
+                <td align="right" ><!-- TMPL_VAR name="budget_amount" --></td>
+                <td align="right" ><!-- TMPL_VAR name="budget_ordered" --></td>
+                <td align="right" ><!-- TMPL_VAR name="budget_spent" --></td>
+                <td align="right" ><!-- TMPL_VAR name="budget_avail" --></td>
+            <!-- /TMPL_IF -->
         <!-- /TMPL_LOOP -->
         </tbody>
     </table>
-    </div>
+    </div><span class="label">Show all :&nbsp;</span><input type="checkbox" id="showallbudgets" />
     <!-- /TMPL_IF -->
 </div>
 

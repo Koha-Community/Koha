@@ -33,6 +33,7 @@ use C4::Branch;
 require C4::Reserves;
 use C4::Charset;
 use C4::Acquisition;
+use List::MoreUtils qw/any/;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -69,6 +70,7 @@ BEGIN {
         get_itemnumbers_of
         GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
+      GetHiddenItemnumbers
 
 		DelItemCheck
 		MoveItemFromBiblio 
@@ -1533,6 +1535,57 @@ sub GetBarcodeFromItemnumber {
     my ($result) = $rq->fetchrow;
     return ($result);
 }
+
+=head2 GetHiddenItemnumbers
+
+=over 4
+
+$result = GetHiddenItemnumbers(@items);
+
+=back
+
+=cut
+
+sub GetHiddenItemnumbers {
+    my (@items) = @_;
+    my @resultitems;
+
+    my $yaml = C4::Context->preference('OpacHiddenItems');
+    my $hidingrules;
+    eval {
+    	$hidingrules = YAML::Load($yaml);
+    };
+    if ($@) {
+    	warn "Unable to parse OpacHiddenItems syspref : $@";
+    	return ();
+    } else {
+    my $dbh = C4::Context->dbh;
+
+	# For each item
+	foreach my $item (@items) {
+
+	    # We check each rule
+	    foreach my $field (keys %$hidingrules) {
+		my $query = "SELECT $field from items where itemnumber = ?";
+		my $sth = $dbh->prepare($query);	
+		$sth->execute($item->{'itemnumber'});
+		my ($result) = $sth->fetchrow;
+
+		# If the results matches the values in the yaml file
+		if (any { $result eq $_ } @{$hidingrules->{$field}}) {
+
+		    # We add the itemnumber to the list
+		    push @resultitems, $item->{'itemnumber'};	    
+
+		    # If at least one rule matched for an item, no need to test the others
+		    last;
+		}
+	    }
+	}
+	return @resultitems;
+    }
+
+ }
 
 =head3 get_item_authorised_values
 

@@ -29,17 +29,17 @@ $.tablesorter.addParser({
 				<!-- TMPL_IF NAME="JacketImages" -->
 					sortList: [[3,0]],
 						<!-- TMPL_IF NAME="item_level_itypes" -->
-							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },4: { sorter: false },5: { sorter: false },6: { sorter: false }}
 						<!-- TMPL_ELSE -->
-							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false }}
+							headers: { 0: { sorter: false }, 1: { sorter: 'articles' },5: { sorter: false },6: { sorter: false },7: { sorter: false }}
 						<!-- /TMPL_IF -->
 				<!-- TMPL_ELSE -->
 						<!-- TMPL_IF NAME="item_level_itypes" -->
 							sortList: [[2,0]],
-							headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false }}
+							headers: { 0: { sorter: 'articles' },3: { sorter: false },4: { sorter: false },5: { sorter: false }}
 						<!-- TMPL_ELSE -->
 							sortList: [[3,0]],
-							headers: { 0: { sorter: 'articles' },4: { sorter: false },5: { sorter: false }}
+							headers: { 0: { sorter: 'articles' },4: { sorter: false },5: { sorter: false },6: { sorter: false }}
 					<!-- /TMPL_IF -->
 				<!-- /TMPL_IF -->
 			}); 
@@ -210,6 +210,9 @@ $.tablesorter.addParser({
 <!-- TMPL_IF NAME="OPACFinesTab" -->
         <th>Fines</th>
 <!-- /TMPL_IF -->
+        <!-- TMPL_IF NAME="OPACMySummaryHTML" -->
+        <th>Links</th>
+        <!-- /TMPL_IF -->
         </tr></thead>
         <tbody>
 		<!-- FIXME: the styling for highlight overrides the overdue red background,
@@ -260,6 +263,9 @@ $.tablesorter.addParser({
 <!-- TMPL_IF NAME="OPACFinesTab" -->
                 <td><!-- TMPL_IF NAME="charges" -->Yes<!-- TMPL_ELSE -->No<!-- /TMPL_IF --></td>
 <!-- /TMPL_IF -->
+            <!-- TMPL_IF NAME="OPACMySummaryHTML" -->
+                <td><!-- TMPL_VAR NAME="MySummaryHTML" --></td>
+            <!-- /TMPL_IF -->
             </tr>
         <!-- /TMPL_LOOP --></tbody>
         </table>

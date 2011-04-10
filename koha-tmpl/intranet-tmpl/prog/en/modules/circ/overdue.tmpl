@@ -69,6 +69,7 @@
 <style type="text/css">
     .sql {display:none;}
 </style>
+<!-- TMPL_INCLUDE NAME="calendar.inc" -->
 </head>
 <body>
 <!-- TMPL_INCLUDE NAME="header.inc" -->
@@ -137,6 +138,35 @@
   <fieldset class="brief">
 <h4>Filter On:</h4>
 	<ol>
+    <li style="border: dashed; border-width:1px;">Date due:
+	<label for="dateduefrom">From:
+	<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="dateduefrom_button" alt="Show Calendar" />
+	</label>
+	<input type="text" id="dateduefrom" name="dateduefrom" size="20" value="<!-- TMPL_VAR NAME="dateduefrom" -->" />
+	<script language="JavaScript" type="text/javascript">
+	    Calendar.setup(
+	    {
+		inputField : "dateduefrom",
+		ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+		button : "dateduefrom_button"
+	    }
+	    );
+	</script>
+
+	<label for="datedueto">To:
+	<img src="<!-- TMPL_VAR Name="themelang" -->/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" />
+	</label>
+	<input type="text" id="datedueto" name="datedueto" size="20" value="<!-- TMPL_VAR NAME="datedueto" -->" />
+	<script language="JavaScript" type="text/javascript">
+	    Calendar.setup(
+	    {
+		inputField : "datedueto",
+		ifFormat : "<!-- TMPL_VAR NAME="DHTMLcalendar_dateformat" -->",
+		button : "datedueto_button"
+	    }
+	    );
+	</script>
+    </li>
     <li><label>Name or cardnumber:</label><input type="text" name="borname" value="<!--TMPL_VAR Name="borname" escape="html" -->" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       <!-- TMPL_LOOP name="borcatloop" -->

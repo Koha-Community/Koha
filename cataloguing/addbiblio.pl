@@ -1023,10 +1023,13 @@ $template->param( title => $record->title() ) if ( $record ne "-1" );
 if (C4::Context->preference("marcflavour") eq "MARC21"){
     $template->param(MARC21 => 1);
 }
+
+
 $template->param(
     popup => $mode,
     frameworkcode => $frameworkcode,
     itemtype => $frameworkcode,
+    borrowernumber => $loggedinuser
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

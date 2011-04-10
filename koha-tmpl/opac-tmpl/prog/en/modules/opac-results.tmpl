@@ -440,7 +440,7 @@ $(document).ready(function(){
                     <!-- TMPL_IF NAME="available_items_loop" -->
                     <span class="available"><strong>Copies available:</strong>
                     <!-- TMPL_LOOP NAME="available_items_loop" -->
-
+                    <!-- TMPL_UNLESS NAME="hideatopac" -->
                     <!-- TMPL_IF NAME="singleBranchMode" -->
                         <!-- TMPL_VAR NAME="location" -->
                     <!-- TMPL_ELSE -->
@@ -452,6 +452,7 @@ $(document).ready(function(){
                         <!-- TMPL_IF NAME="itemcallnumber" -->[<a href="/cgi-bin/koha/opac-search.pl?q=callnum:<!-- TMPL_VAR NAME="itemcallnumber" ESCAPE="URL" -->"><!-- TMPL_VAR NAME="itemcallnumber" --></a>]<!-- /TMPL_IF -->
                     <!-- /TMPL_IF -->
                     (<!-- TMPL_VAR NAME="count" -->),
+                    <!-- /TMPL_UNLESS -->
                     <!-- /TMPL_LOOP -->
                     </span>
                     <!-- TMPL_ELSE -->
