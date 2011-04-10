@@ -94,8 +94,8 @@ sub gettemplate {
     ($query) or warn "no query in gettemplate";
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
+    $tmplbase =~ s/\.tmpl$/.tt/;
     my ( $htdocs, $theme, $lang, $filename ) = _get_template_file( $tmplbase, $interface, $query );
-    $filename =~ s/\.tmpl$/.tt/;
     my $template = C4::Templates->new( $interface, $filename, $tmplbase);
     my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
           . "/$theme/$lang";
