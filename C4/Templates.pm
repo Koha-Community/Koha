@@ -3,6 +3,7 @@ package C4::Templates;
 use strict;
 use warnings;
 use Carp;
+use CGI;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -39,6 +40,7 @@ sub new {
     my $class     = shift;
     my $interface = shift;
     my $filename  = shift;
+    my $tmplbase  = shift;
     my $htdocs;
     if ( $interface ne "intranet" ) {
         $htdocs = C4::Context->config('opachtdocs');
@@ -47,9 +49,7 @@ sub new {
         $htdocs = C4::Context->config('intrahtdocs');
     }
 
-#    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
-    my $theme = 'prog';
-    my $lang = 'en';
+    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface );
     my $template = Template->new(
         {
             EVAL_PERL    => 1,
@@ -61,7 +61,7 @@ sub new {
     ) or die Template->error();
     my $self = {
         TEMPLATE => $template,
-	VARS => {},
+        VARS     => {},
     };
     bless $self, $class;
     $self->theme($theme);
@@ -77,42 +77,116 @@ sub new {
 sub output {
     my $self = shift;
     my $vars = shift;
+
 #    my $file = $self->htdocs . '/' . $self->theme .'/'.$self->lang.'/'.$self->filename;
     my $template = $self->{TEMPLATE};
-    if ($self->interface eq 'intranet'){
-	$vars->{themelang} = '/intranet-tmpl';
+    if ( $self->interface eq 'intranet' ) {
+        $vars->{themelang} = '/intranet-tmpl';
     }
     else {
-	$vars->{themelang} = '/opac-tmpl';
+        $vars->{themelang} = '/opac-tmpl';
     }
     $vars->{lang} = $self->lang;
-    $vars->{themelang}          .= '/' . $self->theme . '/' . $self->lang;
-    $vars->{yuipath}             = (C4::Context->preference("yuipath") eq "local"?$self->{themelang}."/lib/yui":C4::Context->preference("yuipath"));
-    $vars->{interface}           = ( $vars->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
-    $vars->{theme}               = $self->theme;
-    $vars->{opaccolorstylesheet} = C4::Context->preference('opaccolorstylesheet');
-    $vars->{opacsmallimage}      = C4::Context->preference('opacsmallimage');
-    $vars->{opacstylesheet}      = C4::Context->preference('opacstylesheet');
+    $vars->{themelang} .= '/' . $self->theme . '/' . $self->lang;
+    $vars->{yuipath} =
+      ( C4::Context->preference("yuipath") eq "local"
+        ? $self->{themelang} . "/lib/yui"
+        : C4::Context->preference("yuipath") );
+    $vars->{interface} =
+      ( $vars->{interface} ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' );
+    $vars->{theme} = $self->theme;
+    $vars->{opaccolorstylesheet} =
+      C4::Context->preference('opaccolorstylesheet');
+    $vars->{opacsmallimage} = C4::Context->preference('opacsmallimage');
+    $vars->{opacstylesheet} = C4::Context->preference('opacstylesheet');
+
     #add variables set via param to $vars for processing
-    for my $k(keys %{$self->{VARS}}){
-	$vars->{$k} = $self->{VARS}->{$k};
+    for my $k ( keys %{ $self->{VARS} } ) {
+        $vars->{$k} = $self->{VARS}->{$k};
     }
     my $data;
-    $template->process( $self->filename, $vars, \$data) || die "Template process failed: ", $template->error();; 
+    $template->process( $self->filename, $vars, \$data )
+      || die "Template process failed: ", $template->error();
     return $data;
 }
 
+# FIXME - this is a horrible hack to cache
+# the current known-good language, temporarily
+# put in place to resolve bug 4403.  It is
+# used only by C4::XSLT::XSLTParse4Display;
+# the language is set via the usual call
+# to themelanguage.
+my $_current_language = 'en';
+
+sub _current_language {
+    return $_current_language;
+}
+
+sub themelanguage {
+    my ( $htdocs, $tmpl, $interface ) = @_;
+    my $query = new CGI;
+
+    # Set some defaults for language and theme
+    # First, check the user's preferences
+    my $lang;
+
+    # But, if there's a cookie set, obey it
+    $lang = $query->cookie('KohaOpacLanguage')
+      if ( defined $query and $query->cookie('KohaOpacLanguage') );
+
+    # Fall back to English
+    my @languages;
+    if ( $interface eq 'intranet' ) {
+        @languages = split ",", C4::Context->preference("language");
+    }
+    else {
+        @languages = split ",", C4::Context->preference("opaclanguages");
+    }
+    if ($lang) {
+        @languages = ( $lang, @languages );
+    }
+    else {
+        $lang = $languages[0];
+    }
+    my $theme = 'prog'; # in the event of theme failure default to 'prog' -fbcit
+    my $dbh = C4::Context->dbh;
+    my @themes;
+    if ( $interface eq "intranet" ) {
+        @themes = split " ", C4::Context->preference("template");
+    }
+    else {
+        @themes = split " ", C4::Context->preference("opacthemes");
+    }
+
+ # searches through the themes and languages. First template it find it returns.
+ # Priority is for getting the theme right.
+  THEME:
+    foreach my $th (@themes) {
+        foreach my $la (@languages) {
+            if ( -e "$htdocs/$th/$la/modules/$tmpl" ) {
+                $theme = $th;
+                $lang  = $la;
+                last THEME;
+            }
+            last unless $la =~ /[-_]/;
+        }
+    }
+    $_current_language = $lang;  # FIXME part of bad hack to paper over bug 4403
+    return ( $theme, $lang );
+}
+
 # wrapper method to allow easier transition from HTML template pro to Template Toolkit
-sub param{
+sub param {
     my $self = shift;
-    while(@_){
-	my $key = shift;
-	my $val = shift;
+    while (@_) {
+        my $key = shift;
+        my $val = shift;
         utf8::encode($val) if utf8::is_utf8($val);
-        if( ref($val) eq 'ARRAY' && ! scalar @$val ){ $val = undef; }
-        elsif( ref($val) eq 'HASH' && ! scalar %$val ){ $val = undef; }
-	$self->{VARS}->{$key} = $val;
+        if    ( ref($val) eq 'ARRAY' && !scalar @$val ) { $val = undef; }
+        elsif ( ref($val) eq 'HASH'  && !scalar %$val ) { $val = undef; }
+        $self->{VARS}->{$key} = $val;
     }
 }
 
 1;
+

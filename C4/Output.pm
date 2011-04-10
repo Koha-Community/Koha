@@ -96,7 +96,7 @@ sub gettemplate {
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
     my ( $htdocs, $theme, $lang, $filename ) = _get_template_file( $tmplbase, $interface, $query );
     $filename =~ s/\.tmpl$/.tt/;
-    my $template = C4::Templates->new( $interface, $filename);
+    my $template = C4::Templates->new( $interface, $filename, $tmplbase);
     my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
           . "/$theme/$lang";
     $template->param(
