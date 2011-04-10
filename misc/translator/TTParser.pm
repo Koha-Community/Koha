@@ -39,7 +39,10 @@ sub build_tokens{
     $self->{filename} = $filename;
     $self->handler(start => "start", "self, line, tagname, attr, text"); #signature is start( self, linenumber, tagname, hash of attributes, origional text )
     $self->handler(text => "text", "self, line, text, is_cdata"); #signature is text( self, linenumber, origional text, is_cdata )
-    $self->handler(end => "end", "self, line, tag, text"); #signature is end( self, linenumber, tagename, origional text )
+    $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, origional text )
+    $self->handler(declaration => "declaration", "self, line, text, is_cdata"); # declaration
+    $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
+    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
     $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a TmplTokenType::CDATA
     $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
     $self->parse_file($filename);
@@ -52,7 +55,9 @@ sub text{
     my $line = shift;
     my $work = shift; # original text
     my $is_cdata = shift;
+
     while($work){
+#            warn "in text line is $line work is $work";
 #        return if $work =~ m/^\s*$/;
         # if there is a template_toolkit tag
         if( $work =~ m/\[%.*?\]/ ){
@@ -69,6 +74,7 @@ sub text{
             #put work still to do back into work
             $work = $' ? $' : 0;
         } else {
+#            warn "in the text else work is now $work";
             #If there is some left over work, treat it as text token
             my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
             push @tokens, $t;
@@ -77,6 +83,37 @@ sub text{
     }
 }
 
+sub declaration {
+    my $self = shift;
+    my $line = shift;
+    my $work = shift; #original text
+    my $is_cdata = shift;
+#      warn "declaration work is $work";
+    my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+    push @tokens, $t;  
+}      
+
+sub comment {
+    my $self = shift;
+    my $line = shift;
+    my $work = shift; #original text
+    my $is_cdata = shift;
+#      warn "comment work is $work";
+    my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+    push @tokens, $t;  
+}      
+
+sub default {
+    my $self = shift;
+    my $line = shift;
+    my $work = shift; #original text
+    my $is_cdata = shift;
+#      warn "comment work is $work";
+    my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+    push @tokens, $t;  
+}      
+
+
 #handle opening html tags
 sub start{
     my $self = shift;
@@ -84,7 +121,8 @@ sub start{
     my $tag = shift;
     my $hash = shift; #hash of attr/value pairs
     my $text = shift; #origional text
-    #return if ! $interesting_tags{$tag};
+#      warn "in start text is $text";
+    # return if ! $interesting_tags{$tag};
     # was $hash->{$key}
     # print "#### " . $self->{filename}  . " " . $tag . "####\n";
     my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename});
@@ -100,12 +138,22 @@ sub start{
 
 #handle closing html tags
 sub end{
-  my $self = shift;
-  my $line = shift;
-  my $tag = shift;
-  my $text = shift;
+    my $self = shift;
+    my $line = shift;
+    my $tag = shift;
+    my $hash = shift;
+    my $text = shift;
+#  warn "in end text is $text";  
   # what format should this be in?
-  my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename} );
+    my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename} );
+    my %attr;
+    # tags seem to be uses in an 'interesting' way elsewhere..
+    for my $key( %$hash ) {
+        next unless defined $hash->{$key};
+        $attr{+lc($key)} = [ $key, $hash->{$key}, $key."=".$hash->{$key}, 0 ];
+    }
+    $t->set_attributes( \%attr );
+    push @tokens, $t;
 }
 
 1;

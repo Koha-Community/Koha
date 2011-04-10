@@ -305,21 +305,33 @@ sub next_token {
     # parts that make up a text_parametrized (future children of the token)
     my @parts = ();
     while(1){
+        # warn Dumper @parts;
         $next = $self->{_parser}->next_token;
-        return undef unless defined $next;
+        if (! $next){
+            if (@parts){
+                return $self->_parametrize_internal(@parts);
+            }
+            else {
+                return undef;
+            }
+        }
         # if cformat mode is off, dont bother parametrizing, just return them as they come
         return $next unless $self->allow_cformat_p;
         if( $next->type == TmplTokenType::TEXT ){
             push @parts, $next;
-        } elsif( $next->type == TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
+        } 
+        elsif( $next->type == TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
             push @parts, $next;
-        } else{
+        } 
+        else {
             # if there is nothing in parts, return this token
-            return $next unless @parts;
+ 
+           return $next unless @parts;
             # OTHERWISE, put this token back and return the parametrized string of @parts
             $self->{_parser}->unshift_token($next);
             return $self->_parametrize_internal(@parts);
         }
+
     }
 }
 
