@@ -4284,7 +4284,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.03.00.XXX";
+$DBversion = "3.03.00.050";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("
 	INSERT IGNORE INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
