@@ -412,7 +412,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                 <table>
                     <tr>
                         [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<th>&nbsp;</th>[% END %][% END %]
-                        <th colspan="2">Results</th>
+                        <th>Results</th>
                         <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
@@ -491,20 +491,20 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                   <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds</a>
                                   [% IF ( SEARCH_RESULT.holdfor ) %] | <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% SEARCH_RESULT.holdfor_cardnumber %]">Hold for [% SEARCH_RESULT.holdfor_firstname %] [% SEARCH_RESULT.holdfor_surname %] ([% SEARCH_RESULT.holdfor_cardnumber %])</a>[% END %]
                               [% END %]
-                          [% IF ( SEARCH_RESULT.CAN_user_editcatalogue_edit_catalogue ) %]
+                          [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                           | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit record</a>
                           [% END %]
-                          [% IF ( SEARCH_RESULT.CAN_user_editcatalogue_edit_items ) %]
+                          [% IF ( CAN_user_editcatalogue_edit_items ) %]
                           | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit items</a>
                           [% END %]</p>
                                 </td>
 
                                 <td><div class="availability">
                                     [% IF ( SEARCH_RESULT.items_count ) %]<strong>[% SEARCH_RESULT.items_count %]
-                                    [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.available_items_loop ) %], [% IF ( SEARCH_RESULT.availablecount ) %][% SEARCH_RESULT.availablecount %] available:[% END %][% ELSE %], None available[% END %]</strong>
+                                    [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount %] available:[% ELSE %], None available[% END %]</strong>
 
-                                    [% IF ( SEARCH_RESULT.available_items_loop ) %]
-                                    [% IF ( SEARCH_RESULT.availablecount ) %][% SEARCH_RESULT.availablecount %][% END %] available:
+                                    [% IF ( SEARCH_RESULT.availablecount ) %]
+                                    [% SEARCH_RESULT.availablecount %] available:
                                     <ul>
                                     [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
 
@@ -516,8 +516,8 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     [% END %]</ul>
                                     [% END %]
 
-                                   [% IF ( SEARCH_RESULT.onloan_items_loop ) %]
-                                   <span class="status">[% IF ( SEARCH_RESULT.onloancount ) %][% SEARCH_RESULT.onloancount %][% END %] on loan:</span>
+                                   [% IF ( SEARCH_RESULT.onloancount ) %]
+                                   <span class="status">[% SEARCH_RESULT.onloancount %] on loan:</span>
                                     <ul>
                                     [% FOREACH onloan_items_loo IN SEARCH_RESULT.onloan_items_loop %]
                                        [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %]
@@ -533,8 +533,8 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     [% END %]</ul>
                                     [% END %]
 
-                                    [% IF ( SEARCH_RESULT.other_items_loop ) %]
-                                    <span class="unavailable">[% IF ( SEARCH_RESULT.othercount ) %][% SEARCH_RESULT.othercount %][% END %] unavailable:</span>
+                                    [% IF ( SEARCH_RESULT.othercount ) %]
+                                    <span class="unavailable">[% SEARCH_RESULT.othercount %] unavailable:</span>
                                     <ul>
                                     [% FOREACH other_items_loo IN SEARCH_RESULT.other_items_loop %]
                                         [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %]
@@ -556,7 +556,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                     [% END %]</ul>
                                     [% END %]
                                     [% ELSE %]
-                                    [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS ) %]
+                                    [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS.count ) %]
                                     <strong id="altholdings_heading">Other holdings:</strong>
                                     <ul>
                                     [% FOREACH ALTERNATEHOLDING IN SEARCH_RESULT.ALTERNATEHOLDINGS %]
