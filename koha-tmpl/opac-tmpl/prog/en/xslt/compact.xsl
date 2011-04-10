@@ -6,7 +6,7 @@
   xmlns:marc="http://www.loc.gov/MARC21/slim" 
   exclude-result-prefixes="xsi marc"
   version="1.0">
-  <xsl:output method="xml" version="1.0" encoding="UTF-8" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" />    
+  <xsl:output method="xml" version="1.0" encoding="UTF-8" doctype-public="-//W3C//DTD Xhtml 1.0 Transitional//EN" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" />    
       <xsl:template match="/">
         <html>
           <head>

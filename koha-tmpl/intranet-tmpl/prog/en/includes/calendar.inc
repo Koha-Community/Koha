@@ -1,5 +1,5 @@
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css"/>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css"/>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
 <script type="text/javascript">
 // full day names
 Calendar._DN = new Array(_("Sunday"),_("Monday"),_("Tuesday"),_("Wednesday"),_("Thursday"),_("Friday"),_("Saturday"),_("Sunday"));
@@ -17,7 +17,7 @@ Calendar._TT = {};
 Calendar._TT["INFO"] = _("About the calendar");
 
 Calendar._TT["ABOUT"] =
-_("DHTML Date/Time Selector")+"\n" +
+_("Dhtml Date/Time Selector")+"\n" +
 "(c) dynarch.com 2002-2003\n" + // don't translate this this ;-)
 _("For latest version visit: http://dynarch.com/mishoo/calendar.epl")+"\n" +
 _("Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details.") +
@@ -48,7 +48,7 @@ Calendar._TT["DAY_FIRST"] = _("Display %s first");
 // This may be locale-dependent.  It specifies the week-end days, as an array
 // of comma-separated numbers.  The numbers are from 0 to 6: 0 means Sunday, 1
 // means Monday, etc.
-Calendar._TT["WEEKEND"] = "0,6";
+Calendar._TT["WEEKEND"] = "0comma6";
 
 Calendar._TT["CLOSE"] = _("Close");
 Calendar._TT["TODAY"] = _("Today");
@@ -61,11 +61,11 @@ Calendar._TT["TT_DATE_FORMAT"] = "%a, %b %e";
 Calendar._TT["WK"] = _("wk");
 Calendar._TT["TIME"] = _("Time:");
 </script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-var debug    = "<!-- TMPL_VAR Name="debug" -->";
-var dformat  = "<!-- TMPL_VAR Name="dateformat" -->";
+var debug    = "[% debug %]";
+var dformat  = "[% dateformat %]";
 var sentmsg = 0;
 if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
 

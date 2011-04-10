@@ -2,10 +2,10 @@
     <script type="text/JavaScript">
         //<![CDATA[
            function DeleteConfirm() {
-                var msg = "Are you sure you want to delete batch <!-- TMPL_VAR NAME="batch_id" -->?"
+                var msg = "Are you sure you want to delete batch [% batch_id %]?"
                 var answer = confirm(msg);
                 if (answer) {
-                    window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=<!-- TMPL_VAR NAME="batch_id" -->";
+                    window.location = "/cgi-bin/koha/labels/label-manage.pl?op=delete&amp;label_element=batch&amp;element_id=[% batch_id %]";
                 }
                 else {
                     return; // abort delete
@@ -39,7 +39,7 @@
                 }
                 var answer = confirm(msg);
                 if (answer) {
-                    window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;" + getstr;
+                    window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;" + getstr;
                 }
                 else {
                     return; // abort delete
@@ -48,14 +48,14 @@
             function Add() {
                 var barcodes = document.getElementById("barcode");
                 if (barcodes.value == '') {
-                    window.open("/cgi-bin/koha/labels/label-item-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;type=labels",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
+                    window.open("/cgi-bin/koha/labels/label-item-search.pl?batch_id=[% batch_id %]&amp;type=labels",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
                 }
                 else {
                     document.forms["add_by_barcode"].submit();
                 }
             };
             function DeDuplicate() {
-                window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=de_duplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
+                window.location = "/cgi-bin/koha/labels/label-edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id %]";
             };
             function Xport(mode) {
                 if (mode == 'label') {
@@ -79,10 +79,10 @@
                         alert(_("Please select at least one label to export."));
                         return;     // no batch selected
                     }
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&" + getstr, 700, 800);
+                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
                 }
                 else if (mode == 'batch') {
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->", 700, 800);
+                    return GB_showCenter('Export Labels', "/cgi-bin/koha/labels/label-print.pl?batch_id=[% batch_id %]", 700, 800);
                 }
                 else {
                     // some pass-thru error trapping just in case...
@@ -175,11 +175,11 @@
         //]]>
     </script>
     <ul class="toolbar">
-        <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li><!-- TMPL_IF NAME="table_loop" -->
+        <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li>[% IF ( table_loop ) %]
         <li id="removeitemsc"><a id="removeitems" href="#">Remove Item(s)</a></li>
         <li id="deletebatchc"><a id="deletebatch" href="#">Delete Batch</a></li>
         <li id="deduplicatec"><a id="deduplicate" href="#">Remove Duplicates</a></li>
         <li id="exportitemsc"><a id="exportitems" href="#">Export Item(s)</a></li>
-        <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li><!-- /TMPL_IF -->
+        <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li>[% END %]
     </ul>
 </div>

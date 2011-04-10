@@ -1,40 +1,40 @@
         </div>
 
-<!-- TMPL_IF NAME="languages_loop" -->
-    <!-- TMPL_UNLESS NAME="one_language_enabled" -->
+[% IF ( languages_loop ) %]
+    [% UNLESS ( one_language_enabled ) %]
         <div id="changelanguage" class="ft">
         <ul id="i18nMenu" class="footermenu">
-        <!-- TMPL_LOOP NAME="languages_loop" -->
-            <!-- TMPL_IF NAME="group_enabled" -->
-            <!-- TMPL_IF NAME="plural" -->
-            <li class="more"><a class="sublangs" id="show<!-- TMPL_VAR NAME="rfc4646_subtag" -->" href="#"><!-- TMPL_VAR NAME="native_description" --> (<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</a><div id="sub<!-- TMPL_VAR NAME="rfc4646_subtag" -->">
+        [% FOREACH languages_loo IN languages_loop %]
+            [% IF ( languages_loo.group_enabled ) %]
+            [% IF ( languages_loo.plural ) %]
+            <li class="more"><a class="sublangs" id="show[% languages_loo.rfc4646_subtag %]" href="#">[% languages_loo.native_description %] ([% languages_loo.rfc4646_subtag %])</a><div id="sub[% languages_loo.rfc4646_subtag %]">
             <div class="bd"><ul>
-            <!-- TMPL_LOOP NAME="sublanguages_loop" -->
-		<!-- TMPL_IF NAME="enabled" -->
-                <!-- TMPL_IF NAME="sublanguage_current" -->
-                    <li> <a href="#"><!-- TMPL_VAR NAME="native_description" --> <!-- TMPL_VAR NAME="script_description" --> <!-- TMPL_VAR NAME="region_description" --> <!-- TMPL_VAR NAME="variant_description" --> (<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</a></li>
-                <!-- TMPL_ELSE -->
-                <li><a href="/cgi-bin/koha/changelanguage.pl?language=<!-- TMPL_VAR NAME="rfc4646_subtag" -->"> <!-- TMPL_VAR NAME="native_description" --> <!-- TMPL_VAR NAME="script_description" --> <!-- TMPL_VAR NAME="region_description" --> <!-- TMPL_VAR NAME="variant_description" --> (<!-- TMPL_VAR NAME="rfc4646_subtag" -->)</a></li>
-		<!-- /TMPL_IF -->
-                <!-- /TMPL_IF -->
+            [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
+		[% IF ( sublanguages_loo.enabled ) %]
+                [% IF ( sublanguages_loo.sublanguage_current ) %]
+                    <li> <a href="#">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %] ([% sublanguages_loo.rfc4646_subtag %])</a></li>
+                [% ELSE %]
+                <li><a href="/cgi-bin/koha/changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag %]"> [% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %] ([% sublanguages_loo.rfc4646_subtag %])</a></li>
+		[% END %]
+                [% END %]
 
-            <!-- /TMPL_LOOP -->
+            [% END %]
             </ul></div></div></li>
 
-            <!-- TMPL_ELSE -->
-	    	<!-- TMPL_IF NAME="group_enabled" -->
-                <!-- TMPL_IF NAME="current" -->
-                    <li><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></li>
-                <!-- TMPL_ELSE -->
-                    <li><a href="/cgi-bin/koha/changelanguage.pl?language=<!-- TMPL_VAR NAME="rfc4646_subtag" -->"><!-- TMPL_IF NAME="native_description" --><!-- TMPL_VAR NAME="native_description" --><!-- TMPL_ELSE --><!-- TMPL_VAR NAME="rfc4646_subtag" --><!-- /TMPL_IF --></a></li>
-                <!-- /TMPL_IF -->
-		<!-- /TMPL_IF -->
-            <!-- /TMPL_IF -->
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_LOOP -->
+            [% ELSE %]
+	    	[% IF ( languages_loo.group_enabled ) %]
+                [% IF ( languages_loo.current ) %]
+                    <li>[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</li>
+                [% ELSE %]
+                    <li><a href="/cgi-bin/koha/changelanguage.pl?language=[% languages_loo.rfc4646_subtag %]">[% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]</a></li>
+                [% END %]
+		[% END %]
+            [% END %]
+            [% END %]
+        [% END %]
         </ul>
         </div>
-    <!-- /TMPL_UNLESS -->
-<!-- /TMPL_IF -->
+    [% END %]
+[% END %]
     </body>
 </html>

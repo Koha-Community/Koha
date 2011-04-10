@@ -44,7 +44,7 @@
 <h5>Additional parameters</h5>
 
 <ul>
-	<!-- TMPL_IF NAME="NoZebra" --><li><a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a></li><!-- /TMPL_IF -->
+	[% IF ( NoZebra ) %]<li><a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a></li>[% END %]
 	<!-- <li><a href="/cgi-bin/koha/admin/printers.pl">Network Printers</a></li> -->
 	<li><a href="/cgi-bin/koha/admin/z3950servers.pl">Z39.50 Client Targets</a></li>
 </ul>
