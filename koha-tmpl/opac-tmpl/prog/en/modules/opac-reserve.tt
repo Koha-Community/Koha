@@ -267,7 +267,7 @@
                         </span>
 					</td>
                       [% ELSE %]
-					  [% UNLESS ( bibitemloo.none_available ) %]<td>&nbsp;</td>[% END %]
+					  [% UNLESS ( none_available ) %]<td>&nbsp;</td>[% END %]
                       [% END %]
                     [% IF ( bibitemloo.holdable ) %]<td>[% ELSE %]<td colspan="5">[% END %]
                       <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber %]">[% bibitemloo.title |html %][% IF ( bibitemloo.subtitle ) %] [% FOREACH subtitl IN bibitemloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
@@ -296,11 +296,11 @@
                                           </td>
                                         [% END %][% END %]
                     [% IF ( bibitemloo.holdable ) %]
-                    [% IF ( bibitemloo.showpriority ) %]
+                    [% IF ( showpriority ) %]
                     <td>
                     [% bibitemloo.rank %] out of [% bibitemloo.reservecount %]
                     </td>[% END %][% END %]
-		    [% IF ( bibitemloo.reserve_in_future ) %]
+		    [% IF ( reserve_in_future ) %]
 		    [% IF ( bibitemloo.holdable ) %]<td>
               <input name="reserve_date_[% bibitemloo.biblionumber %]" id="reserve_date_[% bibitemloo.biblionumber %]" size="10">
               <script language="JavaScript" type="text/javascript">
@@ -371,7 +371,7 @@
       <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear Date</a></p>
     </td>[% END %]
 
-                    [% IF ( bibitemloo.holdable ) %][% IF ( bibitemloo.OPACItemHolds ) %]
+                    [% IF ( bibitemloo.holdable ) %][% IF ( OPACItemHolds ) %]
                                           <td class="place_on_type" style="display:none">
                                             <table>
                                               <tr>
@@ -417,9 +417,9 @@
                                           </td>
                                         [% END %][% END %]
 
-                    [% UNLESS ( bibitemloo.singleBranchMode ) %]
+                    [% UNLESS ( singleBranchMode ) %]
                         [% IF ( bibitemloo.holdable ) %]
-			    [% IF ( bibitemloo.choose_branch ) %]
+			    [% IF ( choose_branch ) %]
 			                   <td>
                                               <select name="branch" id="branch_[% bibitemloo.biblionumber %]"
                                                 [% UNLESS ( bibitemloo.holdable ) %]disabled="disabled"[% END %] >
@@ -437,7 +437,7 @@
                     [% END %]
                   </tr>
 
-                  [% IF ( bibitemloo.OPACItemHolds ) %]
+                  [% IF ( OPACItemHolds ) %]
                   [% IF ( bibitemloo.holdable ) %]
                     <tr class="copiesrow" id="copiesrow_[% bibitemloo.biblionumber %]">
                       <td colspan="1">
@@ -482,7 +482,7 @@
                                 </td>
                               [% END %]
                               <td>[% itemLoo.barcode %]</td>
-                              [% UNLESS ( itemLoo.singleBranchMode ) %]
+                              [% UNLESS ( singleBranchMode ) %]
                                 <td>[% itemLoo.homeBranchName %]</td>
                                 <td>[% itemLoo.holdingBranchName %]</td>
                               [% END %]
