@@ -95,7 +95,7 @@ $.tablesorter.addParser({
     [% FOREACH BORROWER_INF IN BORROWER_INFO %]
         <h2>Hello, [% BORROWER_INF.firstname %] [% BORROWER_INF.surname %] <span class="hint">(<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here</a> if you're not [% BORROWER_INF.title %] [% BORROWER_INF.firstname %] [% BORROWER_INF.surname %])</span></h2>
         
-		[% IF ( BORROWER_INF.patronupdate ) %]<div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
+		[% IF ( patronupdate ) %]<div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 		
 
         [% IF ( BORROWER_INF.flagged ) %]
@@ -121,9 +121,9 @@ $.tablesorter.addParser({
             <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts">Checked Out</a></li>
             [% IF ( overdues_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-overdues">Overdue</a></li>[% END %]
 [% IF ( OPACFinesTab ) %]
-            [% IF ( amountoverfive ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
-            [% IF ( amountoverzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
-            [% IF ( amountlessthanzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li>[% END %]
+            [% IF ( BORROWER_INF.amountoverfive ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
+            [% IF ( BORROWER_INF.amountoverzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Fines</a></li>[% END %]
+            [% IF ( BORROWER_INF.amountlessthanzero ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-fines">Credits</a></li>[% END %]
 [% END %]
             [% IF ( waiting_count ) %][% IF ( BORROWER_INF.atdestination ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-waiting">Waiting</a></li>[% END %][% END %]
             [% IF ( reserves_count ) %]<li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds">Holds</a></li>[% END %]
@@ -260,11 +260,11 @@ $.tablesorter.addParser({
                         [% END %]</td>
                     [% END %]
                 [% END %]
-[% IF ( ISSUE.OPACFinesTab ) %]
+[% IF ( OPACFinesTab ) %]
                 <td>[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
 [% END %]
-            [% IF ( ISSUE.OPACMySummaryhtml ) %]
-                <td>[% ISSUE.MySummaryhtml %]</td>
+            [% IF ( OPACMySummaryhtml ) %]
+                <td>[% MySummaryhtml %]</td>
             [% END %]
             </tr>
         [% END %]</tbody>
@@ -345,7 +345,7 @@ $.tablesorter.addParser({
 [% ELSE %]No renewals left
 [% END %]
 </td>[% END %][% END %]
-[% IF ( OVERDUE.OPACFinesTab ) %]
+[% IF ( OPACFinesTab ) %]
 <td>[% IF ( OVERDUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
 [% END %]
 </tr>
@@ -391,7 +391,7 @@ $.tablesorter.addParser({
                 <td>[% RESERVE.reservedate %]</td>
 		<td>[% IF ( RESERVE.expirationdate ) %][% RESERVE.expirationdate %][% ELSE %]Never Expires[% END %]</td>
                 <td>[% RESERVE.branch %]</td>
-				[% IF ( RESERVE.showpriority ) %]
+				[% IF ( showpriority ) %]
 				<td>[% RESERVE.priority %] </td>
 				[% END %]
                 <td>
