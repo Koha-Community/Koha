@@ -22,7 +22,7 @@ $(document).ready(function(){
 	<div class="yui-b"><div class="yui-g">
 <div id="userreadingrecord" class="container">
 <!--CONTENT-->
-<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
+<h3><a href="/cgi-bin/koha/opac-user.pl">[% FOREACH BORROWER_INF IN BORROWER_INFO %][% BORROWER_INF.firstname %] [% BORROWER_INF.surname %][% END %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
 
 [% UNLESS ( count ) %]
 You have never borrowed anything from this library.
