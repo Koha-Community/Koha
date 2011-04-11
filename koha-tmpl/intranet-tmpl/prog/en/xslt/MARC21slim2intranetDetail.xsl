@@ -144,7 +144,7 @@
         <xsl:call-template name="showAuthor"><xsl:with-param name="authorfield" select="marc:datafield[@tag=700 or @tag=710 or @tag=711]"/><xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/></xsl:call-template>
 
     <xsl:if test="$DisplayIconsXSLT!='0' and $materialTypeCode!=''">
-        <span class="results_summary type"><span class="label">Type: </span>
+        <span class="results_summary type"><span class="label">Material type: </span>
         <xsl:element name="img"><xsl:attribute name="src">/intranet-tmpl/prog/img/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt"></xsl:attribute></xsl:element>
         <xsl:text> </xsl:text>
         <xsl:value-of select="$materialTypeLabel"/>
