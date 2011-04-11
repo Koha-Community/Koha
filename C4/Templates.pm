@@ -108,7 +108,7 @@ sub output {
             utf8_arrayref($vars->{$k});
         }
         elsif (ref($vars->{$k}) eq 'HASH'){
-            uft8_hashref($vars->{$k});                    
+            utf8_hashref($vars->{$k});
         }
         else {
             utf8::encode($vars->{$k}) if utf8::is_utf8($vars->{$k});
