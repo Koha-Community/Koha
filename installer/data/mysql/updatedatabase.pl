@@ -4297,7 +4297,7 @@ $DBversion = "3.03.00.051";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (Remove spaces and dashes from message_attribute names)\n";
     $dbh->do("UPDATE message_attributes SET message_name = 'Item_Due' WHERE message_name='Item Due'");
-    $dbh->do("UPDATE message_attributes SET message_name = 'Advance_Notice' WHERE message_name='Advance_Notice'");
+    $dbh->do("UPDATE message_attributes SET message_name = 'Advance_Notice' WHERE message_name='Advance Notice'");
     $dbh->do("UPDATE message_attributes SET message_name = 'Hold_Filled' WHERE message_name='Hold Filled'");
     $dbh->do("UPDATE message_attributes SET message_name = 'Item_Check_in' WHERE message_name='Item Check-in'");
     $dbh->do("UPDATE message_attributes SET message_name = 'Item_Checkout' WHERE message_name='Item Checkout'");    
