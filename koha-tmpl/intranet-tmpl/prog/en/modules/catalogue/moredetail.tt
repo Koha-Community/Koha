@@ -43,8 +43,8 @@
     [% FOREACH ITEM_DAT IN ITEM_DATA %]
     <div class="yui-g">
         <h3 id="item[% ITEM_DAT.itemnumber %]">Barcode [% ITEM_DAT.barcode %]  [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext %] [% END %]</h3>
-        <div class="listgroup"><h4>Item Information [% IF ( ITEM_DAT.CAN_user_editcatalogue_edit_catalogue ) %][% UNLESS ( ITEM_DAT.nomod ) %]
-         [% IF ( ITEM_DAT.CAN_user_editcatalogue_edit_items ) %]
+        <div class="listgroup"><h4>Item Information [% IF ( CAN_user_editcatalogue_edit_catalogue ) %][% UNLESS ( ITEM_DAT.nomod ) %]
+         [% IF ( CAN_user_editcatalogue_edit_items ) %]
          <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% ITEM_DAT.biblionumber %]&amp;itemnumber=[% ITEM_DAT.itemnumber %]">[Edit Item]</a>
          [% END %]
          [% END %][% END %]</h4>
@@ -71,7 +71,7 @@
             <li><span class="label">Current Renewals:</span> [% ITEM_DAT.renewals %]&nbsp;</li>
             [% IF ( ITEM_DAT.itemlostloop ) %]
                 <li><span class="label">Lost Status:</span>
-                    [% IF ( ITEM_DAT.CAN_user_circulate ) %]
+                    [% IF ( CAN_user_circulate ) %]
                         <form action="updateitem.pl" method="post">
                         <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
                         <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" />
@@ -101,7 +101,7 @@
             [% END %]
             [% IF ( ITEM_DAT.itemdamagedloop ) %]
             <li><span class="label">Damaged Status:</span>
-                [% IF ( ITEM_DAT.CAN_user_circulate ) %]
+                [% IF ( CAN_user_circulate ) %]
                     <form action="updateitem.pl" method="post">
                     <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
                     <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" />
@@ -130,7 +130,7 @@
             </li>
             [% END %]
             <li><span class="label">Withdrawn?:</span>[% IF ( ITEM_DAT.wthdrawn ) %]Yes[% ELSE %]No[% END %]
-                [% IF ( ITEM_DAT.CAN_user_circulate ) %]
+                [% IF ( CAN_user_circulate ) %]
                     <form action="updateitem.pl" method="post">
                     <input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
                     <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" />
@@ -152,7 +152,7 @@
             <ol class="bibliodetails">
 
                 <li><span class="label">
-                [% IF ( ITEM_DAT.CAN_user_editcatalogue_edit_catalogue ) %]
+                [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
 
                     Accession Date:</span>
                     [% IF ( ITEM_DAT.basketno ) %]
@@ -175,7 +175,7 @@
                 <li><span class="label">Paid for?:</span> [% ITEM_DAT.paidfor %]&nbsp;</li>
             <li><span class="label">Serial enumeration:</span> [% ITEM_DAT.enumchron %]&nbsp;</li>
             <li><span class="label">Public Note:</span>
-                [% IF ( ITEM_DAT.CAN_user_editcatalogue_edit_items ) %]
+                [% IF ( CAN_user_editcatalogue_edit_items ) %]
               <form class="inline" action="updateitem.pl" method="post"><input type="hidden" name="biblionumber" value="[% ITEM_DAT.biblionumber %]" />
                     <input type="hidden" name="biblioitemnumber" value="[% ITEM_DAT.biblioitemnumber %]" /><input type="hidden" name="itemnumber" value="[% ITEM_DAT.itemnumber %]" />
                     <textarea name="itemnotes" rows="2" cols="30">[% ITEM_DAT.itemnotes %]</textarea><input type="submit" name="submit" class="submit" value="Update" />

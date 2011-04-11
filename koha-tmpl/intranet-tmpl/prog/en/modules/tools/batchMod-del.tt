@@ -162,7 +162,7 @@ for( x=0; x<allColumns.length; x++ ){
 		    [% FOREACH not_deleted_loo IN not_deleted_loop %]
 			<tr>
 			    <td>[% not_deleted_loo.itemnumber %]</td>
-			    <td>[% IF ( not_deleted_loo.CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% not_deleted_loo.biblionumber %]&amp;itemnumber=[% not_deleted_loo.itemnumber %]">[% not_deleted_loo.barcode %]</a>[% ELSE %][% not_deleted_loo.barcode %][% END %]</td>
+			    <td>[% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% not_deleted_loo.biblionumber %]&amp;itemnumber=[% not_deleted_loo.itemnumber %]">[% not_deleted_loo.barcode %]</a>[% ELSE %][% not_deleted_loo.barcode %][% END %]</td>
 			    <td>[% IF ( not_deleted_loo.book_on_loan ) %]Item is checked out[% ELSIF ( not_deleted_loo.book_reserved ) %]Item has a waiting hold[% END %]</td>
 			</tr>
 		    [% END %]

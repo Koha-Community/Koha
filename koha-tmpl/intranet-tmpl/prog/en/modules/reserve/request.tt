@@ -570,7 +570,7 @@ function checkMultiHold() {
           <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title |html %]</a></caption>
       [% END %]
       <tr>
-        [% IF ( biblioloo.CAN_user_reserveforothers_modify_holds_priority ) %]
+        [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
             <th>Priority</th>
 	        <th>&nbsp;</th>
         [% ELSE %]
@@ -582,7 +582,7 @@ function checkMultiHold() {
 	<th>Expiration</th>
         <th>Pick up Library</th>
         <th>Details</th>
-        [% IF ( biblioloo.CAN_user_reserveforothers_modify_holds_priority ) %]
+        [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
             <th><img src="/intranet-tmpl/[% biblioloo.theme %]/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
         [% END %]
 	<th>&nbsp;</th>
@@ -600,14 +600,14 @@ function checkMultiHold() {
             <option value="W" selected="selected">Waiting</option>
         [% END %]
     [% END %]
-	[% IF ( reserveloo.CAN_user_reserveforothers_modify_holds_priority ) %][% FOREACH optionloo IN reserveloo.optionloop %]
+	[% IF ( CAN_user_reserveforothers_modify_holds_priority ) %][% FOREACH optionloo IN reserveloo.optionloop %]
         [% IF ( optionloo.selected ) %]<option value="[% optionloo.num %]" selected="selected">[% optionloo.num %]</option>[% ELSE %]<option value="[% optionloo.num %]">[% optionloo.num %]</option>[% END %]
         [% END %][% ELSE %]<option value=""></option>[% END %]
             <option value="del">del</option>
           </select>
         </td>
 
-     [% IF ( reserveloo.CAN_user_reserveforothers_modify_holds_priority ) %]
+     [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
         <td style="white-space:nowrap;">
 	        <a title="Move Hold Up" href="request.pl?action=move&amp;where=up&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
 			<img src="/intranet-tmpl/[% reserveloo.theme %]/img/go-up.png" border="0" alt="Go up" />
@@ -699,7 +699,7 @@ function checkMultiHold() {
     [% END %]
         </td>
 
-    [% IF ( reserveloo.CAN_user_reserveforothers_modify_holds_priority ) %]
+    [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
 	<td>
 		<a title="Toggle Lowest Priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]"> 
 			[% IF ( reserveloo.lowestPriority ) %]

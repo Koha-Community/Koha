@@ -105,7 +105,7 @@
             [% FOREACH koha_new IN koha_news %]
                     <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
 					 <p>[% koha_new.new %]</p>
-					<p class="newsfooter"> Posted on [% koha_new.newdate %] [% IF ( koha_new.CAN_user_tools ) %]
+					<p class="newsfooter"> Posted on [% koha_new.newdate %] [% IF ( CAN_user_tools ) %]
     <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>[% END %]</p></div>
             [% END %]
 		</div><!-- /koha-news -->

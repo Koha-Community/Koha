@@ -171,13 +171,13 @@ canned reports and writing custom SQL reports.</p>
 </td>
     <td>
         <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Show%20SQL">Show</a> 
-        [% IF ( savedreport.CAN_user_reports_create_reports ) %]
+        [% IF ( CAN_user_reports_create_reports ) %]
             &nbsp; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Edit%20SQL">Edit</a>
         [% END %]
     </td>
 <td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Run%20this%20report">Run</a>
 <a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id %]">Schedule</a></td>
-    [% IF ( savedreport.CAN_user_reports_create_reports ) %]
+    [% IF ( CAN_user_reports_create_reports ) %]
         <td><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Delete%20Saved">Delete</a></td>
     [% END %]
 </tr>

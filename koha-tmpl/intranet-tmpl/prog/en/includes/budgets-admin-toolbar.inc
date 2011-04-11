@@ -60,7 +60,7 @@
                 [% FOREACH auth_cats_loo IN auth_cats_loop %]
                         { text: _("Plan by [% auth_cats_loo.authcat %]    "),
                             url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% auth_cats_loo.budget_period_id %]&authcat=[% auth_cats_loo.authcat %]"
-                            [% UNLESS ( auth_cats_loo.CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
+                            [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
                 [% END %]
            [% END %]

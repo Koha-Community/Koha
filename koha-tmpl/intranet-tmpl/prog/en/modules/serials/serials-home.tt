@@ -129,7 +129,7 @@ Serials updated :
                 [% IF ( subscription.cannotedit ) %]
                   &nbsp;        
                 [% ELSE %]
-                  [% IF ( subscription.CAN_user_serials_receive_serials ) %]<a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7">Serial receive</a>[% END %]
+                  [% IF ( CAN_user_serials_receive_serials ) %]<a href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscription.subscriptionid %]&amp;serstatus=1,3,7">Serial receive</a>[% END %]
                 [% END %]
                 </td>
             </tr>

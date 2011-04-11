@@ -58,7 +58,7 @@
         [% ELSE %]
             <tr>
         [% END %]
-                <td>[% IF ( loop_supplier.CAN_user_acquisition_order_manage ) %]
+                <td>[% IF ( CAN_user_acquisition_order_manage ) %]
                     [% IF ( loop_supplier.active ) %]
                         <a href="basketheader.pl?booksellerid=[% loop_supplier.supplierid %]&amp;op=add_form">New basket</a>
                     [% ELSE %]

@@ -100,7 +100,7 @@ for( x=0; x<allColumns.length; x++ ){
     <ul>
     [% FOREACH simple_items_displa IN simple_items_display %]
   <li>
-      [% IF ( simple_items_displa.CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber %]&amp;itemnumber=[% simple_items_displa.itemnumber %]">[% simple_items_displa.barcode %]</a>[% ELSE %][% simple_items_displa.barcode %][% END %]
+      [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber %]&amp;itemnumber=[% simple_items_displa.itemnumber %]">[% simple_items_displa.barcode %]</a>[% ELSE %][% simple_items_displa.barcode %][% END %]
   </li>
     [% END %]
     </ul>
