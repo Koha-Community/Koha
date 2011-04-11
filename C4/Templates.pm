@@ -105,6 +105,7 @@ sub output {
         $vars->{$k} = $self->{VARS}->{$k};
     }
     my $data;
+#    binmode( STDOUT, ":utf8" );
     $template->process( $self->filename, $vars, \$data )
       || die "Template process failed: ", $template->error();
     return $data;
@@ -182,6 +183,7 @@ sub param {
         my $key = shift;
         my $val = shift;
         utf8::encode($val) if utf8::is_utf8($val);
+        utf8::decode($val) if $key eq "XSLTBloc";
         if    ( ref($val) eq 'ARRAY' && !scalar @$val ) { $val = undef; }
         elsif ( ref($val) eq 'HASH'  && !scalar %$val ) { $val = undef; }
         $self->{VARS}->{$key} = $val;

@@ -57,8 +57,6 @@ sub text{
     my $is_cdata = shift;
 
     while($work){
-#            warn "in text line is $line work is $work";
-#        return if $work =~ m/^\s*$/;
         # if there is a template_toolkit tag
         if( $work =~ m/\[%.*?\]/ ){
             #everything before this tag is text (or possibly CDATA), add a text token to tokens if $`
@@ -71,11 +69,10 @@ sub text{
             my $t = TmplToken->new( $&, TmplTokenType::DIRECTIVE, $line, $self->{filename} );
             push @tokens, $t;
 
-            #put work still to do back into work
+            # put work still to do back into work
             $work = $' ? $' : 0;
         } else {
-#            warn "in the text else work is now $work";
-            #If there is some left over work, treat it as text token
+            # If there is some left over work, treat it as text token
             my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
             push @tokens, $t;
             last;
@@ -88,7 +85,6 @@ sub declaration {
     my $line = shift;
     my $work = shift; #original text
     my $is_cdata = shift;
-#      warn "declaration work is $work";
     my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
     push @tokens, $t;  
 }      
@@ -98,7 +94,6 @@ sub comment {
     my $line = shift;
     my $work = shift; #original text
     my $is_cdata = shift;
-#      warn "comment work is $work";
     my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
     push @tokens, $t;  
 }      
@@ -108,7 +103,6 @@ sub default {
     my $line = shift;
     my $work = shift; #original text
     my $is_cdata = shift;
-#      warn "comment work is $work";
     my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
     push @tokens, $t;  
 }      
@@ -121,10 +115,6 @@ sub start{
     my $tag = shift;
     my $hash = shift; #hash of attr/value pairs
     my $text = shift; #origional text
-#      warn "in start text is $text";
-    # return if ! $interesting_tags{$tag};
-    # was $hash->{$key}
-    # print "#### " . $self->{filename}  . " " . $tag . "####\n";
     my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename});
     my %attr;
     # tags seem to be uses in an 'interesting' way elsewhere..
@@ -143,8 +133,7 @@ sub end{
     my $tag = shift;
     my $hash = shift;
     my $text = shift;
-#  warn "in end text is $text";  
-  # what format should this be in?
+    # what format should this be in?
     my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename} );
     my %attr;
     # tags seem to be uses in an 'interesting' way elsewhere..

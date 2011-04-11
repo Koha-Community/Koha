@@ -394,6 +394,7 @@ if ($action eq 'create')  {
             mkdir_recursive($targetdir) unless -d $targetdir;
             print STDERR "Creating $target...\n" unless $quiet;
             open( OUTPUT, ">$target" ) || die "$target: $!\n";
+            binmode( OUTPUT, ":utf8" );
             text_replace( $h, *OUTPUT );
             close OUTPUT;
         } else {

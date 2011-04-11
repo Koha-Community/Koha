@@ -463,6 +463,7 @@ sub output_with_http_headers($$$$;$) {
     # remove SUDOC specific NSB NSE
     $data =~ s/\x{C2}\x{98}|\x{C2}\x{9C}/ /g;
     $data =~ s/\x{C2}\x{88}|\x{C2}\x{89}/ /g;
+      
     utf8::encode($data) if utf8::is_utf8($data);
 
     print $query->header($options), $data;
