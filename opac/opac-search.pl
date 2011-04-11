@@ -348,6 +348,7 @@ if ($params->{'limit-yr'}) {
 # Params that can only have one value
 my $scan = $params->{'scan'};
 my $count = C4::Context->preference('OPACnumSearchResults') || 20;
+my $countRSS         = C4::Context->preference('numSearchRSSResults') || 50;
 my $results_per_page = $params->{'count'} || $count;
 my $offset = $params->{'offset'} || 0;
 my $page = $cgi->param('page') || 1;
@@ -546,6 +547,7 @@ for (my $i=0;$i<@servers;$i++) {
             $limit_cgi_not_availablity =~ s/&limit=available//g if defined $limit_cgi_not_availablity;
             $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
             $template->param(limit_cgi => $limit_cgi);
+            $template->param(countrss  => $countRSS );
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
