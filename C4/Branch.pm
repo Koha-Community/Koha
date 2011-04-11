@@ -206,7 +206,7 @@ sub ModBranch {
             branchaddress2,branchaddress3,branchzip,branchcity,branchstate,
             branchcountry,branchphone,branchfax,branchemail,
             branchurl,branchip,branchprinter,branchnotes)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         ";
         my $sth    = $dbh->prepare($query);
         $sth->execute(
