@@ -42,7 +42,7 @@ sub build_tokens{
     $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, origional text )
     $self->handler(declaration => "declaration", "self, line, text, is_cdata"); # declaration
     $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
-    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
+#    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
     $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a TmplTokenType::CDATA
     $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
     $self->parse_file($filename);
@@ -120,7 +120,12 @@ sub start{
     # tags seem to be uses in an 'interesting' way elsewhere..
     for my $key( %$hash ) {
         next unless defined $hash->{$key};
+        if ($key eq "/"){
+            $attr{+lc($key)} = [ $key, $hash->{$key}, $key."=".$hash->{$key}, 1 ];
+            }
+        else {
         $attr{+lc($key)} = [ $key, $hash->{$key}, $key."=".$hash->{$key}, 0 ];
+            }
     }
     $t->set_attributes( \%attr );
     push @tokens, $t;
