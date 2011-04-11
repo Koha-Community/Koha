@@ -100,9 +100,19 @@ sub output {
     $vars->{opacsmallimage} = C4::Context->preference('opacsmallimage');
     $vars->{opacstylesheet} = C4::Context->preference('opacstylesheet');
 
-    #add variables set via param to $vars for processing
+    # add variables set via param to $vars for processing
+    # and clean any utf8 mess
     for my $k ( keys %{ $self->{VARS} } ) {
         $vars->{$k} = $self->{VARS}->{$k};
+        if (ref($vars->{$k}) eq 'ARRAY'){
+            utf8_arrayref($vars->{$k});
+        }
+        elsif (ref($vars->{$k}) eq 'HASH'){
+            uft8_hashref($vars->{$k});                    
+        }
+        else {
+            utf8::encode($vars->{$k}) if utf8::is_utf8($vars->{$k});
+        }
     }
     my $data;
 #    binmode( STDOUT, ":utf8" );
@@ -111,6 +121,37 @@ sub output {
     return $data;
 }
 
+sub utf8_arrayref {
+    my $arrayref = shift;
+    foreach my $element (@$arrayref){
+        if (ref($element) eq 'ARRAY'){
+            utf8_arrayref($element);
+            next;
+        }
+        if (ref($element) eq 'HASH'){
+            utf8_hashref($element);
+            next;
+        }
+        utf8::encode($element) if utf8::is_utf8($element);
+    }        
+}         
+
+sub utf8_hashref {
+    my $hashref = shift;
+    for my $key (keys %{$hashref}){
+        if (ref($hashref->{$key}) eq 'ARRAY'){
+            utf8_arrayref($hashref->{$key});
+            next;
+        }
+        if (ref($hashref->{$key}) eq 'HASH'){
+            utf8_hashref($hashref->{$key});
+            next;
+        }
+        utf8::encode($hashref->{$key}) if utf8::is_utf8($hashref->{$key});
+    }
+}
+        
+        
 # FIXME - this is a horrible hack to cache
 # the current known-good language, temporarily
 # put in place to resolve bug 4403.  It is
@@ -182,8 +223,6 @@ sub param {
     while (@_) {
         my $key = shift;
         my $val = shift;
-        utf8::encode($val) if utf8::is_utf8($val);
-        utf8::decode($val) if $key eq "XSLTBloc";
         if    ( ref($val) eq 'ARRAY' && !scalar @$val ) { $val = undef; }
         elsif ( ref($val) eq 'HASH'  && !scalar %$val ) { $val = undef; }
         $self->{VARS}->{$key} = $val;
