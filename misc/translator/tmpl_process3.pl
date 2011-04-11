@@ -81,13 +81,8 @@ sub text_replace_tag ($$) {
               } sort {
                   $attr->{$a}->[3] <=> $attr->{$b}->[3] #FIXME
               } keys %$attr);
-	if ($tag eq 'img'){
-	    $it .= ' />';
-	}
-	else {	    
-           $it .= '>';
-	}
-    } 
+        $it .= '>';
+    }
     else {
         $it = $t;
     }
