@@ -51,16 +51,12 @@ $template->param( picture => 1 ) if $picture;
 
 # Getting the messages
 my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
+$template->param( %{$borrower} );
 
 $template->param(
 			QUEUED_MESSAGES 	=> $queued_messages,
- 			BORROWER_INFO         	=> [ $borrower ],
-                        firstname 		=> $borrower->{'firstname'},
-			surname 		=> $borrower->{'surname'},
 			borrowernumber 		=> $borrowernumber,
 			sentnotices 		=> 1
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
-
-
 

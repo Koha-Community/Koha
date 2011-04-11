@@ -84,7 +84,6 @@ $template->param( messagingview               => 1,
                   message_queue               => $message_queue,
                   DHTMLcalendar_dateformat    => C4::Dates->DHTMLcalendar(), 
                   borrowernumber              => $borrowernumber,
-                  branchcode                  => $borrower->{'branchcode'},
                   branchname		      => GetBranchName($borrower->{'branchcode'}),
                   dateformat                  => C4::Context->preference("dateformat"),
                   categoryname                => $borrower->{'description'},
@@ -94,7 +93,8 @@ $template->param( messagingview               => 1,
 #$messaging_preferences->{'SMSnumber'}{'value'} = defined $borrower->{'smsalertnumber'}
 #  ? $borrower->{'smsalertnumber'} : $borrower->{'mobile'};
 
-$template->param( BORROWER_INFO         => [ $borrower ],
+$template->param( %{ $borrower } );
+$template->param(
                   messagingview         => 1,
 				  is_child        => ($borrower->{'category_type'} eq 'C'),
                 );
