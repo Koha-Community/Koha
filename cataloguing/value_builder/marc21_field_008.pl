@@ -100,7 +100,7 @@ sub plugin {
     $result = "$dateentered" . "t        xxu||||| |||| 00| 0 eng d" unless $result;
     my $errorXml = '';
     # Check if the xml, xsd exists and is validated
-    my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->param('lang') . '/modules/cataloguing/value_builder/';
+    my $dir = C4::Context->config('intrahtdocs') . '/prog/' . $template->{lang} . '/modules/cataloguing/value_builder/';
     if (-r $dir . 'marc21_field_008.xml') {
         my $doc = XML::LibXML->new->parse_file($dir . 'marc21_field_008.xml');
         if (-r $dir . 'marc21_field_CF.xsd') {
