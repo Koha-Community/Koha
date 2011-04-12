@@ -185,7 +185,7 @@ if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compa
         }
     }
     if ($markseen or $op) {
-        $res = GetItemsForInventory( $minlocation, $maxlocation, $location, $ignoreissued, $itemtype, $datelastseen, $branchcode, $branch, $offset, $pagesize, $staton );
+        $res = GetItemsForInventory( $minlocation, $maxlocation, $location, $itemtype, $ignoreissued, $datelastseen, $branchcode, $branch, $offset, $pagesize, $staton );
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),
