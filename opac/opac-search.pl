@@ -65,7 +65,7 @@ my $build_grouped_results = C4::Context->preference('OPACGroupResults');
 if ($format =~ /(rss|atom|opensearchdescription)/) {
 	$template_name = 'opac-opensearch.tmpl';
 }
-elsif ($build_grouped_results) {
+elsif (@params && $build_grouped_results) {
     $template_name = 'opac-results-grouped.tmpl';
 }
 elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
