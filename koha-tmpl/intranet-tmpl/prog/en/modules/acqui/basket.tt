@@ -46,8 +46,8 @@
 [% UNLESS ( grouped ) %]
 <script type="text/javascript">
 //<![CDATA[
-            function confirm_reopen() {
-                var is_confirmed = confirm(_('Are you sure you want to reopen this basket?'));
+            function confirm_reopen(skip) {
+                var is_confirmed = skip || confirm(_('Are you sure you want to reopen this basket?'));
                 if (is_confirmed) {
                     window.location = "[% script_name %]?op=reopen&basketno=[% basketno %]";
                 }
@@ -102,7 +102,6 @@
                     <li><a href="basketheader.pl?basketno=[% basketno %]&amp;op=add_form" class="button" id="basketheadbutton">Edit basket header information</a></li>
                     <li><a href="javascript:confirm_deletion();" class="button" id="delbasketbutton">Delete this basket</a></li>
                     [% IF ( unclosable ) %]
-                        <li><button onclick="confirm_close()" class="yui-button-disabled" id="closebutton" type="button" disabled="disabled" title="You can not close this basket">Can not close basket</button></li>
                     [% ELSIF ( uncertainprices ) %]
                         <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&amp;owner=1" class="button" id="uncertpricesbutton">Uncertain prices</a></li>
                     [% ELSE %]
@@ -128,7 +127,7 @@
                         //]]>
                     </script>
                         <ul id="toolbar-list" class="toolbar">
-                            <li><a href="javascript:confirm_reopen();" class="button" id="reopenbutton">Reopen this basket</a></li>
+                            <li><a href="javascript:confirm_reopen([% skip_confirm_reopen %]);" class="button" id="reopenbutton">Reopen this basket</a></li>
                         </ul>
                 </div>
                 [% END %]
@@ -308,7 +307,7 @@
         <form action="/cgi-bin/koha/acqui/basket.pl" class="confirm">
             <h1>Are you sure you want to close basket [% basketname %]?</h1>
             <p>
-            <label for="createbasketgroup">create a purchase order now?</label>
+            <label for="createbasketgroup">Attach this basket to a new basket group with the same name</label>
             <input type="checkbox" id="createbasketgroup" name="createbasketgroup"/>
             </p>
             <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
