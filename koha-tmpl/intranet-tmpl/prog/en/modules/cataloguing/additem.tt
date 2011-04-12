@@ -207,7 +207,7 @@ function set_to_today(id, force) {
             </tr>
                 [% FOREACH item_loo IN item_loop %]
                 <tr id="row[% item_loo.itemnumber %]">
-                    [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
+                    [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
                     <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% item_loo.biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% item_loo.biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a></td>[% END %]
                 [% FOREACH item_valu IN item_loo.item_value %]
                     <td>[% item_valu.field |html %]</td>
