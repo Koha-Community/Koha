@@ -45,7 +45,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
 
-$template->param($borr);
+$template->param(%{$borr});
 
 my $itemtypes = GetItemTypes();
 
@@ -74,9 +74,6 @@ else {
 
 my ( $issues ) = GetAllIssues( $borrowernumber, $order, $limit );
 
-my @bordat;
-$bordat[0] = $borr;
-$template->param( BORROWER_INFO => \@bordat );
 
 my @loop_reading;
 
