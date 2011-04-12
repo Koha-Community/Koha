@@ -60,38 +60,38 @@
         [% IF ( search_boxes_loo.expanded_options ) %][% search_boxes_loo.left_content %][% END %] 
         <select name="idx">
             <option value="kw">Keyword</option>
-            <option value="sucommawrdl">Subject</option>
+            <option value="su,wrdl">Subject</option>
 [% IF ( search_boxes_loo.expanded_options ) %]
-            <option value="sucommaphr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
+            <option value="su,phr">&nbsp;&nbsp;&nbsp;&nbsp; Subject Phrase</option>
 [% END %]
             <option value="ti">Title</option>
 [% IF ( search_boxes_loo.expanded_options ) %]
-            <option value="ticommaphr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
-            <option value="secommawrdl">Series Title</option>
+            <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase</option>
+            <option value="se,wrdl">Series Title</option>
             <option value="callnum">Call Number</option>
             <option value="location">Shelving Location</option>
 [% END %]
-            <option value="aucommawrdl">Author</option>
+            <option value="au,wrdl">Author</option>
             
 [% IF ( search_boxes_loo.expanded_options ) %]
-            <option value="aucommaphr">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
-            <option value="cpncommawrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
-            <option value="cfncommawrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
-            <option value="cfncommaphr">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option>
-            <option value="pncommawrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
-            <option value="pncommaphr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
+            <option value="au,phr">&nbsp;&nbsp;&nbsp;&nbsp; Author Phrase</option>
+            <option value="cpn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Corporate Name</option>
+            <option value="cfn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name</option>
+            <option value="cfn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Conference Name Phrase</option>
+            <option value="pn,wrdl">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name</option>
+            <option value="pn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Personal Name Phrase</option>
 [% END %]
 [% IF ( search_boxes_loo.expanded_options ) %]
             <option value="nt">Notes/Comments</option>
             <option value="curriculum">Curriculum</option>
 [% END %]
-            <option value="pbcommawrdl">Publisher</option>
-            <option value="plcommawrdl">Publisher Location</option>
+            <option value="pb,wrdl">Publisher</option>
+            <option value="pl,wrdl">Publisher Location</option>
 [% IF ( search_boxes_loo.expanded_options ) %]
             <option value="sn">Standard Number</option>
             <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
             <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
-            <option value="lcncommaphr">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
+            <option value="lcn,phr">&nbsp;&nbsp;&nbsp;&nbsp; Call Number</option>
 [% ELSE %]
             <option value="nb">ISBN</option>
 [% END %]

@@ -55,8 +55,8 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	[% END %]
     order by:
     <select name="orderby" id="searchorderby">
-    <option value="surnamecomma0">Surname</option>
-    <option value="cardnumbercomma0">Cardnumber</option>
+    <option value="surname,0">Surname</option>
+    <option value="cardnumber,0">Cardnumber</option>
     </select>
     <input value="Search" class="submit" type="submit" />
 	[% IF ( branchloop ) %]
