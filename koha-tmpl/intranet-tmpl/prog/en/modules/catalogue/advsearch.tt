@@ -56,10 +56,10 @@
 <!-- BOOLEAN SEARCH OPTIONS -->
     <fieldset>
     <legend>Search For: </legend>
-    [% FOREACH search_boxes_loo IN search_boxes_loop %]
-        [% IF ( search_boxes_loo.search_boxes_label ) %]<div style="text-indent: 4.5em;">[% ELSE %]<div>[% END %]
-			[% IF ( search_boxes_loo.expanded_options ) %]
-            [% IF ( search_boxes_loo.boolean ) %]
+    [% FOREACH search_box IN search_boxes_loop %]
+        [% IF ( search_boxes_label ) %]<div style="text-indent: 4.5em;">[% ELSE %]<div>[% END %]
+			[% IF ( expanded_options ) %]
+            [% IF ( search_box.boolean ) %]
                 <select name="op">
                     <option value="and" selected="selected">and</option>
                     <option value="or">or</option>
@@ -69,13 +69,13 @@
 			[% END %]
 			[% INCLUDE 'search_indexes.inc' %]
 			<input type="text" size="30" name="q" title="Enter search terms" value="" />
-            [% IF ( search_boxes_loo.expanded_options ) %]
-                [% IF ( search_boxes_loo.add_field ) %]
+            [% IF ( expanded_options ) %]
+                [% IF ( search_box.add_field ) %]
                     <a href="JavaScript:add_field();" id="ButtonPlus" title="Add another field">[+]</a>
 				[% END %]
-            	[% IF ( search_boxes_loo.scan_index ) %]
-                	<label for="scan">Scan Indexes</label><input type="checkbox" name="scan" id="scan" value="1" />
-            	[% END %]
+              [% IF ( search_box.scan_index ) %]
+                <label for="scan">Scan Indexes</label><input type="checkbox" name="scan" id="scan" value="1" />
+              [% END %]
             [% END %]
 		</div>
     [% END %]
