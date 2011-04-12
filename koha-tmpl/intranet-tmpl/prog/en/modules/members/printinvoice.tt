@@ -4,11 +4,13 @@
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% themelang %]/includes/favicon.ico[% END %]" type="image/x-icon" />
 <link rel="stylesheet" type="text/css" href="[% themelang %]/css/printreceiptinvoice.css" />
 <script language="javascript">
+    function printThenClose() {
         window.print();
         window.close();
+    }
 </script>
 </head>
-<body>
+<body onload="printThenClose();">
 
 <div id="receipt">
 <!-- The table with the account items -->
