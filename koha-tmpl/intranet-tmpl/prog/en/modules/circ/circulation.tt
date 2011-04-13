@@ -900,7 +900,7 @@ No patron matched <span class="ex">[% message %]</span>
 
 <div id="reserves">
 [% IF ( reservloop ) %]
-<form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
+    <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
 	<input type="hidden" name="from" value="circ" />
     <table id="holdst">
         <thead><tr>
@@ -933,7 +933,7 @@ No patron matched <span class="ex">[% message %]</span>
                     <option value="del">Yes</option>
                 </select>
                 <input type="hidden" name="biblionumber" value="[% reservloo.biblionumber %]" />
-                <input type="hidden" name="borrowernumber" value="[% reservloo.borrowernumber %]" />
+                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
                 <input type="hidden" name="reservenumber" value="[% reservloo.reservenumber %]" />
             </td>
             </tr>

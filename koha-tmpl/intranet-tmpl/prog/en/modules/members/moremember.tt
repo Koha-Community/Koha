@@ -610,18 +610,15 @@ function validate1(date) {
                     <option value="del">Yes</option>
                 </select>
                 <input type="hidden" name="biblionumber" value="[% reservloo.biblionumber %]" />
-                <input type="hidden" name="borrowernumber" value="[% reservloo.borrowernumber %]" />
+                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
             </td>
         </tr>
 		[% END %]</tbody>
     </table>
 
-        <fieldset class="action">
-        <input type="submit" name="renew_checked" value="Renew or Return checked items" />
-        <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
-        </fieldset>
-    [% ELSE %]<p>Patron has nothing checked out.</p>[% END %]
-</form>
+        <fieldset class="action"><input type="submit" class="cancel" name="submit" value="Cancel Marked Requests" /></fieldset>
+    </form>
+    [% ELSE %]<p>Patron has nothing on hold.</p>[% END %]
 	</div>
 
 </div>
