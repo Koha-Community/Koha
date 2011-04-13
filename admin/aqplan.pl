@@ -74,14 +74,12 @@ my $budget_period_startdate   = $period->{'budget_period_startdate'};
 my $budget_period_enddate     = $period->{'budget_period_enddate'};
 my $budget_period_locked      = $period->{'budget_period_locked'};
 my $budget_period_description = $period->{'budget_period_description'};
-my $budget_period_dropbox     = GetBudgetPeriodsDropbox($budget_period_id );
 
 
 $template->param(
     budget_period_id          => $budget_period_id,
     budget_period_locked      => $budget_period_locked,
     budget_period_description => $budget_period_description,
-    budget_period_dropbox     => $budget_period_dropbox,
     auth_cats_loop            => $auth_cats_loop,
 );
 

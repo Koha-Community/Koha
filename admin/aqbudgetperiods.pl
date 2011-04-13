@@ -188,10 +188,8 @@ elsif ( $op eq 'delete_confirmed' ) {
         $budgetperiod->{budget_active} = 1;
         push( @period_loop, $budgetperiod );
     }
-    my $budget_period_dropbox = GetBudgetPeriodsDropbox();
 
     $template->param(
-        budget_period_dropbox => $budget_period_dropbox,
         period_loop           => \@period_loop,
 		pagination_bar		  => pagination_bar("aqbudgetperiods.pl",getnbpages(scalar(@$results),$pagesize),$page),
     );

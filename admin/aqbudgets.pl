@@ -73,7 +73,6 @@ my $script_name               = "/cgi-bin/koha/admin/aqbudgets.pl";
 my $budget_hash               = $input->Vars;
 my $budget_id                 = $$budget_hash{budget_id};
 my $budget_permission         = $input->param('budget_permission');
-my $budget_period_dropbox     = $input->param('budget_period_dropbox');
 my $filter_budgetbranch       = $input->param('filter_budgetbranch');
 #filtering non budget keys
 delete $$budget_hash{$_} foreach grep {/filter|^op$|show/} keys %$budget_hash;
@@ -225,9 +224,7 @@ if ($op eq 'add_form') {
         }
     }
     my $branches = GetBranches();
-    my $budget_period_dropbox = GetBudgetPeriodsDropbox($$period{budget_period_id} );
     $template->param(
-        budget_period_dropbox     => $budget_period_dropbox,
         budget_id                 => $budget_id,
         %$period,
     );
