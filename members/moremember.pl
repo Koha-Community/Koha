@@ -265,7 +265,7 @@ sub build_issue_data {
         # Getting borrower details
         my $memberdetails = GetMemberDetails($issue->[$i]{'borrowernumber'});
         $issue->[$i]{'borrowername'} = $memberdetails->{'firstname'} . " " . $memberdetails->{'surname'};
-
+        $issue->[$i]{'cardnumber'} = $memberdetails->{'cardnumber'};
         my $datedue = $issue->[$i]{'date_due'};
         my $issuedate = $issue->[$i]{'issuedate'};
         $issue->[$i]{'date_due'}  = C4::Dates->new($issue->[$i]{'date_due'}, 'iso')->output('syspref');

@@ -421,7 +421,7 @@ sub build_issue_data {
         # Getting borrower details
         my $memberdetails = GetMemberDetails($it->{'borrowernumber'});
         $it->{'borrowername'} = $memberdetails->{'firstname'} . " " . $memberdetails->{'surname'};
-
+        $it->{'cardnumber'} = $memberdetails->{'cardnumber'};
         # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
         $it->{'itemtype'} = ( C4::Context->preference( 'item-level_itypes' ) ) ? $it->{'itype'} : $it->{'itemtype'};
 
