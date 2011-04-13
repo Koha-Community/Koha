@@ -353,7 +353,7 @@ should be the empty string.
 sub manualinvoice {
     my ( $borrowernumber, $itemnum, $desc, $type, $amount, $note ) = @_;
     my $manager_id = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv->{'number'};
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $dbh      = C4::Context->dbh;
     my $notifyid = 0;
     my $insert;
