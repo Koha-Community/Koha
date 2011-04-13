@@ -50,10 +50,7 @@ BEGIN {
         &AddBudgetPeriod
 	    &DelBudgetPeriod
 
-	    &GetBudgetPeriodsDropbox
-        &GetBudgetSortDropbox
         &GetAuthvalueDropbox
-        &GetBudgetPermDropbox
 
         &ModBudgetPlan
 
@@ -335,24 +332,6 @@ sub GetBudgetOrdered {
 }
 
 # -------------------------------------------------------------------
-sub GetBudgetPermDropbox {
-	my ($perm) = @_;
-	my %labels;
-	$labels{'0'} = 'None';
-	$labels{'1'} = 'Owner';
-	$labels{'2'} = 'Library';
-	my $radio = CGI::scrolling_list(
-		-id       => 'budget_permission',
-		-name      => 'budget_permission',
-		-values    => [ '0', '1', '2' ],
-		-default   => $perm,
-		-labels    => \%labels,
-		-size    => 1,
-	);
-	return $radio;
-}
-
-# -------------------------------------------------------------------
 sub GetBudgetAuthCats  {
     my ($budget_period_id) = shift;
     # now, populate the auth_cats_loop used in the budget planning button
@@ -374,61 +353,27 @@ sub GetBudgetAuthCats  {
 
 # -------------------------------------------------------------------
 sub GetAuthvalueDropbox {
-	my ( $name, $authcat, $default ) = @_;
-	my @authorised_values;
-	my %authorised_lib;
-	my $value;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare(
-		"SELECT authorised_value,lib
-            FROM authorised_values
-            WHERE category = ?
-            ORDER BY  lib"
-	);
-	$sth->execute( $authcat );
-
-	push @authorised_values, '';
-	while (my ($value, $lib) = $sth->fetchrow_array) {
-		push @authorised_values, $value;
-		$authorised_lib{$value} = $lib;
-	}
-
-    return 0 if keys(%authorised_lib) == 0;
-
-    my $budget_authvalue_dropbox = CGI::scrolling_list(
-        -values   => \@authorised_values,
-        -labels   => \%authorised_lib,
-        -default  => $default,
-        -override => 1,
-        -size     => 1,
-        -multiple => 0,
-        -name     => $name,
-        -id       => $name,
+    my ( $authcat, $default ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare(
+        'SELECT authorised_value,lib FROM authorised_values
+        WHERE category = ? ORDER BY lib'
     );
+    $sth->execute( $authcat );
+    my $option_list = [];
+    my @authorised_values = ( q{} );
+    while (my ($value, $lib) = $sth->fetchrow_array) {
+        push @{$option_list}, {
+            value => $value,
+            label => $lib,
+            default => ($default eq $value),
+        };
+    }
 
-    return $budget_authvalue_dropbox
-}
-
-# -------------------------------------------------------------------
-sub GetBudgetPeriodsDropbox {
-    my ($budget_period_id) = @_;
-	my %labels;
-	my @values;
-	my ($active, $periods) = GetBudgetPeriods();
-	foreach my $r (@$periods) {
-		$labels{"$r->{budget_period_id}"} = $r->{budget_period_description};
-		push @values, $r->{budget_period_id};
-	}
-
-	# if no buget_id is passed then its an add
-	my $budget_period_dropbox = CGI::scrolling_list(
-		-name    => 'budget_period_id',
-		-values  => \@values,
-		-default => $budget_period_id ? $budget_period_id :  $active,
-		-size    => 1,
-		-labels  => \%labels,
-	);
-	return $budget_period_dropbox;
+    if ( @{$option_list} ) {
+        return $option_list;
+    }
+    return;
 }
 
 # -------------------------------------------------------------------
