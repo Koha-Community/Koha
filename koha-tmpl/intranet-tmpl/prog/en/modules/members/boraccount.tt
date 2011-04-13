@@ -48,7 +48,7 @@
       <td>[% account.note %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding %]</td>
-    [% IF ( account.reverse_col ) %]
+    [% IF ( reverse_col ) %]
       <td>
 	[% IF ( account.payment ) %]
 		<a href="boraccount.pl?action=reverse&amp;borrowernumber=[% account.borrowernumber %]&amp;accountno=[% account.accountno %]">Reverse</a>
@@ -70,7 +70,20 @@
 <tfoot>
   <tr>
     <td colspan="4">Total due</td>
-    [% IF ( totalcredit ) %]<td colspan="2" class="credit">[% ELSE %]<td colspan="2" class="debit">[% END %][% total %]</td>
+    [% IF ( totalcredit ) %]
+      [% IF ( reverse_col ) %]
+        <td colspan="3" class="credit">
+      [% ELSE %]
+        <td colspan="2" class="credit">
+      [% END %]
+    [% ELSE %]
+      [% IF ( reverse_col ) %]
+        <td colspan="3" class="debit">
+      [% ELSE %]
+        <td colspan="2" class="credit">
+      [% END %]
+    [% END %]
+    [% total %]</td>
   </tr>
   </tfoot>
 </table>
