@@ -408,7 +408,7 @@ sub draw_label_text {
         # Fields which hold call number data  FIXME: ( 060? 090? 092? 099? )
         my @callnumber_list = qw(itemcallnumber 050a 050b 082a 952o 995k);
         if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{'printing_type'} eq 'BIB') and ($self->{'callnum_split'})) { # If the field contains the call number, we do some sp
-            if ($cn_source eq 'lcc') {
+            if ($cn_source eq 'lcc' || $cn_source eq 'nlm') { # NLM and LCC should be split the same way
                 @label_lines = _split_lccn($field_data);
                 @label_lines = _split_ccn($field_data) if !@label_lines;    # If it was not a true lccn, try it as a custom call number
                 push (@label_lines, $field_data) if !@label_lines;         # If it was not that, send it on unsplit
