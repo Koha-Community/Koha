@@ -4132,6 +4132,12 @@ $DBversion = '3.03.00.032';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('TraceSubjectSubdivisions', 1, 'Create searches on all subdivisions for subject tracings.','1','YesNo')");
     print "Upgrade to $DBversion done ( include subdivisions when generating subject tracing searches )\n";
+}
+
+$DBversion = "3.03.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WaitingNotifyAtCheckin',0,'If ON, notify librarians of waiting holds for the patron whose items they are checking in.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref WaitingNotifyAtCheckin)\n";
     SetVersion ($DBversion);
 }
 
