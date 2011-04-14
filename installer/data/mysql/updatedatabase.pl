@@ -4134,12 +4134,6 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done ( include subdivisions when generating subject tracing searches )\n";
 }
 
-$DBversion = "3.03.00.XXX";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
-    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WaitingNotifyAtCheckin',0,'If ON, notify librarians of waiting holds for the patron whose items they are checking in.',NULL,'YesNo');");
-    print "Upgrade to $DBversion done (Add syspref WaitingNotifyAtCheckin)\n";
-    SetVersion ($DBversion);
-}
 
 $DBversion = '3.03.00.033';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
@@ -4309,6 +4303,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE message_attributes SET message_name = 'Item_Checkout' WHERE message_name='Item Checkout'");    
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.03.00.052";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('WaitingNotifyAtCheckin',0,'If ON, notify librarians of waiting holds for the patron whose items they are checking in.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref WaitingNotifyAtCheckin)\n";
+    SetVersion ($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
