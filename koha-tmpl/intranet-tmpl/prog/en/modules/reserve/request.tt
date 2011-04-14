@@ -398,10 +398,10 @@ function checkMultiHold() {
                 <input type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
             [% ELSIF ( itemloo.override ) %]
                 <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber %]" />
-                <img src="/intranet-tmpl/[% itemloo.theme %]/img/famfamfam/silk/error.png" alt="Requires override of hold policy" />
+                <img src="/intranet-tmpl/[% theme %]/img/famfamfam/silk/error.png" alt="Requires override of hold policy" />
             [% ELSE %]
                 <input disabled="disabled" type="radio" name="checkitem" value="[% itemloo.itemnumber %]" />
-                <img src="/intranet-tmpl/[% itemloo.theme %]/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
+                <img src="/intranet-tmpl/[% theme %]/img/famfamfam/silk/cross.png" alt="Cannot be put on hold" />
             [% END %]
             </td>
             [% IF ( item_level_itypes ) %]
@@ -583,7 +583,7 @@ function checkMultiHold() {
         <th>Pick up Library</th>
         <th>Details</th>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-            <th><img src="/intranet-tmpl/[% biblioloo.theme %]/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
+            <th><img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Toggle Set to Lowest Priority" /></th>
         [% END %]
 	<th>&nbsp;</th>
       </tr>
@@ -610,19 +610,19 @@ function checkMultiHold() {
      [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
         <td style="white-space:nowrap;">
 	        <a title="Move Hold Up" href="request.pl?action=move&amp;where=up&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
-			<img src="/intranet-tmpl/[% reserveloo.theme %]/img/go-up.png" border="0" alt="Go up" />
+            <img src="/intranet-tmpl/[% theme %]/img/go-up.png" border="0" alt="Go up" />
                 </a>
 
 		<a title="Move Hold To Top" href="request.pl?action=move&amp;where=top&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
-                	<img src="/intranet-tmpl/[% reserveloo.theme %]/img/go-top.png" border="0" alt="Go top" />
+                    <img src="/intranet-tmpl/[% theme %]/img/go-top.png" border="0" alt="Go top" />
                 </a>
 
                 <a title="Move Hold To Bottom" href="request.pl?action=move&amp;where=bottom&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
-                	<img src="/intranet-tmpl/[% reserveloo.theme %]/img/go-bottom.png" border="0" alt="Go bottom" />
+                    <img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Go bottom" />
                 </a>
 
                 <a title="Move Hold Down" href="request.pl?action=move&amp;where=down&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
-                	<img src="/intranet-tmpl/[% reserveloo.theme %]/img/go-down.png" border="0" alt="Go down" />
+                    <img src="/intranet-tmpl/[% theme %]/img/go-down.png" border="0" alt="Go down" />
                 </a>
         </td>
     [% END %]
@@ -703,9 +703,9 @@ function checkMultiHold() {
 	<td>
 		<a title="Toggle Lowest Priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]"> 
 			[% IF ( reserveloo.lowestPriority ) %]
-	                	<img src="/intranet-tmpl/[% reserveloo.theme %]/img/go-bottom.png" border="0" alt="Unset Lowest Priority" />
+                        <img src="/intranet-tmpl/[% theme %]/img/go-bottom.png" border="0" alt="Unset Lowest Priority" />
 		        [% ELSE %]
-		                <img src="/intranet-tmpl/[% reserveloo.theme %]/img/go-down.png" border="0" alt="Set To Lowest Priority" />
+                        <img src="/intranet-tmpl/[% theme %]/img/go-down.png" border="0" alt="Set To Lowest Priority" />
 		        [% END %]
 		</a>
 	</td> 
@@ -713,7 +713,7 @@ function checkMultiHold() {
 
 	<td>
 		<a title="Cancel Hold" href="request.pl?action=cancel&amp;borrowernumber=[% reserveloo.borrowernumber %]&amp;biblionumber=[% reserveloo.biblionumber %]&amp;date=[% reserveloo.date %]">
-                	<img src="/intranet-tmpl/[% reserveloo.theme %]/img/x.png" border="0" alt="Cancel" />
+                    <img src="/intranet-tmpl/[% theme %]/img/x.png" border="0" alt="Cancel" />
                 </a>
 	</td>
 
