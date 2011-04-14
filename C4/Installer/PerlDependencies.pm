@@ -17,7 +17,7 @@ our $PERL_DEPS = {
     'Storable' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '2.21'
+        'min_ver'  => '2.20'
     },
     'PDF::API2' => {
         'usage'    => 'Core',
