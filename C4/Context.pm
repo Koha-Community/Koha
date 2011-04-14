@@ -18,7 +18,7 @@ package C4::Context;
 
 use strict;
 use warnings;
-use vars qw($VERSION $AUTOLOAD $context @context_stack);
+use vars qw($VERSION $AUTOLOAD $context @context_stack $servers $memcached $ismemcached);
 
 BEGIN {
 	if ($ENV{'HTTP_USER_AGENT'})	{
@@ -78,6 +78,22 @@ BEGIN {
 			$main::SIG{__DIE__} = \&CGI::Carp::confess;
 		}
     }  	# else there is no browser to send fatals to!
+
+    # Check if there are memcached servers set
+    $servers = $ENV{'MEMCACHED_SERVERS'};
+    if ($servers) {
+        # Load required libraries and create the memcached object
+	require Cache::Memcached;
+	$memcached = Cache::Memcached->new({
+		      servers => [ $servers ],
+		      debug   => 0,
+		      compress_threshold => 10_000,
+		      namespace => $ENV{'MEMCACHED_NAMESPACE'} || 'koha'
+		  });
+        # Verify memcached available (set a variable and test the output)
+	$ismemcached = $memcached->set('ismemcached','1');
+    }
+
 	$VERSION = '3.00.00.036';
 }
 
@@ -229,6 +245,11 @@ Returns undef in case of error.
 
 sub read_config_file {		# Pass argument naming config file to read
     my $koha = XMLin(shift, keyattr => ['id'], forcearray => ['listen', 'server', 'serverinfo'], suppressempty => '');
+
+    if ($ismemcached) {
+      $memcached->set('kohaconf',$koha);
+    }
+
     return $koha;			# Return value: ref-to-hash holding the configuration
 }
 
@@ -275,6 +296,10 @@ Allocates a new context. Initializes the context from the specified
 file, which defaults to either the file given by the C<$KOHA_CONF>
 environment variable, or F</etc/koha/koha-conf.xml>.
 
+It saves the koha-conf.xml values in the declared memcached server(s)
+if currently available and uses those values until them expire and
+re-reads them.
+
 C<&new> does not set this context as the new default context; for
 that, use C<&set_context>.
 
@@ -309,10 +334,20 @@ sub new {
             return undef;
         }
     }
-        # Load the desired config file.
-    $self = read_config_file($conf_fname);
-    $self->{"config_file"} = $conf_fname;
     
+    if ($ismemcached) {
+      # retreive from memcached
+      $self = $memcached->get('kohaconf');
+      if (not defined $self) {
+	# not in memcached yet
+	$self = read_config_file($conf_fname);
+      }
+    } else {
+      # non-memcached env, read from file
+      $self = read_config_file($conf_fname);
+    }
+
+    $self->{"config_file"} = $conf_fname;
     warn "read_config_file($conf_fname) returned undef" if !defined($self->{"config"});
     return undef if !defined($self->{"config"});
 
