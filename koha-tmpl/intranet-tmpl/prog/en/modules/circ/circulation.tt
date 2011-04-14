@@ -645,7 +645,7 @@ No patron matched <span class="ex">[% message %]</span>
             <a href="/cgi-bin/koha/circ/circulation.pl#checkouts">0 Checkouts</a>
     [% END %]</li>
 [% IF ( displayrelissues ) %]
-<li><a href="/cgi-bin/koha/circ/circulation.pl#relissues">Relatives Issues</a></li>
+<li><a href="/cgi-bin/koha/circ/circulation.pl#relissues">Relatives' Checkouts</a></li>
 [% END %]
 <li>[% IF ( countreserv ) %]
             <a href="/cgi-bin/koha/circ/circulation.pl#reserves">[% countreserv %] Hold(s)</a>
@@ -668,7 +668,7 @@ No patron matched <span class="ex">[% message %]</span>
         <th scope="col">Due date</th>
         <th scope="col">Title</th>
         <th scope="col">Item Type</th>
-        <th scope="col">Checked out on</th> 
+        <th scope="col">Checked out on</th>
         <th scope="col">Call no</th>
         <th scope="col">Charge</th>
         <th scope="col">Price</th>
@@ -830,18 +830,17 @@ No patron matched <span class="ex">[% message %]</span>
 
 [% IF ( displayrelissues ) %]
 <div id="relissues">
-<h2>Relatives issues</h2>
     <table id="relissuest">
     <thead>
     <tr>
         <th scope="col">Due date</th>
         <th scope="col">Title</th>
         <th scope="col">Item Type</th>
-        <th scope="col">Branch</th>
-        <th scope="col">Checked out on</th> 
+        <th scope="col">Checked out on</th>
+        <th scope="col">Call no</th>
         <th scope="col">Charge</th>
-	<th scope="col">Borrower</th>
-        <th scope="col">Material</th>
+        <th scope="col">Price</th>
+        <th scope="col">Patron</th>
     </tr>
     </thead>
 [% IF ( relissues ) %]	<tbody>
@@ -856,13 +855,11 @@ No patron matched <span class="ex">[% message %]</span>
             [% relissue.dd %]</td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissue.biblionumber %]&amp;type=intra"><strong>[% relissue.title |html %]</strong></a>[% IF ( relissue.author ) %], by [% relissue.author %][% END %][% IF ( relissue.itemnotes ) %]- <span class="circ-hlt">[% relissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissue.biblionumber %]&amp;itemnumber=[% relissue.itemnumber %]#item[% relissue.itemnumber %]">[% relissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissue.itemtype_image ) %]<img src="[% relissue.itemtype_image %]" alt="" />[% END %][% END %][% relissue.itemtype %]</td>
-	<td>[% relissue.branchdisplay %]
-        [% IF ( relissue.itemcallnumber ) %]([% relissue.itemcallnumber %])[% END %]</td>
         <td>[% relissue.displaydate %]</td>
-            <td>[% relissue.charge %]</td>
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.borrowername %]</a></td>
-            <td>[% relissue.materials %]</td>
-    </tr>
+        <td>[% relissue.itemcallnumber %]</td>
+        <td>[% relissue.charge %]</td>
+        <td>[% relissue.replacementprice %]</td><td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.borrowername %] ([% relissue.cardnumber %])</a></td>
+     </tr>
     [% END %] <!-- /loop todayissues -->
     <!-- /if todayissues -->[% END %]
 [% IF ( relprevissues ) %]
@@ -877,16 +874,14 @@ No patron matched <span class="ex">[% message %]</span>
         [% relprevissue.dd %]
         </td>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;type=intra"><strong>[% relprevissue.title |html %]</strong></a>[% IF ( relprevissue.author ) %], by [% relprevissue.author %][% END %] [% IF ( relprevissue.itemnotes ) %]- [% relprevissue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;itemnumber=[% relprevissue.itemnumber %]#item[% relprevissue.itemnumber %]">[% relprevissue.barcode %]</a></td>
-        <td>
-            [% relprevissue.itemtype %]
-        </td>
-	<td>[% relprevissue.branchdisplay %]
-        [% IF ( relprevissue.itemcallnumber ) %]([% relprevissue.itemcallnumber %])[% END %]</td>
+        <td>[% UNLESS noItemTypeImages %][% IF relprevissue.itemtype_image %]<img src="[% relprevissue.itemtype_image %]" alt="" />[% END %][% END %][% relprevissue.itemtype %]</td>
         <td>[% relprevissue.displaydate %]</td>
+        <td>[% relprevissue.itemcallnumber %]</td>
 	[% IF ( relprevissue.multiple_borrowers ) %]<td>[% relprevissue.borrowername %]</td>[% END %]
         <td>[% relprevissue.charge %]</td>
-	<td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relprevissue.borrowernumber %]">[% relprevissue.borrowername %]</a></td>
-        <td>[% relprevissue.materials %]</td>
+        <td>[% relprevissue.replacementprice %]</td>
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relprevissue.borrowernumber %]">[% relprevissue.borrowername %] ([% relprevissue.cardnumber %])</a></td>
+
     </tr>
     <!-- /loop previssues -->[% END %]
 <!--/if previssues -->[% END %]
@@ -895,7 +890,7 @@ No patron matched <span class="ex">[% message %]</span>
 </form>
 
 </div>
-[% END %]<!-- end displayrelissues --> 
+[% END %]<!-- end displayrelissues -->
 
 
 <div id="reserves">
