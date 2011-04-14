@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% DEFAULT LibraryNameTitle="Koha Online" %] Catalog &rsaquo;  Account for [% FOREACH BORROWER_INF IN BORROWER_INFO %][% BORROWER_INF.firstname %] [% BORROWER_INF.surname %][% END %]
+[% INCLUDE 'doc-head-open.inc' %][% DEFAULT LibraryNameTitle="Koha Online" %] Catalog &rsaquo;  Account for [% firstname %] [% surname %]
 [% INCLUDE 'doc-head-close.inc' %]
 <style type="text/css">ul.ui-tabs-nav li a, ul.ui-tabs-nav li span.a  { padding:0.6em 1em; }</style>
 <script type="text/javascript">
@@ -22,7 +22,7 @@ $(document).ready(function(){
 	<div class="yui-b"><div class="yui-g">
 <div id="userreadingrecord" class="container">
 <!--CONTENT-->
-<h3><a href="/cgi-bin/koha/opac-user.pl">[% FOREACH BORROWER_INF IN BORROWER_INFO %][% BORROWER_INF.firstname %] [% BORROWER_INF.surname %][% END %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
+<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Checkout History</h3>
 
 [% UNLESS ( count ) %]
 You have never borrowed anything from this library.
