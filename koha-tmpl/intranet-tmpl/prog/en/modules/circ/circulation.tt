@@ -718,7 +718,7 @@ No patron matched <span class="ex">[% message %]</span>
                 <span class="renewals-disabled">
             [% END %]
 		[% IF ( todayissue.renew_error_on_reserve ) %]
-			On Hold
+			<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On Hold</a>
 		[% END %]
                 [% IF ( todayissue.renew_error_too_many ) %]
 			Not Renewable
@@ -732,9 +732,15 @@ No patron matched <span class="ex">[% message %]</span>
   [% IF ( todayissue.return_failed ) %]
             <td class="problem">Checkin Failed</td>
       [% ELSE %]
+            [% IF ( todayissue.renew_error_on_reserve ) %]
+               <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% todayissue.biblionumber %]">On Hold</a>
+                <input type="checkbox" name="all_barcodes[]" value="[% todayissue.barcode %]" checked="checked" style="display: none;" />
+                </td>
+            [% ELSE %]
             <td><input type="checkbox" class="radio" name="barcodes[]"  value="[% todayissue.barcode %]" />
                 <input type="checkbox" name="all_barcodes[]" value="[% todayissue.barcode %]" checked="checked" style="display: none;" />
             </td>
+            [% END %]
       [% END %]
     </tr>
     [% END %] <!-- /loop todayissues -->
@@ -786,7 +792,7 @@ No patron matched <span class="ex">[% message %]</span>
                 <span class="renewals-disabled">
             [% END %]
 		[% IF ( previssue.renew_error_on_reserve ) %]
-			On Hold
+			<a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On Hold</a>
 		[% END %]
                 [% IF ( previssue.renew_error_too_many ) %]
 			Not Renewable
@@ -800,9 +806,15 @@ No patron matched <span class="ex">[% message %]</span>
 		  [% IF ( previssue.return_failed ) %]
             <td class="problem">Checkin Failed</td>
         [% ELSE %]
+            [% IF ( previssue.renew_error_on_reserve ) %]
+               <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% previssue.biblionumber %]">On Hold</a>
+                <input type="checkbox" name="all_barcodes[]" value="[% previssue.barcode %]" checked="checked" style="display: none;" />
+                </td>
+            [% ELSE %]
             <td><input type="checkbox" class="radio" name="barcodes[]"  value="[% previssue.barcode %]" />
                 <input type="checkbox" name="all_barcodes[]" value="[% previssue.barcode %]" checked="checked" style="display: none;" />
             </td>
+            [% END %]
       [% END %]
     </tr>
     <!-- /loop previssues -->[% END %]

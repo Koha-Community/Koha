@@ -493,9 +493,13 @@ function validate1(date) {
       [% IF ( issueloo.return_failed ) %]
             <td class="problem">Checkin Failed</td>
       [% ELSE %]
+        [% IF ( issueloo.norenew_reason_on_reserve ) %]
+            <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% issueloo.biblionumber %]">On Hold</a></td>
+        [% ELSE %]
             <td><input type="checkbox" name="barcodes[]"  value="[% issueloo.barcode %]" onclick="uncheck_sibling(this);" />
                 <input type="checkbox" name="all_barcodes[]" value="[% issueloo.barcode %]" checked="checked" style="display: none;" />
             </td>
+        [% END %]
       [% END %]
         </tr>
   [% END %]
