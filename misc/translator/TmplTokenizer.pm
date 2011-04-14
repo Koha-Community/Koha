@@ -198,6 +198,7 @@ sub _identify_js_translatables (@) {
     # We mark a JavaScript translatable string as in C, i.e., _("literal")
     # For simplicity, we ONLY look for "_" "(" StringLiteral ")"
     for (my $i = 0, my $state = 0, my($j, $q, $s); $i <= $#input; $i += 1) {
+#        warn $input[$i];
         my $reset_state_p = 0;
         push @output, [0, $input[$i]];
         if ($input[$i] !~ /\S/s) {
@@ -221,6 +222,8 @@ sub _identify_js_translatables (@) {
           die "identify_js_translatables internal error: Unknown state $state"
         }
     }
+#    use Data::Dumper;
+#    warn Dumper \@output;
     return \@output;
 }
 
@@ -302,10 +305,10 @@ sub _parametrize_internal{
 sub next_token {
     my $self = shift;
     my $next;
+#    warn "in next_token";
     # parts that make up a text_parametrized (future children of the token)
     my @parts = ();
     while(1){
-        # warn Dumper @parts;
         $next = $self->{_parser}->next_token;
         if (! $next){
             if (@parts){
@@ -321,8 +324,24 @@ sub next_token {
             push @parts, $next;
         } 
         elsif( $next->type == TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
-            push @parts, $next;
+            return $next;
         } 
+        elsif ( $next->type == TmplTokenType::CDATA){
+            $self->_set_js_mode(1);
+            my $s0 = $next->string;
+            my @head = ();
+            my @tail = ();
+
+            if ($s0 =~ /^(\s*\[%\s*)(.*)(\s%=]\s*)$/s) {
+                push @head, $1;
+                 push @tail, $3;
+                $s0 = $2;
+            }
+            push @head, _split_js $s0;
+            $next->set_js_data(_identify_js_translatables(@head, @tail) );
+            return $next;
+
+        }
         else {
             # if there is nothing in parts, return this token
  
