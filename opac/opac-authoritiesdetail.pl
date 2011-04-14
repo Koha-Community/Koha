@@ -168,7 +168,7 @@ foreach my $field (@fields) {
         push( @loop_data, \%tag_data );
     }
 }
-$template->param( "0XX" => \@loop_data );
+$template->param( "Tab0XX" => \@loop_data );
 
 my $authtypes = getauthtypes;
 my @authtypesloop;

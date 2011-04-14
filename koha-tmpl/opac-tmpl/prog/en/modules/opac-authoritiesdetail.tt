@@ -62,10 +62,10 @@ function showChildren(mynumber) {
 [% END %]
 <h1>Entry [% authtypetext %]</h1>
 	<p>Used in <a href="opac-search.pl?type=opac&amp;q=[% authid %]&amp;idx=an">[% count %] records</a></p>
-        [% FOREACH 0X IN 0XX %]
-        <p><b>[% 0X.tag %]</b></p>
+        [% FOREACH Tag0X IN Tab0XX %]
+        <p><b>[% Tag0X.tag %]</b></p>
         <ul>
-        [% FOREACH subfiel IN 0X.subfield %]
+        [% FOREACH subfiel IN Tag.0X.subfield %]
                 <p><b>[% subfiel.marc_lib %]:</b> [% subfiel.marc_value %]</p>
             [% END %]
         </ul>
