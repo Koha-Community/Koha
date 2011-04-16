@@ -4029,7 +4029,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.02.08.001';
+$DBversion = '3.02.07.001';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `items` DROP INDEX `itemsstocknumberidx`;");
     $dbh->do("ALTER TABLE items ADD INDEX itemstocknumberidx (stocknumber);");
@@ -4037,7 +4037,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.02.07.001';
+$DBversion = '3.02.07.002';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     #Remove obsolete columns from aqbooksellers if needed
     my $a = $dbh->selectall_hashref('SHOW columns from aqbooksellers','Field');
