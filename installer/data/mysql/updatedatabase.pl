@@ -4029,7 +4029,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.03.00.XXX';
+$DBversion = '3.02.08.001';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `items` DROP INDEX `itemsstocknumberidx`;");
     $dbh->do("ALTER TABLE items ADD INDEX itemstocknumberidx (stocknumber);");
