@@ -51,6 +51,12 @@ if($.cookie("holdfor") != [% borrowernumber %]){ $.cookie("holdfor",null, { path
             }
         } ).attr( 'checked', false );
         [% END %]
+		// listen submit to trigger qslip on empty checkout
+		$('#mainform').bind('submit',function() {
+		  if ($('#barcode').val() == '') {
+		    return printx_window('qslip'); }
+		});
+
 
 var allcheckboxes = $(".checkboxed");
 	$("#renew_all").click(function(){
@@ -441,7 +447,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% END %]
 
 
-<form method="post" action="/cgi-bin/koha/circ/circulation.pl" name="mainform">
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform">
 <fieldset id="circ_circulation_issue">
     [% IF ( DisplayClearScreenButton ) %]
 	    <input type="button" value="Clear Screen" onclick="window.location = '/cgi-bin/koha/circ/circulation.pl'" />
