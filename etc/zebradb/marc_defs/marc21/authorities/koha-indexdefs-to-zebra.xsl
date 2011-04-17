@@ -62,6 +62,11 @@ authority-zebra-indexdefs.xsl` (substituting the appropriate file names).
             <xsl:call-template name="handle-index-heading"/>
             <xsl:call-template name="handle-index-match-heading"/>
             <xsl:apply-templates/>
+            <xslo:template match="*">
+                <z:index name="Any:w Any:p">
+                    <xslo:value-of select="."/>
+                </z:index>
+            </xslo:template>
         </xslo:stylesheet>
     </xsl:template>
 
