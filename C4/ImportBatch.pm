@@ -210,7 +210,7 @@ sub ModBiblioInBatch {
 =head2 BatchStageMarcRecords
 
   ($batch_id, $num_records, $num_items, @invalid_records) = 
-    BatchStageMarcRecords($marc_flavor, $marc_records, $file_name, 
+    BatchStageMarcRecords($encoding, $marc_records, $file_name, 
                           $comments, $branch_code, $parse_items,
                           $leave_as_staging, 
                           $progress_interval, $progress_callback);
@@ -218,7 +218,7 @@ sub ModBiblioInBatch {
 =cut
 
 sub  BatchStageMarcRecords {
-    my $marc_flavor = shift;
+    my $encoding = shift;
     my $marc_records = shift;
     my $file_name = shift;
     my $comments = shift;
@@ -258,13 +258,16 @@ sub  BatchStageMarcRecords {
             &$progress_callback($rec_num);
         }
         my ($marc_record, $charset_guessed, $char_errors) =
-            MarcToUTF8Record($marc_blob, C4::Context->preference("marcflavour"));
+            MarcToUTF8Record($marc_blob, C4::Context->preference("marcflavour"), $encoding);
+
+        $encoding = $charset_guessed unless $encoding;
+
         my $import_record_id;
         if (scalar($marc_record->fields()) == 0) {
             push @invalid_records, $marc_blob;
         } else {
             $num_valid++;
-            $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $marc_flavor, int(rand(99999)), 0);
+            $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0);
             if ($parse_items) {
                 my @import_items_ids = AddItemsToImportBiblio($batch_id, $import_record_id, $marc_record, 0);
                 $num_items += scalar(@import_items_ids);

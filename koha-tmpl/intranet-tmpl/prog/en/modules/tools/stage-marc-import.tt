@@ -93,13 +93,8 @@ function CheckForm(f) {
 		
 	</li>
 	<li>
-		<label for="syntax">Character encoding: </label>
-        [% IF ( UNIMARC ) %]
-            <select name="syntax" id="syntax"><option value="MARC21">MARC21</option><option value="UNIMARC" selected="selected">UNIMARC</option></select>
-        [% ELSE %]
-            <select name="syntax" id="syntax"><option value="MARC21" selected="selected">MARC21</option><option value="UNIMARC">UNIMARC</option></select>
-        [% END %]
-		
+		<label for="encoding">Character encoding: </label>
+            <select name="encoding" id="encoding"><option value="" selected="selected">Default</option><option value="utf8">UTF-8</option><option value="MARC-8">MARC 8</option><option value="ISO_5426">ISO 5426</option><option value="ISO_6937">ISO 6937</option><option value=ISO_8859-1">ISO 8859-1</option><option value="EUC-KR">EUC-KR</option></select>
 	</li>
 </ol></fieldset>
   <fieldset class="rows">
