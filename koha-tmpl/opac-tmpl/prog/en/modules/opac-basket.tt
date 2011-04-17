@@ -157,7 +157,7 @@ function tagAdded() {
             <form action="opac-basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
     <h3>
-        [% IF ( BIBLIO_RESULT.print_basket ) %]
+        [% IF ( print_basket ) %]
             [% BIBLIO_RESULT.title |html %]
                 [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield |html %][% END %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author |html %][% END %]
@@ -345,7 +345,7 @@ function tagAdded() {
             [% ELSE %]
                 <tr>
             [% END %]
-            [% UNLESS ( BIBLIO_RESULT.print_basket ) %]<td>
+            [% UNLESS ( print_basket ) %]<td>
                         <input type="checkbox" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" onclick="selRecord(value,checked);" />
 
                 </td> [% END %]
