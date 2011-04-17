@@ -233,6 +233,7 @@ sub string_canon ($) {
   my $s = shift;
   # Fold all whitespace into single blanks
   $s =~ s/\s+/ /g;
+  $s =~ s/^\s+//g;
   return $s;
 }
 
