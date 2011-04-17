@@ -273,7 +273,7 @@ sub _formalize{
       }
     } else{
       return _quote_cformat $t->string;
-    }
+    }	  
   } else{
     return _quote_cformat $t->string;
   }
@@ -324,7 +324,7 @@ sub next_token {
             push @parts, $next;
         } 
         elsif( $next->type == TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
-            return $next;
+            push @parts, $next;
         } 
         elsif ( $next->type == TmplTokenType::CDATA){
             $self->_set_js_mode(1);
@@ -339,13 +339,14 @@ sub next_token {
             }
             push @head, _split_js $s0;
             $next->set_js_data(_identify_js_translatables(@head, @tail) );
-            return $next;
-
+	    return $next unless @parts;	    
+	    $self->{_parser}->unshift_token($next);
+            return $self->_parametrize_internal(@parts);
         }
         else {
             # if there is nothing in parts, return this token
- 
-           return $next unless @parts;
+            return $next unless @parts;
+
             # OTHERWISE, put this token back and return the parametrized string of @parts
             $self->{_parser}->unshift_token($next);
             return $self->_parametrize_internal(@parts);
