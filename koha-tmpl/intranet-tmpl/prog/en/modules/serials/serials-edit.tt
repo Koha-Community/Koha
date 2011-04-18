@@ -178,7 +178,8 @@ $(document).ready(function() {
 	<div class="yui-b">
 
 <h1>Serial Edition <i>[% bibliotitle %]</i>
-	( [% location %] ) [% IF ( callnumber ) %] callnumber: [% callnumber %][% END %]</h1>
+	i[% IF location %] ( [% location %] ) [% END %]
+    [% IF ( callnumber ) %] callnumber: [% callnumber %][% END %]</h1>
 <form method="post" name="f" action="serials-edit.pl" id="serials_edit">
 <!--onsubmit="return barcode_check()">-->
 
