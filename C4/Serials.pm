@@ -441,7 +441,6 @@ sub PrepareSerialsData {
     foreach my $key ( sort { $b cmp $a } keys %tmpresults ) {
         push @res, $tmpresults{$key};
     }
-    $res[0]->{'first'} = 1;
     return \@res;
 }
 
