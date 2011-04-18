@@ -64,7 +64,8 @@ $(document).ready(function() {
 [% UNLESS ( popup ) %]
 	[% INCLUDE 'serials-toolbar.inc' %]
 
-	<h1>Serial Collection information for  <i>[% bibliotitle %]</i> ([% location %] ) 
+	<h1>Serial Collection information for  <i>[% bibliotitle %]</i>
+        [% IF location %] ([% location %] ) [% END %]
 		[% IF ( callnumber ) %]callnumber: [% callnumber %][% END %]</h1>
 [% END %]
 
