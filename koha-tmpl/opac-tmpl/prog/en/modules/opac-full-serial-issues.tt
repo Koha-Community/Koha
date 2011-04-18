@@ -164,8 +164,11 @@ function showlayer(numlayer){
     </div>
 
     [% FOREACH year IN years %]
-  [% IF ( year.first ) %]  
-    <div class="yeardata tabsub" id="show[% year.year %]" style="display:block">[% ELSE %]<div class="yeardata tabsub" id="show[% year.year %]" style="display:none">[% END %]
+        [% IF loop.first %]
+           <div class="yeardata tabsub" id="show[% year.year %]" style="display:block">
+        [% ELSE %]
+           <div class="yeardata tabsub" id="show[% year.year %]" style="display:none">
+        [% END %]
         <table class="subscriptionstclass">
 	    <thead>
 		<tr>

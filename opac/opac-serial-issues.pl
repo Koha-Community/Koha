@@ -54,6 +54,13 @@ if ( $selectview eq "full" ) {
     );
     my $subscriptions = GetFullSubscriptionsFromBiblionumber($biblionumber);
     my $subscriptioninformation=PrepareSerialsData($subscriptions);
+    # PrepareSerialsData does some bogus stuff that the template could handle
+    # But at least it sorts the array by the year field so we dont have to
+    # find 'manage' if its there
+    if ($subscriptioninformation->[0]->{year} eq 'manage') {
+        shift @{$subscriptioninformation};
+    }
+
     # now, check is there is an alert subscription for one of the subscriptions
     foreach (@$subscriptions) {
         if (getalert($loggedinuser,'issue',$_->{subscriptionid})) {
@@ -61,9 +68,9 @@ if ( $selectview eq "full" ) {
         }
     }
 
-    my $title   = $subscriptions->[0]{bibliotitle};
-    my $yearmin = $subscriptions->[0]{year};
-    my $yearmax = $subscriptions->[ scalar(@$subscriptions) - 1 ]{year};
+    my $title   = $subscriptions->[0]->{bibliotitle};
+    my $yearmin = $subscriptions->[0]->{year};
+    my $yearmax = $subscriptions->[ -1 ]->{year};
 
 
     # replace CR by <br> in librarian note
