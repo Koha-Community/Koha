@@ -304,14 +304,22 @@ function refocus(calendar) {
     [% END %]
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     <input type="hidden" name="branch" value="[% branch %]" />
+    [% IF ( RENEW_ISSUE ) %]
+    <input type="submit" class="approve" value="Yes, Renew (Y)" accesskey="y" />
+    [% ELSE %]
     <input type="submit" class="approve" value="Yes, Check Out (Y)" accesskey="y" />
+    [% END %]
 </form>
 
 <form method="get" action="/cgi-bin/koha/circ/circulation.pl">
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+    [% IF ( RENEW_ISSUE ) %]
+    <input type="submit" class="deny" value="No, Don't Renew (N)" accesskey="n" />
+    [% ELSE %]
     <input type="submit" class="deny" value="No, Don't Check Out (N)" accesskey="n" />
+    [% END %]
 </form>
 
 </div></div>
