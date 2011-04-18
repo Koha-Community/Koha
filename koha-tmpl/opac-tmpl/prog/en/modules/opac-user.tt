@@ -210,7 +210,7 @@ $.tablesorter.addParser({
 [% IF ( OPACFinesTab ) %]
         <th>Fines</th>
 [% END %]
-        [% IF ( OPACMySummaryhtml ) %]
+        [% IF ( OPACMySummaryHTML ) %]
         <th>Links</th>
         [% END %]
         </tr></thead>
@@ -263,8 +263,8 @@ $.tablesorter.addParser({
 [% IF ( OPACFinesTab ) %]
                 <td>[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
 [% END %]
-            [% IF ( OPACMySummaryhtml ) %]
-                <td>[% MySummaryhtml %]</td>
+            [% IF ( OPACMySummaryHTML ) %]
+                <td>[% ISSUE.MySummaryHTML %]</td>
             [% END %]
             </tr>
         [% END %]</tbody>
