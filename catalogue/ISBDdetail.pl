@@ -67,6 +67,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $res = GetISBDView($biblionumber, "intranet");
+if ( not defined $res ) {
+       # biblionumber invalid -> report and exit
+       $template->param( unknownbiblionumber => 1,
+                               biblionumber => $biblionumber
+       );
+       output_html_with_http_headers $query, $cookie, $template->output;
+       exit;
+}
+
 if($query->cookie("holdfor")){ 
     my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
     $template->param(
@@ -76,10 +86,6 @@ if($query->cookie("holdfor")){
         holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
     );
 }
-
-# my @blocs = split /\@/,$ISBD;
-# my @fields = $record->fields();
-my $res = GetISBDView($biblionumber, "intranet");
 
 # count of item linked with biblio
 my $itemcount = GetItemsCount($biblionumber);
@@ -98,9 +104,9 @@ if ($subscriptionsnumber) {
 $template->param (
     ISBD                => $res,
     biblionumber        => $biblionumber,
-	isbdview => 1,
-	z3950_search_params	=> C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
-	C4::Search::enabled_staff_search_views,
+    isbdview            => 1,
+    z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
+    C4::Search::enabled_staff_search_views
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

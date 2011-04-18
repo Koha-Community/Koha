@@ -38,9 +38,6 @@ my $popup        =
   $query->param('popup')
   ;    # if set to 1, then don't insert links, it's just to show the biblio
 
-my $tagslib = GetMarcStructure(1,$frameworkcode);
-my $record = GetMarcBiblio($biblionumber);
-my $biblio = GetBiblioData($biblionumber);
 # open template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -52,6 +49,19 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+my $record = GetMarcBiblio($biblionumber);
+if ( not defined $record ) {
+    # biblionumber invalid -> report and exit
+    $template->param( unknownbiblionumber => 1,
+                biblionumber => $biblionumber
+    );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
+}
+
+my $tagslib = GetMarcStructure(1,$frameworkcode);
+my $biblio = GetBiblioData($biblionumber);
 
 if($query->cookie("holdfor")){ 
     my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));

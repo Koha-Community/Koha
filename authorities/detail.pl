@@ -172,13 +172,33 @@ my ($template, $loggedinuser, $cookie)
 
 my $authid = $query->param('authid');
 
-
-
 # Using default authtypecode, so all fields are seen
 my $authtypecode = '';
 $tagslib = &GetTagsLabels(1,$authtypecode);
 
-my $record;
+# Build list of authtypes for showing them
+my $authtypes = getauthtypes;
+my @authtypesloop;
+
+foreach my $thisauthtype (sort { $authtypes->{$b} cmp $authtypes->{$a} } keys %$authtypes) {
+    my %row =(value => $thisauthtype,
+                selected => $thisauthtype eq $authtypecode,
+                authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
+            );
+    push @authtypesloop, \%row;
+}
+
+my $record=GetAuthority($authid);
+
+if (not defined $record) {
+    # authid invalid
+    $template->param ( errauthid => $authid,
+                       unknownauthid => 1,
+                       authtypesloop => \@authtypesloop );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
+}
+
 if (C4::Context->preference("AuthDisplayHierarchy")){
   my $trees=BuildUnimarcHierarchies($authid);
   my @trees = split /;/,$trees ;
@@ -201,9 +221,8 @@ if (C4::Context->preference("AuthDisplayHierarchy")){
     'displayhierarchy' =>C4::Context->preference("AuthDisplayHierarchy"),
     'loophierarchies' =>\@loophierarchies,
   );
-} else {
-  $record=GetAuthority($authid);
 }
+
 my $count = CountUsage($authid);
 
 # find the marc field/subfield used in biblio by this authority
@@ -215,24 +234,7 @@ while (my ($tagfield) = $sth->fetchrow) {
 }
 chop $biblio_fields;
 
-
-# fill arrays
-my @loop_data =();
-my $tag;
-# loop through each tab 0 through 9
-# for (my $tabloop = 0; $tabloop<=10;$tabloop++) {
-# loop through each tag
-  build_tabs ($template, $record, $dbh,"",$query);
-
-my $authtypes = getauthtypes;
-my @authtypesloop;
-foreach my $thisauthtype (sort { $authtypes->{$b} cmp $authtypes->{$a} } keys %$authtypes) {
-	my %row =(value => $thisauthtype,
-				selected => $thisauthtype eq $authtypecode,
-				authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-			);
-	push @authtypesloop, \%row;
-}
+build_tabs ($template, $record, $dbh,"",$query);
 
 $template->param(authid => $authid,
 		count => $count,

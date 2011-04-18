@@ -51,6 +51,17 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
+my $biblionumber = $query->param('biblionumber');
+my $record       = GetMarcBiblio($biblionumber);
+
+if ( not defined $record ) {
+    # biblionumber invalid -> report and exit
+    $template->param( unknownbiblionumber => 1,
+                      biblionumber => $biblionumber );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
+}
+
 if($query->cookie("holdfor")){ 
     my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
     $template->param(
@@ -61,14 +72,9 @@ if($query->cookie("holdfor")){
     );
 }
 
-my $biblionumber = $query->param('biblionumber');
-my $fw = GetFrameworkCode($biblionumber);
-
+my $fw           = GetFrameworkCode($biblionumber);
 my $showallitems = $query->param('showallitems');
-
-## get notes and subjects from MARC record
-my $marcflavour      = C4::Context->preference("marcflavour");
-my $record           = GetMarcBiblio($biblionumber);
+my $marcflavour  = C4::Context->preference("marcflavour");
 
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTDetailsDisplay") ) {
@@ -92,11 +98,6 @@ $template->param(
     normalized_oclc => $oclc,
     normalized_isbn => $isbn,
 );
-
-unless (defined($record)) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-	exit;
-}
 
 my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
 my $marcisbnsarray   = GetMarcISBN( $record, $marcflavour );

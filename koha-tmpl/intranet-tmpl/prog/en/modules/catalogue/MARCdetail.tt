@@ -1,5 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; MARC Details for [% bibliotitle %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    MARC Details for [% bibliotitle %]
+  [% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -21,10 +27,19 @@ function Changefwk(FwkList) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; MARC Details for <i>[% bibliotitle |html %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    MARC Details for <i>[% bibliotitle |html %]</i>
+  [% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
 
+[% IF ( unknownbiblionumber ) %]
+  <div class="dialog message">The record you requested does not exist ([% biblionumber %]).</div>
+[% ELSE %]
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -404,5 +419,6 @@ function Changefwk(FwkList) {
 <div class="yui-b">
 [% INCLUDE 'biblio-view-menu.inc' %]
 </div>
+[% END %]
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
