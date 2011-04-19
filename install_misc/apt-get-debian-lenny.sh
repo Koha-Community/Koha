@@ -73,6 +73,7 @@ libpdf-reuse-perl \
 libpdf-table-perl \
 libpoe-perl \
 libschedule-at-perl \
+libtemplate-perl \
 libtext-charwidth-perl \
 libtext-csv-perl \
 libtext-iconv-perl \
