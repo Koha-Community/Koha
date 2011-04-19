@@ -49,6 +49,8 @@ sub new {
 
 sub End {
     my $self = shift;
+    # if the pdf stream is utf8, explicitly set it to utf8; this avoids at lease some wide character errors -chris_n
+    utf8::encode($PDF::Reuse::stream) if utf8::is_utf8($PDF::Reuse::stream);
     prEnd();
 }
 
