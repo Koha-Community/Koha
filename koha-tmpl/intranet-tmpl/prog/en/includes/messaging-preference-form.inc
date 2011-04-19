@@ -36,7 +36,7 @@
           [% ELSE %]Unknown [% END %]</td>
       [% IF ( messaging_preference.takes_days ) %]
       <td>
-          [% IF ( messaging_preference.messaging_form_inactive ) %]
+          [% IF ( messaging_form_inactive ) %]
             <select name="[% messaging_preference.message_attribute_id %]-DAYS" disabled="disabled">
           [% ELSE %]
             <select name="[% messaging_preference.message_attribute_id %]-DAYS">
@@ -53,7 +53,7 @@
       [% END %]
 <!--      [% IF ( messaging_preference.transport_sms ) %]
       [% IF ( messaging_preference.SMSSendDriver ) %]<td>
-          [% IF ( messaging_preference.messaging_form_inactive ) %]
+          [% IF ( messaging_form_inactive ) %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
@@ -71,7 +71,7 @@
 
       [% IF ( messaging_preference.transport_email ) %]
       <td>
-          [% IF ( messaging_preference.messaging_form_inactive ) %]
+          [% IF ( messaging_form_inactive ) %]
             <input type="checkbox"
                  id="email[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
@@ -89,7 +89,7 @@
 
       [% IF ( messaging_preference.has_digest ) %]
       <td>
-          [% IF ( messaging_preference.messaging_form_inactive ) %]
+          [% IF ( messaging_form_inactive ) %]
             <input type="checkbox"
                  id="digest[% messaging_preference.message_attribute_id %]"
                  value="[% messaging_preference.message_attribute_id %]"
@@ -107,7 +107,7 @@
 
 <!--       [% IF ( messaging_preference.transport_rss ) %]
       <td>
-          [% IF ( messaging_preference.messaging_form_inactive ) %]
+          [% IF ( messaging_form_inactive ) %]
             <input type="checkbox"
                  id="rss[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
@@ -123,7 +123,7 @@
       <td>-</td>
       [% END %] -->
 
-      [% UNLESS ( messaging_preference.messaging_form_inactive ) %]
+      [% UNLESS ( messaging_form_inactive ) %]
       <td><input type="checkbox" class="none" id="none[% messaging_preference.message_attribute_id %]" /></td>
       [% END %]
     </tr>
