@@ -92,9 +92,13 @@ sub text_extract (*) {
         last unless defined $s;
         my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
         if ($kind eq TmplTokenType::TEXT) {
-            remember( $s, $t ) if $t =~ /\S/s;
+	    if ($t =~ /\S/s && $t !~ /<!/){
+		remember( $s, $t );
+	    }
         } elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
-            remember( $s, $s->form ) if $s->form =~ /\S/s;
+	    if ($s->form =~ /\S/s && $s->form !~ /<!/){
+		remember( $s, $s->form );
+	    }
         } elsif ($kind eq TmplTokenType::TAG && %$attr) {
             # value [tag=input], meta
             my $tag = lc($1) if $t =~ /^<(\S+)/s;
@@ -174,8 +178,8 @@ EOF
 		my $fmt = TmplTokenizer::_formalize( $param );
 		$fmt =~ s/^%/%$n\$/;
 		if ($type == TmplTokenType::DIRECTIVE) {
-		    $type = "Template::Toolkit Directive";
-#		    $type = $param->string =~ /[%()+/is? $1: 'ERROR';
+#		    $type = "Template::Toolkit Directive";
+		    $type = $param->string =~ /\[%(.*?)%\]/is? $1: 'ERROR';
 		    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
 			    $2: undef;
 		    printf OUTPUT "#. %s: %s\n", $fmt,
