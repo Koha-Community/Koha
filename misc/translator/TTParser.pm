@@ -39,9 +39,9 @@ sub build_tokens{
     $self->{filename} = $filename;
     $self->handler(start => "start", "self, line, tagname, attr, text"); #signature is start( self, linenumber, tagname, hash of attributes, origional text )
     $self->handler(text => "text", "self, line, text, is_cdata"); #signature is text( self, linenumber, origional text, is_cdata )
-#    $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, origional text )
+    $self->handler(end => "end", "self, line, tag, attr, text"); #signature is end( self, linenumber, tagename, origional text )
     $self->handler(declaration => "declaration", "self, line, text, is_cdata"); # declaration
-#    $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
+    $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
 #    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
     $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a TmplTokenType::CDATA
     $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
