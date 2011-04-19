@@ -174,7 +174,8 @@ EOF
 		my $fmt = TmplTokenizer::_formalize( $param );
 		$fmt =~ s/^%/%$n\$/;
 		if ($type == TmplTokenType::DIRECTIVE) {
-		    $type = $param->string =~ /(TMPL_[A-Z]+)+/is? $1: 'ERROR';
+		    $type = "Template::Toolkit Directive";
+#		    $type = $param->string =~ /[%()+/is? $1: 'ERROR';
 		    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
 			    $2: undef;
 		    printf OUTPUT "#. %s: %s\n", $fmt,

@@ -324,7 +324,8 @@ sub next_token {
         if( $next->type == TmplTokenType::TEXT ){
             push @parts, $next;
         } 
-        elsif( $next->type == TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
+#        elsif( $next->type == TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
+        elsif( $next->type == TmplTokenType::DIRECTIVE ){
             push @parts, $next;
         } 
         elsif ( $next->type == TmplTokenType::CDATA){
