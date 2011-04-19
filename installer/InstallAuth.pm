@@ -115,9 +115,9 @@ sub get_template_and_user {
       C4::Context->config('intrahtdocs') . "/prog/"
       . ( $language ? $language : "en" );
     
-    my $filename = "$path/modules/" . $in->{template_name};
-    $filename =~ s/\.tmpl$/.tt/; 
-    my $tmplbase = $filename;
+    my $tmplbase = $in->{template_name};
+    $tmplbase=~ s/\.tmpl$/.tt/;
+    my $filename = "$path/modules/" . $tmplbase;
     my $interface = 'intranet';
     my $template = C4::Templates->new( $interface, $filename, $tmplbase);
     
