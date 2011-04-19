@@ -117,8 +117,9 @@ sub get_template_and_user {
     
     my $filename = "$path/modules/" . $in->{template_name};
     $filename =~ s/\.tmpl$/.tt/; 
+    my $tmplbase = $filename;
     my $interface = 'intranet';
-    my $template = C4::Templates->new( $interface, $filename);
+    my $template = C4::Templates->new( $interface, $filename, $tmplbase);
     
 
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
