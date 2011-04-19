@@ -161,6 +161,26 @@
       </xslo:variable>
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
   </xslo:template>
   <xslo:template mode="index_heading" match="marc:datafield[@tag='400']">
     <z:index name="Personal-name-see-from:w Personal-name-see-from:p Personal-name-see-from:s See-from:w See-from:p See-from:s">
@@ -214,6 +234,26 @@
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
                   <xslo:text>--</xslo:text>
                 </xslo:when>
                 <xslo:otherwise>
@@ -293,6 +333,26 @@
       </xslo:variable>
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
   </xslo:template>
   <xslo:template mode="index_heading" match="marc:datafield[@tag='411']">
     <z:index name="Meeting-name-see-from:w Meeting-name-see-from:p Meeting-name-see-from:s See-from:w See-from:p See-from:s">
@@ -346,6 +406,26 @@
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
                   <xslo:text>--</xslo:text>
                 </xslo:when>
                 <xslo:otherwise>
@@ -425,6 +505,26 @@
       </xslo:variable>
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
   </xslo:template>
   <xslo:template mode="index_heading" match="marc:datafield[@tag='448']">
     <z:index name="Chronological-term-see-from:w Chronological-term-see-from:p Chronological-term-see-from:s See-from:w See-from:p See-from:s">
@@ -478,6 +578,26 @@
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
                   <xslo:text>--</xslo:text>
                 </xslo:when>
                 <xslo:otherwise>
@@ -557,6 +677,26 @@
       </xslo:variable>
       <xslo:value-of select="normalize-space($raw_heading)"/>
     </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
   </xslo:template>
   <xslo:template mode="index_heading" match="marc:datafield[@tag='451']">
     <z:index name="Name-geographic-see-from:w Name-geographic-see-from:p Name-geographic-see-from:s See-from:w See-from:p See-from:s">
@@ -610,6 +750,26 @@
             <xslo:if test="position() &gt; 1">
               <xslo:choose>
                 <xslo:when test="contains('vxyz', @code)">
+                  <xslo:text>--</xslo:text>
+                </xslo:when>
+                <xslo:otherwise>
+                  <xslo:value-of select="substring(' ', 1, 1)"/>
+                </xslo:otherwise>
+              </xslo:choose>
+            </xslo:if>
+            <xslo:value-of select="."/>
+          </xslo:if>
+        </xslo:for-each>
+      </xslo:variable>
+      <xslo:value-of select="normalize-space($raw_heading)"/>
+    </z:index>
+    <z:index name="Heading-Main:w Heading-Main:p Heading-Main:s">
+      <xslo:variable name="raw_heading">
+        <xslo:for-each select="marc:subfield">
+          <xslo:if test="contains('a', @code)" name="Heading-Main:w Heading-Main:p Heading-Main:s">
+            <xslo:if test="position() &gt; 1">
+              <xslo:choose>
+                <xslo:when test="contains('', @code)">
                   <xslo:text>--</xslo:text>
                 </xslo:when>
                 <xslo:otherwise>
@@ -1824,6 +1984,11 @@
     </xslo:variable>
     <z:index name="Subject-heading-thesaurus:w">
       <xslo:value-of select="$full_thesaurus_code"/>
+    </z:index>
+  </xslo:template>
+  <xslo:template match="*">
+    <z:index name="Any:w Any:p">
+      <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
 </xslo:stylesheet>
