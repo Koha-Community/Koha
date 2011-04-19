@@ -188,7 +188,7 @@ sub themelanguage {
         @languages = ( $lang, @languages );
     }
     else {
-        $lang = $languages[0];
+        $lang = $languages[0] || 'en';
     }
     my $theme = 'prog'; # in the event of theme failure default to 'prog' -fbcit
     my $dbh = C4::Context->dbh;
