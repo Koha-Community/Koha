@@ -109,11 +109,11 @@ if ($merge) {
     my @errors_loop  = map{{error => $_}}@errors;
 
     # Parameters
-    $template->param({
+    $template->param(
 	errors  => \@errors_loop,
 	result => 1,
 	biblio1 => $input->param('biblio1')
-    });
+    );
 
 
 #-------------------------
@@ -129,13 +129,13 @@ if ($merge) {
 
     # Ask the user to choose which record will be the kept
     if (not $mergereference) {
-	$template->param({
+	$template->param(
 	    choosereference => 1,	
 	    biblio1 => $biblionumber[0],
 	    biblio2 => $biblionumber[1],
 	    title1 => $data1->{'title'},
 	    title2 => $data2->{'title'}
-	    });
+	    );
     } else {
 
 	if (scalar(@biblionumber) != 2) {
@@ -165,7 +165,7 @@ if ($merge) {
 	my @errors_loop  = map{{error => $_}}@errors;
 
 	# Parameters
-	$template->param({
+	$template->param(
 	    errors  => \@errors_loop,
 	    biblio1 => $mergereference,
 	    biblio2 => $notreference,
@@ -173,7 +173,7 @@ if ($merge) {
 	    record1 => @record1,
 	    record2 => @record2,
 	    framework => $framework
-	    });
+	    );
     }
 }
 output_html_with_http_headers $input, $cookie, $template->output;
