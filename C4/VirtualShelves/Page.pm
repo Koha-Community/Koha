@@ -56,7 +56,7 @@ sub shelfpage ($$$$$) {
     ( $pages{$type} ) or $type = 'opac';
     $query            or die "No query";
     $template         or die "No template";
-    $template->param( { loggedinuser => $loggedinuser } );
+    $template->param(  loggedinuser => $loggedinuser  );
     my $edit;
     my $shelves;
     my @paramsloop;
@@ -315,7 +315,10 @@ sub shelfpage ($$$$$) {
                 $stay = 0;
             }
             $showadd = 1;
-            $stay and $template->param( shelves => 1 ) and $shelves = 1;
+            if ($stay){
+                $template->param( shelves => 1 );
+                $shelves = 1;
+            }
             last SWITCH;
         }
     }
@@ -363,10 +366,10 @@ sub shelfpage ($$$$$) {
     }
     ( scalar keys %qhash ) and $url .= '?' . join '&', map { "$_=$qhash{$_}" } keys %qhash;
     if ( $shelfnumber ) {
-        $template->param( { pagination_bar => pagination_bar( $url, ( int( $totitems / $shelflimit ) ) + ( ( $totitems % $shelflimit ) > 0 ? 1 : 0 ), $itemoff, "itemoff" ) } );
+        $template->param(  pagination_bar => pagination_bar( $url, ( int( $totitems / $shelflimit ) ) + ( ( $totitems % $shelflimit ) > 0 ? 1 : 0 ), $itemoff, "itemoff" )  );
     } else {
         $template->param(
-            { pagination_bar => pagination_bar( $url, ( int( $totshelves / $shelveslimit ) ) + ( ( $totshelves % $shelveslimit ) > 0 ? 1 : 0 ), $shelfoff, "shelfoff" ) } );
+             pagination_bar => pagination_bar( $url, ( int( $totshelves / $shelveslimit ) ) + ( ( $totshelves % $shelveslimit ) > 0 ? 1 : 0 ), $shelfoff, "shelfoff" )  );
     }
     $template->param(
         shelveslooppriv                                                    => \@shelveslooppriv,
