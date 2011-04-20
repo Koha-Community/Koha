@@ -140,7 +140,7 @@ function init_pattern() {
 }
 function reset_pattern() {
 	document.getElementById("numberpattern").value = '';
-    document.getElementById("irregularity").innerhtml = '';
+    document.getElementById("irregularity").innerHTML = '';
 	init_pattern();
 	reset_num_pattern();
 }
@@ -255,7 +255,7 @@ var patternchoice = document.getElementById("numberpattern").value;
         break;
     case "7":
         display_table(1);
-        document.getElementById("more_options").innerhtml = '';
+        document.getElementById("more_options").innerHTML = '';
         document.f.irreg_check.value=1; 
         break;
     case "8":  // Year/Number
@@ -406,25 +406,25 @@ function moreoptions_daily_check(x) {
     var periodicity = document.f.periodicity.value;
     var errortext='';
     if(periodicity == 1){ // i.e. daily
-        document.getElementById("irregularity").innerhtml = '';
+        document.getElementById("irregularity").innerHTML = '';
         errortext =_("Please indicate which days of the week you DO NOT expect to receive issues.")+"<br \/>";
         for(var j=0;j<irregular_issues.daynames.length;j++){
             errortext +="<input type='checkbox' name='irregular' id='irregular"+(j+1)+"' value='"+(j+1)+"' />"+irregular_issues.daynames[j]+" &nbsp; ";
         }
         var error = errortext;
         moreoptions(x);
-        document.getElementById("irregularity").innerhtml = error;
+        document.getElementById("irregularity").innerHTML = error;
     } else {
-        document.getElementById("irregularity").innerhtml = '';
-        document.getElementById("more_options").innerhtml = '';
+        document.getElementById("irregularity").innerHTML = '';
+        document.getElementById("more_options").innerHTML = '';
         moreoptions(x);
     }
 }
 
 // to dispaly the more options section
 function moreoptions(x,y,z){
-document.getElementById("irregularity").innerhtml = '';
-document.getElementById("more_options").innerhtml = '';
+document.getElementById("irregularity").innerHTML = '';
+document.getElementById("more_options").innerHTML = '';
 var textbox = '';
     // alert("X: "+x+"Y: "+y+"Z: "+z);
     if(x){
@@ -457,7 +457,7 @@ var textbox = '';
         }
         textbox +="<\/table>\n";
     }
-    document.getElementById("more_options").innerhtml = textbox;
+    document.getElementById("more_options").innerHTML = textbox;
 }
 
 function hemispheres(chosen){
@@ -489,8 +489,8 @@ var selbox = document.getElementById("season1");
 // to display the more options section for seasons
 function moreoptions_seasons(x,y){
 // x = 'Season'.  y = 'Year'.
-document.getElementById("irregularity").innerhtml = '';
-document.getElementById("more_options").innerhtml = '';
+document.getElementById("irregularity").innerHTML = '';
+document.getElementById("more_options").innerHTML = '';
 var textbox = '';
     //alert("X: "+x+"Year: "+y);
     if(x){
@@ -518,7 +518,7 @@ var textbox = '';
         textbox +="<td><input type=\"text\" name=\"whenmorethan2temp\" id=\"whenmorethan2temp\" size=\"4\" onkeyup=\"moreoptionsupdate(this,1)\"><\/td>\n";
         textbox +="<\/tr><\/table>\n";
     }
-    document.getElementById("more_options").innerhtml = textbox;
+    document.getElementById("more_options").innerHTML = textbox;
 }
 
 function irregularity_check(){
@@ -644,7 +644,7 @@ function irregularity_check(){
         error=_("No irregularities noticed");
     }
 	display_example(expected);
-    document.getElementById("irregularity").innerhtml = error;
+    document.getElementById("irregularity").innerHTML = error;
 	irregular_issues.update();
 }
 
@@ -793,7 +793,7 @@ function display_example(expected){
         }
     }
    //  displaytext = "<div style='padding: 5px; background-color: #CCCCCC'>"+displaytext+"<\/div>";
-    document.getElementById("displayexample").innerhtml = displaytext;
+    document.getElementById("displayexample").innerHTML = displaytext;
 }
 
 function isArray(obj) {
