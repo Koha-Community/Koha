@@ -479,7 +479,7 @@ $(document).ready(function(){
 				[% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
 				[% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]
                                 [% IF ( TagsShowOnList ) %]
-                                [% IF ( SEARCH_RESULT.TagLoop ) %]
+                                [% IF ( SEARCH_RESULT.TagLoop.size ) %]
                                     <div class="results_summary">
                                         <span class="label">Tags:</span>
                                         <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
