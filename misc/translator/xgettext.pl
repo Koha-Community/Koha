@@ -347,11 +347,11 @@ usage_error('You cannot specify both --convert-from and --files-from')
 if (defined $output && $output ne '-') {
     print STDERR "$0: Opening output file \"$output\"\n" if $verbose_p;
         open(OUTPUT, ">$output") || die "$output: $!\n";
-    binmode( OUTPUT, ":utf8" );
 } else {
     print STDERR "$0: Outputting to STDOUT...\n" if $verbose_p;
     open(OUTPUT, ">&STDOUT");
 }
+binmode( OUTPUT, ":utf8" );
 
 if (defined $files_from) {
     print STDERR "$0: Opening input file list \"$files_from\"\n" if $verbose_p;
