@@ -34,6 +34,8 @@ require C4::Reserves;
 use C4::Charset;
 use C4::Acquisition;
 use List::MoreUtils qw/any/;
+use Data::Dumper; # used as part of logging item record changes, not just for
+                  # debugging; so please don't remove this
 
 use vars qw($VERSION @ISA @EXPORT);
 
