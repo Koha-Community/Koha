@@ -64,7 +64,7 @@ if ($bib_list && $format) {
     } else {
         foreach my $biblio (@bibs) {
 
-            my $record = GetMarcBiblio($biblio);
+            my $record = GetMarcBiblio($biblio, 1);
             next unless $record;
 
             if ($format eq 'iso2709') {

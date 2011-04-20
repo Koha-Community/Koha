@@ -2,6 +2,7 @@ package C4::Biblio;
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2010 BibLibre
+# Copyright 2011 Equinox Software, Inc.
 #
 # This file is part of Koha.
 #
@@ -35,6 +36,7 @@ use C4::ClassSource;
 use C4::Charset;
 require C4::Heading;
 require C4::Serials;
+require C4::Items;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -302,39 +304,7 @@ sub ModBiblio {
 
     $frameworkcode = "" unless $frameworkcode;
 
-    # get the items before and append them to the biblio before updating the record, atm we just have the biblio
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-    my $oldRecord = GetMarcBiblio($biblionumber);
-
-    # delete any item fields from incoming record to avoid
-    # duplication or incorrect data - use AddItem() or ModItem()
-    # to change items
-    foreach my $field ( $record->field($itemtag) ) {
-        $record->delete_field($field);
-    }
-
-    # parse each item, and, for an unknown reason, re-encode each subfield
-    # if you don't do that, the record will have encoding mixed
-    # and the biblio will be re-encoded.
-    # strange, I (Paul P.) searched more than 1 day to understand what happends
-    # but could only solve the problem this way...
-    my @fields = $oldRecord->field($itemtag);
-    foreach my $fielditem (@fields) {
-        my $field;
-        foreach ( $fielditem->subfields() ) {
-            # re-encode the subfield only if it isn't already in utf-8.
-            my ($tag, $value) = @$_;
-            $tag = Encode::encode('utf-8', $tag) unless utf8::is_utf8($tag);
-            $value = Encode::encode('utf-8', $value) unless utf8::is_utf8($value);
-
-            if ($field) {
-                $field->add_subfields( $tag => $value );
-            } else {
-                $field = MARC::Field->new( "$itemtag", '', '', $tag => $value );
-            }
-        }
-        $record->append_fields($field);
-    }
+    _strip_item_fields($record, $frameworkcode);
 
     foreach my $field ($record->fields()) {
         if (! $field->is_control_field()) {
@@ -366,6 +336,29 @@ sub ModBiblio {
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
+}
+
+=head2 _strip_item_fields
+
+  _strip_item_fields($record, $frameworkcode)
+
+Utility routine to remove item tags from a
+MARC bib.
+
+=cut
+
+sub _strip_item_fields {
+    my $record = shift;
+    my $frameworkcode = shift;
+    # get the items before and append them to the biblio before updating the record, atm we just have the biblio
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+
+    # delete any item fields from incoming record to avoid
+    # duplication or incorrect data - use AddItem() or ModItem()
+    # to change items
+    foreach my $field ( $record->field($itemtag) ) {
+        $record->delete_field($field);
+    }
 }
 
 =head2 ModBiblioframework
@@ -760,7 +753,7 @@ Return the ISBD view which can be included in opac and intranet
 
 sub GetISBDView {
     my ( $biblionumber, $template ) = @_;
-    my $record   = GetMarcBiblio($biblionumber);
+    my $record   = GetMarcBiblio($biblionumber, 1);
     return undef unless defined $record;
     my $itemtype = &GetFrameworkCode($biblionumber);
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
@@ -1047,16 +1040,18 @@ sub GetMarcFromKohaField {
 
 =head2 GetMarcBiblio
 
-  my $record = GetMarcBiblio($biblionumber);
+  my $record = GetMarcBiblio($biblionumber, [$embeditems]);
 
 Returns MARC::Record representing bib identified by
 C<$biblionumber>.  If no bib exists, returns undef.
-The MARC record contains both biblio & item data.
+C<$embeditems>.  If set to true, items data are included.
+The MARC record contains biblio data, and items data if $embeditems is set to true.
 
 =cut
 
 sub GetMarcBiblio {
     my $biblionumber = shift;
+    my $embeditems   = shift || 0;
     my $dbh          = C4::Context->dbh;
     my $sth          = $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
@@ -1068,6 +1063,9 @@ sub GetMarcBiblio {
     if ($marcxml) {
         $record = eval { MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour') ) };
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
+        return unless $record;
+
+	C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
 
         #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;
@@ -2653,6 +2651,35 @@ sub GetNoZebraIndexes {
         $indexes{$index} = $fields;
     }
     return %indexes;
+}
+
+=head2 EmbedItemsInMarcBiblio
+
+    EmbedItemsInMarcBiblio($marc, $biblionumber);
+
+Given a MARC::Record object containing a bib record,
+modify it to include the items attached to it as 9XX
+per the bib's MARC framework.
+
+=cut
+
+sub EmbedItemsInMarcBiblio {
+    my ($marc, $biblionumber) = @_;
+
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+    _strip_item_fields($marc, $frameworkcode);
+
+    # ... and embed the current items
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
+    $sth->execute($biblionumber);
+    my @item_fields;
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    while (my ($itemnumber) = $sth->fetchrow_array) {
+        my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
+        push @item_fields, $item_marc->field($itemtag);
+    }
+    $marc->insert_fields_ordered(@item_fields);
 }
 
 =head1 INTERNAL FUNCTIONS

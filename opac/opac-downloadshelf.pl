@@ -68,7 +68,7 @@ if ($shelfid && $format) {
         foreach my $biblio (@$items) {
             my $biblionumber = $biblio->{biblionumber};
 
-            my $record = GetMarcBiblio($biblionumber);
+            my $record = GetMarcBiblio($biblionumber, 1);
             next unless $record;
 
             if ($format eq 'iso2709') {

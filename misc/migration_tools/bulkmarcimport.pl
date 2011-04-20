@@ -323,10 +323,13 @@ RECORD: while (  ) {
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
                 # if we failed because of an exception, assume that 
                 # the MARC columns in biblioitems were not set.
+                C4::Biblio::_strip_item_fields($record, '');
                 ModBiblioMarc( $record, $biblionumber, '' );
                 next RECORD;
             } 
  			else{
+                C4::Biblio::_strip_item_fields($record, '');
+                ModBiblioMarc( $record, $biblionumber, '' ); # need to call because of defer_marc_save
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
 			}
             if ($#{ $errors_ref } > -1) { 
