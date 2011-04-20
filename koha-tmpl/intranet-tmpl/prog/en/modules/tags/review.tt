@@ -23,9 +23,9 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	var rej_count = 0;
 	var alerted = 0;
 	function pull_counts () {
-		ok_count  = parseInt(document.getElementById("terms_summary_approved_count"  ).innerhtml);
-		nok_count = parseInt(document.getElementById("terms_summary_unapproved_count").innerhtml);
-		rej_count = parseInt(document.getElementById("terms_summary_rejected_count"  ).innerhtml);
+		ok_count  = parseInt(document.getElementById("terms_summary_approved_count"  ).innerHTML);
+		nok_count = parseInt(document.getElementById("terms_summary_unapproved_count").innerHTML);
+		rej_count = parseInt(document.getElementById("terms_summary_rejected_count"  ).innerHTML);
 	}
 	function count_approve () {
 		pull_counts();
