@@ -946,9 +946,9 @@
 			<ol class="radio">
 			[% FOREACH flagloo IN flagloop %]
 				<li><label class="radio" for="yes[% flagloo.name %]">
-				[% IF ( key == 'gonenoaddress' ) %]Gone no Address:[% END %]
-				[% IF ( key == 'debarred' ) %]Debarred:[% END %]
-				[% IF ( key == 'lost' ) %]Lost Card:[% END %]
+				[% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no Address:[% END %]
+				[% IF ( flagloo.key == 'debarred' ) %]Debarred:[% END %]
+				[% IF ( flagloo.key == 'lost' ) %]Lost Card:[% END %]
                 </label>
 				<label for="yes[% flagloo.name %]">Yes </label>
 				[% IF ( flagloo.yes ) %]
