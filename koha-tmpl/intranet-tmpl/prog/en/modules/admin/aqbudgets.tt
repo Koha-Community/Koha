@@ -10,7 +10,7 @@
      var actTotal ="";
 
     function ownerRemove(f) {
-        document.getElementById('budget_owner_name').innerhtml = '';
+        document.getElementById('budget_owner_name').innerHTML = '';
     }
 
     function Check(f) {
@@ -247,7 +247,6 @@
 <!-- ********************************************************************************************** -->
 <!-- create add/mod entry form -->
 [% IF ( add_form ) %]
-
 <form action="/cgi-bin/koha/admin/aqbudgets.pl" name="Aform" method="post">
     <fieldset class="rows">
     <legend>[% IF ( budget_id ) %]Modify[% ELSE %]Add[% END %] Fund
