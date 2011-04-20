@@ -669,12 +669,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             </h5>
             <small>[% review.datereviewed %]</small>
         <p>
-          [% review.review |0 %]
+          [% review.review %]
           <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber %]&amp;reviewid=[% review.reviewid %]');">Edit</a>
         </p></div>
             [% ELSE %]
             <div class="commentline">
-            [% IF ( review.ShowReviewer ) %]
+            [% IF ( ShowReviewer ) %]
             <h5>
                 Comment by
                 [% review.title %]
@@ -684,7 +684,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% END %]
             <small>[% review.datereviewed %]</small>
         <p>
-          [% review.review |0 %]
+          [% review.review %]
         </p></div>
             [% END %]
         [% END %]

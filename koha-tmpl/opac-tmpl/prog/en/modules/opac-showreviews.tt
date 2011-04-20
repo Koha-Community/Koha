@@ -22,9 +22,9 @@ $(document).ready(function(){
     [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
         <td>
 
-<p>[% IF ( review.BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
+<p>[% IF ( BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
     [% ELSE %]
-    [% IF ( review.BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
+    [% IF ( BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
     [% ELSE %]<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber |url %]#comments" title="View details for this title">
     [% END %]
     [% END %]
@@ -47,7 +47,9 @@ $(document).ready(function(){
     [% IF ( review.copyrightdate ) %]<span class="results_summary"><span class="label">Date:</span>[% review.copyrightdate %]</span>[% END %]</p>
 
             <p class="commentline[% IF ( review.your_comment ) %] yours[% END %]">[% review.review |html %]
-            <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed %] by [% IF ( review.your_comment ) %]<strong>you</strong>[% ELSE %][% review.firstname %] [% review.surname %][% END %]</span></p>
+            <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
+            [% IF ( ShowReviewer ) %] by
+            [% review.firstname %] [% review.surname %][% END %][% END %]</span></p>
         </td>
         <td>
             <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]">
