@@ -101,7 +101,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('reviewson',1,'If ON, enables patron reviews of bibliographic records in the OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SpecifyDueDate',1,'Define whether to display \"Specify Due Date\" form in Circulation','','YesNo');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionHistory',';','Define the display preference for serials issue history in OPAC','simplified|full','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionHistory','simplified','Define the display preference for serials issue history in OPAC','simplified|full','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('SubscriptionLog',1,'If ON, enables subscriptions log',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('suggestion',1,'If ON, enables patron suggestions feature in OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('template','prog','Define the preferred staff interface template','','Themes');
