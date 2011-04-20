@@ -304,15 +304,7 @@ sub ModBiblio {
 
     $frameworkcode = "" unless $frameworkcode;
 
-    # get the items before and append them to the biblio before updating the record, atm we just have the biblio
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-
-    # delete any item fields from incoming record to avoid
-    # duplication or incorrect data - use AddItem() or ModItem()
-    # to change items
-    foreach my $field ( $record->field($itemtag) ) {
-        $record->delete_field($field);
-    }
+    _strip_item_fields($record, $frameworkcode);
 
     foreach my $field ($record->fields()) {
         if (! $field->is_control_field()) {
@@ -344,6 +336,29 @@ sub ModBiblio {
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
+}
+
+=head2 _strip_item_fields
+
+  _strip_item_fields($record, $frameworkcode)
+
+Utility routine to remove item tags from a
+MARC bib.
+
+=cut
+
+sub _strip_item_fields {
+    my $record = shift;
+    my $frameworkcode = shift;
+    # get the items before and append them to the biblio before updating the record, atm we just have the biblio
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+
+    # delete any item fields from incoming record to avoid
+    # duplication or incorrect data - use AddItem() or ModItem()
+    # to change items
+    foreach my $field ( $record->field($itemtag) ) {
+        $record->delete_field($field);
+    }
 }
 
 =head2 ModBiblioframework
@@ -2650,17 +2665,15 @@ per the bib's MARC framework.
 sub EmbedItemsInMarcBiblio {
     my ($marc, $biblionumber) = @_;
 
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField('items.itemnumber', GetFrameworkCode($biblionumber));
-    # delete any fields already in the record that use the item tag
-    foreach my $field ( $marc->field($itemtag) ) {
-        $marc->delete_field($field);
-    }
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+    _strip_item_fields($marc, $frameworkcode);
 
     # ... and embed the current items
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
     $sth->execute($biblionumber);
     my @item_fields;
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
     while (my ($itemnumber) = $sth->fetchrow_array) {
         my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
         push @item_fields, $item_marc->field($itemtag);
