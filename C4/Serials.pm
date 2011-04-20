@@ -1634,7 +1634,9 @@ sub HasSubscriptionExpired {
         my $sth = $dbh->prepare($query);
         $sth->execute($subscriptionid);
         my ($res) = $sth->fetchrow;
-        return 0 unless $res;
+        if (!$res || $res=~m/^0000/) {
+            return 0;
+        }
         my @res                   = split( /-/, $res );
         my @endofsubscriptiondate = split( /-/, $expirationdate );
         return 2 if ( scalar(@res) != 3 || scalar(@endofsubscriptiondate) != 3 || not check_date(@res) || not check_date(@endofsubscriptiondate) );
