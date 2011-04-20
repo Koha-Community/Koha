@@ -306,7 +306,6 @@ sub ModBiblio {
 
     # get the items before and append them to the biblio before updating the record, atm we just have the biblio
     my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-    my $oldRecord = GetMarcBiblio($biblionumber);
 
     # delete any item fields from incoming record to avoid
     # duplication or incorrect data - use AddItem() or ModItem()
