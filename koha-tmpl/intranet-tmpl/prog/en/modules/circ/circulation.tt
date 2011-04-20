@@ -847,6 +847,7 @@ No patron matched <span class="ex">[% message %]</span>
         <input type="submit" id="renew_all" name="renew_all" value="Renew all" />
         </fieldset>
     [% END %]
+    </form>
 [% ELSE %]
 <p>Patron has nothing checked out.</p>
 [% END %]
@@ -886,8 +887,8 @@ No patron matched <span class="ex">[% message %]</span>
         <td>[% relissue.charge %]</td>
         <td>[% relissue.replacementprice %]</td><td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.borrowername %] ([% relissue.cardnumber %])</a></td>
      </tr>
-    [% END %] <!-- /loop todayissues -->
-    <!-- /if todayissues -->[% END %]
+    [% END %] <!-- /loop relissues -->
+    <!-- /if relissues -->[% END %]
 [% IF ( relprevissues ) %]
 <tr><th class="{sorter: false}" colspan="10"><a name="relprevious" id="relprevious"></a>Previous checkouts</th></tr>
     [% FOREACH relprevissue IN relprevissues %]
@@ -909,11 +910,10 @@ No patron matched <span class="ex">[% message %]</span>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relprevissue.borrowernumber %]">[% relprevissue.borrowername %] ([% relprevissue.cardnumber %])</a></td>
 
     </tr>
-    <!-- /loop previssues -->[% END %]
-<!--/if previssues -->[% END %]
+    <!-- /loop relprevissue -->[% END %]
+<!--/if relprevissues -->[% END %]
       </tbody>
     </table>
-</form>
 
 </div>
 [% END %]<!-- end displayrelissues -->
