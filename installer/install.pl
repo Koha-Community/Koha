@@ -188,15 +188,12 @@ elsif ( $step && $step == 3 ) {
     }
     elsif ( $op && $op eq 'finish' ) {
         $installer->set_version_syspref();
+        $installer->set_indexing_engine(0); # use Zebra
 
         # Installation is finished.
         # We just deny anybody access to install
         # And we redirect people to mainpage.
         # The installer will have to relogin since we do not pass cookie to redirection.
-        $template->param( "$op" => 1 );
-    }
-    elsif ( $op && $op eq 'SetIndexingEngine' ) {
-        $installer->set_indexing_engine($query->param('NoZebra'));
         $template->param( "$op" => 1 );
     }
     elsif ( $op && $op eq 'addframeworks' ) {
