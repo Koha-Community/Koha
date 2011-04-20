@@ -842,7 +842,7 @@ sub Generate_Userid {
   do {
     $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
     $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
-    $newuid = lc("$firstname.$surname");
+    $newuid = lc(($firstname)? "$firstname.$surname" : $surname);
     $newuid .= $offset unless $offset == 0;
     $offset++;
 
