@@ -11,7 +11,7 @@
 // modify parent window owner element
 function returnOwner(ownerId, ownerName){
     var top1 = top.opener;
-    top1.document.getElementById('budget_owner_name').innerhtml = ownerName;
+    top1.document.getElementById('budget_owner_name').innerHTML = ownerName;
     top1.document.getElementById('budget_owner_id').value = ownerId;
     window.close();
 }
