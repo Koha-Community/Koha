@@ -105,7 +105,7 @@ for my $date qw(startdate enddate firstacquidate histstartdate histenddate){
 }
 $subs->{location} = GetKohaAuthorisedValueLib("LOC",$subs->{location});
 $subs->{abouttoexpire}  = abouttoexpire($subs->{subscriptionid});
-$template->param($subs);
+$template->param(%{ $subs });
 $template->param(biblionumber_for_new_subscription => $subs->{bibnum});
 my @irregular_issues = split /,/, $subs->{irregularity};
 
