@@ -489,7 +489,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                   <span class="noholdstext">No holds allowed</span>
                               [% ELSE %]
                                   <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds</a>
-                                  [% IF ( SEARCH_RESULT.holdfor ) %] | <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% SEARCH_RESULT.holdfor_cardnumber %]">Hold for [% SEARCH_RESULT.holdfor_firstname %] [% SEARCH_RESULT.holdfor_surname %] ([% SEARCH_RESULT.holdfor_cardnumber %])</a>[% END %]
+                                  [% IF ( holdfor ) %] | <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a>[% END %]
                               [% END %]
                           [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                           | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit record</a>
