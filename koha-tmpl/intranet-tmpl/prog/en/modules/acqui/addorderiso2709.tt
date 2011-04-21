@@ -48,7 +48,7 @@
 
                              </td>
                              <td>[% biblio_lis.overlay_status %]</td>
-                             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% biblio_lis.booksellerid %]&amp;basketno=[% biblio_lis.basketno %]&amp;booksellerid=[% biblio_lis.booksellerid %]&amp;breedingid=[% biblio_lis.import_record_id %]&amp;import_batch_id=[% biblio_lis.import_batch_id %]&amp;biblionumber=[% biblio_lis.match_biblionumber %]">Add order</a></td>
+                             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]&amp;breedingid=[% biblio_lis.import_record_id %]&amp;import_batch_id=[% biblio_lis.import_batch_id %]&amp;biblionumber=[% biblio_lis.match_biblionumber %]">Add order</a></td>
                          </tr>
      [% IF ( biblio_lis.match_biblionumber ) %]
     <tr>
@@ -92,7 +92,7 @@
                        <td>[% batch_lis.import_status %]</td>
                        <td>[% batch_lis.upload_timestamp %]</td>
                        <td>[% batch_lis.num_biblios %]</td>
-                       <td><a href="[% batch_lis.scriptname %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;basketno=[% batch_lis.basketno %]&amp;booksellerid=[% batch_lis.booksellerid %]">Add orders</a></td>
+                       <td><a href="[% batch_lis.scriptname %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]">Add orders</a></td>
                      </tr>
                      [% END %]
                      </tbody>
