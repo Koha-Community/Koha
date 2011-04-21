@@ -749,7 +749,7 @@ Returns the borrowernumber
 sub AddMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-    $data{'password'} = '!' if (not $data{'password'} and $data{'userid'});
+    $data{'userid'} = '' unless $data{'password'};
     $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
 	$data{'borrowernumber'}=InsertInTable("borrowers",\%data);	
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
