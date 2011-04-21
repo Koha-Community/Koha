@@ -262,7 +262,6 @@ sub generate_subfield_form {
 
 
 my $input        = new CGI;
-my $dbh          = C4::Context->dbh;
 my $error        = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
@@ -574,7 +573,7 @@ my $onlymine = C4::Context->preference('IndependantBranches') &&
 my $branches = GetBranchesLoop(C4::Context->userenv->{branch},$onlymine);  # build once ahead of time, instead of multiple times later.
 
 # We generate form, from actuel record
-my @fields;
+@fields = ();
 if($itemrecord){
     foreach my $field ($itemrecord->fields()){
         my $tag = $field->{_tag};
