@@ -71,7 +71,7 @@ var humanMsg = {
 
 	bindEvents: function() {
 	// Remove message if mouse is moved or key is pressed
-		jQuery(window)
+		jQuery(document)
 			.mousemove(humanMsg.removeMsg)
 			.click(humanMsg.removeMsg)
 			.keypress(humanMsg.removeMsg)
@@ -79,7 +79,7 @@ var humanMsg = {
 
 	removeMsg: function() {
 		// Unbind mouse & keyboard
-		jQuery(window)
+		jQuery(document)
 			.unbind('mousemove', humanMsg.removeMsg)
 			.unbind('click', humanMsg.removeMsg)
 			.unbind('keypress', humanMsg.removeMsg)
