@@ -43,7 +43,7 @@
                         [% overduesloo.date_due %]
                     </td>
                     <td>
-                    [% INCLUDE 'biblio-default-view.inc' %][% overduesloo.title |html %] [% IF ( overduesloo.subtitle ) %][% overduesloo.subtitle %][% END %]</a> [% IF ( overduesloo.author ) %] by [% overduesloo.author %][% END %]
+                    [% INCLUDE 'biblio-default-view.inc' biblionumber = overduesloo.biblionumber %][% overduesloo.title |html %] [% IF ( overduesloo.subtitle ) %][% overduesloo.subtitle %][% END %]</a> [% IF ( overduesloo.author ) %] by [% overduesloo.author %][% END %]
 
                             <br />Barcode : [% overduesloo.barcode %]
                     </td>

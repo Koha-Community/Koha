@@ -196,7 +196,7 @@ function placeHold () {
                 [% UNLESS ( noItemTypeImages ) %]<img src="[% itemsloo.imageurl %]" alt="[% itemsloo.description %]" title="[% itemsloo.description %]" />[% END %][% itemsloo.description %]
 			</td>[% END %]
 			<td>
-			[% INCLUDE 'biblio-default-view.inc' %]
+			[% INCLUDE 'biblio-default-view.inc' biblionumber = itemsloo.biblionumber %]
 			[% itemsloo.title |html %][% FOREACH subtitl IN itemsloo.subtitle %] [% subtitl.subfield %][% END %]</a>
 			</td>
 			<td>[% itemsloo.author %]</td>

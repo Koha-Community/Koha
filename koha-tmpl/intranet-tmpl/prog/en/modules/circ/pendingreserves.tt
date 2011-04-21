@@ -118,7 +118,7 @@ $.tablesorter.addParser({
                 <td>[% reserveloo.rcount %]</td> 
                 <td>
                     <p>
-            [% INCLUDE 'biblio-default-view.inc' %]
+            [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
                                 [% reserveloo.title |html %] [% reserveloo.subtitle %]
                             </a>
                     </p>
