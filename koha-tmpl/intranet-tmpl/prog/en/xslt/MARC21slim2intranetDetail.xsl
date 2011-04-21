@@ -17,8 +17,8 @@
         <xsl:variable name="display880" select="boolean(marc:datafield[@tag=880])"/>
 
     <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
-        <xsl:variable name="urlLinkText" select="marc:sysprefs/marc:syspref[@name='urlLinkText']"/>
-        <xsl:variable name="OPACBaseurl" select="marc:sysprefs/marc:syspref[@name='OPACBaseurl']"/>
+        <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
+        <xsl:variable name="OPACBaseURL" select="marc:sysprefs/marc:syspref[@name='OPACBaseURL']"/>
         <xsl:variable name="SubjectModifier"><xsl:if test="marc:sysprefs/marc:syspref[@name='TraceCompleteSubfields']='1'">,complete-subfield</xsl:if></xsl:variable>
         <xsl:variable name="UseAuthoritiesForTracings" select="marc:sysprefs/marc:syspref[@name='UseAuthoritiesForTracings']"/>
         <xsl:variable name="TraceSubjectSubdivisions" select="marc:sysprefs/marc:syspref[@name='TraceSubjectSubdivisions']"/>
@@ -488,8 +488,8 @@
                                     </xsl:when>
                                     <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
                                         <xsl:choose>
-                                        <xsl:when test="$urlLinkText!=''">
-                                                <xsl:value-of select="$urlLinkText"/>
+                                        <xsl:when test="$URLLinkText!=''">
+                                                <xsl:value-of select="$URLLinkText"/>
                                         </xsl:when>
                                         <xsl:otherwise>
                                                 <xsl:text>Click here to access online</xsl:text>
@@ -727,9 +727,9 @@
         </xsl:for-each>
         </xsl:if>
 
-        <xsl:if test="$OPACBaseurl!=''">
+        <xsl:if test="$OPACBaseURL!=''">
         <span class="results_summary"><span class="label">OPAC view: </span>
-            <a><xsl:attribute name="href">http://<xsl:value-of select="$OPACBaseurl"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
+            <a><xsl:attribute name="href">http://<xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
         </span>
         </xsl:if>
 

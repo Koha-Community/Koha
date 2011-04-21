@@ -21,8 +21,8 @@
 
     <xsl:variable name="hidelostitems" select="marc:sysprefs/marc:syspref[@name='hidelostitems']"/>
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
-    <xsl:variable name="OPACurlOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACurlOpenInNewWindow']"/>
-    <xsl:variable name="urlLinkText" select="marc:sysprefs/marc:syspref[@name='urlLinkText']"/>
+    <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
+    <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
     <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
     <xsl:variable name="AlternateHoldingsField" select="substring(marc:sysprefs/marc:syspref[@name='AlternateHoldingsField'], 1, 3)"/>
     <xsl:variable name="AlternateHoldingsSubfields" select="substring(marc:sysprefs/marc:syspref[@name='AlternateHoldingsField'], 4)"/>
@@ -909,7 +909,7 @@
 			   <span class="label">Online Access: </span>
                             <xsl:for-each select="marc:datafield[@tag=856]">
                             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
-                            <xsl:if test="$OPACurlOpenInNewWindow='0'">
+                            <xsl:if test="$OPACURLOpenInNewWindow='0'">
                                    <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
                                     <xsl:choose>
                                      <xsl:when test="($Show856uAsImage='Results' or $Show856uAsImage='Both') and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
@@ -922,8 +922,8 @@
                                     </xsl:when>
                                     <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
 					<xsl:choose>
-					<xsl:when test="$urlLinkText!=''">
-						<xsl:value-of select="$urlLinkText"/>
+					<xsl:when test="$URLLinkText!=''">
+						<xsl:value-of select="$URLLinkText"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>Click here to access online</xsl:text>
@@ -933,7 +933,7 @@
                                     </xsl:choose>
                                     </a>
                               </xsl:if>
-                            <xsl:if test="$OPACurlOpenInNewWindow='1'">
+                            <xsl:if test="$OPACURLOpenInNewWindow='1'">
                                    <a target='_blank'><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
                                     <xsl:choose>
                                     <xsl:when test="($Show856uAsImage='Results' or $Show856uAsImage='Both') and ($SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
@@ -946,8 +946,8 @@
                                     </xsl:when>
                                     <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
 					<xsl:choose>
-					<xsl:when test="$urlLinkText!=''">
-						<xsl:value-of select="$urlLinkText"/>
+					<xsl:when test="$URLLinkText!=''">
+						<xsl:value-of select="$URLLinkText"/>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>Click here to access online</xsl:text>

@@ -19,8 +19,8 @@
 
     <xsl:variable name="UseControlNumber" select="marc:sysprefs/marc:syspref[@name='UseControlNumber']"/>
     <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"/>
-    <xsl:variable name="OPACurlOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACurlOpenInNewWindow']"/>
-    <xsl:variable name="urlLinkText" select="marc:sysprefs/marc:syspref[@name='urlLinkText']"/>
+    <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindow']"/>
+    <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
     <xsl:variable name="ShowISBD" select="marc:sysprefs/marc:syspref[@name='viewISBD']"/>
     
     <xsl:variable name="SubjectModifier"><xsl:if test="marc:sysprefs/marc:syspref[@name='TraceCompleteSubfields']='1'">,complete-subfield</xsl:if></xsl:variable>
@@ -535,7 +535,7 @@
         <xsl:for-each select="marc:datafield[@tag=856]">
             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
             <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-            <xsl:if test="$OPACurlOpenInNewWindow='1'">
+            <xsl:if test="$OPACURLOpenInNewWindow='1'">
                 <xsl:attribute name="target">_blank</xsl:attribute>
             </xsl:if>
             <xsl:choose>
@@ -547,8 +547,8 @@
                     <xsl:with-param name="codes">y3z</xsl:with-param>
                 </xsl:call-template>
             </xsl:when>
-            <xsl:when test="$urlLinkText!=''">
-                <xsl:value-of select="$urlLinkText"/>
+            <xsl:when test="$URLLinkText!=''">
+                <xsl:value-of select="$URLLinkText"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:text>Click here to access online</xsl:text>
@@ -572,7 +572,7 @@
             </xsl:call-template>
             <xsl:for-each select="marc:subfield[@code='u']">
                 <a><xsl:attribute name="href"><xsl:value-of select="text()"/></xsl:attribute>
-                <xsl:if test="$OPACurlOpenInNewWindow='1'">
+                <xsl:if test="$OPACURLOpenInNewWindow='1'">
                     <xsl:attribute name="target">_blank</xsl:attribute>
                 </xsl:if>
                 <xsl:value-of select="text()"/>
