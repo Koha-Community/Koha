@@ -55,7 +55,6 @@ BEGIN {
         import  C4::Auth_with_cas qw(checkpw_cas login_cas logout_cas login_cas_url);
     }
     $servers = C4::Context->config('memcached_servers');
-    $memcached;
     if ($servers) {
 	require Cache::Memcached;
         $memcached = Cache::Memcached->new({
