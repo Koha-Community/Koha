@@ -549,7 +549,7 @@ if(scalar(@select_branch) > 0){
 # --------------------------------------------------------------------------------------------------------
   #in modify mod :default value from $CGIbranch comes from borrowers table
   #in add mod: default value come from branches table (ip correspendence)
-$default=$data{'branchcode'}  if ($op eq 'modify' || ($op eq 'add' && $category_type eq 'C'));
+$default=$data{'branchcode'}  if ($op eq 'modify' || ($op eq 'add' && $category_type eq 'C' && $data{'branchcode'}));
 $CGIbranch = CGI::scrolling_list(-id    => 'branchcode',
             -name   => 'branchcode',
             -values => \@select_branch,
