@@ -66,8 +66,11 @@ my $dbh = C4::Context->dbh;
 $|=1; # flushes output
 
 
-# Deal with virtualshelves
+# Record the version we are coming from
 
+my $original_version = C4::Context->preference("Version");
+
+# Deal with virtualshelves
 my $DBversion = "3.00.00.001";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     # update virtualshelves table to
@@ -3807,8 +3810,11 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+# This is the point where 3.2.x and master diverged, we can use $original_version to make sure we don't
+# apply updates that have already been done
+
 $DBversion = "3.03.00.001";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.00.005")) {
     $dbh->do("DELETE FROM subscriptionroutinglist WHERE borrowernumber IS NULL;");
     $dbh->do("ALTER TABLE subscriptionroutinglist MODIFY COLUMN `borrowernumber` int(11) NOT NULL;");
     $dbh->do("DELETE FROM subscriptionroutinglist WHERE subscriptionid IS NULL;");
@@ -3835,7 +3841,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.03.00.002';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.00.006")) {
     $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='arm' WHERE rfc4646_subtag='hy';");
     $dbh->do("UPDATE language_rfc4646_to_iso639 SET iso639_2_code='eng' WHERE rfc4646_subtag='en';");
     $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'fi','fin');");
@@ -3851,14 +3857,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.03.00.003';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.00.007")) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('UseTablesortForCirc','0','If on, use the JQuery tablesort function on the list of current borrower checkouts on the circulation page. Note that the use of this function may slow down circ for patrons with may checkouts.','','YesNo');");
     print "Upgrade to $DBversion done (Add UseTablesortForCirc syspref)\n";
     SetVersion ($DBversion);
 }
 
 $DBversion = '3.03.00.004';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.01.001")) {
     my $count = $dbh->selectrow_array('SELECT COUNT(*) FROM letter WHERE module = ? AND code = ?', {}, 'suggestions', 'ACCEPTED');
     $dbh->do(q/
 INSERT INTO `letter`
@@ -3898,7 +3904,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.03.00.006';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.01.002")) {
     $dbh->do("ALTER TABLE deletedborrowers ADD `privacy` int(11) AFTER smsalertnumber;");
     $dbh->do("ALTER TABLE deletedborrowers CHANGE `cardnumber` `cardnumber` varchar(16);");
     print "Upgrade to $DBversion done (Fix differences between borrowers and deletedborrowers)\n";
@@ -3924,14 +3930,14 @@ if (C4::Context->preference('Version') < TransformToNum($DBversion)){
 }
 
 $DBversion = '3.03.00.009';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.01.003")) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('IntranetUserCSS','','Add CSS to be included in the Intranet',NULL,'free')");
     print "Upgrade to $DBversion done (Add IntranetUserCSS syspref)\n";
     SetVersion ($DBversion);
 }
 
 $DBversion = "3.03.00.010";
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.02.001")) {
     $dbh->do("UPDATE `marc_subfield_structure` SET liblibrarian = 'Distance from earth' WHERE liblibrarian = 'Distrance from earth' AND tagfield = '034' AND tagsubfield = 'r';");
     $dbh->do("UPDATE `marc_subfield_structure` SET libopac = 'Distance from earth' WHERE libopac = 'Distrance from earth' AND tagfield = '034' AND tagsubfield = 'r';");
     print "Upgrade to $DBversion done (Fix misspelled 034r subfield in MARC21 Frameworks)\n";
@@ -3996,14 +4002,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 };
 
 $DBversion = '3.03.00.017';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.03.001")) {
     $dbh->do("ALTER TABLE  `currency` CHANGE `rate` `rate` FLOAT( 15, 5 ) NULL DEFAULT NULL;");
     print "Upgrade to $DBversion done (Enable currency rates >= 100)\n";
     SetVersion ($DBversion);
 }
 
 $DBversion = '3.03.00.018';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.03.002")) {
     $dbh->do( q|update language_descriptions set description = 'Nederlands' where lang = 'nl' and subtag = 'nl'|);
     $dbh->do( q|update language_descriptions set description = 'Dansk' where lang = 'da' and subtag = 'da'|);
     print "Upgrade to $DBversion done (Correct language descriptions)\n";
@@ -4011,7 +4017,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.03.00.019';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.03.003")) {
     # Fix bokmål
     $dbh->do("UPDATE language_subtag_registry SET description = 'Norwegian bokm&#229;l' WHERE subtag = 'nb';");
     $dbh->do("INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code) VALUES( 'nb','nob');");
@@ -4038,7 +4044,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 };
 
 $DBversion = '3.03.00.021';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.05.001")) {
     $dbh->do("ALTER TABLE items MODIFY enumchron TEXT");
     $dbh->do("ALTER TABLE deleteditems MODIFY enumchron TEXT");
     print "Upgrade to $DBversion done (bug 5642: longer serial enumeration)\n";
@@ -4055,7 +4061,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 # due to a mismatch in kohastructure.sql some koha will have missing columns in aqbasketgroup
 # this attempts to fix that
 $DBversion = '3.03.00.023';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.05.002")) {
     my $sth = $dbh->prepare("SELECT * FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'aqbasketgroups' AND COLUMN_NAME = 'billingplace'");
     $sth->execute;
     $dbh->do("ALTER TABLE aqbasketgroups ADD billingplace VARCHAR(10)") if ! $sth->fetchrow_hashref;
@@ -4085,7 +4091,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.03.00.026';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.05.003")) {
     $dbh->do("UPDATE `message_attributes` SET message_name='Item Due' WHERE message_attribute_id=1 AND message_name LIKE 'Item DUE'");
 	print "Upgrade to $DBversion done ( fix capitalization in message type )\n";
     SetVersion ($DBversion);
@@ -4210,7 +4216,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.03.00.042';
-if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.06.001")) {
     $dbh->do("ALTER TABLE `items` DROP INDEX `itemsstocknumberidx`;");
     $dbh->do("ALTER TABLE items ADD INDEX itemstocknumberidx (stocknumber);");
     print "Upgrade to $DBversion done (Change items.stocknumber to be not unique)\n";
