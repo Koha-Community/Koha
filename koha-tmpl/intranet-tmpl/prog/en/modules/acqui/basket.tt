@@ -272,10 +272,10 @@
                         <td class="number">[% books_loo.quantity %]</td>
                         <td class="number">[% books_loo.line_total %]</td>
                         <td>[% books_loo.budget_name %]</td>
-                        [% IF ( books_loo.active ) %]
-                            [% UNLESS ( books_loo.closedate ) %]
+                        [% IF ( active ) %]
+                            [% UNLESS ( closedate ) %]
                             <td>
-                                <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber %]&amp;booksellerid=[% books_loo.booksellerid %]&amp;basketno=[% books_loo.basketno %]">Modify</a>
+                                <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber %]&amp;booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Modify</a>
                             </td>
                             <td>
                             <a href="javascript:confirm_delete_item([% books_loo.ordernumber %],[% books_loo.biblionumber %])" class="button">Delete</a>
