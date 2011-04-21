@@ -319,14 +319,28 @@ Authority data in MARC21 format
 
 UPGRADE
 =======
-If you are upgrading from a previous installation of Koha 3, you can
+If you are upgrading from a previous installation of Koha 3.x, you can
 use the following:
 
  ./koha_perl_deps.pl -u -m # to identify new Perl dependencies
+
+Install any missing modules
+IMPORTANT: Koha 3.4.x uses Template::Toolkit, this must be installed
+before the webinstaller can run
+
+ sudo apt-get install libtemplate-perl
+
  perl Makefile.PL --prev-install-log /path/to/koha-install-log
  make
  make test
  sudo make upgrade
+
+Koha 3.4.x no longer stores items in biblio records so as part of the
+upgrade you will need to do the following two steps, they can take a
+long time (several hours) to complete for large databases
+
+ misc/maintenance/remove_items_from_biblioitems.pl --run
+ misc/migration_tools/rebuild_zebra.pl -b -r
 
 Uninstall Instructions
 =============================
