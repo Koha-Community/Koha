@@ -31,7 +31,7 @@ New features in 3.4.0
   ACQUISITIONS:
     * Can filter budgets by active status and date on the acquisitions
       homepage
-    * Freetext field added to specify one off delivery addresses/comments
+    * Freetext field added to specify one-off delivery addresses/comments
     * Can create multiple orders from a staged MARC file
     * New cronjob to delete old suggestions
     * Warning when ordering from an external source when a catalogue
@@ -42,7 +42,7 @@ New features in 3.4.0
     * Many additional granular permissions are added
     * Ability to replace the favicon from within the admin interface
     * Ability to import and export MARC frameworks
-    * Separate field for state
+    * Separate field for library state/province
     * WYSIWYG editor for Koha News
     * Ability to add news items to slips
     * Label batch edit interface allows entry of items by scanning
@@ -65,35 +65,35 @@ New features in 3.4.0
     * Show holds waiting for a patron on check in
     * New report wizard for Holds
     * Syspref to disable the ability for borrowers to choose their
-      pickup branch for holds
+      pickup library for holds
     * Self Checkout supports login
     * Ability to set 'hard' due dates, which will not allow items to 
       be checked out past that
-    * Printed receipts can now include the library phone,address and 
+    * Printed receipts can now include the library phone, address and 
       other fields
     * Fast Add framework at circulation
     * Ability to define due dates in the past
-    * Notify of fines owing at checkin
-    * Preferences for defining the fine level when an staff
+    * Checkin page now lists fines owed by patron
+    * Preferences for defining the fine level when a staff
       override is needed
     * Search to Hold feature
 
   OPAC
-    * New System Preference added to allow the librarians to hide
-      items from the OPAC see docs/opac/OpacHiddenItems.txt
-    * Authority display improved on OPAC
-    * Allow the patron to choose which branch they wish to make a
+    * New system preference added to allow the librarians to hide
+      items from the OPAC.  See docs/opac/OpacHiddenItems.txt for
+      more information.
+    * Authority display improved in OPAC
+    * Allow the patron to choose which library they wish to make a
       purchase suggestion for
     * Added the ability to hide the name of a reviewer/commenter in
       the OPAC
     * CSS/HTML and other UI improvements
-    * Lists respect the XSLT preferences
-    * Truncation of facets now controllable by a syspref
-    * Can use 856u to store an image uri, and Koha will display the
-      image
+    * Lists respect the XSLT bibliograhic display preferences
+    * Truncation of facets now controllable by a system preference
+    * Can use 856$u to store an image URI which Koha can then display in the OPAC
     * User can renew multiple items at once
-    * A new librarian controlled column added to the'My Summary' page on the OPAC
-    * Recent comments view for the opac (allow users to see recently reviewed items)
+    * A new librarian-controlled column added to the 'My Summary' page on the OPAC
+    * Recent comments view for the OPAC (allow users to see recently reviewed items)
     * Feature to make the OPAC private (allow only logged in users to search/view items)
     * Ability to edit what displays when no results are found
     * Privacy feature allowing the user to specify when their reading
@@ -101,14 +101,14 @@ New features in 3.4.0
     * opacstylesheet can link to a url anywhere, not just a local file
       
   PATRONS
-    * Separate field for State
+    * Separate field for state/province
     * Ability to duplicate a Patron
     * Print overdue and hold notices for patrons without email addresses
         
   REPORTS
     * Run a report immediately after creation
     * The list of saved reports has pagination and can be sorted
-    * SQL is formatted much more nicely when viewing a report
+    * SQL formatting improvements when viewing a report
     * Parameters can be set in guided reports
 
   SEARCHING
@@ -127,16 +127,16 @@ New features in 3.4.0
   STAFF INTERFACE
     * Enumchron added to the biblio detail page
     * Improvements to suggestion management
-    * Can use 856u to store an image uri, and Koha will display the
-      image
+    * Can use 856$u to store an image URI which Koha can then display in
+      the staff interface.
     * Cart is emptied when a user logs out
     * IntranetUserCSS preference added to allow styling of staff interface
     
   INTERFACE
     * New icon set for itemtypes (Nimes)
-    * Liblime kids iconset resized to consistent size
+    * LibLime kids iconset resized to consistent size
     * Seshat itemtype iconset added (Naropa College)
-    * Classes added to the XSLT results to enable styling
+    * CSS classes added to the XSLT results to enable styling
           
   INTERNATIONALIZTION
     * New initialization SQL files for Norwegian
@@ -152,7 +152,7 @@ New features in 3.4.0
       
   COMMAND LINE UTILITIES
     * Script to update all items and biblio
-    * Script to set and get systempreferences from the command line
+    * Script to set and get system preferences from the command line
 
   BUGFIXES
     * Approximately 633 tracked bugs and enhancement requests
@@ -288,12 +288,12 @@ new features in Koha 3.4:
   * Goddard College, USA
   * Hauraki District Council, New Zealand
   * Horowhenua Library Trust, New Zealand
-  * Merrill Memorial Library, Maine, USA
-  * Middletown Township Public Library, USA
   * La Trappe Monastery, France
   * Lyon3 University, France
   * Marlboro College, USA
   * MassCat, USA
+  * Merrill Memorial Library, Maine, USA
+  * Middletown Township Public Library, USA
   * Ministry of Culture, Spanish Government, Spain
   * Naropa College, USA
   * Nelsonville Public Library, USA
@@ -378,7 +378,7 @@ Koha 3.4.0.
 
 
 We regret any omissions.  If a contributor has been inadvertantly missed,
-please send patch against these release notes to 
+please send a patch against these release notes to 
 koha-patches@lists.koha-community.org.
 
 Revision control notes
