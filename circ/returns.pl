@@ -3,6 +3,7 @@
 # Copyright 2000-2002 Katipo Communications
 #           2006 SAN-OP
 #           2007-2010 BibLibre, Paul POULAIN
+#           2010 Catalyst IT
 #
 # This file is part of Koha.
 #
@@ -171,6 +172,8 @@ my $barcode     = $query->param('barcode');
 my $exemptfine  = $query->param('exemptfine');
 my $dropboxmode = $query->param('dropboxmode');
 my $dotransfer  = $query->param('dotransfer');
+my $canceltransfer = $query->param('canceltransfer');
+my $dest = $query->param('dest');
 my $calendar    = C4::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
 my $today       = C4::Dates->new();
@@ -181,6 +184,17 @@ if ($dotransfer){
     my $transferitem = $query->param('transferitem');
     my $tobranch     = $query->param('tobranch');
     ModItemTransfer($transferitem, $userenv_branch, $tobranch); 
+}
+
+if ($canceltransfer){
+    $itemnumber=$query->param('itemnumber');
+    DeleteTransfer($itemnumber);
+    if($dest eq "ttr"){
+        print $query->redirect("/cgi-bin/koha/circ/transferstoreceive.pl");
+        exit;
+    } else {
+        $template->param( transfercancelled => 1);
+    }
 }
 
 # actually return book and prepare item table.....
@@ -321,6 +335,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
         WrongTransfer  => 1,
         TransferWaitingAt => $messages->{'WrongTransfer'},
         WrongTransferItem => $messages->{'WrongTransferItem'},
+        itemnumber => $itemnumber,
     );
 
     my $reserve    = $messages->{'ResFound'};

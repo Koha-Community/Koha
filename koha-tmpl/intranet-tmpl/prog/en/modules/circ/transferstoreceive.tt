@@ -50,6 +50,7 @@ $(document).ready(function() {
                 <th>On hold for</th>
                 <th>Home library</th>
                 <th>Call no.</th>
+                <th>&nbsp;</th>
             </tr></thead>
             <tbody>[% FOREACH reser IN branchesloo.reserv %]
                 [% IF ( reser.messcompa ) %]
@@ -79,6 +80,7 @@ $(document).ready(function() {
                     </td>
                     <td>[% reser.homebranch %]</td>
                     <td>[% reser.itemcallnumber %]</td>
+                    <td><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber %]&amp;canceltransfer=1&amp;dest=ttr">Cancel Transfer</a></td>
                 </tr>
             [% END %]</tbody>
             </table>
