@@ -443,7 +443,7 @@ foreach my $biblionumber (@biblionumbers) {
                     $num_override++;
             }
             # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
-            if (C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
+            if (C4::Context->preference( 'AllowHoldPolicyOverride' ) && !$item->{available} ) {
                 $item->{override} = 1;
                 $num_override++;
             }   
