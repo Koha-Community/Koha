@@ -30,6 +30,7 @@ use C4::Context;
 use C4::Breeding;
 use C4::Koha;
 use C4::Charset;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 use ZOOM;
 
 my $input        = new CGI;
@@ -43,6 +44,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
 
 my $dbh          = C4::Context->dbh;
 my $error        = $input->param('error');
@@ -102,10 +104,14 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
     push @frameworkcodeloop, \%row;
 }
 
+my $vendor = GetBookSellerFromId($booksellerid);
 $template->param( frameworkcode => $frameworkcode, 
                                     frameworkcodeloop => \@frameworkcodeloop,
                                     booksellerid => $booksellerid,
-                                    basketno => $basketno);
+                                    basketno => $basketno,
+                                    name => $vendor->{'name'}
+                                    );
+                                    
 
 
 if ( $op ne "do_search" ) {
