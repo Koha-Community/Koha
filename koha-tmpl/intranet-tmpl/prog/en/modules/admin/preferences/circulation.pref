@@ -170,7 +170,7 @@ Circulation:
             - Prevent patrons from making holds on the OPAC if they owe more than
             - pref: maxoutstanding
               class: currency
-            - <!-- TMPL_VAR NAME="local_currency" --> in fines.
+            - '[% local_currency %] in fines.'
         -
             - Show a warning on the "Transfers to Receive" screen if the transfer has not been received
             - pref: TransfersMaxDaysWarning
@@ -186,7 +186,7 @@ Circulation:
             - Prevent patrons from checking out books if they have more than
             - pref: noissuescharge
               class: integer
-            - <!-- TMPL_VAR NAME="local_currency" --> in fines.
+            - '[% local_currency %] in fines.'
         -
             - pref: ReturnBeforeExpiry
               choices:
