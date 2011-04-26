@@ -802,8 +802,10 @@ Returns as undef upon any db error without further processing
 sub AddMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-    $data{'userid'} = '' unless $data{'password'};
-    $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
+	# generate a proper login if none provided
+	$data{'userid'} = Generate_Userid($data{'borrowernumber'}, $data{'firstname'}, $data{'surname'}) if $data{'userid'} eq '';
+	# create a disabled account if no password provided
+	$data{'password'} = ($data{'password'})? md5_base64($data{'password'}) : '!';
 	$data{'borrowernumber'}=InsertInTable("borrowers",\%data);	
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
     logaction("MEMBERS", "CREATE", $data{'borrowernumber'}, "") if C4::Context->preference("BorrowersLog");
