@@ -125,6 +125,28 @@ canned reports and writing custom SQL reports.</p>
 [% IF ( savedreports ) %]<h1>Saved Reports</h1>
 <p>Choose the report to run from the list</p>
 
+<div style="margin: 5px">
+<form action="?">
+  <input type="hidden" name="phase" value="Use saved" />
+  <input type="hidden" name="filter_set" value="1" />
+  <table>
+    <tr>
+      <td rowspan="3"><h3>Filter</h3><br/><input type="submit" value="Go" /></td>
+      <td align="right">Date:</td>
+      <td><input type="text" name="filter_date" size="10" value="[% filter_date %]" /></td>
+    </tr>
+    <tr>
+      <td align="right">Author:</td>
+      <td><input type="text" name="filter_author" value="[% filter_author" %]" /></td>
+    </tr>
+    <tr>
+      <td align="right">Keyword:</td>
+      <td><input type="text" name="filter_keyword" value="[% filter_keyword %]" /></td>
+    </tr>
+  </table>
+</form>
+</div>
+
 <span id="pagertable_reports" class="pager">
  <form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
   <img src="[% interface %]/prog/img/first.png" class="first"/>
