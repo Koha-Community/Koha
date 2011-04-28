@@ -193,6 +193,13 @@ Circulation:
                   noblock: "Don't block"
                   confirmation: Ask for confirmation
             - when checking out to a borrower that has overdues outstanding	    
+        -
+            - On checkin route the returned item to
+            - pref: HomeOrHoldingBranchReturn
+              type: choice
+              choices:
+                  homebranch: the library the item is from.
+                  holdingbranch: the library the item was checked out from.
     Holds Policy:
         -
             - pref: AllowHoldPolicyOverride
