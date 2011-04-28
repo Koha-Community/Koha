@@ -236,9 +236,12 @@ if ( C4::Context->preference('OPACPrivacy') ) {
 #
 my @borrowernumbers = GetMemberRelatives($borrowernumber);
 my $issue       = GetPendingIssues($borrowernumber);
-my $relissue    = GetPendingIssues(@borrowernumbers);
-my $issuecount = scalar(@$issue);
-my $relissuecount  = scalar(@$relissue);
+my $relissue    = [];
+if ( @borrowernumbers ) {
+    $relissue    = GetPendingIssues(@borrowernumbers);
+}
+my $issuecount     = @{$issue};
+my $relissuecount  = @{$relissue};
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
 my @issuedata;
