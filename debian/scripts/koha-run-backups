@@ -1,0 +1,93 @@
+#!/bin/sh
+# Copyright 2010-2011  Catalyst IT, Ltd
+# 
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+# 
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+# 
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Daily cron job for koha.
+# - dump all sites, except one called 'demo'
+
+dirname="/var/spool/koha"
+days="2"
+
+show_help() {
+    cat <<EOH
+$0 - performs backups of the koha installations on the system
+
+This allows automation of backing up the koha data and configuration to the
+filesystem. It will keep the past so many backups, discarding older ones.
+
+Options:
+    --output:   the directory that the resulting files will be placed into.
+                (default: /var/spool/koha)
+    --days:     the number of days to keep backups around for
+                (default: 2)
+
+Note: backups produced using this tool can be restored using \`koha-restore'.
+EOH
+}
+
+CMD_LINE=`getopt -o h --long days:,output:,help -n 'koha-run-backups' -- "$@"`
+
+if [ $? != 0 ] ; then show_help ; exit 1 ; fi
+
+eval set -- "$CMD_LINE"
+while true ; do
+    case "$1" in
+        -h|--help)
+            show_help; exit;;
+        --days)
+            days=$2; shift 2 ;;
+        --output)
+            dirname=$2; shift 2 ;;
+        --) shift ; break ;;
+        *) echo "Unknown error parsing the command line!" ; exit 1 ;;
+    esac
+done
+
+for name in $(koha-list --enabled | grep -Fxv demo)
+do
+    koha-dump "$name" > /dev/null
+
+    # Remove old dump files.
+    # FIXME: This could probably be replaced by one line of perl.
+    ls "$dirname/$name/" | 
+    sed "s:^$name-\([0-9-]*\)\.\(sql\|tar\)\.gz$:\1:" |
+    sort -u |
+    tac |
+    sed "1,${days}d" |
+    tac |
+    while read date
+    do
+        tardump="$dirname/$name/$name-$date.tar.gz"
+        sqldump="$dirname/$name/$name-$date.sql.gz"
+        if [ -e "$tardump" ] && [ -e "$sqldump" ]
+        then
+            rm "$tardump"
+            rm "$sqldump"
+        elif [ -e "$tardump" ] || [ -e "$sqldump" ]
+        then
+            echo "Only one of a pair exists! Not removing it."
+            for x in "$tardump" "$sqldump"
+            do
+                if [ -e "$x" ]
+                then
+                    echo "Exists        : $x"
+                else
+                    echo "Does not exist: $x"
+                fi
+            done
+        fi
+    done
+done
+
