@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright (C) 2009 LibLime
+# Copyright 2011 Catalyst IT
 # 
 # This file is part of Koha.
 #
@@ -27,67 +27,43 @@ valid-templates.t
 =head1 DESCRIPTION
 
 This test checks all staff and OPAC templates and includes for syntax errors 
-by running a helper script that loads each template into a HTML::Template::Pro
-object and calls the output() method, which forces the template to be parsed.
-HTML::Template::Pro currently reports any syntax errors to STDERR.
-
-This test currently ignores error messages of the form
-
-EXPR:at pos n: non-initialized variable foo
-
-However, note that TMPL_IF EXPR is currently discouraged for use in Koha
-templates.
 
 =cut
 
-use Test::More qw/no_plan/;
+
 use File::Find;
 use File::Spec;
-use FindBin;
-use IPC::Open3;
+use Template;
+use Test::More;
+# use FindBin;
+# use IPC::Open3;
 
 foreach my $type qw(intranet opac) {
     my $template_dir = File::Spec->rel2abs("koha-tmpl/$type-tmpl/prog/en/modules");
     my $include_dir  = File::Spec->rel2abs("koha-tmpl/$type-tmpl/prog/en/includes");
-   
-    my $template_test = gen_template_test($include_dir);
+    my $template_test = create_template_test($include_dir);
     find({ wanted => $template_test, no_chdir => 1 }, $template_dir, $include_dir);
 }
 
-sub gen_template_test {
-    my $include_dir = shift;
+done_testing();
+
+sub create_template_test {
+    my $includes = shift;
     return sub {
-        return unless -f $File::Find::name;
-
-        # We're starting a seprate process to test the template
-        # because some of the error messages we're interested in
-        # are written directly to STDERR in HTML::Template::Pro's
-        # XS code.  I haven't found any other way to capture
-        # those messages. --gmc
-        local *CHILD_IN;
-        local *CHILD_OUT;
-        my $pid = open3(\*CHILD_IN, \*CHILD_OUT, \*CHILD_ERR, 
-                        "$FindBin::Bin/test_template.pl", $File::Find::name, $include_dir);
-        my @errors = ();
-        while (<CHILD_OUT>) {
-            #FIXME: This is here just to ensure that STDOUT is read which avoids a deadlock in some instances, but probably not all
-            #FIXME: The real solution probably lies within the information found here: http://www.perlmonks.org/?node_id=150748
-        }
-        while (<CHILD_ERR>) {
-            push @errors, $_;
-        }
-        waitpid($pid, 0);
-        @errors = grep { ! /^EXPR:.*non-initialized variable/ } @errors; # ignoring EXPR errors for now
-        my $rel_filename = File::Spec->abs2rel($File::Find::name);
-        ok(@errors == 0, "no errors in $rel_filename") or diag(join("", @errors) );
+	my $tt = Template->new({ABSOLUTE => 1,
+				   INCLUDE_PATH => $includes });
+	my $vars;
+	my $output;
+	if ( ! ok($tt->process($_,$vars,\$output), $_) ){
+	    diag($tt->error);
+	}
     }
-
 }
 
 =head1 AUTHOR
 
 Koha Developement Team <http://koha-community.org>
 
-Galen Charlton <galen.charlton@liblime.com>
+Chris Cormack <chrisc@catalyst.net.nz>
 
 =cut
