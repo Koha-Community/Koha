@@ -463,8 +463,11 @@ if ($borrower) {
     #push @borrowernumbers, $borrower->{'borrowernumber'};
 
     # get each issue of the borrower & separate them in todayissues & previous issues
-    my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
-    my ($relissueslist) = GetPendingIssues(@relborrowernumbers);
+    my $issueslist = GetPendingIssues($borrower->{'borrowernumber'});
+    my $relissueslist = [];
+    if ( @relborrowernumbers ) {
+        $relissueslist = GetPendingIssues(@relborrowernumbers);
+    }
 
     build_issue_data($issueslist, 0);
     build_issue_data($relissueslist, 1);
@@ -477,6 +480,7 @@ if ($borrower) {
     else {
         @todaysissues   = sort { $b->{'timestamp'} cmp $a->{'timestamp'} } @todaysissues;
     }
+
     if ( C4::Context->preference( "previousIssuesDefaultSortOrder" ) eq 'asc' ){
         @previousissues = sort { $a->{'date_due'} cmp $b->{'date_due'} } @previousissues;
     }
