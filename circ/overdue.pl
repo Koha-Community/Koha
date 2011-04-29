@@ -398,7 +398,8 @@ sub build_csv {
     my @lines = ();
 
     # build header ...
-    my @keys = grep { $_ ne 'patron_attr_value_loop' } sort keys %{ $overdues->[0] };
+    my @keys = qw /duedate title author borrowertitle name phone barcode email address address2 zipcode city country
+                branchcode itemcallnumber biblionumber borrowernumber itemnum replacementprice streetnumber streettype/;
     my $csv = Text::CSV_XS->new();
     $csv->combine(@keys);
     push @lines, $csv->string();
