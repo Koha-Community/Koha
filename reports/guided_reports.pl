@@ -68,6 +68,7 @@ if ( $input->param("filter_set") ) {
     $filter = {};
     $filter->{$_} = $input->param("filter_$_") foreach qw/date author keyword/;
     $session->param('report_filter', $filter) if $session;
+    $template->param( 'filter_set' => 1 );
 }
 elsif ($session) {
     $filter = $session->param('report_filter');

@@ -123,29 +123,6 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( saved1 ) %]
 [% IF ( savedreports ) %]<h1>Saved Reports</h1>
-<p>Choose the report to run from the list</p>
-
-<div style="margin: 5px">
-<form action="?">
-  <input type="hidden" name="phase" value="Use saved" />
-  <input type="hidden" name="filter_set" value="1" />
-  <table>
-    <tr>
-      <td rowspan="3"><h3>Filter</h3><br/><input type="submit" value="Go" /></td>
-      <td align="right">Date:</td>
-      <td><input type="text" name="filter_date" size="10" value="[% filter_date %]" /></td>
-    </tr>
-    <tr>
-      <td align="right">Author:</td>
-      <td><input type="text" name="filter_author" value="[% filter_author %]" /></td>
-    </tr>
-    <tr>
-      <td align="right">Keyword:</td>
-      <td><input type="text" name="filter_keyword" value="[% filter_keyword %]" /></td>
-    </tr>
-  </table>
-</form>
-</div>
 
 <span id="pagertable_reports" class="pager">
  <form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
@@ -189,7 +166,7 @@ canned reports and writing custom SQL reports.</p>
 <td>[% savedreport.notes %]</td>
 <td>[% savedreport.borrowersurname %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname %][% END %] ([% savedreport.borrowernumber %])</td>
 <td>[% savedreport.date_created %]</td>
-<td>[% IF ( savedreport.date_run ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&id=[% savedreport.id %]">[% savedreport.date_run %]</a>[% END %]
+<td>[% IF ( savedreport.date_run ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% savedreport.id %]">[% savedreport.date_run %]</a>[% END %]
 </td>
     <td>
         <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Show%20SQL">Show</a> 
@@ -206,11 +183,30 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 </tbody>
 </table>
-[% ELSE %]<h4>There are no saved reports. 
+[% ELSE %]<div class="dialog message">
+    [% IF (filter_set) %]
+    <h4>No saved reports match your criteria. </h4>
     [% IF ( CAN_user_reports_create_reports ) %]
-        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build new?</a>
+    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+    <input type="hidden" name="phase" value="Build new" />
+    <input type="submit" class="edit" value="Build a new report" accesskey="y" />
+    </form>
+
+    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+    <input type="hidden" name="phase" value="Use saved" />
+    <input type="hidden" name="filter_set" value="1" />
+    <input type="hidden" name="filter_keyword" value="" />
+    <input type="submit" class="deny" value="Cancel filter" accesskey="n" />
+    </form>
+
     [% END %]
-</h4>
+    [% ELSE %]
+    <h4>There are no saved reports. </h4>
+    [% IF ( CAN_user_reports_create_reports ) %]
+        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a new report?</a>
+    [% END %]
+    [% END %]
+    </div>
 [% END %]
 [% END %]
 
@@ -670,6 +666,37 @@ Sub report:<select name="subreport">
 </div>
 </div>
 <div class="yui-b">
+
+[% IF ( saved1 ) %]
+<div id="saved-reports-filter">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+  <input type="hidden" name="phase" value="Use saved" />
+  <input type="hidden" name="filter_set" value="1" />
+  <fieldset class="brief">
+  <h3>Filter</h3>
+  <ol>
+    <li><label for="filter_date">Date:
+  <img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" /></label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filter_date %]" />
+    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    <script type="text/javascript">
+        Calendar.setup(
+        {
+          inputField : "filter_date",
+          ifFormat : "[% DHTMLcalendar_dateformat %]",
+          button : "filter_date_button"
+        }
+        );
+    </script>
+    </li>
+    <li><label for="filter_author">Author:</label> <input type="text" id="filter_author" name="filter_author" value="[% filter_author %]" /></li>
+    <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filter_keyword %]" /></li>
+  </ol>
+  <fieldset class="action"><input type="submit" value="Apply filter" /></fieldset>
+</form>
+</div>
+[% END %]
+
+
 [% INCLUDE 'guided-reports-view.inc' %]
 </div>
 </div>
