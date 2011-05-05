@@ -1027,7 +1027,7 @@ sub handle_end_patron_session {
 
     ($trans_date) = @{$self->{fixed_fields}};
 
-    $ils->check_inst_id($fields->{FID_INST_ID}, "handle_end_patron_session");
+    $ils->check_inst_id($fields->{(FID_INST_ID)}, 'handle_end_patron_session');
 
     ($status, $screen_msg, $print_line) = $ils->end_patron_session($fields->{(FID_PATRON_ID)});
 
