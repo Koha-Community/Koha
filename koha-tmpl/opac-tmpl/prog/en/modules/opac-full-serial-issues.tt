@@ -1,5 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Subscription information for [% bibliotitle %]
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" language="javascript">
 //<![CDATA[
 
@@ -23,6 +24,11 @@ $(document).ready(function(){
 		$("a.tabsubs").removeClass("currentsubtab");
 		$(this).addClass("currentsubtab");
 	});
+	$(".subscriptionstclass").tablesorter({[% IF ( dateformat == 'metric' ) %]
+    dateFormat: 'uk',[% END %]
+            widgets : ['zebra'],
+            sortList: [[0,0]]
+        });
 });
 
 // Filters initialization
