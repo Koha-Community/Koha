@@ -3,7 +3,7 @@
 #written 18/1/2000 by chris@katipo.co.nz
 # adapted for use in the hlt opac by finlay@katipo.co.nz 29/11/2002
 # script to renew items from the web
-# Parts Copyright 2010 Catalyst IT
+# Parts Copyright 2010,2011 Catalyst IT
 
 # This file is part of Koha.
 #
@@ -27,7 +27,8 @@ use warnings;
 use CGI;
 use C4::Circulation;
 use C4::Auth;
-
+use C4::Items;
+use C4::Members;
 my $query = new CGI;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -48,7 +49,27 @@ my $errorstring='';
 for my $itemnumber ( @items ) {
     my ($status,$error) = CanBookBeRenewed( $borrowernumber, $itemnumber );
     if ( $status == 1 && $opacrenew == 1 ) {
-        AddRenewal( $borrowernumber, $itemnumber );
+	my $renewalbranch = C4::Context->preference('OpacRenewalBranch');
+	my $branchcode;
+	if ($renewalbranch eq 'itemhomebranch'){
+	    my $item = GetItem($itemnumber);
+	    $branchcode=$item->{'homebranch'};
+	}
+	elsif ($renewalbranch eq 'patronhomebranch'){
+	    my $borrower = GetMemberDetails($borrowernumber);
+	    $branchcode = $borrower->{'branchcode'};
+	}
+	elsif ($renewalbranch eq 'checkoutbranch'){
+	    my $issue = GetOpenIssue($itemnumber);
+	    $branchcode = $issue->{'branchcode'};
+	}
+	elsif ($renewalbranch eq 'null'){
+	    $branchcode='';
+	}
+	else {
+	    $branchcode='OPACRenew'
+	}
+        AddRenewal( $borrowernumber, $itemnumber, $branchcode);
     }
     else {
 	$errorstring .= $error ."|";
