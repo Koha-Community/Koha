@@ -117,7 +117,7 @@
 			<p>The following fields are wrong. Please fix them.</p>
 			<ul>
 			[% IF ( ERROR_login_exist ) %]
-				<li id="ERROR_login_exist">Login/password already exists.</li>
+				<li id="ERROR_login_exist">Username/password already exists.</li>
 			[% END %]
 			[% IF ( ERROR_cardnumber ) %]
 				<li id="ERROR_cardnumber">Cardnumber already in use.</li>
@@ -890,14 +890,14 @@
 		</ol>
 	</fieldset>
 	<fieldset class="rows" id="memberentry_userid">
-		<legend>OPAC login</legend><ol>
+		<legend>OPAC/Staff Login</legend><ol>
 		<li>
 			[% IF ( mandatoryuserid ) %]
 			<label for="userid" class="required">
 			[% ELSE %]
 			<label for="userid">
 			[% END %]
-			OPAC Login: </label>
+			Username: </label>
 
 [% IF ( NoUpdateLogin ) %]
 <input type="text" id="userid" name="userid" size="20" disabled="disabled" value="[% IF ( opduplicate ) %][% ELSE %][% userid %][% END %]" />
