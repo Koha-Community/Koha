@@ -27,11 +27,16 @@
 [% ELSIF ( BiblioDefaultViewisbd ) %]
 	<form action="/cgi-bin/koha/catalogue/ISBDdetail.pl" method="post">
 [% ELSE %]
-	<form action="/cgi-bin/koha/catalogue/detail.pl" method="post">
+	<form method="link" action="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]"/>
 [% END %]
+	    <input type="submit" class="attachanother" value="Attach Another Item"/>
+	    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+	</form>
+	<form action="/cgi-bin/koha/catalogue/detail.pl" method="post">
 	    <input type="submit"  class="approve" value="OK" />
 	    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-	</form></div>
+	</form>
+</div>
 
     [% ELSE %]
 	[% IF ( missingparameter ) %]
