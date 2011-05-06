@@ -297,7 +297,7 @@ $template->param(
 
 my $libravatar_enabled = 0;
 eval 'use Libravatar::URL';
-if (!$@ and C4::Context->preference('ShowReviewer')) {
+if (!$@ and C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto')) {
     $libravatar_enabled = 1;
 }
 
