@@ -46,7 +46,11 @@ $(document).ready(function(){
     [% END %]
     [% IF ( review.copyrightdate ) %]<span class="results_summary"><span class="label">Date:</span>[% review.copyrightdate %]</span>[% END %]</p>
 
-            <p class="commentline[% IF ( review.your_comment ) %] yours[% END %]">[% review.review |html %]
+            <p class="commentline[% IF ( review.your_comment ) %] yours[% END %]">
+            [% IF ( review.avatarurl ) %]
+                <img class="avatar" src="[% review.avatarurl %]" height="40" width="40"/>
+            [% END %]
+            [% review.review |html %]
             <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
             [% IF ( ShowReviewer ) %] by
             [% review.firstname %] [% review.surname %][% END %][% END %]</span></p>

@@ -65,6 +65,13 @@ if($format eq "rss"){
         );
 }
 
+my $libravatar_available = 0;
+
+eval 'use Libravatar::URL';
+if (! $@) {
+    $libravatar_available = 1;
+}
+
 my $reviews = getallreviews(1,$offset,$results_per_page);
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $hits = numberofreviews();
@@ -92,6 +99,10 @@ for my $result (@$reviews){
 	$result->{timestamp} = $bib->{'timestamp'};
 	$result->{firstname} = $borr->{'firstname'};
 	$result->{surname} = $borr->{'surname'};
+        if ($libravatar_available and $borr->{'email'}) {
+            $result->{avatarurl} = libravatar_url(email => $borr->{'email'}, size => 40, https => $ENV{HTTPS});
+        }
+
     if ($result->{borrowernumber} eq $borrowernumber) {
 		$result->{your_comment} = 1;
 	}
