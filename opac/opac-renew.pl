@@ -63,7 +63,7 @@ for my $itemnumber ( @items ) {
 	    my $issue = GetOpenIssue($itemnumber);
 	    $branchcode = $issue->{'branchcode'};
 	}
-	elsif ($renewalbranch eq 'null'){
+	elsif ($renewalbranch eq 'NULL'){
 	    $branchcode='';
 	}
 	else {
