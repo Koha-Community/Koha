@@ -15,45 +15,89 @@
 </xsl:template>
 
 <xsl:template match="marc:record">
-  <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
   <xsl:variable name="leader" select="marc:leader"/>
   <xsl:variable name="leader6" select="substring($leader,7,1)"/>
   <xsl:variable name="leader7" select="substring($leader,8,1)"/>
   <xsl:variable name="biblionumber" select="marc:datafield[@tag=090]/marc:subfield[@code='a']"/>
-
+  <xsl:variable name="DisplayOPACiconsXSLT" select="marc:sysprefs/marc:syspref[@name='DisplayOPACiconsXSLT']"    />
+  <xsl:variable name="OPACURLOpenInNewWindow" select="marc:sysprefs/marc:syspref[@name='OPACURLOpenInNewWindo    w']"/>
+  <xsl:variable name="URLLinkText" select="marc:sysprefs/marc:syspref[@name='URLLinkText']"/>
+  <xsl:variable name="ShowISBD" select="marc:sysprefs/marc:syspref[@name='viewISBD']"/>
 
   <xsl:if test="marc:datafield[@tag=200]">
     <xsl:for-each select="marc:datafield[@tag=200]">
       <h1>
         <xsl:call-template name="addClassRtl" />
-        <xsl:variable name="title" select="marc:subfield[@code='a']"/>
-        <xsl:variable name="ntitle"
-         select="translate($title, '&#x0098;&#x009C;','')"/>
-        <xsl:value-of select="$ntitle" />
-        <xsl:if test="marc:subfield[@code='e']">
-          <xsl:text> : </xsl:text>
-          <xsl:for-each select="marc:subfield[@code='e']">
-            <xsl:value-of select="."/>
-          </xsl:for-each>
-        </xsl:if>
-        <xsl:if test="marc:subfield[@code='b']">
-          <xsl:text> [</xsl:text>
-          <xsl:value-of select="marc:subfield[@code='b']"/>
-          <xsl:text>]</xsl:text>
-        </xsl:if>
-        <xsl:if test="marc:subfield[@code='f']">
-          <xsl:text> / </xsl:text>
-          <xsl:value-of select="marc:subfield[@code='f']"/>
-        </xsl:if>
-        <xsl:if test="marc:subfield[@code='g']">
-          <xsl:text> ; </xsl:text>
-          <xsl:value-of select="marc:subfield[@code='g']"/>
-        </xsl:if>
+        <xsl:for-each select="marc:subfield">
+          <xsl:choose>
+            <xsl:when test="@code='a'">
+              <xsl:variable name="title" select="."/>
+              <xsl:variable name="ntitle"
+               select="translate($title, '&#x0088;&#x0089;&#x0098;&#x009C;','')"/>
+              <xsl:value-of select="$ntitle" />
+            </xsl:when>
+            <xsl:when test="@code='b'">
+              <xsl:text> [</xsl:text>
+              <xsl:value-of select="."/>
+              <xsl:text>]</xsl:text>
+            </xsl:when>
+            <xsl:when test="@code='d'">
+              <xsl:text> = </xsl:text>
+              <xsl:value-of select="."/>
+            </xsl:when>
+            <xsl:when test="@code='e'">
+              <xsl:text> : </xsl:text>
+              <xsl:value-of select="."/>
+            </xsl:when>
+            <xsl:when test="@code='f'">
+              <xsl:text> / </xsl:text>
+              <xsl:value-of select="."/>
+            </xsl:when>
+            <xsl:when test="@code='g'">
+              <xsl:text> ; </xsl:text>
+              <xsl:value-of select="."/>
+            </xsl:when>
+            <xsl:otherwise>
+              <xsl:text>, </xsl:text>
+              <xsl:value-of select="."/>
+            </xsl:otherwise>
+          </xsl:choose>
+        </xsl:for-each>
       </h1>
     </xsl:for-each>
   </xsl:if>
 
-  <xsl:call-template name="tag_4xx" />
+  <div id="views">
+    <span class="view">
+      <span id="Normalview">Normal View</span>
+    </span>
+    <span class="view">
+      <a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC" rel="gb_page_center[600,500]">MARC View</a>
+    </span>
+    <span class="view">
+      <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC">Expanded MARC View</a>
+    </span>
+    <xsl:if test="$ShowISBD!='0'">
+        <span class="view">
+          <a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}">Card View (ISBD)</a>
+        </span>
+    </xsl:if>
+  </div>
+
+  <xsl:call-template name="tag_title">
+    <xsl:with-param name="tag">454</xsl:with-param>
+    <xsl:with-param name="label">Translation of</xsl:with-param>
+  </xsl:call-template>
+
+  <xsl:call-template name="tag_title">
+    <xsl:with-param name="tag">461</xsl:with-param>
+    <xsl:with-param name="label">Set Level</xsl:with-param>
+  </xsl:call-template>
+
+  <xsl:call-template name="tag_title">
+    <xsl:with-param name="tag">464</xsl:with-param>
+    <xsl:with-param name="label">Piece-Analytic Level</xsl:with-param>
+  </xsl:call-template>
 
   <xsl:call-template name="tag_7xx">
     <xsl:with-param name="tag">700</xsl:with-param>
@@ -85,9 +129,19 @@
     <xsl:with-param name="label">Corporate Author (Secondary)</xsl:with-param>
   </xsl:call-template>
 
+  <xsl:call-template name="tag_title">
+    <xsl:with-param name="tag">500</xsl:with-param>
+    <xsl:with-param name="label">Uniform Title</xsl:with-param>
+  </xsl:call-template>
+
+  <xsl:call-template name="tag_title">
+    <xsl:with-param name="tag">503</xsl:with-param>
+    <xsl:with-param name="label">Uniform Conventional Heading</xsl:with-param>
+  </xsl:call-template>
+
   <xsl:if test="marc:datafield[@tag=101]">
-	  <span class="results_summary">
-      <span class="label">Language: </span>
+    <span class="results_summary">
+      <span class="label">Language:</span>
       <xsl:for-each select="marc:datafield[@tag=101]">
         <xsl:for-each select="marc:subfield">
           <xsl:choose>
@@ -132,6 +186,11 @@
       </xsl:for-each>
     </span>
   </xsl:if>
+
+  <xsl:call-template name="tag_comma">
+    <xsl:with-param name="tag">205</xsl:with-param>
+    <xsl:with-param name="label">Edition Statement</xsl:with-param>
+  </xsl:call-template>
 
   <xsl:call-template name="tag_210" />
 
@@ -350,24 +409,30 @@
 
   <xsl:if test="marc:datafield[@tag=856]">
     <span class="results_summary">
-      <span class="label">Online Resources: </span>
+      <span class="label">Online Resources:</span>
       <xsl:for-each select="marc:datafield[@tag=856]">
-        <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
         <a>
           <xsl:attribute name="href">
             <xsl:value-of select="marc:subfield[@code='u']"/>
           </xsl:attribute>
+          <xsl:if test="$OPACURLOpenInNewWindow='1'">
+            <xsl:attribute name="target">_blank</xsl:attribute>
+          </xsl:if>
           <xsl:choose>
-            <xsl:when test="($Show856uAsImage='Details' or $Show856uAsImage='Both') and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
-              <xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute><xsl:attribute name="alt"><xsl:value-of select="marc:subfield[@code='y']"/></xsl:attribute><xsl:attribute name="height">100</xsl:attribute></xsl:element><xsl:text></xsl:text>
-            </xsl:when>
             <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
               <xsl:call-template name="subfieldSelect">
                 <xsl:with-param name="codes">y3z</xsl:with-param>
               </xsl:call-template>
             </xsl:when>
             <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-              Click here to access online
+              <xsl:choose>
+                <xsl:when test="$URLLinkText!=''">
+                  <xsl:value-of select="$URLLinkText"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:text>Click here to access online</xsl:text>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:when>
           </xsl:choose>
         </a>
