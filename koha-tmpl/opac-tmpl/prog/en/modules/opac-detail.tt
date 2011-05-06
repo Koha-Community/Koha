@@ -667,6 +667,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% FOREACH review IN reviews %]
             [% IF ( review.your_comment ) %]
             <div class="commentline yours" id="c[% review.reviewid %]">
+                [% IF ( review.avatarurl ) %]
+            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80"/>
+                [% END %]
             <h5>
                 Your Comment
             </h5>
@@ -678,6 +681,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% ELSE %]
             <div class="commentline">
             [% IF ( ShowReviewer ) %]
+                [% IF ( review.avatarurl ) %]
+            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80"/>
+                [% END %]
             <h5>
                 Comment by
                 [% review.title %]
