@@ -563,7 +563,7 @@ sub put_in_background {
 
         my $reply = CGI->new("");
         print $reply->header(-type => 'text/html');
-        print "{ jobID: '$jobID' }";
+        print '{"jobID":"' . $jobID . '"}';
         exit 0;
     } elsif (defined $pid) {
         # child
