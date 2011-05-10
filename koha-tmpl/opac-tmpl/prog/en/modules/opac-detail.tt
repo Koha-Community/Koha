@@ -346,7 +346,10 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( subscriptionsnumber ) %]<li[% IF ( defaulttab == 'subscriptions' ) %] class="ui-tabs-selected"[% END %]>
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a>
     </li>[% END %]
-[% IF ( reviewson ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#comments">Comments</a></li>[% END %]
+[% IF ( reviewson ) %]
+<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#comments">Comments
+( [% IF reviews.defined %][% reviews.size %][% ELSE %]0[% END %] )</a></li>
+[% END %]
 
 [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonSimilarItems ) %][% IF ( AMAZON_SIMILAR_PRODUCTS ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#similars">Related</a></li>[% END %][% END %][% END %]
 
