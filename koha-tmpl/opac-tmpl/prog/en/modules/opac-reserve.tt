@@ -330,7 +330,7 @@
               Calendar.setup(
               {
                 inputField : "reserve_date_[% bibitemloo.biblionumber %]",
-                ifFormat : "[% bibitemloo.DHTMLcalendar_dateformat %]",
+                ifFormat : "[% DHTMLcalendar_dateformat %]",
                 button : "CalendarReserveDate[% bibitemloo.biblionumber %]",
                 disableFunc : validate[% bibitemloo.biblionumber %],
                 dateStatusFunc : validate[% bibitemloo.biblionumber %]
@@ -362,7 +362,7 @@
       Calendar.setup(
         {
           inputField : "expiration_date_[% bibitemloo.biblionumber %]",
-          ifFormat : "[% bibitemloo.DHTMLcalendar_dateformat %]",
+          ifFormat : "[% DHTMLcalendar_dateformat %]",
           button : "CalendarExpirationDate_[% bibitemloo.biblionumber %]",
           disableFunc : validate1,
           dateStatusFunc : validate1
