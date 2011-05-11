@@ -104,6 +104,7 @@ if ( $borr->{'amountoutstanding'} < 0 ) {
 }
 
 $borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
+$borr->{'debarred'} = C4::Dates->new($borr->{'debarred'},'iso')->output;
 
 my @bordat;
 $bordat[0] = $borr;

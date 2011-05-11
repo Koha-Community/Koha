@@ -232,7 +232,8 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as being restricted
+  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYY-MM-DD)
+  `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of the patron
   `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
   `contactfirstname` text, -- used for children to include first name of guarentor
   `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
@@ -693,7 +694,8 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
   `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
   `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
-  `debarred` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as being restricted
+  `debarred` date default NULL, -- until this date the patron can only check-in (no loans, no holds, etc.), is a fine based on days instead of money (YYY-MM-DD)
+  `debarredcomment` VARCHAR(255) DEFAULT NULL, -- comment on the stop of patron
   `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
   `contactfirstname` text, -- used for children to include first name of guarentor
   `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor

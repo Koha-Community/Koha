@@ -623,39 +623,12 @@ sub IsMemberBlocked {
     my $borrowernumber = shift;
     my $dbh            = C4::Context->dbh;
 
-    # does patron have current fine days?
-	my $strsth=qq{
-            SELECT
-            ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due) ) AS blockingdate,
-            DATEDIFF(ADDDATE(returndate, finedays * DATEDIFF(returndate,date_due)),NOW()) AS blockedcount
-            FROM old_issues
-	};
-    if(C4::Context->preference("item-level_itypes")){
-        $strsth.=
-		qq{ LEFT JOIN items ON (items.itemnumber=old_issues.itemnumber)
-            LEFT JOIN issuingrules ON (issuingrules.itemtype=items.itype)}
-    }else{
-        $strsth .= 
-		qq{ LEFT JOIN items ON (items.itemnumber=old_issues.itemnumber)
-            LEFT JOIN biblioitems ON (biblioitems.biblioitemnumber=items.biblioitemnumber)
-            LEFT JOIN issuingrules ON (issuingrules.itemtype=biblioitems.itemtype) };
-    }
-	$strsth.=
-        qq{ WHERE finedays IS NOT NULL
-            AND  date_due < returndate
-            AND borrowernumber = ?
-            ORDER BY blockingdate DESC, blockedcount DESC
-            LIMIT 1};
-	my $sth=$dbh->prepare($strsth);
-    $sth->execute($borrowernumber);
-    my $row = $sth->fetchrow_hashref;
-    my $blockeddate  = $row->{'blockeddate'};
-    my $blockedcount = $row->{'blockedcount'};
+    my $blockeddate = CheckBorrowerDebarred($borrowernumber);
 
-    return (1, $blockedcount) if $blockedcount > 0;
+    return ( 1, $blockeddate ) if $blockeddate;
 
     # if he have late issues
-    $sth = $dbh->prepare(
+    my $sth = $dbh->prepare(
         "SELECT COUNT(*) as latedocs
          FROM issues
          WHERE borrowernumber = ?
@@ -664,9 +637,9 @@ sub IsMemberBlocked {
     $sth->execute($borrowernumber);
     my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
 
-    return (-1, $latedocs) if $latedocs > 0;
+    return ( -1, $latedocs ) if $latedocs > 0;
 
-    return (0, 0);
+    return ( 0, 0 );
 }
 
 =head2 GetMemberIssuesAndFines
@@ -2078,7 +2051,7 @@ sub GetBorrowersNamesAndLatestIssue {
 
 =head2 DebarMember
 
-  my $success = DebarMember( $borrowernumber );
+my $success = DebarMember( $borrowernumber, $todate );
 
 marks a Member as debarred, and therefore unable to checkout any more
 items.
@@ -2090,13 +2063,16 @@ true on success, false on failure
 
 sub DebarMember {
     my $borrowernumber = shift;
+    my $todate         = shift;
 
     return unless defined $borrowernumber;
     return unless $borrowernumber =~ /^\d+$/;
 
-    return ModMember( borrowernumber => $borrowernumber,
-                      debarred       => 1 );
-    
+    return ModMember(
+        borrowernumber => $borrowernumber,
+        debarred       => $todate
+    );
+
 }
 
 =head2 ModPrivacy

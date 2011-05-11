@@ -164,12 +164,11 @@ function validate1(date) {
 
     [% IF ( flagged ) %]
     <ul>
-        [% IF ( debarred ) %]
-            <li>Patron is restricted
+        [% IF ( userdebarred ) %]
+            <li>Patron is restricted[% IF ( userdebarreddate ) %] until [% userdebarreddate%] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %][% END %]
             <form class="inline compact" action="/cgi-bin/koha/members/setdebar.pl" method="post">
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                <input type="hidden" name="status" value="0" />
-                <input type="submit" value="Lift Restriction" />
+                <input type="submit" value="Lift Debarment" />
             </form>
             </li>
         [% END %]

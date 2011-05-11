@@ -321,6 +321,9 @@ function Dopop(link) {
                     [% IF ( errmsgloo.withdrawn ) %]
                         <p class="problem">Item is withdrawn.</p>
                     [% END %]
+                    [% IF ( errmsgloo.debarred ) %]
+                        <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber %]">[% errmsgloo.debarname %]([% errmsgloo.debarcardnumber %])</a> is now debarred until [% errmsgloo.debarred %] </p>
+                    [% END %]
             [% END %]
 [% IF ( soundon ) %]
 <audio src="/intranet-tmpl/prog/sound/critical.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>

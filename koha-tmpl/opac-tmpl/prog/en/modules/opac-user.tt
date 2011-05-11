@@ -93,7 +93,7 @@ $.tablesorter.addParser({
 		<div class="dialog alert">
         <ul>
             [% IF ( BORROWER_INF.debarred ) %]
-                <li><strong>Please note:</strong> Your account has been frozen. Usually the reason for freezing an account is old overdues or damage fees.If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
+                <li><strong>Please note:</strong> Your account has been frozen until [% BORROWER_INF.debarred %] - [% BORROWER_INF.debarredcomment %]. Usually the reason for freezing an account is old overdues or damage fees.If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
             [% END %]
             [% IF ( BORROWER_INF.gonenoaddress ) %]
                 <li><strong>Please note:</strong> According to our records, we don't have up-to-date [% UNLESS ( BORROWER_INF.OPACPatronDetails ) %]<a href="/cgi-bin/koha/opac-userupdate.pl">contact information</a>[% ELSE %]contact information[% END %] on file.  Please contact the library[% IF ( BORROWER_INF.OPACPatronDetails ) %] or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)[% END %].</li>

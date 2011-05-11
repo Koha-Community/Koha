@@ -42,6 +42,7 @@ use Date::Calc qw(
   Date_to_Days
   Day_of_Week
   Add_Delta_Days	
+  check_date
 );
 use POSIX qw(strftime);
 use C4::Branch; # GetBranches
@@ -1631,6 +1632,10 @@ sub AddReturn {
     if ($borrowernumber) {
         my $fix = _FixOverduesOnReturn($borrowernumber, $item->{itemnumber}, $exemptfine, $dropbox);
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->{itemnumber}...) failed!";  # zero is OK, check defined
+        
+        # fix fine days
+        my $debardate = _FixFineDaysOnReturn( $borrower, $item, $issue->{date_due} );
+        $messages->{'Debarred'} = $debardate if ($debardate);
     }
 
     # find reserves.....
@@ -1752,6 +1757,61 @@ sub MarkIssueReturned {
                                   WHERE borrowernumber = ?
                                   AND itemnumber = ?");
     $sth_del->execute($borrowernumber, $itemnumber);
+}
+
+=head2 _FixFineDaysOnReturn
+
+    &_FixFineDaysOnReturn($borrower, $item, $datedue);
+
+C<$borrower> borrower hashref
+
+C<$item> item hashref
+
+C<$datedue> date due
+
+Internal function, called only by AddReturn that calculate and update the user fine days, and debars him
+
+=cut
+
+sub _FixFineDaysOnReturn {
+    my ( $borrower, $item, $datedue ) = @_;
+
+    if ($datedue) {
+        $datedue = C4::Dates->new( $datedue, "iso" );
+    } else {
+        return;
+    }
+
+    my $branchcode = _GetCircControlBranch( $item, $borrower );
+    my $calendar = C4::Calendar->new( branchcode => $branchcode );
+    my $today = C4::Dates->new();
+
+    my $deltadays = $calendar->daysBetween( $datedue, C4::Dates->new() );
+
+    my $circcontrol = C4::Context::preference('CircControl');
+    my $issuingrule = GetIssuingRule( $borrower->{categorycode}, $item->{itype}, $branchcode );
+    my $finedays    = $issuingrule->{finedays};
+
+    # exit if no finedays defined
+    return unless $finedays;
+    my $grace = $issuingrule->{firstremind};
+
+    if ( $deltadays - $grace > 0 ) {
+        my @newdate = Add_Delta_Days( Today(), $deltadays * $finedays );
+        my $isonewdate = join( '-', @newdate );
+        my ( $deby, $debm, $debd ) = split( /-/, $borrower->{debarred} );
+        if ( check_date( $deby, $debm, $debd ) ) {
+            my @olddate = split( /-/, $borrower->{debarred} );
+
+            if ( Delta_Days( @olddate, @newdate ) > 0 ) {
+                C4::Members::DebarMember( $borrower->{borrowernumber}, $isonewdate );
+                return $isonewdate;
+            }
+        } else {
+            C4::Members::DebarMember( $borrower->{borrowernumber}, $isonewdate );
+            return $isonewdate;
+        }
+    }
 }
 
 =head2 _FixOverduesOnReturn

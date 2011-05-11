@@ -30,6 +30,7 @@ use C4::Dates qw/format_date/;
 use C4::Branch; # GetBranches
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
+use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Members;
 use C4::Biblio;
 use C4::Reserves;
@@ -260,6 +261,16 @@ if ($borrowernumber) {
         issuecount   => $issue,
         finetotal    => $fines
     );
+
+    my $debar = CheckBorrowerDebarred($borrowernumber);
+    if ($debar) {
+        $template->param( 'userdebarred'    => 1 );
+        $template->param( 'debarredcomment' => $borrower->{debarredcomment} );
+        if ( $debar ne "9999-12-31" ) {
+            $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
+        }
+    }
+
 }
 
 #

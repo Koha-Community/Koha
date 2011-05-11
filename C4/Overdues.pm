@@ -1077,16 +1077,17 @@ sub CheckBorrowerDebarred {
         SELECT debarred
         FROM borrowers
         WHERE borrowernumber=?
+        AND debarred > NOW()
     |;
     my $sth = $dbh->prepare($query);
     $sth->execute($borrowernumber);
-    my ($debarredstatus) = $sth->fetchrow;
-    return ( $debarredstatus eq '1' ? 1 : 0 );
+    my $debarredstatus = $sth->fetchrow;
+    return $debarredstatus;
 }
 
 =head2 UpdateBorrowerDebarred
 
-    ($borrowerstatut) = &UpdateBorrowerDebarred($borrowernumber);
+($borrowerstatut) = &UpdateBorrowerDebarred($borrowernumber, $todate);
 
 update status of borrowers in borrowers table (field debarred)
 
@@ -1095,16 +1096,16 @@ C<$borrowernumber> borrower number
 =cut
 
 sub UpdateBorrowerDebarred{
-    my($borrowernumber) = @_;
-    my $dbh = C4::Context->dbh;
-        my $query=qq|UPDATE borrowers
-             SET debarred='1'
+    my ( $borrowernumber, $todate ) = @_;
+    my $dbh   = C4::Context->dbh;
+    my $query = qq|UPDATE borrowers
+             SET debarred=?
                      WHERE borrowernumber=?
             |;
-    my $sth=$dbh->prepare($query);
-        $sth->execute($borrowernumber);
-        $sth->finish;
-        return 1;
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $todate, $borrowernumber );
+    $sth->finish;
+    return 1;
 }
 
 =head2 CheckExistantNotifyid

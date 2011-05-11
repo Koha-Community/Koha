@@ -473,7 +473,7 @@ END_SQL
                 if ( $overdue_rules->{"debarred$i"} ) {
     
                     #action taken is debarring
-                    C4::Members::DebarMember($borrowernumber);
+                    C4::Members::DebarMember($borrowernumber, '9999-12-31');
                     $verbose and warn "debarring $borrowernumber $firstname $lastname\n";
                 }
                 my @params = ($listall ? ( $borrowernumber , 1 , $MAX ) : ( $borrowernumber, $mindays, $maxdays ));

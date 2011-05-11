@@ -4438,6 +4438,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+
 $DBversion = "3.05.00.011";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACResultsSidebar','','Define HTML to be included on the search results page, underneath the facets sidebar','70|10','Textarea')");
@@ -4549,6 +4550,20 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done Koha 3.6.0 release \n";
     SetVersion ($DBversion);
 }
+
+$DBversion = "3.05.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    my $borrowers = $dbh->selectcol_arrayref( "SELECT borrowernumber from borrowers where debarred <>0;", { Columns => [1] } );
+    $dbh->do("ALTER TABLE borrowers MODIFY debarred DATE DEFAULT NULL;");
+    $dbh->do( "UPDATE borrowers set debarred='9999-12-31' where borrowernumber IN (" . join( ",", @$borrowers ) . ");" ) if ($borrowers and scalar(@$borrowers)>0);
+    $dbh->do("ALTER TABLE borrowers ADD COLUMN debarredcomment VARCHAR(255) DEFAULT NULL AFTER debarred;");
+    $dbh->do("ALTER TABLE deletedborrowers MODIFY debarred DATE DEFAULT NULL;");
+    $dbh->do("ALTER TABLE deletedborrowers ADD COLUMN debarredcomment VARCHAR(255) DEFAULT NULL AFTER debarred;");
+    print "Upgrade done (Change borrowers.debarred into Date )\n";
+
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

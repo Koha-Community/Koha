@@ -49,6 +49,7 @@ use C4::Letters;
 use C4::Biblio;
 use C4::Reserves;
 use C4::Branch; # GetBranchName
+use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Form::MessagingPreferences;
 use C4::NewsChannels; #get slip news
 use List::MoreUtils qw/uniq/;
@@ -146,8 +147,17 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 }
 $data->{'IS_ADULT'} = ( $data->{'categorycode'} ne 'I' );
 
-for (qw(debarred gonenoaddress lost borrowernotes)) {
+for (qw(gonenoaddress lost borrowernotes)) {
 	 $data->{$_} and $template->param(flagged => 1) and last;
+}
+
+my $debar = CheckBorrowerDebarred($borrowernumber);
+if ($debar) {
+    $template->param( 'userdebarred' => 1, 'flagged' => 1 );
+    if ( $debar ne "9999-12-31" ) {
+        $template->param( 'userdebarreddate' => C4::Dates::format_date($debar) );
+        $template->param( 'debarredcomment'  => $data->{debarredcomment} );
+    }
 }
 
 $data->{'ethnicity'} = fixEthnicity( $data->{'ethnicity'} );
