@@ -30,7 +30,7 @@ $(document).ready(function() {
         <h1>Defining [% IF ( branch ) %]overdue actions for [% branch %][% ELSE %]default overdue actions[% END %]</h1>
         <div class="help">
             <p>Delay is the number of days after an checkout is due before an action is triggered. </p>
-            <p>If you want Koha to trigger an action (send a letter or debar member), a delay value is required.</p>
+            <p>If you want Koha to trigger an action (send a letter or restrict a member), a delay value is required.</p>
             <p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
         </div>
             <form method="post" action="/cgi-bin/koha/tools/overduerules.pl" id="selectlibrary">
@@ -56,7 +56,7 @@ $(document).ready(function() {
                     <li>Delay [% ERRORDELAY %] for [% BORERR %] patron category has some unexpected characters. There should be only numerical characters. </li>
                 [% END %]
                 [% IF ( ERRORUSELESSDELAY ) %]
-                    <li>No letter or debar action specified for delay [% ERRORUSELESSDELAY %] for [% BORERR %] patron category.  If a delay is supplied, either a letter, debar action, or both should be specified.</li>
+                    <li>No letter or restriction action specified for delay [% ERRORUSELESSDELAY %] for [% BORERR %] patron category.  If a delay is supplied, either a letter, restrict action, or both should be specified.</li>
                 [% END %]
                 [% IF ( ERRORORDER ) %]
                     <li>The first notice's delay should be less than the second, which should be less than the third for the <strong>[% BORERR %]</strong> patron category </li>
@@ -79,7 +79,7 @@ $(document).ready(function() {
 	</ul>
 
 <div id="first"><table>
-					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">First Letter</th><th scope="col">Debar</th></tr>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">First Letter</th><th scope="col">Restrict</th></tr>
                     [% FOREACH tabl IN table %]
                      [% UNLESS ( loop.odd ) %]
                                 <tr class="highlight">
@@ -119,7 +119,7 @@ $(document).ready(function() {
 </div>
 
 <div id="second"><table>
-					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Second Letter</th><th scope="col">Debar</th></tr>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Second Letter</th><th scope="col">Restrict</th></tr>
                     [% FOREACH tabl IN table %]
                      [% UNLESS ( loop.odd ) %]
                                 <tr class="highlight">
@@ -159,7 +159,7 @@ $(document).ready(function() {
 </div>
 
 <div id="third"><table>
-					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Third Letter</th><th scope="col">Debar</th></tr>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Third Letter</th><th scope="col">Restrict</th></tr>
                     [% FOREACH tabl IN table %]
                      [% UNLESS ( loop.odd ) %]
                                 <tr class="highlight">
