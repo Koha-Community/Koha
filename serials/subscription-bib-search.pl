@@ -127,6 +127,7 @@ if ($op eq "do_search" && $query) {
         $resultsloop{author}          = $biblio->{'author'};
         $resultsloop{publishercode}   = $biblio->{'publishercode'};
         $resultsloop{publicationyear} = $biblio->{'publicationyear'};
+        $resultsloop{issn}            = $biblio->{'issn'};
 
         push @results, \%resultsloop;
     }
