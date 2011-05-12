@@ -27,6 +27,7 @@ function GetIt(bibno,title)
        <th>Author</th>
        <th>Publisher</th>
        <th>Publication year</th>
+       <th>ISSN</th>
 	   <th>&nbsp;</th>
     </tr>
     [% FOREACH resultsloo IN resultsloop %]
@@ -42,6 +43,10 @@ function GetIt(bibno,title)
             <td>
                 [% resultsloo.publicationyear |html %]
             </td>
+            <td>
+                [% resultsloo.issn |html %]
+            </td>
+
 			<td><a href="#" onclick="GetIt('[% resultsloo.biblionumber %]',$(this));" title="Choose this record">Choose</a></td>
         </tr>
     [% END %]
