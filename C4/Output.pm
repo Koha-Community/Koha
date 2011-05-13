@@ -292,10 +292,7 @@ sub output_with_http_headers($$$$;$) {
         $options->{'Content-Style-Type' } = 'text/css';
         $options->{'Content-Script-Type'} = 'text/javascript';
     }
-    # remove SUDOC specific NSB NSE
-    $data =~ s/\x{C2}\x{98}|\x{C2}\x{9C}/ /g;
-    $data =~ s/\x{C2}\x{88}|\x{C2}\x{89}/ /g;
-      
+
 # We can't encode here, that will double encode our templates, and xslt
 # We need to fix the encoding as it comes out of the database, or when we pass the variables to templates
  
