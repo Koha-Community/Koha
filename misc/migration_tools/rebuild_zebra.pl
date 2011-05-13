@@ -320,7 +320,7 @@ sub export_marc_records_from_sth {
                           ? GetXmlBiblio( $record_number )
                           : GetAuthorityXML( $record_number );
             if ($record_type eq 'biblio'){
-                my @items = GetItemsInfo($record_number, 'intra');
+                my @items = GetItemsInfo($record_number);
                 if (@items){
                     my $record = MARC::Record->new;
                     my @itemsrecord;
