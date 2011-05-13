@@ -132,7 +132,7 @@ function placeHold () {
             <form action="basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
     <h3>
-        [% IF ( BIBLIO_RESULT.print_basket ) %]
+        [% IF ( print_basket ) %]
             [% BIBLIO_RESULT.title |html %]
                 [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle %][% END %]
                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
@@ -301,7 +301,7 @@ function placeHold () {
 </p>
     <table id="itemst">
 	<thead><tr>
-	    <th>&nbsp;</th>
+	    [% UNLESS ( print_basket ) %]<th>&nbsp;</th>[% END %]
 	    <th>Title</th>
 	    <th>Item Type</th>
 	    <th>Location</th>
@@ -313,7 +313,7 @@ function placeHold () {
             [% ELSE %]
                 <tr>
             [% END %]
-            [% UNLESS ( BIBLIO_RESULT.print_basket ) %]<td>
+            [% UNLESS ( print_basket ) %]<td>
                         <input type="checkbox" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" onclick="selRecord(value,checked);" />
 
                 </td> [% END %]
@@ -347,13 +347,9 @@ function placeHold () {
     </table></form>
 [% END %]
 
-[% IF ( print_basket ) %]
-<a href="#back" class="screen">&lt;&lt; Back to Cart</a>
-[% ELSE %]
 <form name="myform" action="basket/basket.pl" method="get">
     <input type="hidden" name="records" id="records" />
 </form>
-[% END %]
 
 </div>
 </div>
