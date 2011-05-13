@@ -132,6 +132,11 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
     my ($marcrecord, $encoding) = MARCfindbreeding($params->{'breedingid'});
     die("Could not find the selected record in the reservoir, bailing") unless $marcrecord;
 
+    # Remove all the items (952) from the imported record
+    foreach my $item ($marcrecord->field('952')) {
+        $marcrecord->delete_field($item);
+    }
+
     my $duplicatetitle;
 #look for duplicates
     if (! (($biblionumber,$duplicatetitle) = FindDuplicate($marcrecord))){
