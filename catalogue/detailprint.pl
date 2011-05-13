@@ -35,7 +35,7 @@ my $type  = $query->param('type');
 my $biblionumber = $query->param('biblionumber');
 
 # change back when ive fixed request.pl
-my @items = GetItemsInfo( $biblionumber, $type );
+my @items = GetItemsInfo( $biblionumber );
 my $norequests = 1;
 foreach my $itm (@items) {
     $norequests = 0 unless $itm->{'notforloan'};

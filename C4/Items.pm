@@ -1112,16 +1112,12 @@ sub GetItemsByBiblioitemnumber {
 
 =head2 GetItemsInfo
 
-  @results = GetItemsInfo($biblionumber, $type);
+  @results = GetItemsInfo($biblionumber);
 
-Returns information about books with the given biblionumber.
-
-C<$type> may be either C<intra> or anything else. If it is not set to
-C<intra>, then the search will exclude lost, very overdue, and
-withdrawn items.
+Returns information about items with the given biblionumber.
 
 C<GetItemsInfo> returns a list of references-to-hash. Each element
-contains a number of keys. Most of them are table items from the
+contains a number of keys. Most of them are attributes from the
 C<biblio>, C<biblioitems>, C<items>, and C<itemtypes> tables in the
 Koha database. Other keys include:
 
@@ -1157,7 +1153,7 @@ If this is set, it is set to C<One Order>.
 =cut
 
 sub GetItemsInfo {
-    my ( $biblionumber, $type ) = @_;
+    my ( $biblionumber ) = @_;
     my $dbh   = C4::Context->dbh;
     # note biblioitems.* must be avoided to prevent large marc and marcxml fields from killing performance.
     my $query = "

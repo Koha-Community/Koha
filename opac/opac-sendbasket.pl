@@ -81,7 +81,7 @@ if ( $email_add ) {
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 
-        my @items = &GetItemsInfo( $biblionumber, 'opac' );
+        my @items = GetItemsInfo( $biblionumber );
 
         my $hasauthors = 0;
         if($dat->{'author'} || @$marcauthorsarray) {

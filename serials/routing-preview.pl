@@ -65,7 +65,7 @@ if($ok){
     # get biblio information....
     my $biblio = $subs->{'biblionumber'};
 	my ($count2,@bibitems) = GetBiblioItemByBiblioNumber($biblio);
-	my @itemresults = GetItemsInfo($subs->{'biblionumber'}, 'intra');
+	my @itemresults = GetItemsInfo( $subs->{biblionumber} );
 	my $branch = $itemresults[0]->{'holdingbranch'};
 	my $branchname = GetBranchName($branch);
 
