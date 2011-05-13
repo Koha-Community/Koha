@@ -112,8 +112,7 @@ my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 my $dbh = C4::Context->dbh;
 
-# 'intra' param included, even though it's not respected in GetItemsInfo currently
-my @all_items= GetItemsInfo($biblionumber, 'intra');
+my @all_items = GetItemsInfo( $biblionumber );
 my @items;
 for my $itm (@all_items) {
     push @items, $itm unless ( $itm->{itemlost} && GetHideLostItemsPreference($borrowernumber) && !$showallitems);

@@ -96,7 +96,7 @@ for ( my $i = 0 ; $i < $count ; $i++ ) {
 	 # FIXME still need to shift the text to the template so its translateable
 	 if ( $data->[$i]) {
 	     # find if its on issue
-	     my @items = GetItemsInfo($line{'biblionumber'}, 'intra' );
+	     my @items = GetItemsInfo( $line{biblionumber} );
 	     my $onissue = 0;
 	     foreach my $item (@items) {
 		 if ( $item->{'datedue'} eq 'Reserved' ) {

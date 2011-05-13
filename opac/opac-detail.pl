@@ -85,7 +85,7 @@ if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
 
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 
 # change back when ive fixed request.pl
-my @all_items = &GetItemsInfo( $biblionumber, 'opac' );
+my @all_items = GetItemsInfo( $biblionumber );
 my @items;
 
 # Getting items to be hidden

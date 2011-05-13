@@ -124,7 +124,7 @@ $template->param(
 
 my $norequests = 1;
 my $res = GetISBDView($biblionumber, "opac");
-my @items = &GetItemsInfo($biblionumber, 'opac');
+my @items = GetItemsInfo( $biblionumber );
 
 my $itemtypes = GetItemTypes();
 for my $itm (@items) {
