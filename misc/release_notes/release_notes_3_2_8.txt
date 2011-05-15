@@ -1,0 +1,283 @@
+RELEASE NOTES FOR KOHA 3.2.8 - 15 May 2011
+========================================================================
+
+Koha is the first free and open source software library automation package
+(ILS). Development is sponsored by libraries of varying types and sizes,
+volunteers, and support companies from around the world.
+The website for the Koha project is
+
+    http://koha-community.org/
+
+Koha 3.2.8 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.02.08.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+Koha 3.2.8 is a bugfix/maintenance release.
+
+IMPORTANT ANNOUNCEMENT CONCERNING 3.2.x EOL
+========================================================================
+With the release of 3.4.0, the 3.2.x branch is nearing its EOL.
+After 3.2.10 or 04/15/2011, a motion will be made at the August 2011
+general IRC meeting to officially announce EOL for the 3.2.x branch.
+Please keep this in mind when planning new deployments and upgrades to
+existing systems.
+
+Highlights of 3.2.8
+======================
+
+Some of the higher profile bugs addressed in this release are:
+
+3072    critical    'Heading-Main' authority-index breaks authority 
+                    searching in STABLE
+5860    critical    Adding duplicate stocknumber will fail silently
+6104    critical    Modifying an item causes it to lose its branch
+2505    major       enable Perl warnings in all modules and scripts
+4903    major       OAI doesn't work out of the box - XSL path
+5942    major       UNIMARC Authorities SQL data
+6001    major       batchRebuildBiblioTables.pl crashes when GetMarcBiblio
+                    fails.
+6014    major       Log viewer needs permissions
+6056    major       Notes on order line not shown when modifying
+6106    major       add item not respecting framework in acq
+6164    major       messaging tab on staff client loses name
+6282    major       HomeOrHoldingBranchReturn syspref missing from *.pref file
+
+
+Bugs fixed in 3.2.8
+======================
+
+3523    Menu of existing lists limited to 10
+3543    Spine labels - NLM call numbers not splitting
+4196    Defintion of popularity index into Unimarc setup
+4374    Data entry form doesn't use hidden/mandatory flag as expected
+4837    Circulation Print Page uses incorrect heading / incorrect information
+5156    JavaScript error when adding list
+5234    Remove unused CSS files
+5275    no way to change framework by editing
+5509    Packaging scripts get upset when there's an LDAP configuration in the
+        koha_conf.xml
+5529    Staff client shows "Your lists:" and "public lists:" when there are none
+5708    Incorrect Discount applied to rental charge at checkout
+5903    French authorised values fixed - country codes must be in capital letters
+5941    Change the link in the authority search results, to a phrase search
+5948    Missing quantity column in receipt screen
+5964    aqbudgets.tmpl contains untranslatable fields
+6017    Editing an extended attribute can cause a 500 error
+6028    Fixing the 9999 rows limiation on export to csv
+6031    koha-rebuild-zebra doesn't allow XML and verbose indexing
+6032    Give biblios register and shadow sane default max sizes
+6037    Invalid markup, missing breadcrumbs on Keyword to MARC Mapping page
+6077    qty not incremented for AcqCreateItem=recieve
+6096    GetAllShelves has obfuscated return type
+6099    pagination error on GROUP BY guided reports
+6100    request.pl should check maxreserves exists before using it
+6118    Title-host missing in Search.pm
+6126    Slip print doesn't work on Webkit based browsers
+6154    Default sorting by title doesn't work
+6169    Inventory tool fails when ignoreissued set
+6170    'More options' in advanced search broken
+6211    SubscriptionHistory doesn't have default value set
+3628    Add opacSerialDefaultTab preference to display shortened serial collection
+        instead of holdings by default
+4049    Search on itemtypes returning noise
+4189    Searching z39.50 without selecting any servers results in error message
+4393    Searching with scan indexes and sort by title fails
+4912    After editing private list, user should be redirect to private lists
+5213    Suffix number sequence not resetting properly in hmyymmincr barcode autogen
+        pattern
+5915    UNIMARC Authorities : 100$a simple error: Sometimes, language is encoded fre50
+        and not  frey50.
+5923    Authorities list :removing link on Summary
+5947    Adding a date filter to the suggestions search
+5949    Popup alert when deleting orders from a basket
+5950    changing frameworks doesn't change anymore
+5951    Acquisitions: changing planning value to statistics value
+5971    Minor markup error in holds queue report
+5972    DisplayClearScreenButton preference introduces invalid markup
+5990    Lists and Cart show LOC code, not Location Authorized value
+6005    Transit slips cause Firefox 4 to display "prevent this page from opening
+        additional dialogs"
+6062    Basketgroup ordering
+6072    Acquisition permissions inconsistencies
+6088    remove a perl warning
+6108    Quicksearch in member.pl does not display paging correctly
+6109    Hey!
+5895    Correct translation error in German frameworks
+5982    OPAC : Serials changing some wording on opac-detail.tmpl
+6095    Wrong display of acute charaters in html letters
+3644    Support for NORMARC
+4506    Add support of record linking by record control number in $w
+5917    Switch Koha to use Template::Toolkit
+6024    Run a Report immediately after creating or editing
+
+
+Translations new/updated in 3.2.8
+======================
+
+ar-Arab
+hi
+it-IT
+ja-Jpan
+pl-PL
+pt-BR
+pt-PT
+tet
+zh-Hans-TW
+
+======================
+
+    Changes since 3.0:
+
+    * The minimum version of Perl required is now 5.8.8.
+    * There are a number of new Perl module dependencies.
+      Run ./koha_perl_deps.pl -u -m to get a list of
+      any new modules to install during upgrade.
+
+Upgrades
+======================
+
+The structure of the acquisitions tables have changed significantly
+from 3.0.x.  In particular, the budget hierarchy is quite different.
+During an upgrade, a new database table is created called fundmapping
+that contains a record of how budgets were mapped.  It is strongly
+recommended that users of Koha 3.0.x acquisitions carefully review
+the results of the upgrade before resuming ordering in Koha 3.2.x.
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, several translations of the
+Koha manual are available:
+
+English: http://koha-community.org/documentation/3-2-manual/
+Spanish: http://koha-community.org/documentation/3-2-manual-es/
+French:  http://koha-community.org/documentation/3-2-manual-fr/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://www.kohadocs.org/usersguide/apb.html
+
+for information about translating Koha, and join the koha-translate
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.2 is
+
+Release Manager:        Galen Charlton <gmcharlt@gmail.com>
+Documentation Manager:  Nicole Engard <nengard@gmail.com>
+Translation Manager:    Chris Cormack <chris@bigallofwax.co.nz>
+Release Maintainer (3.0.x):
+                        Henri-Damien Laurent <henridamien.laurent@biblibre.com>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to Koha 3.2.8:
+
+Alex Arnaud
+Jared Camins-Esakov
+Colin Campbell
+Frédérick Capovilla
+Galen Charlton
+Tomas Cohen
+Chris Cormack
+Christophe Croullebois
+Marcel de Rooy
+Stéphane Delaune
+Frédéric Demians
+Ricardo Dias
+Jonathan Druart
+Frederic Durand
+Nicole Engard
+Magnus Enger
+Katrin Fischer
+Srdjan Jankovic
+Koustubha Kale
+koha-preprod@sys-tech.net
+Henri-Damien Laurent
+Owen Leonard
+Matthias Meusburger
+Sophie Meynieux
+Chris Nighswonger
+Paul Poulain
+root@lists.nekls.org
+Robin Sheat
+Ian Walls
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send patch against these release notes to
+koha-patches@lists.koha-community.org.
+
+The 3.2.x Release Maintainer especially thanks the 3.6 Release Team and all
+who participated in QA for their diligent labors in testing and pushing well
+over 680 patches since the 3.2.0 relese. Their continued work very much makes
+possible the release of 3.2.8 on its announced schedule.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development
+version of Koha can be retrieved by checking out the master branch of
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.2.x (i.e., this version of Koha and future bugfix
+releases) is 3.2.x.
+
+The next major feature release of Koha will be Koha 3.4.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+Naku te rourou, nau te rourou, ka ora ai te iwi.
