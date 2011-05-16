@@ -4216,11 +4216,25 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 }
 
 $DBversion = '3.03.00.042';
-if (C4::Context->preference("Version") < TransformToNum($DBversion) && $original_version < TransformToNum("3.02.06.001")) {
-    $dbh->do("ALTER TABLE `items` DROP INDEX `itemsstocknumberidx`;");
-    $dbh->do("ALTER TABLE items ADD INDEX itemstocknumberidx (stocknumber);");
-    print "Upgrade to $DBversion done (Change items.stocknumber to be not unique)\n";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    stocknumber_checker();
+    print "Upgrade to $DBversion done (5860 Index itemstocknumber)\n";
     SetVersion ($DBversion);
+}
+
+sub stocknumber_checker { #code reused later on
+  my @row;
+  #drop the obsolete itemSStocknumber idx if it exists
+  @row = $dbh->selectrow_array("SHOW INDEXES FROM items WHERE key_name='itemsstocknumberidx'");
+  $dbh->do("ALTER TABLE `items` DROP INDEX `itemsstocknumberidx`;") if @row;
+
+  #check itemstocknumber idx; remove it if it is unique
+  @row = $dbh->selectrow_array("SHOW INDEXES FROM items WHERE key_name='itemstocknumberidx' AND non_unique=0");
+  $dbh->do("ALTER TABLE `items` DROP INDEX `itemstocknumberidx`;") if @row;
+
+  #add itemstocknumber index non-unique IF it still not exists
+  @row = $dbh->selectrow_array("SHOW INDEXES FROM items WHERE key_name='itemstocknumberidx'");
+  $dbh->do("ALTER TABLE items ADD INDEX itemstocknumberidx (stocknumber);") unless @row;
 }
 
 $DBversion = "3.03.00.043";
@@ -4330,6 +4344,14 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     });
     print "Upgrade to $DBversion done (Adds New System preference numSearchRSSResults)\n";
     SetVersion($DBversion);
+}
+
+$DBversion = '3.05.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    #follow up fix 5860: some installs already past 3.3.0.42
+    stocknumber_checker();
+    print "Upgrade to $DBversion done (Fix for stocknumber index)\n";
+    SetVersion ($DBversion);
 }
 
 =head1 FUNCTIONS
