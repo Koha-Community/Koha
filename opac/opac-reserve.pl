@@ -477,11 +477,11 @@ if ( $numBibsAvailable == 0 || !$anyholdable) {
     $template->param( none_available => 1 );
 }
 
-my $itemTableColspan = 5;
-if (!$template->param('OPACItemHolds')) {
+my $itemTableColspan = 7;
+if (! $template->{VARS}->{'OPACItemHolds'}) {
     $itemTableColspan--;
 }
-if ($template->param('singleBranchMode')) {
+if (! $template->{VARS}->{'singleBranchMode'}) {
     $itemTableColspan--;
 }
 $template->param(itemtable_colspan => $itemTableColspan);
