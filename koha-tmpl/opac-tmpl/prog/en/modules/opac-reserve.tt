@@ -152,6 +152,7 @@
  });
 // ]]>
 </script>
+<style type="text/css">td ul { padding : 0; } td li { white-space: nowrap; font-size: 90%; list-style-type:none; padding : .3em 0; }</style>
 </head>
 
 <body id="opac-holds">
@@ -373,11 +374,13 @@
       <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear Date</a></p>
     </td>[% END %]
 
-                    [% IF ( bibitemloo.holdable ) %][% IF ( OPACItemHolds ) %]
+                    [% IF ( bibitemloo.holdable ) %]
+		    <!-- HOLD ABLE -->
+		    [% IF ( OPACItemHolds ) %]
+		    <!-- ITEM HOLDS -->
                                           <td class="place_on_type" style="display:none">
-                                            <table>
-                                              <tr>
-                                                <td>
+                                            <ul>
+                                                <li>
                                                   [% UNLESS ( bibitemloo.holdable ) %]
                                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
                                                            id="reqany_[% bibitemloo.biblionumber %]"
@@ -394,10 +397,8 @@
                                                     />
                                                   [% END %]
                                                   <label for="reqany_[% bibitemloo.biblionumber %]">Next available copy</label>
-                                                </td>
-                                              </tr>
-                                              <tr>
-                                                <td>
+                                                </li>
+                                                <li>
                                                   [% UNLESS ( bibitemloo.holdable ) %]
                                                     <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
                                                            id="reqspecific_[% bibitemloo.biblionumber %]"
@@ -413,9 +414,8 @@
                                                     />
                                                   [% END %]
                                                   <label for="reqspecific_[% bibitemloo.biblionumber %]">A specific copy</label>
-                                                </td>
-                                              </tr>
-                                            </table>
+                                                </li>
+                                            </ul>
                                           </td>
                                         [% END %][% END %]
 
@@ -442,9 +442,8 @@
                   [% IF ( OPACItemHolds ) %]
                   [% IF ( bibitemloo.holdable ) %]
                     <tr class="copiesrow" id="copiesrow_[% bibitemloo.biblionumber %]">
-                      <td colspan="1">
-                      </td>
-                      <td colspan="[% bibitemloo.itemtable_colspan %]">
+                      <td>&nbsp;</td>
+                      <td colspan="[% itemtable_colspan %]">
                         <table>
                           <caption>Select a specific copy:</caption>
                           <tr>
@@ -468,7 +467,7 @@
                             <tr class="[% itemLoo.backgroundcolor %]">
                               <td>
                                 [% IF ( itemLoo.available ) %]
-                                  <input type="radio" class="checkitem checkitem_[% itemLoo.biblionumber %]" name="checkitem_[% itemLoo.biblionumber %]"
+                                  <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]"
                                          value="[% itemLoo.itemnumber %]" />
                                 [% ELSE %]
                                   <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber %]" />
