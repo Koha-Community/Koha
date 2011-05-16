@@ -87,7 +87,7 @@
     [% FOREACH loo IN loop %] 
         <div id="sub[% loo.urisubfieldcode %]field">
         
-               <fieldset class="rows"><legend>[% IF ( loo.new_subfield ) %]Add new subfield[% ELSE %]Basic constraints[% END %]</legend>
+               <fieldset class="rows" style="float:none;"><legend>[% IF ( loo.new_subfield ) %]Add new subfield[% ELSE %]Basic constraints[% END %]</legend>
                 	<ol>
                 		[% IF ( subfieldcode == 0 || subfieldcode ) %] 
                 		<li><span class="label">Subfield code:</span> [% loo.subfieldcode %] <input type="hidden" name="tagsubfield" value="[% loo.subfieldcode %]" /></li>
@@ -104,7 +104,7 @@
 			
             <a class="displaymore" href="#more[% loo.urisubfieldcode %]">display more constraints</a>
             <div id="more[% loo.urisubfieldcode %]" style="display:none; clear: both">
-             <fieldset class="rows">
+             <fieldset class="rows" style="float:none;">
 				<legend>Advanced constraints:</legend>
                 <ol><li><label for="defaultvalue[% loo.row %]">Default value:</label>
                     <input type="text" name="defaultvalue" id="defaultvalue[% loo.row %]" value="[% loo.defaultvalue %]" /></li>
@@ -114,7 +114,7 @@
                 <li><label for="kohafield[% loo.row %]">Koha link:</label>[% loo.kohafield %]</li>
 			</ol>
 	</fieldset>
-	 <fieldset class="rows">
+	 <fieldset class="rows" style="float:none;">
                 <legend>Other Options: (choose one)</legend>
                     	<ol>
                     		<li><label for="authorised_value[% loo.row %]">Authorized value:</label>[% loo.authorised_value %]</li>
