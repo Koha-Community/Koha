@@ -437,7 +437,7 @@ $(document).ready(function(){
 
 				<span class="results_summary">
                 <span class="label">Availability:</span>
-                    [% IF ( SEARCH_RESULT.available_items_loop ) %]
+                    [% IF ( SEARCH_RESULT.available_items_loop.0 ) %]
                     <span class="available"><strong>Copies available:</strong>
                     [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
                     [% UNLESS ( available_items_loo.hideatopac ) %]
