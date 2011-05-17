@@ -255,7 +255,7 @@ function GetZ3950Terms(){
 
 function Changefwk(FwkList) {
 	var fwk = FwkList.options[FwkList.selectedIndex].value;
- 	window.location = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&breedingid=[% breedingid %]&frameworkcode="+fwk;
+	window.location = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumberdata %]&op=[% op %]&breedingid=[% breedingid %]&mode=[% popup %]&frameworkcode="+fwk;
 
 }
 
