@@ -20,25 +20,30 @@
     [% END %]
     
 [% ELSE %]
+    [% IF ( invalidlist ) %]
+        <div class="dialog alert">
+        <p>You do not have permission to send this list.</p>
+        </div>
+        <p><a class="button close" href="/cgi-bin/koha/opac-shelves.pl">Back to lists</a></p>
+    [% ELSE %]
+        <form action="[% url %]" method="post" id="sendshelfform">
 
-<form action="[% url %]" method="post" id="sendshelfform">
-
-<fieldset class="rows"> 
-<legend>Sending your list</legend>
-<ol>   <li>
-        <label for="email">Email Address:</label>
-        <input type="text" id="email" name="email" size="43" class="focus" />
-    </li>
-    <li>
-            <label for="comment">Comment:</label>
-            <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
-    </li>
-    <li>
-        <input type="hidden" name="shelfid" value="[% shelfid %]" />
-    </li></ol></fieldset>
-       <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
-</form>
-
+        <fieldset class="rows">
+        <legend>Sending your list</legend>
+        <ol>   <li>
+                <label for="email">Email Address:</label>
+                <input type="text" id="email" name="email" size="43" class="focus" />
+            </li>
+            <li>
+                    <label for="comment">Comment:</label>
+                    <textarea id="comment" name="comment" rows="4" cols="40"></textarea>
+            </li>
+            <li>
+                <input type="hidden" name="shelfid" value="[% shelfid %]" />
+            </li></ol></fieldset>
+               <fieldset class="action"> <input type="submit" value="Send" /> <a class="cancel close" href="#">Cancel</a> </fieldset>
+        </form>
+    [% END %]
 [% END %]</div>
 </body>
 </html>
