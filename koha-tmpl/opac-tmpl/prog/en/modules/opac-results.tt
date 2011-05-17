@@ -441,14 +441,14 @@ $(document).ready(function(){
                     <span class="available"><strong>Copies available:</strong>
                     [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
                     [% UNLESS ( available_items_loo.hideatopac ) %]
-                    [% IF ( available_items_loo.singleBranchMode ) %]
+                    [% IF ( singleBranchMode ) %]
                         [% available_items_loo.location %]
                     [% ELSE %]
                         [% available_items_loo.branchname %]
                     [% END %]
 
                     [% IF ( OPACItemsResultsDisplay ) %]
-					    [% UNLESS ( available_items_loo.singleBranchMode ) %][% available_items_loo.location %][% END %]
+					    [% UNLESS ( singleBranchMode ) %][% available_items_loo.location %][% END %]
                         [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/opac-search.pl?q=callnum:[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
                     [% END %]
                     ([% available_items_loo.count %]),
