@@ -376,6 +376,7 @@ my $sth2 = $dbh->prepare("
 $sth2->execute($branch);
 
 while (my $row = $sth2->fetchrow_hashref) {
+    $row->{'current_branch'} ||= $row->{'branchcode'};
     $row->{'humanitemtype'} ||= $row->{'itemtype'};
     $row->{'default_humanitemtype'} = 1 if $row->{'humanitemtype'} eq '*';
     $row->{'humancategorycode'} ||= $row->{'categorycode'};
