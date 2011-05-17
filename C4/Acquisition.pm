@@ -1435,6 +1435,7 @@ sub GetLateOrders {
             OR datereceived IS NULL
             OR aqorders.quantityreceived < aqorders.quantity
         )
+        AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
     ";
     my $having = "";
     if ($dbdriver eq "mysql") {
