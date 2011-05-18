@@ -143,7 +143,7 @@
 			<p>[% IF ( displayprev ) %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% startfromprev %]&amp;search=[% search %]&amp;resultsperpage=[% resultsperpage %]&amp;type=intranet&amp;op=do_search">&lt;&lt; Previous</a>[% END %]
 				[% FOREACH number IN numbers %]
                                 [% IF ( number.highlight ) %] <span class="highlight">[% number.number %]</span>
-                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% number.index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">[% number.number %]</a>
+                                [% ELSE %] <a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search |url %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">[% number.number %]</a>
                                 [% END %]
                                 [% END %]
                                 [% IF ( displaynext ) %]
@@ -188,9 +188,9 @@
 					</td>
 					<td>
                       [% IF ( resul.biblionumber ) %]
-						<a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% resul.index %]&amp;biblionumber=[% resul.biblionumber %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
+						<a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;biblionumber=[% resul.biblionumber %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
                       [% ELSE %]
-						<a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% resul.index %]&amp;type=intranet&amp;op=fillinput')">Clear Field</a>
+						<a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;type=intranet&amp;op=fillinput')">Clear Field</a>
                       [% END %]
 					</td>
 				</tr>
@@ -212,7 +212,7 @@
 							[% number.number %]
 						</span>
 					[% ELSE %]
-						<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% number.index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">
+						<a class="resultnumber" href="/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_4XX.pl&amp;index=[% index %]&amp;startfrom=[% number.startfrom %]&amp;search=[% number.search %]&amp;resultsperpage=[% number.resultsperpage %]&amp;type=intranet&amp;op=do_search">
 							[% number.number %]
 						</a>
 					[% END %]
