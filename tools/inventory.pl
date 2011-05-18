@@ -77,6 +77,8 @@ my @authorised_value_list;
 my $authorisedvalue_categories = '';
 
 my $frameworks = getframeworks();
+$frameworks->{''} = {frameworkcode => ''}; # Add the default framework
+
 for my $fwk (keys %$frameworks){
   my $fwkcode = $frameworks->{$fwk}->{'frameworkcode'};
   my $authcode = GetAuthValCode('items.location', $fwkcode);
