@@ -211,8 +211,8 @@ sub printbasketgrouppdf{
                 } else {
                     push(@ba_order, undef);
                 }
-                if ($ord->{itemtype}){
-                    push(@ba_order, $itemtypes->{$bib->{itemtype}}->{description}) if $bib->{itemtype};
+                if ($ord->{itemtype} and $bib->{itemtype}){
+                    push(@ba_order, $itemtypes->{$bib->{itemtype}}->{description});
                 } else {
                     push(@ba_order, undef);
                 }
