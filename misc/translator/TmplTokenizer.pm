@@ -427,7 +427,7 @@ sub parametrize ($$$$) {
 		$it .= $&;
 		die "$&: Unknown or unsupported format specification\n"; #XXX
 	    } else {
-		die "$&: Completely confused parametrizing\n";#XXX
+		die "$&: Completely confused parametrizing -- msgid: $fmt_0\n";#XXX
 	    }
 	}
     }
