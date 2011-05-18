@@ -142,7 +142,7 @@ function AreMandatoriesNotOk(){
         	[% END %]
     		[% FOREACH subfield_loo IN innerloo.subfield_loop %]
     			[% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id %]");
-                   	tab.push("[% subfield_loo.number %]");
+                   	tab.push("[% BIG_LOO.number %]");
                    	label.push("[% subfield_loo.marc_lib %]");
                 [% END %]
             [% END %]
