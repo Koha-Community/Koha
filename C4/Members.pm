@@ -1123,7 +1123,7 @@ sub GetAllIssues {
   LEFT JOIN items on items.itemnumber=old_issues.itemnumber
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-  WHERE borrowernumber=? 
+  WHERE borrowernumber=? AND old_issues.itemnumber IS NOT NULL
   order by $order";
     if ( $limit != 0 ) {
         $query .= " limit $limit";
