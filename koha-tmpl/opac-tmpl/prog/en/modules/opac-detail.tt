@@ -407,7 +407,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		[% IF ( itemdata_enumchron ) %]<td>[% ITEM_RESULT.enumchron %]</td>[% END %]
 		[% IF ( itemdata_uri ) %]<td><a href="[% ITEM_RESULT.uri %]">[% ITEM_RESULT.uri %]</a></td>[% END %]
 		[% IF ( itemdata_copynumber ) %]<td>[% ITEM_RESULT.copynumber %]</td>[% END %]
-		<td>[% INCLUDE 'item-status.inc' %]</td>
+		<td>[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
 		[% IF ( itemdata_itemnotes ) %]<td>[% ITEM_RESULT.itemnotes %]</td>[% END %]
 		<td>[% ITEM_RESULT.datedue %]</td>
 		[% IF ( ITEM_RESULT.type ) %]
