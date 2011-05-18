@@ -40,6 +40,7 @@ $(document).ready(function(){
         /* Inline edit/delete links */
         $("td").click(function(event){
             var $tgt = $(event.target);
+            var row = $(this).parent();
             $(".linktools").hide();
             $("tr").removeClass("selected");
             if($tgt.is("a")||$tgt.is(":nth-child(7)")||$tgt.is(":nth-child(8)")||$tgt.is(":nth-child(9)")||$tgt.is(":nth-child(10)")){
@@ -50,7 +51,6 @@ $(document).ready(function(){
                 var left = position.left+5;
                 $(".linktools",row).show().css("position","absolute").css("top",top).css("left",left);
             }
-            var row = $(this).parent();
             row.addClass("selected");
         });
     $("form[name='f']").submit(function(){
