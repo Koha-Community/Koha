@@ -161,7 +161,7 @@ function AreMandatoriesNotOk(){
         if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(mandatories[i]) != null && ! document.getElementById(mandatories[i]).value || document.getElementById(mandatories[i]) == null)){
             tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
             document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
-            document.getElementById(mandatories[i]).focus();
+            $('#' + mandatories[i]).focus();
             tabflag[tag+subfield+tagnumber][1]=label[i];
             tabflag[tag+subfield+tagnumber][2]=tab[i];
         } else {
