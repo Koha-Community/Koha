@@ -118,7 +118,7 @@
         <td>[% overdueloo.duedate %]</td>
         <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overdueloo.borrowernumber %]">[% overdueloo.name %]</a>
         [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=Overdue: [% overdueloo.title |html %]">email</a>][% END %]
-        ([% IF ( overdueloo.phone ) %][% overdueloo.phone %][% ELSIF ( overdueloo.mobile ) %][% overdueloo.mobile %][% ELSIF ( overdueloo.phonepro ) %][% overdueloo.phonepro %][% END %])</td>
+        [% IF ( overdueloo.phone ) %]([% overdueloo.phone %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro %])[% END %]</td>
         <td>[% overdueloo.branchcode %]</td>
         <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title |html %]  [% overdueloo.subtitle %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author %][% END %]
         </td>
@@ -137,12 +137,11 @@
 <form method="post" action="/cgi-bin/koha/circ/overdue.pl">
   <fieldset class="brief">
 <h4>Filter On:</h4>
+	<fieldset><legend>Date due:</legend>
 	<ol>
-    <li style="border: dashed; border-width:1px;">Date due:
-	<label for="dateduefrom">From:
+    <li><label for="dateduefrom">From:</label>
+	<input type="text" id="dateduefrom" name="dateduefrom" size="10" value="[% dateduefrom %]" />
 	<img src="[% themelang %]/lib/calendar/cal.gif" id="dateduefrom_button" alt="Show Calendar" />
-	</label>
-	<input type="text" id="dateduefrom" name="dateduefrom" size="20" value="[% dateduefrom %]" />
 	<script language="JavaScript" type="text/javascript">
 	    Calendar.setup(
 	    {
@@ -152,11 +151,11 @@
 	    }
 	    );
 	</script>
-
-	<label for="datedueto">To:
+	</li>
+	<li>
+	<label for="datedueto">To:</label>
+	<input type="text" id="datedueto" name="datedueto" size="10" value="[% datedueto %]" />
 	<img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" />
-	</label>
-	<input type="text" id="datedueto" name="datedueto" size="20" value="[% datedueto %]" />
 	<script language="JavaScript" type="text/javascript">
 	    Calendar.setup(
 	    {
@@ -167,6 +166,8 @@
 	    );
 	</script>
     </li>
+    </ol></fieldset>
+    <ol>
     <li><label>Name or cardnumber:</label><input type="text" name="borname" value="[% borname |html %]" /></li>
     <li><label>Patron category:</label><select name="borcat" id="borcat"><option value="">Any</option>
       [% FOREACH borcatloo IN borcatloop %]
