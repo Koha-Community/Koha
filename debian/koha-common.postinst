@@ -2,6 +2,8 @@
 
 set -e
 
+. /usr/share/debconf/confmodule
+
 conf=/etc/mysql/koha-common.cnf
 if [ ! -e "$conf" ] && [ ! -L "$conf" ]
 then
@@ -11,3 +13,7 @@ fi
 #DEBHELPER#
 
 koha-upgrade-schema $(koha-list)
+
+db_stop
+
+exit 0
