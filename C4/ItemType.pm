@@ -73,12 +73,15 @@ C<description>.
 sub all {
     my ($class) = @_;
     my $dbh = C4::Context->dbh;
-    return    map { $class->new($_) }    @{$dbh->selectall_arrayref(
-        # The itemtypes table is small enough for
-        # `SELECT *` to be harmless.
-        "SELECT * FROM itemtypes ORDER BY description",
-        { Slice => {} },
-    )};
+
+    my @itypes;
+    for ( @{$dbh->selectall_arrayref(
+        "SELECT * FROM itemtypes ORDER BY description", { Slice => {} })} )
+    {
+        utf8::encode($_->{description});
+        push @itypes, $class->new($_);
+    }
+    return @itypes;
 }
 
 
