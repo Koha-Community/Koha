@@ -61,7 +61,7 @@ my @label_ids = $cgi->param('label_id') if $cgi->param('label_id');
 my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
 my $barcode = $cgi->param('barcode') if $cgi->param('barcode');
 
-my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));
+my $branch_code = get_branch_code_from_name($template->{VARS}->{'LoginBranchname'});
 
 if ($op eq 'remove') {
     $batch = C4::Labels::Batch->retrieve(batch_id => $batch_id);
