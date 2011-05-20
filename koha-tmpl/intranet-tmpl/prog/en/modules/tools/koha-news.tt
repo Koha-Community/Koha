@@ -172,10 +172,10 @@ Edit News Item[% ELSE %]Add News Item[% END %][% ELSE %]News[% END %]</div>
                             <td>
                                 <input type="checkbox" name="ids" value="[% opac_new.idnew %]" />
                             </td>
-                            <td>[% IF ( lang == 'koha' ) %]
+                            <td>[% IF ( opac_new.lang == 'koha' ) %]
 			            Librarian interface
                                  [% ELSE %]
-                                    [% IF ( lang == 'slip' ) %]
+                                    [% IF ( opac_new.lang == 'slip' ) %]
 				        Slip
                                     [% ELSE %]
                                         OPAC
