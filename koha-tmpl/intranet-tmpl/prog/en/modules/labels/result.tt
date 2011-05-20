@@ -93,7 +93,7 @@
                         <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
                     [% ELSIF ( text_field.link_field ) %]
                         <td align="center">
-			    <a onclick="add_item('[% text_field.field_value %]',[% text_field.batch_id %], '[% text_field.type %]'); return false" href="/cgi-bin/koha/barcodes/label-edit-batch.pl?op=add&amp;batch_id=[% text_field.batch_id %]&amp;item_number=[% text_field.field_value %]">Add</a>
+			    <a onclick="add_item('[% text_field.field_value %]',[% batch_id %], '[% text_field.type %]'); return false" href="/cgi-bin/koha/barcodes/label-edit-batch.pl?op=add&amp;batch_id=[% batch_id %]&amp;item_number=[% text_field.field_value %]">Add</a>
                         </td>
                     [% ELSE %]
                         <td align="center">[% text_field.field_value %]</td>
