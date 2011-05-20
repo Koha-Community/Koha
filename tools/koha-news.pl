@@ -79,7 +79,7 @@ if ( $op eq 'add_form' ) {
             op => 'edit',
             id => $new_detail->{'idnew'}
         );
-        $template->param($new_detail);
+        $template->{VARS}->{'new_detail'} = $new_detail;
     }
     else {
         $template->param( op => 'add' );
