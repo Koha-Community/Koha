@@ -621,7 +621,7 @@ sub header_cell_loop {
 }
 
 foreach (1..6) {
-    $template->param('build' . $_) and $template->param(buildx => $_) and last;
+     $template->{VARS}->{'build' . $_} and $template->{VARS}->{'buildx' . $_} and last;
 }
 $template->param(   'referer' => $input->referer(),
                     'DHTMLcalendar_dateformat' => C4::Dates->DHTMLcalendar(),
