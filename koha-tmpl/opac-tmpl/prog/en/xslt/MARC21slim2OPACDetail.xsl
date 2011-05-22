@@ -504,59 +504,40 @@
         <xsl:if test="marc:datafield[@tag=856]">
         <span class="results_summary"><span class="label">Online Resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
-                            <xsl:if test="$OPACURLOpenInNewWindow='0'">
-                                   <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-                                    <xsl:choose>
-                                    <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
-                                        <xsl:call-template name="subfieldSelect">
-                                        <xsl:with-param name="codes">y3z</xsl:with-param>
-                                        </xsl:call-template>
-                                    </xsl:when>
-                                    <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-                                        <xsl:choose>
-                                        <xsl:when test="$URLLinkText!=''">
-                                                <xsl:value-of select="$URLLinkText"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                                <xsl:text>Click here to access online</xsl:text>
-                                        </xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:when>
-                                    </xsl:choose>
-                                    </a>
-                              </xsl:if>
-                            <xsl:if test="$OPACURLOpenInNewWindow='1'">
-                                   <a target='_blank'><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-                                    <xsl:choose>
-                                    <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
-                                        <xsl:call-template name="subfieldSelect">
-                                        <xsl:with-param name="codes">y3z</xsl:with-param>
-                                        </xsl:call-template>
-                                    </xsl:when>
-                                    <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-                                        <xsl:choose>
-                                        <xsl:when test="$URLLinkText!=''">
-                                                <xsl:value-of select="$URLLinkText"/>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                                <xsl:text>Click here to access online</xsl:text>
-                                        </xsl:otherwise>
-                                        </xsl:choose>
-                                    </xsl:when>
-                                    </xsl:choose>
-                                    </a>
-                              </xsl:if>
-                                    <xsl:choose>
-                                    <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
-                                    <xsl:otherwise> | </xsl:otherwise>
-                                    </xsl:choose>
-
+            <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+            <xsl:if test="$OPACURLOpenInNewWindow='1'">
+                <xsl:attribute name="target">_blank</xsl:attribute>
+            </xsl:if>
+            <xsl:choose>
+            <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
+                <xsl:call-template name="subfieldSelect">
+                    <xsl:with-param name="codes">y3z</xsl:with-param>
+                </xsl:call-template>
+            </xsl:when>
+            <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
+                <xsl:choose>
+                <xsl:when test="$URLLinkText!=''">
+                    <xsl:value-of select="$URLLinkText"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:text>Click here to access online</xsl:text>
+                </xsl:otherwise>
+                </xsl:choose>
+            </xsl:when>
+            </xsl:choose>
+            </a>
+            <xsl:choose>
+            <xsl:when test="position()=last()"><xsl:text>  </xsl:text></xsl:when>
+            <xsl:otherwise> | </xsl:otherwise>
+            </xsl:choose>
         </xsl:for-each>
         </span>
         </xsl:if>
+
+        <!-- 505 -->
         <xsl:if test="marc:datafield[@tag=505]">
         <xsl:for-each select="marc:datafield[@tag=505]">
-        <span class="results_summary">
+        <span class="results_summary contents">
         <xsl:choose>
         <xsl:when test="@ind1=1">
             <span class="label">Incomplete contents:</span>
