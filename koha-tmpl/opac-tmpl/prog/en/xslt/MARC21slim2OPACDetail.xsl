@@ -534,6 +534,25 @@
         </span>
         </xsl:if>
 
+        <!-- 530 -->
+        <xsl:if test="marc:datafield[@tag=530]">
+        <xsl:for-each select="marc:datafield[@tag=530]">
+        <span class="results_summary additionalforms">
+            <xsl:call-template name="subfieldSelect">
+                <xsl:with-param name="codes">abcd</xsl:with-param>
+            </xsl:call-template>
+            <xsl:for-each select="marc:subfield[@code='u']">
+                <a><xsl:attribute name="href"><xsl:value-of select="text()"/></xsl:attribute>
+                <xsl:if test="$OPACURLOpenInNewWindow='1'">
+                    <xsl:attribute name="target">_blank</xsl:attribute>
+                </xsl:if>
+                <xsl:value-of select="text()"/>
+                </a>
+            </xsl:for-each>
+        </span>
+        </xsl:for-each>
+        </xsl:if>
+
         <!-- 505 -->
         <xsl:if test="marc:datafield[@tag=505]">
         <xsl:for-each select="marc:datafield[@tag=505]">
@@ -562,6 +581,38 @@
         </xsl:otherwise>
         </xsl:choose>
         </span>
+        </xsl:for-each>
+        </xsl:if>
+
+        <!-- 583 -->
+        <xsl:if test="marc:datafield[@tag=583]">
+        <xsl:for-each select="marc:datafield[@tag=583]">
+            <xsl:if test="@ind1=1 or @ind1=' '">
+            <span class="results_summary actionnote">
+                <xsl:choose>
+                <xsl:when test="marc:subfield[@code='z']">
+                    <xsl:value-of select="marc:subfield[@code='z']"/>
+                </xsl:when>
+                <xsl:otherwise>
+                    <xsl:call-template name="subfieldSelect">
+                        <xsl:with-param name="codes">abcdefgijklnou</xsl:with-param>
+                    </xsl:call-template>
+                </xsl:otherwise>
+                </xsl:choose>
+            </span>
+            </xsl:if>
+        </xsl:for-each>
+        </xsl:if>
+
+        <!-- 586 -->
+        <xsl:if test="marc:datafield[@tag=586]">
+        <xsl:for-each select="marc:datafield[@tag=586]">
+            <span class="results_summary awardsnote">
+                <xsl:if test="@ind1=' '">
+                <span class="label">Awards: </span>
+                </xsl:if>
+                <xsl:value-of select="marc:subfield[@code='a']"/>
+            </span>
         </xsl:for-each>
         </xsl:if>
 
