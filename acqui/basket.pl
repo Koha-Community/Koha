@@ -227,11 +227,13 @@ if ( $op eq 'delete_confirm' ) {
     my @results = GetOrders( $basketno );
     
 	my $gist = $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
+	$gist = 0 if $gist == 0.0000;
 	my $discount = $bookseller->{'discount'} / 100;
     my $total_rrp;      # RRP Total, its value will be assigned to $total_rrp_gsti or $total_rrp_gste depending of $bookseller->{'listincgst'}
 	my $total_rrp_gsti; # RRP Total, GST included
 	my $total_rrp_gste; # RRP Total, GST excluded
 	my $gist_rrp;
+	my $total_rrp_est;
 	
     my $qty_total;
     my @books_loop;
@@ -253,6 +255,7 @@ if ( $op eq 'delete_confirm' ) {
 
         $total_rrp += $qty * $order->{'rrp'};
         my $line_total = $qty * $order->{'ecost'};
+        $total_rrp_est += $qty * $order->{'ecost'};
 		# FIXME: what about the "actual cost" field?
         $qty_total += $qty;
         my %line = %{ $order };
@@ -278,19 +281,28 @@ if ( $op eq 'delete_confirm' ) {
         push @books_loop, \%line;
     }
 
-	if ($bookseller->{'listincgst'}) {                        # if prices already includes GST
-		$total_rrp_gsti = $total_rrp;                         # we know $total_rrp_gsti
-		$total_rrp_gste = $total_rrp_gsti / ($gist + 1);      # and can reverse compute other values
-		$gist_rrp       = $total_rrp_gsti - $total_rrp_gste;  #
-	} else {                                                  # if prices does not include GST
-		$total_rrp_gste = $total_rrp;                         # then we use the common way to compute other values
-		$gist_rrp = $total_rrp_gste * $gist;                  #
-		$total_rrp_gsti = $total_rrp_gste + $gist_rrp;        #
-	}
-	# These vars are estimated totals and GST, taking in account the booksellet discount
-	my $total_est_gsti = $total_rrp_gsti - ($total_rrp_gsti * $discount);
-	my $gist_est       = $gist_rrp       - ($gist_rrp * $discount);
-	my $total_est_gste = $total_rrp_gste - ($total_rrp_gste * $discount);
+my $total_est_gste;
+    my $total_est_gsti;
+    my $gist_est;
+    if ($gist){                                                    # if we have GST
+       if ( $bookseller->{'listincgst'} ) {                        # if prices already includes GST
+           $total_rrp_gsti = $total_rrp;                           # we know $total_rrp_gsti
+           $total_rrp_gste = $total_rrp_gsti / ( $gist + 1 );      # and can reverse compute other values
+           $gist_rrp       = $total_rrp_gsti - $total_rrp_gste;    #
+           $total_est_gste = $total_rrp_gste - ( $total_rrp_gste * $discount );
+           $total_est_gsti = $total_rrp_est;
+        } else {                                                    # if prices does not include GST
+           $total_rrp_gste = $total_rrp;                           # then we use the common way to compute other values
+           $gist_rrp       = $total_rrp_gste * $gist;              #
+           $total_rrp_gsti = $total_rrp_gste + $gist_rrp;          #
+           $total_est_gste = $total_rrp_est;
+           $total_est_gsti = $total_rrp_gsti - ( $total_rrp_gsti * $discount );
+       }
+       $gist_est = $gist_rrp - ( $gist_rrp * $discount );
+    } else {
+    $total_rrp_gsti = $total_rrp;
+    $total_est_gsti = $total_rrp_est;
+}
 
     my $contract = &GetContract($basket->{contractnumber});
     my @orders = GetOrders($basketno);
