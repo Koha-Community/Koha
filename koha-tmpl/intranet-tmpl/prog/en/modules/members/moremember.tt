@@ -212,7 +212,9 @@ function validate1(date) {
     [% END %]
     <li><span class="label">Initials: </span>[% initials %]</li>
     <li><span class="label">Date of birth:</span>[% dateofbirth %]</li>
-    <li><span class="label">Sex:</span>[% sex %]</li>[% END %]
+    <li><span class="label">Gender:</span>
+    [% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]
+    </li>[% END %]
     [% IF ( printethnicityline ) %]
     <li><span class="label">Ethnicity:</span>[% ethnicity %]</li>
     <li><span class="label">Ethnicity notes: </span>[% ethnotes %]</li>
