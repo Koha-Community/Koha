@@ -94,6 +94,9 @@ BEGIN {
       &PrepHostMarcField
 
       &CountItemsIssued
+      &CountBiblioInOrders
+      &GetSubscriptionsId
+      &GetHolds
     );
 
     # To modify something
@@ -3805,6 +3808,76 @@ sub get_biblio_authorised_values {
     # warn ( Data::Dumper->Dump( [ $authorised_values ], [ 'authorised_values' ] ) );
     return $authorised_values;
 }
+
+=head2 CountBiblioInOrders
+
+=over 4
+$count = &CountBiblioInOrders( $biblionumber);
+
+=back
+
+This function return count of biblios in orders with $biblionumber 
+
+=cut
+
+sub CountBiblioInOrders {
+ my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          = "SELECT count(*)
+          FROM  aqorders 
+          WHERE biblionumber=? AND (datecancellationprinted IS NULL OR datecancellationprinted='0000-00-00')";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my $count = $sth->fetchrow;
+    return ($count);
+}
+
+=head2 GetSubscriptionsId
+
+=over 4
+$subscriptions = &GetSubscriptionsId($biblionumber);
+
+=back
+
+This function return an array of subscriptionid with $biblionumber
+
+=cut
+
+sub GetSubscriptionsId {
+ my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          = "SELECT subscriptionid
+          FROM  subscription
+          WHERE biblionumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my @subscriptions = $sth->fetchrow_array;
+    return (@subscriptions);
+}
+
+=head2 GetHolds
+
+=over 4
+$holds = &GetHolds($biblionumber);
+
+=back
+
+This function return the count of holds with $biblionumber
+
+=cut
+
+sub GetHolds {
+ my ($biblionumber) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          = "SELECT count(*)
+          FROM  reserves
+          WHERE biblionumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber);
+    my $holds = $sth->fetchrow;
+    return ($holds);
+}
+
 
 1;
 

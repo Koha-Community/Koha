@@ -28,12 +28,12 @@ use C4::Output;
 use CGI;
 use C4::Acquisition;
 use C4::Budgets;
-
 use C4::Bookseller qw( GetBookSellerFromId);
 use C4::Dates qw/format_date/;
 use C4::Debug;
-
+use C4::Biblio;
 use C4::Members qw/GetMember/;  #needed for permissions checking for changing basketgroup of a basket
+use C4::Items;
 =head1 NAME
 
 basket.pl
@@ -259,13 +259,38 @@ if ( $op eq 'delete_confirm' ) {
 		# FIXME: what about the "actual cost" field?
         $qty_total += $qty;
         my %line = %{ $order };
-
-        $line{order_received} = ( $qty == $order->{'quantityreceived'} );
-        $line{basketno}       = $basketno;
-        $line{budget_name}    = $budget->{budget_name};
-        $line{rrp}            = sprintf( "%.2f", $line{'rrp'} );
-        $line{ecost}          = sprintf( "%.2f", $line{'ecost'} );
-        $line{line_total}     = sprintf( "%.2f", $line_total );
+        my $biblionumber = $order->{'biblionumber'};
+        my $countbiblio = CountBiblioInOrders($biblionumber);
+        my $ordernumber = $order->{'ordernumber'};
+        my @subscriptions = GetSubscriptionsId ($biblionumber);
+        my $itemcount = GetItemsCount($biblionumber);
+        my $holds  = GetHolds ($biblionumber);
+        my @items = GetItemnumbersFromOrder( $ordernumber );
+        my $itemholds;
+        foreach my $item (@items){
+            my $nb = GetItemHolds($biblionumber, $item);
+            if ($nb){
+                $itemholds += $nb;
+            }
+        }
+        # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
+        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds);
+        $line{items}                = ($itemcount) - (scalar @items);
+        $line{left_item}            = 1 if $line{items} >= 1;
+        $line{left_biblio}          = 1 if $countbiblio > 1;
+        $line{biblios}              = $countbiblio - 1;
+        $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
+        $line{subscriptions}        = scalar @subscriptions;
+        $line{left_holds}           = 1 if $holds >= 1;
+        $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
+        $line{holds}                = $holds;
+        $line{holds_on_order}       = $itemholds?$itemholds:$holds if $line{left_holds_on_order};
+        $line{order_received}       = ( $qty == $order->{'quantityreceived'} );
+        $line{basketno}             = $basketno;
+        $line{budget_name}          = $budget->{budget_name};
+        $line{rrp}                  = sprintf( "%.2f", $line{'rrp'} );
+        $line{ecost}                = sprintf( "%.2f", $line{'ecost'} );
+        $line{line_total}           = sprintf( "%.2f", $line_total );
         if ($line{uncertainprice}) {
             $template->param( uncertainprices => 1 );
             $line{rrp} .= ' (Uncertain)';

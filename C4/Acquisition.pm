@@ -1221,6 +1221,11 @@ sub DelOrder {
     my $sth = $dbh->prepare($query);
     $sth->execute( $bibnum, $ordernumber );
     $sth->finish;
+    my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
+    foreach my $itemnumber (@itemnumbers){
+    	C4::Items::DelItem( $dbh, $bibnum, $itemnumber );
+    }
+    
 }
 
 =head2 FUNCTIONS ABOUT PARCELS

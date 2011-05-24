@@ -74,14 +74,14 @@ BEGIN {
 	get_hostitemnumbers_of
         GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
-      GetHiddenItemnumbers
-
+        GetHiddenItemnumbers
 		DelItemCheck
 		MoveItemFromBiblio 
 		GetLatestAcquisitions
         CartToShelf
 
 	GetAnalyticsCount
+        GetItemHolds
     );
 }
 
@@ -2464,4 +2464,27 @@ sub GetAnalyticsCount {
     }
 }
 
+=head2 GetItemHolds
+
+=over 4
+$holds = &GetItemHolds($biblionumber, $itemnumber);
+
+=back
+
+This function return the count of holds with $biblionumber and $itemnumber
+
+=cut
+
+sub GetItemHolds {
+    my ($biblionumber, $itemnumber) = @_;
+    my $holds;
+    my $dbh            = C4::Context->dbh;
+    my $query          = "SELECT count(*)
+        FROM  reserves
+        WHERE biblionumber=? AND itemnumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($biblionumber, $itemnumber);
+    $holds = $sth->fetchrow;
+    return $holds;
+}
 1;
