@@ -21,6 +21,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use CGI;
 use Text::CSV;
+use URI::Escape;
 use C4::Reports::Guided;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
@@ -521,6 +522,9 @@ elsif ($phase eq 'Run this report'){
 
         my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
         my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report&amp;phase=Run%20this%20report";
+        if (@sql_params) {
+            $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape($_) } @sql_params);
+        }
         $template->param(
             'results' => \@rows,
             'sql'     => $sql,
