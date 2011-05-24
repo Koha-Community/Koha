@@ -64,8 +64,7 @@ function add_member(subscriptionid,borrowernumber){
 		<td>[% resultsloo.cardnumber %] </td>
 		<td>[% resultsloo.surname %], [% resultsloo.firstname %] </td>
 		<td>[% resultsloo.branchcode %] </td>
-		<td><a onclick="add_member(<!-- TMPL_VAR
-		NAME="subscriptionid" -->,[% resultsloo.borrowernumber %]); return false" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% resultsloo.subscriptionid %]&amp;borrowernumber=[% resultsloo.borrowernumber %]&amp;op=add">Add</a></td></tr>
+		<td><a onclick="add_member([% subscriptionid %],[% resultsloo.borrowernumber %]); return false" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% resultsloo.subscriptionid %]&amp;borrowernumber=[% resultsloo.borrowernumber %]&amp;op=add">Add</a></td></tr>
 		[% END %]
 	</tbody>
 </table>
