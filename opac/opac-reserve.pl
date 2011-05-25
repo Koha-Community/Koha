@@ -451,13 +451,13 @@ foreach my $biblioNum (@biblionumbers) {
 	$itemLoopIter->{imageurl} = getitemtypeimagelocation( 'opac', $itemTypes->{ $itemInfo->{itype} }{imageurl} );
 
     # Show serial enumeration when needed
-    if ($itemLoopIter->{enumchron}) {
-        $itemdata_enumchron = 1;
-    }
-    $template->param( itemdata_enumchron => $itemdata_enumchron );
+        if ($itemLoopIter->{enumchron}) {
+            $itemdata_enumchron = 1;
+        }
 
         push @{$biblioLoopIter{itemLoop}}, $itemLoopIter;
     }
+    $template->param( itemdata_enumchron => $itemdata_enumchron );
 
     if ($numCopiesAvailable > 0) {
         $numBibsAvailable++;

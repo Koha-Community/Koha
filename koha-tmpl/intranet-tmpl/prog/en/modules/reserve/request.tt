@@ -389,6 +389,9 @@ function checkMultiHold() {
             <th>Last Location</th>
             <th>Call no.</th>
             <th>Copy no.</th>
+            [% IF itemdata_enumchron %]
+            <th>Vol no.</th>
+            [% END %]
             <th>Information</th>
         </tr>
     [% FOREACH itemloo IN bibitemloo.itemloop %]
@@ -427,6 +430,11 @@ function checkMultiHold() {
             [% itemloo.itemcallnumber %]
             </td>
             <td>[% IF ( itemloo.copynumber ) %][% itemloo.copynumber %][% ELSE %]&nbsp;[% END %]</td>
+            [% IF itemdata_enumchron %]
+            <td>
+            [% itemloo.enumchron %]
+            </td>
+            [% END %]
             <td>
         	[% IF ( itemloo.onloan ) %]
             <span class="checkedout">Due [% itemloo.date_due %]</span>

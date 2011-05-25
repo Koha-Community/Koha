@@ -230,6 +230,7 @@ if ($multihold) {
     push @biblionumbers, $input->param('biblionumber');
 }
 
+my $itemdata_enumchron = 0;
 my @biblioloop = ();
 foreach my $biblionumber (@biblionumbers) {
 
@@ -461,6 +462,12 @@ foreach my $biblionumber (@biblionumbers) {
             while (my $wait_hashref = $sth2->fetchrow_hashref) {
                 $item->{waitingdate} = format_date($wait_hashref->{waitingdate});
             }
+
+            # Show serial enumeration when needed
+            if ($item->{enumchron}) {
+                $itemdata_enumchron = 1;
+            }
+
             push @{ $biblioitem->{itemloop} }, $item;
         }
 
@@ -566,6 +573,7 @@ foreach my $biblionumber (@biblionumbers) {
     $template->param(
                      optionloop        => \@optionloop,
                      bibitemloop       => \@bibitemloop,
+                     itemdata_enumchron => $itemdata_enumchron,
                      date              => $date,
                      biblionumber      => $biblionumber,
                      findborrower      => $findborrower,
