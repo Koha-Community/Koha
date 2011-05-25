@@ -65,7 +65,7 @@
 							<td>[% resultsloo.branchcode %]</td>
 							<td>[% resultsloo.dateexpiry %]</td>
 							<td>[% IF ( resultsloo.overdues ) %]<span class="overdue"><strong>[% resultsloo.overdues %]</strong></span>[% ELSE %][% resultsloo.overdues %][% END %]/[% resultsloo.issues %]</td>
-							<td>[% resultsloo.fines %]</td>
+							<td>[% IF ( resultsloo.fines < 0 ) %]<span class="credit">[% resultsloo.fines %]</span> [% ELSIF resultsloo.fines > 0 %] <span class="debit"><strong>[% resultsloo.fines %]</strong></span> [% ELSE %] [% resultsloo.fines %] [% END %]</td>
 							<td>[% resultsloo.borrowernotes %]</td>
 							<td>[% IF ( resultsloo.category_type ) %]
 									<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% resultsloo.borrowernumber %]&amp;category_type=[% resultsloo.category_type %]">Edit</a>
