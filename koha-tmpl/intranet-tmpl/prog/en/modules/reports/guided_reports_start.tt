@@ -392,8 +392,7 @@ canned reports and writing custom SQL reports.</p>
 [% IF ( definitions ) %]
 <fieldset><legend>Dictionary Definitions</legend><table>
 [% FOREACH definition IN definitions %]
-    <tr><td><input type="checkbox" name="definition" value="<!--
-TMPL_VAR NAME="id" -->" /> [% definition.name %]</td></tr>
+    <tr><td><input type="checkbox" name="definition" value="[% id %]" /> [% definition.name %]</td></tr>
 [% END %]
 </table>
 [% END %]
@@ -415,10 +414,7 @@ TMPL_VAR NAME="id" -->" /> [% definition.name %]</td></tr>
 <input type="hidden" name="criteria" value="[% criteriastring %]" />
 <fieldset><table>
 [% FOREACH total_b IN total_by %]
-<tr><td><input type="checkbox" name="total_by" id="<!-- TMPL_VAR
-NAME="name" -->" value="<!-- TMPL_VAR
-NAME="name" -->" /> <label for="<!-- TMPL_VAR
-NAME="name" -->">[% total_b.name %]</label></td>
+<tr><td><input type="checkbox" name="total_by" id="[% total_b.name %]" value="[% total_b.name %]" /> <label for="[% total_b.name %]">[% total_b.name %]</label></td>
 <td><select name="[% total_b.name %]_tvalue">
 
 [% FOREACH selec IN total_b.select %]
@@ -447,10 +443,7 @@ NAME="name" -->">[% total_b.name %]</label></td>
 <input type="hidden" name="definition" value="[% definition %]" />
 <input type="hidden" name="totals" value="[% totals %]" />
 <fieldset><table>[% FOREACH order_b IN order_by %]
-<tr><td><input type="checkbox" id="<!-- TMPL_VAR
-NAME="name" -->" name="order_by" value="<!-- TMPL_VAR
-NAME="name" -->" /> <label for="<!-- TMPL_VAR
-NAME="name" -->">[% order_b.name %]</label></td><td>
+<tr><td><input type="checkbox" id="[% order_b.name %]" name="order_by" value="[% order_b.name %]" /> <label for="[% order_b.name %]">[% order_b.name %]</label></td><td>
 <select name="[% order_b.name %]_ovalue">
 
 [% FOREACH selec IN order_b.select %]
