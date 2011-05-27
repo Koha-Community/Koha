@@ -20,15 +20,17 @@
 
 use strict;
 use warnings;
+$|=1;
 
 use C4::Context;
 use C4::Biblio;
 use Getopt::Long;
 
-my ($wherestring, $run, $want_help);
+my ($wherestring, $run, $silent, $want_help);
 my $result = GetOptions(
     'where:s'      => \$wherestring,
     '--run'        => \$run,
+    '--silent'     => \$silent,
     'help|h'       => \$want_help,
 );
 
@@ -38,11 +40,15 @@ if ( not $result or not $run or $want_help ) {
 }
 
 my $dbh = C4::Context->dbh;
+my $count = 0;
 my $querysth =  qq{SELECT biblionumber from biblioitems };
 $querysth    .= " WHERE $wherestring " if ($wherestring);
 my $query = $dbh->prepare($querysth);
 $query->execute;
 while (my $biblionumber = $query->fetchrow){
+    $count++;
+    print "." unless $silent;
+    print "\r$count" unless ($silent or ($count % 100)); 
     my $record = GetMarcBiblio($biblionumber);
     
     if ($record) {
@@ -52,6 +58,8 @@ while (my $biblionumber = $query->fetchrow){
         print "error in $biblionumber : can't parse biblio";
     }
 }
+
+print "\n\n$count records processed.\n" unless $silent;
 
 sub print_usage {
     print <<_USAGE_;
@@ -66,6 +74,7 @@ should be run using rebuild_zebra.pl -b -r.
 Parameters:
     -where                  use this to limit modifications to selected biblios
     --run                   perform the update
+    --silent                run silently
     --help or -h            show this message
 _USAGE_
 }
