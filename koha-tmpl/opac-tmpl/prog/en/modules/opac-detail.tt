@@ -3,6 +3,17 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
 //<![CDATA[
+    [% IF ( busc ) %]
+        var arrPagination = new Array();
+        var pag_index_ini = [% indexPag %];
+        [% IF ( listResults ) %]
+            [% FOREACH listResult IN listResults %]
+                arrPagination[[% listResult.index %]] = {url:"[% listResult.url %]", title:"[% listResult.title|html %]", author:"[% listResult.author|html %]", biblionumber:[% listResult.biblionumber %]};
+           [% END %]
+        [% END %]
+    [% END %]
+
+
      $(document).ready(function() { 
         $('#bibliodescriptions > ul').tabs();
 [% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]$("#tagform").hide();
@@ -33,8 +44,150 @@
         [% END %]
 	[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
         $(".tagbutton").click(KOHA.Tags.add_tag_button);[% END %][% END %][% END %]
+        [% IF ( busc ) %]
+        if (arrPagination.length > 0) {
+            renderPagIndexList(pag_index_ini, $("#listResults"));
+        }
+        $("#a_listResults").click(function(e) {
+            if (arrPagination.length > 0) {
+                e.preventDefault();
+                var navigation = $(".pagination");
+                if (navigation.css("display") == 'none') {
+                    navigation.show();
+                    var newtitle = $(this).attr('title').replace('Show', 'Hide')
+                    $(this).attr('title',newtitle);
+                    renderPagination(pag_index_ini, arrPagination.length - 1, $("#ul_pagination_list"), false);
+                } else {
+                    navigation.hide();
+                    var newtitle = $(this).attr('title').replace('Hide', 'Show')
+                    $(this).attr('title',newtitle);
+                }
+            }
+        });
+        $("#close_pagination").click(function(e) {
+            e.preventDefault();
+            var navigation = $(".pagination");
+            navigation.hide();
+        });
+        [% END %]
 
 });
+
+
+[% IF ( busc ) %]
+
+var timeoutRFW;
+var totalPagItemList = 10;
+
+function rewindList()
+{
+    var ul = $("#listResults");
+    var li_ini = ul.children(':first').next();
+    var index_ini = pag_index_ini;
+    if (li_ini) {
+        index_ini = parseInt(li_ini.attr("class").substring(7), 10);
+    }
+    var li_end = ul.children(':last').prev();
+    var index_end = arrPagination.length - 1;
+    if (li_end) {
+        index_end = parseInt(li_end.attr("class").substring(7), 10);
+    }
+    if (index_ini > pag_index_ini) {
+        renderPagIndexList(index_ini - 1, ul, false);
+        renderPagination(index_ini - 1, arrPagination.length - 1, $("#ul_pagination_list"), true);
+    }
+}//rewindList
+
+function forwardList()
+{
+    var ul = $("#listResults");
+    var li_ini = ul.children(':first').next();
+    var index_ini = pag_index_ini;
+    if (li_ini) {
+        index_ini = parseInt(li_ini.attr("class").substring(7), 10);
+    }
+    var li_end = ul.children(':last').prev();
+    var index_end = arrPagination.length - 1;
+    if (li_end) {
+        index_end = parseInt(li_end.attr("class").substring(7), 10);
+    }
+    if (index_end < arrPagination.length - 1) {
+        renderPagIndexList(index_ini + 1, ul, false);
+        renderPagination(index_ini + 1, arrPagination.length - 1, $("#ul_pagination_list"), true);
+    }
+}//forwardList
+
+function renderPagIndexList(index, ul)
+{
+    var $kids = ul.children("li");
+    if ($kids.length > 0) {
+        $kids.each(function() {
+            $(this).remove();
+        });
+    }
+    var li;
+    var html = "";
+    var ini = index - 1;
+    var end = ini + totalPagItemList - 1;
+    li = $("<li />");
+    html = (index > pag_index_ini)?"<a href='#' id='rew_list_index' onclick='rewindList()' title='Click to rewind the list to " + ini + " - " + end + "'>&laquo;</a>":"&laquo;";
+    li.html(html);
+    ul.append(li);
+    var title = "";
+    for (var i=index; i < arrPagination.length && i < index + totalPagItemList; i++) {
+        if (arrPagination[i] == undefined) continue;
+        var li = $("<li />");
+        if (arrPagination[i].url != "") {
+            title = "See biblio &quot;" + arrPagination[i].title + "&quot; ";
+            if (arrPagination[i].author != "") title += " by &quot;" + arrPagination[i].author + "&quot;";
+            title += " with biblionumber " + arrPagination[i].biblionumber;
+            html = "<a href='" + arrPagination[i].url + "' title='" + title + "' class='a_pag' id='a_pag_" + i + "'";
+            html += " onmouseover='renderPagination(" + i + ", " + (arrPagination.length - 1) + ", $(\"#ul_pagination_list\"), true)'";
+            html += ">" + i + "</a>";
+        } else html = i;
+        li.html(html);
+        li.attr("class", "li_pag_" + i);
+        ul.append(li);
+    }
+    li = $("<li />");
+    ini = index + 1;
+    end = (arrPagination.length > index + totalPagItemList)?index + totalPagItemList:arrPagination.length - 1;
+    html = (end <= arrPagination.length - 1 && (end - index) >= totalPagItemList)?"<a href='#' id='fw_list_index' onclick='forwardList()' title='Click to forward the list to " + ini + " - " + end + "'>&raquo;</a>":"&raquo;";
+    li.html(html);
+    ul.append(li);
+}//renderPagIndexList
+
+
+function renderPagination(index, total, ul, highlIndex)
+{
+    for (var i = pag_index_ini; i <= total; i++) {
+        if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
+        $("#li_pag_" + i).remove();
+    }
+    var j = 0;
+    for (var i = index; i <= total && j < totalPagItemList; i++) {
+        if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
+        var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='Go to detail' />");
+        var html = "<span class='li_pag_index'>" + i + "</span><a href='" + arrPagination[i].url + "'>" + arrPagination[i].title + "</a>";
+        if (arrPagination[i].author) html += "<br /> by " + arrPagination[i].author;
+        li.html(html);
+        if (highlIndex && i == index) li.css("backgroundColor", "#DDDDDD");
+        ul.append(li);
+        j++;
+    }
+    for (i = pag_index_ini; i < index && j < totalPagItemList; i++) {
+        if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
+        $("#li_pag_" + i).remove();
+        var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='Go to detail' />");
+        var html = "<span class='li_pag_index'>" + i + "</span><a href='" + arrPagination[i].url + "'>" + arrPagination[i].title + "</a>";
+        if (arrPagination[i].author) html += "<br /> by " + arrPagination[i].author;
+        li.html(html);
+        ul.append(li);
+        j++;
+    }
+}//renderPagination
+[% END %]
+
 
 YAHOO.util.Event.onContentReady("furtherm", function () {
     $("#furtherm").css("display","block").css("visibility","hidden");
@@ -825,6 +978,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 [% END %]
 
+
 </div>
 [% IF ( NovelistSelectProfile ) %][% IF ( NovelistSelectView == 'below' ) %]
 <div id="NovelistSelect">
@@ -835,8 +989,30 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 </div>
 </div>
 
+
 <div class="yui-u">
 <div id="ulactioncontainer" class="container">
+[% IF ( busc ) %]
+    <div class="nav_results">
+        <div class="l_Results">[% IF ( listResults ) %]<a href="#" id="a_listResults" title="Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])">Browse results</a>[% ELSE %]Browse results[% END %]</div>
+        <ul class="pg_menu">
+            <li class="left_results">[% IF ( previous ) %]<a href="[% previous %]" title="See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous biblio[% END %]">&laquo; Previous</a>[% ELSE %]Previous[% END %]</li>
+            <li class="back_results"><a href="opac-search.pl?[% busc %]" title="Back to the results search list">Back to results</a></li>
+            <li class="right_results">[% IF ( next ) %]<a href="[% next %]" title="See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END %]">Next &raquo;</a>[% ELSE %]Next[% END %]</li>
+        </ul>
+        [% IF ( listResults ) %]
+        <div class="pagination">
+            <div class="nav">
+                <span class="close_pagination"><a href="#" id="close_pagination">Close</a></span>
+                <ul id="listResults"></ul>
+            </div>
+            <div class="pagination_list">
+                <ul id="ul_pagination_list"></ul>
+            </div>
+        </div>
+        [% END %]
+    </div>
+[% END %]
 <ul id="action">
 
 [% UNLESS ( norequests ) %]

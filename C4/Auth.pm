@@ -398,6 +398,11 @@ sub get_template_and_user {
         my $LibraryNameTitle = C4::Context->preference("LibraryName");
         $LibraryNameTitle =~ s/<(?:\/?)(?:br|p)\s*(?:\/?)>/ /sgi;
         $LibraryNameTitle =~ s/<(?:[^<>'"]|'(?:[^']*)'|"(?:[^"]*)")*>//sg;
+        # clean up the busc param in the session if the page is not opac-detail
+        if ($in->{'template_name'} =~ /opac-(.+)\.(?:tt|tmpl)$/ && $1 !~ /^(?:MARC|ISBD)?detail$/) {
+            my $sessionSearch = get_session($sessionID || $in->{'query'}->cookie("CGISESSID"));
+            $sessionSearch->clear(["busc"]) if ($sessionSearch->param("busc"));
+        }
         # variables passed from CGI: opac_css_override and opac_search_limits.
         my $opac_search_limit = $ENV{'OPAC_SEARCH_LIMIT'};
         my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
