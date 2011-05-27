@@ -118,7 +118,7 @@ function add_item(borrowernum,batch_id,type_id){
     <td>[% resultsloo.branchcode %]</td>
     <td>[% resultsloo.dateexpiry %]</td>
     <td>[% resultsloo.borrowernotes %]</td>
-    <td><a onclick="add_item('[% resultsloo.borrowernumber %]',[% resultsloo.batch_id %]); return false" href="/cgi-bin/koha/patroncards/edit-batch.pl?borrower_number=[% resultsloo.borrowernumber %]&amp;batch_id=[% resultsloo.batch_id %]&amp;op=add">Add</a></td>
+    <td><a onclick="add_item('[% resultsloo.borrowernumber %]',[% batch_id %]); return false" href="/cgi-bin/koha/patroncards/edit-batch.pl?borrower_number=[% resultsloo.borrowernumber %]&amp;batch_id=[% batch_id %]&amp;op=add">Add</a></td>
     </tr>
     [% END %]
     </table>
