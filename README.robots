@@ -5,12 +5,22 @@ look for the file /robots.txt.  If this file is found and has lines that apply
 to them they will do as instructed.  A very basic robots.txt follow as an
 example:
 
+-------------------------------------------
 # go away
 User-agent: *
 Disallow: /
+-------------------------------------------
 
 This tells every search engine that cares (User-agent: *) to not index the site
 (Disallow everything past /).
+
+Another slightly more intelligent robots.txt file example allows for some bot indexing (good for your site in google, etc), but also stops your Koha from getting thrashing by ignoring URLs that cause heavy search load
+
+-------------------------------------------
+# do some indexing, but dont index search URLs
+User-agent: *
+Disallow: /cgi-bin/koha/opac-search.pl
+-------------------------------------------
 
 If you have installed Koha to /usr/local/koha3 then this file would be placed
 in the directory /usr/local/koha3/opac/htdocs/.  This should prevent search
