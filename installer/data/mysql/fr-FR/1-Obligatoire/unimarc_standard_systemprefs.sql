@@ -158,7 +158,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('emailLibrarianWhenHoldIsPlaced',0,'Si activé, envoie un mail à la bibliothèque lorsqu''une réservation est posée',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('numReturnedItemsToShow','20','Nombre d''exemplaires rendus à afficher sur la page de retour',NULL,'Integer');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesMode','test','Choisissez un mode pour le calcul des amendes : Test ou Production.','test|production','Choice');
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeInputFilter','','Si activé, permet de définir le format des codes à barre','whitespace|T-prefix|cuecat','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('itemBarcodeInputFilter','','Si activé, permet de définir le format des codes à barre','whitespace|T-prefix|cuecat|libsuite8','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('singleBranchMode',0,'Activer s''il n''y a qu''une seule bibliothèque sur ce catalogue, cela cache le sélecteur de bibliothèque inutile',NULL,'YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('URLLinkText','','Texte à afficher dans l''ancre du logo de l''OPAC',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACViewOthersSuggestions',0,'Si activé, toutes les suggestions sont affichées à l''OPAC',NULL,'YesNo');
@@ -315,3 +315,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/OpacHiddenItems.txt for more informations.','','Textarea');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('numSearchRSSResults',50,'Specify the maximum number of results to display on a RSS page of results',NULL,'Integer');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacRenewalBranch','checkoutbranch','Choose how the branch for an OPAC renewal is recorded in statistics','itemhomebranch|patronhomebranch|checkoutbranch|null','Choice');
+
