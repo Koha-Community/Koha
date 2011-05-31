@@ -351,8 +351,13 @@ sub export_marc_records_from_sth {
             # strung together with no single root element.  zebraidx doesn't seem
             # to care, though, at least if you're using the GRS-1 filter.  It does
             # care if you're using the DOM filter, which requires valid XML file(s).
-            print OUT ($as_xml) ? $marc->as_xml_record(C4::Context->preference('marcflavour')) : $marc->as_usmarc();
-            $num_exported++;
+            eval {
+                print OUT ($as_xml) ? $marc->as_xml_record(C4::Context->preference('marcflavour')) : $marc->as_usmarc();
+                $num_exported++;
+            };
+            if ($@) {
+              warn "Error exporting record $record_number ($record_type) ".($noxml ? "not XML" : "XML");
+            }
         }
     }
     print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
@@ -449,15 +454,19 @@ sub get_raw_marc_record {
             $fetch_sth->execute($record_number);
             if (my ($blob) = $fetch_sth->fetchrow_array) {
                 $marc = MARC::Record->new_from_usmarc($blob);
-                $fetch_sth->finish();
-            } else {
-                return; # failure to find a bib is not a problem -
-                        # a delete could have been done before
-                        # trying to process a record update
+                unless ($marc) {
+                    warn "error creating MARC::Record from $blob";
+                }
             }
+            # failure to find a bib is not a problem -
+            # a delete could have been done before
+            # trying to process a record update
+
+            $fetch_sth->finish();
+            return unless $marc;
         } else {
             eval { $marc = GetMarcBiblio($record_number); };
-            if ($@) {
+            if ($@ || !$marc) {
                 # here we do warn since catching an exception
                 # means that the bib was found but failed
                 # to be parsed
