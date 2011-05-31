@@ -105,14 +105,17 @@ $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );
 ( $borrower_data = GetMember( 'borrowernumber' => $borrowernumber ) ) if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' );
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
-my $category_type = $input->param('category_type');
+my $category_type = $input->param('category_type') || '';
+if ($category_type){
+    $template->{VARS}->{'type_only'} = 1;
+}
 my $new_c_type = $category_type; #if we have input param, then we've already chosen the cat_type.
 unless ($category_type or !($categorycode)){
     my $borrowercategory = GetBorrowercategory($categorycode);
     $category_type    = $borrowercategory->{'category_type'};
     my $category_name = $borrowercategory->{'description'}; 
     $template->param("categoryname"=>$category_name);
-}
+ }
 $category_type="A" unless $category_type; # FIXME we should display a error message instead of a 500 error !
 
 # if a add or modify is requested => check validity of data.
@@ -334,7 +337,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
-            C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
+            C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
         }
 	} elsif ($op eq 'save'){ 
 		if ($NoUpdateLogin) {
