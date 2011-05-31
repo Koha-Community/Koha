@@ -54,7 +54,7 @@ the same thing in staff and OPAC.
 
 =head2 handle_form_action
 
-    C4::Form::MessagingPreferences::handle_form_action($input, { categorycode => 'CPL' }, $template);
+    C4::Form::MessagingPreferences::handle_form_action($input, { categorycode => 'CPL' }, $template, $insert);
 
 Processes CGI parameters and updates the target patron or patron category's
 preferences.
@@ -64,17 +64,16 @@ C<$input> is the CGI query object.
 C<$target_params> is a hashref containing either a C<categorycode> key or a C<borrowernumber> key 
 identifying the patron or patron category whose messaging preferences are to be updated.
 
-C<$template> is the HTML::Template::Pro object for the response; this routine
+C<$template> is the Template::Toolkit object for the response; this routine
 adds a settings_updated template variable.
 
 =cut
 
 sub handle_form_action {
-    my ($query, $target_params, $template) = @_;
+    my ($query, $target_params, $template, $insert, $categorycode) = @_;
     my $messaging_options = C4::Members::Messaging::GetMessagingOptions();
-
     # TODO: If a "NONE" box and another are checked somehow (javascript failed), we should pay attention to the "NONE" box
-    
+    my $prefs_set = 0;
     OPTION: foreach my $option ( @$messaging_options ) {
         my $updater = { %{ $target_params }, 
                         message_attribute_id    => $option->{'message_attribute_id'} };
@@ -96,8 +95,16 @@ sub handle_form_action {
         }
 
         C4::Members::Messaging::SetMessagingPreference( $updater );
-    }
 
+	if ($query->param( $option->{'message_attribute_id'})){
+	    $prefs_set = 1;
+	}
+    }
+    if (! $prefs_set && $insert){
+        # this is new borrower, and we have no preferences set, use the defaults
+	$target_params->{categorycode} = $categorycode;
+        C4::Members::Messaging::SetMessagingPreferencesFromDefaults( $target_params );
+    }
     # show the success message
     $template->param( settings_updated => 1 );
 }
@@ -112,7 +119,7 @@ and fills the corresponding template variables.
 C<$target_params> is a hashref containing either a C<categorycode> key or a C<borrowernumber> key 
 identifying the patron or patron category.
 
-C<$template> is the HTML::Template::Pro object for the response.
+C<$template> is the Template::Toolkit object for the response.
 
 =cut
 

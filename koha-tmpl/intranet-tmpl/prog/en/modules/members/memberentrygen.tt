@@ -1072,6 +1072,9 @@
     [% END %]
     <input type="hidden" name="setting_messaging_prefs" value="1" />
     <legend>Patron messaging preferences</legend>
+    [% IF type_only %]
+        <i>If no preferences are selected, the default preferences for the category chosen will be applied on save, otherwise your selection here is saved</i>
+    [% END %]
     [% INCLUDE 'messaging-preference-form.inc' %]
     [% IF ( SMSSendDriver ) %]
         <p><label for="SMSnumber">SMS number:</label> 
