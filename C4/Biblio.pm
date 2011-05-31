@@ -21,6 +21,7 @@ package C4::Biblio;
 
 use strict;
 use warnings;
+use Carp;
 
 # use utf8;
 use MARC::Record;
@@ -294,6 +295,8 @@ and biblionumber data for indexing.
 
 sub ModBiblio {
     my ( $record, $biblionumber, $frameworkcode ) = @_;
+    croak "No record" unless $record;
+
     if ( C4::Context->preference("CataloguingLog") ) {
         my $newrecord = GetMarcBiblio($biblionumber);
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "BEFORE=>" . $newrecord->as_formatted );
@@ -2667,6 +2670,7 @@ per the bib's MARC framework.
 
 sub EmbedItemsInMarcBiblio {
     my ($marc, $biblionumber) = @_;
+    croak "No MARC record" unless $marc;
 
     my $frameworkcode = GetFrameworkCode($biblionumber);
     _strip_item_fields($marc, $frameworkcode);
