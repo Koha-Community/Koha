@@ -188,15 +188,17 @@ elsif ( $op eq 'add_validate' ) {
     # called by default form, used to confirm deletion of data in DB
 }
 elsif ( $op eq 'delete_confirm' ) {
-    # Check both categoryitem and biblioitems, see Bug 199
-    my $total = 0;
-    for my $table ('biblioitems') {
-        my $sth =
-          $dbh->prepare(
-            "select count(*) as total from $table where itemtype=?");
-        $sth->execute($itemtype);
-        $total += $sth->fetchrow_hashref->{total};
-    }
+    # Check both items and biblioitems
+    my $sth = $dbh->prepare('
+        SELECT COUNT(*) AS total FROM (
+            SELECT itemtype AS t FROM biblioitems
+            UNION
+            SELECT itype AS t FROM items
+        ) AS tmp
+        WHERE tmp.t=?
+    ');
+    $sth->execute($itemtype);
+    my $total = $sth->fetchrow_hashref->{'total'};
 
     my $sth =
       $dbh->prepare(
