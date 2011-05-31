@@ -4932,6 +4932,22 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE issues CHANGE date_due date_due datetime");
+    $dbh->do("ALTER TABLE issues CHANGE returndate returndate datetime");
+    $dbh->do("ALTER TABLE issues CHANGE lastreneweddate lastreneweddate datetime");
+    $dbh->do("ALTER TABLE issues CHANGE issuedate issuedate datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE date_due date_due datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE returndate returndate datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE lastreneweddate lastreneweddate datetime");
+    $dbh->do("ALTER TABLE old_issues CHANGE issuedate issuedate datetime");
+    print "Upgrade to $DBversion done (Setting up issues tables for hourly loans)\n";
+    SetVersion($DBversion);
+}
+
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
