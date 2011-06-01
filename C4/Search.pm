@@ -1671,7 +1671,7 @@ sub searchResults {
 		    ($reservestatus, $reserveitem) = C4::Reserves::CheckReserves($item->{itemnumber});
                 }
 
-                # item is withdrawn, lost or damaged
+                # item is withdrawn, lost, damaged, not for loan, reserved or in transit
                 if (   $item->{wthdrawn}
                     || $item->{itemlost}
                     || $item->{damaged}
@@ -1686,6 +1686,15 @@ sub searchResults {
                     $item_in_transit_count++ if $transfertwhen ne '';
 		    $item_onhold_count++     if $reservestatus eq 'Waiting';
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
+                    
+                    # can place hold on item ?
+                    if ((!$item->{damaged} || C4::Context->preference('AllowHoldsOnDamagedItems'))
+                      && !$item->{itemlost}
+                      && !$item->{withdrawn}
+                    ) {
+                        $can_place_holds = 1;
+                    }
+                    
                     $other_count++;
 
                     my $key = $prefix . $item->{status};
