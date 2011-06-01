@@ -1,0 +1,65 @@
+=============================
+Installation Guide for Configuring a Koha Server to Use a Gmail Account as its SMTP Server
+=============================
+
+Copyright (C) 2010 Foundations Bible College (http://www.foundations.edu)
+
+Author: Chris Nighswonger (cnighswonger AT foundations DOT edu
+
+Feedback/bug reports: Koha Developer's List:
+http://lists.koha.org/mailman/listinfo/koha-devel
+
+This document last modified: 13 February 2010
+
+Configuration Instructions
+=============================
+
+To use your gmail account as an SMTP server you will need to execute the following from a shell prompt.
+
+(These steps are taken from http://jonspriggs.posterous.com/use-gmails-smtp-gateway-using-the-command-lin)
+
+sudo apt-get install openssl xinetd
+
+sudo tee /usr/bin/gmail-smtp <<EOF >/dev/null
+#!/bin/sh
+# Thanks to http://ubuntuforums.org/showthread.php?t=918335 for this install guide
+/usr/bin/openssl s_client -connect smtp.gmail.com:465 -quiet 2>/dev/null
+EOF
+sudo chmod +x /usr/bin/gmail-smtp
+
+sudo tee /etc/xinetd.d/gmail-smtp <<EOF >/dev/null
+# default: on
+# description: Gmail SMTP wrapper for clients without SSL support
+# Thanks to http://ubuntuforums.org/showthread.php?t=918335 for this install guide
+service gmail-smtp
+{
+    disable         = no
+    bind            = localhost
+    port            = 10025
+    socket_type     = stream
+    protocol        = tcp
+    wait            = no
+    user            = root
+    server          = /usr/bin/gmail-smtp
+    type            = unlisted
+}
+EOF
+sudo /etc/init.d/xinetd reload
+
+Edit Mail/Sendmail.pm and set the port to 10025. (Note: This file will be located where ever your Perl libraries are.)
+
+Script Setup Instructions
+=============================
+
+After successfully executing the above steps, you will need to run the process_message_queue.pl script with the
+following syntax:
+
+perl process_message_queue.pl -u librarian@foo.tld -p supersecret -m LOGIN
+
+This, of course, assumes that you have all other scripts in place and functional to generate notices.
+
+Misc Helpful Notes
+=============================
+
+NOTE: In order to debug problems, you can set the debug level in Mail/Sendmail.pm to 11 which will give plenty of
+commentary to STDOUT.

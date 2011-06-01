@@ -69,7 +69,7 @@ If $all_fields is true, then each hashref also contains the other fields from bo
 =cut
 
 sub GetAttributeTypes {
-    my $all = @_ ? shift : 0;
+    my ($all) = @_;
     my $select = $all ? '*' : 'code, description';
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT $select FROM borrower_attribute_types ORDER by code");
@@ -81,6 +81,22 @@ sub GetAttributeTypes {
 sub GetAttributeTypes_hashref {
     my %hash = map {$_->{code} => $_} GetAttributeTypes(@_);
     return \%hash;
+}
+
+=head2 AttributeTypeExists
+
+  my $have_attr_xyz = C4::Members::AttributeTypes::AttributeTypeExists($code)
+
+Returns true if we have attribute type C<$code>
+in the database.
+
+=cut
+
+sub AttributeTypeExists {
+    my ($code) = @_;
+    my $dbh = C4::Context->dbh;
+    my $exists = $dbh->selectrow_array("SELECT code FROM borrower_attribute_types WHERE code = ?", undef, $code);
+    return $exists;
 }
 
 =head1 METHODS 

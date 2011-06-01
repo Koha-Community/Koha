@@ -1,0 +1,148 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; System Preferences</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/preferences.css" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/humanmsg.css" />
+<script src="[% themelang %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
+<script src="[% themelang %]/js/ajax.js" type="text/javascript"></script>
+<script type="text/javascript">
+//<![CDATA[
+    // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
+    var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+    var search_jumped = [% IF ( search_jumped ) %]true[% ELSE %]false[% END %];
+    var MSG_NOTHING_TO_SAVE = _("Nothing to save");
+    var MSG_SAVING = _("Saving...");
+    var MSG_MODIFIED = _("modified");
+    var MSG_MADE_CHANGES = _("You have made changes to system preferences.");
+    var MSG_CLICK_TO_EXPAND = _("Click to expand this section");
+    var MSG_CLICK_TO_COLLAPSE = _("Click to collapse this section");
+//]]>
+</script>
+<script src="[% themelang %]/js/pages/preferences.js" type="text/javascript"></script>
+<script src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js" type="text/javascript"></script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; System Preferences</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+    [% IF ( jump_not_found ) %]
+    <h2>System preferences</h2>
+    <div class="dialog alert">
+        Could not find a system preference named <code>[% jumpfield %]</code>.
+    </div>
+    [% END %]
+    [% IF ( search_not_found ) %]
+    <div class="dialog alert">
+        No system preferences matched your search for <strong>[% searchfield %]</strong>. You can try a different search or <a href="/cgi-bin/koha/admin/preferences.pl?tab=[% last_tab %]">return to where you were before.</a>
+    </div>
+    [% END %]
+    [% FOREACH TAB IN TABS %]
+    <div class="prefs-tab">
+    <h2>[% TAB.tab_title %] preferences</h2>
+    <form action="/cgi-bin/koha/admin/preferences.pl" method="post">
+        <input type="hidden" name="op" value="save" />
+        <input type="hidden" name="tab" value="[% TAB.tab %]" />
+
+            [% FOREACH LINE IN TAB.LINES %]
+            [% IF ( LINE.is_group_title ) %]
+            [% UNLESS ( loop.first ) %]</tbody></table>[% END %]
+            <h3>[% LINE.title %]</h3>
+            <table class="preferences">
+            <thead><tr><th>Preference</th><th>Value</th></tr></thead>
+            [% UNLESS ( loop.last ) %]<tbody>[% END %]
+            [% ELSE %]
+            [% IF ( loop.first ) %]<table class="preferences"><thead><tr><th>Preference</th><th>Value</th></tr></thead><tbody>[% END %]
+            <tr class="name-row">
+                <td class="name-cell">
+                    <code>
+                        [% FOREACH NAME IN LINE.NAMES %]
+						<label for="pref_[% NAME.name %]">
+							[% IF ( NAME.jumped ) %]
+							<span class="term" id="jumped">[% NAME.name %]</span>
+                            [% ELSIF ( NAME.highlighted ) %]
+							<span class="term">[% NAME.name %]</span>
+							[% ELSE %]
+							[% NAME.name %]
+							[% END %]
+						</label>
+                        [% UNLESS ( loop.last ) %]<br />[% END %]
+                        [% END %]
+                    </code>
+                </td>
+                <td>
+                    [% FOREACH CHUNK IN LINE.CHUNKS %]
+                    [% IF ( CHUNK.type_text ) %]
+                    [% CHUNK.contents %]
+                    [% ELSIF ( CHUNK.type_input ) %]
+                    <input type="[%IF CHUNK.input_type %][% CHUNK.input_type %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="short" %]" value="[% CHUNK.value %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
+                    [% ELSIF ( CHUNK.type_select ) %]
+                    <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="choice" %]">
+                        [% FOREACH CHOICE IN CHUNK.CHOICES %]
+                        [% IF ( CHOICE.selected ) %]
+                        <option value="[% CHOICE.value %]" selected="selected">
+                        [% ELSE %]
+                        <option value="[% CHOICE.value %]">
+                        [% END %]
+                            [% CHOICE.text %]
+                        </option>
+                        [% END %]
+                    </select>
+                    [% ELSIF ( CHUNK.type_textarea ) %]
+					<a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
+					<textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="short" %]">[% CHUNK.value %]</textarea>
+                    [% ELSIF ( CHUNK.type_languages ) %]
+                    <dl>
+                    [% FOREACH language IN CHUNK.languages %]
+                        [% IF ( language.plural ) %]
+                        <dt>
+                            [% IF ( language.native_description ) %][% language.native_description %][% ELSE %][% language.rfc4646_subtag %][% END %]
+                        </dt>
+                        [% FOREACH sublanguages_loo IN language.sublanguages_loop %]
+                        <dd>
+                            <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])</label>
+                            [% IF ( sublanguages_loo.enabled ) %]
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            [% ELSE %]
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            [% END %]
+                        </dd>
+                        [% END %]
+                        [% ELSE %]
+                        <dt>
+                            <label for="[% language.rfc4646_subtag %]">[% language.native_description %]([% language.rfc4646_subtag %])</label>
+                            [% IF ( language.group_enabled ) %]
+                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" checked="checked" class="preference preference-checkbox"/>
+                            [% ELSE %]
+                            <input value="[% language.rfc4646_subtag %]" name="pref_[% CHUNK.name %]" id="[% language.rfc4646_subtag %]" type="checkbox" class="preference preference-checkbox"/>
+                            [% END %]
+                        </dt>
+                        [% END %]
+                    [% END %]
+                    </dl>
+                    [% END %]
+                    [% END %]
+                </td>
+            </tr>
+            [% IF ( loop.last ) %]</tbody></table>[% END %]
+            [% END %]
+        [% END %]
+        <fieldset class="action"><button class="save-all submit" type="submit">Save all [% TAB.tab_title %] preferences</button> <a href="/cgi-bin/koha/admin/preferences.pl?tab=[% TAB.tab %]" class="cancel">Cancel</a></fieldset>
+    </form>
+    </div>
+    [% END %]
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'prefs-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

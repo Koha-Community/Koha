@@ -16,110 +16,116 @@
 </script>
 
 <input type="hidden" name="modify" value="yes" />
-<input type="hidden" name="borrowernumber" value="<!-- TMPL_VAR NAME="borrowernumber" -->" />
+<input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
   <table>
     <tr><th></th>
         <th>Days in advance</th>
-        <!-- TMPL_IF NAME="SMSSendDriver" --><th>SMS</th><!-- /TMPL_IF -->
+        [% IF ( SMSSendDriver ) %]<th>SMS</th>[% END %]
         <th>Email</th><th>Digests only?</th>
         <!-- <th>RSS</th> -->
-        <!-- TMPL_UNLESS NAME="messaging_form_inactive" --><th>Do not notify</th><!-- /TMPL_UNLESS -->
+        [% UNLESS ( messaging_form_inactive ) %]<th>Do not notify</th>[% END %]
     </tr>
-    <!-- TMPL_LOOP name="messaging_preferences" -->
+    [% FOREACH messaging_preference IN messaging_preferences %]
     <tr>
-      <td><!-- TMPL_VAR NAME="message_name" --></td>
-      <!-- TMPL_IF NAME="takes_days" -->
+      <td>[% IF ( messaging_preference.Item_Due ) %]Item Due
+          [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance Notice
+          [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming Events
+          [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold Filled
+          [% ELSIF ( messaging_preference.Item_Check_in ) %]Item Check-in
+          [% ELSIF ( messaging_preference.Item_Checkout ) %]Item Checkout
+          [% ELSE %]Unknown [% END %]</td>
+      [% IF ( messaging_preference.takes_days ) %]
       <td>
-          <!-- TMPL_IF NAME="messaging_form_inactive" -->
-            <select name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS" disabled="disabled">
-          <!-- TMPL_ELSE -->
-            <select name="<!-- TMPL_VAR NAME="message_attribute_id" -->-DAYS">
-          <!-- /TMPL_IF -->
-          <!-- TMPL_LOOP name="select_days" -->
-          <!-- TMPL_IF NAME="selected" --><option value="<!-- TMPL_VAR NAME="day" -->" selected="selected"><!-- TMPL_VAR NAME="day" --></option><!-- TMPL_ELSE -->
-          <option value="<!-- TMPL_VAR NAME="day" -->"><!-- TMPL_VAR NAME="day" --></option>
-      <!-- /TMPL_IF -->
-          <!-- /TMPL_LOOP -->
+          [% IF ( messaging_form_inactive ) %]
+            <select name="[% messaging_preference.message_attribute_id %]-DAYS" disabled="disabled">
+          [% ELSE %]
+            <select name="[% messaging_preference.message_attribute_id %]-DAYS">
+          [% END %]
+          [% FOREACH select_day IN messaging_preference.select_days %]
+          [% IF ( select_day.selected ) %]<option value="[% select_day.day %]" selected="selected">[% select_day.day %]</option>[% ELSE %]
+          <option value="[% select_day.day %]">[% select_day.day %]</option>
+      [% END %]
+          [% END %]
         </select>
       </td>
-      <!-- TMPL_ELSE -->
+      [% ELSE %]
       <td>-</td>
-      <!-- /TMPL_IF -->
-      <!-- TMPL_IF NAME="transport-sms" -->
-      <!-- TMPL_IF NAME="SMSSendDriver" --><td>
-          <!-- TMPL_IF NAME="messaging_form_inactive" -->
+      [% END %]
+<!--      [% IF ( messaging_preference.transport_sms ) %]
+      [% IF ( messaging_preference.SMSSendDriver ) %]<td>
+          [% IF ( messaging_form_inactive ) %]
                  <input type="checkbox"
-                 id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="sms"   <!-- TMPL_VAR NAME="transport-sms" --> disabled="disabled" />
-          <!-- TMPL_ELSE -->
+                 id="sms[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="sms"   [% messaging_preference.transport_sms %] disabled="disabled" />
+          [% ELSE %]
                  <input type="checkbox"
-                 id="sms<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="sms"   <!-- TMPL_VAR NAME="transport-sms"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
-          <!-- /TMPL_IF -->
-      </td><!-- /TMPL_IF -->
-      <!-- TMPL_ELSE -->
+                 id="sms[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="sms"   [% messaging_preference.transport_sms %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+          [% END %]
+      </td>[% END %]
+      [% ELSE %]
       <td>-</td>
-      <!-- /TMPL_IF -->
+      [% END %] -->
 
-      <!-- TMPL_IF NAME="transport-email" -->
+      [% IF ( messaging_preference.transport_email ) %]
       <td>
-          <!-- TMPL_IF NAME="messaging_form_inactive" -->
+          [% IF ( messaging_form_inactive ) %]
             <input type="checkbox"
-                 id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="email"   <!-- TMPL_VAR NAME="transport-email"   --> disabled="disabled" />
-          <!-- TMPL_ELSE -->
+                 id="email[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="email"   [% messaging_preference.transport_email %] disabled="disabled" />
+          [% ELSE %]
             <input type="checkbox"
-                 id="email<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="email"   <!-- TMPL_VAR NAME="transport-email"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
-          <!-- /TMPL_IF -->
+                 id="email[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="email"   [% messaging_preference.transport_email %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+          [% END %]
       </td>
-      <!-- TMPL_ELSE -->
+      [% ELSE %]
       <td>-</td>
-      <!-- /TMPL_IF -->
+      [% END %]
 
-      <!-- TMPL_IF NAME="has_digest" -->
+      [% IF ( messaging_preference.has_digest ) %]
       <td>
-          <!-- TMPL_IF NAME="messaging_form_inactive" -->
+          [% IF ( messaging_form_inactive ) %]
             <input type="checkbox"
-                 id="digest<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="digest"   <!-- TMPL_VAR NAME="digest"   --> disabled="disabled" />
-          <!-- TMPL_ELSE -->
+                 id="digest[% messaging_preference.message_attribute_id %]"
+                 value="[% messaging_preference.message_attribute_id %]"
+                 name="digest"   [% messaging_preference.digest %] disabled="disabled" />
+          [% ELSE %]
             <input type="checkbox"
-                 id="digest<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="digest"   <!-- TMPL_VAR NAME="digest"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
-          <!-- /TMPL_IF -->
+                 id="digest[% messaging_preference.message_attribute_id %]"
+                 value="[% messaging_preference.message_attribute_id %]"
+                 name="digest"   [% messaging_preference.digest %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+          [% END %]
       </td>
-      <!-- TMPL_ELSE -->
+      [% ELSE %]
       <td>-</td>
-      <!-- /TMPL_IF -->
+      [% END %]
 
-<!--       <!-- TMPL_IF NAME="transport-rss" -->
+<!--       [% IF ( messaging_preference.transport_rss ) %]
       <td>
-          <!-- TMPL_IF NAME="messaging_form_inactive" -->
+          [% IF ( messaging_form_inactive ) %]
             <input type="checkbox"
-                 id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="rss"   <!-- TMPL_VAR NAME="transport-rss"   --> disabled="disabled" />
-          <!-- TMPL_ELSE -->
+                 id="rss[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="rss"   [% messaging_preference.transport_rss %] disabled="disabled" />
+          [% ELSE %]
             <input type="checkbox"
-                 id="rss<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 name="<!-- TMPL_VAR NAME="message_attribute_id" -->"
-                 value="rss"   <!-- TMPL_VAR NAME="transport-rss"   --> onclick = "$('#none'+'<!-- TMPL_VAR NAME="message_attribute_id" -->').attr('checked','');" />
-          <!-- /TMPL_IF -->
+                 id="rss[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="rss"   [% messaging_preference.transport_rss %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+          [% END %]
       </td>
-      <!-- TMPL_ELSE -->
+      [% ELSE %]
       <td>-</td>
-      <!-- /TMPL_IF --> -->
+      [% END %] -->
 
-      <!-- TMPL_UNLESS NAME="messaging_form_inactive" -->
-      <td><input type="checkbox" class="none" id="none<!-- TMPL_VAR NAME="message_attribute_id" -->" /></td>
-      <!-- /TMPL_UNLESS -->
+      [% UNLESS ( messaging_form_inactive ) %]
+      <td><input type="checkbox" class="none" id="none[% messaging_preference.message_attribute_id %]" /></td>
+      [% END %]
     </tr>
-    <!-- /TMPL_LOOP -->
+    [% END %]
   </table>

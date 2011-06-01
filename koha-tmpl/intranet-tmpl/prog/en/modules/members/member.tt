@@ -1,0 +1,110 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search Results[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; [% IF ( searching ) %]<a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Search Results[% ELSE %]Patrons[% END %]</div>
+
+<div id="doc2" class="yui-t7">
+
+   <div id="bd">
+		<div id="yui-main">
+		    <div class="yui-b">
+				<div class="yui-g">
+
+				[% INCLUDE 'patron-toolbar.inc' %]
+
+	[% IF ( no_add ) %]<div class="dialog alert"><h3>Cannot add patron</h3>
+		[% IF ( no_branches ) %]<p>There are <strong>no libraries defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/branches.pl">add a library</a>.[% ELSE %]An administrator must define at least one library.[% END %]</p>[% END %]
+		[% IF ( no_categories ) %]<p>There are <strong>no patron categories defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/categorie.pl">add a patron category</a>.[% ELSE %]An administrator must define at least one patron category.[% END %]</p>[% END %]</div>
+	[% END %]
+
+						<div class="browse">
+							Browse by last name:
+							[% FOREACH letter IN letters %]
+								<a href="/cgi-bin/koha/members/member.pl?quicksearch=1&amp;surname=[% letter.letter %]">[% letter.letter %]</a>
+							[% END %]
+						</div>
+
+
+						[% IF ( resultsloop ) %]
+						<div id="searchheader"> <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]'<span class="ex">[% member %]</span>'[% END %][% IF ( surname ) %]'<span class="ex">[% surname %]</span>'[% END %]</h3></div>
+						<div class="searchresults">
+
+							<table id="memberresultst">
+							<thead>
+							<tr>
+							<th>Card</th>
+							<th>Name</th>
+							<th>Cat</th>
+							<th>Library</th>
+							<th>Expires on</th>
+							<th>OD/Checkouts</th>
+							<th>Fines</th>
+							<th>Circ note</th>
+							<th>&nbsp;</th>
+							</tr>
+							</thead>
+							<tbody>
+							[% FOREACH resultsloo IN resultsloop %]
+							[% IF ( resultsloo.overdue ) %]
+							<tr class="problem">
+							[% ELSE %]
+							[% UNLESS ( loop.odd ) %]
+							<tr class="highlight">
+							[% ELSE %]
+							<tr>
+							[% END %]
+							[% END %]
+							<td>[% resultsloo.cardnumber %]</td>
+							<td style="white-space: nowrap;"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resultsloo.borrowernumber %]">[% resultsloo.surname %], [% resultsloo.firstname %]</a> <br /> [% resultsloo.address %][% IF ( resultsloo.address2 ) %]<br />[% resultsloo.address2 %][% END %][% IF ( resultsloo.city ) %]<br />[% resultsloo.city %][% IF ( resultsloo.state ) %],[% END %][% END %][% IF ( resultsloo.state ) %] [% resultsloo.state %][% END %] [% IF ( resultsloo.zipcode ) %]  [% resultsloo.zipcode %][% END %][% IF ( resultsloo.country ) %], [% resultsloo.country %][% END %]</td>
+							<td>[% resultsloo.category_description %] ([% resultsloo.category_type %])</td>
+							<td>[% resultsloo.branchcode %]</td>
+							<td>[% resultsloo.dateexpiry %]</td>
+							<td>[% IF ( resultsloo.overdues ) %]<span class="overdue"><strong>[% resultsloo.overdues %]</strong></span>[% ELSE %][% resultsloo.overdues %][% END %]/[% resultsloo.issues %]</td>
+							<td>[% resultsloo.fines %]</td>
+							<td>[% resultsloo.borrowernotes %]</td>
+							<td>[% IF ( resultsloo.category_type ) %]
+									<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% resultsloo.borrowernumber %]&amp;category_type=[% resultsloo.category_type %]">Edit</a>
+						[% ELSE %] <!-- try with categorycode if no category_type -->
+							[% IF ( resultsloo.categorycode ) %]
+									<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% resultsloo.borrowernumber %]&amp;categorycode=[% resultsloo.categorycode %]">Edit</a>
+							[% ELSE %] <!-- if no categorycode, set category_type to A by default -->
+									<a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% resultsloo.borrowernumber %]&amp;category_type=A">Edit</a>
+							[% END %]
+						[% END %]</td>
+							</tr>
+							[% END %]
+							</tbody>
+							</table>
+							<div class="pages">[% IF ( multipage ) %][% paginationbar %][% END %]</div>
+						</div>
+						[% ELSE %]
+						[% IF ( searching ) %]
+						<div class="dialog alert">No results found</div>
+						[% END %]
+						[% END %]
+
+					</div>
+				</div>
+
+				<div class="yui-g">
+				[% INCLUDE 'members-menu.inc' %]
+			</div>
+
+    </div>
+</div>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">//<![CDATA[
+$(document).ready(function() {
+	$("#memberresultst").tablesorter({
+		sortList: [[1,0]],
+		widgets:	['zebra']
+	});
+});
+//]]>
+</script>
+[% INCLUDE 'intranet-bottom.inc' %]

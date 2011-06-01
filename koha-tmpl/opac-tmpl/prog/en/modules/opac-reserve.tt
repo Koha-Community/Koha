@@ -1,0 +1,543 @@
+[% INCLUDE 'doc-head-open.inc' %][% DEFAULT LibraryNameTitle="Koha Online" %] Catalog &rsaquo;  Placing hold [% title |html %] for [% FOREACH USER_INF IN USER_INFO %][% USER_INF.firstname %] [% USER_INF.surname %][% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
+// <![CDATA[
+ var MSG_NO_COPY_SELECTED = _("Expecting a specific copy selection.");
+
+ function prefixOf (s, tok) {
+     var index = s.indexOf(tok);
+     return s.substring(0, index);
+ }
+ function suffixOf (s, tok) {
+     var index = s.indexOf(tok);
+     return s.substring(index + 1);
+ }
+
+ $(document).ready(function() {
+    var copiesRowId = null;
+    var wasSpecific = false;
+    var lastCopiesRowId = null;
+	$(".checkitem").parent().click(function(e){
+		if(e.target.tagName.toLowerCase() == 'td'){
+           $(this).find("input.checkitem").each( function() {
+               $(this).attr('checked', !$(this).attr('checked'));
+			});
+		}
+	});
+    // Hides all 'specific copy' table rows on load.
+    $(".copiesrow").hide();
+
+    $("#place_on_hdr").show();
+    $(".place_on_type").show();
+
+    // Replace non-JS single-selection with multi-selection capability.
+    $(".reserve_mode").val("multi");
+    $(".confirm_nonjs").remove();
+    $(".confirmjs_hold").each(function(){
+        var bib = $(this).attr("title");
+        var html = "<input type =\"checkbox\" class=\"confirmjs\" checked=\"checked\"";
+        html += "value=\"" + bib + "\"/>";
+        $(this).html(html);
+    });
+    $(".confirmjs_nohold").each(function(){
+        var bib = $(this).attr("title");
+        var html = "<input type =\"checkbox\" class=\"confirmjs\" disabled=\"disabled\"";
+        html += "value=\"" + bib + "\"/>";
+        $(this).html(html);
+    });
+
+    // Make sure a specific item was selected where specified
+    // before moving on to a new item.
+    function changeSelection (newCopiesRowId, isSpecific) {
+        if (copiesRowId && ((copiesRowId != newCopiesRowId) || (wasSpecific != isSpecific))) {
+            var biblioNum = suffixOf(copiesRowId, "_");
+
+            // If the 'specific copy' radio button was checked
+              if (wasSpecific && (copiesRowId != newCopiesRowId)) {
+                // Find the selected copy
+                var item = $(".checkitem_" + biblioNum + ":checked");
+                if ($(item).size() == 0) {
+                    alert(MSG_NO_COPY_SELECTED);
+                    return false;
+                }
+            }
+        }
+        copiesRowId = newCopiesRowId;
+        wasSpecific = isSpecific;
+        return true;
+    }
+
+    // When 'specific copy' radio button is clicked
+    $(".selectspecific").click(function() {
+
+        // Make sure all other specific copy table rows are hidden
+        biblioNum = suffixOf($(this).attr("id"), "_");
+        newCopiesRowId = "#copiesrow_" + biblioNum;
+
+        if (!changeSelection(newCopiesRowId, true)) {
+            return false;
+        }
+        $(".copiesrow:not(" + newCopiesRowId + ")").hide();
+
+        // Show the specific copy table for this radio button.
+        $(newCopiesRowId).show();
+    });
+
+
+    // When 'first available' radion button is clicked
+    $(".selectany").click(function() {
+        // Make sure all other specific copy table rows are hidden
+        biblioNum = suffixOf($(this).attr("id"), "_");
+        newCopiesRowId = "#copiesrow_" + biblioNum;
+
+        if (!changeSelection(newCopiesRowId, false)) {
+            return false;
+        }
+
+        // Hide the copies table row
+        $(".copiesrow").hide();
+    });
+
+    // When 'Place Hold' button is clicked
+    $(".placehold").click(function(){
+        var biblionumbers = "";
+        var selections = "";
+
+        if ($(".confirmjs:checked").size() == 0) {
+            alert(MSG_NO_RECORD_SELECTED);
+            return false;
+        }
+
+        // Find the items with the 'Hold' box checked
+        var badBib = null;
+        $(".confirmjs:checked").each(function() {
+            var biblioNum = $(this).val();
+            biblionumbers += biblioNum + "/";
+            selections += biblioNum + "/";
+
+            // If the 'specific copy' radio button is checked
+            if ($("#reqspecific_" + biblioNum + ":checked").size() > 0) {
+                // Find the selected copy
+                var item = $(".checkitem_" + biblioNum + ":checked");
+                if ($(item).size() == 0) {
+                    badBib = biblioNum;
+                    return false;
+                } else {
+                  selections += $(item).val();
+                }
+            }
+            selections += "/";
+
+            // Add the pickup location
+            var branchSel = $("#branch_" + biblioNum);
+            if (branchSel.size() > 0) {
+                selections += $(branchSel).val();
+            }
+            selections += "/";
+            return true;
+        });
+
+        if (badBib) {
+            alert(MSG_NO_COPY_SELECTED);
+            return false;
+        }
+
+        $("#selections").val(selections);
+        $("#biblionumbers").val(biblionumbers);
+
+        return true;
+    });
+
+ });
+// ]]>
+</script>
+<style type="text/css">td ul { padding : 0; } td li { white-space: nowrap; font-size: 90%; list-style-type:none; padding : .3em 0; }</style>
+</head>
+
+<body id="opac-holds">
+  <div id="doc3" class="yui-t7">
+    [% INCLUDE 'masthead.inc' %]
+    <div id="bd">
+	  <div id="yui-g">
+        <div id="holds" class="container">
+        [% IF ( message ) %]
+            [% IF ( GNA ) %]
+              <div id="gna" class="dialog alert">
+                <p><strong>Sorry</strong>, you cannot place holds because the library doesn't have up-to-date <a href="/cgi-bin/koha/opac-userupdate.pl">contact information</a> on file.</p>
+              <p>Please contact your librarian, or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)</p>
+              </div>
+            [% END %]
+            [% IF ( lost ) %]
+              <div id="lost" class="dialog alert">
+                <p><strong>Sorry</strong>, you cannot place holds because your library card has been marked as lost or stolen.</p>
+                <p>If this is an error, please take your card to the circulation desk at your local library and the error will be corrected.</p>
+              </div>
+            [% END %]
+            [% IF ( debarred ) %]
+              <div id="debarred" class="dialog alert">
+                <p><strong>Sorry</strong>, you cannot place holds because your account has been frozen.</p>
+                <p>Usually the reason for freezing an account is old overdues or damage fees.   If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please consult a librarian.</p>
+              </div>
+            [% END %]
+            [% IF ( too_much_oweing ) %]
+              <div class="dialog alert">
+                Sorry, you cannot place holds because you owe [% too_much_oweing %].
+              </div>
+            [% END %]
+            [% IF ( too_many_reserves ) %]
+              <div class="dialog alert">Sorry, you cannot place more than [% too_many_reserves %] holds.
+              </div>
+            [% END %]
+            [% IF ( bad_biblionumber ) %]
+              <div class="dialog alert">ERROR: No biblio record found for biblionumber [% bad_biblionumber %].</div>
+            [% END %]
+            [% IF ( no_items_selected ) %]
+              <div class="dialog alert">
+                You must select at least one item.
+              </div>
+            [% END %]
+            [% IF ( no_branch_selected ) %]
+              <div class="dialog alert">
+                You must select a library for pickup.
+              </div>
+            [% END %]
+            [% IF ( no_biblionumber ) %]
+              <div class="dialog alert">ERROR: No biblionumber received.</div>
+            [% END %]
+            [% IF ( bad_data ) %]
+              <div class="dialog alert">ERROR: Internal error: incomplete hold request.</div>
+            [% END %]
+          [% ELSE %]
+            [% IF ( none_available ) %]
+                <div class="dialog alert"><strong>Sorry</strong>, none of these items can be placed on hold.
+                </div>
+              [% END %]
+          [% END %]<!-- NAME="message" -->
+
+      [% UNLESS ( message ) %][% UNLESS ( none_available ) %]<h3>Confirm holds for:
+                      [% FOREACH USER_INF IN USER_INFO %]
+                        [% USER_INF.firstname %] [% USER_INF.surname %] ([% USER_INF.cardnumber %])
+                      [% END %]
+                    </h3>[% END %]
+
+            <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
+            <input type="hidden" name="place_reserve" value="1"/>
+
+            <!-- These values are set dynamically by js -->
+            <input type="hidden" name="biblionumbers" id="biblionumbers"/>
+            <input type="hidden" name="selecteditems" id="selections"/>
+            <div id="bigloop">
+              <table id="bibitemloop">
+                [% UNLESS ( none_available ) %]<tr>
+                  <th>Hold</th>
+                  <th>Title</th>
+                  [% UNLESS ( item_level_itypes ) %]
+                    <th>Item Type</th>
+                  [% END %]
+                  [% IF ( showpriority ) %]
+                  <th>Priority</th>
+                  [% END %]
+		  [% IF ( reserve_in_future ) %]
+		  <th>Hold Starts on Date</th>
+		  [% END %]
+		  <th>Hold Not Needed After</th>
+                  [% IF ( OPACItemHolds ) %]
+                    <th id="place_on_hdr" style="display:none">Place On</th>
+                  [% END %]
+                  [% UNLESS ( singleBranchMode ) %]
+		    [% IF ( choose_branch ) %]
+                        <th>Pickup Location</th>
+		    [% END %]
+                  [% END %]
+                </tr>[% ELSE %]<tr><th colspan="5">Title</th></tr>[% END %]
+
+                [% FOREACH bibitemloo IN bibitemloop %]
+                  <tr>
+                      [% IF ( bibitemloo.holdable ) %]
+					  <td>
+                      <input class="reserve_mode" name="reserve_mode" type="hidden" value="single"/>
+                      <input class="single_bib" name="single_bib" type="hidden" value="[% bibitemloo.biblionumber %]"/>
+                        <span class="confirmjs_hold" title="[% bibitemloo.biblionumber %]"></span>
+                        <span class="confirm_nonjs">
+                          <input type="radio" class="confirmbox checkitem [% bibitemloo.checkitem_bib %]"
+                                 name="[% bibitemloo.checkitem_bib %]" checked="checked"
+                                 id="[% bibitemloo.checkitem_bib %]"
+                                 value="any" />
+                          <label class="confirm_label" for="[% bibitemloo.checkitem_bib %]">Next available copy</label>
+                        </span>
+					</td>
+                      [% ELSE %]
+					  [% UNLESS ( none_available ) %]<td>&nbsp;</td>[% END %]
+                      [% END %]
+                    [% IF ( bibitemloo.holdable ) %]<td>[% ELSE %]<td colspan="5">[% END %]
+                      <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% bibitemloo.biblionumber %]">[% bibitemloo.title |html %][% IF ( bibitemloo.subtitle ) %] [% FOREACH subtitl IN bibitemloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>
+                      [% IF ( bibitemloo.author ) %],  by [% bibitemloo.author %][% END %]
+
+                      [% UNLESS ( bibitemloo.holdable ) %]
+
+                        [% IF ( bibitemloo.already_reserved ) %]
+                          <div class="bibmessage">You have already requested this title.</div>
+                        [% ELSE %]
+                          [% UNLESS ( bibitemloo.bib_available ) %]
+                            <div class="bibmessage">No available items.</div>
+                          [% ELSE %]
+                            <div class="bibmessage">This title cannot be requested.</div>
+                          [% END %]
+                        [% END %]
+
+
+                        [% END %]
+
+                    </td>
+                    [% IF ( bibitemloo.holdable ) %][% UNLESS ( item_level_itypes ) %]
+                                          <td>
+                                            [% IF ( bibitemloo.imageurl ) %]<img src="[% bibitemloo.imageurl %]" alt="" />[% END %]
+                                [% bibitemloo.description %]
+                                          </td>
+                                        [% END %][% END %]
+                    [% IF ( bibitemloo.holdable ) %]
+                    [% IF ( showpriority ) %]
+                    <td>
+                    [% bibitemloo.rank %] out of [% bibitemloo.reservecount %]
+                    </td>[% END %][% END %]
+		    [% IF ( reserve_in_future ) %]
+		    [% IF ( bibitemloo.holdable ) %]<td>
+              <input name="reserve_date_[% bibitemloo.biblionumber %]" id="reserve_date_[% bibitemloo.biblionumber %]" size="10">
+              <script language="JavaScript" type="text/javascript">
+              //<![CDATA[
+              $("#reserve_date_[% bibitemloo.biblionumber %]").attr( 'readonly', 'readonly' );
+
+              var cal_img = document.createElement('img');
+              cal_img.src = "[% themelang %]/lib/calendar/cal.gif";
+              cal_img.alt = "Show Calendar";
+              cal_img.border = "0";
+              cal_img.id = "CalendarReserveDate[% bibitemloo.biblionumber %]";
+              cal_img.style.cursor = "pointer";
+              document.getElementById("reserve_date_[% bibitemloo.biblionumber %]").parentNode.appendChild( cal_img );
+
+              function validate[% bibitemloo.biblionumber %](date) {
+                  var today = new Date();
+                        if ( (date > today) ||
+                                ( date.getDate() == today.getDate() &&
+                                  date.getMonth() == today.getMonth() &&
+                                  date.getFullYear() == today.getFullYear() ) ) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+              };
+              Calendar.setup(
+              {
+                inputField : "reserve_date_[% bibitemloo.biblionumber %]",
+                ifFormat : "[% DHTMLcalendar_dateformat %]",
+                button : "CalendarReserveDate[% bibitemloo.biblionumber %]",
+                disableFunc : validate[% bibitemloo.biblionumber %],
+                dateStatusFunc : validate[% bibitemloo.biblionumber %]
+              }
+              );
+              //]]>
+              </script>
+      <p style="margin:.3em 2em;">
+      <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('reserve_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear Date</a></p>
+                </td>[% END %]
+
+		    [% END %]
+	[% IF ( bibitemloo.holdable ) %]<td>
+        <input name="expiration_date_[% bibitemloo.biblionumber %]" id="expiration_date_[% bibitemloo.biblionumber %]" size="10" readonly="readonly" />
+        <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="CalendarExpirationDate_[% bibitemloo.biblionumber %]" style="cursor: pointer;" />
+        <script language="JavaScript" type="text/javascript">
+      //<![CDATA[
+      function validate1(date) {
+        var today = new Date();
+        if ( (date > today) ||
+                      ( date.getDate() == today.getDate() &&
+                        date.getMonth() == today.getMonth() &&
+                        date.getFullYear() == today.getFullYear() ) ) {
+          return false;
+        } else {
+          return true;
+        }
+      };
+      Calendar.setup(
+        {
+          inputField : "expiration_date_[% bibitemloo.biblionumber %]",
+          ifFormat : "[% DHTMLcalendar_dateformat %]",
+          button : "CalendarExpirationDate_[% bibitemloo.biblionumber %]",
+          disableFunc : validate1,
+          dateStatusFunc : validate1
+        }
+      );
+      //]]>
+        </script>
+      <p style="margin:.3em 2em;">
+      <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('expiration_date_[% bibitemloo.biblionumber %]').value='';return false;">Clear Date</a></p>
+    </td>[% END %]
+
+                    [% IF ( bibitemloo.holdable ) %]
+		    <!-- HOLD ABLE -->
+		    [% IF ( OPACItemHolds ) %]
+		    <!-- ITEM HOLDS -->
+                                          <td class="place_on_type" style="display:none">
+                                            <ul>
+                                                <li>
+                                                  [% UNLESS ( bibitemloo.holdable ) %]
+                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
+                                                           id="reqany_[% bibitemloo.biblionumber %]"
+                                                           class="selectany"
+                                                           value="Any"
+                                                           disabled="disabled"
+                                                    />
+                                                  [% ELSE %]
+                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
+                                                           id="reqany_[% bibitemloo.biblionumber %]"
+                                                           class="selectany"
+                                                           value="Any"
+                                                           checked="checked"
+                                                    />
+                                                  [% END %]
+                                                  <label for="reqany_[% bibitemloo.biblionumber %]">Next available copy</label>
+                                                </li>
+                                                <li>
+                                                  [% UNLESS ( bibitemloo.holdable ) %]
+                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
+                                                           id="reqspecific_[% bibitemloo.biblionumber %]"
+                                                           class="selectspecific"
+                                                           disabled="disabled"
+                                                           value="Specific"
+                                                    />
+                                                  [% ELSE %]
+                                                    <input type="radio" name="reqtype_[% bibitemloo.biblionumber %]"
+                                                           id="reqspecific_[% bibitemloo.biblionumber %]"
+                                                           class="selectspecific"
+                                                           value="Specific"
+                                                    />
+                                                  [% END %]
+                                                  <label for="reqspecific_[% bibitemloo.biblionumber %]">A specific copy</label>
+                                                </li>
+                                            </ul>
+                                          </td>
+                                        [% END %][% END %]
+
+                    [% UNLESS ( singleBranchMode ) %]
+                        [% IF ( bibitemloo.holdable ) %]
+			    [% IF ( choose_branch ) %]
+			                   <td>
+                                              <select name="branch" id="branch_[% bibitemloo.biblionumber %]"
+                                                [% UNLESS ( bibitemloo.holdable ) %]disabled="disabled"[% END %] >
+                                                [% FOREACH branchChoicesLoo IN bibitemloo.branchChoicesLoop %]
+                                                  [% IF ( branchChoicesLoo.selected ) %]
+                                                    <option value="[% branchChoicesLoo.value %]" selected="selected">[% branchChoicesLoo.branchname %]</option>
+                                                  [% ELSE %]
+                                                    <option value="[% branchChoicesLoo.value %]">[% branchChoicesLoo.branchname %]</option>
+                                                  [% END %]
+                                                [% END %]
+                                              </select>
+                                           </td>
+			    [% END %]
+		        [% END %]
+                    [% END %]
+                  </tr>
+
+                  [% IF ( OPACItemHolds ) %]
+                  [% IF ( bibitemloo.holdable ) %]
+                    <tr class="copiesrow" id="copiesrow_[% bibitemloo.biblionumber %]">
+                      <td>&nbsp;</td>
+                      <td colspan="[% itemtable_colspan %]">
+                        <table>
+                          <caption>Select a specific copy:</caption>
+                          <tr>
+                            <th>Copy</th>
+                            [% IF ( item_level_itypes ) %]
+                              <th>Item Type</th>
+                            [% END %]
+                            <th>Barcode</th>
+                            [% UNLESS ( bibitemloo.singleBranchMode ) %]
+                              <th>Home Library</th>
+                              <th>Last Location</th>
+                            [% END %]
+                            <th>Call Number</th>
+                            [% IF ( bibitemloo.itemdata_enumchron ) %]
+                              <th>Vol Info</th>
+                            [% END %]
+                            <th>Information</th>
+                          </tr>
+
+                          [% FOREACH itemLoo IN bibitemloo.itemLoop %]
+                            <tr class="[% itemLoo.backgroundcolor %]">
+                              <td>
+                                [% IF ( itemLoo.available ) %]
+                                  <input type="radio" class="checkitem checkitem_[% bibitemloo.biblionumber %]" name="checkitem_[% bibitemloo.biblionumber %]"
+                                         value="[% itemLoo.itemnumber %]" />
+                                [% ELSE %]
+                                  <input disabled="disabled" type="radio" class="checkitem" name="checkitem" value="[% itemLoo.itemnumber %]" />
+                                  <img src="/opac-tmpl/[% theme %]/famfamfam/silk/cross.png" alt="Cannot be put on hold" title="Cannot be put on hold" />
+                                [% END %] [% IF ( itemLoo.copynumber ) %][% itemLoo.copynumber %][% END %]
+                              </td>
+                              [% IF ( item_level_itypes ) %]
+                                <td>
+                                  [% UNLESS ( noItemTypeImages ) %]
+                                  [% IF ( itemLoo.imageurl ) %]<img src="[% itemLoo.imageurl %]" alt="" />[% END %]
+                                  [% END %]
+								[% itemLoo.description %]
+                                </td>
+                              [% END %]
+                              <td>[% itemLoo.barcode %]</td>
+                              [% UNLESS ( singleBranchMode ) %]
+                                <td>[% itemLoo.homeBranchName %]</td>
+                                <td>[% itemLoo.holdingBranchName %]</td>
+                              [% END %]
+                              <td>[% itemLoo.callNumber %]</td>
+                              [% IF ( itemLoo.itemdata_enumchron ) %]<!-- test -->
+                                <td>[% itemLoo.enumchron %]</td>
+                              [% END %]
+                              <td>
+                                [% IF ( itemLoo.date_due ) %]
+                                  <span class="checkedout">Due [% itemLoo.date_due %]</span>
+                                [% ELSIF ( itemLoo.transfertwhen ) %]
+                                  <span class="intransit">In transit from [% itemLoo.transfertfrom %],
+                                    to [% itemLoo.transfertto %], since [% itemLoo.transfertwhen %]</span>
+                                [% END %]
+                                [% IF ( itemLoo.message ) %]
+                                  <span class="lost">Unavailable (lost or missing)</span>
+                                [% END %]
+                                [% IF ( itemLoo.notforloan ) %]
+                                  <span class="notforloan">Not for loan ([% itemLoo.notforloanvalue %])</span>
+                                [% END %]
+                                [% IF ( itemLoo.reservedate ) %]
+                                  <span class="waiting">[% IF ( itemLoo.waitingdate ) %]Waiting[% ELSE %]On hold[% END %] for patron
+                                    [% IF ( itemLoo.waitingdate ) %]at[% ELSE %]expected at[% END %] [% itemLoo.ExpectedAtLibrary %]
+                                    since
+                                    [% IF ( itemLoo.waitingdate ) %][% itemLoo.waitingdate %][% ELSE %][% IF ( itemLoo.reservedate ) %][% itemLoo.reservedate %][% END %][% END %].
+                                  </span>
+                                [% ELSE %]
+                                  <span class="notonhold">Not on hold</span>
+                                [% END %]&nbsp;
+                              </td>
+                            </tr>
+                          [% END %]
+                        </table>
+                      </td>
+                    </tr>
+                  [% END %]<!-- bib_available -->
+                  [% END %]<!-- OPACItemHolds -->
+                [% END %]
+              </table><!-- bibitemloop -->
+              [% END %] <!-- if message -->
+            </div><!-- bigloop -->
+
+            [% UNLESS ( message ) %]
+            [% UNLESS ( none_available ) %]
+            <input type="submit" value="Place Hold" class="placehold" />
+            [% END %]
+            [% END %]
+
+            </form>
+
+        </div><!-- holds -->
+      </div><!-- yui-g -->
+    </div><!-- bd    -->
+  </div><!-- doc3  -->
+
+<div><!-- The following include seems to have an extra "/div" in it... -->
+[% INCLUDE 'opac-bottom.inc' %]

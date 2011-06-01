@@ -1,0 +1,443 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Serial Edition [% bibliotitle %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[
+function popup(subscriptionid) {
+	window.open("subscription-renew.pl?subscriptionid="+subscriptionid,"subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
+}
+
+function barcode_check(){
+    [% IF ( count ) %]
+    var count = [% count %];
+    for(var i=1;i<=count;i++){
+
+        var barcodenum = "barcode"+i;
+        var statusnum = "status"+i;
+        var elembarcode = "document.getElementById('"+barcodenum+"')";
+        var elemstatus = "document.getElementById('"+statusnum+"')";
+// alert(elembarcode+"\n"+eval(elembarcode+".value));
+// alert(elemstatus+"\n"+eval(elemstatus+".value"));
+        if(eval(elembarcode+".value") =='' && eval(elemstatus+".value") == 2){
+            var answer = confirm("Leave barcode blank?\n - Note: unable to change this later");
+            if (answer){
+                document.f.submit();
+            } else {
+                return false;
+            }
+        }
+        if(eval(elembarcode+".value".indexOf('TEMP')) > 0 && eval(elemstatus+".value") == 2){
+            var answer = confirm("A barcode was not entered.\nDo you want to put in a barcode\nor do you want to use a system generated barcode?");
+            if (answer){
+                document.f.submit();
+            } else {
+                return false;
+            }
+        }
+    }
+    [% END %]
+}
+function unHideItems(index,labelindex, serialId) {
+	subfield = document.getElementById(index);
+	subfield.style.display = 'block';
+	label = document.getElementById(labelindex);
+	label.style.display='none';	
+
+	// Prefilling 995$h with serial enumeration/issue number
+	// Getting item id
+	itemid = $("fieldset#" + index + " div.cataloguing_additem_itemlist div.items").attr("id");
+	// Getting subfield id
+	subfieldid = "subfield" + itemid.substr(4) + "h";
+	// Setting text field 
+	$("#" + subfieldid + " input[type='text']").val($("#serialseq" + serialId).val());
+
+}
+function HideItems(index,labelindex) {
+	subfield = document.getElementById(index);
+	subfield.style.display = 'none';
+	label = document.getElementById(labelindex);
+	label.style.display='block';	
+}
+function setStatus(serialid){
+    $("#status"+serialid).val("2").attr("selected","selected");
+}
+function changeDate(adate) {
+    var elem = document.getElementById("expecteddate");
+    elem.value = adate;
+}
+function changeDate2(adate) {
+   var elem = document.getElementById("supexpecteddate");
+    elem.value = adate;
+}
+function CloneSubfield(index){
+    var original = document.getElementById(index); //original <div>
+    var clone = original.cloneNode(true);
+    var new_key = CreateKey();
+    var old_id =  original.getAttribute('id');
+    old_id=old_id.substr(12);
+    var new_id  = old_id+new_key;
+    
+    // set the attribute for the new 'div' subfields
+    var inputs     = clone.getElementsByTagName('input');
+    var selects    = clone.getElementsByTagName('select');
+    var textareas  = clone.getElementsByTagName('textarea');
+        
+    // input
+    var id_input = "";
+    for(var i=0,len=inputs.length; i<len ; i++ ){
+        id_input = inputs[i].getAttribute('id')+new_key;
+        inputs[i].setAttribute('id',id_input);
+        inputs[i].setAttribute('name',inputs[i].getAttribute('name'));
+    }
+    
+    // select 
+    for(var i=0,len=selects.length; i<len ; i++ ){
+        id_input = selects[i].getAttribute('id')+new_key;
+        selects[i].setAttribute('id',selects[i].getAttribute('id')+new_key);
+        selects[i].setAttribute('name',selects[i].getAttribute('name'));
+    }
+    
+    // textarea
+    for(var i=0,len=textareas.length; i<len ; i++ ){
+        id_input = textareas[i].getAttribute('id')+new_key;
+        textareas[i].setAttribute('id',textareas[i].getAttribute('id')+new_key);
+        textareas[i].setAttribute('name',textareas[i].getAttribute('name'));
+    }
+    
+    [% UNLESS ( advancedMARCEditor ) %]
+    // when cloning a subfield, reset its label too.
+    var label = clone.getElementsByTagName('label')[0];
+    label.setAttribute('for',id_input);
+    [% END %]
+    
+    // setting a new if for the parent div
+    clone.setAttribute('id',new_id);
+    
+    var CloneButtonPlus;
+    try {
+      var spans = clone.getElementsByTagName('span');
+      if(spans.length){
+          for(var i = 0 ,lenspans = spans.length ; i < lenspans ; i++){
+            if(spans[i].getAttribute('class') == 'buttonPlus'){
+                    CloneButtonPlus = spans[i];
+                    CloneButtonPlus.setAttribute('onclick',"CloneSubfield('" + new_id + "')");
+                    var buttonUp = clone.getElementsByTagName('img')[0];
+                    buttonUp.setAttribute('onclick',"upSubfield('" + new_id + "')");
+                }
+            }
+        }
+    }
+    catch(e){
+        // do nothig if ButtonPlus & CloneButtonPlus don't exist.
+    }
+    // insert this line on the page
+    original.parentNode.insertBefore(clone,original.nextSibling);
+}
+$(document).ready(function() {
+	$("form#serials_edit").submit(function() {
+	    var total_errors = 0;
+        $(".subfield_line:visible", this).each(function() {
+            if ($("*[name=field_value]", this).val().length == 0 &&
+                $("*[name=mandatory]", this).val() == 1) {
+                total_errors++;
+            }
+        });
+        if ( total_errors > 0 ) {
+            var mes  = _("Form not submitted because of the following problem(s)");
+            mes += "\n------------------------------------------------------------------------------------\n";
+            mes += "\n- "+ total_errors+_(" mandatory fields empty (see bold subfields)");
+            alert(mes);
+            return false;
+        }
+    });
+});
+//]]>
+</script>
+<style type="text/css">#serials_edit fieldset.rows label, #serials_edit fieldset.rows span.label {
+	font-size : 100%;
+	width : 25%;
+}
+#serials_edit fieldset.rows select { max-width : 15em; }
+#serials_edit fieldset.rows li {
+	padding-bottom : 3px;
+}
+#serials_edit .input_marceditor {
+	width : auto;
+}</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'serials-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo;  Serial Edition <i>[% bibliotitle %] [% IF ( callnumber ) %]([% callnumber %])[% END %]</i></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Serial Edition <i>[% bibliotitle %]</i>
+	i[% IF location %] ( [% location %] ) [% END %]
+    [% IF ( callnumber ) %] callnumber: [% callnumber %][% END %]</h1>
+<form method="post" name="f" action="serials-edit.pl" id="serials_edit">
+<!--onsubmit="return barcode_check()">-->
+
+[% IF ( Errors ) %]
+<div class="dialog alert">
+<ul>
+[% IF ( barcode_not_unique ) %]<li>Error : Barcode Not Unique For [% FOREACH errse IN errseq %]serialseq [% errse.serialseq %]<br/>[% END %]</li>[% END %]
+</ul>
+</div>
+[% END %]
+
+    <input type="hidden" name="op" value="serialchangestatus" />
+    [% FOREACH subscription IN subscriptions %]
+    <input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid %]" />
+    [% END %]
+	<table>
+	<tr>
+		<th>Numbered</th>
+		<th>Published on</th>
+		<th>Expected on</th>
+		<th>Status</th>
+		<th>Notes</th>
+	</tr>
+[% FOREACH serialslis IN serialslist %]
+    [% UNLESS ( loop.odd ) %]
+    <tr class="highlight">
+    [% ELSE %]
+    <tr>
+    [% END %]
+        <td>
+            <input type="hidden" name="serialid" value="[% serialslis.serialid %]" />
+            <input type="hidden" name="biblionumber" value="[% serialslis.biblionumber %]" />
+            <input type="hidden" name="itemcount" value="[% serialslis.issuesatonce %]" />
+            <input type="hidden" name="user" value="[% serialslis.librarian %]" />
+            Issue <input type="text" name="serialseq" id="serialseq[% serialslis.serialid %]" value="[% serialslis.serialseq %]" size="20" maxlength="100" />
+        </td>
+        <td>
+            <input type="text" name="publisheddate" value="[% serialslis.publisheddate %]" size="10" maxlength="15" />
+        </td>
+        <td>
+            <input type="text" id="expecteddate" name="planneddate" value="[% serialslis.planneddate %]" size="10" maxlength="15" />
+        </td>
+        <td>
+            [% IF ( serialslis.editdisable ) %]
+              <input type="hidden" name="status" id="status[% serialslis.serialid %]" value="1">
+              <select name="status" size="1"  disabled="disabled">
+            [% ELSE %]
+              [% IF ( serialslis.serialsadditems ) %]
+              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid %][% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]','[% serialslis.serialid %]'); changeDate('[% serialslis.arriveddate %]')} else if (this.value==7){changeDate('[% serialslis.arriveddate %]')} else { HideItems('items'+[% serialslis.subscriptionid %]+[% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate('[% serialslis.planneddate %]')}" >
+               [% ELSE %]
+              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2 || this.value==7){changeDate('[% serialslis.arriveddate %]')} else {changeDate('[% serialslis.planneddate %]')}" >
+               [% END %] 
+            [% END %]
+  [% IF ( serialslis.status1 ) %]
+                    <option value="1" selected="selected">Expected</option>
+  [% END %]
+  [% IF ( serialslis.status2 ) %]
+                    <option value="2" selected="selected">Arrived</option>
+  [% ELSE %]
+                    <option value="2">Arrived</option>
+  [% END %]
+  [% IF ( serialslis.status3 ) %]
+                    <option value="3" selected="selected">Late</option>
+  [% ELSE %]
+                    <option value="3">Late</option>
+  [% END %]
+  [% IF ( serialslis.status4 ) %]
+                    <option value="4" selected="selected">Missing</option>
+  [% ELSE %]
+                    <option value="4">Missing</option>
+  [% END %]
+  [% IF ( serialslis.status7 ) %]
+                    <option value="7" selected="selected">Claimed</option>
+  [% ELSE %]
+                    <option value="7">Claimed</option>
+  [% END %]
+  [% IF ( serialslis.status5 ) %]
+                    <option value="5" selected="selected">Not Available</option>
+  [% ELSE %]
+                    <option value="5">Not Available</option>
+  [% END %]
+  [% IF ( serialslis.status6 ) %]
+                    <option value="6" selected="selected">Delete</option>
+  [% ELSE %]
+                    <option value="6">Delete</option>
+  [% END %]
+            </select>
+
+        </td>
+        <td>
+            <input type="text" name="notes" value="[% serialslis.sernotes %]" size="20" maxlength="255" />
+        </td>
+    </tr>
+  [% UNLESS ( serialslis.subscriptionexpired ) %]
+  [% IF ( serialslis.serialsadditems ) %]
+          <tr>
+          <td colspan="5">
+      <a id="label[% serialslis.subscriptionid %][% serialslis.serialid %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% serialslis.subscriptionid %][% serialslis.serialid %]','label[% serialslis.subscriptionid %][% serialslis.serialid %]',  '[% serialslis.serialid %]');setStatus([% serialslis.serialid %]);">
+             Click to add item</a>
+        <fieldset class="rows" style="display:none;" id="items[% serialslis.subscriptionid %][% serialslis.serialid %]">
+        <legend><a style="cursor: pointer;"  onclick="HideItems('items[% serialslis.subscriptionid %][% serialslis.serialid %]','label[% serialslis.subscriptionid %][% serialslis.serialid %]')">
+                Item</a>
+        </legend>
+          <div class="cataloguing_additem_itemlist">
+        [% FOREACH item IN serialslis.items %]
+        <div id="item[% item.serialid %][% item.countitems %]" class="items">
+        <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
+               <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+                              
+                <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
+                [% iteminformatio.marc_value %]
+                <input type="hidden" name="itemid" value="[% iteminformatio.itemid %]" />
+                <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
+                <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
+                <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
+                <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
+                [% IF ( iteminformatio.ITEM_SUBFIELDS_ARE_NOT_REPEATABLE ) %]
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
+                [% END %]
+        
+            </div></li>
+        [% END %]</ol></div><!-- /iteminformation -->
+        
+        <input type="hidden" name="moditem" value="" /> 
+        <input type="hidden" name="tag" value="[% item.itemtagfield %]" />
+        <input type="hidden" name="subfield" value="[% item.itemtagsubfield %]" />
+        <input type="hidden" name="serial" value="[% item.serialid %]" />
+        <input type="hidden" name="bibnum" value="[% item.biblionumber %]" />
+        <input type="hidden" name="itemid" value="[% item.itemid %]" />
+        <input type="hidden" name="field_value" value="[% item.itemnumber %]" />
+        [% END %] <!-- /items -->
+        </div>
+        </fieldset>
+    </td>
+    </tr>
+  [% END %]
+  [% END %]
+[% END %]
+[% FOREACH newserialloo IN newserialloop %]
+    [% UNLESS ( newserialloo.subscriptionexpired ) %]
+    <tr>
+        <td>
+            <input type="hidden" name="serialid" value="NEW" />
+            <input type="hidden" name="biblionumber" value="[% newserialloo.biblionumber %]" />
+            <input type="hidden" name="itemcount" value="[% newserialloo.issuesatonce %]" />
+            <input type="hidden" name="user" value="[% newserialloo.librarian %]" />
+            Supplemental Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')} else {HideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]')}" />
+        </td>
+        <td>
+            <input type="text" name="publisheddate" value="[% newserialloo.publisheddate %]" size="10" maxlength="15" />
+        </td>
+        <td>
+            <input type="text" name="planneddate" id="supexpecteddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" />
+        </td>
+        <td>
+            <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2 || this.value==7){changeDate2('[% newserialloo.arriveddate %]')} else {changeDate2('[% newserialloo.planneddate %]')}" >
+                    <option value="">----</option>
+  [% IF ( newserialloo.status1 ) %]
+                    <option value="1" selected="selected">Expected</option>
+  [% END %]
+  [% IF ( newserialloo.status2 ) %]
+                    <option value="2" selected="selected">Arrived</option>
+  [% ELSE %]
+                    <option value="2">Arrived</option>
+  [% END %]
+  [% IF ( newserialloo.status3 ) %]
+                    <option value="3" selected="selected">Late</option>
+  [% ELSE %]
+                    <option value="3">Late</option>
+  [% END %]
+  [% IF ( newserialloo.status4 ) %]
+                    <option value="4" selected="selected">Missing</option>
+  [% ELSE %]
+                    <option value="4">Missing</option>
+  [% END %]
+  [% IF ( newserialloo.status7 ) %]
+                    <option value="7" selected="selected">Claimed</option>
+  [% ELSE %]
+                    <option value="7">Claimed</option>
+  [% END %]
+  [% IF ( newserialloo.status5 ) %]
+                    <option value="5" selected="selected">Not Available</option>
+  [% ELSE %]
+                    <option value="5">Not Available</option>
+  [% END %]
+  [% IF ( newserialloo.status6 ) %]
+                    <option value="6" selected="selected">Delete</option>
+  [% ELSE %]
+                    <option value="6">Delete</option>
+  [% END %]
+            </select>
+
+        </td>
+        <td>
+            <input type="text" name="notes" value="" size="20" maxlength="255" />
+        </td>
+    </tr>
+  [% IF ( newserialloo.serialsadditems ) %]
+          <tr>
+          <td colspan="5">
+      <a id="label[% newserialloo.subscriptionid %][% newserialloo.serialid %]" style="color: grey; font-size: 80%; cursor: pointer;"  onclick="unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')">
+             Click to add item</a>
+        <fieldset  class="rows" style="display:none;" id="items[% newserialloo.subscriptionid %][% newserialloo.serialid %]">
+        <legend><a style="cursor: pointer;"  onclick="HideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]')">
+                Item</a>
+        </legend>
+          <div class="cataloguing_additem_itemlist">
+        <div id="item[% newserialloo.serialid %][% newserialloo.countitems %]" class="items">
+        <ol>[% FOREACH iteminformatio IN newserialloo.iteminformation %]<li>
+               <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+   
+                <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
+                [% iteminformatio.marc_value %]
+                <input type="hidden" name="itemid" value="[% iteminformatio.itemid %]" />
+                <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
+                <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
+                <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
+                <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
+                [% IF ( iteminformatio.ITEM_SUBFIELDS_ARE_NOT_REPEATABLE ) %]
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
+                [% END %]
+        </div>
+       </li>[% END %]</ol>
+        
+        <input type="hidden" name="moditem" value="" /> 
+        <input type="hidden" name="tag" value="[% newserialloo.itemtagfield %]" />
+        <input type="hidden" name="subfield" value="[% newserialloo.itemtagsubfield %]" />
+        <input type="hidden" name="serial" value="[% newserialloo.serialid %]" />
+        <input type="hidden" name="bibnum" value="[% newserialloo.biblionumber %]" />
+        <input type="hidden" name="itemid" value="[% newserialloo.itemid %]" />
+        <input type="hidden" name="field_value" value="[% newserialloo.itemnumber %]" />
+        </div>
+        </div>
+        </fieldset>
+    </td>
+    </tr>
+  [% END %]
+  [% END %]
+[% END %]
+
+</table>
+    <fieldset class="action"><input type="submit" value="Save"  class="button" accesskey="w" />
+</form>
+
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'serials-menu.inc' %]
+<ul>
+    [% FOREACH subscription IN subscriptions %]
+    
+	<li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid %]" title="serial collection for [% subscription.bibliotitle %]">Serial collection</a></li>
+	<li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid %]</a></li>
+        [% IF ( subscription.abouttoexpire ) %]<a href="#" onclick="javascript:popup([% subscription.subscriptionid %])">Renew [% subscription.subscriptionid %]</a>
+        [% END %]
+      [% END %]
+    <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% biblionumber %]" title="go to [% bibliotitle %]">Show Biblio</a></li></ul>
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

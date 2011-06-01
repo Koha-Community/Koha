@@ -101,6 +101,7 @@ $template->param( picture => 1 ) if $picture;
 	    address => $bor->{'address'},
 	    address2 => $bor->{'address2'},
 	    city => $bor->{'city'},
+	    state => $bor->{'state'},
 	    zipcode => $bor->{'zipcode'},
 	    country => $bor->{'country'},
 	    phone => $bor->{'phone'},

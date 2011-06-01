@@ -75,7 +75,7 @@ sub process_batch {
 
     print "... importing MARC records -- please wait\n";
     my ($num_added, $num_updated, $num_items_added, $num_items_errored, $num_ignored) = 
-        BatchCommitBibRecords($import_batch_id, 100, \&print_progress_and_commit);
+        BatchCommitBibRecords($import_batch_id, '', 100, \&print_progress_and_commit);
     print "... finished importing MARC records\n";
 
     print <<_SUMMARY_;

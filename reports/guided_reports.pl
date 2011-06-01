@@ -22,7 +22,7 @@ use strict;
 use CGI;
 use Text::CSV;
 use C4::Reports::Guided;
-use C4::Auth;
+use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Dates;
 use C4::Debug;
@@ -61,8 +61,21 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+my $session = $cookie ? get_session($cookie->value) : undef;
 
-    my @errors = ();
+my $filter;
+if ( $input->param("filter_set") ) {
+    $filter = {};
+    $filter->{$_} = $input->param("filter_$_") foreach qw/date author keyword/;
+    $session->param('report_filter', $filter) if $session;
+    $template->param( 'filter_set' => 1 );
+}
+elsif ($session) {
+    $filter = $session->param('report_filter');
+}
+
+
+my @errors = ();
 if ( !$phase ) {
     $template->param( 'start' => 1 );
     # show welcome page
@@ -75,8 +88,15 @@ elsif ( $phase eq 'Build new' ) {
 elsif ( $phase eq 'Use saved' ) {
     # use a saved report
     # get list of reports and display them
-    $template->param( 'saved1' => 1 );
-    $template->param( 'savedreports' => get_saved_reports() ); 
+    $template->param(
+        'saved1' => 1,
+        'savedreports' => get_saved_reports($filter),
+    );
+    if ($filter) {
+        while ( my ($k, $v) = each %$filter ) {
+            $template->param( "filter_$k" => $v ) if $v;
+        }
+    }
 }
 
 elsif ( $phase eq 'Delete Saved') {
@@ -133,6 +153,7 @@ elsif ( $phase eq 'Update SQL'){
         update_sql( $id, $sql, $reportname, $notes );
         $template->param(
             'save_successful'       => 1,
+            'id'                    => $id,
         );
     }
     
@@ -367,9 +388,10 @@ elsif ( $phase eq 'Save Report' ) {
         );
     }
     else {
-        save_report( $borrowernumber, $sql, $name, $type, $notes );
+        my $id = save_report( $borrowernumber, $sql, $name, $type, $notes );
         $template->param(
             'save_successful'       => 1,
+            'id'                    => $id,
         );
     }
 }
@@ -484,7 +506,7 @@ elsif ($phase eq 'Run this report'){
             $sql =~ s/<<$split[$i*2+1]>>/$quoted/;
         }
         my ($sth, $errors) = execute_query($sql, $offset, $limit);
-        my $total = select_2_select_count_value($sql) || 0;
+        my $total = nb_rows($sql) || 0;
         unless ($sth) {
             die "execute_query failed to return sth for report $report: $sql";
         } else {
@@ -599,7 +621,7 @@ sub header_cell_loop {
 }
 
 foreach (1..6) {
-    $template->param('build' . $_) and $template->param(buildx => $_) and last;
+     $template->{VARS}->{'build' . $_} and $template->{VARS}->{'buildx' . $_} and last;
 }
 $template->param(   'referer' => $input->referer(),
                     'DHTMLcalendar_dateformat' => C4::Dates->DHTMLcalendar(),

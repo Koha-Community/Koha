@@ -8,9 +8,9 @@
             $("#newrootbudgetc").empty();
 
 // IF THERE IS NO BUDGETS DEFINED YET, THEN DISPLAY PERIOD BUTTON *ONLY*
-<!-- TMPL_UNLESS NAME="period_button_only" -->
+[% UNLESS ( period_button_only ) %]
             $("#planning_menuc").empty();
-<!-- /TMPL_UNLESS  -->
+[% END %]
 
 	    yuiToolbar();
 	 });
@@ -18,52 +18,52 @@
 	// YUI Toolbar Functions
 
 	function yuiToolbar() {
-<!-- TMPL_IF NAME="budget_period_id" -->
+[% IF ( budget_period_id ) %]
 		                var budgets_menu = [
 						{ text: _("New budget"), url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form" },
-                        { text: _("New fund for") + " '<!-- TMPL_VAR NAME="budget_period_description" -->'", url: "/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->"
-                           <!-- TMPL_IF NAME="budget_period_locked" -->,  disabled:true<!-- /TMPL_IF  -->
-                           <!-- TMPL_UNLESS NAME="CAN_user_acquisition_budget_add_del" -->,  disabled:true <!-- /TMPL_UNLESS  -->
+                        { text: _("New fund for") + " '[% budget_period_description %]'", url: "/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&budget_period_id=[% budget_period_id %]"
+                           [% IF ( budget_period_locked ) %],  disabled:true[% END %]
+                           [% UNLESS ( CAN_user_acquisition_budget_add_del ) %],  disabled:true [% END %]
                           }
                 ]
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
         var newrootbudgetButton = new YAHOO.widget.Button("newrootbudget");
-		<!-- /TMPL_IF -->
+		[% END %]
 
-        <!-- TMPL_IF NAME="budget_period_id" -->
+        [% IF ( budget_period_id ) %]
                 var periods_menu = [
-                        { text: _("Edit budget") + " '<!-- TMPL_VAR NAME="budget_period_description" -->'", url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->" },
-                        { text: _("Duplicate budget") + " '<!-- TMPL_VAR NAME="budget_period_description" -->'" }
+                        { text: _("Edit budget") + " '[% budget_period_description %]'", url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=[% budget_period_id %]" },
+                        <!-- { text: _("Duplicate budget") + " '[% budget_period_description %]'" } -->
                 ]
-        <!-- /TMPL_IF -->
+        [% END %]
 
 // IF THERE IS NO BUDGETS DEFINED YET, THEN DISPLAY PERIOD BUTTON *ONLY*
-<!-- TMPL_IF NAME="budget_period_id" -->
+[% IF ( budget_period_id ) %]
 
                var planning_menu = [
 
                         { text: _("Plan by Months"),
-                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=MONTHS"
-                            <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
+                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=MONTHS"
+                            [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
 
                         { text: _("Plan by Branches"),
-                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=BRANCHES"
-                            <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
+                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=BRANCHES"
+                            [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
 
                         { text: _("Plan by Item Types"),
-                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=ITEMTYPES"
-                            <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
+                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]&authcat=ITEMTYPES"
+                            [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
-           <!-- TMPL_IF NAME="authcat" -->
-                <!-- TMPL_LOOP NAME="auth_cats_loop" -->
-                        { text: _("Plan by <!-- TMPL_VAR NAME="authcat" -->    "),
-                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->&authcat=<!-- TMPL_VAR NAME="authcat" -->"
-                            <!-- TMPL_UNLESS NAME="CAN_user_acquisition_planning_manage" -->,  id:'disabled' <!-- /TMPL_UNLESS  -->
+           [% IF ( authcat ) %]
+                [% FOREACH auth_cats_loo IN auth_cats_loop %]
+                        { text: _("Plan by [% auth_cats_loo.authcat %]    "),
+                            url: "/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% auth_cats_loo.budget_period_id %]&authcat=[% auth_cats_loo.authcat %]"
+                            [% UNLESS ( CAN_user_acquisition_planning_manage ) %],  id:'disabled' [% END %]
                         },
-                <!-- /TMPL_LOOP -->
-           <!-- /TMPL_IF -->
+                [% END %]
+           [% END %]
                 ]
 
 	            new YAHOO.widget.Button({
@@ -90,23 +90,23 @@
                 container: "planning_menuc"
             });
 
-<!-- /TMPL_IF  -->
+[% END %]
 
 // IF THERE IS NO BUDGETS DEFINED YET, THEN DISPLAY PERIOD BUTTON *ONLY*
-<!-- TMPL_UNLESS NAME="period_button_only" -->
+[% UNLESS ( period_button_only ) %]
 
 
-<!-- /TMPL_UNLESS -->
+[% END %]
 
 	} //yui-toolbar...
 
 	//]]>
 </script>
 	<ul class="toolbar">
-        <!-- TMPL_UNLESS NAME="budget_period_id" --><li><a id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New Budget</a></li><!-- /TMPL_UNLESS -->
-		<!-- TMPL_UNLESS NAME="period_button_only" --><li id="budgets_menuc"><a id="budgets_menu" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New</a></li><!-- /TMPL_UNLESS -->
+        [% UNLESS ( budget_period_id ) %]<li><a id="newrootbudget" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">New Budget</a></li>[% END %]
+		[% UNLESS ( period_button_only ) %]<li id="budgets_menuc"><a id="budgets_menu" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New</a></li>[% END %]
         <li id="periods_menuc"><a id="periods_menu" href="/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form">Budgets</a></li>
-		<!-- TMPL_UNLESS NAME="period_button_only" --><li id="planning_menuc"><a id="planning_menu" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=<!-- TMPL_VAR NAME="budget_period_id" -->">Budget planning</a></li>
-	<!-- /TMPL_UNLESS -->
+		[% UNLESS ( period_button_only ) %]<li id="planning_menuc"><a id="planning_menu" href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]">Budget planning</a></li>
+	[% END %]
 	</ul>
 </div>

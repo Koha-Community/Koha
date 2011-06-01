@@ -9,6 +9,7 @@ use File::Temp qw/ tempdir /;
 use File::Path;
 use C4::Biblio;
 use C4::AuthoritiesMarc;
+use C4::Items;
 
 # 
 # script that checks zebradir structure & create directories & mandatory files if needed
@@ -37,7 +38,7 @@ my $verbose_logging;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
     'd:s'           => \$directory,
-    'reset'         => \$reset,
+    'r|reset'       => \$reset,
     's'             => \$skip_export,
     'k'             => \$keep_export,
     'nosanitize'    => \$nosanitize,
@@ -310,6 +311,7 @@ sub export_marc_records_from_sth {
     my $num_exported = 0;
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
     my $i = 0;
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber",'');
     while (my ($record_number) = $sth->fetchrow_array) {
         print "." if ( $verbose_logging );
         print "\r$i" unless ($i++ %100 or !$verbose_logging);
@@ -317,6 +319,25 @@ sub export_marc_records_from_sth {
             my $marcxml = $record_type eq 'biblio'
                           ? GetXmlBiblio( $record_number )
                           : GetAuthorityXML( $record_number );
+            if ($record_type eq 'biblio'){
+                my @items = GetItemsInfo($record_number, 'intra');
+                if (@items){
+                    my $record = MARC::Record->new;
+                    my @itemsrecord;
+                    foreach my $item (@items){
+                        my $record = Item2Marc($item, $record_number);                        
+                        push @itemsrecord, $record->field($itemtag);
+                    }
+                    $record->insert_fields_ordered(@itemsrecord);
+                    my $itemsxml=$record->as_xml_record();
+                    my $searchstring = '<record>\n';
+                    my $index = index($itemsxml, '<record>\n', 0);
+                    $itemsxml = substr($itemsxml, $index + length($searchstring));
+                    $searchstring = '</record>';
+                    $marcxml = substr($marcxml, 0, index($marcxml, $searchstring));
+                    $marcxml .= $itemsxml;
+                }
+            }
             if ( $marcxml ) {
                 print OUT $marcxml if $marcxml;
                 $num_exported++;
@@ -330,7 +351,7 @@ sub export_marc_records_from_sth {
             # strung together with no single root element.  zebraidx doesn't seem
             # to care, though, at least if you're using the GRS-1 filter.  It does
             # care if you're using the DOM filter, which requires valid XML file(s).
-            print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
+            print OUT ($as_xml) ? $marc->as_xml_record(C4::Context->preference('marcflavour')) : $marc->as_usmarc();
             $num_exported++;
         }
     }
@@ -358,7 +379,7 @@ sub export_marc_records_from_list {
             # strung together with no single root element.  zebraidx doesn't seem
             # to care, though, at least if you're using the GRS-1 filter.  It does
             # care if you're using the DOM filter, which requires valid XML file(s).
-            print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
+            print OUT ($as_xml) ? $marc->as_xml_record(C4::Context->preference('marcflavour')) : $marc->as_usmarc();
             $num_exported++;
         }
     }
@@ -387,7 +408,7 @@ sub generate_deleted_marc_records {
             fix_unimarc_100($marc);
         }
 
-        print OUT ($as_xml) ? $marc->as_xml_record() : $marc->as_usmarc();
+        print OUT ($as_xml) ? $marc->as_xml_record(C4::Context->preference("marcflavour")) : $marc->as_usmarc();
         $num_exported++;
     }
     print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
@@ -444,6 +465,8 @@ sub get_raw_marc_record {
                 return;
             }
         }
+        # ITEM
+        C4::Biblio::EmbedItemsInMarcBiblio($marc, $record_number);
     } else {
         eval { $marc = GetAuthority($record_number); };
         if ($@) {

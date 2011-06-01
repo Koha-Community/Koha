@@ -36,7 +36,7 @@ Default installation instructions:
 5. sudo ln -s /etc/koha/koha-httpd.conf /etc/apache2/sites-available/koha
   (note that the path to koha-httpd.conf may be different depending on your
   installation choices)
-6. sudo a2enmod rewrite
+6. sudo a2enmod rewrite deflate
 7. sudo a2ensite koha && /etc/init.d/apache2 reload
 8. sudo zebrasrv -f /etc/koha/koha-conf.xml
   (note that you will want to run Zebra in daemon mode for a production
@@ -65,10 +65,29 @@ If you are upgrading from a previous installation of Koha 3.x, you can
 use the following:
 
  ./koha_perl_deps.pl -u -m # to identify new Perl dependencies
+
+Install any missing modules
+IMPORTANT: Koha 3.4.x uses Template::Toolkit, this must be installed
+before the webinstaller can run
+
+On debian/ubuntu
+ sudo apt-get install libtemplate-perl
+
+Other Linux/Unix platforms
+Use the packaged version or install from CPAN
+  cpan Template
+
  perl Makefile.PL --prev-install-log /path/to/koha-install-log
  make
  make test
  sudo make upgrade
+
+Koha 3.4.x no longer stores items in biblio records so as part of the
+upgrade you will need to do the following two steps, they can take a
+long time (several hours) to complete for large databases
+
+ misc/maintenance/remove_items_from_biblioitems.pl --run
+ misc/migration_tools/rebuild_zebra.pl -b -r
 
 WHAT NEXT?
 

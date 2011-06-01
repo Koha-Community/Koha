@@ -92,7 +92,7 @@ if ($member || $category) {
         );
         push(@resultsdata, \%row);
     }
-    my $base_url = __FILE__ . '?' . join('&amp;', map { $_->{term} . ' = ' . $_->{val} } (
+    my $base_url = '?' . join('&amp;', map { $_->{term} . '=' . $_->{val} } (
                                             { term => 'member',         val => $member         },
                                             { term => 'category',       val => $category       },
                                             { term => 'orderby',        val => $orderby        },

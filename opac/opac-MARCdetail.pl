@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -193,7 +194,7 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             undef @subfields_data;
         }
     }
-    $template->param( $tabloop . "XX" => \@loop_data );
+    $template->param( "tab" . $tabloop . "XX" => \@loop_data );
 }
 
 

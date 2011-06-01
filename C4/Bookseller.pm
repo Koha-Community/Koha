@@ -1,6 +1,7 @@
 package C4::Bookseller;
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 PTFS Europe
 #
 # This file is part of Koha.
 #
@@ -18,23 +19,18 @@ package C4::Bookseller;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 
-use vars qw($VERSION @ISA @EXPORT);
+use base qw( Exporter );
 
-BEGIN {
-	# set the version for version checking
-	$VERSION = 3.01;
-    require Exporter;
-	@ISA    = qw(Exporter);
-	@EXPORT = qw(
-		&GetBookSeller &GetBooksellersWithLateOrders &GetBookSellerFromId
-		&ModBookseller
-		&DelBookseller
-		&AddBookseller
-	);
-}
-
+# set the version for version checking
+our $VERSION   = 4.01;
+our @EXPORT_OK = qw(
+  GetBookSeller GetBooksellersWithLateOrders GetBookSellerFromId
+  ModBookseller
+  DelBookseller
+  AddBookseller
+);
 
 =head1 NAME
 
@@ -54,92 +50,67 @@ a bookseller.
 
 =head2 GetBookSeller
 
-@results = &GetBookSeller($searchstring);
+@results = GetBookSeller($searchstring);
 
 Looks up a book seller. C<$searchstring> may be either a book seller
 ID, or a string to look for in the book seller's name.
 
-C<@results> is an array of references-to-hash, whose keys are the fields of of the
+C<@results> is an array of hash_refs whose keys are the fields of of the
 aqbooksellers table in the Koha database.
 
 =cut
 
-# FIXME: This function is badly named.  It should be something like 
-# SearchBookSellersByName.  It is NOT a singular return value.
+sub GetBookSeller {
+    my $searchstring = shift;
+    $searchstring = q{%} . $searchstring . q{%};
+    my $query =
+'select aqbooksellers.*, count(*) as basketcount from aqbooksellers left join aqbasket '
+      . 'on aqbasket.booksellerid = aqbooksellers.id where name lIke ? group by aqbooksellers.id order by name';
 
-sub GetBookSeller($) {
-    my ($searchstring) = @_;
+    my $dbh           = C4::Context->dbh;
+    my $sth           = $dbh->prepare($query);
+    $sth->execute($searchstring);
+    my $resultset_ref = $sth->fetchall_arrayref( {} );
+    return @{$resultset_ref};
+}
+
+sub GetBookSellerFromId {
+    my $id = shift or return;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT * FROM aqbooksellers WHERE name LIKE ?";
-    my $sth =$dbh->prepare($query);
-    $sth->execute( "%$searchstring%" );
-    my @results;
-    # count how many baskets this bookseller has.
-    # if it has none, the bookseller can be deleted
-    my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?");
-    while ( my $data = $sth->fetchrow_hashref ) {
-        $sth2->execute($data->{id});
-        $data->{basketcount} = $sth2->fetchrow();
-        push( @results, $data );
+    my $vendor =
+      $dbh->selectrow_hashref( 'SELECT * FROM aqbooksellers WHERE id = ?',
+        {}, $id );
+    if ($vendor) {
+        ( $vendor->{basketcount} ) = $dbh->selectrow_array(
+            'SELECT count(*) FROM aqbasket where booksellerid = ?',
+            {}, $id );
     }
-    $sth->finish;
-    return  @results ;
+    return $vendor;
 }
 
-
-sub GetBookSellerFromId($) {
-	my $id = shift or return;
-	my $dbh = C4::Context->dbh();
-	my $query = "SELECT * FROM aqbooksellers WHERE id = ?";
-	my $sth =$dbh->prepare($query);
-	$sth->execute( $id );
-	if (my $data = $sth->fetchrow_hashref()){
-		my $sth2 = $dbh->prepare("SELECT count(*) FROM aqbasket WHERE booksellerid=?");
-		$sth2->execute($id);
-		$data->{basketcount}=$sth2->fetchrow();
-		return $data;
-	}
-	return;
-}
 #-----------------------------------------------------------------#
 
 =head2 GetBooksellersWithLateOrders
 
-%results = &GetBooksellersWithLateOrders;
+%results = GetBooksellersWithLateOrders($delay);
 
 Searches for suppliers with late orders.
 
 =cut
 
 sub GetBooksellersWithLateOrders {
-    my ($delay,$branch) = @_; 	# FIXME: Branch argument unused.
+    my $delay = shift;
     my $dbh   = C4::Context->dbh;
 
-# FIXME NOT quite sure that this operation is valid for DBMs different from Mysql, HOPING so
-# should be tested with other DBMs
+    # TODO delay should be verified
+    my $query_string =
+      "SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
+    FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
+    LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
+    WHERE (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY)
+    AND (datereceived = '' OR datereceived IS NULL))";
 
-    my $strsth;
-    my $dbdriver = C4::Context->config("db_scheme") || "mysql";
-    if ( $dbdriver eq "mysql" ) {
-        $strsth = "
-            SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
-            FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
-            LEFT JOIN aqbooksellers ON aqbasket.booksellerid = aqbooksellers.id
-            WHERE (closedate < DATE_SUB(CURDATE( ),INTERVAL $delay DAY)
-                AND (datereceived = '' OR datereceived IS NULL))
-        ";
-    }
-    else {
-        $strsth = "
-            SELECT DISTINCT aqbasket.booksellerid, aqbooksellers.name
-            FROM aqorders LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
-            LEFT JOIN aqbooksellers ON aqbasket.aqbooksellerid = aqbooksellers.id
-            WHERE (closedate < (CURDATE( )-(INTERVAL $delay DAY)))
-                AND (datereceived = '' OR datereceived IS NULL))
-        ";
-    }
-
-    my $sth = $dbh->prepare($strsth);
+    my $sth = $dbh->prepare($query_string);
     $sth->execute;
     my %supplierlist;
     while ( my ( $id, $name ) = $sth->fetchrow ) {
@@ -165,8 +136,8 @@ Returns the ID of the newly-created bookseller.
 
 sub AddBookseller {
     my ($data) = @_;
-    my $dbh = C4::Context->dbh;
-    my $query = "
+    my $dbh    = C4::Context->dbh;
+    my $query  = q|
         INSERT INTO aqbooksellers
             (
                 name,      address1,      address2,   address3,      address4,
@@ -176,8 +147,8 @@ sub AddBookseller {
                 listincgst,invoiceincgst, gstrate,    discount,
                 notes
             )
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
-    ";
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
+      ;
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $data->{'name'},         $data->{'address1'},
@@ -196,21 +167,14 @@ sub AddBookseller {
     );
 
     # return the id of this new supplier
-    # FIXME: no protection against simultaneous addition: max(id) might be wrong!
-    $query = "
-        SELECT max(id)
-        FROM   aqbooksellers
-    ";
-    $sth = $dbh->prepare($query);
-    $sth->execute;
-    return scalar($sth->fetchrow);
+    return $dbh->{'mysql_insertid'};
 }
 
 #-----------------------------------------------------------------#
 
 =head2 ModBookseller
 
-&ModBookseller($bookseller);
+ModBookseller($bookseller);
 
 Updates the information for a given bookseller. C<$bookseller> is a
 reference-to-hash whose keys are the fields of the aqbooksellers table
@@ -226,17 +190,15 @@ C<&ModBookseller> with the result.
 sub ModBookseller {
     my ($data) = @_;
     my $dbh    = C4::Context->dbh;
-    my $query = "
-        UPDATE aqbooksellers
+    my $query  = 'UPDATE aqbooksellers
         SET name=?,address1=?,address2=?,address3=?,address4=?,
             postal=?,phone=?,fax=?,url=?,contact=?,contpos=?,
             contphone=?,contfax=?,contaltphone=?,contemail=?,
             contnotes=?,active=?,listprice=?, invoiceprice=?,
             gstreg=?,listincgst=?,invoiceincgst=?,
-            discount=?, notes=?, gstrate=?
-        WHERE id=?
-    ";
-    my $sth    = $dbh->prepare($query);
+            discount=?,notes=?,gstrate=?
+        WHERE id=?';
+    my $sth = $dbh->prepare($query);
     $sth->execute(
         $data->{'name'},         $data->{'address1'},
         $data->{'address2'},     $data->{'address3'},
@@ -249,27 +211,27 @@ sub ModBookseller {
         $data->{'active'},       $data->{'listprice'},
         $data->{'invoiceprice'}, $data->{'gstreg'},
         $data->{'listincgst'},   $data->{'invoiceincgst'},
-        $data->{'discount'},
-        $data->{'notes'},        $data->{'gstrate'},
-        $data->{'id'}
+        $data->{'discount'},     $data->{'notes'},
+        $data->{'gstrate'},      $data->{'id'}
     );
-    $sth->finish;
+    return;
 }
 
 =head2 DelBookseller
 
-&DelBookseller($booksellerid);
+DelBookseller($booksellerid);
 
-delete the supplier identified by $booksellerid
-This sub can be called only if the supplier has no order.
+delete the supplier record identified by $booksellerid
+This sub assumes it is called only if the supplier has no order.
 
 =cut
 
 sub DelBookseller {
-    my ($id) = @_;
-    my $dbh=C4::Context->dbh;
-    my $sth=$dbh->prepare("DELETE FROM aqbooksellers WHERE id=?");
+    my $id  = shift;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare('DELETE FROM aqbooksellers WHERE id=?');
     $sth->execute($id);
+    return;
 }
 
 1;

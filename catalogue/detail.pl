@@ -30,7 +30,7 @@ use C4::Items;
 use C4::Circulation;
 use C4::Branch;
 use C4::Reserves;
-use C4::Members;
+use C4::Members; # to use GetMember
 use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
@@ -52,11 +52,29 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $biblionumber = $query->param('biblionumber');
-my $fw = GetFrameworkCode($biblionumber);
+my $record       = GetMarcBiblio($biblionumber);
 
-## get notes and subjects from MARC record
-my $marcflavour      = C4::Context->preference("marcflavour");
-my $record           = GetMarcBiblio($biblionumber);
+if ( not defined $record ) {
+    # biblionumber invalid -> report and exit
+    $template->param( unknownbiblionumber => 1,
+                      biblionumber => $biblionumber );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
+}
+
+if($query->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    $template->param(
+        holdfor => $query->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
+
+my $fw           = GetFrameworkCode($biblionumber);
+my $showallitems = $query->param('showallitems');
+my $marcflavour  = C4::Context->preference("marcflavour");
 
 # XSLT processing of some stuff
 if (C4::Context->preference("XSLTDetailsDisplay") ) {
@@ -81,11 +99,6 @@ $template->param(
     normalized_isbn => $isbn,
 );
 
-unless (defined($record)) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-	exit;
-}
-
 my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
 my $marcisbnsarray   = GetMarcISBN( $record, $marcflavour );
 my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
@@ -99,8 +112,12 @@ my $branches = GetBranches();
 my $itemtypes = GetItemTypes();
 my $dbh = C4::Context->dbh;
 
-# change back when ive fixed request.pl
-my @items = &GetItemsInfo( $biblionumber, 'intra' );
+# 'intra' param included, even though it's not respected in GetItemsInfo currently
+my @all_items= GetItemsInfo($biblionumber, 'intra');
+my @items;
+for my $itm (@all_items) {
+    push @items, $itm unless ( $itm->{itemlost} && GetHideLostItemsPreference($borrowernumber) && !$showallitems);
+}
 my $dat = &GetBiblioData($biblionumber);
 
 # get count of holds
@@ -131,7 +148,11 @@ foreach my $subscription (@subscriptions) {
 if ( defined $dat->{'itemtype'} ) {
     $dat->{imageurl} = getitemtypeimagelocation( 'intranet', $itemtypes->{ $dat->{itemtype} }{imageurl} );
 }
-$dat->{'count'} = scalar @items;
+
+$dat->{'count'} = scalar @all_items;
+$dat->{'showncount'} = scalar @items;
+$dat->{'hiddencount'} = scalar @all_items - scalar @items;
+
 my $shelflocations = GetKohaAuthorisedValues('items.location', $fw);
 my $collections    = GetKohaAuthorisedValues('items.ccode'   , $fw);
 my (@itemloop, %itemfields);
@@ -225,6 +246,33 @@ $template->param(
     holdcount           => $holdcount,
 	C4::Search::enabled_staff_search_views,
 );
+
+if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
+    my $fieldspec = C4::Context->preference("AlternateHoldingsField");
+    my $subfields = substr $fieldspec, 3;
+    my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
+    my @alternateholdingsinfo = ();
+    my @holdingsfields = $record->field(substr $fieldspec, 0, 3);
+
+    for my $field (@holdingsfields) {
+        my %holding = ( holding => '' );
+        my $havesubfield = 0;
+        for my $subfield ($field->subfields()) {
+            if ((index $subfields, $$subfield[0]) >= 0) {
+                $holding{'holding'} .= $holdingsep if (length $holding{'holding'} > 0);
+                $holding{'holding'} .= $$subfield[1];
+                $havesubfield++;
+            }
+        }
+        if ($havesubfield) {
+            push(@alternateholdingsinfo, \%holding);
+        }
+    }
+
+    $template->param(
+        ALTERNATEHOLDINGS   => \@alternateholdingsinfo,
+        );
+}
 
 my @results = ( $dat, );
 foreach ( keys %{$dat} ) {

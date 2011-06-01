@@ -93,7 +93,7 @@ use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Suggestions;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Biblio;
 
 my $input = new CGI;

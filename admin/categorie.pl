@@ -92,7 +92,7 @@ if ($op eq 'add_form') {
 	my $data;
 	if ($categorycode) {
 		my $dbh = C4::Context->dbh;
-		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
+		my $sth=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,hidelostitems,overduenoticerequired,category_type from categories where categorycode=?");
 		$sth->execute($categorycode);
 		$data=$sth->fetchrow_hashref;
 		$sth->finish;
@@ -109,6 +109,7 @@ if ($op eq 'add_form') {
 				overduenoticerequired   => $data->{'overduenoticerequired'},
 				issuelimit              => $data->{'issuelimit'},
 				reservefee              => sprintf("%.2f",$data->{'reservefee'}),
+                                hidelostitems           => $data->{'hidelostitems'},
 				category_type           => $data->{'category_type'},
 				DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 				"type_".$data->{'category_type'} => 1,
@@ -128,12 +129,12 @@ if ($op eq 'add_form') {
 	}
 	
 	if ($is_a_modif) {
-            my $sth=$dbh->prepare("UPDATE categories SET description=?,enrolmentperiod=?, enrolmentperioddate=?,upperagelimit=?,dateofbirthrequired=?,enrolmentfee=?,reservefee=?,overduenoticerequired=?,category_type=? WHERE categorycode=?");
-            $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type','categorycode'));
+            my $sth=$dbh->prepare("UPDATE categories SET description=?,enrolmentperiod=?, enrolmentperioddate=?,upperagelimit=?,dateofbirthrequired=?,enrolmentfee=?,reservefee=?,hidelostitems=?,overduenoticerequired=?,category_type=? WHERE categorycode=?");
+            $sth->execute(map { $input->param($_) } ('description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','hidelostitems','overduenoticerequired','category_type','categorycode'));
             $sth->finish;
         } else {
-            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?,?)");
-            $sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','overduenoticerequired','category_type'));
+            my $sth=$dbh->prepare("INSERT INTO categories  (categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,reservefee,hidelostitems,overduenoticerequired,category_type) values (?,?,?,?,?,?,?,?,?,?,?)");
+            $sth->execute(map { $input->param($_) } ('categorycode','description','enrolmentperiod','enrolmentperioddate','upperagelimit','dateofbirthrequired','enrolmentfee','reservefee','hidelostitems','overduenoticerequired','category_type'));
             $sth->finish;
         }
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
@@ -156,7 +157,7 @@ if ($op eq 'add_form') {
 	$sth->finish;
 	$template->param(total => $total->{'total'});
 	
-	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,overduenoticerequired,category_type from categories where categorycode=?");
+	my $sth2=$dbh->prepare("select categorycode,description,enrolmentperiod,enrolmentperioddate,upperagelimit,dateofbirthrequired,enrolmentfee,issuelimit,reservefee,hidelostitems,overduenoticerequired,category_type from categories where categorycode=?");
 	$sth2->execute($categorycode);
 	my $data=$sth2->fetchrow_hashref;
 	$sth2->finish;
@@ -173,6 +174,7 @@ if ($op eq 'add_form') {
                                 overduenoticerequired   => $data->{'overduenoticerequired'},
                                 issuelimit              => $data->{'issuelimit'},
                                 reservefee              =>  sprintf("%.2f",$data->{'reservefee'}),
+                                hidelostitems           => $data->{'hidelostitems'},
                                 category_type           => $data->{'category_type'},
                                 );
 													# END $OP eq DELETE_CONFIRM
@@ -205,6 +207,7 @@ if ($op eq 'add_form') {
 				overduenoticerequired   => $results->[$i]{'overduenoticerequired'},
 				issuelimit              => $results->[$i]{'issuelimit'},
 				reservefee              => sprintf("%.2f",$results->[$i]{'reservefee'}),
+                                hidelostitems           => $results->[$i]{'hidelostitems'},
 				category_type           => $results->[$i]{'category_type'},
 				"type_".$results->[$i]{'category_type'} => 1);
         if (C4::Context->preference('EnhancedMessagingPreferences')) {
@@ -240,9 +243,11 @@ sub _get_brief_messaging_prefs {
         my $pref = C4::Members::Messaging::GetMessagingPreferences( { categorycode => $categorycode,
                                                                     message_name       => $option->{'message_name'} } );
         next unless  $pref->{'transports'};
-        my $brief_pref = { message_attribute_id => $option->{'message_attribute_id'},
-                           message_name => $option->{'message_name'},
-                         };
+        my $brief_pref = {
+            message_attribute_id    => $option->{'message_attribute_id'},
+            message_name            => $option->{'message_name'},
+            $option->{'message_name'} => 1
+        };
         foreach my $transport ( @{$pref->{'transports'}} ) {
             push @{ $brief_pref->{'transports'} }, { transport => $transport };
         }

@@ -9,7 +9,7 @@ a, a:visited {
 	color : #006699;
 }
 
-a:hover,input.editshelf:hover,a.editshelf:hover,input.deleteshelf:hover {
+a:hover,#toolbar input.editshelf:hover,input.editshelf:hover,a.editshelf:hover,input.deleteshelf:hover {
 	color : #990033;
 }
 
@@ -1654,6 +1654,17 @@ span.starMT {
 * html #cartmenulink span, * html #listsmenulink span {
 	padding-top : 5px;
 }
+
+#cartmenulink span#carticon {
+	background: transparent url("../../images/cart.gif") top left no-repeat;
+	position: static;
+	width : 14px;
+	height:14px;
+	margin: 0.35em 0.45em 0 0.2em;
+	padding:0;
+	float: left;
+}
+
 #listsmenulink {
 	background : #9FBFFF;
 }
@@ -1990,5 +2001,16 @@ div.ft {
 #plainmarc table { border: 0; margin: .7em 0 0 0; font-family: monospace; font-size: 95%; }
 #plainmarc th { background-color : #FFF; border: 0; white-space: nowrap; text-align:left; vertical-align: top; padding: 2px; }
 #plainmarc td { border: 0; padding : 2px; vertical-align: top; }
+
+#catalogue_detail_biblio h1 { float:left; margin:0 1em 1em 0; }
+#catalogue_detail_biblio h1.title { float:none; margin-top:1em; }
+#catalogue_detail_biblio h3 {clear:both; }
+
+#opac-detail #Normalview { font-weight:bold; }
+#opac-marcdetail #Normalview { font-weight:normal; }
+#opac-marcdetail #MARCview { font-weight:bold; }
+#opac-isbddetail #Normalview { font-weight:normal; }
+#opac-isbddetail #ISBDview { font-weight:bold; }
+#opac-isbddetail #isbdcontents { margin-top: 2em; }
 
 div.bibmessage { background-color : #ffffb0; border-radius : 5px; padding : 3px; margin : 2px; }

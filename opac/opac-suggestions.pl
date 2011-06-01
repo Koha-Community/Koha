@@ -20,6 +20,7 @@ use warnings;
 
 use CGI;
 use C4::Auth;    # get_template_and_user
+use C4::Members;
 use C4::Branch;
 use C4::Koha;
 use C4::Output;
@@ -77,7 +78,7 @@ if ( $op eq "add_confirm" ) {
 	}
 	else {
 		$$suggestion{'suggesteddate'}=C4::Dates->today;
-		$$suggestion{'branchcode'}=C4::Context->userenv->{"branch"};
+		$$suggestion{'branchcode'}= $input->param('branch') || C4::Context->userenv->{"branch"};
 		&NewSuggestion($suggestion);
 		# empty fields, to avoid filter in "SearchSuggestion"
 		$$suggestion{$_}='' foreach qw<title author publishercode copyrightdate place collectiontitle isbn STATUS>;
@@ -121,6 +122,18 @@ foreach my $suggestion(@$suggestions_loop) {
 }
 
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
+
+# Is the person allowed to choose their branch
+if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
+    my ( $borr ) = GetMemberDetails( $borrowernumber );
+
+# pass the pickup branch along....
+    my $branch = $input->param('branch') || $borr->{'branchcode'} || C4::Context->userenv->{branch} || '' ;
+
+# make branch selection options...
+    my $CGIbranchloop = GetBranchesLoop($branch);
+    $template->param( branch_loop => $CGIbranchloop );
+}
 
 $template->param(
 	%$suggestion,

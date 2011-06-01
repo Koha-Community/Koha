@@ -1,6 +1,6 @@
 
-<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl"><!-- TMPL_VAR NAME="LibraryName" --></a></h1><!-- Begin Patrons Resident Search Box -->
-<!-- TMPL_IF NAME="CAN_user_circulate" --><!-- TMPL_IF NAME="CircAutocompl" --><script type="text/javascript">
+<h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName %]</a></h1><!-- Begin Patrons Resident Search Box -->
+[% IF ( CAN_user_circulate ) %][% IF ( CircAutocompl ) %]<script type="text/javascript">
 //<![CDATA[
 YAHOO.util.Event.onContentReady("header_search", function() {
     new function() {
@@ -43,80 +43,80 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 }
 });
 //]]>
-</script><!-- /TMPL_IF --><!-- /TMPL_IF -->
+</script>[% END %][% END %]
 <div id="header_search">
 	<div id="patron_search" class="residentsearch">
 	<p class="tip">Enter patron card number or partial name:</p>
 	<form action="/cgi-bin/koha/members/member.pl" method="post">
-    <input id="searchmember" size="25" class="focus" name="member" type="text" value="<!--TMPL_VAR Name="member"-->"/>
-	<!--TMPL_IF Name="branchloop"-->
+    <input id="searchmember" size="25" class="focus" name="member" type="text" value="[% member %]"/>
+	[% IF ( branchloop ) %]
 	<span class="filteraction" id="filteraction_off"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[-]</a></span>
 	<span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').toggle();">[+]</a></span>
-	<!--/TMPL_IF -->
+	[% END %]
     order by:
     <select name="orderby" id="searchorderby">
     <option value="surname,0">Surname</option>
     <option value="cardnumber,0">Cardnumber</option>
     </select>
     <input value="Search" class="submit" type="submit" />
-	<!--TMPL_IF Name="branchloop"-->
+	[% IF ( branchloop ) %]
 	<p id="filters"> <label for="branchcode">Library: </label><select name="branchcode" id="branchcode">
-        <option value="">Any</option><!-- TMPL_LOOP name="branchloop" -->
-        <!-- TMPL_IF NAME="selected" -->
-        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="branchname" --></option><!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="branchname" --></option><!-- /TMPL_IF -->
-      <!-- /TMPL_LOOP --></select>
+        <option value="">Any</option>[% FOREACH branchloo IN branchloop %]
+        [% IF ( branchloo.selected ) %]
+        <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
+        <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+      [% END %]</select>
                  <label for="categorycode">Category: </label><select name="categorycode" id="categorycode">
-        <option value="">Any</option><!-- TMPL_LOOP name="categories" -->
-        <!-- TMPL_IF NAME="selected" -->
-        <option value="<!-- TMPL_VAR name="categorycode" -->" selected="selected"><!-- TMPL_VAR name="description" --></option><!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="categorycode" -->"><!-- TMPL_VAR name="description" --></option><!-- /TMPL_IF -->
-      <!-- /TMPL_LOOP --></select>
+        <option value="">Any</option>[% FOREACH categorie IN categories %]
+        [% IF ( categorie.selected ) %]
+        <option value="[% categorie.categorycode %]" selected="selected">[% categorie.description %]</option>[% ELSE %]
+        <option value="[% categorie.categorycode %]">[% categorie.description %]</option>[% END %]
+      [% END %]</select>
 	</p>
-	<!--/TMPL_IF -->
+	[% END %]
 </form>
 	</div>
-	<!-- TMPL_IF NAME="CAN_user_circulate" -->
+	[% IF ( CAN_user_circulate ) %]
 	<div id="circ_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter patron card number or partial name:</p>
     <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
-    <!-- TMPL_IF NAME="CircAutocompl" -->
+    [% IF ( CircAutocompl ) %]
     <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
                 <input autocomplete="off" id="findborrower" name="findborrower" type="text" />
                 <div id="yborrowercontainer"></div>
                 <input id="ysearchsubmit" type="submit" class="submit" value="Submit" />
-                <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
+                <input name="branch" value="[% branch %]" type="hidden" />
                 <input name="printer" value="" type="hidden" />
             </div>
         </div>
-	<!-- TMPL_ELSE -->
+	[% ELSE %]
             <input id="findborrower" name="findborrower" size="40" type="text" />
-            <input name="branch" value="<!-- TMPL_VAR name="branch" -->" type="hidden" />
+            <input name="branch" value="[% branch %]" type="hidden" />
             <input name="printer" value="" type="hidden" />
             <input value="Submit" class="submit" type="submit" />
-	<!-- /TMPL_IF -->
+	[% END %]
     </form>
-	</div><!-- /TMPL_IF -->
-	<!-- TMPL_IF NAME="CAN_user_catalogue" -->
+	</div>[% END %]
+	[% IF ( CAN_user_catalogue ) %]
 	<div id="catalog_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter search keywords:</p>
 		<form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
 			 <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="form-text" />
 				<input type="submit" name="op" id="opac-submit" value="Submit" class="submit" />
 		</form>
-	</div><!-- /TMPL_IF -->
+	</div>[% END %]
 			<ul>
 			<li><a href="/cgi-bin/koha/members/members-home.pl#patron_search">Search Patrons</a></li>
-			<!-- TMPL_IF NAME="CAN_user_circulate" --><li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li><!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="CAN_user_catalogue" --><li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li><!-- /TMPL_IF -->
+			[% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/circulation.pl#circ_search">Check Out</a></li>[% END %]
+			[% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl#catalog_search">Search the Catalog</a></li>[% END %]
 			</ul>
 </div>
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
-    <!-- TMPL_IF NAME="advsearch" -->$("#filteraction_on").toggle();
-    <!-- TMPL_ELSE -->$("#filters").toggle();
-    $("#filteraction_off").toggle();<!-- /TMPL_IF -->
+    [% IF ( advsearch ) %]$("#filteraction_on").toggle();
+    [% ELSE %]$("#filters").toggle();
+    $("#filteraction_off").toggle();[% END %]
 });
 //]]>
 </script>

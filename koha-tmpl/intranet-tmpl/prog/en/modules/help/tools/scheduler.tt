@@ -1,0 +1,22 @@
+[% INCLUDE 'help-top.inc' %]
+<h1>Task Scheduler</h1>
+<p>The task scheduler is a way to schedule reports to run whenever
+      you want.</p><p>To schedule a task, visit the Task Scheduler and fill in the
+      form</p>
+      <ul class="itemizedlist" type="disc"><li class="listitem"><p>Current Server Time shows the time on your server (schedule
+          all of your reports to run based on that time - not on your local
+          time)</p></li><li class="listitem"><p>Time should be entered as hh:mm (2 digit hour, 2 digit
+          minute)</p></li><li class="listitem"><p>Date should be entered using the calendar pop up</p></li><li class="listitem"><p>From Report choose the report you want to schedule</p></li><li class="listitem"><p>Choose whether to receive the text of or a link to the
+          results</p></li><li class="listitem"><p>In the Email filed enter the email of the person you want to
+          receive your report</p></li></ul><p>Below the task scheduler form, there is a list of scheduled
+      reports</p>
+      <p>You can also schedule reports directly from the list of saved
+      reports by clicking the 'Schedule' link</p>
+      <h3>Troubleshooting</h3><p>Task scheduler will not work if the user the webserver runs as
+        doesn't have the permission to use it. To find out if the right user
+        has the permissions necessary, check /etc/at.allow to see what users
+        are in it. If you don't have that file, check etc/at.deny. If at.deny
+        exists but is blank, then every user can use it. Talk to your system
+        admin about adding the user to the right place to make the task
+        scheduler work.</p>
+[% INCLUDE 'help-bottom.inc' %]

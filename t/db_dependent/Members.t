@@ -39,13 +39,13 @@ is ($changedmember->{firstname}, "Marie", "Member Returned");
 
 $member->{email}="Marie\@email.com";
 ModMember(%$member);
-my $searchemail=Search($member);
-is ($member->{email}, "Marie\@email.com", "Email search works");
+$changedmember=GetMemberDetails("","TESTCARD01");
+is ($changedmember->{email}, "Marie\@email.com", "Email Set works");
 
 $member->{ethnicity}="German";
 ModMember(%$member);
-my $searcheth=Search($member);
-is ($member->{ethnicity}, "German", "Ethnicity Works");
+$changedmember=GetMemberDetails("","TESTCARD01");
+is ($changedmember->{ethnicity}, "German", "Ethnicity Works");
 
 my @searchstring=("Mcknight");
 my ($results) = Search(\@searchstring,undef,undef,undef,["surname"]);

@@ -3,7 +3,7 @@
 	<xsl:output encoding="UTF-8" indent="yes" method="xml"/>
 <!--
 Revision 1.14 - Fixed template isValid and fields 010, 020, 022, 024, 028, and 037 to output additional identifier elements 
-  with corresponding @type and @invalid eq 'yes' when subfields z or y (in the case of 022) exist in the MARCXML ::: 2007/01/04 17:35:20 cred
+  with corresponding @type and @invalid == 'yes' when subfields z or y (in the case of 022) exist in the MARCXML ::: 2007/01/04 17:35:20 cred
 
 Revision 1.13 - Changed order of output under cartographics to reflect schema  2006/11/28 tmee
 	

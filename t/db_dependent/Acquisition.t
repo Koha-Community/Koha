@@ -7,7 +7,7 @@ use strict;
 use warnings;
 use Data::Dumper;
 
-use C4::Bookseller;
+use C4::Bookseller qw( GetBookSellerFromId );
 
 use Test::More tests => 37;
 

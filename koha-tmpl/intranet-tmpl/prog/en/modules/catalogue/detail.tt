@@ -1,0 +1,538 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Catalog &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    Details for [% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]
+  [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+// http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
+function verify_images() {
+    $("#bookcoverimg img").each(function(i){
+           if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+            w = this.width;
+            h = this.height;
+            if ((w == 1) || (h == 1)) {
+                $("#bookcoverimg").remove();
+                $(".yui-gb").attr("class","yui-g");
+            } else if ((this.complete != null) && (!this.complete)) {
+                $("#bookcoverimg").remove();
+                $(".yui-gb").attr("class","yui-g");
+            }
+        }
+        });
+	$("#editions img").each(function(i){
+           if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+            w = this.width;
+            h = this.height;
+            if ((w == 1) || (h == 1)) {
+				this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+            } else if ((this.complete != null) && (!this.complete)) {
+				this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+            }
+        }
+        });
+}
+     $(document).ready(function() {
+        $('#bibliodetails > ul').tabs();
+     });
+     [% IF ( AmazonEnabled ) %]$(window).load(function() {
+        verify_images();
+     });[% END %]
+//]]>
+</script>
+</head>
+
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    Details for <i>[% title |html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield %][% END %]</i>
+  [% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+[% IF ( unknownbiblionumber ) %]
+  <div class="dialog message">The record you requested does not exist ([% biblionumber %]).</div>
+[% ELSE %]
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% INCLUDE 'cat-toolbar.inc' %]
+    [% IF ( AmazonEnabled ) %]
+        [% IF ( XSLTDetailsDisplay ) %]
+            <div class="yui-gc">
+            <div id="catalogue_detail_biblio" class="yui-u first">
+        [% ELSE %]
+            <div class="yui-gb">
+            <div id="catalogue_detail_biblio" class="yui-u first">
+        [% END %]
+    [% ELSE %]
+        [% IF ( XSLTDetailsDisplay ) %]
+            <div class="yui-g">
+            <div id="catalogue_detail_biblio">
+        [% ELSE %]
+            <div class="yui-g">
+            <div id="catalogue_detail_biblio" class="yui-u first">
+        [% END %]
+    [% END %]
+
+    [% IF ( XSLTDetailsDisplay ) %]
+        [% XSLTBloc %]
+
+        [% IF ( GetShelves ) %]
+            <span class="results_summary"><span class="label">Lists that include this title: </span>
+            [% FOREACH GetShelve IN GetShelves %]
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a>
+                [% IF ( loop.last ) %][% ELSE %]|[% END %]
+            [% END %]
+            </span>
+        [% END %]
+        [% IF ( holdcount ) %]<span class="results_summary"><span class="label">Holds:</span> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></span>[% ELSE %][% END %]
+
+        [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]</div><div class="yui-u" id="bookcoverimg">
+        <a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a>[% END %][% END %]
+    [% ELSE %]
+
+    <h3>[% title |html %]</h3>
+    [% FOREACH subtitl IN subtitle %]
+    	<h4>[% subtitl.subfield %]</h4>
+    [% END %]
+            [% UNLESS ( item_level_itypes ) %]<img src="[% imageurl %]" alt="[% description %]" title="[% description %]">[% END %]
+            [% IF ( unititle ) %]<p>[% unititle |html %]</p>[% END %]
+            [% IF ( author ) %]<p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% author |url %]">[% author %]</a></p>[% END %]
+        <ul>
+        [% IF ( MARCAUTHORS ) %]
+            <li><strong>Additional Authors:</strong><ul>
+            [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
+                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="&#8225;[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %]</li>
+                [% END %]
+
+        </ul>
+            </li>
+        [% END %]
+[% IF ( MARCSERIES ) %]
+		<li><strong>Series: </strong><ul>[% FOREACH MARCSERIE IN MARCSERIES %]
+		<li>[% FOREACH MARCSERIES_SUBFIELDS_LOO IN MARCSERIE.MARCSERIES_SUBFIELDS_LOOP %] [% IF ( MARCSERIES_SUBFIELDS_LOO.value ) %]<a href="/cgi-bin/koha/catalogue/search.pl?q=se:[% MARCSERIES_SUBFIELDS_LOO.value |url %]">[% MARCSERIES_SUBFIELDS_LOO.value %]</a>[% END %][% IF ( MARCSERIES_SUBFIELDS_LOO.volumenum ) %]. [% MARCSERIES_SUBFIELDS_LOO.volumenum %][% END %][% END %]</li> 
+		[% END %]
+		</ul>
+		</li>
+[% END %]
+        [% IF ( publishercode ) %]
+    <li><strong>Published by:</strong>
+        <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:[% publishercode |url %]">
+            [% publishercode |html %]
+        </a> [% IF ( place ) %]([% place %])[% END %] [% IF ( publicationyear ) %], [% publicationyear %][% END %] [% IF ( editionstatement ) %][% editionstatement %][% END %] [% IF ( editionresponsability ) %][% editionresponsability %][% END %]
+    </li>
+    [% END %]
+        <li><strong>Description:</strong>
+                [% IF ( pages ) %] [% END %][% pages %] [% IF ( illus ) %][% illus %][% END %]
+                [% IF ( size ) %][% size %][% END %]
+        </li>
+[% IF ( MARCurlS ) %]<li>
+    
+	<strong>Online Resources:</strong>
+    <ul>    [% FOREACH MARCurl IN MARCurlS %]
+		<li>[% IF ( MARCurl.part ) %][% MARCurl.part %]
+			<br />[% END %] 
+		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
+		<a href="[% MARCurl.MARCurl %]" title="[% MARCurl.MARCurl %]">[% MARCurl.linktext %]</a>
+			[% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note %]</li>[% END %]</ul>[% END %]</li>
+            [% END %]</ul>
+</li>
+    [% END %]
+    
+    [% IF ( OpacUrl ) %]
+    	<li><strong>OPAC View:</strong>
+    	<a href="http://[% OpacUrl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" target="_blank">Open in new window</a>
+		</li>
+	[% END %]
+        </ul>
+        </div>
+       
+[% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<div class="yui-u" id="bookcoverimg">
+<a href="http://www.amazon[% AmazonTld %]/gp/reader/[% normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img border="0" src="http://images.amazon.com/images/P/[% normalized_isbn %].01.MZZZZZZZ.jpg" alt="" /></a></div>[% END %][% END %]
+        
+        <div class="yui-u" style="margin-top: 1em;">
+        <ul>
+        [% IF ( MARCISBNS ) %]
+            <li><strong>ISBN:</strong><ul>[% FOREACH MARCISBN IN MARCISBNS %]<li>[% MARCISBN.marcisbn %]</li>[% END %]</ul></li>
+        [% ELSE %]
+            [% IF ( normalized_isbn ) %]
+                <li><strong>ISBN:</strong> [% normalized_isbn %]</li>
+            [% END %]
+        [% END %]
+        [% IF ( issn ) %]
+            <li><strong>ISSN:</strong>[% issn %]</li>
+        [% END %]
+        [% IF ( collectiontitle ) %]
+            <li><strong>Collection: </strong>
+                [% collectiontitle %] [% IF ( collectionvolume ) %], [% collectionvolume %][% END %][% IF ( collectionissn ) %] (<strong>ISSN:</strong> [% collectionissn %])[% END %]
+            </li>
+        [% END %]
+        [% IF ( MARCSUBJCTS ) %]
+            <li><strong>Subjects:</strong> 
+            <ul>
+                [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
+                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator %] <a title="&#8225;[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value |html %]</a>[% END %]</li>
+                [% END %]
+                </ul>
+            </li>
+        [% END %]
+        [% IF ( copyrightdate ) %]
+            <li><strong>Copyright:</strong> [% copyrightdate %]</li>
+        [% END %]
+     
+        [% IF ( classification ) %]
+            <li><strong>Classification:</strong> [% subclass %][% classification %]</li>
+        [% END %]
+        [% IF ( dewey ) %]
+            <li><strong>Dewey:</strong> [% dewey %]</li>
+        [% END %]
+        [% IF ( urlS ) %]
+            <li><strong>url:</strong> 
+                [% FOREACH url IN urlS %]
+                    <a href="[% url.url %]">[% url.url %]</a>
+                [% END %]
+            </li>
+        [% END %]
+        <!--This grabs all of the lists a bib record appears in -->
+        [% IF ( GetShelves ) %]
+	        <li><strong>Lists that include this title: </strong>
+	        <ul>
+	        [% FOREACH GetShelve IN GetShelves %]
+		        <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?viewshelf=[% GetShelve.shelfnumber %]">[% GetShelve.shelfname %]</a></li>
+	        [% END %]
+	        </ul>
+	        </li>
+        [% END %]
+            [% IF ( holdcount ) %]<li><strong>Holds:</strong> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></li>[% ELSE %][% END %]
+        </ul>
+		[% END %]
+</div>
+</div>
+<div id="bibliodetails" class="toptabs">
+
+<ul>   
+<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#holdings">Holdings</a></li>
+<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#description">Descriptions</a></li>
+[% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a></li>[% END %]
+[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#editions">Editions</a></li>[% END %][% END %]
+[% IF ( AmazonSimilarItems ) %]<li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]#related">Related Titles</a></li>[% END %]
+ </ul>
+
+<div id="holdings">
+[% IF ( count ) %]
+    [% IF ( showncount ) %]
+        <table>
+            <tr>
+                [% IF ( item_level_itypes ) %]<th>Item type</th>[% END %]
+                <th>Current Location</th>
+                <th>Home Library</th>
+                [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
+                <th>Call Number</th>
+                <th>Status</th>
+                <th>Last seen</th>
+                <th>Barcode</th>
+                [% IF ( volinfo ) %]<th>Publication Details</th>[% END %]
+                [% IF ( itemdata_uri ) %]<th>url</th>[% END %]
+                [% IF ( itemdata_copynumber ) %]<th>Copy No.</th>[% END %]
+                [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
+		[% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine Label</th>[% END %]
+            </tr>
+            [% FOREACH itemloo IN itemloop %]
+                <tr>
+                    [% IF ( item_level_itypes ) %]
+                      <td class="itype">
+                        [% IF ( noItemTypeImages ) %]
+                          [% itemloo.description %]
+                        [% ELSE %]
+                          [% IF ( itemloo.imageurl ) %]
+                            <img src="[% itemloo.imageurl %]" alt="[% itemloo.description %]" title="[% itemloo.description %]" />
+                          [% ELSE %]
+                            [% itemloo.description %]
+                          [% END %]
+                        [% END %]</td>
+                    [% END %]
+                    <td class="location">[% UNLESS ( singlebranchmode ) %][% itemloo.branchname %] [% END %]</td>
+                    <td class="homebranch">[% itemloo.homebranch %]<span class="shelvingloc">[% itemloo.location %]</span> </td>
+		    [% IF ( itemdata_ccode ) %]<td>[% itemloo.ccode %]</td>[% END %]
+                    <td class="itemcallnumber">[% IF ( itemloo.itemcallnumber ) %] [% itemloo.itemcallnumber %][% END %]</td>
+                    <td class="status">
+
+                [% IF ( itemloo.datedue ) %]
+						<span class="datedue">Checked out
+                    [% UNLESS ( itemloo.NOTSAMEBRANCH ) %]
+                          to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.borrowernumber %]">
+			  [% IF ( hidepatronname ) %]
+			      [% itemloo.cardnumber %]
+			  [% ELSE %]
+			      [% itemloo.firstname %] [% itemloo.surname %]
+			  [% END %]
+			  </a>
+                    [% END %]
+						: due [% itemloo.datedue %]
+						</span>
+                [% ELSIF ( itemloo.transfertwhen ) %]
+                           In transit from [% itemloo.transfertfrom %],
+                           to [% itemloo.transfertto %], since [% itemloo.transfertwhen %]
+							<!-- FIXME: the "since" clause is redundant w/ lastseen field -->
+                [% END %]
+
+                [% IF ( itemloo.itemlost ) %]
+                    [% IF ( itemloo.itemlostloop ) %]
+                    [% FOREACH itemlostloo IN itemloo.itemlostloop %]
+                        [% IF ( itemlostloo.selected ) %]
+                                        <span class="lost">[% itemlostloo.lib %]</span>
+                        [% END %]
+                    [% END %]
+                    [% ELSE %]
+                                        <span class="lost">Unavailable (lost or missing)</span>
+                    [% END %]
+                [% END %]
+
+                [% IF ( itemloo.wthdrawn ) %]
+                                        <span class="wdn">Withdrawn</span>
+                [% END %]
+
+                [% IF ( itemloo.damaged ) %]
+                    [% IF ( itemloo.itemdamagedloop ) %]
+                        [% FOREACH itemdamagedloo IN itemloo.itemdamagedloop %]
+                        [% IF ( itemdamagedloo.selected ) %]
+                                        <span class="dmg">[% itemdamagedloo.lib %]</span>
+                        [% END %]
+                        [% END %]
+                    [% ELSE %]
+                                        <span class="dmg">Damaged</span>
+                    [% END %]
+                [% END %]
+
+                [% IF ( itemloo.itemnotforloan ) %]
+                    Not for loan 
+                    [% IF ( itemloo.notforloanvalue ) %]
+                        ([% itemloo.notforloanvalue %])
+                    [% END %]
+                [% END %]
+
+                            
+                [% IF ( itemloo.reservedate ) %]
+                    [% IF ( itemloo.waitingdate ) %]
+                        Waiting
+                    [% ELSE %]
+                        On hold
+                    [% END %]
+                    [% IF ( canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
+		        [% IF ( hidepatronname ) %]
+		            [% itemloo.Reservedcardnumber %]
+		        [% ELSE %]
+		            [% itemloo.ReservedForFirstname %] [% itemloo.ReservedForSurname %]
+			[% END %]
+		    </a>[% END %]
+                    [% IF ( itemloo.waitingdate ) %]
+                        at[% ELSE %]expected at
+                    [% END %]   [% itemloo.ExpectedAtLibrary %]
+                    since
+                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate %]
+                    [% ELSE %]
+                        [% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %]
+                    [% END %]
+                [% END %]
+                [% UNLESS ( itemloo.itemnotforloan ) %][% UNLESS ( itemloo.onloan ) %][% UNLESS ( itemloo.itemlost ) %][% UNLESS ( itemloo.wthdrawn ) %][% UNLESS ( itemloo.damaged ) %][% UNLESS ( itemloo.transfertwhen ) %][% UNLESS ( itemloo.reservedate ) %]
+                                        Available
+                [% END %][% END %][% END %][% END %][% END %][% END %][% END %]
+
+                [% IF ( itemloo.restricted ) %]<span class="restricted">([% itemloo.restricted %])</span>[% END %]
+                        
+                    </td>
+                    <td class="datelastseen">[% itemloo.datelastseen %]</td>
+                    <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% itemloo.type %]&amp;itemnumber=[% itemloo.itemnumber %]&amp;biblionumber=[% itemloo.biblionumber %]&amp;bi=[% itemloo.biblioitemnumber %]#item[% itemloo.itemnumber %]">[% itemloo.barcode %]</a></td>
+				[% IF ( itemloo.volinfo ) %]	<td class="enumchron">
+					[% IF ( itemdata_enumchron ) %]
+						[% IF ( itemloo.enumchron ) %]
+						[% itemloo.enumchron %][% IF ( itemloo.serialseq ) %] -- [% END %]
+						[% END %]
+					[% END %]
+					[% itemloo.serialseq %][% IF ( itemloo.publisheddate ) %] ([% itemloo.publisheddate %])[% END %]
+				</td>[% END %]
+				[% IF ( itemdata_uri ) %]
+					<td class="uri"><a href="[% itemloo.uri %]">[% itemloo.uri %]</a></td>
+				[% END %]
+				[% IF ( itemdata_copynumber ) %]
+					<td class="copynumber">[% itemloo.copynumber %]</td>
+				[% END %]
+                [% IF ( itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
+                [% IF ( itemloo.type ) %]
+                    <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=[% itemloo.biblioitemnumber %]&amp;item=[% itemloo.itemtype %]">Fix Itemtype</a></td>
+                [% END %]
+		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
+			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>
+		[% END %]
+
+                </tr>
+            [% END %]
+        </table>
+        [% END %]
+                [% IF ( hiddencount ) %]
+                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&showallitems=1">Show all items ([% hiddencount %] hidden)</a>
+                [% END %] 		
+		[% IF ( debug_display ) %]
+		<br /><br />
+		<table>
+			<tr><td>itemdata_enumchron</td><td>[% itemdata_enumchron %]</td></tr>
+			<tr><td>itemdata_copynumber</td><td>[% itemdata_copynumber %]</td></tr>
+			<tr><td>serial</td><td>[% serial %]</td></tr>
+		</table>
+                [% END %]
+[% ELSE %]
+    [% IF ( ALTERNATEHOLDINGS ) %]
+    [% FOREACH ALTERNATEHOLDING IN ALTERNATEHOLDINGS %]
+        <div id="alternateholdings"><span class="holdings_label">Holdings:</span> [% ALTERNATEHOLDING.holding %]</div>
+    [% END %]
+    [% ELSE %]
+    <div id="noitems">No physical items for this record</div>
+    [% END %]
+[% END %]
+    </div>
+    
+<div id="description">
+<div class="content_set">
+[% IF ( AmazonEnabled ) %]
+[% FOREACH AMAZON_EDITORIAL_REVIEW IN AMAZON_EDITORIAL_REVIEWS %]
+    [% IF ( AMAZON_EDITORIAL_REVIEW.Content ) %]
+    <h4>From [% AMAZON_EDITORIAL_REVIEW.Source %]:</h4>
+    <p>[% AMAZON_EDITORIAL_REVIEW.Content %]</p>
+    [% END %]
+[% END %]
+[% END %]
+
+[% IF ( MARCNOTES ) %]
+    [% FOREACH MARCNOTE IN MARCNOTES %]
+    <p>[% MARCNOTE.marcnote %]</p>
+    [% END %]
+    [% ELSE %]
+    [% IF ( notes ) %]
+    <p>[% notes %]</p>
+    [% END %]
+[% END %]
+</div>
+</div>
+
+[% IF ( subscriptionsnumber ) %]
+<div id="subscriptions">
+<div class="yui-g">
+<div id="catalogue_detail_subscriptions">
+    <h2>This is a serial subscription</h2>
+    <p> (There are [% subscriptionsnumber %] subscriptions associated with this title).</p> 
+    [% FOREACH subscription IN subscriptions %]
+	    [% IF ( subscription.branchname ) %]<h3>At library: [% subscription.branchname %]</h3>[% ELSE %]
+	    [% IF ( subscription.branchcode ) %]<h3>At branch: [% subscription.branchcode %]</h3>[% END %][% END %]
+            [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes %] </p>[% END %]
+            [% IF ( subscription.latestserials ) %]
+            <p> The [% subscription.staffdisplaycount %] latest issues related to this subscription:</p>
+            <table>
+                <tr>
+                    <th>Issue #</th>
+                    <th>Date</th>
+                    <th>Status</th>
+                    <th>Note</th>
+                </tr>
+            [% FOREACH latestserial IN subscription.latestserials %]
+                <tr>
+                    <td>[% latestserial.serialseq %]</td>
+                    <td>[% latestserial.planneddate %]</td>
+                    <td>[% IF ( latestserial.status1 ) %]Expected
+                        [% ELSE %]
+                            [% IF ( latestserial.status2 ) %]Arrived
+                            [% ELSE %]
+                                [% IF ( latestserial.status3 ) %]Late
+                                [% ELSE %]
+                                    [% IF ( latestserial.status4 ) %]Missing
+                                    [% ELSE %]
+                                        [% IF ( latestserial.status5 ) %]Not Issued
+                                        [% END %]
+                                    [% END %]
+                                [% END %]
+                            [% END %]
+                        [% END %]</td>
+                    <td>[% latestserial.notes %]</td>
+                </tr>
+            [% END %]
+            </table>
+            [% END %]
+			<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]">Subscription Details</a>
+    [% END %]
+</div>
+</div>
+</div>
+[% END %]
+
+[% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
+<div id="editions"><h4>Editions</h4>
+<table>
+[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( XISBN.AmazonEnabled ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn %]/ref=sib_dp_pt/002-7879865-0184864#reader-link"><img src="http://images.amazon.com/images/P/[% XISBN.normalized_isbn %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
+[% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description %][% ELSE %]<img src="[% XISBN.imageurl %]" alt="[% XISBN.description %]" title="[% XISBN.description %]">[% END %]</td>[% END %]
+<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber %]">[% XISBN.title |html %]</a> by [% XISBN.author %] &copy;[% XISBN.copyrightdate %]
+  [% IF ( XISBN.publishercode ) %]
+[% XISBN.publishercode %] [% IF ( XISBN.place ) %]([% XISBN.place %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement %][% END %] [% IF ( XISBN.editionresponsability ) %][% XISBN.editionresponsability %][% END %]
+    [% END %]
+                [% IF ( XISBN.pages ) %] [% END %][% XISBN.pages %] [% IF ( XISBN.illus ) %][% XISBN.illus %][% END %]
+                [% IF ( XISBN.size ) %], [% END %][% XISBN.size %]
+</td>
+
+[% END %]
+</table></div>[% END %]
+[% END %]
+
+[% IF ( AmazonEnabled ) %][% IF ( AmazonSimilarItems ) %]
+<div id="related">
+<h4>Similar Items</h4>
+<ul>
+[% FOREACH AMAZON_SIMILAR_PRODUCT IN AMAZON_SIMILAR_PRODUCTS %]
+[% FOREACH similar_biblionumber IN AMAZON_SIMILAR_PRODUCT.similar_biblionumbers %]
+<li><img alt="img" src="http://images.amazon.com/images/P/[% similar_biblionumber.ASIN %].01._SS50_.jpg" /> <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% similar_biblionumber.biblionumber %]">[% similar_biblionumber.title |html %]</a> </li>
+[% END %]
+[% END %]
+</ul>
+</div>
+[% END %][% END %]
+
+</div><!-- /bibliodetails -->
+
+<div class="yui-g" id="export" style="margin-top: 1em;">
+<form method="get" action="/cgi-bin/koha/catalogue/export.pl">
+<table>  <tr>
+      <th>Save Record</th>   </tr>
+  <tr>     <td> Select Download Format:    <select name="format">
+        <option value="mods">MODS (XML)</option>
+        <option value="dc">Dublin Core (XML)</option>
+        <option value="marcxml">MARCXML</option>
+        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select>
+        <input type="submit" name="save" value="Download Record" /></td>
+  </tr>
+  <tr><td>
+    <input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber %]" />
+  </td></tr>
+</table>
+</form>
+</div>
+
+
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'biblio-view-menu.inc' %]
+</div>
+[% END %]
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

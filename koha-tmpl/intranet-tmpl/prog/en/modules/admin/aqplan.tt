@@ -1,0 +1,311 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Budgets &rsaquo; Funds &rsaquo; Planning for [% budget_period_description %] by [% authcat %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+// ---------------------------------------------------------------------
+// Javascript
+// ---------------------------------------------------------------------
+    function Check(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+            var arr = document.getElementsByName('est_total')
+
+            for ( var i=0, len=arr.length; i<len; ++i ){
+                    var tot = arr[i].innerHTML;
+
+                    if (tot == 'NaN') {
+                        _alertString += "\n- " + _("One or more cell values is non-numeric");
+                    }
+            }
+
+            if (_alertString.length==0) {
+
+                var op  = document.createElement('input');
+                op.setAttribute("type","hidden");
+                op.setAttribute("name","op");
+                op.setAttribute("value","save");   //ohh the pain...
+
+                document.Aform.appendChild(op);
+                document.Aform.submit()
+
+            } else {
+                    alertString2  = _("Form not submitted because of the following problem(s)");
+                    alertString2 += "\n------------------------------------------------------------------------------------\n";
+                    alertString2 += _alertString;
+                    alert(alertString2);
+            }
+    }
+
+
+YAHOO.util.Event.onAvailable("popmenu", function () {
+
+    var itemData  = new Array();
+    table = document.getElementById('plan') 
+    tableTmp =  table.cloneNode(true); 
+    tableTmp.id = 'planTmp';
+
+    [% FOREACH authvals_ro IN authvals_row %]
+        itemData.push( {   text: "[% authvals_ro.val %]",  onclick: { fn: addColumn, obj:  ["[% authvals_ro.colnum %]",  "[% authvals_ro.code %]"]    }    }     );
+
+    [% END %]
+    oMenu = new YAHOO.widget.Menu("basicmenu",
+            {  position: "dynamic", itemdata: itemData , clicktohide  : "true" , context:["popmenu","tl","tr"] }
+    );
+
+   oMenu.render("popmenu");
+   YAHOO.util.Event.addListener("add_popmenu_item", "click", oMenu.show, null, oMenu);
+
+// oMenu.removeItem(2);   // TODO.....
+
+});
+//]]>
+</script>
+<style type="text/css">td.locked { background-image: url('/intranet-tmpl/prog/img/locked.png'); padding-left : 20px; background-repeat: no-repeat; background-position: 4% 50%; } a.control { font-size:85%;text-decoration:none; }</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'budgets-admin-search.inc' %]
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo; 
+    <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id %]">Funds</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/aqplan.pl?budget_period_id=[% budget_period_id %]">Planning</a> &rsaquo;
+</div>
+
+<div id="doc3" class="yui-t2">
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+
+
+[% INCLUDE 'budgets-admin-toolbar.inc' %]
+
+<form method="post" id="Aform" name="Aform"  action="/cgi-bin/koha/admin/aqplan.pl">
+<h3>Planning for [% budget_period_description %] by [% authcat %]</h3>
+<input type="hidden" name="authcat" value="[% authcat %]" />
+<!-- Budget Lines -->
+
+    [% IF ( budget_lines ) %]
+
+    [% IF ( currency ) %]<p><b>Currency = [% currency %]</b>.
+    [% IF ( show_actual ) %]
+        <b>Each cell contain both actual and estimated values.</b>
+    [% ELSE %]
+        <b>Cells contain estimated values only.</b>
+    [% END %]
+    </p>[% ELSE %]<div class="dialog alert"><h3>No active currency is defined</h3><p>Please <a href="/cgi-bin/koha/admin/currency.pl">specify an active currency</a>.</p></div>
+[% IF ( show_actual ) %]
+        <p><b>Each cell contain both actual and estimated values.</b></p>
+    [% ELSE %]
+        <p><b>Cells contain estimated values only.</b></p>
+    [% END %]
+    [% END %]
+
+    <table id="plan" width="100%">
+    <thead>
+    <tr>
+    <th>Fund name</th>
+    <th>Fund total</th>
+
+    [% FOREACH authvals_ro IN authvals_row %]
+         [% IF ( authvals_ro.display ) %]
+            <th id="col[% authvals_ro.code %]" class="[% authvals_ro.colnum %]">
+        [% ELSE %]
+            <th id="col[% authvals_ro.code %]" styl="display:none;" class="[% authvals_ro.colnum %]">
+        [% END %]
+
+    [% authvals_ro.code %]</th>
+    [% END %]
+
+    <th>Fund remaining</th><th>&nbsp;</th>
+    </tr>
+    <tr>
+    <th>&nbsp;</th><th>&nbsp;</th>
+    [% FOREACH authvals_ro IN authvals_row %]
+         [% IF ( authvals_ro.display ) %]
+            <th class="[% authvals_ro.colnum %]">
+        [% ELSE %]
+            <th style="display:none;" class="[% authvals_ro.colnum %]">
+        [% END %]
+
+    <a class="control" onclick="delColumn('[% authvals_ro.colnum %]', 'col[% authvals_ro.code %]')" href="#" title="Hide this column">[ hide ]</a></th>
+
+    [% END %]
+    <th id="popmenu"><a style="font-size:85%;text-decoration:none;" id="add_popmenu_item" href="#" title="Show a hidden column">[ show a column ]</a></th><th>&nbsp;</th>
+     </tr>
+
+    </thead>
+
+    <tbody>
+    [% FOREACH budget_line IN budget_lines %]
+    [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+
+        <td align="left"[% IF ( budget_line.budget_lock ) %] class="locked" title="Fund locked"[% END %]><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id %]&amp;budget_period_id=[% budget_line.budget_period_id %]">[% budget_line.budget_name_indent %]</a></td>
+        <td><span id="budget_tot_formatted_[% budget_line.budget_id %]">[% budget_line.budget_amount_formatted %]&nbsp;</span>
+
+
+        <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
+        <div style="display:none;" id="budget_tot_[% budget_line.budget_id %]">[% budget_line.budget_amount %]</div></td>
+
+        [% FOREACH line IN budget_line.lines %]
+            [% IF ( line.display ) %]
+                <td class="[% line.colnum %]">
+            [% ELSE %]
+                <td style="display:none;" class="[% line.colnum %]">
+            [% END %]
+            <table class="invis" width="100%">
+                <tr>
+                    [% IF ( line.show_actual ) %]
+                        <td   width="50%"  >[% line.actual_amount %]</td>
+                    [% END %]
+                <td>
+
+                [% IF ( line.budget_lock ) %]
+                    [% line.estimated_amount %]&nbsp;
+                    <input type="hidden" style="text-align: right;"  name="[% line.cell_name %]" value="[% line.estimated_amount %]"   />
+                [% ELSE %]
+                    <input type="text" style="text-align: right;  width:90%; " size="6" name="[% line.cell_name %]"  value="[% line.estimated_amount %]"  id="budget_[% line.budget_id %][% line.colnum %]" class="plan_entry_[% line.budget_id %]" onchange="calcTotalRow(this);" />
+                [% END %]
+
+                </td></tr>
+            </table>
+            </td>
+        [% END %]
+
+        <td>
+        <table class="invis" width="100%">
+            <tr>
+       [% IF ( budget_line.show_actual ) %]
+            [% IF ( budget_line.act_negative ) %]
+                <td width="50%" style="color: red;">
+            [% ELSIF ( budget_line.act_positive ) %]
+                <td width="50%" style="color: green;">
+            [% ELSE %]
+                <td width="50%">
+            [% END %]
+                    [% budget_line.budget_act_remain %]
+            </td>
+        [% END %]
+
+        [% IF ( budget_line.est_negative ) %]
+            <td width="50%" style="color: red;" id="budget_est_[% budget_line.budget_id %]">
+        [% ELSIF ( budget_line.est_positive ) %]
+            <td width="50%" style="color: green;" id="budget_est_[% budget_line.budget_id %]">
+        [% ELSE %]
+            <td width="50%" id="budget_est_[% budget_line.budget_id %]">
+        [% END %] 
+                [% budget_line.budget_est_remain %]&nbsp;
+            </td>
+            </tr>
+        </table>
+        </td>
+
+        <td>
+             [% UNLESS ( budget_line.budget_lock ) %]
+                    <input type="button"  onclick="autoFillRow('[% budget_line.budget_id %]')" value="Auto-fill row"/>
+            [% ELSE %]
+             <div style="color:red;">not owned</div>
+            [% END %]
+        </td>
+        </tr>
+    [% END %]
+    </tbody>
+    </table>
+
+    [% IF ( budget_period_locked ) %]
+        <!-- <input STYLE="background: gray;"   type="submit" value="Save" disabled="disabled"/> -->
+    [% ELSE %]
+        <fieldset class="action"><input type="button"  onclick="Check(this.form)" value="Save"/></fieldset>
+    [% END %]
+
+
+<div id="hide_div">
+    [% FOREACH authvals_ro IN authvals_row %]
+
+     [% UNLESS ( authvals_ro.display ) %]
+        <input type="hidden" value="[% authvals_ro.code %]"  name="hide_cols"/>
+     [% END %]
+    [% END %]
+
+ </div>
+
+
+</form>
+
+        [% ELSE %]
+<div class="dialog message">No funds to display for this search criteria</div>
+        [% END %]
+
+
+</div>
+</div>
+<div class="yui-b">
+
+<form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
+<fieldset class="brief">
+<h4>Filter</h4>
+
+<ol>
+    <li>
+        <label for="authcat"> Select planning type:</label>
+        [% authcat_dropbox %]
+    </li>
+    <li class="radio">
+    [% IF ( show_mine ) %]
+        <input type="checkbox" id="show_mine"  name="show_mine" value="1" checked="checked" />
+    [% ELSE %]
+        <input type="checkbox" id="show_mine"  name="show_mine" value="1"  />
+    [% END %]
+    <label for="show_mine">Show my funds only</label>
+    </li>
+
+    <li class="radio">
+    [% IF ( show_active ) %]
+        <input type="checkbox" id="show_active" name="show_active" value="1" checked="checked" />
+    [% ELSE %]
+        <input type="checkbox" id="show_active" name="show_active" value="1" />
+        [% END %]
+    <label for="show_active">Show active funds only</label>
+    </li>
+
+
+    <li class="radio">
+        [% IF ( show_actual ) %]
+            <input type="checkbox" id="show_actual" name="show_actual" value="1" checked="checked" />
+        [% ELSE %]
+            <input type="checkbox" id="show_actual" name="show_actual" value="1"  />
+        [% END %]
+        <label for="show_actual">Show actual/estimated values</label>
+    </li>
+    </ol>
+<fieldset class="action">
+        <input type="submit" name="option_submit" value="Submit" /></fieldset>
+</fieldset>
+</form>
+[% IF ( budget_lines ) %]
+<form method="post" action="/cgi-bin/koha/admin/aqplan.pl">
+<h4>Export</h4>
+<fieldset class="brief">
+    <ol>
+    <li><label for="basename">Output to a file named: </label><input type="text" name="basename" id="basename" value="Export" /></li>
+    <li><label class="inline" for="MIME">Into an application
+    </label>[% CGIextChoice %]
+    [% CGIsepChoice %]</li>
+    </ol>
+    <fieldset class="action">    <input type="submit" value="Submit"/>
+    <input type="hidden" name="report_name" value="[% report_name %]" />
+    <input type="hidden" name="output" value="file" /></fieldset>
+    </fieldset>
+</form>
+[% END %]
+
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -62,7 +62,13 @@ my ($sub_unalloc , $period_sum, $budget_period_unalloc);
 if ($parent) {
     my $query = "  SELECT SUM(budget_amount) as sum FROM aqbudgets where budget_parent_id = ? ";
     my $sth   = $dbh->prepare($query);
-    $sth->execute( $parent->{'budget_id'} );
+    my @sql_params;
+    push @sql_params, $parent->{'budget_id'} ;
+    if ($budget_id){
+        $query.=qq| and budget_id <> ? |;
+        push @sql_params,$budget_id;
+    }
+    $sth->execute( @sql_params );
     my $sum = $sth->fetchrow_hashref;
     $sth->finish;
     
@@ -75,10 +81,16 @@ if ($parent) {
 # ELSE , IF NO PARENT PASSED, THEN CHECK UNALLOCATED FOR PERIOD, IF NOT THEN RETURN 2
 else {
     my $query = qq| SELECT SUM(budget_amount) as sum
-                FROM aqbudgets WHERE budget_period_id = ? and budget_parent_id IS NULL|;
+                FROM aqbudgets WHERE budget_period_id = ? and budget_parent_id IS NULL |;
+    my @sql_params;
+    push @sql_params, $period_id;
+    if ($budget_id){
+        $query.=qq| and budget_id <> ? |;
+        push @sql_params,$budget_id;
+    }
 
-    my $sth   = $dbh->prepare($query);
-    $sth->execute(  $period_id  ); 
+    my $sth = $dbh->prepare($query);
+    $sth->execute(@sql_params);
     $period_sum = $sth->fetchrow_hashref;
     $sth->finish;
     $budget_period_unalloc = $period->{'budget_period_total'} - $period_sum->{'sum'} if $period->{'budget_period_total'};

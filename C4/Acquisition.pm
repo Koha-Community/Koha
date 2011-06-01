@@ -568,7 +568,7 @@ sub ModBasketgroup {
     my $dbh = C4::Context->dbh;
     my $query = "UPDATE aqbasketgroups SET ";
     my @params;
-    foreach my $field (qw(name billingplace deliveryplace deliverycomment closed)) {
+    foreach my $field (qw(name billingplace deliveryplace freedeliveryplace deliverycomment closed)) {
         if ( defined $basketgroupinfo->{$field} ) {
             $query .= "$field=?, ";
             push(@params, $basketgroupinfo->{$field});
@@ -658,7 +658,7 @@ Returns a reference to the array of all the basketgroups of bookseller $booksell
 sub GetBasketgroups {
     my $booksellerid = shift;
     die "bookseller id is required to edit a basketgroup" unless $booksellerid;
-    my $query = "SELECT * FROM aqbasketgroups WHERE booksellerid=?";
+    my $query = "SELECT * FROM aqbasketgroups WHERE booksellerid=? ORDER BY `id` DESC";
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare($query);
     $sth->execute($booksellerid);
@@ -961,6 +961,10 @@ sub ModOrder {
 
     my $dbh = C4::Context->dbh;
     my @params;
+
+    # update uncertainprice to an integer, just in case (under FF, checked boxes have the value "ON" by default)
+    $orderinfo->{uncertainprice}=1 if $orderinfo->{uncertainprice};
+
 #    delete($orderinfo->{'branchcode'});
     # the hash contains a lot of entries not in aqorders, so get the columns ...
     my $sth = $dbh->prepare("SELECT * FROM aqorders LIMIT 1;");
@@ -1414,7 +1418,7 @@ sub GetLateOrders {
         aqbudgets.budget_name     AS budget,
         borrowers.branchcode      AS branch,
         aqbooksellers.name        AS supplier,
-        biblio.author,
+        biblio.author, biblio.title,
         biblioitems.publishercode AS publisher,
         biblioitems.publicationyear,
     ";

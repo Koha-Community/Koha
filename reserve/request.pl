@@ -57,6 +57,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $multihold = $input->param('multi_hold');
 $template->param(multi_hold => $multihold);
+my $showallitems = $input->param('showallitems');
 
 # get Branches and Itemtypes
 my $branches = GetBranches();
@@ -142,7 +143,7 @@ if ($cardnumber) {
     my $number_reserves =
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
-    if ( $number_reserves > C4::Context->preference('maxreserves') ) {
+    if ( C4::Context->preference('maxreserves') && $number_reserves >= C4::Context->preference('maxreserves') ) {
 		$warnings = 1;
         $maxreserves = 1;
     }
@@ -319,6 +320,7 @@ foreach my $biblionumber (@biblionumbers) {
         my $biblioitem = $biblioiteminfos_of->{$biblioitemnumber};
         my $num_available = 0;
         my $num_override  = 0;
+        my $hiddencount   = 0;
         
         $biblioitem->{description} =
           $itemtypes->{ $biblioitem->{itemtype} }{description};
@@ -376,7 +378,7 @@ foreach my $biblionumber (@biblionumbers) {
                 $item->{notforloanvalue} =
                   $notforloan_label_of->{ $item->{notforloan} };
             }
-            
+     
             # Management of lost or long overdue items
             if ( $item->{itemlost} ) {
                 
@@ -386,6 +388,10 @@ foreach my $biblionumber (@biblionumbers) {
                     : $item->{itemlost} == 2 ? "(long overdue)"
                       : "";
                 $item->{backgroundcolor} = 'other';
+                if (GetHideLostItemsPreference($borrowernumber) && !$showallitems) {
+                    $item->{hide} = 1;
+                    $hiddencount++;
+                }
             }
             
             # Check the transit status
@@ -428,10 +434,7 @@ foreach my $biblionumber (@biblionumbers) {
             }
             
             if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve} and CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber) ) {
-                if ( not $policy_holdallowed and C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
-                    $item->{override} = 1;
-                    $num_override++;
-                } elsif ( $policy_holdallowed ) {
+                if ( $policy_holdallowed ) {
                     $item->{available} = 1;
                     $num_available++;
                 }
@@ -439,6 +442,12 @@ foreach my $biblionumber (@biblionumbers) {
                     $item->{override} = 1;
                     $num_override++;
             }
+            # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
+            if (C4::Context->preference( 'AllowHoldPolicyOverride' ) && !$item->{available} ) {
+                $item->{override} = 1;
+                $num_override++;
+            }   
+
             # If none of the conditions hold true, then neither override nor available is set and the item cannot be checked
             
             # FIXME: move this to a pm
@@ -458,6 +467,7 @@ foreach my $biblionumber (@biblionumbers) {
             $biblioloopiter{warn} = 1;
             $biblioloopiter{none_avail} = 1;
         }
+        $template->param( hiddencount => $hiddencount);
         
         push @bibitemloop, $biblioitem;
     }

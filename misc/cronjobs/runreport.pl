@@ -28,6 +28,7 @@ use Pod::Usage;
 use Mail::Sendmail;
 use Text::CSV_XS;
 use CGI;
+use Carp;
 
 use vars qw($VERSION);
 
@@ -52,6 +53,14 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    -m --man        full documentation, same as --help --verbose
    -v --verbose    verbose output
 
+   --format=s      selects format. Choice of text, html, csv, or tsv
+
+   -e --email      whether to use e-mail (implied by --to or --from)
+   --to=s          e-mail address to send report to
+   --from=s        e-mail address to send report from
+   --subject=s     subject for the e-mail
+
+
  Arguments:
    reportID        report ID Number from saved_sql.id, multiple ID's may be specified
 
@@ -70,6 +79,26 @@ Prints the manual page and exits.
 =item B<-v>
 
 Verbose. Without this flag set, only fatal errors are reported.
+
+=item B<-format>
+
+Current options are text, html, csv, and tsv. At the moment, text and tsv both produce tab-separated tab-separated output.
+
+=item B<-email>
+
+Whether to use e-mail (implied by --to or --from).
+
+=item B<-to>
+
+E-mail address to send report to. Defaults to KohaAdminEmailAddress.
+
+=item B<-from>
+
+E-mail address to send report from. Defaults to KohaAdminEmailAddress.
+
+=item B<-subject>
+
+Subject for the e-mail message. Defaults to "Koha Saved Report"
 
 =back
 
@@ -92,17 +121,11 @@ Same as above, but also runs report #17.
 
 =over
 
-=item * 
-
-Complete testing for Sendmail related options: --email, --to, and --from.
 
 =item *
 
 Allow Saved Results option.
 
-=item *
-
-Possible --format option for CSV or tab-delimited output.
 
 =back
 
@@ -119,18 +142,21 @@ my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
 my $email   = 0;
-my $format  = "";
+my $format  = "text";
 my $to      = "";
 my $from    = "";
 my $subject = 'Koha Saved Report';
+my $separator = ',';
+my $quote = '"';
 
 GetOptions(
     'help|?'     => \$help,
     'man'        => \$man,
     'verbose'    => \$verbose,
-    'format'     => \$format,
-    'to'         => \$to,
-    'from'       => \$from,
+    'format=s'   => \$format,
+    'to=s'       => \$to,
+    'from=s'     => \$from,
+    'subject=s'  => \$subject,
     'email'      => \$email,
 ) or pod2usage(2);
 pod2usage( -verbose => 2 ) if ($man);
@@ -139,8 +165,12 @@ pod2usage(1) if $help;
 
 unless ($format) {
     $verbose and print STDERR "No format specified, assuming 'text'\n";
-    $format = '';
-    # $format = 'text';
+    $format = 'text';
+}
+
+if ($format eq 'tsv' || $format eq 'text') {
+    $format = 'csv';
+    $separator = "\t";
 }
 
 if ($to or $from or $email) {
@@ -159,7 +189,7 @@ unless (scalar(@ARGV)) {
 foreach my $report (@ARGV) {
     my ($sql, $type) = get_saved_report($report);
     unless ($sql) {
-        warn "ERROR: No saved report $report found";
+        carp "ERROR: No saved report $report found";
         next;
     }
     $verbose and print "SQL: $sql\n\n";
@@ -173,13 +203,31 @@ foreach my $report (@ARGV) {
     }
     $verbose and print "$count results from execute_query\n";
 
-    my $cgi = CGI->new();
-    my @rows = ();
-    while (my $line = $sth->fetchrow_arrayref) {
-        foreach (@$line) { defined($_) or $_ = ''; }    # catch undef values, replace w/ ''
-        push @rows, $cgi->TR( join('', $cgi->td($line)) ) . "\n";
+    my $message;
+    if ($format eq 'html') {
+        my $cgi = CGI->new();
+        my @rows = ();
+        while (my $line = $sth->fetchrow_arrayref) {
+            foreach (@$line) { defined($_) or $_ = ''; }    # catch undef values, replace w/ ''
+            push @rows, $cgi->TR( join('', $cgi->td($line)) ) . "\n";
+        }
+        $message = $cgi->table(join "", @rows);
+    } elsif ($format eq 'csv') {
+        my $csv = Text::CSV_XS->new({
+            quote_char  => $quote,
+            sep_char    => $separator,
+            });
+        while (my $line = $sth->fetchrow_arrayref) {
+            $csv->combine(@$line);
+#            foreach (@$line) {
+#                defined($_) or $_ = '';
+#                $_ =~ s/$quote/\\$quote/g;
+#                $_ = "$quote$_$quote";
+#            }    # catch undef values, replace w/ ''
+#            $message .= join ($separator, @$line) . "\n";
+            $message .= $csv->string() . "\n";
+        }
     }
-    my $message = $cgi->table(join "", @rows);
 
     if ($email){
         my %mail = (
@@ -188,7 +236,7 @@ foreach my $report (@ARGV) {
             Subject => $subject,
             Message => $message 
         );
-        sendmail(%mail) or warn "mail not sent";
+        sendmail(%mail) or carp 'mail not sent:' . $Mail::Sendmail::error;
     } else {
         print $message;
     }

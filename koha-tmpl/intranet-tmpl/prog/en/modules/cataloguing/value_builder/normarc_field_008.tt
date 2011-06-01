@@ -1,0 +1,4519 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Katalogisering &rsaquo; Feltbygger for 008</title> 
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding:1em;">
+<h3>008 Informasjonskoder</h3>
+
+<form>
+      <p><select name="MatTypeList" id="MatTypeList" onchange="RedrawChoices(this.options[selectedIndex].value);">
+
+			<option value="" selected="selected">Velg materialtype</option>			
+	[% IF ( mon ) %] 
+		<option value="mon" selected="selected">Monografier</option> 
+		[% ELSE %] 
+		<option value="mon">Monografier</option> 
+		[% END %]
+	[% IF ( per ) %] 
+		<option value="per" selected="selected">Periodika</option> 
+		[% ELSE %] 
+		<option value="per">Periodika</option> 
+		[% END %]
+	[% IF ( fil ) %] 
+		<option value="fil" selected="selected">Maskinlesbare filer</option> 
+		[% ELSE %] 
+		<option value="fil">Maskinlesbare filer</option> 
+		[% END %]	
+	[% IF ( mus ) %] 
+		<option value="mus" selected="selected">Musikktrykk og lydopptak</option> 
+		[% ELSE %] 
+		<option value="mus">Musikktrykk og lydopptak</option> 
+		[% END %]	
+	[% IF ( fv ) %] 
+		<option value="fv" selected="selected">Filmer og videogrammer</option> 
+		[% ELSE %] 
+		<option value="fv">Filmer og videogrammer</option> 
+		[% END %]	
+	[% IF ( kar ) %] 
+		<option value="kar" selected="selected">Kart</option> 
+		[% ELSE %] 
+		<option value="kar">Kart</option> 
+		[% END %]
+		
+      </select></p>
+</form>
+
+<form name="f_pop" onsubmit="report()">
+<input type="hidden" name="plugin_name" value="normarc_field_008.pl" />
+<table>
+
+<hr />
+
+<!-- Start first batch of common fields for all formats -->
+<table>
+
+	<tr>
+		<td>00-05 Registreringsdato</td>
+		<td><input type="text" name="f1" maxlength="6" size="7" value="[% f1 %]" /></td>
+	</tr>
+	<tr>
+		<!-- 06 Type of date / Publication status -->
+		<td><label for="f6">06 Dateringskode/Utgivelsesstatus</label></td>
+		<td>
+			<select name="f6" id="f6" size="1">
+	[% IF ( f6 ) %]
+		<option value=" " selected="selected">^ Ikke angitt</option>
+		[% ELSE %]
+		<option value=" ">^ Ikke angitt</option>
+		[% END %]
+	[% IF ( f6a ) %] 
+		<option value="a" selected="selected">a Antatt/forventet utgivelsesår i pos. 7-10</option> 
+		[% ELSE %] 
+		<option value="a">a Antatt/forventet utgivelsesår i pos. 7-10</option> 
+		[% END %] 
+	[% IF ( f6c ) %] 
+		<option value="c" selected="selected">c Utgivelsesår i pos. 7-10 og copyrightår i pos. 11-14</option> 
+		[% ELSE %] 
+		<option value="c">c Utgivelsesår i pos. 7-10 og copyrightår i pos. 11-14</option> 
+		[% END %] 
+	[% IF ( f6n ) %] 
+		<option value="n" selected="selected">n Ukjent år</option> 
+		[% ELSE %] 
+		<option value="n">n Ukjent år</option> 
+		[% END %] 
+	[% IF ( f6o ) %] 
+		<option value="o" selected="selected">o Opphørt (periodika)</option> 
+		[% ELSE %] 
+		<option value="o">o Opphørt (periodika)</option> 
+		[% END %] 
+	[% IF ( f6p ) %] 
+		<option value="p" selected="selected">p År for distribusjon/frigivelse i pos. 7-10 og produksjons-/opptaksperiode i pos. 11-14</option> 
+		[% ELSE %] 
+		<option value="p">p År for distribusjon/frigivelse i pos. 7-10 og produksjons-/opptaksperiode i pos. 11-14</option> 
+		[% END %] 
+	[% IF ( f6r ) %] 
+		<option value="r" selected="selected">r Nyutgaveår i pos. 7-10 og originalår i pos. 11-14</option> 
+		[% ELSE %] 
+		<option value="r">r Nyutgaveår i pos. 7-10 og originalår i pos. 11-14</option> 
+		[% END %] 
+	[% IF ( f6s ) %] 
+		<option value="s" selected="selected">s Enkelt år (f.eks. utgivelsesår) i pos. 7-10</option> 
+		[% ELSE %] 
+		<option value="s">s Enkelt år (f.eks. utgivelsesår) i pos. 7-10</option> 
+		[% END %] 
+	[% IF ( f6u ) %] 
+		<option value="u" selected="selected">u Ukjent status (periodika)</option> 
+		[% ELSE %] 
+		<option value="u">u Ukjent status (periodika)</option> 
+		[% END %] 
+	[% IF ( f6x ) %] 
+		<option value="x" selected="selected">x Løpende (periodika)</option> 
+		[% ELSE %] 
+		<option value="x">x Løpende (periodika)</option> 
+		[% END %] 	
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f710">07-10 Årstall 1</label></td>
+		<td>
+			<input type="text" name="f710" id="f710" size="4" maxlength="4" value="[% f710 %]"/>
+		</td>
+	</tr>
+	<tr>
+    <td><label for="f1114">11-14 Årstall 2</label></td>
+    <td>
+      <input type="text" name="f1114" id="f1114" size="4" maxlength="4" value="[% f1114 %]"/>
+		</td>
+  </tr>
+
+	<tr>
+      <td><label for="f1517">15-17 Utgivelsesland</label> See <a href="http://www.loc.gov/marc/countries/countries_code.html">MARC Code List for Countries</a> </td>
+      <td>
+              <input type="text" name="f1517" id="f1517" size="3"  maxlength="3" value="[% f1517 %]"/>
+      </td>
+        </tr>
+				
+<!-- End first batch of common fields for all formats -->
+				
+<tr><td id="choices" colspan="2"></td></tr>
+
+<!-- Start second batch of common fields for all formats -->
+                <td><label for="f3537">35-37 Språk</label> See <a href="http://www.loc.gov/marc/languages/language_code.html">MARC Code List for Languages</a></td>
+                <td>
+                        <input type="text" name="f3537" id="f3537" size="4"  maxlength="4" value="[% f3537 %]"/>
+                </td>
+        </tr>
+	<tr>
+                <td><label for="f38">38 Udefinert</label></td>
+                <td>
+										<input type="hidden" name="f38" value=" " />                
+                </td>
+        </tr>
+<tr>
+                <td><label for="f39">39 Katalogiseringskilde</label></td>
+                <td>
+                <select name="f39" id="f39" size="1">                                    
+	[% IF ( f39 ) %]
+		<option value=" " selected="selected">^ Ikke angitt</option>
+		[% ELSE %]
+		<option value=" ">^ Ikke angitt</option>
+		[% END %]
+	[% IF ( f390 ) %] 
+		<option value="0" selected="selected">0 Norges nasjonalbibliografi, autorisert post</option> 
+		[% ELSE %] 
+		<option value="0">0 Norges nasjonalbibliografi, autorisert post</option> 
+		[% END %] 
+	[% IF ( f391 ) %] 
+		<option value="1" selected="selected">1 Norges nasjonalbibliografi, uautorisert post</option> 
+		[% ELSE %] 
+		<option value="1">1 Norges nasjonalbibliografi, uautorisert post</option> 
+		[% END %] 
+	[% IF ( f392 ) %] 
+		<option value="2" selected="selected">2 Biblioteksentralen, autorisert post</option> 
+		[% ELSE %] 
+		<option value="2">2 Biblioteksentralen, autorisert post</option> 
+		[% END %] 
+	[% IF ( f393 ) %] 
+		<option value="3" selected="selected">3 Biblioteksentralen, uautorisert post</option> 
+		[% ELSE %] 
+		<option value="3">3 Biblioteksentralen, uautorisert post</option> 
+		[% END %] 
+	[% IF ( f394 ) %] 
+		<option value="4" selected="selected">4 BIBSYS, autorisert post</option> 
+		[% ELSE %] 
+		<option value="4">4 BIBSYS, autorisert post</option> 
+		[% END %] 
+	[% IF ( f395 ) %] 
+		<option value="5" selected="selected">5 BIBSYS, uautorisert post</option> 
+		[% ELSE %] 
+		<option value="5">5 BIBSYS, uautorisert post</option> 
+		[% END %] 
+	[% IF ( f399 ) %] 
+		<option value="9" selected="selected">9 Annen kilde</option> 
+		[% ELSE %] 
+		<option value="9">9 Annen kilde</option> 
+		[% END %]
+								</select>
+                </td>
+        </tr>
+				
+<!-- End second batch of common fields for all formats -->
+
+</table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+</form>
+
+<script type="text/javascript">//<![CDATA[
+
+function RedrawChoices(typ){
+  var divOutput=document.getElementById("choices");
+  switch(typ){
+  case "mon":
+    divOutput.innerHTML='<table><tr> \
+		<td>18 Illustrasjoner</td> \
+		<td> \
+    <select name="f18" id="f18" size="1"> \
+	[% IF ( f18 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f18a ) %] \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		[% ELSE %] \
+		<option value="a">a Illustrasjoner</option> \
+		[% END %] \
+	[% IF ( f18b ) %] \
+		<option value="b" selected="selected">b Kart</option> \
+		[% ELSE %] \
+		<option value="b">b Kart</option> \
+		[% END %] \
+	[% IF ( f18c ) %] \
+		<option value="c" selected="selected">c Portretter</option> \
+		[% ELSE %] \
+		<option value="c">c Portretter</option> \
+		[% END %] \
+	[% IF ( f18d ) %] \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		[% ELSE %] \
+		<option value="d">d Diagrammer</option> \
+		[% END %] \
+	[% IF ( f18e ) %] \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		[% ELSE %] \
+		<option value="e">e Planer (grunnriss)</option> \
+		[% END %] \
+	[% IF ( f18f ) %] \
+		<option value="f" selected="selected">f Plansjer</option> \
+		[% ELSE %] \
+		<option value="f">f Plansjer</option> \
+		[% END %] \
+	[% IF ( f18g ) %] \
+		<option value="g" selected="selected">g Noter</option> \
+		[% ELSE %] \
+		<option value="g">g Noter</option> \
+		[% END %] \
+	[% IF ( f18h ) %] \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		[% ELSE %] \
+		<option value="h">h Faksimiler</option> \
+		[% END %] \
+	[% IF ( f18i ) %] \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		[% ELSE %] \
+		<option value="i">i Våpenskjold</option> \
+		[% END %] \
+	[% IF ( f18j ) %] \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		[% ELSE %] \
+		<option value="j">j Genealogiske tabeller</option> \
+		[% END %] \
+	[% IF ( f18k ) %] \
+		<option value="k" selected="selected">k Blanketter</option> \
+		[% ELSE %] \
+		<option value="k">k Blanketter</option> \
+		[% END %] \
+	[% IF ( f18l ) %] \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		[% ELSE %] \
+		<option value="l">l Prøver, mønstre</option> \
+		[% END %] \
+	[% IF ( f18m ) %] \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		[% ELSE %] \
+		<option value="m">m Lydmateriale</option> \
+		[% END %] \
+	[% IF ( f18n ) %] \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		[% ELSE %] \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		[% END %] \
+	[% IF ( f18o ) %] \
+		<option value="o" selected="selected">o Fotografier</option> \
+		[% ELSE %] \
+		<option value="o">o Fotografier</option> \
+		[% END %] \
+	[% IF ( f18p ) %] \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		[% ELSE %] \
+		<option value="p">p Illuminasjoner</option> \
+		[% END %] \
+		</select> \
+		</td> \
+		</tr><tr> \
+		<td>19 Illustrasjoner</td> \
+		<td> \
+    <select name="f19" id="f19" size="1"> \
+	[% IF ( f19 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f19a ) %] \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		[% ELSE %] \
+		<option value="a">a Illustrasjoner</option> \
+		[% END %] \
+	[% IF ( f19b ) %] \
+		<option value="b" selected="selected">b Kart</option> \
+		[% ELSE %] \
+		<option value="b">b Kart</option> \
+		[% END %] \
+	[% IF ( f19c ) %] \
+		<option value="c" selected="selected">c Portretter</option> \
+		[% ELSE %] \
+		<option value="c">c Portretter</option> \
+		[% END %] \
+	[% IF ( f19d ) %] \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		[% ELSE %] \
+		<option value="d">d Diagrammer</option> \
+		[% END %] \
+	[% IF ( f19e ) %] \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		[% ELSE %] \
+		<option value="e">e Planer (grunnriss)</option> \
+		[% END %] \
+	[% IF ( f19f ) %] \
+		<option value="f" selected="selected">f Plansjer</option> \
+		[% ELSE %] \
+		<option value="f">f Plansjer</option> \
+		[% END %] \
+	[% IF ( f19g ) %] \
+		<option value="g" selected="selected">g Noter</option> \
+		[% ELSE %] \
+		<option value="g">g Noter</option> \
+		[% END %] \
+	[% IF ( f19h ) %] \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		[% ELSE %] \
+		<option value="h">h Faksimiler</option> \
+		[% END %] \
+	[% IF ( f19i ) %] \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		[% ELSE %] \
+		<option value="i">i Våpenskjold</option> \
+		[% END %] \
+	[% IF ( f19j ) %] \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		[% ELSE %] \
+		<option value="j">j Genealogiske tabeller</option> \
+		[% END %] \
+	[% IF ( f19k ) %] \
+		<option value="k" selected="selected">k Blanketter</option> \
+		[% ELSE %] \
+		<option value="k">k Blanketter</option> \
+		[% END %] \
+	[% IF ( f19l ) %] \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		[% ELSE %] \
+		<option value="l">l Prøver, mønstre</option> \
+		[% END %] \
+	[% IF ( f19m ) %] \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		[% ELSE %] \
+		<option value="m">m Lydmateriale</option> \
+		[% END %] \
+	[% IF ( f19n ) %] \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		[% ELSE %] \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		[% END %] \
+	[% IF ( f19o ) %] \
+		<option value="o" selected="selected">o Fotografier</option> \
+		[% ELSE %] \
+		<option value="o">o Fotografier</option> \
+		[% END %] \
+	[% IF ( f19p ) %] \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		[% ELSE %] \
+		<option value="p">p Illuminasjoner</option> \
+		[% END %] \
+		</select> \
+		</td> \
+		</tr><tr> \
+		<td>20 Illustrasjoner</td> \
+		<td> \
+    <select name="f20" id="f20" size="1"> \
+	[% IF ( f20 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f20a ) %] \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		[% ELSE %] \
+		<option value="a">a Illustrasjoner</option> \
+		[% END %] \
+	[% IF ( f20b ) %] \
+		<option value="b" selected="selected">b Kart</option> \
+		[% ELSE %] \
+		<option value="b">b Kart</option> \
+		[% END %] \
+	[% IF ( f20c ) %] \
+		<option value="c" selected="selected">c Portretter</option> \
+		[% ELSE %] \
+		<option value="c">c Portretter</option> \
+		[% END %] \
+	[% IF ( f20d ) %] \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		[% ELSE %] \
+		<option value="d">d Diagrammer</option> \
+		[% END %] \
+	[% IF ( f20e ) %] \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		[% ELSE %] \
+		<option value="e">e Planer (grunnriss)</option> \
+		[% END %] \
+	[% IF ( f20f ) %] \
+		<option value="f" selected="selected">f Plansjer</option> \
+		[% ELSE %] \
+		<option value="f">f Plansjer</option> \
+		[% END %] \
+	[% IF ( f20g ) %] \
+		<option value="g" selected="selected">g Noter</option> \
+		[% ELSE %] \
+		<option value="g">g Noter</option> \
+		[% END %] \
+	[% IF ( f20h ) %] \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		[% ELSE %] \
+		<option value="h">h Faksimiler</option> \
+		[% END %] \
+	[% IF ( f20i ) %] \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		[% ELSE %] \
+		<option value="i">i Våpenskjold</option> \
+		[% END %] \
+	[% IF ( f20j ) %] \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		[% ELSE %] \
+		<option value="j">j Genealogiske tabeller</option> \
+		[% END %] \
+	[% IF ( f20k ) %] \
+		<option value="k" selected="selected">k Blanketter</option> \
+		[% ELSE %] \
+		<option value="k">k Blanketter</option> \
+		[% END %] \
+	[% IF ( f20l ) %] \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		[% ELSE %] \
+		<option value="l">l Prøver, mønstre</option> \
+		[% END %] \
+	[% IF ( f20m ) %] \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		[% ELSE %] \
+		<option value="m">m Lydmateriale</option> \
+		[% END %] \
+	[% IF ( f20n ) %] \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		[% ELSE %] \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		[% END %] \
+	[% IF ( f20o ) %] \
+		<option value="o" selected="selected">o Fotografier</option> \
+		[% ELSE %] \
+		<option value="o">o Fotografier</option> \
+		[% END %] \
+	[% IF ( f20p ) %] \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		[% ELSE %] \
+		<option value="p">p Illuminasjoner</option> \
+		[% END %] \
+		</select> \
+		</td> \
+		</tr><tr> \
+		<td>21 Illustrasjoner</td> \
+		<td> \
+    <select name="f21" id="f21" size="1"> \
+	[% IF ( f21 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f21a ) %] \
+		<option value="a" selected="selected">a Illustrasjoner</option> \
+		[% ELSE %] \
+		<option value="a">a Illustrasjoner</option> \
+		[% END %] \
+	[% IF ( f21b ) %] \
+		<option value="b" selected="selected">b Kart</option> \
+		[% ELSE %] \
+		<option value="b">b Kart</option> \
+		[% END %] \
+	[% IF ( f21c ) %] \
+		<option value="c" selected="selected">c Portretter</option> \
+		[% ELSE %] \
+		<option value="c">c Portretter</option> \
+		[% END %] \
+	[% IF ( f21d ) %] \
+		<option value="d" selected="selected">d Diagrammer</option> \
+		[% ELSE %] \
+		<option value="d">d Diagrammer</option> \
+		[% END %] \
+	[% IF ( f21e ) %] \
+		<option value="e" selected="selected">e Planer (grunnriss)</option> \
+		[% ELSE %] \
+		<option value="e">e Planer (grunnriss)</option> \
+		[% END %] \
+	[% IF ( f21f ) %] \
+		<option value="f" selected="selected">f Plansjer</option> \
+		[% ELSE %] \
+		<option value="f">f Plansjer</option> \
+		[% END %] \
+	[% IF ( f21g ) %] \
+		<option value="g" selected="selected">g Noter</option> \
+		[% ELSE %] \
+		<option value="g">g Noter</option> \
+		[% END %] \
+	[% IF ( f21h ) %] \
+		<option value="h" selected="selected">h Faksimiler</option> \
+		[% ELSE %] \
+		<option value="h">h Faksimiler</option> \
+		[% END %] \
+	[% IF ( f21i ) %] \
+		<option value="i" selected="selected">i Våpenskjold</option> \
+		[% ELSE %] \
+		<option value="i">i Våpenskjold</option> \
+		[% END %] \
+	[% IF ( f21j ) %] \
+		<option value="j" selected="selected">j Genealogiske tabeller</option> \
+		[% ELSE %] \
+		<option value="j">j Genealogiske tabeller</option> \
+		[% END %] \
+	[% IF ( f21k ) %] \
+		<option value="k" selected="selected">k Blanketter</option> \
+		[% ELSE %] \
+		<option value="k">k Blanketter</option> \
+		[% END %] \
+	[% IF ( f21l ) %] \
+		<option value="l" selected="selected">l Prøver, mønstre</option> \
+		[% ELSE %] \
+		<option value="l">l Prøver, mønstre</option> \
+		[% END %] \
+	[% IF ( f21m ) %] \
+		<option value="m" selected="selected">m Lydmateriale</option> \
+		[% ELSE %] \
+		<option value="m">m Lydmateriale</option> \
+		[% END %] \
+	[% IF ( f21n ) %] \
+		<option value="n" selected="selected">n Illustrasjonskode ikke relevant</option> \
+		[% ELSE %] \
+		<option value="n">n Illustrasjonskode ikke relevant</option> \
+		[% END %] \
+	[% IF ( f21o ) %] \
+		<option value="o" selected="selected">o Fotografier</option> \
+		[% ELSE %] \
+		<option value="o">o Fotografier</option> \
+		[% END %] \
+	[% IF ( f21p ) %] \
+		<option value="p" selected="selected">p Illuminasjoner</option> \
+		[% ELSE %] \
+		<option value="p">p Illuminasjoner</option> \
+		[% END %] \
+		</select> \
+		</td></tr> \
+		<tr> \
+		<td>22 Målgruppe / Intelektuelt nivå</td> \
+		<td> \
+		<select name="f22" id="f22" size="1"> \
+	[% IF ( f22 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f22a ) %] \
+		<option value="a" selected="selected">a Voksne</option> \
+		[% ELSE %] \
+		<option value="a">a Voksne</option> \
+		[% END %] \
+	[% IF ( f22b ) %] \
+		<option value="b" selected="selected">b Billedbøker for voksne</option> \
+		[% ELSE %] \
+		<option value="b">b Billedbøker for voksne</option> \
+		[% END %] \
+	[% IF ( f22f ) %] \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		[% ELSE %] \
+		<option value="f">f Spesialisert</option> \
+		[% END %] \
+	[% IF ( f22g ) %] \
+		<option value="g" selected="selected">g Generell</option> \
+		[% ELSE %] \
+		<option value="g">g Generell</option> \
+		[% END %] \
+	[% IF ( f22j ) %] \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		[% ELSE %] \
+		<option value="j">j Barn og ungdom</option> \
+		[% END %] \
+	[% IF ( f22k ) %] \
+		<option value="k" selected="selected">k Billedbøker</option> \
+		[% ELSE %] \
+		<option value="k">k Billedbøker</option> \
+		[% END %] \
+	[% IF ( f22l ) %] \
+		<option value="l" selected="selected">l Barn i alderen til og med 5 år</option> \
+		[% ELSE %] \
+		<option value="l">l Barn i alderen til og med 5 år</option> \
+		[% END %] \
+	[% IF ( f22m ) %] \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22n ) %] \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22o ) %] \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22p ) %] \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		[% ELSE %] \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		[% END %] \
+	[% IF ( f22q ) %] \
+		<option value="q" selected="selected">q Lettlest</option> \
+		[% ELSE %] \
+		<option value="q">q Lettlest</option> \
+		[% END %] \
+	[% IF ( f22r ) %] \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		[% ELSE %] \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		[% END %] \
+	[% IF ( f22s ) %] \
+		<option value="s" selected="selected">s Storskrift</option> \
+		[% ELSE %] \
+		<option value="s">s Storskrift</option> \
+		[% END %] \
+	[% IF ( f22u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+	[% IF ( f22v ) %] \
+		<option value="v" selected="selected">v Billedbøker for barn i alderen til og med 5 år</option> \
+		[% ELSE %] \
+		<option value="v">v Billedbøker for barn i alderen til og med 5 år</option> \
+		[% END %] \
+	[% IF ( f22w ) %] \
+		<option value="w" selected="selected">w Billedbøker for elever på 1. til 3. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="w">w Billedbøker for elever på 1. til 3. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22x ) %] \
+		<option value="x" selected="selected">x Billedbøker for elever på 4. og 5. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="x">x Billedbøker for elever på 4. og 5. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22y ) %] \
+		<option value="y" selected="selected">y Billedbøker for elever på 6. og 7. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="y">y Billedbøker for elever på 6. og 7. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22z ) %] \
+		<option value="z" selected="selected">z Billedbøker for elever på ungdomstrinnet</option> \
+		[% ELSE %] \
+		<option value="z">z Billedbøker for elever på ungdomstrinnet</option> \
+		[% END %] \
+		</select> \
+		</td></tr> \
+		<tr> \
+				<td>23 Materialform</td> \
+				<td> \
+				<select name="f23" id="f23" size="1"> \
+	[% IF ( f23 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f23a ) %] \
+		<option value="a" selected="selected">a Mikrofilm</option> \
+		[% ELSE %] \
+		<option value="a">a Mikrofilm</option> \
+		[% END %] \
+	[% IF ( f23b ) %] \
+		<option value="b" selected="selected">b Mikrofilmkort</option> \
+		[% ELSE %] \
+		<option value="b">b Mikrofilmkort</option> \
+		[% END %] \
+	[% IF ( f23c ) %] \
+		<option value="c" selected="selected">c Mikro-opak</option> \
+		[% ELSE %] \
+		<option value="c">c Mikro-opak</option> \
+		[% END %] \
+	[% IF ( f23f ) %] \
+		<option value="f" selected="selected">f Braille</option> \
+		[% ELSE %] \
+		<option value="f">f Braille</option> \
+		[% END %] \
+	[% IF ( f23r ) %] \
+		<option value="r" selected="selected">r Ordinært trykk (øye-lesbar)</option> \
+		[% ELSE %] \
+		<option value="r">r Ordinært trykk (øye-lesbar)</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>24 Innhold</td> \
+				<td> \
+				<select name="f24" id="f24" size="1"> \
+	[% IF ( f24 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f24a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f24b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f24c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f24d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f24e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f24f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f24h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f24i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f24k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f24l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f24m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f24n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f24o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f24q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f24r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f24s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f24t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f24x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f24z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>25 Innhold</td> \
+				<td> \
+				<select name="f25" id="f25" size="1"> \
+	[% IF ( f25 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f25a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f25b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f25c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f25d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f25e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f25f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f25h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f25i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f25k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f25l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f25m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f25n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f25o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f25q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f25r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f25s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f25t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f25x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f25z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>26 Innhold</td> \
+				<td> \
+				<select name="f26" id="f26" size="1"> \
+	[% IF ( f26 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f26a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f26b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f26c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f26d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f26e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f26f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f26h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f26i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f26k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f26l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f26m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f26n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f26o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f26q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f26r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f26s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f26t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f26x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f26z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>27 Innhold</td> \
+				<td> \
+				<select name="f27" id="f27" size="1"> \
+	[% IF ( f27 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f27a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f27b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f27c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f27d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f27e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f27f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f27h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f27i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f27k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f27l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f27m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f27n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f27o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f27q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f27r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f27s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f27t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f27x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f27z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>28 Offentlig publikasjon</td> \
+				<td> \
+				<select name="f28" id="f28" size="1"> \
+	[% IF ( f28 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f280 ) %] \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f281 ) %] \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="1">1 Offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f28b ) %] \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="b">b Kommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28c ) %] \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28d ) %] \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% ELSE %] \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% END %] \
+	[% IF ( f28e ) %] \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% ELSE %] \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>29 Konferanse</td> \
+				<td> \
+				<select name="f29" id="f29" size="1"> \
+	[% IF ( f29 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f290 ) %] \
+		<option value="0" selected="selected">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		[% ELSE %] \
+		<option value="0">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		[% END %] \
+	[% IF ( f291 ) %] \
+		<option value="1" selected="selected">1 Dokumentet er en konferansepublikasjon</option> \
+		[% ELSE %] \
+		<option value="1">1 Dokumentet er en konferansepublikasjon</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>30 Festskrift</td> \
+				<td> \
+				<select name="f30" id="f30" size="1"> \
+	[% IF ( f30 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f300 ) %] \
+		<option value="0" selected="selected">0 Dokumentet er ikke et festskrift</option> \
+		[% ELSE %] \
+		<option value="0">0 Dokumentet er ikke et festskrift</option> \
+		[% END %] \
+	[% IF ( f301 ) %] \
+		<option value="1" selected="selected">1 Dokumentet er et festskrift</option> \
+		[% ELSE %] \
+		<option value="1">1 Dokumentet er et festskrift</option> \
+		[% END %] \
+	[% IF ( f30a ) %] \
+		<option value="a" selected="selected">a Festskrift for person</option> \
+		[% ELSE %] \
+		<option value="a">a Festskrift for person</option> \
+		[% END %] \
+	[% IF ( f30b ) %] \
+		<option value="b" selected="selected">b Festskrift for korporasjon</option> \
+		[% ELSE %] \
+		<option value="b">b Festskrift for korporasjon</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>31 Register</td> \
+				<td> \
+				<select name="f31" id="f31" size="1"> \
+	[% IF ( f31 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f310 ) %] \
+		<option value="0" selected="selected">0 Dokumentet har ikke register</option> \
+		[% ELSE %] \
+		<option value="0">0 Dokumentet har ikke register</option> \
+		[% END %] \
+	[% IF ( f311 ) %] \
+		<option value="1" selected="selected">1 Dokumentet har register</option> \
+		[% ELSE %] \
+		<option value="1">1 Dokumentet har register</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+				<td>32 Udefinert</td> \
+				<td> \
+				<input type="hidden" name="f32" id="f32" size="1" value=" " /> \
+				</td></tr> \
+		<tr> \
+				<td>33 Litterær form / genre</td> \
+				<td> \
+				<select name="f33" id="f33" size="1"> \
+  [% IF ( f33 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f330 ) %] \
+		<option value="0" selected="selected">0 Ikke skjønnlitteratu</option> \
+		[% ELSE %] \
+		<option value="0">0 Ikke skjønnlitteratu</option> \
+		[% END %] \
+	[% IF ( f331 ) %] \
+		<option value="1" selected="selected">1 Skjønnlitteratur</option> \
+		[% ELSE %] \
+		<option value="1">1 Skjønnlitteratur</option> \
+		[% END %] \
+	[% IF ( f33a ) %] \
+		<option value="a" selected="selected">a Antologi</option> \
+		[% ELSE %] \
+		<option value="a">a Antologi</option> \
+		[% END %] \
+	[% IF ( f33d ) %] \
+		<option value="d" selected="selected">d Dikt</option> \
+		[% ELSE %] \
+		<option value="d">d Dikt</option> \
+		[% END %] \
+	[% IF ( f33l ) %] \
+		<option value="l" selected="selected">l Lærebok, brevkurs</option> \
+		[% ELSE %] \
+		<option value="l">l Lærebok, brevkurs</option> \
+		[% END %] \
+	[% IF ( f33n ) %] \
+		<option value="n" selected="selected">n Novelle / fortelling</option> \
+		[% ELSE %] \
+		<option value="n">n Novelle / fortelling</option> \
+		[% END %] \
+	[% IF ( f33p ) %] \
+		<option value="p" selected="selected">p Pekebok</option> \
+		[% ELSE %] \
+		<option value="p">p Pekebok</option> \
+		[% END %] \
+	[% IF ( f33r ) %] \
+		<option value="r" selected="selected">r Roman</option> \
+		[% ELSE %] \
+		<option value="r">r Roman</option> \
+		[% END %] \
+	[% IF ( f33s ) %] \
+		<option value="s" selected="selected">s Skuespill</option> \
+		[% ELSE %] \
+		<option value="s">s Skuespill</option> \
+		[% END %] \
+	[% IF ( f33t ) %] \
+		<option value="t" selected="selected">t Tegneserie</option> \
+		[% ELSE %] \
+		<option value="t">t Tegneserie</option> \
+		[% END %] \
+				</select> \
+				</td></tr> \
+		<tr> \
+		<td>34 Biografi</td> \
+		<td> \
+		<select name="f34" id="f34" size="1"> \
+	[% IF ( f34 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f340 ) %] \
+		<option value="0" selected="selected">0 Ikke biografisk materiale</option> \
+		[% ELSE %] \
+		<option value="0">0 Ikke biografisk materiale</option> \
+		[% END %] \
+	[% IF ( f341 ) %] \
+		<option value="1" selected="selected">1 Biografisk materiale</option> \
+		[% ELSE %] \
+		<option value="1">1 Biografisk materiale</option> \
+		[% END %] \
+	[% IF ( f34a ) %] \
+		<option value="a" selected="selected">a Selvbiografi</option> \
+		[% ELSE %] \
+		<option value="a">a Selvbiografi</option> \
+		[% END %] \
+	[% IF ( f34b ) %] \
+		<option value="b" selected="selected">b Enkeltbiografi</option> \
+		[% ELSE %] \
+		<option value="b">b Enkeltbiografi</option> \
+		[% END %] \
+	[% IF ( f34c ) %] \
+		<option value="c" selected="selected">c Samlingsbiografi</option> \
+		[% ELSE %] \
+		<option value="c">c Samlingsbiografi</option> \
+		[% END %] \
+	[% IF ( f34d ) %] \
+		<option value="d" selected="selected">d Inneholder biografisk informasjon</option> \
+		[% ELSE %] \
+		<option value="d">d Inneholder biografisk informasjon</option> \
+		[% END %] \
+		</select> \
+		</td></tr> \
+		</table>';
+    break;
+  case "per":
+    divOutput.innerHTML='<table> \
+		<tr> \
+		 <td>18 Periodisitet</td> \
+		 <td> \
+		 <select name="f18" id="f18" size="1"> \
+	[% IF ( f18 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f18a ) %] \
+		<option value="a" selected="selected">a Årlig</option> \
+		[% ELSE %] \
+		<option value="a">a Årlig</option> \
+		[% END %] \
+	[% IF ( f18b ) %] \
+		<option value="b" selected="selected">b Annenhver måned (6-8 ganger pr år)</option> \
+		[% ELSE %] \
+		<option value="b">b Annenhver måned (6-8 ganger pr år)</option> \
+		[% END %] \
+	[% IF ( f18c ) %] \
+		<option value="c" selected="selected">c To ganger pr uke</option> \
+		[% ELSE %] \
+		<option value="c">c To ganger pr uke</option> \
+		[% END %] \
+	[% IF ( f18d ) %] \
+		<option value="d" selected="selected">d Daglig (4-7 ganger pr uke)</option> \
+		[% ELSE %] \
+		<option value="d">d Daglig (4-7 ganger pr uke)</option> \
+		[% END %] \
+	[% IF ( f18e ) %] \
+		<option value="e" selected="selected">e Annenhver uke</option> \
+		[% ELSE %] \
+		<option value="e">e Annenhver uke</option> \
+		[% END %] \
+	[% IF ( f18f ) %] \
+		<option value="f" selected="selected">f To ganger pr år</option> \
+		[% ELSE %] \
+		<option value="f">f To ganger pr år</option> \
+		[% END %] \
+	[% IF ( f18g ) %] \
+		<option value="g" selected="selected">g Annethvert år</option> \
+		[% ELSE %] \
+		<option value="g">g Annethvert år</option> \
+		[% END %] \
+	[% IF ( f18h ) %] \
+		<option value="h" selected="selected">h Hvert tredje år eller sjeldnere</option> \
+		[% ELSE %] \
+		<option value="h">h Hvert tredje år eller sjeldnere</option> \
+		[% END %] \
+	[% IF ( f18i ) %] \
+		<option value="i" selected="selected">i Tre ganger pr uke</option> \
+		[% ELSE %] \
+		<option value="i">i Tre ganger pr uke</option> \
+		[% END %] \
+	[% IF ( f18j ) %] \
+		<option value="j" selected="selected">j Tre ganger pr måned</option> \
+		[% ELSE %] \
+		<option value="j">j Tre ganger pr måned</option> \
+		[% END %] \
+	[% IF ( f18k ) %] \
+		<option value="k" selected="selected">k Uregelmessig</option> \
+		[% ELSE %] \
+		<option value="k">k Uregelmessig</option> \
+		[% END %] \
+	[% IF ( f18m ) %] \
+		<option value="m" selected="selected">m Månedlig (9-12 ganger pr år)</option> \
+		[% ELSE %] \
+		<option value="m">m Månedlig (9-12 ganger pr år)</option> \
+		[% END %] \
+	[% IF ( f18q ) %] \
+		<option value="q" selected="selected">q Kvartalsvis</option> \
+		[% ELSE %] \
+		<option value="q">q Kvartalsvis</option> \
+		[% END %] \
+	[% IF ( f18s ) %] \
+		<option value="s" selected="selected">s To ganger pr måned</option> \
+		[% ELSE %] \
+		<option value="s">s To ganger pr måned</option> \
+		[% END %] \
+	[% IF ( f18t ) %] \
+		<option value="t" selected="selected">t Tre ganger pr år</option> \
+		[% ELSE %] \
+		<option value="t">t Tre ganger pr år</option> \
+		[% END %] \
+	[% IF ( f18u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+	[% IF ( f18w ) %] \
+		<option value="w" selected="selected">w Ukentlig</option> \
+		[% ELSE %] \
+		<option value="w">w Ukentlig</option> \
+		[% END %] \
+	[% IF ( f18z ) %] \
+		<option value="z" selected="selected">z Annen periodisitet</option> \
+		[% ELSE %] \
+		<option value="z">z Annen periodisitet</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>19 Regularitet</td> \
+		 <td> \
+		 <select name="f19" id="f19" size="1"> \
+	[% IF ( f19 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f19n ) %] \
+		<option value="n" selected="selected">n Normalisert uregelmessig</option> \
+		[% ELSE %] \
+		<option value="n">n Normalisert uregelmessig</option> \
+		[% END %] \
+	[% IF ( f19r ) %] \
+		<option value="r" selected="selected">r Regelmessig</option> \
+		[% ELSE %] \
+		<option value="r">r Regelmessig</option> \
+		[% END %] \
+	[% IF ( f19u ) %] \
+		<option value="u" selected="selected">u Ikke kjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ikke kjent</option> \
+		[% END %] \
+	[% IF ( f19x ) %] \
+		<option value="x" selected="selected">x Fullstendig uregelmessig</option> \
+		[% ELSE %] \
+		<option value="x">x Fullstendig uregelmessig</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>20 ISSN-senter</td> \
+		 <td> \
+		 <select name="f20" id="f20" size="1"> \
+	[% IF ( f20 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f200 ) %] \
+		<option value="0" selected="selected">0 ISSN International Centre (Paris)</option> \
+		[% ELSE %] \
+		<option value="0">0 ISSN International Centre (Paris)</option> \
+		[% END %] \
+	[% IF ( f201 ) %] \
+		<option value="1" selected="selected">1 Forente stater</option> \
+		[% ELSE %] \
+		<option value="1">1 Forente stater</option> \
+		[% END %] \
+	[% IF ( f202 ) %] \
+		<option value="2" selected="selected">2 Storbritannia</option> \
+		[% ELSE %] \
+		<option value="2">2 Storbritannia</option> \
+		[% END %] \
+	[% IF ( f203 ) %] \
+		<option value="3" selected="selected">3 Australia</option> \
+		[% ELSE %] \
+		<option value="3">3 Australia</option> \
+		[% END %] \
+	[% IF ( f204 ) %] \
+		<option value="4" selected="selected">4 Canada</option> \
+		[% ELSE %] \
+		<option value="4">4 Canada</option> \
+		[% END %] \
+	[% IF ( f205 ) %] \
+		<option value="5" selected="selected">5 Moskva regionale senter</option> \
+		[% ELSE %] \
+		<option value="5">5 Moskva regionale senter</option> \
+		[% END %] \
+	[% IF ( f206 ) %] \
+		<option value="6" selected="selected">6 Tyskland</option> \
+		[% ELSE %] \
+		<option value="6">6 Tyskland</option> \
+		[% END %] \
+	[% IF ( f207 ) %] \
+		<option value="7" selected="selected">7 Frankrike</option> \
+		[% ELSE %] \
+		<option value="7">7 Frankrike</option> \
+		[% END %] \
+	[% IF ( f20a ) %] \
+		<option value="a" selected="selected">a Finland</option> \
+		[% ELSE %] \
+		<option value="a">a Finland</option> \
+		[% END %] \
+	[% IF ( f20f ) %] \
+		<option value="f" selected="selected">f Sverige</option> \
+		[% ELSE %] \
+		<option value="f">f Sverige</option> \
+		[% END %] \
+	[% IF ( f20h ) %] \
+		<option value="h" selected="selected">h Danmark</option> \
+		[% ELSE %] \
+		<option value="h">h Danmark</option> \
+		[% END %] \
+	[% IF ( f20r ) %] \
+		<option value="r" selected="selected">r Norge</option> \
+		[% ELSE %] \
+		<option value="r">r Norge</option> \
+		[% END %] \
+	[% IF ( f20z ) %] \
+		<option value="z" selected="selected">z Andre ISSN-sentre</option> \
+		[% ELSE %] \
+		<option value="z">z Andre ISSN-sentre</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>21 Type periodikum</td> \
+		 <td> \
+		 <select name="f21" id="f21" size="1"> \
+	[% IF ( f21 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f21a ) %] \
+		<option value="a" selected="selected">a Årbok</option> \
+		[% ELSE %] \
+		<option value="a">a Årbok</option> \
+		[% END %] \
+	[% IF ( f21m ) %] \
+		<option value="m" selected="selected">m Monografiserie</option> \
+		[% ELSE %] \
+		<option value="m">m Monografiserie</option> \
+		[% END %] \
+	[% IF ( f21n ) %] \
+		<option value="n" selected="selected">n Avis</option> \
+		[% ELSE %] \
+		<option value="n">n Avis</option> \
+		[% END %] \
+	[% IF ( f21p ) %] \
+		<option value="p" selected="selected">p Tidsskrift</option> \
+		[% ELSE %] \
+		<option value="p">p Tidsskrift</option> \
+		[% END %] \
+	[% IF ( f21z ) %] \
+		<option value="z" selected="selected">z Andre typer periodika</option> \
+		[% ELSE %] \
+		<option value="z">z Andre typer periodika</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	[% IF ( f22 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f22a ) %] \
+		<option value="a" selected="selected">a Voksne</option> \
+		[% ELSE %] \
+		<option value="a">a Voksne</option> \
+		[% END %] \
+	[% IF ( f22b ) %] \
+		<option value="b" selected="selected">b Tegneserier for voksne</option> \
+		[% ELSE %] \
+		<option value="b">b Tegneserier for voksne</option> \
+		[% END %] \
+	[% IF ( f22f ) %] \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		[% ELSE %] \
+		<option value="f">f Spesialisert</option> \
+		[% END %] \
+	[% IF ( f22g ) %] \
+		<option value="g" selected="selected">g Generell</option> \
+		[% ELSE %] \
+		<option value="g">g Generell</option> \
+		[% END %] \
+	[% IF ( f22j ) %] \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		[% ELSE %] \
+		<option value="j">j Barn og ungdom</option> \
+		[% END %] \
+	[% IF ( f22k ) %] \
+		<option value="k" selected="selected">k Tegneserier</option> \
+		[% ELSE %] \
+		<option value="k">k Tegneserier</option> \
+		[% END %] \
+	[% IF ( f22l ) %] \
+		<option value="l" selected="selected">l Barn i alderen til og med 5 år</option> \
+		[% ELSE %] \
+		<option value="l">l Barn i alderen til og med 5 år</option> \
+		[% END %] \
+	[% IF ( f22m ) %] \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22n ) %] \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22o ) %] \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22p ) %] \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		[% ELSE %] \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		[% END %] \
+	[% IF ( f22q ) %] \
+		<option value="q" selected="selected">q Lettlest</option> \
+		[% ELSE %] \
+		<option value="q">q Lettlest</option> \
+		[% END %] \
+	[% IF ( f22r ) %] \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		[% ELSE %] \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		[% END %] \
+	[% IF ( f22s ) %] \
+		<option value="s" selected="selected">s Storskrift</option> \
+		[% ELSE %] \
+		<option value="s">s Storskrift</option> \
+		[% END %] \
+	[% IF ( f22u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+	[% IF ( f22v ) %] \
+		<option value="v" selected="selected">v Tegneserier for barn i alderen til og med 5 år</option> \
+		[% ELSE %] \
+		<option value="v">v Tegneserier for barn i alderen til og med 5 år</option> \
+		[% END %] \
+	[% IF ( f22w ) %] \
+		<option value="w" selected="selected">w Tegneserier for elever på 1. til 3. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="w">w Tegneserier for elever på 1. til 3. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22x ) %] \
+		<option value="x" selected="selected">x Tegneserier for elever på 4. og 5. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="x">x Tegneserier for elever på 4. og 5. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22y ) %] \
+		<option value="y" selected="selected">y Tegneserier for elever på 6. og 7. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="y">y Tegneserier for elever på 6. og 7. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22z ) %] \
+		<option value="z" selected="selected">z Tegneserier for elever på ungdomstrinnet</option> \
+		[% ELSE %] \
+		<option value="z">z Tegneserier for elever på ungdomstrinnet</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Materialform</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	[% IF ( f23 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f23a ) %] \
+		<option value="a" selected="selected">a Mikrofilm</option> \
+		[% ELSE %] \
+		<option value="a">a Mikrofilm</option> \
+		[% END %] \
+	[% IF ( f23b ) %] \
+		<option value="b" selected="selected">b Mikrofilmkort</option> \
+		[% ELSE %] \
+		<option value="b">b Mikrofilmkort</option> \
+		[% END %] \
+	[% IF ( f23c ) %] \
+		<option value="c" selected="selected">c Mikro-opak</option> \
+		[% ELSE %] \
+		<option value="c">c Mikro-opak</option> \
+		[% END %] \
+	[% IF ( f23f ) %] \
+		<option value="f" selected="selected">f Braille</option> \
+		[% ELSE %] \
+		<option value="f">f Braille</option> \
+		[% END %] \
+	[% IF ( f23r ) %] \
+		<option value="r" selected="selected">r Ordinært trykk (øye-lesbar)</option> \
+		[% ELSE %] \
+		<option value="r">r Ordinært trykk (øye-lesbar)</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>24 Innhold</td> \
+		 <td> \
+		 <select name="f24" id="f24" size="1"> \
+	[% IF ( f24 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f24a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f24b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f24c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f24d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f24e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f24f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f24h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f24i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f24k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f24l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f24m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f24n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f24o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f24q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f24r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f24s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f24t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f24x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f24z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>25 Innhold</td> \
+		 <td> \
+		 <select name="f25" id="f25" size="1"> \
+	[% IF ( f25 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f25a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f25b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f25c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f25d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f25e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f25f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f25h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f25i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f25k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f25l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f25m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f25n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f25o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f25q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f25r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f25s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f25t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f25x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f25z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Innhold</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	[% IF ( f26 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f26a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f26b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f26c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f26d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f26e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f26f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f26h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f26i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f26k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f26l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f26m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f26n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f26o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f26q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f26r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f26s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f26t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f26x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f26z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>27 Innhold</td> \
+		 <td> \
+		 <select name="f27" id="f27" size="1"> \
+	[% IF ( f27 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f27a ) %] \
+		<option value="a" selected="selected">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% ELSE %] \
+		<option value="a">a Sammendrag(abstracts)/Referatorganer</option> \
+		[% END %] \
+	[% IF ( f27b ) %] \
+		<option value="b" selected="selected">b Bibliografier</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografier</option> \
+		[% END %] \
+	[% IF ( f27c ) %] \
+		<option value="c" selected="selected">c Kataloger</option> \
+		[% ELSE %] \
+		<option value="c">c Kataloger</option> \
+		[% END %] \
+	[% IF ( f27d ) %] \
+		<option value="d" selected="selected">d Ordbøker</option> \
+		[% ELSE %] \
+		<option value="d">d Ordbøker</option> \
+		[% END %] \
+	[% IF ( f27e ) %] \
+		<option value="e" selected="selected">e Konversasjonsleksika</option> \
+		[% ELSE %] \
+		<option value="e">e Konversasjonsleksika</option> \
+		[% END %] \
+	[% IF ( f27f ) %] \
+		<option value="f" selected="selected">f Håndbøker</option> \
+		[% ELSE %] \
+		<option value="f">f Håndbøker</option> \
+		[% END %] \
+	[% IF ( f27h ) %] \
+		<option value="h" selected="selected">h Referanseverk</option> \
+		[% ELSE %] \
+		<option value="h">h Referanseverk</option> \
+		[% END %] \
+	[% IF ( f27i ) %] \
+		<option value="i" selected="selected">i Registre</option> \
+		[% ELSE %] \
+		<option value="i">i Registre</option> \
+		[% END %] \
+	[% IF ( f27k ) %] \
+		<option value="k" selected="selected">k Diskografier</option> \
+		[% ELSE %] \
+		<option value="k">k Diskografier</option> \
+		[% END %] \
+	[% IF ( f27l ) %] \
+		<option value="l" selected="selected">l Lover og forskrifter</option> \
+		[% ELSE %] \
+		<option value="l">l Lover og forskrifter</option> \
+		[% END %] \
+	[% IF ( f27m ) %] \
+		<option value="m" selected="selected">m Hovedoppgaver/diplomoppgaver</option> \
+		[% ELSE %] \
+		<option value="m">m Hovedoppgaver/diplomoppgaver</option> \
+		[% END %] \
+	[% IF ( f27n ) %] \
+		<option value="n" selected="selected">n Oversiktsverker innenfor et emne</option> \
+		[% ELSE %] \
+		<option value="n">n Oversiktsverker innenfor et emne</option> \
+		[% END %] \
+	[% IF ( f27o ) %] \
+		<option value="o" selected="selected">o Anmeldelser</option> \
+		[% ELSE %] \
+		<option value="o">o Anmeldelser</option> \
+		[% END %] \
+	[% IF ( f27q ) %] \
+		<option value="q" selected="selected">q Filmografier</option> \
+		[% ELSE %] \
+		<option value="q">q Filmografier</option> \
+		[% END %] \
+	[% IF ( f27r ) %] \
+		<option value="r" selected="selected">r Adressebøker</option> \
+		[% ELSE %] \
+		<option value="r">r Adressebøker</option> \
+		[% END %] \
+	[% IF ( f27s ) %] \
+		<option value="s" selected="selected">s Statistikker</option> \
+		[% ELSE %] \
+		<option value="s">s Statistikker</option> \
+		[% END %] \
+	[% IF ( f27t ) %] \
+		<option value="t" selected="selected">t Tekniske rapporter</option> \
+		[% ELSE %] \
+		<option value="t">t Tekniske rapporter</option> \
+		[% END %] \
+	[% IF ( f27x ) %] \
+		<option value="x" selected="selected">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% ELSE %] \
+		<option value="x">x Doktoravhandlinger/lisensiat-avhandlinger</option> \
+		[% END %] \
+	[% IF ( f27z ) %] \
+		<option value="z" selected="selected">z Ingen av de nevnte typene innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Ingen av de nevnte typene innhold</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	[% IF ( f28 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f280 ) %] \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f281 ) %] \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="1">1 Offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f28b ) %] \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="b">b Kommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28c ) %] \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28d ) %] \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% ELSE %] \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% END %] \
+	[% IF ( f28e ) %] \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% ELSE %] \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>29 Konferanse</td> \
+		 <td> \
+		 <select name="f29" id="f29" size="1"> \
+	[% IF ( f29 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f290 ) %] \
+		<option value="0" selected="selected">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		[% ELSE %] \
+		<option value="0">0 Dokumentet er ikke en konferansepublikasjon</option> \
+		[% END %] \
+	[% IF ( f291 ) %] \
+		<option value="1" selected="selected">1 Dokumentet er en konferansepublikasjon</option> \
+		[% ELSE %] \
+		<option value="1">1 Dokumentet er en konferansepublikasjon</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>30 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>31 Register</td> \
+		 <td> \
+		 <select name="f31" id="f31" size="1"> \
+	[% IF ( f31 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f310 ) %] \
+		<option value="0" selected="selected">0 Dokumentet har ikke register</option> \
+		[% ELSE %] \
+		<option value="0">0 Dokumentet har ikke register</option> \
+		[% END %] \
+	[% IF ( f311 ) %] \
+		<option value="1" selected="selected">1 Dokumentet har register</option> \
+		[% ELSE %] \
+		<option value="1">1 Dokumentet har register</option> \
+		[% END %] \
+	[% IF ( f31b ) %] \
+		<option value="b" selected="selected">b Register for hele bindet finnes i bindets siste hefte</option> \
+		[% ELSE %] \
+		<option value="b">b Register for hele bindet finnes i bindets siste hefte</option> \
+		[% END %] \
+	[% IF ( f31e ) %] \
+		<option value="e" selected="selected">e Register for hele bindet finnes i første hefte av neste bind</option> \
+		[% ELSE %] \
+		<option value="e">e Register for hele bindet finnes i første hefte av neste bind</option> \
+		[% END %] \
+	[% IF ( f31h ) %] \
+		<option value="h" selected="selected">h Registeret utgis separat</option> \
+		[% ELSE %] \
+		<option value="h">h Registeret utgis separat</option> \
+		[% END %] \
+	[% IF ( f31z ) %] \
+		<option value="z" selected="selected">z Registeret tilgjengelig på annet vis</option> \
+		[% ELSE %] \
+		<option value="z">z Registeret tilgjengelig på annet vis</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 <tr> \
+		 <td>32 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>33 Tittelens originale alfabet eller skriftsystem</td> \
+		 <td> \
+		 <select name="f33" id="f33" size="1"> \
+	[% IF ( f33 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f33a ) %] \
+		<option value="a" selected="selected">a Grunnleggende latinsk alfabet</option> \
+		[% ELSE %] \
+		<option value="a">a Grunnleggende latinsk alfabet</option> \
+		[% END %] \
+	[% IF ( f33b ) %] \
+		<option value="b" selected="selected">b Utvidet latinsk alfabet</option> \
+		[% ELSE %] \
+		<option value="b">b Utvidet latinsk alfabet</option> \
+		[% END %] \
+	[% IF ( f33c ) %] \
+		<option value="c" selected="selected">c Kyrillisk alfabet</option> \
+		[% ELSE %] \
+		<option value="c">c Kyrillisk alfabet</option> \
+		[% END %] \
+	[% IF ( f33d ) %] \
+		<option value="d" selected="selected">d Japanske tegn</option> \
+		[% ELSE %] \
+		<option value="d">d Japanske tegn</option> \
+		[% END %] \
+	[% IF ( f33e ) %] \
+		<option value="e" selected="selected">e Kinesiske tegn</option> \
+		[% ELSE %] \
+		<option value="e">e Kinesiske tegn</option> \
+		[% END %] \
+	[% IF ( f33f ) %] \
+		<option value="f" selected="selected">f Arabisk alfabet</option> \
+		[% ELSE %] \
+		<option value="f">f Arabisk alfabet</option> \
+		[% END %] \
+	[% IF ( f33g ) %] \
+		<option value="g" selected="selected">g Gresk alfabet</option> \
+		[% ELSE %] \
+		<option value="g">g Gresk alfabet</option> \
+		[% END %] \
+	[% IF ( f33h ) %] \
+		<option value="h" selected="selected">h Hebraisk alfabet</option> \
+		[% ELSE %] \
+		<option value="h">h Hebraisk alfabet</option> \
+		[% END %] \
+	[% IF ( f33i ) %] \
+		<option value="i" selected="selected">i Thai</option> \
+		[% ELSE %] \
+		<option value="i">i Thai</option> \
+		[% END %] \
+	[% IF ( f33j ) %] \
+		<option value="j" selected="selected">j Devanagari</option> \
+		[% ELSE %] \
+		<option value="j">j Devanagari</option> \
+		[% END %] \
+	[% IF ( f33k ) %] \
+		<option value="k" selected="selected">k Koreansk alfabet</option> \
+		[% ELSE %] \
+		<option value="k">k Koreansk alfabet</option> \
+		[% END %] \
+	[% IF ( f33l ) %] \
+		<option value="l" selected="selected">l Tamil</option> \
+		[% ELSE %] \
+		<option value="l">l Tamil</option> \
+		[% END %] \
+	[% IF ( f33m ) %] \
+		<option value="m" selected="selected">m Gotisk skrift</option> \
+		[% ELSE %] \
+		<option value="m">m Gotisk skrift</option> \
+		[% END %] \
+	[% IF ( f33u ) %] \
+		<option value="u" selected="selected">u Ukjent eller uanvendelig</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent eller uanvendelig</option> \
+		[% END %] \
+	[% IF ( f33z ) %] \
+		<option value="z" selected="selected">z Andre alfabeter eller skriftsystemer</option> \
+		[% ELSE %] \
+		<option value="z">z Andre alfabeter eller skriftsystemer</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 		 <tr> \
+		 <td>34 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f34" id="f34" value=" " /> \
+		 </td></tr> \
+		 </table>';
+    break;
+  case "fil":
+    divOutput.innerHTML='<table> \
+		 <tr> \
+		 <td>18-21 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f18" id="f18" value=" " /> \
+		 <input type="hidden" name="f19" id="f19" value=" " /> \
+		 <input type="hidden" name="f20" id="f20" value=" " /> \
+		 <input type="hidden" name="f21" id="f21" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	[% IF ( f22 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f221 ) %] \
+		<option value="1" selected="selected">1 Barn i alderen til og med 5 år</option> \
+		[% ELSE %] \
+		<option value="1">1 Barn i alderen til og med 5 år</option> \
+		[% END %] \
+	[% IF ( f22a ) %] \
+		<option value="a" selected="selected">a Voksne</option> \
+		[% ELSE %] \
+		<option value="a">a Voksne</option> \
+		[% END %] \
+	[% IF ( f22f ) %] \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		[% ELSE %] \
+		<option value="f">f Spesialisert</option> \
+		[% END %] \
+	[% IF ( f22g ) %] \
+		<option value="g" selected="selected">g Generell</option> \
+		[% ELSE %] \
+		<option value="g">g Generell</option> \
+		[% END %] \
+	[% IF ( f22j ) %] \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		[% ELSE %] \
+		<option value="j">j Barn og ungdom</option> \
+		[% END %] \
+	[% IF ( f22m ) %] \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22n ) %] \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22o ) %] \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22p ) %] \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		[% ELSE %] \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		[% END %] \
+	[% IF ( f22q ) %] \
+		<option value="q" selected="selected">q Lettlest</option> \
+		[% ELSE %] \
+		<option value="q">q Lettlest</option> \
+		[% END %] \
+	[% IF ( f22r ) %] \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		[% ELSE %] \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		[% END %] \
+	[% IF ( f22s ) %] \
+		<option value="s" selected="selected">s Storskrift</option> \
+		[% ELSE %] \
+		<option value="s">s Storskrift</option> \
+		[% END %] \
+	[% IF ( f22u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23-25 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f23" id="f23" value=" " /> \
+		 <input type="hidden" name="f24" id="f24" value=" " /> \
+		 <input type="hidden" name="f25" id="f25" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Type data</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	[% IF ( f26 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f26a ) %] \
+		<option value="a" selected="selected">a Numeriske data</option> \
+		[% ELSE %] \
+		<option value="a">a Numeriske data</option> \
+		[% END %] \
+	[% IF ( f26b ) %] \
+		<option value="b" selected="selected">b Programvare</option> \
+		[% ELSE %] \
+		<option value="b">b Programvare</option> \
+		[% END %] \
+	[% IF ( f26c ) %] \
+		<option value="c" selected="selected">c Grafiske data</option> \
+		[% ELSE %] \
+		<option value="c">c Grafiske data</option> \
+		[% END %] \
+	[% IF ( f26d ) %] \
+		<option value="d" selected="selected">d Tekst</option> \
+		[% ELSE %] \
+		<option value="d">d Tekst</option> \
+		[% END %] \
+	[% IF ( f26e ) %] \
+		<option value="e" selected="selected">e Bibliografiske data</option> \
+		[% ELSE %] \
+		<option value="e">e Bibliografiske data</option> \
+		[% END %] \
+	[% IF ( f26f ) %] \
+		<option value="f" selected="selected">f Font</option> \
+		[% ELSE %] \
+		<option value="f">f Font</option> \
+		[% END %] \
+	[% IF ( f26g ) %] \
+		<option value="g" selected="selected">g Spill</option> \
+		[% ELSE %] \
+		<option value="g">g Spill</option> \
+		[% END %] \
+	[% IF ( f26h ) %] \
+		<option value="h" selected="selected">h Lyd</option> \
+		[% ELSE %] \
+		<option value="h">h Lyd</option> \
+		[% END %] \
+	[% IF ( f26i ) %] \
+		<option value="i" selected="selected">i Interaktivt multimedium</option> \
+		[% ELSE %] \
+		<option value="i">i Interaktivt multimedium</option> \
+		[% END %] \
+	[% IF ( f26j ) %] \
+		<option value="j" selected="selected">j Online tjeneste</option> \
+		[% ELSE %] \
+		<option value="j">j Online tjeneste</option> \
+		[% END %] \
+	[% IF ( f26m ) %] \
+		<option value="m" selected="selected">m En kombinasjon av to eller flere av de ovennevnte</option> \
+		[% ELSE %] \
+		<option value="m">m En kombinasjon av to eller flere av de ovennevnte</option> \
+		[% END %] \
+	[% IF ( f26u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+	[% IF ( f26z ) %] \
+		<option value="z" selected="selected">z Annen type data</option> \
+		[% ELSE %] \
+		<option value="z">z Annen type data</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 <tr> \
+		 <td>27 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f27" id="f27" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	[% IF ( f28 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f280 ) %] \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f281 ) %] \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="1">1 Offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f28b ) %] \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="b">b Kommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28c ) %] \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28d ) %] \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% ELSE %] \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% END %] \
+	[% IF ( f28e ) %] \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% ELSE %] \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 		 <tr> \
+		 <td>29-34 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f29" id="f29" value=" " /> \
+ 		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 <input type="hidden" name="f31" id="f31" value=" " /> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 <input type="hidden" name="f33" id="f33" value=" " /> \
+		 <input type="hidden" name="f34" id="f34" value=" " /> \
+		 </td></tr> \
+		</table>';
+		break;
+  case "mus":
+    divOutput.innerHTML='<table> \
+		 		 		 <tr> \
+		 <td>18-19 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f18" id="f18" value=" " /> \
+ 		 <input type="hidden" name="f19" id="f19" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>20 Format</td> \
+		 <td> \
+		 <select name="f20" id="f20" size="1"> \
+	[% IF ( f20 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f20a ) %] \
+		<option value="a" selected="selected">a Partitur</option> \
+		[% ELSE %] \
+		<option value="a">a Partitur</option> \
+		[% END %] \
+	[% IF ( f20b ) %] \
+		<option value="b" selected="selected">b Studiepartitur</option> \
+		[% ELSE %] \
+		<option value="b">b Studiepartitur</option> \
+		[% END %] \
+	[% IF ( f20c ) %] \
+		<option value="c" selected="selected">c Klaverpartitur</option> \
+		[% ELSE %] \
+		<option value="c">c Klaverpartitur</option> \
+		[% END %] \
+	[% IF ( f20d ) %] \
+		<option value="d" selected="selected">d Korpartitur</option> \
+		[% ELSE %] \
+		<option value="d">d Korpartitur</option> \
+		[% END %] \
+	[% IF ( f20e ) %] \
+		<option value="e" selected="selected">e Particell eller direksjonsstemme for klaver/fiolin o.l.</option> \
+		[% ELSE %] \
+		<option value="e">e Particell eller direksjonsstemme for klaver/fiolin o.l.</option> \
+		[% END %] \
+	[% IF ( f20g ) %] \
+		<option value="g" selected="selected">g Enhetspartitur</option> \
+		[% ELSE %] \
+		<option value="g">g Enhetspartitur</option> \
+		[% END %] \
+	[% IF ( f20m ) %] \
+		<option value="m" selected="selected">m Forskjellige typer partitur</option> \
+		[% ELSE %] \
+		<option value="m">m Forskjellige typer partitur</option> \
+		[% END %] \
+	[% IF ( f20u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+	[% IF ( f20z ) %] \
+		<option value="z" selected="selected">z Annet enn partitur</option> \
+		[% ELSE %] \
+		<option value="z">z Annet enn partitur</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>21 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f21" id="f21" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	[% IF ( f22 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f221 ) %] \
+		<option value="1" selected="selected">1 Barn i alderen til og med 5 år</option> \
+		[% ELSE %] \
+		<option value="1">1 Barn i alderen til og med 5 år</option> \
+		[% END %] \
+	[% IF ( f22a ) %] \
+		<option value="a" selected="selected">a Voksne</option> \
+		[% ELSE %] \
+		<option value="a">a Voksne</option> \
+		[% END %] \
+	[% IF ( f22f ) %] \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		[% ELSE %] \
+		<option value="f">f Spesialisert</option> \
+		[% END %] \
+	[% IF ( f22g ) %] \
+		<option value="g" selected="selected">g Generell</option> \
+		[% ELSE %] \
+		<option value="g">g Generell</option> \
+		[% END %] \
+	[% IF ( f22j ) %] \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		[% ELSE %] \
+		<option value="j">j Barn og ungdom</option> \
+		[% END %] \
+	[% IF ( f22m ) %] \
+		<option value="m" selected="selected">m Elever på 1. til 3. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="m">m Elever på 1. til 3. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22n ) %] \
+		<option value="n" selected="selected">n Elever på 4. og 5. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="n">n Elever på 4. og 5. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22o ) %] \
+		<option value="o" selected="selected">o Elever på 6. og 7. klassetrinn</option> \
+		[% ELSE %] \
+		<option value="o">o Elever på 6. og 7. klassetrinn</option> \
+		[% END %] \
+	[% IF ( f22p ) %] \
+		<option value="p" selected="selected">p Elever på ungdomstrinnet</option> \
+		[% ELSE %] \
+		<option value="p">p Elever på ungdomstrinnet</option> \
+		[% END %] \
+	[% IF ( f22q ) %] \
+		<option value="q" selected="selected">q Lettlest</option> \
+		[% ELSE %] \
+		<option value="q">q Lettlest</option> \
+		[% END %] \
+	[% IF ( f22r ) %] \
+		<option value="r" selected="selected">r For psykisk utviklingshemmede</option> \
+		[% ELSE %] \
+		<option value="r">r For psykisk utviklingshemmede</option> \
+		[% END %] \
+	[% IF ( f22s ) %] \
+		<option value="s" selected="selected">s Storskrift</option> \
+		[% ELSE %] \
+		<option value="s">s Storskrift</option> \
+		[% END %] \
+	[% IF ( f22u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Materialform</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	[% IF ( f23 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f23a ) %] \
+		<option value="a" selected="selected">a Mikrofilm</option> \
+		[% ELSE %] \
+		<option value="a">a Mikrofilm</option> \
+		[% END %] \
+	[% IF ( f23b ) %] \
+		<option value="b" selected="selected">b Mikrofilmkort</option> \
+		[% ELSE %] \
+		<option value="b">b Mikrofilmkort</option> \
+		[% END %] \
+	[% IF ( f23c ) %] \
+		<option value="c" selected="selected">c Mikro-opak</option> \
+		[% ELSE %] \
+		<option value="c">c Mikro-opak</option> \
+		[% END %] \
+	[% IF ( f23f ) %] \
+		<option value="f" selected="selected">f Braille</option> \
+		[% ELSE %] \
+		<option value="f">f Braille</option> \
+		[% END %] \
+	[% IF ( f23r ) %] \
+		<option value="r" selected="selected">r Ordinært trykk (øye-lesbar)</option> \
+		[% ELSE %] \
+		<option value="r">r Ordinært trykk (øye-lesbar)</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>24 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f24" id="f24" size="1"> \
+	[% IF ( f24 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f24a ) %] \
+		<option value="a" selected="selected">a Diskografi</option> \
+		[% ELSE %] \
+		<option value="a">a Diskografi</option> \
+		[% END %] \
+	[% IF ( f24b ) %] \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografi</option> \
+		[% END %] \
+	[% IF ( f24c ) %] \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		[% ELSE %] \
+		<option value="c">c Verkfortegnelse</option> \
+		[% END %] \
+	[% IF ( f24d ) %] \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		[% ELSE %] \
+		<option value="d">d Libretto eller tekst</option> \
+		[% END %] \
+	[% IF ( f24e ) %] \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		[% ELSE %] \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		[% END %] \
+	[% IF ( f24f ) %] \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% ELSE %] \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% END %] \
+	[% IF ( f24g ) %] \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% ELSE %] \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% END %] \
+	[% IF ( f24h ) %] \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		[% ELSE %] \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		[% END %] \
+	[% IF ( f24i ) %] \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="i">i Historiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f24k ) %] \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="k">k Etnologiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f24n ) %] \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet ledsagende materiale</option> \
+		[% END %] \
+	[% IF ( f24r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f24s ) %] \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% ELSE %] \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% END %] \
+	[% IF ( f24z ) %] \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet ledsagende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>25 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f25" id="f25" size="1"> \
+	[% IF ( f25 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f25a ) %] \
+		<option value="a" selected="selected">a Diskografi</option> \
+		[% ELSE %] \
+		<option value="a">a Diskografi</option> \
+		[% END %] \
+	[% IF ( f25b ) %] \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografi</option> \
+		[% END %] \
+	[% IF ( f25c ) %] \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		[% ELSE %] \
+		<option value="c">c Verkfortegnelse</option> \
+		[% END %] \
+	[% IF ( f25d ) %] \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		[% ELSE %] \
+		<option value="d">d Libretto eller tekst</option> \
+		[% END %] \
+	[% IF ( f25e ) %] \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		[% ELSE %] \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		[% END %] \
+	[% IF ( f25f ) %] \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% ELSE %] \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% END %] \
+	[% IF ( f25g ) %] \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% ELSE %] \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% END %] \
+	[% IF ( f25h ) %] \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		[% ELSE %] \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		[% END %] \
+	[% IF ( f25i ) %] \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="i">i Historiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f25k ) %] \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="k">k Etnologiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f25n ) %] \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet ledsagende materiale</option> \
+		[% END %] \
+	[% IF ( f25r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f25s ) %] \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% ELSE %] \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% END %] \
+	[% IF ( f25z ) %] \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet ledsagende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	[% IF ( f26 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f26a ) %] \
+		<option value="a" selected="selected">a Diskografi</option> \
+		[% ELSE %] \
+		<option value="a">a Diskografi</option> \
+		[% END %] \
+	[% IF ( f26b ) %] \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografi</option> \
+		[% END %] \
+	[% IF ( f26c ) %] \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		[% ELSE %] \
+		<option value="c">c Verkfortegnelse</option> \
+		[% END %] \
+	[% IF ( f26d ) %] \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		[% ELSE %] \
+		<option value="d">d Libretto eller tekst</option> \
+		[% END %] \
+	[% IF ( f26e ) %] \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		[% ELSE %] \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		[% END %] \
+	[% IF ( f26f ) %] \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% ELSE %] \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% END %] \
+	[% IF ( f26g ) %] \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% ELSE %] \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% END %] \
+	[% IF ( f26h ) %] \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		[% ELSE %] \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		[% END %] \
+	[% IF ( f26i ) %] \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="i">i Historiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f26k ) %] \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="k">k Etnologiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f26n ) %] \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet ledsagende materiale</option> \
+		[% END %] \
+	[% IF ( f26r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f26s ) %] \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% ELSE %] \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% END %] \
+	[% IF ( f26z ) %] \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet ledsagende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>27 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f27" id="f27" size="1"> \
+	[% IF ( f27 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f27a ) %] \
+		<option value="a" selected="selected">a Diskografi</option> \
+		[% ELSE %] \
+		<option value="a">a Diskografi</option> \
+		[% END %] \
+	[% IF ( f27b ) %] \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografi</option> \
+		[% END %] \
+	[% IF ( f27c ) %] \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		[% ELSE %] \
+		<option value="c">c Verkfortegnelse</option> \
+		[% END %] \
+	[% IF ( f27d ) %] \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		[% ELSE %] \
+		<option value="d">d Libretto eller tekst</option> \
+		[% END %] \
+	[% IF ( f27e ) %] \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		[% ELSE %] \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		[% END %] \
+	[% IF ( f27f ) %] \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% ELSE %] \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% END %] \
+	[% IF ( f27g ) %] \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% ELSE %] \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% END %] \
+	[% IF ( f27h ) %] \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		[% ELSE %] \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		[% END %] \
+	[% IF ( f27i ) %] \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="i">i Historiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f27k ) %] \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="k">k Etnologiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f27n ) %] \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet ledsagende materiale</option> \
+		[% END %] \
+	[% IF ( f27r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f27s ) %] \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% ELSE %] \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% END %] \
+	[% IF ( f27z ) %] \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet ledsagende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	[% IF ( f28 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f28a ) %] \
+		<option value="a" selected="selected">a Diskografi</option> \
+		[% ELSE %] \
+		<option value="a">a Diskografi</option> \
+		[% END %] \
+	[% IF ( f28b ) %] \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografi</option> \
+		[% END %] \
+	[% IF ( f28c ) %] \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		[% ELSE %] \
+		<option value="c">c Verkfortegnelse</option> \
+		[% END %] \
+	[% IF ( f28d ) %] \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		[% ELSE %] \
+		<option value="d">d Libretto eller tekst</option> \
+		[% END %] \
+	[% IF ( f28e ) %] \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		[% ELSE %] \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		[% END %] \
+	[% IF ( f28f ) %] \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% ELSE %] \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% END %] \
+	[% IF ( f28g ) %] \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% ELSE %] \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% END %] \
+	[% IF ( f28h ) %] \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		[% ELSE %] \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		[% END %] \
+	[% IF ( f28i ) %] \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="i">i Historiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f28k ) %] \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="k">k Etnologiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f28n ) %] \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet ledsagende materiale</option> \
+		[% END %] \
+	[% IF ( f28r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f28s ) %] \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% ELSE %] \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% END %] \
+	[% IF ( f28z ) %] \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet ledsagende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>29 Ledsagende materiale</td> \
+		 <td> \
+		 <select name="f29" id="f29" size="1"> \
+	[% IF ( f29 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f29a ) %] \
+		<option value="a" selected="selected">a Diskografi</option> \
+		[% ELSE %] \
+		<option value="a">a Diskografi</option> \
+		[% END %] \
+	[% IF ( f29b ) %] \
+		<option value="b" selected="selected">b Bibliografi</option> \
+		[% ELSE %] \
+		<option value="b">b Bibliografi</option> \
+		[% END %] \
+	[% IF ( f29c ) %] \
+		<option value="c" selected="selected">c Verkfortegnelse</option> \
+		[% ELSE %] \
+		<option value="c">c Verkfortegnelse</option> \
+		[% END %] \
+	[% IF ( f29d ) %] \
+		<option value="d" selected="selected">d Libretto eller tekst</option> \
+		[% ELSE %] \
+		<option value="d">d Libretto eller tekst</option> \
+		[% END %] \
+	[% IF ( f29e ) %] \
+		<option value="e" selected="selected">e Biografi over komponist eller forfatter</option> \
+		[% ELSE %] \
+		<option value="e">e Biografi over komponist eller forfatter</option> \
+		[% END %] \
+	[% IF ( f29f ) %] \
+		<option value="f" selected="selected">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% ELSE %] \
+		<option value="f">f Biografi over utøver eller bakgrunnsmateriale om gruppen</option> \
+		[% END %] \
+	[% IF ( f29g ) %] \
+		<option value="g" selected="selected">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% ELSE %] \
+		<option value="g">g Tekniske og/eller historiske opplysninger om instrumentene</option> \
+		[% END %] \
+	[% IF ( f29h ) %] \
+		<option value="h" selected="selected">h Tekniske opplysninger om fremførelsen</option> \
+		[% ELSE %] \
+		<option value="h">h Tekniske opplysninger om fremførelsen</option> \
+		[% END %] \
+	[% IF ( f29i ) %] \
+		<option value="i" selected="selected">i Historiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="i">i Historiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f29k ) %] \
+		<option value="k" selected="selected">k Etnologiske opplysninger</option> \
+		[% ELSE %] \
+		<option value="k">k Etnologiske opplysninger</option> \
+		[% END %] \
+	[% IF ( f29n ) %] \
+		<option value="n" selected="selected">n Intet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet ledsagende materiale</option> \
+		[% END %] \
+	[% IF ( f29r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f29s ) %] \
+		<option value="s" selected="selected">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% ELSE %] \
+		<option value="s">s Noter eller partitur i et annet format enn hoveddokumentet</option> \
+		[% END %] \
+	[% IF ( f29z ) %] \
+		<option value="z" selected="selected">z Annet ledsagende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet ledsagende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>30 Innhold på lydopptak</td> \
+		 <td> \
+		 <select name="f30" id="f30" size="1"> \
+	[% IF ( f30 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f30a ) %] \
+		<option value="a" selected="selected">a Selvbiografier</option> \
+		[% ELSE %] \
+		<option value="a">a Selvbiografier</option> \
+		[% END %] \
+	[% IF ( f30b ) %] \
+		<option value="b" selected="selected">b Biografier</option> \
+		[% ELSE %] \
+		<option value="b">b Biografier</option> \
+		[% END %] \
+	[% IF ( f30c ) %] \
+		<option value="c" selected="selected">c Samtaler og diskusjoner</option> \
+		[% ELSE %] \
+		<option value="c">c Samtaler og diskusjoner</option> \
+		[% END %] \
+	[% IF ( f30d ) %] \
+		<option value="d" selected="selected">d Drama</option> \
+		[% ELSE %] \
+		<option value="d">d Drama</option> \
+		[% END %] \
+	[% IF ( f30e ) %] \
+		<option value="e" selected="selected">e Essays</option> \
+		[% ELSE %] \
+		<option value="e">e Essays</option> \
+		[% END %] \
+	[% IF ( f30f ) %] \
+		<option value="f" selected="selected">f Romaner</option> \
+		[% ELSE %] \
+		<option value="f">f Romaner</option> \
+		[% END %] \
+	[% IF ( f30g ) %] \
+		<option value="g" selected="selected">g Rapporter, referater</option> \
+		[% ELSE %] \
+		<option value="g">g Rapporter, referater</option> \
+		[% END %] \
+	[% IF ( f30h ) %] \
+		<option value="h" selected="selected">h Fortellinger, noveller</option> \
+		[% ELSE %] \
+		<option value="h">h Fortellinger, noveller</option> \
+		[% END %] \
+	[% IF ( f30i ) %] \
+		<option value="i" selected="selected">i Undervisning</option> \
+		[% ELSE %] \
+		<option value="i">i Undervisning</option> \
+		[% END %] \
+	[% IF ( f30j ) %] \
+		<option value="j" selected="selected">j Språkundervisning</option> \
+		[% ELSE %] \
+		<option value="j">j Språkundervisning</option> \
+		[% END %] \
+	[% IF ( f30k ) %] \
+		<option value="k" selected="selected">k Komedier</option> \
+		[% ELSE %] \
+		<option value="k">k Komedier</option> \
+		[% END %] \
+	[% IF ( f30l ) %] \
+		<option value="l" selected="selected">l Foredrag, taler</option> \
+		[% ELSE %] \
+		<option value="l">l Foredrag, taler</option> \
+		[% END %] \
+	[% IF ( f30m ) %] \
+		<option value="m" selected="selected">m Memoarer</option> \
+		[% ELSE %] \
+		<option value="m">m Memoarer</option> \
+		[% END %] \
+	[% IF ( f30o ) %] \
+		<option value="o" selected="selected">o Eventyr</option> \
+		[% ELSE %] \
+		<option value="o">o Eventyr</option> \
+		[% END %] \
+	[% IF ( f30p ) %] \
+		<option value="p" selected="selected">p Dikt</option> \
+		[% ELSE %] \
+		<option value="p">p Dikt</option> \
+		[% END %] \
+	[% IF ( f30r ) %] \
+		<option value="r" selected="selected">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		[% ELSE %] \
+		<option value="r">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		[% END %] \
+	[% IF ( f30s ) %] \
+		<option value="s" selected="selected">s Lyder (f.eks. fuglelyder)</option> \
+		[% ELSE %] \
+		<option value="s">s Lyder (f.eks. fuglelyder)</option> \
+		[% END %] \
+	[% IF ( f30t ) %] \
+		<option value="t" selected="selected">t Intervjuer</option> \
+		[% ELSE %] \
+		<option value="t">t Intervjuer</option> \
+		[% END %] \
+	[% IF ( f30z ) %] \
+		<option value="z" selected="selected">z Andre typer innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Andre typer innhold</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>31 Innhold på lydopptak</td> \
+		 <td> \
+		 <select name="f31" id="f31" size="1"> \
+	[% IF ( f31 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f31a ) %] \
+		<option value="a" selected="selected">a Selvbiografier</option> \
+		[% ELSE %] \
+		<option value="a">a Selvbiografier</option> \
+		[% END %] \
+	[% IF ( f31b ) %] \
+		<option value="b" selected="selected">b Biografier</option> \
+		[% ELSE %] \
+		<option value="b">b Biografier</option> \
+		[% END %] \
+	[% IF ( f31c ) %] \
+		<option value="c" selected="selected">c Samtaler og diskusjoner</option> \
+		[% ELSE %] \
+		<option value="c">c Samtaler og diskusjoner</option> \
+		[% END %] \
+	[% IF ( f31d ) %] \
+		<option value="d" selected="selected">d Drama</option> \
+		[% ELSE %] \
+		<option value="d">d Drama</option> \
+		[% END %] \
+	[% IF ( f31e ) %] \
+		<option value="e" selected="selected">e Essays</option> \
+		[% ELSE %] \
+		<option value="e">e Essays</option> \
+		[% END %] \
+	[% IF ( f31f ) %] \
+		<option value="f" selected="selected">f Romaner</option> \
+		[% ELSE %] \
+		<option value="f">f Romaner</option> \
+		[% END %] \
+	[% IF ( f31g ) %] \
+		<option value="g" selected="selected">g Rapporter, referater</option> \
+		[% ELSE %] \
+		<option value="g">g Rapporter, referater</option> \
+		[% END %] \
+	[% IF ( f31h ) %] \
+		<option value="h" selected="selected">h Fortellinger, noveller</option> \
+		[% ELSE %] \
+		<option value="h">h Fortellinger, noveller</option> \
+		[% END %] \
+	[% IF ( f31i ) %] \
+		<option value="i" selected="selected">i Undervisning</option> \
+		[% ELSE %] \
+		<option value="i">i Undervisning</option> \
+		[% END %] \
+	[% IF ( f31j ) %] \
+		<option value="j" selected="selected">j Språkundervisning</option> \
+		[% ELSE %] \
+		<option value="j">j Språkundervisning</option> \
+		[% END %] \
+	[% IF ( f31k ) %] \
+		<option value="k" selected="selected">k Komedier</option> \
+		[% ELSE %] \
+		<option value="k">k Komedier</option> \
+		[% END %] \
+	[% IF ( f31l ) %] \
+		<option value="l" selected="selected">l Foredrag, taler</option> \
+		[% ELSE %] \
+		<option value="l">l Foredrag, taler</option> \
+		[% END %] \
+	[% IF ( f31m ) %] \
+		<option value="m" selected="selected">m Memoarer</option> \
+		[% ELSE %] \
+		<option value="m">m Memoarer</option> \
+		[% END %] \
+	[% IF ( f31o ) %] \
+		<option value="o" selected="selected">o Eventyr</option> \
+		[% ELSE %] \
+		<option value="o">o Eventyr</option> \
+		[% END %] \
+	[% IF ( f31p ) %] \
+		<option value="p" selected="selected">p Dikt</option> \
+		[% ELSE %] \
+		<option value="p">p Dikt</option> \
+		[% END %] \
+	[% IF ( f31r ) %] \
+		<option value="r" selected="selected">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		[% ELSE %] \
+		<option value="r">r Fremføring av alle typer ikke-musikalske produksjoner</option> \
+		[% END %] \
+	[% IF ( f31s ) %] \
+		<option value="s" selected="selected">s Lyder (f.eks. fuglelyder)</option> \
+		[% ELSE %] \
+		<option value="s">s Lyder (f.eks. fuglelyder)</option> \
+		[% END %] \
+	[% IF ( f31t ) %] \
+		<option value="t" selected="selected">t Intervjuer</option> \
+		[% ELSE %] \
+		<option value="t">t Intervjuer</option> \
+		[% END %] \
+	[% IF ( f31z ) %] \
+		<option value="z" selected="selected">z Andre typer innhold</option> \
+		[% ELSE %] \
+		<option value="z">z Andre typer innhold</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 <tr> \
+		 <td>32-34 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 <input type="hidden" name="f33" id="f33" value=" " /> \
+		 <input type="hidden" name="f34" id="f34" value=" " /> \
+		 </td></tr> \
+		</table>';
+		break;
+  case "fv":
+    divOutput.innerHTML='<table> \
+				 		 <tr> \
+		 <td>18-20 Spilletid for filmer og videogrammer</td> \
+		 <td> \
+		 (Feltet er ikke tilgjengelig) \
+		 <input type="hidden" name="f18" id="f18" value=" " /> \
+		 <input type="hidden" name="f19" id="f19" value=" " /> \
+		 <input type="hidden" name="f20" id="f20" value=" " /> \
+		 </td></tr> \
+		 				 		 <tr> \
+		 <td>21 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f21" id="f21" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Målgruppe / Intellektuelt nivå</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	[% IF ( f22 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f221 ) %] \
+		<option value="1" selected="selected">1 Voksne over 18 år</option> \
+		[% ELSE %] \
+		<option value="1">1 Voksne over 18 år</option> \
+		[% END %] \
+	[% IF ( f222 ) %] \
+		<option value="2" selected="selected">2 Voksne over 15 år</option> \
+		[% ELSE %] \
+		<option value="2">2 Voksne over 15 år</option> \
+		[% END %] \
+	[% IF ( f224 ) %] \
+		<option value="4" selected="selected">4 Ungdom over 12 år</option> \
+		[% ELSE %] \
+		<option value="4">4 Ungdom over 12 år</option> \
+		[% END %] \
+	[% IF ( f225 ) %] \
+		<option value="5" selected="selected">5 Barn over 7 år</option> \
+		[% ELSE %] \
+		<option value="5">5 Barn over 7 år</option> \
+		[% END %] \
+	[% IF ( f226 ) %] \
+		<option value="6" selected="selected">6 Småbarn</option> \
+		[% ELSE %] \
+		<option value="6">6 Småbarn</option> \
+		[% END %] \
+	[% IF ( f22a ) %] \
+		<option value="a" selected="selected">a Voksne</option> \
+		[% ELSE %] \
+		<option value="a">a Voksne</option> \
+		[% END %] \
+	[% IF ( f22f ) %] \
+		<option value="f" selected="selected">f Spesialisert</option> \
+		[% ELSE %] \
+		<option value="f">f Spesialisert</option> \
+		[% END %] \
+	[% IF ( f22g ) %] \
+		<option value="g" selected="selected">g Generell</option> \
+		[% ELSE %] \
+		<option value="g">g Generell</option> \
+		[% END %] \
+	[% IF ( f22j ) %] \
+		<option value="j" selected="selected">j Barn og ungdom</option> \
+		[% ELSE %] \
+		<option value="j">j Barn og ungdom</option> \
+		[% END %] \
+	[% IF ( f22u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	[% IF ( f23 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f23l ) %] \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		[% ELSE %] \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		[% END %] \
+	[% IF ( f23m ) %] \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		[% ELSE %] \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		[% END %] \
+	[% IF ( f23n ) %] \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet medfølgende materiale</option> \
+		[% END %] \
+	[% IF ( f23o ) %] \
+		<option value="o" selected="selected">o Plakater</option> \
+		[% ELSE %] \
+		<option value="o">o Plakater</option> \
+		[% END %] \
+	[% IF ( f23p ) %] \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		[% ELSE %] \
+		<option value="p">p Pressemateriale</option> \
+		[% END %] \
+	[% IF ( f23r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f23s ) %] \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% ELSE %] \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% END %] \
+	[% IF ( f23z ) %] \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet medfølgende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>24 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f24" id="f24" size="1"> \
+	[% IF ( f24 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f24l ) %] \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		[% ELSE %] \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		[% END %] \
+	[% IF ( f24m ) %] \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		[% ELSE %] \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		[% END %] \
+	[% IF ( f24n ) %] \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet medfølgende materiale</option> \
+		[% END %] \
+	[% IF ( f24o ) %] \
+		<option value="o" selected="selected">o Plakater</option> \
+		[% ELSE %] \
+		<option value="o">o Plakater</option> \
+		[% END %] \
+	[% IF ( f24p ) %] \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		[% ELSE %] \
+		<option value="p">p Pressemateriale</option> \
+		[% END %] \
+	[% IF ( f24r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f24s ) %] \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% ELSE %] \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% END %] \
+	[% IF ( f24z ) %] \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet medfølgende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>25 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f25" id="f25" size="1"> \
+	[% IF ( f25 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f25l ) %] \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		[% ELSE %] \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		[% END %] \
+	[% IF ( f25m ) %] \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		[% ELSE %] \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		[% END %] \
+	[% IF ( f25n ) %] \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet medfølgende materiale</option> \
+		[% END %] \
+	[% IF ( f25o ) %] \
+		<option value="o" selected="selected">o Plakater</option> \
+		[% ELSE %] \
+		<option value="o">o Plakater</option> \
+		[% END %] \
+	[% IF ( f25p ) %] \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		[% ELSE %] \
+		<option value="p">p Pressemateriale</option> \
+		[% END %] \
+	[% IF ( f25r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f25s ) %] \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% ELSE %] \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% END %] \
+	[% IF ( f25z ) %] \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet medfølgende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>26 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f26" id="f26" size="1"> \
+	[% IF ( f26 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f26l ) %] \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		[% ELSE %] \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		[% END %] \
+	[% IF ( f26m ) %] \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		[% ELSE %] \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		[% END %] \
+	[% IF ( f26n ) %] \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet medfølgende materiale</option> \
+		[% END %] \
+	[% IF ( f26o ) %] \
+		<option value="o" selected="selected">o Plakater</option> \
+		[% ELSE %] \
+		<option value="o">o Plakater</option> \
+		[% END %] \
+	[% IF ( f26p ) %] \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		[% ELSE %] \
+		<option value="p">p Pressemateriale</option> \
+		[% END %] \
+	[% IF ( f26r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f26s ) %] \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% ELSE %] \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% END %] \
+	[% IF ( f26z ) %] \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet medfølgende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>27 Medfølgende materiale</td> \
+		 <td> \
+		 <select name="f27" id="f27" size="1"> \
+	[% IF ( f27 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f27l ) %] \
+		<option value="l" selected="selected">l Stillbilder (fra filmen)</option> \
+		[% ELSE %] \
+		<option value="l">l Stillbilder (fra filmen)</option> \
+		[% END %] \
+	[% IF ( f27m ) %] \
+		<option value="m" selected="selected">m Manuskriptmateriale o.l.</option> \
+		[% ELSE %] \
+		<option value="m">m Manuskriptmateriale o.l.</option> \
+		[% END %] \
+	[% IF ( f27n ) %] \
+		<option value="n" selected="selected">n Intet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="n">n Intet medfølgende materiale</option> \
+		[% END %] \
+	[% IF ( f27o ) %] \
+		<option value="o" selected="selected">o Plakater</option> \
+		[% ELSE %] \
+		<option value="o">o Plakater</option> \
+		[% END %] \
+	[% IF ( f27p ) %] \
+		<option value="p" selected="selected">p Pressemateriale</option> \
+		[% ELSE %] \
+		<option value="p">p Pressemateriale</option> \
+		[% END %] \
+	[% IF ( f27r ) %] \
+		<option value="r" selected="selected">r Instruksjonsmateriale</option> \
+		[% ELSE %] \
+		<option value="r">r Instruksjonsmateriale</option> \
+		[% END %] \
+	[% IF ( f27s ) %] \
+		<option value="s" selected="selected">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% ELSE %] \
+		<option value="s">s Musikkpartiturer eller andre musikktrykk</option> \
+		[% END %] \
+	[% IF ( f27z ) %] \
+		<option value="z" selected="selected">z Annet medfølgende materiale</option> \
+		[% ELSE %] \
+		<option value="z">z Annet medfølgende materiale</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	[% IF ( f28 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f280 ) %] \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f281 ) %] \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="1">1 Offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f28b ) %] \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="b">b Kommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28c ) %] \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28d ) %] \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% ELSE %] \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% END %] \
+	[% IF ( f28e ) %] \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% ELSE %] \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 				 		 <tr> \
+		 <td>29-33 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f29" id="f29" value=" " /> \
+		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 <input type="hidden" name="f31" id="f31" value=" " /> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 <input type="hidden" name="f33" id="f33" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>34 Teknikk</td> \
+		 <td> \
+		 <select name="f34" id="f34" size="1"> \
+	[% IF ( f34 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f34a ) %] \
+		<option value="a" selected="selected">a Animasjon</option> \
+		[% ELSE %] \
+		<option value="a">a Animasjon</option> \
+		[% END %] \
+	[% IF ( f34c ) %] \
+		<option value="c" selected="selected">c Animasjon og levende bevegelse</option> \
+		[% ELSE %] \
+		<option value="c">c Animasjon og levende bevegelse</option> \
+		[% END %] \
+	[% IF ( f34l ) %] \
+		<option value="l" selected="selected">l Levende bevegelse</option> \
+		[% ELSE %] \
+		<option value="l">l Levende bevegelse</option> \
+		[% END %] \
+	[% IF ( f34u ) %] \
+		<option value="u" selected="selected">u Ukjent</option> \
+		[% ELSE %] \
+		<option value="u">u Ukjent</option> \
+		[% END %] \
+	[% IF ( f34z ) %] \
+		<option value="z" selected="selected">z Annen teknikk</option> \
+		[% ELSE %] \
+		<option value="z">z Annen teknikk</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		</table>';
+		break;
+  case "kar":
+    divOutput.innerHTML='<table> \
+		<tr> \
+		 <td>18 Relieff</td> \
+		 <td> \
+		 <select name="f18" id="f18" size="1"> \
+	[% IF ( f18 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f18a ) %] \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		[% ELSE %] \
+		<option value="a">a Høydekurver</option> \
+		[% END %] \
+	[% IF ( f18b ) %] \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		[% ELSE %] \
+		<option value="b">b Skyggelegging</option> \
+		[% END %] \
+	[% IF ( f18c ) %] \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		[% ELSE %] \
+		<option value="c">c Graderte fargetoner</option> \
+		[% END %] \
+	[% IF ( f18d ) %] \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		[% ELSE %] \
+		<option value="d">d Bakkestreker</option> \
+		[% END %] \
+	[% IF ( f18e ) %] \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		[% ELSE %] \
+		<option value="e">e Dybdepunkt</option> \
+		[% END %] \
+	[% IF ( f18f ) %] \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		[% ELSE %] \
+		<option value="f">f Formlinjer</option> \
+		[% END %] \
+	[% IF ( f18g ) %] \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		[% ELSE %] \
+		<option value="g">g Høydepunkt</option> \
+		[% END %] \
+	[% IF ( f18i ) %] \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		[% ELSE %] \
+		<option value="i">i Punktsymboler</option> \
+		[% END %] \
+	[% IF ( f18j ) %] \
+		<option value="j" selected="selected">j Landformer</option> \
+		[% ELSE %] \
+		<option value="j">j Landformer</option> \
+		[% END %] \
+	[% IF ( f18k ) %] \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		[% ELSE %] \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		[% END %] \
+	[% IF ( f18n ) %] \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		[% ELSE %] \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		[% END %] \
+	[% IF ( f18z ) %] \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		[% ELSE %] \
+		<option value="z">z Andre reliefftyper</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>19 Relieff</td> \
+		 <td> \
+		 <select name="f19" id="f19" size="1"> \
+	[% IF ( f19 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f19a ) %] \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		[% ELSE %] \
+		<option value="a">a Høydekurver</option> \
+		[% END %] \
+	[% IF ( f19b ) %] \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		[% ELSE %] \
+		<option value="b">b Skyggelegging</option> \
+		[% END %] \
+	[% IF ( f19c ) %] \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		[% ELSE %] \
+		<option value="c">c Graderte fargetoner</option> \
+		[% END %] \
+	[% IF ( f19d ) %] \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		[% ELSE %] \
+		<option value="d">d Bakkestreker</option> \
+		[% END %] \
+	[% IF ( f19e ) %] \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		[% ELSE %] \
+		<option value="e">e Dybdepunkt</option> \
+		[% END %] \
+	[% IF ( f19f ) %] \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		[% ELSE %] \
+		<option value="f">f Formlinjer</option> \
+		[% END %] \
+	[% IF ( f19g ) %] \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		[% ELSE %] \
+		<option value="g">g Høydepunkt</option> \
+		[% END %] \
+	[% IF ( f19i ) %] \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		[% ELSE %] \
+		<option value="i">i Punktsymboler</option> \
+		[% END %] \
+	[% IF ( f19j ) %] \
+		<option value="j" selected="selected">j Landformer</option> \
+		[% ELSE %] \
+		<option value="j">j Landformer</option> \
+		[% END %] \
+	[% IF ( f19k ) %] \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		[% ELSE %] \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		[% END %] \
+	[% IF ( f19n ) %] \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		[% ELSE %] \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		[% END %] \
+	[% IF ( f19z ) %] \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		[% ELSE %] \
+		<option value="z">z Andre reliefftyper</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>20 Relieff</td> \
+		 <td> \
+		 <select name="f20" id="f20" size="1"> \
+	[% IF ( f20 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f20a ) %] \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		[% ELSE %] \
+		<option value="a">a Høydekurver</option> \
+		[% END %] \
+	[% IF ( f20b ) %] \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		[% ELSE %] \
+		<option value="b">b Skyggelegging</option> \
+		[% END %] \
+	[% IF ( f20c ) %] \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		[% ELSE %] \
+		<option value="c">c Graderte fargetoner</option> \
+		[% END %] \
+	[% IF ( f20d ) %] \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		[% ELSE %] \
+		<option value="d">d Bakkestreker</option> \
+		[% END %] \
+	[% IF ( f20e ) %] \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		[% ELSE %] \
+		<option value="e">e Dybdepunkt</option> \
+		[% END %] \
+	[% IF ( f20f ) %] \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		[% ELSE %] \
+		<option value="f">f Formlinjer</option> \
+		[% END %] \
+	[% IF ( f20g ) %] \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		[% ELSE %] \
+		<option value="g">g Høydepunkt</option> \
+		[% END %] \
+	[% IF ( f20i ) %] \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		[% ELSE %] \
+		<option value="i">i Punktsymboler</option> \
+		[% END %] \
+	[% IF ( f20j ) %] \
+		<option value="j" selected="selected">j Landformer</option> \
+		[% ELSE %] \
+		<option value="j">j Landformer</option> \
+		[% END %] \
+	[% IF ( f20k ) %] \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		[% ELSE %] \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		[% END %] \
+	[% IF ( f20n ) %] \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		[% ELSE %] \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		[% END %] \
+	[% IF ( f20z ) %] \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		[% ELSE %] \
+		<option value="z">z Andre reliefftyper</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>21 Relieff</td> \
+		 <td> \
+		 <select name="f21" id="f21" size="1"> \
+	[% IF ( f21 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f21a ) %] \
+		<option value="a" selected="selected">a Høydekurver</option> \
+		[% ELSE %] \
+		<option value="a">a Høydekurver</option> \
+		[% END %] \
+	[% IF ( f21b ) %] \
+		<option value="b" selected="selected">b Skyggelegging</option> \
+		[% ELSE %] \
+		<option value="b">b Skyggelegging</option> \
+		[% END %] \
+	[% IF ( f21c ) %] \
+		<option value="c" selected="selected">c Graderte fargetoner</option> \
+		[% ELSE %] \
+		<option value="c">c Graderte fargetoner</option> \
+		[% END %] \
+	[% IF ( f21d ) %] \
+		<option value="d" selected="selected">d Bakkestreker</option> \
+		[% ELSE %] \
+		<option value="d">d Bakkestreker</option> \
+		[% END %] \
+	[% IF ( f21e ) %] \
+		<option value="e" selected="selected">e Dybdepunkt</option> \
+		[% ELSE %] \
+		<option value="e">e Dybdepunkt</option> \
+		[% END %] \
+	[% IF ( f21f ) %] \
+		<option value="f" selected="selected">f Formlinjer</option> \
+		[% ELSE %] \
+		<option value="f">f Formlinjer</option> \
+		[% END %] \
+	[% IF ( f21g ) %] \
+		<option value="g" selected="selected">g Høydepunkt</option> \
+		[% ELSE %] \
+		<option value="g">g Høydepunkt</option> \
+		[% END %] \
+	[% IF ( f21i ) %] \
+		<option value="i" selected="selected">i Punktsymboler</option> \
+		[% ELSE %] \
+		<option value="i">i Punktsymboler</option> \
+		[% END %] \
+	[% IF ( f21j ) %] \
+		<option value="j" selected="selected">j Landformer</option> \
+		[% ELSE %] \
+		<option value="j">j Landformer</option> \
+		[% END %] \
+	[% IF ( f21k ) %] \
+		<option value="k" selected="selected">k Dybdekurver (isobater)</option> \
+		[% ELSE %] \
+		<option value="k">k Dybdekurver (isobater)</option> \
+		[% END %] \
+	[% IF ( f21n ) %] \
+		<option value="n" selected="selected">n Ingen relieff er vist på kartet</option> \
+		[% ELSE %] \
+		<option value="n">n Ingen relieff er vist på kartet</option> \
+		[% END %] \
+	[% IF ( f21z ) %] \
+		<option value="z" selected="selected">z Andre reliefftyper</option> \
+		[% ELSE %] \
+		<option value="z">z Andre reliefftyper</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>22 Projeksjon</td> \
+		 <td> \
+		 <select name="f22" id="f22" size="1"> \
+	[% IF ( f22 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f22a ) %] \
+		<option value="a" selected="selected">a Planprojeksjon</option> \
+		[% ELSE %] \
+		<option value="a">a Planprojeksjon</option> \
+		[% END %] \
+	[% IF ( f22b ) %] \
+		<option value="b" selected="selected">b Sylinderprojeksjon</option> \
+		[% ELSE %] \
+		<option value="b">b Sylinderprojeksjon</option> \
+		[% END %] \
+	[% IF ( f22c ) %] \
+		<option value="c" selected="selected">c Kjegleprojeksjon</option> \
+		[% ELSE %] \
+		<option value="c">c Kjegleprojeksjon</option> \
+		[% END %] \
+	[% IF ( f22z ) %] \
+		<option value="z" selected="selected">z Annen projeksjon</option> \
+		[% ELSE %] \
+		<option value="z">z Annen projeksjon</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>23 Projeksjon</td> \
+		 <td> \
+		 <select name="f23" id="f23" size="1"> \
+	[% IF ( f23 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f23a ) %] \
+		<option value="a" selected="selected">a Planprojeksjon</option> \
+		[% ELSE %] \
+		<option value="a">a Planprojeksjon</option> \
+		[% END %] \
+	[% IF ( f23b ) %] \
+		<option value="b" selected="selected">b Sylinderprojeksjon</option> \
+		[% ELSE %] \
+		<option value="b">b Sylinderprojeksjon</option> \
+		[% END %] \
+	[% IF ( f23c ) %] \
+		<option value="c" selected="selected">c Kjegleprojeksjon</option> \
+		[% ELSE %] \
+		<option value="c">c Kjegleprojeksjon</option> \
+		[% END %] \
+	[% IF ( f23z ) %] \
+		<option value="z" selected="selected">z Annen projeksjon</option> \
+		[% ELSE %] \
+		<option value="z">z Annen projeksjon</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 		 				 		 <tr> \
+		 <td>24-27 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f24" id="f24" value=" " /> \
+		 <input type="hidden" name="f25" id="f25" value=" " /> \
+		 <input type="hidden" name="f26" id="f26" value=" " /> \
+		 <input type="hidden" name="f27" id="f27" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>28 Offentlig publikasjon</td> \
+		 <td> \
+		 <select name="f28" id="f28" size="1"> \
+	[% IF ( f28 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f280 ) %] \
+		<option value="0" selected="selected">0 Ikke offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="0">0 Ikke offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f281 ) %] \
+		<option value="1" selected="selected">1 Offentlig publikasjon</option> \
+		[% ELSE %] \
+		<option value="1">1 Offentlig publikasjon</option> \
+		[% END %] \
+	[% IF ( f28b ) %] \
+		<option value="b" selected="selected">b Kommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="b">b Kommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28c ) %] \
+		<option value="c" selected="selected">c Fylkeskommunal publikasjon</option> \
+		[% ELSE %] \
+		<option value="c">c Fylkeskommunal publikasjon</option> \
+		[% END %] \
+	[% IF ( f28d ) %] \
+		<option value="d" selected="selected">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% ELSE %] \
+		<option value="d">d Publikasjon fra regjeringer, departementer, direktorater, offentlige utvalg o.l.</option> \
+		[% END %] \
+	[% IF ( f28e ) %] \
+		<option value="e" selected="selected">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% ELSE %] \
+		<option value="e">e Publikasjon fra andre statlige institusjoner, f.eks. Statens kartverk</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 		 		 				 		 <tr> \
+		 <td>29-30 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f29" id="f29" value=" " /> \
+		 <input type="hidden" name="f30" id="f30" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>31 Register</td> \
+	 <td> \
+		 <select name="f31" id="f31" size="1"> \
+	[% IF ( f31 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f310 ) %] \
+		<option value="0" selected="selected">0 Dokumentet har ikke register</option> \
+		[% ELSE %] \
+		<option value="0">0 Dokumentet har ikke register</option> \
+		[% END %] \
+	[% IF ( f311 ) %] \
+		<option value="1" selected="selected">1 Dokumentet har register</option> \
+		[% ELSE %] \
+		<option value="1">1 Dokumentet har register</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 		 		 		 		 				 		 <tr> \
+		 <td>32 Udefinert</td> \
+		 <td> \
+		 <input type="hidden" name="f32" id="f32" value=" " /> \
+		 </td></tr> \
+		 <tr> \
+		 <td>33 Spesielle formatkarakteristika</td> \
+		 <td> \
+		 <select name="f33" id="f33" size="1"> \
+	[% IF ( f33 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f33j ) %] \
+		<option value="j" selected="selected">j Postkort o.l.</option> \
+		[% ELSE %] \
+		<option value="j">j Postkort o.l.</option> \
+		[% END %] \
+	[% IF ( f33k ) %] \
+		<option value="k" selected="selected">k Kalender</option> \
+		[% ELSE %] \
+		<option value="k">k Kalender</option> \
+		[% END %] \
+	[% IF ( f33l ) %] \
+		<option value="l" selected="selected">l Puslespill</option> \
+		[% ELSE %] \
+		<option value="l">l Puslespill</option> \
+		[% END %] \
+	[% IF ( f33m ) %] \
+		<option value="m" selected="selected">m Relieffkart med blindeskrift</option> \
+		[% ELSE %] \
+		<option value="m">m Relieffkart med blindeskrift</option> \
+		[% END %] \
+	[% IF ( f33n ) %] \
+		<option value="n" selected="selected">n Spill</option> \
+		[% ELSE %] \
+		<option value="n">n Spill</option> \
+		[% END %] \
+	[% IF ( f33o ) %] \
+		<option value="o" selected="selected">o Veggkart/rullegardinkart</option> \
+		[% ELSE %] \
+		<option value="o">o Veggkart/rullegardinkart</option> \
+		[% END %] \
+	[% IF ( f33p ) %] \
+		<option value="p" selected="selected">p Spillkort</option> \
+		[% ELSE %] \
+		<option value="p">p Spillkort</option> \
+		[% END %] \
+	[% IF ( f33z ) %] \
+		<option value="z" selected="selected">z Andre spesielle former for kart</option> \
+		[% ELSE %] \
+		<option value="z">z Andre spesielle former for kart</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		 <tr> \
+		 <td>34 Spesielle formatkarakteristika</td> \
+		 <td> \
+		 <select name="f34" id="f34" size="1"> \
+	[% IF ( f34 ) %] \
+		<option value=" " selected="selected">^ Ikke angitt</option> \
+		[% ELSE %] \
+		<option value=" ">^ Ikke angitt</option> \
+		[% END %] \
+	[% IF ( f34j ) %] \
+		<option value="j" selected="selected">j Postkort o.l.</option> \
+		[% ELSE %] \
+		<option value="j">j Postkort o.l.</option> \
+		[% END %] \
+	[% IF ( f34k ) %] \
+		<option value="k" selected="selected">k Kalender</option> \
+		[% ELSE %] \
+		<option value="k">k Kalender</option> \
+		[% END %] \
+	[% IF ( f34l ) %] \
+		<option value="l" selected="selected">l Puslespill</option> \
+		[% ELSE %] \
+		<option value="l">l Puslespill</option> \
+		[% END %] \
+	[% IF ( f34m ) %] \
+		<option value="m" selected="selected">m Relieffkart med blindeskrift</option> \
+		[% ELSE %] \
+		<option value="m">m Relieffkart med blindeskrift</option> \
+		[% END %] \
+	[% IF ( f34n ) %] \
+		<option value="n" selected="selected">n Spill</option> \
+		[% ELSE %] \
+		<option value="n">n Spill</option> \
+		[% END %] \
+	[% IF ( f34o ) %] \
+		<option value="o" selected="selected">o Veggkart/rullegardinkart</option> \
+		[% ELSE %] \
+		<option value="o">o Veggkart/rullegardinkart</option> \
+		[% END %] \
+	[% IF ( f34p ) %] \
+		<option value="p" selected="selected">p Spillkort</option> \
+		[% ELSE %] \
+		<option value="p">p Spillkort</option> \
+		[% END %] \
+	[% IF ( f34z ) %] \
+		<option value="z" selected="selected">z Andre spesielle former for kart</option> \
+		[% ELSE %] \
+		<option value="z">z Andre spesielle former for kart</option> \
+		[% END %] \
+</select> \
+		 </td></tr> \
+		</table>';
+		break;
+	default:
+    divOutput.innerHTML="baz";
+	}
+}
+
+// Pad the string with spaces so that it is 4 characters long.
+// Also, truncate strings that are longer than 4 characters.
+function pad4(s) {
+	var pad = "";
+	if (s.length < 4) {
+		var padLength = 4 - s.length;
+		for (var i = 0; i < 4 - s.length; i++) {
+			pad += " ";
+		}
+		s += pad;
+	} else {
+		s = s.substring(0, 4);
+	}
+	return s;
+}
+
+function report() {
+            var doc   = opener.document; 
+            var field = doc.getElementById("[% index %]");
+            field.value = 
+			document.f_pop.f1.value+
+			document.f_pop.f6.value+
+			// bug 2563 {
+			( document.f_pop.f710.value.match(/^\s*$/)  ? "    " : pad4(document.f_pop.f710.value)  )+
+			( document.f_pop.f1114.value.match(/^\s*$/) ? "    " : pad4(document.f_pop.f1114.value) )+
+			// }
+			document.f_pop.f1517.value+
+			document.f_pop.f18.value+
+			document.f_pop.f19.value+
+			document.f_pop.f20.value+
+			document.f_pop.f21.value+
+			document.f_pop.f22.value+
+			document.f_pop.f23.value+
+			document.f_pop.f24.value+
+			document.f_pop.f25.value+
+			document.f_pop.f26.value+
+			document.f_pop.f27.value+
+			document.f_pop.f28.value+
+			document.f_pop.f29.value+
+			document.f_pop.f30.value+
+			document.f_pop.f31.value+
+			document.f_pop.f32.value+
+			document.f_pop.f33.value+
+			document.f_pop.f34.value+
+			document.f_pop.f3537.value+
+			document.f_pop.f38.value+
+			document.f_pop.f39.value;
+		self.close();
+		return false;
+	}
+	//]]>
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

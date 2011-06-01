@@ -35,7 +35,7 @@ my ($template, $loggedinuser, $cookie)
 
 # Checking if there is a Fast Cataloging Framework
 my $fa = getframeworkinfo('FA');
-$template->param({ fast_cataloging => 1 }) if (defined $fa);
+$template->param( fast_cataloging => 1 ) if (defined $fa);
 
 
 output_html_with_http_headers $query, $cookie, $template->output;

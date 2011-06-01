@@ -151,7 +151,8 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 
 sub calculate {
-    my ($line, $column, $filters) = @_;
+    my ($limit, $column, $filters) = @_;
+
     my @loopcol;
     my @loopline;
     my @looprow;
@@ -209,11 +210,6 @@ sub calculate {
 		} elsif ($column =~ /sort2/   ) {
 			# $colfilter[0] = @$filters[11];
 		}
-        # $colfilter[0] = @$filters[7] if ($column =~ /timestamp/ ) ; FIXME This can't be right.
-        # $colfilter[0] = @$filters[8] if ($column =~ /timestamp/ ) ; FIXME 
-        # $colfilter[0] = @$filters[9] if ($column =~ /timestamp/ ) ; FIXME Only this line would have effect.
-
-    #warn "filtre col ".$colfilter[0]." ".$colfilter[1];
                                                 
     # loop cols.
         if ($column eq "Day") {
@@ -281,15 +277,6 @@ sub calculate {
         $columns{''} = 1;
     }
 
-    #Initialization of cell values.....
-    my @table;
-    for (my $i=1;$i<=$line;$i++) {
-        foreach (keys %columns) {
-#			warn " init table : $row->{rowtitle} / $_ ";
-            $table[$i]->{ $_ || "total" }->{'name'}=0;
-        }
-    }
-
     my $strcalc ;
 
 # Processing average loanperiods
@@ -302,17 +289,13 @@ sub calculate {
                   WHERE old_issues.borrowernumber IS NOT NULL
                   ";
 	my @filterterms = (
-		'old_issues.timestamp  >',
-		'old_issues.timestamp  <',
+		'old_issues.issuedate >',
+		'old_issues.issuedate <',
 		'old_issues.returndate >',
 		'old_issues.returndate <',
 		'old_issues.branchcode  like',
 		'biblioitems.itemtype   like',
 		'borrowers.categorycode like',
-		'dayname(old_issues.timestamp) like',
-		'monthname(old_issues.timestamp) like',
-		'monthname(old_issues.timestamp) like',
-		'year(old_issues.timestamp) like',
 	);
     foreach ((@$filters)[0..9]) {
 		my $term = shift @filterterms;	# go through both arrays in step
@@ -320,16 +303,11 @@ sub calculate {
 		s/\*/%/g;
 		$strcalc .= " AND $term '$_' ";
 	}
-    
     $strcalc .= " GROUP BY borrowers.borrowernumber";
     $strcalc .= ", $colfield" if ($column);
     $strcalc .= " ORDER BY RANK DESC";
     $strcalc .= ",$colfield " if ($colfield);
-# 	my $max;
-# 	if (@loopcol) {
-# 		$max = $line*@loopcol;
-# 	} else { $max=$line;}
-# 	$strcalc .= " LIMIT 0,$max";
+    $strcalc .= " LIMIT $limit" if ($limit);
 
     $debug and print DEBUG "(old_issues) SQL : $strcalc\n";
     my $dbcalc = $dbh->prepare($strcalc);
@@ -414,7 +392,6 @@ sub calculate {
  	# the foot (totals by borrower type)
     $globalline{loopfooter} = [];
     $globalline{total}= $grantotal;		# FIXME: useless
-    $globalline{line} = $line;
     $globalline{column} = $column;
     return [\%globalline];	# reference to a 1 element array: that element is a hashref
 }

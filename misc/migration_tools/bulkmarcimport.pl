@@ -34,6 +34,7 @@ binmode(STDOUT, ":utf8");
 my ( $input_marc_file, $number, $offset) = ('',0,0);
 my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format,$biblios,$authorities,$keepids,$match, $isbn_check, $logfile);
 my ($sourcetag,$sourcesubfield,$idmapfl);
+my $cleanisbn = 1;
 
 $|=1;
 
@@ -59,6 +60,7 @@ GetOptions(
     'x:s' => \$sourcetag,
     'y:s' => \$sourcesubfield,
     'idmap:s' => \$idmapfl,
+    'cleanisbn!'     => \$cleanisbn,
 );
 $biblios=!$authorities||$biblios;
 
@@ -176,7 +178,6 @@ RECORD: while (  ) {
         # from because we don't have access to the original blob.  Note
         # that the staging import can deal with this condition (via
         # C4::Charset::MarcToUTF8Record) because it doesn't use MARC::Batch.
-        $i++;
         next;
     }
     # skip if we get an empty record (that is MARC valid, but will result in AddBiblio failure
@@ -197,20 +198,13 @@ RECORD: while (  ) {
     }
     my $isbn;
     # remove trailing - in isbn (only for biblios, of course)
-    if ($biblios) {
-        if ($marcFlavour eq 'UNIMARC') {
-            if (my $f010 = $record->field('010')) {
-                $isbn = $f010->subfield('a');
-                $isbn =~ s/-//g;
-                $f010->update('a' => $isbn);
-            }
-        } else {
-            if (my $f020 = $record->field('020')) {
-                if ($isbn = $f020->subfield('a')) {
-                    $isbn =~ s/-//g;
-                    $f020->update('a' => $isbn);
-                }
-            }
+    if ($biblios && $cleanisbn) {
+        my $tag = $marcFlavour eq 'UNIMARC' ? '010' : '020';
+        my $field = $record->field($tag);
+        my $isbn = $field && $field->subfield('a');
+        if ( $isbn ) {
+            $isbn =~ s/-//g;
+            $field->update('a' => $isbn);
         }
     }
     my $id;
@@ -222,15 +216,15 @@ RECORD: while (  ) {
        my ($error, $results,$totalhits)=C4::Search::SimpleSearch( $query, 0, 3, [$server] );
        die "unable to search the database for duplicates : $error" if (defined $error);
        #warn "$query $server : $totalhits";
-       if ($results && scalar(@$results)==1){
+       if ( @{$results} == 1 ){
            my $marcrecord = MARC::File::USMARC::decode($results->[0]);
 	   	   $id=GetRecordId($marcrecord,$tagid,$subfieldid);
        } 
-       elsif  ($results && scalar(@$results)>1){
-       $debug && warn "more than one match for $query";
+       elsif  ( @{$results} > 1){
+           $debug && warn "more than one match for $query";
        } 
        else {
-       $debug && warn "nomatch for $query";
+           $debug && warn "nomatch for $query";
        }
     }
 	my $originalid;
@@ -329,10 +323,13 @@ RECORD: while (  ) {
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insertitem",status=>"ERROR"}) if ($logfile);
                 # if we failed because of an exception, assume that 
                 # the MARC columns in biblioitems were not set.
+                C4::Biblio::_strip_item_fields($record, '');
                 ModBiblioMarc( $record, $biblionumber, '' );
                 next RECORD;
             } 
  			else{
+                C4::Biblio::_strip_item_fields($record, '');
+                ModBiblioMarc( $record, $biblionumber, '' ); # need to call because of defer_marc_save
 				printlog({id=>$id||$originalid||$biblionumber, op=>"insert",status=>"ok"}) if ($logfile);
 			}
             if ($#{ $errors_ref } > -1) { 
@@ -518,6 +515,11 @@ can be either 001 to 999 or field and list of subfields as such 100abcde
 If set, a search will be done on isbn, and, if the same isbn is found, the
 biblio is not added. It's another method to deduplicate.  B<-match> & B<-isbn>
 can be both set.
+
+=item B<-cleanisbn>
+
+Clean ISBN fields from entering biblio records, ie removes hyphens. By default,
+ISBN are cleaned. --nocleanisbn will keep ISBN unchanged.
 
 =item B<-x>=I<TAG>
 

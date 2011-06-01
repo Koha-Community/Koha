@@ -1,0 +1,47 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Online Help</title>
+<script language="javascript" type="text/javascript" src="[% themelang %]/js/tinymce/jscripts/tiny_mce/tiny_mce.js"></script>
+<script language="javascript" type="text/javascript">
+tinyMCE.init({
+	mode : "textareas",
+        theme : "advanced",
+	plugins : "table,save,advhr,advlink,iespell,searchreplace,print,contextmenu",
+        theme_advanced_disable : "underline,strikethrough,styleselect,image",
+	theme_advanced_buttons1_add_before : "save,separator",
+	theme_advanced_buttons2_add_before: "cut,copy,paste,separator,search,replace,separator",
+	theme_advanced_buttons3_add_before : "tablecontrols,separator",
+	theme_advanced_buttons3_add : "iespell,advhr,separator,print",
+	theme_advanced_toolbar_location : "top",
+	theme_advanced_toolbar_align : "left",
+	theme_advanced_path_location : "bottom",
+	plugin_insertdate_dateFormat : "%Y-%m-%d",
+	plugin_insertdate_timeFormat : "%H:%M:%S",
+    apply_source_formatting : true
+});
+</script>
+[% IF ( intranetstylesheet ) %]
+    <link rel="stylesheet" type="text/css" href="[% intranetstylesheet %]" />
+[% ELSE %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
+[% END %]
+[% IF ( intranetcolorstylesheet ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% intranetcolorstylesheet %]" />
+[% END %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/help.css" />
+</head>
+<body id="help">
+	<h1>Online Help</h1>
+[% IF ( error ) %]
+<h5>[% error %]</h5>
+[% END %]
+<form action="/cgi-bin/koha/edithelp.pl" method="post">
+<input type="hidden" name="referer" value="[% referer %]" />
+<input type="hidden" name="type" value="[% type %]" />
+<textarea name="help" cols="60" rows="20">[% help %]</textarea>
+<fieldset class="action"><input type="submit" name="submit" class="submit" value="Submit" /> <a class="cancel" href="#" onclick="history.back(); return false;">Cancel</a></fieldset>
+</form>
+	
+</body>
+</html>
+
+

@@ -1,6 +1,6 @@
 #!/usr/bin/perl
-# vim: et ts=4 sw=4
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -26,6 +26,7 @@ use C4::Auth;
 use C4::Koha;
 use C4::Debug;
 use C4::Branch; # GetBranches
+use C4::Dates qw/format_date format_date_in_iso/;
 
 my $input = new CGI;
 my $dbh = C4::Context->dbh;
@@ -100,8 +101,8 @@ elsif ($op eq 'delete-branch-item') {
 # save the values entered
 elsif ($op eq 'add') {
     my $sth_search = $dbh->prepare("SELECT COUNT(*) AS total FROM issuingrules WHERE branchcode=? AND categorycode=? AND itemtype=?");
-    my $sth_insert = $dbh->prepare("INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, renewalsallowed, reservesallowed, issuelength, fine, finedays, firstremind, chargeperiod,rentaldiscount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?)");
-    my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, finedays=?, firstremind=?, chargeperiod=?, maxissueqty=?, renewalsallowed=?, reservesallowed=?, issuelength=?, rentaldiscount=?  WHERE branchcode=? AND categorycode=? AND itemtype=?");
+    my $sth_insert = $dbh->prepare("INSERT INTO issuingrules (branchcode, categorycode, itemtype, maxissueqty, renewalsallowed, reservesallowed, issuelength, hardduedate, hardduedatecompare, fine, finedays, firstremind, chargeperiod,rentaldiscount) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?)");
+    my $sth_update=$dbh->prepare("UPDATE issuingrules SET fine=?, finedays=?, firstremind=?, chargeperiod=?, maxissueqty=?, renewalsallowed=?, reservesallowed=?, issuelength=?, hardduedate=?, hardduedatecompare=?, rentaldiscount=?  WHERE branchcode=? AND categorycode=? AND itemtype=?");
     
     my $br = $branch; # branch
     my $bor  = $input->param('categorycode'); # borrower category
@@ -116,15 +117,18 @@ elsif ($op eq 'add') {
     $maxissueqty =~ s/\s//g;
     $maxissueqty = undef if $maxissueqty !~ /^\d+/;
     my $issuelength  = $input->param('issuelength');
+    my $hardduedate = $input->param('hardduedate');
+    $hardduedate = format_date_in_iso($hardduedate);
+    my $hardduedatecompare = $input->param('hardduedatecompare');
     my $rentaldiscount = $input->param('rentaldiscount');
     $debug and warn "Adding $br, $bor, $cat, $fine, $maxissueqty";
 
     $sth_search->execute($br,$bor,$cat);
     my $res = $sth_search->fetchrow_hashref();
     if ($res->{total}) {
-        $sth_update->execute($fine, $finedays,$firstremind, $chargeperiod, $maxissueqty, $renewalsallowed,$reservesallowed, $issuelength,$rentaldiscount, $br,$bor,$cat);
+        $sth_update->execute($fine, $finedays,$firstremind, $chargeperiod, $maxissueqty, $renewalsallowed,$reservesallowed, $issuelength,$hardduedate,$hardduedatecompare,$rentaldiscount, $br,$bor,$cat);
     } else {
-        $sth_insert->execute($br,$bor,$cat,$maxissueqty,$renewalsallowed,$reservesallowed,$issuelength,$fine,$finedays,$firstremind,$chargeperiod,$rentaldiscount);
+        $sth_insert->execute($br,$bor,$cat,$maxissueqty,$renewalsallowed,$reservesallowed,$issuelength,$hardduedate,$hardduedatecompare,$fine,$finedays,$firstremind,$chargeperiod,$rentaldiscount);
     }
 } 
 elsif ($op eq "set-branch-defaults") {
@@ -372,11 +376,20 @@ my $sth2 = $dbh->prepare("
 $sth2->execute($branch);
 
 while (my $row = $sth2->fetchrow_hashref) {
+    $row->{'current_branch'} ||= $row->{'branchcode'};
     $row->{'humanitemtype'} ||= $row->{'itemtype'};
     $row->{'default_humanitemtype'} = 1 if $row->{'humanitemtype'} eq '*';
     $row->{'humancategorycode'} ||= $row->{'categorycode'};
     $row->{'default_humancategorycode'} = 1 if $row->{'humancategorycode'} eq '*';
     $row->{'fine'} = sprintf('%.2f', $row->{'fine'});
+    if ($row->{'hardduedate'} ne '0000-00-00') {
+       $row->{'hardduedate'} = format_date( $row->{'hardduedate'});
+       $row->{'hardduedatebefore'} = 1 if ($row->{'hardduedatecompare'} == -1);
+       $row->{'hardduedateexact'} = 1 if ($row->{'hardduedatecompare'} ==  0);
+       $row->{'hardduedateafter'} = 1 if ($row->{'hardduedatecompare'} ==  1);
+    } else {
+       $row->{'hardduedate'} = 0;
+    }
     push @row_loop, $row;
 }
 $sth->finish;
@@ -481,7 +494,7 @@ $template->param(categoryloop => \@category_loop,
                         rules => \@sorted_row_loop,
                         branchloop => \@branchloop,
                         humanbranch => ($branch ne '*' ? $branches->{$branch}->{branchname} : ''),
-                        branch => $branch,
+                        current_branch => $branch,
                         definedbranch => scalar(@sorted_row_loop)>0 
                         );
 output_html_with_http_headers $input, $cookie, $template->output;

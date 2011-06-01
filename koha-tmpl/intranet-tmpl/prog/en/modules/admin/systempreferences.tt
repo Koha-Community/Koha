@@ -1,0 +1,353 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; [% IF ( add_form ) %] System Preferences &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] System Preferences &rsaquo; Data Added[% END %]
+[% IF ( delete_confirm ) %] System Preferences &rsaquo; [% searchfield %] &rsaquo; Confirm Deletion of Parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] System Preferences &rsaquo; Parameter Deleted[% END %][% IF ( else ) %]System Preferences[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+[% IF ( add_form ) %]
+    $(document).ready(function() {
+        $('.variabletype').css({ color: "#0000CC", cursor: "pointer" });
+        $('.variabletype').click(function() {
+            $('#preftype').attr("value",$(this).attr("id"));
+        });
+    });
+[% END %]
+        // FIXME: many of these js functions appear unused
+        function isNotNull(f,noalert) {
+            if (f.value.length ==0) {
+    return false;
+            }
+            return true;
+        }
+        //
+        function toUC(f) {
+            var x=f.value.toUpperCase();
+            f.value=x;
+            return true;
+        }
+        //
+        function isNum(v,maybenull) {
+        var n = new Number(v.value);
+        if (isNaN(n)) {
+            return false;
+            }
+        if (maybenull==0 && v.value=='') {
+            return false;
+        }
+        return true;
+        }
+        //
+        function isDate(f) {
+            var t = Date.parse(f.value);
+            if (isNaN(t)) {
+                return false;
+            }
+        }
+        //
+        function Check(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+            if (f.variable.value.length==0) {
+                _alertString += "\n- " + _("variable missing");
+            }
+            if (f.value.value.length==0) {
+                _alertString += "\n- " + _("value missing");
+            }
+            if (_alertString.length==0) {
+                document.Aform.submit();
+            } else {
+                alertString2  = _("Form not submitted because of the following problem(s)");
+                alertString2 += "\n------------------------------------------------------------------------------------\n";
+                alertString2 += _alertString;
+                alert(alertString2);
+            }
+        }
+        $( function() {
+            $( '#sysprefst .expand-textarea' ).show().click( function () {
+                $( this ).hide().nextAll( 'textarea, input[type=submit]' ).show( 'slow' );
+
+                return false;
+            } ).nextAll( 'textarea, input[type=submit]' ).hide();
+        } );
+        //]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'sysprefs-admin-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; Data Added[% END %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&searchfield=[% searchfield %]">[% searchfield %]</a> &rsaquo; Confirm Deletion of Parameter '[% searchfield %]'[% END %][% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; Parameter Deleted[% END %][% IF ( else ) %]System Preferences[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% IF ( add_form ) %]
+    
+        <form action="[% script_name %]" name="Aform" method="post" [% IF ( type_upload ) %]enctype="multipart/form-data"[% END %]>
+                
+        <fieldset class="rows"><legend>
+        [% IF ( modify ) %]Modify
+        [% ELSE %]Add
+        [% END %] a system preference</legend><ol>
+            <li><label for="explanation">Explanation: </label><input type="text" name="explanation" id="explanation" size="60" value="[% explanation |html %]" /><input type="hidden" name="op" value="add_validate" /></li>
+            <li>[% IF ( searchfield ) %]<span class="label">Variable: </span>[% searchfield %]<input type="hidden" name="variable" value="[% searchfield %]" />
+            [% ELSE %]<label for="variable">Variable: </label><input type="text" name="variable" id="variable" size="60" />[% END %]</li>
+            <li><label for="value">Value: </label>
+                [% IF ( type_free ) %]
+                    <textarea id="value" name="value" cols="[% fieldlength %]">[% value |html %]</textarea>
+                [% ELSIF ( type_upload ) %]
+                    <input type="file" name="value" />
+                [% ELSIF ( type_textarea ) %]
+                    <textarea name="value" id="value" rows="[% rows %]" cols="[% cols %]">[% value |html %]</textarea>
+                [% ELSIF ( type_choice ) %]
+                    <select name="value" id="value">
+                        [% FOREACH option IN options %]
+                            [% IF ( option.selected ) %]
+                                <option value="[% option.option %]" selected="selected">
+                            [% ELSE %]
+                                <option value="[% option.option %]">
+                            [% END %][% option.option %]</option>
+                        [% END %]
+                    </select>
+                [% END %]
+        [% IF ( type_langselector ) %]
+        [% IF ( languages_loop ) %]
+    <table>
+        [% FOREACH languages_loo IN languages_loop %]
+        <tr><td>
+            [% IF ( languages_loo.plural ) %]
+            [% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]
+            [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]<table><tr><td>
+                [% IF ( sublanguages_loo.sublanguage_current ) %]
+                    <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                    <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+
+                [% ELSE %]
+                    <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                    <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+                [% END %]</td></tr></table>
+            [% END %]
+
+            [% ELSE %]
+                [% IF ( languages_loo.current ) %]
+            <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                [% ELSE %]
+            <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                [% END %]
+            [% END %]
+        </td></tr>
+        [% END %]
+    </table>
+        [% END %]
+
+        [% END %]
+
+                [% IF ( type_yesno ) %]
+                    [% IF ( value_yes ) %]
+                        <input type="radio" name="value" id="value" value="1" checked="checked" />[% ELSE %]<input type="radio" name="value" id="value" value="1" />
+                    [% END %]
+                    <label for="value" class="yesno">ON</label>
+                    [% IF ( value_no ) %]
+                        <input type="radio" name="value" id="value-no" value="0" checked="checked" />[% ELSE %]<input type="radio" name="value" id="value-no" value="0" />
+                    [% END %]
+                    <label for="value-no" class="yesno">OFF</label>
+                [% END %]
+                </li>
+        </ol></fieldset>
+        <fieldset class="action"><input type="submit" value="Save" /> 
+          [% IF ( return_tab ) %]
+            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl?tab=[% return_tab %]">Cancel</a>
+          [% ELSE %]
+            <a class="cancel" href="/cgi-bin/koha/admin/systempreferences.pl">Cancel</a>
+          [% END %]
+        </fieldset>
+        
+        <fieldset class="brief">
+        <legend>Koha internal</legend>
+        <div class="hint">Note: you should have no reasons to modify the following default values</div>
+        <ol>
+        <li><label for="preftype">Variable type:</label>
+        <div class="hint"> (<span class="variabletype" id="Choice">Choice</span>, <span class="variabletype" id="YesNo">YesNo</span>, <span class="variabletype" id="Integer">Integer</span>, <span class="variabletype" id="Textarea">Textarea</span>, <span class="variabletype" id="Float">Float</span>, <span class="variabletype" id="Themes">Themes</span>, <span class="variabletype" id="Languages">Languages</span>, <span class="variabletype" id="Upload">Upload</span> or <span class="variabletype" id="ClassSources">ClassSources</span>)</div>
+        <input type="text" name="preftype" id="preftype" value="[% preftype %]" size="40" maxlength="40" /></li>
+        <li><label for="prefoptions">Variable options:</label>
+        <div class="hint">(a choice list for Choice (separated by |) or cols|rows for Texarea)</div>
+        <input type="text" name="prefoptions" id="prefoptions" value="[% prefoptions %]" size="60" maxlength="80" /></li>
+        </ol>
+        </fieldset>
+        </form>
+    [% END %]
+    
+    [% IF ( add_validate ) %]
+        <h3>Data recorded</h3>
+        
+        <form action="[% script_name %]" method="post">
+        <input type="submit" value="OK" />
+        </form>
+    [% END %]
+    
+    [% IF ( delete_confirm ) %]
+    <table>
+        <caption>Confirm Deletion of [% searchfield %]?</caption>
+        <tr>
+            <th>Variable Name:</th>
+            <td>[% searchfield %]</td>
+        </tr>
+        <tr><th>Value: </th><td>
+        [% Tvalue %]
+        </td></tr></table>
+        <form class="inline" action="[% script_name %]" method="post">
+        <input type="hidden" name="op" value="delete_confirmed" />
+        <input type="hidden" name="searchfield" value="[% searchfield %]" />
+        <input type="hidden" name="Tvalue" value="[% Tvalue %]" />
+        <input type="submit"  value="Yes, Delete" /></form> 
+        <form class="inline" action="[% script_name %]" method="post"><input type="submit" value="No, Do not Delete" /></form>
+    [% END %]
+    
+    [% IF ( delete_confirmed ) %]
+        <h3>Data deleted</h3>
+        <form action="[% script_name %]" method="post">
+            <input type="submit" value="Back to System Preferences" />
+        </form>
+    [% END %]
+   
+    [% IF ( else ) %]
+    
+    <div id="toolbar">
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript">
+    //<![CDATA[
+    // prepare DOM for YUI Toolbar
+     $(document).ready(function() {
+        yuiToolbar();
+        [% IF ( loop ) %]$("#sysprefst").tablesorter({
+            sortList: [[0,0]],
+            headers: { 1: {sorter:false},2: { sorter: false },3: { sorter: false },4: { sorter: false }}
+        });[% END %]
+     });
+    // YUI Toolbar Functions
+    function yuiToolbar() {
+        new YAHOO.widget.Button("newstopword");
+    }   //]]>
+    </script>
+    <ul class="toolbar">
+        <li><a id="newstopword" href="[% script_name %]?op=add_form">New Preference</a></li>
+    </ul></div>
+    
+    <h1>System preferences admin</h1>
+    <h2>[% tab %] preferences</h2>
+    [% searchfield %]
+    <table width="80%" id="sysprefst">
+    <thead><tr>
+        <th>Preference</th>
+        <th>Explanation</th>
+        <th>Value</th>
+        <th>Edit</th>
+        <th>Delete</th>
+    </tr></thead>
+    <tbody>[% FOREACH loo IN loop %]
+    [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+
+        <td><strong><a href="[% loo.edit %]">[% loo.variable %]</a></strong></td><td> [% loo.explanation |html %]</td>
+        [% IF ( loo.oneline ) %]
+        <td class="single-line">
+        [% ELSE %]
+        <td>
+        [% END %]
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" [% IF ( loo.type_upload ) %]enctype="multipart/form-data"[% END %]>
+
+                [% IF ( loo.type_free ) %]
+                <input type="text" name="value" size="[% loo.fieldlength %]" value="[% loo.value |html %]" />
+                [% END %]
+                [% IF ( loo.type_upload ) %]
+                <input type="file" name="value" value="[% loo.value |html %]" />
+                [% END %]
+                [% IF ( loo.type_textarea ) %]
+                <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
+                <textarea name="value" rows="[% loo.rows %]" cols="[% loo.cols %]">[% loo.value |html %]</textarea>
+                [% END %]
+                [% IF ( loo.type_choice ) %]
+                <select name="value">
+                    [% FOREACH option IN loo.options %]
+                        [% IF ( option.selected ) %]
+                            <option value="[% option.option %]" selected="selected">
+                        [% ELSE %]
+                            <option value="[% option.option %]">
+                        [% END %][% option.option %]</option>
+                    [% END %]
+                </select>
+                [% END %]
+                [% IF ( loo.type_langselector ) %]
+                [% IF ( loo.languages_loop ) %]
+                <table>
+                [% FOREACH languages_loo IN loo.languages_loop %]
+                <tr><td>
+                    [% IF ( languages_loo.plural ) %]
+                    [% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]
+                    [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]<table><tr><td>
+                        [% IF ( sublanguages_loo.sublanguage_current ) %]
+                            <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+
+                        [% ELSE %]
+                            <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
+                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+                        [% END %]</td></tr></table>
+                    [% END %]
+
+                    [% ELSE %]
+                        [% IF ( languages_loo.current ) %]
+                    <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                        [% ELSE %]
+                    <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
+                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                        [% END %]
+                    [% END %]
+                </td></tr>
+                [% END %]
+                </table>
+                [% END %]
+
+                [% END %]
+
+                [% IF ( loo.type_yesno ) %]
+                    [% IF ( loo.value_yes ) %]
+                        <input type="radio" name="value" value="1" checked="checked" />[% ELSE %]<input type="radio" name="value" value="1" />
+                    [% END %]
+                    <label for="value" class="yesno">ON</label>
+                    [% IF ( loo.value_no ) %]
+                        <input type="radio" name="value" value="0" checked="checked" />[% ELSE %]<input type="radio" name="value" value="0" />
+                    [% END %]
+                    <label for="value-no" class="yesno">OFF</label>
+                [% END %]
+                <input type="hidden" name="op" value="add_validate" />
+                <input type="hidden" name="variable" value="[% loo.variable %]" />
+                <input type="hidden" name="prefoptions" value="[% loo.prefoptions |html %]" />
+                <input type="hidden" name="preftype" value="[% loo.type %]" />
+                <input type="hidden" name="explanation" value="[% loo.explanation |html %]" />
+                <input type="submit" value="Save" />
+            </form>
+        </td>
+
+        <td><a href="[% loo.edit %]">Edit </a></td>
+        <td><a href="[% loo.delete %]">Delete</a></td>
+    </tr>
+    [% END %]</tbody>
+    </table>
+    
+    [% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'prefs-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

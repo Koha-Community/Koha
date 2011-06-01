@@ -1,0 +1,157 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $('#showallbudgets').click(function() {
+	if ( $('#showallbudgets:checked').val() !== undefined) {
+	    $('.b_inactive').show();
+	    $('#b_inactive').show();
+	    $('.bu_active').show();
+	    $('.bu_inactive').hide();
+	}
+	else {
+	    $('.b_inactive').hide();
+	    $('#b_inactive').hide();
+	    $('.bu_inactive').show();
+	    $('.bu_active').hide();
+	}
+    });
+});
+//]]>
+</script>
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; </div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% INCLUDE 'acquisitions-toolbar.inc' %]
+
+<h1>Acquisitions</h1>
+<div class="yui-g">
+<div class="yui-u first">
+<div id="acqui_acqui_home_order">
+    <fieldset>
+        <legend>Manage orders</legend>
+    [% IF ( nobudget ) %]
+        [% IF ( CAN_user_parameters ) %]
+        <span class="problem">You must <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget</a> in Administration</span>
+        [% ELSE %]
+        <span class="problem">Your administrator must define a budget in Administration</span>
+        [% END %]
+        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
+            <p><label for="supplierpage">Vendor </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
+            <input type="submit" value="Search" />
+            </p>
+        </form>
+    [% ELSE %]
+        <form name="findsupplier" action="/cgi-bin/koha/acqui/booksellers.pl" method="post">
+            <p><label for="supplierpage">Vendor: </label><input type="text" size="25" name="supplier" id="supplierpage" class="focus" />
+            <input type="submit" value="Search" />
+            </p>
+        </form>
+
+    [% END %]
+    </fieldset>
+</div>
+
+[% IF ( suggestion ) %][% IF ( suggestions_count ) %]
+<div id="acqui_acqui_home_suggestions">
+    <fieldset>
+    <legend>Pending suggestions</legend>
+        <p>[% suggestions_count %] suggestions waiting. <a href="/cgi-bin/koha/suggestion/suggestion.pl">Manage suggestions</a>.</p>
+    </fieldset>
+</div>[% END %][% END %]
+
+</div>
+
+<div class="yui-u">
+
+        [% IF ( loop_budget ) %]
+
+            <h3>All available funds[% IF ( branchname ) %] for [% branchname %] branch[% END %]</h3>
+
+    <!-- <a href="/cgi-bin/koha/admin/aqbookfund.pl" title="[ Manage funds ]">[ Manage ]</a>
+    <a href="/cgi-bin/koha/admin/budgetperiods.pl">manage budgets</a><br><br>  -->
+
+
+
+    <div id="BudgetsAndFunds">
+    <table id="accounts">
+        <thead>
+        <tr>
+            <th>Fund</th>
+            <th>Owner</th>
+            <th>Branch</th>
+            <th>Amount</th>
+            <th>Ordered</th>
+            <th>Spent</th>
+            <th>Avail</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <th>Total</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% total %]</span><span class="bu_inactive" >[% total_active %]</span></th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% totordered %]</span><span class="bu_inactive" >[% totordered_active %]</span></th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% totspent %]</span><span class="bu_inactive" >[% totspent_active %]</span></th>
+            <th align="right" ><span class="bu_active" style="display : none;">[% totavail %]</span><span class="bu_inactive" >[% totavail_active %]</span></th>
+        </tr>
+        </tfoot>
+        <tbody>
+        [% FOREACH loop_budge IN loop_budget %]
+	    [% IF ( loop_budge.budget_period_active ) %]
+            [% IF ( loop.odd ) %]
+                <tr>
+            [% ELSE %]
+                <tr class="highlight">
+            [% END %]
+                <td align="center">[% loop_budge.budget_code %]</td>
+                <td align="center">[% loop_budge.budget_owner %]</td>
+                <td align="center">[% loop_budge.budget_branchname %]</td>
+                <td align="right" >[% loop_budge.budget_amount %]</td>
+                <td align="right" >[% loop_budge.budget_ordered %]</td>
+                <td align="right" >[% loop_budge.budget_spent %]</td>
+                <td align="right" >[% loop_budge.budget_avail %]</td>
+            </tr>
+            [% ELSE %]
+            [% IF ( loop.odd ) %]
+                <tr class="b_inactive" style="display : none;">
+            [% ELSE %]
+                <tr class="highlight" id = "b_inactive" style="display : none;">
+            [% END %]
+            <td align="center" >[% loop_budge.budget_code %]</td>
+                <td align="center">[% loop_budge.budget_owner %]</td>
+                <td align="center">[% loop_budge.budget_branchname %]</td>
+                <td align="right" >[% loop_budge.budget_amount %]</td>
+                <td align="right" >[% loop_budge.budget_ordered %]</td>
+                <td align="right" >[% loop_budge.budget_spent %]</td>
+                <td align="right" >[% loop_budge.budget_avail %]</td>
+            [% END %]
+        [% END %]
+        </tbody>
+    </table>
+    </div><span class="label">Show all :&nbsp;</span><input type="checkbox" id="showallbudgets" />
+    [% END %]
+</div>
+
+</div>
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

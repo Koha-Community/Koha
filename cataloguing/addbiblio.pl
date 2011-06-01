@@ -2,6 +2,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2004-2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -188,7 +189,7 @@ sub build_authorized_values_list ($$$$$$$) {
             "select itemtype,description from itemtypes order by description");
         $sth->execute;
         push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+          unless ( $tagslib->{$tag}->{$subfield}->{defaultvalue} and $tagslib->{$tag}->{$subfield}->{mandatory} );
           
         my $itemtype;
         
@@ -340,14 +341,14 @@ sub create_input {
     if(exists $mandatory_z3950->{$tag.$subfield}){
         $subfield_data{z3950_mandatory} = $mandatory_z3950->{$tag.$subfield};
     }
-    # decide if the subfield must be expanded (visible) by default or not
-    # if it is mandatory, then expand. If it is hidden explicitly by the hidden flag, hidden anyway
+    # Subfield is hidden depending of hidden and mandatory flag, and is always
+    # shown if it contains anything or if its field is mandatory.
+    my $tdef = $tagslib->{$tag};
     $subfield_data{visibility} = "display:none;"
-        if (    ($tagslib->{$tag}->{$subfield}->{hidden} % 2 == 1) and $value ne ''
-            or ($value eq '' and !$tagslib->{$tag}->{$subfield}->{mandatory})
-        );
-    # always expand all subfields of a mandatory field
-    $subfield_data{visibility} = "" if $tagslib->{$tag}->{mandatory};
+        if $tdef->{$subfield}->{hidden} % 2 == 1 &&
+           $value eq '' &&
+           !$tdef->{$subfield}->{mandatory} &&
+           !$tdef->{mandatory};
     # it's an authorised field
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
         $subfield_data{marc_value} =
@@ -757,7 +758,7 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
   my ($countcreated,$countlinked);
   while (my $data=$query->fetchrow_hashref){
     foreach my $field ($record->field($data->{tagfield})){
-      next if ($field->subfield('3')||$field->subfield('9'));
+      next if ($field->subfield('3') || $field->subfield('9'));
       # No authorities id in the tag.
       # Search if there is any authorities to link to.
       my $query='at='.$data->{authtypecode}.' ';
@@ -768,16 +769,16 @@ AND (authtypecode IS NOT NULL AND authtypecode<>\"\")|);
         warn "BIBLIOADDSAUTHORITIES: $error";
 	    return (0,0) ;
 	  }
-      if ($results && scalar(@$results)==1) {
+      if ( @{$results} == 1) {
         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
         $field->add_subfields('9'=>$marcrecord->field('001')->data);
         $countlinked++;
-      } elsif (scalar(@$results)>1) {
+      } elsif (@{$results} > 1) {
    #More than One result 
    #This can comes out of a lack of a subfield.
 #         my $marcrecord = MARC::File::USMARC::decode($results->[0]);
 #         $record->field($data->{tagfield})->add_subfields('9'=>$marcrecord->field('001')->data);
-  $countlinked++;
+        $countlinked++;
       } else {
   #There are no results, build authority record, add it to Authorities, get authid and add it to 9
   ###NOTICE : This is only valid if a subfield is linked to one and only one authtypecode     
@@ -837,7 +838,7 @@ my $dbh           = C4::Context->dbh;
 my $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
 
 $frameworkcode = &GetFrameworkCode($biblionumber)
-  if ( $biblionumber and not($frameworkcode) );
+  if ( $biblionumber and not($frameworkcode) and $op ne 'addbiblio' );
 
 $frameworkcode = '' if ( $frameworkcode eq 'Default' );
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -932,8 +933,7 @@ if ( $op eq "addbiblio" ) {
         else {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
         }
-
-        if (($mode ne "popup" && !$is_a_modif) || $redirect eq "items"){
+        if ($redirect eq "items" || ($mode ne "popup" && !$is_a_modif && $redirect ne "view")){
             print $input->redirect(
                 "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
             );
@@ -1023,10 +1023,13 @@ $template->param( title => $record->title() ) if ( $record ne "-1" );
 if (C4::Context->preference("marcflavour") eq "MARC21"){
     $template->param(MARC21 => 1);
 }
+
+
 $template->param(
     popup => $mode,
     frameworkcode => $frameworkcode,
     itemtype => $frameworkcode,
+    borrowernumber => $loggedinuser
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

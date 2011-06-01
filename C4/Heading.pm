@@ -24,6 +24,7 @@ use MARC::Field;
 use C4::Context;
 use C4::Heading::MARC21;
 use C4::Search;
+use Carp;
 
 our $VERSION = 3.00;
 
@@ -106,9 +107,12 @@ heading.
 
 sub authorities {
     my $self = shift;
-    my $query = qq(Match-heading,ext="$self->{'search_form'}");
+    my $query = qq(Match-heading,do-not-truncate,ext="$self->{'search_form'}");
     $query .= $self->_query_limiters();
     my ($error, $results, $total_hits) = SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
+    if (defined $error) {
+        carp "Error:$error from search $query";
+    }
     return $results;
 }
 
@@ -123,9 +127,12 @@ that are a preferred form of the heading.
 
 sub preferred_authorities {
     my $self = shift;
-    my $query = "Match-heading-see-from,ext='$self->{'search_form'}'";
+    my $query = "Match-heading-see-from,do-not-truncate,ext='$self->{'search_form'}'";
     $query .= $self->_query_limiters();
     my ($error, $results, $total_hits) = SimpleSearch( $query, undef, undef, [ "authorityserver" ] );
+    if (defined $error) {
+        carp "Error:$error from search $query";
+    }
     return $results;
 }
 

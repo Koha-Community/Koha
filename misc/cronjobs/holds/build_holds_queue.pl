@@ -168,8 +168,9 @@ sub GetItemsAvailableToFillHoldRequestsForBib {
     $items_query .=   "WHERE items.notforloan = 0
                        AND holdingbranch IS NOT NULL
                        AND itemlost = 0
-                       AND wthdrawn = 0
-                       AND items.onloan IS NULL
+                       AND wthdrawn = 0";
+    $items_query .=   " AND damaged = 0 " unless C4::Context->preference('AllowHoldsOnDamagedItems');
+    $items_query .=   " AND items.onloan IS NULL
                        AND (itemtypes.notforloan IS NULL OR itemtypes.notforloan = 0)
                        AND itemnumber NOT IN (
                            SELECT itemnumber

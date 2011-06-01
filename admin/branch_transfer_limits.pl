@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -64,7 +65,7 @@ for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{b
 
 # Set the template language for the correct limit type
 my $limit_phrase = 'Collection Code';
-my $limitType = C4::Context->preference("BranchTransferLimitsType");
+my $limitType = C4::Context->preference("BranchTransferLimitsType") || "ccode";
 if ( $limitType eq 'itemtype' ) {
 	$limit_phrase = 'Item Type';
 }

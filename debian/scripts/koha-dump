@@ -40,10 +40,10 @@ echo "Dumping Koha site $name:"
 
 
 # Dump database.
-mysqlhost="$(sed -n '/.*<hostname>\(.*\)<\/hostname>.*/s::\1:p' $kohaconfig)"
-mysqldb="$(sed -n '/.*<database>\(.*\)<\/database>.*/s::\1:p' $kohaconfig)"
-mysqluser="$(sed -n '/.*<user>\(.*\)<\/user>.*/s::\1:p' $kohaconfig | tail -n1)"
-mysqlpass="$(sed -n '/.*<pass>\(.*\)<\/pass>.*/s::\1:p' $kohaconfig)"
+mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
+mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
+mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
+mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
 dbdump="/var/spool/koha/$name/$name-$date.sql.gz"
 echo "* DB to $dbdump"
 mysqldump --databases --host="$mysqlhost" \

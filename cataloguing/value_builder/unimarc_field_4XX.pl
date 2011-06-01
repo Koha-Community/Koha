@@ -335,7 +335,10 @@ sub plugin {
         my $orderby;
         $search = 'kw,wrdl='.$search.' and mc-itemtype='.$itype if $itype;
         my ( $errors, $results, $total_hits ) = SimpleSearch($search, $startfrom * $resultsperpage, $resultsperpage );
-        my $total = scalar(@$results);
+        if (defined $errors ) {
+            $results = [];
+        }
+        my $total = @{$results};
 
         #        warn " biblio count : ".$total;
 

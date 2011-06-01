@@ -27,8 +27,10 @@ kohaconfig="/etc/koha/sites/$name/koha-conf.xml"
 date="$(date +%Y-%m-%d)"
 
 
-mysqldb="$(sed -n '/.*<database>\(.*\)<\/database>.*/s::\1:p' $kohaconfig)"
-mysqluser="$(sed -n '/.*<user>\(.*\)<\/user>.*/s::\1:p' $kohaconfig | tail -n1)"
-mysqlpass="$(sed -n '/.*<pass>\(.*\)<\/pass>.*/s::\1:p' $kohaconfig)"
-mysqldump --databases --user="$mysqluser" --password="$mysqlpass" "$mysqldb" |
+mysqlhost="$( xmlstarlet sel -t -v 'yazgfs/config/hostname' $kohaconfig )"
+mysqldb="$( xmlstarlet sel -t -v 'yazgfs/config/database' $kohaconfig )"
+mysqluser="$( xmlstarlet sel -t -v 'yazgfs/config/user' $kohaconfig )"
+mysqlpass="$( xmlstarlet sel -t -v 'yazgfs/config/pass' $kohaconfig )"
+mysqldump --databases --host="$mysqlhost" --user="$mysqluser" \
+    --password="$mysqlpass" "$mysqldb" |
     sed "s/$name/__KOHASITE__/g"

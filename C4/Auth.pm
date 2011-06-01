@@ -34,7 +34,7 @@ use C4::VirtualShelves;
 use POSIX qw/strftime/;
 
 # use utf8;
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout);
+use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $servers $memcached);
 
 BEGIN {
     $VERSION = 3.02;        # set version for version checking
@@ -54,7 +54,16 @@ BEGIN {
         require C4::Auth_with_cas;             # no import
         import  C4::Auth_with_cas qw(checkpw_cas login_cas logout_cas login_cas_url);
     }
-
+    $servers = C4::Context->config('memcached_servers');
+    if ($servers) {
+	require Cache::Memcached;
+        $memcached = Cache::Memcached->new({
+					       servers => [ $servers ],
+					       debug   => 0,
+					       compress_threshold => 10_000,
+					       namespace => C4::Context->config('memcached_namespace') || 'koha',
+					   });
+    }
 }
 
 =head1 NAME
@@ -154,19 +163,19 @@ sub get_template_and_user {
         $template->param( loggedinusername => $user );
         $template->param( sessionID        => $sessionID );
 
-		my ($total, $pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
-		if (defined($pubshelves)) {
-        	$template->param( 	pubshelves     	=> scalar (@$pubshelves),
-        						pubshelvesloop 	=> $pubshelves,
-							);
-			$template->param(	pubtotal		=> $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@$pubshelves));
-		}
-		if (defined($barshelves)) {
-        	$template->param(	barshelves     	=> scalar (@$barshelves),
-        						barshelvesloop 	=> $barshelves,
-							);
-			$template->param(	bartotal		=> $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar (@$barshelves));
-		}
+        my ($total, $pubshelves, $barshelves) = C4::Context->get_shelves_userenv();
+        if (defined($pubshelves)) {
+            $template->param( pubshelves     => scalar @{$pubshelves},
+                              pubshelvesloop => $pubshelves,
+            );
+            $template->param( pubtotal   => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar @{$pubshelves});
+        }
+        if (defined($barshelves)) {
+            $template->param( barshelves      => scalar @{$barshelves},
+                              barshelvesloop  => $barshelves,
+            );
+            $template->param( bartotal  => $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar @{$barshelves});
+        }
 
         $borrowernumber = getborrowernumber($user) if defined($user);
 
@@ -232,7 +241,7 @@ sub get_template_and_user {
         }
 		# Logged-in opac search history
 		# If the requested template is an opac one and opac search history is enabled
-		if ($in->{'type'} == "opac" && C4::Context->preference('EnableOpacSearchHistory')) {
+		if ($in->{type} eq 'opac' && C4::Context->preference('EnableOpacSearchHistory')) {
 			my $dbh = C4::Context->dbh;
 			my $query = "SELECT COUNT(*) FROM search_history WHERE userid=?";
 			my $sth = $dbh->prepare($query);
@@ -287,11 +296,11 @@ sub get_template_and_user {
         $template->param( sessionID        => $sessionID );
         
         my ($total, $pubshelves) = C4::Context->get_shelves_userenv();  # an anonymous user has no 'barshelves'...
-        if (defined(($pubshelves))) {
-            $template->param(   pubshelves      => scalar (@$pubshelves),
+        if (defined $pubshelves) {
+            $template->param(   pubshelves      => scalar @{$pubshelves},
                                 pubshelvesloop  => $pubshelves,
                             );
-            $template->param(   pubtotal        => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar (@$pubshelves));
+            $template->param(   pubtotal        => $total->{'pubtotal'}, ) if ($total->{'pubtotal'} > scalar @{$pubshelves});
         }
 
     }
@@ -332,12 +341,11 @@ sub get_template_and_user {
             LoginSurname                 => C4::Context->userenv?C4::Context->userenv->{"surname"}:"Inconnu",
             TagsEnabled                  => C4::Context->preference("TagsEnabled"),
             hide_marc                    => C4::Context->preference("hide_marc"),
-            'item-level_itypes'          => C4::Context->preference('item-level_itypes'),
+            item_level_itypes            => C4::Context->preference('item-level_itypes'),
             patronimages                 => C4::Context->preference("patronimages"),
             singleBranchMode             => C4::Context->preference("singleBranchMode"),
             XSLTDetailsDisplay           => C4::Context->preference("XSLTDetailsDisplay"),
             XSLTResultsDisplay           => C4::Context->preference("XSLTResultsDisplay"),
-            BranchesLoop                 => GetBranchesLoop(),
             using_https                  => $in->{'query'}->https() ? 1 : 0,
             noItemTypeImages            => C4::Context->preference("noItemTypeImages"),
     );
@@ -360,6 +368,7 @@ sub get_template_and_user {
             advancedMARCEditor          => C4::Context->preference("advancedMARCEditor"),
             canreservefromotherbranches => C4::Context->preference('canreservefromotherbranches'),
             intranetcolorstylesheet     => C4::Context->preference("intranetcolorstylesheet"),
+            IntranetFavicon             => C4::Context->preference("IntranetFavicon"),
             intranetreadinghistory      => C4::Context->preference("intranetreadinghistory"),
             intranetstylesheet          => C4::Context->preference("intranetstylesheet"),
             IntranetUserCSS             => C4::Context->preference("IntranetUserCSS"),
@@ -380,17 +389,26 @@ sub get_template_and_user {
         # variables passed from CGI: opac_css_override and opac_search_limits.
         my $opac_search_limit = $ENV{'OPAC_SEARCH_LIMIT'};
         my $opac_limit_override = $ENV{'OPAC_LIMIT_OVERRIDE'};
-        my $mylibraryfirst = C4::Context->preference("SearchMyLibraryFirst");
-        my $opac_name;
-        if($opac_limit_override && ($opac_search_limit =~ /branch:(\w+)/) ){
-             $opac_name = C4::Branch::GetBranchName($1)   # opac_search_limit is a branch, so we use it.
-        } elsif($mylibraryfirst){
-            $opac_name = C4::Branch::GetBranchName($mylibraryfirst);
+        my $opac_name = '';
+        if (($opac_search_limit =~ /branch:(\w+)/ && $opac_limit_override) || $in->{'query'}->param('limit') =~ /branch:(\w+)/){
+            $opac_name = $1;   # opac_search_limit is a branch, so we use it.
+        } elsif (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv && C4::Context->userenv->{'branch'}) {
+            $opac_name = C4::Context->userenv->{'branch'};
         }
+	my $checkstyle = C4::Context->preference("opaccolorstylesheet");
+	if ($checkstyle =~ /http/)
+	{
+            	$template->param( opacexternalsheet => $checkstyle);
+	} else
+	{
+		my $opaccolorstylesheet = C4::Context->preference("opaccolorstylesheet");  
+            $template->param( opaccolorstylesheet => $opaccolorstylesheet);
+	}
         $template->param(
             AmazonContent             => "" . C4::Context->preference("AmazonContent"),
             AnonSuggestions           => "" . C4::Context->preference("AnonSuggestions"),
             AuthorisedValueImages     => C4::Context->preference("AuthorisedValueImages"),
+            BranchesLoop              => GetBranchesLoop($opac_name),
             LibraryName               => "" . C4::Context->preference("LibraryName"),
             LibraryNameTitle          => "" . $LibraryNameTitle,
             LoginBranchname           => C4::Context->userenv?C4::Context->userenv->{"branchname"}:"",
@@ -408,7 +426,6 @@ sub get_template_and_user {
             OpacAuthorities           => C4::Context->preference("OpacAuthorities"),
             OPACBaseURL               => ($in->{'query'}->https() ? "https://" : "http://") . $ENV{'SERVER_NAME'} .
                    ($ENV{'SERVER_PORT'} eq ($in->{'query'}->https() ? "443" : "80") ? '' : ":$ENV{'SERVER_PORT'}"),
-            opac_name             => $opac_name,
             opac_css_override           => $ENV{'OPAC_CSS_OVERRIDE'},
             opac_search_limit         => $opac_search_limit,
             opac_limit_override       => $opac_limit_override,
@@ -426,10 +443,10 @@ sub get_template_and_user {
             hidelostitems             => C4::Context->preference("hidelostitems"),
             mylibraryfirst            => (C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv) ? C4::Context->userenv->{'branch'} : '',
             opaclayoutstylesheet      => "" . C4::Context->preference("opaclayoutstylesheet"),
-            opaccolorstylesheet       => "" . C4::Context->preference("opaccolorstylesheet"),
             opacstylesheet            => "" . C4::Context->preference("opacstylesheet"),
             opacbookbag               => "" . C4::Context->preference("opacbookbag"),
             opaccredits               => "" . C4::Context->preference("opaccredits"),
+            OpacFavicon               => C4::Context->preference("OpacFavicon"),
             opacheader                => "" . C4::Context->preference("opacheader"),
             opaclanguagesdisplay      => "" . C4::Context->preference("opaclanguagesdisplay"),
             opacreadinghistory        => C4::Context->preference("opacreadinghistory"),
@@ -437,6 +454,7 @@ sub get_template_and_user {
             opacuserjs                => C4::Context->preference("opacuserjs"),
             opacuserlogin             => "" . C4::Context->preference("opacuserlogin"),
             reviewson                 => C4::Context->preference("reviewson"),
+            ShowReviewer              => C4::Context->preference("ShowReviewer"),
             suggestion                => "" . C4::Context->preference("suggestion"),
             virtualshelves            => "" . C4::Context->preference("virtualshelves"),
             OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),
@@ -457,7 +475,7 @@ sub get_template_and_user {
             SyndeticsCoverImageSize      => C4::Context->preference("SyndeticsCoverImageSize"),
         );
 
-        $template->param(OpacPublic => '1') if ($template->param( 'loggedinusername') || C4::Context->preference("OpacPublic"));
+        $template->param(OpacPublic => '1') if ($user || C4::Context->preference("OpacPublic"));
     }
 	$template->param(listloop=>[{shelfname=>"Freelist", shelfnumber=>110}]);
     return ( $template, $borrowernumber, $cookie, $flags);
@@ -718,7 +736,9 @@ sub checkauth {
 		    $userid = $retuserid;
 		    $info{'invalidCasLogin'} = 1 unless ($return);
         	} else {
-		    ( $return, $cardnumber ) = checkpw( $dbh, $userid, $password, $query );
+		    my $retuserid;
+		    ( $return, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
+		    $userid = $retuserid if ($retuserid ne '');
 		}
 		if ($return) {
                _session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
@@ -744,20 +764,21 @@ sub checkauth {
                 	";
                 	my $sth = $dbh->prepare("$select where userid=?");
                 	$sth->execute($userid);
-					unless ($sth->rows) {
-                		$debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
-						$sth = $dbh->prepare("$select where cardnumber=?");
-                   		$sth->execute($cardnumber);
-						unless ($sth->rows) {
-                			$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
-                    		$sth->execute($userid);
-							unless ($sth->rows) {
-                				$debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
-							}
-						}
-					}
+			unless ($sth->rows) {
+		    	    $debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
+		    	    $sth = $dbh->prepare("$select where cardnumber=?");
+		       	    $sth->execute($cardnumber);
+
+		    	    unless ($sth->rows) {
+				$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
+				$sth->execute($userid);
+				unless ($sth->rows) {
+				    $debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
+				}
+			    }
+			}
                 	if ($sth->rows) {
-                    	($borrowernumber, $firstname, $surname, $userflags,
+			    ($borrowernumber, $firstname, $surname, $userflags,
                     		$branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
 						$debug and print STDERR "AUTH_3 results: " .
 							"$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
@@ -841,12 +862,12 @@ sub checkauth {
 				$total->{'bartotal'} = $totshelves;
 				($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
 				$total->{'pubtotal'} = $totshelves;
-				$session->param('barshelves', $barshelves->[0]);
-				$session->param('pubshelves', $pubshelves->[0]);
+				$session->param('barshelves', $barshelves);
+				$session->param('pubshelves', $pubshelves);
 				$session->param('totshelves', $total);
 
-				C4::Context::set_shelves_userenv('bar',$barshelves->[0]);
-				C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
+				C4::Context::set_shelves_userenv('bar',$barshelves);
+				C4::Context::set_shelves_userenv('pub',$pubshelves);
 				C4::Context::set_shelves_userenv('tot',$total);
 			}
         	else {
@@ -866,9 +887,9 @@ sub checkauth {
 			my ($total, $totshelves, $pubshelves);
 			($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
 			$total->{'pubtotal'} = $totshelves;
-			$session->param('pubshelves', $pubshelves->[0]);
+			$session->param('pubshelves', $pubshelves);
 			$session->param('totshelves', $total);
-			C4::Context::set_shelves_userenv('pub',$pubshelves->[0]);
+			C4::Context::set_shelves_userenv('pub',$pubshelves);
 			C4::Context::set_shelves_userenv('tot',$total);
 
 			# setting a couple of other session vars...
@@ -912,6 +933,15 @@ sub checkauth {
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
     my $template = gettemplate( $template_name, $type, $query );
     $template->param(branchloop => \@branch_loop,);
+    my $checkstyle = C4::Context->preference("opaccolorstylesheet");
+    if ($checkstyle =~ /\//)
+	{
+            	$template->param( opacexternalsheet => $checkstyle);
+	} else
+	{
+		my $opaccolorstylesheet = C4::Context->preference("opaccolorstylesheet");  
+            $template->param( opaccolorstylesheet => $opaccolorstylesheet);
+	}
     $template->param(
     login        => 1,
         INPUTS               => \@inputs,
@@ -922,10 +952,10 @@ sub checkauth {
         opacuserlogin        => C4::Context->preference("opacuserlogin"),
         OpacNav              => C4::Context->preference("OpacNav"),
         opaccredits          => C4::Context->preference("opaccredits"),
+        OpacFavicon          => C4::Context->preference("OpacFavicon"),
         opacreadinghistory   => C4::Context->preference("opacreadinghistory"),
         opacsmallimage       => C4::Context->preference("opacsmallimage"),
         opaclayoutstylesheet => C4::Context->preference("opaclayoutstylesheet"),
-        opaccolorstylesheet  => C4::Context->preference("opaccolorstylesheet"),
         opaclanguagesdisplay => C4::Context->preference("opaclanguagesdisplay"),
         opacuserjs           => C4::Context->preference("opacuserjs"),
         opacbookbag          => "" . C4::Context->preference("opacbookbag"),
@@ -936,6 +966,7 @@ sub checkauth {
         opacheader           => C4::Context->preference("opacheader"),
         TagsEnabled                  => C4::Context->preference("TagsEnabled"),
         OPACUserCSS           => C4::Context->preference("OPACUserCSS"),
+        opacstylesheet       => C4::Context->preference("opacstylesheet"),
         intranetcolorstylesheet =>
 								C4::Context->preference("intranetcolorstylesheet"),
         intranetstylesheet => C4::Context->preference("intranetstylesheet"),
@@ -962,7 +993,7 @@ sub checkauth {
         url         => $self_url,
         LibraryName => C4::Context->preference("LibraryName"),
     );
-    $template->param( \%info );
+    $template->param( %info );
 #    $cookie = $query->cookie(CGISESSID => $session->id
 #   );
     print $query->header(
@@ -1343,6 +1374,9 @@ sub get_session {
     elsif ($storage_method eq 'Pg') {
         $session = new CGI::Session("driver:PostgreSQL;serializer:yaml;id:md5", $sessionID, {Handle=>$dbh});
     }
+    elsif ($storage_method eq 'memcached' && $servers){
+	$session = new CGI::Session("driver:memcached;serializer:yaml;id:md5", $sessionID, { Memcached => $memcached } );
+    }
     else {
         # catch all defaults to tmp should work on all systems
         $session = new CGI::Session("driver:File;serializer:yaml;id:md5", $sessionID, {Directory=>'/tmp'});
@@ -1382,7 +1416,7 @@ sub checkpw {
 
             C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
-            return 1, $cardnumber;
+            return 1, $userid;
         }
     }
     $sth =
@@ -1546,7 +1580,7 @@ sub haspermission {
     my ($userid, $flagsrequired) = @_;
     my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
     $sth->execute($userid);
-    my $flags = getuserflags( $sth->fetchrow(), $userid );
+    my $flags = getuserflags($sth->fetchrow(), $userid);
     if ( $userid eq C4::Context->config('user') ) {
         # Super User Account from /etc/koha.conf
         $flags->{'superlibrarian'} = 1;
@@ -1555,7 +1589,9 @@ sub haspermission {
         # Demo user that can do "anything" (demo=1 in /etc/koha.conf)
         $flags->{'superlibrarian'} = 1;
     }
+
     return $flags if $flags->{superlibrarian};
+
     foreach my $module ( keys %$flagsrequired ) {
         my $subperm = $flagsrequired->{$module};
         if ($subperm eq '*') {

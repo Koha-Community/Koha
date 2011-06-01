@@ -40,6 +40,14 @@ my $data = undef;
 my $borrowernumber = undef;
 my $cardnumber = undef;
 
+my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => "members/readingrec.tmpl",
+				query => $input,
+				type => "intranet",
+				authnotrequired => 0,
+				flagsrequired => {borrowers => 1},
+				debug => 1,
+				});
+
 if ($input->param('cardnumber')) {
     $cardnumber = $input->param('cardnumber');
     $data = GetMember(cardnumber => $cardnumber);
@@ -50,27 +58,9 @@ if ($input->param('borrowernumber')) {
     $data = GetMember(borrowernumber => $borrowernumber);
 }
 
-my $order=$input->param('order') || 'date_due desc';
-my $limit=$input->param('limit');
-
-if ($limit){
-    if ($limit eq 'full'){
-		$limit=0;
-    }
-}
-else {
-  $limit=50;
-}
+my $order = 'date_due desc';
+my $limit = 0;
 my ( $issues ) = GetAllIssues($borrowernumber,$order,$limit);
-
-my ($template, $loggedinuser, $cookie)
-= get_template_and_user({template_name => "members/readingrec.tmpl",
-				query => $input,
-				type => "intranet",
-				authnotrequired => 0,
-				flagsrequired => {borrowers => 1},
-				debug => 1,
-				});
 
 my @loop_reading;
 
@@ -123,6 +113,7 @@ $template->param(
 					    address => $data->{'address'},
 						address2 => $data->{'address2'},
 					    city => $data->{'city'},
+					    state => $data->{'state'},
 						zipcode => $data->{'zipcode'},
 						country => $data->{'country'},
 						phone => $data->{'phone'},

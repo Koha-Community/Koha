@@ -26,6 +26,7 @@ use C4::Search;
 use C4::AuthoritiesMarc::MARC21;
 use C4::AuthoritiesMarc::UNIMARC;
 use C4::Charset;
+use C4::Log;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -224,12 +225,9 @@ sub SearchAuthorities {
         for(my $i = 0 ; $i <= $#{$value} ; $i++)
         {
             if (@$value[$i]){
-            ##If mainentry search $a tag
                 if (@$tags[$i] eq "mainmainentry") {
 
-# FIXME: 'Heading-Main' index not yet defined in zebra
-#                $attr =" \@attr 1=Heading-Main "; 
-                $attr =" \@attr 1=Heading ";
+                $attr =" \@attr 1=Heading-Main ";
 
                 }elsif (@$tags[$i] eq "mainentry") {
                 $attr =" \@attr 1=Heading ";
@@ -245,6 +243,7 @@ sub SearchAuthorities {
                 } else {
                     $attr .=" \@attr 5=1 \@attr 4=6 ";## Word list, right truncated, anywhere
                 }
+                @$value[$i] =~ s/"/\\"/g; # Escape the double-quotes in the search value
                 $attr =$attr."\"".@$value[$i]."\"";
                 $q2 .=$attr;
                 $dosearch=1;
@@ -266,8 +265,9 @@ sub SearchAuthorities {
                             '@attr 7=2 @attr 1=Heading 0'
                            :''
                         );            
-        $query=($query?"\@or $orderstring $query":"\@or \@attr 1=_ALLRECORDS \@attr 2=103 '' $orderstring ");
-        
+        $query=($query?$query:"\@attr 1=_ALLRECORDS \@attr 2=103 ''");
+        $query="\@or $orderstring $query" if $orderstring;
+
         $offset=0 unless $offset;
         my $counter = $offset;
         $length=10 unless $length;
@@ -364,7 +364,12 @@ sub CountUsage {
         my $query;
         $query= "an=".$authid;
   		my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
-        return ($result);
+        if ($err) {
+            warn "Error: $err from search $query";
+            $result = 0;
+        }
+
+        return $result;
     }
 }
 
@@ -622,6 +627,7 @@ sub AddAuthority {
       $f5->update($time.".0");
     }
 
+    SetUTF8Flag($record);
 	if ($format eq "MARC21") {
 		if (!$record->leader) {
 			$record->leader($leader);
@@ -647,17 +653,21 @@ sub AddAuthority {
     }
 	}
 
-  if (($format eq "UNIMARCAUTH") && (!$record->subfield('100','a'))){
-        $record->leader("     nx  j22             ");
+  if ($format eq "UNIMARCAUTH") {
+        $record->leader("     nx  j22             ") unless ($record->leader());
         my $date=POSIX::strftime("%Y%m%d",localtime);    
-        if ($record->field('100')){
+    if (my $string=$record->subfield('100',"a")){
+      	$string=~s/fre50/frey50/;
+      	$record->field('100')->update('a'=>$string);
+    }
+    elsif ($record->field('100')){
           $record->field('100')->update('a'=>$date."afrey50      ba0");
-        } else {      
-          $record->append_fields(
-            MARC::Field->new('100',' ',' '
-              ,'a'=>$date."afrey50      ba0")
-          );
-        }      
+    } else {      
+        $record->append_fields(
+        MARC::Field->new('100',' ',' '
+            ,'a'=>$date."afrey50      ba0")
+        );
+    }      
   }
   my ($auth_type_tag, $auth_type_subfield) = get_auth_type_location($authtypecode);
   if (!$authid and $format eq "MARC21") {
@@ -699,6 +709,7 @@ sub AddAuthority {
     my $sth=$dbh->prepare("insert into auth_header (authid,datecreated,authtypecode,marc,marcxml) values (?,now(),?,?,?)");
     $sth->execute($authid,$authtypecode,$record->as_usmarc,$record->as_xml_record($format));
     $sth->finish;
+    logaction( "AUTHORITIES", "ADD", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
   }
   ModZebra($authid,'specialUpdate',"authorityserver",$oldRecord,$record);
   return ($authid);
@@ -717,9 +728,10 @@ sub DelAuthority {
     my ($authid) = @_;
     my $dbh=C4::Context->dbh;
 
+    logaction( "AUTHORITIES", "DELETE", $authid, "authority" ) if C4::Context->preference("AuthoritiesLog");
     ModZebra($authid,"recordDelete","authorityserver",GetAuthority($authid),undef);
-    $dbh->do("delete from auth_header where authid=$authid") ;
-
+    my $sth = $dbh->prepare("DELETE FROM auth_header WHERE authid=?");
+    $sth->execute($authid);
 }
 
 sub ModAuthority {
@@ -747,6 +759,7 @@ sub ModAuthority {
       print AUTH $authid;
       close AUTH;
   }
+  logaction( "AUTHORITIES", "MODIFY", $authid, "BEFORE=>" . $oldrecord->as_formatted ) if C4::Context->preference("AuthoritiesLog");
   return $authid;
 }
 
@@ -909,7 +922,7 @@ sub FindDuplicateAuthority {
     }
     my ($error, $results, $total_hits) = C4::Search::SimpleSearch( $query, 0, 1, [ "authorityserver" ] );
     # there is at least 1 result => return the 1st one
-    if (@$results>0) {
+    if (!defined $error && @{$results} ) {
       my $marcrecord = MARC::File::USMARC::decode($results->[0]);
       return $marcrecord->field('001')->data,BuildSummary($marcrecord,$marcrecord->field('001')->data,$authtypecode);
     }
@@ -1037,7 +1050,7 @@ sub BuildSummary{
             $narrowerterms =~s/-- \n$//;
             $seealso =~s/-- \n$//;
             $see =~s/-- \n$//;
-      $summary = "<b><a href=\"detail.pl?authid=$authid\">".$heading."</a></b><br />".($notes?"$notes <br />":"");
+      $summary = $heading."<br />".($notes?"$notes <br />":"");
       $summary.= '<p><div class="label">TG : '.$broaderterms.'</div></p>' if ($broaderterms);
       $summary.= '<p><div class="label">TS : '.$narrowerterms.'</div></p>' if ($narrowerterms);
       $summary.= '<p><div class="label">TA : '.$seealso.'</div></p>' if ($seealso);
@@ -1118,33 +1131,34 @@ sub BuildUnimarcHierarchies{
   my $data = GetHeaderAuthority($authid);
   if ($data->{'authtrees'} and not $force){
     return $data->{'authtrees'};
-  } elsif ($data->{'authtrees'}){
-    $hierarchies=$data->{'authtrees'};
+#  } elsif ($data->{'authtrees'}){
+#    $hierarchies=$data->{'authtrees'};
   } else {
     my $record = GetAuthority($authid);
     my $found;
-	if ($record){
-		foreach my $field ($record->field('550')){
-		  if ($field->subfield('5') && $field->subfield('5') eq 'g'){
-			my $parentrecord = GetAuthority($field->subfield('3'));
-			my $localresult=$hierarchies;
-			my $trees;
-			$trees = BuildUnimarcHierarchies($field->subfield('3'));
-			my @trees;
-			if ($trees=~/;/){
-			   @trees = split(/;/,$trees);
-			} else {
-			   push @trees, $trees;
-			}
-			foreach (@trees){
-			  $_.= ",$authid";
-			}
-			@globalresult = (@globalresult,@trees);
-			$found=1;
-		  }
-		  $hierarchies=join(";",@globalresult);
-		}
-	}
+    return unless $record;
+    foreach my $field ($record->field('5..')){
+      if ($field->subfield('5') && $field->subfield('5') eq 'g'){
+		my $subfauthid=_get_authid_subfield($field);
+        next if ($subfauthid eq $authid);
+        my $parentrecord = GetAuthority($subfauthid);
+        my $localresult=$hierarchies;
+        my $trees;
+        $trees = BuildUnimarcHierarchies($subfauthid);
+        my @trees;
+        if ($trees=~/;/){
+           @trees = split(/;/,$trees);
+        } else {
+           push @trees, $trees;
+        }
+        foreach (@trees){
+          $_.= ",$authid";
+        }
+        @globalresult = (@globalresult,@trees);
+        $found=1;
+      }
+      $hierarchies=join(";",@globalresult);
+    }
     #Unless there is no ancestor, I am alone.
     $hierarchies="$authid" unless ($hierarchies);
   }
@@ -1176,19 +1190,21 @@ sub BuildUnimarcHierarchy{
   my $class = shift @_;
   my $authid_constructed = shift @_;
   return undef unless ($record);
-  my $authid=$record->subfield('2..','3');
+  my $authid=$record->field('001')->data();
   my %cell;
   my $parents=""; my $children="";
   my (@loopparents,@loopchildren);
-  foreach my $field ($record->field('550')){
-    if ($field->subfield('5') && $field->subfield('a')){
-      if ($field->subfield('5') eq 'h'){
-        push @loopchildren, { "childauthid"=>$field->subfield('3'),"childvalue"=>$field->subfield('a')};
-      }elsif ($field->subfield('5') eq 'g'){
-        push @loopparents, { "parentauthid"=>$field->subfield('3'),"parentvalue"=>$field->subfield('a')};
-      }
+  foreach my $field ($record->field('5..')){
+      my $subfauthid=_get_authid_subfield($field);
+      if ($subfauthid && $field->subfield('5') && $field->subfield('a')){
+          if ($field->subfield('5') eq 'h'){
+              push @loopchildren, { "childauthid"=>$field->subfield('3'),"childvalue"=>$field->subfield('a')};
+	  }
+	  elsif ($field->subfield('5') eq 'g'){
+	      push @loopparents, { "parentauthid"=>$field->subfield('3'),"parentvalue"=>$field->subfield('a')};
+	  }
           # brothers could get in there with an else
-    }
+      }
   }
   $cell{"ifparents"}=1 if (scalar(@loopparents)>0);
   $cell{"ifchildren"}=1 if (scalar(@loopchildren)>0);
@@ -1201,6 +1217,10 @@ sub BuildUnimarcHierarchy{
   return \%cell;
 }
 
+sub _get_authid_subfield{
+    my ($field)=@_;
+    return $field->subfield('9')||$field->subfield('3');
+}
 =head2 GetHeaderAuthority
 
   $ref= &GetHeaderAuthority( $authid)

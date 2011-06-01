@@ -1,32 +1,32 @@
-<!-- TMPL_IF name="datedue" -->
-    <!-- TMPL_IF name="OPACShowCheckoutName" -->
-        Checked out to <!-- TMPL_VAR NAME="cardnumber" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" -->
-    <!-- TMPL_ELSE -->
+[% IF ( item.datedue ) %]
+    [% IF ( OPACShowCheckoutName ) %]
+        Checked out to [% item.cardnumber %] [% item.firstname %] [% item.surname %]
+    [% ELSE %]
         Checked out
-    <!-- /TMPL_IF -->
-<!-- TMPL_ELSIF Name="transfertwhen" -->
-    In transit from <!-- TMPL_VAR NAME="transfertfrom" -->
-    to <!-- TMPL_VAR NAME="transfertto" --> since <!-- TMPL_VAR NAME="transfertwhen" -->
-<!-- TMPL_ELSIF NAME="waiting" -->
+    [% END %]
+[% ELSIF ( item.transfertwhen ) %]
+    In transit from [% item.transfertfrom %]
+    to [% item.transfertto %] since [% item.transfertwhen %]
+[% ELSIF ( item.waiting ) %]
     On hold
-<!-- TMPL_ELSIF NAME="wthdrawn" -->
+[% ELSIF ( item.wthdrawn ) %]
     Item withdrawn
-<!-- TMPL_ELSIF name="itemlost"-->
-    <!-- TMPL_IF name="lostimageurl"-->
-        <img src="<!-- TMPL_VAR NAME="lostimageurl" -->" alt="<!-- TMPL_VAR NAME="lostimagelabel" -->" title="<!-- TMPL_VAR NAME="lostimagelabel" -->">
-    <!-- TMPL_ELSE -->
+[% ELSIF ( item.itemlost ) %]
+    [% IF ( item.lostimageurl ) %]
+        <img src="[% item.lostimageurl %]" alt="[% item.lostimagelabel %]" title="[% item.lostimagelabel %]">
+    [% ELSE %]
         Item lost
-    <!-- /TMPL_IF -->
-<!-- TMPL_ELSIF name="itemnotforloan" -->
-    <!-- TMPL_IF NAME="notforloanvalue" -->
-        <!-- TMPL_VAR NAME="notforloanvalue" --> <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
-    <!-- TMPL_ELSE -->
-        Not for loan <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->
-<!-- TMPL_ELSIF name="notforloan_per_itemtype" -->
-    Not for loan <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
-<!-- TMPL_ELSIF NAME="damaged" -->
+    [% END %]
+[% ELSIF ( item.itemnotforloan ) %]
+    [% IF ( item.notforloanvalue ) %]
+        [% item.notforloanvalue %] [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
+    [% ELSE %]
+        Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
+    [% END %]
+[% ELSIF ( item.notforloan_per_itemtype ) %]
+    Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
+[% ELSIF ( item.damaged ) %]
     Item damaged
-<!-- TMPL_ELSE -->
-    Available <!-- TMPL_IF NAME="restrictedopac" --><span class="restricted">(<!-- TMPL_VAR NAME="restrictedopac" -->)</span><!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
+[% ELSE %]
+    Available [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac %])</span>[% END %]
+[% END %]

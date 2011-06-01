@@ -1,7 +1,7 @@
 package C4::Record;
 #
 # Copyright 2006 (C) LibLime
-# Joshua Ferraro <jmf@liblime.com>
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -359,7 +359,7 @@ sub marcrecord2csv {
     my $output;
 
     # Getting the record
-    my $record = GetMarcBiblio($biblio);
+    my $record = GetMarcBiblio($biblio, 1);
     next unless $record;
     # Getting the framework
     my $frameworkcode = GetFrameworkCode($biblio);
@@ -411,6 +411,8 @@ sub marcrecord2csv {
 	foreach (@marcfields) {
 
 	    my $field = $_->{field};
+        # Remove any blank char that might have unintentionally insered into the tag name
+        $field =~ s/\s+//g; 
 
 	    # If we have a user-supplied header, we use it
 	    if (exists $_->{header}) {

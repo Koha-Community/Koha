@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -40,6 +41,10 @@ use C4::Members;
 use C4::VirtualShelves;
 use C4::XSLT;
 use C4::ShelfBrowser;
+use C4::Charset;
+use MARC::Record;
+use MARC::Field;
+use List::MoreUtils qw/any none/;
 
 BEGIN {
 	if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -70,6 +75,9 @@ if ( ! $record ) {
     exit;
 }
 $template->param( biblionumber => $biblionumber );
+
+SetUTF8Flag($record);
+
 # XSLT processing of some stuff
 if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
     $template->param( 'XSLTBloc' => XSLTParse4Display($biblionumber, $record, 'Detail', 'opac') );
@@ -79,14 +87,27 @@ $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowChec
 # change back when ive fixed request.pl
 my @all_items = &GetItemsInfo( $biblionumber, 'opac' );
 my @items;
-@items = @all_items unless C4::Context->preference('hidelostitems');
 
-if (C4::Context->preference('hidelostitems')) {
-    # Hide host items
+# Getting items to be hidden
+my @hiddenitems = GetHiddenItemnumbers(@all_items);
+
+# Are there items to hide?
+my $hideitems = 1 if C4::Context->preference('hidelostitems') or scalar(@hiddenitems) > 0;
+
+# Hide items
+if ($hideitems) {
     for my $itm (@all_items) {
-        push @items, $itm unless $itm->{itemlost};
+	if  ( C4::Context->preference('hidelostitems') ) {
+	    push @items, $itm unless $itm->{itemlost} or any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
+	} else {
+	    push @items, $itm unless any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
     }
 }
+} else {
+    # Or not
+    @items = @all_items;
+}
+
 my $dat = &GetBiblioData($biblionumber);
 
 my $itemtypes = GetItemTypes();
@@ -101,7 +122,7 @@ my $collections =  GetKohaAuthorisedValues('items.ccode',$dat->{'frameworkcode'}
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
-my @subscriptions       = GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
+my @subscriptions       = GetSubscriptions( undef, undef, $biblionumber );
 
 my @subs;
 $dat->{'serial'}=1 if $subscriptionsnumber;
@@ -198,6 +219,7 @@ for my $itm (@items) {
 my $dbh              = C4::Context->dbh;
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
+my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
 my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
 my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
@@ -220,6 +242,33 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      authorised_value_images => $biblio_authorised_value_images,
                      subtitle                => $subtitle,
     );
+
+if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
+    my $fieldspec = C4::Context->preference("AlternateHoldingsField");
+    my $subfields = substr $fieldspec, 3;
+    my $holdingsep = C4::Context->preference("AlternateHoldingsSeparator") || ' ';
+    my @alternateholdingsinfo = ();
+    my @holdingsfields = $record->field(substr $fieldspec, 0, 3);
+
+    for my $field (@holdingsfields) {
+        my %holding = ( holding => '' );
+        my $havesubfield = 0;
+        for my $subfield ($field->subfields()) {
+            if ((index $subfields, $$subfield[0]) >= 0) {
+                $holding{'holding'} .= $holdingsep if (length $holding{'holding'} > 0);
+                $holding{'holding'} .= $$subfield[1];
+                $havesubfield++;
+            }
+        }
+        if ($havesubfield) {
+            push(@alternateholdingsinfo, \%holding);
+        }
+    }
+
+    $template->param(
+        ALTERNATEHOLDINGS   => \@alternateholdingsinfo,
+        );
+}
 
 foreach ( keys %{$dat} ) {
     $template->param( "$_" => defined $dat->{$_} ? $dat->{$_} : '' );
@@ -513,6 +562,7 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $dat->{title} ? $search_for_title =~ s/{TITLE}/$dat->{title}/g : $search_for_title =~ s/{TITLE}//g;
     $isbn ? $search_for_title =~ s/{ISBN}/$isbn/g : $search_for_title =~ s/{ISBN}//g;
     $marccontrolnumber ? $search_for_title =~ s/{CONTROLNUMBER}/$marccontrolnumber/g : $search_for_title =~ s/{CONTROLNUMBER}//g;
+    $search_for_title =~ s/{BIBLIONUMBER}/$biblionumber/g;
  $template->param('OPACSearchForTitleIn' => $search_for_title);
 }
 

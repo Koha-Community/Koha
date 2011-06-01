@@ -2753,13 +2753,13 @@ Invalid command 'RewriteEngine', perhaps misspelled or defined by a module not i
 
 
 
-== Enable the mod_rewrite Apache module ==
+== Enable the mod_rewrite and mod_deflate Apache modules ==
 
-OK... It seems that we need to enable the mod_rewrite Apache module:
+OK... It seems that we need to enable the mod_rewrite and the mod_deflate Apache module:
 |--------------------
-myhost:/etc/sysconfig # a2enmod rewrite
+myhost:/etc/sysconfig # a2enmod rewrite deflate
 |--------------------
-[If the above command seems NOT to work, for some reason, do this - edit /etc/sysconfig/apache2 and add the word "rewrite" (without the quotes) at the end of the APACHE_MODULES line, right before the right quote]
+[If the above command seems NOT to work, for some reason, do this - edit /etc/sysconfig/apache2 and add the words "rewrite" -and "deflate"- (without the quotes) at the end of the APACHE_MODULES line, right before the right quote]
 |--------------------
 myhost:/etc/sysconfig # service apache2 restart
 Syntax OK

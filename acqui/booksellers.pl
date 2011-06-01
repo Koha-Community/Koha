@@ -4,6 +4,7 @@
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2008-2009 BibLibre SARL
+# Copyright 2010 PTFS Europe
 #
 # This file is part of Koha.
 #
@@ -20,14 +21,13 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
 =head1 NAME
 
 booksellers.pl
 
 =head1 DESCRIPTION
 
-this script displays the list of suppliers & orders like C<$supplier> given on input arg.
+this script displays the list of suppliers & baskets like C<$supplier> given on input arg.
 thus, this page brings differents features like to display supplier's details,
 to add an order for a specific supplier or to just add a new supplier.
 
@@ -37,98 +37,114 @@ to add an order for a specific supplier or to just add a new supplier.
 
 =item supplier
 
-C<$supplier> is the suplier we have to search order.
+C<$supplier> is the string with which we search for a supplier
+
 =back
 
-=item op
+=item id or supplierid
 
-C<OP> can be equals to 'close' if we have to close a basket before building the page.
-
-=item basket
-
-the C<basket> we have to close if op is equal to 'close'.
+The id of the supplier whose baskets we will display
 
 =back
 
 =cut
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use C4::Auth;
 use C4::Biblio;
 use C4::Output;
 use CGI;
 
-
-use C4::Acquisition;
 use C4::Dates qw/format_date/;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId GetBookSeller /;
 use C4::Members qw/GetMember/;
 
-my $query = new CGI;
+my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "acqui/booksellers.tmpl",
+    {   template_name   => 'acqui/booksellers.tmpl',
         query           => $query,
-        type            => "intranet",
+        type            => 'intranet',
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 'vendors_manage' },
+        flagsrequired   => { acquisition => '*' },
         debug           => 1,
     }
 );
 
 #parameters
 my $supplier = $query->param('supplier');
-my $id       = $query->param('id') || $query->param('supplierid');
+my $id = $query->param('id') || $query->param('supplierid');
 my @suppliers;
 
 if ($id) {
-	push @suppliers, GetBookSellerFromId($id);
+    push @suppliers, GetBookSellerFromId($id);
 } else {
-	@suppliers = GetBookSeller($supplier);
+    @suppliers = GetBookSeller($supplier);
 }
-my $count = scalar @suppliers;
-if ($count == 1){
-	$template->param( supplier_name => $suppliers[0]->{'name'},
-		id => $suppliers[0]->{'id'}
-	);
+
+my $supplier_count = @suppliers;
+if ( $supplier_count == 1 ) {
+    $template->param(
+        supplier_name => $suppliers[0]->{'name'},
+        id            => $suppliers[0]->{'id'}
+    );
+}
+
+my $uid;
+if ($loggedinuser) {
+    $uid = GetMember( borrowernumber => $loggedinuser )->{userid};
 }
 
 #build result page
-my @loop_suppliers;
-for ( my $i = 0 ; $i < $count ; $i++ ) {
-    my $orders  = GetBasketsByBookseller( $suppliers[$i]->{'id'}, {groupby => "aqbasket.basketno", orderby => "aqbasket.basketname"} );
-    my $ordcount = scalar @$orders;
-    my %line;
+my $loop_suppliers = [];
 
-    $line{supplierid} = $suppliers[$i]->{'id'};
-    $line{name}       = $suppliers[$i]->{'name'};
-    $line{active}     = $suppliers[$i]->{'active'};
-    my @loop_basket;
-    my $uid = GetMember(borrowernumber => $loggedinuser)->{userid} if $loggedinuser;
-    for ( my $i2 = 0 ; $i2 < $ordcount ; $i2++ ) {
-        if ( $orders->[$i2]{'authorisedby'} eq $loggedinuser || haspermission($uid, { flagsrequired   => { 'acquisition' => '*' } } ) ) {
-            my %inner_line;
-            $inner_line{basketno}     = $orders->[$i2]{'basketno'};
-            $inner_line{basketname}     = $orders->[$i2]{'basketname'};
-            $inner_line{total}        = scalar GetOrders($orders->[$i2]{'basketno'});
-            $inner_line{authorisedby} = $orders->[$i2]{'authorisedby'};
-            my $authby = GetMember(borrowernumber => $orders->[$i2]{'authorisedby'});
-            $inner_line{surname}      = $authby->{'firstname'};
-            $inner_line{firstname}    = $authby->{'surname'};
-            $inner_line{creationdate} = format_date( $orders->[$i2]{'creationdate'} );
-            $inner_line{closedate}    = format_date( $orders->[$i2]{'closedate'}    );
-            $inner_line{uncertainprice} = $orders->[$i2]{'uncertainprice'};
-            push @loop_basket, \%inner_line;
+for my $vendor (@suppliers) {
+    my $baskets = get_vendors_baskets( $vendor->{id} );
+
+    my $loop_basket = [];
+    for my $basket ( @{$baskets} ) {
+        if ((      $basket->{authorisedby}
+                && $basket->{authorisedby} eq $loggedinuser
+            )
+            || haspermission( $uid, { flagsrequired => { acquisition => q{*} } } )
+          ) {
+            for my $date_field (qw( creationdate closedate)) {
+                if ( $basket->{$date_field} ) {
+                    $basket->{$date_field} =
+                      format_date( $basket->{$date_field} );
+                }
+            }
+            push @{$loop_basket}, $basket;
         }
     }
-    $line{loop_basket} = \@loop_basket;
-    push @loop_suppliers, \%line;
+
+    push @{$loop_suppliers},
+      { loop_basket => $loop_basket,
+        supplierid  => $vendor->{id},
+        name        => $vendor->{name},
+        active      => $vendor->{active},
+      };
+
 }
 $template->param(
-    loop_suppliers          => \@loop_suppliers,
-    supplier                => ($id || $supplier),
-    count                   => $count,
+    loop_suppliers => $loop_suppliers,
+    supplier       => ( $id || $supplier ),
+    count          => $supplier_count,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
+
+sub get_vendors_baskets {
+    my $supplier_id = shift;
+    my $dbh         = C4::Context->dbh;
+    my $sql         = <<'ENDSQL';
+select aqbasket.*, count(*) as total,  borrowers.firstname, borrowers.surname
+from aqbasket left join aqorders on aqorders.basketno = aqbasket.basketno
+left join borrowers on aqbasket.authorisedby = borrowers.borrowernumber
+where booksellerid = ?
+AND ( aqorders.quantity > aqorders.quantityreceived OR quantityreceived IS NULL)
+AND datecancellationprinted IS NULL
+group by basketno
+ENDSQL
+    return $dbh->selectall_arrayref( $sql, { Slice => {} }, $supplier_id );
+}

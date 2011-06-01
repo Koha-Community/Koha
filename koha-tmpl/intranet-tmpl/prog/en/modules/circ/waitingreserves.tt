@@ -1,0 +1,167 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Holds awaiting pickup</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles',
+    is: function(s) {return false;  },
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+    type: 'text'
+});
+     $(document).ready(function() {
+         $('#resultlist > ul').tabs();
+         $("th a").hide();
+         $.tablesorter.defaults.widgets = ['zebra'];
+         $("#holdst,#holdso").tablesorter({[% IF ( dateformat == 'metric' ) %]
+            dateFormat: 'uk',[% END %]
+            sortList: [[3,0]],
+            headers: { 1:{sorter:'articles'},3: { sorter: 'articles' },4:{sorter:false}}
+        }); 
+      });
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+&rsaquo; <a href="/cgi-bin/koha/circ/waitingreserves.pl">Holds awaiting pickup</a>
+</div>
+
+<div id="doc" class="yui-t7">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-g">
+
+        <h2>Holds awaiting pickup for your library on: [% show_date %]
+            [% IF ( all_branches_link ) %]
+            <span style="margin-left:20px"><a href="[% all_branches_link %]">
+            View all branches</a></span>
+            [% END %]
+        </h2>
+        [% IF ( messagetransfert ) %]
+            <div>
+                <h2>Hold find for ([% nextreservtitle %]), must be transferred</h2>
+                <p>This hold placed by : <b> [% nextreservsurname %] [% nextreservfirstname %]</b> at the library : <b> [% branchname %] </b>, Please transfer this hold.
+                </p>
+                <form name="cancelReservewithtransfert" action="waitingreserves.pl" method="post">
+                    <input type="submit" class="button" />
+                </form>
+            </div>
+        [% END %]
+        [% IF ( waiting ) %]
+            <div id="bloc25">
+                <h2>This hold is waiting</h2>
+                <p>This hold ([% nextreservtitle %]) was placed by <b> : [% nextreservsurname %] [% nextreservfirstname %]</b>,
+                Please retain this hold.
+                </p>
+                <form name="cancelReservewithwaiting" action="waitingreserves.pl" method="post">
+                    <input type="submit" />
+                </form>
+            </div>
+        [% END %]
+        [% UNLESS ( message ) %]
+        <div id="resultlist" class="toptabs">
+            <ul>
+                <li><a href="/cgi-bin/koha/circ/waitingreserves.pl#holdswaiting">[% reservecount %] Hold(s) waiting</a></li>
+                <li><a href="/cgi-bin/koha/circ/waitingreserves.pl#holdsover">[% overcount %] Hold(s) over</a></li>
+            </ul>
+            <div id="holdswaiting">
+            [% IF ( reserveloop ) %]
+               <table id="holdst">
+               <thead><tr>
+                    <th>Available since</th>
+                    <th>Title</th>
+                    <th>Patron</th>
+                    <th>Location</th>
+                    <th>Action</th>
+               </tr></thead>
+               <tbody>[% FOREACH reserveloo IN reserveloop %]
+                <tr>
+                    <td><p>[% reserveloo.waitingdate %]</p></td>
+                    <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
+                        [% reserveloo.title |html %] [% reserveloo.subtitle |html %]
+                        </a>
+                            &nbsp; (<b>[% reserveloo.itemtype %]</b>)
+                            <br />Barcode: [% reserveloo.barcode %]
+                    </td>
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernum %]">[% reserveloo.borrowername %], [% reserveloo.borrowerfirstname %]</a><br />[% reserveloo.borrowerphone %]<br />
+                        [% IF ( reserveloo.borrowermail ) %]<a href="mailto:[% reserveloo.email %]?subject=Reservation: [% reserveloo.title %]">
+                        [% reserveloo.borrowermail %]</a>[% END %]
+                    </td>
+                    <td>[% reserveloo.homebranch %]<br />[% reserveloo.itemcallnumber %]</td>
+                    <td>
+                        <form name="cancelReserve" action="waitingreserves.pl" method="post">
+                            <input type="hidden" name="borrowernumber" value="[% reserveloo.borrowernum %]" />
+                            <input type="hidden" name="itemnumber" value="[% reserveloo.itemnumber %]" />
+                            <input type="hidden" name="fbr" value="[% reserveloo.holdingbranch %]" />
+                            <input type="hidden" name="tbr" value="[% reserveloo.homebranch %]" />
+                            [% IF ( reserveloo.dotransfer ) %]
+                            <input type="submit" value="Cancel hold and return to : [% reserveloo.homebranch %]" /> 
+                            [% ELSE %]
+                            <input type="submit" value="Cancel hold" />
+                            [% END %]
+                       </form>
+                    </td>
+                </tr>
+                [% END %]</tbody>
+        </table>
+        [% ELSE %]
+            <div class="dialog message">No holds found.</div>
+        [% END %]
+        </div>
+        <div id="holdsover">
+                <p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay %] days.</p>
+                [% IF ( overloop ) %]
+               <table id="holdso">
+               <thead><tr>
+                    <th>Available since</th>
+                    <th>Title</th>
+                    <th>Patron</th>
+                    <th>Location</th>
+                    <th>Action</th>
+               </tr></thead>
+               <tbody>[% FOREACH overloo IN overloop %]
+                    <tr>
+                        <td><p>[% overloo.waitingdate %]</p></td>
+                        <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overloo.biblionumber %][% overloo.title |html %] [% overloo.subtitle |html %]
+                        </a>
+                            [% UNLESS ( item_level_itypes ) %][% IF ( overloo.itemtype ) %]&nbsp; (<b>[% overloo.itemtype %]</b>)[% END %][% END %]
+                        <br />Barcode: [% overloo.barcode %]
+                    </td>
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overloo.borrowernum %]">[% overloo.borrowername %], [% overloo.borrowerfirstname %]</a><br />[% overloo.borrowerphone %]<br />
+                        [% IF ( overloo.borrowermail ) %]<a href="mailto:[% overloo.email %]?subject=Reservation: [% overloo.title |url %]">
+        [% overloo.borrowermail %]</a>[% END %]
+                    </td>
+                    <td>[% overloo.homebranch %] [% overloo.itemcallnumber %]</td>
+                    <td><form name="cancelReserve" action="waitingreserves.pl" method="post">
+                            <input type="hidden" name="borrowernumber" value="[% overloo.borrowernum %]" />
+                            <input type="hidden" name="itemnumber" value="[% overloo.itemnumber %]" />
+                            <input type="hidden" name="fbr" value="[% overloo.holdingbranch %]" />
+                            <input type="hidden" name="tbr" value="[% overloo.homebranch %]" />
+                            [% IF ( overloo.dotransfer ) %]
+                            <input type="submit" value="Cancel hold and return to : [% overloo.homebranch %]" />
+                            [% ELSE %]
+                            <input type="submit" value="Cancel hold" />
+                            [% END %]
+                       </form>
+                    </td>
+                </tr>
+                [% END %]</tbody>
+        </table>
+        [% ELSE %]
+            <div class="dialog message">No holds found.</div>
+                [% END %]
+        </div>
+        </div>
+    [% END %]
+
+</div>
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

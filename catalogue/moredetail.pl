@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2003 Katipo Communications
+# parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -31,7 +32,9 @@ use C4::Auth;
 use C4::Serials;
 use C4::Dates qw/format_date/;
 use C4::Circulation;  # to use itemissues
+use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
+use C4::Members qw/GetHideLostItemsPreference/;
 
 my $query=new CGI;
 
@@ -48,14 +51,26 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     flagsrequired   => {catalogue => 1},
     });
 
+if($query->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    $template->param(
+        holdfor => $query->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
+
 # get variables
 
 my $biblionumber=$query->param('biblionumber');
 my $title=$query->param('title');
 my $bi=$query->param('bi');
 $bi = $biblionumber unless $bi;
+my $itemnumber = $query->param('itemnumber');
 my $data=GetBiblioData($biblionumber);
 my $dewey = $data->{'dewey'};
+my $showallitems = $query->param('showallitems');
 
 #coping with subscriptions
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
@@ -73,21 +88,32 @@ my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 
 my @results;
 my $fw = GetFrameworkCode($biblionumber);
-my @items= GetItemsInfo($biblionumber);
-my $count=@items;
-$data->{'count'}=$count;
+my @all_items= GetItemsInfo($biblionumber);
+my @items;
+for my $itm (@all_items) {
+    push @items, $itm unless ( $itm->{itemlost} && 
+                               GetHideLostItemsPreference($loggedinuser) &&
+                               !$showallitems && 
+                               ($itemnumber != $itm->{itemnumber}));
+}
+
+my $totalcount=@all_items;
+my $showncount=@items;
+my $hiddencount = $totalcount - $showncount;
+$data->{'count'}=$totalcount;
+$data->{'showncount'}=$showncount;
+$data->{'hiddencount'}=$hiddencount;  # can be zero
 
 my $ccodes= GetKohaAuthorisedValues('items.ccode',$fw);
 my $itemtypes = GetItemTypes;
 
 $data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'description'};
 $results[0]=$data;
-my $itemnumber;
 ($itemnumber) and @items = (grep {$_->{'itemnumber'} == $itemnumber} @items);
 foreach my $item (@items){
     $item->{itemlostloop}= GetAuthorisedValues(GetAuthValCode('items.itemlost',$fw),$item->{itemlost}) if GetAuthValCode('items.itemlost',$fw);
     $item->{itemdamagedloop}= GetAuthorisedValues(GetAuthValCode('items.damaged',$fw),$item->{damaged}) if GetAuthValCode('items.damaged',$fw);
-    $item->{'collection'}              = $ccodes->{ $item->{ccode} };
+    $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
     $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
     $item->{'datelastborrowed'}        = format_date( $item->{'datelastborrowed'} );
@@ -132,7 +158,7 @@ $template->param(loggedinuser => $loggedinuser);
 $template->param(biblionumber => $biblionumber);
 $template->param(biblioitemnumber => $bi);
 $template->param(itemnumber => $itemnumber);
-$template->param(ONLY_ONE => 1) if ( $itemnumber && $count != @items );
+$template->param(ONLY_ONE => 1) if ( $itemnumber && $showncount != @items );
 $template->param(z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)));
 
 output_html_with_http_headers $query, $cookie, $template->output;

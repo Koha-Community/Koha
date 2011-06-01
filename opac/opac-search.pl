@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2008 Garry Collum and the Koha Koha Development team
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -65,7 +66,7 @@ my $build_grouped_results = C4::Context->preference('OPACGroupResults');
 if ($format =~ /(rss|atom|opensearchdescription)/) {
 	$template_name = 'opac-opensearch.tmpl';
 }
-elsif ($build_grouped_results) {
+elsif (@params && $build_grouped_results) {
     $template_name = 'opac-results-grouped.tmpl';
 }
 elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
@@ -83,6 +84,9 @@ else {
     authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     }
 );
+if ($template_name eq 'opac-results.tmpl') {
+   $template->param('COinSinOPACResults' => C4::Context->preference('COinSinOPACResults'));
+}
 
 if ($format eq 'rss2' or $format eq 'opensearchdescription' or $format eq 'atom') {
 	$template->param($format => 1);
@@ -139,10 +143,9 @@ if (C4::Context->preference('TagsEnabled')) {
 #}
 
 # load the branches
-my $mybranch = ( C4::Context->preference('SearchMyLibraryFirst') && C4::Context->userenv && C4::Context->userenv->{branch} ) ? C4::Context->userenv->{branch} : '';
+
 my $branches = GetBranches();   # used later in *getRecords, probably should be internalized by those functions after caching in C4::Branch is established
 $template->param(
-    branchloop       => GetBranchesLoop($mybranch, 0),
     searchdomainloop => GetBranchCategories(undef,'searchdomain'),
 );
 
@@ -161,8 +164,8 @@ my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {
 	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-        my %row =(  number=>$cnt++,
-				ccl => $itype_or_itemtype,
+	    my %row =(  number=>$cnt++,
+		ccl => "$itype_or_itemtype,phr",
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
@@ -212,7 +215,7 @@ if ( $template_type && $template_type eq 'advsearch' ) {
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
     my @search_boxes_array;
-    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") || 3;
+    my $search_boxes_count = 3; # begin whith 3 boxes
     for (my $i=1;$i<=$search_boxes_count;$i++) {
         # if it's the first one, don't display boolean option, but show scan indexes
         if ($i==1) {
@@ -317,7 +320,7 @@ my @limits;
 @limits = split("\0",$params->{'limit'}) if $params->{'limit'};
 
 if($params->{'multibranchlimit'}) {
-push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
+    push @limits, '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
 }
 
 my $available;
@@ -345,6 +348,7 @@ if ($params->{'limit-yr'}) {
 # Params that can only have one value
 my $scan = $params->{'scan'};
 my $count = C4::Context->preference('OPACnumSearchResults') || 20;
+my $countRSS         = C4::Context->preference('numSearchRSSResults') || 50;
 my $results_per_page = $params->{'count'} || $count;
 my $offset = $params->{'offset'} || 0;
 my $page = $cgi->param('page') || 1;
@@ -427,6 +431,7 @@ if ($facets) {
     foreach my $f (@$facets) {
         $f->{facets} = [ sort { uc($a->{facet_title_value}) cmp uc($b->{facet_title_value}) } @{ $f->{facets} } ];
     }
+    @$facets = sort {$a->{expand} cmp $b->{expand}} @$facets;
 }
 
 # use Data::Dumper; print STDERR "-" x 25, "\n", Dumper($results_hashref);
@@ -468,9 +473,11 @@ for (my $i=0;$i<@servers;$i++) {
 										limit=>$tag_quantity });
 			}
 		}
-		foreach (@newresults) {
-		    $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
-		}
+                if (C4::Context->preference('COinSinOPACResults')) {
+		    foreach (@newresults) {
+		      $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
+		    }
+                }
       
 	if ($results_hashref->{$server}->{"hits"}){
 	    $total = $total + $results_hashref->{$server}->{"hits"};
@@ -504,6 +511,7 @@ for (my $i=0;$i<@servers;$i++) {
      		    $template->param(ShowOpacRecentSearchLink => 1);
      		}
  
+            shift @recentSearches if (@recentSearches > 15);
      		# Pushing the cookie back 
      		$newsearchcookie = $cgi->cookie(
  					    -name => 'KohaOpacRecentSearches',
@@ -540,6 +548,7 @@ for (my $i=0;$i<@servers;$i++) {
             $limit_cgi_not_availablity =~ s/&limit=available//g if defined $limit_cgi_not_availablity;
             $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
             $template->param(limit_cgi => $limit_cgi);
+            $template->param(countrss  => $countRSS );
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
             $template->param(limit_desc => $limit_desc);
@@ -628,6 +637,7 @@ $template->param(
             total => $total,
             opacfacets => 1,
             facets_loop => $facets,
+	    displayFacetCount=> C4::Context->preference('displayFacetCount')||0,
             scan => $scan,
             search_error => $error,
 );

@@ -61,6 +61,18 @@ Circulation:
               class: integer
             - last returned items on the checkin screen.
         -
+            - pref: FineNotifyAtCheckin
+              choices:
+                  yes: Notify
+                  no: "Don't notify"
+            - librarians of overdue fines on the items they are checking in.
+        -
+            - pref: WaitingNotifyAtCheckin
+              choices:
+                  yes: Notify
+                  no: "Don't notify"
+            - librarians of waiting holds for the patron whose items they are checking in.
+        -
             - pref: FilterBeforeOverdueReport
               choices:
                   yes: Require
@@ -85,6 +97,18 @@ Circulation:
                   yes: Allow
                   no: "Don't allow"
             - staff to manually override the renewal limit and renew a checkout when it would go over the renewal limit.
+        -
+            - pref: AllFinesNeedOverride
+              choices:
+                  yes: Require
+                  no: "Don't require"
+            - staff to manually override all fines, even fines less than noissuescharge.
+        -
+            - pref: AllowFineOverride
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to manually override and check out items to patrons who have more than noissuescharge in fines.
         -
             - pref: InProcessingToShelvingCart
               choices:
@@ -130,16 +154,6 @@ Circulation:
                   homebranch: the library the item is from.
                   holdingbranch: the library the item was checked out from.
         -
-            - Make all checkouts have a due date of
-            - pref: globalDueDate
-              class: date
-            - .
-        -
-            - Make all checkouts due on or before
-            - pref: ceilingDueDate
-              class: date
-            - .
-        -
             - Calculate the due date using 
             - pref: useDaysMode
               choices:
@@ -156,7 +170,7 @@ Circulation:
             - Prevent patrons from making holds on the OPAC if they owe more than
             - pref: maxoutstanding
               class: currency
-            - <!-- TMPL_VAR NAME="local_currency" --> in fines.
+            - '[% local_currency %] in fines.'
         -
             - Show a warning on the "Transfers to Receive" screen if the transfer has not been received
             - pref: TransfersMaxDaysWarning
@@ -172,7 +186,7 @@ Circulation:
             - Prevent patrons from checking out books if they have more than
             - pref: noissuescharge
               class: integer
-            - <!-- TMPL_VAR NAME="local_currency" --> in fines.
+            - '[% local_currency %] in fines.'
         -
             - pref: ReturnBeforeExpiry
               choices:
@@ -194,6 +208,13 @@ Circulation:
                   noblock: "Don't block"
                   confirmation: Ask for confirmation
             - when checking out to a borrower that has overdues outstanding	    
+        -
+            - On checkin route the returned item to
+            - pref: HomeOrHoldingBranchReturn
+              type: choice
+              choices:
+                  homebranch: the library the item is from.
+                  holdingbranch: the library the item was checked out from.
     Holds Policy:
         -
             - pref: AllowHoldPolicyOverride
@@ -254,6 +275,12 @@ Circulation:
                   no: "Don't allow (with independent branches)"
             - a user from one library to place a hold on an item from another library
         -
+            - pref: OPACAllowUserToChooseBranch
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - a user to choose the branch to pick up a hold from.
+        -
             - pref: ReservesNeedReturns
               choices:
                   yes: "Don't automatically"
@@ -306,6 +333,28 @@ Circulation:
                   yes: Enable
                   no: "Don't enable"
             - "the web-based self checkout system. (available at: /cgi-bin/koha/sco/sco-main.pl)"
+        -
+            - Have patrons login into the web-based self checkout system with their 
+            - pref: SelfCheckoutByLogin
+              choices:
+                  yes: Username and Password
+                  no: Barcode
+        -
+            - "Time out the current patron's web-based self checkout system login after"
+            - pref: SelfCheckTimeout
+              class: integer
+            - seconds.
+        -
+            - pref: AllowSelfCheckReturns
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - patrons to return items through web-based self checkout system. 
+        -
+            - "Include the following HTML in the Help page of the web-based self checkout system:"
+            - pref: SelfCheckHelpMessage
+              type: textarea
+              class: code
         -
             - pref: AutoSelfCheckAllowed
               choices:

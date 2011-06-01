@@ -1,0 +1,90 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Subscription information for biblio #[% biblionumber %] with title : [% bibliotitle %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+active([% yearmin %]);
+function active(numlayer)
+{
+	for (i=[% yearmin %]; i<=[% yearmax %]; i++ ) {
+		ong = i;
+		link = "link"+i;
+		if (numlayer==i) {
+			document.getElementById(ong).style.visibility="visible";
+		} else {
+			document.getElementById(ong).style.visibility="hidden";
+		}
+	}
+}
+//]]>
+</script>
+</head>
+<body>
+
+[% UNLESS ( popup ) %]
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'serials-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Serials </div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	<h1>Subscription information for biblio #[% biblionumber %] with title : [% bibliotitle %]</h1>
+	<p>
+	<a href="opac-detail.pl?biblionumber=[% biblionumber %]" class="button">Back to biblio</a>
+[% END %]
+	[% FOREACH year IN years %]
+		[% IF ( year.year ) %]
+			<a  class="button" href="javascript:active([% year.year %])">[% year.year %]</a>
+		[% END %]
+	[% END %]
+	<a class=" button serial" href="serial-issues.pl?biblionumber=[% biblionumber %]&amp;selectview=small">Compact view</a>
+	</p>
+	[% FOREACH year IN years %]
+	<div name="[% year.year %]" id="[% year.year %]" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" [% IF ( year.first ) %]style="visibility:visible"[% END %]>
+		<table>
+			<tr>
+				<th>Information
+				</th>
+				<th>Date
+				</th>
+				<th>Number
+				</th>
+				<th>Status
+				</th>
+			</tr>
+			[% FOREACH serial IN year.serials %]
+			<tr>
+				<td>
+					[% serial.notes %]
+				</td>
+				<td>
+					[% serial.planneddate %]
+				</td>
+				<td>
+					[% serial.serialseq %]
+				</td>
+				<td>
+					[% IF ( serial.status1 ) %]Arrived[% END %]
+					[% IF ( serial.status2 ) %]Expected[% END %]
+					[% IF ( serial.status3 ) %]Late[% END %]
+					[% IF ( serial.status4 ) %]Missing[% END %]
+					[% IF ( serial.status5 ) %]Not Available[% END %]
+					[% IF ( serial.status7 ) %]Claimed[% END %]
+				</td>
+			</tr>
+			[% END %]
+		</table>
+	</div>
+	[% END %]
+
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'serials-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -39,7 +39,7 @@ use C4::Accounts;
 use Getopt::Long;
 
 my  $lost;  #  key=lost value,  value=num days.
-my ($charge, $verbose, $confirm);
+my ($charge, $verbose, $confirm, $quiet);
 my $endrange = 366;  # FIXME hardcoded - don't deal with anything overdue by more than this num days.
 
 GetOptions( 
@@ -47,6 +47,7 @@ GetOptions(
     'c|charge=s' => \$charge,
     'confirm'    => \$confirm,
     'verbose'    => \$verbose,
+    'quiet'      => \$quiet,
 );
 
 my $usage = << 'ENDUSAGE';
@@ -184,6 +185,8 @@ sub summarize ($$) {
     }
 }
 
-print "\n### LONGOVERDUE SUMMARY ###";
-summarize (\@report, 1);
-print "\nTOTAL: $total items\n";
+if (!$quiet){
+    print "\n### LONGOVERDUE SUMMARY ###";
+    summarize (\@report, 1);
+    print "\nTOTAL: $total items\n";
+}

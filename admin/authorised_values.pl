@@ -76,15 +76,15 @@ if ($op eq 'add_form') {
 	}
 	if ($id) {
 		$template->param(action_modify => 1);
-		$template->param('heading-modify-authorized-value-p' => 1);
+		$template->param('heading_modify_authorized_value_p' => 1);
 	} elsif ( ! $data->{'category'} ) {
 		$template->param(action_add_category => 1);
-		$template->param('heading-add-new-category-p' => 1);
+		$template->param('heading_add_new_category_p' => 1);
 	} else {
 		$template->param(action_add_value => 1);
-		$template->param('heading-add-authorized-value-p' => 1);
+		$template->param('heading_add_authorized_value_p' => 1);
 	}
-	$template->param('use-heading-flags-p' => 1);
+	$template->param('use_heading_flags_p' => 1);
 	$template->param( category        => $data->{'category'},
                          authorised_value => $data->{'authorised_value'},
                          lib              => $data->{'lib'},

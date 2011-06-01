@@ -1,0 +1,23 @@
+[% INCLUDE 'help-top.inc' %]
+
+<h1>Merging Items</h1>
+
+<p style="color: rgb(153, 0, 0);">Important: Merging will only work with two bibliographic records that use the same bibliographic framework.</p>
+
+<p>The easiest way to merge together duplicate bibliographic records is to add them to a list and use the Merge Tool from there.</p>
+
+<p>From the list, check the two bibliographic records you want to merge. If you choose more than or fewer than 2, you will be presented with an error.</p>
+
+<p>Once you have selected the records you want to merge, click the 'Merge selected records' button. You will be asked which of the two records you would like to keep as your primary record and which will be deleted after the merge.</p>
+
+<p>You will be presented with the MARC for both of the records (each accessible by tabs labeled with the bib numbers for those records). By default the entire first record will be selected, uncheck the fields you don't want in the final (destination) record and then move on to the second tab to choose which fields should be in the final (destination) record.</p>
+
+<p>Should you try to add a field that is not repeatable two times (like choosing the 245 field from both record #1 and #2) you will be presented with an error</p>
+
+<p>Most importantly you want to make sure that all of the items from the two records are attached to the new record. To do this you want to make sure that all 952 files are selected before completing the merge.</p>
+
+<p>Once you have completed your selections click the 'merge' button. The primary record will now show the data you chose for it, and the second record will be deleted.</p>
+
+<p style="color: rgb(153, 0, 0);">Important: It is important to rebuild your zebra index immediately after merging records. If a search is performed for a record which has been deleted Koha will present the patrons with an error in the OPAC.</p>
+
+[% INCLUDE 'help-bottom.inc' %]

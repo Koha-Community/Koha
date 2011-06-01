@@ -1,0 +1,214 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Notice Triggers</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+        $('#selectlibrary').find("input:submit").hide();
+        $('#branch').change(function() {
+                $('#selectlibrary').submit();
+        });
+	    $('#rulestabs > ul').tabs();
+});
+//]]>
+</script>
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Notice Triggers</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+        <h1>Defining [% IF ( branch ) %]overdue actions for [% branch %][% ELSE %]default overdue actions[% END %]</h1>
+        <div class="help">
+            <p>Delay is the number of days after an checkout is due before an action is triggered. </p>
+            <p>If you want Koha to trigger an action (send a letter or debar member), a delay value is required.</p>
+            <p>Columns must be filled left to right: if the first column is blank, other columns will be ignored. </p>
+        </div>
+            <form method="post" action="/cgi-bin/koha/tools/overduerules.pl" id="selectlibrary">
+            <label for="branch">Select a library:</label>
+                <select id="branch" name="branch">
+                    <option value="">Default</option>
+                    [% FOREACH branchloo IN branchloop %]
+                        [% IF ( branchloo.selected ) %]
+                            <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                        [% ELSE %]
+                            <option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+                        [% END %]
+                    [% END %]
+                </select>
+                <input type="submit" value="Select" />
+            </form>
+            [% IF ( ERROR ) %]
+            <div class="dialog alert">
+                <h3>Data error</h3>
+                <p>The following errors were found. Please correct them and submit again:</p>
+                <ul>
+                [% IF ( ERRORDELAY ) %]
+                    <li>Delay [% ERRORDELAY %] for [% BORERR %] patron category has some unexpected characters. There should be only numerical characters. </li>
+                [% END %]
+                [% IF ( ERRORUSELESSDELAY ) %]
+                    <li>No letter or debar action specified for delay [% ERRORUSELESSDELAY %] for [% BORERR %] patron category.  If a delay is supplied, either a letter, debar action, or both should be specified.</li>
+                [% END %]
+                [% IF ( ERRORORDER ) %]
+                    <li>The first notice's delay should be less than the second, which should be less than the third for the <strong>[% BORERR %]</strong> patron category </li>
+                [% END %]
+                </ul>
+            </div>
+            [% END %]
+            [% IF ( table ) %]
+            <form method="post" action="/cgi-bin/koha/tools/overduerules.pl">
+                <input type="hidden" name="op" value="save" />
+                <input type="hidden" name="branch" value="[% branch %]" />
+				<h3>Rules for overdue actions: [% IF ( branch ) %][% branch %][% ELSE %] default library [% END %]</h3>
+                    [% IF ( datasaved ) %]<div class="dialog message">INPUT SAVED</div> [% END %]
+
+  <div id="rulestabs" class="toptabs">
+	<ul class="ui-tabs-nav">
+      <li><a href="#first">First</a></li>
+      <li><a href="#second">Second</a></li>
+      <li><a href="#third">Third</a></li>
+	</ul>
+
+<div id="first"><table>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">First Letter</th><th scope="col">Debar</th></tr>
+                    [% FOREACH tabl IN table %]
+                     [% UNLESS ( loop.odd ) %]
+                                <tr class="highlight">
+                            [% ELSE %]
+                                <tr>
+                            [% END %]
+                            <th scope="row">[% tabl.line %]</th>
+<td>
+                                <input type="text" name="delay1-[% tabl.overduename %]" size="5" value="[% tabl.delay1 %]" />
+                            </td>
+<td>
+                            [% IF ( tabl.noletter ) %]
+                                <input type="text" name="letter1-[% tabl.overduename %]" value="[% tabl.letter1 %]" />
+                            [% ELSE %]
+                                <select name="letter1-[% tabl.overduename %]">
+                                    <option value="">No notice</option>
+                                    [% FOREACH letterloop IN tabl.letterloop1 %]
+                                        [% IF ( letterloop.selected ) %]
+                                            <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
+                                        [% ELSE %]
+                                            <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                            [% END %]
+                            </td>
+<td>
+                                [% IF ( tabl.debarred1 ) %]
+                                    <input type="checkbox" name="debarred1-[% tabl.overduename %]" checked="checked" value="1" />
+                                [% ELSE %]
+                                    <input type="checkbox" name="debarred1-[% tabl.overduename %]" value="1" />
+                                [% END %]
+                            </td>
+							</tr>
+							[% END %]
+							</table>
+</div>
+
+<div id="second"><table>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Second Letter</th><th scope="col">Debar</th></tr>
+                    [% FOREACH tabl IN table %]
+                     [% UNLESS ( loop.odd ) %]
+                                <tr class="highlight">
+                            [% ELSE %]
+                                <tr>
+                            [% END %]
+                            <th scope="row">[% tabl.line %]</th>
+<td>
+                                <input type="text" name="delay2-[% tabl.overduename %]" size="5" value="[% tabl.delay2 %]" />
+                            </td>
+<td>
+                            [% IF ( tabl.noletter ) %]
+                                <input type="text" name="letter2-[% tabl.overduename %]" value="[% tabl.letter2 %]" />
+                            [% ELSE %]
+                                <select name="letter2-[% tabl.overduename %]">
+                                    <option value="">No notice</option>
+                                        [% FOREACH letterloop IN tabl.letterloop2 %]
+                                            [% IF ( letterloop.selected ) %]
+                                                <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
+                                            [% ELSE %]
+                                                <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
+                                            [% END %]
+                                        [% END %]
+                                </select>
+                            [% END %]
+                            </td>
+<td>
+                                [% IF ( tabl.debarred2 ) %]
+                                    <input type="checkbox" name="debarred2-[% tabl.overduename %]" checked="checked" value="1" />
+                                [% ELSE %]
+                                    <input type="checkbox" name="debarred2-[% tabl.overduename %]" value="1" />
+                                [% END %]
+                            </td>
+							</tr>
+							[% END %]
+							</table>
+</div>
+
+<div id="third"><table>
+					<tr><th>&nbsp;</th><th scope="col">Delay</th><th scope="col">Third Letter</th><th scope="col">Debar</th></tr>
+                    [% FOREACH tabl IN table %]
+                     [% UNLESS ( loop.odd ) %]
+                                <tr class="highlight">
+                            [% ELSE %]
+                                <tr>
+                            [% END %]
+                            <th scope="row">[% tabl.line %]</th>
+<td>
+                                <input type="text" name="delay3-[% tabl.overduename %]" size="5" value="[% tabl.delay3 %]" />
+                            </td>
+<td>
+                            [% IF ( tabl.noletter ) %]
+                                <input type="text" name="letter3-[% tabl.overduename %]" value="[% tabl.letter3 %]" />
+                            [% ELSE %]
+                                <select name="letter3-[% tabl.overduename %]">
+                                    <option value="">No notice</option>
+                                    [% FOREACH letterloop IN tabl.letterloop3 %]
+                                        [% IF ( letterloop.selected ) %]
+                                            <option value="[% letterloop.value %]" selected="selected">[% letterloop.lettername %]</option>
+                                        [% ELSE %]
+                                            <option value="[% letterloop.value %]">[% letterloop.lettername %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                            [% END %]
+                            </td>
+<td>
+                                [% IF ( tabl.debarred3 ) %]
+                                    <input type="checkbox" name="debarred3-[% tabl.overduename %]" checked="checked" value="1" />
+                                [% ELSE %]
+                                    <input type="checkbox" name="debarred3-[% tabl.overduename %]" value="1" />
+                                [% END %]
+                            </td>
+                        </tr>
+                    [% END %]
+                </table>
+</div>
+</div>
+
+                <fieldset class="action"><input type="submit" value="Save Changes" /></fieldset>
+            </form>
+            [% ELSE %]
+                <div class="warning">You don't have patron categories defined, or the patron categories are not set to receive overdue notices.</div>
+                <div class="warning">If this is not what you were expecting, go to <a href="../admin/categorie.pl">patron categories</p></div>
+            [% END %]
+    </div>
+    </div>
+    <div class="yui-b noprint">
+        [% INCLUDE 'tools-menu.inc' %]
+    </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

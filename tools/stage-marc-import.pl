@@ -55,7 +55,7 @@ my $nomatch_action = $input->param('nomatch_action');
 my $parse_items = $input->param('parse_items');
 my $item_action = $input->param('item_action');
 my $comments = $input->param('comments');
-my $syntax = $input->param('syntax');
+my $encoding = $input->param('encoding');
 my ($template, $loggedinuser, $cookie)
 	= get_template_and_user({template_name => "tools/stage-marc-import.tmpl",
 					query => $input,
@@ -108,7 +108,7 @@ if ($completedJobID) {
 
             my $reply = CGI->new("");
             print $reply->header(-type => 'text/html');
-            print "{ jobID: '$jobID' }";
+            print '{"jobID":"' . $jobID . '"}';
             exit 0;
         } elsif (defined $pid) {
             # child
@@ -130,10 +130,10 @@ if ($completedJobID) {
     }
 
     # FIXME branch code
-    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($syntax, $marcrecord, $filename, 
-                                                                                   $comments, '', $parse_items, 0,
-                                                                                   50, staging_progress_callback($job, $dbh));
+    my ($batch_id, $num_valid, $num_items, @import_errors) = BatchStageMarcRecords($encoding, $marcrecord, $filename, $comments, '', $parse_items, 0, 50, staging_progress_callback($job, $dbh));
+
     $dbh->commit();
+
     my $num_with_matches = 0;
     my $checked_matches = 0;
     my $matcher_failed = 0;

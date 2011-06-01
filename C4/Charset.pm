@@ -33,6 +33,7 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
+        NormalizeString
         IsStringUTF8ish
         MarcToUTF8Record
         SetUTF8Flag
@@ -111,13 +112,15 @@ sub IsStringUTF8ish {
 
 =head2 SetUTF8Flag
 
-  my $marc_record = SetUTF8Flag($marc_record);
+  my $marc_record = SetUTF8Flag($marc_record, $nfd);
 
 This function sets the PERL UTF8 flag for data.
 It is required when using new_from_usmarc 
 since MARC::File::USMARC does not handle PERL UTF8 setting.
 When editing unicode marc records fields and subfields, you
 would end up in double encoding without using this function. 
+
+If $nfd is set, string normalization will use NFD instead of NFC
 
 FIXME
 In my opinion, this function belongs to MARC::Record and not
@@ -127,13 +130,13 @@ But since it handles charset, and MARC::Record, it finds its way in that package
 =cut
 
 sub SetUTF8Flag{
-	my ($record)=@_;
+	my ($record, $nfd)=@_;
 	return unless ($record && $record->fields());
 	foreach my $field ($record->fields()){
 		if ($field->tag()>=10){
 			my @subfields;
 			foreach my $subfield ($field->subfields()){
-				push @subfields,($$subfield[0],NormalizeString($$subfield[1]));
+				push @subfields,($$subfield[0],NormalizeString($$subfield[1],$nfd));
 			}
 			my $newfield=MARC::Field->new(
 							$field->tag(),
@@ -148,27 +151,28 @@ sub SetUTF8Flag{
 
 =head2 NormalizeString
 
-    my $normalized_string=NormalizeString($string);
+    my $normalized_string=NormalizeString($string,$nfd,$transform);
 
 Given a string
-
-nfc : If you want to set NFC and not NFD
+nfd : If you want to set NFD and not NFC
 transform : If you expect all the signs to be removed
-Sets the PERL UTF8 Flag on your initial data if need be
-and applies cleaning if required 
 
-Returns a utf8 NFD normalized string
+Sets the PERL UTF8 Flag on your initial data if need be
+and applies cleaning if required
+
+Returns a utf8 NFC normalized string
 
 Sample code :
-    my $string=NormalizeString ("l'ornithoptère");
-    #results into ornithoptère in NFD form and sets UTF8 Flag
+   my $string=NormalizeString ("l'ornithoptère");
+   #results into ornithoptère in NFC form and sets UTF8 Flag
 
 =cut
 
+
 sub NormalizeString{
-	my ($string,$nfc,$transform)=@_;
+	my ($string,$nfd,$transform)=@_;
 	utf8::decode($string) unless (utf8::is_utf8($string));
-	if ($nfc){
+	if ($nfd){
 		$string= NFD($string);
 	}
 	else {
@@ -246,20 +250,20 @@ sub MarcToUTF8Record {
     # If we do not know the source encoding, try some guesses
     # as follows:
     #   1. Record is UTF-8 already.
-    #   2. If MARC flavor is MARC21, then
+    #   2. If MARC flavor is MARC21 or NORMARC, then
     #      a. record is MARC-8
     #      b. record is ISO-8859-1
     #   3. If MARC flavor is UNIMARC, then
     if (not defined $source_encoding) {
         if ($marc_blob_is_utf8) {
-            # note that for MARC21 we are not bothering to check
+            # note that for MARC21/NORMARC we are not bothering to check
             # if the Leader/09 is set to 'a' or not -- because
             # of problems with various ILSs (including Koha in the
             # past, alas), this just is not trustworthy.
             SetMarcUnicodeFlag($marc_record, $marc_flavour);
             return $marc_record, 'UTF-8', [];
         } else {
-            if ($marc_flavour eq 'MARC21') {
+            if ($marc_flavour eq 'MARC21' || $marc_flavour eq 'NORMARC') {
                 return _default_marc21_charconv_to_utf8($marc_record, $marc_flavour);
             } elsif ($marc_flavour =~/UNIMARC/) {
                 return _default_unimarc_charconv_to_utf8($marc_record, $marc_flavour);
@@ -314,7 +318,7 @@ sub SetMarcUnicodeFlag {
     my $marc_flavour = shift; # || C4::Context->preference("marcflavour");
 
     $marc_record->encoding('UTF-8');
-    if ($marc_flavour eq 'MARC21') {
+    if ($marc_flavour eq 'MARC21' || $marc_flavour eq 'NORMARC') {
         my $leader = $marc_record->leader();
         substr($leader, 9, 1) = 'a';
         $marc_record->leader($leader); 

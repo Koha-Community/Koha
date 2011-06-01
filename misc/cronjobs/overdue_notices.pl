@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2008 Liblime
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -112,9 +113,9 @@ directory. This can be downloaded or futher processed by library staff.
 
 comma separated list of fields that get substituted into templates in
 places of the E<lt>E<lt>items.contentE<gt>E<gt> placeholder. This
-defaults to issuedate,title,barcode,author
+defaults to due date,title,barcode,author
 
-Other possible values come from fields in the biblios, items, and
+Other possible values come from fields in the biblios, items and
 issues tables.
 
 =item B<-borcat>
@@ -255,7 +256,7 @@ my $csvfilename;
 my $htmlfilename;
 my $triggered = 0;
 my $listall = 0;
-my $itemscontent = join( ',', qw( issuedate title barcode author itemnumber ) );
+my $itemscontent = join( ',', qw( date_due title barcode author itemnumber ) );
 my @myborcat;
 my @myborcatout;
 
@@ -374,10 +375,11 @@ foreach my $branchcode (@branches) {
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $admin_email_address;
 
     my $sth2 = $dbh->prepare( <<'END_SQL' );
-SELECT biblio.*, items.*, issues.*, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_overdue
-  FROM issues,items,biblio
+SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, TO_DAYS(NOW())-TO_DAYS(date_due) AS days_overdue
+  FROM issues,items,biblio, biblioitems
   WHERE items.itemnumber=issues.itemnumber
     AND biblio.biblionumber   = items.biblionumber
+    AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
     AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ?
 END_SQL

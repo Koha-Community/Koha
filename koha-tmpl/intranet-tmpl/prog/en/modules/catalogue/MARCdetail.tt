@@ -1,0 +1,424 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Catalog &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    MARC Details for [% bibliotitle %]
+  [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+
+	 $(document).ready(function() {
+ 		$('#bibliotabs > ul').tabs();
+	 });
+
+function Changefwk(FwkList) {
+	var fwk = FwkList.options[FwkList.selectedIndex].value;
+	window.location = "MARCdetail.pl?biblionumber=[% biblionumber %]&frameworkcode="+fwk;
+}
+
+//]]>
+</script>
+</head>
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    MARC Details for <i>[% bibliotitle |html %]</i>
+  [% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+[% IF ( unknownbiblionumber ) %]
+  <div class="dialog message">The record you requested does not exist ([% biblionumber %]).</div>
+[% ELSE %]
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+[% INCLUDE 'cat-toolbar.inc' %]
+
+[% UNLESS ( popup ) %]
+    <h1>MARC biblio : [% biblionumber %]  ( [% bibliotitle |html %] )</h1>
+
+
+[% END %]
+
+    <p><b>With Framework : <select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+                            <option value="">Default</option>
+                            [% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+                            [% IF ( frameworkcodeloo.selected ) %]<option value="[% frameworkcodeloo.value %]" selected="selected">[% frameworkcodeloo.frameworktext %]</option>[% ELSE %]<option value="[% frameworkcodeloo.value %]">[% frameworkcodeloo.frameworktext %]</option>[% END %]
+                            [% END %]
+            </select> </b></p>
+
+<div id="bibliotabs" class="toptabs numbered">
+	<ul>
+            [% IF ( tab0XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab0XX">0</a></li>
+            [% END %]
+            [% IF ( tab1XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab1XX">1</a></li>
+            [% END %]
+            [% IF ( tab2XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab2XX">2</a></li>
+            [% END %]
+            [% IF ( tab3XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab3XX">3</a></li>
+            [% END %]
+            [% IF ( tab4XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab4XX">4</a></li>
+            [% END %]
+            [% IF ( tab5XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab5XX">5</a></li>
+            [% END %]
+            [% IF ( tab6XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab6XX">6</a></li>
+            [% END %]
+            [% IF ( tab7XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab7XX">7</a></li>
+            [% END %]
+            [% IF ( tab8XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab8XX">8</a></li>
+            [% END %]
+            [% IF ( tab9XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab9XX">9</a></li>
+            [% END %]
+            [% IF ( tab10XX ) %]
+                <li><a href="/cgi-bin/koha/catalogue/MARCdetail.pl#tab10XX">Item(s)</a></li>
+            [% END %]
+        </ul>
+    <div id="tab0XX">
+        [% FOREACH tab0X IN tab0XX %]
+            [% IF ( tab0X.tag ) %]
+                <div class="tag">
+                <div class="tag_title">
+                    [% tab0X.tag %]
+                </div>
+            [% ELSE %]
+                <div class="tag">
+            [% END %]
+            [% FOREACH subfiel IN tab0X.subfield %]
+                <p class="subfield_line">
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %][% subfiel.marc_subfield %][% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div> <!-- class='tag' -->
+        [% END %]
+    </div>
+
+    <div id="tab1XX">
+        [% FOREACH tab1X IN tab1XX %]
+                [% IF ( tab1X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab1X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab1X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div id="tab2XX">
+        [% FOREACH tab2X IN tab2XX %]
+                [% IF ( tab2X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab2X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab2X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div id="tab3XX">
+        [% FOREACH tab3X IN tab3XX %]
+                [% IF ( tab3X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab3X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab3X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div id="tab4XX">
+        [% FOREACH tab4X IN tab4XX %]
+                [% IF ( tab4X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab4X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab4X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div  id="tab5XX">
+        [% FOREACH tab5X IN tab5XX %]
+                [% IF ( tab5X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab5X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab5X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div id="tab6XX">
+        [% FOREACH tab6X IN tab6XX %]
+                [% IF ( tab6X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab6X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab6X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div  id="tab7XX">
+        [% FOREACH tab7X IN tab7XX %]
+                [% IF ( tab7X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab7X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab7X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div id="tab8XX">
+        [% FOREACH tab8X IN tab8XX %]
+                [% IF ( tab8X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab8X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab8X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+    <div id="tab9XX">
+        [% FOREACH tab9X IN tab9XX %]
+                [% IF ( tab9X.tag ) %]
+                    <div class="tag">
+                    <div class="tag_title">
+                        [% tab9X.tag %]
+                    </div>
+                [% ELSE %]
+                    <div class="tag">
+                [% END %]
+            [% FOREACH subfiel IN tab9X.subfield %]
+                <p>
+                    <span class="subfield-label">&nbsp;
+                    [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                    <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></span>
+                    [% IF ( subfiel.is_url ) %]<a href="[% subfiel.marc_value %]">[% subfiel.marc_value |html %]</a>[% ELSE %][% subfiel.marc_value |html %][% END %]
+                    [% IF ( subfiel.link ) %]
+                        <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;idx=[% subfiel.link %],phr&amp;type=intranet&amp;q=[% subfiel.marc_value |url %]">
+                            <img border="0" src="[% interface %]/[% theme %]/img/filefind.png" height="15" title="Search on [% subfiel.marc_value |html %]" alt="Search on [% subfiel.marc_value |html %]" />
+                        </a>
+                    [% END %]
+                    [% IF ( subfiel.authority ) %]
+                        <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                    [% END %]
+                </p>
+            [% END %]
+            </div>
+        [% END %]
+    </div>
+
+     [% IF ( tab10XX ) %]
+    <div id="tab10XX">
+        <table>
+                <tr>
+                    [% FOREACH item_header_loo IN item_header_loop %]
+                        <th>
+                            [% item_header_loo.header_value %]
+                        </th>
+                    [% END %]
+                </tr>
+                [% FOREACH item_loo IN item_loop %]
+                    <tr>
+                        [% item_loo.item_value %]
+                    </tr>
+                [% END %]
+        </table>
+    </div>
+    [% END %]
+
+</div>
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'biblio-view-menu.inc' %]
+</div>
+[% END %]
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

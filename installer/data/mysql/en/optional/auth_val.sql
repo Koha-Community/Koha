@@ -51,3 +51,7 @@ INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('MANUA
 
 -- custom borrower notes
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('BOR_NOTES','ADDR','Address Notes');
+
+-- OPAC Suggestions reasons
+INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','damaged','The copy on the shelf is damaged','The copy on the shelf is damaged');
+INSERT INTO authorised_values (category,authorised_value,lib,lib_opac) VALUES ('OPAC_SUG','bestseller','Upcoming title by popular author','Upcoming title by popular author');

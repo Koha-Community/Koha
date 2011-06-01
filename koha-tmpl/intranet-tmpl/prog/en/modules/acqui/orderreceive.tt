@@ -1,0 +1,169 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Receipt summary for : [% name %] [% IF ( invoice ) %]invoice, [% invoice %][% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/js/additem.js"> </script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% supplierid %]">[% name %]</a> &rsaquo; Receive items from : [% name %] [% IF ( invoice ) %][[% invoice %]][% END %] (order #[% ordernumber %])</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Receive items from : [% name %] [% IF ( invoice ) %][[% invoice %]] [% END %] (order #[% ordernumber %])</h1>
+
+[% IF ( count ) %]
+    <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post">
+<div class="yui-g">
+<div class="yui-u first">
+    
+    <fieldset class="rows">
+    <legend>Catalog Details</legend>
+    <ol><li><span class="label">Title: </span><span class="title">[% title |html %]</span></li>
+    <li> <span class="label">Author: </span>
+        [% author %]</li>
+    <li><span class="label">Copyright: </span>
+        [% copyrightdate %]</li>
+    <li> <span class="label">ISBN: </span>
+        [% isbn %]</li>
+    <li> <span class="label">Series: </span>
+        [% seriestitle %]</li>
+    </ol>
+	</fieldset>
+    [% IF ( items ) %]
+    <fieldset class="rows">
+        <legend>Item</legend>
+        [% IF ( NoACQframework ) %]
+            <p class="required">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</p>
+        [% END %]
+
+        [% FOREACH item IN items %]
+        <div id="outeritemblock">
+        <div id="itemblock">
+            <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
+                <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+                                
+                    <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
+                    [% iteminformatio.marc_value %]
+                    <input type="hidden" name="itemid" value="1" />
+                    <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
+                    <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
+                    <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
+                    <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
+                    [% IF ( iteminformatio.ITEM_SUBFIELDS_ARE_NOT_REPEATABLE ) %]
+                        <span class="buttonPlus" onclick="CloneSubfield('subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
+                    [% END %]
+            
+                </div></li>
+            [% END %]
+            </ol>
+            <a style="cursor: pointer; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock[% item.itemBlockIndex %]')">+</a>
+            <a style="display:none; cursor: pointer; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock[% item.itemBlockIndex %]')">-</a>
+        </div><!-- /iteminformation -->
+        </div>
+        
+        <input type="hidden" name="moditem" value="" /> 
+        <input type="hidden" name="tag" value="[% item.itemtagfield %]" />
+        <input type="hidden" name="subfield" value="[% item.itemtagsubfield %]" />
+        <input type="hidden" name="serial" value="[% item.serialid %]" />
+        <input type="hidden" name="bibnum" value="[% item.biblionumber %]" />
+        <input type="hidden" name="itemid" value="1" />
+        <input type="hidden" name="field_value" value="[% item.itemnumber %]" />
+        [% END %] <!-- /items -->
+    </fieldset>
+    [% END %] <!-- items -->
+    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+    <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
+    <input type="hidden" name="biblioitemnumber" value="[% biblioitemnumber %]" />
+    <input type="hidden" name="supplierid" value="[% supplierid %]" />
+    <input type="hidden" name="datereceived" value="[% datereceived_iso %]" />
+    <input type="hidden" name="freight" value="[% freight %]" />
+    <input type="hidden" name="gst" value="[% gst %]" />
+	</div>
+	<div class="yui-u">
+    <fieldset class="rows">
+    <legend>Accounting details</legend>
+       <ol>
+       <li><label for="datereceived">Date received: </label><span class="label"> [% datereceived %] </span></li>
+       <li><label for="quantityto">Quantity to receive: </label><span class="label">
+           [% IF ( edit ) %]
+               <input type="text" name="quantity" value="[% quantity %]" />
+           [% ELSE %]
+               <input type="text" READONLY name="quantity" value="[% quantity %]" />
+           [% END %]
+           </span></li>
+        <li><label for="quantity">Quantity received: </label>
+            [% IF ( quantityreceived ) %]
+                [% IF ( edit ) %]
+                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceived %]" />
+                    <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
+                [% ELSE %]
+                [% IF ( items ) %]
+                    <input READONLY type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
+                [% ELSE %]
+                    <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantityreceivedplus1 %]" />
+                [% END %]
+                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="[% quantityreceived %]" />
+                [% END %]
+            [% ELSE %]
+                [% IF ( items ) %]
+                    <input READONLY type="text" id="quantity" size="20" name="quantityrec" value="1" />
+                [% ELSE %]
+                    <input type="text" size="20" id="quantity" name="quantityrec" value="1" />
+                [% END %]
+                <input id="origquantityrec" READONLY type="hidden" name="origquantityrec" value="0" />
+            [% END %]
+		</li>
+        <li><label for="rrp">Replacement cost: </label><input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /></li>
+        <li><label for="ecost">Budgeted cost: </label><input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" /></li>
+        <li><label for="cost">Actual cost:</label>
+        [% IF ( unitprice ) %]
+         <input type="text" size="20" name="cost" id="cost" value="[% unitprice %]" />
+        [% ELSE %]
+            <input type="text" size="20" name="cost" id="cost" value="[% ecost %]" />
+        [% END %]</li></ol>
+        <label for="note">Notes: </label><textarea name="note" width="40" rows="8" >[% notes %]</textarea>
+        <input type="hidden" name="invoice" value="[% invoice %]" />
+    </fieldset>
+
+</div>
+</div><div class="yui-g"><fieldset class="action">
+        <input type="button"  value="Save" onclick="javascript:if(check_additem()) { this.form.submit(); } else { alert( _('Duplicate barcodes detected.  Please correct the errors and resubmit.') ); return false };" /> <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?supplierid=[% supplierid %]&amp;invoice=[% invoice %]&amp;gst=[% gst %]&amp;freight=[% freight %]">Cancel</a>
+</fieldset></div>    </form>
+[% ELSE %]
+<div id="acqui_acquire_orderlist">
+    <table>
+    <tr>
+        <th>Basket</th>
+        <th>ISBN</th>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Qty</th>
+        <th>Received</th>
+    </tr>
+    [% FOREACH loo IN loop %]
+        <tr>
+            <td>[% loo.basketno %]</td>
+            <td>[% loo.isbn %]</td>
+         <td><a href="orderreceive.pl?datereceived=[% loo.datereceived %]&amp;receive=[% loo.ordernumber %]&amp;biblio=[% loo.biblionumber %]&amp;invoice=[% loo.invoice %]&amp;freight=[% loo.freight %]&amp;gst=[% loo.gst %]&amp;id=[% loo.id %]">[% loo.title |html %]</a></td>
+            <td>[% loo.author %]</td>
+            <td>[% loo.quantity %]</td>
+            <td>[% loo.quantityreceived %]</td>
+        </tr>
+    [% END %]
+    </table>
+</div>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

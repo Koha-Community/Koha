@@ -1,0 +1,93 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Guarantor Search</title>
+[% INCLUDE 'doc-head-close.inc' %]
+    <style type="text/css">
+    #custom-doc { width:44.46em;*width:43.39em;min-width:578px; margin:auto; text-align:left; }
+    </style>
+    <script type="text/javascript">
+        <!--
+        function fillguarantor(id, surname, firstname, streetnumber, address, address2, city, state, zipcode, country) {
+            var $ = window.opener.$;
+            var form = $('#entryform').get(0);
+
+            if (form.guarantorid.value) {
+                $("#contact-details").find('a').remove();
+                $("#contactname, #contactfirstname").parent().find('span').remove();
+            }
+
+            form.guarantorid.value = id;
+            $('#contact-details')
+                .show()
+                .find('span')
+                .after('<a target="blank" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=' + id + '">' + id + '</a>');
+
+            $(form.contactname)
+                .val(surname)
+                .before('<span>' + surname + '</span>').get(0).type = 'hidden';
+            $(form.contactfirstname)
+                .val(firstname)
+                .before('<span>' + firstname + '</span>').get(0).type = 'hidden';
+
+            form.streetnumber.value = streetnumber;
+            form.address.value = address;
+            form.address2.value = address2;
+            form.city.value = city;
+            form.state.value = state;
+            form.zipcode.value = zipcode;
+            form.country.value = country;
+
+            form.guarantorsearch.value = 'Change';
+            self.close();
+        }
+        // -->
+    </script>
+</head>
+
+<div id="custom-doc" class="yui-t7">
+   <div id="bd">
+	<div class="yui-g">
+	
+
+<h3>Search for guarantor</h3>
+	<form action="/cgi-bin/koha/members/guarantor_search.pl" method="post">
+		<fieldset>
+		<input type="hidden" name="category_type" id="category_type" value="[% category_type %]" />
+		<input type="text" name="member" id="member" value="[% member %]" class="focus" /> Ordered by
+		<select name="orderby">
+			<option value="surname,firstname">Surname</option>
+			<option value="cardnumber">Cardnumber</option>
+		</select> <input type="submit" class="button" value="Search" /></fieldset>
+	</form>
+
+[% IF ( results ) %]
+	<p>Searched for <span class="ex">[% member %]</span>, [% numresults %] patron(s) found:</p>
+	<table>
+		<tr>
+			<th>Cardnumber</th>
+			<th>Name</th>
+			<th>Date of birth</th>
+			<th>Address</th>
+            <th>Select?</th>
+		</tr>
+		[% FOREACH resultsloo IN resultsloop %]
+			<tr>
+				<td>[% resultsloo.cardnumber %]</td>
+                <td>
+                    [% resultsloo.surname %], [% resultsloo.firstname %]
+                </td> 
+				<td>[% resultsloo.dateofbirth %]</td>
+				<td><p>[% resultsloo.address %] [% resultsloo.address2 %] [% resultsloo.city %] [% resultsloo.state %] [% resultsloo.zipcode %] [% resultsloo.country %]</p></td>
+                <td>
+                    <form action="">
+                        <input type="button" onclick="fillguarantor('[% resultsloo.borrowernumber %]', '[% resultsloo.surname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.firstname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.streetnumber |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.address |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.address2 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.city |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.state |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.zipcode |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.country |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]'); return false;" value="Select"/>
+                    </form>
+                </td>
+			</tr>
+		[% END %]
+	</table>
+[% END %]
+
+<div id="closewindow"><a href="#" class="close">Cancel</a></div>
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

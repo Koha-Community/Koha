@@ -15,6 +15,7 @@
 </xsl:template>
 
 <xsl:template match="marc:record">
+  <xsl:variable name="Show856uAsImage" select="marc:sysprefs/marc:syspref[@name='OPACDisplay856uAsImage']"/>
   <xsl:variable name="leader" select="marc:leader"/>
   <xsl:variable name="leader6" select="substring($leader,7,1)"/>
   <xsl:variable name="leader7" select="substring($leader,8,1)"/>
@@ -51,21 +52,6 @@
       </h1>
     </xsl:for-each>
   </xsl:if>
-
-  <div id="views">
-    <span class="view">
-      <span id="Normalview">Normal View</span>
-    </span>
-    <span class="view">
-      <a id="MARCviewPop" href="/cgi-bin/koha/opac-showmarc.pl?id={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC" rel="gb_page_center[600,500]">MARC View</a>
-    </span>
-    <span class="view">
-      <a id="MARCview" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}" title="MARC">Expanded MARC View</a>
-    </span>
-    <span class="view">
-      <a id="ISBDview" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber={marc:datafield[@tag=090]/marc:subfield[@code='a']}">Card View (ISBD)</a>
-    </span>
-  </div>
 
   <xsl:call-template name="tag_4xx" />
 
@@ -366,11 +352,15 @@
     <span class="results_summary">
       <span class="label">Online Resources: </span>
       <xsl:for-each select="marc:datafield[@tag=856]">
+        <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
         <a>
           <xsl:attribute name="href">
             <xsl:value-of select="marc:subfield[@code='u']"/>
           </xsl:attribute>
           <xsl:choose>
+            <xsl:when test="($Show856uAsImage='Details' or $Show856uAsImage='Both') and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
+              <xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute><xsl:attribute name="alt"><xsl:value-of select="marc:subfield[@code='y']"/></xsl:attribute><xsl:attribute name="height">100</xsl:attribute></xsl:element><xsl:text></xsl:text>
+            </xsl:when>
             <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
               <xsl:call-template name="subfieldSelect">
                 <xsl:with-param name="codes">y3z</xsl:with-param>

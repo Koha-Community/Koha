@@ -1,0 +1,87 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  Personal Details for [% firstname %] [% surname %]
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+
+<h3><a href="/cgi-bin/koha/opac-user.pl">[% firstname %] [% surname %]'s account</a> <img src="[% themelang %]../../images/caret.gif" width="16" height="16" alt="&gt;" border="0" /> Personal Details</h3>
+
+<table>
+<tr><th scope="row">Name:</th><td> [% firstname %] [% surname %]</td></tr>
+<tr><th scope="row">
+Card Number:</th><td>[% cardnumber %]</td></tr>
+</table>
+
+<table>
+<caption>Contact Details</caption>
+<tr><th scope="row">Mailing Address:</th><td>[% address %], [% city %]</td></tr>
+
+<tr><th scope="row">Permanent Address:</th><td> [% B_address %], [% B_address2 %], [% B_city %]</td></tr>
+
+<tr><th scope="row">Phone (Home):</th><td>[% IF ( phone ) %][% phone %][% ELSE %]&nbsp;[% END %]</td></tr>
+
+<tr><th scope="row">Phone (Daytime):</th><td>[% IF ( mobile ) %][% mobile %][% ELSE %]&nbsp;[% END %]</td></tr>
+
+<tr><th scope="row">Fax:</th><td>[% IF ( fax ) %][% fax %][% ELSE %]&nbsp;[% END %]</td></tr>
+
+<tr><th scope="row">Email:</th><td>[% IF ( email ) %]<a href="mailto:[% email %]">[% email %]</a>[% ELSE %]&nbsp;[% END %]</td></tr>
+
+</table>
+
+<table>
+<caption>Membership Details</caption>
+<tr><th scope="row">Membership Number:</th><td> [% borrowernumber %]</td></tr>
+
+<tr><th scope="row">Membership Category:</th><td>  [% categorycode %]</td></tr>
+
+<!-- <td>Fee:</th><td>  /year, Paid</td> -->
+
+<tr><th scope="row">Joined:</th><td>[% dateenrolled %]</td></tr>
+
+<tr><th scope="row">Expires:</th><td>[% dateexpiry %]</td></tr>
+
+[% IF ( joiningbranch ) %]<tr><th>Joining Branch:</th><td>[% joiningbranch %]</td></tr>[% ELSE %]&nbsp;[% END %]</table>
+
+<table>
+<caption>Identity Details</caption>
+<tr><th scope="row">DoB:</th><td> [% IF ( dateofbirth ) %][% dateofbirth %][% ELSE %]&nbsp;[% END %]</td></tr>
+
+<tr><th scope="row">Gender:</th><td>[% IF ( sex ) %][% sex %][% ELSE %]&nbsp;[% END %]</td></tr></table>
+
+[% IF ( contactname ) %]
+<table>
+<caption>Alternate Contact Details</caption>
+<tr><th scope="row">Alternate Contact:</th><td> [% IF ( contactname ) %][% contactname %][% ELSE %]&nbsp;[% END %]</td></tr>
+
+<tr><th scope="row">Phone:</th><td> [% IF ( B_phone ) %][% B_phone %][% ELSE %]&nbsp;[% END %]</td></tr>
+
+<tr><th scope="row">Relationship:</th><td> [% IF ( relationship ) %][% relationship %][% ELSE %]&nbsp;[% END %]  </td></tr>
+
+<tr><th scope="row">Notes:</th><td> [% IF ( contactnote ) %][% contactnote %][% ELSE %]&nbsp;[% END %] </td></tr>
+
+<tr><th scope="row">Guarantor:</th><td> [% IF ( guarantorid ) %][% guarantorid %][% ELSE %]&nbsp;[% END %] </td></tr></table>
+
+[% ELSE %]
+<h4>No alternate contact on file.</h4>
+[% END %]
+
+<form action="/cgi-bin/koha/opac-userupdate.pl" method="post">
+<input type="submit" name="Modify" value="Modify Your Record" />
+</form>
+
+</div>
+</div>
+</div>
+<div class="yui-b">
+<div id="leftmenus" class="container">
+[% INCLUDE 'navigation.inc' %]
+[% INCLUDE 'usermenu.inc' %]
+</div>
+</div>
+</div>
+[% INCLUDE 'opac-bottom.inc' %]

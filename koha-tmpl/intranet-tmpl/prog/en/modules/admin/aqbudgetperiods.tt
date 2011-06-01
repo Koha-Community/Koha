@@ -1,0 +1,307 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+
+<script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+// #################################################################################
+// Javascript
+// #################################################################################
+    function Check(f) {
+            var ok=1;
+            var _alertString="";
+            var alertString2;
+
+            if (!(isNotNull(f.budget_period_startdate,1))) {
+                    _alertString += "\n- " + _("Start date missing");
+            }
+
+            if (!(isNotNull(f.budget_period_enddate,1))) {
+                    _alertString += "\n- " + _("End date missing");
+            }
+
+            if ( f.budget_period_startdate >   f.budget_period_enddate )  {
+                    _alertString += "\n- " + _("Start date must be before end date");
+            }
+
+            if (!(isNotNull(f.budget_period_description,1))) {
+                    _alertString += "\n- " + _("Description missing");
+            }
+
+            if (!(isNum(f.budget_period_total))) {
+                    _alertString += "\n- " + _("Amount must be a valid number, or empty");
+            }
+
+/*
+			checkBudgetTotal(f) {
+			}
+*/
+
+            if (_alertString.length==0) {
+                    f.submit();
+            } else {
+                    alertString2  = _("Form not submitted because of the following problem(s)");
+                    alertString2 += "\n------------------------------------------------------------------------------------\n";
+                    alertString2 += _alertString;
+                    alert(alertString2);
+            }
+    }
+	$(document).ready(function() {
+		 $("#periodsh").tablesorter({
+	            widgets : ['zebra'],
+	            sortList: [[0,0]],
+	            headers:  {6:{sorter:false}}
+	     });
+	});
+</script>
+
+<title>
+    Koha &rsaquo; Administration &rsaquo; Budgets
+
+    [% IF ( add_form ) %]&rsaquo;
+        [% IF ( budget_period_id ) %]
+            Modify budget'[% budget_period_id %]'
+        [% ELSE %]
+            Add budget
+        [% END %]
+    [% END %]
+
+    [% IF ( delete_confirm ) %]&rsaquo;
+            Delete budget '[% budget_period_description %]'?
+    [% END %]
+    [% IF ( delete_confirmed ) %]&rsaquo;
+        Data Deleted
+    [% END %]
+</title>
+
+
+</head>
+
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'budgets-admin-search.inc' %]
+
+<!-- ################################################################################# -->
+<!-- BREADCRUMBS -->
+<!-- ################################################################################# -->
+
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+
+    <!-- add or modify a budget period -->
+    <!-- ####################################### -->
+    [% IF ( add_form ) %]
+        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budget</a> &rsaquo;
+        [% IF ( budget_period_id ) %]
+            Modify budget [% budget_period_description %]
+
+        [% ELSE %]
+            Add budget
+        [% END %]
+    [% END %]
+
+    <!-- delete a budget period -->
+    <!-- ################################ -->
+    [% IF ( delete_confirm ) %]
+        <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
+        [% IF ( total ) %]
+            Cannot delete budget '[% budget_period_description %]'
+        [% ELSE %]
+            Delete budget '[% budget_period_description %]'?
+        [% END %]
+    [% END %]
+
+    <!-- display budget periods list -->
+    <!-- ########################################## -->
+    [% IF ( else ) %]
+        Budgets administration
+    [% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+<div id="bd">
+<div id="yui-main">
+<div class="yui-b">
+
+[% INCLUDE 'budgets-admin-toolbar.inc' %]
+
+[% IF ( add_form ) %]
+    <!--  add or modify a budget period   -->
+
+    [% IF ( budget_period_id ) %]
+        <h3>Modify budget</h3>
+    [% ELSE %]
+        <h3>Add budget</h3>
+	[% END %]
+<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post">
+    <fieldset class="rows">
+    <!-- ################################################################################# -->
+    <!-- display information about the budget period that must be added or modified -->
+    <!-- ################################################################################# -->
+    <input type="hidden" name="op" value="add_validate" />
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+    <ol>
+    <li>
+    <label class="required" for="budget_period_startdate">Start date</label>
+    <input type="text" size="10" id="budget_period_startdate" name="budget_period_startdate"   value="[% budget_period_startdate %]"  />
+    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show start date calendar" />
+    <script type="text/javascript">
+        Calendar.setup({
+        inputField     :    "budget_period_startdate",
+        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
+        button         :    "openCalendarFrom",
+        align          :    "Tl",
+        singleClick    :    false
+        });
+    </script>
+				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    </li>
+    <li>
+
+    <label class="required" for="budget_period_enddate">End date</label>
+    <input type="text" size="10" id="budget_period_enddate" name="budget_period_enddate" value="[% budget_period_enddate %]" />
+    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarTo" style="cursor: pointer;" alt="Show end date calendar" />
+
+    <script type="text/javascript">
+        Calendar.setup({
+        inputField     :    "budget_period_enddate",
+        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
+        button         :    "openCalendarTo",
+        align          :    "Tl"
+        });
+    </script>
+				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    </li>
+
+    <li>
+        <!-- DESCRIPTION -->
+        <!-- ############################## -->
+        <label class="required" for="budget_period_description">Description</label>
+        <input type="text" id="budget_period_description" name="budget_period_description"
+        size="48" maxlength="80" value="[% budget_period_description %]" />
+    </li>
+
+    <li>
+        <!-- TOTAL -->
+        <!-- ############################## -->
+        <label for="budget_period_total">Total amount</label>
+        <input type="text" id="budget_period_total" name="budget_period_total"
+        size="10" maxlength="80" value="[% budget_period_total %]" />
+    </li>
+
+    <li>
+        <!-- ACTIVE -->
+        <!-- ############################## -->
+        <label for="budget_period_active">Make Budget Active</label>
+        [% IF ( budget_period_active ) %]<input type="checkbox" checked="checked" id="budget_period_active" name="budget_period_active" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_active" name="budget_period_active" value="1"/> [% END %]
+    </li>
+
+    <li>
+        <!-- LOCK  -->
+        <!-- ############################## -->
+        <label for="budget_period_locked">Lock Budget</label>
+        [% IF ( budget_period_locked ) %]<input type="checkbox" checked="checked" id="budget_period_locked" name="budget_period_locked" value="1" />[% ELSE %]  <input type="checkbox" id="budget_period_locked" name="budget_period_locked" value="1"/> [% END %]
+    </li>
+    </ol>
+    </fieldset>
+
+    <fieldset class="action">
+        <!-- "save changes" button -->
+        <!-- ###################################### -->
+        <input type="button" value="Save Changes"  onclick="Check(this.form)"    />
+        <!--             <input type="submit" value="Save Changes"  />  -->
+        <!--            <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="cancel">Cancel</a> -->
+    </fieldset>
+
+</form>
+
+[% END %]
+
+<!-- ####################################################################### -->
+<!-- delete a budget period -->
+<!-- ####################################################################### -->
+
+[% IF ( delete_confirm ) %]
+    [% IF ( total ) %]
+        <div class="dialog message">
+        <h3>Cannot delete budget</h3>
+        <p><strong>This record is used [% total %] times</strong>
+        . Deletion is not possible.</p>
+    [% ELSE %]
+        <div class="dialog alert">
+        <h3>Delete budget '[% budget_period_description %]'?</h3>
+    [% END %]
+
+    <!-- ############################################################# -->
+    <!-- "delete" and "cancel" buttons    -->
+    <!-- ############################################################# -->
+
+    <form action="[% script_name %]" method="post">
+        <input type="hidden" name="op" value="delete_confirmed" />
+        <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+        <input type="submit" class="approve" value="Delete" />
+    </form>
+
+    <form action="[% script_name %]" method="post">
+        <input type="submit" class="deny" value="Cancel" />
+    </form>
+
+    </div>
+[% END %]
+<!--  DEFAULT  display budget periods list -->
+[% IF ( else ) %]
+    <h2>Budgets administration</h2>
+
+    [% INCLUDE 'budgets-active-currency.inc' %]
+
+    <table id="periodsh">
+    <thead>
+	    <tr>
+	        <th>Budget Name</th>
+	        <th>Start Date</th>
+	        <th>End Date</th>
+	        <th>Active</th>
+	        <th>Locked</th>
+	        <th>Total</th>
+	        <th>Actions</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    [% FOREACH period_loo IN period_loop %]
+	        [% IF ( loop.odd ) %]
+	            <tr>
+	        [% ELSE %]
+	            <tr class="highlight">
+	        [% END %]
+	        <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id %]" title="View funds for [% period_loo.budget_period_description %]">[% period_loo.budget_period_description %]</a></td>
+	        <td>[% period_loo.budget_period_startdate %]</td>
+	        <td>[% period_loo.budget_period_enddate %]</td>
+	        <td>[% IF ( period_loo.budget_period_active ) %]<span style="color:green;">Active</span>&nbsp;[% ELSE %][% END %] </td>
+	        <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
+	        <td align='right'>[% period_loo.budget_period_total %]</td>
+	        <td>
+	            <a href="[% period_loo.script_name %]?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id |html %]">Edit</a>
+	            <a href="[% period_loo.script_name %]?op=delete_confirm&amp;budget_period_id=[% period_loo.budget_period_id %]">Delete</a>
+	           	<a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% period_loo.budget_period_id %]">Add Fund</a>
+	        </td>
+	        </tr>
+	    [% END %]
+	    [% UNLESS ( period_loop ) %]
+    	<tr><td colspan="7">No budget</td></tr>
+    	[% END %]
+    </tbody>
+    </table>
+    <div class="pages">[% pagination_bar %]</div>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

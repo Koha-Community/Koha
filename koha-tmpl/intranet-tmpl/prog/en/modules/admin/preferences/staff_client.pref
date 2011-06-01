@@ -1,0 +1,116 @@
+Staff Client:
+    Appearance:
+        -
+            - Use the
+            - pref: template
+              choices: staff-templates
+            - theme on the staff interface.
+        -
+            - "The staff client is located at http://"
+            - pref: staffClientBaseURL
+              class: url
+            - .
+        -
+            - Include the stylesheet at
+            - pref: intranetstylesheet
+              class: url
+            - on all pages in the staff interface, instead of the default. (This should be a complete URL, starting with <code>http://</code>.)
+        -
+            - "Include the following CSS on all pages in the staff client:"
+            - pref: IntranetUserCSS
+              type: textarea
+              class: code
+        -
+            - Include the stylesheet <code><!-- TMPL_VAR NAME="themelang" -->/css/</code>
+            - pref: intranetcolorstylesheet
+              class: file
+            - on all pages in the staff interface. (Leave blank to disable.)
+        -
+            - Use include files from the
+            - pref: intranet_includes
+              class: file
+            - directory in the template directory, instead of <code>includes/</code>. (Leave blank to disable)
+        -
+            - "Show the following HTML in its own column on the main page of the staff client:"
+            - pref: IntranetmainUserblock
+              type: textarea
+              class: code
+        -
+            - "Show the following HTML in the More menu at the top of each page on the staff client (should be a list of links or blank):"
+            - pref: IntranetNav
+              type: textarea
+              class: code
+        -
+            - "Include the following JavaScript on all pages in the staff clien:"
+            - pref: intranetuserjs
+              type: textarea
+              class: code
+        -
+            - Use the image at
+            - pref: IntranetFavicon
+              class: url
+            - for the Staff Client's favicon. (This should be a complete URL, starting with <code>http://</code>.)
+        -
+            - Show biblio records on result page in the staff client
+            - pref: XSLTResultsDisplay
+              choices:
+                  yes: using XSLT stylesheets.
+                  no: normally.
+        -
+            - Show item details pages in the staff client
+            - pref: XSLTDetailsDisplay
+              choices:
+                  yes: using XSLT stylesheets.
+                  no: normally.
+        -
+            - Use the Yahoo UI libraries
+            - pref: yuipath
+              choices:
+                  local: "included with Koha (faster, will work if internet goes down)."
+                  "http://yui.yahooapis.com/2.5.1/build": "from Yahoo's own servers (less demand on your servers)."
+        -
+            - pref: StaffAuthorisedValueImages
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - images for <a href="/cgi-bin/koha/admin/authorised_values.pl">authorized values</a> (such as lost statuses and locations) in search results.
+        -
+            - 'Display the URI in the 856u field as an image on: '
+            - pref: Display856uAsImage
+              choices:
+                  OFF: "Neither Details or Results pages"
+                  Details: "Details page only"
+                  Results: "Results page (for future use, Results XSLT not functional at this time)."
+                  Both: "Both Results and Details pages (for future use, Results XSLT not functional at this time)."
+            - 'Note: The corresponding XSLT option must be turned on.'
+    Options:
+        -
+            - pref: viewMARC
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to view records in plain MARC form on the staff client.
+        -
+            - pref: viewLabeledMARC
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to view records in labeled MARC form on the staff client.
+        -
+            - pref: viewISBD
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to view records in ISBD form on the staff client.
+        -
+            - pref: HidePatronName
+              choices:
+                  no: Show
+                  yes: "Don't show"
+            - the names of patrons that have items checked out or on hold on detail pages or the "Place Hold" screen.
+        -
+            - pref: intranetbookbag
+              choices:
+                  yes: Show
+                  no: "Don't show"
+            - the cart option in the staff client.

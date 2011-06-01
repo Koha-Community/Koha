@@ -5,6 +5,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -42,14 +43,17 @@ my $data=GetMember('borrowernumber' => $borrowernumber);
 my $add=$input->param('add');
 
 if ($add){
-    my $barcode=$input->param('barcode');
-    my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
-    my $desc=$input->param('desc');
-    my $amount=$input->param('amount') || 0;
-    $amount = -$amount;
-    my $type=$input->param('type');
-    manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
-    print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    if(checkauth($input)) {
+        my $barcode = $input->param('barcode');
+        my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
+        my $desc    = $input->param('desc');
+        my $note    = $input->param('note');
+        my $amount  = $input->param('amount') || 0;
+        $amount = -$amount;
+        my $type = $input->param('type');
+        manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
+        print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    }
 } else {
 	my ($template, $loggedinuser, $cookie)
 	  = get_template_and_user({template_name => "members/mancredit.tmpl",
@@ -82,6 +86,7 @@ if ($add){
 		    address => $data->{'address'},
 		    address2 => $data->{'address2'},
 		    city => $data->{'city'},
+		    state => $data->{'state'},
 		    zipcode => $data->{'zipcode'},
 		    country => $data->{'country'},
 		    phone => $data->{'phone'},

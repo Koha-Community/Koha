@@ -18,8 +18,9 @@ use strict;
 use warnings;
 
 use CGI;
+use Digest::MD5 qw(md5_base64);
 
-use C4::Auth;
+use C4::Auth qw(get_template_and_user checkpw);
 use C4::Koha;
 use C4::Dates qw/format_date/;
 use C4::Circulation;
@@ -54,22 +55,47 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
     type  => "opac",
     debug => 1,
 });
+if (C4::Context->preference('SelfCheckoutByLogin'))
+{
+    $template->param(authbylogin  => 1);
+}
+
+# Get the self checkout timeout preference, or use 120 seconds as a default
+my $selfchecktimeout = 120000;
+if (C4::Context->preference('SelfCheckTimeout')) { 
+    $selfchecktimeout = C4::Context->preference('SelfCheckTimeout') * 1000;
+}
+$template->param(SelfCheckTimeout => $selfchecktimeout);
+
+# Checks policy laid out by AllowSelfCheckReturns, defaults to 'on' if preference is undefined
+my $allowselfcheckreturns = 1;
+if (defined C4::Context->preference('AllowSelfCheckReturns')) {
+    $allowselfcheckreturns = C4::Context->preference('AllowSelfCheckReturns');
+}
+$template->param(AllowSelfCheckReturns => $allowselfcheckreturns);
+
 
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $barcode, $confirmed, $timedout) = (
+my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $timedout) = (
     $query->param("op")         || '',
     $query->param("patronid")   || '',
+    $query->param("patronlogin")|| '',
+    $query->param("patronpw")   || '',
     $query->param("barcode")    || '',
     $query->param("confirmed")  || '',
     $query->param("timedout")   || '', #not actually using this...
 );
 
-my %confirmation_strings = ( RENEW_ISSUE => "This item is already checked out to you.  Return it?", );
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 #warn "issuerid: " . $issuerid;
 my $issuer   = GetMemberDetails($issuerid);
 my $item     = GetItem(undef,$barcode);
+if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
+    my $dbh = C4::Context->dbh;
+    my $resval, $patronid = checkpw($dbh, $patronlogin, $patronpw);
+}
 my $borrower = GetMemberDetails(undef,$patronid);
+
 
 my $branch = $issuer->{branchcode};
 my $confirm_required = 0;
@@ -77,12 +103,12 @@ my $return_only = 0;
 #warn "issuer cardnumber: " .   $issuer->{cardnumber};
 #warn "patron cardnumber: " . $borrower->{cardnumber};
 if ($op eq "logout") {
-    $query->param( patronid => undef );
+    $query->param( patronid => undef, patronlogin => undef, patronpw => undef );
 }
-elsif ( $op eq "returnbook" ) {
+elsif ( $op eq "returnbook" && $allowselfcheckreturns ) {
     my ($doreturn) = AddReturn( $barcode, $branch );
     #warn "returnbook: " . $doreturn;
-    $borrower = GetMemberDetails( undef, $patronid );   # update borrower
+    $borrower = GetMemberDetails(undef,$patronid);
 }
 elsif ( $op eq "checkout" ) {
     my $impossible  = {};
@@ -180,6 +206,8 @@ if ($borrower->{cardnumber}) {
         issues_count => scalar(@issues),
         ISSUES => \@issues,
         patronid => $patronid,
+        patronlogin => $patronlogin,
+        patronpw => $patronpw,
         noitemlinks => 1 ,
     );
     my $inputfocus = ($return_only      == 1) ? 'returnbook' :

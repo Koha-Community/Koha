@@ -1,6 +1,7 @@
 package C4::Suggestions;
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright Biblibre 2011
 #
 # This file is part of Koha.
 #
@@ -24,7 +25,7 @@ use CGI;
 
 use C4::Context;
 use C4::Output;
-use C4::Dates qw(format_date);
+use C4::Dates qw(format_date format_date_in_iso);
 use C4::SQLHelper qw(:all);
 use C4::Debug;
 use C4::Letters;
@@ -43,8 +44,8 @@ our @EXPORT  = qw<
     ModSuggestion
     NewSuggestion
     SearchSuggestion
+    DelSuggestionsOlderThan
 >;
-
 
 =head1 NAME
 
@@ -126,7 +127,7 @@ sub SearchSuggestion  {
             if ($userenv) {
                 if (($userenv->{flags} % 2) != 1 && !$suggestion->{branchcode}){
                 push @sql_params,$$userenv{branch};
-                push @query,q{ and (branchcode = ? or branchcode ='')};
+                push @query,q{ and (suggestions.branchcode = ? or suggestions.branchcode ='')};
                 }
             }
     }
@@ -144,6 +145,17 @@ sub SearchSuggestion  {
         else {
             push @query, " and (suggestions.$field='' OR suggestions.$field IS NULL)";
         }
+    }
+
+    my $today = C4::Dates->today('iso');
+
+    foreach ( qw( suggesteddate manageddate accepteddate ) ) {
+        my $from = $_ . "_from";
+        my $to = $_ . "_to";
+        if ($$suggestion{$from} || $$suggestion{$to}) {
+            push @query, " AND suggestions.suggesteddate BETWEEN '" 
+                . (format_date_in_iso($$suggestion{$from}) || 0000-00-00) . "' AND '" . (format_date_in_iso($$suggestion{$to}) || $today) . "'";
+        } 
     }
 
     $debug && warn "@query";
@@ -427,6 +439,23 @@ sub DelSuggestion {
         my $suggestiondeleted=$sth->execute($suggestionid);
         return $suggestiondeleted;  
     }
+}
+
+=head2 DelSuggestionsOlderThan
+    &DelSuggestionsOlderThan($days)
+    
+    Delete all suggestions older than TODAY-$days , that have be accepted or rejected.
+    
+=cut
+sub DelSuggestionsOlderThan {
+    my ($days) = @_;
+    return if not $days;
+    my $dbh = C4::Context->dbh;
+    
+    my $sth = $dbh->prepare("
+        DELETE FROM suggestions WHERE STATUS <> 'ASKED' AND date < ADDDATE(NOW(), ?);
+    ");
+    $sth->execute("-$days");
 }
 
 1;

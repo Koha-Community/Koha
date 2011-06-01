@@ -27,6 +27,7 @@ use C4::Overdues;    # AddNotifyLine
 use C4::Biblio;
 use C4::Koha;
 use C4::Debug;
+use C4::Branch;
 
 =head1 branchoverdues.pl
 
@@ -103,21 +104,27 @@ my ($tag,$subfield) = GetMarcFromKohaField('items.location','');
 my $tagslib = &GetMarcStructure(1,'');
 if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
     my $values= GetAuthorisedValues($tagslib->{$tag}->{$subfield}->{authorised_value});
+    for (@$values) { $_->{selected} = 1 if $location eq $_->{authorised_value} }
     $template->param(locationsloop => $values);
 }
 # now display infos
 foreach my $num (@getoverdues) {
-
     my %overdueforbranch;
+    my $record = GetMarcBiblio($num->{biblionumber});
+    if ($record){
+        $overdueforbranch{'subtitle'} = GetRecordValue('subtitle',$record,'')->[0]->{subfield};
+    }
     $overdueforbranch{'date_due'}          = format_date( $num->{'date_due'} );
     $overdueforbranch{'title'}             = $num->{'title'};
     $overdueforbranch{'description'}       = $num->{'description'};
     $overdueforbranch{'barcode'}           = $num->{'barcode'};
     $overdueforbranch{'biblionumber'}      = $num->{'biblionumber'};
+    $overdueforbranch{'author'}            = $num->{'author'};
     $overdueforbranch{'borrowersurname'}   = $num->{'surname'};
     $overdueforbranch{'borrowerfirstname'} = $num->{'firstname'};
     $overdueforbranch{'borrowerphone'}     = $num->{'phone'};
     $overdueforbranch{'borroweremail'}     = $num->{'email'};
+    $overdueforbranch{'homebranch'}        = GetBranchName($num->{'homebranch'});
     $overdueforbranch{'itemcallnumber'}    = $num->{'itemcallnumber'};
     $overdueforbranch{'borrowernumber'}    = $num->{'borrowernumber'};
     $overdueforbranch{'itemnumber'}        = $num->{'itemnumber'};

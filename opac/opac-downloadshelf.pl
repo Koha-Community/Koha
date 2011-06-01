@@ -48,52 +48,59 @@ my $shelfid = $query->param('shelfid');
 my $format  = $query->param('format');
 my $dbh     = C4::Context->dbh;
 
-if ($shelfid && $format) {
+if ( ShelfPossibleAction( (defined($borrowernumber) ? $borrowernumber : -1), $shelfid, 'view' ) ) {
 
-    my @shelf               = GetShelf($shelfid);
-    my ($items, $totitems)  = GetShelfContents($shelfid);
-    my $marcflavour         = C4::Context->preference('marcflavour');
-    my $output;
+    if ($shelfid && $format) {
 
-   # CSV 
-    if ($format =~ /^\d+$/) {
-        my @biblios;
-        foreach (@$items) {
-            push @biblios, $_->{biblionumber};
+        my @shelf               = GetShelf($shelfid);
+        my ($items, $totitems)  = GetShelfContents($shelfid);
+        my $marcflavour         = C4::Context->preference('marcflavour');
+        my $output;
+
+       # CSV
+        if ($format =~ /^\d+$/) {
+            my @biblios;
+            foreach (@$items) {
+                push @biblios, $_->{biblionumber};
+            }
+            $output = marc2csv(\@biblios, $format);
+                
+        # Other formats
+        } else {
+            foreach my $biblio (@$items) {
+                my $biblionumber = $biblio->{biblionumber};
+
+                my $record = GetMarcBiblio($biblionumber, 1);
+                next unless $record;
+
+                if ($format eq 'iso2709') {
+                    $output .= $record->as_usmarc();
+                }
+                elsif ($format eq 'ris' ) {
+                    $output .= marc2ris($record);
+                }
+                elsif ($format eq 'bibtex') {
+                    $output .= marc2bibtex($record, $biblionumber);
+                }
+            }
         }
-        $output = marc2csv(\@biblios, $format);
-            
-    # Other formats
+
+        # If it was a CSV export we change the format after the export so the file extension is fine
+        $format = "csv" if ($format =~ m/^\d+$/);
+
+        print $query->header(
+    	-type => 'application/octet-stream',
+    	-'Content-Transfer-Encoding' => 'binary',
+    	-attachment=>"shelf.$format");
+        print $output;
+
     } else {
-        foreach my $biblio (@$items) {
-            my $biblionumber = $biblio->{biblionumber};
-
-            my $record = GetMarcBiblio($biblionumber);
-            next unless $record;
-
-            if ($format eq 'iso2709') {
-                $output .= $record->as_usmarc();
-            }
-            elsif ($format eq 'ris' ) {
-                $output .= marc2ris($record);
-            }
-            elsif ($format eq 'bibtex') {
-                $output .= marc2bibtex($record, $biblionumber);
-            }
-        }
+        $template->param(csv_profiles => GetCsvProfilesLoop());
+        $template->param(shelfid => $shelfid); 
+        output_html_with_http_headers $query, $cookie, $template->output;
     }
 
-    # If it was a CSV export we change the format after the export so the file extension is fine
-    $format = "csv" if ($format =~ m/^\d+$/);
-
-    print $query->header(
-	-type => 'application/octet-stream',
-	-'Content-Transfer-Encoding' => 'binary',
-	-attachment=>"shelf.$format");
-    print $output;
-
 } else {
-    $template->param(csv_profiles => GetCsvProfilesLoop());
-    $template->param(shelfid => $shelfid); 
+    $template->param(invalidlist => 1); 
     output_html_with_http_headers $query, $cookie, $template->output;
 }

@@ -1,0 +1,223 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Currencies &amp; Exchange Rates &rsaquo;
+[% IF ( add_form ) %][% IF ( searchfield ) %]Modify Currency '[% searchfield %]'[% ELSE %]New Currency[% END %][% END %]
+[% IF ( delete_confirm ) %]Confirm Deletion of Currency '[% searchfield %]'[% END %]
+[% IF ( delete_confirmed ) %]Currency Deleted[% END %]
+[% IF ( else ) %]Currencies[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    function toUC(f) {
+        var x=f.value.toUpperCase();
+        f.value=x;
+        return true;
+    }
+    function Check(f) {
+        var _alertString="";
+        var alertString2;
+        if (f.currency.value.length==0) {
+            _alertString += _("- Currency name missing") + "\n";
+        }
+        if (f.rate.value.length==0) {
+            _alertString += _("- Rate missing") + "\n";
+        }
+        if (f.symbol.value.length==0) {
+            _alertString += _("- Symbol missing") + "\n";
+        }
+        if (_alertString.length==0) {
+            document.Aform.submit();
+        } else {
+            alertString2 = _("Form not submitted because of the following problem(s)") + "\n";
+            alertString2 += "------------------------------------------------------------------------------------\n";
+            alertString2 += _alertString;
+            alert(alertString2);
+        }
+    }
+
+    $(document).ready(function() {
+        new YAHOO.widget.Button("newcurrency");
+
+        // prevents users to check active with a currency != 1
+        $("#rate").keyup(function() {
+            if ( $(this).val() == 1.0 ) {
+                $("#active").removeAttr('disabled');
+            } else {
+                $("#active").removeAttr('checked');
+                $("#active").attr('disabled','disabled');
+            }
+        });
+    });
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'currencies-admin-search.inc' %]
+
+
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange Rates</a> &rsaquo; [% IF ( add_form ) %][% IF ( searchfield ) %]Modify Currency '[% searchfield %]'[% ELSE %]New Currency[% END %][% END %]
+[% IF ( delete_confirm ) %]Confirm Deletion of Currency '<span class="ex">[% searchfield %]</span>'[% END %]
+[% IF ( delete_confirmed ) %]Currency Deleted[% END %]
+[% IF ( else ) %]Currencies[% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% IF ( else ) %]
+<div id="toolbar">
+    <ul class="toolbar">
+    <li><a id="newcurrency" href="[% script_name %]?op=add_form">New Currency</a></li>
+</ul></div>
+[% END %]
+
+[% IF ( add_form ) %]
+
+<form action="[% script_name %]" name="Aform" method="post">
+    <input type="hidden" name="op" value="save" />
+    <fieldset class="rows">
+    <legend>[% IF ( searchfield ) %]
+        Modify currency
+    [% ELSE %]
+        New currency
+    [% END %]</legend>
+    <ol>
+        <li>
+    [% IF ( searchfield ) %]
+            <span class="label">Currency: </span>
+            <input type="hidden" name="currency" id="currency" value="[% searchfield %]" />[% searchfield %]
+    [% ELSE %]
+            <label for="currency">Currency: </label>
+            <input type="text" name="currency" id="currency" size="50" maxlength="50" onblur="toUC(this);" />
+    [% END %]
+        </li>
+        <li>
+            <label for="rate">Rate: </label>
+            <input type="text" name="rate" id="rate" size="10" maxlength="10" value="[% rate %]" />
+        </li>
+        <li>
+            <label for="symbol">Symbol: </label>
+            <input type="text" name="symbol" id="symbol" size="5" maxlength="5" value="[% symbol %]" />
+        </li>
+
+        <li>
+            <span class="label">Last Updated: </span>[% timestamp %]
+        </li>
+        <li>
+            <label for="active">Active: </label>
+            [% IF ( active ) %]
+            <input type="checkbox" id="active" name="active" value="1" checked="checked" />
+            [% ELSE %]
+            <input type="checkbox" id="active" name="active" value="1" />
+            [% END %]
+        </li>
+
+        </ol>
+        </fieldset>
+
+    <fieldset class="action">
+        <input type="submit" value="Submit" onclick="Check(this.form)" />
+        <a href="/cgi-bin/koha/admin/currency.pl" class="cancel">Cancel</a>
+    </fieldset>
+    </form>
+
+[% END %]
+
+[% IF ( delete_confirm ) %]
+    [% IF ( totalgtzero ) %]
+    <div class="dialog message">
+        <h3>Cannot Delete Currency <span class="ex">'[% searchfield %]'</span></h3>
+        <p>This currency is used [% total %] times. Deletion not possible</p>
+        <form action="[% script_name %]" method="post">
+            <input type="submit" value="OK" class="approve" />
+        </form>
+    </div>
+    [% ELSE %]
+    <div class="dialog alert">
+        <h3>Confirm Deletion of Currency <span class="ex">'[% searchfield %]'</span></h3>
+        <table>
+            <tr><th>Currency</th>
+                <td>[% searchfield %]</td>
+            </tr>
+            <tr><th>Rate</th>
+                <td>[% rate %]</td>
+            </tr>
+        </table>
+        <form action="[% script_name %]" method="post">
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="searchfield" value="[% searchfield %]" />
+            <input type="submit" class="approve" value="Delete this Currency" />
+        </form>
+        <form action="[% script_name %]" method="post">
+            <input type="submit" class="deny" value="No, Do Not Delete" />
+        </form>
+    </div>
+    [% END %]
+[% END %]
+
+[% IF ( delete_confirmed ) %]
+<div class="dialog message"><h3>Currency Deleted</h3>
+<form action="[% script_name %]" method="post">
+    <input type="submit" class="approve" value="OK" />
+</form></div>
+[% END %]
+
+[% IF ( else ) %]
+
+<h2>Currencies and Exchange Rates</h2>
+
+[% IF ( loop ) %][% UNLESS ( activecurrency ) %]<div class="dialog alert"><h3>No active currency is defined</h3><p>Please edit one currency and mark it as active.</p></div>[% END %][% END %]
+
+
+    [% IF ( searchfield ) %]
+        You searched for [% searchfield %]</span>
+    [% END %]
+
+    <table>
+        <tr>
+            <th>Currency</th>
+            <th>Rate</th>
+            <th>Symbol</th>
+            <th>Last Updated</th>
+            <th>Active</th>
+            <th colspan="2">Actions&nbsp;</th>
+        </tr>
+        [% FOREACH loo IN loop %]
+        [% UNLESS ( loop.odd ) %]
+        <tr class="highlight">
+        [% ELSE %]
+        <tr>
+        [% END %]
+            <td>[% loo.currency %]</td>
+            <td>[% loo.rate %]</td>
+            <td>[% loo.symbol |html %]</td>
+            <td>[% loo.timestamp %]</td>
+            <td style="color:green;">[% IF ( loo.active ) %]✓[% END %]</td>
+            <td><a href="[% loo.script_name %]?op=add_form&amp;searchfield=[% loo.currency %]">Edit</a></td>
+            <td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.currency %]">Delete</a></td>
+        </tr>
+        [% END %]
+    </table>
+<br />
+
+    [% IF ( offsetgtzero ) %]
+        <a href="[% script_name %]?offset=[% prevpage %]">&lt;&lt; Previous</a>
+    [% END %]
+
+    [% IF ( ltcount ) %]
+        <a href="[% script_name %]?offset=[% nextpage %]">Next &gt;&gt;</a>
+    [% END %]
+
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

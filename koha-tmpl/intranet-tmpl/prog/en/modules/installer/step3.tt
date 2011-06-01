@@ -1,0 +1,264 @@
+[% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo; Web Installer &rsaquo; Step 3</title>
+[% IF ( finish ) %]<meta http-equiv="refresh" content="10; url=/cgi-bin/koha/mainpage.pl">[% END %]
+[% INCLUDE 'installer-doc-head-close.inc' %]
+<div>
+<h1 id="logo"><img alt="Koha" src="/intranet-tmpl/prog/img/koha.org-logo.gif" /> Web Installer &rsaquo; Step 3</h1>
+
+[% IF ( selectframeworks ) %]
+    <script language="JavaScript">
+    <!--
+    
+    var surl = unescape(window.location.pathname);
+    
+    function doLoad()
+    {
+        // the timeout value should be the same as in the "refresh" meta-tag
+        setTimeout( "refresh()", 2*1000 );
+    }
+    
+    function refresh(value)
+    {
+        //  This version of the refresh function will cause a new
+        //  entry in the visitor's history.  It is provided for
+        //  those browsers that only support JavaScript 1.0.
+        //
+        surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
+        window.location.href = surl;
+    }
+    
+    //-->
+    </script>
+    
+    <script language="JavaScript1.1">
+    <!--
+    function refresh(value)
+    {
+        //  This version does NOT cause an entry in the browser's
+        //  page view history.  Most browsers will always retrieve
+        //  the document from the web-server whether it is already
+        //  in the browsers page-cache or not.
+        //  
+        surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
+        window.location.replace( surl );
+    }
+    //-->
+    </script>
+    
+    <script language="JavaScript1.2">
+    <!--
+    function refresh(value)
+    {
+        //  This version of the refresh function will be invoked
+        //  for browsers that support JavaScript version 1.2
+        //
+        
+        //  The argument to the location.reload function determines
+        //  if the browser should retrieve the document from the
+        //  web-server.  In our example all we need to do is cause
+        //  the JavaScript block in the document body to be
+        //  re-evaluated.  If we needed to pull the document from
+        //  the web-server again (such as where the document contents
+        //  change dynamically) we would pass the argument as 'true'.
+        //  
+        surl=surl+'?step=3&op=selectframeworks&fwklanguage='+value;
+        window.location.replace( surl );
+    }
+    //-->
+    </script>
+    </head>
+    <body>
+    <script language="JavaScript">
+    function Hide(link) {
+            subfield = document.getElementById('bloc'+link);
+        var initstyle=subfield.style.display;
+            if (initstyle == 'block') subfield.style.display = 'none' ;
+            if (initstyle == 'none') subfield.style.display = 'block' ;
+    }
+    </script>
+[% END %]
+[% IF ( finish ) %]
+    <h1>Congratulations, Installation complete</h1>
+    <p>If this page does not redirect in 5 seconds, click <a href="/">here</a>.</p> 
+[% END %]
+[% IF ( choosemarc ) %]
+    <h2 align="center">Select your MARC flavour</h2>
+    <form name="frameworkselection" method="post" action="install.pl">   
+    <input type="hidden" name="step" value="3" />
+    <input type="hidden" name="op" value="selectframeworks" />
+    <p>  
+    [% FOREACH flavourloo IN flavourloop %]
+    <div>
+            [% IF ( flavourloo.checked ) %]
+                <input type="radio" name="marcflavour" value="[% flavourloo.code %]" checked /> [% flavourloo.label %] <br/>
+            [% ELSE %]
+                <input type="radio" name="marcflavour" value="[% flavourloo.code %]" /> [% flavourloo.label %] <br/>
+            [% END %]
+    </div>
+    [% END %]
+    </p>
+    <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+    </form>
+[% END %]
+
+[% IF ( selectframeworks ) %]
+    <h2 align="center">Selecting Default Settings</h2>
+    <form name="frameworkselection" method="post" action="install.pl">
+    <input type="hidden" name="step" value="3" />
+    <input type="hidden" name="op" value="addframeworks" />
+    
+    [% IF ( frameworksloop ) %]
+    <h2>MARC Frameworks: [% marcflavour %]</h2>
+    [% IF ( en_marc_frameworks ) %]
+        <h4><span class="error">No MARC frameworks are available for your language.  
+                Defaulting to the frameworks supplied for English (en)<span></h4>
+    [% END %]
+    [% FOREACH frameworksloo IN frameworksloop %]
+    <div>
+    <h3>[% frameworksloo.label %]</h3>
+    [% FOREACH framework IN frameworksloo.frameworks %]
+        <table style="border:1px;vertical-align:top;">
+        <tr>
+        <td style="vertical-align:top;">
+            [% IF ( framework.checked ) %]
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" />
+            [% ELSE %]
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" />
+            [% END %]
+        </td>
+        <td>
+            [% framework.fwkdescription %]
+            <em>([% framework.fwkname %])</em>
+        </td>
+        </table>
+    [% END %]
+    </div>
+    </p>
+    [% END %]
+    <h2>Other data</h2>
+    [% END %]
+    [% IF ( en_sample_data ) %]
+        <h4><span class="error">No sample data and settings are available for your language.  
+                Defaulting to the samples supplied for English (en)<span></h4>
+    [% END %]
+    [% FOREACH levelloo IN levelloop %]
+    <div>
+    <h3>[% levelloo.label %]</h3>
+    [% FOREACH framework IN levelloo.frameworks %]
+        <table style="border:1px;vertical-align:top;">
+        <tr>
+        <td style="vertical-align:top;">
+            [% IF ( framework.checked ) %]
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" checked="checked" />
+            [% ELSE %]
+                <input type="checkbox" name="framework" value="[% framework.fwkfile %]" />
+            [% END %]
+        </td>
+        <td>
+            [% framework.fwkdescription %]
+            <em>([% framework.fwkname %])</em>
+        </td>
+        </table>
+    [% END %]
+    </div>
+    </p>
+    [% END %]
+    <p>When you've made your selections, please click 'Import' below to begin the process. It may take a while to complete,
+    please be patient.</p>
+    <p><input type="submit" value="import" />
+    </p>
+    </form>
+    </p>
+[% END %]
+
+
+[% IF ( addframeworks ) %]
+    [% FOREACH lis IN list %]
+    <h3>[% lis.level %] data added</h3>
+    <ul>
+    [% FOREACH fwklis IN lis.fwklist %]
+        <li>[% fwklis.fwkname %][% IF ( fwklis.error ) %]<br /><span class="error">[% fwklis.error %]</span>[% END %] </li>
+    [% END %]
+    </ul>
+    [% END %]
+    <h3>All done!</h3>
+    <p>Installation complete.<br />
+        <p>Click on Finish to complete and load the Koha Staff Interface.
+        <form name="finish">
+        <input type="hidden" name="step" value="3" />
+        <input type="hidden" name="op" value="finish" />
+        <input type="submit" value="Finish" /></form>
+        </p>
+    </p>
+[% END %]
+
+
+[% IF ( importdatastructure ) %]
+    [% IF ( error ) %]
+        <p>The following error occurred while importing the database structure:</p>
+        <p class="error">[% error %] </p>
+        <p>Please contact your system administrator</p>
+    [% ELSE %]
+        <h2 align="center">Success</h2>
+        <ul>
+        <li>Database tables created</li>
+        </ul>
+        <form action="install.pl">
+        <input type="hidden" name="step" value="3" />
+            <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+        </form>
+    [% END %]
+[% END %]
+
+
+[% IF ( proposeimport ) %]
+    <p>Now we're ready to create the database tables and fill them with some default data.</p>
+    <form action="install.pl">
+    <input type="hidden" name="step" value="3" />
+    <input type="hidden" name="op" value="importdatastructure" />
+    <p> Click Next to continue <input value="Next &gt;&gt;" type="submit" /></p>
+    </form>
+[% END %]
+
+
+[% IF ( default ) %]
+    [% IF ( upgrading ) %]
+        <p>
+            We are upgrading from Koha [% dbversion %] to [% kohaversion %], you must <a href="install.pl?step=3&amp;op=updatestructure" class="button">update your database</a>
+        </p>
+    [% ELSE %]
+        <p>We are ready to do some basic configuration. Please 
+            <a href="install.pl?step=3&amp;op=choosemarc" class="button">install basic configuration settings</a>
+            to continue the installation.
+        </p>
+    [% END %]
+[% END %]
+
+
+
+[% IF ( updatestructure ) %]
+  <div><h2 align="center">Updating database structure</h2>
+  [% IF ( has_update_succeeds ) %]
+  <p>Update report :</p>
+    <ul>
+      [% FOREACH update_repor IN update_report %]
+          <li>[% update_repor.line |html %]</li>
+      [% END %] 
+    </ul>
+  [% END %]
+  [% IF ( has_update_errors ) %]
+  <p>Update errors :</p>
+    <ul>
+      [% FOREACH update_error IN update_errors %]
+          <li class="update_error">[% update_error.line |html %]</li>
+      [% END %] 
+    </ul>
+  [% END %]
+ [% UNLESS ( has_update_errors ) %]
+    <p>Everything went OK, update done.</p>
+  [% END %]
+<a href="install.pl?step=3&amp;op=finished" class="button">Continue to log in to Koha</a>
+  </div>
+[% END %]
+
+</body>
+</html>

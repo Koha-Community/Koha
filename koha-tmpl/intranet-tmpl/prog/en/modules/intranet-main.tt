@@ -1,0 +1,116 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha staff client</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css"> #koha-news { border: 1px solid #EEEEEE; margin: .2em;} #koha-news h3 {background-color: #EEEEEE; padding : .3em; margin: 0;} .newsitem {margin: .3em; border-bottom: 1px solid #EEE;} .newsitem:last-child {border-bottom : 0;} .newsfooter {font-size: 80%; color: #CCCCCC;} </style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% IF ( koha_news_count ) %]<div id="doc3" class="yui-t3">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
+<div id="bd">
+[% IF ( koha_news_count ) %]<div id="yui-main"><div class="yui-b"><div class="yui-g">
+[% ELSE %]	<div class="yui-g">[% END %]
+
+	<div class="yui-u first">
+	[% IF ( CAN_user_circulate ) %]
+	<h3><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></h3>
+	<ul><li>
+       <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+        <label for="navfindborrower">Check out to:</label>
+            <input accesskey="u" id="navfindborrower" name="findborrower" type="text" size="10" />
+            <input type="hidden" name="branch" value="[% branch %]" />
+            <input type="hidden" name="printer" value="[% printer %]" />
+            <input type="submit" class="submit" value="OK" />
+       </form>
+       </li>
+       <li><a accesskey="r" href="/cgi-bin/koha/circ/returns.pl">Check in</a></li>
+        <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li></ul>
+	[% END %]
+	[% IF ( CAN_user_borrowers ) %]
+		<h3><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></h3>
+		<ul>
+        <li><form action="/cgi-bin/koha/members/member.pl" method="post">
+           <label for="navmember">Search:&nbsp;</label>
+           <input id="navmember" type="text" size="10" name="member" />
+           <input type="submit" value="OK" class="submit" />
+            </form>
+        </li>
+    </ul>
+	[% END %]
+	[% IF ( CAN_user_catalogue ) %]
+                <h3><a href="/cgi-bin/koha/catalogue/search.pl">Search</a></h3>
+				<ul>
+                    <li>
+                        <form name="searchform" method="get" action="/cgi-bin/koha/catalogue/search.pl" id="searchform">
+                        <input type="hidden" name="idx" value="" />
+                        <label for="navkeyword">
+                            Search catalog:&nbsp;
+                        </label><input type="text" id="navkeyword" name="q" size="10" accesskey="q" />
+                        <input type="submit" value=" OK " class="submit" />
+                        </form>
+                     </li>
+				</ul>
+   [% END %]
+                <h3><a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a></h3>
+	</div>
+	
+	<div class="yui-u">
+    [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+    <h3><a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a></h3>
+	<ul>
+        <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl">Add MARC Record</a></li>
+    [% ELSE %]
+    [% IF ( CAN_user_editauthorities ) %]
+    <h3>Cataloging</h3>
+    <ul>
+    [% END %]
+    [% END %]
+    
+    [% IF ( CAN_user_editauthorities ) %]
+        <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
+    [% END %]
+    </ul>
+    
+    
+    [% IF ( CAN_user_serials ) %]
+    <h3><a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a></h3>
+    [% END %]
+	[% IF ( CAN_user_acquisition ) %]
+	<h3><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></h3>
+	[% END %]
+    [% IF ( CAN_user_reports ) %]
+    <h3><a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a></h3>
+    [% END %]
+    [% IF ( CAN_user_parameters ) %]
+    <h3><a href="/cgi-bin/koha/admin/admin-home.pl">Koha administration</a></h3>
+   	<ul>
+        <li><a href="/cgi-bin/koha/admin/preferences.pl">System preferences</a></li>
+    </ul>
+    [% END %]
+    [% IF ( CAN_user_tools ) %] 
+    <h3><a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a></h3>
+    [% END %]
+    <h3><a href="/cgi-bin/koha/about.pl">About Koha</a></h3>
+	</div>
+	</div>
+		[% IF ( IntranetmainUserblock ) %]<div id="mainuserblock" class="yui-g">
+			[% IntranetmainUserblock %]
+			</div>[% ELSE %]&nbsp;
+		[% END %]
+[% IF ( koha_news_count ) %]
+	</div><!-- /yui-bd -->
+	</div><!-- /yui-main -->
+	<div class="yui-b">
+		<div id="koha-news">
+            <h3>News</h3>
+            [% FOREACH koha_new IN koha_news %]
+                    <div class="newsitem" id="news[% koha_new.idnew %]"><h4>[% koha_new.title %]</h4>
+					 <p>[% koha_new.new %]</p>
+					<p class="newsfooter"> Posted on [% koha_new.newdate %] [% IF ( CAN_user_tools ) %]
+    <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;id=[% koha_new.idnew %]">Edit</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=del&amp;ids=[% koha_new.idnew %]">Delete</a> | <a href="/cgi-bin/koha/tools/koha-news.pl?op=add_form">New</a>[% END %]</p></div>
+            [% END %]
+		</div><!-- /koha-news -->
+	</div>
+[% END %]
+	
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

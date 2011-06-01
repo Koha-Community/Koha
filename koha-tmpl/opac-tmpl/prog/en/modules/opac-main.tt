@@ -1,0 +1,74 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="opac-main">
+[% IF ( OpacNav ) %]<div id="doc3" class="yui-t1">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+	<div id="yui-main">
+
+	<div class="yui-b">
+		[% IF ( opacuserlogin ) %]
+	    [% IF ( loggedinusername ) %]
+			<div class="yui-g">
+			<div>
+			[% ELSE %]
+		<div class="yui-ge">
+		<div class="yui-u first">
+    [% END %]
+	[% ELSE %]
+		<div class="yui-g">
+		<div>
+	[% END %]
+	
+	[% IF ( koha_news_count ) %]
+<div id="news" class="container">
+    <table>
+    [% FOREACH koha_new IN koha_news %]
+    <tr><th>[% koha_new.title %]</th></tr>
+    <tr><td><p>[% koha_new.new %]</p>
+                <p><i>(published on [% koha_new.newdate %])</i></p></td></tr>
+    [% END %]
+    </table>
+</div>
+[% END %]
+
+	[% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock" class="container">[% OpacMainUserBlock %]</div>[% END %]
+
+</div>
+		
+	[% IF ( opacuserlogin ) %]
+    [% UNLESS ( loggedinusername ) %]
+    [% UNLESS ( casAuthentication ) %]
+    <div class="yui-u">
+	<div id="login" class="container">
+	<form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="auth">
+    <input type="hidden" name="koha_login_context" value="opac" />
+	<fieldset class="brief">
+		<legend>Log in to Your Account:</legend>
+		<ol>
+		<li><label for="userid">Login:</label><input type="text" id="userid" size="10" name="userid" /></li>
+		<li><label for="password">Password:</label><input type="password" id="password" size="10" name="password" /></li>
+		</ol>	 <fieldset class="action">
+	 <input type="submit" value="Log In" class="submit" />
+	 </fieldset></fieldset>
+	</form>
+	</div>
+	 </div>
+    [% END %]
+    [% END %]
+	
+[% END %]
+</div>
+</div>
+</div>
+[% IF ( OpacNav ) %]<div class="yui-b">
+<div id="opacnav" class="container">
+[% INCLUDE 'navigation.inc' %]
+</div>
+</div>[% END %]
+</div>
+
+[% INCLUDE 'opac-bottom.inc' %]

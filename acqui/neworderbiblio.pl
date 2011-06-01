@@ -60,7 +60,7 @@ use strict;
 
 use C4::Search;
 use CGI;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 use C4::Biblio;
 use C4::Auth;
 use C4::Output;
@@ -112,16 +112,15 @@ if (defined $error) {
 
 my @results;
 
-if ($marcresults) {
-    foreach my $result ( @{$marcresults} ) {
-        my $marcrecord = MARC::File::USMARC::decode( $result );
-        my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
+foreach my $result ( @{$marcresults} ) {
+    my $marcrecord = MARC::File::USMARC::decode( $result );
+    my $biblio = TransformMarcToKoha( C4::Context->dbh, $marcrecord, '' );
 
-        $biblio->{booksellerid} = $booksellerid;
-        push @results, $biblio;
+    $biblio->{booksellerid} = $booksellerid;
+    push @results, $biblio;
 
-    }
 }
+
 $template->param(
     basketno             => $basketno,
     booksellerid     => $bookseller->{'id'},

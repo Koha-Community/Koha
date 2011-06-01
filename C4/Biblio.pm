@@ -1,6 +1,8 @@
 package C4::Biblio;
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
+# Copyright 2011 Equinox Software, Inc.
 #
 # This file is part of Koha.
 #
@@ -34,6 +36,7 @@ use C4::ClassSource;
 use C4::Charset;
 require C4::Heading;
 require C4::Serials;
+require C4::Items;
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -78,6 +81,8 @@ BEGIN {
       &GetUsedMarcStructure
       &GetXmlBiblio
       &GetCOinSBiblio
+      &GetMarcPrice
+      &GetMarcQuantity
 
       &GetAuthorisedValueDesc
       &GetMarcStructure
@@ -249,6 +254,7 @@ sub AddBiblio {
     my $dbh = C4::Context->dbh;
 
     # transform the data into koha-table style data
+    SetUTF8Flag($record);
     my $olddata = TransformMarcToKoha( $dbh, $record, $frameworkcode );
     ( $biblionumber, $error ) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
@@ -293,38 +299,12 @@ sub ModBiblio {
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "BEFORE=>" . $newrecord->as_formatted );
     }
 
+    SetUTF8Flag($record);
     my $dbh = C4::Context->dbh;
 
     $frameworkcode = "" unless $frameworkcode;
 
-    # get the items before and append them to the biblio before updating the record, atm we just have the biblio
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
-    my $oldRecord = GetMarcBiblio($biblionumber);
-
-    # delete any item fields from incoming record to avoid
-    # duplication or incorrect data - use AddItem() or ModItem()
-    # to change items
-    foreach my $field ( $record->field($itemtag) ) {
-        $record->delete_field($field);
-    }
-
-    # parse each item, and, for an unknown reason, re-encode each subfield
-    # if you don't do that, the record will have encoding mixed
-    # and the biblio will be re-encoded.
-    # strange, I (Paul P.) searched more than 1 day to understand what happends
-    # but could only solve the problem this way...
-    my @fields = $oldRecord->field($itemtag);
-    foreach my $fielditem (@fields) {
-        my $field;
-        foreach ( $fielditem->subfields() ) {
-            if ($field) {
-                $field->add_subfields( Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
-            } else {
-                $field = MARC::Field->new( "$itemtag", '', '', Encode::encode( 'utf-8', $_->[0] ) => Encode::encode( 'utf-8', $_->[1] ) );
-            }
-        }
-        $record->append_fields($field);
-    }
+    _strip_item_fields($record, $frameworkcode);
 
     foreach my $field ($record->fields()) {
         if (! $field->is_control_field()) {
@@ -356,6 +336,29 @@ sub ModBiblio {
     _koha_modify_biblio( $dbh, $oldbiblio, $frameworkcode );
     _koha_modify_biblioitem_nonmarc( $dbh, $oldbiblio );
     return 1;
+}
+
+=head2 _strip_item_fields
+
+  _strip_item_fields($record, $frameworkcode)
+
+Utility routine to remove item tags from a
+MARC bib.
+
+=cut
+
+sub _strip_item_fields {
+    my $record = shift;
+    my $frameworkcode = shift;
+    # get the items before and append them to the biblio before updating the record, atm we just have the biblio
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+
+    # delete any item fields from incoming record to avoid
+    # duplication or incorrect data - use AddItem() or ModItem()
+    # to change items
+    foreach my $field ( $record->field($itemtag) ) {
+        $record->delete_field($field);
+    }
 }
 
 =head2 ModBiblioframework
@@ -750,12 +753,13 @@ Return the ISBD view which can be included in opac and intranet
 
 sub GetISBDView {
     my ( $biblionumber, $template ) = @_;
-    my $record   = GetMarcBiblio($biblionumber);
+    my $record   = GetMarcBiblio($biblionumber, 1);
+    return undef unless defined $record;
     my $itemtype = &GetFrameworkCode($biblionumber);
     my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
     my $tagslib = &GetMarcStructure( 1, $itemtype );
 
-    my $ISBD = C4::Context->preference('ISBD');
+    my $ISBD = C4::Context->preference('isbd');
     my $bloc = $ISBD;
     my $res;
     my $blocres;
@@ -1036,16 +1040,18 @@ sub GetMarcFromKohaField {
 
 =head2 GetMarcBiblio
 
-  my $record = GetMarcBiblio($biblionumber);
+  my $record = GetMarcBiblio($biblionumber, [$embeditems]);
 
 Returns MARC::Record representing bib identified by
 C<$biblionumber>.  If no bib exists, returns undef.
-The MARC record contains both biblio & item data.
+C<$embeditems>.  If set to true, items data are included.
+The MARC record contains biblio data, and items data if $embeditems is set to true.
 
 =cut
 
 sub GetMarcBiblio {
     my $biblionumber = shift;
+    my $embeditems   = shift || 0;
     my $dbh          = C4::Context->dbh;
     my $sth          = $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
@@ -1057,6 +1063,9 @@ sub GetMarcBiblio {
     if ($marcxml) {
         $record = eval { MARC::Record::new_from_xml( $marcxml, "utf8", C4::Context->preference('marcflavour') ) };
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
+        return unless $record;
+
+	C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
 
         #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;
@@ -1113,50 +1122,57 @@ sub GetCOinSBiblio {
     my $isbn      = '';
     my $issn      = '';
     my $publisher = '';
+    my $pages     = '';
+    my $titletype = 'b';
 
-    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
-        my $fmts6;
-        my $fmts7;
-        %$fmts6 = (
-            'a' => 'book',
-            'b' => 'manuscript',
-            'c' => 'book',
-            'd' => 'manuscript',
-            'e' => 'map',
-            'f' => 'map',
-            'g' => 'film',
-            'i' => 'audioRecording',
-            'j' => 'audioRecording',
-            'k' => 'artwork',
-            'l' => 'document',
-            'm' => 'computerProgram',
-            'r' => 'document',
+    # For the purposes of generating COinS metadata, LDR/06-07 can be
+    # considered the same for UNIMARC and MARC21
+    my $fmts6;
+    my $fmts7;
+    %$fmts6 = (
+                'a' => 'book',
+                'b' => 'manuscript',
+                'c' => 'book',
+                'd' => 'manuscript',
+                'e' => 'map',
+                'f' => 'map',
+                'g' => 'film',
+                'i' => 'audioRecording',
+                'j' => 'audioRecording',
+                'k' => 'artwork',
+                'l' => 'document',
+                'm' => 'computerProgram',
+                'o' => 'document',
+                'r' => 'document',
+            );
+    %$fmts7 = (
+                    'a' => 'journalArticle',
+                    's' => 'journal',
+              );
 
-        );
-        %$fmts7 = (
-            'a' => 'journalArticle',
-            's' => 'journal',
-        );
+    $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
 
-        $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
-
-        if ( $genre eq 'book' ) {
+    if ( $genre eq 'book' ) {
             $genre = $fmts7->{$pos7} if $fmts7->{$pos7};
-        }
+    }
 
-        ##### We must transform mtx to a valable mtx and document type ####
-        if ( $genre eq 'book' ) {
+    ##### We must transform mtx to a valable mtx and document type ####
+    if ( $genre eq 'book' ) {
             $mtx = 'book';
-        } elsif ( $genre eq 'journal' ) {
+    } elsif ( $genre eq 'journal' ) {
             $mtx = 'journal';
-        } elsif ( $genre eq 'journalArticle' ) {
+            $titletype = 'j';
+    } elsif ( $genre eq 'journalArticle' ) {
             $mtx   = 'journal';
             $genre = 'article';
-        } else {
+            $titletype = 'a';
+    } else {
             $mtx = 'dc';
-        }
+    }
 
-        $genre = ( $mtx eq 'dc' ) ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
+    $genre = ( $mtx eq 'dc' ) ? "&amp;rft.type=$genre" : "&amp;rft.genre=$genre";
+
+    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 
         # Setting datas
         $aulast  = $record->subfield( '700', 'a' );
@@ -1180,9 +1196,6 @@ sub GetCOinSBiblio {
     } else {
 
         # MARC21 need some improve
-        my $fmts;
-        $mtx   = 'book';
-        $genre = "&amp;rft.genre=book";
 
         # Setting datas
         if ( $record->field('100') ) {
@@ -1195,17 +1208,34 @@ sub GetCOinSBiblio {
                 $oauthors .= "&amp;rft.au=$au";
             }
         }
-        $title = "&amp;rft.btitle=" . $record->subfield( '245', 'a' );
+        $title = "&amp;rft." . $titletype . "title=" . $record->subfield( '245', 'a' );
         $subtitle = $record->subfield( '245', 'b' ) || '';
         $title .= $subtitle;
-        $pubyear   = $record->subfield( '260', 'c' ) || '';
-        $publisher = $record->subfield( '260', 'b' ) || '';
-        $isbn      = $record->subfield( '020', 'a' ) || '';
-        $issn      = $record->subfield( '022', 'a' ) || '';
+        if ($titletype eq 'a') {
+            $pubyear   = substr $record->field('008')->data(), 7, 4;
+            $isbn      = $record->subfield( '773', 'z' ) || '';
+            $issn      = $record->subfield( '773', 'x' ) || '';
+            if ($mtx eq 'journal') {
+                $title    .= "&amp;rft.title=" . (($record->subfield( '773', 't' ) || $record->subfield( '773', 'a')));
+            } else {
+                $title    .= "&amp;rft.btitle=" . (($record->subfield( '773', 't' ) || $record->subfield( '773', 'a')) || '');
+            }
+            foreach my $rel ($record->subfield( '773', 'g' )) {
+                if ($pages) {
+                    $pages .= ', ';
+                }
+                $pages .= $rel;
+            }
+        } else {
+            $pubyear   = $record->subfield( '260', 'c' ) || '';
+            $publisher = $record->subfield( '260', 'b' ) || '';
+            $isbn      = $record->subfield( '020', 'a' ) || '';
+            $issn      = $record->subfield( '022', 'a' ) || '';
+        }
 
     }
     my $coins_value =
-"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear";
+"ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3A$mtx$genre$title&amp;rft.isbn=$isbn&amp;rft.issn=$issn&amp;rft.aulast=$aulast&amp;rft.aufirst=$aufirst$oauthors&amp;rft.pub=$publisher&amp;rft.date=$pubyear&amp;rft.pages=$pages";
     $coins_value =~ s/(\ |&[^a])/\+/g;
     $coins_value =~ s/\"/\&quot\;/g;
 
@@ -1213,6 +1243,72 @@ sub GetCOinSBiblio {
 
     return $coins_value;
 }
+
+
+=head2 GetMarcPrice
+
+return the prices in accordance with the Marc format.
+=cut
+
+sub GetMarcPrice {
+    my ( $record, $marcflavour ) = @_;
+    my @listtags;
+    my $subfield;
+    
+    if ( $marcflavour eq "MARC21" ) {
+        @listtags = ('345', '020');
+        $subfield="c";
+    } elsif ( $marcflavour eq "UNIMARC" ) {
+        @listtags = ('345', '010');
+        $subfield="d";
+    } else {
+        return;
+    }
+    
+    for my $field ( $record->field(@listtags) ) {
+        for my $subfield_value  ($field->subfield($subfield)){
+            #check value
+            return $subfield_value if ($subfield_value);
+        }
+    }
+    return 0; # no price found
+}
+
+=head2 GetMarcQuantity
+
+return the quantity of a book. Used in acquisition only, when importing a file an iso2709 from a bookseller
+Warning : this is not really in the marc standard. In Unimarc, Electre (the most widely used bookseller) use the 969$a
+
+=cut
+
+sub GetMarcQuantity {
+    my ( $record, $marcflavour ) = @_;
+    my @listtags;
+    my $subfield;
+    
+    if ( $marcflavour eq "MARC21" ) {
+        return 0
+    } elsif ( $marcflavour eq "UNIMARC" ) {
+        @listtags = ('969');
+        $subfield="a";
+    } else {
+        return;
+    }
+    
+    for my $field ( $record->field(@listtags) ) {
+        for my $subfield_value  ($field->subfield($subfield)){
+            #check value
+            if ($subfield_value) {
+                 # in France, the cents separator is the , but sometimes, ppl use a .
+                 # in this case, the price will be x100 when unformatted ! Replace the . by a , to get a proper price calculation
+                $subfield_value =~ s/\./,/ if C4::Context->preference("CurrencyFormat") eq "FR";
+                return $subfield_value;
+            }
+        }
+    }
+    return 0; # no price found
+}
+
 
 =head2 GetAuthorisedValueDesc
 
@@ -1297,10 +1393,10 @@ ISBNs stored in differents places depending on MARC flavour
 sub GetMarcISBN {
     my ( $record, $marcflavour ) = @_;
     my $scope;
-    if ( $marcflavour eq "MARC21" ) {
-        $scope = '020';
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $scope = '010';
+    } else {    # assume marc21 if not unimarc
+        $scope = '020';
     }
     my @marcisbns;
     my $isbn = "";
@@ -1337,10 +1433,10 @@ The note are stored in differents places depending on MARC flavour
 sub GetMarcNotes {
     my ( $record, $marcflavour ) = @_;
     my $scope;
-    if ( $marcflavour eq "MARC21" ) {
-        $scope = '5..';
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $scope = '3..';
+    } else {    # assume marc21 if not unimarc
+        $scope = '5..';
     }
     my @marcnotes;
     my $note = "";
@@ -1377,18 +1473,20 @@ The subjects are stored in differents places depending on MARC flavour
 sub GetMarcSubjects {
     my ( $record, $marcflavour ) = @_;
     my ( $mintag, $maxtag );
-    if ( $marcflavour eq "MARC21" ) {
-        $mintag = "600";
-        $maxtag = "699";
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "600";
         $maxtag = "611";
+    } else {    # assume marc21 if not unimarc
+        $mintag = "600";
+        $maxtag = "699";
     }
 
     my @marcsubjects;
     my $subject  = "";
     my $subfield = "";
     my $marcsubject;
+
+    my $subject_limit = C4::Context->preference("TraceCompleteSubfields") ? 'su,complete-subfield' : 'su';
 
     foreach my $field ( $record->field('6..') ) {
         next unless $field->tag() >= $mintag && $field->tag() <= $maxtag;
@@ -1416,7 +1514,7 @@ sub GetMarcSubjects {
                 @link_loop = ( { 'limit' => 'an', link => "$linkvalue" } );
             }
             if ( not $found9 ) {
-                push @link_loop, { 'limit' => 'su', link => $linkvalue, operator => $operator };
+                push @link_loop, { 'limit' => $subject_limit, link => $linkvalue, operator => $operator };
             }
             my $separator = C4::Context->preference("authoritysep") unless $counter == 0;
 
@@ -1448,12 +1546,12 @@ sub GetMarcAuthors {
     # tagslib useful for UNIMARC author reponsabilities
     my $tagslib =
       &GetMarcStructure( 1, '' );    # FIXME : we don't have the framework available, we take the default framework. May be buggy on some setups, will be usually correct.
-    if ( $marcflavour eq "MARC21" ) {
-        $mintag = "700";
-        $maxtag = "720";
-    } elsif ( $marcflavour eq "UNIMARC" ) {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "700";
         $maxtag = "712";
+    } elsif ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) { # assume marc21 or normarc if not unimarc
+        $mintag = "700";
+        $maxtag = "720";
     } else {
         return;
     }
@@ -1568,12 +1666,12 @@ The series are stored in differents places depending on MARC flavour
 sub GetMarcSeries {
     my ( $record, $marcflavour ) = @_;
     my ( $mintag, $maxtag );
-    if ( $marcflavour eq "MARC21" ) {
-        $mintag = "440";
-        $maxtag = "490";
-    } else {    # assume unimarc if not marc21
+    if ( $marcflavour eq "UNIMARC" ) {
         $mintag = "600";
         $maxtag = "619";
+    } else {    # assume marc21 if not unimarc
+        $mintag = "440";
+        $maxtag = "490";
     }
 
     my @marcseries;
@@ -1610,7 +1708,7 @@ sub GetMarcSeries {
             if ($volume_number) {
                 push @subfields_loop, { volumenum => $value };
             } else {
-                push @subfields_loop, { code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number };
+                push @subfields_loop, { code => $code, value => $value, link_loop => \@link_loop, separator => $separator, volumenum => $volume_number } unless ( $series_subfield->[0] eq '9' );
             }
             $counter++;
         }
@@ -1680,13 +1778,18 @@ sub TransformKohaToMarcOneField {
     }
     $sth->execute( $frameworkcode, $kohafieldname );
     if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
+        my @values = split(/\s?\|\s?/, $value, -1);
+        
+        foreach my $itemvalue (@values){
         my $tag = $record->field($tagfield);
         if ($tag) {
-            $tag->update( $tagsubfield => $value );
+                $tag->add_subfields( $tagsubfield => $itemvalue );
             $record->delete_field($tag);
             $record->insert_fields_ordered($tag);
-        } else {
-            $record->add_fields( $tagfield, " ", " ", $tagsubfield => $value );
+            }
+            else {
+                $record->add_fields( $tagfield, " ", " ", $tagsubfield => $itemvalue );
+            }
         }
     }
     return $record;
@@ -1919,8 +2022,14 @@ sub TransformHtmlToMarc {
             if ( $tag < 10 ) {                              # no code for theses fields
                                                             # in MARC editor, 000 contains the leader.
                 if ( $tag eq '000' ) {
-                    $record->leader( $cgi->param( $params->[ $j + 1 ] ) ) if length( $cgi->param( $params->[ $j + 1 ] ) ) == 24;
-
+                    # Force a fake leader even if not provided to avoid crashing
+                    # during decoding MARC record containing UTF-8 characters
+                    $record->leader(
+                        length( $cgi->param($params->[$j+1]) ) == 24
+                        ? $cgi->param( $params->[ $j + 1 ] )
+                        : '     nam a22        4500'
+			)
+                    ;
                     # between 001 and 009 (included)
                 } elsif ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {
                     $newfield = MARC::Field->new( $tag, $cgi->param( $params->[ $j + 1 ] ), );
@@ -2276,6 +2385,14 @@ sub PrepareItemrecordDisplay {
                         $defaultvalue = $defaultvalues->{branchcode} if $defaultvalues;
                     }
                 }
+                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.location' )
+                    && $defaultvalues
+                    && $defaultvalues->{'location'} ) {
+                    my $temp = $itemrecord->field($subfield) if ($itemrecord);
+                    unless ($temp) {
+                        $defaultvalue = $defaultvalues->{location} if $defaultvalues;
+                    }
+                }
                 if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
                     my @authorised_values;
                     my %authorised_lib;
@@ -2347,6 +2464,40 @@ sub PrepareItemrecordDisplay {
                         -tabindex => '',
                         -multiple => 0,
                     );
+                } elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
+                        # opening plugin
+                        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
+                        if (do $plugin) {
+                            my $temp;
+                            my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
+                            my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
+                            $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
+                            my $index_subfield = int(rand(1000000));
+                            $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
+                            $subfield_data{marc_value} = qq[<input tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255"
+                                onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
+                                 onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
+                                <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
+                                $javascript];
+                        } else {
+                            warn "Plugin Failed: $plugin";
+                            $subfield_data{marc_value} = qq(<input tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" />); # supply default input form
+                        }
+                }
+                elsif ( $tag eq '' ) {       # it's an hidden field
+                    $subfield_data{marc_value} = qq(<input type="hidden" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" value="$defaultvalue" />);
+                }
+                elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
+                    $subfield_data{marc_value} = qq(<input type="text" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" value="$defaultvalue" />);
+                }
+                elsif ( length($defaultvalue) > 100
+                            or (C4::Context->preference("marcflavour") eq "UNIMARC" and
+                                  300 <= $tag && $tag < 400 && $subfield eq 'a' )
+                            or (C4::Context->preference("marcflavour") eq "MARC21"  and
+                                  500 <= $tag && $tag < 600                     )
+                          ) {
+                    # oversize field (textarea)
+                    $subfield_data{marc_value} = qq(<textarea tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255">$defaultvalue</textarea>\n");
                 } else {
                     $subfield_data{marc_value} = "<input type=\"text\" name=\"field_value\" value=\"$defaultvalue\" size=\"50\" maxlength=\"255\" />";
                 }
@@ -2500,6 +2651,35 @@ sub GetNoZebraIndexes {
         $indexes{$index} = $fields;
     }
     return %indexes;
+}
+
+=head2 EmbedItemsInMarcBiblio
+
+    EmbedItemsInMarcBiblio($marc, $biblionumber);
+
+Given a MARC::Record object containing a bib record,
+modify it to include the items attached to it as 9XX
+per the bib's MARC framework.
+
+=cut
+
+sub EmbedItemsInMarcBiblio {
+    my ($marc, $biblionumber) = @_;
+
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+    _strip_item_fields($marc, $frameworkcode);
+
+    # ... and embed the current items
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
+    $sth->execute($biblionumber);
+    my @item_fields;
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    while (my ($itemnumber) = $sth->fetchrow_array) {
+        my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
+        push @item_fields, $item_marc->field($itemtag);
+    }
+    $marc->insert_fields_ordered(@item_fields);
 }
 
 =head1 INTERNAL FUNCTIONS

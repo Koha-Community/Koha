@@ -2,10 +2,10 @@
     <script type="text/JavaScript">
         //<![CDATA[
            function DeleteConfirm() {
-                var msg = "Are you sure you want to delete batch <!-- TMPL_VAR NAME="batch_id" -->?"
+                var msg = "Are you sure you want to delete batch [% batch_id %]?"
                 var answer = confirm(msg);
                 if (answer) {
-                    window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=<!-- TMPL_VAR NAME="batch_id" -->";
+                    window.location = "/cgi-bin/koha/patroncards/manage.pl?op=delete&amp;card_element=batch&amp;element_id=[% batch_id %]";
                 }
                 else {
                     return; // abort delete
@@ -22,7 +22,7 @@
                         }
                     }
                     if (items.length < 1) {
-                        alert("Please select at least one item to delete.");
+                        alert(_("Please select at least one item to delete."));
                         return;     // no item selected
                     }
                     getstr = items.join("&");
@@ -34,22 +34,22 @@
 //                    var msg = "Are you sure you want to remove selected item from this batch?"
 //                }
                 else {
-                    alert("Please select at least label to delete.");
+                    alert(_("Please select at least label to delete."));
                     return;     // no item selected
                 }
                 var answer = confirm(msg);
                 if (answer) {
-                    window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->&amp;" + getstr;
+                    window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=remove&amp;batch_id=[% batch_id %]&amp;" + getstr;
                 }
                 else {
                     return; // abort delete
                 }
             };
             function Add() {
-                window.open("/cgi-bin/koha/patroncards/members-search.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
+                window.open("/cgi-bin/koha/patroncards/members-search.pl?batch_id=[% batch_id %]",'FindABibIndex','width=875,height=400,toolbar=no,scrollbars=yes');
             };
             function DeDuplicate() {
-                window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=de_duplicate&amp;batch_id=<!-- TMPL_VAR NAME="batch_id" -->";
+                window.location = "/cgi-bin/koha/patroncards/edit-batch.pl?op=de_duplicate&amp;batch_id=[% batch_id %]";
             };
             function Xport(mode) {
                 if (mode == 'label') {
@@ -61,7 +61,7 @@
                             }
                         }
                         if (patroncards.length < 1) {
-                            alert("Please select at least one card to export.");
+                            alert(_("Please select at least one card to export."));
                             return;     // no batch selected
                         }
                         getstr = patroncards.join("&");
@@ -70,13 +70,13 @@
                         getstr = document.items.action.value;
                     }
                     else {
-                        alert("Please select at least one card to export.");
+                        alert(_("Please select at least one card to export."));
                         return;     // no batch selected
                     }
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/patroncards/print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->&" + getstr, 700, 800);
+                    return GB_showCenter('Export Labels', "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]&" + getstr, 700, 800);
                 }
                 else if (mode == 'batch') {
-                    return GB_showCenter('Export Labels', "/cgi-bin/koha/patroncards/print.pl?batch_id=<!-- TMPL_VAR NAME="batch_id" -->", 700, 800);
+                    return GB_showCenter('Export Labels', "/cgi-bin/koha/patroncards/print.pl?batch_id=[% batch_id %]", 700, 800);
                 }
                 else {
                     // some pass-thru error trapping just in case...
@@ -95,7 +95,7 @@
                         return(document.items.action.value);
                     }
                 };
-                alert("Please select at least one item.");
+                alert(_("Please select at least one item."));
                 return (-1);
             };
 
@@ -169,11 +169,11 @@
         //]]>
     </script>
     <ul class="toolbar">
-        <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li><!-- TMPL_IF NAME="table_loop" -->
+        <li id="additemsc"><a id="additems" href="#">Add Item(s)</a></li>[% IF ( table_loop ) %]
         <li id="removeitemsc"><a id="removeitems" href="#">Remove Item(s)</a></li>
         <li id="deletebatchc"><a id="deletebatch" href="#">Delete Batch</a></li>
         <li id="deduplicatec"><a id="deduplicate" href="#">Remove Duplicates</a></li>
         <li id="exportitemsc"><a id="exportitems" href="#">Export Item(s)</a></li>
-        <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li><!-- /TMPL_IF -->
+        <li id="exportbatchc"><a id="exportbatch" href="#">Export Batch</a></li>[% END %]
     </ul>
 </div>

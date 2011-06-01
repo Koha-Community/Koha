@@ -1,0 +1,93 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] 
+[% IF ( opacuserlogin ) %]
+ Catalog &rsaquo;  Log in to Your Account
+[% ELSE %]
+ Catalog &rsaquo; Catalog Login Disabled
+[% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+
+<!-- Bug 4288: Hide circular 'Log in to Your Account' link in opac-auth.pl -->
+<script type="text/javascript">
+    $(document).ready(function() {
+        if ( $("#auth" ) ) { $("#members ul li a").hide(); }
+    });
+</script>
+</head>
+<body id="opac-login-page">
+<div id="doc3" class="yui-t7">
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+	<div id="yui-g">
+<div id="userauth" class="container">
+<div id="opac-auth">
+<!--CONTENT-->
+[% IF ( opacuserlogin ) %]
+[% IF ( nopermission ) %]
+<!-- This is what is displayed if user doesnt have permission -->
+<p>Sorry, the system doesn't think you have permission to access this page. </p>
+[% END %]
+[% IF ( loginprompt ) %]
+<!-- login prompt time-->
+<h3>Log In to Your Account</h3>
+[% IF ( timed_out ) %]
+<!-- This is what is displayed if login has timed out -->
+<p>Sorry, your session has timed out.  Please log in again.</p>
+[% END %]
+
+[% IF ( different_ip ) %]
+<!-- This is what is displayed if user doesnt have permission -->
+<p>You are logging from a different IP address.  Please log in again.</p>
+[% END %]
+
+[% IF ( invalid_username_or_password ) %]
+<!-- This is what is displayed if user doesnt have permission -->
+<p>You entered an incorrect username or password. Please try again! And remember, usernames and passwords are case sensitive.</p>
+[% END %]
+
+[% IF ( casAuthentication ) %]
+<h4>Cas Login</h4>
+
+[% IF ( invalidCasLogin ) %]
+<!-- This is what is displayed if cas login has failed -->
+<p>Sorry, the CAS login failed.</p>
+[% END %]
+
+<p>If you have a <acronym title="Central Authentication Service">CAS</acronym> account, please <a href="[% casServerUrl %]">click here to login</a>.<p>
+
+<h4>Local Login</h4>
+<p>If you do not have a CAS account, but a local account, you can still log in : </p>
+
+[% END %]
+
+<form action="[% url %]" name="auth" id="auth" method="post">
+  <input type="hidden" name="koha_login_context" value="opac" />
+<fieldset class="brief">[% FOREACH INPUT IN INPUTS %]
+  <input type="hidden" name="[% INPUT.name |html %]" value="[% INPUT.value |html %]" />
+[% END %]
+<ol>
+<li><label for="userid">Login</label>
+<input type="text"  size="25" id="userid"  name="userid" /></li>
+<li><label for="password">Password</label><input type="password"  size="25" id="password"  name="password" /></li>
+</ol></fieldset>
+
+<input type="submit" value="Log In" class="submit" />
+<div id="nologininstructions">  <h5>Don't have a password yet?</h5><p> If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
+<h5>Don't have a library card?</h5><p> If you don't have a library card, stop by your local library to sign up.  </p></div>
+</form>
+
+
+[% END %]
+[% ELSE %]
+<h4>Logging on to the catalog has not been enabled by the library.</h4>
+<ul>
+  <li>To report this error, you can 
+          <a href="mailto:[% admin %]">email the Koha Administrator</a>.</li>
+  <li>Use top menu bar to navigate to another part of Koha.</li>
+</ul>
+[% END %]</div>
+</div>
+</div>
+</div>
+
+[% INCLUDE 'opac-bottom.inc' %]

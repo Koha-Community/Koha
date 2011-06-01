@@ -60,9 +60,9 @@ sub remember ($$) {
     my($token, $string) = @_;
     # If we determine that the string is negligible, don't bother to remember
     unless (string_negligible_p( $string ) || token_negligible_p( $token )) {
-	my $key = TmplTokenizer::string_canon( $string );
-	$text{$key} = [] unless defined $text{$key};
-	push @{$text{$key}}, $token;
+        my $key = TmplTokenizer::string_canon( $string );
+        $text{$key} = [] unless defined $text{$key};
+        push @{$text{$key}}, $token;
     }
 }
 
@@ -83,37 +83,41 @@ sub string_list () {
     return @t;
 }
 
-###############################################################################
+  ###############################################################################
 
 sub text_extract (*) {
     my($h) = @_;
     for (;;) {
-	my $s = TmplTokenizer::next_token $h;
-    last unless defined $s;
-	my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
-	if ($kind eq TmplTokenType::TEXT) {
-	    remember( $s, $t ) if $t =~ /\S/s;
-	} elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
-	    remember( $s, $s->form ) if $s->form =~ /\S/s;
-	} elsif ($kind eq TmplTokenType::TAG && %$attr) {
-	    # value [tag=input], meta
-	    my $tag = lc($1) if $t =~ /^<(\S+)/s;
-	    for my $a ('alt', 'content', 'title', 'value','label') {
-		if ($attr->{$a}) {
-            next if $a eq 'label' && $tag ne 'optgroup';
-		    next if $a eq 'content' && $tag ne 'meta';
-		    next if $a eq 'value' && ($tag ne 'input'
-			|| (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|checkbox)$/)); # FIXME
-		    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
-		    $val = TmplTokenizer::trim $val;
-		    remember( $s, $val ) if $val =~ /\S/s;
-		}
+        my $s = TmplTokenizer::next_token $h;
+        last unless defined $s;
+        my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
+        if ($kind eq TmplTokenType::TEXT) {
+	    if ($t =~ /\S/s && $t !~ /<!/){
+		remember( $s, $t );
 	    }
-	} elsif ($s->has_js_data) {
-	    for my $t (@{$s->js_data}) {
-		remember( $s, $t->[3] ) if $t->[0]; # FIXME
+        } elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
+	    if ($s->form =~ /\S/s && $s->form !~ /<!/){
+		remember( $s, $s->form );
 	    }
-	}
+        } elsif ($kind eq TmplTokenType::TAG && %$attr) {
+            # value [tag=input], meta
+            my $tag = lc($1) if $t =~ /^<(\S+)/s;
+            for my $a ('alt', 'content', 'title', 'value','label') {
+                if ($attr->{$a}) {
+                    next if $a eq 'label' && $tag ne 'optgroup';
+                    next if $a eq 'content' && $tag ne 'meta';
+                    next if $a eq 'value' && ($tag ne 'input'
+                        || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|checkbox)$/)); # FIXME
+                    my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
+                    $val = TmplTokenizer::trim $val;
+                    remember( $s, $val ) if $val =~ /\S/s;
+                }
+            }
+        } elsif ($s->has_js_data) {
+            for my $t (@{$s->js_data}) {
+              remember( $s, $t->[3] ) if $t->[0]; # FIXME
+            }
+        }
     }
 }
 
@@ -174,7 +178,8 @@ EOF
 		my $fmt = TmplTokenizer::_formalize( $param );
 		$fmt =~ s/^%/%$n\$/;
 		if ($type == TmplTokenType::DIRECTIVE) {
-		    $type = $param->string =~ /(TMPL_[A-Z]+)+/is? $1: 'ERROR';
+#		    $type = "Template::Toolkit Directive";
+		    $type = $param->string =~ /\[%(.*?)%\]/is? $1: 'ERROR';
 		    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
 			    $2: undef;
 		    printf OUTPUT "#. %s: %s\n", $fmt,
@@ -341,11 +346,12 @@ usage_error('You cannot specify both --convert-from and --files-from')
 
 if (defined $output && $output ne '-') {
     print STDERR "$0: Opening output file \"$output\"\n" if $verbose_p;
-    open(OUTPUT, ">$output") || die "$output: $!\n";
+        open(OUTPUT, ">$output") || die "$output: $!\n";
 } else {
     print STDERR "$0: Outputting to STDOUT...\n" if $verbose_p;
     open(OUTPUT, ">&STDOUT");
 }
+binmode( OUTPUT, ":utf8" );
 
 if (defined $files_from) {
     print STDERR "$0: Opening input file list \"$files_from\"\n" if $verbose_p;

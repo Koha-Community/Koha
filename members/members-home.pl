@@ -1,5 +1,6 @@
 #!/usr/bin/perl
 
+# Parts Copyright Biblibre 2010
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
@@ -11,9 +12,9 @@
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
 use warnings;
@@ -27,22 +28,10 @@ use C4::Branch;
 use C4::Category;
 
 my $query = new CGI;
-my $quicksearch = $query->param('quicksearch');
 my $branch = $query->param('branchcode');
-my ($template, $loggedinuser, $cookie);
 my $template_name;
 
-if($quicksearch){
-($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "members/member-quicksearch.tmpl",
-                 query => $query,
-                 type => "intranet",
-                 authnotrequired => 0,
-                 flagsrequired => {borrowers => 1},
-                 debug => 1,
-                 });
-} else {
-($template, $loggedinuser, $cookie)
+my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "members/member.tmpl",
                  query => $query,
                  type => "intranet",
@@ -50,7 +39,6 @@ if($quicksearch){
                  flagsrequired => {borrowers => 1},
                  debug => 1,
                  });
-}
 
 my $branches = GetBranches;
 my @branchloop;
@@ -63,13 +51,33 @@ foreach (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} 
   push @branchloop, \%row;
 }
 
-my @categories=C4::Category->all;
-$template->param(
-    branchloop=>\@branchloop,
-	categories=>\@categories,
-);
+my @categories;
+my $no_categories;
+my $no_add = 0;
+if(scalar(@branchloop) < 1){
+    $no_add = 1;
+    $template->param(no_branches => 1);
+} 
+else {
+    $template->param(branchloop=>\@branchloop);
+}
+
+@categories=C4::Category->all;
+if(scalar(@categories) < 1){ 
+    $no_categories = 1; 
+}
+
+if($no_categories && C4::Context->preference("AddPatronLists")=~/code/){
+    $no_add = 1;
+    $template->param(no_categories => 1);
+} 
+else {
+    $template->param(categories=>\@categories);
+}
+
 $template->param( 
         "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+        no_add => $no_add,
             );
 my @letters = map { {letter => $_} } ( 'A' .. 'Z');
 $template->param( letters => \@letters );

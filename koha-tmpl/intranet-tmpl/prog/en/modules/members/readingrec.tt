@@ -1,0 +1,104 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Circulation History for [% firstname %] [% surname %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+<script type="text/javascript" id="js">$(document).ready(function() {
+	$.tablesorter.addParser({
+		id: 'articles',
+		is: function(s) {return false;  },
+		format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+		type: 'text'
+	});
+	$.tablesorter.defaults.widgets = ['zebra'];
+	$("#table_readingrec").tablesorter({
+		sortList: [[8,1]],
+		headers: { 1: { sorter: 'articles' }}
+	}).tablesorterPager({container: $("#pagertable_readingrec"),positionFixed: false,size: 20});
+}); </script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Circulation History for [% firstname %] [% surname %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+[% INCLUDE 'circ-toolbar.inc' %]
+<h1>Circulation History</h1>
+<form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
+
+<span id="pagertable_readingrec" class="pager">
+	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+		<img src="[% interface %]/prog/img/first.png" class="first"/>
+		<img src="[% interface %]/prog/img/prev.png" class="prev"/>
+		<input type="text" size="5" class="pagedisplay"/>
+		<img src="[% interface %]/prog/img/next.png" class="next"/>
+		<img src="[% interface %]/prog/img/last.png" class="last"/>
+		, entries/page :
+		<select class="pagesize">
+			<option value="10">10</option>
+			<option selected="selected" value="20">20</option>
+			<option value="30">30</option>
+			<option value="40">40</option>
+			<option value="50">50</option>
+			<option value="100">100</option>
+		</select>
+	</form>
+</span>
+<table id="table_readingrec">
+<thead>
+    <th>Date</th>
+	<th>Title</th>
+	<th>Author</th>
+	<th>Call No.</th>
+	<th>Barcode</th>
+	<th>Number of Renewals</th>
+	<th>Checked out on</th>
+	<th>Checked out from</th>
+	<th>Date Due</th>
+	<th>Return Date</th>
+</thead>
+[% FOREACH loop_readin IN loop_reading %]
+    [% IF ( loop_readin.returndate ) %]<tr>[% ELSE %]<tr class="onissue">[% END %]
+        <td>
+            [% loop_readin.issuestimestamp %]
+        </td>
+        <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_readin.biblionumber %]">[% loop_readin.title |html %]</a></td>
+
+        <td>[% loop_readin.author %]</td>
+
+        <td>[% loop_readin.classification %]</td>
+
+        <td>[% loop_readin.barcode %]</td>
+
+            <td>
+        [% loop_readin.renewals %]</td>
+            <td>
+        [% loop_readin.issuedate %]</td>
+            <td>
+        [% loop_readin.issuingbranch %]</td>
+			<td>[% IF ( loop_readin.date_due ) %][% loop_readin.date_due %][% ELSE %]&nbsp;[% END %]</td>
+            <td>
+        [% IF ( loop_readin.returndate ) %]
+            [% loop_readin.returndate %]
+        [% ELSE %]
+            Checked Out
+        [% END %]
+	</td>
+</tr>
+[% END %]
+</table>
+
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'circ-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

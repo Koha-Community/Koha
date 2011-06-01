@@ -203,17 +203,18 @@ sub ModBranch {
         my $query  = "
             INSERT INTO branches
             (branchcode,branchname,branchaddress1,
-            branchaddress2,branchaddress3,branchzip,branchcity,
+            branchaddress2,branchaddress3,branchzip,branchcity,branchstate,
             branchcountry,branchphone,branchfax,branchemail,
             branchurl,branchip,branchprinter,branchnotes)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
         ";
         my $sth    = $dbh->prepare($query);
         $sth->execute(
             $data->{'branchcode'},       $data->{'branchname'},
             $data->{'branchaddress1'},   $data->{'branchaddress2'},
             $data->{'branchaddress3'},   $data->{'branchzip'},
-            $data->{'branchcity'},       $data->{'branchcountry'},
+            $data->{'branchcity'},       $data->{'branchstate'},
+            $data->{'branchcountry'},
             $data->{'branchphone'},      $data->{'branchfax'},
             $data->{'branchemail'},      $data->{'branchurl'},
             $data->{'branchip'},         $data->{'branchprinter'},
@@ -225,7 +226,7 @@ sub ModBranch {
             UPDATE branches
             SET branchname=?,branchaddress1=?,
                 branchaddress2=?,branchaddress3=?,branchzip=?,
-                branchcity=?,branchcountry=?,branchphone=?,
+                branchcity=?,branchstate=?,branchcountry=?,branchphone=?,
                 branchfax=?,branchemail=?,branchurl=?,branchip=?,
                 branchprinter=?,branchnotes=?
             WHERE branchcode=?
@@ -235,7 +236,8 @@ sub ModBranch {
             $data->{'branchname'},
             $data->{'branchaddress1'},   $data->{'branchaddress2'},
             $data->{'branchaddress3'},   $data->{'branchzip'},
-            $data->{'branchcity'},       $data->{'branchcountry'},
+            $data->{'branchcity'},       $data->{'branchstate'},       
+            $data->{'branchcountry'},
             $data->{'branchphone'},      $data->{'branchfax'},
             $data->{'branchemail'},      $data->{'branchurl'},
             $data->{'branchip'},         $data->{'branchprinter'},

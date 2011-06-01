@@ -459,10 +459,10 @@ sub stylesheet {
     unless ( $stylesheet ) {
         my $xsl_file = $self->{ conf }
                        ? $self->{ conf }->{ format }->{ $format }->{ xsl_file }
-                       : ( C4::Context->config('intranetdir') .
-                         "/koha-tmpl/intranet-tmpl/prog/en/xslt/" .
+                       : ( C4::Context->config('intrahtdocs') .
+                         '/prog/en/xslt/' .
                          C4::Context->preference('marcflavour') .
-                         "slim2OAIDC.xsl" );
+                         'slim2OAIDC.xsl' );
         my $parser = XML::LibXML->new();
         my $xslt = XML::LibXSLT->new();
         my $style_doc = $parser->parse_file( $xsl_file );

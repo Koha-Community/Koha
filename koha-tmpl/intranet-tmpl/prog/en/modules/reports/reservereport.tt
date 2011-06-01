@@ -1,0 +1,44 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Hold Report &rsaquo; All Holds</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; All Holds</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<table>
+	<tr><th>Name</th><th>Hold Date</th><th>Title</th><th>Class</th></tr>
+	[% FOREACH dataloo IN dataloop %]
+		<tr>
+			<td>
+				[% dataloo.name %]
+			</td>
+			<td>
+				[% dataloo.reservedate %]
+			</td>
+			<td>
+				[% dataloo.title |html %]
+			</td>
+			<td>
+				[% dataloo.classification %]
+			</td>
+		</tr>
+	[% END %]
+</table>
+<p>[% count %]</p>
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

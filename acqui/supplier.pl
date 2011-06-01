@@ -49,7 +49,7 @@ use C4::Output;
 use C4::Dates qw/format_date /;
 use CGI;
 
-use C4::Bookseller;
+use C4::Bookseller qw( GetBookSellerFromId DelBookseller );
 use C4::Budgets;
 
 my $query    = CGI->new;
@@ -64,7 +64,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => 'intranet',
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 'vendors_manage' },
+        flagsrequired   => { acquisition => '*' },
         debug           => 1,
     }
 );

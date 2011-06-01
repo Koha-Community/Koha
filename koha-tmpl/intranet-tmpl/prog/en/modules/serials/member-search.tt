@@ -1,0 +1,83 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Member Search &rsaquo; [% bookselname %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+<!--
+
+function add_member(subscriptionid,borrowernumber){
+     var myurl = "routing.pl?subscriptionid="+subscriptionid+"&borrowernumber="+borrowernumber+"&op=add";
+     window.opener.location.href = myurl;
+}
+
+//-->
+</script>
+<style type="text/css">
+   #custom-doc { width:36.46em;*width:35.53em;min-width:430px; margin:auto; text-align:left; padding: 1em; }
+   </style>
+</head>
+<body>
+<div id="custom-doc" class="yui-t7">
+   
+<div id="bd">
+<div id="yui-main">
+<div id="search" class="yui-g">
+	<form action="[% actionname %]" method="get">
+            <input type="hidden" name="subscriptionid" id="subscriptionid" value="[% subscriptionid %]" />
+		<fieldset class="rows">
+			<legend> Filter :</legend>
+			<ol>
+			<li><label for="member">Name:</label> <input type="hidden" name="surname" value="[% surname %]" />
+			<input type="text" name="member" id="member" value="[% member %]" /></li>
+			<li><label for="branchcode"> Library :</label><select name="branchcode" id="branchcode">
+			<option value="">Any</option>[% FOREACH branchloo IN branchloop %]
+			[% IF ( branchloo.selected ) %]
+			<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]
+			<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+			[% END %]</select></li>
+			<li><label for="categorycode">Category:</label><select name="categorycode" id="categorycode">
+			<option value="">Any</option>[% FOREACH categoryloo IN categoryloop %]
+			[% IF ( categoryloo.selected ) %]
+			<option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.description %]</option>[% ELSE %]
+			<option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>[% END %]
+			[% END %]</select></li>
+			</ol>
+			<fieldset class="action"><input type="submit" value="Search" /></fieldset>
+	      </fieldset>
+	  </form>
+</div> 
+[% IF ( resultsloop ) %]
+<div id="searchheader" style="margin-top:.7em;"> <h3>Results [% from %] to [% to %] of [% numresults %] found for [% IF ( member ) %]'<span class="ex">[% member %]</span>'[% END %][% IF ( surname ) %]'<span class="ex">[% surname %]</span>'[% END %]</h3></div>
+<div class="searchresults">
+
+<table id="memberresultst">
+	<thead>
+		<tr>
+		<th>Card</th>
+		<th>Name</th>
+		<th>Library</th>
+		<th>Add</th>
+		</tr>
+	</thead>
+	<tbody>
+		[% FOREACH resultsloo IN resultsloop %]
+		[% IF ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+		<td>[% resultsloo.cardnumber %] </td>
+		<td>[% resultsloo.surname %], [% resultsloo.firstname %] </td>
+		<td>[% resultsloo.branchcode %] </td>
+		<td><a onclick="add_member([% subscriptionid %],[% resultsloo.borrowernumber %]); return false" href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% resultsloo.subscriptionid %]&amp;borrowernumber=[% resultsloo.borrowernumber %]&amp;op=add">Add</a></td></tr>
+		[% END %]
+	</tbody>
+</table>
+[% IF ( multipage ) %]<div class="pages">[% paginationbar %]</div>[% END %]
+</div>
+[% ELSE %]
+[% IF ( searching ) %]
+<p>No results found</p>
+[% END %]
+[% END %]
+<fieldset class="action"><a href="#" class="button close">Close</a></fieldset>
+</div>
+
+</div> 
+
+[% INCLUDE 'intranet-bottom.inc' %]

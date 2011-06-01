@@ -1,0 +1,694 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Record Matching Rules
+[% IF ( matching_rule_form ) %]
+  [% IF ( edit_matching_rule ) %]
+    &rsaquo; Modify record matching rule
+  [% ELSE %]
+    &rsaquo; Add record matching rule
+  [% END %]
+[% END %]
+[% IF ( delete_matching_rule_form ) %]
+  &rsaquo; Confirm deletion of record matching rule &quot;[% code %]&quot;
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+
+var maxMatchPoint = [% max_matchpoint %];
+var maxMatchCheck = [% max_matchcheck %];
+
+function InsertMatchpoint(loc, index) {
+    var original= $("#"+index);
+    var clone = original.clone();
+    clone.show();
+
+    // update IDs and form names
+    maxMatchPoint++;
+    clone.attr('id', 'mp_' + maxMatchPoint);
+    $("span.counter",clone).html(maxMatchPoint);
+    $("label",clone).each(function(){
+      var s = $(this).attr("for");
+        if (s.match(/mp_num/)) {
+            $(this).attr("for",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+        }
+    });
+
+    $("div",clone).each(function(){
+      var s = $(this).attr("id");
+        if (s.match(/mp_num/)) {
+            $(this).attr("id",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+        }
+    });
+    $("input",clone).each(function(){
+        var s = $(this).attr("id");
+        if(s.match(/mp_num/)){
+          $(this).attr("id",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+        }
+
+        var s = $(this).attr("name");
+        if(s.match(/mp_num/)){
+          $(this).attr("name",s.replace(/mp_num/, 'mp_' + maxMatchPoint));
+        }
+    });
+    $("#match_points").append(clone);
+}
+
+function InsertMatchcheck(loc, index) {
+    var original= $("#"+index);
+    var clone = original.clone();
+    clone.show();
+
+    // update IDs and form names
+    maxMatchCheck++;
+    clone.attr('id', 'mc_' + maxMatchCheck);
+    $("span.counter",clone).html(maxMatchCheck);
+    $("label",clone).each(function(){
+      var s = $(this).attr("for");
+        if (s.match(/mc_num/)) {
+            $(this).attr("for",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+        }
+    });
+
+    $("div",clone).each(function(){
+      var s = $(this).attr("id");
+        if (s.match(/mc_num/)) {
+            $(this).attr("id",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+        }
+    });
+    $("input",clone).each(function(){
+        var s = $(this).attr("id");
+        if(s.match(/mc_num/)){
+          $(this).attr("id",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+        }
+
+        var s = $(this).attr("name");
+        if(s.match(/mc_num/)){
+          $(this).attr("name",s.replace(/mc_num/, 'mc_' + maxMatchCheck));
+        }
+    });
+    $("#match_checks").append(clone);
+}
+
+function DeleteMatchpoint(loc) {
+    $(loc).parent().parent().parent().remove();
+    if($(".matchgroup",$("#match_points")).length == 0){
+      maxMatchPoint = 0;
+      $("#addMatchPoint").show();
+    }
+}
+
+function DeleteMatchcheck(loc) {
+    $(loc).parent().parent().parent().remove();
+    if($(".matchgroup",$("#match_checks")).length == 0){
+      maxMatchCheck = 0;
+      $("#addMatchCheck").show();
+    }
+}
+
+function DoCancel(f) {
+  f.op.value='';
+  document.Aform.submit();
+}
+
+function CheckMatchingRuleForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.code.value.length==0) {
+        _alertString += "\n- " + _("Matching rule code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (f.threshold.value.length==0) {
+        _alertString += "\n- " + _("Threshold missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+function CheckRuleForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.sort_rule.value.length==0) {
+        _alertString += "\n- " + _("Filing rule code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (f.sort_routine.value.length==0) {
+        _alertString += "\n- " + _("Sort routine missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+//]]>
+</script>
+<style type="text/css">
+  fieldset.rows fieldset.rows { border-width : 0; }
+  fieldset.rows fieldset.rows fieldset.rows { border-width : 1px; }
+  fieldset, fieldset.rows { width : 90%; padding: .3em .6em .3em .6em; }
+	fieldset.rows fieldset {font-size:100%;}
+  div.matchgroup { border:1px solid #DDD; border-left-width: 15px; padding:.4em; margin-bottom:.6em;}
+</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( display_list ) %]Record Matching Rules[% ELSE %]<a href="/cgi-bin/koha/admin/matching-rules.pl">Record Matching Rules</a>[% END %]
+[% IF ( matching_rule_form ) %]
+  [% IF ( edit_matching_rule ) %]
+    &rsaquo; Modify record matching rule
+  [% ELSE %]
+    &rsaquo; Add record matching rule
+  [% END %]
+[% END %]
+[% IF ( delete_matching_rule_form ) %]
+  &rsaquo; Confirm deletion of record matching rule &quot;[% code %]&quot;
+[% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% IF ( matching_rule_form ) %]
+  [% IF ( edit_matching_rule ) %]
+<h2>Modify record matching rule</h2>
+  [% ELSE %]
+<h2>Add record matching rule</h2>
+  [% END %]
+<form action="[% script_name %]" name="Aform" method="post">
+  <input type="hidden" name="op" value="[% confirm_op %]" />
+  <fieldset class="rows">
+    <ol>
+      <li>
+          [% IF ( edit_matching_rule ) %]
+		  <span class="label">Matching rule code: </span>
+            <input type="hidden" name="matcher_id" value="[% matcher_id %]" />
+            <input type="hidden" name="code" value="[% code %]" />
+            [% code %]
+          [% ELSE %]
+		  <label for="code" class="required">Matching rule code: </label>
+            <input type="text" id="code" name="code"  size="10" maxlength="10" /> <span class="required">Required</span>
+          [% END %]
+       </li>
+       <li><label for="description" class="required">Description: </label>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="[% description |html %]" /> <span class="required">Required</span>
+       </li>
+       <li><label for="threshold" class="required">Match threshold: </label>
+           <input type="text" id="threshold" name="threshold" size="5" maxlength="5" 
+                  value="[% threshold |html %]" /> <span class="required">Required</span>
+       </li>
+    </ol>
+  </fieldset>
+
+  <fieldset class="rows" id="match_points">
+  <h4>Match points</h4>
+  [% IF ( edit_matching_rule ) %]
+  [% IF ( matchpoints ) %]<p id="addMatchPoint" style="display:none;">[% ELSE %]<p id="addMatchPoint">[% END %]<a href="#" class="button" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;">Add match point</a></p>
+  [% ELSE %]<p id="addMatchPoint" style="display:none;"><a href="#" class="button" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;">Add match point</a></p>[% END %]
+  [% IF ( edit_matching_rule ) %]
+  [% FOREACH matchpoint IN matchpoints %]
+  <div id="mp_[% matchpoint.mp_num %]" class="matchgroup">
+  <fieldset class="rows">
+    <legend>Match Point [% matchpoint.mp_num %] | <a href="#" class="button" onclick="InsertMatchpoint('mp_[% matchpoint.mp_num %]', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
+    <ol>
+      <li>
+        <label for="mp_[% matchpoint.mp_num %]_search_index">Search index: </label>
+        <input type ="text" id="mp_[% matchpoint.mp_num %]_search_index" 
+               name="mp_[% matchpoint.mp_num %]_search_index" size="20" 
+               value="[% matchpoint.index |html %]"
+          maxlength="30" />
+      </li>
+      <li>
+        <label for="mp_[% matchpoint.mp_num %]_score">Score: </label>
+        <input type ="text" id="mp_[% matchpoint.mp_num %]_score" 
+               name="mp_[% matchpoint.mp_num %]_score" size="5"
+               value="[% matchpoint.score |html %]" 
+               maxlength="5" />
+      </li>
+      </ol>
+      [% FOREACH component IN matchpoint.components %]
+      <fieldset class="rows" id="mp_[% component.mp_num %]_c_[% component.comp_num %]">
+      <legend>Matchpoint components</legend>
+        <ol>
+          <li>
+            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_tag">Tag: </label>
+            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_tag" 
+                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_tag" 
+                   value="[% component.tag |html %]"
+                   size="3" maxlength="3" />
+          </li>
+          <li>
+            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_subfields">Subfields: </label>
+            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_subfields" 
+                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_subfields" 
+                   value="[% component.subfields |html %]"
+                   size="10" maxlength="40" />
+          </li>
+          <li>
+            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_offset">Offset: </label>
+            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_offset" 
+                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_offset" 
+                   value="[% component.offset |html %]"
+                   size="5" maxlength="5" />
+          </li>
+          <li>
+            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_length">Length: </label>
+            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_length" 
+                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_length" 
+                   value="[% component.length |html %]"
+                   size="5" maxlength="5" />
+          </li>
+              [% FOREACH norm IN component.norms %]
+              <li id="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n_[% norm.norm_num %]">
+                <label for="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n__[% norm.norm_num %]_norm">Normalization rule: </label>
+                <input type="text" id="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n__[% norm.norm_num %]_norm" 
+                       name="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+                       value="[% norm.norm |html %]"
+                       size="20" maxlength="50" />
+              </li>
+              [% END %]
+        </ol>
+      </fieldset>
+      [% END %]
+      </fieldset>
+      <br style="clear:both;" />
+      </div>
+  </fieldset>
+
+  [% END %]
+  [% ELSE %]
+  <div id="mp_1" class="matchgroup">
+  <fieldset class="rows">
+    <legend>Match Point 1 | <a href="#" class="button" onclick="InsertMatchpoint('mp_1', 'mp_template'); return false;">Add match point</a> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
+    <ol>
+      <li>
+        <label for="mp_1_search_index">Search index: </label>
+        <input type ="text" id="mp_1_search_index" name="mp_1_search_index" size="20" 
+          maxlength="30" />
+      </li>
+      <li>
+        <label for="mp_1_score">Score: </label>
+        <input type ="text" id="mp_1_score" name="mp_1_score" size="5" maxlength="5" />
+      </li>
+    </ol>
+    <fieldset class="rows" id="mp_1_c_1">
+      <legend>Matchpoint components</legend>
+        <ol>
+          <li>
+            <label for="mp_1_c_1_tag">Tag: </label>
+            <input type="text" id="mp_1_c_1_tag" name="mp_1_c_1_tag" size="3" maxlength="3" />
+          </li>
+          <li>
+            <label for="mp_1_c_1_subfields">Subfields: </label>
+            <input type="text" id="mp_1_c_1_subfields" name="mp_1_c_1_subfields" size="10" maxlength="40" />
+          </li>
+          <li>
+            <label for="mp_1_c_1_offset">Offset: </label>
+            <input type="text" id="mp_1_c_1_offset" name="mp_1_c_1_offset" size="5" maxlength="5" />
+          </li>
+          <li>
+            <label for="mp_1_c_1_length">Length: </label>
+            <input type="text" id="mp_1_c_1_length" name="mp_1_c_1_length" size="5" maxlength="5" />
+          </li>
+            <li id="mp_1_c_1_n_1">
+              <label for="mp_1_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mp_1_c_1_n_1_norm" name="mp_1_c_1_n_1_norm" size="20" maxlength="50" />
+            </li>
+        </ol>
+    </fieldset>
+    </fieldset>
+      <br style="clear:both;" />
+      </div>
+
+  </fieldset>
+  [% END %]
+
+  <fieldset class="rows" id="match_checks">
+  <h4>Required match checks</h4>
+  [% IF ( edit_matching_rule ) %]
+  [% IF ( matchchecks ) %]<p id="addMatchCheck" style="display:none;">[% ELSE %]<p id="addMatchCheck">[% END %]<a href="#" class="button" onclick="InsertMatchcheck('mc_1', 'mc_template'); return false;">Add match check</a></p>
+  [% ELSE %]<p id="addMatchCheck" style="display:none;"><a href="#" class="button" onclick="InsertMatchcheck('mc_1', 'mc_template'); return false;">Add match check</a></p>[% END %]
+  [% IF ( edit_matching_rule ) %]
+  [% FOREACH matchcheck IN matchchecks %]
+  <fieldset class="rows" id="mc_[% matchcheck.mc_num %]">
+    <legend>Match check [% matchcheck.mc_num %]<a href="#" class="button" onclick="InsertMatchcheck('mc_[% matchcheck.mc_num %]', 'mc_template'); return false;">Add match check</a> | <a href="#" class="button" onclick="DeleteMatchcheck(this); return false;">Remove this match check</a></legend>
+    <input type="hidden" id="mc_[% matchcheck.mc_num %]_id" name="mc_[% matchcheck.mc_num %]_id" value="1" />
+      [% FOREACH src_component IN matchcheck.src_components %]
+      <fieldset class="rows" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]">
+        <legend>Source (incoming) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_tag">Tag: </label>
+            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
+                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
+                   value="[% src_component.tag |html %]"
+                   size="3" maxlength="3" />
+          </li>
+          <li>
+            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_subfields">Subfields: </label>
+            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
+                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
+                   value="[% src_component.subfields |html %]"
+                   size="10" maxlength="40" />
+          </li>
+          <li>
+            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_offset">Offset: </label>
+            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
+                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
+                   value="[% src_component.offset |html %]"
+                   size="5" maxlength="5" />
+          </li>
+          <li>
+            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_length">Length: </label>
+            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_length" 
+                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_length" 
+                   value="[% src_component.length |html %]"
+                   size="5" maxlength="5" />
+          </li>
+          [% FOREACH norm IN src_component.norms %]
+            <li id="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]">
+              <label for="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+              <input type="text" id="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+                     name="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+                    value="[% norm.norm |html %]"
+                    size="20" maxlength="50" />
+            </li>
+          [% END %]
+        </ol>
+      </fieldset>
+      [% END %]
+      [% FOREACH tgt_component IN matchcheck.tgt_components %]
+      <fieldset class="rows" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]">
+        <legend>Target (database) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag">Tag: </label>
+            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
+                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
+                   value="[% tgt_component.tag |html %]"
+                   size="3" maxlength="3" />
+          </li>
+          <li>
+            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields">Subfields: </label>
+            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
+                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
+                   value="[% tgt_component.subfields |html %]"
+                   size="10" maxlength="40" />
+          </li>
+          <li>
+            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset">Offset: </label>
+            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
+                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
+                   value="[% tgt_component.offset |html %]"
+                   size="5" maxlength="5" />
+          </li>
+          <li>
+            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length">Length: </label>
+            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
+                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
+                   value="[% tgt_component.length |html %]"
+                   size="5" maxlength="5" />
+          </li>
+          [% FOREACH norm IN tgt_component.norms %]
+            <li id="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]">
+              <label for="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+              <input type="text" id="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+                     name="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+                    value="[% norm.norm |html %]"
+                    size="20" maxlength="50" />
+            </li>
+          [% END %]
+        </ol>
+      </fieldset>
+      [% END %]
+  </fieldset>
+  [% END %]
+  [% ELSE %]
+  <div id="mc_1" class="matchgroup">
+  <fieldset class="rows">
+    <legend>Match check 1 | <a href="#" class="button" onclick="InsertMatchcheck('mc_1', 'mc_template'); return false;">Add match check</a> | <a href="#" class="button" onclick="DeleteMatchcheck(this); return false;">Remove this match check</a></legend>
+    <input type="hidden" id="mc_1_id" name="mc_1_id" value="1" />
+      <fieldset class="rows" id="mc_1_src_c_1">
+        <legend>Source (incoming) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_1_src_c_1_tag">Tag: </label>
+            <input type="text" id="mc_1_src_c_1_tag" name="mc_1_src_c_1_tag" size="3" maxlength="3" />
+          </li>
+          <li>
+            <label for="mc_1_src_c_1_subfields">Subfields: </label>
+            <input type="text" id="mc_1_src_c_1_subfields" name="mc_1_src_c_1_subfields" size="10" maxlength="40" />
+          </li>
+          <li>
+            <label for="mc_1_src_c_1_offset">Offset: </label>
+            <input type="text" id="mc_1_src_c_1_offset" name="mc_1_src_c_1_offset" size="5" maxlength="5" />
+          </li>
+          <li>
+            <label for="mc_1_src_c_1_length">Length: </label>
+            <input type="text" id="mc_1_src_c_1_length" name="mc_1_src_c_1_length" size="5" maxlength="5" />
+          </li>
+            <li id="mc_1_src_c_1_n_1">
+              <label for="mc_1_src_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mc_1_src_c_1_n_1_norm" name="mc_1_src_c_1_n_1_norm" size="20" maxlength="50" />
+            </li>
+        </ol>
+      </fieldset>
+
+      <fieldset class="rows" id="mc_1_tgt_c_1">
+        <legend>Target (database) record check field</legend>
+        <ol>
+          <li>
+            <label for="mc_1_tgt_c_1_tag">Tag: </label>
+            <input type="text" id="mc_1_tgt_c_1_tag" name="mc_1_tgt_c_1_tag" size="3" maxlength="3" />
+          </li>
+          <li>
+            <label for="mc_1_tgt_c_1_subfields">Subfields: </label>
+            <input type="text" id="mc_1_tgt_c_1_subfields" name="mc_1_tgt_c_1_subfields" size="10" maxlength="40" />
+          </li>
+          <li>
+            <label for="mc_1_tgt_c_1_offset">Offset: </label>
+            <input type="text" id="mc_1_tgt_c_1_offset" name="mc_1_tgt_c_1_offset" size="5" maxlength="5" />
+          </li>
+          <li>
+            <label for="mc_1_tgt_c_1_length">Length: </label>
+            <input type="text" id="mc_1_tgt_c_1_length" name="mc_1_tgt_c_1_length" size="5" maxlength="5" />
+          </li>
+            <li id="mc_1_tgt_c_1_n_1">
+              <label for="mc_1_tgt_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mc_1_tgt_c_1_n_1_norm" name="mc_1_tgt_c_1_n_1_norm" size="20" maxlength="50" />
+            </li>
+        </ol>
+      </fieldset>
+  </fieldset>
+  <br style="clear:both;" />
+  </div>
+  [% END %]
+  </fieldset>
+  <fieldset class="action">
+    [% IF ( edit_matching_rule ) %]
+    <input type="button" value="Save"
+           onclick="CheckMatchingRuleForm(this.form)" />
+    [% ELSE %]
+    <input type="button" value="Save"
+           onclick="CheckMatchingRuleForm(this.form)" />
+    [% END %]
+    <a class="cancel" href="/cgi-bin/koha/admin/matching-rules.pl">Cancel</a>
+  </fieldset>
+</form>
+[% END %]
+
+[% IF ( delete_matching_rule_form ) %]
+<div class="dialog alert"><h3>Confirm deletion of record matching rule <span class="ex">'[% code %]' ([% description %])</span>?</h3>
+<form action="[% script_name %]" name="Aform" method="post">
+  <input type="hidden" name="op" value="[% confirm_op %]" />
+  <input type="hidden" name="matcher_id" value="[% matcher_id %]" />
+    <input type="submit" value="Delete record matching rule" class="approve" /></form>
+	<form action="[% script_name %]" method="get">
+    <input type="submit" value="No, Do Not Delete" class="deny" />
+</form></div>
+[% END %]
+
+[% IF ( display_list ) %]
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newrule");
+	}	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newrule" href="[% script_name %]?op=add_matching_rule">New Record Matching Rule</a></li>
+</ul></div>
+
+<h2>Record Matching Rules</h2>
+[% IF ( added_matching_rule ) %]
+<div class="dialog message">Added record matching rule &quot;[% added_matching_rule %]&quot;</div>
+[% END %]
+[% IF ( edited_matching_rule ) %]
+<div class="dialog message">Modified record matching rule &quot;[% edited_matching_rule %]&quot;</div>
+[% END %]
+[% IF ( deleted_matching_rule ) %]
+<div class="dialog message">Deleted record matching rule &quot;[% deleted_matching_rule %]&quot;</div>
+[% END %]
+[% IF ( available_matching_rules ) %]<table>
+  <tr>
+    <th>#</th>
+    <th>Code</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  [% FOREACH available_matching_rule IN available_matching_rules %]
+  <tr>
+    <td>[% available_matching_rule.matcher_id %]</td>
+    <td>[% available_matching_rule.code %]</td>
+    <td>[% available_matching_rule.description %]</td>
+    <td>
+      <a href="[% available_matching_rule.script_name %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]">Edit</a>
+      <a href="[% available_matching_rule.script_name %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id |html %]">Delete</a>
+    </td>
+  </tr>
+  [% END %]
+</table>[% ELSE %]<p>There are no saved matching rules.</p>[% END %]
+
+<div class="pages">[% pagination_bar %]</div>
+
+[% END %]
+ [% IF ( matching_rule_form ) %]
+<div id="mp_template" class="matchgroup" style="display:none;">
+  <fieldset class="rows">
+    <legend>Match point <span class="counter"></span> | <a href="#" class="button" onclick="DeleteMatchpoint(this); return false;">Remove this match point</a></legend>
+    <ol>
+      <li>
+        <label for="mp_num_search_index">Search index: </label>
+        <input type ="text" id="mp_num_search_index" name="mp_num_search_index" size="20" 
+          maxlength="30" />
+      </li>
+      <li>
+        <label for="mp_num_score">Score: </label>
+        <input type ="text" id="mp_num_score" name="mp_num_score" size="5" maxlength="5" />
+      </li>
+    </ol>
+      <fieldset id="mp_num_c_1" class="rows">
+      <legend>Matchpoint components</legend>
+        <ol>
+          <li>
+            <label for="mp_num_c_1_tag">Tag: </label>
+            <input type="text" id="mp_num_c_1_tag" name="mp_num_c_1_tag" size="3" maxlength="3" />
+          </li>
+          <li>
+            <label for="mp_num_c_1_subfields">Subfields: </label>
+            <input type="text" id="mp_num_c_1_subfields" name="mp_num_c_1_subfields" size="10" maxlength="40" />
+          </li>
+          <li>
+            <label for="mp_num_c_1_offset">Offset: </label>
+            <input type="text" id="mp_num_c_1_offset" name="mp_num_c_1_offset" size="5" maxlength="5" />
+          </li>
+          <li>
+            <label for="mp_num_c_1_length">Length: </label>
+            <input type="text" id="mp_num_c_1_length" name="mp_num_c_1_length" size="5" maxlength="5" />
+          </li>
+            <li id="mp_num_c_1_n_1">
+              <label for="mp_num_c_1_n_1_norm">Normalization rule: </label>
+              <input type="text" id="mp_num_c_1_n_1_norm" name="mp_num_c_1_n_1_norm" size="20" maxlength="50" />
+            </li>
+        </ol>
+      </fieldset>
+  </fieldset>
+      <br style="clear:both;" />
+      </div>
+
+<div id="mc_template" class="matchgroup" style="display:none">
+<fieldset class="rows">
+  <legend>Match check <span class="counter"></span> | <a href="#" class="button" onclick="DeleteMatchcheck(this); return false;">Remove this match check</a></legend>
+  <input type="hidden" id="mc_num_id" name="mc_num_id" value="1" />
+    <fieldset class="rows" id="mc_num_src_c_1">
+      <legend>Source (incoming) record check field</legend>
+      <ol>
+        <li>
+          <label for="mc_num_src_c_1_tag">Tag: </label>
+          <input type="text" id="mc_num_src_c_1_tag" name="mc_num_src_c_1_tag" size="3" maxlength="3" />
+        </li>
+        <li>
+          <label for="mc_num_src_c_1_subfields">Subfields: </label>
+          <input type="text" id="mc_num_src_c_1_subfields" name="mc_num_src_c_1_subfields" size="10" maxlength="40" />
+        </li>
+        <li>
+          <label for="mc_num_src_c_1_offset">Offset: </label>
+          <input type="text" id="mc_num_src_c_1_offset" name="mc_num_src_c_1_offset" size="5" maxlength="5" />
+        </li>
+        <li>
+          <label for="mc_num_src_c_1_length">Length: </label>
+          <input type="text" id="mc_num_src_c_1_length" name="mc_num_src_c_1_length" size="5" maxlength="5" />
+        </li>
+          <li id="mc_num_src_c_1_n_1">
+            <label for="mc_num_src_c_1_n_1_norm">Normalization rule: </label>
+            <input type="text" id="mc_num_src_c_1_n_1_norm" name="mc_num_src_c_1_n_1_norm" size="20" maxlength="50" />
+          </li>
+      </ol>
+    </fieldset>
+    <fieldset class="rows" id="mc_num_tgt_c_1">
+      <legend>Target (database) record check field</legend>
+      <ol>
+        <li>
+          <label for="mc_num_tgt_c_1_tag">Tag: </label>
+          <input type="text" id="mc_num_tgt_c_1_tag" name="mc_num_tgt_c_1_tag" size="3" maxlength="3" />
+        </li>
+        <li>
+          <label for="mc_num_tgt_c_1_subfields">Subfields: </label>
+          <input type="text" id="mc_num_tgt_c_1_subfields" name="mc_num_tgt_c_1_subfields" size="10" maxlength="40" />
+        </li>
+        <li>
+          <label for="mc_num_tgt_c_1_offset">Offset: </label>
+          <input type="text" id="mc_num_tgt_c_1_offset" name="mc_num_tgt_c_1_offset" size="5" maxlength="5" />
+        </li>
+        <li>
+          <label for="mc_num_tgt_c_1_length">Length: </label>
+          <input type="text" id="mc_num_tgt_c_1_length" name="mc_num_tgt_c_1_length" size="5" maxlength="5" />
+        </li>
+          <li id="mc_num_tgt_c_1_n_1">
+            <label for="mc_num_tgt_c_1_n_1_norm">Normalization rule: </label>
+            <input type="text" id="mc_num_tgt_c_1_n_1_norm" name="mc_num_tgt_c_1_n_1_norm" size="20" maxlength="50" />
+          </li>
+      </ol>
+    </fieldset>
+</fieldset>
+<br style="clear:both;" />
+</div>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

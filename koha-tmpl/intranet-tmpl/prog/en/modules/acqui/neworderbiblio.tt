@@ -1,0 +1,88 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Search Existing Records</title>
+[% INCLUDE 'greybox.inc' %]
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?=[% basketno %]">Basket [% basketno %]</a> &rsaquo; Search Existing Records</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	
+<h1>Search Existing Records</h1>
+
+
+[% IF ( total ) %]
+<b>[% total %] results found </b> 
+<div class="pages">[% pagination_bar %]</div>
+[% ELSE %]
+<h3> No results found</h3>
+<p>
+    No results match your search for <span style="font-weight: bold;">&ldquo;[% query %]&rdquo;</span> in [% LibraryName %]
+</p>
+[% END %]
+
+[% IF ( query_error ) %]
+<br /><br />
+<b>Error:</b>
+<span class="problem">
+    [% query_error %]
+</span>
+[% END %]
+
+[% IF ( total ) %]
+<div class="searchresults">
+    <table>
+    <tr>
+       <th>Summary</th>
+       <th>Publisher</th>
+       <th>Copyright</th>
+       <th colspan="2">&nbsp;</th>
+    </tr>
+    [% FOREACH biblio IN resultsloop %]
+        <tr>
+            <td>
+                <p><span class="title">[% biblio.title |html %]</span>
+                [% IF ( biblio.author ) %]  by <span class="author">[% biblio.author %]</span>,[% END %]</p>
+                <p>[% IF ( biblio.isbn ) %] [% biblio.isbn %][% END %]
+                [% IF ( biblio.pages ) %] - [% biblio.pages %][% END %]
+                [% IF ( biblio.notes ) %] : [% biblio.notes %][% END %]
+                [% IF ( biblio.size ) %] ; [% biblio.size %][% END %]
+                </p>
+            </td>
+            <td>
+                [% biblio.publishercode %]
+                [% IF ( biblio.place ) %] ; [% biblio.place %][% END %]
+            </td>
+            <td>
+                [% biblio.copyrightdate %]
+            </td>
+        <td>
+        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">View MARC</a>
+        </td>
+            <td>
+            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;biblionumber=[% biblio.biblionumber %]" title="Order this one">
+                Order
+            </a>
+            </td>
+        </tr>
+    [% END %]
+    </table>
+</div>
+[% END %]
+
+[% INCLUDE 'acquisitions-add-to-basket.inc' %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

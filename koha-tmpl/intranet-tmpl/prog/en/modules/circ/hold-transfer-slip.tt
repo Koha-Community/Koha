@@ -1,0 +1,54 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha -- Circulation: Transfers</title>
+[% INCLUDE 'doc-head-close-receipt.inc' %]
+<script language="javascript">
+function printandclose()
+{
+window.print();
+window.close();
+}
+</script>
+</head>
+<body onload="printandclose();"><div id="main">
+
+[% FOREACH reservedat IN reservedata %]
+
+<h5>Date: [% reservedat.pulldate %]</h5>
+<h3> [% IF ( reservedat.transferrequired ) %]Transfer to [% reservedat.branchname %] [% ELSE %]Hold in [% reservedat.branchname %][% END %]</h3>
+
+<div id="reserve_display">
+
+<h3>[% reservedat.surname %], [% reservedat.firstname %]</h3>
+
+<ul>
+	<li>[% reservedat.cardnumber %]</li>
+    [% IF ( reservedat.phone ) %]
+        <li>[% reservedat.phone %]</li>
+    [% END %]
+    <li>
+        [% reservedat.address %]<br />
+	    [% IF ( reservedat.address2 ) %][% reservedat.address2 %]<br />[% END %]
+        [% reservedat.city %]  [% reservedat.zip %]
+    </li>
+    [% IF ( reservedat.email ) %]
+        <li>[% reservedat.email %]</li>
+    [% END %]
+</ul>
+<br />
+<h3>ITEM ON HOLD</h3>
+ <h4>[% reservedat.title |html %]</h4>
+ <h5>[% reservedat.author %] </h5>
+ <ul>
+    [% IF ( reservedat.barcode ) %]<li>[% reservedat.barcode %]</li>[% END %]
+    [% IF ( reservedat.itemcallnumber ) %]<li>[% reservedat.itemcallnumber %]</li>[% END %]
+    [% IF ( reservedat.waitingdate ) %]<li>[% reservedat.waitingdate %]</li>[% END %]
+ </ul>
+ [% IF ( reservedat.reservenotes ) %]
+    <p>Notes: [% reservedat.reservenotes %]</p>
+ [% END %]
+
+
+
+[% END %]
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

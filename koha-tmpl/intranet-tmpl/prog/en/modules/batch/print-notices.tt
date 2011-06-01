@@ -1,0 +1,25 @@
+[% INCLUDE 'doc-head-open.inc' %]
+    <title>Print Notices for [% today %]</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <style type="text/css">
+        <!-- 
+        .message { page-break-after: always }
+        pre { font-family: monospace }
+        -->
+    </style>
+    [% IF ( stylesheet ) %]
+    <style type="text/css">
+        <!--
+        [% stylesheet %]
+        -->
+    </style>
+    [% END %]
+</head>
+<body>
+    [% FOREACH message IN messages %]
+    <div class="message">
+        <pre>[% message.content %]</pre>
+    </div>
+    [% END %]
+</body>
+</html>

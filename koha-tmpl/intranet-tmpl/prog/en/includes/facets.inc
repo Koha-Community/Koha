@@ -1,28 +1,28 @@
-<!-- TMPL_IF NAME="opacfacets" -->
-<!-- TMPL_IF NAME="facets_loop" -->
+[% IF ( opacfacets ) %]
+[% IF ( facets_loop ) %]
 <div id="search-facets">
 <h4>Refine your search</h4>
 <ul>
-	<li>Availability<ul><li><!-- TMPL_IF NAME="available" -->Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi_not_availablity" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->">Show all items</a><!-- TMPL_ELSE -->Limit to <a href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->&amp;limit=available">currently available items.</a><!-- /TMPL_IF --></li></ul>
-	<!-- TMPL_IF NAME="related" --> <li>(related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->)</li><!-- /TMPL_IF -->
+	<li>Availability<ul><li>[% IF ( available ) %]Showing only <strong>available</strong> items. <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi_not_availablity %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]">Show all items</a>[% ELSE %]Limit to <a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;limit=available">currently available items.</a>[% END %]</li></ul>
+	[% IF ( related ) %] <li>(related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %])</li>[% END %]
 	</li>
 
-	<!-- TMPL_LOOP NAME="facets_loop" -->
-	<li id="<!-- TMPL_VAR NAME="type_id" -->">
-<!-- TMPL_VAR NAME="type_label" -->
-<!-- TMPL_IF NAME="type_label_Authors" -->Authors<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="type_label_Titles" -->Titles<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="type_label_Topics" -->Topics<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="type_label_Places" -->Places<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="type_label_Series" -->Series<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="type_label_Libraries" -->Libraries<!-- /TMPL_IF -->
+	[% FOREACH facets_loo IN facets_loop %]
+	<li id="[% facets_loo.type_id %]">
+[% facets_loo.type_label %]
+[% IF ( facets_loo.type_label_Authors ) %]Authors[% END %]
+[% IF ( facets_loo.type_label_Titles ) %]Titles[% END %]
+[% IF ( facets_loo.type_label_Topics ) %]Topics[% END %]
+[% IF ( facets_loo.type_label_Places ) %]Places[% END %]
+[% IF ( facets_loo.type_label_Series ) %]Series[% END %]
+[% IF ( facets_loo.type_label_Libraries ) %]Libraries[% END %]
 <ul>
-        <!-- TMPL_LOOP NAME="facets" --><li><a href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->&amp;limit=<!-- TMPL_VAR NAME="type_link_value" -->:<!-- TMPL_VAR NAME="facet_link_value" -->" title="<!-- TMPL_VAR NAME="facet_title_value" -->"><!-- TMPL_VAR NAME="facet_label_value" --></a> <!-- (<!-- TMPL_VAR NAME="facet_count" -->) --></li><!-- /TMPL_LOOP --><!-- TMPL_IF NAME="expandable" -->
-        <li class="showmore"><a href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->&amp;expand=<!-- TMPL_VAR NAME="expand" -->#<!-- TMPL_VAR NAME="type_id" -->">Show More</a></li>
-<!-- /TMPL_IF -->
+        [% FOREACH facet IN facets_loo.facets %]<li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;limit=[% facet.type_link_value %]:[% facet.facet_link_value %]" title="[% facet.facet_title_value %]">[% facet.facet_label_value %]</a> [% IF ( facet.displayFacetCount ) %]([% facet.facet_count %])[% END %]</li>[% END %][% IF ( facets_loo.expandable ) %]
+        <li class="showmore"><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">Show More</a></li>
+[% END %]
 </ul></li>
-<!-- /TMPL_LOOP -->
+[% END %]
 </ul>
 </div>
-<!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
+[% END %]
+[% END %]

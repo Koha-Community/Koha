@@ -48,6 +48,7 @@ sub find_translation ($) {
 sub text_replace_tag ($$) {
     my($t, $attr) = @_;
     my $it;
+
     # value [tag=input], meta
     my $tag = lc($1) if $t =~ /^<(\S+)/s;
     my $translated_p = 0;
@@ -55,8 +56,8 @@ sub text_replace_tag ($$) {
     if ($attr->{$a}) {
         next if $a eq 'label' && $tag ne 'optgroup';
         next if $a eq 'content' && $tag ne 'meta';
-        next if $a eq 'value' && ($tag ne 'input'
-        || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:checkbox|hidden|radio|text)$/)); # FIXME
+        next if $a eq 'value' && ($tag ne 'input' || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:checkbox|hidden|radio|text)$/)); # FIXME
+
         my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
         if ($val =~ /\S/s) {
         my $s = find_translation($val);
@@ -69,19 +70,19 @@ sub text_replace_tag ($$) {
     }
     }
     if ($translated_p) {
-    $it = "<$tag"
-        . join('', map {
-            sprintf(' %s=%s', $_, $attr->{$_}->[2]) #FIXME
-        } sort {
-            $attr->{$a}->[3] <=> $attr->{$b}->[3] #FIXME
-        } keys %$attr);
-	if ($tag eq 'img'){
-	    $it .= ' />';
-	}
-	else {	    
-           $it .= ' >';
-	}
-    } 
+     $it = "<$tag"
+          . join('', map { if ($_ ne '/'){
+                             sprintf(' %s="%s"', $_, $attr->{$_}->[1]);
+          }
+              else {
+                  sprintf(' %s',$_);
+                  }
+                         
+              } sort {
+                  $attr->{$a}->[3] <=> $attr->{$b}->[3] #FIXME
+              } keys %$attr);
+        $it .= '>';
+    }
     else {
         $it = $t;
     }
@@ -227,8 +228,8 @@ my $action = shift or usage_error('You must specify an ACTION.');
 usage_error('You must at least specify input and string list filenames.')
     if !@in_files || !defined $str_file;
 
-# Type match defaults to *.tmpl plus *.inc if not specified
-$type = "tmpl|inc|xsl" if !defined($type);
+# Type match defaults to *.tt plus *.inc if not specified
+$type = "tt|inc|xsl" if !defined($type);
 
 # Check the inputs for being files or directories
 for my $input (@in_files) {
@@ -393,7 +394,7 @@ if ($action eq 'create')  {
             my $targetdir = $` if $target =~ /[^\/]+$/s;
             mkdir_recursive($targetdir) unless -d $targetdir;
             print STDERR "Creating $target...\n" unless $quiet;
-            open( OUTPUT, ">$target" ) || die "$target: $!\n";
+            open( OUTPUT, ">$target" ) || die "$target: $!\n";            
             text_replace( $h, *OUTPUT );
             close OUTPUT;
         } else {

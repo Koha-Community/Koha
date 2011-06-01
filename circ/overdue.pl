@@ -2,6 +2,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -26,7 +27,7 @@ use CGI qw(-oldstyle_urls);
 use C4::Auth;
 use C4::Branch;
 use C4::Debug;
-use C4::Dates qw/format_date/;
+use C4::Dates qw/format_date format_date_in_iso/;
 use Date::Calc qw/Today/;
 use Text::CSV_XS;
 
@@ -39,6 +40,8 @@ my $itemtypefilter  = $input->param('itemtype') || '';
 my $borflagsfilter  = $input->param('borflag') || '';
 my $branchfilter    = $input->param('branch') || '';
 my $op              = $input->param('op') || '';
+my $dateduefrom = format_date_in_iso($input->param( 'dateduefrom' )) || '';
+my $datedueto   = format_date_in_iso($input->param( 'datedueto' )) || '';
 my $isfiltered      = $op =~ /apply/i && $op =~ /filter/i;
 my $noreport        = C4::Context->preference('FilterBeforeOverdueReport') && ! $isfiltered && $op ne "csv";
 
@@ -208,7 +211,11 @@ $template->param(
     patron_attr_filter_loop => \@patron_attr_filter_loop,
     borname => $bornamefilter,
     order => $order,
-    showall => $showall);
+    showall => $showall,
+    DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
+    dateduefrom => $input->param( 'dateduefrom' ) || '',
+    datedueto   => $input->param( 'datedueto' ) || '',
+);
 
 if ($noreport) {
     # la de dah ... page comes up presto-quicko
@@ -228,7 +235,15 @@ if ($noreport) {
     $bornamefilter =~s/\?/\_/g;
 
     my $strsth="SELECT date_due,
+        borrowers.title as borrowertitle,
         concat(surname,' ', firstname) as borrower, 
+        borrowers.streetnumber,
+        borrowers.streettype, 
+        borrowers.address,
+        borrowers.address2,
+        borrowers.city,
+        borrowers.zipcode,
+        borrowers.country,
         borrowers.phone,
         borrowers.email,
         issues.itemnumber,
@@ -253,6 +268,8 @@ if ($noreport) {
     $strsth.=" AND biblioitems.itemtype   = '" . $itemtypefilter . "' " if $itemtypefilter;
     $strsth.=" AND borrowers.flags        = '" . $borflagsfilter . "' " if $borflagsfilter;
     $strsth.=" AND borrowers.branchcode   = '" . $branchfilter   . "' " if $branchfilter;
+    $strsth.=" AND date_due < '" . $datedueto . "' "  if $datedueto;
+    $strsth.=" AND date_due > '" . $dateduefrom . "' " if $dateduefrom;
     # restrict patrons (borrowers) to those matching the patron attribute filter(s), if any
     my $bnlist = $have_pattr_filter_data ? join(',',keys %borrowernumber_to_attributes) : '';
     $strsth =~ s/WHERE 1=1/WHERE 1=1 AND borrowers.borrowernumber IN ($bnlist)/ if $bnlist;
@@ -289,7 +306,15 @@ if ($noreport) {
             borrowernumber         => $data->{borrowernumber},
             barcode                => $data->{barcode},
             itemnum                => $data->{itemnumber},
+            borrowertitle          => $data->{borrowertitle},
             name                   => $data->{borrower},
+            streetnumber           => $data->{streetnumber},                   
+            streettype             => $data->{streettype},                     
+            address                => $data->{address},                        
+            address2               => $data->{address2},                       
+            city                   => $data->{city},                   
+            zipcode                => $data->{zipcode},                        
+            country                => $data->{country},
             phone                  => $data->{phone},
             email                  => $data->{email},
             biblionumber           => $data->{biblionumber},

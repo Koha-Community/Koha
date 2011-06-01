@@ -74,7 +74,7 @@ use C4::Output;
 
 use C4::Dates qw/format_date/;
 use C4::Acquisition;
-use C4::Bookseller;
+use C4::Bookseller qw/ GetBookSellerFromId /;
 
 my $input          = CGI->new;
 my $supplierid     = $input->param('supplierid');
@@ -91,7 +91,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,
-        flagsrequired   => { acquisition => 1 },
+        flagsrequired   => { acquisition => 'order_receive' },
         debug           => 1,
     }
 );

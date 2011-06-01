@@ -1,7 +1,6 @@
 #!/usr/bin/perl
 
-
-# Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -47,7 +46,7 @@ $debug or $debug = $cgi_debug;
 my $do_it    = $input->param('do_it');
 my @modules   = $input->param("modules");
 my $user     = $input->param("user");
-my $action   = $input->param("action");
+my @action   = $input->param("action");
 my $object   = $input->param("object");
 my $info     = $input->param("info");
 my $datefrom = $input->param("from");
@@ -86,7 +85,8 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
                         address         => $data->{'address'},
                         address2        => $data->{'address2'},
                         city            => $data->{'city'},
-			zipcode		=> $data->{'zipcode'},
+                        state           => $data->{'state'},
+                        zipcode         => $data->{'zipcode'},
                         phone           => $data->{'phone'},
                         phonepro        => $data->{'phonepro'},
                         email           => $data->{'email'},
@@ -104,12 +104,16 @@ $template->param(
 
 if ($do_it) {
 
-    my $results = GetLogs($datefrom,$dateto,$user,\@modules,$action,$object,$info);
-    my $total = scalar @$results;
-    foreach my $result (@$results){
-	if ($result->{'info'} eq 'item'){
+    my @data;
+    my $results = GetLogs($datefrom,$dateto,$user,\@modules,\@action,$object,$info);
+    @data=@$results;
+    my $total = scalar @data;
+    foreach my $result (@data){
+	if ($result->{'info'} eq 'item'||$result->{module} eq "CIRCULATION"){
 	    # get item information so we can create a working link
-	    my $item=GetItem($result->{'object'});
+        my $itemnumber=$result->{'object'};
+        $itemnumber=$result->{'info'} if ($result->{module} eq "CIRCULATION");
+	    my $item=GetItem($itemnumber);
 	    $result->{'biblionumber'}=$item->{'biblionumber'};
 	    $result->{'biblioitemnumber'}=$item->{'biblionumber'};		
 	}
@@ -120,13 +124,13 @@ if ($do_it) {
         $template->param (
 			logview => 1,
             total    => $total,
-            looprow  => $results,
+            looprow  => \@data,
             do_it    => 1,
             datefrom => $datefrom,
             dateto   => $dateto,
             user     => $user,
             object   => $object,
-            action   => $action,
+            action   => \@action,
             info     => $info,
             src      => $src,
         );
@@ -144,7 +148,7 @@ if ($do_it) {
             -filename   => "$basename.csv"
         );
         my $sep = C4::Context->preference("delimiter");
-        foreach my $line (@$results) {
+        foreach my $line (@data) {
             #next unless $modules[0] eq "catalogue";
 		foreach (qw(timestamp firstname surname action info title author)) {
 			print $line->{$_} . $sep;

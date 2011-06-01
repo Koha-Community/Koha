@@ -137,7 +137,7 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES( 'da','dan');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'da', 'language', 'da', 'D&aelig;nsk');
+VALUES ( 'da', 'language', 'da', 'Dansk');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'da', 'language', 'en', 'Danish');
@@ -153,7 +153,7 @@ INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES( 'nl','dut');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES ( 'nl', 'language', 'nl', 'ned&#601;rl&#593;ns');
+VALUES ( 'nl', 'language', 'nl', 'Nederlands');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'nl', 'language', 'en', 'Dutch');
@@ -387,21 +387,43 @@ VALUES( 'gl', 'language', 'gl', 'Galego');
 INSERT INTO language_descriptions(subtag, type, lang, description)
 VALUES( 'gl', 'language', 'en', 'Galician');
 
--- Norwegian
+-- Norwegian (bokmål)
 INSERT INTO language_subtag_registry( subtag, type, description, added)
-VALUES ( 'nb', 'language', 'Norwegian','2005-10-16' );
+VALUES ( 'nb', 'language', 'Norwegian bokm&#229;l','2005-10-16' );
 
 INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
 VALUES( 'nb','nor');
 
-INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'nb', 'language', 'nb', 'Norsk');
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES( 'nb','nob');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'nb', 'language', 'en', 'Norwegian');
+VALUES( 'nb', 'language', 'nb', 'Norsk bokm&#229;l');
 
 INSERT INTO language_descriptions(subtag, type, lang, description)
-VALUES( 'nb', 'language', 'fr', 'Norvégien');
+VALUES( 'nb', 'language', 'en', 'Norwegian bokm&#229;l');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'nb', 'language', 'fr', 'Norvégien bokm&#229;l');
+
+-- Norwegian (nynorsk)
+INSERT INTO language_subtag_registry( subtag, type, description, added)
+VALUES ( 'nn', 'language', 'Norwegian nynorsk','2011-02-14' );
+
+INSERT INTO language_rfc4646_to_iso639(rfc4646_subtag,iso639_2_code)
+VALUES( 'nn','nno');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'nn', 'language', 'nb', 'Norsk nynorsk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'nn', 'language', 'nn', 'Norsk nynorsk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'nn', 'language', 'en', 'Norwegian nynorsk');
+
+INSERT INTO language_descriptions(subtag, type, lang, description)
+VALUES( 'nn', 'language', 'fr', 'Norvégien nynorsk');
 
 -- Persian
 INSERT INTO language_subtag_registry( subtag, type, description, added)

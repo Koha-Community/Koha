@@ -1,0 +1,176 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Authorities &rsaquo;
+    [% IF ( unknownauthid ) %]
+      Unknown authority record
+    [% ELSE %]
+      Details for Authority #[% authid %] ([% authtypetext %])
+    [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+
+//<![CDATA[
+
+	 $(document).ready(function() {
+ 		$('#authoritiestabs>ul').tabs();
+	 });
+
+function confirm_deletion() {
+	var is_confirmed = confirm('Are you sure you want to delete this authority?');
+	if (is_confirmed) {
+		window.location="authorities-home.pl?op=delete&amp;authid=[% authid %]";
+	}
+}
+function Dopop(link) {
+	newin=window.open(link,'width=500,height=400,toolbar=false,scrollbars=yes');
+}
+//]]>
+</script>
+[% IF ( displayhierarchy ) %]
+<link rel="stylesheet" type="text/css" href="[% themelang %]/css/hierarchy.css" />
+<script type="text/javascript">
+function showParents(mynumber) {
+  var parents=document.getElementsByName(mynumber+'p')
+  for(i=0;i<parents.length;i++){
+    if (parents[i].style.display == "none") {
+      parents[i].style.display ="block";
+    } else {
+      parents[i].style.display ="none";
+    }
+  } 
+}
+function showChildren(mynumber) {
+  var children=document.getElementsByName(mynumber+'c')
+  for(i=0;i<children.length;i++){
+    if (children[i].style.display == "none") {
+      children[i].style.display = "block";
+    } else {
+      children[i].style.display = "none";
+    }
+  }
+}
+function Help() {
+    newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
+}
+
+function addauthority() {
+    X = document.forms[0].authtype.value;
+    window.location="/cgi-bin/koha/authorities/authorities.pl?authtypecode="+X;
+}
+function searchauthority() {
+    X = document.forms[0].authtype2.value;
+    Y = document.forms[0].value.value;
+    window.location="/cgi-bin/koha/authorities/authorities-home.pl?op=do_search&type=intranet&authtypecode="+X+"&value="+Y+"&marclist=&and_or=and&excluding=&operator=contains";
+}
+</script>
+ [% END %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'authorities-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a> &rsaquo;
+    [% IF ( unknownauthid ) %]
+      Unknown authority record
+    [% ELSE %]
+      Details for Authority #[% authid %] ([% authtypetext %])
+    [% END %]
+</div>
+
+<div id="doc" class="yui-t7">
+
+<div id="bd">
+        <div id="yui-main">
+        <div class="yui-g">
+
+    [% INCLUDE 'authorities-toolbar.inc' %]
+	
+[% IF ( displayhierarchy ) %]
+
+<div class="hierarchies">
+[% FOREACH loophierarchie IN loophierarchies %]
+  <div class="hierarchy">
+  [% FOREACH loopelemen IN loophierarchie.loopelement %]
+    <div id="[% loopelemen.loopauthid %]" class="[% loopelemen.class %]">
+    [% IF ( loopelemen.ifparents ) %]
+      [% FOREACH loopparent IN loopelemen.loopparents %]
+        <div name="[% loopparent.loopauthid %]p" class="parent"> <a href="detail.pl?authid=[% loopparent.parentauthid %]">[% loopparent.parentvalue %]</a></div>
+      [% END %]
+    [% END %]
+    [% IF ( loopelemen.current_value ) %]
+        [% loopelemen.value %]
+    [% ELSE %]
+        <a href="detail.pl?authid=[% loopelemen.loopauthid %]" title="Term">[% loopelemen.value %]</a>
+    [% END %]
+    [% IF ( loopelemen.ifchildren ) %]
+      <sub><a class="parents" title="Narrower terms" href="JavaScript:showChildren('[% loopelemen.loopauthid %]');">+</a></sub><br />
+      [% FOREACH loopchildre IN loopelemen.loopchildren %]
+        <div name="[% loopchildre.loopauthid %]c" class="child"> <a href="detail.pl?authid=[% loopchildre.childauthid %]">[% loopchildre.childvalue %]</a></div>
+      [% END %]
+    [% END %]
+    </div>
+  [% END %]
+    
+  </div>
+[% END %]
+</div>
+[% END %]
+
+
+[% IF ( unknownauthid ) %]
+    <div class="dialog message">The authority record you requested does not exist ([% errauthid %]).</div>
+[% ELSE %]
+<h1>Authority #[% authid %] ([% authtypetext %])</h1>
+
+<div id="action">
+    
+    
+    Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=[% authid %]">[% count %] record(s)</a>
+</div>
+
+<div id="authoritiestabs" class="toptabs numbered">
+    <ul>
+        [% FOREACH BIG_LOO IN BIG_LOOP %]
+            <li>
+                <a href="/cgi-bin/koha/cataloguing/addbiblio.pl#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a>
+            </li>
+        [% END %]
+    </ul>
+
+[% FOREACH BIG_LOO IN BIG_LOOP %]
+    <div id="tab[% BIG_LOO.number %]XX">
+    [% FOREACH innerloo IN BIG_LOO.innerloop %]
+        [% IF ( innerloo.tag ) %]
+            <div class="tag">
+            <div class="tag_title">
+                [% innerloo.tag %]
+            </div>
+        [% ELSE %]
+            <div class="tag">
+        [% END %]
+        [% FOREACH subfiel IN innerloo.subfield %]
+            <p>
+                <label class="labelsubfield">&nbsp;
+                [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
+                <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></label>
+                [% subfiel.marc_value %]
+                [% IF ( subfiel.link ) %]
+                    <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
+                        <img border="0" src="[% interface %]/[% theme %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value %]">
+                    </a>
+                [% END %]
+                [% IF ( subfiel.authority ) %]
+                    <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority %]" class="button">Auth</a>
+                [% END %]
+            </p>
+        [% END %]
+        </div>
+    [% END %]
+    </div>
+[% END %]
+</div>
+</div>
+</div>
+[% END %]
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -27,7 +27,7 @@ use warnings;
 
 use C4::Biblio;
 use CGI;
-use C4::VirtualShelves qw/:DEFAULT GetRecentShelves RefreshShelvesSummary/;
+use C4::VirtualShelves qw/:DEFAULT GetAllShelves RefreshShelvesSummary/;
 use C4::Auth;
 use C4::Output;
 use C4::Auth qw/get_session/;
@@ -96,36 +96,23 @@ else {
 				"category$singlecategory" => 1
 			);
 	} else {
-	# offer choice of shelves
-	my $limit = 10;
-    my @shelvesloop;
-    my %shelvesloop;
-    #grab each type of shelf, open (type 3) should not be limited by user.
-    foreach my $shelftype (1,2,3) {
-        my ($shelflist) = GetRecentShelves($shelftype, $limit, $shelftype == 3 ? undef : $loggedinuser);
-        for my $shelf (@{ $shelflist->[0] }) {
-            push(@shelvesloop, $shelf->{shelfnumber});
-            $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
+
+        my $privateshelves = GetAllShelves(1,$loggedinuser);
+        if(@{$privateshelves}){
+			$template->param (
+				privatevirtualshelves          => $privateshelves,
+				existingshelves => 1
+			);
+		}
+        my $publicshelves = GetAllShelves(2,$loggedinuser);
+        if(@{$publicshelves}){
+			$template->param (
+				publicvirtualshelves          => $publicshelves,
+				existingshelves => 1
+			);
         }
-    }
-    my $CGIvirtualshelves;
-    if ( @shelvesloop > 0 ) {
-        $CGIvirtualshelves = CGI::scrolling_list (
-            -name     => 'shelfnumber',
-            -id     => 'shelfnumber',
-            -values   => \@shelvesloop,
-            -labels   => \%shelvesloop,
-            -size     => 1,
-            -tabindex => '',
-            -multiple => 0
-        );
 
-	$template->param (
-		CGIvirtualshelves       => $CGIvirtualshelves,
-	);
-    }
-	}
-
+}
 	my @biblios;
 	for my $bib (@biblionumber) {
 		my $data = GetBiblioData( $bib );

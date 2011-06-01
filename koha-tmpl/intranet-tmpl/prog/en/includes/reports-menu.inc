@@ -9,7 +9,8 @@
 		<li><a href="/cgi-bin/koha/reports/borrowers_stats.pl">Patrons</a></li>
 		<li><a href="/cgi-bin/koha/reports/catalogue_stats.pl">Catalog</a></li>
 		<li><a href="/cgi-bin/koha/reports/issues_stats.pl">Circulation</a></li>
-                <li><a href="/cgi-bin/koha/reports/serials_stats.pl">Serials</a></li>
+        <li><a href="/cgi-bin/koha/reports/serials_stats.pl">Serials</a></li>
+        <li><a href="/cgi-bin/koha/reports/reserves_stats.pl">Holds</a></li>        
 	</ul>
 
 

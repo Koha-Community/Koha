@@ -1,0 +1,142 @@
+[% INCLUDE 'help-top.inc' %]
+
+<h1>MARC Record Subfields</h1>
+
+<p>Frameworks are made up of MARC fields and subfields. To make edits to most Frameworks you must edit the fields and subfields. Clicking 'Edit' to the right of each subfield will allow you to make changes to the text associated with the field</p>
+
+<ul>
+	<li>Each field has a tag (which is the MARC tag)
+<ul>
+	<li>The 'Label for lib' is what will show in the staff client if you have advancedMARCeditor set to display labels</li>
+	<li>The 'Label for OPAC' is what will show on the MARC view in the OPAC</li>
+	<li>If you check 'Repeatable' then the field will have a plus sign next to it allowing you to add multiples of that tag</li>
+	<li>If you check 'Mandatory' the record will not be allowed to save unless you have a value assigned to this tag</li>
+	<li>'Authorized value' is where you define an authorized value that your catalogers can choose from a pull down to fill this field in
+To edit the subfields associated with the tag, click 'Subfields' to the right of the tag on the 'MARC Structure' listing</li>
+</ul>
+</li>
+	<li>From the list of subfields you can click 'Delete' to the right of each to delete the subfields</li>
+	<li>To edit the subfields click 'Edit Subfields'</li>
+	<li>For each subfield you can set the following values
+<ul>
+	<li>Text for librarian
+<ul>
+	<li>what appears before the subfield in the librarian interface</li>
+</ul>
+</li>
+	<li>Text for OPAC
+<ul>
+	<li>what appears before the field in the OPAC.</li>
+	<li>If left empty, the text for librarian is used instead</li>
+</ul>
+</li>
+	<li>Repeatable
+<ul>
+	<li>the field will have a plus sign next to it allowing you to add multiples of that tag</li>
+</ul>
+</li>
+	<li>Mandatory
+<ul>
+	<li>the record will not be allowed to save unless you have a value assigned to this tag</li>
+</ul>
+</li>
+	<li>Managed in tab
+<ul>
+	<li>defines the tab where the subfield is shown. All subfields of a given field must be in the same tab or ignored. Ignore means that the subfield is not managed.</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Default value
+<ul>
+	<li>defines what you want to appear in the field by default, this will be editable, but it saves time if you use the same note over and over or the same value in a field often.</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>hidden
+<ul>
+	<li>allows you to select from 19 possible visibility conditions, 17 of which are implemented. They are the following:
+<ul>
+	<li>-9 =&gt; Future use</li>
+	<li>-8 =&gt; Flag</li>
+	<li>-7 =&gt; OPAC !Intranet !Editor Collapsed</li>
+	<li>-6 =&gt; OPAC Intranet !Editor !Collapsed</li>
+	<li>-5 =&gt; OPAC Intranet !Editor Collapsed</li>
+	<li>-4 =&gt; OPAC !Intranet !Editor !Collapsed</li>
+	<li>-3 =&gt; OPAC !Intranet Editor Collapsed</li>
+	<li>-2 =&gt; OPAC !Intranet Editor !Collapsed</li>
+	<li>-1 =&gt; OPAC Intranet Editor Collapsed</li>
+	<li>0 =&gt; OPAC Intranet Editor !Collapsed</li>
+	<li>1 =&gt; !OPAC Intranet Editor Collapsed</li>
+	<li>2 =&gt; !OPAC !Intranet Editor !Collapsed</li>
+	<li>3 =&gt; !OPAC !Intranet Editor Collapsed</li>
+	<li>4 =&gt; !OPAC Intranet Editor !Collapsed</li>
+	<li>5 =&gt; !OPAC !Intranet !Editor Collapsed</li>
+	<li>6 =&gt; !OPAC Intranet !Editor !Collapsed</li>
+	<li>7 =&gt; !OPAC Intranet !Editor Collapsed</li>
+	<li>8 =&gt; !OPAC !Intranet !Editor !Collapsed</li>
+	<li>9 =&gt; Future use</li>
+</ul>
+</li>
+	<li>( ! means 'not visible' or in the case of Collapsed 'not Collapsed')</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Is a url
+<ul>
+	<li>if checked, it means that the subfield is a url and can be clicked</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Link
+<ul>
+	<li>If you enter a field/subfield here (200b), a link appears after the subfield in the MARC Detail view. This view is present only in the staff client, not the OPAC. If the librarian clicks on the link, a search is done on the database for the field/subfield with the same value. This can be used for 2 main topics :
+<ul>
+	<li>on a field like author (200f in UNIMARC), put 200f here, you will be able to see all bib records with the same author.</li>
+	<li>on a field that is a link (4xx) to reach another bib record. For example, put 011a in 464$x, will find the serials that are with this ISSN.</li>
+</ul>
+</li>
+	<li style="color: #990000;">Important: This value should not change after data has been added to your catalog</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Koha link
+<ul>
+	<li>Koha is multi-MARC compliant. So, it does not know what the 245$a means, neither what 200$f (those 2 fields being both the title in MARC21 and UNIMARC). So, in this list you can "map" a MARC subfield to its meaning. Koha constantly maintains consistency between a subfield and its meaning. When the user want to search on "title", this link is used to find what is searched (245 if you're MARC21, 200 if you're UNIMARC).</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Authorized value
+<ul>
+	<li>means the value cannot by typed by the librarian, but must be chosen from a pull down generated by the authorized value list</li>
+	<li>In the example above, the 504a field will show the MARC504 Authorized Values when cataloging</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Thesaurus
+<ul>
+	<li>means that the value is not free text, but must be searched in the authority/thesaurus of the selected category</li>
+</ul>
+</li>
+</ul>
+<ul>
+	<li>Plugin
+<ul>
+	<li>means the value is calculated or managed by a plugin. Plugins can do almost anything.</li>
+	<li>For example, in UNIMARC there are plugins for every 1xx fields that are coded fields. The plugin is a huge help for cataloger ! There are also two plugins (unimarc_plugin_210c and unimarc_plugin_225a that can "magically" find the editor from an ISBN, and the collection list for the editor)</li>
+</ul>
+</li>
+</ul>
+</li>
+	<li>To save your changes simply click the 'Save Changes' button at the top of the screen</li>
+</ul>
+
+
+[% INCLUDE 'help-bottom.inc' %]
+

@@ -39,7 +39,7 @@ use C4::Circulation;
 my $minlocation=$input->param('minlocation') || '';
 my $maxlocation=$input->param('maxlocation');
 $maxlocation=$minlocation.'Z' unless ( $maxlocation || ! $minlocation );
-my $location=$input->param('location');
+my $location=$input->param('location') || '';
 my $itemtype=$input->param('itemtype'); # FIXME note, template does not currently supply this
 my $ignoreissued=$input->param('ignoreissued');
 my $datelastseen = $input->param('datelastseen');
@@ -48,7 +48,8 @@ my $markseen = $input->param('markseen');
 $offset=0 unless $offset;
 my $pagesize = $input->param('pagesize');
 $pagesize=50 unless $pagesize;
-my $branchcode = $input->param('branchcode');
+my $branchcode = $input->param('branchcode') || '';
+my $branch     = $input->param('branch');
 my $op = $input->param('op');
 my $res;    #contains the results loop
 # warn "uploadbarcodes : ".$uploadbarcodes;
@@ -73,7 +74,7 @@ for my $branch_hash (keys %$branches) {
 
 @branch_loop = sort {$a->{branchname} cmp $b->{branchname}} @branch_loop;
 my @authorised_value_list;
-my $authorisedvalue_categories;
+my $authorisedvalue_categories = '';
 
 my $frameworks = getframeworks();
 for my $fwk (keys %$frameworks){
@@ -105,7 +106,7 @@ my $staton = {};								#authorized values that are ticked
 for my $authvfield (@$statuses) {
     $staton->{$authvfield->{fieldname}} = [];
     for my $authval (@{$authvfield->{values}}){
-        if ( $input->param('status-' . $authvfield->{fieldname} . '-' . $authval->{id}) eq 'on' ){
+        if ( defined $input->param('status-' . $authvfield->{fieldname} . '-' . $authval->{id}) && $input->param('status-' . $authvfield->{fieldname} . '-' . $authval->{id}) eq 'on' ){
             push @{$staton->{$authvfield->{fieldname}}}, $authval->{id};
         }
     }
@@ -129,6 +130,7 @@ $template->param(branchloop => \@branch_loop,
                 location=>$location,
                 ignoreissued=>$ignoreissued,
                 branchcode=>$branchcode,      
+                branch    => $branch,
                 offset => $offset,
                 pagesize => $pagesize,
                 datelastseen => $datelastseen,
@@ -183,13 +185,13 @@ if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compa
         }
     }
     if ($markseen or $op) {
-        $res = GetItemsForInventory($minlocation,$maxlocation,$location, $ignoreissued,$itemtype,$datelastseen,$branchcode,$offset,$pagesize,$staton);
+        $res = GetItemsForInventory( $minlocation, $maxlocation, $location, $itemtype, $ignoreissued, $datelastseen, $branchcode, $branch, $offset, $pagesize, $staton );
         $template->param(loop =>$res,
                         nextoffset => ($offset+$pagesize),
                         prevoffset => ($offset?$offset-$pagesize:0),
                         );
     }
-    if ( ( ( $input->param('compareinv2barcd') eq 'on' ) && ( scalar @brcditems != scalar @$res ) ) && length($uploadbarcodes) > 0 ){
+    if ( defined $input->param('compareinv2barcd') && ( ( $input->param('compareinv2barcd') eq 'on' ) && ( scalar @brcditems != scalar @$res ) ) && length($uploadbarcodes) > 0 ){
         if ( scalar @brcditems > scalar @$res ){
             for my $brcditem (@brcditems) {
                 if (! grep(/$brcditem->{barcode}/, @$res) ){
@@ -210,7 +212,7 @@ if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compa
     }
 }
 
-if ($input->param('CSVexport') eq 'on'){
+if (defined $input->param('CSVexport') && $input->param('CSVexport') eq 'on'){
     eval {use Text::CSV};
     my $csv = Text::CSV->new or
             die Text::CSV->error_diag ();

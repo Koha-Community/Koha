@@ -1,0 +1,43 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Alert subscribers for [% bibliotitle %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'serials-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Alert subscribers for <i>[% bibliotitle %]</i></div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Alert subscribers for <i>[% bibliotitle %]</i></h1>
+		<a href="subscription-detail.pl?subscriptionid=[% subscriptionid %]" class="button">subscription</a>
+		[% IF ( alertloop ) %]
+			<table>
+			<tr>
+				<th>Patron name</th>
+				<th>&nbsp;</th>
+			</tr>
+
+			[% FOREACH alertloo IN alertloop %]
+				<tr>
+					<td>[% alertloo.name %]</td>
+					<td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% alertloo.borrowernumber %]" class="button">View</a></td>
+				</tr>
+			[% END %]
+			</table>
+		[% ELSE %]
+			Nobody
+		[% END %]
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'serials-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

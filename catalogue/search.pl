@@ -3,6 +3,7 @@
 # For documentation try 'perldoc /path/to/search'
 #
 # Copyright 2006 LibLime
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha
 #
@@ -145,6 +146,7 @@ use C4::Auth qw(:DEFAULT get_session);
 use C4::Search;
 use C4::Languages qw(getAllLanguages);
 use C4::Koha;
+use C4::Members qw(GetMember);
 use C4::VirtualShelves qw(GetRecentShelves);
 use POSIX qw(ceil floor);
 use C4::Branch; # GetBranches
@@ -181,6 +183,16 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
     $template->param('UNIMARC' => 1);
 }
 
+if($cgi->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $cgi->cookie("holdfor"));
+    $template->param(
+        holdfor => $cgi->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
+
 ## URI Re-Writing
 # Deprecated, but preserved because it's interesting :-)
 # The same thing can be accomplished with mod_rewrite in
@@ -207,16 +219,20 @@ if (C4::Context->preference("marcflavour") eq "UNIMARC" ) {
 
 # load the branches
 my $branches = GetBranches();
-my @branch_loop;
 
-# we need to know the borrower branch code to set a default branch
-my $borrowerbranchcode = C4::Context->userenv->{'branch'};
-
-for my $branch_hash (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
-    # if independantbranches is activated, set the default branch to the borrower branch
-    my $selected = (C4::Context->preference("independantbranches") and ($borrowerbranchcode eq $branch_hash)) ? 1 : undef;
-    push @branch_loop, {value => "$branch_hash" , branchname => $branches->{$branch_hash}->{'branchname'}, selected => $selected};
-}
+# Populate branch_loop with all branches sorted by their name.  If
+# independantbranches is activated, set the default branch to the borrower
+# branch, except for superlibrarian who need to search all libraries.
+my $user = C4::Context->userenv;
+my @branch_loop = map {
+     {
+        value      => $_,
+        branchname => $branches->{$_}->{branchname},
+        selected   => $user->{branch} eq $_ && C4::Branch::onlymine(),
+     }
+} sort {
+    $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname}
+} keys %$branches;
 
 my $categories = GetBranchCategories(undef,'searchdomain');
 
@@ -234,7 +250,7 @@ my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
 
 if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
     my %row =(  number=>$cnt++,
-                ccl => $itype_or_itemtype,
+                ccl => qq($itype_or_itemtype,phr),
                 code => $thisitemtype,
                 selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
@@ -281,7 +297,7 @@ if ( $template_type eq 'advsearch' ) {
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
     my @search_boxes_array;
-    my $search_boxes_count = C4::Context->preference("OPACAdvSearchInputCount") || 3; # FIXME: using OPAC sysprefs?
+    my $search_boxes_count = 3; # begin whith 3 boxes
     # FIXME: all this junk can be done in TMPL using __first__ and __last__
     for (my $i=1;$i<=$search_boxes_count;$i++) {
         # if it's the first one, don't display boolean option, but show scan indexes
@@ -367,8 +383,11 @@ my @indexes;
 @indexes = split("\0",$params->{'idx'});
 
 # if a simple index (only one)  display the index used in the top search box
-if ($indexes[0] && !$indexes[1]) {
-    $template->param("ms_".$indexes[0] => 1);}
+if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
+    my $idx = "ms_".$indexes[0];
+    $idx =~ s/\,/comma/g;  # template toolkit doesnt like variables with a , in it
+    $template->param($idx => 1);
+}
 
 
 # an operand can be a single term, a phrase, or a complete ccl query
@@ -380,7 +399,7 @@ my @limits;
 @limits = split("\0",$params->{'limit'}) if $params->{'limit'};
 
 if($params->{'multibranchlimit'}) {
-push @limits, join(" or ", map { "branch: $_ "}  @{GetBranchesInCategory($params->{'multibranchlimit'})}) ;
+    push @limits, '('.join( " or ", map { "branch: $_ " } @{ GetBranchesInCategory( $params->{'multibranchlimit'} ) } ).')';
 }
 
 my $available;
@@ -452,10 +471,9 @@ my $scan_index_to_use;
 
 for my $this_cgi ( split('&',$query_cgi) ) {
     next unless $this_cgi;
-    $this_cgi =~ m/(.*=)(.*)/;
+    $this_cgi =~ m/(.?)=(.*)/;
     my $input_name = $1;
     my $input_value = $2;
-    $input_name =~ s/=$//;
     push @query_inputs, { input_name => $input_name, input_value => $input_value };
 	if ($input_name eq 'idx') {
     	$scan_index_to_use = $input_value; # unless $scan_index_to_use;
@@ -641,6 +659,7 @@ $template->param(
             total => $total,
             opacfacets => 1,
             facets_loop => $facets,
+	    displayFacetCount=> C4::Context->preference('displayFacetCount')||0,
             scan => $scan,
             search_error => $error,
 );
@@ -657,17 +676,14 @@ my $row_count = 10; # FIXME:This probably should be a syspref
 my ($pubshelves, $total) = GetRecentShelves(2, $row_count, undef);
 my ($barshelves, $total) = GetRecentShelves(1, $row_count, $borrowernumber);
 
-my @pubshelves = @{$pubshelves};
-my @barshelves = @{$barshelves};
-
-if (@pubshelves) {
-        $template->param( addpubshelves     => scalar (@pubshelves));
-        $template->param( addpubshelvesloop => @pubshelves);
+if (@{$pubshelves}) {
+        $template->param( addpubshelves     => scalar @{$pubshelves});
+        $template->param( addpubshelvesloop => $pubshelves);
 }
 
-if (@barshelves) {
-        $template->param( addbarshelves     => scalar (@barshelves));
-        $template->param( addbarshelvesloop => @barshelves);
+if (@{$barshelves}) {
+        $template->param( addbarshelves     => scalar @{$barshelves});
+        $template->param( addbarshelvesloop => $barshelves);
 }
 
 

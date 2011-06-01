@@ -43,13 +43,13 @@ my $FILE_VERSION = '1.0';
 
 our $query = CGI->new;
 
-my ($template, $loggedinuser, $cookie)
-  = get_template_and_user( { template_name => "offline_circ/process_koc.tmpl",
-				query => $query,
-				type => "intranet",
-				authnotrequired => 0,
-				 flagsrequired   => { circulate => "circulate_remaining_permissions" },
-				});
+my ($template, $loggedinuser, $cookie) = get_template_and_user({
+    template_name => "offline_circ/process_koc.tmpl",
+    query => $query,
+    type => "intranet",
+    authnotrequired => 0,
+     flagsrequired   => { circulate => "circulate_remaining_permissions" },
+});
 
 
 my $fileID=$query->param('uploadedfileid');
@@ -71,8 +71,8 @@ if ($completedJobID) {
     my $uploaded_file = C4::UploadedFile->fetch($sessionID, $fileID);
     my $fh = $uploaded_file->fh();
     my @input_lines = <$fh>;
-  
-    my $filename = $uploaded_file->name(); 
+
+    my $filename = $uploaded_file->name();
     my $job = undef;
 
     if ($runinbackground) {
@@ -92,7 +92,7 @@ if ($completedJobID) {
 
             my $reply = CGI->new("");
             print $reply->header(-type => 'text/html');
-            print "{ jobID: '$jobID' }";
+            print '{"jobID":"' . $jobID . '"}';
             exit 0;
         } elsif (defined $pid) {
             # child
@@ -110,25 +110,24 @@ if ($completedJobID) {
         # if we get here, we're a child that has detached
         # itself from Apache
 
-    }     
+    }
 
     my $header_line = shift @input_lines;
     my $file_info   = parse_header_line($header_line);
     if ($file_info->{'Version'} ne $FILE_VERSION) {
-      push( @output, { message => 1,
-      ERROR_file_version => 1,
-      upload_version => $file_info->{'Version'},
-      current_version => $FILE_VERSION
-      } );
+        push @output, {
+            message => 1,
+            ERROR_file_version => 1,
+            upload_version => $file_info->{'Version'},
+            current_version => $FILE_VERSION
+        };
     }
-    
-    
+
     my $i = 0;
     foreach  my $line (@input_lines)  {
-    
         $i++;
         my $command_line = parse_command_line($line);
-        
+
         # map command names in the file to subroutine names
         my %dispatch_table = (
             issue     => \&kocIssueItem,
@@ -193,7 +192,7 @@ sub parse_command_line {
     my $command_line = shift;
     chomp($command_line);
     $command_line =~ s/\r//g;
-    
+
     my ( $timestamp, $command, @args ) = split( /\t/, $command_line );
     my ( $date,      $time,    $id )   = split( /\s/, $timestamp );
 
@@ -239,134 +238,130 @@ sub arguments_for_command {
 }
 
 sub kocIssueItem {
-  my $circ = shift;
+    my $circ = shift;
 
-  $circ->{ 'barcode' } = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
-  my $branchcode = C4::Context->userenv->{branch};
-  my $borrower = GetMember( 'cardnumber'=>$circ->{ 'cardnumber' } );
-  my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
-  my $issue = GetItemIssue( $item->{'itemnumber'} );
+    $circ->{ 'barcode' } = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
+    my $branchcode = C4::Context->userenv->{branch};
+    my $borrower = GetMember( 'cardnumber'=>$circ->{ 'cardnumber' } );
+    my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
+    my $issue = GetItemIssue( $item->{'itemnumber'} );
 
-  my $issuingrule = GetIssuingRule( $borrower->{ 'categorycode' }, $item->{ 'itemtype' }, $branchcode );
-  my $issuelength = $issuingrule->{ 'issuelength' };
-  my ( $year, $month, $day ) = split( /-/, $circ->{'date'} );
-  ( $year, $month, $day ) = Add_Delta_Days( $year, $month, $day, $issuelength );
-  my $date_due = sprintf("%04d-%02d-%02d", $year, $month, $day);
+    if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
+        #warn "Item Currently Issued.";
+        my $issue = GetOpenIssue( $item->{'itemnumber'} );
 
-  if ( $issue->{ 'date_due' } ) { ## Item is currently checked out to another person.
-#warn "Item Currently Issued.";
-    my $issue = GetOpenIssue( $item->{'itemnumber'} );
-    
-    if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
-#warn "Item issued to this member already, renewing.";
-    
-    my $date_due_object = C4::Dates->new($date_due ,'iso');
-    C4::Circulation::AddRenewal(
-        $issue->{'borrowernumber'},    # borrowernumber
-        $item->{'itemnumber'},         # itemnumber
-        undef,                         # branch
-        $date_due_object,              # datedue
-        $circ->{'date'},               # issuedate
-    ) unless ($DEBUG);
+        if ( $issue->{'borrowernumber'} eq $borrower->{'borrowernumber'} ) { ## Issued to this person already, renew it.
+            #warn "Item issued to this member already, renewing.";
 
-      push( @output, { renew => 1,
-    title => $item->{ 'title' },
-    biblionumber => $item->{'biblionumber'},
-    barcode => $item->{ 'barcode' },
-    firstname => $borrower->{ 'firstname' },
-    surname => $borrower->{ 'surname' },
-    borrowernumber => $borrower->{'borrowernumber'},
-    cardnumber => $borrower->{'cardnumber'},
-    datetime => $circ->{ 'datetime' }
-    } );
+            C4::Circulation::AddRenewal(
+                $issue->{'borrowernumber'},    # borrowernumber
+                $item->{'itemnumber'},         # itemnumber
+                undef,                         # branch
+                undef,                         # datedue - let AddRenewal calculate it automatically
+                $circ->{'date'},               # issuedate
+            ) unless ($DEBUG);
 
-    } else {
-#warn "Item issued to a different member.";
-#warn "Date of previous issue: $issue->{'issuedate'}";
-#warn "Date of this issue: $circ->{'date'}";
-      my ( $i_y, $i_m, $i_d ) = split( /-/, $issue->{'issuedate'} );
-      my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
-      
-      if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
-        my $date_due_object = C4::Dates->new($date_due ,'iso');
-        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
-        push( @output, { issue => 1,
-    title => $item->{ 'title' },
-    biblionumber => $item->{'biblionumber'},
-    barcode => $item->{ 'barcode' },
-    firstname => $borrower->{ 'firstname' },
-    surname => $borrower->{ 'surname' },
-    borrowernumber => $borrower->{'borrowernumber'},
-    cardnumber => $borrower->{'cardnumber'},
-    datetime => $circ->{ 'datetime' }
-    } );
+            push @output, {
+                renew => 1,
+                title => $item->{ 'title' },
+                biblionumber => $item->{'biblionumber'},
+                barcode => $item->{ 'barcode' },
+                firstname => $borrower->{ 'firstname' },
+                surname => $borrower->{ 'surname' },
+                borrowernumber => $borrower->{'borrowernumber'},
+                cardnumber => $borrower->{'cardnumber'},
+                datetime => $circ->{ 'datetime' }
+            };
 
-      } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
-#warn "Current issue to another member is newer. Doing nothing";
-        ## This situation should only happen of the Offline Circ data is *really* old.
-        ## FIXME: write line to old_issues and statistics
-      }
-    
+        } else {
+            #warn "Item issued to a different member.";
+            #warn "Date of previous issue: $issue->{'issuedate'}";
+            #warn "Date of this issue: $circ->{'date'}";
+            my ( $i_y, $i_m, $i_d ) = split( /-/, $issue->{'issuedate'} );
+            my ( $c_y, $c_m, $c_d ) = split( /-/, $circ->{'date'} );
+
+            if ( Date_to_Days( $i_y, $i_m, $i_d ) < Date_to_Days( $c_y, $c_m, $c_d ) ) { ## Current issue to a different persion is older than this issue, return and issue.
+                C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
+                push @output, {
+                    issue => 1,
+                    title => $item->{ 'title' },
+                    biblionumber => $item->{'biblionumber'},
+                    barcode => $item->{ 'barcode' },
+                    firstname => $borrower->{ 'firstname' },
+                    surname => $borrower->{ 'surname' },
+                    borrowernumber => $borrower->{'borrowernumber'},
+                    cardnumber => $borrower->{'cardnumber'},
+                    datetime => $circ->{ 'datetime' }
+                };
+
+            } else { ## Current issue is *newer* than this issue, write a 'returned' issue, as the item is most likely in the hands of someone else now.
+                #warn "Current issue to another member is newer. Doing nothing";
+                ## This situation should only happen of the Offline Circ data is *really* old.
+                ## FIXME: write line to old_issues and statistics
+            }
+        }
+    } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
+        C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, undef, undef, $circ->{'date'} ) unless ( DEBUG );
+        push @output, {
+            issue => 1,
+            title => $item->{ 'title' },
+            biblionumber => $item->{'biblionumber'},
+            barcode => $item->{ 'barcode' },
+            firstname => $borrower->{ 'firstname' },
+            surname => $borrower->{ 'surname' },
+            borrowernumber => $borrower->{'borrowernumber'},
+            cardnumber => $borrower->{'cardnumber'},
+            datetime =>$circ->{ 'datetime' }
+        };
     }
-  } else { ## Item is not checked out to anyone at the moment, go ahead and issue it
-      my $date_due_object = C4::Dates->new($date_due ,'iso');
-      C4::Circulation::AddIssue( $borrower, $circ->{'barcode'}, $date_due_object ) unless ( DEBUG );
-    push( @output, { issue => 1,
-    title => $item->{ 'title' },
-    biblionumber => $item->{'biblionumber'},
-    barcode => $item->{ 'barcode' },
-    firstname => $borrower->{ 'firstname' },
-    surname => $borrower->{ 'surname' },
-    borrowernumber => $borrower->{'borrowernumber'},
-    cardnumber => $borrower->{'cardnumber'},
-    datetime =>$circ->{ 'datetime' }
-    } );
-	 }  
 }
 
 sub kocReturnItem {
-  my ( $circ ) = @_;
-  $circ->{'barcode'} = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
-  my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
-  #warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
-  my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
-  if ( $borrowernumber ) {
-  my $borrower = GetMember( 'borrowernumber' =>$borrowernumber );
-    C4::Circulation::MarkIssueReturned( $borrowernumber,
-                                      $item->{'itemnumber'},
-                                      undef,
-                                      $circ->{'date'} );
-  
-  push( @output, { return => 1,
-    title => $item->{ 'title' },
-    biblionumber => $item->{'biblionumber'},
-    barcode => $item->{ 'barcode' },
-    borrowernumber => $borrower->{'borrowernumber'},
-    firstname => $borrower->{'firstname'},
-    surname => $borrower->{'surname'},
-    cardnumber => $borrower->{'cardnumber'},
-    datetime => $circ->{ 'datetime' }
-    } ); 
-  } else {
-    push( @output, { ERROR_no_borrower_from_item => 1,
-    badbarcode => $circ->{'barcode'}
-    } );
-  
-  }
+    my ( $circ ) = @_;
+    $circ->{'barcode'} = barcodedecode($circ->{'barcode'}) if( $circ->{'barcode'} && C4::Context->preference('itemBarcodeInputFilter'));
+    my $item = GetBiblioFromItemNumber( undef, $circ->{ 'barcode' } );
+    #warn( Data::Dumper->Dump( [ $circ, $item ], [ qw( circ item ) ] ) );
+    my $borrowernumber = _get_borrowernumber_from_barcode( $circ->{'barcode'} );
+    if ( $borrowernumber ) {
+        my $borrower = GetMember( 'borrowernumber' =>$borrowernumber );
+        C4::Circulation::MarkIssueReturned(
+            $borrowernumber,
+            $item->{'itemnumber'},
+            undef,
+            $circ->{'date'}
+        );
 
+        push @output, {
+            return => 1,
+            title => $item->{ 'title' },
+            biblionumber => $item->{'biblionumber'},
+            barcode => $item->{ 'barcode' },
+            borrowernumber => $borrower->{'borrowernumber'},
+            firstname => $borrower->{'firstname'},
+            surname => $borrower->{'surname'},
+            cardnumber => $borrower->{'cardnumber'},
+            datetime => $circ->{ 'datetime' }
+        };
+    } else {
+        push @output, {
+            ERROR_no_borrower_from_item => 1,
+            badbarcode => $circ->{'barcode'}
+        };
+    }
 }
 
 sub kocMakePayment {
-  my ( $circ ) = @_;
-  my $borrower = GetMember( 'cardnumber'=>$circ->{ 'cardnumber' } );
-  recordpayment( $borrower->{'borrowernumber'}, $circ->{'amount'} );
-  push( @output, { payment => 1,
-    amount => $circ->{'amount'},
-    firstname => $borrower->{'firstname'},
-    surname => $borrower->{'surname'},
-    cardnumber => $circ->{'cardnumber'},
-    borrower => $borrower->{'borrowernumber'}
-    } );
+    my ( $circ ) = @_;
+    my $borrower = GetMember( 'cardnumber'=>$circ->{ 'cardnumber' } );
+    recordpayment( $borrower->{'borrowernumber'}, $circ->{'amount'} );
+    push @output, {
+        payment => 1,
+        amount => $circ->{'amount'},
+        firstname => $borrower->{'firstname'},
+        surname => $borrower->{'surname'},
+        cardnumber => $circ->{'cardnumber'},
+        borrower => $borrower->{'borrowernumber'}
+    };
 }
 
 =head2 _get_borrowernumber_from_barcode
@@ -384,9 +379,8 @@ sub _get_borrowernumber_from_barcode {
 
     my $item = GetBiblioFromItemNumber( undef, $barcode );
     return unless $item->{'itemnumber'};
-    
+
     my $issue = C4::Circulation::GetItemIssue( $item->{'itemnumber'} );
     return unless $issue->{'borrowernumber'};
     return $issue->{'borrowernumber'};
-    
 }

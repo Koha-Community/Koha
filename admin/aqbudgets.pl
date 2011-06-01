@@ -64,10 +64,9 @@ my $show         = $input->param('show'); # SET TO 1, BY A FORM SUMBIT
 $show_mine       = $input->param('show_mine') if $show == 1;
 
 # IF USER DOESNT HAVE PERM FOR AN 'ADD', THEN REDIRECT TO THE DEFAULT VIEW...
-if  (  not defined $template->{param_map}->{'CAN_user_acquisition_budget_add_del'}  &&  $op ==  'add_form'  )   {
+if  (  not defined $template->{VARS}->{'CAN_user_acquisition_budget_add_del'}  &&  $op ==  'add_form'  )   {
     $op = '';
 }
-
 my $num=FormatNumber;
 
 my $script_name               = "/cgi-bin/koha/admin/aqbudgets.pl";
@@ -75,9 +74,9 @@ my $budget_hash               = $input->Vars;
 my $budget_id                 = $$budget_hash{budget_id};
 my $budget_permission         = $input->param('budget_permission');
 my $budget_period_dropbox     = $input->param('budget_period_dropbox');
+my $filter_budgetbranch       = $input->param('filter_budgetbranch');
 #filtering non budget keys
 delete $$budget_hash{$_} foreach grep {/filter|^op$|show/} keys %$budget_hash;
-my $filter_budgetbranch       = $input->param('filter_budgetbranch');
 my $filter_budgetname         = $input->param('filter_budgetname');
 $template->param(
     notree => ($filter_budgetbranch or $show_mine)
@@ -123,7 +122,6 @@ $template->param(auth_cats_loop => GetBudgetAuthCats($$period{budget_period_id})
 # Used to create form to add or  modify a record
 if ($op eq 'add_form') {
 #### ------------------- ADD_FORM -------------------------
-
     # if no buget_id is passed then its an add
     #  pass the period_id to build the dropbox - because we only want to show  budgets from this period
     my $dropbox_disabled;

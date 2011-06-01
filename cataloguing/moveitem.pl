@@ -48,7 +48,7 @@ my ($template, $loggedinuser, $cookie)
                  query => $query,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {editcatalogue => 'edit_catalogue'},
+        flagsrequired   => { editcatalogue => 'edit_items' },
                  debug => 1,
                  });
 

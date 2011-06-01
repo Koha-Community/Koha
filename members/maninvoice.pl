@@ -5,6 +5,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -41,32 +42,35 @@ my $borrowernumber=$input->param('borrowernumber');
 my $data=GetMember('borrowernumber'=>$borrowernumber);
 my $add=$input->param('add');
 if ($add){
-#  print $input->header;
-    my $barcode=$input->param('barcode');
-    my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
-    my $desc=$input->param('desc');
-    my $amount=$input->param('amount');
-    my $type=$input->param('type');
-    my $error=manualinvoice($borrowernumber,$itemnum,$desc,$type,$amount);
-	if ($error){
-		my ($template, $loggedinuser, $cookie)
-		  = get_template_and_user({template_name => "members/maninvoice.tmpl",
-					query => $input,
-					type => "intranet",
-					authnotrequired => 0,
-					flagsrequired => {borrowers => 1},
-					debug => 1,
-					});
-		if ($error =~ /FOREIGN KEY/ && $error =~ /itemnumber/){
-			$template->param('ITEMNUMBER' => 1);
-		}
-		$template->param('ERROR' => $error);
-        output_html_with_http_headers $input, $cookie, $template->output;
-	}
-	else {
-		print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
-		exit;
-	}
+    if(checkauth($input)) {
+        #  print $input->header;
+        my $barcode=$input->param('barcode');
+        my $itemnum = GetItemnumberFromBarcode($barcode) if $barcode;
+        my $desc=$input->param('desc');
+        my $amount=$input->param('amount');
+        my $type=$input->param('type');
+        my $note    = $input->param('note');
+        my $error   = manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
+        if ($error) {
+            my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+                {   template_name   => "members/maninvoice.tmpl",
+                    query           => $input,
+                    type            => "intranet",
+                    authnotrequired => 0,
+                    flagsrequired   => { borrowers => 1 },
+                    debug           => 1,
+                }
+            );
+            if ( $error =~ /FOREIGN KEY/ && $error =~ /itemnumber/ ) {
+                $template->param( 'ITEMNUMBER' => 1 );
+            }
+            $template->param( 'ERROR' => $error );
+            output_html_with_http_headers $input, $cookie, $template->output;
+        } else {
+            print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+            exit;
+        }
+    }
 } else {
 
 	my ($template, $loggedinuser, $cookie)
@@ -110,6 +114,7 @@ if ($add){
 		address => $data->{'address'},
 		address2 => $data->{'address2'},
 		city => $data->{'city'},
+		state => $data->{'state'},
 		zipcode => $data->{'zipcode'},
 		country => $data->{'country'},
 		phone => $data->{'phone'},

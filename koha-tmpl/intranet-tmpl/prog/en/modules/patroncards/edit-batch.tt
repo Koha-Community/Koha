@@ -1,0 +1,89 @@
+    [% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Tools &rsaquo; Patron Card Creator &rsaquo; Manage Patron Card Batches</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    [% INCLUDE 'greybox.inc' %]
+    <script type="text/javascript">
+        //<![CDATA[
+        $(document).ready(function() {
+            $("#cancel").empty();
+            buildButtons();
+         });
+        function buildButtons() {
+            var cancelButton = new YAHOO.widget.Button({
+                type: "link",
+                href: "/cgi-bin/koha/patroncards/manage.pl?card_element=batch",
+                label: _("Cancel"),
+                id: "cancel",
+                container: "cancel",
+            });
+        };
+    </script>
+</head>
+<body>
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'cat-search.inc' %]
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
+        <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
+        <a href="/cgi-bin/koha/patroncards/home.pl">Patron Card Creator</a> &rsaquo;
+        <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=batch">Manage Patron Card Batches</a> &rsaquo;
+        Manage Batch Number [% batch_id %]
+    </div>
+    <div id="doc3" class="yui-t2">
+        <div id="bd">
+            <div id="yui-main">
+                <div class="yui-b">
+                    [% INCLUDE 'patroncards-batches-toolbar.inc' %]
+                    [% INCLUDE 'error-messages.inc' %]
+                    <div class="yui-g">
+                        <div class="yui-u first" id="manage-patroncard-batches">
+                            <div class="hint">Current Branch: [% LoginBranchname %]</div>
+                                [% IF ( table_loop ) %]
+                                <form name="items" class="checkboxed">
+                                    <h2>Items in batch number [% batch_id %]</h2>
+                                    <table>
+                                        [% FOREACH table_loo IN table_loop %]
+                                        [% IF ( table_loo.header_fields ) %]
+                                        <tr>
+                                        [% FOREACH header_field IN table_loo.header_fields %]
+                                            <th>[% header_field.field_label %]</th>
+                                        [% END %]
+                                        </tr>
+                                        [% ELSE %]
+                                        <tr>
+                                        [% FOREACH text_field IN table_loo.text_fields %]
+                                        [% IF ( text_field.select_field ) %]
+                                            <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
+                                        [% ELSE %]
+                                            <td>[% text_field.field_value %]</td>
+                                        [% END %]
+                                        [% END %]
+                                        </tr>
+                                        [% END %]
+                                        [% END %]
+                                    </table>
+                                </form>
+                                [% ELSE %]
+                                    <div class="dialog message"><h4>There are no items in Batch [% batch_id %] yet</h4>
+                                    <p>Use the toolbar above to add items.</p></div>
+                                [% END %]
+                            </div>
+                            [% IF ( duplicate_message ) %]
+                            <div class="yui-u">
+                                <div class="dialog message">
+                                    <strong>[% duplicate_count %] duplicate item(s) found</strong> and removed from batch [% batch_id %].
+                                </div>
+                            </div>
+                            [% END %]
+                        </div>
+                        <fieldset class="action">
+                            <span id="cancel"><a class="cancel" href="/cgi-bin/koha/patroncards/manage.pl?card_element=batch">Cancel</a></span>
+                        </fieldset>
+                    </div>
+                </div>
+                <div class="yui-b">
+                    [% INCLUDE 'patroncards-menu.inc' %]
+                </div>
+            </div>
+        </div>
+    [% INCLUDE 'intranet-bottom.inc' %]

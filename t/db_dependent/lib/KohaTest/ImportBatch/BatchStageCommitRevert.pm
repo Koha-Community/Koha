@@ -237,7 +237,7 @@ sub stage_commit_batches : Test( 75 ) {
         }
 
         my ($num_added, $num_updated, $num_items_added, 
-            $num_items_errored, $num_ignored) = BatchCommitBibRecords($batch_id);
+            $num_items_errored, $num_ignored) = BatchCommitBibRecords($batch_id,'');
         cmp_ok($num_added,         "==", $results->{'num_added'},         "$batch_key: added correct number of bibs");
         cmp_ok($num_updated,       "==", $results->{'num_updated'},       "$batch_key: updated correct number of bibs");
         cmp_ok($num_items_added,   "==", $results->{'num_items_added'},   "$batch_key: added correct number of items");

@@ -237,11 +237,11 @@ table {
 	border-right : 1px solid #BCBCBC;
 }
 
-table.invis{
-	border : white;
-}
-table.invis tr,table.invis td {
-	border : white;
+table.invis,
+table.invis tr,
+table.invis td,
+tr.highlight table.invis td {
+	border : none;
 }
 
 td, th {
@@ -304,7 +304,7 @@ tr.onissue td {
 	background-color: #FFFFCC;
 }
 
-tr.highlight.onissue td {
+tr.odd.onissue td {
 	background-color: #FFFFE1;
 }
 
@@ -439,6 +439,7 @@ ul.toolbar {
 
 ul.toolbar button {
 	padding-bottom : 2px;
+	font-family: arial, verdana, helvetica, sans-serif;
 }
 .yui-menu-button  {
 	
@@ -927,12 +928,15 @@ fieldset.rows .inputnote {
 }
 
 #placehold a,
-#placehold button {
+#placehold button,
+#holdfor .first-child {
 	padding-left : 34px;
 	background-image: url("../../img/toolbar-hold.gif");
 	background-position : center left;
 	background-repeat : no-repeat;
 }
+
+#holdfor .first-child { padding-left : 17px; }
 
 #editmenuc .first-child, #deleteshelf .first-child,#newmenuc .first-child, #addbiblio .first-child, #z3950search .first-child, #printmenuc .first-child, #newsupplier .first-child, #savemenuc .first-child, #budgets_menuc .first-child, #periods_menuc .first-child {
 	padding-left : 15px;
@@ -1118,6 +1122,10 @@ div.first fieldset {
  	border : 1px solid #bcbcbc;
 	margin : .4em;
 	padding : .4em .4em .4em 25px;
+ }
+
+ .dialog input[type="submit"] {
+	background : #FFF none;
  }
  
 .dialog input.approve, td input.approve {
@@ -1411,6 +1419,11 @@ li.email {
 	font-size : 80%;
 	margin : 0 0 .5em -1px;
 	padding : .1em 0 .1em 1em;
+}
+
+/* Hack just for Firefox */
+html>/**/body #searchheader button, x:-moz-any-link, x:default {
+	padding-bottom : 3px;
 }
 
 #searchheader h3 {
@@ -1920,3 +1933,90 @@ ul.budget_hierarchy li:first-child:after {
 	margin : 1em 0;
 }
 fieldset.rows+h3 {clear:both;padding-top:.5em;}
+
+.import_export{
+    position:relative;
+}
+.import_export .import_export_options{
+    background: white;
+    border: 1px solid #CDCDCD;
+    left: 60px;
+    padding: 10px;
+    position: absolute;
+    top: 0;
+    z-index: 1;
+    width: 300px;
+}
+.import_export_options li{
+    display: block;
+    list-style: none;
+    padding-top: 10px;
+}
+.import_export_options .import_export_close {
+    cursor: pointer;
+    text-decoration: underline;
+}
+.import_export_options .export_ok {
+    padding: 10;
+    background: #E3E3E3 none;
+    cursor: pointer;
+    margin-left: 20px;
+    border: none;
+}
+.import_export_options .import_ok {
+    padding: 10;
+    background: #E3E3E3 none;
+    cursor: pointer;
+    margin-left: 20px;
+    border: none;
+}
+.form_import .input_import {
+    border: 1px solid #bcbcbc;
+}
+.import_export_options .importing {
+    padding: inherit;
+    background: none;
+}
+.li_close_import_export {
+    text-align: right;
+}
+
+.importing {
+    position: relative;
+}
+
+.importing .importing_msg {
+    padding-left: 10px;
+    padding-bottom: 10px;
+}
+
+#advanced-search fieldset {
+	border : 1px solid #EEE;
+	-moz-border-radius : 3px;
+	border-radius : 3px;
+}
+
+#advanced-search fieldset.action {
+	border : 0;
+}
+
+#advanced-search fieldset fieldset {
+	border : 1px solid #EEE;
+	margin : 0;
+	padding : .3em .5em;
+	-moz-border-radius : 0;
+	border-radius : 0;
+}
+#advanced-search fieldset fieldset+fieldset {
+	border-top : 0;
+}
+#advanced-search table {
+	border-spacing : 5px;
+	border-collapse : separate;
+	border-width : 0;
+}
+#advanced-search td {
+	border : 1px solid #EEE;
+	padding : 0.3em 0.4em;
+}
+</style>

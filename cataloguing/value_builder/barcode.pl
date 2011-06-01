@@ -1,8 +1,6 @@
 #!/usr/bin/perl
-
-# $Id: barcode.pl,v 1.1.2.2 2006/09/20 02:24:42 kados Exp $
-
 # Copyright 2000-2002 Katipo Communications
+# Parts copyright 2008-2010 Foundations Bible College
 #
 # This file is part of Koha.
 #
@@ -19,10 +17,13 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#use strict;
-#use warnings; FIXME - Bug 2505
+use strict;
+use warnings;
+no warnings 'redefine'; # otherwise loading up multiple plugins fills the log with subroutine redefine warnings
+
 use C4::Context;
 require C4::Dates;
+
 my $DEBUG = 0;
 
 =head1
@@ -99,11 +100,12 @@ sub plugin_javascript {
     }
     elsif ($autoBarcodeType eq 'hbyymmincr') {      # Generates a barcode where hb = home branch Code, yymm = year/month catalogued, incr = incremental number, reset yearly -fbcit
         $year = substr($year, -2);
-        $query = "SELECT MAX(CAST(SUBSTRING(barcode,7,4) AS signed)) FROM items WHERE barcode REGEXP ?";
+        $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
         my $sth = $dbh->prepare($query);
         $sth->execute("^[a-zA-Z]{1,}$year");
         while (my ($count)= $sth->fetchrow_array) {
             $nextnum = $count if $count;
+            $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 10000 books per month
             warn "Existing incremental number = $nextnum" if $DEBUG;
         }
         $nextnum++;

@@ -1,0 +1,714 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports &rsaquo; Guided Reports Wizard 
+[% IF ( saved1 ) %]&rsaquo; Saved Reports
+[% ELSIF ( create ) %]&rsaquo; Create from SQL
+[% ELSIF ( showsql ) %]&rsaquo; Saved Reports &rsaquo; SQL View
+[% ELSIF ( execute ) %]&rsaquo; Saved Reports &rsaquo; [% name %] Report
+[% ELSIF ( buildx ) %]&rsaquo; Build A Report, Step [% buildx %] of 6:
+[% IF ( build1 ) %]Choose a Module
+[% ELSIF ( build2 ) %]Pick a Report Type
+[% ELSIF ( build3 ) %]Select Columns for Display
+[% ELSIF ( build4 ) %]Select Criteria to Limit on
+[% ELSIF ( build5 ) %]Pick which columns to total
+[% ELSIF ( build6 ) %]Select how you want the report ordered
+[% END %]
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+<style type="text/css">
+    #sql { width: 90%; height: 9em;}
+</style>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
+
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function(){
+[% IF ( showsql ) %]
+    $("#sql").focus(function() {
+        $(this).select();
+    });
+[% END %]
+[% IF ( saved1 ) %]
+    $(".confirmdelete").click(function(){
+        $(this).parents('tr').attr("class","warn");
+        if(confirm("Are you sure you want to "+$(this).attr("title")+"?")){
+            return true;
+        } else {
+            $(this).parents('tr').attr("class","");
+            return false;
+        }
+    });
+[% END %]
+  // call the tablesorter plugin
+  $("#table_reports").tablesorter({
+    sortList: [[1,0]],
+    headers: {
+       6: { sorter: false},
+       7: { sorter: false},
+       8: { sorter: false},
+       9: { sorter: false},
+      10: { sorter: false}
+    }
+  }).tablesorterPager({
+    container:     $("#pagertable_reports"),
+    positionFixed: false,
+    size:          50
+  });
+});
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>
+&rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a>
+&rsaquo; 
+[% IF ( saved1 ) %]Saved Reports
+[% ELSIF ( create ) %]Create from SQL
+[% ELSIF ( showsql ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports</a> &rsaquo; SQL View
+[% ELSIF ( execute ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports</a> &rsaquo; <em>[% name %]</em> Report
+[% ELSIF ( buildx ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build A Report</a> &rsaquo; Step [% buildx %] of 6:
+    [% IF ( build1 ) %]Choose a Module
+    [% ELSIF ( build2 ) %]Pick a Report Type
+    [% ELSIF ( build3 ) %]Select Columns for Display
+    [% ELSIF ( build4 ) %]Select Criteria to Limit on
+    [% ELSIF ( build5 ) %]Pick which columns to total
+    [% ELSIF ( build6 ) %]Select how you want the report ordered
+    [% END %]
+[% END %]
+</div>
+
+<div id="doc3" class="yui-t1">
+<div id="bd">
+<div id="yui-main">
+    <div class="yui-b">
+
+[% IF ( start ) %]
+    <h2>Guided Reports</h2>
+    <p>Use the guided reports engine to create non standard reports.
+This feature aims to provide some middle ground between the built in
+canned reports and writing custom SQL reports.</p>
+
+    <h3>Build And Run Reports</h3>
+        [% IF ( CAN_user_reports_create_reports ) %]
+        <form action="/cgi-bin/koha/reports/guided_reports.pl">
+            <input type="hidden" name="phase" value="Build new" />
+            <input type="submit" name="submit" value="Build new"/>
+        </form>
+        [% END %]
+        [% IF ( CAN_user_reports_execute_reports ) %]
+        <form action="/cgi-bin/koha/reports/guided_reports.pl">
+            <input type="hidden" name="phase" value="Use saved"/>
+            <input type="submit" name="submit" value="Use saved"/>
+        </form>
+        [% END %]
+        [% IF ( CAN_user_reports_create_reports ) %]
+        <form action="/cgi-bin/koha/reports/guided_reports.pl">
+            <input type="hidden" name="phase" value="Create report from SQL"/>
+            <input type="submit" name="submit" value="Create report from SQL"/>
+        </form>
+        [% END %]
+<h3>Reports Dictionary</h3>
+<p>Use the reports dictionary to define custom criteria to use in your reports</p>
+<form action="/cgi-bin/koha/reports/dictionary.pl">
+<input type="hidden" name="phase" value="View Dictionary"/>
+<input type="submit" name="submit" value="View Dictionary"/>
+</form>
+[% END %]
+
+[% IF ( saved1 ) %]
+[% IF ( savedreports ) %]<h1>Saved Reports</h1>
+
+<span id="pagertable_reports" class="pager">
+ <form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+  <img src="[% interface %]/prog/img/first.png" class="first"/>
+  <img src="[% interface %]/prog/img/prev.png" class="prev"/>
+  <input type="text" size="5" class="pagedisplay"/>
+  <img src="[% interface %]/prog/img/next.png" class="next"/>
+  <img src="[% interface %]/prog/img/last.png" class="last"/>
+  , entries/page:
+  <select class="pagesize">
+   <option value="10">10</option>
+   <option value="25" selected="selected">25</option>
+   <option value="50">50</option>
+   <option value="100">100</option>
+   <option value="200">200</option>
+  </select>
+ </form>
+</span>
+
+<table id="table_reports" class="tablesorter">
+<thead>
+ <tr>
+  <th>ID</th>
+  <th>Report Name</th>
+  <th>Type</th>
+  <th>Notes</th>
+  <th>Author</th>
+  <th>Creation Date</th>
+  <th>Saved Results</th>
+  <th>Saved SQL</th>
+  <th>&nbsp;</th>
+  <th>&nbsp;</th>
+ </tr>
+</thead>
+<tbody>
+[% FOREACH savedreport IN savedreports %]
+[% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+<td>[% savedreport.id %]</td>
+<td>[% savedreport.report_name %]</td>
+<td>[% savedreport.type %]</td>
+<td>[% savedreport.notes %]</td>
+<td>[% savedreport.borrowersurname %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname %][% END %] ([% savedreport.borrowernumber %])</td>
+<td>[% savedreport.date_created %]</td>
+<td>[% IF ( savedreport.date_run ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% savedreport.id %]">[% savedreport.date_run %]</a>[% END %]
+</td>
+    <td>
+        <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Show%20SQL">Show</a> 
+        [% IF ( CAN_user_reports_create_reports ) %]
+            &nbsp; <a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Edit%20SQL">Edit</a>
+        [% END %]
+    </td>
+<td><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Run%20this%20report">Run</a>
+<a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id %]">Schedule</a></td>
+    [% IF ( CAN_user_reports_create_reports ) %]
+        <td><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id %]&amp;phase=Delete%20Saved">Delete</a></td>
+    [% END %]
+</tr>
+[% END %]
+</tbody>
+</table>
+[% ELSE %]<div class="dialog message">
+    [% IF (filter_set) %]
+    <h4>No saved reports match your criteria. </h4>
+    [% IF ( CAN_user_reports_create_reports ) %]
+    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+    <input type="hidden" name="phase" value="Build new" />
+    <input type="submit" class="edit" value="Build a new report" accesskey="y" />
+    </form>
+
+    <form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+    <input type="hidden" name="phase" value="Use saved" />
+    <input type="hidden" name="filter_set" value="1" />
+    <input type="hidden" name="filter_keyword" value="" />
+    <input type="submit" class="deny" value="Cancel filter" accesskey="n" />
+    </form>
+
+    [% END %]
+    [% ELSE %]
+    <h4>There are no saved reports. </h4>
+    [% IF ( CAN_user_reports_create_reports ) %]
+        <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Build%20new">Build a new report?</a>
+    [% END %]
+    [% END %]
+    </div>
+[% END %]
+[% END %]
+
+
+[% IF ( build1 ) %]
+<h1>Build A Report</h1>
+<form action="/cgi-bin/koha/reports/guided_reports.pl">
+<fieldset class="rows">
+<legend>Step 1 of 6: Choose a Module to Report on</legend>
+<ol><li><label for="areas">Choose: </label><select name="areas" id="areas">
+[% FOREACH area IN areas %]
+<option value="[% area.id %]">[% area.name %]</option>
+[% END %]
+</select></li></ol>
+</fieldset>
+<fieldset class="action">
+<input type="hidden" name="phase" value="Report on this Area" />
+<input type="submit" name="submit" value="Next &gt;&gt;" />
+
+</fieldset>
+</form>
+[% END %]
+
+
+[% IF ( build2 ) %]
+<h1>Build A Report</h1>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="area" value="[% area %]" />
+<fieldset class="rows"><legend>Step 2 of 6: Pick a Report Type</legend>
+<ol><li><label for="types">Choose: </label>
+    <select id="types" name="types">
+        <option value="1">Tabular</option>
+        <option value="2" disabled="disabled">Summary</option>
+        <option value="3" disabled="disabled">Matrix</option>
+    </select>
+</li></ol></fieldset>
+
+<fieldset class="action">
+    <input type="hidden" name="phase" value="Choose this type" />
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" />
+</fieldset>
+</form>
+</div>
+<div class="yui-gb"><div class="yui-u first"></div>
+
+<!--- Summary and Matrix reports have not yet been implemented-->
+<!--<div class="yui-u">Summary:
+<img src="/intranet-tmpl/prog/img/reports-summary-graphic.gif" /></div>
+<div class="yui-u">Matrix:
+<img src="/intranet-tmpl/prog/img/reports-matrix-graphic.gif" /></div>-->
+
+[% END %]
+
+[% IF ( build3 ) %]
+<h3>Step 3 of 6: Select Columns for Display</h3>
+<p>Note: Be careful selecting when selecting columns. If your choice is too broad it could result in a very large report that will either not complete, or slow your system down.</p>
+
+<form id="column_submit" action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+    <input type="hidden" name="area" value="[% area %]" />
+    <input type="hidden" name="type" value="[% type %]" />
+    <fieldset>
+<div class="yui-g">
+<div class="yui-u first">	<div style="float: left;"><select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width: 200px;height:300px;">
+[% FOREACH column IN columns %]
+[% IF ( column.table ) %]
+
+[% IF ( loop.first ) %]
+[% ELSE %]
+</optgroup>
+[% END %]
+
+<optgroup label="[% column.table %]">
+[% ELSE %]
+<option value="[% column.name %]">
+[% IF ( column.description ) %][% column.description %]
+[% ELSE %]
+[% column.name %]
+[% END %]
+</option>
+[% END %]
+[% END %]
+</optgroup>
+</select></div>
+<div style="width: 6.3em; float: right; margin-top: 100px"><input type="button" name="Add" value="Add" class="button" style="width:6em;" onclick="addColumn()" /><br />
+<input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width: 6em; margin: 1em 0;" onclick="delColumn()" /></div>
+</div>
+
+<div class="yui-u">
+<select id="selectedColumns" name="columns" multiple="multiple" size="25" style="width:200px; height:300px;"></select>
+</div>
+</div>
+</fieldset>
+<div class="yui-g">
+<fieldset class="action">
+    <input type="hidden" name="phase" value="Choose these columns" />
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" />
+</fieldset>
+</div>
+</form>
+
+[% END %]
+
+[% IF ( build4 ) %]
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" >
+    <input type="hidden" name="area" value="[% area %]" />
+    <input type="hidden" name="type" value="[% type %]" />
+    <input type="hidden" name="column" value="[% column %]" />
+    <fieldset><legend>Step 4 of 6: Select Criteria to Limit on</legend>
+    <table>
+        [% FOREACH criteri IN criteria %]
+        <tr>
+        <td>
+            <input type="checkbox" name="criteria_column" id="[% criteri.name %]" value="[% criteri.name %]" /> 
+            <label for="[% criteri.name %]">[% criteri.description %] </label>
+        </td>
+        [% IF ( criteri.date ) %]
+        <td>
+            <input type="text" size="10" id="[% criteri.name %]_value" name="[% criteri.name %]_value" value="" />
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom[% criteri.name %]" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+            <script type="text/javascript">   
+            Calendar.setup({  
+            inputField     : "[% criteri.name %]_value",
+            ifFormat       : "[% criteri.DHTMLcalendar_dateformat %]",
+            button         : "buttonfrom[% criteri.name %]",
+            align          : "Tl" 
+            });     
+            </script>          
+		<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+        </td>
+        </tr>
+        [% ELSE %]
+        [% IF ( criteri.textrange ) %]
+            <td>from
+            <input type="text" size="10" id="[% criteri.from %]_value" name="[% criteri.from %]_value" value="" /> to 
+            <input type="text" size="10" id="[% criteri.to %]_value" name="[% criteri.to %]_value" value="" />
+            </td>
+            </tr>
+        [% ELSE %]
+            [% IF ( criteri.daterange ) %]
+            <td>from 
+            <input type="text" size="10" id="from_[% criteri.name %]_value" name="from_[% criteri.name %]_value" value="" />
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfromfrom_[% criteri.name %]" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+            <script type="text/javascript">   
+                Calendar.setup({  
+                inputField     : "from_[% criteri.name %]_value",
+                ifFormat       : "[% criteri.DHTMLcalendar_dateformat %]",
+                button         : "buttonfromfrom_[% criteri.name %]",
+                align          : "Tl" 
+                });     
+            </script>         
+            to
+            <input type="text" size="10" id="to_[% criteri.name %]_value" name="to_[% criteri.name %]_value" value="" />
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfromto_[% criteri.name %]" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />                 
+            <script type="text/javascript">   
+                Calendar.setup({  
+                inputField     : "to_[% criteri.name %]_value",
+                ifFormat       : "[% criteri.DHTMLcalendar_dateformat %]",
+                button         : "buttonfromto_[% criteri.name %]",
+                align          : "Tl" 
+                });     
+            </script>        
+			<span class="hint">[% INCLUDE 'date-format.inc' %]</span>
+            </td>
+        </tr>
+            [% ELSE %]
+            <td>
+                <select name="[% criteri.name %]_value">
+                [% FOREACH value IN criteri.values %]
+                <option value="[% value.availablevalues %]">[% IF ( value.default ) %]Default[% ELSE %][% value.availablevalues |html %][% END %]</option>
+                [% END %]
+                </select>
+            </td>
+            </tr>
+            [% END %]
+        [% END %]
+        [% END %]
+    [% END %]
+    </table>
+    </fieldset>
+
+[% IF ( definitions ) %]
+<fieldset><legend>Dictionary Definitions</legend><table>
+[% FOREACH definition IN definitions %]
+    <tr><td><input type="checkbox" name="definition" value="[% id %]" /> [% definition.name %]</td></tr>
+[% END %]
+</table>
+[% END %]
+
+<fieldset class="action"><input type="hidden" name="phase" value="Choose these criteria" />
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" /> </fieldset>
+</form>
+[% END %]
+
+
+[% IF ( build5 ) %]
+<h3>Step 5 of 6: Pick which columns to total</h3>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="area" value="[% area %]" />
+<input type="hidden" name="type" value="[% type %]" />
+<input type="hidden" name="column" value="[% column %]" />
+<input type="hidden" name="definition" value="[% definition %]" />
+<input type="hidden" name="criteria" value="[% criteriastring %]" />
+<fieldset><table>
+[% FOREACH total_b IN total_by %]
+<tr><td><input type="checkbox" name="total_by" id="[% total_b.name %]" value="[% total_b.name %]" /> <label for="[% total_b.name %]">[% total_b.name %]</label></td>
+<td><select name="[% total_b.name %]_tvalue">
+
+[% FOREACH selec IN total_b.select %]
+<option value="[% selec.value %]">[% selec.value %]</option>
+[% END %]
+</select>
+
+</td></tr>
+[% END %]
+</table></fieldset>
+
+<fieldset class="action"><input type="hidden" name="phase" value="Choose These Operations" />
+    <input type="button" name="back" value="&lt;&lt; Back" onclick="javascript:history.back()" />
+    <input type="submit" name="submit" value="Next &gt;&gt;" /></fieldset>
+</form>
+[% END %]
+
+
+[% IF ( build6 ) %]
+<h3>Step 6 of 6: Choose how you want the report ordered</h3>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="area" value="[% area %]" />
+<input type="hidden" name="type" value="[% type %]" />
+<input type="hidden" name="column" value="[% column %]" />
+<input type="hidden" name="criteria" value="[% criteriastring %]" />
+<input type="hidden" name="definition" value="[% definition %]" />
+<input type="hidden" name="totals" value="[% totals %]" />
+<fieldset><table>[% FOREACH order_b IN order_by %]
+<tr><td><input type="checkbox" id="[% order_b.name %]" name="order_by" value="[% order_b.name %]" /> <label for="[% order_b.name %]">[% order_b.name %]</label></td><td>
+<select name="[% order_b.name %]_ovalue">
+
+[% FOREACH selec IN order_b.select %]
+<option value="[% selec.value %]">[% selec.value %]</option>
+[% END %]
+</select>
+</td></tr>
+
+[% END %]
+</table></fieldset>
+
+<fieldset class="action">
+<input type="hidden" name="phase" value="Build Report" />
+<input type="submit" name="submit" value="Finish" /></fieldset>
+</form>
+[% END %]
+
+
+[% IF ( showreport ) %]
+<h1>Confirm Custom Report</h1>
+<p>Your report will be generated with the following SQL statement.</p>
+<p> 
+[% sql |html %]
+</p>
+
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="sql" value="[% sql %]" />
+<input type="hidden" name="type" value="[% type %]" />
+<p>You will need to save the report before you can execute it</p>
+<fieldset class="action"><input type="hidden" name="phase" value="Save" />  
+<input type="submit" name="submit" value="Save" />  </fieldset>
+</form>
+[% END %]
+
+[% IF ( save ) %]
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="sql" value="[% sql |html %]" />
+<input type="hidden" name="type" value="[% type %]" />
+<fieldset class="rows">
+<legend>Save Your Custom Report</legend>
+<ol>
+    <li><label for="reportname">Report Name: </label><input type="text" id="reportname" name="reportname" /></li>
+    <li><label for="notes">Notes:</label> <textarea name="notes" id="notes"></textarea></li>
+</ol></fieldset>
+<fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
+<input type="submit" name="submit" value="Save Report" /></fieldset>
+</form>
+[% END %]
+
+[% IF ( enter_params ) %]
+    <form action='/cgi-bin/koha/reports/guided_reports.pl'>
+        <input type='hidden' name='phase' value='Run this report' />
+        <input type='hidden' name='reports' value="[% reports %]" />
+        <h1>Enter parameters for report [% name %]:</h1>
+        [% IF ( notes ) %]<p>[% notes %]</p>[% END %]
+        [% FOREACH sql_param IN sql_params %]
+            <p>[% sql_param.entry %]: [% sql_param.input %]</p>
+        [% END %]
+        <input type='submit' value='Run the report'/>
+    </form>
+[% END %]
+
+[% IF ( execute ) %]
+<h1>[% name %]</h1>
+[% IF ( notes ) %]<p>[% notes %]</p>[% END %]
+[% IF ( unlimited_total ) %]<p>Total number of rows matching the (unlimited) query is [% unlimited_total %].</p>[% END %]
+<pre id="sql_output">[% sql %]</pre>
+<div class="pages">[% pagination_bar %]</div>
+[% UNLESS ( errors ) %]
+<table>
+<tr>[% FOREACH header_ro IN header_row %]<th>[% header_ro.cell %]</th>[% END %]</tr>
+[% FOREACH result IN results %]
+<tr>
+    [% FOREACH cell IN result.cells %]<td>[% cell.cell %]</td>[% END %]
+</tr>
+[% END %]
+</table>
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<fieldset class="action">
+<label for="format">Download the report: </label>
+<select name="format" id="format">
+<option value="csv">Comma Separated Text</option>
+<option value="tab">Tab Separated Text</option>
+</select>
+<input type="hidden" name="sql" value="[% sql |html %]" />
+<input type="hidden" name="phase" value="Export" />
+<input type="submit" name="submit" value="Download" /></fieldset>
+</form>
+[% END %]
+[% END %]
+
+[% IF ( create ) %]
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<fieldset class="rows">
+<legend>Create Report From SQL</legend>
+<ol>
+    <li><label for="reportname">Report Name:</label> <input type="text" id="reportname" name="reportname" [% IF ( reportname ) %] value="[% reportname %]"[% END %] /> </li>
+    <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% DEFAULT notes="" %]</textarea></li>
+    <li><label for="types">Type:</label>
+        <select id="types" name="types">
+            <option value="1">Tabular</option>
+            <option value="2" disabled="disabled">Summary</option>
+            <option value="3" disabled="disabled">Matrix</option>
+        </select>
+    </li>
+</ol>
+</fieldset>
+<fieldset class="rows">
+<legend>SQL:</legend>
+<div style="margin:1em;">
+<textarea  id="sql" name="sql" cols="50" rows="10">[% DEFAULT sql="" %]</textarea>
+</div>
+</fieldset>
+
+<fieldset class="action"><input type="hidden" name="phase" value="Save Report" />
+<input type="submit" name="submit" value="Save Report" /></fieldset>
+</form>
+[% END %]
+
+[% IF ( compound ) %]
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+Master: <select name="master">
+[% FOREACH savedreport IN savedreports %]
+<option value="[% savedreport.id %]">[% savedreport.report_name %]</option>
+[% END %]
+</select>
+&nbsp;
+Sub report:<select name="subreport">
+[% FOREACH savedreport IN savedreports %]
+<option value="[% savedreport.id %]">[% savedreport.report_name %]</option>
+[% END %]
+</select>
+<br />
+<input type="hidden" name="phase" value="Save Compound" />
+<input type="submit" name="submit" value="Save Compound" />
+</form>
+[% END %]
+
+[% IF ( save_compound ) %]
+[% master %] <br />
+[% subsql %]
+[% END %]
+
+
+[% IF ( retresults ) %]
+<h1>Saved Report Results</h1>
+<h2>[% name %]</h2>
+<p>[% notes %]</p>
+<table>
+[% FOREACH result IN results %]
+[% result.row %]
+[% END %]
+</table>
+[% END %]
+
+[% IF ( showsql ) %]
+<textarea id="sql">[% sql %]</textarea>
+[% END %]
+
+[% IF ( editsql ) %]
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<input type="hidden" name="phase" value="Update SQL" />
+<input type="hidden" name="id" value="[% id %]"/>
+<fieldset class="rows">
+<legend>Edit SQL</legend>
+<ol>
+<li><label for="reportname">Report Name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" /></li>
+<li><label for="notes">Notes:</label><textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
+<li><textarea id="sql" name="sql" rows="10" cols="60">[% sql %]</textarea></li>
+</ol>
+</fieldset>
+
+<fieldset class="action">
+<input type="submit" name="submit" value="Update SQL" /></fieldset>
+</form>
+
+
+[% END %]
+
+[% IF ( save_successful ) %]
+[% UNLESS ( errors ) %]
+<h2>Your report has been saved</h2>
+<p>The report you have created has now been saved. You can now</p>
+<ul>
+    [% IF ( id ) %]
+    <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% id %]&amp;phase=Run%20this%20report">Run this report</a></li>
+    [% END %]
+    <li>Access this report from the: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Saved Reports Page</a></li>
+    <li>Schedule this report to run using the: <a href="/cgi-bin/koha/tools/scheduler.pl">Scheduler Tool</a></li>
+    <li>Return to: <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved">Guided Reports</a></li>
+</ul>
+[% END %]
+[% END %]
+
+[% IF ( errors ) %]
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
+<div class="dialog alert">
+<b>The following error was encountered:</b><br />
+[% FOREACH error IN errors %]
+    [% IF ( error.sqlerr ) %]This report contains the SQL keyword <b>[% error.sqlerr %]</b>.
+    <br />Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.
+    <br />Please return to the &quot;Saved Reports&quot; screen and delete this report or retry creating a new one.
+    [% ELSIF ( error.queryerr ) %]The database returned the following error: <br />[% error.queryerr %]<br />Please check the log for further details.
+    [% ELSE %]
+    [% END %]
+[% END %]
+</div>
+<fieldset class="action"><input type="hidden" name="phase" value="Use saved" />
+<input type="submit" name="submit" value="Saved Reports" /></fieldset>
+</form>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+
+[% IF ( saved1 ) %]
+<div id="saved-reports-filter">
+<form action="/cgi-bin/koha/reports/guided_reports.pl" method="get">
+  <input type="hidden" name="phase" value="Use saved" />
+  <input type="hidden" name="filter_set" value="1" />
+  <fieldset class="brief">
+  <h3>Filter</h3>
+  <ol>
+    <li><label for="filter_date">Date:
+  <img src="[% themelang %]/lib/calendar/cal.gif" id="datedueto_button" alt="Show Calendar" /></label> <input type="text" id="filter_date" name="filter_date" size="10" value="[% filter_date %]" />
+    <div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    <script type="text/javascript">
+        Calendar.setup(
+        {
+          inputField : "filter_date",
+          ifFormat : "[% DHTMLcalendar_dateformat %]",
+          button : "filter_date_button"
+        }
+        );
+    </script>
+    </li>
+    <li><label for="filter_author">Author:</label> <input type="text" id="filter_author" name="filter_author" value="[% filter_author %]" /></li>
+    <li><label for="filter_keyword">Keyword:</label> <input type="text" id="filter_keyword" name="filter_keyword" value="[% filter_keyword %]" /></li>
+  </ol>
+  <fieldset class="action"><input type="submit" value="Apply filter" /></fieldset>
+</form>
+</div>
+[% END %]
+
+
+[% INCLUDE 'guided-reports-view.inc' %]
+</div>
+</div>
+<script type="text/javascript">
+//<![CDATA[
+function addColumn() {
+    $("#availableColumns option:selected").clone().appendTo("#selectedColumns").attr("selected", "selected");
+}
+function delColumn() {
+    $("#selectedColumns option:selected").remove();
+}
+$("#column_submit").submit(function() {
+    if ($("#selectedColumns option").size() < 1) {
+        alert(_("No columns selected!"));
+        return false;
+    }
+    $("#selectedColumns option").attr("selected", "selected");  // Select everything still in #selectedColumns
+    return true;
+});
+//]]>
+</script>
+[% INCLUDE 'intranet-bottom.inc' %]

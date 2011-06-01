@@ -1,0 +1,322 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Classification Sources
+[% IF ( class_source_form ) %]
+&rsaquo; 
+    [% IF ( edit_class_source ) %]Modify classification source[% ELSE %]Add classification source[% END %]
+[% END %]
+[% IF ( sort_rule_form ) %]
+&rsaquo;
+    [% IF ( edit_sort_rule ) %]Modify filing rule[% ELSE %]Add filing rule[% END %]
+[% END %]
+[% IF ( delete_class_source_form ) %]
+  &rsaquo; Confirm deletion of classification source [% class_source %]
+[% ELSIF ( delete_sort_rule_form ) %]
+  &rsaquo; Confirm deletion of filing rule [% sort_rule %]
+[% ELSIF ( delete_sort_rule_impossible ) %]
+  &rsaquo; Cannot delete filing rule [% sort_rule %]
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+
+function CheckSourceForm(f) {
+    var _alertString="";
+    var alertString2;
+    if (f.class_source.value.length==0) {
+        _alertString += "\n- " + _("Classification source code missing");
+    }
+    if (f.sort_rule.value.length==0) {
+        _alertString += "\n- " + _("Filing rule code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+function CheckRuleForm(f) {
+    var _alertString="";
+    var alertString2;
+    if (f.sort_rule.value.length==0) {
+        _alertString += "\n- " + _("Filing rule code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (f.sort_routine.value.length==0) {
+        _alertString += "\n- " + _("Sort routine missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+$(document).ready(function() {
+    new YAHOO.widget.Button("newsource");
+    new YAHOO.widget.Button("newrule");
+});
+
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/classsources.pl">Classification Sources</a>
+[% IF ( class_source_form ) %]
+&rsaquo; [% IF ( edit_class_source ) %]Modify classification source[% ELSE %]Add classification source[% END %]
+[% END %]
+[% IF ( sort_rule_form ) %]
+&rsaquo; [% IF ( edit_sort_rule ) %]Modify filing rule[% ELSE %]Add filing rule[% END %]
+[% END %]
+[% IF ( delete_class_source_form ) %]
+&rsaquo; Confirm deletion of classification source <span class="ex">'[% class_source %]'</span>
+[% ELSIF ( delete_sort_rule_form ) %]
+&rsaquo; Confirm deletion of filing rule <span class="ex">'[% sort_rule %]'</span>
+[% ELSIF ( delete_sort_rule_impossible ) %]
+&rsaquo; Cannot delete filing rule <span class="ex">'[% sort_rule %]'</span>
+[% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+  <div id="bd">
+    <div id="yui-main">
+      <div class="yui-b">
+
+[% IF ( class_source_form ) %]
+  [% IF ( edit_class_source ) %]
+<h2>Modify classification source</h2>
+  [% ELSE %]
+<h2>Add classification source</h2>
+  [% END %]
+<form action="[% script_name %]" name="Aform" method="post">
+  <input type="hidden" name="op" value="[% confirm_op %]" />
+  <fieldset class="rows">
+    <ol>
+      <li>
+          [% IF ( edit_class_source ) %]
+		  <span class="label">Classification source code: </span>
+            <input type="hidden" name="class_source" value="[% class_source %]" />
+            [% class_source %]
+          [% ELSE %]
+		  <label for="class_source">Classification source code: </label>
+            <input type="text" id="class_source" name="class_source"  size="10" maxlength="10" />
+          [% END %]
+       </li>
+       <li><label for="description">Description: </label>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="[% description |html %]" />
+       </li>
+       <li><label for="used">Source in use?</label>
+           [% IF ( used ) %]<input type="checkbox" id="used" name="used" value="used" checked="checked" />[% ELSE %]
+		  <input type="checkbox" id="used" name="used" value="used" />[% END %]
+       </li>
+       <li><label for="sort_rule">Filing Rule: </label>
+           <select id="sort_rule" name="sort_rule">
+           [% FOREACH rules_dropdow IN rules_dropdown %]
+             [% IF ( rules_dropdow.selected ) %]
+             <option value="[% rules_dropdow.rule %]" selected="selected">[% rules_dropdow.description %] ([% rules_dropdow.rule %])</option>
+             [% ELSE %]
+             <option value="[% rules_dropdow.rule %]">[% rules_dropdow.description %] ([% rules_dropdow.rule %])</option>
+             [% END %]
+           [% END %]
+           </select>
+       </li>    
+    </ol>
+  </fieldset>
+  <fieldset class="action">
+    <input type="button" value="Save" onclick="CheckSourceForm(this.form)" />
+    <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+  </fieldset>
+</form>
+[% END %]
+
+[% IF ( sort_rule_form ) %]
+  [% IF ( edit_sort_rule ) %]
+<h2>Modify filing rule</h2>
+  [% ELSE %]
+<h2>Add filing rule</h2>
+  [% END %]
+<form action="[% script_name %]" name="Aform" method="post">
+  <input type="hidden" name="op" value="[% confirm_op %]" />
+  <fieldset class="rows">
+    <ol>
+      <li>
+          [% IF ( edit_sort_rule ) %]
+		  <span class="label">Filing rule code: </span>
+            <input type="hidden" name="sort_rule" value="[% sort_rule %]" />
+            [% sort_rule %]
+          [% ELSE %]
+		  <label for="sort_rule">Filing rule code: </label>
+            <input type="text" id="sort_rule" name="sort_rule"  size="10" maxlength="10" />
+          [% END %]
+       </li>
+       <li><label for="description">Description: </label>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="[% description |html %]" />
+       </li>
+       <li><label for="sort_routine">Filing Routine: </label>
+           <select id="sort_routine" name="sort_routine">
+           [% FOREACH routines_dropdow IN routines_dropdown %]
+             [% IF ( routines_dropdow.selected ) %]
+             <option value="[% routines_dropdow.routine %]" selected="selected">[% routines_dropdow.routine %]</option>
+             [% ELSE %]
+             <option value="[% routines_dropdow.routine %]">[% routines_dropdow.routine %]</option>
+             [% END %]
+           [% END %]
+           </select>
+       </li>
+    </ol>
+  </fieldset>
+    <fieldset class="action">
+        <input type="button" value="Save" onclick="CheckRuleForm(this.form)" />
+        <a class="cancel" href="/cgi-bin/koha/admin/classsources.pl">Cancel</a>
+    </fieldset>
+</form>
+[% END %]
+
+[% IF ( delete_class_source_form ) %]
+<div class="dialog alert"><h3>Confirm deletion of classification source <span class="ex">'[% class_source %]'</span>?</h3>
+    <form action="[% script_name %]" name="Aform" method="post">
+      <input type="hidden" name="op" value="[% confirm_op %]" />
+      <input type="hidden" name="class_source" value="[% class_source %]" />
+      <input type="submit" value="Delete classification source" class="approve" />
+    </form>
+    <form action="[% script_name %]" method="get">
+        <input type="submit" value="No, Do Not Delete" class="deny" />
+    </form>
+</div>
+[% END %]
+
+[% IF ( delete_sort_rule_form ) %]
+<div class="dialog alert"><h3>Confirm deletion of filing rule <span class="ex">'[% sort_rule %]'</span>?</h3>
+    <form action="[% script_name %]" name="Aform" method="post">
+        <input type="hidden" name="op" value="[% confirm_op %]" />
+        <input type="hidden" name="sort_rule" value="[% sort_rule %]" />
+        <input type="submit" value="Delete filing rule" class="approve" />
+    </form>
+    <form action="[% script_name %]" method="get">
+        <input type="submit" value="No, Do Not Delete" class="deny" />
+    </form>
+</div>
+[% END %]
+
+[% IF ( delete_sort_rule_impossible ) %]
+<div class="dialog message"><h3>Cannot delete filing rule <span class="ex">'[% sort_rule %]'</span></h3>
+    <p>The filing rule [% sort_rule %] is used by at least one classification source.  Please
+    remove it from all classification source definitions before trying again.
+    </p>
+    <form action="[% script_name %]" method="get">
+        <input type="submit" value="OK" class="approve" />
+    </form>
+</div>
+[% END %]
+
+[% IF ( display_lists ) %]
+
+<div id="toolbar">
+	<ul class="toolbar">
+	<li><a id="newsource" href="[% script_name %]?op=add_source">New Classification Source</a></li>
+	<li><a id="newrule" href="[% script_name %]?op=add_sort_rule">New Filing Rules</a></li>
+</ul></div>
+
+<h2>Classification Sources</h2>
+[% IF ( added_source ) %]
+<div class="dialog message">Added classification source [% added_source %]</div>
+[% END %]
+[% IF ( edited_source ) %]
+<div class="dialog message">Modified classification source [% edited_source %]</div>
+[% END %]
+[% IF ( deleted_source ) %]
+<div class="dialog message">Deleted classification source [% deleted_source %]</div>
+[% END %]
+<table>
+  <tr>
+    <th>Code</th>
+    <th>Description</th>
+    <th>In Use</th>
+    <th>Filing Rule</th>
+    <th>Actions</th>
+  </tr>
+  [% FOREACH class_source IN class_sources %]
+  [% IF ( loop.odd ) %]
+  <tr>
+  [% ELSE %]
+  <tr class="highlight">
+  [% END %]
+    <td>[% class_source.code %]</td>
+    <td>[% class_source.description %]</td>
+    <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
+    <td>[% class_source.sortrule %]</td>
+    <td>
+      <a href="[% class_source.script_name %]?op=edit_source&amp;class_source=[% class_source.code |html %]">Edit</a>
+      <a href="[% class_source.script_name %]?op=delete_source&amp;class_source=[% class_source.code |html %]">Delete</a>
+    </td>
+  </tr>
+  [% END %]
+</table>
+
+<div class="pages">[% pagination_bar %]</div>
+
+<h2>Classification Filing Rules</h2>
+[% IF ( added_rule ) %]
+<div class="dialog message">Added filing rule [% added_rule %]</div>
+[% END %]
+[% IF ( edited_rule ) %]
+<div class="dialog message">Modified filing rule [% edited_rule %]</div>
+[% END %]
+[% IF ( deleted_rule ) %]
+<div class="dialog message">Deleted filing rule [% deleted_rule %]</div>
+[% END %]
+<table>
+  <tr>
+    <th>Code</th>
+    <th>Description</th>
+    <th>Sorting Routine</th>
+    <th>Actions</th>
+  </tr>
+  [% FOREACH class_sort_rule IN class_sort_rules %]
+  [% IF ( loop.odd ) %]
+  <tr>
+  [% ELSE %]
+  <tr class="highlight">
+  [% END %]
+    <td>[% class_sort_rule.rule %]</td>
+    <td>[% class_sort_rule.description %]</td>
+    <td>[% class_sort_rule.sort_routine %]</td>
+    <td>
+      <a href="[% class_sort_rule.script_name %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]">Edit</a>
+      <a href="[% class_sort_rule.script_name %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule |html %]">Delete</a>
+    </td>
+  </tr>
+  [% END %]
+</table>
+<div class="paginationBar">[% pagination_bar %]</div>
+
+[% END %]
+
+      </div>
+    </div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+  </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

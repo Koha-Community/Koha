@@ -1,0 +1,355 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Basket Grouping for [% booksellername %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<link rel="stylesheet" type="text/css" href="[% yuipath %]/fonts/fonts-min.css" />
+<script type="text/javascript" src="[% yuipath %]/yahoo-dom-event/yahoo-dom-event.js"></script>
+<script type="text/javascript" src="[% yuipath %]/animation/animation-min.js"></script>
+<script type="text/javascript" src="[% yuipath %]/dragdrop/dragdrop-min.js"></script>
+<script type="text/javascript" src="[% yuipath %]/element/element-min.js"></script>
+<script type="text/javascript" src="[% yuipath %]/tabview/tabview-min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
+<link rel="stylesheet" type="text/css" href="[% yuipath %]/tabview/assets/skins/sam/tabview.css" /> 
+ 
+<style type="text/css">
+/*margin and padding on body element
+  can introduce errors in determining
+  element position and are not recommended;
+  we turn them off as a foundation for YUI
+  CSS treatments. */
+body {
+	margin:0;
+	padding:0;
+}
+
+#ungrouped {
+	overflow: auto;
+	height: 400px;
+}
+
+.draglist{
+	width: 200px;
+	height: 300px;
+	overflow: auto;
+}
+
+div.workarea_alt { padding: 5px; float:left; width: 95%;}
+div.closed { background-color="pink"; padding:10px; float:left; width: 45%;}
+
+ul.closed {
+    position: relative;
+    background: grey;
+    padding-bottom:10;
+    border: 1px solid gray;
+    list-style: none;
+    margin:0;
+    padding: 5px;
+}
+
+ul.draglist {
+    position: relative;
+    background: #f7f7f7;
+    padding-bottom:10;
+    border: 1px solid gray;
+    list-style: none;
+    margin:0;
+    padding: 5px;
+}
+
+ul.draglist li {
+    margin: 1px;
+    cursor: move;
+    list-style: none;
+}
+
+ul.draglist_alt {
+    position: relative;
+    border: 1px solid gray;
+    list-style: none;
+    margin: 0;
+    background: #f7f7f7;
+    padding: 5px;
+    cursor: move;
+}
+
+ul.draglist_alt li {
+    margin: 1px;
+    list-style: none;
+}
+
+li.grouped {
+    background-color: #D1E6EC;
+    border:1px solid #7EA6B2;
+    list-style: none;
+}
+
+li.ungrouped {
+    background-color: #D8D4E2;
+    border:1px solid #6B4C86;
+}
+
+fieldset.various li {
+    list-style: none;
+    clear: none;
+}
+
+.basketgroup {
+	margin-top: 10px;
+	font-size: 1.2em;
+	font-weight: bold;
+	list-style: none;
+	background-color: #D8D4E2;
+	display: block;
+}
+.basketgroup li{
+	font-size: 0.5em;
+	list-style: none;
+	display: inline;
+}
+
+</style>
+
+<script type="text/javascript">
+//<![CDATA[
+	YAHOO.util.Event.onDOMReady(DDApp.init, DDApp, true);
+	var tabView = new YAHOO.widget.TabView('bgtabs');
+//]]>
+
+
+function submitForm(form) {
+    if (form.close.checked == true) {
+	var input = document.createElement("input");
+	input.setAttribute("type", "hidden");
+	input.setAttribute("name", "closed");
+	input.setAttribute("value", "1");
+	form.appendChild(input);
+    }
+}
+
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; Basket Grouping</div>
+
+<div id="doc" class="yui-t7">
+            
+        <div class="yui-b"> 
+        	<div id="toolbar">
+				<script type="text/javascript">
+					//<![CDATA[
+				
+					// prepare DOM for YUI Toolbar
+				
+					 $(document).ready(function() {
+					  //  $("#toolbar").empty();
+					    yuiToolbar();
+					 });
+				
+					// YUI Toolbar Functions
+				
+					function yuiToolbar() {
+						var booksellermenu = [
+							{ text: _("Vendor"), url: "/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]" },
+							{ text: _("Edit vendor"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]"},
+						]
+						var ordersbutton = [
+						         { text: _("Manage orders"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=[% booksellerid %]" },
+						         { text: _("Edit uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&owner=1" },
+						]
+						new YAHOO.widget.Button("newbasketgroup");
+					    new YAHOO.widget.Button({
+					        type: "menu",
+					        label: _("Vendor"),
+					        name: "booksellerbutton",
+					        menu: booksellermenu,
+					        container: "toolbar"
+					    });
+					    
+					    new YAHOO.widget.Button({
+					        type: "menu",
+					        label: _("Orders"),
+					        name: "ordersbutton",
+					        menu: ordersbutton,
+					        container: "toolbar"
+					    });
+					}
+					//]]>
+				</script>
+				<a href="?op=add&amp;booksellerid=[% booksellerid %]" name="newbasketgroup" id="newbasketgroup">New Basket Group</a>
+			</div>
+			<h1>Basket Grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername %]</a></h1>
+		</div>
+[% IF ( grouping ) %]
+	<div id="bd"> 
+	    <div class="yui-g"> 
+		    <div class="yui-u grouping"> 
+
+				<form action="[% scriptname %]" method="post" name="basketgroups" id="basketgroups">
+	            <div id="groups">
+	            <div class="workarea_alt" >
+	            <h3>Ungrouped Baskets</h3>
+	            <ul id="ungrouped" class="draglist_alt">
+	            [% IF ( baskets ) %]
+	                [% FOREACH basket IN baskets %]
+	                    <li class="ungrouped" id="b-[% basket.basketno %]" >
+	                        <a href="basket.pl?basketno=[% basket.basketno %]">
+	                        [% IF ( basket.basketname ) %]
+	                            [% basket.basketname %]
+	                        [% ELSE %]
+	                            No name, basketnumber: [% basket.basketno %]
+	                        [% END %]
+	                        </a>, <br />
+	                        Total: [% basket.total %]
+	                        <input type="hidden" class="basket" name="basket" value="[% basket.basketno %]" />
+	                    </li>
+	                    [% END %]
+	                [% END %]
+	                </ul>
+	            </div>
+	            </div>
+	            </form>
+
+			</div> 
+			
+		    <div class="yui-u first"> 
+		    	<form action="" method="post" id="groupingform" onsubmit="return submitForm(this)">
+					<fieldset id="various" class='various' >
+						<h3><label for="basketgroupname">Basket Group Name:</label></h3>
+						<input type="text" name="basketgroupname" id="basketgroupname" value="[% name %]" />
+						<h3><label for="billingplace">Billing Place:</label></h3>
+						<select name="billingplace" id="billingplace">
+							[% FOREACH billingplaceloo IN billingplaceloop %]
+							<option value="[% billingplaceloo.value %]" [% IF ( billingplaceloo.selected ) %]selected[% END %]>[% billingplaceloo.branchname %]</option>
+							[% END %]
+						</select>
+						<h3><label for="deliveryplace">Delivery Place:</label></h3>
+						<select name="deliveryplace" id="deliveryplace">
+							<option value="">--</option>
+							[% FOREACH deliveryplaceloo IN deliveryplaceloop %]
+							<option value="[% deliveryplaceloo.value %]" [% IF ( deliveryplaceloo.selected ) %]selected[% END %]>[% deliveryplaceloo.branchname %]</option>
+							[% END %]
+						</select>
+                        <p>or</p>
+                        <h3><label for="freedeliveryplace">Delivery Place:</label></h3>
+                        <textarea cols="26" name="freedeliveryplace" id="freedeliveryplace">[% freedeliveryplace %]</textarea>
+						<h3><label for="deliverycomment">Delivery comment:</label></h3>
+						<textarea cols="26" name="deliverycomment" id="deliverycomment">[% deliverycomment %]</textarea>
+		         		<div class="workarea">
+							<h3>Grouping:</h3>
+							<ul class="draglist" id="bg">
+								[% FOREACH selectedbasket IN selectedbaskets %]
+				                    <li class="grouped" id="b-[% selectedbasket.basketno %]" >
+				                        <a href="basket.pl?basketno=[% selectedbasket.basketno %]">
+				                        [% IF ( selectedbasket.basketname ) %]
+				                            [% selectedbasket.basketname %]
+				                        [% ELSE %]
+				                            No name, basketnumber: [% selectedbasket.basketno %]
+				                        [% END %]
+				                        </a>, <br />
+				                        Total: [% selectedbasket.total %]
+				                        <input type="hidden" class="basket" name="basket" value="[% selectedbasket.basketno %]" />
+				                    </li>
+			                    [% END %]
+
+							</ul>
+						</div>
+						<div><input type="checkbox" name="close"> Close</input></div>
+		                <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+		                [% IF ( basketgroupid ) %]
+		                	<input type="hidden" name="basketgroupid" value="[% basketgroupid %]" />
+		                [% END %]
+		                <input type="hidden" name="op" value="attachbasket" />
+		                <input type="submit" value="Save" />
+					</fieldset>
+				</form>
+			</div> 
+		</div> 	 
+    </div> 
+[% ELSE %]
+	<div class="yui-g"> 
+		<div id="bgtabs" class="yui-navset">
+		    <ul class="yui-nav">
+		        <li[% UNLESS ( closed ) %] class="selected"[% END %]><a href="#opened"><em>Opened</em></a></li>
+		        <li[% IF ( closed ) %] class="selected"[% END %]><a href="#closed"><em>Closed</em></a></li>
+		    </ul>            
+		    <div class="yui-content">
+		        <div id="opened">
+		        	<ul>
+		        		[% FOREACH basketgroup IN basketgroups %]
+		        			[% UNLESS ( basketgroup.closed ) %]
+		        		<li class="basketgroup">
+		        			[% IF ( basketgroup.name ) %]
+		        				[% basketgroup.name %]
+		        			[% ELSE %]
+		        				Basket Group n°[% basketgroup.id %]
+		        			[% END %]
+   			       			<ul>
+		        				<li>
+		        					<span class="yui-button yui-link-button">
+		        						<span class="first-child">
+		        							<a href="javascript:closeandprint([% basketgroup.id %])" class="yui-button yui-link-button">Close & Print</a>
+	        							</span>
+        							</span>
+	        					</li>
+		        				<li>
+		        					<span class="yui-button yui-link-button">
+		        						<span class="first-child">
+		        							<a href="?op=add&amp;booksellerid=[% basketgroup.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]" class="yui-button yui-link-button" >Edit</a>
+	        							</span>
+        							</span>
+       							</li>
+       							<li>
+		        					<span class="yui-button yui-link-button">
+		        						<span class="first-child">
+		        							<a href="?op=delete&amp;booksellerid=[% basketgroup.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]" class="yui-button yui-link-button" >Delete</a>
+	        							</span>
+        							</span>
+       							</li>
+       							
+		        			</ul>
+		        		</li>
+		        			[% END %]
+		        		[% END %]
+		        	</ul>
+		        </div>
+		        <div id="closed">
+		        	<ul>
+		        		[% FOREACH basketgroup IN basketgroups %]
+			        		[% IF ( basketgroup.closed ) %]
+			        		<li class="basketgroup">
+			        			[% IF ( basketgroup.name ) %]
+			        				[% basketgroup.name %]
+			        			[% ELSE %]
+			        				Basket Group n°[% basketgroup.id %]
+			        			[% END %]
+			        			<ul>
+			        				<li>
+										<span class="yui-button yui-link-button">
+			        						<span class="first-child">
+		        								<a href="/cgi-bin/koha/acqui/basketgroup.pl?op=reopen&amp;booksellerid=[% basketgroup.booksellerid %]&amp;basketgroupid=[% basketgroup.id %]" class="yui-button yui-link-button">Reopen</a>
+	        								</span>
+        								</span>
+			        				</li>
+			        				<li>
+										<span class="yui-button yui-link-button">
+			        						<span class="first-child">
+		        								<a href="/cgi-bin/koha/acqui/basketgroup.pl?op=print&amp;basketgroupid=[% basketgroup.id %]" class="yui-button yui-link-button">Print</a>
+	        								</span>
+        								</span>
+			        				</li>
+			        			</ul>
+			        		</li>
+			        		[% END %]
+		        		[% END %]
+		        	</ul>
+		        </div>
+		    </div>
+		</div>
+		
+	</div> 
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

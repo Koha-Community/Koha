@@ -1,0 +1,33 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Download shelf</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding:1em;">
+[% IF ( format ) %]
+    <p>Your download should begin automatically.</p>
+[% ELSE %]
+<div id="export" class="detailtagcell">    <form method="post" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
+<form method="post" action="/cgi-bin/koha/virtualshelves/downloadshelf.pl">
+	<fieldset class="rows">
+	<legend>Download List</legend>
+	<ol><li>
+	<label for="format">Format : </label>
+        <select name="format" id="format">
+	    <option value="">-- Choose Format --</option>
+	    <option value="iso2709">iso2709</option>
+	    <option value="ris">RIS</option>
+	    <option value="bibtex">BibTex</option>
+	    [% FOREACH csv_profile IN csv_profiles %]
+	    <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
+	    [% END %]
+	</select>
+	</li></ol>
+	</fieldset>
+	<fieldset class="action"><input type="hidden" name="shelfid" value="[% shelfid %]" />
+	<input type="submit" name="save" value="Save" />  <a class="cancel close" href="#">Cancel</a>
+	</fieldset>
+    </form>
+
+[% END %]
+</body>
+</html>

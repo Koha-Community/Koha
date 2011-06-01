@@ -1,0 +1,223 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Cataloging &rsaquo; 000 - Bygging av postens hode</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding:1em;">
+<form name="f_pop" onsubmit="report()">
+<input type="hidden" name="plugin_name" value="normarc_leader.pl" />
+<h3>000 - Postens hode</h3>
+<table>
+	<tr>
+		<td><span class="label">00-04 Systemgenerert informasjon</span></td>
+		<td>(autofylt)</td>
+	</tr>
+	<tr>
+		<td><label for="f5">05 Postens status</label></td>
+		<td>
+			<select name="f5" id="f5" size="1">
+			
+			[% IF ( f5c ) %]
+				<option value="c" selected="selected">c Rettet post</option>
+			[% ELSE %]
+				<option value="c">c Rettet post</option>
+			[% END %]
+
+			[% IF ( f5d ) %]
+				<option value="d" selected="selected">d Slettet post</option>
+			[% ELSE %]
+				<option value="d">d Slettet post</option>
+			[% END %]
+
+			[% IF ( f5n ) %]
+				<option value="n" selected="selected">n Ny post</option>
+			[% ELSE %]
+				<option value="n">n Ny post</option>
+			[% END %]
+			
+			[% IF ( f5p ) %]
+				<option value="p" selected="selected">p Oppgradert post</option>
+			[% ELSE %]
+				<option value="p">p Oppgradert post</option>
+			[% END %]
+
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f6">06 Materialtype</label></td>
+		<td>
+			<select name="f6" id="f6" size="1">
+			
+			[% IF ( f6a ) %]
+				<option value="a" selected="selected">a Tekstlig materiale</option>
+			[% ELSE %]
+				<option value="a">a Tekstlig materiale</option>
+			[% END %]
+			[% IF ( f6b ) %]
+				<option value="b" selected="selected">b Manuskripter (kap.4)</option>
+			[% ELSE %]
+				<option value="b">b Manuskripter (kap.4)</option>
+			[% END %]
+			[% IF ( f6c ) %]
+				<option value="c" selected="selected">c Musikktrykk (kap.5)</option>
+			[% ELSE %]
+				<option value="c">c Musikktrykk (kap.5)</option>
+			[% END %]
+			[% IF ( f6d ) %]
+				<option value="d" selected="selected">d Musikkmanuskripter (kap.5)</option>
+			[% ELSE %]
+				<option value="d">d Musikkmanuskripter (kap.5)</option>
+			[% END %]
+			[% IF ( f6e ) %]
+				<option value="e" selected="selected">e Kartografisk materiale (kap.3)</option>
+			[% ELSE %]
+				<option value="e">e Kartografisk materiale (kap.3)</option>
+			[% END %]
+			[% IF ( f6f ) %]
+				<option value="f" selected="selected">f Kartmanuskripter (kap.3)</option>
+			[% ELSE %]
+				<option value="f">f Kartmanuskripter (kap.3)</option>
+			[% END %]
+			[% IF ( f6g ) %]
+				<option value="g" selected="selected">g Filmer og videoopptak (kap.7)</option>
+			[% ELSE %]
+				<option value="g">g Filmer og videoopptak (kap.7)</option>
+			[% END %]
+			[% IF ( f6i ) %]
+				<option value="i" selected="selected">i Lydopptak (ikke musikk) (kap.6)</option>
+			[% ELSE %]
+				<option value="i">i Lydopptak (ikke musikk) (kap.6)</option>
+			[% END %]
+			[% IF ( f6j ) %]
+				<option value="j" selected="selected">j Lydopptak av musikkverk (kap.6)</option>
+			[% ELSE %]
+				<option value="j">j Lydopptak av musikkverk (kap.6)</option>
+			[% END %]
+			[% IF ( f6k ) %]
+				<option value="k" selected="selected">k Grafisk materiale (kap.8)</option>
+			[% ELSE %]
+				<option value="k">k Grafisk materiale (kap.8)</option>
+			[% END %]
+			[% IF ( f6m ) %]
+				<option value="m" selected="selected">m Maskinlesbare filer (kap.9)</option>
+			[% ELSE %]
+				<option value="m">m Maskinlesbare filer (kap.9)</option>
+			[% END %]
+			[% IF ( f6o ) %]
+				<option value="o" selected="selected">o Kombidokumenter</option>
+			[% ELSE %]
+				<option value="o">o Kombidokumenter</option>
+			[% END %]
+			[% IF ( f6r ) %]
+				<option value="r" selected="selected">r Tre-dimensjonale gjenstander (kap.10)</option>
+			[% ELSE %]
+				<option value="r">r Tre-dimensjonale gjenstander (kap.10)</option>
+			[% END %]
+
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f7">07 Bibliografisk kategori</label></td>
+		<td>
+			<select name="f7" id="f7" size="1">
+			
+				[% IF ( f7a ) %]
+					<option value="a" selected="selected">a Analytt til ikke-periodisk dokument</option>
+				[% ELSE %]
+					<option value="a">a Analytt til ikke-periodisk dokument</option>
+				[% END %]
+				[% IF ( f7b ) %]
+					<option value="b" selected="selected">b Serieanalytt</option>
+				[% ELSE %]
+					<option value="b">b Serieanalytt</option>
+				[% END %]				
+				[% IF ( f7c ) %]
+					<option value="c" selected="selected">c Samling</option>
+				[% ELSE %]
+					<option value="c">c Samling</option>
+				[% END %]				
+				[% IF ( f7m ) %]
+					<option value="m" selected="selected">m Monografi</option>
+				[% ELSE %]
+					<option value="m">m Monografi</option>
+				[% END %]				
+				[% IF ( f7p ) %]
+					<option value="p" selected="selected">p Analytt til periodikum</option>
+				[% ELSE %]
+					<option value="p">p Analytt til periodikum</option>
+				[% END %]				
+				[% IF ( f7s ) %]
+					<option value="s" selected="selected">s Periodikum </option>
+				[% ELSE %]
+					<option value="s">s Periodikum </option>
+				[% END %]				
+
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>08-16 Systemgenerert informasjon</td>
+		<td>(autofylt)</td>
+    </tr>
+    <tr>
+		<td><label for="f17">17 Beskrivelsesnivå</label></td>
+		<td>
+			<select name="f17" id="f17" size="1">
+				[% IF ( f170 ) %]
+					<option value="0" selected="selected">0	Fullstendig beskrivelse</option>
+				[% ELSE %]
+					<option value="0">0	Fullstendig beskrivelse</option>
+				[% END %]
+				[% IF ( f171 ) %]
+					<option value="1" selected="selected">1 Nivå 2, iflg. KAT.</option>
+				[% ELSE %]
+					<option value="1">1 Nivå 2, iflg. KAT.</option>
+				[% END %]
+				[% IF ( f172 ) %]
+					<option value="2" selected="selected">2 Nivå 1, iflg. KAT.</option>
+				[% ELSE %]
+					<option value="2">2 Nivå 1, iflg. KAT.</option>
+				[% END %]
+				[% IF ( f175 ) %]
+					<option value="5" selected="selected">5 Foreløpig katalogisering.</option>
+				[% ELSE %]
+					<option value="5">5 Foreløpig katalogisering.</option>
+				[% END %]
+
+			</select>
+		</td>
+	</tr>
+
+	<tr>
+		<td>18-23 Systemgenerert informasjon</td>
+		<td>(autofylt)</td>
+	</tr>
+
+</table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Avbryt</a></fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+function report() {
+            var doc   = opener.document; 
+            var field = doc.getElementById("[% index %]");
+        
+            field.value = 
+			'     '+
+			document.f_pop.f5.value+
+			document.f_pop.f6.value+
+			document.f_pop.f7.value+
+			' '+ // document.f_pop.f8.value+
+			'a'+ // MARC21 UNICODE flag - must be 'a' for Koha
+			'22     '+
+			document.f_pop.f17.value+
+			' '+ // document.f_pop.f18.value+
+			' '+ // document.f_pop.f19.value+
+			'4500';
+		self.close();
+		return false;
+	}
+	//]]>
+</script>
+[% INCLUDE 'popup-bottom.inc' %]

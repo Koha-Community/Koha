@@ -94,28 +94,28 @@ if ($op eq "export") {
         $query .= " AND biblioitems.biblionumber <= ? ";
         push @sql_params, $EndingBiblionumber;    
     }
-    
-    if ( $branch ) {
-        $query .= " AND biblioitems.biblionumber = items.biblionumber AND homebranch = ? ";
+
+    if ($branch) {
+        $query .= " AND homebranch = ? ";
         push @sql_params, $branch;
     }
-    
-    if ( $start_callnumber ) {
-        $query .= " AND biblioitems.biblionumber = items.biblionumber AND itemcallnumber <= ? ";
+
+    if ($start_callnumber) {
+        $query .= " AND itemcallnumber <= ? ";
         push @sql_params, $start_callnumber;
     }
-    
-    if ( $end_callnumber ) {
-        $query .= " AND biblioitems.biblionumber = items.biblionumber AND itemcallnumber >= ? ";
+
+    if ($end_callnumber) {
+        $query .= " AND itemcallnumber >= ? ";
         push @sql_params, $end_callnumber;
     }
-    if ( $start_accession ) {
-        $query .= " AND biblioitems.biblionumber = items.biblionumber AND dateaccessioned >= ? ";
-        push @sql_params,$start_accession->output('iso');
+    if ($start_accession) {
+        $query .= " AND dateaccessioned >= ? ";
+        push @sql_params, $start_accession->output('iso');
     }
-    
-    if ( $end_accession ) {
-        $query .= " AND biblioitems.biblionumber = items.biblionumber AND dateaccessioned <= ? ";
+
+    if ($end_accession) {
+        $query .= " AND dateaccessioned <= ? ";
         push @sql_params, $end_accession->output('iso');
     }
     
@@ -133,13 +133,14 @@ if ($op eq "export") {
             next;
         }
         next if not defined $record;
-        if ( $dont_export_items || $strip_nonlocal_items || $limit_ind_branch) {
+        C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) unless $dont_export_items;
+        if ($strip_nonlocal_items || $limit_ind_branch) {
             my ( $homebranchfield, $homebranchsubfield ) =
                 GetMarcFromKohaField( 'items.homebranch', '' );
 			for my $itemfield ($record->field($homebranchfield)){
 				# if stripping nonlocal items, use loggedinuser's branch if they didn't select one
 				$branch = C4::Context->userenv->{'branch'} unless $branch;
-                $record->delete_field($itemfield) if($dont_export_items || ($itemfield->subfield($homebranchsubfield) ne $branch) ) ;
+                $record->delete_field($itemfield) if($itemfield->subfield($homebranchsubfield) ne $branch) ;
             }
         }
         

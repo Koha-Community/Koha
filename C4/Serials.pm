@@ -125,10 +125,11 @@ sub GetLateIssues {
             LEFT JOIN  biblio ON biblio.biblionumber = subscription.biblionumber
             LEFT JOIN  aqbooksellers ON subscription.aqbooksellerid = aqbooksellers.id
             WHERE      ((planneddate < now() AND serial.STATUS =1) OR serial.STATUS = 3)
-            AND        subscription.aqbooksellerid=$supplierid
+            AND        subscription.aqbooksellerid=?
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
+        $sth->execute($supplierid);
     } else {
         my $query = qq|
             SELECT     name,title,planneddate,serialseq,serial.subscriptionid
@@ -140,8 +141,8 @@ sub GetLateIssues {
             ORDER BY   title
         |;
         $sth = $dbh->prepare($query);
+        $sth->execute;
     }
-    $sth->execute;
     my @issuelist;
     my $last_title;
     my $odd   = 0;
@@ -440,7 +441,6 @@ sub PrepareSerialsData {
     foreach my $key ( sort { $b cmp $a } keys %tmpresults ) {
         push @res, $tmpresults{$key};
     }
-    $res[0]->{'first'} = 1;
     return \@res;
 }
 
@@ -581,7 +581,7 @@ sub GetSubscriptions {
         my @sqlstrings;
         my @strings_to_search;
         @strings_to_search = map { "%$_%" } split( / /, $string );
-        foreach my $index qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes) {
+        foreach my $index (qw(biblio.title subscription.callnumber subscription.location subscription.notes subscription.internalnotes)) {
             push @bind_params, @strings_to_search;
             my $tmpstring = "AND $index LIKE ? " x scalar(@strings_to_search);
             $debug && warn "$tmpstring";
@@ -594,7 +594,7 @@ sub GetSubscriptions {
         my @sqlstrings;
         my @strings_to_search;
         @strings_to_search = map { "%$_%" } split( / /, $issn );
-        foreach my $index qw(biblioitems.issn subscription.callnumber) {
+        foreach my $index ( qw(biblioitems.issn subscription.callnumber)) {
             push @bind_params, @strings_to_search;
             my $tmpstring = "OR $index LIKE ? " x scalar(@strings_to_search);
             $debug && warn "$tmpstring";
@@ -1480,9 +1480,9 @@ sub ItemizeSerials {
     my $fwk = GetFrameworkCode( $data->{'biblionumber'} );
     if ( $info->{barcode} ) {
         my @errors;
-        my $exists = itemdata( $info->{'barcode'} );
-        push @errors, "barcode_not_unique" if ($exists);
-        unless ($exists) {
+        if ( is_barcode_in_use( $info->{barcode} ) ) {
+            push @errors, 'barcode_not_unique';
+        } else {
             my $marcrecord = MARC::Record->new();
             my ( $tag, $subfield ) = GetMarcFromKohaField( "items.barcode", $fwk );
             my $newField = MARC::Field->new( "$tag", '', '', "$subfield" => $info->{barcode} );
@@ -1634,7 +1634,9 @@ sub HasSubscriptionExpired {
         my $sth = $dbh->prepare($query);
         $sth->execute($subscriptionid);
         my ($res) = $sth->fetchrow;
-        return 0 unless $res;
+        if (!$res || $res=~m/^0000/) {
+            return 0;
+        }
         my @res                   = split( /-/, $res );
         my @endofsubscriptiondate = split( /-/, $expirationdate );
         return 2 if ( scalar(@res) != 3 || scalar(@endofsubscriptiondate) != 3 || not check_date(@res) || not check_date(@endofsubscriptiondate) );
@@ -2337,29 +2339,24 @@ sub GetNextDate(@) {
     return "$resultdate";
 }
 
-=head2 itemdata
+=head2 is_barcode_in_use
 
-  $item = itemdata($barcode);
-
-Looks up the item with the given barcode, and returns a
-reference-to-hash containing information about that item. The keys of
-the hash are the fields from the C<items> and C<biblioitems> tables in
-the Koha database.
+Returns number of occurence of the barcode in the items table
+Can be used as a boolean test of whether the barcode has
+been deployed as yet
 
 =cut
 
-#'
-sub itemdata {
-    my ($barcode) = @_;
+sub is_barcode_in_use {
+    my $barcode = shift;
     my $dbh       = C4::Context->dbh;
-    my $sth       = $dbh->prepare(
-        "Select * from items LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber 
-        WHERE barcode=?"
+    my $occurences = $dbh->selectall_arrayref(
+        'SELECT itemnumber from items where barcode = ?',
+        {}, $barcode
+
     );
-    $sth->execute($barcode);
-    my $data = $sth->fetchrow_hashref;
-    $sth->finish;
-    return ($data);
+
+    return @{$occurences};
 }
 
 1;

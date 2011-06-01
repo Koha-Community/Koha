@@ -1,0 +1,549 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports &rsaquo; Holds statistics [% IF ( do_it ) %]&rsaquo; Results[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+<style type="text/css">
+	.sql {display:none;}
+</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> [% IF ( do_it ) %]&rsaquo; <a href="/cgi-bin/koha/reports/reserves_stats.pl">Holds statistics</a> &rsaquo; Results [% ELSE %]&rsaquo; Holds statistics[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+[% IF ( do_it ) %]
+    [% IF ( mainloop ) %]
+        <h1>Holds statistics</h1>
+        [% IF ( loopfilter ) %]
+            <p>Filtered on</p>
+            <ul>
+            [% FOREACH loopfilte IN loopfilter %]
+                [% IF ( loopfilte.err ) %]<li class="error">Error:
+				[% ELSIF ( loopfilte.sql ) %]<li class="sql">
+				[% ELSE %]<li>
+				[% END %]
+					[% loopfilte.crit %] [% loopfilte.filter %]
+				</li>
+            [% END %]
+            </ul>
+        [% END %]
+		
+    [% FOREACH mainloo IN mainloop %]
+        
+        <table> 
+            <tr>
+                <th>[% mainloo.line %] / [% mainloo.column %]</th>
+                [% FOREACH loopco IN mainloo.loopcol %]
+                    <th>[% loopco.coltitle_display |html %]</th>
+                [% END %]
+                <th>TOTAL</th>
+                </tr>
+                [% FOREACH loopro IN mainloo.looprow %]
+                    <tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]>
+                        <td>[% DEFAULT loopro.rowtitle_display="UNKNOWN VALUE" |html %]</td>
+                    [% FOREACH loopcel IN loopro.loopcell %]
+						<td align="center">
+						[% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output %]&amp;[% loopcel.url_complement %]">[% DEFAULT loopcel.value="&nbsp;" %]</a>[% ELSE %][% DEFAULT loopcel.value="&nbsp;" %][% END %]
+						</td>
+                    [% END %]
+						<td align="center">[% loopro.totalrow %]</td>
+                    </tr>
+                [% END %]
+            <tr>
+                <th>TOTAL</th>
+                [% FOREACH loopfoote IN mainloo.loopfooter %]
+                <th>[% loopfoote.totalcol %]</th>
+                [% END %]
+                <th>[% mainloo.total %]</th>
+            </tr>
+        </table>
+    [% END %]
+    [% END %]
+[% ELSE %]
+
+    <form method="post" action="/cgi-bin/koha/reports/reserves_stats.pl">
+    <fieldset class="rows">
+	<legend>Holds statistics</legend><table>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Row</th>
+                <th>Column</th>
+                <th>Filter</th>
+            </tr>
+        </thead>
+        <tbody>
+        	<tr >
+                <td>Hold Status </td>
+                <td><input type="radio" name="Line" value="reservestatus" /></td>
+                <td><input type="radio" name="Column" value="reservestatus" checked="checked" /></td>
+                <td>
+				<input type="checkbox" name="filter_reservestatus_or_1" value="1"> Asked</input>
+				<input type="checkbox" name="filter_reservestatus_or_2" value="2"> Processing</input>
+				<input type="checkbox" name="filter_reservestatus_or_3" value="3"> Waiting</input>
+				<input type="checkbox" name="filter_reservestatus_or_4" value="4"> Satisfied</input>
+				<input type="checkbox" name="filter_reservestatus_or_5" value="5"> Cancelled</input>
+				</td>
+             </tr>
+             <tr class="highlight">
+                <td>Hold Date</td>
+                <td><input type="radio" name="Line" value="reservedate" /></td>
+                <td><input type="radio" name="Column" value="reservedate" /></td>
+                <td><label for="reservedate_begin">From</label> <input type="text"  size="10" id="filter_reservedate_begin" name="filter_reservedate_begin" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openreservedateFrom" style="cursor: pointer;" />
+                   <script type="text/javascript">
+				   //<![CDATA[ 
+				   function validate1(date) {
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        var weekDay = date.getDay();
+                        var dayMonth = month + '-' + day;
+                        var dateString = year + '-' + month + '-' + day;
+                        var dateTo = document.getElementById('filter_reservedate_end').value.split("-");
+                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+                        if (date > limitDate) {
+                             return true;
+                        } else {
+                             return false;
+                        }
+                    }
+                    Calendar.setup({
+                            inputField : "filter_reservedate_begin",
+                            ifFormat : "[% DHTMLcalendar_dateformat %]",
+                            button : "openreservedateFrom",
+                            disableFunc : validate1,
+                            dateStatusFunc : validate1
+                    });
+					//]]>
+					</script>
+                    <label for="filter_reservedate_end">To</label> <input size="10" id="filter_reservedate_end" name="filter_reservedate_end" value="" type="text" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="openreservedateTo" style="cursor: pointer;" border="0" />
+                    <script type="text/javascript">
+					//<![CDATA[  
+					function validate2(date) {
+                         var day = date.getDate();
+                         var month = date.getMonth() + 1;
+                         var year = date.getFullYear();
+                         var weekDay = date.getDay();
+                         var dayMonth = month + '-' + day;
+                         var dateString = year + '-' + month + '-' + day;
+                         var dateFrom = document.getElementById('filter_reservedate_begin').value.split("-");
+                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+                         if (limitDate > date) {
+                              return true;
+                         } else {
+                              return false;
+                         }
+                     }
+                     Calendar.setup({
+                             inputField : "filter_reservedate_end",
+                             ifFormat : "[% DHTMLcalendar_dateformat %]",
+                             button : "openreservedateTo",
+                             disableFunc : validate2,
+                             dateStatusFunc : validate2
+                     });
+					//]]>
+					</script>
+                    </td>
+                </tr>
+            <tr>
+                <td>Notification Date</td>
+                <td><input type="radio" name="Line" value="notificationdate" /></td>
+                <td><input type="radio" name="Column" value="notificationdate" /></td>
+                <td><label for="filter_notificationdate_begin">From</label> <input type="text"  size="10" id="filter_notificationdate_begin" name="filter_notificationdate_begin" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="opennotificationdateFrom" style="cursor: pointer;" />
+                   <script type="text/javascript">
+				   //<![CDATA[ 
+				   function validate1(date) {
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        var weekDay = date.getDay();
+                        var dayMonth = month + '-' + day;
+                        var dateString = year + '-' + month + '-' + day;
+                        var dateTo = document.getElementById('filter_notificationdate_end').value.split("-");
+                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+                        if (date > limitDate) {
+                             return true;
+                        } else {
+                             return false;
+                        }
+                    }
+                    Calendar.setup({
+                            inputField : "filter_notificationdate_begin",
+                            ifFormat : "[% DHTMLcalendar_dateformat %]",
+                            button : "opennotificationdateFrom",
+                            disableFunc : validate1,
+                            dateStatusFunc : validate1
+                    });
+					//]]>
+					</script>
+                    <label for="filter_notificationdate_end">To</label> <input  size="10" id="filter_notificationdate_end" name="filter_notificationdate_end" value="" type="text" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="opennotificationdateTo" style="cursor: pointer;" border="0" />
+                    <script type="text/javascript">
+					//<![CDATA[  
+					function validate2(date) {
+                         var day = date.getDate();
+                         var month = date.getMonth() + 1;
+                         var year = date.getFullYear();
+                         var weekDay = date.getDay();
+                         var dayMonth = month + '-' + day;
+                         var dateString = year + '-' + month + '-' + day;
+                         var dateFrom = document.getElementById('filter_notificationdate_begin').value.split("-");
+                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+                         if (limitDate > date) {
+                              return true;
+                         } else {
+                              return false;
+                         }
+                     }
+                     Calendar.setup({
+                             inputField : "filter_notificationdate_end",
+                             ifFormat : "[% DHTMLcalendar_dateformat %]",
+                             button : "opennotificationdateTo",
+                             disableFunc : validate2,
+                             dateStatusFunc : validate2
+                     });
+					//]]>
+					</script>
+                    </td>
+             </tr>
+            <tr>
+                <td>Reminder Date</td>
+                <td><input type="radio" name="Line" value="reminderdate" /></td>
+                <td><input type="radio" name="Column" value="reminderdate" /></td>
+                <td><label for="filter_reminderdate_begin">From</label> <input type="text"  size="10" id="filter_reminderdate_begin" name="Filter" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openreminderdateFrom" style="cursor: pointer;" />
+                   <script type="text/javascript">
+				   //<![CDATA[ 
+				   function validate1(date) {
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        var weekDay = date.getDay();
+                        var dayMonth = month + '-' + day;
+                        var dateString = year + '-' + month + '-' + day;
+                        var dateTo = document.getElementById('filter_reminderdate_end').value.split("-");
+                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+                        if (date > limitDate) {
+                             return true;
+                        } else {
+                             return false;
+                        }
+                    }
+                    Calendar.setup({
+                            inputField : "filter_reminderdate_begin",
+                            ifFormat : "[% DHTMLcalendar_dateformat %]",
+                            button : "openreminderdateFrom",
+                            disableFunc : validate1,
+                            dateStatusFunc : validate1
+                    });
+					//]]>
+					</script>
+                    <label for="filter_reminderdate_end">To</label> <input size="10" id="filter_reminderdate_end" name="filter_reminderdate_end" value="" type="text" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="openreminderdateTo" style="cursor: pointer;" border="0" />
+                    <script type="text/javascript">
+					//<![CDATA[  
+					function validate2(date) {
+                         var day = date.getDate();
+                         var month = date.getMonth() + 1;
+                         var year = date.getFullYear();
+                         var weekDay = date.getDay();
+                         var dayMonth = month + '-' + day;
+                         var dateString = year + '-' + month + '-' + day;
+                         var dateFrom = document.getElementById('filter_reminderdate_begin').value.split("-");
+                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+                         if (limitDate > date) {
+                              return true;
+                         } else {
+                              return false;
+                         }
+                     }
+                     Calendar.setup({
+                             inputField : "filter_reminderdate_end",
+                             ifFormat : "[% DHTMLcalendar_dateformat %]",
+                             button : "openreminderdateTo",
+                             disableFunc : validate2,
+                             dateStatusFunc : validate2
+                     });
+					//]]>
+					</script>
+                    </td>
+             </tr>
+            <tr>
+                <td>Waiting Date</td>
+                <td><input type="radio" name="Line" value="waitingdate" /></td>
+                <td><input type="radio" name="Column" value="waitingdate" /></td>
+                <td><label for="filter_waitingdate_begin">From</label> <input type="text"  size="10" id="filter_waitingdate_begin" name="filter_waitingdate_begin" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="openwaitingdateFrom" style="cursor: pointer;" />
+                   <script type="text/javascript">
+				   //<![CDATA[ 
+				   function validate1(date) {
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        var weekDay = date.getDay();
+                        var dayMonth = month + '-' + day;
+                        var dateString = year + '-' + month + '-' + day;
+                        var dateTo = document.getElementById('filter_waitingdate_end').value.split("-");
+                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+                        if (date > limitDate) {
+                             return true;
+                        } else {
+                             return false;
+                        }
+                    }
+                    Calendar.setup({
+                            inputField : "filter_waitingdate_begin",
+                            ifFormat : "[% DHTMLcalendar_dateformat %]",
+                            button : "openwaitingdateFrom",
+                            disableFunc : validate1,
+                            dateStatusFunc : validate1
+                    });
+					//]]>
+					</script>
+                    <label for="filter_waitingdate_end">To</label> <input  size="10" id="filter_waitingdate_end" name="filter_waitingdate_end" value="" type="text" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="openwaitingdateTo" style="cursor: pointer;" border="0" />
+                    <script type="text/javascript">
+					//<![CDATA[  
+					function validate2(date) {
+                         var day = date.getDate();
+                         var month = date.getMonth() + 1;
+                         var year = date.getFullYear();
+                         var weekDay = date.getDay();
+                         var dayMonth = month + '-' + day;
+                         var dateString = year + '-' + month + '-' + day;
+                         var dateFrom = document.getElementById('filter_waitingdate_begin').value.split("-");
+                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+                         if (limitDate > date) {
+                              return true;
+                         } else {
+                              return false;
+                         }
+                     }
+                     Calendar.setup({
+                             inputField : "filter_waitingdate_end",
+                             ifFormat : "[% DHTMLcalendar_dateformat %]",
+                             button : "openwaitingdateTo",
+                             disableFunc : validate2,
+                             dateStatusFunc : validate2
+                     });
+					//]]>
+					</script>
+                    </td>
+             </tr>
+			 <tr>
+                <td>Cancellation Date</td>
+                <td><input type="radio" name="Line" value="cancellationdate" /></td>
+                <td><input type="radio" name="Column" value="cancellationdate" /></td>
+                <td><label for="filter_cancellationdate_begin">From</label> <input type="text"  size="10" id="filter_cancellationdate_begin" name="filter_cancellationdate_begin" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" border="0" id="opencancellationdateFrom" style="cursor: pointer;" />
+                   <script type="text/javascript">
+				   //<![CDATA[ 
+				   function validate1(date) {
+                        var day = date.getDate();
+                        var month = date.getMonth() + 1;
+                        var year = date.getFullYear();
+                        var weekDay = date.getDay();
+                        var dayMonth = month + '-' + day;
+                        var dateString = year + '-' + month + '-' + day;
+                        var dateTo = document.getElementById('filter_cancellationdate_end').value.split("-");
+                        var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+                        if (date > limitDate) {
+                             return true;
+                        } else {
+                             return false;
+                        }
+                    }
+                    Calendar.setup({
+                            inputField : "filter_cancellationdate_begin",
+                            ifFormat : "[% DHTMLcalendar_dateformat %]",
+                            button : "opencancellationdateFrom",
+                            disableFunc : validate1,
+                            dateStatusFunc : validate1
+                    });
+					//]]>
+					</script>
+                    <label for="filter_cancellationdate_end">To</label> <input  size="10" id="filter_cancellationdate_end" name="filter_cancellationdate_end" value="" type="text" />
+                    <img src="[% themelang %]/lib/calendar/cal.gif" alt="Show Calendar" id="opencancellationdateTo" style="cursor: pointer;" border="0" />
+                    <script type="text/javascript">
+					//<![CDATA[  
+					function validate2(date) {
+                         var day = date.getDate();
+                         var month = date.getMonth() + 1;
+                         var year = date.getFullYear();
+                         var weekDay = date.getDay();
+                         var dayMonth = month + '-' + day;
+                         var dateString = year + '-' + month + '-' + day;
+                         var dateFrom = document.getElementById('filter_cancellationdate_begin').value.split("-");
+                         var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+                         if (limitDate > date) {
+                              return true;
+                         } else {
+                              return false;
+                         }
+                     }
+                     Calendar.setup({
+                             inputField : "filter_cancellationdate_end",
+                             ifFormat : "[% DHTMLcalendar_dateformat %]",
+                             button : "opencancellationdateTo",
+                             disableFunc : validate2,
+                             dateStatusFunc : validate2
+                     });
+					//]]>
+					</script>
+                    </td>
+             </tr>
+        <tr>
+            <td>Patron Category</td>
+            <td><input type="radio" name="Line" value="borrowers.categorycode" /></td>
+            <td><input type="radio" name="Column" value="borrowers.categorycode" /></td>
+           <td><select name="filter_categorycode" id="borcat">
+               <option value=""> </option>
+               [% FOREACH categoryloo IN categoryloop %]
+                 [% IF ( categoryloo.selected ) %]<option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.description %]</option>[% ELSE %]<option value="[% categoryloo.categorycode %]">[% categoryloo.description %]</option>[% END %]
+               [% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr class="highlight">
+            <td>Item Type</td>
+            <td><input type="radio" name="Line" value="items.itype" /></td>
+            <td><input type="radio" name="Column" value="items.itype" /></td>
+           <td><select name="filter_items.itype" id="itype">
+               <option value=""> </option>
+               [% FOREACH itypeloo IN itypeloop %]
+                 [% IF ( itypeloo.selected ) %]<option value="[% itypeloo.code %]" selected="selected">[% itypeloo.description %]</option>[% ELSE %]<option value="[% itypeloo.code %]">[% itypeloo.description %]</option>[% END %]
+               [% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr>
+            <td>Pickup Library</td>
+            <td><input type="radio" name="Line" value="reserves.branchcode" checked="checked" /></td>
+            <td><input type="radio" name="Column" value="reserves.branchcode" /></td>
+            <td><select name="filter_reserves.branchcode" id="resbranchcode">
+               <option value=""> </option>
+               [% FOREACH branchloo IN branchloop %]
+[% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+				[% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr class="highlight">
+            <td>Holding Library</td>
+            <td><input type="radio" name="Line" value="holdingbranch" /></td>
+            <td><input type="radio" name="Column" value="holdingbranch" /></td>
+            <td><select name="filter_holdingbranch" id="holdingbranch">
+               <option value=""> </option>
+               [% FOREACH branchloo IN branchloop %]
+[% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+				[% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr>
+            <td>Home Library</td>
+            <td><input type="radio" name="Line" value="homebranch" /></td>
+            <td><input type="radio" name="Column" value="homebranch" /></td>
+            <td><select name="filter_homebranch" id="homebranch">
+               <option value=""> </option>
+               [% FOREACH branchloo IN branchloop %]
+[% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>[% ELSE %]<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>[% END %]
+				[% END %]
+               </select>
+             </td> 
+        </tr>
+        <tr class="highlight">
+            <td>Collection</td>
+            <td><input type="radio" name="Line"   value="items.ccode" /></td>
+            <td><input type="radio" name="Column" value="items.ccode" /></td>
+            <td><select name="filter_items.ccode" id="ccode">
+                <option value=""> </option>
+                [% FOREACH ccodeloo IN ccodeloop %]
+					[% IF ( ccodeloo.selected ) %] <option value="[% ccodeloo.code %]" selected="selected">[% ccodeloo.description %]</option>[% ELSE %]<option value="[% ccodeloo.code %]">[% ccodeloo.description %]</option>[% END %]
+                [% END %]
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <td>Shelving Location</td>
+            <td><input type="radio" name="Line" value="items.location" /></td>
+            <td><input type="radio" name="Column" value="items.location" /></td>
+            <td><select name="filter_items.location" id="location">
+                <option value=""> </option>
+                [% FOREACH locationloo IN locationloop %]
+					[% IF ( locationloo.selected ) %]<option value="[% locationloo.code %]" selected="selected">[% locationloo.description %]</option>[% ELSE %]<option value="[% locationloo.code %]">[% locationloo.description %]</option>[% END %]
+				[% END %]
+               </select>
+            </td> 
+        </tr>
+        <tr class="highlight">
+            <td>Item Call Number</td>
+            <td></td>
+            <td></td>
+            <td>From <input type="text" name="filter_itemcallnumber" size="10" /> (inclusive) to <input type="text" name="fiter_itemcallnumber" size="10" /> (exclusive) </td>
+        </tr>
+        [% IF ( hassort1 ) %]
+        <tr><td>Patron sort1</td>
+			<td><input type="radio" name="Line" value="borrowers.sort1" /></td>
+			<td><input type="radio" name="Column" value="borrowers.sort1" /></td>
+			<td><select name="filter_borrowers.sort1" id="sort1">
+               <option value=""> </option>
+               [% FOREACH Bsort IN Bsort1 %]
+			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+               [% END %]
+               </select>
+            </td> 
+        </tr>
+        [% END %]
+        [% IF ( hassort2 ) %]
+        <tr class="highlight"><td>Patron sort2</td>
+            <td><input type="radio" name="Line" value="borrowers.sort2" /></td>
+            <td><input type="radio" name="Column" value="borrowers.sort2" /></td>
+           	<td><select name="filter_borrowers.sort2" id="sort2">
+               <option value=""> </option>
+               [% FOREACH Bsort IN Bsort2 %]
+			   [% IF ( Bsort.selected ) %]<option value="[% Bsort.authorised_value %]" selected="selected">[% Bsort.lib %]</option>[% ELSE %]<option value="[% Bsort.authorised_value %]" >[% Bsort.lib %]</option>[% END %]
+               [% END %]
+               </select>
+            </td> 
+        </tr>
+        [% END %]
+        </tbody>
+    </table><br /></fieldset>
+
+<fieldset class="rows"><legend>Cell value </legend><ol><li><label for="cellvalue1">Count holds</label> <input type="radio" name="Cellvalue" value="1" id="cellvalue1" checked="checked" /> </li>
+            <li><label for="cellvalue2">Count unique borrowers</label> <input type="radio" name="Cellvalue" value="2" id="cellvalue2" /> </li><li><label for="cellvalue3">Count unique items</label> <input type="radio" name="Cellvalue" id="cellvalue3" value="3" /> </li><li><label for="cellvalue4">Count unique biblios</label> <input type="radio" name="Cellvalue" id="cellvalue4" value="4" /> </li></ol></fieldset>
+			
+	<fieldset class="rows">
+	<legend>Output</legend>
+<ol><li><label for="outputscreen">To screen into the browser: </label><input type="radio" checked="checked" name="output" id="outputscreen" value="screen" /> </li>
+<li><label for="outputfile">To a file:</label> <input type="radio" name="output" value="file" id="outputfile" /> <label class="inline" for="basename">Named: </label><input type="text" name="basename" id="basename" value="Export" /> <label class="inline" for="MIME">Into an application  
+		</label>[% CGIextChoice %]
+		[% CGIsepChoice %]</li></ol>
+	</fieldset>
+
+	<fieldset class="action">
+	<input type="submit" value="Submit" />
+	<input type="hidden" name="report_name" value="[% report_name %]" />
+	<input type="hidden" name="do_it" value="1" />
+	</fieldset>
+	</form>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

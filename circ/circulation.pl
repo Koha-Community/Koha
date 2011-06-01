@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 
-# written 8/5/2002 by Finlay
 # script to execute issuing of books
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -42,6 +42,7 @@ use Date::Calc qw(
   Add_Delta_Days
   Date_to_Days
 );
+use List::MoreUtils qw/uniq/;
 
 
 #
@@ -136,11 +137,8 @@ if ( $barcode ) {
     }
 }
 
-my ($datedue,$invalidduedate,$globalduedate);
+my ($datedue,$invalidduedate);
 
-if(C4::Context->preference('globalDueDate') && (C4::Context->preference('globalDueDate') =~ C4::Dates->regexp('syspref'))){
-        $globalduedate = C4::Dates->new(C4::Context->preference('globalDueDate'));
-}
 my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
 if($duedatespec_allow){
     if ($duedatespec) {
@@ -157,16 +155,7 @@ if($duedatespec_allow){
             $invalidduedate = 1;
             $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
         }
-    } else {
-        # pass global due date to tmpl if specifyduedate is true 
-        # and we have no barcode (loading circ page but not checking out)
-        if($globalduedate &&  ! $barcode ){
-            $duedatespec = $globalduedate->output();
-            $stickyduedate = 1;
-        }
     }
-} else {
-    $datedue = $globalduedate if ($globalduedate);
 }
 
 my $todaysdate = C4::Dates->new->output('iso');
@@ -311,10 +300,6 @@ if ($barcode) {
         unless($confirm_required) {
             AddIssue( $borrower, $barcode, $datedue, $cancelreserve );
             $inprocess = 1;
-            if($globalduedate && ! $stickyduedate && $duedatespec_allow ){
-                $duedatespec = $globalduedate->output();
-                $stickyduedate = 1;
-            }
         }
     }
     
@@ -419,15 +404,24 @@ my $todaysissues = '';
 my $previssues   = '';
 my @todaysissues;
 my @previousissues;
+my @relissues;
+my @relprevissues;
+my $displayrelissues;
 
 my $totalprice = 0;
 
-if ($borrower) {
-# get each issue of the borrower & separate them in todayissues & previous issues
-    my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
+sub build_issue_data {
+    my $issueslist = shift;
+    my $relatives = shift;
+
     # split in 2 arrays for today & previous
     foreach my $it ( @$issueslist ) {
         my $itemtypeinfo = getitemtypeinfo( (C4::Context->preference('item-level_itypes')) ? $it->{'itype'} : $it->{'itemtype'} );
+
+        # Getting borrower details
+        my $memberdetails = GetMemberDetails($it->{'borrowernumber'});
+        $it->{'borrowername'} = $memberdetails->{'firstname'} . " " . $memberdetails->{'surname'};
+        $it->{'cardnumber'} = $memberdetails->{'cardnumber'};
         # set itemtype per item-level_itype syspref - FIXME this is an ugly hack
         $it->{'itemtype'} = ( C4::Context->preference( 'item-level_itypes' ) ) ? $it->{'itype'} : $it->{'itemtype'};
 
@@ -455,11 +449,28 @@ if ($borrower) {
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
 
         if ( $todaysdate eq $it->{'issuedate'} or $todaysdate eq $it->{'lastreneweddate'} ) {
-            push @todaysissues, $it;
+            (!$relatives) ? push @todaysissues, $it : push @relissues, $it;
         } else {
-            push @previousissues, $it;
+            (!$relatives) ? push @previousissues, $it : push @relprevissues, $it;
         }
     }
+}
+
+if ($borrower) {
+
+    # Getting borrower relatives
+    my @relborrowernumbers = GetMemberRelatives($borrower->{'borrowernumber'});
+    #push @borrowernumbers, $borrower->{'borrowernumber'};
+
+    # get each issue of the borrower & separate them in todayissues & previous issues
+    my ($issueslist) = GetPendingIssues($borrower->{'borrowernumber'});
+    my ($relissueslist) = GetPendingIssues(@relborrowernumbers);
+
+    build_issue_data($issueslist, 0);
+    build_issue_data($relissueslist, 1);
+  
+    $displayrelissues = scalar($relissueslist);
+
     if ( C4::Context->preference( "todaysIssuesDefaultSortOrder" ) eq 'asc' ) {
         @todaysissues   = sort { $a->{'timestamp'} cmp $b->{'timestamp'} } @todaysissues;
     }
@@ -494,6 +505,7 @@ if ($borrowerslist) {
         -id       => 'borrowernumber',
         -values   => \@values,
         -labels   => \%labels,
+        -ondblclick => 'document.forms[\'mainform\'].submit()',
         -size     => 7,
         -tabindex => '',
         -multiple => 0
@@ -614,6 +626,11 @@ if($bor_messages_loop){ $template->param(flagged => 1 ); }
 my (undef, $roadttype_hashref) = &GetRoadTypes();
 my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
 
+my $fast_cataloging = 0;
+    if (defined getframeworkinfo('FA')) {
+    $fast_cataloging = 1 
+    }
+
 $template->param(
     lib_messages_loop => $lib_messages_loop,
     bor_messages_loop => $bor_messages_loop,
@@ -637,6 +654,7 @@ $template->param(
     emailpro          => $borrower->{'emailpro'},
     borrowernotes     => $borrower->{'borrowernotes'},
     city              => $borrower->{'city'},
+    state              => $borrower->{'state'},
     zipcode           => $borrower->{'zipcode'},
     country           => $borrower->{'country'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
@@ -651,12 +669,16 @@ $template->param(
     totaldue          => sprintf('%.2f', $total),
     todayissues       => \@todaysissues,
     previssues        => \@previousissues,
+    relissues			=> \@relissues,
+    relprevissues		=> \@relprevissues,
+    displayrelissues		=> $displayrelissues,
     inprocess         => $inprocess,
     memberofinstution => $member_of_institution,
     CGIorganisations  => $CGIorganisations,
     is_child          => ($borrower->{'category_type'} eq 'C'),
     circview => 1,
     soundon           => C4::Context->preference("SoundOn"),
+    fast_cataloging   => $fast_cataloging,
 );
 
 # save stickyduedate to session

@@ -80,5 +80,5 @@ sub send_reply {
     my $reply = CGI->new("");
     print $reply->header(-type => 'text/html');
     # response will be sent back as JSON
-    print "{ status: '$upload_status', fileid: '$fileid' }";
+    print '{"status":"' . $upload_status . '","fileid":"' . $fileid . '"}';
 }

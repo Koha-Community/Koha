@@ -48,7 +48,8 @@ use strict;
 #use warnings; FIXME - Bug 2505
 use C4::Context;
 use C4::Auth;
-use C4::Bookseller;
+
+use C4::Bookseller qw( ModBookseller AddBookseller );
 use C4::Biblio;
 use C4::Output;
 use CGI;
@@ -91,7 +92,7 @@ $data{'contnotes'}=$input->param('contact_notes');
 # warn "".$data{'contnotes'};
 $data{'notes'}=$input->param('notes');
 $data{'active'}=$input->param('status');
-$data{'specialty'}=$input->param('publishers_imprints');
+
 $data{'listprice'}=$input->param('list_currency');
 $data{'invoiceprice'}=$input->param('invoice_currency');
 $data{'gstreg'}=$input->param('gst');

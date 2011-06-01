@@ -1,11 +1,11 @@
 <form name="f" method="get" action="auth_finder.pl">
             <input type="hidden" name="op" value="do_search" />
             <input type="hidden" name="type" value="intranet" />
-            <input type="hidden" name="index" value="<!-- TMPL_VAR NAME="index" -->" />
+            <input type="hidden" name="index" value="[% index %]" />
                 <fieldset class="rows"><ol><li>
                     <span class="label">Authority type</span>
-                    <!-- TMPL_VAR NAME="authtypecode" -->
-                    <input type="hidden" name="authtypecode" value="<!-- TMPL_VAR NAME="authtypecode" -->" />
+                    [% authtypecode %]
+                    <input type="hidden" name="authtypecode" value="[% authtypecode %]" />
                 </li>
                 <li>
                     <label for="mainmainentry">Main entry ($a only)</label>
@@ -17,7 +17,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value_mainstr" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_mainstr" -->" />
+                    <input type="text" name="value_mainstr" value="[% value_mainstr |html %]" />
                 </li>
                 <li>
                     <label for="mainentry">Main entry</label>
@@ -29,7 +29,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value_main" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_main" -->" />
+                    <input type="text" name="value_main" value="[% value_main |html %]" />
                 </li>
                 <li>
                     <label for="marclist">Anywhere</label>
@@ -41,7 +41,7 @@
                         <option value="start">starts with</option>
                         <option value="is">is exactly</option>
                     </select>
-                    <input type="text" name="value_any" value="<!-- TMPL_VAR ESCAPE="HTML" name="value_any" -->" />
+                    <input type="text" name="value_any" value="[% value_any |html %]" />
                 </li>
 		<li>
 		<label for="orderby">Sort by </label>

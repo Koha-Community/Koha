@@ -35,7 +35,7 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&recordpayment &makepayment &manualinvoice
-		&getnextacctno &reconcileaccount &getcharges &getcredits
+		&getnextacctno &reconcileaccount &getcharges &ModNote &getcredits
 		&getrefunds &chargelostitem
 		&ReversePayment
 	); # removed &fixaccounts
@@ -316,7 +316,7 @@ sub chargelostitem{
         # FIXME: Log this ?
         }
         #FIXME : Should probably have a way to distinguish this from an item that really was returned.
-        warn " $issues->{'borrowernumber'}  /  $itemnumber ";
+        #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
         C4::Circulation::MarkIssueReturned($issues->{borrowernumber},$itemnumber);
 	#  Shouldn't MarkIssueReturned do this?
         C4::Items::ModItem({ onloan => undef }, undef, $itemnumber);
@@ -327,7 +327,7 @@ sub chargelostitem{
 =head2 manualinvoice
 
   &manualinvoice($borrowernumber, $itemnumber, $description, $type,
-                 $amount, $user);
+                 $amount, $note);
 
 C<$borrowernumber> is the patron's borrower number.
 C<$description> is a description of the transaction.
@@ -351,7 +351,9 @@ should be the empty string.
 #
 
 sub manualinvoice {
-    my ( $borrowernumber, $itemnum, $desc, $type, $amount, $user ) = @_;
+    my ( $borrowernumber, $itemnum, $desc, $type, $amount, $note ) = @_;
+    my $manager_id = 0;
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $dbh      = C4::Context->dbh;
     my $notifyid = 0;
     my $insert;
@@ -403,16 +405,16 @@ sub manualinvoice {
         $desc .= " " . $itemnum;
         my $sth = $dbh->prepare(
             "INSERT INTO  accountlines
-                        (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber,notify_id)
-        VALUES (?, ?, now(), ?,?, ?,?,?,?)");
-     $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft, $itemnum,$notifyid) || return $sth->errstr;
+                        (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber,notify_id, note, manager_id)
+        VALUES (?, ?, now(), ?,?, ?,?,?,?,?,?)");
+     $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft, $itemnum,$notifyid, $note, $manager_id) || return $sth->errstr;
   } else {
     my $sth=$dbh->prepare("INSERT INTO  accountlines
-            (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding,notify_id)
-            VALUES (?, ?, now(), ?, ?, ?, ?,?)"
+            (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding,notify_id, note, manager_id)
+            VALUES (?, ?, now(), ?, ?, ?, ?,?,?,?)"
         );
         $sth->execute( $borrowernumber, $accountno, $amount, $desc, $type,
-            $amountleft, $notifyid );
+            $amountleft, $notifyid, $note, $manager_id );
     }
     return 0;
 }
@@ -606,6 +608,12 @@ sub getcharges {
     return (@results);
 }
 
+sub ModNote {
+    my ( $borrowernumber, $accountno, $note ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare('UPDATE accountlines SET note = ? WHERE borrowernumber = ? AND accountno = ?');
+    $sth->execute( $note, $borrowernumber, $accountno );
+}
 
 sub getcredits {
 	my ( $date, $date2 ) = @_;

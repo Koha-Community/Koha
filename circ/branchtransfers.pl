@@ -1,10 +1,9 @@
 #!/usr/bin/perl
-# WARNING: This file uses 4-character tabs!
 
-#written 11/3/2002 by Finlay
 #script to execute branch transfers of books
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #

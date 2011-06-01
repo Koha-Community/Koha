@@ -1,6 +1,7 @@
 package C4::Members;
 
 # Copyright 2000-2003 Katipo Communications
+# Copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -44,6 +45,7 @@ BEGIN {
 		&Search
 		&SearchMember 
 		&GetMemberDetails
+        &GetMemberRelatives
 		&GetMember
 
 		&GetGuarantees 
@@ -68,6 +70,8 @@ BEGIN {
     &GetPatronImage
     &PutPatronImage
     &RmPatronImage
+
+                &GetHideLostItemsPreference
 
 		&IsMemberBlocked
 		&GetMemberAccountRecords
@@ -209,22 +213,28 @@ sub SearchMember {
             $query.=" borrowers.branchcode =".$dbh->quote(C4::Context->userenv->{'branch'})." AND " unless (C4::Context->userenv->{'branch'} eq "insecure");
           }      
         }     
-        $query.="((surname LIKE ? OR surname LIKE ?
-                OR firstname  LIKE ? OR firstname LIKE ?
-                OR othernames LIKE ? OR othernames LIKE ?)
+        $query.="((surname LIKE ? OR (surname LIKE ? AND surname REGEXP ?)
+                OR firstname  LIKE ? OR (firstname LIKE ? AND firstname REGEXP ?)
+                OR othernames LIKE ? OR (othernames LIKE ? AND othernames REGEXP ?))
         " .
         ($category_type?" AND category_type = ".$dbh->quote($category_type):"");
+        my $regex = '[[:punct:][:space:]]'.$data[0];
         @bind = (
-            "$data[0]%", "% $data[0]%", "$data[0]%", "% $data[0]%",
-            "$data[0]%", "% $data[0]%"
+            "$data[0]%", "%$data[0]%", $regex, 
+            "$data[0]%", "%$data[0]%", $regex, 
+            "$data[0]%", "%$data[0]%", $regex 
         );
         for ( my $i = 1 ; $i < $count ; $i++ ) {
-            $query = $query . " AND (" . " surname LIKE ? OR surname LIKE ?
-                OR firstname  LIKE ? OR firstname LIKE ?
-                OR othernames LIKE ? OR othernames LIKE ?)";
+            $query = $query . " AND (" . " surname LIKE ? OR (surname LIKE ? AND surname REGEXP ?)
+                OR firstname  LIKE ? OR (firstname LIKE ? AND firstname REGEXP ?)
+                OR othernames LIKE ? OR (othernames LIKE ? AND othernames REGEXP ?))";
+            $regex = '[[:punct:][:space:]]'.$data[$i];
             push( @bind,
-                "$data[$i]%",   "% $data[$i]%", "$data[$i]%",
-                "% $data[$i]%", "$data[$i]%",   "% $data[$i]%" );
+              "$data[$i]%", "%$data[$i]%", $regex,
+              "$data[$i]%", "%$data[$i]%", $regex,
+              "$data[$i]%", "%$data[$i]%", $regex
+            );
+
 
             # FIXME - .= <<EOT;
         }
@@ -278,22 +288,30 @@ C<&searchtype> is a string telling the type of search you want todo : start_with
 =cut
 
 sub Search {
-    my ($filter,$orderby, $limit, $columns_out, $search_on_fields,$searchtype) = @_;
-	my @filters;
-	if (ref($filter) eq "ARRAY"){
-		push @filters,@$filter;
-	}
-	else {
-		push @filters,$filter;
-	}
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-		my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
-		push @filters,@$matching_records;
+    my ( $filter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype ) = @_;
+    my @filters;
+    my %filtersmatching_record;
+    my @finalfilter;
+    if ( ref($filter) eq "ARRAY" ) {
+        push @filters, @$filter;
+    } else {
+        push @filters, $filter;
     }
-	$searchtype||="start_with";
-	my $data=SearchInTable("borrowers",\@filters,$orderby,$limit,$columns_out,$search_on_fields,$searchtype);
-
-    return ( $data );
+    if ( C4::Context->preference('ExtendedPatronAttributes') ) {
+        my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
+        if(scalar(@$matching_records)>0) {
+			foreach my $matching_record (@$matching_records) {
+				$filtersmatching_record{$$matching_record[0]}=1;
+			}
+			foreach my $k (keys(%filtersmatching_record)) {
+				push @filters, {"borrowernumber"=>$k};
+			}
+		}
+    }
+    $searchtype ||= "start_with";
+	push @finalfilter, \@filters;
+	my $data = SearchInTable( "borrowers", \@finalfilter, $orderby, $limit, $columns_out, $search_on_fields, $searchtype );
+    return ($data);
 }
 
 =head2 GetMemberDetails
@@ -444,7 +462,7 @@ sub patronflags {
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
         $flaginfo{'message'} = sprintf "Patron owes \$%.02f", $amount;
         $flaginfo{'amount'}  = sprintf "%.02f", $amount;
-        if ( $amount > $noissuescharge ) {
+        if ( $amount > $noissuescharge && !C4::Context->preference("AllowFineOverride") ) {
             $flaginfo{'noissues'} = 1;
         }
         $flags{'CHARGES'} = \%flaginfo;
@@ -571,6 +589,46 @@ sub GetMember {
     return;
 }
 
+=head2 GetMemberRelatives
+
+ @borrowernumbers = GetMemberRelatives($borrowernumber);
+
+ C<GetMemberRelatives> returns a borrowersnumber's list of guarantor/guarantees of the member given in parameter
+
+=cut 
+sub GetMemberRelatives {
+    my $borrowernumber = shift;
+    my $dbh = C4::Context->dbh;
+    my @glist;
+
+    # Getting guarantor
+    my $query = "SELECT guarantorid FROM borrowers WHERE borrowernumber=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    my $data = $sth->fetchrow_arrayref();
+    push @glist, $data->[0] if $data->[0];
+    my $guarantor = $data->[0] if $data->[0];
+
+    # Getting guarantees
+    $query = "SELECT borrowernumber FROM borrowers WHERE guarantorid=?";
+    $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    while ($data = $sth->fetchrow_arrayref()) {
+       push @glist, $data->[0];
+    }
+
+    # Getting sibling guarantees
+    if ($guarantor) {
+        $query = "SELECT borrowernumber FROM borrowers WHERE guarantorid=?";
+        $sth = $dbh->prepare($query);
+        $sth->execute($guarantor);
+        while ($data = $sth->fetchrow_arrayref()) {
+           push @glist, $data->[0] if ($data->[0] != $borrowernumber);
+        }
+    }
+
+    return @glist;
+}
 
 =head2 IsMemberBlocked
 
@@ -742,7 +800,7 @@ Returns the borrowernumber
 sub AddMember {
     my (%data) = @_;
     my $dbh = C4::Context->dbh;
-    $data{'password'} = '!' if (not $data{'password'} and $data{'userid'});
+    $data{'userid'} = '' unless $data{'password'};
     $data{'password'} = md5_base64( $data{'password'} ) if $data{'password'};
 	$data{'borrowernumber'}=InsertInTable("borrowers",\%data);	
     # mysql_insertid is probably bad.  not necessarily accurate and mysql-specific at best.
@@ -784,7 +842,7 @@ sub Generate_Userid {
   do {
     $firstname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
     $surname =~ s/[[:digit:][:space:][:blank:][:punct:][:cntrl:]]//g;
-    $newuid = lc("$firstname.$surname");
+    $newuid = lc(($firstname)? "$firstname.$surname" : $surname);
     $newuid .= $offset unless $offset == 0;
     $offset++;
 
@@ -952,7 +1010,7 @@ sub UpdateGuarantees {
 }
 =head2 GetPendingIssues
 
-  my $issues = &GetPendingIssues($borrowernumber);
+  my $issues = &GetPendingIssues(@borrowernumber);
 
 Looks up what the patron with the given borrowernumber has borrowed.
 
@@ -965,14 +1023,22 @@ The keys include C<biblioitems> fields except marc and marcxml.
 
 #'
 sub GetPendingIssues {
-    my ($borrowernumber) = @_;
+    my (@borrowernumbers) = @_;
+
+    # Borrowers part of the query
+    my $bquery = '';
+    for (my $i = 0; $i < @borrowernumbers; $i++) {
+        $bquery .= " borrowernumber = ?";
+        $bquery .= " OR" if ($i < (scalar(@borrowernumbers) - 1));
+    }
+
     # must avoid biblioitems.* to prevent large marc and marcxml fields from killing performance
     # FIXME: namespace collision: each table has "timestamp" fields.  Which one is "timestamp" ?
     # FIXME: circ/ciculation.pl tries to sort by timestamp!
     # FIXME: C4::Print::printslip tries to sort by timestamp!
     # FIXME: namespace collision: other collisions possible.
     # FIXME: most of this data isn't really being used by callers.
-    my $sth = C4::Context->dbh->prepare(
+    my $query =
    "SELECT issues.*,
             items.*,
            biblio.*,
@@ -989,16 +1055,19 @@ sub GetPendingIssues {
            biblioitems.url,
            issues.timestamp AS timestamp,
            issues.renewals  AS renewals,
+           issues.borrowernumber AS borrowernumber,
             items.renewals  AS totalrenewals
     FROM   issues
     LEFT JOIN items       ON items.itemnumber       =      issues.itemnumber
     LEFT JOIN biblio      ON items.biblionumber     =      biblio.biblionumber
     LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
     WHERE
-      borrowernumber=?
+      $bquery
     ORDER BY issues.issuedate"
-    );
-    $sth->execute($borrowernumber);
+    ;
+
+    my $sth = C4::Context->dbh->prepare($query);
+    $sth->execute(@borrowernumbers);
     my $data = $sth->fetchall_arrayref({});
     my $today = C4::Dates->new->output('iso');
     foreach (@$data) {
@@ -1796,6 +1865,25 @@ sub RmPatronImage {
     my $dberror = $sth->errstr;
     warn "Database error!" if $sth->errstr;
     return $dberror;
+}
+
+=head2 GetHideLostItemsPreference
+
+  $hidelostitemspref = &GetHideLostItemsPreference($borrowernumber);
+
+Returns the HideLostItems preference for the patron category of the supplied borrowernumber
+C<&$hidelostitemspref>return value of function, 0 or 1
+
+=cut
+
+sub GetHideLostItemsPreference {
+    my ($borrowernumber) = @_;
+    my $dbh = C4::Context->dbh;
+    my $query = "SELECT hidelostitems FROM borrowers,categories WHERE borrowers.categorycode = categories.categorycode AND borrowernumber = ?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($borrowernumber);
+    my $hidelostitems = $sth->fetchrow;    
+    return $hidelostitems;    
 }
 
 =head2 GetRoadTypeDetails (OUEST-PROVENCE)

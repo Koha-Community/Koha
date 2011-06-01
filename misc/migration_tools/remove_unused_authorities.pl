@@ -62,6 +62,10 @@ while (my $data=$rqselect->fetchrow_hashref){
     $query= "an=".$data->{'authid'};
     # search for biblios mapped
     my ($err,$res,$used) = C4::Search::SimpleSearch($query,0,10);
+    if (defined $err) {
+        warn "error: $err on search $query\n";
+        next;
+    }
     print ".";
     print "$counter\n" unless $counter++ % 100;
     # if found, delete, otherwise, just count

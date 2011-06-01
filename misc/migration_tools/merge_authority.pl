@@ -97,7 +97,7 @@ if ($batch) {
   my $MARCto = GetAuthority($mergeto);
   &merge($mergefrom,$MARCfrom,$mergeto,$MARCto);
   #Could add mergefrom authority to mergeto rejected forms before deletion 
-  DelAuthority($mergefrom);
+  DelAuthority($mergefrom) if ($mergefrom != $mergeto);
 }
 my $timeneeded = gettimeofday - $starttime;
 print "Done in $timeneeded seconds" unless $noconfirm;

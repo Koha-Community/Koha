@@ -1,0 +1,188 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Hold Ratios</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css" />
+<!-- End of additions --><!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	 $(document).ready(function() {
+	 	$("th a").hide();
+	 	$(".ratiolimit").click(function () {
+            $("#ratio").val($(this).html());
+        });
+	 	$(".ratiolimit").hover(
+            function () { $(this).toggleClass("ulined") },
+            function () { $(this).toggleClass("ulined") }
+        );
+		$.tablesorter.defaults.widgets = ['zebra']; 
+		$("#holdst:has(tbody tr)").tablesorter({    // only add sort if the table has a body and rows
+			sortList: [[0,1]],
+			headers: { 1: { sorter: 'articles' }}
+		}); 
+	 });
+//]]>
+</script>
+<style type="text/css">
+    .sql { display: none; }
+    .ulined { text-decoration: underline; }
+    .ratiolimit { color: blue; cursor: pointer; }
+</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Hold Ratios</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+<h1>Hold Ratios to Calculate Items Needed</h1>
+   <h3>Calculated on [% todaysdate %]. From [% from %]
+	to [% to %]</h3>
+<p>These items have a hold ratio &ge; [% ratio %].</p>
+<div class="sql">[% DEFAULT sql="" %]</div>
+
+[% IF ( reserveloop ) %]
+    <table id="holdst">
+<thead>    <tr>
+        <th>Holds
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=[% ratio %]&amp;order=reservecount&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>Items
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=[% ratio %]&amp;order=itemcount&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>Hold Ratio</th>
+        <th>Title
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=[% ratio %]&amp;order=biblio&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>Holding Libraries
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=[% ratio %]&amp;order=branch&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>Location
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=[% ratio %]&amp;order=location&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>Itype
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=[% ratio %]&amp;order=itype&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>Call Numbers
+        <a href="/cgi-bin/koha/circ/reserveratios.pl?ratio=[% ratio %]&amp;order=callnumber&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>Items Needed
+        </th>
+    </tr></thead>
+    
+    <tbody>[% FOREACH reserveloo IN reserveloop %]
+        <tr>
+           	<td><p>[% reserveloo.reservecount %]</p></td>
+           	<td><p>[% reserveloo.itemcount %]</p></td>
+           	<td><p class="ratiolimit">[% reserveloo.thisratio %]</p></td>
+            <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title |html %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author %][% END %]
+            </td>
+            <td><p>[% reserveloo.listbranch %]</p></td>
+            <td><p>[% reserveloo.location %]</p></td>
+            <td><p>[% reserveloo.itype %]</p></td>
+            <td><p>[% reserveloo.listcall %]</p></td>
+            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p><b>[% reserveloo.ratiocalc %] to order</b></p>[% END %]</td>
+        </tr>
+    [% END %]</tbody>
+    </table>
+    [% ELSE %]
+        <b>No items found.</b>
+    [% END %]
+</div>
+</div>
+<div class="yui-b">
+<form action="/cgi-bin/koha/circ/reserveratios.pl" method="post" >
+<fieldset class="brief">
+<h4>Refine Results:</h4>
+<ol><li><label for="ratio">
+    Hold Ratio:
+</label>
+<input type="text" size="5" id="ratio" name="ratio" value="[% ratio %]" /></li>
+<li><label for="from">
+    Start date:
+</label>
+<input type="text" size="10" id="from" name="from" value="[% from %]" />
+<img src="[% themelang %]/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
+<script language="JavaScript" type="text/javascript">
+function validate1(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var weekDay = date.getDay();
+    var dayMonth = month + '-' + day;
+    var dateString = year + '-' + month + '-' + day;
+    var dateTo = document.getElementById('to').value.split("-");
+    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+    if (date > limitDate) {
+            return true;
+    } else {
+            return false;
+    }
+}
+Calendar.setup(
+        {
+        inputField : "from",
+        ifFormat : "[% DHTMLcalendar_dateformat %]",
+        button : "openCalendarFrom",
+        disableFunc : validate1,
+        dateStatusFunc : validate1
+        }
+);
+</script></li>
+<li><label for="to" >
+    End date:
+</label>
+<input size="10" id="to" name="to" value="[% to %]" type="text" />
+<img src="[% themelang %]/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
+<script type="text/javascript">
+        function validate2(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var weekDay = date.getDay();
+            var dayMonth = month + '-' + day;
+            var dateString = year + '-' + month + '-' + day;
+            var dateFrom = document.getElementById('from').value.split("-");
+            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+            if (limitDate > date) {
+                    return true;
+            } else {
+                    return false;
+            }
+        }
+
+        Calendar.setup(
+                {
+                    inputField : "to",
+                    ifFormat : "[% DHTMLcalendar_dateformat %]",
+                    button : "openCalendarTo",
+                    disableFunc : validate2,
+                    dateStatusFunc : validate2
+                }
+        );
+</script></li></ol>
+(inclusive)
+
+<fieldset class="action"><input type="submit" value="Go" class="submit"/></fieldset>
+</fieldset>
+</form>
+
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

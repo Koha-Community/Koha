@@ -1,0 +1,130 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Reports &rsaquo; Lost Items</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_items ) %] &rsaquo; <a href="/cgi-bin/koha/reports/itemslost.pl">Lost Items</a> &rsaquo; Results[% ELSE %] &rsaquo; Lost Items[% END %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h1>Lost Items</h1>
+
+[% IF ( get_items ) %]
+
+<div class="results">
+    [% IF ( total ) %]
+        [% total %] lost items found
+    [% ELSE %]
+        No lost items found
+    [% END %]
+</div>
+
+    [% IF ( itemsloop ) %]<table>
+    <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Lost Code</th>
+        <th>Barcode</th>
+        <th>Date last seen</th>
+        <th>Price</th>
+        <th>Rep.Price</th>
+        <th>Library</th>
+        <th>Itemtype</th>
+        <th>Holdingbranch</th>
+        <th>Location</th>
+        <th>Notes</th>
+    </tr>
+     [% FOREACH itemsloo IN itemsloop %]
+        [% UNLESS ( loop.odd ) %]
+        <tr class="highlight">
+        [% ELSE %]
+        <tr>
+        [% END %]
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">
+						  [% itemsloo.title |html %]
+					 </a></td>
+            <td>[% itemsloo.author %]</td>
+            <td>[% itemsloo.lib %]</td>
+            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itemsloo.biblionumber %]" title="[% itemsloo.itemnotes %]">
+                    [% itemsloo.barcode %]
+                </a></td>
+            <td>[% itemsloo.datelastseen %]</td>
+            <td>[% itemsloo.price %]</td>
+            <td>[% itemsloo.replacementprice %]</td>
+            <td>[% itemsloo.homebranch %]</td>
+            <td>[% IF ( itemsloo.itype_level ) %][% itemsloo.itype %][% ELSE %][% itemsloo.itemtype %][% END %]</td>
+            <td>[% itemsloo.holdingbranch %]</td>
+            <td>[% itemsloo.location %]</td>
+            <td>[% itemsloo.itemnotes %]</td>
+        </tr>
+    [% END %]
+    </table>
+	[% END %] 
+	[% ELSE %]
+	
+	<form name="f" action="/cgi-bin/koha/reports/itemslost.pl" method="post">
+<fieldset class="rows"><ol>    <li><label for="orderbyfilter">Order by: </label>
+    <select id="orderbyfilter" name="orderbyfilter">
+        <option value=""> --- </option>
+        <option value="title">Title</option>
+        <option value="author">Author</option>
+        <option value="homebranch">Library</option>
+        <option value="itype">Itemtypes</option>
+        <option value="barcode">Barcode</option>
+        <option value="price">Price</option>
+        <option value="replacementprice">Replacement Price</option>
+        <option value="lib">Lost Code</option>
+        <option value="datelastseen">Date Last Seen</option>
+        <option value="location">Location</option>
+    </select></li>
+	
+	<li><label for="barcodefilter">Barcode: </label><input type="text" name="barcodefilter" id="barcodefilter" size="6" /></li>
+	<li><label for="branchfilter">Library: </label><select name="branchfilter" id="branchfilter">
+                <option value="">All</option>
+            [% FOREACH branchloo IN branchloop %]
+                [% IF ( branchloo.selected ) %]<option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+				[% ELSE %]
+				<option value="[% branchloo.value %]">[% branchloo.branchname %]</option>
+				[% END %]
+            [% END %]
+            </select></li>
+	<li><label for="itemtypesfilter">Item Type: </label><select name="itemtypesfilter" id="itemtypesfilter">
+                <option value="">All</option>
+                [% FOREACH itemtypeloo IN itemtypeloop %]
+                [% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.value %]" selected="selected">[% itemtypeloo.description %]</option>
+				[% ELSE %]
+				<option value="[% itemtypeloo.value %]">[% itemtypeloo.description %]</option>
+				[% END %]
+                [% END %]
+            </select></li>
+
+	<li><label for="loststatusfilter">Lost Status: </label><select name="loststatusfilter" id="loststatusfilter">
+                <option value="">All</option>
+                [% FOREACH loststatusloo IN loststatusloop %]
+                [% IF ( loststatusloo.selected ) %]<option value="[% loststatusloo.authorised_value %]" selected="selected">[% loststatusloo.lib %]</option>
+		[% ELSE %]
+		<option value="[% loststatusloo.authorised_value %]">[% loststatusloo.lib %]</option>
+		[% END %]
+                [% END %]
+            </select></li>
+</ol></fieldset>
+<fieldset class="action">    <input type="submit" value="Submit" />
+    <input type="hidden" name="get_items" value="1" /></fieldset>
+</form>
+	
+	[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'reports-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -97,8 +98,8 @@ $template->param(
 my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 my $dbh = C4::Context->dbh;
 my $dat                 = TransformMarcToKoha( $dbh, $record );
-my @subscriptions       =
-  GetSubscriptions( $dat->{title}, $dat->{issn}, $biblionumber );
+my @subscriptions       = GetSubscriptions( undef, undef, $biblionumber );
+
 my @subs;
 foreach my $subscription (@subscriptions) {
     my %cell;

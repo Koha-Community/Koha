@@ -11,8 +11,13 @@
 <listen id="biblioserver" >tcp:localhost:9998/bibliosocket</listen>
 <listen id="authorityserver" >tcp:localhost:9999/authoritysocket</listen>
 -->
-<!-- public server runs on tcp -->
-<!-- <listen id="publicserver" >tcp:@:9999</listen> -->
+
+<!-- Uncomment the following entry if you want to run the public Z39.50 server.
+    Also uncomment the <server> and <serverinfo> sections for id 'publicserver' 
+    under PUBLICSERVER'S BIBLIOGRAPHIC RECORDS title-->
+<!--
+<listen id="publicserver" >tcp:@:__ZEBRA_SRU_BIBLIOS_PORT__</listen>
+-->
 
 <!-- Settings for special biblio server instance for PazPar2.
      Because PazPar2 only connects to a Z39.50 server using TCP/IP,
@@ -172,6 +177,80 @@ __PAZPAR2_TOGGLE_XML_POST__
     <user>__ZEBRA_USER__</user>
     <password>__ZEBRA_PASS__</password>
 </serverinfo>
+
+<!-- PUBLICSERVER'S BIBLIOGRAPHIC RECORDS -->
+<!--
+<server id="publicserver"  listenref="publicserver"> 
+    <directory>__ZEBRA_DATA_DIR__/biblios</directory>
+    <config>__ZEBRA_CONF_DIR__/zebra-biblios.cfg</config>
+    <cql2rpn>__ZEBRA_CONF_DIR__/pqf.properties</cql2rpn>
+     <retrievalinfo>
+       <retrieval syntax="usmarc" name="F"/>
+       <retrieval syntax="usmarc" name="B"/>
+       <retrieval syntax="xml" name="F"/>
+       <retrieval syntax="xml" name="B"/>
+       <retrieval syntax="xml" name="marcxml"
+                  identifier="info:srw/schema/1/marcxml-v1.1">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="dc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2DC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="mods">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2MODS.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rdfdc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rss2">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slim2RSS2.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="utils">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="__INTRANET_TMPL_DIR__/prog/en/xslt/MARC21slimUtils.xsl"/>
+         </backend>
+       </retrieval>
+     </retrievalinfo>
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-biblios.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
+      <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host>__ZEBRA_SRU_HOST__</host>
+            <port>__ZEBRA_SRU_BIBLIOS_PORT__</port>
+            <database>biblios</database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+    </xi:include>
+</server>
+<serverinfo id="publicserver">
+        <ccl2rpn>__ZEBRA_CONF_DIR__/ccl.properties</ccl2rpn>
+        <user>__ZEBRA_USER__</user>    
+        <password>__ZEBRA_PASS__</password>
+</serverinfo>
+-->
 
 <!-- ADDITIONAL KOHA CONFIGURATION DIRECTIVE -->
 <!-- db_scheme should follow the DBD driver name --> 

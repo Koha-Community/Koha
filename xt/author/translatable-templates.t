@@ -17,6 +17,7 @@ use File::Temp qw/tempdir/;
 use IPC::Open3;
 use File::Spec;
 use Symbol qw(gensym);
+use utf8;
 
 my $po_dir = tempdir(CLEANUP => 1);
 
@@ -38,6 +39,7 @@ sub test_string_extraction {
     while (<PH>) {
         # ignore some noise on STDERR
         next if /^\.* done\.$/;
+	next if /^\.* terminé\.$/;
         next if /^Warning: Can't determine original templates' charset/;
         next if /^Warning: Charset Out defaulting to/;
         next if /^Removing empty file /;

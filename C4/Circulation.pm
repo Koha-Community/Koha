@@ -1,6 +1,7 @@
 package C4::Circulation;
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -683,8 +684,7 @@ sub CanBookBeIssued {
 
         my $branch = _GetCircControlBranch($item,$borrower);
         my $itype = ( C4::Context->preference('item-level_itypes') ) ? $item->{'itype'} : $biblioitem->{'itemtype'};
-        my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
-        $duedate = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
+        $duedate = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $itype, $branch, $borrower );
 
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
@@ -730,17 +730,24 @@ sub CanBookBeIssued {
     # DEBTS
     my ($amount) =
       C4::Members::GetMemberAccountRecords( $borrower->{'borrowernumber'}, '' && $duedate->output('iso') );
+    my $amountlimit = C4::Context->preference("noissuescharge");
+    my $allowfineoverride = C4::Context->preference("AllowFineOverride");
+    my $allfinesneedoverride = C4::Context->preference("AllFinesNeedOverride");
     if ( C4::Context->preference("IssuingInProcess") ) {
-        my $amountlimit = C4::Context->preference("noissuescharge");
-        if ( $amount > $amountlimit && !$inprocess ) {
+        if ( $amount > $amountlimit && !$inprocess && !$allowfineoverride) {
             $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
-        }
-        elsif ( $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
+        } elsif ( $amount > $amountlimit && !$inprocess && $allowfineoverride) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $allfinesneedoverride && $amount > 0 && $amount <= $amountlimit && !$inprocess ) {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
     else {
-        if ( $amount > 0 ) {
+        if ( $amount > $amountlimit && $allowfineoverride ) {
+            $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $amount > $amountlimit && !$allowfineoverride) {
+            $issuingimpossible{DEBT} = sprintf( "%.2f", $amount );
+        } elsif ( $amount > 0 && $allfinesneedoverride ) {
             $needsconfirmation{DEBT} = sprintf( "%.2f", $amount );
         }
     }
@@ -1034,8 +1041,7 @@ sub AddIssue {
           );
         unless ($datedue) {
             my $itype = ( C4::Context->preference('item-level_itypes') ) ? $biblio->{'itype'} : $biblio->{'itemtype'};
-            my $loanlength = GetLoanLength( $borrower->{'categorycode'}, $itype, $branch );
-            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $loanlength, $branch, $borrower );
+            $datedue = CalcDateDue( C4::Dates->new( $issuedate, 'iso' ), $itype, $branch, $borrower );
 
         }
         $sth->execute(
@@ -1163,6 +1169,66 @@ sub GetLoanLength {
 
     # if no rule is set => 21 days (hardcoded)
     return 21;
+}
+
+
+=head2 GetHardDueDate
+
+  my ($hardduedate,$hardduedatecompare) = &GetHardDueDate($borrowertype,$itemtype,branchcode)
+
+Get the Hard Due Date and it's comparison for an itemtype, a borrower type and a branch
+
+=cut
+
+sub GetHardDueDate {
+    my ( $borrowertype, $itemtype, $branchcode ) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth =
+      $dbh->prepare(
+"select hardduedate, hardduedatecompare from issuingrules where categorycode=? and itemtype=? and branchcode=?"
+      );
+    $sth->execute( $borrowertype, $itemtype, $branchcode );
+    my $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( $borrowertype, "*", $branchcode );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", $itemtype, $branchcode );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", "*", $branchcode );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( $borrowertype, $itemtype, "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( $borrowertype, "*", "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", $itemtype, "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    $sth->execute( "*", "*", "*" );
+    $results = $sth->fetchrow_hashref;
+    return (C4::Dates->new($results->{hardduedate}, 'iso'),$results->{hardduedatecompare})
+      if defined($results) && $results->{hardduedate} ne 'NULL';
+
+    # if no rule is set => return undefined
+    return (undef, undef);
 }
 
 =head2 GetIssuingRule
@@ -1603,7 +1669,7 @@ sub AddReturn {
     #adding message if holdingbranch is non equal a userenv branch to return the document to homebranch
     #we check, if we don't have reserv or transfert for this document, if not, return it to homebranch .
 
-    if ($doreturn and ($branch ne $hbr) and not $messages->{'WrongTransfer'} and ($validTransfert ne 1) ){
+    if (($doreturn or $messages->{'NotIssued'}) and !$resfound and ($branch ne $hbr) and not $messages->{'WrongTransfer'}){
         if ( C4::Context->preference("AutomaticItemReturn"    ) or
             (C4::Context->preference("UseBranchTransferLimits") and
              ! IsBranchTransferAllowed($branch, $hbr, $item->{C4::Context->preference("BranchTransferLimitsType")} )
@@ -1858,7 +1924,7 @@ sub _GetCircControlBranch {
     my $branch;
 
     if ($circcontrol eq 'PickupLibrary') {
-        $branch= C4::Context->userenv->{'branch'};
+        $branch= C4::Context->userenv->{'branch'} if C4::Context->userenv;
     } elsif ($circcontrol eq 'PatronLibrary') {
         $branch=$borrower->{branchcode};
     } else {
@@ -2189,15 +2255,12 @@ sub AddRenewal {
     unless ($datedue) {
 
         my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
-        my $loanlength = GetLoanLength(
-                    $borrower->{'categorycode'},
-                    (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'} ,
-			        $issuedata->{'branchcode'}  );   # that's the circ control branch.
+        my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         C4::Dates->new($issuedata->{date_due}, 'iso') :
                                         C4::Dates->new();
-        $datedue =  CalcDateDue($datedue,$loanlength,$issuedata->{'branchcode'},$borrower);
+        $datedue =  CalcDateDue($datedue,$itemtype,$issuedata->{'branchcode'},$borrower);
     }
 
     # Update the issues record to have the new due date, and a new count
@@ -2299,37 +2362,76 @@ sub GetIssuingCharges {
     my $item_type;
 
     # Get the book's item type and rental charge (via its biblioitem).
-    my $qcharge =     "SELECT itemtypes.itemtype,rentalcharge FROM items
-            LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber";
-	$qcharge .= (C4::Context->preference('item-level_itypes'))
-                ? " LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype "
-                : " LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype ";
-	
-    $qcharge .=      "WHERE items.itemnumber =?";
-   
-    my $sth1 = $dbh->prepare($qcharge);
-    $sth1->execute($itemnumber);
-    if ( my $data1 = $sth1->fetchrow_hashref ) {
-        $item_type = $data1->{'itemtype'};
-        $charge    = $data1->{'rentalcharge'};
-        my $q2 = "SELECT rentaldiscount FROM borrowers
+    my $charge_query = 'SELECT itemtypes.itemtype,rentalcharge FROM items
+        LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber';
+    $charge_query .= (C4::Context->preference('item-level_itypes'))
+        ? ' LEFT JOIN itemtypes ON items.itype = itemtypes.itemtype'
+        : ' LEFT JOIN itemtypes ON biblioitems.itemtype = itemtypes.itemtype';
+
+    $charge_query .= ' WHERE items.itemnumber =?';
+
+    my $sth = $dbh->prepare($charge_query);
+    $sth->execute($itemnumber);
+    if ( my $item_data = $sth->fetchrow_hashref ) {
+        $item_type = $item_data->{itemtype};
+        $charge    = $item_data->{rentalcharge};
+        my $branch = C4::Branch::mybranch();
+        my $discount_query = q|SELECT rentaldiscount,
+            issuingrules.itemtype, issuingrules.branchcode
+            FROM borrowers
             LEFT JOIN issuingrules ON borrowers.categorycode = issuingrules.categorycode
             WHERE borrowers.borrowernumber = ?
-            AND (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')";
-        my $sth2 = $dbh->prepare($q2);
-        $sth2->execute( $borrowernumber, $item_type );
-        if ( my $data2 = $sth2->fetchrow_hashref ) {
-            my $discount = $data2->{'rentaldiscount'};
-            if ( $discount eq 'NULL' ) {
-                $discount = 0;
-            }
+            AND (issuingrules.itemtype = ? OR issuingrules.itemtype = '*')
+            AND (issuingrules.branchcode = ? OR issuingrules.branchcode = '*')|;
+        my $discount_sth = $dbh->prepare($discount_query);
+        $discount_sth->execute( $borrowernumber, $item_type, $branch );
+        my $discount_rules = $discount_sth->fetchall_arrayref({});
+        if (@{$discount_rules}) {
+            # We may have multiple rules so get the most specific
+            my $discount = _get_discount_from_rule($discount_rules, $branch, $item_type);
             $charge = ( $charge * ( 100 - $discount ) ) / 100;
         }
-        $sth2->finish;
     }
 
-    $sth1->finish;
+    $sth->finish; # we havent _explicitly_ fetched all rows
     return ( $charge, $item_type );
+}
+
+# Select most appropriate discount rule from those returned
+sub _get_discount_from_rule {
+    my ($rules_ref, $branch, $itemtype) = @_;
+    my $discount;
+
+    if (@{$rules_ref} == 1) { # only 1 applicable rule use it
+        $discount = $rules_ref->[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # could have up to 4 does one match $branch and $itemtype
+    my @d = grep { $_->{branchcode} eq $branch && $_->{itemtype} eq $itemtype } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # do we have item type + all branches
+    @d = grep { $_->{branchcode} eq q{*} && $_->{itemtype} eq $itemtype } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # do we all item types + this branch
+    @d = grep { $_->{branchcode} eq $branch && $_->{itemtype} eq q{*} } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # so all and all (surely we wont get here)
+    @d = grep { $_->{branchcode} eq q{*} && $_->{itemtype} eq q{*} } @{$rules_ref};
+    if (@d) {
+        $discount = $d[0]->{rentaldiscount};
+        return (defined $discount) ? $discount : 0;
+    }
+    # none of the above
+    return 0;
 }
 
 =head2 AddIssuingCharge
@@ -2581,40 +2683,58 @@ sub UpdateHoldingbranch {
 
 =head2 CalcDateDue
 
-$newdatedue = CalcDateDue($startdate,$loanlength,$branchcode);
-this function calculates the due date given the loan length ,
+$newdatedue = CalcDateDue($startdate,$itemtype,$branchcode,$borrower);
+
+this function calculates the due date given the start date and configured circulation rules,
 checking against the holidays calendar as per the 'useDaysMode' syspref.
 C<$startdate>   = C4::Dates object representing start date of loan period (assumed to be today)
+C<$itemtype>  = itemtype code of item in question
 C<$branch>  = location whose calendar to use
-C<$loanlength>  = loan length prior to adjustment
+C<$borrower> = Borrower object
+
 =cut
 
 sub CalcDateDue { 
-	my ($startdate,$loanlength,$branch,$borrower) = @_;
+	my ($startdate,$itemtype,$branch,$borrower) = @_;
 	my $datedue;
+        my $loanlength = GetLoanLength($borrower->{'categorycode'},$itemtype, $branch);
 
-	if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
-		my $timedue = time + ($loanlength) * 86400;
-	#FIXME - assumes now even though we take a startdate 
-		my @datearr  = localtime($timedue);
-		$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+	# if globalDueDate ON the datedue is set to that date
+	if ( C4::Context->preference('globalDueDate')
+             && ( C4::Context->preference('globalDueDate') =~ C4::Dates->regexp('syspref') ) ) {
+            $datedue = C4::Dates->new( C4::Context->preference('globalDueDate') );
 	} else {
-		my $calendar = C4::Calendar->new(  branchcode => $branch );
-		$datedue = $calendar->addDate($startdate, $loanlength);
+	# otherwise, calculate the datedue as normal
+		if(C4::Context->preference('useDaysMode') eq 'Days') {  # ignoring calendar
+			my $timedue = time + ($loanlength) * 86400;
+		#FIXME - assumes now even though we take a startdate 
+			my @datearr  = localtime($timedue);
+			$datedue = C4::Dates->new( sprintf("%04d-%02d-%02d", 1900 + $datearr[5], $datearr[4] + 1, $datearr[3]), 'iso');
+		} else {
+			my $calendar = C4::Calendar->new(  branchcode => $branch );
+			$datedue = $calendar->addDate($startdate, $loanlength);
+		}
+	}
+
+	# if Hard Due Dates are used, retreive them and apply as necessary
+        my ($hardduedate, $hardduedatecompare) = GetHardDueDate($borrower->{'categorycode'},$itemtype, $branch);
+	if ( $hardduedate && $hardduedate->output('iso') && $hardduedate->output('iso') ne '0000-00-00') {
+            # if the calculated due date is after the 'before' Hard Due Date (ceiling), override
+            if ( $datedue->output( 'iso' ) gt $hardduedate->output( 'iso' ) && $hardduedatecompare == -1) {
+                $datedue = $hardduedate;
+            # if the calculated date is before the 'after' Hard Due Date (floor), override
+            } elsif ( $datedue->output( 'iso' ) lt $hardduedate->output( 'iso' ) && $hardduedatecompare == 1) {
+                $datedue = $hardduedate;               
+            # if the hard due date is set to 'exactly', overrride
+            } elsif ( $hardduedatecompare == 0) {
+                $datedue = $hardduedate;
+            }
+            # in all other cases, keep the date due as it is
 	}
 
 	# if ReturnBeforeExpiry ON the datedue can't be after borrower expirydate
 	if ( C4::Context->preference('ReturnBeforeExpiry') && $datedue->output('iso') gt $borrower->{dateexpiry} ) {
 	    $datedue = C4::Dates->new( $borrower->{dateexpiry}, 'iso' );
-	}
-
-	# if ceilingDueDate ON the datedue can't be after the ceiling date
-	if ( C4::Context->preference('ceilingDueDate')
-             && ( C4::Context->preference('ceilingDueDate') =~ C4::Dates->regexp('syspref') ) ) {
-            my $ceilingDate = C4::Dates->new( C4::Context->preference('ceilingDueDate') );
-            if ( $datedue->output( 'iso' ) gt $ceilingDate->output( 'iso' ) ) {
-                $datedue = $ceilingDate;
-            }
 	}
 
 	return $datedue;

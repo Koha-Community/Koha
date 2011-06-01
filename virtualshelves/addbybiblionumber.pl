@@ -160,13 +160,13 @@ else {    # this shelf doesn't already exist.
     #grab each type of shelf, open (type 3) should not be limited by user.
     foreach my $shelftype (1,2,3) {
 	    my ($shelflist) = GetRecentShelves($shelftype, $limit, $shelftype == 3 ? undef : $loggedinuser);
-	    for my $shelf (@{ $shelflist->[0] }) {
+	    for my $shelf (@{ $shelflist }) {
 		    push(@shelvesloop, $shelf->{shelfnumber});
 		    $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
 	    }
     }
 
-    if(@shelvesloop gt 0){
+    if( @shelvesloop ){
         my $CGIvirtualshelves = CGI::scrolling_list
           (
            -name     => 'shelfnumber',

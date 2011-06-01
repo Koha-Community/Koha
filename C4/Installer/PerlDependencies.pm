@@ -17,7 +17,7 @@ our $PERL_DEPS = {
     'Storable' => {
         'usage'    => 'Core',
         'required' => '1',
-        'min_ver'  => '2.21'
+        'min_ver'  => '2.20'
     },
     'PDF::API2' => {
         'usage'    => 'Core',
@@ -389,6 +389,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '4.2'
     },
+    'CGI::Session::Driver::memcached' => {
+        'usage'    => 'Memcached Feature (Experimental)',
+        'required' => '0',
+        'min_ver'  => '0.04',
+    },
     'POSIX' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -469,6 +474,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '2.05',
     },
+    'Template' => {
+	'usage'    => 'Core',
+	'required' => '1',
+	'min_ver'  => '2.22',
+    },
 };
 
 1;
@@ -510,8 +520,8 @@ This file is part of Koha.
 Koha is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software
 Foundation; either version 2 of the License, or (at your option) any later version.
 
-You should have received a copy of the GNU General Public License along with Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-Suite 330, Boston, MA  02111-1307 USA
+You should have received a copy of the GNU General Public License along with Koha; if not, write to the Free Software Foundation, Inc., 51 Franklin Street,
+Fifth Floor, Boston, MA 02110-1301 USA.
 
 =head1 DISCLAIMER OF WARRANTY
 

@@ -1,0 +1,618 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of Search [% IF ( query_desc ) %]for '[% query_desc %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.highlight-3.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
+var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
+var q_array = new Array();  // will hold search terms, if present
+[% IF ( AmazonEnabled ) %]
+// http://www.oreillynet.com/pub/a/javascript/2003/10/21/amazonhacks.html
+function verify_images() {
+    $("img").each(function(i){
+        if ((this.src.indexOf('images.amazon.com') >= 0) || (this.src.indexOf('g-images.amazon.com') >=0)) {
+            w = this.width;
+            h = this.height;
+            if ((w == 1) || (h == 1)) {
+                this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+            } else if ((this.complete != null) && (!this.complete)) {
+                this.src = 'http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif';
+            }
+        }
+    });
+}
+
+$(window).load(function() {
+        verify_images();
+     });
+[% END %]
+function Dopop(link) {
+        newin=window.open(link,'popup','width=500,height=500,toolbar=false,scrollbars=yes,resizeable=yes');
+}
+function cartList(){
+    if($("#addto").find("option:selected").attr("value") == "addtolist"){
+        var shelfnumber = $("#addto").find("option:selected").attr("id").replace("s","");
+        if (vShelfAdd()) {
+             Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?shelfnumber='+shelfnumber+'&confirm=1&' + vShelfAdd());
+        }
+        return false;
+    } else if($("#addto").find("option:selected").attr("value") == "newlist"){
+        if (vShelfAdd()) {
+            Dopop('/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?newshelf=1&' + vShelfAdd());
+        }
+        return false;
+    }
+    if($("#addto").find("option:selected").attr("value") == "addtocart"){
+        addMultiple();
+        return false;
+    }
+}
+$(window).load(function() {
+        new YAHOO.widget.Button("cartsubmit", { onclick: { fn: cartList }});
+});
+$(document).ready(function() {
+$("#placeholdc").empty();
+$('#sortbyform').find("input:submit").hide();
+$('#sort_by').change(function() {
+        $('#sortbyform').submit();
+    });
+$(".addtocart").show();
+        var param1 = "<label for=\"addto\">"+_("Add to:")+"<\/label><select name=\"addto\" id=\"addto\"><option value=\"\"><\/option>";
+        [% IF ( intranetbookbag ) %]     param1 += "<option value=\"addtocart\">"+_("Cart")+"<\/option>"; [% END %]
+        [% IF ( virtualshelves ) %][% IF ( addbarshelves ) %]
+        param1 += "<optgroup label=\""+_("Your Lists:")+"\">";[% FOREACH addbarshelvesloo IN addbarshelvesloop %]
+        param1 += "<option id=\"s[% addbarshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addbarshelvesloo.shelfname |html %]<\/option>";[% END %]
+        param1 += "<\/optgroup>";[% END %]
+        [% IF ( addpubshelves ) %]param1 += "<optgroup label=\""+_("Public Lists:")+"\">"[% FOREACH addpubshelvesloo IN addpubshelvesloop %]+"<option id=\"s[% addpubshelvesloo.shelfnumber %]\" value=\"addtolist\">[% addpubshelvesloo.shelfname |html %]<\/option>"[% END %]
+        [% END %]
+        param1 +="<\/optgroup><option value=\"newlist\">"+_("[ New List ]")+"<\/option>"
+        [% END %]
+        param1 += "<\/select> <input id=\"cartsubmit\" type=\"submit\" class=\"submit\" value=\""+_("Save")+"\" />";
+ $('#sortsubmit').hide();
+        $("span.clearall").html("<a id=\"CheckNone\" href=\"#\">"+_("Clear All")+"<\/a>");
+        $("span.checkall").html("<a id=\"CheckAll\" href=\"#\">"+_("Select All")+"<\/a>");
+        $("span.addto").html(param1);
+        $("#addto").change(function(){
+                cartList();
+        });
+        $(".addto").find("input:submit").click(function(){
+                cartList();
+                return false;
+	});
+
+ $("#tagsel_span").html("<input id=\"tagsel_tag\" class=\"submit\" type=\"submit\" value=\"Tag\"/>");
+
+    $("#selection_ops").show();
+    $(".selection").show();
+    [% IF ( query_desc ) %]
+        var query_desc = "[% query_desc |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+        q_array = query_desc.split(" ");
+        highlightOn();
+        $("#highlight_toggle_on" ).hide().click(function() {highlightOn() ;});
+        $("#highlight_toggle_off").show().click(function() {highlightOff();});
+    [% END %]
+});
+
+function highlightOff() {
+    $("p").removeHighlight();
+    $(".highlight_toggle").toggle();
+}
+function highlightOn() {
+    var x;
+    for (x in q_array) {
+        $("p").highlight(q_array[x]);
+    }
+    $(".highlight_toggle").toggle();
+}
+
+function selectAll () {
+    $(".selection").attr("checked", "checked");
+}
+function clearAll () {
+    $(".selection").removeAttr("checked");
+}
+function placeHold () {
+    var checkedItems = $(".selection:checked");
+    if ($(checkedItems).size() == 0) {
+        alert(MSG_NO_ITEM_SELECTED);
+        return false;
+    }
+    var bibs = "";
+    var badBibs = false;
+    $(checkedItems).each(function() {
+        var bib = $(this).val();
+        if ($("#reserve_" + bib).size() == 0) {
+            alert(MSG_NON_RESERVES_SELECTED);
+            badBibs = true;
+            return false;
+        }
+        bibs += bib + "/";
+    });
+    if (badBibs) {
+        return false;
+    }
+    $("#hold_form_biblios").val(bibs);
+    $("#hold_form").submit();
+    return false;
+}
+function addToList () {
+    var checkedItems = $(".selection:checked");
+    if ($(checkedItems).size() == 0) {
+        alert(MSG_NO_ITEM_SELECTED);
+        return false;
+    }
+    var bibs = "";
+    $(checkedItems).each(function() {
+        bibs += $(this).val() + "/";
+    });
+
+    var url = "/cgi-bin/koha/virtualshelves/addbybiblionumber.pl?biblionumbers=" + bibs;
+	window.open(url, 'Add_to_virtualshelf', 'width=500, height=400, toolbar=false, scrollbars=yes');
+    return false;
+}
+
+/* this function open a popup to search on z3950 server.  */
+function PopupZ3950() {
+    var strQuery = GetZ3950Terms();
+    if(strQuery){
+        window.open("/cgi-bin/koha/cataloguing/z3950_search.pl?biblionumber=[% biblionumber %]"+strQuery,"z3950search",'width=740,height=450,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+    }
+}
+/* provide Z3950 search points */
+function GetZ3950Terms(){
+	var strQuery="&frameworkcode=";
+	[% FOREACH z3950_search_param IN z3950_search_params %]
+		strQuery += "&" + "[% z3950_search_param.name %]" + "=" + "[% z3950_search_param.encvalue %]";
+	[% END %]
+	return strQuery;
+}
+
+YAHOO.util.Event.onContentReady("searchheader", function () {
+        new YAHOO.widget.Button( "z3950submit", { onclick: { fn: PopupZ3950 }});
+        [% IF ( holdfor ) %]
+        var holdFor = function (){
+            $("#holdFor").val("");
+            placeHold();
+        }
+        var holdForPatron = function () {
+            $("#holdFor").val("[% holdfor_cardnumber %]");
+            placeHold();
+        }
+        var HoldForButtonMenu = [
+            { text: "Place hold", onclick: { fn: holdFor }},
+            { text: "Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", onclick: { fn: holdForPatron }}
+        ];
+
+        var HoldForButton = new YAHOO.widget.Button({
+                type: "split",
+                label: "Place hold",
+                name: "holdfor",
+                menu: HoldForButtonMenu,
+                container: "placeholdc",
+                onclick: { fn: holdFor }
+        });
+        [% ELSE %]
+        new YAHOO.widget.Button({
+            id: "placehold",
+            type: "link",
+            label: _("Place hold"),
+            container: "placeholdc",
+            onclick: { fn: placeHold }
+         });
+        [% END %]
+}); // YAHOO onContentReady
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs">
+         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+&rsaquo; Search [% IF ( query_desc ) %]for '[% query_desc |html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %]
+</div>
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+    [% IF ( outer_sup_results_loop ) %]
+    <div class="yui-ge">
+    <div class="yui-u first">
+    [% END %]
+
+    [% IF ( koha_spsuggest ) %]
+        <div style="font-size: 12px;">Did you mean:
+            <ul style="list-style: none;">
+            [% FOREACH SPELL_SUGGES IN SPELL_SUGGEST %]
+            <li>
+                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% SPELL_SUGGES.spsuggestion %]">[% SPELL_SUGGES.spsuggestion %]</a>
+            </li>
+            [% END %]
+            </ul>
+        </div>
+    [% END %]
+
+    [% IF ( total ) %]
+        <div id="searchheader">
+            <form action="/cgi-bin/koha/catalogue/search.pl" method="get" id="sortbyform">
+                [% IF ( searchdesc ) %]
+                    [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
+                    <input type="hidden" name="[% QUERY_INPUT.input_name |html %]" value="[% QUERY_INPUT.input_value |html %]"/>
+                    [% END %]
+                    [% FOREACH LIMIT_INPUT IN LIMIT_INPUTS %]
+                    <input type="hidden" name="[% LIMIT_INPUT.input_name |html %]" value="[% LIMIT_INPUT.input_value |html %]"/>
+                    [% END %]
+                [% END %]
+                <!-- RE-SORT START -->
+                    <label for="sort_by">Sort By: </label>
+                    <select id="sort_by" name="sort_by">
+                    [% INCLUDE 'resort_form.inc' %]
+                    </select>
+                    <input type="submit" value="Go" />
+                <!-- RESORT END -->
+            </form>
+            <h3>
+                [% total %] result(s) found [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].<br />&nbsp;
+            </h3>
+            <div id="selection_ops" class="cartlist" style="display:none">
+                <a href="#" onclick="selectAll(); return false;">Select All</a>
+                |
+                <a href="#" onclick="clearAll(); return false;">Clear All</a>
+                |
+                <a href="#" class="highlight_toggle" id="highlight_toggle_off">Unhighlight</a>
+                <a href="#" class="highlight_toggle" id="highlight_toggle_on">Highlight</a>
+                |
+		<span class="addto"></span>
+                [% IF ( CAN_user_reserveforothers ) %]
+                    [% IF ( DisplayMultiPlaceHold ) %]
+                  | <span id="placeholdc"><input type="button" id="placehold" onclick="placeHold(); return false;" value="Place Hold"/></span>
+                    [% END %]
+                [% END %]
+
+				[% IF ( CAN_user_editcatalogue_edit_catalogue ) %] | <input type="button" id="z3950submit" onclick="PopupZ3950(); return false;" value="Z39.50 Search"/>[% END %]
+            </div>
+        </div>
+    [% IF ( stopwords_removed ) %]<div><p class="tip">Ignored the following common words: "[% stopwords_removed %]"<p></div>[% END %]
+    [% ELSE %]
+        <div id="searchheader">
+			<form method="post" name="fz3950" class="fz3950bigrpad">
+				<span id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></span>
+			</form>
+            <h3>No results found</h3>
+        [% IF ( searchdesc ) %]
+            <p>
+                No results match your search [% IF ( query_desc ) %]for <span style="font-weight: bold;">'[% query_desc |html %]'</span>[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s): <span style="font-weight: bold;">'[% limit_desc %]'</span>[% END %][% IF ( LibraryName ) %] in [% LibraryName %] Catalog[% END %].
+            </p>
+        [% ELSE %]
+            <p>You did not specify any search criteria.</p>
+        [% END %]
+		</div>
+    [% END %]
+
+    [% IF ( query_error ) %]
+        <br /><br />
+        Error:
+        <span  class="problem">
+            [% query_error %]
+        </span>
+    [% END %]
+
+    <!-- Search Results Table -->
+    [% IF ( total ) %]
+        [% IF ( scan ) %]
+            <h1>Scan Index:</h1>
+            <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
+            <table>
+                <tr>
+                    <td>
+                        Scan Index for: <input type="text" name="q" id="scan-index" size="35" value="" />
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="scan-index">Indexed in:</label>
+                        <select name="idx" id="scan-index">
+                            <option value="">Any Word</option>
+                            <option [% IF (ms_anycommaphr) %] selected="selected" [% END %] value="any,phr">Any Phrase</option>
+                            <option [% IF ( ms_ti ) %] selected="selected" [% END %] value="ti">Title</option>
+                            <option [% IF (ms_ticommaphr) %] selected="selected" [% END %] value="ti,phr">Title Phrase</option>
+                            <option [% IF (ms_aucommaphr) %] selected="selected" [% END %] value="au,phr">Author</option>
+                            <option [% IF ( ms_su ) %] selected="selected" [% END %] value="su">Subject</option>
+                            <option [% IF (ms_sucommaphr) %] selected="selected" [% END %] value="su,phr">Subject Phrase</option>
+                            <option [% IF ( ms_se ) %] selected="selected" [% END %] value="se">Series</option>
+                            <option [% IF ( ms_pb ) %] selected="selected" [% END %] value="pb">Publisher</option>
+                            <option [% IF ( ms_nt ) %] selected="selected" [% END %] value="nt">Notes</option>
+                            <option [% IF ( ms_se ) %] selected="selected" [% END %] value="se">Series Title</option>
+                            <option [% IF ( ms_sn ) %] selected="selected" [% END %] value="sn">ISBN</option>
+                            <option [% IF ( ms_ss ) %] selected="selected" [% END %] value="ss">ISSN</option>
+                        </select>
+                        <input type="hidden" name="scan" value="1" />
+                    </td>
+                </tr>
+            </table>
+            </form>
+
+            <form action="/cgi-bin/koha/catalogue/search.pl" method="get">
+            <table>
+                <tr>
+                    <th>Term/Phrase</th>
+                    <th>Count</th>
+                </tr>
+                [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
+                    [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+                        <td>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% SEARCH_RESULT.scan_index_to_use %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title %]&quot;">[% SEARCH_RESULT.title |html %]</a>
+                        </td>
+                        <td>
+                            [% SEARCH_RESULT.author %]
+                        </td>
+                    </tr>
+                [% END %]
+            </table>
+            </form>
+        [% ELSE %]
+
+                [% IF ( NoZebra ) %]
+                <!-- ######### -->
+                <div id="facets">
+                <dl>
+                <!-- FACETS START -->
+                [% IF ( opacfacets ) %]
+                    <dt id="facets1" onclick="var Elt=document.getElementById('facets_list');if (Elt.style.display!='block'){Elt.style.display='block';} else {Elt.style.display='none';}">
+                    Refine your search
+                    </dt>
+                    <dd id="facets_list" style="display:none;">
+                    <ul>
+                    [% FOREACH facets_loo IN facets_loop %]
+                    <li id="[% facets_loo.type_id %]">[% facets_loo.type_label %]
+                        <ul>
+                        [% FOREACH facet IN facets_loo.facets %]
+                            <li>
+                                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% facet.searchdesc %] and [% facet.type_link_value %]:[% facet.facet_link_value %]" title="[% facet.facet_title_value %]">
+                                    [% facet.facet_label_value %]
+                                </a> ([% facet.facet_count %])
+                            </li>
+                        [% END %]
+                        [% IF ( facets_loo.expandable ) %]
+                            <li class="showmore">
+                                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% facets_loo.searchdesc %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">
+                                    Show More
+                                </a>
+                            </li>
+                        [% END %]
+                        </ul>
+                    </li>
+                    [% END %]
+                    </ul>
+                    </dd>
+                [% END %]
+                <!-- FACETS END -->
+                </dl>
+            </div>
+            <!-- ######### -->
+            <!-- NoZebra -->[% END %]
+
+            <div id="searchresults">
+                <form action="/cgi-bin/koha/catalogue/search.pl" method="get" name="bookbag_form" id="bookbag_form">
+                [% IF ( searchdesc ) %]
+                [% FOREACH QUERY_INPUT IN QUERY_INPUTS %]
+                <input type="hidden" name="[% QUERY_INPUT.input_name |html %]" value="[% QUERY_INPUT.input_value |html %]"/>
+                [% END %]
+                [% FOREACH LIMIT_INPUT IN LIMIT_INPUTS %]
+                <input type="hidden" name="[% LIMIT_INPUT.input_name |html %]" value="[% LIMIT_INPUT.input_value |html %]"/>
+                [% END %]
+                [% END %]
+
+                    <!-- TABLE RESULTS START -->
+                <table>
+                    <tr>
+                        [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<th>&nbsp;</th>[% END %][% END %]
+                        <th>Results</th>
+                        <th>Location</th>
+                    </tr>
+                        <!-- Actual Search Results -->
+                        [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
+                         [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+                            [% IF ( SEARCH_RESULT.AmazonEnabled ) %][% IF ( SEARCH_RESULT.AmazonCoverImages ) %]
+                                <td>
+                                    <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+									
+                                        <img src="[% IF ( SEARCH_RESULT.normalized_isbn ) %]http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg[% ELSE %]http://g-images.amazon.com/images/G/01/x-site/icons/no-img-sm.gif[% END %]" alt="" class="thumbnail" />
+                                    </a></td>
+                            [% END %][% END %]
+                            <td>
+                                <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" style="display:none" />
+                            </td>
+                            <td>
+                                <p>[% SEARCH_RESULT.result_number %].
+                                 [% biblionumber = SEARCH_RESULT.biblionumber %]
+
+				[% INCLUDE 'biblio-default-view.inc' %]
+                                            <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title |html %][% ELSE %]No title[% END %]</b>
+                                            </a>
+                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle %] , [% subtitl.subfield %] [% END %]
+										[% IF ( SEARCH_RESULT.volume ) %],[% SEARCH_RESULT.volume %][% END %] [% IF ( SEARCH_RESULT.volumeddesc ) %], [% SEARCH_RESULT.volumeddesc %][% END %]
+                                </p>
+                                [% IF ( SEARCH_RESULT.summary ) %]
+                                        [% IF ( SEARCH_RESULT.author ) %]
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
+                                        [% ELSE %]
+                                            &nbsp;
+                                        [% END %]
+                                    <p>
+                                    [% UNLESS ( item_level_itypes ) %]
+                                    [% UNLESS ( noItemTypeImages ) %][% IF ( SEARCH_RESULT.imageurl ) %]
+                                    <img src="[% SEARCH_RESULT.imageurl %]" title="[% SEARCH_RESULT.description %]" style="float: left; margin: .1em;" alt="" />
+                                    [% END %][% END %]
+                                    [% END %]
+                                    [% SEARCH_RESULT.summary %]</p>
+                                [% ELSE %]
+                                    <p>
+                                    [% UNLESS ( item_level_itypes ) %]
+                                    [% UNLESS ( noItemTypeImages ) %][% IF ( SEARCH_RESULT.imageurl ) %]
+                                    <img src="[% SEARCH_RESULT.imageurl %]" title="[% SEARCH_RESULT.description %]" style="float: left; margin: .1em;" alt="" />
+                                    [% END %][% END %]
+                                    [% END %]
+
+                                        [% IF ( SEARCH_RESULT.author ) %]
+                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author %]</a>
+                                        [% ELSE %]
+                                            &nbsp;
+                                        [% END %]
+                                        Description:
+                                        <span class="results_imprint">[% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place %] [% END %]
+                                        [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode %][% END %] [% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear %] [% ELSIF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate %][% END %]</span>
+										[% IF ( SEARCH_RESULT.edition ) %]<span class="results_edition">Edition: [% SEARCH_RESULT.edition %]</span>[% END %]
+                                        <span class="results_physicaldesc">[% IF ( SEARCH_RESULT.pages ) %]: [% SEARCH_RESULT.pages %][% END %]
+                                        [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size %][% END %]</span> [% IF ( SEARCH_RESULT.normalized_isbn ) %]<span class="results_isbn">ISBN: [% SEARCH_RESULT.normalized_isbn %]</span>[% END %]
+                                        <span class="results_itemtype">[% SEARCH_RESULT.description %]</span>
+                                        [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp %])</i>[% END %]
+                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% SEARCH_RESULT.cn_class |url %]">[% SEARCH_RESULT.cn_class %]</a>][% END %]
+                                    </p>
+                                    [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<p class="searchhighlightblob">[% SEARCH_RESULT.searchhighlightblob %]</p>[% END %]
+
+                                    [% IF ( SEARCH_RESULT.authorised_value_images ) %]
+                                <p>
+                                  [% FOREACH authorised_value_image IN SEARCH_RESULT.authorised_value_images %]
+                                  <img src="[% authorised_value_image.imageurl %]" alt="[% authorised_value_image.description %]" />
+                                  [% END %]
+                                </p>
+                                [% END %]
+
+                                [% END %]
+                                  <p class="hold">[% IF ( SEARCH_RESULT.norequests ) %]
+                                  <span class="noholdstext">No holds allowed</span>
+                              [% ELSE %]
+                                  <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds</a>
+                                  [% IF ( holdfor ) %] | <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a>[% END %]
+                              [% END %]
+                          [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
+                          | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit record</a>
+                          [% END %]
+                          [% IF ( CAN_user_editcatalogue_edit_items ) %]
+                          | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit items</a>
+                          [% END %]</p>
+                                </td>
+
+                                <td><div class="availability">
+                                    [% IF ( SEARCH_RESULT.items_count ) %]<strong>[% SEARCH_RESULT.items_count %]
+                                    [% IF ( SEARCH_RESULT.itemsplural ) %]items[% ELSE %]item[% END %][% IF ( SEARCH_RESULT.availablecount ) %], [% SEARCH_RESULT.availablecount %] available:[% ELSE %], None available[% END %]</strong>
+
+                                    [% IF ( SEARCH_RESULT.availablecount ) %]
+                                    [% SEARCH_RESULT.availablecount %] available:
+                                    <ul>
+                                    [% FOREACH available_items_loo IN SEARCH_RESULT.available_items_loop %]
+
+                                        [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %][% IF ( available_items_loo.imageurl ) %]<li style="list-style: none; list-style-type: none;"><img src="[% available_items_loo.imageurl %]" title="[% available_items_loo.description %]" alt="[% available_items_loo.description %]" />[% ELSE %]<li>[% END %][% ELSE %]<li>[% END %][% END %]
+                                        [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname %][% END %]
+                                        [% IF ( available_items_loo.location ) %][% available_items_loo.location %][% END %]
+                                        [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber %]</a>][% END %]
+                                        ([% available_items_loo.count %])</li>
+                                    [% END %]</ul>
+                                    [% END %]
+
+                                   [% IF ( SEARCH_RESULT.onloancount ) %]
+                                   <span class="status">[% SEARCH_RESULT.onloancount %] on loan:</span>
+                                    <ul>
+                                    [% FOREACH onloan_items_loo IN SEARCH_RESULT.onloan_items_loop %]
+                                       [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %]
+                                        [% IF ( onloan_items_loo.imageurl ) %]
+                                        <li style="list-style: none; list-style-type: none;"><img src="[% onloan_items_loo.imageurl %]" title="[% onloan_items_loo.description %]" alt="[% onloan_items_loo.description %]" />
+                                        [% ELSE %]<li>[% END %]
+                                        [% ELSE %]<li>[% END %][% END %]
+
+                                        [% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname %][% END %]
+                                        [% IF ( onloan_items_loo.location ) %][% onloan_items_loo.location %][% END %]
+                                        [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% onloan_items_loo.itemcallnumber |url %]">[% onloan_items_loo.itemcallnumber %]</a>][% END %]
+                                        ([% onloan_items_loo.count %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue %] long overdue[% END %]) date due: [% onloan_items_loo.due_date %]</li>
+                                    [% END %]</ul>
+                                    [% END %]
+
+                                    [% IF ( SEARCH_RESULT.othercount ) %]
+                                    <span class="unavailable">[% SEARCH_RESULT.othercount %] unavailable:</span>
+                                    <ul>
+                                    [% FOREACH other_items_loo IN SEARCH_RESULT.other_items_loop %]
+                                        [% IF ( noItemTypeImages ) %]<li>[% ELSE %][% IF ( item_level_itypes ) %]
+                                        [% IF ( other_items_loo.imageurl ) %]
+                                        <li style="list-style: none; list-style-type: none;"><img src="[% other_items_loo.imageurl %]" title="[% other_items_loo.description %]" alt="[% other_items_loo.description %]" />
+                                        [% ELSE %]<li>[% END %]
+                                        [% ELSE %]<li>[% END %][% END %]
+
+                                        [% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname %][% END %]
+                                        [% IF ( other_items_loo.location ) %][% other_items_loo.location %][% END %]
+                                        [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=[% other_items_loo.itemcallnumber |url %]">[% other_items_loo.itemcallnumber %]</a>][% END %]
+                                        [% IF ( other_items_loo.wthdrawn ) %](Withdrawn)[% END %]
+                                        [% IF ( other_items_loo.itemlost ) %](Lost)[% END %]
+                                        [% IF ( other_items_loo.damaged ) %](Damaged)[% END %]
+                                        [% IF ( other_items_loo.intransit ) %](In transit)[% END %]
+                                        [% IF ( other_items_loo.onhold ) %](On hold)[% END %]
+                                        [% IF ( other_items_loo.notforloan ) %][% other_items_loo.notforloan %][% END %]
+                                        ([% other_items_loo.count %])</li>
+                                    [% END %]</ul>
+                                    [% END %]
+                                    [% ELSE %]
+                                    [% IF ( SEARCH_RESULT.ALTERNATEHOLDINGS.count ) %]
+                                    <strong id="altholdings_heading">Other holdings:</strong>
+                                    <ul>
+                                    [% FOREACH ALTERNATEHOLDING IN SEARCH_RESULT.ALTERNATEHOLDINGS %]
+                                    <li id="alternateholdings">[% ALTERNATEHOLDING.holding %]</li>
+                                    [% END %]
+                                    </li>
+                                    [% ELSE %]
+                                    <span class="unavailable">No items</span>
+                                    [% END %]
+                                    [% END %] <!-- /items count -->
+                                    </div></td>
+
+                            </tr>
+                        [% END %]
+                </table>
+		</form>
+                </div>
+        [% END %]
+        [% INCLUDE 'page-numbers.inc' %]
+    [% ELSE %]
+    <!-- No Results Found -->
+    [% END %]
+[% IF ( outer_sup_results_loop ) %]
+</div>
+<div class="yui-u">
+[% FOREACH outer_sup_results_loo IN outer_sup_results_loop %]
+<!-- <div class="yui-b"> -->
+    [% IF ( outer_sup_results_loo.inner_sup_results_loop ) %]
+        [% outer_sup_results_loo.servername %]
+        [% FOREACH inner_sup_results_loo IN outer_sup_results_loo.inner_sup_results_loop %]
+        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi %][% inner_sup_results_loo.limit_cgi |html %][% inner_sup_results_loo.sort_by %][% inner_sup_results_loo.link %]">[% inner_sup_results_loo.title |html %]</a></div>
+        [% END %]
+    [% END %]
+<!-- </div> -->
+[% END %]
+</div>
+</div>
+[% END %]
+
+<form id="hold_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
+    <!-- Value will be set here by placeHold() -->
+    <input id="hold_form_biblios" type="hidden" name="biblionumbers" value="" />
+    <input type="hidden" name="findborrower" id="holdFor" value="" />
+    <input type="hidden" name="multi_hold" value="1"/>
+</form>
+
+<form id="list_form" method="get" action="/cgi-bin/koha/reserve/request.pl">
+    <!-- Value will be set here by addToList() -->
+    <input id="list_form_biblios" type="hidden" name="biblionumbers" value="" />
+    <input type="hidden" name="multi_listadd" value="1"/>
+</form>
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'facets.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

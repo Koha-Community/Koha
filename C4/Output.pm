@@ -32,8 +32,9 @@ use C4::Context;
 use C4::Languages qw(getTranslatedLanguages get_bidi regex_lang_subtags language_get_description accept_language );
 use C4::Dates qw(format_date);
 use C4::Budgets qw(GetCurrency);
+use C4::Templates;
 
-use HTML::Template::Pro;
+#use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
@@ -93,16 +94,9 @@ sub gettemplate {
     ($query) or warn "no query in gettemplate";
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
+    $tmplbase =~ s/\.tmpl$/.tt/;
     my ( $htdocs, $theme, $lang, $filename ) = _get_template_file( $tmplbase, $interface, $query );
-
-    my $template       = HTML::Template::Pro->new(
-        filename          => $filename,
-        die_on_bad_params => 1,
-        global_vars       => 1,
-        case_sensitive    => 1,
-        loop_context_vars => 1, # enable: __first__, __last__, __inner__, __odd__, __counter__ 
-        path              => ["$htdocs/$theme/$lang/$path"]
-    );
+    my $template = C4::Templates->new( $interface, $filename, $tmplbase);
     my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
           . "/$theme/$lang";
     $template->param(
@@ -469,12 +463,18 @@ sub output_with_http_headers($$$$;$) {
     # remove SUDOC specific NSB NSE
     $data =~ s/\x{C2}\x{98}|\x{C2}\x{9C}/ /g;
     $data =~ s/\x{C2}\x{88}|\x{C2}\x{89}/ /g;
+      
+# We can't encode here, that will double encode our templates, and xslt
+# We need to fix the encoding as it comes out of the database, or when we pass the variables to templates
+ 
+#    utf8::encode($data) if utf8::is_utf8($data);
+
     print $query->header($options), $data;
 }
 
 sub output_html_with_http_headers ($$$;$) {
     my ( $query, $cookie, $data, $status ) = @_;
-    $data =~ s/\&amp\;amp\; /\&amp\; /;
+    $data =~ s/\&amp\;amp\; /\&amp\; /g;
     output_with_http_headers( $query, $cookie, $data, 'html', $status );
 }
 

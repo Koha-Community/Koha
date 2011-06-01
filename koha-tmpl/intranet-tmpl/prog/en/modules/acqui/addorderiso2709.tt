@@ -1,0 +1,218 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; Order Staged MARC Records
+[% IF ( batch_details ) %]
+ &rsaquo; Batch [% import_batch_id %]
+[% ELSE %]
+ &rsaquo; Batch List
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/acq.js"></script>
+<script type="text/JavaScript">
+//<![CDATA[
+    $(document).ready(function() {
+        $("#files").tablesorter({
+            headers: {
+                5: { sorter: false },
+            }
+        });
+    });
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo;  Add orders from iso2709 file</div>
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+       <div id="yui-main">
+           <div class="yui-b">
+             [% IF ( batch_details ) %]
+                  <h1>Add orders from [% comments %]
+                    ([% file_name %] staged on [% upload_timestamp %])
+                  </h1>
+               <div>
+                   <form action="[% scriptname %]" method="post" name="import_biblios">
+                     <table>
+                     <tr>
+                         <th>Citation</th>
+                         <th>Match?</th>
+                         <th>Order</th>
+                       </tr>
+                       [% FOREACH biblio_lis IN biblio_list %]
+                         <tr>
+                             <td>
+                                [% biblio_lis.citation %]
+
+                             </td>
+                             <td>[% biblio_lis.overlay_status %]</td>
+                             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]&amp;breedingid=[% biblio_lis.import_record_id %]&amp;import_batch_id=[% biblio_lis.import_batch_id %]&amp;biblionumber=[% biblio_lis.match_biblionumber %]">Add order</a></td>
+                         </tr>
+     [% IF ( biblio_lis.match_biblionumber ) %]
+    <tr>
+      <td class="highlight" colspan="3">&nbsp;&nbsp;&nbsp;Matches biblio [% biblio_lis.match_biblionumber %] (score = [% biblio_lis.match_score %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio_lis.match_biblionumber %]">[% biblio_lis.match_citation %]</a></td>
+    </tr>
+    [% END %]
+                      [% END %]
+                     </table>
+                   </form>
+               </div>
+              [% IF ( pages ) %]
+                <div class="pages">
+                Page 
+                  [% FOREACH page IN pages %]
+                    [% IF ( page.current_page ) %]
+                      <span class="current">[% page.page_number %]</span>
+                    [% ELSE %]
+                      <a class="nav" href="[% page.script_name %]?import_batch_id=[% page.import_batch_id %]&amp;offset=[% page.offset %]">[% page.page_number %]</a>
+                    [% END %]
+                  [% END %]
+              [% END %]
+             [% ELSE %]
+               <div>
+                <h1>Choose the file to add to the basket</h1>
+                   <table id="files">
+                     <thead>
+                     <tr>
+                       <th>File name</th>
+                       <th>Comments</th>
+                       <th>Status</th>
+                       <th>Staged</th>
+                       <th># Bibs</th>
+                       <th>&nbsp;</th>
+                     </tr>
+                     </thead>
+                     <tbody>
+                     [% FOREACH batch_lis IN batch_list %]
+                     <tr>
+                        <td>[% batch_lis.file_name %]</td>
+                       <td>[% batch_lis.comments %]</td>
+                       <td>[% batch_lis.import_status %]</td>
+                       <td>[% batch_lis.upload_timestamp %]</td>
+                       <td>[% batch_lis.num_biblios %]</td>
+                       <td><a href="[% batch_lis.scriptname %]?import_batch_id=[% batch_lis.import_batch_id %]&amp;basketno=[% basketno %]&amp;booksellerid=[% booksellerid %]">Add orders</a></td>
+                     </tr>
+                     [% END %]
+                     </tbody>
+                   </table>
+               </div>
+             [% END %]
+           </div>
+        [% IF ( import_batch_id ) %]
+            <div class="yui-b">
+            <h2>Import All</h2>
+            <p>Import all the lines in the basket with the following parameters:</p>
+            <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
+                    <input type="hidden" name="op" value="import_records"/>
+                    <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
+                    <input type="hidden" name="basketno" value="[% basketno %]" />
+                    <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
+                    <input type="hidden" name="import_batch_id" value="[% import_batch_id %]" />
+
+                    [% FOREACH loop_currencie IN loop_currencies %]
+                        <input type="hidden" name="[% loop_currencie.currency %]" value="[% loop_currencie.rate %]" />
+                    [% END %]
+
+                [% IF ( items ) %]
+                <fieldset class="rows">
+                    <legend>Item</legend>
+                    [% IF ( NoACQframework ) %]
+                        <div class="dialog message">No ACQ framework, using default. You should create a framework with code ACQ, the items framework would be used</div>
+                    [% END %]
+
+                    [% FOREACH item IN items %]
+                    <div id="outeritemblock">
+                    <div id="itemblock">
+                        <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
+                            <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+
+                                <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
+                                [% iteminformatio.marc_value %]
+                                <input type="hidden" name="itemid" value="1" />
+                                <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield %]" />
+                                <input type="hidden" name="tag" value="[% iteminformatio.tag %]" />
+                                <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
+                                <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
+                            </div></li>
+                        [% END %]
+                        </ol>
+                    </div><!-- /iteminformation -->
+                    </div>
+
+                    [% END %] <!-- /items -->
+                </fieldset>
+                [% END %] <!-- items -->
+                <fieldset class="rows">
+                    <legend>Accounting Details</legend>
+                    <ol>
+                        <li>
+                            <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, usefull when receiveing an order -->
+                            <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
+                        </li>
+                        <li>
+                            [% IF ( close ) %]
+                        <span class="label">Budget: </span>
+                                <input type="hidden" size="20" name="budget_id" id="budget_id" value="[% budget_id %]" />[% Budget_name %]
+                            [% ELSE %]
+                            <li>
+                            <label for="currency">Currency:</label>
+                            <select name="currency" id="currency" onchange="calcNeworderTotal();">
+                            [% FOREACH loop_currencie IN loop_currencies %]
+                                    [% IF ( loop_currencie.selected ) %]<option value="[% loop_currencie.currcode %]" selected="selected">[% loop_currencie.currcode %]</option>[% ELSE %]<option value="[% loop_currencie.currcode %]">[% loop_currencie.currcode %]</option>[% END %][% END %]
+                            </select>
+                            </li>
+                            <li>
+                            <label for="budget_id">Budget: </label>
+                            <select id="budget_id" onchange="fetchSortDropbox(this.form)" size="1" name="budget_id">
+                            [% FOREACH budget_loo IN budget_loop %]
+                                [% IF ( budget_loo.b_sel ) %]
+                                    <option value="[% budget_loo.b_id %]" selected="selected">[% budget_loo.b_txt %]</option>
+                                [% ELSE %]
+                                    <option value="[% budget_loo.b_id %]">[% budget_loo.b_txt %]</option>
+                                [% END %]
+                            [% END %]
+                            </select>
+                            </li>
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="notes">Notes: </label>
+                            <textarea id="notes" cols="30" rows="3" name="notes"></textarea>
+                        </li>
+                        <li><div class="hint">The 2 following fields are available for your own usage. They can be useful for statistical purposes</div>
+                            <label for="sort1">Planning value1: </label>
+
+                            [% IF ( CGIsort1 ) %]
+                                [% CGIsort1 %]
+                            [% ELSE %]
+
+                                <input type="text" id="sort1" size="20" name="sort1" value="[% sort1 %]" />
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="sort2">Planning value2: </label>
+
+                            [% IF ( CGIsort2 ) %]
+                                [% CGIsort2 %]
+                            [% ELSE %]
+                                <input type="text" id="sort2" size="20" name="sort2" value="[% sort2 %]" />
+                            [% END %]
+                        </li>
+                        <li>
+                            
+                        </li>
+            </ol>
+                </fieldset>
+                <fieldset class="action">
+                    <input type="submit" value="Save" /><a class="cancel" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Cancel</a>
+                </fieldset>
+            </form>
+            </div>
+        [% END %]
+       </div>
+   </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,258 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Holds to Pull</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<!-- Additions to enable Calendar system -->
+<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css" />
+<!-- End of additions --><!-- Additions to enable Calendar system -->
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
+<!-- End of additions -->
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+	 $(document).ready(function() {
+	 	$("th a").hide();
+		$.tablesorter.defaults.widgets = ['zebra'];
+		$("#holdst").tablesorter({[% IF ( dateformat == 'metric' ) %]
+		dateFormat: 'uk',[% END %]
+			sortList: [[3,0]],
+			headers: { 0:{sorter:false},1:{sorter:false},3: { sorter: 'articles' },7:{sorter:false}}
+		}); 
+ 	 });
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds to Pull</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+<h2>Holds to Pull[% IF ( run_report ) %] placed between [% from %] and [% to %][% END %]</h2>
+[% IF ( run_report ) %]
+<h3>Reported on [% todaysdate %]</h3>
+<p>The following holds have not been filled. Please retrieve them and check them in.</p>
+<div class="searchresults">
+    [% IF ( reserveloop ) %]
+    <table id="holdst">
+    <thead>
+    <tr>
+        <th>
+				Pull This Many Items
+        </th>        
+        <th>
+				Items Available
+        </th>
+        <th>
+				Patrons with Holds
+        </th>
+        <th>Title
+        <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=biblio&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>
+            Libraries
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=library&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>
+            Available Call Numbers
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=call&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>
+            Available Itypes
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=itype&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th>
+            Available Locations
+				<a href="/cgi-bin/koha/circ/pendingreserves.pl?order=location&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+        <th >Earliest Hold Date
+            <a href="/cgi-bin/koha/circ/pendingreserves.pl?order=date&amp;from=[% from %]&amp;to=[% to %]">Sort</a>
+        </th>
+    </tr>
+    </thead>
+    <tbody>
+        [% IF ( next_or_previous ) %]
+        <tr>
+            <td colspan="3" align="left">
+            [% IF ( prev_results ) %]
+                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
+                    <input type="hidden" name="from" value="[% from %]">
+                    <input type="hidden" name="to" value="[% to %]">
+                    <input type="hidden" name="report_page" value="[% prev_results %]">
+                    <input type="submit" name="run_report" value="&lt; Prev">
+                </form>
+            [% END %]
+            </td>
+            <td colspan="3"></td>
+            <td colspan="3" align="right">
+            [% IF ( next_results ) %]
+                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
+                    <input type="hidden" name="from" value="[% from %]">
+                    <input type="hidden" name="to" value="[% to %]">
+                    <input type="hidden" name="report_page" value="[% next_results %]">
+                    <input type="submit" name="run_report" value="Next &gt;">
+                </form>
+            [% END %]
+            </td>
+        </tr>
+        [% END %]
+        [% FOREACH reserveloo IN reserveloop %]
+        <tr>
+            [% IF ( reserveloo.borrowernumber ) %]
+                <td><p><b>[% reserveloo.pullcount %]</b></p></td>
+                <td>[% reserveloo.count %]</td>  
+                <td>[% reserveloo.rcount %]</td> 
+                <td>
+                    <p>
+            [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
+                                [% reserveloo.title |html %] [% reserveloo.subtitle %]
+                            </a>
+                    </p>
+                </td>
+            [% ELSE %]
+                <td colspan="3">
+                    &nbsp;
+                </td>
+                <td>"</td>
+            [% END %]
+            <td><p>[% reserveloo.holdingbranch %]</p></td>
+            <td><p>[% reserveloo.itemcallnumber %]</p></td>
+				<td><p>[% reserveloo.itype %]</p></td> 
+				<td><p>[% reserveloo.location %]</p></td>
+            <td width="15%">
+                <p>[% reserveloo.reservedate %]</p>
+                <p>in [% reserveloo.branch %]</p>
+                [% IF ( reserveloo.statusw ) %]<p>Waiting</p>[% END %][% IF ( reserveloo.statusf ) %]<p>Fullfilled</p>[% END %]
+            </td>
+        </tr>
+        [% END %]
+        [% IF ( next_or_previous ) %]
+        <tr>
+            <td colspan="3" align="left">
+            [% IF ( prev_results ) %]
+                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
+                    <input type="hidden" name="from" value="[% from %]">
+                    <input type="hidden" name="to" value="[% to %]">
+                    <input type="hidden" name="report_page" value="[% prev_results %]">
+                    <input type="submit" name="run_report" value="&lt; Prev">
+                </form>
+            [% END %]
+            </td>
+            <td colspan="3"></td>
+            <td colspan="3" align="right">
+            [% IF ( next_results ) %]
+                <form action="/cgi-bin/koha/circ/pendingreserves.pl" method="POST">
+                    <input type="hidden" name="from" value="[% from %]">
+                    <input type="hidden" name="to" value="[% to %]">
+                    <input type="hidden" name="report_page" value="[% next_results %]">
+                    <input type="submit" name="run_report" value="Next &gt;">
+                </form>
+            [% END %]
+            </td>
+        </tr>
+        [% END %]
+    </tbody>
+    </table>
+    [% ELSE %]
+        <b>No items found.</b>
+    [% END %]
+</div>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+<div id="filters">
+
+<form action="/cgi-bin/koha/circ/pendingreserves.pl" method="post" >
+<fieldset class="brief">
+<h4>Refine Results</h4>
+<ol>
+<li>
+<label for="from">
+    Start date:
+</label>
+<input type="text" size="10" id="from" name="from" value="[% from %]" />
+<img src="[% themelang %]/lib/calendar/cal.gif"  border="0" id="openCalendarFrom" style="cursor: pointer;" alt="" />
+<script language="JavaScript" type="text/javascript">
+function validate1(date) {
+    var day = date.getDate();
+    var month = date.getMonth() + 1;
+    var year = date.getFullYear();
+    var weekDay = date.getDay();
+    var dayMonth = month + '-' + day;
+    var dateString = year + '-' + month + '-' + day;
+    var dateTo = document.getElementById('to').value.split("-");
+    var limitDate = new Date(dateTo[0], (dateTo[1] - 1), dateTo[2]);
+    if (date > limitDate) {
+            return true;
+    } else {
+            return false;
+    }
+}
+Calendar.setup(
+        {
+        inputField : "from",
+        ifFormat : "[% DHTMLcalendar_dateformat %]",
+        button : "openCalendarFrom",
+        disableFunc : validate1,
+        dateStatusFunc : validate1
+        }
+);
+</script></li>
+<li><label for="to">
+    End date:
+</label>
+<input size="10" id="to" name="to" value="[% to %]" type="text" />
+<img src="[% themelang %]/lib/calendar/cal.gif" alt="" id="openCalendarTo" style="cursor: pointer;" border="0" />
+<script type="text/javascript">
+        function validate2(date) {
+            var day = date.getDate();
+            var month = date.getMonth() + 1;
+            var year = date.getFullYear();
+            var weekDay = date.getDay();
+            var dayMonth = month + '-' + day;
+            var dateString = year + '-' + month + '-' + day;
+            var dateFrom = document.getElementById('from').value.split("-");
+            var limitDate = new Date(dateFrom[0], (dateFrom[1] - 1), dateFrom[2]);
+            if (limitDate > date) {
+                    return true;
+            } else {
+                    return false;
+            }
+        }
+
+        Calendar.setup(
+                {
+                    inputField : "to",
+                    ifFormat : "[% DHTMLcalendar_dateformat %]",
+                    button : "openCalendarTo",
+                    disableFunc : validate2,
+                    dateStatusFunc : validate2
+                }
+        );
+</script></li>
+</ol>
+<p><i>(Inclusive, default is two days ago to today, set other date ranges as needed. )</i></p>
+<fieldset class="action"><input type="submit" name="run_report" value="Submit" class="submit"/></fieldset>
+</fieldset>
+</form>
+
+</div>
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

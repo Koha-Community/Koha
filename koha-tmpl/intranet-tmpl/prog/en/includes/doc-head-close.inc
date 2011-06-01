@@ -1,88 +1,89 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="<!-- TMPL_VAR NAME="themelang" -->/includes/favicon.ico" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/lib/jquery/plugins/ui.tabs.css" />
-<link rel="stylesheet" type="text/css" media="print" href="<!-- TMPL_VAR name="themelang" -->/css/print.css" />
-<!-- TMPL_IF name="intranetstylesheet" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="intranetstylesheet" -->" />
-<!-- TMPL_ELSE -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/staff-global.css" />
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="css_libs" -->
-    <!-- TMPL_LOOP NAME="css_libs" -->
-        <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="lib" -->" />
-    <!-- /TMPL_LOOP -->
-<!-- /TMPL_IF -->
+<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% themelang %]/includes/favicon.ico[% END %]" type="image/x-icon" />
+<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/jquery/plugins/ui.tabs.css" />
+<link rel="stylesheet" type="text/css" media="print" href="[% themelang %]/css/print.css" />
+[% IF ( intranetstylesheet ) %]
+    <link rel="stylesheet" type="text/css" href="[% intranetstylesheet %]" />
+[% ELSE %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/staff-global.css" />
+[% END %]
+[% IF ( css_libs ) %]
+    [% FOREACH css_lib IN css_libs %]
+        <link rel="stylesheet" type="text/css" href="[% themelang %]/[% css_lib.lib %]" />
+    [% END %]
+[% END %]
 
-<!-- TMPL_IF NAME="css_module" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/modules/<!-- TMPL_VAR NAME="css_module" -->" />
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="css_page" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/pages/<!-- TMPL_VAR NAME="css_page" -->" />
-<!-- /TMPL_IF -->
+[% IF ( css_module ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/modules/[% css_module %]" />
+[% END %]
+[% IF ( css_page ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/pages/[% css_page %]" />
+[% END %]
 
-<!-- TMPL_IF NAME="css_widgets" -->
-    <!-- TMPL_LOOP NAME="css_widgets" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/<!-- TMPL_VAR NAME="widget" -->" />
-    <!-- /TMPL_LOOP -->
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="IntranetUserCSS" --><style type="text/css"><!-- TMPL_VAR NAME="IntranetUserCSS" --></style><!-- /TMPL_IF -->
+[% IF ( css_widgets ) %]
+    [% FOREACH css_widget IN css_widgets %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/[% css_widget.widget %]" />
+    [% END %]
+[% END %]
+[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/jquery.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/ui.tabs.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.hotkeys.min.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/jquery/plugins/jquery.highlight-3.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/jquery.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/ui.tabs.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.hotkeys.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.highlight-3.js"></script>
 
-<!-- TMPL_IF NAME="js_libs" -->
-    <!-- TMPL_LOOP NAME="js_libs" -->
-        <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="lib" -->"></script>
-    <!-- /TMPL_LOOP -->
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="js_module" -->
-    <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/modules/<!-- TMPL_VAR NAME="js_module" -->"></script>
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="js_page" -->
-    <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/pages/<!-- TMPL_VAR NAME="js_page" -->"></script>
-<!-- /TMPL_IF -->
+[% IF ( js_libs ) %]
+    [% FOREACH js_lib IN js_libs %]
+        <script type="text/javascript" src="[% themelang %]/[% js_lib.lib %]"></script>
+    [% END %]
+[% END %]
+[% IF ( js_module ) %]
+    <script type="text/javascript" src="[% themelang %]/js/modules/[% js_module %]"></script>
+[% END %]
+[% IF ( js_page ) %]
+    <script type="text/javascript" src="[% themelang %]/js/pages/[% js_page %]"></script>
+[% END %]
 
-<!-- TMPL_IF NAME="js_widgets" -->
-    <!-- TMPL_LOOP NAME="js_widgets" -->
-        <script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/<!-- TMPL_VAR NAME="widget" -->"></script>
-    <!-- /TMPL_LOOP -->
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="login" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/login.css" />
-<!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="wizard" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/wizard.css" />
-<!-- /TMPL_IF -->
+[% IF ( js_widgets ) %]
+    [% FOREACH js_widget IN js_widgets %]
+        <script type="text/javascript" src="[% themelang %]/[% js_widget.widget %]"></script>
+    [% END %]
+[% END %]
+[% IF ( login ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/login.css" />
+[% END %]
+[% IF ( wizard ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/wizard.css" />
+[% END %]
 
 <!-- local colors -->
-<!-- TMPL_IF name="intranetcolorstylesheet" -->
-    <link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR NAME="themelang" -->/css/<!-- TMPL_VAR NAME="intranetcolorstylesheet" -->" />
-<!-- /TMPL_IF -->
+[% IF ( intranetcolorstylesheet ) %]
+    <link rel="stylesheet" type="text/css" href="[% themelang %]/css/[% intranetcolorstylesheet %]" />
+[% END %]
 
 <!-- yui js --> 
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/utilities/utilities.js"></script> 
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/datasource/datasource-min.js"></script>
-<!-- TMPL_IF NAME="CircAutocompl" -->
-    <script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/autocomplete/autocomplete-min.js"></script>
-<!-- /TMPL_IF -->
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/button/button-min.js"></script> 
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/container/container_core-min.js"></script> 
-<script type="text/javascript" src="<!-- TMPL_VAR NAME="yuipath" -->/menu/menu-min.js"></script> 
+<script type="text/javascript" src="[% yuipath %]/utilities/utilities.js"></script> 
+<script type="text/javascript" src="[% yuipath %]/datasource/datasource-min.js"></script>
+[% IF ( CircAutocompl ) %]
+    <script type="text/javascript" src="[% yuipath %]/autocomplete/autocomplete-min.js"></script>
+[% END %]
+<script type="text/javascript" src="[% yuipath %]/button/button-min.js"></script> 
+<script type="text/javascript" src="[% yuipath %]/container/container_core-min.js"></script> 
+<script type="text/javascript" src="[% yuipath %]/menu/menu-min.js"></script> 
 
 <!-- koha core js -->
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/js/staff-global.js"></script>
-<!-- TMPL_IF NAME="intranetuserjs" -->
+<script type="text/javascript" src="[% themelang %]/js/staff-global.js"></script>
+[% IF ( intranetuserjs ) %]
     <script type="text/javascript">
     //<![CDATA[
-    <!-- TMPL_VAR NAME="intranetuserjs" -->
+    [% intranetuserjs %]
     //]]>
     </script>
-<!-- /TMPL_IF -->
+[% END %]
 <script type="text/javascript" language="javascript">
     //<![CDATA[
-    <!-- TMPL_IF NAME="intranetbookbag" -->var MSG_BASKET_EMPTY = _("Your cart is currently empty");
+    [% IF ( intranetbookbag ) %]var MSG_BASKET_EMPTY = _("Your cart is currently empty");
         var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
         var MSG_RECORD_ADDED = _("This item has been added to your cart");
         var MSG_NRECORDS_ADDED = _(" item(s) added to your cart");
@@ -92,9 +93,9 @@
         var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
         var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be reserved.");
-    <!-- /TMPL_IF -->
+    [% END %]
     //]]>
     </script>
-    <!-- TMPL_IF EXPR="virtualshelves || intranetbookbag" -->
-        <script type="text/javascript" language="javascript" src="<!-- TMPL_VAR NAME="themelang" -->/js/basket.js"></script>
-    <!-- /TMPL_IF -->
+    [% IF ( virtualshelves || intranetbookbag ) %]
+        <script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js"></script>
+    [% END %]

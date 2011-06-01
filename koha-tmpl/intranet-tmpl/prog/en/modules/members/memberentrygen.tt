@@ -1,0 +1,1103 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Patrons &rsaquo; 
+[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] [% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %][% UNLESS ( opadd ) %] [% surname %], [% firstname %][% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'calendar.inc' %]
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+    $(document).ready(function() {
+		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
+        $("#guarantordelete").click(function() {
+            $("#contact-details").hide().find('a').remove();
+            $("#guarantorid, #contactname, #contactfirstname").each(function () { this.value = "" });
+            $("#contactname, #contactfirstname")
+                .each(function () { this.type = 'text' })
+                .parent().find('span').remove();
+            $("#guarantorsearch").val("Set to Patron");
+        });
+        $("#select_city").change(function(){
+            var myRegEx=new RegExp(/(.*)\|(.*)/);
+            document.form.select_city.value.match(myRegEx);
+            document.form.zipcode.value=RegExp.$1;
+            document.form.city.value=RegExp.$2;
+        });
+    });
+
+    function clear_entry(node) {
+        var original = node.parentNode.parentNode;
+        $("input[type=text]", original).attr('value', '');
+        $("select", original).attr('value', '');
+    }
+
+    function clone_entry(node) {
+        var original = node.parentNode.parentNode;
+        var clone = original.cloneNode(true);
+        var newId = 50 + parseInt(Math.random() * 100000);
+        $("input", clone).attr('id', function() {
+            return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        $("input", clone).attr('name', function() {
+            return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        $("select", clone).attr('id', function() {
+            return this.id.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        $("select", clone).attr('name', function() {
+            return this.name.replace(/patron_attr_\d+/, 'patron_attr_' + newId);
+        });
+        $("input#patron_attr_" + newId, clone).attr('value','');
+        $("select#patron_attr_" + newId, clone).attr('value','');
+        original.parentNode.insertBefore(clone, original.nextSibling);
+    }
+		var MSG_SEPARATOR = _("Separator must be / in field ");
+        var MSG_INCORRECT_DAY = _("Invalid day entered in field ");
+        var MSG_INCORRECT_MONTH = _("Invalid month entered in field ");
+        var MSG_INCORRECT_YEAR = _("Invalid year entered in field ");
+        var MSG_DUPLICATE_PATRON = _("Warning: Duplicate patron");
+        var MSG_DUPLICATE_ORGANIZATION = _("Warning: Duplicate organization");
+        var MSG_LATE_EXPIRY = _("Warning: Expiration date falls before enrollment date");
+        var MSG_MISSING_MANDATORY = _("The following fields are mandatory:");
+        var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
+//]]>
+</script>
+<script type="text/javascript" src="[% themelang %]/js/members.js"></script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; 
+[% IF ( opadd ) %]
+		Add[% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %]
+[% surname %] [% firstname %]
+[% ELSE %] 
+<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% firstname %] [% surname %]</a> &rsaquo; <strong>[% IF ( opduplicate ) %]Duplicate[% ELSE %]Modify[% END %][% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %]
+</strong>[% END %]</div>
+[% IF ( opadd ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+	[% IF ( no_add ) %]<div class="dialog alert"><h3>Cannot add patron</h3>
+		[% IF ( no_branches ) %]<p>There are <strong>no libraries defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/branches.pl">add a library</a>.[% ELSE %]An administrator must define at least one library.[% END %]</p>[% END %]
+		[% IF ( no_categories ) %]<p>There are <strong>no patron categories defined</strong>. [% IF ( CAN_user_parameters ) %]Please <a href="/cgi-bin/koha/admin/categorie.pl">add a patron category</a>.[% ELSE %]An administrator must define at least one patron category.</p>[% END %][% END %]</div>[% END %]
+
+	[% UNLESS ( no_add ) %]
+	[% IF ( opadd ) %]
+	<h1>
+		Add[% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %] [% firstname %] [% surname %] 
+	</h1>
+	[% ELSE %]
+	<h1>
+		[% IF ( opduplicate ) %]Duplicate[% ELSE %]Modify[% END %][% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %]
+[% firstname %] [% surname %] 
+	</h1>
+	[% END %]
+  
+	[% IF ( check_member ) %]
+			<div class="dialog alert">
+				<h3>Duplicate patron record?</h3>
+				<p><a class="popup" href="javascript:Dopop('moremember.pl?print=brief&amp;borrowernumber=[% check_member %]');" >View existing record</a></p>
+				<form action="/cgi-bin/koha/members/memberentry.pl" method="get"><input type="hidden" name="op" value="modify" /><input type="hidden" name="borrowernumber" value="[% check_member %]" /><input type="hidden" name="category_type" value="[% check_categorytype %]" /><input class="edit" type="submit" value="It is a duplicate. Edit existing record" /></form>
+
+				<form name="form_double" action="/cgi-bin/koha/members/memberentry.pl" method="post">
+				<input type="hidden" name="nodouble" value="1" />
+				<input class="new" type="submit" value="Not a duplicate. Save as new record" />
+			</div>
+	[% END %]
+
+	[% IF ( debug ) %]
+		<div id="debug">
+				<div>Debug is on (level [% debug %])</div>
+		</div>
+	[% END %]
+	[% IF ( nok ) %]
+		<div class="dialog alert">
+			<p>The following fields are wrong. Please fix them.</p>
+			<ul>
+			[% IF ( ERROR_login_exist ) %]
+				<li id="ERROR_login_exist">Username/password already exists.</li>
+			[% END %]
+			[% IF ( ERROR_cardnumber ) %]
+				<li id="ERROR_cardnumber">Cardnumber already in use.</li>
+			[% END %]
+			[% IF ( ERROR_age_limitations ) %]
+				<li id="ERROR_age_limitations">Patron's age is incorrect for their category.  
+					Ages allowed are [% ERROR_age_limitations %].</li>
+			[% END %]
+			[% IF ( ERROR_branch ) %]
+				<li id="ERROR_branch">Library is invalid.</li>
+			[% END %]   
+			[% IF ( ERROR_dateofbirth ) %]
+				<li id="ERROR_dateofbirth">Date of birth is invalid.</li>
+			[% END %]
+			[% IF ( ERROR_dateenrolled ) %]
+				<li id="ERROR_dateenrolled">Date of enrollment is invalid.</li>
+			[% END %]
+			[% IF ( ERROR_dateexpiry ) %]
+				<li id="ERROR_dateexpiry">Date of expiration is invalid.</li>
+			[% END %]
+			[% IF ( ERROR_short_password ) %]
+				<li id="ERROR_short_password">Password must be at least [% minPasswordLength %] characters long.</li>
+			[% END %]
+            [% IF ( ERROR_extended_unique_id_failed ) %]
+                <li id="ERROR_extended_unique_id_failed">The attribute value 
+                    [% ERROR_extended_unique_id_failed %] is already is use by another patron record.</li>
+			[% END %]
+			</ul>
+		</div>
+	[% END %]
+
+
+[% UNLESS ( check_member ) %]<form name="form" id="entryform"  action="/cgi-bin/koha/members/memberentry.pl" method="post">
+<input type="hidden" name="nodouble"  value="[% nodouble %]" /> [% END %]
+<!--    field always hidden in different form (1,2,3) -->
+<input type="hidden" name="BorrowerMandatoryField" value="[% BorrowerMandatoryField %]" />
+<input type="hidden" name="category_type" value="[% category_type %]" />
+<input type="hidden" name="updtype" value="[% updtype %]" />
+<input type="hidden" name="select_roadtype" value="[% select_roadtype %]" />
+<input type="hidden" name="destination" value="[% destination %]" />
+<input type="hidden" name="check_member" value="[% check_member %]" />
+<input type="hidden" name="borrowernumber" value="[% IF ( opduplicate ) %][% ELSE %][% borrowernumber %][% END %]" />
+<input type="hidden" name="nodouble"  value="[% IF ( opduplicate ) %][% ELSE %][% nodouble %][% END %]" />
+[% IF ( step ) %]<input type="hidden" name="step"  value="[% step %]" />[% END %]
+[% IF ( opadd ) %]<input type="hidden" name="op" value="insert" />[% ELSIF ( opduplicate ) %]<input type="hidden" name="op" value="insert" />[% ELSE %]<input type="hidden" name="op" value="save" />[% END %]
+
+[% IF ( step_1 ) %]
+	<fieldset class="rows" id="memberentry_identity">
+		<legend>[% IF ( I ) %]Organization [% ELSE %]Patron [% END %]identity</legend>
+		<ol>
+		[% UNLESS ( I ) %]
+		[% IF ( title_cgipopup ) %]
+            <li>
+            [% IF ( mandatorytitle ) %]
+                <label for="btitle" class="required">
+            [% ELSE %]
+                <label for="btitle">
+            [% END %]
+            Salutation: </label>
+            [% borrotitlepopup %]
+            [% IF ( mandatorytitle ) %]<span class="required">Required</span>[% END %]
+            </li>
+		[% END %]
+        [% END %]
+		<li>
+		[% IF ( mandatorysurname ) %]
+		<label for="surname" class="required">
+		[% ELSE %]
+		<label for="surname">
+		[% END %]
+		Surname: </label>
+		[% IF ( uppercasesurnames ) %]
+		<input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% surname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+		[% ELSE %]
+		<input type="text" id="surname" name="surname" size="20"  value="[% surname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+		[% END %]
+		[% IF ( mandatorysurname ) %]<span class="required">Required</span>[% END %]
+		</li>
+		[% UNLESS ( I ) %]
+            <li>
+                [% IF ( mandatoryfirstname ) %]
+                <label for="firstname" class="required">
+                [% ELSE %]
+                <label for="firstname">
+                [% END %]
+                First name: </label>
+                <input type="text" id="firstname" name="firstname" size="20"  value="[% IF ( opduplicate ) %][% ELSE %][% firstname %][% END %]" />
+                [% IF ( mandatoryfirstname ) %]<span class="required">Required</span>[% END %]
+            </li>
+            <li>
+                [% IF ( mandatorydateofbirth ) %]
+                <label for="dateofbirth" class="required">
+                [% ELSE %]
+                <label for="dateofbirth">
+                [% END %]
+                Date of birth: </label>
+				
+	[% IF ( metric ) %]			
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" onchange="CheckDate(document.form.dateofbirth);" value="[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]" />
+[% ELSE %]
+                <input type="text" id="dateofbirth" name="dateofbirth" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% dateofbirth %][% END %]" />
+[% END %]
+
+                <img src="[% themelang %]/lib/calendar/cal.gif" id="dateofbirth_button" alt="Show Calendar" />
+        <script language="JavaScript" type="text/javascript">
+            Calendar.setup(
+            {
+                inputField : "dateofbirth",
+                ifFormat : "[% DHTMLcalendar_dateformat %]",
+                button : "dateofbirth_button"
+            }
+            );
+        </script>
+        [% IF ( mandatorydateofbirth ) %]<span class="required">Required</span>[% END %]
+        [% IF ( ERROR_dateofbirth ) %]<span class="required">(Error)</span>[% END %]
+		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+            </li>
+            <li>
+                [% IF ( mandatoryinitials ) %]
+                    <label for="initials" class="required">
+                [% ELSE %]
+                    <label for="initials">
+                [% END %]
+                Initials: </label>
+                <input type="text" id="initials" name="initials" size="20"  value="[% initials %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />	
+                [% IF ( mandatoryinitials ) %]<span class="required">Required</span>[% END %]
+            </li>
+        [% END %]
+		<li>
+			[% IF ( mandatoryothernames ) %]
+			<label for="othernames" class="required">
+			[% ELSE %]
+			<label for="othernames">
+			[% END %]
+			Other name: </label>
+			<input type="text" id="othernames" name="othernames" size="20"  value="[% othernames %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+[% IF ( mandatoryothernames ) %]<span class="required">Required</span>[% END %]
+		[% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]
+		</li>
+    [% UNLESS ( I ) %]
+		<li class="radio">
+		
+		[% IF ( female ) %]
+				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" checked="checked"  />
+[% ELSE %]
+				<label for="sex-female">Female </label><input type="radio" name="sex" id="sex-female" value="F" />
+[% END %]
+		[% IF ( male ) %]
+		<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" checked="checked" />
+[% ELSE %]
+				<label for="sex-male">Male </label><input type="radio" name="sex" id="sex-male" value="M" />
+[% END %]
+[% IF ( none ) %]
+				<label for="sex-none">N/A </label><input type="radio" name="sex" id="sex-none" value=""  checked="checked"  />
+[% ELSE %]
+				<label for="sex-none">N/A </label><input type="radio" name="sex" id="sex-none" value="" />
+[% END %]
+       	</li>
+    [% END %]
+		</ol>
+	</fieldset>
+	
+[% IF ( showguarantor ) %]<input type="hidden" id="guarantorid" name="guarantorid"   value="[% guarantorid %]" />
+    <fieldset class="rows">
+        <legend>Guarantor Information</legend>
+        <ol>
+[% IF ( P ) %]
+	        [% IF ( guarantorid ) %]
+	        <li id="contact-details">
+	        [% ELSE %]
+	        <li id="contact-details" style="display: none">
+	        [% END %]
+	            <span class="label">Organization #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid %]" target="blank">[% guarantorid %]</a>[% END %]
+	        </li>
+	        <li>
+	            <label for="contactname">Organization name: </label>
+	            [% IF ( guarantorid ) %]
+	            <span>[% contactname %]</span>
+	            <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname %]" />
+	            [% ELSE %]
+	            <input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	            [% END %]
+	        </li>
+[% ELSE %]
+ [% IF ( C ) %]
+ [% IF ( guarantorid ) %]
+ <li id="contact-details">
+ [% ELSE %]
+ <li id="contact-details" style="display: none">
+ [% END %]
+     <span class="label">Patron #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid %]" target="blank">[% guarantorid %]</a>[% END %]
+ </li>
+ <li>
+     <label for="contactname">Surname: </label>
+     [% IF ( guarantorid ) %]
+     <span>[% contactname %]</span>
+     <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname %]" />
+     [% ELSE %]
+     <input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+     [% END %]
+ </li>
+ <li>
+     <label for="contactfirstname">First name: </label>
+     [% IF ( guarantorid ) %]
+     <span>[% contactfirstname %]</span>
+     <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname %]" />
+     [% ELSE %]
+     <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+     [% END %]
+ </li>
+ [% IF ( relshiploop ) %]
+ <li>
+     <label for="relationship">Relationship: </label>
+     <select name="relationship" id="relationship" >
+         [% FOREACH relshiploo IN relshiploop %]
+         [% IF ( relshiploo.selected ) %]
+         <option value="[% relshiploo.relationship %]" selected="selected" >[% relshiploo.relationship %]</option>
+         [% ELSE %]
+         <option value="[% relshiploo.relationship %]">[% relshiploo.relationship %]</option>
+         [% END %]
+         [% END %]
+     </select>
+ </li>
+ [% END %]
+ [% END %]
+[% END %]
+        <li>
+            <span class="label">&nbsp;</span>
+            [% IF ( guarantorid ) %]
+            <input id="guarantorsearch" type="button" value="Change" onclick="Dopopguarantor('guarantor_search.pl?category_type=[% category_type %]');" />
+            [% ELSE %]
+            <input id="guarantorsearch" type="button" value="Set to Patron" onclick="Dopopguarantor('guarantor_search.pl?category_type=[% category_type %]');" />
+            [% END %]
+            <input id="guarantordelete" type="button" value="Delete" />
+        </li>
+        </ol>
+    </fieldset>
+
+[% END %]
+<fieldset class="rows">
+    <legend>Main address</legend><ol>
+    <li>
+      [% IF ( mandatorystreetnumber ) %]
+      <label for="streetnumber" class="required">
+      [% ELSE %]
+      <label for="streetnumber">
+      [% END %]
+      Street number: </label>
+      <input type="text" id="streetnumber" name="streetnumber" size="5" value="[% streetnumber %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+[% IF ( mandatorystreetnumber ) %]<span class="required">Required</span>[% END %]
+    </li>
+    [% IF ( road_cgipopup ) %]
+      <li>
+      [% IF ( mandatorystreettype ) %]
+      <label for="streettype" class="required">
+      [% ELSE %]
+      <label for="streettype">
+      [% END %]
+      Street type: </label>
+      [% roadpopup %]
+	  [% IF ( mandatorystreettype ) %]<span class="required">Required</span>[% END %]
+      </li>
+    [% END %] 
+    <li>
+      [% IF ( mandatoryaddress ) %]
+      <label for="address" class="required">
+      [% ELSE %]
+      <label for="address">
+      [% END %]
+      Address: </label>
+      <input type="text" id="address" name="address" size="35" value="[% address %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryaddress ) %]<span class="required">Required</span>[% END %]
+    </li>
+    <li>
+      [% IF ( mandatoryaddress2 ) %]
+      <label for="address2" class="required">
+      [% ELSE %]
+      <label for="address2">
+      [% END %]
+      Address 2: </label>
+      <input type="text" id="address2" name="address2" size="35" value="[% address2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryaddress2 ) %]<span class="required">Required</span>[% END %]
+    </li>  
+    <li>
+      [% IF ( mandatorycity ) %]
+        <label for="city" class="required">
+      [% ELSE %]
+        <label for="city">
+      [% END %]
+      City: </label>
+        
+        <input type="text" id="city" name="city" size="20" value="[% city %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+        [% IF ( city_cgipopup ) %]or <strong>choose</strong>
+        <select id="select_city" name="select_city">
+        [% FOREACH city_loo IN city_loop %]
+            [% IF ( city_loo.selected ) %]
+            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]" selected="selected">
+            [% ELSE %]
+            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]">
+            [% END %]
+                [% city_loo.city_name %] [% city_loo.city_zipcode %]
+            </option>
+        [% END %]
+        </select>
+        [% END %]
+	  [% IF ( mandatorycity ) %]<span class="required">Required</span>[% END %]
+    </li>
+    <li> 
+      [% IF ( mandatorystate ) %]
+        <label for="state" class="required">
+      [% ELSE %]
+        <label for="state">
+      [% END %]
+      State: </label>
+      <input type="text" name="state" id="state" size="20" value="[% state %]" />
+	  [% IF ( mandatorystate ) %]<span class="required">Required</span>[% END %]
+    </li>
+    <li> 
+      [% IF ( mandatoryzipcode ) %]
+        <label for="zipcode" class="required">
+      [% ELSE %]
+        <label for="zipcode">
+      [% END %]
+      Zip/Postal code: </label>
+      <input type="text" name="zipcode" id="zipcode" size="10" value="[% zipcode %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryzipcode ) %]<span class="required">Required</span>[% END %]
+    </li>
+    
+    <li> 
+      [% IF ( mandatorycountry ) %]
+        <label for="country" class="required">
+      [% ELSE %]
+        <label for="country">
+      [% END %]
+      Country: </label>
+      <input type="text" name="country" id="country" size="20" value="[% country %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatorycountry ) %]<span class="required">Required</span>[% END %]
+    </li>    
+  
+	</ol>
+    </fieldset>
+  <fieldset class="rows" id="memberentry_contact">
+    <legend>Contact</legend><ol>
+      <li>
+      [% IF ( mandatoryphone ) %] 
+      <label for="phone" class="required">
+      [% ELSE %]
+      <label for="phone">
+      [% END %]
+      Phone (home): </label>
+      <input type="text" id="phone" name="phone" value="[% phone %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
+
+    </li>
+    <li>
+      [% IF ( mandatoryphonepro ) %]
+      <label for="phonepro" class="required">
+      [% ELSE %]
+      <label for="phonepro">
+      [% END %]
+      Phone (work): </label>
+      <input type="text" id="phonepro" name="phonepro" value="[% phonepro %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryphonepro ) %]<span class="required">Required</span>[% END %]
+    </li>
+    <li>
+      [% IF ( mandatorymobile ) %]
+      <label for="mobile" class="required">
+      [% ELSE %]
+      <label for="mobile">
+      [% END %]
+      Phone (cell): </label>
+      <input type="text" id="mobile" name="mobile" value="[% mobile %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatorymobile ) %]<span class="required">Required</span>[% END %]
+    </li>
+    <li>
+      [% IF ( mandatoryemail ) %]
+      <label for="email" class="required">
+      [% ELSE %]
+      <label for="email">
+      [% END %]
+      Primary Email: </label>
+      <input type="text" id="email" name="email" size="45" value="[% email %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />  
+	  [% IF ( mandatoryemail ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
+
+    </li>
+    <li>
+      [% IF ( mandatoryemailpro ) %] 
+      <label for="emailpro" class="required">
+      [% ELSE %]
+      <label for="emailpro">
+      [% END %]
+      Secondary Email: </label>
+      <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryemailpro ) %]<span class="required">Required</span>[% END %]
+    </li>
+    <li>
+      [% IF ( mandatoryfax ) %]
+      <label for="fax" class="required">
+      [% ELSE %]
+      <label for="fax">
+      [% END %]
+      Fax: </label>
+      <input type="text" id="fax" name="fax" value="[% fax %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryfax ) %]<span class="required">Required</span>[% END %]
+    </li>
+	</ol>
+  </fieldset>
+
+
+<!-- ************************ STEP_1 *********************** -->
+[% END %]
+[% IF ( step_6 ) %]
+
+		<fieldset class="rows" id="memberentry_address">
+		<legend>Alternate address</legend><ol>
+			<li>
+				[% IF ( mandatoryB_address ) %]
+					<label for="B_address" class="required">
+				[% ELSE %]
+					<label for="B_address">
+				[% END %]
+				Address: </label>
+				<input type="text" id="B_address" name="B_address" size="40" value="[% B_address %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+				[% IF ( mandatoryB_address2 ) %]
+					<label for="B_address2" class="required">
+				[% ELSE %]
+					<label for="B_address2">
+				[% END %]
+				Address 2: </label>
+				<input type="text" id="B_address2" name="B_address2" size="40" value="[% B_address2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryB_address2 ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+				[% IF ( mandatoryB_city ) %]
+					<label for="B_city" class="required" >
+				[% ELSE %]
+					<label for="B_city">
+				[% END %]
+				City: </label>
+				<input type="text" id="B_city" name="B_city" size="20" value="[% B_city %]" />
+	  [% IF ( mandatoryB_city ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+				[% IF ( mandatoryB_state ) %]
+					<label for="B_state" class="required" >
+				[% ELSE %]
+					<label for="B_state">
+				[% END %]
+				State: </label>
+				<input type="text" id="B_state" name="B_state" size="20" value="[% B_state %]" />
+	  [% IF ( mandatoryB_state ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+				[% IF ( mandatoryB_zipcode ) %]
+					<label for="B_zipcode" class="required">
+				[% ELSE %]
+					<label for="B_zipcode">
+				[% END %]
+				Zip/Postal code: </label>
+				<input type="text" id="B_zipcode" name="B_zipcode" maxlength="10" size="10" value="[% B_zipcode %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryB_zipcode ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+				[% IF ( mandatoryB_country ) %]
+					<label for="B_country" class="required">
+				[% ELSE %]
+					<label for="B_country">
+				[% END %]
+				Country: </label>
+				<input type="text" id="B_country" name="B_country" size="20" value="[% B_country %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatoryB_country ) %]<span class="required">Required</span>[% END %]
+			</li>
+            <li>
+                [% IF ( mandatoryB_phone ) %]
+                <label for="B_phone" class="required">
+                [% ELSE %]
+                <label for="B_phone">
+                [% END %]
+                Phone: </label>  
+                <input type="text" id="B_phone" name="B_phone" value="[% B_phone %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+                [% IF ( mandatoryB_phone ) %]<span class="required">Required</span>[% END %]
+            </li>
+			<li> 
+        [% IF ( mandatoryB_email ) %]
+          <label for="B_email" class="required">
+        [% ELSE %]
+          <label for="B_email">
+        [% END %]
+        Email: </label>
+        <input type="text" id="B_email" name="B_email" size="45" value="[% B_email %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+		[% IF ( mandatoryB_email ) %]<span class="required">Required</span>[% END %] </li>
+            <li>
+                [% IF ( mandatorycontactnote ) %]
+                <label for="contactnote" class="required">
+                [% ELSE %]
+                <label for="contactnote">
+                [% END %]
+                Contact note: </label>
+                <textarea id="contactnote" name="contactnote" cols="40" rows="2">[% contactnote %]</textarea>
+        [% IF ( mandatorycontactnote ) %]<span class="required">Required</span>[% END %]
+            </li>
+			</ol>
+		</fieldset>
+[% END %]		
+[% IF ( step_2 ) %]
+		<fieldset class="rows" id="memberentry_altaddress">       
+		    <legend>Alternate Contact</legend><ol>
+			<li>
+			    [% IF ( mandatoryaltcontactsurname ) %]
+				<label for="altcontactsurname" class="required">
+				[% ELSE %]
+				<label for="altcontactsurname">
+				[% END %]
+				Surname:</label>
+				<input type="text" name="altcontactsurname" id="altcontactsurname" value="[% altcontactsurname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( mandatoryaltcontactsurname ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+			    [% IF ( mandatoryaltcontactfirstname ) %]
+				<label for="altcontactfirstname" class="required">
+				[% ELSE %]
+				<label for="altcontactfirstname">
+				[% END %]
+				First name:</label>
+				<input type="text" name="altcontactfirstname" id="altcontactfirstname" value="[% altcontactfirstname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( mandatoryaltcontactfirstname ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+			    [% IF ( mandatoryaltcontactaddress1 ) %]
+				<label for="altcontactaddress1" class="required">
+				[% ELSE %]
+				<label for="altcontactaddress1">
+				[% END %]
+				Address:</label>
+				<input type="text" name="altcontactaddress1" id="altcontactaddress1" value="[% altcontactaddress1 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="40" />
+				[% IF ( mandatoryaltcontactaddress1 ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+			    [% IF ( mandatoryaltcontactaddress2 ) %]
+				<label for="altcontactaddress2" class="required">
+				[% ELSE %]
+				<label for="altcontactaddress2">
+				[% END %]
+				Address 2:</label>
+				<input type="text" name="altcontactaddress2" id="altcontactaddress2" value="[% altcontactaddress2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="40" />
+				[% IF ( mandatoryaltcontactaddress2 ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+			    [% IF ( mandatoryaltcontactaddress3 ) %]
+				<label for="altcontactaddress3" class="required">
+				[% ELSE %]
+				<label for="altcontactaddress3">
+				[% END %]
+				City:</label>
+				<input type="text" name="altcontactaddress3" id="altcontactaddress3" value="[% altcontactaddress3 %]" size="20" />
+				[% IF ( mandatoryaltcontactaddress3 ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+			    [% IF ( mandatoryaltcontactstate ) %]
+				<label for="altcontactstate" class="required">
+				[% ELSE %]
+				<label for="altcontactstate">
+				[% END %]
+				State:</label>
+				<input type="text" name="altcontactstate" id="altcontactstate" value="[% altcontactstate %]" size="20" />
+				[% IF ( mandatoryaltcontactstate ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+			    [% IF ( mandatoryaltcontactzipcode ) %]
+				<label for="altcontactzipcode" class="required">
+				[% ELSE %]
+				<label for="altcontactzipcode">
+				[% END %]
+				Zip/Postal code:</label>
+				<input type="text" name="altcontactzipcode" id="altcontactzipcode" value="[% altcontactzipcode %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="5" />
+				[% IF ( mandatoryaltcontactzipcode ) %]<span class="required">Required</span>[% END %]
+			</li>
+			<li>
+			    [% IF ( mandatoryaltcontactcountry ) %]
+				<label for="altcontactcountry" class="required">
+				[% ELSE %]
+				<label for="altcontactcountry">
+				[% END %]
+				Country:</label>
+				<input type="text" name="altcontactcountry" id="altcontactcountry" value="[% altcontactcountry %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="20" />
+				[% IF ( mandatoryaltcontactcountry ) %]<span class="required">Required</span>[% END %]
+			</li>			
+			<li>
+			    [% IF ( mandatoryaltcontactphone ) %]
+				<label for="altcontactphone" class="required">
+				[% ELSE %]
+				<label for="altcontactphone">
+				[% END %]
+				Phone:</label>
+				<input type="text" name="altcontactphone" id="altcontactphone" value="[% altcontactphone %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( mandatoryaltcontactphone ) %]<span class="required">Required</span>[% END %]
+			</li>
+            </ol>
+        </fieldset>
+
+
+  [% IF ( I ) %]
+	[% IF ( memberofinstution ) %]
+	<fieldset class="rows" id="memberentry_organisation">
+		<legend>Organizations</legend><ol>
+		<li>
+			[% IF ( mandatoryphone ) %] 
+			<label for="organisations" class="required">
+			[% ELSE %]
+			<label for="organisations">
+			[% END %]
+			Organization(s): </label>
+			[% CGIorganisations %]
+	  [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]
+		</li>
+		</ol>
+	</fieldset>
+	[% END %]
+  [% END %]
+              
+[% END %]
+[% IF ( step_3 ) %]
+
+  <fieldset class="rows" id="memberentry_library_management">
+    <legend>Library Management</legend><ol>
+   <li> [% IF ( mandatorycardnumber ) %]
+      <label for="cardnumber" class="required">
+    [% ELSE %]
+      <label for="cardnumber">
+    [% END %] 
+    Card number: </label>
+    <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% cardnumber %][% END %]" />
+	  [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]</li>
+    <li>
+      [% IF ( mandatorybranchcode ) %]
+        <label for="branchcode" class="required">
+      [% ELSE %]
+        <label for="branchcode">
+      [% END %]
+      Library: </label>
+      [% CGIbranch %]
+	  [% IF ( mandatorybranchcode ) %]<span class="required">Required</span>[% END %]
+    </li>
+    <li>
+        <label for="categorycode">Category: </label>
+        <select id="categorycode" name="categorycode">
+        [% FOREACH typeloo IN typeloop %]
+			[% FOREACH categoryloo IN typeloo.categoryloop %]
+				[% IF ( loop.first ) %]
+					[% IF ( categoryloo.typename_C ) %]<optgroup label="Child">[% END %]
+					[% IF ( categoryloo.typename_A ) %]<optgroup label="Adult">[% END %]
+					[% IF ( categoryloo.typename_S ) %]<optgroup label="Staff">[% END %]
+					[% IF ( categoryloo.typename_I ) %]<optgroup label="Organization">[% END %]
+					[% IF ( categoryloo.typename_P ) %]<optgroup label="Professional">[% END %]
+					[% IF ( categoryloo.typename_X ) %]<optgroup label="Statistical">[% END %]
+			    [% END %]
+				[% IF ( categoryloo.categorycodeselected ) %]
+               <option value="[% categoryloo.categorycode %]" selected="selected">[% categoryloo.categoryname %]</option>
+				[% ELSE %]
+<option value="[% categoryloo.categorycode %]">[% categoryloo.categoryname %]</option>
+				[% END %]
+				[% IF ( loop.last ) %]
+			        </optgroup>
+				[% END %]
+            [% END %]
+       [% END %]
+       </select>
+    </li>
+    <li>
+      [% IF ( mandatorysort1 ) %]
+        <label for="sort1" class="required">
+      [% ELSE %]
+        <label for="sort1">
+      [% END %]
+      Sort 1: </label>
+      [% IF ( CGIsort1 ) %] 
+        [% CGIsort1 %]
+      [% ELSE %]
+        <input  type="text" id="sort1" name="sort1" size="20"  value="[% sort1 %]" />
+	  [% IF ( mandatorysort1 ) %]<span class="required">Required</span>[% END %]
+      [% END %]   
+    </li>
+    <li>
+    [% IF ( mandatorysort2 ) %]
+    <label for="sort2" class="required">
+    [% ELSE %]
+    <label for="sort2">
+    [% END %]
+    Sort 2: </label>
+    [% IF ( CGIsort2 ) %] 
+      [% CGIsort2 %]
+    [% ELSE %]
+      <input  type="text" id="sort2" name="sort2" size="20"  value="[% sort2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	  [% IF ( mandatorysort2 ) %]<span class="required">Required</span>[% END %]
+    [% END %] 
+    </li>
+	</ol>
+  </fieldset>
+	<fieldset class="rows" id="memberentry_subscription">
+	<legend>Library set-up</legend><ol>
+		<li>
+			[% IF ( mandatorydateenrolled ) %]
+			<label for="dateenrolled" class="required">
+			[% ELSE %]
+			<label for="dateenrolled">
+			[% END %]
+			Registration date: </label>
+			<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" [% IF ( metric ) %]onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');"[% END %] value="[% dateenrolled %]" />
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="dateenrolled_button" alt="Show Calendar" />
+      <script language="JavaScript" type="text/javascript">
+        Calendar.setup(
+          {
+            inputField : "dateenrolled",
+            ifFormat : "[% DHTMLcalendar_dateformat %]",
+            button : "dateenrolled_button"
+          }
+        );
+      </script>
+		[% IF ( mandatorydateenrolled ) %]<span class="required">Required</span>[% END %]
+		[% IF ( ERROR_dateenrolled ) %]<span class="required">(Error)</span>[% END %]
+		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+		</li>
+		<li>
+			[% IF ( mandatorydateexpiry ) %]
+			<label for="dateexpiry" class="required">
+			[% ELSE %]
+			<label for="dateexpiry">
+			[% END %]
+			Expiry date (leave blank for auto calc) </label>
+			<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" [% IF ( metric ) %]onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');"[% END %] value="[% UNLESS ( opadd ) %][% dateexpiry %][% END %]" />
+            <img src="[% themelang %]/lib/calendar/cal.gif" id="dateexpiry_button" alt="Show Calendar" />
+      <script language="JavaScript" type="text/javascript">
+        Calendar.setup(
+          {
+            inputField : "dateexpiry",
+            ifFormat : "[% DHTMLcalendar_dateformat %]",
+            button : "dateexpiry_button"
+          }
+        );
+      </script>
+		[% IF ( mandatorydateexpiry ) %]<span class="required">Required</span>[% END %]
+		[% IF ( ERROR_dateexpiry ) %]<span class="required">(Error)</span>[% END %]
+		<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+		</li>
+		<li>
+			[% IF ( mandatoryopacnote ) %]
+				<label for="opacnote" class="required">
+			[% ELSE %]
+				<label for="opacnote">
+			[% END %]	
+			OPAC note: </label>
+			<textarea id="opacnote" name="opacnote" cols="55" rows="5">[% opacnote %]</textarea>
+			<div class="hint">This message appears on this patron's user page in the OPAC</div>
+	  [% IF ( mandatoryopacnote ) %]<span class="required">Required</span>[% END %]
+		</li>
+		<li>
+			[% IF ( mandatoryborrowernotes ) %]	
+				<label for="borrowernotes" class="required">
+			[% ELSE %]
+				<label for="borrowernotes">
+			[% END %]
+			Circulation note: </label>
+			<textarea id="borrowernotes" name="borrowernotes" cols="55" rows="5">[% borrowernotes %]</textarea>
+			<div class="hint">This message displays when checking out to this patron</div>
+	  [% IF ( mandatoryborrowernotes ) %]<span class="required">Required</span>[% END %]
+		</li>
+		</ol>
+	</fieldset>
+	<fieldset class="rows" id="memberentry_userid">
+		<legend>OPAC/Staff Login</legend><ol>
+		<li>
+			[% IF ( mandatoryuserid ) %]
+			<label for="userid" class="required">
+			[% ELSE %]
+			<label for="userid">
+			[% END %]
+			Username: </label>
+
+[% IF ( NoUpdateLogin ) %]
+<input type="text" id="userid" name="userid" size="20" disabled="disabled" value="[% IF ( opduplicate ) %][% ELSE %][% userid %][% END %]" />
+[% ELSE %]
+<input type="text" id="userid" name="userid" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% userid %][% END %]" />
+[% END %]
+
+	  [% IF ( mandatoryuserid ) %]<span class="required">Required</span>[% END %]
+		</li>
+		<li>
+			[% IF ( mandatorypassword ) %]
+			<label for="password" class="required">
+			[% ELSE %]
+			<label for="password">
+			[% END %]
+			Password: </label>
+			[% IF ( opadd ) %]
+			[% IF ( NoUpdateLogin ) %]
+				<input type="text" id="password" name="password" size="20"  disabled="disabled" value="[% IF ( opduplicate ) %][% ELSE %][% password %][% END %]" />
+[% ELSE %]
+				<input type="text" id="password" name="password" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% password %][% END %]" />
+[% END %]
+			[% ELSE %]
+			[% IF ( password ) %]
+				[% IF ( NoUpdateLogin ) %]
+					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="****" />
+				[% ELSE %]
+					<input type="text" id="password" name="password" size="20" value="[% IF ( opduplicate ) %][% ELSE %]****[% END %]" />
+				[% END %]
+			[% ELSE %]
+				[% IF ( NoUpdateLogin ) %]
+					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="" />
+				[% ELSE %]
+					<input type="text" id="password" name="password" size="20" value="" />
+				[% END %]
+			[% END %]
+			[% END %]
+	  [% IF ( mandatorypassword ) %]<span class="required">Required</span>[% END %][% IF ( ERROR_short_password ) %]<span class="required">Password is too short</span>[% END %]
+[% IF ( minPasswordLength ) %]<div class="hint">Minimum password length: [% minPasswordLength %]</div>[% END %]
+		</li></ol>
+		</fieldset>
+		<!--this zones are not necessary in modif mode -->
+		[% UNLESS ( opadd ) %]
+		<fieldset class="rows">
+			<legend>Patron Account Flags</legend>
+			<ol class="radio">
+			[% FOREACH flagloo IN flagloop %]
+				<li><label class="radio" for="yes[% flagloo.name %]">
+				[% IF ( flagloo.key == 'gonenoaddress' ) %]Gone no Address:[% END %]
+				[% IF ( flagloo.key == 'debarred' ) %]Debarred:[% END %]
+				[% IF ( flagloo.key == 'lost' ) %]Lost Card:[% END %]
+                </label>
+				<label for="yes[% flagloo.name %]">Yes </label>
+				[% IF ( flagloo.yes ) %]
+				<input type="radio" id="yes[% flagloo.name %]" name="[% flagloo.name %]" value="1" checked="checked" />
+				[% ELSE %]
+				<input type="radio" id="yes[% flagloo.name %]" name="[% flagloo.name %]" value="1" />
+				[% END %]
+				<label for="no[% flagloo.name %]">No </label>
+				[% IF ( flagloo.no ) %]
+				<input type="radio" id="no[% flagloo.name %]" name="[% flagloo.name %]" value="0" checked="checked"/>
+				[% ELSE %]
+				<input type="radio" id="no[% flagloo.name %]" name="[% flagloo.name %]" value="0" />
+				[% END %]
+
+</li>
+			[% END %]
+			</ol>
+			</fieldset>
+		[% END %]	
+
+[% END %]
+
+[% IF ( step_4 ) %][% IF ( ExtendedPatronAttributes ) %][% UNLESS ( no_patron_attribute_types ) %]
+  <fieldset class="rows" id="memberentry_patron_attributes">
+    <input type="hidden" name="setting_extended_patron_attributes" value="1" />
+    <legend>Additional attributes and identifiers</legend>
+    <table>
+        <tr>
+            <th>Type</th>
+            <th colspan="2">Value</th>
+        </tr>
+        [% FOREACH patron_attribute IN patron_attributes %]
+        <tr>
+            <td>[% patron_attribute.code %] ([% patron_attribute.description %])
+            </td>
+            <td>
+                <input type="hidden" id="[% patron_attribute.form_id %]_code" name="[% patron_attribute.form_id %]_code" value="[% patron_attribute.code |html %]" />
+                [% IF ( patron_attribute.use_dropdown ) %]
+                    <select id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]">
+                        <option value="" />
+                        [% FOREACH auth_val_loo IN patron_attribute.auth_val_loop %]
+                            [% IF ( auth_val_loo.selected ) %]
+                                <option value="[% auth_val_loo.authorised_value %]" selected="selected">
+                                    [% auth_val_loo.lib %]
+                                </option>
+                            [% ELSE %]
+                                <option value="[% auth_val_loo.authorised_value %]" >
+                                    [% auth_val_loo.lib %]
+                                </option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                [% ELSE %]
+                    <input type="text" maxlength="64" value="[% patron_attribute.value %]"
+                           id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]"[% IF ( patron_attribute.opduplicate ) %] onclick="this.value=''"[% END %] />
+                [% END %]
+                [% IF ( patron_attribute.password_allowed ) %]
+                    (Password: <input type="password" maxlength="64" value="[% patron_attribute.password %]"
+                           id="[% patron_attribute.form_id %]_password" name="[% patron_attribute.form_id %]_password" />)
+                [% END %]
+            </td>
+            <td>
+                <a href="#" onclick="clear_entry(this); return false;">Clear</a>
+                [% IF ( patron_attribute.repeatable ) %]
+                <a href="#" onclick="clone_entry(this); return false;">New</a>
+                [% END %]
+            </td>
+        </tr>
+        [% END %]
+    </table>
+  </fieldset>
+[% END %][% END %][% END %]
+
+[% IF ( step_5 ) %][% IF ( EnhancedMessagingPreferences ) %]
+  <fieldset class="rows" id="memberentry_messaging_prefs">
+    [% IF ( opadd ) %]
+    <!-- handle changing prefs if creating new patron and changing
+         the patron category
+    -->
+    <script language="javascript" type="text/javascript">//<![CDATA[
+       $(document).ready(function(){
+            var message_prefs_dirty = false;
+            $('#memberentry_messaging_prefs > *').change(function() {
+                message_prefs_dirty = true;
+            });
+            $('#categorycode').change(function() {
+                var categorycode = $(this).val();
+                if (message_prefs_dirty) {
+                    if (!confirm('Change messaging preferences to default for this category?')) {
+                        return;
+                    }
+                }
+                $.getJSON('/cgi-bin/koha/members/default_messageprefs.pl?categorycode=' + categorycode,
+                    function(data) {
+                        $.each(data.messaging_preferences, function(i, item) {
+                            var attrid = item.message_attribute_id;
+                            var transports = ['email', 'rss', 'sms'];
+                            $.each(transports, function(j, transport) {
+                                if (item['transport-' + transport] != ' ') {
+                                    $('#' + transport + attrid).attr('checked', item['transport-' + transport]);
+                                } else {
+                                    $('#' + transport + attrid).removeAttr('checked');
+                                }
+                            });
+                            if (item.digest && item.digest != ' ') {
+                                $('#digest' + attrid).attr('checked', item.digest);
+                            } else {
+                                $('#digest' + attrid).removeAttr('checked');
+                            }
+                            if (item.takes_days == '1') {
+                                $('[name=' + attrid + '-DAYS]').val('' + item.days_in_advance);
+                            }
+                        });
+                        message_prefs_dirty = false;
+                    }
+                );
+            });
+        });
+    //]]>
+    </script>
+    [% END %]
+    <input type="hidden" name="setting_messaging_prefs" value="1" />
+    <legend>Patron messaging preferences</legend>
+    [% INCLUDE 'messaging-preference-form.inc' %]
+    [% IF ( SMSSendDriver ) %]
+        <p><label for="SMSnumber">SMS number:</label> 
+          <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+        </p>
+    [% END %]
+  </fieldset>
+[% END %] [% END %]
+
+    <fieldset class="action">
+        <input type="submit" name="save" onclick="return check_form_borrowers();" value="Save" />
+      [% IF ( opadd ) %]
+       <a class="cancel" href="/cgi-bin/koha/members/member.pl">Cancel</a>
+	   [% ELSE %]
+	  <a class="cancel" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">Cancel</a>
+	   [% END %]
+    </fieldset>
+</form>
+  
+</div>
+</div>
+
+[% UNLESS ( opadd ) %]<div class="yui-b">
+[% INCLUDE 'members-menu.inc' %]
+</div>[% END %]
+[% END %]
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
+

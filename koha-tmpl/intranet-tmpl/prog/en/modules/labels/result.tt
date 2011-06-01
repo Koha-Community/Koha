@@ -1,0 +1,130 @@
+    [% INCLUDE 'doc-head-open.inc' %]
+    <title>Koha &rsaquo; Barcodes and Labels &rsaquo; Search Results</title>
+    [% INCLUDE 'doc-head-close.inc' %]
+    <style type="text/css">#custom-doc { width:46.23em;*width:45.04em;min-width:700px; margin:auto;margin-top: .4em; text-align:left; }</style>
+    <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+    <script type="text/javascript">
+        //<![CDATA[
+            $(document).ready(function(){
+                $("#CheckAll").click(function(){
+                    $(".checkboxed").checkCheckboxes();
+                    return false;
+                });
+                $("#CheckNone").click(function(){
+                    $(".checkboxed").unCheckCheckboxes();
+                    return false;
+                });
+            });
+            function add_item(item_number,batch_id,type_id){
+                var getstr='';
+                if (item_number == 'checked') {
+                    items= new Array;
+                    if(document.resultform.action.length > 0) {
+                        for (var i=0; i < document.resultform.action.length; i++) {
+                            if (document.resultform.action[i].checked) {
+                                items.push("item_number=" +  document.resultform.action[i].value);
+                            }
+                        }
+                        getstr = items.join("&");
+                    } else {
+                        getstr = "item_number="+document.resultform.action.value;
+                    }
+                }
+                else {
+                    getstr = "item_number="+item_number;
+                }
+                var myurl = "label-edit-batch.pl?op=add&batch_id="+batch_id+
+                "&"+getstr;
+                window.opener.location.href = myurl;
+                //top.location.href=myurl;
+            }
+            //]]>
+    </script>
+</head>
+<body>
+    <div id="custom-doc" class="yui-t7">
+        <div id="bd">
+            <h1>Search results</h1>
+	    <div class="results">
+                [% IF ( displayprev || displaynext ) %]
+                <p>
+                    [% IF ( displayprev ) %]
+                    <a href="label-item-search.pl?startfrom=[% startfromprev %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&lt;&lt;</a>
+                    [% END %]
+                    [% FOREACH number IN numbers %]
+                    <a href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% number.ccl_query %]&amp;resultsperpage=[% number.resultsperpage %]&amp;op=do_search&amp;batch_id=[% number.batch_id %]">[% number.number %]</a>
+                    [% END %]
+                    [% IF ( displaynext ) %]
+                    <a href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&gt;&gt;</a>
+                    [% END %]
+		</p>
+                [% END %]
+                [% IF ( results ) %]
+                <strong>Results [% from %] through [% to %] [% IF ( total ) %] of [% total %][% END %]</strong>
+                [% ELSE %]
+                No results found
+                [% END %]
+            </div>
+
+            <form name="resultform" class="checkboxed" action="">
+            <p><a id="CheckAll" href="#">Select All</a> <a id="CheckNone" href="#">Clear All</a> | <input type="button" value="Add checked" onclick="add_item('checked',[% batch_id %],'[% type %]'); return false;" />
+                    <input type="button" class="close" value="Done" /></p>
+
+                <div id="label-search-results">
+                <input type="hidden" name="ccl_query" value="[% ccl_query %]" />
+            [% FOREACH result_se IN result_set %]
+            <div style="border-bottom:1px solid #CCC;margin: .5em 0;">
+		            <h4>[% result_se.title |html %]</h4>
+                            <p>[% IF ( result_se.author ) %]by [% result_se.author %][% END %]
+                            [[% result_se.itemtype %]], [% IF ( result_se.publishercode ) %][% result_se.publishercode %] [% END %][% IF ( result_se.place ) %][% result_se.place %] [% END %][% IF ( result_se.copyrightdate ) %][% result_se.copyrightdate %], [% END %][% IF ( result_se.pages ) %][% result_se.pages %][% END %][% IF ( result_se.isbn ) %], <b>ISBN: </b>[% result_se.isbn %][% END %][% IF ( result_se.notes ) %],<br />[% result_se.notes %][% END %]</p>
+
+                    <table style="margin-bottom:1em;">
+                    [% FOREACH item_tabl IN result_se.item_table %]
+                    [% IF ( item_tabl.header_fields ) %]
+                    <tr>
+                    [% FOREACH header_field IN item_tabl.header_fields %]
+                        <th>[% header_field.field_label %]</th>
+                    [% END %]
+                    </tr>
+                    [% ELSE %]
+                    <tr>
+                    [% FOREACH text_field IN item_tabl.text_fields %]
+                    [% IF ( text_field.select_field ) %]
+                        <td align="center"><input type="checkbox" name="action" value="[% text_field.field_value %]"></td>
+                    [% ELSIF ( text_field.link_field ) %]
+                        <td align="center">
+			    <a onclick="add_item('[% text_field.field_value %]',[% batch_id %], '[% text_field.type %]'); return false" href="/cgi-bin/koha/barcodes/label-edit-batch.pl?op=add&amp;batch_id=[% batch_id %]&amp;item_number=[% text_field.field_value %]">Add</a>
+                        </td>
+                    [% ELSE %]
+                        <td align="center">[% text_field.field_value %]</td>
+                    [% END %]
+                    [% END %]
+                    </tr>
+                    [% END %]
+                    [% END %]
+                    </table>
+                    </div>
+	        [% END %]
+                </div>
+            </form>
+        </div>
+	<div class="results">
+	    [% IF ( displayprev || displaynext ) %]
+            <p>
+                [% IF ( displayprev ) %]
+                <a href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&lt;&lt;</a>
+                [% END %]
+                [% FOREACH number IN numbers %]
+                [% IF ( number.highlight ) %]
+                <span class="current">[% number.number %]</span>
+                [% ELSE %]
+                <a href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% number.ccl_query %]&amp;resultsperpage=[% number.resultsperpage %]&amp;op=do_search&amp;batch_id=[% number.batch_id %]">[% number.number %]</a>
+                [% END %]
+                [% END %]
+                [% IF ( displaynext ) %]
+                <a href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&gt;&gt;</a>
+                [% END %]
+	    </p>
+            [% END %]
+	</div>
+    [% INCLUDE 'intranet-bottom.inc' %]

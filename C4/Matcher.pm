@@ -606,9 +606,12 @@ sub get_matches {
         # FIXME only searching biblio index at the moment
         my ($error, $searchresults, $total_hits) = SimpleSearch($query, 0, $max_matches);
 
-        warn "search failed ($query) $error" if $error;
-        foreach my $matched (@$searchresults) {
-            $matches{$matched} += $matchpoint->{'score'};
+        if (defined $error ) {
+            warn "search failed ($query) $error";
+        } else {
+            foreach my $matched (@{$searchresults}) {
+                $matches{$matched} += $matchpoint->{'score'};
+            }
         }
     }
 

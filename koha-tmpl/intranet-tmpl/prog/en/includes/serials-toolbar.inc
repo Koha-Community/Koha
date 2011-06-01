@@ -15,30 +15,30 @@
 
 	function yuiToolbar() {
 	
-    <!-- TMPL_IF NAME="subscriptionid" -->
+    [% IF ( subscriptionid ) %]
 	    var editmenu = [
-	        <!-- TMPL_IF NAME="CAN_user_serials_edit_subscription" -->
-		    { text: _("Edit Subscription"),  <!-- TMPL_IF NAME="cannotedit" -->disabled: true, <!-- /TMPL_IF --> url: "/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" },
-		<!-- /TMPL_IF -->
-	        <!-- TMPL_IF NAME="CAN_user_serials_create_subscription" -->
-		    { text: _("Edit as New (Duplicate)"), <!-- TMPL_IF NAME="cannotedit" -->disabled: true, <!-- /TMPL_IF --> url: "/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->" },
-		<!-- /TMPL_IF -->
-	        <!-- TMPL_IF NAME="CAN_user_serials_delete_subscription" -->
-			{ text: _("Delete Subscription"), <!-- TMPL_IF NAME="cannotedit" -->disabled: true, <!-- /TMPL_IF --> onclick: {fn: confirm_deletion }}
-		<!-- /TMPL_IF -->
+	        [% IF ( CAN_user_serials_edit_subscription ) %]
+		    { text: _("Edit Subscription"),  [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=[% subscriptionid %]" },
+		[% END %]
+	        [% IF ( CAN_user_serials_create_subscription ) %]
+		    { text: _("Edit as New (Duplicate)"), [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid %]" },
+		[% END %]
+	        [% IF ( CAN_user_serials_delete_subscription ) %]
+			{ text: _("Delete Subscription"), [% IF ( cannotedit ) %]disabled: true, [% END %] onclick: {fn: confirm_deletion }}
+		[% END %]
 	    ];
-	 <!-- /TMPL_IF -->
+	 [% END %]
 	    new YAHOO.widget.Button("newsubscription");
-	    <!-- TMPL_IF NAME="subscriptionid" -->		
+	    [% IF ( subscriptionid ) %]		
 		new YAHOO.widget.Button({
               id: "renew", 
               type: "link", 
 			  href: "#",
               label: _("Renew"), 
               container: "renewc",
-onclick: {fn:function(){popup(<!--TMPL_VAR Name="subscriptionid"-->)}}
+onclick: {fn:function(){popup([% subscriptionid %])}}
           });
-	<!-- TMPL_IF NAME="subscriptionid" -->	  
+	[% IF ( subscriptionid ) %]	  
 	new YAHOO.widget.Button({
 	        type: "menu",
 	        label: _("Edit"),
@@ -47,48 +47,48 @@ onclick: {fn:function(){popup(<!--TMPL_VAR Name="subscriptionid"-->)}}
 	        container: "editmenuc",
 			
 	    });
-		<!-- /TMPL_IF -->
+		[% END %]
 	    new YAHOO.widget.Button("renew");
 	    new YAHOO.widget.Button("receive");
-		<!-- /TMPL_IF -->
+		[% END %]
 	}
 
 	//]]>
 	</script>
 <ul class="toolbar">
-    <!-- TMPL_IF NAME="CAN_user_serials_create_subscription" -->
-	<!-- TMPL_IF NAME="biblionumber_for_new_subscription" -->
-		<li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=<!-- TMPL_VAR NAME="biblionumber_for_new_subscription" -->">New Subscription</a></li>
-	<!-- TMPL_ELSE -->
+    [% IF ( CAN_user_serials_create_subscription ) %]
+	[% IF ( biblionumber_for_new_subscription ) %]
+		<li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber_for_new_subscription %]">New Subscription</a></li>
+	[% ELSE %]
 		<li><a id="newsubscription" href="/cgi-bin/koha/serials/subscription-add.pl">New Subscription</a></li>
-	<!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->
+	[% END %]
+    [% END %]
 
-    <!-- TMPL_IF EXPR="CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription" -->
-	<!-- TMPL_IF NAME="subscriptionid" -->
+    [% IF ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription ) %]
+	[% IF ( subscriptionid ) %]
 
-	    <!-- TMPL_IF expr="CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription" -->
-		<!-- TMPL_UNLESS name="cannotedit" -->
-		    <li id="editmenuc"><a id="edit" href="/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Edit</a></li>
-		<!-- /TMPL_UNLESS -->
-	    <!-- /TMPL_IF -->
+	    [% IF ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription ) %]
+		[% UNLESS ( cannotedit ) %]
+		    <li id="editmenuc"><a id="edit" href="/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=[% subscriptionid %]">Edit</a></li>
+		[% END %]
+	    [% END %]
 
-	    <!-- TMPL_IF name="CAN_user_serials_create_subscription" -->
-		<li><a id="duplicate" href="/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->">Duplicate </a></li>
-	    <!-- /TMPL_IF -->
+	    [% IF ( CAN_user_serials_create_subscription ) %]
+		<li><a id="duplicate" href="/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid %]">Duplicate </a></li>
+	    [% END %]
 
-	    <!-- TMPL_UNLESS name="cannotedit" -->
-		<!-- TMPL_IF name="CAN_user_serials_renew_subscription" -->
-		    <li id="renewc"><a id="renew" href="#" onclick="popup(<!--TMPL_VAR Name="subscriptionid"-->)">Renew </a></li>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="CAN_user_serials_receive_serials" -->
-		    <li><a id="receive" href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=<!-- TMPL_VAR name="subscriptionid" -->&amp;serstatus=1,3">Receive</a></li>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF name="CAN_user_serials_delete_subscription" -->
+	    [% UNLESS ( cannotedit ) %]
+		[% IF ( CAN_user_serials_renew_subscription ) %]
+		    <li id="renewc"><a id="renew" href="#" onclick="popup([% subscriptionid %])">Renew </a></li>
+		[% END %]
+		[% IF ( CAN_user_serials_receive_serials ) %]
+		    <li><a id="receive" href="/cgi-bin/koha/serials/serials-edit.pl?subscriptionid=[% subscriptionid %]&amp;serstatus=1,3">Receive</a></li>
+		[% END %]
+		[% IF ( CAN_user_serials_delete_subscription ) %]
 		    <li><a id="delete" href="javascript:confirm_deletion()">Delete</a></li>
-		<!-- /TMPL_IF -->
-	    <!-- /TMPL_UNLESS -->
-	<!-- /TMPL_IF -->
-    <!-- /TMPL_IF -->
+		[% END %]
+	    [% END %]
+	[% END %]
+    [% END %]
 </ul>
 </div>

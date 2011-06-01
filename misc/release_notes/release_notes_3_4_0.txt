@@ -1,0 +1,407 @@
+RELEASE NOTES FOR KOHA 3.4.0 - 22 April 2011
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+
+Koha 3.4.0 is released in memoriam of Elizabeth Mae Gallagher-Mitchell
+December 20, 2010 - March 10, 2011.
+Haere. Mōu tai ata; mōku tai ahiahi 
+
+Koha 3.4.0 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.04.00.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.4.0 is a major feature release.
+
+New features in 3.4.0
+======================
+
+  ACQUISITIONS:
+    * Can filter budgets by active status and date on the acquisitions
+      homepage
+    * Freetext field added to specify one-off delivery addresses/comments
+    * Can create multiple orders from a staged MARC file
+    * New cronjob to delete old suggestions
+    * Warning when ordering from an external source when a catalogue
+      record already exists
+    * Currency can be set when ordering
+
+  ADMINISTRATION
+    * Many additional granular permissions are added
+    * Ability to replace the favicon from within the admin interface
+    * Ability to import and export MARC frameworks
+    * Separate field for library state/province
+    * WYSIWYG editor for Koha News
+    * Ability to add news items to slips
+    * Label batch edit interface allows entry of items by scanning
+      barcodes
+    * Can choose the MARC framework when importing records
+    
+  CATALOGING
+    * NORMARC support added
+    * Edits to Authority records are now logged
+    * 005 field updated when a Biblio or Authority record is edited
+    * Added edit record/edit items to the search result if logged in 
+      user has cataloguing privileges
+    * Add support of record linking by record control number in $w
+    * 006/008 plugins much improved
+
+  CIRCULATION
+    * Callnumbers are displayed when an item is checked in
+    * Waiting holds now show the date they were marked waiting
+    * Show guarantees checkouts when checking out to a guarantor and vice versa
+    * Show holds waiting for a patron on check in
+    * New report wizard for Holds
+    * Syspref to disable the ability for borrowers to choose their
+      pickup library for holds
+    * Self Checkout supports login
+    * Ability to set 'hard' due dates, which will not allow items to 
+      be checked out past that
+    * Printed receipts can now include the library phone, address and 
+      other fields
+    * Fast Add framework at circulation
+    * Ability to define due dates in the past
+    * Checkin page now lists fines owed by patron
+    * Preferences for defining the fine level when a staff
+      override is needed
+    * Search to Hold feature
+
+  OPAC
+    * New system preference added to allow the librarians to hide
+      items from the OPAC.  See docs/opac/OpacHiddenItems.txt for
+      more information.
+    * Authority display improved in OPAC
+    * Allow the patron to choose which library they wish to make a
+      purchase suggestion for
+    * Added the ability to hide the name of a reviewer/commenter in
+      the OPAC
+    * CSS/HTML and other UI improvements
+    * Lists respect the XSLT bibliograhic display preferences
+    * Truncation of facets now controllable by a system preference
+    * Can use 856$u to store an image URI which Koha can then display in the OPAC
+    * User can renew multiple items at once
+    * A new librarian-controlled column added to the 'My Summary' page on the OPAC
+    * Recent comments view for the OPAC (allow users to see recently reviewed items)
+    * Feature to make the OPAC private (allow only logged in users to search/view items)
+    * Ability to edit what displays when no results are found
+    * Privacy feature allowing the user to specify when their reading
+      (or circulation) records are anonymised
+    * opacstylesheet can link to a url anywhere, not just a local file
+      
+  PATRONS
+    * Separate field for state/province
+    * Ability to duplicate a Patron
+    * Print overdue and hold notices for patrons without email addresses
+        
+  REPORTS
+    * Run a report immediately after creation
+    * The list of saved reports has pagination and can be sorted
+    * SQL formatting improvements when viewing a report
+    * Parameters can be set in guided reports
+
+  SEARCHING
+    * NoZebra mode is officially deprecated.
+    * Added shelf location to the indexes
+    * Added a search link for analytics to serial records
+    * Subjects can now search complete subfields
+    * MARC21 tag 751 (geographical entry) is now searchable
+    * UNIMARC EAN/UPC/Music fields added to the indices
+    * usecontrolnumber syspref allows you to link the 78X fields to 
+      other names of the same serial
+
+  SERIALS
+    * 50 bugs fixed in serials management 5508
+
+  STAFF INTERFACE
+    * Enumchron added to the biblio detail page
+    * Improvements to suggestion management
+    * Can use 856$u to store an image URI which Koha can then display in
+      the staff interface.
+    * Cart is emptied when a user logs out
+    * IntranetUserCSS preference added to allow styling of staff interface
+    
+  INTERFACE
+    * New icon set for itemtypes (Nimes)
+    * LibLime kids iconset resized to consistent size
+    * Seshat itemtype iconset added (Naropa College)
+    * CSS classes added to the XSLT results to enable styling
+          
+  INTERNATIONALIZTION
+    * New initialization SQL files for Norwegian
+
+  INTERNALS, PACKAGING AND PERFORMANCE
+    * Koha now uses Template::Toolkit rather than HTML::Template::Pro
+    * Improvements to test case coverage
+    * .packages file for Ubuntu Maverick
+    * Testing using Test::Perl::Critic
+    * CGI::Session can now be stored in Memcached
+    * mod_deflate added to save bandwidth
+    * Move items out of biblioitems
+      
+  COMMAND LINE UTILITIES
+    * Script to update all items and biblio
+    * Script to set and get system preferences from the command line
+
+  BUGFIXES
+    * Approximately 633 tracked bugs and enhancement requests
+      are addressed in this release
+
+System Preferences
+======================
+
+The following system preferences are new in 3.4.0:
+    
+    * AllFinesNeedOverride
+    * AllowFineOverride
+    * AllowPurchaseSuggestionBranchChoice
+    * AllowSelfCheckReturns
+    * AlternateHoldingsField
+    * AlternateHoldingsSeparator
+    * AuthoritiesLog
+    * COinSinOPACResults
+    * Display856uAsImage
+    * displayFacetCount
+    * FacetLabelTruncationLength
+    * FineNotifyAtCheckin
+    * HoldNotifyAtCheckin
+    * IntranetFavicon
+    * IntranetUserCSS
+    * itemBarcodeInputFilter
+    * maxItemsInSearchResults
+    * maxRecordsForFacets
+    * OPACAllowUserToChooseBranch
+    * OPACDisplay856uAsImage
+    * OpacFavicon
+    * OpacHiddenItems
+    * OPACMySummaryHTML
+    * OPACNoResultsFound
+    * OpacPrivacy
+    * OpacPublic
+    * SelfCheckHelpMessage
+    * SelfCheckTimeout
+    * ShowReviewer
+    * StaffAuthorisedValueImages
+    * TraceCompleteSubfields
+    * TraceSubjectSubdivisions
+    * UseAuthoritiesForTracings
+    * UseControlNumber
+    * UseTablesortForCirc
+    * WaitingNotifyAtCheckin
+
+System requirements
+======================
+
+    Changes since 3.2:
+    
+    * Template::Toolkit
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the english version of the
+Koha manual is available:
+
+    http://koha-community.org/documentation/3-4-manual/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.4 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.4.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+QA Manager:             Colin Campbell
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.4:
+
+  * Aix-Marseille University, France
+  * East Brunswick Public Library, USA
+  * Food and Agriculture Organisation of the United Nations
+  * Goddard College, USA
+  * Hauraki District Council, New Zealand
+  * Horowhenua Library Trust, New Zealand
+  * La Trappe Monastery, France
+  * Los Gatos Public Library, USA
+  * Lyon3 University, France
+  * Marlboro College, USA
+  * MassCat, USA
+  * Merrill Memorial Library, Maine, USA
+  * Middletown Township Public Library, USA
+  * Ministry of Culture, Spanish Government, Spain
+  * Naropa College, USA
+  * Nelsonville Public Library, USA
+  * Nimes, France
+  * Regionbibliotek Halland, Sweden
+  * Rijksmuseum Research Library, Netherlands
+  * SAN Ouest Provence, France
+  * SAR, USA
+  * St Etienne University, France
+  * VOKAL, USA
+  
+We thank the following individuals who contributed patches to
+Koha 3.4.0. 
+
+  * Alex Arnaud
+  * Amit Gupta
+  * Andrew Elwell
+  * Bernardo Gonzalez Kriegel
+  * Brian Engard
+  * Brice Sanchez  
+  * Chris Cormack
+  * Chris Nighswonger
+  * Christophe Croullebois
+  * Christopher Hall
+  * Cindy Murdock Ames
+  * Claudia
+  * Colin Campbell
+  * D Ruth Bavousett  
+  * Daniel Grobani
+  * David Schuster
+  * Dobrica Pavlinusic
+  * Doug Dearden
+  * Edward Allen
+  * Frédéric Demians
+  * Frédérick Capovilla
+  * Frère Sébastien Marie
+  * Galen Charlton
+  * Garry Collum
+  * Henri-Damien LAURENT
+  * Ian Walls
+  * Jane Wagner
+  * Janusz Kaczmarek
+  * Jared Camins-Esakov
+  * Jean-André Santoni
+  * Jerome Charaoui
+  * Jesse Weaver
+  * Joe Atzberger
+  * Johnboy
+  * Jonathan Druart
+  * Julian Maurice
+  * Katrin Fischer
+  * Koustubha Kale
+  * Lars Wirzenius
+  * Liz Rea
+  * Magnus Enger
+  * Marcel de Rooy
+  * Mark Gavillet
+  * Mason James
+  * Matthew Hunt
+  * Matthias Meusburger
+  * MJ Ray
+  * Nahuel ANGELINETTI
+  * Nate Curulla
+  * Nicolas Morin
+  * Nicole C. Engard
+  * Owen Leonard
+  * Paul Poulain
+  * Reed Wade
+  * Ricardo Dias Marques
+  * Robin Sheat
+  * Salvador Zaragoza Rubio
+  * Savitra Sirohi
+  * Serhij Dubyk {Сергій Дубик}
+  * Sophie Meynieux
+  * Spartaness
+  * Srdjan Jankovic
+  * Stéphane Delaune
+  * Tomas Cohen Arazi
+  * Will Stokes
+  * Zach Sim
+  * Zeno Tajoli
+
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.4.x (i.e., this version of Koha and future bugfix
+releases) is 3.4.x.
+
+The next major feature release of Koha will be Koha 3.6.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 

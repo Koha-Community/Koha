@@ -24,7 +24,7 @@ use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
-use C4::Dates qw/format_date/;
+use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Output;
 use C4::Dates;
 use XML::Simple;
@@ -43,7 +43,7 @@ BEGIN {
 	    save_report get_saved_reports execute_query get_saved_report create_compound run_compound
 		get_column_type get_distinct_values save_dictionary get_from_dictionary
 		delete_definition delete_report format_results get_sql
-        select_2_select_count_value update_sql
+        nb_rows update_sql
 	);
 }
 
@@ -373,6 +373,14 @@ sub get_criteria {
     return ( \@criteria_array );
 }
 
+sub nb_rows($) {
+    my $sql = shift or return;
+    my $sth = C4::Context->dbh->prepare($sql);
+    $sth->execute();
+    my $rows = $sth->fetchall_arrayref();
+    return scalar (@$rows);
+}
+
 =item execute_query
 
   ($results, $total, $error) = execute_query($sql, $offset, $limit)
@@ -399,16 +407,6 @@ the user in a user-supplied SQL query WILL apply in any case.
 #  ~ remove any LIMIT clause
 #  ~ repace SELECT clause w/ SELECT count(*)
 
-sub select_2_select_count_value ($) {
-    my $sql = shift or return;
-    my $countsql = select_2_select_count($sql);
-    $debug and warn "original query: $sql\ncount query: $countsql\n";
-    my $sth1 = C4::Context->dbh->prepare($countsql);
-    $sth1->execute();
-    my $total = $sth1->fetchrow();
-    $debug and warn "total records for this query: $total\n";
-    return $total;
-}
 sub select_2_select_count ($) {
     # Modify the query passed in to create a count query... (I think this covers all cases -crn)
     my ($sql) = strip_limit(shift) or return;
@@ -432,7 +430,7 @@ sub execute_query ($;$$$) {
         return;
     }
     $offset = 0    unless $offset;
-    $limit  = 9999 unless $limit;
+    $limit  = 999999 unless $limit;
     $debug and print STDERR "execute_query($sql, $offset, $limit)\n";
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         return (undef, {  sqlerr => $1} );
@@ -468,7 +466,8 @@ sub execute_query ($;$$$) {
 
 =item save_report($sql,$name,$type,$notes)
 
-Given some sql and a name this will saved it so that it can resued
+Given some sql and a name this will saved it so that it can reused
+Returns id of the newly created report
 
 =cut
 
@@ -478,8 +477,10 @@ sub save_report {
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
     my $query =
 "INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,type,notes)  VALUES (?,now(),now(),?,?,?,?)";
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $sql, $name, $type, $notes );
+    $dbh->do( $query, undef, $borrowernumber, $sql, $name, $type, $notes );
+    my $id = $dbh->selectrow_array("SELECT max(id) FROM saved_sql WHERE borrowernumber=? AND report_name=?", undef,
+                                   $borrowernumber, $name);
+    return $id;
 }
 
 sub update_sql {
@@ -546,22 +547,52 @@ sub delete_report {
 	$sth->execute($id);
 }	
 
+# $filter is either { date => $d, author => $a, keyword => $kw }
+# or $keyword. Optional.
+my $DATE_FORMAT = "%d/%m/%Y";
 sub get_saved_reports {
+    my ($filter) = @_;
+    $filter = { keyword => $filter } if $filter && !ref( $filter );
+
     my $dbh   = C4::Context->dbh();
-    my $query = "SELECT *,saved_sql.id AS id FROM saved_sql 
-    LEFT JOIN saved_reports ON saved_reports.report_id = saved_sql.id
-    ORDER by date_created";
-    my $sth   = $dbh->prepare($query);
-    $sth->execute();
-    
-    my $result = $sth->fetchall_arrayref({});
-    foreach (@$result){
-        $_->{date_created} = format_date($_->{date_created}); 
-        
-        my $member = C4::Members::GetMember(borrowernumber=>$_->{borrowernumber});
-        $_->{borrowerfirstname} = $member->{firstname};
-        $_->{borrowersurname}   = $member->{surname};
+    my (@cond,@args);
+    my $query = "SELECT saved_sql.id, report_id, report,
+                        date_run, date_created, last_modified, savedsql, last_run,
+                        report_name, type, notes,
+                        borrowernumber, surname as borrowersurname, firstname as borrowerfirstname
+                 FROM saved_sql 
+                 LEFT JOIN saved_reports ON saved_reports.report_id = saved_sql.id
+                 LEFT OUTER JOIN borrowers USING (borrowernumber)";
+    if ($filter) {
+        if (my $date = $filter->{date}) {
+            $date = format_date_in_iso($date);
+            push @cond, "DATE(date_run) = ? OR
+                         DATE(date_created) = ? OR
+                         DATE(last_modified) = ? OR
+                         DATE(last_run) = ?";
+            push @args, $date, $date, $date, $date;
+        }
+        if (my $author = $filter->{author}) {
+            $author = "%$author%";
+            push @cond, "surname LIKE ? OR
+                         firstname LIKE ?";
+            push @args, $author, $author;
+        }
+        if (my $keyword = $filter->{keyword}) {
+            $keyword = "%$keyword%";
+            push @cond, "report LIKE ? OR
+                         report_name LIKE ? OR
+                         notes LIKE ? OR
+                         savedsql LIKE ?";
+            push @args, $keyword, $keyword, $keyword, $keyword;
+        }
     }
+    $query .= " WHERE ".join( " AND ", map "($_)", @cond ) if @cond;
+    $query .= " ORDER by date_created";
+    
+    my $result = $dbh->selectall_arrayref($query, {Slice => {}}, @args);
+    $_->{date_created} = format_date($_->{date_created}) foreach @$result;
+
     return $result;
 }
 

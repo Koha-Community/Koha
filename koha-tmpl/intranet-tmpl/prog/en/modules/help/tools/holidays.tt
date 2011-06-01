@@ -1,0 +1,66 @@
+[% INCLUDE 'help-top.inc' %]
+
+<h1>Holidays Calendar</h1>
+
+<p>Libraries can define library closings and holidays to be used when
+      calculating due dates. You can make use of the Calendar by turning on
+      the proper system preferences:</p><ul class="itemizedlist" type="disc"><li class="listitem"><p><span class="emphasis"><em>Get there: </em></span>More &gt; Administration &gt;
+          Global System Preferences &gt; Circulation &gt; useDaysMode</p><ul class="itemizedlist" type="circle"><li class="listitem"><p>Choose the method for calculating due date - either
+              include days the library is closed in the calculation or don't
+              include them.</p></li></ul></li><li class="listitem"><p><span class="emphasis"><em>Get there:</em></span> More &gt; Administration &gt;
+          Global System Preferences &gt; Circulation &gt; finescalendar</p><ul class="itemizedlist" type="circle"><li class="listitem"><p>This will check the holiday calendar before charging
+              fines</p></li></ul></li></ul>
+              <h3>Adding Events</h3>
+              <p>Before adding events, choose the library you would like to apply
+        the closings to. When adding events you will be asked if you would
+        like to apply the event to one branch or all branches. To add events,
+        simply</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Click on the date on the calendar that you would like to
+            apply the closing to</p></li><li class="listitem"><p>In the form that appears above the calendar, enter the
+            closing information</p><ul class="itemizedlist" type="circle"><li class="listitem"><p>Library will be filled in automatically based on the
+                library you chose from the pull down at the top of the
+                page</p></li><li class="listitem"><p>The day information will also be filled in automatically
+                based on the date you clicked on the calendar</p></li><li class="listitem"><p>In the description enter the reason the library is
+                closed</p></li><li class="listitem"><p>Next you can choose if this event is a one time event or
+                if it is repeatable.</p></li><li class="listitem"><p>Finally decide if this event should be applied to all
+                libraries or just the one you have originally selected</p></li></ul></div></li><li class="listitem"><p>After saving you will see the event listed in the summary
+            below the calendar</p></li></ul>
+            <h3>Editing Events</h3><p>To edit events</p><ul class="itemizedlist" type="disc"><li class="listitem"><p>Click on the event on the calendar that you want to change
+            (do this by clicking on the date on the calendar, not the event
+            listed in the summary)</p></li><li class="listitem"><p>From this form you can make edits to the holiday or delete
+            the holiday completely. Both actions require that you click 'Save'
+            before the change will be made.</p></li><li class="listitem"><p>Clicking on repeatable events will offer slightly different
+            options</p>
+            <ul class="itemizedlist" type="circle"><li class="listitem"><p>In the form above you will note that there is now an
+                option to 'Generate an exception for this repeated holiday,'
+                choosing this option will allow you to make it so that this
+                date is not closed even though the library is usually closed
+                on this date.</p></li></ul></li></ul>
+                <h3 class="title">Additional Help</h3><p>When adding or editing events you can get additional help by
+        clicking on the blue plus sign next to various different options on
+        the form</p>
+        
+<h2>Questions</h2>
+
+<p><strong>Why do I want to add holidays for my branch?</strong></p>
+
+After holidays are entered on the calendar, circulation rules are then recalculated to taken in to account that library is closed and there will be no one present to return items.
+
+ 
+<p><strong>How do I enable the Holiday Calendar?</strong></p>
+
+You can make use of the Holidays Calendar by turning on the proper system preferences
+<ul>
+<li><em>Get there:</em> More > Administration > Global System Preferences > Circulation > useDaysMode</li>
+        <ul> <li>Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module</li></ul>
+<li><em>Get there:</em> More > Administration > Global System Preferences > Circulation > finescalendar</li>
+        <ul> <li>This will use the check the holiday calendar before charging fines</li></ul>
+</ul>
+ 
+<p><strong>How is the dropbox date determined?</strong></p>
+
+<p>Is it the last open date for the checkout branch? Is it today's date minus one? Can the dropbox checkin date be set? If the library is closed for four days for repairs, for example, there would be more than one day needed for the dropbox date.</p>
+
+<p>You will only have one dropbox date and that will be the last day that the library open (determined by the holiday calendar) because there is no real way to know what day the books were dropped into the box during the 4 closed days. The only way to change the effective checkin date in dropbox mode is to modify the calendar.</p>
+
+[% INCLUDE 'help-bottom.inc' %]
+

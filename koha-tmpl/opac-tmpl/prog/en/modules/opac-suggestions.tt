@@ -1,0 +1,220 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  
+[% IF ( op_add ) %]Enter a new purchase suggestion[% END %]
+[% IF ( op_else ) %]Purchase Suggestions[% END %]
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/JavaScript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles', 
+    is: function(s) {return false;  }, 
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
+    type: 'text' 
+});
+
+       $(function() {
+			$("#suggestt").tablesorter({
+				widgets : ['zebra'],
+				[% IF ( loggedinusername ) %]sortList: [[1,0]],[% ELSE %]sortList: [[0,0]],[% END %]
+		        headers: {
+				[% IF ( loggedinusername ) %]
+					[% IF ( OPACViewOthersSuggestions ) %]
+					0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },4: {sorter: false},5:{sorter:false}
+					[% ELSE %]
+					0: { sorter: false },2: { sorter: 'articles' },2: {sorter: false },3: {sorter: false},4:{sorter:false}
+					[% END %]
+				[% ELSE %]
+				[% IF ( OPACViewOthersSuggestions ) %]
+					0: { sorter: 'articles' },1: {sorter: false },3: {sorter: false},4:{sorter:false}
+					[% ELSE %]
+					0: { sorter: 'articles' },1: {sorter: false },2: {sorter: false},3:{sorter:false}
+					[% END %]
+				[% END %]
+				}
+			}); 
+			$("#CheckAll").click(function(){
+		        $(".checkboxed").checkCheckboxes();
+		        return false;
+		    });
+		    $("#CheckNone").click(function(){
+		        $(".checkboxed").unCheckCheckboxes();
+		        return false;
+		    }); 
+       });
+       	
+      function Check(f) {
+		var _alertString="";
+		var alertString2;
+
+	    if(f.title.value.length ==0){
+			_alertString += _("- You must enter a Title") + "\n";
+		}
+
+		if (_alertString.length==0) {
+			f.submit();
+		} else {
+			alertString2 = _("Form not submitted because of the following problem(s)");
+			alertString2 += "\n------------------------------------------------------------------------------------\n\n";
+			alertString2 += _alertString;
+			alert(alertString2);
+		}
+	}
+//]]>
+</script>
+</head>
+[% IF ( loggedinusername ) %]<body id="opac-usersuggestions">[% ELSE %]<body id="opac-suggestions">[% END %]
+
+<div id="doc3" class="yui-t1">
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+	<div id="yui-main">
+	<div class="yui-b"><div class="yui-g">
+<div id="usersuggestions" class="container">
+[% IF ( op_add ) %]
+    <h1>Enter a new purchase suggestion</h1>
+
+    <p>Please fill out this form to make a purchase suggestion. You will receive an email when the library processes your suggestion</p>
+    <p>Only the title is required, but the more information you enter the easier it will be for the librarians to find title you're requesting. The "Notes" field can be used to provide any additional information.</p>
+    <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+   <fieldset class="rows"> <ol>
+    <li><label class="required" for="title">Title:</label><input type="text" id="title" name="title" size="50" maxlength="80" /></li>
+    <li><label for="author">Author:</label><input type="text" id="author" name="author" size="50" maxlength="80" /></li>
+    <li><label for="copyrightdate">Copyright Date:</label><input type="text" id="copyrightdate" name="copyrightdate" size="4" maxlength="4" /></li>
+    <li><label for="isbn">Standard Number (ISBN, ISSN or Other):</label><input type="text" id="isbn" name="isbn" size="50" maxlength="80" /></li>
+    <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" size="50" maxlength="80" /></li>
+    <li><label for="collectiontitle">Collection Title:</label><input type="text" id="collectiontitle" name="collectiontitle" size="50" maxlength="80" /></li>
+    <li><label for="place">Publication Place:</label><input type="text" id="place" name="place" size="50" maxlength="80" /></li>
+    <li><label for="itemtype">Item Type:</label><select name="itemtype" id="itemtype">
+            <option value="">Default</option>
+        [% FOREACH itemtypeloo IN itemtypeloop %]
+			[% IF ( itemtypeloo.selected ) %]<option value="[% itemtypeloo.itemtype %]" selected="selected"> [% ELSE %]<option value="[% itemtypeloo.itemtype %]"> [% END %] [% itemtypeloo.description %]</option>
+        [% END %]
+        </select> </li>
+    [% IF ( branch_loop ) %]
+    <li><label for="branch">Branch:</label>
+        <select name="branch" id="branch">
+        [% FOREACH branch_loo IN branch_loop %]
+            [% IF ( branch_loo.selected ) %]
+            <option value="[% branch_loo.value %]" selected="selected">[% branch_loo.branchname %]</option>
+            [% ELSE %]
+            <option value="[% branch_loo.value %]">[% branch_loo.branchname %]</option>
+            [% END %]
+        [% END %]
+        </select>
+    </li>
+    [% END %]
+    [% IF ( patron_reason_loop ) %]<li><label for="patronreason">Reason for suggestion: </label><select name="patronreason" id="patronreason"><option value="">-- Choose --</option>[% FOREACH patron_reason_loo IN patron_reason_loop %]
+           <option value="[% patron_reason_loo.authorised_value %]">[% patron_reason_loo.lib %]</option>
+    [% END %]</select></li>[% END %]
+    <li><label for="note">Notes:</label><textarea name="note" id="note" rows="5" cols="40"></textarea></li>
+    </ol></fieldset>
+        <fieldset class="action"><input type="hidden" name="suggestedby" value="[% suggestedbyme %]" /><input type="hidden" name="op" value="add_confirm" /><input type="submit" onclick="Check(this.form); return false;" value="Submit Your Suggestion" /> <a class="action" href="/cgi-bin/koha/opac-suggestions.pl">Cancel</a></fieldset>
+    </form>
+
+[% END %]
+
+[% IF ( op_else ) %]
+    <h1>[% UNLESS ( OPACViewOthersSuggestions ) %][% IF ( loggedinusername ) %]My [% END %][% END %]Purchase Suggestions</h1>
+
+    [% IF ( deleted ) %]<div class="dialog message">The selected suggestions have been deleted.</div>[% END %]
+    [% IF ( submitted ) %]<div class="dialog message">Your suggestion has been submitted.</div>[% END %]
+
+    [% IF ( suggestions_loop ) %]
+    [% IF ( OPACViewOthersSuggestions ) %]
+	<form action="/cgi-bin/koha/opac-suggestions.pl" method="get">
+    <table>
+        <tr>
+                <th>
+                    Search for:
+                </th>
+                <td>
+                    <input type="text" name="title" value="[% title %]" />
+                </td>
+                <th>
+                Suggested by:
+                </th>
+                <td>
+                    <select name="suggestedby">
+                        <option value="0">Anyone</option>
+                        <option value="1">Me</option>
+                    </select>
+                </td>
+                <th>
+                    <input type="submit" value="Search" />
+                </th>
+        </tr>
+		</table>
+            </form>[% END %]
+        <form action="/cgi-bin/koha/opac-suggestions.pl" method="post">
+            <input type="hidden" name="op" value="delete_confirm" />
+			<div><span class="checkall"><a href="#" id="CheckAll">Select All</a></span>
+		<span class="clearall"><a href="#" id="CheckNone">Clear All</a></span> | [% IF ( loggedinusername ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% ELSE %][% IF ( AnonSuggestions ) %]<a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a>[% END %][% END %]
+</div>
+			<table id="suggestt" class="checkboxed">
+			<thead><tr>
+            [% IF ( loggedinusername ) %]<th>&nbsp;</th>[% END %]
+            <th>Summary</th>
+            <th>Note</th>
+            [% IF ( OPACViewOthersSuggestions ) %]<th>Suggested For</th>[% END %]
+            <th>Managed by</th>
+            <th>Status</th>
+        </tr></thead>
+        <tbody>[% FOREACH suggestions_loo IN suggestions_loop %]
+            [% IF ( suggestions_loo.even ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+[% IF ( loggedinusername ) %]<td>
+    [% IF ( suggestions_loo.showcheckbox ) %]
+                    <input type="checkbox" name="delete_field" value="[% suggestions_loo.suggestionid %]" />
+    [% END %]
+                </td>[% END %]
+                <td>
+                    <p><strong>[% suggestions_loo.title |html %]</strong></p>
+                    <p>[% IF ( suggestions_loo.author ) %][% suggestions_loo.author %],[% END %]
+                        [% IF ( suggestions_loo.copyrightdate ) %] - [% suggestions_loo.copyrightdate %],[% END %] 
+                        [% IF ( suggestions_loo.publishercode ) %] - [% suggestions_loo.publishercode %][% END %]
+                        [% IF ( suggestions_loo.place ) %]([% suggestions_loo.place %])[% END %]
+                        [% IF ( suggestions_loo.collectiontitle ) %] , [% suggestions_loo.collectiontitle %][% END %]
+                        [% IF ( suggestions_loo.itemtype ) %] - [% suggestions_loo.itemtype %][% END %]
+                    </p>
+                </td>
+                <td>
+                    [% suggestions_loo.note %]
+                </td>
+                [% IF ( OPACViewOthersSuggestions ) %]<td>
+                    [% IF ( suggestions_loo.branchcodesuggestedby ) %][% suggestions_loo.branchcodesuggestedby %][% ELSE %]&nbsp;[% END %]
+                </td>[% END %]
+                <td>
+					[% IF ( suggestions_loo.surnamemanagedby ) %][% suggestions_loo.surnamemanagedby %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby %][% ELSE %]&nbsp;[% END %]
+                </td>
+                <td>
+                    [% IF ( suggestions_loo.ASKED ) %]Requested[% END %]
+                    [% IF ( suggestions_loo.CHECKED ) %]Checked by the library[% END %]
+                    [% IF ( suggestions_loo.ACCEPTED ) %]Accepted by the library[% END %]
+                    [% IF ( suggestions_loo.ORDERED ) %]Ordered by the library[% END %]
+                    [% IF ( suggestions_loo.REJECTED ) %]Suggestion declined [% END %]
+                    [% IF ( suggestions_loo.AVAILABLE ) %]Available in the library[% END %]
+                    [% IF ( suggestions_loo.reason ) %]([% suggestions_loo.reason %])[% END %]
+                </td>
+            </tr>
+        [% END %]
+       </tbody>
+    </table> [% IF ( loggedinusername ) %]<fieldset class="action">
+                <input type="submit" value="Delete Checked Items" />
+            </fieldset>
+        [% END %]
+        </form>
+    [% ELSE %]<p>There are no pending purchase suggestions.</p> [% IF ( loggedinusername ) %]<p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p>[% ELSE %][% IF ( AnonSuggestions ) %]<p><a class="new" href="/cgi-bin/koha/opac-suggestions.pl?op=add">New purchase suggestion</a></p>[% END %][% END %][% END %]
+	
+[% END %]
+</div>
+</div>
+</div>
+</div>
+<div class="yui-b">
+<div id="leftmenus" class="container">
+[% INCLUDE 'navigation.inc' %]
+[% INCLUDE 'usermenu.inc' %]
+</div>
+</div>
+</div>
+[% INCLUDE 'opac-bottom.inc' %]

@@ -2,6 +2,7 @@ package C4::Overdues;
 
 
 # Copyright 2000-2002 Katipo Communications
+# copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -488,12 +489,12 @@ sub UpdateFine {
 
     if ( my $data = $sth->fetchrow_hashref ) {
 
-		# we're updating an existing fine.  Only modify if we're adding to the charge.
+		# we're updating an existing fine.  Only modify if amount changed
         # Note that in the current implementation, you cannot pay against an accruing fine
         # (i.e. , of accounttype 'FU').  Doing so will break accrual.
     	if ( $data->{'amount'} != $amount ) {
             my $diff = $amount - $data->{'amount'};
-            $diff = 0 if ( $data->{amount} > $amount);
+	    #3341: diff could be positive or negative!
             my $out  = $data->{'amountoutstanding'} + $diff;
             my $query = "
                 UPDATE accountlines
@@ -956,9 +957,13 @@ returns a list of branch codes for branches with overdue rules defined.
 
 sub GetBranchcodesWithOverdueRules {
     my $dbh               = C4::Context->dbh;
-    my $rqoverduebranches = $dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL AND branchcode <> ''");
+    my $rqoverduebranches = $dbh->prepare("SELECT DISTINCT branchcode FROM overduerules WHERE delay1 IS NOT NULL AND branchcode <> '' ORDER BY branchcode");
     $rqoverduebranches->execute;
     my @branches = map { shift @$_ } @{ $rqoverduebranches->fetchall_arrayref };
+    if (!$branches[0]) {
+       my $availbranches = C4::Branch::GetBranches();
+       @branches = keys %$availbranches;
+    }
     return @branches;
 }
 
@@ -1176,12 +1181,14 @@ sub GetOverduesForBranch {
             borrowers.phone,
             borrowers.email,
                biblio.title,
+               biblio.author,
                biblio.biblionumber,
                issues.date_due,
                issues.returndate,
                issues.branchcode,
              branches.branchname,
                 items.barcode,
+                items.homebranch,
                 items.itemcallnumber,
                 items.location,
                 items.itemnumber,

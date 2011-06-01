@@ -43,6 +43,7 @@ use CGI;
 use C4::Koha;
 use C4::Biblio;
 use C4::Items;
+use C4::Members; # to use GetMember
 use C4::Branch;     # GetBranchDetail
 use C4::Serials;    # CountSubscriptionFromBiblionumber
 use C4::Search;		# enabled_staff_search_views
@@ -66,9 +67,25 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-# my @blocs = split /\@/,$ISBD;
-# my @fields = $record->fields();
 my $res = GetISBDView($biblionumber, "intranet");
+if ( not defined $res ) {
+       # biblionumber invalid -> report and exit
+       $template->param( unknownbiblionumber => 1,
+                               biblionumber => $biblionumber
+       );
+       output_html_with_http_headers $query, $cookie, $template->output;
+       exit;
+}
+
+if($query->cookie("holdfor")){ 
+    my $holdfor_patron = GetMember('borrowernumber' => $query->cookie("holdfor"));
+    $template->param(
+        holdfor => $query->cookie("holdfor"),
+        holdfor_surname => $holdfor_patron->{'surname'},
+        holdfor_firstname => $holdfor_patron->{'firstname'},
+        holdfor_cardnumber => $holdfor_patron->{'cardnumber'},
+    );
+}
 
 # count of item linked with biblio
 my $itemcount = GetItemsCount($biblionumber);
@@ -87,9 +104,9 @@ if ($subscriptionsnumber) {
 $template->param (
     ISBD                => $res,
     biblionumber        => $biblionumber,
-	isbdview => 1,
-	z3950_search_params	=> C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
-	C4::Search::enabled_staff_search_views,
+    isbdview            => 1,
+    z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
+    C4::Search::enabled_staff_search_views
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

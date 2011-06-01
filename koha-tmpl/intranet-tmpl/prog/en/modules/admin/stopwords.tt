@@ -1,0 +1,153 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; System Administration &rsaquo; Stop words
+[% IF ( add_form ) %]&rsaquo; [% IF ( searchfield ) %]Modify[% ELSE %]New[% END %] stop word
+[% ELSIF ( add_validate ) %]&rsaquo; Data recorded
+[% ELSIF ( delete_confirm ) %]&rsaquo; Delete stop word '[% searchfield %]' ?
+[% ELSIF ( delete_confirmed ) %]&rsaquo; Data deleted
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script language="javascript" type="text/javascript">
+//<![CDATA[
+    $(document).ready(function() {
+        new YAHOO.widget.Button("newstopword");
+    });
+    function toUC(f) {
+        var x=f.value.toUpperCase();
+        f.value=x;
+        return true;
+    }
+    function Check(f) {
+        if (f.word.value.length==0) {
+            alert(_("Form not submitted: word missing"));
+        } else {
+            document.Aform.submit();
+        }
+    }
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'stopwords-admin-search.inc' %]
+
+<div id="breadcrumbs">
+<a href="/cgi-bin/koha/mainpage.pl">Home</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/stopwords.pl">Stop Words</a>
+[% IF ( add_form ) %]
+    &rsaquo; [% IF ( searchfield ) %]Modify[% ELSE %]New[% END %] Stop Word
+[% ELSIF ( add_validate ) %]
+    &rsaquo; Data recorded
+[% ELSIF ( delete_confirm ) %]
+    &rsaquo; Delete Stop Word '[% searchfield %]' ?
+[% ELSIF ( delete_confirmed ) %]
+    &rsaquo; Data deleted
+[% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+
+[% IF ( add_form ) %]
+        [% IF ( searchfield ) %]
+            <h1>Modify word</h1>
+        [% ELSE %]
+            <h1>New word</h1>
+        [% END %]
+        <form action="[% script_name %]" name="Aform" method="post">
+            <input type="hidden" name="op" value="add_validate" />
+            <fieldset class="rows">
+            <ol><li>
+            [% IF ( searchfield ) %]
+                <span class="label">Word</span>
+                    <input type="hidden" name="word" value="[% searchfield %]" />[% searchfield %]
+            [% ELSE %]
+                <label for="word">Word</label>
+                <input type="text" name="word" id="word" size="50" maxlength="250" onblur="toUC(this)" />
+            [% END %]
+                </li>
+            </ol>
+            </fieldset>
+            <fieldset class="action">
+                <input type="button" value="Save" onclick="Check(this.form)" />
+                <a class="cancel" href="/cgi-bin/koha/admin/stopwords.pl">Cancel</a>
+            </fieldset>
+        </form>
+[% END %]
+
+[% IF ( add_validate ) %]
+   <div class="dialog message"> <h3>Data recorded</h3>
+    <form action="[% script_name %]" method="post">
+        <input type="submit" value="OK" class="approve" />
+    </form></div>
+[% END %]
+
+[% IF ( delete_confirm ) %]
+    <div class="dialog alert">
+	<h3>Delete Stop Word <span class="ex">'[% searchfield %]'</span></h3>
+	<form action="[% script_name %]" method="post">
+        <input type="hidden" name="op" value="delete_confirmed" />
+        <input type="hidden" name="searchfield" value="[% searchfield %]" />
+        <input type="submit" value="Yes, Delete" class="approve" />
+    </form>
+    <form action="[% script_name %]" method="get">
+        <input type="submit" class="deny" value="No, Do Not Delete" />
+    </form></div>
+[% END %]
+
+[% IF ( delete_confirmed ) %]
+   <div class="dialog message"> <h3>Data deleted</h3>
+    <form action="[% script_name %]" method="post">
+        <input type="submit" value="OK" class="approve" />
+    </form></div>
+[% END %]
+
+[% IF ( else ) %]
+
+<div id="toolbar">
+	<ul class="toolbar">
+	<li><a id="newstopword" href="/cgi-bin/koha/admin/stopwords.pl?op=add_form">New Stop Word</a></li>
+</ul></div>
+
+    <h1>Stop Words</h1>
+    <p class="message">NOTE : if you change something in this table, ask your administrator to run misc/batchRebuildBiblioTables.pl script.</p>
+
+    [% IF ( searchfield ) %]
+        <p>You searched for <b>[% searchfield %]</b></p>
+    [% END %]
+
+    <table>
+        <tr><th>Word</th>
+            <th></th>
+        </tr>
+        [% FOREACH loo IN loop %]
+           [% IF ( loop.odd ) %]<tr>
+           [% ELSE %]<tr class="highlight">
+           [% END %]
+            <td>[% loo.word %]</td>
+            <td><a href="[% loo.script_name %]?op=delete_confirm&amp;searchfield=[% loo.word %]">Delete</a></td>
+        </tr>
+        [% END %]
+    </table>
+
+    <div class="pages">
+        [% IF ( offsetgtzero ) %]
+            <a href="[% script_name %]?offset=[% prevpage %]">&lt;&lt; Previous</a>
+        [% END %]
+        [% IF ( ltcount ) %]
+            <a href="[% script_name %]?offset=[% nextpage %]">Next &gt;&gt;</a>
+        [% END %]
+    </div>
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

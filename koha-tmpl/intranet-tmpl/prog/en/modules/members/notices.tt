@@ -1,0 +1,62 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Sent notices for [% firstname %] [% surname %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" language="javascript">
+//<![CDATA[
+    $(document).ready(function() {
+	$("#noticestable").tablesorter({
+	    [% IF ( dateformat == 'metric' ) %]
+		dateFormat: 'uk'
+	    [% END %]
+	});
+    });
+//]]>
+</script>
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'patron-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Sent notices for [% firstname %] [% surname %]</div>
+
+<div id="doc3" class="yui-t2">
+   
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+[% INCLUDE 'circ-toolbar.inc' %]
+<h1>Sent notices for [% firstname %] [% surname %]</h1>
+
+    <table id="noticestable">
+	<thead>
+	    <tr>
+		<th>Subject</th>
+		<th>Content</th>
+		<th>Type</th>
+		<th>Status</th>
+		<th>Time</th>
+	    </tr>
+	</thead>
+	<tbody>
+	    [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
+	    <tr>
+		<td>[% QUEUED_MESSAGE.subject %]</td>
+		<td>[% QUEUED_MESSAGE.content %]</td>
+		<td>[% QUEUED_MESSAGE.message_transport_type %]</td>
+		<td>[% QUEUED_MESSAGE.status %]</td>
+		<td>[% QUEUED_MESSAGE.time_queued %]</td>
+	    </tr>
+	    [% END %]
+	</tbody>
+    </table>
+
+</div>
+</div>
+
+<div class="yui-b">
+[% INCLUDE 'circ-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

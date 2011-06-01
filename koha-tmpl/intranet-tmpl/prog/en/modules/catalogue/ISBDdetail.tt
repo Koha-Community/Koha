@@ -1,0 +1,45 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Catalog &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    ISBD Details for [% title %]
+  [% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body>
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo;
+  [% IF ( unknownbiblionumber ) %]
+    Unknown record
+  [% ELSE %]
+    ISBD Details for <i>[% biblionumber %]</i>
+  [% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+[% IF ( unknownbiblionumber ) %]
+  <div class="dialog message">The record you requested does not exist ([% biblionumber %]).</div>
+[% ELSE %]
+   <div id="bd">
+      <div id="yui-main">
+	<div class="yui-b">
+	[% INCLUDE 'cat-toolbar.inc' %]
+
+	  <div id="catalogue_ISBDdetail">
+		  [% ISBD %]
+	  </div>
+	</div>
+      </div>
+      <div class="yui-b">
+      [% INCLUDE 'biblio-view-menu.inc' %]
+      </div>
+    </div>
+[% END %]
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

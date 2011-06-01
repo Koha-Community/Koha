@@ -1,11 +1,11 @@
-<link rel="stylesheet" type="text/css" href="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-system.css"/>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-en.js"></script>
-<script type="text/javascript" src="<!-- TMPL_VAR name="themelang" -->/lib/calendar/calendar-setup.js"></script>
+<link rel="stylesheet" type="text/css" href="[% themelang %]/lib/calendar/calendar-system.css"/>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-en.js"></script>
+<script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
 <script type="text/javascript">
 //<![CDATA[
-var debug    = "<!-- TMPL_VAR Name="debug" -->";
-var dformat  = "<!-- TMPL_VAR Name="dateformat" -->";
+var debug    = "[% debug %]";
+var dformat  = "[% dateformat %]";
 var sentmsg = 0;
 if (debug > 1) {alert("dateformat: " + dformat + "\ndebug is on (level " + debug + ")");}
 

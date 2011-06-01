@@ -1,9 +1,8 @@
 insert into `message_attributes`
 (`message_attribute_id`, message_name, `takes_days`)
 values
-(1, 'Fälligkeitsbenachrichtigung', 0),
-(2, 'Erinnerungsbenachrichtigung', 1),
-(4, 'Vormerkbenachrichtigung', 0),
-(5, 'Rückgabequittung', 0),
-(6, 'Ausleihquittung', 0);
-
+(1, 'Item_DUE', 0),
+(2, 'Advance_Notice', 1),
+(4, 'Hold_Filled', 0),
+(5, 'Item_Check_in', 0),
+(6, 'Item_Checkout', 0);

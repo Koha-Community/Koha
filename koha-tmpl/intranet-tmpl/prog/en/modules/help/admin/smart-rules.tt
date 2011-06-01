@@ -1,0 +1,94 @@
+[% INCLUDE 'help-top.inc' %]
+
+<h1>Circulation and Fines Rules</h1>
+
+<p>These rules define how your items are circulated, how/when fines are calculated and how holds are handled.</p>
+
+<p>The rules are applied from most specific to less specific, using the first found in this order:</p>
+
+<ul>
+	<li>same library, same patron type, all item types</li>
+	<li>same library, same patron type, alll item types</li>
+	<li>same library, all patron types, same item type</li>
+	<li>same library, all patron types, all item types</li>
+	<li>all libraries, same patron type, same item type</li>
+	<li>all libraries, same patron type, all item types</li>
+	<li>all libraries, all patron types, same item type</li>
+	<li>all libraries, all patron types, all item types</li>
+</ul>
+
+<p style="background-color: #ffe599;">Tip: If you are a single library system choose your branch name before creating rules (sometimes having only rules for the 'all libraries' option can cause issues with holds)</p>
+
+<p style="color: #990000;">Important: At the very least you will need to set an default circulation rule. This rule should be set for all item types, all libraries and all patron types. That will catch all instances that do not match a specific rule. When checking out if you do not have a rule for all libraries, all item types and all patron types then you may see patrons getting blocked from placing holds. You will also want a rule for your specific library set for all item types and all patron types to avoid this holds issue. Koha needs to know what rule to fall back on.</p>
+
+<h2>Default Circulation Rules</h2>
+
+<p>Using the issuing rules matrix you can define rules that depend on patron/item type combos. To set your rules, choose a library from the pull down (or 'all libraries' if you want to apply these rules to all branches):</p>
+
+<p>From the matrix you can choose any combination of patron categories and item types to apply the rules to</p>
+
+<ul>
+	<li>First choose which patron category you'd like the rule to be applied to. If you leave this to 'All' it will apply to all patron categories</li>
+	<li>Choose the 'Item Type' you would like this rule to apply to. If you leave this to 'All' it will apply to all item types</li>
+	<li>Limit the number of items a patron can have checked out at the same time by entering a number in the 'Current Checkouts Allowed' field</li>
+	<li>Define the period of time and item can be checked out to a patron by entering the number of days in the 'Loan Period' box.</li>
+	<li>'Fine Amount' should have the amount you would like to charge for overdue items
+<ul>
+	<li>Enter only numbers and decimal points (no currency symbols).</li>
+</ul>
+</li>
+	<li>The 'Fine Grace Period' is the period of time an item can be overdue before you start charging fines.</li>
+	<li>Enter the 'Fine Charging Interval' in days (ex. charge fines every 1 day, or every 2 days)</li>
+	<li>If your library 'fines' patrons by suspending their account you can enter the number of days their fine should be suspended in the 'Suspension in Days' field</li>
+	<li>Next decide if the patron can renew this item type and if so, enter how many times they can renew it in the 'Renewals Allowed' box</li>
+	<li>If the patron can place holds on this item type, enter the total numbers of items (of this type) that can be put on hold in the 'Holds Allowed' field</li>
+	<li>Finally, if you charge a rental fee for the item type and want to give a specific patron type a discount on that fee, enter the percentage discount (without the % symbol) in the 'Rental Discount' field</li>
+</ul>
+
+<p>When finished, click 'Add' to save your changes. To modify a rule, create a new one with the same patron type and item type. If you would like to delete your rule, simply click the 'Delete' link to the right of the rule.</p>
+
+<p>To save time you can clone rules from one library to another by choosing the clone option above the rules matrix.</p>
+
+<p>After choosing to clone you will be presented with a confirmation message.</p>
+
+<h2>Default Checkouts and Hold Policy</h2>
+
+<p>You can set a default maximum number of checkouts and hold policy that will be used if none is defined below for a particular item type or category.</p>
+
+<p>From this menu you can set a default to apply to all item types and patrons in the library.</p>
+
+<ul>
+	<li>In 'Total Current Checkouts Allowed' enter the total number of items patrons can have checked out at one time</li>
+	<li>Control where patrons can place holds from using the 'Hold Policy' menu
+<ul>
+	<li>From Any Library: Patrons from any library may put this item on hold. (default if none is defined)</li>
+	<li>From Home Library: Only patrons from the item's home library may put this book on hold.</li>
+	<li>No Holds Allowed: No patron may put this book on hold.</li>
+</ul>
+</li>
+	<li>Once your policy is set, you can unset it by clicking the 'Unset' link to the right of the rule</li>
+</ul>
+
+<h2>Checkouts Per Patron</h2>
+
+<p>For this library, you can specify the maximum number of loans that a patron of a given category can make, regardless of the item type.</p>
+
+<p>If the total amount loanable for a given patron category is left blank, no limit applies, except possibly for a limit you define for a specific item type.</p>
+
+<h2>Item Hold Policies</h2>
+
+<p>For this library, you can edit rules for given itemtypes, regardless of the patron's category. Currently, this means hold policies.</p>
+
+<p>The various policies have the following effects:</p>
+
+<ul>
+	<li>From Any Library: Patrons from any library may put this item on hold. (default if none is defined)</li>
+	<li>From Home Library: Only patrons from the item's home library may put this book on hold.</li>
+	<li>No Holds Allowed: No patron may put this book on hold.</li>
+</ul>
+
+<p style="color: #990000;">Important: Note that if the system preference AllowHoldPolicyOverride set to 'allow', these policies can be overridden by your circulation staff.</p>
+
+<p style="color: #990000;">Important: These policies are based on the patron's home branch, not the branch that the reserving staff member is from.</p>
+
+[% INCLUDE 'help-bottom.inc' %]

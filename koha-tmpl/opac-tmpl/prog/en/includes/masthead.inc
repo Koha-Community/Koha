@@ -1,195 +1,196 @@
 <div id="header-wrapper"><div id="members">
-  <!-- TMPL_IF NAME="opacuserlogin" -->
+  [% IF ( opacuserlogin ) %]
 	<ul>
-<!-- TMPL_UNLESS NAME="loggedinusername" -->
-               <li><a href="/cgi-bin/koha/opac-user.pl">Log in to Your Account</a></li><!-- /TMPL_UNLESS -->
-            <!-- TMPL_IF NAME="loggedinusername" -->
-                <li><span class="members">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername"><!-- TMPL_LOOP NAME="USER_INFO" --><!-- TMPL_VAR NAME="title" --> <!-- TMPL_VAR NAME="firstname" --> <!-- TMPL_VAR NAME="surname" --><!-- /TMPL_LOOP --></span></a></span></li>
+[% UNLESS ( loggedinusername ) %]
+               <li><a href="/cgi-bin/koha/opac-user.pl">Log in to Your Account</a></li>[% END %]
+            [% IF ( loggedinusername ) %]
+                <li><span class="members">Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% FOREACH USER_INF IN USER_INFO %][% USER_INF.title %] [% USER_INF.firstname %] [% USER_INF.surname %][% END %]</span></a></span></li>
 
-            <!-- /TMPL_IF -->
-            <!-- TMPL_IF NAME="ShowOpacRecentSearchLink" -->
+            [% END %]
+            [% IF ( ShowOpacRecentSearchLink ) %]
                 <li><a href="/cgi-bin/koha/opac-search-history.pl" title="View your search history">Search history</a> [<a class="logout" href="/cgi-bin/koha/opac-search-history.pl?action=delete" title="Delete your search history" onclick="return confirm(_('Are you sure you want to delete your search history?'));">x</a>]</li>
-            <!-- /TMPL_IF -->
-			<!-- TMPL_IF NAME="loggedinusername" --><li><a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a></li><!-- /TMPL_IF -->
+            [% END %]
+			[% IF ( loggedinusername ) %]<li><a class="logout" id="logout" href="/cgi-bin/koha/opac-main.pl?logout.x=1">Log Out</a></li>[% END %]
    	</ul>	
-  <!-- /TMPL_IF -->
+  [% END %]
 </div>
-  <!-- TMPL_IF NAME="opacheader" -->
-	<!-- TMPL_VAR NAME="opacheader" -->
-  <!-- /TMPL_IF -->
+  [% IF ( opacheader ) %]
+	[% opacheader %]
+  [% END %]
 <div id="opac-main-search" class="yui-g">
-   <!-- TMPL_IF NAME="opacsmallimage" -->
-   <h1 id="libraryname" style="background-image: url('<!-- TMPL_VAR NAME="opacsmallimage" -->');">
-   <!-- TMPL_ELSE -->
+   [% IF ( opacsmallimage ) %]
+   <h1 id="libraryname" style="background-image: url('[% opacsmallimage %]');">
+   [% ELSE %]
    <h1 id="libraryname">
-   <!-- /TMPL_IF --><a href="/cgi-bin/koha/opac-main.pl"><!-- TMPL_IF NAME="LibraryName" --><!-- TMPL_VAR NAME="LibraryName" --><!-- TMPL_ELSE -->Koha Online Catalog<!-- /TMPL_IF --></a></h1>
+   [% END %]<a href="/cgi-bin/koha/opac-main.pl">[% IF ( LibraryName ) %][% LibraryName %][% ELSE %]Koha Online Catalog[% END %]</a></h1>
 
 <div id="fluid">
 
-<!-- TMPL_IF NAME="OpacPublic" -->
+[% IF ( OpacPublic ) %]
 <div id="fluid-offset">
-<!-- TMPL_UNLESS NAME="advsearch" --><form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
+[% UNLESS ( advsearch ) %]<form name="searchform" method="get" action="/cgi-bin/koha/opac-search.pl" id="searchform">
     <label for="masthead_search" class="left"> Search 
-	<!-- TMPL_UNLESS NAME="OpacAddMastheadLibraryPulldown" -->
-            <!-- TMPL_IF name="mylibraryfirst" --> (in <!-- TMPL_VAR name="mylibraryfirst" --> only)<!-- /TMPL_IF -->
-	<!-- /TMPL_UNLESS -->
+	[% UNLESS ( OpacAddMastheadLibraryPulldown ) %]
+            [% IF ( mylibraryfirst ) %] (in [% mylibraryfirst %] only)[% END %]
+	[% END %]
     </label>
 
 	<select name="idx" id="masthead_search" class="left" style="max-width:10em;width:10em;">
-	<!-- TMPL_IF NAME="ms_kw" -->
+	[% IF ( ms_kw ) %]
         <option selected="selected" value="">Library Catalog</option>
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
         <option value="">Library Catalog</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ms_ti" -->
+		[% END %]
+		[% IF ( ms_ti ) %]
         <option selected="selected" value="ti">Title</option>
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
         <option value="ti">Title</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ms_au" -->
+		[% END %]
+		[% IF ( ms_au ) %]
         <option selected="selected" value="au">Author</option>
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
         <option value="au">Author</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ms_su" -->
+		[% END %]
+		[% IF ( ms_su ) %]
         <option selected="selected" value="su">Subject</option>
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
         <option value="su">Subject</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ms_nb" -->
+		[% END %]
+		[% IF ( ms_nb ) %]
 		<option selected="selected" value="nb">ISBN</option>
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
 		<option value="nb">ISBN</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ms_se" -->
+		[% END %]
+		[% IF ( ms_se ) %]
         <option selected="selected" value="se">Series</option>
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
         <option value="se">Series</option>
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="ms_callnum" -->
+		[% END %]
+		[% IF ( ms_callnum ) %]
         <option selected="selected" value="callnum">Call Number</option>
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
         <option value="callnum">Call Number</option>
-		<!-- /TMPL_IF --></select>
-<!-- TMPL_IF NAME="ms_value" -->
-        <input type="text" id = "transl1" name="q" value="<!-- TMPL_VAR ESCAPE="HTML" NAME="ms_value" -->" class="left" style="width: 35%; font-size: 111%;"/><div id="translControl"></div>
-<!-- TMPL_ELSE -->
+		[% END %]</select>
+[% IF ( ms_value ) %]
+        <input type="text" id = "transl1" name="q" value="[% ms_value |html %]" class="left" style="width: 35%; font-size: 111%;"/><div id="translControl"></div>
+[% ELSE %]
         <input type="text" id = "transl1" name="q" class="left" style="width: 35%; font-size: 111%;"/><div id="translControl"></div>
-<!-- /TMPL_IF -->
-   <!-- TMPL_IF NAME="OpacAddMastheadLibraryPulldown" -->
+[% END %]
+   [% IF ( OpacAddMastheadLibraryPulldown ) %]
       <select name="limit" id="masthead_search" class="left" style="max-width:10em;width:10em;">
          <option value="">All Libraries</option>
-         <!-- TMPL_LOOP NAME="BranchesLoop" -->
-            <option <!-- TMPL_IF NAME="selected" -->SELECTED<!-- /TMPL_IF --> value="branch:<!-- TMPL_VAR NAME='value' -->"><!-- TMPL_VAR NAME='branchname' --></option>
-         <!-- /TMPL_LOOP -->
+         [% FOREACH BranchesLoo IN BranchesLoop %]
+            <option [% IF ( BranchesLoo.selected ) %]SELECTED[% END %] value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
+         [% END %]
       </select>
-   <!-- TMPL_ELSE -->
-      <!-- TMPL_UNLESS NAME="opac_limit_override" -->
-          <!-- TMPL_IF name="mylibraryfirst" --> 
-               <input name="limit" value="branch:<!-- TMPL_VAR name="mylibraryfirst" -->" type="hidden" />
-          <!-- /TMPL_IF -->
-       <!-- /TMPL_UNLESS -->
-   <!-- /TMPL_IF -->
-   <!-- TMPL_IF NAME="opac_search_limit" -->
-      <input name="limit" value="<!-- TMPL_VAR name="opac_search_limit" -->" type="hidden" />
-   <!-- /TMPL_IF -->
+   [% ELSE %]
+      [% IF ( opac_limit_override ) %]
+          [% IF ( opac_search_limit ) %]
+            <input name="limit" value="[% opac_search_limit %]" type="hidden" />
+          [% END %]
+      [% ELSE %]
+          [% IF ( mylibraryfirst ) %] 
+               <input name="limit" value="branch:[% mylibraryfirst %]" type="hidden" />
+          [% END %]
+      [% END %]
+   [% END %]
 
 
     <input type="submit" value="Go" id="searchsubmit" class="left" />
-<!-- TMPL_IF NAME="opacbookbag" --><span id="cmspan"></span><!-- /TMPL_IF -->
+[% IF ( opacbookbag ) %]<span id="cmspan"></span>[% END %]
 
-<!--TMPL_IF NAME="virtualshelves" --><a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a><!-- /TMPL_IF -->
+[% IF ( virtualshelves ) %]<a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a>[% END %]
     </form>
-<!-- TMPL_ELSE -->
+[% ELSE %]
 <div style="width:80%;*margin-bottom:-30px;">
-<!--TMPL_IF NAME="virtualshelves" --><a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a><!-- /TMPL_IF --><!-- TMPL_IF NAME="opacbookbag" --><span id="cmspan"></span><!-- /TMPL_IF -->
+[% IF ( virtualshelves ) %]<a href="/cgi-bin/koha/opac-shelves.pl" id="listsmenulink" class=""><i></i><span><i></i><span></span>Lists </span></a>[% END %][% IF ( opacbookbag ) %]<span id="cmspan"></span>[% END %]
 </div>
-<!-- /TMPL_UNLESS -->
+[% END %]
 
 <div id="moresearches">
 <a href="/cgi-bin/koha/opac-search.pl">Advanced Search</a>
-<!-- TMPL_IF NAME="OpacBrowser"     --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="OpacAuthorities" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by Subject</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="TagsEnabled"     --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag Cloud</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="OpacCloud"       --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject Cloud</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="OpacTopissue"    --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a><!-- /TMPL_IF -->
-<!-- TMPL_IF NAME="suggestion" -->
-  <!-- TMPL_IF NAME="AnonSuggestions" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
-  <!-- TMPL_ELSIF NAME="OPACViewOthersSuggestions" --><span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
-  <!-- /TMPL_IF -->
-<!-- /TMPL_IF -->
+[% IF ( OpacBrowser ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-browser.pl">Browse by Hierarchy</a>[% END %]
+[% IF ( OpacAuthorities ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-authorities-home.pl">Browse by author or subject</a>[% END %]
+[% IF ( TagsEnabled ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags.pl">Tag Cloud</a>[% END %]
+[% IF ( OpacCloud ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-tags_subject.pl">Subject Cloud</a>[% END %]
+[% IF ( OpacTopissue ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-topissues.pl">Most Popular</a>[% END %]
+[% IF ( suggestion ) %]
+  [% IF ( AnonSuggestions ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
+  [% ELSIF ( OPACViewOthersSuggestions ) %]<span class="pipe"> | </span><a href="/cgi-bin/koha/opac-suggestions.pl">Purchase Suggestions</a>
+  [% END %]
+[% END %]
 </div>
  </div>
 </div>
 
-<!-- /TMPL_IF -->  <!-- OpacPublic --> 
+[% END %]  <!-- OpacPublic --> 
 
-<!-- TMPL_IF NAME="opacbookbag" --><div id="cartDetails">Your cart is empty.</div><!-- /TMPL_IF -->
+[% IF ( opacbookbag ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
 
-<!-- TMPL_IF NAME="virtualshelves" -->
+[% IF ( virtualshelves ) %]
 <div id="listsmenu" class="yuimenu" style="display: none">
     <div class="bd">
 	<h4>Public Lists</h4>
-		<!-- TMPL_IF NAME="pubshelves" -->
+		[% IF ( pubshelves ) %]
 			<ul class="first-of-type">
-			<!-- TMPL_LOOP NAME="pubshelvesloop" -->
-			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
-			<!-- /TMPL_LOOP -->
+			[% FOREACH pubshelvesloo IN pubshelvesloop %]
+			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% pubshelvesloo.shelfnumber %]&amp;sortfield=[% pubshelvesloo.sortfield %]">[% pubshelvesloo.shelfname |html %]</a></li>
+			[% END %]
 			</ul>   
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
 			No Public Lists
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="pubtotal" -->
+		[% END %]
+		[% IF ( pubtotal ) %]
 			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">View all <!--TMPL_VAR NAME="pubtotal" --> public lists</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=publicshelves">View all [% pubtotal %] public lists</a></li>
 			</ul>
-		<!-- /TMPL_IF -->
-  <!-- TMPL_IF NAME="opacuserlogin" -->
-    <!-- TMPL_IF NAME="loggedinusername" -->
+		[% END %]
+  [% IF ( opacuserlogin ) %]
+    [% IF ( loggedinusername ) %]
 <h4>Your Lists</h4>
-		<!-- TMPL_IF NAME="barshelves" -->
+		[% IF ( barshelves ) %]
 			<ul class="first-of-type">
-			<!-- TMPL_LOOP NAME="barshelvesloop" -->
-			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=<!-- TMPL_VAR NAME="shelfnumber" -->&amp;sortfield=<!-- TMPL_VAR NAME="sortfield" -->"><!-- TMPL_VAR NAME="shelfname"  ESCAPE="html" --></a></li>
-			<!-- /TMPL_LOOP -->
+			[% FOREACH barshelvesloo IN barshelvesloop %]
+			<li class="yuimenuitem"><a href="/cgi-bin/koha/opac-shelves.pl?viewshelf=[% barshelvesloo.shelfnumber %]&amp;sortfield=[% barshelvesloo.sortfield %]">[% barshelvesloo.shelfname |html %]</a></li>
+			[% END %]
 			</ul>   
-		<!-- TMPL_ELSE -->
+		[% ELSE %]
 			No Private Lists
-		<!-- /TMPL_IF -->
-		<!-- TMPL_IF NAME="bartotal" -->
+		[% END %]
+		[% IF ( bartotal ) %]
 			<ul class="second-of-type">
-            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all <!--TMPL_VAR NAME="bartotal" --> of your lists</a></li>
+            <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl?display=privateshelves">View all [% bartotal %] of your private lists</a></li>
 			</ul>
-		<!-- /TMPL_IF -->
+		[% END %]
 		<ul class="second-of-type">
         <li class="yuimenuitem"><a class="yuimenuitemlabel" href="/cgi-bin/koha/opac-shelves.pl">Manage Lists</a></li>
         </ul>
-    <!-- TMPL_ELSE --><ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
-    <!-- /TMPL_IF -->
-  <!-- /TMPL_IF -->
+    [% ELSE %]<ul class="first-of-type"><li><a href="/cgi-bin/koha/opac-user.pl">Log in to Create Your Own Lists</a></li></ul>
+    [% END %]
+  [% END %]
 	  </div>
 </div><!-- /listmenu /virtualshelves -->
-<!-- /TMPL_IF -->
+[% END %]
 <div id="listsDetails"></div>
 </div>
 </div>
 <div id="breadcrumbs" class="yui-g">
-<!-- TMPL_IF NAME="searchdesc" --><p><!-- TMPL_IF name="total" --><strong>&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML"--> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo; </strong>returned <!-- TMPL_VAR NAME="total" ESCAPE="HTML"--> results. <!-- TMPL_IF NAME="related" --> (related searches: <!-- TMPL_LOOP NAME="related" --><!-- TMPL_VAR NAME="related_search" --><!-- /TMPL_LOOP -->). <!-- /TMPL_IF -->
-<a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi"  ESCAPE="HTML" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" ESCAPE="HTML" --><!-- /TMPL_IF -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
-<!-- TMPL_ELSE -->
+[% IF ( searchdesc ) %]<p>[% IF ( total ) %]<strong>&ldquo;[% query_desc |html %] [% limit_desc |html %]&rdquo; </strong>returned [% total |html %] results. [% IF ( related ) %] (related searches: [% FOREACH relate IN related %][% relate.related_search %][% END %]). [% END %]
+<a href="[% OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;count=[% countrss |html %]&amp;sort_by=acqdate_dsc&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
+[% ELSE %]
 <strong>No Results Found!</strong>
 <p>
-    <!-- TMPL_IF NAME="searchdesc" -->
-    No results match your search for <span style="font-weight: bold;">&ldquo;<!-- TMPL_VAR NAME="query_desc" ESCAPE="HTML" --> <!-- TMPL_VAR NAME="limit_desc" ESCAPE="HTML"-->&rdquo;</span> in <!-- TMPL_VAR NAME="LibraryName" --> Catalog. <a href="<!-- TMPL_VAR NAME="OPACBaseURL" -->/cgi-bin/koha/opac-search.pl?<!-- TMPL_VAR name="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" ESCAPE="HTML" -->&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
-    <!-- TMPL_ELSE -->
+    [% IF ( searchdesc ) %]
+    No results match your search for <span style="font-weight: bold;">&ldquo;[% query_desc |html %] [% limit_desc |html %]&rdquo;</span> in [% LibraryName %] Catalog. <a href="[% OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
+    [% ELSE %]
     You did not specify any search criteria.
-    <!-- /TMPL_IF -->
+    [% END %]
 </p>
-<!-- TMPL_IF name="OPACNoResultsFound" -->
+[% IF ( OPACNoResultsFound ) %]
 <div id="noresultsfound">
-<!-- TMPL_VAR NAME="OPACNoResultsFound" -->
+[% OPACNoResultsFound %]
 </div>
-<!-- /TMPL_IF -->
+[% END %]
 
 </div>
-<!-- /TMPL_IF --></p><!-- /TMPL_IF --></div>
+[% END %]</p>[% END %]</div>

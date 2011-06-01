@@ -1,7 +1,7 @@
-<!-- TMPL_IF NAME="PAGE_NUMBERS" --><div class="pages">
+[% IF ( PAGE_NUMBERS ) %]<div class="pages">
     <!-- Row of numbers corresponding to search result pages -->
-        <!-- TMPL_IF NAME="previous_page_offset" --><a class="nav" href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" -->&amp;offset=<!-- TMPL_VAR NAME="previous_page_offset" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->">&lt;&lt; Previous</a><!-- /TMPL_IF -->
-    <!-- TMPL_LOOP NAME="PAGE_NUMBERS" --><!-- TMPL_IF NAME="highlight" --><span class="current"><!-- TMPL_VAR NAME="pg" --></span><!-- TMPL_ELSE -->        <a class="nav" href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" -->&amp;offset=<!-- TMPL_VAR NAME="offset" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->"><!-- TMPL_VAR NAME="pg" --></a><!-- /TMPL_IF -->
-    <!-- /TMPL_LOOP -->
-        <!-- TMPL_IF NAME="next_page_offset" --><a class="nav" href="/cgi-bin/koha/catalogue/search.pl?<!-- TMPL_VAR NAME="query_cgi" ESCAPE="HTML" --><!-- TMPL_VAR NAME="limit_cgi" -->&amp;offset=<!-- TMPL_VAR NAME="next_page_offset" --><!-- TMPL_IF NAME="sort_by" -->&amp;sort_by=<!-- TMPL_VAR NAME="sort_by" --><!-- /TMPL_IF -->">Next &gt;&gt;</a><!-- /TMPL_IF -->
-</div><!-- /TMPL_IF -->
+        [% IF ( previous_page_offset ) %]<a class="nav" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% previous_page_offset %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]">&lt;&lt; Previous</a>[% END %]
+    [% FOREACH PAGE_NUMBER IN PAGE_NUMBERS %][% IF ( PAGE_NUMBER.highlight ) %]<span class="current">[% PAGE_NUMBER.pg %]</span>[% ELSE %]        <a class="nav" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% PAGE_NUMBER.offset %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]">[% PAGE_NUMBER.pg %]</a>[% END %]
+    [% END %]
+        [% IF ( next_page_offset ) %]<a class="nav" href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;offset=[% next_page_offset %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by %][% END %]">Next &gt;&gt;</a>[% END %]
+</div>[% END %]

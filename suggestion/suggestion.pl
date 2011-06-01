@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 # This file is part of Koha.
+# Copyright 2006-2010 BibLibre
+
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -11,9 +13,9 @@
 # WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
 # A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along with
-# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
-# Suite 330, Boston, MA  02111-1307 USA
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
 #use warnings; FIXME - Bug 2505
@@ -54,7 +56,7 @@ sub GetCriteriumDesc{
     return ($criteriumvalue eq 'ASKED'?"Pending":ucfirst(lc( $criteriumvalue))) if ($displayby =~/status/i);
     return (GetBranchName($criteriumvalue)) if ($displayby =~/branchcode/);
     return (GetSupportName($criteriumvalue)) if ($displayby =~/itemtype/);
-    if ($displayby =~/managedby/||$displayby =~/acceptedby/){
+    if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
         return "" unless $borr;
         return $$borr{firstname} . ", " . $$borr{surname};
@@ -72,12 +74,15 @@ my $op              = $input->param('op')||'else';
 my @editsuggestions = $input->param('edit_field');
 my $branchfilter   = $input->param('branchcode');
 my $suggestedby    = $input->param('suggestedby');
+my $returnsuggested = $input->param('returnsuggested');
+my $returnsuggestedby = $input->param('returnsuggestedby');
 my $managedby    = $input->param('managedby');
 my $displayby    = $input->param('displayby');
 my $tabcode    = $input->param('tabcode');
 
 # filter informations which are not suggestion related.
 my $suggestion_ref  = $input->Vars;
+
 delete $$suggestion_ref{$_} foreach qw( suggestedbyme op displayby tabcode edit_field );
 foreach (keys %$suggestion_ref){
     delete $$suggestion_ref{$_} if (!$$suggestion_ref{$_} && ($op eq 'else' || $op eq 'change'));
@@ -94,11 +99,18 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 #########################################
 ##  Operations
 ##
-if ($op =~/save/i){
-    if ($$suggestion_ref{'suggestionid'}>0){
-    &ModSuggestion($suggestion_ref);
-    }  
-    else {
+if ( $op =~ /save/i ) {
+	if ( $$suggestion_ref{"STATUS"} ) {
+        if ( my $tmpstatus = lc( $$suggestion_ref{"STATUS"} ) =~ /ACCEPTED|REJECTED/i ) {
+            $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "date" } = C4::Dates->today;
+            $$suggestion_ref{ lc( $$suggestion_ref{"STATUS"}) . "by" }   = C4::Context->userenv->{number};
+        }
+        $$suggestion_ref{"manageddate"} = C4::Dates->today;
+        $$suggestion_ref{"managedby"}   = C4::Context->userenv->{number};
+    }
+    if ( $$suggestion_ref{'suggestionid'} > 0 ) {
+        &ModSuggestion($suggestion_ref);
+    } else {
         ###FIXME:Search here if suggestion already exists.
         my $suggestions_loop =
             SearchSuggestion( $suggestion_ref );
@@ -126,11 +138,16 @@ elsif ($op=~/edit/) {
     $op ='save';
 }  
 elsif ($op eq "change" ) {
+    # set accepted/rejected/managed informations if applicable
+    # ie= if the librarian has choosen some action on the suggestions
+    if ($$suggestion_ref{"STATUS"} eq "ACCEPTED"){
+        $$suggestion_ref{"accepteddate"}=C4::Dates->today;
+        $$suggestion_ref{"acceptedby"}=C4::Context->userenv->{number};
+    } elsif ($$suggestion_ref{"STATUS"} eq "REJECTED"){
+        $$suggestion_ref{"rejecteddate"}=C4::Dates->today;
+        $$suggestion_ref{"rejectedby"}=C4::Context->userenv->{number};
+    }
 	if ($$suggestion_ref{"STATUS"}){
-		if (my $tmpstatus=lc($$suggestion_ref{"STATUS"}) =~/ACCEPTED|REJECTED/i){
-			$$suggestion_ref{"$tmpstatus"."date"}=C4::Dates->today;
-			$$suggestion_ref{"$tmpstatus"."by"}=C4::Context->userenv->{number};
-		}
 		$$suggestion_ref{"manageddate"}=C4::Dates->today;
 		$$suggestion_ref{"managedby"}=C4::Context->userenv->{number};
 	}
@@ -172,7 +189,10 @@ if ($op=~/else/) {
     
         my $suggestions = &SearchSuggestion($suggestion_ref);
         foreach my $suggestion (@$suggestions){
-            $suggestion->{budget_name}=GetBudget($suggestion->{budgetid})->{budget_name} if $suggestion->{budgetid};
+            if($suggestion->{budgetid}) {
+                my $budget = GetBudget($suggestion->{budgetid});
+                $suggestion->{budget_name}=$budget->{budget_name} if $budget;
+            }
             foreach my $date qw(suggesteddate manageddate accepteddate){
                 if ($suggestion->{$date} ne "0000-00-00" && $suggestion->{$date} ne "" ){
                 $suggestion->{$date}=format_date($suggestion->{$date}) ;
@@ -199,7 +219,7 @@ if ($op=~/else/) {
     );
 }
 
-foreach my $element qw(managedby suggestedby){
+foreach my $element qw(managedby suggestedby acceptedby) {
 #    $debug || warn $$suggestion_ref{$element};
     if ($$suggestion_ref{$element}){
         my $member=GetMember(borrowernumber=>$$suggestion_ref{$element});
@@ -220,6 +240,10 @@ $template->param(
     "op"             =>$op,
 );
 
+if(defined($returnsuggested) and $returnsuggested ne "noone")
+{
+	print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=".$returnsuggested."#suggestions");
+}
 
 ####################
 ## Initializing selection lists
@@ -258,6 +282,7 @@ foreach my $support(@$supportlist){
     }
 }
 $template->param(itemtypeloop=>$supportlist);
+$template->param( returnsuggestedby => $returnsuggestedby );
 
 my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG",$$suggestion_ref{'patronreason'});
 $template->param(patron_reason_loop=>$patron_reason_loop);
@@ -271,6 +296,7 @@ foreach my $budget (@$budgets){
 };
 
 $template->param( budgetsloop => $budgets);
+$template->param( "statusselected_$$suggestion_ref{'STATUS'}" =>1);
 
 # get currencies and rates
 my @rates = GetCurrencies();
@@ -293,7 +319,7 @@ $template->param(
 );
 
 my %hashlists;
-foreach my $field qw(managedby acceptedby suggestedby budgetid STATUS) {
+foreach my $field qw(managedby acceptedby suggestedby budgetid) {
     my $values_list;
     $values_list=GetDistinctValues("suggestions.".$field) ;
     my @codes_list = map{

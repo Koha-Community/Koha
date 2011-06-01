@@ -74,7 +74,7 @@ my $op = $cgi->param('op') || 'none';
 my $element_id = $cgi->param('element_id') || undef;
 my $error = $cgi->param('error') || 0;
 
-my $branch_code = ($label_element eq 'batch' ? get_branch_code_from_name($template->param('LoginBranchname')) : '');
+my $branch_code = ($label_element eq 'batch' ? get_branch_code_from_name($template->{VARS}->{'LoginBranchname'}) : '');
 
 if ($op eq 'delete') {
     if          ($label_element eq 'layout')    {$error = C4::Labels::Layout::delete(layout_id => $element_id);}

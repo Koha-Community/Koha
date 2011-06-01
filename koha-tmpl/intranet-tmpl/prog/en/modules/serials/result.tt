@@ -1,0 +1,64 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Serials &rsaquo; Search Results</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" language="javascript">
+//<![CDATA[
+function GetIt(bibno,title)
+{
+    title = title.replace(/\?/,"\?");
+    title = title.replace(/"/,"\"");
+    title = title.replace(/'/,"\'");
+    opener.document.f.biblionumber.value = bibno;
+    opener.document.f.title.value = title;
+    window.close();
+}
+//]]>
+</script>
+</head>
+<body>
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	
+
+[% IF ( total ) %]
+<h1>Search results from [% from %] to [% to %] of [% total %]</h1>
+<table>
+    <tr>
+       <th>Title</th>
+       <th>Author</th>
+       <th>Publisher</th>
+       <th>Publication year</th>
+	   <th>&nbsp;</th>
+    </tr>
+    [% FOREACH resultsloo IN resultsloop %]
+        <tr>
+            <td>[% resultsloo.title |html %] [% resultsloo.subtitle |html %]
+            </td>
+            <td>
+                [% resultsloo.author |html %]
+            </td>
+            <td>
+                [% resultsloo.publishercode |html %]
+            </td>
+            <td>
+                [% resultsloo.publicationyear |html %]
+            </td>
+			<td><a href="#" onclick="GetIt('[% resultsloo.biblionumber %]','[% resultsloo.title |url %]');" title="Choose this record">Choose</a></td>
+        </tr>
+    [% END %]
+    </table>
+[% ELSE %]
+<h2>No results found for <b>[% query %]</b></h2>
+[% END %]
+[% IF ( displayprev ) %]
+<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromprev |url %]&amp;q=[% query |url %]">&lt;&lt;</a>
+[% END %]
+[% IF ( displaynext ) %]
+<a href="/cgi-bin/koha/serials/subscription-bib-search.pl?op=do_search&amp;type=intranet&amp;startfrom=[% startfromnext |url %]&amp;q=[% query |url %]">&gt;&gt;</a>
+[% END %]
+<p><a href="subscription-bib-search.pl">Search for another record</a></p>
+<fieldset class="action"><a class="button close" href="#">Close</a></fieldset>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

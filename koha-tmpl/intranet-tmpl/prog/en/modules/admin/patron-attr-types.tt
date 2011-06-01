@@ -1,0 +1,234 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Patron Attribute Types
+[% IF ( attribute_type_form ) %]
+  [% IF ( edit_attribute_type ) %]
+    &rsaquo; Modify patron attribute type
+  [% ELSE %]
+    &rsaquo; Add patron attribute type
+  [% END %]
+[% END %]
+[% IF ( delete_attribute_type_form ) %]
+  &rsaquo; Confirm deletion of patron attribute type &quot;[% code |html %]&quot;
+[% END %]
+</title>
+[% INCLUDE 'doc-head-close.inc' %]
+
+<script type="text/javascript">
+//<![CDATA[
+
+function DoCancel(f) {
+  f.op.value='';
+  document.Aform.submit();
+}
+
+function CheckAttributeTypeForm(f) {
+    var ok=1;
+    var _alertString="";
+    var alertString2;
+    if (f.code.value.length==0) {
+        _alertString += "\n- " + _("Patron attribute type code missing");
+    }
+    if (f.description.value.length==0) {
+        _alertString += "\n- " + _("Description missing");
+    }
+    if (_alertString.length==0) {
+        document.Aform.submit();
+    } else {
+        alertString2  = _("Form not submitted because of the following problem(s)");
+        alertString2 += "\n------------------------------------------------------------------------------------\n";
+        alertString2 += _alertString;
+        alert(alertString2);
+    }
+}
+
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( display_list ) %]Patron Attribute Types[% ELSE %]<a href="/cgi-bin/koha/admin/patron-attr-types.pl">Patron Attribute Types</a>[% END %]
+[% IF ( attribute_type_form ) %]
+  [% IF ( edit_attribute_type ) %]
+    &rsaquo; Modify patron attribute type
+  [% ELSE %]
+    &rsaquo; Add patron attribute type
+  [% END %]
+[% END %]
+[% IF ( delete_attribute_type_form ) %]
+  &rsaquo; Confirm deletion of patron attribute type &quot;[% code |html %]&quot;
+[% END %]
+</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+[% IF ( WARNING_extended_attributes_off ) %]
+<div class="dialog message">Because the 'ExtendedPatronAttributes` system preference is currently not enabled, extended patron attributes cannot be given to patron records.  Go <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ExtendedPatronAttributes">here</a> if you wish to enable this feature.</div>
+[% END %]
+
+[% IF ( attribute_type_form ) %]
+  [% IF ( edit_attribute_type ) %]
+<h2>Modify patron attribute type</h2>
+  [% ELSE %]
+<h2>Add patron attribute type</h2>
+  [% END %]
+[% IF ( duplicate_code_error ) %]
+<div class="dialog message">Could not add patron attribute type &quot;[% duplicate_code_error %]&quot; 
+    &mdash; one with that code already exists.
+</div>
+[% END %]
+<form action="[% script_name %]" name="Aform" method="post">
+  <input type="hidden" name="op" value="[% confirm_op %]" />
+  <fieldset class="rows">
+    <ol>
+      <li>
+          [% IF ( edit_attribute_type ) %]
+		  <span class="label">Patron attribute type code: </span>
+            <input type="hidden" name="code" value="[% code |html %]" />
+            [% code |html %]
+          [% ELSE %]
+		  <label for="code">Patron attribute type code: </label>
+            <input type="text" id="code" name="code"  size="10" maxlength="10" />
+          [% END %]
+       </li>
+       <li><label for="description">Description: </label>
+           <input type="text" id="description" name="description" size="50" maxlength="250" 
+                  value="[% description |html %]" />
+       </li>
+       <li><label for="repeatable">Repeatable: </label>
+            <input type="checkbox" id="repeatable" name="repeatable" [% repeatable_checked %] [% repeatable_disabled %] />
+            <span>Check to let a patron record have multiple values of this attribute.  
+                  This setting cannot be changed after an attribute is defined.</span>
+       </li>
+       <li><label for="unique_id">Unique identifier: </label>
+            <input type="checkbox" id="unique_id" name="unique_id" [% unique_id_checked %] [% unique_id_disabled %] />
+            <span>If checked, attribute will be a unique identifier &mdash; if a value is given to a patron record, the same value
+                  cannot be given to a different record.  This setting cannot be changed after an attribute is defined.</span>
+       </li>
+       <li><label for="password_allowed">Allow password: </label>
+            <input type="checkbox" id="password_allowed" name="password_allowed" [% password_allowed_checked %] />
+            <span>Check to make it possible to associate a password with this attribute.</span>
+       </li>
+       <li><label for="opac_display">Display in OPAC: </label>
+            <input type="checkbox" id="opac_display" name="opac_display" [% opac_display_checked %] />
+            <span>Check to display this attribute on a patron's details page in the OPAC.</span>
+       </li>
+       <li><label for="staff_searchable">Searchable: </label>
+            <input type="checkbox" id="staff_searchable" name="staff_searchable" [% staff_searchable_checked %] />
+            <span>Check to make this attribute staff_searchable in the staff patron search.</span>
+       </li>
+        <li><label for="authorised_value_category">Authorized value category: </label>
+            <select name="authorised_value_category" id="authorised_value_category">
+                <option value=""></option>
+                [% FOREACH authorised_value_categorie IN authorised_value_categories %]
+                    [% IF ( authorised_value_categorie.selected ) %]
+                        <option value="[% authorised_value_categorie.category %]" selected="selected">
+                            [% authorised_value_categorie.category %]
+                        </option>
+                    [% ELSE %]
+                        <option value="[% authorised_value_categorie.category %]">
+                            [% authorised_value_categorie.category %]
+                        </option>
+                    [% END %]
+                [% END %]
+            </select>
+            <span>Authorized value category; if one is selected, the patron record input page will only allow values 
+                  to be chosen from the authorized value list.  However, an authorized value list is not 
+                  enforced during batch patron import.</span>
+        </li>
+    </ol>
+  </fieldset>
+  <fieldset class="action">
+    [% IF ( edit_attribute_type ) %]
+    <input type="button" value="Save"
+           onclick="CheckAttributeTypeForm(this.form)" />
+    [% ELSE %]
+    <input type="button" value="Save"
+           onclick="CheckAttributeTypeForm(this.form)" />
+    [% END %]
+    <a class="cancel" href="/cgi-bin/koha/admin/patron-attr-types.pl">Cancel</a>
+  </fieldset>
+</form>
+[% END %]
+
+[% IF ( delete_attribute_type_form ) %]
+<div class="dialog alert"><h3>Confirm deletion of patron attribute type <span class="ex">'[% code |html %]' ([% description %])</span>?</h3>
+<form action="[% script_name %]" name="Aform" method="post">
+  <input type="hidden" name="op" value="[% confirm_op %]" />
+  <input type="hidden" name="code" value="[% code |html %]" />
+    <input type="submit" value="Delete patron attribute type" class="approve" /></form>
+	<form action="[% script_name %]" method="get">
+    <input type="submit" value="No, Do Not Delete" class="deny" />
+</form></div>
+[% END %]
+
+[% IF ( display_list ) %]
+
+<div id="toolbar">
+	<script type="text/javascript">
+	//<![CDATA[
+	// prepare DOM for YUI Toolbar
+	 $(document).ready(function() {
+	    yuiToolbar();
+	 });
+	// YUI Toolbar Functions
+	function yuiToolbar() {
+	    new YAHOO.widget.Button("newrule");
+	}	//]]>
+	</script>
+	<ul class="toolbar">
+	<li><a id="newrule" href="[% script_name %]?op=add_attribute_type">New Patron Attribute Type</a></li>
+</ul></div>
+
+<h2>Patron Attribute Types</h2>
+[% IF ( added_attribute_type ) %]
+<div class="dialog message">Added patron attribute type &quot;[% added_attribute_type %]&quot;</div>
+[% END %]
+[% IF ( edited_attribute_type ) %]
+<div class="dialog message">Modified patron attribute type &quot;[% edited_attribute_type %]&quot;</div>
+[% END %]
+[% IF ( deleted_attribute_type ) %]
+<div class="dialog message">Deleted patron attribute type &quot;[% deleted_attribute_type %]&quot;</div>
+[% END %]
+[% IF ( ERROR_delete_in_use ) %]
+<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_in_use %]&quot; 
+    &mdash; it is in use by [% ERROR_num_patrons %] patron records</div>
+[% END %]
+[% IF ( ERROR_delete_not_found ) %]
+<div class="dialog message">Could not delete patron attribute type &quot;[% ERROR_delete_not_found %]&quot; 
+    &mdash; it was already absent from the database.</div>
+[% END %]
+[% IF ( available_attribute_types ) %]<table>
+  <tr>
+    <th>Code</th>
+    <th>Description</th>
+    <th>Actions</th>
+  </tr>
+  [% FOREACH available_attribute_type IN available_attribute_types %]
+  <tr>
+    <td>[% available_attribute_type.code |html %]</td>
+    <td>[% available_attribute_type.description %]</td>
+    <td>
+      <a href="[% available_attribute_type.script_name %]?op=edit_attribute_type&amp;code=[% available_attribute_type.code |html %]">Edit</a>
+      <a href="[% available_attribute_type.script_name %]?op=delete_attribute_type&amp;code=[% available_attribute_type.code |html %]">Delete</a>
+    </td>
+  </tr>
+  [% END %]
+</table>[% ELSE %]<p>There are no saved patron attribute types.</p>[% END %]
+
+<div class="pages">[% pagination_bar %]</div>
+
+[% END %]
+ 
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

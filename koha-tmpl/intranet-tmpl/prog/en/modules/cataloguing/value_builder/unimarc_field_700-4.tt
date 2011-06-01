@@ -1,0 +1,64 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>UNIMARC Field 700-4 builder</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body style="padding:1em;">
+<h3>UNIMARC Field 700-4 builder</h3>
+<p>Sélectionnez la valeur pour le champ 700 $4. Elle sera automatiquement reportée dans la zone 700 $8 qui suit.</p>
+<form name="f_pop" onsubmit="report()" action="">
+<table>
+	<tr>
+		<td><label for="f1">Code date publication </label></td><td><select name="f1" id="f1" size="1">
+			[% IF ( f1_075 ) %]
+			<option value="075 - postface" selected="selected">postface</option>
+			[% ELSE %]
+			<option value="075 - postface">postface</option>
+			[% END %]
+			
+			[% IF ( f1_651 ) %]
+			<option value="651 - dir. de publication" selected="selected">dir. de publication</option>
+			[% ELSE %]
+			<option value="651 - dir. de publication">dir. de publication</option>
+			[% END %]
+			
+			 [% IF ( f1_440 ) %]
+			<option value="440 - illustrateur" selected="selected">illustrateur</option>
+			[% ELSE %]
+			<option value="440 - illustrateur">illustrateur</option>
+			[% END %]
+			
+			[% IF ( f1_080 ) %]
+			<option value="080 - préface, notes" selected="selected">préface, notes</option>
+			[% ELSE %]
+			<option value="080 - préface, notes">préface, notes</option>
+			[% END %]
+			
+			[% IF ( f1_730 ) %]
+			<option value="730 - traducteur" selected="selected">traducteur</option>
+			[% ELSE %]
+			<option value="730 - traducteur">traducteur</option>
+			[% END %]
+			</select>
+		</td>
+	</tr>
+</table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+	function report() {
+		x = document.f_pop.f1.value.split(' - ');
+		var doc   = opener.document; 
+            var field = doc.getElementById("[% index %]");
+        
+            field.value =  x[0];
+		if ([% index2 %]>0) {
+			opener.document.f.field_value[[% index2 %]].value= x[1];
+		}
+		self.close();
+		return false;
+	}
+//]]>
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

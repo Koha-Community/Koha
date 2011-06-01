@@ -1,0 +1,360 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
+            Receipt Summary for [% name %] [% IF ( invoice ) %]Invoice [% invoice %][% END %] on [% formatteddatereceived %][% ELSE %]Receive Orders from [% name %][% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'greybox.inc' %]
+<script type="text/javascript" src="[% yuipath %]/json/json-min.js"></script>
+<script type="text/JavaScript">
+//<![CDATA[
+
+    var rowsToCollapse = 5;
+
+    $(document).ready(function(){
+
+	rowCountPending  = $("#pendingt tbody.filterclass tr").length;
+	rowCountReceived = $("#receivedt tbody.filterclass tr").length;
+	if (rowCountPending  > rowsToCollapse) { pendingCollapse(); }
+	if (rowCountReceived > rowsToCollapse) { receivedCollapse(); }
+    });
+
+     // Case-insensitive version of jquery's contains function
+     jQuery.extend(jQuery.expr[':'], {
+	    icontains : "jQuery(a).text().toUpperCase().indexOf(m[3].toUpperCase())>=0"
+     });
+
+     // Contains exactly function
+     jQuery.extend(jQuery.expr[':'], {
+          containsExactly: "$(a).text() == m[3]"
+     });
+
+
+    // Collapse pending items table
+    function pendingCollapse() {
+	$("#pendingcollapserow").remove();
+    $("#pendingt tr").show();
+	$("#pendingt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
+	$("#pendingt").before("<p id=\"pendingcollapserow\">" + _("Only the first ")  + rowsToCollapse +  _(" items are displayed.") + "<a href=\"javascript:pendingExpand();\">" + _("Click here to show all ")  + rowCountPending + _(" items") + "<\/a>.<\/p>");
+
+    }
+
+    // Expend pending items table
+    function pendingExpand() {
+	$("#pendingcollapserow").remove();
+	$("#pendingt tr").show();
+    $("#pendingt tbody.filterclass tr.orderfound").remove();
+	$("#pendingt").before("<p id=\"pendingcollapserow\">" + rowCountPending + _(" items are displayed.") + "<a href=\"javascript:pendingCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
+    }
+
+    // Collapse already received items table
+    function receivedCollapse() {
+	$("#receivedcollapserow").remove();
+	$("#receivedt tbody.filterclass tr:gt(" + (rowsToCollapse-1) + ")").hide();
+	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("Only the first ") + rowsToCollapse + _(" items are displayed.") + "<a href=\"javascript:receivedExpand();\">" + _("Click here to show all ") + rowCountReceived + _(" items") + "<\/a>.<\/p>");
+    }
+
+    // Expand already received items table
+    function receivedExpand() {
+	$("#receivedcollapserow").remove();
+	$("#receivedt tr").show();
+	$("#receivedt").before("<p id=\"receivedcollapserow\">" + _("All ") + rowCountReceived + _(" items are displayed.") + "<a href=\"javascript:receivedCollapse();\">" + _("Click here to show only the first ") + rowsToCollapse + _(" items") + "<\/a>.<\/p>");
+    }
+
+    // Launch filtering
+    function filter() {
+
+    var summaryStatus = jQuery.trim($("#summaryfilter").val());
+	var basketStatus  = $("#basketfilter").val();
+	var orderStatus   = $("#orderfilter").val();
+
+	if (summaryStatus == '' && basketStatus == '' && orderStatus == '') { clearFilters(); return false; }
+
+	var filtered = "table#pendingt tbody.filterclass tr";
+
+	// We hide everything
+	$("#nothingfoundrow").remove();
+	$(filtered).hide();
+
+	// Do the search
+	var callback =  {
+		success: function(o) {
+			var jsonString = o.responseText;
+			var gst = "[% gst %]";
+			try {
+				var orders = YAHOO.lang.JSON.parse(jsonString);
+				var foundCount = orders.length;
+
+				for( i = 0 ; i < orders.length ; i++){
+					order = orders[i];
+					$('<tr class="orderfound">'
+                       + '<td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=' + order.basketno + '">' + order.basketno + '</a></td>'
+                       + '<td class="orderfilterclass"> <a href="neworderempty.pl?ordernumber=' + order.ordernumber + '&booksellerid=' + order.booksellerid + '">' + order.ordernumber + ' </a></td>'
+                       + '<td class="summaryfilterclass">'
+                       + '<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + order.biblionumber + '">' + order.title + '</a>' + _(" by ") + order.author + '&nbsp;&ndash;&nbsp;' + order.isbn + '</td>'
+                       + '<td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=' + order.biblionumber + '" title="MARC" rel="gb_page_center[600,500]">Card</a></td>'
+                       + '<td>' + order.quantity + '</td>'
+                       + '<td>' + order.ecost + '</td>'
+                       + '<td>' + order.ordertotal + '</td>'
+                       + '<td>'
+                       + '<a href="orderreceive.pl?ordernumber=' + order.ordernumber + '&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]&amp;gst=' + gst + '&amp;freight=' + order.freight + '&amp;supplierid=[% supplierid %]">Receive</a> /'
+                       + '<a href="parcel.pl?type=intra&amp;ordernumber=' + order.ordernumber + '&amp;biblionumber=' + order.biblionumber + '&amp;action=cancelorder&amp;supplierid=[% supplierid %]&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]" onclick="return confirm(\'' + _('Are you sure you want to cancel this order?') + '\');">Cancel</a>'
+                       + '</td></tr>').appendTo("table#pendingt");
+				}
+
+				// If nothing has been found, we tell the user so
+				if (orders.length == 0) {
+				    $("<tr><td id=\"nothingfoundrow\" colspan=\"8\">No items match your criteria.<\/tr>").appendTo("#pendingt");
+				}
+			}catch(e){alert(e);}
+		}
+	}
+	var transaction = YAHOO.util.Connect.asyncRequest('GET', '/cgi-bin/koha/acqui/parcel.pl?supplierid=[% supplierid %]&search='+summaryStatus+'&basketno='+basketStatus+'&orderno='+orderStatus+'&format=json', callback, null);
+
+	return false;
+    }
+
+    // Clear already applied filters
+    function clearFilters() {
+	$("#nothingfoundrow").remove();
+        $("#pendingt tbody.filterclass tr").show();
+        //$("#pendingt tbody.filterclass tr.orderfound").remove();
+	pendingExpand();
+    }
+
+//]]>
+</script>
+
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'acquisitions-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;  [% IF ( datereceived ) %]
+            Receipt Summary for <i>[% name %]</i> [% IF ( invoice ) %]<i>[ [% invoice %] ]</i>[% END %] on <i>[% formatteddatereceived %]</i>
+        [% ELSE %]
+            Receive orders from [% name %]
+        [% END %]</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-b">
+	[% IF ( receive_error ) %]
+	<div class="dialog alert">
+	<h3>Error adding items:</h3>
+	<ul>
+	[% FOREACH error_loo IN error_loop %]
+		<li>[% error_loo.error_param %][% IF ( error_loo.error_duplicate_barcode ) %]Duplicate Barcode[% END %] <!-- todo: other error conditions come here. --></li>
+	[% END %]
+	</ul>
+	</div>
+	[% END %]
+    <h1>
+        [% IF ( datereceived ) %]
+            Receipt Summary for <i>[% name %]</i> [% IF ( invoice ) %] <i> [ [% invoice %] ] </i>[% END %] on <i>[% formatteddatereceived %]</i>
+        [% ELSE %]
+            Receive orders from [% name %]
+        [% END %]
+    </h1>
+
+    [% IF ( success_delorder ) %]
+    <div class="dialog message">The order has been successfully canceled.</div>
+    [% ELSE %]
+	[% IF ( error_delitem ) %]
+	    <div class="dialog alert">The order has been canceled, although one or more items could not have been deleted.</div>
+	[% END %]
+	[% IF ( error_delbiblio ) %]
+	    <div class="dialog alert">The order has been canceled, although the record has not been deleted.</div>
+	[% END %]
+    [% END %]
+
+<div id="acqui_receive_summary">
+<p><strong>Invoice number:</strong> [% invoice %] <strong>Received by:</strong> [% loggedinusername %] <strong>On:</strong> [% formatteddatereceived %]</p>
+	<!-- TODO: Add date picker, change rcv date. -->
+</div>
+<div id="acqui_receive_search">
+    <h3>Pending Orders</h3>
+
+ [% IF ( loop_orders ) %]<table id="pendingt">
+    <thead>
+        <tr>
+            <th>Basket</th>
+            <th>Order Line</th>
+            <th>Summary</th>
+    	    <th>View Record</th>
+            <th>Quantity</th>
+            <th>Unit cost</th>
+            <th>Order cost</th>
+            <th>&nbsp;</th>
+        </tr>
+    </thead>
+		<tfoot>
+            <tr><td colspan="4" class="total">TOTAL</td>
+                <td> [% totalPquantity %] </td>
+				<td>&nbsp;</td>
+                <td>[% ordergrandtotal %]</td>
+				<td>&nbsp;</td>
+            </tr>
+		</tfoot>
+    <tbody class="filterclass">
+        [% FOREACH loop_order IN loop_orders %]
+	[% UNLESS ( loop.odd ) %]
+            <tr class="highlight">
+        [% ELSE %]
+            <tr>
+        [% END %]
+                <td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a></td>
+                <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber %]&amp;booksellerid=[% loop_order.supplierid %]">[% loop_order.ordernumber %]</a></td>
+                <td class="summaryfilterclass">
+                  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber %]">[% loop_order.title |html %]</a>
+                [% IF ( loop_order.author ) %] by [% loop_order.author %][% END %]
+                [% IF ( loop_order.isbn ) %] &ndash; [% loop_order.isbn %][% END %]
+                [% IF ( loop_order.publishercode ) %]<br />Publisher :[% loop_order.publishercode %][% END %]
+                </td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td>[% loop_order.quantity %]</td>
+                <td>[% loop_order.ecost %]</td>
+                <td>[% loop_order.ordertotal %]</td>
+				<td>
+				    <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;datereceived=[% loop_order.invoicedatereceived %]&amp;invoice=[% loop_order.invoice %]&amp;gst=[% loop_order.gst %]&amp;freight=[% loop_order.freight %]&amp;supplierid=[% loop_order.supplierid %]">Receive</a> /
+				    <a href="parcel.pl?type=intra&amp;ordernumber=[% loop_order.ordernumber %]&amp;biblionumber=[% loop_order.biblionumber %]&amp;action=cancelorder&amp;supplierid=[% loop_order.supplierid %]&amp;datereceived=[% loop_order.invoicedatereceived %]&amp;invoice=[% loop_order.invoice %]" onclick="return confirm(_('Are you sure you want to cancel this order?'));">Cancel</a>
+				</td>
+            </tr>
+        [% END %]
+    </tbody>
+     </table>[% ELSE %]There are no pending orders.[% END %]
+   <div id="resultnumber">
+	<!-- Row of numbers corresponding to search result pages -->
+	[% IF ( displayprev ) %]
+		<a href="parcel.pl?type=intra&amp;supplierid=[% supplierid %]&amp;startfrom=[% prevstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">&lt;&lt; Previous</a>
+	[% END %]
+	[% FOREACH number IN numbers %]
+		[% IF ( number.highlight ) %]
+		<span class="current">[% number.number %]</span>
+		[% ELSE %]
+		<a href="parcel.pl?type=intra&amp;supplierid=[% supplierid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datereceived ) %]&amp;datereceived=[% number.datereceived %][% END %][% IF ( number.invoice ) %]&amp;invoice=[% number.invoice %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
+		[% END %]
+	[% END %]
+	[% IF ( displaynext ) %]
+		<a href="parcel.pl?type=intra&amp;supplierid=[% supplierid %]&amp;startfrom=[% nextstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">Next &gt;&gt;</a>
+	[% END %]
+	</div>
+</div>
+<div id="acqui_receive_receivelist">
+    <h3>Already Received</h3>
+
+   [% IF ( loop_received ) %]
+   <form action="/cgi-bin/koha/acqui/parcel.pl" method="get" name="orderform">
+    <table id="receivedt">
+        <thead>
+	    <tr>
+		<th>Basket</th>
+		<th>Order Line</th>
+		<th>Summary</th>
+		<th>View Record</th>
+		<th>Quantity</th>  
+		<th>Est cost</th>
+		<th>Actual cost</th>
+		<th>TOTAL</th>
+	    </tr>
+	</thead>
+<tfoot>
+	    <tr>
+		<td colspan="4" class="total">SUBTOTAL</td>
+		<td colspan="2">&nbsp;</td>
+		<td>[% totalprice %]</td>
+		<td>[% tototal %]</td>
+	    </tr>
+	      
+	      [% IF ( totalfreight ) %]
+		    <tr>
+			<td colspan="6">&nbsp;
+		</td>
+			    <td>Shipping</td>
+		<td>[% totalfreight %]</td>
+	    	</tr> 
+	    [% END %]
+	      [% IF ( gst ) %]
+		    <tr>
+			<td colspan="6">
+		<p class="message">
+			    <b>HELP</b><br />
+		    The total at the bottom of the page should be within a few cents of the total for the invoice.
+		</p>
+		</td>
+			    <td><b>Tax rate</b></td>
+		<td>[% gst %]</td>
+	    	</tr> 
+	    [% END %]
+	    <tr>
+	    <td colspan="4" class="total">TOTAL</td>
+		<td>[% totalquantity %]</td>
+		<td colspan="2">&nbsp;</td>
+		<td>[% grandtot %]</td>
+	    </tr>
+    </tfoot>
+	<tbody class="filterclass">
+	    [% FOREACH loop_receive IN loop_received %]
+        [% UNLESS ( loop.odd ) %]
+            <tr class="highlight">
+        [% ELSE %]
+            <tr>
+        [% END %]
+                <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a></td>
+                <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% supplierid %]">[% loop_receive.ordernumber %]</a></td>
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.title |html %]</a>
+                [% IF ( loop_receive.author ) %] / [% loop_receive.author %][% END %]
+                [% IF ( loop_receive.isbn ) %] - [% loop_receive.isbn %][% END %]
+                [% IF ( loop_receive.publishercode ) %]<br />Publisher :[% loop_receive.publishercode %][% END %]
+                </td>
+                <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_receive.biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Card</a></td>
+                <td>[% loop_receive.quantityreceived %]</td>
+                <td>[% loop_receive.ecost %]</td>
+                <td>[% loop_receive.unitprice %]</td>
+                <td>[% loop_receive.total %]</td>
+            </tr>
+	    [% END %]
+	</tbody>
+    </table>
+    </form>
+	[% ELSE %]There are no received orders.[% END %]
+</div>
+
+</div>
+</div>
+<div class="yui-b">
+<form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" onsubmit="return filter();">
+        <fieldset class="brief">
+
+            <h4>Filter</h4>
+
+	    <ol>
+
+		<li>
+		    <label for="summaryfilter">ISBN, author or title :</label>
+		    <input type="text" name="summaryfilter" id="summaryfilter" />
+		</li>
+
+		<li>
+		    <label for="basketfilter">Basket :</label>
+		    <input type="text" name="basketfilter" id="basketfilter" />
+		</li>
+
+		<li>
+		    <label for="orderfilter">Order Line :</label>
+		    <input type="text" name="orderfilter" id="orderfilter" />
+		</li>
+	    </ol>
+		<fieldset class="action">
+		    <input type="submit" value="Filter" />
+		    <a href="#" onclick="clearFilters();">Clear</a>
+		</fieldset>
+
+
+        </fieldset>
+    </form>
+[% INCLUDE 'acquisitions-menu.inc' %]
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
+ 

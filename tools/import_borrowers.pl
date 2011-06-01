@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
-# Copyright 2007 Liblime Ltd
+# Copyright 2007 Liblime
+# Parts copyright 2010 BibLibre
 #
 # This file is part of Koha.
 #
@@ -147,7 +148,7 @@ if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
         } elsif (@columns == @columnkeys) {
             @borrower{@columnkeys} = @columns;
             # MJR: try to fill blanks gracefully by using default values
-            foreach my $key (@criticals) {
+            foreach my $key (@columnkeys) {
                 if ($borrower{$key} !~ /\S/) {
                     $borrower{$key} = $defaults{$key};
                 }

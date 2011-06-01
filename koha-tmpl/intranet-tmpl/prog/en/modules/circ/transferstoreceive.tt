@@ -1,0 +1,97 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Transfers to your library</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+//<![CDATA[
+$.tablesorter.addParser({
+    id: 'articles',
+    is: function(s) {return false;  },
+    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+    type: 'text'
+});
+$(document).ready(function() {
+    [% FOREACH branchesloo IN branchesloop %]
+    $.tablesorter.defaults.widgets = ['zebra'];
+    $("#transferst[% branchesloo.branchcode %]").tablesorter({[% IF ( branchesloo.dateformat_metric ) %]
+        dateFormat: 'uk',[% END %]
+        sortList: [[0,0]],
+        headers: { 1: { sorter: 'articles' }}
+    });
+    [% END %]
+});
+//]]>
+</script>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>  &rsaquo; Transfers to your library</div>
+
+<div id="doc" class="yui-t7">
+
+   <div id="bd">
+	<div id="yui-main">
+	<div class="yui-g">
+
+	<h1>Transfers made to your library as of [% show_date %]</h1>
+	[% IF ( branchesloop ) %]
+        <p>Your library is the destination for the following transfer(s)</p>
+		[% IF ( latetransfers ) %]<p>Transfers are <span class="error">considered late</span> after [% TransfersMaxDaysWarning %] days.</p>[% END %]
+        <div id="resultlist">
+        [% FOREACH branchesloo IN branchesloop %]
+            [% IF ( branchesloo.branchcode ) %]
+            <table style="width: 100%" id="transferst[% branchesloo.branchcode %]">
+            <caption>Coming from [% branchesloo.branchname %]</caption>
+            <thead><tr>
+                <th>Date of transfer</th>
+                <th>Title</th>
+                <th>On hold for</th>
+                <th>Home library</th>
+                <th>Call no.</th>
+                <th>&nbsp;</th>
+            </tr></thead>
+            <tbody>[% FOREACH reser IN branchesloo.reserv %]
+                [% IF ( reser.messcompa ) %]
+                <tr class="problem">
+                [% ELSE %]
+                <tr>
+                [% END %]
+                    <td><p>[% reser.datetransfer %]</p> [% IF ( reser.messcompa ) %]<span class="error">Transfer is [% reser.diff %] days late</span>[% END %]</td>
+                    <td><span style="display:none;">[% reser.title |html %]</span><!-- invisible title for tablesorter -->
+                   [% INCLUDE 'biblio-default-view.inc' biblionumber = reser.biblionumber %][% reser.title |html %] [% IF ( reser.subtitle ) %] [% FOREACH subtitl IN reser.subtitle %][% subtitl.subfield %][% END %][% END %]</a> [% IF ( reser.author ) %]by [% reser.author %][% END %]
+                            [% IF ( reser.itemtype ) %]&nbsp; (<b>[% reser.itemtype %]</b>)[% END %]
+                            <br />Barcode: [% reser.barcode %]
+                    </td>
+                    <td>[% IF ( reser.borrowername ) %]
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.borrowernum %]">
+                            [% reser.borrowername %] &nbsp; [% reser.borrowerfirstname %]
+                        </a>
+                        <br />[% reser.borrowerphone %]<br />
+                            [% IF ( reser.borrowermail ) %]
+                                <a href="mailto:[% reser.email %]?subject=Reservation: [% reser.title |html %]">
+                                    [% reser.borrowermail %]
+                                </a>
+                            [% END %]
+                        [% ELSE %]
+                        <p>None</p>
+                    [% END %]
+                    </td>
+                    <td>[% reser.homebranch %]</td>
+                    <td>[% reser.itemcallnumber %]</td>
+                    <td><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber %]&amp;canceltransfer=1&amp;dest=ttr">Cancel Transfer</a></td>
+                </tr>
+            [% END %]</tbody>
+            </table>
+            [% END %]
+        [% END %]
+        </div>
+    [% ELSE %]
+        <p>No transfers to receive</p>
+    [% END %]
+
+</div>
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

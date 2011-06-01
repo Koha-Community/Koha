@@ -120,13 +120,13 @@ if ($op eq 'add_form') {
 	if ($searchfield) {
 		$template->param(action => "Modify tag",
 								searchfield => "<input type=\"hidden\" name=\"tagfield\" value=\"$searchfield\" />$searchfield");
-		$template->param('heading-modify-tag-p' => 1);
+		$template->param('heading_modify_tag_p' => 1);
 	} else {
 		$template->param(action => "Add tag",
 								searchfield => "<input type=\"text\" name=\"tagfield\" size=\"5\" maxlength=\"3\" />");
-		$template->param('heading-add-tag-p' => 1);
+		$template->param('heading_add_tag_p' => 1);
 	}
-	$template->param('use-heading-flags-p' => 1);
+	$template->param('use_heading_flags_p' => 1);
 	$template->param(liblibrarian => $data->{'liblibrarian'},
 							libopac => $data->{'libopac'},
 							repeatable => "".$data->{'repeatable'},
@@ -188,9 +188,10 @@ if ($op eq 'add_form') {
 # called by delete_confirm, used to effectively confirm deletion of data in DB
 } elsif ($op eq 'delete_confirmed') {
 	unless (C4::Context->config('demo') eq 1) {
-		$dbh->do("delete from auth_tag_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
-		$dbh->do("delete from auth_subfield_structure where tagfield='$searchfield' and authtypecode='$authtypecode'");
-        # FIXME: Secuity vulnerability -- use placeholders, prepare and execute!
+		my $sth = $dbh->prepare("delete from auth_tag_structure where tagfield=? and authtypecode=?");
+		$sth->execute($searchfield,$authtypecode);
+		my $sth = $dbh->prepare("delete from auth_subfield_structure where tagfield=? and authtypecode=?");
+		$sth->execute($searchfield,$authtypecode);
 	}
     print "Content-Type: text/html\n\n<META HTTP-EQUIV=Refresh CONTENT=\"0; URL=auth_tag_structure.pl?searchfield=".$input->param('tagfield')."&authtypecode=$authtypecode\">";
     exit;

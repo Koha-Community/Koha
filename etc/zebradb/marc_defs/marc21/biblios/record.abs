@@ -67,7 +67,10 @@ melm 034        Map-scale
 #melm 035       Local-number,Identifier-standard
 melm 037        Identifier-standard,Stock-number
 melm 040        Code-institution,Record-source
-melm 041        ln
+melm 041$a      ln
+melm 041$d      ln
+melm 041$e      ln
+melm 041$j      ln
 melm 043        Code-geographic
 #melm 046       pubdate
 melm 050$b      LC-call-number:w,LC-call-number:p,LC-call-number:s
@@ -122,23 +125,23 @@ melm 400$a      Name-and-title
 melm 400$t      Author-title,Name-and-title,Title,Title-series
 melm 400$9      Koha-Auth-Number
 melm 400        Author,Author-name-personal,Name,Personal-name
-melm 410        Author,Corporate-name
 melm 410$a      Name-and-title
 melm 410$t      Author-title,Title,Title-series
 melm 410$9      Koha-Auth-Number
-melm 410        Author-name-corporate,Name
-melm 411        Author,Conference-name
+melm 410        Author,Corporate-name
+#melm 410        Author-name-corporate,Name
 melm 411$a      Name-and-title
 #melm 411$t     title,author,Author-title,Title-series
 melm 411$t      Author-title,Title-series
+melm 411        Author,Conference-name
 #melm 411       author,Author-name-corporate,Name
-melm 411        Author-name-corporate,Name
+#melm 411        Author-name-corporate,Name
 melm 440$a      Title-series:w,Title-series:p
 melm 440$9      Koha-Auth-Number
 melm 440        Title-series:w,Title-series:p,Title,Title-series
 melm 490$a      Title-series:w,Title-series:p
-melm 490        Title,Title-series
 melm 490$9      Koha-Auth-Number
+melm 490        Title,Title-series
 
 melm 500        Note:w,Note:p
 melm 502        Material-type
@@ -158,20 +161,19 @@ melm 600$a      Name-and-title,Name,Personal-name,Subject-name-personal,Subject
 melm 600$t      Name-and-title,Title,Subject
 melm 600$9      Koha-Auth-Number
 #melm 600       Name,Personal-name,Subject-heading,Subject-name-personal
-melm 600        Name,Personal-name,Subject-name-personal,Subject
+melm 600        Name,Personal-name,Subject-name-personal,Subject,Subject:p
 melm 610$a      Name-and-title
 melm 610$t      Name-and-title,Title
 melm 610$9      Koha-Auth-Number
-melm 610        Name,Subject,Corporate-name
-melm 611        Conference-name
+melm 610        Name,Subject,Subject:p,Corporate-name
 melm 611$a      Name-and-title
 melm 611$t      Name-and-title,Title
 melm 611$9      Koha-Auth-Number
-melm 611        Name,Subject
+melm 611        Conference-name,Name,Subject,Subject:p
 melm 630$n      Thematic-number
 melm 630$r      Music-key
 melm 630$9      Koha-Auth-Number
-melm 630        Subject
+melm 630        Subject,Subject:p
 melm 650$9      Koha-Auth-Number    
 melm 650        Subject,Subject:p
 melm 651$9      Koha-Auth-Number    
@@ -181,13 +183,13 @@ melm 652$9      Koha-Auth-Number
 melm 653$9      Koha-Auth-Number    
 melm 653        Subject,Subject:p
 melm 654$9      Koha-Auth-Number    
-melm 654        Subject
+melm 654        Subject,Subject:p
 melm 655$9      Koha-Auth-Number    
-melm 655        Subject
+melm 655        Subject,Subject:p
 melm 656$9      Koha-Auth-Number    
-melm 656        Subject
+melm 656        Subject,Subject:p
 melm 657$9      Koha-Auth-Number    
-melm 657        Subject
+melm 657        Subject,Subject:p
 melm 658$a	curriculum:w,curriculum:p
 melm 658$b	curriculum:w,curriculum:p
 melm 658$c	curriculum:w,curriculum:p
@@ -201,14 +203,12 @@ melm 700$r      Music-key
 #melm 700$t     author,Author-title,Name-and-title,Title,Title-uniform
 melm 700$t      Author-title,Name-and-title,Title,Title-uniform
 melm 700        Author,Author-name-corporate,Author-name-personal,Name,Editor,Personal-name
-melm 710        Author,Corporate-name
 #melm 710$t     author,Author-title,Name-and-title,Title,Title-uniform
 melm 710$t      Author-title,Name-and-title,Title,Title-uniform
 #melm 710$a     author,author:p,Name-and-title
 melm 710$a      Name-and-title
 melm 710$9      Koha-Auth-Number    
-#melm 710       author,Name
-melm 710        Author,Name
+melm 710        Author,Corporate-name,Name
 melm 711$a      Name-and-title
 #melm 711$t     author,Author-title,Title,Title-uniform
 melm 711$t      Author-title,Title,Title-uniform
@@ -220,8 +220,12 @@ melm 730$r      Music-key
 melm 730$9      Koha-Auth-Number
 melm 730        Title,Title-uniform
 melm 740        Title,Title-other-variant
+melm 751$a      Name-geographic
+melm 751$9      Koha-Auth-Number
+melm 751        Name-geographic
 melm 770$w      Record-control-number
 melm 772$w      Record-control-number
+melm 773$a      Host-item
 melm 773$t      Host-item
 melm 773$w      Record-control-number
 melm 774$w      Record-control-number
@@ -231,16 +235,16 @@ melm 777$w      Record-control-number
 melm 780$t      Title
 melm 780$w      Record-control-number
 melm 780        Title,Title-former,Related-periodical
-melm 785        Related-periodical
 melm 785$w      Record-control-number
+melm 785        Related-periodical
 melm 787$w      Record-control-number
 
 melm 800$a      Name-and-title
 #melm 800$t     author,Author-title,Name-and-title,Title,Title-series
 melm 800$t      Author-title,Name-and-title,Title,Title-series
 melm 800$9      Koha-Auth-Number
-melm 800        Author,Author-name-personal,Name,Personal-name
 melm 800$w      Record-control-number
+melm 800        Author,Author-name-personal,Name,Personal-name
 melm 810$a      Name-and-title
 melm 810$t      Author-title,Name-and-title,Title,Title-series
 melm 810$w      Record-control-number
@@ -264,7 +268,7 @@ melm 999$d      biblioitemnumber:n,biblioitemnumber:w,biblioitemnumber:s
 melm 942$0      totalissues:n,totalissues:s
 melm 942$2      cn-bib-source
 melm 942$6      cn-bib-sort:n,cn-bib-sort:s
-melm 942$c      itemtype:w
+melm 942$c      itemtype:w,itemtype:p
 melm 942$n      Suppress:w,Suppress:n
 
 # need to check bib1
@@ -282,7 +286,7 @@ melm 952$4      damaged:n,damaged:w
 melm 952$5      restricted:n,restricted:w
 melm 952$6      cn-sort:n,cn-sort:s
 melm 952$7      notforloan:n,notforloan:w
-melm 952$8      ccode
+melm 952$8      ccode:w,ccode:p
 melm 952$9      itemnumber:n,itemnumber:s
 melm 952$a      homebranch
 melm 952$b      holdingbranch
@@ -294,7 +298,7 @@ melm 952$e      acqsource
 melm 952$f      coded-location-qualifier
 melm 952$g      price
 #melm 952$h     
-#melm 952$i     
+melm 952$i      stocknumber
 melm 952$j      stack:n,stack:w
 #melm 952$k     
 melm 952$l      issues:n,issues:w,issues:s
@@ -310,5 +314,5 @@ melm 952$u      uri:u
 melm 952$v      replacementprice
 melm 952$w      replacementpricedate
 #melm 952$x
-melm 952$y      itype:w
+melm 952$y      itype:w,itype:p
 melm 952$z      Note:w,Note:p

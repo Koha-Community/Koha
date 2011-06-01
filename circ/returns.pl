@@ -2,7 +2,8 @@
 
 # Copyright 2000-2002 Katipo Communications
 #           2006 SAN-OP
-#           2007 BibLibre, Paul POULAIN
+#           2007-2010 BibLibre, Paul POULAIN
+#           2010 Catalyst IT
 #
 # This file is part of Koha.
 #
@@ -171,6 +172,8 @@ my $barcode     = $query->param('barcode');
 my $exemptfine  = $query->param('exemptfine');
 my $dropboxmode = $query->param('dropboxmode');
 my $dotransfer  = $query->param('dotransfer');
+my $canceltransfer = $query->param('canceltransfer');
+my $dest = $query->param('dest');
 my $calendar    = C4::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
 my $today       = C4::Dates->new();
@@ -181,6 +184,17 @@ if ($dotransfer){
     my $transferitem = $query->param('transferitem');
     my $tobranch     = $query->param('tobranch');
     ModItemTransfer($transferitem, $userenv_branch, $tobranch); 
+}
+
+if ($canceltransfer){
+    $itemnumber=$query->param('itemnumber');
+    DeleteTransfer($itemnumber);
+    if($dest eq "ttr"){
+        print $query->redirect("/cgi-bin/koha/circ/transferstoreceive.pl");
+        exit;
+    } else {
+        $template->param( transfercancelled => 1);
+    }
 }
 
 # actually return book and prepare item table.....
@@ -241,6 +255,31 @@ if ($barcode) {
         $input{duedate}        = $duedate;
         $input{return_overdue} = 1 if ($duedate and $duedate lt $today->output('iso'));
         push( @inputloop, \%input );
+
+        if ( C4::Context->preference("FineNotifyAtCheckin") ) {
+            my ( $od, $issue, $fines ) = GetMemberIssuesAndFines( $borrower->{'borrowernumber'} );
+            if ($fines > 0) {
+                $template->param( fines => sprintf("%.2f",$fines) );
+                $template->param( fineborrowernumber => $borrower->{'borrowernumber'} );
+            }
+        }
+        
+        if (C4::Context->preference("WaitingNotifyAtCheckin") ) {
+            #Check for waiting holds
+            my @reserves = GetReservesFromBorrowernumber($borrower->{'borrowernumber'});
+            my $waiting_holds;
+            foreach my $num_res (@reserves) {
+                if ( $num_res->{'found'} eq 'W' && $num_res->{'branchcode'} eq $userenv_branch) {
+                    $waiting_holds++;
+                }
+            } 
+            if ($waiting_holds > 0) {
+                $template->param(
+                    waiting_holds       => $waiting_holds,
+                    holdsborrowernumber => $borrower->{'borrowernumber'},
+                );
+            }
+        }
     }
     elsif ( !$messages->{'BadBarcode'} ) {
         $input{duedate}   = 0;
@@ -296,6 +335,7 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
         WrongTransfer  => 1,
         TransferWaitingAt => $messages->{'WrongTransfer'},
         WrongTransferItem => $messages->{'WrongTransferItem'},
+        itemnumber => $itemnumber,
     );
 
     my $reserve    = $messages->{'ResFound'};
@@ -529,6 +569,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{itembiblionumber} = $biblio->{'biblionumber'};
         $ri{itemtitle}        = $biblio->{'title'};
         $ri{itemauthor}       = $biblio->{'author'};
+        $ri{itemcallnumber}   = $biblio->{'itemcallnumber'};
         $ri{itemtype}         = $biblio->{'itemtype'};
         $ri{itemnote}         = $biblio->{'itemnotes'};
         $ri{ccode}            = $biblio->{'ccode'};

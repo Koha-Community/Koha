@@ -21,35 +21,39 @@
         new YAHOO.widget.Button("editcontracts");
 
         var manageorders = [
-            { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&op=add_form"},
-            { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=<!--TMPL_VAR Name="id"-->"},
-            { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->"},
-            { text: _("Receive shipments"), url: "/cgi-bin/koha/acqui/parcels.pl?supplierid=<!--TMPL_VAR Name="id"-->" },
-            <!-- TMPL_IF name="basketno" -->
-                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&basketno=<!--TMPL_VAR name="basketno" -->&owner=1"}
-            <!-- TMPL_ELSE -->
-                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=<!-- TMPL_VAR NAME="id" -->&owner=1"}
-            <!-- /TMPL_IF -->
+            [% IF ( CAN_user_acquisition_order_manage ) %]
+                { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form"},
+                { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=[% id %]"},
+                { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% id %]"},
+            [% END %]
+            { text: _("Receive shipments"), url: "/cgi-bin/koha/acqui/parcels.pl?supplierid=[% id %]" },
+            [% IF ( basketno ) %]
+                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% id %]&basketno=[% basketno %]&owner=1"}
+            [% ELSE %]
+                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% id %]&owner=1"}
+            [% END %]
         ]
-        <!-- TMPL_IF NAME="id" -->
-            <!-- TMPL_IF NAME="basketcount" -->
+        [% IF ( id ) %]
+            [% IF ( basketcount ) %]
                 new YAHOO.widget.Button({type: "menu", label: _("Manage orders"), name: "manageorders", menu: manageorders, container: "toolbar-list"});
-            <!-- /TMPL_IF -->
-        <!-- /TMPL_IF -->
+            [% END %]
+        [% END %]
     }
 
     //]]>
     </script>
     <ul id="toolbar-list" class="toolbar">
-        <!-- TMPL_IF NAME="id" -->
-            <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=<!--TMPL_VAR Name="id"-->&amp;op=enter">Edit</a></li>
-            <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=<!-- TMPL_VAR name="id" -->">New Contract</a></li>
-            <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=<!-- TMPL_VAR name="id" -->">Contracts</a></li>
-            <!-- TMPL_UNLESS NAME="basketcount" -->
-                <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=<!-- TMPL_VAR name="id" -->&op=add_form">New Basket</a></li>
-            <!-- /TMPL_UNLESS -->
-        <!-- TMPL_ELSE -->
+        [% IF ( id ) %]
+            [% IF ( CAN_user_acquisition_vendors_manage ) %]
+                <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]&amp;op=enter">Edit</a></li>
+                <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=[% id %]">New Contract</a></li>
+                <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% id %]">Contracts</a></li>
+                [% UNLESS ( basketcount ) %]
+                    <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form">New Basket</a></li>
+                [% END %]
+            [% END %]
+        [% ELSE %]
             <li><a id="newbudget" href="/cgi-bin/koha/acqui/supplier.pl?op=enter">New Vendor</a></li>
-        <!-- /TMPL_IF -->
+        [% END %]
     </ul>
 </div>

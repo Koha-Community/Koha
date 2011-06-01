@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # This file is part of Koha.
+# parts copyright 2010 BibLibre
 #
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
@@ -26,12 +27,16 @@ use C4::Koha;
 use C4::Circulation;
 use C4::Reserves;
 use C4::Members;
+use C4::Members::AttributeTypes;
+use C4::Members::Attributes qw/GetBorrowerAttributeValue/;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Dates qw/format_date/;
 use C4::Letters;
 use C4::Branch; # GetBranches
+
+use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
 my $query = new CGI;
 
@@ -92,9 +97,10 @@ $borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
 my @bordat;
 $bordat[0] = $borr;
 
-$template->param(   BORROWER_INFO  => \@bordat,
-                    borrowernumber => $borrowernumber,
-                    patron_flagged => $borr->{flagged},
+$template->param(   BORROWER_INFO     => \@bordat,
+                    borrowernumber    => $borrowernumber,
+                    patron_flagged    => $borr->{flagged},
+                    OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
                 );
 
 #get issued items ....
@@ -107,7 +113,7 @@ my @issuedat;
 my $itemtypes = GetItemTypes();
 my ($issues) = GetPendingIssues($borrowernumber);
 if ($issues){
-	foreach my $issue ( sort sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
+	foreach my $issue ( sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
 		# check for reserves
 		my ( $restype, $res ) = CheckReserves( $issue->{'itemnumber'} );
 		if ( $restype ) {
@@ -158,6 +164,17 @@ if ($issues){
 		
 		my $isbn = GetNormalizedISBN($issue->{'isbn'});
 		$issue->{normalized_isbn} = $isbn;
+
+                # My Summary HTML
+                if (my $my_summary_html = C4::Context->preference('OPACMySummaryHTML')){
+                    $issue->{author} ? $my_summary_html =~ s/{AUTHOR}/$issue->{author}/g : $my_summary_html =~ s/{AUTHOR}//g;
+                    $issue->{title} =~ s/\/+$//; # remove trailing slash
+                    $issue->{title} =~ s/\s+$//; # remove trailing space
+                    $issue->{title} ? $my_summary_html =~ s/{TITLE}/$issue->{title}/g : $my_summary_html =~ s/{TITLE}//g;
+                    $issue->{isbn} ? $my_summary_html =~ s/{ISBN}/$isbn/g : $my_summary_html =~ s/{ISBN}//g;
+                    $issue->{biblionumber} ? $my_summary_html =~ s/{BIBLIONUMBER}/$issue->{biblionumber}/g : $my_summary_html =~ s/{BIBLIONUMBER}//g;
+                    $issue->{MySummaryHTML} = $my_summary_html;
+                }
 	}
 }
 $template->param( ISSUES       => \@issuedat );
@@ -165,6 +182,13 @@ $template->param( issues_count => $count );
 
 $template->param( OVERDUES       => \@overdues );
 $template->param( overdues_count => $overdues_count );
+
+my $show_barcode = C4::Members::AttributeTypes::AttributeTypeExists( ATTRIBUTE_SHOW_BARCODE );
+if ($show_barcode) {
+    my $patron_show_barcode = GetBorrowerAttributeValue($borrowernumber, ATTRIBUTE_SHOW_BARCODE);
+    undef $show_barcode if defined($patron_show_barcode) && !$patron_show_barcode;
+}
+$template->param( show_barcode => 1 ) if $show_barcode;
 
 # load the branches
 my $branches = GetBranches();
@@ -194,6 +218,7 @@ foreach my $res (@reserves) {
     my $publictype = $res->{'publictype'};
     $res->{$publictype} = 1;
     $res->{'waiting'} = 1 if $res->{'found'} eq 'W';
+    $res->{'formattedwaitingdate'} = format_date($res->{'waitingdate'});
     $res->{'branch'} = $branches->{ $res->{'branchcode'} }->{'branchname'};
     my $biblioData = GetBiblioData($res->{'biblionumber'});
     $res->{'reserves_title'} = $biblioData->{'title'};
@@ -226,7 +251,7 @@ foreach my $res (@reserves) {
             $res->{'wait'}= 1; 
             $res->{'holdingbranch'}=$item->{'holdingbranch'};
             $res->{'biblionumber'}=$item->{'biblionumber'};
-            $res->{'barcodenumber'} = $item->{'barcode'};
+            $res->{'barcode'} = $item->{'barcode'};
             $res->{'wbrcode'} = $res->{'branchcode'};
             $res->{'itemnumber'}    = $res->{'itemnumber'};
             $res->{'wbrname'} = $branches->{$res->{'branchcode'}}->{'branchname'};

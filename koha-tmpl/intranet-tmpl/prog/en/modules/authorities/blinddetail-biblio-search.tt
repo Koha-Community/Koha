@@ -1,0 +1,57 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<Title>Koha -- Authority details</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        var index_start = "[% index %]";
+        var whichfield;
+        try {
+            whichfield = opener.opener.document.getElementById(index_start);
+        } catch(e) {
+            return;
+        }
+        
+        // browse all its subfields
+        var subfields = whichfield.parentNode.parentNode.getElementsByTagName('input');
+        var re = /^tag_\d*_code_/;
+        for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
+            if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
+                var code     = subfields[i];   // code is the first input 
+                var subfield = subfields[i+1]; // subfield the second
+
+            [% IF ( clear ) %]
+                if (subfield){subfield.value="" ;}
+            [% ELSE %]      
+              [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
+                if (code.value == "[% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"){
+                        subfield.value = "[% SUBFIELD_LOO.marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+                }
+              [% END %]
+              if(code.value=='9'){
+                  subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+              }
+            [% END %]
+            }
+        }
+      	opener.close();
+       	window.close();
+            
+       	return false;
+    });
+//]]>
+</script>
+</head>
+<body>
+
+<div id="doc" class="yui-t7">
+   <div id="bd">
+	<div class="yui-g">
+
+
+
+</div>
+</div>
+</div>
+
+[% INCLUDE 'popup-bottom.inc' %]

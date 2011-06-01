@@ -26,6 +26,7 @@ use Encode;
 use Carp;
 
 use C4::Members;
+use C4::Branch;
 use C4::Log;
 use C4::SMS;
 use C4::Debug;
@@ -440,15 +441,16 @@ sub SendAlerts {
     }    
    # send an "account details" notice to a newly created user 
     elsif ( $type eq 'members' ) {
-        $letter->{content} =~ s/<<borrowers.title>>/$externalid->{'title'}/g;
-        $letter->{content} =~ s/<<borrowers.firstname>>/$externalid->{'firstname'}/g;
-        $letter->{content} =~ s/<<borrowers.surname>>/$externalid->{'surname'}/g;
-        $letter->{content} =~ s/<<borrowers.userid>>/$externalid->{'userid'}/g;
+        # must parse the password special, before it's hashed.
         $letter->{content} =~ s/<<borrowers.password>>/$externalid->{'password'}/g;
 
+        parseletter( $letter, 'borrowers', $externalid->{'borrowernumber'});
+        parseletter( $letter, 'branches', $externalid->{'branchcode'} );
+
+        my $branchdetails = GetBranchDetail($externalid->{'branchcode'});
         my %mail = (
                 To      =>     $externalid->{'emailaddr'},
-                From    =>  C4::Context->preference("KohaAdminEmailAddress"),
+                From    =>  $branchdetails->{'branchemail'} || C4::Context->preference("KohaAdminEmailAddress"),
                 Subject => $letter->{'title'}, 
                 Message => $letter->{'content'},
                 'Content-Type' => 'text/plain; charset="utf8"',
@@ -622,7 +624,7 @@ sub SendQueuedMessages (;$) {
         # This is just begging for subclassing
         next MESSAGE if ( lc($message->{'message_transport_type'}) eq 'rss' );
         if ( lc( $message->{'message_transport_type'} ) eq 'email' ) {
-            _send_message_by_email( $message );
+            _send_message_by_email( $message, $params->{'username'}, $params->{'password'}, $params->{'method'} );
         }
         elsif ( lc( $message->{'message_transport_type'} ) eq 'sms' ) {
             _send_message_by_sms( $message );
@@ -787,6 +789,7 @@ ENDSQL
 
 sub _send_message_by_email ($;$$$) {
     my $message = shift or return;
+    my ($username, $password, $method) = @_;
 
     my $to_address = $message->{to_address};
     unless ($to_address) {
@@ -813,7 +816,9 @@ sub _send_message_by_email ($;$$$) {
         }
     }
 
-	my $content = encode('utf8', $message->{'content'});
+    my $utf8   = decode('MIME-Header', $message->{'subject'} );
+    $message->{subject}= encode('MIME-Header', $utf8);
+    my $content = encode('utf8', $message->{'content'});
     my %sendmail_params = (
         To   => $to_address,
         From => $message->{'from_address'} || C4::Context->preference('KohaAdminEmailAddress'),
@@ -822,6 +827,7 @@ sub _send_message_by_email ($;$$$) {
         Message => $content,
         'content-type' => $message->{'content_type'} || 'text/plain; charset="UTF-8"',
     );
+    $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
     if ( my $bcc = C4::Context->preference('OverdueNoticeBcc') ) {
        $sendmail_params{ Bcc } = $bcc;
     }

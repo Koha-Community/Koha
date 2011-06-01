@@ -10,7 +10,7 @@ plan skip_all => "Test::Class required for performing database tests" if $@;
 
 use C4::Auth;
 use C4::Biblio;
-use C4::Bookseller;
+use C4::Bookseller qw( AddBookseller );
 use C4::Context;
 use C4::Items;
 use C4::Members;
@@ -590,8 +590,8 @@ sub add_biblios {
 
     $self->reindex_marc();
     my $query = 'Finn Test';
-    my ( $error, $results ) = SimpleSearch( $query );
-    if ( $param{'count'} <= scalar( @$results ) ) {
+    my ( $error, $results, undef ) = SimpleSearch( $query );
+    if ( !defined $error && $param{'count'} <=  @{$results} ) {
         pass( "found all $param{'count'} titles" );
     } else {
         fail( "we never found all $param{'count'} titles" );

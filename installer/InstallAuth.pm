@@ -27,6 +27,7 @@ use Digest::MD5 qw(md5_base64);
 require Exporter;
 use C4::Context;
 use C4::Output;
+use C4::Templates;
 use C4::Koha;
 use CGI::Session;
 
@@ -113,13 +114,13 @@ sub get_template_and_user {
     my $path =
       C4::Context->config('intrahtdocs') . "/prog/"
       . ( $language ? $language : "en" );
-    my $template = HTML::Template::Pro->new(
-        filename          => "$path/modules/" . $in->{template_name},
-        die_on_bad_params => 1,
-        global_vars       => 1,
-        case_sensitive    => 1,
-        path              => ["$path/includes"]
-    );
+    
+    my $tmplbase = $in->{template_name};
+    $tmplbase=~ s/\.tmpl$/.tt/;
+    my $filename = "$path/modules/" . $tmplbase;
+    my $interface = 'intranet';
+    my $template = C4::Templates->new( $interface, $filename, $tmplbase);
+    
 
     my ( $user, $cookie, $sessionID, $flags ) = checkauth(
         $in->{'query'},
@@ -355,13 +356,10 @@ sub checkauth {
     my $path =
       C4::Context->config('intrahtdocs') . "/prog/"
       . ( $query->param('language') ? $query->param('language') : "en" );
-    my $template = HTML::Template::Pro->new(
-        filename          => "$path/modules/$template_name",
-        die_on_bad_params => 1,
-        global_vars       => 1,
-        case_sensitive    => 1,
-        path              => ["$path/includes"]
-    );
+    my $filename = "$path/modules/$template_name";
+    $filename =~ s/\.tmpl$/.tt/;
+    my $interface = 'intranet';
+    my $template = C4::Templates->new( $interface, $filename);
     $template->param(
         INPUTS => \@inputs,
 

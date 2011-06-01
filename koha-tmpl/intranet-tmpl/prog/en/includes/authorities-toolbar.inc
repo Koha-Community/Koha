@@ -15,8 +15,8 @@
 	function yuiToolbar() {   
 	
 		var newmenu = [
-			<!-- TMPL_LOOP name="authtypesloop" -->{ text: "<!-- TMPL_VAR name="authtypetext" -->", url: "/cgi-bin/koha/authorities/authorities.pl?authtypecode=<!-- TMPL_VAR name="value" -->"},
-<!-- /TMPL_LOOP -->
+			[% FOREACH authtypesloo IN authtypesloop %]{ text: "[% authtypesloo.authtypetext %]", url: "/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authtypesloo.value %]"},
+[% END %]
 		]
 
 	    new YAHOO.widget.Button({
@@ -42,22 +42,22 @@
 	</script>
   <form name="f2" method="post" action="authorities.pl">	
   
-<!-- TMPL_IF NAME="authid" -->  <a id="editAuth" href="authorities.pl?authid=<!-- TMPL_VAR NAME="authid" -->">Edit</a>
+[% IF ( authid ) %]  <a id="editAuth" href="authorities.pl?authid=[% authid %]">Edit</a>
     
-    <!-- TMPL_UNLESS name="count" -->
+    [% UNLESS ( count ) %]
     <span id="delAuthc"><a id="delAuth" href="javascript:confirm_deletion()">Delete</a></span>
-    <!-- /TMPL_UNLESS --><!-- TMPL_ELSE -->&nbsp;<!-- /TMPL_IF -->
+    [% END %][% ELSE %]&nbsp;[% END %]
   
   <span id="newmenuc">
 	<label for="add_authtypecode">New: </label>
         <select id="add_authtypecode" name="authtypecode">
-<!-- TMPL_LOOP name="authtypesloop" -->
-  <!-- TMPL_IF name="selected" -->
-        <option value="<!-- TMPL_VAR name="value" -->" selected="selected"><!-- TMPL_VAR name="authtypetext" --></option>
-  <!-- TMPL_ELSE -->
-        <option value="<!-- TMPL_VAR name="value" -->"><!-- TMPL_VAR name="authtypetext" --></option>
-  <!-- /TMPL_IF -->
-<!-- /TMPL_LOOP -->
+[% FOREACH authtypesloo IN authtypesloop %]
+  [% IF ( authtypesloo.selected ) %]
+        <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
+  [% ELSE %]
+        <option value="[% authtypesloo.value %]">[% authtypesloo.authtypetext %]</option>
+  [% END %]
+[% END %]
         </select>
       <input type="submit" value="Add" class="button" />
   </span></form>

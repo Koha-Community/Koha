@@ -1,0 +1,269 @@
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo;  MARC Details for Record No. [% biblionumber %]
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+    YAHOO.util.Event.onContentReady("furtherm", function () {
+        $("#furtherm").css("display","block").css("visibility","hidden");
+        $("#furthersearches").parent().show();
+        var furthersearchesMenu = new YAHOO.widget.Menu("furtherm");
+            furthersearchesMenu.render();
+            furthersearchesMenu.cfg.setProperty("context", ["furthersearches", "tr", "br"]);
+            furthersearchesMenu.subscribe("beforeShow",positionfurthersearchesMenu);
+            furthersearchesMenu.subscribe("show", furthersearchesMenu.focus);
+            function positionfurthersearchesMenu() {
+                        furthersearchesMenu.align("tr", "br");
+            }
+            YAHOO.util.Event.addListener("furthersearches", "click", furthersearchesMenu.show, null, furthersearchesMenu);
+            YAHOO.widget.Overlay.windowResizeEvent.subscribe(positionfurthersearchesMenu);
+     });
+[% IF ( OPACXSLTDetailsDisplay ) %]
+$(document).ready(function(){
+    $.ajaxSetup({
+        error:function(x,e){
+            switch (x.status) {
+                case 200: break;
+                default:
+                $('#switchview').parent().html("<div class=\"dialog alert\">"+_("Sorry, plain view is temporarily unavailable")+".</div>");
+                $("#plainmarc").hide();
+                $("#labeledmarc").show();
+                break;
+            }
+        }
+    });
+
+    var loaded = 0;
+    $("#switchview").toggle(
+      function () {
+        $(this).text(_("view labeled"));
+        $("#labeledmarc").hide();
+        if(!loaded){
+            $("#plainmarc").show().html("<div style=\"margin:1em;padding:1em;border:1px solid #EEE;font-size:150%;\"><img src=\"/opac-tmpl/prog/images/loading.gif\" /> "+_("Loading")+"...</div>").load("/cgi-bin/koha/opac-showmarc.pl","id=[% biblionumber %]&viewas=html");
+            loaded = 1;
+        } else {
+            $("#plainmarc").show();
+        }
+      },
+      function () {
+        $(this).text(_("view plain"));
+        $("#labeledmarc").show();
+        $("#plainmarc").hide();
+      }
+    );
+});
+[% END %]
+//]]>
+</script>
+</head>
+<body id="opac-marcdetail">
+
+<div id="doc3" class="yui-t7">
+   <div id="bd">
+[% INCLUDE 'masthead.inc' %]
+
+    <div id="yui-main">
+    <div class="yui-b"><div id="opac-detail" class="yui-ge">
+    <div class="yui-u first">
+    <div id="usermarcdetail" class="container">
+    <div id="catalogue_detail_biblio">
+
+    <div id="views">
+    <span class="view"><a id="Normalview" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]">Normal View</a></span>
+
+<span class="view"><span id="MARCview">MARC View</span></span>
+[% IF ( ISBD ) %]<span class="view"><a id="ISBDview"  href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% biblionumber %]">ISBD View</a></span>[% END %]
+</div>
+    <h1 class="title">[% bibliotitle %] (Record no. [% biblionumber %])</h1>
+    [% IF ( OPACXSLTDetailsDisplay ) %]
+    <div id="switchview_div">[ <a id="switchview" href="/cgi-bin/koha/opac-showmarc.pl?id=[% biblionumber %]&amp;viewas=html">view plain</a> ]</div>
+    <div id="plainmarc"></div>[% END %]
+    <div id="labeledmarc">
+    <table id="marc">
+        [% FOREACH tab0X IN tab0XX %]
+        <tr><th colspan="2">[% tab0X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab0X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+        [% FOREACH tab1X IN tab1XX %]
+        <tr><th colspan="2">[% tab1X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab1X.subfield %]
+                <tr>
+                    <td  >[% subfiel.marc_lib %]</td>
+                    <td  >[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab2X IN tab2XX %]
+        <tr><th colspan="2">[% tab2X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab2X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab3X IN tab3XX %]
+        <tr><th colspan="2">[% tab3X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab3X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab4X IN tab4XX %]
+        <tr><th colspan="2" >[% tab4X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab4X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab5X IN tab5XX %]
+        <tr><th colspan="2">[% tab5X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab5X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab6X IN tab6XX %]
+        <tr><th colspan="2">[% tab6X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab6X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab7X IN tab7XX %]
+        <tr><th colspan="2">[% tab7X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab7X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab8X IN tab8XX %]
+        <tr><th colspan="2">[% tab8X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab8X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+
+        [% FOREACH tab9X IN tab9XX %]
+        <tr><th colspan="2">[% tab9X.tag %]</th></tr>
+        [% FOREACH subfiel IN tab9X.subfield %]
+                <tr>
+                    <td>[% subfiel.marc_lib %]</td>
+                    <td>[% subfiel.marc_value %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+    </table>
+    </div>
+[% IF ( item_header_loop ) %]
+        <table id="items">
+            <caption>Copies</caption>
+                <tr>
+                    [% FOREACH item_header_loo IN item_header_loop %]
+                        <th>
+                            [% item_header_loo.header_value %]
+                        </th>
+                    [% END %]
+                </tr>
+                [% FOREACH item_loo IN item_loop %]
+                    <tr>
+                        [% item_loo.item_value %]
+                    </tr>
+                [% END %]
+        </table>[% ELSE %]
+        <p>No copies available.</p>
+    [% END %]
+    </div>
+    </div>
+    </div>
+    <div class="yui-u">
+    <div id="ulactioncontainer" class="container">
+<ul id="action">
+
+[% UNLESS ( norequests ) %]
+        [% IF ( opacuserlogin ) %]
+        [% IF ( RequestOnOpac ) %]
+            [% IF ( AllowOnShelfHolds ) %]
+                <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place Hold</a></li>
+            [% ELSE %]
+                [% IF ( ItemsIssued ) %]
+                    <li><a class="reserve" href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% biblionumber %]">Place Hold</a></li>
+                [% END %]
+            [% END %]
+
+            [% END %]
+    [% END %]
+[% END %]
+        <li><a class="print" href="/cgi-bin/koha/opac-detailprint.pl?biblionumber=[% biblionumber %]" onclick="Dopop('opac-detailprint.pl?biblionumber=[% biblionumber %]'); return false;">
+            Print
+        </a></li>
+[% IF ( virtualshelves ) %]
+   [% IF ( opacuserlogin ) %] [% IF ( loggedinusername ) %]
+        <li><a class="addtoshelf" href="/cgi-bin/koha/opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]" onclick="Dopop('opac-addbybiblionumber.pl?biblionumber=[% biblionumber %]'); return false;">
+            Save to Your Lists
+        </a></li>
+    [% END %][% END %]
+[% END %]
+        [% IF ( opacbookbag ) %]<li><a class="addtocart" href="#" onclick="addRecord('[% biblionumber %]'); return false;">
+            Add to Your Cart
+        </a></li>[% END %]
+        <li style="display:none;"><a href="#" id="furthersearches">More searches</a></li>
+</ul>
+
+[% IF ( OPACSearchForTitleIn ) %]
+<div id="furtherm" class="yuimenu">
+<div class="bd">
+<h4>Search for this title in:</h4>
+<ul class="first-of-type">
+
+[% OPACSearchForTitleIn %]
+
+</ul>
+</div>
+</div>
+[% END %]
+
+        <div id="export">
+        <form method="get" action="/cgi-bin/koha/opac-export.pl">
+        <label for="format">Save Record:</label>
+        <select name="format" id="format">
+        <option value="">-- Choose Format --</option>
+        <option value="mods">MODS (XML)</option>
+        <option value="dc">Dublin Core (XML)</option>
+        <option value="marcxml">MARCXML</option>
+        <option value="marc8">MARC (non-Unicode/MARC-8)</option>
+        <option value="utf8">MARC (Unicode/UTF-8)</option>    </select><input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber %]" />
+<input type="submit" name="save" value="Go" /></form></div>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+
+</div>
+[% INCLUDE 'opac-bottom.inc' %]
+
