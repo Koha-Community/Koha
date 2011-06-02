@@ -817,7 +817,7 @@ sub login_core ($$$) {
 		$server->{sip_username} = $uid;
 		$server->{sip_password} = $pwd;
 
-		my $auth_status = api_auth($uid,$pwd);
+        my $auth_status = api_auth($uid,$pwd,$inst);
 		if (!$auth_status or $auth_status !~ /^ok$/i) {
 			syslog("LOG_WARNING", "api_auth failed for SIP terminal '%s' of '%s': %s",
 						$uid, $inst, ($auth_status||'unknown'));
@@ -1585,17 +1585,17 @@ sub patron_status_string {
     return $patron_status;
 }
 
-sub api_auth($$) {
-	# AUTH
-	my ($username,$password) = (shift,shift);
-	$ENV{REMOTE_USER} = $username;
-	my $query = CGI->new();
-	$query->param(userid   => $username);
-	$query->param(password => $password);
-	my ($status, $cookie, $sessionID) = check_api_auth($query, {circulate=>1}, "intranet");
-	# print STDERR "check_api_auth returns " . ($status || 'undef') . "\n";
-	# print "api_auth userenv = " . &dump_userenv;
-	return $status;
+sub api_auth {
+    my ($username,$password, $branch) = @_;
+    $ENV{REMOTE_USER} = $username;
+    my $query = CGI->new();
+    $query->param(userid   => $username);
+    $query->param(password => $password);
+    if ($branch) {
+        $query->param(branch => $branch);
+    }
+    my ($status, $cookie, $sessionID) = check_api_auth($query, {circulate=>1}, 'intranet');
+    return $status;
 }
 
 1;
