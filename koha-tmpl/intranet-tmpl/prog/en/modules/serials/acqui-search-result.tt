@@ -6,7 +6,7 @@
 function GetIt(aqbooksellerid,name)
 {
   opener.document.f.aqbooksellerid.value = aqbooksellerid;
-  opener.document.f.aqbooksellername.value = unescape(name);
+  opener.document.f.aqbooksellername.value = name;
   window.close();
 }
 </script>
@@ -33,7 +33,7 @@ function GetIt(aqbooksellerid,name)
         <tr>
         [% END %]
 			<td>[% loop_supplier.name %]</td>
-			<td><a href="#" onclick="GetIt([% loop_supplier.aqbooksellerid %],'[% loop_supplier.name |url %]')">Choose</a></td>
+			<td><a href="#" onclick="GetIt([% loop_supplier.aqbooksellerid %],$(this).parent().prev().text())">Choose</a></td>
 		</tr>
 	[% END %]
 </table>
