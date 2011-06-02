@@ -85,7 +85,7 @@ for( x=0; x<allColumns.length; x++ ){
     </tr>
       </thead>
       <tbody>
-            [% FOREACH item_loo IN item_loop %] <tr> [% IF ( item_loo.show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot Edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" /></td>[% END %][% ELSE %]<td>&nbsp;</td>[% END %]
+            [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot Edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber %]" id="row[% item_loo.itemnumber %]" checked="checked" /></td>[% END %][% ELSE %]<td>&nbsp;</td>[% END %]
                 <td><label for="row[% item_loo.itemnumber %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber %]">[% item_loo.title %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author %][% END %]</label></td>
                 [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field |html %]</td> 
         [% END %] </tr>
