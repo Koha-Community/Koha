@@ -17,7 +17,8 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-# Written by Robin Sheat <robin@catalyst.net.nz>
+# Written by Robin Sheat <robin@catalyst.net.nz> and
+#   Srdjan Jankovic <srdjan@catalyst.net.nz>
 # Based on an sh version by Lars Wirzenius.
 
 use strict;
@@ -29,7 +30,7 @@ use POSIX qw/strftime/;
 my $buildresult;
 my $distribution='squeeze-dev';
 my $git_checks='all';
-my $version='3.3-1~git';
+my $version='3.5-1~git';
 my $auto_version=1;
 my $need_help;
 my $debug;
@@ -99,7 +100,7 @@ Options:
         tracked files with untracked changes will cause an error), and 'none'
         (checking git status is skipped totally.) Default is 'all'.
     --version, -v
-        the version string for the resulting package. Default is '3.3-1~git'.
+        the version string for the resulting package. Default is '3.5-1~git'.
     --(no)autoversion
         whether or not to use the date and git commit ID in the version value.
         Default is to include it.
