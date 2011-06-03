@@ -63,14 +63,12 @@ my $confirm;                                                        # -c: Confir
 my $nomail;                                                         # -n: No mail. Will not send any emails.
 my $mindays     = 0;                                                # -m: Maximum number of days in advance to send notices
 my $maxdays     = 30;                                               # -e: the End of the time period
-my $fromaddress = C4::Context->preference('KohaAdminEmailAddress'); # -f: From address for the emails
 my $verbose     = 0;                                                # -v: verbose
 my $itemscontent = join(',',qw( issuedate title barcode author ));
 
 GetOptions( 'c'              => \$confirm,
             'n'              => \$nomail,
             'm:i'            => \$maxdays,
-            'f:s'            => \$fromaddress,
             'v'              => \$verbose,
             'itemscontent=s' => \$itemscontent,
        );
@@ -83,7 +81,6 @@ See the comments in the script for directions on changing the script.
 This script has the following parameters :
 	-c Confirm and remove this help & warning
         -m maximum number of days in advance to send advance notices.
-        -f from address for the emails. Defaults to KohaAdminEmailAddress system preference
 	-n send No mail. Instead, all mail messages are printed on screen. Usefull for testing purposes.
         -v verbose
         -i csv list of fields that get substituted into templates in places
@@ -135,22 +132,28 @@ SELECT biblio.*, items.*, issues.*
     AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
 END_SQL
 
+my $admin_adress = C4::Context->preference('KohaAdminEmailAddress');
+
 UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
     warn 'examining ' . $upcoming->{'itemnumber'} . ' upcoming due items' if $verbose;
     # warn( Data::Dumper->Dump( [ $upcoming ], [ 'overdue' ] ) );
+
+    my $from_address = $upcoming->{branchemail} || $admin_adress;
 
     my $letter;
     my $borrower_preferences;
     if ( 0 == $upcoming->{'days_until_due'} ) {
         # This item is due today. Send an 'item due' message.
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $upcoming->{'borrowernumber'},
-                                                                                   message_name   => 'item due' } );
+                                                                                   message_name   => 'item_due' } );
         # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
-        next DUEITEM unless $borrower_preferences;
+        next unless $borrower_preferences;
         
         if ( $borrower_preferences->{'wants_digest'} ) {
             # cache this one to process after we've run through all of the items.
-            $due_digest->{$upcoming->{'borrowernumber'}}++;
+            my $digest = $due_digest->{$upcoming->{'borrowernumber'}} ||= {};
+            $digest->{email} ||= $from_address;
+            $digest->{count}++;
         } else {
             my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
             my $letter_type = 'DUE';
@@ -172,14 +175,16 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         }
     } else {
         $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $upcoming->{'borrowernumber'},
-                                                                                   message_name   => 'advance notice' } );
+                                                                                   message_name   => 'advance_notice' } );
         # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
         next UPCOMINGITEM unless $borrower_preferences && exists $borrower_preferences->{'days_in_advance'};
         next UPCOMINGITEM unless $borrower_preferences->{'days_in_advance'} == $upcoming->{'days_until_due'};
 
         if ( $borrower_preferences->{'wants_digest'} ) {
             # cache this one to process after we've run through all of the items.
-            $upcoming_digest->{$upcoming->{'borrowernumber'}}++;
+            my $digest = $upcoming_digest->{$upcoming->{'borrowernumber'}} ||= {};
+            $digest->{email} ||= $from_address;
+            $digest->{count}++;
         } else {
             my $biblio = C4::Biblio::GetBiblioFromItemNumber( $upcoming->{'itemnumber'} );
             my $letter_type = 'PREDUE';
@@ -211,6 +216,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
         foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
             C4::Letters::EnqueueLetter( { letter                 => $letter,
                                           borrowernumber         => $upcoming->{'borrowernumber'},
+                                          from_address           => $from_address,
                                           message_transport_type => $transport } );
         }
       }
@@ -231,9 +237,12 @@ SELECT biblio.*, items.*, issues.*
     AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
 END_SQL
 
-PATRON: while ( my ( $borrowernumber, $count ) = each %$upcoming_digest ) {
+PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
+    my $count = $digest->{count};
+    my $from_address = $digest->{email};
+
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
-                                                                                  message_name   => 'advance notice' } );
+                                                                                  message_name   => 'advance_notice' } );
     # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
     next PATRON unless $borrower_preferences; # how could this happen?
 
@@ -241,6 +250,7 @@ PATRON: while ( my ( $borrowernumber, $count ) = each %$upcoming_digest ) {
     my $letter_type = 'PREDUEDGST';
     my $letter = C4::Letters::getletter( 'circulation', $letter_type );
     die "no letter of type '$letter_type' found. Please see sample_notices.sql" unless $letter;
+
     $sth->execute($borrowernumber,$borrower_preferences->{'days_in_advance'});
     my $titles = "";
     while ( my $item_info = $sth->fetchrow_hashref()) {
@@ -261,15 +271,19 @@ PATRON: while ( my ( $borrowernumber, $count ) = each %$upcoming_digest ) {
       foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
         C4::Letters::EnqueueLetter( { letter                 => $letter,
                                       borrowernumber         => $borrowernumber,
+                                      from_address           => $from_address,
                                       message_transport_type => $transport } );
       }
     }
 }
 
 # Now, run through all the people that want digests and send them
-PATRON: while ( my ( $borrowernumber, $count ) = each %$due_digest ) {
+PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
+    my $count = $digest->{count};
+    my $from_address = $digest->{email};
+
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
-                                                                                  message_name   => 'item due' } );
+                                                                                  message_name   => 'item_due' } );
     # warn( Data::Dumper->Dump( [ $borrower_preferences ], [ 'borrower_preferences' ] ) );
     next PATRON unless $borrower_preferences; # how could this happen?
 
@@ -297,6 +311,7 @@ PATRON: while ( my ( $borrowernumber, $count ) = each %$due_digest ) {
       foreach my $transport ( @{$borrower_preferences->{'transports'}} ) {
         C4::Letters::EnqueueLetter( { letter                 => $letter,
                                       borrowernumber         => $borrowernumber,
+                                      from_address           => $from_address,
                                       message_transport_type => $transport } );
       }
     }
