@@ -196,7 +196,7 @@ if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compa
     if ( defined $input->param('compareinv2barcd') && ( ( $input->param('compareinv2barcd') eq 'on' ) && ( scalar @brcditems != scalar @$res ) ) && length($uploadbarcodes) > 0 ){
         if ( scalar @brcditems > scalar @$res ){
             for my $brcditem (@brcditems) {
-                if (! grep(/$brcditem->{barcode}/, @$res) ){
+                if (! grep( $_->{barcode} =~ /$brcditem->{barcode}/ , @$res) ){
                     $brcditem->{notfoundkoha} = 1;
                     push @$res, $brcditem;
                 }
@@ -204,7 +204,7 @@ if ( ! ($uploadbarcodes && length($uploadbarcodes)>0 ) || ( $input->param('compa
         } else {
             my @notfound;
             for my $item (@$res) {
-                if ( ! grep(/$item->{barcode}/, @brcditems) ){
+                if ( ! grep( $_->{barcode} =~ /$item->{barcode}/ , @brcditems) ){
                     $item->{notfoundbarcode} = 1;
                     push @notfound, $item;
                 }
