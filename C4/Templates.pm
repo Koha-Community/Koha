@@ -191,7 +191,6 @@ sub themelanguage {
         $lang = $languages[0] || 'en';
     }
     my $theme = 'prog'; # in the event of theme failure default to 'prog' -fbcit
-    my $dbh = C4::Context->dbh;
     my @themes;
     if ( $interface eq "intranet" ) {
         @themes = split " ", C4::Context->preference("template");
