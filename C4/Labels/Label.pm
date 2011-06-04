@@ -553,6 +553,28 @@ sub barcode {
             warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
         }
     }
+    elsif ($params{'barcode_type'} eq 'EAN13') {
+        $bar_length = 4; # FIXME
+    $num_of_bars = 13;
+        $tot_bar_length = ($bar_length * $num_of_bars) + ($guard_length * 2);
+        $x_scale_factor = ($params{'width'} / $tot_bar_length) * 0.9;
+        eval {
+            PDF::Reuse::Barcode::EAN13(
+                x                   => $params{'llx'},
+                y                   => $params{'lly'},
+                value               => sprintf('%013d',$params{barcode_data}),
+#                xSize               => $x_scale_factor,
+#                ySize               => $params{'y_scale_factor'},
+                mode                    => 'graphic',
+            );
+        };
+        if ($@) {
+            warn sprintf('Barcode generation failed for item %s with this error: %s', $self->{'item_number'}, $@);
+        }
+    }
+    else {
+    warn "unknown barcode_type: $params{barcode_type}";
+    }
 }
 
 sub csv_data {
@@ -607,6 +629,9 @@ This module provides methods for creating, and otherwise manipulating single lab
 
 =item .
             INDUSTRIAL2OF5  = The standard 2 of 5 barcode (a binary level bar code developed by Identicon Corp. and Computer Identics Corp. in 1970)
+
+=item .
+            EAN13           = The standard EAN-13 barcode
 
 =back
 
