@@ -411,9 +411,9 @@ $(document).ready(function(){
 				[% IF ( OPACXSLTResultsDisplay ) %]
                 [% SEARCH_RESULT.XSLTResultsRecord %]
 				[% ELSE %]
-				[% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">
+				[% IF ( BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">
                                 [% ELSE %]
-                                [% IF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">
+                                [% IF ( BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">
                                 [% ELSE %]<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]" title="View details for this title">
                                 [% END %]
                                 [% END %]
