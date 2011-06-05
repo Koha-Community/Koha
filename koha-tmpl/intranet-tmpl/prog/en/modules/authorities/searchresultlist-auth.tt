@@ -31,7 +31,7 @@ function jumpfull(page)
                     [% IF ( number.highlight ) %]
                         [% number.number %]
                     [% ELSE %]
-                        <a href="auth_finder.pl?startfrom=[% number.startfrom %]&amp;authtypecode=[% number.authtypecode %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% number.index %]&amp;tagid=[% number.tagid %]&amp;orderby=[% number.orderby %]">
+                        <a href="auth_finder.pl?startfrom=[% number.startfrom %]&amp;authtypecode=[% authtypecode %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index %]&amp;tagid=[% tagid %]&amp;orderby=[% orderby %]">
                             [% number.number %]</a>
                     [% END %]
                 [% END %]
@@ -72,7 +72,7 @@ function jumpfull(page)
                         <td>
                           [% IF ( resul.repets ) %]
                             [% FOREACH repet IN resul.repets %]
-                              <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% repet.authid %]&amp;index=[% repet.index %]&amp;repet=[% repet.repet %]')" title="[% repet.value %]">[% repet.repet %]</a>
+                              <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% repet.index %]&amp;repet=[% repet.repet %]')" title="[% repet.value %]">[% repet.repet %]</a>
                             [% END %]
                           [% ELSE %]
                             <a href="javascript:jumpfull('blinddetail-biblio-search.pl?authid=[% resul.authid %]&amp;index=[% index %]')">choose</a>
@@ -94,7 +94,7 @@ function jumpfull(page)
                     [% IF ( number.highlight ) %]
                         [% number.number %]
                     [% ELSE %]
-                        <a href="auth_finder.pl?startfrom=[% number.startfrom %]&amp;authtypecode=[% number.authtypecode %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% number.index %]&amp;tagid=[% number.tagid %]&amp;orderby=[% number.orderby %]">
+                        <a href="auth_finder.pl?startfrom=[% number.startfrom %]&amp;authtypecode=[% authtypecode %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index %]&amp;tagid=[% tagid %]&amp;orderby=[% orderby %]">
                             [% number.number %]</a>
                     [% END %]
                 [% END %]
