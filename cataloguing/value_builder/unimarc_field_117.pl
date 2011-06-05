@@ -62,6 +62,16 @@ function Clic$field_number(i) {
 
 return ($field_number,$res);
 }
+
+sub wrapper {
+    my ($char) = @_;
+    return "space" if $char eq " ";
+    return "dblspace" if $char eq "  ";
+    return "pipe" if $char eq "|";
+    return "dblpipe" if $char eq "||";
+    return $char;
+}
+
 sub plugin {
 my ($input) = @_;
 	my $index= $input->param('index');
@@ -76,12 +86,12 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => '*'},
 			     debug => 1,
 			     });
- 	my $f1 = substr($result,0,2);
- 	my $f2 = substr($result,2,2);
- 	my $f3 = substr($result,4,2);
- 	my $f4 = substr($result,6,2);
+ 	my $f1 = substr($result,0,2); $f1 = wrapper( $f1 ) if $f1;
+ 	my $f2 = substr($result,2,2); $f2 = wrapper( $f2 ) if $f2;
+ 	my $f3 = substr($result,4,2); $f3 = wrapper( $f3 ) if $f3;
+ 	my $f4 = substr($result,6,2); $f4 = wrapper( $f4 ) if $f4;
 
- 	my $f5 = substr($result,8,1);
+ 	my $f5 = substr($result,8,1); $f5 = wrapper( $f5 ) if $f5;
 
 	$template->param(index => $index,
 							"f1$f1" => 1,

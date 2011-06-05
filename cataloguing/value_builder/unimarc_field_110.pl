@@ -62,6 +62,14 @@ sub plugin_javascript {
 
     return ($field_number,$res);
 }
+
+sub wrapper {
+    my ($char) = @_;
+    return "space" if $char eq " ";
+    return "pipe" if $char eq "|";
+    return $char;
+}
+
 sub plugin {
 my ($input) = @_;
 	my $index= $input->param('index');
@@ -76,15 +84,15 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => '*'},
 			     debug => 1,
 			     });
- 	my $f1 = substr($result,0,1);
- 	my $f2 = substr($result,1,1);
- 	my $f3 = substr($result,2,1);
- 	my $f4 = substr($result,3,1);
+ 	my $f1 = substr($result,0,1); $f1 = wrapper( $f1 ) if $f1;
+ 	my $f2 = substr($result,1,1); $f2 = wrapper( $f2 ) if $f2;
+ 	my $f3 = substr($result,2,1); $f3 = wrapper( $f3 ) if $f3;
+ 	my $f4 = substr($result,3,1); $f4 = wrapper( $f4 ) if $f4;
  	my $f5 = substr($result,4,3);
- 	my $f6 = substr($result,7,1);
- 	my $f7 = substr($result,8,1);
- 	my $f8 = substr($result,9,1);
- 	my $f9 = substr($result,10,1);
+ 	my $f6 = substr($result,7,1); $f6 = wrapper( $f6 ) if $f6;
+ 	my $f7 = substr($result,8,1); $f7 = wrapper( $f7 ) if $f7;
+ 	my $f8 = substr($result,9,1); $f8 = wrapper( $f8 ) if $f8;
+ 	my $f9 = substr($result,10,1); $f9 = wrapper( $f9 ) if $f9;
 
 	$template->param(index => $index,
                         "f1$f1" => 1,

@@ -60,6 +60,13 @@ function Clic$function_name(i) {
 
 return ($function_name,$res);
 }
+
+sub wrapper {
+    my ($char) = @_;
+    return "dblpipe" if $char eq "||";
+    return $char;
+}
+
 sub plugin {
 my ($input) = @_;
 	my $index= $input->param('index');
@@ -76,7 +83,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => '*'},
 			     debug => 1,
 			     });
-	my $f1 = substr($result,0,2);
+	my $f1 = substr($result,0,2); $f1 = wrapper( $f1 ) if $f1;
 	$template->param(index => $index,
 			 "f1$f1" => 1);
         output_html_with_http_headers $input, $cookie, $template->output;
