@@ -60,6 +60,14 @@ function Clic$function_name(i) {
 
 return ($function_name,$res);
 }
+
+sub wrapper {
+    my ($char) = @_;
+    return "space" if $char eq " ";
+    return "pipe" if $char eq "|";
+    return $char;
+}
+
 sub plugin {
 my ($input) = @_;
 	my $index= $input->param('index');
@@ -76,7 +84,7 @@ my ($template, $loggedinuser, $cookie)
 			     flagsrequired => {editcatalogue => '*'},
 			     debug => 1,
 			     });
-	my $f1 = substr($result,0,1);
+	my $f1 = substr($result,0,1); $f1 = wrapper( $f1 ) if $f1;
 	my $f2 = substr($result,1,1);
 	my $f3 = substr($result,2,1);
 	my $f4 = substr($result,3,1);

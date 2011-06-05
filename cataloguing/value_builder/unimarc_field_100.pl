@@ -67,6 +67,14 @@ sub plugin_javascript {
     return ( $field_number, $res );
 }
 
+sub wrapper {
+    my ($char) = @_;
+    return "space" if $char eq " ";
+    return "dblspace" if $char eq "  ";
+    return "pipe" if $char eq "|";
+    return $char;
+}
+
 sub plugin {
     my ($input) = @_;
     my $index  = $input->param('index');
@@ -90,14 +98,14 @@ sub plugin {
         my @today = Date::Calc::Today();
         $f1 = $today[0] . sprintf('%02s',$today[1]) . sprintf('%02s',$today[2]);
     }
-    my $f2  = substr( $result, 8,  1 );
+    my $f2  = substr( $result, 8,  1 ); $f2  = wrapper( $f2 ) if $f2;
     my $f3  = substr( $result, 9,  4 );
     $f3='' if $f3 eq '    '; # empty publication year if only spaces, otherwise it's hard to fill the field
     my $f4  = substr( $result, 13, 4 );
     $f4='' if $f4 eq '    ';
-    my $f5  = substr( $result, 17, 1 );
-    my $f6  = substr( $result, 18, 1 );
-    my $f7  = substr( $result, 19, 1 );
+    my $f5  = substr( $result, 17, 1 ); $f5  = wrapper( $f5 ) if $f5;
+    my $f6  = substr( $result, 18, 1 ); $f6  = wrapper( $f6 ) if $f6;
+    my $f7  = substr( $result, 19, 1 ); $f7  = wrapper( $f7 ) if $f7;
     my $f8  = substr( $result, 20, 1 );
     my $f9  = substr( $result, 21, 1 );
     my $f10 = substr( $result, 22, 3 );
@@ -105,7 +113,7 @@ sub plugin {
     my $f12 = substr( $result, 26, 2 );
     my $f13 = substr( $result, 28, 2 );
     my $f14 = substr( $result, 30, 4 );
-    my $f15 = substr( $result, 34, 2 );
+    my $f15 = substr( $result, 34, 2 ); $f15 = wrapper( $f15 ) if $f15;
 
     $template->param(
         index     => $index,

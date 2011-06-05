@@ -60,6 +60,14 @@ function Clic$function_name(i) {
 
 return ($function_name,$res);
 }
+
+sub wrapper {
+    my ($char) = @_;
+    return "space" if $char eq " ";
+    return "pipe" if $char eq "|";
+    return $char;
+}
+
 sub plugin {
 my ($input) = @_;
 	my $index= $input->param('index');
@@ -83,12 +91,12 @@ my ($template, $loggedinuser, $cookie)
 	my $f5 = substr($result,4,1);
 	my $f6 = substr($result,5,1);
 	my $f7 = substr($result,6,1);
-	my $f8 = substr($result,7,1);
-	my $f9 = substr($result,8,1);
-	my $f10 = substr($result,9,1);
-	my $f11 = substr($result,10,1);
-	my $f12 = substr($result,11,1);
-	my $f13 = substr($result,12,1);
+	my $f8 = substr($result,7,1); $f8 = wrapper( $f8 ) if $f8;
+	my $f9 = substr($result,8,1); $f9 = wrapper( $f9 ) if $f9;
+	my $f10 = substr($result,9,1); $f10 = wrapper( $f10 ) if $f10;
+	my $f11 = substr($result,10,1); $f11 = wrapper( $f11 ) if $f11;
+	my $f12 = substr($result,11,1); $f12 = wrapper( $f12 ) if $f12;
+	my $f13 = substr($result,12,1); $f13 = wrapper( $f13 ) if $f13;
 	my $f14 = substr($result,13,1);
 	my $f15 = substr($result,14,1);
 	$template->param(index => $index,
