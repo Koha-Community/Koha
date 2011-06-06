@@ -20,7 +20,7 @@
 				[% IF ( number.highlight ) %]
 					<span class="current">[% number.number %]</span>
 				[% ELSE %]
-					<a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% number.resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% number.authtypecode %]&amp;orderby=[% number.orderby %]">[% number.number %]</a>
+					<a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">[% number.number %]</a>
 				[% END %]
 			[% END %]
 			[% IF ( displaynext ) %]
@@ -71,7 +71,7 @@
 			[% END %]
 			[% FOREACH number IN numbers %]
 				[% IF ( number.highlight ) %]<span class="current">[% number.number %]</span>[% ELSE %]
-					<a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% number.resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% number.authtypecode %]&amp;orderby=[% number.orderby %]">[% number.number %]</a>
+					<a href="opac-authorities-home.pl?startfrom=[% number.startfrom %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode %]&amp;orderby=[% orderby %]">[% number.number %]</a>
 				[% END %]
 			[% END %]
 			[% IF ( displaynext ) %]
