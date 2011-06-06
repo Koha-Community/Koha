@@ -185,10 +185,14 @@ sub one_msg {
 
     # If reading or writing fails, then the server's dead,
     # so there's no point in continuing.
-    if (!write_msg({seqno => $seqno}, $test->{msg}, $sock)) {
-		BAIL_OUT("Write failure in $test->{id}");
-    } elsif (!($resp = <$sock>)) {
-		BAIL_OUT("Read failure in $test->{id}");
+    if ( !write_msg( { seqno => $seqno }, $test->{msg}, $sock ) ) {
+        BAIL_OUT("Write failure in $test->{id}");
+    }
+
+    my $rv = sysread( $sock, $resp, 10000000 ); # 10000000 is a big number
+
+    if ( !$rv ) {
+        BAIL_OUT("Read failure in $test->{id}");
     }
 
 	chomp($resp);
