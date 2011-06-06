@@ -274,6 +274,21 @@ if (defined $href) {
 #       $charset_in = $candidate;
 #   }
 #     }
+
+    # BUG6464: check consistency of PO messages
+    #  - count number of '%s' in msgid and msgstr
+    for my $msg ( values %$href ) {
+        my $id_count  = split(/%s/, $msg->{msgid}) - 1;
+        my $str_count = split(/%s/, $msg->{msgstr}) - 1;
+        next if $id_count == $str_count ||
+                $msg->{msgstr} eq '""' ||
+                grep { /fuzzy/ } @{$msg->{_flags}};
+        warn_normal
+            "unconsistent %s count: ($id_count/$str_count):\n" .
+            "  line:   " . $msg->{loaded_line_number} . "\n" .
+            "  msgid:  " . $msg->{msgid} . "\n" .
+            "  msgstr: " . $msg->{msgstr} . "\n", undef;
+    }
 }
 
 # set our charset in to UTF-8
