@@ -537,6 +537,7 @@ if ($borrower) {
 my $returned_counter = ( C4::Context->preference('numReturnedItemsToShow') ) ? C4::Context->preference('numReturnedItemsToShow') : 8;
 my $count = 0;
 my @riloop;
+my $shelflocations = GetKohaAuthorisedValues('items.location','');
 foreach ( sort { $a <=> $b } keys %returneditems ) {
     my %ri;
     if ( $count++ < $returned_counter ) {
@@ -575,6 +576,11 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         $ri{ccode}            = $biblio->{'ccode'};
         $ri{itemnumber}       = $biblio->{'itemnumber'};
         $ri{barcode}          = $bar_code;
+
+        $ri{location}         = $biblio->{'location'};
+        my $shelfcode = $ri{'location'};
+        $ri{'location'} = $shelflocations->{$shelfcode} if ( defined( $shelfcode ) && defined($shelflocations) && exists( $shelflocations->{$shelfcode} ) );
+
     }
     else {
         last;
