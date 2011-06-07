@@ -102,7 +102,7 @@ sub plugin_javascript {
         $year = substr($year, -2);
         $query = "SELECT MAX(CAST(SUBSTRING(barcode,-4) AS signed)) AS number FROM items WHERE barcode REGEXP ?";
         my $sth = $dbh->prepare($query);
-        $sth->execute("^[a-zA-Z]{1,}$year");
+        $sth->execute("^[-a-zA-Z]{1,}$year");
         while (my ($count)= $sth->fetchrow_array) {
             $nextnum = $count if $count;
             $nextnum = 0 if $nextnum == 9999; # this sequence only allows for cataloging 10000 books per month
