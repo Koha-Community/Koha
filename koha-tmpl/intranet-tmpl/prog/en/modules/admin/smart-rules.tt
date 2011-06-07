@@ -72,7 +72,8 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                 <th>Patron Category</th>
                 <th>Item Type</th>
                 <th>Current Checkouts Allowed</th>
-                <th>Loan Period (day)</th>
+                <th>Loan Period</th>
+                <th>Unit</th>
                 <th>Hard Due Date</th>
                 <th>Fine Amount</th>
                 <th>Fine Charging Interval</th>
@@ -108,6 +109,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 								[% END %]
 							</td>
 							<td>[% rule.issuelength %]</td>
+							<td>[% rule.lengthunit %]</td>
                                                         <td>[% IF ( rule.hardduedate ) %]
                                                                [% IF ( rule.hardduedatebefore ) %]before [% rule.hardduedate %]</td>
                                                                [% ELSE %][% IF ( rule.hardduedateexact ) %]on [% rule.hardduedate %]</td>
@@ -146,6 +148,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     </td>
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="issuelength" size="3" /> </td>
+                    <td><input name="lengthunit"  size="6" /> </td>
                     <td><select name="hardduedatecompare">
                            <option value="-1">Before</option>
                            <option value="0">Exactly on</option>
