@@ -18,7 +18,7 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 use CGI;
 use C4::Context;
 use C4::Output;
@@ -28,7 +28,7 @@ use C4::Debug;
 use C4::Branch; # GetBranches
 use C4::Dates qw/format_date format_date_in_iso/;
 
-my $input = new CGI;
+my $input = CGI->new;
 my $dbh = C4::Context->dbh;
 
 # my $flagsrequired;
