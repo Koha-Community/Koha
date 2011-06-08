@@ -230,7 +230,7 @@ if ($borrowernumber) {
             0 , $borrower->{'enrolmentperiod'});
     }
     # if the expiry date is before today ie they have expired
-    if ( $warning_year*$warning_month*$warning_day==0 
+    if ( !$borrower->{'dateexpiry'} || $warning_year*$warning_month*$warning_day==0
         || Date_to_Days($today_year,     $today_month, $today_day  ) 
          > Date_to_Days($warning_year, $warning_month, $warning_day) )
     {
@@ -238,7 +238,7 @@ if ($borrowernumber) {
         $template->param(
             flagged  => "1",
             noissues => "1",
-            expired     => format_date($borrower->{dateexpiry}),
+            expired => "1",
             renewaldate => format_date("$renew_year-$renew_month-$renew_day")
         );
     }
