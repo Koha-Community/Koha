@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials &rsaquo; [% IF ( modname ) %][% bibliotitle |html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
+<title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle |html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 
@@ -931,7 +931,7 @@ $(document).ready(function() {
 	}
 	);
    //  $(".widelabel").attr("width", "300px");  // labels stay skinny in IE7 anyway.
-[% IF ( modname ) %]
+[% IF ( modify ) %]
     set_num_pattern_from_template_vars();
     [% IF ( hemisphere ) %]
 	is_hemisphere = [% hemisphere %] ;
@@ -952,15 +952,15 @@ $(document).ready(function() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modname ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% bibliotitle |html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; [% IF ( modify ) %]<a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]"><i>[% bibliotitle |html %]</i></a> &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</div>
 
 <div id="doc3" class="yui-t7">
    
    <div id="bd">
-<h1>[% IF ( modname ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %]</h1>
+<h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle |html %]</i>[% ELSE %]Add a new subscription[% END %]</h1>
    <div class="yui-g">
     <form method="post" name="f" action="/cgi-bin/koha/serials/subscription-add.pl">
-[% IF ( modname ) %]
+[% IF ( modify ) %]
         <input type="hidden" name="op" value="modsubscription" />
         <input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
 [% ELSE %]
@@ -988,7 +988,7 @@ $(document).ready(function() {
                 (<input type="text" name="title" value="[% bibliotitle %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
                <div class="inputnote"> <a href="#" onclick="Plugin(f)">Search for Biblio</a>
 		    [% IF ( CAN_user_editcatalogue ) %] 
-		       [% IF ( modname ) %]
+		       [% IF ( modify ) %]
 		       | <a href="#" onclick="addbiblioPopup([% bibnum %]); return false;">Edit biblio</a>
 		       [% ELSE %]
 		       | <a href="#" onclick="addbiblioPopup(); return false;">Create Biblio</a>
@@ -1107,10 +1107,10 @@ $(document).ready(function() {
     <ol>
         <li>
            <label for="acqui_date"> First issue publication date:</label>
-                [% UNLESS ( modname ) %]<img src="[% themelang %]/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />[% END %]
-                <input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" [% IF ( modname ) %]disabled="disabled"[% END %] style="border-width: 0px;"  />
+                [% UNLESS ( modify ) %]<img src="[% themelang %]/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />[% END %]
+                <input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" [% IF ( modify ) %]disabled="disabled"[% END %] style="border-width: 0px;"  />
         </li>
-           [% IF ( modname ) %]<li><label for="next_acqui_date"> Next issue publication date:</label>
+           [% IF ( modify ) %]<li><label for="next_acqui_date"> Next issue publication date:</label>
                 <img src="[% themelang %]/lib/calendar/cal.gif" id="next_acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />
                 <input type="text" name="nextacquidate" value="[% nextacquidate %]" size="13" maxlength="10" id="next_acqui_date" style="border-width: 0px;"  />
                 </li>[% END %]
@@ -1118,9 +1118,9 @@ $(document).ready(function() {
         <li><!-- both scripts for calendar must follow the input field --> 
                 <script type="text/javascript">
                     Calendar.setup({
-                        inputField      :   "[% IF ( modname ) %]next_[% END %]acqui_date",
+                        inputField      :   "[% IF ( modify ) %]next_[% END %]acqui_date",
                         ifFormat       :   "[% DHTMLcalendar_dateformat %]",
-                        button         :   "[% IF ( modname ) %]next_[% END %]acqui_button",
+                        button         :   "[% IF ( modify ) %]next_[% END %]acqui_button",
                         align          :   "Tl",
                         onUpdate        :    function(cal) { 
                                                              irregular_issues.weeks = getWeeksArray(cal.date);
@@ -1134,9 +1134,9 @@ $(document).ready(function() {
                                                         } 
                         });
                     Calendar.setup({
-                        inputField      :   "[% IF ( modname ) %]next_[% END %]acqui_date",
+                        inputField      :   "[% IF ( modify ) %]next_[% END %]acqui_date",
                         ifFormat       :   "[% DHTMLcalendar_dateformat %]",
-                        button         :   "[% IF ( modname ) %]next_[% END %]acqui_date",
+                        button         :   "[% IF ( modify ) %]next_[% END %]acqui_date",
                         align          :   "Tl",
                         onUpdate        :    function(cal) { irregular_issues.weeks = getWeeksArray(cal.date);
                                                             irregular_issues.firstissue = cal.date;
@@ -1404,7 +1404,7 @@ $(document).ready(function() {
                 </tr>
                 <tr>
                     <td>
-                        [% IF ( modname ) %]
+                        [% IF ( modify ) %]
                             Last value
                         [% ELSE %]
                             Begins with

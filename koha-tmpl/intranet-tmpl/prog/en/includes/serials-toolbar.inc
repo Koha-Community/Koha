@@ -18,7 +18,7 @@
     [% IF ( subscriptionid ) %]
 	    var editmenu = [
 	        [% IF ( CAN_user_serials_edit_subscription ) %]
-		    { text: _("Edit Subscription"),  [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=[% subscriptionid %]" },
+		    { text: _("Edit Subscription"),  [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid %]" },
 		[% END %]
 	        [% IF ( CAN_user_serials_create_subscription ) %]
 		    { text: _("Edit as New (Duplicate)"), [% IF ( cannotedit ) %]disabled: true, [% END %] url: "/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid %]" },
@@ -69,7 +69,7 @@ onclick: {fn:function(){popup([% subscriptionid %])}}
 
 	    [% IF ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription ) %]
 		[% UNLESS ( cannotedit ) %]
-		    <li id="editmenuc"><a id="edit" href="/cgi-bin/koha/serials/subscription-add.pl?op=mod&amp;subscriptionid=[% subscriptionid %]">Edit</a></li>
+		    <li id="editmenuc"><a id="edit" href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid %]">Edit</a></li>
 		[% END %]
 	    [% END %]
 

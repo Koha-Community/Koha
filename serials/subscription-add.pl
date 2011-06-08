@@ -43,7 +43,7 @@ my @budgets;
 
 # Permission needed if it is a modification : edit_subscription
 # Permission needed otherwise (nothing or dup) : create_subscription
-my $permission = ($op eq "mod") ? "edit_subscription" : "create_subscription";
+my $permission = ($op eq "modify") ? "edit_subscription" : "create_subscription";
 
 my ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-add.tmpl",
@@ -66,12 +66,12 @@ my $subs;
 my $firstissuedate;
 my $nextexpected;
 
-if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
+if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 
     my $subscriptionid = $query->param('subscriptionid');
     $subs = GetSubscription($subscriptionid);
 ## FIXME : Check rights to edit if mod. Could/Should display an error message.
-    if ($subs->{'cannotedit'} && $op eq 'mod'){
+    if ($subs->{'cannotedit'} && $op eq 'modify'){
       carp "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     }
@@ -91,7 +91,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
     letter_loop($subs->{'letter'}, $template);
     $nextexpected = GetNextExpected($subscriptionid);
     $nextexpected->{'isfirstissue'} = $nextexpected->{planneddate}->output('iso') eq $firstissuedate ;
-    $subs->{nextacquidate} = $nextexpected->{planneddate}->output()  if($op eq 'mod');
+    $subs->{nextacquidate} = $nextexpected->{planneddate}->output()  if($op eq 'modify');
     unless($op eq 'modsubscription') {
 		foreach my $length_unit qw(numberlength weeklength monthlength){
 			if ($subs->{$length_unit}){
@@ -107,7 +107,7 @@ if ($op eq 'mod' || $op eq 'dup' || $op eq 'modsubscription') {
                     $op => 1,
                     "subtype_$sub_on" => 1,
                     sublength =>$sub_length,
-                    history => ($op eq 'mod'),
+                    history => ($op eq 'modify'),
                     "periodicity".$subs->{'periodicity'} => 1,
                     "numberpattern".$subs->{'numberpattern'} => 1,
                     firstacquiyear => substr($firstissuedate,0,4),
@@ -160,7 +160,7 @@ if ($op eq 'addsubscription') {
         }
     $template->param(subtype => \@sub_type_data);
 
-    letter_loop( '', $template ) if ($op ne 'modsubscription' && $op ne 'dup' && $op ne 'mod');
+    letter_loop( '', $template ) if ($op ne 'modsubscription' && $op ne 'dup' && $op ne 'modify');
 
     my $new_biblionumber = $query->param('biblionumber_for_new_subscription');
     if (defined $new_biblionumber) {
