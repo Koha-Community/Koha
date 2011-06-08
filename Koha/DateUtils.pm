@@ -26,7 +26,7 @@ use C4::Context;
 use base 'Exporter';
 use version; our $VERSION = qv('1.0.0');
 
-our @EXPORT = (qw( dt_from_string ));
+our @EXPORT = (qw( dt_from_string output_pref));
 
 =head1 DateUtils
 
@@ -69,6 +69,9 @@ sub dt_from_string {
         } else {
             if ( $date_format eq 'iso' ) {
                 $date_string =~ s/-00/-01/;
+                if ( $date_string =~ m/^0000-00/ ) {
+                    return;               # invalid date in db
+                }
             } elsif ( $date_format eq 'us' ) {
                 $date_string =~ s[-00-][-01-];
             } elsif ( $date_format eq 'sql' ) {
@@ -82,4 +85,26 @@ s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
     return DateTime->now( time_zone => $tz );
 
 }
+
+sub output_pref {
+    my $dt   = shift;
+    my $pref = C4::Context->preference('dateformat');
+    given ($pref) {
+        when (/^iso/) {
+            return $dt->strftime('%Y-%m-%d $H:%M');
+        }
+        when (/^metric/) {
+            return $dt->strftime('%d/%m/%Y $H:%M');
+        }
+        when (/^us/) {
+            return $dt->strftime('%m/%d/%Y $H:%M');
+        }
+        default {
+            return $dt->strftime('%Y-%m-%d $H:%M');
+        }
+
+    }
+    return;
+}
+
 1;
