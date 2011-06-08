@@ -60,8 +60,15 @@ getmysqlhost() {
 }
 
 getinstancemysqlpassword() {
-    sed -n '/<pass>/s:.*>\(.*\)</pass>.*:\1:p' \
-        "/etc/koha/sites/$1/koha-conf.xml"
+    xmlstarlet sel -t -v 'yazgfs/config/pass' "/etc/koha/sites/$1/koha-conf.xml"
+}
+
+getinstancemysqluser() {
+    xmlstarlet sel -t -v 'yazgfs/config/user' "/etc/koha/sites/$1/koha-conf.xml"
+}
+
+getinstancemysqldatabase() {
+    xmlstarlet sel -t -v 'yazgfs/config/database' "/etc/koha/sites/$1/koha-conf.xml"
 }
 
 # Set defaults and read config file, if it exists.
@@ -170,7 +177,7 @@ then
     koha-create-dirs "$name"
 
     # Generate Zebra database password.
-    zebrapwd="$(pwgen -1)"
+    zebrapwd="$(pwgen -s 12 1)"
     # Set up MySQL database for this instance.
     if [ "$op" = create ]
     then
@@ -180,7 +187,7 @@ CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
 FLUSH PRIVILEGES;
 eof
-    fi
+    fi #`
 
     # Generate and install Apache site-available file and log dir.
     generate_config_file apache-site.conf.in \
@@ -229,6 +236,11 @@ fi
 
 if [ "$op" = create ] || [ "$op" = populate ]
 then
+    # Re-fetch the passwords from the config we've generated, allows it
+    # to be different from what we set, in case the user had to change
+    # something.
+    mysqluser=$(getinstancemysqluser $name)
+    mysqldb=$(getinstancemysqldatabase $name)
     # Use the default database content if that exists.
     if [ -e "$DEFAULTSQL" ]
     then
@@ -251,7 +263,7 @@ UPDATE borrowers
 SET password = '$staffdigest' 
 WHERE borrowernumber = 3;
 eof
-
+        #`
         echo "staff user password is '$staffpass' but keep that secret"
 
         # Upgrade the database schema, just in case the dump was from an 
