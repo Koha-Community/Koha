@@ -287,7 +287,7 @@ $(document).ready(function() {
         [% FOREACH item IN serialslis.items %]
         <div id="item[% item.serialid %][% item.countitems %]" class="items">
         <ol>[% FOREACH iteminformatio IN item.iteminformation %]<li>
-               <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+               <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% item.serialid %][% item.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
                               
                 <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
                 [% iteminformatio.marc_value %]
@@ -297,7 +297,7 @@ $(document).ready(function() {
                 <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
                 <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
                 [% IF ( iteminformatio.ITEM_SUBFIELDS_ARE_NOT_REPEATABLE ) %]
-                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% item.serialid %][% item.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
                 [% END %]
         
             </div></li>
@@ -326,7 +326,7 @@ $(document).ready(function() {
             <input type="hidden" name="biblionumber" value="[% newserialloo.biblionumber %]" />
             <input type="hidden" name="itemcount" value="[% newserialloo.issuesatonce %]" />
             <input type="hidden" name="user" value="[% newserialloo.librarian %]" />
-            Supplemental Issue <input type="text" name="serialseq" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')} else {HideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]')}" />
+            Supplemental Issue <input type="text" name="serialseq" id="serialseq[% newserialloo.serialid %]" value="" size="20" maxlength="100" onchange="if (this.value!=''){unHideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]', '[% newserialloo.serialid %]')} else {HideItems('items[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]')}" />
         </td>
         <td>
             <input type="text" name="publisheddate" value="[% newserialloo.publisheddate %]" size="10" maxlength="15" />
@@ -335,7 +335,8 @@ $(document).ready(function() {
             <input type="text" name="planneddate" id="supexpecteddate" value="[% newserialloo.planneddate %]" size="10" maxlength="15" />
         </td>
         <td>
-            <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2 || this.value==7){changeDate2('[% newserialloo.arriveddate %]')} else {changeDate2('[% newserialloo.planneddate %]')}" >
+            <select name="status" size="1" id="addstatus[% newserialloo.serialid %]" onchange="if (this.value==2){unHideItems('items'+'[% newserialloo.subscriptionid %][% newserialloo.serialid %]','label[% newserialloo.subscriptionid %][% newserialloo.serialid %]','[% newserialloo.serialid %]'); changeDate2('[% newserialloo.arriveddate %]')} else if (this.value==7){changeDate('[% newserialloo.arriveddate %]')} else { HideItems('items'+'[% newserialloo.subscriptionid %]'+[% newserialloo.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate2('[% serialslis.planneddate %]')}" >
+
                     <option value="">----</option>
   [% IF ( newserialloo.status1 ) %]
                     <option value="1" selected="selected">Expected</option>
@@ -389,7 +390,7 @@ $(document).ready(function() {
           <div class="cataloguing_additem_itemlist">
         <div id="item[% newserialloo.serialid %][% newserialloo.countitems %]" class="items">
         <ol>[% FOREACH iteminformatio IN newserialloo.iteminformation %]<li>
-               <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
+               <div class="subfield_line" style="[% iteminformatio.hidden %];" id="subfield[% newserialloo.serialid %][% newserialloo.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]">
    
                 <label>[% iteminformatio.subfield %] - [% IF ( iteminformatio.mandatory ) %]<b>[% END %][% iteminformatio.marc_lib %][% IF ( iteminformatio.mandatory ) %] *</b>[% END %]</label>
                 [% iteminformatio.marc_value %]
@@ -399,7 +400,7 @@ $(document).ready(function() {
                 <input type="hidden" name="subfield" value="[% iteminformatio.subfield %]" />
                 <input type="hidden" name="mandatory" value="[% iteminformatio.mandatory %]" />
                 [% IF ( iteminformatio.ITEM_SUBFIELDS_ARE_NOT_REPEATABLE ) %]
-                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% iteminformatio.serialid %][% iteminformatio.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
+                    <span class="buttonPlus" onclick="CloneSubfield('subfield[% newserialloo.serialid %][% newserialloo.countitems %][% iteminformatio.subfield %][% iteminformatio.random %]')">+</span>
                 [% END %]
         </div>
        </li>[% END %]</ol>
