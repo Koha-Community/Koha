@@ -36,7 +36,7 @@ my $input = new CGI;
 
 my $flagsrequired;
 $flagsrequired->{borrowers}=1;
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired);
+checkauth($input, 0, $flagsrequired);
 
 my $destination = $input->param("destination") || '';
 my $cardnumber = $input->param("cardnumber");

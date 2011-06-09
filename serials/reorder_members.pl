@@ -29,8 +29,7 @@ my $subscriptionid = $query->param('subscriptionid');
 my $routingid      = $query->param('routingid');
 my $rank           = $query->param('rank');
 
-my ( $user, $cookie, $sesion_id, $flags ) =
-  checkauth( $query, 0, { serials => 1 }, 'intranet' );
+checkauth( $query, 0, { serials => 1 }, 'intranet' );
 
 reorder_members( $subscriptionid, $routingid, $rank );
 

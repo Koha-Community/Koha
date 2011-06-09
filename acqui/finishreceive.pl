@@ -34,7 +34,9 @@ use List::MoreUtils qw/any/;
 
 my $input=new CGI;
 my $flagsrequired = {acquisition => 'order_receive'};
-my ($loggedinuser, $cookie, $sessionID) = checkauth($input, 0, $flagsrequired, 'intranet');
+
+checkauth($input, 0, $flagsrequired, 'intranet');
+
 my $user=$input->remote_user;
 my $biblionumber = $input->param('biblionumber');
 my $biblioitemnumber=$input->param('biblioitemnumber');

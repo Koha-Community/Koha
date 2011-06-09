@@ -95,8 +95,7 @@ if ($op eq 'del') {
 }
 my $hasRouting = check_routing($subscriptionid);
 
-my ($user, $sessionID, $flags);
-($user, $cookie, $sessionID, $flags)
+(undef, $cookie, undef, undef)
     = checkauth($query, 0, {catalogue => 1}, "intranet");
 
 # COMMENT hdl : IMHO, we should think about passing more and more data hash to template->param rather than duplicating code a new coding Guideline ?

@@ -146,6 +146,19 @@ sub get_template_and_user {
     my $borrowernumber;
     my $insecure = C4::Context->preference('insecure');
     if ($user or $insecure) {
+        # It's possible for $user to be the borrowernumber if they don't have a
+        # userid defined (and are logging in through some other method, such
+        # as SSL certs against an email address)
+        $borrowernumber = getborrowernumber($user) if defined($user);
+        if (!defined($borrowernumber) && defined($user)) {
+		my $borrower = GetMember(borrowernumber => $user);
+		if ($borrower) {
+		$borrowernumber = $user;
+                # A bit of a hack, but I don't know there's a nicer way
+                # to do it.
+                $user = $borrower->{firstname} . ' ' . $borrower->{surname};
+            }
+        }
 
         # user info
         $template->param( loggedinusername => $user );
@@ -165,7 +178,6 @@ sub get_template_and_user {
             $template->param( bartotal  => $total->{'bartotal'}, ) if ($total->{'bartotal'} > scalar @{$barshelves});
         }
 
-        $borrowernumber = getborrowernumber($user) if defined($user);
         require C4::Members;
         my ( $borr ) = C4::Members::GetMemberDetails( $borrowernumber );
         my @bordat;
@@ -719,24 +731,63 @@ sub checkauth {
     }
     unless ($userid || $sessionID) {
         #we initiate a session prior to checking for a username to allow for anonymous sessions...
-		my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
+        my $session = get_session("") or die "Auth ERROR: Cannot get_session()";
         my $sessionID = $session->id;
-       	C4::Context->_new_userenv($sessionID);
-        $cookie = $query->cookie(CGISESSID => $sessionID);
-	    $userid    = $query->param('userid');
-            if (($cas && $query->param('ticket')) || $userid) {
-        	my $password = $query->param('password');
-		my ($return, $cardnumber);
-		if ($cas && $query->param('ticket')) {
-		    my $retuserid;
-		    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
-		    $userid = $retuserid;
-		    $info{'invalidCasLogin'} = 1 unless ($return);
-        	} else {
-		    my $retuserid;
-		    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
-		    $userid = $retuserid if ($retuserid ne '');
-		}
+        C4::Context->_new_userenv($sessionID);
+        $cookie = $query->cookie( CGISESSID => $sessionID );
+        $userid = $query->param('userid');
+        if (   ( $cas && $query->param('ticket') )
+            || $userid
+            || ( my $pki_field = C4::Context->preference('AllowPKIAuth') ) ne
+            'None' )
+        {
+            my $password = $query->param('password');
+            my ( $return, $cardnumber );
+            if ( $cas && $query->param('ticket') ) {
+                my $retuserid;
+                ( $return, $cardnumber, $retuserid ) =
+                  checkpw( $dbh, $userid, $password, $query );
+                $userid = $retuserid;
+                $info{'invalidCasLogin'} = 1 unless ($return);
+            }
+            elsif (
+                ( $pki_field eq 'Common Name' && $ENV{'SSL_CLIENT_S_DN_CN'} )
+                || (   $pki_field eq 'emailAddress'
+                    && $ENV{'SSL_CLIENT_S_DN_Email'} )
+              )
+            {
+                my $value;
+                if ( $pki_field eq 'Common Name' ) {
+                    $value = $ENV{'SSL_CLIENT_S_DN_CN'};
+                }
+                elsif ( $pki_field eq 'emailAddress' ) {
+                    $value = $ENV{'SSL_CLIENT_S_DN_Email'};
+
+              # If we're looking up the email, there's a chance that the person
+              # doesn't have a userid. So if there is none, we pass along the
+              # borrower number, and the bits of code that need to know the user
+              # ID will have to be smart enough to handle that.
+                    require C4::Members;
+                    my @users_info = C4::Members::GetBorrowersWithEmail($value);
+                    if (@users_info) {
+
+                        # First the userid, then the borrowernum
+                        $value = $users_info[0][1] || $users_info[0][0];
+                    } else {
+                        undef $value;
+                    }
+                }
+
+                # 0 for no user, 1 for normal, 2 for demo user.
+                $return = $value ? 1 : 0;
+                $userid = $value;
+            }
+            else {
+                my $retuserid;
+                ( $return, $cardnumber, $retuserid ) =
+                  checkpw( $dbh, $userid, $password, $query );
+                $userid = $retuserid if ( $retuserid ne '' );
+            }
 		if ($return) {
                #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
             	if ( $flags = haspermission(  $userid, $flagsrequired ) ) {
@@ -746,127 +797,126 @@ sub checkauth {
                 	$info{'nopermission'} = 1;
                 	C4::Context->_unset_userenv($sessionID);
             	}
+                my ($borrowernumber, $firstname, $surname, $userflags,
+                    $branchcode, $branchname, $branchprinter, $emailaddress);
 
-				my ($borrowernumber, $firstname, $surname, $userflags,
-					$branchcode, $branchname, $branchprinter, $emailaddress);
+                if ( $return == 1 ) {
+                    my $select = "
+                    SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode,
+                    branches.branchname    as branchname,
+                    branches.branchprinter as branchprinter,
+                    email
+                    FROM borrowers
+                    LEFT JOIN branches on borrowers.branchcode=branches.branchcode
+                    ";
+                    my $sth = $dbh->prepare("$select where userid=?");
+                    $sth->execute($userid);
+                    unless ($sth->rows) {
+                        $debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
+                        $sth = $dbh->prepare("$select where cardnumber=?");
+                        $sth->execute($cardnumber);
 
-            	if ( $return == 1 ) {
-                	my $select = "
-                	SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode, 
-                    	    branches.branchname    as branchname, 
-                        	branches.branchprinter as branchprinter, 
-                        	email 
-                	FROM borrowers 
-                	LEFT JOIN branches on borrowers.branchcode=branches.branchcode
-                	";
-                	my $sth = $dbh->prepare("$select where userid=?");
-                	$sth->execute($userid);
-			unless ($sth->rows) {
-		    	    $debug and print STDERR "AUTH_1: no rows for userid='$userid'\n";
-		    	    $sth = $dbh->prepare("$select where cardnumber=?");
-		       	    $sth->execute($cardnumber);
-
-		    	    unless ($sth->rows) {
-				$debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
-				$sth->execute($userid);
-				unless ($sth->rows) {
-				    $debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
-				}
-			    }
-			}
-                	if ($sth->rows) {
-			    ($borrowernumber, $firstname, $surname, $userflags,
-                    		$branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
-						$debug and print STDERR "AUTH_3 results: " .
-							"$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
-					} else {
-						print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
-					}
+                        unless ($sth->rows) {
+                            $debug and print STDERR "AUTH_2a: no rows for cardnumber='$cardnumber'\n";
+                            $sth->execute($userid);
+                            unless ($sth->rows) {
+                                $debug and print STDERR "AUTH_2b: no rows for userid='$userid' AS cardnumber\n";
+                            }
+                        }
+                    }
+                    if ($sth->rows) {
+                        ($borrowernumber, $firstname, $surname, $userflags,
+                            $branchcode, $branchname, $branchprinter, $emailaddress) = $sth->fetchrow;
+                        $debug and print STDERR "AUTH_3 results: " .
+                        "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
+                    } else {
+                        print STDERR "AUTH_3: no results for userid='$userid', cardnumber='$cardnumber'.\n";
+                    }
 
 # launch a sequence to check if we have a ip for the branch, i
 # if we have one we replace the branchcode of the userenv by the branch bound in the ip.
 
-					my $ip       = $ENV{'REMOTE_ADDR'};
-					# if they specify at login, use that
-					if ($query->param('branch')) {
-						$branchcode  = $query->param('branch');
-						$branchname = GetBranchName($branchcode);
-					}
-					my $branches = GetBranches();
-					if (C4::Context->boolean_preference('IndependantBranches') && C4::Context->boolean_preference('Autolocation')){
-						# we have to check they are coming from the right ip range
-						my $domain = $branches->{$branchcode}->{'branchip'};
-						if ($ip !~ /^$domain/){
-							$loggedin=0;
-							$info{'wrongip'} = 1;
-						}
-					}
+                    my $ip       = $ENV{'REMOTE_ADDR'};
+                    # if they specify at login, use that
+                    if ($query->param('branch')) {
+                        $branchcode  = $query->param('branch');
+                        $branchname = GetBranchName($branchcode);
+                    }
+                    my $branches = GetBranches();
+                    if (C4::Context->boolean_preference('IndependantBranches') && C4::Context->boolean_preference('Autolocation')){
+                        # we have to check they are coming from the right ip range
+                        my $domain = $branches->{$branchcode}->{'branchip'};
+                        if ($ip !~ /^$domain/){
+                            $loggedin=0;
+                            $info{'wrongip'} = 1;
+                        }
+                    }
 
-					my @branchesloop;
-					foreach my $br ( keys %$branches ) {
-						#     now we work with the treatment of ip
-						my $domain = $branches->{$br}->{'branchip'};
-						if ( $domain && $ip =~ /^$domain/ ) {
-							$branchcode = $branches->{$br}->{'branchcode'};
+                    my @branchesloop;
+                    foreach my $br ( keys %$branches ) {
+                        #     now we work with the treatment of ip
+                        my $domain = $branches->{$br}->{'branchip'};
+                        if ( $domain && $ip =~ /^$domain/ ) {
+                            $branchcode = $branches->{$br}->{'branchcode'};
 
-							# new op dev : add the branchprinter and branchname in the cookie
-							$branchprinter = $branches->{$br}->{'branchprinter'};
-							$branchname    = $branches->{$br}->{'branchname'};
-						}
-					}
-					$session->param('number',$borrowernumber);
-					$session->param('id',$userid);
-					$session->param('cardnumber',$cardnumber);
-					$session->param('firstname',$firstname);
-					$session->param('surname',$surname);
-					$session->param('branch',$branchcode);
-					$session->param('branchname',$branchname);
-					$session->param('flags',$userflags);
-					$session->param('emailaddress',$emailaddress);
-					$session->param('ip',$session->remote_addr());
-					$session->param('lasttime',time());
-					$debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
-				}
-				elsif ( $return == 2 ) {
-					#We suppose the user is the superlibrarian
-					$borrowernumber = 0;
-					$session->param('number',0);
-					$session->param('id',C4::Context->config('user'));
-					$session->param('cardnumber',C4::Context->config('user'));
-					$session->param('firstname',C4::Context->config('user'));
-					$session->param('surname',C4::Context->config('user'));
-					$session->param('branch','NO_LIBRARY_SET');
-					$session->param('branchname','NO_LIBRARY_SET');
-					$session->param('flags',1);
-					$session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
-					$session->param('ip',$session->remote_addr());
-					$session->param('lasttime',time());
-				}
-				C4::Context::set_userenv(
-					$session->param('number'),       $session->param('id'),
-					$session->param('cardnumber'),   $session->param('firstname'),
-					$session->param('surname'),      $session->param('branch'),
-					$session->param('branchname'),   $session->param('flags'),
-					$session->param('emailaddress'), $session->param('branchprinter')
-				);
+                            # new op dev : add the branchprinter and branchname in the cookie
+                            $branchprinter = $branches->{$br}->{'branchprinter'};
+                            $branchname    = $branches->{$br}->{'branchname'};
+                        }
+                    }
+                    $session->param('number',$borrowernumber);
+                    $session->param('id',$userid);
+                    $session->param('cardnumber',$cardnumber);
+                    $session->param('firstname',$firstname);
+                    $session->param('surname',$surname);
+                    $session->param('branch',$branchcode);
+                    $session->param('branchname',$branchname);
+                    $session->param('flags',$userflags);
+                    $session->param('emailaddress',$emailaddress);
+                    $session->param('ip',$session->remote_addr());
+                    $session->param('lasttime',time());
+                    $debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map {$session->param($_)} qw(cardnumber firstname surname branch) ;
+                }
+                elsif ( $return == 2 ) {
+                    #We suppose the user is the superlibrarian
+                    $borrowernumber = 0;
+                    $session->param('number',0);
+                    $session->param('id',C4::Context->config('user'));
+                    $session->param('cardnumber',C4::Context->config('user'));
+                    $session->param('firstname',C4::Context->config('user'));
+                    $session->param('surname',C4::Context->config('user'));
+                    $session->param('branch','NO_LIBRARY_SET');
+                    $session->param('branchname','NO_LIBRARY_SET');
+                    $session->param('flags',1);
+                    $session->param('emailaddress', C4::Context->preference('KohaAdminEmailAddress'));
+                    $session->param('ip',$session->remote_addr());
+                    $session->param('lasttime',time());
+                }
+                C4::Context::set_userenv(
+                    $session->param('number'),       $session->param('id'),
+                    $session->param('cardnumber'),   $session->param('firstname'),
+                    $session->param('surname'),      $session->param('branch'),
+                    $session->param('branchname'),   $session->param('flags'),
+                    $session->param('emailaddress'), $session->param('branchprinter')
+                );
 
-				# Grab borrower's shelves and public shelves and add them to the session
-				# $row_count determines how many records are returned from the db query
-				# and the number of lists to be displayed of each type in the 'Lists' button drop down
-				my $row_count = 10; # FIXME:This probably should be a syspref
-				my ($total, $totshelves, $barshelves, $pubshelves);
-				($barshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(1, $row_count, $borrowernumber);
-				$total->{'bartotal'} = $totshelves;
-				($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
-				$total->{'pubtotal'} = $totshelves;
-				$session->param('barshelves', $barshelves);
-				$session->param('pubshelves', $pubshelves);
-				$session->param('totshelves', $total);
+                # Grab borrower's shelves and public shelves and add them to the session
+                # $row_count determines how many records are returned from the db query
+                # and the number of lists to be displayed of each type in the 'Lists' button drop down
+                my $row_count = 10; # FIXME:This probably should be a syspref
+                my ($total, $totshelves, $barshelves, $pubshelves);
+                ($barshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(1, $row_count, $borrowernumber);
+                $total->{'bartotal'} = $totshelves;
+                ($pubshelves, $totshelves) = C4::VirtualShelves::GetRecentShelves(2, $row_count, undef);
+                $total->{'pubtotal'} = $totshelves;
+                $session->param('barshelves', $barshelves);
+                $session->param('pubshelves', $pubshelves);
+                $session->param('totshelves', $total);
 
-				C4::Context::set_shelves_userenv('bar',$barshelves);
-				C4::Context::set_shelves_userenv('pub',$pubshelves);
-				C4::Context::set_shelves_userenv('tot',$total);
-			}
+                C4::Context::set_shelves_userenv('bar',$barshelves);
+                C4::Context::set_shelves_userenv('pub',$pubshelves);
+                C4::Context::set_shelves_userenv('tot',$total);
+            }
         	else {
             	if ($userid) {
                 	$info{'invalid_username_or_password'} = 1;
