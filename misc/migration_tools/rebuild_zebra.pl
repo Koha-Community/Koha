@@ -191,7 +191,7 @@ sub index_records {
     my ($record_type, $directory, $skip_export, $process_zebraqueue, $as_xml, $noxml, $nosanitize, $do_not_clear_zebraqueue, $verbose_logging, $zebraidx_log_opt, $server_dir) = @_;
 
     my $num_records_exported = 0;
-    my $num_records_deleted = 0;
+    my $records_deleted;
     my $need_reset = check_zebra_dirs($server_dir);
     if ($need_reset) {
     	print "$0: found broken zebra server directories: forcing a rebuild\n";
@@ -212,12 +212,12 @@ sub index_records {
         if ($process_zebraqueue) {
             my $entries = select_zebraqueue_records($record_type, 'deleted');
             mkdir "$directory/del_$record_type" unless (-d "$directory/del_$record_type");
-            $num_records_deleted = generate_deleted_marc_records($record_type, $entries, "$directory/del_$record_type", $as_xml);
+            $records_deleted = generate_deleted_marc_records($record_type, $entries, "$directory/del_$record_type", $as_xml);
             mark_zebraqueue_batch_done($entries);
             $entries = select_zebraqueue_records($record_type, 'updated');
             mkdir "$directory/upd_$record_type" unless (-d "$directory/upd_$record_type");
             $num_records_exported = export_marc_records_from_list($record_type, 
-                                                                  $entries, "$directory/upd_$record_type", $as_xml, $noxml);
+                                                                  $entries, "$directory/upd_$record_type", $as_xml, $noxml, $records_deleted);
             mark_zebraqueue_batch_done($entries);
         } else {
             my $sth = select_all_records($record_type);
@@ -239,7 +239,7 @@ sub index_records {
 	my $record_fmt = ($as_xml) ? 'marcxml' : 'iso2709' ;
     if ($process_zebraqueue) {
         do_indexing($record_type, 'delete', "$directory/del_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt) 
-            if $num_records_deleted;
+            if %$records_deleted;
         do_indexing($record_type, 'update', "$directory/upd_$record_type", $reset, $noshadow, $record_fmt, $zebraidx_log_opt)
             if $num_records_exported;
     } else {
@@ -366,12 +366,14 @@ sub export_marc_records_from_sth {
 }
 
 sub export_marc_records_from_list {
-    my ($record_type, $entries, $directory, $as_xml, $noxml) = @_;
+    my ($record_type, $entries, $directory, $as_xml, $noxml, $records_deleted) = @_;
 
     my $num_exported = 0;
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
     my $i = 0;
-    my %found = ();
+
+    # Skip any deleted records. We check for this anyway, but this reduces error spam
+    my %found = %$records_deleted;
     foreach my $record_number ( map { $_->{biblio_auth_number} }
                                 grep { !$found{ $_->{biblio_auth_number} }++ }
                                 @$entries ) {
@@ -396,7 +398,7 @@ sub export_marc_records_from_list {
 sub generate_deleted_marc_records {
     my ($record_type, $entries, $directory, $as_xml) = @_;
 
-    my $num_exported = 0;
+    my $records_deleted = {};
     open (OUT, ">:utf8 ", "$directory/exported_records") or die $!;
     my $i = 0;
     foreach my $record_number (map { $_->{biblio_auth_number} } @$entries ) {
@@ -414,11 +416,12 @@ sub generate_deleted_marc_records {
         }
 
         print OUT ($as_xml) ? $marc->as_xml_record(C4::Context->preference("marcflavour")) : $marc->as_usmarc();
-        $num_exported++;
+
+        $records_deleted->{$record_number} = 1;
     }
-    print "\nRecords exported: $num_exported\n" if ( $verbose_logging );
+    print "\nRecords exported: $i\n" if ( $verbose_logging );
     close OUT;
-    return $num_exported;
+    return $records_deleted;
     
 
 }
