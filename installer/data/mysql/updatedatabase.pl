@@ -4346,7 +4346,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '3.05.00.XXX';
+$DBversion = '3.05.00.002';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     #follow up fix 5860: some installs already past 3.3.0.42
     stocknumber_checker();
