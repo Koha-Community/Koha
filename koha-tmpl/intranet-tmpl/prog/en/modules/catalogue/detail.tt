@@ -138,14 +138,14 @@ function verify_images() {
                 [% IF ( pages ) %] [% END %][% pages %] [% IF ( illus ) %][% illus %][% END %]
                 [% IF ( size ) %][% size %][% END %]
         </li>
-[% IF ( MARCurlS ) %]<li>
+[% IF ( MARCURLS ) %]<li>
     
 	<strong>Online Resources:</strong>
-    <ul>    [% FOREACH MARCurl IN MARCurlS %]
+    <ul>    [% FOREACH MARCurl IN MARCURLS %]
 		<li>[% IF ( MARCurl.part ) %][% MARCurl.part %]
 			<br />[% END %] 
 		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
-		<a href="[% MARCurl.MARCurl %]" title="[% MARCurl.MARCurl %]">[% MARCurl.linktext %]</a>
+		<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% MARCurl.linktext %]</a>
 			[% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note %]</li>[% END %]</ul>[% END %]</li>
             [% END %]</ul>
 </li>
