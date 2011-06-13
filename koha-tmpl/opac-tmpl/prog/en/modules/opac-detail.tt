@@ -182,9 +182,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% END %]
     </span>[% END %]
 
-    [% IF ( MARCurlS ) %]
+    [% IF ( MARCURLS ) %]
     <div class="results_summary"><span class="label">Online Resources:</span>
-    <ul>    [% FOREACH MARCurl IN MARCurlS %]
+    <ul>    [% FOREACH MARCurl IN MARCURLS %]
         <li>[% IF ( MARCurl.part ) %][% MARCurl.part %]
             <br />[% END %] 
         <!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
