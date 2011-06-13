@@ -4,6 +4,7 @@ use warnings;
 use 5.010;
 
 use DateTime;
+use DateTime::Set;
 use C4::Context;
 use Carp;
 use Readonly;
@@ -80,13 +81,17 @@ sub addDate {
     my ( $self, $base_date, $add_duration, $unit ) = @_;
     my $days_mode = C4::Context->preference('useDaysMode');
     Readonly::Scalar my $return_by_hour => 10;
+    my $day_dur = DateTime::Duration->new( days => 1);
+    if ($add_duration->is_negative()) {
+        $day_dur->inverse();
+    }
     if ( $days_mode eq 'Datedue' ) {
 
         my $dt = $base_date + $add_duration;
         while ( $self->is_holiday($dt) ) {
 
             # TODOP if hours set to 10 am
-            $dt->add( days => 1 );
+            $dt->add_duration( $day_dur );
             if ( $unit eq 'hours' ) {
                 $dt->set_hour($return_by_hour);    # Staffs specific
             }
@@ -95,7 +100,7 @@ sub addDate {
     } elsif ( $days_mode eq 'Calendar' ) {
         my $days = $add_duration->in_units('days');
         while ($days) {
-            $base_date->add( days => 1 );
+            $base_date->add_duration( $day_dur );
             if ( $self->is_holiday($base_date) ) {
                 next;
             } else {
@@ -121,7 +126,7 @@ sub is_holiday {
     if (@matches) {
         return 1;
     }
-    $dt->truncate('days');
+    $dt->truncate(to => 'days');
     my $day   = $dt->day;
     my $month = $dt->month;
     for my $dm ( @{ $self->{day_month_closed_days} } ) {
