@@ -98,6 +98,15 @@ sub addDate {
         }
         return $dt;
     } elsif ( $days_mode eq 'Calendar' ) {
+        if ($unit eq 'hours' ) {
+            $base_date->add_duration($add_duration);
+            while ($self->is_holiday($base_date)) {
+            $base_date->add_duration( $day_dur );
+
+            }
+
+        }
+        else {
         my $days = $add_duration->in_units('days');
         while ($days) {
             $base_date->add_duration( $day_dur );
@@ -107,6 +116,7 @@ sub addDate {
                 --$days;
             }
         }
+    }
         if ( $unit eq 'hours' ) {
             my $dt = $base_date->clone()->subtract( days => 1 );
             if ( $self->is_holiday($dt) ) {

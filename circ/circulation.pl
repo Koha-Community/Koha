@@ -36,6 +36,7 @@ use C4::Reserves;
 use C4::Context;
 use CGI::Session;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::DateUtils;
 
 use Date::Calc qw(
   Today
@@ -445,9 +446,10 @@ sub build_issue_data {
         $totalprice += $it->{'replacementprice'};
         $it->{'itemtype'} = $itemtypeinfo->{'description'};
         $it->{'itemtype_image'} = $itemtypeinfo->{'imageurl'};
-        $it->{'dd'} = format_date($it->{'date_due'});
+        $it->{'dd'} = output_pref($it->{'date_due'});
         $it->{'displaydate'} = format_date($it->{'issuedate'});
-        $it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
+        #$it->{'od'} = ( $it->{'date_due'} lt $todaysdate ) ? 1 : 0 ;
+        $it->{'od'} = $it->{'overdue'};
         ($it->{'author'} eq '') and $it->{'author'} = ' ';
         $it->{'renew_failed'} = $renew_failed{$it->{'itemnumber'}};
 

@@ -91,16 +91,16 @@ sub output_pref {
     my $pref = C4::Context->preference('dateformat');
     given ($pref) {
         when (/^iso/) {
-            return $dt->strftime('%Y-%m-%d $H:%M');
+            return $dt->strftime('%Y-%m-%d %H:%M');
         }
         when (/^metric/) {
-            return $dt->strftime('%d/%m/%Y $H:%M');
+            return $dt->strftime('%d/%m/%Y %H:%M');
         }
         when (/^us/) {
-            return $dt->strftime('%m/%d/%Y $H:%M');
+            return $dt->strftime('%m/%d/%Y %H:%M');
         }
         default {
-            return $dt->strftime('%Y-%m-%d $H:%M');
+            return $dt->strftime('%Y-%m-%d %H:%M');
         }
 
     }
