@@ -169,7 +169,7 @@ sub makepayment {
     my $data = $sth->fetchrow_hashref;
     $sth->finish;
 
-    my $sth = $dbh->prepare("UPDATE accountlines
+    $sth = $dbh->prepare("UPDATE accountlines
 			        SET amountoutstanding = 0
 			      WHERE borrowernumber = ?
 				AND accountno = ?");
@@ -185,7 +185,7 @@ sub makepayment {
 
     # create new line
     my $payment = 0 - $amount;
-    my $sth = $dbh->prepare("INSERT INTO accountlines
+    $sth = $dbh->prepare("INSERT INTO accountlines
 					 (borrowernumber, accountno, date, amount,
 					  description, accounttype, amountoutstanding)
 				  VALUES (?,?,now(),?,?,'Pay',0)");
