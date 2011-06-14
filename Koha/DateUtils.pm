@@ -80,7 +80,7 @@ s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
                 $date_string =~ s/00T/01T/;
             }
         }
-        return DateTime::Format::DateParse->parse_datetime( $date_string, $tz );
+        return DateTime::Format::DateParse->parse_datetime( $date_string, $tz->name() );
     }
     return DateTime->now( time_zone => $tz );
 

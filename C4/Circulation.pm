@@ -51,6 +51,7 @@ use C4::Log; # logaction
 
 use Data::Dumper;
 use Koha::DateUtils;
+use Koha::Calendar;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -695,7 +696,7 @@ sub CanBookBeIssued {
     if ($duedate && ref $duedate ne 'DateTime') {
         $duedate = dt_from_string($duedate);
     }
-    my $now = DateTime->now( timezone => C4::Context->tz() );
+    my $now = DateTime->now( time_zone => C4::Context->tz() );
     unless ( $duedate ) {
         my $issuedate = $now->clone();
 
