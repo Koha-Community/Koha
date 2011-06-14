@@ -251,7 +251,6 @@ my $issuecount     = @{$issue};
 my $relissuecount  = @{$relissue};
 my $roaddetails = &GetRoadTypeDetails( $data->{'streettype'} );
 my $today       = POSIX::strftime("%Y-%m-%d", localtime);	# iso format
-my @issuedata;
 my @borrowers_with_issues;
 my $overdues_exist = 0;
 my $totalprice = 0;
@@ -268,7 +267,7 @@ sub build_issue_data {
     for ( my $i = 0 ; $i < $issuecount ; $i++ ) {
         my $datedue = $issue->[$i]{'date_due'};
         my $issuedate = $issue->[$i]{'issuedate'};
-        $issue->[$i]{'date_due'}  = C4::Dates->new($issue->[$i]{'date_due'}, 'iso')->output('syspref');
+        $issue->[$i]{'date_due'}  = format_date($issue->[$i]->{issuedate});
         $issue->[$i]{'issuedate'} = C4::Dates->new($issue->[$i]{'issuedate'},'iso')->output('syspref');
         my $biblionumber = $issue->[$i]{'biblionumber'};
         $issue->[$i]{'issuingbranchname'} = GetBranchName($issue->[$i]{'branchcode'});
@@ -299,7 +298,7 @@ sub build_issue_data {
             }
         }
         # end lost, damaged
-        if ( $datedue lt $today ) {
+        if ( $issue->[$i]{overdue}) {
             $overdues_exist = 1;
             $row{'red'} = 1;
         }

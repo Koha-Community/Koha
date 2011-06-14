@@ -36,6 +36,7 @@ use C4::Items;
 use C4::Dates qw/format_date/;
 use C4::Letters;
 use C4::Branch; # GetBranches
+use Koha::DateUtils;
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
@@ -153,7 +154,7 @@ my @issuedat;
 my $itemtypes = GetItemTypes();
 my ($issues) = GetPendingIssues($borrowernumber);
 if ($issues){
-	foreach my $issue ( sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
+	foreach my $issue ( sort { $b->{date_due}->datetime() cmp $a->{date_due}->datetime() } @{$issues} ) {
 		# check for reserves
 		my ( $restype, $res, undef ) = CheckReserves( $issue->{'itemnumber'} );
 		if ( $restype ) {
@@ -200,7 +201,7 @@ if ($issues){
 			$issue->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
 			$issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
 		}
-		$issue->{date_due} = format_date($issue->{date_due});
+		$issue->{date_due} = output_pref($issue->{date_due});
 		push @issuedat, $issue;
 		$count++;
 		
