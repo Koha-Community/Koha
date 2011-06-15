@@ -354,6 +354,9 @@ sub load_sql_in_order {
     $request->execute;
     my ($systempreference) = $request->fetchrow;
     $systempreference = '' unless defined $systempreference; # avoid warning
+    # Make sure the global sysprefs.sql file is loaded first
+    my $globalsysprefs = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/sysprefs.sql";
+    unshift(@fnames, $globalsysprefs);
     foreach my $file (@fnames) {
         #      warn $file;
         undef $/;
