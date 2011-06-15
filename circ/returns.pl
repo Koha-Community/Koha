@@ -27,7 +27,7 @@ script to execute returns of books
 =cut
 
 use strict;
-#use warnings; FIXME - Bug 2505
+use warnings;
 
 use CGI;
 use C4::Context;
@@ -222,7 +222,8 @@ if ($barcode) {
 #
     ( $returned, $messages, $issueinformation, $borrower ) =
       AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode);     # do the return
-    my $homeorholdingbranchreturn = C4::Context->preference('HomeOrHoldingBranchReturn') or 'homebranch';
+    my $homeorholdingbranchreturn = C4::Context->preference('HomeOrHoldingBranchReturn');
+    $homeorholdingbranchreturn ||= 'homebranch';
 
     # get biblio description
     my $biblio = GetBiblioFromItemNumber($itemnumber);
