@@ -2,25 +2,41 @@ use strict;
 use warnings;
 use 5.010;
 use DateTime;
+use DateTime::TimeZone;
 
-use Test::More tests => 8;                      # last test to print
+use C4::Context;
+use Test::More tests => 9;    # last test to print
 
-use_ok('Koha::DateUtils');
+BEGIN { use_ok('Koha::DateUtils'); }
 
-my $dt_metric = dt_from_string('01/02/2010', 'metric', 'Europe/London');
-isa_ok $dt_metric, 'DateTime', 'metric returns a DateTime object';
-cmp_ok $dt_metric->ymd(), 'eq', '2010-02-01', 'metric date correct';
+my $tz = C4::Context->tz;
 
-my $dt_us = dt_from_string('02/01/2010', 'us', 'Europe/London');
-isa_ok $dt_us, 'DateTime', 'us returns a DateTime object';
-cmp_ok $dt_us->ymd(), 'eq', '2010-02-01', 'us date correct';
+isa_ok( $tz, 'DateTime::TimeZone', 'Context returns timezone object' );
 
-my $dt_iso = dt_from_string('2010-02-01', 'iso', 'Europe/London');
-isa_ok $dt_iso, 'DateTime', 'iso returns a DateTime object';
-cmp_ok $dt_iso->ymd(), 'eq', '2010-02-01', 'iso date correct';
+my $testdate_iso = '2011-06-16';                   # Bloomsday 2011
+my $dt = dt_from_string( $testdate_iso, 'iso' );
 
+isa_ok( $dt, 'DateTime', 'dt_from_string returns a DateTime object' );
 
+cmp_ok( $dt->ymd(), 'eq', $testdate_iso, 'Returned object matches input' );
 
-my $dt = dt_from_string( undef );
+$dt->set_hour(12);
+$dt->set_minute(0);
 
-isa_ok $dt, 'DateTime', 'No string returns a DateTime object';
+my $date_string = output_pref( $dt, 'iso' );
+cmp_ok $date_string, 'eq', '2011-06-16 12:00', 'iso output';
+
+$date_string = output_pref( $dt, 'us' );
+cmp_ok $date_string, 'eq', '06/16/2011 12:00', 'us output';
+
+# metric should return the French Revolutionary Calendar Really
+$date_string = output_pref( $dt, 'metric' );
+cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'metric output';
+
+my $dear_dirty_dublin = DateTime::TimeZone->new( name => 'Europe/Dublin');
+my $new_dt = dt_from_string('16/06/2011', 'metric',  $dear_dirty_dublin);
+
+isa_ok( $new_dt, 'DateTime', 'Create DateTime with different timezone' );
+
+cmp_ok( $new_dt->ymd(), 'eq', $testdate_iso, 'Returned Dublin object matches input' );
+
