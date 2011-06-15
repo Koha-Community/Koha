@@ -80,15 +80,29 @@ s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;
                 $date_string =~ s/00T/01T/;
             }
         }
-        return DateTime::Format::DateParse->parse_datetime( $date_string, $tz->name() );
+        return DateTime::Format::DateParse->parse_datetime( $date_string,
+            $tz->name() );
     }
     return DateTime->now( time_zone => $tz );
 
 }
 
+=head2 output_pref
+
+$date_string = output_pref($dt, [$format] );
+
+Returns a string containing the time & date formatted as per the C4::Context setting
+
+A second parameter allows overriding of the syspref value. This is for testing only
+In usage use the DateTime objects own methods for non standard formatting
+
+=cut
+
 sub output_pref {
-    my $dt   = shift;
-    my $pref = C4::Context->preference('dateformat');
+    my $dt         = shift;
+    my $force_pref = shift;    # if testing we want to override Context
+    my $pref =
+      defined $force_pref ? $force_pref : C4::Context->preference('dateformat');
     given ($pref) {
         when (/^iso/) {
             return $dt->strftime('%Y-%m-%d %H:%M');
