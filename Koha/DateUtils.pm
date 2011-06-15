@@ -69,11 +69,12 @@ sub dt_from_string {
         } else {
             if ( $date_format eq 'iso' ) {
                 $date_string =~ s/-00/-01/;
-                if ( $date_string =~ m/^0000-00/ ) {
+                if ( $date_string =~ m/^0000-0/ ) {
                     return;               # invalid date in db
                 }
             } elsif ( $date_format eq 'us' ) {
-                $date_string =~ s[-00-][-01-];
+                $date_string =~ s#-#/#g;
+                $date_string =~ s[/00/][/01/];
             } elsif ( $date_format eq 'sql' ) {
                 $date_string =~
 s/(\d{4})(\d{2})(\d{2})\s+(\d{2})(\d{2})(\d{2})/$1-$2-$3T$4:$5:$6/;

@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 9;    # last test to print
+use Test::More tests => 19;    # last test to print
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -33,10 +33,37 @@ cmp_ok $date_string, 'eq', '06/16/2011 12:00', 'us output';
 $date_string = output_pref( $dt, 'metric' );
 cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'metric output';
 
-my $dear_dirty_dublin = DateTime::TimeZone->new( name => 'Europe/Dublin');
-my $new_dt = dt_from_string('16/06/2011', 'metric',  $dear_dirty_dublin);
-
+my $dear_dirty_dublin = DateTime::TimeZone->new( name => 'Europe/Dublin' );
+my $new_dt = dt_from_string( '16/06/2011', 'metric', $dear_dirty_dublin );
 isa_ok( $new_dt, 'DateTime', 'Create DateTime with different timezone' );
+cmp_ok( $new_dt->ymd(), 'eq', $testdate_iso,
+    'Returned Dublin object matches input' );
 
-cmp_ok( $new_dt->ymd(), 'eq', $testdate_iso, 'Returned Dublin object matches input' );
+$new_dt = dt_from_string( '2011-06-16 12:00', 'sql' );
+isa_ok( $new_dt, 'DateTime', 'Create DateTime from (mysql) sql' );
+cmp_ok( $new_dt->ymd(), 'eq', $testdate_iso, 'sql returns correct date' );
 
+$new_dt = dt_from_string( $dt, 'iso' );
+isa_ok( $new_dt, 'DateTime', 'Passed a DateTime dt_from_string returns it' );
+
+# C4::Dates allowed 00th of the month
+
+my $ymd = '2012-01-01';
+my $dt0 = dt_from_string( '00/01/2012', 'metric' );
+isa_ok( $dt0, 'DateTime',
+    'dt_from_string returns a DateTime object passed a zero metric day' );
+cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects metric day 0' );
+
+$dt0 = dt_from_string( '01/00/2012', 'us' );
+isa_ok( $dt0, 'DateTime',
+    'dt_from_string returns a DateTime object passed a zero us day' );
+cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects us day 0' );
+
+$dt0 = dt_from_string( '2012-01-00', 'iso' );
+isa_ok( $dt0, 'DateTime',
+    'dt_from_string returns a DateTime object passed a zero iso day' );
+cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects iso day 0' );
+
+# Return undef if passed mysql 0 dates
+$dt0 = dt_from_string( '0000-00-00', 'iso' );
+is( $dt0, undef, "undefined returned for 0 iso date" );
