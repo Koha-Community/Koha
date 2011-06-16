@@ -12,9 +12,9 @@
 <div class="container">
 <h2>Issues for a subscription</h2>
 <div id="views">
-	<span class="view"><a id="Normalview" href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Normal View</a></span>
+	<span class="view"><a id="Normalview" href="opac-detail.pl?biblionumber=<!-- TMPL_VAR name="biblionumber" ESCAPE="HTML" -->" class="button">Normal View</a></span>
 		<span class="view"><span id="Briefhistory">Brief history</span></span>
-	<span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" -->" class="button">Full History</a></span>
+	<span class="view"><a id="Fullhistory" href="opac-serial-issues.pl?selectview=full&amp;biblionumber=<!-- TMPL_VAR name="biblionumber" ESCAPE="HTML" -->" class="button">Full History</a></span>
 </div>
 <form method="post" name="f">
 <!-- TMPL_LOOP name="subscription_LOOP" -->

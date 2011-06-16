@@ -66,7 +66,7 @@
 		<option value="1">Private</option>
 		<option value="2">Public</option>
 		</select></li></ol></fieldset>
-		<!-- TMPL_LOOP NAME="biblios" --> <input type="hidden" name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" -->" /><!-- /TMPL_LOOP -->
+		<!-- TMPL_LOOP NAME="biblios" --> <input type="hidden"name="biblionumber" value="<!-- TMPL_VAR NAME="biblionumber" ESCAPE="HTML"-->" /><!-- /TMPL_LOOP -->
 		<fieldset class="action"><input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a></fieldset>
 		</form>
 	<!-- /TMPL_UNLESS -->
