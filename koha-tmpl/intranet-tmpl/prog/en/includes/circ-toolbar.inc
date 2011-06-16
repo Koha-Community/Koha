@@ -27,7 +27,7 @@ function confirm_reregistration() {
 function update_child() {
     // var borrowernumbervalue= $("#borrowernumber").attr("value"); 
 [% IF ( CATCODE_MULTI ) %]
- window.open('/cgi-bin/koha/members/update-child.pl?op=multi&borrowernumber=[% borrowernumber %]','UpdateChild','width=400,height=300,toolbar=no,scrollbars=no,resizable=yes');
+ window.open('/cgi-bin/koha/members/update-child.pl?op=multi&borrowernumber=[% borrowernumber %]','UpdateChild','width=400,height=300,toolbar=no,scrollbars=yes,resizable=yes');
 [% ELSE %]
  confirm_updatechild();
 [% END %]
