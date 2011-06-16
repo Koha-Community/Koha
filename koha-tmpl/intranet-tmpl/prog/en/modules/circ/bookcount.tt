@@ -49,7 +49,7 @@ $(document).ready(function(){
             <td>[% IF ( branchloo.seen ) %]
                     <span style="display:none;">[% branchloo.seen %][% branchloo.seentime %]</span>
                     <!-- invisible span for eventual use by tablesorter -->
-                    [% DEFAULT branchloo.seentime="??:??" %] [% branchloo.seen %] 
+                    [% branchloo.seen %] [% branchloo.seentime %]
                 [% ELSE %]Never
                 [% END %]
             </td>
