@@ -1,6 +1,16 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Choose Adult category</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+	$(document).ready(function() {
+		$.tablesorter.defaults.widgets = ['zebra'];
+		$("#catst").tablesorter({
+			sortList: [[2,0]],
+			headers: { 0: { sorter: false }}
+		});
+	});
+</script>
 <style type="text/css"> 
 	   #custom-doc { width:29em;*width:28.3em;min-width:377px; margin:auto; text-align:left; } 
 </style> 
@@ -41,12 +51,15 @@ window.close();
 
 <form method="post" action="update-child.pl">
 <fieldset>
-<table>
+<table id="catst">
+<thead>
 <tr>
 <th>&nbsp;</th>
 <th>Code</th>
 <th>Description</th>
 </tr>
+</thead>
+<tbody>
 [% FOREACH CAT_LOO IN CAT_LOOP %]
 <tr>
 <td>
@@ -55,6 +68,7 @@ window.close();
 <td><label for="catcode[% CAT_LOO.catcode %]"><strong>[% CAT_LOO.catdesc %]</strong></label></td> 
 </tr>
 [% END %]
+</tbody>
 </table>
 <input type="hidden" name="op" value="update" />
 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
@@ -72,4 +86,4 @@ window.close();
 
 
 </div>
-[% INCLUDE 'intranet-bottom.inc' %]
+[% INCLUDE 'popup-bottom.inc' %]

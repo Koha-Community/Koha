@@ -25,7 +25,7 @@ function confirm_reregistration() {
 
 function update_child() {
 [% IF ( CATCODE_MULTI ) %]
- window.open('update-child.pl?op=multi&borrowernumber=[% borrowernumber %]','UpdateChild','width=400,height=300,toolbar=no,scrollbars=no,resizable=yes');
+ window.open('update-child.pl?op=multi&borrowernumber=[% borrowernumber %]','UpdateChild','width=400,height=300,toolbar=no,scrollbars=yes,resizable=yes');
 [% ELSE %]
  confirm_updatechild();
 [% END %]
