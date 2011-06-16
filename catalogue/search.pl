@@ -471,7 +471,7 @@ my $scan_index_to_use;
 
 for my $this_cgi ( split('&',$query_cgi) ) {
     next unless $this_cgi;
-    $this_cgi =~ m/(.?)=(.*)/;
+    $this_cgi =~ m/(.*?)=(.*)/;
     my $input_name = $1;
     my $input_value = $2;
     push @query_inputs, { input_name => $input_name, input_value => $input_value };
