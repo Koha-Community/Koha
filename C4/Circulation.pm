@@ -52,6 +52,7 @@ use C4::Log; # logaction
 use Data::Dumper;
 use Koha::DateUtils;
 use Koha::Calendar;
+use Carp;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -444,7 +445,7 @@ sub TooMany {
     my $branch_borrower_circ_rule = GetBranchBorrowerCircRule($branch, $cat_borrower);
     if (defined($branch_borrower_circ_rule->{maxissueqty})) {
         my @bind_params = ();
-        my $branch_count_query = "SELECT COUNT(*) FROM issues 
+        my $branch_count_query = "SELECT COUNT(*) FROM issues
                                   JOIN items USING (itemnumber)
                                   WHERE borrowernumber = ? ";
         push @bind_params, $borrower->{borrowernumber};
@@ -1046,7 +1047,7 @@ sub AddIssue {
         # Record in the database the fact that the book was issued.
         my $sth =
           $dbh->prepare(
-                "INSERT INTO issues 
+                "INSERT INTO issues
                     (borrowernumber, itemnumber,issuedate, date_due, branchcode)
                 VALUES (?,?,?,?,?)"
           );
@@ -1605,7 +1606,8 @@ sub AddReturn {
             # define circControlBranch only if dropbox mode is set
             # don't allow dropbox mode to create an invalid entry in issues (issuedate > today)
             # FIXME: check issuedate > returndate, factoring in holidays
-            $circControlBranch = _GetCircControlBranch($item,$borrower) unless ( $item->{'issuedate'} eq C4::Dates->today('iso') );;
+            #$circControlBranch = _GetCircControlBranch($item,$borrower) unless ( $item->{'issuedate'} eq C4::Dates->today('iso') );;
+            $circControlBranch = _GetCircControlBranch($item,$borrower);
         }
 
         if ($borrowernumber) {
@@ -1742,27 +1744,27 @@ routine in C<C4::Accounts>.
 sub MarkIssueReturned {
     my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy ) = @_;
     my $dbh   = C4::Context->dbh;
-    my $query = "UPDATE issues SET returndate=";
+    my $query = 'UPDATE issues SET returndate=';
     my @bind;
     if ($dropbox_branch) {
-        my $calendar = C4::Calendar->new( branchcode => $dropbox_branch );
-        my $dropboxdate = $calendar->addDate( C4::Dates->new(), -1 );
-        $query .= " ? ";
-        push @bind, $dropboxdate->output('iso');
+        my $calendar = Koha->new( branchcode => $dropbox_branch );
+        my $dropboxdate = $calendar->addDate( DateTime->now( time_zone => C4::Context->tz), -1 );
+        $query .= ' ? ';
+        push @bind, $dropboxdate->strftimei('%Y-%m-%d %H:%M');
     } elsif ($returndate) {
-        $query .= " ? ";
+        $query .= ' ? ';
         push @bind, $returndate;
     } else {
-        $query .= " now() ";
+        $query .= ' now() ';
     }
-    $query .= " WHERE  borrowernumber = ?  AND itemnumber = ?";
+    $query .= ' WHERE  borrowernumber = ?  AND itemnumber = ?';
     push @bind, $borrowernumber, $itemnumber;
     # FIXME transaction
     my $sth_upd  = $dbh->prepare($query);
     $sth_upd->execute(@bind);
-    my $sth_copy = $dbh->prepare("INSERT INTO old_issues SELECT * FROM issues 
+    my $sth_copy = $dbh->prepare('INSERT INTO old_issues SELECT * FROM issues
                                   WHERE borrowernumber = ?
-                                  AND itemnumber = ?");
+                                  AND itemnumber = ?');
     $sth_copy->execute($borrowernumber, $itemnumber);
     # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
     if ( $privacy == 2) {
@@ -2048,14 +2050,19 @@ sub GetItemIssue {
     return unless $itemnumber;
     my $sth = C4::Context->dbh->prepare(
         "SELECT *
-        FROM issues 
+        FROM issues
         LEFT JOIN items ON issues.itemnumber=items.itemnumber
         WHERE issues.itemnumber=?");
     $sth->execute($itemnumber);
     my $data = $sth->fetchrow_hashref;
     return unless $data;
-    $data->{'overdue'} = ($data->{'date_due'} lt C4::Dates->today('iso')) ? 1 : 0;
-    return ($data);
+    $data->{issuedate} = dt_from_string($data->{issuedate}, 'sql');
+    $data->{issuedate}->truncate(to => 'minutes');
+    $data->{date_due} = dt_from_string($data->{date_due}, 'sql');
+    $data->{date_due}->truncate(to => 'minutes');
+    my $dt = DateTime->now( time_zone => C4::Context->tz)->truncate( to => 'minutes');
+    $data->{'overdue'} = DateTime->compare($data->{'date_due'}, $dt ) == -1 ? 1 : 0;
+    return $data;
 }
 
 =head2 GetOpenIssue
@@ -2098,13 +2105,13 @@ sub GetItemIssues {
     my ( $itemnumber, $history ) = @_;
     
     my $today = C4::Dates->today('iso');  # get today date
-    my $sql = "SELECT * FROM issues 
+    my $sql = "SELECT * FROM issues
               JOIN borrowers USING (borrowernumber)
               JOIN items     USING (itemnumber)
               WHERE issues.itemnumber = ? ";
     if ($history) {
         $sql .= "UNION ALL
-                 SELECT * FROM old_issues 
+                 SELECT * FROM old_issues
                  LEFT JOIN borrowers USING (borrowernumber)
                  JOIN items USING (itemnumber)
                  WHERE old_issues.itemnumber = ? ";
@@ -2248,7 +2255,7 @@ sub CanBookBeRenewed {
                    SELECT 
                     borrowers.categorycode, biblioitems.itemtype, issues.renewals, renewalsallowed, $controlbranch
                    FROM  issuingrules, 
-                   issues 
+                   issues
                    LEFT JOIN items USING (itemnumber) 
                    LEFT JOIN borrowers USING (borrowernumber) 
                    LEFT JOIN biblioitems USING (biblioitemnumber)
@@ -2333,9 +2340,9 @@ sub AddRenewal {
     $sth->execute( $borrowernumber, $itemnumber );
     my $issuedata = $sth->fetchrow_hashref;
     $sth->finish;
-    if($datedue && ! $datedue->output('iso')){
-        warn "Invalid date passed to AddRenewal.";
-        return undef;
+    if(defined $datedue && ref $datedue ne 'DateTime' ) {
+        carp 'Invalid date passed to AddRenewal.';
+        return;
     }
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date or the current due date
@@ -2346,8 +2353,8 @@ sub AddRenewal {
         my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
-                                        C4::Dates->new($issuedata->{date_due}, 'iso') :
-                                        C4::Dates->new();
+                                        $issuedata->{date_due} :
+                                        DateTime->now( time_zone => C4::Context->tz());
         $datedue =  CalcDateDue($datedue,$itemtype,$issuedata->{'branchcode'},$borrower);
     }
 
@@ -2358,12 +2365,13 @@ sub AddRenewal {
                             WHERE borrowernumber=? 
                             AND itemnumber=?"
     );
-    $sth->execute( $datedue->output('iso'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
+
+    $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
     $sth->finish;
 
     # Update the renewal count on the item, and tell zebra to reindex
     $renews = $biblio->{'renewals'} + 1;
-    ModItem({ renewals => $renews, onloan => $datedue->output('iso') }, $biblio->{'biblionumber'}, $itemnumber);
+    ModItem({ renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $biblio->{'biblionumber'}, $itemnumber);
 
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
@@ -2381,7 +2389,6 @@ sub AddRenewal {
         $sth->execute( $borrowernumber, $accountno, $charge, $manager_id,
             "Renewal of Rental Item $item->{'title'} $item->{'barcode'}",
             'Rent', $charge, $itemnumber );
-        $sth->finish;
     }
     # Log the renewal
     UpdateStats( $branch, 'renew', $charge, '', $itemnumber, $item->{itype}, $borrowernumber);

@@ -175,10 +175,10 @@ my $dropboxmode = $query->param('dropboxmode');
 my $dotransfer  = $query->param('dotransfer');
 my $canceltransfer = $query->param('canceltransfer');
 my $dest = $query->param('dest');
-my $calendar    = C4::Calendar->new( branchcode => $userenv_branch );
+my $calendar    = Koha::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
-my $today       = C4::Dates->new();
-my $today_iso   = $today->output('iso');
+my $today       = DateTime=>now( time_zone => C4::Context->tz());
+#my $today_iso   = $today->output('iso');
 my $dropboxdate = $calendar->addDate($today, -1);
 if ($dotransfer){
 # An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
@@ -249,13 +249,14 @@ if ($barcode) {
     );
 
     if ($returned) {
-        my $duedate = $issueinformation->{'date_due'};
+        my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minutes');
+        my $duedate = $issueinformation->{date_due}->strftime('%Y-%m-%d %H:%M');
         $returneditems{0}      = $barcode;
         $riborrowernumber{0}   = $borrower->{'borrowernumber'};
         $riduedate{0}          = $duedate;
         $input{borrowernumber} = $borrower->{'borrowernumber'};
         $input{duedate}        = $duedate;
-        $input{return_overdue} = 1 if ($duedate and $duedate lt $today->output('iso'));
+        $input{return_overdue} = 1 if (DateTime->compare($issueinformation->{date_due}, $time_now) == -1);
         push( @inputloop, \%input );
 
         if ( C4::Context->preference("FineNotifyAtCheckin") ) {
@@ -519,7 +520,7 @@ if ($borrower) {
             {
                 my $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'});
                 push @itemloop, {
-                    duedate   => format_date($item->{'date_due'}),
+                    duedate   => output_pref($item->{'date_due'}),
                     biblionum => $biblio->{'biblionumber'},
                     barcode   => $biblio->{'barcode'},
                     title     => $biblio->{'title'},
@@ -555,15 +556,16 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     my %ri;
     if ( $count++ < $returned_counter ) {
         my $bar_code = $returneditems{$_};
-        my $duedate = $riduedate{$_};
-        if ($duedate) {
-            my @tempdate = split( /-/, $duedate );
-            $ri{year}  = $tempdate[0];
-            $ri{month} = $tempdate[1];
-            $ri{day}   = $tempdate[2];
-            $ri{duedate} = format_date($duedate);
+        if ($riduedate{$_}) {
+            my $duedate = DateTime::Format::DateParse::MySQL( $riduedate{$_}, C4::Context->tz()->name());
+            $ri{year}  = $duedate->year();
+            $ri{month} = $duedate->month();
+            $ri{day}   = $duedate->day();
+            $ri{hour}   = $duedate->hour();
+            $ri{minute}   = $duedate->minute();
+            $ri{duedate} = output_pref($duedate);
             my ($b)      = GetMemberDetails( $riborrowernumber{$_}, 0 );
-            $ri{return_overdue} = 1 if ($duedate lt $today->output('iso'));
+            $ri{return_overdue} = 1 if (DateTime->compare($duedate, DateTime->now()) == -1 );
             $ri{borrowernumber} = $b->{'borrowernumber'};
             $ri{borcnum}        = $b->{'cardnumber'};
             $ri{borfirstname}   = $b->{'firstname'};
@@ -610,7 +612,7 @@ $template->param(
     errmsgloop     => \@errmsgloop,
     exemptfine     => $exemptfine,
     dropboxmode    => $dropboxmode,
-    dropboxdate    => $dropboxdate->output(),
+    dropboxdate    => output_pref($dropboxdate),
     overduecharges => $overduecharges,
     soundon        => C4::Context->preference("SoundOn"),
 );
