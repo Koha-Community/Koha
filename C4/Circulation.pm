@@ -21,6 +21,7 @@ package C4::Circulation;
 
 use strict;
 #use warnings; FIXME - Bug 2505
+use DateTime;
 use C4::Context;
 use C4::Stats;
 use C4::Reserves;
@@ -28,24 +29,11 @@ use C4::Biblio;
 use C4::Items;
 use C4::Members;
 use C4::Dates;
-use C4::Calendar;
+use C4::Dates qw(format_date);
 use C4::Accounts;
 use C4::ItemCirculationAlertPreference;
-use C4::Dates qw(format_date);
 use C4::Message;
 use C4::Debug;
-use Date::Calc qw(
-  Today
-  Today_and_Now
-  Add_Delta_YM
-  Add_Delta_DHMS
-  Date_to_Days
-  Day_of_Week
-  Add_Delta_Days	
-  check_date
-  Delta_Days
-);
-use POSIX qw(strftime);
 use C4::Branch; # GetBranches
 use C4::Log; # logaction
 
@@ -1077,7 +1065,7 @@ sub AddIssue {
         ModItem({ issues           => $item->{'issues'},
                   holdingbranch    => C4::Context->userenv->{'branch'},
                   itemlost         => 0,
-                  datelastborrowed => C4::Dates->new()->output('iso'),
+                  datelastborrowed => DateTime->now(time_zone => C4::Context->tz())->ymd(),
                   onloan           => $datedue->ymd(),
                 }, $item->{'biblionumber'}, $item->{'itemnumber'});
         ModDateLastSeen( $item->{'itemnumber'} );
@@ -2104,7 +2092,8 @@ Returns reference to an array of hashes
 sub GetItemIssues {
     my ( $itemnumber, $history ) = @_;
     
-    my $today = C4::Dates->today('iso');  # get today date
+    my $today = DateTime->now( time_zome => C4::Context->tz);  # get today date
+    $today->truncate( to => 'minutes' );
     my $sql = "SELECT * FROM issues
               JOIN borrowers USING (borrowernumber)
               JOIN items     USING (itemnumber)
@@ -2125,7 +2114,10 @@ sub GetItemIssues {
     }
     my $results = $sth->fetchall_arrayref({});
     foreach (@$results) {
-        $_->{'overdue'} = ($_->{'date_due'} lt $today) ? 1 : 0;
+        my $date_due = dt_from_string($_->{date_due},'sql');
+        $date_due->truncate( to => 'minutes' );
+
+        $_->{overdue} = (DateTime->compare($date_due, $today) == -1) ? 1 : 0;
     }
     return $results;
 }
@@ -2326,7 +2318,7 @@ sub AddRenewal {
     my $itemnumber      = shift or return undef;
     my $branch          = shift;
     my $datedue         = shift;
-    my $lastreneweddate = shift || C4::Dates->new()->output('iso');
+    my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz)->ymd();
     my $item   = GetItem($itemnumber) or return undef;
     my $biblio = GetBiblioFromItemNumber($itemnumber) or return undef;
 
@@ -2877,44 +2869,6 @@ sub CalcDateDue {
     }
 
     return $datedue;
-}
-
-=head2 CheckValidDatedue
-
-  $newdatedue = CheckValidDatedue($date_due,$itemnumber,$branchcode);
-
-This function does not account for holiday exceptions nor does it handle the 'useDaysMode' syspref .
-To be replaced by CalcDateDue() once C4::Calendar use is tested.
-
-this function validates the loan length against the holidays calendar, and adjusts the due date as per the 'useDaysMode' syspref.
-C<$date_due>   = returndate calculate with no day check
-C<$itemnumber>  = itemnumber
-C<$branchcode>  = location of issue (affected by 'CircControl' syspref)
-C<$loanlength>  = loan length prior to adjustment
-
-=cut
-
-sub CheckValidDatedue {
-my ($date_due,$itemnumber,$branchcode)=@_;
-my @datedue=split('-',$date_due->output('iso'));
-my $years=$datedue[0];
-my $month=$datedue[1];
-my $day=$datedue[2];
-# die "Item# $itemnumber ($branchcode) due: " . ${date_due}->output() . "\n(Y,M,D) = ($years,$month,$day)":
-my $dow;
-for (my $i=0;$i<2;$i++){
-    $dow=Day_of_Week($years,$month,$day);
-    ($dow=0) if ($dow>6);
-    my $result=CheckRepeatableHolidays($itemnumber,$dow,$branchcode);
-    my $countspecial=CheckSpecialHolidays($years,$month,$day,$itemnumber,$branchcode);
-    my $countspecialrepeatable=CheckRepeatableSpecialHolidays($month,$day,$itemnumber,$branchcode);
-        if (($result ne '0') or ($countspecial ne '0') or ($countspecialrepeatable ne '0') ){
-        $i=0;
-        (($years,$month,$day) = Add_Delta_Days($years,$month,$day, 1))if ($i ne '1');
-        }
-    }
-    my $newdatedue=C4::Dates->new(sprintf("%04d-%02d-%02d",$years,$month,$day),'iso');
-return $newdatedue;
 }
 
 
