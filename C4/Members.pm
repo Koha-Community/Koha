@@ -37,6 +37,7 @@ use C4::Members::Attributes qw(SearchIdMatchingAttribute);
 use C4::NewsChannels; #get slip news
 use DateTime;
 use DateTime::Format::DateParse;
+use Koha::DateUtils;
 
 our ($VERSION,@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -1037,6 +1038,9 @@ sub GetPendingIssues {
     my $tz = C4::Context->tz();
     my $today = DateTime->now( time_zone => $tz);
     foreach (@{$data}) {
+        if ($_->{issuedate}) {
+            $_->{issuedate} = dt_from_string($_->{issuedate}. 'sql');
+        }
         $_->{date_due} or next;
         $_->{date_due} = DateTime::Format::DateParse->parse_datetime($_->{date_due}, $tz->name());
         if ( DateTime->compare($_->{date_due}, $today) == -1 ) {
