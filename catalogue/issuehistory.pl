@@ -67,11 +67,11 @@ if ($itemnumber){
 		%{$biblio[0]},
 	);
 } 
-foreach (@$issues){
-	$_->{date_due}   = format_date($_->{date_due});
-	$_->{issuedate}  = format_date($_->{issuedate});
-	$_->{returndate} = format_date($_->{returndate});
-	$_->{lastreneweddate} = format_date($_->{lastreneweddate});
+foreach (@{$issues}){
+	$_->{date_due}   = format_sqldatetime($_->{date_due});
+	$_->{issuedate}  = format_sqldatetime($_->{issuedate});
+	$_->{returndate} = format_sqldatetime($_->{returndate});
+	$_->{lastreneweddate} = format_sqldatetime($_->{lastreneweddate});
 }
 $template->param(
     total        => scalar @$issues,

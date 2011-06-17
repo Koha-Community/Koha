@@ -35,6 +35,7 @@ use C4::Circulation;  # to use itemissues
 use C4::Members; # to use GetMember
 use C4::Search;		# enabled_staff_search_views
 use C4::Members qw/GetHideLostItemsPreference/;
+use Koha::DateUtils;
 
 my $query=new CGI;
 
@@ -162,8 +163,8 @@ foreach my $item (@items){
     }
     $item->{'homebranchname'} = GetBranchName($item->{'homebranch'});
     $item->{'holdingbranchname'} = GetBranchName($item->{'holdingbranch'});
-    if ($item->{'datedue'}) {
-        $item->{'datedue'} = format_date($item->{'datedue'});
+    if ($item->{datedue}) {
+        $item->{datedue} = format_sqldatetime($item->{datedue});
         $item->{'issue'}= 1;
     } else {
         $item->{'issue'}= 0;
