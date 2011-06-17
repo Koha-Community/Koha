@@ -1218,7 +1218,7 @@ sub GetOverduesForBranch {
     WHERE (accountlines.amountoutstanding  != '0.000000')
       AND (accountlines.accounttype         = 'FU'      )
       AND (issues.branchcode =  ?   )
-      AND (issues.date_due  < CURDATE())
+      AND (issues.date_due  < NOW())
     ";
     my @getoverdues;
     my $i = 0;
