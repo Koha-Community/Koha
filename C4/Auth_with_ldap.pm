@@ -119,8 +119,14 @@ sub checkpw_ldap {
         }
 
 	# FIXME dpavlin -- we really need $userldapentry leater on even if using auth_by_bind!
-	my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
-	$userldapentry = $search->shift_entry;
+
+	# BUG #5094
+	# 2010-08-04 JeremyC
+	# a $userldapentry is only needed if either updating or replicating are enabled
+	if($config{update} or $config{replicate}) {
+	    my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
+	    $userldapentry = $search->shift_entry;
+	}
 
 	} else {
 		my $res = ($config{anonymous}) ? $db->bind : $db->bind($ldapname, password=>$ldappassword);
