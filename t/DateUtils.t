@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 19;    # last test to print
+use Test::More tests => 21;    # last test to print
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -67,3 +67,10 @@ cmp_ok( $dt0->ymd(), 'eq', $ymd, 'Returned object corrects iso day 0' );
 # Return undef if passed mysql 0 dates
 $dt0 = dt_from_string( '0000-00-00', 'iso' );
 is( $dt0, undef, "undefined returned for 0 iso date" );
+
+my $formatted = format_sqldatetime( '2011-06-16 12:00:07', 'metric' );
+cmp_ok( $formatted, 'eq', '16/06/2011 12:00', 'format_sqldatetime conversion' );
+
+$formatted = format_sqldatetime( undef, 'metric' );
+cmp_ok( $formatted, 'eq', q{},
+    'format_sqldatetime formats undef as empty string' );
