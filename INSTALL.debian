@@ -1,13 +1,14 @@
 =============================
-Installation Guide for Installing Koha on Debian Lenny with MySQL 5
+Installation Guide for Installing Koha on Debian
 =============================
 
 Some parts copyright 2010 Chris Nighswonger
+Some parts copyright 2011 MJ Ray and software.coop
 
 Feedback/bug reports: Koha Developer's List:
 http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-devel
 
-This document last modified: October 8, 2010
+This document last modified: 2011-06-19
 
 Installation Instructions
 =============================
@@ -17,19 +18,23 @@ as indicated or by running the command directly as root.
 
 1. Prepare System and Install Dependencies
 
-1.1 Install Debian Lenny via Businesscard CD
+1.1 Install Debian via Business Card CD
 
-    See http://www.debian.org/releases/lenny/debian-installer/
+    See http://www.debian.org/CD/netinst/
 
 1.2 Set up Indexdata apt sources for Yaz and Zebra packages
 
-Edit your /etc/apt/sources.list file and add the following:
+See the instructions from indexdata at
+http://ftp.indexdata.com/pub/debian/README
+
+At the time of writing, you need to create
+/etc/apt/sources.list.d/indexdata.list containing the following:
 
     # Index Data
-    deb http://ftp.indexdata.dk/debian lenny main
-    deb-src http://ftp.indexdata.dk/debian lenny main
+    deb http://ftp.indexdata.dk/debian squeeze main
+    deb-src http://ftp.indexdata.dk/debian squeeze main
 
-The Index Data packages are signed with a key you can install as follows:
+and add their archive signing key to your system:
 
     $ wget -O- http://ftp.indexdata.dk/debian/indexdata.asc | sudo apt-key add -
 
@@ -53,46 +58,38 @@ Note: for more information about Git, please see the Koha Git Usage Guide:
 1.3.2 Option B: Download Koha from http://download.koha-community.org
 
 Find the latest Koha stable version on http://download.koha-community.org
-and get it:
+and download it to your server with something like:
 
-    $ wget <URL> found on download.koha-community.org
+    $ wget <URL found on download.koha-community.org>
 
 1.4 Install additional Debian dependencies
 
 IMPORTANT:  You should only use CPAN for Perl dependencies which are NOT
             available from the package maintainer. You have been warned!
 
-Run shell script installing all necessary Debian packages, MySQL Server,
+Installing all necessary Debian packages, MySQL Server,
 Zebra and all Debian packaged Perl module required by Koha:
 
-    $ sudo install_misc/apt-get-debian-lenny.sh
+    $ sudo dpkg --set-selections < install_misc/debian.packages
+    $ sudo apt-get dselect-upgrade
 
-1.5 Install Perl dependencies that aren't packaged into Debian Lenny
-sources
+1.5 Install Perl dependencies that aren't packaged into Debian
 
 Run the following command:
 
-    $ sudo cpan Algorithm::CheckDigits SMS::Send HTTP::OAI IPC::Cmd \
-      Memoize::Memcached PDF::API2::Simple PDF::Table Storable Test::More \
-      Locale::Currency::Format DateTime Lingua::Stem::Snowball Text::CSV::Encoded \
-      UNIVERSAL::require YAML Authen::CAS::Client
+    $ perl koha_perl_deps.pl -m -u
+
+This will list whether any Perl dependencies are missing or need a
+later version and whether they are required.  You can then install
+them another way.  There may be packages on
+http://debian.koha-community.org or maybe you can build packages
+yourself or maybe you will need to install them locally with a command
+similar to
+
+    $ sudo cpan Graphics::Magick
 
 Note: you may need to run CPAN initialization if you've not run cpan
-before:
-
-    /etc/perl/CPAN/Config.pm initialized.
-
-    CPAN is the world-wide archive of perl resources. It consists of about
-    100 sites that all replicate the same contents all around the globe.
-    Many countries have at least one CPAN site already. The resources
-    found on CPAN are easily accessible with the CPAN.pm module. If you
-    want to use CPAN.pm, you have to configure it properly.
-    
-    If you do not want to enter a dialog now, you can answer 'no' to this
-    question and I'll try to autoconfigure. (Note: you can revisit this
-    dialog anytime later by typing 'o conf init' at the cpan prompt.)
-    
-    Are you ready for manual configuration? [yes]
+before.  See http://search.cpan.org/~andk/CPAN/lib/CPAN.pm#CONFIGURATION
 
 When the configuration is completed CPAN will install the Perl modules.
 
@@ -194,7 +191,7 @@ Note: you may still see the usual Apache default site if your VirtualHost
       configuration isn't correct.  If Koha is the only web application running on the server,
       the command "sudo a2dissite default" may be a quick fix. For servers running other sites
       alongside Koha, see the Apache HTTPD manual section on virtual hosts for full
-      instructions (http://httpd.apache.org/docs/2.0/vhosts/).
+      instructions (http://httpd.apache.org/docs/2.2/vhosts/).
 
 5. Run the Web Installer, populate the database, initial configuration of settings
 
@@ -374,6 +371,7 @@ Uninstall Instructions
 Tested on the following operating environments
 ==============================================
 - Debian Lenny 5.0
+- Debian Squeeze 6.0
 
 Other Notes
 =====================
