@@ -4088,11 +4088,17 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = '3.02.09.XXX';
+$DBversion = '3.02.09.001';
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     #follow up fix 5860: some installs already past 3.2.6.1/3.2.7.1
     stocknumber_checker();
-    print "Upgrade to $DBversion done (Fix for stocknumber index)\n";
+    print "Upgrade to $DBversion done (Fix for stocknumber index. See http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=5860)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.02.10.000';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (Incrementing version for 3.2.10 release. See release notes for details.)\n";
     SetVersion ($DBversion);
 }
 
