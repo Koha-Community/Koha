@@ -642,7 +642,7 @@ sub IsMemberBlocked {
         "SELECT COUNT(*) as latedocs
          FROM issues
          WHERE borrowernumber = ?
-         AND date_due < curdate()"
+         AND date_due < now()"
     );
     $sth->execute($borrowernumber);
     my $latedocs = $sth->fetchrow_hashref->{'latedocs'};
@@ -680,7 +680,7 @@ sub GetMemberIssuesAndFines {
     $sth = $dbh->prepare(
         "SELECT COUNT(*) FROM issues 
          WHERE borrowernumber = ? 
-         AND date_due < curdate()"
+         AND date_due < now()"
     );
     $sth->execute($borrowernumber);
     my $overdue_count = $sth->fetchrow_arrayref->[0];
