@@ -37,15 +37,18 @@ BEGIN {
     eval { require "$FindBin::Bin/kohalib.pl" };
 }
 
-use Date::Calc qw/Date_to_Days/;
+#use Date::Calc qw/Date_to_Days/;
 
 use C4::Context;
 use C4::Circulation;
 use C4::Overdues;
-use C4::Calendar qw();  # don't need any exports from Calendar
 use C4::Biblio;
 use C4::Debug;  # supplying $debug and $cgi_debug
 use Getopt::Long;
+
+use Koha::Calendar;
+use Koha::DateUtils;
+
 
 my $help = 0;
 my $verbose = 0;
@@ -54,7 +57,7 @@ my $output_dir;
 GetOptions( 'h|help'    => \$help,
             'v|verbose' => \$verbose,
             'o|out:s'   => \$output_dir,
-       );
+    );
 my $usage = << 'ENDUSAGE';
 
 This script calculates and charges overdue fines
@@ -73,7 +76,7 @@ ENDUSAGE
 die $usage if $help;
 
 use vars qw(@borrower_fields @item_fields @other_fields);
-use vars qw($fldir $libname $control $mode $delim $dbname $today $today_iso $today_days);
+use vars qw($fldir $libname $control $mode $delim $dbname );
 use vars qw($filename);
 
 CHECK {
@@ -99,9 +102,7 @@ INIT {
 my $data = Getoverdues();
 my $overdueItemsCounted = 0;
 my %calendars = ();
-$today = C4::Dates->new();
-$today_iso = $today->output('iso');
-$today_days = Date_to_Days(split(/-/,$today_iso));
+my $today = DateTime->now( time_zone => C4::Context->tz() );
 if($output_dir){
     $fldir = $output_dir if( -d $output_dir );
 } else {
@@ -112,16 +113,14 @@ if (!-d $fldir) {
 }
 $filename = $dbname;
 $filename =~ s/\W//;
-$filename = $fldir . '/'. $filename . '_' .  $today_iso . ".log";
+$filename = $fldir . '/'. $filename . '_' .  $today->ymd() . ".log";
 print "writing to $filename\n" if $verbose;
 open (FILE, ">$filename") or die "Cannot write file $filename: $!";
 print FILE join $delim, (@borrower_fields, @item_fields, @other_fields);
 print FILE "\n";
 
 for (my $i=0; $i<scalar(@$data); $i++) {
-    my $datedue = C4::Dates->new($data->[$i]->{'date_due'},'iso');
-    my $datedue_days = Date_to_Days(split(/-/,$datedue->output('iso')));
-    my $due_str = $datedue->output();
+    my $datedue = dt_from_string($data->[$i]->{'date_due'});
     unless (defined $data->[$i]->{'borrowernumber'}) {
         print STDERR "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
         next;   # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
@@ -133,22 +132,24 @@ for (my $i=0; $i<scalar(@$data); $i++) {
     # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
     my $calendar;
     unless (defined ($calendars{$branchcode})) {
-        $calendars{$branchcode} = C4::Calendar->new(branchcode => $branchcode);
+        $calendars{$branchcode} = Koha::Calendar->new(branchcode => $branchcode);
     }
     $calendar = $calendars{$branchcode};
-    my $isHoliday = $calendar->isHoliday(split '/', $today->output('metric'));
+    my $isHoliday = $calendar->is_holiday($today);
       
-    ($datedue_days <= $today_days) or next; # or it's not overdue, right?
+    if ( DateTime->compare($datedue, $today) != 1) {
+        next; # not overdue
+    }
 
     $overdueItemsCounted++;
-    my ($amount,$type,$daycounttotal,$daycount)=
-  		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode,undef,undef, $datedue, $today);
+    my ($amount,$type,$daycounttotal)=
+		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode, $datedue, $today);
         # FIXME: $type NEVER gets populated by anything.
-    (defined $type) or $type = '';
+    $type ||= '';
 	# Don't update the fine if today is a holiday.  
   	# This ensures that dropbox mode will remove the correct amount of fine.
 	if ($mode eq 'production' and  ! $isHoliday) {
-		UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,$due_str) if( $amount > 0 ) ;
+		UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,output_pref($datedue)) if( $amount > 0 ) ;
  	}
     my @cells = ();
     push @cells, map {$borrower->{$_}} @borrower_fields;
@@ -160,7 +161,7 @@ for (my $i=0; $i<scalar(@$data); $i++) {
 my $numOverdueItems = scalar(@$data);
 if ($verbose) {
    print <<EOM;
-Fines assessment -- $today_iso -- Saved to $filename
+Fines assessment -- $today->ymd() -- Saved to $filename
 Number of Overdue Items:
      counted $overdueItemsCounted
     reported $numOverdueItems

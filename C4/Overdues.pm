@@ -209,9 +209,9 @@ sub checkoverdues {
 
 =head2 CalcFine
 
-    ($amount, $chargename, $daycount, $daycounttotal) = &CalcFine($item, 
-                                  $categorycode, $branch, $days_overdue, 
-                                  $description, $start_date, $end_date );
+    ($amount, $chargename,  $daycounttotal) = &CalcFine($item,
+                                  $categorycode, $branch,
+                                  $start_dt, $end_dt );
 
 Calculates the fine for a book.
 
@@ -229,13 +229,8 @@ the book.
 
 C<$branchcode> is the library (string) whose issuingrules govern this transaction.
 
-C<$days_overdue> is the number of days elapsed since the book's due date.
-  NOTE: supplying days_overdue is deprecated.
-
-C<$start_date> & C<$end_date> are C4::Dates objects 
+C<$start_date> & C<$end_date> are DateTime objects
 defining the date range over which to determine the fine.
-Note that if these are defined, we ignore C<$difference> and C<$dues> , 
-but retain these for backwards-comptibility with extant fines scripts.
 
 Fines scripts should just supply the date range over which to calculate the fine.
 
@@ -249,8 +244,6 @@ the categoryitem table, whatever that is.
 C<$daycount> is the number of days between start and end dates, Calendar adjusted (where needed), 
 minus any applicable grace period.
 
-C<$daycounttotal> is C<$daycount> without consideration of grace period.
-
 FIXME - What is chargename supposed to be ?
 
 FIXME: previously attempted to return C<$message> as a text message, either "First Notice", "Second Notice",
@@ -259,48 +252,38 @@ or "Final Notice".  But CalcFine never defined any value.
 =cut
 
 sub CalcFine {
-    my ( $item, $bortype, $branchcode, $difference ,$dues , $start_date, $end_date  ) = @_;
-	$debug and warn sprintf("CalcFine(%s, %s, %s, %s, %s, %s, %s)",
-			($item ? '{item}' : 'UNDEF'), 
-			($bortype    || 'UNDEF'), 
-			($branchcode || 'UNDEF'), 
-			($difference || 'UNDEF'), 
-			($dues       || 'UNDEF'), 
-			($start_date ? ($start_date->output('iso') || 'Not a C4::Dates object') : 'UNDEF'), 
-			(  $end_date ? (  $end_date->output('iso') || 'Not a C4::Dates object') : 'UNDEF')
-	);
+    my ( $item, $bortype, $branchcode, $start_date, $end_date  ) = @_;
     my $dbh = C4::Context->dbh;
     my $amount = 0;
-	my $daystocharge;
-	# get issuingrules (fines part will be used)
-    $debug and warn sprintf("CalcFine calling GetIssuingRule(%s, %s, %s)", $bortype, $item->{'itemtype'}, $branchcode);
-    my $data = C4::Circulation::GetIssuingRule($bortype, $item->{'itemtype'}, $branchcode);
-	if($difference) {
-		# if $difference is supplied, the difference has already been calculated, but we still need to adjust for the calendar.
-    	# use copy-pasted functions from calendar module.  (deprecated -- these functions will be removed from C4::Overdues ).
-	    my $countspecialday    =    &GetSpecialHolidays($dues,$item->{itemnumber});
-	    my $countrepeatableday = &GetRepeatableHolidays($dues,$item->{itemnumber},$difference);    
-	    my $countalldayclosed  = $countspecialday + $countrepeatableday;
-	    $daystocharge = $difference - $countalldayclosed;
-	} else {
-		# if $difference is not supplied, we have C4::Dates objects giving us the date range, and we use the calendar module.
-		if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
-			my $calendar = C4::Calendar->new( branchcode => $branchcode );
-			$daystocharge = $calendar->daysBetween( $start_date, $end_date );
-		} else {
-			$daystocharge = Date_to_Days(split('-',$end_date->output('iso'))) - Date_to_Days(split('-',$start_date->output('iso')));
-		}
-	}
-	# correct for grace period.
-	my $days_minus_grace = $daystocharge - $data->{'firstremind'};
-    if ($data->{'chargeperiod'} > 0 && $days_minus_grace > 0 ) { 
-        $amount = int($daystocharge / $data->{'chargeperiod'}) * $data->{'fine'};
+    my $charge_duration;
+    # get issuingrules (fines part will be used)
+    my $data = C4::Circulation::GetIssuingRule($bortype, $item->{itemtype}, $branchcode);
+    if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
+        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+        $charge_duration = $calendar->days_between( $start_date, $end_date );
+    } else {
+        $charge_duration = $end_date - $start_date;
+    }
+    # correct for grace period.
+    my $fine_unit = $data->{lengthunit};
+    $fine_unit ||= 'days';
+    my $chargeable_units;
+    if ($fine_unit eq 'hours') {
+        $chargeable_units = $charge_duration->hours(); # TODO closed times???
+    }
+    else {
+        $chargeable_units = $charge_duration->day;
+    }
+    my $days_minus_grace = $chargeable_units - $data->{firstremind};
+    if ($data->{'chargeperiod'}  && $days_minus_grace  ) {
+        $amount = int($chargeable_units / $data->{'chargeperiod'}) * $data->{'fine'};# TODO fine calc should be in cents
     } else {
         # a zero (or null)  chargeperiod means no charge.
     }
-	$amount = C4::Context->preference('maxFine') if(C4::Context->preference('maxFine') && ( $amount > C4::Context->preference('maxFine')));
-	$debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $data->{'chargename'}, $days_minus_grace, $daystocharge);
-    return ($amount, $data->{'chargename'}, $days_minus_grace, $daystocharge);
+    if(C4::Context->preference('maxFine') && ( $amount > C4::Context->preference('maxFine'))) {
+        $amount = C4::Context->preference('maxFine');
+    }
+    return ($amount, $data->{chargename}, $days_minus_grace);
     # FIXME: chargename is NEVER populated anywhere.
 }
 

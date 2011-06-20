@@ -54,7 +54,7 @@ use C4::Letters;
 use C4::Members;
 use C4::Members::Messaging;
 use C4::Overdues;
-use C4::Dates qw/format_date/;
+use Koha::DateUtils;
 
 
 # These are defaults for command line options.
@@ -345,6 +345,12 @@ sub parse_letter {
         substitute => $params->{'substitute'},
         tables     => \%table_params,
     );
+}
+
+sub format_date {
+    my $date_string = shift;
+    my $dt=dt_from_string($date_string);
+    return output_pref($dt);
 }
 
 1;
