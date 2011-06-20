@@ -5,6 +5,7 @@ use 5.010;
 
 use DateTime;
 use DateTime::Set;
+use DateTime::Duration;
 use C4::Context;
 use Carp;
 use Readonly;
@@ -81,8 +82,8 @@ sub addDate {
     my ( $self, $base_date, $add_duration, $unit ) = @_;
     my $days_mode = C4::Context->preference('useDaysMode');
     Readonly::Scalar my $return_by_hour => 10;
-    my $day_dur = DateTime::Duration->new( days => 1);
-    if ($add_duration->is_negative()) {
+    my $day_dur = DateTime::Duration->new( days => 1 );
+    if ( $add_duration->is_negative() ) {
         $day_dur->inverse();
     }
     if ( $days_mode eq 'Datedue' ) {
@@ -91,32 +92,31 @@ sub addDate {
         while ( $self->is_holiday($dt) ) {
 
             # TODOP if hours set to 10 am
-            $dt->add_duration( $day_dur );
+            $dt->add_duration($day_dur);
             if ( $unit eq 'hours' ) {
                 $dt->set_hour($return_by_hour);    # Staffs specific
             }
         }
         return $dt;
     } elsif ( $days_mode eq 'Calendar' ) {
-        if ($unit eq 'hours' ) {
+        if ( $unit eq 'hours' ) {
             $base_date->add_duration($add_duration);
-            while ($self->is_holiday($base_date)) {
-            $base_date->add_duration( $day_dur );
+            while ( $self->is_holiday($base_date) ) {
+                $base_date->add_duration($day_dur);
 
             }
 
-        }
-        else {
-        my $days = $add_duration->in_units('days');
-        while ($days) {
-            $base_date->add_duration( $day_dur );
-            if ( $self->is_holiday($base_date) ) {
-                next;
-            } else {
-                --$days;
+        } else {
+            my $days = $add_duration->in_units('days');
+            while ($days) {
+                $base_date->add_duration($day_dur);
+                if ( $self->is_holiday($base_date) ) {
+                    next;
+                } else {
+                    --$days;
+                }
             }
         }
-    }
         if ( $unit eq 'hours' ) {
             my $dt = $base_date->clone()->subtract( days => 1 );
             if ( $self->is_holiday($dt) ) {
@@ -136,7 +136,7 @@ sub is_holiday {
     if (@matches) {
         return 1;
     }
-    $dt->truncate(to => 'days');
+    $dt->truncate( to => 'days' );
     my $day   = $dt->day;
     my $month = $dt->month;
     for my $dm ( @{ $self->{day_month_closed_days} } ) {
@@ -153,6 +153,27 @@ sub is_holiday {
 
     # damn have to go to work after all
     return 0;
+}
+
+sub days_between {
+    my $self     = shift;
+    my $start_dt = shift;
+    my $end_dt   = shift;
+    $start_dt->truncate( to => 'hours' );
+    $end_dt->truncate( to => 'hours' );
+
+    # start and end should not be closed days
+    my $duration = $end_dt - $start_dt;
+    $start_dt->truncate( to => 'days' );
+    $end_dt->truncate( to => 'days' );
+    while ( DateTime->compare( $start_dt, $end_dt ) == -1 ) {
+        $start_dt->add( days => 1 );
+        if ( $self->is_holiday($start_dt) ) {
+            $duration->subtract( days => 1 );
+        }
+    }
+    return $duration;
+
 }
 
 1;
@@ -212,6 +233,13 @@ $yesno = $calendar->is_holiday($dt);
 
 passed at DateTime object returns 1 if it is a closed day
 0 if not according to the calendar
+
+=head2 days_between
+
+$duration = $calendar->days_between($start_dt, $end_dt);
+
+Passed two dates returns a DateTime::Duration object measuring the length between them
+ignoring closed days
 
 =head1 DIAGNOSTICS
 
