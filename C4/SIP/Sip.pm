@@ -50,7 +50,9 @@ our $last_response = '';
 
 sub timestamp {
     my $time = $_[0] || time();
-    if ($time=~m/^(\d{4})\-(\d{2})\-(\d{2})/) {
+    if ( ref $time eq 'DateTime') {
+        return $time->strftime(SIP_DATETIME);
+    } elsif ($time=~m/^(\d{4})\-(\d{2})\-(\d{2})/) {
         # passing a db returned date as is + bogus time
         return sprintf( '%04d%02d%02d    235900', $1, $2, $3);
     }
