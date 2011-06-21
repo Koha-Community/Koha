@@ -236,19 +236,22 @@ if ( (defined $newdata{'userid'}) && ($newdata{'userid'} eq '')){
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
 my $extended_patron_attributes = ();
 if ($op eq 'save' || $op eq 'insert'){
-  if (checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){ 
-    push @errors, 'ERROR_cardnumber';
-  } 
-  my $dateofbirthmandatory = (scalar grep {$_ eq "dateofbirth"} @field_check) ? 1 : 0;
-  if ($newdata{dateofbirth} && $dateofbirthmandatory) {
-    my $age = GetAge($newdata{dateofbirth});
-    my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
-	my ($low,$high) = ($borrowercategory->{'dateofbirthrequired'}, $borrowercategory->{'upperagelimit'});
-    if (($high && ($age > $high)) or ($age < $low)) {
-      push @errors, 'ERROR_age_limitations';
-	  $template->param('ERROR_age_limitations' => "$low to $high");
+    # If the cardnumber is blank, treat it as null.
+    $newdata{'cardnumber'} = undef if $newdata{'cardnumber'} =~ /^\s*$/;
+
+    if (checkcardnumber($newdata{cardnumber},$newdata{borrowernumber})){ 
+        push @errors, 'ERROR_cardnumber';
+    } 
+    my $dateofbirthmandatory = (scalar grep {$_ eq "dateofbirth"} @field_check) ? 1 : 0;
+    if ($newdata{dateofbirth} && $dateofbirthmandatory) {
+        my $age = GetAge($newdata{dateofbirth});
+        my $borrowercategory=GetBorrowercategory($newdata{'categorycode'});   
+        my ($low,$high) = ($borrowercategory->{'dateofbirthrequired'}, $borrowercategory->{'upperagelimit'});
+        if (($high && ($age > $high)) or ($age < $low)) {
+            push @errors, 'ERROR_age_limitations';
+            $template->param('ERROR_age_limitations' => "$low to $high");
+        }
     }
-  }
   
     if($newdata{surname} && C4::Context->preference('uppercasesurnames')) {
         $newdata{'surname'} = uc($newdata{'surname'});
@@ -396,7 +399,6 @@ if ( $op eq "duplicate" ) {
     $template->param( step_1 => 1, step_2 => 1, step_3 => 1, step_4 => 1, step_5 => 1, step_6 => 1 ) unless $step;
 }
 
-# my $cardnumber=$data{'cardnumber'};
 $data{'cardnumber'}=fixup_cardnumber($data{'cardnumber'}) if $op eq 'add';
 if(!defined($data{'sex'})){
     $template->param( none => 1);
