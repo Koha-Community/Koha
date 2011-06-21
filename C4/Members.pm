@@ -900,6 +900,7 @@ sub fixup_cardnumber ($) {
 
     #     if ($cardnumber !~ /\S/ && $autonumber_members) {
     ($autonumber_members) or return $cardnumber;
+    defined($cardnumber) or return $cardnumber;
     my $checkdigit = C4::Context->preference('checkdigit');
     my $dbh = C4::Context->dbh;
     if ( $checkdigit and $checkdigit eq 'katipo' ) {
@@ -1261,6 +1262,8 @@ sub checkuniquemember {
 
 sub checkcardnumber {
     my ($cardnumber,$borrowernumber) = @_;
+    # If cardnumber is null, we assume they're allowed.
+    return 0 if !defined($cardnumber);
     my $dbh = C4::Context->dbh;
     my $query = "SELECT * FROM borrowers WHERE cardnumber=?";
     $query .= " AND borrowernumber <> ?" if ($borrowernumber);
