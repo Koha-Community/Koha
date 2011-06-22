@@ -13,14 +13,18 @@ use Readonly;
 sub new {
     my ( $classname, %options ) = @_;
     my $self = {};
+    bless $self, $classname;
     for my $o_name ( keys %options ) {
         my $o = lc $o_name;
         $self->{$o} = $options{$o_name};
     }
+    if (exists $options{TEST_MODE}) {
+        $self->_mockinit();
+        return $self;
+    }
     if ( !defined $self->{branchcode} ) {
         croak 'No branchcode argument passed to Koha::Calendar->new';
     }
-    bless $self, $classname;
     $self->_init();
     return $self;
 }
@@ -33,17 +37,15 @@ sub _init {
 'SELECT * from repeatable_holidays WHERE branchcode = ? AND ISNULL(weekday) = ?'
     );
     $repeat_sth->execute( $branch, 0 );
-    $self->{weekly_closed_days} = [];
+    $self->{weekly_closed_days} = [0,0,0,0,0,0,0];
     Readonly::Scalar my $sunday => 7;
     while ( my $tuple = $repeat_sth->fetchrow_hashref ) {
-        my $day = $tuple->{weekday} == 0 ? $sunday : $tuple->{weekday};
-        push @{ $self->{weekly_closed_days} }, $day;
+        $self->{weekly_closed_days}->[$tuple->{weekday }] = 1;
     }
     $repeat_sth->execute( $branch, 1 );
     $self->{day_month_closed_days} = [];
     while ( my $tuple = $repeat_sth->fetchrow_hashref ) {
-        push @{ $self->{day_month_closed_days} },
-          { day => $tuple->{day}, month => $tuple->{month}, };
+        $self->{day_month_closed_days}->{ $tuple->{day}}->{$tuple->{month} } = 1;
     }
     my $special = $dbh->prepare(
 'SELECT day, month, year, title, description FROM special_holidays WHERE ( branchcode = ? ) AND (isexception = ?)'
@@ -132,17 +134,17 @@ sub addDate {
 sub is_holiday {
     my ( $self, $dt ) = @_;
     my $dow = $dt->day_of_week;
-    my @matches = grep { $_ == $dow } @{ $self->{weekly_closed_days} };
-    if (@matches) {
+    if ($dow == 7) {
+        $dow = 0;
+    }
+    if ($self->{weekly_closed_days}->[$dow] == 1) {
         return 1;
     }
     $dt->truncate( to => 'days' );
     my $day   = $dt->day;
     my $month = $dt->month;
-    for my $dm ( @{ $self->{day_month_closed_days} } ) {
-        if ( $month == $dm->{month} && $day == $dm->{day} ) {
-            return 1;
-        }
+    if ( $self->{day_month_closed_days}->{$month}->{$day} == 1  ) {
+        return 1;
     }
     if ( $self->{exception_holidays}->contains($dt) ) {
         return 1;
@@ -174,6 +176,27 @@ sub days_between {
     }
     return $duration;
 
+}
+
+sub _mockinit {
+    my $self       = shift;
+    $self->{weekly_closed_days} = [1,0,0,0,0,0,0]; # Sunday only
+    $self->{day_month_closed_days} = {
+        6 => {
+            16 => 1,
+        }
+    };
+    my $dates = [];
+    $self->{exception_holidays} = DateTime::Set->from_datetimes( dates => $dates );
+    my $special = DateTime->new(
+        year => 2011,
+        month => 6,
+        day  => 1,
+        time_zone => 'Europe/London',
+    );
+    push @{$dates}, $special;
+    $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
+    return;
 }
 
 1;
