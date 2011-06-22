@@ -58,6 +58,13 @@ sub sys_command_output {
     return map { chomp; $_ } <$command_output>;
 }
 
+sub sys_command_output_screen {
+    my ($command) = @_;
+
+    print "$command\n" if $debug;
+    system($command);
+}
+
 sub everything_is_committed {
     my $filter;
     for ($git_checks) {
@@ -130,7 +137,7 @@ sub build_package {
     sys_command_output( qq{git archive --format=tar --prefix="koha-$newversion/" HEAD | gzip -9 > "../koha_$newversion.tar.gz"} );
 
     my $pdebuildopts = $buildresult ? "--buildresult $buildresult" : "";
-    sys_command_output( "pdebuild $pdebuildopts" );
+    sys_command_output_screen( "pdebuild $pdebuildopts" );
 }
 
 everything_is_committed() or die "cannot build: uncommited changes";
