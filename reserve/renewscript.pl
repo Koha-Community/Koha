@@ -66,7 +66,7 @@ if ($input->param('return_all')) {
 my $branch=$input->param('branch');
 my $datedue;
 if ($input->param('newduedate')){
-    $datedue = dt_from_string($input->param('newduedate');
+    $datedue = dt_from_string($input->param('newduedate'));
 }
 
 # warn "barcodes : @barcodes";
