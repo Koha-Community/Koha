@@ -76,10 +76,9 @@ foreach my $issue (@{$issues}){
 	$line{title}           = $issue->{'title'};
 	$line{author}          = $issue->{'author'};
 	$line{classification}  = $issue->{'classification'} || $issue->{'itemcallnumber'};
-    my $dt = dt_from_string($issue->{date_due}, 'sql');
-	$line{date_due}        = output_pref($dt);
-	$line{returndate}      = format_date($issue->{'returndate'});
-	$line{issuedate}       = format_date($issue->{'issuedate'});
+	$line{date_due}        = format_sqldatetime($issue->{date_due});
+	$line{returndate}      = format_sqldatetime($issue->{returndate});
+	$line{issuedate}       = format_sqldatetime($issue->{issuedate});
 	$line{issuingbranch}   = GetBranchName($issue->{'branchcode'});
 	$line{renewals}        = $issue->{'renewals'};
 	$line{barcode}         = $issue->{'barcode'};
