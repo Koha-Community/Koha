@@ -426,7 +426,7 @@ elsif ( $op eq 'add_validate' ) {
         my $link   = $link[$i];
         my $defaultvalue = $defaultvalue[$i];
         
-        if ($liblibrarian) {
+        if (defined($liblibrarian) && $liblibrarian ne "") {
             unless ( C4::Context->config('demo') eq 1 ) {
                 if (marc_subfield_structure_exists($tagfield, $tagsubfield, $frameworkcode)) {
                     $sth_update->execute(
