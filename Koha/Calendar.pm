@@ -18,7 +18,7 @@ sub new {
         my $o = lc $o_name;
         $self->{$o} = $options{$o_name};
     }
-    if (exists $options{TEST_MODE}) {
+    if ( exists $options{TEST_MODE} ) {
         $self->_mockinit();
         return $self;
     }
@@ -37,15 +37,16 @@ sub _init {
 'SELECT * from repeatable_holidays WHERE branchcode = ? AND ISNULL(weekday) = ?'
     );
     $repeat_sth->execute( $branch, 0 );
-    $self->{weekly_closed_days} = [0,0,0,0,0,0,0];
+    $self->{weekly_closed_days} = [ 0, 0, 0, 0, 0, 0, 0 ];
     Readonly::Scalar my $sunday => 7;
     while ( my $tuple = $repeat_sth->fetchrow_hashref ) {
-        $self->{weekly_closed_days}->[$tuple->{weekday }] = 1;
+        $self->{weekly_closed_days}->[ $tuple->{weekday} ] = 1;
     }
     $repeat_sth->execute( $branch, 1 );
     $self->{day_month_closed_days} = [];
     while ( my $tuple = $repeat_sth->fetchrow_hashref ) {
-        $self->{day_month_closed_days}->{ $tuple->{day}}->{$tuple->{month} } = 1;
+        $self->{day_month_closed_days}->{ $tuple->{day} }->{ $tuple->{month} } =
+          1;
     }
     my $special = $dbh->prepare(
 'SELECT day, month, year, title, description FROM special_holidays WHERE ( branchcode = ? ) AND (isexception = ?)'
@@ -77,12 +78,16 @@ sub _init {
           )->truncate( to => 'day' );
     }
     $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
+    $self->{days_mode} = C4::Context->preference('useDaysMode');
     return;
 }
 
 sub addDate {
     my ( $self, $base_date, $add_duration, $unit ) = @_;
-    my $days_mode = C4::Context->preference('useDaysMode');
+    if ( ref $add_duration ne 'DateTime::Duration' ) {
+        $add_duration = DateTime::Duration->new( days => $add_duration );
+    }
+    my $days_mode = $self->{days_mode};
     Readonly::Scalar my $return_by_hour => 10;
     my $day_dur = DateTime::Duration->new( days => 1 );
     if ( $add_duration->is_negative() ) {
@@ -134,16 +139,16 @@ sub addDate {
 sub is_holiday {
     my ( $self, $dt ) = @_;
     my $dow = $dt->day_of_week;
-    if ($dow == 7) {
+    if ( $dow == 7 ) {
         $dow = 0;
     }
-    if ($self->{weekly_closed_days}->[$dow] == 1) {
+    if ( $self->{weekly_closed_days}->[$dow] == 1 ) {
         return 1;
     }
     $dt->truncate( to => 'days' );
     my $day   = $dt->day;
     my $month = $dt->month;
-    if ( $self->{day_month_closed_days}->{$month}->{$day} == 1  ) {
+    if ( exists $self->{day_month_closed_days}->{$month}->{$day} ) {
         return 1;
     }
     if ( $self->{exception_holidays}->contains($dt) ) {
@@ -179,23 +184,21 @@ sub days_between {
 }
 
 sub _mockinit {
-    my $self       = shift;
-    $self->{weekly_closed_days} = [1,0,0,0,0,0,0]; # Sunday only
-    $self->{day_month_closed_days} = {
-        6 => {
-            16 => 1,
-        }
-    };
+    my $self = shift;
+    $self->{weekly_closed_days} = [ 1, 0, 0, 0, 0, 0, 0 ];    # Sunday only
+    $self->{day_month_closed_days} = { 6 => { 16 => 1, } };
     my $dates = [];
-    $self->{exception_holidays} = DateTime::Set->from_datetimes( dates => $dates );
+    $self->{exception_holidays} =
+      DateTime::Set->from_datetimes( dates => $dates );
     my $special = DateTime->new(
-        year => 2011,
-        month => 6,
-        day  => 1,
+        year      => 2011,
+        month     => 6,
+        day       => 1,
         time_zone => 'Europe/London',
     );
     push @{$dates}, $special;
     $self->{single_holidays} = DateTime::Set->from_datetimes( dates => $dates );
+    $self->{days_mode} = 'Calendar';
     return;
 }
 
