@@ -25,8 +25,8 @@ use C4::Output;
 
 use C4::Circulation;    # GetBiblioIssues
 use C4::Biblio;    # GetBiblio GetBiblioFromItemNumber
-use C4::Dates qw/format_date/;
 use C4::Search;		# enabled_staff_search_views
+use Koha::DateUtils;
 
 my $query = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(

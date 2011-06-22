@@ -177,7 +177,7 @@ my $canceltransfer = $query->param('canceltransfer');
 my $dest = $query->param('dest');
 my $calendar    = Koha::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
-my $today       = DateTime=>now( time_zone => C4::Context->tz());
+my $today       = DateTime->now( time_zone => C4::Context->tz());
 #my $today_iso   = $today->output('iso');
 my $dropboxdate = $calendar->addDate($today, -1);
 if ($dotransfer){
