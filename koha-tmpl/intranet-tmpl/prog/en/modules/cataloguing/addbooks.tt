@@ -41,7 +41,7 @@
             [% IF ( CAN_user_editcatalogue_edit_items ) %]<th>&nbsp;</th>[% END %]
         </tr>
     [% FOREACH resultsloo IN resultsloop %]
-        [% IF ( resultsloo.even ) %]
+        [% IF ( loop.even ) %]
             <tr class="highlight">
         [% ELSE %]
             <tr>
