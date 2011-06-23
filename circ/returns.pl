@@ -45,6 +45,7 @@ use C4::Members;
 use C4::Branch; # GetBranches GetBranchName
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
+use Koha::DateUtils;
 
 my $query = new CGI;
 
