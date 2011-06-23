@@ -5,7 +5,7 @@ use DateTime;
 use DateTime::TimeZone;
 
 use C4::Context;
-use Test::More tests => 23;
+use Test::More tests => 25;
 
 BEGIN { use_ok('Koha::DateUtils'); }
 
@@ -34,12 +34,14 @@ $date_string = output_pref( $dt, 'metric' );
 cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'metric output';
 
 $date_string = output_pref_due( $dt, 'metric' );
-cmp_ok $date_string, 'eq', '16/06/2011 12:00', 'output_pref_due preserves non midnight HH:SS';
+cmp_ok $date_string, 'eq', '16/06/2011 12:00',
+  'output_pref_due preserves non midnight HH:SS';
 
 $dt->set_hour(23);
 $dt->set_minute(59);
 $date_string = output_pref_due( $dt, 'metric' );
-cmp_ok $date_string, 'eq', '16/06/2011', 'output_pref_due truncates HH:SS at midnight';
+cmp_ok $date_string, 'eq', '16/06/2011',
+  'output_pref_due truncates HH:SS at midnight';
 
 my $dear_dirty_dublin = DateTime::TimeZone->new( name => 'Europe/Dublin' );
 my $new_dt = dt_from_string( '16/06/2011', 'metric', $dear_dirty_dublin );
@@ -82,3 +84,14 @@ cmp_ok( $formatted, 'eq', '16/06/2011 12:00', 'format_sqldatetime conversion' );
 $formatted = format_sqldatetime( undef, 'metric' );
 cmp_ok( $formatted, 'eq', q{},
     'format_sqldatetime formats undef as empty string' );
+
+$formatted = format_sqlduedatetime( '2011-06-16 12:00:07', 'metric' );
+cmp_ok(
+    $formatted, 'eq',
+    '16/06/2011 12:00',
+    'format_sqlduedatetime conversion for hourly loans'
+);
+
+$formatted = format_sqlduedatetime( '2011-06-16 23:59:07', 'metric' );
+cmp_ok( $formatted, 'eq', '16/06/2011',
+    'format_sqlduedatetime conversion for daily loans' );

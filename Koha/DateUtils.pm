@@ -26,7 +26,9 @@ use C4::Context;
 use base 'Exporter';
 use version; our $VERSION = qv('1.0.0');
 
-our @EXPORT = (qw( dt_from_string output_pref format_sqldatetime output_pref_due ));
+our @EXPORT = (
+    qw( dt_from_string output_pref format_sqldatetime output_pref_due format_sqlduedatetime)
+);
 
 =head1 DateUtils
 
@@ -138,7 +140,7 @@ the time portion is stripped if it is '23:59'
 
 sub output_pref_due {
     my $disp_str = output_pref(@_);
-    $disp_str=~s/ 23:59//;
+    $disp_str =~ s/ 23:59//;
     return $disp_str;
 }
 
@@ -158,6 +160,26 @@ sub format_sqldatetime {
         my $dt = dt_from_string( $str, 'sql' );
         $dt->truncate( to => 'minutes' );
         return output_pref( $dt, $force_pref );
+    }
+    return q{};
+}
+
+=head2 format_sqlduedatetime
+
+$string = format_sqldatetime( $string_as_returned_from_db );
+
+a convenience routine for calling dt_from_string and formatting the result
+with output_pref_due as it is a frequent activity in scripts
+
+=cut
+
+sub format_sqlduedatetime {
+    my $str        = shift;
+    my $force_pref = shift;    # if testing we want to override Context
+    if ( defined $str && $str =~ m/^\d{4}-\d{2}-\d{2}/ ) {
+        my $dt = dt_from_string( $str, 'sql' );
+        $dt->truncate( to => 'minutes' );
+        return output_pref_due( $dt, $force_pref );
     }
     return q{};
 }
