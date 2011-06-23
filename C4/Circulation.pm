@@ -2838,6 +2838,10 @@ sub CalcDateDue {
             }
             my $calendar = Koha::Calendar->new( branchcode => $branch );
             $datedue = $calendar->addDate( $startdate, $dur, $loanlength->{lengthunit} );
+            if ($loanlength->{lengthunit} eq 'days') {
+                $datedue->set_hour(23);
+                $datedue->set_minute(59);
+            }
         }
     }
 
