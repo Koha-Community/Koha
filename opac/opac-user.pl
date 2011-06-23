@@ -201,7 +201,7 @@ if ($issues){
 			$issue->{'imageurl'}    = getitemtypeimagelocation( 'opac', $itemtypes->{$itemtype}->{'imageurl'} );
 			$issue->{'description'} = $itemtypes->{$itemtype}->{'description'};
 		}
-		$issue->{date_due} = output_pref($issue->{date_due});
+		$issue->{date_due} = output_pref_due($issue->{date_due});
 		push @issuedat, $issue;
 		$count++;
 		

@@ -26,7 +26,7 @@ use C4::Context;
 use base 'Exporter';
 use version; our $VERSION = qv('1.0.0');
 
-our @EXPORT = (qw( dt_from_string output_pref format_sqldatetime));
+our @EXPORT = (qw( dt_from_string output_pref format_sqldatetime output_pref_due ));
 
 =head1 DateUtils
 
@@ -120,6 +120,26 @@ sub output_pref {
 
     }
     return;
+}
+
+=head2 output_pref_due
+
+$date_string = output_pref_due($dt, [$format] );
+
+Returns a string containing the time & date formatted as per the C4::Context setting
+
+A second parameter allows overriding of the syspref value. This is for testing only
+In usage use the DateTime objects own methods for non standard formatting
+
+This is effectivelyt a wrapper around output_pref for due dates
+the time portion is stripped if it is '23:59'
+
+=cut
+
+sub output_pref_due {
+    my $disp_str = output_pref(@_);
+    $disp_str=~s/ 23:59//;
+    return $disp_str;
 }
 
 =head2 format_sqldatetime
