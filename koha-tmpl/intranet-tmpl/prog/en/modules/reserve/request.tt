@@ -169,7 +169,7 @@ function checkMultiHold() {
     <h1>Confirm Holds</h1>
   [% END %]
 
-  [% UNLESS ( cardnumber ) %]
+  [% UNLESS ( borrowernumber ) %]
     [% IF ( messageborrower ) %]
       <div class="dialog alert"><h3>Patron Not Found</h3><p>No patron with this name, Please, try another</p> </div>
     [% END %]
@@ -243,7 +243,7 @@ function checkMultiHold() {
             <form action="placerequest.pl" method="post" onsubmit="return checkMultiHold();" name="form">
         [% END %]
 
-        <input type="hidden" size="10" name="member" value="[% cardnumber %]" />
+        <input type="hidden" size="10" name="borrowernumber" value="[% borrowernumber %]" />
         <input type="hidden" name="type" value="str8" />
 
         [% IF ( multi_hold ) %]
@@ -262,7 +262,7 @@ function checkMultiHold() {
         [% END %]
 
        <ol> <li><span class="label">Patron:</span>
-            [% IF ( cardnumber ) %]
+            [% IF ( borrowernumber ) %]
                 <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %] ([% cardnumber %])</a>
             [% ELSE %]
                 Not defined yet
@@ -358,7 +358,7 @@ function checkMultiHold() {
 </ol>
    [% UNLESS ( multi_hold ) %]
         <fieldset class="action">
-            [% IF ( cardnumber ) %]
+            [% IF ( borrowernumber ) %]
                 [% IF ( override_required ) %]
                     <input type="submit" class="warning" value="Place Hold" />
                 [% ELSIF ( none_available ) %]
@@ -465,7 +465,7 @@ function checkMultiHold() {
         </table>
     [% IF ( bibitemloo.hiddencount ) %]
         <form>
-        <p class="hiddencount"><a href="request.pl?biblionumber=[% bibitemloo.biblionumber %]&cardnumber=[% bibitemloo.cardnumber %]&showallitems=1">Show all items ([% bibitemloo.hiddencount %] hidden)</a></p>
+        <p class="hiddencount"><a href="request.pl?biblionumber=[% bibitemloo.biblionumber %]&borrowernumber=[% bibitemloo.borrowernumber %]&showallitems=1">Show all items ([% bibitemloo.hiddencount %] hidden)</a></p>
         </form>
     [% END %] <!-- hiddencount -->
     [% END %] <!-- bibitemloop -->
@@ -538,7 +538,7 @@ function checkMultiHold() {
   [% END %]<!-- /multi_hold -->
 
     <fieldset class="action">
-        [% IF ( cardnumber ) %]
+        [% IF ( borrowernumber ) %]
             [% IF ( override_required ) %]
                 <input type="submit" class="warning" value="Place Hold" />
             [% ELSIF ( none_available ) %]
@@ -552,7 +552,7 @@ function checkMultiHold() {
 	</fieldset>
 [% END %]
 
-[% UNLESS ( cardnumber ) %]
+[% UNLESS ( borrowernumber ) %]
 [% IF ( reserveloop ) %]
 <form name="T[% time %]" action="modrequest.pl" method="post">
   [% IF ( multi_hold ) %]
@@ -631,7 +631,7 @@ function checkMultiHold() {
         <td>
           <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber %]" >
 	  [% IF ( reserveloo.hidename ) %]
-	      [% reserveloo.cardnumber %]
+	      [% reserveloo.cardnumber (reserveloo.borrowernumber) %]
 	  [% ELSE %]
 	      [% reserveloo.firstname %] [% reserveloo.surname %]
 	  [% END %]

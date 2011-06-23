@@ -85,7 +85,7 @@ my $CGIbranch = CGI::scrolling_list(
 my $findborrower = $input->param('findborrower');
 $findborrower = '' unless defined $findborrower;
 $findborrower =~ s|,| |g;
-my $cardnumber = $input->param('cardnumber') || '';
+my $borrowernumber_hold = $input->param('borrowernumber') || '';
 my $borrowerslist;
 my $messageborrower;
 my $warnings;
@@ -118,21 +118,19 @@ if ($findborrower) {
 
     my @borrowers = @$borrowers;
 
-    if ( $#borrowers == -1 ) {
-        $input->param( 'findborrower', '' );
+    if ( !@borrowers ) {
         $messageborrower = "'$findborrower'";
     }
-    elsif ( $#borrowers == 0 ) {
-        $input->param( 'cardnumber', $borrowers[0]->{'cardnumber'} );
-        $cardnumber = $borrowers[0]->{'cardnumber'};
+    elsif ( @borrowers == 1 ) {
+        $borrowernumber_hold = $borrowers[0]->{'borrowernumber'};
     }
     else {
         $borrowerslist = \@borrowers;
     }
 }
 
-if ($cardnumber) {
-    my $borrowerinfo = GetMemberDetails( 0, $cardnumber );
+if ($borrowernumber_hold) {
+    my $borrowerinfo = GetMemberDetails( $borrowernumber_hold );
     my $diffbranch;
     my @getreservloop;
     my $count_reserv = 0;
@@ -144,7 +142,7 @@ if ($cardnumber) {
     my $number_reserves =
       GetReserveCount( $borrowerinfo->{'borrowernumber'} );
 
-    if ( C4::Context->preference('maxreserves') && $number_reserves >= C4::Context->preference('maxreserves') ) {
+    if ( C4::Context->preference('maxreserves') && ($number_reserves >= C4::Context->preference('maxreserves')) ) {
 		$warnings = 1;
         $maxreserves = 1;
     }
@@ -165,24 +163,25 @@ if ($cardnumber) {
     }
 
     $template->param(
-                borrowernumber => $borrowerinfo->{'borrowernumber'},
-                borrowersurname   => $borrowerinfo->{'surname'},
-                borrowerfirstname => $borrowerinfo->{'firstname'},
-                borrowerstreetaddress => $borrowerinfo->{'address'},
-                borrowercity => $borrowerinfo->{'city'},
-                borrowerphone => $borrowerinfo->{'phone'},
-                borrowermobile => $borrowerinfo->{'mobile'},
-                borrowerfax => $borrowerinfo->{'fax'},
-                borrowerphonepro => $borrowerinfo->{'phonepro'},
-                borroweremail => $borrowerinfo->{'email'},
-                borroweremailpro => $borrowerinfo->{'emailpro'},
-                borrowercategory => $borrowerinfo->{'category'},
-                borrowerreservs   => $count_reserv,
-                maxreserves       => $maxreserves,
-                expiry            => $expiry,
-                diffbranch        => $diffbranch,
-				messages => $messages,
-				warnings => $warnings
+                borrowernumber      => $borrowerinfo->{'borrowernumber'},
+                borrowersurname     => $borrowerinfo->{'surname'},
+                borrowerfirstname   => $borrowerinfo->{'firstname'},
+                borrowerstreetaddress   => $borrowerinfo->{'address'},
+                borrowercity        => $borrowerinfo->{'city'},
+                borrowerphone       => $borrowerinfo->{'phone'},
+                borrowermobile      => $borrowerinfo->{'mobile'},
+                borrowerfax         => $borrowerinfo->{'fax'},
+                borrowerphonepro    => $borrowerinfo->{'phonepro'},
+                borroweremail       => $borrowerinfo->{'email'},
+                borroweremailpro    => $borrowerinfo->{'emailpro'},
+                borrowercategory    => $borrowerinfo->{'category'},
+                borrowerreservs     => $count_reserv,
+                cardnumber          => $borrowerinfo->{'cardnumber'},
+                maxreserves         => $maxreserves,
+                expiry              => $expiry,
+                diffbranch          => $diffbranch,
+				messages            => $messages,
+				warnings            => $warnings
     );
 }
 
@@ -201,18 +200,18 @@ if ($borrowerslist) {
         } @{$borrowerslist}
       )
     {
-        push @values, $borrower->{cardnumber};
+        push @values, $borrower->{borrowernumber};
 
-        $labels{ $borrower->{cardnumber} } = sprintf(
+        $labels{ $borrower->{borrowernumber} } = sprintf(
             '%s, %s ... (%s - %s) ... %s',
-            $borrower->{surname},    $borrower->{firstname},
-            $borrower->{cardnumber}, $borrower->{categorycode},
-            $borrower->{address},
+            $borrower->{surname} ||'',    $borrower->{firstname} || '',
+            $borrower->{cardnumber} || '', $borrower->{categorycode} || '',
+            $borrower->{address} || '',
         );
     }
 
     $CGIselectborrower = CGI::scrolling_list(
-        -name     => 'cardnumber',
+        -name     => 'borrowernumber',
         -values   => \@values,
         -labels   => \%labels,
         -size     => 7,
@@ -221,7 +220,7 @@ if ($borrowerslist) {
 }
 
 # FIXME launch another time GetMemberDetails perhaps until
-my $borrowerinfo = GetMemberDetails( 0, $cardnumber );
+my $borrowerinfo = GetMemberDetails( $borrowernumber_hold );
 
 my @biblionumbers = ();
 my $biblionumbers = $input->param('biblionumbers');
@@ -239,7 +238,7 @@ foreach my $biblionumber (@biblionumbers) {
 
     my $dat          = GetBiblioData($biblionumber);
 
-    if ( not CanBookBeReserved($borrowerinfo->{borrowernumber}, $biblionumber) ) {
+    unless ( CanBookBeReserved($borrowerinfo->{borrowernumber}, $biblionumber) ) {
  		$warnings = 1;
         $maxreserves = 1;
     }
@@ -430,11 +429,14 @@ foreach my $biblionumber (@biblionumbers) {
             $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
             
             if ( $branchitemrule->{'holdallowed'} == 0 ||
-                 ( $branchitemrule->{'holdallowed'} == 1 && $borrowerinfo->{'branchcode'} ne $item->{'homebranch'} ) ) {
+                 ( $branchitemrule->{'holdallowed'} == 1 && 
+                     $borrowerinfo->{'branchcode'} ne $item->{'homebranch'} ) ) {
                 $policy_holdallowed = 0;
             }
             
-            if (IsAvailableForItemLevelRequest($itemnumber) and not $item->{cantreserve} and CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber) ) {
+            if (IsAvailableForItemLevelRequest($itemnumber) and 
+            	not $item->{cantreserve} and 
+            	CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber) ) {
                 if ( $policy_holdallowed ) {
                     $item->{available} = 1;
                     $num_available++;
@@ -565,7 +567,6 @@ foreach my $biblionumber (@biblionumbers) {
                      date              => $date,
                      biblionumber      => $biblionumber,
                      findborrower      => $findborrower,
-                     cardnumber        => $cardnumber,
                      title             => $dat->{title},
                      author            => $dat->{author},
                      holdsview => 1,
