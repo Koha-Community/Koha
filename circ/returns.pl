@@ -179,7 +179,6 @@ my $dest = $query->param('dest');
 my $calendar    = Koha::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
 my $today       = DateTime->now( time_zone => C4::Context->tz());
-#my $today_iso   = $today->output('iso');
 my $dropboxdate = $calendar->addDate($today, -1);
 if ($dotransfer){
 # An item has been returned to a branch other than the homebranch, and the librarian has chosen to initiate a transfer
@@ -521,7 +520,7 @@ if ($borrower) {
             {
                 my $biblio = GetBiblioFromItemNumber( $item->{'itemnumber'});
                 push @itemloop, {
-                    duedate   => output_pref($item->{'date_due'}),
+                    duedate   => format_sqldatetime($item->{date_due}),
                     biblionum => $biblio->{'biblionumber'},
                     barcode   => $biblio->{'barcode'},
                     title     => $biblio->{'title'},
