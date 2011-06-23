@@ -793,7 +793,7 @@ sub CanBookBeIssued {
     #
 	my ($current_loan_count, $max_loans_allowed) = TooMany( $borrower, $item->{biblionumber}, $item );
     # if TooMany max_loans_allowed returns 0 the user doesn't have permission to check out this book
-    if ($max_loans_allowed eq 0) {
+    if (defined $max_loans_allowed && $max_loans_allowed == 0) {
         $needsconfirmation{PATRON_CANT} = 1;
     } else {
         if($max_loans_allowed){
