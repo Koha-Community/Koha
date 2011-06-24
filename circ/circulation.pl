@@ -4,6 +4,7 @@
 
 # Copyright 2000-2002 Katipo Communications
 # copyright 2010 BibLibre
+# Copyright 2011 PTFS-Europe Ltd.
 #
 # This file is part of Koha.
 #
@@ -145,8 +146,9 @@ my $duedatespec_allow = C4::Context->preference('SpecifyDueDate');
 if($duedatespec_allow){
     if ($duedatespec) {
         if ($duedatespec =~ C4::Dates->regexp('syspref')) {
-            my $tempdate = C4::Dates->new($duedatespec);
-                $datedue = $tempdate;
+                $datedue = dt_from_string($duedatespec);
+                $datedue->set_hour(23);
+                $datedue->set_minute(59);
         } else {
             $invalidduedate = 1;
             $template->param(IMPOSSIBLE=>1, INVALID_DATE=>$duedatespec);
