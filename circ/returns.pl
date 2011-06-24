@@ -4,6 +4,7 @@
 #           2006 SAN-OP
 #           2007-2010 BibLibre, Paul POULAIN
 #           2010 Catalyst IT
+#           2011 PTFS-Europe Ltd.
 #
 # This file is part of Koha.
 #
@@ -30,13 +31,11 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use CGI;
+use DateTime;
 use C4::Context;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Circulation;
-use C4::Dates qw/format_date/;
-use Date::Calc qw/Add_Delta_Days/;
-use C4::Calendar;
 use C4::Print;
 use C4::Reserves;
 use C4::Biblio;
@@ -46,6 +45,7 @@ use C4::Branch; # GetBranches GetBranchName
 use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
 use Koha::DateUtils;
+use Koha::Calendar;
 
 my $query = new CGI;
 
@@ -546,7 +546,6 @@ if ($borrower) {
         riborfirstname   => $borrower->{'firstname'}
     );
 }
-
 #set up so only the last 8 returned items display (make for faster loading pages)
 my $returned_counter = ( C4::Context->preference('numReturnedItemsToShow') ) ? C4::Context->preference('numReturnedItemsToShow') : 8;
 my $count = 0;
@@ -557,7 +556,7 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     if ( $count++ < $returned_counter ) {
         my $bar_code = $returneditems{$_};
         if ($riduedate{$_}) {
-            my $duedate = DateTime::Format::DateParse::MySQL( $riduedate{$_}, C4::Context->tz()->name());
+            my $duedate = dt_from_string( $riduedate{$_}, 'sql');
             $ri{year}  = $duedate->year();
             $ri{month} = $duedate->month();
             $ri{day}   = $duedate->day();
@@ -602,7 +601,6 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     }
     push @riloop, \%ri;
 }
-
 $template->param(
     riloop         => \@riloop,
     genbrname      => $branches->{$userenv_branch}->{'branchname'},
