@@ -87,6 +87,7 @@ sub addDate {
     if ( ref $add_duration ne 'DateTime::Duration' ) {
         $add_duration = DateTime::Duration->new( days => $add_duration );
     }
+    $unit ||= q{};    # default days ?
     my $days_mode = $self->{days_mode};
     Readonly::Scalar my $return_by_hour => 10;
     my $day_dur = DateTime::Duration->new( days => 1 );
@@ -114,7 +115,7 @@ sub addDate {
             }
 
         } else {
-            my $days = $add_duration->in_units('days');
+            my $days = abs $add_duration->in_units('days');
             while ($days) {
                 $base_date->add_duration($day_dur);
                 if ( $self->is_holiday($base_date) ) {
