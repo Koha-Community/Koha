@@ -1,0 +1,252 @@
+RELEASE NOTES FOR KOHA 3.4.2 - 27 June 2011
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.4.2 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.04.02.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.4.2 is a bugfix/maintenance release.
+
+Highlights of 3.4.2
+======================
+
+6518    blocker     XSS vulnerabilities in the OPAC
+2246    critical    Label printing doesn't work with Unicode characters
+4993    critical    ldap search always anonymous when using auth_by_bind
+5658    critical    can't delete subfields in frameworks
+5683    critical    link_bibs_to_authorities.pl can corrupt records
+5860    critical    Adding duplicate stocknumber will fail silently
+6343    critical    Label Creator not working, Current Branch: NULL
+6395    critical    cannot create routing list - template error?
+6472    critical    HidePatronName no longer works as stated
+6525    critical    hold filled emails not going out
+3140    major       It is possible to email someone else's private list
+4319    major       waiting items cannot be reserved
+5094    major       auth_by_bind authentication can fail even if given a
+                    correct password and userid
+5918    major       When AddPatronLists is set to "general" and
+                    EnhancedMessagingPreferences is set, messaging prefs 
+                    not copied from defaults
+6258    major       Guided reports wizard 'Build new' brings up empty page
+6300    major       can't get to other pages of marc import
+6340    major       Pagination bar on guided reports result page broken
+6351    major       Cannot delete library-specific circulation rules
+6370    major       news showing that it's for the opac when it's for the
+                    librarian interface
+6452    major       Missing SQL placeholders
+6497    major       MARC URLs not showing up in both OPAC and staff client
+                    Details page under non-XSLT view
+
+Bugs fixed in 3.4.2
+======================
+
+5509    Packaging scripts get upset when there's an LDAP configuration in the koha_conf.xml
+5653    default new label layout and sample data have broken call number placeholder
+5684    Z3950 search on OCLC pulls in items (tag 952)
+5868    Subject indexes do not search most 6xx fields
+6031    koha-rebuild-zebra doesn't allow XML and verbose indexing
+6067    When Add Duplicate changing framework would lose data
+6103    Many MARC21 fields not searched with CCL indexes due to misconfiguration
+6131    (unimarc only) improper index name for personal-name
+6170    'More options' in advanced search broken
+6306    It is not possible edit news
+6337    Variable scope errors in staff client cart print view
+6338    Datepickers on OPAC hold form does not work
+6342    Help link doesn't popup anymore contextual help page
+6353    Erroneous prefixes before the singleBranchMode preference
+6355    Late orders report shows cancelled orders
+6363    The "Item Location" selectbox in inventory.pl doesn't appear when the default MARC framework is the only one avaiable.
+6364    Display of item availability broken on OPAC detail screen
+6365    Missing information about tab number when mandatory fields unfilled
+6402    Lists sorted by year appear to be empty
+6408    column alignment off on the patron categories admin
+6409    pagination bar for guided report output does not work if report has parameters
+6417    Template variable errors in Guided Reports
+6436    Don't allow deletion of an itemtype used in items.itype
+6444    Encoding problems with vendor names in subscription-add.pl
+6446    batch item deletion interface problems
+6463    Authorities browsing error when using auth. plugins
+6487    No error explanation if patron expiration date is missing
+6510    "Sort by" in intranet search alters search and number of hits
+6512    Time missing from Item circulation history table
+6521    Editing a patron fails with blank cardnumber
+5268    Language Issue: Debarred
+5714    Unescaped ampersands in OPAC facets
+6091    Remove undeclared syspref OPACAdvSearchInputCount
+6357    Items (un)availability not displayed correctly (OPAC)
+6367    'Preview MARC' hover button does not show correct MARC record
+6375    Markup and style corrections for overdue report
+6377    fines should be red on patron search
+6378    Misaligned columns on tags approval page
+6388    Broken pager images in branch_transfer_limits.tt
+6389    Administration menu like Tools menu
+6397    Mis-named variable in .TT causes table cell shift
+6442    opacnav pref explained wrong
+6453    The "Compare barcodes list to results" functionnality of inventory.pl can't find barcodes
+6462    Authority type is not displayed in OPAC
+5020    on patron record sex should be gender
+6332    missing 'clear date' link
+6350    Bug for tracking updates to the history file
+6401    Give Ian Walls credit in the history file.
+6459    Needless call to C4::Context->dbh in C4::Templates::themelanguage()
+5929    Use branch admin email for advance_notice.pl emails
+6050    GetItemsInfo ignores second parameter
+6294    Add {BIBLIONUMBER} parsing support to SearchForTitleIn syspref
+6347    Bug in opac-reserve.pl stopping item level holds
+6362    Fix MARC display in OPAC
+6415    Can't make a patron card batch
+6429    Updating development team in about
+6433    rebuild_zebra.pl does not handle MARC::Record exceptions gracefully
+6464    Add inconsistence check for '%s' count in tmpl_process3.pl
+6491    Add Div in privacy page
+
+System requirements
+======================
+
+    Changes since 3.2:
+
+    * Template::Toolkit
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the english version of the
+Koha manual is available:
+
+    http://koha-community.org/documentation/3-4-manual/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.4 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.4.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+QA Manager:             Colin Campbell
+
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to
+Koha 3.4.2. 
+
+Tomas Cohen Arazi
+Alex Arnaud
+D Ruth Bavousett
+Jared Camins-Esakov
+Colin Campbell
+Frédérick Capovilla
+Galen Charlton
+Chris Cormack
+Jeremy Crabtree
+Elliott Davis
+Frédéric Demians
+Nicole C. Engard
+Magnus Enger
+Katrin Fischer
+Srdjan Janković
+Janusz Kaczmarek
+Owen Leonard
+Frère Sébastien Marie
+Ricardo Dias Marques
+Chris Nighswonger
+Dobrica Pavlinusic
+Ian Walls
+MJ Ray
+Liz Rea
+Marcel de Rooy
+Robin Sheat
+Fridolyn Somers
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.4.x (i.e., this version of Koha and future bugfix
+releases) is 3.4.x.
+
+The next major feature release of Koha will be Koha 3.6.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini
