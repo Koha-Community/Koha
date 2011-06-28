@@ -1,35 +1,104 @@
 [% INCLUDE 'help-top.inc' %]
 
 <h1>Notices</h1>
+All notices sent by Koha can be customized using the Notices Tool. The system comes with several predefined templates that will appear when you first visit the Notices Tool
 
-<p>Notices are messages sent to patrons, vendors and staff to notify them at key times.</p>
-<h2>Add a new notice</h2>
-		<ul>
-			<li>Click 'New Notice'</li>
-			<li>Choose a 'Koha Module' to associate your notice with from the dropdown box</li>
-			<li>Enter a 'Code' abbreviation for your new notice (for example: 'ODUE' for Overdue Notice)</li>
-			<li>Enter a 'Name' for your new notice (for example 'Overdue Notice')</li>
-			<li>Enter a 'Message Subject' (for example 'Item Overdue')</li>
-			<li>Design your 'Message Body'</li>
-		</ul>
-		<ul>
-			<li> 
-			<ul>
-				<li>Choose a field from the scroll down menu on the left side
-				<ul>
-					<li>
-				    <span style="background-color: #ffe599">
-TIP: For help with what each field is, see the Notices: Database Fields section of this manual</span></li>
-				</ul></li>
-				<li>Click the '&gt;&gt;' button to insert that field into your text message where you'd like it to appear in the notice.</li>
-				<li>Continue adding 'field's and clicking '&gt;&gt;' to insert them into the notice until your message is completed.</li>
-				<li>Then, click 'Submit'</li>
-			</ul></li>
-			<li>
-		    <span style="color: #ff0000">
-IMPORTANT: Currently, Koha can not reference multiple biblios in a single notice (in other words--in the example below-- there is not just ONE email sent that describes ALL currently overdue items, but an email sent for EACH overdue item) </span></li>
-		</ul><h3>	   
-	   How do I schedule overdue notices?</h3>To schedule overdue notices, you must use Koha's 'Notice/Status Trigger' tool.<br/>
-		<ul>
-			<li><em>Get there:</em> More &gt; Tools &gt; Overdue notice/status triggers</li>
-		</ul>	[% INCLUDE 'help-bottom.inc' %]
+Each notice can be edited, but only a few can be deleted, this is to prevent system errors should a message try to send without a template.
+<h2>Adding Notices</h2>
+<ul>
+	<li>To add a new notice
+<ul>
+	<li>Click 'New Notice'</li>
+	<li>Choose the module this notice is related to</li>
+	<li>The Code is limited to 20 characters</li>
+	<li>Use the name field to expand on your Code</li>
+	<li>Message Subject is what will appear in the subject line of the email</li>
+	<li>In the message body feel free to type whatever message you feel is best, use the fields on the left hand side to enter individualized data from the from database.
+<ul>
+	<li style="color: #ff0000;">Important: On overdue notices make sure to use &lt;&lt;items.content&gt;&gt; to print out the data related to all items that are overdue. The other option is to use the &lt;item&gt;&lt;/item&gt; tags to span the line so that it will print out multiple lines</li>
+	<li style="color: #ff0000;">Important: Only the overdue notices take advantage of the &lt;item&gt;&lt;/item&gt; tags, all other notices referencing items need to use &lt;&lt;items.content&gt;&gt;</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3>Notice Markup</h3>
+When creating your overdue notices there are two tags in addition to the various database fields that you can use in your notices.
+<p style="color: #ff0000;">Important: These new tags only work on the overdue notices, not other circulation related notices at this time.</p>
+
+<ul>
+	<li>&lt;item&gt;&lt;/item&gt; which should enclose all fields from the biblio, biblioitems, and items tables.</li>
+	<li>&lt;fine&gt;&lt;/fine&gt; which should be enclosed by the item tag and should enclose a currency identifier per ISO 4217. If this tag is present with a proper identifier, the fine for that item will be displayed in the proper currency format.
+<ul>
+	<li>Note: ISO 4217 changes from time to time therefore all currencies may not be supported. If you find one that is not supported, please file a bug with the Locale::Currency::Format author Tan D Nguyen &lt;tnguyen at cpan doe org&gt;.</li>
+</ul>
+</li>
+</ul>
+An example of using these two tags in a notice template might be like:
+<pre>The following item(s) is/are currently overdue:
+
+   &lt;item&gt;"&lt;&lt;biblio.title&gt;&gt;" by &lt;&lt;biblio.author&gt;&gt;, &lt;&lt;items.itemcallnumber&gt;&gt;, Barcode: &lt;&lt;items.barcode&gt;&gt; Fine: &lt;fine&gt;GBP&lt;/fine&gt;&lt;/item&gt;</pre>
+Which, assuming two items were overdue, would result in a notice like:
+<pre>The following item(s) is/are currently overdue:
+
+   "A Short History of Western Civilization" by Harrison, John B, 909.09821 H2451, Barcode: 08030003 Fine: £3.50
+   "History of Western Civilization" by Hayes, Carlton Joseph Huntley, 909.09821 H3261 v.1, Barcode: 08030004 Fine: £3.50</pre>
+<h2>Existing Notices</h2>
+Among the default notices are notices for several common actions within Koha, here are some of what those notices do
+<ul>
+	<li>ACCTDETAILS
+<ul>
+	<li>Sent to patrons when their account is set up if the AutoEmailOPACUser preference is set to 'Send'</li>
+</ul>
+</li>
+	<li>ACQCLAIM (Acquisition Claim)
+<ul>
+	<li>Used in the claim acquisition module</li>
+	<li>Get there: More &gt; Acquisitions &gt; Late issues</li>
+</ul>
+</li>
+	<li>HOLD (Hold Available for Pickup)
+<ul>
+	<li>This notice is used if two criteria are met:
+<ul>
+	<li>The EnhancedMessagingPreferences is set to 'Allow'</li>
+	<li>The patron has requested to receive this notice
+<ul>
+	<li>Get there: OPAC &gt; Login &gt; my messaging</li>
+	<li>Get there: Staff Client &gt; Patron Record &gt; Messaging</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+	<li>HOLDPLACED (a notice to the library staff that a hold has been placed)
+<ul>
+	<li>This notice requires the emailLibrarianWhenHoldIsPlaced system preference to be set to 'Enable'</li>
+</ul>
+</li>
+	<li>HOLD_PRINT (Printed notice when hold available for pickup)
+<ul>
+	<li>This notice is used for hold confirmation notices that are sent out in print format. This will not effect what the email notice looks like.</li>
+</ul>
+</li>
+	<li>ODUE (Overdue Notice)
+<ul>
+	<li>This notice is used to send Overdue Notices to Patrons</li>
+	<li>See a Sample Overdue Notice</li>
+	<li>Requires that you set Overdue Notice/Status Triggers</li>
+</ul>
+</li>
+	<li>RLIST (Routing List)
+<ul>
+	<li>Used in the serials module to notify patrons/staff of new issues of a serial
+<ul>
+	<li>Get there: More &gt; Serials &gt; New Subscription</li>
+</ul>
+</li>
+	<li>You have the option to select the 'Routing List' notice when creating a new subscription (Choose from the 'Patron notification' drop down).</li>
+	<li style="background-color: #ffe599;">Tip: Notice also that if you'd like to notify patrons of new serial issues, you can click on 'define a notice' which will take you to the 'Notices' tool</li>
+</ul>
+</li>
+</ul>
+[% INCLUDE 'help-bottom.inc' %]
