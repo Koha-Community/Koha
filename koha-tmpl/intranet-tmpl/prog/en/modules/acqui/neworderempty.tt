@@ -249,6 +249,23 @@ $(document).ready(function()
                 <input type="text" size="50" name="series" id="series" value="[% seriestitle %]" />
             [% END %]
         </li>
+        </li>
+            [% UNLESS ( biblionumber ) %]
+            [% IF ( itemtypeloop ) %]
+            <li>
+                <span class="label">Item type:</span>
+                <select name="itemtype" style="width:12em;">
+                [% FOREACH itemtype IN itemtypeloop %]
+                    [% IF ( itemtype.selected ) %]
+                        <option value="[% itemtype.itemtype %]" selected="selected">[% itemtype.description %]</option>
+                    [% ELSE %]
+                        <option value="[% itemtype.itemtype %]">[% itemtype.description %]</option>
+                    [% END %]
+                [% END %]
+                </select>
+            </li>
+            [% END %]
+            [% END %]
         </ol>
     </fieldset>
     [% IF ( items ) %]
