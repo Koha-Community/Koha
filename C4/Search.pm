@@ -34,6 +34,7 @@ use C4::Items;
 use C4::Charset;
 use YAML;
 use URI::Escape;
+use Business::ISBN;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG);
 
@@ -1694,7 +1695,7 @@ sub searchResults {
                     $item_in_transit_count++ if $transfertwhen ne '';
 		    $item_onhold_count++     if $reservestatus eq 'Waiting';
                     $item->{status} = $item->{wthdrawn} . "-" . $item->{itemlost} . "-" . $item->{damaged} . "-" . $item->{notforloan};
-                    
+
                     # can place hold on item ?
                     if ((!$item->{damaged} || C4::Context->preference('AllowHoldsOnDamagedItems'))
                       && !$item->{itemlost}
@@ -2610,7 +2611,15 @@ $template->param ( MYLOOP => C4::Search::z3950_search_args($searchscalar) )
 
 sub z3950_search_args {
     my $bibrec = shift;
-    $bibrec = { title => $bibrec } if !ref $bibrec;
+    my $isbn = Business::ISBN->new($bibrec);
+
+    if (defined $isbn && $isbn->is_valid)
+    {
+    $bibrec = { isbn => $bibrec } if !ref $bibrec;
+}
+else {
+     $bibrec = { title => $bibrec } if !ref $bibrec;
+}
     my $array = [];
     for my $field (qw/ lccn isbn issn title author dewey subject /)
     {
