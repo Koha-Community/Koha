@@ -272,7 +272,7 @@ sub CalcFine {
         $chargeable_units = $charge_duration->hours(); # TODO closed times???
     }
     else {
-        $chargeable_units = $charge_duration->day;
+        $chargeable_units = $charge_duration->days;
     }
     my $days_minus_grace = $chargeable_units - $data->{firstremind};
     if ($data->{'chargeperiod'}  && $days_minus_grace  ) {

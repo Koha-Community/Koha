@@ -9,6 +9,7 @@
 #  This script is meant to be run nightly out of cron.
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2011 PTFS-Europe Ltd
 #
 # This file is part of Koha.
 #
@@ -25,39 +26,28 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-
-# FIXME: use FinesMode as described or change syspref description
 use strict;
-#use warnings; FIXME - Bug 2505
-
-BEGIN {
-    # find Koha's Perl modules
-    # test carefully before changing this
-    use FindBin;
-    eval { require "$FindBin::Bin/kohalib.pl" };
-}
-
-#use Date::Calc qw/Date_to_Days/;
+use warnings;
+use 5.010;
 
 use C4::Context;
-use C4::Circulation;
 use C4::Overdues;
-use C4::Biblio;
-use C4::Debug;  # supplying $debug and $cgi_debug
 use Getopt::Long;
+use Carp;
+use File::Spec;
 
 use Koha::Calendar;
 use Koha::DateUtils;
 
-
-my $help = 0;
-my $verbose = 0;
+my $help;
+my $verbose;
 my $output_dir;
 
-GetOptions( 'h|help'    => \$help,
-            'v|verbose' => \$verbose,
-            'o|out:s'   => \$output_dir,
-    );
+GetOptions(
+    'h|help'    => \$help,
+    'v|verbose' => \$verbose,
+    'o|out:s'   => \$output_dir,
+);
 my $usage = << 'ENDUSAGE';
 
 This script calculates and charges overdue fines
@@ -73,100 +63,111 @@ This script has the following parameters :
 
 ENDUSAGE
 
-die $usage if $help;
-
-use vars qw(@borrower_fields @item_fields @other_fields);
-use vars qw($fldir $libname $control $mode $delim $dbname );
-use vars qw($filename);
-
-CHECK {
-    @borrower_fields = qw(cardnumber categorycode surname firstname email phone address citystate);
-        @item_fields = qw(itemnumber barcode date_due);
-       @other_fields = qw(type days_overdue fine);
-    $libname = C4::Context->preference('LibraryName');
-    $control = C4::Context->preference('CircControl');
-    $mode    = C4::Context->preference('finesMode');
-    $dbname  = C4::Context->config('database');
-    $delim   = "\t"; # ?  C4::Context->preference('delimiter') || "\t";
-
+if ($help) {
+    print $usage;
+    exit;
 }
 
-INIT {
-    $debug and print "Each line will contain the following fields:\n",
-        "From borrowers : ", join(', ', @borrower_fields), "\n",
-        "From items : ", join(', ', @item_fields), "\n",
-        "Per overdue: ", join(', ', @other_fields), "\n",
-        "Delimiter: '$delim'\n";
-}
+my @borrower_fields =
+  qw(cardnumber categorycode surname firstname email phone address citystate);
+my @item_fields  = qw(itemnumber barcode date_due);
+my @other_fields = qw(type days_overdue fine);
+my $libname      = C4::Context->preference('LibraryName');
+my $control      = C4::Context->preference('CircControl');
+my $mode         = C4::Context->preference('finesMode');
+my $delim = "\t";    # ?  C4::Context->preference('delimiter') || "\t";
 
-my $data = Getoverdues();
-my $overdueItemsCounted = 0;
-my %calendars = ();
+my %is_holiday;
 my $today = DateTime->now( time_zone => C4::Context->tz() );
-if($output_dir){
-    $fldir = $output_dir if( -d $output_dir );
-} else {
-    $fldir = $ENV{TMPDIR} || "/tmp";
-}
-if (!-d $fldir) {
-    warn "Could not write to $fldir ... does not exist!";
-}
-$filename = $dbname;
-$filename =~ s/\W//;
-$filename = $fldir . '/'. $filename . '_' .  $today->ymd() . ".log";
-print "writing to $filename\n" if $verbose;
-open (FILE, ">$filename") or die "Cannot write file $filename: $!";
-print FILE join $delim, (@borrower_fields, @item_fields, @other_fields);
-print FILE "\n";
+my $filename = get_filename($output_dir);
 
-for (my $i=0; $i<scalar(@$data); $i++) {
-    my $datedue = dt_from_string($data->[$i]->{'date_due'});
-    unless (defined $data->[$i]->{'borrowernumber'}) {
-        print STDERR "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
-        next;   # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
+open my $fh, '>>', $filename or croak "Cannot write file $filename: $!";
+print {$fh} join $delim, ( @borrower_fields, @item_fields, @other_fields );
+print {$fh} "\n";
+
+my $counted  = 0;
+my $overdues = Getoverdues();
+for my $overdue ( @{$overdues} ) {
+    if ( !defined $overdue->{borrowernumber} ) {
+        carp
+"ERROR in Getoverdues : issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
+        next;
     }
-    my $borrower = BorType($data->[$i]->{'borrowernumber'});
-    my $branchcode = ($control eq 'ItemHomeLibrary') ? $data->[$i]->{homebranch} :
-                     ($control eq 'PatronLibrary'  ) ?   $borrower->{branchcode} :
-                                                       $data->[$i]->{branchcode} ;
-    # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
-    my $calendar;
-    unless (defined ($calendars{$branchcode})) {
-        $calendars{$branchcode} = Koha::Calendar->new(branchcode => $branchcode);
-    }
-    $calendar = $calendars{$branchcode};
-    my $isHoliday = $calendar->is_holiday($today);
-      
-    if ( DateTime->compare($datedue, $today) != 1) {
-        next; # not overdue
+    my $borrower = BorType( $overdue->{borrowernumber} );
+    my $branchcode =
+        ( $control eq 'ItemHomeLibrary' ) ? $overdue->{homebranch}
+      : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
+      :                                     $overdue->{branchcode};
+
+# In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
+    if ( !exists $is_holiday{$branchcode} ) {
+        $is_holiday{$branchcode} = set_holiday( $branchcode, $today );
     }
 
-    $overdueItemsCounted++;
-    my ($amount,$type,$daycounttotal)=
-		CalcFine($data->[$i], $borrower->{'categorycode'}, $branchcode, $datedue, $today);
-        # FIXME: $type NEVER gets populated by anything.
-    $type ||= '';
-	# Don't update the fine if today is a holiday.  
-  	# This ensures that dropbox mode will remove the correct amount of fine.
-	if ($mode eq 'production' and  ! $isHoliday) {
-		UpdateFine($data->[$i]->{'itemnumber'},$data->[$i]->{'borrowernumber'},$amount,$type,output_pref($datedue)) if( $amount > 0 ) ;
- 	}
-    my @cells = ();
-    push @cells, map {$borrower->{$_}} @borrower_fields;
-    push @cells, map {$data->[$i]->{$_}} @item_fields;
+    my $datedue = dt_from_string( $overdue->{date_due} );
+    if ( DateTime->compare( $datedue, $today ) == 1 ) {
+        next;    # not overdue
+    }
+    ++$counted;
+
+    my ( $amount, $type, $daycounttotal ) =
+      CalcFine( $overdue, $borrower->{categorycode},
+        $branchcode, $datedue, $today );
+
+    $type ||= q{};
+
+    # Don't update the fine if today is a holiday.
+    # This ensures that dropbox mode will remove the correct amount of fine.
+    if ( $mode eq 'production' && !$is_holiday{$branchcode} ) {
+        if ( $amount > 0 ) {
+            UpdateFine(
+                $overdue->{itemnumber},
+                $overdue->{borrowernumber},
+                $amount, $type, output_pref($datedue)
+            );
+        }
+    }
+    my @cells;
+    push @cells,
+      map { defined $borrower->{$_} ? $borrower->{$_} : q{} } @borrower_fields;
+    push @cells, map { $overdue->{$_} } @item_fields;
     push @cells, $type, $daycounttotal, $amount;
-    print FILE join($delim, @cells), "\n";
+    say {$fh} join $delim, @cells;
 }
+close $fh;
 
-my $numOverdueItems = scalar(@$data);
 if ($verbose) {
-   print <<EOM;
+    my $overdue_items = @{$overdues};
+    print <<'EOM';
 Fines assessment -- $today->ymd() -- Saved to $filename
 Number of Overdue Items:
-     counted $overdueItemsCounted
-    reported $numOverdueItems
+     counted $overdue_items
+    reported $counted
 
 EOM
 }
 
-close FILE;
+sub set_holiday {
+    my ( $branch, $dt ) = @_;
+
+    my $calendar = Koha::Calendar->new( branchcode => $branch );
+    return $calendar->is_holiday($dt);
+}
+
+sub get_filename {
+    my $directory = shift;
+    if ( !$directory ) {
+        $directory = File::Spec->tmpdir();
+    }
+    if ( !-d $directory ) {
+        carp "Could not write to $directory ... does not exist!";
+    }
+    my $name = C4::Context->config('database');
+    $name =~ s/\W//;
+    $name .= join q{}, q{_}, $today->ymd(), '.log';
+    $name = File::Spec->catfile( $directory, $name );
+    if ($verbose) {
+        say "writing to $name";
+    }
+    return $name;
+}
