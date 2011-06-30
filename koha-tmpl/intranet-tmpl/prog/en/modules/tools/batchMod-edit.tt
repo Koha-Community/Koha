@@ -12,6 +12,7 @@
 // Prepare array of all column headers, incrementing each index by
 // two to accomodate control and title columns
 var allColumns = new Array([% FOREACH item_header_loo IN item_header_loop %]'[% loop.count %]'[% UNLESS ( loop.last ) %],[% END %][% END %]);
+console.log(allColumns);
 for( x=0; x<allColumns.length; x++ ){
   allColumns[x] = Number(allColumns[x]) + 2;
 }
@@ -71,7 +72,7 @@ for( x=0; x<allColumns.length; x++ ){
 
 <p id="selections"><strong>Show/hide columns:</strong> <span class="selected"><input type="checkbox" checked="checked" id="showall"/><label for="showall">Show all columns</label></span> <span><input type="checkbox" id="hideall"/><label for="hideall">Hide all columns</label></span> 
         [% FOREACH item_header_loo IN item_header_loop %]
-        <span class="selected"><input id="checkheader[% item_header_loo.__counter %]" type="checkbox" checked="checked" /> <label for="checkheader[% loop.count %]">[% item_header_loo.header_value %]</label> </span>
+        <span class="selected"><input id="checkheader[% loop.count %]" type="checkbox" checked="checked" /> <label for="checkheader[% loop.count %]">[% item_header_loo.header_value %]</label> </span>
         [% END %]
 </p>
         <table id="itemst">
