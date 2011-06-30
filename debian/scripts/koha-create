@@ -257,7 +257,7 @@ then
         # Populate the database with default content.
         zcat "$DEFAULTSQL" |
         sed "s/__KOHASITE__/$name/g" |
-        mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpwd"
+        mysql --host="$mysqlhost" --user="$mysqluser" --password="$mysqlpwd" "$mysqldb"
 
 
         # Change the default user's password.
