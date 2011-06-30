@@ -4611,6 +4611,10 @@ sub TransformToNum {
     my $version = shift;
     # remove the 3 last . to have a Perl number
     $version =~ s/(.*\..*)\.(.*)\.(.*)/$1$2$3/;
+    # three X's at the end indicate that you are testing patch with dbrev
+    # change it into 999
+    # prevents error on a < comparison between strings (should be: lt)
+    $version =~ s/XXX$/999/;
     return $version;
 }
 
@@ -4621,7 +4625,9 @@ set the DBversion in the systempreferences
 =cut
 
 sub SetVersion {
-    my $kohaversion = TransformToNum(shift);
+    return if $_[0]=~ /XXX$/;
+      #you are testing a patch with a db revision; do not change version
+    my $kohaversion = TransformToNum($_[0]);
     if (C4::Context->preference('Version')) {
       my $finish=$dbh->prepare("UPDATE systempreferences SET value=? WHERE variable='Version'");
       $finish->execute($kohaversion);
