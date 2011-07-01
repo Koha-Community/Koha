@@ -310,12 +310,12 @@ OPAC:
             - Use 
             - pref: OpacRenewalBranch
               choices:
-                  itemhomebranch: "The Items' home branch"
-                  patronhomebranch: "The Patrons' home branch"
-                  checkoutbranch: "The branch the item was checked out from"
+                  itemhomebranch: "the item's home branch"
+                  patronhomebranch: "the patron's home branch"
+                  checkoutbranch: "the branch the item was checked out from"
                   null: "NULL"
-                  opacrenew: "OPACRenew"
-            - as branchcode to store in the statistics table
+                  opacrenew: "'OPACRenew'"
+            - as branchcode to store in the statistics table.
         -
             - Only allow patrons to renew their own books on the OPAC if they have less than
             - pref: OPACFineNoRenewals
