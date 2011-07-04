@@ -153,15 +153,22 @@ sub next_hold {
 }
 
 # hold_patron_id is NOT the barcode.  It's the borrowernumber.
-# That's because the reserving patron may not have a barcode, or may be from an different system entirely (ILL)!
+# If a return triggers capture for a hold the borrowernumber is passed
+# and saved so that other hold info can be retrieved
 sub hold_patron_id {
-    my $self = shift or return;
-    my $hold = $self->next_hold() or return;
-    return $hold->{borrowernumber};
+    my $self = shift;
+    my $id   = shift;
+    if ($id) {
+        $self->{hold}->{borrowernumber} = $id;
+    }
+    if ($self->{hold} ) {
+        return $self->{hold}->{borrowernumber};
+    }
+    return;
+
 }
 sub hold_patron_name {
     my $self = shift or return;
-    # return $self->{hold_patron_name} if $self->{hold_patron_name};    TODO: consider caching
     my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
     my $holder = GetMember(borrowernumber=>$borrowernumber);
     unless ($holder) {
@@ -175,7 +182,6 @@ sub hold_patron_name {
                 "" ;                                         # neither populated, empty string
     my $name = $holder->{firstname} ? $holder->{firstname} . ' ' : '';
     $name .= $holder->{surname} . $extra;
-    # $self->{hold_patron_name} = $name;      # TODO: consider caching
     return $name;
 }
 
@@ -192,9 +198,15 @@ sub hold_patron_bcode {
 }
 
 sub destination_loc {
-    my $self = shift or return;
-    my $hold = $self->next_hold();
-    return ($hold ? $hold->{branchcode} : '');
+    my $self = shift;
+    my $set_loc = shift;
+    if ($set_loc) {
+        $self->{dest_loc} = $set_loc;
+    }
+    if ($self->{dest_loc} ) {
+        return $self->{dest_loc};
+    }
+    return q{};
 }
 
 our $AUTOLOAD;
