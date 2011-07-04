@@ -647,14 +647,7 @@ sub handle_checkin {
     # apparently we can't trust the returns from Checkin yet (because C4::Circulation::AddReturn is faulty)
     # So we reproduce the alert logic here.
     if (not $status->alert) {
-        if ($item->hold_patron_id) {
-            $status->alert(1);
-            if ($item->destination_loc and $item->destination_loc ne $current_loc) {
-                $status->alert_type('02');  # hold at other library
-            } else {
-                $status->alert_type('01');  # hold at this library
-            }
-        } elsif ($item->destination_loc and $item->destination_loc ne $current_loc) {
+        if ($item->destination_loc and $item->destination_loc ne $current_loc) {
             $status->alert(1);
             $status->alert_type('04');  # no hold, just send it
         }
