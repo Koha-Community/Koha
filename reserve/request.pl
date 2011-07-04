@@ -93,6 +93,7 @@ my $messages;
 
 my $date = C4::Dates->today('iso');
 my $action = $input->param('action');
+$action ||= q{};
 
 if ( $action eq 'move' ) {
   my $where = $input->param('where');
