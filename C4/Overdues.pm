@@ -252,7 +252,8 @@ or "Final Notice".  But CalcFine never defined any value.
 =cut
 
 sub CalcFine {
-    my ( $item, $bortype, $branchcode, $start_date, $end_date  ) = @_;
+    my ( $item, $bortype, $branchcode, $due_dt, $end_date  ) = @_;
+    my $start_date = $due_dt->clone();
     my $dbh = C4::Context->dbh;
     my $amount = 0;
     my $charge_duration;
