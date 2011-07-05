@@ -4363,7 +4363,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.05.00.XXX";
+$DBversion = "3.05.00.004";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewerPhoto',1,'If ON, photo of reviewer will be shown beside comments in OPAC',NULL,'YesNo');");
     print "Upgrade to $DBversion done (Add syspref ShowReviewerPhoto)\n";
