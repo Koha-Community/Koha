@@ -2614,8 +2614,8 @@ sub SendCirculationAlert {
     my ($type, $item, $borrower, $branch) =
         ($opts->{type}, $opts->{item}, $opts->{borrower}, $opts->{branch});
     my %message_name = (
-        CHECKIN  => 'Item Check-in',
-        CHECKOUT => 'Item Checkout',
+        CHECKIN  => 'Item_Check_in',
+        CHECKOUT => 'Item_Checkout',
     );
     my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences({
         borrowernumber => $borrower->{borrowernumber},

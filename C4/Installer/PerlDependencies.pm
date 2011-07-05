@@ -479,6 +479,11 @@ our $PERL_DEPS = {
 	'required' => '1',
 	'min_ver'  => '2.22',
     },
+    'Gravatar::URL' => {
+        'usage'    => 'Photos in OPAC reviews',
+        'required' => '0',
+        'min_ver'  => '1.03',
+    },
 };
 
 1;

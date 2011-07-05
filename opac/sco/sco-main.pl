@@ -92,7 +92,7 @@ my $issuer   = GetMemberDetails($issuerid);
 my $item     = GetItem(undef,$barcode);
 if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     my $dbh = C4::Context->dbh;
-    my $resval, $patronid = checkpw($dbh, $patronlogin, $patronpw);
+    my ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
 }
 my $borrower = GetMemberDetails(undef,$patronid);
 

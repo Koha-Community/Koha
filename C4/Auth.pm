@@ -455,6 +455,7 @@ sub get_template_and_user {
             opacuserlogin             => "" . C4::Context->preference("opacuserlogin"),
             reviewson                 => C4::Context->preference("reviewson"),
             ShowReviewer              => C4::Context->preference("ShowReviewer"),
+            ShowReviewerPhoto         => C4::Context->preference("ShowReviewerPhoto"),
             suggestion                => "" . C4::Context->preference("suggestion"),
             virtualshelves            => "" . C4::Context->preference("virtualshelves"),
             OPACSerialIssueDisplayCount => C4::Context->preference("OPACSerialIssueDisplayCount"),

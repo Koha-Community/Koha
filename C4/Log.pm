@@ -213,7 +213,7 @@ sub GetLogs {
     my @parameters;
     $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') >= \"".$iso_datefrom."\" " if $iso_datefrom;   #fix me - mysql specific
     $query .= " AND DATE_FORMAT(timestamp, '%Y-%m-%d') <= \"".$iso_dateto."\" " if $iso_dateto;
-    if($user) {
+    if($user ne "") {
     	$query .= " AND user = ? ";
     	push(@parameters,$user);
     }

@@ -189,7 +189,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <br />[% END %] 
         <!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
         
-        [% IF ( MARCurl.OPACurlOpenInNewWindow ) %]<a href="[% MARCurl.MARCurl %]" title="[% MARCurl.MARCurl %]" target="_blank">[% ELSE %]<a href="[% MARCurl.MARCurl %]" title="[% MARCurl.MARCurl %]">[% END %]
+        [% IF ( MARCurl.OPACurlOpenInNewWindow ) %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]" target="_blank">[% ELSE %]<a href="[% MARCurl.MARCURL %]" title="[% MARCurl.MARCURL %]">[% END %]
         
         [% MARCurl.linktext %]</a>
             [% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note %]</li>[% END %]</ul>[% END %]</li>
@@ -667,6 +667,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
         [% FOREACH review IN reviews %]
             [% IF ( review.your_comment ) %]
             <div class="commentline yours" id="c[% review.reviewid %]">
+                [% IF ( review.avatarurl ) %]
+            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80"/>
+                [% END %]
             <h5>
                 Your Comment
             </h5>
@@ -678,6 +681,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% ELSE %]
             <div class="commentline">
             [% IF ( ShowReviewer ) %]
+                [% IF ( review.avatarurl ) %]
+            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80"/>
+                [% END %]
             <h5>
                 Comment by
                 [% review.title %]

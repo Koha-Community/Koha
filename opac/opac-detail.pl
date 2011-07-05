@@ -295,6 +295,12 @@ $template->param(
     ocoins => GetCOinSBiblio($biblionumber),
 );
 
+my $libravatar_enabled = 0;
+eval 'use Libravatar::URL';
+if (!$@ and C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowReviewerPhoto')) {
+    $libravatar_enabled = 1;
+}
+
 my $reviews = getreviews( $biblionumber, 1 );
 my $loggedincommenter;
 foreach ( @$reviews ) {
@@ -303,6 +309,9 @@ foreach ( @$reviews ) {
     $_->{title}     = $borrowerData->{'title'};
     $_->{surname}   = $borrowerData->{'surname'};
     $_->{firstname} = $borrowerData->{'firstname'};
+    if ($libravatar_enabled and $borrowerData->{'email'}) {
+        $_->{avatarurl} = libravatar_url(email => $borrowerData->{'email'}, https => $ENV{HTTPS});
+    }
     $_->{userid}    = $borrowerData->{'userid'};
     $_->{cardnumber}    = $borrowerData->{'cardnumber'};
     $_->{datereviewed} = format_date($_->{datereviewed});

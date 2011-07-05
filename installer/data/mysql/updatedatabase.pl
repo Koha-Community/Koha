@@ -4354,6 +4354,22 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.05.00.003";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(qq{
+    INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacRenewalBranch','checkoutbranch','Choose how the branch for an OPAC renewal is recorded in statistics','itemhomebranch|patronhomebranch|checkoutbranch|null','Choice');
+    });
+    print "Upgrade to $DBversion done (Adds New System preference OpacRenewalBranch)\n";
+    SetVersion($DBversion);
+}
+
+$DBversion = "3.05.00.004";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewerPhoto',1,'If ON, photo of reviewer will be shown beside comments in OPAC',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref ShowReviewerPhoto)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

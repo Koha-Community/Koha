@@ -203,7 +203,12 @@ sub SetBorrowerAttributes {
     foreach my $attr (@$attr_list) {
         $attr->{password} = undef unless exists $attr->{password};
         $sth->execute($borrowernumber, $attr->{code}, $attr->{value}, $attr->{password});
+        if ($sth->err) {
+            warn sprintf('Database returned the following error: %s', $sth->errstr);
+            return; # bail immediately on errors
+        }
     }
+    return 1; # borower attributes successfully set
 }
 
 =head2 extended_attributes_code_value_arrayref 

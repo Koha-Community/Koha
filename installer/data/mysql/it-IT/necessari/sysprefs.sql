@@ -168,6 +168,7 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('ReturnLog','1','','Se su ON, abilita i log delle restituzioni dal prestito.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('reviewson','1','','Se ON, abilita la possibilità per gli utenti a inserire recensioni di record bibliografici nell\'OPAC.','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewer',1,'If ON, name of reviewer will be shown above comments in OPAC','','YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('ShowReviewerPhoto',1,'If ON, photo of reviewer will be shown beside comments in OPAC','','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('RoutingSerials','1','','Se ON, il serial routing è attivato.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('SearchMyLibraryFirst','0','','Se ON, le ricerche in OPAC restituiranno risultati limitatamente alla biblioteca impostata di default dell’utente  se questi si è loggato.','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('SessionStorage','mysql','mysql|Pg|tmp','Per usare un database o un file temporaneo per l\'archiviazione dei dati della sessione.','Choice');
@@ -299,3 +300,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('AlternateHoldingsSeparator','','The string to use to separate subfields in alternate holdings displays.',NULL,'free');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacHiddenItems','','This syspref allows to define custom rules for hiding specific items at opac. See docs/opac/O    pacHiddenItems.txt for more informations.','','Textarea');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('numSearchRSSResults',50,'Specify the maximum number of results to display on a RSS page of results',NULL,'Integer');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('OpacRenewalBranch','checkoutbranch','Choose how the branch for an OPAC renewal is recorded in statistics','itemhomebranch|patronhomebranch|checkoutbranch|null','Choice');

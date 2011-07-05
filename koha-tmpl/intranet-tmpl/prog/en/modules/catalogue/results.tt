@@ -412,13 +412,13 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                 <table>
                     <tr>
                         [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]<th>&nbsp;</th>[% END %][% END %]
-                        <th>Results</th>
+                        <th colspan="2">Results</th>
                         <th>Location</th>
                     </tr>
                         <!-- Actual Search Results -->
                         [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                          [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
-                            [% IF ( SEARCH_RESULT.AmazonEnabled ) %][% IF ( SEARCH_RESULT.AmazonCoverImages ) %]
+                            [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]
                                 <td>
                                     <a class="p1" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
 									
