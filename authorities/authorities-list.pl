@@ -4,7 +4,7 @@ use warnings;
 use C4::Context;
 use C4::AuthoritiesMarc;
 use utf8;
-use open qw( :std :utf8 );
+use open qw[ :std :encoding(utf8) ];
 
 my $dbh=C4::Context->dbh;
 my $datatypes_query = $dbh->prepare(<<ENDSQL);

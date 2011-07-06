@@ -24,7 +24,7 @@ use MARC::Record;
 use MARC::File::XML;
 use MARC::File::USMARC;
 
-use open OUT => ':utf8';
+use open OUT => ':encoding(UTF-8)';
 
 use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;

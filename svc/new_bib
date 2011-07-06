@@ -28,7 +28,7 @@ use XML::Simple;
 use C4::Charset;
 
 my $query = new CGI;
-binmode STDOUT, ":utf8";
+binmode STDOUT, ':encoding(UTF-8)';
 
 my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
 unless ($status eq "ok") {

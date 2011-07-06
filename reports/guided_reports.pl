@@ -539,7 +539,7 @@ elsif ($phase eq 'Run this report'){
 }
 
 elsif ($phase eq 'Export'){
-    binmode STDOUT, ':utf8';
+    binmode STDOUT, ':encoding(UTF-8)';
 
 	# export results to tab separated text or CSV
 	my $sql    = $input->param('sql');  # FIXME: use sql from saved report ID#, not new user-supplied SQL!
