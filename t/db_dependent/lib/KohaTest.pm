@@ -627,11 +627,11 @@ sub reindex_marc {
         mkdir "$directory/$record_type";
         my $sth = $dbh->prepare($record_type eq "biblio" ? "SELECT marc FROM biblioitems" : "SELECT marc FROM auth_header");
         $sth->execute();
-        open OUT, ">:utf8", "$directory/$record_type/records";
+        open my $out, '>:encoding(UTF-8)', "$directory/$record_type/records";
         while (my ($blob) = $sth->fetchrow_array) {
-            print OUT $blob;
+            print {$out} $blob;
         }
-        close OUT;
+        close $out;
         my $zebra_server = "${record_type}server";
         my $zebra_config  = C4::Context->zebraconfig($zebra_server)->{'config'};
         my $zebra_db_dir  = C4::Context->zebraconfig($zebra_server)->{'directory'};

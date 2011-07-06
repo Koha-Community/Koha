@@ -56,7 +56,7 @@ my ($template, $loggedinuser, $cookie)
 	}
 
 if ($op eq "export") {
-    binmode(STDOUT,":utf8");
+    binmode STDOUT, ':encoding(UTF-8)';
 	print $query->header(   -type => 'application/octet-stream', 
                             -charset => 'utf-8',
                             -attachment=>$filename);

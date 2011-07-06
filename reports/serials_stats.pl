@@ -103,7 +103,7 @@ if($do_it){
         $template->param(datas => \@datas,
                          do_it => 1);
     }else{
-        binmode STDOUT, ':utf8';
+        binmode STDOUT, ':encoding(UTF-8)';
         print $input->header(-type => 'application/vnd.sun.xml.calc',
                          -encoding => 'utf-8',
                              -name => "$basename.csv",

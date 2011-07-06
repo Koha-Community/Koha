@@ -9,7 +9,7 @@ use Encode;
 my $parser = XML::SAX::ParserFactory->parser(
 Handler => MySAXHandler->new
 );
-binmode STDOUT, ":utf8";
+binmode STDOUT, ':encoding(UTF-8)';
 print "\x{65}\x{301}\n";
 $parser->parse_string(encode_utf8("<xml>\x{65}\x{301}</xml>"));
 $parser->parse_string("<xml>\xEF\xBB\xBF\x{65}\x{301}</xml>");
