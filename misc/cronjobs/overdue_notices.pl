@@ -323,7 +323,7 @@ if (@branchcodes) {
 # these are the fields that will be substituted into <<item.content>>
 my @item_content_fields = split( /,/, $itemscontent );
 
-binmode( STDOUT, ":utf8" );
+binmode STDOUT, ':encoding(UTF-8)';
 
 
 our $csv;       # the Text::CSV_XS object

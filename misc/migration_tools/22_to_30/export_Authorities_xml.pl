@@ -23,7 +23,7 @@ $rq->execute;
 #ATTENTION : Mettre la base en utf8 auparavant.
 #BEWARE : Set database into utf8 before.
 while (my ($authid)=$rq->fetchrow){
-open FILEOUTPUT,">:utf8", "./$filename/$authid.xml" or die "unable to open $filename";
+open my $fileoutput, '>:encoding(UTF-8)', "./$filename/$authid.xml" or die "unable to open $filename";
   my $record=AUTHgetauthority($dbh,$authid);
   if (! utf8::is_utf8($record)) {
     utf8::decode($record);
@@ -44,7 +44,7 @@ open FILEOUTPUT,">:utf8", "./$filename/$authid.xml" or die "unable to open $file
      # } else {
 #    $record->encoding( 'UTF-8' );
 #  }
-  print FILEOUTPUT $record->as_xml();
-close FILEOUPUT;
+  print {$fileoutput}  $record->as_xml();
+close $fileoutput;
 
 }

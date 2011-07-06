@@ -41,7 +41,7 @@ else {
     );
 }
 
-binmode( STDOUT, ":utf8" );
+binmode STDOUT, ':encoding(UTF-8)';
 my $repository = C4::OAI::Repository->new();
 
 # __END__ Main Prog

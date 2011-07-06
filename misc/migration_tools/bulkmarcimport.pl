@@ -30,7 +30,7 @@ use Getopt::Long;
 use IO::File;
 use Pod::Usage;
 
-binmode(STDOUT, ":utf8");
+binmode STDOUT, ':encoding(UTF-8)';
 my ( $input_marc_file, $number, $offset) = ('',0,0);
 my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format,$biblios,$authorities,$keepids,$match, $isbn_check, $logfile);
 my ($sourcetag,$sourcesubfield,$idmapfl);
