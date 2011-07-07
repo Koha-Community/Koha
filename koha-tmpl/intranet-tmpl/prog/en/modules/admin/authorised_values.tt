@@ -50,6 +50,9 @@
 	   [% IF ( action_add_value ) %]New authorized value[% END %]
 	   [% IF ( action_add_category ) %]New category[% END %]
 	</h1>
+
+    [% IF ( action_modify ) %]<div class="note"><strong>NOTE:</strong> If you change an authorized value, existing records using it won't be updated.</div>[% END %]
+
 	<form action="[% script_name %]" name="Aform" method="post">
 	<input type="hidden" name="op" value="add_validate" />
     <input type="hidden" name="offset" value="[% offset %]" />
@@ -173,15 +176,10 @@
 </ul></div>
 
 <h1>Authorized values</h1>
-<p>These values can be used in many pull down menus throughout the Koha system. You can define as many categories as you want, and as many authorized values as you want in each category.</p>
-
-<p>When you define the MARC subfield structure, you can link a subfield to a authorized-value category. When the user ask for adding of modifying a biblio, the subfield is not entered through a free field, but though a list of authorized values</p>
+<div class="note"><strong>NOTE:</strong> If you change an authorized value, existing records using it won't be updated.</div>
 
 [% IF ( duplicate_category ) %]
-<div>
-<span class="problem">Could not add value &quot;[% duplicate_value %]&quot; for category 
-    &quot;[% duplicate_category %]&quot; &mdash; value already present.
-</span>
+<div class="dialog alert">Could not add value &quot;[% duplicate_value %]&quot; for category &quot;[% duplicate_category %]&quot; &mdash; value already present.
 </div>
 [% END %]
 <form action="/cgi-bin/koha/admin/authorised_values.pl" method="post" id="category"><label for="searchfield">Show Category: </label>[% tab_list %] <input type="submit" value="Submit" /></form>
