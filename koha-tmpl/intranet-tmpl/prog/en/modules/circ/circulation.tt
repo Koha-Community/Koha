@@ -273,7 +273,7 @@ function refocus(calendar) {
 [% END %]
 </ul>
 
-<form method="post" action="/cgi-bin/koha/circ/circulation.pl">
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" autocomplete="off">
 
 [% IF ( RESERVED ) %]
     <p>
@@ -422,7 +422,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% IF ( CGIselectborrower ) %]
 [% INCLUDE 'patron-toolbar.inc' %]
 
-<form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform">
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
 <fieldset id="circ_circulation_selectborrower" class="brief">
     <legend>Patron selection</legend>
 
@@ -454,7 +454,7 @@ No patron matched <span class="ex">[% message %]</span>
 [% END %]
 
 
-<form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform">
+<form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform" autocomplete="off">
 <fieldset id="circ_circulation_issue">
     [% IF ( DisplayClearScreenButton ) %]
         <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>

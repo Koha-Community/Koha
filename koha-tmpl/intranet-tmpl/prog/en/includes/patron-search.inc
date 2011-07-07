@@ -79,7 +79,7 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 	[% IF ( CAN_user_circulate ) %]
 	<div id="circ_search" class="residentsearch" style="display:none;">
 	<p class="tip">Enter patron card number or partial name:</p>
-    <form action="/cgi-bin/koha/circ/circulation.pl" method="post">
+    <form action="/cgi-bin/koha/circ/circulation.pl" method="post" autocomplete="off">
     [% IF ( CircAutocompl ) %]
     <div class="autocomplete">
             <div id="borrowerautocomplete" class="autocomplete">
