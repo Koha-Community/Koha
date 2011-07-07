@@ -6,7 +6,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.metadata.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/JavaScript">
 //<![CDATA[
 var MSG_CONFIRM_DELETE_HOLD = _("Are you sure you want to cancel this hold?");
 $.tablesorter.addParser({
@@ -27,6 +27,25 @@ $.tablesorter.addParser({
             }); 
 			$("#overduest").tablesorter();
 [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
+        [% IF ( OpacRenewalAllowed ) %][% IF ( canrenew ) %]$("#renewselected").submit(function(){
+            valid = false;
+            $("input[type=checkbox]").each(function(){
+                if($(this).is(':checked')){
+                    valid = true;
+                }
+            });
+            if(!valid){
+                alert(_("Nothing has been selected. Check the box for each item you want to renew"));
+            }
+            return valid;
+        });
+        $("#renewselected_link").live('click',function(){
+            $("#renewselected").submit();
+        });
+        $("#renewall_link").live('click',function(){
+            $("#renewall").submit();
+        });
+        $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");[% END %][% END %]
             });
 //]]>
 </script>
@@ -155,7 +174,7 @@ $.tablesorter.addParser({
     [% END %]
 
     <div id="opac-user-checkouts">[% IF ( issues_count ) %]
-        <form action="/cgi-bin/koha/opac-renew.pl" method="post">
+        <form id="renewselected" action="/cgi-bin/koha/opac-renew.pl" method="post">
 	<input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
 	<input type="hidden" name="from" value="opac_user" />
         <table id="checkoutst">
@@ -217,7 +236,7 @@ $.tablesorter.addParser({
                 <td>[% ISSUE.itemcallnumber %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
                     [% UNLESS patron_flagged %]
-                    <td>[% IF ( ISSUE.status ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a> <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
+                    <td>[% IF ( ISSUE.status ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a> <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
                         [% ELSE %]
                         Not renewable[% IF ( ISSUE.too_many ) %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>[% ELSE %][% IF ( ISSUE.on_reserve ) %] <span class="renewals">(On hold)</span>[% END %][% END %] 
                         [% END %]</td>
@@ -232,16 +251,15 @@ $.tablesorter.addParser({
             </tr>
         [% END %]</tbody>
         </table>
-
-        [% IF OpacRenewalAllowed %]
-            [% UNLESS patron_flagged %]
-            <input type="submit" value="Renew Selected" />
-            [% END %]
+	   [% IF ( canrenew ) %]
+		[% IF ( OpacRenewalAllowed ) %]
+		<input type="submit" value="Renew Selected" />
+		[% END %]
         [% END %]
 		</form>
 		[% IF ( OpacRenewalAllowed ) %]
-		
-		<form action="/cgi-bin/koha/opac-renew.pl" method="post">
+        [% IF ( canrenew ) %]
+		<form id="renewall" action="/cgi-bin/koha/opac-renew.pl" method="post">
 			<input type="hidden" name="from" value="opac_user" />
 			<input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
 			[% FOREACH ISSUE IN ISSUES %]
@@ -250,6 +268,7 @@ $.tablesorter.addParser({
 			[% UNLESS patron_flagged %]<input type="submit" value="Renew All" />[% END %]
 		</form>
 		[% END %]
+        [% END %]
     [% ELSE %]
         <table>
             <tr><td>You have nothing checked out</td></tr>

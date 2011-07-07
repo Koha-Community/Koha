@@ -114,6 +114,7 @@ my @overdues;
 my @issuedat;
 my $itemtypes = GetItemTypes();
 my ($issues) = GetPendingIssues($borrowernumber);
+my $canrenew = 0;
 if ($issues){
 	foreach my $issue ( sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
 		# check for reserves
@@ -142,7 +143,10 @@ if ($issues){
 		# check if item is renewable
 		my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
 		($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
-		$issue->{'status'} = $status && C4::Context->preference("OpacRenewalAllowed");
+        if($status && C4::Context->preference("OpacRenewalAllowed")){
+            $issue->{'status'} = $status;
+            $canrenew = 1;
+        }
 		$issue->{'too_many'} = 1 if $renewerror and $renewerror eq 'too_many';
 		$issue->{'on_reserve'} = 1 if $renewerror and $renewerror eq 'on_reserve';
 
@@ -181,7 +185,7 @@ if ($issues){
 }
 $template->param( ISSUES       => \@issuedat );
 $template->param( issues_count => $count );
-
+$template->param( canrenew     => $canrenew );
 $template->param( OVERDUES       => \@overdues );
 $template->param( overdues_count => $overdues_count );
 
