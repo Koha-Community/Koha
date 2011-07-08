@@ -72,7 +72,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
 
     [% IF ( GoogleJackets ) %]<div style="block" title="[% biblionumber |url %]" class="[% normalized_isbn %]" id="gbs-thumbnail-preview"></div>[% END %]
-    [% IF ( BakerTaylorEnabled ) %][% IF ( normalized_isbn ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="https://[% BakerTaylorBookstoreurl |html %][% normalized_isbn %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageurl |html %][% normalized_isbn %]" /></a>[% ELSE %]<a href="https://[% BakerTaylorBookstoreurl |html %][% normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageurl |html %][% normalized_isbn %]" /></a>[% END %][% END %][% END %]
+    [% IF ( BakerTaylorEnabled ) %][% IF ( normalized_isbn ) %][% IF ( OPACurlOpenInNewWindow ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]" target="_blank"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>[% ELSE %]<a href="https://[% BakerTaylorBookstoreURL |html %][% normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% normalized_isbn %]" /></a>[% END %][% END %][% END %]
     </div>
 
     <abbr class="unapi-id" title="koha:biblionumber:[% biblionumber %]"><!-- unAPI --></abbr>
