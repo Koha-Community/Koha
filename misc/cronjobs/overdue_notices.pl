@@ -644,6 +644,9 @@ sub parse_letter { # FIXME: this code should probably be moved to C4::Letters:pa
         return unless exists $params->{$required};
     }
 
+   my $todaysdate = C4::Dates->new()->output("syspref");
+   $params->{'letter'}->{title}   =~ s/<<today>>/$todaysdate/g;
+   $params->{'letter'}->{content} =~ s/<<today>>/$todaysdate/g;
 
     if ( $params->{'substitute'} ) {
         while ( my ( $key, $replacedby ) = each %{ $params->{'substitute'} } ) {
