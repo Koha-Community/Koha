@@ -18,7 +18,7 @@
 <img src="http://www.syndetics.com/index.aspx?isbn=[% review.normalized_isbn %]/SC.GIF&amp;client=[% review.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% review.normalized_upc %]&amp;oclc=[% review.normalized_oclc %]" alt="" />
 [% END %][% END %][% END %][% END %]
 
-[% IF ( BakerTaylorEnabled ) %][% IF ( review.normalized_isbn ) %]<a href="https://[% review.BakerTaylorBookstoreurl |html %][% review.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageurl |html %][% review.normalized_isbn %]" /></a>[% END %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF ( review.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% review.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% review.normalized_isbn %]" /></a>[% END %][% END %]
 	   [% IF ( review.author ) %]<p>By [% review.author |html %].</p> [% END %]
 	   <p>[% IF ( review.place ) %][% review.place |html %] [% END %][% IF ( review.publishercode ) %][% review.publishercode |html %][% END %][% IF ( review.publicationyear ) %] [% review.publicationyear |html %]
                     [% ELSE %][% IF ( review.copyrightdate ) %] [% review.copyrightdate |html %][% END %][% END %]

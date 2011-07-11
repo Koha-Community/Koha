@@ -75,7 +75,7 @@ $(document).ready(function(){
 
         [% IF ( GoogleJackets ) %][% IF ( review.normalized_isbn ) %]<div style="block" title="[% review.biblionumber |url %]" class="[% review.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
         </a>
-        [% IF ( BakerTaylorEnabled ) %][% IF ( review.normalized_isbn ) %]<a href="https://[% review.BakerTaylorBookstoreurl |html %][% review.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageurl |html %][% review.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+        [% IF ( BakerTaylorEnabled ) %][% IF ( review.normalized_isbn ) %]<a href="https://[% review.BakerTaylorBookstoreURL |html %][% review.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageURL |html %][% review.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
         </td>
     </tr>
     [% END %]
