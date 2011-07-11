@@ -232,7 +232,7 @@ $.tablesorter.addParser({
 
 [% IF ( GoogleJackets ) %][% IF ( ISSUE.normalized_isbn ) %]<div style="display:block;" title="Click to view in Google Books" class="[% ISSUE.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<a href="http://books.google.com/books?q=[% ISSUE.title |url %]"><span class="no-image">No cover image available</span></a>[% END %][% END %]
 
-[% IF ( BakerTaylorEnabled ) %][% IF ( ISSUE.normalized_isbn ) %]<a href="https://[% ISSUE.BakerTaylorBookstoreurl |html %][% ISSUE.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% ISSUE.BakerTaylorImageurl |html %][% ISSUE.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_isbn! -->[% END %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF ( ISSUE.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% ISSUE.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% ISSUE.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_isbn! -->[% END %][% END %]
 
 [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( using_https ) %]
 <img src="https://secure.syndetics.com/index.aspx?isbn=[% ISSUE.normalized_isbn %]/SC.GIF&amp;client=[% ISSUE.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% ISSUE.normalized_upc %]&amp;oclc=[% ISSUE.normalized_oclc %]" alt="" class="thumbnail" />
@@ -318,7 +318,7 @@ $.tablesorter.addParser({
 
 [% IF ( GoogleJackets ) %][% IF ( OVERDUE.normalized_isbn ) %]<div style="display:block;" title="Click to view in Google Books" class="[% OVERDUE.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<a href="http://books.google.com/books?q=[% OVERDUE.title |url %]"><span class="no-image">No cover image available</span></a>[% END %][% END %]
 
-[% IF ( BakerTaylorEnabled ) %][% IF ( OVERDUE.normalized_isbn ) %]<a href="https://[% OVERDUE.BakerTaylorBookstoreurl |html %][% OVERDUE.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% OVERDUE.BakerTaylorImageurl |html %][% OVERDUE.normalized_isbn %]" /></a>[% ELSE %]<!-- BakerTaylor needs normalized_isbn! --><span class="no-image">No cover image available</span>[% END %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF ( OVERDUE.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% OVERDUE.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% OVERDUE.normalized_isbn %]" /></a>[% ELSE %]<!-- BakerTaylor needs normalized_isbn! --><span class="no-image">No cover image available</span>[% END %][% END %]
 
 [% IF ( SyndeticsCoverImages ) %]
 [% IF ( using_https ) %]

@@ -42,7 +42,7 @@
 <img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" />
 [% END %][% END %][% END %][% END %]
 
-[% IF ( BakerTaylorEnabled ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<a href="https://[% SEARCH_RESULT.BakerTaylorBookstoreurl |html %][% SEARCH_RESULT.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% SEARCH_RESULT.BakerTaylorImageurl |html %][% SEARCH_RESULT.normalized_isbn %]" /></a>[% END %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% SEARCH_RESULT.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% SEARCH_RESULT.normalized_isbn %]" /></a>[% END %][% END %]
 	   <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author |html %]. [% END %]
 	   [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place |html %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode |html %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear |html %]
                     [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate |html %][% END %][% END %]
