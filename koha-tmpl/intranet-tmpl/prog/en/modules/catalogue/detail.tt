@@ -355,7 +355,7 @@ function verify_images() {
                     </td>
                     <td class="datelastseen">[% itemloo.datelastseen %]</td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% itemloo.type %]&amp;itemnumber=[% itemloo.itemnumber %]&amp;biblionumber=[% itemloo.biblionumber %]&amp;bi=[% itemloo.biblioitemnumber %]#item[% itemloo.itemnumber %]">[% itemloo.barcode %]</a></td>
-				[% IF ( itemloo.enumchron ) %]	<td class="enumchron">
+				[% IF ( volinfo ) %]	<td class="enumchron">
 					[% IF ( itemdata_enumchron ) %]
 						[% IF ( itemloo.enumchron ) %]
 						[% itemloo.enumchron %][% IF ( itemloo.serialseq ) %] -- [% END %]
