@@ -9,7 +9,8 @@
 <script type="text/javascript" id="js">$(document).ready(function() {
 	$("#table_categorie").tablesorter({
 		sortList: [[0,0]],
-		headers: { 10: { sorter: false}}
+		widgets: ['zebra'],
+		headers: { 11: { sorter: false}}
 	}).tablesorterPager({container: $("#pagertable_categorie"),positionFixed: false,size: 20});
 }); </script>
 [% INCLUDE 'calendar.inc' %]
@@ -300,11 +301,7 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 			<th scope="col" colspan="2">&nbsp; </th>
 		</thead>
 		[% FOREACH loo IN loop %]
-		[% UNLESS ( loop.odd ) %]
-			<tr class="highlight">
-		[% ELSE %]
 			<tr>
-		[% END %]
                         <td>[% loo.categorycode |html %]</td>
                         <td>
                             <a href="[% loo.script_name %]?op=add_form&amp;categorycode=[% loo.categorycode |url %]">[% loo.description |html %]</a>
@@ -332,22 +329,25 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
                         <td>[% IF ( loo.hidelostitems ) %]Hidden[% ELSE %]Shown[% END %]</td>
                         <td>[% loo.reservefee %]</td>
                         [% IF ( EnhancedMessagingPreferences ) %]
-                        <td>
+                        <td style="white-space: nowrap; font-size:80%;">
                             [% IF ( loo.messaging_prefs ) %]
-                                [% IF ( messaging_preference.Item_Due ) %]Item Due
-                                [% ELSIF ( messaging_preference.Advance_Notice ) %]Advance Notice
-                                [% ELSIF ( messaging_preference.Upcoming_Events ) %]Upcoming Events
-                                [% ELSIF ( messaging_preference.Hold_Filled ) %]Hold Filled
-                                [% ELSIF ( messaging_preference.Item_Check_in ) %]Item Check-in
-                                [% ELSIF ( messaging_preference.Item_Checkout ) %]Item Checkout
-                                [% ELSE %]Unknown 
-                                [% END %] :
-                                [% FOREACH transport IN messaging_pref.transports %]
-                                    [% transport.transport %]
-                                [% END %]                                
-                                <br />
+                              [% FOREACH prefs IN loo.messaging_prefs %]
+	                                [% FOREACH transport IN prefs.transports %]
+                                         [% IF ( transport.transport ) %]
+			                                [% IF ( prefs.Item_Due ) %]Item Due
+			                                [% ELSIF ( prefs.Advance_Notice ) %]Advance Notice
+			                                [% ELSIF ( prefs.Upcoming_Events ) %]Upcoming Events
+			                                [% ELSIF ( prefs.Hold_Filled ) %]Hold Filled
+			                                [% ELSIF ( prefs.Item_Check_in ) %]Item Check-in
+			                                [% ELSIF ( prefs.Item_Checkout ) %]Item Checkout
+			                                [% ELSE %]Unknown
+			                                [% END %]:
+				                            <strong>[% transport.transport %]</strong><br />
+				                         [% ELSE %]None<br />[% END %]
+	                                [% END %]
+                                [% END %]
                             [% ELSE %]
-                                none
+                                None
                             [% END %]
                         </td>
                         [% END %]
