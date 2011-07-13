@@ -842,6 +842,7 @@ sub getIndexes{
                     'Authority-Number',
                     'authtype',
                     'bc',
+		    'Bib-level',
                     'biblionumber',
                     'bio',
                     'biography',
