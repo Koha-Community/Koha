@@ -38,7 +38,10 @@
 			$("#holtype").attr("class","key exception").html(_("Holiday exception"));
 		} else if(holidayType == 'weekday') {
 			$("#showOperationDelLabel").html(_('Delete this holiday.'));
-			$("#holtype").attr("class","key repeatableday").html(_("Repeatable holiday"));
+			$("#holtype").attr("class","key repeatableweekly").html(_("Holiday repeating weekly"));
+		} else if(holidayType == 'daymonth') {
+			$("#showOperationDelLabel").html(_('Delete this holiday.'));
+			$("#holtype").attr("class","key repeatableyearly").html(_("Holiday repeating yearly"));
 		} else {
 			$("#showOperationDelLabel").html(_('Delete this holiday.'));
 			$("#holtype").attr("class","key holiday").html(_("Unique holiday"));
@@ -107,7 +110,8 @@
 .normalday { background-color :  #EDEDED; color :  Black; border : 1px solid #BCBCBC; }
 .exception { background-color :  #b3d4ff; color :  Black; border : 1px solid #BCBCBC; }
 .holiday {  background-color :  #ffaeae; color :  Black;  border : 1px solid #BCBCBC; }
-.repeatableday {  background-color :  #FFFF99; color :  Black;  border : 1px solid #BCBCBC; }
+.repeatableweekly {  background-color :  #FFFF99; color :  Black;  border : 1px solid #BCBCBC; }
+.repeatableyearly {  background-color :  #FFCC66; color :  Black;  border : 1px solid #BCBCBC; }
 .information { z-index : 1; background-color :  #DCD2F1; width : 300px; display : none; border : 1px solid #000000; color :  #000000; font-size :  8pt; font-weight :  bold; background-color :  #FFD700; cursor :  pointer; padding : 2px; }
 .panel { z-index : 1; display : none; border : 3px solid #CCC; padding : 3px; margin-top: .3em;  background-color: #FEFEFE; } fieldset.brief { border : 0; margin-top: 0; }
 #showHoliday { margin : .5em 0; } h1 select { width: 20em; } div.yui-b fieldset.brief ol { font-size:100%; } div.yui-b fieldset.brief li, div.yui-b fieldset.brief li.radio  { padding:0.2em 0; } .help { margin:.3em 0;border:1px solid #EEE;padding:.3em .7em; font-size : 90%; } #holidayweeklyrepeatable, #holidaysyearlyrepeatable, #holidaysunique, #holidayexceptions { font-size : 90%; margin-bottom : 1em;} .calendar td, .calendar th, .calendar .button, .calendar tbody .day { padding : .7em; font-size: 110%; } .calendar { width: auto; border : 0; }
@@ -288,8 +292,10 @@
 		var dateString = year + '/' + month + '/' + day;
 		if (exception_holidays[dateString] != null) {
 			return 'exception';
-		} else if ((week_days[weekDay] != null) || (day_month_holidays[dayMonth] != null)) {
-			return 'repeatableday';
+		} else if ( week_days[weekDay] != null ){
+			return 'repeatableweekly';
+		} else if ( day_month_holidays[dayMonth] != null ) {
+			return 'repeatableyearly';
 		} else if (holidays[dateString] != null) {
 			return 'holiday';
 		} else {
@@ -347,7 +353,8 @@
 	<p>
 		<span class="key normalday">Working day</span>
 		<span class="key holiday">Unique holiday</span>
-		<span class="key repeatableday">Repeatable holiday</span>
+		<span class="key repeatableweekly">Holiday repeating weekly</span>
+		<span class="key repeatableyearly">Holiday repeating yearly</span>
 		<span class="key exception">Holiday exception</span>
 	</p>
 </div>
@@ -380,9 +387,9 @@
 <table id="holidayweeklyrepeatable">
 <thead>
 <tr>
-  <th class="repeatableday">Day of Week</th>
-  <th class="repeatableday">Title</th>
-  <th class="repeatableday">Description</th>
+  <th class="repeatableweekly">Day of Week</th>
+  <th class="repeatableweekly">Title</th>
+  <th class="repeatableweekly">Description</th>
 </tr>
 </thead>
 <tbody>
@@ -407,12 +414,12 @@
 <thead>
 <tr>
   [% IF ( dateformat == 'metric' ) %]
-  <th class="repeatableday">Day/Month</th>
+  <th class="repeatableyearly">Day/Month</th>
   [% ELSE %]
-  <th class="repeatableday">Month/Day</th>
+  <th class="repeatableyearly">Month/Day</th>
   [% END %]
-  <th class="repeatableday">Title</th>
-  <th class="repeatableday">Description</th>
+  <th class="repeatableyearly">Title</th>
+  <th class="repeatableyearly">Description</th>
 </tr>
 </thead>
 <tbody>
