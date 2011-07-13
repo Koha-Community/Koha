@@ -207,12 +207,12 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	</tr>
 	[% FOREACH tagloo IN tagloop %]
 	<tr>
-	    <td class="count">[% offset + __counter__ %]
+	    <td class="count">[% offset + loop.count %]
 	    </td>
 	    <td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" [% IF ( approved == 0 ) %] class="pending"[% END %] /></span>
 	    </td>
-	    [% IF ( approved == -1 ) %]<td class="red">rejected
-		[% ELSIF ( approved == 1 ) %]<td class="green"><img alt="OK" src="/intranet-tmpl/prog/img/approve.gif" />
+	    [% IF ( tagloo.approved == -1 ) %]<td class="red">rejected
+		[% ELSIF ( tagloo.approved == 1 ) %]<td class="green"><img alt="OK" src="/intranet-tmpl/prog/img/approve.gif" />
 		[% ELSE %]<td class="pending">
 		[% END %]
 	    </td>
