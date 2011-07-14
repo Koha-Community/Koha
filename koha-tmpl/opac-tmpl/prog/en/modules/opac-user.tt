@@ -73,8 +73,8 @@ $.tablesorter.addParser({
             [% IF ( BORROWER_INF.lost ) %]
                 <li><strong>Please note: </strong> Your library card has been marked as lost or stolen. If this is an error, please contact the library.</li>
             [% END %]
-            [% IF ( BORROWER_INF.renewal_blocked_fines ) %]
-                <li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than [% BORROWER_INF.renewal_blocked_fines %]</a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li>
+            [% IF renewal_blocked_fines %]
+                <li><strong>Please note: </strong> Since you have <a href="/cgi-bin/koha/opac-account.pl">more than [% renewal_blocked_fines %]</a> in fines, you cannot renew your books online. Please pay your fines if you wish to renew your books.</li>
             [% END %]
         </ul></div>
         [% END %]
@@ -168,7 +168,7 @@ $.tablesorter.addParser({
         [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
         <th>Call No.</th>
         [% IF ( OpacRenewalAllowed ) %]
-        [% UNLESS ( patron_flagged ) %]<th class="{sorter: false}">Renew</th>[% END %]
+        [% UNLESS  patron_flagged %]<th class="{sorter: false}">Renew</th>[% END %]
         [% END %]
 [% IF ( OPACFinesTab ) %]
         <th>Fines</th>
@@ -216,7 +216,7 @@ $.tablesorter.addParser({
                 [% IF ( show_barcode ) %]<td>[% ISSUE.barcode %]</td>[% END %]
                 <td>[% ISSUE.itemcallnumber %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
-                    [% UNLESS ( ISSUE.patron_flagged ) %]
+                    [% UNLESS patron_flagged %]
                     <td>[% IF ( ISSUE.status ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/><a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a> <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
                         [% ELSE %]
                         Not renewable[% IF ( ISSUE.too_many ) %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>[% ELSE %][% IF ( ISSUE.on_reserve ) %] <span class="renewals">(On hold)</span>[% END %][% END %] 
@@ -232,10 +232,12 @@ $.tablesorter.addParser({
             </tr>
         [% END %]</tbody>
         </table>
-	
-		[% IF ( OpacRenewalAllowed ) %]
-		<input type="submit" value="Renew Selected" />
-		[% END %]
+
+        [% IF OpacRenewalAllowed %]
+            [% UNLESS patron_flagged %]
+            <input type="submit" value="Renew Selected" />
+            [% END %]
+        [% END %]
 		</form>
 		[% IF ( OpacRenewalAllowed ) %]
 		
@@ -245,7 +247,7 @@ $.tablesorter.addParser({
 			[% FOREACH ISSUE IN ISSUES %]
 			<input type="hidden" name="item" value="[% ISSUE.itemnumber %]" />
 			[% END %]
-			[% UNLESS ( patron_flagged ) %]<input type="submit" value="Renew All" />[% END %]
+			[% UNLESS patron_flagged %]<input type="submit" value="Renew All" />[% END %]
 		</form>
 		[% END %]
     [% ELSE %]
@@ -267,7 +269,7 @@ $.tablesorter.addParser({
 <th>Call No.</th>
 <th>Due</th>
 [% IF ( OpacRenewalAllowed ) %]
-                    [% UNLESS ( patron_flagged ) %]<th class="{sorter: false}">Renew</th>[% END %][% END %]
+                    [% UNLESS patron_flagged %]<th class="{sorter: false}">Renew</th>[% END %][% END %]
 [% IF ( OPACFinesTab ) %]
 <th>Fines</th>
 [% END %]
@@ -299,7 +301,7 @@ $.tablesorter.addParser({
 <td>[% OVERDUE.itemcallnumber %]</td>
 <td>[% OVERDUE.date_due %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
-                    [% UNLESS ( OVERDUE.patron_flagged ) %]
+                    [% UNLESS patron_flagged %]
 <td>
 [% IF ( OVERDUE.debarred ) %]Account Frozen
 [% ELSIF ( OVERDUE.status ) %]
