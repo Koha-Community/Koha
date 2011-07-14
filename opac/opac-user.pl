@@ -79,11 +79,13 @@ if ( $borr->{'amountoutstanding'} > 5 ) {
 if ( 5 >= $borr->{'amountoutstanding'} && $borr->{'amountoutstanding'} > 0 ) {
     $borr->{'amountoverzero'} = 1;
 }
+my $no_renewal_amt = C4::Context->preference( 'OPACFineNoRenewals' );
+$no_renewal_amt ||= 0;
 
-if ( $borr->{'amountoutstanding'} > C4::Context->preference( 'OPACFineNoRenewals' ) ) {
+if ( $borr->{amountoutstanding} > $no_renewal_amt ) {
     $borr->{'flagged'} = 1;
     $template->param(
-        renewal_blocked_fines => sprintf( "%.02f", C4::Context->preference( 'OPACFineNoRenewals' ) ),
+        renewal_blocked_fines => sprintf( '%.02f', $no_renewal_amt ),
     );
 }
 
