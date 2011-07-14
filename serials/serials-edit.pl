@@ -176,6 +176,7 @@ foreach my $subscriptionid (@subscriptionids) {
             $cell->{serialsadditems} = 1;
         }
         $cell->{'subscriptionid'} = $subscriptionid;
+        $cell->{biblionumber} = $serialdatalist[0]->{'biblionumber'};
         $cell->{'itemid'}         = 'NNEW';
         $cell->{'serialid'}       = 'NEW';
         $cell->{'issuesatonce'}   = 1;
