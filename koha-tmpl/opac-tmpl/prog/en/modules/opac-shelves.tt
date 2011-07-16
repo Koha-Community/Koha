@@ -343,7 +343,7 @@ $(function() {
 
                 [% IF ( GoogleJackets ) %][% IF ( itemsloo.normalized_isbn ) %]<div style="block" title="[% itemsloo.biblionumber |url %]" class="[% itemsloo.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 </a>
-                [% IF ( BakerTaylorEnabled ) %][% IF ( itemsloo.normalized_isbn ) %]<a href="https://[% itemsloo.BakerTaylorBookstoreurl |html %][% itemsloo.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% itemsloo.BakerTaylorImageurl |html %][% itemsloo.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+                [% IF ( BakerTaylorEnabled ) %][% IF ( itemsloo.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% itemsloo.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% itemsloo.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
         </td>
                       </tr>
                   [% END %]<!-- /itemsloop -->

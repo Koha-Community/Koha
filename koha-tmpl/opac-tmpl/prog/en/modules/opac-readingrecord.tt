@@ -67,7 +67,7 @@ You have never borrowed anything from this library.
 
     [% IF ( GoogleJackets ) %][% IF ( READING_RECOR.normalized_isbn ) %]<div style="block" title="[% READING_RECOR.biblionumber |url %]" class="[% READING_RECOR.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
 
-    [% IF ( BakerTaylorEnabled ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="https://[% READING_RECOR.BakerTaylorBookstoreurl |html %][% READING_RECOR.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% READING_RECOR.BakerTaylorImageurl |html %][% READING_RECOR.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
+    [% IF ( BakerTaylorEnabled ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% READING_RECOR.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% READING_RECOR.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
 
 	[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( using_https ) %]
 	<img src="https://secure.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% READING_RECOR.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />
