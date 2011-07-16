@@ -36,6 +36,8 @@ generate_config_file() {
         -e "s/__OPACSERVER__/$domain/g" \
         -e "s/__INTRASERVER__/$intradomain/g" \
         -e "s/__ZEBRA_PASS__/$zebrapwd/g" \
+        -e "s/__ZEBRA_MARC_FORMAT__/$ZEBRA_MARC_FORMAT/g" \
+        -e "s/__ZEBRA_LANGUAGE__/$ZEBRA_LANGUAGE/g" \
         -e "s/__DB_NAME__/$mysqldb/g" \
         -e "s/__DB_HOST__/$mysqlhost/g" \
         -e "s/__DB_USER__/$mysqluser/g" \
@@ -65,6 +67,8 @@ INTRAPORT="8080"
 INTRAPREFIX=""
 INTRASUFFIX=""
 DEFAULTSQL=""
+ZEBRA_MARC_FORMAT="marc21"
+ZEBRA_LANGUAGE="en"
 if [ -e /etc/koha/koha-sites.conf ]
 then
     . /etc/koha/koha-sites.conf
