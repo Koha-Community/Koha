@@ -1075,8 +1075,8 @@ sub BuildSummary{
               } elsif ($record->field('148')) {
                                       $heading.= $field->as_string('abvxyz68');
               } elsif ($record->field('150')) {
-          #    $heading.= $field->as_string('abvxyz68');
-          $heading.= $field->as_formatted();
+                  $heading.= $field->as_string('abvxyz68');
+              #$heading.= $field->as_formatted();
               my $tag=$field->tag();
               $heading=~s /^$tag//g;
               $heading =~s /\_/\$/g;
