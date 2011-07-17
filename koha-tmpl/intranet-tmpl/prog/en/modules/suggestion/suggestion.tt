@@ -204,7 +204,15 @@ $(document).ready(function() { calcNewsuggTotal(); });
 <div id="suggestiontabs" class="toptabs">
 <ul class="ui-tabs-nav">
 [% FOREACH suggestion IN suggestions %]
-[% IF ( suggestion.first ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="suggestion.pl#[% suggestion.suggestiontype %]">[% IF ( suggestion.suggestiontypelabel ) %][% suggestion.suggestiontypelabel %][% ELSE %]No name[% END %] ([% suggestion.suggestionscount %])</a></li>
+[% IF ( suggestion.first ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="suggestion.pl#[% suggestion.suggestiontype %]">[% IF ( suggestion.suggestiontypelabel ) %]
+    [% IF (suggestion.suggestiontypelabel == "Pending") %]Pending
+    [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]Accepted
+    [% ELSIF (suggestion.suggestiontypelabel == "Checked") %]Checked
+    [% ELSIF (suggestion.suggestiontypelabel == "Rejected") %]Rejected
+    [% ELSIF (suggestion.suggestiontypelabel == "Available") %]Available
+    [% ELSIF (suggestion.suggestiontypelabel == "Ordered") %]Ordered[% ELSE %]
+    [% suggestion.suggestiontypelabel %][% END %]
+    [% ELSE %]No name[% END %] ([% suggestion.suggestionscount %])</a></li>
 [% END %]
     </ul>
     </div>
