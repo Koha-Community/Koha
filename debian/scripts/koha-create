@@ -19,12 +19,10 @@
 
 set -e
 
-
 die() {
     echo "$@" 1>&2
     exit 1
 }
-
 
 generate_config_file() {
     touch "$2"
@@ -60,7 +58,6 @@ getinstancemysqlpassword() {
         "/etc/koha/sites/$1/koha-conf.xml"
 }
 
-
 # Set defaults and read config file, if it exists.
 DOMAIN=""
 INTRAPORT="8080"
@@ -74,18 +71,31 @@ then
     . /etc/koha/koha-sites.conf
 fi
 
+[ $# -ge 2 ] && [ $# -le 6 ] || 
+    die "Usage: $0 [--create-db|--request-db|--populate-db] \
+[--marcflavor marc21|normarc|unimarc] \
+[--zebralang en|fr|nb] instancename"
 
-# Parse command line.
-[ "$#" = 2 ] || 
-    die "Usage: $0 [--create-db|--request-db|--populate-db] instancename"
-case "$1" in
-  --create-db) op=create ;;
-  --request-db) op=request ;;
-  --populate-db) op=populate ;;
-  *) die "Usage: $0 [--create-db|--request-db|--populate-db] instancename" ;;
-esac
+TEMP=`getopt -o crpm:l: -l create-db,request-db,populate-db,marcflavor:,zebralang: \
+     -n "$0" -- "$@"`
 
-name="$2"
+# Note the quotes around `$TEMP': they are essential!
+eval set -- "$TEMP"
+
+while true ; do
+	case "$1" in
+		-c|--create-db) op=create ; shift ;;
+		-r|--request-db) op=request ; shift ;;
+		-p|--populate-db) op=populate ; shift ;;
+		-m|--marcflavor) ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
+		-l|--zebralang) ZEBRA_LANGUAGE="$2" ; shift 2 ;;
+		--) shift ; break ;;
+		*) die "Internal error! " ;;
+	esac
+done
+
+name="$1"
+
 domain="$name$DOMAIN"
 if [ "$INTRAPORT" = 80 ] || [ "$INTRAPORT" = "" ]
 then
