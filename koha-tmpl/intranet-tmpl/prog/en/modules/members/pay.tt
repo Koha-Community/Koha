@@ -64,10 +64,10 @@
 	<td>[% loop_pa.description %] [% loop_pa.title |html %]</td>
     <td>
         [% IF ( loop_pa.net_balance ) %]
-        <input type="text" name="note[% loop_pa.i %]" value="
+            <input type="text" name="note[% loop_pa.i %]" value="[% loop_pa.note %]" />
+        [% ELSE %]
+            [% loop_pa.note %]
         [% END %]
-        [% loop_pa.note %]
-        [% IF ( loop_pa.net_balance ) %]" />[% END %]
     </td>
 	<td>[% loop_pa.accounttype %]</td>
 	<td>[% loop_pa.notify_id %]</td>
