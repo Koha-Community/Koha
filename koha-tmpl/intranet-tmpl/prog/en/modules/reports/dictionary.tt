@@ -19,55 +19,55 @@
 [% END %]
 <h1>Dictionary</h1>
 [% IF ( start_dictionary ) %]
-<p>Use the dictionary to define custom criteria for reporting.</p>
+	<p>Use the dictionary to define custom criteria for reporting.</p>
 
-
-<h2>Current Terms</h2>
-<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-<input type="hidden" name="phase" value="View Dictionary" />
-Filter by area <select name="areas">
-<option value="">All</option>
-[% FOREACH area IN areas %]     
-    [% IF ( area.selected ) %]
-        <option value="[% area.id %]" selected="selected" >[% area.name %]</option>
-    [% ELSE %]
-        <option value="[% area.id %]">[% area.name %]</option>
-    [% END %]
+		[% IF ( definitions ) %]
+		<h2>Current Terms</h2>
+		<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+		<input type="hidden" name="phase" value="View Dictionary" />
+		[% IF ( areas ) %]
+			Filter by area <select name="areas">
+			<option value="">All</option>
+			[% FOREACH area IN areas %]
+			    [% IF ( area.selected ) %]
+			        <option value="[% area.id %]" selected="selected" >[% area.name %]</option>
+			    [% ELSE %]
+			        <option value="[% area.id %]">[% area.name %]</option>
+			    [% END %]
+			[% END %]
+			</select>
+			<input name="submit" value="Go" type="submit" />
+			</form>
+			<br />
+		[% END %]
+		<table border="1" cellspacing="0" cellpadding="5">
+		<tr>
+		<th>Name</th>
+		<th>Description</th>
+		<th>Area</th>
+		<th>Definition</th>
+		<th>&nbsp;</th>
+		</tr>
+		[% FOREACH definition IN definitions %]
+			[% UNLESS ( loop.odd ) %]
+				<tr class="highlight" valign="top">
+			[% ELSE %]
+				<tr valign="top">
+			[% END %]
+			<td>[% definition.name %]</td>
+			<td>[% definition.description %]</td>
+			<td>[% definition.areaname %]</td>
+			<td>[% definition.saved_sql %]</td>
+			<td><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
+			<input type="hidden" name="id" value="[% definition.id %]" />
+			<input type="hidden" name="phase" value="Delete Definition" />
+			<input type="submit" name="submit" value="Delete Definition" />
+			</form></td>
+			</tr>
+		[% END %]
+		</table>
+		[% END %]
 [% END %]
-</select> 
-<input name="submit" value="Go" type="submit" />
-</form>
-<br />
-<table border="1" cellspacing="0" cellpadding="5">
-<tr>
-<th>Name</th>
-<th>Description</th>
-<th>Area</th>
-<th>Definition</th>
-<th>&nbsp;</th>
-</tr>
-[% IF ( definitions ) %]
-[% FOREACH definition IN definitions %]
-[% UNLESS ( loop.odd ) %]
-<tr class="highlight" valign="top">
-[% ELSE %]
-<tr valign="top">
-[% END %]
-<td>[% definition.name %]</td>
-<td>[% definition.description %]</td>
-<td>[% definition.areaname %]</td>
-<td>[% definition.saved_sql %]</td>
-<td><form method="post" action="/cgi-bin/koha/reports/dictionary.pl">
-<input type="hidden" name="id" value="[% definition.id %]" />
-<input type="hidden" name="phase" value="Delete Definition" />
-<input type="submit" name="submit" value="Delete Definition" />
-</form></td>
-</tr>
-[% END %]
-[% END %]
-</table>
-[% END %]
-
 
 [% IF ( new_dictionary ) %]
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
