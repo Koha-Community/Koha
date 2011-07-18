@@ -2,12 +2,19 @@
 <title>Koha &rsaquo; Reports &rsaquo; Guided Reports &rsaquo; Dictionary</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
+<style type="text/css">fieldset.rows table { clear: none; margin: 0;}</style>
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a>  &rsaquo; <strong> Dictionary </strong></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a> &rsaquo; <a href="/cgi-bin/koha/reports/guided_reports.pl">Guided Reports Wizard</a> 
+[% IF ( new_dictionary ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Name the new definition</strong>
+[% ELSIF ( step_2 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 2: Choose the area </strong> 
+[% ELSIF ( step_3 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 3: Choose columns </strong> 
+[% ELSIF ( step_4 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 4: Specify a value </strong> 
+[% ELSIF ( step_5 ) %] &rsaquo; <a href="/cgi-bin/koha/reports/dictionary.pl">Dictionary</a> &rsaquo; <strong>Step 5: Confirm definition</strong> 
+[% ELSE %]<strong> Dictionary </strong>[% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -70,17 +77,9 @@
 [% END %]
 
 [% IF ( new_dictionary ) %]
+<h3>Add New Definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
-
-<div class="toptabs">
-<ul class="ui-tabs-nav">
-	<li class="ui-tabs-selected"><span class="a">Step 1: Name</span></li>
-	<li><span class="a">Step 2: Area</span></li>
-	<li><span class="a">Step 3: Columns</span></li>
-	<li><span class="a">Step 4: Values</span></li>
-</ul>
-<div class="tabs-container">
-<fieldset class="rows"><legend>Add New Definition</legend><ol>
+<fieldset class="rows"><legend>Step 1 of 5: Name the new definition</legend><ol>
 <li>
 <label for="definition_name">Definition Name:</label>
 <input type="text" id="definition_name" name="definition_name" />
@@ -93,23 +92,14 @@
 																													  
 <fieldset class="action"><input type="hidden" name="phase" value="New Term step 2" />
 <input name="submit" value="Next" type="submit" /></fieldset>
-</div>
-</div>
 </form>
 [% END %]
 
 [% IF ( step_2 ) %]
-<div class="toptabs">
-<ul class="ui-tabs-nav">
-	<li><span class="a">Step 1: Name</span></li>
-	<li class="ui-tabs-selected"><span class="a">Step 2: Area</span></li>
-	<li><span class="a">Step 3: Columns</span></li>
-	<li><span class="a">Step 4: Values</span></li>
-</ul>
-<div class="tabs-container">
+<h3>Add New Definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <fieldset class="rows">
-<legend>Add New Definition</legend>
+<legend>Step 2 of 5: Choose the area</legend>
 <ol><li><input type="hidden" name="phase" value="New Term step 3" />
 <input type="hidden" name="definition_name" value="[% definition_name %]" />
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
@@ -122,28 +112,21 @@
 </fieldset>                                                                            
 <fieldset class="action"><input name="submit" value="Next" type="submit" /></fieldset>
 </form>
-</div>
-</div>
 [% END %]
 
 [% IF ( step_3 ) %]
-<h1>Add New Definition</h1>
-<div class="toptabs">
-<ul class="ui-tabs-nav">
-	<li><span class="a">Step 1: Name</span></li>
-	<li><span class="a">Step 2: Area</span></li>
-	<li class="ui-tabs-selected"><span class="a">Step 3: Columns</span></li>
-	<li><span class="a">Step 4: Values</span></li>
-</ul>
-<div class="tabs-container">
+<h3>Add New Definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
+<fieldset class="rows">
+<legend>Step 3 of 5: Choose columns</legend>
 <input type="hidden" name="area" value="[% area %]" />
 <input type="hidden" name="definition_name" value="[% definition_name %]" />
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
 
-<table style="border: 0;"><tr><td><select id="availableColumns" name="oldcolumns2" size="25" style="width:200px;height:300px;">    
-[% FOREACH column IN columns %]                              
-[% IF ( column.table ) %]                                                                                                      
+<table style="border: 0;margin:1em;"><tr>
+<td style="border: 0;"><select id="availableColumns" name="oldcolumns2" size="25" style="width:200px;height:300px;">    
+[% FOREACH column IN columns %]
+[% IF ( column.table ) %]
 [% IF ( loop.first ) %]                              
 [% ELSE %]               
 </optgroup>        
@@ -162,29 +145,21 @@
 </optgroup>
 </select></td>
 
-<td><input type="button" name="Add" value="Add" class="button"  style="width : 6em; margin-bottom : .5em;" onclick="addColumn()" /><br /><input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width : 6em;"  onclick="delColumn()" />  </td>
+<td style="border: 0;"><input type="button" name="Add" value="Add" class="button"  style="width : 6em; margin-bottom : .5em;" onclick="addColumn()" /><br /><input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width : 6em;"  onclick="delColumn()" />  </td>
 
-<td><select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>     </td>   </tr></table>     
-         
-                                                                            
+<td style="border: 0;"><select id="selectedColumns" name="columns" size="25" style="width:200px;height:300px;"></select>     </td>   </tr></table>     
+
 <input type="hidden" name="phase" value="New Term step 4" />
-<input type="submit" name="submit" value="Next" />  
-</form>    
-</div>
-</div>
+</fieldset>
+<fieldset class="action"><input type="submit" name="submit" value="Next" /></fieldset>
+</form>
 [% END %]
 
 [% IF ( step_4 ) %]
-<h1>Add New Definition</h1>
-<div class="toptabs">
-<ul class="ui-tabs-nav">
-	<li><span class="a">Step 1: Name</span></li>
-	<li><span class="a">Step 2: Area</span></li>
-	<li><span class="a">Step 3: Columns</span></li>
-	<li class="ui-tabs-selected"><span class="a">Step 4: Values</span></li>
-</ul>
-<div class="tabs-container">
+<h3>Add New Definition</h3>
 <form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
+<fieldset class="rows">
+<legend>Step 4 of 5: Specify a value</legend>
 <input type="hidden" name="area" value="[% area %]" />
 <input type="hidden" name="definition_name" value="[% definition_name %]" />
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
@@ -192,78 +167,82 @@
 
 [% FOREACH column IN columns %]
 <input type="hidden" name="criteria_column" value="[% column.name %]" />
-[% column.name %]
+<ol><li><span class="label">Column: </span> [% column.name %]</li>
 [% IF ( column.distinct ) %]
-<select name="[% column.name %]_value"> 
-[% FOREACH value IN column.values %]           
-<option value="[% value.availablevalues %]">[% value.availablevalues %]</option>      
-[% END %]   
-</select>
+	<li><label for="[% column.name %]_value">Choose: </label> <select id="[% column.name %]_value" name="[% column.name %]_value"> 
+		[% FOREACH value IN column.values %]
+			<option value="[% value.availablevalues %]">[% value.availablevalues %]</option>
+		[% END %]
+	</select></li>
 [% END %]
 [% IF ( column.date ) %]
-<table>
-<tr valign="top">
-<td><input type="radio" name="[% column.name %]_all" value="all" />All dates</td>
-<td>OR</td>
-<td><input type="radio" name="dates" value="range" />Date range<br />
-<table>
-<tr>
-<td>Start of date range</td>
-<td><input type="text" size="10" id="[% column.name %]_start_value" name="[% column.name %]_start_value" value="" />      
-<img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />    
-<script type="text/javascript">                            
-Calendar.setup({             
-inputField     : "[% column.name %]_start_value",    
-ifFormat       : "[% DHTMLcalendar_dateformat %]",
-button         : "buttonfrom1",                            
-align          : "Tl"                  
-});
-</script>
-<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-</td>
-</tr>
-<tr>
-<td>End of date range</td>
-<td>
-<input type="text" size="10" id="[% column.name %]_end_value" name="[% column.name %]_end_value" value="" />      
-<img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom2" style="cursor: pointer;"  />
-<script type="text/javascript">                            
-Calendar.setup({             
-inputField     : "[% column.name %]_end_value",    
-ifFormat       : "[% DHTMLcalendar_dateformat %]",
-button         : "buttonfrom2",
-align          : "Tl"                  
-});
-</script>
-<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
-</td>
-</tr>
-</table></td>
-</tr>
-</table>
+	<li><span class="label">Choose: </span><table>
+	<tr valign="top">
+	<td><input type="radio" name="[% column.name %]_all" value="all" />All dates</td>
+	<td>OR</td>
+	<td><input type="radio" name="dates" value="range" />Date range<br />
+	<table>
+	<tr>
+	<td>Start of date range</td>
+	<td><input type="text" size="10" id="[% column.name %]_start_value" name="[% column.name %]_start_value" value="" />      
+	<img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom1" style="cursor: pointer;"  />
+	<script type="text/javascript">
+	Calendar.setup({
+	inputField     : "[% column.name %]_start_value",
+	ifFormat       : "[% DHTMLcalendar_dateformat %]",
+	button         : "buttonfrom1",
+	align          : "Tl"
+	});
+	</script>
+	<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+	</td>
+	</tr>
+	<tr>
+	<td>End of date range</td>
+	<td>
+	<input type="text" size="10" id="[% column.name %]_end_value" name="[% column.name %]_end_value" value="" />      
+	<img src="[% themelang %]/lib/calendar/cal.gif" id="buttonfrom2" style="cursor: pointer;"  />
+	<script type="text/javascript">
+	Calendar.setup({
+	inputField     : "[% column.name %]_end_value",
+	ifFormat       : "[% DHTMLcalendar_dateformat %]",
+	button         : "buttonfrom2",
+	align          : "Tl"
+	});
+	</script>
+	<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+	</td>
+	</tr>
+	</table></td>
+	</tr>
+</table></li>
 [% END %]
 [% IF ( column.text ) %]
-<p>Search string matches <input type="text" size="13" name="[% column.name %]_value" /></p>
+	<li><label for="[% column.name %]_value">Search string matches: </label> <input type="text" size="13" name="[% column.name %]_value" /></li>
 [% END %]
 
 [% END %]
+</ol>
 <input type="hidden" name="phase" value="New Term step 5" />
-<input type="submit" name="submit" value="Next" />            
+</fieldset>
+<fieldset class="action">
+<input type="submit" name="submit" value="Next" />
+</fieldset>
 </form>
-</div>
-</div>
 [% END %]
 
 [% IF ( step_5 ) %]
-<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">      
+<form action="/cgi-bin/koha/reports/dictionary.pl" method="post">
 <input type="hidden" name="area" value="[% area %]" />    
 <input type="hidden" name="definition_name" value="[% definition_name %]" />           
 <input type="hidden" name="definition_description" value="[% definition_description %]" />
 <input type="hidden" name="columnstring" value="[% columnstring %]" />
 
-<h3>Confirm Definition</h3>
+<h3>Add New Definition</h3>
 
-<fieldset class="rows"><ol><li>
+<fieldset class="rows">
+<legend>Step 5 of 5: Confirm details</legend>
+<ol><li>
 <span class="label">Name:</span>
 [% definition_name %]
 </li>
@@ -274,9 +253,9 @@ align          : "Tl"
 <li>
 <span class="label">Area:</span>
 [% areaname %]
-</li></ol>
-
-<ol><li>
+</li>
+<li>
+<span class="label">Data:</span>
 <table>
 <tr>
 <th>Columns</th>
