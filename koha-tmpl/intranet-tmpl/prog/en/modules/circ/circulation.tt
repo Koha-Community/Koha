@@ -207,7 +207,7 @@ function refocus(calendar) {
                 <select name="type" id="type" onchange="this.form.borrower_message.value=this.options[this.selectedIndex].value;">
                     <option value="">Select Note</option>
                     [% FOREACH canned_bor_notes_loo IN canned_bor_notes_loop %]
-                    <option value="[% canned_bor_notes_loo.lib %]">[% canned_bor_notes_loo.authorised_value %]</option>
+                    <option value="[% canned_bor_notes_loo.lib %]">[% canned_bor_notes_loo.lib %]</option>
                     [% END %]
                 </select>
         </li>
