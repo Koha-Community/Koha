@@ -1176,7 +1176,7 @@ sub GetItemsInfo {
            itemtypes.notforloan as notforloan_per_itemtype,
            branchurl
      FROM items
-     LEFT JOIN branches ON items.homebranch = branches.branchcode
+     LEFT JOIN branches ON items.holdingbranch = branches.branchcode
      LEFT JOIN biblio      ON      biblio.biblionumber     = items.biblionumber
      LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
