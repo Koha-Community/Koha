@@ -66,7 +66,7 @@ sub getMultipleAuth {
 # Logout from CAS
 sub logout_cas {
     my ($query) = @_;
-    my $uri = $ENV{'SCRIPT_URI'};
+    my $uri = C4::Context->preference('OPACBaseURL') . $query->script_name();
     my $casparam = $query->param('cas');
     # FIXME: This should be more generic and handle whatever parameters there might be
     $uri .= "?cas=" . $casparam if (defined $casparam);
@@ -78,7 +78,7 @@ sub logout_cas {
 # Login to CAS
 sub login_cas {
     my ($query) = @_;
-    my $uri = $ENV{'SCRIPT_URI'};
+    my $uri = C4::Context->preference('OPACBaseURL') . $query->script_name();
     my $casparam = $query->param('cas');
     # FIXME: This should be more generic and handle whatever parameters there might be
     $uri .= "?cas=" . $casparam if (defined $casparam);
@@ -91,7 +91,7 @@ sub login_cas {
 sub login_cas_url {
 
     my ($query, $key) = @_;
-    my $uri = $ENV{'SCRIPT_URI'};
+    my $uri = C4::Context->preference('OPACBaseURL') . $query->script_name();
     my $casparam = $query->param('cas');
     # FIXME: This should be more generic and handle whatever parameters there might be
     $uri .= "?cas=" . $casparam if (defined $casparam);
@@ -107,7 +107,7 @@ sub checkpw_cas {
     $debug and warn "checkpw_cas";
     my ($dbh, $ticket, $query) = @_;
     my $retnumber;
-    my $uri = $ENV{'SCRIPT_URI'};
+    my $uri = C4::Context->preference('OPACBaseURL') . $query->script_name();
     my $casparam = $query->param('cas');
     # FIXME: This should be more generic and handle whatever parameters there might be
     $uri .= "?cas=" . $casparam if (defined $casparam);
@@ -157,7 +157,7 @@ sub check_api_auth_cas {
     $debug and warn "check_api_auth_cas";
     my ($dbh, $PT, $query) = @_;
     my $retnumber;
-    my $url = $query->url();
+    my $url = C4::Context->preference('OPACBaseURL') . $query->script_name();
 
     my $casparam = $query->param('cas');
     $casparam = $defaultcasserver if (not defined $casparam);
