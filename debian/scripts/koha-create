@@ -19,6 +19,11 @@
 
 set -e
 
+usage="Usage: $0 [--create-db|--request-db|--populate-db] \
+[--marcflavor marc21|normarc|unimarc] \
+[--zebralang en|fr|nb] [--defaultsql /path/to/some.sql] 
+[--configfile /path/to/config] instancename"
+
 die() {
     echo "$@" 1>&2
     exit 1
@@ -71,29 +76,54 @@ then
     . /etc/koha/koha-sites.conf
 fi
 
-[ $# -ge 2 ] && [ $# -le 6 ] || 
-    die "Usage: $0 [--create-db|--request-db|--populate-db] \
-[--marcflavor marc21|normarc|unimarc] \
-[--zebralang en|fr|nb] instancename"
+[ $# -ge 2 ] && [ $# -le 10 ] || die $usage
 
-TEMP=`getopt -o crpm:l: -l create-db,request-db,populate-db,marcflavor:,zebralang: \
+TEMP=`getopt -o crpm:l: -l create-db,request-db,populate-db,marcflavor:,zebralang:,configfile: \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
 eval set -- "$TEMP"
+
+# Temporary variables for the command line options
+CLO_ZEBRA_MARC_FORMAT=""
+CLO_ZEBRA_LANGUAGE=""
+CLO_DEFAULTSQL=""
 
 while true ; do
 	case "$1" in
 		-c|--create-db) op=create ; shift ;;
 		-r|--request-db) op=request ; shift ;;
 		-p|--populate-db) op=populate ; shift ;;
-		-m|--marcflavor) ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
-		-l|--zebralang) ZEBRA_LANGUAGE="$2" ; shift 2 ;;
-		-d|--defaultsql) DEFAULTSQL="$2" ; shift 2 ;;
+		-m|--marcflavor) CLO_ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
+		-l|--zebralang) CLO_ZEBRA_LANGUAGE="$2" ; shift 2 ;;
+		-d|--defaultsql) CLO_DEFAULTSQL="$2" ; shift 2 ;;
+		-f|--configfile) configfile="$2" ; shift 2 ;;
 		--) shift ; break ;;
-		*) die "Internal error! " ;;
+		*) die $usage ;;
 	esac
 done
+
+# Load the configfile given on the command line
+if [ -e "$configfile" ]
+then
+    . "$configfile"
+else
+    die "$configfile does not exist.";
+fi
+
+# Make sure options from the command line get the highest precedence
+if [ "$CLO_ZEBRA_MARC_FORMAT" != "" ]
+then
+    ZEBRA_MARC_FORMAT="$CLO_ZEBRA_MARC_FORMAT"
+fi
+if [ "$CLO_ZEBRA_LANGUAGE" != "" ]
+then
+    ZEBRA_LANGUAGE="$CLO_ZEBRA_LANGUAGE"
+fi
+if [ "$CLO_DEFAULTSQL" != "" ]
+then
+    DEFAULTSQL="$CLO_DEFAULTSQL"
+fi
 
 name="$1"
 
