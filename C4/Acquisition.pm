@@ -233,7 +233,7 @@ sub GetBasketAsCSV {
     my $output; 
 
     # TODO: Translate headers
-    my @headers = qw(contractname ordernumber line entrydate isbn author title publishercode collectiontitle notes quantity rrp);
+    my @headers = qw(contractname ordernumber entrydate isbn author title publishercode collectiontitle notes quantity rrp);
 
     $csv->combine(@headers);                                                                                                        
     $output = $csv->string() . "\n";	
@@ -241,26 +241,21 @@ sub GetBasketAsCSV {
     my @rows;
     foreach my $order (@orders) {
 	my @cols;
-	my $bd = GetBiblioData($order->{'biblionumber'});
 	push(@cols,
 		$contract->{'contractname'},
 		$order->{'ordernumber'},
 		$order->{'entrydate'}, 
 		$order->{'isbn'},
-		$bd->{'author'},
-		$bd->{'title'},
-		$bd->{'publishercode'},
-		$bd->{'collectiontitle'},
+		$order->{'author'},
+		$order->{'title'},
+		$order->{'publishercode'},
+		$order->{'collectiontitle'},
 		$order->{'notes'},
 		$order->{'quantity'},
 		$order->{'rrp'},
 	    );
 	push (@rows, \@cols);
     }
-
-    # Sort by publishercode 
-    # TODO: Sort by publishercode then by title
-    @rows = sort { @$a[7] cmp @$b[7] } @rows;
 
     foreach my $row (@rows) {
 	$csv->combine(@$row);                                                                                                                    
