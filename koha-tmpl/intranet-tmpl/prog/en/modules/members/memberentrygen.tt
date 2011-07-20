@@ -162,7 +162,18 @@
 <input type="hidden" name="borrowernumber" value="[% IF ( opduplicate ) %][% ELSE %][% borrowernumber %][% END %]" />
 <input type="hidden" name="nodouble"  value="[% IF ( opduplicate ) %][% ELSE %][% nodouble %][% END %]" />
 [% IF ( step ) %]<input type="hidden" name="step"  value="[% step %]" />[% END %]
-[% IF ( opadd ) %]<input type="hidden" name="op" value="insert" />[% ELSIF ( opduplicate ) %]<input type="hidden" name="op" value="insert" />[% ELSE %]<input type="hidden" name="op" value="save" />[% END %]
+[% IF ( opadd ) %]<input type="hidden" name="op" value="insert" />
+[% ELSIF ( opduplicate ) %]
+<input type="hidden" name="op" value="insert" />
+[% ELSE %]
+<input type="hidden" name="op" value="save" />
+[% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 %]
+[%# Only put the cardnumber if we arent showing it in the form later %]
+[% IF cardnumber %]
+<input type="hidden" name="cardnumber" value="[% cardnumber %]">
+[% END %]
+[% END %]
+[% END %]
 
 [% IF ( step_1 ) %]
 	<fieldset class="rows" id="memberentry_identity">
