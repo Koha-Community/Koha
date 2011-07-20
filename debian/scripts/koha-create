@@ -89,6 +89,7 @@ while true ; do
 		-p|--populate-db) op=populate ; shift ;;
 		-m|--marcflavor) ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
 		-l|--zebralang) ZEBRA_LANGUAGE="$2" ; shift 2 ;;
+		-d|--defaultsql) DEFAULTSQL="$2" ; shift 2 ;;
 		--) shift ; break ;;
 		*) die "Internal error! " ;;
 	esac
