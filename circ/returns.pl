@@ -277,6 +277,8 @@ if ($barcode) {
                 $template->param(
                     waiting_holds       => $waiting_holds,
                     holdsborrowernumber => $borrower->{'borrowernumber'},
+                    holdsfirstname => $borrower->{'firstname'},
+                    holdssurname => $borrower->{'surname'},
                 );
             }
         }
