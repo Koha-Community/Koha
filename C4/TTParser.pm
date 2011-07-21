@@ -1,8 +1,8 @@
 #!/usr/bin/env perl
 #simple parser for HTML with Template Toolkit directives. Tokens are put into @tokens and are accesible via next_token and peep_token
-package TTParser;
+package C4::TTParser;
 use base qw(HTML::Parser);
-use TmplToken;
+use C4::TmplToken;
 use strict;
 use warnings;
 
@@ -43,7 +43,7 @@ sub build_tokens{
     $self->handler(declaration => "declaration", "self, line, text, is_cdata"); # declaration
     $self->handler(comment => "comment", "self, line, text, is_cdata"); # comments
 #    $self->handler(default => "default", "self, line, text, is_cdata"); # anything else
-    $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a TmplTokenType::CDATA
+    $self->marked_sections(1); #treat anything inside CDATA tags as text, should really make it a C4::TmplTokenType::CDATA
     $self->unbroken_text(1); #make contiguous whitespace into a single token (can span multiple lines)
     $self->parse_file($filename);
     return $self;
@@ -60,19 +60,19 @@ sub text{
         if( $work =~ m/\[%.*?\]/ ){
             #everything before this tag is text (or possibly CDATA), add a text token to tokens if $`
             if( $` ){
-                my $t = TmplToken->new( $`, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+                my $t = C4::TmplToken->new( $`, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
                 push @tokens, $t;
             }
 
             #the match itself is a DIRECTIVE $&
-            my $t = TmplToken->new( $&, TmplTokenType::DIRECTIVE, $line, $self->{filename} );
+            my $t = C4::TmplToken->new( $&, C4::TmplTokenType::DIRECTIVE, $line, $self->{filename} );
             push @tokens, $t;
 
             # put work still to do back into work
             $work = $' ? $' : 0;
         } else {
             # If there is some left over work, treat it as text token
-            my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+            my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
 	    
             push @tokens, $t;
             last;
@@ -85,7 +85,7 @@ sub declaration {
     my $line = shift;
     my $work = shift; #original text
     my $is_cdata = shift;
-    my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
     push @tokens, $t;  
 }      
 
@@ -94,7 +94,7 @@ sub comment {
     my $line = shift;
     my $work = shift; #original text
     my $is_cdata = shift;
-    my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
     push @tokens, $t;  
 }      
 
@@ -103,7 +103,7 @@ sub default {
     my $line = shift;
     my $work = shift; #original text
     my $is_cdata = shift;
-    my $t = TmplToken->new( $work, ($is_cdata? TmplTokenType::CDATA : TmplTokenType::TEXT), $line, $self->{filename} );
+    my $t = C4::TmplToken->new( $work, ($is_cdata? C4::TmplTokenType::CDATA : C4::TmplTokenType::TEXT), $line, $self->{filename} );
     push @tokens, $t;  
 }      
 
@@ -115,7 +115,7 @@ sub start{
     my $tag = shift;
     my $hash = shift; #hash of attr/value pairs
     my $text = shift; #origional text
-    my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename});
+    my $t = C4::TmplToken->new( $text, C4::TmplTokenType::TAG, $line, $self->{filename});
     my %attr;
     # tags seem to be uses in an 'interesting' way elsewhere..
     for my $key( %$hash ) {
@@ -139,7 +139,7 @@ sub end{
     my $hash = shift;
     my $text = shift;
     # what format should this be in?
-    my $t = TmplToken->new( $text, TmplTokenType::TAG, $line, $self->{filename} );
+    my $t = C4::TmplToken->new( $text, C4::TmplTokenType::TAG, $line, $self->{filename} );
     my %attr;
     # tags seem to be uses in an 'interesting' way elsewhere..
     for my $key( %$hash ) {
