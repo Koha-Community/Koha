@@ -33,8 +33,7 @@
             </tr></thead>
             <tbody>
         [% FOREACH issue IN issues %]
-        [% UNLESS ( loop.odd ) %]<tr class="highlight"><!-- TMPL_ELSE
---><tr>[% END %]
+        [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                 <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issue.borrowernumber %]">[% issue.surname %][% IF ( issue.firstname ) %], [% issue.firstname %][% END %]</a></td>
                 <td>[% IF ( issue.barcode ) %]
                         <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issue.biblionumber %]&amp;itemnumber=[% issue.itemnumber %]">[% issue.barcode %]</a>
