@@ -12,6 +12,7 @@ use Exporter;
 use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
 use Socket qw(:crlf);
+use IO::Handle;
 
 use Sip::Constants qw(SIP_DATETIME);
 use Sip::Checksum qw(checksum);
@@ -230,9 +231,11 @@ sub write_msg {
 
 
     if ($file) {
+        $file->autoflush(1);
         print $file "$msg\r";
     } else {
-        print "$msg\r";
+        STDOUT->autoflush(1);
+        print $msg, "\r";
         syslog("LOG_INFO", "OUTPUT MSG: '$msg'");
     }
 
