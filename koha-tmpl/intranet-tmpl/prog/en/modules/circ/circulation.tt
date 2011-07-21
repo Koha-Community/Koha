@@ -159,7 +159,6 @@ function refocus(calendar) {
 };
 //]]>
 </script>
-
 [% INCLUDE 'calendar.inc' %]
 </head>
 <body>
@@ -458,7 +457,7 @@ No patron matched <span class="ex">[% message %]</span>
 <form method="post" action="/cgi-bin/koha/circ/circulation.pl" id="mainform" name="mainform">
 <fieldset id="circ_circulation_issue">
     [% IF ( DisplayClearScreenButton ) %]
-	    <input type="button" value="Clear Screen" onclick="window.location = '/cgi-bin/koha/circ/circulation.pl'" />
+        <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>
     [% END %]
 
     <label for="barcode">Checking out to [% firstname %] [% surname %] ([% cardnumber %]) </label>

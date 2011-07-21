@@ -2048,3 +2048,36 @@ fieldset.rows+h3 {clear:both;padding-top:.5em;}
 	border : 1px solid #EEE;
 	padding : 0.3em 0.4em;
 }
+#circ_circulation_issue {
+    position: relative;
+    }
+
+#clearscreen {
+    margin-right: 0;
+    position: absolute;
+    top:0;
+    right:0;
+    }
+/* CSS Hack to target Firefox */
+@-moz-document url-prefix() {
+    #clearscreen {
+        margin-right : 1em;
+        top: -1em;
+    }
+}
+#clearscreen a {
+    display:block;
+    -moz-border-radius: 0 0 0 5px;
+    border-radius: 0 0 0 5px;
+    padding : 0 .7em .2em .7em;
+    background-color : #EEE;
+    color : #CCC;
+    text-shadow: 0px -1px 0px #666;
+    text-decoration: none;
+    font-size: 160%;
+    font-weight : bold
+    }
+#clearscreen a:hover {
+    color : #cc0000;
+    }
+
