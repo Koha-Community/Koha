@@ -20,9 +20,10 @@
 set -e
 
 usage="Usage: $0 [--create-db|--request-db|--populate-db] \
-[--marcflavor marc21|normarc|unimarc] \
-[--zebralang en|fr|nb] [--defaultsql /path/to/some.sql] 
-[--configfile /path/to/config] instancename"
+    [--marcflavor marc21|normarc|unimarc] \
+    [--zebralang en|nb|fr] \
+    [--defaultsql /path/to/some.sql] \
+    [--configfile /path/to/config] instancename"
 
 die() {
     echo "$@" 1>&2
@@ -78,7 +79,7 @@ fi
 
 [ $# -ge 2 ] && [ $# -le 10 ] || die $usage
 
-TEMP=`getopt -o crpm:l: -l create-db,request-db,populate-db,marcflavor:,zebralang:,configfile: \
+TEMP=`getopt -o crpm:l:d:f: -l create-db,request-db,populate-db,marcflavor:,zebralang:,defaultsql:,configfile: \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -99,7 +100,7 @@ while true ; do
 		-d|--defaultsql) CLO_DEFAULTSQL="$2" ; shift 2 ;;
 		-f|--configfile) configfile="$2" ; shift 2 ;;
 		--) shift ; break ;;
-		*) die $usage ;;
+		*) die "Internal error processing command line arguments" ;;
 	esac
 done
 
