@@ -1,4 +1,4 @@
-package TmplTokenType;
+package C4::TmplTokenType;
 
 use strict;
 #use warnings; FIXME - Bug 2505
@@ -10,7 +10,7 @@ use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 =head1 NAME
 
-TmplTokenType.pm - Types of TmplToken objects
+C4::TmplTokenType.pm - Types of TmplToken objects
 
 =head1 DESCRIPTION
 
@@ -43,7 +43,7 @@ use vars qw( $_text $_text_parametrized $_cdata
 
 BEGIN {
     my $new = sub {
-	my $this = 'TmplTokenType';#shift;
+	my $this = 'C4::TmplTokenType';#shift;
 	my $class = ref($this) || $this;
 	my $self = {};
 	bless $self, $class;

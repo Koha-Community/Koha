@@ -44,12 +44,12 @@ sub token_negligible_p( $ ) {
     my($x) = @_;
     my $t = $x->type;
     return !$extract_all_p && (
-	    $t == TmplTokenType::TEXT? string_negligible_p( $x->string ):
-	    $t == TmplTokenType::DIRECTIVE? 1:
-	    $t == TmplTokenType::TEXT_PARAMETRIZED
+	    $t == C4::TmplTokenType::TEXT? string_negligible_p( $x->string ):
+	    $t == C4::TmplTokenType::DIRECTIVE? 1:
+	    $t == C4::TmplTokenType::TEXT_PARAMETRIZED
 		&& join( '', map { my $t = $_->type;
-			$t == TmplTokenType::DIRECTIVE?
-				'1': $t == TmplTokenType::TAG?
+			$t == C4::TmplTokenType::DIRECTIVE?
+				'1': $t == C4::TmplTokenType::TAG?
 					'': token_negligible_p( $_ )?
 					'': '1' } @{$x->children} ) eq '' );
 }
@@ -91,15 +91,15 @@ sub text_extract (*) {
         my $s = TmplTokenizer::next_token $h;
         last unless defined $s;
         my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
-        if ($kind eq TmplTokenType::TEXT) {
+        if ($kind eq C4::TmplTokenType::TEXT) {
 	    if ($t =~ /\S/s && $t !~ /<!/){
 		remember( $s, $t );
 	    }
-        } elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
+        } elsif ($kind eq C4::TmplTokenType::TEXT_PARAMETRIZED) {
 	    if ($s->form =~ /\S/s && $s->form !~ /<!/){
 		remember( $s, $s->form );
 	    }
-        } elsif ($kind eq TmplTokenType::TAG && %$attr) {
+        } elsif ($kind eq C4::TmplTokenType::TAG && %$attr) {
             # value [tag=input], meta
             my $tag = lc($1) if $t =~ /^<(\S+)/s;
             for my $a ('alt', 'content', 'title', 'value','label') {
@@ -165,19 +165,19 @@ msgstr ""
 EOF
     my $directory_re = quotemeta("$directory/");
     for my $t (string_list) {
-	if ($text{$t}->[0]->type == TmplTokenType::TEXT_PARAMETRIZED) {
+	if ($text{$t}->[0]->type == C4::TmplTokenType::TEXT_PARAMETRIZED) {
 	    my($token, $n) = ($text{$t}->[0], 0);
 	    printf OUTPUT "#. For the first occurrence,\n"
 		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
 	    for my $param ($token->parameters_and_fields) {
 		$n += 1;
 		my $type = $param->type;
-		my $subtype = ($type == TmplTokenType::TAG
+		my $subtype = ($type == C4::TmplTokenType::TAG
 			&& $param->string =~ /^<input\b/is?
 				$param->attributes->{'type'}->[1]: undef);
 		my $fmt = TmplTokenizer::_formalize( $param );
 		$fmt =~ s/^%/%$n\$/;
-		if ($type == TmplTokenType::DIRECTIVE) {
+		if ($type == C4::TmplTokenType::DIRECTIVE) {
 #		    $type = "Template::Toolkit Directive";
 		    $type = $param->string =~ /\[%(.*?)%\]/is? $1: 'ERROR';
 		    my $name = $param->string =~ /\bname=(["']?)([^\s"']+)\1/is?
@@ -193,7 +193,7 @@ EOF
 			    . (defined $value? " value=$value->[1]": '');
 		}
 	    }
-	} elsif ($text{$t}->[0]->type == TmplTokenType::TAG) {
+	} elsif ($text{$t}->[0]->type == C4::TmplTokenType::TAG) {
 	    my($token) = ($text{$t}->[0]);
 	    printf OUTPUT "#. For the first occurrence,\n"
 		    if @{$text{$t}} > 1 && $token->parameters_and_fields > 0;
@@ -220,7 +220,7 @@ EOF
         $pathname =~ s/^.*\/koha-tmpl\/(.*)$/$1/;
 	    printf OUTPUT "#: %s:%d\n", $pathname, $token->line_number
 		    if defined $pathname && defined $token->line_number;
-	    $cformat_p = 1 if $token->type == TmplTokenType::TEXT_PARAMETRIZED;
+	    $cformat_p = 1 if $token->type == C4::TmplTokenType::TEXT_PARAMETRIZED;
 	}
 	printf OUTPUT "#, c-format\n" if $cformat_p;
 	printf OUTPUT "msgid %s\n", TmplTokenizer::quote_po
@@ -246,7 +246,7 @@ sub convert_translation_file () {
 	$msgid =~ s/^SELECTED>//;
 
 	# Create dummy token
-	my $token = TmplToken->new( $msgid, TmplTokenType::UNKNOWN, undef, undef );
+	my $token = TmplToken->new( $msgid, C4::TmplTokenType::UNKNOWN, undef, undef );
 	remember( $token, $msgid );
 	$msgstr =~ s/^(?:LIMIT;|LIMITED;)//g; # unneeded for tmpl_process3
 	$translation{$msgid} = $msgstr unless $msgstr eq '*****';

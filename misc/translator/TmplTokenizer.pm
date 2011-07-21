@@ -2,9 +2,9 @@ package TmplTokenizer;
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use TmplTokenType;
-use TmplToken;
-use TTParser;
+use C4::TmplTokenType;
+use C4::TmplToken;
+use C4::TTParser;
 use VerboseWarnings qw( pedantic_p error_normal warn_normal warn_pedantic );
 require Exporter;
 
@@ -68,7 +68,7 @@ sub new {
     shift;
     my ($filename) = @_;
     #open my $handle,$filename or die "can't open $filename";
-    my $parser = TTParser->new;
+    my $parser = C4::TTParser->new;
     $parser->build_tokens( $filename );
     bless {
       filename => $filename,
@@ -259,11 +259,11 @@ sub _formalize_string_cformat{
 
 sub _formalize{
   my $t = shift;
-  if( $t->type == TmplTokenType::DIRECTIVE ){
+  if( $t->type == C4::TmplTokenType::DIRECTIVE ){
     return '%s';
-  } elsif( $t->type == TmplTokenType::TEXT ){
+  } elsif( $t->type == C4::TmplTokenType::TEXT ){
     return _formalize_string_cformat( $t->string );
-  } elsif( $t->type == TmplTokenType::TAG ){
+  } elsif( $t->type == C4::TmplTokenType::TAG ){
     if( $t->string =~ m/^a\b/is ){
       return '<a>';
     } elsif( $t->string =~ m/^input\b/is ){
@@ -281,13 +281,13 @@ sub _formalize{
 }
 
 # internal parametization, used within next_token
-# method that takes in an array of TEXT and DIRECTIVE tokens (DIRECTIVEs must be GET) and return a TmplTokenType::TEXT_PARAMETRIZED
+# method that takes in an array of TEXT and DIRECTIVE tokens (DIRECTIVEs must be GET) and return a C4::TmplTokenType::TEXT_PARAMETRIZED
 sub _parametrize_internal{
     my $this = shift;
     my @parts = @_;
     # my $s = "";
     # for my $item (@parts){
-    #     if( $item->type == TmplTokenType::TEXT ){
+    #     if( $item->type == C4::TmplTokenType::TEXT ){
     #         $s .= $item->string;
     #     } else {
     #         #must be a variable directive
@@ -297,7 +297,7 @@ sub _parametrize_internal{
     my $s = join( "", map { _formalize $_ } @parts );
     # should both the string and form be $s? maybe only the later? posibly the former....
     # used line number from first token, should suffice
-    my $t = TmplToken->new( $s, TmplTokenType::TEXT_PARAMETRIZED, $parts[0]->line_number, $this->filename );
+    my $t = C4::TmplToken->new( $s, C4::TmplTokenType::TEXT_PARAMETRIZED, $parts[0]->line_number, $this->filename );
     $t->set_children(@parts);
     $t->set_form($s);
     return $t;
@@ -321,14 +321,14 @@ sub next_token {
         }
         # if cformat mode is off, dont bother parametrizing, just return them as they come
         return $next unless $self->allow_cformat_p;
-        if( $next->type == TmplTokenType::TEXT ){
+        if( $next->type == C4::TmplTokenType::TEXT ){
             push @parts, $next;
         } 
-#        elsif( $next->type == TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
-        elsif( $next->type == TmplTokenType::DIRECTIVE ){
+#        elsif( $next->type == C4::TmplTokenType::DIRECTIVE && $next->string =~ m/\[%\s*\w+\s*%\]/ ){
+        elsif( $next->type == C4::TmplTokenType::DIRECTIVE ){
             push @parts, $next;
         } 
-        elsif ( $next->type == TmplTokenType::CDATA){
+        elsif ( $next->type == C4::TmplTokenType::CDATA){
             $self->_set_js_mode(1);
             my $s0 = $next->string;
             my @head = ();
@@ -383,7 +383,7 @@ sub parametrize ($$$$) {
 		    my $param = $params[$i - 1];
 		    warn_normal "$fmt_0: $&: Expected a TMPL_VAR, but found a "
 			    . $param->type->to_string . "\n", undef
-			    if $param->type != TmplTokenType::DIRECTIVE;
+			    if $param->type != C4::TmplTokenType::DIRECTIVE;
 		    warn_normal "$fmt_0: $&: Unsupported "
 				. "field width or precision\n", undef
 			    if defined $width || defined $prec;
@@ -400,7 +400,7 @@ sub parametrize ($$$$) {
 		if (!defined $param) {
 		    warn_normal "$fmt_0: $&: Parameter $i not known", undef;
 		} else {
-		    if ($param->type == TmplTokenType::TAG
+		    if ($param->type == C4::TmplTokenType::TAG
 			    && $param->string =~ /^<input\b/is) {
 			my $type = defined $param->attributes?
 				lc($param->attributes->{'type'}->[1]): undef;
