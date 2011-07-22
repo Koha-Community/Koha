@@ -181,36 +181,36 @@
               </div>
             [% END %]
             [% IF ( too_much_oweing ) %]
-              <div class="dialog alert">
+              <div id="too_much_oweing" class="dialog alert">
                 Sorry, you cannot place holds because you owe [% too_much_oweing %].
               </div>
             [% END %]
             [% IF ( too_many_reserves ) %]
-              <div class="dialog alert">Sorry, you cannot place more than [% too_many_reserves %] holds.
+              <div id="too_many_reserves" class="dialog alert">Sorry, you cannot place more than [% too_many_reserves %] holds.
               </div>
             [% END %]
             [% IF ( bad_biblionumber ) %]
-              <div class="dialog alert">ERROR: No biblio record found for biblionumber [% bad_biblionumber %].</div>
+              <div id="bad_biblionumber" class="dialog alert">ERROR: No biblio record found for biblionumber [% bad_biblionumber %].</div>
             [% END %]
             [% IF ( no_items_selected ) %]
-              <div class="dialog alert">
+              <div id="no_items_selected" class="dialog alert">
                 You must select at least one item.
               </div>
             [% END %]
             [% IF ( no_branch_selected ) %]
-              <div class="dialog alert">
+              <div id="no_branch_selected" class="dialog alert">
                 You must select a library for pickup.
               </div>
             [% END %]
             [% IF ( no_biblionumber ) %]
-              <div class="dialog alert">ERROR: No biblionumber received.</div>
+              <div id="no_biblionumber" class="dialog alert">ERROR: No biblionumber received.</div>
             [% END %]
             [% IF ( bad_data ) %]
-              <div class="dialog alert">ERROR: Internal error: incomplete hold request.</div>
+              <div id="bad_data" class="dialog alert">ERROR: Internal error: incomplete hold request.</div>
             [% END %]
           [% ELSE %]
             [% IF ( none_available ) %]
-                <div class="dialog alert"><strong>Sorry</strong>, none of these items can be placed on hold.
+                <div id="none_available" class="dialog alert"><strong>Sorry</strong>, none of these items can be placed on hold.
                 </div>
               [% END %]
           [% END %]<!-- NAME="message" -->
