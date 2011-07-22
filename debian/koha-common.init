@@ -42,6 +42,8 @@ SCRIPTNAME=/etc/init.d/$NAME
 #
 do_start()
 {
+    # We insure all required directories exist, including disabled ones.
+    koha-create-dirs $(koha-list)
     koha-start-zebra $(koha-list --enabled)
 }
 
