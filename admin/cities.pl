@@ -58,14 +58,16 @@ if ($op eq 'add_form') {
 	#---- if primkey exists, it's a modify action, so read values to modify...
 	my $data;
 	if ($cityid) {
-		my $sth=$dbh->prepare("select cityid,city_name,city_zipcode from cities where  cityid=?");
+		my $sth=$dbh->prepare("select cityid,city_name,city_state,city_zipcode,city_country from cities where  cityid=?");
 		$sth->execute($cityid);
 		$data=$sth->fetchrow_hashref;
 	}
 
 	$template->param(	
 				city_name       => $data->{'city_name'},
-				city_zipcode    => $data->{'city_zipcode'});
+				city_state      => $data->{'city_state'},
+				city_zipcode    => $data->{'city_zipcode'},
+				city_country    => $data->{'city_country'});
 # END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
 # called by add_form, used to insert/modify data in DB
@@ -73,12 +75,12 @@ if ($op eq 'add_form') {
  	my $sth;
 	
 	if ($input->param('cityid') ){
-		$sth=$dbh->prepare("UPDATE cities SET city_name=?,city_zipcode=? WHERE cityid=?");
-		$sth->execute($input->param('city_name'),$input->param('city_zipcode'),$input->param('cityid'));
+		$sth=$dbh->prepare("UPDATE cities SET city_name=?,city_state=?,city_zipcode=?,city_country=? WHERE cityid=?");
+		$sth->execute($input->param('city_name'),$input->param('city_state'),$input->param('city_zipcode'),$input->param('city_country'),$input->param('cityid'));
 	}
 	else{	
-		$sth=$dbh->prepare("INSERT INTO cities (city_name,city_zipcode) values (?,?)");
-		$sth->execute($input->param('city_name'),$input->param('city_zipcode'));
+		$sth=$dbh->prepare("INSERT INTO cities (city_name,city_state,city_zipcode,city_country) values (?,?,?,?)");
+		$sth->execute($input->param('city_name'),$input->param('city_state'),$input->param('city_zipcode'),$input->param('city_country'));
 	}
 	print $input->redirect($script_name);
 	exit;
@@ -86,12 +88,14 @@ if ($op eq 'add_form') {
 # called by default form, used to confirm deletion of data in DB
 } elsif ($op eq 'delete_confirm') {
 	$template->param(delete_confirm => 1);
-	my $sth=$dbh->prepare("select cityid,city_name,city_zipcode from cities where  cityid=?");
+	my $sth=$dbh->prepare("select cityid,city_name,city_state,city_zipcode,city_country from cities where  cityid=?");
 	$sth->execute($cityid);
 	my $data=$sth->fetchrow_hashref;
     $template->param(
         city_name    =>	$data->{'city_name'},
+        city_state   =>	$data->{'city_state'},
         city_zipcode => $data->{'city_zipcode'},
+        city_country => $data->{'city_country'},
     );
 ################## DELETE_CONFIRMED ##################################
 # called by delete_confirm, used to effectively confirm deletion of data in DB

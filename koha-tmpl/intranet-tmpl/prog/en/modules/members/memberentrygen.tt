@@ -16,10 +16,12 @@
             $("#guarantorsearch").val("Set to Patron");
         });
         $("#select_city").change(function(){
-            var myRegEx=new RegExp(/(.*)\|(.*)/);
+            var myRegEx=new RegExp(/(.*)\|(.*)\|(.*)\|(.*)/);
             document.form.select_city.value.match(myRegEx);
             document.form.zipcode.value=RegExp.$1;
             document.form.city.value=RegExp.$2;
+            document.form.state.value=RegExp.$3;
+            document.form.country.value=RegExp.$4;
         });
     });
 
@@ -425,11 +427,11 @@
         <select id="select_city" name="select_city">
         [% FOREACH city_loo IN city_loop %]
             [% IF ( city_loo.selected ) %]
-            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]" selected="selected">
+            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]|[% city_loo.city_state %]|[% city_loo.city_country %]" selected="selected">
             [% ELSE %]
-            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]">
+            <option value="[% city_loo.city_zipcode %]|[% city_loo.city_name %]|[% city_loo.city_state %]|[% city_loo.city_country %]">
             [% END %]
-                [% city_loo.city_name %] [% city_loo.city_zipcode %]
+                [% city_loo.city_name %] [% city_loo.city_state %] [% city_loo.city_zipcode %]
             </option>
         [% END %]
         </select>

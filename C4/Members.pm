@@ -1304,10 +1304,10 @@ sub getzipnamecity {
     my $dbh      = C4::Context->dbh;
     my $sth      =
       $dbh->prepare(
-        "select city_name,city_zipcode from cities where cityid=? ");
+        "select city_name,city_state,city_zipcode,city_country from cities where cityid=? ");
     $sth->execute($cityid);
     my @data = $sth->fetchrow;
-    return $data[0], $data[1];
+    return $data[0], $data[1], $data[2], $data[3];
 }
 
 
@@ -1627,13 +1627,15 @@ sub GetCities {
 
     my $dbh   = C4::Context->dbh;
     my $city_arr = $dbh->selectall_arrayref(
-        q|SELECT cityid,city_zipcode,city_name FROM cities ORDER BY city_name|,
+        q|SELECT cityid,city_zipcode,city_name,city_state,city_country FROM cities ORDER BY city_name|,
         { Slice => {} });
     if ( @{$city_arr} ) {
         unshift @{$city_arr}, {
             city_zipcode => q{},
             city_name    => q{},
             cityid       => q{},
+            city_state   => q{},
+            city_country => q{},
         };
     }
 

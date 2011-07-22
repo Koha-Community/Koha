@@ -4,9 +4,10 @@
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.pager.js"></script>
 <script type="text/javascript" id="js">$(document).ready(function() {
+	$.tablesorter.defaults.widgets = ['zebra'];
 	$("#table_cities").tablesorter({
 		sortList: [[1,0]],
-		headers: { 3: { sorter: false},4: { sorter: false}}
+		headers: { 5: { sorter: false},6: { sorter: false}}
 	}).tablesorterPager({container: $("#pagertable_cities"),positionFixed: false,size: 20});
 }); </script>
 <script type="text/javascript">
@@ -62,12 +63,20 @@
 		<span class="label">City ID: </span>[% cityid %]</li>
 	[% END %]
 	<li>
-	<label for="city_name">City, State: </label>
+	<label for="city_name" class="required" title="required">City: </label>
 	<input type="text" name="city_name" id="city_name" size="80" maxlength="100" value="[% city_name |html %]" />
 	</li>
+	<li>
+	<label for="city_state">State: </label>
+	<input type="text" name="city_state" id="city_state" size="80" maxlength="100" value="[% city_state |html %]" />
+	</li>
 	<li>				
-	<label for="city_zipcode">Zip/Postal code: </label>
+	<label for="city_zipcode" class="required" title="required">Zip/Postal code: </label>
 	<input type="text" name="city_zipcode" id="city_zipcode" size="20" maxlength="20" value="[% city_zipcode %]" />
+	</li>
+	<li>
+	<label for="city_country">Country: </label>
+	<input type="text" name="city_country" id="city_country" size="80" maxlength="100" value="[% city_country |html %]" />
 	</li></ol></fieldset>
 	
 	<fieldset class="action">
@@ -83,11 +92,17 @@
         <tr><th>City id</th>
             <td>[% cityid %]</td>
         </tr>
-        <tr><th>City, State</th>
+        <tr><th>City</th>
             <td>[% city_name %]</td>
+        </tr>
+        <tr><th>State</th>
+            <td>[% city_state %]</td>
         </tr>
         <tr><th>Zip/Postal code</th>
             <td>[% city_zipcode %]</td>
+        </tr>
+        <tr><th>Country</th>
+            <td>[% city_country %]</td>
         </tr>
     </table>
     <form action="[% script_name %]" method="post">
@@ -135,8 +150,10 @@
 <table id="table_cities">
 		<thead>
 			<th>City ID</th>
-			<th>City, State</th>
+			<th>City</th>
+			<th>State</th>
 			<th>Zip/Postal code</th>
+			<th>Country</th>
 			<th>&nbsp;</th>
 			<th>&nbsp;</th>
 		</thead>
@@ -148,8 +165,9 @@
 		[% END %]
 			<td>[% loo.cityid %]</td>
 			<td>[% loo.city_name %]</td>
+			<td>[% loo.city_state %]</td>
 			<td>[% loo.city_zipcode %]</td>
-			
+			<td>[% loo.city_country %]</td>
 			<td><a href="[% loo.script_name %]?op=add_form&amp;cityid=[% loo.cityid %]">Edit</a></td>
 			<td><a href="[% loo.script_name %]?op=delete_confirm&amp;cityid=[% loo.cityid %]">Delete</a></td>
 		</tr>

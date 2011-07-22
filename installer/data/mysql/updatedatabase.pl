@@ -4391,6 +4391,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `cities` ADD `city_state` VARCHAR( 100 ) NULL DEFAULT NULL AFTER  `city_name`;");
+    $dbh->do("ALTER TABLE `cities` ADD `city_country` VARCHAR( 100 ) NULL DEFAULT NULL AFTER  `city_zipcode`;");
+    print "Add state and country to cities table corresponding to new columns in borrowers\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
