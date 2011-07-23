@@ -84,7 +84,17 @@
 	var NO_GOOGLE_JACKET = _("No cover image available");
 	//]]>
 </script>
-[% END %][% IF ( BakerTaylorEnabled ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/bakertaylorimages.js"></script>
+[% END %]
+[% IF OpenLibraryCovers %]
+<script type="text/javascript" language="javascript" src="[% themelang %]/js/openlibrary.js"></script>
+<script type="text/javascript" language="javascript">
+//<![CDATA[
+var NO_OL_JACKET = _("No cover image available");
+//]]>
+</script>
+[% END %]
+
+[% IF ( BakerTaylorEnabled ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/bakertaylorimages.js"></script>
 <script type="text/javascript" language="javascript">
 	//<![CDATA[
 	var NO_BAKERTAYLOR_IMAGE = _("No cover image available");
