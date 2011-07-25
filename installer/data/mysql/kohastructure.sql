@@ -1311,6 +1311,17 @@ CREATE TABLE `matchchecks` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
+-- Table structure for table `need_merge_authorities`
+--
+
+DROP TABLE IF EXISTS `need_merge_authorities`;
+CREATE TABLE `need_merge_authorities` (
+  `id` int NOT NULL auto_increment PRIMARY KEY,
+  `authid` bigint NOT NULL,
+  `done` tinyint DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
 -- Table structure for table `notifys`
 --
 
