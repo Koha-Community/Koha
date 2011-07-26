@@ -241,6 +241,8 @@ sub GetBasketAsCSV {
     my @rows;
     foreach my $order (@orders) {
 	my @cols;
+	# newlines are not valid characters for Text::CSV combine()
+        $order->{'notes'} =~ s/[\r\n]+//g;
 	push(@cols,
 		$contract->{'contractname'},
 		$order->{'ordernumber'},
