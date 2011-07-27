@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname %][% ELSE %]Lists[% END %][% IF ( shelves ) %] &rsaquo; Create New List[% END %][% IF ( edit ) %] &rsaquo; Edit List [% shelfname %][% END %]</title>
+<title>Koha &rsaquo; [% IF ( viewshelf ) %]Lists &rsaquo; Contents of [% shelfname | html %][% ELSE %]Lists[% END %][% IF ( shelves ) %] &rsaquo; Create New List[% END %][% IF ( edit ) %] &rsaquo; Edit List [% shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 <script type="text/javascript">
@@ -116,7 +116,7 @@ function placeHold () {
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
-[% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create New List[% END %][% IF ( edit ) %] &rsaquo; Edit List <i>[% shelfname %]</i>[% END %]</div>
+[% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname | html %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create New List[% END %][% IF ( edit ) %] &rsaquo; Edit List <i>[% shelfname | html %]</i>[% END %]</div>
 
 <div id="doc" class="yui-t7">
  <div id="bd">
@@ -159,7 +159,7 @@ function placeHold () {
         <input type="hidden" name="viewshelf" value="[% shelfnumber %]" />
         <input type="hidden" name="modifyshelfcontents" value="1" />
  <fieldset>
-  <legend>Contents of <i>[% shelfname %]</i></legend>
+  <legend>Contents of <i>[% shelfname | html %]</i></legend>
    
  [% IF ( manageshelf ) %]
      <p><span class="checkall"></span> |
@@ -226,7 +226,7 @@ function placeHold () {
 <div class="yui-g">
 <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
  <fieldset class="brief">
-    <legend>Add an item to <i>[% shelfname %]</i></legend>
+    <legend>Add an item to <i>[% shelfname | html %]</i></legend>
         <ol>
             <li>
                 <label for="addbarcode">Barcode:</label>
@@ -242,7 +242,7 @@ function placeHold () {
 [% END %]<!-- /manageshelf -->
 
 [% IF ( debug ) %]
-  [% IF ( edit ) %]<div>Edit is on ([% shelfname %])</div>[% END %]
+  [% IF ( edit ) %]<div>Edit is on ([% shelfname | html %])</div>[% END %]
   [% IF ( seflag ) %]<div>seflag is on ([% seflag %])</div>[% END %]
 [% END %]
 
@@ -276,7 +276,7 @@ function placeHold () {
 		<input type="hidden" name="op" value="modifsave" />
         [% IF ( showprivateshelves ) %]<input type="hidden" name="display" value="privateshelves" />[% END %]
 		<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
-		<legend>Edit List <i>[% shelfname %]</i></legend>
+		<legend>Edit List <i>[% shelfname | html %]</i></legend>
 		<ol>
 		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value='[% shelfname |html %]' /></li>
 		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]" />[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]</li>
