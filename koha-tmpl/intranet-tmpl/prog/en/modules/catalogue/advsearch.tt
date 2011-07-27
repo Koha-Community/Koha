@@ -15,6 +15,7 @@
 	}
 	$(document).ready(function() {
 		$("input[name=q]:eq(0)").focus();
+                $('#advsearches > ul').tabs();
 	});
 </script>
 </head>
@@ -92,27 +93,40 @@
             <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear">[New search]</a>
             </fieldset>
 <!-- /SEARCH BUTTONS -->
-
-<!-- ITEMTYPE LIMITS -->
-	<fieldset id="itemtypelist">
-     <legend>Limit to any of the following</legend>
+</div>
+<!-- MC-TYPE LIMITS -->
+    <div class="yui-g">
+      <div id="advsearches" class="toptabs">
+      <ul>
+      [% FOREACH advsearchloo IN advancedsearchesloop %]
+        <li id="advsearch-tab-[% advsearchloo.advanced_search_type %]">
+           <a href="/cgi-bin/koha/opac-search.pl#advsearch-[% advsearchloo.advanced_search_type %]">
+           [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item Type
+           [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
+           [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving Location
+           [% ELSE %]Something Else
+           [% END %]
+           </a>
+        </li>
+      [% END %]
+      </ul>
+    [% FOREACH advsearchloo IN advancedsearchesloop %]
+    <div id="advsearch-[% advsearchloo.advanced_search_type %]" class="advsearch">
+    <fieldset>
+    <legend>Limit to any of the following:</legend>
     <table>
         <tr>
-      [% FOREACH itemtypeloo IN itemtypeloop %]
-        <td>
-        [% UNLESS ( noItemTypeImages ) %]
-        [% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]
-        [% END %]
-		<input type="checkbox" id="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]" />&nbsp;
-        <label for="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]">[% itemtypeloo.description %]</label></td>
-        [% UNLESS ( itemtypeloo.count5 ) %]</tr><tr>[% END %]
-      [% END %]
-	  <!-- FIXME: for validation, avoid generating empty row -->
-      </tr>
+    [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
+        <td><input type="checkbox" id="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
+        [% itemtypeloo.description %]</label></td>
+        [% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %]
+    [% END %]
+        </tr>
     </table>
-	</fieldset>
-<!-- /ITEMTYPE LIMITS -->
-
+    </fieldset>
+    </div>
+    [% END %]
+<!-- /MC-TYPE LIMIT -->
 [% IF ( expanded_options ) %]
 <!-- BASIC LIMITS -->
  <fieldset id="basiclimits">

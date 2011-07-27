@@ -239,44 +239,50 @@ my $categories = GetBranchCategories(undef,'searchdomain');
 $template->param(branchloop => \@branch_loop, searchdomainloop => $categories);
 
 # load the Type stuff
-# load the Type stuff
 my $itemtypes = GetItemTypes;
 # the index parameter is different for item-level itemtypes
 my $itype_or_itemtype = (C4::Context->preference("item-level_itypes"))?'itype':'itemtype';
-my @itemtypesloop;
-my $selected=1;
+my @advancedsearchesloop;
 my $cnt;
-my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes");
+my $advanced_search_types = C4::Context->preference("AdvancedSearchTypes") || "itemtypes";
+my @advanced_search_types = split(/\|/, $advanced_search_types);
 
-if (!$advanced_search_types or $advanced_search_types eq 'itemtypes') {                                                                 foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
-    my %row =(  number=>$cnt++,
-                ccl => qq($itype_or_itemtype,phr),
+foreach my $advanced_srch_type (@advanced_search_types) {
+   if ($advanced_srch_type eq 'itemtypes') {
+   # itemtype is a special case, since it's not defined in authorized values
+        my @itypesloop;
+	foreach my $thisitemtype ( sort {$itemtypes->{$a}->{'description'} cmp $itemtypes->{$b}->{'description'} } keys %$itemtypes ) {
+	    my %row =(  number=>$cnt++,
+		ccl => "$itype_or_itemtype,phr",
                 code => $thisitemtype,
-                selected => $selected,
                 description => $itemtypes->{$thisitemtype}->{'description'},
-                count5 => $cnt % 4,
-                imageurl=> getitemtypeimagelocation( 'intranet', $itemtypes->{$thisitemtype}->{'imageurl'} ),
+                imageurl=> getitemtypeimagelocation( 'opac', $itemtypes->{$thisitemtype}->{'imageurl'} ),
             );
-        $selected = 0 if ($selected) ;
-        push @itemtypesloop, \%row;
-    }
-    $template->param(itemtypeloop => \@itemtypesloop);
-} else {
-    my $advsearchtypes = GetAuthorisedValues($advanced_search_types);
-    for my $thisitemtype (sort {$a->{'lib'} cmp $b->{'lib'}} @$advsearchtypes) {
-        my %row =(
-                number=>$cnt++,
-                ccl => $advanced_search_types,
+	    push @itypesloop, \%row;
+	}
+        my %search_code = (  advanced_search_type => $advanced_srch_type,
+                             code_loop => \@itypesloop );
+        push @advancedsearchesloop, \%search_code;
+    } else {
+    # covers all the other cases: non-itemtype authorized values
+       my $advsearchtypes = GetAuthorisedValues($advanced_srch_type, '', 'opac');
+        my @authvalueloop;
+	for my $thisitemtype (@$advsearchtypes) {
+		my %row =(
+				number=>$cnt++,
+				ccl => $advanced_srch_type,
                 code => $thisitemtype->{authorised_value},
-                selected => $selected,
                 description => $thisitemtype->{'lib'},
-                count5 => $cnt % 4,
-                imageurl=> getitemtypeimagelocation( 'intranet', $thisitemtype->{'imageurl'} ),
-            );
-        push @itemtypesloop, \%row;
+                imageurl => getitemtypeimagelocation( 'intranet', $thisitemtype->{'imageurl'} ),
+                );
+		push @authvalueloop, \%row;
+	}
+        my %search_code = (  advanced_search_type => $advanced_srch_type,
+                             code_loop => \@authvalueloop );
+        push @advancedsearchesloop, \%search_code;
     }
-    $template->param(itemtypeloop => \@itemtypesloop);
 }
+$template->param(advancedsearchesloop => \@advancedsearchesloop);
 
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type eq 'advsearch' ) {

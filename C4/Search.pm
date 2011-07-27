@@ -1296,7 +1296,7 @@ sub buildQuery {
     warn "QUERY BEFORE LIMITS: >$query<" if $DEBUG;
 
     # add limits
-    my $group_OR_limits;
+    my %group_OR_limits;
     my $availability_limit;
     foreach my $this_limit (@limits) {
         if ( $this_limit =~ /available/ ) {
@@ -1313,17 +1313,16 @@ sub buildQuery {
         # group_OR_limits, prefixed by mc-
         # OR every member of the group
         elsif ( $this_limit =~ /mc/ ) {
-        
-            if ( $this_limit =~ /mc-ccode:/ ) {
+            my ($k,$v) = split(/:/, $this_limit,2);
+            if ( $k !~ /mc-i(tem)?type/ ) {
                 # in case the mc-ccode value has complicating chars like ()'s inside it we wrap in quotes
                 $this_limit =~ tr/"//d;
-                my ($k,$v) = split(/:/, $this_limit,2);
                 $this_limit = $k.":\"".$v."\"";
             }
 
-            $group_OR_limits .= " or " if $group_OR_limits;
-            $limit_desc      .= " or " if $group_OR_limits;
-            $group_OR_limits .= "$this_limit";
+            $group_OR_limits{$k} .= " or " if $group_OR_limits{$k};
+            $limit_desc      .= " or " if $group_OR_limits{$k};
+            $group_OR_limits{$k} .= "$this_limit";
             $limit_cgi       .= "&limit=$this_limit";
             $limit_desc      .= " $this_limit";
         }
@@ -1346,9 +1345,9 @@ sub buildQuery {
             }
         }
     }
-    if ($group_OR_limits) {
+    foreach my $k (keys (%group_OR_limits)) {
         $limit .= " and " if ( $query || $limit );
-        $limit .= "($group_OR_limits)";
+        $limit .= "($group_OR_limits{$k})";
     }
     if ($availability_limit) {
         $limit .= " and " if ( $query || $limit );

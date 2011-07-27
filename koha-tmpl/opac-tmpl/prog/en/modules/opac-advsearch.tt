@@ -2,6 +2,12 @@
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %]
     Catalog &rsaquo; Advanced Search
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" language="javascript">//<![CDATA[
+            $(document).ready(function() {
+            $('#advsearches > ul').tabs();
+});
+    //]]>
+</script>
 </head>
 <body id="advsearch"><div id="doc3" class="yui-t7">
 <div id="bd">
@@ -130,20 +136,37 @@
 </div>
 </div>
     <div class="yui-g">
+      <div id="advsearches" class="toptabs">
+      <ul>
+      [% FOREACH advsearchloo IN advancedsearchesloop %]
+        <li id="advsearch-tab-[% advsearchloo.advanced_search_type %]">
+           <a href="/cgi-bin/koha/opac-search.pl#advsearch-[% advsearchloo.advanced_search_type %]">
+           [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item Type
+           [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
+           [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving Location
+           [% ELSE %]Something Else
+           [% END %]
+           </a>
+        </li>
+      [% END %]
+      </ul>
 <!-- /BOOLEAN SEARCH OPTIONS -->
-    <div id="advsearch-itemtype" class="container">
+    [% FOREACH advsearchloo IN advancedsearchesloop %]
+    <div id="advsearch-[% advsearchloo.advanced_search_type %]" class="container advsearch">
     <fieldset>
     <legend>Limit to any of the following:</legend>
     <table>
         <tr>
-    [% FOREACH itemtypeloo IN itemtypeloop %]
+    [% FOREACH itemtypeloo IN advsearchloo.code_loop %]
         <td><input type="checkbox" id="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]" name="limit" value="mc-[% itemtypeloo.ccl %]:[% itemtypeloo.code %]"/><label for="[% itemtypeloo.ccl %]-[% itemtypeloo.number %]">[% UNLESS ( noItemTypeImages ) %][% IF ( itemtypeloo.imageurl ) %]<img border="0" src="[% itemtypeloo.imageurl %]" alt="[% itemtypeloo.description %]" />[% END %]&nbsp;[% END %]
         [% itemtypeloo.description %]</label></td>
-        [% UNLESS ( itemtypeloo.count5 ) %][% UNLESS ( loop.last ) %]</tr><tr>[% END %][% END %]
+        [% UNLESS ( loop.count % 5 ) %]</tr><tr>[% END %]
     [% END %]
         </tr>
     </table>
     </fieldset>
+    </div>
+    [% END %]
     </div>
     <div id="langfilter">
     <fieldset><legend>Language</legend>
