@@ -2283,16 +2283,15 @@ sub AddRenewal {
     if ( $charge > 0 ) {
         my $accountno = getnextacctno( $borrowernumber );
         my $item = GetBiblioFromItemNumber($itemnumber);
+        my $manager_id = 0;
+        $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv; 
         $sth = $dbh->prepare(
                 "INSERT INTO accountlines
-                    (date,
-					borrowernumber, accountno, amount,
-                    description,
-					accounttype, amountoutstanding, itemnumber
-					)
-                    VALUES (now(),?,?,?,?,?,?,?)"
+                    (date, borrowernumber, accountno, amount, manager_id,
+                    description,accounttype, amountoutstanding, itemnumber)
+                    VALUES (now(),?,?,?,?,?,?,?,?)"
         );
-        $sth->execute( $borrowernumber, $accountno, $charge,
+        $sth->execute( $borrowernumber, $accountno, $charge, $manager_id,
             "Renewal of Rental Item $item->{'title'} $item->{'barcode'}",
             'Rent', $charge, $itemnumber );
         $sth->finish;
@@ -2445,15 +2444,17 @@ sub AddIssuingCharge {
     my ( $itemnumber, $borrowernumber, $charge ) = @_;
     my $dbh = C4::Context->dbh;
     my $nextaccntno = getnextacctno( $borrowernumber );
+    my $manager_id = 0;
+    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $query ="
         INSERT INTO accountlines
             (borrowernumber, itemnumber, accountno,
             date, amount, description, accounttype,
-            amountoutstanding)
-        VALUES (?, ?, ?,now(), ?, 'Rental', 'Rent',?)
+            amountoutstanding, manager_id)
+        VALUES (?, ?, ?,now(), ?, 'Rental', 'Rent',?,?)
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $borrowernumber, $itemnumber, $nextaccntno, $charge, $charge );
+    $sth->execute( $borrowernumber, $itemnumber, $nextaccntno, $charge, $charge, $manager_id );
     $sth->finish;
 }
 
