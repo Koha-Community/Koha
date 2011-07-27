@@ -285,10 +285,13 @@ if (   C4::Context->preference('OPACdefaultSortField')
       . C4::Context->preference('OPACdefaultSortOrder');
 }
 
+my @allowed_sortby = qw /acqdate_asc acqdate_dsc author_az author_za call_number_asc call_number_dsc popularity_asc popularity_dsc pubdate_asc pubdate_dsc relevance title_az title_za/; 
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
 $sort_by[0] = $default_sort_by if !$sort_by[0] && defined($default_sort_by);
 foreach my $sort (@sort_by) {
-    $template->param($sort => 1);   # FIXME: security hole.  can set any TMPL_VAR here
+    if ( $sort ~~ @allowed_sortby ) {
+        $template->param($sort => 1);
+    }
 }
 $template->param('sort_by' => $sort_by[0]);
 
