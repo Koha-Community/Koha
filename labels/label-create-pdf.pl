@@ -1,15 +1,43 @@
 #!/usr/bin/perl
 
+# Copyright Chris Nighswonger 2009
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
+
+
 use strict;
 use warnings;
 
 use CGI;
-
+use C4::Auth;
 use C4::Debug;
 use C4::Creators 1.000000;
 use C4::Labels 1.000000;
 
 my $cgi = new CGI;
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+								     template_name   => "labels/label-home.tt",
+								     query           => $cgi,
+								     type            => "intranet",
+								     authnotrequired => 0,
+								     flagsrequired   => { tools => 'label_creator' },
+								     debug           => 1,
+								     });
+
 
 my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
@@ -19,6 +47,8 @@ my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
 my @item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
 
 my $items = undef;
+
+
 
 my $pdf_file = (@label_ids || @item_numbers ? "label_single_" . scalar(@label_ids || @item_numbers) : "label_batch_$batch_id");
 print $cgi->header( -type       => 'application/pdf',
