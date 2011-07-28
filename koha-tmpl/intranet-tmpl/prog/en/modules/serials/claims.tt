@@ -1,5 +1,4 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% INCLUDE 'calendar.inc' %]
     <title>Koha &rsaquo; Serials &rsaquo; Claims</title>
     [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -145,6 +144,7 @@
 
 //]]>
 </script>
+[% INCLUDE 'calendar.inc' %]
 </head>
 <body>
     [% INCLUDE 'header.inc' %]
@@ -281,7 +281,7 @@
                 </tr></thead>
                 <tbody>[% FOREACH missingissue IN missingissues %]
                     <tr>
-                        [% IF ( missingissue.letter ) %]
+                        [% IF ( letter ) %]
                             <td>
                     <input type="checkbox" name="serialid" value="[% missingissue.serialid %]" />
                             </td>
