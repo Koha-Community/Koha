@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use CGI;
+use C4::Auth;
 use Graphics::Magick;
 use XML::Simple;
 use POSIX qw(ceil);
@@ -33,6 +34,16 @@ use C4::Creators 1.000000;
 use C4::Patroncards 1.000000;
 
 my $cgi = new CGI;
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
+                                                                     template_name   => "labels/label-home.tt",
+                                                                     query           => $cgi,
+                                                                     type            => "intranet",
+                                                                     authnotrequired => 0,
+                                                                     flagsrequired   => { tools => 'label_creator' },
+                                                                     debug           => 1,
+                                                                     });
+
 
 my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
