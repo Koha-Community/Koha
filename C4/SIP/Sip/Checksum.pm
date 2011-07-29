@@ -10,7 +10,7 @@ our $debug = 0;
 
 sub checksum {
     my $pkt = shift;
-    return (-unpack('%16U*', $pkt) & 0xFFFF);
+    return (-unpack('%16C*', $pkt) & 0xFFFF);
 }
 
 sub verify_cksum {
@@ -29,7 +29,7 @@ sub verify_cksum {
     # Convert the checksum back to hex and calculate the sum of the
     # pack without the checksum.
     $cksum = hex($1);
-    $shortsum = unpack("%16U*", substr($pkt, 0, -4));
+    $shortsum = unpack("%16C*", substr($pkt, 0, -4));
 
     # The checksum is valid if the hex sum, plus the checksum of the 
     # base packet short when truncated to 16 bits.
