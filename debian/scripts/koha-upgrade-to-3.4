@@ -37,7 +37,7 @@ Koha will be upgraded for the following instances: $TO_UPGRADE
 This may take some time to run. Go make a coffee.
 EOH
 
-for name in "$TO_UPGRADE"
+for name in $TO_UPGRADE
 do
     echo "Upgrading $name..."
     sudo -u "$name-koha" -H \
