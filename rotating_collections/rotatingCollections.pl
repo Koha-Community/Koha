@@ -15,7 +15,7 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "rotating_collections/rotatingCollections.tmpl",
 			     query => $query,
 			     type => "intranet",
-			     authnotrequired => 1,
+			     authnotrequired => 0,
 			     flagsrequired => {parameters => 1},
 			     debug => 1,
 			     });
