@@ -1,5 +1,6 @@
 <fieldset id="acqui_basket_add">
     <legend>Add Order To Basket</legend>
+    [% IF has_budgets %]
     <form action="/cgi-bin/koha/acqui/neworderbiblio.pl" method="post">
         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
         <input type="hidden" name="basketno" value="[% basketno %]" />
@@ -11,4 +12,7 @@
         <li><a href="/cgi-bin/koha/acqui/addorderiso2709.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]"> From a staged file</a></li>
         </ul>
     </form>
+    [% ELSE %]
+        You can't create any orders unless you first <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">define a budget and a fund</a>.
+    [% END %]
 </fieldset>
