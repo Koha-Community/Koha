@@ -52,7 +52,7 @@
                     <a href="label-item-search.pl?startfrom=[% startfromprev %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&lt;&lt;</a>
                     [% END %]
                     [% FOREACH number IN numbers %]
-                    <a href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% number.ccl_query %]&amp;resultsperpage=[% number.resultsperpage %]&amp;op=do_search&amp;batch_id=[% number.batch_id %]">[% number.number %]</a>
+                    <a href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">[% number.number %]</a>
                     [% END %]
                     [% IF ( displaynext ) %]
                     <a href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&gt;&gt;</a>
@@ -127,4 +127,4 @@
 	    </p>
             [% END %]
 	</div>
-    [% INCLUDE 'intranet-bottom.inc' %]
+    [% INCLUDE 'popup-bottom.inc' %]
