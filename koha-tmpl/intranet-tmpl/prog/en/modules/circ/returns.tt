@@ -68,9 +68,9 @@ function Dopop(link) {
 
 <!-- Patron has waiting holds -->
 [% IF ( waiting_holds ) %]
-    <div class="dialog alert">
-        <h3>Patron has [% waiting_holds %] hold(s) waiting for pickup.</h3>
-        <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% holdsborrowernumber %]">Checkout holds</a>.</p>
+    <div class="dialog message">
+        <h3>[% holdsfirstname %] [% holdssurname %] has [% waiting_holds %] hold(s) waiting for pickup.</h3>
+        <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% holdsborrowernumber %]">Check out to this patron</a>.</p>
     </div>
 [% END %]
 
