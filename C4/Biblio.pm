@@ -1612,7 +1612,8 @@ sub GetMarcAuthors {
                 $separator = C4::Context->preference('authoritysep');
             }
             push @subfields_loop,
-              { code      => $subfieldcode,
+              { tag       => $field->tag(),
+                code      => $subfieldcode,
                 value     => $value,
                 link_loop => \@this_link_loop,
                 separator => $separator
