@@ -83,9 +83,9 @@
                     [% IF ( CHUNK.type_text ) %]
                     [% CHUNK.contents %]
                     [% ELSIF ( CHUNK.type_input ) %]
-                    <input type="[%IF CHUNK.input_type %][% CHUNK.input_type %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="short" %]" value="[% CHUNK.value %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
+                    <input type="[%IF CHUNK.input_type %][% CHUNK.input_type %][% ELSE %]text[% END %]" name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]" value="[% CHUNK.value %]" autocomplete="off" /> [% IF ( CHUNK.dateinput ) %]<span class="hint">[% INCLUDE 'date-format.inc' %]</span>[% END %]
                     [% ELSIF ( CHUNK.type_select ) %]
-                    <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="choice" %]">
+                    <select name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "choice" %]">
                         [% FOREACH CHOICE IN CHUNK.CHOICES %]
                         [% IF ( CHOICE.selected ) %]
                         <option value="[% CHOICE.value %]" selected="selected">
@@ -98,7 +98,7 @@
                     </select>
                     [% ELSIF ( CHUNK.type_textarea ) %]
 					<a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
-					<textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% DEFAULT CHUNK.class="short" %]">[% CHUNK.value %]</textarea>
+					<textarea name="pref_[% CHUNK.name %]" id="pref_[% CHUNK.name %]" class="preference preference-[% CHUNK.class or "short" %]">[% CHUNK.value %]</textarea>
                     [% ELSIF ( CHUNK.type_languages ) %]
                     <dl>
                     [% FOREACH language IN CHUNK.languages %]

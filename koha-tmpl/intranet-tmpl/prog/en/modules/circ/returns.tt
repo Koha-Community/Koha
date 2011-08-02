@@ -188,7 +188,7 @@ function Dopop(link) {
     [% IF ( transfer ) %]
     <!-- transfer: item with no reservation, must be returned to its homebranch -->
 	<div class="dialog message">
-	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% DEFAULT title="item" |html %]</a> to [% homebranchname %]</h3></div>[% END %]
+	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% homebranchname %]</h3></div>[% END %]
 
     [% IF ( needstransfer ) %]
 	<!-- needstransfer -->

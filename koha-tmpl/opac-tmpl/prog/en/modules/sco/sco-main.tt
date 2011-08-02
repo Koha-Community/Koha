@@ -204,7 +204,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
     <!-- FIXME: yet another jacket image breakpoint -->
 	<td>[% IF ( ISSUE.amazonimages ) %] [% IF ( ISSUE.isbn ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber |url %]"><img src="http://images.amazon.com/images/P/[% ISSUE.isbn %].01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a>[% END %] [% END %][% UNLESS ( ISSUE.noitemlinks ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a>[% ELSE %]<strong>[% ISSUE.title |html %]</strong>[% END %]<span class="item-details">
 	[% ISSUE.author %]</span> ([% ISSUE.barcode %])</td>
-	<td>[% DEFAULT ISSUE.itemcallnumber="&nbsp;" %]</td>
+	<td>[% ISSUE.itemcallnumber %]</td>
 	[% IF ( ISSUE.overdue ) %]<td class="overdue">[% ISSUE.date_due_display %]</td>[% ELSE %]<td>[% ISSUE.date_due_display %]</td>[% END %]
 	<td>
     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">

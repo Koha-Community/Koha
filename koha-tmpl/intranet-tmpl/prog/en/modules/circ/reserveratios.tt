@@ -9,7 +9,7 @@
 <script type="text/javascript" src="[% themelang %]/lib/calendar/calendar-setup.js"></script>
 <!-- End of additions -->
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript" language="JavaScript">
+<script type="text/javascript">
 //<![CDATA[
 $.tablesorter.addParser({
     id: 'articles', 
@@ -55,7 +55,7 @@ $.tablesorter.addParser({
    <h3>Calculated on [% todaysdate %]. From [% from %]
 	to [% to %]</h3>
 <p>These items have a hold ratio &ge; [% ratio %].</p>
-<div class="sql">[% DEFAULT sql="" %]</div>
+<div class="sql">[% sql %]</div>
 
 [% IF ( reserveloop ) %]
     <table id="holdst">

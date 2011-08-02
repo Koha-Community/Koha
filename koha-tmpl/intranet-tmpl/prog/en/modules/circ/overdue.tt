@@ -233,9 +233,9 @@
     <li><label for="order">Sort By:</label> <select name="order" id="order">
 [% FOREACH ORDER_LOO IN ORDER_LOOP %]
     [% IF ( ORDER_LOO.selected ) %]
-    <option value="[% DEFAULT ORDER_LOO.ordervalue="" %]" selected="selected">
+    <option value="[% ORDER_LOO.ordervalue %]" selected="selected">
     [% ELSE %]
-    <option value="[% DEFAULT ORDER_LOO.ordervalue="" %]">
+    <option value="[% ORDER_LOO.ordervalue %]">
     [% END %]
     [% IF ( ORDER_LOO.order_date_due ) %]Due Date
     [% ELSIF ( ORDER_LOO.order_borrower ) %]Patron

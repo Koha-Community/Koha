@@ -77,7 +77,7 @@
 	<h1>All Tags</h1>
 	
 		<form method="get" action="opac-tags.pl">
-		<fieldset>Show up to <input type="text" name="limit" style="text-align: right;" maxlength="4" size="4" value="[% DEFAULT limit="100" %]" />
+		<fieldset>Show up to <input type="text" name="limit" style="text-align: right;" maxlength="4" size="4" value="[% limit or "100" %]" />
 			tags[% IF ( opacuserlogin ) %] from other users[% END %].
 			<input type="submit" value="OK" />
             [% IF ( opacuserlogin ) %][% UNLESS ( loggedinusername ) %]

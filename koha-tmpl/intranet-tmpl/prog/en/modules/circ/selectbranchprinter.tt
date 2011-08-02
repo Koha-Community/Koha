@@ -26,15 +26,15 @@
 Updated:<ul>
     [% FOREACH update IN updated %]
     [% IF ( update.updated_branch ) %]
-        <li>Library: [% DEFAULT update.old_branch="?" %] &rArr; [% DEFAULT update.LoginBranchcode="?" %]</li>
+        <li>Library: [% update.old_branch or "?" %] &rArr; [% update.LoginBranchcode or "?" %]</li>
     [% ELSIF ( update.updated_printer ) %]
-      <!-- FIXME:  <li>Printer: [% DEFAULT update.old_printer="?" %] &rArr; [% DEFAULT update.new_printer="?" %]</li> -->
+      <!-- FIXME:  <li>Printer: [% update.old_printer or "?" %] &rArr; [% update.new_printer or "?" %]</li> -->
     [% ELSE %]
         <li>ERROR - unknown</li>
     [% END %]
     [% END %]
     </ul>
-<form method="post" action="[% DEFAULT referer="/cgi-bin/koha/circ/circulation.pl" |html %]">
+<form method="post" action="[% referer or "/cgi-bin/koha/circ/circulation.pl" |html %]">
     <div class="noshow">
         [% FOREACH recycle_loo IN recycle_loop %]
         <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value |html %]" />
@@ -83,7 +83,7 @@ Updated:<ul>
     [% FOREACH recycle_loo IN recycle_loop %]
     <input type="text" name="[% recycle_loo.param %]" value="[% recycle_loo.value |html %]" />
     [% END %]
-    <input type="hidden" name="oldreferer" value="[% DEFAULT referer="/cgi-bin/koha/circ/circulation.pl" |html %]" />
+    <input type="hidden" name="oldreferer" value="[% referer or "/cgi-bin/koha/circ/circulation.pl" |html %]" />
 </div>
 </form>
 <!-- /updated -->
