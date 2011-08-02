@@ -1,0 +1,73 @@
+[%# duplicates circ-menu.inc but assumes all borrower attributes are in a borrower variable rather than
+in the global namespace %]
+[% IF borrower %]
+<div class="patroninfo"><h5>[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])</h5>
+<!--[if IE 6]>
+<style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
+}</style>
+<![endif]-->
+<ul>
+[% IF ( patronimages ) %]
+[% IF borrower.has_picture %]
+<li><img src="/cgi-bin/koha/members/patronimage.pl?crdnum=[% borrower.cardnumber %]" id="patronimage" alt="[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])" border="0" style="max-width : 140px; margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC; width:auto !important; width:130px;" /></li>
+[% ELSE %]
+<li><img src="/intranet-tmpl/prog/img/patron-blank.png" alt="[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
+[% END %]
+[% END %]
+    <li>[% IF borrower.address %]
+            [% borrower.address %]
+    [% ELSE %]
+            <span class="empty">No address stored.</span>
+    [% END %]</li>
+    [% IF borrower.address2 %]
+        <li>[% borrower.address2 %]</li>
+    [% END %]<li>
+    [% IF borrower.city %]
+            [% borrower.city %][% IF borrower.state %], [% borrower.state %][% END %]
+	    [% borrower.zipcode %][% IF ( borrower.country ) %], [% borrower.country %][% END %]
+    [% ELSE %]
+        <span class="empty">No city stored.</span>
+    [% END %]</li>
+    <li>[% IF borrower.phone %]
+        [% borrower.phone %]
+    [% ELSE %]
+        [% IF borrower.mobile %]
+            [% borrower.mobile %]
+        [% ELSE %]
+            [% IF borrower.phonepro %]
+                [% borrower.phonepro %]
+            [% ELSE %]
+                <span class="empty">No phone stored.</span>
+            [% END %]
+        [% END %]
+    [% END %]</li>
+    [% IF borrower.email %]
+        <li class="email"> <a href="mailto:[% borrower.email %]" title="[% borrower.email %]">[% borrower.email %]</a></li>
+    [% ELSE %]
+        [% IF borrower.emailpro %]
+            <li class="email"> <a href="mailto:[% borrower.emailpro %]" title="[% borrower.emailpro %]">[% borrower.emailpro %]</a></li>
+        [% ELSE %]
+            <li> <span class="empty">No email stored.</span>    </li>
+        [% END %]
+    [% END %]
+    <li>Category: [% borrower.description %] ([% borrower.categorycode %])</li>
+    <li>Home Library: [% IF ( borrower.branchname ) %][% borrower.branchname %][% ELSE %][% borrower.branch %][% END %]</li>
+</ul></div>
+<div id="menu">
+<ul>
+	[% IF ( circview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% borrower.borrowernumber %]">Check Out</a></li>
+	[% IF ( CAN_user_borrowers ) %]
+	[% IF ( detailview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]">Details</a></li>
+	[% END %]
+	 [% IF ( CAN_user_updatecharges ) %]
+	[% IF ( finesview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Fines</a></li>
+	[% END %]
+	[% IF ( intranetreadinghistory ) %][% IF ( readingrecordview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/readingrec.pl?borrowernumber=[% borrower.borrowernumber %]">Circulation History</a></li>[% END %]
+	[% IF ( CAN_user_parameters ) %][% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=circulation&amp;object=[% borrower.borrowernumber %]&amp;src=circ">Modification Log</a></li>[% END %]
+    [% IF ( EnhancedMessagingPreferences ) %]
+    [% IF ( messagingview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/messaging.pl?borrowernumber=[% borrower.borrowernumber %]">Messaging</a></li>
+    [% END %]
+    [% IF ( sentnotices ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% borrower.borrowernumber %]">Notices</a></li>
+</ul></div>
+[% END %]
+

@@ -2,6 +2,7 @@
 
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2010 BibLibre
+# Copyright 2010,2011 PTFS-Europe Ltd
 #
 # This file is part of Koha.
 #
@@ -17,7 +18,6 @@
 # You should have received a copy of the GNU General Public License along
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
-
 
 =head1 pay.pl
 
@@ -38,196 +38,243 @@ use C4::Accounts;
 use C4::Stats;
 use C4::Koha;
 use C4::Overdues;
-use C4::Branch; # GetBranches
+use C4::Branch;
 
-my $input = new CGI;
+my $input = CGI->new;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-    {
-        template_name   => "members/pay.tmpl",
+    {   template_name   => 'members/pay.tmpl',
         query           => $input,
-        type            => "intranet",
+        type            => 'intranet',
         authnotrequired => 0,
         flagsrequired   => { borrowers => 1, updatecharges => 1 },
         debug           => 1,
     }
 );
 
+my $writeoff_sth;
+my $add_writeoff_sth;
+
+my @names = $input->param;
+
 my $borrowernumber = $input->param('borrowernumber');
-if ( $borrowernumber eq '' ) {
+if ( !$borrowernumber ) {
     $borrowernumber = $input->param('borrowernumber0');
 }
 
 # get borrower details
-my $data = GetMember( borrowernumber => $borrowernumber );
+my $borrower = GetMember( borrowernumber => $borrowernumber );
 my $user = $input->remote_user;
+$user ||= q{};
 
-# get account details
 my $branches = GetBranches();
-my $branch   = GetBranch( $input, $branches );
+my $branch = GetBranch( $input, $branches );
 
-my @names = $input->param;
-my %inp;
-my $check = 0;
-for ( my $i = 0 ; $i < @names ; $i++ ) {
-    my $temp = $input->param( $names[$i] );
-    if ( $temp eq 'wo' ) {
-        $inp{ $names[$i] } = $temp;
-        $check = 1;
-    }
-    if ( $temp eq 'yes' ) {
+my $writeoff_item = $input->param('confirm_writeoff');
+my $paycollect    = $input->param('paycollect');
+if ($paycollect) {
+    print $input->redirect(
+        "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber");
+}
+my $payselected = $input->param('payselected');
+if ($payselected) {
+    payselected(@names);
+}
 
-# FIXME : using array +4, +5, +6 is dirty. Should use arrays for each accountline
-        my $amount         = $input->param( $names[ $i + 4 ] );
-        my $borrowernumber = $input->param( $names[ $i + 5 ] );
-        my $accountno      = $input->param( $names[ $i + 6 ] );
-        makepayment( $borrowernumber, $accountno, $amount, $user, $branch );
-        $check = 2;
-    }
-    if ( $temp eq 'no'||$temp eq 'yes'||$temp eq 'wo') {
-        my $borrowernumber = $input->param( $names[ $i + 5 ] );
-        my $accountno      = $input->param( $names[ $i + 6 ] );
-        my $note     = $input->param( $names[ $i + 10 ] );
-        ModNote( $borrowernumber, $accountno, $note );
+my $writeoff_all = $input->param('woall');    # writeoff all fines
+if ($writeoff_all) {
+    writeoff_all(@names);
+} elsif ($writeoff_item) {
+    my $accountno    = $input->param('accountno');
+    my $itemno       = $input->param('itemnumber');
+    my $account_type = $input->param('accounttype');
+    my $amount       = $input->param('amount');
+    writeoff( $accountno, $itemno, $account_type, $amount );
+}
+
+for (@names) {
+    if (/^pay_indiv_(\d+)$/) {
+        my $line_no = $1;
+        redirect_to_paycollect( 'pay_individual', $line_no );
+    } elsif (/^wo_indiv_(\d+)$/) {
+        my $line_no = $1;
+        redirect_to_paycollect( 'writeoff_individual', $line_no );
     }
 }
 
-my $total = $input->param('total') || '';
-if ( $check == 0 ) {
-    if ( $total ne '' ) {
-        recordpayment( $borrowernumber, $total );
-    }
+add_accounts_to_template();
 
-    my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+output_html_with_http_headers $input, $cookie, $template->output;
 
-    my @allfile;
-    my @notify = NumberNotifyId($borrowernumber);
+sub writeoff {
+    my ( $accountnum, $itemnum, $accounttype, $amount ) = @_;
 
-    my $numberofnotify = scalar(@notify);
-    for ( my $j = 0 ; $j < scalar(@notify) ; $j++ ) {
-        my @loop_pay;
-        my ( $total , $accts, $numaccts) =
-          GetBorNotifyAcctRecord( $borrowernumber, $notify[$j] );
-        for ( my $i = 0 ; $i < $numaccts ; $i++ ) {
-            my %line;
-            if ( $accts->[$i]{'amountoutstanding'} != 0 ) {
-                $accts->[$i]{'amount'}            += 0.00;
-                $accts->[$i]{'amountoutstanding'} += 0.00;
-                $line{i}           = $j . "" . $i;
-                $line{itemnumber}  = $accts->[$i]{'itemnumber'};
-                $line{accounttype} = $accts->[$i]{'accounttype'};
-                $line{amount}      = sprintf( "%.2f", $accts->[$i]{'amount'} );
-                $line{amountoutstanding} =
-                  sprintf( "%.2f", $accts->[$i]{'amountoutstanding'} );
-                $line{borrowernumber} = $borrowernumber;
-                $line{accountno}      = $accts->[$i]{'accountno'};
-                $line{description}    = $accts->[$i]{'description'};
-                $line{note}           = $accts->[$i]{'note'};
-                $line{title}          = $accts->[$i]{'title'};
-                $line{notify_id}      = $accts->[$i]{'notify_id'};
-                $line{notify_level}   = $accts->[$i]{'notify_level'};
-                $line{net_balance} = 1 if($accts->[$i]{'amountoutstanding'} > 0); # you can't pay a credit.
-                push( @loop_pay, \%line );
-            }
+    # if no item is attached to fine, make sure to store it as a NULL
+    $itemnum ||= undef;
+    get_writeoff_sth();
+    $writeoff_sth->execute( $accountnum, $borrowernumber );
+
+    my $acct = getnextacctno($borrowernumber);
+    $add_writeoff_sth->execute( $borrowernumber, $acct, $itemnum, $amount );
+
+    UpdateStats( $branch, 'writeoff', $amount, q{}, q{}, q{}, $borrowernumber );
+
+    return;
+}
+
+sub add_accounts_to_template {
+
+    my ( $total, undef, undef ) = GetMemberAccountRecords($borrowernumber);
+    my $accounts = [];
+    my @notify   = NumberNotifyId($borrowernumber);
+
+    my $notify_groups = [];
+    for my $notify_id (@notify) {
+        my ( $acct_total, $accountlines, undef ) =
+          GetBorNotifyAcctRecord( $borrowernumber, $notify_id );
+        if ( @{$accountlines} ) {
+            my $totalnotify = AmountNotify( $notify_id, $borrowernumber );
+            push @{$accounts},
+              { accountlines => $accountlines,
+                notify       => $notify_id,
+                total        => $totalnotify,
+              };
         }
-
-        my $totalnotify = AmountNotify( $notify[$j], $borrowernumber );
-        ( $totalnotify = '0' ) if ( $totalnotify =~ /^0.00/ );
-        push @allfile,
-          {
-            'loop_pay' => \@loop_pay,
-            'notify'   => $notify[$j],
-            'total'    =>  sprintf( "%.2f",$totalnotify),
-			
-          };
     }
-	
-if ( $data->{'category_type'} eq 'C') {
-   my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
-   my $cnt = scalar(@$catcodes);
-   $template->param( 'CATCODE_MULTI' => 1) if $cnt > 1;
-   $template->param( 'catcode' =>    $catcodes->[0])  if $cnt == 1;
-}
-	
-$template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
-my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
-$template->param( picture => 1 ) if $picture;
-	
+    borrower_add_additional_fields($borrower);
     $template->param(
-        allfile        => \@allfile,
-        firstname      => $data->{'firstname'},
-        surname        => $data->{'surname'},
-        borrowernumber => $borrowernumber,
-	cardnumber => $data->{'cardnumber'},
-	categorycode => $data->{'categorycode'},
-	category_type => $data->{'category_type'},
-	categoryname  => $data->{'description'},
-	address => $data->{'address'},
-	address2 => $data->{'address2'},
-	city => $data->{'city'},
-    state => $data->{'state'},
-	zipcode => $data->{'zipcode'},
-	country => $data->{'country'},
-	phone => $data->{'phone'},
-	email => $data->{'email'},
-	branchcode => $data->{'branchcode'},
-	branchname => GetBranchName($data->{'branchcode'}),
-	is_child        => ($data->{'category_type'} eq 'C'),
-        total          => sprintf( "%.2f", $total )
+        accounts => $accounts,
+        borrower => $borrower,
+        total    => $total,
     );
-    output_html_with_http_headers $input, $cookie, $template->output;
+    return;
 
 }
-else {
 
-    my %inp;
-    my @name = $input->param;
-    for ( my $i = 0 ; $i < @name ; $i++ ) {
-        my $test = $input->param( $name[$i] );
-        if ( $test eq 'wo' ) {
-            my $temp = $name[$i];
-            $temp =~ s/payfine//;
-            $inp{ $name[$i] } = $temp;
+sub get_for_redirect {
+    my ( $name, $name_in, $money ) = @_;
+    my $s     = q{&} . $name . q{=};
+    my $value = $input->param($name_in);
+    if ( !defined $value ) {
+        $value = ( $money == 1 ) ? 0 : q{};
+    }
+    if ($money) {
+        $s .= sprintf '%.2f', $value;
+    } else {
+        $s .= $value;
+    }
+    return $s;
+}
+
+sub redirect_to_paycollect {
+    my ( $action, $line_no ) = @_;
+    my $redirect =
+      "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber";
+    $redirect .= q{&};
+    $redirect .= "$action=1";
+    $redirect .= get_for_redirect( 'accounttype', "accounttype$line_no", 0 );
+    $redirect .= get_for_redirect( 'amount', "amount$line_no", 1 );
+    $redirect .=
+      get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );
+    $redirect .= get_for_redirect( 'accountno',    "accountno$line_no",    0 );
+    $redirect .= get_for_redirect( 'description',  "description$line_no",  0 );
+    $redirect .= get_for_redirect( 'title',        "title$line_no",        0 );
+    $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
+    $redirect .= get_for_redirect( 'notify_id',    "notify_id$line_no",    0 );
+    $redirect .= get_for_redirect( 'notify_level', "notify_level$line_no", 0 );
+    $redirect .= '&remote_user=';
+    $redirect .= $user;
+    return print $input->redirect($redirect);
+}
+
+sub writeoff_all {
+    my @params = @_;
+    my @wo_lines = grep { /^accountno\d+$/ } @params;
+    for (@wo_lines) {
+        if (/(\d+)/) {
+            my $value       = $1;
+            my $accounttype = $input->param("accounttype$value");
+
+            #    my $borrowernum    = $input->param("borrowernumber$value");
+            my $itemno    = $input->param("itemnumber$value");
+            my $amount    = $input->param("amount$value");
+            my $accountno = $input->param("accountno$value");
+            writeoff( $accountno, $itemno, $accounttype, $amount );
         }
     }
-    my $borrowernumber;
-    while ( my ( $key, $value ) = each %inp ) {
 
-        my $accounttype = $input->param("accounttype$value");
-        $borrowernumber = $input->param("borrowernumber$value");
-        my $itemno    = $input->param("itemnumber$value");
-        my $amount    = $input->param("amount$value");
-        my $accountno = $input->param("accountno$value");
-        writeoff( $borrowernumber, $accountno, $itemno, $accounttype, $amount );
-    }
     $borrowernumber = $input->param('borrowernumber');
     print $input->redirect(
         "/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    return;
 }
 
-sub writeoff {
-    my ( $borrowernumber, $accountnum, $itemnum, $accounttype, $amount ) = @_;
-    my $user = $input->remote_user;
-    my $dbh  = C4::Context->dbh;
-    undef $itemnum unless $itemnum; # if no item is attached to fine, make sure to store it as a NULL
-    my $sth =
-      $dbh->prepare(
-"Update accountlines set amountoutstanding=0 where accountno=? and borrowernumber=?"
-      );
-    $sth->execute( $accountnum, $borrowernumber );
-    $sth->finish;
-    $sth = $dbh->prepare("select max(accountno) from accountlines");
-    $sth->execute;
-    my $account = $sth->fetchrow_hashref;
-    $sth->finish;
-    $account->{'max(accountno)'}++;
-    $sth = $dbh->prepare(
-"insert into accountlines (borrowernumber,accountno,itemnumber,date,amount,description,accounttype)
-						values (?,?,?,now(),?,'Writeoff','W')"
-    );
-    $sth->execute( $borrowernumber, $account->{'max(accountno)'},
-        $itemnum, $amount );
-    $sth->finish;
-    UpdateStats( $branch, 'writeoff', $amount, '', '', '',
-        $borrowernumber );
+sub borrower_add_additional_fields {
+    my $b_ref = shift;
+
+# some borrower info is not returned in the standard call despite being assumed
+# in a number of templates. It should not be the business of this script but in lieu of
+# a revised api here it is ...
+    if ( $b_ref->{category_type} eq 'C' ) {
+        my ( $catcodes, $labels ) =
+          GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
+        if ( @{$catcodes} ) {
+            if ( @{$catcodes} > 1 ) {
+                $b_ref->{CATCODE_MULTI} = 1;
+            } elsif ( @{$catcodes} == 1 ) {
+                $b_ref->{catcode} = $catcodes->[0];
+            }
+        }
+    } elsif ( $b_ref->{category_type} eq 'A' ) {
+        $b_ref->{adultborrower} = 1;
+    }
+    my ( $picture, $dberror ) = GetPatronImage( $b_ref->{cardnumber} );
+    if ($picture) {
+        $b_ref->{has_picture} = 1;
+    }
+
+    $b_ref->{branchname} = GetBranchName( $b_ref->{branchcode} );
+    return;
+}
+
+sub payselected {
+    my @params = @_;
+    my $amt    = 0;
+    my @lines_to_pay;
+    foreach (@params) {
+        if (/^incl_par_(\d+)$/) {
+            my $index = $1;
+            push @lines_to_pay, $input->param("accountno$index");
+            $amt += $input->param("amountoutstanding$index");
+        }
+    }
+    $amt = '&amt=' . $amt;
+    my $sel = '&selected=' . join ',', @lines_to_pay;
+    my $redirect =
+        "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber"
+      . $amt
+      . $sel;
+
+    print $input->redirect($redirect);
+    return;
+}
+
+sub get_writeoff_sth {
+
+    # lets prepare these statement handles only once
+    if ($writeoff_sth) {
+        return;
+    } else {
+        my $dbh = C4::Context->dbh;
+
+        # Do we need to validate accounttype
+        my $sql = 'Update accountlines set amountoutstanding=0 '
+          . 'WHERE accountno=? and borrowernumber=?';
+        $writeoff_sth = $dbh->prepare($sql);
+        my $insert =
+q{insert into accountlines (borrowernumber,accountno,itemnumber,date,amount,description,accounttype)}
+          . q{values (?,?,?,now(),?,'Writeoff','W')};
+        $add_writeoff_sth = $dbh->prepare($insert);
+    }
+    return;
 }

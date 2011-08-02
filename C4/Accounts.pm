@@ -38,7 +38,9 @@ BEGIN {
 		&getnextacctno &reconcileaccount &getcharges &ModNote &getcredits
 		&getrefunds &chargelostitem
 		&ReversePayment
-	); # removed &fixaccounts
+        makepartialpayment
+        recordpayment_selectaccts
+	);
 }
 
 =head1 NAME
@@ -369,7 +371,6 @@ sub manualinvoice {
     my $dbh      = C4::Context->dbh;
     my $notifyid = 0;
     my $insert;
-    $itemnum =~ s/ //g;
     my $accountno  = getnextacctno($borrowernumber);
     my $amountleft = $amount;
 
@@ -413,12 +414,12 @@ sub manualinvoice {
         $notifyid = 1;
     }
 
-    if ( $itemnum ne '' ) {
-        $desc .= " " . $itemnum;
+    if ( $itemnum ) {
+        $desc .= ' ' . $itemnum;
         my $sth = $dbh->prepare(
-            "INSERT INTO  accountlines
+            'INSERT INTO  accountlines
                         (borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding, itemnumber,notify_id, note, manager_id)
-        VALUES (?, ?, now(), ?,?, ?,?,?,?,?,?)");
+        VALUES (?, ?, now(), ?,?, ?,?,?,?,?,?)');
      $sth->execute($borrowernumber, $accountno, $amount, $desc, $type, $amountleft, $itemnum,$notifyid, $note, $manager_id) || return $sth->errstr;
   } else {
     my $sth=$dbh->prepare("INSERT INTO  accountlines
@@ -685,6 +686,106 @@ sub ReversePayment {
     $sth->execute( $borrowernumber, $accountno );
   }
 }
+
+=head2 recordpayment_selectaccts
+
+  recordpayment_selectaccts($borrowernumber, $payment,$accts);
+
+Record payment by a patron. C<$borrowernumber> is the patron's
+borrower number. C<$payment> is a floating-point number, giving the
+amount that was paid. C<$accts> is an array ref to a list of
+accountnos which the payment can be recorded against
+
+Amounts owed are paid off oldest first. That is, if the patron has a
+$1 fine from Feb. 1, another $1 fine from Mar. 1, and makes a payment
+of $1.50, then the oldest fine will be paid off in full, and $0.50
+will be credited to the next one.
+
+=cut
+
+sub recordpayment_selectaccts {
+    my ( $borrowernumber, $amount, $accts ) = @_;
+
+    my $dbh        = C4::Context->dbh;
+    my $newamtos   = 0;
+    my $accdata    = q{};
+    my $branch     = C4::Context->userenv->{branch};
+    my $amountleft = $amount;
+    my $sql = 'SELECT * FROM accountlines WHERE (borrowernumber = ?) ' .
+    'AND (amountoutstanding<>0) ';
+    if (@{$accts} ) {
+        $sql .= ' AND accountno IN ( ' .  join ',', @{$accts};
+        $sql .= ' ) ';
+    }
+    $sql .= ' ORDER BY date';
+    # begin transaction
+    my $nextaccntno = getnextacctno($borrowernumber);
+
+    # get lines with outstanding amounts to offset
+    my $rows = $dbh->selectall_arrayref($sql, { Slice => {} }, $borrowernumber);
+
+    # offset transactions
+    my $sth     = $dbh->prepare('UPDATE accountlines SET amountoutstanding= ? ' .
+        'WHERE (borrowernumber = ?) AND (accountno=?)');
+    for my $accdata ( @{$rows} ) {
+        if ($amountleft == 0) {
+            last;
+        }
+        if ( $accdata->{amountoutstanding} < $amountleft ) {
+            $newamtos = 0;
+            $amountleft -= $accdata->{amountoutstanding};
+        }
+        else {
+            $newamtos   = $accdata->{amountoutstanding} - $amountleft;
+            $amountleft = 0;
+        }
+        my $thisacct = $accdata->{accountno};
+        $sth->execute( $newamtos, $borrowernumber, $thisacct );
+    }
+
+    # create new line
+    $sql = 'INSERT INTO accountlines ' .
+    '(borrowernumber, accountno,date,amount,description,accounttype,amountoutstanding) ' .
+    q|VALUES (?,?,now(),?,'Payment,thanks','Pay',?)|;
+    $dbh->do($sql,{},$borrowernumber, $nextaccntno, 0 - $amount, 0 - $amountleft );
+    UpdateStats( $branch, 'payment', $amount, '', '', '', $borrowernumber, $nextaccntno );
+    return;
+}
+
+# makepayment needs to be fixed to handle partials till then this separate subroutine
+# fills in
+sub makepartialpayment {
+    my ( $borrowernumber, $accountno, $amount, $user, $branch ) = @_;
+    if (!$amount || $amount < 0) {
+        return;
+    }
+    my $dbh = C4::Context->dbh;
+
+    my $nextaccntno = getnextacctno($borrowernumber);
+    my $newamtos    = 0;
+
+    my $data = $dbh->selectrow_hashref(
+        'SELECT * FROM accountlines WHERE  borrowernumber=? AND accountno=?',undef,$borrowernumber,$accountno);
+    my $new_outstanding = $data->{amountoutstanding} - $amount;
+
+    my $update = 'UPDATE  accountlines SET amountoutstanding = ?  WHERE   borrowernumber = ? '
+    . ' AND   accountno = ?';
+    $dbh->do( $update, undef, $new_outstanding, $borrowernumber, $accountno);
+
+    # create new line
+    my $insert = 'INSERT INTO accountlines (borrowernumber, accountno, date, amount, '
+    .  'description, accounttype, amountoutstanding) '
+    . ' VALUES (?, ?, now(), ?, ?, ?, 0)';
+
+    $dbh->do(  $insert, undef, $borrowernumber, $nextaccntno, $amount,
+        "Payment, thanks - $user", 'Pay');
+
+    UpdateStats( $user, 'payment', $amount, '', '', '', $borrowernumber, $accountno );
+
+    return;
+}
+
+
 
 END { }    # module clean-up code here (global destructor)
 
