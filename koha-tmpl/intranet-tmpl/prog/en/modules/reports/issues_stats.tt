@@ -44,10 +44,14 @@
                 <th>TOTAL</th>
                 </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
-                    <tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]>
-                        <td>[% DEFAULT loopro.rowtitle_display="UNKNOWN VALUE" |html %]</td>
+                    [% IF ( loop.odd ) %]
+                    <tr>
+                    [% ELSE %]
+                    <tr class="highlight">
+                    [% END %]
+                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" |html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
-						<td>[% DEFAULT loopcel.value="&nbsp;" %]</td>
+						<td>[% loopcel.value %]</td>
                     [% END %]
 						<td>[% loopro.totalrow %]</td>
                     </tr>

@@ -46,11 +46,15 @@
                 <th>TOTAL</th>
                 </tr>
                 [% FOREACH loopro IN mainloo.looprow %]
-                    <tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]>
-                        <td>[% DEFAULT loopro.rowtitle_display="UNKNOWN VALUE" |html %]</td>
+                    [% IF ( loop.odd ) %]
+                    <tr>
+                    [% ELSE %]
+                    <tr class="highlight">
+                    [% END %]
+                        <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" |html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
 						<td align="center">
-						[% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output %]&amp;[% loopcel.url_complement %]">[% DEFAULT loopcel.value="&nbsp;" %]</a>[% ELSE %][% DEFAULT loopcel.value="&nbsp;" %][% END %]
+						[% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output %]&amp;[% loopcel.url_complement %]">[% loopcel.value %]</a>[% ELSE %][% loopcel.value %][% END %]
 						</td>
                     [% END %]
 						<td align="center">[% loopro.totalrow %]</td>

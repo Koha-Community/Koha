@@ -541,7 +541,7 @@ canned reports and writing custom SQL reports.</p>
 <legend>Create Report From SQL</legend>
 <ol>
     <li><label for="reportname">Report Name:</label> <input type="text" id="reportname" name="reportname" [% IF ( reportname ) %] value="[% reportname %]"[% END %] /> </li>
-    <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% DEFAULT notes="" %]</textarea></li>
+    <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
     <li><label for="types">Type:</label>
         <select id="types" name="types">
             <option value="1">Tabular</option>
@@ -554,7 +554,7 @@ canned reports and writing custom SQL reports.</p>
 <fieldset class="rows">
 <legend>SQL:</legend>
 <div style="margin:1em;">
-<textarea  id="sql" name="sql" cols="50" rows="10">[% DEFAULT sql="" %]</textarea>
+<textarea  id="sql" name="sql" cols="50" rows="10">[% sql %]</textarea>
 </div>
 </fieldset>
 
