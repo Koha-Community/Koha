@@ -4370,7 +4370,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);    
 }
     
-$DBversion = "3.05.00.XXX";
+$DBversion = "3.05.00.005";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BasketConfirmations', '1', 'When closing or reopening a basket,', 'always ask for confirmation.|do not ask for confirmation.', 'Choice');");
     print "Upgrade to $DBversion done (Adds pref BasketConfirmations)\n";
