@@ -526,6 +526,8 @@ DROP TABLE IF EXISTS `cities`;
 CREATE TABLE `cities` (
   `cityid` int(11) NOT NULL auto_increment,
   `city_name` varchar(100) NOT NULL default '',
+  `city_state` VARCHAR( 100 ) NULL DEFAULT NULL,
+  `city_country` VARCHAR( 100 ) NULL DEFAULT NULL,
   `city_zipcode` varchar(20) default NULL,
   PRIMARY KEY  (`cityid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
