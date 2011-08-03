@@ -4377,7 +4377,7 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.05.00.XXX"; #FIXME
+$DBversion = "3.05.00.006"; 
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('MARCAuthorityControlField008', '|| aca||aabn           | a|a     d', NULL, NULL, 'Textarea')");
     print "Upgrade to $DBversion done (Add syspref MARCAuthorityControlField008)\n";
