@@ -4391,7 +4391,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.05.00.XXX";
+$DBversion = "3.05.00.008";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("ALTER TABLE `cities` ADD `city_state` VARCHAR( 100 ) NULL DEFAULT NULL AFTER  `city_name`;");
     $dbh->do("ALTER TABLE `cities` ADD `city_country` VARCHAR( 100 ) NULL DEFAULT NULL AFTER  `city_zipcode`;");
