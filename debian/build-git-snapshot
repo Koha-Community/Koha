@@ -52,9 +52,10 @@ sub sys_command_output {
     my ($command) = @_;
 
     print "$command\n" if $debug;
-    open COMMAND, "$command |"
+    my $command_output;
+    open($command_output, "$command"," |")
       or die qq{Cannot execute "$command": $!"};
-    return map { chomp; $_ } <COMMAND>;
+    return map { chomp; $_ } <$command_output>;
 }
 
 sub everything_is_committed {
