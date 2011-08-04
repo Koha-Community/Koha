@@ -1204,11 +1204,9 @@ sub GetMemberAccountRecords {
 
 =head2 GetBorNotifyAcctRecord
 
-  ($count, $acctlines, $total) = &GetBorNotifyAcctRecord($params,$notifyid);
+  ($total, $acctlines, $count) = &GetBorNotifyAcctRecord($params,$notifyid);
 
 Looks up accounting data for the patron with the given borrowernumber per file number.
-
-(FIXME - I'm not at all sure what this is about.)
 
 C<&GetBorNotifyAcctRecord> returns a three-element array. C<$acctlines> is a
 reference-to-array, where each element is a reference-to-hash; the
@@ -1231,7 +1229,6 @@ sub GetBorNotifyAcctRecord {
                     AND amountoutstanding != '0' 
                 ORDER BY notify_id,accounttype
                 ");
-#                    AND (accounttype='FU' OR accounttype='N' OR accounttype='M'OR accounttype='A'OR accounttype='F'OR accounttype='L' OR accounttype='IP' OR accounttype='CH' OR accounttype='RE' OR accounttype='RL')
 
     $sth->execute( $borrowernumber, $notifyid );
     my $total = 0;
