@@ -33,6 +33,7 @@ my @trans_syspref_files = qw(
     uk-UA/mandatory/system_preferences_full_optimal_for_install_only.sql
     ru-RU/mandatory/system_preferences_full_optimal_for_install_only.sql
     pl-PL/mandatory/sysprefs.sql
+    es-ES/mandatory/sysprefs.sql
 );
 
 ok(

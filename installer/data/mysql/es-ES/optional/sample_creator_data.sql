@@ -3,7 +3,7 @@
 
 LOCK TABLES `creator_layouts` WRITE;
 /*!40000 ALTER TABLE `creator_layouts` DISABLE KEYS */;
-INSERT INTO `creator_layouts` VALUES (17,'CODE39',1,'BIBBAR','Label Test',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, callnumber','<opt></opt>','Labels'),(18,'CODE39',1,'BAR','DEFAULT',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, callnumber','<opt></opt>','Labels'),(19,'CODE39',1,'BAR','DEFAULT',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, callnumber','<opt></opt>','Labels'),(20,'CODE39',1,'BAR','Test Layout',0,'TR',10,'POINT',0,'L','barcode','<opt page_side="F" units="POINT">
+INSERT INTO `creator_layouts` VALUES (17,'CODE39',1,'BIBBAR','Label Test',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, itemcallnumber','<opt></opt>','Labels'),(18,'CODE39',1,'BAR','DEFAULT',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, itemcallnumber','<opt></opt>','Labels'),(19,'CODE39',1,'BAR','DEFAULT',0,'TR',3,'POINT',0,'L','title, author, isbn, issn, itemtype, barcode, itemcallnumber','<opt></opt>','Labels'),(20,'CODE39',1,'BAR','Test Layout',0,'TR',10,'POINT',0,'L','barcode','<opt page_side="F" units="POINT">
   <images name="image_1" Dx="72" Ox="0" Oy="0" Sx="0" Sy="0" Tx="4.5" Ty="63">
     <data_source image_name="none" image_source="patronimages" />
   </images>
