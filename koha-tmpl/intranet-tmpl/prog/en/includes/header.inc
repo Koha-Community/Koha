@@ -53,10 +53,10 @@
             <strong>[% LoginBranchname %]</strong>
             [% IF ( IndependantBranches ) %]
                 [% IF ( CAN_user_management ) %]
-                    (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set</a>)
+                    (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>)
                 [% END %]
             [% ELSE %]
-                (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set</a>)
+                (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>)
             [% END %]
         |
         [% END %]
