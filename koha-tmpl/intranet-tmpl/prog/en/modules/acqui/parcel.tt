@@ -331,6 +331,14 @@
 	[% ELSE %]There are no received orders.[% END %]
 </div>
 
+<!--<form action="/cgi-bin/koha/acqui/parcels.pl?supplierid=[% supplierid %]" method="post">-->
+<form action="parcels.pl?supplierid=[% supplierid %]" method="post">
+    <input type="hidden" name="supplierid" value="[% supplierid %]">
+    <fieldset class="action">
+        <input type="submit" value="End receiving">
+    </fieldset>
+</form>
+
 </div>
 </div>
 <div class="yui-b">
