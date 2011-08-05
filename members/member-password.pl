@@ -14,6 +14,7 @@ use C4::Members;
 use C4::Branch;
 use C4::Circulation;
 use CGI;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 use Digest::MD5 qw(md5_base64);
 
@@ -89,7 +90,8 @@ if ( $newpassword  && ! $errormsg ) {
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
 my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
-	
+my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});
+
     $template->param( othernames => $bor->{'othernames'},
 	    surname     => $bor->{'surname'},
 	    firstname   => $bor->{'firstname'},
@@ -111,7 +113,8 @@ $template->param( picture => 1 ) if $picture;
 	    userid      => $bor->{'userid'},
 	    destination => $destination,
 		is_child        => ($bor->{'category_type'} eq 'C'),
-	    defaultnewpassword => $defaultnewpassword 
+	    defaultnewpassword => $defaultnewpassword,
+    	extendedattributes => $attributes,
 	);
 
 

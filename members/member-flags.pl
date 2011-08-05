@@ -13,6 +13,7 @@ use C4::Auth qw(:DEFAULT :EditPermissions);
 use C4::Context;
 use C4::Members;
 use C4::Branch;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 #use C4::Acquisitions;
 
 use C4::Output;
@@ -161,7 +162,8 @@ if ($input->param('newflags')) {
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
     my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
-		
+my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});
+
 $template->param(
 		borrowernumber => $bor->{'borrowernumber'},
     cardnumber => $bor->{'cardnumber'},
@@ -182,6 +184,7 @@ $template->param(
 		branchname => GetBranchName($bor->{'branchcode'}),
 		loop => \@loop,
 		is_child        => ($bor->{'category_type'} eq 'C'),
+        extendedattributes => $attributes,
 		);
 
     output_html_with_http_headers $input, $cookie, $template->output;

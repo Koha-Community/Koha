@@ -33,6 +33,7 @@ use C4::Members;
 use C4::Branch;
 use C4::Accounts;
 use C4::Items;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 my $input=new CGI;
 
@@ -77,6 +78,7 @@ if ($add){
     $template->param( adultborrower => 1 ) if ( $data->{category_type} eq 'A' );
     my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
+    my $attributes = GetBorrowerAttributes($borrowernumber);
     
     $template->param(
         borrowernumber => $borrowernumber,
@@ -97,6 +99,7 @@ if ($add){
 		    branchcode => $data->{'branchcode'},
 		    branchname => GetBranchName($data->{'branchcode'}),
 		    is_child        => ($data->{'category_type'} eq 'C'),
+            extendedattributes => $attributes,
         );
     output_html_with_http_headers $input, $cookie, $template->output;
 }

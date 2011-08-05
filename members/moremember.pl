@@ -52,6 +52,7 @@ use C4::Branch; # GetBranchName
 use C4::Form::MessagingPreferences;
 use C4::NewsChannels; #get slip news
 use List::MoreUtils qw/uniq/;
+use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 #use Smart::Comments;
 #use Data::Dumper;
@@ -442,6 +443,7 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
     $template->param(SMSnumber     => defined $data->{'smsalertnumber'} ? $data->{'smsalertnumber'} : $data->{'mobile'});
 }
+my $attributes = GetBorrowerAttributes($borrowernumber);
 
 $template->param(
     detailview => 1,
@@ -471,6 +473,7 @@ $template->param(
     "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
+    extendedattributes => $attributes,
 );
 
 #Get the slip news items

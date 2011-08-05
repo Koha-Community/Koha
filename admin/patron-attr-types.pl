@@ -106,6 +106,9 @@ sub error_add_attribute_type_form {
     if ($input->param('staff_searchable')) {
         $template->param(staff_searchable_checked => 1);
     }
+    if ($input->param('display_checkout')) {
+        $template->param(display_checkout_checked => 'checked="checked"');
+    }
 
     $template->param(
         attribute_type_form => 1,
@@ -147,6 +150,8 @@ sub add_update_attribute_type {
     $attr_type->authorised_value_category($authorised_value_category);
     my $password_allowed = $input->param('password_allowed');
     $attr_type->password_allowed($password_allowed);
+    my $display_checkout = $input->param('display_checkout');
+    $attr_type->display_checkout($display_checkout);
 
     if ($op eq 'edit') {
         $template->param(edited_attribute_type => $attr_type->code());
@@ -222,7 +227,9 @@ sub edit_attribute_type_form {
     if ($attr_type->staff_searchable()) {
         $template->param(staff_searchable_checked => 1);
     }
-
+    if ($attr_type->display_checkout()) {
+        $template->param(display_checkout_checked => 'checked="checked"');
+    }
     authorised_value_category_list($template, $attr_type->authorised_value_category());
 
     $template->param(
