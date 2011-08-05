@@ -59,6 +59,7 @@ use CGI;
 use C4::Dates qw/format_date/;
 use C4::Bookseller qw/ GetBookSellerFromId GetBookSeller /;
 use C4::Members qw/GetMember/;
+use C4::Context;
 
 my $query = CGI->new;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -95,6 +96,11 @@ if ($loggedinuser) {
     $uid = GetMember( borrowernumber => $loggedinuser )->{userid};
 }
 
+my $userenv = C4::Context::userenv;
+my $viewbaskets = C4::Context->preference('AcqViewBaskets');
+
+my $userbranch = $userenv->{branch};
+
 #build result page
 my $loop_suppliers = [];
 
@@ -102,19 +108,25 @@ for my $vendor (@suppliers) {
     my $baskets = get_vendors_baskets( $vendor->{id} );
 
     my $loop_basket = [];
+    
     for my $basket ( @{$baskets} ) {
-        if ((      $basket->{authorisedby}
-                && $basket->{authorisedby} eq $loggedinuser
-            )
-            || haspermission( $uid, { acquisition => q{*} } )
-          ) {
+        my $authorisedby = $basket->{authorisedby};
+        my $basketbranch = GetMember( borrowernumber => $authorisedby )->{branchcode};
+        
+        if ($userenv->{'flags'} & 1 || #user is superlibrarian
+               (haspermission( $uid, { acquisition => q{*} } ) && #user has acq permissions and
+                   ($viewbaskets eq 'all' || #user is allowed to see all baskets
+                   ($viewbaskets eq 'branch' && $authorisedby && $userbranch eq $basketbranch) || #basket belongs to user's branch
+                   ($basket->{authorisedby} &&  $viewbaskets == 'user' && $authorisedby == $loggedinuser) #user created this basket
+                   ) 
+                ) 
+           ) { 
             for my $date_field (qw( creationdate closedate)) {
                 if ( $basket->{$date_field} ) {
-                    $basket->{$date_field} =
-                      format_date( $basket->{$date_field} );
+                    $basket->{$date_field} = format_date( $basket->{$date_field} );
                 }
             }
-            push @{$loop_basket}, $basket;
+            push @{$loop_basket}, $basket; 
         }
     }
 

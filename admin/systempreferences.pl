@@ -76,6 +76,7 @@ my %tabsysprefs;
     $tabsysprefs{AcqCreateItem}="Acquisitions";
     $tabsysprefs{OrderPdfFormat}="Acquisitions";
     $tabsysprefs{CurrencyFormat}="Acquisitions";
+    $tabsysprefs{AcqViewBaskets}="Acquisitions";
 
 # Admin
 $tabsysprefs{singleBranchMode}      = "Admin";
