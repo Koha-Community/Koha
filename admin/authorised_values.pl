@@ -27,7 +27,7 @@ use C4::Koha;
 use C4::Output;
 
 
-sub AuthorizedValuesForCategory ($) {
+sub AuthorizedValuesForCategory {
     my ($searchstring) = shift or return;
     my $dbh = C4::Context->dbh;
     $searchstring=~ s/\'/\\\'/g;

@@ -24,6 +24,7 @@
 use strict;
 use warnings;
 use CGI;
+use Carp;
 use Number::Format qw(:all);
 
 use C4::Context;
@@ -210,8 +211,20 @@ if ($op eq ""){
         }
         if ($price){
             $orderinfo{'listprice'} = $price;
-            eval "use C4::Acquisition qw/GetBasket/;";
-            eval "use C4::Bookseller qw/GetBookSellerFromId/;";
+            eval {
+		require C4::Acquisition;
+		import C4::Acquisition qw/GetBasket/;
+	    };
+	    if ($@){
+		croak $@;
+	    }
+            eval {
+		require C4::Bookseller;
+	        import C4::Bookseller qw/GetBookSellerFromId/;
+	    };
+	    if ($@){
+		croak $@;
+	    }
             my $basket     = GetBasket( $orderinfo{basketno} );
             my $bookseller = GetBookSellerFromId( $basket->{booksellerid} );
             my $gst        = $bookseller->{gstrate} || C4::Context->preference("gist") || 0;
@@ -265,7 +278,7 @@ my $budget = GetBudget($budget_id);
 
 # build budget list
 my $budget_loop = [];
-my $budgets = GetBudgetHierarchy( q{}, $borrower->{branchcode}, $borrower->{borrowernumber} );
+$budgets = GetBudgetHierarchy( q{}, $borrower->{branchcode}, $borrower->{borrowernumber} );
 foreach my $r ( @{$budgets} ) {
     if ( !defined $r->{budget_amount} || $r->{budget_amount} == 0 ) {
         next;
