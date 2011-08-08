@@ -979,7 +979,7 @@
                             </xsl:for-each>
                             (<xsl:value-of select="$AlternateHoldingsCount"/>)
                             </xsl:when>
-                            <xsl:otherwise>No copies available</xsl:otherwise>
+                            <xsl:otherwise>No copies available </xsl:otherwise>
                         </xsl:choose>
 				   </xsl:when>
                    <xsl:when test="count(key('item-by-status', 'available'))>0">
