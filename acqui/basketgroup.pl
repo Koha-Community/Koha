@@ -45,6 +45,7 @@ The bookseller who we want to display the baskets (and basketgroups) of.
 
 use strict;
 use warnings;
+use Carp;
 
 use C4::Input;
 use C4::Auth;
@@ -184,9 +185,21 @@ sub printbasketgrouppdf{
     my ($basketgroupid) = @_;
     
     my $pdfformat = C4::Context->preference("OrderPdfFormat");
-    eval "use $pdfformat";
-    # FIXME consider what would happen if $pdfformat does not
-    # contain the name of a valid Perl module.
+    if ($pdfformat eq 'pdfformat::layout3pages' || $pdfformat eq 'pdfformat::layout2pages'){
+	eval {
+	    require $pdfformat;
+	    import $pdfformat;
+	};
+	if ($@){
+	}
+    }
+    else {
+	print $input->header;  
+	print $input->start_html;  # FIXME Should do a nicer page
+	print "<h1>Invalid PDF Format set</h1>";
+	print "Please go to the systempreferences and set a valid pdfformat";
+	exit;
+    }
     
     my $basketgroup = GetBasketgroup($basketgroupid);
     my $bookseller = GetBookSellerFromId($basketgroup->{'booksellerid'});
@@ -202,8 +215,20 @@ sub printbasketgrouppdf{
             #isbn, itemtype, author, title, publishercode, quantity, listprice ecost discount gstrate
             my @ba_order;
             if ( $ord->{biblionumber} && $ord->{quantity}> 0 ) {
-                eval "use C4::Biblio";
-                eval "use C4::Koha";
+                eval {
+		    require C4::Biblio;
+		    import C4::Biblio;
+		};
+		if ($@){
+		    croak $@;
+		}
+                eval {
+		    require C4::Koha;
+		    import C4::Koha;
+		};
+		if ($@){
+		    croak $@;
+		}
                 my $bib = GetBiblioData($ord->{biblionumber});
                 my $itemtypes = GetItemTypes();
                 if($ord->{isbn}){
@@ -246,6 +271,7 @@ sub printbasketgrouppdf{
     );
     my $pdf = printpdf($basketgroup, $bookseller, $baskets, \%orders, $bookseller->{gstrate} // C4::Context->preference("gist")) || die "pdf generation failed";
     print $pdf;
+
 }
 
 my $op = $input->param('op');

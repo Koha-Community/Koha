@@ -194,12 +194,6 @@ sub SearchPrefs {
     my %tab_files = _get_pref_files( $input );
     our @terms = split( /\s+/, $searchfield );
 
-    sub matches {
-        my ( $text ) = @_;
-
-        return !grep( { $text !~ /$_/i } @terms );
-    }
-
     foreach my $tab_name ( keys %tab_files ) {
         my $data = GetTab( $input, $tab_name );
         my $title = ( keys( %$data ) )[0];
@@ -209,7 +203,7 @@ sub SearchPrefs {
         my $matched_groups;
 
         while ( my ( $group_title, $contents ) = each %$tab ) {
-            if ( matches( $group_title ) ) {
+            if ( matches( $group_title, \@terms ) ) {
                 $matched_groups->{$group_title} = $contents;
                 next;
             }
@@ -225,12 +219,12 @@ sub SearchPrefs {
                             my ( undef, $LINES ) = TransformPrefsToHTML( $data, $searchfield );
 
                             return { search_jumped => 1, tab => $tab_name, tab_title => $title, LINES => $LINES };
-                        } elsif ( matches( $piece->{'pref'} ) ) {
+                        } elsif ( matches( $piece->{'pref'}, \@terms) ) {
                             $matched = 1;
-                        } elsif ( ref( $piece->{'choices'} ) eq 'HASH' && grep( { $_ && matches( $_ ) } values( %{ $piece->{'choices'} } ) ) ) {
+                        } elsif ( ref( $piece->{'choices'} ) eq 'HASH' && grep( { $_ && matches( $_, \@terms ) } values( %{ $piece->{'choices'} } ) ) ) {
                             $matched = 1;
                         }
-                    } elsif ( matches( $piece ) ) {
+                    } elsif ( matches( $piece, \@terms ) ) {
                         $matched = 1;
                     }
                     last if ( $matched );
@@ -250,6 +244,11 @@ sub SearchPrefs {
     }
 
     return @tabs;
+}
+
+sub matches {
+    my ( $text, $terms ) = @_;
+    return !grep( { $text !~ /$_/i } @$terms );
 }
 
 my $dbh = C4::Context->dbh;
