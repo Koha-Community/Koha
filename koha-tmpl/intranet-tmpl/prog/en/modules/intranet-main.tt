@@ -13,7 +13,7 @@
 	<div class="yui-u first">
 	[% IF ( CAN_user_circulate ) %]
 	<h3><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></h3>
-	<ul><li>
+	<ul><li style="padding-bottom:.3em;">
        <form method="post" action="/cgi-bin/koha/circ/circulation.pl">
         <label for="navfindborrower">Check out to:</label>
             <input accesskey="u" id="navfindborrower" name="findborrower" type="text" size="10" />
@@ -22,7 +22,13 @@
             <input type="submit" class="submit" value="OK" />
        </form>
        </li>
-       <li><a accesskey="r" href="/cgi-bin/koha/circ/returns.pl">Check in</a></li>
+       <li style="padding-bottom:.3em;">
+       <form method="post" action="/cgi-bin/koha/circ/returns.pl">
+        <label for="barcode">Check in:</label>
+            <input accesskey="r" id="barcode" name="barcode" type="text" size="10" />
+            <input type="submit" class="submit" value="OK" />
+       </form></li>
+
         <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfers</a></li></ul>
 	[% END %]
 	[% IF ( CAN_user_borrowers ) %]
