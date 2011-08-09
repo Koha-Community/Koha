@@ -629,7 +629,7 @@ No patron matched <span class="ex">[% message %]</span>
 					[% IF ( lib_messages_loo.can_delete ) %]
 						<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% lib_messages_loo.message_id %]&amp;borrowernumber=[% lib_messages_loo.borrowernumber %]">[Delete]</a>
 					[% ELSE %]
-						[% IF ( lib_messages_loo.all_messages_del ) %]
+						[% IF ( all_messages_del ) %]
 							<a href="/cgi-bin/koha/circ/del_message.pl?message_id=[% lib_messages_loo.message_id %]&amp;borrowernumber=[% lib_messages_loo.borrowernumber %]">[Delete]</a>
 						[% END %]
 					[% END %]
