@@ -8,6 +8,7 @@
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode">
+        <option value="">All Authority Types</option>
         [% FOREACH authtypesloo IN authtypesloop %]
             [% IF ( authtypesloo.selected ) %]
             <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
@@ -37,6 +38,7 @@
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <select  name="authtypecode">
+        <option value="">All Authority Types</option>
         [% FOREACH authtypesloo IN authtypesloop %]
             [% IF ( authtypesloo.selected ) %]
             <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
@@ -68,6 +70,7 @@
         <input type="hidden" name="op" value="do_search" />
         <input type="hidden" name="type" value="intranet" />
         <select name="authtypecode">
+        <option value="">All Authority Types</option>
         [% FOREACH authtypesloo IN authtypesloop %]
             [% IF ( authtypesloo.selected ) %]
             <option value="[% authtypesloo.value %]" selected="selected">[% authtypesloo.authtypetext %]</option>
