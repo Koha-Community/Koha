@@ -478,7 +478,7 @@
       [% ELSE %]
       <label for="phone">
       [% END %]
-      Phone (home): </label>
+      Primary Phone: </label>
       <input type="text" id="phone" name="phone" value="[% phone %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
 	  [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
 
@@ -489,7 +489,7 @@
       [% ELSE %]
       <label for="phonepro">
       [% END %]
-      Phone (work): </label>
+      Secondary Phone: </label>
       <input type="text" id="phonepro" name="phonepro" value="[% phonepro %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
 	  [% IF ( mandatoryphonepro ) %]<span class="required">Required</span>[% END %]
     </li>
@@ -499,7 +499,7 @@
       [% ELSE %]
       <label for="mobile">
       [% END %]
-      Phone (cell): </label>
+      Other Phone: </label>
       <input type="text" id="mobile" name="mobile" value="[% mobile %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
 	  [% IF ( mandatorymobile ) %]<span class="required">Required</span>[% END %]
     </li>
