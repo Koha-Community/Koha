@@ -23,7 +23,7 @@ usage="Usage: $0 [--create-db|--request-db|--populate-db] \
     [--marcflavor marc21|normarc|unimarc] \
     [--zebralang en|nb|fr] \
     [--defaultsql /path/to/some.sql] \
-    [--configfile /path/to/config] instancename"
+    [--configfile /path/to/config] [--adminuser n] instancename"
 
 die() {
     echo "$@" 1>&2
@@ -79,14 +79,15 @@ INTRASUFFIX=""
 DEFAULTSQL=""
 ZEBRA_MARC_FORMAT="marc21"
 ZEBRA_LANGUAGE="en"
+ADMINUSER="1"
 if [ -e /etc/koha/koha-sites.conf ]
 then
     . /etc/koha/koha-sites.conf
 fi
 
-[ $# -ge 2 ] && [ $# -le 10 ] || die $usage
+[ $# -ge 2 ] && [ $# -le 12 ] || die $usage
 
-TEMP=`getopt -o crpm:l:d:f: -l create-db,request-db,populate-db,marcflavor:,zebralang:,defaultsql:,configfile: \
+TEMP=`getopt -o crpm:l:d:f:a: -l create-db,request-db,populate-db,marcflavor:,zebralang:,defaultsql:,configfile:,adminuser: \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -96,6 +97,7 @@ eval set -- "$TEMP"
 CLO_ZEBRA_MARC_FORMAT=""
 CLO_ZEBRA_LANGUAGE=""
 CLO_DEFAULTSQL=""
+CLO_ADMINUSER=""
 
 while true ; do
 	case "$1" in
@@ -106,6 +108,7 @@ while true ; do
 		-l|--zebralang) CLO_ZEBRA_LANGUAGE="$2" ; shift 2 ;;
 		-d|--defaultsql) CLO_DEFAULTSQL="$2" ; shift 2 ;;
 		-f|--configfile) configfile="$2" ; shift 2 ;;
+		-a|--adminuser) CLO_ADMINUSER="$2" ; shift 2 ;;
 		--) shift ; break ;;
 		*) die "Internal error processing command line arguments" ;;
 	esac
@@ -134,6 +137,10 @@ fi
 if [ "$CLO_DEFAULTSQL" != "" ]
 then
     DEFAULTSQL="$CLO_DEFAULTSQL"
+fi
+if [ "$CLO_ADMINUSER" != "" ]
+then
+    ADMINUSER="$CLO_ADMINUSER"
 fi
 
 name="$1"
@@ -264,7 +271,7 @@ then
 USE \`$mysqldb\`;
 UPDATE borrowers 
 SET password = '$staffdigest' 
-WHERE borrowernumber = 3;
+WHERE borrowernumber = $ADMINUSER;
 eof
         #`
         echo "staff user password is '$staffpass' but keep that secret"
