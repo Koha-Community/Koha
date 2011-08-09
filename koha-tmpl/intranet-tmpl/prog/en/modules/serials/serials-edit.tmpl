@@ -84,9 +84,8 @@ function HideItems(index,labelindex) {
 function setStatus(serialid){
     $("#status"+serialid).val("2").attr("selected","selected");
 }
-function changeDate(adate) {
-    var elem = document.getElementById("expecteddate");
-    elem.value = adate;
+function changeDate(elem,adate) {
+    $(elem).closest('tr').find('#expecteddate').val(adate);
 }
 function changeDate2(adate) {
    var elem = document.getElementById("supexpecteddate");
@@ -231,9 +230,9 @@ function CloneSubfield(index){
               <select name="status" size="1"  disabled="disabled">
             <!--TMPL_ELSE-->
               <!--TMPL_IF Name="serialsadditems"-->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="serialid" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','<!-- TMPL_VAR NAME="serialid" -->'); changeDate('<!-- TMPL_VAR NAME="arriveddate" -->')} else if (this.value==7){changeDate('<!-- TMPL_VAR NAME="arriveddate" -->')} else { HideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->'); changeDate('<!-- TMPL_VAR NAME="planneddate" -->')}" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="serialid" -->" onchange="if (this.value==2){unHideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" --><!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->','<!-- TMPL_VAR NAME="serialid" -->'); changeDate(this,'<!-- TMPL_VAR NAME="arriveddate" -->')} else if (this.value==7){changeDate(this,'<!-- TMPL_VAR NAME="arriveddate" -->')} else { HideItems('items'+<!-- TMPL_VAR NAME="subscriptionid" -->+<!-- TMPL_VAR NAME="serialid" -->,'label<!-- TMPL_VAR NAME="subscriptionid" --><!--TMPL_VAR Name="serialid"-->'); changeDate(this,'<!-- TMPL_VAR NAME="planneddate" -->')}" >
                <!--TMPL_ELSE -->
-              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="serialid" -->" onchange="if (this.value==2 || this.value==7){changeDate('<!-- TMPL_VAR NAME="arriveddate" -->')} else {changeDate('<!-- TMPL_VAR NAME="planneddate" -->')}" >
+              <select name="status" size="1" id="status<!-- TMPL_VAR NAME="serialid" -->" onchange="if (this.value==2 || this.value==7){changeDate(this,'<!-- TMPL_VAR NAME="arriveddate" -->')} else {changeDate(this,'<!-- TMPL_VAR NAME="planneddate" -->')}" >
                <!--/TMPL_IF--> 
             <!--/TMPL_IF-->
   <!--TMPL_IF name="status1" -->
