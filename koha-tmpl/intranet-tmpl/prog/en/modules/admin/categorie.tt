@@ -87,6 +87,7 @@
 	}
 	//]]>
 </script>
+<style type="text/css">#enrolmentmessage.hint { display : none; }</style>
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -122,12 +123,16 @@
 	<li><span class="label">Category code</span>[% categorycode |html %]
 				<input type="hidden" name="categorycode" value="[% categorycode |html %]" /><input type="hidden" name="is_a_modif" value="1" /></li>
 	[% ELSE %]
-	<li><label for="categorycode">Category code: </label> &nbsp; <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
+	<li><label for="categorycode">Category code: </label> <input type="text" name="categorycode" id="categorycode" size="10" maxlength="10" onblur="toUC(this)" /></li>
 	[% END %]
-	<li><label for="description">Description: </label> &nbsp; <input type="text" name="description" id="description" size="40" maxlength="80" value="[% description |html %]" /></li>
-	<li><label for="enrolmentperiod">Enrollment period: </label> &nbsp; 
-		<input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF ( enrolmentperiod ) %][% enrolmentperiod %][% END %]" /> months <br />
-		<label for="enrolmentperioddate">Until date: </label> &nbsp;
+	<li><label for="description">Description: </label> <input type="text" name="description" id="description" size="40" maxlength="80" value="[% description |html %]" /></li>
+	<li><label for="enrolmentperiod">Enrollment period: </label>
+	<fieldset>
+	<legend>Choose one</legend>
+	<ol>
+	<li><label for="enrolmentperiod" style="width:6em;">In months: </label>
+		<input type="text" name="enrolmentperiod" id="enrolmentperiod" size="3" maxlength="3" value="[% IF ( enrolmentperiod ) %][% enrolmentperiod %][% END %]" /> months</li>
+	<li><label for="enrolmentperioddate" style="width:6em;">Until date: </label>
 		<input type="text" name="enrolmentperioddate" id="enrolmentperioddate" value="[% enrolmentperioddate %]" /> <img src="[% themelang %]/lib/calendar/cal.gif" id="enrolmentperioddate_button" alt="Show Calendar" />
 		<script type="text/javascript">
             //<![CDATA[
@@ -138,12 +143,15 @@
             	});
            	//]]>
         </script>
-		<div id="enrolmentmessage" class="hint">Cannot have "months" and "until date" at the same time</div>
+		<div id="enrolmentmessage" class="hint" style="margin-left:0;">Cannot have "months" and "until date" at the same time</div>
 	</li>
-	<li><label for="dateofbirthrequired">Age required: </label> &nbsp; <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="[% dateofbirthrequired %]" size="3" maxlength="3" /> years</li>
-	<li><label for="upperagelimit">Upperage limit: </label> &nbsp; <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="[% upperagelimit %]" /> years</li>
+	</ol>
+	</fieldset>
+	</li>
+	<li><label for="dateofbirthrequired">Age required: </label> <input type="text" name="dateofbirthrequired" id="dateofbirthrequired" value="[% dateofbirthrequired %]" size="3" maxlength="3" /> years</li>
+	<li><label for="upperagelimit">Upperage limit: </label> <input type="text" name="upperagelimit" id="upperagelimit" size="3" maxlength="3" value="[% upperagelimit %]" /> years</li>
 	<li><label for="enrolmentfee">Enrollment fee: </label><input type="text" name="enrolmentfee" id="enrolmentfee" size="6" value="[% enrolmentfee %]" /></li>
-	<li><label for="overduenoticerequired">Overdue notice required: </label> &nbsp; <select name="overduenoticerequired" id="overduenoticerequired">
+	<li><label for="overduenoticerequired">Overdue notice required: </label> <select name="overduenoticerequired" id="overduenoticerequired">
 			[% IF ( overduenoticerequired ) %]
 						<option value="0">No</option>
 						<option value="1" selected="selected">Yes</option>
@@ -152,7 +160,7 @@
 						<option value="1">Yes</option>
 			[% END %]
 					</select></li>
-	<li><label for="hidelostitems">Lost items in staff client</label> &nbsp; <select name="hidelostitems" id="hidelostitems">
+	<li><label for="hidelostitems">Lost items in staff client</label> <select name="hidelostitems" id="hidelostitems">
 			[% IF ( hidelostitems ) %]
 						<option value="0">Shown</option>
 						<option value="1" selected="selected">Hidden by default</option>
@@ -162,7 +170,7 @@
 			[% END %]
 					</select></li>
 	<li><label for="reservefee">Hold fee: </label><input type="text" name="reservefee" id="reservefee" size="6" value="[% reservefee %]" /></li>
-	<li><label for="category_type">Category type: </label> &nbsp; <select name="category_type" id="category_type">
+	<li><label for="category_type">Category type: </label> <select name="category_type" id="category_type">
 						[% IF ( type_n ) %]<option value="" selected="selected">Select a Category type</option>[% ELSE %]<option value="">Select a Category type</option>[% END %]
 					[% IF ( type_A ) %]<option value="A" selected="selected">Adult</option>[% ELSE %]<option value="A">Adult</option>[% END %]
 					[% IF ( type_C ) %]<option value="C" selected="selected">Child</option>[% ELSE %]<option value="C">Child</option>[% END %]
