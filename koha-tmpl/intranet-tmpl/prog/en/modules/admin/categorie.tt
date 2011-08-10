@@ -273,6 +273,7 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 [% IF ( searchfield ) %]
 		You Searched for [% searchfield %]</span>
 	[% END %]
+[% IF ( loop ) %]
 <span id="pagertable_categorie" class="pager">
 	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
 		<img src="[% interface %]/prog/img/first.png" class="first"/>
@@ -364,6 +365,9 @@ Confirm Deletion of Category [% categorycode |html %][% END %]</legend>
 		</tr>
 		[% END %]
 	</table>
+[% ELSE %]
+	<div class="dialog alert">No categories have been defined. <a href="/cgi-bin/koha/admin/categorie.pl?op=add_form">Create a new category</a>.</div>
+[% END %]
 [% END %]
 
 </div>
