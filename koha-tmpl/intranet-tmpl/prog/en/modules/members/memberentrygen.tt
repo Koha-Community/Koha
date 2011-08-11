@@ -734,26 +734,6 @@
             </ol>
         </fieldset>
 
-
-  [% IF ( I ) %]
-	[% IF ( memberofinstution ) %]
-	<fieldset class="rows" id="memberentry_organisation">
-		<legend>Organizations</legend><ol>
-		<li>
-			[% IF ( mandatoryphone ) %] 
-			<label for="organisations" class="required">
-			[% ELSE %]
-			<label for="organisations">
-			[% END %]
-			Organization(s): </label>
-			[% CGIorganisations %]
-	  [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]
-		</li>
-		</ol>
-	</fieldset>
-	[% END %]
-  [% END %]
-              
 [% END %]
 [% IF ( step_3 ) %]
 
