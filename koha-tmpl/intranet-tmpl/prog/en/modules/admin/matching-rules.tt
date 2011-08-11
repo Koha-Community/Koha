@@ -250,42 +250,42 @@ function CheckRuleForm(f) {
       </li>
       </ol>
       [% FOREACH component IN matchpoint.components %]
-      <fieldset class="rows" id="mp_[% component.mp_num %]_c_[% component.comp_num %]">
+      <fieldset class="rows" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]">
       <legend>Matchpoint components</legend>
         <ol>
           <li>
-            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_tag">Tag: </label>
-            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_tag" 
-                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_tag" 
+            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_tag">Tag: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_tag" 
+                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_tag" 
                    value="[% component.tag |html %]"
                    size="3" maxlength="3" />
           </li>
           <li>
-            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_subfields">Subfields: </label>
-            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_subfields" 
-                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_subfields" 
+            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_subfields">Subfields: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_subfields" 
+                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_subfields" 
                    value="[% component.subfields |html %]"
                    size="10" maxlength="40" />
           </li>
           <li>
-            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_offset">Offset: </label>
-            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_offset" 
-                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_offset" 
+            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_offset">Offset: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_offset" 
+                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_offset" 
                    value="[% component.offset |html %]"
                    size="5" maxlength="5" />
           </li>
           <li>
-            <label for="mp_[% component.mp_num %]_c_[% component.comp_num %]_length">Length: </label>
-            <input type="text" id="mp_[% component.mp_num %]_c_[% component.comp_num %]_length" 
-                   name="mp_[% component.mp_num %]_c_[% component.comp_num %]_length" 
+            <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_length">Length: </label>
+            <input type="text" id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_length" 
+                   name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_length" 
                    value="[% component.length |html %]"
                    size="5" maxlength="5" />
           </li>
               [% FOREACH norm IN component.norms %]
-              <li id="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n_[% norm.norm_num %]">
-                <label for="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n__[% norm.norm_num %]_norm">Normalization rule: </label>
-                <input type="text" id="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n__[% norm.norm_num %]_norm" 
-                       name="mp_[% norm.mp_num %]_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+              <li id="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n_[% norm.norm_num %]">
+                <label for="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n__[% norm.norm_num %]_norm">Normalization rule: </label>
+                <input type="text" id="mp_[% norm.mp_num %]_c_[% component.comp_num %]_n__[% norm.norm_num %]_norm" 
+                       name="mp_[% matchpoint.mp_num %]_c_[% component.comp_num %]_n_[% norm.norm_num %]_norm" 
                        value="[% norm.norm |html %]"
                        size="20" maxlength="50" />
               </li>
@@ -362,37 +362,37 @@ function CheckRuleForm(f) {
         <ol>
           <li>
             <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_tag">Tag: </label>
-            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
-                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
+            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
+                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_tag" 
                    value="[% src_component.tag |html %]"
                    size="3" maxlength="3" />
           </li>
           <li>
-            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_subfields">Subfields: </label>
-            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
-                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
+            <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_subfields">Subfields: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
+                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_subfields" 
                    value="[% src_component.subfields |html %]"
                    size="10" maxlength="40" />
           </li>
           <li>
-            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_offset">Offset: </label>
-            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
-                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
+            <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_offset">Offset: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
+                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_offset" 
                    value="[% src_component.offset |html %]"
                    size="5" maxlength="5" />
           </li>
           <li>
-            <label for="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_length">Length: </label>
-            <input type="text" id="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_length" 
-                   name="mc_[% src_component.mc_num %]_src_c_[% src_component.comp_num %]_length" 
+            <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_length">Length: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_length" 
+                   name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_length" 
                    value="[% src_component.length |html %]"
                    size="5" maxlength="5" />
           </li>
           [% FOREACH norm IN src_component.norms %]
-            <li id="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]">
-              <label for="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
-              <input type="text" id="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
-                     name="mc_[% norm.mc_num %]_src_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+            <li id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]">
+              <label for="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+              <input type="text" id="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm" 
+                     name="mc_[% matchcheck.mc_num %]_src_c_[% src_component.comp_num %]_n_[% norm.norm_num %]_norm" 
                     value="[% norm.norm |html %]"
                     size="20" maxlength="50" />
             </li>
@@ -401,42 +401,42 @@ function CheckRuleForm(f) {
       </fieldset>
       [% END %]
       [% FOREACH tgt_component IN matchcheck.tgt_components %]
-      <fieldset class="rows" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]">
+      <fieldset class="rows" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]">
         <legend>Target (database) record check field</legend>
         <ol>
           <li>
-            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag">Tag: </label>
-            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
-                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
+            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag">Tag: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
+                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_tag" 
                    value="[% tgt_component.tag |html %]"
                    size="3" maxlength="3" />
           </li>
           <li>
-            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields">Subfields: </label>
-            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
-                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
+            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields">Subfields: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
+                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_subfields" 
                    value="[% tgt_component.subfields |html %]"
                    size="10" maxlength="40" />
           </li>
           <li>
-            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset">Offset: </label>
-            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
-                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
+            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset">Offset: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
+                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_offset" 
                    value="[% tgt_component.offset |html %]"
                    size="5" maxlength="5" />
           </li>
           <li>
-            <label for="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length">Length: </label>
-            <input type="text" id="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
-                   name="mc_[% tgt_component.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
+            <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length">Length: </label>
+            <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
+                   name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_length" 
                    value="[% tgt_component.length |html %]"
                    size="5" maxlength="5" />
           </li>
           [% FOREACH norm IN tgt_component.norms %]
-            <li id="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]">
-              <label for="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
-              <input type="text" id="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
-                     name="mc_[% norm.mc_num %]_tgt_c_[% norm.comp_num %]_n_[% norm.norm_num %]_norm" 
+            <li id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]">
+              <label for="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm">Normalization rule: </label>
+              <input type="text" id="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm" 
+                     name="mc_[% matchcheck.mc_num %]_tgt_c_[% tgt_component.comp_num %]_n_[% norm.norm_num %]_norm" 
                     value="[% norm.norm |html %]"
                     size="20" maxlength="50" />
             </li>

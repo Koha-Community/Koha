@@ -126,7 +126,7 @@ sub add_update_matching_rule {
 
     # match checks
     my @mc_nums = sort map { /^mc_(\d+)_id/ ? int($1): () } $input->param;
-    foreach my $mc_num (@mp_nums) {
+    foreach my $mc_num (@mc_nums) {
         # source components
         my $src_components = [];
         my @src_comp_nums = sort map { /^mc_${mc_num}_src_c_(\d+)_tag/ ? int($1): () } $input->param;
