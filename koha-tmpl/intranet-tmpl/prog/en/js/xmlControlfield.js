@@ -168,7 +168,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
 (function()
 {
 
-    xmlControlField = function(tagfield, form_id, select, table, h4_result, tr_result, idMaterial)
+    xmlControlField = function(tagfield, form_id, select, table, h4_result, tr_result, idMaterial, themelang)
     {
         this.tagfield = tagfield;
         this.idMaterial = idMaterial;
@@ -178,6 +178,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
         this.table = table;
         this.h4_result = h4_result;
         this.tr_result = tr_result;
+        this.themelang = themelang;
     };//xmlControlField
 
 
@@ -192,6 +193,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
         table: null,
         h4_result: "",
         tr_result: "",
+        themelang: "",
 
 
         setIdMaterial: function(idMaterial)
@@ -203,7 +205,7 @@ function changeH4Result(form, h4_result, tr_result, pos, value)
         {
             this.xmlDoc = $.ajax({
                 type: "GET",
-                url: "/intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_" + this.tagfield + ".xml",
+                url: this.themelang + "/modules/cataloguing/value_builder/marc21_field_" + this.tagfield + ".xml",
                 dataType: "xml",
                 async: false
             }).responseXML;
