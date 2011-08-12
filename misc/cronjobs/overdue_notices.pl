@@ -409,7 +409,7 @@ END_SQL
             my $mindays = $overdue_rules->{"delay$i"};    # the notice will be sent after mindays days (grace period)
             my $maxdays = (
                   $overdue_rules->{ "delay" . ( $i + 1 ) }
-                ? $overdue_rules->{ "delay" . ( $i + 1 ) }
+                ? $overdue_rules->{ "delay" . ( $i + 1 ) } - 1
                 : ($MAX)
             );                                            # issues being more than maxdays late are managed somewhere else. (borrower probably suspended)
 
