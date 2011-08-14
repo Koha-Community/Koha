@@ -275,15 +275,15 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
 --
 
 DROP TABLE IF EXISTS `borrower_attribute_types`;
-CREATE TABLE `borrower_attribute_types` (
-  `code` varchar(10) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `repeatable` tinyint(1) NOT NULL default 0,
-  `unique_id` tinyint(1) NOT NULL default 0,
-  `opac_display` tinyint(1) NOT NULL default 0,
-  `password_allowed` tinyint(1) NOT NULL default 0,
-  `staff_searchable` tinyint(1) NOT NULL default 0,
-  `authorised_value_category` varchar(10) default NULL,
+CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron fields known as extended patron attributes
+  `code` varchar(10) NOT NULL, -- unique key used to identify each custom field
+  `description` varchar(255) NOT NULL, -- description for each custom field
+  `repeatable` tinyint(1) NOT NULL default 0, -- defines whether one patron/borrower can have multiple values for this custom field  (1 for yes, 0 for no)
+  `unique_id` tinyint(1) NOT NULL default 0, -- defines if this value needs to be unique (1 for yes, 0 for no)
+  `opac_display` tinyint(1) NOT NULL default 0, -- defines if this field is visible to patrons on their account in the OPAC (1 for yes, 0 for no)
+  `password_allowed` tinyint(1) NOT NULL default 0, -- defines if it is possible to associate a password with this custom field (1 for yes, 0 for no)
+  `staff_searchable` tinyint(1) NOT NULL default 0, -- defines if this field is searchable via the patron search in the staff client (1 for yes, 0 for no)
+  `authorised_value_category` varchar(10) default NULL, -- foreign key from authorised_values that links this custom field to an authorized value category
   PRIMARY KEY  (`code`),
   KEY `auth_val_cat_idx` (`authorised_value_category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -293,11 +293,11 @@ CREATE TABLE `borrower_attribute_types` (
 --
 
 DROP TABLE IF EXISTS `borrower_attributes`;
-CREATE TABLE `borrower_attributes` (
-  `borrowernumber` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL,
-  `attribute` varchar(64) default NULL,
-  `password` varchar(64) default NULL,
+CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as extended patron attributes linked to patrons/borrowers
+  `borrowernumber` int(11) NOT NULL, -- foreign key from the borrowers table, defines which patron/borrower has this attribute
+  `code` varchar(10) NOT NULL, -- foreign key from the borrower_attribute_types table, defines which custom field this value was entered for
+  `attribute` varchar(64) default NULL, -- custom patron field value
+  `password` varchar(64) default NULL, -- password associated with this field
   KEY `borrowernumber` (`borrowernumber`),
   KEY `code_attribute` (`code`, `attribute`),
   CONSTRAINT `borrower_attributes_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
