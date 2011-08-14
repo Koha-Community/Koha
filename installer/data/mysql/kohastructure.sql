@@ -337,24 +337,24 @@ CREATE TABLE `branchcategories` (
 --
 
 DROP TABLE IF EXISTS `branches`;
-CREATE TABLE `branches` (
-  `branchcode` varchar(10) NOT NULL default '',
-  `branchname` mediumtext NOT NULL,
-  `branchaddress1` mediumtext,
-  `branchaddress2` mediumtext,
-  `branchaddress3` mediumtext,
-  `branchzip` varchar(25) default NULL,
-  `branchcity` mediumtext,
-  `branchstate` mediumtext,
-  `branchcountry` text,
-  `branchphone` mediumtext,
-  `branchfax` mediumtext,
-  `branchemail` mediumtext,
-  `branchurl` mediumtext,
-  `issuing` tinyint(4) default NULL,
-  `branchip` varchar(15) default NULL,
-  `branchprinter` varchar(100) default NULL,
-  `branchnotes` mediumtext,
+CREATE TABLE `branches` ( -- information about your libraries or branches are stored here
+  `branchcode` varchar(10) NOT NULL default '', -- a unique key assigned to each branch
+  `branchname` mediumtext NOT NULL, -- the name of your library or branch
+  `branchaddress1` mediumtext, -- the first address line of for your library or branch
+  `branchaddress2` mediumtext, -- the second address line of for your library or branch
+  `branchaddress3` mediumtext, -- the third address line of for your library or branch
+  `branchzip` varchar(25) default NULL, -- the zip or postal code for your library or branch
+  `branchcity` mediumtext, -- the city or province for your library or branch
+  `branchstate` mediumtext, -- the state for your library or branch
+  `branchcountry` text, -- the county for your library or branch
+  `branchphone` mediumtext, -- the primary phone for your library or branch
+  `branchfax` mediumtext, -- the fax number for your library or branch
+  `branchemail` mediumtext, -- the primary email address for your library or branch
+  `branchurl` mediumtext, -- the URL for your library or branch's website
+  `issuing` tinyint(4) default NULL, --unused in Koha
+  `branchip` varchar(15) default NULL, -- the IP address for your library or branch
+  `branchprinter` varchar(100) default NULL, -- unused in Koha
+  `branchnotes` mediumtext, -- notes related to your library or branch
   UNIQUE KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
