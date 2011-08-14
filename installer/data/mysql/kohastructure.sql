@@ -649,74 +649,73 @@ CREATE TABLE `deletedbiblioitems` (
 --
 
 DROP TABLE IF EXISTS `deletedborrowers`;
-CREATE TABLE `deletedborrowers` (
-  `borrowernumber` int(11) NOT NULL default 0,
-  `cardnumber` varchar(16) NOT NULL default '',
-  `surname` mediumtext NOT NULL,
-  `firstname` text,
-  `title` mediumtext,
-  `othernames` mediumtext,
-  `initials` text,
-  `streetnumber` varchar(10) default NULL,
-  `streettype` varchar(50) default NULL,
-  `address` mediumtext NOT NULL,
-  `address2` text,
-  `city` mediumtext NOT NULL,
-  `state` text default NULL,
-  `zipcode` varchar(25) default NULL,
-  `country` text,
-  `email` mediumtext,
-  `phone` text,
-  `mobile` varchar(50) default NULL,
-  `fax` mediumtext,
-  `emailpro` text,
-  `phonepro` text,
-  `B_streetnumber` varchar(10) default NULL,
-  `B_streettype` varchar(50) default NULL,
-  `B_address` varchar(100) default NULL,
-  `B_address2` text default NULL,
-  `B_city` mediumtext,
-  `B_state` text default NULL,
-  `B_zipcode` varchar(25) default NULL,
-  `B_country` text,
-  `B_email` text,
-  `B_phone` mediumtext,
-  `dateofbirth` date default NULL,
-  `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(10) default NULL,
-  `dateenrolled` date default NULL,
-  `dateexpiry` date default NULL,
-  `gonenoaddress` tinyint(1) default NULL,
-  `lost` tinyint(1) default NULL,
-  `debarred` tinyint(1) default NULL,
-  `contactname` mediumtext,
-  `contactfirstname` text,
-  `contacttitle` text,
-  `guarantorid` int(11) default NULL,
-  `borrowernotes` mediumtext,
-  `relationship` varchar(100) default NULL,
-  `ethnicity` varchar(50) default NULL,
-  `ethnotes` varchar(255) default NULL,
-  `sex` varchar(1) default NULL,
-  `password` varchar(30) default NULL,
-  `flags` int(11) default NULL,
-  `userid` varchar(30) default NULL,
-  `opacnote` mediumtext,
-  `contactnote` varchar(255) default NULL,
-  `sort1` varchar(80) default NULL,
-  `sort2` varchar(80) default NULL,
-  `altcontactfirstname` varchar(255) default NULL,
-  `altcontactsurname` varchar(255) default NULL,
-  `altcontactaddress1` varchar(255) default NULL,
-  `altcontactaddress2` varchar(255) default NULL,
-  `altcontactaddress3` varchar(255) default NULL,
-  `altcontactstate` text default NULL,
-  `altcontactzipcode` varchar(50) default NULL,
-  `altcontactcountry` text default NULL,
-  `altcontactphone` varchar(50) default NULL,
-  `smsalertnumber` varchar(50) default NULL,
-  `privacy` integer(11) DEFAULT '1' NOT NULL,
-  KEY `borrowernumber` (`borrowernumber`),
+CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrowers you have deleted
+  `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
+  `cardnumber` varchar(16) default NULL, -- unique key, library assigned ID number for patrons/borrowers
+  `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
+  `firstname` text, -- patron/borrower's first name
+  `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
+  `othernames` mediumtext, -- any other names associated with the patron/borrower
+  `initials` text, -- initials for your patron/borrower
+  `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
+  `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
+  `address` mediumtext NOT NULL, -- the first address line for your patron/borrower's primary address
+  `address2` text, -- the second address line for your patron/borrower's primary address
+  `city` mediumtext NOT NULL, -- the city or town for your patron/borrower's primary address
+  `state` text default NULL, -- the state or province for your patron/borrower's primary address
+  `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
+  `country` text, -- the country for your patron/borrower's primary address
+  `email` mediumtext, -- the primary email address for your patron/borrower's primary address
+  `phone` text, -- the primary phone number for your patron/borrower's primary address
+  `mobile` varchar(50) default NULL, -- the other phone number for your patron/borrower's primary address
+  `fax` mediumtext, -- the fax number for your patron/borrower's primary address
+  `emailpro` text, -- the secondary email addres for your patron/borrower's primary address
+  `phonepro` text, -- the secondary phone number for your patron/borrower's primary address
+  `B_streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's alternate address
+  `B_streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
+  `B_address` varchar(100) default NULL, -- the first address line for your patron/borrower's alternate address
+  `B_address2` text default NULL, -- the second address line for your patron/borrower's alternate address
+  `B_city` mediumtext, -- the city or town for your patron/borrower's alternate address
+  `B_state` text default NULL, -- the state for your patron/borrower's alternate address
+  `B_zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's alternate address
+  `B_country` text, -- the country for your patron/borrower's alternate address
+  `B_email` text, -- the patron/borrower's alternate email address
+  `B_phone` mediumtext, -- the patron/borrower's alternate phone number
+  `dateofbirth` date default NULL, -- the patron/borrower's date of birth (YYYY-MM-DD)
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, includes the code of the patron/borrower's home branch
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
+  `dateenrolled` date default NULL, -- date the patron was added to Koha (YYYY-MM-DD)
+  `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
+  `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
+  `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
+  `debarred` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as being restricted
+  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
+  `contactfirstname` text, -- used for children to include first name of guarentor
+  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
+  `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
+  `borrowernotes` mediumtext, -- a note on the patron/borroewr's account that is only visible in the staff client
+  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
+  `ethnicity` varchar(50) default NULL, -- unused in Koha
+  `ethnotes` varchar(255) default NULL, -- unused in Koha
+  `sex` varchar(1) default NULL, -- patron/borrower's gender
+  `password` varchar(30) default NULL, -- patron/borrower's encrypted password
+  `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
+  `userid` varchar(30) default NULL, -- patron/borrower's opac and/or staff client log in
+  `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
+  `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
+  `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
+  `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
+  `altcontactfirstname` varchar(255) default NULL, -- first name of alternate contact for the patron/borrower
+  `altcontactsurname` varchar(255) default NULL, -- surname or last name of the alternate contact for the patron/borrower
+  `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
+  `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
+  `altcontactaddress3` varchar(255) default NULL, -- the third address line for the alternate contact for the patron/borrower
+  `altcontactstate` text default NULL, -- the city and state for the alternate contact for the patron/borrower
+  `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
+  `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
+  `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
+  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
+  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
