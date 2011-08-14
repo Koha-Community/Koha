@@ -61,9 +61,8 @@ function HideItems(index,labelindex) {
 function setStatus(serialid){
     $("#status"+serialid).val("2").attr("selected","selected");
 }
-function changeDate(adate) {
-    var elem = document.getElementById("expecteddate");
-    elem.value = adate;
+function changeDate(elem, adate) {
+    $(elem).closest('tr').find('#expecteddate').val(adate);
 }
 function changeDate2(adate) {
    var elem = document.getElementById("supexpecteddate");
@@ -228,9 +227,9 @@ $(document).ready(function() {
               <select name="status" size="1"  disabled="disabled">
             [% ELSE %]
               [% IF ( serialslis.serialsadditems ) %]
-              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid %][% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]','[% serialslis.serialid %]'); changeDate('[% serialslis.arriveddate %]')} else if (this.value==7){changeDate('[% serialslis.arriveddate %]')} else { HideItems('items'+[% serialslis.subscriptionid %]+[% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate('[% serialslis.planneddate %]')}" >
+              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2){unHideItems('items'+[% serialslis.subscriptionid %][% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]','[% serialslis.serialid %]'); changeDate(this, '[% serialslis.arriveddate %]')} else if (this.value==7){changeDate(this, '[% serialslis.arriveddate %]')} else { HideItems('items'+[% serialslis.subscriptionid %]+[% serialslis.serialid %],'label[% serialslis.subscriptionid %][% serialslis.serialid %]'); changeDate(this, '[% serialslis.planneddate %]')}" >
                [% ELSE %]
-              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2 || this.value==7){changeDate('[% serialslis.arriveddate %]')} else {changeDate('[% serialslis.planneddate %]')}" >
+              <select name="status" size="1" id="status[% serialslis.serialid %]" onchange="if (this.value==2 || this.value==7){changeDate(this, '[% serialslis.arriveddate %]')} else {changeDate(this, '[% serialslis.planneddate %]')}" >
                [% END %] 
             [% END %]
   [% IF ( serialslis.status1 ) %]
