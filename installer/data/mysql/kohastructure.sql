@@ -1700,17 +1700,17 @@ CREATE TABLE `special_holidays` (
 --
 
 DROP TABLE IF EXISTS `statistics`;
-CREATE TABLE `statistics` (
-  `datetime` datetime default NULL,
-  `branch` varchar(10) default NULL,
-  `proccode` varchar(4) default NULL,
-  `value` double(16,4) default NULL,
-  `type` varchar(16) default NULL,
+CREATE TABLE `statistics` ( -- information related to transactions (circulation and fines) in Koha
+  `datetime` datetime default NULL, -- date and time of the transaction
+  `branch` varchar(10) default NULL, -- foreign key, branch where the transaction occurred
+  `proccode` varchar(4) default NULL, -- proceedure code 
+  `value` double(16,4) default NULL, -- monetary value associated with the transaction
+  `type` varchar(16) default NULL, -- transaction type (locause, issue, return, renew, writeoff, payment, Credit*)
   `other` mediumtext,
   `usercode` varchar(10) default NULL,
-  `itemnumber` int(11) default NULL,
-  `itemtype` varchar(10) default NULL,
-  `borrowernumber` int(11) default NULL,
+  `itemnumber` int(11) default NULL, -- foreign key from the items table, links transaction to a specific item
+  `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
+  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
   `associatedborrower` int(11) default NULL,
   KEY `timeidx` (`datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
