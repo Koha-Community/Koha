@@ -306,6 +306,10 @@ CREATE TABLE `borrower_attributes` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `branch_item_rules`
+--
+
 DROP TABLE IF EXISTS `branch_item_rules`;
 CREATE TABLE `branch_item_rules` (
   `branchcode` varchar(10) NOT NULL,
@@ -2023,6 +2027,10 @@ CREATE TABLE `zebraqueue` (
   KEY `zebraqueue_lookup` (`server`, `biblio_auth_number`, `operation`, `done`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `services_throttle`
+--
+
 DROP TABLE IF EXISTS `services_throttle`;
 CREATE TABLE `services_throttle` (
   `service_type` varchar(10) NOT NULL default '',
@@ -2030,9 +2038,12 @@ CREATE TABLE `services_throttle` (
   PRIMARY KEY  (`service_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_subtag_registry`
 -- http://www.w3.org/International/articles/language-tags/
-
 -- RFC4646
+--
+
 DROP TABLE IF EXISTS language_subtag_registry;
 CREATE TABLE language_subtag_registry (
         subtag varchar(25),
@@ -2044,9 +2055,13 @@ CREATE TABLE language_subtag_registry (
         KEY `subtag` (`subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_rfc4646_to_iso639`
 -- TODO: add suppress_scripts
 -- this maps three letter codes defined in iso639.2 back to their
 -- two letter equivilents in rfc4646 (LOC maintains iso639+)
+--
+
 DROP TABLE IF EXISTS language_rfc4646_to_iso639;
 CREATE TABLE language_rfc4646_to_iso639 (
         rfc4646_subtag varchar(25),
@@ -2055,6 +2070,10 @@ CREATE TABLE language_rfc4646_to_iso639 (
         PRIMARY KEY  (`id`),
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `language_descriptions`
+--
 
 DROP TABLE IF EXISTS language_descriptions;
 CREATE TABLE language_descriptions (
@@ -2068,7 +2087,11 @@ CREATE TABLE language_descriptions (
         KEY `subtag_type_lang` (`subtag`, `type`, `lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_script_bidi`
 -- bi-directional support, keyed by script subcode
+--
+
 DROP TABLE IF EXISTS language_script_bidi;
 CREATE TABLE language_script_bidi (
         rfc4646_subtag varchar(25), -- script subtag, Arab, Hebr, etc.
@@ -2076,14 +2099,22 @@ CREATE TABLE language_script_bidi (
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_script_mapping`
 -- TODO: need to map language subtags to script subtags for detection
 -- of bidi when script is not specified (like ar, he)
+--
+
 DROP TABLE IF EXISTS language_script_mapping;
 CREATE TABLE language_script_mapping (
         language_subtag varchar(25),
         script_subtag varchar(25),
         KEY `language_subtag` (`language_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `permissions`
+--
 
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
@@ -2095,6 +2126,10 @@ CREATE TABLE `permissions` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `serialitems`
+--
+
 DROP TABLE IF EXISTS `serialitems`;
 CREATE TABLE `serialitems` (
 	`itemnumber` int(11) NOT NULL,
@@ -2104,6 +2139,10 @@ CREATE TABLE `serialitems` (
 	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `user_permissions`
+--
 
 DROP TABLE IF EXISTS `user_permissions`;
 CREATE TABLE `user_permissions` (
