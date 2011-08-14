@@ -529,12 +529,12 @@ CREATE TABLE `default_circ_rules` (
 --
 
 DROP TABLE IF EXISTS `cities`;
-CREATE TABLE `cities` (
-  `cityid` int(11) NOT NULL auto_increment,
-  `city_name` varchar(100) NOT NULL default '',
-  `city_state` VARCHAR( 100 ) NULL DEFAULT NULL,
-  `city_country` VARCHAR( 100 ) NULL DEFAULT NULL,
-  `city_zipcode` varchar(20) default NULL,
+CREATE TABLE `cities` ( -- authorized values for cities/states/countries to choose when adding/editing a patron/borrower
+  `cityid` int(11) NOT NULL auto_increment, -- unique identifier added by Koha
+  `city_name` varchar(100) NOT NULL default '', -- name of the city
+  `city_state` VARCHAR( 100 ) NULL DEFAULT NULL, -- name of the state/province
+  `city_country` VARCHAR( 100 ) NULL DEFAULT NULL, -- name of the country
+  `city_zipcode` varchar(20) default NULL, -- zip or postal code
   PRIMARY KEY  (`cityid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
