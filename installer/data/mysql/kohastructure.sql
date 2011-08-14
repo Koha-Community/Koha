@@ -324,11 +324,11 @@ CREATE TABLE `branch_item_rules` (
 --
 
 DROP TABLE IF EXISTS `branchcategories`;
-CREATE TABLE `branchcategories` (
-  `categorycode` varchar(10) NOT NULL default '',
-  `categoryname` varchar(32),
-  `codedescription` mediumtext,
-  `categorytype` varchar(16),
+CREATE TABLE `branchcategories` ( -- information related to library/branch groups 
+  `categorycode` varchar(10) NOT NULL default '', -- unique key, used to identify the group
+  `categoryname` varchar(32), -- name used to identify the group
+  `codedescription` mediumtext, -- description of the group
+  `categorytype` varchar(16), -- defines if this is a search or properties group
   PRIMARY KEY  (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -363,9 +363,9 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
 --
 
 DROP TABLE IF EXISTS `branchrelations`;
-CREATE TABLE `branchrelations` (
-  `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(10) NOT NULL default '',
+CREATE TABLE `branchrelations` ( -- tracks which libraries/branches are in each library/branch group
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key linking to the branches table
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key linking to the branchcategories table
   PRIMARY KEY  (`branchcode`,`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `categorycode` (`categorycode`),
