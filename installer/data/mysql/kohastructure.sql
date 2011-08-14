@@ -95,13 +95,13 @@ CREATE TABLE `auth_types` (
 --
 
 DROP TABLE IF EXISTS `authorised_values`;
-CREATE TABLE `authorised_values` (
-  `id` int(11) NOT NULL auto_increment,
-  `category` varchar(10) NOT NULL default '',
-  `authorised_value` varchar(80) NOT NULL default '',
-  `lib` varchar(80) default NULL,
-  `lib_opac` VARCHAR(80) default NULL,
-  `imageurl` varchar(200) default NULL,
+CREATE TABLE `authorised_values` ( -- stores values for authorized values categories and values
+  `id` int(11) NOT NULL auto_increment, -- unique key, used to identify the authorized value
+  `category` varchar(10) NOT NULL default '', -- key used to identify the authorized value category
+  `authorised_value` varchar(80) NOT NULL default '', -- code use to identify the authorized value
+  `lib` varchar(80) default NULL, -- authorized value description as printed in the staff client
+  `lib_opac` VARCHAR(80) default NULL, -- authorized value description as printed in the OPAC
+  `imageurl` varchar(200) default NULL, -- authorized value URL
   PRIMARY KEY  (`id`),
   KEY `name` (`category`),
   KEY `lib` (`lib`),
