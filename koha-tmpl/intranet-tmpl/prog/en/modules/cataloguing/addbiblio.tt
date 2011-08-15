@@ -845,9 +845,10 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	            <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib %]</a>
             [% END %]
             [% IF ( innerloo.repeatable ) %]
-                <a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Repeat this Tag">+</a>
+                <span class="subfield_controls"><a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Repeat this Tag"><img src="/intranet-tmpl/prog/img/repeat-tag.png" alt="Repeat this Tag" /></a>
             [% END %]
-                <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Delete this Tag">&#8722;</a>
+                <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Delete this Tag"><img src="/intranet-tmpl/prog/img/delete-tag.png" alt="Delete this Tag" /></a></span>
+
             
         </div>
 	
