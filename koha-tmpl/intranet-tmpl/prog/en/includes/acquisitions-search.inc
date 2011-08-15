@@ -12,10 +12,16 @@
 	
 		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
 		<label for="title">Title: </label><input type="text" id="title" name="title" size="15" value="[% title %]" /> <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name %]" />
+        <span class="filteraction" id="filteraction_off" style="display:none"> <a href="#" onclick="$('#filters').toggle();$('.filteraction').hide();">[-]</a></span>
+        <span class="filteraction" id="filteraction_on"> <a href="#" onclick="$('#filters').show();$('.filteraction').toggle();">[+]</a></span>
 	<input value="Submit" class="submit" type="submit" /> <a href="/cgi-bin/koha/acqui/histsearch.pl">Advanced Search</a>
+    <p id="filters" style="display:none">
+      <label for="basket">Basket: </label><input type="text" name="basket" id="basket">
+      <label for="booksellerinvoicenumber">Invoice No.: </label><input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber">
+    </p>
 	</form>
 	</div>	
-			<ul>
+			<ul id="tabtriggers">
 			<li><a href="/cgi-bin/koha/acqui/booksellers.pl#supplier_search">Vendor Search</a></li>
 			<li><a href="/cgi-bin/koha/acqui/histsearch.pl#orders_search">Orders Search</a></li>
 			</ul>	

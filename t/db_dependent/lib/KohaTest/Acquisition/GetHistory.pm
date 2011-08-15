@@ -38,22 +38,20 @@ sub no_history : Test( 4 ) {
 
 =cut
 
-sub one_order : Test( 50 ) {
+my $INVOICE = "1234-56 AB";
+sub one_order : Test( 55 ) {
     my $self = shift;
     
-    my ( $basketno, $ordernumber ) = $self->create_new_basket();
+    my ( $basketno, $ordernumber ) = $self->create_new_basket(invoice => $INVOICE);
     ok( $basketno, "basketno is $basketno" );
     ok( $ordernumber, "ordernumber is $ordernumber" );
 
     # No arguments fetches no history.
     {
-        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory();
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = eval { GetHistory() };
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
         
-        is( scalar @$order_loop, 0, 'order_loop is empty' );
-        is( $total_qty,          0, 'total_qty' );
-        is( $total_price,        0, 'total_price' );
-        is( $total_qtyreceived,  0, 'total_qtyreceived' );
+        is( $order_loop, undef, 'order_loop is empty' );
     }
 
     my $bibliodata = GetBiblioData( $self->{'biblios'}[0] );
@@ -62,7 +60,7 @@ sub one_order : Test( 50 ) {
     
     # searching by title should find it.
     {
-        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( $bibliodata->{'title'} );
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( title => $bibliodata->{'title'} );
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
     
         is( scalar @$order_loop, 1, 'order_loop searched by title' );
@@ -73,9 +71,35 @@ sub one_order : Test( 50 ) {
         # diag( Data::Dumper->Dump( [ $order_loop ], [ 'order_loop' ] ) );
     }
 
+    # searching by basket number
+    {
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( basket => $basketno );
+        # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
+    
+        is( scalar @$order_loop, 1, 'order_loop searched by basket no' );
+        is( $total_qty,          1, 'total_qty searched by basket no' );
+        is( $total_price,        1, 'total_price searched by basket no' );
+        is( $total_qtyreceived,  0, 'total_qtyreceived searched by basket no' );
+
+        # diag( Data::Dumper->Dump( [ $order_loop ], [ 'order_loop' ] ) );
+    }
+
+    # searching by invoice number
+    {
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( booksellerinvoicenumber  => $INVOICE );
+        # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
+    
+        is( scalar @$order_loop, 1, 'order_loop searched by invoice no' );
+        is( $total_qty,          1, 'total_qty searched by invoice no' );
+        is( $total_price,        1, 'total_price searched by invoice no' );
+        is( $total_qtyreceived,  0, 'total_qtyreceived searched by invoice no' );
+
+        # diag( Data::Dumper->Dump( [ $order_loop ], [ 'order_loop' ] ) );
+    }
+
     # searching by author
     {
-        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( undef, $bibliodata->{'author'} );
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( author => $bibliodata->{'author'} );
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
     
         is( scalar @$order_loop, 1, 'order_loop searched by author' );
@@ -92,7 +116,7 @@ sub one_order : Test( 50 ) {
         ok( $bookseller->{'name'}, 'bookseller name' )
           or diag( Data::Dumper->Dump( [ $bookseller ], [ 'bookseller' ] ) );
         
-        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( undef, undef, $bookseller->{'name'} );
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( name => $bookseller->{'name'} );
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
     
         is( scalar @$order_loop, 1, 'order_loop searched by name' );
@@ -106,7 +130,7 @@ sub one_order : Test( 50 ) {
         my $tomorrow = $self->tomorrow();
         # diag( "tomorrow is $tomorrow" );
 
-        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( undef, undef, undef, undef, $tomorrow );
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( to_placed_on =>  $tomorrow );
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
     
         is( scalar @$order_loop, 1, 'order_loop searched by to_date' );
@@ -120,7 +144,7 @@ sub one_order : Test( 50 ) {
         my $yesterday = $self->yesterday();
         # diag( "yesterday was $yesterday" );
     
-        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( undef, undef, undef, $yesterday );
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( from_placed_on =>  $yesterday );
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
     
         is( scalar @$order_loop, 1, 'order_loop searched by from_date' );
@@ -134,7 +158,7 @@ sub one_order : Test( 50 ) {
 
     # just search by title here, we need to search by something.
     {
-        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( $bibliodata->{'title'} );
+        my ( $order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( title => $bibliodata->{'title'} );
         # diag( Data::Dumper->Dump( [ $order_loop, $total_qty, $total_price, $total_qtyreceived ], [ qw( order_loop total_qty total_price total_qtyreceived ) ] ) );
     
         is( scalar @$order_loop, 1, 'order_loop searched by title' );

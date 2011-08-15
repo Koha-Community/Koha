@@ -201,8 +201,6 @@ sub startup_15_truncate_tables : Test( startup => 1 ) {
                               ethnicity
                               issues
                               issuingrules
-                              labels
-                              labels_profile
                               matchchecks
                               notifys
                               nozebra
@@ -268,8 +266,6 @@ we need a bookfund for many of the tests. This currently uses one that
 is in the skeleton database.  free to use this one, or insert your
 own.
 
-=cut
-
 sub startup_22_add_bookfund : Test(startup => 2) {
     my $self = shift;
 
@@ -282,6 +278,8 @@ sub startup_22_add_bookfund : Test(startup => 2) {
     $self->{'bookfundid'} = $bookfundid;
     return;
 }
+
+=cut
 
 =head2 startup_24_add_branch
 

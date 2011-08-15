@@ -20,6 +20,7 @@ package C4::Acquisition;
 
 use strict;
 use warnings;
+use Carp;
 use C4::Context;
 use C4::Debug;
 use C4::Dates qw(format_date format_date_in_iso);
@@ -897,7 +898,7 @@ sub NewOrder {
 
     # if these parameters are missing, we can't continue
     for my $key (qw/basketno quantity biblionumber budget_id/) {
-        die "Mandatory parameter $key missing" unless $orderinfo->{$key};
+        croak "Mandatory parameter $key missing" unless $orderinfo->{$key};
     }
 
     if ( defined $orderinfo->{subscription} && $orderinfo->{'subscription'} eq 'yes' ) {
@@ -1486,9 +1487,18 @@ sub GetLateOrders {
 
 =head3 GetHistory
 
-  (\@order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( $title, $author, $name, $from_placed_on, $to_placed_on );
+  (\@order_loop, $total_qty, $total_price, $total_qtyreceived) = GetHistory( %params );
 
 Retreives some acquisition history information
+
+params:  
+  title
+  author
+  name
+  from_placed_on
+  to_placed_on
+  basket                  - search both basket name and number
+  booksellerinvoicenumber 
 
 returns:
     $order_loop is a list of hashrefs that each look like this:
@@ -1515,93 +1525,115 @@ returns:
 =cut
 
 sub GetHistory {
-    my ( $title, $author, $name, $from_placed_on, $to_placed_on ) = @_;
+# don't run the query if there are no parameters (list would be too long for sure !)
+    croak "No search params" unless @_;
+    my %params = @_;
+    my $title = $params{title};
+    my $author = $params{author};
+    my $name = $params{name};
+    my $from_placed_on = $params{from_placed_on};
+    my $to_placed_on = $params{to_placed_on};
+    my $basket = $params{basket};
+    my $booksellerinvoicenumber = $params{booksellerinvoicenumber};
+
     my @order_loop;
     my $total_qty         = 0;
     my $total_qtyreceived = 0;
     my $total_price       = 0;
 
-# don't run the query if there are no parameters (list would be too long for sure !)
-    if ( $title || $author || $name || $from_placed_on || $to_placed_on ) {
-        my $dbh   = C4::Context->dbh;
-        my $query ="
-            SELECT
-                biblio.title,
-                biblio.author,
-                aqorders.basketno,
-		aqbasket.basketname,
-		aqbasket.basketgroupid,
-		aqbasketgroups.name as groupname,
-                aqbooksellers.name,
-		aqbasket.creationdate,
-                aqorders.datereceived,
-                aqorders.quantity,
-                aqorders.quantityreceived,
-                aqorders.ecost,
-                aqorders.ordernumber,
-                aqorders.booksellerinvoicenumber as invoicenumber,
-                aqbooksellers.id as id,
-                aqorders.biblionumber
-            FROM aqorders
-            LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
-	    LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
-            LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
-            LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
+    my $dbh   = C4::Context->dbh;
+    my $query ="
+        SELECT
+            biblio.title,
+            biblio.author,
+            aqorders.basketno,
+    aqbasket.basketname,
+    aqbasket.basketgroupid,
+    aqbasketgroups.name as groupname,
+            aqbooksellers.name,
+    aqbasket.creationdate,
+            aqorders.datereceived,
+            aqorders.quantity,
+            aqorders.quantityreceived,
+            aqorders.ecost,
+            aqorders.ordernumber,
+            aqorders.booksellerinvoicenumber as invoicenumber,
+            aqbooksellers.id as id,
+            aqorders.biblionumber
+        FROM aqorders
+        LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
+    LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
+        LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
+        LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
 
-        $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
-        if ( C4::Context->preference("IndependantBranches") );
-	
-        $query .= " WHERE (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
+    $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
+    if ( C4::Context->preference("IndependantBranches") );
 
-        my @query_params  = ();
+    $query .= " WHERE (datecancellationprinted is NULL or datecancellationprinted='0000-00-00') ";
 
-        if ( defined $title ) {
-            $query .= " AND biblio.title LIKE ? ";
-            $title =~ s/\s+/%/g;
-            push @query_params, "%$title%";
+    my @query_params  = ();
+
+    if ( defined $title ) {
+        $query .= " AND biblio.title LIKE ? ";
+        $title =~ s/\s+/%/g;
+        push @query_params, "%$title%";
+    }
+
+    if ( defined $author ) {
+        $query .= " AND biblio.author LIKE ? ";
+        push @query_params, "%$author%";
+    }
+
+    if ( defined $name ) {
+        $query .= " AND aqbooksellers.name LIKE ? ";
+        push @query_params, "%$name%";
+    }
+
+    if ( defined $from_placed_on ) {
+        $query .= " AND creationdate >= ? ";
+        push @query_params, $from_placed_on;
+    }
+
+    if ( defined $to_placed_on ) {
+        $query .= " AND creationdate <= ? ";
+        push @query_params, $to_placed_on;
+    }
+
+    if ($basket) {
+        if ($basket =~ m/^\d+$/) {
+            $query .= " AND aqorders.basketno = ? ";
+            push @query_params, $basket;
+        } else {
+            $query .= " AND aqbasket.basketname LIKE ? ";
+            push @query_params, "%$basket%";
         }
+    }
 
-        if ( defined $author ) {
-            $query .= " AND biblio.author LIKE ? ";
-            push @query_params, "%$author%";
-        }
+    if ($booksellerinvoicenumber) {
+        $query .= " AND (aqorders.booksellerinvoicenumber LIKE ? OR aqbasket.booksellerinvoicenumber LIKE ?)";
+        push @query_params, "%$booksellerinvoicenumber%", "%$booksellerinvoicenumber%";
+    }
 
-        if ( defined $name ) {
-            $query .= " AND aqbooksellers.name LIKE ? ";
-            push @query_params, "%$name%";
+    if ( C4::Context->preference("IndependantBranches") ) {
+        my $userenv = C4::Context->userenv;
+        if ( $userenv && ($userenv->{flags} || 0) != 1 ) {
+            $query .= " AND (borrowers.branchcode = ? OR borrowers.branchcode ='' ) ";
+            push @query_params, $userenv->{branch};
         }
-
-        if ( defined $from_placed_on ) {
-            $query .= " AND creationdate >= ? ";
-            push @query_params, $from_placed_on;
-        }
-
-        if ( defined $to_placed_on ) {
-            $query .= " AND creationdate <= ? ";
-            push @query_params, $to_placed_on;
-        }
-
-        if ( C4::Context->preference("IndependantBranches") ) {
-            my $userenv = C4::Context->userenv;
-            if ( ($userenv) && ( $userenv->{flags} != 1 ) ) {
-                $query .= " AND (borrowers.branchcode = ? OR borrowers.branchcode ='' ) ";
-                push @query_params, $userenv->{branch};
-            }
-        }
-        $query .= " ORDER BY id";
-        my $sth = $dbh->prepare($query);
-        $sth->execute( @query_params );
-        my $cnt = 1;
-        while ( my $line = $sth->fetchrow_hashref ) {
-            $line->{count} = $cnt++;
-            $line->{toggle} = 1 if $cnt % 2;
-            push @order_loop, $line;
-            $line->{creationdate} = format_date( $line->{creationdate} );
-            $line->{datereceived} = format_date( $line->{datereceived} );
-            $total_qty         += $line->{'quantity'};
-            $total_qtyreceived += $line->{'quantityreceived'};
-            $total_price       += $line->{'quantity'} * $line->{'ecost'};
-        }
+    }
+    $query .= " ORDER BY id";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( @query_params );
+    my $cnt = 1;
+    while ( my $line = $sth->fetchrow_hashref ) {
+        $line->{count} = $cnt++;
+        $line->{toggle} = 1 if $cnt % 2;
+        push @order_loop, $line;
+        $line->{creationdate} = format_date( $line->{creationdate} );
+        $line->{datereceived} = format_date( $line->{datereceived} );
+        $total_qty         += $line->{'quantity'};
+        $total_qtyreceived += $line->{'quantityreceived'};
+        $total_price       += $line->{'quantity'} * $line->{'ecost'};
     }
     return \@order_loop, $total_qty, $total_price, $total_qtyreceived;
 }

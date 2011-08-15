@@ -2,6 +2,8 @@
 
 # This file is part of Koha.
 #
+# Parts copyright 2011 Catalyst IT Ltd.
+#
 # Koha is free software; you can redistribute it and/or modify it under the
 # terms of the GNU General Public License as published by the Free Software
 # Foundation; either version 2 of the License, or (at your option) any later
@@ -56,12 +58,14 @@ use C4::Acquisition;
 use C4::Dates;
 use C4::Debug;
 
-my $input          = new CGI;
-my $title          = $input->param( 'title');
-my $author         = $input->param('author');
-my $name           = $input->param( 'name' );
-my $from_placed_on = C4::Dates->new($input->param('from'));
-my $to_placed_on   = C4::Dates->new($input->param(  'to'));
+my $input = new CGI;
+my $title                   = $input->param( 'title');
+my $author                  = $input->param('author');
+my $name                    = $input->param( 'name' );
+my $basket                  = $input->param( 'basket' );
+my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
+my $from_placed_on          = C4::Dates->new($input->param('from')) if $input->param('from');
+my $to_placed_on            = C4::Dates->new($input->param(  'to')) if $input->param('to');
 
 my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -83,20 +87,38 @@ if ( $d = $input->param('iso') ) {
     $to_iso = C4::Dates->new($d)->output('iso');
 }
 
-my ( $order_loop, $total_qty, $total_price, $total_qtyreceived ) =
-  GetHistory( $title, $author, $name, $from_iso, $to_iso );
+my ( $order_loop, $total_qty, $total_price, $total_qtyreceived );
+# If we're supplied any value then we do a search. Otherwise we don't.
+my $do_search = $title || $author || $name || $basket || $booksellerinvoicenumber ||
+    $from_placed_on || $to_placed_on;
+if ($do_search) {
+    ( $order_loop, $total_qty, $total_price, $total_qtyreceived ) = GetHistory(
+        title => $title,
+        author => $author,
+        name => $name,
+        from_placed_on => $from_iso,
+        to_placed_on => $to_iso,
+        basket => $basket,
+        booksellerinvoicenumber => $booksellerinvoicenumber,
+    );
+}
+
+my $from_date = $from_placed_on->output('syspref') if $from_placed_on;
+my $to_date = $to_placed_on->output('syspref') if $to_placed_on;
 
 $template->param(
     suggestions_loop        => $order_loop,
     total_qty               => $total_qty,
     total_qtyreceived       => $total_qtyreceived,
     total_price             => sprintf( "%.2f", $total_price ),
-    numresults              => scalar(@$order_loop),
+    numresults              => $order_loop ? scalar(@$order_loop) : undef,
     title                   => $title,
     author                  => $author,
     name                    => $name,
-    from_placed_on          => $from_placed_on->output('syspref'),
-    to_placed_on            =>   $to_placed_on->output('syspref'),
+    basket                  => $basket,
+    booksellerinvoicenumber => $booksellerinvoicenumber,
+    from_placed_on          => $from_date,
+    to_placed_on            => $to_date,
     DHTMLcalendar_dateformat=> C4::Dates->DHTMLcalendar(),
 	dateformat              => C4::Dates->new()->format(),
     debug                   => $debug || $input->param('debug') || 0,

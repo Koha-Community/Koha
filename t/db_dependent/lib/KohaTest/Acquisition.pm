@@ -7,6 +7,7 @@ use warnings;
 use Test::More;
 
 use C4::Acquisition;
+use C4::Budgets;
 use C4::Context;
 use C4::Members;
 use Time::localtime;
@@ -25,7 +26,6 @@ sub methods : Test( 1 ) {
                        GetOrder 
                        NewOrder 
                        ModOrder 
-                       ModOrderBiblioNumber 
                        ModReceiveOrder 
                        SearchOrder 
                        DelOrder 
@@ -71,27 +71,21 @@ sub create_new_basket {
     $self->add_biblios( add_items => 1 );
     ok( scalar @{$self->{'biblios'}} > 0, 'we have added at least one biblio' );
 
-    my ( $basketno, $ordernumber ) = NewOrder( undef, # $basketno,
-                                          $self->{'biblios'}[0], # $bibnum,
-                                          undef, # $title,
-                                          1, # $quantity,
-                                          undef, # $listprice,
-                                          $self->{'booksellerid'}, # $booksellerid,
-                                          $param{'authorizedby'}, # $authorisedby,
-                                          undef, # $notes,
-                                          $self->{'bookfundid'},     # $bookfund,
-                                          undef, # $bibitemnum,
-                                          1, # $rrp,
-                                          1, # $ecost,
-                                          undef, # $gst,
-                                          undef, # $budget,
-                                          undef, # $cost,
-                                          undef, # $sub,
-                                          $param{'invoice'}, # $invoice,
-                                          undef, # $sort1,
-                                          undef, # $sort2,
-                                          undef, # $purchaseorder
-                                     );
+    my $rand = int(rand(10000));
+    my $basketno = NewBasket( $self->{'booksellerid'}, $param{'authorizedby'},  "Basket $rand");
+#             $basketnote, $basketbooksellernote, $basketcontractnumber );
+#   The following keys are used: "biblionumber", "title", "basketno", "quantity", "notes", "biblioitemnumber", "rrp", "ecost", "gst", "unitprice", "subscription", "sort1", "sort2", "booksellerinvoicenumber", "listprice", "budgetdate", "purchaseordernumber", "branchcode", "booksellerinvoicenumber", "bookfundid".
+    my $budget_id = AddBudget( { budget_name => "Budget $rand" } );
+    my ( undef, $ordernumber ) = NewOrder( {
+            basketno => $basketno,
+            budget_id => $budget_id,
+            biblionumber => $self->{'biblios'}[0],
+            quantity => 1,
+            bookfundid => $self->{'bookfundid'},
+            rrp => 1,
+            ecost => 1,
+            booksellerinvoicenumber => $param{'invoice'},
+        } );
     ok( $basketno, "my basket number is $basketno" );
     ok( $ordernumber,   "my order number is $ordernumber" );
     
