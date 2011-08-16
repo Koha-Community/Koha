@@ -938,8 +938,8 @@ CREATE TABLE `import_items` (
 
 DROP TABLE IF EXISTS `issues`;
 CREATE TABLE `issues` (
-  `borrowernumber` int(11) default NULL,
-  `itemnumber` int(11) default NULL,
+  `borrowernumber` int(11),
+  `itemnumber` int(11),
   `date_due` date default NULL,
   `branchcode` varchar(10) default NULL,
   `issuingbranch` varchar(18) default NULL,
@@ -949,11 +949,11 @@ CREATE TABLE `issues` (
   `renewals` tinyint(4) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `issuedate` date default NULL,
+  PRIMARY KEY (`itemnumber`),
   KEY `issuesborridx` (`borrowernumber`),
-  KEY `issuesitemidx` (`itemnumber`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
-  CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL,
-  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL
+  CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
+  CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE RESTRICT ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2100,7 +2100,7 @@ CREATE TABLE `serialitems` (
 	UNIQUE KEY `serialitemsidx` (`itemnumber`),
 	KEY `serialitems_sfk_1` (`serialid`),
 	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
-	CONSTRAINT serialitems_sfk_2 FOREIGN KEY (itemnumber) REFERENCES items (itemnumber) ON DELETE CASCADE ON UPDATE CASCADE
+	CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 DROP TABLE IF EXISTS `user_permissions`;

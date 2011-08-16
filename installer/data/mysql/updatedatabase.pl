@@ -4399,6 +4399,39 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO old_issues (borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate)
+              SELECT borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate FROM issues WHERE borrowernumber IS NULL");
+    $dbh->do("DELETE FROM issues WHERE borrowernumber IS NULL");
+
+    $dbh->do("INSERT INTO old_issues (borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate)
+              SELECT borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate FROM issues WHERE itemnumber IS NULL");
+    $dbh->do("DELETE FROM issues WHERE itemnumber IS NULL");
+
+    $dbh->do("INSERT INTO old_issues (borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate)
+              SELECT borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate FROM issues WHERE NOT EXISTS (SELECT * FROM borrowers WHERE borrowernumber = issues.borrowernumber)");
+    $dbh->do("DELETE FROM issues WHERE NOT EXISTS (SELECT * FROM borrowers WHERE borrowernumber = issues.borrowernumber)");
+
+    $dbh->do("INSERT INTO old_issues (borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate)
+              SELECT borrowernumber, itemnumber, date_due, branchcode, issuingbranch, returndate, lastreneweddate, `return`, renewals, timestamp, issuedate FROM issues WHERE NOT EXISTS (SELECT * FROM items WHERE itemnumber = issues.itemnumber)");
+    $dbh->do("DELETE FROM issues WHERE NOT EXISTS (SELECT * FROM items WHERE itemnumber = issues.itemnumber)");
+
+    $dbh->do("ALTER TABLE issues DROP FOREIGN KEY `issues_ibfk_1`");
+    $dbh->do("ALTER TABLE issues DROP FOREIGN KEY `issues_ibfk_2`");
+    $dbh->do("ALTER TABLE issues ALTER COLUMN borrowernumber DROP DEFAULT");
+    $dbh->do("ALTER TABLE issues ALTER COLUMN itemnumber DROP DEFAULT");
+    $dbh->do("ALTER TABLE issues MODIFY COLUMN borrowernumber int(11) NOT NULL");
+    $dbh->do("ALTER TABLE issues MODIFY COLUMN itemnumber int(11) NOT NULL");
+    $dbh->do("ALTER TABLE issues DROP KEY `issuesitemidx`");
+    $dbh->do("ALTER TABLE issues ADD PRIMARY KEY (`itemnumber`)");
+    $dbh->do("ALTER TABLE issues ADD CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE");
+    $dbh->do("ALTER TABLE issues ADD CONSTRAINT `issues_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE RESTRICT ON UPDATE CASCADE");
+
+    print "Upgrade to $DBversion done (issues referential integrity)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
