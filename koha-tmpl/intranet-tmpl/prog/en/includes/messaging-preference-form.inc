@@ -51,8 +51,8 @@
       [% ELSE %]
       <td>-</td>
       [% END %]
-<!--      [% IF ( messaging_preference.transport_sms ) %]
-      [% IF ( messaging_preference.SMSSendDriver ) %]<td>
+      [% IF ( messaging_preference.transport_sms ) %]
+      [% IF ( SMSSendDriver ) %]<td>
           [% IF ( messaging_form_inactive ) %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id %]"
@@ -67,7 +67,7 @@
       </td>[% END %]
       [% ELSE %]
       <td>-</td>
-      [% END %] -->
+      [% END %]
 
       [% IF ( messaging_preference.transport_email ) %]
       <td>
