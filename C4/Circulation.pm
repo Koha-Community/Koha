@@ -1735,7 +1735,7 @@ sub MarkIssueReturned {
     my $query = 'UPDATE issues SET returndate=';
     my @bind;
     if ($dropbox_branch) {
-        my $calendar = Koha->new( branchcode => $dropbox_branch );
+        my $calendar = Koha::Calendar->new( branchcode => $dropbox_branch );
         my $dropboxdate = $calendar->addDate( DateTime->now( time_zone => C4::Context->tz), -1 );
         $query .= ' ? ';
         push @bind, $dropboxdate->strftimei('%Y-%m-%d %H:%M');
