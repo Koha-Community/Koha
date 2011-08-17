@@ -4,12 +4,23 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'greybox.inc' %]
 <script type="text/javascript" src="[% yuipath %]/json/json-min.js"></script>
-<script type="text/JavaScript">
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
 //<![CDATA[
 
     var rowsToCollapse = 5;
 
+	$.tablesorter.addParser({
+	    id: 'articles',
+	    is: function(s) {return false;  },
+	    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+	    type: 'text'
+	});
+
     $(document).ready(function(){
+    $("#pendingt").tablesorter({
+		headers: { 2: { sorter: 'articles' },3: { sorter: false },7:{sorter:false}}
+    });
 
 	rowCountPending  = $("#pendingt tbody.filterclass tr").length;
 	rowCountReceived = $("#receivedt tbody.filterclass tr").length;
