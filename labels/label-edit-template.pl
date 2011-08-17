@@ -50,9 +50,18 @@ my $units = get_unit_values();
 if ($op eq 'edit') {
     $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
     $profile_list = get_all_profiles(field_list => 'profile_id,printer_name,paper_bin',filter => "template_id=$template_id OR template_id=''");
+    push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
+    foreach my $profile (@$profile_list) {
+        if ($profile->{'profile_id'} == $label_template->get_attr('profile_id')) {
+            $profile->{'selected'} = 1;
+        }
+        else {
+            $profile->{'selected'} = 0;
+        }
+    }
 }
 elsif ($op eq 'save') {
-    my @params = (      profile_id      => $cgi->param('profile_id') || '',
+    my @params = (      profile_id      => $cgi->param('profile_id'),
                         template_code   => $cgi->param('template_code') || 'DEFAULT_TEMPLATE',
                         template_desc   => $cgi->param('template_desc') || 'Default description',
                         page_width      => $cgi->param('page_width') || 0,
@@ -69,10 +78,11 @@ elsif ($op eq 'save') {
                         row_gap         => $cgi->param('row_gap') || 0,
                         units           => $cgi->param('units') || 'POINT',
                         );
-    if ($template_id) {   # if a label_id was passed in, this is an update to an existing layout
+    if ($template_id) {   # if a template_id was passed in, this is an update to an existing template
         $label_template = C4::Labels::Template->retrieve(template_id => $template_id);
         if ($cgi->param('profile_id') && ($label_template->get_attr('template_id') != $cgi->param('profile_id'))) {
-            if ($label_template->get_attr('profile_id') > 0) {   # no need to get the old one if there was no profile associated
+            # Release the old profile if one is currently associated
+            if ($label_template->get_attr('profile_id') > 0) {
                 my $old_profile = C4::Labels::Profile->retrieve(profile_id => $label_template->get_attr('profile_id'));
                 $old_profile->set_attr(template_id => 0);
                 $old_profile->save();
@@ -81,23 +91,18 @@ elsif ($op eq 'save') {
             $new_profile->set_attr(template_id => $label_template->get_attr('template_id'));
             $new_profile->save();
         }
+        elsif ($cgi->param('profile_id') == 0) { # Disassociate any printer profile from the template
+            if ($label_template->get_attr('profile_id') > 0) {
+                my $old_profile = C4::Labels::Profile->retrieve(profile_id => $label_template->get_attr('profile_id'));
+                $old_profile->set_attr(template_id => 0);
+                $old_profile->save();
+            }
+        }
 
-#        if ($cgi->param('profile_id')) {
-#            my $old_profile = ($label_template->get_attr('profile_id') ? C4::Labels::Profile->retrieve(profile_id => $label_template->get_attr('profile_id')) : undef);
-#            my $new_profile = C4::Labels::Profile->retrieve(profile_id => $cgi->param('profile_id'));
-#            if ($label_template->get_attr('template_id') != $new_profile->get_attr('template_id')) {
-#                $new_profile->set_attr(template_id => $label_template->get_attr('template_id'));
-#                $new_profile->save();
-#                if ($old_profile) {
-#                    $old_profile->set_attr(template_id => 0);
-#                    $old_profile->save();
-#                }
-#            }
-#        }
         $label_template->set_attr(@params);
         $label_template->save();
     }
-    else {      # if no label_id, this is a new layout so insert it
+    else {      # if no template_id, this is a new template so insert it
         $label_template = C4::Labels::Template->new(@params);
         my $template_id = $label_template->save();
         if ($cgi->param('profile_id')) {
@@ -111,10 +116,10 @@ elsif ($op eq 'save') {
 }
 else {  # if we get here, this is a new layout
     $label_template = C4::Labels::Template->new();
-}
-if ($template_id) {
+    $profile_list = get_all_profiles(field_list => 'profile_id,printer_name,paper_bin',filter => "template_id=''");
+    push @$profile_list, {paper_bin => 'N/A', profile_id => 0, printer_name => 'No Profile'};
     foreach my $profile (@$profile_list) {
-        if ($profile->{'profile_id'} == $label_template->get_attr('profile_id')) {
+        if ($profile->{'profile_id'} == 0) {
             $profile->{'selected'} = 1;
         }
         else {
