@@ -610,6 +610,7 @@ sub handle_checkin {
     my ($self, $server) = @_;
     my $account = $server->{account};
     my $ils     = $server->{ils};
+    my $my_branch = $ils->institution;
     my ($current_loc, $inst_id, $item_id, $terminal_pwd, $item_props, $cancel);
     my ($patron, $item, $status);
     my $resp = CHECKIN_RESP;
@@ -621,6 +622,9 @@ sub handle_checkin {
 	$item_id     = $fields->{(FID_ITEM_ID)};
 	$item_props  = $fields->{(FID_ITEM_PROPS)};
 	$cancel      = $fields->{(FID_CANCEL)};
+    if ($current_loc) {
+        $my_branch = $current_loc;# most scm do not set $current_loc
+    }
 
     $ils->check_inst_id($inst_id, "handle_checkin");
 
@@ -629,7 +633,7 @@ sub handle_checkin {
         syslog("LOG_WARNING", "received no-block checkin from terminal '%s'", $account->{id});
         $status = $ils->checkin_no_block($item_id, $trans_date, $return_date, $item_props, $cancel);
     } else {
-        $status = $ils->checkin($item_id, $trans_date, $return_date, $current_loc, $item_props, $cancel);
+        $status = $ils->checkin($item_id, $trans_date, $return_date, $my_branch, $item_props, $cancel);
     }
 
     $patron = $status->patron;
@@ -647,7 +651,7 @@ sub handle_checkin {
     # apparently we can't trust the returns from Checkin yet (because C4::Circulation::AddReturn is faulty)
     # So we reproduce the alert logic here.
     if (not $status->alert) {
-        if ($item->destination_loc and $item->destination_loc ne $current_loc) {
+        if ($item->destination_loc and $item->destination_loc ne $my_branch) {
             $status->alert(1);
             $status->alert_type('04');  # no hold, just send it
         }
