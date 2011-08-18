@@ -95,16 +95,16 @@ sub text_replace (**) {
     my $s = TmplTokenizer::next_token $h;
     last unless defined $s;
     my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
-    if ($kind eq TmplTokenType::TEXT) {
+    if ($kind eq C4::TmplTokenType::TEXT) {
         print $output find_translation($t);
-    } elsif ($kind eq TmplTokenType::TEXT_PARAMETRIZED) {
+    } elsif ($kind eq C4::TmplTokenType::TEXT_PARAMETRIZED) {
         my $fmt = find_translation($s->form);
         print $output TmplTokenizer::parametrize($fmt, 1, $s, sub {
         $_ = $_[0];
         my($kind, $t, $attr) = ($_->type, $_->string, $_->attributes);
-        $kind == TmplTokenType::TAG && %$attr?
+        $kind == C4::TmplTokenType::TAG && %$attr?
             text_replace_tag($t, $attr): $t });
-    } elsif ($kind eq TmplTokenType::TAG && %$attr) {
+    } elsif ($kind eq C4::TmplTokenType::TAG && %$attr) {
         print $output text_replace_tag($t, $attr);
     } elsif ($s->has_js_data) {
         for my $t (@{$s->js_data}) {
