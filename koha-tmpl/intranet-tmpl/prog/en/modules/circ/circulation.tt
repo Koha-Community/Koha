@@ -346,7 +346,7 @@ function refocus(calendar) {
             <li>The barcode was not found [% barcode %]</li>
 	    [% IF ( fast_cataloging ) %]
 	        [% IF ( CAN_user_editcatalogue_fast_cataloging ) %]
-                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA">Fast cataloging</a>
+                    <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=FA&barcode=[% barcode %]&borrowernumber=[% borrowernumber %]&branch=[% branch %]&duedatespec=[% duedatespec %]&stickyduedate=[% stickyduedate %]">Fast cataloging</a>
 		[% END %]
 	    [% END %]
         [% END %]

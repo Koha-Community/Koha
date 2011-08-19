@@ -899,6 +899,13 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
     </div>
 [% END %]
 </div>
+<!-- Fields for fast add cataloguing -->
+<input type="hidden" name="barcode" value="[% barcode %]" />
+<input type="hidden" name="branch" value="[% branch %]" />
+<input type="hidden" name="circborrowernumber" value="[% circborrowernumber %]" />
+<input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
+<input type="hidden" name="duedatespec" value="[% duedatespec %]" />
+<!-- /End of fast add fields -->
 </form>
 
 </div>

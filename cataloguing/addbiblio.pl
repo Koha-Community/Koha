@@ -835,7 +835,11 @@ my $frameworkcode = $input->param('frameworkcode');
 my $redirect      = $input->param('redirect');
 my $dbh           = C4::Context->dbh;
 
-my $userflags = ($frameworkcode eq 'FA') ? "fast_cataloging" : "edit_catalogue";
+    
+my $userflags = 'edit_catalogue';
+if ($frameworkcode eq 'FA'){
+    $userflags = 'fast_cataloging';
+}
 
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not($frameworkcode) and $op ne 'addbiblio' );
@@ -843,13 +847,22 @@ $frameworkcode = &GetFrameworkCode($biblionumber)
 $frameworkcode = '' if ( $frameworkcode eq 'Default' );
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "cataloguing/addbiblio.tmpl",
+        template_name   => "cataloguing/addbiblio.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => { editcatalogue => $userflags },
     }
 );
+
+if ($frameworkcode eq 'FA'){
+    # We need to grab and set some variables in the template for use on the additems screen
+    $template->{VARS}->{'circborrowernumber'} = $input->param('borrowernumber');
+    $template->{VARS}->{'barcode'} = $input->param('barcode');
+    $template->{VARS}->{'branch'} = $input->param('branch');
+    $template->{VARS}->{'stickyduedate'} = $input->param('stickyduedate');
+    $template->{VARS}->{'duedatespec'} = $input->param('duedatespec');
+}
 
 # Getting the list of all frameworks
 # get framework list
@@ -940,12 +953,25 @@ if ( $op eq "addbiblio" ) {
             ( $biblionumber, $oldbibitemnum ) = AddBiblio( $record, $frameworkcode );
         }
         if ($redirect eq "items" || ($mode ne "popup" && !$is_a_modif && $redirect ne "view")){
-            print $input->redirect(
+	    if ($frameworkcode eq 'FA'){
+		my $borrowernumber = $input->param('circborrowernumber');
+		my $barcode = $input->param('barcode');
+		my $branch = $input->param('branch');
+		my $stickyduedate = $input->param('stickyduedate');
+		my $duedatespec = $input->param('duedatespec');
+		print $input->redirect(
+                "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode&borrowernumber=$borrowernumber&branch=$branch&barcode=$barcode&stickyduedate=$stickyduedate&duedatespec=$duedatespec"
+		);
+		exit;
+	    }
+	    else {
+		print $input->redirect(
                 "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=$biblionumber&frameworkcode=$frameworkcode"
-            );
-            exit;
+		);
+		exit;
+	    }
         }
-		elsif($is_a_modif || $redirect eq "view"){
+	elsif($is_a_modif || $redirect eq "view"){
             my $defaultview = C4::Context->preference('IntranetBiblioDefaultView');
             my $views = { C4::Search::enabled_staff_search_views };
             if ($defaultview eq 'isbd' && $views->{can_view_ISBD}) {
@@ -959,7 +985,8 @@ if ( $op eq "addbiblio" ) {
             }
             exit;
 
-		}else {
+	}
+	else {
           $template->param(
             biblionumber => $biblionumber,
             done         =>1,

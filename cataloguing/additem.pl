@@ -1,8 +1,8 @@
 #!/usr/bin/perl
 
-
 # Copyright 2000-2002 Katipo Communications
 # Copyright 2004-2010 BibLibre
+# Parts Copyright Catalyst IT 2011
 #
 # This file is part of Koha.
 #
@@ -34,6 +34,7 @@ use C4::Dates;
 use List::MoreUtils qw/any/;
 
 use MARC::File::XML;
+use URI::Escape;
 
 my $dbh = C4::Context->dbh;
 
@@ -99,7 +100,8 @@ sub _increment_barcode {
 
 sub generate_subfield_form {
         my ($tag, $subfieldtag, $value, $tagslib,$subfieldlib, $branches, $today_iso, $biblionumber, $temp, $loop_data, $i) = @_;
-        
+  
+  my $frameworkcode = &GetFrameworkCode($biblionumber);
         my %subfield_data;
         my $dbh = C4::Context->dbh;        
         my $authorised_values_sth = $dbh->prepare("SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib");
@@ -143,6 +145,10 @@ sub generate_subfield_form {
             }
         }
         
+        if ($frameworkcode eq 'FA' && $subfieldlib->{kohafield} eq 'items.barcode'){
+	    my $input = new CGI;
+	    $value = $input->param('barcode');
+	}
         my $attributes_no_value = qq(tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" );
         my $attributes          = qq($attributes_no_value value="$value" );
         
@@ -284,7 +290,7 @@ if (not defined $userflags) {
 }
 
 my ($template, $loggedinuser, $cookie)
-    = get_template_and_user({template_name => "cataloguing/additem.tmpl",
+    = get_template_and_user({template_name => "cataloguing/additem.tt",
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
@@ -415,6 +421,14 @@ if ($op eq "additem") {
 	    }
 	    undef($itemrecord);
 	}
+    }	
+    if ($frameworkcode eq 'FA'){
+	my $redirect_string = 'borrowernumber=' . uri_escape($input->param('borrowernumber')) .
+	  '&barcode=' . uri_escape($input->param('barcode'));
+	$redirect_string .= '&duedatespec=' . uri_escape($input->param('duedatespec')) . 
+	  '&stickyduedate=1';
+	print $input->redirect("/cgi-bin/koha/circ/circulation.pl?" . $redirect_string);
+	exit;
     }
 
 
@@ -574,7 +588,11 @@ my $onlymine = C4::Context->preference('IndependantBranches') &&
                C4::Context->userenv                           && 
                C4::Context->userenv->{flags}!=1               && 
                C4::Context->userenv->{branch};
-my $branches = GetBranchesLoop(C4::Context->userenv->{branch},$onlymine);  # build once ahead of time, instead of multiple times later.
+my $branch = C4::Context->userenv->{branch};
+if ($frameworkcode eq 'FA'){
+    $branch = $input->param('branch');
+}    
+my $branches = GetBranchesLoop($branch,$onlymine);  # build once ahead of time, instead of multiple times later.
 
 # We generate form, from actuel record
 @fields = ();
@@ -634,6 +652,14 @@ $template->param(
     opisadd => ($nextop eq "saveitem") ? 0 : 1,
     C4::Search::enabled_staff_search_views,
 );
+
+if ($frameworkcode eq 'FA'){
+    $template->{VARS}->{'borrowernumber'}=$input->param('borrowernumber');
+    $template->{VARS}->{'barcode'}=$input->param('barcode');
+    $template->{VARS}->{'stickyduedate'}=$input->param('stickduedate');
+    $template->{VARS}->{'duedatespec'}=$input->param('duedatespec');
+}    
+
 foreach my $error (@errors) {
     $template->param($error => 1);
 }

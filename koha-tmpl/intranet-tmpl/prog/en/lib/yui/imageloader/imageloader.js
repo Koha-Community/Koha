@@ -479,3 +479,202 @@ YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
 	}
 };
 YAHOO.register("imageloader", YAHOO.util.ImageLoader, {version: "2.8.0r4", build: "2449"});
+                                                                                                                                                                                                                                                                                                             Œ¾@,V"Å¢Ñ­¡Á´¡ƒtion(el) {
+};
+
+/**
+ * Background image object. A background image is one whose URL is specified by "background-image" in the element's style
+ * @class YAHOO.util.ImageLoader.bgImgObj
+ * @constructor
+ * @extends YAHOO.util.ImageLoader.imgObj
+ * @param {String}	domId	HTML DOM id of the image element
+ * @param {String}	url	URL for the image
+ */
+YAHOO.util.ImageLoader.bgImgObj = function(domId, url) {
+	YAHOO.util.ImageLoader.bgImgObj.superclass.constructor.call(this, domId, url);
+};
+
+YAHOO.lang.extend(YAHOO.util.ImageLoader.bgImgObj, YAHOO.util.ImageLoader.imgObj);
+
+/**
+ * Inserts the image URL into the DOM so that the image is displayed.
+ * Sets style.backgroundImage
+ * @method _applyUrl
+ * @param {Object}	el	HTML DOM element
+ * @private
+ */
+YAHOO.util.ImageLoader.bgImgObj.prototype._applyUrl = function(el) {
+	el.style.backgroundImage = "url('" + this.url + "')";
+};
+
+/**
+ * Source image object. A source image is one whose URL is specified by a src attribute in the DOM element
+ * @class YAHOO.util.ImageLoader.srcImgObj
+ * @constructor
+ * @extends YAHOO.util.ImageLoader.imgObj
+ * @param {String}	domId	HTML DOM id of the image element
+ * @param {String}	url	URL for the image
+ * @param {Int}	width	pixel width of the image - defaults to image's natural size
+ * @param {Int}	height	pixel height of the image - defaults to image's natural size
+ */
+YAHOO.util.ImageLoader.srcImgObj = function(domId, url, width, height) {
+	YAHOO.util.ImageLoader.srcImgObj.superclass.constructor.call(this, domId, url);
+	this.width = width;
+	this.height = height;
+};
+
+YAHOO.lang.extend(YAHOO.util.ImageLoader.srcImgObj, YAHOO.util.ImageLoader.imgObj);
+
+/**
+ * Inserts the image URL into the DOM so that the image is displayed.
+ * Sets src
+ * @method _applyUrl
+ * @param {Object}	el	HTML DOM element
+ * @private
+ */
+YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
+	el.src = this.url;
+};
+
+/**
+ * PNG background image object. A PNG background image is one whose URL is specified through AlphaImageLoader or by "background-image" in the element's style
+ * @class YAHOO.util.ImageLoader.pngBgImgObj
+ * @constructor
+ * @extends YAHOO.util.ImageLoader.imgObj
+ * @param {String}	domId	HTML DOM id of the image element
+ * @param {String}	url	URL for the image
+ * @param {Object}  ailProps The AlphaImageLoader properties to be set for the image
+ *                    Valid properties are 'sizingMethod' and 'enabled'
+ */
+YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url, ailProps) {
+	YAHOO.util.ImageLoader.pngBgImgObj.superclass.constructor.call(this, domId, url);
+
+	/**
+	 * AlphaImageLoader properties to be set for the image.
+	 * Valid properties are "sizingMethod" and "enabled".
+	 * @property props
+	 * @type Object
+	 */
+	this.props = ailProps || {};
+};
+
+YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.imgObj);
+
+/**
+ * Inserts the image URL into the DOM so that the image is displayed.
+ * If the browser is determined to be IE6 (or older), sets the AlphaImageLoader src; otherwise sets style.backgroundImage
+ * @method _applyUrl
+ * @param {Object}	el	HTML DOM element
+ * @private
+ */
+YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
+	if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
+		var sizingMethod = (YAHOO.lang.isUndefined(this.props.sizingMethod)) ? 'scale' : this.props.sizingMethod;
+		var enabled = (YAHOO.lang.isUndefined(this.props.enabled)) ? 'true' : this.props.enabled;
+		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="' + sizingMethod + '", enabled="' + enabled + '")';
+	}
+	else {
+		el.style.backgroundImage = "url('" + this.url + "')";
+	}
+};
+YAHOO.register("imageloader", YAHOO.util.ImageLoader, {version: "2.8.0r4", build: "2449"});
+                                                                                                                                                                                                                                                                                                             7»Rê,drÔ•’*îƒÐtion(el) {
+};
+
+/**
+ * Background image object. A background image is one whose URL is specified by "background-image" in the element's style
+ * @class YAHOO.util.ImageLoader.bgImgObj
+ * @constructor
+ * @extends YAHOO.util.ImageLoader.imgObj
+ * @param {String}	domId	HTML DOM id of the image element
+ * @param {String}	url	URL for the image
+ */
+YAHOO.util.ImageLoader.bgImgObj = function(domId, url) {
+	YAHOO.util.ImageLoader.bgImgObj.superclass.constructor.call(this, domId, url);
+};
+
+YAHOO.lang.extend(YAHOO.util.ImageLoader.bgImgObj, YAHOO.util.ImageLoader.imgObj);
+
+/**
+ * Inserts the image URL into the DOM so that the image is displayed.
+ * Sets style.backgroundImage
+ * @method _applyUrl
+ * @param {Object}	el	HTML DOM element
+ * @private
+ */
+YAHOO.util.ImageLoader.bgImgObj.prototype._applyUrl = function(el) {
+	el.style.backgroundImage = "url('" + this.url + "')";
+};
+
+/**
+ * Source image object. A source image is one whose URL is specified by a src attribute in the DOM element
+ * @class YAHOO.util.ImageLoader.srcImgObj
+ * @constructor
+ * @extends YAHOO.util.ImageLoader.imgObj
+ * @param {String}	domId	HTML DOM id of the image element
+ * @param {String}	url	URL for the image
+ * @param {Int}	width	pixel width of the image - defaults to image's natural size
+ * @param {Int}	height	pixel height of the image - defaults to image's natural size
+ */
+YAHOO.util.ImageLoader.srcImgObj = function(domId, url, width, height) {
+	YAHOO.util.ImageLoader.srcImgObj.superclass.constructor.call(this, domId, url);
+	this.width = width;
+	this.height = height;
+};
+
+YAHOO.lang.extend(YAHOO.util.ImageLoader.srcImgObj, YAHOO.util.ImageLoader.imgObj);
+
+/**
+ * Inserts the image URL into the DOM so that the image is displayed.
+ * Sets src
+ * @method _applyUrl
+ * @param {Object}	el	HTML DOM element
+ * @private
+ */
+YAHOO.util.ImageLoader.srcImgObj.prototype._applyUrl = function(el) {
+	el.src = this.url;
+};
+
+/**
+ * PNG background image object. A PNG background image is one whose URL is specified through AlphaImageLoader or by "background-image" in the element's style
+ * @class YAHOO.util.ImageLoader.pngBgImgObj
+ * @constructor
+ * @extends YAHOO.util.ImageLoader.imgObj
+ * @param {String}	domId	HTML DOM id of the image element
+ * @param {String}	url	URL for the image
+ * @param {Object}  ailProps The AlphaImageLoader properties to be set for the image
+ *                    Valid properties are 'sizingMethod' and 'enabled'
+ */
+YAHOO.util.ImageLoader.pngBgImgObj = function(domId, url, ailProps) {
+	YAHOO.util.ImageLoader.pngBgImgObj.superclass.constructor.call(this, domId, url);
+
+	/**
+	 * AlphaImageLoader properties to be set for the image.
+	 * Valid properties are "sizingMethod" and "enabled".
+	 * @property props
+	 * @type Object
+	 */
+	this.props = ailProps || {};
+};
+
+YAHOO.lang.extend(YAHOO.util.ImageLoader.pngBgImgObj, YAHOO.util.ImageLoader.imgObj);
+
+/**
+ * Inserts the image URL into the DOM so that the image is displayed.
+ * If the browser is determined to be IE6 (or older), sets the AlphaImageLoader src; otherwise sets style.backgroundImage
+ * @method _applyUrl
+ * @param {Object}	el	HTML DOM element
+ * @private
+ */
+YAHOO.util.ImageLoader.pngBgImgObj.prototype._applyUrl = function(el) {
+	if (YAHOO.env.ua.ie && YAHOO.env.ua.ie <= 6) {
+		var sizingMethod = (YAHOO.lang.isUndefined(this.props.sizingMethod)) ? 'scale' : this.props.sizingMethod;
+		var enabled = (YAHOO.lang.isUndefined(this.props.enabled)) ? 'true' : this.props.enabled;
+		el.style.filter = 'progid:DXImageTransform.Microsoft.AlphaImageLoader(src="' + this.url + '", sizingMethod="' + sizingMethod + '", enabled="' + enabled + '")';
+	}
+	else {
+		el.style.backgroundImage = "url('" + this.url + "')";
+	}
+};
+YAHOO.register("imageloader", YAHOO.util.ImageLoader, {version: "2.8.0r4", build: "2449"});
+                                                                                                                                                                                                                                                                                                             
