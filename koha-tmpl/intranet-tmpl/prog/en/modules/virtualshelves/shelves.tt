@@ -115,7 +115,8 @@ function placeHold () {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/virtualshelves/shelves.pl">Lists</a> [% IF ( category1 ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a> [% ELSE %] Your Lists [% END %] [% ELSIF ( category2 ) %] &rsaquo; [% IF ( viewshelf ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a> [% ELSE %] Public Lists [% END %] [% ELSIF ( showprivateshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=privateshelves">Your Lists</a> [% ELSE %] Your Lists [% END %] [% ELSIF ( showpublicshelves ) %] &rsaquo; [% IF ( viewshelf || edit ) %] <a href="/cgi-bin/koha/virtualshelves/shelves.pl?display=publicshelves">Public Lists</a> [% ELSE %] Public Lists [% END %] [% END %]
+
 [% IF ( viewshelf ) %]&rsaquo; Contents of <i>[% shelfname | html %]</i>[% END %][% IF ( shelves ) %] &rsaquo; Create New List[% END %][% IF ( edit ) %] &rsaquo; Edit List <i>[% shelfname | html %]</i>[% END %]</div>
 
 <div id="doc" class="yui-t7">

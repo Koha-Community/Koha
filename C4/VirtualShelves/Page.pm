@@ -241,13 +241,15 @@ sub shelfpage ($$$$$) {
                 my $i = 0;
                 my $manageshelf = ShelfPossibleAction( $loggedinuser, $shelfnumber, 'manage' );
                 $template->param(
-                    shelfname   => $shelfname,
-                    shelfnumber => $shelfnumber,
-                    viewshelf   => $shelfnumber,
-                    authorsort  => $authorsort,
-                    yearsort    => $yearsort,
-                    manageshelf => $manageshelf,
-                    itemsloop   => $items,
+                    shelfname           => $shelfname,
+                    shelfnumber         => $shelfnumber,
+                    viewshelf           => $shelfnumber,
+                    authorsort          => $authorsort,
+                    yearsort            => $yearsort,
+                    manageshelf         => $manageshelf,
+                    "category$category" => 1,
+                    category            => $category,
+                    itemsloop           => $items,
                 );
             } else {
                 push @paramsloop, { nopermission => $shelfnumber };
