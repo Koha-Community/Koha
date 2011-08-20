@@ -132,7 +132,8 @@ $(document).ready(function() {
 <input type="button" value="Return Item" name="confirm" class="return" onclick="this.form.op.value='returnbook';this.form.submit();"  />
 [% END %]
 [% END %]
-<input type="button" value="Renew Item" [% UNLESS ( renew ) %] name="confirm"[% END %] class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
+[% UNLESS ( renew ) %]<input type="button" value="Renew Item" name="confirm" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
+[% ELSE %]<input type="button" value="Renew Item" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />[% END %]
 <input type="button" value="Cancel" class="cancel" onclick="this.form.op.value='';this.form.submit();return true;"  />
 </form>
 </div>
@@ -219,7 +220,8 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
           <span>No renewals allowed</span>
           [% END %]
         [% ELSE %]
-        <input type="button" value="Renew Item" [% UNLESS ( ISSUE.renew ) %] name="confirm"[% END %] class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
+            [% UNLESS ( ISSUE.renew ) %]<input type="button" value="Renew Item"  name="confirm" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />
+            [% ELSE %]<input type="button" value="Renew Item" class="renew" onclick="this.form.confirmed.value='1';this.form.submit();" />[% END %]
         [% END %]
     </form>
 	</td>
