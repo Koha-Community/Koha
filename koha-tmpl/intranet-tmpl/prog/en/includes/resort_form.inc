@@ -33,15 +33,15 @@
 <optgroup label="Call Number">
 	
 	[% IF ( sort_by == "call_number_asc" ) %]
-<option value="call_number_asc" selected="selected">Call Number (Non-fiction 0-9 to Fiction A-Z)</option>
+<option value="call_number_asc" selected="selected">Call Number (0-9 to A-Z)</option>
 [% ELSE %]
-	<option value="call_number_asc">Call Number (Non-fiction 0-9 to Fiction A-Z)</option>
+	<option value="call_number_asc">Call Number (0-9 to A-Z)</option>
 [% END %]
 
 [% IF ( sort_by == "call_number_dsc" ) %]
-<option value="call_number_dsc" selected="selected">Call Number (Fiction Z-A to Non-fiction 9-0)</option>
+<option value="call_number_dsc" selected="selected">Call Number (Z-A to 9-0)</option>
 [% ELSE %]
-	<option value="call_number_dsc">Call Number (Fiction Z-A to Non-fiction 9-0)</option>
+	<option value="call_number_dsc">Call Number (Z-A to 9-0)</option>
 [% END %]
 
 </optgroup>
