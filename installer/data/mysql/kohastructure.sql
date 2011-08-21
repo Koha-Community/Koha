@@ -1161,12 +1161,12 @@ CREATE TABLE `creator_templates` (
 --
 
 DROP TABLE IF EXISTS `letter`;
-CREATE TABLE `letter` (
-  `module` varchar(20) NOT NULL default '',
-  `code` varchar(20) NOT NULL default '',
-  `name` varchar(100) NOT NULL default '',
-  `title` varchar(200) NOT NULL default '',
-  `content` text,
+CREATE TABLE `letter` ( -- table for all notice templates in Koha
+  `module` varchar(20) NOT NULL default '', -- Koha module that triggers this notice
+  `code` varchar(20) NOT NULL default '', -- unique identifier for this notice
+  `name` varchar(100) NOT NULL default '', -- plain text name for this notice
+  `title` varchar(200) NOT NULL default '', -- subject line of the notice
+  `content` text, -- body text for the notice
   PRIMARY KEY  (`module`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
