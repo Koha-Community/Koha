@@ -38,8 +38,11 @@
 </script>
 <script type="text/javascript" language="javascript" src="[% themelang %]/js/amazonimages.js"></script>          [% END %]
 
-<script type="text/javascript" language="javascript"
-[% IF ( opacbookbag ) %]src="[% themelang %]/js/basket.js">[% ELSIF ( virtualshelves ) %]src="[% themelang %]/js/basket.js">[% ELSE %]>var readCookie;[% END %]</script>
+[% IF ( opacbookbag ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
+[% ELSIF ( virtualshelves ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
+[% ELSE %]<script type="text/javascript" language="javascript"> var readCookie;[% END %]
+</script>
+
 <script type="text/javascript" language="javascript">
 	//<![CDATA[
     [% IF ( opacbookbag ) %]var MSG_BASKET_EMPTY = _("Your cart is currently empty");
@@ -74,8 +77,9 @@
          });[% END %]
 	[% IF ( opacuserjs ) %][% opacuserjs %][% END %]
 	//]]>
-</script><script type="text/javascript" language="javascript"
-[% IF ( opacbookbag ) %]src="[% themelang %]/js/basket.js">[% ELSIF ( virtualshelves ) %]src="[% themelang %]/js/basket.js">[% ELSE %]>var readCookie;[% END %]</script>
+[% IF ( opacbookbag ) %]</script><script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
+[% ELSIF ( virtualshelves ) %]</script><script type="text/javascript" language="javascript" src="[% themelang %]/js/basket.js">
+[% ELSE %]</script><script type="text/javascript" language="javascript">var readCookie;[% END %]</script>
 [% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]<script type="text/javascript" language="javascript" src="[% themelang %]/js/tags.js"></script>[% END %][% ELSE %][% END %]
 [% IF ( GoogleJackets ) %]
 <script type="text/javascript" language="javascript" src="[% themelang %]/js/google-jackets.js"></script>
