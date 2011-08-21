@@ -367,9 +367,9 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
 --
 
 DROP TABLE IF EXISTS `branchrelations`;
-CREATE TABLE `branchrelations` ( -- tracks which libraries/branches are in each library/branch group
-  `branchcode` varchar(10) NOT NULL default '', -- foreign key linking to the branches table
-  `categorycode` varchar(10) NOT NULL default '', -- foreign key linking to the branchcategories table
+CREATE TABLE `branchrelations` ( -- this table links libraries/branches to groups
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to identify the branch
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the branchcategories table to identify the group
   PRIMARY KEY  (`branchcode`,`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `categorycode` (`categorycode`),
