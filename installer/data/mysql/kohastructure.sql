@@ -328,11 +328,11 @@ CREATE TABLE `branch_item_rules` (
 --
 
 DROP TABLE IF EXISTS `branchcategories`;
-CREATE TABLE `branchcategories` ( -- information related to library/branch groups 
-  `categorycode` varchar(10) NOT NULL default '', -- unique key, used to identify the group
-  `categoryname` varchar(32), -- name used to identify the group
-  `codedescription` mediumtext, -- description of the group
-  `categorytype` varchar(16), -- defines if this is a search or properties group
+CREATE TABLE `branchcategories` ( -- information related to library/branch groups
+  `categorycode` varchar(10) NOT NULL default '', -- unique identifier for the library/branch group
+  `categoryname` varchar(32), -- name of the library/branch group
+  `codedescription` mediumtext, -- longer description of the library/branch group
+  `categorytype` varchar(16), -- says whether this is a search group or a properties group
   PRIMARY KEY  (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
