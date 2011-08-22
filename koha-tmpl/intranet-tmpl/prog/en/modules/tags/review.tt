@@ -209,7 +209,8 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	<tr>
 	    <td class="count">[% offset + loop.count %]
 	    </td>
-	    <td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" [% IF ( approved == 0 ) %] class="pending"[% END %] /></span>
+        [% IF ( approved == 0 ) %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" class="pending" /></span>
+        [% ELSE %]<td><span><input type="checkbox" value="[% tagloo.term %]" name="tags" /></span>[% END %]
 	    </td>
 	    [% IF ( tagloo.approved == -1 ) %]<td class="red">rejected
 		[% ELSIF ( tagloo.approved == 1 ) %]<td class="green"><img alt="OK" src="/intranet-tmpl/prog/img/approve.gif" />
@@ -304,11 +305,16 @@ td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 	<ol>
 	    <li><label for="tag">Term</label> <input type="text" name="tag" id="tag" value="[% filter_tag %]" />
 	    </li>
-	    <li><label for="approved">Status</label> <select name="approved" id="approved">
-			<option [% IF ( filter_approved_all ) %]selected="selected" [% END %]value="all">all</option>
-			<option [% IF ( filter_approved_ok ) %]selected="selected" [% END %]value="1">approved</option>
-			<option [% IF ( filter_approved_pending ) %]selected="selected" [% END %]value="0">pending</option>
-			<option [% IF ( filter_approved_rej ) %]selected="selected" [% END %]value="-1">rejected</option>
+	    <li><label for="approved">Status</label> 
+            <select name="approved" id="approved">
+            [% IF ( filter_approved_all ) %]<option selected="selected" value="all">all</option>
+            [% ELSE %]<option value="all">all</option>[% END %]
+            [% IF ( filter_approved_ok ) %]<option selected="selected" value="1">approved</option>
+            [% ELSE %]<option value="1">approved</option>[% END %]
+            [% IF ( filter_approved_pending ) %]<option selected="selected" value="0">pending</option>
+            [% ELSE %]<option value="0">pending</option>[% END %]
+            [% IF ( filter_approved_rej ) %]<option selected="selected" value="-1">rejected</option>
+            [% ELSE %]<option value="-1">rejected</option>[% END %]
 			</select>
 	    </li>
 	    <li><label for="approver">Reviewer</label> <input type="text" name="approver" id="approver" value="[% filter_approver %]" />
