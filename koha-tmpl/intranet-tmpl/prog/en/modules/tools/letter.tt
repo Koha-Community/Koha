@@ -184,6 +184,7 @@ $(document).ready(function() {
 		<ol>
 			<li>
 				<label for="module">Koha module:</label>
+				<input type="hidden" name="oldmodule" value="[% module %]" />
 		[% IF ( modify ) %]<select name="module" id="module">[% END %] [% IF ( adding ) %] <select name="module" id="module" onchange="javascript:window.location.href = unescape(window.location.pathname)+'?op=add_form&amp;module='+this.value+'&amp;content='+window.document.forms['Aform'].elements['content'].value;">[% END %]
                                     [% IF ( catalogue ) %]
                                     <option value="catalogue" selected="selected">Catalog</option>

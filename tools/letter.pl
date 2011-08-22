@@ -179,6 +179,7 @@ sub add_form {
         name    => $letter->{name},
         title   => $letter->{title},
         content => $letter->{content},
+        module  => $module,
         $module => 1,
         SQLfieldname => $field_selection,
     );
@@ -186,18 +187,19 @@ sub add_form {
 }
 
 sub add_validate {
-    my $dbh     = C4::Context->dbh;
-    my $module  = $input->param('module');
-    my $code    = $input->param('code');
-    my $name    = $input->param('name');
-    my $title   = $input->param('title');
-    my $content = $input->param('content');
-    if (letter_exists($module, $code)) {
+    my $dbh        = C4::Context->dbh;
+    my $module     = $input->param('module');
+    my $oldmodule  = $input->param('oldmodule');
+    my $code       = $input->param('code');
+    my $name       = $input->param('name');
+    my $title      = $input->param('title');
+    my $content    = $input->param('content');
+    if (letter_exists($oldmodule, $code)) {
         $dbh->do(
             q{UPDATE letter SET module = ?, code = ?, name = ?, title = ?, content = ? WHERE module = ? AND code = ?},
             undef,
             $module, $code, $name, $title, $content,
-            $module, $code
+            $oldmodule, $code
         );
     } else {
         $dbh->do(
