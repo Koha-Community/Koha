@@ -42,7 +42,7 @@
             [% searchresult.number %]
         </td>
         <td>
-            <a href="/cgi-bin/koha/acqui/parcel.pl?type=intra&amp;supplierid=[% searchresult.supplierid |url %]&amp;datereceived=[% searchresult.raw_datereceived |url %][% IF ( searchresult.code ) %]&amp;invoice=[% searchresult.code |url %][% END %]">
+            <a href="/cgi-bin/koha/acqui/parcel.pl?type=intra&amp;supplierid=[% supplierid |url %]&amp;datereceived=[% searchresult.raw_datereceived |url %][% IF ( searchresult.code ) %]&amp;invoice=[% searchresult.code |url %][% END %]">
                 [% searchresult.datereceived %]</a>
         </td>
         <td>
