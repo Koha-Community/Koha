@@ -178,12 +178,10 @@ function set_to_today(id, force) {
  &rsaquo; <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]">Items</a>
 </div>
 
-<div id="doc3" class="yui-t2">
+<div id="doc3" class="yui-t7">
 
    <div id="bd">
 	<div id="yui-main">
-	<div class="yui-b">
-
 
 <h1>Items for [% title |html %] [% IF ( author ) %] by [% author %][% END %] (Record #[% biblionumber %])</h1>
 
@@ -218,7 +216,11 @@ function set_to_today(id, force) {
         </div>
     [% END %]
 </div>
-
+<div class="yui-gf">
+<div class="yui-u first">
+[% INCLUDE 'biblio-view-menu.inc' %]
+</div>
+<div class="yui-u">
 <div id="cataloguing_additem_newitem">
     <form method="post" action="/cgi-bin/koha/cataloguing/additem.pl" name="f">
     <input type="hidden" name="op" value="[% op %]" />
@@ -273,17 +275,16 @@ function set_to_today(id, force) {
     [% END %]</fieldset>
     
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-    <input type="hidden" name="stickyduedate"" value="[% stickyduedate %]" />
+    <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
     <input type="hidden" name="barcode" value="[% barcode %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
 
 
     </form>
 </div>
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'biblio-view-menu.inc' %]
+</div><!-- /yui-u -->
+</div><!-- /yui-gf -->
+
 </div>
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
