@@ -222,14 +222,16 @@ function submitForm(form) {
 						<h3><label for="billingplace">Billing Place:</label></h3>
 						<select name="billingplace" id="billingplace">
 							[% FOREACH billingplaceloo IN billingplaceloop %]
-							<option value="[% billingplaceloo.value %]" [% IF ( billingplaceloo.selected ) %]selected[% END %]>[% billingplaceloo.branchname %]</option>
+                                [% IF ( billingplaceloo.selected ) %]<option value="[% billingplaceloo.value %]" selected="selected">[% billingplaceloo.branchname %]</option>
+                                [% ELSE %]<option value="[% billingplaceloo.value %]">[% billingplaceloo.branchname %]</option>[% END%]
 							[% END %]
 						</select>
 						<h3><label for="deliveryplace">Delivery Place:</label></h3>
 						<select name="deliveryplace" id="deliveryplace">
 							<option value="">--</option>
 							[% FOREACH deliveryplaceloo IN deliveryplaceloop %]
-							<option value="[% deliveryplaceloo.value %]" [% IF ( deliveryplaceloo.selected ) %]selected[% END %]>[% deliveryplaceloo.branchname %]</option>
+                                [% IF ( deliveryplaceloo.selected ) %]<option value="[% deliveryplaceloo.value %]" selected="selected">[% deliveryplaceloo.branchname %]</option>
+                                [% ELSE %]<option value="[% deliveryplaceloo.value %]">[% deliveryplaceloo.branchname %]</option>[% END %]
 							[% END %]
 						</select>
                         <p>or</p>
@@ -272,8 +274,10 @@ function submitForm(form) {
 	<div class="yui-g"> 
 		<div id="bgtabs" class="yui-navset">
 		    <ul class="yui-nav">
-		        <li[% UNLESS ( closed ) %] class="selected"[% END %]><a href="#opened"><em>Opened</em></a></li>
-		        <li[% IF ( closed ) %] class="selected"[% END %]><a href="#closed"><em>Closed</em></a></li>
+                [% UNLESS ( closed ) %]<li class="selected"><a href="#opened"><em>Opened</em></a></li>
+                [% ELSE%]<li><a href="#opened"><em>Opened</em></a></li>[% END %]
+                [% IF ( closed ) %]<li class="selected"><a href="#closed"><em>Closed</em></a></li>
+                [% ELSE %]<li><a href="#closed"><em>Closed</em></a></li>[% END %]
 		    </ul>            
 		    <div class="yui-content">
 		        <div id="opened">
