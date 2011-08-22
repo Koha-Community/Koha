@@ -38,7 +38,8 @@
             <th>&nbsp;</th>
         </tr>
     [% FOREACH lateorder IN lateorders %]
-        <tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]> 
+        [% UNLESS ( loop.odd ) %]<tr class="highlight">
+        [% ELSE %]<tr>[% END %]
             <td>
                 [% lateorder.orderdate %]
                 ([% lateorder.latesince %] days)
@@ -101,7 +102,8 @@
 		<select id="supplierid" size="1" tabindex="" name="supplierid">
 			<option value=""/>
 			[% FOREACH SUPPLIER_LOO IN SUPPLIER_LOOP %]
-			<option value="[% SUPPLIER_LOO.id %]"[% IF ( SUPPLIER_LOO.selected ) %] selected="selected"[% END %]>[% SUPPLIER_LOO.name %]</option>
+                [% IF ( SUPPLIER_LOO.selected ) %]<option value="[% SUPPLIER_LOO.id %]" selected="selected">[% SUPPLIER_LOO.name %]</option>
+                [% ELSE %]<option value="[% SUPPLIER_LOO.id %]">[% SUPPLIER_LOO.name %]</option>[% END %]
         	[% END %]
 		</select>
 </ol>

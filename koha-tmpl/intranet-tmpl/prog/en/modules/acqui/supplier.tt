@@ -89,18 +89,16 @@ if (f.company.value == "") {
             <li><label for="list_currency">List prices are</label>
                     <select name="list_currency" id="list_currency">
                     [% FOREACH loop_currenc IN loop_currency %]
-                        <option value="[% loop_currenc.currency %]"
-                            [% IF ( loop_currenc.listprice ) %]selected="1"[% END %]>
-                            [% loop_currenc.currency %]</option>
+                        [% IF ( loop_currenc.listprice ) %]<option value="[% loop_currenc.currency %]" selected="1">[% loop_currenc.currency %]</option>
+                        [% ELSE %]<option value="[% loop_currenc.currency %]">[% loop_currenc.currency %]</option>[% END %]
                     [% END %]
                     </select>
             </li>
             <li><label for="invoice_currency">Invoice prices are</label>
                     <select name="invoice_currency" id="invoice_currency">
                     [% FOREACH loop_currenc IN loop_currency %]
-                        <option value="[% loop_currenc.currency %]"
-                            [% IF ( loop_currenc.invoiceprice ) %]selected="1"[% END %]>
-                            [% loop_currenc.currency %]</option>
+                        [% IF ( loop_currenc.invoiceprice ) %]<option value="[% loop_currenc.currency %]" selected="1">[% loop_currenc.currency %]</option>
+                        [% ELSE %]<option value="[% loop_currenc.currency %]">[% loop_currenc.currency %]</option>[% END %]
                     [% END %]
                     </select>
             </li>
