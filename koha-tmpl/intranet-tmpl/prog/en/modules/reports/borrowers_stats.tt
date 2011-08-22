@@ -40,7 +40,8 @@
 				<th>TOTAL</th>
 			</tr>
 				[% FOREACH loopro IN mainloo.looprow %]
-					<tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]>
+                    [% UNLESS ( loop.odd ) %]<tr class="highlight">
+                    [% ELSE %]<tr>[% END %]
 						<td>[% IF ( loopro.rowtitle_display ) %][% loopro.rowtitle_display %][% ELSE %][% loopro.rowtitle %][% END %]
 						</td>
 						[% FOREACH loopcel IN loopro.loopcell %]
@@ -236,7 +237,8 @@
 				</tr>
 			[% END %]
 			[% IF ( SORT2_LOOP ) %]
-				<tr[% UNLESS ( SORT1_LOOP ) %] class="highlight"[% END %]>
+                [% UNLESS ( SORT1_LOOP ) %]<tr class="highlight">
+                [% ELSE %]<tr>[% END %]
 				<td>Sort2</td>
 				<td><input type="radio" name="Line" value="sort2" /></td>
 				<td><input type="radio" name="Column" value="sort2" /></td>

@@ -540,7 +540,10 @@ canned reports and writing custom SQL reports.</p>
 <fieldset class="rows">
 <legend>Create Report From SQL</legend>
 <ol>
-    <li><label for="reportname">Report Name:</label> <input type="text" id="reportname" name="reportname" [% IF ( reportname ) %] value="[% reportname %]"[% END %] /> </li>
+    <li><label for="reportname">Report Name:</label> 
+        [% IF ( reportname ) %]<input type="text" id="reportname" name="reportname" value="[% reportname %]" />
+        [% ELSE %]<input type="text" id="reportname" name="reportname" />[% END %] 
+    </li>
     <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
     <li><label for="types">Type:</label>
         <select id="types" name="types">
