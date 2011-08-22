@@ -996,7 +996,7 @@ sub BuildSummary{
 	my $resultstring;
 	$resultstring = join(" -- ",@stringssummary);
     $resultstring =~ s/\[(.*?)\]//g;
-    $resultstring =~ s/\n/<br>/g;
+    $resultstring =~ s/\n/<br\/>/g;
 	$summary      =  $resultstring;
   } else {
     my $heading = '';
