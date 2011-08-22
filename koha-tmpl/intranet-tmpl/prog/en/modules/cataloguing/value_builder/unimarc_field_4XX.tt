@@ -164,7 +164,8 @@
 				[% FOREACH resul IN result %]
 				[% IF ( resul.title ) %]
 				<tr>
-                                    <td[% IF ( resul.even ) %] class="hilighted"[% END %]>
+                                    [% IF ( resul.even ) %]<td class="hilighted">
+                                    [% ELSE %]<td>[% END %]
                                                             [% IF ( resul.MARC_ON ) %]
                                                                     <a_class="transparent resultlist" href="/cgi-bin/koha/MARCdetail.pl?biblionumber=[% resul.biblionumber |url %]">[% resul.title |html %]</a>
                                                             [% ELSE %]
@@ -177,10 +178,12 @@
                                                     [% IF ( resul.size ) %] ; [% resul.size %][% END %]
                                             </p>
 					</td>
-					<td align="center" [% IF ( resul.even ) %] class="hilighted"[% END %]>
+                    [% IF ( resul.even ) %]<td align="center" class="hilighted">
+                    [% ELSE %]<td align="center">[% END %]
 						[% resul.totitem %]
 					</td>
-					<td [% IF ( resul.even ) %]class="hilighted"[% END %]>
+                    [% IF ( resul.even ) %]<td class="hilighted">
+                    [% ELSE %]<td>[% END %]
 						[% resul.CN %]
 					</td>
 					<td>
