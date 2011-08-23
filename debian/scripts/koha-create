@@ -112,11 +112,14 @@ while true ; do
 done
 
 # Load the configfile given on the command line
-if [ -e "$configfile" ]
+if [ "$configfile" != "" ]
 then
-    . "$configfile"
-else
-    die "$configfile does not exist.";
+    if [ -e "$configfile" ]
+    then
+        . "$configfile"
+    else
+        die "$configfile does not exist.";
+    fi
 fi
 
 # Make sure options from the command line get the highest precedence
