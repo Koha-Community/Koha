@@ -516,7 +516,7 @@ function checkMultiHold() {
             [% END %]
 
           [% IF ( biblioloo.alreadyres ) %]
-              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% biblioloo.borrowernumber %]">[% biblioloo.borrowerfirstname %] [% biblioloo.borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
+              <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a> <strong>already has a hold</strong> on this item </li>
           [% END %]
           [% IF ( biblioloo.none_avail ) %]
               <li> <strong>No copies are available</strong> to be placed on hold</li>
@@ -567,7 +567,7 @@ function checkMultiHold() {
 
     [% IF ( biblioloo.reserveloop ) %]
     <table>
-      [% IF ( biblioloo.multi_hold ) %]
+      [% IF ( multi_hold ) %]
           <caption><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblioloo.biblionumber %]">[% biblioloo.title |html %]</a></caption>
       [% END %]
       <tr>
