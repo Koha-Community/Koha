@@ -420,9 +420,6 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		<td>[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
 		[% IF ( itemdata_itemnotes ) %]<td>[% ITEM_RESULT.itemnotes %]</td>[% END %]
 		<td>[% ITEM_RESULT.datedue %]</td>
-		[% IF ( ITEM_RESULT.type ) %]
-		<td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=[% ITEM_RESULT.biblioitemnumber %]&amp;item=[% ITEM_RESULT.itemtype %]">Fix Itemtype</a></td>
-		[% END %]
 	    </tr>
 	    [% END %]</tbody>
 	</table>

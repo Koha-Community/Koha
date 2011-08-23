@@ -370,9 +370,6 @@ function verify_images() {
 					<td class="copynumber">[% itemloo.copynumber %]</td>
 				[% END %]
                 [% IF ( itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
-                [% IF ( itemloo.type ) %]
-                    <td><a href="/cgi-bin/koha/maint/catmaintain.pl?type=fixitemtype&amp;bi=[% itemloo.biblioitemnumber %]&amp;item=[% itemloo.itemtype %]">Fix Itemtype</a></td>
-                [% END %]
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
 			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>
 		[% END %]
