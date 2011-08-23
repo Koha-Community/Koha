@@ -35,20 +35,23 @@ sub set_parameters {
 	my $dbh = C4::Context->dbh;
 	my $branches=GetBranches();
 	my @branches;
+	my $default;
 	my @select_branch;
 	my %select_branches;
 	push @select_branch,"";
 	$select_branches{""} = "";
-	foreach my $branch (keys %$branches) {
+	for my $branch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
 		push @select_branch, $branch;
 		$select_branches{$branch} = $branches->{$branch}->{'branchname'};
+		$default = C4::Context->userenv->{'branch'} if (C4::Context->userenv && C4::Context->userenv->{'branch'});
 	}
 	my $CGIbranch=CGI::scrolling_list( -name     => 'value',
 				-id => 'value',
 				-values   => \@select_branch,
 				-labels   => \%select_branches,
 				-size     => 1,
-				-multiple => 0 );
+				-multiple => 0,
+				-default => $default, );
 	$template->param(CGIbranch => $CGIbranch);
 	return $template;
 }
@@ -65,7 +68,8 @@ sub calculate {
 			FROM itemtypes,items         
 		WHERE items.itype=itemtypes.itemtype         
 		AND items.holdingbranch=?            
-		GROUP BY  items.itype");
+		GROUP BY items.itype
+		ORDER BY itemtypes.description");
 
 		}
 		else {
@@ -75,7 +79,8 @@ sub calculate {
 		WHERE biblioitems.itemtype=itemtypes.itemtype 
 		AND items.biblioitemnumber=biblioitems.biblioitemnumber
 		AND items.holdingbranch=?
-			GROUP BY  biblioitems.itemtype");
+			GROUP BY  biblioitems.itemtype
+			ORDER BY itemtypes.description");
 		}
 		$sth->execute($branch);
 	} else {
@@ -84,14 +89,16 @@ sub calculate {
 		SELECT description,items.itype AS itemtype, COUNT(*) AS total 
 			FROM itemtypes,items
 		WHERE items.itype=itemtypes.itemtype
-			GROUP BY items.itype");
+			GROUP BY items.itype
+			ORDER BY itemtypes.description");
 		}
 		else {
 		$sth = $dbh->prepare("SELECT description, biblioitems.itemtype, COUNT(*) AS total
 			FROM itemtypes, biblioitems,items 
 		WHERE biblioitems.itemtype=itemtypes.itemtype 
 		AND biblioitems.biblioitemnumber = items.biblioitemnumber
-			GROUP BY biblioitems.itemtype");
+			GROUP BY biblioitems.itemtype
+			ORDER BY itemtypes.description");
 		}
 		$sth->execute;
 	}
@@ -116,6 +123,7 @@ sub calculate {
 	$globalline{loopitemtype} = \@results;
 	$globalline{total} = $grantotal;
 	$globalline{branch} = $branch;
+	$globalline{branchname} = GetBranchName($branch);
 	push @mainloop,\%globalline;
 	return \@mainloop;
 }
