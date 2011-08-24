@@ -90,7 +90,7 @@ sub marc2ris {
 
     my $marcflavour = C4::Context->preference("marcflavour");
     my $intype = lc($marcflavour);
-    my $marcprint = 1; # Debug
+    my $marcprint = 0; # Debug flag;
 
     # Let's redirect stdout
     open my $oldout, ">&STDOUT";
@@ -105,11 +105,11 @@ sub marc2ris {
 	my $leader = $record->leader();
 	if ($intype eq "marc21") {
 	    if ($leader =~ /^.{9}a/) {
-		print "<marc>---\n<marc>UTF-8 data\n" if $marcprint;
+		print "<marc>---\r\n<marc>UTF-8 data\r\n" if $marcprint;
 		$utf = 1;
 	    }
 	    else {
-		print "<marc>---\n<marc>MARC-8 data\n" if $marcprint;
+		print "<marc>---\r\n<marc>MARC-8 data\r\n" if $marcprint;
 	    }
 	}
 	## else: other MARC formats do not specify the character encoding
@@ -135,7 +135,7 @@ sub marc2ris {
 	foreach my $field (@author_fields) {
 	    if (length($field)) {
 		my $author = &get_author($field);
-		print "AU  - ",&charconv($author),"\n";
+		print "AU  - ",&charconv($author),"\r\n";
 	    }
 	}
 
@@ -161,7 +161,7 @@ sub marc2ris {
 	foreach my $field (@editor_fields) {
 	    if (length($field)) {
 		my $editor = &get_editor($field);
-		print "ED  - ",&charconv($editor),"\n";
+		print "ED  - ",&charconv($editor),"\r\n";
 	    }
 	}
 
@@ -178,7 +178,7 @@ sub marc2ris {
 	    &print_stitle($record->field('225'));
 	}
 	else { ## marc21, ukmarc
-	    &print_stitle($record->field('210'));
+	    &print_stitle($record->field('490'));
 	}
 
 	## ISBN/ISSN
@@ -234,7 +234,7 @@ sub marc2ris {
 	## entry is the number of occurrences, but we're not really interested
 	## in that and rather print the key
 	while (my ($key, $value) = each %kwpool) {
-	    print "KW  - ", &charconv($key), "\n";
+	    print "KW  - ", &charconv($key), "\r\n";
 	}
 
 	## 5XX have various candidates for notes and abstracts. We pool
@@ -261,7 +261,7 @@ sub marc2ris {
 	my $allnotes = join "; ", @notepool;
 
 	if (length($allnotes) > 0) {
-	    print "N1  - ", &charconv($allnotes), "\n";
+	    print "N1  - ", &charconv($allnotes), "\r\n";
 	}
 
 	## 320/520 have the abstract
@@ -276,7 +276,7 @@ sub marc2ris {
 	}
 
 	## end RIS dataset
-	print "ER  - \n";
+	print "ER  - \r\n";
 
     # Let's re-redirect stdout
     close STDOUT;
@@ -294,6 +294,7 @@ sub marc2ris {
 ## Returns: the value at leader position 06 
 ##********************************************************************
 sub print_typetag {
+  my ($leader)= @_;
     ## the keys of typehash are the allowed values at position 06
     ## of the leader of a MARC record, the values are the RIS types
     ## that might appropriately represent these types.
@@ -331,31 +332,31 @@ sub print_typetag {
 		);
     
     ## The type of a MARC record is found at position 06 of the leader
-    my $typeofrecord = substr("@_", 6, 1);
+    my $typeofrecord = substr($leader, 6, 1);
 
     ## ToDo: for books, field 008 positions 24-27 might have a few more
     ## hints
 
-    my $typehash;
+    my %typehash;
     
     ## the ukmarc here is just a guess
     if ($intype eq "marc21" || $intype eq "ukmarc") {
-	$typehash = $ustypehash;
+	%typehash = %ustypehash;
     }
     elsif ($intype eq "unimarc") {
-	$typehash = $unitypehash;
+	%typehash = %unitypehash;
     }
     else {
 	## assume MARC21 as default
-	$typehash = $ustypehash;
+	%typehash = %ustypehash;
     }
 
     if (!exists $typehash{$typeofrecord}) {
-	print "\nTY  - BOOK\n"; ## most reasonable default
-	warn ("no type found - assume BOOK");
+	print "TY  - BOOK\r\n"; ## most reasonable default
+	warn ("no type found - assume BOOK") if $marcprint;
     }
     else {
-	print "\nTY  - $typehash{$typeofrecord}\n";
+	print "TY  - $typehash{$typeofrecord}\r\n";
     }
 
     ## use $typeofrecord as the return value, just in case
@@ -378,7 +379,7 @@ sub normalize_author {
 
     if ($nametype == 0) {
 	# ToDo: convert every input to Last[,(F.|First)[ (M.|Middle)[,Suffix]]]
-	warn("name >>$rawauthora<< in direct order - leave as is");
+	warn("name >>$rawauthora<< in direct order - leave as is") if $marcprint;
 	return $rawauthora;
     }
     elsif ($nametype == 1) {
@@ -427,11 +428,11 @@ sub get_author {
 	$indicator = 1;
     }
 
-    print "<marc>:Author(Ind$indicator): ", $authorfield->indicator("$indicator"),"\n" if $marcprint;
-    print "<marc>:Author(\$a): ", $authorfield->subfield('a'),"\n" if $marcprint;
-    print "<marc>:Author(\$b): ", $authorfield->subfield('b'),"\n" if $marcprint;
-    print "<marc>:Author(\$c): ", $authorfield->subfield('c'),"\n" if $marcprint;
-    print "<marc>:Author(\$h): ", $authorfield->subfield('h'),"\n" if $marcprint;
+    print "<marc>:Author(Ind$indicator): ", $authorfield->indicator("$indicator"),"\r\n" if $marcprint;
+    print "<marc>:Author(\$a): ", $authorfield->subfield('a'),"\r\n" if $marcprint;
+    print "<marc>:Author(\$b): ", $authorfield->subfield('b'),"\r\n" if $marcprint;
+    print "<marc>:Author(\$c): ", $authorfield->subfield('c'),"\r\n" if $marcprint;
+    print "<marc>:Author(\$h): ", $authorfield->subfield('h'),"\r\n" if $marcprint;
     if ($intype eq "ukmarc") {
 	my $authorname = $authorfield->subfield('a') . "," . $authorfield->subfield('h');
 	normalize_author($authorname, $authorfield->subfield('b'), $authorfield->subfield('c'), $authorfield->indicator("$indicator"));
@@ -449,13 +450,13 @@ sub get_author {
 sub get_editor {
     my ($editorfield) = @_;
 
-    if ($editorfield == undef) {
-	return undef;
+    if (!$editorfield) {
+	return;
     }
     else {
-	print "<marc>Editor(\$a): ", $editorfield->subfield('a'),"\n" if $marcprint;
-	print "<marc>Editor(\$b): ", $editorfield->subfield('b'),"\n" if $marcprint;
-	print "<marc>editor(\$c): ", $editorfield->subfield('c'),"\n" if $marcprint;
+	print "<marc>Editor(\$a): ", $editorfield->subfield('a'),"\r\n" if $marcprint;
+	print "<marc>Editor(\$b): ", $editorfield->subfield('b'),"\r\n" if $marcprint;
+	print "<marc>editor(\$c): ", $editorfield->subfield('c'),"\r\n" if $marcprint;
 	return $editorfield->subfield('a');
     }
 }
@@ -467,15 +468,14 @@ sub get_editor {
 ##********************************************************************
 sub print_title {
     my ($titlefield) = @_;
-    if ($titlefield == undef) {
-	print "<marc>empty title field (245)\n" if $marcprint;
-	warn("empty title field (245)");
-	@_;
+    if (!$titlefield) {
+	print "<marc>empty title field (245)\r\n" if $marcprint;
+	warn("empty title field (245)") if $marcprint;
     }
     else {
-	print "<marc>Title(\$a): ",$titlefield->subfield('a'),"\n" if $marcprint;
-	print "<marc>Title(\$b): ",$titlefield->subfield('b'),"\n" if $marcprint;
-	print "<marc>Title(\$c): ",$titlefield->subfield('c'),"\n" if $marcprint;
+	print "<marc>Title(\$a): ",$titlefield->subfield('a'),"\r\n" if $marcprint;
+	print "<marc>Title(\$b): ",$titlefield->subfield('b'),"\r\n" if $marcprint;
+	print "<marc>Title(\$c): ",$titlefield->subfield('c'),"\r\n" if $marcprint;
     
 	## The title is usually written in a very odd notation. The title
 	## proper ($a) often ends with a space followed by a separator like
@@ -498,7 +498,7 @@ sub print_title {
 	    if (length($clean_subtitle) > 0 && $intype ne "unimarc") {
 		print ": ",&charconv($clean_subtitle);
 	    }
-	    print "\n";
+	    print "\r\n";
 	}
 
 	## The statement of responsibility is just this: horrors. There is
@@ -506,7 +506,7 @@ sub print_title {
 	## be written and designated. The field is free-form and resistant
 	## to all parsing efforts, so this information is lost on me
     }
- }
+}
 
 ##********************************************************************
 ## print_stitle(): prints info from series title field
@@ -516,29 +516,27 @@ sub print_title {
 sub print_stitle {
     my ($titlefield) = @_;
 
-    if ($titlefield == undef) {
-	print "<marc>empty series title field\n" if $marcprint;
-	warn("empty series title field");
-	@_;
+    if (!$titlefield) {
+	print "<marc>empty series title field\r\n" if $marcprint;
     }
     else {
-	print "<marc>Series title(\$a): ",$titlefield->subfield('a'),"\n" if $marcprint;
+	print "<marc>Series title(\$a): ",$titlefield->subfield('a'),"\r\n" if $marcprint;
 	my $clean_title = $titlefield->subfield('a');
 
 	$clean_title =~ s% *[/:;.]$%%;
 
 	if (length($clean_title) > 0) {
-	    print "T2  - ", &charconv($clean_title);
+	    print "T2  - ", &charconv($clean_title),"\r\n";
 	}
 
 	if ($intype eq "unimarc") {
-	    print "<marc>Series vol(\$v): ",$titlefield->subfield('v'),"\n" if $marcprint;
+	    print "<marc>Series vol(\$v): ",$titlefield->subfield('v'),"\r\n" if $marcprint;
 	    if (length($titlefield->subfield('v')) > 0) {
-		print "VL  - ", &charconv($titlefield->subfield('v'));
+		print "VL  - ", &charconv($titlefield->subfield('v')),"\r\n";
 	    }
 	}
     }
- }
+}
 
 ##********************************************************************
 ## print_isbn(): gets info from MARC field 020
@@ -547,18 +545,18 @@ sub print_stitle {
 sub print_isbn {
     my($isbnfield) = @_;
 
-    if ($isbnfield == undef ||length ($isbnfield->subfield('a')) == 0) {
-	print "<marc>no isbn found (020\$a)\n" if $marcprint;
-	warn("no isbn found");
+    if (!$isbnfield || length ($isbnfield->subfield('a')) == 0) {
+	print "<marc>no isbn found (020\$a)\r\n" if $marcprint;
+	warn("no isbn found") if $marcprint;
     }
     else {
 	if (length ($isbnfield->subfield('a')) < 10) {
-	    print "<marc>truncated isbn (020\$a)\n" if $marcprint;
-	    warn("truncated isbn");
+	    print "<marc>truncated isbn (020\$a)\r\n" if $marcprint;
+	    warn("truncated isbn") if $marcprint;
 	}
 
 	my $isbn = substr($isbnfield->subfield('a'), 0, 10);
-	print "SN  - ", &charconv($isbn), "\n";
+	print "SN  - ", &charconv($isbn), "\r\n";
     }
 }
 
@@ -569,18 +567,18 @@ sub print_isbn {
 sub print_issn {
     my($issnfield) = @_;
 
-    if ($issnfield == undef ||length ($issnfield->subfield('a')) == 0) {
-	print "<marc>no issn found (022\$a)\n" if $marcprint;
-	warn("no issn found");
+    if (!$issnfield || length ($issnfield->subfield('a')) == 0) {
+	print "<marc>no issn found (022\$a)\r\n" if $marcprint;
+	warn("no issn found") if $marcprint;
     }
     else {
 	if (length ($issnfield->subfield('a')) < 9) {
-	    print "<marc>truncated issn (022\$a)\n" if $marcprint;
-	    warn("truncated issn");
+	    print "<marc>truncated issn (022\$a)\r\n" if $marcprint;
+	    warn("truncated issn") if $marcprint;
 	}
 
 	my $issn = substr($issnfield->subfield('a'), 0, 9);
-	print "SN  - ", &charconv($issn), "\n";
+	print "SN  - ", &charconv($issn), "\r\n";
     }
 }
 
@@ -591,12 +589,12 @@ sub print_issn {
 sub print_loc_callno {
     my($callnofield) = @_;
 
-    if ($callnofield == undef || length ($callnofield->subfield('a')) == 0) {
-	print "<marc>no LOC call number found (050\$a)\n" if $marcprint;
-	warn("no LOC call number found");
+    if (!$callnofield || length ($callnofield->subfield('a')) == 0) {
+	print "<marc>no LOC call number found (050\$a)\r\n" if $marcprint;
+	warn("no LOC call number found") if $marcprint;
     }
     else {
-	print "AV  - ", &charconv($callnofield->subfield('a')), " ", &charconv($callnofield->subfield('b')), "\n";
+	print "AV  - ", &charconv($callnofield->subfield('a')), " ", &charconv($callnofield->subfield('b')), "\r\n";
     }
 }
 
@@ -607,12 +605,12 @@ sub print_loc_callno {
 sub print_dewey {
     my($deweyfield) = @_;
 
-    if ($deweyfield == undef || length ($deweyfield->subfield('a')) == 0) {
-	print "<marc>no Dewey number found (082\$a)\n" if $marcprint;
-	warn("no Dewey number found");
+    if (!$deweyfield || length ($deweyfield->subfield('a')) == 0) {
+	print "<marc>no Dewey number found (082\$a)\r\n" if $marcprint;
+	warn("no Dewey number found") if $marcprint;
     }
     else {
-	print "U1  - ", &charconv($deweyfield->subfield('a')), " ", &charconv($deweyfield->subfield('2')), "\n";
+	print "U1  - ", &charconv($deweyfield->subfield('a')), " ", &charconv($deweyfield->subfield('2')), "\r\n";
     }
 }
 
@@ -623,9 +621,9 @@ sub print_dewey {
 sub print_pubinfo {
     my($pubinfofield) = @_;
 
-    if ($pubinfofield == undef) {
-	print "<marc>no publication information found (260)\n" if $marcprint;
-	warn("no publication information found");
+    if (!$pubinfofield) {
+	print "<marc>no publication information found (260)\r\n" if $marcprint;
+	warn("no publication information found") if $marcprint;
     }
     else {
 	## the following information is available in MARC21:
@@ -686,7 +684,7 @@ sub print_pubinfo {
 		## a four-digit year and leave the rest as
 		## "other info"
 		$protoyear = @$tuple[1];
-		print "<marc>Year (260\$c): $protoyear\n" if $marcprint;
+		print "<marc>Year (260\$c): $protoyear\r\n" if $marcprint;
 
 		## strip any separator chars at the end
 		$protoyear =~ s% *[\.;:/]*$%%;
@@ -708,16 +706,16 @@ sub print_pubinfo {
 		}
 		else {
 		    ## have no year info
-		    print "<marc>no four-digit year found, use 0000\n" if $marcprint;
+		    print "<marc>no four-digit year found, use 0000\r\n" if $marcprint;
 		    $protoyear = "0000///$protoyear";
-		    warn("no four-digit year found, use 0000");
+		    warn("no four-digit year found, use 0000") if $marcprint;
 		}
 
 		if ($pycounter == 0 && length($protoyear)) {
-		    print "PY  - $protoyear\n";
+		    print "PY  - $protoyear\r\n";
 		}
 		elsif ($pycounter == 1 && length($_)) {
-		    print "Y2  - $protoyear\n";
+		    print "Y2  - $protoyear\r\n";
 		}
 		## else: discard
 	    }
@@ -726,10 +724,10 @@ sub print_pubinfo {
 
 	## now dump the collected CY and PB lists
 	if (@cities > 0) {
-	    print "CY  - ", &charconv(join(", ", @cities)), "\n";
+	    print "CY  - ", &charconv(join(", ", @cities)), "\r\n";
 	}
 	if (@publishers > 0) {
-	    print "PB  - ", &charconv(join(", ", @publishers)), "\n";
+	    print "PB  - ", &charconv(join(", ", @publishers)), "\r\n";
 	}
     }
 }
@@ -751,7 +749,7 @@ sub get_keywords {
 	    if ($fieldname eq "600") {
 		my $val = normalize_author($kwfield->subfield('a'), $kwfield->subfield('b'), $kwfield->subfield('c'), $kwfield->indicator('1'));
 		${$href}{$val} += 1;
-		print "<marc>Field $kwfield subfield a:", $kwfield->subfield('a'), "\n<marc>Field $kwfield subfield b:", $kwfield->subfield('b'), "\n<marc>Field $kwfield subfield c:", $kwfield->subfield('c'), "\n" if $marcprint;
+		print "<marc>Field $kwfield subfield a:", $kwfield->subfield('a'), "\r\n<marc>Field $kwfield subfield b:", $kwfield->subfield('b'), "\r\n<marc>Field $kwfield subfield c:", $kwfield->subfield('c'), "\r\n" if $marcprint;
 	    }
 	    else {
 		## retrieve all available subfields
@@ -768,7 +766,7 @@ sub get_keywords {
 			    if (length(@$kwtuple[1]) > 0) {
 				## add to hash
 				${$href}{@$kwtuple[1]} += 1;
-				print "<marc>Field $fieldname subfield $subfield:", @$kwtuple[1], "\n" if $marcprint;
+				print "<marc>Field $fieldname subfield $subfield:", @$kwtuple[1], "\r\n" if $marcprint;
 			    }
 			    ## we can leave the subfields loop here
 			    last;
@@ -880,7 +878,7 @@ sub pool_subx {
 		    ## [0] contains subfield code
 		    if (@$notetuple[0] eq $subfield) {
 			## [1] contains value, remove trailing separators
-			print "<marc>field $fieldname subfield $subfield: ", @$notetuple[1], "\n" if $marcprint;
+			print "<marc>field $fieldname subfield $subfield: ", @$notetuple[1], "\r\n" if $marcprint;
 			@$notetuple[1] =~ s% *[,;.:/]*$%%;
 			if (length(@$notetuple[1]) > 0) {
 			    ## add to list
@@ -914,7 +912,7 @@ sub print_abstract {
 	    if (length ($abfield->subfield($field)) > 0) {
 		my $ab = $abfield->subfield($field);
 
-		print "<marc>field 520 subfield $field: $ab\n" if $marcprint;
+		print "<marc>field 520 subfield $field: $ab\r\n" if $marcprint;
 
 		## strip trailing separators
 		$ab =~ s% *[;,:./]*$%%;
@@ -928,7 +926,7 @@ sub print_abstract {
     my $allabs = join "; ", @abstrings;
 
     if (length($allabs) > 0) {
-	print "N2  - ", &charconv($allabs), "\n";
+	print "N2  - ", &charconv($allabs), "\r\n";
     }
 
 }
