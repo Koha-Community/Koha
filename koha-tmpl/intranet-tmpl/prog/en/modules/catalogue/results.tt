@@ -318,18 +318,28 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                         <label for="scan-index">Indexed in:</label>
                         <select name="idx" id="scan-index">
                             <option value="">Any Word</option>
-                            <option [% IF (ms_anycommaphr) %] selected="selected" [% END %] value="any,phr">Any Phrase</option>
-                            <option [% IF ( ms_ti ) %] selected="selected" [% END %] value="ti">Title</option>
-                            <option [% IF (ms_ticommaphr) %] selected="selected" [% END %] value="ti,phr">Title Phrase</option>
-                            <option [% IF (ms_aucommaphr) %] selected="selected" [% END %] value="au,phr">Author</option>
-                            <option [% IF ( ms_su ) %] selected="selected" [% END %] value="su">Subject</option>
-                            <option [% IF (ms_sucommaphr) %] selected="selected" [% END %] value="su,phr">Subject Phrase</option>
-                            <option [% IF ( ms_se ) %] selected="selected" [% END %] value="se">Series</option>
-                            <option [% IF ( ms_pb ) %] selected="selected" [% END %] value="pb">Publisher</option>
-                            <option [% IF ( ms_nt ) %] selected="selected" [% END %] value="nt">Notes</option>
-                            <option [% IF ( ms_se ) %] selected="selected" [% END %] value="se">Series Title</option>
-                            <option [% IF ( ms_sn ) %] selected="selected" [% END %] value="sn">ISBN</option>
-                            <option [% IF ( ms_ss ) %] selected="selected" [% END %] value="ss">ISSN</option>
+                            [% IF ( ms_anycommaphr) %]<option selected="selected" value="any,phr">Any Phrase</option>
+                            [% ELSE %]<option value="any,phr">Any Phrase</option>[% END %]
+                            [% IF ( ms_ti ) %]<option selected="selected" value="ti">Title</option>
+                            [% ELSE %]<option value="ti">Title</option>[% END %]
+                            [% IF ( ms_ticommaphr ) %]<option selected="selected" value="ti,phr">Title Phrase</option>
+                            [% ELSE %]<option value="ti,phr">Title Phrase</option>[% END %]
+                            [% IF ( ms_aucommaphr ) %]<option selected="selected" value="au,phr">Author</option>
+                            [% ELSE %]<option value"au,phr">Author</option>[% END %]
+                            [% IF ( ms_su ) %]<option selected="selected" value="su">Subject</option>
+                            [% ELSE %]<option value="su">Subject</option>[% END %]
+                            [% IF ( ms_sucommaphr ) %]<option selected="selected" value="su,phr">Subject Phrase</option>
+                            [% ELSE %]<option value="su,phr">Subject Phrase</option>[% END %]
+                            [% IF ( ms_se ) %]<option selected="selected" value="se">Series</option>
+                            [% ELSE %]<option value="su">Series</option>[% END %]
+                            [% IF ( ms_pb ) %]<option selected="selected" value="pb">Publisher</option>
+                            [% ELSE %]<option value="pb">Publisher</option>[% END %]
+                            [% IF ( ms_nt ) %]<option selected="selected" value="nt">Notes</option>
+                            [% ELSE %]<option value="nt">Notes</option>[% END %]
+                            [% IF ( ms_sn ) %]<option selected="selected" value="sn">ISBN</option>
+                            [% ELSE %]<option value="sn">ISBN</option>[% END %]
+                            [% IF ( ms_ss ) %]<option selected="selected" value="ss">ISSN</option>
+                            [% ELSE %]<option value="ss">ISSN</option>[% END %]
                         </select>
                         <input type="hidden" name="scan" value="1" />
                     </td>
