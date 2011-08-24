@@ -44,7 +44,8 @@
             <th><label for="barcode">Barcode: </label></td>
             <td><input type="text" id="barcode" name="barcode" /></td>
             <td>
-              <input type="checkbox" name="removeItem" [% IF ( removeChecked ) %]checked[% END %] >
+              [% IF ( removeChecked ) %]<input type="checkbox" name="removeItem" checked="checked" />
+              [% ELSE %]<input type="checkbox" name="removeItem" />[% END %]
               <label for="removeItem">Remove Item from Collection</label>
             </td>
           </tr>
