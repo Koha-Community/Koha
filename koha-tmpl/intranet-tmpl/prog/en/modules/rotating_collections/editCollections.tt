@@ -89,7 +89,8 @@
                 <label for="title">Title: </label>
               </td>
               <td>
-               <input type="text" name="title" [% IF ( editColTitle ) %] value="[% editColTitle %]" [% END %] />
+                [% IF ( editColTitle ) %]<input type="text" name="title" value="[% editColTitle %]" />
+                [% ELSE %]<input type="text" name="title" />[% END %]
               </td>
             </tr>
         
@@ -98,7 +99,8 @@
                 <label for="description">Description: </label>
               </td>
               <td>
-                <input type="text" size="50" name="description" [% IF ( editColDescription ) %] value="[% editColDescription %]" [% END %] />
+                [% IF (editColDescription ) %]<input type="text" size="50" name="description" value="[ editColDescription %]" />
+                [% ELSE %]<input type="text" size="50" name="description" />[% END %]
               </td>
             </tr>
 
