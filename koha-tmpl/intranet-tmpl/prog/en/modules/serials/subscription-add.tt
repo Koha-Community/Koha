@@ -1108,7 +1108,8 @@ $(document).ready(function() {
         <li>
            <label for="acqui_date"> First issue publication date:</label>
                 [% UNLESS ( modify ) %]<img src="[% themelang %]/lib/calendar/cal.gif" id="acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />[% END %]
-                <input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" [% IF ( modify ) %]disabled="disabled"[% END %] style="border-width: 0px;"  />
+                [% IF ( modify ) %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" disabled="disabled" style="border-width: 0px;"  />
+                [% ELSE %]<input type="text" name="firstacquidate" value="[% firstacquidate %]"  size="13" maxlength="10" id="acqui_date" style="border-width: 0px;"  />[% END %]
         </li>
            [% IF ( modify ) %]<li><label for="next_acqui_date"> Next issue publication date:</label>
                 <img src="[% themelang %]/lib/calendar/cal.gif" id="next_acqui_button" style="cursor: pointer;" alt="Show Calendar" title="Show Calendar" />

@@ -43,7 +43,8 @@ function active(numlayer)
 	<a class=" button serial" href="serial-issues.pl?biblionumber=[% biblionumber %]&amp;selectview=small">Compact view</a>
 	</p>
 	[% FOREACH year IN years %]
-	<div name="[% year.year %]" id="[% year.year %]" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;" [% IF ( year.first ) %]style="visibility:visible"[% END %]>
+    [% IF ( year.first ) %]<div name="[% year.year %]" id="[% year.year %]" style="position:absolute; visibility:visible margin-top:0px; border:4px;" >
+    [% ELSE %]<div name="[% year.year %]" id="[% year.year %]" style="position:absolute; visibility:hidden; margin-top:0px; border:4px;">[% END %]
 		<table>
 			<tr>
 				<th>Information
