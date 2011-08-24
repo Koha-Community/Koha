@@ -58,14 +58,14 @@
       [% ELSE %]
       <td>-</td>
       [% END %]
-<!--      [% IF ( messaging_preference.transport_sms ) %]
-      [% IF ( messaging_preference.SMSSendDriver ) %]<td><input type="checkbox"
+      [% IF ( messaging_preference.transport_sms ) %]
+      [% IF ( SMSSendDriver ) %]<td><input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
                  value="sms" [% messaging_preference.transport_sms %] onclick = "document.opacmessaging.none[% messaging_preference.message_attribute_id %].checked=false;" /></td>[% END %]
       [% ELSE %]
       <td>-</td>
-      [% END %] -->
+      [% END %]
 
       [% IF ( messaging_preference.transport_email ) %]
       <td><input type="checkbox"
