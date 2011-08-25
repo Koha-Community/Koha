@@ -1072,9 +1072,9 @@ sub GetMarcBiblio {
         if ($@) { warn " problem with :$biblionumber : $@ \n$marcxml"; }
         return unless $record;
 
+        C4::Biblio::_koha_marc_update_bib_ids($record, '', $biblionumber, $biblionumber);
 	C4::Biblio::EmbedItemsInMarcBiblio($record, $biblionumber) if ($embeditems);
 
-        #      $record = MARC::Record::new_from_usmarc( $marc) if $marc;
         return $record;
     } else {
         return undef;
@@ -2855,7 +2855,7 @@ sub EmbedItemsInMarcBiblio {
         my $item_marc = C4::Items::GetMarcItem($biblionumber, $itemnumber);
         push @item_fields, $item_marc->field($itemtag);
     }
-    $marc->insert_fields_ordered(@item_fields);
+    $marc->append_fields(@item_fields);
 }
 
 =head1 INTERNAL FUNCTIONS
