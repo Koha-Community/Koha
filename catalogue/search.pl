@@ -466,7 +466,7 @@ my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit
 my @results;
 
 ## I. BUILD THE QUERY
-my $lang = C4::Output::getlanguagecookie($cgi);
+my $lang = C4::Templates::getlanguagecookie($cgi);
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$stopwords_removed,$query_type) = buildQuery(\@operators,\@operands,\@indexes,\@limits,\@sort_by,$scan,$lang);
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
