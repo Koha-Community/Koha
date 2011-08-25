@@ -433,10 +433,7 @@ sub get_corrected_marc_record {
 
     if (defined $marc) {
         fix_leader($marc);
-        if ($record_type eq 'biblio') {
-            my $succeeded = fix_biblio_ids($marc, $record_number);
-            return unless $succeeded;
-        } else {
+        if ($record_type eq 'authority') {
             fix_authority_id($marc, $record_number);
         }
         if (C4::Context->preference("marcflavour") eq "UNIMARC") {
@@ -468,7 +465,7 @@ sub get_raw_marc_record {
             $fetch_sth->finish();
             return unless $marc;
         } else {
-            eval { $marc = GetMarcBiblio($record_number); };
+            eval { $marc = GetMarcBiblio($record_number, 1); };
             if ($@ || !$marc) {
                 # here we do warn since catching an exception
                 # means that the bib was found but failed
@@ -477,8 +474,6 @@ sub get_raw_marc_record {
                 return;
             }
         }
-        # ITEM
-        C4::Biblio::EmbedItemsInMarcBiblio($marc, $record_number);
     } else {
         eval { $marc = GetAuthority($record_number); };
         if ($@) {
