@@ -111,10 +111,9 @@ foreach my $num (@getreserves) {
     my $gettitle     = GetBiblioFromItemNumber( $num->{'itemnumber'} );
     # fix up item type for display
     $gettitle->{'itemtype'} = C4::Context->preference('item-level_itypes') ? $gettitle->{'itype'} : $gettitle->{'itemtype'};
-    my $getborrower  = GetMemberDetails( $num->{'borrowernumber'} );
+    my $getborrower = GetMember(borrowernumber => $num->{'borrowernumber'});
     my $itemtypeinfo = getitemtypeinfo( $gettitle->{'itemtype'} );  # using the fixed up itype/itemtype
     $getreserv{'waitingdate'} = format_date( $num->{'waitingdate'} );
-
     my ( $waiting_year, $waiting_month, $waiting_day ) = split (/-/, $num->{'waitingdate'});
     ( $waiting_year, $waiting_month, $waiting_day ) =
       Add_Delta_Days( $waiting_year, $waiting_month, $waiting_day,

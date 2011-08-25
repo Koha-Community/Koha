@@ -1553,6 +1553,7 @@ CREATE TABLE `reserves` (
   `waitingdate` date default NULL,
   `expirationdate` DATE DEFAULT NULL,
   `lowestPriority` tinyint(1) NOT NULL,
+  KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
   KEY `biblionumber` (`biblionumber`),
   KEY `itemnumber` (`itemnumber`),
