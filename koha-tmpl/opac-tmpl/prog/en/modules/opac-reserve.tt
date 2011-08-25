@@ -423,17 +423,28 @@
                         [% IF ( bibitemloo.holdable ) %]
 			    [% IF ( choose_branch ) %]
 			                   <td>
-                                              <select name="branch" id="branch_[% bibitemloo.biblionumber %]"
-                                                [% UNLESS ( bibitemloo.holdable ) %]disabled="disabled"[% END %] >
-                                                [% FOREACH branchChoicesLoo IN bibitemloo.branchChoicesLoop %]
-                                                  [% IF ( branchChoicesLoo.selected ) %]
-                                                    <option value="[% branchChoicesLoo.value %]" selected="selected">[% branchChoicesLoo.branchname %]</option>
-                                                  [% ELSE %]
-                                                    <option value="[% branchChoicesLoo.value %]">[% branchChoicesLoo.branchname %]</option>
-                                                  [% END %]
-                                                [% END %]
-                                              </select>
-                                           </td>
+                         [% UNLESS ( bibitemloo.holdable ) %]
+                            <select name="branch" id="branch_[% bibitemloo.biblionumber %]" disabled="disabled">
+                              [% FOREACH branchChoicesLoo IN bibitemloo.branchChoicesLoop %]
+                                [% IF ( branchChoicesLoo.selected ) %]
+                                  <option value="[% branchChoicesLoo.value %]" selected="selected">[% branchChoicesLoo.branchname %]</option>
+                                [% ELSE %]
+                                  <option value="[% branchChoicesLoo.value %]">[% branchChoicesLoo.branchname %]</option>
+                                [% END %]
+                              [% END %]
+                          </select>
+                          [% ELSE %]
+                            <select name="branch" id="branch_[% bibitemloo.biblionumber %]">
+                              [% FOREACH branchChoicesLoo IN bibitemloo.branchChoicesLoop %]
+                                [% IF ( branchChoicesLoo.selected ) %]
+                                  <option value="[% branchChoicesLoo.value %]" selected="selected">[% branchChoicesLoo.branchname %]</option>
+                                [% ELSE %]
+                                  <option value="[% branchChoicesLoo.value %]">[% branchChoicesLoo.branchname %]</option>
+                                [% END %]
+                              [% END %]
+                            </select>
+                          [% END %]
+                       </td>
 			    [% END %]
 		        [% END %]
                     [% END %]
