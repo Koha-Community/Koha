@@ -1072,15 +1072,14 @@ sub buildQuery {
 
     my $stopwords_removed;    # flag to determine if stopwords have been removed
 
-    my $cclq;
+    my $cclq       = 0;
     my $cclindexes = getIndexes();
-    if( $query !~ /\s*ccl=/ ){
-        for my $index (@$cclindexes){
-            if($query =~ /($index)(,?\w)*[:=]/){
-                $cclq = 1;
-            }
+    if ( $query !~ /\s*ccl=/ ) {
+        while ( !$cclq && $query =~ /(?:^|\W)(\w+)(,\w+)*[:=]/g ) {
+            my $dx = lc($1);
+            $cclq = grep { lc($_) eq $dx } @$cclindexes;
         }
-        $query = "ccl=$query" if($cclq);
+        $query = "ccl=$query" if $cclq;
     }
 
 # for handling ccl, cql, pqf queries in diagnostic mode, skip the rest of the steps
