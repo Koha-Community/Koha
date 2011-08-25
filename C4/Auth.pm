@@ -26,7 +26,7 @@ use CGI::Session;
 
 require Exporter;
 use C4::Context;
-use C4::Output;    # to get the template
+use C4::Templates;    # to get the template
 use C4::Members;
 use C4::Koha;
 use C4::Branch; # GetBranches
@@ -136,7 +136,7 @@ EOQ
 sub get_template_and_user {
     my $in       = shift;
     my $template =
-      gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
+      C4::Templates::gettemplate( $in->{'template_name'}, $in->{'type'}, $in->{'query'} );
     my ( $user, $cookie, $sessionID, $flags );
     if ( $in->{'template_name'} !~m/maintenance/ ) {
         ( $user, $cookie, $sessionID, $flags ) = checkauth(
@@ -936,7 +936,7 @@ sub checkauth {
     }
 
     my $template_name = ( $type eq 'opac' ) ? 'opac-auth.tmpl' : 'auth.tmpl';
-    my $template = gettemplate( $template_name, $type, $query );
+    my $template = C4::Templates::gettemplate( $template_name, $type, $query );
     $template->param(branchloop => \@branch_loop,);
     my $checkstyle = C4::Context->preference("opaccolorstylesheet");
     if ($checkstyle =~ /\//)

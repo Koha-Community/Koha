@@ -103,7 +103,7 @@ InstallAuth - Authenticates Koha users for Install process
     authenticated page.
 
     More information on the C<gettemplate> sub can be found in the
-    Output.pm module.
+    Templates.pm module.
 
 =cut
 
