@@ -315,9 +315,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <div id="bibliodescriptions" class="toptabs">
 
 <ul>   
-<li[% IF ( defaulttab == 'holdings' ) %] class="ui-tabs-selected"[% END %]><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#holdings">Holdings
-    ( [% count %] )</a>
-   </li>
+[% IF ( defaulttab == 'holdings' ) %]<li class="ui-tabs-selected">
+[% ELSE %]<li>[% END %]
+	<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#holdings">Holdings ( [% count %] )</a></li>
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#descriptions">Title Notes</a></li>
 [% IF ( SYNDETICS_TOC ) %]
  <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#toc">TOC</a></li>
@@ -343,7 +343,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#LTFLTagBrowse">Tag Browser</a></li>
 [% END %]
 [% END %]
-[% IF ( subscriptionsnumber ) %]<li[% IF ( defaulttab == 'subscriptions' ) %] class="ui-tabs-selected"[% END %]>
+[% IF ( subscriptionsnumber ) %]
+	[% IF ( defaulttab == 'subscriptions' ) %]<li class="ui-tabs-selected">
+	[% ELSE %]<li>[% END %]
             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#subscriptions">Subscriptions</a>
     </li>[% END %]
 [% IF ( reviewson ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#comments">Comments</a></li>[% END %]
@@ -356,7 +358,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( Babeltheque ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#babeltheque">Babelthèque</a></li>[% END %]
 
     [% IF ( serialcollection ) %]
-    <li[% IF ( defaulttab == 'serialcollection' ) %] class="ui-tabs-selected"[% END %]><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#serialcollection">Serial Collection</a></li>
+		[% IF ( defaulttab == 'serialcollection' ) %]<li class="ui-tabs-selected">
+		[% ELSE %]<li>[% END %]
+		<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#serialcollection">Serial Collection</a></li>
     [% END %]
 </ul>
 
