@@ -4432,6 +4432,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("CREATE INDEX priorityfoundidx ON reserves (priority,found)");
+    print "Create an index on reserves to speed up holds awaiting pickup report bug 5866\n";
+    SetVersion($DBversion);
+}
+
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
