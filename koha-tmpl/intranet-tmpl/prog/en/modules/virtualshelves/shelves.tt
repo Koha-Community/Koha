@@ -344,7 +344,7 @@ function placeHold () {
 		<div id="privateshelves" class="ui-tabs-panel" style="display:none;">
 		[% END %]
             [% IF ( shelveslooppriv ) %]
-			[% pagination_bar %]
+			<div class="pages">[% pagination_bar %]</div>
         		<table>
         		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
                 [% FOREACH shelveslooppri IN shelveslooppriv %]
@@ -396,7 +396,7 @@ function placeHold () {
 		<div id="publicshelves" class="ui-tabs-panel" style="display:none;">
 		[% END %]
         [% IF ( shelvesloop ) %]
-		[% pagination_bar %]
+		<div class="pages">[% pagination_bar %]</div>
         <table>
         <tr><th>List Name</th><th>Contents</th><th>Sort By</th><th>Type</th><th>Options</th></tr>
             [% FOREACH shelvesloo IN shelvesloop %]
