@@ -1401,14 +1401,14 @@ CREATE TABLE `old_reserves` (
 --
 
 DROP TABLE IF EXISTS `opac_news`;
-CREATE TABLE `opac_news` (
-  `idnew` int(10) unsigned NOT NULL auto_increment,
-  `title` varchar(250) NOT NULL default '',
-  `new` text NOT NULL,
-  `lang` varchar(25) NOT NULL default '',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `expirationdate` date default NULL,
-  `number` int(11) default NULL,
+CREATE TABLE `opac_news` ( -- data from the news tool
+  `idnew` int(10) unsigned NOT NULL auto_increment, -- unique identifier for the news article
+  `title` varchar(250) NOT NULL default '', -- title of the news article
+  `new` text NOT NULL, -- the body of your news article
+  `lang` varchar(25) NOT NULL default '', -- location for the article (koha is the staff client, slip is the circulation receipt and language codes are for the opac)
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- pulibcation date and time
+  `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible
+  `number` int(11) default NULL, -- the order in which this article appears in that specific location
   PRIMARY KEY  (`idnew`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
