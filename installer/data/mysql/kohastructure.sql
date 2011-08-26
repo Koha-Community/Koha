@@ -1575,13 +1575,13 @@ CREATE TABLE `reserves` (
 --
 
 DROP TABLE IF EXISTS `reviews`;
-CREATE TABLE `reviews` (
-  `reviewid` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) default NULL,
-  `biblionumber` int(11) default NULL,
-  `review` text,
-  `approved` tinyint(4) default NULL,
-  `datereviewed` datetime default NULL,
+CREATE TABLE `reviews` ( -- patron opac comments
+  `reviewid` int(11) NOT NULL auto_increment, -- unique identifier for this comment
+  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron left this comment
+  `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bibliographic record this comment is for
+  `review` text, -- the body of the comment
+  `approved` tinyint(4) default NULL, -- whether this comment has been approved by a librarian (1 for yes, 0 for no)
+  `datereviewed` datetime default NULL, -- the date the comment was left
   PRIMARY KEY  (`reviewid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
