@@ -95,9 +95,9 @@
         <li>
         [% END %]
 			[% IF ( loo.checked ) %]
-			   <input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" checked="checked" onchange="toggleChildren(this)" />
+			   <input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" checked="checked" onclick="toggleChildren(this)" />
 			[% ELSE %]
-				<input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]"  onchange="toggleChildren(this)" />
+				<input type="checkbox" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]"  onclick="toggleChildren(this)" />
 			[% END %]
                 <label class="permissioncode" for="flag-[% loo.bit %]">[% loo.flag %]</label>
                 <span class="permissiondesc">[% loo.flagdesc %]</span>
@@ -106,11 +106,9 @@
                     [% FOREACH sub_perm_loo IN loo.sub_perm_loop %]
                         <li>
 			            [% IF ( sub_perm_loo.checked ) %]
-			                <input type="checkbox" id="[% sub_perm_loo.id %]" 
-                                name="flag" value="[% sub_perm_loo.perm %]" checked="checked" onchange="toggleParent(this)" />
+			                <input type="checkbox" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" checked="checked" onclick="toggleParent(this)" />
 			            [% ELSE %]
-			                <input type="checkbox" id="[% sub_perm_loo.id %]" 
-                                name="flag" value="[% sub_perm_loo.perm %]" onchange="toggleParent(this)" />
+			                <input type="checkbox" id="[% sub_perm_loo.id %]" name="flag" value="[% sub_perm_loo.perm %]" onclick="toggleParent(this)" />
 			            [% END %]
                     <label class="permissioncode" for="[% sub_perm_loo.id %]">[% sub_perm_loo.code %]</label>
                              <span class="permissiondesc">[% sub_perm_loo.description %]</span>
