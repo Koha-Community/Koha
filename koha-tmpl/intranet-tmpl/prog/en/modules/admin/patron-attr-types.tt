@@ -101,25 +101,61 @@ function CheckAttributeTypeForm(f) {
                   value="[% description |html %]" />
        </li>
        <li><label for="repeatable">Repeatable: </label>
-            <input type="checkbox" id="repeatable" name="repeatable" [% repeatable_checked %] [% repeatable_disabled %] />
+            [% IF ( repeatable_checked ) %]
+              [% IF ( repeatable_disabled ) %]
+                <input type="checkbox" id="repeatable" name="repeatable" checked="checked" disabled="disabled" />
+              [% ELSE %]
+                <input type="checkbox" id="repeatable" name="repeatable" checked="checked" />
+              [% END %]
+            [% ELSE %]
+              [% IF ( repeatable_disabled ) %]
+                <input type="checkbox" id="repeatable" name="repeatable" disabled="disabled" />
+              [% ELSE %]
+                <input type="checkbox" id="repeatable" name="repeatable" />
+              [% END %]
+            [% END %]
             <span>Check to let a patron record have multiple values of this attribute.  
                   This setting cannot be changed after an attribute is defined.</span>
        </li>
        <li><label for="unique_id">Unique identifier: </label>
-            <input type="checkbox" id="unique_id" name="unique_id" [% unique_id_checked %] [% unique_id_disabled %] />
+            [% IF ( unique_id_checked ) %]
+              [% IF ( unique_id_disabled ) %]
+                <input type="checkbox" id="unique_id" name="unique_id" checked="checked" disabled="disabled" />
+              [% ELSE %]
+                <input type="checkbox" id="unique_id" name="unique_id" checked="checked" />
+              [% END %]
+            [% ELSE %]
+              [% IF ( unique_id_disabled ) %]
+                <input type="checkbox" id="unique_id" name="unique_id" disabled="disabled" />
+              [% ELSE %]
+                <input type="checkbox" id="unique_id" name="unique_id" />
+              [% END %]
+            [% END %]
             <span>If checked, attribute will be a unique identifier &mdash; if a value is given to a patron record, the same value
                   cannot be given to a different record.  This setting cannot be changed after an attribute is defined.</span>
        </li>
        <li><label for="password_allowed">Allow password: </label>
-            <input type="checkbox" id="password_allowed" name="password_allowed" [% password_allowed_checked %] />
+          [% IF ( password_allowed_checked ) %]
+            <input type="checkbox" id="password_allowed" name="password_allowed" checked="checked" />
+          [% ELSE %]
+            <input type="checkbox" id="password_allowed" name="password_allowed" />
+          [% END %]
             <span>Check to make it possible to associate a password with this attribute.</span>
        </li>
        <li><label for="opac_display">Display in OPAC: </label>
-            <input type="checkbox" id="opac_display" name="opac_display" [% opac_display_checked %] />
+          [% IF ( opac_display_checked ) %]
+            <input type="checkbox" id="opac_display" name="opac_display" checked="checked" />
+          [% ELSE %]
+            <input type="checkbox" id="opac_display" name="opac_display" />
+          [% END %]
             <span>Check to display this attribute on a patron's details page in the OPAC.</span>
        </li>
        <li><label for="staff_searchable">Searchable: </label>
-            <input type="checkbox" id="staff_searchable" name="staff_searchable" [% staff_searchable_checked %] />
+          [% IF ( staff_searchable_checked ) %]
+            <input type="checkbox" id="staff_searchable" name="staff_searchable" checked="checked" />
+          [% ELSE %]
+            <input type="checkbox" id="staff_searchable" name="staff_searchable" />
+          [% END %]
             <span>Check to make this attribute staff_searchable in the staff patron search.</span>
        </li>
         <li><label for="authorised_value_category">Authorized value category: </label>
