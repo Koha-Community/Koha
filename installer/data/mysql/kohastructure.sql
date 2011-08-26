@@ -2643,12 +2643,12 @@ CREATE TABLE `aqorders_items` (
 --
 
 DROP TABLE IF EXISTS `fieldmapping`;
-CREATE TABLE `fieldmapping` (
-  `id` int(11) NOT NULL auto_increment,
-  `field` varchar(255) NOT NULL,
-  `frameworkcode` char(4) NOT NULL default '',
-  `fieldcode` char(3) NOT NULL,
-  `subfieldcode` char(1) NOT NULL,
+CREATE TABLE `fieldmapping` ( -- koha to keyword mapping
+  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `field` varchar(255) NOT NULL, -- keyword to be mapped to (ex. subtitle)
+  `frameworkcode` char(4) NOT NULL default '', -- foreign key from the biblio_framework table to link this mapping to a specific framework
+  `fieldcode` char(3) NOT NULL, -- marc field number to map to this keyword
+  `subfieldcode` char(1) NOT NULL, -- marc subfield associated with the fieldcode to map to this keyword
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
