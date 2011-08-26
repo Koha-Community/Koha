@@ -254,15 +254,15 @@ sub editbranchform {
     #
     # We export a "categoryloop" array to the template, each element of which
     # contains separate 'categoryname', 'categorycode', 'codedescription', and
-    # 'checked' fields. The $checked field is either '' or 'checked="checked"'
+    # 'checked' fields. The $checked field is either empty or 1'
 
     my $catinfo = GetBranchCategory();
     my @categoryloop = ();
     foreach my $cat (@$catinfo) {
-        my $checked = "";
+        my $checked;
         my $tmp     = quotemeta( $cat->{'categorycode'} );
         if ( grep { /^$tmp$/ } @{ $data->{'categories'} } ) {
-            $checked = "checked=\"checked\"";
+            $checked = 1;
         }
         push @categoryloop, {
             categoryname    => $cat->{'categoryname'},
