@@ -56,7 +56,7 @@ if($edit){
     print $query->redirect("routing.pl?subscriptionid=$subscriptionid");
 }
 
-my ($routing, @routinglist) = getroutinglist($subscriptionid);
+my @routinglist = getroutinglist($subscriptionid);
 my $subs = GetSubscription($subscriptionid);
 my ($tmp ,@serials) = GetSerials($subscriptionid);
 my ($template, $loggedinuser, $cookie);
@@ -81,18 +81,17 @@ if($ok){
 		my $const = 'o';
 		my $notes;
 		my $title = $subs->{'bibliotitle'};
-		for(my $i=0;$i<$routing;$i++){
-			my $sth = $dbh->prepare("SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ?");
-				$sth->execute($biblio,$routinglist[$i]->{'borrowernumber'});
-				my $data = $sth->fetchrow_hashref;
+        for my $routing ( @routinglist ) {
+            my $sth = $dbh->prepare('SELECT * FROM reserves WHERE biblionumber = ? AND borrowernumber = ? LIMIT 1');
+            $sth->execute($biblio,$routing->{borrowernumber});
+            my $reserve = $sth->fetchrow_hashref;
 
-		#       warn "$routinglist[$i]->{'borrowernumber'} is the same as $data->{'borrowernumber'}";
-			if($routinglist[$i]->{'borrowernumber'} == $data->{'borrowernumber'}){
-				ModReserve($routinglist[$i]->{'ranking'},$biblio,$routinglist[$i]->{'borrowernumber'},$branch);
-				} else {
-				AddReserve($branch,$routinglist[$i]->{'borrowernumber'},$biblio,$const,\@bibitems,$routinglist[$i]->{'ranking'},'',$notes,$title);
-			}
-    	}
+            if($routing->{borrowernumber} == $reserve->{borrowernumber}){
+                ModReserve($routing->{ranking},$biblio,$routing->{borrowernumber},$branch);
+            } else {
+                AddReserve($branch,$routing->{borrowernumber},$biblio,$const,\@bibitems,$routing->{ranking}, undef, undef, $notes,$title);
+        }
+    }
 	}
 
     ($template, $loggedinuser, $cookie)
@@ -115,15 +114,11 @@ if($ok){
 				});
 }
 
-my @results;
-my $data;
-for(my $i=0;$i<$routing;$i++){
-    $data=GetMember('borrowernumber' => $routinglist[$i]->{'borrowernumber'});
-    $data->{'location'}=$data->{'branchcode'};
-    $data->{'name'}="$data->{'firstname'} $data->{'surname'}";
-    $data->{'routingid'}=$routinglist[$i]->{'routingid'};
-    $data->{'subscriptionid'}=$subscriptionid;
-    push(@results, $data);
+my $memberloop = [];
+for my $routing (@routinglist) {
+    my $member = GetMember( borrowernumber => $routing->{borrowernumber} );
+    $member->{name}           = "$member->{firstname} $member->{surname}";
+    push @{$memberloop}, $member;
 }
 
 my $routingnotes = $serials[0]->{'routingnotes'};
@@ -134,7 +129,7 @@ $template->param(
     issue => $issue,
     issue_escaped => URI::Escape::uri_escape($issue),
     subscriptionid => $subscriptionid,
-    memberloop => \@results,
+    memberloop => $memberloop,
     routingnotes => $routingnotes,
     hasRouting => check_routing($subscriptionid),
     );
