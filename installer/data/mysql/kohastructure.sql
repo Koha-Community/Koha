@@ -1417,18 +1417,18 @@ CREATE TABLE `opac_news` ( -- data from the news tool
 --
 
 DROP TABLE IF EXISTS `overduerules`;
-CREATE TABLE `overduerules` (
-  `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(10) NOT NULL default '',
-  `delay1` int(4) default NULL,
-  `letter1` varchar(20) default NULL,
-  `debarred1` varchar(1) default 0,
-  `delay2` int(4) default NULL,
-  `debarred2` varchar(1) default 0,
-  `letter2` varchar(20) default NULL,
-  `delay3` int(4) default NULL,
-  `letter3` varchar(20) default NULL,
-  `debarred3` int(1) default 0,
+CREATE TABLE `overduerules` ( -- overdue notice status and triggers
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table to define which patron category this rule is for
+  `delay1` int(4) default NULL, -- number of days after the item is overdue that the first notice is sent
+  `letter1` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the first notice
+  `debarred1` varchar(1) default 0, -- is the patron restricted when the first notice is sent (1 for yes, 0 for no)
+  `delay2` int(4) default NULL, -- number of days after the item is overdue that the second notice is sent
+  `debarred2` varchar(1) default 0, -- is the patron restricted when the second notice is sent (1 for yes, 0 for no)
+  `letter2` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the second notice
+  `delay3` int(4) default NULL, -- number of days after the item is overdue that the third notice is sent
+  `letter3` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the third notice
+  `debarred3` int(1) default 0, -- is the patron restricted when the third notice is sent (1 for yes, 0 for no)
   PRIMARY KEY  (`branchcode`,`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
