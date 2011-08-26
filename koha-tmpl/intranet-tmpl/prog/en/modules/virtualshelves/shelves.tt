@@ -279,7 +279,7 @@ function placeHold () {
 		<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />
 		<legend>Edit List <i>[% shelfname | html %]</i></legend>
 		<ol>
-		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value='[% shelfname |html %]' /></li>
+		<li><label for="shelfname">Name: </label><input type="text" id="shelfname" name="shelfname" size="25" value="[% shelfname |html %]" /></li>
 		<li><label for="owner">Owner: </label><input type="hidden" id="owner" name="owner" value="[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]" />[% IF ( owner ) %][% ownername %][% ELSE %][% loggedinusername %][% END %]</li>
 		<li><label for="sortfield" >Sort this list by: </label>
 		<select name="sortfield">
