@@ -203,9 +203,17 @@
 		[% END %]
 		Surname: </label>
 		[% IF ( uppercasesurnames ) %]
-		<input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% surname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+			[% IF ( opduplicate ) %]
+				<input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% surname %]" onclick="this.value=''" />
+			[% ELSE %]
+				<input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% surname %]" />
+			[% END %]
 		[% ELSE %]
-		<input type="text" id="surname" name="surname" size="20"  value="[% surname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+			[% IF ( opduplicate ) %]
+				<input type="text" id="surname" name="surname" size="20"  value="[% surname %]" onclick="this.value=''" />
+			[% ELSE %]
+				<input type="text" id="surname" name="surname" size="20"  value="[% surname %]" />
+			[% END %]
 		[% END %]
 		[% IF ( mandatorysurname ) %]<span class="required">Required</span>[% END %]
 		</li>
@@ -255,7 +263,11 @@
                     <label for="initials">
                 [% END %]
                 Initials: </label>
-                <input type="text" id="initials" name="initials" size="20"  value="[% initials %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />	
+                [% IF ( opduplicate ) %]
+					<input type="text" id="initials" name="initials" size="20"  value="[% initials %]" onclick="this.value=''" />
+                [% ELSE %]
+					<input type="text" id="initials" name="initials" size="20"  value="[% initials %]" />
+                [% END %]
                 [% IF ( mandatoryinitials ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
@@ -266,7 +278,11 @@
 			<label for="othernames">
 			[% END %]
 			Other name: </label>
-			<input type="text" id="othernames" name="othernames" size="20"  value="[% othernames %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+			[% IF ( opduplicate ) %]
+				<input type="text" id="othernames" name="othernames" size="20"  value="[% othernames %]" onclick="this.value=''" />
+			[% ELSE %]
+				<input type="text" id="othernames" name="othernames" size="20"  value="[% othernames %]" />
+			[% END %]
 [% IF ( mandatoryothernames ) %]<span class="required">Required</span>[% END %]
 		[% IF ( I ) %]<input type="hidden" name="sex" value="N" />[% END %]
 		</li>
@@ -311,7 +327,11 @@
 	            <span>[% contactname %]</span>
 	            <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname %]" />
 	            [% ELSE %]
-	            <input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+		            [% IF ( opduplicate ) %]
+						<input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]" onclick="this.value=''" />
+		            [% ELSE %]
+						<input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]" />
+		            [% END %]
 	            [% END %]
 	        </li>
 [% ELSE %]
@@ -329,7 +349,11 @@
      <span>[% contactname %]</span>
      <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname %]" />
      [% ELSE %]
-     <input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+		[% IF ( opduplicate ) %]
+			<input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]" onclick="this.value=''" />
+		[% ELSE %]
+			<input name="contactname" id="contactname" type="text" size="20" value="[% contactname %]" />
+		[% END %]
      [% END %]
  </li>
  <li>
@@ -338,7 +362,11 @@
      <span>[% contactfirstname %]</span>
      <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname %]" />
      [% ELSE %]
-     <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+	     [% IF ( opduplicate ) %]
+				<input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname %]" onclick="this.value=''" />
+	     [% ELSE %]
+				<input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname %]" />
+	     [% END %]
      [% END %]
  </li>
  [% IF ( relshiploop ) %]
@@ -379,7 +407,11 @@
       <label for="streetnumber">
       [% END %]
       Street number: </label>
-      <input type="text" id="streetnumber" name="streetnumber" size="5" value="[% streetnumber %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+		<input type="text" id="streetnumber" name="streetnumber" size="5" value="[% streetnumber %]" onclick="this.value=''" />
+      [% ELSE %]
+		<input type="text" id="streetnumber" name="streetnumber" size="5" value="[% streetnumber %]" />
+      [% END %]
 [% IF ( mandatorystreetnumber ) %]<span class="required">Required</span>[% END %]
     </li>
     [% IF ( road_cgipopup ) %]
@@ -401,7 +433,11 @@
       <label for="address">
       [% END %]
       Address: </label>
-      <input type="text" id="address" name="address" size="35" value="[% address %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+			<input type="text" id="address" name="address" size="35" value="[% address %]" onclick="this.value=''" />
+      [% ELSE %]
+			<input type="text" id="address" name="address" size="35" value="[% address %]" />
+      [% END %]
 	  [% IF ( mandatoryaddress ) %]<span class="required">Required</span>[% END %]
     </li>
     <li>
@@ -411,7 +447,11 @@
       <label for="address2">
       [% END %]
       Address 2: </label>
-      <input type="text" id="address2" name="address2" size="35" value="[% address2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+			<input type="text" id="address2" name="address2" size="35" value="[% address2 %]" onclick="this.value=''" />
+      [% ELSE %]
+			<input type="text" id="address2" name="address2" size="35" value="[% address2 %]" />
+      [% END %]
 	  [% IF ( mandatoryaddress2 ) %]<span class="required">Required</span>[% END %]
     </li>  
     <li>
@@ -421,8 +461,11 @@
         <label for="city">
       [% END %]
       City: </label>
-        
-        <input type="text" id="city" name="city" size="20" value="[% city %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+        [% IF ( opduplicate ) %]
+			<input type="text" id="city" name="city" size="20" value="[% city %]" onclick="this.value=''" />
+        [% ELSE %]
+			<input type="text" id="city" name="city" size="20" value="[% city %]" />
+        [% END %]
         [% IF ( city_cgipopup ) %]or <strong>choose</strong>
         <select id="select_city" name="select_city">
         [% FOREACH city_loo IN city_loop %]
@@ -455,7 +498,11 @@
         <label for="zipcode">
       [% END %]
       Zip/Postal code: </label>
-      <input type="text" name="zipcode" id="zipcode" size="10" value="[% zipcode %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+			<input type="text" name="zipcode" id="zipcode" size="10" value="[% zipcode %]" onclick="this.value=''" />
+      [% ELSE %]
+			<input type="text" name="zipcode" id="zipcode" size="10" value="[% zipcode %]" />
+      [% END %]
 	  [% IF ( mandatoryzipcode ) %]<span class="required">Required</span>[% END %]
     </li>
     
@@ -466,7 +513,11 @@
         <label for="country">
       [% END %]
       Country: </label>
-      <input type="text" name="country" id="country" size="20" value="[% country %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+			<input type="text" name="country" id="country" size="20" value="[% country %]" onclick="this.value=''" />
+      [% ELSE %]
+			<input type="text" name="country" id="country" size="20" value="[% country %]" />
+      [% END %]
 	  [% IF ( mandatorycountry ) %]<span class="required">Required</span>[% END %]
     </li>    
   
@@ -481,7 +532,11 @@
       <label for="phone">
       [% END %]
       Primary Phone: </label>
-      <input type="text" id="phone" name="phone" value="[% phone %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+			<input type="text" id="phone" name="phone" value="[% phone %]" onclick="this.value=''" />
+      [% ELSE %]
+			<input type="text" id="phone" name="phone" value="[% phone %]" />
+      [% END %]
 	  [% IF ( mandatoryphone ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
 
     </li>
@@ -492,7 +547,11 @@
       <label for="phonepro">
       [% END %]
       Secondary Phone: </label>
-      <input type="text" id="phonepro" name="phonepro" value="[% phonepro %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+			<input type="text" id="phonepro" name="phonepro" value="[% phonepro %]" onclick="this.value=''" />
+      [% ELSE %]
+			<input type="text" id="phonepro" name="phonepro" value="[% phonepro %]" />
+      [% END %]
 	  [% IF ( mandatoryphonepro ) %]<span class="required">Required</span>[% END %]
     </li>
     <li>
@@ -502,7 +561,11 @@
       <label for="mobile">
       [% END %]
       Other Phone: </label>
-      <input type="text" id="mobile" name="mobile" value="[% mobile %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+		<input type="text" id="mobile" name="mobile" value="[% mobile %]" onclick="this.value=''" />
+      [% ELSE %]
+		<input type="text" id="mobile" name="mobile" value="[% mobile %]" />
+      [% END %]
 	  [% IF ( mandatorymobile ) %]<span class="required">Required</span>[% END %]
     </li>
     <li>
@@ -512,7 +575,11 @@
       <label for="email">
       [% END %]
       Primary Email: </label>
-      <input type="text" id="email" name="email" size="45" value="[% email %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />  
+      [% IF ( opduplicate ) %]
+		<input type="text" id="email" name="email" size="45" value="[% email %]" onclick="this.value=''" />
+      [% ELSE %]
+		<input type="text" id="email" name="email" size="45" value="[% email %]" />
+      [% END %]
 	  [% IF ( mandatoryemail ) %]<span class="required">Required</span>[% END %]<div class="hint">Shows on transit slips</div>
 
     </li>
@@ -523,7 +590,11 @@
       <label for="emailpro">
       [% END %]
       Secondary Email: </label>
-      <input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+		<input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro %]" onclick="this.value=''" />
+      [% ELSE %]
+		<input type="text" id="emailpro" name="emailpro" size="45" value="[% emailpro %]" />
+      [% END %]
 	  [% IF ( mandatoryemailpro ) %]<span class="required">Required</span>[% END %]
     </li>
     <li>
@@ -533,7 +604,11 @@
       <label for="fax">
       [% END %]
       Fax: </label>
-      <input type="text" id="fax" name="fax" value="[% fax %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+		<input type="text" id="fax" name="fax" value="[% fax %]" onclick="this.value=''" />
+      [% ELSE %]
+		<input type="text" id="fax" name="fax" value="[% fax %]" />
+      [% END %]
 	  [% IF ( mandatoryfax ) %]<span class="required">Required</span>[% END %]
     </li>
 	</ol>
@@ -553,7 +628,11 @@
 					<label for="B_address">
 				[% END %]
 				Address: </label>
-				<input type="text" id="B_address" name="B_address" size="40" value="[% B_address %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( opduplicate ) %]
+					<input type="text" id="B_address" name="B_address" size="40" value="[% B_address %]" onclick="this.value=''" />
+				[% ELSE %]
+					<input type="text" id="B_address" name="B_address" size="40" value="[% B_address %]" />
+				[% END %]
 	  [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -563,7 +642,11 @@
 					<label for="B_address2">
 				[% END %]
 				Address 2: </label>
-				<input type="text" id="B_address2" name="B_address2" size="40" value="[% B_address2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( opduplicate ) %]
+					<input type="text" id="B_address2" name="B_address2" size="40" value="[% B_address2 %]" onclick="this.value=''" />
+				[% ELSE %]
+					<input type="text" id="B_address2" name="B_address2" size="40" value="[% B_address2 %]" />
+				[% END %]
 	  [% IF ( mandatoryB_address2 ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -593,7 +676,11 @@
 					<label for="B_zipcode">
 				[% END %]
 				Zip/Postal code: </label>
-				<input type="text" id="B_zipcode" name="B_zipcode" maxlength="10" size="10" value="[% B_zipcode %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( opduplicate ) %]
+					<input type="text" id="B_zipcode" name="B_zipcode" maxlength="10" size="10" value="[% B_zipcode %]" onclick="this.value=''" />
+				[% ELSE %]
+					<input type="text" id="B_zipcode" name="B_zipcode" maxlength="10" size="10" value="[% B_zipcode %]" />
+				[% END %]
 	  [% IF ( mandatoryB_zipcode ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -603,7 +690,11 @@
 					<label for="B_country">
 				[% END %]
 				Country: </label>
-				<input type="text" id="B_country" name="B_country" size="20" value="[% B_country %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( opduplicate ) %]
+					<input type="text" id="B_country" name="B_country" size="20" value="[% B_country %]" onclick="this.value=''" />
+				[% ELSE %]
+					<input type="text" id="B_country" name="B_country" size="20" value="[% B_country %]" />
+				[% END %]
 	  [% IF ( mandatoryB_country ) %]<span class="required">Required</span>[% END %]
 			</li>
             <li>
@@ -612,8 +703,12 @@
                 [% ELSE %]
                 <label for="B_phone">
                 [% END %]
-                Phone: </label>  
-                <input type="text" id="B_phone" name="B_phone" value="[% B_phone %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+                Phone: </label>
+                [% IF ( opduplicate ) %]
+					<input type="text" id="B_phone" name="B_phone" value="[% B_phone %]" onclick="this.value=''" />
+                [% ELSE %]
+					<input type="text" id="B_phone" name="B_phone" value="[% B_phone %]" />
+                [% END %]
                 [% IF ( mandatoryB_phone ) %]<span class="required">Required</span>[% END %]
             </li>
 			<li> 
@@ -623,7 +718,11 @@
           <label for="B_email">
         [% END %]
         Email: </label>
-        <input type="text" id="B_email" name="B_email" size="45" value="[% B_email %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+        [% IF ( opduplicate ) %]
+			<input type="text" id="B_email" name="B_email" size="45" value="[% B_email %]" onclick="this.value=''" />
+        [% ELSE %]
+			<input type="text" id="B_email" name="B_email" size="45" value="[% B_email %]" />
+		[% END %]
 		[% IF ( mandatoryB_email ) %]<span class="required">Required</span>[% END %] </li>
             <li>
                 [% IF ( mandatorycontactnote ) %]
@@ -648,7 +747,11 @@
 				<label for="altcontactsurname">
 				[% END %]
 				Surname:</label>
-				<input type="text" name="altcontactsurname" id="altcontactsurname" value="[% altcontactsurname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( opduplicate ) %]
+					<input type="text" name="altcontactsurname" id="altcontactsurname" value="[% altcontactsurname %]" onclick="this.value=''" />
+				[% ELSE %]
+					<input type="text" name="altcontactsurname" id="altcontactsurname" value="[% altcontactsurname %]" />
+				[% END %]
 				[% IF ( mandatoryaltcontactsurname ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -658,7 +761,11 @@
 				<label for="altcontactfirstname">
 				[% END %]
 				First name:</label>
-				<input type="text" name="altcontactfirstname" id="altcontactfirstname" value="[% altcontactfirstname %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( opduplicate ) %]
+					<input type="text" name="altcontactfirstname" id="altcontactfirstname" value="[% altcontactfirstname %]" onclick="this.value=''" />
+				[% ELSE %]
+					<input type="text" name="altcontactfirstname" id="altcontactfirstname" value="[% altcontactfirstname %]" />
+				[% END %]
 				[% IF ( mandatoryaltcontactfirstname ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -668,7 +775,11 @@
 				<label for="altcontactaddress1">
 				[% END %]
 				Address:</label>
-				<input type="text" name="altcontactaddress1" id="altcontactaddress1" value="[% altcontactaddress1 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="40" />
+				[% IF ( opduplicate ) %]
+					<input type="text" name="altcontactaddress1" id="altcontactaddress1" value="[% altcontactaddress1 %]" onclick="this.value=''" size="40" />
+				[% ELSE %]
+					<input type="text" name="altcontactaddress1" id="altcontactaddress1" value="[% altcontactaddress1 %]" size="40" />
+				[% END %]
 				[% IF ( mandatoryaltcontactaddress1 ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -678,7 +789,11 @@
 				<label for="altcontactaddress2">
 				[% END %]
 				Address 2:</label>
-				<input type="text" name="altcontactaddress2" id="altcontactaddress2" value="[% altcontactaddress2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="40" />
+				[% IF ( opduplicate ) %]
+					<input type="text" name="altcontactaddress2" id="altcontactaddress2" value="[% altcontactaddress2 %]" onclick="this.value=''" size="40" />
+				[% ELSE %]
+					<input type="text" name="altcontactaddress2" id="altcontactaddress2" value="[% altcontactaddress2 %]" size="40" />
+				[% END %]
 				[% IF ( mandatoryaltcontactaddress2 ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -708,7 +823,11 @@
 				<label for="altcontactzipcode">
 				[% END %]
 				Zip/Postal code:</label>
-				<input type="text" name="altcontactzipcode" id="altcontactzipcode" value="[% altcontactzipcode %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="5" />
+				[% IF ( opduplicate ) %]
+					<input type="text" name="altcontactzipcode" id="altcontactzipcode" value="[% altcontactzipcode %]" onclick="this.value=''" size="5" />
+				[% ELSE %]
+					<input type="text" name="altcontactzipcode" id="altcontactzipcode" value="[% altcontactzipcode %]" size="5" />
+				[% END %]
 				[% IF ( mandatoryaltcontactzipcode ) %]<span class="required">Required</span>[% END %]
 			</li>
 			<li>
@@ -718,7 +837,11 @@
 				<label for="altcontactcountry">
 				[% END %]
 				Country:</label>
-				<input type="text" name="altcontactcountry" id="altcontactcountry" value="[% altcontactcountry %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] size="20" />
+				[% IF ( opduplicate ) %]
+					<input type="text" name="altcontactcountry" id="altcontactcountry" value="[% altcontactcountry %]" onclick="this.value=''" size="20" />
+				[% ELSE %]
+					<input type="text" name="altcontactcountry" id="altcontactcountry" value="[% altcontactcountry %]" size="20" />
+				[% END %]
 				[% IF ( mandatoryaltcontactcountry ) %]<span class="required">Required</span>[% END %]
 			</li>			
 			<li>
@@ -728,7 +851,11 @@
 				<label for="altcontactphone">
 				[% END %]
 				Phone:</label>
-				<input type="text" name="altcontactphone" id="altcontactphone" value="[% altcontactphone %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+				[% IF ( opduplicate ) %]
+					<input type="text" name="altcontactphone" id="altcontactphone" value="[% altcontactphone %]" onclick="this.value=''" />
+				[% ELSE %]
+					<input type="text" name="altcontactphone" id="altcontactphone" value="[% altcontactphone %]" />
+				[% END %]
 				[% IF ( mandatoryaltcontactphone ) %]<span class="required">Required</span>[% END %]
 			</li>
             </ol>
@@ -745,7 +872,11 @@
       <label for="cardnumber">
     [% END %] 
     Card number: </label>
-    <input type="text" id="cardnumber" name="cardnumber" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% cardnumber %][% END %]" />
+    [% IF ( opduplicate ) %]
+		<input type="text" id="cardnumber" name="cardnumber" size="20" />
+    [% ELSE %]
+		<input type="text" id="cardnumber" name="cardnumber" size="20" value="[% cardnumber %]" />
+    [% END %]
 	  [% IF ( mandatorycardnumber ) %]<span class="required">Required</span>[% END %]</li>
     <li>
       [% IF ( mandatorybranchcode ) %]
@@ -806,7 +937,11 @@
     [% IF ( CGIsort2 ) %] 
       [% CGIsort2 %]
     [% ELSE %]
-      <input  type="text" id="sort2" name="sort2" size="20"  value="[% sort2 %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+      [% IF ( opduplicate ) %]
+		<input  type="text" id="sort2" name="sort2" size="20"  value="[% sort2 %]" onclick="this.value=''" />
+      [% ELSE %]
+		<input  type="text" id="sort2" name="sort2" size="20"  value="[% sort2 %]" />
+      [% END %]
 	  [% IF ( mandatorysort2 ) %]<span class="required">Required</span>[% END %]
     [% END %] 
     </li>
@@ -821,7 +956,11 @@
 			<label for="dateenrolled">
 			[% END %]
 			Registration date: </label>
-			<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" [% IF ( metric ) %]onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');"[% END %] value="[% dateenrolled %]" />
+			[% IF ( metric ) %]
+				<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" onchange="CheckDate(document.form.dateenrolled);check_manip_date('verify');" value="[% dateenrolled %]" />
+			[% ELSE %]
+				<input type="text" id="dateenrolled" name="dateenrolled"  maxlength="10" size="10" value="[% dateenrolled %]" />
+			[% END %]
             <img src="[% themelang %]/lib/calendar/cal.gif" id="dateenrolled_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
@@ -843,7 +982,19 @@
 			<label for="dateexpiry">
 			[% END %]
 			Expiry date (leave blank for auto calc) </label>
-			<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" [% IF ( metric ) %]onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');"[% END %] value="[% UNLESS ( opadd ) %][% dateexpiry %][% END %]" />
+			[% IF ( metric ) %]
+				[% UNLESS ( opadd ) %]
+					<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" value="[% dateexpiry %]" />
+				[% ELSE %]
+					<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" onchange="CheckDate(document.form.dateexpiry);check_manip_date('verify');" />
+				[% END %]
+			[% ELSE %]
+				[% UNLESS ( opadd ) %]
+				<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" value="[% dateexpiry %]" />
+
+				<input type="text" id="dateexpiry" name="dateexpiry" maxlength="10"  size="10" value="[% UNLESS ( opadd ) %][% dateexpiry %][% END %]" />
+				[% END %]
+			[% END %]
             <img src="[% themelang %]/lib/calendar/cal.gif" id="dateexpiry_button" alt="Show Calendar" />
       <script language="JavaScript" type="text/javascript">
         Calendar.setup(
@@ -893,9 +1044,17 @@
 			Username: </label>
 
 [% IF ( NoUpdateLogin ) %]
-<input type="text" id="userid" name="userid" size="20" disabled="disabled" value="[% IF ( opduplicate ) %][% ELSE %][% userid %][% END %]" />
+	[% IF ( opduplicate ) %]
+		<input type="text" id="userid" name="userid" size="20" disabled="disabled" />
+	[% ELSE %]
+		<input type="text" id="userid" name="userid" size="20" disabled="disabled" value="[% userid %]" />
+	[% END %]
 [% ELSE %]
-<input type="text" id="userid" name="userid" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% userid %][% END %]" />
+	[% IF ( opduplicate ) %]
+		<input type="text" id="userid" name="userid" size="20" value="" />
+	[% ELSE %]
+		<input type="text" id="userid" name="userid" size="20" value="[% userid %]" />
+	[% END %]
 [% END %]
 
 	  [% IF ( mandatoryuserid ) %]<span class="required">Required</span>[% END %]
@@ -909,16 +1068,28 @@
 			Password: </label>
 			[% IF ( opadd ) %]
 			[% IF ( NoUpdateLogin ) %]
-				<input type="text" id="password" name="password" size="20"  disabled="disabled" value="[% IF ( opduplicate ) %][% ELSE %][% password %][% END %]" />
+				[% IF ( opduplicate ) %]
+					<input type="text" id="password" name="password" size="20"  disabled="disabled" />
+				[% ELSE %]
+					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="[% password %]" />
+				[% END %]
 [% ELSE %]
-				<input type="text" id="password" name="password" size="20" value="[% IF ( opduplicate ) %][% ELSE %][% password %][% END %]" />
+				[% IF ( opduplicate ) %]
+					<input type="text" id="password" name="password" size="20" />
+				[% ELSE %]
+					<input type="text" id="password" name="password" size="20" value="[% password %]" />
+				[% END %]
 [% END %]
 			[% ELSE %]
 			[% IF ( password ) %]
 				[% IF ( NoUpdateLogin ) %]
 					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="****" />
 				[% ELSE %]
-					<input type="text" id="password" name="password" size="20" value="[% IF ( opduplicate ) %][% ELSE %]****[% END %]" />
+					[% IF ( opduplicate ) %]
+						<input type="text" id="password" name="password" size="20" />
+					[% ELSE %]
+						<input type="text" id="password" name="password" size="20" value="****" />
+					[% END %]
 				[% END %]
 			[% ELSE %]
 				[% IF ( NoUpdateLogin ) %]
@@ -995,8 +1166,13 @@
                         [% END %]
                     </select>
                 [% ELSE %]
+                    [% IF ( opduplicate ) %]
                     <input type="text" maxlength="64" value="[% patron_attribute.value %]"
-                           id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]"[% IF ( patron_attribute.opduplicate ) %] onclick="this.value=''"[% END %] />
+                           id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" onclick="this.value=''" />
+                    [% ELSE %]
+                    <input type="text" maxlength="64" value="[% patron_attribute.value %]"
+                           id="[% patron_attribute.form_id %]" name="[% patron_attribute.form_id %]" />
+                    [% END %]
                 [% END %]
                 [% IF ( patron_attribute.password_allowed ) %]
                     (Password: <input type="password" maxlength="64" value="[% patron_attribute.password %]"
@@ -1070,8 +1246,12 @@
     [% END %]
     [% INCLUDE 'messaging-preference-form.inc' %]
     [% IF ( SMSSendDriver ) %]
-        <p><label for="SMSnumber">SMS number:</label> 
-          <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]"[% IF ( opduplicate ) %] onclick="this.value=''"[% END %] />
+        <p><label for="SMSnumber">SMS number:</label>
+          [% IF ( opduplicate ) %]
+            <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" onclick="this.value=''" />
+          [% ELSE %]
+            <input type="text" id="SMSnumber" name="SMSnumber" value="[% SMSnumber %]" />
+        [% END %]
         </p>
     [% END %]
   </fieldset>
