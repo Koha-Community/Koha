@@ -1867,12 +1867,12 @@ CREATE TABLE `suggestions` (
 --
 
 DROP TABLE IF EXISTS `systempreferences`;
-CREATE TABLE `systempreferences` (
-  `variable` varchar(50) NOT NULL default '',
-  `value` text,
-  `options` mediumtext,
-  `explanation` text,
-  `type` varchar(20) default NULL,
+CREATE TABLE `systempreferences` ( -- global system preferences
+  `variable` varchar(50) NOT NULL default '', -- system preference name
+  `value` text, -- system preference values
+  `options` mediumtext, -- options for multiple choice system preferences
+  `explanation` text, -- descriptive text for the system preference
+  `type` varchar(20) default NULL, -- type of question this preference asks (multiple choice, plain text, yes or no, etc)
   PRIMARY KEY  (`variable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
