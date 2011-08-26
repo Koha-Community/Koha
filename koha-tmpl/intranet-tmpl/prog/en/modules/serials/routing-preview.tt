@@ -6,8 +6,8 @@
 
 function print_slip(subscriptionid,issue){
     var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
-window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
-    window.location.href='serials-home.pl';
+    window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
+    window.location.href='subscription-detail.pl?subscriptionid=' + subscriptionid;
 }
 //-->
 </script>
