@@ -323,19 +323,17 @@ sub export_marc_records_from_sth {
                 my @items = GetItemsInfo($record_number);
                 if (@items){
                     my $record = MARC::Record->new;
+                    $record->encoding('UTF-8');
                     my @itemsrecord;
                     foreach my $item (@items){
                         my $record = Item2Marc($item, $record_number);                        
                         push @itemsrecord, $record->field($itemtag);
                     }
                     $record->insert_fields_ordered(@itemsrecord);
-                    my $itemsxml=$record->as_xml_record();
-                    my $searchstring = '<record>\n';
-                    my $index = index($itemsxml, '<record>\n', 0);
-                    $itemsxml = substr($itemsxml, $index + length($searchstring));
-                    $searchstring = '</record>';
-                    $marcxml = substr($marcxml, 0, index($marcxml, $searchstring));
-                    $marcxml .= $itemsxml;
+                    my $itemsxml = $record->as_xml_record();
+                    $marcxml =
+                        substr($marcxml, 0, length($marcxml)-10) .
+                        substr($itemsxml, index($itemsxml, "</leader>\n", 0) + 10);
                 }
             }
             if ( $marcxml ) {
