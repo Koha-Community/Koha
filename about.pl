@@ -1,5 +1,10 @@
 #!/usr/bin/perl
 
+# Copyright Pat Eyler 2003
+# Copyright Biblibre 2006
+# Parts Copyright Liblime 2008
+# Parts Copyright Chris Nighswonger 2010
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it under the
