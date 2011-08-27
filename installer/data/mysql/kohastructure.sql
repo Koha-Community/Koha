@@ -1513,14 +1513,14 @@ CREATE TABLE `repeatable_holidays` ( -- information for the days the library is 
 --
 
 DROP TABLE IF EXISTS `reports_dictionary`;
-CREATE TABLE reports_dictionary (
-   `id` int(11) NOT NULL auto_increment,
-   `name` varchar(255) default NULL,
-   `description` text,
-   `date_created` datetime default NULL,
-   `date_modified` datetime default NULL,
-   `saved_sql` text,
-   `area` int(11) default NULL,
+CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for use in reports
+   `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+   `name` varchar(255) default NULL, -- name for this definition
+   `description` text, -- description for this definition
+   `date_created` datetime default NULL, -- date and time this definition was created
+   `date_modified` datetime default NULL, -- date and time this definition was last modified
+   `saved_sql` text, -- SQL snippet for us in reports
+   `area` int(11) default NULL, -- Koha module this definition is for (1 = Circulation, 2 = Catalog, 3 = Patrons, 4 = Acquistions, 5 = Accounts)
    PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
