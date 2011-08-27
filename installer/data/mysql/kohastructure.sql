@@ -2312,13 +2312,13 @@ CREATE TABLE `item_circulation_alert_preferences` (
 -- Table structure for table `messages`
 --
 DROP TABLE IF EXISTS `messages`;
-CREATE TABLE `messages` (
-  `message_id` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL,
-  `branchcode` varchar(10) default NULL,
-  `message_type` varchar(1) NOT NULL,
-  `message` text NOT NULL,
-  `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE `messages` ( -- circulation messages left via the patron's check out screen
+  `message_id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `borrowernumber` int(11) NOT NULL, -- foreign key linking this message to the borrowers table
+  `branchcode` varchar(10) default NULL, -- foreign key linking the message to the branches table
+  `message_type` varchar(1) NOT NULL, -- whether the message is for the librarians (L) or the patron (B)
+  `message` text NOT NULL, -- the text of the message
+  `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- the date and time the message was written
   PRIMARY KEY (`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
