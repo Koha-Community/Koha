@@ -1960,13 +1960,13 @@ CREATE TABLE `userflags` (
 --
 
 DROP TABLE IF EXISTS `virtualshelves`;
-CREATE TABLE `virtualshelves` (
-  `shelfnumber` int(11) NOT NULL auto_increment,
-  `shelfname` varchar(255) default NULL,
-  `owner` varchar(80) default NULL,
-  `category` varchar(1) default NULL,
-  `sortfield` varchar(16) default NULL,
-  `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves) 
+  `shelfnumber` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `shelfname` varchar(255) default NULL, -- name of the list
+  `owner` varchar(80) default NULL, -- foriegn key linking to the borrowers table (using borrowernumber) for the creator of this list
+  `category` varchar(1) default NULL, -- type of list (public [2], private [1] or open [3])
+  `sortfield` varchar(16) default NULL, -- the field this list is sorted on
+  `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
   PRIMARY KEY  (`shelfnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1975,11 +1975,11 @@ CREATE TABLE `virtualshelves` (
 --
 
 DROP TABLE IF EXISTS `virtualshelfcontents`;
-CREATE TABLE `virtualshelfcontents` (
-  `shelfnumber` int(11) NOT NULL default 0,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `virtualshelfcontents` ( -- information about the titles in a list (or virtual shelf)
+  `shelfnumber` int(11) NOT NULL default 0, -- foreign key linking to the virtualshelves table, defines the list that this record has been added to
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking to the biblio table, defines the bib record that has been added to the list
   `flags` int(11) default NULL,
-  `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time this bib record was added to the list
   KEY `shelfnumber` (`shelfnumber`),
   KEY `biblionumber` (`biblionumber`),
   CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
