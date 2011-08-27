@@ -1991,22 +1991,22 @@ CREATE TABLE `virtualshelfcontents` (
 --
 
 DROP TABLE IF EXISTS `z3950servers`;
-CREATE TABLE `z3950servers` (
-  `host` varchar(255) default NULL,
-  `port` int(11) default NULL,
-  `db` varchar(255) default NULL,
-  `userid` varchar(255) default NULL,
-  `password` varchar(255) default NULL,
-  `name` mediumtext,
-  `id` int(11) NOT NULL auto_increment,
-  `checked` smallint(6) default NULL,
-  `rank` int(11) default NULL,
-  `syntax` varchar(80) default NULL,
-  `icon` text,
+CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets used in cataloging
+  `host` varchar(255) default NULL, -- target's host name
+  `port` int(11) default NULL, -- port number used to connect to target
+  `db` varchar(255) default NULL, -- target's database name
+  `userid` varchar(255) default NULL, -- username needed to log in to target
+  `password` varchar(255) default NULL, -- password needed to log in to target
+  `name` mediumtext, -- name given to the target by the library
+  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `checked` smallint(6) default NULL, -- whether this target is checked by default  (1 for yes, 0 for no)
+  `rank` int(11) default NULL, -- where this target appears in the list of targets
+  `syntax` varchar(80) default NULL, -- marc format provided by this target
+  `icon` text, -- unused in Koha
   `position` enum('primary','secondary','') NOT NULL default 'primary',
   `type` enum('zed','opensearch') NOT NULL default 'zed',
-  `encoding` text default NULL,
-  `description` text NOT NULL,
+  `encoding` text default NULL, -- characters encoding provided by this target
+  `description` text NOT NULL, -- unused in Koha
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
