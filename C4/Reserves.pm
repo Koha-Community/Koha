@@ -760,17 +760,32 @@ sub CheckReserves {
     my ( $item, $barcode ) = @_;
     my $dbh = C4::Context->dbh;
     my $sth;
-    my $select = "
-    SELECT items.biblionumber,
+    my $select;
+    if (C4::Context->preference('item-level_itypes')){
+	$select = "
+           SELECT items.biblionumber,
            items.biblioitemnumber,
            itemtypes.notforloan,
            items.notforloan AS itemnotforloan,
            items.itemnumber
-    FROM   items
-    LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
-    LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
-    ";
-
+           FROM   items
+           LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+           LEFT JOIN itemtypes   ON items.itype   = itemtypes.itemtype
+        ";
+    }
+    else {
+	$select = "
+           SELECT items.biblionumber,
+           items.biblioitemnumber,
+           itemtypes.notforloan,
+           items.notforloan AS itemnotforloan,
+           items.itemnumber
+           FROM   items
+           LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+           LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
+        ";
+    }
+   
     if ($item) {
         $sth = $dbh->prepare("$select WHERE itemnumber = ?");
         $sth->execute($item);
