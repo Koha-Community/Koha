@@ -198,7 +198,6 @@ $template->param(itemtypeloop => \@itemtypesloop);
 
 # The following should only be loaded if we're bringing up the advanced search template
 if ( $template_type && $template_type eq 'advsearch' ) {
-
     # load the servers (used for searching -- to do federated searching, etc.)
     my $primary_servers_loop;# = displayPrimaryServers();
     $template->param(outer_servers_loop =>  $primary_servers_loop,);
@@ -207,9 +206,13 @@ if ( $template_type && $template_type eq 'advsearch' ) {
     $template->param(outer_sup_servers_loop => $secondary_servers_loop,);
 
     # set the default sorting
-    my $default_sort_by = C4::Context->preference('OPACdefaultSortField')."_".C4::Context->preference('OPACdefaultSortOrder') 
-        if (C4::Context->preference('OPACdefaultSortField') && C4::Context->preference('OPACdefaultSortOrder'));
-    $template->param($default_sort_by => 1);
+    if (   C4::Context->preference('OPACdefaultSortField')
+        && C4::Context->preference('OPACdefaultSortOrder') ) {
+        my $default_sort_by =
+            C4::Context->preference('OPACdefaultSortField') . '_'
+          . C4::Context->preference('OPACdefaultSortOrder');
+        $template->param( sort_by => $default_sort_by );
+    }
 
     # determine what to display next to the search boxes (ie, boolean option
     # shouldn't appear on the first one, scan indexes should, adding a new
