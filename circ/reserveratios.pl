@@ -21,13 +21,14 @@
 use strict;
 use warnings;
 
+use CGI;
+use Date::Calc qw/Today Add_Delta_YM/;
+
 use C4::Context;
 use C4::Output;
-use CGI;
 use C4::Auth;
 use C4::Dates qw/format_date format_date_in_iso/;
 use C4::Debug;
-use Date::Calc qw/Today Add_Delta_YM/;
 use C4::Biblio qw/GetMarcBiblio GetRecordValue GetFrameworkCode/;
 
 my $input = new CGI;
@@ -61,10 +62,12 @@ if (!defined($startdate) or $startdate !~ s/^\s*(\S+)\s*$/$1/) {   # strip space
 if (!defined($enddate)   or $enddate   !~ s/^\s*(\S+)\s*$/$1/) {   # strip spaces, remove Taint
 	$enddate   = format_date($todaysdate);
 }
-if (!defined($ratio)     or $ratio     !~ s/^\s*(0?\.?\d+)(\.0*)?\s*$/$1/) {   # strip spaces, remove Taint
+if (!defined($ratio)) {
 	$ratio = 3;
 }
-if ($ratio == 0) {
+# Force to be a number
+$ratio += 0;
+if ($ratio <= 0) {
     $ratio = 1; # prevent division by zero
 }
 
