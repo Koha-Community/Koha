@@ -1759,6 +1759,7 @@ EOF
         # insert fee in patron debts
         manualinvoice($borrower->{'borrowernumber'}, '', '', 'A', $enrolmentfee);
     }
+     logaction("MEMBERS", "RENEW", $borrower->{'borrowernumber'}, "Membership renewed")if C4::Context->preference("BorrowersLog");
     return $date if ($sth);
     return 0;
 }
