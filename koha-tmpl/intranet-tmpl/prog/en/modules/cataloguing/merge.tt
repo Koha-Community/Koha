@@ -244,7 +244,7 @@ $(document).ready(function(){
 					    <input type="checkbox" checked="checked" class="subfieldpick" id="rec_1_[% subfiel.subkey %]" /> 
 					    <span class="subfield">[% subfiel.subtag %]</span> / [% subfiel.value %]
 				    <input type="hidden" name="tag_[% subfiel.tag %]_code_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.subtag %]" />
-				    <input type="hidden" name="tag_[% subfiel.tag %]_subfield_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.value %]" />
+				    <input type="hidden" name="tag_[% subfiel.tag %]_subfield_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.value |html%]" />
 					</li>
 				    [% END %]
 				</ul>
@@ -271,7 +271,7 @@ $(document).ready(function(){
 			<input type="hidden" name="tag_[% fiel.tag %]_indicator2_[% fiel.key %]" value="[% fiel.indicator2 %]" />
 			[% IF ( fiel.value ) %] / [% fiel.value %]
 			<input type="hidden" name="tag_[% fiel.tag %]_code_00_[% fiel.key %]" value="00" />
-			<input type="hidden" name="tag_[% fiel.tag %]_subfield_00_[% fiel.key %]" value="[% fiel.value %]" />
+			<input type="hidden" name="tag_[% fiel.tag %]_subfield_00_[% fiel.key %]" value="[% fiel.value |html%]" />
 			[% END %]
 
 			[% IF ( fiel.subfield ) %]
@@ -281,7 +281,7 @@ $(document).ready(function(){
 					<input type="checkbox" class="subfieldpick" id="rec_2_[% subfiel.subkey %]" />
 					<span class="subfield">[% subfiel.subtag %]</span> / [% subfiel.value %]
 				    <input type="hidden" name="tag_[% subfiel.tag %]_code_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.subtag %]" />
-				    <input type="hidden" name="tag_[% subfiel.tag %]_subfield_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.value %]" />
+				    <input type="hidden" name="tag_[% subfiel.tag %]_subfield_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.value |html%]" />
 				    </li>
 				[% END %]
 			    </ul>
@@ -312,7 +312,7 @@ $(document).ready(function(){
 		    [% IF ( fiel.value ) %] /
 			[% fiel.value %]
 			<input type="hidden" name="tag_[% fiel.tag %]_code_00_[% fiel.key %]" value="00" />
-			<input type="hidden" name="tag_[% fiel.tag %]_subfield_00_[% fiel.key %]" value="[% fiel.value %]" />
+			<input type="hidden" name="tag_[% fiel.tag %]_subfield_00_[% fiel.key %]" value="[% fiel.value |html%]" />
 		    [% END %]
 			
 		    [% IF ( fiel.subfield ) %]
@@ -321,7 +321,7 @@ $(document).ready(function(){
 				<li id="k[% subfiel.subkey %]">
 				    <span class="subfield">[% subfiel.subtag %]</span> / [% subfiel.value %]
 				    <input type="hidden" name="tag_[% subfiel.tag %]_code_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.subtag %]" />
-				    <input type="hidden" name="tag_[% subfiel.tag %]_subfield_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.value %]" />
+				    <input type="hidden" name="tag_[% subfiel.tag %]_subfield_[% subfiel.subtag %]_[% subfiel.key %]_[% subfiel.subkey %]" value="[% subfiel.value |html%]" />
 				</li>
 			    [% END %]
 			</ul>
