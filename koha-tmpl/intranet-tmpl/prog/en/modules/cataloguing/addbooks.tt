@@ -72,9 +72,9 @@
                 [% END %]
                 </td>
                 <td>
-                    [% IF ( resultsloo.items_loop ) %]
+                    [% IF ( resultsloo.available_items_loop ) %]
                         <span class="available">
-                        [% FOREACH items_loo IN resultsloo.items_loop %]
+                        [% FOREACH items_loo IN resultsloo.available_items_loop %]
                             [% items_loo.count %] [% items_loo.branchname %]
                             <i>
                         [% IF ( items_loo.location ) %][% items_loo.location %][% END %]
