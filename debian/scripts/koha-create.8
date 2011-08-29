@@ -1,15 +1,15 @@
 .\" Copyright 2010  Catalyst IT, Ltd
-.\" 
+.\"
 .\" This program is free software: you can redistribute it and/or modify
 .\" it under the terms of the GNU General Public License as published by
 .\" the Free Software Foundation, either version 3 of the License, or
 .\" (at your option) any later version.
-.\" 
+.\"
 .\" This program is distributed in the hope that it will be useful,
 .\" but WITHOUT ANY WARRANTY; without even the implied warranty of
 .\" MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 .\" GNU General Public License for more details.
-.\" 
+.\"
 .\" You should have received a copy of the GNU General Public License
 .\" along with this program.  If not, see <http://www.gnu.org/licenses/>.
 .\===========================================================
@@ -23,38 +23,41 @@ koha-create \(em create a new Koha instance
 [
 .B \-\^\-create-db|--request-db|--populate-db
 ]
+.br
 [
-.B \-\^\-marcflavor
+.B \-\^\-marcflavor \fImarc21|normarc|unimarc\fP
+]
+.br
+[
+.B \-\^\-zebralang \fIen|nb|fr\fP
 ]
 [
-.B \-\^\-zebralang
+.B \-\^\-defaultsql \fIsql-file\fP
 ]
+.br
 [
-.B \-\^\-defaultsql
-]
-[
-.B \-\^\-configfile
+.B \-\^\-configfile \fIconfig-file\fP
 ]
 .IR instancename
 .\===========================================================
 .SH OPTIONS
 .TP \w'\fB\-\^\-populate-db\fP'u+3n
 .B \-\^\-create-db
-Create a new datbase on localhost. If the database you want to use does 
-not reside on localhost, you can use --request-db and --populate-db, see below. 
+Create a new datbase on localhost. If the database you want to use does
+not reside on localhost, you can use --request-db and --populate-db, see below.
 .\----------------------------------------------------------------------------------------------------------------------
 .TP
 .B \-\^\-request-db
-This option will create a file called 
+This option will create a file called
 .IR instancename-db-request.txt
-in your current directory that contains information about 
-how the database needs to be set up. 
+in your current directory that contains information about
+how the database needs to be set up.
 .\----------------------------------------------------------------------------------------------------------------------
 .TP
 .B \-\^\-populate-db
 When you have run koha-create with the --request-db option, and a database
 has been set up, you can finnish your installation by running koha-create
-with this option. 
+with this option.
 .\----------------------------------------------------------------------------------------------------------------------
 .TP
 .B \-\^\-configfile
@@ -63,18 +66,18 @@ the default config file, see below for details.
 .\----------------------------------------------------------------------------------------------------------------------
 .TP
 .B \-\^\-defaultsql
-Path to an SQL-file other than the one pointed to in the default or alternative 
-config file.  Corresponds to the DEFAULTSQL config file variable. 
+Path to an SQL-file other than the one pointed to in the default or alternative
+config file.  Corresponds to the DEFAULTSQL config file variable.
 .\----------------------------------------------------------------------------------------------------------------------
 .TP
 .B \-\^\-marcflavor
-Specifies format of MARC records to be indexed by Zebra. Corresponds to the 
-ZEBRA_MARC_FORMAT config file variable. 
+Specifies format of MARC records to be indexed by Zebra. Corresponds to the
+ZEBRA_MARC_FORMAT config file variable.
 .\----------------------------------------------------------------------------------------------------------------------
 .TP
 .B \-\^\-zebralang
 Primary language for Zebra indexing. Corresponds to the ZEBRA_LANGUAGE
-config file variable. 
+config file variable.
 .\===========================================================
 .SH DESCRIPTION
 .B koha-create
@@ -83,11 +86,11 @@ It is meant for a site that provides Koha hosting,
 and serves several sites from the same host.
 .PP
 The name of the instance is used as the domain name for Apache,
-Unix user and group names, and MySQL username and datbase names
+Unix user and group names, and MySQL username and database names
 are derived from it.
 Unix user and group are named
 .IR instance -koha.
-MySQL username is 
+MySQL username is
 .RI koha_ instance ,
 and database is
 .RI koha_ instance .
@@ -96,15 +99,18 @@ The Unix user has logins disabled.
 The password for MySQL is generated randomly, and printed to the terminal.
 .PP
 The instance name is used as the domain name (ServerName) for Apache.
-The public catalog (OPAC), for library customers, is on port 80.
-The librarian intranet interface is on port 8080.
+The public catalogue (OPAC), for library customers, is on port 80.
+The staff client interface is configured similarly, depending on the settings
+in
+.B /etc/koha/koha-site.conf
+or alternate config file.
 .PP
-After the Koha instance is created, it is ready to be used, 
+After the Koha instance is created, it is ready to be used,
 but the librarian needs to log in via the intranet and configure things.
 .PP
 Several configuration variables are available for adjusting this behavior.
 The variables are put into
-.B /etc/koha/koha-site.conf .
+.BR /etc/koha/koha-site.conf .
 The following variables are obeyed:
 .PP
 .\----------------------------------------------------------------------------------------------------------------------
@@ -154,10 +160,10 @@ Primary language for Zebra indexing. Possible values are 'en', 'fr' and 'nb'.
 Order of precedence for config options, from lowest to highest:
 .RS
 .nf
-1. The defaults set in the code of koha-create 
+1. The defaults set in the code of koha-create
 2. /etc/koha/koha-sites.conf
 3. Config file specified with --configfile
-4. Individual command line options 
+4. Individual command line options
 .fi
 .RE
 .\===========================================================
@@ -179,7 +185,7 @@ To create a new Koha instance:
 koha-create hslibrary
 .RE
 .PP
-The public catalog is now at 
+The public catalog is now at
 .I http://hslibrary/
 and the librarian interface at
 .IR http://hslibrary:8080/ .
