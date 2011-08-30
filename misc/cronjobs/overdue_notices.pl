@@ -426,7 +426,7 @@ END_SQL
             # <date> <itemcount> <firstname> <lastname> <address1> <address2> <address3> <city> <postcode>
 
             my $borrower_sql = <<'END_SQL';
-SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email, date_due
+SELECT distinct(issues.borrowernumber), firstname, surname, address, address2, city, zipcode, country, email
 FROM   issues,borrowers,categories
 WHERE  issues.borrowernumber=borrowers.borrowernumber
 AND    borrowers.categorycode=categories.categorycode
@@ -442,10 +442,10 @@ END_SQL
             }
             $borrower_sql .= '  AND categories.overduenoticerequired=1 ';
             if($triggered) {
-                $borrower_sql .= ' HAVING TO_DAYS(NOW())-TO_DAYS(date_due) = ?';
+                $borrower_sql .= ' AND TO_DAYS(NOW())-TO_DAYS(date_due) = ?';
                 push @borrower_parameters, $mindays;
             } else {
-                $borrower_sql .= ' HAVING TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ? ' ;
+                $borrower_sql .= ' AND TO_DAYS(NOW())-TO_DAYS(date_due) BETWEEN ? and ? ' ;
                 push @borrower_parameters, $mindays, $maxdays;
             }
 
@@ -455,8 +455,8 @@ END_SQL
             $verbose and warn $borrower_sql . "\n $branchcode | " . $overdue_rules->{'categorycode'} . "\n ($mindays, $maxdays)\nreturns " . $sth->rows . " rows";
 
             while ( my ( $borrowernumber, $firstname, $lastname,
-                    $address1, $address2, $city, $postcode, $country, $email,
-                    $date_due ) = $sth->fetchrow )
+                    $address1, $address2, $city, $postcode, $country, $email
+                    ) = $sth->fetchrow )
             {
                 $verbose and warn "borrower $firstname, $lastname ($borrowernumber) has items triggering level $i.";
     
