@@ -1530,6 +1530,7 @@ sub GetHistory {
     my %params = @_;
     my $title = $params{title};
     my $author = $params{author};
+    my $isbn   = $params{isbn};
     my $name = $params{name};
     my $from_placed_on = $params{from_placed_on};
     my $to_placed_on = $params{to_placed_on};
@@ -1546,6 +1547,7 @@ sub GetHistory {
         SELECT
             biblio.title,
             biblio.author,
+	    biblioitems.isbn,
             aqorders.basketno,
     aqbasket.basketname,
     aqbasket.basketgroupid,
@@ -1564,6 +1566,7 @@ sub GetHistory {
         LEFT JOIN aqbasket ON aqorders.basketno=aqbasket.basketno
     LEFT JOIN aqbasketgroups ON aqbasket.basketgroupid=aqbasketgroups.id
         LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
+	LEFT JOIN biblioitems ON biblioitems.biblionumber=aqorders.biblionumber
         LEFT JOIN biblio ON biblio.biblionumber=aqorders.biblionumber";
 
     $query .= " LEFT JOIN borrowers ON aqbasket.authorisedby=borrowers.borrowernumber"
@@ -1582,6 +1585,11 @@ sub GetHistory {
     if ( defined $author ) {
         $query .= " AND biblio.author LIKE ? ";
         push @query_params, "%$author%";
+    }
+
+    if ( defined $isbn ) {
+        $query .= " AND biblioitems.isbn LIKE ? ";
+        push @query_params, "%$isbn%";
     }
 
     if ( defined $name ) {
