@@ -50,7 +50,7 @@ elsif ($format=~ /mods/) {
     $marc = marc2modsxml($marc);
 }
 elsif ($format =~ /ris/) {
-    $marc = marc2ris(MARC::Record->new_from_usmarc($marc));
+    $marc = marc2ris($marc);
 }
 elsif ($format =~ /bibtex/) {
     $marc = marc2bibtex(C4::Biblio::GetMarcBiblio($biblionumber),$biblionumber);
