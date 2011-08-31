@@ -82,13 +82,11 @@
 
 [% IF ( OpacNav ) %]
 <div class="yui-b"><div id="leftmenus" class="container">
-[% INCLUDE 'navigation.inc' %]
-[% INCLUDE 'usermenu.inc' %]
+[% INCLUDE 'navigation.inc' IsPatronPage=1 %]
 </div></div>
 [% ELSIF ( loggedinusername ) %]
 <div class="yui-b"><div id="leftmenus" class="container">
-[% INCLUDE 'navigation.inc' %]
-[% INCLUDE 'usermenu.inc' %]
+[% INCLUDE 'navigation.inc' IsPatronPage=1 %]
 </div></div>
 [% ELSE %]
 [% END %]

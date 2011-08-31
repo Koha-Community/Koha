@@ -601,8 +601,7 @@ $(function() {
       [% IF ( OpacNav||loggedinusername ) %]
         <div class="yui-b">
           <div is="leftmenus" class="container">
-            [% INCLUDE 'navigation.inc' %]
-            [% INCLUDE 'usermenu.inc' %]
+            [% INCLUDE 'navigation.inc' IsPatronPage=1 %]
           </div>
         </div>
       [% END %]
