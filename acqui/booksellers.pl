@@ -106,7 +106,7 @@ for my $vendor (@suppliers) {
         if ((      $basket->{authorisedby}
                 && $basket->{authorisedby} eq $loggedinuser
             )
-            || haspermission( $uid, { flagsrequired => { acquisition => q{*} } } )
+            || haspermission( $uid, { acquisition => q{*} } )
           ) {
             for my $date_field (qw( creationdate closedate)) {
                 if ( $basket->{$date_field} ) {

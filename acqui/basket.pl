@@ -197,7 +197,7 @@ if ( $op eq 'delete_confirm' ) {
 #if the basket is closed,and the user has the permission to edit basketgroups, display a list of basketgroups
     my $basketgroups;
     my $member = GetMember(borrowernumber => $loggedinuser);
-    if ($basket->{closedate} && haspermission({ flagsrequired   => { acquisition => 'group_manage'} })) {
+    if ($basket->{closedate} && haspermission({ acquisition => 'group_manage'} )) {
         $basketgroups = GetBasketgroups($basket->{booksellerid});
         for my $bg ( @{$basketgroups} ) {
             if ($basket->{basketgroupid} && $basket->{basketgroupid} == $bg->{id}){
