@@ -791,7 +791,12 @@
                 </xsl:call-template>
         </xsl:for-each>
         <xsl:for-each select="marc:subfield[@code='b']">
-                <xsl:value-of select="."/>
+            <xsl:value-of select="."/>
+            <xsl:choose>
+                <xsl:when test="position() != last()">
+                    <xsl:text> -- </xsl:text>
+                </xsl:when>
+            </xsl:choose>
         </xsl:for-each>
         <xsl:if test="marc:subfield[@code='c'] or marc:subfield[@code='d'] or marc:subfield[@code='n']">
                 <xsl:call-template name="subfieldSelect">

@@ -142,10 +142,15 @@
         </xsl:choose>
         <xsl:call-template name="nameABCDQ"/></a>
         <xsl:choose>
-        <xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
+        <xsl:when test="position()!=last()"><xsl:text>; </xsl:text></xsl:when></xsl:choose>
         </xsl:for-each>
 
         <xsl:for-each select="marc:datafield[@tag=110 or @tag=710]">
+            <xsl:choose>
+                <xsl:when test="position()=1">
+                    <xsl:text>; </xsl:text>
+                </xsl:when>
+            </xsl:choose>
         <a>
         <xsl:choose>
             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
@@ -921,7 +926,12 @@
                 </xsl:call-template>
         </xsl:for-each>
         <xsl:for-each select="marc:subfield[@code='b']">
-                <xsl:value-of select="."/>
+            <xsl:value-of select="."/>
+            <xsl:choose>
+                <xsl:when test="position() != last()">
+                    <xsl:text> -- </xsl:text>
+                </xsl:when>
+            </xsl:choose>
         </xsl:for-each>
         <xsl:if test="marc:subfield[@code='c'] or marc:subfield[@code='d'] or marc:subfield[@code='n']">
                 <xsl:call-template name="subfieldSelect">
