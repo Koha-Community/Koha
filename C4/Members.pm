@@ -1041,7 +1041,7 @@ sub GetPendingIssues {
     # Borrowers part of the query
     my $bquery = '';
     for (my $i = 0; $i < @borrowernumbers; $i++) {
-        $bquery .= ' borrowernumber = ?';
+        $bquery .= ' issues.borrowernumber = ?';
         if ($i < $#borrowernumbers ) {
             $bquery .= ' OR';
         }
@@ -1068,6 +1068,9 @@ sub GetPendingIssues {
            biblioitems.volumedesc,
            biblioitems.lccn,
            biblioitems.url,
+           borrowers.firstname,
+           borrowers.surname,
+           borrowers.cardnumber,
            issues.timestamp AS timestamp,
            issues.renewals  AS renewals,
            issues.borrowernumber AS borrowernumber,
@@ -1076,6 +1079,7 @@ sub GetPendingIssues {
     LEFT JOIN items       ON items.itemnumber       =      issues.itemnumber
     LEFT JOIN biblio      ON items.biblionumber     =      biblio.biblionumber
     LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
+    LEFT JOIN borrowers ON issues.borrowernumber = borrowers.borrowernumber
     WHERE
       $bquery
     ORDER BY issues.issuedate"

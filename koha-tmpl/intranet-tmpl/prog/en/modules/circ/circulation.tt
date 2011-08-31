@@ -701,7 +701,8 @@ No patron matched <span class="ex">[% message %]</span>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% todayissue.biblionumber %]&amp;type=intra"><strong>[% todayissue.title |html %]</strong></a>[% IF ( todayissue.author ) %], by [% todayissue.author %][% END %][% IF ( todayissue.itemnotes ) %]- <span class="circ-hlt">[% todayissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% todayissue.biblionumber %]&amp;itemnumber=[% todayissue.itemnumber %]#item[% todayissue.itemnumber %]">[% todayissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( todayissue.itemtype_image ) %]<img src="[% todayissue.itemtype_image %]" alt="" />[% END %][% END %][% todayissue.itemtype %]</td>
         <td>[% todayissue.checkoutdate %]</td>
-        [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.borrowername %]</td>[% END %]
+        [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.firstname %] [% todayissue.surname %]</td>[% END %]
+        <td>[% todayissue.issuingbranchname %]</td>
         <td>[% todayissue.itemcallnumber %]</td>
             <td>[% todayissue.charge %]</td>
             <td>[% todayissue.replacementprice %]</td>
@@ -775,7 +776,12 @@ No patron matched <span class="ex">[% message %]</span>
             [% previssue.itemtype %]
         </td>
         <td>[% previssue.displaydate %]</td>
+<<<<<<< HEAD
         [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.borrowername %]</td>[% END %]
+=======
+        [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.firstname %] [% previssue.surname %]</td>[% END %]
+        <td>[% previssue.issuingbranchname %]</td>
+>>>>>>> 26acaf3... Bug 6801: checkoverdues returns unnecessary fields, causing slowness
         <td>[% previssue.itemcallnumber %]</td>
         <td>[% previssue.charge %]</td>
         <td>[% previssue.replacementprice %]</td>
@@ -881,7 +887,7 @@ No patron matched <span class="ex">[% message %]</span>
         <td>[% relissue.displaydate %]</td>
         <td>[% relissue.itemcallnumber %]</td>
         <td>[% relissue.charge %]</td>
-        <td>[% relissue.replacementprice %]</td><td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.borrowername %] ([% relissue.cardnumber %])</a></td>
+        <td>[% relissue.replacementprice %]</td><td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.firstname %] [% relissue.surname %] ([% relissue.cardnumber %])</a></td>
      </tr>
     [% END %] <!-- /loop relissues -->
     <!-- /if relissues -->[% END %]
@@ -900,10 +906,10 @@ No patron matched <span class="ex">[% message %]</span>
         <td>[% UNLESS noItemTypeImages %][% IF relprevissue.itemtype_image %]<img src="[% relprevissue.itemtype_image %]" alt="" />[% END %][% END %][% relprevissue.itemtype %]</td>
         <td>[% relprevissue.displaydate %]</td>
         <td>[% relprevissue.itemcallnumber %]</td>
-	[% IF ( relprevissue.multiple_borrowers ) %]<td>[% relprevissue.borrowername %]</td>[% END %]
+	[% IF ( relprevissue.multiple_borrowers ) %]<td>[% relprevissue.firstname %] [% relprevissue.surname %]</td>[% END %]
         <td>[% relprevissue.charge %]</td>
         <td>[% relprevissue.replacementprice %]</td>
-        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relprevissue.borrowernumber %]">[% relprevissue.borrowername %] ([% relprevissue.cardnumber %])</a></td>
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relprevissue.borrowernumber %]">[% relprevissue.firstname %] [% relprevissue.surname %] ([% relprevissue.cardnumber %])</a></td>
 
     </tr>
     <!-- /loop relprevissue -->[% END %]
