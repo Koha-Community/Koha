@@ -874,7 +874,7 @@ foreach my $thisframeworkcode ( keys %$frameworks ) {
 		frameworktext => $frameworks->{$thisframeworkcode}->{'frameworktext'},
 	);
 	if ($frameworkcode eq $thisframeworkcode){
-		$row{'selected'}="selected=\"selected\"";
+		$row{'selected'} = 1;
 		}
 	push @frameworkcodeloop, \%row;
 } 
