@@ -778,8 +778,12 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 			<li id="changeframework"><label for="Frameworks">Change framework: </label>
 			<select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
 			                <option value="Default">Default</option>
-							[% FOREACH frameworkcodeloo IN frameworkcodeloop %]                                             
-                                <option value="[% frameworkcodeloo.value %]" [% frameworkcodeloo.selected %]>
+							[% FOREACH frameworkcodeloo IN frameworkcodeloop %]
+                                [% IF ( frameworkcodeloo.selected ) %]
+                                    <option value="[% frameworkcodeloo.value %]" selected="selected">
+                                [% ELSE %]
+                                    <option value="[% frameworkcodeloo.value %]">
+                                [% END %]
 					             [% frameworkcodeloo.frameworktext %]                                      
                                  </option>                          
 					        [% END %]
