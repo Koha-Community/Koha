@@ -64,7 +64,11 @@
             <span class="loggedinusername">
                 [% loggedinusername %]
             </span>
-            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1"[% IF ( intranetbookbag ) %] onclick="delBasket(true);"[% END %]>Log Out</a>) |
+            [% IF ( intranetbookbag ) %]
+            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1" onclick="delBasket(true);">Log Out</a>) |
+            [% ELSE %]
+            (<a href="/cgi-bin/koha/mainpage.pl?logout.x=1">Log Out</a>) |
+            [% END %]
         [% ELSE %]
             You are not logged in |
         [% END %]
