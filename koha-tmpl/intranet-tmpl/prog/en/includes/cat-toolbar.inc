@@ -81,11 +81,21 @@ function confirm_items_deletion() {
 	YAHOO.util.Event.onContentReady("cattoolbar", function () {
 		//	Menu for new record, new item, new subscription
 		var newmenu = [
-			[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{text: _("New Record"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl" },[% END %]
-			[% IF ( CAN_user_editcatalogue_edit_items ) %]{text: _("New Item"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]#additema" },[% END %]
-			[% IF ( CAN_user_serials_create_subscription ) %]
-			{text: _("New Subscription"), url: "/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber %]"},[% END %]
-			[% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{text: _("Analyze items"), url: "/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&analyze=1" },[% END %][% END %]
+			[% IF CAN_user_editcatalogue_edit_catalogue %]
+            {text: _("New Record"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl" },
+            [% END %]
+			[% IF ( CAN_user_editcatalogue_edit_items ) %]
+            {text: _("New Item"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]#additema" },
+            [% END %]
+            [% IF ( CAN_user_serials_create_subscription ) %]
+                {text: _("New Subscription"), url: "/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber %]"},
+            [% END %]
+            [% IF ( EasyAnalyticalRecords && CAN_user_editcatalogue_edit_catalogue ) %]
+                {text: _("Analyze Items"), url: "/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&analyze=1" },
+            [% END %]
+            [% IF CAN_user_editcatalogue_edit_catalogue %]
+                {text: _("New Child Record"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?parentbiblionumber=[% biblionumber %]" },
+            [% END %]
 		];
 		if(newmenu.length){
 			new YAHOO.widget.Button({

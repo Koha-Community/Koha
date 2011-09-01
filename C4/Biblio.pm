@@ -132,6 +132,7 @@ BEGIN {
       &TransformHtmlToMarc
       &TransformHtmlToXml
       &GetNoZebraIndexes
+      prepare_host_field
     );
 }
 
@@ -3640,8 +3641,64 @@ sub GetHolds {
     return ($holds);
 }
 
+=head2 prepare_host_field
+
+$marcfield = prepare_host_field( $hostbiblioitem, $marcflavour );
+Generate the host item entry for an analytic child entry
+
+=cut
+
+sub prepare_host_field {
+    my ( $hostbiblio, $marcflavour ) = @_;
+    $marcflavour ||= 'MARC21';
+    my $host = GetMarcBiblio($hostbiblio);
+    if ( $marcflavour eq 'MARC21' ) {
+
+        # unfortunately as_string does not 'do the right thing'
+        # if field returns undef
+        my %sfd;
+        my $field;
+        if ( $field = $host->author() ) {
+            $sfd{a} = $field;
+        }
+        if ( $field = $host->title() ) {
+            $sfd{t} = $field;
+        }
+        if ( $field = $host->field('260') ) {
+            my $s = $field->as_string('abc');
+            if ($s) {
+                $sfd{d} = $s;
+            }
+        }
+        if ( $field = $host->field('240') ) {
+            my $s = $field->as_string();
+            if ($s) {
+                $sfd{b} = $s;
+            }
+        }
+        if ( $field = $host->field('022') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{x} = $s;
+            }
+        }
+        if ( $field = $host->field('020') ) {
+            my $s = $field->as_string('a');
+            if ($s) {
+                $sfd{x} = $s;
+            }
+        }
+        if ( $field = $host->field('001') ) {
+            $sfd{w} = $field->data(),;
+        }
+        my $host_field = MARC::Field->new( 773, '0', ' ', %sfd );
+        return $host_field;
+    }
+    return;
+}
 
 1;
+
 
 __END__
 
