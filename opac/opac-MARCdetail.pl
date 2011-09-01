@@ -142,8 +142,8 @@ for ( my $tabloop = 0 ; $tabloop <= 10 ; $tabloop++ ) {
             for my $i ( 0 .. $#subf ) {
                 $subf[$i][0] = "@" unless $subf[$i][0];
                 my $sf_def = $tagslib->{ $fields[$x_i]->tag() }->{ $subf[$i][0] };
-                next if ( $sf_def->{tab} ne $tabloop );
-                next if ( $sf_def->{hidden} > 0 ); 
+                next if ( ($sf_def->{tab}||'') ne $tabloop );
+                next if ( ($sf_def->{hidden}||0) > 0 );
                 my %subfield_data;
                 $subfield_data{marc_lib} = ($sf_def->{lib} eq $previous) ?  '--' : $sf_def->{lib};
                 $previous = $sf_def->{lib};
@@ -215,8 +215,8 @@ foreach my $field (@fields) {
     # loop through each subfield
     for my $i ( 0 .. $#subf ) {
         my $sf_def = $tagslib->{ $field->tag() }->{ $subf[$i][0] };
-        next if ( $sf_def->{tab} ne 10 );
-		next if ( $sf_def->{hidden} > 0 );
+        next if ( ($sf_def->{tab}||'') ne 10 );
+        next if ( ($sf_def->{hidden}||0) > 0 );
         $witness{ $subf[$i][0] } = $sf_def->{lib};
 
         if ( $sf_def->{isurl} ) {
@@ -237,7 +237,7 @@ foreach my $field (@fields) {
 my ( $holdingbrtagf, $holdingbrtagsubf ) =
   &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
 @big_array =
-  sort { $a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf} } @big_array;
+  sort { ($a->{$holdingbrtagsubf}||'') cmp ($b->{$holdingbrtagsubf}||'') } @big_array;
 
 #fill big_row with missing datas
 foreach my $subfield_code ( keys(%witness) ) {
