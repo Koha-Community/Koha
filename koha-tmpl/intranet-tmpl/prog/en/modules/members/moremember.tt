@@ -437,7 +437,12 @@ function validate1(date) {
           [% ELSE %]
           <tr>
           [% END %]
-		  <td[% IF ( issueloo.red ) %] class="od"[% END %]>[% issueloo.date_due %]
+          [% IF ( issueloo.red ) %]
+		      <td class="od">
+          [% ELSE %]
+            <td>
+          [% END %]
+                [% issueloo.date_due %]
                 [% IF ( issueloo.itemlost ) %]
                                         <span class="lost">[% issueloo.itemlost %]</span>
                     [% END %]
@@ -538,7 +543,12 @@ function validate1(date) {
           [% ELSE %]
           <tr>
           [% END %]
-		  <td[% IF ( relissueloo.red ) %] class="od"[% END %]>[% relissueloo.date_due %]
+          [% IF ( relissueloo.red ) %]
+            <td class="od">
+          [% ELSE %]
+            <td>
+          [% END %]
+                [% relissueloo.date_due %]
                 [% IF ( relissueloo.itemlost ) %]
                                         <span class="lost">[% relissueloo.itemlost %]</span>
                     [% END %]
