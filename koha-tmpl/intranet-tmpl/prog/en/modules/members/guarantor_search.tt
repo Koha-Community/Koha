@@ -6,7 +6,19 @@
     </style>
     <script type="text/javascript">
         <!--
-        function fillguarantor(id, surname, firstname, streetnumber, address, address2, city, state, zipcode, country, branchcode) {
+        function fillguarantor(id) {
+            var $ = window.$;
+            var surname       = $('#' + id + 'surname').text();
+            var firstname     = $('#' + id + 'firstname').text();
+            var streetnumber  = $('#' + id + 'streetnumber').text();
+            var address       = $('#' + id + 'address').text();
+            var address2      = $('#' + id + 'address2').text();
+            var city          = $('#' + id + 'city').text();
+            var state         = $('#' + id + 'state').text();
+            var zipcode       = $('#' + id + 'zipcode').text();
+            var country       = $('#' + id + 'country').text();
+            var branchcode    = $('#' + id + 'branchcode').text();
+
             var $ = window.opener.$;
             var form = $('#entryform').get(0);
 
@@ -71,16 +83,30 @@
             <th>Select?</th>
 		</tr>
 		[% FOREACH resultsloo IN resultsloop %]
+          [% import(resultsloo) %]
 			<tr>
-				<td>[% resultsloo.cardnumber %]</td>
+				<td>[% cardnumber %]</td>
                 <td>
-                    [% resultsloo.surname %], [% resultsloo.firstname %]
+                    [% surname %], [% firstname %]
                 </td> 
-				<td>[% resultsloo.dateofbirth %]</td>
-				<td><p>[% resultsloo.address %] [% resultsloo.address2 %] [% resultsloo.city %] [% resultsloo.state %] [% resultsloo.zipcode %] [% resultsloo.country %]</p></td>
+				<td>[% dateofbirth %]</td>
+				<td><p>[% address %] [% address2 %] [% city %] [% state %] [% zipcode %] [% country %]</p></td>
                 <td>
+                  <span style="display:none;">
+                   <span id="[% borrowernumber %]surname">[% surname %]</span>
+                   <span id="[% borrowernumber %]firstname">[% firstname %]</span>
+                   <span id="[% borrowernumber %]streetnumber">[% streetnumber %]</span>
+                   <span id="[% borrowernumber %]address">[% address %]</span>
+                   <span id="[% borrowernumber %]address2">[% address2 %]</span>
+                   <span id="[% borrowernumber %]city">[% city %]</span>
+                   <span id="[% borrowernumber %]state">[% state %]</span>
+                   <span id="[% borrowernumber %]zipcode">[% zipcode %]</span>
+                   <span id="[% borrowernumber %]country">[% country %]</span>
+                   <span id="[% borrowernumber %]branchcode">[% branchcode %]</span>
+                  </span>
+
                     <form action="">
-                        <input type="button" onclick="fillguarantor('[% resultsloo.borrowernumber %]', '[% resultsloo.surname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.firstname |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.streetnumber |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.address |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.address2 |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.city |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]', '[% resultsloo.state |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.zipcode |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.country |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]','[% resultsloo.branchcode |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]'); return false;" value="Select"/>
+                        <input type="button" onclick="fillguarantor('[% borrowernumber %]'); return false;" value="Select"/>
                     </form>
                 </td>
 			</tr>
