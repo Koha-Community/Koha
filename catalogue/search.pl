@@ -364,7 +364,7 @@ my $default_sort_by = C4::Context->preference('defaultSortField')."_".C4::Contex
 @sort_by = split("\0",$params->{'sort_by'}) if $params->{'sort_by'};
 $sort_by[0] = $default_sort_by unless $sort_by[0];
 foreach my $sort (@sort_by) {
-    $template->param($sort => 1);
+    $template->param($sort => 1) if $sort;
 }
 $template->param('sort_by' => $sort_by[0]);
 
