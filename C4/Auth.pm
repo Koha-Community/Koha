@@ -137,8 +137,8 @@ Output.pm module.
 =cut
 
 my $SEARCH_HISTORY_INSERT_SQL =<<EOQ;
-INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, limit_desc, limit_cgi, total, time            )
-VALUES                    (     ?,         ?,          ?,         ?,          ?,         ?,     ?, FROM_UNIXTIME(?))
+INSERT INTO search_history(userid, sessionid, query_desc, query_cgi, total, time            )
+VALUES                    (     ?,         ?,          ?,         ?,          ?, FROM_UNIXTIME(?))
 EOQ
 sub get_template_and_user {
     my $in       = shift;
@@ -271,9 +271,13 @@ sub get_template_and_user {
 			        my @recentSearches = @{thaw($searchcookie) || []};
 				if (@recentSearches) {
 					my $sth = $dbh->prepare($SEARCH_HISTORY_INSERT_SQL);
-                    
-                    $sth->execute( $borrowernumber, $in->{'query'}->cookie("CGISESSID"), $_->{'query_desc'}, $_->{'query_cgi'}, $_->{'limit_desc'}, $_->{'limit_cgi'}, $_->{'total'}, $_->{'time'}, )
-                                foreach @recentSearches;
+					$sth->execute( $borrowernumber,
+						       $in->{'query'}->cookie("CGISESSID"),
+						       $_->{'query_desc'},
+						       $_->{'query_cgi'},
+						       $_->{'total'},
+						       $_->{'time'},
+                            ) foreach @recentSearches;
 
 					# And then, delete the cookie's content
 					my $newsearchcookie = $in->{'query'}->cookie(
