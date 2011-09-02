@@ -25,7 +25,6 @@ use C4::Context;
 use C4::Utils qw( :all );
 use Authen::CAS::Client;
 use CGI;
-use FindBin;
 
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug);
@@ -35,70 +34,31 @@ BEGIN {
 	$VERSION = 3.03;	# set the version for version checking
 	$debug = $ENV{DEBUG};
 	@ISA    = qw(Exporter);
-	@EXPORT = qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url);
-}
-my $context = C4::Context->new() or die 'C4::Context->new failed';
-my $defaultcasserver;
-my $casservers;
-my $yamlauthfile = "../C4/Auth_cas_servers.yaml";
-
-
-# If there's a configuration for multiple cas servers, then we get it
-if (multipleAuth()) {
-    ($defaultcasserver, $casservers) = YAML::LoadFile(qq($FindBin::Bin/$yamlauthfile));
-    $defaultcasserver = $defaultcasserver->{'default'};
-} else {
-# Else, we fall back to casServerUrl syspref
-    $defaultcasserver = 'default';
-    $casservers = { 'default' => C4::Context->preference('casServerUrl') };
+	@EXPORT = qw(checkpw_cas login_cas logout_cas login_cas_url);
 }
 
-# Is there a configuration file for multiple cas servers?
-sub multipleAuth {
-    return (-e qq($FindBin::Bin/$yamlauthfile));
-}
 
-# Returns configured CAS servers' list if multiple authentication is enabled
-sub getMultipleAuth {
-   return $casservers; 
-}
+my $context = C4::Context->new() 	or die 'C4::Context->new failed';
+my $casserver = C4::Context->preference('casServerUrl');
 
 # Logout from CAS
 sub logout_cas {
     my ($query) = @_;
-    my $uri = $ENV{'SCRIPT_URI'};
-    my $casparam = $query->param('cas');
-    # FIXME: This should be more generic and handle whatever parameters there might be
-    $uri .= "?cas=" . $casparam if (defined $casparam);
-    $casparam = $defaultcasserver if (not defined $casparam);
-    my $cas = Authen::CAS::Client->new($casservers->{$casparam});
-    print $query->redirect( $cas->logout_url($uri));
+    my $cas = Authen::CAS::Client->new($casserver);
+    print $query->redirect($cas->logout_url(url => $ENV{'SCRIPT_URI'}));
 }
 
 # Login to CAS
 sub login_cas {
     my ($query) = @_;
-    my $uri = $ENV{'SCRIPT_URI'};
-    my $casparam = $query->param('cas');
-    # FIXME: This should be more generic and handle whatever parameters there might be
-    $uri .= "?cas=" . $casparam if (defined $casparam);
-    $casparam = $defaultcasserver if (not defined $casparam);
-    my $cas = Authen::CAS::Client->new($casservers->{$casparam});
-    print $query->redirect( $cas->login_url($uri));
+    my $cas = Authen::CAS::Client->new($casserver);
+    print $query->redirect($cas->login_url($ENV{'SCRIPT_URI'})); 
 }
 
 # Returns CAS login URL with callback to the requesting URL
 sub login_cas_url {
-
-    my ($query, $key) = @_;
-    my $uri = $ENV{'SCRIPT_URI'};
-    my $casparam = $query->param('cas');
-    # FIXME: This should be more generic and handle whatever parameters there might be
-    $uri .= "?cas=" . $casparam if (defined $casparam);
-    $casparam = $defaultcasserver if (not defined $casparam);
-    $casparam = $key if (defined $key);
-    my $cas = Authen::CAS::Client->new($casservers->{$casparam});
-    return $cas->login_url($uri);
+    my $cas = Authen::CAS::Client->new($casserver);
+    return $cas->login_url($ENV{'SCRIPT_URI'});
 }
 
 # Checks for password correctness
@@ -107,102 +67,45 @@ sub checkpw_cas {
     $debug and warn "checkpw_cas";
     my ($dbh, $ticket, $query) = @_;
     my $retnumber;
-    my $uri = $ENV{'SCRIPT_URI'};
-    my $casparam = $query->param('cas');
-    # FIXME: This should be more generic and handle whatever parameters there might be
-    $uri .= "?cas=" . $casparam if (defined $casparam);
-    $casparam = $defaultcasserver if (not defined $casparam);
-    my $cas = Authen::CAS::Client->new($casservers->{$casparam});
+    my $cas = Authen::CAS::Client->new($casserver);
 
     # If we got a ticket
     if ($ticket) {
-        $debug and warn "Got ticket : $ticket";
+	$debug and warn "Got ticket : $ticket";
+	
+	# We try to validate it
+	my $val = $cas->service_validate($ENV{'SCRIPT_URI'}, $ticket);
+	
+	# If it's valid
+	if( $val->is_success() ) {
 
-        # We try to validate it
-        my $val = $cas->service_validate($uri, $ticket );
+	    my $userid = $val->user();
+	    $debug and warn "User CAS authenticated as: $userid";
 
-        # If it's valid
-        if ( $val->is_success() ) {
+	    # Does it match one of our users ?
+    	    my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
+    	    $sth->execute($userid);
+    	    if ( $sth->rows ) {
+		$retnumber = $sth->fetchrow;
+		return (1, $retnumber, $userid);
+	    }
+	    $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
+	    $sth->execute($userid);
+	    if ( $sth->rows ) {
+	    	$retnumber = $sth->fetchrow;
+		return (1, $retnumber, $userid);
+	    }
+	    
+	    # If we reach this point, then the user is a valid CAS user, but not a Koha user
+	    $debug and warn "User $userid is not a valid Koha user";
 
-            my $userid = $val->user();
-            $debug and warn "User CAS authenticated as: $userid";
-
-            # Does it match one of our users ?
-            my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
-            }
-            $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
-            }
-
-            # If we reach this point, then the user is a valid CAS user, but not a Koha user
-            $debug and warn "User $userid is not a valid Koha user";
-
-        } else {
-            $debug and warn "Invalid session ticket : $ticket";
-            return 0;
-        }
+    	} else {
+    	    $debug and warn "Invalid session ticket : $ticket";
+    	    return 0;
+	}
     }
     return 0;
 }
-
-# Proxy CAS auth
-sub check_api_auth_cas {
-    $debug and warn "check_api_auth_cas";
-    my ($dbh, $PT, $query) = @_;
-    my $retnumber;
-    my $url = $query->url();
-
-    my $casparam = $query->param('cas');
-    $casparam = $defaultcasserver if (not defined $casparam);
-    my $cas = Authen::CAS::Client->new($casservers->{$casparam});
-
-    # If we have a Proxy Ticket
-    if ($PT) {
-        my $r = $cas->proxy_validate( $url, $PT );
-
-        # If the PT is valid
-        if ( $r->is_success ) {
-
-            # We've got a username !
-            $debug and warn "User authenticated as: ", $r->user, "\n";
-            $debug and warn "Proxied through:\n";
-            $debug and warn "  $_\n" for $r->proxies;
-
-            my $userid = $r->user;
-
-            # Does it match one of our users ?
-            my $sth = $dbh->prepare("select cardnumber from borrowers where userid=?");
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
-            }
-            $sth = $dbh->prepare("select userid from borrowers where cardnumber=?");
-            return $r->user;
-            $sth->execute($userid);
-            if ( $sth->rows ) {
-                $retnumber = $sth->fetchrow;
-                return ( 1, $retnumber, $userid );
-            }
-
-            # If we reach this point, then the user is a valid CAS user, but not a Koha user
-            $debug and warn "User $userid is not a valid Koha user";
-
-        } else {
-            $debug and warn "Proxy Ticket authentication failed";
-            return 0;
-        }
-    }
-    return 0;
-}
-
 
 1;
 __END__
