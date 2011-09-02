@@ -90,7 +90,7 @@ $template->param(
 # ------- get periods stuff ------------------
 
 # USED FOR PERMISSION COMPARISON LATER
-my $borrower_id         = $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'};
+my $borrower_id         = $template->{VARS}->{'USER_INFO'}[0]->{'borrowernumber'};
 my $user                = GetMemberDetails($borrower_id);
 my $user_branchcode     = $user->{'branchcode'};
 
@@ -246,7 +246,7 @@ if ($op eq 'add_form') {
         # PERMISSIONS
         unless($staffflags->{'superlibrarian'} % 2   == 1 ) {
             #IF NO PERMS, THEN DISABLE EDIT/DELETE
-            unless ( $template->{param_map}->{'CAN_user_acquisition_budget_modify'} ) {
+            unless ( $template->{VARS}->{'CAN_user_acquisition_budget_modify'} ) {
                 $budget->{'budget_lock'} = 1;
             }
             # check budget permission

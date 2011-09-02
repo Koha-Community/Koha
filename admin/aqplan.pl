@@ -85,8 +85,8 @@ $template->param(
 
 # ------- get periods stuff ------------------
 
-my $borrower_id         = $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'};
-my $borrower_branchcode = $template->{param_map}->{'USER_INFO'}[0]->{'branchcode'};
+my $borrower_id         = $template->{VARS}->{'USER_INFO'}[0]->{'borrowernumber'};
+my $borrower_branchcode = $template->{VARS}->{'USER_INFO'}[0]->{'branchcode'};
 
 my $periods;
 my $authcat      = $input->param('authcat');
@@ -132,7 +132,7 @@ my $op        = $input->param("op");
 
 my $budget_branchcode;
 
-my $budgets_ref = GetBudgetHierarchy( $budget_period_id, $show_mine?$template->{param_map}->{'USER_INFO'}[0]->{'branchcode'}:'', $show_mine?$template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'}:'' );
+my $budgets_ref = GetBudgetHierarchy( $budget_period_id, $show_mine?$template->{VARS}->{'USER_INFO'}[0]->{'branchcode'}:'', $show_mine?$template->{VARS}->{'USER_INFO'}[0]->{'borrowernumber'}:'' );
 
 # build categories list
 my $sth = $dbh->prepare("select distinct category from authorised_values where category like 'A%' ");
