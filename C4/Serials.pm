@@ -608,8 +608,6 @@ sub GetSubscriptions {
     $sth = $dbh->prepare($sql);
     $sth->execute(@bind_params);
     my @results;
-    my $previousbiblio = "";
-    my $odd           = 1;
 
     while ( my $line = $sth->fetchrow_hashref ) {
         if ( $previousbiblio eq $line->{biblionumber} ) {
