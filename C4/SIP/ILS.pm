@@ -190,12 +190,16 @@ sub checkin {
 	# It's ok to check it in if it exists, and if it was checked out
 	$circ->ok($item && $item->{patron});
 
-    if ($circ->ok) {
-		$circ->patron($patron = new ILS::Patron $item->{patron});
-		delete $item->{patron};
-		delete $item->{due_date};
-		$patron->{items} = [ grep {$_ ne $item_id} @{$patron->{items}} ];
-    }
+	if (!defined($item->{patron})) {
+		$circ->screen_msg("Item not checked out");
+	} else {
+		if ($circ->ok) {
+			$circ->patron($patron = new ILS::Patron $item->{patron});
+			delete $item->{patron};
+			delete $item->{due_date};
+			$patron->{items} = [ grep {$_ ne $item_id} @{$patron->{items}} ];
+		}
+	}
     # END TRANSACTION
 
     return $circ;
