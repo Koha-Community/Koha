@@ -80,7 +80,7 @@ my $suggestions_count       = CountSuggestion($status);
 
 my $budget_arr =
   GetBudgetHierarchy( '', $user->{branchcode},
-    $template->{param_map}->{'USER_INFO'}[0]->{'borrowernumber'} );
+    $template->{VARS}->{'USER_INFO'}[0]->{'borrowernumber'} );
 
 my $total      = 0;
 my $totspent   = 0;
