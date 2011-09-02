@@ -197,6 +197,11 @@ $template->param( subscriptions => \@subscriptionloop );
 
 if ( $op and $op eq 'serialchangestatus' ) {
 
+    # Convert serialseqs to UTF-8 to prevent encoding problems
+    foreach my $seq (@serialseqs) {
+        utf8::decode($seq) unless utf8::is_utf8($seq);
+    }
+
     my $newserial;
     for ( my $i = 0 ; $i <= $#serialids ; $i++ ) {
         my ($plan_date, $pub_date);
