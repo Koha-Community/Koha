@@ -179,7 +179,11 @@ sub param {
         my $val = shift;
         if    ( ref($val) eq 'ARRAY' && !scalar @$val ) { $val = undef; }
         elsif ( ref($val) eq 'HASH'  && !scalar %$val ) { $val = undef; }
-        $self->{VARS}->{$key} = $val;
+        if ( $key ) {
+            $self->{VARS}->{$key} = $val;
+        } else {
+            warn "Problem = a value of $val has been passed to param without key";
+        }
     }
 }
 
