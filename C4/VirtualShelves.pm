@@ -203,15 +203,19 @@ sub GetRecentShelves {
     my @params;
     my $selection;
     if (defined $owner) {
-        @params = ($owner, $mincategory, $row_count);
+        @params = ($owner, $mincategory);
         $selection = ' WHERE owner = ? AND category = ?';
     } else {
-        @params = ( $mincategory, $row_count);
+        @params = ( $mincategory);
         $selection = ' WHERE category >= ? ';
     }
     my $query = 'SELECT * FROM virtualshelves';
     $query .= $selection;
-    $query .= ' ORDER BY lastmodified DESC LIMIT ?';
+    $query .= ' ORDER BY lastmodified DESC';
+    if ($row_count){
+	$query .= ' LIMIT ?';
+	push @params,$row_count;
+    }
     my $sth = $dbh->prepare($query);
     $sth->execute(@params);
     my $shelflist = $sth->fetchall_arrayref({});
