@@ -2,6 +2,7 @@
 
 
 # Copyright 2009 BibLibre
+# Parts Copyright Catalyst IT 2011
 #
 # This file is part of Koha.
 #
@@ -26,6 +27,7 @@ use C4::Auth;
 use C4::Items;
 use C4::Biblio;
 use C4::Serials;
+use C4::Reserves qw/MergeHolds/;
 
 my $input = new CGI;
 my @biblionumber = $input->param('biblionumber');
@@ -100,6 +102,8 @@ if ($merge) {
 
     # Deleting the other record
     if (scalar(@errors) == 0) {
+	# Move holds
+	MergeHolds($dbh,$tobiblio,$frombiblio);
 	my $error = DelBiblio($frombiblio);
 	push @errors, $error if ($error); 
     }
@@ -251,3 +255,4 @@ sub createKey(){
 }
 
 
+    

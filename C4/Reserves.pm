@@ -3,6 +3,7 @@ package C4::Reserves;
 # Copyright 2000-2002 Katipo Communications
 #           2006 SAN Ouest Provence
 #           2007-2010 BibLibre Paul POULAIN
+#           2011 Catalyst IT
 #
 # This file is part of Koha.
 #
@@ -86,7 +87,7 @@ This modules provides somes functions to deal with reservations.
 BEGIN {
     # set the version for version checking
     $VERSION = 3.01;
-	require Exporter;
+    require Exporter;
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &AddReserve
@@ -121,6 +122,7 @@ BEGIN {
         &AlterPriority
         &ToggleLowestPriority
     );
+    @EXPORT_OK = qw( MergeHolds );
 }    
 
 =head2 AddReserve
@@ -1797,6 +1799,51 @@ sub _ShiftPriorityByDateAndPriority {
 
     return $new_priority;  # so the caller knows what priority they wind up receiving
 }
+
+=head2 MergeHolds
+
+  MergeHolds($dbh,$to_biblio, $from_biblio);
+
+This shifts the holds from C<$from_biblio> to C<$to_biblio> and reorders them by the date they were placed
+
+=cut
+
+sub MergeHolds {
+    my ( $dbh, $to_biblio, $from_biblio ) = @_;
+    my $sth = $dbh->prepare(
+        "SELECT count(*) as reservenumber FROM reserves WHERE biblionumber = ?"
+    );
+    $sth->execute($from_biblio);
+    if ( my $data = $sth->fetchrow_hashref() ) {
+
+        # holds exist on old record, if not we don't need to do anything
+        $sth = $dbh->prepare(
+            "UPDATE reserves SET biblionumber = ? WHERE biblionumber = ?");
+        $sth->execute( $to_biblio, $from_biblio );
+
+        # Reorder by date
+        # don't reorder those already waiting
+
+        $sth = $dbh->prepare(
+"SELECT * FROM reserves WHERE biblionumber = ? AND (found <> ? AND found <> ? OR found is NULL) ORDER BY reservedate ASC"
+        );
+        my $upd_sth = $dbh->prepare(
+"UPDATE reserves SET priority = ? WHERE biblionumber = ? AND borrowernumber = ?
+        AND reservedate = ? AND constrainttype = ? AND (itemnumber = ? or itemnumber is NULL) "
+        );
+        $sth->execute( $to_biblio, 'W', 'T' );
+        my $priority = 1;
+        while ( my $reserve = $sth->fetchrow_hashref() ) {
+            $upd_sth->execute(
+                $priority,                    $to_biblio,
+                $reserve->{'borrowernumber'}, $reserve->{'reservedate'},
+                $reserve->{'constrainttype'}, $reserve->{'itemnumber'}
+            );
+            $priority++;
+        }
+    }
+}
+
 
 =head1 AUTHOR
 
