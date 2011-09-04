@@ -152,14 +152,14 @@ if ( $shelfnumber || ( $shelfnumber == -1 ) ) {    # the shelf already exist.
     }
 }
 else {    # this shelf doesn't already exist.
-    my $limit = 10;
+#    my $limit = 10;
     my ($shelflist);
     my @shelvesloop;
     my %shelvesloop;
 
     #grab each type of shelf, open (type 3) should not be limited by user.
     foreach my $shelftype (1,2,3) {
-	    my ($shelflist) = GetRecentShelves($shelftype, $limit, $shelftype == 3 ? undef : $loggedinuser);
+	    my ($shelflist) = GetRecentShelves($shelftype, undef, $shelftype == 3 ? undef : $loggedinuser);
 	    for my $shelf (@{ $shelflist }) {
 		    push(@shelvesloop, $shelf->{shelfnumber});
 		    $shelvesloop{$shelf->{shelfnumber}} = $shelf->{shelfname};
