@@ -818,7 +818,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 	<div class="tag" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
             [% UNLESS ( innerloo.hide_marc ) %]
-            	[% IF ( innerloo.advancedMARCEditor ) %]
+            	[% IF advancedMARCEditor %]
 		<a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
 		[% ELSE %]
                         <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]<a class="marcdocs"
@@ -841,7 +841,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                 [% END %]
             [% END %]
 
-            [% UNLESS ( innerloo.advancedMARCEditor ) %]
+            [% UNLESS advancedMARCEditor %]
 	            <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib %]</a>
             [% END %]
             [% IF ( innerloo.repeatable ) %]
@@ -856,7 +856,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             <!--  One line on the marc editor -->
             <div class="subfield_line" style="[% subfield_loo.visibility %]; float: left; clear: left; width: 100%;" id="subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]">
             
-                [% UNLESS ( subfield_loo.advancedMARCEditor ) %]
+                [% UNLESS advancedMARCEditor %]
                     <label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" [% IF ( subfield_loo.fixedfield ) %] style="display:none;" [% END %] class="labelsubfield">
                 [% END %] 
                 
@@ -873,7 +873,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
  </span>
                 [% END %]
             
-                [% UNLESS ( subfield_loo.advancedMARCEditor ) %]
+                [% UNLESS advancedMARCEditor %]
                     [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
                         [% subfield_loo.marc_lib_plain %]
                         [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
