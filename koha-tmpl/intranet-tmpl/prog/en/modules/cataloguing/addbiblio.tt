@@ -817,7 +817,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         [% IF ( innerloo.tag ) %]
 	<div class="tag" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
-            [% UNLESS ( innerloo.hide_marc ) %]
+            [% UNLESS hide_marc %]
             	[% IF advancedMARCEditor %]
 		<a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
 		[% ELSE %]
@@ -860,7 +860,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
                     <label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" [% IF ( subfield_loo.fixedfield ) %] style="display:none;" [% END %] class="labelsubfield">
                 [% END %] 
                 
-                [% UNLESS ( subfield_loo.hide_marc ) %]
+                [% UNLESS hide_marc %]
                 <span class="subfieldcode">[% IF ( subfield_loo.fixedfield ) %] 
                         <img class="buttonUp" style="display:none;" src="[% themelang %]/../img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
                     [% ELSE %]
