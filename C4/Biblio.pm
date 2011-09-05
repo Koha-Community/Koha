@@ -1606,7 +1606,7 @@ sub GetMarcAuthors {
 
 =head2 GetMarcUrls
 
-  $marcurls = GetMarcUrls($record,$marcflavour);
+  $marcurls = GetMarcUrls($record,$marcflavour,$issn);
 
 Returns arrayref of URLs from MARC data, suitable to pass to tmpl loop.
 Assumes web resources (not uncommon in MARC21 to omit resource type ind) 
@@ -1614,7 +1614,7 @@ Assumes web resources (not uncommon in MARC21 to omit resource type ind)
 =cut
 
 sub GetMarcUrls {
-    my ( $record, $marcflavour ) = @_;
+    my ( $record, $marcflavour, $issn ) = @_;
 
     my @marcurls;
     for my $field ( $record->field('856') ) {
@@ -1624,6 +1624,8 @@ sub GetMarcUrls {
         }
         my @urls = $field->subfield('u');
         foreach my $url (@urls) {
+            $url .= "?sid=&ISSN=$issn"
+              if $issn && ($url =~ m/\bserialssolutions\b/o) && ($url !~ m/\bISSN=/o);
             my $marcurl;
             if ( $marcflavour eq 'MARC21' ) {
                 my $s3   = $field->subfield('3');

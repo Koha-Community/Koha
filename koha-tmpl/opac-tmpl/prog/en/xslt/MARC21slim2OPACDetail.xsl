@@ -436,6 +436,7 @@
         </xsl:for-each>
         </span>
         </xsl:if>
+        <xsl:variable name="issn"><xsl:if test="marc:datafield[@tag=022]"><xsl:value-of select="marc:datafield[@tag=022]/marc:subfield[@code='a']"/></xsl:if></xsl:variable>
 
         <!-- Other Title  Statement: Alternate Graphic Representation (MARC 880) -->
         <xsl:if test="$display880">
@@ -539,7 +540,9 @@
         <span class="results_summary"><span class="label">Online Resources: </span>
         <xsl:for-each select="marc:datafield[@tag=856]">
             <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
-            <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+            <xsl:variable name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:variable>
+            <!--        <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/><xsl:if test="$issn and matches(marc:subfield[@code='u'], 'serialssolutions') and not matches(marc:subfield[@code='u'], 'ISSN')">?ISSN=<xsl:value-of select="$issn"/></xsl:if></xsl:attribute> -->
+            <a><xsl:attribute name="href"><xsl:value-of select="$href"/><xsl:if test="$issn and contains($href, 'serialssolutions') and not(contains($href, 'ISSN'))">?sid=&amp;ISSN=<xsl:value-of select="$issn"/></xsl:if></xsl:attribute>
             <xsl:if test="$OPACURLOpenInNewWindow='1'">
                 <xsl:attribute name="target">_blank</xsl:attribute>
             </xsl:if>

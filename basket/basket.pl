@@ -65,8 +65,8 @@ foreach my $biblionumber ( @bibs ) {
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
     my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
-    my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-    my @items            = GetItemsInfo( $biblionumber );
+    my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour,$dat->{issn});
+    my @items            = GetItemsInfo( $biblionumber, 'opac' );
 
     my $hasauthors = 0;
     if($dat->{'author'} || @$marcauthorsarray) {

@@ -97,12 +97,12 @@ my $hideitems = 1 if C4::Context->preference('hidelostitems') or scalar(@hiddeni
 # Hide items
 if ($hideitems) {
     for my $itm (@all_items) {
-	if  ( C4::Context->preference('hidelostitems') ) {
-	    push @items, $itm unless $itm->{itemlost} or any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
-	} else {
-	    push @items, $itm unless any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
+        if  ( C4::Context->preference('hidelostitems') ) {
+            push @items, $itm unless $itm->{itemlost} or any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
+        } else {
+            push @items, $itm unless any { $itm->{'itemnumber'} eq $_ } @hiddenitems;
+        }
     }
-}
 } else {
     # Or not
     @items = @all_items;
@@ -223,7 +223,7 @@ my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
 my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
 my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
-my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour,$dat->{issn});
 my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
 
     $template->param(

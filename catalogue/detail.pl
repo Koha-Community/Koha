@@ -99,12 +99,19 @@ $template->param(
     normalized_isbn => $isbn,
 );
 
+unless (defined($record)) {
+    print $query->redirect("/cgi-bin/koha/errors/404.pl");
+	exit;
+}
+
+my $dat = &GetBiblioData($biblionumber);
+
 my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
 my $marcisbnsarray   = GetMarcISBN( $record, $marcflavour );
 my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
 my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
-my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour,$dat->{issn});
 my $subtitle         = GetRecordValue('subtitle', $record, $fw);
 
 # Get Branches, Itemtypes and Locations
@@ -117,7 +124,6 @@ my @items;
 for my $itm (@all_items) {
     push @items, $itm unless ( $itm->{itemlost} && GetHideLostItemsPreference($borrowernumber) && !$showallitems);
 }
-my $dat = &GetBiblioData($biblionumber);
 
 # get count of holds
 my ( $holdcount, $holds ) = GetReservesFromBiblionumber($biblionumber,1);
