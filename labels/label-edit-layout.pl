@@ -23,7 +23,6 @@ use warnings;
 
 use CGI;
 use POSIX;
-use Text::CSV_XS;
 
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
@@ -66,40 +65,23 @@ sub _set_selected {
 
 sub _select_format_string {     # generate field table based on format_string
     my $format_string = shift;
-    $format_string =~ s/(?<=,) (?![A-Z][a-z][0-9])//g;  # remove spaces between fields
-    my $table = [];
-    my $fields = [];
-    my ($row_index, $col_index, $field_index) = (0,0,0);
-    my $cols = 5;       # number of columns to wrap on
-    my $csv = Text::CSV_XS->new({ allow_whitespace => 1 });
-    my $status = $csv->parse($format_string);
-    my @text_fields = $csv->fields();
-    warn sprintf('Error parsing format_string. Parser returned: %s', $csv->error_input()) if $csv->error_input();
-    my $field_count = $#text_fields + 1;
-    POPULATE_TABLE:
-    foreach my $text_field (@text_fields) {
-        $$fields[$col_index] = {field_empty => 0, field_name => ($text_field . "_tbl"), field_label => $text_field, order => [{num => '', selected => 0}]};
-        for (my $order_i = 1; $order_i <= $field_count; $order_i++) {
-            $$fields[$col_index]{'order'}[$order_i] = {num => $order_i, selected => ($field_index == $order_i-1 ? 1 : 0)};
-        }
-        $col_index++;
+
+    my @text_fields = grep /\w/, split /\s*,\s/, $format_string;
+    my %tf = map {$_ => 1} @text_fields;
+    my @missing_fields = grep { !$tf{$_} } @{ C4::Labels::Layout->PRESET_FIELDS };
+
+    my $field_count = scalar(@text_fields) + scalar( @missing_fields);
+
+    my @fields;
+    my $field_index = 1;
+    foreach my $f (@text_fields) {
+        push @fields, {field_name => ($f . "_tbl"), field_label => $f, order => $field_index};
         $field_index++;
-        if ((($col_index > 0) && !($col_index % $cols)) || ($field_index == $field_count)) {    # wrap to new row
-            if (($field_index == $field_count) && ($row_index > 0)) { # in this case fill out row with empty fields
-                while ($col_index < $cols) {
-                    $$fields[$col_index] = {field_empty => 1, field_name => '', field_label => '', order => [{num => '', selected => 0}]};
-                    $col_index++;
-                }
-                $$table[$row_index] = {text_fields => $fields};
-                last POPULATE_TABLE;
-            }
-            $$table[$row_index] = {text_fields => $fields};
-            $row_index++;
-            $fields = [];
-            $col_index = 0;
-        }
     }
-    return $table;
+    foreach my $f (@missing_fields) {
+        push @fields, {field_name => ($f . "_tbl"), field_label => $f};
+    }
+    return (\@fields, $field_count);
 }
 
 if ($op eq 'edit') {
@@ -110,15 +92,14 @@ if ($op eq 'edit') {
 elsif  ($op eq 'save') {
     my $format_string = '';
     if ($layout_choice eq 'layout_table') {       # translate the field table into a format_string
-        my @layout_table = ();
+        my %layout_table;
         foreach my $cgi_param ($cgi->param()) {
             if (($cgi_param =~ m/^(.*)_tbl$/) && ($cgi->param($cgi_param))) {
                 my $value = $cgi->param($cgi_param);
-                $layout_table[$value - 1] = $1;
+                $layout_table{$1} = $value;
             }
         }
-        @layout_table = grep {$_} @layout_table;        # this removes numerically 'skipped' fields. ie. user omits a number in sequential order
-        $format_string = join ', ', @layout_table;
+        $format_string = join ', ', sort { $layout_table{$a} <=> $layout_table{$b} } keys %layout_table;
         $cgi->param('format_string', $format_string);
     }
     my @params = (
@@ -152,14 +133,15 @@ my $barcode_types = _set_selected(get_barcode_types(), $layout, 'barcode_type');
 my $label_types = _set_selected(get_label_types(), $layout, 'printing_type');
 my $font_types = _set_selected(get_font_types(), $layout, 'font');
 my $text_justification_types = _set_selected(get_text_justification_types(), $layout, 'text_justify');
-my $select_text_fields = _select_format_string($layout->get_attr('format_string'));
+my ($select_text_fields, $select_text_fields_cnt) = _select_format_string($layout->get_attr('format_string'));
 
 $template->param(
         barcode_types   => $barcode_types,
         label_types     => $label_types,
         font_types      => $font_types,
         text_justification_types    => $text_justification_types,
-        field_table     => $select_text_fields,
+        fields          => $select_text_fields,
+        field_count     => $select_text_fields_cnt,
         layout_id       => $layout->get_attr('layout_id') > -1 ? $layout->get_attr('layout_id') : '',
         layout_name     => $layout->get_attr('layout_name'),
         guidebox        => $layout->get_attr('guidebox'),

@@ -75,25 +75,23 @@
                                         <input type="radio" name="layout_choice" id="layout_choice_order" value="layout_table" /><label for="layout_choice_order">Choose Order Of Text Fields to Print</label>
                                         [% END %]
 												<div id="layout_table">
-                                                    [% FOREACH field_tabl IN field_table %]
                                                     <p>
-                                                        [% FOREACH text_field IN field_tabl.text_fields %]
-                                                        [% IF ( text_field.field_empty ) %]
-                                                        [% ELSE %]
-                                                            <select name="[% text_field.field_name %]" id="[% text_field.field_name |url %]">
-                                                                [% FOREACH orde IN text_field.order %]
-                                                                [% IF ( orde.selected ) %]
-                                                                <option value="[% orde.num %]" selected="selected">[% orde.num %]</option>
+                                            [% FOREACH text_field IN fields %]
+                                                        <select name="[% text_field.field_name %]" id="[% text_field.field_name |url %]">
+                                                            <option value=""></option>
+                                                            [% FOREACH orde IN [1..field_count] %]
+                                                                [% IF ( orde == text_field.order ) %]
+                                                            <option value="[% orde %]" selected="1">[% orde %]</option>
                                                                 [% ELSE %]
-                                                                <option value="[% orde.num %]">[% orde.num %]</option>
+                                                            <option value="[% orde %]">[% orde %]</option>
                                                                 [% END %]
-                                                                [% END %]
-                                                            </select>
-                                                            <label for="[% text_field.field_name |url %]">[% text_field.field_label %]</label>
-                                                        [% END %]
-                                                        [% END %]
+                                                            [% END %]
+                                                        </select>&nbsp;<label for="[% text_field.field_name |url %]">[% text_field.field_label %]</label>
+
+                                                        &nbsp;&nbsp;
+
+                                            [% END %]
                                                     </p>
-                                                    [% END %]
 											</div>
                                             </li>
                                             [% UNLESS ( layout_string ) %]

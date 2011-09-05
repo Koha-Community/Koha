@@ -61,6 +61,7 @@ sub _check_params {
     return $exit_code;
 }
 
+use constant PRESET_FIELDS => [qw(title author isbn issn itemtype barcode callnumber)];
 sub new {
     my $invocant = shift;
     my $self = '';
@@ -81,7 +82,7 @@ sub new {
             font_size       =>      3,
             callnum_split   =>      0,
             text_justify    =>      'L',
-            format_string   =>      'title, author, isbn, issn, itemtype, barcode, callnumber',
+            format_string   =>      join(', ', @{ PRESET_FIELDS() }),
             @_,
         };
     }
