@@ -87,9 +87,6 @@ foreach my $accountline ( @{$accts}) {
         $accountline->{payment} = 1;
         $reverse_col = 1;
     }
-    if ($accountline->{accounttype} ne 'F' && $accountline->{accounttype} ne 'FU'){
-        $accountline->{printtitle} = 1;
-    }
 }
 
 $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
