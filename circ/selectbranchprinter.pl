@@ -31,13 +31,14 @@ use C4::Branch; # GetBranches GetBranchesLoop
 # this will be the script that chooses branch and printer settings....
 
 my $query = CGI->new();
+
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user({
     template_name   => "circ/selectbranchprinter.tmpl",
     query           => $query,
     type            => "intranet",
     debug           => 1,
     authnotrequired => 0,
-    flagsrequired   => { circulate => "circulate_remaining_permissions" },
+    flagsrequired   => { catalogue => 1, },
 });
 
 my $sessionID = $query->cookie("CGISESSID");
