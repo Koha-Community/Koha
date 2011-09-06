@@ -817,7 +817,7 @@ sub CanBookBeIssued {
             }
         }
     }
-    if ( $item->{'wthdrawn'} && $item->{'wthdrawn'} == 1 )
+    if ( $item->{'wthdrawn'} && $item->{'wthdrawn'} > 0 )
     {
         $issuingimpossible{WTHDRAWN} = 1;
     }
