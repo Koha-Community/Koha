@@ -433,20 +433,22 @@ foreach my $biblionumber (@biblionumbers) {
                      $borrowerinfo->{'branchcode'} ne $item->{'homebranch'} ) ) {
                 $policy_holdallowed = 0;
             }
-
-            if (IsAvailableForItemLevelRequest($itemnumber) and
-            	not $item->{cantreserve} and
-            	CanItemBeReserved($borrowerinfo->{borrowernumber}, $itemnumber) ) {
-                if ( $policy_holdallowed ) {
-                    $item->{available} = 1;
-                    $num_available++;
-                }
-            } elsif (C4::Context->preference( 'AllowHoldPolicyOverride' ) ) {
-                    $item->{override} = 1;
-                    $num_override++;
+            
+            if (
+                   $policy_holdallowed
+                && !$item->{cantreserve}
+                && IsAvailableForItemLevelRequest($itemnumber)
+                && CanItemBeReserved(
+                    $borrowerinfo->{borrowernumber}, $itemnumber
+                )
+              )
+            {
+                $item->{available} = 1;
+                $num_available++;
             }
-            # If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
-            if (C4::Context->preference( 'AllowHoldPolicyOverride' ) && !$item->{available} ) {
+            elsif ( C4::Context->preference('AllowHoldPolicyOverride') ) {
+
+# If AllowHoldPolicyOverride is set, it should override EVERY restriction, not just branch item rules
                 $item->{override} = 1;
                 $num_override++;
             }
