@@ -52,7 +52,7 @@
         [% ELSE %]
             <strong>[% LoginBranchname %]</strong>
             [% IF ( IndependantBranches ) %]
-                [% IF ( CAN_user_management ) %]
+                [% IF ( CAN_user_management || CAN_user_editcatalogue_edit_catalogue ) %]
                     (<a href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>)
                 [% END %]
             [% ELSE %]
