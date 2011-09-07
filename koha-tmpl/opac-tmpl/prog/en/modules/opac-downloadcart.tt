@@ -9,9 +9,9 @@
 	<ol><li><label for="format">Download cart:</label>
         <select name="format" id="format">
         <option value="">-- Choose format --</option>
-	    <option value="iso2709">iso2709</option>
-	    <option value="ris">RIS</option>
-	    <option value="bibtex">BibTex</option>
+        <option value="ris">RIS (Zotero, EndNote, others)</option>
+        <option value="bibtex">BibTeX</option>
+        <option value="iso2709">MARC</option>
 	    [% FOREACH csv_profile IN csv_profiles %]
 	    <option value="[% csv_profile.export_format_id %]">CSV - [% csv_profile.profile %]</option>
 	    [% END %]
