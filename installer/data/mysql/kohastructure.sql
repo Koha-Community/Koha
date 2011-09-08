@@ -1825,38 +1825,38 @@ CREATE TABLE `subscriptionroutinglist` ( -- information related to the routing l
 --
 
 DROP TABLE IF EXISTS `suggestions`;
-CREATE TABLE `suggestions` (
-  `suggestionid` int(8) NOT NULL auto_increment,
-  `suggestedby` int(11) NOT NULL default 0,
-  `suggesteddate` date NOT NULL default 0,
-  `managedby` int(11) default NULL,
-  `manageddate` date default NULL,
-   acceptedby INT(11) default NULL,
-   accepteddate date default NULL,
-   rejectedby INT(11) default NULL,
-   rejecteddate date default NULL,
-  `STATUS` varchar(10) NOT NULL default '',
-  `note` mediumtext,
-  `author` varchar(80) default NULL,
-  `title` varchar(80) default NULL,
-  `copyrightdate` smallint(6) default NULL,
-  `publishercode` varchar(255) default NULL,
-  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+CREATE TABLE `suggestions` ( -- purchase suggestions
+  `suggestionid` int(8) NOT NULL auto_increment, -- unique identifier assigned automatically by Koha
+  `suggestedby` int(11) NOT NULL default 0, -- borrowernumber for the person making the suggestion, foreign key linking to the borrowers table
+  `suggesteddate` date NOT NULL default 0, -- date the suggestion was submitted
+  `managedby` int(11) default NULL, -- borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table
+  `manageddate` date default NULL, -- date the suggestion was updated
+   acceptedby INT(11) default NULL, -- borrowernumber for the librarian who accepted the suggestion, foreign key linking to the borrowers table
+   accepteddate date default NULL, -- date the suggestion was marked as accepted
+   rejectedby INT(11) default NULL, -- borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table
+   rejecteddate date default NULL, -- date the suggestion was marked as rejected
+  `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, or REJECTED)
+  `note` mediumtext, -- note entered on the suggestion
+  `author` varchar(80) default NULL, -- author of the suggested item
+  `title` varchar(80) default NULL, -- title of the suggested item
+  `copyrightdate` smallint(6) default NULL, -- copyright date of the suggested item
+  `publishercode` varchar(255) default NULL, -- publisher of the suggested item
+  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,  -- date and time the suggestion was updated
   `volumedesc` varchar(255) default NULL,
   `publicationyear` smallint(6) default 0,
-  `place` varchar(255) default NULL,
-  `isbn` varchar(30) default NULL,
+  `place` varchar(255) default NULL, -- publication place of the suggested item
+  `isbn` varchar(30) default NULL, -- isbn of the suggested item
   `mailoverseeing` smallint(1) default 0,
-  `biblionumber` int(11) default NULL,
-  `reason` text,
-   budgetid INT(11),
-   branchcode VARCHAR(10) default NULL,
-   collectiontitle text default NULL,
-   itemtype VARCHAR(30) default NULL,
-	quantity SMALLINT(6) default NULL,
-	currency VARCHAR(3) default NULL,
-	price DECIMAL(28,6) default NULL,
-	total DECIMAL(28,6) default NULL,
+  `biblionumber` int(11) default NULL, -- foreign key linking the suggestion to the biblio table after the suggestion has been ordered
+  `reason` text, -- reason for making the suggestion
+   budgetid INT(11), -- foreign key linking the suggested budget to the aqbudgets table
+   branchcode VARCHAR(10) default NULL, -- foreign key linking the suggested branch to the branches table
+   collectiontitle text default NULL, -- collection name for the suggested item
+   itemtype VARCHAR(30) default NULL, -- suggested item type 
+	quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
+	currency VARCHAR(3) default NULL, -- suggested currency for the suggested price
+	price DECIMAL(28,6) default NULL, -- suggested price
+	total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`)
