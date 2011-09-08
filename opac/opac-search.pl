@@ -405,6 +405,7 @@ if (C4::Context->preference('OpacSuppression')) {
 }
 
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
+$template->param ( OPACResultsSidebar => C4::Context->preference('OPACResultsSidebar'));
 
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total = 0; # the total results for the whole set
