@@ -2,6 +2,7 @@ package C4::Members;
 
 # Copyright 2000-2003 Katipo Communications
 # Copyright 2010 BibLibre
+# Parts Copyright 2010 Catalyst IT
 #
 # This file is part of Koha.
 #
@@ -352,11 +353,11 @@ sub GetMemberDetails {
     my $query;
     my $sth;
     if ($borrowernumber) {
-        $sth = $dbh->prepare("select borrowers.*,category_type,categories.description from borrowers left join categories on borrowers.categorycode=categories.categorycode where  borrowernumber=?");
+        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE  borrowernumber=?");
         $sth->execute($borrowernumber);
     }
     elsif ($cardnumber) {
-        $sth = $dbh->prepare("select borrowers.*,category_type,categories.description from borrowers left join categories on borrowers.categorycode=categories.categorycode where cardnumber=?");
+        $sth = $dbh->prepare("SELECT borrowers.*,category_type,categories.description,reservefee FROM borrowers LEFT JOIN categories ON borrowers.categorycode=categories.categorycode WHERE cardnumber=?");
         $sth->execute($cardnumber);
     }
     else {
@@ -386,6 +387,7 @@ sub GetMemberDetails {
     $sth->execute( $borrower->{'categorycode'} );
     my $enrolment = $sth->fetchrow;
     $borrower->{'enrolmentperiod'} = $enrolment;
+    
     return ($borrower);    #, $flags, $accessflagshash);
 }
 

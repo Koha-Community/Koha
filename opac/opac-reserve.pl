@@ -54,6 +54,10 @@ sub get_out ($$$) {
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
 
+# Pass through any reserve charge
+if ($borr->{reservefee} > 0){
+    $template->param( RESERVE_CHARGE => sprintf("%.2f",$borr->{reservefee}));
+}
 # get branches and itemtypes
 my $branches = GetBranches();
 my $itemTypes = GetItemTypes();

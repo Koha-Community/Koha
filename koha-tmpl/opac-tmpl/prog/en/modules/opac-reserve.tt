@@ -220,6 +220,11 @@
                         [% USER_INF.firstname %] [% USER_INF.surname %] ([% USER_INF.cardnumber %])
                       [% END %]
                     </h3>[% END %]
+	      [% IF (RESERVE_CHARGE) %]
+	      <div class="dialog alert">
+	        There is a charge of [% RESERVE_CHARGE %] for placing this reserve
+	      </div>
+	      [% END %]
 
             <form action="/cgi-bin/koha/opac-reserve.pl" method="post">
             <input type="hidden" name="place_reserve" value="1"/>
