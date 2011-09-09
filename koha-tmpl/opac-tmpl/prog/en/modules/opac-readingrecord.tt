@@ -70,9 +70,9 @@ You have never borrowed anything from this library.
     [% IF ( BakerTaylorEnabled ) %][% IF ( READING_RECOR.normalized_isbn ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% READING_RECOR.normalized_isbn %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% READING_RECOR.normalized_isbn %]" /></a>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
 
 	[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( using_https ) %]
-	<img src="https://secure.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% READING_RECOR.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />
+	<img src="https://secure.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />
 	[% ELSE %]
-	<img src="http://www.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% READING_RECOR.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
+	<img src="http://www.syndetics.com/index.aspx?isbn=[% READING_RECOR.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% READING_RECOR.normalized_upc %]&amp;oclc=[% READING_RECOR.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
 </td>
 <td>[% IF ( READING_RECOR.BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% READING_RECOR.biblionumber |url %]">[% READING_RECOR.title |html %] [% IF ( READING_RECOR.subtitle ) %][% FOREACH subtitl IN READING_RECOR.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% ELSE %]
 [% IF ( READING_RECOR.BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% READING_RECOR.biblionumber |url %]">[% READING_RECOR.title |html %] [% IF ( READING_RECOR.subtitle ) %][% FOREACH subtitl IN READING_RECOR.subtitle %][% subtitl.subfield %][% END %][% END %]</a>[% ELSE %]
