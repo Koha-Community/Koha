@@ -4506,6 +4506,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("UPDATE itemtypes SET imageurl = 'vokal/Book.png' WHERE imageurl = 'vokal/BOOK.png'");
+    $dbh->do("UPDATE itemtypes SET imageurl = 'vokal/Book-32px.png' WHERE imageurl = 'vokal/BOOK-32px.png'");
+    $dbh->do("UPDATE authorised_values SET imageurl = 'vokal/Book.png' WHERE imageurl = 'vokal/BOOK.png'");
+    $dbh->do("UPDATE authorised_values SET imageurl = 'vokal/Book-32px.png' WHERE imageurl = 'vokal/BOOK-32px.png'");
+    print "Upgrade to $DBversion done (remove duplicate VOKAL Book icons, bug 6862)\n";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
