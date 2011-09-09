@@ -530,9 +530,9 @@ $(document).ready(function(){
                     [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonCoverImages ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<img src="http://images.amazon.com/images/P/[% SEARCH_RESULT.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" class="thumbnail" />[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %][% END %]
 
 					[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( using_https ) %]
-                <img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="thumbnail" />
+                <img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="thumbnail" />
                 [% ELSE %]
-                <img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SEARCH_RESULT.SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
+                <img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="thumbnail" />[% END %][% END %][% END %]
 
                 [% IF ( GoogleJackets ) %][% IF ( SEARCH_RESULT.normalized_isbn ) %]<div style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% SEARCH_RESULT.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>[% ELSE %]<span class="no-image">No cover image available</span>[% END %][% END %]
                 </a>
