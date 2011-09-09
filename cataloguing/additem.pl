@@ -422,7 +422,7 @@ if ($op eq "additem") {
 	    undef($itemrecord);
 	}
     }	
-    if ($frameworkcode eq 'FA'){
+    if ($frameworkcode eq 'FA' && $input->param('borrowernumber')){
 	my $redirect_string = 'borrowernumber=' . uri_escape($input->param('borrowernumber')) .
 	  '&barcode=' . uri_escape($input->param('barcode'));
 	$redirect_string .= '&duedatespec=' . uri_escape($input->param('duedatespec')) . 
