@@ -1,0 +1,13 @@
+In order to build .deb packages, following debian packages need to be present
+(installed): 
+devscripts
+pbuilder
+dh-make
+fakeroot
+
+As root (or sudo) execute:
+pbuilder create
+
+Executing build-git-snapshot without any arguments will leave package and the
+rest in some pbuilder dir, eg. /var/cache/pbuilder/result It is highly
+recommended that --buildresult option is used.

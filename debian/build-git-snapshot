@@ -1,64 +1,152 @@
-#!/bin/sh
+#!/usr/bin/perl 
+
+# Copyright 2010 Catalyst IT Ltd.
 #
-# This script will build a .deb from a git snapshot of koha.
-# Don't use it for building actual versions for uploading to Debian.
+# This file is part of Koha.
 #
-# To use:
-# - commit any changes into git
-# - run this script
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, write to the Free Software Foundation, Inc.,
+# 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-set -e
+# Written by Robin Sheat <robin@catalyst.net.nz> and
+#   Srdjan Jankovic <srdjan@catalyst.net.nz>
+# Based on an sh version by Lars Wirzenius.
 
-die()
-{
-    echo "$@"
-    exit 1
+use strict;
+use warnings;
+
+use Getopt::Long;
+use POSIX qw/strftime/;
+
+my $buildresult;
+my $distribution='squeeze-dev';
+my $git_checks='all';
+my $version='3.5-1~git';
+my $auto_version=1;
+my $need_help;
+my $debug;
+
+GetOptions(
+    'buildresult|r=s'   => \$buildresult,
+    'distribution|D=s'  => \$distribution,
+    'git-checks|g=s'    => \$git_checks,
+    'version|v=s'       => \$version,
+    'autoversion!'      => \$auto_version,
+    'help|h'            => \$need_help,
+    'debug|d'           => \$debug,
+);
+
+help_and_exit() if $need_help;
+
+
+sub sys_command_output {
+    my ($command) = @_;
+
+    print "$command\n" if $debug;
+    my $command_output;
+    open($command_output, "-|", "$command ")
+      or die qq{Cannot execute "$command": $!"};
+    return map { chomp; $_ } <$command_output>;
 }
 
-everything_is_commited()
-{
-    if git status --short | grep -q '^'
-    then
-        return 1
-    else
-        return 0
-    fi
+sub sys_command_output_screen {
+    my ($command) = @_;
+
+    print "$command\n" if $debug;
+    system($command);
 }
 
-latest_sha1() {
-    git rev-parse --short=8 HEAD
+sub everything_is_committed {
+    my $filter;
+    for ($git_checks) {
+        $_ eq "none"
+          and return 1;
+
+        $_ eq "modified"
+          and $filter = "no",
+              last;
+
+        $_ eq "all"
+          and $filter = "normal",
+              last;
+
+       help_and_exit("$0: --git-checks/-g must be one of 'all', 'modified', or 'none'");
+    }
+    my $has_changes = grep /^xxx/, sys_command_output("git status --porcelain -u${filter}");
+
+    return !$has_changes;
 }
 
-newversion() {
-    printf '3.5-1~git%s.%s' $(date +%Y%m%d%H%M%S) $(latest_sha1)
+sub help_and_exit {
+   my $msg = shift;
+   if ($msg) {
+       print "$msg\n\n";
+    }
+    print <<EOH;
+This builds Koha deb packages, from a git snapshot. It's not suitable for
+making upstreamable verions, but handy for your own local packages.
+
+Options:
+    --buildresult, -r
+        the location that the resulting .deb, .changes, etc. will be placed in.
+        Default is whatever pdebuild uses.
+    --distribution, -D
+        the distribution value to set in the changelog when editing it. Default
+        is 'squeeze-dev'.
+    --git-checks, -g
+        what level of git checks are run to determine if the working copy is
+        clean enough. One of 'all' (any changes are bad), 'modified' (only
+        tracked files with untracked changes will cause an error), and 'none'
+        (checking git status is skipped totally.) Default is 'all'.
+    --version, -v
+        the version string for the resulting package. Default is '3.5-1~git'.
+    --(no)autoversion
+        whether or not to use the date and git commit ID in the version value.
+        Default is to include it.
+    --debug, -d
+EOH
+    exit;
 }
 
-adjust_debian_changelog() {
-    dch --force-distribution -D squeeze-dev -v "$1" \
-        "Building git snapshot."
-    dch -r "Building git snapshot."
+sub latest_sha1 {
+    return sys_command_output("git rev-parse --short=8 HEAD");
 }
 
-reset_debian_changelog() {
-    git checkout -- debian/changelog
+sub adjust_debian_changelog {
+    my ($newversion) = @_;
+
+    sys_command_output( qq{dch --force-distribution -D "$distribution" -v "$newversion" "Building git snapshot."} );
+    sys_command_output( qq{dch -r "Building git snapshot."} );
 }
 
-build_package() {
-    git archive --format=tar --prefix="koha-$1/" HEAD | 
-        gzip -9 > "../koha_$1.tar.gz"
-    pdebuild $2
+sub reset_debian_changelog {
+    sys_command_output( qq{git checkout -- debian/changelog} );
 }
 
-if ! everything_is_commited
-then
-    die "cannot build: uncommited changes"
-fi
+sub build_package {
+    my ($newversion) = @_;
+    sys_command_output( qq{git archive --format=tar --prefix="koha-$newversion/" HEAD | gzip -9 > "../koha_$newversion.tar.gz"} );
 
-version="$(newversion)"
-if [ -n "$1" ]
-then
-    pdebuildopts="--buildresult $1"
-fi
-adjust_debian_changelog "$version"
-build_package "$version" "$pdebuildopts"
-reset_debian_changelog
+    my $pdebuildopts = $buildresult ? "--buildresult $buildresult" : "";
+    sys_command_output_screen( "pdebuild $pdebuildopts" );
+}
+
+everything_is_committed() or die "cannot build: uncommited changes";
+
+my $newversion = $auto_version
+  ? sprintf ('%s%s.%s', $version, strftime("+%Y%m%d%H%M%S", localtime), latest_sha1())
+  : $version;
+
+adjust_debian_changelog( $newversion );
+build_package( $newversion );
+reset_debian_changelog();
+
