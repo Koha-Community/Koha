@@ -4439,7 +4439,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.05.00.XXX";
+$DBversion = "3.05.00.011";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACResultsSidebar','','Define HTML to be included on the search results page, underneath the facets sidebar','70|10','Textarea')");
     print "Upgrade to $DBversion done (add OPACResultsSidebar syspref (enh 6165))\n";
