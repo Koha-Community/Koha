@@ -254,9 +254,9 @@ function GetZ3950Terms(){
 }
 
 function Changefwk(FwkList) {
-	var fwk = FwkList.options[FwkList.selectedIndex].value;
-	window.location = "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumberdata %]&op=[% op %]&breedingid=[% breedingid %]&mode=[% popup %]&frameworkcode="+fwk;
-
+    var f = document.f;
+    f.op.value = "";
+    f.submit();
 }
 
 // returns the subfieldcode based upon subfieldid writing
@@ -776,7 +776,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
 			<li id="savebutton"><input id="addbiblio" type="submit" value="Save" /></li>
 			<li id="z3950searchc"><input type="button" id="z3950search" value="Z39.50 Search" onclick="PopupZ3950(); return false;" /></li>
 			<li id="changeframework"><label for="Frameworks">Change framework: </label>
-			<select name="Frameworks" id="Frameworks" onchange="Changefwk(this);">
+			<select name="frameworkcode" id="Frameworks" onchange="Changefwk(this);">
 			                <option value="Default">Default</option>
 							[% FOREACH frameworkcodeloo IN frameworkcodeloop %]
                                 [% IF ( frameworkcodeloo.selected ) %]
