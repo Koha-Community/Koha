@@ -433,6 +433,7 @@ CREATE TABLE `categories` (
 --
 -- Table: collections
 --
+DROP TABLE IF EXISTS collections;
 CREATE TABLE collections (
   colId integer(11) NOT NULL auto_increment,
   colTitle varchar(100) NOT NULL DEFAULT '',
@@ -444,6 +445,7 @@ CREATE TABLE collections (
 --
 -- Table: collections_tracking
 --
+DROP TABLE IF EXISTS collections_tracking;
 CREATE TABLE collections_tracking (
   ctId integer(11) NOT NULL auto_increment,
   colId integer(11) NOT NULL DEFAULT 0 comment 'collections.colId',
