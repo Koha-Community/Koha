@@ -95,13 +95,13 @@ CREATE TABLE `auth_types` (
 --
 
 DROP TABLE IF EXISTS `authorised_values`;
-CREATE TABLE `authorised_values` (
-  `id` int(11) NOT NULL auto_increment,
-  `category` varchar(10) NOT NULL default '',
-  `authorised_value` varchar(80) NOT NULL default '',
-  `lib` varchar(80) default NULL,
-  `lib_opac` VARCHAR(80) default NULL,
-  `imageurl` varchar(200) default NULL,
+CREATE TABLE `authorised_values` ( -- stores values for authorized values categories and values
+  `id` int(11) NOT NULL auto_increment, -- unique key, used to identify the authorized value
+  `category` varchar(10) NOT NULL default '', -- key used to identify the authorized value category
+  `authorised_value` varchar(80) NOT NULL default '', -- code use to identify the authorized value
+  `lib` varchar(80) default NULL, -- authorized value description as printed in the staff client
+  `lib_opac` VARCHAR(80) default NULL, -- authorized value description as printed in the OPAC
+  `imageurl` varchar(200) default NULL, -- authorized value URL
   PRIMARY KEY  (`id`),
   KEY `name` (`category`),
   KEY `lib` (`lib`),
@@ -113,19 +113,19 @@ CREATE TABLE `authorised_values` (
 --
 
 DROP TABLE IF EXISTS `biblio`;
-CREATE TABLE `biblio` (
-  `biblionumber` int(11) NOT NULL auto_increment,
-  `frameworkcode` varchar(4) NOT NULL default '',
-  `author` mediumtext,
-  `title` mediumtext,
-  `unititle` mediumtext,
-  `notes` mediumtext,
-  `serial` tinyint(1) default NULL,
+CREATE TABLE `biblio` ( -- table that stores bibliographic information
+  `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
+  `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
+  `author` mediumtext, -- statement of responsibility from MARC record (100 in MARC21)
+  `title` mediumtext, -- title (without the subtitle) from the MARC record (245 in MARC21)
+  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240 in MARC21)
+  `notes` mediumtext, -- values from the general notes field in the MARC record (500 in MARC21) split by bar (|)
+  `serial` tinyint(1) default NULL, -- foreign key, linking to the subscriptionid in the serial table
   `seriestitle` mediumtext,
-  `copyrightdate` smallint(6) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `datecreated` DATE NOT NULL,
-  `abstract` mediumtext,
+  `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
+  `datecreated` DATE NOT NULL, -- the date this record was added to Koha
+  `abstract` mediumtext, -- summary from the MARC record (520 in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -193,73 +193,73 @@ CREATE TABLE `biblioitems` (
 --
 
 DROP TABLE IF EXISTS `borrowers`;
-CREATE TABLE `borrowers` (
-  `borrowernumber` int(11) NOT NULL auto_increment,
-  `cardnumber` varchar(16) default NULL,
-  `surname` mediumtext NOT NULL,
-  `firstname` text,
-  `title` mediumtext,
-  `othernames` mediumtext,
-  `initials` text,
-  `streetnumber` varchar(10) default NULL,
-  `streettype` varchar(50) default NULL,
-  `address` mediumtext NOT NULL,
-  `address2` text,
-  `city` mediumtext NOT NULL,
-  `state` text default NULL,
-  `zipcode` varchar(25) default NULL,
-  `country` text,
-  `email` mediumtext,
-  `phone` text,
-  `mobile` varchar(50) default NULL,
-  `fax` mediumtext,
-  `emailpro` text,
-  `phonepro` text,
-  `B_streetnumber` varchar(10) default NULL,
-  `B_streettype` varchar(50) default NULL,
-  `B_address` varchar(100) default NULL,
-  `B_address2` text default NULL,
-  `B_city` mediumtext,
-  `B_state` text default NULL,
-  `B_zipcode` varchar(25) default NULL,
-  `B_country` text,
-  `B_email` text,
-  `B_phone` mediumtext,
-  `dateofbirth` date default NULL,
-  `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(10) NOT NULL default '',
-  `dateenrolled` date default NULL,
-  `dateexpiry` date default NULL,
-  `gonenoaddress` tinyint(1) default NULL,
-  `lost` tinyint(1) default NULL,
-  `debarred` tinyint(1) default NULL,
-  `contactname` mediumtext,
-  `contactfirstname` text,
-  `contacttitle` text,
-  `guarantorid` int(11) default NULL,
-  `borrowernotes` mediumtext,
-  `relationship` varchar(100) default NULL,
-  `ethnicity` varchar(50) default NULL,
-  `ethnotes` varchar(255) default NULL,
-  `sex` varchar(1) default NULL,
-  `password` varchar(30) default NULL,
-  `flags` int(11) default NULL,
-  `userid` varchar(30) default NULL,
-  `opacnote` mediumtext,
-  `contactnote` varchar(255) default NULL,
-  `sort1` varchar(80) default NULL,
-  `sort2` varchar(80) default NULL,
-  `altcontactfirstname` varchar(255) default NULL,
-  `altcontactsurname` varchar(255) default NULL,
-  `altcontactaddress1` varchar(255) default NULL,
-  `altcontactaddress2` varchar(255) default NULL,
-  `altcontactaddress3` varchar(255) default NULL,
-  `altcontactstate` text default NULL,
-  `altcontactzipcode` varchar(50) default NULL,
-  `altcontactcountry` text default NULL,
-  `altcontactphone` varchar(50) default NULL,
-  `smsalertnumber` varchar(50) default NULL,
-  `privacy` integer(11) DEFAULT '1' NOT NULL,
+CREATE TABLE `borrowers` ( -- this table includes information about your patrons/borrowers/members
+  `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
+  `cardnumber` varchar(16) default NULL, -- unique key, library assigned ID number for patrons/borrowers
+  `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
+  `firstname` text, -- patron/borrower's first name
+  `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
+  `othernames` mediumtext, -- any other names associated with the patron/borrower
+  `initials` text, -- initials for your patron/borrower
+  `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
+  `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
+  `address` mediumtext NOT NULL, -- the first address line for your patron/borrower's primary address
+  `address2` text, -- the second address line for your patron/borrower's primary address
+  `city` mediumtext NOT NULL, -- the city or town for your patron/borrower's primary address
+  `state` text default NULL, -- the state or province for your patron/borrower's primary address
+  `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
+  `country` text, -- the country for your patron/borrower's primary address
+  `email` mediumtext, -- the primary email address for your patron/borrower's primary address
+  `phone` text, -- the primary phone number for your patron/borrower's primary address
+  `mobile` varchar(50) default NULL, -- the other phone number for your patron/borrower's primary address
+  `fax` mediumtext, -- the fax number for your patron/borrower's primary address
+  `emailpro` text, -- the secondary email addres for your patron/borrower's primary address
+  `phonepro` text, -- the secondary phone number for your patron/borrower's primary address
+  `B_streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's alternate address
+  `B_streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
+  `B_address` varchar(100) default NULL, -- the first address line for your patron/borrower's alternate address
+  `B_address2` text default NULL, -- the second address line for your patron/borrower's alternate address
+  `B_city` mediumtext, -- the city or town for your patron/borrower's alternate address
+  `B_state` text default NULL, -- the state for your patron/borrower's alternate address
+  `B_zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's alternate address
+  `B_country` text, -- the country for your patron/borrower's alternate address
+  `B_email` text, -- the patron/borrower's alternate email address
+  `B_phone` mediumtext, -- the patron/borrower's alternate phone number
+  `dateofbirth` date default NULL, -- the patron/borrower's date of birth (YYYY-MM-DD)
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, includes the code of the patron/borrower's home branch
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
+  `dateenrolled` date default NULL, -- date the patron was added to Koha (YYYY-MM-DD)
+  `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
+  `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
+  `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
+  `debarred` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as being restricted
+  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
+  `contactfirstname` text, -- used for children to include first name of guarentor
+  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
+  `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
+  `borrowernotes` mediumtext, -- a note on the patron/borroewr's account that is only visible in the staff client
+  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
+  `ethnicity` varchar(50) default NULL, -- unused in Koha
+  `ethnotes` varchar(255) default NULL, -- unused in Koha
+  `sex` varchar(1) default NULL, -- patron/borrower's gender
+  `password` varchar(30) default NULL, -- patron/borrower's encrypted password
+  `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
+  `userid` varchar(30) default NULL, -- patron/borrower's opac and/or staff client log in
+  `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
+  `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
+  `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
+  `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
+  `altcontactfirstname` varchar(255) default NULL, -- first name of alternate contact for the patron/borrower
+  `altcontactsurname` varchar(255) default NULL, -- surname or last name of the alternate contact for the patron/borrower
+  `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
+  `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
+  `altcontactaddress3` varchar(255) default NULL, -- the third address line for the alternate contact for the patron/borrower
+  `altcontactstate` text default NULL, -- the city and state for the alternate contact for the patron/borrower
+  `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
+  `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
+  `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
+  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
+  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
@@ -275,15 +275,15 @@ CREATE TABLE `borrowers` (
 --
 
 DROP TABLE IF EXISTS `borrower_attribute_types`;
-CREATE TABLE `borrower_attribute_types` (
-  `code` varchar(10) NOT NULL,
-  `description` varchar(255) NOT NULL,
-  `repeatable` tinyint(1) NOT NULL default 0,
-  `unique_id` tinyint(1) NOT NULL default 0,
-  `opac_display` tinyint(1) NOT NULL default 0,
-  `password_allowed` tinyint(1) NOT NULL default 0,
-  `staff_searchable` tinyint(1) NOT NULL default 0,
-  `authorised_value_category` varchar(10) default NULL,
+CREATE TABLE `borrower_attribute_types` ( -- definitions for custom patron fields known as extended patron attributes
+  `code` varchar(10) NOT NULL, -- unique key used to identify each custom field
+  `description` varchar(255) NOT NULL, -- description for each custom field
+  `repeatable` tinyint(1) NOT NULL default 0, -- defines whether one patron/borrower can have multiple values for this custom field  (1 for yes, 0 for no)
+  `unique_id` tinyint(1) NOT NULL default 0, -- defines if this value needs to be unique (1 for yes, 0 for no)
+  `opac_display` tinyint(1) NOT NULL default 0, -- defines if this field is visible to patrons on their account in the OPAC (1 for yes, 0 for no)
+  `password_allowed` tinyint(1) NOT NULL default 0, -- defines if it is possible to associate a password with this custom field (1 for yes, 0 for no)
+  `staff_searchable` tinyint(1) NOT NULL default 0, -- defines if this field is searchable via the patron search in the staff client (1 for yes, 0 for no)
+  `authorised_value_category` varchar(10) default NULL, -- foreign key from authorised_values that links this custom field to an authorized value category
   PRIMARY KEY  (`code`),
   KEY `auth_val_cat_idx` (`authorised_value_category`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -293,11 +293,11 @@ CREATE TABLE `borrower_attribute_types` (
 --
 
 DROP TABLE IF EXISTS `borrower_attributes`;
-CREATE TABLE `borrower_attributes` (
-  `borrowernumber` int(11) NOT NULL,
-  `code` varchar(10) NOT NULL,
-  `attribute` varchar(64) default NULL,
-  `password` varchar(64) default NULL,
+CREATE TABLE `borrower_attributes` ( -- values of custom patron fields known as extended patron attributes linked to patrons/borrowers
+  `borrowernumber` int(11) NOT NULL, -- foreign key from the borrowers table, defines which patron/borrower has this attribute
+  `code` varchar(10) NOT NULL, -- foreign key from the borrower_attribute_types table, defines which custom field this value was entered for
+  `attribute` varchar(64) default NULL, -- custom patron field value
+  `password` varchar(64) default NULL, -- password associated with this field
   KEY `borrowernumber` (`borrowernumber`),
   KEY `code_attribute` (`code`, `attribute`),
   CONSTRAINT `borrower_attributes_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
@@ -305,6 +305,10 @@ CREATE TABLE `borrower_attributes` (
   CONSTRAINT `borrower_attributes_ibfk_2` FOREIGN KEY (`code`) REFERENCES `borrower_attribute_types` (`code`)
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `branch_item_rules`
+--
 
 DROP TABLE IF EXISTS `branch_item_rules`;
 CREATE TABLE `branch_item_rules` (
@@ -324,11 +328,11 @@ CREATE TABLE `branch_item_rules` (
 --
 
 DROP TABLE IF EXISTS `branchcategories`;
-CREATE TABLE `branchcategories` (
-  `categorycode` varchar(10) NOT NULL default '',
-  `categoryname` varchar(32),
-  `codedescription` mediumtext,
-  `categorytype` varchar(16),
+CREATE TABLE `branchcategories` ( -- information related to library/branch groups
+  `categorycode` varchar(10) NOT NULL default '', -- unique identifier for the library/branch group
+  `categoryname` varchar(32), -- name of the library/branch group
+  `codedescription` mediumtext, -- longer description of the library/branch group
+  `categorytype` varchar(16), -- says whether this is a search group or a properties group
   PRIMARY KEY  (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -337,24 +341,24 @@ CREATE TABLE `branchcategories` (
 --
 
 DROP TABLE IF EXISTS `branches`;
-CREATE TABLE `branches` (
-  `branchcode` varchar(10) NOT NULL default '',
-  `branchname` mediumtext NOT NULL,
-  `branchaddress1` mediumtext,
-  `branchaddress2` mediumtext,
-  `branchaddress3` mediumtext,
-  `branchzip` varchar(25) default NULL,
-  `branchcity` mediumtext,
-  `branchstate` mediumtext,
-  `branchcountry` text,
-  `branchphone` mediumtext,
-  `branchfax` mediumtext,
-  `branchemail` mediumtext,
-  `branchurl` mediumtext,
-  `issuing` tinyint(4) default NULL,
-  `branchip` varchar(15) default NULL,
-  `branchprinter` varchar(100) default NULL,
-  `branchnotes` mediumtext,
+CREATE TABLE `branches` ( -- information about your libraries or branches are stored here
+  `branchcode` varchar(10) NOT NULL default '', -- a unique key assigned to each branch
+  `branchname` mediumtext NOT NULL, -- the name of your library or branch
+  `branchaddress1` mediumtext, -- the first address line of for your library or branch
+  `branchaddress2` mediumtext, -- the second address line of for your library or branch
+  `branchaddress3` mediumtext, -- the third address line of for your library or branch
+  `branchzip` varchar(25) default NULL, -- the zip or postal code for your library or branch
+  `branchcity` mediumtext, -- the city or province for your library or branch
+  `branchstate` mediumtext, -- the state for your library or branch
+  `branchcountry` text, -- the county for your library or branch
+  `branchphone` mediumtext, -- the primary phone for your library or branch
+  `branchfax` mediumtext, -- the fax number for your library or branch
+  `branchemail` mediumtext, -- the primary email address for your library or branch
+  `branchurl` mediumtext, -- the URL for your library or branch's website
+  `issuing` tinyint(4) default NULL, --unused in Koha
+  `branchip` varchar(15) default NULL, -- the IP address for your library or branch
+  `branchprinter` varchar(100) default NULL, -- unused in Koha
+  `branchnotes` mediumtext, -- notes related to your library or branch
   UNIQUE KEY `branchcode` (`branchcode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -363,9 +367,9 @@ CREATE TABLE `branches` (
 --
 
 DROP TABLE IF EXISTS `branchrelations`;
-CREATE TABLE `branchrelations` (
-  `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(10) NOT NULL default '',
+CREATE TABLE `branchrelations` ( -- this table links libraries/branches to groups
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to identify the branch
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the branchcategories table to identify the group
   PRIMARY KEY  (`branchcode`,`categorycode`),
   KEY `branchcode` (`branchcode`),
   KEY `categorycode` (`categorycode`),
@@ -525,12 +529,12 @@ CREATE TABLE `default_circ_rules` (
 --
 
 DROP TABLE IF EXISTS `cities`;
-CREATE TABLE `cities` (
-  `cityid` int(11) NOT NULL auto_increment,
-  `city_name` varchar(100) NOT NULL default '',
-  `city_state` VARCHAR( 100 ) NULL DEFAULT NULL,
-  `city_country` VARCHAR( 100 ) NULL DEFAULT NULL,
-  `city_zipcode` varchar(20) default NULL,
+CREATE TABLE `cities` ( -- authorized values for cities/states/countries to choose when adding/editing a patron/borrower
+  `cityid` int(11) NOT NULL auto_increment, -- unique identifier added by Koha
+  `city_name` varchar(100) NOT NULL default '', -- name of the city
+  `city_state` VARCHAR( 100 ) NULL DEFAULT NULL, -- name of the state/province
+  `city_country` VARCHAR( 100 ) NULL DEFAULT NULL, -- name of the country
+  `city_zipcode` varchar(20) default NULL, -- zip or postal code
   PRIMARY KEY  (`cityid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -582,19 +586,19 @@ CREATE TABLE `currency` (
 --
 
 DROP TABLE IF EXISTS `deletedbiblio`;
-CREATE TABLE `deletedbiblio` (
-  `biblionumber` int(11) NOT NULL default 0,
-  `frameworkcode` varchar(4) NOT NULL default '',
-  `author` mediumtext,
-  `title` mediumtext,
-  `unititle` mediumtext,
-  `notes` mediumtext,
-  `serial` tinyint(1) default NULL,
+CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records that have been deleted
+  `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
+  `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
+  `author` mediumtext, -- statement of responsibility from MARC record (100 in MARC21)
+  `title` mediumtext, -- title (without the subtitle) from the MARC record (245 in MARC21)
+  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240 in MARC21)
+  `notes` mediumtext, -- values from the general notes field in the MARC record (500 in MARC21) split by bar (|)
+  `serial` tinyint(1) default NULL, -- foreign key, linking to the subscriptionid in the serial table
   `seriestitle` mediumtext,
-  `copyrightdate` smallint(6) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `datecreated` DATE NOT NULL,
-  `abstract` mediumtext,
+  `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
+  `datecreated` DATE NOT NULL, -- the date this record was added to Koha
+  `abstract` mediumtext, -- summary from the MARC record (520 in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -649,74 +653,73 @@ CREATE TABLE `deletedbiblioitems` (
 --
 
 DROP TABLE IF EXISTS `deletedborrowers`;
-CREATE TABLE `deletedborrowers` (
-  `borrowernumber` int(11) NOT NULL default 0,
-  `cardnumber` varchar(16) NOT NULL default '',
-  `surname` mediumtext NOT NULL,
-  `firstname` text,
-  `title` mediumtext,
-  `othernames` mediumtext,
-  `initials` text,
-  `streetnumber` varchar(10) default NULL,
-  `streettype` varchar(50) default NULL,
-  `address` mediumtext NOT NULL,
-  `address2` text,
-  `city` mediumtext NOT NULL,
-  `state` text default NULL,
-  `zipcode` varchar(25) default NULL,
-  `country` text,
-  `email` mediumtext,
-  `phone` text,
-  `mobile` varchar(50) default NULL,
-  `fax` mediumtext,
-  `emailpro` text,
-  `phonepro` text,
-  `B_streetnumber` varchar(10) default NULL,
-  `B_streettype` varchar(50) default NULL,
-  `B_address` varchar(100) default NULL,
-  `B_address2` text default NULL,
-  `B_city` mediumtext,
-  `B_state` text default NULL,
-  `B_zipcode` varchar(25) default NULL,
-  `B_country` text,
-  `B_email` text,
-  `B_phone` mediumtext,
-  `dateofbirth` date default NULL,
-  `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(10) default NULL,
-  `dateenrolled` date default NULL,
-  `dateexpiry` date default NULL,
-  `gonenoaddress` tinyint(1) default NULL,
-  `lost` tinyint(1) default NULL,
-  `debarred` tinyint(1) default NULL,
-  `contactname` mediumtext,
-  `contactfirstname` text,
-  `contacttitle` text,
-  `guarantorid` int(11) default NULL,
-  `borrowernotes` mediumtext,
-  `relationship` varchar(100) default NULL,
-  `ethnicity` varchar(50) default NULL,
-  `ethnotes` varchar(255) default NULL,
-  `sex` varchar(1) default NULL,
-  `password` varchar(30) default NULL,
-  `flags` int(11) default NULL,
-  `userid` varchar(30) default NULL,
-  `opacnote` mediumtext,
-  `contactnote` varchar(255) default NULL,
-  `sort1` varchar(80) default NULL,
-  `sort2` varchar(80) default NULL,
-  `altcontactfirstname` varchar(255) default NULL,
-  `altcontactsurname` varchar(255) default NULL,
-  `altcontactaddress1` varchar(255) default NULL,
-  `altcontactaddress2` varchar(255) default NULL,
-  `altcontactaddress3` varchar(255) default NULL,
-  `altcontactstate` text default NULL,
-  `altcontactzipcode` varchar(50) default NULL,
-  `altcontactcountry` text default NULL,
-  `altcontactphone` varchar(50) default NULL,
-  `smsalertnumber` varchar(50) default NULL,
-  `privacy` integer(11) DEFAULT '1' NOT NULL,
-  KEY `borrowernumber` (`borrowernumber`),
+CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrowers you have deleted
+  `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
+  `cardnumber` varchar(16) default NULL, -- unique key, library assigned ID number for patrons/borrowers
+  `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
+  `firstname` text, -- patron/borrower's first name
+  `title` mediumtext, -- patron/borrower's title, for example: Mr. or Mrs.
+  `othernames` mediumtext, -- any other names associated with the patron/borrower
+  `initials` text, -- initials for your patron/borrower
+  `streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's primary address
+  `streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's primary address
+  `address` mediumtext NOT NULL, -- the first address line for your patron/borrower's primary address
+  `address2` text, -- the second address line for your patron/borrower's primary address
+  `city` mediumtext NOT NULL, -- the city or town for your patron/borrower's primary address
+  `state` text default NULL, -- the state or province for your patron/borrower's primary address
+  `zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's primary address
+  `country` text, -- the country for your patron/borrower's primary address
+  `email` mediumtext, -- the primary email address for your patron/borrower's primary address
+  `phone` text, -- the primary phone number for your patron/borrower's primary address
+  `mobile` varchar(50) default NULL, -- the other phone number for your patron/borrower's primary address
+  `fax` mediumtext, -- the fax number for your patron/borrower's primary address
+  `emailpro` text, -- the secondary email addres for your patron/borrower's primary address
+  `phonepro` text, -- the secondary phone number for your patron/borrower's primary address
+  `B_streetnumber` varchar(10) default NULL, -- the house number for your patron/borrower's alternate address
+  `B_streettype` varchar(50) default NULL, -- the street type (Rd., Blvd, etc) for your patron/borrower's alternate address
+  `B_address` varchar(100) default NULL, -- the first address line for your patron/borrower's alternate address
+  `B_address2` text default NULL, -- the second address line for your patron/borrower's alternate address
+  `B_city` mediumtext, -- the city or town for your patron/borrower's alternate address
+  `B_state` text default NULL, -- the state for your patron/borrower's alternate address
+  `B_zipcode` varchar(25) default NULL, -- the zip or postal code for your patron/borrower's alternate address
+  `B_country` text, -- the country for your patron/borrower's alternate address
+  `B_email` text, -- the patron/borrower's alternate email address
+  `B_phone` mediumtext, -- the patron/borrower's alternate phone number
+  `dateofbirth` date default NULL, -- the patron/borrower's date of birth (YYYY-MM-DD)
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, includes the code of the patron/borrower's home branch
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table, includes the code of the patron category
+  `dateenrolled` date default NULL, -- date the patron was added to Koha (YYYY-MM-DD)
+  `dateexpiry` date default NULL, -- date the patron/borrower's card is set to expire (YYYY-MM-DD)
+  `gonenoaddress` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having an unconfirmed address
+  `lost` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as having lost their card
+  `debarred` tinyint(1) default NULL, -- set to 1 for yes and 0 for no, flag to note that library marked this patron/borrower as being restricted
+  `contactname` mediumtext, -- used for children and profesionals to include surname or last name of guarentor or organization name
+  `contactfirstname` text, -- used for children to include first name of guarentor
+  `contacttitle` text, -- used for children to include title (Mr., Mrs., etc) of guarentor
+  `guarantorid` int(11) default NULL, -- borrowernumber used for children or professionals to link them to guarentors or organizations
+  `borrowernotes` mediumtext, -- a note on the patron/borroewr's account that is only visible in the staff client
+  `relationship` varchar(100) default NULL, -- used for children to include the relationship to their guarentor
+  `ethnicity` varchar(50) default NULL, -- unused in Koha
+  `ethnotes` varchar(255) default NULL, -- unused in Koha
+  `sex` varchar(1) default NULL, -- patron/borrower's gender
+  `password` varchar(30) default NULL, -- patron/borrower's encrypted password
+  `flags` int(11) default NULL, -- will include a number associated with the staff member's permissions
+  `userid` varchar(30) default NULL, -- patron/borrower's opac and/or staff client log in
+  `opacnote` mediumtext, -- a note on the patron/borrower's account that is visible in the OPAC and staff client
+  `contactnote` varchar(255) default NULL, -- a note related to the patron/borrower's alternate address
+  `sort1` varchar(80) default NULL, -- a field that can be used for any information unique to the library
+  `sort2` varchar(80) default NULL, -- a field that can be used for any information unique to the library
+  `altcontactfirstname` varchar(255) default NULL, -- first name of alternate contact for the patron/borrower
+  `altcontactsurname` varchar(255) default NULL, -- surname or last name of the alternate contact for the patron/borrower
+  `altcontactaddress1` varchar(255) default NULL, -- the first address line for the alternate contact for the patron/borrower
+  `altcontactaddress2` varchar(255) default NULL, -- the second address line for the alternate contact for the patron/borrower
+  `altcontactaddress3` varchar(255) default NULL, -- the third address line for the alternate contact for the patron/borrower
+  `altcontactstate` text default NULL, -- the city and state for the alternate contact for the patron/borrower
+  `altcontactzipcode` varchar(50) default NULL, -- the zipcode for the alternate contact for the patron/borrower
+  `altcontactcountry` text default NULL, -- the country for the alternate contact for the patron/borrower
+  `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
+  `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
+  `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
   KEY `cardnumber` (`cardnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -939,19 +942,18 @@ CREATE TABLE `import_items` (
 --
 
 DROP TABLE IF EXISTS `issues`;
-CREATE TABLE `issues` (
-  `borrowernumber` int(11),
-  `itemnumber` int(11),
-  `date_due` date default NULL,
-  `branchcode` varchar(10) default NULL,
+CREATE TABLE `issues` ( -- information related to check outs or issues
+  `borrowernumber` int(11), -- foreign key, linking this to the borrowers table for the patron this item was checked out to
+  `itemnumber` int(11), -- foreign key, linking this to the items table for the item that was checked out
+  `date_due` date default NULL, -- date the item is due (yyyy-mm-dd)
+  `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
   `issuingbranch` varchar(18) default NULL,
-  `returndate` date default NULL,
-  `lastreneweddate` date default NULL,
+  `returndate` date default NULL, -- date the item was returned, will be NULL until moved to old_issues
+  `lastreneweddate` date default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
-  `renewals` tinyint(4) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `issuedate` date default NULL,
-  PRIMARY KEY (`itemnumber`),
+  `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
+  `issuedate` date default NULL, -- date the item was checked out or issued
   KEY `issuesborridx` (`borrowernumber`),
   KEY `bordate` (`borrowernumber`,`timestamp`),
   CONSTRAINT `issues_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE RESTRICT ON UPDATE CASCADE,
@@ -1049,13 +1051,13 @@ CREATE TABLE `items` (
 --
 
 DROP TABLE IF EXISTS `itemtypes`;
-CREATE TABLE `itemtypes` (
-  `itemtype` varchar(10) NOT NULL default '',
-  `description` mediumtext,
-  `rentalcharge` double(16,4) default NULL,
-  `notforloan` smallint(6) default NULL,
-  `imageurl` varchar(200) default NULL,
-  `summary` text,
+CREATE TABLE `itemtypes` ( -- defines the item types
+  `itemtype` varchar(10) NOT NULL default '', -- unique key, a code associated with the item type
+  `description` mediumtext, -- a plain text explanation of the item type
+  `rentalcharge` double(16,4) default NULL, -- the amount charged when this item is checked out/issued
+  `notforloan` smallint(6) default NULL, -- 1 if the item is not for loan, 0 if the item is available for loan
+  `imageurl` varchar(200) default NULL, -- URL for the item type icon
+  `summary` text, -- information from the summary field, may include HTML
   PRIMARY KEY  (`itemtype`),
   UNIQUE KEY `itemtype` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1159,12 +1161,12 @@ CREATE TABLE `creator_templates` (
 --
 
 DROP TABLE IF EXISTS `letter`;
-CREATE TABLE `letter` (
-  `module` varchar(20) NOT NULL default '',
-  `code` varchar(20) NOT NULL default '',
-  `name` varchar(100) NOT NULL default '',
-  `title` varchar(200) NOT NULL default '',
-  `content` text,
+CREATE TABLE `letter` ( -- table for all notice templates in Koha
+  `module` varchar(20) NOT NULL default '', -- Koha module that triggers this notice
+  `code` varchar(20) NOT NULL default '', -- unique identifier for this notice
+  `name` varchar(100) NOT NULL default '', -- plain text name for this notice
+  `title` varchar(200) NOT NULL default '', -- subject line of the notice
+  `content` text, -- body text for the notice
   PRIMARY KEY  (`module`,`code`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1340,18 +1342,18 @@ CREATE TABLE `nozebra` (
 --
 
 DROP TABLE IF EXISTS `old_issues`;
-CREATE TABLE `old_issues` (
-  `borrowernumber` int(11) default NULL,
-  `itemnumber` int(11) default NULL,
-  `date_due` date default NULL,
-  `branchcode` varchar(10) default NULL,
+CREATE TABLE `old_issues` ( -- lists items that were checked out and have been returned
+  `borrowernumber` int(11) default NULL, -- foreign key, linking this to the borrowers table for the patron this item was checked out to
+  `itemnumber` int(11) default NULL, -- foreign key, linking this to the items table for the item that was checked out
+  `date_due` date default NULL, -- date the item is due (yyyy-mm-dd)
+  `branchcode` varchar(10) default NULL, -- foreign key, linking to the branches table for the location the item was checked out
   `issuingbranch` varchar(18) default NULL,
-  `returndate` date default NULL,
-  `lastreneweddate` date default NULL,
+  `returndate` date default NULL, -- date the item was returned
+  `lastreneweddate` date default NULL, -- date the item was last renewed
   `return` varchar(4) default NULL,
-  `renewals` tinyint(4) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `issuedate` date default NULL,
+  `renewals` tinyint(4) default NULL, -- lists the number of times the item was renewed
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this record was last touched
+  `issuedate` date default NULL, -- date the item was checked out or issued
   KEY `old_issuesborridx` (`borrowernumber`),
   KEY `old_issuesitemidx` (`itemnumber`),
   KEY `old_bordate` (`borrowernumber`,`timestamp`),
@@ -1399,14 +1401,14 @@ CREATE TABLE `old_reserves` (
 --
 
 DROP TABLE IF EXISTS `opac_news`;
-CREATE TABLE `opac_news` (
-  `idnew` int(10) unsigned NOT NULL auto_increment,
-  `title` varchar(250) NOT NULL default '',
-  `new` text NOT NULL,
-  `lang` varchar(25) NOT NULL default '',
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP,
-  `expirationdate` date default NULL,
-  `number` int(11) default NULL,
+CREATE TABLE `opac_news` ( -- data from the news tool
+  `idnew` int(10) unsigned NOT NULL auto_increment, -- unique identifier for the news article
+  `title` varchar(250) NOT NULL default '', -- title of the news article
+  `new` text NOT NULL, -- the body of your news article
+  `lang` varchar(25) NOT NULL default '', -- location for the article (koha is the staff client, slip is the circulation receipt and language codes are for the opac)
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- pulibcation date and time
+  `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible
+  `number` int(11) default NULL, -- the order in which this article appears in that specific location
   PRIMARY KEY  (`idnew`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1415,18 +1417,18 @@ CREATE TABLE `opac_news` (
 --
 
 DROP TABLE IF EXISTS `overduerules`;
-CREATE TABLE `overduerules` (
-  `branchcode` varchar(10) NOT NULL default '',
-  `categorycode` varchar(10) NOT NULL default '',
-  `delay1` int(4) default NULL,
-  `letter1` varchar(20) default NULL,
-  `debarred1` varchar(1) default 0,
-  `delay2` int(4) default NULL,
-  `debarred2` varchar(1) default 0,
-  `letter2` varchar(20) default NULL,
-  `delay3` int(4) default NULL,
-  `letter3` varchar(20) default NULL,
-  `debarred3` int(1) default 0,
+CREATE TABLE `overduerules` ( -- overdue notice status and triggers
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table to define which branch this rule is for (if blank it's all libraries)
+  `categorycode` varchar(10) NOT NULL default '', -- foreign key from the categories table to define which patron category this rule is for
+  `delay1` int(4) default NULL, -- number of days after the item is overdue that the first notice is sent
+  `letter1` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the first notice
+  `debarred1` varchar(1) default 0, -- is the patron restricted when the first notice is sent (1 for yes, 0 for no)
+  `delay2` int(4) default NULL, -- number of days after the item is overdue that the second notice is sent
+  `debarred2` varchar(1) default 0, -- is the patron restricted when the second notice is sent (1 for yes, 0 for no)
+  `letter2` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the second notice
+  `delay3` int(4) default NULL, -- number of days after the item is overdue that the third notice is sent
+  `letter3` varchar(20) default NULL, -- foreign key from the letter table to define which notice should be sent as the third notice
+  `debarred3` int(1) default 0, -- is the patron restricted when the third notice is sent (1 for yes, 0 for no)
   PRIMARY KEY  (`branchcode`,`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1495,14 +1497,14 @@ CREATE TABLE `printers_profile` (
 --
 
 DROP TABLE IF EXISTS `repeatable_holidays`;
-CREATE TABLE `repeatable_holidays` (
-  `id` int(11) NOT NULL auto_increment,
-  `branchcode` varchar(10) NOT NULL default '',
-  `weekday` smallint(6) default NULL,
-  `day` smallint(6) default NULL,
-  `month` smallint(6) default NULL,
-  `title` varchar(50) NOT NULL default '',
-  `description` text NOT NULL,
+CREATE TABLE `repeatable_holidays` ( -- information for the days the library is closed
+  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, defines which branch this closing is for
+  `weekday` smallint(6) default NULL, -- day of the week (0=Sunday, 1=Monday, etc) this closing is repeated on
+  `day` smallint(6) default NULL, -- day of the month this closing is on
+  `month` smallint(6) default NULL, -- month this closing is in
+  `title` varchar(50) NOT NULL default '', -- title of this closing
+  `description` text NOT NULL, -- description for this closing
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1511,14 +1513,14 @@ CREATE TABLE `repeatable_holidays` (
 --
 
 DROP TABLE IF EXISTS `reports_dictionary`;
-CREATE TABLE reports_dictionary (
-   `id` int(11) NOT NULL auto_increment,
-   `name` varchar(255) default NULL,
-   `description` text,
-   `date_created` datetime default NULL,
-   `date_modified` datetime default NULL,
-   `saved_sql` text,
-   `area` int(11) default NULL,
+CREATE TABLE reports_dictionary ( -- definitions (or snippets of SQL) stored for use in reports
+   `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+   `name` varchar(255) default NULL, -- name for this definition
+   `description` text, -- description for this definition
+   `date_created` datetime default NULL, -- date and time this definition was created
+   `date_modified` datetime default NULL, -- date and time this definition was last modified
+   `saved_sql` text, -- SQL snippet for us in reports
+   `area` int(11) default NULL, -- Koha module this definition is for (1 = Circulation, 2 = Catalog, 3 = Patrons, 4 = Acquistions, 5 = Accounts)
    PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1573,13 +1575,13 @@ CREATE TABLE `reserves` (
 --
 
 DROP TABLE IF EXISTS `reviews`;
-CREATE TABLE `reviews` (
-  `reviewid` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) default NULL,
-  `biblionumber` int(11) default NULL,
-  `review` text,
-  `approved` tinyint(4) default NULL,
-  `datereviewed` datetime default NULL,
+CREATE TABLE `reviews` ( -- patron opac comments
+  `reviewid` int(11) NOT NULL auto_increment, -- unique identifier for this comment
+  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron left this comment
+  `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bibliographic record this comment is for
+  `review` text, -- the body of the comment
+  `approved` tinyint(4) default NULL, -- whether this comment has been approved by a librarian (1 for yes, 0 for no)
+  `datereviewed` datetime default NULL, -- the date the comment was left
   PRIMARY KEY  (`reviewid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1588,9 +1590,9 @@ CREATE TABLE `reviews` (
 --
 
 DROP TABLE IF EXISTS `roadtype`;
-CREATE TABLE `roadtype` (
-  `roadtypeid` int(11) NOT NULL auto_increment,
-  `road_type` varchar(100) NOT NULL default '',
+CREATE TABLE `roadtype` ( -- road types defined in administration and used in patron management
+  `roadtypeid` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha for each road type
+  `road_type` varchar(100) NOT NULL default '', -- text for road type
   PRIMARY KEY  (`roadtypeid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1681,15 +1683,15 @@ CREATE TABLE sessions (
 --
 
 DROP TABLE IF EXISTS `special_holidays`;
-CREATE TABLE `special_holidays` (
-  `id` int(11) NOT NULL auto_increment,
-  `branchcode` varchar(10) NOT NULL default '',
-  `day` smallint(6) NOT NULL default 0,
-  `month` smallint(6) NOT NULL default 0,
-  `year` smallint(6) NOT NULL default 0,
-  `isexception` smallint(1) NOT NULL default 1,
-  `title` varchar(50) NOT NULL default '',
-  `description` text NOT NULL,
+CREATE TABLE `special_holidays` ( -- non repeatable holidays/library closings
+  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `branchcode` varchar(10) NOT NULL default '', -- foreign key from the branches table, defines which branch this closing is for
+  `day` smallint(6) NOT NULL default 0, -- day of the month this closing is on
+  `month` smallint(6) NOT NULL default 0, -- month this closing is in
+  `year` smallint(6) NOT NULL default 0, -- year this closing is in
+  `isexception` smallint(1) NOT NULL default 1, -- is this a holiday exception to a repeatable holiday (1 for yes, 0 for no)
+  `title` varchar(50) NOT NULL default '', -- title for this closing
+  `description` text NOT NULL, -- description of this closing
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1698,17 +1700,17 @@ CREATE TABLE `special_holidays` (
 --
 
 DROP TABLE IF EXISTS `statistics`;
-CREATE TABLE `statistics` (
-  `datetime` datetime default NULL,
-  `branch` varchar(10) default NULL,
-  `proccode` varchar(4) default NULL,
-  `value` double(16,4) default NULL,
-  `type` varchar(16) default NULL,
+CREATE TABLE `statistics` ( -- information related to transactions (circulation and fines) in Koha
+  `datetime` datetime default NULL, -- date and time of the transaction
+  `branch` varchar(10) default NULL, -- foreign key, branch where the transaction occurred
+  `proccode` varchar(4) default NULL, -- proceedure code 
+  `value` double(16,4) default NULL, -- monetary value associated with the transaction
+  `type` varchar(16) default NULL, -- transaction type (locause, issue, return, renew, writeoff, payment, Credit*)
   `other` mediumtext,
   `usercode` varchar(10) default NULL,
-  `itemnumber` int(11) default NULL,
-  `itemtype` varchar(10) default NULL,
-  `borrowernumber` int(11) default NULL,
+  `itemnumber` int(11) default NULL, -- foreign key from the items table, links transaction to a specific item
+  `itemtype` varchar(10) default NULL, -- foreign key from the itemtypes table, links transaction to a specific item type
+  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
   `associatedborrower` int(11) default NULL,
   KEY `timeidx` (`datetime`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -1805,11 +1807,11 @@ CREATE TABLE `subscriptionhistory` (
 --
 
 DROP TABLE IF EXISTS `subscriptionroutinglist`;
-CREATE TABLE `subscriptionroutinglist` (
-  `routingid` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL,
-  `ranking` int(11) default NULL,
-  `subscriptionid` int(11) NOT NULL,
+CREATE TABLE `subscriptionroutinglist` ( -- information related to the routing lists attached to subscriptions
+  `routingid` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `borrowernumber` int(11) NOT NULL, -- foreign key from the borrowers table, defines with patron is on the routing list
+  `ranking` int(11) default NULL, -- where the patron stands in line to receive the serial
+  `subscriptionid` int(11) NOT NULL, -- foreign key from the subscription table, defines which subscription this routing list is for
   PRIMARY KEY  (`routingid`),
   UNIQUE (`subscriptionid`, `borrowernumber`),
   CONSTRAINT `subscriptionroutinglist_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`)
@@ -1823,38 +1825,38 @@ CREATE TABLE `subscriptionroutinglist` (
 --
 
 DROP TABLE IF EXISTS `suggestions`;
-CREATE TABLE `suggestions` (
-  `suggestionid` int(8) NOT NULL auto_increment,
-  `suggestedby` int(11) NOT NULL default 0,
-  `suggesteddate` date NOT NULL default 0,
-  `managedby` int(11) default NULL,
-  `manageddate` date default NULL,
-   acceptedby INT(11) default NULL,
-   accepteddate date default NULL,
-   rejectedby INT(11) default NULL,
-   rejecteddate date default NULL,
-  `STATUS` varchar(10) NOT NULL default '',
-  `note` mediumtext,
-  `author` varchar(80) default NULL,
-  `title` varchar(80) default NULL,
-  `copyrightdate` smallint(6) default NULL,
-  `publishercode` varchar(255) default NULL,
-  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+CREATE TABLE `suggestions` ( -- purchase suggestions
+  `suggestionid` int(8) NOT NULL auto_increment, -- unique identifier assigned automatically by Koha
+  `suggestedby` int(11) NOT NULL default 0, -- borrowernumber for the person making the suggestion, foreign key linking to the borrowers table
+  `suggesteddate` date NOT NULL default 0, -- date the suggestion was submitted
+  `managedby` int(11) default NULL, -- borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table
+  `manageddate` date default NULL, -- date the suggestion was updated
+   acceptedby INT(11) default NULL, -- borrowernumber for the librarian who accepted the suggestion, foreign key linking to the borrowers table
+   accepteddate date default NULL, -- date the suggestion was marked as accepted
+   rejectedby INT(11) default NULL, -- borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table
+   rejecteddate date default NULL, -- date the suggestion was marked as rejected
+  `STATUS` varchar(10) NOT NULL default '', -- suggestion status (ASKED, CHECKED, ACCEPTED, or REJECTED)
+  `note` mediumtext, -- note entered on the suggestion
+  `author` varchar(80) default NULL, -- author of the suggested item
+  `title` varchar(80) default NULL, -- title of the suggested item
+  `copyrightdate` smallint(6) default NULL, -- copyright date of the suggested item
+  `publishercode` varchar(255) default NULL, -- publisher of the suggested item
+  `date` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,  -- date and time the suggestion was updated
   `volumedesc` varchar(255) default NULL,
   `publicationyear` smallint(6) default 0,
-  `place` varchar(255) default NULL,
-  `isbn` varchar(30) default NULL,
+  `place` varchar(255) default NULL, -- publication place of the suggested item
+  `isbn` varchar(30) default NULL, -- isbn of the suggested item
   `mailoverseeing` smallint(1) default 0,
-  `biblionumber` int(11) default NULL,
-  `reason` text,
-   budgetid INT(11),
-   branchcode VARCHAR(10) default NULL,
-   collectiontitle text default NULL,
-   itemtype VARCHAR(30) default NULL,
-	quantity SMALLINT(6) default NULL,
-	currency VARCHAR(3) default NULL,
-	price DECIMAL(28,6) default NULL,
-	total DECIMAL(28,6) default NULL,
+  `biblionumber` int(11) default NULL, -- foreign key linking the suggestion to the biblio table after the suggestion has been ordered
+  `reason` text, -- reason for making the suggestion
+   budgetid INT(11), -- foreign key linking the suggested budget to the aqbudgets table
+   branchcode VARCHAR(10) default NULL, -- foreign key linking the suggested branch to the branches table
+   collectiontitle text default NULL, -- collection name for the suggested item
+   itemtype VARCHAR(30) default NULL, -- suggested item type 
+	quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
+	currency VARCHAR(3) default NULL, -- suggested currency for the suggested price
+	price DECIMAL(28,6) default NULL, -- suggested price
+	total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`)
@@ -1865,12 +1867,12 @@ CREATE TABLE `suggestions` (
 --
 
 DROP TABLE IF EXISTS `systempreferences`;
-CREATE TABLE `systempreferences` (
-  `variable` varchar(50) NOT NULL default '',
-  `value` text,
-  `options` mediumtext,
-  `explanation` text,
-  `type` varchar(20) default NULL,
+CREATE TABLE `systempreferences` ( -- global system preferences
+  `variable` varchar(50) NOT NULL default '', -- system preference name
+  `value` text, -- system preference values
+  `options` mediumtext, -- options for multiple choice system preferences
+  `explanation` text, -- descriptive text for the system preference
+  `type` varchar(20) default NULL, -- type of question this preference asks (multiple choice, plain text, yes or no, etc)
   PRIMARY KEY  (`variable`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1958,13 +1960,13 @@ CREATE TABLE `userflags` (
 --
 
 DROP TABLE IF EXISTS `virtualshelves`;
-CREATE TABLE `virtualshelves` (
-  `shelfnumber` int(11) NOT NULL auto_increment,
-  `shelfname` varchar(255) default NULL,
-  `owner` varchar(80) default NULL,
-  `category` varchar(1) default NULL,
-  `sortfield` varchar(16) default NULL,
-  `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves) 
+  `shelfnumber` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `shelfname` varchar(255) default NULL, -- name of the list
+  `owner` varchar(80) default NULL, -- foriegn key linking to the borrowers table (using borrowernumber) for the creator of this list
+  `category` varchar(1) default NULL, -- type of list (public [2], private [1] or open [3])
+  `sortfield` varchar(16) default NULL, -- the field this list is sorted on
+  `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
   PRIMARY KEY  (`shelfnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1973,11 +1975,11 @@ CREATE TABLE `virtualshelves` (
 --
 
 DROP TABLE IF EXISTS `virtualshelfcontents`;
-CREATE TABLE `virtualshelfcontents` (
-  `shelfnumber` int(11) NOT NULL default 0,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `virtualshelfcontents` ( -- information about the titles in a list (or virtual shelf)
+  `shelfnumber` int(11) NOT NULL default 0, -- foreign key linking to the virtualshelves table, defines the list that this record has been added to
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking to the biblio table, defines the bib record that has been added to the list
   `flags` int(11) default NULL,
-  `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time this bib record was added to the list
   KEY `shelfnumber` (`shelfnumber`),
   KEY `biblionumber` (`biblionumber`),
   CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
@@ -1989,22 +1991,22 @@ CREATE TABLE `virtualshelfcontents` (
 --
 
 DROP TABLE IF EXISTS `z3950servers`;
-CREATE TABLE `z3950servers` (
-  `host` varchar(255) default NULL,
-  `port` int(11) default NULL,
-  `db` varchar(255) default NULL,
-  `userid` varchar(255) default NULL,
-  `password` varchar(255) default NULL,
-  `name` mediumtext,
-  `id` int(11) NOT NULL auto_increment,
-  `checked` smallint(6) default NULL,
-  `rank` int(11) default NULL,
-  `syntax` varchar(80) default NULL,
-  `icon` text,
+CREATE TABLE `z3950servers` ( -- connection information for the Z39.50 targets used in cataloging
+  `host` varchar(255) default NULL, -- target's host name
+  `port` int(11) default NULL, -- port number used to connect to target
+  `db` varchar(255) default NULL, -- target's database name
+  `userid` varchar(255) default NULL, -- username needed to log in to target
+  `password` varchar(255) default NULL, -- password needed to log in to target
+  `name` mediumtext, -- name given to the target by the library
+  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `checked` smallint(6) default NULL, -- whether this target is checked by default  (1 for yes, 0 for no)
+  `rank` int(11) default NULL, -- where this target appears in the list of targets
+  `syntax` varchar(80) default NULL, -- marc format provided by this target
+  `icon` text, -- unused in Koha
   `position` enum('primary','secondary','') NOT NULL default 'primary',
   `type` enum('zed','opensearch') NOT NULL default 'zed',
-  `encoding` text default NULL,
-  `description` text NOT NULL,
+  `encoding` text default NULL, -- characters encoding provided by this target
+  `description` text NOT NULL, -- unused in Koha
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2024,6 +2026,10 @@ CREATE TABLE `zebraqueue` (
   KEY `zebraqueue_lookup` (`server`, `biblio_auth_number`, `operation`, `done`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `services_throttle`
+--
+
 DROP TABLE IF EXISTS `services_throttle`;
 CREATE TABLE `services_throttle` (
   `service_type` varchar(10) NOT NULL default '',
@@ -2031,9 +2037,12 @@ CREATE TABLE `services_throttle` (
   PRIMARY KEY  (`service_type`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_subtag_registry`
 -- http://www.w3.org/International/articles/language-tags/
-
 -- RFC4646
+--
+
 DROP TABLE IF EXISTS language_subtag_registry;
 CREATE TABLE language_subtag_registry (
         subtag varchar(25),
@@ -2045,9 +2054,13 @@ CREATE TABLE language_subtag_registry (
         KEY `subtag` (`subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_rfc4646_to_iso639`
 -- TODO: add suppress_scripts
 -- this maps three letter codes defined in iso639.2 back to their
 -- two letter equivilents in rfc4646 (LOC maintains iso639+)
+--
+
 DROP TABLE IF EXISTS language_rfc4646_to_iso639;
 CREATE TABLE language_rfc4646_to_iso639 (
         rfc4646_subtag varchar(25),
@@ -2056,6 +2069,10 @@ CREATE TABLE language_rfc4646_to_iso639 (
         PRIMARY KEY  (`id`),
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `language_descriptions`
+--
 
 DROP TABLE IF EXISTS language_descriptions;
 CREATE TABLE language_descriptions (
@@ -2069,7 +2086,11 @@ CREATE TABLE language_descriptions (
         KEY `subtag_type_lang` (`subtag`, `type`, `lang`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_script_bidi`
 -- bi-directional support, keyed by script subcode
+--
+
 DROP TABLE IF EXISTS language_script_bidi;
 CREATE TABLE language_script_bidi (
         rfc4646_subtag varchar(25), -- script subtag, Arab, Hebr, etc.
@@ -2077,14 +2098,22 @@ CREATE TABLE language_script_bidi (
         KEY `rfc4646_subtag` (`rfc4646_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `language_script_mapping`
 -- TODO: need to map language subtags to script subtags for detection
 -- of bidi when script is not specified (like ar, he)
+--
+
 DROP TABLE IF EXISTS language_script_mapping;
 CREATE TABLE language_script_mapping (
         language_subtag varchar(25),
         script_subtag varchar(25),
         KEY `language_subtag` (`language_subtag`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `permissions`
+--
 
 DROP TABLE IF EXISTS `permissions`;
 CREATE TABLE `permissions` (
@@ -2096,6 +2125,10 @@ CREATE TABLE `permissions` (
     ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+--
+-- Table structure for table `serialitems`
+--
+
 DROP TABLE IF EXISTS `serialitems`;
 CREATE TABLE `serialitems` (
 	`itemnumber` int(11) NOT NULL,
@@ -2105,6 +2138,10 @@ CREATE TABLE `serialitems` (
 	CONSTRAINT `serialitems_sfk_1` FOREIGN KEY (`serialid`) REFERENCES `serial` (`serialid`) ON DELETE CASCADE ON UPDATE CASCADE,
 	CONSTRAINT `serialitems_sfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `user_permissions`
+--
 
 DROP TABLE IF EXISTS `user_permissions`;
 CREATE TABLE `user_permissions` (
@@ -2275,13 +2312,13 @@ CREATE TABLE `item_circulation_alert_preferences` (
 -- Table structure for table `messages`
 --
 DROP TABLE IF EXISTS `messages`;
-CREATE TABLE `messages` (
-  `message_id` int(11) NOT NULL auto_increment,
-  `borrowernumber` int(11) NOT NULL,
-  `branchcode` varchar(10) default NULL,
-  `message_type` varchar(1) NOT NULL,
-  `message` text NOT NULL,
-  `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+CREATE TABLE `messages` ( -- circulation messages left via the patron's check out screen
+  `message_id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `borrowernumber` int(11) NOT NULL, -- foreign key linking this message to the borrowers table
+  `branchcode` varchar(10) default NULL, -- foreign key linking the message to the branches table
+  `message_type` varchar(1) NOT NULL, -- whether the message is for the librarians (L) or the patron (B)
+  `message` text NOT NULL, -- the text of the message
+  `message_date` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP, -- the date and time the message was written
   PRIMARY KEY (`message_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2606,12 +2643,12 @@ CREATE TABLE `aqorders_items` (
 --
 
 DROP TABLE IF EXISTS `fieldmapping`;
-CREATE TABLE `fieldmapping` (
-  `id` int(11) NOT NULL auto_increment,
-  `field` varchar(255) NOT NULL,
-  `frameworkcode` char(4) NOT NULL default '',
-  `fieldcode` char(3) NOT NULL,
-  `subfieldcode` char(1) NOT NULL,
+CREATE TABLE `fieldmapping` ( -- koha to keyword mapping
+  `id` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
+  `field` varchar(255) NOT NULL, -- keyword to be mapped to (ex. subtitle)
+  `frameworkcode` char(4) NOT NULL default '', -- foreign key from the biblio_framework table to link this mapping to a specific framework
+  `fieldcode` char(3) NOT NULL, -- marc field number to map to this keyword
+  `subfieldcode` char(1) NOT NULL, -- marc subfield associated with the fieldcode to map to this keyword
   PRIMARY KEY  (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
