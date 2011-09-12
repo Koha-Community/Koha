@@ -142,7 +142,8 @@
                 <td> <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.id %]" title="MARC" rel="gb_page_center[600,500]">Card</a>
 				</td>
                 <td>
-                	<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]" [% UNLESS ( CAN_user_editcatalogue_edit_catalogue ) %] class="disabled" onclick="return false;"[% END %]>Add biblio</a>
+                    [% UNLESS ( CAN_user_editcatalogue_edit_catalogue ) %]<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]" class="disabled" onclick="return false;">Add biblio</a>
+                    [% ELSE %]<a href="/cgi-bin/koha/cataloguing/addbiblio.pl?breedingid=[% breeding_loo.id %]">Add biblio</a>[% END %]
                 </td>
             </tr>
             [% END %]

@@ -674,8 +674,8 @@ function searchauthority() {
                 <div name="line" class="subfield_line" style="[% subfield_loo.visibility %];" id="subfield[% subfield_loo.tag %][% subfield_loo.subfield %]">
                 
                     [% UNLESS ( subfield_loo.advancedMARCEditor ) %]
-                    <label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
-                            [% IF ( subfield_loo.fixedfield ) %] style="display:none;" [% END %] class="labelsubfield" >
+                        [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" style="display:none;" class="labelsubfield" >
+                        [% ELSE %] <label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" class="labelsubfield" >[% END %]
                     [% END %] 
                     
                     [% UNLESS ( subfield_loo.hide_marc ) %]

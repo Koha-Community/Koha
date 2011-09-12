@@ -178,9 +178,12 @@
     <li><label>Patron flags:</label>
         <select name="borflag" size="1" id="borflag">
             <option value="">None</option>
-            <option value="gonenoaddress"[% IF ( borflag_gonenoaddress ) %] selected="selected"[% END %]>Address in question</option>
-            <option value="debarred"[% IF ( borflag_debarred ) %] selected="selected"[% END %]>Restricted</option>
-            <option value="lost"[% IF ( borflag_lost ) %] selected="selected"[% END %]>Lost Card</option>
+            [% IF ( borflag_gonenoaddress ) %]<option value="gonenoaddress" selected="selected">Address in question</option>
+            [% ELSE %]<option value="gonenoaddress">Address in question</option>[% END %]
+            [% IF ( borflag_debarred ) %]<option value="debarred" selected="selected">Restricted</option>
+            [% ELSE %]<option value="debarred">Restricted</option>[% END %]
+            [% IF ( borflag_lost ) %]<option value="lost" selected="selected">Lost Card</option>
+            [% ELSE %]<option value="lost">Lost Card</option>[% END %]
         </select>
     </li>
 	[% FOREACH patron_attr_filter_loo IN patron_attr_filter_loop %]
@@ -251,7 +254,8 @@
     </option>
 [% END %]
 	[% FOREACH patron_attr_order_loo IN patron_attr_order_loop %]
-	    <option value="[% patron_attr_order_loo.value |html %]"[% IF ( patron_attr_order_loo.selected ) %] selected="selected"[% END %]>[% patron_attr_order_loo.label %]</option>
+        [% IF ( patron_attr_order_loo.selected ) %]<option value="[% patron_attr_order_loo.value |html %]" selected="selected">[% patron_attr_order_loo.label %]</option>
+        [% ELSE %]<option value="[% patron_attr_order_loo.value |html %]">[% patron_attr_order_loo.label %]</option>[% END %]
 	[% END %]
 </select></li>
 

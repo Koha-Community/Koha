@@ -65,7 +65,8 @@
 			</tr>
 				[% IF ( looptable.looprow ) %]
 				[% FOREACH loopro IN looptable.looprow %]
-					<tr[% UNLESS ( loop.odd ) %] class="highlight"[% END %]>
+                    [% UNLESS ( loop.odd ) %]<tr class="highlight">
+                    [% ELSE %]<tr>[% END %]
 						<td>[% loop.count %]</td>
 						<td>[% DEFAULT loopro.itemcallnumber="No Call Number" %]</td>
 						<td>[% DEFAULT loopro.barcode="No Barcode" %]</td>
