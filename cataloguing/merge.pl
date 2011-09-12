@@ -48,12 +48,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 #------------------------
 if ($merge) {
 
-    my @params = $input->param();
     my $dbh = C4::Context->dbh;
     my $sth;
 
     # Creating a new record from the html code
-    my $record       = TransformHtmlToMarc( \@params , $input );
+    my $record       = TransformHtmlToMarc( $input );
     my $tobiblio     =  $input->param('biblio1');
     my $frombiblio   =  $input->param('biblio2');
 

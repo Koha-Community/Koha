@@ -1989,8 +1989,8 @@ sub _default_ind_to_space {
 
 =head2 TransformHtmlToMarc
 
-    L<$record> = TransformHtmlToMarc(L<$params>,L<$cgi>)
-    L<$params> is a ref to an array as below:
+    L<$record> = TransformHtmlToMarc(L<$cgi>)
+    L<$cgi> is the CGI object which containts the values for subfields
     {
         'tag_010_indicator1_531951' ,
         'tag_010_indicator2_531951' ,
@@ -2007,14 +2007,14 @@ sub _default_ind_to_space {
         'tag_200_code_f_873510_110730' ,
         'tag_200_subfield_f_873510_110730' ,
     }
-    L<$cgi> is the CGI object which containts the value.
     L<$record> is the MARC::Record object.
 
 =cut
 
 sub TransformHtmlToMarc {
-    my $params = shift;
     my $cgi    = shift;
+
+    my @params = $cgi->param();
 
     # explicitly turn on the UTF-8 flag for all
     # 'tag_' parameters to avoid incorrect character
@@ -2035,8 +2035,8 @@ sub TransformHtmlToMarc {
     my $record = MARC::Record->new();
     my $i      = 0;
     my @fields;
-    while ( $params->[$i] ) {    # browse all CGI params
-        my $param    = $params->[$i];
+    while ( $params[$i] ) {    # browse all CGI params
+        my $param    = $params[$i];
         my $newfield = 0;
 
         # if we are on biblionumber, store it in the MARC::Record (it may not be in the edited fields)
@@ -2052,7 +2052,7 @@ sub TransformHtmlToMarc {
             my $tag = $1;
 
             my $ind1 = _default_ind_to_space( substr( $cgi->param($param), 0, 1 ) );
-            my $ind2 = _default_ind_to_space( substr( $cgi->param( $params->[ $i + 1 ] ), 0, 1 ) );
+            my $ind2 = _default_ind_to_space( substr( $cgi->param( $params[ $i + 1 ] ), 0, 1 ) );
             $newfield = 0;
             my $j = $i + 2;
 
@@ -2062,27 +2062,27 @@ sub TransformHtmlToMarc {
                     # Force a fake leader even if not provided to avoid crashing
                     # during decoding MARC record containing UTF-8 characters
                     $record->leader(
-                        length( $cgi->param($params->[$j+1]) ) == 24
-                        ? $cgi->param( $params->[ $j + 1 ] )
+                        length( $cgi->param($params[$j+1]) ) == 24
+                        ? $cgi->param( $params[ $j + 1 ] )
                         : '     nam a22        4500'
 			)
                     ;
                     # between 001 and 009 (included)
-                } elsif ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {
-                    $newfield = MARC::Field->new( $tag, $cgi->param( $params->[ $j + 1 ] ), );
+                } elsif ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {
+                    $newfield = MARC::Field->new( $tag, $cgi->param( $params[ $j + 1 ] ), );
                 }
 
                 # > 009, deal with subfields
             } else {
-                while ( defined $params->[$j] && $params->[$j] =~ /_code_/ ) {    # browse all it's subfield
-                    my $inner_param = $params->[$j];
+                while ( defined $params[$j] && $params[$j] =~ /_code_/ ) {    # browse all it's subfield
+                    my $inner_param = $params[$j];
                     if ($newfield) {
-                        if ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {         # only if there is a value (code => value)
-                            $newfield->add_subfields( $cgi->param($inner_param) => $cgi->param( $params->[ $j + 1 ] ) );
+                        if ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {         # only if there is a value (code => value)
+                            $newfield->add_subfields( $cgi->param($inner_param) => $cgi->param( $params[ $j + 1 ] ) );
                         }
                     } else {
-                        if ( $cgi->param( $params->[ $j + 1 ] ) ne '' ) {         # creating only if there is a value (code => value)
-                            $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($inner_param) => $cgi->param( $params->[ $j + 1 ] ), );
+                        if ( $cgi->param( $params[ $j + 1 ] ) ne '' ) {         # creating only if there is a value (code => value)
+                            $newfield = MARC::Field->new( $tag, $ind1, $ind2, $cgi->param($inner_param) => $cgi->param( $params[ $j + 1 ] ), );
                         }
                     }
                     $j += 2;
