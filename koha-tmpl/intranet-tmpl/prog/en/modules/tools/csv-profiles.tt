@@ -101,7 +101,11 @@ function reloadPage(p) {
 						    <li><label for="new_encoding">Encoding: </label>
 						    <select name="encoding" id="new_encoding">
 							[% FOREACH encoding IN encodings %]
-							    <option[% IF ( encoding == 'utf8' ) %] selected="selected" [% END %]>[% encoding.encoding %]</option>
+								[% IF ( encoding == 'utf8' ) %]
+									<option selected="selected">[% encoding.encoding %]</option>
+								[% ELSE %]
+									<option>[% encoding.encoding %]</option>
+								[% END %]
 							[% END %]
 						    </select></li>
 
@@ -129,7 +133,7 @@ function reloadPage(p) {
 						    <select id="modify_profile_name" name="profile_name" onchange="javascript:reloadPage(this)">
 							<option value="0">-- Choose One --</option>
 							[% FOREACH existing_profile IN existing_profiles %]
-							[% IF ( export_format_id == selected_profile_id ) %]
+							[% IF ( existing_profile.export_format_id == selected_profile_id ) %]
 							<option value="[% existing_profile.export_format_id %]" selected="selected">[% existing_profile.profile %]</option>
 							[% ELSE %]
 							<option value="[% existing_profile.export_format_id %]">[% existing_profile.profile %]</option>
@@ -230,7 +234,6 @@ function reloadPage(p) {
 						    <li><label for="subfield_separator">Subfield separator: </label>
 						    <select name="subfield_separator" id="subfield_separator">
                                 <option value=":">Colon (:)</option>
-
 
                                 [% IF ( selected_subfield_separator == ',' ) %]
                                 <option value="," selected="selected">Comma (,)</option>
