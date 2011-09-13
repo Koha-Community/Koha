@@ -109,8 +109,8 @@ function Dopop(link) {
 
 [% IF ( soundon ) %]
 <audio src="/intranet-tmpl/prog/sound/ending.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-[% END %]	
-	
+[% END %]
+
 <div class="dialog message">
         <h3>Hold Found (item is already waiting):  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
@@ -150,6 +150,9 @@ function Dopop(link) {
 
     [% IF ( diffbranch ) %]
 		<!-- diffbranch -->
+        [% IF ( soundon ) %]
+        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        [% END %]
         <div class="dialog message">
 		<h3>Hold needing transfer found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
                 <h4>Hold for: </h4>
@@ -188,10 +191,18 @@ function Dopop(link) {
     [% IF ( transfer ) %]
     <!-- transfer: item with no reservation, must be returned to its homebranch -->
 	<div class="dialog message">
-	  <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% homebranchname %]</h3></div>[% END %]
+            <h3>Please return <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title or "item" |html %]</a> to [% homebranchname %]</h3>
+        </div>
+        [% IF ( soundon ) %]
+        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        [% END %]
+    [% END %]
 
     [% IF ( needstransfer ) %]
 	<!-- needstransfer -->
+        [% IF ( soundon ) %]
+        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        [% END %]
 	<div class="dialog message"><h3> This item needs to be transferred to [% homebranchname %]</h3>
 	Transfer Now?<br />
     <form method="post" action="returns.pl" name="mainform" id="mainform">
@@ -208,10 +219,13 @@ function Dopop(link) {
 	[% END %]
 	<input type="hidden" name="barcode" value="0" />
 	</form>   </div>
-	[% END %]
+    [% END %]
 
     [% IF ( diffbranch ) %]
 	<!-- diffbranch -->
+        [% IF ( soundon ) %]
+        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        [% END %]
         <h3>Item Consigned:</h3>
         <table>
         <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a></caption>
@@ -236,11 +250,11 @@ function Dopop(link) {
     <!-- case of simple return no issue or transfer but with a reservation  -->
     [% IF ( reserved ) %]
 	<!--  reserved  -->
-	
-[% IF ( soundon ) %]
-<audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
-[% END %]
-	
+
+        [% IF ( soundon ) %]
+        <audio src="/intranet-tmpl/prog/sound/opening.ogg" autoplay="autoplay" autobuffer="autobuffer"></audio>
+        [% END %]
+
 	<div class="dialog message">
 	  <h3>Hold Found: <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber %]">[% title |html %]</a></h3>
         [% IF ( reservenotes ) %]<h4>Notes: [% reservenotes %]</h4>[% END %]
