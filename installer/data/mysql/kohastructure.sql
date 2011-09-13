@@ -355,7 +355,7 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `branchfax` mediumtext, -- the fax number for your library or branch
   `branchemail` mediumtext, -- the primary email address for your library or branch
   `branchurl` mediumtext, -- the URL for your library or branch's website
-  `issuing` tinyint(4) default NULL, --unused in Koha
+  `issuing` tinyint(4) default NULL, -- unused in Koha
   `branchip` varchar(15) default NULL, -- the IP address for your library or branch
   `branchprinter` varchar(100) default NULL, -- unused in Koha
   `branchnotes` mediumtext, -- notes related to your library or branch
@@ -654,7 +654,7 @@ CREATE TABLE `deletedbiblioitems` (
 
 DROP TABLE IF EXISTS `deletedborrowers`;
 CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrowers you have deleted
-  `borrowernumber` int(11) NOT NULL auto_increment, -- primary key, Koha assigned ID number for patrons/borrowers
+  `borrowernumber` int(11) NOT NULL default 0, -- primary key, Koha assigned ID number for patrons/borrowers
   `cardnumber` varchar(16) default NULL, -- unique key, library assigned ID number for patrons/borrowers
   `surname` mediumtext NOT NULL, -- patron/borrower's last name (surname)
   `firstname` text, -- patron/borrower's first name
@@ -720,6 +720,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `altcontactphone` varchar(50) default NULL, -- the phone number for the alternate contact for the patron/borrower
   `smsalertnumber` varchar(50) default NULL, -- the mobile phone number where the patron/borrower would like to receive notices (if SNS turned on)
   `privacy` integer(11) DEFAULT '1' NOT NULL, -- patron/borrower's privacy settings related to their reading history  KEY `borrowernumber` (`borrowernumber`),
+  KEY borrowernumber (borrowernumber),
   KEY `cardnumber` (`cardnumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
