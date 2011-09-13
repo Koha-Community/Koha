@@ -54,15 +54,29 @@
       [% IF ( messaging_preference.transport_sms ) %]
       [% IF ( SMSSendDriver ) %]<td>
           [% IF ( messaging_form_inactive ) %]
+              [% IF ( messaging_preference.transports_sms ) %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="sms"   [% messaging_preference.transport_sms %] disabled="disabled" />
+                 value="sms" checked="checked" disabled="disabled" />
+              [% ELSE %]
+                 <input type="checkbox"
+                 id="sms[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="sms" disabled="disabled" />
+              [% END %]
           [% ELSE %]
+              [% IF ( messaging_preference.transports_sms ) %]
                  <input type="checkbox"
                  id="sms[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="sms"   [% messaging_preference.transport_sms %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+                 value="sms" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% ELSE %]
+                 <input type="checkbox"
+                 id="sms[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="sms" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% END %]
           [% END %]
       </td>[% END %]
       [% ELSE %]
@@ -72,15 +86,29 @@
       [% IF ( messaging_preference.transport_email ) %]
       <td>
           [% IF ( messaging_form_inactive ) %]
-            <input type="checkbox"
-                 id="email[% messaging_preference.message_attribute_id %]"
-                 name="[% messaging_preference.message_attribute_id %]"
-                 value="email"   [% messaging_preference.transport_email %] disabled="disabled" />
+              [% IF ( messaging_preference.transports_email ) %]
+                <input type="checkbox"
+                   id="email[% messaging_preference.message_attribute_id %]"
+                   name="[% messaging_preference.message_attribute_id %]"
+                   value="email" checked="checked" disabled="disabled" />
+              [% ELSE %]
+                <input type="checkbox"
+                   id="email[% messaging_preference.message_attribute_id %]"
+                   name="[% messaging_preference.message_attribute_id %]"
+                   value="email" disabled="disabled" />
+              [% END %]
           [% ELSE %]
+              [% IF ( messaging_preference.transports_email ) %]
             <input type="checkbox"
                  id="email[% messaging_preference.message_attribute_id %]"
                  name="[% messaging_preference.message_attribute_id %]"
-                 value="email"   [% messaging_preference.transport_email %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+                 value="email" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% ELSE %]
+            <input type="checkbox"
+                 id="email[% messaging_preference.message_attribute_id %]"
+                 name="[% messaging_preference.message_attribute_id %]"
+                 value="email" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% END %]
           [% END %]
       </td>
       [% ELSE %]
@@ -90,15 +118,29 @@
       [% IF ( messaging_preference.has_digest ) %]
       <td>
           [% IF ( messaging_form_inactive ) %]
-            <input type="checkbox"
-                 id="digest[% messaging_preference.message_attribute_id %]"
-                 value="[% messaging_preference.message_attribute_id %]"
-                 name="digest"   [% messaging_preference.digest %] disabled="disabled" />
+              [% IF ( messaging_preference.digest ) %]
+                <input type="checkbox"
+                     id="digest[% messaging_preference.message_attribute_id %]"
+                     value="[% messaging_preference.message_attribute_id %]"
+                     name="digest" checked="checked" disabled="disabled" />
+              [% ELSE %]
+                <input type="checkbox"
+                     id="digest[% messaging_preference.message_attribute_id %]"
+                     value="[% messaging_preference.message_attribute_id %]"
+                     name="digest" disabled="disabled" />
+              [% END %]
           [% ELSE %]
-            <input type="checkbox"
-                 id="digest[% messaging_preference.message_attribute_id %]"
-                 value="[% messaging_preference.message_attribute_id %]"
-                 name="digest"   [% messaging_preference.digest %] onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% IF ( messaging_preference.digest ) %]
+                <input type="checkbox"
+                     id="digest[% messaging_preference.message_attribute_id %]"
+                     value="[% messaging_preference.message_attribute_id %]"
+                     name="digest" checked="checked" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% ELSE %]
+                <input type="checkbox"
+                     id="digest[% messaging_preference.message_attribute_id %]"
+                     value="[% messaging_preference.message_attribute_id %]"
+                     name="digest" onclick = "$('#none'+'[% messaging_preference.message_attribute_id %]').attr('checked','');" />
+              [% END %]
           [% END %]
       </td>
       [% ELSE %]
