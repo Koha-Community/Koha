@@ -145,8 +145,12 @@ YAHOO.util.Event.onAvailable("popmenu", function () {
     <tbody>
     [% FOREACH budget_line IN budget_lines %]
     [% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-
-        <td align="left"[% IF ( budget_line.budget_lock ) %] class="locked" title="Fund locked"[% END %]><a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id %]&amp;budget_period_id=[% budget_line.budget_period_id %]">[% budget_line.budget_name_indent %]</a></td>
+        [% IF ( budget_line.budget_lock ) %]
+            <td align="left" class="locked" title="Fund locked">
+        [% ELSE %]
+            <td align="left">
+        [% END %]
+        <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id %]&amp;budget_period_id=[% budget_line.budget_period_id %]">[% budget_line.budget_name_indent %]</a></td>
         <td><span id="budget_tot_formatted_[% budget_line.budget_id %]">[% budget_line.budget_amount_formatted %]&nbsp;</span>
 
 

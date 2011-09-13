@@ -157,9 +157,7 @@ $(document).ready(function(){
     <select name="framework" id="frameworks">
       <option value="">Default</option>
       [% FOREACH framework IN frameworks %]
-      <option value="[% framework.value %]" [% framework.selected %]>
-      [% framework.label %]
-      </option>
+          <option value="[% framework.value %]">[% framework.label %]</option>
       [% END %]
     </select>
     </fieldset>

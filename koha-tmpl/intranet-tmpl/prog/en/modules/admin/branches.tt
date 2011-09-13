@@ -99,7 +99,12 @@
         <ol>
 		[% FOREACH categoryloo IN categoryloop %]
             <li><label for="[% categoryloo.categorycode %]">[% categoryloo.categoryname %]</label>
-                <input type="checkbox" id="[% categoryloo.categorycode %]" name="[% categoryloo.categorycode %]" [% categoryloo.checked %] /> <span class="hint">[% categoryloo.codedescription %]</span>
+                [% IF ( categoryloo.checked ) %]
+                    <input type="checkbox" id="[% categoryloo.categorycode %]" name="[% categoryloo.categorycode %]" checked="checked" />
+                [% ELSE %]
+                    <input type="checkbox" id="[% categoryloo.categorycode %]" name="[% categoryloo.categorycode %]" />
+                [% END %]
+                <span class="hint">[% categoryloo.codedescription %]</span>
             </li>
         [% END %]
 		</ol>

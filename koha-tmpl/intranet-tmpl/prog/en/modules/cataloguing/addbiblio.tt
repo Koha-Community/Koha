@@ -857,7 +857,6 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             <div class="subfield_line" style="[% subfield_loo.visibility %]; float: left; clear: left; width: 100%;" id="subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]">
             
                 [% UNLESS advancedMARCEditor %]
-                    <label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" [% IF ( subfield_loo.fixedfield ) %] style="display:none;" [% END %] class="labelsubfield">
                     [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" style="display:none;" class="labelsubfield">
                     [% ELSE %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" class="labelsubfield">[% END %]
                 [% END %] 

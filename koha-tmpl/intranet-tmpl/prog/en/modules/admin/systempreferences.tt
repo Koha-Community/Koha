@@ -87,9 +87,11 @@
     <div class="yui-b">
 
 [% IF ( add_form ) %]
-    
-        <form action="[% script_name %]" name="Aform" method="post" [% IF ( type_upload ) %]enctype="multipart/form-data"[% END %]>
-                
+        [% IF ( type_upload ) %]
+            <form action="[% script_name %]" name="Aform" method="post" enctype="multipart/form-data">
+        [% ELSE %]
+            <form action="[% script_name %]" name="Aform" method="post">
+        [% END %]
         <fieldset class="rows"><legend>
         [% IF ( modify ) %]Modify
         [% ELSE %]Add
@@ -125,21 +127,41 @@
             [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]<table><tr><td>
                 [% IF ( sublanguages_loo.sublanguage_current ) %]
                     <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
-                    <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+                    [% IF ( sublanguages_loo.enabled ) %]
+                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                    [% ELSE %]
+                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                    [% END %]
+                    </label>
 
                 [% ELSE %]
                     <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
-                    <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+                    [% IF ( sublanguages_loo.enabled ) %]
+                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                    [% ELSE %]
+                        <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                    [% END %]
+                    </label>
                 [% END %]</td></tr></table>
             [% END %]
 
             [% ELSE %]
                 [% IF ( languages_loo.current ) %]
             <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
-                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                [% IF ( languages_loo.group_enabled ) %]
+                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                [% ELSE %]
+                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                [% END %]
+                    </label>
                 [% ELSE %]
             <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
-                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                [% IF ( languages_loo.group_enabled ) %]
+                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                [% ELSE %]
+                    <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                [% END %]
+                    </label>
                 [% END %]
             [% END %]
         </td></tr>
@@ -260,8 +282,11 @@
         [% ELSE %]
         <td>
         [% END %]
-            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" [% IF ( loo.type_upload ) %]enctype="multipart/form-data"[% END %]>
-
+        [% IF ( loo.type_upload ) %]
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post" enctype="multipart/form-data">
+        [% ELSE %]
+            <form action="/cgi-bin/koha/admin/systempreferences.pl" method="post">
+        [% END %]
                 [% IF ( loo.type_free ) %]
                 <input type="text" name="value" size="[% loo.fieldlength %]" value="[% loo.value |html %]" />
                 [% END %]
@@ -293,21 +318,41 @@
                     [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]<table><tr><td>
                         [% IF ( sublanguages_loo.sublanguage_current ) %]
                             <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+                            [% IF ( sublanguages_loo.enabled ) %]
+                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                            [% ELSE %]
+                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                            [% END %]
+                            </label>
 
                         [% ELSE %]
                             <label for="[% sublanguages_loo.rfc4646_subtag %]">[% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %]([% sublanguages_loo.rfc4646_subtag %])
-                            <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( sublanguages_loo.enabled ) %]checked="checked"[% END %] /> </label>
+                            [% IF ( sublanguages_loo.enabled ) %]
+                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                            [% ELSE %]
+                                <input value="[% sublanguages_loo.rfc4646_subtag %]" name="value" id="[% sublanguages_loo.rfc4646_subtag %]" type="checkbox" />
+                            [% END %]
+                            </label>
                         [% END %]</td></tr></table>
                     [% END %]
 
                     [% ELSE %]
                         [% IF ( languages_loo.current ) %]
                     <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
-                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                        [% IF ( languages_loo.group_enabled ) %]
+                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                        [% ELSE %]
+                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                        [% END %]
+                            </label>
                         [% ELSE %]
                     <label for="[% languages_loo.rfc4646_subtag %]">[% languages_loo.native_description %]([% languages_loo.rfc4646_subtag %])
-                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" [% IF ( languages_loo.group_enabled ) %]checked="checked"[% END %] /> </label>
+                        [% IF ( languages_loo.group_enabled ) %]
+                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" checked="checked" />
+                        [% ELSE %]
+                            <input value="[% languages_loo.rfc4646_subtag %]" name="value" id="opac[% languages_loo.rfc4646_subtag %]" type="checkbox" />
+                        [% END %]
+                            </label>
                         [% END %]
                     [% END %]
                 </td></tr>

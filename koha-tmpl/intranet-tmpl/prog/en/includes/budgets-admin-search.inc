@@ -61,7 +61,11 @@ YAHOO.util.Event.onContentReady("header_search", function() {
 
         <option value=""></option>
             [% FOREACH branchloo IN branchloop %]
-                <option value="[% branchloo.value %]" [% IF ( branchloo.selected ) %]selected[% END %]>[% branchloo.branchname %]</option>
+                [% IF ( branchloo.selected ) %]
+                <option value="[% branchloo.value %]" selected="selected">[% branchloo.branchname %]</option>
+                [% ELSE %]
+                <option value="[% branchloo.value %]" >[% branchloo.branchname %]</option>
+                [% END %]
             [% END %]     
        </select>         
 
