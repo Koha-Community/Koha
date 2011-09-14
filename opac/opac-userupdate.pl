@@ -48,6 +48,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
+my ( $patronemail ) = GetFirstValidEmailAddress($borrowernumber);
 my $lib = GetBranchDetail($borr->{'branchcode'});
 
 # handle the new information....
@@ -79,6 +80,10 @@ if ( !$updateemailaddress || $updateemailaddress eq '' ) {
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
 }
+
+if ( !$patronemail || $patronemail eq '' ) {
+	$patronemail = $updateemailaddress;
+};
 
 if ( $query->param('modify') ) {
 
@@ -117,7 +122,7 @@ EOF
     $message .= "\n\nThanks,\nKoha\n\n";
     my %mail = (
         To      => $updateemailaddress,
-        From    => $updateemailaddress,
+        From    => $patronemail,
         Subject => "User Request for update of Record.",
         Message => $message,
         'Content-Type' => 'text/plain; charset="utf8"',
