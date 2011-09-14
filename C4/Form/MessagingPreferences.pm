@@ -140,9 +140,9 @@ sub set_form_values {
             } ( 0..30 ); # FIXME: 30 is a magic number.
         }
         foreach my $transport ( @{$pref->{'transports'}} ) {
-            $option->{'transport_'.$transport} = 'checked="checked"';
+            $option->{'transports_'.$transport} = 1;
         }
-        $option->{'digest'} = 'checked="checked"' if $pref->{'wants_digest'};
+        $option->{'digest'} = 1 if $pref->{'wants_digest'};
     }
     $template->param(messaging_preferences => $messaging_options);
 }
