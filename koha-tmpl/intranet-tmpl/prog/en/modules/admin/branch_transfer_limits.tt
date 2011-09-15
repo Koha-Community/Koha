@@ -71,7 +71,11 @@
         <label for="branchselect">Select a library :</label>
             <select name="branchcode" id="branchselect">
 		[% FOREACH branch_loo IN branch_loop %]
+			[% IF ( branch_loo.selected ) %]
+                <option value="[% branch_loo.value %]" selected="selected">[% branch_loo.branchname %]</option>
+            [% ELSE %]
                 <option value="[% branch_loo.value %]">[% branch_loo.branchname %]</option>
+            [% END %]
 		[% END %]
             </select>
 	    <input type="submit" value="Choose" />	    
@@ -99,8 +103,8 @@
 	}).tablesorterPager({container: $("#pager[% codes_loo.code %]table"),positionFixed: false,size: 10});
 }); </script>
 	
-	<span id="pager[% codes_loo.code %]table" class="pager">
-	<form class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
+	<div id="pager[% codes_loo.code %]table" class="pager">
+	<p class="formpager">&nbsp;<strong>page(s)</strong>&nbsp;:
 		<img src="[% interface %]/[% theme %]/img/first.png" class="first"/>
 		<img src="[% interface %]/[% theme %]/img/prev.png" class="prev"/>
 		<input type="text" size="5" class="pagedisplay"/>
@@ -115,8 +119,8 @@
 			<option value="50">50</option>
 			<option value="100">100</option>
 		</select>
-	</form>
-</span>
+	</p>
+</div>
 		<table id="[% codes_loo.code %]table">
 			<thead>
 				<tr>

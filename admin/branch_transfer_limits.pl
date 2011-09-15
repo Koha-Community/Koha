@@ -58,6 +58,7 @@ my @branch_loop;
 for my $thisbranch (sort { $branches->{$a}->{branchname} cmp $branches->{$b}->{branchname} } keys %$branches) {
     my %row =(value => $thisbranch,
               branchname => $branches->{$thisbranch}->{'branchname'},
+              selected => $thisbranch eq $branchcode ? 1 : 0,
              );
     push @branch_loop, \%row;
 }
