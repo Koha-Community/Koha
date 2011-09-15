@@ -113,6 +113,7 @@ if ($op eq 'add_form') {
 				category_type           => $data->{'category_type'},
 				DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
 				"type_".$data->{'category_type'} => 1,
+				SMSSendDriver => C4::Context->preference("SMSSendDriver")
 				);
     if (C4::Context->preference('EnhancedMessagingPreferences')) {
         C4::Form::MessagingPreferences::set_form_values({ categorycode => $categorycode } , $template);
