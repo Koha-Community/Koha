@@ -254,29 +254,15 @@ or "Final Notice".  But CalcFine never defined any value.
 sub CalcFine {
     my ( $item, $bortype, $branchcode, $due_dt, $end_date  ) = @_;
     my $start_date = $due_dt->clone();
-    my $dbh = C4::Context->dbh;
-    my $amount = 0;
-    my $charge_duration;
     # get issuingrules (fines part will be used)
     my $data = C4::Circulation::GetIssuingRule($bortype, $item->{itemtype}, $branchcode);
-    if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
-        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
-        $charge_duration = $calendar->days_between( $start_date, $end_date );
-    } else {
-        $charge_duration = $end_date - $start_date;
-    }
-    # correct for grace period.
     my $fine_unit = $data->{lengthunit};
     $fine_unit ||= 'days';
-    my $chargeable_units;
-    if ($fine_unit eq 'hours') {
-        $chargeable_units = $charge_duration->hours(); # TODO closed times???
-    }
-    else {
-        $chargeable_units = $charge_duration->days;
-    }
-    my $days_minus_grace = $chargeable_units - $data->{firstremind};
-    if ($data->{'chargeperiod'}  && $days_minus_grace  ) {
+
+    my $chargeable_units = _get_chargeable_units($fine_unit, $start_date, $end_date, $branchcode);
+    my $units_minus_grace = $chargeable_units - $data->{firstremind};
+    my $amount = 0;
+    if ($data->{'chargeperiod'}  && $units_minus_grace  ) {
         $amount = int($chargeable_units / $data->{'chargeperiod'}) * $data->{'fine'};# TODO fine calc should be in cents
     } else {
         # a zero (or null)  chargeperiod means no charge.
@@ -284,8 +270,47 @@ sub CalcFine {
     if(C4::Context->preference('maxFine') && ( $amount > C4::Context->preference('maxFine'))) {
         $amount = C4::Context->preference('maxFine');
     }
-    return ($amount, $data->{chargename}, $days_minus_grace);
+    return ($amount, $data->{chargename}, $units_minus_grace);
     # FIXME: chargename is NEVER populated anywhere.
+}
+
+
+=head2 _get_chargeable_units
+
+    _get_chargeable_units($unit, $start_date_ $end_date, $branchcode);
+
+return integer value of units between C<$start_date> and C<$end_date>, factoring in holidays for C<$branchcode>.
+
+C<$unit> is 'days' or 'hours' (default is 'days').
+
+C<$start_date> and C<$end_date> are the two DateTimes to get the number of units between.
+
+C<$branchcode> is the branch whose calendar to use for finding holidays.
+
+=cut
+
+sub _get_chargeable_units {
+    my ($unit, $dt1, $dt2, $branchcode) = @_;
+    my $charge_units = 0;
+    my $charge_duration;
+    if ($unit eq 'hours') {
+        if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
+            my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+            $charge_duration = $calendar->hours_between( $dt1, $dt2 );
+        } else {
+            $charge_duration = $dt2->delta_ms( $dt1 );
+        }
+        return $charge_duration->in_units('hours');
+    }
+    else { # days
+        if(C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed') {
+            my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+            $charge_duration = $calendar->days_between( $dt1, $dt2 );
+        } else {
+            $charge_duration = $dt2->delta_days( $dt1 );
+        }
+        return $charge_duration->in_units('days');
+    }
 }
 
 

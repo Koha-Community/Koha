@@ -168,17 +168,34 @@ sub days_between {
     my $self     = shift;
     my $start_dt = shift;
     my $end_dt   = shift;
-    $start_dt->truncate( to => 'hours' );
-    $end_dt->truncate( to => 'hours' );
 
     # start and end should not be closed days
-    my $duration = $end_dt - $start_dt;
+    my $duration = $end_dt->delta_days($start_dt);
     $start_dt->truncate( to => 'days' );
     $end_dt->truncate( to => 'days' );
     while ( DateTime->compare( $start_dt, $end_dt ) == -1 ) {
         $start_dt->add( days => 1 );
         if ( $self->is_holiday($start_dt) ) {
             $duration->subtract( days => 1 );
+        }
+    }
+    return $duration;
+
+}
+
+sub hours_between {
+    my ($self, $start_dt, $end_dt) = @_;
+    my $duration = $end_dt->delta_ms($start_dt);
+    $start_dt->truncate( to => 'days' );
+    $end_dt->truncate( to => 'days' );
+    # NB this is a kludge in that it assumes all days are 24 hours
+    # However for hourly loans the logic should be expanded to
+    # take into account open/close times then it would be a duration
+    # of library open hours
+    while ( DateTime->compare( $start_dt, $end_dt ) == -1 ) {
+        $start_dt->add( days => 1 );
+        if ( $self->is_holiday($start_dt) ) {
+            $duration->subtract( hours => 24 );
         }
     }
     return $duration;
