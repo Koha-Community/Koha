@@ -27,8 +27,6 @@ use CGI::Session;
 require Exporter;
 use C4::Context;
 use C4::Templates;    # to get the template
-use C4::Members;
-use C4::Koha;
 use C4::Branch; # GetBranches
 use C4::VirtualShelves;
 use POSIX qw/strftime/;
@@ -188,8 +186,8 @@ sub get_template_and_user {
         }
 
         $borrowernumber = getborrowernumber($user) if defined($user);
-
-        my ( $borr ) = GetMemberDetails( $borrowernumber );
+        require C4::Members;
+        my ( $borr ) = C4::Members::GetMemberDetails( $borrowernumber );
         my @bordat;
         $bordat[0] = $borr;
         $template->param( "USER_INFO" => \@bordat );
