@@ -24,7 +24,6 @@ use strict;
 use C4::Context;
 use C4::Stats;
 use C4::Reserves;
-use C4::Koha;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;
