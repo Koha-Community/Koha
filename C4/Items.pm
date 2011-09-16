@@ -29,10 +29,6 @@ use C4::Dates qw/format_date format_date_in_iso/;
 use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
-use C4::Branch;
-require C4::Reserves;
-use C4::Charset;
-use C4::Acquisition;
 use List::MoreUtils qw/any/;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
@@ -640,6 +636,7 @@ item that has a given branch code.
 
 sub CheckItemPreSave {
     my $item_ref = shift;
+    require C4::Branch;
 
     my %errors = ();
 
@@ -1210,7 +1207,6 @@ sub GetItemsInfo {
 	my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=? "); 
 	while ( my $data = $sth->fetchrow_hashref ) {
         my $datedue = '';
-        my $count_reserves;
         $isth->execute( $data->{'itemnumber'} );
         if ( my $idata = $isth->fetchrow_hashref ) {
             $data->{borrowernumber} = $idata->{borrowernumber};
@@ -1231,14 +1227,6 @@ sub GetItemsInfo {
 			($data->{'serialseq'} , $data->{'publisheddate'}) = $ssth->fetchrow_array();
 			$serial = 1;
         }
-		if ( $datedue eq '' ) {
-            my ( $restype, $reserves, undef ) =
-              C4::Reserves::CheckReserves( $data->{'itemnumber'} );
-# Previous conditional check with if ($restype) is not needed because a true
-# result for one item will result in subsequent items defaulting to this true
-# value.
-            $count_reserves = $restype;
-        }
         #get branch information.....
         my $bsth = $dbh->prepare(
             "SELECT * FROM branches WHERE branchcode = ?
@@ -1249,7 +1237,6 @@ sub GetItemsInfo {
             $data->{'branchname'} = $bdata->{'branchname'};
         }
         $data->{'datedue'}        = $datedue;
-        $data->{'count_reserves'} = $count_reserves;
 
         # get notforloan complete status if applicable
         my $sthnflstatus = $dbh->prepare(
@@ -2182,11 +2169,12 @@ sub MoveItemFromBiblio {
         ModZebra( $tobiblio, "specialUpdate", "biblioserver", undef, undef );
         ModZebra( $frombiblio, "specialUpdate", "biblioserver", undef, undef );
 	    # Checking if the item we want to move is in an order 
-        my $order = GetOrderFromItemnumber($itemnumber);
+        require C4::Acquisition;
+        my $order = C4::Acquisition::GetOrderFromItemnumber($itemnumber);
 	    if ($order) {
 		    # Replacing the biblionumber within the order if necessary
 		    $order->{'biblionumber'} = $tobiblio;
-	        ModOrder($order);
+	        C4::Acquisition::ModOrder($order);
 	    }
         return $tobiblio;
 	}
@@ -2441,9 +2429,9 @@ sub _get_unlinked_subfields_xml {
 
 sub  _parse_unlinked_item_subfields_from_xml {
     my $xml = shift;
-
+    require C4::Charset;
     return unless defined $xml and $xml ne "";
-    my $marc = MARC::Record->new_from_xml(StripNonXmlChars($xml),'UTF-8');
+    my $marc = MARC::Record->new_from_xml(C4::Charset::StripNonXmlChars($xml),'UTF-8');
     my $unlinked_subfields = [];
     my @fields = $marc->fields();
     if ($#fields > -1) {
