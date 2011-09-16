@@ -23,27 +23,12 @@ use warnings;
 use CGI;
 use C4::Output;
 use C4::Auth;
-use C4::AuthoritiesMarc;
 use C4::Koha;
 use C4::NewsChannels;
 use C4::Review qw/numberofreviews/;
 use C4::Suggestions qw/CountSuggestion/;
 use C4::Tags qw/get_count_by_tag_status/;
 my $query     = new CGI;
-my $authtypes = getauthtypes;
-my @authtypesloop;
-
-foreach my $thisauthtype (
-    sort { $authtypes->{$a} <=> $authtypes->{$b} }
-    keys %$authtypes
-  )
-{
-    my %row = (
-        value        => $thisauthtype,
-        authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
-    );
-    push @authtypesloop, \%row;
-}
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -55,10 +40,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
             catalogue => 1,
         },
     }
-);
-
-$template->param(
-    authtypesloop => \@authtypesloop
 );
 
 my $all_koha_news   = &GetNewsToDisplay("koha");
