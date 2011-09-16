@@ -22,7 +22,6 @@ use warnings;
 
 require Exporter;
 use C4::Context;
-use C4::Koha;
 use C4::ClassSortRoutine;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
