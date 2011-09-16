@@ -1,0 +1,216 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-create</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Communnity</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-create">
+
+  <refmeta>
+    <refentrytitle>koha-create</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-create</refname>
+    <refpurpose>Create a new Koha instance.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-create</command>
+      <arg><option>--create-db</option>|<option>--request-db</option>|<option>--populate-db</option></arg>
+      <arg><option>--marcflavor</option> marc21|normarc|unimarc</arg>
+      <arg><option>--zebralang</option> en|nb|fr</arg>
+      <arg><option>--defaultsql</option> /path/to/some.sql</arg>
+      <arg><option>--configfile</option> /path/to/config</arg>
+      <arg><option>--adminuser</option> n</arg>
+      <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  
+  <refsect1><title>Options</title>
+  <variablelist>
+    
+    <varlistentry>
+      <term><option>--create-db</option></term>
+      <listitem>
+        <para>Create a new datbase on localhost. If the database you want to use does not reside on localhost, you  can  use <option>--request-db</option> and <option>--populate-db</option>, see below.</para>
+      </listitem>
+    </varlistentry>
+    
+    <varlistentry>
+      <term><option>--request-db</option></term>
+      <listitem>
+        <para>This  option will create a file called <filename>instancename-db-request.txt</filename> in your current directory that contains information about how the database needs to be set up.</para>
+      </listitem>
+    </varlistentry>
+    
+    <varlistentry>
+      <term><option>--populate-db</option></term>
+      <listitem>
+        <para>When you have run koha-create with the <option>--request-db</option> option, and a database has been set up, you can finnish your installation by running <command>koha-create</command> with this option.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--configfile</option></term>
+      <listitem>
+        <para>Path to an alternative config file. This file can hold the same variables as the default config file, see below for details.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--defaultsql</option></term>
+      <listitem>
+        <para>Path to an SQL-file other than the one pointed to in the default or alternative config file. Corresponds to the DEFAULTSQL config file variable.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--marcflavor</option></term>
+      <listitem>
+        <para>Specifies format of MARC records to be indexed by Zebra. Corresponds to the ZEBRA_MARC_FORMAT config file variable.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--zebralang</option></term>
+      <listitem>
+        <para>Primary language for Zebra indexing. Corresponds to the ZEBRA_LANGUAGE config file variable.</para>
+      </listitem>
+    </varlistentry>
+
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+    <para><command>koha-create</command>  creates  a new Koha instance.  It is meant for a site that provides Koha hosting, and serves several sites from the same host.</para>
+    <para>The name of the instance is used as the domain name  for  Apache,  Unix user and group names, and MySQL username and database names are derived from it.  Unix user and group are named instance-koha. MySQL username is koha_instance, and database is koha_instance.</para>
+    <para>The Unix user has logins disabled.  The password for MySQL is generated randomly, and printed to the terminal.</para>
+    <para>The instance name is used as the domain name (ServerName)  for  Apache. The public catalogue (OPAC), for library customers, is on port 80.  The staff client interface is configured similarly, depending on the settings in <filename>/etc/koha/koha-sites.conf</filename> or alternate config file.</para>
+    <para>After  the  Koha  instance  is created, it is ready to be used, but the librarian needs to log in via the intranet and configure things.</para>
+    <para>Several configuration variables are available for adjusting this behavior. The variables are put into <filename>/etc/koha/koha-site.conf</filename>. The following variables are obeyed:</para>
+    
+    <variablelist>
+    
+      <varlistentry>
+        <term><option>DOMAIN</option></term>
+        <listitem>
+          <para>The domain to append to the instance name, for Apache ServerName. Default is empty. The value must begin with a period.</para>
+        </listitem>
+      </varlistentry>
+    
+      <varlistentry>
+        <term><option>INTRAPORT</option></term>
+        <listitem>
+          <para>The port for the intranet.  If you set this to empty or 80, then you must also define INTRAPREFIX or INTRASUFFIX.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>INTRAPREFIX</option></term>
+        <listitem>
+          <para>This is inserted before the instance name  when  forming  Apache ServerName.  For subdomains, make sure it ends with a period.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>INTRASUFFIX</option></term>
+        <listitem>
+          <para>This  is inserted after the instance name, but before the domain name, when forming Apache ServerName.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>DEFAULTSQL</option></term>
+        <listitem>
+          <para>An SQL file (compressed with gzip) that can be fed  to  mysql(1) to  initialize the database after it has been created.  Might be created using koha-dump-defaults(8).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>ZEBRA_MARC_FORMAT</option></term>
+        <listitem>
+          <para>Specifies format of MARC records to be indexed by Zebra.  Possible values are 'marc21', 'normarc' and 'unimarc'.</para>
+        </listitem>
+      </varlistentry>
+              
+      <varlistentry>
+        <term><option>ZEBRA_LANGUAGE</option></term>
+        <listitem>
+          <para>Primary  language  for Zebra indexing. Possible values are 'en', 'fr' and 'nb'.</para>
+        </listitem>
+      </varlistentry>
+
+    </variablelist>
+
+    <para>Order of precedence for config options, from lowest to highest:</para>
+       
+    <orderedlist>
+      <listitem><para>The defaults set in the code of <command>koha-create</command></para></listitem>
+      <listitem><para><filename>/etc/koha/koha-sites.conf</filename></para></listitem>
+      <listitem><para>Config file specified with <option>--configfile</option></para></listitem>
+      <listitem><para>Individual command line options</para></listitem>
+    </orderedlist>
+    
+  </refsect1>
+
+  <refsect1><title>Files</title>
+  <variablelist>
+    <varlistentry>
+      <term><option><filename>/etc/koha/koha-sites.conf</filename></option></term>
+      <listitem>
+        <para>Configuration variables are read from this file, if it exists.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Bugs</title>
+  <para>The program is a bit fragile. If something goes wrong, it does not clean up after itself.</para>
+  <para>Bugs can be reported here: <uri>http://bugs.koha-community.org/bugzilla3/</uri></para>
+  </refsect1>
+  
+  <refsect1><title>Example</title>
+  
+    <para>To create a new Koha instance:</para>
+
+    <para><command>koha-create hslibrary</command></para>
+
+    <para>The public catalog is now at <uri>http://hslibrary/</uri> and the librarian interface at <uri>http://hslibrary:8080/</uri>.</para>
+
+    <para>To use full domain names, and have the intranet interface on port  80, but on a different domain name, add the following variables to the configuration file:</para>
+
+    <itemizedlist spacing="compact">
+      <listitem><para>DOMAIN=".example.com"</para></listitem>
+      <listitem><para>INTRAPORT=""</para></listitem>
+      <listitem><para>INTRASUFFIX="-intra"</para></listitem>
+    </itemizedlist>
+
+    <para>This will result in the addresses for the public and intranet interfaces becoming these:</para>
+
+    <itemizedlist spacing="compact">
+      <listitem><para><uri>http://hslibrary.example.com/</uri></para></listitem>
+      <listitem><para><uri>http://hslibrary-intra.example.com/</uri></para></listitem>
+    </itemizedlist>
+    <para>Configuration changes only apply to instances created afterwards.</para>
+
+  </refsect1>
+  
+  <refsect1><title>See also</title>
+
+  <simplelist type="inline">
+    <member><command>koha-remove(8)</command></member>
+  </simplelist>
+
+  </refsect1>
+
+</refentry>
+
+</article>
