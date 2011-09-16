@@ -82,6 +82,10 @@ BEGIN {
 
 	GetAnalyticsCount
         GetItemHolds
+
+
+        PrepareItemrecordDisplay
+
     );
 }
 
@@ -2497,4 +2501,231 @@ sub GetItemHolds {
     $holds = $sth->fetchrow;
     return $holds;
 }
+=head1  OTHER FUNCTIONS
+
+
+=head2 PrepareItemrecordDisplay
+
+  PrepareItemrecordDisplay($itemrecord,$bibnum,$itemumber,$frameworkcode);
+
+Returns a hash with all the fields for Display a given item data in a template
+
+The $frameworkcode returns the item for the given frameworkcode, ONLY if bibnum is not provided
+
+=cut
+
+sub PrepareItemrecordDisplay {
+
+    my ( $bibnum, $itemnum, $defaultvalues, $frameworkcode ) = @_;
+
+    my $dbh = C4::Context->dbh;
+    $frameworkcode = &GetFrameworkCode($bibnum) if $bibnum;
+    my ( $itemtagfield, $itemtagsubfield ) = &GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my $tagslib = &GetMarcStructure( 1, $frameworkcode );
+
+    # return nothing if we don't have found an existing framework.
+    return q{} unless $tagslib;
+    my $itemrecord;
+    if ($itemnum) {
+        $itemrecord = C4::Items::GetMarcItem( $bibnum, $itemnum );
+    }
+    my @loop_data;
+    my $authorised_values_sth = $dbh->prepare( "SELECT authorised_value,lib FROM authorised_values WHERE category=? ORDER BY lib" );
+    foreach my $tag ( sort keys %{$tagslib} ) {
+        my $previous_tag = '';
+        if ( $tag ne '' ) {
+
+            # loop through each subfield
+            my $cntsubf;
+            foreach my $subfield ( sort keys %{ $tagslib->{$tag} } ) {
+                next if ( subfield_is_koha_internal_p($subfield) );
+                next if ( $tagslib->{$tag}->{$subfield}->{'tab'} ne "10" );
+                my %subfield_data;
+                $subfield_data{tag}           = $tag;
+                $subfield_data{subfield}      = $subfield;
+                $subfield_data{countsubfield} = $cntsubf++;
+                $subfield_data{kohafield}     = $tagslib->{$tag}->{$subfield}->{'kohafield'};
+
+                #        $subfield_data{marc_lib}=$tagslib->{$tag}->{$subfield}->{lib};
+                $subfield_data{marc_lib}   = $tagslib->{$tag}->{$subfield}->{lib};
+                $subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
+                $subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
+                $subfield_data{hidden}     = "display:none"
+                  if $tagslib->{$tag}->{$subfield}->{hidden};
+                my ( $x, $defaultvalue );
+                if ($itemrecord) {
+                    ( $x, $defaultvalue ) = _find_value( $tag, $subfield, $itemrecord );
+                }
+                $defaultvalue = $tagslib->{$tag}->{$subfield}->{defaultvalue} unless $defaultvalue;
+                if ( !defined $defaultvalue ) {
+                    $defaultvalue = q||;
+                }
+                $defaultvalue =~ s/"/&quot;/g;
+
+                # search for itemcallnumber if applicable
+                if ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
+                    && C4::Context->preference('itemcallnumber') ) {
+                    my $CNtag      = substr( C4::Context->preference('itemcallnumber'), 0, 3 );
+                    my $CNsubfield = substr( C4::Context->preference('itemcallnumber'), 3, 1 );
+                    if ($itemrecord) {
+                        my $temp = $itemrecord->field($CNtag);
+                        if ($temp) {
+                            $defaultvalue = $temp->subfield($CNsubfield);
+                        }
+                    }
+                }
+                if (   $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.itemcallnumber'
+                    && $defaultvalues
+                    && $defaultvalues->{'callnumber'} ) {
+                    my $temp;
+                    if ($itemrecord) {
+                        $temp = $itemrecord->field($subfield);
+                    }
+                    unless ($temp) {
+                        $defaultvalue = $defaultvalues->{'callnumber'} if $defaultvalues;
+                    }
+                }
+                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.holdingbranch' || $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.homebranch' )
+                    && $defaultvalues
+                    && $defaultvalues->{'branchcode'} ) {
+                    my $temp;
+                    if ($itemrecord) {
+                        $temp = $itemrecord->field($subfield);
+                    }
+                    unless ($temp) {
+                        $defaultvalue = $defaultvalues->{branchcode} if $defaultvalues;
+                    }
+                }
+                if (   ( $tagslib->{$tag}->{$subfield}->{kohafield} eq 'items.location' )
+                    && $defaultvalues
+                    && $defaultvalues->{'location'} ) {
+                    my $temp = $itemrecord->field($subfield) if ($itemrecord);
+                    unless ($temp) {
+                        $defaultvalue = $defaultvalues->{location} if $defaultvalues;
+                    }
+                }
+                if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
+                    my @authorised_values;
+                    my %authorised_lib;
+
+                    # builds list, depending on authorised value...
+                    #---- branch
+                    if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
+                        if (   ( C4::Context->preference("IndependantBranches") )
+                            && ( C4::Context->userenv->{flags} % 2 != 1 ) ) {
+                            my $sth = $dbh->prepare( "SELECT branchcode,branchname FROM branches WHERE branchcode = ? ORDER BY branchname" );
+                            $sth->execute( C4::Context->userenv->{branch} );
+                            push @authorised_values, ""
+                              unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                            while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
+                                push @authorised_values, $branchcode;
+                                $authorised_lib{$branchcode} = $branchname;
+                            }
+                        } else {
+                            my $sth = $dbh->prepare( "SELECT branchcode,branchname FROM branches ORDER BY branchname" );
+                            $sth->execute;
+                            push @authorised_values, ""
+                              unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                            while ( my ( $branchcode, $branchname ) = $sth->fetchrow_array ) {
+                                push @authorised_values, $branchcode;
+                                $authorised_lib{$branchcode} = $branchname;
+                            }
+                        }
+
+                        #----- itemtypes
+                    } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
+                        my $sth = $dbh->prepare( "SELECT itemtype,description FROM itemtypes ORDER BY description" );
+                        $sth->execute;
+                        push @authorised_values, ""
+                          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                        while ( my ( $itemtype, $description ) = $sth->fetchrow_array ) {
+                            push @authorised_values, $itemtype;
+                            $authorised_lib{$itemtype} = $description;
+                        }
+                        #---- class_sources
+                    } elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
+                        push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+
+                        my $class_sources = GetClassSources();
+                        my $default_source = C4::Context->preference("DefaultClassificationSource");
+
+                        foreach my $class_source (sort keys %$class_sources) {
+                            next unless $class_sources->{$class_source}->{'used'} or
+                                        ($class_source eq $default_source);
+                            push @authorised_values, $class_source;
+                            $authorised_lib{$class_source} = $class_sources->{$class_source}->{'description'};
+                        }
+
+                        #---- "true" authorised value
+                    } else {
+                        $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value} );
+                        push @authorised_values, ""
+                          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+                        while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
+                            push @authorised_values, $value;
+                            $authorised_lib{$value} = $lib;
+                        }
+                    }
+                    $subfield_data{marc_value} = CGI::scrolling_list(
+                        -name     => 'field_value',
+                        -values   => \@authorised_values,
+                        -default  => "$defaultvalue",
+                        -labels   => \%authorised_lib,
+                        -size     => 1,
+                        -tabindex => '',
+                        -multiple => 0,
+                    );
+                } elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
+                        # opening plugin
+                        my $plugin = C4::Context->intranetdir . "/cataloguing/value_builder/" . $tagslib->{$tag}->{$subfield}->{'value_builder'};
+                        if (do $plugin) {
+                            my $temp;
+                            my $extended_param = plugin_parameters( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
+                            my ( $function_name, $javascript ) = plugin_javascript( $dbh, $temp, $tagslib, $subfield_data{id}, undef );
+                            $subfield_data{random}     = int(rand(1000000));    # why do we need 2 different randoms?
+                            my $index_subfield = int(rand(1000000));
+                            $subfield_data{id} = "tag_".$tag."_subfield_".$subfield."_".$index_subfield;
+                            $subfield_data{marc_value} = qq[<input tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255"
+                                onfocus="Focus$function_name($subfield_data{random}, '$subfield_data{id}');"
+                                 onblur=" Blur$function_name($subfield_data{random}, '$subfield_data{id}');" />
+                                <a href="#" class="buttonDot" onclick="Clic$function_name('$subfield_data{id}'); return false;" title="Tag Editor">...</a>
+                                $javascript];
+                        } else {
+                            warn "Plugin Failed: $plugin";
+                            $subfield_data{marc_value} = qq(<input tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" />); # supply default input form
+                        }
+                }
+                elsif ( $tag eq '' ) {       # it's an hidden field
+                    $subfield_data{marc_value} = qq(<input type="hidden" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" value="$defaultvalue" />);
+                }
+                elsif ( $tagslib->{$tag}->{$subfield}->{'hidden'} ) {   # FIXME: shouldn't input type be "hidden" ?
+                    $subfield_data{marc_value} = qq(<input type="text" tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255" value="$defaultvalue" />);
+                }
+                elsif ( length($defaultvalue) > 100
+                            or (C4::Context->preference("marcflavour") eq "UNIMARC" and
+                                  300 <= $tag && $tag < 400 && $subfield eq 'a' )
+                            or (C4::Context->preference("marcflavour") eq "MARC21"  and
+                                  500 <= $tag && $tag < 600                     )
+                          ) {
+                    # oversize field (textarea)
+                    $subfield_data{marc_value} = qq(<textarea tabindex="1" id="$subfield_data{id}" name="field_value" class="input_marceditor" size="67" maxlength="255">$defaultvalue</textarea>\n");
+                } else {
+                    $subfield_data{marc_value} = "<input type=\"text\" name=\"field_value\" value=\"$defaultvalue\" size=\"50\" maxlength=\"255\" />";
+                }
+                push( @loop_data, \%subfield_data );
+            }
+        }
+    }
+    my $itemnumber;
+    if ( $itemrecord && $itemrecord->field($itemtagfield) ) {
+        $itemnumber = $itemrecord->subfield( $itemtagfield, $itemtagsubfield );
+    }
+    return {
+        'itemtagfield'    => $itemtagfield,
+        'itemtagsubfield' => $itemtagsubfield,
+        'itemnumber'      => $itemnumber,
+        'iteminformation' => \@loop_data
+    };
+}
+
 1;
