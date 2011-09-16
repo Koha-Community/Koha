@@ -237,12 +237,13 @@ sub read_config_file {		# Pass argument naming config file to read
 # 
 sub db_scheme2dbi {
     my $name = shift;
-
+    # for instance, we support only mysql, so don't care checking
+    return "mysql";
     for ($name) {
 # FIXME - Should have other databases. 
-        if (/mysql/i) { return("mysql"); }
+        if (/mysql/) { return("mysql"); }
         if (/Postgres|Pg|PostgresSQL/) { return("Pg"); }
-        if (/oracle/i) { return("Oracle"); }
+        if (/oracle/) { return("Oracle"); }
     }
     return undef;         # Just in case
 }
