@@ -23,13 +23,7 @@ use warnings;
 use C4::Dates qw(format_date format_date_in_iso);
 use Date::Calc qw(:all);
 use POSIX qw(strftime);
-use C4::Suggestions;
-use C4::Koha;
 use C4::Biblio;
-use C4::Branch;
-use C4::Items;
-use C4::Search;
-use C4::Letters;
 use C4::Log;    # logaction
 use C4::Debug;
 
@@ -417,7 +411,6 @@ sub PrepareSerialsData {
                 $subs->{$datefield} = format_date( $subs->{$datefield}  );
             }
         }
-        $subs->{'branchname'} = GetBranchName( $subs->{'branchcode'} );
         $subs->{ "status" . $subs->{'status'} } = 1;
         $subs->{"checked"}                      = $subs->{'status'} =~ /1|3|4|7/;
 
@@ -1328,8 +1321,8 @@ sub ReNewSubscription {
     my $biblio = $sth->fetchrow_hashref;
 
     if ( C4::Context->preference("RenewSerialAddsSuggestion") ) {
-
-        NewSuggestion(
+        require C4::Suggestions;
+        C4::Suggestions::NewSuggestion(
             {   'suggestedby'   => $user,
                 'title'         => $subscription->{bibliotitle},
                 'author'        => $biblio->{author},
@@ -1546,7 +1539,8 @@ sub ItemizeSerials {
                     $marcrecord->insert_fields_ordered($newField);
                 }
             }
-            AddItemFromMarc( $marcrecord, $data->{'biblionumber'} );
+            require C4::Items;
+            C4::Items::AddItemFromMarc( $marcrecord, $data->{'biblionumber'} );
             return 1;
         }
         return ( 0, @errors );
