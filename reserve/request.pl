@@ -27,7 +27,7 @@ script to place reserves/requests
 
 use strict;
 use warnings;
-use C4::Branch; # GetBranches get_branchinfos_of
+use C4::Branch;
 use CGI;
 use List::MoreUtils qw/uniq/;
 use Date::Calc qw/Date_to_Days/;

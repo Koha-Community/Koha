@@ -20,7 +20,6 @@ use strict;
 #use warnings; FIXME - Bug 2505
 require Exporter;
 use C4::Context;
-use C4::Koha;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -407,34 +406,6 @@ sub GetBranchDetail {
     $sth->execute($branchcode);
     return $sth->fetchrow_hashref();
 }
-
-=head2 get_branchinfos_of
-
-  my $branchinfos_of = get_branchinfos_of(@branchcodes);
-
-Associates a list of branchcodes to the information of the branch, taken in
-branches table.
-
-Returns a href where keys are branchcodes and values are href where keys are
-branch information key.
-
-  print 'branchname is ', $branchinfos_of->{$code}->{branchname};
-
-=cut
-
-sub get_branchinfos_of {
-    my @branchcodes = @_;
-
-    my $query = '
-    SELECT branchcode,
-       branchname
-    FROM branches
-    WHERE branchcode IN ('
-      . join( ',', map( { "'" . $_ . "'" } @branchcodes ) ) . ')
-';
-    return C4::Koha::get_infos_of( $query, 'branchcode' );
-}
-
 
 =head2 GetBranchesInCategory
 

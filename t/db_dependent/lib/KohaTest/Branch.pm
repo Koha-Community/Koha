@@ -20,7 +20,6 @@ sub methods : Test( 1 ) {
                       GetCategoryTypes
                       GetBranch
                       GetBranchDetail
-                      get_branchinfos_of
                       GetBranchesInCategory
                       GetBranchInfo
                       DelBranch
