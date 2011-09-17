@@ -64,8 +64,10 @@ my $author                  = $input->param('author');
 my $name                    = $input->param( 'name' );
 my $basket                  = $input->param( 'basket' );
 my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
-my $from_placed_on          = C4::Dates->new($input->param('from')) if $input->param('from');
-my $to_placed_on            = C4::Dates->new($input->param(  'to')) if $input->param('to');
+my $from_placed_on          = $input->param('from');
+$from_placed_on             = C4::Dates->new($from_placed_on) if $from_placed_on;
+my $to_placed_on            = $input->param('to');
+$to_placed_on               = C4::Dates->new($to_placed_on) if $to_placed_on;
 
 my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -103,8 +105,8 @@ if ($do_search) {
     );
 }
 
-my $from_date = $from_placed_on->output('syspref') if $from_placed_on;
-my $to_date = $to_placed_on->output('syspref') if $to_placed_on;
+my $from_date = $from_placed_on ? $from_placed_on->output('syspref') : undef;
+my $to_date = $to_placed_on ? $to_placed_on->output('syspref') : undef;
 
 $template->param(
     suggestions_loop        => $order_loop,
