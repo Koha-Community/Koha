@@ -28,7 +28,8 @@ use CGI;
 my $query = new CGI;
 
 # find the script that called the online help using the CGI referer()
-our $refer = $query->referer();
+our $refer = $query->param('url');
+$refer = $query->referer()  if !$refer || $refer eq 'undefined';
 
 $refer =~ /koha\/(.*)\.pl/;
 my $from = "modules/help/$1.tt";
@@ -40,6 +41,7 @@ unless ( -e "$htdocs/$theme/$lang/$from" ) {
     ( $theme, $lang ) = themelanguage( $htdocs, $from, "intranet", $query );
 }
 my $template = C4::Templates->new('intranet', "$htdocs/$theme/$lang/$from");
+$template->param( referer => $refer );
 
 output_html_with_http_headers $query, "", $template->output;
 
