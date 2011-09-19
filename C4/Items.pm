@@ -2198,7 +2198,11 @@ sub DelItemCheck {
     if ($onloan){
         $error = "book_on_loan" 
     }
-    elsif (C4::Context->preference("IndependantBranches") and (C4::Context->userenv->{branch} ne $item->{C4::Context->preference("HomeOrHoldingBranch")||'homebranch'})){
+    elsif ( C4::Context->userenv->{flags} % 2 != 1 and
+            C4::Context->preference("IndependantBranches") and
+           (C4::Context->userenv->{branch} ne
+             $item->{C4::Context->preference("HomeOrHoldingBranch")||'homebranch'}) )
+    {
         $error = "not_same_branch";
     }
 	else{
