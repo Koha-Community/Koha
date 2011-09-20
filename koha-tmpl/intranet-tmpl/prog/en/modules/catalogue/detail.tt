@@ -328,7 +328,7 @@ function verify_images() {
                     [% IF ( itemloo.waitingdate ) %]
                         Waiting
                     [% ELSE %]
-                        On hold
+                        Item-level hold
                     [% END %]
                     [% IF ( canreservefromotherbranches ) %]for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% itemloo.ReservedForBorrowernumber %]">
 		        [% IF ( hidepatronname ) %]
@@ -338,12 +338,12 @@ function verify_images() {
 			[% END %]
 		    </a>[% END %]
                     [% IF ( itemloo.waitingdate ) %]
-                        at[% ELSE %]expected at
+                        at[% ELSE %]for delivery at
                     [% END %]   [% itemloo.ExpectedAtLibrary %]
-                    since
-                    [% IF ( itemloo.waitingdate ) %][% itemloo.waitingdate %]
+                    [% IF ( itemloo.waitingdate ) %]
+                        since [% itemloo.waitingdate %]
                     [% ELSE %]
-                        [% IF ( itemloo.reservedate ) %][% itemloo.reservedate %][% END %]
+                        [% IF ( itemloo.reservedate ) %](placed [% itemloo.reservedate %])[% END %]
                     [% END %]
                 [% END %]
                 [% UNLESS ( itemloo.itemnotforloan ) %][% UNLESS ( itemloo.onloan ) %][% UNLESS ( itemloo.itemlost ) %][% UNLESS ( itemloo.wthdrawn ) %][% UNLESS ( itemloo.damaged ) %][% UNLESS ( itemloo.transfertwhen ) %][% UNLESS ( itemloo.reservedate ) %]
