@@ -188,6 +188,7 @@ sub XSLTParse4Display {
                               UseAuthoritiesForTracings TraceSubjectSubdivisions
                               Display856uAsImage OPACDisplay856uAsImage 
                               UseControlNumber
+                              singleBranchMode
                               AlternateHoldingsField AlternateHoldingsSeparator / )
     {
         my $sp = C4::Context->preference( $syspref );
