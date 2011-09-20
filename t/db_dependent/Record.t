@@ -74,11 +74,11 @@ is ($marcqualified, $test3xml, "testing marcQualified");
 my $mods=marc2modsxml($marc);
 my $test4xml=qq(<?xml version="1.0" encoding="UTF-8"?>
 <mods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.loc.gov/mods/v3" version="3.1" xsi:schemaLocation="http://www.loc.gov/mods/v3 http://www.loc.gov/standards/mods/v3/mods-3-1.xsd">
-  <typeOfResource/>
-  <originInfo>
-    <issuance/>
-  </originInfo>
-  <recordInfo/>
+<typeOfResource/>
+<originInfo>
+<issuance/>
+</originInfo>
+<recordInfo/>
 </mods>
 );
 
