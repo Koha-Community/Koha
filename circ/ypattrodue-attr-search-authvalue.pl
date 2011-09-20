@@ -32,7 +32,7 @@ $attrcode =~ s|^/||;
 my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { circulate => '*' } );
 exit 0 if $auth_status ne "ok";
 
-binmode STDOUT, ":utf8";
+binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
 print STDERR ">> CALLING $0 (attrcode=$attrcode, query=$query)\n" if $debug;
