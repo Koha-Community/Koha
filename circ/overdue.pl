@@ -351,7 +351,7 @@ if ($noreport) {
     }
 
     if ($op eq 'csv') {
-        binmode(STDOUT, ":utf8");
+        binmode(STDOUT, ":encoding(UTF-8)");
         my $csv = build_csv(\@overduedata);
         print $input->header(-type => 'application/vnd.sun.xml.calc',
                              -encoding    => 'utf-8',
