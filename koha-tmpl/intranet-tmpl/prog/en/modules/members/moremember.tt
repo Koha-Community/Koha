@@ -17,16 +17,16 @@ $(document).ready(function() {
 	$.tablesorter.defaults.widgets = ['zebra'];
 	$("#issuest").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
-        headers: { 1: { sorter: 'articles' }}
+        headers: { 1: { sorter: 'articles'},8:{sorter:false},9:{sorter:false }}
 	}); 
 	$("#relissuest").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
-		headers: { 1: { sorter: 'articles' }}
+		headers: { 1: { sorter: 'articles'},8:{sorter:false},9:{sorter:false }}
 	}); 
 	$("#holdst").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
 		sortList: [[0,0]],
-		headers: { 1: { sorter: 'articles' },6: { sorter: false }}
+		headers: { 1: { sorter: 'articles' },5: { sorter: false }}
 	}); 
     [% IF ( picture ) %]
     // new YAHOO.widget.Button("delpicture");   // FIXME: formatting mismatch between YUI and normal button
@@ -422,6 +422,7 @@ function validate1(date) {
             <th scope="col">Title</th>
             <th scope="col">Item Type</th>
             <th scope="col">Checked out on</th> 
+            <th scope="col">Checked out from</th> 
             <th scope="col">Call no</th>
             <th scope="col">Charge</th>
             <th scope="col">Price</th>
@@ -453,6 +454,7 @@ function validate1(date) {
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% issueloo.biblionumber %]"><strong>[% issueloo.title |html %]</strong></a>[% IF ( issueloo.author ) %], by [% issueloo.author %][% END %] [% IF ( issueloo.publishercode ) %]; [% issueloo.publishercode %] [% END %] [% IF ( issueloo.publicationyear ) %], [% issueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% issueloo.biblionumber %]&amp;itemnumber=[% issueloo.itemnumber %]#item[% issueloo.itemnumber %]">[% issueloo.barcode %]</a></td>
 <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( issueloo.itemtype_image ) %]<img src="[% issueloo.itemtype_image %]" alt="" />[% END %][% END %][% issueloo.itemtype_description %]</td>
             <td>[% issueloo.issuedate %]</td>
+            <td>[% issueloo.issuingbranchname %]</td>
 	        <td>[% issueloo.itemcallnumber %]</td>
             <td>[% issueloo.charge %]</td>
             <td>[% issueloo.replacementprice %]</td>
@@ -529,6 +531,7 @@ function validate1(date) {
             <th scope="col">Title</th>
             <th scope="col">Item Type</th>
             <th scope="col">Checked out on</th> 
+            <th scope="col">Checked out from</th>
             <th scope="col">Call no</th>
             <th scope="col">Charge</th>
             <th scope="col">Price</th>
@@ -559,6 +562,7 @@ function validate1(date) {
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissueloo.biblionumber %]"><strong>[% relissueloo.title |html %]</strong></a>[% IF relissueloo.author %], by [% relissueloo.author %][% END %] [% IF relissueloo.publishercode %]; [% relissueloo.publishercode %] [% END %] [% IF relissueloo.publicationyear %], [% relissueloo.publicationyear %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissueloo.biblionumber %]&amp;itemnumber=[% relissueloo.itemnumber %]#item[% relissueloo.itemnumber %]">[% relissueloo.barcode %]</a></td>
 <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissueloo.itemtype_image ) %]<img src="[% relissueloo.itemtype_image %]" alt="" />[% END %][% END %][% relissueloo.itemtype_description %]</td>
             <td>[% relissueloo.issuedate %]</td>
+            <td>[% relissueloo.issuingbranchname %]</td>
         <td>[% relissueloo.itemcallnumber %]</td>
         <td>[% relissueloo.charge %]</td>
         <td>[% relissueloo.replacementprice %]</td>

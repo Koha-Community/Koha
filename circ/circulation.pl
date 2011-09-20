@@ -438,6 +438,7 @@ sub build_issue_data {
         $it->{'can_confirm'} = !$can_renew && !$restype;
         $it->{'renew_error'} = $restype;
         $it->{'checkoutdate'} = C4::Dates->new($it->{'issuedate'},'iso')->output('syspref');
+        $it->{'issuingbranchname'} = GetBranchName($it->{'branchcode'});
 
         $totalprice += $it->{'replacementprice'};
         $it->{'itemtype'} = $itemtypeinfo->{'description'};

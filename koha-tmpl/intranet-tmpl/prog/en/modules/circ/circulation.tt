@@ -22,11 +22,11 @@
 		[% IF ( UseTablesortForCirc ) %]$.tablesorter.defaults.widgets = ['zebra'];
 		$("#issuest").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
-		headers: { 1: { sorter: 'articles' },5: { sorter: false },6:{sorter:false},7:{sorter:false},8:{sorter:false}}
+		headers: { 1: { sorter: 'articles' },6: { sorter: false },7:{sorter:false},8:{sorter:false},9:{sorter:false}}
 		});
 		$("#relissuest").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
-		headers: { 1: { sorter: 'articles' },5: { sorter: false },6:{sorter:false},7:{sorter:false},8:{sorter:false}}
+		headers: { 1: { sorter: 'articles' },6: { sorter: false },7:{sorter:false},8:{sorter:false},9:{sorter:false}}
 		});
 
 		//FIXME: Sorting does not work when there are previous checkouts only
@@ -40,7 +40,7 @@
 		$("#holdst").tablesorter({[% IF ( dateformat_metric ) %]
 		dateFormat: 'uk',[% END %]
 			sortList: [[0,0]],
-			headers: { 1: { sorter: 'articles' }}
+			headers: { 1: { sorter: 'articles' },5: { sorter: false }}
 		});[% END %]
         [% IF ( AllowRenewalLimitOverride ) %]
         $( '#override_limit' ).click( function () {
@@ -678,6 +678,7 @@ No patron matched <span class="ex">[% message %]</span>
         <th scope="col">Title</th>
         <th scope="col">Item Type</th>
         <th scope="col">Checked out on</th>
+        <th scope="col">Checked out from</th>
         <th scope="col">Call no</th>
         <th scope="col">Charge</th>
         <th scope="col">Price</th>
@@ -701,6 +702,7 @@ No patron matched <span class="ex">[% message %]</span>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( todayissue.itemtype_image ) %]<img src="[% todayissue.itemtype_image %]" alt="" />[% END %][% END %][% todayissue.itemtype %]</td>
         <td>[% todayissue.checkoutdate %]</td>
         [% IF ( todayissue.multiple_borrowers ) %]<td>[% todayissue.borrowername %]</td>[% END %]
+        <td>[% todayissue.issuingbranchname %]</td>
         <td>[% todayissue.itemcallnumber %]</td>
             <td>[% todayissue.charge %]</td>
             <td>[% todayissue.replacementprice %]</td>
@@ -775,6 +777,7 @@ No patron matched <span class="ex">[% message %]</span>
         </td>
         <td>[% previssue.displaydate %]</td>
         [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.borrowername %]</td>[% END %]
+        <td>[% previssue.issuingbranchname %]</td>
         <td>[% previssue.itemcallnumber %]</td>
         <td>[% previssue.charge %]</td>
         <td>[% previssue.replacementprice %]</td>
@@ -859,6 +862,7 @@ No patron matched <span class="ex">[% message %]</span>
         <th scope="col">Title</th>
         <th scope="col">Item Type</th>
         <th scope="col">Checked out on</th>
+        <th scope="col">Checked out from</th>
         <th scope="col">Call no</th>
         <th scope="col">Charge</th>
         <th scope="col">Price</th>
@@ -878,6 +882,7 @@ No patron matched <span class="ex">[% message %]</span>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relissue.biblionumber %]&amp;type=intra"><strong>[% relissue.title |html %]</strong></a>[% IF ( relissue.author ) %], by [% relissue.author %][% END %][% IF ( relissue.itemnotes ) %]- <span class="circ-hlt">[% relissue.itemnotes %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relissue.biblionumber %]&amp;itemnumber=[% relissue.itemnumber %]#item[% relissue.itemnumber %]">[% relissue.barcode %]</a></td>
         <td>[% UNLESS ( noItemTypeImages ) %] [% IF ( relissue.itemtype_image ) %]<img src="[% relissue.itemtype_image %]" alt="" />[% END %][% END %][% relissue.itemtype %]</td>
         <td>[% relissue.displaydate %]</td>
+        <td>[% relissue.issuingbranchname %]</td>
         <td>[% relissue.itemcallnumber %]</td>
         <td>[% relissue.charge %]</td>
         <td>[% relissue.replacementprice %]</td><td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% relissue.borrowernumber %]">[% relissue.borrowername %] ([% relissue.cardnumber %])</a></td>
@@ -898,6 +903,7 @@ No patron matched <span class="ex">[% message %]</span>
         <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;type=intra"><strong>[% relprevissue.title |html %]</strong></a>[% IF ( relprevissue.author ) %], by [% relprevissue.author %][% END %] [% IF ( relprevissue.itemnotes ) %]- [% relprevissue.itemnotes %][% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% relprevissue.biblionumber %]&amp;itemnumber=[% relprevissue.itemnumber %]#item[% relprevissue.itemnumber %]">[% relprevissue.barcode %]</a></td>
         <td>[% UNLESS noItemTypeImages %][% IF relprevissue.itemtype_image %]<img src="[% relprevissue.itemtype_image %]" alt="" />[% END %][% END %][% relprevissue.itemtype %]</td>
         <td>[% relprevissue.displaydate %]</td>
+        <td>[% relprevissue.issuingbranchname %]</td>
         <td>[% relprevissue.itemcallnumber %]</td>
 	[% IF ( relprevissue.multiple_borrowers ) %]<td>[% relprevissue.borrowername %]</td>[% END %]
         <td>[% relprevissue.charge %]</td>
