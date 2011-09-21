@@ -999,6 +999,12 @@
                    </xsl:when>
 				   </xsl:choose>
 
+                   <xsl:choose> <xsl:when test="count(key('item-by-status', 'available'))>0">
+                       <xsl:choose><xsl:when test="count(key('item-by-status', 'reference'))>0">
+                            <br/>
+                       </xsl:when></xsl:choose>
+                   </xsl:when> </xsl:choose>
+
                    <xsl:choose>
                    <xsl:when test="count(key('item-by-status', 'reference'))>0">
                    <span class="available">
