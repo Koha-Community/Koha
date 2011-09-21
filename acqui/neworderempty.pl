@@ -383,6 +383,7 @@ $template->param(
     listprice        => sprintf("%.2f", $data->{'listprice'}||$data->{'price'}||$listprice),
     total            => sprintf("%.2f", ($data->{'ecost'}||0)*($data->{'quantity'}||0) ),
     ecost            => $data->{'ecost'},
+    unitprice        => sprintf("%.2f", $data->{'unitprice'}),
     notes            => $data->{'notes'},
     publishercode    => $data->{'publishercode'},
     
