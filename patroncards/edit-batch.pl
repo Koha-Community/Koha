@@ -60,7 +60,7 @@ my @item_numbers = $cgi->param('item_number') if $cgi->param('item_number');
 my @borrower_numbers = $cgi->param('borrower_number') if $cgi->param('borrower_number');
 my $errstr = $cgi->param('error') || '';
 
-my $branch_code = get_branch_code_from_name($template->{VARS}->{'LoginBranchname'});
+my $branch_code = C4::Context->userenv->{'branch'};
 
 if ($op eq 'remove') {
     $batch = C4::Patroncards::Batch->retrieve(batch_id => $batch_id);

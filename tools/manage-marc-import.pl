@@ -189,7 +189,7 @@ sub redo_matching {
 sub create_labelbatch_from_importbatch {
 	my ($batch_id) = @_;
         my $err = undef;
-        my $branch_code = get_branch_code_from_name($template->param('LoginBranchname'));
+        my $branch_code = C4::Context->userenv->{'branch'};
         my $batch = C4::Labels::Batch->new(branch_code => $branch_code);
 	my @items = GetItemNumbersFromImportBatch($batch_id);
         if (grep{$_ == 0} @items) {
