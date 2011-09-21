@@ -50,7 +50,7 @@ use C4::Koha;
 
 our ($tagslib);
 
-sub build_tabs ($$$$$) {
+sub build_tabs {
     my ( $template, $record, $dbh, $encoding,$input ) = @_;
 
     # fill arrays

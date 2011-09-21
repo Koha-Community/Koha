@@ -47,7 +47,7 @@ builds list, depending on authorised value...
 
 =cut
 
-sub build_authorized_values_list ($$$$$$$) {
+sub build_authorized_values_list {
     my ( $tag, $subfield, $value, $dbh, $authorised_values_sth,$index_tag,$index_subfield ) = @_;
 
     my @authorised_values;
@@ -321,11 +321,11 @@ Create a random value to set it into the input name
 
 =cut
 
-sub CreateKey(){
+sub CreateKey {
     return int(rand(1000000));
 }
 
-sub build_tabs ($$$$$) {
+sub build_tabs {
     my ( $template, $record, $dbh, $encoding,$input ) = @_;
 
     # fill arrays
@@ -499,7 +499,7 @@ sub build_tabs ($$$$$) {
 }
 
 
-sub build_hidden_data () {
+sub build_hidden_data {
     # build hidden data =>
     # we store everything, even if we show only requested subfields.
 
