@@ -312,6 +312,9 @@ function Dopop(link) {
                     [% IF ( errmsgloo.notissued ) %]
                         <p class="problem">Not checked out.</p>
                     [% END %]
+                    [% IF ( errmsgloo.localuse) %]
+                        <p class="problem">Local Use recorded</p>
+                    [% END %]
                     [% IF ( errmsgloo.waslost ) %]
                         <p class="problem">Item was lost, now found.</p>
                     [% END %]

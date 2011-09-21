@@ -1515,7 +1515,8 @@ sub AddReturn {
     my $biblio;
     my $doreturn       = 1;
     my $validTransfert = 0;
-    
+    my $stat_type = 'return';    
+
     # get information on item
     my $itemnumber = GetItemnumberFromBarcode( $barcode );
     unless ($itemnumber) {
@@ -1532,6 +1533,11 @@ sub AddReturn {
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
         $doreturn = 0;
         # No issue, no borrowernumber.  ONLY if $doreturn, *might* you have a $borrower later.
+        # Record this as a local use, instead of a return, if the RecordLocalUseOnReturn is on
+        if (C4::Context->preference("RecordLocalUseOnReturn")) {
+           $messages->{'LocalUse'} = 1;
+           $stat_type = 'localuse';
+        }
     }
 
     my $item = GetItem($itemnumber) or die "GetItem($itemnumber) failed";
@@ -1639,7 +1645,7 @@ sub AddReturn {
     # update stats?
     # Record the fact that this book was returned.
     UpdateStats(
-        $branch, 'return', '0', '',
+        $branch, $stat_type, '0', '',
         $item->{'itemnumber'},
         $biblio->{'itemtype'},
         $borrowernumber

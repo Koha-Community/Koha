@@ -423,6 +423,9 @@ foreach my $code ( keys %$messages ) {
         $err{notissued} = 1;
         $err{msg} = $branches->{ $messages->{'IsPermanent'} }->{'branchname'};
     }
+    elsif ( $code eq 'LocalUse' ) {
+        $err{localuse} = 1;
+    }
     elsif ( $code eq 'WasLost' ) {
         $err{waslost} = 1;
     }
