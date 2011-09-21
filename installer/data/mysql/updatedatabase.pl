@@ -4466,6 +4466,16 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectEnabled',0,'Enable Novelist Select content.  Requires Novelist Profile and Password',NULL,'YesNo')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectProfile',NULL,'Novelist Select user Password',NULL,'free')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectPassword',NULL,'Enable Novelist user Profile',NULL,'free')");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('NovelistSelectView','tab','Where to display Novelist Select content','tab|above|below|right','Choice')");
+    print "Upgrade to $DBversion done (Add support for EBSCO's NoveList Select (enh 6902))\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
