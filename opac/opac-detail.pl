@@ -494,6 +494,14 @@ $template->param(LibraryThingForLibrariesTabbedView =>
 C4::Context->preference('LibraryThingForLibrariesTabbedView') );
 } 
 
+# Novelist Select
+if( C4::Context->preference('NovelistSelectEnabled') ) 
+{ 
+$template->param(NovelistSelectProfile => C4::Context->preference('NovelistSelectProfile') ); 
+$template->param(NovelistSelectPassword => C4::Context->preference('NovelistSelectPassword') ); 
+$template->param(NovelistSelectView => C4::Context->preference('NovelistSelectView') ); 
+} 
+
 
 # Babelthèque
 if ( C4::Context->preference("Babeltheque") ) {

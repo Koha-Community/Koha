@@ -28,6 +28,9 @@
 	[% IF OpenLibraryCovers %]
 	KOHA.OpenLibrary.GetCoverFromIsbn();
 	[% END %]
+        [% IF ( NovelistSelectProfile ) %]
+        novSelect.loadContentForISBN('[% normalized_isbn %]','[% NovelistSelectProfile %]', '[% NovelistSelectPassword %]', function(d){});
+        [% END %]
 	[% IF ( opacuserlogin ) %][% IF ( loggedinusername ) %][% IF ( TagsEnabled ) %]
         $(".tagbutton").click(KOHA.Tags.add_tag_button);[% END %][% END %][% END %]
 
@@ -314,9 +317,18 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( BakerTaylorContentURL ) %]
         <span class="results_summary">
         <span class="label">Enhanced Content: </span> 
-        [% IF ( OPACurlOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL |html %]" target="_blank">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL |html %]">Content Cafe</a>[% END %]
+              [% IF ( OPACurlOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL |html %]" target="_blank">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL |html %]">Content Cafe</a>[% END %]
         </span>
     [% END %]
+    [% IF ( NovelistSelectProfile ) %] 
+       [% IF ( NovelistSelectView == 'above') %]
+        <span class="results_summary">
+        <span class="label">Novelist Select: </span> 
+        <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+        </span>
+       [% END %]
+    [% END %]
+
 </div>
 
 <div id="bibliodescriptions" class="toptabs">
@@ -358,6 +370,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% IF ( reviewson ) %]
 <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#comments">Comments
 ( [% IF reviews.defined %][% reviews.size %][% ELSE %]0[% END %] )</a></li>
+[% END %]
+
+[% IF ( NovelistSelectProfile ) %] 
+[% IF ( NovelistSelectView == 'tab') %]
+<li> <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#NovelistSelect">Novelist Select</a></li>
+[% END %]
 [% END %]
 
 [% IF ( OPACAmazonEnabled ) %][% IF ( OPACAmazonSimilarItems ) %][% IF ( AMAZON_SIMILAR_PRODUCTS ) %]<li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]#similars">Related</a></li>[% END %][% END %][% END %]
@@ -591,6 +609,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %][% END %]
 [% END %] <!-- /SyndeticsEnabled -->
 
+[% IF ( NovelistSelectProfile ) %] [% IF ( NovelistSelectView == 'tab') %]
+   <div id="NovelistSelect">
+        <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+   </div>
+[% END %] [% END %]
+
 [% IF ( subscriptionsnumber ) %]
 <div id="subscriptions">
     <h2>This is a serial</h2>
@@ -802,6 +826,12 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 [% END %]
 
 </div>
+[% IF ( NovelistSelectProfile ) %][% IF ( NovelistSelectView == 'below' ) %]
+<div id="NovelistSelect">
+<h3>Novelist Select</h3>
+<div data-novelist-novelistselect="[% normalized_isbn %]"></div>
+</div>
+[% END %][% END %]
 </div>
 </div>
 
@@ -863,6 +893,13 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <input type="submit" name="save" value="Go" /></form>
         </div>
 
+        [% IF ( NovelistSelectProfile ) %] [% IF ( NovelistSelectView == 'right') %]
+         <div id="NovelistSelect">
+            <h4>Novelist Select</h4>
+            <div data-novelist-novelistselect=[% normalized_isbn %]></div>
+         </div>
+        [% END %] [% END %]
+
 </div>
 </div>
 </div>
@@ -882,5 +919,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <a href="http://www.librarything.com/forlibraries/noscript.php?id=
 [% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
 [% END %]
+[% END %]
+[% IF ( NovelistSelectProfile ) %]
+<script type="text/javascript" src="http://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
 [% END %]
 [% INCLUDE 'opac-bottom.inc' %]
