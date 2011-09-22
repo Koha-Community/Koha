@@ -186,7 +186,7 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
 my $borrowerslist;
 my $message;
 if ($findborrower) {
-    my ($count, $borrowers) = SearchMember($findborrower, 'cardnumber', 'web');
+    my $borrowers = Search($findborrower, 'cardnumber');
     my @borrowers = @$borrowers;
     if (C4::Context->preference("AddPatronLists")) {
         $template->param(

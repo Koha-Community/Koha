@@ -118,23 +118,24 @@ sub GetBorrowerAttributeValue {
 
 =head2 SearchIdMatchingAttribute
 
-  my $matching_records = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
+  my $matching_borrowernumbers = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
 
 =cut
 
 sub SearchIdMatchingAttribute{
     my $filter = shift;
-    my $finalfilter=$filter->[0];
+    $filter = [$filter] unless ref $filter;
+
     my $dbh   = C4::Context->dbh();
     my $query = qq{
-SELECT borrowernumber
+SELECT DISTINCT borrowernumber
 FROM borrower_attributes
 JOIN borrower_attribute_types USING (code)
 WHERE staff_searchable = 1
-AND attribute like ?};
+AND (} . join (" OR ", map "attribute like ?", @$filter) .qq{)};
     my $sth = $dbh->prepare_cached($query);
-    $sth->execute("%$finalfilter%");
-    return $sth->fetchall_arrayref;
+    $sth->execute(map "%$_%", @$filter);
+    return [map $_->[0], @{ $sth->fetchall_arrayref }];
 }
 
 =head2 CheckUniqueness

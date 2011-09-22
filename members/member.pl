@@ -75,10 +75,11 @@ foreach my $category (@categories){
 			 };
 	$categories_dislay{$$category{categorycode}} = $hash;
 }
+my $AddPatronLists = C4::Context->preference("AddPatronLists") || '';
 $template->param( 
-        "AddPatronLists_".C4::Context->preference("AddPatronLists")=> "1",
+        "AddPatronLists_$AddPatronLists" => "1",
             );
-if (C4::Context->preference("AddPatronLists")=~/code/){
+if ($AddPatronLists=~/code/){
     $categories[0]->{'first'}=1;
 }  
 
@@ -96,17 +97,15 @@ else {
 $member =~ s/,//g;   #remove any commas from search string
 $member =~ s/\*/%/g;
 
-my ($count,$results);
-
-my @searchpatron;
-push @searchpatron, $member if ($member);
-push @searchpatron, $patron if ( keys %$patron );
 my $from = ( $startfrom - 1 ) * $resultsperpage;
 my $to   = $from + $resultsperpage;
 
-#($results)=Search(\@searchpatron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  ) if (@searchpatron);
-my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
-($results) = Search( \@searchpatron, \@orderby, undef, undef, [ "firstname", "surname", "othernames", "cardnumber", "userid" ], $search_scope ) if (@searchpatron);
+my ($count,$results);
+if ($member || keys %$patron) {
+    #($results)=Search($member || $patron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  );
+    my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
+    ($results) = Search( $member || $patron, \@orderby, undef, undef, [ "firstname", "surname", "othernames", "cardnumber", "userid" ], $search_scope );
+}
 
 if ($results) {
 	for my $field ('categorycode','branchcode'){
