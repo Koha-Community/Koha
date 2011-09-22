@@ -167,7 +167,7 @@ sub init ($;$$) {
     $self->{'dateformat'} = $dformat = ( scalar(@_) >= 2 ) ? $_[1] : _prefformat();
     ( $format_map{$dformat} ) or croak "Invalid date format '$dformat' from " . ( ( scalar(@_) >= 2 ) ? 'argument' : 'system preferences' );
     $self->{'dmy_arrayref'} = [ ( (@_) ? $self->dmy_map(shift) : localtime ) ];
-    $debug and warn "(during init) \@\$self->{'dmy_arrayref'}: " . join( ' ', @{ $self->{'dmy_arrayref'} } ) . "\n";
+    if ($debug > 1) { warn "(during init) \@\$self->{'dmy_arrayref'}: " . join( ' ', @{ $self->{'dmy_arrayref'} } ) . "\n"; }
     return $self;
 }
 
