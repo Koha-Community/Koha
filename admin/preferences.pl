@@ -175,7 +175,7 @@ sub TransformPrefsToHTML {
 sub _get_pref_files {
     my ( $input, $open_files ) = @_;
 
-    my ( $htdocs, $theme, $lang, undef ) = C4::Output::_get_template_file( 'admin/preferences/admin.pref', 'intranet', $input );
+    my ( $htdocs, $theme, $lang, undef ) = C4::Templates::_get_template_file( 'admin/preferences/admin.pref', 'intranet', $input );
 
     my %results;
 
