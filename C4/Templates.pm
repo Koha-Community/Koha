@@ -55,12 +55,13 @@ sub new {
 
     my ($theme, $lang)= themelanguage( $htdocs, $tmplbase, $interface, $query);
     my $template = Template->new(
-        {
-            EVAL_PERL    => 1,
+        {   EVAL_PERL    => 1,
             ABSOLUTE     => 1,
-            INCLUDE_PATH => "$htdocs/$theme/$lang/includes",
-            FILTERS      => {},
-
+            INCLUDE_PATH => [
+                "$htdocs/$theme/$lang/includes",
+                "$htdocs/$theme/en/includes"
+            ],
+            FILTERS => {},
         }
     ) or die Template->error();
     my $self = {
