@@ -10,10 +10,10 @@
 		dateFormat: 'uk'
 	    [% END %]
 	});
-    
-    $("a.message-title").click(function(e){
-        $("p.message").hide();
-        $(this).next("p").show();
+
+    $(".message").hide();
+    $(".message-title").click(function(e){
+        $(this).next(".message").toggle();
         e.preventDefault();
     });
     
