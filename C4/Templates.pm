@@ -239,12 +239,10 @@ C4::Templates - Functions for managing templates
 
 =head1 FUNCTIONS
 
-=over 2
-
 =cut
 
-#FIXME: this is a quick fix to stop rc1 installing broken
-#Still trying to figure out the correct fix.
+# FIXME: this is a quick fix to stop rc1 installing broken
+# Still trying to figure out the correct fix.
 my $path = C4::Context->config('intrahtdocs') . "/prog/en/includes/";
 
 #---------------------------------------------------------------------------------------------------------
