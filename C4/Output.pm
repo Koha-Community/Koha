@@ -53,6 +53,15 @@ BEGIN {
 }
 
 
+=head1 NAME
+
+C4::Output - Functions for managing output, is slowly being deprecated
+
+=head1 FUNCTIONS
+
+=over 2
+=cut
+
 =item FormatNumber
 =cut
 sub FormatNumber{
