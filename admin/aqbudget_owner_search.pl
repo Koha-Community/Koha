@@ -64,7 +64,7 @@ my @resultsdata;
 my $toggle = 0;
 
 if ( $member ) {
-	my $results= SearchMember($member,"surname",undef,undef,undef);
+	my $results= Search($member,"surname");
 
     foreach my $res (@$results) {
 

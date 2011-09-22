@@ -12,7 +12,7 @@ sub testing_class { 'C4::Members' };
 
 sub methods : Test( 1 ) {
     my $self = shift;
-    my @methods = qw( SearchMember 
+    my @methods = qw( Search
                       GetMemberDetails 
                       patronflags 
                       GetMember 

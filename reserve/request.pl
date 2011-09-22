@@ -112,19 +112,17 @@ if ( $action eq 'move' ) {
 }
 
 if ($findborrower) {
-    my ( $count, $borrowers ) =
-      SearchMember($findborrower, 'cardnumber', 'web' );
+    my $borrowers = Search($findborrower, 'cardnumber');
 
-    my @borrowers = @$borrowers;
-
-    if ( !@borrowers ) {
+    if ($borrowers && @$borrowers) {
+        if ( @$borrowers == 1 ) {
+            $borrowernumber_hold = $borrowers->[0]->{'borrowernumber'};
+        }
+        else {
+            $borrowerslist = $borrowers;
+        }
+    } else {
         $messageborrower = "'$findborrower'";
-    }
-    elsif ( @borrowers == 1 ) {
-        $borrowernumber_hold = $borrowers[0]->{'borrowernumber'};
-    }
-    else {
-        $borrowerslist = \@borrowers;
     }
 }
 
