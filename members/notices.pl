@@ -56,7 +56,9 @@ $template->param( %{$borrower} );
 $template->param(
 			QUEUED_MESSAGES 	=> $queued_messages,
 			borrowernumber 		=> $borrowernumber,
-			sentnotices 		=> 1
+			sentnotices 		=> 1,
+            branchname          => GetBranchName($borrower->{'branchcode'}),
+            categoryname        => $borrower->{'description'},
 		);
 output_html_with_http_headers $input, $cookie, $template->output;
 

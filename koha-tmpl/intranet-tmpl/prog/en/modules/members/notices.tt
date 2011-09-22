@@ -10,10 +10,20 @@
 		dateFormat: 'uk'
 	    [% END %]
 	});
+    
+    $("a.message-title").click(function(e){
+        $("p.message").hide();
+        $(this).next("p").show();
+        e.preventDefault();
+    });
+    
     });
 //]]>
 </script>
-
+<style type="text/css">
+    p.message { display: none; }
+    a.message-title { font-weight: bold; display: block; }
+</style>
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -22,34 +32,53 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Sent notices for [% firstname %] [% surname %]</div>
 
 <div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+    <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
 [% INCLUDE 'circ-toolbar.inc' %]
 <h1>Sent notices for [% firstname %] [% surname %]</h1>
+
 
     <table id="noticestable">
 	<thead>
 	    <tr>
-		<th>Subject</th>
-		<th>Content</th>
+		<th>Notice</th>
 		<th>Type</th>
 		<th>Status</th>
 		<th>Time</th>
 	    </tr>
 	</thead>
+[% IF ( QUEUED_MESSAGES ) %]
 	<tbody>
 	    [% FOREACH QUEUED_MESSAGE IN QUEUED_MESSAGES %]
 	    <tr>
-		<td>[% QUEUED_MESSAGE.subject %]</td>
-		<td>[% QUEUED_MESSAGE.content %]</td>
-		<td>[% QUEUED_MESSAGE.message_transport_type %]</td>
-		<td>[% QUEUED_MESSAGE.status %]</td>
+		<td>
+            <a class="message-title" href="#">[% QUEUED_MESSAGE.subject %]</a>
+            <p class="message">
+                [% QUEUED_MESSAGE.content FILTER html_line_break %]
+            </p>
+        </td>
+		<td>
+            [% IF ( QUEUED_MESSAGE.message_transport_type == 'email' ) %]email
+            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'print' ) %]print
+            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'feed' ) %]feed
+            [% ELSIF ( QUEUED_MESSAGE.message_transport_type == 'sms' ) %]sms
+            [% ELSE %][% QUEUED_MESSAGE.message_transport_type %][% END %]
+        </td>
+		<td>
+            [% IF ( QUEUED_MESSAGE.status == 'sent' ) %]sent
+            [% ELSIF ( QUEUED_MESSAGE.status == 'pending' ) %]pending
+            [% ELSIF ( QUEUED_MESSAGE.status == 'failed' ) %]failed
+            [% ELSIF ( QUEUED_MESSAGE.status == 'deleted' ) %]deleted
+            [% ELSE %][% QUEUED_MESSAGE.status %][% END %]
+        </td>
 		<td>[% QUEUED_MESSAGE.time_queued %]</td>
 	    </tr>
 	    [% END %]
 	</tbody>
+    [% ELSE %]
+    <tr><td colspan="4">There is no record of any messages that have been sent to this patron.</td></tr>
+    [% END %]
     </table>
 
 </div>
