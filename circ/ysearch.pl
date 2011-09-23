@@ -47,7 +47,8 @@ my $sql = qq(SELECT surname, firstname, cardnumber, address, city, zipcode, coun
              WHERE surname LIKE ?
              OR firstname LIKE ?
              OR cardnumber LIKE ?
-             ORDER BY surname, firstname);
+             ORDER BY surname, firstname
+             LIMIT 10);
 my $sth = $dbh->prepare( $sql );
 $sth->execute("$query%", "$query%", "$query%");
 
