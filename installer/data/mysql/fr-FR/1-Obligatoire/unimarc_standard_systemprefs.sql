@@ -182,6 +182,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('finesCalendar',"noFinesWhenClosed",'Spécifie l''utilisation  du calendrier pour le calcul des dates de retours et les amendes',"ignoreCalendar|noFinesWhenClosed",'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('previousIssuesDefaultSortOrder',"asc",'Ordre d''affichage des prêts en cours sur la page de circulation hors prêts du jour',"asc|desc",'Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowingHistoryLink','circhist','When showing borrower history for an item on the catalogue page, link to borrower','detail|circhist','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('todaysIssuesDefaultSortOrder',"desc",'Ordre d''affichage des prêts en cours (prêts du jour)',"asc|desc",'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OPACItemHolds','1','Si activé, les adhérents peuvent placer des réservations sur un exemplaire spécifique. Sinon, il ne peuvent que réserver le prochain disponible.','','YesNo');
 INSERT INTO `systempreferences` (variable, value,options,type, explanation) VALUES ('AddPatronLists','categorycode','categorycode|category_type','Choice','Slectionner categorycode ou category_type permet d''afficher la liste des catégories ou des types de catégories à l''ajout d''un lecteur');

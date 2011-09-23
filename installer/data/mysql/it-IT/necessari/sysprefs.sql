@@ -152,6 +152,7 @@ insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, 
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('patronimages','jpg','','Per impostare il formato immagine per le foto degli utenti','free');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('PatronsPerPage','20','20','Numero di utenti visualizzati di default per pagina','Integer');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('previousIssuesDefaultSortOrder','asc','asc|desc','Specifica l’ordine dei prestiti precedenti nella pagina di circolazione','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowingHistoryLink','circhist','When showing borrower history for an item on the catalogue page, link to borrower','detail|circhist','Choice');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('printcirculationslips','1','','Se ON, abilita la stampa delle ricevute del prestito','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('QueryAutoTruncate','1','','Se ON, è abilitato il troncamento delle query di default','YesNo');
 insert into `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) values('QueryFuzzy','0','','Se ON, abilita le opzioni di ricerca fuzzy','YesNo');

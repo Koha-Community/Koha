@@ -146,10 +146,16 @@ foreach my $item (@items){
         $item->{'issue'}= 0;
     }
 }
-$template->param(count => $data->{'count'},
-	subscriptionsnumber => $subscriptionsnumber,
+my $borrower_link
+    = ( C4::Context->preference("BorrowingHistoryLink") eq 'details' )
+    ? 'members/moremember.pl'
+    : 'circ/circulation.pl';
+$template->param(
+    count               => $data->{'count'},
+    subscriptionsnumber => $subscriptionsnumber,
     subscriptiontitle   => $data->{title},
-	C4::Search::enabled_staff_search_views,
+    borrowerlink        => $borrower_link,
+    C4::Search::enabled_staff_search_views,
 );
 $template->param(BIBITEM_DATA => \@results);
 $template->param(ITEM_DATA => \@items);

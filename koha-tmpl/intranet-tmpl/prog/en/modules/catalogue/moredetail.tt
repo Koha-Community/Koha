@@ -169,9 +169,9 @@
 
                 <li><span class="label">Last seen:</span> [% ITEM_DAT.datelastseen %]&nbsp;</li>
                 <li><span class="label">Last borrowed:</span> [% ITEM_DAT.datelastborrowed %]&nbsp;</li>
-                [% IF ( ITEM_DAT.card0 ) %]<li><span class="label">Last Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower0 %]">[% ITEM_DAT.card0 %]</a>&nbsp;</li>[% END %]
-                [% IF ( ITEM_DAT.card1 ) %]<li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower1 %]">[% ITEM_DAT.card1 %]</a>&nbsp;</li>[% END %]
-		[% IF ( ITEM_DAT.card2 ) %]<li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% ITEM_DAT.borrower2 %]">[% ITEM_DAT.card2 %]</a>&nbsp;</li>[% END %]
+                [% IF ( ITEM_DAT.card0 ) %]<li><span class="label">Last Borrower:</span> <a href="/cgi-bin/koha/[% borrowerlink %]?borrowernumber=[% ITEM_DAT.borrower0 %]">[% ITEM_DAT.card0 %]</a>&nbsp;</li>[% END %]
+                [% IF ( ITEM_DAT.card1 ) %]<li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/[% borrowerlink %]?borrowernumber=[% ITEM_DAT.borrower1 %]">[% ITEM_DAT.card1 %]</a>&nbsp;</li>[% END %]
+		[% IF ( ITEM_DAT.card2 ) %]<li><span class="label">Previous Borrower:</span> <a href="/cgi-bin/koha/[% borrowerlink %]?borrowernumber=[% ITEM_DAT.borrower2 %]">[% ITEM_DAT.card2 %]</a>&nbsp;</li>[% END %]
                 <li><span class="label">Paid for?:</span> [% ITEM_DAT.paidfor %]&nbsp;</li>
             <li><span class="label">Serial enumeration:</span> [% ITEM_DAT.enumchron %]&nbsp;</li>
             <li><span class="label">Public Note:</span>
