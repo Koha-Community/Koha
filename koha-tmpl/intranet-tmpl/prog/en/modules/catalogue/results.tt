@@ -136,6 +136,20 @@ function placeHold () {
     $("#hold_form").submit();
     return false;
 }
+
+function forgetPatron(){
+    $.cookie("holdfor",null, { path: "/", expires: 0 });
+    $(".holdforlink").remove();
+    $("#placeholdc").empty();
+    new YAHOO.widget.Button({
+    id: "placehold",
+    type: "button",
+    label: _("Place hold"),
+    container: "placeholdc",
+    onclick: { fn: placeHold }
+ });
+}
+
 function addToList () {
     var checkedItems = $(".selection:checked");
     if ($(checkedItems).size() == 0) {
@@ -181,8 +195,8 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
         }
         var HoldForButtonMenu = [
             { text: "Place hold", onclick: { fn: holdFor }},
-            { text: "Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", onclick: { fn: holdForPatron }}
-        ];
+            { text: "Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", onclick: { fn: holdForPatron }},
+            { text: "Forget [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", onclick: { fn: forgetPatron }}];
 
         var HoldForButton = new YAHOO.widget.Button({
                 type: "split",
@@ -195,7 +209,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
         [% ELSE %]
         new YAHOO.widget.Button({
             id: "placehold",
-            type: "link",
+            type: "button",
             label: _("Place hold"),
             container: "placeholdc",
             onclick: { fn: placeHold }
@@ -499,7 +513,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                   <span class="noholdstext">No holds allowed</span>
                               [% ELSE %]
                                   <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds</a>
-                                  [% IF ( holdfor ) %] | <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a>[% END %]
+                                  [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></span>[% END %]
                               [% END %]
                           [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                           | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Edit record</a>
