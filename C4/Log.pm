@@ -4,6 +4,7 @@ package C4::Log;
 
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2011 MJ Ray and software.coop
 #
 # This file is part of Koha.
 #
@@ -217,7 +218,7 @@ sub GetLogs {
     	$query .= " AND user = ? ";
     	push(@parameters,$user);
     }
-    if(scalar @$modules > 1 or @$modules[0] ne "") {
+    if($modules && scalar(@$modules)) {
     	$query .= " AND module IN (".join(",",map {"?"} @$modules).") ";
 	push(@parameters,@$modules);
     }
