@@ -4,6 +4,7 @@ use strict;
 use warnings;
 use Carp;
 use CGI;
+use List::Util qw/first/;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -168,57 +169,6 @@ sub _current_language {
     return $_current_language;
 }
 
-sub themelanguage_lite {
-    my ( $htdocs, $tmpl, $interface ) = @_;
-    my $query = new CGI;
-
-    # Set some defaults for language and theme
-    # First, check the user's preferences
-    my $lang;
-
-    # But, if there's a cookie set, obey it
-    $lang = $query->cookie('KohaOpacLanguage')
-      if ( defined $query and $query->cookie('KohaOpacLanguage') );
-
-    # Fall back to English
-    my @languages;
-    if ( $interface eq 'intranet' ) {
-        @languages = split ",", C4::Context->preference("language");
-    }
-    else {
-        @languages = split ",", C4::Context->preference("opaclanguages");
-    }
-    if ($lang) {
-        @languages = ( $lang, @languages );
-    }
-    else {
-        $lang = $languages[0] || 'en';
-    }
-    my $theme = 'prog'; # in the event of theme failure default to 'prog' -fbcit
-    my @themes;
-    if ( $interface eq "intranet" ) {
-        @themes = split " ", C4::Context->preference("template");
-    }
-    else {
-        @themes = split " ", C4::Context->preference("opacthemes");
-    }
-
- # searches through the themes and languages. First template it find it returns.
- # Priority is for getting the theme right.
-  THEME:
-    foreach my $th (@themes) {
-        foreach my $la (@languages) {
-            if ( -e "$htdocs/$th/$la/modules/$tmpl" ) {
-                $theme = $th;
-                $lang  = $la;
-                last THEME;
-            }
-            last unless $la =~ /[-_]/;
-        }
-    }
-    $_current_language = $lang;  # FIXME part of bad hack to paper over bug 4403
-    return ( $theme, $lang );
-}
 
 # wrapper method to allow easier transition from HTML template pro to Template Toolkit
 sub param {
@@ -249,9 +199,11 @@ my $path = C4::Context->config('intrahtdocs') . "/prog/en/includes/";
 # FIXME - POD
 
 sub _get_template_file {
-    my ( $tmplbase, $interface, $query ) = @_;
-    my $htdocs = C4::Context->config( $interface ne 'intranet' ? 'opachtdocs' : 'intrahtdocs' );
-    my ( $theme, $lang ) = themelanguage( $htdocs, $tmplbase, $interface, $query );
+    my ($tmplbase, $interface, $query) = @_;
+
+    my $is_intranet = $interface eq 'intranet';
+    my $htdocs = C4::Context->config($is_intranet ? 'intrahtdocs' : 'opachtdocs');
+    my ($theme, $lang) = themelanguage($htdocs, $tmplbase, $interface, $query);
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
 
     # if the template doesn't exist, load the English one as a last resort
@@ -260,9 +212,9 @@ sub _get_template_file {
         $lang = 'en';
         $filename = "$htdocs/$theme/$lang/modules/$tmplbase";
     }
-
-    return ( $htdocs, $theme, $lang, $filename );
+    return ($htdocs, $theme, $lang, $filename);
 }
+
 
 sub gettemplate {
     my ( $tmplbase, $interface, $query ) = @_;
@@ -270,14 +222,19 @@ sub gettemplate {
     my $path = C4::Context->preference('intranet_includes') || 'includes';
     my $opacstylesheet = C4::Context->preference('opacstylesheet');
     $tmplbase =~ s/\.tmpl$/.tt/;
-    my ( $htdocs, $theme, $lang, $filename ) = _get_template_file( $tmplbase, $interface, $query );
+    my ($htdocs, $theme, $lang, $filename)
+       =  _get_template_file($tmplbase, $interface, $query);
     my $template = C4::Templates->new($interface, $filename, $tmplbase, $query);
-    my $themelang=( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' )
-          . "/$theme/$lang";
+    my $is_intranet = $interface eq 'intranet';
+    my $themelang =
+        ($is_intranet ? '/intranet-tmpl' : '/opac-tmpl') .
+        "/$theme/$lang";
     $template->param(
         themelang => $themelang,
-        yuipath   => (C4::Context->preference("yuipath") eq "local"?"$themelang/lib/yui":C4::Context->preference("yuipath")),
-        interface => ( $interface ne 'intranet' ? '/opac-tmpl' : '/intranet-tmpl' ),
+        yuipath   => C4::Context->preference("yuipath") eq "local"
+                     ? "$themelang/lib/yui"
+                     : C4::Context->preference("yuipath"),
+        interface => $is_intranet ? '/intranet-tmpl' : '/opac-tmpl',
         theme     => $theme,
         lang      => $lang
     );
@@ -307,66 +264,41 @@ sub gettemplate {
 #---------------------------------------------------------------------------------------------------------
 # FIXME - POD
 sub themelanguage {
-    my ( $htdocs, $tmpl, $interface, $query ) = @_;
+    my ($htdocs, $tmpl, $interface, $query) = @_;
     ($query) or warn "no query in themelanguage";
 
-    # Set some defaults for language and theme
-    # First, check the user's preferences
+    # Select a language based on cookie, syspref available languages & browser
+    my $is_intranet = $interface eq 'intranet';
+    my @languages = split(",", C4::Context->preference(
+        $is_intranet ? 'language' : 'opaclanguages'));
     my $lang;
-    my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
-    $lang = accept_language( $http_accept_language, 
-              getTranslatedLanguages($interface,'prog') )
-      if $http_accept_language;
-    # But, if there's a cookie set, obey it
-    $lang = $query->cookie('KohaOpacLanguage') if (defined $query and $query->cookie('KohaOpacLanguage'));
-    # Fall back to English
-    my @languages;
-    if ($interface eq 'intranet') {
-        @languages = split ",", C4::Context->preference("language");
-    } else {
-        @languages = split ",", C4::Context->preference("opaclanguages");
+    $lang = $query->cookie('KohaOpacLanguage')
+        if defined $query and $query->cookie('KohaOpacLanguage');
+    unless ($lang) {
+        my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
+        $lang = accept_language( $http_accept_language, 
+            getTranslatedLanguages($interface,'prog') );
     }
-    if ($lang){  
-        @languages=($lang,@languages);
-    } else {
-        $lang = $languages[0];
-    }      
-    my $theme = 'prog';	# in the event of theme failure default to 'prog' -fbcit
-    my $dbh = C4::Context->dbh;
-    my @themes;
-    if ( $interface eq "intranet" ) {
-        @themes    = split " ", C4::Context->preference("template");
-    }
-    else {
-      # we are in the opac here, what im trying to do is let the individual user
-      # set the theme they want to use.
-      # and perhaps the them as well.
-        #my $lang = $query->cookie('KohaOpacLanguage');
-        @themes = split " ", C4::Context->preference("opacthemes");
-    }
+    # Ignore a lang not selected in sysprefs
+    $lang = undef  unless first { $_ eq $lang } @languages;
+    # Fall back to English if necessary
+    $lang = 'en' unless $lang;
 
- # searches through the themes and languages. First template it find it returns.
- # Priority is for getting the theme right.
-    THEME:
-    foreach my $th (@themes) {
-        foreach my $la (@languages) {
-            #for ( my $pass = 1 ; $pass <= 2 ; $pass += 1 ) {
-                # warn "$htdocs/$th/$la/modules/$interface-"."tmpl";
-                #$la =~ s/([-_])/ $1 eq '-'? '_': '-' /eg if $pass == 2;
-				if ( -e "$htdocs/$th/$la/modules/$tmpl") {
-                #".($interface eq 'intranet'?"modules":"")."/$tmpl" ) {
-                    $theme = $th;
-                    $lang  = $la;
-                    last THEME;
-                }
-                last unless $la =~ /[-_]/;
-            #}
+    my @themes = split(" ", C4::Context->preference(
+        $is_intranet ? "template" : "opacthemes" ));
+    push @themes, 'prog';
+
+    # Try to find first theme for the selected language
+    for my $theme (@themes) {
+        if ( -e "$htdocs/$theme/$lang/modules/$tmpl" ) {
+            $_current_language = $lang;
+            return ($theme, $lang)
         }
     }
-
-    $_current_language = $lang; # FIXME part of bad hack to paper over bug 4403
-    return ( $theme, $lang );
+    # Otherwise, return prog theme in English 'en'
+    return ('prog', 'en');
 }
+
 
 sub setlanguagecookie {
     my ( $query, $language, $uri ) = @_;
