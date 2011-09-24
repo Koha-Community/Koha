@@ -159,7 +159,11 @@ function CheckAttributeTypeForm(f) {
             <span>Check to make this attribute staff_searchable in the staff patron search.</span>
        </li>
        <li><label for="display_checkout">Display in check-out: </label>
-            <input type="checkbox" id="display_checkout" name="display_checkout" [% display_checkout_checked %] />
+            [% IF display_checkout_checked %]
+                <input type="checkbox" id="display_checkout" name="display_checkout" checked="checked" />
+	    [% ELSE %]
+	        <input type="checkbox" id="display_checkout" name="display_checkout" />
+	    [% END %]
             <span>Check to show this attribute in patron check-out.</span>
        </li>
 
