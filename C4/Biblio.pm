@@ -1219,7 +1219,8 @@ sub GetCOinSBiblio {
         $subtitle = $record->subfield( '245', 'b' ) || '';
         $title .= $subtitle;
         if ($titletype eq 'a') {
-            $pubyear   = substr $record->field('008')->data(), 7, 4;
+            $pubyear   = $record->field('008') || '';
+            $pubyear   = substr($pubyear->data(), 7, 4) if $pubyear;
             $isbn      = $record->subfield( '773', 'z' ) || '';
             $issn      = $record->subfield( '773', 'x' ) || '';
             if ($mtx eq 'journal') {
