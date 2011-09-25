@@ -7,7 +7,9 @@
 use strict;
 use warnings;
 use Test::More tests => 5;
-use C4::Log;
+
+# We need C4::Dates to handle the dates
+use C4::Dates;
 
 BEGIN {
 	use_ok('C4::Log');
@@ -36,7 +38,8 @@ ok($success, "GetLogs returns results for an open search");
 
 eval {
     # FIXME: US formatted date hardcoded into test for now
-    $success = scalar(@{GetLogs("09/01/2011","10/01/2011","",undef,undef,"","")});
+    my $date = C4::Dates->new();
+    $success = scalar(@{GetLogs($date->today(),$date->today(),"",undef,undef,"","")});
 } or do {
     diag($@);
     $success = 0;
