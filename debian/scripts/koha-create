@@ -30,14 +30,16 @@ die() {
     exit 1
 }
 
+# UPPER CASE VARIABLES - from configfile or default value
+# lower case variables - generated within this script
 generate_config_file() {
     touch "$2"
     chown "root:$username" "$2"
     chmod 0640 "$2"
     sed -e "s/__KOHASITE__/$name/g" \
-        -e "s/__OPACPORT__/80/g" \
+        -e "s/__OPACPORT__/$OPACPORT/g" \
         -e "s/__INTRAPORT__/$INTRAPORT/g" \
-        -e "s/__OPACSERVER__/$domain/g" \
+        -e "s/__OPACSERVER__/$opacdomain/g" \
         -e "s/__INTRASERVER__/$intradomain/g" \
         -e "s/__ZEBRA_PASS__/$zebrapwd/g" \
         -e "s/__ZEBRA_MARC_FORMAT__/$ZEBRA_MARC_FORMAT/g" \
@@ -73,6 +75,7 @@ getinstancemysqldatabase() {
 
 # Set defaults and read config file, if it exists.
 DOMAIN=""
+OPACPORT="80"
 INTRAPORT="8080"
 INTRAPREFIX=""
 INTRASUFFIX=""
@@ -145,13 +148,8 @@ fi
 
 name="$1"
 
-domain="$name$DOMAIN"
-if [ "$INTRAPORT" = 80 ] || [ "$INTRAPORT" = "" ]
-then
-    intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
-else
-    intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN:$INTRAPORT"
-fi
+opacdomain="$name$DOMAIN"
+intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
 
 
 mysqldb="koha_$name"
