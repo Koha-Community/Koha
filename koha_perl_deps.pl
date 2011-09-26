@@ -39,7 +39,7 @@ push @pm, 'missing_pm' if $missing || $all;
 push @pm, 'upgrade_pm' if $upgrade || $all;
 push @pm, 'current_pm' if $installed || $all;
 
-print color 'bold white' if $color;
+print color 'bold blue' if $color;
 print"
                                               Installed         Required          Module is
 Module Name                                   Version           Version            Required
@@ -68,7 +68,7 @@ write;
         }
     }
 }
-print color 'bold white' if $color;
+print color 'bold blue' if $color;
 my $footer = "
 --------------------------------------------------------------------------------------------
 Total modules reported: $count                      ";
@@ -81,6 +81,7 @@ else {
 }
 
 print $footer;
+print color 'reset' if $color;
 
 1;
 
