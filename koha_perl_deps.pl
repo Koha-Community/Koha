@@ -41,8 +41,9 @@ push @pm, 'current_pm' if $installed || $all;
 
 print color 'bold white' if $color;
 print"
-Module Name                                 Current Version                       Required Version         Module Required
---------------------------------------------------------------------------------------------------------------------------
+                                              Installed         Required          Module is
+Module Name                                   Version           Version            Required
+--------------------------------------------------------------------------------------------
 ";
 
 my $count = 0;
@@ -60,8 +61,8 @@ foreach my $type (@pm) {
             my $current_version = ($color ? $_->{$pm}->{'cur_ver'} :
                                    $type eq 'missing_pm' || $type eq 'upgrade_pm' ? $_->{$pm}->{'cur_ver'}." *" : $_->{$pm}->{'cur_ver'});
 format =
-@<<<<<<<<<<<<<<<<<<<<<<<<<                  @<<<<<<<<<<                           @<<<<<<<<<<              @<<<<<
-$pm,                                        $current_version,                     $_->{$pm}->{'min_ver'},  $required
+@<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<< @<<<<<<<<<<<<<<<<       @<<<<<
+$pm,                                          $current_version, $_->{$pm}->{'min_ver'},  $required
 .
 write;
         }
@@ -69,8 +70,8 @@ write;
 }
 print color 'bold white' if $color;
 my $footer = "
---------------------------------------------------------------------------------------------------------------------------
-Total modules reported: $count                                                     ";
+--------------------------------------------------------------------------------------------
+Total modules reported: $count                      ";
 
 if ($color) {
     $footer .= "\n\n";
