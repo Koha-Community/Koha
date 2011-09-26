@@ -4415,6 +4415,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Create an index on reserves to speed up holds awaiting pickup report bug 5866\n";
     SetVersion($DBversion);
 }
+$DBversion = "3.04.05.000";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    print "Upgrade to $DBversion done (Incrementing version for 3.4.5 release. See release notes for details.)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
