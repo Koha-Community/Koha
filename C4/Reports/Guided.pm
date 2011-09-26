@@ -25,7 +25,7 @@ use Carp;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Dates qw/format_date format_date_in_iso/;
-use C4::Templates;
+use C4::Templates qw/themelanguage/;
 use C4::Dates;
 use XML::Simple;
 use XML::Dumper;
@@ -741,7 +741,7 @@ sub _get_column_defs {
 	my $columns_def_file = "columns.def";
 	my $htdocs = C4::Context->config('intrahtdocs');                       
 	my $section='intranet';
-	my ($theme, $lang) = themelanguage($htdocs, $columns_def_file, $section,$cgi);
+	my ($theme, $lang) = C4::Templates::themelanguage($htdocs, $columns_def_file, $section,$cgi);
 
 	my $full_path_to_columns_def_file="$htdocs/$theme/$lang/$columns_def_file";    
 	open (COLUMNS,$full_path_to_columns_def_file);
