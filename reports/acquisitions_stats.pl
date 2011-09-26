@@ -47,10 +47,10 @@ my $fullreportname = "reports/acquisitions_stats.tmpl";
 my $line           = $input->param("Line");
 my $column         = $input->param("Column");
 my @filters        = $input->param("Filter");
-$filters[0]= (($line =~ /closedate/ || $column =~ /closedate/) ? format_date_in_iso($filters[0]) : undef);
-$filters[1]= (($line =~ /closedate/ || $column =~ /closedate/) ? format_date_in_iso($filters[1]) : undef);
-$filters[2]= (($line =~ /delivery/ || $column =~ /delivery/) ? format_date_in_iso($filters[2]) : undef);
-$filters[3]= (($line =~ /delivery/ || $column =~ /delivery/) ? format_date_in_iso($filters[3]) : undef);
+$filters[0]= format_date_in_iso($filters[0]);
+$filters[1]= format_date_in_iso($filters[1]);
+$filters[2]= format_date_in_iso($filters[2]);
+$filters[3]= format_date_in_iso($filters[3]);
 my $podsp          = $input->param("PlacedOnDisplay");
 my $rodsp          = $input->param("ReceivedOnDisplay");
 my $aodsp          = $input->param("AcquiredOnDisplay");    ##added by mason.
