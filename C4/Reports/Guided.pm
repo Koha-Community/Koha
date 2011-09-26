@@ -25,7 +25,7 @@ use Carp;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 use C4::Context;
 use C4::Dates qw/format_date format_date_in_iso/;
-use C4::Output;
+use C4::Templates;
 use C4::Dates;
 use XML::Simple;
 use XML::Dumper;
