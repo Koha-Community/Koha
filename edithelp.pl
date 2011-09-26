@@ -19,6 +19,7 @@
 
 use strict;
 use C4::Output;
+use C4::Templates;
 use C4::Auth;
 use CGI;
 use warnings;
@@ -66,7 +67,7 @@ sub _get_filepath ($;$) {
     $referer =~ /koha\/(.*)\.pl/;
     my $from = "help/$1.tt";
     my $htdocs = C4::Context->config('intrahtdocs');
-    my ($theme, $lang) = themelanguage( $htdocs, $from, "intranet", $input );
+    my ($theme, $lang) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $input );
 	$debug and print STDERR "help filepath: $htdocs/$theme/$lang/modules/$from";
 	return "$htdocs/$theme/$lang/modules/$from";
 }
