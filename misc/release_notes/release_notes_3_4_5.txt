@@ -1,0 +1,242 @@
+RELEASE NOTES FOR KOHA 3.4.5 - 26 September 2011
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.4.5 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.04.05.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.4.5 is a bugfix/maintenance release.
+
+Highlights of 3.4.5
+======================
+
+4122    blocker     WebBasedSelfCheck doesn't control anything
+6704    critical    merging records cuts off fields at quotation marks
+6727    critical    can't import frameworks
+6750    critical    Guarantor search broken on translated templates
+4419    major       Cannot change module for notice templates
+4966    major       no way to finish receiving
+6318    major       fields missing when editing a layout
+6351    major       Cannot delete library-specific circulation rules
+6620    major       Sip Server Output may be buffered
+6651    major       koha-upgrade-to-3.4 fails when multiple instances are present
+6665    major       advancedMARCeditor preference not functioning
+6765    major       Enable correct checksums for UTF-8 encoded data
+6834    major       $template->{param_map} is deprecated with the introduction of Template::Toolkit
+6841    major       A member with cataloging permissions cannot change branches (when independent branches is set on)
+
+
+Bugs fixed in 3.4.5
+======================
+
+520     Displaying ALL records
+1016    Crashed mySql tables
+1220    validation problems and usability in lynx
+1664    Installer not picking up missing perl modules
+2539    kohaspsuggest is deprecated, notes outmoded
+2775    Test suite failing after change to cache sysprefs
+2891    Cannot manually enter dates in some report forms
+4866    Optionally enable Change event for item plugins
+4868    Improve controls for cloning and deleting MARC subfields
+4877    Create and update the manual pages for the koha-* scripts.
+5028    Remove references to catmaintain.pl
+5252    Emails & Phones On Patron Add/Edit form
+5498    Standardize markup and style of pagination menus
+5524    Can't delete list from second page of results
+5602    Improve configurability of package building scripts
+5866    At larger hold volume, waitingreserves.pl for all libraries times out, can cause generalized slowness
+6121    waitingreserves: branchname instead of branch code
+6129    ISSN url param for serialssolutions.com
+6256    Many bib1 attributes missing
+6275    Automated backups of data and config
+6368    unimarc_field_4XX plugin does not work with new templates
+6431    New Circulation modules for Hourly Circulation
+6458    incorrect parsing result in translation processing
+6479    Encoding problem in "recievedlist" when the numbering formula contains utf-8 characters
+6516    koha-create makes assumptions about borrowernumber of staff user
+6517    koha-create wants "use database" in DEFAULTSQL
+6528    Cataloging search issues - Holdings not displayed in location column
+6538    help on letter.pl is incorrect
+6540    Add more options to koha-create
+6555    only 10 lists in pull down when adding from a bib record
+6562    Reserve request generates unnecessary runtime errors
+6595    Add German translation for purchase suggestion mails
+6602    Reports dictionary doesn't properly recognize text columns
+6640    Template errors in defining default variable values causes information not to be displayed
+6652    Zip showing in funny place on libraries admin
+6656    Default sort preferences ignored on advanced search
+6662    sort options in opac are dewey specific
+6677    patron stats still refers to debarred
+6695    Layout of patron category add/edit form slightly broken
+6696    New category button broken when no categories defined
+6712    Remove memberofinstitution markup from templates until it can be completed
+6715    xmlControlField.js always fetches the value_builder xml files in the "en" directory.
+6723    allow framework import with CRLF
+6724    Holds Ratio does not allow decimals
+6726    When SMS is enabled the messaging table is misaligned
+6728    Table sorter for receiving acquisitions
+6732    Missing Title for Manual Invoice
+6733    printing routing list sends you to main serials page
+6744    Acknowledge the actual es-ES translators
+6747    Additional check in opac-export
+6753    Markup corrections and improvements for label export window
+6754    Improve breadcrumbs on lists pages
+6768    Two unused include files can be removed: error-top.inc and error-bottom.inc
+6791    editing list with apostrophe loses text
+6794    Broken toggle in member-flags in ie
+6822    RIS export problem in opac-export.pl with parsing the MARC
+6829    Remove two warnings for opac-MARCdetail
+6860    syndetics covers not showing on search results or shelf browse
+6863    covers missing from shelf browse for various services
+
+
+System requirements
+======================
+
+    Changes since 3.2:
+
+    * Template::Toolkit
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the english version of the
+Koha manual is available:
+
+    http://koha-community.org/documentation/3-4-manual/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.4 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.4.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+QA Manager:             Colin Campbell
+
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to
+Koha 3.4.5
+
+Tomas Cohen Arazi
+Alex Arnaud
+Steven Callender
+Colin Campbell
+Frédérick Capovilla
+Chris Cormack
+Christophe Croullebois
+Frédéric Demians
+Nicole C. Engard
+Magnus Enger
+Katrin Fischer
+Srdjan Jankovic
+Janusz Kaczmarek
+Ulrich Kleiber
+Henri-Damien LAURENT
+Owen Leonard
+Chris Nighswonger
+Maxime Pelletier
+Paul Poulain
+Liz Rea
+Marcel de Rooy
+Salvador Zaragoza Rubio
+Robin Sheat
+Ian Walls
+Ward van Wanrooij
+Brett Wilkins
+
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.4.x (i.e., this version of Koha and future bugfix
+releases) is 3.4.x.
+
+The next major feature release of Koha will be Koha 3.6.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini
