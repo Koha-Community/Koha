@@ -18,11 +18,11 @@
 #use strict;
 #use warnings; FIXME - Bug 2505
 
-use C4::Output;
+use C4::Templates;
 use CGI;
 
 my $query    = new CGI;
 my $language = $query->param('language');
 my $url      = $query->referer();
 
-setlanguagecookie( $query, $language, $url );
+C4::Templates::setlanguagecookie( $query, $language, $url );
