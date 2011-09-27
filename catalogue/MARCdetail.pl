@@ -83,6 +83,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $record = GetMarcBiblio($biblionumber);
+$template->param( ocoins => GetCOinSBiblio($record) );
 
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit
