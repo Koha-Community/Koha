@@ -203,14 +203,14 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
 	[% FOREACH ISSUE IN ISSUES %]
 	[% UNLESS ( loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
     <!-- FIXME: yet another jacket image breakpoint -->
-	<td>[% IF ( ISSUE.amazonimages ) %] [% IF ( ISSUE.isbn ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber |url %]"><img src="http://images.amazon.com/images/P/[% ISSUE.isbn %].01.THUMBZZZ.jpg" alt="Book Cover Image" class="thumbnail" /></a>[% END %] [% END %][% UNLESS ( ISSUE.noitemlinks ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a>[% ELSE %]<strong>[% ISSUE.title |html %]</strong>[% END %]<span class="item-details">
+	<td>[% UNLESS ( ISSUE.noitemlinks ) %]<a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.biblionumber %]">[% ISSUE.title |html %]</a>[% ELSE %]<strong>[% ISSUE.title |html %]</strong>[% END %]<span class="item-details">
 	[% ISSUE.author %]</span> ([% ISSUE.barcode %])</td>
 	<td>[% ISSUE.itemcallnumber %]</td>
 	[% IF ( ISSUE.overdue ) %]<td class="overdue">[% ISSUE.date_due_display %]</td>[% ELSE %]<td>[% ISSUE.date_due_display %]</td>[% END %]
 	<td>
     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
     <input type="hidden" name="op" value="checkout" />
-    <input type="hidden" name="patronid" value="[% ISSUE.patronid %]" />
+    <input type="hidden" name="patronid" value="[% patronid %]" />
     <input type="hidden" name="barcode" value="[% ISSUE.barcode %]" />
     <input type="hidden" name="confirmed" value=""  />
         [% IF ( ISSUE.norenew ) %]
@@ -225,7 +225,7 @@ Sorry, This Self-Checkout Station has lost authentication.  Please contact the a
         [% END %]
     </form>
 	</td>
-	[% UNLESS ( ISSUE.nofines ) %]<td>[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>[% END %]</tr>
+	[% UNLESS ( nofines ) %]<td>[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>[% END %]</tr>
 	[% END %]
     </tbody>
 
