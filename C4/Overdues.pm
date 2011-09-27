@@ -169,7 +169,7 @@ sub checkoverdues {
     my $sth = C4::Context->dbh->prepare(
         "SELECT biblio.*, items.*, issues.*,
                 biblioitems.volume,
-                bibliotiems.number,
+                biblioitems.number,
                 biblioitems.itemtype,
                 biblioitems.isbn,
                 biblioitems.issn,
