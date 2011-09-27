@@ -91,7 +91,7 @@
 
 [% ELSE %]
 
-<h2>[% nnoverdue %] Item[% IF ( noverdue_is_plural ) %]s[% END %]
+<h2>[% nnoverdue %] [% IF ( noverdue_is_plural ) %]Items[% ELSE %]Item[% END %]
 	 Overdue as of [% todaysdate %][% IF ( isfiltered ) %] (filtered)[% END %]</h2>
 
 <p>
