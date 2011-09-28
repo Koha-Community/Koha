@@ -35,6 +35,7 @@ use C4::Serials;
 use C4::XISBN qw(get_xisbns get_biblionumber_from_isbn);
 use C4::External::Amazon;
 use C4::Search;		# enabled_staff_search_views
+use C4::Tags qw(get_tags);
 use C4::VirtualShelves;
 use C4::XSLT;
 use C4::Images;
@@ -393,6 +394,18 @@ if ( C4::Context->preference("LocalCoverImages") == 1 ) {
 # Get OPAC URL
 if (C4::Context->preference('OPACBaseURL')){
      $template->param( OpacUrl => C4::Context->preference('OPACBaseURL') );
+}
+
+# Displaying tags
+
+my $tag_quantity;
+if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->preference('TagsShowOnDetail')) {
+    $template->param(
+        TagsEnabled => 1,
+        TagsShowOnDetail => $tag_quantity
+    );
+    $template->param(TagLoop => get_tags({biblionumber=>$biblionumber, approved=>1,
+                                'sort'=>'-weight', limit=>$tag_quantity}));
 }
 
 output_html_with_http_headers $query, $cookie, $template->output;

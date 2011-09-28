@@ -1,0 +1,103 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review Tags[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
+<script type="text/javascript">
+//<![CDATA[
+    $.tablesorter.addParser({
+        id: 'articles',
+        is: function(s) {return false;  },
+        format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); },
+        type: 'text'
+    });
+    $(document).ready(function() {
+        $(".delete").click(function (event) {
+            $(this).parent().parent().parent().addClass("selected");
+            var answer = confirm(_("Are you sure you want to remove the tag from this title?"));
+                if (!answer){
+                    $("tr").removeClass("selected");
+                    event.preventDefault();
+                }
+        });
+        $("#itemst").tablesorter({
+            sortList: [[0,0]],
+            headers: { 0: { sorter: 'articles' },1: { sorter: false },2:{sorter:false}}
+        });
+    });
+//]]>
+</script>
+<style type="text/css">
+tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }</style>
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tags/review.pl">Tags</a> &rsaquo; Results for tag <i>[% tag %]</i></div>
+
+<div id="doc3" class="yui-t2">
+ <div id="bd">
+  <div id="yui-main">
+  <div class="yui-b">
+[% IF ( titles ) %]
+<h3>Titles tagged with the term <i>[% tag %]</i></h3>
+<table id="itemst">
+	<thead><tr>
+	    <th>Title</th>
+	    <th>Location</th>
+	    <th>&nbsp;</th>
+        </tr></thead>
+
+        [% FOREACH title IN titles %]
+            [% IF ( title.even ) %]
+                <tr class="highlight">
+            [% ELSE %]
+                <tr>
+            [% END %]
+            <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = title.biblionumber %][% title.title |html %][% FOREACH subtitl IN title.subtitle %] [% subtitl.subfield %][% END %]</a>
+            [% title.author %]
+            <p>[% IF ( title.publishercode ) %]- [% title.publishercode|html %]
+            [% IF ( title.place ) %] [% title.place %][% END %][% END %]
+            [% IF ( title.pages ) %] - [% title.pages %][% IF ( title.size ) %] [% title.size %]
+            [% END %]
+            [% END %]</p>
+            [% IF ( title.notes ) %]
+            <p>[% title.notes |html%]</p>[% END %]
+            [% IF ( title.TagLoop ) %]<p style="font-size:90%"><strong>Tagged with:</strong> [% FOREACH TagLoo IN title.TagLoop %]
+            <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term %]">[% TagLoo.term |html %]</a> <span class="weight">([% TagLoo.weight_total %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
+            [% END %]</p>
+            [% END %]
+            </td>
+            <td>[% IF ( title.items ) %]<ul style="font-size:80%">[% FOREACH item IN title.items %]
+                <li>
+                    [% item.branchname %] [% item.location_description %]
+                    [% IF ( item.itemcallnumber ) %]
+                        ([% item.itemcallnumber %])
+                    [% END %]
+                </li>
+                [% END %]</ul>[% ELSE %]This record has no items.[% END %]
+             </td>
+             <td><form method="post" action="/cgi-bin/koha/tags/list.pl"><input type="hidden" name="op" value="del" /><input type="hidden" name="tag" value="[% tag %]" /><input type="hidden" name="tag_id" value="[% title.tag_id %]" /><input type="submit" class="delete" value="Remove tag" /></form></td>
+            </tr>
+        [% END %]
+    </table>
+[% ELSE %]
+	<div class="dialog message">There are no titles tagged with the term <i>[% tag %]</i></div>
+[% END %]
+</form>
+ </div>
+ </div>
+ <div class="yui-b">
+  <ul>
+    <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a>
+    </li>
+    <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a>
+    </li>
+    <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a>
+    </li>
+    <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a>
+    </li>
+  </ul>
+ </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]

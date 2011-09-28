@@ -102,6 +102,18 @@ function verify_images() {
             [% END %]
             </span>
         [% END %]
+        [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
+                <span class="results_summary"><span class="label">Tags:</span>
+                    [% FOREACH TagLoo IN TagLoop %]
+                        [% IF ( CAN_user_tools_moderate_tags ) %]
+                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term |html %]</a>
+                        [% ELSE %]
+                        [% TagLoo.term |html %]
+                        [% END %]
+                        <span class="weight">([% TagLoo.weight_total %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
+                    [% END %]
+                    </span>
+        [% END %]
         [% IF ( holdcount ) %]<span class="results_summary"><span class="label">Holds:</span> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></span>[% ELSE %][% END %]
 
         [% IF ( AmazonEnabled ) %][% IF ( AmazonCoverImages ) %]</div><div class="yui-u" id="bookcoverimg">
@@ -220,9 +232,24 @@ function verify_images() {
 	        </ul>
 	        </li>
         [% END %]
+        [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
+                <li><strong>Tags:</strong>
+                    <ul id="tagslist">
+                    [% FOREACH TagLoo IN TagLoop %]
+                        <li>
+                        [% IF ( CAN_user_tools_moderate_tags ) %]
+                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term |html %]</a>
+                        [% ELSE %]
+                        [% TagLoo.term |html %]
+                        [% END %]
+                        <span class="weight">([% TagLoo.weight_total %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]</li>
+                    [% END %]
+                    </ul></li>
+        [% END %]
             [% IF ( holdcount ) %]<li><strong>Holds:</strong> <span class="holdcount"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a></span></li>[% ELSE %][% END %]
         </ul>
 		[% END %]
+
 </div>
 </div>
 <div id="bibliodetails" class="toptabs">
