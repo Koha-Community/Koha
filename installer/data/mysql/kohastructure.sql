@@ -2419,39 +2419,39 @@ CREATE TABLE `aqbasket` (
 --
 
 DROP TABLE IF EXISTS `aqbooksellers`;
-CREATE TABLE `aqbooksellers` (
-  `id` int(11) NOT NULL auto_increment,
-  `name` mediumtext NOT NULL,
-  `address1` mediumtext,
-  `address2` mediumtext,
-  `address3` mediumtext,
-  `address4` mediumtext,
-  `phone` varchar(30) default NULL,
-  `accountnumber` mediumtext,
-  `othersupplier` mediumtext,
-  `currency` varchar(3) NOT NULL default '',
-  `booksellerfax` mediumtext,
-  `notes` mediumtext,
-  `bookselleremail` mediumtext,
-  `booksellerurl` mediumtext,
-  `contact` varchar(100) default NULL,
-  `postal` mediumtext,
-  `url` varchar(255) default NULL,
-  `contpos` varchar(100) default NULL,
-  `contphone` varchar(100) default NULL,
-  `contfax` varchar(100) default NULL,
-  `contaltphone` varchar(100) default NULL,
-  `contemail` varchar(100) default NULL,
-  `contnotes` mediumtext,
-  `active` tinyint(4) default NULL,
-  `listprice` varchar(10) default NULL,
-  `invoiceprice` varchar(10) default NULL,
-  `gstreg` tinyint(4) default NULL,
-  `listincgst` tinyint(4) default NULL,
-  `invoiceincgst` tinyint(4) default NULL,
-  `gstrate` decimal(6,4) default NULL,
-  `discount` float(6,4) default NULL,
-  `fax` varchar(50) default NULL,
+CREATE TABLE `aqbooksellers` ( -- information about the vendors listed in acquisitions
+  `id` int(11) NOT NULL auto_increment, -- primary key and unique identifier assigned by Koha
+  `name` mediumtext NOT NULL, -- vendor name
+  `address1` mediumtext, -- first line of vendor physical address
+  `address2` mediumtext, -- second line of vendor physical address
+  `address3` mediumtext, -- third line of vendor physical address
+  `address4` mediumtext, -- fourth line of vendor physical address
+  `phone` varchar(30) default NULL, -- vendor phone number
+  `accountnumber` mediumtext, -- unused in Koha
+  `othersupplier` mediumtext,  -- unused in Koha
+  `currency` varchar(3) NOT NULL default '', -- unused in Koha
+  `booksellerfax` mediumtext, -- vendor fax number
+  `notes` mediumtext, -- order notes
+  `bookselleremail` mediumtext, -- vendor email
+  `booksellerurl` mediumtext, -- unused in Koha
+  `contact` varchar(100) default NULL, -- name of contact at vendor
+  `postal` mediumtext, -- vendor postal address (all lines)
+  `url` varchar(255) default NULL, -- vendor web address
+  `contpos` varchar(100) default NULL, -- contact person's position
+  `contphone` varchar(100) default NULL, -- contact's phone number
+  `contfax` varchar(100) default NULL,  -- contact's fax number
+  `contaltphone` varchar(100) default NULL, -- contact's alternate phone number
+  `contemail` varchar(100) default NULL, -- contact's email address
+  `contnotes` mediumtext, -- notes related to the contact
+  `active` tinyint(4) default NULL, -- is this vendor active (1 for yes, 0 for no)
+  `listprice` varchar(10) default NULL, -- currency code for list prices
+  `invoiceprice` varchar(10) default NULL, -- currency code for invoice prices
+  `gstreg` tinyint(4) default NULL, -- is your library charged tax (1 for yes, 0 for no)
+  `listincgst` tinyint(4) default NULL, -- is tax included in list prices (1 for yes, 0 for no)
+  `invoiceincgst` tinyint(4) default NULL, -- is tax included in invoice prices (1 for yes, 0 for no)
+  `gstrate` decimal(6,4) default NULL, -- the tax rate the library is charged
+  `discount` float(6,4) default NULL, -- discount offered on all items ordered from this vendor
+  `fax` varchar(50) default NULL, -- vendor fax number
   PRIMARY KEY  (`id`),
   KEY `listprice` (`listprice`),
   KEY `invoiceprice` (`invoiceprice`),
