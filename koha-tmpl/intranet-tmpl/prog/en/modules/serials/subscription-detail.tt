@@ -1,9 +1,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Details for Subscription #[% subscriptionid %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" language="javascript">
-<!--
-
+<script type="text/javascript">
+//<![CDATA[
 // the english words used in display purposes
 var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern",
 "Autumn"),_("Winter"),_("Spring"),_("Summer"),_("Fall"),_("Season"),_("Year"));
@@ -33,8 +32,10 @@ function confirm_deletion() {
 function popup(subscriptionid) {
     newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes');
 }
-
--->
+$(document).ready(function() {
+    $("#subscription_description > ul").tabs();
+});
+//]]>
 </script>
 </head>
 <body>
@@ -75,34 +76,54 @@ function popup(subscriptionid) {
 	</div>
 	[% END %] <!-- NEEDSCONFIRMATION -->
 
- 
-    <div id="subscription_info">
-        <h2>Subscription information</h2>
-		<ul>
+<div id="subscription_description" class="toptabs">
+<ul class="ui-tabs-nav">
+    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_info">Information</a></li>
+    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_planning">Planning</a></li>
+    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_issues">Issues</a></li>
+    <li><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid %]#subscription_summary">Summary</a></li>
+</ul>
+
+<div id="subscription_info">
+    <div class="yui-g">
+    <div class="yui-u first">
+    <div class="rows">
+		<ol>
 		<li><span class="label">Subscription ID: </span>[% subscriptionid %]</li>
         <li><span class="label">Librarian identity:</span> [% librarian %]</li>
-        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% aqbooksellerid %]">[% aqbooksellername %]&nbsp;</a></li>
-        <li><span class="label">Biblio:</span> <i>([% bibnum %])</i> <a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% bibnum %]">[% bibliotitle %]</a></li>
-[% IF ( branchcode ) %]<li><span class="label">Library:</span> [% branchcode %]&nbsp;</li>[% END %]
+        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% aqbooksellerid %]">[% aqbooksellername %]</a></li>
+        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view %].pl?biblionumber=[% bibnum %]">[% bibliotitle %]</a> <i>([% bibnum %])</i></li>
+[% IF ( branchcode ) %]<li><span class="label">Library:</span> [% branchcode %]</li>[% END %]
         [% IF ( serialsadditems ) %]
-            <li>Serial receipt creates an item record.</li>
+            <li><span class="label">Items:</span> Serial receipt creates an item record.</li>
         [% ELSE %]
-            <li>Serial receipt does not create an item record.</li>
+            <li><span class="label">Items:</span> Serial receipt does not create an item record.</li>
         [% END %]
-        <li><span class="label">Grace period:</span> [% graceperiod %]&nbsp;</li>
-        [% IF ( location ) %]<li><span class="label">Location:</span> [% location %]&nbsp;</li>[% END %]
-        [% IF ( callnumber ) %]<li><span class="label">Call Number:</span> [% callnumber %]&nbsp;</li>[% END %]
-		[% IF ( staffdisplaycount ) %]<li><span class="label">Number of issues to display to staff</span>:&nbsp;[% staffdisplaycount %]&nbsp;</li>[% END %]
-		[% IF ( opacdisplaycount ) %]<li><span class="label">Number of issues to display to the public</span>:&nbsp;[% opacdisplaycount %]&nbsp;</li>[% END %]
-        [% IF ( letter ) %]<li><span class="label">Patron alert with:</span> [% letter %]&nbsp;</li>[% END %]
-        [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
-     </ul>
+        <li><span class="label">Grace period:</span> [% graceperiod %]</li>
+        </ol>
     </div>
+    </div>
+    <div class="yui-u">
+    <div class="rows">
+        <ol>
+        [% IF ( location ) %]<li><span class="label">Location:</span> [% location %]</li>[% END %]
+        [% IF ( callnumber ) %]<li><span class="label">Call Number:</span> [% callnumber %]</li>[% END %]
+		[% IF ( staffdisplaycount ) %]<li><span class="label">Number of issues to display to staff:</span>[% staffdisplaycount %]</li>[% END %]
+		[% IF ( opacdisplaycount ) %]<li><span class="label">Number of issues to display to the public:</span>[% opacdisplaycount %]</li>[% END %]
+        [% IF ( letter ) %]<li><span class="label">Patron alert with:</span> [% letter %]</li>[% END %]
+        [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
+     </ol>
+     </div>
+     </div>
+</div>
+</div>
     <div id="subscription_planning">
-        <h2>Planning</h2>
-            <p><label>Beginning date:</label> [% startdate %]
-            </p>
-            <p><label>Frequency (*):</label>
+    <div class="yui-g">
+    <div class="rows">
+        <ol>
+            <li><span class="label">Beginning date:</span> [% startdate %]
+            </li>
+            <li><span class="label">Frequency (*):</span>
                 [% IF ( periodicity16 ) %]
                         Without regularity
                 [% END %]
@@ -151,14 +172,16 @@ function popup(subscriptionid) {
                 [% IF ( periodicity11 ) %]
                         1/2 years
                 [% END %]
-              Manual history :
+            </li>
+            <li>
+              <span class="label">Manual history: </span>
                 [% IF ( manualhistory ) %]
-                    <input type="checkbox" checked="checked" disabled="disabled" />
+                    Disabled
                 [% ELSE %]
-                    <input type="checkbox" disabled="disabled" />
+                    Enabled
                 [% END %]
-            </p>
-            <p><label>Number pattern:</label>
+            </li>
+            <li><span class="label">Number pattern:</span>
                 [% IF ( numberpattern1 ) %]
                     Number only
                 [% END %]
@@ -183,9 +206,9 @@ function popup(subscriptionid) {
                 [% IF ( numberpattern7 ) %]
                     None of the above
                 [% END %]
-            </p>
-            <table>
-            <tr><td><p>Starting with:</p></td>
+            </li>
+            <li><table>
+            <tr><td>Starting with:</td>
                 <td align="center">[% lastvalue1 %]</td>
             [% IF ( lastvalue2 ) %]
                 <td align="center">&nbsp; 
@@ -198,7 +221,7 @@ function popup(subscriptionid) {
                 </td>
             [% END %]
             </tr>
-            <tr><td><p>Rollover:</p></td>
+            <tr><td>Rollover:</td>
                 <td align="center">[% whenmorethan1 %]</td>
             [% IF ( whenmorethan2 ) %]
                 <td align="center">&nbsp; 
@@ -211,16 +234,19 @@ function popup(subscriptionid) {
                 </td>
             [% END %]
             </tr>
-            </table>
+            </table></li>
             [% IF ( irregular_issues ) %]
-            <p><label>Irregularity:</label> [% irregular_issues %] issues
-            </p>
+            <li><span class="label">Irregularity:</span> [% irregular_issues %] issues
+            </li>
             [% END %]
-            <p><label>First arrival:</label> [% firstacquidate %]
-            </p>
-        [% IF ( numberlength ) %]<p><label>Number of issues:</label> [% numberlength %]</p>[% END %]
-        [% IF ( weeklength ) %]<p><label>Number of weeks:</label> [% weeklength %]</p>[% END %]
-        [% IF ( monthlength ) %]<p><label>Number of months:</label> [% monthlength %]</p>[% END %]
+            <li><span class="label">First arrival:</span> [% firstacquidate %]
+            </li>
+        [% IF ( numberlength ) %]<li><span class="label">Number of issues:</span> [% numberlength %]</li>[% END %]
+        [% IF ( weeklength ) %]<li><span class="label">Number of weeks:</span> [% weeklength %]</li>[% END %]
+        [% IF ( monthlength ) %]<li><span class="label">Number of months:</span> [% monthlength %]</li>[% END %]
+        </ol>
+    </div>
+    </div>
     </div>
     <div id="subscription_numbering" style="display:none;">
         <h3>Numbering calculation</h3>
@@ -284,7 +310,6 @@ function popup(subscriptionid) {
             </table>
     </div>
     <div id="subscription_issues">
-        <h2>Serial issues</h2>
         <table>
         <tr>
             <th>Issue number</th>
@@ -331,31 +356,22 @@ function popup(subscriptionid) {
         </table>
     </div>
     <div id="subscription_summary">
-        <h2>Subscription summary</h2>
-        <table cellpadding="0" cellspacing="0">
-            <tr>
-                <td><label>Start date</label></td>
-                <td> [% startdate %] </td>
-            </tr>
-            <tr>
-                <td><label>End date</label></td>
-                <td> [% enddate %]</td>
-            </tr>
-            <tr>
-                <td><label>History start date</label></td>
-                <td> [% histstartdate %] </td>
-            </tr>
-            <tr>
-                <td><label>History end date</label></td>
-                <td> [% histenddate %]</td>
-            </tr>
-            <tr><td><label>Received issues</label></td><td>[% recievedlist %]</td></tr>
-            <tr><td><label>Missing issues</label></td><td>[% missinglist %]</td></tr>
-            <tr><td><label>Nonpublic note</label></td><td>[% internalnotes %]</td></tr>
-            <tr><td><label>Public note</label></td><td>[% notes %]</td></tr>
-        </table>
+    <div class="yui-g">
+    <div class="rows">
+        <ol>
+            <li><span class="label">Start date:</span> [% startdate %] </li>
+            <li><span class="label">End date:</span> [% enddate %]</li>
+            <li><span class="label">History start date:</span> [% histstartdate %] </li>
+            <li><span class="label">History end date:</span> [% histenddate %]</li>
+            <li><span class="label">Received issues:</span>[% recievedlist %]</li>
+            <li><span class="label">Missing issues:</span>[% missinglist %]</li>
+            <li><span class="label">Nonpublic note:</span>[% internalnotes %]</li>
+            <li><span class="label">Public note:</span>[% notes %]</li>
+        </ol>
     </div>
-
+    </div>
+    </div>
+    </div>
 </div>
 </div>
 
