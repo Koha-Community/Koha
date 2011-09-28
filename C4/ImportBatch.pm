@@ -382,6 +382,10 @@ sub  BatchStageMarcRecords {
         if (scalar($marc_record->fields()) == 0) {
             push @invalid_records, $marc_blob;
         } else {
+
+            # Normalize the record so it doesn't have separated diacritics
+            SetUTF8Flag($marc_record);
+
             $num_valid++;
             if ($record_type eq 'biblio') {
                 $import_record_id = AddBiblioToBatch($batch_id, $rec_num, $marc_record, $encoding, int(rand(99999)), 0);

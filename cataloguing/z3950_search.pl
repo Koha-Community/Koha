@@ -249,6 +249,10 @@ warn "query ".$query  if $DEBUG;
 ## In HEAD i change everything to UTF-8
 # In rel2_2 i am not sure what encoding is so no character conversion is done here
 ##Add necessary encoding changes to here -TG
+
+                        # Normalize the record so it doesn't have separated diacritics
+                        SetUTF8Flag($marcrecord);
+
                         my $oldbiblio = TransformMarcToKoha( $dbh, $marcrecord, "" );
                         $oldbiblio->{isbn}   =~ s/ |-|\.//g if $oldbiblio->{isbn};
                         # pad | and ( with spaces to allow line breaks in the HTML

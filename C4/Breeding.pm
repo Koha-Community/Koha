@@ -94,6 +94,9 @@ sub ImportBreeding {
         ($marcrecord, $charset_result, $charset_errors) = 
             MarcToUTF8Record($marcarray[$i]."\x1D", C4::Context->preference("marcflavour"), $encoding);
         
+        # Normalize the record so it doesn't have separated diacritics
+        SetUTF8Flag($marcrecord);
+
 #         warn "$i : $marcarray[$i]";
         # FIXME - currently this does nothing 
         my @warnings = $marcrecord->warnings();
