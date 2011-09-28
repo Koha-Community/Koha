@@ -1380,22 +1380,22 @@ CREATE TABLE `old_issues` ( -- lists items that were checked out and have been r
 -- Table structure for table `old_reserves`
 --
 DROP TABLE IF EXISTS `old_reserves`;
-CREATE TABLE `old_reserves` (
-  `borrowernumber` int(11) default NULL,
-  `reservedate` date default NULL,
-  `biblionumber` int(11) default NULL,
+CREATE TABLE `old_reserves` ( -- this table holds all holds/reserves that have been completed (either filled or cancelled)
+  `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table defining which patron this hold is for
+  `reservedate` date default NULL, -- the date the hold was places
+  `biblionumber` int(11) default NULL, -- foreign key from the biblio table defining which bib record this hold is on
   `constrainttype` varchar(1) default NULL,
-  `branchcode` varchar(10) default NULL,
-  `notificationdate` date default NULL,
-  `reminderdate` date default NULL,
-  `cancellationdate` date default NULL,
-  `reservenotes` mediumtext,
-  `priority` smallint(6) default NULL,
-  `found` varchar(1) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `itemnumber` int(11) default NULL,
-  `waitingdate` date default NULL,
-  `expirationdate` DATE DEFAULT NULL,
+  `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
+  `notificationdate` date default NULL, -- currently unused
+  `reminderdate` date default NULL, -- currently unused
+  `cancellationdate` date default NULL, -- the date this hold was cancelled
+  `reservenotes` mediumtext, -- notes related to this hold
+  `priority` smallint(6) default NULL, -- where in the queue the patron sits
+  `found` varchar(1) default NULL, -- a one letter code defining what the the status is of the hold is after it has been confirmed
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
+  `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
+  `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
+  `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL,
   KEY `old_reserves_borrowernumber` (`borrowernumber`),
   KEY `old_reserves_biblionumber` (`biblionumber`),
@@ -1555,22 +1555,22 @@ CREATE TABLE `reserveconstraints` (
 --
 
 DROP TABLE IF EXISTS `reserves`;
-CREATE TABLE `reserves` (
-  `borrowernumber` int(11) NOT NULL default 0,
-  `reservedate` date default NULL,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `reserves` ( -- information related to holds/reserves in Koha
+  `borrowernumber` int(11) NOT NULL default 0, -- foreign key from the borrowers table defining which patron this hold is for
+  `reservedate` date default NULL, -- the date the hold was places
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key from the biblio table defining which bib record this hold is on
   `constrainttype` varchar(1) default NULL,
-  `branchcode` varchar(10) default NULL,
-  `notificationdate` date default NULL,
-  `reminderdate` date default NULL,
-  `cancellationdate` date default NULL,
-  `reservenotes` mediumtext,
-  `priority` smallint(6) default NULL,
-  `found` varchar(1) default NULL,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `itemnumber` int(11) default NULL,
-  `waitingdate` date default NULL,
-  `expirationdate` DATE DEFAULT NULL,
+  `branchcode` varchar(10) default NULL, -- foreign key from the branches table defining which branch the patron wishes to pick this hold up at
+  `notificationdate` date default NULL, -- currently unused
+  `reminderdate` date default NULL, -- currently unused
+  `cancellationdate` date default NULL, -- the date this hold was cancelled
+  `reservenotes` mediumtext, -- notes related to this hold
+  `priority` smallint(6) default NULL, -- where in the queue the patron sits
+  `found` varchar(1) default NULL, -- a one letter code defining what the the status is of the hold is after it has been confirmed
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time this hold was last updated
+  `itemnumber` int(11) default NULL, -- foreign key from the items table defining the specific item the patron has placed on hold or the item this hold was filled with
+  `waitingdate` date default NULL, -- the date the item was marked as waiting for the patron at the library
+  `expirationdate` DATE DEFAULT NULL, -- the date the hold expires (usually the date entered by the patron to say they don't need the hold after a certain date)
   `lowestPriority` tinyint(1) NOT NULL,
   KEY priorityfoundidx (priority,found),
   KEY `borrowernumber` (`borrowernumber`),
