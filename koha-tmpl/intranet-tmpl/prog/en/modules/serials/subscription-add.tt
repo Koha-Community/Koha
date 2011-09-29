@@ -1077,25 +1077,32 @@ $(document).ready(function() {
 <div><h3 style="display:inline">Subscription history</h3> <a href="#" id="cancel_manual_history">[cancel manual history]</a></div>
         <p>Hint: you can update the serial history manually. This can be useful for an old subscription or to clean the existing history. Modify these fields with care, as future serial receive will continue to update them automatically.</p>
         <fieldset class="rows">
-		<ol>
-            <li>
-            <label for="histstartdate">Subscription start date</label>
-            <input type="text" name="histstartdate" id="histstartdate" value="[% histstartdate %]" /><div class="hint"> (start date of the 1st subscription)</div>
-            </li>
-            <li>
-            <label for="histenddate">Subscription end date</label>
-            <input type="text" name="histenddate" id="histenddate" value="[% histenddate %]" /> <div class="hint">(if empty, subscription is still active)</div>
-            </li>
-            <li>
+            <ol>
+                <li>
+                <label for="histstartdate">Subscription start date</label>
+                <input type="text" name="histstartdate" id="histstartdate" value="[% histstartdate %]" /><div class="hint"> (start date of the 1st subscription)</div>
+                </li>
+                <li>
+                <label for="histenddate">Subscription end date</label>
+                <input type="text" name="histenddate" id="histenddate" value="[% histenddate %]" /> <div class="hint">(if empty, subscription is still active)</div>
+                </li>
+                <li>
                 <label for="recievedlist">Received issues</label>
-            <textarea name="recievedlist" id="recievedlist" cols="60" rows="5">[% recievedlist %]</textarea>
-            </li>
-            <li>
+                <textarea name="recievedlist" id="recievedlist" cols="60" rows="5">[% recievedlist %]</textarea>
+                </li>
+                <li>
                 <label for="missinglist">Missing issues</label>
-            <textarea name="missinglist" id="missinglist" cols="60" rows="5">[% missinglist %]</textarea>
-            </li>
-            <li>
-		</ol>
+                <textarea name="missinglist" id="missinglist" cols="60" rows="5">[% missinglist %]</textarea>
+                </li>
+                <li>
+                <label for="opacnote">Note for OPAC</label>
+                <textarea name="opacnote" id="opacnote" cols="60" rows="5">[% opacnote %]</textarea>
+                </li>
+                <li>
+                <label for="librariannote">Note for staff</label>
+                <textarea name="librariannote" id="librariannote" cols="60" rows="5">[% librariannote %]</textarea>
+                </li>
+            </ol>
         </fieldset>
     <fieldset class="action"><input type="submit" value="Save subscription history"  /></fieldset>
 </div>
