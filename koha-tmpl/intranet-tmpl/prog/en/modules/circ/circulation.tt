@@ -571,7 +571,7 @@ No patron matched <span class="ex">[% message %]</span>
 
         	[% IF ( charges ) %]
 			    <li>
-            <span class="circ-hlt">Fines:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Outstanding fines[% IF ( chargesamount ) %] of [% chargesamount %][% END %]</a>.
+            <span class="circ-hlt">Fees &amp; Charges:</span> Patron has  <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrowernumber %]">Outstanding fees &amp; charges[% IF ( chargesamount ) %] of [% chargesamount %][% END %]</a>.
                 [% IF ( charges_is_blocker ) %]
                     Checkouts are <span class="circ-hlt">BLOCKED</span> because fine balance is <span class="circ-hlt">OVER THE LIMIT</span>.
                 [% END %]
