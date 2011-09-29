@@ -1,4 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
+[% INCLUDE 'greybox.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo;
   [% IF ( unknownbiblionumber ) %]
     Unknown record
@@ -174,6 +175,10 @@ function verify_images() {
     	<a href="http://[% OpacUrl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber %]" target="_blank">Open in new window</a>
 		</li>
 	[% END %]
+        <li>
+            <strong>MARC Preview:</strong>
+            <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber %]" title="MARC" rel="gb_page_center[600,500]">Show</a>
+        </li>
         </ul>
         </div>
        
