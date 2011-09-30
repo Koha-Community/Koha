@@ -767,7 +767,7 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             type: "button",
             label: _("Z39.50 Search"),
             container: "z3950searchc",
-			onclick: {fn:function(){PopupZ3950()}}
+            onclick: {fn:function(){if (confirm(_("Please note that this Z39.50 search could replace the current record."))) PopupZ3950()}}
         });
 	}
 
