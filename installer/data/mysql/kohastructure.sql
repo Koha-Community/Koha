@@ -146,39 +146,39 @@ CREATE TABLE `biblio_framework` (
 --
 
 DROP TABLE IF EXISTS `biblioitems`;
-CREATE TABLE `biblioitems` (
-  `biblioitemnumber` int(11) NOT NULL auto_increment,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `biblioitems` ( -- information related to bibliographic records in Koha
+  `biblioitemnumber` int(11) NOT NULL auto_increment, -- primary key, unique identifier assigned by Koha
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
   `volume` mediumtext,
   `number` mediumtext,
-  `itemtype` varchar(10) default NULL,
-  `isbn` varchar(30) default NULL,
-  `issn` varchar(9) default NULL,
+  `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
+  `isbn` varchar(30) default NULL, -- ISBN (MARC21 020$a)
+  `issn` varchar(9) default NULL, -- ISSN (MARC21 022$a)
   `publicationyear` text,
-  `publishercode` varchar(255) default NULL,
+  `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,
-  `volumedesc` text,
+  `volumedesc` text, -- volume information (MARC21 362$a)
   `collectiontitle` mediumtext default NULL,
   `collectionissn` text default NULL,
   `collectionvolume` mediumtext default NULL,
   `editionstatement` text default NULL,
   `editionresponsibility` text default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `illus` varchar(255) default NULL,
-  `pages` varchar(255) default NULL,
+  `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
+  `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
   `notes` mediumtext,
-  `size` varchar(255) default NULL,
-  `place` varchar(255) default NULL,
-  `lccn` varchar(25) default NULL,
-  `marc` longblob,
-  `url` varchar(255) default NULL,
-  `cn_source` varchar(10) default NULL,
+  `size` varchar(255) default NULL, -- material size (MARC21 300$c)
+  `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
+  `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
+  `marc` longblob, -- full bibliographic MARC record
+  `url` varchar(255) default NULL, -- url (MARC21 856$u)
+  `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
   `cn_sort` varchar(30) default NULL,
   `totalissues` int(10),
-  `marcxml` longtext NOT NULL,
+  `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
@@ -602,39 +602,39 @@ CREATE TABLE `deletedbiblio` (
 --
 
 DROP TABLE IF EXISTS `deletedbiblioitems`;
-CREATE TABLE `deletedbiblioitems` (
-  `biblioitemnumber` int(11) NOT NULL default 0,
-  `biblionumber` int(11) NOT NULL default 0,
+CREATE TABLE `deletedbiblioitems` ( -- information about bibliographic records that have been deleted
+  `biblioitemnumber` int(11) NOT NULL default 0, -- primary key, unique identifier assigned by Koha
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key linking this table to the biblio table
   `volume` mediumtext,
   `number` mediumtext,
-  `itemtype` varchar(10) default NULL,
-  `isbn` varchar(30) default NULL,
-  `issn` varchar(9) default NULL,
+  `itemtype` varchar(10) default NULL, -- biblio level item type (MARC21 942$c)
+  `isbn` varchar(30) default NULL, -- ISBN (MARC21 020$a)
+  `issn` varchar(9) default NULL, -- ISSN (MARC21 022$a)
   `publicationyear` text,
-  `publishercode` varchar(255) default NULL,
+  `publishercode` varchar(255) default NULL, -- publisher (MARC21 260$b)
   `volumedate` date default NULL,
-  `volumedesc` text,
+  `volumedesc` text, -- volume information (MARC21 362$a)
   `collectiontitle` mediumtext default NULL,
   `collectionissn` text default NULL,
   `collectionvolume` mediumtext default NULL,
   `editionstatement` text default NULL,
   `editionresponsibility` text default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `illus` varchar(255) default NULL,
-  `pages` varchar(255) default NULL,
+  `illus` varchar(255) default NULL, -- illustrations (MARC21 300$b)
+  `pages` varchar(255) default NULL, -- number of pages (MARC21 300$c)
   `notes` mediumtext,
-  `size` varchar(255) default NULL,
-  `place` varchar(255) default NULL,
-  `lccn` varchar(25) default NULL,
-  `marc` longblob,
-  `url` varchar(255) default NULL,
-  `cn_source` varchar(10) default NULL,
+  `size` varchar(255) default NULL, -- material size (MARC21 300$c)
+  `place` varchar(255) default NULL, -- publication place (MARC21 260$a)
+  `lccn` varchar(25) default NULL, -- library of congress control number (MARC21 010$a)
+  `marc` longblob, -- full bibliographic MARC record
+  `url` varchar(255) default NULL, -- url (MARC21 856$u)
+  `cn_source` varchar(10) default NULL, -- classification source (MARC21 942$2)
   `cn_class` varchar(30) default NULL,
   `cn_item` varchar(10) default NULL,
   `cn_suffix` varchar(10) default NULL,
   `cn_sort` varchar(30) default NULL,
   `totalissues` int(10),
-  `marcxml` longtext NOT NULL,
+  `marcxml` longtext NOT NULL, -- full bibliographic MARC record in MARCXML
   PRIMARY KEY  (`biblioitemnumber`),
   KEY `bibinoidx` (`biblioitemnumber`),
   KEY `bibnoidx` (`biblionumber`),
