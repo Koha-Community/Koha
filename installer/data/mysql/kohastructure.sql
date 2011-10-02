@@ -998,46 +998,46 @@ CREATE TABLE `issuingrules` (
 --
 
 DROP TABLE IF EXISTS `items`;
-CREATE TABLE `items` (
-  `itemnumber` int(11) NOT NULL auto_increment,
-  `biblionumber` int(11) NOT NULL default 0,
-  `biblioitemnumber` int(11) NOT NULL default 0,
-  `barcode` varchar(20) default NULL,
-  `dateaccessioned` date default NULL,
-  `booksellerid` mediumtext default NULL,
-  `homebranch` varchar(10) default NULL,
-  `price` decimal(8,2) default NULL,
-  `replacementprice` decimal(8,2) default NULL,
-  `replacementpricedate` date default NULL,
-  `datelastborrowed` date default NULL,
-  `datelastseen` date default NULL,
+CREATE TABLE `items` ( -- holdings/item information 
+  `itemnumber` int(11) NOT NULL auto_increment, -- primary key and unique identifier added by Koha
+  `biblionumber` int(11) NOT NULL default 0, -- foreign key from biblio table used to link this item to the right bib record
+  `biblioitemnumber` int(11) NOT NULL default 0, -- foreign key from the biblioitems table to link to item to additional information
+  `barcode` varchar(20) default NULL, -- item barcode (MARC21 952$p)
+  `dateaccessioned` date default NULL, -- date the item was acquired or added to Koha (MARC21 952$d)
+  `booksellerid` mediumtext default NULL, -- where the item was purchased (MARC21 952$e)
+  `homebranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this item (MARC21 952$a)
+  `price` decimal(8,2) default NULL, -- purchase price (MARC21 952$g)
+  `replacementprice` decimal(8,2) default NULL, -- cost the library charges to replace the item if it has been marked lost (MARC21 952$v)
+  `replacementpricedate` date default NULL, -- the date the price is effective from (MARC21 952$w)
+  `datelastborrowed` date default NULL, -- the date the item was last checked out/issued
+  `datelastseen` date default NULL, -- the date the item was last see (usually the last time the barcode was scanned or inventory was done)
   `stack` tinyint(1) default NULL,
-  `notforloan` tinyint(1) NOT NULL default 0,
-  `damaged` tinyint(1) NOT NULL default 0,
-  `itemlost` tinyint(1) NOT NULL default 0,
-  `wthdrawn` tinyint(1) NOT NULL default 0,
-  `itemcallnumber` varchar(255) default NULL,
-  `issues` smallint(6) default NULL,
-  `renewals` smallint(6) default NULL,
-  `reserves` smallint(6) default NULL,
-  `restricted` tinyint(1) default NULL,
-  `itemnotes` mediumtext,
-  `holdingbranch` varchar(10) default NULL,
+  `notforloan` tinyint(1) NOT NULL default 0, -- authorized value defining why this item is not for loan (MARC21 952$7)
+  `damaged` tinyint(1) NOT NULL default 0, -- authorized value defining this item as damaged (MARC21 952$4)
+  `itemlost` tinyint(1) NOT NULL default 0, -- authorized value defining this item as lost (MARC21 952$1)
+  `wthdrawn` tinyint(1) NOT NULL default 0, -- authorized value defining this item as withdrawn (MARC21 952$0)
+  `itemcallnumber` varchar(255) default NULL, -- call number for this item (MARC21 952$o)
+  `issues` smallint(6) default NULL, -- number of times this item has been checked out/issued
+  `renewals` smallint(6) default NULL, -- number of times this item has been renewed
+  `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
+  `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
+  `itemnotes` mediumtext, -- public notes on this item (MARC21 952$x)
+  `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
   `paidfor` mediumtext,
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
-  `location` varchar(80) default NULL,
-  `permanent_location` varchar(80) default NULL,
-  `onloan` date default NULL,
-  `cn_source` varchar(10) default NULL,
-  `cn_sort` varchar(30) default NULL,
-  `ccode` varchar(10) default NULL,
-  `materials` varchar(10) default NULL,
-  `uri` varchar(255) default NULL,
-  `itype` varchar(10) default NULL,
-  `more_subfields_xml` longtext default NULL,
-  `enumchron` text default NULL,
-  `copynumber` varchar(32) default NULL,
-  `stocknumber` varchar(32) default NULL,
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
+  `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
+  `permanent_location` varchar(80) default NULL, -- linked to the CART and PROC temporary locations feature, stores the permanent shelving location
+  `onloan` date default NULL, -- defines if this item is currently checked out (1 for yes, 0 for no)
+  `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
+  `cn_sort` varchar(30) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
+  `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
+  `materials` varchar(10) default NULL, -- materials specified (MARC21 952$3)
+  `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
+  `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
+  `more_subfields_xml` longtext default NULL, -- additional 952 subfields in XML format
+  `enumchron` text default NULL, -- serial enumeration/chronology for the item (MARC21 952$h)
+  `copynumber` varchar(32) default NULL, -- copy number (MARC21 952$t)
+  `stocknumber` varchar(32) default NULL, -- inventory number (MARC21 952$i)
   PRIMARY KEY  (`itemnumber`),
   UNIQUE KEY `itembarcodeidx` (`barcode`),
   KEY `itemstocknumberidx` (`stocknumber`),
