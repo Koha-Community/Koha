@@ -2,10 +2,6 @@
 
 <h1>Cataloging</h1>
 
-<p>Before you start cataloging in Koha you're going to want to do some basic setup. Refer to the Implementation Checklist for a full list of these things. Most importantly you're going to want to make sure that your Frameworks are all defined the way you want. Once in the cataloging module you will not be able to add or remove fields and subfields so your frameworks must be ready before you start cataloging.</p>
-
-<h2>Adding Records</h2>
-
 <p>Records can be added to Koha via original or copy cataloging. If you would like to catalog a record using a blank template</p>
 
 <ul>
@@ -19,16 +15,20 @@
 <p>If you want to catalog a record based on an existing record at another library</p>
 
 <ul>
-	<li>Click 'z39.50 Search'</li>
+	<li>Click 'z39.50 Search'
+<ul>
 	<li>Search for the item you would like to catalog
 <ul>
-	<li>If no results are found, try searching for fewer fields, not all Z39.50 targets can search all of the fields above.</li>
+	<li>Tip: If no results are found, try searching for fewer fields, not all Z39.50 targets can search all of the fields above.</li>
 </ul>
 </li>
 	<li>Search targets can be altered by using the Z39.50 Admin area.</li>
 	<li>From the results you can view the MARC or Card view for the records or choose to Import them into Koha
 <ul>
 	<li>In addition to the Import link to the right of each title, you can click on the title you're interested in and a menu will pop up with links to preview the record and import it</li>
+	<li>If you don't find the title you need in your Z39.50 search results you can click the 'Try Another Search' button at the bottom left of your results</li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -36,29 +36,26 @@
 <p>Once you've opened a blank framework or imported a record via Z39.50 you will be presented with the form to continue cataloging</p>
 
 <ul>
-	<li>To expand a collapsed tag click on the tag number</li>
-	<li>To get help from the Library of Congress on a MARC tag click the question mark (?) to the right of each field number
+	<li>To expand a collapsed tag click on the tag description</li>
+	<li>To get help from the Library of Congress on a Marc tag click the question mark (?) to the right of each field number
 <ul>
-	<li style="background-color: #ffe599">If you think this is an unwanted feature, you could add the following JavaScript to your intranetuserjs system preference:
-$(document).ready(function(){<br>
-$(".tagnum a").hide();<br>
-});</li>
+	<li>If you feel that this clutters the screen you can hide the question marks by unchecking the box next to the 'Show MARC tag documentation links' note at the top right of the editor</li>
 </ul>
 </li>
 	<li>Sometimes fields may not be editable due to the value in your BiblioAddsAuthorities system preference. If you have this preference set to not allow catalogers to type in fields controlled by authorities you may see a lock symbol to the left of the field.
 <ul>
-	<li>If this icon appears you must click the ellipse to the right of the field to search for an existing authority.</li>
+	<li>If this icon appears you must click the icon to the right of the field to search for an existing authority.</li>
 	<li>From the results list click 'Choose authority' to bring that into your catalog record</li>
 </ul>
 </li>
-	<li>To duplicate a field click on the + (plus sign) to the right of the tag
+	<li>To duplicate a field click on the 'repeat this tag' icon to the right of the tag
 <ul>
 	<li>To move subfields in to the right order, click the up arrow to the left of the field</li>
 	<li>To duplicate a subfield click on the clone icon (to remove a copied field, click the delete clone icon) to the right of the field</li>
 	<li>To remove a subfield (if there is more than one of the same type), click the - (minus sign) to the right of the field</li>
 </ul>
 </li>
-	<li>To use a plugin click on the ... (ellipse) to the right of the filed
+	<li>To use a plugin click on the icon to the right of the filed
 <ul>
 	<li>Some fixed fields have editors that will change based on the material type you're cataloging (for example the 006 and the 008 fields)</li>
 </ul>
@@ -68,15 +65,19 @@ $(".tagnum a").hide();<br>
 	<li>If you are about to add a duplicate record to the system you will be warned before saving</li>
 </ul>
 </li>
-</ul>  
+</ul>
 
 <h2>Editing Records</h2>
 
-<p>To edit a record you can click 'Edit Biblio' from the search results on the cataloging page or by clicking the Edit button on the Bibliographic Record.</p>
+<p>To edit a record you can click 'Edit Biblio' from the search results on the cataloging page or by clicking the Edit button on the Bibliographic Record and choosing 'Edit Record'</p>
 
 <p>The record will open in the MARC editor</p>
 
-<p>Once you have made your edits you can click 'Save' at the top of the editor.</p>
+<p>The alternative is to search via Z39.50 to overlay your record with a fuller record found at another library. You can do this by choosing 'Replace Record via Z39.50' from the Edit menu.</p>
+
+<p>Once you choose that you will be brought to a Z39.50 search window to search other libraries for the record in question.</p>
+
+<p>Once you have made your edits (via either method) you can click 'Save' at the top left of the editor.</p>
 
 <h2>Duplicating Records</h2>
 
@@ -87,5 +88,7 @@ $(".tagnum a").hide();<br>
 <h2>Merging Records</h2>
 
 <p>If you would like to merge together multiple records you can do that via the Lists tool.</p>
+
+<p><strong>See the full documentation for Cataloging in the <a href="http://manual.koha-community.org/3.6/en/cataloging.html#catbibs">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
