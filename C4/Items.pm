@@ -2139,10 +2139,15 @@ sub _koha_new_item {
             $item->{'copynumber'},
             $item->{'stocknumber'},
     );
-    my $itemnumber = $dbh->{'mysql_insertid'};
+
+    my $itemnumber;
     if ( defined $sth->errstr ) {
         $error.="ERROR in _koha_new_item $query".$sth->errstr;
     }
+    else {
+        $itemnumber = $dbh->{'mysql_insertid'};
+    }
+
     return ( $itemnumber, $error );
 }
 
