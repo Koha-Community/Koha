@@ -31,6 +31,7 @@
 	<div class="yui-b">
 [% INCLUDE 'circ-toolbar.inc' %]
 <h1>Circulation History</h1>
+[% IF ( loop_reading ) %]
 <form action="/cgi-bin/koha/members/readingrec.pl" method="get"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" /></form>
 
 <div id="pagertable_readingrec">
@@ -79,7 +80,9 @@
 </tr>
 [% END %]
 </table>
-
+[% ELSE %]
+<div class="dialog message">This patron has no circulation history.</div>
+[% END %]
 </div>
 </div>
 
