@@ -432,6 +432,7 @@ sub get_template_and_user {
             OpacHighlightedWords       => C4::Context->preference("OpacHighlightedWords"),
             OPACItemHolds             => C4::Context->preference("OPACItemHolds"),
             OPACShelfBrowser          => "". C4::Context->preference("OPACShelfBrowser"),
+            OpacShowRecentComments    => C4::Context->preference("OpacShowRecentComments"),
             OPACURLOpenInNewWindow    => "" . C4::Context->preference("OPACURLOpenInNewWindow"),
             OPACUserCSS               => "". C4::Context->preference("OPACUserCSS"),
             OPACViewOthersSuggestions => "" . C4::Context->preference("OPACViewOthersSuggestions"),
