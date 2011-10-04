@@ -238,7 +238,7 @@ function AreMandatoriesNotOk(){
  * check if z3950 mandatories are set or not
  */
 function GetZ3950Terms(){
- var strQuery="&frameworkcode="+document.forms['f'].frameworkcode.value;
+ var strQuery="&frameworkcode="+document.forms['f'].Frameworks.value;
     var mandatories = new Array();
     var mandatories_label = new Array();
     [% FOREACH BIG_LOO IN BIG_LOOP %][% FOREACH innerloo IN BIG_LOO.innerloop %][% FOREACH subfield_loo IN innerloo.subfield_loop %][% IF ( subfield_loo.z3950_mandatory ) %]mandatories.push("[% subfield_loo.id %]");
