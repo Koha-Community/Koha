@@ -62,18 +62,19 @@ if ($importid) {
 	$record = MARC::Record->new_from_usmarc($marc) ;
  	if($view eq 'card') {
 		$xmlrecord = $record->as_xml();
-	} 
+	}
 }
-
 
 if ($view eq 'card' || $view eq 'html') {
     $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
     my $xslfile;
+    my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
+
     if ($view eq 'card'){
-	$xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/compact.xsl";
+        $xslfile = C4::Context->config('opachtdocs').$themelang."/xslt/compact.xsl";
     }
     else { # must be html
-	$xslfile = C4::Context->config('opachtdocs')."/prog/en/xslt/MARC21slim2OPACMARCdetail.xsl";	
+        $xslfile = C4::Context->config('opachtdocs').$themelang."/xslt/MARC21slim2OPACMARCdetail.xsl";
     }
     my $parser = XML::LibXML->new();
     my $xslt   = XML::LibXSLT->new();

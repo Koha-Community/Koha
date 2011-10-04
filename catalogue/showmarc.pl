@@ -2,8 +2,6 @@
 
 # Koha library project  www.koha-community.org
 
-# Licensed under the GPL
-
 # Copyright 2007 Liblime
 # Parts copyright 2010 BibLibre
 #
@@ -66,11 +64,11 @@ if($importid) {
 		$xmlrecord = $record->as_xml();
 	} 
 }
-		
-if($view eq 'card') {
-$xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
 
-my $xslfile = C4::Context->config('intrahtdocs')."/prog/en/xslt/compact.xsl";
+if($view eq 'card') {
+    my $themelang = '/' . C4::Context->preference("opacthemes") .  '/' . C4::Templates::_current_language();
+    $xmlrecord = GetXmlBiblio($biblionumber) unless $xmlrecord;
+my $xslfile = C4::Context->config('intrahtdocs').$themelang."/xslt/compact.xsl";
 my $parser = XML::LibXML->new();
 my $xslt = XML::LibXSLT->new();
 my $source = $parser->parse_string($xmlrecord);
@@ -80,13 +78,11 @@ my $results = $stylesheet->transform($source);
 my $newxmlrecord = $stylesheet->output_string($results);
 $newxmlrecord=Encode::decode_utf8($newxmlrecord) unless utf8::is_utf8($newxmlrecord); #decode only if not in perl internal format
 print $input->header(-charset => 'UTF-8'), $newxmlrecord;
-
 } else {
+    $record =GetMarcBiblio($biblionumber) unless $record;
 
-$record =GetMarcBiblio($biblionumber) unless $record; 
-
-my $formatted = $record->as_formatted;
-$template->param( MARC_FORMATTED => $formatted );
+    my $formatted = $record->as_formatted;
+    $template->param( MARC_FORMATTED => $formatted );
 
 my $output= $template->output;
 $output=Encode::decode_utf8($output) unless utf8::is_utf8($output);
