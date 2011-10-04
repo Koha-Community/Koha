@@ -1971,9 +1971,9 @@ sub _koha_new_item {
             homebranch          = ?,
             price               = ?,
             replacementprice    = ?,
-            replacementpricedate = NOW(),
+            replacementpricedate = ?,
             datelastborrowed    = ?,
-            datelastseen        = NOW(),
+            datelastseen        = ?,
             stack               = ?,
             notforloan          = ?,
             damaged             = ?,
@@ -2002,6 +2002,7 @@ sub _koha_new_item {
             stocknumber         = ?
           ";
     my $sth = $dbh->prepare($query);
+    my $today = C4::Dates->today('iso');
    $sth->execute(
             $item->{'biblionumber'},
             $item->{'biblioitemnumber'},
@@ -2011,7 +2012,9 @@ sub _koha_new_item {
             $item->{'homebranch'},
             $item->{'price'},
             $item->{'replacementprice'},
+            $item->{'replacementpricedate'} || $today,
             $item->{datelastborrowed},
+            $item->{datelastseen} || $today,
             $item->{stack},
             $item->{'notforloan'},
             $item->{'damaged'},
