@@ -124,6 +124,7 @@ sub checkpw_ldap {
 	#$debug and $db->debug(5);
     my $userldapentry;
 
+    # first, LDAP authentication
     if ( $ldap->{auth_by_bind} ) {
         my $principal_name;
         if ( $ldap->{anonymous_bind} ) {
@@ -182,11 +183,12 @@ sub checkpw_ldap {
 		}
         my $search = search_method($db, $userid) or return 0;   # warnings are in the sub
         $userldapentry = $search->shift_entry;
-		my $cmpmesg = $db->compare( $userldapentry, attr=>'userpassword', value => $password );
-		if ($cmpmesg->code != 6) {
-			warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($cmpmesg);
-			return -1;
-		}
+        my $dn = $userldapentry->dn;
+        my $user_ldap_bind_ret = $db->bind($dn, password => $password);
+        if ($user_ldap_bind_ret->code) {
+            warn "LDAP Auth rejected : invalid password for user '$userid'. " . description($user_ldap_bind_ret);
+            return -1;
+        }
 	}
 
     # To get here, LDAP has accepted our user's login attempt.
