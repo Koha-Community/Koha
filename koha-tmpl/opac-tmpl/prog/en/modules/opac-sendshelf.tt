@@ -33,7 +33,7 @@ Classification: [% BIBLIO_RESULT.classification %][% END %][% IF ( BIBLIO_RESULT
 LCCN: [% BIBLIO_RESULT.lccn %][% END %][% IF ( BIBLIO_RESULT.url ) %]
 url : [% BIBLIO_RESULT.url %][% END %]
 In the online catalog:
-[% BIBLIO_RESULT.OPACBaseurl %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber |url %]
+[% OPACBaseURL %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% BIBLIO_RESULT.biblionumber |url %]
 Items : [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
     [% ITEM_RESULT.branchname %] [% ITEM_RESULT.location %] [% IF ( ITEM_RESULT.itemcallnumber ) %]([% ITEM_RESULT.itemcallnumber %])[% END %] [% ITEM_RESULT.barcode %][% END %]
 
