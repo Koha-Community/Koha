@@ -40,17 +40,21 @@ $flagsrequired->{borrowers}=1;
 my $member=$input->param('member');
 my $cardnumber = $input->param('cardnumber');
 my $destination = $input->param('destination');
-my $errormsg;
+my @errors;
 my ($bor)=GetMember('borrowernumber' => $member);
 if(( $member ne $loggedinuser ) && ($bor->{'category_type'} eq 'S' ) ) {
-	$errormsg = 'NOPERMISSION' unless($staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
+	push(@errors,'NOPERMISSION') unless($staffflags->{'superlibrarian'} || $staffflags->{'staffaccess'} );
 	# need superlibrarian for koha-conf.xml fakeuser.
 }
 my $newpassword = $input->param('newpassword');
-my $minpw = C4::Context->preference('minPasswordLength');
-$errormsg = 'SHORTPASSWORD' if( $newpassword && $minpw && (length($newpassword) < $minpw ) );
+my $newpassword2 = $input->param('newpassword2');
 
-if ( $newpassword  && ! $errormsg ) {
+push(@errors,'NOMATCH') if ( ( $newpassword && $newpassword2 ) && ($newpassword ne $newpassword2) );
+
+my $minpw = C4::Context->preference('minPasswordLength');
+push(@errors,'SHORTPASSWORD') if( $newpassword && $minpw && (length($newpassword) < $minpw ) );
+
+if ( $newpassword  && !scalar(@errors) ) {
     my $digest=md5_base64($input->param('newpassword'));
     my $uid = $input->param('newuserid');
     my $dbh=C4::Context->dbh;
@@ -62,13 +66,7 @@ if ( $newpassword  && ! $errormsg ) {
 		    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
 		}
     } else {
-			$errormsg = 'BADUSERID';
-    	    $template->param(othernames => $bor->{'othernames'},
-						surname     => $bor->{'surname'},
-						firstname   => $bor->{'firstname'},
-						userid      => $bor->{'userid'},
-						defaultnewpassword => $newpassword 
-						);
+			push(@errors,'BADUSERID');
     }
 } else {
     my $userid = $bor->{'userid'};
@@ -79,7 +77,9 @@ if ( $newpassword  && ! $errormsg ) {
     for (my $i=0; $i<$length; $i++) {
 	$defaultnewpassword.=substr($chars, int(rand(length($chars))),1);
     }
-	
+
+	$template->param( defaultnewpassword => $defaultnewpassword );
+}
     if ( $bor->{'category_type'} eq 'C') {
         my  ( $catcodes, $labels ) =  GetborCatFromCatType( 'A', 'WHERE category_type = ?' );
         my $cnt = scalar(@$catcodes);
@@ -120,16 +120,16 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 	    userid      => $bor->{'userid'},
 	    destination => $destination,
 		is_child        => ($bor->{'category_type'} eq 'C'),
-	    defaultnewpassword => $defaultnewpassword,
 		activeBorrowerRelationship => (C4::Context->preference('borrowerRelationship') ne ''),
+        minPasswordLength => $minpw
 	);
 
+if( scalar(@errors )){
+	$template->param( errormsg => 1 );
+	foreach my $error (@errors) {
+        $template->param($error) || $template->param( $error => 1);
+	}
 
 }
-
-$template->param( member => $member,
-					errormsg => $errormsg,
-					$errormsg => 1 ,
-					minPasswordLength => $minpw );
 
 output_html_with_http_headers $input, $cookie, $template->output;

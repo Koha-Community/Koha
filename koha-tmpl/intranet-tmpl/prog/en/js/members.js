@@ -85,6 +85,8 @@ var myDate2=document.form.dateexpiry.value.split ('/');
 // function to test all fields in forms and nav in different forms(1 ,2 or 3)
 function check_form_borrowers(nav){
 	var statut=0;
+	var message = "";
+	var message_champ="";
 	if (document.form.check_member.value == 1 )
 	{
 		if (document.form_double.answernodouble) {
@@ -101,9 +103,8 @@ function check_form_borrowers(nav){
 	else
 	{
 	    var champ_verif = document.form.BorrowerMandatoryField.value.split ('|');
-	    var message = MSG_MISSING_MANDATORY
+	    message += MSG_MISSING_MANDATORY
 	    message += "\n";
-	    var message_champ="";
 		for (var i=0; i<champ_verif.length; i++) {
 			if (document.getElementsByName(""+champ_verif[i]+"")[0]) {
 				var val_champ=eval("document.form."+champ_verif[i]+".value");
@@ -128,10 +129,18 @@ function check_form_borrowers(nav){
 			}
 		}
 	}
+
+	if ( document.form.password.value != document.form.password2.value ){
+			if ( message_champ != '' ){
+				message_champ += "\n";
+			}
+			message_champ+= MSG_PASSWORD_MISMATCH;
+			statut=1;
+	}
+
 	//patrons form to test if you checked no to the question of double
  	if (statut!=1 && document.form.check_member.value > 0 ) {
 		if (!(document.form_double.answernodouble.checked)){
-			message ="";
 			message_champ+= MSG_DUPLICATE_SUSPICION;
 			statut=1;
 			document.form.nodouble.value=0;

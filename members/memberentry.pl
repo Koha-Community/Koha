@@ -292,6 +292,8 @@ if ($op eq 'save' || $op eq 'insert'){
   }
   
   my $password = $input->param('password');
+  my $password2 = $input->param('password2');
+  push @errors, "ERROR_password_mismatch" if ( $password ne $password2 );
   push @errors, "ERROR_short_password" if( $password && $minpw && $password ne '****' && (length($password) < $minpw) );
 
   if (C4::Context->preference('ExtendedPatronAttributes')) {

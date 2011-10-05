@@ -3,7 +3,7 @@
 [% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] [% IF ( categoryname ) %] [% categoryname %] patron[% ELSE %][% IF ( I ) %] Organization patron[% END %][% IF ( A ) %] Adult patron[% END %][% IF ( C ) %] Child patron[% END %][% IF ( P ) %] Professional patron[% END %][% IF ( S ) %] Staff patron[% END %][% END %][% UNLESS ( opadd ) %] [% surname %], [% firstname %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/JavaScript" language="JavaScript">
+<script type="text/JavaScript">
 //<![CDATA[
     $(document).ready(function() {
 		$("fieldset.rows input").keydown(function(e){ return checkEnter(e); });
@@ -60,6 +60,7 @@
         var MSG_LATE_EXPIRY = _("Warning: Expiration date falls before enrollment date");
         var MSG_MISSING_MANDATORY = _("The following fields are mandatory:");
         var MSG_DUPLICATE_SUSPICION = _("Please confirm whether this is a duplicate patron");
+        var MSG_PASSWORD_MISMATCH = _("The passwords entered do not match");
 //]]>
 </script>
 <script type="text/javascript" src="[% themelang %]/js/members.js"></script>
@@ -142,6 +143,9 @@
 			[% END %]
 			[% IF ( ERROR_short_password ) %]
 				<li id="ERROR_short_password">Password must be at least [% minPasswordLength %] characters long.</li>
+			[% END %]
+			[% IF ( ERROR_password_mismatch ) %]
+				<li id="ERROR_password_mismatch">Passwords do not match.</li>
 			[% END %]
             [% IF ( ERROR_extended_unique_id_failed ) %]
                 <li id="ERROR_extended_unique_id_failed">The attribute value 
@@ -1182,41 +1186,82 @@
 			[% IF ( opadd ) %]
 			[% IF ( NoUpdateLogin ) %]
 				[% IF ( opduplicate ) %]
-					<input type="text" id="password" name="password" size="20"  disabled="disabled" />
+					<input type="password" id="password" name="password" size="20"  disabled="disabled" />
 				[% ELSE %]
-					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="[% password %]" />
+					<input type="password" id="password" name="password" size="20"  disabled="disabled" value="[% password %]" />
 				[% END %]
 [% ELSE %]
 				[% IF ( opduplicate ) %]
-					<input type="text" id="password" name="password" size="20" />
+					<input type="password" id="password" name="password" size="20" />
 				[% ELSE %]
-					<input type="text" id="password" name="password" size="20" value="[% password %]" />
+					<input type="password" id="password" name="password" size="20" value="[% password %]" />
 				[% END %]
 [% END %]
 			[% ELSE %]
 			[% IF ( password ) %]
 				[% IF ( NoUpdateLogin ) %]
-					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="****" />
+					<input type="password" id="password" name="password" size="20"  disabled="disabled" value="****" />
 				[% ELSE %]
 					[% IF ( opduplicate ) %]
-						<input type="text" id="password" name="password" size="20" />
+						<input type="password" id="password" name="password" size="20" />
 					[% ELSE %]
-						<input type="text" id="password" name="password" size="20" value="****" />
+						<input type="password" id="password" name="password" size="20" value="****" />
 					[% END %]
 				[% END %]
 			[% ELSE %]
 				[% IF ( NoUpdateLogin ) %]
-					<input type="text" id="password" name="password" size="20"  disabled="disabled" value="" />
+					<input type="password" id="password" name="password" size="20"  disabled="disabled" value="" />
 				[% ELSE %]
-					<input type="text" id="password" name="password" size="20" value="" />
+					<input type="password" id="password" name="password" size="20" value="" />
 				[% END %]
 			[% END %]
 			[% END %]
 	  [% IF ( mandatorypassword ) %]<span class="required">Required</span>[% END %][% IF ( ERROR_short_password ) %]<span class="required">Password is too short</span>[% END %]
 [% IF ( minPasswordLength ) %]<div class="hint">Minimum password length: [% minPasswordLength %]</div>[% END %]
 		</li>
-        [% END %]
-    </ol>
+		<li>
+			[% IF ( mandatorypassword ) %]
+			<label for="password2" class="required">
+			[% ELSE %]
+			<label for="password2">
+			[% END %]
+			Confirm password: </label>
+			[% IF ( opadd ) %]
+			[% IF ( NoUpdateLogin ) %]
+				[% IF ( opduplicate ) %]
+					<input type="password" id="password2" name="password2" size="20"  disabled="disabled" />
+				[% ELSE %]
+					<input type="password" id="password2" name="password2" size="20"  disabled="disabled" value="[% password %]" />
+				[% END %]
+[% ELSE %]
+				[% IF ( opduplicate ) %]
+					<input type="password" id="password2" name="password2" size="20" />
+				[% ELSE %]
+					<input type="password" id="password2" name="password2" size="20" value="[% password %]" />
+				[% END %]
+[% END %]
+			[% ELSE %]
+			[% IF ( password ) %]
+				[% IF ( NoUpdateLogin ) %]
+					<input type="password" id="password2" name="password2" size="20"  disabled="disabled" value="****" />
+				[% ELSE %]
+					[% IF ( opduplicate ) %]
+						<input type="password" id="password2" name="password2" size="20" />
+					[% ELSE %]
+						<input type="password" id="password2" name="password2" size="20" value="****" />
+					[% END %]
+				[% END %]
+			[% ELSE %]
+				[% IF ( NoUpdateLogin ) %]
+					<input type="password" id="password2" name="password2" size="20"  disabled="disabled" value="" />
+				[% ELSE %]
+					<input type="password" id="password2" name="password2" size="20" value="" />
+				[% END %]
+			[% END %]
+			[% END %]
+	  [% IF ( mandatorypassword ) %]<span class="required">Required</span>[% END %][% IF ( ERROR_password_mismatch ) %]<span class="required">Passwords do not match</span>[% END %]
+		</li>
+		</ol>
 		</fieldset>
         [% END # hide fieldset %]
 		<!--this zones are not necessary in modif mode -->
@@ -1430,6 +1475,7 @@
 [% UNLESS ( opadd ) %]<div class="yui-b">
 [% INCLUDE 'members-menu.inc' %]
 </div>[% END %]
+[% END %]
 [% END %]
 </div>
 [% INCLUDE 'intranet-bottom.inc' %]
