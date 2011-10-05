@@ -79,6 +79,12 @@ $.tablesorter.addParser({
         
 		[% IF ( patronupdate ) %]<div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 		
+        [% IF ( BORROWER_INF.warndeparture ) %]
+        <div class="dialog alert">
+                <strong>Please note:</strong><span> Your card will expire on [% BORROWER_INF.warndeparture %]. Please contact the library if you wish to renew your subscription.</span>
+                [% IF ( BORROWER_INF.returnbeforeexpiry ) %]<span> Also note that you must return all checked out items before your card expires.</span>[% END %]
+        </div>
+        [% END %]
 
         [% IF ( BORROWER_INF.flagged ) %]
 		<div class="dialog alert">
