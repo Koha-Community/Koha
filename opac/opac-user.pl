@@ -38,6 +38,12 @@ use C4::Branch; # GetBranches
 
 use constant ATTRIBUTE_SHOW_BARCODE => 'SHOW_BCODE';
 
+use Date::Calc qw(
+  Today
+  Add_Delta_Days
+  Date_to_Days
+);
+
 my $query = new CGI;
 
 BEGIN {
@@ -63,6 +69,9 @@ my $patronupdate = $query->param('patronupdate');
 
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
+
+my (  $today_year,   $today_month,   $today_day) = Today();
+my ($warning_year, $warning_month, $warning_day) = split /-/, $borr->{'dateexpiry'};
 
 for (qw(dateenrolled dateexpiry dateofbirth)) {
     ($borr->{$_}) and $borr->{$_} = format_date($borr->{$_});
@@ -98,6 +107,18 @@ $borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
 
 my @bordat;
 $bordat[0] = $borr;
+
+# Warningdate is the date that the warning starts appearing
+if ( C4::Context->preference('NotifyBorrowerDeparture') &&
+    Date_to_Days(Add_Delta_Days($warning_year,$warning_month,$warning_day,- C4::Context->preference('NotifyBorrowerDeparture'))) <
+    Date_to_Days( $today_year, $today_month, $today_day ) ) 
+{
+    # borrower card soon to expire, warn the borrower
+    $borr->{'warndeparture'} = $borr->{dateexpiry};
+    if (C4::Context->preference('ReturnBeforeExpiry')){
+        $borr->{'returnbeforeexpiry'} = 1;
+    }
+}
 
 $template->param(   BORROWER_INFO     => \@bordat,
                     borrowernumber    => $borrowernumber,
