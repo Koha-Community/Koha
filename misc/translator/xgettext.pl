@@ -351,7 +351,7 @@ if (defined $output && $output ne '-') {
     print STDERR "$0: Outputting to STDOUT...\n" if $verbose_p;
     open(OUTPUT, ">&STDOUT");
 }
-binmode( OUTPUT, ":utf8" );
+#binmode( OUTPUT, ":utf8" );
 
 if (defined $files_from) {
     print STDERR "$0: Opening input file list \"$files_from\"\n" if $verbose_p;
