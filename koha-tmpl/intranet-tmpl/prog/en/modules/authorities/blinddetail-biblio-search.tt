@@ -11,9 +11,11 @@
         } catch(e) {
             return;
         }
-        
-        // browse all its subfields
-        var subfields = whichfield.parentNode.parentNode.getElementsByTagName('input');
+
+        var field_start = whichfield.parentNode.parentNode;
+      
+        // browse all its subfields (clear and $9)
+        var subfields = field_start.getElementsByTagName('input');
         var re = /^tag_\d*_code_/;
         for(var i=0, len = subfields.length ; i< len ; i++) { // browse all subfields
             if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
@@ -22,18 +24,73 @@
 
             [% IF ( clear ) %]
                 if (subfield){subfield.value="" ;}
-            [% ELSE %]      
-              [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
-                if (code.value == "[% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"){
-                        subfield.value = "[% SUBFIELD_LOO.marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+            [% ELSE %]
+                if(code.value=='9'){
+                    subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
                 }
-              [% END %]
-              if(code.value=='9'){
-                  subfield.value = "[% authid |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
-              }
             [% END %]
             }
         }
+
+        // Sets the good number of form fields for the specified subfield
+        function SetSubfieldNumber(subfield_name, nb) {
+            // Nothing to do if we only have one value
+            if(nb <= 1) {
+                return;
+            }
+            
+            // Find the subfield we want to clone
+            var re = new RegExp('^subfield' + subfield_name,'g');
+            var subfields = $(field_start).children('div').filter( function() {
+                return this.id.match(re);
+            });
+
+            // Add as many clones as needed
+            for(var i=0; i<nb-subfields.length; i++) {
+                window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'));
+            }
+        }
+
+        // Fills the subfield with the values entered in argument
+        function SetSubfieldValues() {
+            // Get the arguments
+            var subfield_name = arguments[0];
+            var values = new Array();
+            for(var i=1; i<arguments.length; i++) {
+                values.push(arguments[i]);
+            }
+
+            // Create the correct number of form fields for all values
+            SetSubfieldNumber(subfield_name, values.length);
+            
+            // Find the subfields where we will add the new values
+            var re = new RegExp('^subfield' + subfield_name,'g');
+            var subfields = $(field_start).children('div').filter( function() {
+                return this.id.match(re);
+            });
+
+            // Add the new values to those subfields, empty the additional fields
+            var i=0;
+            subfields.each(function() {
+                if(i in values) {
+                    this.getElementsByTagName('input')[1].value = values[i];
+                }
+                else {
+                    this.getElementsByTagName('input')[1].value = "";
+                }
+                i++;
+            });
+        }
+
+        [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
+            SetSubfieldValues(
+                "[% tag_number |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %][% SUBFIELD_LOO.marc_subfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+            [% FOREACH marc_value IN SUBFIELD_LOO.marc_values %]
+                ,"[% marc_value |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]"
+            [% END %]
+            );
+        [% END %]
+
       	opener.close();
        	window.close();
             
