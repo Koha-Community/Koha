@@ -80,10 +80,20 @@ if ($authid) {
     my @fields = $record->field( $auth_type->{auth_tag_to_report} );
     my $repet = ($query->param('repet') || 1) - 1;
     my $field = $fields[$repet];
+
+    # Get all values for each distinct subfield
+    my %subfields;
     for ( $field->subfields ) {
-        my ($letter, $value) = @$_;
-        $letter = '@' unless $letter;
-        push @subfield_loop, { marc_subfield => $letter, marc_value => $value };
+        my $letter = $_->[0];
+        next if defined $subfields{$letter};
+        my @values = $field->subfield($letter);
+        $subfields{$letter} = \@values;
+    }
+
+    # Add all subfields to the subfield_loop
+    for( keys %subfields ) {
+        my $letter = $_ || '@';
+        push( @subfield_loop, {marc_subfield => $letter, marc_values => $subfields{$_}} );
     }
 }
 else {
@@ -91,11 +101,16 @@ else {
     $template->param( "clear" => 1 );
 }
 
+# Extract the tag number from the index
+my $tag_number = $index;
+$tag_number =~ s/^tag_(\d*)_.*$/$1/;
+
 $template->param(
     authid          => $authid ? $authid : "",
     index           => $index,
     tagid           => $tagid,
     SUBFIELD_LOOP   => \@subfield_loop,
+    tag_number      => $tag_number,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
