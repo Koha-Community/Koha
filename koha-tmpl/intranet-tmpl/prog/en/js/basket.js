@@ -299,15 +299,20 @@ function delRecord (n, s) {
 }
 
 
-function delBasket(rep) {
+function delBasket(context,rep) {
     if (rep == undefined){
         rep = confirm(MSG_CONFIRM_DEL_BASKET);
     }
     if (rep) {
-        delCookie(nameCookie);
-        document.location = "about:blank";
-        updateBasket(0,top.opener);
-        window.close();
+        if(context == "popup"){
+            delCookie(nameCookie);
+            document.location = "about:blank";
+            updateBasket(0,top.opener);
+            window.close();
+        } else {
+            delCookie(nameCookie);
+            updateBasket(0,top.opener);
+        }
     }
 }
 
