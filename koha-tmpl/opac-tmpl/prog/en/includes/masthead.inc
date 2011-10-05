@@ -182,7 +182,7 @@
 <strong>No Results Found!</strong>
 <p>
     [% IF ( searchdesc ) %]
-    No results match your search for <span style="font-weight: bold;">&ldquo;[% query_desc |html %] [% limit_desc |html %]&rdquo;</span> in [% LibraryName %] Catalog. <a href="[% OPACBaseurl %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
+    No results match your search for <span style="font-weight: bold;">&ldquo;[% query_desc |html %] [% limit_desc |html %]&rdquo;</span> in [% LibraryName %] Catalog. <a href="[% OPACBaseURL %]/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %]&amp;format=rss2"><img src="/opac-tmpl/prog/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" /></a>
     [% ELSE %]
     You did not specify any search criteria.
     [% END %]
