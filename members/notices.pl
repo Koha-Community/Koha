@@ -53,7 +53,14 @@ $template->param( picture => 1 ) if $picture;
 # Getting the messages
 my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
 $template->param( %{$borrower} );
-my $attributes = GetBorrowerAttributes($borrowernumber);
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
 
 $template->param(
 			QUEUED_MESSAGES 	=> $queued_messages,
@@ -61,7 +68,6 @@ $template->param(
 			sentnotices 		=> 1,
                         branchname              => GetBranchName($borrower->{'branchcode'}),
                         categoryname            => $borrower->{'description'},
-                        extendedattributes      => $attributes,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

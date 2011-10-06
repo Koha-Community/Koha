@@ -96,7 +96,14 @@ if (! $limit){
 
 my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
-my $attributes = GetBorrowerAttributes($borrowernumber);
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
 
 $template->param(
 						readingrecordview => 1,
@@ -125,7 +132,6 @@ $template->param(
 			   			branchname => GetBranchName($data->{'branchcode'}),
 						showfulllink => (scalar @loop_reading > 50),					
 						loop_reading => \@loop_reading,
-					    extendedattributes => $attributes,
 );
 output_html_with_http_headers $input, $cookie, $template->output;
 

@@ -50,13 +50,13 @@ in the global namespace %]
             <li> <span class="empty">No email stored.</span>    </li>
         [% END %]
     [% END %]
-    [% FOREACH extendedattribute IN borrower.extendedattributes %]
+    [% IF ( ExtendedPatronAttributes ) %][% FOREACH extendedattribute IN borrower.extendedattributes %]
         [% IF ( extendedattribute.display_checkout ) %]
             [% IF ( extendedattribute.value ) %]
                 <li>[% extendedattribute.description %] : [% IF ( extendedattribute.value_description ) %][% extendedattribute.value_description %][% ELSE %][% extendedattribute.value %][% END %]</li>
             [% END %]
         [% END %]
-    [% END %]
+    [% END %][% END %]
     <li>Category: [% borrower.description %] ([% borrower.categorycode %])</li>
     <li>Home Library: [% IF ( borrower.branchname ) %][% borrower.branchname %][% ELSE %][% borrower.branch %][% END %]</li>
 </ul></div>

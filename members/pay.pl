@@ -233,7 +233,13 @@ sub borrower_add_additional_fields {
     if ($picture) {
         $b_ref->{has_picture} = 1;
     }
-    $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
+
+    if (C4::Context->preference('ExtendedPatronAttributes')) {
+        $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
+        $template->param(
+            ExtendedPatronAttributes => 1,
+        );
+    }
 
     $b_ref->{branchname} = GetBranchName( $b_ref->{branchcode} );
     return;

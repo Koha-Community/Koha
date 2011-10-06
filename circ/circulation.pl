@@ -632,7 +632,14 @@ my $fast_cataloging = 0;
     if (defined getframeworkinfo('FA')) {
     $fast_cataloging = 1 
     }
-my $attributes = GetBorrowerAttributes($borrowernumber);
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
 
 $template->param(
     lib_messages_loop => $lib_messages_loop,
@@ -682,7 +689,6 @@ $template->param(
     circview => 1,
     soundon           => C4::Context->preference("SoundOn"),
     fast_cataloging   => $fast_cataloging,
-    extendedattributes => $attributes,
 );
 
 # save stickyduedate to session

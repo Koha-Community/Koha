@@ -94,7 +94,14 @@ $template->param( adultborrower => 1 ) if ( $data->{'category_type'} eq 'A' );
 
 my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
 $template->param( picture => 1 ) if $picture;
-my $attributes = GetBorrowerAttributes($borrowernumber);
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
 
 $template->param(
     finesview           => 1,
@@ -120,7 +127,6 @@ $template->param(
     is_child            => ($data->{'category_type'} eq 'C'),
     reverse_col         => $reverse_col,
     accounts            => $accts,
-    extendedattributes => $attributes,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;

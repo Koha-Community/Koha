@@ -285,12 +285,12 @@ function validate1(date) {
         <th>Type</th>
         <th>Value</th>
     </tr>
-    [% FOREACH patron_attribute IN patron_attributes %]
+    [% FOREACH extendedattribute IN extendedattributes %]
     <tr>
-        <td>[% patron_attribute.code %] ([% patron_attribute.description %])</td>
-        <td>[% patron_attribute.value %]
-            [% IF ( patron_attribute.value_description ) %]
-                ([% patron_attribute.value_description %])
+        <td>[% extendedattribute.code %] ([% extendedattribute.description %])</td>
+        <td>[% extendedattribute.value %]
+            [% IF ( extendedattribute.value_description ) %]
+                ([% extendedattribute.value_description %])
             [% END %]
         </td>
     </tr>

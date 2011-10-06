@@ -48,13 +48,13 @@
             <li> <span class="empty">No email stored.</span>    </li>
         [% END %]
     [% END %]
-    [% FOREACH extendedattribute IN extendedattributes %]
+    [% IF ( ExtendedPatronAttributes ) %][% FOREACH extendedattribute IN extendedattributes %]
         [% IF ( extendedattribute.display_checkout ) %]
             [% IF ( extendedattribute.value ) %]
                 <li>[% extendedattribute.description %] : [% IF ( extendedattribute.value_description ) %][% extendedattribute.value_description %][% ELSE %][% extendedattribute.value %][% END %]</li>
             [% END %]
         [% END %]
-    [% END %]
+    [% END %][% END %]
     <li>Category: [% categoryname %] ([% categorycode %])</li>
     <li>Home Library: [% IF ( branchname ) %][% branchname %][% ELSE %][% branch %][% END %]</li>
 </ul></div>

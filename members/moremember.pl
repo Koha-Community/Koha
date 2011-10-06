@@ -425,8 +425,11 @@ my $branch=C4::Context->userenv->{'branch'};
 $template->param(%$data);
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
-    $template->param(ExtendedPatronAttributes => 1);
-    $template->param(patron_attributes => C4::Members::Attributes::GetBorrowerAttributes($borrowernumber));
+    my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
     my @types = C4::Members::AttributeTypes::GetAttributeTypes();
     if (scalar(@types) == 0) {
         $template->param(no_patron_attribute_types => 1);
@@ -439,7 +442,6 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(SMSSendDriver => C4::Context->preference("SMSSendDriver"));
     $template->param(SMSnumber     => defined $data->{'smsalertnumber'} ? $data->{'smsalertnumber'} : $data->{'mobile'});
 }
-my $attributes = GetBorrowerAttributes($borrowernumber);
 
 $template->param(
     detailview => 1,
@@ -469,7 +471,6 @@ $template->param(
     "dateformat_" . (C4::Context->preference("dateformat") || '') => 1,
     samebranch     => $samebranch,
     quickslip		  => $quickslip,
-    extendedattributes => $attributes,
 );
 
 #Get the slip news items

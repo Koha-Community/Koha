@@ -162,7 +162,14 @@ if ($input->param('newflags')) {
 $template->param( adultborrower => 1 ) if ( $bor->{'category_type'} eq 'A' );
     my ($picture, $dberror) = GetPatronImage($bor->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
-my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
+    my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
 
 $template->param(
 		borrowernumber => $bor->{'borrowernumber'},
@@ -184,7 +191,6 @@ $template->param(
 		branchname => GetBranchName($bor->{'branchcode'}),
 		loop => \@loop,
 		is_child        => ($bor->{'category_type'} eq 'C'),
-        extendedattributes => $attributes,
 		);
 
     output_html_with_http_headers $input, $cookie, $template->output;

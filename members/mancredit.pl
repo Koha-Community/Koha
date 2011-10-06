@@ -78,7 +78,14 @@ if ($add){
     $template->param( adultborrower => 1 ) if ( $data->{category_type} eq 'A' );
     my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
+
+if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);
+    $template->param(
+        ExtendedPatronAttributes => 1,
+        extendedattributes => $attributes
+    );
+}
     
     $template->param(
         borrowernumber => $borrowernumber,
@@ -99,7 +106,6 @@ if ($add){
 		    branchcode => $data->{'branchcode'},
 		    branchname => GetBranchName($data->{'branchcode'}),
 		    is_child        => ($data->{'category_type'} eq 'C'),
-            extendedattributes => $attributes,
         );
     output_html_with_http_headers $input, $cookie, $template->output;
 }
