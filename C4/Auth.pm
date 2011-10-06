@@ -435,6 +435,7 @@ sub get_template_and_user {
             opac_limit_override       => $opac_limit_override,
             OpacBrowser               => C4::Context->preference("OpacBrowser"),
             OpacCloud                 => C4::Context->preference("OpacCloud"),
+            OpacKohaUrl               => C4::Context->preference("OpacKohaUrl"),
             OpacMainUserBlock         => "" . C4::Context->preference("OpacMainUserBlock"),
             OpacNav                   => "" . C4::Context->preference("OpacNav"),
             OpacPasswordChange        => C4::Context->preference("OpacPasswordChange"),

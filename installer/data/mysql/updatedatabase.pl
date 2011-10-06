@@ -4452,6 +4452,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do(qq|INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OpacKohaUrl','0',"Show 'Powered by Koha' text on OPAC footer.",NULL,NULL)|);
+    print "Upgrade to $DBversion done (Add syspref 'OpacKohaUrl')\n";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 

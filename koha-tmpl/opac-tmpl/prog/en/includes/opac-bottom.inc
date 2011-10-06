@@ -1,14 +1,15 @@
-
 [% IF ( opaccredits ) %]
 	<div class="ft">
         [% opaccredits %]
     </div>
 [% END %]
 </div>
-[% IF ( opaclanguagesdisplay ) %]
-[% IF ( languages_loop ) %]
+
+[% IF ( opaclanguagesdisplay || OpacKohaUrl ) %]
+<div id="changelanguage" class="ft">
+[% IF ( languages_loop && opaclanguagesdisplay ) %]
     [% UNLESS ( one_language_enabled ) %]
-        <div id="changelanguage" class="ft"><strong>Languages: </strong>
+        <strong>Languages: </strong>
         [% FOREACH languages_loo IN languages_loop %]
             [% IF ( languages_loo.group_enabled ) %]
             [% IF ( languages_loo.plural ) %]
@@ -22,14 +23,13 @@
                 [% ELSE %]
                 <li><a href="/cgi-bin/koha/opac-changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag %]"> [% sublanguages_loo.native_description %] [% sublanguages_loo.script_description %] [% sublanguages_loo.region_description %] [% sublanguages_loo.variant_description %] ([% sublanguages_loo.rfc4646_subtag %])</a></li>
                 [% END %]
-		[% END %]
+               [% END %]
             [% END %]
             </ul>
 			</div>
 			</div>
-
             [% ELSE %]
-	    	[% IF ( languages_loo.group_enabled ) %]
+		      [% IF ( languages_loo.group_enabled ) %]
                 [% IF ( languages_loo.current ) %]
                     [% IF ( languages_loo.native_description ) %][% languages_loo.native_description %][% ELSE %][% languages_loo.rfc4646_subtag %][% END %]
                 [% ELSE %]
@@ -39,9 +39,16 @@
             [% END %]
             [% END %][% UNLESS ( loop.last ) %] | [% END %]
         [% END %]
-        </div>
     [% END %]
 [% END %]
+
+[% IF ( OpacKohaUrl ) %]
+    <span class="koha_url">
+        <a class="koha_url" href="http://koha-community.org">Powered by <strong>Koha</strong></a>&nbsp;&nbsp;
+    </span>
+[% END %]
+
+</div>
 [% END %]
 
 [% IF ( Babeltheque ) %]
