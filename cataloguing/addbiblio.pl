@@ -1007,10 +1007,7 @@ elsif ( $op eq "delete" ) {
         $biblionumber = "";
     }
 
-    if ( $record eq -1 ) {
-        $record = TransformHtmlToMarc( $input );
-    }
-    else {
+    if ( $record ne -1 ) {
 #FIXME: it's kind of silly to go from MARC::Record to MARC::File::XML and then back again just to fix the encoding
         eval {
             my $uxml = $record->as_xml;
