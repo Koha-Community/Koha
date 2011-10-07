@@ -644,13 +644,16 @@ C<$borrowernumber> is the borrowernumber
 sub GetFine {
     my ( $itemnum, $borrowernumber ) = @_;
     my $dbh   = C4::Context->dbh();
-    my $query = "SELECT sum(amountoutstanding) FROM accountlines
-    where accounttype like 'F%'  
-  AND amountoutstanding > 0 AND itemnumber = ? AND borrowernumber=?";
+    my $query = q|SELECT sum(amountoutstanding) as fineamount FROM accountlines
+    where accounttype like 'F%'
+  AND amountoutstanding > 0 AND itemnumber = ? AND borrowernumber=?|;
     my $sth = $dbh->prepare($query);
     $sth->execute( $itemnum, $borrowernumber );
-    my $data = $sth->fetchrow_hashref();
-    return ( $data->{'sum(amountoutstanding)'} );
+    my $fine = $sth->fetchrow_hashref();
+    if ($fine->{fineamount}) {
+        return $fine->{fineamount};
+    }
+    return 0;
 }
 
 
