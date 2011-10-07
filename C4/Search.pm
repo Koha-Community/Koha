@@ -1776,7 +1776,18 @@ sub searchResults {
             push @available_items_loop, $available_items->{$key}
         }
 
-         # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
+        # XSLT processing of some stuff
+	use C4::Charset;
+	SetUTF8Flag($marcrecord);
+	$debug && warn $marcrecord->as_formatted;
+	my $interface = $search_context eq 'opac' ? 'OPAC' : '';
+	if (!$scan && C4::Context->preference($interface . "XSLTResultsDisplay")) {
+            $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, 'Results',
+                                                                $search_context, 1);
+	    # the last parameter tells Koha to clean up the problematic ampersand entities that Zebra outputs
+        }
+
+        # if biblio level itypes are used and itemtype is notforloan, it can't be reserved either
         if (!C4::Context->preference("item-level_itypes")) {
             if ($itemtypes{ $oldbiblio->{itemtype} }->{notforloan}) {
                 $can_place_holds = 0;

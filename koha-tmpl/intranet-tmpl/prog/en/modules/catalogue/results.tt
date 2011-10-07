@@ -453,6 +453,9 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                 <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber %]" style="display:none" />
                             </td>
                             <td>
+			    [% IF ( SEARCH_RESULT.XSLTResultsRecord ) %]
+				[% SEARCH_RESULT.XSLTResultsRecord %]
+			    [% ELSE %]
                                 <p>[% SEARCH_RESULT.result_number %].
                                  [% biblionumber = SEARCH_RESULT.biblionumber %]
 
@@ -508,6 +511,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                                 </p>
                                 [% END %]
 
+                                [% END %]
                                 [% END %]
                                   <p class="hold">[% IF ( SEARCH_RESULT.norequests ) %]
                                   <span class="noholdstext">No holds allowed</span>
