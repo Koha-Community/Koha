@@ -2,30 +2,59 @@
 
 <h1>Patron Import</h1>
 
-		<ul>
-			<li>Create a CSV file for your patron data<br/>
-			<ul>
-				<li>Format your file with the following fields
-				<ul>
-					<li>'surname', 'firstname', 'title', 'othernames', 'initials', 'streetnumber', 'streettype', 'address', 'address2', 'city', 'state', 'zipcode', 'country', 'email', 'phone', 'mobile', 'fax', 'emailpro', 'phonepro', 'B_streetnumber', 'B_streettype', 'B_address', 'B_address2', 'B_city', 'B_state', 'B_zipcode', 'B_country', 'B_email', 'B_phone', 'dateofbirth', 'branchcode', 'categorycode', 'dateenrolled', 'dateexpiry', 'gonenoaddress', 'lost', 'debarred', 'contactname', 'contactfirstname', 'contacttitle', 'guarantorid', 'borrowernotes', 'relationship', 'ethnicity', 'ethnotes', 'sex', 'password', 'flags', 'userid', 'opacnote', 'contactnote', 'sort1', 'sort2', 'altcontactfirstname', 'altcontactsurname', 'altcontactaddress1', 'altcontactaddress2', 'altcontactaddress3', 'altcontactstate', 'altcontactzipcode', 'altcontactcountry', 'altcontactphone', 'smsalertnumber', 'patron_attributes'
-					<ul>
-						<li>
-					    <span style="background-color: #ffe599">
-TIP: Consult your system administrator if you are unsure of how to fill in the above fields.</span></li>
-						<li>					   
-					   IMPORTANT: Make sure the 'branchcode' and 'categorycode' are valid entries in your database.</li>
-						<li>Passwords should be stored in plain text, and will be encrypted as they're imported
-						<ul>
-							<li>
-						    <span style="background-color: #ffe599">
-TIP: If your passwords are already encrypted, talk to your systems administrator about options.</span></li>
-						</ul></li>
-					</ul></li>
-				</ul></li>
-			</ul></li>
-			<li>Select a file to import into the borrowers table</li>
-			<li>If a cardnumber exists in the table, you can choose whether to ignore the new one or overwrite the old one.</li>
-			<li>Click 'Import'</li>
-			<li>You will be brought to a confirmation screen.</li>
-		</ul>
-	</div>	[% INCLUDE 'help-bottom.inc' %]
+<p>The patron import tool can be used at any time to add patrons in bulk. It is commonly used in universities and schools when a new batch of students registers.</p>
+
+<h2>Creating Patron File</h2>
+
+<p>Your Koha installation comes with a blank CSV file that you can use as a template for your patron records. If you would like to create the file yourself, make sure that your file has the following fields in this order as the header row:</p>
+
+<blockquote>borrowernumber, cardnumber, surname, firstname, title, othernames, initials, streetnumber, streettype, address, address2, city, zipcode, country, email, phone, mobile, fax, emailpro, phonepro, B_streetnumber, B_streettype, B_address, B_address2, B_city, B_zipcode, B_country, B_email, B_phone, dateofbirth, branchcode, categorycode, dateenrolled, dateexpiry, gonenoaddress, lost, debarred, contactname, contactfirstname, contacttitle, guarantorid, borrowernotes, relationship, ethnicity, ethnotes, sex, password, flags, userid, opacnote, contactnote, sort1, sort2, altcontactfirstname, altcontactsurname, altcontactaddress1, altcontactaddress2, altcontactaddress3, altcontactzipcode, altcontactcountry, altcontactphone, smsalertnumber, patron_attributes</blockquote>
+
+<p style="color: #990000;">Important: The 'password' value should be stored in plain text, and will be converted to a md5 hash (which is an encrypted version of the password).</p>
+
+<ul>
+    <li>If your passwords are already encrypted, talk to your systems administrator about options</li>
+</ul>
+
+<p style="color: #990000;">Important: Date formats should match your system preference, and must be zero-padded, e.g. '01/02/2008'.</p>
+
+<p style="color: #990000;">Important: The fields 'branchcode' and 'categorycode' are required and must match valid entries in your database.</p>
+
+<p style="background-color: #ffe599">Tip: If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values.</p>
+
+<ul>
+	<li>The attribute type code and a colon should precede each value.
+<ul>
+	<li>For example: INSTID:12345,LANG:fr or STARTDATE:January 1 2010,TRACK:Day</li>
+	<li>If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma:
+<ul>
+	<li>"STARTDATE:January 1, 2010","TRACK:Day"</li>
+	<li>This syntax would be required if the data might have a comma in it, like a date string.</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+<h2>Importing Patrons</h2>
+
+<p>Once you have created your file, you can use the Patron Import Tool to bring the data into Koha.</p>
+
+<ul>
+	<li>Choose your CSV file and choose to match on 'Cardnumber' to prevent adding of duplicate card numbers to the system</li>
+	<li>Next you can choose default values to apply to all patrons you are importing
+<ul>
+	<li>ex. If you're importing patrons specific to one branch you can use the field on the Import form to apply the branch code to all those you are importing.</li>
+</ul>
+</li>
+	<li>Finally you need to decide on what data you want to replace if there are duplicates.
+<ul>
+	<li>A matching record is found using the field you chose for matching criteria to prevent duplication</li>
+	<li>If you included patron attributes in your file you can decide whether to add your values to existing values or erase existing values and enter only your new values.</li>
+</ul>
+</li>
+</ul>
+
+<p><strong>See the full documentation for Patron Import in the <a href="http://manual.koha-community.org/3.6/en/patronimport.html">manual</a> (online).</strong></p>
+
+[% INCLUDE 'help-bottom.inc' %]

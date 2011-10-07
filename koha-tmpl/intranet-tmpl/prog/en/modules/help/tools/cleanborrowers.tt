@@ -2,20 +2,20 @@
 
 <h1>Patrons (anonymize, bulk-delete)</h1>
 
-<p>This tool allows you to bulk anonymize circulation histories or bulk delete patron records. This  means that the system keeps a link between old loans and their items but severs the link to the borrower.</p>
+<p>This tool allows you to bulk anonymize circulation histories (this means that you keep records of how many times items were checked out - but not the patrons who checked the items out) or bulk delete patrons (remove them from the system completely).</p>
 
-		<ul>
-			<li>Once in the tool, you have two options</li>
-			<li>Check the box next to the action(s) you'd like to perform
-			<ul>
-				<li>To delete borrowers, enter the date since the last time they borrowed</li>
-				<li>To anonymize circulation history enter the date before which you'd like that data deleted</li>
-			</ul></li>
-		</ul>
-		
-<h2>Is there a way to run this tool automatically?</h2>
-<p>Not at this time.</p>
-<h2>Will running this report sever the connection between patrons and items that are checked out to them currently?</h2>
-<p>No, this report will only remove connections between patrons and items they have checked out in the past but have returned to the library.</p>
+<p style="color: #990000;">Important: Patrons with outstanding fines or items checked out are not saved. They are not completely removed from the system (moved to the delete_borrowers table), but this tool does not provide as many checks as one may desire.</p
+
+<p>To either delete or anonymize patrons</p>
+
+<ul>
+	<li>Check the task you would like to perform (Delete or Anonymize)</li>
+	<li>Enter a date before which you want to alter the data</li>
+	<li>Click 'Next'</li>
+	<li>A confirmation will appear asking if you're sure this is what you want to happen</li>
+	<li>Clicking 'Finish' will delete or anonymize your data</li>
+</ul>
+
+<p><strong>See the full documentation for Anonymizing Patrons in the <a href="http://manual.koha-community.org/3.6/en/anonpatrons.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]

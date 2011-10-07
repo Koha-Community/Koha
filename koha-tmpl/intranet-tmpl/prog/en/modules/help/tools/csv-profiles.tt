@@ -4,21 +4,50 @@
 
 <p>CSV Profiles are created to define how you would like your cart or list to export.</p>
 
-<p>To add a CSV Profile enter the following info:</p>
+<h2>Add CSV Profiles</h2>
+
+<p>To add a CSV Profile</p>
+
 <ul>
-<li>The 'Profile name' will appear on the export pull down list when choosing 'Download' from your cart or list</li>
-<li>The 'Profile description' is for your own benefit</li>
-<li>Finally format your CSV file using the 'Profile marcfields' fields
-<ul><li>Define which fields or subfields you want to export, separated by pipes. Example : 200|210$a|301</li></ul>
+	<li>Click 'CSV Profiles' from the Tools menu
+<ul>
+	<li>The 'Profile name' will appear on the export pull down list when choosing 'Download' from your cart or list</li>
+	<li>The 'Profile description' is for your own benefit</li>
+	<li>The 'CSV separator' is the character used to separate values and value groups</li>
+	<li>The 'Field separator' is the character used to separate duplicate fields
+<ul>
+	<li>Example: You may have multiple 650 fields</li>
+</ul>
+</li>
+	<li>The 'Subfield separator' is the character used to separate duplicate subfields
+<ul>
+	<li>Example: You may have multiple $a subfields in a field</li>
+</ul>
+</li>
+	<li>The 'Encoding' field lets you define the encoding used when saving the file</li>
+	<li>Finally format your CSV file using the 'Profile marcfields' fields
+<ul>
+	<li>Define which fields or subfields you want to export, separated by pipes. Example : 200|210$a|301</li>
+	<li style="background-color: #ffe599;">Tip: You can also use your own headers (instead of the ones from Koha) by prefixing the field number with an header, followed by the equal sign. Example : Personal name=200|Entry element=210$a|300|009</li>
+</ul>
+</li>
+</ul>
 </li>
 </ul>
 
-<p>Once you have created at least one CSV Profile an option to 'Modify CSV Profiles' will appear below the Add form
-<ul><li>Choose the profile you would like to edit and alter the necessary fields.</li>
-<li>To delete a profile, check the 'Delete selelcted profile' option before clicking 'Submit Query'</li></ul>
+<h2>Modify CSV Profiles</h2>
+
+<p>Once you have created at least one CSV Profile an 'Edit profile' tab will appear next to the 'New profile' button.</p>
+
+<ul>
+	<li>Choose the profile you would like to edit and alter the necessary fields.</li>
+	<li>To delete a profile, check the 'Delete selected profile' option before clicking 'Submit Query'</li>
+</ul>
 
 <h2>Using CSV Profiles</h2>
+
 <p>Your CSV Profiles will appear on the export list or cart menu under the 'Download' button</p>
 
+<p><strong>See the full documentation for CSV Profiles in the <a href="http://manual.koha-community.org/3.6/en/csvprofiles.html">manual</a> (online).</strong></p>
 
 [% INCLUDE 'help-bottom.inc' %]
