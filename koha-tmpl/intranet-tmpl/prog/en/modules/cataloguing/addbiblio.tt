@@ -78,9 +78,9 @@ function PopupZ3950() {
 }
 
 function PopupMARCFieldDoc(field, blocknumber) {
-    [% IF ( MARC21 ) %]
+    [% IF ( marcflavour == 'MARC21' ) %]
         _MARC21FieldDoc(field);
-    [% ELSE %]
+    [% ELSIF ( marcflavour == 'UNIMARC' ) %]
         _UNIMARCFieldDoc(field, blocknumber);
     [% END %]
 }
@@ -664,10 +664,10 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
         <div id="yui-main">
         <div class="yui-g">
 
-
-
 <h1>[% IF ( biblionumber ) %]Editing <em>[% title |html %]</em> (Record Number [% biblionumber %])</h1>[% ELSE %]Add MARC Record</h1>[% END %]
+[% IF marcflavour != 'NORMARC' %]
 <div><input type="checkbox" name="marcDocsSelect" id="marcDocsSelect" checked="true" /> Show MARC tag documentation links<br/></div>
+[% END %]
 
 [% UNLESS ( number ) %]
     <!-- show duplicate warning on tab 0 only -->
@@ -825,8 +825,9 @@ function unHideSubfield(index,labelindex) { // FIXME :: is it used ?
             	[% IF advancedMARCEditor %]
 		<a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
 		[% ELSE %]
-                        <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]<a class="marcdocs"
-                 onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% BIG_LOO.number %]); return false;">&nbsp;?</a></span>
+                 <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]
+                 [% IF marcflavour != 'NORMARC' %]<a class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag %]', [% BIG_LOO.number %]); return false;">&nbsp;?</a>[% END %]
+                 </span>
 		[% END %]
                 [% IF ( innerloo.fixedfield ) %]
 	                <input tabindex="1" class="indicator flat" type="text" style="display:none;" name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]" size="1" maxlength="1" value="[% innerloo.indicator1 %]" />
