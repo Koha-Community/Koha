@@ -369,3 +369,4 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SuspendHoldsIntranet', '1', NULL , 'Allow holds to be suspended from the intranet.', 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('SuspendHoldsOpac', '1', NULL , 'Allow holds to be suspended from the OPAC.', 'YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('DefaultLanguageField008','','Fill in the default language for field 008 Range 35-37 (e.g. eng, nor, ger, see <a href="http://www.loc.gov/marc/languages/language_code.html">MARC Code List for Languages</a>)','','Free');
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OPACShowBarcode','0','Show items barcode in holding tab','','YesNo');

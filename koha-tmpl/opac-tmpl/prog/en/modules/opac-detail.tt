@@ -718,6 +718,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             <th id="item_status">Status</th>
             [% IF ( itemdata_itemnotes ) %]<th id="item_notes">Notes</th>[% END %]
             <th id="item_datedue">Date due</th>
+            [% IF ( OPACShowBarcode ) %]<th>Barcode</th>[% END %]
         [% IF holds_count.defined %]
             <th>Item holds</th>
         [% ELSIF show_priority %]
@@ -746,7 +747,8 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 		[% IF ( itemdata_copynumber ) %]<td>[% ITEM_RESULT.copynumber %]</td>[% END %]
 		<td>[% INCLUDE 'item-status.inc' item = ITEM_RESULT %]</td>
 		[% IF ( itemdata_itemnotes ) %]<td>[% ITEM_RESULT.itemnotes %]</td>[% END %]
-		<td>[% ITEM_RESULT.datedue | $KohaDates %]</td>
+        <td>[% ITEM_RESULT.datedue | $KohaDates %]</td>
+        [% IF ( OPACShowBarcode ) %]<td>[% ITEM_RESULT.barcode %]</td>[% END %]
         [% IF holds_count.defined || show_priority %]
         <td>
             [% IF holds_count.defined %] [% ITEM_RESULT.holds_count %] [% END %]

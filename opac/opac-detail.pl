@@ -393,7 +393,8 @@ $template->param( 'ItemsIssued' => CountItemsIssued( $biblionumber ) );
 
 
 
-$template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 
+$template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") );
+$template->param('OPACShowBarcode' => C4::Context->preference("OPACShowBarcode") );
 # change back when ive fixed request.pl
 my @all_items = GetItemsInfo( $biblionumber );
 
