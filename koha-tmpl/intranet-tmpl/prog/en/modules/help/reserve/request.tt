@@ -1,37 +1,75 @@
 [% INCLUDE 'help-top.inc' %]
 
 <h1>Holds</h1>
-	<ul>
-		<li>Enter the barcode or partial name for the patron you'd like to hold the book for.</li>
-		<li>You will be brought to a page where you can alter (if necessary) and/or confirm the hold
-		<ul>
-			<li>
-		    <span style="background-color: #ffe599">
-TIP: Note that in this case an error message appears notifying the circulation librarians that the patron might want to pick the book up at his/her home branch.</span></li>
-			<li>From here you can pick to either hold the next available item or a particular item
-			<ul>
-				<li>Item level holds are available by checking the box next to a particular item</li>
-				<li>An item is available for an item level hold if<br/>
-				<ul>
-					<li>it is not lost AND,</li>
-					<li>it is not marked not for loan AND,</li>
-					<li>it is not withdrawn AND,</li>
-					<li>it is not damaged (unless the AllowHoldsOnDamagedItems system preference is ON), AND</li>
-					<li>it is not on loan (unless the AllowOnShelfHolds system preference is ON)</li>
-				</ul></li>
-				<li>
-			    <span style="background-color: #ffe599">
-TIP:  If independent branches is on and the canreservefromotherbranches system preference is OFF, a staff operator is prevented from placing an item-level hold request on an item from a different branch</span></li>
-			</ul></li>
-			<li>To confirm the hold, click 'Place Hold'</li>
-		</ul></li>
-	</ul>
 
+<h2>Placing Holds in Staff Client</h2>
 
-<h3>Reordering holds</h3>
+<p>There are several ways to place holds from the staff client. The most obvious is using the 'Place Hold' button at the top of any bibliographic record.</p>
 
-	<ul>
-		<li>Hold priority can be altered by viewing the holds for the title</li>
-		<li>To view holds on a title, click the 'Holds' tab on the left</li>
-		<li>By changing the priority number a patron can be moved up or down on the list of holds</li>
-	</ul>[% INCLUDE 'help-bottom.inc' %]
+<p>You can also click the smaller 'Place Hold' link found at the top of your catalog search results, or the 'Holds' link found below each result.</p>
+
+<p>You will be asked to search for a patron by barcode or any part of their name to start the hold process.</p>
+
+<p>If you'd like to search for the patron first and then the bib record for the hold, you can open the patron record and click on the 'Search to Hold' button at the top of the patron record.</p>
+
+<p>After clicking the button you will be brought to the catalog search page where you can find the book(s) you want to place a hold on. Under each title on the results you'll see an option to 'Hold for Patron Name.'</p>
+
+<p>If you want to place a hold on multiple items, simply check the boxes to the left of them and click the arrow to the right of the 'Place Hold' button.</p>
+
+<p>Depending on how many items you choose to place a hold on at once you will be see a different place hold form. If you are placing a hold on one bibliographic record you will see a list of all of the items you can place a hold on.</p>
+
+<ul>
+	<li>Enter any notes that might apply to this hold</li>
+	<li>Choose the library where the patron will pick up the item</li>
+	<li>If the patron wants the hold to start on a date other than today, enter that in the 'Hold starts on date' field
+<ul>
+	<li>This option will only appear if the AllowHoldDateInFuture system preference is set to 'Allow'</li>
+</ul>
+</li>
+	<li>If the patron has specified that they don't want the item after a certain date, or if you have limits on hold lengths, you can enter an expiration date for the hold in the 'Hold expires on date'
+<ul>
+	<li>To have expired holds canceled automatically you will need to have the Expired Holds cron job set to run on a regular basis.</li>
+</ul>
+</li>
+	<li>Next choose if you want to place a hold on the next available item or a specific item by clicking the radio button next to an individual item.</li>
+</ul>
+
+<p>If you're placing a hold on multiple items you will be presented with the next available option for all titles. If no items are available for hold it will say so on the confirmation screen.</p>
+
+<h2>Managing Holds</h2>
+
+<p>Holds can be altered and canceled from the Holds tab found on the left of the bibliographic record.</p>
+
+<p>From the list of holds you can change the order of the holds, the pickup location and/or cancel the hold.</p>
+
+<p>Note: Depending on how you have your HidePatronName system preference set the list may show patron names instead of card numbers in the Patron column like in the image above.</p>
+
+<p>To rearrange or delete holds, simply make a selection from the 'Priority' pull down or click the arrows to the right of the priority pull down.</p>
+
+<p>To delete or cancel a hold, choose 'del' from the menu or click the red 'X' to the right of the hold line.</p>
+
+<p>Clicking the down arrow to the right of the hold will stick the hold at the bottom of the list even if more requests are made.</p>
+
+<p>For example, your library has home-bound patrons that are allowed to keep books out for months at a time. It would not be fair to other patrons if a home-bound patron were able to check out a brand new book and keep it for months. For this reason, the home-bound patron's hold request would stay at the bottom of the queue until everyone else who wanted to read that book has already done so.</p>
+
+<p>Once you have made your changes, click the 'Update hold(s)' button and your changes will be saved.</p>
+
+<h2>Receiving Holds</h2>
+
+<p>When items that are on hold are checked in or out the system will remind the circulation librarian that the item is on hold and offer them options for managing the hold.</p>
+
+<p>When you check in an item that has a hold on it the system will ask you to either confirm and transfer the item or just confirm the hold</p>
+
+<p>Clicking the Confirm button will mark the item as on hold for the patron. If the item needs to be transferred the item will also be marked as in transit to the proper branch. Clicking 'Ignore' will retain the hold, but allow you to check the item out to another patron. Choosing to confirm and print will present you with a printable page that you can slip inside the book with the necessary hold and/or transfer information.</p>
+
+<p>Once confirmed the hold will show on the patron record and on the checkout screen under the 'Hold' tab.</p>
+
+<p>The item record will also show that the item is on hold.</p>
+
+<p>In some cases a patron may come in to pick up a hold for their partner (or someone else in their household). In this case you want to make sure that the hold is cancelled when you check the item out to someone else. When trying to check out an item that is already waiting for someone else you will be presented with a warning message.</p>
+
+<p>From here you can check the item out to the patron at the desk and cancel the hold for the patron.</p>
+
+<p><strong>See the full documentation for Holds in the <a href="http://manual.koha-community.org/3.6/en/holds.html">manual</a> (online).</strong></p>
+
+[% INCLUDE 'help-bottom.inc' %]
