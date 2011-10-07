@@ -276,6 +276,8 @@ my $error        = $input->param('error');
 my $biblionumber = $input->param('biblionumber');
 my $itemnumber   = $input->param('itemnumber');
 my $op           = $input->param('op');
+my $hostitemnumber = $input->param('hostitemnumber');
+my $marcflavour  = C4::Context->preference("marcflavour");
 
 my $frameworkcode = &GetFrameworkCode($biblionumber);
 
@@ -502,6 +504,20 @@ if ($op eq "additem") {
         $itemnumber="";
     }
     $nextop="additem";
+} elsif ($op eq "delinkitem"){
+    my $analyticfield = '773';
+	if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC'){
+        $analyticfield = '773';
+    } elsif ($marcflavour eq 'UNIMARC') {
+        $analyticfield = '461';
+    }
+    foreach my $field ($record->field($analyticfield)){
+        if ($field->subfield('9') eq $hostitemnumber){
+            $record->delete_field($field);
+            last;
+        }
+    }
+	my $modbibresult = ModBiblio($record, $biblionumber,'');
 }
 
 #
@@ -512,6 +528,8 @@ if ($op eq "additem") {
 # now, build existiing item list
 my $temp = GetMarcBiblio( $biblionumber );
 #my @fields = $record->fields();
+
+
 my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 my @big_array;
 #---- finds where items.itemnumber is stored
@@ -519,6 +537,29 @@ my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumb
 my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", $frameworkcode);
 C4::Biblio::EmbedItemsInMarcBiblio($temp, $biblionumber);
 my @fields = $temp->fields();
+
+
+my @hostitemnumbers;
+my $analyticfield = '773';
+if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC') {
+    $analyticfield = '773';
+} elsif ($marcflavour eq 'UNIMARC') {
+    $analyticfield = '461';
+}
+foreach my $hostfield ($temp->field($analyticfield)){
+    if ($hostfield->subfield('0')){
+        my $hostrecord = GetMarcBiblio($hostfield->subfield('0'), 1);
+        my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostfield->subfield('0')) );
+        foreach my $hostitem ($hostrecord->field($itemfield)){
+            if ($hostitem->subfield('9') eq $hostfield->subfield('9')){
+                push (@fields, $hostitem);
+                push (@hostitemnumbers, $hostfield->subfield('9'));
+            }
+        }
+    }
+}
+
+
 
 foreach my $field (@fields) {
     next if ( $field->tag() < 10 );
@@ -550,6 +591,19 @@ foreach my $field (@fields) {
             }
         }
         $this_row{itemnumber} = $subfieldvalue if ($field->tag() eq $itemtagfield && $subfieldcode eq $itemtagsubfield);
+	foreach my $hostitemnumber (@hostitemnumbers){
+		if ($this_row{itemnumber} eq $hostitemnumber){
+			$this_row{hostitemflag} = 1;
+			$this_row{hostbiblionumber}= GetBiblionumberFromItemnumber($hostitemnumber);
+			last;
+		}
+	}
+
+#	my $countanalytics=GetAnalyticsCount($this_row{itemnumber});
+#        if ($countanalytics > 0){
+#                $this_row{countanalytics} = $countanalytics;
+#        }
+
     }
     if (%this_row) {
         push(@big_array, \%this_row);
@@ -570,6 +624,9 @@ for my $row ( @big_array ) {
     $row_data{itemnumber} = $row->{itemnumber};
     #reporting this_row values
     $row_data{'nomod'} = $row->{'nomod'};
+    $row_data{'hostitemflag'} = $row->{'hostitemflag'};
+    $row_data{'hostbiblionumber'} = $row->{'hostbiblionumber'};
+#	$row_data{'countanalytics'} = $row->{'countanalytics'};
     push(@item_value_loop,\%row_data);
 }
 foreach my $subfield_code (sort keys(%witness)) {

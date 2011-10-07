@@ -1559,6 +1559,33 @@ sub searchResults {
 
         # Pull out the items fields
         my @fields = $marcrecord->field($itemtag);
+        my $marcflavor = C4::Context->preference("marcflavour");
+        # adding linked items that belong to host records
+        my $analyticsfield = '773';
+        if ($marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC') {
+            $analyticsfield = '773';
+        } elsif ($marcflavor eq 'UNIMARC') {
+            $analyticsfield = '461';
+        }
+        foreach my $hostfield ( $marcrecord->field($analyticsfield)) {
+            my $hostbiblionumber = $hostfield->subfield("0");
+            my $linkeditemnumber = $hostfield->subfield("9");
+            if(!$hostbiblionumber eq undef){
+                my $hostbiblio = GetMarcBiblio($hostbiblionumber, 1);
+                my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
+                if(!$hostbiblio eq undef){
+                    my @hostitems = $hostbiblio->field($itemfield);
+                    foreach my $hostitem (@hostitems){
+                        if ($hostitem->subfield("9") eq $linkeditemnumber){
+                            my $linkeditem =$hostitem;
+                            # append linked items if they exist
+                            if (!$linkeditem eq undef){
+                                push (@fields, $linkeditem);}
+                        }
+                    }
+                }
+            }
+        }
 
         # Setting item statuses for display
         my @available_items_loop;

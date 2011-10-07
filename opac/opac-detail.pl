@@ -86,6 +86,27 @@ if (C4::Context->preference("OPACXSLTDetailsDisplay") ) {
 $template->param('OPACShowCheckoutName' => C4::Context->preference("OPACShowCheckoutName") ); 
 # change back when ive fixed request.pl
 my @all_items = GetItemsInfo( $biblionumber );
+
+# adding items linked via host biblios
+my $marcflavour  = C4::Context->preference("marcflavour");
+
+my $analyticfield = '773';
+if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC'){
+    $analyticfield = '773';
+} elsif ($marcflavour eq 'UNIMARC') {
+    $analyticfield = '461';
+}
+foreach my $hostfield ( $record->field($analyticfield)) {
+    my $hostbiblionumber = $hostfield->subfield("0");
+    my $linkeditemnumber = $hostfield->subfield("9");
+    my @hostitemInfos = GetItemsInfo($hostbiblionumber);
+    foreach my $hostitemInfo (@hostitemInfos){
+        if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
+            push(@all_items, $hostitemInfo);
+        }
+    }
+}
+
 my @items;
 
 # Getting items to be hidden
@@ -217,13 +238,13 @@ for my $itm (@items) {
 
 ## get notes and subjects from MARC record
 my $dbh              = C4::Context->dbh;
-my $marcflavour      = C4::Context->preference("marcflavour");
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
 my $marcisbnsarray   = GetMarcISBN    ($record,$marcflavour);
 my $marcauthorsarray = GetMarcAuthors ($record,$marcflavour);
 my $marcsubjctsarray = GetMarcSubjects($record,$marcflavour);
 my $marcseriesarray  = GetMarcSeries  ($record,$marcflavour);
 my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
+my $marchostsarray  = GetMarcHosts($record,$marcflavour);
 my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
 
     $template->param(
@@ -232,6 +253,7 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
                      MARCAUTHORS             => $marcauthorsarray,
                      MARCSERIES              => $marcseriesarray,
                      MARCURLS                => $marcurlsarray,
+		     MARCHOSTS               => $marchostsarray,
                      norequests              => $norequests,
                      RequestOnOpac           => C4::Context->preference("RequestOnOpac"),
                      itemdata_ccode          => $itemfields{ccode},

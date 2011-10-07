@@ -98,6 +98,15 @@ if ($type eq 'str8' && $borrower){
         }
         my $const;
 
+	if ($checkitem ne ''){
+		my $item = GetItem($checkitem);
+        	if ($item->{'biblionumber'} ne $biblionumber) {
+                	$biblionumber = $item->{'biblionumber'};
+        	}
+	}
+
+
+
         if ($multi_hold) {
             my $bibinfo = $bibinfos{$biblionumber};
             AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,'a',[$biblionumber],

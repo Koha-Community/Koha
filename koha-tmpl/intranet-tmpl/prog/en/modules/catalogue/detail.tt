@@ -248,6 +248,9 @@ function verify_images() {
                 [% IF ( itemdata_copynumber ) %]<th>Copy No.</th>[% END %]
                 [% IF ( itemdata_itemnotes ) %]<th>Public notes</th>[% END %]
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]<th>Spine Label</th>[% END %]
+		[% IF ( hostrecords ) %]<th>Host Records</th>[% END %]
+		[% IF ( analyze ) %]<th>Used in</th>[% END %]
+		[% IF ( analyze ) %]<th></th>[% END %]
             </tr>
             [% FOREACH itemloo IN itemloop %]
                 <tr>
@@ -360,8 +363,8 @@ function verify_images() {
 						[% IF ( itemloo.enumchron ) %]
 						[% itemloo.enumchron %][% IF ( itemloo.serialseq ) %] -- [% END %]
 						[% END %]
-					[% END %]
 					[% itemloo.serialseq %][% IF ( itemloo.publisheddate ) %] ([% itemloo.publisheddate %])[% END %]
+					[% END %]
 				</td>[% END %]
 				[% IF ( itemdata_uri ) %]
 					<td class="uri"><a href="[% itemloo.uri %]">[% itemloo.uri %]</a></td>
@@ -373,6 +376,17 @@ function verify_images() {
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
 			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>
 		[% END %]
+                [% IF ( hostrecords ) %]
+                      <td>[% IF ( itemloo.hostbiblionumber) %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemloo.hostbiblionumber %]" >[% itemloo.hosttitle %]</a>[% END %]</td>
+                [% END %]
+                [% IF ( analyze ) %]<td>
+			[% IF ( itemloo.countanalytics ) %]
+                      		<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&q=[% itemloo.itemnumber %]">[% itemloo.countanalytics %] analytics</a>
+			[% END %]</td>
+		[% END %]
+                [% IF ( analyze ) %]
+                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% itemloo.biblionumber %]&hostitemnumber=[% itemloo.itemnumber %]">Create Analytics</a></td>
+                [% END %]
 
                 </tr>
             [% END %]

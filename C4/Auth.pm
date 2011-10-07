@@ -382,6 +382,7 @@ sub get_template_and_user {
             virtualshelves              => C4::Context->preference("virtualshelves"),
             StaffSerialIssueDisplayCount => C4::Context->preference("StaffSerialIssueDisplayCount"),
             NoZebra                     => C4::Context->preference('NoZebra'),
+		EasyAnalyticalRecords => C4::Context->preference('EasyAnalyticalRecords'),
         );
     }
     else {

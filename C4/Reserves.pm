@@ -385,6 +385,14 @@ sub CanBookBeReserved{
     my ($borrowernumber, $biblionumber) = @_;
 
     my @items = GetItemsInfo($biblionumber);
+
+	#get items linked via host records
+	my $marcrecord= GetMarcBiblio($biblionumber);
+	my @hostitemInfos = GetHostItemsInfo($marcrecord);
+	if (@hostitemInfos){
+		push (@items,@hostitemInfos);
+	}
+
     foreach my $item (@items){
         return 1 if CanItemBeReserved($borrowernumber, $item->{itemnumber});
     }

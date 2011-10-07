@@ -292,7 +292,13 @@ foreach my $biblionumber (@biblionumbers) {
     if (my $items = get_itemnumbers_of($biblionumber)->{$biblionumber}){
         @itemnumbers  = @$items;
     }
-    else {
+	my @hostitems = get_hostitemnumbers_of($biblionumber);
+	if (@hostitems){
+		$template->param('hostitemsflag' => 1);
+		push(@itemnumbers, @hostitems);
+	}
+
+    if (!@itemnumbers) {
         $template->param('noitems' => 1);
         $biblioloopiter{noitems} = 1;
     }
@@ -325,6 +331,9 @@ foreach my $biblionumber (@biblionumbers) {
 
         $biblioitem->{description} =
           $itemtypes->{ $biblioitem->{itemtype} }{description};
+	if($biblioitem->{biblioitemnumber} ne $biblionumber){
+		$biblioitem->{hostitemsflag}=1;
+	}
         $biblioloopiter{description} = $biblioitem->{description};
         $biblioloopiter{itypename} = $biblioitem->{description};
         $biblioloopiter{imageurl} =
@@ -348,6 +357,11 @@ foreach my $biblionumber (@biblionumbers) {
                   $branches->{ $item->{holdingbranch} }{branchname};
             }
 
+		if($item->{biblionumber} ne $biblionumber){
+			$item->{hostitemsflag}=1;
+		        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
+		}
+		
             #   add information
             $item->{itemcallnumber} = $item->{itemcallnumber};
 

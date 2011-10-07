@@ -190,6 +190,7 @@ function set_to_today(id, force) {
 [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div>[% END %]
 [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div>[% END %]
 [% IF ( not_same_branch ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: The items do not belong to your branch.</div>[% END %]
+[% IF ( linked_analytics ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&analyze=1">analytics.</a>.</div>[% END %]
 
 <div id="cataloguing_additem_itemlist">
     [% IF ( item_loop ) %]
@@ -205,8 +206,10 @@ function set_to_today(id, force) {
             </tr>
                 [% FOREACH item_loo IN item_loop %]
                 <tr id="row[% item_loo.itemnumber %]">
-                    [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
-                    <td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a></td>[% END %]
+                    [% IF ( item_loo.nomod ) %] <td colspan="2">&nbsp;</td>[% ELSE %][% IF ( item_loo.hostitemflag ) %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit in Host</a></td>
+<td><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber %]&amp;hostitemnumber=[% item_loo.itemnumber %]">Delink</a></td>
+[% ELSE %]<td><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]#edititem">Edit</a></td>
+                    <td>[% IF ( item_loo.countanalytics ) %]<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&q=% item_loo.itemnumber %]">view analytics</a>[% ELSE %]<a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% biblionumber %]&amp;itemnumber=[% item_loo.itemnumber %]" onclick="confirm_deletion([% biblionumber %],[% item_loo.itemnumber %]); return false;">Delete</a>[% END %]</td>[% END %][% END %]
                 [% FOREACH item_valu IN item_loo.item_value %]
                     <td>[% item_valu.field |html %]</td>
                 [% END %]

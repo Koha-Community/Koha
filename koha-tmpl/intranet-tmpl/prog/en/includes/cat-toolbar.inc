@@ -82,6 +82,7 @@ function confirm_items_deletion() {
 			[% IF ( CAN_user_editcatalogue_edit_items ) %]{text: _("New Item"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]#additema" },[% END %]
 			[% IF ( CAN_user_serials_create_subscription ) %]
 			{text: _("New Subscription"), url: "/cgi-bin/koha/serials/subscription-add.pl?biblionumber_for_new_subscription=[% biblionumber %]"},[% END %]
+			[% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{text: _("Analyze items"), url: "/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&analyze=1" },[% END %][% END %]
 		];
 		if(newmenu.length){
 			new YAHOO.widget.Button({
@@ -97,6 +98,7 @@ function confirm_items_deletion() {
 	        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Edit Record"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=&amp;op=" },[% END %]
 	        [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Edit Items"), url: "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber %]" },[% END %]
 	        [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Attach Item"), url: "/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber %]" },[% END %]
+                [% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Link to Host Item"), url: "/cgi-bin/koha/cataloguing/linkitem.pl?biblionumber=[% biblionumber %]" },[% END %][% END %]
 	        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Edit as New (Duplicate)"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=&amp;op=duplicate" },[% END %]
 			[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Replace Record via Z39.50"), onclick: {fn: PopupZ3950 } },[% END %]
 			[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Delete Record"), onclick: {fn: confirm_deletion }[% IF ( count ) %],id:'disabled'[% END %] },[% END %]

@@ -69,7 +69,9 @@ BEGIN {
         GetItemsByBiblioitemnumber
         GetItemsInfo
 	GetItemsLocationInfo
+	GetHostItemsInfo
         get_itemnumbers_of
+	get_hostitemnumbers_of
         GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
       GetHiddenItemnumbers
@@ -78,6 +80,8 @@ BEGIN {
 		MoveItemFromBiblio 
 		GetLatestAcquisitions
         CartToShelf
+
+	GetAnalyticsCount
     );
 }
 
@@ -1395,6 +1399,46 @@ sub GetItemsLocationInfo {
 	return @results;
 }
 
+=head2 GetHostItemsInfo
+
+	$hostiteminfo = GetHostItemsInfo($hostfield);
+	Returns the iteminfo for items linked to records via a host field
+
+=cut
+
+sub GetHostItemsInfo {
+	my ($record) = @_;
+	my @returnitemsInfo;
+
+	if (C4::Context->preference('marcflavour') eq 'MARC21' ||
+        C4::Context->preference('marcflavour') eq 'NORMARC'){
+	    foreach my $hostfield ( $record->field('773') ) {
+        	my $hostbiblionumber = $hostfield->subfield("0");
+	        my $linkeditemnumber = $hostfield->subfield("9");
+        	my @hostitemInfos = GetItemsInfo($hostbiblionumber);
+	        foreach my $hostitemInfo (@hostitemInfos){
+        	        if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
+                	        push (@returnitemsInfo,$hostitemInfo);
+				last;
+                	}
+        	}
+	    }
+	} elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC'){
+	    foreach my $hostfield ( $record->field('461') ) {
+        	my $hostbiblionumber = $hostfield->subfield("0");
+	        my $linkeditemnumber = $hostfield->subfield("9");
+        	my @hostitemInfos = GetItemsInfo($hostbiblionumber);
+	        foreach my $hostitemInfo (@hostitemInfos){
+        	        if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
+                	        push (@returnitemsInfo,$hostitemInfo);
+				last;
+                	}
+        	}
+	    }
+	}
+	return @returnitemsInfo;
+}
+
 
 =head2 GetLastAcquisitions
 
@@ -1481,6 +1525,53 @@ sub get_itemnumbers_of {
 
     return \%itemnumbers_of;
 }
+
+=head2 get_hostitemnumbers_of
+
+  my @itemnumbers_of = get_hostitemnumbers_of($biblionumber);
+
+Given a biblionumber, return the list of corresponding itemnumbers that are linked to it via host fields
+
+Return a reference on a hash where key is a biblionumber and values are
+references on array of itemnumbers.
+
+=cut
+
+
+sub get_hostitemnumbers_of {
+	my ($biblionumber) = @_;
+	my $marcrecord = GetMarcBiblio($biblionumber);
+        my (@returnhostitemnumbers,$tag, $biblio_s, $item_s);
+	
+	my $marcflavor = C4::Context->preference('marcflavour');
+	if ($marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC') {
+        $tag='773';
+        $biblio_s='0';
+        $item_s='9';
+    } elsif ($marcflavor eq 'UNIMARC') {
+        $tag='461';
+        $biblio_s='0';
+        $item_s='9';
+    }
+
+    foreach my $hostfield ( $marcrecord->field($tag) ) {
+        my $hostbiblionumber = $hostfield->subfield($biblio_s);
+        my $linkeditemnumber = $hostfield->subfield($item_s);
+        my @itemnumbers;
+        if (my $itemnumbers = get_itemnumbers_of($hostbiblionumber)->{$hostbiblionumber})
+        {
+            @itemnumbers = @$itemnumbers;
+        }
+        foreach my $itemnumber (@itemnumbers){
+            if ($itemnumber eq $linkeditemnumber){
+                push (@returnhostitemnumbers,$itemnumber);
+                last;
+            }
+        }
+    }
+    return @returnhostitemnumbers;
+}
+
 
 =head2 GetItemnumberFromBarcode
 
@@ -2094,35 +2185,35 @@ sub DelItemCheck {
     my ( $dbh, $biblionumber, $itemnumber ) = @_;
     my $error;
 
+        my $countanalytics=GetAnalyticsCount($itemnumber);
+
+
     # check that there is no issue on this item before deletion.
     my $sth=$dbh->prepare("select * from issues i where i.itemnumber=?");
     $sth->execute($itemnumber);
 
     my $item = GetItem($itemnumber);
-    my $onloan = $sth->fetchrow;
-    if ($onloan) {
-        $error = "book_on_loan";
+    my $onloan=$sth->fetchrow;
+
+    if ($onloan){
+        $error = "book_on_loan" 
     }
     elsif (C4::Context->preference("IndependantBranches") and (C4::Context->userenv->{branch} ne $item->{C4::Context->preference("HomeOrHoldingBranch")||'homebranch'})){
         $error = "not_same_branch";
-    } 
-    else {
-	if ($onloan){ 
-	    $error = "book_on_loan" 
-	}
-	else {
-	    # check it doesnt have a waiting reserve
-	    $sth=$dbh->prepare("SELECT * FROM reserves WHERE (found = 'W' or found = 'T') AND itemnumber = ?");
-	    $sth->execute($itemnumber);
-	    my $reserve=$sth->fetchrow;
-	    if ($reserve) {
-		$error = "book_reserved";
-	    } 
-	    else {
-		DelItem($dbh, $biblionumber, $itemnumber);
-		return 1;
-	    }
-	}
+    }
+	else{
+        # check it doesnt have a waiting reserve
+        $sth=$dbh->prepare("SELECT * FROM reserves WHERE (found = 'W' or found = 'T') AND itemnumber = ?");
+        $sth->execute($itemnumber);
+        my $reserve=$sth->fetchrow;
+        if ($reserve){
+            $error = "book_reserved";
+        } elsif ($countanalytics > 0){
+		$error = "linked_analytics";
+	} else {
+            DelItem($dbh, $biblionumber, $itemnumber);
+            return 1;
+        }
     }
     return $error;
 }
@@ -2337,6 +2428,30 @@ sub  _parse_unlinked_item_subfields_from_xml {
         }
     }
     return $unlinked_subfields;
+}
+
+=head2 GetAnalyticsCount
+
+  $count= &GetAnalyticsCount($itemnumber)
+
+counts Usage of itemnumber in Analytical bibliorecords. 
+
+=cut
+
+sub GetAnalyticsCount {
+    my ($itemnumber) = @_;
+    if (C4::Context->preference('NoZebra')) {
+        # Read the index Koha-Auth-Number for this authid and count the lines
+        my $result = C4::Search::NZanalyse("hi=$itemnumber");
+        my @tab = split /;/,$result;
+        return scalar @tab;
+    } else {
+        ### ZOOM search here
+        my $query;
+        $query= "hi=".$itemnumber;
+                my ($err,$res,$result) = C4::Search::SimpleSearch($query,0,10);
+        return ($result);
+    }
 }
 
 1;

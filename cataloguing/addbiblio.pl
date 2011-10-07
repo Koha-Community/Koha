@@ -349,6 +349,10 @@ sub create_input {
            $value eq '' &&
            !$tdef->{$subfield}->{mandatory} &&
            !$tdef->{mandatory};
+    # expand all subfields of 773 if there is a host item provided in the input
+    $subfield_data{visibility} ="" if ($tag eq 773 and $cgi->param('hostitemnumber'));
+
+
     # it's an authorised field
     if ( $tagslib->{$tag}->{$subfield}->{authorised_value} ) {
         $subfield_data{marc_value} =
@@ -696,7 +700,7 @@ sub build_tabs ($$$$$) {
                            # always include in the form regardless of the hidden setting - bug 2206
                     next
                       if ( $tagslib->{$tag}->{$subfield}->{tab} ne $tabloop );
-                    push(
+			push(
                         @subfields_data,
                         &create_input(
                             $tag, $subfield, '', $index_tag, $tabloop, $record,
@@ -834,6 +838,8 @@ my $mode          = $input->param('mode');
 my $frameworkcode = $input->param('frameworkcode');
 my $redirect      = $input->param('redirect');
 my $dbh           = C4::Context->dbh;
+my $hostbiblionumber = $input->param('hostbiblionumber');
+my $hostitemnumber = $input->param('hostitemnumber');
 
     
 my $userflags = 'edit_catalogue';
@@ -903,6 +909,14 @@ if (($biblionumber) && !($breedingid)){
 }
 if ($breedingid) {
     ( $record, $encoding ) = MARCfindbreeding( $breedingid ) ;
+}
+#populate hostfield if hostbiblionumber is available
+if ($hostbiblionumber){
+	my $marcflavour = C4::Context->preference("marcflavour");
+	$record=MARC::Record->new();
+	$record->leader('');
+        my $field = PrepHostMarcField($hostbiblionumber, $hostitemnumber,$marcflavour);
+	$record->append_fields($field);
 }
 
 $is_a_modif = 0;
@@ -1055,6 +1069,8 @@ elsif ( $op eq "delete" ) {
         biblioitemnumtagfield    => $biblioitemnumtagfield,
         biblioitemnumtagsubfield => $biblioitemnumtagsubfield,
         biblioitemnumber         => $biblioitemnumber,
+	hostbiblionumber	=> $hostbiblionumber,
+	hostitemnumber		=> $hostitemnumber
     );
 }
 

@@ -78,6 +78,7 @@ BEGIN {
       &GetMarcBiblio
       &GetMarcAuthors
       &GetMarcSeries
+      &GetMarcHosts
       GetMarcUrls
       &GetUsedMarcStructure
       &GetXmlBiblio
@@ -90,6 +91,7 @@ BEGIN {
       &GetMarcFromKohaField
       &GetFrameworkCode
       &TransformKohaToMarc
+      &PrepHostMarcField
 
       &CountItemsIssued
     );
@@ -1760,6 +1762,48 @@ sub GetMarcSeries {
     return $marcseriessarray;
 }    #end getMARCseriess
 
+=head2 GetMarcHosts
+
+  $marchostsarray = GetMarcHosts($record,$marcflavour);
+
+Get all host records (773s MARC21, 461 UNIMARC) from the MARC record and returns them in an array.
+
+=cut
+
+sub GetMarcHosts {
+    my ( $record, $marcflavour ) = @_;
+    my ( $tag,$title_subf,$bibnumber_subf,$itemnumber_subf);
+    $marcflavour ||="MARC21";
+    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
+        $tag = "773";
+        $title_subf = "t";
+        $bibnumber_subf ="0";
+        $itemnumber_subf='9';
+    }
+    elsif ($marcflavour eq "UNIMARC") {
+        $tag = "461";
+        $title_subf = "t";
+        $bibnumber_subf ="0";
+        $itemnumber_subf='9';
+    };
+
+    my @marchosts;
+
+    foreach my $field ( $record->field($tag)) {
+
+        my @fields_loop;
+
+        my $hostbiblionumber = $field->subfield("$bibnumber_subf");
+        my $hosttitle = $field->subfield($title_subf);
+        my $hostitemnumber=$field->subfield($itemnumber_subf);
+        push @fields_loop, { hostbiblionumber => $hostbiblionumber, hosttitle => $hosttitle, hostitemnumber => $hostitemnumber};
+        push @marchosts, { MARCHOSTS_FIELDS_LOOP => \@fields_loop };
+
+        }
+    my $marchostsarray = \@marchosts;
+    return $marchostsarray;
+}
+
 =head2 GetFrameworkCode
 
   $frameworkcode = GetFrameworkCode( $biblionumber )
@@ -1796,6 +1840,86 @@ sub TransformKohaToMarc {
     }
     return $record;
 }
+
+=head2 PrepHostMarcField
+
+    $hostfield = PrepHostMarcField ( $hostbiblionumber,$hostitemnumber,$marcflavour )
+
+This function returns a host field populated with data from the host record, the field can then be added to an analytical record
+
+=cut
+
+sub PrepHostMarcField {
+    my ($hostbiblionumber,$hostitemnumber, $marcflavour) = @_;
+    $marcflavour ||="MARC21";
+    
+    my $hostrecord = GetMarcBiblio($hostbiblionumber);
+	my $item = C4::Items::GetItem($hostitemnumber);
+	
+	my $hostmarcfield;
+    if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
+	
+        #main entry
+        my $mainentry;
+        if ($hostrecord->subfield('100','a')){
+            $mainentry = $hostrecord->subfield('100','a');
+        } elsif ($hostrecord->subfield('110','a')){
+            $mainentry = $hostrecord->subfield('110','a');
+        } else {
+            $mainentry = $hostrecord->subfield('111','a');
+        }
+	
+        # qualification info
+        my $qualinfo;
+        if (my $field260 = $hostrecord->field('260')){
+            $qualinfo =  $field260->as_string( 'abc' );
+        }
+	
+
+    	#other fields
+        my $ed = $hostrecord->subfield('250','a');
+        my $barcode = $item->{'barcode'};
+        my $title = $hostrecord->subfield('245','a');
+
+        # record control number, 001 with 003 and prefix
+        my $recctrlno;
+        if ($hostrecord->field('001')){
+            $recctrlno = $hostrecord->field('001')->data();
+            if ($hostrecord->field('003')){
+                $recctrlno = '('.$hostrecord->field('003')->data().')'.$recctrlno;
+            }
+        }
+
+        # issn/isbn
+        my $issn = $hostrecord->subfield('022','a');
+        my $isbn = $hostrecord->subfield('020','a');
+
+
+        $hostmarcfield = MARC::Field->new(
+                773, '0', '',
+                '0' => $hostbiblionumber,
+                '9' => $hostitemnumber,
+                'a' => $mainentry,
+                'b' => $ed,
+                'd' => $qualinfo,
+                'o' => $barcode,
+                't' => $title,
+                'w' => $recctrlno,
+                'x' => $issn,
+                'z' => $isbn
+                );
+    } elsif ($marcflavour eq "UNIMARC") {
+        $hostmarcfield = MARC::Field->new(
+            461, '', '',
+            '0' => $hostbiblionumber,
+            't' => $hostrecord->subfield('200','a'), 
+            '9' => $hostitemnumber
+        );	
+    };
+
+    return $hostmarcfield;
+}
+
 
 =head2 TransformKohaToMarcOneField
 

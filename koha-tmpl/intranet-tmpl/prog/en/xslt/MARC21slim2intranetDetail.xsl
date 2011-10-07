@@ -564,6 +564,11 @@
                     </a>
                     <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
                 </xsl:when>
+                <xsl:when test="marc:subfield[@code='0']">
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:subfield[@code='0']"/></xsl:attribute>
+                        <xsl:value-of select="$f773"/>
+                    </a>
+                </xsl:when>
                 <xsl:otherwise>
                     <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Title:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
                         <xsl:value-of select="$f773"/>

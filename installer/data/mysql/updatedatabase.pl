@@ -4444,6 +4444,29 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     print "Upgrade to $DBversion done (add OPACResultsSidebar syspref (enh 6165))\n";
     SetVersion($DBversion);
 }
+    
+$DBversion = '3.05.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('EasyAnalyticalRecords','0','If on, display in the catalogue screens tools to easily setup analytical record relationships','','YesNo');");
+    print "Upgrade to $DBversion done (Add EasyAnalyticalRecords syspref)\n";
+    SetVersion ($DBversion);
+}
+
+$DBversion = '3.05.00.XXX';
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    if (C4::Context->preference("marcflavour") eq 'MARC21' ||
+        C4::Context->preference("marcflavour") eq 'NORMARC'){
+        $dbh->do("INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value` , `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES ('773', '0', 'Host Biblionumber', 'Host Biblionumber', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL)");
+        $dbh->do("INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value` , `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES ('773', '9', 'Host Itemnumber', 'Host Itemnumber', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL)");
+        print "Upgrade to $DBversion done (Add 773 subfield 9 and 0 to default framework)\n";
+        SetVersion ($DBversion);
+    } elsif (C4::Context->preference("marcflavour") eq 'UNIMARC'){
+        $dbh->do("INSERT INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblibrarian`, `libopac`, `repeatable`, `mandatory`, `kohafield`, `tab`, `authorised_value` , `authtypecode`, `value_builder`, `isurl`, `hidden`, `frameworkcode`, `seealso`, `link`, `defaultvalue`) VALUES ('461', '9', 'Host Itemnumber', 'Host Itemnumber', 0, 0, NULL, 7, NULL, NULL, '', NULL, -6, '', '', '', NULL)");
+        print "Upgrade to $DBversion done (Add 461 subfield 9 to default framework)\n";
+        SetVersion ($DBversion);
+    }
+		
+}
 
 $DBversion = "3.05.00.012";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
