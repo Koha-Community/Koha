@@ -4459,6 +4459,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE `borrowers` MODIFY `userid` VARCHAR(75)");
+    print "Modified userid column length into 75 in borrowers\n";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
