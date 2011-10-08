@@ -24,11 +24,13 @@
   <refsynopsisdiv>
     <cmdsynopsis>
       <command>koha-create</command>
-      <arg choice="req"><option>--create-db</option>|<option>--request-db</option>|<option>--populate-db</option></arg>
+      <arg choice="req"><option>--create-db</option>|<option>--request-db</option>|<option>--populate-db</option>|<option>--use-db</option></arg>
       <arg><option>--marcflavor</option> marc21|normarc|unimarc</arg>
       <arg><option>--zebralang</option> en|nb|fr</arg>
       <arg><option>--defaultsql</option> /path/to/some.sql</arg>
       <arg><option>--configfile</option> /path/to/config</arg>
+      <arg><option>--passwdfile</option> /path/to/passwd</arg>
+      <arg><option>--database</option> database</arg>
       <arg><option>--adminuser</option> n</arg>
       <arg choice="req" rep="norepeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
@@ -40,7 +42,7 @@
     <varlistentry>
       <term><option>--create-db</option></term>
       <listitem>
-        <para>Create a new datbase on localhost. If the database you want to use does not reside on localhost, you  can  use <option>--request-db</option> and <option>--populate-db</option>, see below.</para>
+        <para>Create a new database on localhost. If the database you want to use does not reside on localhost, you can use <option>--request-db</option> and <option>--populate-db</option>, see below. If the database already exists, you can use <option>--use-db</option>, see below.</para>
       </listitem>
     </varlistentry>
     
@@ -54,7 +56,14 @@
     <varlistentry>
       <term><option>--populate-db</option></term>
       <listitem>
-        <para>When you have run koha-create with the <option>--request-db</option> option, and a database has been set up, you can finnish your installation by running <command>koha-create</command> with this option.</para>
+        <para>When you have run koha-create with the <option>--request-db</option> option, and a database has been set up, you can finish your installation by running <command>koha-create</command> with this option.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--use-db</option></term>
+      <listitem>
+        <para>When the database you want to use has already been populated, you can run <command>koha-create</command> with this option to take care of all the other set-up configuration.</para>
       </listitem>
     </varlistentry>
 
@@ -62,6 +71,13 @@
       <term><option>--configfile</option></term>
       <listitem>
         <para>Path to an alternative config file. This file can hold the same variables as the default config file, see below for details.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--database</option></term>
+      <listitem>
+        <para>MySQL database to use.</para>
       </listitem>
     </varlistentry>
 
@@ -76,6 +92,13 @@
       <term><option>--marcflavor</option></term>
       <listitem>
         <para>Specifies format of MARC records to be indexed by Zebra. Corresponds to the ZEBRA_MARC_FORMAT config file variable.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option>--passwdfile</option></term>
+      <listitem>
+        <para>Path to an alternative passwd file. This file is in the same format as the default (Koha) passwd file, see below for details.</para>
       </listitem>
     </varlistentry>
 
@@ -106,6 +129,27 @@
         </listitem>
       </varlistentry>
     
+      <varlistentry>
+        <term><option>OPACPORT</option></term>
+        <listitem>
+          <para>The port for the OPAC.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>OPACPREFIX</option></term>
+        <listitem>
+          <para>This is inserted before the instance name  when  forming  Apache ServerName.  For subdomains, make sure it ends with a period.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>OPACSUFFIX</option></term>
+        <listitem>
+          <para>This  is inserted after the instance name, but before the domain name, when forming Apache ServerName.</para>
+        </listitem>
+      </varlistentry>
+
       <varlistentry>
         <term><option>INTRAPORT</option></term>
         <listitem>
@@ -167,6 +211,13 @@
       <term><option><filename>/etc/koha/koha-sites.conf</filename></option></term>
       <listitem>
         <para>Configuration variables are read from this file, if it exists.</para>
+      </listitem>
+    </varlistentry>
+
+    <varlistentry>
+      <term><option><filename>/etc/koha/passwd</filename></option></term>
+      <listitem>
+        <para>Pre-selected database credentials are read from this file, if it exists. The format for this file is instancename:username:passwd:database. Database is optional, but the other three are required if you want to use pre-determined database user credentials.</para>
       </listitem>
     </varlistentry>
   </variablelist>
