@@ -71,13 +71,12 @@ C<description>.
 =cut
 
 sub all {
-    my ($class) = @_;
-    my $dbh = C4::Context->dbh;
-    return    map { $class->new($_) }    @{$dbh->selectall_arrayref(
-        # The categories table is small enough for
-        # `SELECT *` to be harmless.
-        "SELECT * FROM categories ORDER BY description",
-        { Slice => {} },
+    my $class = shift;
+    map {
+        utf8::encode($_->{description});
+        $class->new($_);
+    } @{C4::Context->dbh->selectall_arrayref(
+        "SELECT * FROM categories ORDER BY description", { Slice => {} }
     )};
 }
 
