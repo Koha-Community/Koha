@@ -19,11 +19,12 @@
 
 set -e
 
-usage="Usage: $0 [--create-db|--request-db|--populate-db] \
+usage="Usage: $0 [--create-db|--request-db|--populate-db|--use-db] \
     [--marcflavor marc21|normarc|unimarc] \
     [--zebralang en|nb|fr] \
     [--defaultsql /path/to/some.sql] \
-    [--configfile /path/to/config] [--adminuser n] instancename"
+    [--configfile /path/to/config] [--passwdfile /path/to/passwd] \
+    [--database database] [--adminuser n] instancename"
 
 die() {
     echo "$@" 1>&2
@@ -76,6 +77,8 @@ getinstancemysqldatabase() {
 # Set defaults and read config file, if it exists.
 DOMAIN=""
 OPACPORT="80"
+OPACPREFIX=""
+OPACSUFFIX=""
 INTRAPORT="8080"
 INTRAPREFIX=""
 INTRASUFFIX=""
@@ -83,14 +86,15 @@ DEFAULTSQL=""
 ZEBRA_MARC_FORMAT="marc21"
 ZEBRA_LANGUAGE="en"
 ADMINUSER="1"
+PASSWDFILE="/etc/koha/passwd"
 if [ -e /etc/koha/koha-sites.conf ]
 then
     . /etc/koha/koha-sites.conf
 fi
 
-[ $# -ge 2 ] && [ $# -le 12 ] || die $usage
+[ $# -ge 2 ] && [ $# -le 16 ] || die $usage
 
-TEMP=`getopt -o crpm:l:d:f:a: -l create-db,request-db,populate-db,marcflavor:,zebralang:,defaultsql:,configfile:,adminuser: \
+TEMP=`getopt -o crpm:l:d:f:a: -l create-db,request-db,populate-db,use-db,marcflavor:,zebralang:,defaultsql:,configfile:,passwdfile:,adminuser: \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -107,10 +111,13 @@ while true ; do
 		-c|--create-db) op=create ; shift ;;
 		-r|--request-db) op=request ; shift ;;
 		-p|--populate-db) op=populate ; shift ;;
+        -u|--use-db) op=use ; shift ;;
 		-m|--marcflavor) CLO_ZEBRA_MARC_FORMAT="$2" ; shift 2 ;;
 		-l|--zebralang) CLO_ZEBRA_LANGUAGE="$2" ; shift 2 ;;
 		-d|--defaultsql) CLO_DEFAULTSQL="$2" ; shift 2 ;;
 		-f|--configfile) configfile="$2" ; shift 2 ;;
+        -s|--passwdfile) CLO_PASSWDFILE="$2" ; shift 2 ;;
+        -b|--database) CLO_DATABASE="$2" ; shift 2 ;;
 		-a|--adminuser) CLO_ADMINUSER="$2" ; shift 2 ;;
 		--) shift ; break ;;
 		*) die "Internal error processing command line arguments" ;;
@@ -145,26 +152,54 @@ if [ "$CLO_ADMINUSER" != "" ]
 then
     ADMINUSER="$CLO_ADMINUSER"
 fi
+if [ "$CLO_PASSWDFILE" != "" ]
+then
+    PASSWDFILE="$CLO_PASSWDFILE"
+fi
 
 name="$1"
 
-opacdomain="$name$DOMAIN"
+opacdomain="$OPACPREFIX$name$OPACSUFFIX$DOMAIN"
 intradomain="$INTRAPREFIX$name$INTRASUFFIX$DOMAIN"
 
 
-mysqldb="koha_$name"
-mysqlhost="$(getmysqlhost)"
-mysqluser="koha_$name"
-
-if [ "$op" = create ] || [ "$op" = request ]
+if [ `cat $PASSWDFILE | grep "^$name:"` ]
 then
-    mysqlpwd="$(pwgen -1)"
+    passwdline=`cat $PASSWDFILE | grep "^$name:"`
+    mysqluser=`echo $passwdline | cut -d ":" -f 2`
+    mysqlpwd=`echo $passwdline | cut -d ":" -f 3`
+    mysqldb=`echo $passwdline | cut -d ":" -f 4`
+fi
+
+# The order of precedence for MySQL database name is:
+# default < passwd file < command line
+if [ "$mysqldb" = "" ]
+then
+    mysqldb="koha_$name"
+fi
+if [ "$CLO_DATABASE" != "" ]
+then
+    mysqldb="$CLO_DATABASE"
+fi
+
+if [ "$mysqluser" = "" ]
+then
+    mysqluser="koha_$name"
+fi
+mysqlhost="$(getmysqlhost)"
+
+if [ "$op" = create ] || [ "$op" = request ] || [ "$op" = use ]
+then
+    if [ "$mysqlpwd" = "" ]
+    then
+        mysqlpwd="$(pwgen -1)"
+    fi
 else
     mysqlpwd="$(getinstancemysqlpassword $name)"
 fi
 
 
-if [ "$op" = create ] || [ "$op" = request ]
+if [ "$op" = create ] || [ "$op" = request ] || [ "$op" = use ]
 then
     # Create new user and group.
     username="$name-koha"
@@ -191,6 +226,15 @@ then
     then
         mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
 CREATE DATABASE \`$mysqldb\`;
+CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
+GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
+FLUSH PRIVILEGES;
+eof
+    fi #`
+
+    if [ "$op" = use ]
+    then
+        mysql --defaults-extra-file=/etc/mysql/koha-common.cnf --force <<eof
 CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
 GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
 FLUSH PRIVILEGES;
@@ -283,7 +327,7 @@ eof
 fi
 
 
-if [ "$op" = create ] || [ "$op" = populate ]
+if [ "$op" = create ] || [ "$op" = populate ] || [ "$op" = use ]
 then
     # Reconfigure Apache.
     a2ensite "$name"

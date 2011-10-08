@@ -23,14 +23,27 @@
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-remove</command> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+      <command>koha-remove</command>
+      <arg><option>--keep-mysql</option></arg>
+      <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+  <variablelist>
+    <varlistentry>
+      <term><option>--keep-mysql</option></term>
+      <listitem>
+        <para>Leave the MySQL database and user when removing the Koha instance.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
 
   <refsect1><title>Description</title>
   <para>Remove a Koha instance.</para>
   </refsect1>
-  
+
   <refsect1><title>See also</title>
   <simplelist type="inline">
     <member><command>koha-disable(8)</command></member>
@@ -39,7 +52,7 @@
     <member><command>koha-restore(8)</command></member>
   </simplelist>
   </refsect1>
-  
+
 </refentry>
 
 </article>
