@@ -1827,17 +1827,30 @@ sub GetFrameworkCode {
 This function builds partial MARC::Record from a hash
 Hash entries can be from biblio or biblioitems.
 
-This function is called in acquisition module, to create a basic catalogue entry from user entry
+This function is called in acquisition module, to create a basic catalogue
+entry from user entry
 
 =cut
 
+
 sub TransformKohaToMarc {
-    my ($hash) = @_;
-    my $sth    = C4::Context->dbh->prepare( "SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield=?" );
+    my $hash = shift;
     my $record = MARC::Record->new();
     SetMarcUnicodeFlag( $record, C4::Context->preference("marcflavour") );
-    foreach ( keys %{$hash} ) {
-        &TransformKohaToMarcOneField( $sth, $record, $_, $hash->{$_}, '' );
+    my $db_to_marc = C4::Context->marcfromkohafield;
+    while ( my ($name, $value) = each %$hash ) {
+        next unless my $dtm = $db_to_marc->{''}->{$name};
+        my ($tag, $letter) = @$dtm;
+        foreach my $value ( split(/\s?\|\s?/, $value, -1) ) {
+            if ( my $field = $record->field($tag) ) {
+                $field->add_subfields( $letter => $value );
+            }
+            else {
+                $record->insert_fields_ordered( MARC::Field->new(
+                    $tag, " ", " ", $letter => $value ) );
+            }
+        }
+
     }
     return $record;
 }
@@ -1928,34 +1941,6 @@ sub PrepHostMarcField {
 
 =cut
 
-sub TransformKohaToMarcOneField {
-    my ( $sth, $record, $kohafieldname, $value, $frameworkcode ) = @_;
-    $frameworkcode = '' unless $frameworkcode;
-    my $tagfield;
-    my $tagsubfield;
-
-    if ( !defined $sth ) {
-        my $dbh = C4::Context->dbh;
-        $sth = $dbh->prepare( "SELECT tagfield,tagsubfield FROM marc_subfield_structure WHERE frameworkcode=? AND kohafield=?" );
-    }
-    $sth->execute( $frameworkcode, $kohafieldname );
-    if ( ( $tagfield, $tagsubfield ) = $sth->fetchrow ) {
-        my @values = split(/\s?\|\s?/, $value, -1);
-        
-        foreach my $itemvalue (@values){
-        my $tag = $record->field($tagfield);
-        if ($tag) {
-                $tag->add_subfields( $tagsubfield => $itemvalue );
-            $record->delete_field($tag);
-            $record->insert_fields_ordered($tag);
-            }
-            else {
-                $record->add_fields( $tagfield, " ", " ", $tagsubfield => $itemvalue );
-            }
-        }
-    }
-    return $record;
-}
 
 =head2 TransformHtmlToXml
 
