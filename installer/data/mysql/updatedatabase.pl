@@ -1,6 +1,5 @@
 #!/usr/bin/perl
 
-
 # Database Updater
 # This script checks for required updates to the database.
 
@@ -4446,7 +4445,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.05.00.XXX";
+$DBversion = "3.05.00.012";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('RecordLocalUseOnReturn',0,'If ON, statistically record returns of unissued items as local use, instead of return',NULL,'YesNo')");
     print "Upgrade to $DBversion done (add RecordLocalUseOnReturn syspref (enh 6403))\n";
