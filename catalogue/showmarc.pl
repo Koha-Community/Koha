@@ -27,9 +27,12 @@
 use strict;
 #use warnings; FIXME - Bug 2505
 
+use open OUT=>':utf8', ':std';
+
 # standard or CPAN modules used
 use CGI qw(:standard);
 use DBI;
+use Encode;
 
 # Koha modules used
 use C4::Context;
@@ -77,10 +80,8 @@ my $style_doc = $parser->parse_file($xslfile);
 my $stylesheet = $xslt->parse_stylesheet($style_doc);
 my $results = $stylesheet->transform($source);
 my $newxmlrecord = $stylesheet->output_string($results);
-#warn $newxmlrecord;
-print "Content-type: text/html\n\n";
-utf8::encode($newxmlrecord);
-print $newxmlrecord;
+$newxmlrecord=Encode::decode_utf8($newxmlrecord) unless utf8::is_utf8($newxmlrecord); #decode only if not in perl internal format
+print $input->header(-charset => 'UTF-8'), $newxmlrecord;
 
 } else {
 
@@ -89,5 +90,7 @@ $record =GetMarcBiblio($biblionumber) unless $record;
 my $formatted = $record->as_formatted;
 $template->param( MARC_FORMATTED => $formatted );
 
-output_html_with_http_headers $input, $cookie, $template->output;
+my $output= $template->output;
+$output=Encode::decode_utf8($output) unless utf8::is_utf8($output);
+output_html_with_http_headers $input, $cookie, $output;
 }
