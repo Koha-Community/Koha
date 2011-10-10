@@ -4585,6 +4585,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.07.00.005";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BorrowerUnwantedField','','Name the fields you don''t need to store for a patron''s account',NULL,'free')");
+    print "Upgrade to $DBversion done (BorrowerUnwantedField syspref)\n";
+    SetVersion ($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)

@@ -100,6 +100,13 @@ my @field_check=split(/\|/,$check_BorrowerMandatoryField);
 foreach (@field_check) {
 	$template->param( "mandatory$_" => 1);    
 }
+# function to designate unwanted fields
+my $check_BorrowerUnwantedField=C4::Context->preference("BorrowerUnwantedField");
+@field_check=split(/\|/,$check_BorrowerUnwantedField);
+foreach (@field_check) {
+    next unless m/\w/o;
+	$template->param( "no$_" => 1);
+}
 $template->param( "add" => 1 ) if ( $op eq 'add' );
 $template->param( "duplicate" => 1 ) if ( $op eq 'duplicate' );
 $template->param( "checked" => 1 ) if ( defined($nodouble) && $nodouble eq 1 );

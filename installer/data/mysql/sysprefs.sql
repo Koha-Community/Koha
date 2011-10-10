@@ -325,6 +325,7 @@ INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES (
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('BasketConfirmations', '1', 'When closing or reopening a basket,', 'always ask for confirmation.|do not ask for confirmation.', 'Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('MARCAuthorityControlField008', '|| aca||aabn           | a|a     d', NULL, NULL, 'Textarea');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpenLibraryCovers',0,'If ON Openlibrary book covers will be show',NULL,'YesNo');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowerUnwantedField','','Name the fields you don\'t need to store for a patron\'s account',NULL,'free');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OpacKohaUrl','1',"Show 'Powered by Koha' text on OPAC footer.",NULL,NULL);
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('EasyAnalyticalRecords','0','If on, display in the catalogue screens tools to easily setup analytical record relationships','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowRecentComments',0,'If ON a link to recent comments will appear in the OPAC masthead',NULL,'YesNo');

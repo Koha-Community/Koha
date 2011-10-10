@@ -29,8 +29,13 @@ Patrons:
                no: "Don't"
          - default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942).
      -
-         - "The following database columns must be filled in on the patron entry screen:"
+         - "The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
          - pref: BorrowerMandatoryField
+           class: multi
+         - (separate columns with |)
+     -
+         - "The following <a href='http://schema.koha-community.org/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
+         - pref: BorrowerUnwantedField
            class: multi
          - (separate columns with |)
      -

@@ -224,6 +224,7 @@ $tabsysprefs{intranetreadinghistory}       = "Patrons";
 $tabsysprefs{NotifyBorrowerDeparture}      = "Patrons";
 $tabsysprefs{memberofinstitution}          = "Patrons";
 $tabsysprefs{BorrowerMandatoryField}       = "Patrons";
+$tabsysprefs{BorrowerUnwantedField}        = "Patrons";
 $tabsysprefs{borrowerRelationship}         = "Patrons";
 $tabsysprefs{BorrowersTitles}              = "Patrons";
 $tabsysprefs{patronimages}                 = "Patrons";
