@@ -411,21 +411,21 @@ CREATE TABLE `browser` (
 --
 
 DROP TABLE IF EXISTS `categories`;
-CREATE TABLE `categories` (
-  `categorycode` varchar(10) NOT NULL default '',
-  `description` mediumtext,
-  `enrolmentperiod` smallint(6) default NULL,
-  `enrolmentperioddate` DATE NULL DEFAULT NULL,
-  `upperagelimit` smallint(6) default NULL,
+CREATE TABLE `categories` ( -- this table shows information related to Koha patron categories
+  `categorycode` varchar(10) NOT NULL default '', -- unique primary key used to idenfity the patron category
+  `description` mediumtext, -- description of the patron category
+  `enrolmentperiod` smallint(6) default NULL, -- number of months the patron is enrolled for (will be NULL if enrolmentperioddate is set)
+  `enrolmentperioddate` DATE NULL DEFAULT NULL, -- date the patron is enrolled until (will be NULL if enrolmentperiod is set)
+  `upperagelimit` smallint(6) default NULL, -- age limit for the patron
   `dateofbirthrequired` tinyint(1) default NULL,
-  `finetype` varchar(30) default NULL,
+  `finetype` varchar(30) default NULL, -- unused in Koha
   `bulk` tinyint(1) default NULL,
-  `enrolmentfee` decimal(28,6) default NULL,
-  `overduenoticerequired` tinyint(1) default NULL,
-  `issuelimit` smallint(6) default NULL,
-  `reservefee` decimal(28,6) default NULL,
-  `hidelostitems` tinyint(1) NOT NULL default '0',
-  `category_type` varchar(1) NOT NULL default 'A',
+  `enrolmentfee` decimal(28,6) default NULL, -- enrollment fee for the patron
+  `overduenoticerequired` tinyint(1) default NULL, -- are overdue notices sent to this patron category (1 for yes, 0 for no)
+  `issuelimit` smallint(6) default NULL, -- unused in Koha
+  `reservefee` decimal(28,6) default NULL, -- cost to place holds
+  `hidelostitems` tinyint(1) NOT NULL default '0', -- are lost items shown to this category (1 for yes, 0 for no)
+  `category_type` varchar(1) NOT NULL default 'A', -- type of Koha patron (Adult, Child, Professional, Organizational, Statistical, Staff)
   PRIMARY KEY  (`categorycode`),
   UNIQUE KEY `categorycode` (`categorycode`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
