@@ -66,6 +66,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $OPACDisplayRequestPriority = (C4::Context->preference("OPACDisplayRequestPriority")) ? 1 : 0;
 my $patronupdate = $query->param('patronupdate');
+my $canrenew = 1;
 
 # get borrower information ....
 my ( $borr ) = GetMemberDetails( $borrowernumber );
@@ -80,6 +81,7 @@ $borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
 
 if ( $borr->{'debarred'} || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
     $borr->{'flagged'} = 1;
+    $canrenew = 0;
 }
 
 if ( $borr->{'amountoutstanding'} > 5 ) {
@@ -93,6 +95,7 @@ $no_renewal_amt ||= 0;
 
 if ( $borr->{amountoutstanding} > $no_renewal_amt ) {
     $borr->{'flagged'} = 1;
+    $canrenew = 0;
     $template->param(
         renewal_blocked_fines => sprintf( '%.02f', $no_renewal_amt ),
     );
@@ -129,13 +132,11 @@ $template->param(   BORROWER_INFO     => \@bordat,
 #get issued items ....
 
 my $count          = 0;
-my $toggle = 0;
 my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $itemtypes = GetItemTypes();
 my ($issues) = GetPendingIssues($borrowernumber);
-my $canrenew = 0;
 if ($issues){
 	foreach my $issue ( sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
 		# check for reserves
@@ -166,7 +167,6 @@ if ($issues){
 		($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
         if($status && C4::Context->preference("OpacRenewalAllowed")){
             $issue->{'status'} = $status;
-            $canrenew = 1;
         }
 		$issue->{'too_many'} = 1 if $renewerror and $renewerror eq 'too_many';
 		$issue->{'on_reserve'} = 1 if $renewerror and $renewerror eq 'on_reserve';
