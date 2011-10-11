@@ -89,10 +89,9 @@ if ( $query->param('modify') ) {
 
     # get all the fields:
     my $message = <<"EOF";
-Patron $borr->{'cardnumber'}
+Patron $borr->{'cardnumber'} has requested to change her/his personal details.
+Please check these new details and make the changes to these fields:
 
-has requested to change her/his personal details.
-Please check these new details and make the changes:
 EOF
 
     my $streetnumber = $borr->{'streetnumber'} || '';
@@ -113,12 +112,13 @@ EOF
            $borrowerfield  = format_date( $borr->{'dateofbirth'} ) || '';
         }
 
-        if($borrowerfield eq $newfield) {
-            $message .= "$field : $borrowerfield  -->  $newfield\n";
-        } else {
-            $message .= uc($field) . " : $borrowerfield  -->  $newfield\n";
+        if($borrowerfield ne $newfield) {
+            $message .= $field . " : $borrowerfield  -->  $newfield\n";
         }
     }
+
+    $message .= "\nEdit this patron's record: http://".C4::Context->preference('staffClientBaseURL ')."/cgi-bin/koha/members/memberentry.pl?op=modify&borrowernumber=".$borr->{'borrowernumber'}."&categorycode=".$borr->{'categorycode'} if C4::Context->preference('staffClientBaseURL ');
+
     $message .= "\n\nThanks,\nKoha\n\n";
     my %mail = (
         To      => $updateemailaddress,
