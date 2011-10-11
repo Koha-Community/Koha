@@ -58,7 +58,6 @@ $.tablesorter.addParser({
     <div id="yui-main">
     <div class="yui-b"><div class="yui-g">
 	<div id="userdetails" class="container">
-
 	[% IF ( bor_messages ) %]
 	       <div class="dialog message">
 	               <h3>Messages For You</h3>
@@ -89,7 +88,7 @@ $.tablesorter.addParser({
         </div>
         [% END %]
 
-        [% IF ( BORROWER_INF.flagged ) %]
+        [% IF ( patron_flagged ) %]
 		<div class="dialog alert">
         <ul>
             [% IF ( BORROWER_INF.debarred ) %]
@@ -196,7 +195,7 @@ $.tablesorter.addParser({
         [% IF ( show_barcode ) %]<th>Barcode</th>[% END %]
         <th>Call No.</th>
         [% IF ( OpacRenewalAllowed ) %]
-        [% UNLESS  patron_flagged %]<th class="{sorter: false}">Renew</th>[% END %]
+        <th class="{sorter: false}">Renew</th>
         [% END %]
 [% IF ( OPACFinesTab ) %]
         <th>Fines</th>
@@ -244,12 +243,10 @@ $.tablesorter.addParser({
                 [% IF ( show_barcode ) %]<td>[% ISSUE.barcode %]</td>[% END %]
                 <td>[% ISSUE.itemcallnumber %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
-                    [% UNLESS patron_flagged %]
-                    <td>[% IF ( ISSUE.status ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a> <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
+                    <td>[% IF ( ISSUE.status ) %][% IF ( canrenew ) %]<input type="checkbox" name="item" value="[% ISSUE.itemnumber %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber %]&amp;borrowernumber=[% ISSUE.borrowernumber %]">Renew</a>[% END %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>
                         [% ELSE %]
                         Not renewable[% IF ( ISSUE.too_many ) %] <span class="renewals">([% ISSUE.renewsleft %] of [% ISSUE.renewsallowed %] renewals remaining)</span>[% ELSE %][% IF ( ISSUE.on_reserve ) %] <span class="renewals">(On hold)</span>[% END %][% END %] 
                         [% END %]</td>
-                    [% END %]
                 [% END %]
 [% IF ( OPACFinesTab ) %]
                 <td>[% IF ( ISSUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
@@ -274,7 +271,7 @@ $.tablesorter.addParser({
 			[% FOREACH ISSUE IN ISSUES %]
 			<input type="hidden" name="item" value="[% ISSUE.itemnumber %]" />
 			[% END %]
-			[% UNLESS patron_flagged %]<input type="submit" value="Renew All" />[% END %]
+			<input type="submit" value="Renew All" />
 		</form>
 		[% END %]
         [% END %]
@@ -297,7 +294,8 @@ $.tablesorter.addParser({
 <th>Call No.</th>
 <th>Due</th>
 [% IF ( OpacRenewalAllowed ) %]
-                    [% UNLESS patron_flagged %]<th class="{sorter: false}">Renew</th>[% END %][% END %]
+                    <th class="{sorter: false}">Renew</th>
+[% END %]
 [% IF ( OPACFinesTab ) %]
 <th>Fines</th>
 [% END %]
@@ -329,15 +327,14 @@ $.tablesorter.addParser({
 <td>[% OVERDUE.itemcallnumber %]</td>
 <td>[% OVERDUE.date_due %]</td>
                 [% IF ( OpacRenewalAllowed ) %]
-                    [% UNLESS patron_flagged %]
 <td>
 [% IF ( OVERDUE.debarred ) %]Account Frozen
 [% ELSIF ( OVERDUE.status ) %]
-<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber %]&amp;bornum=[% OVERDUE.borrowernumber %]">Renew</a> <span class="renewals">([% OVERDUE.renewsleft %] of [% OVERDUE.renewsallowed %] renewals remaining)</span>
-[% ELSIF ( OVERDUE.onreserve ) %]On Reserve
+[% IF ( canrenew ) %]<a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber %]&amp;bornum=[% OVERDUE.borrowernumber %]">Renew</a>[% END %] <span class="renewals">([% OVERDUE.renewsleft %] of [% OVERDUE.renewsallowed %] renewals remaining)</span>
+[% ELSIF ( OVERDUE.onreserve ) %]On hold
 [% ELSE %]No renewals left
 [% END %]
-</td>[% END %][% END %]
+</td>[% END %]
 [% IF ( OPACFinesTab ) %]
 <td>[% IF ( OVERDUE.charges ) %]Yes[% ELSE %]No[% END %]</td>
 [% END %]
