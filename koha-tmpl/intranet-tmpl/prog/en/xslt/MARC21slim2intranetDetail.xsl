@@ -166,7 +166,7 @@
         </xsl:for-each>
 
         <!-- 490 Series not traced, Ind1 = 0 -->
-        <xsl:for-each select="marc:datafield[@tag=490][@ind1=0]">
+        <xsl:for-each select="marc:datafield[@tag=490][@ind1!=1]">
              <a href="/cgi-bin/koha/catalogue/search.pl?q=se:{marc:subfield[@code='a']}">
                         <xsl:call-template name="chopPunctuation">
                             <xsl:with-param name="chopString">
