@@ -574,10 +574,6 @@ No patron matched <span class="ex">[% message %]</span>
                </form>
 			</li>[% END %]
 
-            [% IF ( dbarred ) %]<li class="blocker">
-               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% borrowernumber %]&amp;cardnumber=[% cardnumber %]&amp;destination=circ&amp;status=0">Lift restriction</a>
-</li>[% END %]
-
         	[% IF ( odues ) %]<li>[% IF ( nonreturns ) %]<span class="circ-hlt">Overdues:</span> Patron has <span class="circ-hlt">ITEMS OVERDUE</span>. See highlighted items <a href="#checkouts">below</a>[% END %]</li>
             [% END %]
 

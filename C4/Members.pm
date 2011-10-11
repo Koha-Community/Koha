@@ -25,7 +25,7 @@ use strict;
 use C4::Context;
 use C4::Dates qw(format_date_in_iso);
 use Digest::MD5 qw(md5_base64);
-use Date::Calc qw/Today Add_Delta_YM/;
+use Date::Calc qw/Today Add_Delta_YM check_date Date_to_Days/;
 use C4::Log; # logaction
 use C4::Overdues;
 use C4::Reserves;
@@ -451,13 +451,15 @@ sub patronflags {
         $flaginfo{'noissues'} = 1;
         $flags{'LOST'}        = \%flaginfo;
     }
-    if (   $patroninformation->{'debarred'}
-        && $patroninformation->{'debarred'} == 1 )
-    {
-        my %flaginfo;
-        $flaginfo{'message'}  = 'Borrower is Debarred.';
-        $flaginfo{'noissues'} = 1;
-        $flags{'DBARRED'}     = \%flaginfo;
+    if ( $patroninformation->{'debarred'} && check_date( split( /-/, $patroninformation->{'debarred'} ) ) ) {
+        if ( Date_to_Days(Date::Calc::Today) < Date_to_Days( split( /-/, $patroninformation->{'debarred'} ) ) ) {
+            my %flaginfo;
+            $flaginfo{'debarredcomment'} = $patroninformation->{'debarredcomment'};
+            $flaginfo{'message'}         = $patroninformation->{'debarredcomment'};
+            $flaginfo{'noissues'}        = 1;
+            $flaginfo{'dateend'}         = $patroninformation->{'debarred'};
+            $flags{'DBARRED'}           = \%flaginfo;
+        }
     }
     if (   $patroninformation->{'borrowernotes'}
         && $patroninformation->{'borrowernotes'} )

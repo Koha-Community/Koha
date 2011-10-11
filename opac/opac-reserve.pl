@@ -29,6 +29,7 @@ use C4::Dates qw/format_date/;
 use C4::Context;
 use C4::Members;
 use C4::Branch; # GetBranches
+use C4::Overdues;
 use C4::Debug;
 # use Data::Dumper;
 
@@ -278,7 +279,7 @@ if ( $borr->{lost} && ($borr->{lost} eq 1) ) {
                      lost    => 1
                     );
 }
-if ( $borr->{debarred} && ($borr->{debarred} eq 1) ) {
+if ( CheckBorrowerDebarred($borrowernumber) ) {
     $noreserves = 1;
     $template->param(
                      message  => 1,
