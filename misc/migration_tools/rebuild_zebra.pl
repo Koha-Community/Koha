@@ -175,7 +175,7 @@ if ($keep_export) {
 sub check_zebra_dirs {
 	my ($base) = shift() . '/';
 	my $needed_repairing = 0;
-	my @dirs = ( '', 'key', 'register', 'shadow' );
+	my @dirs = ( '', 'key', 'register', 'shadow', 'tmp' );
 	foreach my $dir (@dirs) {
 		my $bdir = $base . $dir;
         if (! -d $bdir) {
