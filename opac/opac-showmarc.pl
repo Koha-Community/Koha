@@ -27,8 +27,11 @@
 use strict;
 use warnings;
 
+use open OUT=>':utf8', ':std';
+
 # standard or CPAN modules used
 use CGI;
+use Encode;
 
 # Koha modules used
 use C4::Context;
@@ -79,8 +82,8 @@ if ($view eq 'card' || $view eq 'html') {
     my $stylesheet = $xslt->parse_stylesheet($style_doc);
     my $results = $stylesheet->transform($source);
     my $newxmlrecord = $stylesheet->output_string($results);
-    print $input->header(), $newxmlrecord;
-    exit;
+    $newxmlrecord = Encode::decode_utf8($newxmlrecord) unless utf8::is_utf8($newxmlrecord);
+    print $input->header(-charset => 'UTF-8'), $newxmlrecord;
 } else {
     $record =GetMarcBiblio($biblionumber) unless $record; 
     $template->param( MARC_FORMATTED => $record->as_formatted );
