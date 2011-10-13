@@ -4499,7 +4499,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
 		
 }
 
-$DBversion = "3.05.00.XXX";
+$DBversion = "3.05.00.018";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('OpacNavBottom','','Links after OpacNav links','70|10','Textarea')");
     print "Upgrade to $DBversion done (add OpacNavBottom syspref (enh 6825): if appropriate, you can split OpacNav into OpacNav and OpacNavBottom)\n";
