@@ -441,7 +441,7 @@ sub build_issue_data {
             $it->{'borrowernumber'},$it->{'itemnumber'}
         );
         $it->{"renew_error_${can_renew_error}"} = 1 if defined $can_renew_error;
-        my ( $restype, $reserves ) = CheckReserves( $it->{'itemnumber'} );
+        my ( $restype, $reserves, undef ) = CheckReserves( $it->{'itemnumber'} );
         $it->{'can_renew'} = $can_renew;
         $it->{'can_confirm'} = !$can_renew && !$restype;
         $it->{'renew_error'} = $restype;

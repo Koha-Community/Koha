@@ -142,7 +142,7 @@ my $canrenew = 0;
 if ($issues){
 	foreach my $issue ( sort { $b->{'date_due'} cmp $a->{'date_due'} } @$issues ) {
 		# check for reserves
-		my ( $restype, $res ) = CheckReserves( $issue->{'itemnumber'} );
+		my ( $restype, $res, undef ) = CheckReserves( $issue->{'itemnumber'} );
 		if ( $restype ) {
 			$issue->{'reserved'} = 1;
 		}

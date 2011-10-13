@@ -109,6 +109,7 @@ BEGIN {
         &ModReserveStatus
         &ModReserveCancelAll
         &ModReserveMinusPriority
+        &MoveReserve
         
         &CheckReserves
         &CanBookBeReserved
@@ -523,7 +524,7 @@ sub GetOtherReserves {
     my ($itemnumber) = @_;
     my $messages;
     my $nextreservinfo;
-    my ( $restype, $checkreserves ) = CheckReserves($itemnumber);
+    my ( undef, $checkreserves, undef ) = CheckReserves($itemnumber);
     if ($checkreserves) {
         my $iteminfo = GetItem($itemnumber);
         if ( $iteminfo->{'holdingbranch'} ne $checkreserves->{'branchcode'} ) {
@@ -738,8 +739,8 @@ sub GetReserveStatus {
 
 =head2 CheckReserves
 
-  ($status, $reserve) = &CheckReserves($itemnumber);
-  ($status, $reserve) = &CheckReserves(undef, $barcode);
+  ($status, $reserve, $all_reserves) = &CheckReserves($itemnumber);
+  ($status, $reserve, $all_reserves) = &CheckReserves(undef, $barcode);
 
 Find a book in the reserves.
 
@@ -804,11 +805,11 @@ sub CheckReserves {
     # note: we get the itemnumber because we might have started w/ just the barcode.  Now we know for sure we have it.
     my ( $biblio, $bibitem, $notforloan_per_itemtype, $notforloan_per_item, $itemnumber ) = $sth->fetchrow_array;
 
-    return ( 0, 0 ) unless $itemnumber; # bail if we got nothing.
+    return ( '' ) unless $itemnumber; # bail if we got nothing.
 
     # if item is not for loan it cannot be reserved either.....
     #    execpt where items.notforloan < 0 :  This indicates the item is holdable. 
-    return ( 0, 0 ) if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
+    return ( '' ) if  ( $notforloan_per_item > 0 ) or $notforloan_per_itemtype;
 
     # Find this item in the reserves
     my @reserves = _Findgroupreserve( $bibitem, $biblio, $itemnumber );
@@ -822,7 +823,7 @@ sub CheckReserves {
         my $priority = 10000000;
         foreach my $res (@reserves) {
             if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
-                return ( "Waiting", $res ); # Found it
+                return ( "Waiting", $res, \@reserves ); # Found it
             } else {
                 # See if this item is more important than what we've got so far
                 if ( $res->{'priority'} && $res->{'priority'} < $priority ) {
@@ -843,11 +844,10 @@ sub CheckReserves {
     # We return the most important (i.e. next) reservation.
     if ($highest) {
         $highest->{'itemnumber'} = $item;
-        return ( "Reserved", $highest );
+        return ( "Reserved", $highest, \@reserves );
     }
-    else {
-        return ( 0, 0 );
-    }
+
+    return ( '' );
 }
 
 =head2 CancelExpiredReserves
@@ -1814,6 +1814,53 @@ sub _ShiftPriorityByDateAndPriority {
     }
 
     return $new_priority;  # so the caller knows what priority they wind up receiving
+}
+
+=head2 MoveReserve
+
+  MoveReserve( $itemnumber, $borrowernumber, $cancelreserve )
+
+Use when checking out an item to handle reserves
+If $cancelreserve boolean is set to true, it will remove existing reserve
+
+=cut
+
+sub MoveReserve {
+    my ( $itemnumber, $borrowernumber, $cancelreserve ) = @_;
+
+    my ( $restype, $res, $all_reserves ) = CheckReserves( $itemnumber );
+    return unless $res;
+
+    my $biblionumber     =  $res->{biblionumber};
+    my $biblioitemnumber = $res->{biblioitemnumber};
+
+    if ($res->{borrowernumber} == $borrowernumber) {
+        ModReserveFill($res);
+    }
+    else {
+        # warn "Reserved";
+        # The item is reserved by someone else.
+        # Find this item in the reserves
+
+        my $borr_res;
+        foreach (@$all_reserves) {
+            $_->{'borrowernumber'} == $borrowernumber or next;
+            $_->{'biblionumber'}   == $biblionumber   or next;
+
+            $borr_res = $_;
+            last;
+        }
+
+        if ( $borr_res ) {
+            # The item is reserved by the current patron
+            ModReserveFill($borr_res);
+        }
+
+        if ($cancelreserve) { # cancel reserves on this item
+            CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
+            CancelReserve($res->{'biblionumber'}, 0, $res->{'borrowernumber'});
+        }
+    }
 }
 
 =head2 MergeHolds
