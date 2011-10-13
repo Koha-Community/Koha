@@ -128,9 +128,7 @@ foreach my $item (@items){
     $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
     $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'description'};
     $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
-    $item->{'datelastborrowed'}        = format_date( $item->{'datelastborrowed'} );
-    $item->{'dateaccessioned'}         = format_date( $item->{'dateaccessioned'} );
-    $item->{'datelastseen'}            = format_date( $item->{'datelastseen'} );
+    $item->{$_}                        = format_date( $item->{$_} ) foreach qw/datelastborrowed dateaccessioned datelastseen lastreneweddate/;
     $item->{'copyvol'}                 = $item->{'copynumber'};
 
     # item has a host number if its biblio number does not match the current bib
