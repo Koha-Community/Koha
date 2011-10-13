@@ -29,6 +29,7 @@ sub methods : Test( 1 ) {
                        ModReserveAffect 
                        ModReserveCancelAll 
                        ModReserveMinusPriority 
+                       MoveReserve
                        GetReserveInfo 
                        _FixPriority 
                        _Findgroupreserve 

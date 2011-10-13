@@ -51,12 +51,12 @@ AddReserve($branch,    $borrowernumber, $biblionumber,
         $constraint, $bibitems,  $priority,       $notes,
         $title,      $checkitem, $found);
         
-my ($status, $reserve) = CheckReserves($itemnumber, $barcode);
+my ($status, $reserve, $all_reserves) = CheckReserves($itemnumber, $barcode);
 ok($status eq "Reserved", "CheckReserves Test 1");
 
-($status, $reserve) = CheckReserves($itemnumber);
+($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
 ok($status eq "Reserved", "CheckReserves Test 2");
 
-($status, $reserve) = CheckReserves(undef, $barcode);
+($status, $reserve, $all_reserves) = CheckReserves(undef, $barcode);
 ok($status eq "Reserved", "CheckReserves Test 3");
 
