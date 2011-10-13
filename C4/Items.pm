@@ -1214,6 +1214,7 @@ sub GetItemsInfo {
             $data->{cardnumber}     = $idata->{cardnumber};
             $data->{surname}     = $idata->{surname};
             $data->{firstname}     = $idata->{firstname};
+            $data->{lastreneweddate} = $idata->{lastreneweddate};
             $datedue                = $idata->{'date_due'};
         if (C4::Context->preference("IndependantBranches")){
         my $userenv = C4::Context->userenv;
