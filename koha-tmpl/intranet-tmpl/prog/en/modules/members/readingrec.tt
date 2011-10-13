@@ -11,9 +11,10 @@
 		type: 'text'
 	});
 	$.tablesorter.defaults.widgets = ['zebra'];
-	$("#table_readingrec").tablesorter({
+	$("#table_readingrec").tablesorter({[% IF ( dateformat_metric ) %]
+		dateFormat: 'uk',[% END %]
 		sortList: [[8,1]],
-		headers: { 1: { sorter: 'articles' }}
+		headers: { 1: { sorter: 'articles' }, 9: { sorter: 'shortDate'} }
 	}).tablesorterPager({container: $("#pagertable_readingrec"),positionFixed: false,size: 20});
 }); </script>
 </head>
