@@ -319,7 +319,7 @@ sub transferbook {
 
     # find reserves.....
     # That'll save a database query.
-    my ( $resfound, $resrec ) =
+    my ( $resfound, $resrec, undef ) =
       CheckReserves( $itemnumber );
     if ( $resfound and not $ignoreRs ) {
         $resrec->{'ResFound'} = $resfound;
@@ -869,7 +869,7 @@ sub CanBookBeIssued {
     }
 
     # See if the item is on reserve.
-    my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
+    my ( $restype, $res, undef ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($restype) {
 		my $resbor = $res->{'borrowernumber'};
 		my ( $resborrower ) = C4::Members::GetMember( borrowernumber => $resbor );
@@ -983,39 +983,7 @@ sub AddIssue {
 				);
 			}
 
-			# See if the item is on reserve.
-			my ( $restype, $res ) =
-			  C4::Reserves::CheckReserves( $item->{'itemnumber'} );
-			if ($restype) {
-				my $resbor = $res->{'borrowernumber'};
-				if ( $resbor eq $borrower->{'borrowernumber'} ) {
-					# The item is reserved by the current patron
-					ModReserveFill($res);
-				}
-				elsif ( $restype eq "Waiting" ) {
-					# warn "Waiting";
-					# The item is on reserve and waiting, but has been
-					# reserved by some other patron.
-				}
-				elsif ( $restype eq "Reserved" ) {
-					# warn "Reserved";
-					# The item is reserved by someone else.
-					if ($cancelreserve) { # cancel reserves on this item
-						CancelReserve(0, $res->{'itemnumber'}, $res->{'borrowernumber'});
-					}
-				}
-				if ($cancelreserve) {
-					CancelReserve($res->{'biblionumber'}, 0, $res->{'borrowernumber'});
-				}
-				else {
-					# set waiting reserve to first in reserve queue as book isn't waiting now
-					ModReserve(1,
-						$res->{'biblionumber'},
-						$res->{'borrowernumber'},
-						$res->{'branchcode'}
-					);
-				}
-			}
+            MoveReserve( $item->{'itemnumber'}, $borrower->{'borrowernumber'}, $cancelreserve );
 
 			# Starting process for transfer job (checking transfert and validate it if we have one)
             my ($datesent) = GetTransfers($item->{'itemnumber'});
@@ -1630,7 +1598,7 @@ sub AddReturn {
 
     # find reserves.....
     # if we don't have a reserve with the status W, we launch the Checkreserves routine
-    my ($resfound, $resrec) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
+    my ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($resfound) {
           $resrec->{'ResFound'} = $resfound;
         $messages->{'ResFound'} = $resrec;
@@ -2193,7 +2161,7 @@ sub CanBookBeRenewed {
 			$error="too_many";
 		}
 		
-        my ( $resfound, $resrec ) = C4::Reserves::CheckReserves($itemnumber);
+        my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
         if ($resfound) {
             $renewokay = 0;
 			$error="on_reserve"

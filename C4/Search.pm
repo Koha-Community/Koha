@@ -1646,7 +1646,7 @@ sub searchResults {
                 my ($transfertfrom, $transfertto);
 
                 # is item on the reserve shelf?
-		my $reservestatus = 0;
+		my $reservestatus = '';
 		my $reserveitem;
 
                 unless ($item->{wthdrawn}
@@ -1668,7 +1668,7 @@ sub searchResults {
                     #        should map transit status to record indexed in Zebra.
                     #
                     ($transfertwhen, $transfertfrom, $transfertto) = C4::Circulation::GetTransfers($item->{itemnumber});
-		    ($reservestatus, $reserveitem) = C4::Reserves::CheckReserves($item->{itemnumber});
+		    ($reservestatus, $reserveitem, undef) = C4::Reserves::CheckReserves($item->{itemnumber});
                 }
 
                 # item is withdrawn, lost, damaged, not for loan, reserved or in transit

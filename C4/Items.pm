@@ -1224,7 +1224,7 @@ sub GetItemsInfo {
 			$serial = 1;
         }
 		if ( $datedue eq '' ) {
-            my ( $restype, $reserves ) =
+            my ( $restype, $reserves, undef ) =
               C4::Reserves::CheckReserves( $data->{'itemnumber'} );
 # Previous conditional check with if ($restype) is not needed because a true
 # result for one item will result in subsequent items defaulting to this true
