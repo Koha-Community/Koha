@@ -130,8 +130,8 @@ $(document).ready(function() { calcNewsuggTotal(); });
     <fieldset class="rows"> <legend>Suggestion management</legend>
        <ol>
             [% IF ( suggestionid ) %]<li><label for="status">Status:</label><select id="STATUS" name="STATUS"><option value="">No Status</option>
-                [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Asked</option> 
-                [% ELSE %]<option value="ASKED">Asked</option>[% END %]
+                [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Pending</option> 
+                [% ELSE %]<option value="ASKED">Pending</option>[% END %]
                 [% IF (statusselected_ACCEPTED ) %]<option value="ACCEPTED" selected="selected">Accepted</option>
                 [% ELSE %]<option value="ACCEPTED">Accepted</option>[% END %]
                 [% IF (statusselected_CHECKED ) %]<option value="CHECKED" selected="selected">Checked</option>
@@ -268,7 +268,7 @@ $(document).ready(function() { calcNewsuggTotal(); });
                     [% suggestions_loo.budget_name %]
                 </td>
                 <td>
-                    [% IF ( suggestions_loo.ASKED ) %]Asked[% END %] [% IF ( suggestions_loo.ACCEPTED ) %]Accepted[% END %] [% IF ( suggestions_loo.ORDERED ) %]Ordered[% END %] [% IF ( suggestions_loo.REJECTED ) %]Rejected[% END %] [% IF ( suggestions_loo.CHECKED ) %]Checked[% END %] [% IF ( suggestions_loo.reason ) %]<br />([% suggestions_loo.reason %])[% END %]
+                    [% IF ( suggestions_loo.ASKED ) %]Pending[% END %] [% IF ( suggestions_loo.ACCEPTED ) %]Accepted[% END %] [% IF ( suggestions_loo.ORDERED ) %]Ordered[% END %] [% IF ( suggestions_loo.REJECTED ) %]Rejected[% END %] [% IF ( suggestions_loo.CHECKED ) %]Checked[% END %] [% IF ( suggestions_loo.reason ) %]<br />([% suggestions_loo.reason %])[% END %]
                 </td>
         </tr>
         [% END %]</tbody>
@@ -277,8 +277,8 @@ $(document).ready(function() { calcNewsuggTotal(); });
         <div id="status[% suggestion.suggestiontype %]">
 	<label for="STATUS[% suggestion.suggestiontype %]">Mark selected as: </label><select name="STATUS" id="STATUS[% suggestion.suggestiontype %]">
 	<option value=""> -- Choose a status --</option>
-    [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Asked</option> 
-    [% ELSE %]<option value="ASKED">Asked</option>[% END %]
+    [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Pending</option> 
+    [% ELSE %]<option value="ASKED">Pending</option>[% END %]
     [% IF (statusselected_ACCEPTED ) %]<option value="ACCEPTED" selected="selected">Accepted</option>
     [% ELSE %]<option value="ACCEPTED">Accepted</option>[% END %]
     [% IF (statusselected_CHECKED ) %]<option value="CHECKED" selected="selected">Checked</option>
@@ -338,8 +338,8 @@ $(document).ready(function() { calcNewsuggTotal(); });
 				 <fieldset class="brief"><h4 class="collapse"><a href="#">Suggestion information</a></h4>
                     <ol>
                       <li><label for="status"> Status:</label><select name="STATUS" id="STATUS"><option value="">Any</option>
-                        [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Asked</option> 
-                        [% ELSE %]<option value="ASKED">Asked</option>[% END %]
+                        [% IF (statusselected_ASKED ) %]<option value="ASKED" selected="selected">Pending</option> 
+                        [% ELSE %]<option value="ASKED">Pending</option>[% END %]
                         [% IF (statusselected_ACCEPTED ) %]<option value="ACCEPTED" selected="selected">Accepted</option>
                         [% ELSE %]<option value="ACCEPTED">Accepted</option>[% END %]
                         [% IF (statusselected_CHECKED ) %]<option value="CHECKED" selected="selected">Checked</option>
