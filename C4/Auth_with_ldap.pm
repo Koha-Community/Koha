@@ -155,7 +155,7 @@ sub checkpw_ldap {
             ($cardnumber eq $c2) or warn "update_local returned cardnumber '$c2' instead of '$cardnumber'";
         } else { # C1, D1
             # maybe update just the password?
-		return(1, $cardnumber); # FIXME dpavlin -- don't destroy ExtendedPatronAttributes
+		return(1, $cardnumber, $local_userid);
         }
     } elsif ($config{replicate}) { # A2, C2
         $borrowernumber = AddMember(%borrower) or die "AddMember failed";
@@ -182,7 +182,7 @@ sub checkpw_ldap {
 		}
            C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
   	}
-return(1, $cardnumber);
+return(1, $cardnumber, $userid);
 }
 
 # Pass LDAP entry object and local cardnumber (userid).
