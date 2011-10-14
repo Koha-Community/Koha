@@ -750,7 +750,7 @@ sub checkauth {
 		    $info{'invalidCasLogin'} = 1 unless ($return);
         	} else {
 		    my $retuserid;
-		    ( $return, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
+		    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
 		    $userid = $retuserid if ($retuserid ne '');
 		}
 		if ($return) {
@@ -1452,7 +1452,7 @@ sub checkpw {
 
             C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
-            return 1, $userid;
+            return 1, $cardnumber, $userid;
         }
     }
     $sth =
