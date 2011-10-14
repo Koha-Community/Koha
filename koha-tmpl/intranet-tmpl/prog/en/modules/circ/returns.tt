@@ -228,8 +228,8 @@ $(document).ready(function () {
         <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
 [% IF ( wborcnum ) %]<h5>Hold for:</h5>
         <ul><li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">
-            [% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
-        <li>[% wborstnum %] [% wboraddress %][% IF ( wboraddress2 ) %]<br />
+            [% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
+                <li>[% wborstnum %] [% wboraddress %][% IF ( wboraddress2 ) %]<br />
 		[% wboraddress2 %]<br />[% END %]
         [% wborcity %]  [% wborzip %]</li>
         [% IF ( wborphone ) %]<li>[% wborphone %]</li>[% END %]
@@ -274,6 +274,7 @@ $(document).ready(function () {
 
                     <li>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])
+                        <span class="patron-category"> - [% wborcategory %]</span>
                     </li>
 
                     <li>
@@ -352,7 +353,7 @@ $(document).ready(function () {
                 <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% itembarcode |html %]: [% title |html %]</a></p>
                 <h4>Hold for: </h4>
                     <ul>
-                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %])</li>
+                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]">[% borsurname %], [% borfirstname %]</a> ([% borcnum %]) <span class="patron-category"> - [% wborcategory %]</span> </li>
                         <li>[% borstnum %] [% boraddress %]<br />
 						[% IF ( boraddress2 ) %][% boraddress2 %]<br />[% END %]
 						[% borcity %]  [% borzip %]</li>
@@ -477,6 +478,7 @@ $(document).ready(function () {
                                 [% borsurname %], [% borfirstname %]
                             </a>
                             ([% borcnum %])
+                            <span class="patron-category"> - [% wborcategory %]</span>
                         </li>
 
                         <li>
