@@ -750,7 +750,7 @@ sub checkauth {
 		    $info{'invalidCasLogin'} = 1 unless ($return);
         	} else {
 		    my $retuserid;
-		    ( $return, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
+		    ( $return, $cardnumber, $retuserid ) = checkpw( $dbh, $userid, $password, $query );
 		    $userid = $retuserid if ($retuserid ne '');
 		}
 		if ($return) {
@@ -1425,8 +1425,8 @@ sub checkpw {
     my ( $dbh, $userid, $password, $query ) = @_;
     if ($ldap) {
         $debug and print "## checkpw - checking LDAP\n";
-        my ($retval,$retcard) = checkpw_ldap(@_);    # EXTERNAL AUTH
-        ($retval) and return ($retval,$retcard);
+        my ($retval,$retcard,$retuserid) = checkpw_ldap(@_);    # EXTERNAL AUTH
+        ($retval) and return ($retval,$retcard,$retuserid);
     }
 
     if ($cas && $query && $query->param('ticket')) {
@@ -1452,7 +1452,7 @@ sub checkpw {
 
             C4::Context->set_userenv( "$borrowernumber", $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
-            return 1, $userid;
+            return 1, $cardnumber, $userid;
         }
     }
     $sth =
@@ -1468,7 +1468,7 @@ sub checkpw {
 
             C4::Context->set_userenv( $borrowernumber, $userid, $cardnumber,
                 $firstname, $surname, $branchcode, $flags );
-            return 1, $userid;
+            return 1, $cardnumber, $userid;
         }
     }
     if (   $userid && $userid eq C4::Context->config('user')
