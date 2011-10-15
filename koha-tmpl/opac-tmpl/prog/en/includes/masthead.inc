@@ -80,7 +80,7 @@
       <select name="limit" id="masthead_search" class="left" style="max-width:10em;width:10em;">
          <option value="">All Libraries</option>
          [% FOREACH BranchesLoo IN BranchesLoop %]
-            [% IF ( BranchesLoo.selected ) %]<option select="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
+            [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
             [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
          [% END %]
       </select>
