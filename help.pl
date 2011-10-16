@@ -32,15 +32,9 @@ our $refer = $query->param('url');
 $refer = $query->referer()  if !$refer || $refer eq 'undefined';
 
 $refer =~ /koha\/(.*)\.pl/;
-my $from = "modules/help/$1.tt";
+my $from = "help/$1.tt";
 
-my $htdocs = C4::Context->config('intrahtdocs');
-my ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $query );
-unless ( -e "$htdocs/$theme/$lang/$from" ) {
-    $from = "modules/help/nohelp.tt";
-    ( $theme, $lang ) = C4::Templates::themelanguage( $htdocs, $from, "intranet", $query );
-}
-my $template = C4::Templates->new('intranet', "$htdocs/$theme/$lang/$from");
+my $template = C4::Templates::gettemplate($from, 'intranet', $query);
 $template->param( referer => $refer );
 
 output_html_with_http_headers $query, "", $template->output;

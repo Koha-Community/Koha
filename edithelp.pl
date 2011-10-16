@@ -97,14 +97,12 @@ elsif ( $type eq 'modify' ) {
 	} else {
 		(-w $file) or $error = 
 			"WARNING: You will not be able save, because your webserver cannot write to '$file'. Contact your admin about help file permissions.";
-    	open (INFILE, $file) or die "Cannot read file '$file'";		# unlikely death, since we just checked
+    	open (my $fh, '<', $file) or die "Cannot read file '$file'";		# unlikely death, since we just checked
 		my $help = '';
-		while ( my $inp = <INFILE> ) {
-			unless ( $inp =~ /INCLUDE/ ) {
-				$help .= $inp;
-			}
+        while ( <$fh> ) {
+            $help .= /\[% INCLUDE .* %\](.*)$/ ? $1 : $_;
 		}
-		close INFILE;
+		close $fh;
     	$template->param( 'help' => $help );
 		$type = 'save';
 	}
