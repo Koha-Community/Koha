@@ -53,7 +53,7 @@ function Check(ff) {
             if (ff.field_value[i].value.length == 0 && ff.mandatory[i].value == 1) {
                 empty_item_mandatory++;
             }
-            if(ff.subfield[i].value === 'p' && ff.field_value[i].value.length != 0) {
+            if(ff.subfield[i].value === '[% barcode_subfield %]' && ff.field_value[i].value.length != 0) {
                 barcodes.push(ff.field_value[i].value);
             }
         }
