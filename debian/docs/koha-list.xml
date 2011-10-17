@@ -1,0 +1,73 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-list</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Communnity</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-list">
+
+  <refmeta>
+    <refentrytitle>koha-list</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-list</refname>
+    <refpurpose>Lists Koha instances, optionally only those that are enabled or have email turned on.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-list</command> <arg><option>--enabled</option></arg> <arg><option>--email</option></arg> <arg><option>-h</option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+  
+  <refsect1><title>Options</title>
+  <para>The filtering options can be combined, and you probably want to do this (except --email and --noemail, that's just silly.)</para>
+  <variablelist> 
+    <varlistentry>
+      <term><option>--enabled</option></term>
+      <listitem>
+        <para>Only show instances that are enabled.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--email</option></term>
+      <listitem>
+        <para>Only show instances that have email enabled.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--noemail</option></term>
+      <listitem>
+        <para>Only show instances that do not have email enabled.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-h</option></term>
+      <listitem>
+        <para>This help.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+  <para>Lists Koha instances, optionally only those that are enabled or have email turned on.</para>
+  </refsect1>
+  
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>koha-create-dirs(8)</command></member>
+    <member><command>koha-foreach(8)</command></member>
+  </simplelist>
+  </refsect1>
+  
+</refentry>
+
+</article>

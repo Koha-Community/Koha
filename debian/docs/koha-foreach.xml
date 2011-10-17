@@ -1,5 +1,5 @@
 <article xmlns='http://docbook.org/ns/docbook'>
-<title>koha-remove</title>
+<title>koha-foreach</title>
 <info>
 <productname>Koha</productname> is the first free software library automation package.
 <author>
@@ -8,35 +8,33 @@
 </author>
 </info>
 
-<refentry xml:id="koha-remove">
+<refentry xml:id="koha-foreach">
 
   <refmeta>
-    <refentrytitle>koha-remove</refentrytitle>
+    <refentrytitle>koha-foreach</refentrytitle>
     <manvolnum>8</manvolnum>
   </refmeta>
 
   <refnamediv>
-    <refname>koha-remove</refname>
-    <refpurpose>Remove a Koha instance.</refpurpose>
+    <refname>koha-foreach</refname>
+    <refpurpose>Run a command for each Koha instance. Takes the same arguments as koha-list.</refpurpose>
     <refclass>UNIX/Linux</refclass>
   </refnamediv>
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-remove</command> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+      <command>koha-list</command> <arg><option>--enabled</option></arg> <arg><option>--email</option>|<option>--noemail</option></arg> <arg><option>command</option></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1><title>Description</title>
-  <para>Remove a Koha instance.</para>
+  <para>Run a command for each Koha instance. Takes the same arguments as koha-list.</para>
   </refsect1>
   
   <refsect1><title>See also</title>
   <simplelist type="inline">
-    <member><command>koha-disable(8)</command></member>
-    <member><command>koha-dump(8)</command></member>
-    <member><command>koha-enable(8)</command></member>
-    <member><command>koha-restore(8)</command></member>
+    <member><command>koha-create-dirs(8)</command></member>
+    <member><command>koha-list(8)</command></member>
   </simplelist>
   </refsect1>
   
