@@ -35,7 +35,7 @@
 	[% END %]
     </label>
 
-	<select name="idx" id="masthead_search" class="left" style="max-width:10em;width:10em;">
+	<select name="idx" id="masthead_search" class="left">
 	[% IF ( ms_kw ) %]
         <option selected="selected" value="">Library Catalog</option>
 		[% ELSE %]
@@ -77,7 +77,7 @@
         <input type="text" id = "transl1" name="q" class="left" style="width: 35%; font-size: 111%;"/><div id="translControl"></div>
 [% END %]
    [% IF ( OpacAddMastheadLibraryPulldown ) %]
-      <select name="limit" id="masthead_search" class="left" style="max-width:10em;width:10em;">
+      <select name="limit" id="select_library" class="left">
          <option value="">All Libraries</option>
          [% FOREACH BranchesLoo IN BranchesLoop %]
             [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
