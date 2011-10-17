@@ -3,8 +3,28 @@
 <listen id="biblioserver" >unix:/var/run/koha/__KOHASITE__/bibliosocket</listen>
 <listen id="authorityserver" >unix:/var/run/koha/__KOHASITE__/authoritysocket</listen>
 
+<!-- Uncomment the following entry if you want to run the public Z39.50 server.
+    Also uncomment the <server> and <serverinfo> sections for id 'publicserver'
+    under PUBLICSERVER'S BIBLIOGRAPHIC RECORDS title-->
+<!--
+<listen id="publicserver" >tcp:@:__ZEBRA_SRU_BIBLIOS_PORT__</listen>
+-->
+
+<!-- Settings for special biblio server instance for PazPar2.
+     Because PazPar2 only connects to a Z39.50 server using TCP/IP,
+     it cannot use the Unix-domain socket that biblioserver uses.
+     Therefore, a custom server is defined. -->
+<!--
+<listen id="mergeserver">tcp:@:__MERGE_SERVER_PORT__</listen>
+<server id="mergeserver"  listenref="mergeserver">
+    <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
+    <config>/var/lib/koha/__KOHASITE__/zebra-biblios.cfg</config>
+    <cql2rpn>/var/lib/koha/__KOHASITE__/pqf.properties</cql2rpn>
+</server>
+-->
+
 <!-- BIBLIOGRAPHIC RECORDS -->
-<server id="biblioserver"  listenref="biblioserver"> 
+<server id="biblioserver"  listenref="biblioserver">
     <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
     <config>/etc/koha/sites/__KOHASITE__/zebra-biblios.cfg</config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
@@ -56,10 +76,26 @@
          </backend>
        </retrieval>
      </retrievalinfo>
+    <!-- The stuff below is used to enable SRU. It's currently disabled
+         until we come up with a good way to make it get magically set up by
+         the packaging system. If you need it, uncomment and set it up
+         manually.
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-biblios.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
+      <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host>__ZEBRA_SRU_HOST__</host>
+            <port>__ZEBRA_SRU_BIBLIOS_PORT__</port>
+            <database>biblios</database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+    </xi:include> -->
 </server>
 <serverinfo id="biblioserver">
         <ccl2rpn>/etc/koha/zebradb/ccl.properties</ccl2rpn>
-        <user>kohauser</user>    
+        <user>kohauser</user>
         <password>__ZEBRA_PASS__</password>
 </serverinfo>
 
@@ -112,12 +148,103 @@
      </retrievalinfo>
       </xi:fallback>
     </xi:include>
+    <!-- The stuff below is used to enable SRU. It's currently disabled
+         until we come up with a good way to make it get magically set up by
+         the packaging system. If you need it, uncomment and set it up
+         manually.
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-authorities.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:fallback>
+      <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host>__ZEBRA_SRU_HOST__</host>
+            <port>__ZEBRA_SRU_AUTHORITIES_PORT__</port>
+            <database>authorities</database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+  </xi:include> -->
 </server>
 <serverinfo id="authorityserver">
     <ccl2rpn>/etc/koha/zebradb/ccl.properties</ccl2rpn>
     <user>kohauser</user>
     <password>__ZEBRA_PASS__</password>
 </serverinfo>
+
+<!-- PUBLICSERVER'S BIBLIOGRAPHIC RECORDS -->
+<!-- This can be used to set up a public Z39.50/SRU server.
+
+<server id="publicserver"  listenref="publicserver">
+    <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
+    <config>/etc/koha/sites/__KOHASITE__/zebra-biblios.cfg</config>
+    <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
+     <retrievalinfo>
+       <retrieval syntax="usmarc" name="F"/>
+       <retrieval syntax="usmarc" name="B"/>
+       <retrieval syntax="xml" name="F"/>
+       <retrieval syntax="xml" name="B"/>
+       <retrieval syntax="xml" name="marcxml"
+                  identifier="info:srw/schema/1/marcxml-v1.1">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="dc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2DC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="mods">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2MODS.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rdfdc">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RDFDC.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="rss2">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slim2RSS2.xsl"/>
+         </backend>
+       </retrieval>
+       <retrieval syntax="xml" name="utils">
+         <backend syntax="usmarc" name="F">
+           <marc inputformat="marc" outputformat="marcxml"
+                 inputcharset="utf-8"/>
+           <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
+         </backend>
+       </retrieval>
+     </retrievalinfo>
+    <xi:include href="__KOHA_CONF_DIR__/zebradb/explain-biblios.xml"
+                xmlns:xi="http://www.w3.org/2001/XInclude">
+      <xi:fallback>
+      <explain xmlns="http://explain.z3950.org/dtd/2.0/">
+          <serverInfo>
+            <host>__ZEBRA_SRU_HOST__</host>
+            <port>__ZEBRA_SRU_BIBLIOS_PORT__</port>
+            <database>biblios</database>
+          </serverInfo>
+        </explain>
+      </xi:fallback>
+    </xi:include>
+</server>
+<serverinfo id="publicserver">
+        <ccl2rpn>/etc/koha/zebradb/ccl.properties</ccl2rpn>
+        <user>kohauser</user>
+        <password>__ZEBRA_PASS__</password>
+</serverinfo>
+-->
 
 <config>
  <db_scheme>mysql</db_scheme>
@@ -136,6 +263,7 @@
  <intrahtdocs>/usr/share/koha/intranet/htdocs/intranet-tmpl</intrahtdocs>
  <includes>/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/includes/</includes>
  <logdir>/var/log/koha/__KOHASITE__</logdir>
+ <!-- <pazpar2url>http://__PAZPAR2_HOST__:__PAZPAR2_PORT__/search.pz2</pazpar2url> -->
  <install_log>/usr/share/koha/misc/koha-install-log</install_log>
  <useldapserver>0</useldapserver><!-- see C4::Auth_with_ldap for extra configs you must add if you want to turn this on -->
  <memcached_servers></memcached_servers>
