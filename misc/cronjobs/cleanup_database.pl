@@ -44,7 +44,7 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                       other options
    --sessions         purge the sessions table.  If you use this while users 
                       are logged into Koha, they will have to reconnect.
-   --sessdays DAYS    purge only sessions older than DAYS days (use together with sessions parameter).
+   --sessdays DAYS    purge only sessions older than DAYS days.
    -v --verbose       will cause the script to give you a bit more information
                       about the run.
    --zebraqueue DAYS  purge completed entries from the zebraqueue from 
@@ -66,6 +66,7 @@ GetOptions(
     'zebraqueue:i' => \$zebraqueue_days,
     'merged'       => \$purge_merged,
 ) || usage(1);
+$sessions=1 if $sess_days && $sess_days>0;
 
 if ($help) {
     usage(0);
@@ -158,9 +159,9 @@ sub RemoveOldSessions {
 
     while ( $sth->fetch ) {
         $lasttime = 0;
-        if ( $a_session =~ /lasttime:\s+(\d+)/ ) {
+        if ( $a_session =~ /lasttime:\s+'?(\d+)/ ) {
             $lasttime = $1;
-        } elsif ( $a_session =~ /(ATIME|CTIME):\s+(\d+)/ ) {
+        } elsif ( $a_session =~ /(ATIME|CTIME):\s+'?(\d+)/ ) {
             $lasttime = $2;
         }
         if ( $lasttime && $lasttime < $limit ) {
