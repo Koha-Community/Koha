@@ -47,6 +47,7 @@ sub methods : Test( 1 ) {
                       CheckSpecialHolidays
                       CheckRepeatableSpecialHolidays
                       CheckValidBarcode
+                      ReturnLostItem
                 );
     
     can_ok( $self->testing_class, @methods );    

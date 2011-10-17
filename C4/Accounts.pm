@@ -23,8 +23,7 @@ use strict;
 use C4::Context;
 use C4::Stats;
 use C4::Members;
-use C4::Items;
-use C4::Circulation qw(MarkIssueReturned);
+use C4::Circulation qw(ReturnLostItem);
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -218,7 +217,7 @@ sub makepayment {
 
     #check to see what accounttype
     if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
-        returnlost( $borrowernumber, $data->{'itemnumber'} );
+        ReturnLostItem( $borrowernumber, $data->{'itemnumber'} );
     }
 }
 
@@ -278,64 +277,34 @@ EOT
 
 =cut
 
-sub returnlost{
-    my ( $borrowernumber, $itemnum ) = @_;
-    C4::Circulation::MarkIssueReturned( $borrowernumber, $itemnum );
-    my $borrower = C4::Members::GetMember( 'borrowernumber'=>$borrowernumber );
-    my @datearr = localtime(time);
-    my $date = ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
-    my $bor = "$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
-    ModItem({ paidfor =>  "Paid for by $bor $date" }, undef, $itemnum);
-}
-
-
 sub chargelostitem{
 # lost ==1 Lost, lost==2 longoverdue, lost==3 lost and paid for
 # FIXME: itemlost should be set to 3 after payment is made, should be a warning to the interface that
 # a charge has been added
 # FIXME : if no replacement price, borrower just doesn't get charged?
-   
     my $dbh = C4::Context->dbh();
-    my ($itemnumber) = @_;
-    my $sth=$dbh->prepare("SELECT issues.*,items.*,biblio.title 
-                           FROM issues 
-                           JOIN items USING (itemnumber) 
-                           JOIN biblio USING (biblionumber)
-                           WHERE issues.itemnumber=?");
-    $sth->execute($itemnumber);
-    my $issues=$sth->fetchrow_hashref();
+    my ($borrowernumber, $itemnumber, $amount, $description) = @_;
 
-    # if a borrower lost the item, add a replacement cost to the their record
-    if ( $issues->{borrowernumber} ){
+    # first make sure the borrower hasn't already been charged for this item
+    my $sth1=$dbh->prepare("SELECT * from accountlines
+    WHERE borrowernumber=? AND itemnumber=? and accounttype='L'");
+    $sth1->execute($borrowernumber,$itemnumber);
+    my $existing_charge_hashref=$sth1->fetchrow_hashref();
 
-        # first make sure the borrower hasn't already been charged for this item
-        my $sth1=$dbh->prepare("SELECT * from accountlines
-        WHERE borrowernumber=? AND itemnumber=? and accounttype='L'");
-        $sth1->execute($issues->{'borrowernumber'},$itemnumber);
-        my $existing_charge_hashref=$sth1->fetchrow_hashref();
-
-        # OK, they haven't
-        unless ($existing_charge_hashref) {
-            # This item is on issue ... add replacement cost to the borrower's record and mark it returned
-            #  Note that we add this to the account even if there's no replacement price, allowing some other
-            #  process (or person) to update it, since we don't handle any defaults for replacement prices.
-            my $accountno = getnextacctno($issues->{'borrowernumber'});
-            my $sth2=$dbh->prepare("INSERT INTO accountlines
-            (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
-            VALUES (?,?,now(),?,?,'L',?,?)");
-            $sth2->execute($issues->{'borrowernumber'},$accountno,$issues->{'replacementprice'},
-            "Lost Item $issues->{'title'} $issues->{'barcode'}",
-            $issues->{'replacementprice'},$itemnumber);
-            $sth2->finish;
-        # FIXME: Log this ?
-        }
-        #FIXME : Should probably have a way to distinguish this from an item that really was returned.
-        #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
-        C4::Circulation::MarkIssueReturned($issues->{borrowernumber},$itemnumber);
-	#  Shouldn't MarkIssueReturned do this?
-        C4::Items::ModItem({ onloan => undef }, undef, $itemnumber);
+    # OK, they haven't
+    unless ($existing_charge_hashref) {
+        # This item is on issue ... add replacement cost to the borrower's record and mark it returned
+        #  Note that we add this to the account even if there's no replacement price, allowing some other
+        #  process (or person) to update it, since we don't handle any defaults for replacement prices.
+        my $accountno = getnextacctno($borrowernumber);
+        my $sth2=$dbh->prepare("INSERT INTO accountlines
+        (borrowernumber,accountno,date,amount,description,accounttype,amountoutstanding,itemnumber)
+        VALUES (?,?,now(),?,?,'L',?,?)");
+        $sth2->execute($borrowernumber,$accountno,$amount,
+        $description,$amount,$itemnumber);
+        $sth2->finish;
+    # FIXME: Log this ?
     }
-    $sth->finish;
 }
 
 =head2 manualinvoice

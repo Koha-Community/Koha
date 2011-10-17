@@ -59,8 +59,9 @@ BEGIN {
 
 	# FIXME subs that should probably be elsewhere
 	push @EXPORT, qw(
-		&FixOverduesOnReturn
 		&barcodedecode
+        &LostItem
+        &ReturnLostItem
 	);
 
 	# subs to deal with issuing a book
@@ -2949,8 +2950,43 @@ sub DeleteBranchTransferLimits {
    $sth->execute();
 }
 
+sub ReturnLostItem{
+    my ( $borrowernumber, $itemnum ) = @_;
 
-  1;
+    MarkIssueReturned( $borrowernumber, $itemnum );
+    my $borrower = C4::Members::GetMember( 'borrowernumber'=>$borrowernumber );
+    my @datearr = localtime(time);
+    my $date = ( 1900 + $datearr[5] ) . "-" . ( $datearr[4] + 1 ) . "-" . $datearr[3];
+    my $bor = "$borrower->{'firstname'} $borrower->{'surname'} $borrower->{'cardnumber'}";
+    ModItem({ paidfor =>  "Paid for by $bor $date" }, undef, $itemnum);
+}
+
+
+sub LostItem{
+    my ($itemnumber, $mark_returned) = @_;
+
+    my $dbh = C4::Context->dbh();
+    my $sth=$dbh->prepare("SELECT issues.*,items.*,biblio.title 
+                           FROM issues 
+                           JOIN items USING (itemnumber) 
+                           JOIN biblio USING (biblionumber)
+                           WHERE issues.itemnumber=?");
+    $sth->execute($itemnumber);
+    my $issues=$sth->fetchrow_hashref();
+    $sth->finish;
+
+    # if a borrower lost the item, add a replacement cost to the their record
+    if ( my $borrowernumber = $issues->{borrowernumber} ){
+
+        C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}");
+        #FIXME : Should probably have a way to distinguish this from an item that really was returned.
+        #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
+        MarkIssueReturned($borrowernumber,$itemnumber) if $mark_returned;
+    }
+}
+
+
+1;
 
 __END__
 
