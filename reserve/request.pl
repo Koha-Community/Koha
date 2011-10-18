@@ -129,7 +129,7 @@ if ($findborrower) {
 # If we have the borrowernumber because we've performed an action, then we
 # don't want to try to place another reserve.
 if ($borrowernumber_hold && !$action) {
-    my $borrowerinfo = GetMemberDetails( $borrowernumber_hold );
+    my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
     my $diffbranch;
     my @getreservloop;
     my $count_reserv = 0;
@@ -217,8 +217,8 @@ if ($borrowerslist) {
     );
 }
 
-# FIXME launch another time GetMemberDetails perhaps until
-my $borrowerinfo = GetMemberDetails( $borrowernumber_hold );
+# FIXME launch another time GetMember perhaps until
+my $borrowerinfo = GetMember( borrowernumber => $borrowernumber_hold );
 
 my @biblionumbers = ();
 my $biblionumbers = $input->param('biblionumbers');
@@ -373,7 +373,7 @@ foreach my $biblionumber (@biblionumbers) {
 
             # checking reserve
             my ($reservedate,$reservedfor,$expectedAt) = GetReservesFromItemnumber($itemnumber);
-            my $ItemBorrowerReserveInfo = GetMemberDetails( $reservedfor, 0);
+            my $ItemBorrowerReserveInfo = GetMember( borrowernumber => $reservedfor );
 
             if ( defined $reservedate ) {
                 $item->{backgroundcolor} = 'reserved';
@@ -542,7 +542,7 @@ foreach my $biblionumber (@biblionumbers) {
         }
 
         #     get borrowers reserve info
-        my $reserveborrowerinfo = GetMemberDetails( $res->{'borrowernumber'}, 0);
+        my $reserveborrowerinfo = GetMember( borrowernumber => $res->{'borrowernumber'} );
         if (C4::Context->preference('HidePatronName')){
 	    $reserve{'hidename'} = 1;
 	    $reserve{'cardnumber'} = $reserveborrowerinfo->{'cardnumber'};
