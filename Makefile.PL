@@ -33,7 +33,7 @@ use C4::Installer;
 my $koha_pm = C4::Installer::PerlModules->new;
 
 my $DEBUG = 0;
-die "perl 5.8.8 or later required" unless ($] >= 5.008008);
+die "perl 5.10 or later required" unless ($] >= 5.010000);
 
 # Hash up directory structure & files beginning with the directory we were called from (should be the base of koha)...
 
