@@ -112,7 +112,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							<td>
 							  <select>
 							    <option value="hours" [% IF (rule.lengthunit == "hours") %] selected [% END %]>Hours</option>
-							    <option value="days" [% IF (rule.lengthunit == "days") %] selected [% END %]>Days</option>
+							    <option value="days" [% IF (rule.lengthunit != "hours") %] selected [% END %]>Days</option>
 							  </select>
 							</td>
                                                         <td>[% IF ( rule.hardduedate ) %]
