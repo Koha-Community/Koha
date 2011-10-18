@@ -578,7 +578,7 @@ C<$issuingimpossible> and C<$needsconfirmation> are some hashref.
 
 =over 4
 
-=item C<$borrower> hash with borrower informations (from GetMemberDetails)
+=item C<$borrower> hash with borrower informations (from GetMember or GetMemberDetails)
 
 =item C<$barcode> is the bar code of the book being issued.
 
@@ -858,7 +858,7 @@ sub CanBookBeIssued {
     elsif ($issue->{borrowernumber}) {
 
         # issued to someone else
-        my $currborinfo =    C4::Members::GetMemberDetails( $issue->{borrowernumber} );
+        my $currborinfo =    C4::Members::GetMember( borrowernumber => $issue->{borrowernumber} );
 
 #        warn "=>.$currborinfo->{'firstname'} $currborinfo->{'surname'} ($currborinfo->{'cardnumber'})";
         $needsconfirmation{ISSUED_TO_ANOTHER} = 1;
@@ -872,7 +872,7 @@ sub CanBookBeIssued {
     my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->{'itemnumber'} );
     if ($restype) {
 		my $resbor = $res->{'borrowernumber'};
-		my ( $resborrower ) = C4::Members::GetMemberDetails( $resbor, 0 );
+		my ( $resborrower ) = C4::Members::GetMember( borrowernumber => $resbor );
 		my $branches  = GetBranches();
 		my $branchname = $branches->{ $res->{'branchcode'} }->{'branchname'};
         if ( $resbor ne $borrower->{'borrowernumber'} && $restype eq "Waiting" )
@@ -909,7 +909,7 @@ Issue a book. Does no check, they are done in CanBookBeIssued. If we reach this 
 
 =over 4
 
-=item C<$borrower> is a hash with borrower informations (from GetMemberDetails).
+=item C<$borrower> is a hash with borrower informations (from GetMember or GetMemberDetails).
 
 =item C<$barcode> is the barcode of the item being issued.
 
@@ -1525,7 +1525,7 @@ sub AddReturn {
     my $issue  = GetItemIssue($itemnumber);
 #   warn Dumper($iteminformation);
     if ($issue and $issue->{borrowernumber}) {
-        $borrower = C4::Members::GetMemberDetails($issue->{borrowernumber})
+        $borrower = C4::Members::GetMember( borrowernumber => $issue->{borrowernumber})
             or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existant borrowernumber '$issue->{borrowernumber}'\n"
                 . Dumper($issue) . "\n";
     } else {
@@ -2261,7 +2261,7 @@ sub AddRenewal {
     # based on the value of the RenewalPeriodBase syspref.
     unless ($datedue) {
 
-        my $borrower = C4::Members::GetMemberDetails( $borrowernumber, 0 ) or return undef;
+        my $borrower = C4::Members::GetMember( borrowernumber => $borrowernumber ) or return undef;
         my $itemtype = (C4::Context->preference('item-level_itypes')) ? $biblio->{'itype'} : $biblio->{'itemtype'};
 
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
@@ -2315,7 +2315,7 @@ sub GetRenewCount {
     my $renewsallowed = 0;
     my $renewsleft    = 0;
 
-    my $borrower = C4::Members::GetMemberDetails($bornum);
+    my $borrower = C4::Members::GetMember( borrowernumber => $bornum);
     my $item     = GetItem($itemno); 
 
     # Look in the issues table for this item, lent to this borrower,
