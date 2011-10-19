@@ -4421,7 +4421,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.04.05.XXX";
+$DBversion = "3.04.05.001";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("UPDATE itemtypes SET imageurl = 'vokal/Book.png' WHERE imageurl = 'vokal/BOOK.png'");
     $dbh->do("UPDATE itemtypes SET imageurl = 'vokal/Book-32px.png' WHERE imageurl = 'vokal/BOOK-32px.png'");
