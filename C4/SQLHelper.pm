@@ -43,9 +43,6 @@ BEGIN {
 				);
 }
 
-my $tablename;
-my $hash;
-
 =head1 NAME
 
 C4::SQLHelper - Perl Module containing convenience functions for SQL Handling
