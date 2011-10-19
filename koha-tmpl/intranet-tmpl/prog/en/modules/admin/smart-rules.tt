@@ -110,10 +110,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
 							</td>
 							<td>[% rule.issuelength %]</td>
 							<td>
-							  <select>
-							    <option value="hours" [% IF (rule.lengthunit == "hours") %] selected [% END %]>Hours</option>
-							    <option value="days" [% IF (rule.lengthunit != "hours") %] selected [% END %]>Days</option>
-							  </select>
+							    [% rule.lengthunit %]
 							</td>
                                                         <td>[% IF ( rule.hardduedate ) %]
                                                                [% IF ( rule.hardduedatebefore ) %]before [% rule.hardduedate %]</td>
@@ -154,7 +151,7 @@ for="tobranch"><strong>Clone these rules to:</strong></label> <input type="hidde
                     <td><input name="maxissueqty" size="3" /></td>
                     <td><input name="issuelength" size="3" /> </td>
                     <td>
-		      <select>
+		      <select name="lengthunit">
 			<option value="days" selected>Days</option>
 			<option value="hours">Hours</option>
 		      </select>
