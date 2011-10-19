@@ -428,7 +428,7 @@ sub build_issue_data {
         $issue->{cardnumber} = $memberdetails->{cardnumber};
         my $issuedate;
         if ($issue->{issuedate} ) {
-            $issuedate = $issue->{issuedate}->clone();
+           $issuedate = $issue->{issuedate}->clone();
         }
 
         #wtf $issue->{'date_due'}  = format_date($issue->[$i]->{issuedate});
