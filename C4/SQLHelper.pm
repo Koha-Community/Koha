@@ -415,7 +415,7 @@ sub _Process_Operands{
 	my @tmpkeys;
 	my @localkeys;
 
-    $operand = [$operand] unless ref $operand;
+    $operand = [$operand] unless ref $operand eq 'ARRAY';
     foreach (@$operand) {
 	    push @tmpkeys, " $field = ? ";
 	    push @values, $_;
