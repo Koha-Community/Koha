@@ -4523,6 +4523,12 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.05.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE borrower_attribute_types ADD COLUMN display_checkout TINYINT(1) NOT NULL DEFAULT '0';");
+    print "Upgrade to $DBversion done (Added a display_checkout field in borrower_attribute_types table)\n"; 
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
