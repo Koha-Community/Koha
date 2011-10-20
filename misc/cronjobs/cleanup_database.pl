@@ -38,8 +38,8 @@ use Getopt::Long;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS]
-        [-m|--mail]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged]
+
    -h --help          prints this help message, and exits, ignoring all
                       other options
    --sessions         purge the sessions table.  If you use this while users 
@@ -50,11 +50,12 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --zebraqueue DAYS  purge completed entries from the zebraqueue from 
                       more than DAYS days ago.
    -m --mail          purge the mail queue. 
+   --merged           purged completed entries from need_merge_authorities.
 USAGE
     exit $_[0];
 }
 
-my ( $help, $sessions, $sess_days, $verbose, $zebraqueue_days, $mail );
+my ( $help, $sessions, $sess_days, $verbose, $zebraqueue_days, $mail, $purge_merged);
 
 GetOptions(
     'h|help'       => \$help,
@@ -63,13 +64,14 @@ GetOptions(
     'v|verbose'    => \$verbose,
     'm|mail'       => \$mail,
     'zebraqueue:i' => \$zebraqueue_days,
+    'merged'       => \$purge_merged,
 ) || usage(1);
 
 if ($help) {
     usage(0);
 }
 
-if ( !( $sessions || $zebraqueue_days || $mail ) ) {
+if ( !( $sessions || $zebraqueue_days || $mail || $purge_merged) ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
 }
@@ -134,6 +136,14 @@ if ($mail) {
     $sth->execute() or $dbh->errstr;
     print "Done with purging the mail queue.\n" if ($verbose);
 }
+
+if($purge_merged) {
+    print "Purging completed entries from need_merge_authorities.\n" if $verbose;
+    $sth = $dbh->prepare("DELETE FROM need_merge_authorities WHERE done=1");
+    $sth->execute() or die $dbh->errstr;
+    print "Done with purging need_merge_authorities.\n" if $verbose;
+}
+
 exit(0);
 
 sub RemoveOldSessions {
