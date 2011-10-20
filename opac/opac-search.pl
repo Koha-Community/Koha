@@ -506,7 +506,8 @@ for (my $i=0;$i<@servers;$i++) {
 		}
                 if (C4::Context->preference('COinSinOPACResults')) {
 		    foreach (@newresults) {
-		      $_->{coins} = GetCOinSBiblio($_->{'biblionumber'});
+                      my $record = GetMarcBiblio($_->{'biblionumber'});
+		      $_->{coins} = GetCOinSBiblio($record);
 		    }
                 }
       

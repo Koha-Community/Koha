@@ -1104,20 +1104,17 @@ sub GetXmlBiblio {
 
 =head2 GetCOinSBiblio
 
-  my $coins = GetCOinSBiblio($biblionumber);
+  my $coins = GetCOinSBiblio($record);
 
-Returns the COinS(a span) which can be included in a biblio record
+Returns the COinS (a span) which can be included in a biblio record
 
 =cut
 
 sub GetCOinSBiblio {
-    my ($biblionumber) = @_;
-    my $record = GetMarcBiblio($biblionumber);
+    my $record = shift;
 
     # get the coin format
     if ( ! $record ) {
-	# can't get a valid MARC::Record object, bail out at this point
-	warn "We called GetMarcBiblio with a biblionumber that doesn't exist biblionumber=$biblionumber";
 	return;
     }
     my $pos7 = substr $record->leader(), 7, 1;

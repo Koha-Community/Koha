@@ -599,7 +599,7 @@ $template->param(
 
 # COinS format FIXME: for books Only
 $template->param(
-    ocoins => GetCOinSBiblio($biblionumber),
+    ocoins => GetCOinSBiblio($record),
 );
 
 my $libravatar_enabled = 0;
