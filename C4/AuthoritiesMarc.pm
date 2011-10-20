@@ -639,9 +639,16 @@ sub AddAuthority {
 		}
 		my $date=POSIX::strftime("%y%m%d",localtime);
 		if (!$record->field('008')) {
-			$record->insert_fields_ordered(
-				MARC::Field->new('008',$date."|||a||||||           | |||     d")
-			);
+            # Get a valid default value for field 008
+            my $default_008 = C4::Context->preference('MARCAuthorityControlField008');
+            if(!$default_008 or length($default_008)<34) {
+                $default_008 = '|| aca||aabn           | a|a     d';
+            }
+            else {
+                $default_008 = substr($default_008,0,34);
+            }
+
+            $record->insert_fields_ordered( MARC::Field->new('008',$date.$default_008) );
 		}
 		if (!$record->field('040')) {
 		 $record->insert_fields_ordered(
