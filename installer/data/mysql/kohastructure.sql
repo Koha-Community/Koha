@@ -1315,10 +1315,10 @@ CREATE TABLE `matchchecks` (
 --
 
 DROP TABLE IF EXISTS `need_merge_authorities`;
-CREATE TABLE `need_merge_authorities` (
-  `id` int NOT NULL auto_increment PRIMARY KEY,
-  `authid` bigint NOT NULL,
-  `done` tinyint DEFAULT 0
+CREATE TABLE `need_merge_authorities` ( -- keeping track of authority records still to be merged by merge_authority cron job (used only if pref dontmerge is ON)
+  `id` int NOT NULL auto_increment PRIMARY KEY, -- unique id
+  `authid` bigint NOT NULL, -- reference to authority record
+  `done` tinyint DEFAULT 0  -- indication whether merge has been executed (0=not done, 1= done, 2= in progress)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
