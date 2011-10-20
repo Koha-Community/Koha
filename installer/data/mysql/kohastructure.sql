@@ -116,16 +116,16 @@ DROP TABLE IF EXISTS `biblio`;
 CREATE TABLE `biblio` ( -- table that stores bibliographic information
   `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
   `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` mediumtext, -- statement of responsibility from MARC record (100 in MARC21)
-  `title` mediumtext, -- title (without the subtitle) from the MARC record (245 in MARC21)
-  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240 in MARC21)
-  `notes` mediumtext, -- values from the general notes field in the MARC record (500 in MARC21) split by bar (|)
+  `author` mediumtext, -- statement of responsibility from MARC record (100$a in MARC21)
+  `title` mediumtext, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
+  `notes` mediumtext, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- foreign key, linking to the subscriptionid in the serial table
   `seriestitle` mediumtext,
   `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
   `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` mediumtext, -- summary from the MARC record (520 in MARC21)
+  `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -591,16 +591,16 @@ DROP TABLE IF EXISTS `deletedbiblio`;
 CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records that have been deleted
   `biblionumber` int(11) NOT NULL auto_increment, -- unique identifier assigned to each bibliographic record
   `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
-  `author` mediumtext, -- statement of responsibility from MARC record (100 in MARC21)
-  `title` mediumtext, -- title (without the subtitle) from the MARC record (245 in MARC21)
-  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240 in MARC21)
-  `notes` mediumtext, -- values from the general notes field in the MARC record (500 in MARC21) split by bar (|)
+  `author` mediumtext, -- statement of responsibility from MARC record (100$a in MARC21)
+  `title` mediumtext, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `unititle` mediumtext, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
+  `notes` mediumtext, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- foreign key, linking to the subscriptionid in the serial table
   `seriestitle` mediumtext,
   `copyrightdate` smallint(6) default NULL, -- publication or copyright date from the MARC record
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched
   `datecreated` DATE NOT NULL, -- the date this record was added to Koha
-  `abstract` mediumtext, -- summary from the MARC record (520 in MARC21)
+  `abstract` mediumtext, -- summary from the MARC record (520$a in MARC21)
   PRIMARY KEY  (`biblionumber`),
   KEY `blbnoidx` (`biblionumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
