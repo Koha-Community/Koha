@@ -397,6 +397,8 @@ Note that only columns that can be directly
 changed from the cataloging and serials
 item editors are included in this hash.
 
+Returns item record
+
 =cut
 
 my %default_values_for_mod_from_marc = (
@@ -446,7 +448,8 @@ sub ModItemFromMarc {
     }
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
 
-    return ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $unlinked_item_subfields); 
+    ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $unlinked_item_subfields); 
+    return $item;
 }
 
 =head2 ModItem
@@ -495,6 +498,9 @@ sub ModItem {
     };
 
     $item->{'itemnumber'} = $itemnumber or return undef;
+
+    $item->{onloan} = undef if $item->{itemlost};
+
     _set_derived_columns_for_mod($item);
     _do_column_fixes_for_mod($item);
     # FIXME add checks

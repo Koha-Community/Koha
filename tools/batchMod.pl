@@ -25,6 +25,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
+use C4::Circulation;
 use C4::Context;
 use C4::Koha; # XXX subfield_is_koha_internal_p
 use C4::Branch; # XXX subfield_is_koha_internal_p
@@ -140,16 +141,25 @@ if ($op eq "action") {
 			    $deleted_items++;
 			} else {
 			    $not_deleted_items++;
-			    push @not_deleted, { biblionumber => $itemdata->{'biblionumber'}, itemnumber => $itemdata->{'itemnumber'}, barcode => $itemdata->{'barcode'}, title => $itemdata->{'title'}, $return => 1 };
+			    push @not_deleted, {
+                    biblionumber => $itemdata->{'biblionumber'},
+                    itemnumber => $itemdata->{'itemnumber'},
+                    barcode => $itemdata->{'barcode'},
+                    title => $itemdata->{'title'},
+                    $return => 1
+                };
 			}
 		} else {
 		    if ($something_to_modify) {
 			my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
 			my $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
-			my $localitem = TransformMarcToKoha( $dbh, $marcitem, "", 'items' );
 			my $localmarcitem=Item2Marc($itemdata);
 			UpdateMarcWith($marcitem,$localmarcitem);
-			eval{my ($oldbiblionumber,$oldbibnum,$oldbibitemnum) = ModItemFromMarc($localmarcitem,$itemdata->{biblionumber},$itemnumber)};
+			eval{
+                if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
+                    LostItem($itemnumber, 'MARK RETURNED') if $item->{itemlost};
+                }
+            };
 		    }
 		}
 		$i++;
