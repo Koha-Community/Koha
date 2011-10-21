@@ -21,7 +21,7 @@ sub simple_usage : Test( 6 ) {
     ok(     ! $details->{'flags'}->{'DBARRED'},          'this member is NOT debarred' );
 
     # Now, let's debar this member and see what happens
-    my $success = C4::Members::DebarMember( $self->{'memberid'} );
+    my $success = C4::Members::DebarMember( $self->{'memberid'}, '2099-12-31' );
 
     ok( $success, 'we were able to debar the member' );
     

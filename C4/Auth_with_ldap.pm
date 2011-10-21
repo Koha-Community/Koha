@@ -357,7 +357,7 @@ C4::Auth - Authenticates Koha users
 		| gonenoaddress       | tinyint(1)   | YES  |     | NULL    |                |
 		| lost                | tinyint(1)   | YES  |     | NULL    |                |
 		| debarred            | date         | YES  |     | NULL    |                |
-        | debarredcomment     | varchar(255) | YES  |     | NULL    |                |
+		| debarredcomment     | varchar(255) | YES  |     | NULL    |                |
 		| contactname         | mediumtext   | YES  |     | NULL    |                |
 		| contactfirstname    | text         | YES  |     | NULL    |                |
 		| contacttitle        | text         | YES  |     | NULL    |                |

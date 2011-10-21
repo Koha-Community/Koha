@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 # Copyright 2000-2002 Katipo Communications
+# Parts copyright 2011 BibLibre
 #
 # This file is part of Koha.
 #
@@ -40,22 +41,13 @@ $flagsrequired->{borrowers} = 1;
 my ( $loggedinuser, $cookie, $sessionID ) =
   checkauth( $input, 0, $flagsrequired );
 
-my $destination    = $input->param("destination") || '';
-my $cardnumber     = $input->param("cardnumber");
 my $borrowernumber = $input->param('borrowernumber');
-my $status         = $input->param('status');
 
 my $dbh = C4::Context->dbh;
 my $sth =
-  $dbh->prepare("Update borrowers set debarred = ? where borrowernumber = ?");
-$sth->execute( $status, $borrowernumber );
+  $dbh->prepare("Update borrowers set debarred = NULL where borrowernumber = ?");
+$sth->execute( $borrowernumber );
 $sth->finish;
 
-if ( $destination eq "circ" ) {
-    print $input->redirect(
-        "/cgi-bin/koha/circ/circulation.pl?findborrower=".$cardnumber);
-}
-else {
-    print $input->redirect(
-        "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
-}
+print $input->redirect(
+    "/cgi-bin/koha/members/moremember.pl?borrowernumber=$borrowernumber");
