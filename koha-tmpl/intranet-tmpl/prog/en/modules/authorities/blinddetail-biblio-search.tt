@@ -33,10 +33,11 @@
         }
 
         // Sets the good number of form fields for the specified subfield
+        // Returns false if the cloning failed
         function SetSubfieldNumber(subfield_name, nb) {
             // Nothing to do if we only have one value
             if(nb <= 1) {
-                return;
+                return true;
             }
             
             // Find the subfield we want to clone
@@ -45,10 +46,16 @@
                 return this.id.match(re);
             });
 
-            // Add as many clones as needed
-            for(var i=0; i<nb-subfields.length; i++) {
-                window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'));
+            // Try to add as many clones as needed
+            try {
+                for(var i=0; i<nb-subfields.length; i++) {
+                    window.opener.opener.CloneSubfield(subfields[0].getAttribute('id'));
+                }
             }
+            catch(err) {
+                return false;
+            }
+            return true;
         }
 
         // Fills the subfield with the values entered in argument
@@ -61,6 +68,7 @@
             }
 
             // Create the correct number of form fields for all values
+            // If the field cloning failed, only the first value will be added to the form.
             SetSubfieldNumber(subfield_name, values.length);
             
             // Find the subfields where we will add the new values
