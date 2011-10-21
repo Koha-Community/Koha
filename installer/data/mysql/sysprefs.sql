@@ -329,4 +329,4 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('OpacKohaUrl','1',"Show 'Powered by Koha' text on OPAC footer.",NULL,NULL);
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('EasyAnalyticalRecords','0','If on, display in the catalogue screens tools to easily setup analytical record relationships','','YesNo');
 INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacShowRecentComments',0,'If ON a link to recent comments will appear in the OPAC masthead',NULL,'YesNo');
-
+INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CircAutoPrintQuickSlip', '1', 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or Clear the screen.',NULL,'YesNo');

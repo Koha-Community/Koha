@@ -4560,7 +4560,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     $dbh->do("ALTER TABLE deletedborrowers MODIFY debarred DATE DEFAULT NULL;");
     $dbh->do("ALTER TABLE deletedborrowers ADD COLUMN debarredcomment VARCHAR(255) DEFAULT NULL AFTER debarred;");
     print "Upgrade done (Change borrowers.debarred into Date )\n";
+    SetVersion($DBversion);
+}
 
+$DBversion = "3.07.00.XXX";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES ('CircAutoPrintQuickSlip', '1', 'Choose what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or Clear the screen.',NULL,'YesNo');");
+    print "Upgrade to $DBversion done (Add syspref CircAutoPrintQuickSlip to control what should happen when an empty barcode field is submitted in circulation: Display a print quick slip window or clear the screen. )\n";
     SetVersion($DBversion);
 }
 

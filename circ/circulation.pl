@@ -703,6 +703,7 @@ $template->param(
     circview => 1,
     soundon           => C4::Context->preference("SoundOn"),
     fast_cataloging   => $fast_cataloging,
+    CircAutoPrintQuickSlip   => C4::Context->preference("CircAutoPrintQuickSlip"),
 );
 
 # save stickyduedate to session

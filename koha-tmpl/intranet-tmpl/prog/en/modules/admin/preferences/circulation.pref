@@ -91,6 +91,13 @@ Circulation:
                   yes: Record
                   no: "Don't record"
             - local use when an unissued item is checked in.
+        -
+            - When an empty an empty barcode field is submitted in circulation
+            - pref: CircAutoPrintQuickSlip
+              choices:
+                  yes: "open a print quick slip window"
+                  no: "clear the screen"
+            - .
     Checkout Policy:
         -
             - pref: AllowNotForLoanOverride

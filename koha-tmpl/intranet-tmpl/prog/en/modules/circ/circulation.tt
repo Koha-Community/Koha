@@ -46,12 +46,12 @@
                 $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
             }
         } ).attr( 'checked', false );
-        [% END %]
-		// listen submit to trigger qslip on empty checkout
-		$('#mainform').bind('submit',function() {
-		  if ($('#barcode').val() == '') {
-		    return printx_window('qslip'); }
-		});
+        [% END %][% IF ( CircAutoPrintQuickSlip ) %]
+        // listen submit to trigger qslip on empty checkout
+        $('#mainform').bind('submit',function() {
+          if ($('#barcode').val() == '') {
+            return printx_window('qslip'); }
+        });[% END %]
 
 
 var allcheckboxes = $(".checkboxed");
