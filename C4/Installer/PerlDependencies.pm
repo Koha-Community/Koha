@@ -284,11 +284,6 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '2.35'
     },
-    'HTML::Template::Pro' => {
-        'usage'    => 'Core',
-        'required' => '1',
-        'min_ver'  => '0.69'
-    },
     'Term::ANSIColor' => {
         'usage'    => 'Core',
         'required' => '1',
