@@ -209,7 +209,7 @@ sub shelfpage ($$$$$) {
                     my $record = GetMarcBiblio($biblionumber);
                     $this_item->{XSLTBloc} =
                         XSLTParse4Display($biblionumber, $record, 'Results', 'opac')
-                            if C4::Context->preference("OPACXSLTResultsDisplay");
+                            if C4::Context->preference("OPACXSLTResultsDisplay") && $type eq 'opac';
 
                     # the virtualshelfcontents table does not store these columns nor are they retrieved from the items
                     # and itemtypes tables, so I'm commenting them out for now to quiet the log -crn
