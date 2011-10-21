@@ -380,7 +380,7 @@ use the following:
  ./koha_perl_deps.pl -u -m # to identify new Perl dependencies
 
 Install any missing modules
-IMPORTANT: Koha 3.4.x uses Template::Toolkit, this must be installed
+IMPORTANT: Koha 3.6.x uses Template::Toolkit, this must be installed
 before the webinstaller can run
 
  sudo apt-get install libtemplate-perl
@@ -390,7 +390,8 @@ before the webinstaller can run
  make test
  sudo make upgrade
 
-Koha 3.4.x no longer stores items in biblio records so as part of the
+Koha 3.4.x or later no longer stores items in biblio records so 
+if you are upgrading from an older version as part of the
 upgrade you will need to do the following two steps, they can take a
 long time (several hours) to complete for large databases
 
