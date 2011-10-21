@@ -2,6 +2,7 @@
 #
 # This code has been modified by Trendsetters (originally from opac-user.pl)
 # This code has been modified by rch
+# Parts Copyright 2010-2011, ByWater Solutions (those related to username/password auth)
 # We're going to authenticate a self-check user.  we'll add a flag to borrowers 'selfcheck'
 #
 # We're in a controlled environment; we trust the user.
@@ -92,7 +93,8 @@ my $issuer   = GetMemberDetails($issuerid);
 my $item     = GetItem(undef,$barcode);
 if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     my $dbh = C4::Context->dbh;
-    my ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
+    my $resval;
+    ($resval, $patronid) = checkpw($dbh, $patronlogin, $patronpw);
 }
 my $borrower = GetMemberDetails(undef,$patronid);
 
