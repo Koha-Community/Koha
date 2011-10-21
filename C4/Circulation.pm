@@ -1523,7 +1523,7 @@ sub AddReturn {
     my $issue  = GetItemIssue($itemnumber);
 #   warn Dumper($iteminformation);
     if ($issue and $issue->{borrowernumber}) {
-        $borrower = C4::Members::GetMember( borrowernumber => $issue->{borrowernumber})
+        $borrower = C4::Members::GetMemberDetails($issue->{borrowernumber})
             or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existant borrowernumber '$issue->{borrowernumber}'\n"
                 . Dumper($issue) . "\n";
     } else {
