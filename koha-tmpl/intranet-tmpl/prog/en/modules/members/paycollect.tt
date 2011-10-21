@@ -57,7 +57,7 @@ function moneyFormat(textObj) {
 <body>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay Fines for [% borrower.firstname %] [% borrower.surname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Pay Fines for [% borrower.firstname %] [% borrower.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %]Pay an amount toward selected fines[% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -77,10 +77,10 @@ function moneyFormat(textObj) {
     <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]" >Pay fines</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% borrower.borrowernumber %]" >Create Manual Invoice</a>
+    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% borrower.borrowernumber %]" >Create manual invoice</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrower.borrowernumber %]" >Create Manual Credit</a>
+    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% borrower.borrowernumber %]" >Create manual credit</a>
     </li>
 </ul>
 <div class="tabs-container">
@@ -103,50 +103,50 @@ function moneyFormat(textObj) {
     <input type="hidden" name="amountoutstanding" id="amountoutstanding" value="[% amountoutstanding %]" />
     <input type="hidden" name="accountno" id="accountno" value="[% accountno %]" />
     <input type="hidden" name="title" id="title" value="[% title %]" />
+
+<fieldset class="rows">
+    <legend>Pay an individual fine</legend>
     <table>
-    <tr>
-        <th>Description</th>
-        <th>Account Type</th>
-        <th>Notify id</th>
-        <th>Level</th>
-        <th>Amount</th>
-        <th>Amount Outstanding</th>
-    </tr>
-    <tr>
-        <td>
-            [% description %] [% title  %]
-        </td>
-        <td>[% accounttype %]</td>
-        <td>[% notify_id %]</td>
-        <td>[% notify_level %]</td>
-        <td class="debit">[% amount | format('%.2f') %]</td>
-        <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
-    </tr>
-    <tr>
-        <td>Total Amount Payable : </td>
-        <td>[% amountoutstanding | format('%.2f') %]</td>
-        <td colspan="4"></td>
-    </tr>
-    <tr><td colspan="6"> </td></tr>
-    <tr>
-        <td>Collect From Patron: </td>
-        <td>
+    <thead><tr>
+            <th>Description</th>
+            <th>Account Type</th>
+            <th>Notify id</th>
+            <th>Level</th>
+            <th>Amount</th>
+            <th>Amount Outstanding</th>
+        </tr></thead>
+    <tfoot>
+        <td colspan="5">Total amount payable:</td><td>[% amountoutstanding | format('%.2f') %]</td>
+    </tfoot>
+    <tbody><tr>
+            <td>
+                [% description %] [% title  %]
+            </td>
+            <td>[% accounttype %]</td>
+            <td>[% notify_id %]</td>
+            <td>[% notify_level %]</td>
+            <td class="debit">[% amount | format('%.2f') %]</td>
+            <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
+        </tr></tbody>
+</table>
+
+<ol>
+
+    <li>
+        <label for="paid">Collect from patron: </label>
             <!-- default to paying all -->
         <input name="paid" id="paid" value="[% amountoutstanding | format('%.2f') %]" onchange="moneyFormat(document.payindivfine.paid)"/>
-        </td>
-    </tr>
-    <tr><td colspan="6"></td></tr>
-    <tr>
-        <td colspan="6">
-        <input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a>
-        </td>
-    </tr>
+    </li>
+</ol>
+</fieldset>
 
-    </table>
+    <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
+        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
     </form>
 [% ELSIF ( writeoff_individual ) %]
     <form name="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
+    <fieldset class="rows">
+    <legend>Write off an individual fine</legend>
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="pay_individual" id="pay_individual" value="[% pay_individual %]" />
     <input type="hidden" name="itemnumber" id="itemnumber" value="[% itemnumber %]" />
@@ -159,33 +159,27 @@ function moneyFormat(textObj) {
     <input type="hidden" name="accountno" id="accountno" value="[% accountno %]" />
     <input type="hidden" name="title" id="title" value="[% title %]" />
     <table>
-    <tr>
-        <th>Description</th>
-        <th>Account Type</th>
-        <th>Notify id</th>
-        <th>Level</th>
-        <th>Amount</th>
-        <th>Amount Outstanding</th>
-    </tr>
-    <tr>
-        <td>[% description %] [% title %]</td>
-        <td>[% accounttype %]</td>
-        <td>[% notify_id %]</td>
-        <td>[% notify_level %]</td>
-        <td class="debit">[% amount | format('%.2f') %]</td>
-        <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
-    </tr>
-    <tr><td colspan="6"> </td></tr>
-    <tr><td colspan="6"><strong>Writeoff This Charge?</strong></td></tr>
-    <tr><td> </td></tr>
-    <tr>
-        <td colspan="6">
-        <input type="submit" name="confirm_writeoff" id="confirm_writeoff" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a>
-        </td>
-    </tr>
-
+    <thead><tr>
+            <th>Description</th>
+            <th>Account Type</th>
+            <th>Notify id</th>
+            <th>Level</th>
+            <th>Amount</th>
+            <th>Amount Outstanding</th>
+        </tr></thead>
+    <tfoot><td colspan="5">Total amount to be written off:</td><td>[% amountoutstanding | format('%.2f') %]</td></tfoot>
+    <tbody><tr>
+            <td>[% description %] [% title %]</td>
+            <td>[% accounttype %]</td>
+            <td>[% notify_id %]</td>
+            <td>[% notify_level %]</td>
+            <td class="debit">[% amount | format('%.2f') %]</td>
+            <td class="debit">[% amountoutstanding | format('%.2f') %]</td>
+        </tr></tbody>
     </table>
+    </fieldset>
+    <div class="action"><input type="submit" name="confirm_writeoff" id="confirm_writeoff" value="Write off this charge" />
+        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
     </form>
 [% ELSE %]
 
@@ -194,27 +188,22 @@ function moneyFormat(textObj) {
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
     <input type="hidden" name="total" id="total" value="[% total %]" />
 
-    <table>
-    <tr>
-        <td>Total Amount Outstanding : </td>
-        <td class="debit">[% total | format('%.2f') %]</td>
-    </tr>
-    <tr><td colspan="2"> </td></tr>
-    <tr>
-        <td>Collect From Patron: </td>
-        <td>
+    <fieldset class="rows">
+    [% IF ( selected_accts ) %]<legend>Pay an amount toward selected fines</legend>[% ELSE %]<legend>Pay an amount toward all fines</legend>[% END %]
+    <ol>
+        <li>
+            <span class="label">Total amount outstanding: </span>
+            <span class="debit">[% total | format('%.2f') %]</span>
+        </li>
+    <li>
+        <label for="paid">Collect from patron: </label>
         <!-- default to paying all -->
         <input name="paid" id="paid" value="[% total | format('%.2f') %]" onchange="moneyFormat(document.payfine.paid)"/>
-        </td>
-    </tr>
-    <tr><td></td></tr>
-    <tr>
-        <td colspan="2">
-        <input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a>
-        </td>
-    </tr>
-    </table>
+    </li>
+    </ol>
+    </fieldset>
+    <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
+        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% borrower.borrowernumber %]">Cancel</a></div>
     </form>
 [% END %]
 </div></div>
