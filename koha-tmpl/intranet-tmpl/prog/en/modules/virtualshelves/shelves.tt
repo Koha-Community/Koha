@@ -349,7 +349,7 @@ function placeHold () {
         		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
                 [% FOREACH shelveslooppri IN shelveslooppriv %]
                     [% IF ( shelveslooppri.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-        <td><a href="shelves.pl?[% IF ( shelveslooppri.showprivateshelves ) %]display=privateshelves&amp;[% END %]viewshelf=[% shelveslooppri.shelf %]&shelfoff=[% shelfoff %]">[% shelveslooppri.shelfname |html %]</a></td>
+        <td><a href="shelves.pl?[% IF ( shelveslooppri.showprivateshelves ) %]display=privateshelves&amp;[% END %]viewshelf=[% shelveslooppri.shelf %]&amp;shelfoff=[% shelfoff %]">[% shelveslooppri.shelfname |html %]</a></td>
         <td>[% shelveslooppri.count %] item(s)</td>
         <td>[% IF ( shelveslooppri.authorsort ) %]Author[% ELSIF ( shelveslooppri.yearsort ) %]Year[% ELSE %]Title[% END %]</td>
         <td>[% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
@@ -399,10 +399,11 @@ function placeHold () {
         [% IF ( shelvesloop ) %]
 		<div class="pages">[% pagination_bar %]</div>
         <table>
-        <tr><th>List Name</th><th>Contents</th><th>Sort By</th><th>Type</th><th>Options</th></tr>
+        <tr><th>List Name</th><th>Created by</th><th>Contents</th><th>Sort By</th><th>Type</th><th>Options</th></tr>
             [% FOREACH shelvesloo IN shelvesloop %]
                 [% IF ( shelvesloo.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
 		<td><a href="shelves.pl?viewshelf=[% shelvesloo.shelf %]">[% shelvesloo.shelfname |html %]</a></td>
+        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% shelvesloo.owner %]">[% shelvesloo.ownername %]</td>
 		<td>[% shelvesloo.count %] item(s)</td>
         <td>[% IF ( shelvesloo.authorsort ) %]Author[% ELSIF ( shelvesloo.yearsort ) %]Year[% ELSE %]Title[% END %]</td>
         <td>[% IF ( shelvesloo.viewcategory1 ) %]Private[% END %]
