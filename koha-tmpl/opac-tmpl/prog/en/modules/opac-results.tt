@@ -479,8 +479,8 @@ $(document).ready(function(){
 				[% IF ( LibraryThingForLibrariesID ) %]<div class="ltfl_reviews"></div>[% END %]
 				[% IF ( opacuserlogin ) %][% IF ( TagsEnabled ) %]
                                 [% IF ( TagsShowOnList ) %]
+                                   <div class="results_summary">	
                                 [% IF ( SEARCH_RESULT.TagLoop.size ) %]
-                                    <div class="results_summary">
                                         <span class="label">Tags:</span>
                                         <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN SEARCH_RESULT.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
                                             [% END %]
@@ -489,7 +489,7 @@ $(document).ready(function(){
                                 [% IF ( TagsInputOnList ) %]
                                     [% IF ( loggedinusername ) %]
                                     <form name="tagform[% SEARCH_RESULT.biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl">
-                                        <label for="newtag[% SEARCH_RESULT.biblionumber %]">New tag:</label>
+					<span class="label">New tag:</span>
                                         <input name="newtag[% SEARCH_RESULT.biblionumber %]" id="newtag[% SEARCH_RESULT.biblionumber %]" maxlength="100" />
                                         <input name="tagbutton" class="tagbutton" title="[% SEARCH_RESULT.biblionumber %]" type="submit" value="Add" />
                                     </form>
