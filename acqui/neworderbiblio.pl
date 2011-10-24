@@ -65,6 +65,8 @@ use C4::Biblio;
 use C4::Auth;
 use C4::Output;
 use C4::Koha;
+use C4::Members qw/ GetMember /;
+use C4::Budgets qw/ GetBudgetHierarchy /;
 
 my $input = new CGI;
 
@@ -121,10 +123,22 @@ foreach my $result ( @{$marcresults} ) {
 
 }
 
+my $borrower= GetMember('borrowernumber' => $loggedinuser);
+my $budgets = GetBudgetHierarchy(q{},$borrower->{branchcode},$borrower->{borrowernumber});
+my $has_budgets = 0;
+foreach my $r (@{$budgets}) {
+    if (!defined $r->{budget_amount} || $r->{budget_amount} == 0) {
+        next;
+    }
+    $has_budgets = 1;
+    last;
+}
+
 $template->param(
+    has_budgets          => $has_budgets,
     basketno             => $basketno,
-    booksellerid     => $bookseller->{'id'},
-    name             => $bookseller->{'name'},
+    booksellerid         => $bookseller->{'id'},
+    name                 => $bookseller->{'name'},
     resultsloop          => \@results,
     total                => $total_hits,
     query                => $query,
