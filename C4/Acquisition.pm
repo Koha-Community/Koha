@@ -1581,33 +1581,33 @@ sub GetHistory {
 
     my @query_params  = ();
 
-    if ( defined $title ) {
+    if ( $title ) {
         $query .= " AND biblio.title LIKE ? ";
         $title =~ s/\s+/%/g;
         push @query_params, "%$title%";
     }
 
-    if ( defined $author ) {
+    if ( $author ) {
         $query .= " AND biblio.author LIKE ? ";
         push @query_params, "%$author%";
     }
 
-    if ( defined $isbn ) {
+    if ( $isbn ) {
         $query .= " AND biblioitems.isbn LIKE ? ";
         push @query_params, "%$isbn%";
     }
 
-    if ( defined $name ) {
+    if ( $name ) {
         $query .= " AND aqbooksellers.name LIKE ? ";
         push @query_params, "%$name%";
     }
 
-    if ( defined $from_placed_on ) {
+    if ( $from_placed_on ) {
         $query .= " AND creationdate >= ? ";
         push @query_params, $from_placed_on;
     }
 
-    if ( defined $to_placed_on ) {
+    if ( $to_placed_on ) {
         $query .= " AND creationdate <= ? ";
         push @query_params, $to_placed_on;
     }
