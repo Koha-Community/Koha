@@ -1854,16 +1854,17 @@ CREATE TABLE `suggestions` (
   `place` varchar(255) default NULL,
   `isbn` varchar(30) default NULL,
   `mailoverseeing` smallint(1) default 0,
-  `biblionumber` int(11) default NULL,
-  `reason` text,
-   budgetid INT(11),
-   branchcode VARCHAR(10) default NULL,
-   collectiontitle text default NULL,
-   itemtype VARCHAR(30) default NULL,
-	quantity SMALLINT(6) default NULL,
-	currency VARCHAR(3) default NULL,
-	price DECIMAL(28,6) default NULL,
-	total DECIMAL(28,6) default NULL,
+  `biblionumber` int(11) default NULL, -- foreign key linking the suggestion to the biblio table after the suggestion has been ordered
+  `reason` text, -- reason for accepting or rejecting the suggestion
+  `patronreason` text, -- reason for making the suggestion
+   budgetid INT(11), -- foreign key linking the suggested budget to the aqbudgets table
+   branchcode VARCHAR(10) default NULL, -- foreign key linking the suggested branch to the branches table
+   collectiontitle text default NULL, -- collection name for the suggested item
+   itemtype VARCHAR(30) default NULL, -- suggested item type 
+	quantity SMALLINT(6) default NULL, -- suggested quantity to be purchased
+	currency VARCHAR(3) default NULL, -- suggested currency for the suggested price
+	price DECIMAL(28,6) default NULL, -- suggested price
+	total DECIMAL(28,6) default NULL, -- suggested total cost (price*quantity updated for currency)
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`)

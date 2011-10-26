@@ -4458,6 +4458,13 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.04.07.001";
+if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
+    $dbh->do("ALTER TABLE  `suggestions` ADD  `patronreason` TEXT NULL AFTER  `reason`");
+    print "Upgrade to $DBversion done (Add column to suggestions table to store patrons' reasons for submitting a suggestion. )\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
