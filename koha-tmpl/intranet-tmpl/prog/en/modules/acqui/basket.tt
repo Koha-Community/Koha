@@ -3,7 +3,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% UNLESS ( closedate ) %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/JavaScript">
+<script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {
         $("#orders").tablesorter({
@@ -19,7 +19,6 @@
                     window.location = "[% script_name %]?op=close&basketno=[% basketno %]";
                 }
             }
-
             function confirm_deletion() {
                 var is_confirmed = confirm(_('Are you sure you want to delete this basket?'));
                 if (is_confirmed) {
@@ -43,6 +42,17 @@
 //]]>
 </script>
 [% ELSE %]
+<script type="text/javascript">
+//<![CDATA[
+    $(document).ready(function(){
+        $("#basketgroupid").change(function(){
+            if($(this).val() == "new"){
+                location.href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% booksellerid %]";
+            }
+        });
+    });
+//]]>
+</script>
 [% UNLESS ( grouped ) %]
 <script type="text/javascript">
 //<![CDATA[
@@ -157,43 +167,51 @@
             </h2>
         [% END %]
         [% IF ( basketno ) %]
-            <div id="acqui_basket_summary"  class="yui-g">
-                <h2>Basket details</h2>
-                [% IF ( basketnote ) %]<p>Internal note: [% basketnote %]</p>[% END %]
-                [% IF ( basketbooksellernote ) %]<p>Vendor note: [% basketbooksellernote %]</p>[% END %]
+            <div id="acqui_basket_summary" class="yui-g">
+                <div class="rows">
+                <div class="yui-u first">
+                <ol>
+                [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote %]</li>[% END %]
+                [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote %]</li>[% END %]
                 [% IF ( basketcontractno ) %]
-                    <p>Contract name: <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></p>
+                    <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno %]&amp;booksellerid=[% booksellerid %]">[% basketcontractname %]</a></li>
                 [% END %]
-                [% IF ( authorisedbyname ) %]<p>Managed by:  [% authorisedbyname %]</p>[% END %]
-                [% IF ( creationdate ) %]<p>Opened on:  [% creationdate %]</p>[% END %]
+                [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname %]</li>[% END %]
+                [% IF ( creationdate ) %]<li><span class="label">Opened on:</span>  [% creationdate %]</li>[% END %]
+                [% IF ( closedate ) %]<li><span class="label">Closed on:</span> [% closedate %]</li>[% END %]
+
+                </ol>
+                </div>
                 [% IF ( closedate ) %]
-                <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
-                <p>Closed on:  [% closedate %]</p>
-                [% IF ( basketgroups ) %]
-                    <p> Basket group: <select id="basketgroupid" name="basketgroupid">
-                        [% FOREACH basketgroup IN basketgroups %]
-                            [% IF ( basketgroup.default ) %]
+                <div class="yui-u">
+                    <form action="/cgi-bin/koha/acqui/basketgroup.pl" method="post">
+
+                        <p><label for="basketgroupid"><strong>Basket group:</strong></label></p>
+                        <p><select id="basketgroupid" name="basketgroupid">
+                            <option value="new">Add new group</option>
+                                                    [% FOREACH basketgroup IN basketgroups %]
+                                                        [% IF ( basketgroup.default ) %]
                             <option value="[% basketgroup.id %]" selected="selected">[% basketgroup.name %]</option>
-                            [% ELSE %]
+                                                        [% ELSE %]
                             <option value="[% basketgroup.id %]">[% basketgroup.name %]</option>
-                            [% END %]
-                        [% END %]
-                        </select>
-                        <input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
+                                                        [% END %]
+                                                    [% END %]
+                        </select></p>
+
+                        <p><input type="hidden" id="basketno" value="[% basketno %]" name="basketno" />
                         <input type="hidden" value="mod_basket" name="op" />
                         <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
-                        <input type="submit" value="Change basket group" />
-                    </p>
-                </form>
-                [% ELSE %]
-                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basketgroups %]&amp;basketgroupid=[% id %]">[% name %]</a>
+                        <input type="submit" value="Change basket group" /></p>
+
+                    </form>
+                </div>
                 [% END %]
-                [% END %]
+            </div>
             </div>
         [% END %]
 
         [% UNLESS ( delete_confirm ) %]
-        <div id="acqui_basket_content">
+        <div id="acqui_basket_content" class="yui-g">
         <h2>Order Details</h2>
         [% IF ( books_loop ) %]
             <table id="orders">
@@ -216,11 +234,11 @@
                 <tfoot>
                 [% IF ( GST ) %]
                 <tr>
-                    <th>Total Tax Exc.</th>
-                    <th>[% total_rrp_gste %]</th>
-                    <th>&nbsp;</th>
-                    <th>[% qty_total %]</th>
-                    <th>[% total_est_gste %]</th>
+                    <th scope="row">Total Tax Exc.</th>
+                    <td>[% total_rrp_gste %]</td>
+                    <td>&nbsp;</td>
+                    <td>[% qty_total %]</td>
+                    <td>[% total_est_gste %]</td>
                         [% IF ( active ) %]
                             [% IF ( closedate ) %]
                             <td colspan="1" rowspan="3">&nbsp;</td>
@@ -230,26 +248,26 @@
                         [% END %]
                 </tr>
                 <tr>
-                    <th>Tax ([% gist_rate %])</th>
-                    <th>[% gist_rrp %]</th>
-                    <th>&nbsp;</th>
-                    <th>&nbsp;</th>
-                    <th>[% gist_est %]</th>
+                    <th scope="row">Tax ([% gist_rate %])</th>
+                    <td>[% gist_rrp %]</td>
+                    <td>&nbsp;</td>
+                    <td>&nbsp;</td>
+                    <td>[% gist_est %]</td>
                 </tr>
                 <tr>
-                    <th>Total Tax Inc. ([% currency %])</th>
-                    <th>[% total_rrp_gsti %]</th>
-                    <th>&nbsp;</th>
-                    <th>[% qty_total %]</th>
-                    <th>[% total_est_gsti %]</th>
+                    <th scope="row">Total Tax Inc. ([% currency %])</th>
+                    <td>[% total_rrp_gsti %]</td>
+                    <td>&nbsp;</td>
+                    <td>[% qty_total %]</td>
+                    <td>[% total_est_gsti %]</td>
                 </tr>
                 [% ELSE %]
                 <tr>
-                    <th>Total ([% currency %])</th>
-                    <th>[% total_rrp_gsti %]</th>
-                    <th>&nbsp;</th>
-                    <th>[% qty_total %]</th>
-                    <th>[% total_est_gsti %]</th>
+                    <th scope="row">Total ([% currency %])</th>
+                    <td>[% total_rrp_gsti %]</td>
+                    <td>&nbsp;</td>
+                    <td>[% qty_total %]</td>
+                    <td>[% total_est_gsti %]</td>
                 </tr>
                 [% END %]
                 </tfoot>
