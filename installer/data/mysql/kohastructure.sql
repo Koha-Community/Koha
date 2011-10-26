@@ -1861,7 +1861,8 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
   `isbn` varchar(30) default NULL, -- isbn of the suggested item
   `mailoverseeing` smallint(1) default 0,
   `biblionumber` int(11) default NULL, -- foreign key linking the suggestion to the biblio table after the suggestion has been ordered
-  `reason` text, -- reason for making the suggestion
+  `reason` text, -- reason for accepting or rejecting the suggestion
+  `patronreason` text, -- reason for making the suggestion
    budgetid INT(11), -- foreign key linking the suggested budget to the aqbudgets table
    branchcode VARCHAR(10) default NULL, -- foreign key linking the suggested branch to the branches table
    collectiontitle text default NULL, -- collection name for the suggested item
