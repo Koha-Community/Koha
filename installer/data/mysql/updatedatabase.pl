@@ -4432,14 +4432,14 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion($DBversion);
 }
 
-$DBversion = "3.04.00.002"; 
+$DBversion = "3.04.05.002"; 
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("CREATE TABLE need_merge_authorities (id int NOT NULL auto_increment PRIMARY KEY, authid bigint NOT NULL, done tinyint DEFAULT 0) ENGINE=InnoDB DEFAULT CHARSET=utf8");
     print "Upgrade to $DBversion done (6094: Fixing ModAuthority problems, add a need_merge_authorities table)\n";
     SetVersion($DBversion);
 }
 
-$DBversion = "3.04.00.003";
+$DBversion = "3.04.05.003";
 if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     $dbh->do("INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowingHistoryLink','circhist','When showing borrower history for an item on the catalogue page, link to borrower','detail|circhist','Choice')");
     print "Add the system preference 'BorrowingHistoryLink' (bug 6905)\n";
