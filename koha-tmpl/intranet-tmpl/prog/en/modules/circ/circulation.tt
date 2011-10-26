@@ -779,12 +779,8 @@ No patron matched <span class="ex">[% message %]</span>
             [% previssue.itemtype %]
         </td>
         <td>[% previssue.displaydate %]</td>
-<<<<<<< HEAD
-        [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.borrowername %]</td>[% END %]
-=======
         [% IF ( previssue.multiple_borrowers ) %]<td>[% previssue.firstname %] [% previssue.surname %]</td>[% END %]
         <td>[% previssue.issuingbranchname %]</td>
->>>>>>> 26acaf3... Bug 6801: checkoverdues returns unnecessary fields, causing slowness
         <td>[% previssue.itemcallnumber %]</td>
         <td>[% previssue.charge %]</td>
         <td>[% previssue.replacementprice %]</td>
