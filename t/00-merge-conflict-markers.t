@@ -49,8 +49,7 @@ find({
         }
         close $fh;
         if ($marker_found) {
-            fail("$file has no merge conflict markers");
-            diag("marker found in line $line");
+            fail("$file contains merge conflict markers in line $line");
         } else {
             pass("$file has no merge conflict markers");
         }
