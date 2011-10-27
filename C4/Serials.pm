@@ -588,7 +588,7 @@ sub GetSubscriptions {
             $tmpstring =~ s/^AND //;
             push @sqlstrings, $tmpstring;
         }
-        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "(" . join( ") OR (", @sqlstrings ) . ")";
+        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
     }
     if ($issn) {
         my @sqlstrings;
@@ -601,7 +601,7 @@ sub GetSubscriptions {
             $tmpstring =~ s/^OR //;
             push @sqlstrings, $tmpstring;
         }
-        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "(" . join( ") OR (", @sqlstrings ) . ")";
+        $sqlwhere .= ( $sqlwhere ? " AND " : " WHERE " ) . "((" . join( ") OR (", @sqlstrings ) . "))";
     }
     $sql .= "$sqlwhere ORDER BY title";
     $debug and warn "GetSubscriptions query: $sql params : ", join( " ", @bind_params );
