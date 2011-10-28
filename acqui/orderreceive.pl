@@ -70,6 +70,7 @@ use C4::Auth;
 use C4::Output;
 use C4::Dates qw/format_date/;
 use C4::Bookseller qw/ GetBookSellerFromId /;
+use C4::Budgets qw/ GetBudget /;
 use C4::Members;
 use C4::Branch;    # GetBranches
 use C4::Items;
@@ -133,6 +134,12 @@ if ( $count == 1 ) {
     if ( @$results[0]->{'unitprice'} == 0 ) {
         @$results[0]->{'unitprice'} = '';
     }
+
+    my $authorisedby = @$results[0]->{'authorisedby'};
+    my $member = GetMember( borrowernumber => $authorisedby );
+
+    my $budget = GetBudget( @$results[0]->{'budget_id'} );
+
     $template->param(
         count                 => 1,
         biblionumber          => @$results[0]->{'biblionumber'},
@@ -148,17 +155,19 @@ if ( $count == 1 ) {
         copyrightdate         => @$results[0]->{'copyrightdate'},
         isbn                  => @$results[0]->{'isbn'},
         seriestitle           => @$results[0]->{'seriestitle'},
-        bookfund              => @$results[0]->{'bookfundid'},
+        bookfund              => $budget->{budget_name},
         quantity              => @$results[0]->{'quantity'},
         quantityreceivedplus1 => @$results[0]->{'quantityreceived'} + 1,
         quantityreceived      => @$results[0]->{'quantityreceived'},
         rrp                   => @$results[0]->{'rrp'},
         ecost                 => @$results[0]->{'ecost'},
         unitprice             => @$results[0]->{'unitprice'},
+        memberfirstname       => $member->{firstname} || "",
+        membersurname         => $member->{surname} || "",
         invoice               => $invoice,
         datereceived          => $datereceived->output(),
-        datereceived_iso          => $datereceived->output('iso'),
-        notes                       =>              $order->{notes}
+        datereceived_iso      => $datereceived->output('iso'),
+        notes                 => $order->{notes}
     );
 }
 else {
