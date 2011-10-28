@@ -32,7 +32,7 @@ It allows to edit & save information about this bookseller.
 
 =over 4
 
-=item supplierid
+=item booksellerid
 
 To know the bookseller this script has to display details.
 
@@ -53,10 +53,10 @@ use C4::Bookseller qw( GetBookSellerFromId DelBookseller );
 use C4::Budgets;
 
 my $query    = CGI->new;
-my $id       = $query->param('supplierid');
+my $booksellerid       = $query->param('booksellerid');
 my $supplier = {};
-if ($id) {
-    $supplier = GetBookSellerFromId($id);
+if ($booksellerid) {
+    $supplier = GetBookSellerFromId($booksellerid);
 }
 my $op = $query->param('op') || 'display';
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -77,7 +77,7 @@ $tax_rate *= 100;
 #build array for currencies
 if ( $op eq 'display' ) {
 
-    my $contracts = GetContract( { booksellerid => $id } );
+    my $contracts = GetContract( { booksellerid => $booksellerid } );
 
     for ( @{$contracts} ) {
         $_->{contractstartdate} = format_date( $_->{contractstartdate} );
@@ -85,7 +85,7 @@ if ( $op eq 'display' ) {
     }
 
     $template->param(
-        id            => $id,
+        booksellerid  => $booksellerid,
         name          => $supplier->{'name'},
         postal        => $supplier->{'postal'},
         address1      => $supplier->{'address1'},
@@ -117,7 +117,7 @@ if ( $op eq 'display' ) {
         contracts     => $contracts,
     );
 } elsif ( $op eq 'delete' ) {
-    DelBookseller($id);
+    DelBookseller($booksellerid);
     print $query->redirect('/cgi-bin/koha/acqui/acqui-home.pl');
     exit;
 } else {
@@ -145,7 +145,7 @@ if ( $op eq 'display' ) {
 
     my $gstrate = defined $supplier->{gstrate} ? $supplier->{gstrate} * 100 : '';
     $template->param(
-        id           => $id,
+        booksellerid => $booksellerid,
         name         => $supplier->{'name'},
         postal       => $supplier->{'postal'},
         address1     => $supplier->{'address1'},
@@ -165,7 +165,7 @@ if ( $op eq 'display' ) {
         contnotes    => $supplier->{'contnotes'},
         notes        => $supplier->{'notes'},
         # set active ON by default for supplier add (id empty for add)
-        active       => $id ? $supplier->{'active'} : 1,
+        active       => $booksellerid ? $supplier->{'active'} : 1,
         gstreg        => $supplier->{'gstreg'},
         listincgst    => $supplier->{'listincgst'},
         invoiceincgst => $supplier->{'invoiceincgst'},

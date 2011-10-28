@@ -35,7 +35,7 @@ It allows to write an order/parcels as 'received' when he arrives.
 
 =over 4
 
-=item supplierid
+=item booksellerid
 
 To know the supplier this script has to show orders.
 
@@ -77,7 +77,7 @@ use C4::Acquisition;
 use C4::Bookseller qw/ GetBookSellerFromId /;
 
 my $input          = CGI->new;
-my $supplierid     = $input->param('supplierid');
+my $booksellerid     = $input->param('booksellerid');
 my $order          = $input->param('orderby') || 'datereceived desc';
 my $startfrom      = $input->param('startfrom');
 my $code           = $input->param('filter');
@@ -96,8 +96,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $bookseller = GetBookSellerFromId($supplierid);
-my @parcels = GetParcels( $supplierid, $order, $code, $datefrom, $dateto );
+my $bookseller = GetBookSellerFromId($booksellerid);
+my @parcels = GetParcels( $booksellerid, $order, $code, $datefrom, $dateto );
 my $count_parcels = @parcels;
 
 # multi page display gestion
@@ -136,7 +136,7 @@ $template->param(
     name                     => $bookseller->{'name'},
     DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
     datereceived_today       => C4::Dates->new()->output(),
-    supplierid               => $supplierid,
+    booksellerid             => $booksellerid,
     GST                      => C4::Context->preference('gist'),
 );
 

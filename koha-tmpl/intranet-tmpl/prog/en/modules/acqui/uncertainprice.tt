@@ -14,7 +14,7 @@ function check(form) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;<a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; Uncertain prices for vendor: [% booksellername %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; Uncertain prices for vendor: [% booksellername %]</div>
 
 <div id="doc" class="yui-t7">
    <div id="bd">
@@ -22,7 +22,7 @@ function check(form) {
         [% IF ( validate ) %]
             <META HTTP-EQUIV=Refresh CONTENT="0; url=[% scriptname %]?booksellerid=[% booksellerid %]">
         [% ELSE %]
-        <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername %]</a> <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]&amp;op=enter">(edit)</a></h1>
+        <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&amp;op=enter">(edit)</a></h1>
         <h2>Contact information</h2>
         <p><strong>Address: </strong>
             [% booksellerpostal %]

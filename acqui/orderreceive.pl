@@ -34,7 +34,7 @@ It permit to write a new order as 'received'.
 
 =over 4
 
-=item supplierid
+=item booksellerid
 
 to know on what supplier this script has to display receive order.
 
@@ -81,7 +81,7 @@ use C4::Suggestions;
 my $input      = new CGI;
 
 my $dbh          = C4::Context->dbh;
-my $supplierid   = $input->param('supplierid');
+my $booksellerid   = $input->param('booksellerid');
 my $ordernumber       = $input->param('ordernumber');
 my $search       = $input->param('receive');
 my $invoice      = $input->param('invoice');
@@ -91,7 +91,7 @@ my $datereceived = $input->param('datereceived');
 
 $datereceived = $datereceived ? C4::Dates->new($datereceived, 'iso') : C4::Dates->new();
 
-my $bookseller = GetBookSellerFromId($supplierid);
+my $bookseller = GetBookSellerFromId($booksellerid);
 my $input_gst = ($input->param('gst') eq '' ? undef : $input->param('gst'));
 my $gst= $input_gst // $bookseller->{gstrate} // C4::Context->preference("gist") // 0;
 my $results = SearchOrder($ordernumber,$search);
@@ -148,7 +148,7 @@ if ( $count == 1 ) {
         biblionumber          => @$results[0]->{'biblionumber'},
         ordernumber           => @$results[0]->{'ordernumber'},
         biblioitemnumber      => @$results[0]->{'biblioitemnumber'},
-        supplierid            => @$results[0]->{'booksellerid'},
+        booksellerid            => @$results[0]->{'booksellerid'},
         freight               => $freight,
         gst                   => $gst,
         name                  => $bookseller->{'name'},
@@ -187,13 +187,13 @@ else {
         $line{gst}          = $gst;
         $line{title}        = @$results[$i]->{'title'};
         $line{author}       = @$results[$i]->{'author'};
-        $line{supplierid}   = $supplierid;
+        $line{booksellerid}   = $booksellerid;
         push @loop, \%line;
     }
 
     $template->param(
         loop         => \@loop,
-        supplierid   => $supplierid,
+        booksellerid   => $booksellerid,
     );
 }
 my $op = $input->param('op');

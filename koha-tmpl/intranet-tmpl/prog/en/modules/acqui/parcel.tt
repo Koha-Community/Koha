@@ -106,8 +106,8 @@
                        + '<td>' + order.ecost + '</td>'
                        + '<td>' + order.ordertotal + '</td>'
                        + '<td>'
-                       + '<a href="orderreceive.pl?ordernumber=' + order.ordernumber + '&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]&amp;gst=' + gst + '&amp;freight=' + order.freight + '&amp;supplierid=[% supplierid %]">Receive</a> /'
-                       + '<a href="parcel.pl?type=intra&amp;ordernumber=' + order.ordernumber + '&amp;biblionumber=' + order.biblionumber + '&amp;action=cancelorder&amp;supplierid=[% supplierid %]&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]" onclick="return confirm(\'' + _('Are you sure you want to cancel this order?') + '\');">Cancel</a>'
+                       + '<a href="orderreceive.pl?ordernumber=' + order.ordernumber + '&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]&amp;gst=' + gst + '&amp;freight=' + order.freight + '&amp;booksellerid=[% booksellerid %]">Receive</a> /'
+                       + '<a href="parcel.pl?type=intra&amp;ordernumber=' + order.ordernumber + '&amp;biblionumber=' + order.biblionumber + '&amp;action=cancelorder&amp;booksellerid=[% booksellerid %]&amp;datereceived=[% invoicedatereceived %]&amp;invoice=[% invoice %]" onclick="return confirm(\'' + _('Are you sure you want to cancel this order?') + '\');">Cancel</a>'
                        + '</td></tr>').appendTo("table#pendingt");
 				}
 
@@ -118,7 +118,7 @@
 			}catch(e){alert(e);}
 		}
 	}
-	var transaction = YAHOO.util.Connect.asyncRequest('GET', '/cgi-bin/koha/acqui/parcel.pl?supplierid=[% supplierid %]&search='+summaryStatus+'&basketno='+basketStatus+'&orderno='+orderStatus+'&format=json', callback, null);
+	var transaction = YAHOO.util.Connect.asyncRequest('GET', '/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% booksellerid %]&search='+summaryStatus+'&basketno='+basketStatus+'&orderno='+orderStatus+'&format=json', callback, null);
 
 	return false;
     }
@@ -235,7 +235,7 @@
             <tr>
         [% END %]
                 <td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a></td>
-                <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber %]&amp;booksellerid=[% loop_order.supplierid %]">[% loop_order.ordernumber %]</a></td>
+                <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber %]&amp;booksellerid=[% loop_order.booksellerid %]">[% loop_order.ordernumber %]</a></td>
                 <td class="summaryfilterclass">
                   <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber %]">[% loop_order.title |html %]</a>
                 [% IF ( loop_order.author ) %] by [% loop_order.author %][% END %]
@@ -252,7 +252,7 @@
                 <td>[% loop_order.ecost %]</td>
                 <td>[% loop_order.ordertotal %]</td>
 				<td>
-				    <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;datereceived=[% loop_order.invoicedatereceived %]&amp;invoice=[% loop_order.invoice %]&amp;gst=[% loop_order.gst %]&amp;freight=[% loop_order.freight %]&amp;supplierid=[% loop_order.supplierid %]">Receive</a>
+				    <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;datereceived=[% loop_order.invoicedatereceived %]&amp;invoice=[% loop_order.invoice %]&amp;gst=[% loop_order.gst %]&amp;freight=[% loop_order.freight %]&amp;booksellerid=[% loop_order.booksellerid %]">Receive</a>
 				    
 				</td>
 				<td>
@@ -286,17 +286,17 @@
    <div id="resultnumber">
 	<!-- Row of numbers corresponding to search result pages -->
 	[% IF ( displayprev ) %]
-		<a href="parcel.pl?type=intra&amp;supplierid=[% supplierid %]&amp;startfrom=[% prevstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">&lt;&lt; Previous</a>
+		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% prevstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">&lt;&lt; Previous</a>
 	[% END %]
 	[% FOREACH number IN numbers %]
 		[% IF ( number.highlight ) %]
 		<span class="current">[% number.number %]</span>
 		[% ELSE %]
-		<a href="parcel.pl?type=intra&amp;supplierid=[% supplierid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datereceived ) %]&amp;datereceived=[% number.datereceived %][% END %][% IF ( number.invoice ) %]&amp;invoice=[% number.invoice %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
+		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% number.startfrom %][% IF ( number.datereceived ) %]&amp;datereceived=[% number.datereceived %][% END %][% IF ( number.invoice ) %]&amp;invoice=[% number.invoice %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage %][% END %]#resultnumber">[% number.number %]</a>
 		[% END %]
 	[% END %]
 	[% IF ( displaynext ) %]
-		<a href="parcel.pl?type=intra&amp;supplierid=[% supplierid %]&amp;startfrom=[% nextstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">Next &gt;&gt;</a>
+		<a href="parcel.pl?type=intra&amp;booksellerid=[% booksellerid %]&amp;startfrom=[% nextstartfrom %][% IF ( datereceived ) %]&amp;datereceived=[% datereceived %][% END %][% IF ( invoice ) %]&amp;invoice=[% invoice %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage %][% END %]#resultnumber">Next &gt;&gt;</a>
 	[% END %]
 	</div>
 </div>
@@ -361,7 +361,7 @@
             <tr>
         [% END %]
                 <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_receive.basketno %]">[% loop_receive.basketno %]</a></td>
-                <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% supplierid %]">[% loop_receive.ordernumber %]</a></td>
+                <td><a href="neworderempty.pl?ordernumber=[% loop_receive.ordernumber %]&amp;booksellerid=[% booksellerid %]">[% loop_receive.ordernumber %]</a></td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_receive.biblionumber %]">[% loop_receive.title |html %]</a>
                 [% IF ( loop_receive.author ) %] / [% loop_receive.author %][% END %]
                 [% IF ( loop_receive.isbn ) %] - [% loop_receive.isbn %][% END %]
@@ -385,9 +385,9 @@
 	[% ELSE %]There are no received orders.[% END %]
 </div>
 
-<!--<form action="/cgi-bin/koha/acqui/parcels.pl?supplierid=[% supplierid %]" method="post">-->
-<form action="parcels.pl?supplierid=[% supplierid %]" method="post">
-    <input type="hidden" name="supplierid" value="[% supplierid %]" />
+<!--<form action="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]" method="post">-->
+<form action="parcels.pl?booksellerid=[% booksellerid %]" method="post">
+    <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
     <fieldset class="action">
         <input type="submit" value="Finish receiving" />
     </fieldset>

@@ -41,7 +41,7 @@ C<$supplier> is the string with which we search for a supplier
 
 =back
 
-=item id or supplierid
+=item id or booksellerid
 
 The id of the supplier whose baskets we will display
 
@@ -74,11 +74,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 #parameters
 my $supplier = $query->param('supplier');
-my $id = $query->param('id') || $query->param('supplierid');
+my $booksellerid = $query->param('booksellerid');
 my @suppliers;
 
-if ($id) {
-    push @suppliers, GetBookSellerFromId($id);
+if ($booksellerid) {
+    push @suppliers, GetBookSellerFromId($booksellerid);
 } else {
     @suppliers = GetBookSeller($supplier);
 }
@@ -87,7 +87,7 @@ my $supplier_count = @suppliers;
 if ( $supplier_count == 1 ) {
     $template->param(
         supplier_name => $suppliers[0]->{'name'},
-        id            => $suppliers[0]->{'id'}
+        booksellerid  => $suppliers[0]->{'booksellerid'}
     );
 }
 
@@ -136,7 +136,7 @@ for my $vendor (@suppliers) {
 
     push @{$loop_suppliers},
       { loop_basket => $loop_basket,
-        supplierid  => $vendor->{id},
+        booksellerid  => $vendor->{id},
         name        => $vendor->{name},
         active      => $vendor->{active},
       };
@@ -144,7 +144,7 @@ for my $vendor (@suppliers) {
 }
 $template->param(
     loop_suppliers => $loop_suppliers,
-    supplier       => ( $id || $supplier ),
+    supplier       => ( $booksellerid || $supplier ),
     count          => $supplier_count,
 );
 

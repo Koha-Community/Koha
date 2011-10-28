@@ -60,18 +60,18 @@
         [% END %]
                 <td>[% IF ( CAN_user_acquisition_order_manage ) %]
                     [% IF ( loop_supplier.active ) %]
-                        <a href="basketheader.pl?booksellerid=[% loop_supplier.supplierid %]&amp;op=add_form">New basket</a>
+                        <a href="basketheader.pl?booksellerid=[% loop_supplier.booksellerid %]&amp;op=add_form">New basket</a>
                     [% ELSE %]
                         Inactive
                     [% END %]
                     [% END %]
                 </td>
-                <td>	<a href="parcels.pl?supplierid=[% loop_supplier.supplierid %]">Receive shipment</a>
+                <td>	<a href="parcels.pl?booksellerid=[% loop_supplier.booksellerid %]">Receive shipment</a>
                 </td>
                 [% IF ( loop_supplier.name ) %]
-                <td><a href="supplier.pl?supplierid=[% loop_supplier.supplierid %]">[% loop_supplier.name %]</a></td>
+                <td><a href="supplier.pl?booksellerid=[% loop_supplier.booksellerid %]">[% loop_supplier.name %]</a></td>
                 [% ELSE %]
-                <td><a href="supplier.pl?supplierid=[% loop_supplier.supplierid %]">NO NAME</a></td>
+                <td><a href="supplier.pl?booksellerid=[% loop_supplier.booksellerid %]">NO NAME</a></td>
                 [% END %]
                 <td>	<table>
                         [% IF ( loop_supplier.loop_basket ) %]

@@ -48,7 +48,7 @@ my $datereceived=$input->param('datereceived');
 my $replacement=$input->param('rrp');
 my $gst=$input->param('gst');
 my $freight=$input->param('freight');
-my $supplierid = $input->param('supplierid');
+my $booksellerid = $input->param('booksellerid');
 my $cnt=0;
 my $error_url_str;
 my $ecost = $input->param('ecost');
@@ -99,7 +99,7 @@ if ($quantityrec > $origquantityrec ) {
 
 update_item( $_ ) foreach GetItemnumbersFromOrder( $ordernumber );
 
-print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&supplierid=$supplierid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
+print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoice=$invoiceno&booksellerid=$booksellerid&freight=$freight&gst=$gst&datereceived=$datereceived$error_url_str");
 
 ################################ End of script ################################
 
@@ -107,7 +107,7 @@ sub update_item {
     my ( $itemnumber ) = @_;
 
     ModItem( {
-        booksellerid         => $supplierid,
+        booksellerid         => $booksellerid,
         dateaccessioned      => $datereceived,
         price                => $unitprice,
         replacementprice     => $replacement,

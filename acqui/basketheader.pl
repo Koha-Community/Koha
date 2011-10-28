@@ -33,9 +33,9 @@ notes to the supplier, local notes, and the contractnumber, which identifies the
 
 =over 4
 
-=item supplierid
+=item booksellerid
 
-C<$supplierid> is the id of the supplier we add the basket to.
+C<$booksellerid> is the id of the supplier we add the basket to.
 
 =item basketid
 

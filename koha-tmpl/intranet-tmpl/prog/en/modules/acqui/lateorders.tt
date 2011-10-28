@@ -6,9 +6,9 @@
 //<![CDATA[
 $(document).ready(function() {
     $("input:checkbox[name=claim_for]").click(function(){
-        var supplierid = $(this).attr('supplierid');
+        var booksellerid = $(this).attr('booksellerid');
         if ( $("input:checkbox[name=claim_for]:checked").length > 0) {
-            $("input:checkbox[name=claim_for][supplierid!="+supplierid+"]").attr('disabled', true);
+            $("input:checkbox[name=claim_for][booksellerid!="+booksellerid+"]").attr('disabled', true);
         } else {
             $("input:checkbox[name=claim_for]").attr('disabled', false);
         }
@@ -48,7 +48,7 @@ $(document).ready(function() {
 <form action="lateorders.pl" name="claim" method="post">
   <input type="hidden" name="op" value="send_alert" />
   <input type="hidden" name="delay" value="[% delay %]" />
-  <input type="hidden" name="supplierid" value="[% SupplierId %]" />
+  <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
 	[% IF ( letters ) %]
 	<p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
 	  [% FOREACH letter IN letters %]
@@ -76,7 +76,7 @@ $(document).ready(function() {
         [% UNLESS ( loop.odd ) %]<tr class="highlight">
         [% ELSE %]<tr>[% END %]
             <td>
-                ([% lateorder.supplierid %])
+                ([% lateorder.booksellerid %])
                 [% lateorder.orderdate %]
                 ([% lateorder.latesince %] days)
             </td>
@@ -109,7 +109,7 @@ $(document).ready(function() {
             <td>[% lateorder.claimed_date %]</td>
             <td>
                 [% UNLESS lateorder.budget_lock %]
-                    <input type="checkbox" class="checkbox" name="claim_for" value="[% lateorder.ordernumber %]"  supplierid="[% lateorder.supplierid %]"/>
+                    <input type="checkbox" class="checkbox" name="claim_for" value="[% lateorder.ordernumber %]"  supplierid="[% lateorder.booksellerid %]"/>
                 [% END %]
              </td>
             </td>
@@ -141,8 +141,8 @@ $(document).ready(function() {
 [% IF ( ERROR_LOO.delay_digits ) %]<p class="error">The number of days ([% ERROR_LOO.bad_delay %]) must be a number between 0 and 999.</p>[% END %]
 [% END %]
 <ol><li><label for="delay">Order date:</label><input size="3" maxlength="3" id="delay" type="text" name="delay" value="[% delay %]" /> days ago</li>
-	<li><label for="supplierid">Vendor:</label>
-		<select id="supplierid" size="1" tabindex="" name="supplierid">
+	<li><label for="booksellerid">Vendor:</label>
+		<select id="booksellerid" size="1" tabindex="" name="booksellerid">
 			<option value=""/>
 			[% FOREACH SUPPLIER_LOO IN SUPPLIER_LOOP %]
                 [% IF ( SUPPLIER_LOO.selected ) %]<option value="[% SUPPLIER_LOO.id %]" selected="selected">[% SUPPLIER_LOO.name %]</option>

@@ -69,7 +69,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 my $supplier=$input->param('supplier');
 #print startpage;
 my %data;
-$data{'id'}=$input->param('id');
+$data{'booksellerid'}=$input->param('booksellerid');
 
 $data{'name'}=$input->param('company');
 $data{'postal'}=$input->param('company_postal');
@@ -109,13 +109,13 @@ if ($gstrate eq '') {
 $data{'discount'}=$input->param('discount');
 $data{'active'}=$input->param('status');
 if($data{'name'}) {
-	if ($data{'id'}){
+	if ($data{'booksellerid'}){
 	    ModBookseller(\%data);
 	} else {
-	    $data{id}=AddBookseller(\%data);
+	    $data{booksellerid}=AddBookseller(\%data);
 	}
 #redirect to booksellers.pl
-print $input->redirect("booksellers.pl?id=".$data{id});
+print $input->redirect("booksellers.pl?booksellerid=".$data{booksellerid});
 } else {
 print $input->redirect("supplier.pl?op=enter"); # fail silently.
 }

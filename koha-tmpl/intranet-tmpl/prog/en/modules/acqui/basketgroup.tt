@@ -106,11 +106,11 @@ function submitForm(form) {
 
 function yuiToolbar() {
 	var booksellermenu = [
-		{ text: _("Vendor"), url: "/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]" },
+		{ text: _("Vendor"), url: "/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]" },
 		{ text: _("Edit vendor"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]"},
 	]
 	var ordersbutton = [
-	         { text: _("Manage orders"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=[% booksellerid %]" },
+	         { text: _("Manage orders"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]" },
 	         { text: _("Edit uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&owner=1" },
 	]
 	new YAHOO.widget.Button("newbasketgroup");
@@ -137,7 +137,7 @@ function yuiToolbar() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername |html %]</a> &rsaquo; Basket Grouping</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a> &rsaquo; Basket Grouping</div>
 
 <div id="doc" class="yui-t7">
             
@@ -145,7 +145,7 @@ function yuiToolbar() {
         	<div id="toolbar">
 				<a href="?op=add&amp;booksellerid=[% booksellerid %]" name="newbasketgroup" id="newbasketgroup">New Basket Group</a>
 			</div>
-			<h1>Basket Grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% booksellername |html %]</a></h1>
+			<h1>Basket Grouping for <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername |html %]</a></h1>
 		</div>
 [% IF ( grouping ) %]
 	<div id="bd"> 

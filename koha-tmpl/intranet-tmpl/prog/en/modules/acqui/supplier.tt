@@ -5,7 +5,7 @@
 //<![CDATA[
 function confirm_deletion() {
     if (confirm(_("Confirm deletion of this vendor ?"))) {
-        window.location="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]&op=delete";
+        window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&op=delete";
     }
 }
 function check(f) {
@@ -22,14 +22,14 @@ if (f.company.value == "") {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( id ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]">[% name %]</a> &rsaquo; Update: [% name %][% ELSE %]Add vendor[% END %] [% ELSE %][% name %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( booksellerid ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; Update: [% name %][% ELSE %]Add vendor[% END %] [% ELSE %][% name %][% END %]</div>
 
 <div id="doc" class="yui-t7">
 
 <div id="bd">
     <div id="yui-main">
     [% IF ( enter ) %]
-        [% IF ( id ) %]
+        [% IF ( booksellerid ) %]
         <h1>Update: [% name %]</h1>
     [% ELSE %]
         <h1>Add vendor</h1>
@@ -39,7 +39,7 @@ if (f.company.value == "") {
 [% IF ( enter ) %]
     <form action="updatesupplier.pl" name="updatesupplier" method="post">
     <div class="yui-g">
-        <input type="hidden" name="id" value="[% id %]" />
+        <input type="hidden" name="id" value="[% booksellerid %]" />
         <fieldset class="rows">
             <legend>Company details</legend>
             <ol><li><label for="company" class="required">Name * </label>
@@ -140,8 +140,8 @@ if (f.company.value == "") {
             <li><label for="notes">Notes</label>
                 <textarea cols="40" rows="4" id="notes" name="notes" >[% notes %]</textarea></li></ol>
         </fieldset>
-        <fieldset class="action"><input type="button" value="Save" onclick="check(this.form);" /> [% IF ( id ) %]
-        <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]">[% ELSE %]<a class="cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
+        <fieldset class="action"><input type="button" value="Save" onclick="check(this.form);" /> [% IF ( booksellerid ) %]
+        <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% ELSE %]<a class="cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
         [% END %]Cancel</a></fieldset>
         </div>
     </form>

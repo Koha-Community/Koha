@@ -22,18 +22,18 @@
 
         var manageorders = [
             [% IF ( CAN_user_acquisition_order_manage ) %]
-                { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form"},
-                { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?supplierid=[% id %]"},
-                { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% id %]"},
+                { text: _("New basket"), url: "/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&op=add_form"},
+                { text: _("Baskets"), url: "/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid %]"},
+                { text: _("Basket groups"), url: "/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid %]"},
             [% END %]
-            { text: _("Receive shipments"), url: "/cgi-bin/koha/acqui/parcels.pl?supplierid=[% id %]" },
+            { text: _("Receive shipments"), url: "/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid %]" },
             [% IF ( basketno ) %]
-                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% id %]&basketno=[% basketno %]&owner=1"}
+                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&basketno=[% basketno %]&owner=1"}
             [% ELSE %]
-                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% id %]&owner=1"}
+                { text: _("Uncertain prices"), url: "/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid %]&owner=1"}
             [% END %]
         ]
-        [% IF ( id ) %]
+        [% IF ( booksellerid ) %]
             [% IF ( basketcount ) %]
                 new YAHOO.widget.Button({type: "menu", label: _("Manage orders"), name: "manageorders", menu: manageorders, container: "toolbar-list"});
             [% END %]
@@ -43,13 +43,13 @@
     //]]>
     </script>
     <ul id="toolbar-list" class="toolbar">
-        [% IF ( id ) %]
+        [% IF ( booksellerid ) %]
             [% IF ( CAN_user_acquisition_vendors_manage ) %]
-                <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]&amp;op=enter">Edit</a></li>
-                <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=[% id %]">New Contract</a></li>
-                <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% id %]">Contracts</a></li>
+                <li><a id="editsupplier" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]&amp;op=enter">Edit</a></li>
+                <li><a id="newcontract" href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&booksellerid=[% booksellerid %]">New Contract</a></li>
+                <li><a id="editcontracts" href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid %]">Contracts</a></li>
                 [% UNLESS ( basketcount ) %]
-                    <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% id %]&op=add_form">New Basket</a></li>
+                    <li><a id="newbasket" href="/cgi-bin/koha/acqui/basketheader.pl?booksellerid=[% booksellerid %]&op=add_form">New Basket</a></li>
                 [% END %]
             [% END %]
         [% ELSE %]

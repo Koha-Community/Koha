@@ -7,7 +7,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% supplierid %]">[% name %]</a> &rsaquo; Receive items from : [% name %] [% IF ( invoice ) %][[% invoice %]][% END %] (order #[% ordernumber %])</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% name %]</a> &rsaquo; Receive items from : [% name %] [% IF ( invoice ) %][[% invoice %]][% END %] (order #[% ordernumber %])</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -93,7 +93,7 @@
     <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
     <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
     <input type="hidden" name="biblioitemnumber" value="[% biblioitemnumber %]" />
-    <input type="hidden" name="supplierid" value="[% supplierid %]" />
+    <input type="hidden" name="booksellerid" value="[% booksellerid %]" />
     <input type="hidden" name="datereceived" value="[% datereceived_iso %]" />
     <input type="hidden" name="freight" value="[% freight %]" />
     <input type="hidden" name="gst" value="[% gst %]" />
@@ -148,7 +148,7 @@
 
 </div>
 </div><div class="yui-g"><fieldset class="action">
-        <input type="button"  value="Save" onclick="javascript:if(check_additem()) { this.form.submit(); } else { alert( _('Duplicate barcodes detected.  Please correct the errors and resubmit.') ); return false };" /> <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?supplierid=[% supplierid %]&amp;invoice=[% invoice %]&amp;gst=[% gst %]&amp;freight=[% freight %]">Cancel</a>
+        <input type="button"  value="Save" onclick="javascript:if(check_additem()) { this.form.submit(); } else { alert( _('Duplicate barcodes detected.  Please correct the errors and resubmit.') ); return false };" /> <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% booksellerid %]&amp;invoice=[% invoice %]&amp;gst=[% gst %]&amp;freight=[% freight %]">Cancel</a>
 </fieldset></div>    </form>
 [% ELSE %]
 <div id="acqui_acquire_orderlist">

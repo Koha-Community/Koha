@@ -111,7 +111,7 @@ elsif ( $op eq 'add_validate' ) {
         });
     }
 
-    print $input->redirect("/cgi-bin/koha/acqui/supplier.pl?supplierid=$booksellerid");
+    print $input->redirect("/cgi-bin/koha/acqui/supplier.pl?booksellerid=$booksellerid");
     exit;
 
     # END $OP eq ADD_VALIDATE
@@ -138,7 +138,7 @@ elsif ( $op eq 'delete_confirmed' ) {
 
     DelContract( { contractnumber => $contractnumber } );
 
-    print $input->redirect("/cgi-bin/koha/acqui/supplier.pl?supplierid=$booksellerid");
+    print $input->redirect("/cgi-bin/koha/acqui/supplier.pl?booksellerid=$booksellerid");
     exit;
 
     # END $OP eq DELETE_CONFIRMED

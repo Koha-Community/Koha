@@ -34,7 +34,7 @@ It allows to write an order as 'received' when he arrives.
 
 =over 4
 
-=item supplierid
+=item booksellerid
 
 To know the supplier this script has to show orders.
 
@@ -71,8 +71,8 @@ use C4::Suggestions;
 use JSON;
 
 my $input=new CGI;
-my $supplierid=$input->param('supplierid');
-my $bookseller=GetBookSellerFromId($supplierid);
+my $booksellerid=$input->param('booksellerid');
+my $bookseller=GetBookSellerFromId($booksellerid);
 
 my $invoice=$input->param('invoice') || '';
 my $freight=$input->param('freight');
@@ -102,7 +102,7 @@ if($input->param('format') eq "json"){
        
     my @datas;
     my $search   = $input->param('search') || '';
-    my $supplier = $input->param('supplierid') || '';
+    my $supplier = $input->param('booksellerid') || '';
     my $basketno = $input->param('basketno') || '';
     my $orderno  = $input->param('orderno') || '';
 
@@ -155,7 +155,7 @@ if( scalar(@rcv_err) ) {
 }
 
 my $cfstr         = "%.2f";                                                           # currency format string -- could get this from currency table.
-my @parcelitems   = GetParcel($supplierid, $invoice, $datereceived->output('iso'));
+my @parcelitems   = GetParcel($booksellerid, $invoice, $datereceived->output('iso'));
 my $countlines    = scalar @parcelitems;
 my $totalprice    = 0;
 my $totalfreight  = 0;
@@ -174,7 +174,7 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
     $line{invoice} = $invoice;
     $line{gst}     = $gst;
     $line{total} = sprintf($cfstr, $total);
-    $line{supplierid} = $supplierid;
+    $line{booksellerid} = $booksellerid;
     push @loop_received, \%line;
     $totalprice += $parcelitems[$i]->{'unitprice'};
     $line{unitprice} = sprintf($cfstr, $parcelitems[$i]->{'unitprice'});
@@ -195,7 +195,7 @@ for (my $i = 0 ; $i < $countlines ; $i++) {
     $tototal       += $total;
 }
 
-my $pendingorders = GetPendingOrders($supplierid);
+my $pendingorders = GetPendingOrders($booksellerid);
 my $countpendings = scalar @$pendingorders;
 
 # pending orders totals
@@ -219,7 +219,7 @@ for (my $i = 0 ; $i < $countpendings ; $i++) {
     $line{invoice} = $invoice;
     $line{gst} = $gst;
     $line{total} = $total;
-    $line{supplierid} = $supplierid;
+    $line{booksellerid} = $booksellerid;
     $ordergrandtotal += $line{ecost} * $line{quantity};
     
     my $biblionumber = $line{'biblionumber'};
@@ -302,7 +302,7 @@ $template->param(
     invoicedatereceived   => $datereceived->output('iso'),
     formatteddatereceived => $datereceived->output(),
     name                  => $bookseller->{'name'},
-    supplierid            => $supplierid,
+    booksellerid            => $booksellerid,
     gst                   => $gst,
     freight               => $freight,
     invoice               => $invoice,

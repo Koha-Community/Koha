@@ -158,7 +158,7 @@
 
                     Accession Date:</span>
                     [% IF ( ITEM_DAT.basketno ) %]
-                    <a href="/cgi-bin/koha/acqui/parcel.pl?supplierid=[% ITEM_DAT.booksellerid %]&amp;invoice=[% ITEM_DAT.booksellerinvoicenumber %]&amp;datereceived=[% ITEM_DAT.datereceived %]">[% ITEM_DAT.dateaccessioned %]</a>
+                    <a href="/cgi-bin/koha/acqui/parcel.pl?booksellerid=[% ITEM_DAT.booksellerid %]&amp;invoice=[% ITEM_DAT.booksellerinvoicenumber %]&amp;datereceived=[% ITEM_DAT.datereceived %]">[% ITEM_DAT.dateaccessioned %]</a>
                     [% ELSE %]
                     [% ITEM_DAT.dateaccessioned %]
                     [% END %]

@@ -42,10 +42,10 @@
 	    [% order.title %]
 	</td>
 	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber %]&booksellerid=[% order.booksellerid %]&basketno=[% order.basketno %]">[% order.ordernumber %]</a>
+	    <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber %]&amp;booksellerid=[% order.booksellerid %]&amp;basketno=[% order.basketno %]">[% order.ordernumber %]</a>
 	</td>
 	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% order.booksellerid %]">[% order.booksellerid %]</a>
+	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
 	</td>
 	<td class="cell">
 	    [% order.itype %]

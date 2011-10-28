@@ -100,7 +100,7 @@ my $input = new CGI;
 
 # getting the CGI params
 my $basketno        = $input->param('basketno');
-my $supplierid      = $input->param('booksellerid');
+my $booksellerid      = $input->param('booksellerid');
 my $author          = $input->param('author');
 my $title           = $input->param('title');
 my $publishercode   = $input->param('publishercode');
@@ -134,11 +134,11 @@ my $suggestions_loop =
                 title			=> $title, 
                 publishercode	=> $publishercode,
                 STATUS        => 'ACCEPTED'});
-my $vendor = GetBookSellerFromId($supplierid);
+my $vendor = GetBookSellerFromId($booksellerid);
 $template->param(
     suggestions_loop        => $suggestions_loop,
     basketno                => $basketno,
-    supplierid              => $supplierid,
+    booksellerid              => $booksellerid,
     name					=> $vendor->{'name'},
     "op_$op"                => 1,
 );

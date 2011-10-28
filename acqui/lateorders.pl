@@ -29,7 +29,7 @@ given on input arg.
 
 =over 4
 
-=item supplierid
+=item booksellerid
 To know on which supplier this script have to display late order.
 
 =item delay
@@ -64,7 +64,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
 	debug => 1,
 });
 
-my $supplierid = $input->param('supplierid') || undef; # we don't want "" or 0
+my $booksellerid = $input->param('booksellerid') || undef; # we don't want "" or 0
 my $delay      = $input->param('delay');
 my $branch     = $input->param('branch');
 my $op         = $input->param('op');
@@ -95,15 +95,16 @@ if ($op and $op eq "send_alert"){
 my %supplierlist = GetBooksellersWithLateOrders($delay);
 my (@sloopy);	# supplier loop
 foreach (keys %supplierlist){
-	push @sloopy, (($supplierid and $supplierid eq $_ )            ? 
+	push @sloopy, (($booksellerid and $booksellerid eq $_ )            ?
 					{id=>$_, name=>$supplierlist{$_}, selected=>1} :
 					{id=>$_, name=>$supplierlist{$_}} )            ;
 }
 $template->param(SUPPLIER_LOOP => \@sloopy);
-$template->param(Supplier=>$supplierlist{$supplierid}) if ($supplierid);
-$template->param(SupplierId=>$supplierid) if ($supplierid);
 
-my @lateorders = GetLateOrders($delay,$supplierid,$branch);
+$template->param(Supplier=>$supplierlist{$booksellerid}) if ($booksellerid);
+$template->param(booksellerid=>$booksellerid) if ($booksellerid);
+
+my @lateorders = GetLateOrders($delay,$booksellerid,$branch);
 
 my $total;
 foreach (@lateorders){

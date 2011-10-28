@@ -54,7 +54,7 @@ basket.pl
 
 The basket number.
 
-=item supplierid
+=item booksellerid
 
 the supplier this script have to display the basket.
 
@@ -66,7 +66,7 @@ the supplier this script have to display the basket.
 
 my $query        = new CGI;
 my $basketno     = $query->param('basketno');
-my $booksellerid = $query->param('supplierid');
+my $booksellerid = $query->param('booksellerid');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -82,7 +82,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $basket = GetBasket($basketno);
 
 # FIXME : what about the "discount" percentage?
-# FIXME : the query->param('supplierid') below is probably useless. The bookseller is always known from the basket
+# FIXME : the query->param('booksellerid') below is probably useless. The bookseller is always known from the basket
 # if no booksellerid in parameter, get it from basket
 # warn "=>".$basket->{booksellerid};
 $booksellerid = $basket->{booksellerid} unless $booksellerid;
@@ -164,7 +164,7 @@ if ( $op eq 'delete_confirm' ) {
                          basketgroupid => $basketgroupid } );
             print $query->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid='.$booksellerid.'&closed=1');
         } else {
-            print $query->redirect('/cgi-bin/koha/acqui/booksellers.pl?supplierid=' . $booksellerid);
+            print $query->redirect('/cgi-bin/koha/acqui/booksellers.pl?booksellerid=' . $booksellerid);
         }
         exit;
     } else {

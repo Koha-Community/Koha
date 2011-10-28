@@ -47,13 +47,13 @@
 	    [% order.title %]
 	</td>
 	<td class="cell">
-            <a href="/cgi-bin/koha/acqui/orderreceive.pl?ordernumber=[% order.ordernumber %]&biblio=[% order.biblionumber %]&invoice=[% order.booksellerinvoicenumber %]&supplierid=[% order.booksellerid %]&catview=yes">[% order.ordernumber %]</a>
+            <a href="/cgi-bin/koha/acqui/orderreceive.pl?ordernumber=[% order.ordernumber %]&amp;biblio=[% order.biblionumber %]&amp;invoice=[% order.booksellerinvoicenumber %]&amp;booksellerid=[% order.booksellerid %]&amp;catview=yes">[% order.ordernumber %]</a>
 	</td>
 	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% order.booksellerid %]">[% order.booksellerid %]</a>
+	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid %]">[% order.booksellerid %]</a>
 	</td>
 	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% order.booksellerinvoicenumber %]&supplierid=[% order.booksellerid %]&datereceived=[% order.datereceived %]">[% order.booksellerinvoicenumber %]</a>
+	    <a href="/cgi-bin/koha/acqui/parcel.pl?invoice=[% order.booksellerinvoicenumber %]&amp;booksellerid=[% order.booksellerid %]&amp;datereceived=[% order.datereceived %]">[% order.booksellerinvoicenumber %]</a>
 	</td>
 	<td class="cell">
 	    [% order.itype %]
