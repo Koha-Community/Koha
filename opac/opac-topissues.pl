@@ -2,6 +2,7 @@
 
 
 # Copyright 2000-2002 Katipo Communications
+# Parts Copyright Catalyst IT 2011
 #
 # This file is part of Koha.
 #
@@ -83,7 +84,14 @@ if($advanced_search_types eq 'ccode'){
                     ";
     $template->param(ccodesearch => 1);
 }else{
-    $whereclause .= ' AND biblioitems.itemtype='.$dbh->quote($itemtype) if $itemtype;
+    if ($itemtype){
+	if (C4::Context->preference('item-level_itypes')){
+	    $whereclause .= ' AND items.itype = ' . $dbh->quote($itemtype);
+	}
+	else {
+	    $whereclause .= ' AND biblioitems.itemtype='.$dbh->quote($itemtype);
+        }
+    }
     $query = "SELECT datecreated, biblio.biblionumber, title,
                     author, sum( items.issues ) AS tot, biblioitems.itemtype,
                     biblioitems.publishercode,biblioitems.publicationyear,
