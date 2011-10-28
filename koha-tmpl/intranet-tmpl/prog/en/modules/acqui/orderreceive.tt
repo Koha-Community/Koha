@@ -89,7 +89,9 @@
     <fieldset class="rows">
     <legend>Accounting details</legend>
        <ol>
-       <li><label for="datereceived">Date received: </label><span class="label"> [% datereceived %] </span></li>
+       <li><label for="datereceived">Date received: </label><span> [% datereceived %] </span></li>
+       <li><label for="bookfund">Budget: </label><span> [% bookfund %] </span></li>
+       <li><label for="creator">Created by: </label><span> [% IF ( memberfirstname and membersurname ) %][% IF ( memberfirstname ) %][% memberfirstname %][% END %] [% membersurname %][% ELSE %]No name[% END %]</span></li>
        <li><label for="quantityto">Quantity to receive: </label><span class="label">
            [% IF ( edit ) %]
                <input type="text" name="quantity" value="[% quantity %]" />
