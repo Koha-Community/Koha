@@ -53,7 +53,9 @@ if (f.company.value == "") {
             <li><label for="company_fax">Fax</label>
                 <input type="text" size="20" id="company_fax" name="company_fax" value="[% fax %]" /></li>
             <li><label for="website">Website</label>
-                <input type="text" size="40" id="website" name="website" value="[% url %]" /></li></ol>
+                <input type="text" size="40" id="website" name="website" value="[% url %]" /></li>
+            <li><label for="accountnumber">Account number</label>
+                <input type="text" size="40" id="accountnumber" name="accountnumber" value="[% accountnumber %]" /></li></ol>
         </fieldset>
         <fieldset class="rows">
             <legend>Contact details</legend>
@@ -136,7 +138,7 @@ if (f.company.value == "") {
                 <input type="text" size="6" id="discount" name="discount" value="[% discount %]" />%</li>
             <li><label for="gstrate">Tax rate</label><input type="text" name="gstrate" id="gstrate" size="6" value="[% gstrate %]"/>% (leave blank for default tax of [% default_gst_rate %]%)</li>
             <li><label for="notes">Notes</label>
-                <textarea cols="40" rows="4" id="notes" name="notes" >[% notes %]</textarea></li></ol>			
+                <textarea cols="40" rows="4" id="notes" name="notes" >[% notes %]</textarea></li></ol>
         </fieldset>
         <fieldset class="action"><input type="button" value="Save" onclick="check(this.form);" /> [% IF ( id ) %]
         <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% id %]">[% ELSE %]<a class="cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
@@ -154,7 +156,10 @@ if (f.company.value == "") {
                 <p><span class="label">Phone: </span>[% phone %]</p>
                 <p><span class="label">Fax: </span>[% fax %]</p>
                 [% IF ( url ) %]
-                    <p><span class="label">Web site: </span><a href="[% url %]">[% url %]</a></p>
+                    <p><span class="label">Website: </span><a href="[% url %]">[% url %]</a></p>
+                [% END %]
+                [% IF ( accountnumber ) %]
+                    <p><span class="label">Account number: </span>[% accountnumber %]</p>
                 [% END %]
             </div>
             <div id="supplier-contact-details" class="yui-u">
