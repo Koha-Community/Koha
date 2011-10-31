@@ -463,7 +463,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub _print_to_csv {
     my ( $header, $results ) = @_;
 
-    binmode STDOUT, ":utf8";
+    binmode STDOUT, ":encoding(UTF-8)";
 
     my $csv = Text::CSV_XS->new(
         {   sep_char     => $del,
