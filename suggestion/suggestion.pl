@@ -59,7 +59,7 @@ sub GetCriteriumDesc{
     if ($displayby =~/suggestedby/||$displayby =~/managedby/||$displayby =~/acceptedby/){
         my $borr=C4::Members::GetMember(borrowernumber=>$criteriumvalue);
         return "" unless $borr;
-        return $$borr{firstname} . ", " . $$borr{surname};
+        return $$borr{surname} . ", " . $$borr{firstname};
     }
     if ( $displayby =~ /budgetid/) {
         my $budget = GetBudget($criteriumvalue);
