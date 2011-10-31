@@ -250,7 +250,7 @@ Create a random value to set it into the input name
 
 =cut
 
-sub createKey(){
+sub createKey {
     return int(rand(1000000));
 }
 

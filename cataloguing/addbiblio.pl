@@ -159,7 +159,7 @@ sub MARCfindbreeding {
 
 =cut
 
-sub build_authorized_values_list ($$$$$$$) {
+sub build_authorized_values_list {
     my ( $tag, $subfield, $value, $dbh, $authorised_values_sth,$index_tag,$index_subfield ) = @_;
 
     my @authorised_values;
@@ -252,7 +252,7 @@ sub build_authorized_values_list ($$$$$$$) {
 
 =cut
 
-sub CreateKey(){
+sub CreateKey {
     return int(rand(1000000));
 }
 
@@ -263,7 +263,7 @@ sub CreateKey(){
 
 =cut
 
-sub GetMandatoryFieldZ3950($){
+sub GetMandatoryFieldZ3950 {
     my $frameworkcode = shift;
     my @isbn   = GetMarcFromKohaField('biblioitems.isbn',$frameworkcode);
     my @title  = GetMarcFromKohaField('biblio.title',$frameworkcode);
@@ -536,7 +536,7 @@ sub format_indicator {
     return $ind_value;
 }
 
-sub build_tabs ($$$$$) {
+sub build_tabs {
     my ( $template, $record, $dbh, $encoding,$input ) = @_;
 
     # fill arrays
