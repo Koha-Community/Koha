@@ -39,7 +39,7 @@ my $field = $input->param('field');
 # Prevent from disclosing data
 die() unless ($table eq "biblioitems"); 
 
-binmode STDOUT, ":utf8";
+binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
 my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { cataloguing => '*' } );
