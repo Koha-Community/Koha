@@ -99,7 +99,7 @@ function jumpfull(page)
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromnext %]&amp;authtypecode=[% authtypecode %][% FOREACH searchdat IN searchdata %]&[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index %]&amp;tagid=[% tagid %]&amp;orderby=[% orderby %]">
+                    <a href="auth_finder.pl?startfrom=[% startfromnext %]&amp;authtypecode=[% authtypecode %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term %]=[% searchdat.val %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index %]&amp;tagid=[% tagid %]&amp;orderby=[% orderby %]">
                         &gt;&gt;</a>
                 [% END %]
         </div>[% END %]
