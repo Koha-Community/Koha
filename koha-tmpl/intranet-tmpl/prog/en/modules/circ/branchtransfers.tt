@@ -86,8 +86,46 @@
     </table></div>
 
 [% ELSE %]
-<div class="yui-ge">
-   <div class="yui-u first">     
+                    [% IF ( reqmessage ) %]
+                     <div class="dialog message">
+                        <ul>
+                         [% IF ( cancelled ) %]
+                             <li>Reserve cancelled</li>
+                         [% END %]
+                         [% IF ( setwaiting ) %]
+                             <li>Item should now be waiting at library: [% reqbrchname %]</li>
+                         [% END %]
+                         </ul>
+                    </div>
+                     [% END %]
+
+                     [% IF ( errmsgloop ) %]
+                        <div class="dialog message">
+                            <ul>
+                             [% FOREACH errmsgloo IN errmsgloop %]
+                              [% IF ( errmsgloo.errbadcode ) %]
+                                  <li>No Item with barcode: [% errmsgloo.msg %]</li>
+                              [% END %]
+                              [% IF ( errmsgloo.errispermanent ) %]
+                                  <li>Please return item to home library: [% errmsgloo.msg %]</li>
+                              [% END %]
+                              [% IF ( errmsgloo.errnotallowed ) %]
+                                  <li>You cannot transfer items of [% errmsgloo.codeType %] <b>[% errmsgloo.code %]</b> to <b>[% errmsgloo.tbr %]</b></li>
+                              [% END %]
+                              [% IF ( errmsgloo.errdesteqholding ) %]
+                                  <li>Item is already at destination library.</li>
+                              [% END %]
+                              [% IF ( errmsgloo.errwasreturned ) %]
+                                  <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.borrowernumber %]">
+                                  [% errmsgloo.firstname %] [% errmsgloo.surname %]
+                                  ([% errmsgloo.cardnumber %])</a> and has been returned.</li>
+                              [% END %]
+                          [% END %]
+                          </ul>
+                            </div>
+                        [% END %]
+
+<div id="branchtransfers">
     <form method="post" name="mainform" id="mainform" action="/cgi-bin/koha/circ/branchtransfers.pl">
         <fieldset class="brief">
             <legend>Transfer</legend>
@@ -119,58 +157,29 @@
             <input type="hidden" name="tb-[% trsfitemloo.counter %]" value="[% trsfitemloo.tobrcd %]" />
         [% END %]
     </form></div>
- 
-	 <div class="yui-u"><h4>Messages</h4>
-		<ul>
-                [% IF ( reqmessage ) %]
-                    [% IF ( cancelled ) %]
-                        <li>Reserve Cancelled</li>
-                    [% END %]
-                    [% IF ( setwaiting ) %]
-                        <li>Item should now be waiting at library: [% reqbrchname %]</li>
-                    [% END %]
-                [% END %]
-                [% FOREACH errmsgloo IN errmsgloop %]
-                    [% IF ( errmsgloo.errbadcode ) %]
-                        <li>No Item with barcode: [% errmsgloo.msg %]</li>
-                    [% END %]
-                    [% IF ( errmsgloo.errispermanent ) %]
-                        <li>Please return item to home library: [% errmsgloo.msg %]</li>
-                    [% END %]
-                    [% IF ( errmsgloo.errnotallowed ) %]
-                        <li>You cannot transfer items of [% errmsgloo.codeType %] <b>[% errmsgloo.code %]</b> to <b>[% errmsgloo.tbr %]</b></li>
-                    [% END %]
-                    [% IF ( errmsgloo.errdesteqholding ) %]
-                        <li>Item is already at destination library.</li>
-                    [% END %]
-                    [% IF ( errmsgloo.errwasreturned ) %]
-                        <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.borrowernumber %]">
-[% errmsgloo.firstname %] [% errmsgloo.surname %]
-([% errmsgloo.cardnumber %])</a> and has been returned.</li>
-                    [% END %]
-                [% END %]
-        </ul>
-    </div><!-- /yui-u -->
-</div><!-- /yui-ge -->
-	 
+</div>
+
     [% IF ( trsfitemloop ) %]
         <div class="yui-g">
 		<table>
             <caption>Transferred Items</caption>
             <tr>
-                <th>Bar Code</th>
                 <th>Title</th>
+                <th>Author</th>
+                <th>Barcode</th>
+                <th>Shelving location</th>
+                <th>Call number</th>
+                <th>Type</th>
                 <th>To</th>
             </tr>
             [% FOREACH trsfitemloo IN trsfitemloop %]
                 <tr>
-                    <td>
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber %]">[% trsfitemloo.barcode %]</a>
-                    </td>
-                    <td>
-                        <p>[% trsfitemloo.title |html %] ([% trsfitemloo.author %])</p>
-                        <p>[% trsfitemloo.ccode %]</p>
-                    </td>
+                    <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber %]">[% trsfitemloo.title |html %]</a></td>
+                    <td>[% trsfitemloo.author %]</td>
+                    <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.biblionumber %]&amp;itemnumber=[% trsfitemloo.itemnumber %]#item[% trsfitemloo.itemnumber %]">[% trsfitemloo.barcode %]</a></td>
+                    <td>[% trsfitemloo.location %]</td>
+                    <td>[% trsfitemloo.itemcallnumber %]</td>
+                    <td>[% trsfitemloo.ccode %]</td>
                     <td>[% trsfitemloo.tobrname %]</td>
                 </tr>
             [% END %]
