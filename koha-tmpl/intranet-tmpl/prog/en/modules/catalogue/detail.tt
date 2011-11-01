@@ -384,11 +384,11 @@ function verify_images() {
                 [% END %]
                 [% IF ( analyze ) %]<td>
 			[% IF ( itemloo.countanalytics ) %]
-                      		<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&q=[% itemloo.itemnumber %]">[% itemloo.countanalytics %] analytics</a>
+				<a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=[% itemloo.itemnumber %]">[% itemloo.countanalytics %] analytics</a>
 			[% END %]</td>
 		[% END %]
                 [% IF ( analyze ) %]
-                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% itemloo.biblionumber %]&hostitemnumber=[% itemloo.itemnumber %]">Create Analytics</a></td>
+                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% itemloo.biblionumber %]&amp;hostitemnumber=[% itemloo.itemnumber %]">Create Analytics</a></td>
                 [% END %]
 
                 </tr>
@@ -396,7 +396,7 @@ function verify_images() {
         </table>
         [% END %]
                 [% IF ( hiddencount ) %]
-                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&showallitems=1">Show all items ([% hiddencount %] hidden)</a>
+                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]&amp;showallitems=1">Show all items ([% hiddencount %] hidden)</a>
                 [% END %] 		
 		[% IF ( debug_display ) %]
 		<br /><br />
