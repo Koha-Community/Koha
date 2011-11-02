@@ -187,7 +187,7 @@ sub printbasketgrouppdf{
     my $pdfformat = C4::Context->preference("OrderPdfFormat");
     if ($pdfformat eq 'pdfformat::layout3pages' || $pdfformat eq 'pdfformat::layout2pages'){
 	eval {
-	    require $pdfformat;
+        eval "require $pdfformat";
 	    import $pdfformat;
 	};
 	if ($@){
