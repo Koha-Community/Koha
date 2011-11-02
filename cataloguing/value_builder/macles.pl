@@ -118,20 +118,24 @@ my ($input) = @_;
 #        use Data::Dumper;warn "BIGLOOP IN".Dumper(@BIGLOOP);
     }
     foreach my $num (sort keys %numbers){
-      my @tmpcolhdr = @{$numbers{$num}->{'col_hdr'}} if ($numbers{$num}->{'col_hdr'});
-      my @tmprowhdr = @{$numbers{$num}->{"row_hdr"}} if ($numbers{$num}->{'row_hdr'});
+	my @tmpcolhdr;
+	my @tmprowhdr;
+        @tmpcolhdr = @{$numbers{$num}->{'col_hdr'}} if ($numbers{$num}->{'col_hdr'});
+        @tmprowhdr = @{$numbers{$num}->{"row_hdr"}} if ($numbers{$num}->{'row_hdr'});
       my @lines;
       my @lists;
       my %BIGLOOPcell;
       foreach my $row (@tmprowhdr){
         my $tmprowvalue=$row->{rowvalue};
-        my $rowcode=$1 if $tmprowvalue=~/[0-9]([0-9])\./;
+	  my $rowcode;
+          $rowcode=$1 if $tmprowvalue=~/[0-9]([0-9])\./;
         my @cells;
         if (scalar(@tmpcolhdr)>0){
         #cas du tableau bidim
           foreach my $col (@tmpcolhdr){
             my $tmpcolvalue=$col->{colvalue};
-            my $colcode=$1 if $tmpcolvalue=~/[0-9]\.([0-9])/;
+	      my $colcode;
+              $colcode=$1 if $tmpcolvalue=~/[0-9]\.([0-9])/;
             my %cell;
             $cell{celvalue}=$num.$rowcode.$colcode;
             $cell{rowvalue}=$tmprowvalue;
