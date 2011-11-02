@@ -1,5 +1,23 @@
 #!/usr/bin/perl
 
+# Copyright Koha development team 2011
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
+
 use strict;
 use warnings;
 
@@ -13,11 +31,14 @@ use C4::Labels 1.000000;
 
 my $cgi = new CGI;
 
-my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
+my $batch_id;
+my @label_ids;
+my @item_numbers;
+$batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
 my $layout_id   = $cgi->param('layout_id') || undef;
-my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
-my @item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
+@label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
+@item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
 
 my $items = undef;
 
