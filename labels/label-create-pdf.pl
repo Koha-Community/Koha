@@ -38,13 +38,15 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 								     debug           => 1,
 								     });
 
-
-my $batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
+my $batch_id;
+my @label_ids;
+my @item_numbers;
+$batch_id    = $cgi->param('batch_id') if $cgi->param('batch_id');
 my $template_id = $cgi->param('template_id') || undef;
 my $layout_id   = $cgi->param('layout_id') || undef;
 my $start_label = $cgi->param('start_label') || 1;
-my @label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
-my @item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
+@label_ids   = $cgi->param('label_id') if $cgi->param('label_id');
+@item_numbers  = $cgi->param('item_number') if $cgi->param('item_number');
 
 my $items = undef;
 
