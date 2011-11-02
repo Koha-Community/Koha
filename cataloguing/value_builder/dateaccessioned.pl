@@ -1,7 +1,5 @@
 #!/usr/bin/perl
 
-# $Id: usmarc_field_952v.pl,v 1.1.2.2 2006/09/20 02:59:53 kados Exp $
-
 # Copyright 2000-2002 Katipo Communications
 #
 # This file is part of Koha.
@@ -19,7 +17,7 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#use strict;
+use strict;
 #use warnings; FIXME - Bug 2505
 
 =head1
