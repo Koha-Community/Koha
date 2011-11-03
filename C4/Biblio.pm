@@ -3522,9 +3522,12 @@ sub _koha_delete_biblio {
         $bkup_sth->finish;
 
         # delete the biblio
-        my $del_sth = $dbh->prepare("DELETE FROM biblio WHERE biblionumber=?");
-        $del_sth->execute($biblionumber);
-        $del_sth->finish;
+        my $sth2 = $dbh->prepare("DELETE FROM biblio WHERE biblionumber=?");
+        $sth2->execute($biblionumber);
+        # update the timestamp (Bugzilla 7146)
+        $sth2= $dbh->prepare("UPDATE deletedbiblio SET timestamp=NOW() WHERE biblionumber=?");
+        $sth2->execute($biblionumber);
+        $sth2->finish;
     }
     $sth->finish;
     return undef;
@@ -3568,9 +3571,12 @@ sub _koha_delete_biblioitems {
         $bkup_sth->finish;
 
         # delete the biblioitem
-        my $del_sth = $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
-        $del_sth->execute($biblioitemnumber);
-        $del_sth->finish;
+        my $sth2 = $dbh->prepare("DELETE FROM biblioitems WHERE biblioitemnumber=?");
+        $sth2->execute($biblioitemnumber);
+        # update the timestamp (Bugzilla 7146)
+        $sth2= $dbh->prepare("UPDATE deletedbiblioitems SET timestamp=NOW() WHERE biblioitemnumber=?");
+        $sth2->execute($biblioitemnumber);
+        $sth2->finish;
     }
     $sth->finish;
     return undef;
