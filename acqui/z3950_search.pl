@@ -134,8 +134,17 @@ if ( $op ne "do_search" ) {
 }
 else {
     my @id = $input->param('id');
+
+    if ( not defined @id ) {
+        # empty server list -> report and exit
+        $template->param( emptyserverlist => 1 );
+        output_html_with_http_headers $input, $cookie, $template->output;
+        exit;
+    }
+
     my @oConnection;
     my @oResult;
+    my @errconn;
     my $s = 0;
     my $query;
     my $nterms;
@@ -164,7 +173,7 @@ else {
         $query .= " \@attr 1=21 \"$subject\" ";
         $nterms++;
     }
-	if ($lccn) {	
+    if ($lccn) {
         $query .= " \@attr 1=9 $lccn ";
         $nterms++;
     }
@@ -186,7 +195,6 @@ warn "query ".$query  if $DEBUG;
         $sth->execute($servid);
         while ( $server = $sth->fetchrow_hashref ) {
             warn "serverinfo ".join(':',%$server) if $DEBUG;
-            my $noconnection = 0;
             my $option1      = new ZOOM::Options();
             $option1->option( 'async' => 1 );
             $option1->option( 'elementSetName', 'F' );
@@ -237,9 +245,10 @@ sub displayresults {
         my ( $error, $errmsg, $addinfo, $diagset ) =
           $oConnection[$k]->error_x();
         if ($error) {
-            warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n"
-              if $DEBUG;
-
+            if ($error =~ m/^(10000|10007)$/ ) {
+                push(@errconn, {'server' => $serverhost[$k]});
+            }
+            $DEBUG and warn "$k $serverhost[$k] error $query: $errmsg ($error) $addinfo\n";
         }
         else {
             my $numresults = $oResult[$k]->size();
@@ -280,13 +289,6 @@ sub displayresults {
                           )
                           = ImportBreeding( $marcdata, 2, $serverhost[$k], $encoding[$k], $random, 'z3950' );
                         my %row_data;
-                        if ( $i % 2 ) {
-                            $toggle = 1;
-                        }
-                        else {
-                            $toggle = 0;
-                        }
-                        $row_data{toggle}       = $toggle;
                         $row_data{server}       = $servername[$k];
                         $row_data{isbn}         = $oldbiblio->{isbn};
                         $row_data{lccn}         = $oldbiblio->{lccn};
@@ -295,9 +297,9 @@ sub displayresults {
                         $row_data{breedingid}   = $breedingid;
                         $row_data{biblionumber} = $biblionumber;
                         push( @breeding_loop, \%row_data );
-		            
+
                     } else {
-                        push(@breeding_loop,{'toggle'=>($i % 2)?1:0,'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
+                        push(@breeding_loop,{'server'=>$servername[$k],'title'=>join(': ',$oConnection[$k]->error_x()),'breedingid'=>-1,'biblionumber'=>-1});
                     } # $rec
                 }    # upto 5 results
             }    #$numresults
@@ -308,10 +310,11 @@ sub displayresults {
         breeding_loop => \@breeding_loop,
         server        => $servername[$k],
         numberpending => $numberpending,
+        errconn       => \@errconn
     );
     output_html_with_http_headers $input, $cookie, $template->output if $numberpending == 0;
 
-    #  	print  $template->output  if $firstresult !=1;
+    #   print  $template->output  if $firstresult !=1;
     $firstresult++;
 }
 displayresults();
