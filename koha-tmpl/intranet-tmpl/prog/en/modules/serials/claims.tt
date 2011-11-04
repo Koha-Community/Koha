@@ -172,7 +172,7 @@
 [% UNLESS ( letter ) %]<div class="dialog alert">No claims notice defined. <a href="/cgi-bin/koha/tools/letter.pl">Please define one</a>.</div>[% END %]
     <form id="claims" name="claims" action="claims.pl" method="post">
     <fieldset>
-	    <label for="supplierid">Supplier: </label>
+	    <label for="supplierid">Vendor: </label>
 	    <select id="supplierid" name="supplierid">
 	        [% FOREACH suploo IN suploop %]
 	            [% IF ( suploo.selected ) %]
