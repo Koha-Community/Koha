@@ -8,8 +8,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 0.2\n"
-"POT-Creation-Date: 2011-09-16 08:39+0200\n"
-"PO-Revision-Date: 2011-07-11 09:02+0200\n"
+"POT-Creation-Date: 2011-10-26 15:56+0200\n"
+"PO-Revision-Date: 2011-10-12 14:07+0200\n"
 "Last-Translator: Piotr <ropuch@bagno.be>\n"
 "Language-Team: American English <kde-i18n-doc@kde.org>\n"
 "MIME-Version: 1.0\n"
@@ -519,7 +519,8 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:201
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:205
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:206
-#: opac-tmpl/prog/en/modules/opac-auth.tt:87
+#: opac-tmpl/prog/en/modules/opac-auth.tt:65
+#: opac-tmpl/prog/en/modules/opac-auth.tt:99
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 #: opac-tmpl/prog/en/modules/opac-review.tt:51
 #: opac-tmpl/prog/en/modules/opac-review.tt:72
@@ -1244,10 +1245,11 @@ msgstr "%s"
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:219
 #: opac-tmpl/prog/en/modules/opac-auth.tt:18
 #: opac-tmpl/prog/en/modules/opac-auth.tt:53
-#: opac-tmpl/prog/en/modules/opac-auth.tt:59
-#: opac-tmpl/prog/en/modules/opac-auth.tt:65
-#: opac-tmpl/prog/en/modules/opac-auth.tt:66
-#: opac-tmpl/prog/en/modules/opac-auth.tt:91
+#: opac-tmpl/prog/en/modules/opac-auth.tt:63
+#: opac-tmpl/prog/en/modules/opac-auth.tt:71
+#: opac-tmpl/prog/en/modules/opac-auth.tt:77
+#: opac-tmpl/prog/en/modules/opac-auth.tt:78
+#: opac-tmpl/prog/en/modules/opac-auth.tt:103
 #: opac-tmpl/prog/en/modules/opac-review.tt:54
 #: opac-tmpl/prog/en/modules/opac-review.tt:66
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:27
@@ -1534,7 +1536,6 @@ msgstr "%s "
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:269
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:489
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:202
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:206
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:249
 #: opac-tmpl/prog/en/modules/opac-tags.tt:52
 #, c-format
@@ -1740,7 +1741,8 @@ msgstr "%s %s"
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:113
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:214
 #: opac-tmpl/prog/en/modules/opac-auth.tt:45
-#: opac-tmpl/prog/en/modules/opac-auth.tt:77
+#: opac-tmpl/prog/en/modules/opac-auth.tt:65
+#: opac-tmpl/prog/en/modules/opac-auth.tt:89
 #: opac-tmpl/prog/en/modules/opac-review.tt:52
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:11
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:16
@@ -2104,7 +2106,7 @@ msgstr "%s %s %s Pozycja w drodze z "
 #: opac-tmpl/prog/en/modules/opac-user.tt:381
 #, c-format
 msgid "%s %s %s Item waiting at "
-msgstr "%s %s %s Pozycja oczekuje w"
+msgstr "%s %s %s Pozycja oczekuje w "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -2121,7 +2123,7 @@ msgstr "%s %s %s Tylko na miejscu  %s"
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:106
 #, c-format
 msgid "%s %s %s You have subscribed to email notification on new issues "
-msgstr "%s %s %s Otrzymuj powiadomienia o nowych numerach"
+msgstr "%s %s %s Otrzymuj powiadomienia o nowych numerach "
 
 #. For the first occurrence,
 #. %1$s:  END 
@@ -2275,8 +2277,8 @@ msgid ""
 "%s %s Checked out to %s %s %s %s Checked out %s %s In transit from %s to %s "
 "since %s %s On hold %s Item withdrawn %s %s "
 msgstr ""
-"%s %s Checked out to %s %s %s %s Checked out %s %s In transit from %s to %s "
-"since %s %s On hold %s Item withdrawn %s %s "
+"%s %s Wypożyczony przez %s %s %s %s Wypożyczony %s %s W tranzycie z %s do %s "
+"od %s %s Zarezerwowany %s Wycofawny %s %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSIF ( item.damaged ) 
@@ -2313,6 +2315,13 @@ msgstr "%s %s Tylko na miejscu %s"
 msgid "%s %s by %s %s%s%s"
 msgstr "%s %s autorstwa %s %s%s%s"
 
+#. %1$s:  END 
+#. %2$s:  IF ( casServersLoop ) 
+#: opac-tmpl/prog/en/modules/opac-auth.tt:58
+#, c-format
+msgid "%s %s please choose against which one you would like to authenticate: "
+msgstr ""
+
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
 #. %3$s:  ELSE 
@@ -2328,7 +2337,6 @@ msgstr "%s %s tag%stagów%s dodano pomyślnie."
 #. %3$s:  IF ( PAGE_NUMBER.highlight ) 
 #: opac-tmpl/prog/en/includes/page-numbers.inc:3
 #: opac-tmpl/prog/en/modules/opac-detail.tt:104
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:206
 #, c-format
 msgid "%s %s%s"
 msgstr "%s %s%s"
@@ -2486,9 +2494,9 @@ msgid ""
 "s&nbsp;with limit(s):&nbsp;'%s'%s %s You did not specify any search "
 "criteria. %s %s "
 msgstr ""
-"%s %s%s%sKoha Online%s Catalog &rsaquo; %s Wyniki wyszukiwania %s '%s'%s%"
+"%s %s%s%sKoha Online%s Catalog &rsaquo; %s Wyniki wyszukiwania %sdla '%s'%s%"
 "s&nbsp;z ograniczeniami:&nbsp;'%s'%s %s Nie podano żadnych kryteriów "
-"wyszukiwawczych. %s %s "
+"wyszukiwania. %s %s"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -2848,9 +2856,9 @@ msgid ""
 "entered incorrectly. If this problem persists, please ask a librarian to re-"
 "set your password for you. %s "
 msgstr ""
-"$s Hasła nie są takie same. Proszę ponownie wprowadzić nowe hasło. %s %s "
+"%s Hasła nie są takie same. Proszę ponownie wprowadzić nowe hasło. %s %s "
 "Hasło mu się składać z przynajmniej %s znaków %s %s Twoje aktualne hasło nie "
-"zostało wprowadzone poprawnie. Jeśli problem będzie się powtarzał, proszę  "
+"zostało wprowadzone poprawnie. Jeśli problem będzie się powtarzał, proszę "
 "poprosić bibliotekarza o zresetowanie hasła. %s"
 
 #. %1$s:  END 
@@ -3549,8 +3557,8 @@ msgid ""
 "%s%s%s%s%sKoha Online%s%sKoha Online%s Catalog &rsaquo; Updating Details for "
 "%s%s %s%s %s "
 msgstr ""
-"%s%s%s%s%sKoha Online%s%sKoha Online%s Catalog &rsaquo; Aktualizacja "
-"danych : %s%s %s%s %s "
+"%s%s%s%s%sKoha Online%s%sKoha Online%s Catalog &rsaquo; Aktualizacja danych "
+"dla%s%s %s%s %s"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -3769,7 +3777,7 @@ msgstr "%s%s%s%sKoha Online%s Catalog &rsaquo; Najpopularniejsze tytuły %s "
 #: opac-tmpl/prog/en/modules/opac-userdetails.tt:1
 #, c-format
 msgid "%s%s%s%sKoha Online%s Catalog &rsaquo; Personal Details for %s %s %s "
-msgstr "%s%s%s%sKoha Online%s Catalog &rsaquo; Dane personalne: %s %s %s "
+msgstr "%s%s%s%sKoha Online%s Catalog &rsaquo; Dane osobowe: %s %s %s"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -3794,7 +3802,7 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-showreviews.tt:1
 #, c-format
 msgid "%s%s%s%sKoha Online%s Catalog &rsaquo; Recent Comments %s "
-msgstr "%s%s%s%sKoha Online%s Catalog &rsaquo; Ostatnie komentarze %s "
+msgstr "%s%s%s%sKoha Online%s Catalog &rsaquo; Najnowsze komentarze %s"
 
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
@@ -4089,7 +4097,7 @@ msgstr "%s&nbsp;%s %s"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:21
 #, c-format
 msgid "%s(%s)%s"
-msgstr "%s&nbsp;%s %s"
+msgstr "%s(%s)%s"
 
 #. %1$s:  IF ( place ) 
 #. %2$s:  place 
@@ -4136,7 +4144,7 @@ msgstr "%s, %s, %s"
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:274
 #, c-format
 msgid "%s, by %s%s %s %s "
-msgstr "%s, by %s%s %s %s "
+msgstr "%s, autorstwa %s%s %s %s"
 
 #. %1$s:  SEARCH_RESULT.result_number 
 #: opac-tmpl/prog/en/modules/opac-results.tt:382
@@ -4250,8 +4258,8 @@ msgstr ""
 msgid ""
 "%sAwaited %s %sArrived %s %sLate %s %sMissing %s %sNot Issued %s %s %s %s %s "
 msgstr ""
-"%sOczekiwane %s %sOdebrane %s %sOpóźnione %s %sBrakujące %s %sNie zamówione %"
-"s %s %s %s %s "
+"%sOczekiwany %s %sWpłynął %s %sOpóźniony %s %sBrakujący %s %sNie zamówiony %"
+"s %s %s %s %s"
 
 #. %1$s:  IF ( starting_homebranch ) 
 #. %2$s:  starting_homebranch 
@@ -4266,7 +4274,7 @@ msgstr ""
 #, c-format
 msgid ""
 "%sBrowsing %s Shelves%s%s, Shelving Location: %s%s%s, Collection Code: %s%s "
-msgstr "%sPrzeglądenie %s półek%s%s, Dział: %s%s%s, Kod kolekcji: %s%s "
+msgstr "%sPrzeglądanie %s półek%s%s, Dział: %s%s%s, Kod kolekcji: %s%s"
 
 #. %1$s:  IF ( ccodesearch ) 
 #. %2$s:  ELSE 
@@ -4299,8 +4307,8 @@ msgid ""
 "%sItem Due %sAdvance Notice %sUpcoming Events %sHold Filled %sItem Check-in %"
 "sItem Checkout %sUnknown %s"
 msgstr ""
-"%sTermin zwrotu %sCzas powiadomienia %sNadchodzące wydarzenia %sZłożenie "
-"rezerwacji %sWypożyczenia %sZwroty %sNieznane %s"
+"%sData zwrotu %sDni przedomienia %sNadchodzące wydarzenia %sZłożenie "
+"rezerwacji %sZwrot %sWypożyczenie %sInne %s"
 
 #. %1$s:  ELSE 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
@@ -4356,7 +4364,7 @@ msgstr "%sZarezerwowany %sBrak możliwości przedłużeń %s "
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:517
 #, c-format
 msgid "%sPrivate%s %sPublic%s %sOpen%s "
-msgstr "%sPriwatne%s %sPubliczne%s %sOtwarte%s "
+msgstr "%sPrywatne%s %sPubliczne%s %sOtwarte%s"
 
 #. %1$s:  IF ( suggestions_loo.ASKED ) 
 #. %2$s:  END 
@@ -4380,9 +4388,9 @@ msgid ""
 "sOrdered by the library%s %sSuggestion declined %s %sAvailable in the library"
 "%s %s(%s)%s "
 msgstr ""
-"%sZamówione%s %sSprawdzone przez biblioteke%s %sZaakceptowane przez "
-"bibliotekę%s %sZamówione przez bibliotekę%s %sPropozycja odrzucona %s %"
-"sDostępne w bibliotece%s %s(%s)%s "
+"%sZgłoszona%s %sSprawdzona przez bibliotekę%s %sZaakceptowana przez "
+"bibliotekę%s %sZamówiona przez bibliotekę %s %sPropozycja odrzucona %s %"
+"sDostępna w bibliotece %s %s(%s)%s"
 
 #. %1$s:  IF ( available ) 
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
@@ -4395,7 +4403,7 @@ msgstr "%sWyświetlanie tylko "
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:123
 #, c-format
 msgid "%sThis item is already checked out to you.%s"
-msgstr "%sMasz już wypożyczoną tą pozycję.%s"
+msgstr "%sMasz już wypożyczoną tę pozycję.%s"
 
 #. For the first occurrence,
 #. %1$s:  ELSE 
@@ -4427,8 +4435,8 @@ msgid ""
 "%sWaiting%s %sArrived%s %sLate%s %sMissing%s %sNot Available%s %sClaimed%s %s"
 "(%s)%s "
 msgstr ""
-"%sOczekuje%s %sOdebrane%s %sOpóźnione%s %sBrakujące%s %sNiedstepne%s %"
-"sZażądane%s %s(%s)%s "
+"%sOczekujące%s %sOdebrane%s %sOpóźnione%s %sBrakujące%s %sNiedostepne%s %"
+"sZażądane%s %s(%s)%s"
 
 #. %1$s:  IF ( itemLoo.waitingdate ) 
 #. %2$s:  ELSE 
@@ -4484,7 +4492,7 @@ msgstr "%sautorstwa "
 #: opac-tmpl/prog/en/modules/opac-review.tt:71
 #, c-format
 msgid "%sby %s%s"
-msgstr "%sautorstwa %s (%s)"
+msgstr "%sautorstwa %s%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
@@ -4718,7 +4726,7 @@ msgstr ""
 "GetPatronStatus&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetRecords&gt; "
 "&lt;record&gt; &lt;biblioitemnumber&gt;1&lt;/biblioitemnumber&gt; &lt;"
@@ -5029,7 +5037,7 @@ msgstr ""
 "&lt;/dlf:items&gt; &lt;/dlf:record&gt; &lt;/dlf:collection&gt;"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:321
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "&lt;xml version=\"1.0\" encoding=\"UTF-8\"&gt;; &lt;GetAuthorityRecords&gt; "
 "&lt;record&gt; &lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt; &lt;record "
@@ -5050,29 +5058,24 @@ msgid ""
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
 "RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;/GetAuthorityRecords&gt;"
 msgstr ""
-"&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
-"GetAuthorityRecords&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/"
-"XMLSchema-instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim "
-"http://www.loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://"
-"www.loc.gov/MARC21/slim\"&gt; &lt;leader&gt;00126nx j2200073 4500 &lt;/"
-"leader&gt; &lt;controlfield tag=\"001\"&gt;1&lt;/controlfield&gt; &lt;"
-"datafield tag=\"250\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;"
-"TECHNIQUE&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"100\" ind1="
-"\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20071210afrey50 ba0&lt;/"
+"&lt;xml version=\"1.0\" encoding=\"UTF-8\"&gt;; &lt;GetAuthorityRecords&gt; "
+"&lt;record&gt; &lt;?xml version=\"1.0\" encoding=\"UTF-8\"?&gt; &lt;record "
+"xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation="
+"\"http://www.loc.gov/MARC21/slim http://www.loc.gov/ standards/marcxml/"
+"schema/MARC21slim.xsd\" xmlns=\"http://www.loc.gov/MARC21/slim\"&gt; &lt;"
+"leader&gt;00182 2200085 4500&lt;/leader&gt; &lt;controlfield tag=\"001"
+"\"&gt;1&lt;/controlfield&gt; &lt;datafield tag=\"200\" ind1=\" \" ind2=\" "
+"\"&gt; &lt;subfield code=\"a\"&gt;Hugo&lt;/subfield&gt; &lt;subfield code=\"b"
+"\"&gt;Victor&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"801\" "
+"ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;France&lt;/subfield&gt; "
+"&lt;subfield code=\"b\"&gt;Nimes&lt;/subfield&gt; &lt;subfield code=\"c"
+"\"&gt;2010/04/13&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"100"
+"\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20100413 50 &lt;/"
 "subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"152\" ind1=\" \" ind2=\" "
-"\"&gt; &lt;subfield code=\"b\"&gt;NC&lt;/subfield&gt; &lt;/datafield&gt; "
-"&lt;/record&gt; &lt;record xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-"
-"instance\" xsi:schemaLocation=\"http://www.loc.gov/MARC21/slim http://www."
-"loc.gov/ standards/marcxml/schema/MARC21slim.xsd\" xmlns=\"http://www.loc."
-"gov/MARC21/slim\"&gt; &lt;leader&gt;00130nx j2200073 4500 &lt;/leader&gt; "
-"&lt;controlfield tag=\"001\"&gt;2&lt;/controlfield&gt; &lt;datafield tag="
-"\"250\" ind1=\" \" ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;CHEMIN DE "
-"FER&lt;/subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"100\" ind1=\" \" "
-"ind2=\" \"&gt; &lt;subfield code=\"a\"&gt;20071210afrey50 ba0&lt;/"
-"subfield&gt; &lt;/datafield&gt; &lt;datafield tag=\"152\" ind1=\" \" ind2=\" "
-"\"&gt; &lt;subfield code=\"b\"&gt;NC&lt;/subfield&gt; &lt;/datafield&gt; "
-"&lt;/record&gt; &lt;record&gt;RecordNotFound&lt;/record&gt; &lt;/"
-"GetAuthorityRecords&gt;"
+"\"&gt; &lt;subfield code=\"b\"&gt;NP&lt;/subfield&gt; &lt;/datafield&gt; "
+"&lt;/record&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
+"RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;record&gt; &lt;code&gt;"
+"RecordNotFound&lt;/code&gt; &lt;/record&gt; &lt;/GetAuthorityRecords&gt;"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:77
 #, c-format
@@ -5135,7 +5138,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Fraza: tytuł"
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:279
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:979
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:993
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1011
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1017
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:295
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:714
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:734
@@ -5325,13 +5328,13 @@ msgstr ")%s%s"
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:191
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:198
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:205
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1024
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1031
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1030
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1037
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1043
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1049
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1055
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1061
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1067
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:749
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:756
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:763
@@ -5362,7 +5365,7 @@ msgstr "+ "
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:266
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:270
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:996
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1014
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1020
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:717
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:737
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:128
@@ -5390,7 +5393,8 @@ msgstr ", żadnej z tych pozycji nie można zamówić. "
 #, c-format
 msgid ", you cannot place holds because the library doesn't have up-to-date "
 msgstr ""
-", nie możesz zamawiać, ponieważ biblioteka nie posiada twoich aktualnych "
+", nie możesz dokonywać rezerwacji, ponieważ biblioteka nie posiada twoich "
+"aktualnych"
 
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:179
 #, c-format
@@ -5656,7 +5660,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:455
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:496
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:996
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1014
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1020
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:325
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:336
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:347
@@ -5754,11 +5758,15 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:113
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:127
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:259
+#, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:"
+msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
+
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:140
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:155
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:177
-#, c-format
-msgid "/cgi-bin/koha/opac-search.pl?q=au:"
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:282
@@ -5889,10 +5897,10 @@ msgstr ": "
 #: opac-tmpl/prog/en/modules/opac-addbybiblionumber.tt:14
 #, c-format
 msgid ": %sa list:%s"
-msgstr ":%slista:%s"
+msgstr ": %slista:%s"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:891
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1074
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1080
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:76
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:489
 #, c-format
@@ -6042,7 +6050,7 @@ msgstr ">"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:545
 #, c-format
 msgid "?sid=&amp;ISSN="
-msgstr ""
+msgstr "?sid=&amp;ISSN="
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:151
 #, c-format
@@ -6655,19 +6663,19 @@ msgstr "Autorzy:"
 #: opac-tmpl/prog/en/includes/opac-facets.inc:6
 #, c-format
 msgid "Availability"
-msgstr "Dostępność"
+msgstr "Status"
 
 #: opac-tmpl/prog/en/modules/opac-results.tt:439
 #, c-format
 msgid "Availability:"
-msgstr "Dostępność:"
+msgstr "Status"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:76
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:968
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:700
 #, c-format
 msgid "Availability: "
-msgstr "Dostępność: "
+msgstr "Status:"
 
 #: opac-tmpl/prog/en/modules/opac-serial-issues.tt:91
 #, c-format
@@ -6718,7 +6726,7 @@ msgstr "Nagrody: "
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:57
 #, c-format
 msgid "BE CAREFUL"
-msgstr "UWAŻAJ"
+msgstr "UWAGA"
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:839
 #, c-format
@@ -6917,11 +6925,6 @@ msgstr "Bok"
 msgid "Book"
 msgstr "Książka"
 
-#. IMG
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:206
-msgid "Book Cover Image"
-msgstr "Widok okładki"
-
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:189
 #, c-format
 msgid "Braille"
@@ -6967,7 +6970,7 @@ msgstr "Przeglądaj wg hierarchii"
 #: opac-tmpl/prog/en/modules/opac-authorities-home.tt:16
 #, c-format
 msgid "Browse by author or subject"
-msgstr "Przeglądaj wg autoru lub tematu"
+msgstr "Przeglądaj wg autora lub tematu"
 
 #: opac-tmpl/prog/en/modules/opac-browser.tt:12
 #, c-format
@@ -7034,15 +7037,15 @@ msgstr "Sygnatura"
 
 #: opac-tmpl/prog/en/includes/resort_form.inc:26
 #: opac-tmpl/prog/en/includes/resort_form.inc:28
-#, fuzzy, c-format
+#, c-format
 msgid "Call Number (0-9 to A-Z)"
-msgstr "Sygnatura (od Nie-Fikcja 0-9 do Fikcja A-Z)"
+msgstr "Sygnatura (0-9 do A-Z)"
 
 #: opac-tmpl/prog/en/includes/resort_form.inc:31
 #: opac-tmpl/prog/en/includes/resort_form.inc:33
-#, fuzzy, c-format
+#, c-format
 msgid "Call Number (Z-A to 9-0)"
-msgstr "Sygnatura (od Fikcja Z-A do Nie-Fikcja 9-0)"
+msgstr "Sygnatura (Z-A do 9-0)"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:204
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:403
@@ -7167,7 +7170,7 @@ msgid "Checked Out"
 msgstr "Wypożyczone"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:161
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1022
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1028
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:746
 #, c-format
 msgid "Checked out ("
@@ -7232,7 +7235,7 @@ msgstr "Wyczyść datę"
 #: opac-tmpl/prog/en/modules/opac-user.tt:78
 #, c-format
 msgid "Click here"
-msgstr "Kliknij tutaj"
+msgstr "Kliknij"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:562
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:929
@@ -7278,7 +7281,7 @@ msgstr "Kliknij aby przeszukać Google Books"
 #: opac-tmpl/prog/en/modules/opac-detail.tt:433
 #, c-format
 msgid "Close Shelf Browser"
-msgstr "Zamknij przeglądanie półki"
+msgstr "Zakończ przeglądanie półki"
 
 #: opac-tmpl/prog/en/modules/opac-downloadcart.tt:27
 #, c-format
@@ -7462,7 +7465,7 @@ msgid "Copies available for loan: "
 msgstr "Dostępne egzemplarze: "
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:138
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1005
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1011
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:727
 #, c-format
 msgid "Copies available for reference: "
@@ -7585,7 +7588,7 @@ msgid "Daily"
 msgstr "Dziennik"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:182
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1041
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1047
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:768
 #, c-format
 msgid "Damaged ("
@@ -7656,9 +7659,9 @@ msgid ""
 "default option : the library will keep your reading history for the duration "
 "permitted by local laws."
 msgstr ""
-"Domyślne: przechowuj moją historie wypożyczeń zgodnie z obowiązującymi "
-"przepisami. To jest opcja domyślna: biblioteka będzie przechowywać Twoją "
-"historię wypożyczeń przez okres dozwolony przez prawo."
+"Domyślne: przechowuj moją historię wypożyczeń zgodnie z lokalnym prawem. "
+"Jest to opcja domyślna: biblioteka będzie przechowywać Twoją historię "
+"wypożyczeń przez czas dozwolony przez lokalne prawo."
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:105
 #, c-format
@@ -7815,12 +7818,12 @@ msgstr "DoB:"
 msgid "Doktoravhandlinger/lisensiat-avhandlinger"
 msgstr "Doktoravhandlinger/lisensiat-avhandlinger"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:76
+#: opac-tmpl/prog/en/modules/opac-auth.tt:88
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Nie masz karty bibliotecznej?"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:75
+#: opac-tmpl/prog/en/modules/opac-auth.tt:87
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Nie masz jeszcze hasła?"
@@ -8102,7 +8105,7 @@ msgstr "Błąd! Niedozwolony parametr"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:46
 msgid "Error! The add_tag operation failed on"
-msgstr "Błąd! Operacja dodawania tagu nie powiodła się dla"
+msgstr "Błąd! Operacja add_tag nie powiodła się przy"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:46
@@ -8127,7 +8130,7 @@ msgstr "Błąd:"
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:46
 msgid "Errors: "
-msgstr "Błąd: "
+msgstr "Błędy: "
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:501
 #, c-format
@@ -8390,9 +8393,9 @@ msgid ""
 "Forever: keep my reading history without limit. This is the option for users "
 "who want to keep track of what they are reading."
 msgstr ""
-"Zawsze: przechopwuj moją historię wypożyczeń bez ograniczeń. Ta opcja "
-"przeznaczona jest dla czytelników którzy chcą mieć dostęp do informacji o "
-"wszystkich książkach, które przeczytali."
+"Zawsze: przechowuj  całą historię wypożyczeń. Ta opcja przeznaczona jest dla "
+"czytelników którzy chcą mieć dostęp do informacji o wszystkich książkach, "
+"które wypożyczyli."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -8726,7 +8729,7 @@ msgid ""
 "which can be imported into a Personal Bibliographic Software like EndNote, "
 "Reference Manager or ProCite. "
 msgstr ""
-"Witaj! %s %s wysłał Ci zawartość Listy %s z naszego katalogu. Zwróć uwagę, "
+"Witaj! %s %s wysłał Ci zawartość listy %s z naszego katalogu. Zwróć uwagę, "
 "że załącznik zawiera rekordy bibliograficzne w formacie MARC, które możesz "
 "zaimportować do programów typu EndNote, Reference Manager czy ProCite. "
 
@@ -8923,7 +8926,7 @@ msgstr ""
 "Jeśli nie klikniesz przycisku \"Zakończ\", Twoja sesja wygaśnie "
 "automatycznie po %s sekundach."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:59
+#: opac-tmpl/prog/en/modules/opac-auth.tt:71
 #, c-format
 msgid ""
 "If you do not have a CAS account, but a local account, you can still log "
@@ -8931,7 +8934,7 @@ msgid ""
 msgstr ""
 "Jeśli nie posiadasz konta CAS, tylko konto lokalne, możesz się zalogować w: "
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:76
+#: opac-tmpl/prog/en/modules/opac-auth.tt:88
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up. "
@@ -8939,7 +8942,7 @@ msgstr ""
 "Jeśli nie posiadasz jeszcze karty bibliotecznej, poproś o jej wystawienie w "
 "wypożyczalni. "
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:75
+#: opac-tmpl/prog/en/modules/opac-auth.tt:87
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -8970,7 +8973,7 @@ msgid "Immediate deletion"
 msgstr "Natychmiastowe usunięcie"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:196
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1053
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1059
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:782
 #, c-format
 msgid "In transit ("
@@ -9078,7 +9081,7 @@ msgstr "Data założenia konta:"
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:81
 #, c-format
 msgid "Joined: "
-msgstr "Dołączył(a): "
+msgstr "Dołączył: "
 
 #: opac-tmpl/prog/en/modules/opac-userdetails.tt:48
 #, c-format
@@ -9349,7 +9352,7 @@ msgstr "Powiązane z: "
 #: opac-tmpl/prog/en/modules/opac-user.tt:196
 #, c-format
 msgid "Links"
-msgstr "Links"
+msgstr "Linki"
 
 #. %1$s:  paramsloo.delete_ok 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:172
@@ -9397,7 +9400,7 @@ msgstr "Listy "
 msgid "Loading"
 msgstr "Wczytywanie"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:58
+#: opac-tmpl/prog/en/modules/opac-auth.tt:70
 #, c-format
 msgid "Local Login"
 msgstr "Lokalny login"
@@ -9411,7 +9414,7 @@ msgstr "Lokalizacja"
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:239
 #, c-format
 msgid "Location and availability: "
-msgstr "Lokalizacja i dostępność: "
+msgstr "Lokalizacja i status: "
 
 #: opac-tmpl/prog/en/modules/opac-basket.tt:293
 #, c-format
@@ -9420,7 +9423,7 @@ msgstr "Lokalizacje"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-main.tt:55
-#: opac-tmpl/prog/en/modules/opac-auth.tt:74
+#: opac-tmpl/prog/en/modules/opac-auth.tt:86
 msgid "Log In"
 msgstr "Zaloguj"
 
@@ -9468,12 +9471,12 @@ msgstr "Zaloguj się by dodać tagi."
 msgid "Log in to your account"
 msgstr "Zaloguj się na swoje konto"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:82
+#: opac-tmpl/prog/en/modules/opac-auth.tt:94
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Logowanie do katalogu nie zostało włączone."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:69
+#: opac-tmpl/prog/en/modules/opac-auth.tt:81
 #, c-format
 msgid "Login"
 msgstr "Login"
@@ -9499,7 +9502,7 @@ msgid "LookupPatron"
 msgstr "LookupPatron"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:175
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1035
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1041
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:761
 #, c-format
 msgid "Lost ("
@@ -9720,7 +9723,7 @@ msgstr "Autor główny"
 #: opac-tmpl/prog/en/modules/opac-results.tt:557
 #, c-format
 msgid "Make a "
-msgstr "Złóż"
+msgstr "Zgłoś "
 
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:71
 #, c-format
@@ -10000,8 +10003,9 @@ msgid ""
 "Never: Delete my reading history immediately. This will delete all record of "
 "the item that was checked-out upon check-in."
 msgstr ""
-"Nigdy: natychmiast kasuj moją historię wypożyczeń. To usunie wszystkie "
-"informacje o wypożyczonych książkach po ich oddaniu."
+"Nigdy: Natychmiast usuń moją historię wypożyczania. Ta opcja usunie "
+"wszystkie informacje o książkach które zostały w przeszłości wypożyczone/"
+"zwrócone."
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:432
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:498
@@ -10210,7 +10214,7 @@ msgstr "Brak tagów dla tego tytułu."
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:178
 #, c-format
 msgid "Non Fiction"
-msgstr "Nie-fikcja"
+msgstr "Tekst nieliteracki"
 
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:181
 #, c-format
@@ -10309,7 +10313,7 @@ msgid ""
 "Note: you can only tag an item with a given term once. Check 'My Tags' to "
 "see your current tags."
 msgstr ""
-"Uwaga: konkretny tag może byc przypisany do danej pozycji tylko raz. Sprawdź "
+"Uwaga: konkretny tag może być przypisany do danej pozycji tylko raz. Sprawdź "
 "\"Moje tagi\" aby zobaczyć swoje aktualne tagi."
 
 #. SCRIPT
@@ -10344,7 +10348,7 @@ msgstr "Uwagi:"
 #: opac-tmpl/prog/en/modules/opac-user.tt:9
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
-msgstr ""
+msgstr "Nie dokonano wyboru. Zaznacz pozycje, które chcesz przedłużyć."
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:487
 #, c-format
@@ -10373,14 +10377,14 @@ msgid "OR"
 msgstr "LUB"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:203
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1059
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1065
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:788
 #, c-format
 msgid "On hold ("
 msgstr "Zamówione ("
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:189
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1047
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1053
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:775
 #, c-format
 msgid "On order ("
@@ -10497,9 +10501,9 @@ msgstr "Drugie imię:"
 
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:39
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:118
-#, fuzzy, c-format
+#, c-format
 msgid "Other Phone:"
-msgstr "Telefon domowy:"
+msgstr "Inny telefon:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:447
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:452
@@ -10571,7 +10575,7 @@ msgstr "Parametry"
 msgid "Partial contents:"
 msgstr "Częściowa zawartość:"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:71
+#: opac-tmpl/prog/en/modules/opac-auth.tt:83
 #, c-format
 msgid "Password"
 msgstr "Hasło"
@@ -10757,8 +10761,8 @@ msgid ""
 "Please also note that the library staff can't update these values for you: "
 "it's your privacy!"
 msgstr ""
-"Proszę zauważyć, że bibliotekarz nie może zaktualizować tych ustawień dla "
-"Ciebie: to Twoja prywatność!"
+"Należy również pamiętać, że pracownicy biblioteki nie mogą zaktualizować "
+"tych ustawień za Ciebie: to Twoja prywatność!"
 
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:34
 #, c-format
@@ -10818,9 +10822,8 @@ msgid ""
 "Please note that information on any book still checked-out must be kept by "
 "the library no matter which privacy option you choose."
 msgstr ""
-"Proszę zauważyć, że informacja o aktualnie wypożyczonych książkach musi byc "
-"przechowywana przezx bibliotekę bez względu na to, która opcje prywatności "
-"została wybrana."
+"Zwróć uwagę, że informacje na temat  wypożyczonych książek muszą być "
+"przechowywane przez bibliotekę bez względu na wybraną opcję prywatności."
 
 #: opac-tmpl/prog/en/modules/opac-user.tt:87
 #: opac-tmpl/prog/en/modules/opac-user.tt:90
@@ -10904,9 +10907,9 @@ msgstr "Email:"
 #: opac-tmpl/prog/en/modules/opac-userdetails.tt:26
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:37
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:116
-#, fuzzy, c-format
+#, c-format
 msgid "Primary Phone:"
-msgstr "Dziecko (5-8); "
+msgstr "Telefon:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:838
 #, c-format
@@ -10945,7 +10948,7 @@ msgstr "Polityka prywatności"
 #: opac-tmpl/prog/en/modules/opac-privacy.tt:21
 #, c-format
 msgid "Privacy rule"
-msgstr "Reguła prywatności"
+msgstr "Opcje prywatności"
 
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:397
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:582
@@ -11116,7 +11119,7 @@ msgstr "Realia"
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:107
 #, c-format
 msgid "Reason for suggestion: "
-msgstr "Powód propozycja zakupu "
+msgstr "Uzasadnienie propozycji:"
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:717
 #, c-format
@@ -11225,13 +11228,11 @@ msgstr "Przedłuż zaznaczone"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:9
-#, fuzzy
 msgid "Renew all"
 msgstr "Przedłuż wszystko"
 
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-user.tt:9
-#, fuzzy
 msgid "Renew selected"
 msgstr "Przedłuż zaznaczone"
 
@@ -11264,7 +11265,7 @@ msgstr "Zwróć pozycję"
 #. INPUT type=button name=returnbook
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:115
 msgid "Return this item"
-msgstr "Zwróć tą pozycję"
+msgstr "Zwróć tę pozycję"
 
 #. INPUT type=submit name=confirm
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:118
@@ -11435,7 +11436,7 @@ msgstr "Przeszukaj "
 #: opac-tmpl/prog/en/modules/opac-results.tt:271
 #, c-format
 msgid "Scan Index for: "
-msgstr "Przeszukaj Indeks: "
+msgstr "Przeszukaj indeks: "
 
 #: opac-tmpl/prog/en/modules/opac-results-grouped.tt:111
 #: opac-tmpl/prog/en/modules/opac-results.tt:267
@@ -11557,9 +11558,9 @@ msgstr "Email dodatkowy:"
 #: opac-tmpl/prog/en/modules/opac-userdetails.tt:28
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:38
 #: opac-tmpl/prog/en/modules/opac-userupdate.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "Secondary Phone:"
-msgstr "Współautor"
+msgstr "Drugi telefon:"
 
 #. IMG
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:346
@@ -11731,7 +11732,7 @@ msgstr "Serie:"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:210
 #, c-format
 msgid "Series: "
-msgstr "Series: "
+msgstr "Serie: "
 
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:147
 #, c-format
@@ -11839,12 +11840,12 @@ msgstr "Podobne pozycje"
 #: opac-tmpl/prog/en/modules/opac-user.tt:96
 #, c-format
 msgid "Since you have "
-msgstr "Jeśli masz "
+msgstr "Ponieważ masz"
 
 #: opac-tmpl/prog/en/modules/maintenance.tt:24
 #, c-format
 msgid "Site Administrator"
-msgstr "Administrator strony"
+msgstr "administratorem strony"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:150
 #, c-format
@@ -11904,9 +11905,7 @@ msgstr ""
 #. SCRIPT
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:3
 msgid "Sorry, plain view is temporarily unavailable"
-msgstr ""
-"Przepraszamy, opcja widoku w niesformatowanym tekście jest chwilowo "
-"niedostępna."
+msgstr "Przepraszamy, zwykły widok jest chwilowo niedostępny."
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:46
@@ -12379,7 +12378,7 @@ msgstr "Status taga. "
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:46
 msgid "Tags added: "
-msgstr "Dodano tagi: "
+msgstr "Dodane tagi: "
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:237
 #: opac-tmpl/prog/en/modules/opac-detail.tt:241
@@ -12511,7 +12510,7 @@ msgid ""
 "months %s of all time%s "
 msgstr ""
 "%s najczęściej wypożyczanych %s %s %s tytułów%s %s w %s %s %s w ciągu "
-"ostatnich %s miesięcy %s ogólnie%s "
+"ostatnich %s miesięcy %s wszystkich%s "
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -12535,8 +12534,8 @@ msgstr "Chmura ISBD nie została włączona."
 #, c-format
 msgid "The browser table is empty. this feature is not fully set-up. See the "
 msgstr ""
-"Tablica przeglądarki jest pusta. Ta funkcja nie jest skonfigurowana do "
-"końca. Zobacz "
+"Tablica przeglądarki jest pusta. Ta funkcja nie została w pełni "
+"skonfigurowana. Zobacz "
 
 #. %1$s:  email_add 
 #: opac-tmpl/prog/en/modules/opac-sendbasketform.tt:9
@@ -12685,9 +12684,10 @@ msgid ""
 "this system. %sERROR: illegal parameter %s %sERROR: You must log in to "
 "complete that action. %sERROR: You cannot delete the tag %s. "
 msgstr ""
-"Wystąpił problem z wykonaniem operacji: %sPrzepraszamy, tagi nie zostały "
-"włączone w tym systemie. %sBŁĄD: niedozwolony parametr %s %sBŁĄD: musisz się "
-"zalogować żeby dokończyć tą akcję. %sBŁĄD: nie możesz usunąć tagu %s. "
+"Wystąpił problem z ta operacją: %sPrzepraszamy, w tym systemie tagi nie "
+"zostały włączone w tym systemie. %sBŁĄD: niedozwolony parametr %s %sBŁĄD: "
+"musisz się zalogować żeby dokończyć tą akcję. %sBŁĄD: nie możesz usunąć tagu "
+"%s. "
 
 #: opac-tmpl/prog/en/modules/opac-passwd.tt:15
 #, c-format
@@ -12773,7 +12773,7 @@ msgstr "Pozycję dodano do schowka"
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:89
 #, c-format
 msgid "This item has been withdrawn from the collection. %s "
-msgstr "Ta pozycja została wycofana z kolekcji. %s "
+msgstr "Ten egzemplarz został wycofany z kolekcji. %s "
 
 #. SCRIPT
 #: opac-tmpl/prog/en/includes/doc-head-close.inc:46
@@ -12902,7 +12902,7 @@ msgstr "Tytuł: "
 msgid "To make changes to your record please contact the library."
 msgstr "W celu zmiany swoich danych proszę skontaktować się z biblioteką."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:84
+#: opac-tmpl/prog/en/modules/opac-auth.tt:96
 #: opac-tmpl/prog/en/modules/errors/500.tt:16
 #: opac-tmpl/prog/en/modules/errors/402.tt:16
 #: opac-tmpl/prog/en/modules/errors/401.tt:17
@@ -13067,7 +13067,7 @@ msgstr "Anuluj prenumeratę"
 msgid "Use the \"Confirm\" button below to confirm deletion. "
 msgstr "Użyj przycisku \"Potwierdź\" aby zatwierdzić usunięcie. "
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:86
+#: opac-tmpl/prog/en/modules/opac-auth.tt:98
 #: opac-tmpl/prog/en/modules/errors/500.tt:18
 #: opac-tmpl/prog/en/modules/errors/402.tt:18
 #: opac-tmpl/prog/en/modules/errors/401.tt:19
@@ -13174,7 +13174,7 @@ msgstr "Zobacz pełne hasło"
 #: opac-tmpl/prog/en/includes/masthead.inc:163
 #, c-format
 msgid "View all %s of your private lists"
-msgstr "Wyświetl swoje wszystkie (%s) listy prywatne "
+msgstr "Wyświetl wszystkie (%s) listy prywatne "
 
 #. %1$s:  pubtotal 
 #: opac-tmpl/prog/en/includes/masthead.inc:146
@@ -13297,7 +13297,7 @@ msgid "Wire"
 msgstr "Wire"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:168
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1029
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1035
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:754
 #, c-format
 msgid "Withdrawn ("
@@ -13479,7 +13479,7 @@ msgstr "Twój komentarz "
 #: opac-tmpl/prog/en/modules/opac-sendshelf.tt:1
 #, c-format
 msgid "Your List : %s "
-msgstr "Twoja Lista: %s "
+msgstr "Twoja lista: %s "
 
 #: opac-tmpl/prog/en/includes/masthead.inc:151
 #, c-format
@@ -13624,7 +13624,7 @@ msgstr "Kod pocztowy: "
 #: opac-tmpl/prog/en/includes/masthead.inc:11
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:52
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:992
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1010
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1016
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:712
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:733
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:40
@@ -13693,9 +13693,8 @@ msgstr "[% itemsloo.biblionumber |url %]"
 
 #. INPUT type=text name=limit
 #: opac-tmpl/prog/en/modules/opac-tags.tt:80
-#, fuzzy
 msgid "[% limit or"
-msgstr "%sOgranicz do "
+msgstr "[% ogranicz lub"
 
 #. INPUT type=text name=q
 #: opac-tmpl/prog/en/includes/masthead.inc:75
@@ -13769,6 +13768,19 @@ msgstr "_"
 #, c-format
 msgid "_blank"
 msgstr "_blank"
+
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:422
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:472
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:249
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:260
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:674
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:792
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:854
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:414
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:467
+#, fuzzy, c-format
+msgid "a_t"
+msgstr "w"
 
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:210
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:375
@@ -13856,13 +13868,14 @@ msgstr "abstrakt"
 msgid "abstract or summary "
 msgstr "abstrakty lub streszczenia "
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:56
-#, c-format
-msgid "account, please "
+#, fuzzy, c-format
+msgid "account, %s please "
 msgstr "konto, proszę"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:915
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1098
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1104
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:100
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:513
 #, c-format
@@ -13918,7 +13931,7 @@ msgid "aperture card "
 msgstr "karta perforowana "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:887
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1070
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1076
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:72
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:485
 #, c-format
@@ -13939,19 +13952,6 @@ msgstr "dzieło sztuki (reprodukcja) "
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:529
 msgid "article"
 msgstr "artykuł"
-
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:422
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:472
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:249
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:260
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:674
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:792
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:854
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:414
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:467
-#, c-format
-msgid "at"
-msgstr "w"
 
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
@@ -14005,7 +14005,7 @@ msgid "available online "
 msgstr "dostępne online "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:923
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1107
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1113
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:802
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:109
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:521
@@ -14113,7 +14113,7 @@ msgid "catalogue"
 msgstr "katalog"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:908
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1091
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1097
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:93
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:506
 #, c-format
@@ -14160,7 +14160,7 @@ msgstr "dzieci (9-14)"
 msgid "chip cartridge "
 msgstr "zasobnik z chipem "
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:56
+#: opac-tmpl/prog/en/modules/opac-auth.tt:58
 #, c-format
 msgid "click here to login"
 msgstr "Kliknij tu aby się zalogować"
@@ -14381,7 +14381,7 @@ msgstr "globus księżyca"
 msgid "electronic "
 msgstr "elektroniczny "
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:85
+#: opac-tmpl/prog/en/modules/opac-auth.tt:97
 #: opac-tmpl/prog/en/modules/errors/500.tt:17
 #: opac-tmpl/prog/en/modules/errors/402.tt:17
 #: opac-tmpl/prog/en/modules/errors/401.tt:18
@@ -14524,7 +14524,7 @@ msgstr "font"
 #: opac-tmpl/prog/en/modules/opac-browser.tt:44
 #, c-format
 msgid "for more information on what it does and how to configure it."
-msgstr "aby uzyskać więcej informacji do czego służy i jak go skonfigurować."
+msgstr "więcej informacji na temat tego, co robi i jak go skonfigurować."
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:73
 #, c-format
@@ -14575,7 +14575,7 @@ msgstr "twarda oprawa"
 #: opac-tmpl/prog/en/modules/opac-shelves.tt:169
 #, c-format
 msgid "has already been added."
-msgstr "została juz dodana."
+msgstr "został już dodany."
 
 #: opac-tmpl/prog/en/modules/opac-detail.tt:331
 #: opac-tmpl/prog/en/modules/opac-detail.tt:333
@@ -15406,9 +15406,9 @@ msgid "profile "
 msgstr "profil "
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:619
-#, fuzzy, c-format
+#, c-format
 msgid "programmed text "
-msgstr "podręcznik programowy "
+msgstr "podręcznik programowany"
 
 #: opac-tmpl/prog/en/includes/subtypes_unimarc.inc:94
 #, c-format
@@ -15857,7 +15857,7 @@ msgstr "data w której czytelnik chciałby zwrócić pozycję"
 #: opac-tmpl/prog/en/modules/ilsdi.tt:366
 #, c-format
 msgid "the type of the identifier, possible values: "
-msgstr "określa typ identyfikatora; możliwe wartości "
+msgstr "określa typ identyfikatora; możliwe wartości: "
 
 #: opac-tmpl/prog/en/modules/ilsdi.tt:415
 #: opac-tmpl/prog/en/modules/ilsdi.tt:542
@@ -15885,7 +15885,7 @@ msgstr ""
 msgid "there may be a delay in restoring your account if you submit online)%s."
 msgstr ""
 "w przypadku skorzystania z formularza online może pojawić się opóźnienia w "
-"przywróceniu konta)%s"
+"przywróceniu konta)%s."
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:610
 #, c-format
@@ -16044,7 +16044,7 @@ msgstr "wyświetl etykiety"
 #: opac-tmpl/prog/en/modules/opac-MARCdetail.tt:77
 #, c-format
 msgid "view plain"
-msgstr "zwykły widok"
+msgstr "widok zwykły"
 
 #. IMG
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:537
@@ -16469,6 +16469,9 @@ msgstr ""
 
 #~ msgid "Below is a list of the three latest issues :"
 #~ msgstr "Poniżej znajduje się lista trzech ostatnich numerów:"
+
+#~ msgid "Book Cover Image"
+#~ msgstr "Widok okładki"
 
 #, fuzzy
 #~ msgid "Books on Tape"

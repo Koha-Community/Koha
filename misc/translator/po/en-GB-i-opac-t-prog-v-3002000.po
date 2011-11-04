@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 3.0.2\n"
-"POT-Creation-Date: 2011-09-16 08:35+0200\n"
+"POT-Creation-Date: 2011-10-26 15:52+0200\n"
 "PO-Revision-Date: 2011-05-17 08:32+0200\n"
 "Last-Translator: Jonathan <jonathan.field@ptfs-europe.com>\n"
 "Language-Team: Koha-translate <koha-translate@lists.koha.org>\n"
@@ -514,7 +514,8 @@ msgstr ""
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:201
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:205
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:206
-#: opac-tmpl/prog/en/modules/opac-auth.tt:87
+#: opac-tmpl/prog/en/modules/opac-auth.tt:65
+#: opac-tmpl/prog/en/modules/opac-auth.tt:99
 #: opac-tmpl/prog/en/modules/opac-review.tt:6
 #: opac-tmpl/prog/en/modules/opac-review.tt:51
 #: opac-tmpl/prog/en/modules/opac-review.tt:72
@@ -1239,10 +1240,11 @@ msgstr "%s,"
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:219
 #: opac-tmpl/prog/en/modules/opac-auth.tt:18
 #: opac-tmpl/prog/en/modules/opac-auth.tt:53
-#: opac-tmpl/prog/en/modules/opac-auth.tt:59
-#: opac-tmpl/prog/en/modules/opac-auth.tt:65
-#: opac-tmpl/prog/en/modules/opac-auth.tt:66
-#: opac-tmpl/prog/en/modules/opac-auth.tt:91
+#: opac-tmpl/prog/en/modules/opac-auth.tt:63
+#: opac-tmpl/prog/en/modules/opac-auth.tt:71
+#: opac-tmpl/prog/en/modules/opac-auth.tt:77
+#: opac-tmpl/prog/en/modules/opac-auth.tt:78
+#: opac-tmpl/prog/en/modules/opac-auth.tt:103
 #: opac-tmpl/prog/en/modules/opac-review.tt:54
 #: opac-tmpl/prog/en/modules/opac-review.tt:66
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:27
@@ -1529,7 +1531,6 @@ msgstr "%s ;"
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:269
 #: opac-tmpl/prog/en/modules/opac-reserve.tt:489
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:202
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:206
 #: opac-tmpl/prog/en/modules/sco/sco-main.tt:249
 #: opac-tmpl/prog/en/modules/opac-tags.tt:52
 #, fuzzy, c-format
@@ -1735,7 +1736,8 @@ msgstr "%s, %s"
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:113
 #: opac-tmpl/prog/en/modules/opac-suggestions.tt:214
 #: opac-tmpl/prog/en/modules/opac-auth.tt:45
-#: opac-tmpl/prog/en/modules/opac-auth.tt:77
+#: opac-tmpl/prog/en/modules/opac-auth.tt:65
+#: opac-tmpl/prog/en/modules/opac-auth.tt:89
 #: opac-tmpl/prog/en/modules/opac-review.tt:52
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:11
 #: opac-tmpl/prog/en/modules/opac-sendshelfform.tt:16
@@ -2306,6 +2308,13 @@ msgstr "Not for loan (%s)"
 msgid "%s %s by %s %s%s%s"
 msgstr "%s %s %s %s (%s)"
 
+#. %1$s:  END 
+#. %2$s:  IF ( casServersLoop ) 
+#: opac-tmpl/prog/en/modules/opac-auth.tt:58
+#, c-format
+msgid "%s %s please choose against which one you would like to authenticate: "
+msgstr ""
+
 #. %1$s:  added_count 
 #. %2$s:  IF ( added_count ==1 ) 
 #. %3$s:  ELSE 
@@ -2321,7 +2330,6 @@ msgstr "successfully added."
 #. %3$s:  IF ( PAGE_NUMBER.highlight ) 
 #: opac-tmpl/prog/en/includes/page-numbers.inc:3
 #: opac-tmpl/prog/en/modules/opac-detail.tt:104
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:206
 #, fuzzy, c-format
 msgid "%s %s%s"
 msgstr "%s %s (%s)"
@@ -5086,7 +5094,7 @@ msgstr "&nbsp;&nbsp;&nbsp;&nbsp; Title Phrase"
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:279
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:979
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:993
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1011
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1017
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:295
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:714
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:734
@@ -5277,13 +5285,13 @@ msgstr "%s, %s"
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:191
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:198
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:205
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1024
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1031
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1030
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1037
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1043
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1049
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1055
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1061
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1067
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:749
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:756
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:763
@@ -5314,7 +5322,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:266
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:270
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:996
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1014
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1020
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:717
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:737
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:128
@@ -5595,7 +5603,7 @@ msgstr ""
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:455
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:496
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:996
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1014
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1020
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:325
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:336
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:347
@@ -5693,11 +5701,15 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:113
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:127
 #: opac-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:259
+#, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:"
+msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
+
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:140
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:155
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:177
-#, c-format
-msgid "/cgi-bin/koha/opac-search.pl?q=au:"
+#, fuzzy, c-format
+msgid "/cgi-bin/koha/opac-search.pl?q=au:\""
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:282
@@ -5831,7 +5843,7 @@ msgid ": %sa list:%s"
 msgstr "a list:"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:891
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1074
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1080
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:76
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:489
 #, fuzzy, c-format
@@ -6859,11 +6871,6 @@ msgstr "Bok"
 msgid "Book"
 msgstr "Book"
 
-#. IMG
-#: opac-tmpl/prog/en/modules/sco/sco-main.tt:206
-msgid "Book Cover Image"
-msgstr "Book Cover Image"
-
 #: opac-tmpl/prog/en/modules/opac-advsearch.tt:189
 #, c-format
 msgid "Braille"
@@ -7110,7 +7117,7 @@ msgid "Checked Out"
 msgstr "On Loan"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:161
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1022
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1028
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:746
 #, c-format
 msgid "Checked out ("
@@ -7405,7 +7412,7 @@ msgid "Copies available for loan: "
 msgstr "Copies available for loan:"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:138
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1005
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1011
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:727
 #, fuzzy, c-format
 msgid "Copies available for reference: "
@@ -7528,7 +7535,7 @@ msgid "Daily"
 msgstr "Daily"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:182
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1041
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1047
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:768
 #, c-format
 msgid "Damaged ("
@@ -7760,12 +7767,12 @@ msgstr "DoB:"
 msgid "Doktoravhandlinger/lisensiat-avhandlinger"
 msgstr "Doktoravhandlinger/lisensiat-avhandlinger"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:76
+#: opac-tmpl/prog/en/modules/opac-auth.tt:88
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Don't have a library card?"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:75
+#: opac-tmpl/prog/en/modules/opac-auth.tt:87
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Don't have a password yet?"
@@ -8868,7 +8875,7 @@ msgstr ""
 "If you do not click the 'Finish' button, your session will automatically "
 "expire in %s seconds."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:59
+#: opac-tmpl/prog/en/modules/opac-auth.tt:71
 #, fuzzy, c-format
 msgid ""
 "If you do not have a CAS account, but a local account, you can still log "
@@ -8876,14 +8883,14 @@ msgid ""
 msgstr ""
 "If you do not have a CAS account, but a local account, you can still log in :"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:76
+#: opac-tmpl/prog/en/modules/opac-auth.tt:88
 #, fuzzy, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up. "
 msgstr ""
 "If you don't have a library card, stop by your local library to sign up."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:75
+#: opac-tmpl/prog/en/modules/opac-auth.tt:87
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -8914,7 +8921,7 @@ msgid "Immediate deletion"
 msgstr "Immediate deletion"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:196
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1053
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1059
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:782
 #, c-format
 msgid "In transit ("
@@ -9341,7 +9348,7 @@ msgstr "Lists"
 msgid "Loading"
 msgstr "Loading"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:58
+#: opac-tmpl/prog/en/modules/opac-auth.tt:70
 #, c-format
 msgid "Local Login"
 msgstr "Local Login"
@@ -9364,7 +9371,7 @@ msgstr "Location(s)"
 
 #. INPUT type=submit
 #: opac-tmpl/prog/en/modules/opac-main.tt:55
-#: opac-tmpl/prog/en/modules/opac-auth.tt:74
+#: opac-tmpl/prog/en/modules/opac-auth.tt:86
 msgid "Log In"
 msgstr "Log In"
 
@@ -9412,12 +9419,12 @@ msgstr "Log in to add tags."
 msgid "Log in to your account"
 msgstr "Log in to Your Account"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:82
+#: opac-tmpl/prog/en/modules/opac-auth.tt:94
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Logging on to the catalogue has not been enabled by the library."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:69
+#: opac-tmpl/prog/en/modules/opac-auth.tt:81
 #, c-format
 msgid "Login"
 msgstr "Login"
@@ -9443,7 +9450,7 @@ msgid "LookupPatron"
 msgstr "LookupPatron"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:175
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1035
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1041
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:761
 #, c-format
 msgid "Lost ("
@@ -10313,14 +10320,14 @@ msgid "OR"
 msgstr "OR"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:203
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1059
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1065
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:788
 #, c-format
 msgid "On hold ("
 msgstr "On hold ("
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:189
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1047
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1053
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:775
 #, c-format
 msgid "On order ("
@@ -10511,7 +10518,7 @@ msgstr "Parameters"
 msgid "Partial contents:"
 msgstr "Partial contents:"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:71
+#: opac-tmpl/prog/en/modules/opac-auth.tt:83
 #, c-format
 msgid "Password"
 msgstr "Password"
@@ -12826,7 +12833,7 @@ msgstr "Title:"
 msgid "To make changes to your record please contact the library."
 msgstr "To make changes to your record please contact the library."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:84
+#: opac-tmpl/prog/en/modules/opac-auth.tt:96
 #: opac-tmpl/prog/en/modules/errors/500.tt:16
 #: opac-tmpl/prog/en/modules/errors/402.tt:16
 #: opac-tmpl/prog/en/modules/errors/401.tt:17
@@ -12991,7 +12998,7 @@ msgstr "Unsubscribe"
 msgid "Use the \"Confirm\" button below to confirm deletion. "
 msgstr "Use the \"Confirm\" button below to confirm deletion."
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:86
+#: opac-tmpl/prog/en/modules/opac-auth.tt:98
 #: opac-tmpl/prog/en/modules/errors/500.tt:18
 #: opac-tmpl/prog/en/modules/errors/402.tt:18
 #: opac-tmpl/prog/en/modules/errors/401.tt:19
@@ -13224,7 +13231,7 @@ msgid "Wire"
 msgstr "Wire"
 
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:168
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1029
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1035
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:754
 #, c-format
 msgid "Withdrawn ("
@@ -13556,7 +13563,7 @@ msgstr "Postcode:"
 #: opac-tmpl/prog/en/includes/masthead.inc:11
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACResults.xsl:52
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:992
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1010
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1016
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:712
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:733
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:40
@@ -13704,6 +13711,19 @@ msgstr "_"
 msgid "_blank"
 msgstr "_blank"
 
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:422
+#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:472
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:249
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:260
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:674
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:792
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:854
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:414
+#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:467
+#, fuzzy, c-format
+msgid "a_t"
+msgstr "at"
+
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:210
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:375
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:387
@@ -13790,13 +13810,14 @@ msgstr "abstract"
 msgid "abstract or summary "
 msgstr "abstract or summary"
 
+#. %1$s:  IF ( casServerUrl ) 
 #: opac-tmpl/prog/en/modules/opac-auth.tt:56
-#, c-format
-msgid "account, please "
-msgstr ""
+#, fuzzy, c-format
+msgid "account, %s please "
+msgstr "of contents page,"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:915
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1098
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1104
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:100
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:513
 #, c-format
@@ -13853,7 +13874,7 @@ msgid "aperture card "
 msgstr "aperture card"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:887
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1070
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1076
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:72
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:485
 #, c-format
@@ -13874,19 +13895,6 @@ msgstr "art reproduction"
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:529
 msgid "article"
 msgstr "article"
-
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:422
-#: opac-tmpl/prog/en/xslt/NORMARCslim2OPACDetail.xsl:472
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:249
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:260
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:674
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:792
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:854
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:414
-#: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:467
-#, c-format
-msgid "at"
-msgstr "at"
 
 #. %1$s:  WAITIN.branch 
 #. %2$s:  ELSE 
@@ -13940,7 +13948,7 @@ msgid "available online "
 msgstr "available online"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:923
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1107
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1113
 #: opac-tmpl/prog/en/xslt/NORMARCslim2OPACResults.xsl:802
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:109
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:521
@@ -14048,7 +14056,7 @@ msgid "catalogue"
 msgstr "catalogue"
 
 #: opac-tmpl/prog/en/xslt/MARC21slim2OPACDetail.xsl:908
-#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1091
+#: opac-tmpl/prog/en/xslt/MARC21slim2OPACResults.xsl:1097
 #: opac-tmpl/prog/en/xslt/NORMARCslimUtils.xsl:93
 #: opac-tmpl/prog/en/xslt/UNIMARCslim2OPACDetail.xsl:506
 #, c-format
@@ -14095,7 +14103,7 @@ msgstr "children (9-14)"
 msgid "chip cartridge "
 msgstr "chip cartridge"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:56
+#: opac-tmpl/prog/en/modules/opac-auth.tt:58
 #, fuzzy, c-format
 msgid "click here to login"
 msgstr "Click here to access online"
@@ -14317,7 +14325,7 @@ msgstr "earth moon globe"
 msgid "electronic "
 msgstr "electronic"
 
-#: opac-tmpl/prog/en/modules/opac-auth.tt:85
+#: opac-tmpl/prog/en/modules/opac-auth.tt:97
 #: opac-tmpl/prog/en/modules/errors/500.tt:17
 #: opac-tmpl/prog/en/modules/errors/402.tt:17
 #: opac-tmpl/prog/en/modules/errors/401.tt:18
@@ -16404,6 +16412,9 @@ msgstr ""
 #, fuzzy
 #~ msgid "Below is a list of the %s latest issues :"
 #~ msgstr "Below is a list of the three latest issues :"
+
+#~ msgid "Book Cover Image"
+#~ msgstr "Book Cover Image"
 
 #~ msgid "Books on Tape"
 #~ msgstr "Books on Tape"
