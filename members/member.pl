@@ -104,7 +104,7 @@ my ($count,$results);
 if ($member || keys %$patron) {
     #($results)=Search($member || $patron,{surname=>1,firstname=>1},[$from,$to],undef,["firstname","surname","email","othernames"]  );
     my $search_scope = ( $quicksearch ? "field_start_with" : "start_with" );
-    ($results) = Search( $member || $patron, \@orderby, undef, undef, [ "firstname", "surname", "othernames", "cardnumber", "userid" ], $search_scope );
+    ($results) = Search( $member || $patron, \@orderby, undef, undef, [ "firstname", "surname", "othernames", "cardnumber", "userid", "email" ], $search_scope );
 }
 
 if ($results) {
