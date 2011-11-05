@@ -48,20 +48,6 @@
                 window.location = "[% script_name %]?op=delete_confirm&delbiblio="+delbiblio+"&basketno="+basketno+"&booksellerid="+booksellerid;
             }
 
-            function confirm_delete_item(ordernumber, biblionumber) {
-                var is_confirmed = confirm(_("Are you sure you want to delete this order ?"));
-                if (is_confirmed) {
-                    window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno=[% basketno %]&quantity=0&biblionumber="+biblionumber;
-                }
-            }
-
-            function confirm_delete_biblio(ordernumber, biblionumber) {
-                var is_confirmed = confirm(_("Are you sure you want to delete this catalog record and order ?"));
-                if (is_confirmed) {
-                    window.location = "addorder.pl?ordernumber="+ordernumber+"&basketno=[% basketno %]&quantity=0&biblionumber="+biblionumber+"&delbiblio=1";
-                    }
-            }
-
             function transfer_order_popup(ordernumber) {
                 var url = "/cgi-bin/koha/acqui/transferorder.pl?"
                     + "ordernumber=" + ordernumber
@@ -539,10 +525,10 @@
                             [% IF ( books_loo.left_holds_on_order ) %]
                             <span class="button" title="Can't delete order, ([% books_loo.holds_on_order %]) holds are linked with this order cancel holds first">Can't delete order</span><br>
                             [% ELSE %]
-                            <a href="javascript:confirm_delete_item([% books_loo.ordernumber %],[% books_loo.biblionumber %])" class="button">Delete order</a><br>
+                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber %]&biblionumber=[% books_loo.biblionumber %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno %]" class="button">Delete order</a><br>
                             [% END %]
                             [% IF ( books_loo.can_del_bib ) %]
-                            <a href="javascript:confirm_delete_biblio([% books_loo.ordernumber %],[% books_loo.biblionumber %])" class="button">Delete order and catalog record</a><br>
+                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber %]&biblionumber=[% books_loo.biblionumber %]&del_biblio=1&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno %]" class="button">Delete order and catalog record</a><br>
                             [% ELSE %]
                             <span class="button" title="Can't delete catalog record, see constraints below">Can't delete order and catalog record</span><br>
                             [% END %]

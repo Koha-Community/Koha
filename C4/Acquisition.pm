@@ -1785,25 +1785,58 @@ cancelled.
 =cut
 
 sub DelOrder {
-    my ( $bibnum, $ordernumber ) = @_;
+    my ( $bibnum, $ordernumber, $delete_biblio, $reason ) = @_;
+
+    my $error;
     my $dbh = C4::Context->dbh;
     my $query = "
         UPDATE aqorders
         SET    datecancellationprinted=now(), orderstatus='cancelled'
-        WHERE  biblionumber=? AND ordernumber=?
+    ";
+    if($reason) {
+        $query .= "
+            , notes = IF(notes IS NULL,
+                CONCAT('Cancellation reason: ', ?),
+                CONCAT(notes, ' - Cancellation reason: ', ?)
+            )
+        ";
+    }
+    $query .= "
+        WHERE biblionumber=? AND ordernumber=?
     ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $bibnum, $ordernumber );
+    if($reason) {
+        $sth->execute($reason, $reason, $bibnum, $ordernumber);
+    } else {
+        $sth->execute( $bibnum, $ordernumber );
+    }
+    $sth->finish;
+
     my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
     foreach my $itemnumber (@itemnumbers){
-        C4::Items::DelItem(
-            {
-                biblionumber => $bibnum,
-                itemnumber   => $itemnumber
-            }
-        );
+        my $delcheck = C4::Items::DelItemCheck( $dbh, $bibnum, $itemnumber );
+
+        if($delcheck != 1) {
+            $error->{'delitem'} = 1;
+        }
     }
-    return;
+
+    if($delete_biblio) {
+        # We get the number of remaining items
+        my $itemcount = C4::Items::GetItemsCount($bibnum);
+
+        # If there are no items left,
+        if ( $itemcount == 0 ) {
+            # We delete the record
+            my $delcheck = DelBiblio($bibnum);
+
+            if($delcheck) {
+                $error->{'delbiblio'} = 1;
+            }
+        }
+    }
+
+    return $error;
 }
 
 =head3 TransferOrder

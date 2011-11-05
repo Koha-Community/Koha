@@ -123,7 +123,7 @@ use strict;
 use warnings;
 use CGI;
 use C4::Auth;			# get_template_and_user
-use C4::Acquisition;    # DelOrder ModOrder
+use C4::Acquisition;    # ModOrder
 use C4::Suggestions;	# ModStatus
 use C4::Biblio;			# AddBiblio TransformKohaToMarc
 use C4::Budgets;
@@ -230,10 +230,8 @@ $orderinfo->{subscriptionid} ||= undef;
 my $user = $input->remote_user;
 
 # create, modify or delete biblio
-# create if $quantity>=0 and $existing='no'
-# modify if $quantity>=0 and $existing='yes'
-# delete if $quantity has been set to 0 by the librarian
-# delete biblio if delbiblio has been set to 1 by the librarian
+# create if $quantity>0 and $existing='no'
+# modify if $quantity>0 and $existing='yes'
 if ( $orderinfo->{quantity} ne '0' ) {
     #TODO:check to see if biblio exists
     unless ( $$orderinfo{biblionumber} ) {
@@ -321,13 +319,6 @@ if ( $orderinfo->{quantity} ne '0' ) {
 
 }
 
-else { # qty=0, delete the line
-    my $biblionumber = $input->param('biblionumber');
-    DelOrder( $biblionumber, $$orderinfo{ordernumber} );
-    if ($orderinfo->{delbiblio} == 1){
-     DelBiblio($biblionumber);
-    }
-}
 my $basketno=$$orderinfo{basketno};
 my $booksellerid=$$orderinfo{booksellerid};
 if (my $import_batch_id=$$orderinfo{import_batch_id}) {

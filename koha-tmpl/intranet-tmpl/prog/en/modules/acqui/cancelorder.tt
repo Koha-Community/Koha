@@ -1,0 +1,62 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Acquisition &rsaquo; Cancel order</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body>
+[% INCLUDE 'header.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisition</a> &rsaquo; Cancel order</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+  <div id="yui-main">
+    <div class="yui-b">
+      [% UNLESS ( confirmcancel ) %]
+      <form method="post" action="">
+        <div class="dialog alert">
+          <h3>Are you sure you want to cancel this order ([% ordernumber %])</h3>
+          <p>
+            [% IF (del_biblio) %]
+              Bibliographic record will be deleted too.
+            [% ELSE %]
+              Bibliographic record will not be deleted.
+            [% END %]
+          </p>
+          <p>
+            <textarea name="reason" placeholder="Reason of cancellation"></textarea>
+          </p>
+          <input type="hidden" name="action" value="confirmcancel" />
+          <input type="hidden" value="[% ordernumber %]" name="ordernumber" />
+          <input type="hidden" value="[% biblionumber %]" name="biblionumber" />
+          <input type="hidden" value="[% referrer %]" name="referrer" />
+          [% IF (del_biblio) %]
+            <input type="hidden" value="1" name="del_biblio" />
+          [% END %]
+          <input type="submit" class="approve" value="Yes, Cancel (Y)" accesskey="y" />
+          <input type="submit" class="deny" value="No, Don't Cancel (N)" accesskey="n" onclick="window.location='[% referrer %]';return false;" />
+        </div>
+      </form>
+      [% ELSE %]
+        [% IF ( success_cancelorder ) %]
+            <div class="dialog message">
+                The order has been successfully canceled
+        [% ELSE %]
+            <div class="dialog alert">
+                An error has occured.
+                [% IF ( error_delitem ) %]
+                    <p>The order has been canceled, although one or more items could not have been deleted.</p>
+                [% END %]
+                [% IF ( error_delbiblio ) %]
+                <p>The order has been canceled, although the record has not been deleted.</p>
+                [% END %]
+        [% END %]
+                <p>Click <a href="[% referrer %]">here</a> to return to previous page</p>
+            </div>
+      [% END %]
+
+    </div>
+  </div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
