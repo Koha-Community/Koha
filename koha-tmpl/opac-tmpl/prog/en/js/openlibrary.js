@@ -27,44 +27,45 @@ KOHA.OpenLibrary = {
         scriptElement.setAttribute("id", "jsonScript");
         scriptElement.setAttribute("src",
             "http://openlibrary.org/api/books?bibkeys=" + escape(bibkeys) +
-            "&callback=KOHA.OpenLibrary.olCallBack");
+            "&callback=KOHA.OpenLibrary.olCallBack&jscmd=data");
         scriptElement.setAttribute("type", "text/javascript");
         document.documentElement.firstChild.appendChild(scriptElement);
 
     },
+
+
 
     /**
      * Add cover pages <div
      * and link to preview if div id is gbs-thumbnail-preview
      */
     olCallBack: function(booksInfo) {
-       for (id in booksInfo) {
-          var book = booksInfo[id];
-          var isbn = book.bib_key.substring(5);
-          
-          $("."+isbn).each(function() {
-              var a = document.createElement("a");
-              a.href = book.info_url;
-				      if (typeof(book.thumbnail_url) != "undefined") {
-	               	var img = document.createElement("img");
-	                img.src = book.thumbnail_url;
-					        $(this).append(img);
-                  var re = /^openlibrary-thumbnail-preview/;
-                  if ( re.exec($(this).attr("id")) ) {
-                      $(this).append(
-                        '<div style="margin-bottom:5px; margin-top:-5px;font-size:9px">' +
-                        '<a href="' + 
-                        book.info_url + 
-                        '">Preview</a></div>' 
-                      );
-                  }
-		     		} else {
-				    	var message = document.createElement("span");
-					    $(message).attr("class","no-image");
-					    $(message).html(NO_OL_JACKET);
-					    $(this).append(message);
-				    }
-        });
-      }
-    }
+    for (id in booksInfo) {
+       var book = booksInfo[id];
+       var isbn = id.substring(5);
+       $("."+isbn).each(function() {
+       var is_opacdetail = /openlibrary-thumbnail-preview/.exec($(this).attr("id"));
+           var a = document.createElement("a");
+           a.href = booksInfo.url;
+           if (book.cover) {
+               var img = document.createElement("img");
+               if (is_opacdetail) {
+        img.src = book.cover.medium;
+        $(this).append(img);
+                $(this).append(
+                       '<div class="results_summary">' + '<a href="' + book.url + '">Preview</a></div>'
+                   );
+               } else {
+            img.src = book.cover.small;
+            $(this).append(img);
+        }
+           } else {
+               var message =  document.createElement("span");
+               $(message).attr("class","no-image");
+               $(message).html(NO_OL_JACKET);
+               $(this).append(message);
+           }
+       });
+   }
+ }
 };
