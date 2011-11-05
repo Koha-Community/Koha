@@ -215,7 +215,7 @@ sub makepayment {
 
     #check to see what accounttype
     if ( $data->{'accounttype'} eq 'Rep' || $data->{'accounttype'} eq 'L' ) {
-        ReturnLostItem( $borrowernumber, $data->{'itemnumber'} );
+        C4::Circulation::ReturnLostItem( $borrowernumber, $data->{'itemnumber'} );
     }
 }
 
