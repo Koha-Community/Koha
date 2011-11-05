@@ -28,6 +28,8 @@ use C4::Auth;
 use C4::Context;
 use C4::Installer;
 
+#use Smart::Comments '####';
+
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -101,7 +103,46 @@ foreach (@components) {
         $row = [];
     }
 }
+## ## $table
 
 $template->param( table => $table );
+
+
+## ------------------------------------------
+## Koha time line code
+
+#get file location
+my $dir = C4::Context->config('intranetdir');
+open( FILE, "$dir" . "/docs/history.txt" );
+my $i = 0;
+
+my @rows2 = ();
+my $row2  = [];
+
+my @lines = <FILE>;
+close(FILE);
+
+shift @lines; #remove header row
+
+foreach (@lines) {
+    my ( $date, $desc, $tag ) = split(/\t/);
+    push(
+        @rows2,
+        {
+            date => $date,
+            desc => $desc,
+        }
+    );
+}
+
+my $table2 = [];
+#foreach my $row2 (@rows2) {
+foreach  (@rows2) {
+    push (@$row2, $_);
+    push( @$table2, { row2 => $row2 } );
+    $row2 = [];
+}
+
+$template->param( table2 => $table2 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
