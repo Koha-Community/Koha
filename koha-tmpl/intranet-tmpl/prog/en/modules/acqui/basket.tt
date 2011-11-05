@@ -12,6 +12,7 @@
                 10: { sorter: false }
             }
         });
+        $("#cancelledorderst").tablesorter();
     });
             function confirm_close() {
                 var is_confirmed = confirm(_('Are you sure you want to close this basket?'));
@@ -332,6 +333,49 @@
         [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>
         [% END %]
         </div>
+        [% IF (cancelledorders_loop) %]
+          <div id="cancelledorders">
+            <h2>Cancelled orders</h2>
+            <table id="cancelledorderst">
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>RRP</th>
+                  <th>Est.</th>
+                  <th>Qty.</th>
+                  <th>Total</th>
+                  <th>Fund</th>
+                </tr>
+              </thead>
+              <tbody>
+                [% FOREACH order IN cancelledorders_loop %]
+                  <tr style="color:grey">
+                    <td>
+                      <p>
+                        [% IF ( order.order_received ) %] (rcvd)[% END %]
+                        [% IF (order.title) %]
+                          [% order.title |html %] by [% order.author %]<br />
+                        [% ELSE %]
+                          <em>Deleted bibliographic record, can't find title</em><br />
+                        [% END %]
+                        [% IF ( order.notes ) %] [% order.notes %][% END %]
+                        [% IF ( order.isbn ) %] - [% order.isbn %][% END %]
+                        [% IF ( order.issn ) %] - [% order.issn %][% END %]
+                        [% IF ( order.publishercode ) %], [% order.publishercode %][% END %]
+                        [% IF ( order.publicationyear ) %], [% order.publicationyear %][% END %]
+                      </p>
+                    </td>
+                    <td><p>[% order.rrp %]</p></td>
+                    <td><p>[% order.ecost %]</p></td>
+                    <td><p>[% order.quantity %]</p></td>
+                    <td><p>[% order.line_total %]</p></td>
+                    <td><p>[% order.budget_name %]</p></td>
+                  </tr>
+                [% END %]
+              </tbody>
+            </table>
+          </div>
+        [% END %]
         <br />
         [% UNLESS ( closedate ) %]
         [% INCLUDE 'acquisitions-add-to-basket.inc' %]

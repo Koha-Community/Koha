@@ -54,6 +54,7 @@ BEGIN {
         &GetOrderNumber &GetLateOrders &GetOrderFromItemnumber
         &SearchOrder &GetHistory &GetRecentAcqui
         &ModReceiveOrder &ModOrderBiblioitemNumber
+        &GetCancelledOrders
 
         &NewOrderItem &ModOrderItem
 
@@ -1040,6 +1041,42 @@ sub ModOrderBiblioitemNumber {
     my $sth = $dbh->prepare($query);
     $sth->execute( $biblioitemnumber, $ordernumber, $biblionumber );
 }
+
+=head3 GetCancelledOrders
+
+  my @orders = GetCancelledOrders($basketno, $orderby);
+
+Returns cancelled orders for a basket
+
+=cut
+
+sub GetCancelledOrders {
+    my ( $basketno, $orderby ) = @_;
+
+    return () unless $basketno;
+
+    my $dbh   = C4::Context->dbh;
+    my $query = "
+        SELECT biblio.*, biblioitems.*, aqorders.*, aqbudgets.*
+        FROM aqorders
+          LEFT JOIN aqbudgets   ON aqbudgets.budget_id = aqorders.budget_id
+          LEFT JOIN biblio      ON biblio.biblionumber = aqorders.biblionumber
+          LEFT JOIN biblioitems ON biblioitems.biblionumber = biblio.biblionumber
+        WHERE basketno = ?
+          AND (datecancellationprinted IS NOT NULL
+               AND datecancellationprinted <> '0000-00-00')
+    ";
+
+    $orderby = "aqorders.datecancellationprinted desc, aqorders.timestamp desc"
+        unless $orderby;
+    $query .= " ORDER BY $orderby";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($basketno);
+    my $results = $sth->fetchall_arrayref( {} );
+
+    return @$results;
+}
+
 
 #------------------------------------------------------------#
 

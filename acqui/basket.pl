@@ -343,6 +343,11 @@ my $total_est_gste;
         last;
     }
 
+    my @cancelledorders = GetCancelledOrders($basketno);
+    foreach (@cancelledorders) {
+        $_->{'line_total'} = sprintf("%.2f", $_->{'ecost'} * $_->{'quantity'});
+    }
+
     $template->param(
         basketno             => $basketno,
         basketname           => $basket->{'basketname'},
@@ -359,6 +364,7 @@ my $total_est_gste;
         name                 => $bookseller->{'name'},
         entrydate            => C4::Dates->new($results[0]->{'entrydate'},'iso')->output,
         books_loop           => \@books_loop,
+        cancelledorders_loop => \@cancelledorders,
         gist_rate            => sprintf( "%.2f", $gist * 100 ) . '%',
         total_rrp_gste       => sprintf( "%.2f", $total_rrp_gste ),
         total_est_gste       => sprintf( "%.2f", $total_est_gste ),
