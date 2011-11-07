@@ -114,7 +114,7 @@ function verify_images() {
         [% IF ( MARCAUTHORS ) %]
             <li><strong>Additional Authors:</strong><ul>
             [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
-                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="&#8225;[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %]</li>
+                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator %]<a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value %]</a>[% END %]</li>
                 [% END %]
 
         </ul>
@@ -183,7 +183,7 @@ function verify_images() {
             <li><strong>Subjects:</strong> 
             <ul>
                 [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
-                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator %] <a title="&#8225;[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value |html %]</a>[% END %]</li>
+                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator %] <a title="‡[% MARCSUBJECT_SUBFIELDS_LOO.code %] [% MARCSUBJECT_SUBFIELDS_LOO.value %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value |html %]</a>[% END %]</li>
                 [% END %]
                 </ul>
             </li>
