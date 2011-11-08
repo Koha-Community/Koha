@@ -72,7 +72,6 @@ BEGIN {
 		&GetRenewCount
 		&GetItemIssue
 		&GetItemIssues
-		&GetBorrowerIssues
 		&GetIssuingCharges
 		&GetIssuingRule
         &GetBranchBorrowerCircRule
