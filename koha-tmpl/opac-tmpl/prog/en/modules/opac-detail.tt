@@ -1,4 +1,4 @@
-[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield %][% END %]
+[% INCLUDE 'doc-head-open.inc' %][% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %], [% subtitl.subfield |html %][% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/JavaScript" language="JavaScript">
@@ -249,7 +249,7 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
     [% IF ( OPACXSLTDetailsDisplay ) %]
         [% XSLTBloc %]
     [% ELSE %]
-    <h1 class="title">[% title |html %][% IF ( subtitle ) %] <span class="subtitle">[% FOREACH subtitl IN subtitle %][% subtitl.subfield %] [% END %]</span>[% END %]</h1>
+    <h1 class="title">[% title |html %][% IF ( subtitle ) %] <span class="subtitle">[% FOREACH subtitl IN subtitle %][% subtitl.subfield |html %] [% END %]</span>[% END %]</h1>
     [% IF ( author ) %]<h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author |html %]</a></h5>[% END %] 
 
     <span class="results_summary">[% UNLESS ( item_level_itypes ) %]
@@ -853,21 +853,23 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% IF ( review.your_comment ) %]
             <div class="commentline yours" id="c[% review.reviewid %]">
                 [% IF ( review.avatarurl ) %]
-            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80"/>
+            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
                 [% END %]
             <h5>
                 Your Comment
             </h5>
             <small>[% review.datereviewed %]</small>
         <p>
-          [% review.review %]
+          [% FILTER html_break %]
+          [% review.review |html %]
+          [% END %]
           <a href="#" onclick="Dopop('/cgi-bin/koha/opac-review.pl?biblionumber=[% review.biblionumber %]&amp;reviewid=[% review.reviewid %]');">Edit</a>
         </p></div>
             [% ELSE %]
             <div class="commentline">
             [% IF ( ShowReviewer ) %]
                 [% IF ( review.avatarurl ) %]
-            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80"/>
+            <img class="avatar" src="[% review.avatarurl %]" height="80" width="80" alt="" />
                 [% END %]
             <h5>
                 Comment by
@@ -878,7 +880,9 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
             [% END %]
             <small>[% review.datereviewed %]</small>
         <p>
-          [% review.review %]
+          [% FILTER html_break %]
+          [% review.review |html %]
+          [% END %]
         </p></div>
             [% END %]
         [% END %]

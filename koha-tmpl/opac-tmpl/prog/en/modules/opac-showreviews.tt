@@ -14,7 +14,7 @@ $(document).ready(function(){
    <div id="bd">
 [% INCLUDE 'masthead.inc' %]
 	<div id="yui-main">
-	<div class="yui-b"><div id="usershowreviews" class="container">
+	<div id="usershowreviews" class="container">
     <div id="recentcomments" class="searchresults">
 <h3>Recent comments</h3>
 <table>
@@ -28,7 +28,7 @@ $(document).ready(function(){
     [% ELSE %]<a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber |url %]#comments" title="View details for this title">
     [% END %]
     [% END %]
-    [% IF ( review.title ) %][% review.title |html %][% ELSE %]No title[% END %] [% FOREACH subtitl IN review.subtitle %] [% subtitl.subfield %][% END %]</a>
+    [% IF ( review.title ) %][% review.title %][% ELSE %]No title[% END %] [% FOREACH subtitl IN review.subtitle %] [% subtitl.subfield |html %][% END %]</a>
     [% IF ( review.author ) %]by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author %]</a></p>
     [% END %]
     <p>
@@ -48,16 +48,16 @@ $(document).ready(function(){
 
             <p class="commentline[% IF ( review.your_comment ) %] yours[% END %]">
             [% IF ( review.avatarurl ) %]
-                <img class="avatar" src="[% review.avatarurl %]" height="40" width="40"/>
+                <img class="avatar" src="[% review.avatarurl %]" height="40" width="40" alt="" />
             [% END %]
+            [% FILTER html_break %]
             [% review.review |html %]
+            [% END %]
             <span style="font-size:87%;font-color:#CCC;">Added [% review.datereviewed %] [% IF ( review.your_comment ) %] by <strong>you</strong>[% ELSE %]
             [% IF ( ShowReviewer ) %] by
             [% review.firstname %] [% review.surname %][% END %][% END %]</span></p>
         </td>
         <td>
-            <a class="p1" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber %]">
-
 [% IF ( review.BiblioDefaultViewmarc ) %]<a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
     [% ELSE %]
     [% IF ( review.BiblioDefaultViewisbd ) %]<a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% review.biblionumber |url %]" title="View details for this title">
@@ -90,7 +90,6 @@ $(document).ready(function(){
     [% END %]
         [% IF ( next_page_offset ) %]<a class="nav" href="/cgi-bin/koha/opac-showreviews.pl?offset=[% next_page_offset %]">Next &gt;&gt;</a>[% END %]
 </div>[% END %]
-</div>
 </div>
 </div>
 </div>
