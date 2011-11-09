@@ -1,0 +1,224 @@
+RELEASE NOTES FOR KOHA 3.4.6 - 09 Nov 2011
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.4.6 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.04.06.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.4.6 is a bugfix/maintenance release.
+
+Highlights of 3.4.6
+======================
+
+1139	blocker		ISBN search fails with double dashes
+5995	blocker		Glitch with checkauth
+2453	critical	(very) large biblio/item handling
+6575	critical	funds with no restrictions not see by librarians
+6576	critical	changing framework while cataloging looses data
+6687	critical	cannot move people in the holds queue
+6854	critical	import_borrowers.pl : Double password encryption on member update if there is no password in the csv and no default password value.
+6879	critical	Actual price should show correctly on order line and basket summary
+6959	critical	Can't import record via Z39.50 from MARC edit page
+2599	major		Search limits not working for NoZebra
+5796	major		actual price not taken into account in encumbrance
+5945	major		can't search patron's email anymore
+6014	major		Log viewer needs permissions
+6414	major		actual price not recorded when ordering
+6465	major		Errors in UNIMARC plugins for fixed length fields (for | and space) (T::T issue)
+6490	major		Lost and paid not updated when book is checked out.
+6660	major		limiting search to a patron category shows all patrons in category
+6801	major		Patron details page slow to load when many checkouts present
+6927	major		Typo in Overdues.pm
+6974	major		MARC21 Leader plugin no longer auto-fills the 000 field
+6977	major		Support for repeated subfields when importing an authority into a biblio record field.
+7134	major		patron records getting funny birthdays
+
+
+Bugs fixed in 3.4.6
+======================
+
+3258	normal		routing-preview.pl : button text + redirect issue
+3704	normal		SIP Checkin of not checked out item returns error without additional reason
+5369	normal		se queries with paranthesis fail
+5630	normal		CAS improvements
+6070	normal		On a new order defined from suggestion some fields were missing.
+6217	normal		Searching for 3 part patron names brings no results
+6253	normal		Unified Patron Search subroutine
+6280	normal		Invalid SQL being passed in circulation checkout
+6390	normal		Basket only visible for librarian who created it
+6460	normal		No log generated if Action set to All or Modify or Delete
+6513	normal		Library and Category filters when searching for a borrower to add to a routing list don't work correctly.
+6885	normal		Superlibrarian users can't delete items from another library when IndependantBranches
+6966	normal		Update Help Files for Koha 3.6 Release
+6972	normal		Hardcoded template paths to en in showmarc
+6996	normal		Encoding problem in opac-showmarc
+6997	normal		koha-remove leaves system in inconsistent state if there is an error
+7202	normal		z39.50 search on bib edit not working
+959	enhancement	We need to be abble to modifie order line after receipt
+5528	enhancement	Analytical records support
+5572	enhancement	refinements to function merge sub merge in C4::AuthoritiesMarc
+5983	enhancement	Change the wording around the CAS login
+6012	enhancement	Set up a working example of a CAS proxy
+6296	enhancement	Allow authentication to Koha via PKI / x.509 certificates
+6670	enhancement	Link patron name on returns screen to circulation page instead of patron detail page
+6875	enhancement	de-nesting C4 packages
+6884	enhancement	Improve TinyMCE configuration on Koha News page
+
+
+System requirements
+======================
+
+    Changes since 3.2:
+
+    * Template::Toolkit
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the english version of the
+Koha manual is available:
+
+    http://koha-community.org/documentation/3-4-manual/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese
+  * Danish
+  * English (New Zealand)
+  * English (USA)
+  * French (France)
+  * French (Canada)
+  * German
+  * Greek
+  * Hindi
+  * Italian
+  * Norwegian
+  * Portuguese
+  * Spanish
+  * Turkish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.4 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+Release Maintainer (3.2.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.4.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+QA Manager:             Colin Campbell
+
+
+Credits
+======================
+
+We thank the following individuals who contributed patches to
+Koha 3.4.6 (The numeral in the first column represents the number
+of patches included in this release):
+
+     1	Alex Arnaud
+     1	Larry Baerveldt
+     1	Greg Barniskis
+     2	D Ruth Bavousett
+     1	Jared Camins-Esakov
+     2	Colin Campbell
+     2	Frédérick Capovilla
+     1	Galen Charlton
+    17	Chris Cormack
+     8	Frédéric Demians
+     2	Jonathan Druart
+     1	Nicole Engard
+     2	Magnus Enger
+     3	Katrin Fischer
+     2	Mason James
+     6	Srdjan Jankovic
+     1	Janusz Kaczmarek
+    12	Owen Leonard
+     1	Matthias Meusburger
+     1	Joy Nelson
+     4	Chris Nighswonger
+     2	Maxime Pelletier
+    11	Paul Poulain
+     1	Meenakshi R
+     1	MJ Ray
+     4	Liz Rea
+    10	Marcel de Rooy
+     7	Robin Sheat
+     1	Juan Sieira
+    18	Ian Walls
+
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.4.x (i.e., this version of Koha and future bugfix
+releases) is 3.4.x.
+
+The next major feature release of Koha will be Koha 3.6.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini
+
+##### Autogenerated release notes updated last on 09 Nov 2011 at 16:50:37Z #####
