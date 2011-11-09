@@ -16,13 +16,13 @@ use LWP::UserAgent;
 use Data::Dumper;
 use HTTP::Cookies;
 use C4::Context;
-use C4::Debug;
 
-my $baseurl= $ARGV[0] || "http://am123/cgi-bin/koha/";
+my $baseurl= C4::Context->preference("staffClientBaseURL")."/cgi-bin/koha/";
 my $max_tries = 200;
-my $concurrency = 30;
-my $user = $ARGV[1] ||'hdl';
-my $password = $ARGV[2] || 'hdl';
+my $concurrency = 10;
+my $debug;
+my $user = 'kados';
+my $password = 'kados';
 
 # Authenticate via our handy dandy RESTful services
 # and grab a cookie
@@ -37,7 +37,6 @@ if( $resp->is_success ) {
     print "Authentication successful\n";
     print "Auth:\n $resp->content" if $debug;
 }
-
 # remove some unnecessary garbage from the cookie
 $cookie =~ s/ path_spec; discard; version=0//;
 $cookie =~ s/Set-Cookie3: //;
@@ -139,35 +138,7 @@ $ro = $b2->execute;
 # calculate hits/sec
 print ("\t".$b2->total_time."ms\t".(1000*$b2->total_requests/$b2->total_time)." borrowers/sec\n");
 
-my $b2 = HTTPD::Bench::ApacheBench->new;
-$b2->concurrency( $concurrency );
-print "Load testing patron search page";
-for (my $i=1;$i<=$max_tries;$i++) {
-#     print "$baseurl/members/moremember.pl?borrowernumber=$rand_borrowernumber\n";
-    push @borrowers,"$baseurl/members/member.pl?member=jean";
-}
-$b2->add_run($run2);
-$b->add_run($run2);
 
-# send HTTP request sequences to server and time responses
-$ro = $b2->execute;
-
-print ("\t".$b2->total_time."ms\t".(1000*$b2->total_requests/$b2->total_time)." borrowers/sec\n");
-
-my $b2 = HTTPD::Bench::ApacheBench->new;
-$b2->concurrency( $concurrency );
-
-print "Load testing patron search page";
-for (my $i=1;$i<=$max_tries;$i++) {
-#     print "$baseurl/members/moremember.pl?borrowernumber=$rand_borrowernumber\n";
-    push @borrowers,"$baseurl/members/member.pl?quicksearch=1&surname=A";
-}
-$b2->add_run($run2);
-$b->add_run($run2);
-
-# send HTTP request sequences to server and time responses
-$ro = $b2->execute;
-print ("\t".$b2->total_time."ms\t".(1000*$b2->total_requests/$b2->total_time)." borrowers/sec\n");
 #
 # issue (& then return) books
 #
