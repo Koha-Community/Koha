@@ -112,9 +112,9 @@ elsif ($op eq 'none') {
     # setup select menus for selecting layout and template for this run...
     $referer = $ENV{'HTTP_REFERER'};
     $referer =~ s/^.*?:\/\/.*?(\/.*)$/$1/m;
-    @batch_ids = grep{my $id = $_; $id = {batch_id => $id}} @batch_ids;
-    @label_ids = grep{my $id = $_; $id = {label_id => $id}} @label_ids;
-    @item_numbers = grep{my $number=$_; $number = {item_number => $number}} @item_numbers;
+    @batch_ids = map{{batch_id => $_}} @batch_ids;
+    @label_ids = map{{label_id => $_}} @label_ids;
+    @item_numbers = map{{item_number => $_}} @item_numbers;
     $templates = get_all_templates(field_list => 'template_id, template_code', filter => 'creator = "Labels"');
     $layouts = get_all_layouts(field_list => 'layout_id, layout_name', filter => 'creator = "Labels"');
     $output_formats = get_output_formats();
