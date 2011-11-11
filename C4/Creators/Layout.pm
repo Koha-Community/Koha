@@ -61,7 +61,7 @@ sub _check_params {
     return $exit_code;
 }
 
-use constant PRESET_FIELDS => [qw(title author isbn issn itemtype barcode callnumber)];
+use constant PRESET_FIELDS => [qw(title author isbn issn itemtype barcode itemcallnumber)];
 sub new {
     my $invocant = shift;
     my $self = '';
