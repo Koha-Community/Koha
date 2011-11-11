@@ -994,11 +994,11 @@ YAHOO.util.Event.onContentReady("furtherm", function () {
 <div id="ulactioncontainer" class="container">
 [% IF ( busc ) %]
     <div class="nav_results">
-        <div class="l_Results">[% IF ( listResults ) %]<a href="#" id="a_listResults" title="Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])">Browse results</a>[% ELSE %]Browse results[% END %]</div>
-        <ul class="pg_menu">
-            <li class="left_results">[% IF ( previous ) %]<a href="[% previous %]" title="See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous biblio[% END %]">&laquo; Previous</a>[% ELSE %]Previous[% END %]</li>
+        <div class="l_Results">[% IF ( listResults ) %]<a href="#" id="a_listResults" title="Show pagination list ([% indexPag %]-[% indexPagEnd %] / [% totalPag %])">Browse results</a>[% ELSE %]<span>Browse results</span>[% END %]</div>
+        <ul class="pg_menu clearfix">
+            <li class="left_results">[% IF ( previous ) %]<a href="[% previous %]" title="See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous biblio[% END %]">&laquo; Previous</a>[% ELSE %]<span>Previous</span>[% END %]</li>
             <li class="back_results"><a href="opac-search.pl?[% busc %]" title="Back to the results search list">Back to results</a></li>
-            <li class="right_results">[% IF ( next ) %]<a href="[% next %]" title="See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END %]">Next &raquo;</a>[% ELSE %]Next[% END %]</li>
+            <li class="right_results">[% IF ( next ) %]<a href="[% next %]" title="See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END %]">Next &raquo;</a>[% ELSE %]<span>Next</span>[% END %]</li>
         </ul>
         [% IF ( listResults ) %]
         <div class="pagination">
