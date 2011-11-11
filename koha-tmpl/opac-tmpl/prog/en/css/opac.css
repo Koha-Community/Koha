@@ -2177,36 +2177,39 @@ a.koha_url {
     background-color:#D9D9D9;
 }
 .nav_results ul.pg_menu {
-    height:25px;
     border-top: 1px solid #D0D0D0;
+    white-space : nowrap;
 }
 .nav_results ul.pg_menu li {
     color:#B2B2B2;
-    display:block;
-    float:left;
-    padding:5px 0;
+    display:inline;
     list-style:none;
-    text-align:center;
+    margin: 0;
 }
-.nav_results ul.pg_menu li.back_results {
-    padding:5px 0px;
-    width:45%;
+.nav_results ul.pg_menu li.back_results a {
     border-left: 1px solid #D0D0D0;
     border-right: 1px solid #D0D0D0;
 }
-.nav_results ul.pg_menu li a {
+.nav_results ul.pg_menu li a,
+.nav_results ul.pg_menu li span {
+	background-color: #F3F3F3;
+	display : block;
+    float:left;
+    padding:.4em .5em;
     text-decoration:none;
     font-weight:normal;
-    color:#4D4D4D;
+    text-align:center;
 }
+
+.nav_results ul.pg_menu li span {
+	color : #B2B2B2;
+}
+
+.nav_results ul.pg_menu li.left_results a {
+	padding-left : 0;
+}
+
 .nav_results ul.pg_menu li a:hover {
-    color:#006699;
-}
-.nav_results ul.pg_menu li.left_results {
-    margin-right:10px;
-}
-.nav_results ul.pg_menu li.right_results {
-    margin-left:10px;
 }
 
 .nav_results #listResults{
