@@ -54,7 +54,7 @@ name=$(tar tf "$configdump" |
        sed -n '/^etc\/koha\/sites\/\([^/]*\)\/$/s//\1/p')
 username="$name-koha"
 adduser --no-create-home --disabled-login --gecos "Koha instance $username" \
-    --quiet "$username"
+    --home "/var/lib/koha/$name" --quiet "$username"
 
 
 # Create dirs. Some of them will be in the tarball, but not all, e.g.,
