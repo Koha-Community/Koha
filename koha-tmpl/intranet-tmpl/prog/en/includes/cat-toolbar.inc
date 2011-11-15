@@ -55,6 +55,9 @@ function confirm_items_deletion() {
             }else{
                 return false;
             }
+		} else {
+			alert(_("This record has no items."));
+			return false;
 		}
 }
 [% END %]
@@ -102,7 +105,7 @@ function confirm_items_deletion() {
 	        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Edit as New (Duplicate)"), url: "/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber %]&amp;frameworkcode=&amp;op=duplicate" },[% END %]
 			[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Replace Record via Z39.50"), onclick: {fn: PopupZ3950 } },[% END %]
 			[% IF ( CAN_user_editcatalogue_edit_catalogue ) %]{ text: _("Delete Record"), onclick: {fn: confirm_deletion }[% IF ( count ) %],id:'disabled'[% END %] },[% END %]
-	        [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Delete all Items"), onclick: {fn: confirm_items_deletion } }[% END %]
+	        [% IF ( CAN_user_editcatalogue_edit_items ) %]{ text: _("Delete all Items"), onclick: {fn: confirm_items_deletion }[% UNLESS ( count ) %],id:'disabled'[% END %] }[% END %]
 	    ];
 		if(editmenu.length){
 			new YAHOO.widget.Button({
