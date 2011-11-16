@@ -124,6 +124,8 @@ $template->param(   BORROWER_INFO     => \@bordat,
                     borrowernumber    => $borrowernumber,
                     patron_flagged    => $borr->{flagged},
                     OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
+                    surname           => $borr->{surname},
+                    showname          => $borr->{showname},
                 );
 
 #get issued items ....

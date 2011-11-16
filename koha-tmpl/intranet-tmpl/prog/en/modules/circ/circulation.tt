@@ -1,9 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Circulation
-[% IF ( borrowernumber ) %]
-&rsaquo; Checking out to [% surname %], [% firstname %]
-([% cardnumber %])
-[% END %]</title>
+<title>Koha &rsaquo; Circulation [% IF ( borrowernumber ) %] &rsaquo; Checking out to [% INCLUDE 'patron-title.inc' %] [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( UseTablesortForCirc ) %]<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>[% END %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
@@ -166,9 +162,13 @@ function refocus(calendar) {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;[% IF ( borrowernumber ) %] <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% firstname %] [% surname %][% ELSE %] <strong>Checkouts</strong>[% END %]</div>
-
-
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo;
+[% IF ( borrowernumber ) %]
+    <a href="/cgi-bin/koha/circ/circulation.pl">Checkouts</a> &rsaquo; [% INCLUDE 'patron-title.inc' %]
+[% ELSE %]
+    <strong>Checkouts</strong>
+[% END %]
+</div>
 [% IF ( CGIselectborrower ) %]
 <div id="doc" class="yui-t7">
 
@@ -456,7 +456,8 @@ No patron matched <span class="ex">[% message %]</span>
         <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>
     [% END %]
 
-    <label for="barcode">Checking out to [% firstname %] [% surname %] ([% cardnumber %]) </label>
+    <label for="barcode">Checking out to [% INCLUDE 'patron-title.inc' %]</label>
+
 	<div class="hint">Enter item barcode:</div>
 
     [% IF ( NEEDSCONFIRMATION ) %]
@@ -523,7 +524,7 @@ No patron matched <span class="ex">[% message %]</span>
 
     [% IF ( flagged ) %]
 		[% IF ( noissues ) %]
-		 <h4>Checking out to [% firstname %] [% surname %] ([% cardnumber %])</h4>
+		<h4>Checking out to [% INCLUDE 'patron-title.inc' %]</h4>
         <div id="circmessages" class="circmessage warning">
 		[% ELSE %]
         <div id="circmessages" class="circmessage attention">

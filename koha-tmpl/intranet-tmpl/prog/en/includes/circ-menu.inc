@@ -1,5 +1,5 @@
 [% IF ( borrowernumber ) %]
-<div class="patroninfo"><h5>[% firstname %] [% surname %] ([% cardnumber %])</h5>
+<div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
 <!--[if IE 6]>
 <style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
 }</style>

@@ -74,14 +74,17 @@ if ($src eq 'circ') {   # if we were called from circulation, use the circulatio
     my $data = GetMember('borrowernumber'=>$borrowernumber);
     my ($picture, $dberror) = GetPatronImage($data->{'cardnumber'});
     $template->param( picture => 1 ) if $picture;
+    
     $template->param(   menu            => 1,
                         title           => $data->{'title'},
                         initials        => $data->{'initials'},
                         surname         => $data->{'surname'},
+                        othernames      => $data->{'othernames'},
                         borrowernumber  => $borrowernumber,
                         firstname       => $data->{'firstname'},
                         cardnumber      => $data->{'cardnumber'},
                         categorycode    => $data->{'categorycode'},
+                        category_type   => $data->{'category_type'},
                         categoryname	=> $data->{'description'},
                         address         => $data->{'address'},
                         address2        => $data->{'address2'},
