@@ -629,9 +629,9 @@ my (undef, $roadttype_hashref) = &GetRoadTypes();
 my $address = $borrower->{'streetnumber'}.' '.$roadttype_hashref->{$borrower->{'streettype'}}.' '.$borrower->{'address'};
 
 my $fast_cataloging = 0;
-    if (defined getframeworkinfo('FA')) {
+if (defined getframeworkinfo('FA')) {
     $fast_cataloging = 1 
-    }
+}
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);
@@ -654,6 +654,8 @@ $template->param(
     printername       => $printer,
     firstname         => $borrower->{'firstname'},
     surname           => $borrower->{'surname'},
+    showname          => $borrower->{'showname'},
+    category_type     => $borrower->{'category_type'},
     dateexpiry        => format_date($newexpiry),
     expiry            => format_date($borrower->{'dateexpiry'}),
     categorycode      => $borrower->{'categorycode'},
@@ -669,6 +671,7 @@ $template->param(
     country           => $borrower->{'country'},
     phone             => $borrower->{'phone'} || $borrower->{'mobile'},
     cardnumber        => $borrower->{'cardnumber'},
+    othernames        => $borrower->{'othernames'},
     amountold         => $amountold,
     barcode           => $barcode,
     stickyduedate     => $stickyduedate,

@@ -111,6 +111,7 @@ $template->param(
 						title => $data->{'title'},
 						initials => $data->{'initials'},
 						surname => $data->{'surname'},
+						othernames => $data->{'othernames'},
 						borrowernumber => $borrowernumber,
 						limit => $limit,
 						firstname => $data->{'firstname'},

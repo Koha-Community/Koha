@@ -1,5 +1,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron Details for [% firstname %] [% surname %] ([% cardnumber %])[% END %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo;
+[% IF ( unknowuser ) %]
+    Patron does not exist
+[% ELSE %]
+    Patron Details for [% INCLUDE 'patron-title.inc' %]
+[% END %]
+</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
@@ -119,7 +125,7 @@ function validate1(date) {
 <div id="breadcrumbs">
          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron Details for [% firstname %] [% surname %] ([% cardnumber %])[% END %]
+&rsaquo; [% IF ( unknowuser ) %]Patron does not exist[% ELSE %]Patron Details for [% INCLUDE 'patron-title.inc' %][% END %]
 </div>
 
 <div id="doc3" class="yui-t1">

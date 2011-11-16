@@ -1,0 +1,6 @@
+[% IF category_type == 'I' %]
+    [% surname %] [% IF othernames %] ([% othernames %]) [% END %]
+[% ELSE %]
+    [% firstname %] [% surname %]
+[% END %]
+([% cardnumber %])

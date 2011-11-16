@@ -1,7 +1,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha Online[% END %] Catalog &rsaquo; Library Home for
 [% FOREACH BORROWER_INF IN BORROWER_INFO %]
-    [% BORROWER_INF.firstname %] [% BORROWER_INF.surname %]
+    [% INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber %]
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.metadata.min.js"></script>
@@ -75,7 +75,10 @@ $.tablesorter.addParser({
 	       </div>
 	[% END %]
     [% FOREACH BORROWER_INF IN BORROWER_INFO %]
-        <h2>Hello, [% BORROWER_INF.firstname %] [% BORROWER_INF.surname %] <span class="hint">(<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here</a> if you're not [% BORROWER_INF.title %] [% BORROWER_INF.firstname %] [% BORROWER_INF.surname %])</span></h2>
+        <h2>Hello, [% INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber %]
+        <span class="hint">(<a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here</a> if you're not
+        [% BORROWER_INF.title %] [% INCLUDE 'patron-title.inc' category_type = BORROWER_INF.category_type firstname = BORROWER_INF.firstname surname = BORROWER_INF.surname othernames = BORROWER_INF.othernames cardnumber = BORROWER_INF.cardnumber %])
+        </span></h2>
         
 		[% IF ( patronupdate ) %]<div class="dialog message"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 		

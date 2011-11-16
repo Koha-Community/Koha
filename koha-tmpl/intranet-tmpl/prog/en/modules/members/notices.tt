@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Sent notices for [% firstname %] [% surname %]</title>
+<title>Sent notices for [% INCLUDE 'patron-title.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
 <script type="text/javascript" language="javascript">
@@ -29,14 +29,14 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Sent notices for [% firstname %] [% surname %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Sent notices for [% INCLUDE 'patron-title.inc' %]</div>
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
     <div id="yui-main">
     <div class="yui-b">
 [% INCLUDE 'circ-toolbar.inc' %]
-<h1>Sent notices for [% firstname %] [% surname %]</h1>
+<h1>Sent notices for [% INCLUDE 'patron-title.inc' %]</h1>
 
 
     <table id="noticestable">

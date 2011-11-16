@@ -132,9 +132,6 @@ my $category_type = $data->{'category_type'};
 
 ### $category_type
 
-# in template <TMPL_IF name="I"> => instutitional (A for Adult& C for children) 
-$template->param( $data->{'categorycode'} => 1 ); 
-
 $debug and printf STDERR "dates (enrolled,expiry,birthdate) raw: (%s, %s, %s)\n", map {$data->{$_}} qw(dateenrolled dateexpiry dateofbirth);
 foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 		my $userdate = $data->{$_};
@@ -443,6 +440,8 @@ if (C4::Context->preference('EnhancedMessagingPreferences')) {
     $template->param(SMSnumber     => defined $data->{'smsalertnumber'} ? $data->{'smsalertnumber'} : $data->{'mobile'});
 }
 
+# in template <TMPL_IF name="I"> => instutitional (A for Adult, C for children) 
+$template->param( $data->{'categorycode'} => 1 ); 
 $template->param(
     detailview => 1,
     AllowRenewalLimitOverride => C4::Context->preference("AllowRenewalLimitOverride"),
@@ -450,6 +449,7 @@ $template->param(
     CANDELETEUSER    => $candeleteuser,
     roaddetails     => $roaddetails,
     borrowernumber  => $borrowernumber,
+    othernames      => $data->{'othernames'},
     categoryname    => $data->{'description'},
     reregistration  => $reregistration,
     branch          => $branch,
