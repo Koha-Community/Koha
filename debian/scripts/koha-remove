@@ -31,20 +31,41 @@ do
     shift
 done
 
-for name in "$@"
+NAMES="$@"
+
+SITECONFDIR="/etc/koha/sites"
+# There has to be a better way of excluding '.' from find. But this works.
+INSTANCES=`cd $SITECONFDIR && find . -type d -printf " %f" |sed s/\ .\ //`
+
+if [ -z $NAMES ] ; then
+    echo "Please specify a Koha instance name. Your choices are:"
+    echo "$INSTANCES"
+    exit 1
+fi
+
+for name in $NAMES
 do
+    # Does the directory (ie instance) name exist?
+    if [ ! -d $SITECONFDIR/$name ] ; then
+     echo Koha configuration directory for instance \"$name\" does not exist, please specify a valid Koha instance
+  exit 1
+    fi
+
     echo "Removing Koha instance $name"
 
     if [ "$keepmysql" != "1" ]
     then
-        mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
+    # The grant creates the user in case it isn't, we don't want our loop to fail if it has already being deleted.
+    mysql --defaults-extra-file=/etc/mysql/koha-common.cnf <<eof
+GRANT USAGE ON \`koha_$name\`.* TO \`koha_$name\`@\`%\`;
 DROP USER \`koha_$name\`;
-DROP DATABASE \`koha_$name\`;
+DROP DATABASE IF EXISTS \`koha_$name\`;
 FLUSH PRIVILEGES;
 eof
     fi #`
     
-    koha-stop-zebra $name
+    # If the daemon is not running already, we don't want to fail this loop. So bin the result code if this fails.
+    koha-stop-zebra $name | /bin/true
     [ -f "/etc/apache2/sites-available/$name" ]  && \
         rm "/etc/apache2/sites-available/$name"
     [ -f "/etc/koha/sites/$name/koha-conf.xml" ] && \
@@ -57,8 +78,9 @@ eof
         rm "/etc/koha/sites/$name/zebra-authorities-dom.cfg"
     [ -f "/etc/koha/sites/$name/zebra.passwd" ] && \
         rm "/etc/koha/sites/$name/zebra.passwd"
+    # Maybe a user has left something in the config directory they want to keep? We won't delete it here, nor throw an error if the have.
     [ -d "/etc/koha/sites/$name" ] && \
-        rmdir "/etc/koha/sites/$name"
+        rmdir --ignore-fail-on-non-empty "/etc/koha/sites/$name"
     [ -d "/var/lock/koha/$name" ] && \
         rm -r "/var/lock/koha/$name"
     [ -d "/var/log/koha/$name" ] && \
@@ -66,7 +88,8 @@ eof
     [ -d "/var/run/koha/$name" ] && \
         rm -r "/var/run/koha/$name"
     getent passwd "$name-koha" > /dev/null && deluser --quiet "$name-koha"
-    a2dissite "$name"
+    # in case the site has already been disabled, we don't want to break the loop now.
+    a2dissite "$name" | /bin/true
 done
 
 service apache2 restart
