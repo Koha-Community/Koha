@@ -34,7 +34,7 @@ my $want_help;
 my $as_xml;
 my $process_zebraqueue;
 my $do_not_clear_zebraqueue;
-my $verbose_logging;
+my $verbose_logging = 0;
 my $zebraidx_log_opt = " -v none,fatal,warn ";
 my $result = GetOptions(
     'd:s'           => \$directory,
@@ -51,7 +51,7 @@ my $result = GetOptions(
 	'x'				=> \$as_xml,
     'y'             => \$do_not_clear_zebraqueue,
     'z'             => \$process_zebraqueue,
-    'v'             => \$verbose_logging,
+    'v+'            => \$verbose_logging,
 );
 
 
@@ -96,8 +96,8 @@ if ($noshadow) {
 
 #  -v is for verbose, which seems backwards here because of how logging is set
 #    on the CLI of zebraidx.  It works this way.  The default is to not log much
-if ($verbose_logging) {
-    $zebraidx_log_opt = '';
+if ($verbose_logging >= 2) {
+    $zebraidx_log_opt = '-v none,fatal,warn,all';
 }
 
 my $use_tempdir = 0;
@@ -637,6 +637,7 @@ Parameters:
 
     -v                      increase the amount of logging.  Normally only 
                             warnings and errors from the indexing are shown.
+                            Use log level 2 (-v -v) to include all Zebra logs.
 
     -munge-config           Deprecated option to try
                             to fix Zebra config files.
