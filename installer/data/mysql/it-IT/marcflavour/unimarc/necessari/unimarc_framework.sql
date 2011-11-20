@@ -15,7 +15,7 @@ insert  into `biblio_framework`(`frameworkcode`,`frameworktext`) values ('PR','R
 /*Fields and subfield of standard Unimarc */
 
 /*Data for the table `marc_tag_structure` [Fields] */
---Inizia il framework Default
+-- Inizia il framework Default
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('000','Guida (Record label)','',0,1,'','');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('001','Identificatore del record','Identificatore del record',0,0,'','');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('005','Identificatore di versione','',0,0,'','');
@@ -181,8 +181,8 @@ insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatabl
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('802','Centro ISSN','',1,0,'','');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('830','Nota generale del catalogatore','',1,0,'','');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('856','Localizzazione e accessi elettronici','',1,0,'','');
----
---- Inizia il framework 'MN'
+--
+-- Inizia il framework 'MN'
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('000','Guida (Record label)','',0,1,'','MN');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('001','Identificatore del record','',0,1,'','MN');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('005','Identificatore di versione','',0,0,'','MN');
@@ -230,8 +230,8 @@ insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatabl
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('802','Centro ISSN','',1,0,'','MN');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('830','Nota generale del catalogatore','',1,0,'','MN');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('856','Localizzazione e accessi elettronici','',1,0,'','MN');
----
---- Inizia il framework 'PR'
+--
+-- Inizia il framework 'PR'
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('000','Guida (Record label)','',0,1,'','PR');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('001','Identificatore del record','',0,1,'','PR');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values ('005','Identificatore di versione','',0,0,'','PR');
@@ -1389,8 +1389,8 @@ insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('856','x','Nota non pubblica','',1,0,'',8,'','','',0,-5,'','','',NULL);
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('856','y','Metodo di accesso','',0,0,'',8,'','','',0,-5,'','','',NULL);
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('856','z','Nota pubblica','',1,0,'',8,'','','',0,-5,'','','',NULL);
----
---- Iizia la struttura di 'MN'
+--
+-- Iizia la struttura di 'MN'
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('000','@','Guida (Record label)','',0,1,'',0,'','','unimarc_leader.pl',NULL,0,'MN','',NULL,NULL);
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('001','@','Identificatore del record','',0,0,'biblio.biblionumber',-1,'','','',0,0,'MN',NULL,'','');
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('005','@','Identificatore di versione','',0,0,'',0,'','','marc21_field_005.pl',NULL,0,'MN','',NULL,NULL);
@@ -1720,7 +1720,7 @@ insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('856','x','Nota non pubblica','',1,0,'',8,'','','',NULL,-5,'MN','',NULL,NULL);
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('856','y','Metodo di accesso','',0,0,'',8,'','','',NULL,-5,'MN','',NULL,NULL);
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('856','z','Nota pubblica','',1,0,'',8,'','','',NULL,-5,'MN','',NULL,NULL);
----
+--
 -- Inizia il framework 'PR'
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('000','@','Guida (Record label)','',0,1,'',0,'','','unimarc_leader.pl',NULL,0,'PR','',NULL,NULL);
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('001','@','Identificatore del record','',0,0,'biblio.biblionumber',-1,'','','',0,0,'PR',NULL,'','');
@@ -2480,7 +2480,7 @@ insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatabl
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values
 ('995','Collocazione e informazioni sulla copia (Koha)','',1,0,'','');
 
---- MN
+-- MN
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values
 ('090','id koha','',0,0,'','MN');
 insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`authorised_value`,`frameworkcode`) values
@@ -2499,7 +2499,7 @@ insert  into `marc_tag_structure`(`tagfield`,`liblibrarian`,`libopac`,`repeatabl
 ('995','Collocazione e informazioni sulla copia (Koha)','',1,0,'','PR');
 
 
---- Sottcampi di Default
+-- Sottcampi di Default
 -- 090
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('090','a','valore id','valore id',0,0,'biblioitems.biblioitemnumber',9,'','','',0,-5,'',NULL,'','');
 -- 099
@@ -2519,7 +2519,7 @@ insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('942','n','Suppress in OPAC','Suppress in OPAC',0,0,'',9,'','','',0,-5,'',NULL,'','');
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('942','s','Serial record flag','Serial record',0,0,'biblio.serial',9,'','','',0,0,'',NULL,'','');
 
---995
+-- 995
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('995','0','Ritiro della copia','Ritiro della copia',0,0,'items.wthdrawn',10,'WITHDRAWN','','',0,0,'',NULL,'','0');
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('995','1','Codice di sistema (classificazione specifica o altro schema e edizione)','Codice di sistema (classificazione specifica o altro schema e edizione)',0,0,'',10,'','','',0,-5,'',NULL,'','');
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('995','2','Copia smarrita','Copia smarrita',0,0,'items.itemlost',10,'LOST','','',0,0,'',NULL,'','0');
@@ -2557,7 +2557,7 @@ insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('995','y','Codice dell\'ente destinatario superiore','',0,0,'',10,'','','',0,-5,'',NULL,'','');
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('995','z','Ente destinatario superiore, testo libero','',0,0,'',10,'','','',0,-5,'',NULL,'','');
 
---- Sottocampi di MN
+-- Sottocampi di MN
 -- 090
 insert  into `marc_subfield_structure`(`tagfield`,`tagsubfield`,`liblibrarian`,`libopac`,`repeatable`,`mandatory`,`kohafield`,`tab`,`authorised_value`,`authtypecode`,`value_builder`,`isurl`,`hidden`,`frameworkcode`,`seealso`,`link`,`defaultvalue`) values ('090','a','valore id','valore id',0,0,'biblioitems.biblioitemnumber',9,'','','',0,-5,'MN',NULL,'','');
 -- 099
