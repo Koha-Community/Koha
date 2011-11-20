@@ -1,4 +1,4 @@
-package C4::Cache;
+package Koha::Cache;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -19,15 +19,15 @@ package C4::Cache;
 
 =head1 NAME
 
-C4::Cache - Handling caching of html and Objects for Koha
+Koha::Cache - Handling caching of html and Objects for Koha
 
 =head1 SYNOPSIS
 
-  use C4::Cache (cache_type => $cache_type, %params );
+  use Koha::Cache (cache_type => $cache_type, %params );
 
 =head1 DESCRIPTION
 
-Base class for C4::Cache::X. Subclasses need to provide the following methods
+Base class for Koha::Cache::X. Subclasses need to provide the following methods
 
 B<_cache_handle ($params_hr)> - cache handle creator
 
@@ -49,19 +49,18 @@ use Carp;
 
 use base qw(Class::Accessor);
 
-use C4::Cache::Memcached;
+use Koha::Cache::Memcached;
 
 __PACKAGE__->mk_ro_accessors( qw( cache ) );
 
 sub new {
-    my $class = shift;                                                          
-    my %param = @_;                                                             
-    
-    my $cache_type = $param{cache_type} || 'memcached';
+    my $class = shift;
+    my $param = shift;
+    my $cache_type = $param->{cache_type} || 'memcached';
     my $subclass = __PACKAGE__."::".ucfirst($cache_type);
-    my $cache    = $subclass->_cache_handle(\%param)
+    my $cache    = $subclass->_cache_handle($param)
       or croak "Cannot create cache handle for '$cache_type'";
-    return bless $class->SUPER::new({cache => $cache}), $subclass;              
+    return bless $class->SUPER::new({cache => $cache}), $subclass;
 }
 
 =head2 EXPORT
@@ -70,7 +69,7 @@ None by default.
 
 =head1 SEE ALSO
 
-C4::Cache::Memcached
+Koha::Cache::Memcached
 
 =head1 AUTHOR
 

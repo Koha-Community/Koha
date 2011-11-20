@@ -9,6 +9,6 @@ use warnings;
 use Test::More tests => 1;
 
 BEGIN {
-        use_ok('C4::Cache::Memcached');
+        use_ok('Koha::Cache::Memcached');
 }
 

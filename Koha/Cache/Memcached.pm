@@ -1,4 +1,4 @@
-package C4::Cache::Memcached;
+package Koha::Cache::Memcached;
 
 # Copyright 2009 Chris Cormack and The Koha Dev Team
 #
@@ -23,14 +23,12 @@ use Carp;
 
 use Cache::Memcached;
 
-use base qw(C4::Cache);
+use base qw(Koha::Cache);
 
 sub _cache_handle {
     my $class  = shift;
     my $params = shift;
-
     my @servers = split /,/, $params->{'cache_servers'};
-
     return Cache::Memcached->new(
         servers   => \@servers,
         namespace => $params->{'namespace'} || 'KOHA',
@@ -40,6 +38,7 @@ sub _cache_handle {
 sub set_in_cache {
     my ( $self, $key, $value, $expiry ) = @_;
     croak "No key" unless $key;
+    $self->cache->set_debug;
 
     if ( defined $expiry ) {
         return $self->cache->set( $key, $value, $expiry );
@@ -67,10 +66,10 @@ sub flush_all {
 }
 
 1;
-__END__                                                                         
-                                                                                  
+__END__
+
 =head1 NAME
 
-C4::Cache::Memcached - memcached subclass of C4::Cache
+Koha::Cache::Memcached - memcached subclass of Koha::Cache
 
 =cut
