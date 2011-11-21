@@ -330,6 +330,7 @@ our $csv;       # the Text::CSV_XS object
 our $csv_fh;    # the filehandle to the CSV file.
 if ( defined $csvfilename ) {
     my $sep_char = C4::Context->preference('delimiter') || ',';
+    $sep_char = "\t" if ($sep_char eq 'tabulation');
     $csv = Text::CSV_XS->new( { binary => 1 , sep_char => $sep_char } );
     if ( $csvfilename eq '' ) {
         $csv_fh = *STDOUT;
