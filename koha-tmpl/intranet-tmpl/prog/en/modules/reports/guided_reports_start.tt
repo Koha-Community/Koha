@@ -138,6 +138,8 @@ canned reports and writing custom SQL reports.</p>
   <th>Notes</th>
   <th>Author</th>
   <th>Creation date</th>
+  <th>Public</th>
+  [% IF (usecache) %] <th>Cache expiry (seconds)</th> [% END %]
   <th>Saved results</th>
   <th>Saved SQL</th>
   <th>&nbsp;</th>
@@ -153,6 +155,12 @@ canned reports and writing custom SQL reports.</p>
 <td>[% savedreport.notes %]</td>
 <td>[% savedreport.borrowersurname %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname %][% END %] ([% savedreport.borrowernumber %])</td>
 <td>[% savedreport.date_created %]</td>
+[% IF (savedreport.public) %]
+<td>Yes</td>
+[% ELSE %]
+<td>No</td>
+[% END %]
+[% IF (usecache) %] <td>[% savedreport.cache_expiry %]</td> [% END %]
 <td>[% IF ( savedreport.date_run ) %]<a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% savedreport.id %]">[% savedreport.date_run %]</a>[% END %]
 </td>
     <td>
@@ -199,16 +207,36 @@ canned reports and writing custom SQL reports.</p>
 
 
 [% IF ( build1 ) %]
+[% IF ( cache_error) %]
+<div class="dialog alert">
+<b> Please choose a cache_expiry less than 30 days </b>
+</div>
+[% END %]
 <h1>Build a report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl">
 <fieldset class="rows">
-<legend>Step 1 of 6: Choose a module to report on</legend>
+<legend>Step 1 of 6: Choose a module to report on,[% IF (usecache) %] Set cache expiry, [% END %] and Choose report visibility </legend>
 <ol><li><label for="areas">Choose: </label><select name="areas" id="areas">
 [% FOREACH area IN areas %]
 <option value="[% area.id %]">[% area.name %]</option>
 [% END %]
-</select></li></ol>
-</fieldset>
+</select></li>
+[% IF (public) %]
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
+[% ELSE %]
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</public> </select></li>
+[% END %]
+[% IF (usecache) %] <li>
+<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
+<select id="cache_expiry_units" name="cache_expiry_units">
+<option value="seconds">Seconds (default)</option>
+<option value="minutes">Minutes</option>
+<option value="hours">Hours</option>
+<option value="days">Days</option>
+</select>
+</li>[% END %]
+</ol>
+<ofieldset>
 <fieldset class="action">
 <input type="hidden" name="phase" value="Report on this Area" />
 <input type="submit" name="submit" value="Next &gt;&gt;" />
@@ -222,6 +250,8 @@ canned reports and writing custom SQL reports.</p>
 <h1>Build A Report</h1>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="area" value="[% area %]" />
+<input type="hidden" name="public" value="[% public %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
 <fieldset class="rows"><legend>Step 2 of 6: Pick a report type</legend>
 <ol><li><label for="types">Choose: </label>
     <select id="types" name="types">
@@ -255,6 +285,8 @@ canned reports and writing custom SQL reports.</p>
 <form id="column_submit" action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
     <input type="hidden" name="area" value="[% area %]" />
     <input type="hidden" name="type" value="[% type %]" />
+    <input type="hidden" name="public" value="[% public %]" />
+    <input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
     <fieldset>
 <div class="yui-g">
 <div class="yui-u first">	<div style="float: left;"><select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width: 200px;height:300px;">
@@ -303,6 +335,8 @@ canned reports and writing custom SQL reports.</p>
     <input type="hidden" name="area" value="[% area %]" />
     <input type="hidden" name="type" value="[% type %]" />
     <input type="hidden" name="column" value="[% column %]" />
+    <input type="hidden" name="public" value="[% public %]" />
+    <input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
     <fieldset><legend>Step 4 of 6: Select criteria to limit on</legend>
     <table>
         [% FOREACH criteri IN criteria %]
@@ -399,6 +433,8 @@ canned reports and writing custom SQL reports.</p>
 <input type="hidden" name="column" value="[% column %]" />
 <input type="hidden" name="definition" value="[% definition %]" />
 <input type="hidden" name="criteria" value="[% criteriastring %]" />
+<input type="hidden" name="public" value="[% public %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
 <fieldset><table>
 [% FOREACH total_b IN total_by %]
 <tr><td><input type="checkbox" name="total_by" id="[% total_b.name %]" value="[% total_b.name %]" /> <label for="[% total_b.name %]">[% total_b.name %]</label></td>
@@ -429,6 +465,8 @@ canned reports and writing custom SQL reports.</p>
 <input type="hidden" name="criteria" value="[% criteriastring %]" />
 <input type="hidden" name="definition" value="[% definition %]" />
 <input type="hidden" name="totals" value="[% totals %]" />
+<input type="hidden" name="public" value="[% public %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
 <fieldset><table>[% FOREACH order_b IN order_by %]
 <tr><td><input type="checkbox" id="[% order_b.name %]" name="order_by" value="[% order_b.name %]" /> <label for="[% order_b.name %]">[% order_b.name %]</label></td><td>
 <select name="[% order_b.name %]_ovalue">
@@ -459,6 +497,8 @@ canned reports and writing custom SQL reports.</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="sql" value="[% sql %]" />
 <input type="hidden" name="type" value="[% type %]" />
+<input type="hidden" name="public" value="[% public %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
 <p>You will need to save the report before you can execute it</p>
 <fieldset class="action"><input type="hidden" name="phase" value="Save" />  
 <input type="submit" name="submit" value="Save" />  </fieldset>
@@ -469,6 +509,8 @@ canned reports and writing custom SQL reports.</p>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
 <input type="hidden" name="sql" value="[% sql |html %]" />
 <input type="hidden" name="type" value="[% type %]" />
+<input type="hidden" name="public" value="[% public %]" />
+<input type="hidden" name="cache_expiry" value="[% cache_expiry %]" />
 <fieldset class="rows">
 <legend>Save your custom report</legend>
 <ol>
@@ -545,6 +587,20 @@ canned reports and writing custom SQL reports.</p>
         [% IF ( reportname ) %]<input type="text" id="reportname" name="reportname" value="[% reportname %]" />
         [% ELSE %]<input type="text" id="reportname" name="reportname" />[% END %] 
     </li>
+[% IF (public) %]
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
+[% ELSE %]
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selected">No (default)</option> <option value="1">Yes</public> </select></li>
+[% END %]
+[% IF (usecache) %] <li>
+<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
+<select id="cache_expiry_units" name="cache_expiry_units">
+<option value="seconds" selected="selected">Seconds (default)</option>
+<option value="minutes">Minutes</option>
+<option value="hours">Hours</option>
+<option value="days">Days</option>
+</select>
+</li>[% END %]
     <li><label for="notes">Notes:</label> <textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
     <li><label for="types">Type:</label>
         <select id="types" name="types">
@@ -622,6 +678,20 @@ Sub report:<select name="subreport">
 <legend>Edit SQL report</legend>
 <ol>
 <li><label for="reportname">Report name:</label><input type="text" id="reportname" name="reportname" value="[% reportname %]" size="50" /></li>
+[% IF (public) %]
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0">No (default)</option> <option value="1" selected="selected">Yes</public> </select></li>
+[% ELSE %]
+  <li><label for="public">Report is public:</label><select id="public" name="public"> <option value="0" selected="selelcted">No (default)</option> <option value="1">Yes</public> </select></li>
+[% END %]
+[% IF (usecache) %] <li>
+<label for="cache_expiry">Cache expiry:</label><input type="text" id="cache_expiry" name="cache_expiry" value="[% cache_expiry %]"></input>
+<select id="cache_expiry_units" name="cache_expiry_units">
+<option value="seconds">Seconds (default)</option>
+<option value="minutes">Minutes</option>
+<option value="hours">Hours</option>
+<option value="days">Days</option>
+</select>
+</li>[% END %]
 <li><label for="notes">Notes:</label><textarea id="notes" name="notes" cols="50" rows="2">[% notes %]</textarea></li>
 <li><textarea id="sql" name="sql" rows="10" cols="60">[% sql %]</textarea></li>
 </ol>
@@ -659,6 +729,7 @@ Sub report:<select name="subreport">
     <br />Use of this keyword is not allowed in Koha reports due to security and data integrity risks. Only SELECT queries are allowed.
     <br />Please return to the &quot;Saved Reports&quot; screen and delete this report or retry creating a new one.
     [% ELSIF ( error.queryerr ) %]The database returned the following error: <br />[% error.queryerr %]<br />Please check the log for further details.
+    [% ELSIF ( error.cache_expiry ) %]Please select a cache expiry less than 30 days.
     [% ELSE %]
     [% END %]
 [% END %]

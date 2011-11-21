@@ -40,6 +40,7 @@ Script to control the guided report creation
 =cut
 
 my $input = new CGI;
+my $usecache = C4::Context->ismemcached;
 
 my $phase = $input->param('phase');
 my $flagsrequired;
@@ -84,7 +85,7 @@ if ( !$phase ) {
 elsif ( $phase eq 'Build new' ) {
     # build a new report
     $template->param( 'build1' => 1 );
-    $template->param( 'areas' => get_report_areas() );
+    $template->param( 'areas' => get_report_areas(), 'usecache' => $usecache, 'cache_expiry' => 300, 'public' => '0' );
 }
 elsif ( $phase eq 'Use saved' ) {
     # use a saved report
@@ -92,6 +93,7 @@ elsif ( $phase eq 'Use saved' ) {
     $template->param(
         'saved1' => 1,
         'savedreports' => get_saved_reports($filter),
+        'usecache' => $usecache,
     );
     if ($filter) {
         while ( my ($k, $v) = each %$filter ) {
@@ -125,12 +127,15 @@ elsif ( $phase eq 'Show SQL'){
 elsif ( $phase eq 'Edit SQL'){
 	
     my $id = $input->param('reports');
-    my ($sql,$type,$reportname,$notes) = get_saved_report($id);
+    my ($sql,$type,$reportname,$notes, $cache_expiry, $public) = get_saved_report($id);
     $template->param(
 	    'sql'        => $sql,
 	    'reportname' => $reportname,
         'notes'      => $notes,
         'id'         => $id,
+        'cache_expiry' => $cache_expiry,
+        'public' => $public,
+        'usecache' => $usecache,
 	    'editsql'    => 1,
     );
 }
@@ -140,7 +145,27 @@ elsif ( $phase eq 'Update SQL'){
     my $sql        = $input->param('sql');
     my $reportname = $input->param('reportname');
     my $notes      = $input->param('notes');
+    my $cache_expiry = $input->param('cache_expiry');
+    my $cache_expiry_units = $input->param('cache_expiry_units');
+    my $public = $input->param('public');
+
     my @errors;
+
+    # if we have the units, then we came from creating a report from SQL and thus need to handle converting units
+    if( $cache_expiry_units ){
+      if( $cache_expiry_units eq "minutes" ){
+        $cache_expiry *= 60;
+      } elsif( $cache_expiry_units eq "hours" ){
+        $cache_expiry *= 3600; # 60 * 60
+      } elsif( $cache_expiry_units eq "days" ){
+        $cache_expiry *= 86400; # 60 * 60 * 24
+      }
+    }
+    # check $cache_expiry isnt too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
+    if( $cache_expiry >= 2592000 ){
+      push @errors, {cache_expiry => $cache_expiry};
+    }
+
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         push @errors, {sqlerr => $1};
     }
@@ -154,7 +179,7 @@ elsif ( $phase eq 'Update SQL'){
         );
     }
     else {
-        update_sql( $id, $sql, $reportname, $notes );
+        update_sql( $id, $sql, $reportname, $notes, $cache_expiry, $public );
         $template->param(
             'save_successful'       => 1,
             'reportname'            => $reportname,
@@ -177,17 +202,41 @@ elsif ($phase eq 'retrieve results') {
 }
 
 elsif ( $phase eq 'Report on this Area' ) {
+    my $cache_expiry_units = $input->param('cache_expiry_units'),
+    my $cache_expiry = $input->param('cache_expiry');
 
-    # they have choosen a new report and the area to report on
-    $template->param(
-        'build2' => 1,
-        'area'   => $input->param('areas'),
-        'types'  => get_report_types(),
-    );
+    # we need to handle converting units
+    if( $cache_expiry_units eq "minutes" ){
+      $cache_expiry *= 60;
+    } elsif( $cache_expiry_units eq "hours" ){
+      $cache_expiry *= 3600; # 60 * 60
+    } elsif( $cache_expiry_units eq "days" ){
+      $cache_expiry *= 86400; # 60 * 60 * 24
+    }
+    # check $cache_expiry isnt too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
+    if( $cache_expiry >= 2592000 ){ # oops, over the limit of 30 days
+      # report error to user
+      $template->param(
+        'cache_error' => 1,
+        'build1' => 1,
+        'areas'   => get_report_areas(),
+        'cache_expiry' => $cache_expiry,
+        'usecache' => $usecache,
+        'public' => $input->param('public'),
+      );
+    } else {
+      # they have choosen a new report and the area to report on
+      $template->param(
+          'build2' => 1,
+          'area'   => $input->param('areas'),
+          'types'  => get_report_types(),
+          'cache_expiry' => $cache_expiry,
+          'public' => $input->param('public'),
+      );
+    }
 }
 
 elsif ( $phase eq 'Choose this type' ) {
-
     # they have chosen type and area
     # get area and type and pass them to the template
     my $area = $input->param('area');
@@ -197,11 +246,12 @@ elsif ( $phase eq 'Choose this type' ) {
         'area'   => $area,
         'type'   => $type,
         columns  => get_columns($area,$input),
+        'cache_expiry' => $input->param('cache_expiry'),
+        'public' => $input->param('public'),
     );
 }
 
 elsif ( $phase eq 'Choose these columns' ) {
-
     # we now know type, area, and columns
     # next step is the constraints
     my $area    = $input->param('area');
@@ -215,6 +265,9 @@ elsif ( $phase eq 'Choose these columns' ) {
         'column' => $column,
         definitions => get_from_dictionary($area),
         criteria    => get_criteria($area,$input),
+        'cache_expiry' => $input->param('cache_expiry'),
+        'cache_expiry_units' => $input->param('cache_expiry_units'),
+        'public' => $input->param('public'),
     );
 }
 
@@ -259,7 +312,6 @@ elsif ( $phase eq 'Choose these criteria' ) {
         }
 	}
     }
-
     $template->param(
         'build5'         => 1,
         'area'           => $area,
@@ -267,6 +319,9 @@ elsif ( $phase eq 'Choose these criteria' ) {
         'column'         => $column,
         'definition'     => $definition,
         'criteriastring' => $query_criteria,
+        'cache_expiry' => $input->param('cache_expiry'),
+        'cache_expiry_units' => $input->param('cache_expiry_units'),
+        'public' => $input->param('public'),
     );
 
     # get columns
@@ -307,6 +362,8 @@ elsif ( $phase eq 'Choose These Operations' ) {
         'criteriastring' => $criteria,
         'totals'         => $totals,
         'definition'     => $definition,
+        'cache_expiry' => $input->param('cache_expiry'),
+        'public' => $input->param('public'),
     );
 
     # get columns
@@ -356,7 +413,9 @@ elsif ( $phase eq 'Build Report' ) {
     $template->param(
         'showreport' => 1,
         'sql'        => $sql,
-        'type'       => $type
+        'type'       => $type,
+        'cache_expiry' => $input->param('cache_expiry'),
+        'public' => $input->param('public'),
     );
 }
 
@@ -367,7 +426,9 @@ elsif ( $phase eq 'Save' ) {
     $template->param(
         'save' => 1,
         'sql'  => $sql,
-        'type' => $type
+        'type' => $type,
+        'cache_expiry' => $input->param('cache_expiry'),
+        'public' => $input->param('public'),
     );
 }
 
@@ -377,6 +438,26 @@ elsif ( $phase eq 'Save Report' ) {
     my $name = $input->param('reportname');
     my $type = $input->param('types');
     my $notes = $input->param('notes');
+    my $cache_expiry = $input->param('cache_expiry');
+    my $cache_expiry_units = $input->param('cache_expiry_units');
+    my $public = $input->param('public');
+
+
+    # if we have the units, then we came from creating a report from SQL and thus need to handle converting units
+    if( $cache_expiry_units ){
+      if( $cache_expiry_units eq "minutes" ){
+        $cache_expiry *= 60;
+      } elsif( $cache_expiry_units eq "hours" ){
+        $cache_expiry *= 3600; # 60 * 60
+      } elsif( $cache_expiry_units eq "days" ){
+        $cache_expiry *= 86400; # 60 * 60 * 24
+      }
+    }
+    # check $cache_expiry isnt too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
+    if( $cache_expiry >= 2592000 ){
+      push @errors, {cache_expiry => $cache_expiry};
+    }
+    ## FIXME this is AFTER entering a name to save the report under
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         push @errors, {sqlerr => $1};
     }
@@ -390,10 +471,12 @@ elsif ( $phase eq 'Save Report' ) {
             'reportname'=> $name,
             'type'      => $type,
             'notes'     => $notes,
+            'cache_expiry' => $cache_expiry,
+            'public'    => $public,
         );
     }
     else {
-        my $id = save_report( $borrowernumber, $sql, $name, $type, $notes );
+        my $id = save_report( $borrowernumber, $sql, $name, $type, $notes, $cache_expiry, $public );
         $template->param(
             'save_successful'       => 1,
             'reportname'            => $name,
@@ -602,7 +685,7 @@ elsif ($phase eq 'Create report from SQL') {
             'notes'         => $input->param('notes'),
         );
     }
-	$template->param('create' => 1);
+        $template->param('create' => 1, 'public' => '0', 'cache_expiry' => 300, 'usecache' => $usecache);
 }
 
 elsif ($phase eq 'Create Compound Report'){

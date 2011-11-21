@@ -1,0 +1,79 @@
+#!/usr/bin/perl
+
+# Copyright 2011 Chris Cormack <chris@bigballofwax.co.nz>
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 2 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along with
+# Koha; if not, write to the Free Software Foundation, Inc., 59 Temple Place,
+# Suite 330, Boston, MA  02111-1307 USA
+#
+
+use strict;
+use warnings;
+
+use C4::Auth;
+use C4::Reports::Guided;
+use JSON;
+use CGI;
+
+my $query  = CGI->new();
+my $report = $query->param('id');
+
+my $cache;
+my $usecache = C4::Context->preference('usecache');
+
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {
+        template_name   => "intranet-main.tmpl",
+        query           => $query,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { catalogue => 1, },
+    }
+);
+
+if ($usecache) {
+    require Koha::Cache;
+    Koha::Cache->import();
+    $cache = Koha::Cache->new(
+        {
+            'cache_type'    => 'memcached',
+            'cache_servers' => $ENV{'MEMCACHED_SERVERS'}
+        }
+    );
+    my $namespace = $ENV{'MEMCACHED_NAMESPACE'} || 'koha';
+    my $page = $cache->get_from_cache("$namespace:intranet:report:$report");
+    if ($page) {
+        print $query->header;
+        print $page;
+        exit;
+    }
+}
+
+print $query->header;
+
+# $public isnt used for intranet
+my ( $sql, $type, $name, $notes, $cache_expiry, $public ) =
+  get_saved_report($report);
+my $offset = 0;
+my $limit  = 10;
+my ( $sth, $errors ) = execute_query( $sql, $offset, $limit );
+my $lines     = $sth->fetchall_arrayref;
+my $json_text = to_json($lines);
+print $json_text;
+
+if ($usecache) {
+    my $namespace = $ENV{'MEMCACHED_NAMESPACE'} || 'koha';
+    $cache->set_in_cache( "$namespace:intranet:report:$report",
+        $json_text, $cache_expiry );
+}

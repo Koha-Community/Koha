@@ -1714,6 +1714,8 @@ CREATE TABLE saved_sql (
    `report_name` varchar(255) default NULL,
    `type` varchar(255) default NULL,
    `notes` text,
+   `cache_expiry` int NOT NULL default 300,
+   `public` boolean NOT NULL default FALSE,
    PRIMARY KEY  (`id`),
    KEY boridx (`borrowernumber`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;

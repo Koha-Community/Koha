@@ -472,12 +472,12 @@ Returns id of the newly created report
 =cut
 
 sub save_report {
-    my ( $borrowernumber, $sql, $name, $type, $notes ) = @_;
+    my ( $borrowernumber, $sql, $name, $type, $notes, $cache_expiry, $public ) = @_;
     my $dbh = C4::Context->dbh();
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
     my $query =
-"INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,type,notes)  VALUES (?,now(),now(),?,?,?,?)";
-    $dbh->do( $query, undef, $borrowernumber, $sql, $name, $type, $notes );
+"INSERT INTO saved_sql (borrowernumber,date_created,last_modified,savedsql,report_name,type,notes,cache_expiry, public)  VALUES (?,now(),now(),?,?,?,?,?,?)";
+    $dbh->do( $query, undef, $borrowernumber, $sql, $name, $type, $notes, $cache_expiry, $public );
     my $id = $dbh->selectrow_array("SELECT max(id) FROM saved_sql WHERE borrowernumber=? AND report_name=?", undef,
                                    $borrowernumber, $name);
     return $id;
@@ -488,11 +488,19 @@ sub update_sql {
     my $sql = shift;
     my $reportname = shift;
     my $notes = shift;
+    my $cache_expiry = shift;
+    my $public = shift;
+
+    # not entirely a magic number, Cache::Memcached::Set assumed any expiry >= (60*60*24*30) is an absolute unix timestamp (rather than relative seconds)
+    if( $cache_expiry >= 2592000 ){
+      die "Please specify a cache expiry less than 30 days\n";
+    }
+
     my $dbh = C4::Context->dbh();
     $sql =~ s/(\s*\;\s*)$//; # removes trailing whitespace and /;/
-    my $query = "UPDATE saved_sql SET savedsql = ?, last_modified = now(), report_name = ?, notes = ? WHERE id = ? ";
+    my $query = "UPDATE saved_sql SET savedsql = ?, last_modified = now(), report_name = ?, notes = ?, cache_expiry = ?, public = ? WHERE id = ? ";
     my $sth = $dbh->prepare($query);
-    $sth->execute( $sql, $reportname, $notes, $id );
+    $sth->execute( $sql, $reportname, $notes, $cache_expiry, $public, $id );
     $sth->finish();
 }
 
@@ -559,7 +567,8 @@ sub get_saved_reports {
     my $query = "SELECT saved_sql.id, report_id, report,
                         date_run, date_created, last_modified, savedsql, last_run,
                         report_name, type, notes,
-                        borrowernumber, surname as borrowersurname, firstname as borrowerfirstname
+                        borrowernumber, surname as borrowersurname, firstname as borrowerfirstname,
+                        cache_expiry, public
                  FROM saved_sql 
                  LEFT JOIN saved_reports ON saved_reports.report_id = saved_sql.id
                  LEFT OUTER JOIN borrowers USING (borrowernumber)";
@@ -603,7 +612,7 @@ sub get_saved_report {
     my $sth   = $dbh->prepare($query);
     $sth->execute($id);
     my $data = $sth->fetchrow_hashref();
-    return ( $data->{'savedsql'}, $data->{'type'}, $data->{'report_name'}, $data->{'notes'} );
+    return ( $data->{'savedsql'}, $data->{'type'}, $data->{'report_name'}, $data->{'notes'}, $data->{'cache_expiry'}, $data->{'public'} );
 }
 
 =item create_compound($masterID,$subreportID)

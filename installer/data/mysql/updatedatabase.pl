@@ -5219,6 +5219,19 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.09.00.XXX";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE saved_sql
+        ADD (
+            cache_expiry INT NOT NULL DEFAULT 300,
+            public BOOLEAN NOT NULL DEFAULT FALSE
+        );
+    ");
+    print "Upgrade to $DBversion done (Added cache_expiry and public fields in
+saved_reports table.)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 TableExists($table)
