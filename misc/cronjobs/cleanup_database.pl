@@ -20,8 +20,11 @@
 use strict;
 use warnings;
 
-BEGIN {
+use constant DEFAULT_ZEBRAQ_PURGEDAYS => 30;
+use constant DEFAULT_IMPORT_PURGEDAYS => 60;
+use constant DEFAULT_LOGS_PURGEDAYS => 180;
 
+BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
@@ -31,14 +34,11 @@ BEGIN {
 use C4::Context;
 use C4::Dates;
 
-#use C4::Debug;
-#use C4::Letters;
-#use File::Spec;
 use Getopt::Long;
 
 sub usage {
     print STDERR <<USAGE;
-Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged]
+Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueue DAYS] [-m|--mail] [--merged] [--import DAYS] [--logs DAYS]
 
    -h --help          prints this help message, and exits, ignoring all
                       other options
@@ -47,15 +47,19 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
    --sessdays DAYS    purge only sessions older than DAYS days.
    -v --verbose       will cause the script to give you a bit more information
                       about the run.
-   --zebraqueue DAYS  purge completed entries from the zebraqueue from 
-                      more than DAYS days ago.
+   --zebraqueue DAYS  purge completed zebraqueue entries older than DAYS days.
+                      Defaults to 30 days if no days specified.
    -m --mail          purge the mail queue. 
    --merged           purged completed entries from need_merge_authorities.
+   --import DAYS      purge records from import tables older than DAYS days.
+                      Defaults to 60 days if no days specified.
+   --logs DAYS        purge entries from action_logs older than DAYS days.
+                      Defaults to 180 days if no days specified.
 USAGE
     exit $_[0];
 }
 
-my ( $help, $sessions, $sess_days, $verbose, $zebraqueue_days, $mail, $purge_merged);
+my ( $help, $sessions, $sess_days, $verbose, $zebraqueue_days, $mail, $purge_merged, $pImport, $pLogs);
 
 GetOptions(
     'h|help'       => \$help,
@@ -65,14 +69,22 @@ GetOptions(
     'm|mail'       => \$mail,
     'zebraqueue:i' => \$zebraqueue_days,
     'merged'       => \$purge_merged,
+    'import:i'     => \$pImport,
+    'logs:i'       => \$pLogs,
 ) || usage(1);
+
 $sessions=1 if $sess_days && $sess_days>0;
+# if --import, --logs or --zebraqueue were passed without number of days,
+# use defaults
+$pImport= DEFAULT_IMPORT_PURGEDAYS if defined($pImport) && $pImport==0;
+$pLogs= DEFAULT_LOGS_PURGEDAYS if defined($pLogs) && $pLogs==0;
+$zebraqueue_days= DEFAULT_ZEBRAQ_PURGEDAYS if defined($zebraqueue_days) && $zebraqueue_days==0;
 
 if ($help) {
     usage(0);
 }
 
-if ( !( $sessions || $zebraqueue_days || $mail || $purge_merged) ) {
+if ( !( $sessions || $zebraqueue_days || $mail || $purge_merged || $pImport || $pLogs) ) {
     print "You did not specify any cleanup work for the script to do.\n\n";
     usage(1);
 }
@@ -145,6 +157,19 @@ if($purge_merged) {
     print "Done with purging need_merge_authorities.\n" if $verbose;
 }
 
+if($pImport) {
+    print "Purging records from import tables.\n" if $verbose;
+    PurgeImportTables();
+    print "Done with purging import tables.\n" if $verbose;
+}
+
+if($pLogs) {
+    print "Purging records from action_logs.\n" if $verbose;
+    $sth = $dbh->prepare("DELETE FROM action_logs WHERE timestamp < date_sub(curdate(), interval ? DAY)");
+    $sth->execute($pLogs) or die $dbh->errstr;
+    print "Done with purging action_logs.\n" if $verbose;
+}
+
 exit(0);
 
 sub RemoveOldSessions {
@@ -172,4 +197,23 @@ sub RemoveOldSessions {
     if ($verbose) {
         print "$count sessions were deleted.\n";
     }
+}
+
+sub PurgeImportTables {
+    #First purge import_records
+    #Delete cascades to import_biblios, import_items and import_record_matches
+    $sth = $dbh->prepare("DELETE FROM import_records WHERE upload_timestamp < date_sub(curdate(), interval ? DAY)");
+    $sth->execute($pImport) or die $dbh->errstr;
+
+    # Now purge import_batches
+    # Timestamp cannot be used here without care, because records are added
+    # continuously to batches without updating timestamp (z3950 search).
+    # So we only delete older empty batches.
+    # This delete will therefore not have a cascading effect.
+    $sth = $dbh->prepare("DELETE ba
+ FROM import_batches ba
+ LEFT JOIN import_records re ON re.import_batch_id=ba.import_batch_id
+ WHERE re.import_record_id IS NULL AND
+ ba.upload_timestamp < date_sub(curdate(), interval ? DAY)");
+    $sth->execute($pImport) or die $dbh->errstr;
 }
