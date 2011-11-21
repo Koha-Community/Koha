@@ -21,6 +21,7 @@ use strict;
 use warnings;
 
 use constant DEFAULT_ZEBRAQ_PURGEDAYS => 30;
+use constant DEFAULT_MAIL_PURGEDAYS => 30;
 use constant DEFAULT_IMPORT_PURGEDAYS => 60;
 use constant DEFAULT_LOGS_PURGEDAYS => 180;
 
@@ -49,7 +50,8 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                       about the run.
    --zebraqueue DAYS  purge completed zebraqueue entries older than DAYS days.
                       Defaults to 30 days if no days specified.
-   -m --mail          purge the mail queue. 
+   -m --mail DAYS     purge items from the mail queue that are older than DAYS days.
+                      Defaults to 30 days if no days specified.
    --merged           purged completed entries from need_merge_authorities.
    --import DAYS      purge records from import tables older than DAYS days.
                       Defaults to 60 days if no days specified.
@@ -66,7 +68,7 @@ GetOptions(
     'sessions'     => \$sessions,
     'sessdays:i'   => \$sess_days,
     'v|verbose'    => \$verbose,
-    'm|mail'       => \$mail,
+    'm|mail:i'       => \$mail,
     'zebraqueue:i' => \$zebraqueue_days,
     'merged'       => \$purge_merged,
     'import:i'     => \$pImport,
@@ -79,6 +81,7 @@ $sessions=1 if $sess_days && $sess_days>0;
 $pImport= DEFAULT_IMPORT_PURGEDAYS if defined($pImport) && $pImport==0;
 $pLogs= DEFAULT_LOGS_PURGEDAYS if defined($pLogs) && $pLogs==0;
 $zebraqueue_days= DEFAULT_ZEBRAQ_PURGEDAYS if defined($zebraqueue_days) && $zebraqueue_days==0;
+$mail= DEFAULT_MAIL_PURGEDAYS if defined($mail) && $mail==0;
 
 if ($help) {
     usage(0);
@@ -139,15 +142,14 @@ if ($zebraqueue_days) {
 }
 
 if ($mail) {
-    if ($verbose) {
-        $sth = $dbh->prepare("SELECT COUNT(*) FROM message_queue");
-        $sth->execute() or die $dbh->errstr;
-        my @count_arr = $sth->fetchrow_array;
-        print "Deleting $count_arr[0] entries from the mail queue.\n";
-    }
-    $sth = $dbh->prepare("TRUNCATE message_queue");
-    $sth->execute() or $dbh->errstr;
-    print "Done with purging the mail queue.\n" if ($verbose);
+    print "Mail queue purge triggered for $mail days.\n" if ($verbose);
+
+    $sth = $dbh->prepare("DELETE FROM message_queue WHERE time_queued < date_sub(curdate(), interval ? day)");
+    $sth->execute($mail) or die $dbh->errstr;
+    my $count = $sth->rows;
+    $sth->finish;
+
+    print "$count messages were deleted from the mail queue.\nDone with message_queue purge.\n" if ($verbose);
 }
 
 if($purge_merged) {
