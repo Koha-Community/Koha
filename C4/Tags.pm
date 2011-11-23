@@ -40,6 +40,7 @@ BEGIN {
 		&whitelist
 		&is_approved
 		&approval_counts
+		&get_count_by_tag_status
 		&get_filters
 	);
 	# %EXPORT_TAGS = ();
@@ -90,6 +91,24 @@ sub approval_counts () {
 	$result->{approved_total} = $result->{approved_count} + $result->{rejected_count} + $result->{unapproved_count};
 	$debug and warn "counts returned: " . Dumper $result;
 	return $result;
+}
+
+=head2 get_count_by_tag_status
+
+  get_count_by_tag_status($status);
+
+Takes a status and gets a count of tags with that status
+
+=cut
+
+sub get_count_by_tag_status  {
+    my ($status) = @_;
+    my $dbh            = C4::Context->dbh;
+    my $query          =
+      "SELECT count(*) FROM tags_approval WHERE approved=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( $status );
+  return $sth->fetchrow;
 }
 
 sub remove_tag ($;$) {

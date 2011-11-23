@@ -21,6 +21,8 @@ use warnings;
 use CGI;
 use C4::Auth;
 use C4::Output;
+use C4::Review qw/numberofreviews/;
+use C4::Tags qw/get_count_by_tag_status/;
 
 my $query = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -32,6 +34,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         flagsrequired   => { tools => '*' },
         debug           => 1,
     }
+);
+
+my $pendingcomments = numberofreviews(0);
+my $pendingtags = get_count_by_tag_status(0);
+
+$template->param(
+    pendingcomments => $pendingcomments,
+    pendingtags     => $pendingtags
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;

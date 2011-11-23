@@ -78,7 +78,7 @@ if ( C4::Context->preference('ShowReviewer') and C4::Context->preference('ShowRe
 
 my $reviews = getallreviews(1,$offset,$results_per_page);
 my $marcflavour      = C4::Context->preference("marcflavour");
-my $hits = numberofreviews();
+my $hits = numberofreviews(1);
 my $i = 0;
 my $latest_comment_date;
 for my $result (@$reviews){
