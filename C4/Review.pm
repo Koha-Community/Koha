@@ -91,11 +91,12 @@ sub updatereview {
 }
 
 sub numberofreviews {
+    my ($status) = @_;
     my $dbh            = C4::Context->dbh;
     my $query          =
       "SELECT count(*) FROM reviews WHERE approved=?";
     my $sth = $dbh->prepare($query);
-    $sth->execute( 1 );
+    $sth->execute( $status );
   return $sth->fetchrow;
 }
 

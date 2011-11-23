@@ -16,8 +16,8 @@
 <h3>Patrons and circulation</h3>
 <dl>
     [% IF ( CAN_user_tools_moderate_comments ) %]
-    <dt><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a></dt>
-	<dd>Moderate patron comments</dd>
+    <dt><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a> [% IF ( pendingcomments ) %]<span class="holdcount"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments %]</a></span>[% END %]</dt>
+	<dd>Moderate patron comments. </dd>
     [% END %]
     
     [% IF ( CAN_user_tools_import_patrons ) %]
@@ -46,7 +46,7 @@
     [% END %]
 
     [% IF ( CAN_user_tools_moderate_tags ) %]
-    <dt><a href="/cgi-bin/koha/tags/review.pl">Tags</a></dt>
+    <dt><a href="/cgi-bin/koha/tags/review.pl">Tags</a> [% IF ( pendingtags ) %]<span class="holdcount"><a href="/cgi-bin/koha/tags/review.pl">[% pendingtags %]</a></span>[% END %]</dt>
 	<dd>Moderate patron tags</dd>
     [% END %]
 
