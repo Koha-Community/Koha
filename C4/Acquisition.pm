@@ -720,10 +720,7 @@ sub GetPendingOrders {
         LEFT JOIN biblioitems ON biblioitems.biblionumber=biblio.biblionumber
         WHERE booksellerid=?
             AND (quantity > quantityreceived OR quantityreceived is NULL)
-            AND datecancellationprinted IS NULL
-            AND (to_days(now())-to_days(closedate) < 180 OR closedate IS NULL)
-    ";
-    ## FIXME  Why 180 days ???
+            AND datecancellationprinted IS NULL";
     my @query_params = ( $supplierid );
     my $userenv = C4::Context->userenv;
     if ( C4::Context->preference("IndependantBranches") ) {
