@@ -1,0 +1,60 @@
+Configuracion de Post Instalacion 
+==================================
+
+Usted deberia considerar hacer lo siguiente despues de instalar este paquete:
+
+* Instalar mysql-server, para una base de datos local.
+
+* Alternativamente, puede configurar una conexion remota a un servidor MySQL:
+  - rm /etc/mysql/koha-common.cnf
+  - $SUEDITOR /etc/mysql/koha-common.cnf
+
+        [client]
+        host = algun.otro.host
+        user = mysqlusername
+        password = mysqlpassword
+        
+* Habilitar la re-escritura del modulo: a2enmod rewrite
+
+* Escuchar en el puerto 8080: $SUEDITOR /etc/apache2/ports.conf
+
+* Alternativamente, puede configurar koha-create, usando /etc/koha/koha-sites.conf
+  (ver /usr/sbin/koha-create para establecer las variables ).
+  
+* Despues de esto, usted puede crear una nueva instancia de Koha:
+  - koha-create --create-db name
+
+
+Diseño del sistema de archivo de Koha en Debian 
+================================================
+
+El paquete Debian de Koha pone archivos en los siguientes lugares:
+
+* /etc/koha -- archivos de configuración del sistema 
+* /etc/cron.hourly/koha-common -- cron job
+* /etc/cron.daily/koha-common -- cron job
+* /etc/cron.d/koha-common -- cron job
+* /usr/share/koha -- archivos compartidos (plantillas HTML, codigo Perl, etc)
+
+Cada instancia de Koha tiene archivos en los siguientes lugares:
+
+* /etc/koha/sites/$name -- archivos de configuración 
+* /etc/apache2/sites-available/$name -- Archivo configuración Apache 
+* /var/lib/koha/$name -- Bases de datos Zebra 
+* /var/log/koha/$name -- archivos log (Apache, Zebra)
+* /var/lock/koha/$name -- run-time lock files
+* /var/run/koha/$name -- run-time sockets etc
+* /var/spool/koha/$name -- dumps bases de datos
+
+
+Koha y MySQL
+==============
+
+El script de post instalacion de Koha-common crea el archivo /etc/mysql/koha-common.cnf,
+y todos los scripts usan esté para acceder a las bases de datos MySQL. Por defecto,
+es un enlace simbólico que apunta a debian.cnf, y sólo trabaja en el servidor local.
+Si usted lo desea, puede crear un archivo /etc/mysql/koha-common.cnf en lugar
+del enlace simbólico, y que apunte a un servidor remoto. En la actualidad no existe
+ninguna herramienta para ayudarle a hacer eso, pero debería ser bastante sencillo.
+
+
