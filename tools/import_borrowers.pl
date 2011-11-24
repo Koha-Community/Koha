@@ -62,7 +62,7 @@ my @columnkeys = C4::Members->columns;
 if ($extended) {
     push @columnkeys, 'patron_attributes';
 }
-my $columnkeystpl = [ map { {'key' => $_} }  grep {$_ ne 'borrowernumber' && $_ ne 'cardnumber'} @columnkeys ];  # ref. to array of hashrefs.
+my $columnkeystpl = [ map { {'key' => $_} }  grep {$_ ne 'borrowernumber' } @columnkeys ];  # ref. to array of hashrefs.
 
 my $input = CGI->new();
 our $csv  = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
