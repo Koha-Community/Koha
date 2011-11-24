@@ -37,6 +37,10 @@ script to administer the budget periods table
 	- we show the record having primkey=$primkey and ask for deletion validation form
  if $op=delete_confirmed
 	- we delete the record having primkey=$primkey
+ if $op=duplicate_form
+  - displays the duplication of budget period form (allowing specification of dates)
+ if $op=duplicate_budget
+  - we perform the duplication of the budget period specified as budget_period_id
 
 =cut
 
@@ -54,6 +58,7 @@ use C4::Output;
 use C4::Acquisition;
 use C4::Budgets;
 use C4::Debug;
+use C4::SQLHelper;
 
 my $dbh = C4::Context->dbh;
 
@@ -167,6 +172,74 @@ elsif ( $op eq 'delete_confirmed' ) {
     my $data = GetBudgetPeriod( $budget_period_id);
     DelBudgetPeriod($budget_period_id);
 	$op='else';
+}
+
+# display the form for duplicating
+elsif ( $op eq 'duplicate_form'){
+    $template->param(
+        DHTMLcalendar_dateformat 	=> C4::Dates->DHTMLcalendar(),
+        'duplicate_form' => '1',
+        'budget_period_id' => $budget_period_id,
+    );
+}
+
+# handle the actual duplication
+elsif ( $op eq 'duplicate_budget' ){
+    die "please specify a budget period id\n" if( !defined $budget_period_id || $budget_period_id eq '' );
+    my $startdate = $input->param('budget_period_startdate');
+    my $enddate = $input->param('budget_period_enddate');
+
+    my $data = GetBudgetPeriod( $budget_period_id);
+
+    $data->{'budget_period_startdate'} = $startdate;
+    $data->{'budget_period_enddate'} = $enddate;
+    delete $data->{'budget_period_id'};
+    my $new_budget_period_id = C4::SQLHelper::InsertInTable('aqbudgetperiods', $data);
+
+    my $tree = GetBudgetHierarchy( $budget_period_id );
+
+    # hash mapping old ids to new
+    my %old_new;
+    # hash mapping old parent ids to list of new children ids
+    # only store a child here if the parents old id isnt in the old_new map
+    # when the parent is found, this map will be used, and then the entry removed and their id placed in old_new
+    my %parent_children;
+
+    for my $entry( @$tree ){
+        die "serious errors, parent period $budget_period_id doesnt match child ", $entry->{'budget_period_id'}, "\n" if( $entry->{'budget_period_id'} != $budget_period_id );
+        my $orphan = 0; # set to 1 if we need to make an entry in parent_children
+        my $old_id = delete $entry->{'budget_id'};
+        my $parent_id = delete $entry->{'budget_parent_id'};
+        $entry->{'budget_period_id'} = $new_budget_period_id;
+
+        if( !defined $parent_id ){
+        } elsif( defined $parent_id && $parent_id eq '' ){
+        } elsif( defined $old_new{$parent_id} ){
+            # set parent id now
+            $entry->{'budget_parent_id'} = $old_new{$parent_id};
+        } else {
+            # make an entry in parent_children
+            $parent_children{$parent_id} = [] unless defined $parent_children{$parent_id};
+            $orphan = 1;
+        }
+
+        # write it to db
+        my $new_id = C4::SQLHelper::InsertInTable('aqbudgets', $entry);
+        $old_new{$old_id} = $new_id;
+        push @{$parent_children{$parent_id}}, $new_id if $orphan;
+
+        # deal with any children
+        if( defined $parent_children{$old_id} ){
+            # tell my children my new id
+            for my $child ( @{$parent_children{$old_id}} ){
+                C4::SQLHelper::UpdateInTable('aqcudgets', [ 'budget_id' => $child, 'budget_parent_id' => $new_id ]);
+            }
+            delete $parent_children{$old_id};
+        }
+    }
+
+    # display the list of budgets
+    $op = 'else';
 }
 
 # DEFAULT - DISPLAY AQPERIODS TABLE

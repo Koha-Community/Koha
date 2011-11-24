@@ -8,6 +8,29 @@
 // #################################################################################
 // Javascript
 // #################################################################################
+    function CheckDuplicateForm(f){
+            var ok=1;
+            var _alertString="";
+            var alertString="";
+            if(!(isNotNull(f.budget_period_startdate,1))){
+              _alertString += "\n- " + _("Start date missing");
+            }
+            if (!(isNotNull(f.budget_period_enddate,1))){
+              _alertString += "\n- " + _("End date missing");
+            }
+            if( f.budget_period_startdate > f.budget_period_enddate ) {
+              _alertString += "\n- " + _("Start date must be before end date");
+            }
+
+            if(_alertString.length==0){
+              f.submit();
+            } else {
+              alertString += _("Form not submitted because of the following problem(s)");
+              alertString += "\n-----------------------------------------\n";
+              alertString += _alertString;
+              alert(alertString);
+            }
+    }
     function Check(f) {
             var ok=1;
             var _alertString="";
@@ -127,6 +150,57 @@
 <div class="yui-b">
 
 [% INCLUDE 'budgets-admin-toolbar.inc' %]
+
+[% IF ( duplicate_form ) %]
+<form action="/cgi-bin/koha/admin/aqbudgetperiods.pl" name="f" method="post">
+    <fieldset class="rows">
+    <input type="hidden" name="op" value="duplicate_budget" />
+    <input type="hidden" name="budget_period_id" value="[% budget_period_id %]" />
+
+    <ol>
+
+    <li>
+    <label class="required" for="budget_period_startdate">Start date</label>
+    <input type="text" size="10" id="budget_period_startdate" name="budget_period_startdate"   value="[% budget_period_startdate %]"  />
+    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarFrom" style="cursor: pointer;" alt="Show start date calendar" />
+    <script type="text/javascript">
+        Calendar.setup({
+        inputField     :    "budget_period_startdate",
+        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
+        button         :    "openCalendarFrom",
+        align          :    "Tl",
+        singleClick    :    false
+        });
+    </script>
+				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    </li>
+    <li>
+
+    <label class="required" for="budget_period_enddate">End date</label>
+    <input type="text" size="10" id="budget_period_enddate" name="budget_period_enddate" value="[% budget_period_enddate %]" />
+    <img src="/intranet-tmpl/prog/en/lib/calendar/cal.gif" border="0" id="openCalendarTo" style="cursor: pointer;" alt="Show end date calendar" />
+
+    <script type="text/javascript">
+        Calendar.setup({
+        inputField     :    "budget_period_enddate",
+        ifFormat         :    "[% DHTMLcalendar_dateformat %]",
+        button         :    "openCalendarTo",
+        align          :    "Tl"
+        });
+    </script>
+				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+    </li>
+
+    </ol>
+    </fieldset>
+
+    <fieldset class="action">
+        <input type="button" value="Save Changes"  onclick="CheckDuplicateForm(this.form)"    />
+    </fieldset>
+
+</form>
+
+[% END %]
 
 [% IF ( add_form ) %]
     <!--  add or modify a budget period   -->
@@ -296,6 +370,7 @@
     </table>
     <div class="pages">[% pagination_bar %]</div>
 [% END %]
+
 
 </div>
 </div>

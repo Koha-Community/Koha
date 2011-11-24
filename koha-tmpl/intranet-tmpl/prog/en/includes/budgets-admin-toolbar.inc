@@ -33,7 +33,7 @@
         [% IF ( budget_period_id ) %]
                 var periods_menu = [
                         { text: _("Edit budget") + " '[% budget_period_description %]'", url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=add_form&budget_period_id=[% budget_period_id %]" },
-                        <!-- { text: _("Duplicate budget") + " '[% budget_period_description %]'" } -->
+                        { text: _("Duplicate budget") + " '[% budget_period_description %]'", url: "/cgi-bin/koha/admin/aqbudgetperiods.pl?op=duplicate_form&budget_period_id=[% budget_period_id %]" },
                 ]
         [% END %]
 
