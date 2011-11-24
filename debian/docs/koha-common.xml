@@ -1,0 +1,206 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-common</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Communnity</orgname>
+  <uri>http://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-common">
+
+  <refmeta>
+    <refentrytitle>koha-common</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-common</refname>
+    <refpurpose>Create and manage Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsect1><title>Description</title>
+    <para>koha-common provides a number of scripts for creating and administering Koha instances. It is meant for sites that provide Koha hosting, and serves several sites from the same host.</para>
+  </refsect1>
+
+  <refsect1><title>Commands</title>
+    <para>The following commands are available after when koha-common has been installed. See individual manual pages for each command for optios and other details related to their usage.</para>
+
+    <refsect2><title>Administer instances</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>koha-disable</option></term>
+        <listitem>
+          <para>Disable a Koha instance.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-enable</option></term>
+        <listitem>
+          <para>Enable a Koha instance. New instances are enabled by default. You only need this command if you have previously disabled a site with koha-disable.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-restore</option></term>
+        <listitem>
+          <para>Restore a Koha site from a dump (from koha-dump).</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-dump</option></term>
+        <listitem>
+          <para>Dump all contents and configs for a Koha site.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-remove</option></term>
+        <listitem>
+          <para>Remove a Koha instance.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    </refsect2>
+
+    <refsect2><title>Database-related</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>koha-dump-defaults</option></term>
+        <listitem>
+          <para>Create default contents from an existing Koha site.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-upgrade-schema</option></term>
+        <listitem>
+          <para>Upgrade the DB schema for Koha instances. Done automatically on package upgrades.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-reset-passwd</option></term>
+        <listitem>
+          <para>Reset password for a user in a Koha instance.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-mysql</option></term>
+        <listitem>
+          <para>Provide an interactive mysql shell set up for the specified koha instance.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    </refsect2>
+
+    <refsect2><title>Zebra-related</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>koha-start-zebra</option></term>
+        <listitem>
+          <para>Start Zebra for named Koha instances.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-restart-zebra</option></term>
+        <listitem>
+          <para>Restart Zebra for named Koha instances.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-rebuild-zebra</option></term>
+        <listitem>
+          <para>Rebuild the Zebra database for a Koha instance.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-stop-zebra</option></term>
+        <listitem>
+          <para>Stop Zebra for named Koha instances.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    </refsect2>
+
+    <refsect2><title>E-mail</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>koha-email-enable</option></term>
+        <listitem>
+          <para>Turn on the email for a Koha instance.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-email-disable</option></term>
+        <listitem>
+          <para>Turn off the email for a Koha instance.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    </refsect2>
+
+    <refsect2><title>Misc</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>koha-upgrade-to-3.4</option></term>
+        <listitem>
+          <para>Performs the necessary changes to upgrade a Koha system from 3.2 to 3.4. If no instance names are provided, this will run it on all of them.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    </refsect2>
+
+    <refsect2><title>Utilities</title>
+    <variablelist>
+
+      <varlistentry>
+        <term><option>koha-create-dirs</option></term>
+        <listitem>
+          <para>Create dirs for a Koha instance.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-list</option></term>
+        <listitem>
+          <para>Lists Koha instances, optionally only those that are enabled or have email turned on.</para>
+        </listitem>
+      </varlistentry>
+
+      <varlistentry>
+        <term><option>koha-foreach</option></term>
+        <listitem>
+          <para>Run a command for each Koha instance. Takes the same arguments as koha-list.</para>
+        </listitem>
+      </varlistentry>
+    </variablelist>
+    </refsect2>
+  </refsect1>
+  
+  <refsect1><title>Bugs</title>
+  <para>The scripts are a bit fragile. If something goes wrong, they do not clean up after themselves.</para>
+  <para>Bugs can be reported here: <uri>http://bugs.koha-community.org/bugzilla3/</uri></para>
+  </refsect1>
+
+  <refsect1><title>About Koha</title>
+  <para>Koha is the first free software library automation package. In use worldwide, its development is steered by a growing community of users collaborating to achieve their technology goals. Koha’s feature set continues to evolve and expand to meet the needs of its user base.</para>
+  </refsect1>
+
+</refentry>
+
+</article>

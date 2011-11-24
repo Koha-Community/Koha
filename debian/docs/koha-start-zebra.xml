@@ -1,5 +1,5 @@
 <article xmlns='http://docbook.org/ns/docbook'>
-<title>koha-remove</title>
+<title>koha-start-zebra</title>
 <info>
 <productname>Koha</productname> is the first free software library automation package.
 <author>
@@ -8,35 +8,34 @@
 </author>
 </info>
 
-<refentry xml:id="koha-remove">
+<refentry xml:id="koha-start-zebra">
 
   <refmeta>
-    <refentrytitle>koha-remove</refentrytitle>
+    <refentrytitle>koha-start-zebra</refentrytitle>
     <manvolnum>8</manvolnum>
   </refmeta>
 
   <refnamediv>
-    <refname>koha-remove</refname>
-    <refpurpose>Remove a Koha instance.</refpurpose>
+    <refname>koha-start-zebra</refname>
+    <refpurpose>Start Zebra for named Koha instances.</refpurpose>
     <refclass>UNIX/Linux</refclass>
   </refnamediv>
 
   <refsynopsisdiv>
     <cmdsynopsis>
-      <command>koha-remove</command> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
+      <command>koha-start-zebra</command> <arg choice="req" rep="repeat"><replaceable>instancename</replaceable></arg>
     </cmdsynopsis>
   </refsynopsisdiv>
 
   <refsect1><title>Description</title>
-  <para>Remove a Koha instance.</para>
+  <para>Start Zebra for named Koha instances.</para>
   </refsect1>
   
   <refsect1><title>See also</title>
   <simplelist type="inline">
-    <member><command>koha-disable(8)</command></member>
-    <member><command>koha-dump(8)</command></member>
-    <member><command>koha-enable(8)</command></member>
-    <member><command>koha-restore(8)</command></member>
+    <member><command>koha-rebuild-zebra(8)</command></member>
+    <member><command>koha-restart-zebra(8)</command></member>
+    <member><command>koha-stop-zebra(8)</command></member>
   </simplelist>
   </refsect1>
   
