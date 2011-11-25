@@ -160,6 +160,7 @@ sub themelanguage {
       if $http_accept_language;
     # But, if there's a cookie set, obey it
     $lang = $query->cookie('KohaOpacLanguage') if (defined $query and $query->cookie('KohaOpacLanguage'));
+    $lang =~ s/[^a-zA-Z_-]*//g; 
     # Fall back to English
     my @languages;
     if ($interface eq 'intranet') {
