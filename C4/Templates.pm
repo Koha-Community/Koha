@@ -277,8 +277,7 @@ sub themelanguage {
     my @languages = split(",", C4::Context->preference(
         $is_intranet ? 'language' : 'opaclanguages'));
     my $lang;
-    $lang = $query->cookie('KohaOpacLanguage')
-        if defined $query and $query->cookie('KohaOpacLanguage');
+    $lang = getlanguagecookie($query);
     unless ($lang) {
         my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
         $lang = accept_language( $http_accept_language, 
@@ -327,8 +326,7 @@ sub getlanguagecookie {
         $lang = $ENV{HTTP_ACCEPT_LANGUAGE};
         
     }
-    $lang = substr($lang, 0, 2);
-
+    $lang =~ s/[^a-zA-Z_-]*//; #sanitzie
     return $lang;
 }
 
