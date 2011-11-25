@@ -32,7 +32,9 @@ our $refer = $query->param('url');
 $refer = $query->referer()  if !$refer || $refer eq 'undefined';
 
 $refer =~ /koha\/(.*)\.pl/;
-my $from = "help/$1.tt";
+my $file = $1;
+$file =~ s/[^a-zA-Z0-9_\-\/]*//g;
+my $from = "help/$file.tt";
 
 my $template = C4::Templates::gettemplate($from, 'intranet', $query);
 $template->param( referer => $refer );
