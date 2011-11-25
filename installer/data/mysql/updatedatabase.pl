@@ -4551,7 +4551,7 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
-$DBversion = "3.05.00.XXX";
+$DBversion = "3.06.00.001";
 if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     my $borrowers = $dbh->selectcol_arrayref( "SELECT borrowernumber from borrowers where debarred <>0;", { Columns => [1] } );
     $dbh->do("ALTER TABLE borrowers MODIFY debarred DATE DEFAULT NULL;");
