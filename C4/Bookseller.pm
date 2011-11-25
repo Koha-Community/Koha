@@ -65,7 +65,7 @@ sub GetBookSeller {
     $searchstring = q{%} . $searchstring . q{%};
     my $query =
 'select aqbooksellers.*, count(*) as basketcount from aqbooksellers left join aqbasket '
-      . 'on aqbasket.booksellerid = aqbooksellers.id where name lIke ? group by aqbooksellers.id order by name';
+      . 'on aqbasket.booksellerid = aqbooksellers.id where name like ? group by aqbooksellers.id order by name';
 
     my $dbh           = C4::Context->dbh;
     my $sth           = $dbh->prepare($query);
@@ -141,20 +141,22 @@ sub AddBookseller {
         INSERT INTO aqbooksellers
             (
                 name,      address1,      address2,   address3,      address4,
-                postal,    phone,         fax,        url,           contact,
+                postal,    phone,         accountnumber,   fax,      url,           
+                contact,
                 contpos,   contphone,     contfax,    contaltphone,  contemail,
                 contnotes, active,        listprice,  invoiceprice,  gstreg,
                 listincgst,invoiceincgst, gstrate,    discount,
                 notes
             )
-        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
+        VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) |
       ;
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $data->{'name'},         $data->{'address1'},
         $data->{'address2'},     $data->{'address3'},
         $data->{'address4'},     $data->{'postal'},
-        $data->{'phone'},        $data->{'fax'},
+        $data->{'phone'},        $data->{'accountnumber'},
+        $data->{'fax'},
         $data->{'url'},          $data->{'contact'},
         $data->{'contpos'},      $data->{'contphone'},
         $data->{'contfax'},      $data->{'contaltphone'},
@@ -192,7 +194,7 @@ sub ModBookseller {
     my $dbh    = C4::Context->dbh;
     my $query  = 'UPDATE aqbooksellers
         SET name=?,address1=?,address2=?,address3=?,address4=?,
-            postal=?,phone=?,fax=?,url=?,contact=?,contpos=?,
+            postal=?,phone=?,accountnumber=?,fax=?,url=?,contact=?,contpos=?,
             contphone=?,contfax=?,contaltphone=?,contemail=?,
             contnotes=?,active=?,listprice=?, invoiceprice=?,
             gstreg=?,listincgst=?,invoiceincgst=?,
@@ -203,7 +205,8 @@ sub ModBookseller {
         $data->{'name'},         $data->{'address1'},
         $data->{'address2'},     $data->{'address3'},
         $data->{'address4'},     $data->{'postal'},
-        $data->{'phone'},        $data->{'fax'},
+        $data->{'phone'},        $data->{'accountnumber'},
+        $data->{'fax'},
         $data->{'url'},          $data->{'contact'},
         $data->{'contpos'},      $data->{'contphone'},
         $data->{'contfax'},      $data->{'contaltphone'},
