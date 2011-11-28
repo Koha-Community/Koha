@@ -1,29 +1,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Comments waiting for Approval</title>
+<title>Koha &rsaquo; Tools &rsaquo; Comments &rsaquo; [% IF ( status ) %] Approved comments[% ELSE %] Comments awaiting moderation[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.tablesorter.min.js"></script>
-<script type="text/javascript">//<![CDATA[
-$(document).ready(function() {
-$.tablesorter.addParser({
-    id: 'articles', 
-    is: function(s) {return false;  }, 
-    format: function(s) { return s.toLowerCase().replace(/^(the|an|a) /,''); }, 
-    type: 'text' 
-});
-	$("#commentst").tablesorter({
-		sortList: [[0,0]],
-		headers: { 1: {sorter: 'articles'},2: { sorter: false },3: { sorter: false }}
-	}); 
-}); 
-//]]>
-</script>
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a>
-&rsaquo; Comments Awaiting Moderation</div>
+&rsaquo; <a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a> &rsaquo;[% IF ( status ) %] Approved comments[% ELSE %] Comments awaiting moderation[% END %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -32,6 +16,14 @@ $.tablesorter.addParser({
 	<div class="yui-b">
 
 <h1>Comments</h1>
+
+<!-- The manual invoice and credit buttons -->
+<div class="toptabs">
+<ul class="ui-tabs-nav">
+    [% IF ( status ) %]<li class="ui-tabs-selected">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?status=1">Approved comments</a></li>
+    [% IF ( status ) %]<li>[% ELSE %]<li class="ui-tabs-selected">[% END %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl" >Comments awaiting moderation</a></li>
+</ul>
+<div class="tabs-container">
 
 [% IF ( reviews ) %]
 <table id="commentst">
@@ -61,15 +53,18 @@ $.tablesorter.addParser({
             [% review.review |html %]
         </td>
         <td>
-            <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid %]">Approve</a> |
+            [% IF ( status ) %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=unapprove&amp;reviewid=[% review.reviewid %]">Unapprove</a>[% ELSE %]<a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=approve&amp;reviewid=[% review.reviewid %]">Approve</a>[% END %] |
             <a href="/cgi-bin/koha/reviews/reviewswaiting.pl?op=delete&amp;reviewid=[% review.reviewid %]">Delete</a>
         </td>
     </tr>
     [% END %]</tbody>
 </table>
+ <div class="pages">[% pagination_bar %]</div>
 [% ELSE %]
-<b>No comments to moderate</b>
+[% IF ( status ) %]<p><b>No comments have been approved.</b></p>[% ELSE %]<p><b>No comments to moderate.</b></p>[% END %]
 [% END %]
+</div>
+</div>
 
 </div>
 </div>
