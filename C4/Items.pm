@@ -1185,14 +1185,15 @@ sub GetItemsInfo {
            items.notforloan as itemnotforloan,
            itemtypes.description,
            itemtypes.notforloan as notforloan_per_itemtype,
-           branchurl
+           holding.branchurl
      FROM items
-     LEFT JOIN branches ON items.holdingbranch = branches.branchcode
+     LEFT JOIN branches AS holding ON items.holdingbranch = holding.branchcode
+     LEFT JOIN branches AS home ON items.homebranch=home.branchcode
      LEFT JOIN biblio      ON      biblio.biblionumber     = items.biblionumber
      LEFT JOIN biblioitems ON biblioitems.biblioitemnumber = items.biblioitemnumber
      LEFT JOIN itemtypes   ON   itemtypes.itemtype         = "
      . (C4::Context->preference('item-level_itypes') ? 'items.itype' : 'biblioitems.itemtype');
-    $query .= " WHERE items.biblionumber = ? ORDER BY branches.branchname,items.dateaccessioned desc" ;
+    $query .= " WHERE items.biblionumber = ? ORDER BY home.branchname,items.dateaccessioned desc" ;
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my $i = 0;
