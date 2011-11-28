@@ -38,8 +38,11 @@ sub test_string_extraction {
     my @warnings;
     while (<PH>) {
         # ignore some noise on STDERR
-        next if /^\.* done\.$/;
-	next if /^\.* terminé\.$/;
+        # the output of msmerge, that consist in .... followed by a "done" (localized), followed by a .
+        # The "done" localized can include diacritics, so ignoring the whole word
+        # FIXME PP: the flow is not correct UTF8, testing \p{IsLetter} does not work, but I think this regexp will do the job
+        next if (/^\.+ .*\.$/);
+        # other Koha-specific catses that should not worry us
         next if /^Warning: Can't determine original templates' charset/;
         next if /^Warning: Charset Out defaulting to/;
         next if /^Removing empty file /;
