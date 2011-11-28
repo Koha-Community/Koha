@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-21 12:18+0200\n"
-"PO-Revision-Date: 2011-10-17 15:24+0200\n"
-"Last-Translator: Zeno <tajoli@cilea.it>\n"
+"POT-Creation-Date: 2011-11-28 19:51+0200\n"
+"PO-Revision-Date: 2011-11-23 13:52+0200\n"
+"Last-Translator: bargioni <bargioni@pusc.it>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: it\n"
 "MIME-Version: 1.0\n"
@@ -42,6 +42,22 @@ msgstr "facendo un ordine."
 # Acquisitions > Policy
 msgid "acquisitions.pref#AcqCreateItem# receiving an order."
 msgstr "ricevendo un ordine."
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# Show baskets"
+msgstr "Zeige die Bestellungen beim Lieferanten,"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# created by staff member."
+msgstr "die vom angemeldeten Benutzer erstellt wurden."
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# from staff member's branch."
+msgstr "die zur Heimatbibliothek des angemeldeten Benutzers gehören."
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#AcqViewBaskets# in system, regardless of owner."
+msgstr "die, unabhängig vom Benutzer, in Koha erfasst wurden."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#BasketConfirmations# When closing or reopening a basket,"
@@ -297,9 +313,7 @@ msgstr "di creare automaticamente nuovi records di authority se ncesessari invec
 
 # Authorities
 msgid "authorities.pref#MARCAuthorityControlField008# Use the following text for the contents of MARC authority control field 008 position 06-39 (fixed length data elements). Do NOT include the date (position 00-05)."
-msgstr ""
-"Usa il testo che segue per il contenuto delle posizioni 06-36 del campo 008 "
-"dell' authority control NON includere la data (posizioni 00-05)"
+msgstr "Usa il testo che segue per il contenuto delle posizioni 06-36 del campo 008 dell' authority control NON includere la data (posizioni 00-05)"
 
 # Authorities
 msgid "authorities.pref#UseAuthoritiesForTracings# Don't use"
@@ -346,7 +360,6 @@ msgid "cataloguing.pref Spine Labels"
 msgstr "Etichette sul dorso"
 
 # Cataloging > Record Structure
-# Cataloging > Record Structure
 msgid "cataloguing.pref#AlternateHoldingsField# ."
 msgstr " ."
 
@@ -365,6 +378,18 @@ msgstr "Usa"
 # Cataloging > Interface
 msgid "cataloguing.pref#DefaultClassificationSource# as the default classification source."
 msgstr "come tag che di default contiene la classificazione."
+
+# Cataloging > Interface
+msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
+msgstr "Aktiviere"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't Display"
+msgstr "Deaktiviere"
+
+# Cataloging > Interface
+msgid "cataloguing.pref#EasyAnalyticalRecords# easy ways to create analytical record relationships"
+msgstr "die Funktion zur einfachen Erstellung von Verknüpfungen zwischen Titeldatensätzen."
 
 # Cataloging > Display
 msgid "cataloguing.pref#ISBD# Use the following as the ISBD template:"
@@ -535,8 +560,11 @@ msgid "cataloguing.pref#hide_marc# Don't display"
 msgstr "Non mostrare"
 
 # Cataloging > Display
+# Cataloging > Display
 msgid "cataloguing.pref#hide_marc# MARC tag numbers, subfield codes and indicators in MARC views."
-msgstr "nelle visualizzazioni MARC i numeri di tag, i codic di sottocampo e gli indicatori."
+msgstr ""
+"nelle visualizzazioni MARC i numeri di tag, i codici di sottocampo e gli "
+"indicatori."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#item-level_itypes# Use the item type of the"
@@ -559,8 +587,14 @@ msgid "cataloguing.pref#itemcallnumber# Map the MARC subfield"
 msgstr "Definisci il sottocampo MARC"
 
 # Cataloging > Record Structure
+# Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples: <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr "che serve a costruire la collocazione di un copia. Puoi inserire diversi sottocampi, per esempio <code>082ab</code> porterà  ad usare i sottocampi a e b di 082. Esempi: <strong>Dewey</strong>: <code>082ab</code> o <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> o <code>090ab</code>; <strong>dal record di copia</strong>: <code>852hi</code>"
+msgstr ""
+"che serve a costruire la collocazione di una copia. Puoi inserire diversi "
+"sottocampi, per esempio <code>082ab</code> porterà  ad usare i sottocampi a "
+"e b di 082. Esempi: <strong>Dewey</strong>: <code>082ab</code> o "
+"<code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> o "
+"<code>090ab</code>; <strong>dal record di copia</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -964,8 +998,7 @@ msgstr "Registra"
 
 # Circulation > Interface
 msgid "circulation.pref#RecordLocalUseOnReturn# local use when an unissued item is checked in."
-msgstr ""
-"come uso locale quando una copia non prestata viene letta come rientrata"
+msgstr "come uso locale quando una copia non prestata viene letta come rientrata"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#RenewalPeriodBase# When renewing checkouts, base the new due date on"
@@ -1383,6 +1416,10 @@ msgstr "Google"
 msgid "enhanced_content.pref Library Thing"
 msgstr "Library Thing"
 
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref Novelist Select"
+msgstr "Novelist Select"
+
 # Enhanced Content > OCLC
 msgid "enhanced_content.pref OCLC"
 msgstr "OCLC"
@@ -1607,6 +1644,54 @@ msgstr "dentro la pagina delle informazioni bibliografiche."
 msgid "enhanced_content.pref#LibraryThingForLibrariesTabbedView# in tabs."
 msgstr "nei tabs."
 
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectEnabled# Add"
+msgstr "Zeige"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectEnabled# Don't add"
+msgstr "Zeige keine"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectEnabled# Novelist Select content to the OPAC (requires that you have entered in a user profile and password, which can be seen in image links)."
+msgstr "Inhalte von Novelist Select im OPAC (erfordert die Angabe eines Profils und eines Passworts, die im Link sichtbar sind)."
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectProfile# ."
+msgstr "."
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectProfile# Access Novelist Select using user profile"
+msgstr "Verwende für die Anzeige von Novelist Select Inhalten das Benutzerprofil"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectProfile# and password"
+msgstr "und das Passwort"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# ."
+msgstr "."
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# Display Novelist Select content"
+msgstr "Zeige die Inhalte von Novelist Select"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# above the holdings table"
+msgstr "über der Exemplardatentabelle"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# below the holdings table"
+msgstr "unter der Exemplardatentabelle"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# in an OPAC tab"
+msgstr "in einem eigenen Reiter"
+
+# Enhanced Content > Novelist Select
+msgid "enhanced_content.pref#NovelistSelectView# under the Save Record dropdown, on the right"
+msgstr "unterhalb des Menüs auf der linken Seite"
+
 # Enhanced Content > OCLC
 msgid "enhanced_content.pref#OCLCAffiliateID# Use the <a href=\"http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp\">OCLC affiliate ID</a>"
 msgstr "Usa il <a href=\"http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp\">OCLC affiliate ID</a>"
@@ -1685,9 +1770,7 @@ msgstr "Non aggiungere"
 
 # Enhanced Content > Open Library
 msgid "enhanced_content.pref#OpenLibraryCovers# cover images from Open Library to search results and item detail pages on the OPAC."
-msgstr ""
-"le copertine da Open Library ai risultati di ricerca e alla pagine di "
-"dettaglio dell'Opac"
+msgstr "le copertine da Open Library ai risultati di ricerca e alla pagine di dettaglio dell'Opac"
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -2327,9 +2410,7 @@ msgstr "agli utenti di scegliere i loro criteri di privacy relativamente allo st
 
 # OPAC > Appearance
 msgid "opac.pref#OPACResultsSidebar# Include the following HTML under the facets in OPAC search results:"
-msgstr ""
-"Includi il seguente codice HTML sotto le faccette nei risultati di ricerca "
-"dell'Opac"
+msgstr "Includi il seguente codice HTML sotto le faccette nei risultati di ricerca dell'Opac"
 
 # OPAC > Appearance
 msgid "opac.pref#OPACSearchForTitleIn# <br />Note: The placeholders {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record."
@@ -2511,6 +2592,10 @@ msgstr "nell'Opac un avviso che l'Opac non è disponibile perchè in manutenzion
 msgid "opac.pref#OpacNav# Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
 msgstr "Mostra il codice HTML qui inserito nella colonna di sinistra della pagina principale e nella pagina degli utenti dell'Opac (generalmente sono link per la navigazione):"
 
+# OPAC > Appearance
+msgid "opac.pref#OpacNavBottom# Show the following HTML on the left hand column of the main page and patron account on the OPAC, after OpacNav, and before patron account links if available:"
+msgstr "Zeige das folgende HTML in der linken Spalte der Startseite und im Benutzerkonto oberhalb von OpacNav und vor vorhandenen Navigationsreitern an:"
+
 # OPAC > Features
 msgid "opac.pref#OpacPasswordChange# Allow"
 msgstr "Permetti"
@@ -2574,6 +2659,18 @@ msgstr "il codice della biblioteca a cui la copia appartiene (home branch)"
 # OPAC > Policy
 msgid "opac.pref#OpacRenewalBranch# the patron's home branch"
 msgstr "il codice della biblioteca a cui appartiene l'utente"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacShowRecentComments# Don't show"
+msgstr "Zeige einen"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacShowRecentComments# Show"
+msgstr "Zeige keinen"
+
+# OPAC > Appearance
+msgid "opac.pref#OpacShowRecentComments# a link to recent comments in the OPAC masthead."
+msgstr "Link zu kürzlich verfassten Kommentaren in der Navigationsleiste des OPACs."
 
 # OPAC > Features
 msgid "opac.pref#OpacTopissue# Allow"
