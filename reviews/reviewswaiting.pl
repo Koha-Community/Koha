@@ -39,16 +39,23 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $op       = $query->param('op') || '';
+my $status   = $query->param('status') || 0;
 my $reviewid = $query->param('reviewid');
+my $offset   = $query->param('offset') || 0;
+my $count    = C4::Context->preference('numSearchResults') || 20;
+my $total    = numberofreviews($status);
 
 if ( $op eq 'approve' ) {
     approvereview($reviewid);
+}
+elsif ( $op eq 'unapprove' ) {
+    unapprovereview($reviewid);
 }
 elsif ( $op eq 'delete' ) {
     deletereview($reviewid);
 }
 
-my $reviews = getallreviews(0);
+my $reviews = getallreviews($status,$offset,$count);
 
 foreach ( @$reviews ) {
     my $borrowernumber = $_->{borrowernumber};
@@ -60,6 +67,12 @@ foreach ( @$reviews ) {
     $_->{firstname}   = $borrowerData->{'firstname'};
 }
 
-$template->param( reviews => $reviews );
+my $url = "/cgi-bin/koha/reviews/reviewswaiting.pl?status=$status";
+
+$template->param(
+    status => $status,
+    reviews => $reviews,
+    pagination_bar => pagination_bar( $url, ( int( $total / $count ) ) + ( ( $total % $count ) > 0 ? 1 : 0 ), $offset, "offset" )
+);
 
 output_html_with_http_headers $query, $cookie, $template->output;

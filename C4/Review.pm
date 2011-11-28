@@ -30,7 +30,7 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(getreview savereview updatereview numberofreviews numberofreviewsbybiblionumber
-		getreviews getallreviews approvereview deletereview);
+		getreviews getallreviews approvereview unapprovereview deletereview);
 }
 
 =head1 NAME
@@ -44,7 +44,8 @@ C4::Review - Perl Module containing routines for dealing with reviews of items
   my $review=getreview($biblionumber,$borrowernumber);
   savereview($biblionumber,$borrowernumber,$review);
   updatereview($biblionumber,$borrowernumber,$review);
-  my $count=numberofreviews($biblionumber);
+  my $count=numberofreviews($status);
+  my $count=numberofreviewsbybiblionumber($biblionumber);
   my $reviews=getreviews($biblionumber);
   my $reviews=getallreviews($status);
 
@@ -148,6 +149,24 @@ sub approvereview {
                WHERE reviewid=?";
     my $sth = $dbh->prepare($query);
     $sth->execute( 1, $reviewid );
+}
+
+=head2 unapprovereview
+
+  unapprovereview($reviewid);
+
+Takes a reviewid and marks that review as not approved
+
+=cut
+
+sub unapprovereview {
+    my ($reviewid) = @_;
+    my $dbh        = C4::Context->dbh();
+    my $query      = "UPDATE reviews
+               SET approved=?
+               WHERE reviewid=?";
+    my $sth = $dbh->prepare($query);
+    $sth->execute( 0, $reviewid );
 }
 
 =head2 deletereview
