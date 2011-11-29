@@ -404,7 +404,7 @@ YAHOO.util.Event.onContentReady("searchheader", function () {
                         [% END %]
                         [% IF ( facets_loo.expandable ) %]
                             <li class="showmore">
-                                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% facets_loo.searchdesc %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">
+                                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% facets_loo.searchdesc %][% IF ( offset ) %]&amp;offset=[% offset %][% END %]&amp;expand=[% facets_loo.expand %]#[% facets_loo.type_id %]">
                                     Show More
                                 </a>
                             </li>
