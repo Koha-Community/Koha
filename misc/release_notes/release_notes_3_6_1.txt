@@ -1,0 +1,192 @@
+RELEASE NOTES FOR KOHA 3.6.1
+29 Nov 2011
+========================================================================
+
+Koha is the first free and open source software library automation package 
+(ILS). Development is sponsored by libraries of varying types and sizes, 
+volunteers, and support companies from around the world.  
+The website for the Koha project is 
+
+    http://koha-community.org/
+
+Koha 3.6.1 can be downloaded from:
+
+    http://download.koha-community.org/koha-3.06.01.tar.gz
+
+Installation instructions can be found at:
+
+    http://wiki.koha-community.org/wiki/Installation_Documentation
+    
+    OR in the INSTALL files that come in the tarball
+
+Koha 3.6.1 is a bugfix/maintenance release.
+
+Highlights of 3.6.1
+======================
+
+6628	critical	[security] help system use insecure REFERRER for file inclusion
+4211	major		Acquisitions actions on suggestions don't generate email
+6824	major		Basket permissions not looked up correctly
+6977	major		Support for repeated subfields when importing an authority into a biblio record field.
+7069	major		Javascript errors in tags/review
+7207	major		Cannot export label batches
+
+
+Bugs fixed in 3.6.1
+======================
+
+2847	normal		Use HTML escape in templates where appropriate
+3958	normal		Standardize vendor/supplier/bookseller terminology
+5072	normal		Filling an order page with no budget defined causes a 500 error
+5885	normal		UNIMARC XSLT changes
+5974	normal		Bogus auth check for "StaffMember" role
+6253	normal		Unified Patron Search subroutine
+6280	normal		Invalid SQL being passed in circulation checkout
+6369	normal		Formatting problems on some items when printing an order form (PDF).
+6390	normal		Basket only visible for librarian who created it
+6676	normal		Acquisition basket access control trivially by-passable
+6963	normal		When creating a new order, the item isn't added if its barcode already exists in the items table.
+3184	enhancement	Show creator and budget receiving a document
+4161	enhancement	When adding Vendor default to active currencies
+5436	enhancement	Extended patron attributes display improvements
+6721	enhancement	Add Basket number and Invoice number search
+6875	enhancement	de-nesting C4 packages
+7173	enhancement	Detect duplicates when creating items while receiving
+
+
+System requirements
+======================
+
+    Changes since 3.4:
+    
+    * Perl 5.10 is required
+
+
+Documentation
+======================
+
+As of Koha 3.2, the Koha manual is now maintained in DocBook.  The
+home page for Koha documentation is 
+
+    http://koha-community.org/documentation/
+
+As of the date of these release notes, only the English version of the
+Koha manual is available:
+
+    http://manual.koha-community.org/3.6/en/
+
+The Git repository for the Koha manual can be found at
+
+    http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary
+
+Translations
+======================
+
+Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:
+
+  * Chinese (Taiwan)
+  * Danish
+  * English (USA)
+  * English (UK)
+  * French (France)
+  * German
+  * Italian
+  * Portuguese (Brazil)
+  * Spanish
+
+Partial translations are available for various other languages.
+
+The Koha team welcomes additional translations; please see
+
+    http://wiki.koha-community.org/wiki/Translating_Koha
+
+for information about translating Koha, and join the koha-translate 
+list to volunteer:
+
+    http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate
+
+The most up-to-date translations can be found at:
+
+    http://translate.koha-community.org/
+
+Release Team
+======================
+
+The release team for Koha 3.6 is
+
+Release Manager:        Chris Cormack <chrisc@catalyst.net.nz>
+Documentation Manager:  Nicole C Engard <nengard@gmail.com>
+Translation Manager:    Frédéric Demians <frederic@tamil.fr>
+QA Manager:             Ian Walls <ian.walls@bywatersolutions.com>
+Bug Wranglers:          MJ Ray, Marcel Roy, Paul Poulain, Mason James
+
+Release Maintainer (3.4.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+Release Maintainer (3.6.x):
+                        Chris Nighswonger <cnighswonger@foundations.edu>
+
+
+
+Credits
+======================
+
+We thank the following libraries who are known to have sponsored
+new features in Koha 3.6:
+  * Los Gatos Public Library
+  * NEKLS
+  * East Brunswick Public Library
+  * Athens County Public Libraries
+  * Horowhenua Library Trust
+  * Halton Borough Council
+  * South Taranaki District Council
+
+We thank the following individuals who contributed patches to
+Koha 3.6.1. 
+
+     1	Nahuel ANGELINETTI
+     5	Frédérick Capovilla
+    12	Chris Cormack
+     2	Frédéric Demians
+     4	Katrin Fischer
+     6	Owen Leonard
+     1	Julian Maurice
+     1	Joy Nelson
+     3	Chris Nighswonger
+     2	Maxime Pelletier
+     5	Paul Poulain
+     2	Liz Rea
+     1	Marcel de Rooy
+     1	Salvador Zaragoza Rubio
+     7	Ian Walls
+
+
+We regret any omissions.  If a contributor has been inadvertantly missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.
+
+Revision control notes
+======================
+
+The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of 
+
+    git://git.koha-community.org/koha.git
+
+The branch for Koha 3.6.x (i.e., this version of Koha and future bugfix
+releases) is 3.6.x.
+
+The next major feature release of Koha will be Koha 3.8.0.
+
+Bugs and feature requests
+======================
+
+Bug reports and feature requests can be filed at the Koha bug
+tracker at
+
+    http://bugs.koha-community.org/
+
+
+Ehara taku toa i te toa takitahi, engari he toa takitini 
+
+##### Autogenerated release notes updated last on 29 Nov 2011 at 01:20:19Z #####
