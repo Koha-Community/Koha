@@ -4660,6 +4660,13 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.06.04.005";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do("UPDATE borrowers SET debarred=NULL WHERE debarred='0000-00-00';");
+    print "Setting NULL to debarred where 0000-00-00 is stored (bug 7272)";
+    SetVersion($DBversion);
+}
+
 
 =head1 FUNCTIONS
 
