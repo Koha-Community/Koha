@@ -175,6 +175,7 @@ my $authvalcode_items_itemlost = GetAuthValCode('items.itemlost',$fw);
 my $authvalcode_items_damaged  = GetAuthValCode('items.damaged', $fw);
 
 my $analytics_flag;
+my $materials_flag; # set this if the items have anything in the materials field
 foreach my $item (@items) {
 
     $item->{homebranch}        = GetBranchName($item->{homebranch});
@@ -252,7 +253,9 @@ foreach my $item (@items) {
 		$analytics_flag=1;
 		$item->{countanalytics} = $countanalytics;
 	}
-
+    if ($item->{'materials'} ne ''){
+	$materials_flag = 1;
+    }
     push @itemloop, $item;
 }
 
@@ -277,6 +280,7 @@ $template->param(
         hostrecords         => $hostrecords,
 	analytics_flag	=> $analytics_flag,
 	C4::Search::enabled_staff_search_views,
+        materials       => $materials_flag,
 );
 
 if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {
