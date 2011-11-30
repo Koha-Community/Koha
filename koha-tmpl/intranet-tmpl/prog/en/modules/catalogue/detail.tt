@@ -243,6 +243,7 @@ function verify_images() {
                 <th>Status</th>
                 <th>Last seen</th>
                 <th>Barcode</th>
+		[% IF materials %]<th>Materials Specified</th>[% END %]
                 [% IF ( volinfo ) %]<th>Publication Details</th>[% END %]
                 [% IF ( itemdata_uri ) %]<th>url</th>[% END %]
                 [% IF ( itemdata_copynumber ) %]<th>Copy No.</th>[% END %]
@@ -372,6 +373,9 @@ function verify_images() {
 				[% IF ( itemdata_copynumber ) %]
 					<td class="copynumber">[% itemloo.copynumber %]</td>
 				[% END %]
+	        [% IF itemloo.materials %]
+		    <td> [% itemloo.materials %] </td>
+		[% END %]
                 [% IF ( itemdata_itemnotes ) %]<td><div class="itemnotes">[% itemloo.itemnotes %]</div></td>[% END %]
 		[% IF ( SpineLabelShowPrintOnBibDetails ) %]
 			<td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% itemloo.barcode %]" >Print Label</a></td>

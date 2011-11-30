@@ -58,6 +58,7 @@
             <li><span class="label">Item Callnumber:</span> [% ITEM_DAT.itemcallnumber %]&nbsp;</li>
             [% IF ( ITEM_DAT.copyvol ) %]<li><span class="label">Copy / Vol :</span> [% ITEM_DAT.copyvol %]&nbsp;</li> [% END %]
             [% IF ( ITEM_DAT.replacementprice ) %]<li><span class="label">Replacement Price:</span> [% ITEM_DAT.replacementprice %]&nbsp;</li> [% END %]
+	    [% IF ITEM_DAT.materials %]<li><span class="label">Materials Specified:</span> [% ITEM_DAT.materials %] </li> [% END %]
             </ol></div>
            <div class="listgroup"><h4>Statuses [% IF ( ITEM_DAT.status_advisory ) %](
                 [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext %] [% END %]
