@@ -70,7 +70,7 @@ $(function() {
   $("a.print").show();
 
     [% IF ( opacuserlogin ) %][% IF ( RequestOnOpac ) %]$("#placehold").html("<a href=\"#\" class=\"hold tag_hides\">"+_('Place Hold')+"<\/a>");
-      $("a.hold").click(function(){
+      $("#toolbar a.hold").click(function(){
          holdSelections();
          return false;
       });[% END %][% END %]
