@@ -1008,6 +1008,53 @@ sub CanBookBeIssued {
     return ( \%issuingimpossible, \%needsconfirmation, \%alerts );
 }
 
+=head2 CanBookBeReturned
+
+  ($returnallowed, $message) = CanBookBeReturned($item, $branch)
+
+Check whether the item can be returned to the provided branch
+
+=over 4
+
+=item C<$item> is a hash of item information as returned from GetItem
+
+=item C<$branch> is the branchcode where the return is taking place
+
+=back
+
+Returns:
+
+=over 4
+
+=item C<$returnallowed> is 0 or 1, corresponding to whether the return is allowed (1) or not (0)
+
+=item C<$message> is the branchcode where the item SHOULD be returned, if the return is not allowed
+
+=cut
+
+sub CanBookBeReturned {
+  my ($item, $branch) = @_;
+  my $allowreturntobranch = C4::Context->preference("AllowReturnToBranch") || 'anywhere';
+
+  # assume return is allowed to start
+  my $allowed = 1;
+  my $message;
+
+  # identify all cases where return is forbidden
+  if ($allowreturntobranch eq 'homebranch' && $branch ne $item->{'homebranch'}) {
+     $allowed = 0;
+     $message = $item->{'homebranch'};
+  } elsif ($allowreturntobranch eq 'holdingbranch' && $branch ne $item->{'holdingbranch'}) {
+     $allowed = 0;
+     $message = $item->{'holdingbranch'};
+  } elsif ($allowreturntobranch eq 'homeorholdingbranch' && $branch ne $item->{'homebranch'} && $branch ne $item->{'holdingbranch'}) {
+     $allowed = 0;
+     $message = $item->{'homebranch'}; # FIXME: choice of homebranch is arbitrary
+  }
+
+  return ($allowed, $message);
+}
+
 =head2 AddIssue
 
   &AddIssue($borrower, $barcode, [$datedue], [$cancelreserve], [$issuedate])
@@ -1623,18 +1670,14 @@ sub AddReturn {
         $branches->{$hbr}->{PE} and $messages->{'IsPermanent'} = $hbr;
     }
 
-    # if indy branches and returning to different branch, refuse the return unless canreservefromotherbranches is turned on
-    if ($hbr ne $branch && C4::Context->preference("IndependantBranches") && !(C4::Context->preference("canreservefromotherbranches"))){
+    # check if the return is allowed at this branch
+    my ($returnallowed, $message) = CanBookBeReturned($item, $branch);
+    unless ($returnallowed){
         $messages->{'Wrongbranch'} = {
             Wrongbranch => $branch,
-            Rightbranch => $hbr,
+            Rightbranch => $message
         };
         $doreturn = 0;
-        # bailing out here - in this case, current desired behavior
-        # is to act as if no return ever happened at all.
-        # FIXME - even in an indy branches situation, there should
-        # still be an option for the library to accept the item
-        # and transfer it to its owning library.
         return ( $doreturn, $messages, $issue, $borrower );
     }
 

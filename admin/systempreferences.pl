@@ -204,7 +204,7 @@ $tabsysprefs{AllowAllMessageDeletion}        = "Circulation";
 $tabsysprefs{OverdueNoticeBcc}               = "Circulation";
 $tabsysprefs{OverduesBlockCirc}              = "Circulation";
 $tabsysprefs{UseTransportCostMatrix}         = "Circulation";
-
+$tabsysprefs{AllowReturnToBranch}            = "Circulation";
 
 # Staff Client
 $tabsysprefs{template}                = "StaffClient";

@@ -198,6 +198,15 @@ Circulation:
                   homebranch: the library the item is from.
                   holdingbranch: the library the item was checked out from.
         -
+            - Allow materials to be returned to
+            - pref: AllowReturnToBranch
+              type: choice
+              choices:
+                  anywhere: to any library.
+                  homebranch: only the library the item is from.
+                  holdingbranch: only the library the item was checked out from.
+                  homeorholdingbranch: either the library the item is from or the library it was checked out from.
+        -
             - Calculate the due date using 
             - pref: useDaysMode
               choices:
