@@ -273,21 +273,10 @@ sub themelanguage {
     ($query) or warn "no query in themelanguage";
 
     # Select a language based on cookie, syspref available languages & browser
-    my $is_intranet = $interface eq 'intranet';
-    my @languages = split(",", C4::Context->preference(
-        $is_intranet ? 'language' : 'opaclanguages'));
-    my $lang;
-    $lang = getlanguagecookie($query);
-    unless ($lang) {
-        my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
-        $lang = accept_language( $http_accept_language, 
-            getTranslatedLanguages($interface,'prog') );
-    }
-    # Ignore a lang not selected in sysprefs
-    $lang = undef  unless first { $_ eq $lang } @languages;
-    # Fall back to English if necessary
-    $lang = 'en' unless $lang;
+    my $lang = getlanguage($query, $interface);
 
+    # Select theme
+    my $is_intranet = $interface eq 'intranet';
     my @themes = split(" ", C4::Context->preference(
         $is_intranet ? "template" : "opacthemes" ));
     push @themes, 'prog';
@@ -317,16 +306,36 @@ sub setlanguagecookie {
     );
 }
 
-sub getlanguagecookie {
-    my ($query) = @_;
+
+sub getlanguage {
+    my ($query, $interface) = @_;
+
+    # Select a language based on cookie, syspref available languages & browser
+    my $is_intranet = $interface eq 'intranet';
+    my @languages = split(",", C4::Context->preference(
+        $is_intranet ? 'language' : 'opaclanguages'));
+
     my $lang;
-    if ($query->cookie('KohaOpacLanguage')){
-        $lang = $query->cookie('KohaOpacLanguage') ;
-    }else{
-        $lang = $ENV{HTTP_ACCEPT_LANGUAGE};
-        
+
+    # cookie
+    if ( $query->cookie('KohaOpacLanguage') ) {
+        $lang = $query->cookie('KohaOpacLanguage');
+        $lang =~ s/[^a-zA-Z_-]*//; # sanitize cookie
     }
-    $lang =~ s/[^a-zA-Z_-]*//; #sanitzie
+
+    # HTTP_ACCEPT_LANGUAGE
+    unless ($lang) {
+        my $http_accept_language = $ENV{ HTTP_ACCEPT_LANGUAGE };
+        $lang = accept_language( $http_accept_language,
+            getTranslatedLanguages($interface,'prog') );
+    }
+
+    # Ignore a lang not selected in sysprefs
+    $lang = undef  unless first { $_ eq $lang } @languages;
+
+    # Fall back to English if necessary
+    $lang = 'en' unless $lang;
+
     return $lang;
 }
 
