@@ -226,6 +226,13 @@ function refocus(calendar) {
 </div>
 
 [% IF ( dateexpiry ) %]<div class="dialog message">Patron's account has been renewed until [% dateexpiry %]</div>[% END %]
+
+[% IF additional_materials %]
+    <div id="materials" class="dialog message">Note about the accompanying materials: <br />
+    [% additional_materials %]
+    </div>
+[% END %]
+
 [% IF ( NEEDSCONFIRMATION ) %]
 <div class="yui-g">
 

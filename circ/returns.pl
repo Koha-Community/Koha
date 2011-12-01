@@ -238,6 +238,7 @@ if ($barcode) {
         itemtype         => $biblio->{'itemtype'},
         ccode            => $biblio->{'ccode'},
         itembiblionumber => $biblio->{'biblionumber'},    
+	additional_materials => $biblio->{'materials'}
     );
 
     my %input = (
