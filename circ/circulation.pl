@@ -296,6 +296,7 @@ if ($barcode) {
         unless($issueconfirmed){
             #  Get the item title for more information
             my $getmessageiteminfo  = GetBiblioFromItemNumber(undef,$barcode);
+	    $template->{VARS}->{'additional_materials'} = $getmessageiteminfo->{'materials'};
             $template->param( itemhomebranch => $getmessageiteminfo->{'homebranch'} );
 
             # pass needsconfirmation to template if issuing is possible and user hasn't yet confirmed.

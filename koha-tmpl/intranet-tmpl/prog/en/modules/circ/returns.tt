@@ -54,6 +54,12 @@ function Dopop(link) {
 
 <div class="yui-g">
 
+[% IF additional_materials %]
+    <div class="dialog message" id="materials">Note about the accompanying materials: <br />
+    [% additional_materials %]
+    </div>
+[% END %]
+
 [% IF ( collectionItemNeedsTransferred ) %]
 	<div id="rotating-collection" class="dialog message">This item is part of a Rotating Collection and needs to be Transferred to [% collectionBranch %]</div>
 [% END %]
