@@ -305,7 +305,7 @@ if (@branchcodes) {
     @branches = grep { $seen{$_} } @overduebranches;
     
     
-    if (@overduebranches) {
+    if (@branches) {
 
     	my $branch_word = scalar @branches > 1 ? 'branches' : 'branch';
 	$verbose and warn "$branch_word @branches have overdue rules\n";
