@@ -678,95 +678,89 @@ sub getFacets {
     if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
         $facets = [
             {
-                link_value  => 'su-to',
-                label_value => 'Topics',
-                tags        =>
-                  [ '600', '601', '602', '603', '604', '605', '606', '610' ],
-                subfield => 'a',
+                idx   => 'su-to',
+                label => 'Topics',
+                tags  => [ qw/ 600a 601a 602a 603a 604a 605a 606ax 610a/ ],
+                sep   => ' - ',
             },
             {
-                link_value  => 'su-geo',
-                label_value => 'Places',
-                tags        => ['651'],
-                subfield    => 'a',
+                idx   => 'su-geo',
+                label => 'Places',
+                tags  => [ qw/ 651a / ],
+                sep   => ' - ',
             },
             {
-                link_value  => 'su-ut',
-                label_value => 'Titles',
-                tags        => [ '500', '501', '502', '503', '504', ],
-                subfield    => 'a',
+                idx   => 'su-ut',
+                label => 'Titles',
+                tags  => [ qw/ 500a 501a 502a 503a 504a / ],
+                sep   => ', ',
             },
             {
-                link_value  => 'au',
-                label_value => 'Authors',
-                tags        => [ '700', '701', '702', ],
-                subfield    => 'a',
+                idx   => 'au',
+                label => 'Authors',
+                tags  => [ qw/ 700ab 701ab 702ab / ],
+                sep   => ', ',
             },
             {
-                link_value  => 'se',
-                label_value => 'Series',
-                tags        => ['225'],
-                subfield    => 'a',
+                idx   => 'se',
+                label => 'Series',
+                tags  => [ qw/ 225a / ],
+                sep   => ', ',
             },
-            ];
-
-            my $library_facet;
-
-            $library_facet = {
-                link_value  => 'branch',
-                label_value => 'Libraries',
-                tags        => [ '995', ],
-                subfield    => 'b',
-                expanded    => '1',
-            };
-            push @$facets, $library_facet unless C4::Context->preference("singleBranchMode");
+        ];
+        my $library_facet = {
+            idx   => 'branch',
+            label => 'Libraries',
+            tags  => [ qw/ 995b / ],
+            expanded => '1',
+        };
+        push @$facets, $library_facet unless C4::Context->preference("singleBranchMode");
     }
     else {
         $facets = [
             {
-                link_value  => 'su-to',
-                label_value => 'Topics',
-                tags        => ['650'],
-                subfield    => 'a',
+                idx   => 'su-to',
+                label => 'Topics',
+                tags  => [ qw/ 650a / ],
+                sep   => '--',
             },
-
             #        {
-            #        link_value => 'su-na',
-            #        label_value => 'People and Organizations',
-            #        tags => ['600', '610', '611'],
-            #        subfield => 'a',
+            #        idx   => 'su-na',
+            #        label => 'People and Organizations',
+            #        tags  => [ qw/ 600a 610a 611a / ],
+            #        sep   => 'a',
             #        },
             {
-                link_value  => 'su-geo',
-                label_value => 'Places',
-                tags        => ['651'],
-                subfield    => 'a',
+                idx   => 'su-geo',
+                label => 'Places',
+                tags  => [ qw/ 651a / ],
+                sep   => '--',
             },
             {
-                link_value  => 'su-ut',
-                label_value => 'Titles',
-                tags        => ['630'],
-                subfield    => 'a',
+                idx   => 'su-ut',
+                label => 'Titles',
+                tags  => [ qw/ 630a / ],
+                sep   => '--',
             },
             {
-                link_value  => 'au',
-                label_value => 'Authors',
-                tags        => [ '100', '110', '700', ],
-                subfield    => 'a',
+                idx   => 'au',
+                label => 'Authors',
+                tags  => [ qw/ 100a 110a 700a / ],
+                sep   => ', ',
             },
             {
-                link_value  => 'se',
-                label_value => 'Series',
-                tags        => [ '440', '490', ],
-                subfield    => 'a',
+                idx   => 'se',
+                label => 'Series',
+                tags  => [ qw/ 440a 490a / ],
+                sep   => ', ',
             },
             ];
             my $library_facet;
             $library_facet = {
-                link_value  => 'branch',
-                label_value => 'Libraries',
-                tags        => [ '952', ],
-                subfield    => 'b',
+                idx   => 'branch',
+                label => 'Libraries',
+                tags  => [ qw/ 952b / ],
+                sep   => ', ',
                 expanded    => '1',
             };
             push @$facets, $library_facet unless C4::Context->preference("singleBranchMode");

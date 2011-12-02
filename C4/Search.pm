@@ -469,46 +469,39 @@ sub getRecords {
                 if ( !$scan && $servers[ $i - 1 ] =~ /biblioserver/ ) {
 
                     my $jmax = $size>$facets_maxrecs? $facets_maxrecs: $size;
-
-                    for ( my $k = 0 ; $k <= @$facets ; $k++ ) {
-                        ($facets->[$k]) or next;
-                        my @fcodes = @{$facets->[$k]->{'tags'}};
-                        my $sfcode = $facets->[$k]->{'subfield'};
-
+                    for my $facet ( @$facets ) {
 		                for ( my $j = 0 ; $j < $jmax ; $j++ ) {
 		                    my $render_record = $results[ $i - 1 ]->record($j)->render();
                             my @used_datas = ();
-
-                            foreach my $fcode (@fcodes) {
-
+                            foreach my $tag ( @{$facet->{tags}} ) {
                                 # avoid first line
-                                my $field_pattern = '\n'.$fcode.' ([^\n]+)';
+                                my $tag_num = substr($tag, 0, 3);
+                                my $letters = substr($tag, 3);
+                                my $field_pattern = '\n' . $tag_num . ' ([^\n]+)';
                                 my @field_tokens = ( $render_record =~ /$field_pattern/g ) ;
-
                                 foreach my $field_token (@field_tokens) {
-                                    my $subfield_pattern = '\$'.$sfcode.' ([^\$]+)';
-                                    my @subfield_values = ( $field_token =~ /$subfield_pattern/g );
-
-                                    foreach my $subfield_value (@subfield_values) {
-
-                                        my $data = $subfield_value;
-                                        $data =~ s/^\s+//; # trim left
-                                        $data =~ s/\s+$//; # trim right
-
-                                        unless ( $data ~~ @used_datas ) {
-                                            $facets_counter->{ $facets->[$k]->{'link_value'} }->{$data}++;
-                                            push @used_datas, $data;
+                                    my @subf = ( $field_token =~ /\$([a-zA-Z0-9]) ([^\$]+)/g );
+                                    my @values;
+                                    for (my $i = 0; $i < @subf; $i += 2) {
+                                        if ( $letters =~ $subf[$i] ) {
+                                             my $value = $subf[$i+1];
+                                             $value =~ s/^ *//;
+                                             $value =~ s/ *$//;
+                                             push @values, $value;
                                         }
-                                    } # subfields
+                                    }
+                                    my $data = join($facet->{sep}, @values);
+                                    unless ( $data ~~ @used_datas ) {
+                                        $facets_counter->{ $facet->{idx} }->{$data}++;
+                                        push @used_datas, $data;
+                                    }
                                 } # fields
                             } # field codes
                         } # records
-
-                        $facets_info->{ $facets->[$k]->{'link_value'} }->{'label_value'} = $facets->[$k]->{'label_value'};
-                        $facets_info->{ $facets->[$k]->{'link_value'} }->{'expanded'} = $facets->[$k]->{'expanded'};
+                        $facets_info->{ $facet->{idx} }->{label_value} = $facet->{label};
+                        $facets_info->{ $facet->{idx} }->{expanded} = $facet->{expanded};
                     } # facets
                 }
-                # End PROGILONE
             }
 
             # warn "connection ", $i-1, ": $size hits";
