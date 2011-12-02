@@ -10,25 +10,44 @@ use C4::Output;
 
 
 use C4::Calendar;
+use DateTime;
 
-my $input = new CGI;
-my $dbh = C4::Context->dbh();
+my $input               = new CGI;
+my $dbh                 = C4::Context->dbh();
 
-my $branchcode = $input->param('newBranchName');
-my $originalbranchcode = $branchcode;
-my $weekday = $input->param('newWeekday');
-my $day = $input->param('newDay');
-my $month = $input->param('newMonth');
-my $year = $input->param('newYear');
-my $title = $input->param('newTitle');
-my $description = $input->param('newDescription');
-my $newoperation = $input->param('newOperation');
-my $allbranches = $input->param('allBranches');
+my $branchcode          = $input->param('newBranchName');
+my $originalbranchcode  = $branchcode;
+my $weekday             = $input->param('newWeekday');
+my $day                 = $input->param('newDay');
+my $month               = $input->param('newMonth');
+my $year                = $input->param('newYear');
+my $day1;
+my $month1;
+my $year1;
+my $dateofrange         = $input->param('dateofrange');
+my $title               = $input->param('newTitle');
+my $description         = $input->param('newDescription');
+my $newoperation        = $input->param('newOperation');
+my $allbranches         = $input->param('allBranches');
 
-my $calendardate = sprintf("%04d-%02d-%02d", $year, $month, $day);
-my $isodate = C4::Dates->new($calendardate, 'iso');
-$calendardate = $isodate->output('syspref');
+my $calendardate        = sprintf("%04d-%02d-%02d", $year, $month, $day);
+my $isodate             = C4::Dates->new($calendardate, 'iso');
+$calendardate           = $isodate->output('syspref');
 
+my @dateend = split(/[\/-]/, $dateofrange);
+if (C4::Context->preference("dateformat") eq "metric") {
+    $day1 = $dateend[0];
+    $month1 = $dateend[1];
+    $year1 = $dateend[2];
+}elsif (C4::Context->preference("dateformat") eq "us") {
+    $month1 = $dateend[0];
+    $day1 = $dateend[1];
+    $year1 = $dateend[2];
+} else {
+    $year1 = $dateend[0];
+    $month1 = $dateend[1];
+    $day1 = $dateend[2];
+}
 $title || ($title = '');
 if ($description) {
 	$description =~ s/\r/\\r/g;
@@ -80,5 +99,52 @@ sub add_holiday {
 						             description => $description);
 		}
 
-	}
+	} elsif ( $newoperation eq 'holidayrange' ) {
+        #Make an array with holiday's days
+        my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
+        my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
+        my @holiday_list = ();
+
+        for (my $dt = $first_dt->clone();
+            $dt <= $end_dt;
+            $dt->add(days => 1) )
+            {
+            push @holiday_list, $dt->clone();
+            }
+
+        foreach my $date (@holiday_list){
+            unless ( $calendar->isHoliday( $date->{local_c}->{day}, $date->{local_c}->{month}, $date->{local_c}->{year} ) ) {
+            $calendar->insert_single_holiday(
+                day         => $date->{local_c}->{day},
+                month       => $date->{local_c}->{month},
+                year        => $date->{local_c}->{year},
+                title       => $title,
+                description => $description
+                );
+            }
+        }
+    } elsif ( $newoperation eq 'holidayrangerepeat' ) {
+        #Make an array with holiday's days
+        my $first_dt = DateTime->new(year => $year, month  => $month,  day => $day);
+        my $end_dt   = DateTime->new(year => $year1, month  => $month1,  day => $day1);
+        my @holiday_list = ();
+
+        for (my $dt = $first_dt->clone();
+            $dt <= $end_dt;
+            $dt->add(days => 1) )
+            {
+            push @holiday_list, $dt->clone();
+            }
+
+        foreach my $date (@holiday_list){
+            unless ( $calendar->isHoliday( $date->{local_c}->{day}, $date->{local_c}->{month}, $date->{local_c}->{year} ) ) {
+            $calendar->insert_day_month_holiday(
+                day         => $date->{local_c}->{day},
+                month       => $date->{local_c}->{month},
+                title       => $title,
+                description => $description
+                );
+            }
+        }
+    }
 }
