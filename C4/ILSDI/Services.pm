@@ -315,7 +315,7 @@ sub AuthenticatePatron {
     my ($cgi) = @_;
 
     # Check if borrower exists, using a C4::Auth function...
-    unless( checkpw( C4::Context->dbh, $cgi->param('username'), $cgi->param('password') ) ) {
+    unless( C4::Auth::checkpw( C4::Context->dbh, $cgi->param('username'), $cgi->param('password') ) ) {
         return { code => 'PatronNotFound' };
     }
 
