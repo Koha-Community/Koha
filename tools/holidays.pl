@@ -147,6 +147,7 @@ $template->param(WEEK_DAYS_LOOP => \@week_days,
         keydate => $keydate,
         branchcodes => $branchcodes,
         branch => $branch,
+        DHTMLcalendar_dateformat => C4::Dates->DHTMLcalendar(),
         branchname => $branchname
   );
 
