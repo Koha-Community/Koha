@@ -556,25 +556,26 @@ my @fields = $temp->fields();
 
 
 my @hostitemnumbers;
-my $analyticfield = '773';
-if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC') {
-    $analyticfield = '773';
-} elsif ($marcflavour eq 'UNIMARC') {
-    $analyticfield = '461';
-}
-foreach my $hostfield ($temp->field($analyticfield)){
-    if ($hostfield->subfield('0')){
-        my $hostrecord = GetMarcBiblio($hostfield->subfield('0'), 1);
-        my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostfield->subfield('0')) );
-        foreach my $hostitem ($hostrecord->field($itemfield)){
-            if ($hostitem->subfield('9') eq $hostfield->subfield('9')){
-                push (@fields, $hostitem);
-                push (@hostitemnumbers, $hostfield->subfield('9'));
+if ( C4::Context->preference('EasyAnalyticalRecords') ) {
+    my $analyticfield = '773';
+    if ($marcflavour  eq 'MARC21' || $marcflavour eq 'NORMARC') {
+        $analyticfield = '773';
+    } elsif ($marcflavour eq 'UNIMARC') {
+        $analyticfield = '461';
+    }
+    foreach my $hostfield ($temp->field($analyticfield)){
+	if ($hostfield->subfield('0')){
+            my $hostrecord = GetMarcBiblio($hostfield->subfield('0'), 1);
+	    my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostfield->subfield('0')) );
+	    foreach my $hostitem ($hostrecord->field($itemfield)){
+		if ($hostitem->subfield('9') eq $hostfield->subfield('9')){
+		    push (@fields, $hostitem);
+                    push (@hostitemnumbers, $hostfield->subfield('9'));
+                }
             }
         }
     }
 }
-
 
 
 foreach my $field (@fields) {
@@ -607,18 +608,21 @@ foreach my $field (@fields) {
             }
         }
         $this_row{itemnumber} = $subfieldvalue if ($field->tag() eq $itemtagfield && $subfieldcode eq $itemtagsubfield);
-	foreach my $hostitemnumber (@hostitemnumbers){
+
+	if ( C4::Context->preference('EasyAnalyticalRecords') ) {
+	    foreach my $hostitemnumber (@hostitemnumbers){
 		if ($this_row{itemnumber} eq $hostitemnumber){
 			$this_row{hostitemflag} = 1;
 			$this_row{hostbiblionumber}= GetBiblionumberFromItemnumber($hostitemnumber);
 			last;
 		}
-	}
+	    }
 
-#	my $countanalytics=GetAnalyticsCount($this_row{itemnumber});
-#        if ($countanalytics > 0){
+#	    my $countanalytics=GetAnalyticsCount($this_row{itemnumber});
+#           if ($countanalytics > 0){
 #                $this_row{countanalytics} = $countanalytics;
-#        }
+#           }
+	}
 
     }
     if (%this_row) {
