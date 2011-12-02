@@ -146,7 +146,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% IF ( breeding_loo.breedingid ) %]
 
 	    <tr id="row[% breeding_loo.breedingid %]">
-	        <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview Card</a> <a href="#" onclick="Import([% breeding_loo.breedingid %],0); return false">Import</a><a href="#" onclick="closemenu();return false;" title="Close this menu"> X </a></div> </td>
+	        <td>[% breeding_loo.server %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid %]" rel="gb_page_center[600,500]">Preview Card</a> <a href="#" onclick="Import([% breeding_loo.breedingid %],[% breeding_loo.biblionumber %]); return false">Import</a><a href="#" onclick="closemenu();return false;" title="Close this menu"> X </a></div> </td>
             <td>[% breeding_loo.title |html %]</td>
             <td>[% breeding_loo.author %]</td>
             <td>[% breeding_loo.date %]</td>
