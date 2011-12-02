@@ -243,6 +243,7 @@ sub findrelatedto ($$) {
 sub SendAlerts {
     my ( $type, $externalid, $letter ) = @_;
     my $dbh = C4::Context->dbh;
+    my $strsth;
     if ( $type eq 'issue' ) {
 
         # 		warn "sending issues...";
@@ -290,29 +291,56 @@ sub SendAlerts {
                     );
                 sendmail(%mail) or carp $Mail::Sendmail::error;
 
-# warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
             }
         }
     }
     elsif ( $type eq 'claimacquisition' ) {
 
-        # 		warn "sending issues...";
-        my $letter = getletter( 'claimacquisition', $letter );
+        $letter = getletter( 'claimacquisition', $letter );
 
         # prepare the letter...
         # search the biblionumber
-        my $strsth =
-"select aqorders.*,aqbasket.*,biblio.*,biblioitems.* from aqorders LEFT JOIN aqbasket on aqbasket.basketno=aqorders.basketno LEFT JOIN biblio on aqorders.biblionumber=biblio.biblionumber LEFT JOIN biblioitems on aqorders.biblioitemnumber=biblioitems.biblioitemnumber where aqorders.ordernumber IN ("
+        $strsth = qq{
+            SELECT aqorders.*,aqbasket.*,biblio.*,biblioitems.*,aqbooksellers.*
+            FROM aqorders
+            LEFT JOIN aqbasket ON aqbasket.basketno=aqorders.basketno
+            LEFT JOIN biblio ON aqorders.biblionumber=biblio.biblionumber
+            LEFT JOIN biblioitems ON aqorders.biblioitemnumber=biblioitems.biblioitemnumber
+            LEFT JOIN aqbooksellers ON aqbasket.booksellerid=aqbooksellers.id
+            WHERE aqorders.ordernumber IN (
+        }
           . join( ",", @$externalid ) . ")";
+    }
+    elsif ( $type eq 'claimissues' ) {
+
+        $letter = getletter( 'claimissues', $letter );
+
+        # prepare the letter...
+        # search the biblionumber
+        $strsth = qq{
+            SELECT serial.*,subscription.*, biblio.*, aqbooksellers.*
+            FROM serial
+            LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid
+            LEFT JOIN biblio ON serial.biblionumber=biblio.biblionumber
+            LEFT JOIN aqbooksellers ON subscription.aqbooksellerid=aqbooksellers.id
+            WHERE serial.serialid IN (
+        }
+          . join( ",", @$externalid ) . ")";
+    }
+
+    if ( $type eq 'claimacquisition' or $type eq 'claimissues' ) {
         my $sthorders = $dbh->prepare($strsth);
         $sthorders->execute;
-        my $dataorders = $sthorders->fetchall_arrayref( {} );
-        parseletter( $letter, 'aqbooksellers',
-            $dataorders->[0]->{booksellerid} );
-        my $sthbookseller =
-          $dbh->prepare("select * from aqbooksellers where id=?");
-        $sthbookseller->execute( $dataorders->[0]->{booksellerid} );
-        my $databookseller = $sthbookseller->fetchrow_hashref;
+        my @fields = map {
+            $sthorders->{mysql_table}[$_] . "." . $sthorders->{NAME}[$_] }
+            (0 .. $#{$sthorders->{NAME}} ) ;
+
+        my @orders_infos;
+        while ( my $row = $sthorders->fetchrow_arrayref() ) {
+            my %rec = ();
+            @rec{@fields} = @$row;
+            push @orders_infos, \%rec;
+        }
 
         # parsing branch info
         my $userenv = C4::Context->userenv;
@@ -321,129 +349,65 @@ sub SendAlerts {
         # parsing librarian name
         $letter->{content} =~ s/<<LibrarianFirstname>>/$userenv->{firstname}/g;
         $letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/g;
-        $letter->{content} =~
-          s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
-        foreach my $data ( @{$dataorders} ) {
-            if ( $letter->{content} =~ m/(<<.*>>)/ ) {
-                my $line = $1;
-                foreach my $field ( keys %{$data} ) {
-                    $line =~ s/(<<[^\.]+.$field>>)/$data->{$field}/;
-                }
-                $letter->{content} =~ s/(<<.*>>)/$line\n$1/;
-            }
+        $letter->{content} =~ s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
+
+        # Get Fields remplacement
+        my $order_format = $1 if ( $letter->{content} =~ m/(<order>.*<\/order>)/xms );
+
+        # Foreach field to remplace
+        while ( $letter->{content} =~ m/<<([^>]*)>>/g ) {
+            my $field = $1;
+            my $value = $orders_infos[0]->{$field} || "";
+            $value = sprintf("%.2f", $value) if $field =~ /price/;
+            $letter->{content} =~ s/<<$field>>/$value/g;
         }
-        $letter->{content} =~ s/<<[^>]*>>//g;
+
+        if ( $order_format ) {
+            # For each order
+            foreach my $infos ( @orders_infos ) {
+                my $order_content = $order_format;
+                # We replace by value
+                while ( $order_content =~ m/<<([^>]*)>>/g ) {
+                    my $field = $1;
+                    my $value = $infos->{$field} || "";
+                    $value = sprintf("%.2f", $value) if $field =~ /price/;
+                    $order_content =~ s/(<<$field>>)/$value/g;
+                }
+                $order_content =~ s/<\/{0,1}?order>//g;
+                $letter->{content} =~ s/<order>.*<\/order>/$order_content\n$order_format/xms;
+            }
+            $letter->{content} =~ s/<order>.*<\/order>//xms;
+        }
+
         my $innerletter = $letter;
 
         # ... then send mail
-        if (   $databookseller->{bookselleremail}
-            || $databookseller->{contemail} )
-        {
+        if (   $orders_infos[0]->{'aqbooksellers.bookselleremail'}
+            || $orders_infos[0]->{'aqbooksellers.contemail'} ) {
+            my $to = $orders_infos[0]->{'aqbooksellers.bookselleremail'};
+            $to .= ", " if $to;
+            $to .= $orders_infos[0]->{'aqbooksellers.contemail'} || "";
             my %mail = (
-                To => $databookseller->{bookselleremail}
-                  . (
-                    $databookseller->{contemail}
-                    ? "," . $databookseller->{contemail}
-                    : ""
-                  ),
+                To             => $to,
                 From           => $userenv->{emailaddress},
                 Subject        => "" . $innerletter->{title},
                 Message        => "" . $innerletter->{content},
                 'Content-Type' => 'text/plain; charset="utf8"',
             );
             sendmail(%mail) or carp $Mail::Sendmail::error;
+            warn "sending to $mail{To} From $mail{From} subj $mail{Subject} Mess $mail{Message}";
+            if ( C4::Context->preference("LetterLog") ) {
+                logaction( "ACQUISITION", "Send Acquisition claim letter", "", "order list : " . join( ",", @$externalid ) . "\n$innerletter->{title}\n$innerletter->{content}" ) if $type eq 'claimacquisition';
+                logaction( "ACQUISITION", "CLAIM ISSUE", undef, "To=" . $mail{To} . " Title=" . $innerletter->{title} . " Content=" . $innerletter->{content} ) if $type eq 'claimissues';
+            }
+        } else {
+            die "This bookseller has no email\n";
         }
-        if ( C4::Context->preference("LetterLog") ) {
-            logaction(
-                "ACQUISITION",
-                "Send Acquisition claim letter",
-                "",
-                "order list : "
-                  . join( ",", @$externalid )
-                  . "\n$innerletter->{title}\n$innerletter->{content}"
-            );
-        }
+
+        warn "sending to From $userenv->{emailaddress} subj $innerletter->{title} Mess $innerletter->{content}";
     }
-    elsif ( $type eq 'claimissues' ) {
 
-        # 		warn "sending issues...";
-        my $letter = getletter( 'claimissues', $letter );
-
-        # prepare the letter...
-        # search the biblionumber
-        my $strsth =
-"select serial.*,subscription.*, biblio.* from serial LEFT JOIN subscription on serial.subscriptionid=subscription.subscriptionid LEFT JOIN biblio on serial.biblionumber=biblio.biblionumber where serial.serialid IN ("
-          . join( ",", @$externalid ) . ")";
-        my $sthorders = $dbh->prepare($strsth);
-        $sthorders->execute;
-        my $dataorders = $sthorders->fetchall_arrayref( {} );
-        parseletter( $letter, 'aqbooksellers',
-            $dataorders->[0]->{aqbooksellerid} );
-        my $sthbookseller =
-          $dbh->prepare("select * from aqbooksellers where id=?");
-        $sthbookseller->execute( $dataorders->[0]->{aqbooksellerid} );
-        my $databookseller = $sthbookseller->fetchrow_hashref;
-
-        # parsing branch info
-        my $userenv = C4::Context->userenv;
-        parseletter( $letter, 'branches', $userenv->{branch} );
-
-        # parsing librarian name
-        $letter->{content} =~ s/<<LibrarianFirstname>>/$userenv->{firstname}/g;
-        $letter->{content} =~ s/<<LibrarianSurname>>/$userenv->{surname}/g;
-        $letter->{content} =~
-          s/<<LibrarianEmailaddress>>/$userenv->{emailaddress}/g;
-        foreach my $data ( @{$dataorders} ) {
-            if ( $letter->{content} =~ m/(<<.*>>)/ ) {
-                my $line = $1;
-                foreach my $field ( keys %{$data} ) {
-                    $line =~ s/(<<[^\.]+.$field>>)/$data->{$field}/;
-                }
-                $letter->{content} =~ s/(<<.*>>)/$line\n$1/;
-            }
-        }
-        $letter->{content} =~ s/<<[^>]*>>//g;
-        my $innerletter = $letter;
-
-        # ... then send mail
-        if (   $databookseller->{bookselleremail}
-            || $databookseller->{contemail} ) {
-            my $mail_to = $databookseller->{bookselleremail};
-            if ($databookseller->{contemail}) {
-                if (!$mail_to) {
-                    $mail_to = $databookseller->{contemail};
-                } else {
-                    $mail_to .= q|,|;
-                    $mail_to .= $databookseller->{contemail};
-                }
-            }
-            my $mail_subj = $innerletter->{title};
-            my $mail_msg  = $innerletter->{content};
-            $mail_msg  ||= q{};
-            $mail_subj ||= q{};
-
-            my %mail = (
-                To => $mail_to,
-                From    => $userenv->{emailaddress},
-                Subject => $mail_subj,
-                Message => $mail_msg,
-                'Content-Type' => 'text/plain; charset="utf8"',
-            );
-            sendmail(%mail) or carp $Mail::Sendmail::error;
-            logaction(
-                "ACQUISITION",
-                "CLAIM ISSUE",
-                undef,
-                "To="
-                  . $databookseller->{contemail}
-                  . " Title="
-                  . $innerletter->{title}
-                  . " Content="
-                  . $innerletter->{content}
-            ) if C4::Context->preference("LetterLog");
-        }
-    }    
-   # send an "account details" notice to a newly created user 
+    # send an "account details" notice to a newly created user
     elsif ( $type eq 'members' ) {
         # must parse the password special, before it's hashed.
         $letter->{content} =~ s/<<borrowers.password>>/$externalid->{'password'}/g;

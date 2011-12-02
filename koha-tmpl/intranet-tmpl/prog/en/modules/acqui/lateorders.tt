@@ -1,6 +1,20 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Late orders</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript">
+//<![CDATA[
+$(document).ready(function() {
+    $("input:checkbox[name=claim_for]").click(function(){
+        var supplierid = $(this).attr('supplierid');
+        if ( $("input:checkbox[name=claim_for]:checked").length > 0) {
+            $("input:checkbox[name=claim_for][supplierid!="+supplierid+"]").attr('disabled', true);
+        } else {
+            $("input:checkbox[name=claim_for]").attr('disabled', false);
+        }
+    });
+});
+//]]>
+</script>
 </head>
 <body>
 [% INCLUDE 'header.inc' %]
@@ -17,9 +31,17 @@
 <h1>[% IF ( Supplier ) %][% Supplier %] : [% END %]Late orders</h1>
 <div id="acqui_lateorders">
 
+[% IF error_claim %]
+    <div class="error">[% error_claim %]</div>
+[% END %]
+[% IF info_claim %]
+    <div class="info">[% info_claim %]</div>
+[% END %]
 [% IF ( lateorders ) %]
 <form action="lateorders.pl" name="claim" method="post">
   <input type="hidden" name="op" value="send_alert" />
+  <input type="hidden" name="delay" value="[% delay %]" />
+  <input type="hidden" name="supplierid" value="[% SupplierId %]" />
 	[% IF ( letters ) %]
 	<p><label for="letter_code">Claim using notice: </label><select name="letter_code" id="letter_code">
 	  [% FOREACH letter IN letters %]
@@ -35,12 +57,20 @@
             <th>Information</th>
             <th>Total cost</th>
             <th>Basket</th>
-            <th>&nbsp;</th>
+            <th>Claims count</th>
+            <th>Claimed date</th>
+            <!-- TMPL_IF name="Supplier" -->
+            [% IF Supplier %]
+                <th><input type="checkbox" id="checkAll"></th>
+            [% ELSE %]
+                <th></th>
+            [% END %]
         </tr>
     [% FOREACH lateorder IN lateorders %]
         [% UNLESS ( loop.odd ) %]<tr class="highlight">
         [% ELSE %]<tr>[% END %]
             <td>
+                ([% lateorder.supplierid %])
                 [% lateorder.orderdate %]
                 ([% lateorder.latesince %] days)
             </td>
@@ -69,8 +99,13 @@
                  </p>
                  <p title="branch">[% lateorder.branch %]</p>
             </td>
+            <td>[% lateorder.claims_count %]</td>
+            <td>[% lateorder.claimed_date %]</td>
             <td>
-                <input type="checkbox" name="claim_for" value="[% lateorder.ordernumber %]" />
+                [% UNLESS lateorder.budget_lock %]
+                    <input type="checkbox" name="claim_for" value="[% lateorder.ordernumber %]"  supplierid="[% lateorder.supplierid %]"/>
+                [% END %]
+             </td>
             </td>
         </tr>
         [% END %]
@@ -78,6 +113,8 @@
             <th>Total</th>
             <th colspan="2">&nbsp;</th>
             <th>[% total %]</th>
+            <th>&nbsp;</th>
+            <th>&nbsp;</th>
             <th>&nbsp;</th>
             <td>
                 <input type="submit" value="Claim Order" />

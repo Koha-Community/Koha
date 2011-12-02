@@ -62,6 +62,8 @@ BEGIN {
         &GetContracts &GetContract
 
         &GetItemnumbersFromOrder
+
+        &AddClaim
     );
 }
 
@@ -1453,9 +1455,12 @@ sub GetLateOrders {
         DATE(aqbasket.closedate)  AS orderdate,
         aqorders.rrp              AS unitpricesupplier,
         aqorders.ecost            AS unitpricelib,
+        aqorders.claims_count     AS claims_count,
+        aqorders.claimed_date     AS claimed_date,
         aqbudgets.budget_name     AS budget,
         borrowers.branchcode      AS branch,
         aqbooksellers.name        AS supplier,
+        aqbooksellers.id          AS supplierid,
         biblio.author, biblio.title,
         biblioitems.publishercode AS publisher,
         biblioitems.publicationyear,
@@ -1517,6 +1522,7 @@ sub GetLateOrders {
     my @results;
     while (my $data = $sth->fetchrow_hashref) {
         $data->{orderdate} = format_date($data->{orderdate});
+        $data->{claimed_date} = format_date($data->{claimed_date});
         push @results, $data;
     }
     return @results;
@@ -1777,6 +1783,31 @@ sub GetContract {
     $sth->execute( $contractno );
     my $result = $sth->fetchrow_hashref;
     return $result;
+}
+
+=head3 AddClaim
+
+=over 4
+
+&AddClaim($ordernumber);
+
+Add a claim for an order
+
+=back
+
+=cut
+sub AddClaim {
+    my ($ordernumber) = @_;
+    my $dbh          = C4::Context->dbh;
+    my $query        = "
+        UPDATE aqorders SET
+            claims_count = claims_count + 1,
+            claimed_date = CURDATE()
+        WHERE ordernumber = ?
+        ";
+    my $sth = $dbh->prepare($query);
+    $sth->execute($ordernumber);
+
 }
 
 1;
