@@ -103,6 +103,7 @@
 		$("a.helptext").click(function(){
 			$(this).parent().find(".hint").toggle(); return false;
 		});
+		$("#dateofrange").each(function () { this.value = "" });
 	});
 //]]>
 </script>
@@ -209,7 +210,7 @@
 				<input type="hidden" id="newBranchName" name="newBranchName" />
 			</li>
 			<li>
-				<strong>Date:</strong>
+				<strong>From Date:</strong>
 				<span id="newDaynameOutput"></span>, 
 
 				[% IF ( dateformat_us ) %]<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>/<span id="newYearOutput"></span>[% ELSIF ( dateformat_metric ) %]<span id="newDayOutput"></span>/<span id="newMonthOutput"></span>/<span id="newYearOutput"></span>[% ELSE %]<span id="newYearOutput"></span>/<span id="newMonthOutput"></span>/<span id="newDayOutput"></span>[% END %]
@@ -219,6 +220,20 @@
 				<input type="hidden" id="newDay" name="newDay" />
 				<input type="hidden" id="newMonth" name="newMonth" />
 				<input type="hidden" id="newYear" name="newYear" />
+			</li>
+			<li class="dateinsert">
+				<b>To Date : </b>
+				<input type="text" id="dateofrange" name="dateofrange" size="20" value="[% dateofrange %]" />
+				<img src="[% themelang %]/lib/calendar/cal.gif" id="dateofrange_button" alt="Show Calendar" />
+				<script language="JavaScript" type="text/javascript">
+				Calendar.setup(
+					{
+					inputField : "dateofrange",
+					ifFormat : "[% DHTMLcalendar_dateformat %]",
+					button : "dateofrange_button"
+					}
+				);
+				</script>
 			</li>
 			<li><label for="title">Title: </label><input type="text" name="newTitle" id="title" size="35" /></li>
 			<li><label for="newDescription">Description:</label>
@@ -239,6 +254,16 @@
 							<a href="#" class="helptext">[?]</a>
 							<div class="hint">This will take this day and month as a reference to make it a holiday. Through this option, you can repeat this rule for every year. For example, selecting August 1st will make August 1st a holiday every year.</div>
 							</li>
+            <li class="radio"><input type="radio" name="newOperation" id="newOperationField" value="holidayrange" />
+                            <label for="newOperationField">Holidays on a range</label>.
+                            <a href="#" class="helptext">[?]</a>
+                            <div class="hint">Make a single holiday on a range. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, but will not affect August 1st-10st in other years.</div>
+                            </li>
+            <li class="radio"><input type="radio" name="newOperation" id="newOperationFieldyear" value="holidayrangerepeat" />
+                            <label for="newOperationFieldyear">Holidays repeated yearly on a range</label>.
+                            <a href="#" class="helptext">[?]</a>
+                            <div class="hint">Make a single holiday on a range repeated yearly. For example, selecting August 1st, 2012  and August 10st, 2012 will make all days between 1st and 10st holiday, and will affect August 1st-10st in other years.</div>
+                            </li>
 				<li class="radio">
 				<input type="checkbox" name="allBranches" id="allBranches" />
 				<label for="allBranches">Copy to all libraries</label>.
