@@ -99,7 +99,7 @@ for (my $i=0;$i<$numaccts;$i++){
                 'amount'            => sprintf("%.2f",$accts->[$i]{'amount'}),
                 'amountoutstanding' => sprintf("%.2f",$accts->[$i]{'amountoutstanding'}),
                 'accountno' => $accts->[$i]{'accountno'},
-                'payment' => ( $accts->[$i]{'accounttype'} eq 'Pay' ),
+                'payment' => ( $accts->[$i]{'accounttype'} =~ /^Pay/ ),
 
                 );
 
