@@ -161,8 +161,8 @@ function confirm_items_deletion() {
 			location.href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]";
 		}
 		var HoldForButtonMenu = [
-			{ text: "Place hold", url: "/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]" },
-			{ text: "Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", url: "/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]&findborrower=[% holdfor_cardnumber %]" }
+			{ text: _("Place hold"), url: "/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]" },
+			{ text: _("Place hold for")+ " [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])", url: "/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]&findborrower=[% holdfor_cardnumber %]" }
 		];
 
 		//	Instantiate a Split Button using the array of YAHOO.widget.MenuItem 
@@ -172,7 +172,7 @@ function confirm_items_deletion() {
 		var HoldForButton = new YAHOO.widget.Button({
 				id: "holdfor",
 				type: "split",
-				label: "Place hold",
+				label: _("Place hold"),
 				name: "holdfor",
 				menu: HoldForButtonMenu,
 				container: this,
