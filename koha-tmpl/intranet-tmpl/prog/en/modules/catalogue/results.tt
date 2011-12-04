@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of Search [% IF ( query_desc ) %]for '[% query_desc %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="/intranet-tmpl/prog/en/lib/jquery/plugins/jquery.highlight-3.js"></script>
 <script type="text/javascript">
