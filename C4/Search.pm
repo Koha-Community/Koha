@@ -1075,7 +1075,7 @@ sub buildQuery {
     my $cclq       = 0;
     my $cclindexes = getIndexes();
     if ( $query !~ /\s*ccl=/ ) {
-        while ( !$cclq && $query =~ /(?:^|\W)(\w+)(,\w+)*[:=]/g ) {
+        while ( !$cclq && $query =~ /(?:^|\W)([\w-]+)(,[\w-]+)*[:=]/g ) {
             my $dx = lc($1);
             $cclq = grep { lc($_) eq $dx } @$cclindexes;
         }
