@@ -33,7 +33,6 @@ use C4::Dates qw(format_date);
 use C4::Budgets qw(GetCurrency);
 use C4::Templates;
 
-#use HTML::Template::Pro;
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
 BEGIN {
