@@ -79,7 +79,6 @@ BEGIN {
 	# subs to move to Members.pm
 	push @EXPORT, qw(
         &CheckBorrowerDebarred
-        &UpdateBorrowerDebarred
 	);
 	# subs to move to Biblio.pm
 	push @EXPORT, qw(
@@ -1085,28 +1084,6 @@ sub CheckBorrowerDebarred {
     return $debarredstatus;
 }
 
-=head2 UpdateBorrowerDebarred
-
-($borrowerstatut) = &UpdateBorrowerDebarred($borrowernumber, $todate);
-
-update status of borrowers in borrowers table (field debarred)
-
-C<$borrowernumber> borrower number
-
-=cut
-
-sub UpdateBorrowerDebarred{
-    my ( $borrowernumber, $todate ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|UPDATE borrowers
-             SET debarred=?
-                     WHERE borrowernumber=?
-            |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $todate, $borrowernumber );
-    $sth->finish;
-    return 1;
-}
 
 =head2 CheckExistantNotifyid
 

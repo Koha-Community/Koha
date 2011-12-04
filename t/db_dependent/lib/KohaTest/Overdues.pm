@@ -34,7 +34,6 @@ sub methods : Test( 1 ) {
                        CheckAccountLineLevelInfo 
                        GetOverduerules
                        CheckBorrowerDebarred
-                       UpdateBorrowerDebarred
                        CheckExistantNotifyid 
                        CheckAccountLineItemInfo 
                        CheckItemNotify 
