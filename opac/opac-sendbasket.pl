@@ -54,11 +54,19 @@ my $email_sender = $query->param('email_sender');
 my $dbh          = C4::Context->dbh;
 
 if ( $email_add ) {
+    my $user = GetMember(borrowernumber => $borrowernumber);
+    my $user_email = GetFirstValidEmailAddress($borrowernumber)
+    || C4::Context->preference('KohaAdminEmailAddress');
+
     my $email_from = C4::Context->preference('KohaAdminEmailAddress');
+    my $email_replyto = "$user->{firstname} $user->{surname} <$user_email>";
     my $comment    = $query->param('comment');
     my %mail = (
         To   => $email_add,
-        From => $email_from
+        From => $email_from,
+    'Reply-To' => $email_replyto,
+    'X-Orig-IP' => $ENV{'REMOTE_ADDR'},
+    'X-Abuse-Report' => C4::Context->preference('KohaAdminEmailAddress'),
     );
 
     my ( $template2, $borrowernumber, $cookie ) = get_template_and_user(
@@ -66,7 +74,7 @@ if ( $email_add ) {
             template_name   => "opac-sendbasket.tmpl",
             query           => $query,
             type            => "opac",
-            authnotrequired => 1,
+            authnotrequired => 0,
             flagsrequired   => { borrow => 1 },
         }
     );
@@ -105,8 +113,6 @@ if ( $email_add ) {
     }
 
     my $resultsarray = \@results;
-    
-    my $user = GetMember(borrowernumber => $borrowernumber); 
     
     $template2->param(
         BIBLIO_RESULTS => $resultsarray,
@@ -162,14 +168,15 @@ $isofile
 $boundary--
 END_OF_BODY
 
-    # Sending mail
-    if ( sendmail %mail ) {
-        # do something if it works....
+    # Sending mail (if not empty basket)
+    if ( defined($iso2709) && sendmail %mail ) {
+    # do something if it works....
         $template->param( SENT      => "1" );
     }
     else {
         # do something if it doesnt work....
-        carp "Error sending mail: $Mail::Sendmail::error \n";
+    carp "Error sending mail: empty basket" if !defined($iso2709);
+        carp "Error sending mail: $Mail::Sendmail::error" if $Mail::Sendmail::error;
         $template->param( error => 1 );
     }
     $template->param( email_add => $email_add );
