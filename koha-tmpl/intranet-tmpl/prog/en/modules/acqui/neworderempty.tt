@@ -337,8 +337,8 @@ $(document).ready(function()
                 </div></li>
             [% END %]
             </ol>
-            <a style="cursor: pointer; color: grey; font-size: 180%;" onclick="cloneItemBlock('itemblock[% item.itemBlockIndex %]')">+</a>
-            <a style="display:none; cursor: pointer; color: grey; font-size: 180%;" onclick="deleteItemBlock('itemblock[% item.itemBlockIndex %]')">-</a>
+            <a class="addItem" onclick="cloneItemBlock('itemblock[% item.itemBlockIndex %]')">Add</a>
+            <a class="delItem" style="display:none;" onclick="deleteItemBlock('itemblock[% item.itemBlockIndex %]')">Delete</a>
         </div><!-- /iteminformation -->
         </div>
 
