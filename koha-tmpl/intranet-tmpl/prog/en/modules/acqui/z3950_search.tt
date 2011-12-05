@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Acquisitions &rsaquo; Z39.50 Search Results</title>
+<title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( opsearch ) %]Order from external source[% ELSE %]Order from external source &rsaquo; Search results[% END %]</title>
 [% INCLUDE 'greybox.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% themelang %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
@@ -63,11 +63,11 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo; Order from Z39.50 search</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?supplierid=[% booksellerid %]">[% name %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo; [% IF ( opsearch ) %]Order from external source[% ELSE %]<a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">Order from external source</a> &rsaquo; Search results[% END %]</div>
 <div id="doc3" class="yui-t7">
       <div id="bd">
 	  [% IF ( opsearch ) %]
-<h2>Z39.50 Search Points</h2>
+<h2>Order from external source</h2>
     <form method="post" action="z3950_search.pl" name="f" class="checkboxed">
     <input type="hidden" name="op" id="op" value="do_search" />
 	<div class="yui-g">
@@ -126,7 +126,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
 
 [% ELSE %]
-    <h2>Results</h2>
+    <h2>Search results</h2>
     [% IF ( breeding_loop ) %]
     <table id="resultst">
 <thead>    <tr>
