@@ -573,9 +573,8 @@ sub getImageSets {
 
     my @imagesets = (); # list of hasrefs of image set data to pass to template
     my @subdirectories = _getSubdirectoryNames( $paths->{'staff'}{'filesystem'} );
-warn $paths->{'staff'}{'filesystem'};
     foreach my $imagesubdir ( @subdirectories ) {
-	warn $imagesubdir;
+    warn $imagesubdir if $DEBUG;
         my @imagelist     = (); # hashrefs of image info
         my @imagenames = _getImagesFromDirectory( File::Spec->catfile( $paths->{'staff'}{'filesystem'}, $imagesubdir ) );
         my $imagesetactive = 0;
