@@ -4571,6 +4571,12 @@ if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = "3.06.02.001";
+if ( C4::Context->preference("Version") < TransformToNum($DBversion) ) {
+    $dbh->do(" UPDATE `message_attributes` SET message_name='Item_Due' WHERE message_name='Item_DUE'");
+    print "Updating message_name in message_attributes";
+    SetVersion($DBversion);
+}
 
 =head1 FUNCTIONS
 
