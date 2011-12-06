@@ -1923,7 +1923,7 @@ sub TransformHtmlToXml {
         }
         $prevtag = @$tags[$i];
     }
-    $xml .= "</datafield>\n" if @$tags > 0;
+    $xml .= "</datafield>\n" if $xml =~ m/<datafield/;
     if ( C4::Context->preference('marcflavour') eq 'UNIMARC' and !$unimarc_and_100_exist ) {
 
         #     warn "SETTING 100 for $auth_type";
