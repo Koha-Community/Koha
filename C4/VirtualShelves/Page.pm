@@ -367,9 +367,9 @@ sub shelfpage ($$$$$) {
         $qhash{$_} = $query->param($_) if $query->param($_);
     }
     ( scalar keys %qhash ) and $url .= '?' . join '&', map { "$_=$qhash{$_}" } keys %qhash;
-    if ( $shelfnumber ) {
+    if ( $shelfnumber && $totitems ) {
         $template->param(  pagination_bar => pagination_bar( $url, ( int( $totitems / $shelflimit ) ) + ( ( $totitems % $shelflimit ) > 0 ? 1 : 0 ), $itemoff, "itemoff" )  );
-    } else {
+    } elsif ( $totshelves ) {
         $template->param(
              pagination_bar => pagination_bar( $url, ( int( $totshelves / $shelveslimit ) ) + ( ( $totshelves % $shelveslimit ) > 0 ? 1 : 0 ), $shelfoff, "shelfoff" )  );
     }
