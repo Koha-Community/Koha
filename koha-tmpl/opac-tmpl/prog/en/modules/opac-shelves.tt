@@ -92,7 +92,6 @@ $(function() {
           $("#addtags").html("<a id=\"tagsel_tag\" href=\"#\">"+_("Tag")+"<\/a> |");
 
         $(".tagbutton").click(KOHA.Tags.add_tag_button);
-      [% IF ( TagsInputOnList ) %]
       [% IF ( loggedinusername ) %]
             $("#tagsel_tag").click(function(){
                 tagSelected();
@@ -111,7 +110,6 @@ $(function() {
                 window.location = "/cgi-bin/koha/opac-user.pl";
                 return false;
             });
-        [% END %]
         [% END %]
         [% END %][% END %][% END %]
   [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
@@ -278,14 +276,16 @@ $(function() {
           [% END %][% ELSE %]This record has no items.[% END %]</span>
             [% END %]
         [% IF ( TagsEnabled ) %]
-                [% IF ( TagsShowOnList ) %]
-                [% IF ( itemsloo.TagLoop ) %]
-          <div class="results_summary">
-                        <span class="label">Tags:</span>
-                        <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN itemsloo.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
-                            [% END %]
-                        </ul>
-                [% END %]
+          [% IF ( TagsShowOnList ) %]
+            [% IF ( itemsloo.TagLoop.size ) %]
+              <div class="results_summary">
+              <span class="label">Tags:</span>
+              <ul style="display: inline; list-style: none;">[% FOREACH TagLoo IN itemsloo.TagLoop %]<li style="display: inline; list-style: none;"><a href="/cgi-bin/koha/opac-search.pl?tag=[% TagLoo.term |url %]&amp;q=[% TagLoo.term |url %]">[% TagLoo.term %]</a> <span class="weight">([% TagLoo.weight_total %])</span></li>
+                  [% END %]
+              </ul>
+              </div>
+            [% END %]
+          [% END %]
                 [% IF ( TagsInputOnList ) %]
           [% IF ( loggedinusername ) %]
                     <form name="tagform[% itemsloo.biblionumber %]" method="post" action="/cgi-bin/koha/opac-tags.pl">
@@ -299,10 +299,10 @@ $(function() {
                     [% ELSIF ( loop.first ) %]<span class="tagstatus" id="login4tags">Log in to add tags.</span>
                   [% END %]
                 [% END %]
-                  [% IF ( itemsloo.TagLoop ) %]
-          </div>[% END %]
+            [% IF ( loggedinusername ) %]
+              <span id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus" style="display:none;">Tag status here.</span>
+            [% END %]
         [% END %]
-                [% END %]
 
 <span class="results_summary actions"><span class="label">Actions:</span>
       [% IF ( RequestOnOpac ) %]
