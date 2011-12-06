@@ -84,20 +84,45 @@
 		newin=window.open("/cgi-bin/koha/help.pl","KohaHelp",'width=600,height=600,toolbar=false,scrollbars=yes');
 	}
 	$(document).ready(function() {
+
+[% IF ( dateformat_metric ) %]		$.tablesorter.addParser({ // http://tablesorter.com/docs/example-parsers.html
+			id: 'shortDates',
+			is: function(s){
+				return false;
+			},
+			format: function(s){
+				var datepattern = new RegExp("[0-9]\/[0-9]");
+				if( datepattern.test(s)){ // sorting a date without a year: "01/12"
+					var dateparts = s.split("/").reverse().join("-"); // build an ISO date to be sorted as text
+					s = "2000-" + dateparts; // use 2000 as the default year
+				}
+				return s;
+			},
+			type: 'text'
+		});
+[% END %]
 		$(".hint").hide();
 		$("#branch").change(function(){
 			changeBranch();
 		});
-		$("#holidayexceptions").tablesorter({
+		$("#holidayexceptions").tablesorter({[% IF ( dateformat_metric ) %]
+		  dateFormat: 'uk',[% END %]
 		  sortList: [[0,0]], widgets: ['zebra']
 		});
-		$("#holidayweeklyrepeatable").tablesorter({
+		$("#holidayweeklyrepeatable").tablesorter({[% IF ( dateformat_metric ) %]
+		  dateFormat: 'uk',[% END %]
 		  sortList: [[0,0]], widgets: ['zebra']
 		});
-		$("#holidaysyearlyrepeatable").tablesorter({
-		  sortList: [[0,0]], widgets: ['zebra']
+		$("#holidaysyearlyrepeatable").tablesorter({[% IF ( dateformat_metric ) %]
+			headers : {
+				0: {
+					sorter : 'shortDates'
+				}
+			},[% END %]
+			sortList: [[0,0]], widgets: ['zebra']
 		});
-		$("#holidaysunique").tablesorter({
+		$("#holidaysunique").tablesorter({[% IF ( dateformat_metric ) %]
+		  dateFormat: 'uk',[% END %]
 		  sortList: [[0,0]], widgets: ['zebra']
 		});
 		$("a.helptext").click(function(){
@@ -438,7 +463,7 @@
 <table id="holidaysyearlyrepeatable">
 <thead>
 <tr>
-  [% IF ( dateformat == 'metric' ) %]
+  [% IF ( dateformat_metric ) %]
   <th class="repeatableyearly">Day/Month</th>
   [% ELSE %]
   <th class="repeatableyearly">Month/Day</th>
