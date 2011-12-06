@@ -54,6 +54,7 @@ BEGIN {
 	SearchInTable
 	UpdateInTable
 	GetPrimaryKeys
+        clear_columns_cache
 );
 	%EXPORT_TAGS = ( all =>[qw( InsertInTable DeleteInTable SearchInTable UpdateInTable GetPrimaryKeys)]
 				);
@@ -251,6 +252,23 @@ sub GetPrimaryKeys($) {
 	my $hash_columns=_get_columns($tablename);
 	return  grep { $hash_columns->{$_}->{'Key'} =~/PRI/i}  keys %$hash_columns;
 }
+
+
+=head2 clear_columns_cache
+
+  C4::SQLHelper->clear_columns_cache();
+
+cleans the internal cache of sysprefs. Please call this method if
+you update a tables structure. Otherwise, your new changes
+will not be seen by this process.
+
+=cut
+
+sub clear_columns_cache {
+    %$hashref = ();
+}
+
+
 
 =head2 _get_columns
 
