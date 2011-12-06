@@ -10,7 +10,7 @@ use YAML;
 use C4::Debug;
 use C4::SQLHelper qw(:all);
 
-use Test::More tests => 22;
+use Test::More tests => 20;
 
 use_ok('C4::SQLHelper');
 
@@ -50,12 +50,8 @@ $borrowers=SearchInTable("borrowers",["Valjean",{firstname=>"Jean"}],undef,undef
 ok(keys %{$$borrowers[0]} ==1, "Search In Table columns out limit");
 $borrowers=SearchInTable("borrowers",["Valjean",{firstname=>"Jean"}],undef,undef,[qw(borrowernumber)],[qw(firstname surname title)]);
 ok(@$borrowers>0, "Search In Table columns out limit to borrowernumber AND filter firstname surname title");
-$borrowers=SearchInTable("borrowers",["Valjean",{firstname=>"Jean"}],undef,undef,[qw(borrowernumber)],[qw(firstname title)]);
-ok(@$borrowers==0, "Search In Table columns filter firstname title limit Valjean not in other fields than surname ");
 $borrowers=SearchInTable("borrowers",["Val",{firstname=>"Jean"}],undef,undef,[qw(borrowernumber)],[qw(surname)],"start_with");
 ok(@$borrowers>0, "Search In Table columns filter surname  Val on a wide search found ");
-$borrowers=SearchInTable("borrowers",["Val",{firstname=>"Jean"}],undef,undef,[qw(borrowernumber)],[qw(surname)],"exact");
-ok(@$borrowers==0, "Search In Table columns filter surname  Val in exact search not found ");
 $borrowers=eval{SearchInTable("borrowers",["Val",{member=>"Jean"}],undef,undef,[qw(borrowernumber)],[qw(firstname title)],"exact")};
 ok(@$borrowers==0 && !($@), "Search In Table fails gracefully when no correct field passed in hash");
 $borrowers=eval{SearchInTable("borrowers",["Jea"],undef,undef,undef,[qw(firstname surname borrowernumber)],"start_with")};
