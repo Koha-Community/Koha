@@ -210,11 +210,11 @@ function validate1(date) {
         [% IF ( email ) %]<li><span class="label">Primary email:</span><a href="mailto:[% email %]">[% email %]</a></li>[% END %]
         [% IF ( emailpro ) %]<li><span class="label">Secondary email: </span><a href="mailto:[% emailpro %]">[% emailpro %]</a></li>[% END %]
     [% END %]
-    <li><span class="label">Initials: </span>[% initials %]</li>
-    <li><span class="label">Date of birth:</span>[% dateofbirth %]</li>
-    <li><span class="label">Gender:</span>
+    [% IF ( initials ) %]<li><span class="label">Initials: </span>[% initials %]</li>[% END %]
+    [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth %]</li>[% END %]
+    [% IF ( sex ) %]<li><span class="label">Gender:</span>
     [% IF ( sex == 'F' ) %]Female[% ELSIF ( sex == 'M' ) %]Male[% ELSE %][% sex %][% END %]
-    </li>[% END %]
+    </li>[% END %][% END %]
     [% IF ( printethnicityline ) %]
     <li><span class="label">Ethnicity:</span>[% ethnicity %]</li>
     <li><span class="label">Ethnicity notes: </span>[% ethnotes %]</li>
@@ -364,9 +364,9 @@ function validate1(date) {
       <li><span class="label">City: </span>[% B_city %]</li>
       [% IF ( B_state ) %]<li><span class="label">State: </span>[% B_state %]</li>[% END %]
       <li><span class="label">Zip/Postal Code: </span>[% B_zipcode %]</li>
-      <li><span class="label">Country: </span>[% B_country %]</li>
+      [% IF ( B_country ) %]<li><span class="label">Country: </span>[% B_country %]</li>[% END %]
       [% IF ( B_phone ) %]<li><span class="label">Phone: </span>[% B_phone %]</li>[% END %]
-      [% IF ( B_email ) %]<li><span class="label">Email: </span>[% B_email %]</li>[% END %]</ol></div>
+      [% IF ( B_email ) %]<li><span class="label">Email: </span><a href="mailto:[% B_email %]">[% email %]</a></li>[% END %]</ol></div>
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=6">Edit</a></div>
     [% END %]
@@ -378,10 +378,11 @@ function validate1(date) {
     <li><span class="label">Address: </span>[% altcontactaddress1 %]</li>
     <li><span class="label">Address 2: </span>[% altcontactaddress2 %]</li>
 	<li><span class="label">City: </span>[% altcontactaddress3 %]</li>
-	 [% IF ( altcontactstate ) %]<li><span class="label">State: </span>[% altcontactstate %]</li>[% END %]
+    [% IF ( altcontactstate ) %]<li><span class="label">State: </span>[% altcontactstate %]</li>[% END %]
 	<li><span class="label">Zip/Postal Code: </span>[% altcontactzipcode %]</li>
-	<li><span class="label">Country: </span>[% altcontactcountry %]</li>
-    <li><span class="label">Phone: </span>[% altcontactphone %]</li></ol></div>
+	[% IF ( altcontactcountry ) %]<li><span class="label">Country: </span>[% altcontactcountry %]</li>[% END %]
+    [% IF ( altcontactphone ) %]<li><span class="label">Phone: </span>[% altcontactphone %]</li>[% END %]
+    </ol></div>
 </div>
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=2">Edit</a></div>
 
