@@ -95,7 +95,7 @@ function placeHold () {
 		var _alertString="";
 		var alertString2;
 
-	    if(f.addshelf.value.length ==0){
+	    if($("#shelfname").val() == ""){
 			_alertString += _("- You must enter a List Name") + "\n";
 		}
 
@@ -349,7 +349,7 @@ function placeHold () {
         		<tr><th>List Name</th><th>Contents</th><th>Sort by</th><th>Type</th><th>Options</th></tr>
                 [% FOREACH shelveslooppri IN shelveslooppriv %]
                     [% IF ( shelveslooppri.toggle ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
-        <td><a href="shelves.pl?[% IF ( shelveslooppri.showprivateshelves ) %]display=privateshelves&amp;[% END %]viewshelf=[% shelveslooppri.shelf %]&shelfoff=[% shelfoff %]">[% shelveslooppri.shelfname |html %]</a></td>
+        <td><a href="shelves.pl?[% IF ( shelveslooppri.showprivateshelves ) %]display=privateshelves&amp;[% END %]viewshelf=[% shelveslooppri.shelf %]&amp;shelfoff=[% shelfoff %]">[% shelveslooppri.shelfname |html %]</a></td>
         <td>[% shelveslooppri.count %] item(s)</td>
         <td>[% IF ( shelveslooppri.authorsort ) %]Author[% ELSIF ( shelveslooppri.yearsort ) %]Year[% ELSE %]Title[% END %]</td>
         <td>[% IF ( shelveslooppri.viewcategory1 ) %]Private[% END %]
