@@ -644,13 +644,18 @@ sub BatchRevertItems {
     $sth->bind_param(1, $import_record_id);
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref()) {
-        DelItem($dbh, $biblionumber, $row->{'itemnumber'});
-        my $updsth = $dbh->prepare("UPDATE import_items SET status = ? WHERE import_items_id = ?");
-        $updsth->bind_param(1, 'reverted');
-        $updsth->bind_param(2, $row->{'import_items_id'});
-        $updsth->execute();
-        $updsth->finish();
-        $num_items_deleted++;
+        my $error = DelItemCheck($dbh, $biblionumber, $row->{'itemnumber'});
+        if ($error == 1){
+            my $updsth = $dbh->prepare("UPDATE import_items SET status = ? WHERE import_items_id = ?");
+            $updsth->bind_param(1, 'reverted');
+            $updsth->bind_param(2, $row->{'import_items_id'});
+            $updsth->execute();
+            $updsth->finish();
+            $num_items_deleted++;
+        }
+        else {
+            next;
+        }
     }
     $sth->finish();
     return $num_items_deleted;
