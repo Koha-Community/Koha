@@ -331,13 +331,13 @@ if ( $template_type eq 'advsearch' ) {
     my $languages_limit_loop = getAllLanguages();
     $template->param(search_languages_loop => $languages_limit_loop,);
 
-    # use the global setting by default
-    if ( C4::Context->preference("expandedSearchOption") == 1) {
-        $template->param( expanded_options => C4::Context->preference("expandedSearchOption") );
-    }
-    # but let the user override it
-    if ( ($cgi->param('expanded_options') == 0) || ($cgi->param('expanded_options') == 1 ) ) {
-        $template->param( expanded_options => $cgi->param('expanded_options'));
+    # Expanded search options in advanced search:
+    # use the global setting by default, but let the user override it
+    {
+        my $expanded = $cgi->param('expanded_options');
+        $expanded = C4::Context->preference("expandedSearchOption") || 0
+            if !defined($expanded) || $expanded !~ /^0|1$/;
+        $template->param( expanded_options => $expanded );
     }
 
     $template->param(virtualshelves => C4::Context->preference("virtualshelves"));
