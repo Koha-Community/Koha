@@ -18,7 +18,7 @@ my $CARDNUMBER   = 'TESTCARD01';
 my $FIRSTNAME    = 'Marie';
 my $SURNAME      = 'Mcknight';
 my $CATEGORYCODE = 'S';
-my $BRANCHCODE   = 's';
+my $BRANCHCODE   = 'CPL';
 
 my $CHANGED_FIRSTNAME = "Marry Ann";
 my $EMAIL             = "Marie\@email.com";
