@@ -43,7 +43,7 @@ my @USERENV = (
     'Test',
     0,
 );
-my $BRANCH_IDX = 5;
+my $BRANCH_IDX = 4;
 
 C4::Context->_new_userenv ('DUMMY_SESSION_ID');
 C4::Context->set_userenv ( @USERENV );
