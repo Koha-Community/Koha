@@ -216,6 +216,7 @@ sub SearchPrefs {
 
                 foreach my $piece ( @$line ) {
                     if ( ref( $piece ) eq 'HASH' ) {
+                        if ( !$piece->{'pref'} ){ next; }
                         if ( $piece->{'pref'} =~ /^$searchfield$/i ) {
                             my ( undef, $LINES ) = TransformPrefsToHTML( $data, $searchfield );
 
@@ -249,7 +250,7 @@ sub SearchPrefs {
 
 sub matches {
     my ( $text, $terms ) = @_;
-    return !grep( { $text !~ /$_/i } @$terms );
+    if ( $text ) { return !grep( { $text !~ /$_/i } @$terms ); }
 }
 
 my $dbh = C4::Context->dbh;
