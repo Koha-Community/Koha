@@ -29,7 +29,7 @@ find({
     wanted => sub {
         my $file = $_;
 
-        return if $file =~ /\.(ico|jpg|gif|ogg|pdf|png|psd|swf|zip)$/;
+        return if $file =~ /\.(ico|jpg|gif|ogg|pdf|png|psd|swf|zip|.*\~)$/;
         return unless -f $file;
 
         my @name_parts = File::Spec->splitpath($file);
