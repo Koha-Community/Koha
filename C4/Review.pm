@@ -91,7 +91,8 @@ sub updatereview {
 }
 
 sub numberofreviews {
-    my ($status) = @_;
+    my ($param) = @_;
+    my $status = (defined($param) ? $param : 1);
     my $dbh            = C4::Context->dbh;
     my $query          =
       "SELECT count(*) FROM reviews WHERE approved=?";
