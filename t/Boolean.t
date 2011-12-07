@@ -19,3 +19,4 @@ is( true_p('YES'),  '1', 'verified case insensitivity' );
 
 is( true_p(undef), undef, 'recognizes undefined as not boolean' );
 is( true_p('foo'), undef, 'recognizes \'foo\' as not boolean' );
+is( true_p([]), undef, 'recognizes a reference as not a boolean' );
