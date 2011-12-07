@@ -139,7 +139,7 @@ INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES ('ThingISBN',0,'Use with FRBRizeEditions. If ON, Koha will use the ThingISBN web service in the Editions tab on the detail pages.','','YesNo');
 
 -- I18N/L10N
-INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy/mm/dd)','metric|us|iso','Choice');
+INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('dateformat','us','Define global date format (us mm/dd/yyyy, metric dd/mm/yyy, ISO yyyy-mm-dd)','metric|us|iso','Choice');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguages','en','Set the default language in the OPAC.',NULL,'Languages');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('opaclanguagesdisplay',0,'If ON, enables display of Change Language feature on OPAC','','YesNo');
 INSERT INTO `systempreferences` (variable,value,explanation,options,type) VALUES('BorrowersTitles','Mr|Mrs|Miss|Ms','Define appropriate Titles for patrons',NULL,'free');
