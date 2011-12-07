@@ -1,7 +1,8 @@
 #!/usr/bin/perl
 #
-# This Koha test module is a stub!  
-# Add more tests here!!!
+
+# A simple test for UploadedFile
+# only ->new is covered
 
 use strict;
 use warnings;
