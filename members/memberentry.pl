@@ -649,7 +649,7 @@ if (C4::Context->preference('uppercasesurnames')) {
 }
 
 $data{debarred} = C4::Overdues::CheckBorrowerDebarred($borrowernumber);
-$data{datedebarred} = $data{debarred} if ( $data{debarred} ne "9999-12-31" );
+$data{datedebarred} = $data{debarred} if ( $data{debarred} && $data{debarred} ne "9999-12-31" );
 foreach (qw(dateenrolled dateexpiry dateofbirth datedebarred)) {
 	$data{$_} = format_date($data{$_});	# back to syspref for display
 	$template->param( $_ => $data{$_});
