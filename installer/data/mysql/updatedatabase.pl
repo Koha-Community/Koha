@@ -4967,6 +4967,33 @@ if (C4::Context->preference("Version") < TransformToNum($DBversion)) {
     SetVersion ($DBversion);
 }
 
+$DBversion = "3.07.99.032";
+if ( C4::Context->preference("Version") lt TransformToNum($DBversion) ) {
+    $dbh->do("ALTER TABLE virtualshelves MODIFY COLUMN owner int"); #should have been int already (fk to borrowers)
+    $dbh->do("UPDATE virtualshelves vi LEFT JOIN borrowers bo ON bo.borrowernumber=vi.owner SET vi.owner=NULL where bo.borrowernumber IS NULL"); #before adding the constraint on borrowernumber, we need to get rid of deleted owners
+    $dbh->do("DELETE FROM virtualshelves WHERE owner IS NULL and category=1"); #delete private lists without owner (cascades to shelfcontents)
+    $dbh->do("ALTER TABLE virtualshelves ADD COLUMN allow_add tinyint(1) DEFAULT 0, ADD COLUMN allow_delete_own tinyint(1) DEFAULT 1, ADD COLUMN allow_delete_other tinyint(1) DEFAULT 0, ADD CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL");
+    $dbh->do("UPDATE virtualshelves SET allow_add=0, allow_delete_own=1, allow_delete_other=0 WHERE category=1");
+    $dbh->do("UPDATE virtualshelves SET allow_add=0, allow_delete_own=1, allow_delete_other=0 WHERE category=2");
+    $dbh->do("UPDATE virtualshelves SET allow_add=1, allow_delete_own=1, allow_delete_other=1 WHERE category=3");
+    $dbh->do("UPDATE virtualshelves SET category=2 WHERE category=3");
+
+    $dbh->do("ALTER TABLE virtualshelfcontents ADD COLUMN borrowernumber int, ADD CONSTRAINT `shelfcontents_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL");
+    $dbh->do("UPDATE virtualshelfcontents co LEFT JOIN virtualshelves sh USING (shelfnumber) SET co.borrowernumber=sh.owner");
+
+    $dbh->do("CREATE TABLE virtualshelfshares
+    (id int AUTO_INCREMENT PRIMARY KEY, shelfnumber int NOT NULL,
+    borrowernumber int, invitekey varchar(10), sharedate datetime,
+    CONSTRAINT `virtualshelfshares_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+        CONSTRAINT `virtualshelfshares_ibfk_2` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8");
+
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacAllowPublicListCreation',1,'If set, allows opac users to create public lists',NULL,'YesNo');");
+    $dbh->do("INSERT INTO systempreferences (variable,value,explanation,options,type) VALUES('OpacAllowSharingPrivateLists',0,'If set, allows opac users to share private lists with other patrons',NULL,'YesNo');");
+
+    print "Upgrade to $DBversion done (BZ7310: Improving list permissions)\n";
+    SetVersion($DBversion);
+}
+
 =head1 FUNCTIONS
 
 =head2 DropAllForeignKeys($table)
