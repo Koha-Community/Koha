@@ -18,8 +18,8 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-#use strict;
-#use warnings; FIXME - Bug 2505
+use strict;
+use warnings;
 
 use C4::AuthoritiesMarc;
 use C4::Auth;
@@ -110,7 +110,10 @@ my ($input) = @_;
     my $authtypes = getauthtypes;
     my @authtypesloop;
     foreach my $thisauthtype (keys %$authtypes) {
-        my $selected = 1 if $thisauthtype eq $authtypecode;
+        my $selected;
+        if ($thisauthtype eq $authtypecode) {
+            $selected=1;
+        }
         my %row =(value => $thisauthtype,
                     selected => $selected,
                     authtypetext => $authtypes->{$thisauthtype}{'authtypetext'},
@@ -183,7 +186,7 @@ my ($input) = @_;
         } else {
             $to = (($startfrom+1)*$resultsperpage);
         }
-        my $link="../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&and_or=$and_or&amp;marclist=$marclist&amp;operator=$operator&amp;orderby=$orderby&amp;excluding=$excluding&amp;".join("&amp;",map {"value=".$_} @value)."&amp;op=do_search&amp;type=intranet&amp;index=$index";
+        my $link="../cataloguing/plugin_launcher.pl?plugin_name=unimarc_field_210c.pl&amp;authtypecode=EDITORS&amp;".join("&amp;",map {"value=".$_} @value)."&amp;op=do_search&amp;type=intranet&amp;index=$index";
 
         $template->param(result => $results) if $results;
         $template->param('index' => $query->param('index'));
