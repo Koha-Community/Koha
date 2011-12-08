@@ -30,6 +30,7 @@ use C4::Members;
 use C4::Members::AttributeTypes;
 use C4::Members::Attributes qw/GetBorrowerAttributeValue/;
 use C4::Output;
+use C4::Overdues qw/CheckBorrowerDebarred/;
 use C4::Biblio;
 use C4::Items;
 use C4::Dates qw/format_date/;
@@ -78,7 +79,18 @@ for (qw(dateenrolled dateexpiry dateofbirth)) {
 }
 $borr->{'ethnicity'} = fixEthnicity( $borr->{'ethnicity'} );
 
-if ( $borr->{'debarred'} || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
+my $debar = CheckBorrowerDebarred($borrowernumber);
+my $userdebarred;
+
+if ($debar) {
+    $userdebarred = 1;
+    $template->param( 'userdebarred' => $userdebarred );
+    if ( $debar ne "9999-12-31" ) {
+        $borr->{'userdebarreddate'} = C4::Dates::format_date($debar);
+    }
+}
+
+if ( $userdebarred || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
     $borr->{'flagged'} = 1;
 }
 
@@ -104,7 +116,6 @@ if ( $borr->{'amountoutstanding'} < 0 ) {
 }
 
 $borr->{'amountoutstanding'} = sprintf "%.02f", $borr->{'amountoutstanding'};
-$borr->{'debarred'} = C4::Dates->new($borr->{'debarred'},'iso')->output;
 
 my @bordat;
 $bordat[0] = $borr;
@@ -127,6 +138,7 @@ $template->param(   BORROWER_INFO     => \@bordat,
                     OPACMySummaryHTML => (C4::Context->preference("OPACMySummaryHTML")) ? 1 : 0,
                     surname           => $borr->{surname},
                     showname          => $borr->{showname},
+
                 );
 
 #get issued items ....

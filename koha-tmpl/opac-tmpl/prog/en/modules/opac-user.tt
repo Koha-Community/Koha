@@ -27,7 +27,7 @@ $.tablesorter.addParser({
             }); 
 			$("#overduest").tablesorter();
 [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
-        [% IF ( OpacRenewalAllowed ) %][% IF ( canrenew ) %]$("#renewselected").submit(function(){
+        [% IF ( OpacRenewalAllowed && canrenew && !userdebarred ) %]$("#renewselected").submit(function(){
             valid = false;
             $("input[type=checkbox]").each(function(){
                 if($(this).is(':checked')){
@@ -45,7 +45,7 @@ $.tablesorter.addParser({
         $("#renewall_link").live('click',function(){
             $("#renewall").submit();
         });
-        $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");[% END %][% END %]
+        $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");[% END %]
             });
 //]]>
 </script>
@@ -92,8 +92,8 @@ $.tablesorter.addParser({
         [% IF ( BORROWER_INF.flagged ) %]
 		<div class="dialog alert">
         <ul>
-            [% IF ( BORROWER_INF.debarred ) %]
-                <li><strong>Please note:</strong> Your account has been frozen until [% BORROWER_INF.debarred %] - [% BORROWER_INF.debarredcomment %]. Usually the reason for freezing an account is old overdues or damage fees.If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
+            [% IF ( userdebarred ) %]
+                <li><strong>Please note:</strong> Your account has been frozen[% IF ( BORROWER_INF.userdebarreddate ) %] until [% BORROWER_INF.userdebarreddate %][% END %][% IF ( BORROWER_INF.debarredcomment ) %] with the comment "[% BORROWER_INF.debarredcomment %]"[% END %]. Usually the reason for freezing an account is old overdues or damage fees. If <a href="/cgi-bin/koha/opac-user.pl">your account page</a> shows your account to be clear, please contact the library.</li>
             [% END %]
             [% IF ( BORROWER_INF.gonenoaddress ) %]
                 <li><strong>Please note:</strong> According to our records, we don't have up-to-date [% UNLESS ( BORROWER_INF.OPACPatronDetails ) %]<a href="/cgi-bin/koha/opac-userupdate.pl">contact information</a>[% ELSE %]contact information[% END %] on file.  Please contact the library[% IF ( BORROWER_INF.OPACPatronDetails ) %] or use the <a href="/cgi-bin/koha/opac-userupdate.pl">online update form</a> to submit current information (<em>Please note:</em> there may be a delay in restoring your account if you submit online)[% END %].</li>
@@ -260,14 +260,11 @@ $.tablesorter.addParser({
             </tr>
         [% END %]</tbody>
         </table>
-	   [% IF ( canrenew ) %]
-		[% IF ( OpacRenewalAllowed ) %]
+	   [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
 		<input type="submit" value="Renew Selected" />
 		[% END %]
-        [% END %]
 		</form>
-		[% IF ( OpacRenewalAllowed ) %]
-        [% IF ( canrenew ) %]
+        [% IF ( canrenew && !userdebarred && OpacRenewalAllowed ) %]
 		<form id="renewall" action="/cgi-bin/koha/opac-renew.pl" method="post">
 			<input type="hidden" name="from" value="opac_user" />
 			<input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
@@ -277,7 +274,6 @@ $.tablesorter.addParser({
 			[% UNLESS patron_flagged %]<input type="submit" value="Renew All" />[% END %]
 		</form>
 		[% END %]
-        [% END %]
     [% ELSE %]
         <table>
             <tr><td>You have nothing checked out</td></tr>

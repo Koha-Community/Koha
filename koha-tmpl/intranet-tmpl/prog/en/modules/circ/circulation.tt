@@ -565,12 +565,12 @@ No patron matched <span class="ex">[% message %]</span>
 
             [% IF ( userdebarred ) %]
                <li class="blocker">
-               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate %] [% END %] [% IF (debarredcomment ) %]([% debarredcomment %])[% END %]
+               <span class="circ-hlt"> Restricted:</span> Patron's account is restricted [% IF (userdebarreddate ) %] until [% userdebarreddate %] [% END %] [% IF (debarredcomment ) %] with the comment "[% debarredcomment %]"[% END %]
                <form class="inline compact" action="/cgi-bin/koha/members/setstatus.pl" method="post">
 	                <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
 	                <input type="hidden" name="destination" value="circ" />
 	                <input type="hidden" name="cardnumber" value="[% cardnumber %]" />
-	                <input type="submit" value="Lift Debarment" />
+	                <input type="submit" value="Lift restriction" />
                </form>
 			</li>[% END %]
 
