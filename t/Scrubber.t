@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 
-use Test::More tests => 11;
+use Test::More tests => 19;
 BEGIN {
 	use FindBin;
 	use lib $FindBin::Bin;
@@ -20,7 +20,7 @@ sub pretty_line {
 
 my ($scrubber,$html,$result,@types,$collapse);
 $collapse = 1;
-@types = qw(comment tag);
+@types = qw(default comment tag staff);
 $html = q|
 <![CDATA[selfdestruct]]&#x5d;>
 <?php  echo(" EVIL EVIL EVIL "); ?>    <!-- COMMENT -->
@@ -58,7 +58,7 @@ $collapse and $result =~ s/\s*\n\s*/\n/g;
 print pretty_line('default'), $result, "\n", pretty_line();
 
 foreach(@types) {
-	ok($scrubber = C4::Scrubber->new($_), "Constructor: C4::Scrubber->new($_)");
+	ok($scrubber = C4::Scrubber->new($_), "testing Constructor: C4::Scrubber->new($_)");
 	ok(printf("# scrubber settings: default %s, comment %s, process %s\n",
 		$scrubber->default(),$scrubber->comment(),$scrubber->process()),
 		"Outputting settings from scrubber object (type: $_)"
@@ -67,4 +67,22 @@ foreach(@types) {
 	$collapse and $result =~ s/\s*\n\s*/\n/g;
 	print pretty_line($_), $result, "\n", pretty_line();
 }
+
+print "\n\n######################################################\nStart of invalid tests\n";
+
+#Test for invalid new entry
+eval{
+	C4::Scrubber->new("");
+	fail("test should fail on entry of ''\n");
+};
+pass("Test should have failed on entry of '' (empty string) and it did. YAY!\n");
+
+eval{
+	C4::Scrubber->new("Client");
+	fail("test should fail on entry of 'Client'\n");
+};
+pass("Test should have failed on entry of 'Client' and it did. YAY!\n");
+
+print "######################################################\n";
+
 diag "done.\n";
