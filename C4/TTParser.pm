@@ -22,7 +22,6 @@ sub next_token{
 
 #unshift token back on @tokens
 sub unshift_token{
-    my $self = shift;
     unshift @tokens, shift;
 }
 
