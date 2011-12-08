@@ -12,19 +12,21 @@
 <li><img src="/intranet-tmpl/prog/img/patron-blank.png" alt="[% firstname %] [% surname %] ([% cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
 [% END %]
 [% END %]
-    <li>[% IF ( address ) %]
-            [% address %]
+    [% IF ( address or address2 ) %]
+        [% IF ( address ) %]
+            <li>[% address %]</li>
+        [% END %]
+        [% IF ( address2 ) %]
+            <li>[% address2 %]</li>
+        [% END %]
     [% ELSE %]
-            <span class="empty">No address stored.</span>
-    [% END %]</li>
-    [% IF ( address2 ) %]
-        <li>[% address2 %]</li>
-    [% END %]<li> 
+            <li><span class="empty" id="noadressstored">No address stored.</span></li>
+    [% END %]
     [% IF ( city ) %]
             [% city %][% IF ( state ) %], [% state %][% END %]
 	    [% zipcode %][% IF ( country ) %], [% country %][% END %]
     [% ELSE %]
-        <span class="empty">No city stored.</span>
+        <span class="empty" id="nocitystored">No city stored.</span>
     [% END %]</li>
     <li>[% IF ( phone ) %]
         [% phone %]
@@ -35,7 +37,7 @@
             [% IF ( phonepro ) %]
                 [% phonepro %]
             [% ELSE %]
-                <span class="empty">No phone stored.</span>    
+                <span class="empty" id="nophonestored">No phone stored.</span>
             [% END %]
         [% END %]
     [% END %]</li>
