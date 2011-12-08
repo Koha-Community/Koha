@@ -2055,11 +2055,15 @@ DROP TABLE IF EXISTS `virtualshelves`;
 CREATE TABLE `virtualshelves` ( -- information about lists (or virtual shelves) 
   `shelfnumber` int(11) NOT NULL auto_increment, -- unique identifier assigned by Koha
   `shelfname` varchar(255) default NULL, -- name of the list
-  `owner` varchar(80) default NULL, -- foriegn key linking to the borrowers table (using borrowernumber) for the creator of this list
-  `category` varchar(1) default NULL, -- type of list (public [2], private [1] or open [3])
+  `owner` int default NULL, -- foreign key linking to the borrowers table (using borrowernumber) for the creator of this list (changed from varchar(80) to int)
+  `category` varchar(1) default NULL, -- type of list (private [1], public [2])
   `sortfield` varchar(16) default NULL, -- the field this list is sorted on
   `lastmodified` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time the list was last modified
-  PRIMARY KEY  (`shelfnumber`)
+  `allow_add` tinyint(1) default 0, -- permission for adding entries to list
+  `allow_delete_own` tinyint(1) default 1, -- permission for deleting entries frm list that you added yourself
+  `allow_delete_other` tinyint(1) default 0, -- permission for deleting entries from list that another person added
+  PRIMARY KEY  (`shelfnumber`),
+  CONSTRAINT `virtualshelves_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
@@ -2072,10 +2076,27 @@ CREATE TABLE `virtualshelfcontents` ( -- information about the titles in a list 
   `biblionumber` int(11) NOT NULL default 0, -- foreign key linking to the biblio table, defines the bib record that has been added to the list
   `flags` int(11) default NULL,
   `dateadded` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- date and time this bib record was added to the list
+  `borrowernumber` int, -- borrower number that created this list entry (only the first one is saved: no need for use in/as key)
   KEY `shelfnumber` (`shelfnumber`),
   KEY `biblionumber` (`biblionumber`),
   CONSTRAINT `virtualshelfcontents_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `shelfcontents_ibfk_2` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `shelfcontents_ibfk_3` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Table structure for table `virtualshelfshares`
+--
+
+DROP TABLE IF EXISTS `virtualshelfshares`;
+CREATE TABLE `virtualshelfshares` ( -- shared private lists
+  `id` int AUTO_INCREMENT PRIMARY KEY,  -- unique key
+  `shelfnumber` int NOT NULL,  -- foreign key for virtualshelves
+  `borrowernumber` int,  -- borrower that accepted access to this list
+  `invitekey` varchar(10), -- temporary string used in accepting the invitation to access thist list; not-empty means that the invitation has not been accepted yet
+  `sharedate` datetime,  -- date of invitation or acceptance of invitation
+  CONSTRAINT `virtualshelfshares_ibfk_1` FOREIGN KEY (`shelfnumber`) REFERENCES `virtualshelves` (`shelfnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `virtualshelfshares_ibfk_2` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE SET NULL -- no cascaded delete, please see HandleDelBorrower in VirtualShelves.pm
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 --
