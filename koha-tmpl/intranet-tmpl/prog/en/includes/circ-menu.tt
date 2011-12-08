@@ -14,19 +14,22 @@ in the global namespace %]
 <li><img src="/intranet-tmpl/prog/img/patron-blank.png" alt="[% borrower.firstname %] [% borrower.surname %] ([% borrower.cardnumber %])" border="0" style="margin: .3em 0 .3em .3em; padding: .2em; border: 1px solid #CCCCCC;" /></li>
 [% END %]
 [% END %]
-    <li>[% IF borrower.address %]
-            [% borrower.address %]
+    [% IF ( borrower.address or borrower.address2 ) %]
+        [% IF ( borrower.address ) %]
+            <li>[% borrower.address %]</li>
+        [% END %]
+        [% IF ( borrower.address2 ) %]
+            <li>[% borrower.address2 %]</li>
+        [% END %]
     [% ELSE %]
-            <span class="empty">No address stored.</span>
-    [% END %]</li>
-    [% IF borrower.address2 %]
-        <li>[% borrower.address2 %]</li>
-    [% END %]<li>
+            <li><span class="empty" id="noaddressstored">No address stored.</span></li>
+    [% END %]
+    <li>
     [% IF borrower.city %]
             [% borrower.city %][% IF borrower.state %], [% borrower.state %][% END %]
 	    [% borrower.zipcode %][% IF ( borrower.country ) %], [% borrower.country %][% END %]
     [% ELSE %]
-        <span class="empty">No city stored.</span>
+        <span class="empty" id="nocitystored">No city stored.</span>
     [% END %]</li>
     <li>[% IF borrower.phone %]
         [% borrower.phone %]
@@ -37,7 +40,7 @@ in the global namespace %]
             [% IF borrower.phonepro %]
                 [% borrower.phonepro %]
             [% ELSE %]
-                <span class="empty">No phone stored.</span>
+                <span class="empty" id="nophonestored">No phone stored.</span>
             [% END %]
         [% END %]
     [% END %]</li>
